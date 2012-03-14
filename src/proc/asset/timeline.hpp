@@ -67,6 +67,7 @@
 //using std::vector;
 //using std::string;
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -78,9 +79,8 @@ namespace session {
 namespace asset {
   
   
-//  using lumiera::P;
   class Timeline;
-  typedef lumiera::P<Timeline> PTimeline;
+  typedef P<Timeline> PTimeline;
   
   
   /**
@@ -111,5 +111,5 @@ namespace asset {
 ///////////////////////////TODO currently just fleshing the API
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

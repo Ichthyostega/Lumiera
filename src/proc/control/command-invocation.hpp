@@ -46,7 +46,6 @@
 #ifndef CONTROL_COMMAND_INVOCACTION_H
 #define CONTROL_COMMAND_INVOCACTION_H
 
-//#include "pre.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
@@ -54,9 +53,10 @@
 
 
 
+namespace proc {
 namespace control {
   
-  using namespace lumiera::typelist;
+  using namespace lib::meta;
   
   
   
@@ -221,5 +221,5 @@ namespace control {
   }
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

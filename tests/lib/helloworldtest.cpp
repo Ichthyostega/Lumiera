@@ -35,7 +35,7 @@ namespace lumiera{
 namespace test   {
   
   /******************************************
-   * Hellooooooo the world is a test
+   * Hellooooooo the world is just a test
    * @test demo of using the test framework
    */
   class HelloWorld_test : public Test
@@ -58,10 +58,15 @@ namespace test   {
   
   
   
-  /** Register this test class to be invoked in some test groups (suites) */
-  Launch<HelloWorld_test> run_HelloWorld_test("HelloWorld_test","unit common");
-  
-  // NOTE: you may use the Macro "LAUNCHER" in run.hpp to simplify this Registration
+  /** Register this test class to be invoked in some test groups (suites) 
+   * @remarks this macro \c LUNCHER is defined in run.hpp to simplify
+   *          the registration of test classes. It expands to the
+   *          following static variable definition
+   *          \code
+   *          Launch<HelloWorld_test> run_HelloWorld_test("HelloWorld_test","unit common");
+   *          \endcode
+   */
+  LAUNCHER (HelloWorld_test, "unit common");
   
   
   

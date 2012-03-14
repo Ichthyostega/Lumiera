@@ -139,8 +139,7 @@ private:
    */  
   void on_scroll();
   
-  void on_hovering_track_changed(
-    boost::shared_ptr<timeline::Track> hovering_track);
+  void on_hovering_track_changed(shared_ptr<timeline::Track> hovering_track);
     
 private:
   /* ===== Internal Event Handlers ===== */
@@ -168,9 +167,8 @@ private:
    * to control the amount of indention.
    * @param offset The vertical offset of the headers in pixels.
    */
-  void draw_header_decoration(
-    boost::shared_ptr<model::Track> modelTrack,
-    const Gdk::Rectangle &clip_rect);
+  void draw_header_decoration(shared_ptr<model::Track> modelTrack,
+                              const Gdk::Rectangle &clip_rect);
   
   /**
    * A helper function which calls lookup_timeline_track within the
@@ -182,8 +180,8 @@ private:
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
    */
-  boost::shared_ptr<timeline::Track> lookup_timeline_track(
-    boost::shared_ptr<model::Track> modelTrack);
+  shared_ptr<timeline::Track>
+  lookup_timeline_track (shared_ptr<model::Track> modelTrack);
     
   void begin_drag();
   
@@ -248,7 +246,7 @@ private:
   int scrollSlideRate;
     
   //----- User Interaction State -----//  
-  boost::shared_ptr<timeline::Track> hoveringTrack;
+  shared_ptr<timeline::Track> hoveringTrack;
 
   Gdk::Point mousePoint;
   

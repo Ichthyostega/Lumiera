@@ -30,7 +30,7 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace boost;
+using namespace std::tr1;
 using namespace util;
 
 namespace gui {
@@ -342,12 +342,9 @@ TimelineHeaderContainer::on_scroll()
 }
 
 void
-TimelineHeaderContainer::on_hovering_track_changed(
-  boost::shared_ptr<timeline::Track> hovering_track)
+TimelineHeaderContainer::on_hovering_track_changed( shared_ptr<timeline::Track>)
 {
-  (void)hovering_track;
-  
-
+  /* do nothing */
 }
 
 bool
@@ -392,7 +389,7 @@ TimelineHeaderContainer::layout_headers()
           
           Widget &widget = timeline_track->get_header_widget();
           
-          optional<Gdk::Rectangle> header_rect =
+          boost::optional<Gdk::Rectangle> header_rect =
             layout_helper.get_track_header_rect(timeline_track);
           
           if(header_rect)

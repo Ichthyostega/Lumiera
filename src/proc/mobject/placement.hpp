@@ -67,7 +67,7 @@
 #ifndef MOBJECT_PLACEMENT_H
 #define MOBJECT_PLACEMENT_H
 
-#include "pre.hpp"
+#include "lib/error.hpp"
 #include "lib/hash-indexed.hpp"
 #include "lib/time/timevalue.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
@@ -77,6 +77,7 @@
 #include <tr1/memory>
 
 
+namespace proc {
 namespace mobject {
   
   namespace session{ class MObjectFactory; }
@@ -283,5 +284,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

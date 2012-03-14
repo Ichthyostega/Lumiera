@@ -23,6 +23,7 @@
 
 #include "proc/asset/preview.hpp"
 
+namespace proc {
 namespace asset {
   
   
@@ -64,4 +65,4 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace asset

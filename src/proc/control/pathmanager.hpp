@@ -27,6 +27,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   
@@ -44,5 +45,5 @@ namespace control {
 
 
 
-} // namespace control
+}} // namespace proc::control
 #endif

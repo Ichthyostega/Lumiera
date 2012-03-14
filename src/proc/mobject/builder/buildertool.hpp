@@ -61,13 +61,14 @@
 #include "proc/mobject/explicitplacement.hpp"
 
 
+namespace proc    {
 namespace mobject {
   
   class Buildable;
   
   namespace builder {
   
-    using lumiera::P;
+    using lib::P;
     
     /** 
      * Policy invoking an catch-all function for processing
@@ -93,7 +94,7 @@ namespace mobject {
      * an instantiation of the "Applicable" template parametrised with all 
      * concrete Buildable classes, for which it wants calls to be dispatched.
      * \par
-     * In addition to lumiera::visitor::Tool, BuilderTool adds support for dealing
+     * In addition to lib::visitor::Tool, BuilderTool adds support for dealing
      * with objects normally handled by means of smart-pointers or similar
      * wrappers, most notably mobject::Placement. The visitation is initiated
      * by calling the stand-alone function \c (BuilderTool& tool, WRA& wrappedTargetObj) ,
@@ -105,9 +106,8 @@ namespace mobject {
      *       as we simply store a pointer within the BuilderTool instance.
      */
     class BuilderTool
-      : public lumiera::visitor::Tool<void, InvokeCatchAllFunction>
-      {
-        lumiera::WrapperPtr currentWrapper_;
+      : public lib::visitor::Tool<void, InvokeCatchAllFunction>
+      { lumiera::WrapperPtr currentWrapper_;
         
       public:
         
@@ -146,7 +146,7 @@ namespace mobject {
           }
         
         template<class TAR>
-        lumiera::P<TAR>
+        P<TAR>
         getPtr ()
           {
             P<TAR>* pP = currentWrapper_.get<P<TAR>*>(); 
@@ -166,11 +166,11 @@ namespace mobject {
         class TYPELIST  //  list of all concrete Buildables to be treated
       >
     class Applicable
-      : public lumiera::visitor::Applicable<TOOLImpl, TYPELIST, BuilderTool>
+      : public lib::visitor::Applicable<TOOLImpl, TYPELIST, BuilderTool>
       { }
       ;
       
-    using lumiera::typelist::Types;  // convenience for the users of "Applicable"
+    using lib::meta::Types;  // convenience for the users of "Applicable"
   
   }// namespace mobject::builder
   
@@ -181,7 +181,7 @@ namespace mobject {
   /**
    *  Marker Interface for classes visitable by Builder tools. 
    */
-  class Buildable : public lumiera::visitor::Visitable<builder::BuilderTool>
+  class Buildable : public lib::visitor::Visitable<builder::BuilderTool>
     { };
   
   
@@ -206,5 +206,5 @@ namespace mobject {
     }
   
   
-}} // namespace mobject::builder
+}}} // namespace proc::mobject::builder
 #endif

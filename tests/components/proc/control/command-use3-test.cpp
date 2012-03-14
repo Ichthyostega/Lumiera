@@ -36,6 +36,7 @@
 //#include <string>
 
 
+namespace proc {
 namespace control {
 namespace test    {
 
@@ -102,4 +103,4 @@ namespace test    {
   LAUNCHER (CommandUse3_test, "function controller");
       
       
-}} // namespace control::test
+}}} // namespace proc::control::test

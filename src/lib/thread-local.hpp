@@ -95,7 +95,7 @@ namespace lib {
       
     private:
       TAR*
-      accessChecked()
+      accessChecked()  const
         {
           TAR *p(get());
           if (!p)

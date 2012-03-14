@@ -5,16 +5,24 @@ Since some time, GDB supports Python written extension modules, especially
 for pretty printing of data structures. A selection of pre-defined pretty printers
 for STL containers is part of the standard distribution. The graphical debugger frontend
 provided by the Eclipse CDT automatically uses this debugger provided presentation
-to show the value of variables in the detail pane of the variables view, while the
-individual variable entries always show the expandable structure view.
+to show the value of variables in the detail pane of the variables view. The most recent
+version of CDT (Version 8 for Eclipe 3.7 »Indigo«) is even able to populate the structure view
+based on the python pretty printer's output, which is a big step ahead towards easy debugging
+of more elaborate data structures based on STL containers.
+
 
 Installation notes
 ------------------
 
-This feature requires an python enabled GDB (>6.8.50). Debian/Lenny isn't enough,
-but compiling the GDB package from Debian/Squeeze (GDB-7.1) is straightforward.
-Moreover, you need to check out and install the python pretty-printers and 
-you need to activate them through your +~/.gdbinit+
+This feature requires an python enabled GDB (>6.8.50). Actually, even the most recent stable
+GDB (Version 7.2) is recommended, because it contains some relevant bugfixes. Debian users
+might want to backport the the GDB package from Debian/Wheezy (GDB-7.2).
+Moreover, you need to check out and install a recent version of the python pretty-printers
+from the GNU Subversion repository:
+
+* 'svn checkout'
+   http://gcc.gnu.org/viewcvs/trunk/libstdc%2B%2B-v3/python/[svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python stlPrettyPrinter]
+* you need to activate them explicitly through your +~/.gdbinit
 
 [source,python]
 ----
@@ -60,5 +68,9 @@ main (int, char**)
 When selecting the string or the vector in the Eclipse variables view
 (or when issuing "print str" at the GDB prompt), the GDB python pretty-printer
 should be activated.
+
+NOTE: to get the full support in _Eclipse Indigo + CDT-8_, you need to activate
+      the setting ``enable pretty printers in variable/expression tree'', which
+      can be accessed as Window/Preferences > C++ / debug / GDB
 
 

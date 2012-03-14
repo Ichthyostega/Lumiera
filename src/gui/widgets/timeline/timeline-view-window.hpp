@@ -54,6 +54,16 @@ using lib::time::Offset;
 class TimelineViewWindow
 {
 public:
+    
+  /**
+   * The maximum scale for timeline display.
+   * @remarks At MaxScale, every pixel on the timeline is equivalent
+   * to 30000000 lumiera::Time increments.
+   */ 
+  static const int64_t MaxScale;
+  static const double ZoomSmoothing;
+  static const double ZoomIncrement;
+  
  
   /**
    * @param offset The initial view offset.
@@ -68,7 +78,7 @@ public:
    *       from the session / current timeline to be displayed. It doesn't
    *       make sense to display raw time values here, as each timeline might
    *       turn out to have a different origin; this is the result of resolving
-   *       a placement, and only the session has the necessary informations...
+   *       a placement, and only the session has the necessary information...
    */
   Offset get_time_offset() const;
 
@@ -94,14 +104,18 @@ public:
    * zero
    */
   void set_time_scale(int64_t time_scale);
-    
+  void set_time_scale(double ratio);
+  
+  /** get the current time scale with zoom smoothing applied */
+  double get_smoothed_time_scale()  const;
+  
   /**
    * Zooms the view in or out as by a number of steps while keeping a 
    * given point on the timeline still.
-   * @param zoom_size The number of steps to zoom by. The scale factor
-   * is 1.25^(-zoom_size).
+   * @param new_time_scale The number of steps to zoom by. The scale factor
+   * is 1.25^(-new_time_scale).
    */
-  void zoom_view(int point, int zoom_size);
+  void zoom_view(int point, double timescale_ratio);
   
   /**
    * Scrolls the view horizontally as a proportion of the view area.
@@ -138,6 +152,13 @@ public:
 
 private:
   TimeVar timeOffset;
+
+  /**
+   * The scale of the Timline Body.
+   * @remarks This value represents the time span that is visible in
+   * the TimelineBodyWidget. Smaller numbers here will "zoom in"
+   * while larger numbers will "zoom out"
+   */
   int64_t timeScale;
   
   sigc::signal<void> changedSignal;

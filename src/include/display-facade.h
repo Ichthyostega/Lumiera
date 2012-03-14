@@ -21,13 +21,18 @@
 */
 
 /** @file display-facade.h
- ** Major public Interface of the Lumiera GUI. While, generally speaking, the GUI
- ** controls the application and thus acts on its own, it exposes some services
- ** to the lower layers. Especially the lumiera::Display interface serves to
- ** hand over calculated frames to the GUI for displaying them in a viewer.
- ** It's a first draft as of 1/2009, probably it can be factored out into
- ** a more general display service in future.
- **
+ ** Experimental Interface, allowing the Dummy-Player to access the 
+ ** video display widget in the GUI. While, generally speaking, the GUI
+ ** controls the application and thus acts on its own, it might expose some
+ ** services to the lower layers.
+ ** 
+ ** In the Dummy-Player design study, the lumiera::Display interface serves
+ ** to hand over calculated frames to the GUI for displaying them in a viewer.
+ ** 
+ ** This is a first draft as of 1/2009, and likely to be superseded by a
+ ** better design, where rather the \em provider of an output facility
+ ** registers with the OutputManager in the core.
+ ** 
  ** @see gui::GuiFacade
  ** @see dummy-player-facade.h
  ** 

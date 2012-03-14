@@ -31,10 +31,11 @@
 using std::rand;
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
-  using lumiera::P;
+  using lib::P;
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::TimeValue;
@@ -120,4 +121,4 @@ namespace test    {
   LAUNCHER (CommandBasic_test, "unit controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

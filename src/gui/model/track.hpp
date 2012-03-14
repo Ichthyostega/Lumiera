@@ -47,6 +47,7 @@ protected:
   Track();
 
 public:
+  virtual ~Track(); /// this is an interface
 
   /**
    * Returns true if this track can own any child tracks.
@@ -57,7 +58,7 @@ public:
   /**
    * Gets the list of child tracks.
    */
-  virtual const std::list< boost::shared_ptr<Track> >&
+  virtual const std::list<shared_ptr<Track> >&
   get_child_tracks () const;
   
   /**
@@ -106,8 +107,8 @@ public:
    * @return Returns the parent track if one was found, or an empty
    * shared_ptr if none was found.
    */
-  virtual boost::shared_ptr<ParentTrack>
-  find_descendant_track_parent (boost::shared_ptr<Track> child);
+  virtual shared_ptr<ParentTrack>
+  find_descendant_track_parent (shared_ptr<Track> child);
 
   /**
    * A signal which fires when the enabled status changes.
@@ -154,7 +155,7 @@ protected:
    * An object used internally as a return value for when there's no
    * children.
    */
-  static const std::list< boost::shared_ptr<Track> > NoChildren;
+  static const std::list< shared_ptr<Track> > NoChildren;
 
   /**
    * The internal implementation of print_branch.

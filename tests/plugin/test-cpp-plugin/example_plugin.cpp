@@ -1,5 +1,5 @@
 /*
-  example_plugin.cpp  -  example plugin (C++) for testing the interface/plugin system
+  ExamplePlugin  -  example plugin (C++) for testing the interface/plugin system
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>,
@@ -32,7 +32,7 @@ extern "C" {
 #include "common/interface.h"
 #include "common/interfacedescriptor.h"
 
-#include "tests/common/hello_interface.h"
+#include "interface/say_hello.h"
 }
 
 using boost::format;
@@ -41,7 +41,7 @@ using std::endl;
 
 
 
-class example_plugin
+class ExamplePlugin
   {
   public:
     static LumieraInterface
@@ -55,13 +55,13 @@ class example_plugin
     static void
     myclose (LumieraInterface)
       {
-        std::cout << "closed" << endl;
+        std::cout << "dying" << endl;
       }
   };
 
 
-class example_plugin_de
-  : public example_plugin
+class ExamplePlugin_de
+  : public ExamplePlugin
   {
   public:
     static void
@@ -73,13 +73,13 @@ class example_plugin_de
     static void
     servus (const char* m)
       {
-        std::cout << "Tschuess " << m << endl;
+        std::cout << "Tschüss " << m << endl;
       }
   };
 
 
-class example_plugin_en
-  : public example_plugin
+class ExamplePlugin_en
+  : public ExamplePlugin
   {
   public:
     static void
@@ -107,22 +107,22 @@ extern "C" { /* ================== define two lumieraorg_testhello instance ====
                  LUMIERA_INTERFACE_DEFINE (lumieraorg_testhello, 0
                                           ,lumieraorg_hello_german_cpp
                                           , NULL  /* no descriptor given */
-                                          , example_plugin::myopen
-                                          , example_plugin::myclose
+                                          , ExamplePlugin::myopen
+                                          , ExamplePlugin::myclose
                                           , LUMIERA_INTERFACE_MAP (hello, "\300\244\125\265\235\312\175\263\335\044\371\047\247\263\015\322",
-                                                                   example_plugin_de::griazi)
+                                                                   ExamplePlugin_de::griazi)
                                           , LUMIERA_INTERFACE_MAP (goodbye, "\115\365\126\102\201\104\012\257\153\232\006\210\010\346\076\070",
-                                                                   example_plugin_de::servus)
+                                                                   ExamplePlugin_de::servus)
                                           ),
                  LUMIERA_INTERFACE_DEFINE (lumieraorg_testhello, 0
                                           ,lumieraorg_hello_english_cpp
                                           , NULL  /* no descriptor given */
-                                          , example_plugin::myopen
-                                          , example_plugin::myclose
+                                          , ExamplePlugin::myopen
+                                          , ExamplePlugin::myclose
                                           , LUMIERA_INTERFACE_MAP (hello, "\303\367\107\154\077\063\237\066\034\034\050\136\170\220\260\226",
-                                                                   example_plugin_en::hello)
+                                                                   ExamplePlugin_en::hello)
                                           , LUMIERA_INTERFACE_MAP (goodbye, "\107\207\072\105\101\102\150\201\322\043\104\110\232\023\205\161",
-                                                                   example_plugin_en::bye)
+                                                                   ExamplePlugin_en::bye)
                                           )
                 );
 

@@ -105,8 +105,8 @@ namespace lib {
       pointer       address(reference r)            const { return par_.address(r); }
       const_pointer address(const_reference cr)     const { return par_.address(cr); }
       pointer       allocate(size_type n, const void *p=0){ return par_.allocate(n,p); }
-      void          deallocate(pointer p, size_type n)    { return par_.deallocate(p,n); }
-      void          destroy(pointer p)                    { return par_.destroy(p); }
+      void          deallocate(pointer p, size_type n)    {        par_.deallocate(p,n); }
+      void          destroy(pointer p)                    {        par_.destroy(p); }
       
       
       void 

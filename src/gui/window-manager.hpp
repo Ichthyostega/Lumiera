@@ -39,14 +39,14 @@
 #include "gui/gtk-base.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <cairomm/cairomm.h>
 #include <string>
-
+#include <tr1/memory>
 
 namespace gui {
   
 using std::string;
+using std::tr1::shared_ptr;
 
 
 namespace model      { class Project; }
@@ -195,7 +195,7 @@ private:
 
 private:
   
-  std::list< boost::shared_ptr<workspace::WorkspaceWindow> > windowList;
+  std::list<shared_ptr<workspace::WorkspaceWindow> > windowList;
     
 public:
 

@@ -30,7 +30,7 @@
  ** we need to accept functor objects with a very specific and predetermined
  ** signature, thus allowing for strict type checking by the compiler.
  ** 
- ** \par Relation of function signatures
+ ** \par Relation of function signatures (MEM = type of the "memento" for Undo)
  ** - operation: void(P1,..PN)
  ** - captureUndo: MEM(P1,..PN)
  ** - undoOperation void(P1,..PN,MEM)
@@ -46,40 +46,33 @@
 #ifndef CONTROL_COMMAND_SIGNATURE_H
 #define CONTROL_COMMAND_SIGNATURE_H
 
-//#include "pre.hpp"
-//#include "lib/symbol.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/typeseq-util.hpp"
-//#include "lib/meta/tuple.hpp"
 
-//#include <tr1/memory>
 #include <tr1/functional>
 
 
 
 
+namespace proc {
 namespace control {
   
-//  using lib::Symbol;
-//  using std::tr1::shared_ptr;
   using std::tr1::function;
   
-  using lumiera::typelist::FunctionSignature;
-  using lumiera::typelist::FunctionTypedef;
-  using lumiera::typelist::Types;
-//using lumiera::typelist::NullType;
-//using lumiera::typelist::Tuple;
-  using lumiera::typelist::Append;
-  using lumiera::typelist::SplitLast;
+  using lib::meta::FunctionSignature;
+  using lib::meta::FunctionTypedef;
+  using lib::meta::Types;
+  using lib::meta::Append;
+  using lib::meta::SplitLast;
   
-
+  
   /** 
-   * Metaprogramming helper for building Command function signatures. 
+   * Metaprogramming helper for building Command function signatures.
    * The complete definition context of any command is templated to the signature
    * of the actual command operation and to the memento type. The typedefs embedded
-   * within CommandSignature<SIG,MEM> allows accepting suitable typed functions
+   * within CommandSignature<SIG,MEM> allows for accepting suitable typed functions
    * to implement the command in question.
    */
   template<typename SIG, typename MEM>
@@ -93,7 +86,7 @@ namespace control {
       
     public:
       typedef typename FunctionTypedef<void, Args>::Sig          OperateSig;
-      typedef typename FunctionTypedef<MEM, Args>::Sig           CaptureSig;
+      typedef typename FunctionTypedef<MEM,  Args>::Sig          CaptureSig;
       typedef typename FunctionTypedef<void, ExtendedArgs>::Sig  UndoOp_Sig;
       typedef Args                                               CmdArgs;
       typedef MEM                                                Memento;
@@ -103,16 +96,23 @@ namespace control {
   
   
   /** 
-   * Type analysis helper template. 
+   * Type analysis helper template.
    * Used for dissecting a given type signature to derive
    * the related basic operation signature, the signature of a possible Undo-function
    * and the signature necessary for capturing undo information. The implementation
    * relies on re-binding an embedded type defining template, based on the actual
    * case, as identified by the structure of the given parameter signature.
+   * 
+   * To use this template, it is instantiated with the signature of a functor object
+   * in question. Depending on the actual situation, the compiler will then either
+   * pick Case1 or Case2 -- thus allowing the client in any case to pick up the
+   * correct signatures for Operation, Capture and Undo-function from the
+   * public typedefs within \c UndoSignature
    */
   template<typename SIG>
   class UndoSignature
     {
+      // preparation:  dissect the function signature into arguments and result
       typedef typename FunctionSignature< function<SIG> >::Args Args;
       typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
       
@@ -152,5 +152,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

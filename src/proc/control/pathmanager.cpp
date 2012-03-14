@@ -23,6 +23,7 @@
 
 #include "proc/control/pathmanager.hpp"
 
+namespace proc {
 namespace control {
 
 
@@ -30,4 +31,4 @@ namespace control {
   /** */
 
 
-} // namespace control
+}} // namespace proc::control

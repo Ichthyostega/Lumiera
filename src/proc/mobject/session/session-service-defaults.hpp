@@ -41,12 +41,13 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
-//  using lumiera::typelist::InstantiateChained;
-//  using lumiera::typelist::InheritFrom;
-//  using lumiera::typelist::NullType;
+//  using lib::meta::InstantiateChained;
+//  using lib::meta::InheritFrom;
+//  using lib::meta::NullType;
   
   
   class SessionServiceDefaults
@@ -55,5 +56,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

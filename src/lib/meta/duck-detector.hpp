@@ -30,7 +30,7 @@
  ** Because, if we can get a \c bool answer to such a question <i>at compile time,</i> we can use
  ** \c boost::enable_if to pick a special implementation based on the test result. Together, these
  ** techniques allow to adopt a duck-typed programming style, where an arbitrary object is allowed
- ** to enter a given API function, provided this object supports some special operations.
+ ** to enter a given API function, provided this object supports some specific operations.
  ** 
  ** While C++ certainly isn't a dynamic language and doesn't provide any kind of run time introspection,
  ** doing such check-and branch at compile time allows even to combine such a flexible approach with
@@ -91,16 +91,6 @@
 
 
 #include "lib/meta/util.hpp"
-
-namespace lib {
-namespace meta{
-  
-                      ///////////////TICKET #175  sort out meta namespace
-  using lumiera::Yes_t;
-  using lumiera::No_t;
-    
-}} // namespace lib::meta
-
 
 
 

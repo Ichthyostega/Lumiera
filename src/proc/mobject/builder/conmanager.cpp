@@ -24,21 +24,20 @@
 #include "proc/mobject/builder/conmanager.hpp"
 #include "proc/control/stypemanager.hpp"
 
+namespace proc {
 namespace mobject {
-  namespace builder {
-    
-    
-    
-    /**
-     * TODO !!!!!!!!!!!!!!!!!!
-     */
-    int
-    ConManager::getConnection ()
-    {
-    }
+namespace builder {
+  
+  
+  
+  /**
+   * TODO !!!!!!!!!!!!!!!!!!
+   */
+  int
+  ConManager::getConnection ()
+  {
+  }
 
 
 
-  } // namespace mobject::builder
-
-} // namespace mobject
+}}} // namespace proc::mobject::builder

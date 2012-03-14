@@ -31,7 +31,7 @@
  ** 
  ** For actually providing these operations, the client is expected to call the
  ** definition functions in a chained manner ("fluent interface"). When  finally all the
- ** required informations are available, a \em prototype object is  built and registered
+ ** required information is available, a \em prototype object is built and registered
  ** with the CommandRegistry. From this point on, the corresponding Command (frontend object)
  ** can be accessed directly by ID (and only relying on the header command.hpp).
  ** 
@@ -53,7 +53,6 @@
 #ifndef CONTROL_COMMAND_DEF_H
 #define CONTROL_COMMAND_DEF_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "lib/symbol.hpp"
@@ -67,7 +66,7 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/tuple.hpp"
 #include "lib/util.hpp"
 
@@ -77,6 +76,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using std::tr1::shared_ptr;
@@ -86,12 +86,12 @@ namespace control {
   using lib::Symbol;
   using util::cStr;
   
-  using lumiera::typelist::FunctionSignature;
-  using lumiera::typelist::FunctionTypedef;
-  using lumiera::typelist::Types;
-  using lumiera::typelist::NullType;
-  using lumiera::typelist::Tuple;
-  using lumiera::typelist::tuple::makeNullTuple;
+  using lib::meta::FunctionSignature;
+  using lib::meta::FunctionTypedef;
+  using lib::meta::Types;
+  using lib::meta::NullType;
+  using lib::meta::Tuple;
+  using lib::meta::tuple::makeNullTuple;
   
   
   
@@ -326,5 +326,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

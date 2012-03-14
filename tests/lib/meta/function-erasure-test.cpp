@@ -34,8 +34,8 @@ using lumiera::error::LUMIERA_ERROR_ASSERTION;
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib  {
+namespace meta {
 namespace test {
   
   using std::tr1::function;
@@ -273,4 +273,4 @@ namespace test {
   
   
   
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test

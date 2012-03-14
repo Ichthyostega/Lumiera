@@ -21,14 +21,15 @@
 */
 
 
-#ifndef MOBJECT_SESSION_LABEL_H
-#define MOBJECT_SESSION_LABEL_H
+#ifndef PROC_MOBJECT_SESSION_LABEL_H
+#define PROC_MOBJECT_SESSION_LABEL_H
 
 #include "proc/mobject/session/meta.hpp"
 #include "lib/symbol.hpp"
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -68,5 +69,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

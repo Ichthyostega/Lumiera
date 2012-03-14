@@ -68,6 +68,7 @@
 #include <string>
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -88,8 +89,6 @@ namespace session {
   
   using util::for_each;
   using util::has_any;
-  
-  using namespace lumiera;
   
   LUMIERA_ERROR_DEFINE (NOT_IN_SESSION, "referring to a Placement not known to the current session");
   LUMIERA_ERROR_DEFINE (PLACEMENT_TYPE, "requested Placement (pointee) type not compatible with data or context");
@@ -574,7 +573,7 @@ namespace session {
     struct SelfCheckFailure
       : error::Fatal
       {
-        SelfCheckFailure (Literal currentTest, string failure)
+        SelfCheckFailure (lib::Literal currentTest, string failure)
           : error::Fatal (string("Failed test: ")+currentTest+ " : "+failure
                          ,LUMIERA_ERROR_INDEX_CORRUPTED)
           { }
@@ -728,4 +727,4 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

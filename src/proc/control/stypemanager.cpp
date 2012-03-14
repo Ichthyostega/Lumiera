@@ -27,9 +27,9 @@
 #include "include/lifecycle.h"
 
 
+namespace proc {
 namespace control {
   
-  using lumiera::StreamType;
   using lib::Symbol;
   
   /* ======= stream type manager lifecycle ==========*/
@@ -114,7 +114,7 @@ namespace control {
     UNIMPLEMENTED ("STypeManager basic functionality: wire up implementation facade (impl type) from given raw type of the library");
   }
   
-} // namespace control
+}} // namespace proc::control
 
 
 // ==== C interface for registering setup of basic stream type configuration =======
@@ -122,5 +122,5 @@ namespace control {
 void 
 lumiera_StreamType_registerInitFunction (void setupFun(void))
 {
-  lumiera::LifecycleHook (control::ON_STREAMTYPES_RESET, setupFun);
+  lumiera::LifecycleHook (proc::control::ON_STREAMTYPES_RESET, setupFun);
 }

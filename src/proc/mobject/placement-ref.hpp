@@ -65,7 +65,6 @@
 #ifndef MOBJECT_PLACEMENT_REF_H
 #define MOBJECT_PLACEMENT_REF_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
 #include "proc/mobject/placement.hpp"
@@ -74,7 +73,11 @@
 
 
 
-namespace mobject {
+namespace proc {
+  namespace error = lumiera::error;
+  
+  namespace mobject {
+  
   
   
   class MObject;
@@ -210,7 +213,7 @@ namespace mobject {
               {
                 return access(id_).isValid();
               }
-            catch (lumiera::error::Invalid&) {}
+            catch (error::Invalid&) {}
             
           return false;
         }
@@ -263,15 +266,15 @@ namespace mobject {
       access (_Id const& placementID)
         {
           if (!placementID)
-            throw lumiera::error::Logic ("Attempt to access a NIL PlacementRef"
-                                        ,LUMIERA_ERROR_BOTTOM_PLACEMENTREF);
+            throw error::Logic ("Attempt to access a NIL PlacementRef"
+                               ,LUMIERA_ERROR_BOTTOM_PLACEMENTREF);
           
           Placement<MObject> & genericPlacement (session::SessionServiceFetch::resolveID (placementID));  // may throw
           REQUIRE (genericPlacement.isValid());
           
           if (!(genericPlacement.template isCompatible<MX>()))
-            throw lumiera::error::Invalid("actual type of the resolved placement is incompatible"
-                                         , LUMIERA_ERROR_INVALID_PLACEMENTREF);
+            throw error::Invalid("actual type of the resolved placement is incompatible"
+                                , LUMIERA_ERROR_INVALID_PLACEMENTREF);
                   ////////////////////////TODO: 1. better message, including type?
                   ////////////////////////TODO: 2. define a separate error-ID for the type mismatch!
           
@@ -285,5 +288,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

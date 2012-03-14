@@ -1,0 +1,41 @@
+Library documentation
+=====================
+
+//Menu: label Support Lib
+
+Alongside with the core Lumiera Application, we're also creating several *Libraries*. +
+This section holds pages with in-depth technical documentation regarding those. Please don't
+expect a coherent or complete coverage for the time being -- library functionality is typically
+``discovered'' while in the middle of the implementation, then factored out, reused and remoulded
+over time.
+
+Interface Library
+-----------------
+The Lumiera Application is designed deliberately in a way to be controllable by scripts. All of
+the Session, the models and the backend are fully operational without the GUI. Any significant
+functionality can be addressed through the primary Façade Interfaces.
+
+But, in order to make such an open and extensible application a reality, we need to build up
+an 'interface layer' -- provided as library for client code and script adapters to link against.
+This library allows to access the primary external interfaces and exposes everything needed to
+work with the specifics of the application.
+
+[,yellow]#TODO as of 1/2012:# _this is just a nebulous plan for now._ Nothing of the work required
+really to address facilities from the outside has been done. All we've managed to achieve is actually
+to use clean interfaces and decouple the parts of the application appropriately.
+
+- we still need to identify those core concepts which need to be exposed
+- we need to refactor the corresponding data types to resolve cross dependencies to the implementation
+- then we could think about moving those data types into an _official Lumiera interface_
+
+Support Library
+---------------
+There is a huge collection of generic building blocks, re-used more or less frequently.
+The're written in a generic way, but in accordance to the rest of the source base, relying only
+on the general error handling and logging framework used within Lumiera. (Some facilities may depend
+on other parts of the Application; this can be qualified as a bug -- please complain when you've found
+something of that sort).
+
+
+
+

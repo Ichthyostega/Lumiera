@@ -28,6 +28,7 @@
 #include "proc/state.hpp"
 
 
+namespace proc {
 namespace engine {
 
 
@@ -38,7 +39,7 @@ namespace engine {
       
     private: /* === top-level implementation of the State interface === */
       
-      BuffHandle allocateBuffer (BufferDescriptor const&);
+      BuffHandle allocateBuffer (const lumiera::StreamType*);              //////////////////////////TICKET #828
       
       void releaseBuffer (BuffHandle& bh);
       
@@ -56,5 +57,5 @@ namespace engine {
     
     
     
-} // namespace engine
+}} // namespace proc::engine
 #endif

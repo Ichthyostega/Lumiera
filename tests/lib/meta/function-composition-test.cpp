@@ -29,9 +29,9 @@
 #include "meta/typelist-diagnostics.hpp"
 
 
-namespace lumiera {
-namespace typelist{
-namespace test    {
+namespace lib  {
+namespace meta {
+namespace test {
   
   using ::test::Test;
   using func::applyFirst;
@@ -127,7 +127,7 @@ namespace test    {
   /******************************************************************************
    * @test this test covers some extensions and variations on function closures:
    *       - partial application of a function, returning a partial closure
-   *       - variation: binding a arbitrary term, might even be a nested binder
+   *       - variation: binding an arbitrary term, might even be a nested binder
    *       - chaining of two functions with suitable arguments ("composition")
    */
   class FunctionComposition_test : public Test
@@ -142,10 +142,7 @@ namespace test    {
         }
       
       
-      /** verify the test input data
-       *  @see TypeListManipl_test#check_diagnostics()
-       *       for an explanation of the DISPLAY macro
-       */
+      /** verify the test input data */
       void
       check_diagnostics ()
         {
@@ -387,4 +384,4 @@ namespace test    {
   
   
   
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test

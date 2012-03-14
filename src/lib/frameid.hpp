@@ -25,6 +25,7 @@
 #define LUMIERA_FRAMEID_H
 
 
+#include <boost/operators.hpp>
 
 namespace lumiera {
   

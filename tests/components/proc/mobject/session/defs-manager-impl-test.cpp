@@ -21,8 +21,6 @@
 * *****************************************************/
 
 
-#include "pre_a.hpp"
-
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
@@ -32,7 +30,7 @@
 #include "common/configrules.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 
 #include <boost/format.hpp>
 
@@ -41,6 +39,7 @@ using util::isnil;
 using std::string;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -56,7 +55,6 @@ namespace test    {
   
   using lumiera::ConfigRules;
   using lumiera::query::QueryHandler;
-  using lumiera::StreamType;
   
   
   
@@ -173,4 +171,4 @@ lumiera::query::setFakeBypass("stream("+sID+")"); //////////////////////////////
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

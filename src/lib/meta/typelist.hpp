@@ -40,27 +40,37 @@ This code is heavily inspired by
 
 /** @file typelist.hpp
  ** A template metaprogramming technique for manipulating collections of types.
- ** Effectively this is a taylored and simplified version of what can be found in the Loki library.
+ ** Effectively this is a tailored and simplified version of what can be found in the Loki library.
  ** We use it in other generic library-style code to generate repetitive code. If you tend to find
  ** template metaprogramming (or functional programming in general) offending, please ignore the 
- ** technical details and just consider the benefit of such an simplification for the user code.
+ ** technical details and just consider the benefit of such an simplification for the client code.
  **
- ** Interface for using this facility is the template Types(.....) for up to 20 Type parameters
- **
- ** @see lumiera::visitor::Applicable usage example
- ** @see typelisttest.cpp
+ ** Interface for using this facility is the template Types(.....) for up to 20 Type parameters.
+ ** To start typelist processing, other templates typically pick up the Types<...>::List type.
+ ** This allows for LISP-style list processing, with a pattern match on either Node<TY,TYPES>
+ ** or NullType to terminate recursion. In C++ template metaprogramming, "pattern match"
+ ** is done by partial template specialisations (the compiler will pick up and thus
+ ** match the template parameters). A typedef acts like a declaration in normal
+ ** programming. Because such a "declaration" can't be changed after the fact,
+ ** effectively this is a flavour of functional programming. Just the
+ ** "execution environment" is the compiler, during compilation.
+ ** 
+ ** @see lib::visitor::Applicable usage example
+ ** @see control::CommandSignature more elaborate usage example (dissecting a functor signature)
+ ** @see TypeList_test
+ ** @see TypeListManip_test
  ** 
  */
 
 
-#ifndef LUMIERA_META_TYPELIST_H
-#define LUMIERA_META_TYPELIST_H
+#ifndef LIB_META_TYPELIST_H
+#define LIB_META_TYPELIST_H
 
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta {
     
     struct NullType 
       { 
@@ -119,5 +129,5 @@ namespace typelist{
     typedef Node<NullType,NullType> NodeNull;
     
     
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

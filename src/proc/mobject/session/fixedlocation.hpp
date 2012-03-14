@@ -21,20 +21,20 @@
 */
 
 
-#ifndef MOBJECT_SESSION_FIXEDLOCATION_H
-#define MOBJECT_SESSION_FIXEDLOCATION_H
+#ifndef PROC_MOBJECT_SESSION_FIXEDLOCATION_H
+#define PROC_MOBJECT_SESSION_FIXEDLOCATION_H
 
 #include "proc/mobject/session/locatingpin.hpp"
 
 
 
-namespace mobject
-  {
-    class ExplicitPlacement; //TODO trac #100
+namespace proc {
+namespace mobject {
+  
+  class ExplicitPlacement; //TODO trac #100
+  
+  namespace session {
     
-  namespace session
-    {
-
     /** 
      * The most common case of positioning a MObject
      * in the Session: directly specifying a constant position.
@@ -59,10 +59,8 @@ namespace mobject
         virtual FixedLocation* clone ()  const;
         
       };
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    
+    
+    
+}}} // namespace proc::mobject::session
 #endif

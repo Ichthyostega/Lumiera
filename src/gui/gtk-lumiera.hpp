@@ -55,10 +55,14 @@
 #include "gui/window-manager.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <tr1/memory>
 #include <vector>
 
 
 namespace gui {
+
+using std::tr1::shared_ptr;
+
 
 
 /* ====== The Application Class ====== */

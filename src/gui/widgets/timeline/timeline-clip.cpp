@@ -27,11 +27,11 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
-  using boost::shared_ptr;  //////////////////////TICKET #796 
+  using std::tr1::shared_ptr;
   
 
-  Clip::Clip (boost::shared_ptr<model::Clip> clip,
-              boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
+  Clip::Clip (shared_ptr<model::Clip> clip,
+              shared_ptr<timeline::DrawStrategy> drawStrategy)
     : Entity(drawStrategy)
     , modelClip(clip)
     , selected(false)

@@ -26,10 +26,10 @@
 
 
 
-namespace mobject
-  {
-
-
+namespace proc {
+namespace mobject {
+  
+  
   /**
    * Provides the implementation for getting the acutal value 
    * of a time varying or automated effect/plugin parameter
@@ -39,8 +39,8 @@ namespace mobject
     {
       ///////////////
     };
-
-
-
-} // namespace mobject
+  
+  
+  
+}} // namespace proc::mobject
 #endif

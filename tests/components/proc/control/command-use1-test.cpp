@@ -25,7 +25,7 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-invocation.hpp"
 #include "proc/control/command-def.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
@@ -33,6 +33,7 @@
 #include <iostream>
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
@@ -389,4 +390,4 @@ namespace test    {
   LAUNCHER (CommandUse1_test, "function controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

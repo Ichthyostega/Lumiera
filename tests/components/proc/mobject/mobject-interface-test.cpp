@@ -44,6 +44,7 @@
 
 
 
+namespace proc    {
 namespace mobject {
 namespace test    {
   
@@ -125,4 +126,4 @@ namespace test    {
   LAUNCHER (MObjectInterface_test, "unit session");
   
   
-}} // namespace mobject::test
+}}} // namespace proc::mobject::test

@@ -22,7 +22,7 @@
 
 
 /** @file visitor-policies.hpp
- ** Policies usable for configuring the lumiera::visitor::Tool for different kinds of error handling. 
+ ** Policies usable for configuring the lib::visitor::Tool for different kinds of error handling. 
  ** @see buildertool.hpp for another flavour (calling an catch-all-function there)
  **
  */
@@ -35,7 +35,7 @@
 #include "lib/error.hpp"
 
 
-namespace lumiera {
+namespace lib {
 namespace visitor {
   
   /** 
@@ -70,5 +70,5 @@ namespace visitor {
   
   
   
-}} // namespace lumiera::visitor
+}} // namespace lib::visitor
 #endif

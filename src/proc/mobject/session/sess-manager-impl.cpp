@@ -51,6 +51,7 @@ using boost::scoped_ptr;
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -67,7 +68,7 @@ namespace session {
   SessionImplAPI*
   SessManagerImpl::operator-> ()  throw()
   {
-    if (!pImpl_)
+    if (!pSess_)
       try
         { // create empty default configured session
           this->reset();
@@ -80,7 +81,7 @@ namespace session {
         }
     
     
-    return pImpl_.get();
+    return pSess_.get();
   }
   
   
@@ -201,8 +202,8 @@ namespace session {
    *  \link #operator-> access \endlink to the session object.
    */
   SessManagerImpl::SessManagerImpl ()  throw()
-    : pImpl_ (0)
-    , lifecycle_(new SessionLifecycleDetails(pImpl_))
+    : pSess_ (0)
+    , lifecycle_(new SessionLifecycleDetails(pSess_))
   {
     Session::initFlag = true;  //////////////////////////////////////// TICKET #518   instead of this hack, implement basic-init of the session manager for real
   }
@@ -210,7 +211,7 @@ namespace session {
   
   SessManagerImpl::~SessManagerImpl ()
   {
-    TODO ("verify sane lifecycle");
+                               //////////////////////////////////////// TICKET #845 verify sane session manager lifecycle here
     Session::initFlag = false;
   }
   
@@ -219,7 +220,7 @@ namespace session {
   bool
   SessManagerImpl::isUp ()
   {
-    return bool(pImpl_);                          ///////////////////// TICKET #702 possible race, because this gets true way before the interface is up
+    return bool(pSess_);                          ///////////////////// TICKET #702 possible race, because this gets true way before the interface is up
   }
   
   /** @note no transactional behaviour. may succeed partially.
@@ -229,7 +230,7 @@ namespace session {
   SessManagerImpl::clear ()
   {
     Lock sync(this);
-    pImpl_->clear();
+    pSess_->clear();
   }
   
   
@@ -242,7 +243,7 @@ namespace session {
   {
     Lock sync(this);
     lifecycle_->shutDown();
-    pImpl_.reset();
+    pSess_.reset();
   }
   
   
@@ -286,4 +287,4 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

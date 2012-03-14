@@ -24,7 +24,7 @@
 #include "common/config.h"
 #include "common/configitem.h"
 
-#include "tests/test.h"
+#include "lib/test/test.h"
 
 TESTS_BEGIN
 

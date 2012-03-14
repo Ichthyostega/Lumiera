@@ -293,7 +293,7 @@ function add_comment()
 {
     local name="$1"
     local nl=$'\n'
-    local comment="//edit comment$nl    $(date +%c) $(git config --get user.name) <$(git config --get user.email)>$nl"
+    local comment="//edit comment$nl$nl$(git config --get user.name):: '$(date +%c)' ~<$(git config --get user.email)>~$nl"
 
     ed "$name" 2>/dev/null <<EOF
 /endof_comments:/-1i

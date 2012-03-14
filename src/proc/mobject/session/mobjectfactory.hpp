@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_MOBJECTFACTORY_H
-#define MOBJECT_SESSION_MOBJECTFACTORY_H
+#ifndef PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
+#define PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
 
 #include "proc/mobject/mobject.hpp"
 #include "proc/asset/entry-id.hpp"
@@ -30,6 +30,7 @@
 
 
 
+namespace proc {
 namespace asset {
   
   class Clip;
@@ -76,5 +77,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

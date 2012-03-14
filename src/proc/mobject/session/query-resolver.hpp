@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_QUERY_RESOLVER_H
-#define MOBJECT_SESSION_QUERY_RESOLVER_H
+#ifndef PROC_MOBJECT_SESSION_QUERY_RESOLVER_H
+#define PROC_MOBJECT_SESSION_QUERY_RESOLVER_H
 
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
@@ -41,9 +41,11 @@
 //using std::vector;
 //using std::string;
 
+namespace proc {
 namespace mobject {
 namespace session {
   
+  using lib::IxID;
   using util::unConst;
   using boost::noncopyable;
   using boost::scoped_ptr;
@@ -88,7 +90,7 @@ namespace session {
       struct QueryID
         {
           Kind kind;
-          size_t type;
+          IxID type;
         };
       
       QueryID const&
@@ -158,7 +160,7 @@ namespace session {
   typedef lib::TypedContext<Goal::Result> ResultType;
   
   template<typename RES>
-  inline size_t
+  inline IxID
   getResultTypeID()  ///< @return unique ID denoting result type RES
   {
     return ResultType::ID<RES>::get();
@@ -335,5 +337,5 @@ namespace session {
   }
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

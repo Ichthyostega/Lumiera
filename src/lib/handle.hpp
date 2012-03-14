@@ -60,7 +60,7 @@ namespace lib {
    * Generic opaque reference counting handle, for accessing a service
    * and managing its lifecycle. Usually such a handle is created by
    * an service interface and \link #activate activated \endlink by
-   * setting up the link to some internal implementation object.
+   * setting up the link to a suitable hidden implementation object.
    * This setup can only be done by a friend or derived class,       //////////////////////////TODO: that was the intention. Why didn't this work out as expected?
    * while client code is free to copy and store handle objects.
    * Finally, any handle can be closed, thereby decrementing

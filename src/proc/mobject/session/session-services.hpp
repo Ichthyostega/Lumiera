@@ -82,11 +82,12 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
-  using lumiera::typelist::InstantiateChained;
-  using lumiera::typelist::Types;
+  using lib::meta::InstantiateChained;
+  using lib::meta::Types;
   
   
   /**
@@ -136,5 +137,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

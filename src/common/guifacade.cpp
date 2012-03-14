@@ -156,7 +156,7 @@ namespace gui {
             if (facade)
               {
                 WARN (guifacade, "GUI subsystem terminates, but GuiFacade isn't properly closed. "
-                               "Closing it forcedly; this indicates broken startup logic and should be fixed.");
+                                 "Closing it forcedly; this indicates broken startup logic and should be fixed.");
                 try { facade.reset (0); }
                 catch(...) { WARN_IF (lumiera_error_peek(), guifacade, "Ignoring error: %s", lumiera_error()); }
                 lumiera_error(); // clear any remaining error state...

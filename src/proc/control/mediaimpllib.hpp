@@ -25,10 +25,11 @@
 #define CONTROL_MEDIAIMPLLIB_H
 
 
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 
 
 
+namespace proc {
 namespace control {
   
   using lib::Symbol;
@@ -39,9 +40,9 @@ namespace control {
     protected:
       virtual ~MediaImplLib() {};
       
-      typedef lumiera::StreamType::ImplFacade ImplFacade;
-      typedef lumiera::StreamType::ImplFacade::TypeTag TypeTag;
-      typedef lumiera::StreamType::ImplFacade::DataBuffer DataBuffer;
+      typedef StreamType::ImplFacade ImplFacade;
+      typedef StreamType::ImplFacade::TypeTag TypeTag;
+      typedef StreamType::ImplFacade::DataBuffer DataBuffer;
       
     public:
       virtual Symbol getLibID()  const =0;
@@ -50,5 +51,5 @@ namespace control {
     };
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

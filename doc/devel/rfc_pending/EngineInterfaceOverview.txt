@@ -163,7 +163,8 @@ buffers.
 
 Dispatching Step
 ~~~~~~~~~~~~~~~~
-The dispatcher translates a render process into sequences of node invocations,
+The dispatcher translates a render process (actually a _calculation stream_ as
+part of a render process) into sequences of node invocations,
 which then can be analysed further (including planning the invocation of
 prerequisites) and scheduled. This mapping is assisted by the engine model API
 (to find the right exit node in the right segment), the render process (for
@@ -212,7 +213,7 @@ Tasks
    ([green]#->  yes, implementation deferred#)
  * find out about the exact handling of multichannel data streams ([green]#✔ done#)
  * design and prototypical implementation of frame quantisation ([green]#✔ done#)
- * design a buffer descriptor [red]#TODO#
+ * design a buffer descriptor ([green]#✔ done#)
  * design a buffer designation scheme [red]#TODO#
  * expand on the node identification scheme [red]#TODO#
  * clarify how control data frames can be addressed [red]#TODO#
@@ -223,7 +224,11 @@ Discussion
 
 Pros/Cons/Alternatives
 ^^^^^^^^^^^^^^^^^^^^^^
-Possible variants to consider....
+Currently we're focussing on how to implement _this_ concept, not on
+evaluating alternatives. Especially the idea of scheduling individual frame jobs
+is a core concept of Lumiera. This RfC tries to bridge from the session model to
+an engine based on these concepts. It's the attempt to link two concepts already
+defined and decided on....
 
 
 Rationale

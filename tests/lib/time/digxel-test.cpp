@@ -27,6 +27,7 @@
 #include "lib/time/digxel.hpp"
 #include "lib/util.hpp"
 
+#include <time.h>
 #include <cstdlib>
 #include <iostream>
 #include <boost/format.hpp>
@@ -55,7 +56,15 @@ namespace test{
       {
         double arbitrary = (rand() % RAND_RANGE);
         arbitrary /= (1 + rand() % RAND_DENOM);
-        return arbitrary;
+        
+        static double prevVal;
+        if (arbitrary != prevVal)
+          {
+            prevVal = arbitrary;
+            return arbitrary;
+          }
+        else
+          return randomFrac();
       }
     
     inline uint
@@ -267,7 +276,7 @@ namespace test{
           
           CHECK (d1 == d2);
           
-          double someValue = randomFrac();
+          double someValue = d1 + randomFrac();
           d1 = someValue;
           
           CHECK (d1 == someValue);

@@ -52,9 +52,9 @@
 
 
 
+namespace proc {
 namespace control {
   
-  using lib::TypedAllocationManager;
   using lib::InPlaceBuffer;
   using std::string;
   
@@ -279,5 +279,5 @@ namespace control {
     
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

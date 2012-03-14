@@ -189,8 +189,7 @@ TimeCode::set_widget_name(string name)
 void
 TimeCode::setup_events()
 {
-  // FIXME: change to set_can_focus(true) once Debian squeeze is released
-  clock_base.set_flags(CAN_FOCUS);
+  clock_base.set_can_focus(true);
 
   const Gdk::EventMask eventMask =
     Gdk::BUTTON_PRESS_MASK|
@@ -210,15 +209,14 @@ TimeCode::setup_events()
   ms_seconds_ebox.add_events(eventMask);
   audio_frames_ebox.add_events(eventMask);
 
-  // FIXME: change to set_can_focus(true) once Debian squeeze is released
-  hours_ebox.set_flags(CAN_FOCUS);
-  minutes_ebox.set_flags(CAN_FOCUS);
-  seconds_ebox.set_flags(CAN_FOCUS);
-  frames_ebox.set_flags(CAN_FOCUS);
-  audio_frames_ebox.set_flags(CAN_FOCUS);
-  ms_hours_ebox.set_flags(CAN_FOCUS);
-  ms_minutes_ebox.set_flags(CAN_FOCUS);
-  ms_seconds_ebox.set_flags(CAN_FOCUS);
+  hours_ebox.set_can_focus(true);
+  minutes_ebox.set_can_focus(true);
+  seconds_ebox.set_can_focus(true);
+  frames_ebox.set_can_focus(true);
+  audio_frames_ebox.set_can_focus(true);
+  ms_hours_ebox.set_can_focus(true);
+  ms_minutes_ebox.set_can_focus(true);
+  ms_seconds_ebox.set_can_focus(true);
 
   hours_ebox.signal_motion_notify_event().connect(bind(mem_fun(
     *this, &TimeCode::field_motion_notify_event), SMPTE_Hours));

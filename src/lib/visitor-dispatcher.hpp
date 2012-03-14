@@ -34,7 +34,7 @@
 #include <vector>
 
 
-namespace lumiera {
+namespace lib {
 namespace visitor {
   
   using lib::ClassLock;
@@ -213,5 +213,5 @@ namespace visitor {
   
   
   
-}} // namespace lumiera::visitor
+}} // namespace lib::visitor
 #endif

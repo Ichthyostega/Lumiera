@@ -60,6 +60,7 @@
 //#include <tr1/functional>
 
 
+namespace proc {
 namespace control {
   
   using lib::TypedAllocationManager;
@@ -187,5 +188,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

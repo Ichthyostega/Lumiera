@@ -46,15 +46,15 @@
  */
 
 
-#ifndef LUMIERA_P_H
-#define LUMIERA_P_H
+#ifndef LIB_P_H
+#define LIB_P_H
 
 
 #include "lib/error.hpp"
 #include <tr1/memory>
 
 
-namespace lumiera {
+namespace lib {
   
   using std::tr1::shared_ptr;
   using std::tr1::weak_ptr;
@@ -79,51 +79,51 @@ namespace lumiera {
                                  P ( )                      : BASE() {}
       template<class Y> explicit P (Y* p)                   : BASE(p) {}
       template<class Y, class D> P (Y* p, D d)              : BASE(p,d){}
-
+      
                                  P (P const& r)             : BASE(r)  {}
       template<class Y>          P (shared_ptr<Y> const& r) : BASE(r)  {}
       template<class Y> explicit P (weak_ptr<Y> const& wr)  : BASE(wr) {}
-      template<class Y> explicit P (std::auto_ptr<Y> & ar)  : BASE(ar) {}      
-    
+      template<class Y> explicit P (std::auto_ptr<Y> & ar)  : BASE(ar) {}
       
-      P& operator= (P const& r)                               { BASE::operator= (r);  return *this; }  
+      
+      P& operator= (P const& r)                               { BASE::operator= (r);  return *this; }
       template<class Y> P& operator=(shared_ptr<Y> const& sr) { BASE::operator= (sr); return *this; }
       template<class Y> P& operator=(std::auto_ptr<Y> & ar)   { BASE::operator= (ar); return *this; }
-
+      
       TAR* get() const        { return dynamic_cast<TAR*> (BASE::get()); }
       TAR& operator*() const  { return *get(); }
       TAR* operator->() const { return get();  }
-
+      
       void swap(P& b)         { BASE::swap (b);}
       
-    
+      
     private: /* === friend operators injected into enclosing namespace for ADL === */
       template<typename _O_>
       friend inline bool
       operator== (P const& p, P<_O_> const& q) { return (p && q)? (*p == *q) : (!p && !q); }
-  
+      
       template<typename _O_>
       friend inline bool
       operator!= (P const& p, P<_O_> const& q) { return (p && q)? (*p != *q) : !(!p && !q); }
-  
+      
       template<typename _O_>
       friend inline bool
       operator<  (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *p < *q; }   ///< @note deliberately not allowing comparison on NIL ////TICKET #307  : problem with equality test in associative containers, where equal(a,b) := !(a < b) && !(b < a)
-  
+      
       template<typename _O_>
       friend inline bool
       operator>  (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *q < *p; }
-
+      
       template<typename _O_>
       friend inline bool
       operator<= (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *p <= *q;}
-
+      
       template<typename _O_>
       friend inline bool
       operator>= (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *p >= *q;}
       
     };
-   
-    
-} // namespace lumiera
+  
+  
+} // namespace lib
 #endif

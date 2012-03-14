@@ -1,0 +1,114 @@
+format 74
+
+classcanvas 128005 class_ref 176133 // OutputSlot
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 155.04 38.2 2000
+end
+fragment 128261 "output management"
+  xyzwh 126.62 17.82 1990 240 288
+end
+classcanvas 129029 class_ref 185221 // Allocation
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 247.02 129.02 2005
+end
+classcanvas 129541 class_ref 178565 // DataSink
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 13.16 194.12 2005
+end
+classcanvas 129925 class_ref 185349 // Connection
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 419.32 189.12 2000
+end
+classcanvas 130309 class_ref 185477 // OutputSlotImpl
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  color green
+  xyz 149.12 420.84 2000
+end
+classcanvas 130565 class_ref 185605 // ConnectionState
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 249.88 248.84 2000
+end
+classcanvas 130949 class_ref 185733 // ConcreteConnection
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  color lightgreen
+  xyz 408.32 358 2000
+end
+classcanvas 131205 class_ref 185861 // ConnectionStateManager
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 228.88 351 2000
+end
+classcanvas 132613 class_ref 178693 // BufferProvider
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 484.36 459.64 2000
+end
+fragment 132997 "concrete output driver"
+  xyzwh 126.68 309.48 1995 464 204
+end
+note 133125 "Client
+front-end"
+  xyzwh 15.36 270.88 2000 75 43
+note 133381 "Knowledge specific to this external output and driver"
+  xyzwh 536.04 322.88 2000 138 58
+relationcanvas 129157 relation_ref 212485 // <dependency>
+  decenter_begin 726
+  from ref 128005 z 2006 stereotype "<<when-in-use>>" xyz 230 72 3000 to point 227.72 82.12
+  line 132485 z 2006 to point 294.96 83.12
+  line 132357 z 2006 to ref 129029
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129669 relation_ref 212613 // <directional composition>
+  geometry HV
+  from ref 129029 z 2006 stereotype "<<for_each_channel>>" xyz 65 158 3000 to point 51 155
+  line 130821 z 2006 to ref 129541
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 130053 ---+ decenter_end 876
+  from ref 129029 z 2006 to ref 128005
+relationcanvas 130181 relation_ref 212741 // <unidirectional association>
+  from ref 129541 z 2006 stereotype "<<smart-Handle>>" xyz 188 210 3000 to ref 129925
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130437 relation_ref 212869 // <generalisation>
+  from ref 130309 z 2001 to ref 128005
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130693 relation_ref 212997 // <realization>
+  from ref 130565 z 2006 to ref 129029
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 131077 relation_ref 213125 // <realization>
+  from ref 130949 z 2001 to ref 129925
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 131333 relation_ref 213253 // <generalisation>
+  from ref 131205 z 2001 to ref 130565
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 131717 relation_ref 213509 // <dependency>
+  from ref 131205 z 2001 to ref 130949
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 131845 relation_ref 213637 // <dependency>
+  geometry HV
+  decenter_end 197
+  from ref 130309 z 2001 to point 252 433
+  line 132101 z 2001 to ref 131205
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 132741 relation_ref 213765 // <unidirectional association>
+  from ref 130949 z 2001 to point 524.68 414
+  line 133253 z 2001 to ref 132613
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+preferred_whz 723 654 1
+end

@@ -24,18 +24,19 @@
 #include "proc/mobject/builder/segmentation-tool.hpp"
 
 
-using mobject::Buildable;
-using mobject::session::Clip;
-using mobject::session::Effect;
-
-
+namespace proc {
 namespace mobject {
 namespace builder {
+  
+  using mobject::Buildable;
+  using session::Clip;
+  using session::Effect;
+  using session::Fixture;
   
                                       /////////////////////////////////TICKET #414
   
   
-  SegmentationTool::SegmentationTool(mobject::session::Fixture&)
+  SegmentationTool::SegmentationTool(Fixture&)
   {
     UNIMPLEMENTED ("create new SegmentationTool");
   }
@@ -76,4 +77,4 @@ namespace builder {
   }
   
   
-}} // namespace mobject::builder
+}}} // namespace proc::mobject::builder

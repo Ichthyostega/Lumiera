@@ -1,0 +1,40 @@
+Scheduler and Job handling
+==========================
+
+The purpose of the _Scheduler_ is to run small self contained _Jobs_
+ordered by priority and observing specific timing constraints.
+
+Scheduler implementation ideas
+------------------------------
+
+Use multiple priority queues
+
+- background work
+- foreground high-priority
+- soft-realtime actions
+
+About Jobs
+----------
+A job is a closure to run a small and limited action or operation, which
+in itself _should not block_. Job may depend on each other and on resources
+to be provided. A job may be conained in multiple queues and may be marked
+as _canceled_ -- in which case the job function will never run and the job
+will be discarded on occasion.
+
+Job States
+~~~~~~~~~~
+
+[source,C]
+--------------
+enum job_state
+{ 
+  done,         // already done, nothing to do
+  running,      // job is running 
+  waiting,      // waits for some resource (annother job)
+  rejected,     // sorry, cant do that dave, time will run out
+  expired,      // time expired
+  aborted       // got aborted
+}
+--------------
+
+

@@ -55,9 +55,9 @@
 #include <tr1/functional>
 
 
+namespace proc {
 namespace control {
   
-  using lib::TypedAllocationManager;
   using std::tr1::function;
   using std::tr1::shared_ptr;
   
@@ -238,5 +238,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

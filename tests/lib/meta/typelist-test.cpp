@@ -30,8 +30,8 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib  {
+namespace meta {
 namespace test {
       
       template<int I>
@@ -91,4 +91,4 @@ namespace test {
       
       
       
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test

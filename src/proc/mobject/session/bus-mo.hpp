@@ -21,17 +21,18 @@
 */
 
 
-#ifndef MOBJECT_SESSION_BUS_MO_H
-#define MOBJECT_SESSION_BUS_MO_H
+#ifndef PROC_MOBJECT_SESSION_BUS_MO_H
+#define PROC_MOBJECT_SESSION_BUS_MO_H
 
 #include "proc/mobject/session/meta.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 
 
+namespace proc {
 namespace asset { 
   
   class Pipe;
-  typedef lumiera::P<Pipe> PPipe;
+  typedef P<Pipe> PPipe;
 
 }
 
@@ -71,5 +72,5 @@ namespace session {
   template class Placement<session::BusMO, session::Meta>;
   typedef Placement<session::BusMO, session::Meta> PBus;
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

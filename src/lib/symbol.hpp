@@ -112,7 +112,7 @@ namespace lib {
   /** safety guard: maximum number of chars to process.
    *  For comparisons, hash calculations etc., when dealing
    *  with raw char ptrs (typically literal values) */
-  const size_t STRING_MAX_RELEVANT = 1000;
+  extern const size_t STRING_MAX_RELEVANT;
   
   
   /* ===== to be picked up by ADL ===== */

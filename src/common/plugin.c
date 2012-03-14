@@ -248,7 +248,7 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
 LumieraPlugin
 lumiera_plugin_load (const char* plugin)
 {
-  TRACE (pluginloader_dbg);
+  TRACE (pluginloader_dbg, "plugin=%s", plugin);
 
   /* dispatch on ext, call the registered function */
   const char* ext = strrchr (plugin, '.');
@@ -417,6 +417,7 @@ lumiera_plugin_delete_fn (PSplaynode node)
                 LUMIERA_INTERFACE_CAST(lumieraorg__plugin, 0) self->plugin;
               lumiera_interfaceregistry_bulkremove_interfaces (handle->plugin_interfaces ());
             }
+          TRACE (pluginloader_dbg, "unloading plugin/module %s", self->name);
           itr->lumiera_plugin_unload_fn (self);
           break;
         }

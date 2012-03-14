@@ -29,8 +29,11 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
+  
+  namespace error = lumiera::error;
   
   
   /**
@@ -67,8 +70,8 @@ namespace session {
       throwIfInvalid()  const
         {
           if (!isValid())
-            throw lumiera::error::Fatal ("Invalid MObject in model. Indicates a race "
-                                         "or similarly broken internal assumptions.");
+            throw error::Fatal ("Invalid MObject in model. Indicates a race "
+                                "or similarly broken internal assumptions.");
         }
       
       string buildShortID (lib::Literal typeID, string suffix ="")  const;
@@ -76,5 +79,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

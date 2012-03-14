@@ -66,7 +66,6 @@
 
 namespace lib {
   
-  using lumiera::P;
   using util::isSameObject;
   
   /**
@@ -189,7 +188,7 @@ namespace lib {
         }
       
       
-      typedef lumiera::P<TAR> PTarget;
+      typedef P<TAR> PTarget;
       
       /** factory for creating smart-ptr managed
        *  TAR instances, automatically registered

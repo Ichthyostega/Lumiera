@@ -40,6 +40,7 @@ using std::cout;
 using std::endl;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -48,8 +49,8 @@ namespace test    {
   typedef TestPlacement<TestSubMO21> PSub;
   
   typedef PlacementMO::ID P_ID;
-
-
+  
+  
   /***************************************************************************
    * @test properties and behaviour of the reference-mechanism for Placements.
    *       We create an mock placement index and install it to be used
@@ -188,4 +189,4 @@ namespace test    {
   LAUNCHER (PlacementRef_test, "unit session");
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

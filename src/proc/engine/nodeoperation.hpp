@@ -59,8 +59,8 @@
 
 #include "proc/state.hpp"
 #include "proc/engine/procnode.hpp"
-#include "proc/engine/buffhandle.hpp"
-#include "proc/engine/bufftable.hpp"
+#include "proc/engine/channel-descriptor.hpp"
+#include "proc/engine/bufftable-obsolete.hpp"
 #include "proc/engine/nodeinvocation.hpp"
 
 #include "lib/meta/util.hpp"
@@ -70,6 +70,7 @@
 
 
 
+namespace proc {
 namespace engine {
 namespace config {
   
@@ -82,7 +83,7 @@ namespace config {
    */
   struct OperationBase
     {
-      typedef lumiera::Yes_t is_defined;
+      typedef lib::meta::Yes_t is_defined;
       
       BuffHandle
       getSource (Invocation& ivo, uint chanNo)
@@ -245,7 +246,7 @@ namespace config {
   
   template<class NEXT>
   struct ReleaseBuffers : NEXT                     /////////////////TODO: couldn't this be done automatically by BuffTab's dtor??
-    {                                             /////////////////       this would require BuffHandle to be a smart ref....
+    {                                             /////////////////       this would require BuffHandle to be a smart ref....     --> ///TICKET #249
       BuffHandle 
       step (Invocation& ivo)
         {
@@ -276,12 +277,12 @@ namespace config {
     };
   
   
-  using lumiera::typelist::Config;
+  using lib::meta::Config;
                                               ///////////////////////TODO: selecting this way isn't especially readable,
                                               ///////////////////////////: but BufferProvider selection is going to be solved differently anyway, see Ticket #249
   template<class CONF>
   struct SelectBuffProvider                                          { typedef AllocBufferFromParent Type; };
-  template<char PROC_ign, char INPLA_ign>
+  template<uint PROC_ign, uint INPLA_ign>
   struct SelectBuffProvider< Config<CACHING, PROC_ign, INPLA_ign> >  { typedef AllocBufferFromCache  Type; };
   
   
@@ -289,7 +290,7 @@ namespace config {
   struct Strategy ;
   
   
-  template<char INPLACE_ign>
+  template<uint INPLACE_ign>
   struct Strategy< Config<CACHING,PROCESS,INPLACE_ign> >
     : QueryCache<
        AllocBufferTable<
@@ -301,7 +302,7 @@ namespace config {
              OperationBase > > > > > > >
     { };
   
-  template<char INPLACE_ign>
+  template<uint INPLACE_ign>
   struct Strategy< Config<PROCESS,INPLACE_ign> >
     : AllocBufferTable<
        PullInput<
@@ -335,5 +336,5 @@ namespace config {
   
   
   
-}} // namespace engine::config
+}}} // namespace proc::engine::config
 #endif

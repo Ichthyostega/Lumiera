@@ -27,7 +27,7 @@
 
 #include "lib/scoped-holder.hpp"
 #include "lib/scoped-holder-transfer.hpp"
-#include "testdummy.hpp"
+#include "lib/test/testdummy.hpp"
 
 #include <iostream>
 #include <vector>
@@ -125,17 +125,17 @@ namespace test {
       void
       buildVector()
         {
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             typedef typename Table<HO>::Type Vect;
             
             Vect table(50);
-            CHECK (0==checksum);
+            CHECK (0 == Dummy::checksum());
             
             for (uint i=0; i<10; ++i)
               create_contained_object (table[i]);
             
-            CHECK (0 < checksum);
+            CHECK (0 < Dummy::checksum());
             CHECK ( table[9]);
             CHECK (!table[10]);
             
@@ -143,9 +143,9 @@ namespace test {
             CHECK (rawP);
             CHECK (table[5]);
             CHECK (rawP == &(*table[5]));
-            CHECK (rawP->add(-555) == table[5]->add(-555));
+            CHECK (rawP->acc(-555) == table[5]->acc(-555));
           }
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
       
@@ -153,29 +153,29 @@ namespace test {
       void
       growVector()
         {
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             typedef typename Table<HO>::Type Vect;
             
             Vect table;
             table.reserve(2);
-            CHECK (0==checksum);
+            CHECK (0 == Dummy::checksum());
             
             cout << ".\n..install one element at index[0]\n";
             table.push_back(HO());
-            CHECK (0==checksum);
+            CHECK (0 == Dummy::checksum());
             
             create_contained_object (table[0]); // switches into "managed" state
-            CHECK (0 < checksum);
-            int theSum = checksum;
+            CHECK (0 < Dummy::checksum());
+            int theSum = Dummy::checksum();
             
             cout << ".\n..*** resize table to 16 elements\n";
             for (uint i=0; i<15; ++i)
               table.push_back(HO());
             
-            CHECK (theSum==checksum);
+            CHECK (theSum == Dummy::checksum());
           }
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
       
@@ -183,37 +183,37 @@ namespace test {
       void
       checkErrorHandling()
         {
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             typedef typename Table<HO>::Type Vect;
             
             Vect table(5);
             table.reserve(5);
-            CHECK (0==checksum);
+            CHECK (0 == Dummy::checksum());
             
             create_contained_object (table[2]);
             create_contained_object (table[4]);
-            CHECK (0 < checksum);
-            int theSum = checksum;
+            CHECK (0 < Dummy::checksum());
+            int theSum = Dummy::checksum();
             
             cout << ".\n.throw some exceptions...\n";
-            throw_in_ctor = true;
+            Dummy::activateCtorFailure();
             try
               {
                 create_contained_object (table[3]);
-                NOTREACHED ();
+                NOTREACHED ("ctor should throw");
               }
             catch (int val)
               {
-                CHECK (theSum < checksum);
-                checksum -= val;
-                CHECK (theSum==checksum);
+                CHECK (theSum < Dummy::checksum());
+                Dummy::checksum() -= val;
+                CHECK (theSum == Dummy::checksum());
               }
             CHECK ( table[2]);
             CHECK (!table[3]); // not created because of exception
             CHECK ( table[4]);
             
-            throw_in_ctor = false;
+            Dummy::activateCtorFailure(false);
             throw_in_transfer=true;  // can do this only when using ScopedHolder
             try
               {
@@ -223,10 +223,10 @@ namespace test {
               {
                 CHECK ( table.size() < 10);
               }
-            CHECK (theSum == checksum);
+            CHECK (theSum == Dummy::checksum());
             throw_in_transfer=false;
           }
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
     };

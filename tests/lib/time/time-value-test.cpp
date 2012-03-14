@@ -233,7 +233,14 @@ namespace test{
           CHECK (9 == off9);
           // simple linear combinations
           CHECK (7 == -2*off9 + off5*5);
-        }
+          
+          // build offset by number of frames
+          Offset byFrames(-125, FrameRate::PAL);
+          CHECK (Time(FSecs(-5)) == byFrames);
+          
+          CHECK (Offset(-5, FrameRate(5,4)) == -Offset(5, FrameRate(5,4)));
+          CHECK (Offset(3, FrameRate(3)) == Offset(12345, FrameRate(24690,2)));
+        }                                // precise rational number calculations
       
       
       void

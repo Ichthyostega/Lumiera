@@ -103,6 +103,8 @@
 namespace lib    {
 namespace advice {
   
+  namespace error = lumiera::error;
+  
   using std::tr1::placeholders::_1;
   using std::tr1::unordered_map;
   using lib::iter_stl::eachVal;
@@ -118,7 +120,6 @@ namespace advice {
   using std::cout;
   using std::endl;
   
-  using namespace lumiera;
   
   
   

@@ -33,6 +33,7 @@ using std::string;
 using std::cout;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -138,4 +139,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

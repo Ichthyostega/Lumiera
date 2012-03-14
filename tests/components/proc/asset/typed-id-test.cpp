@@ -47,22 +47,23 @@ using util::for_each;
 using util::isnil;
 //using lib::Literal;
 using lib::Symbol;
-using lumiera::P;
+using lib::P;
 //using std::string;
 using std::cout;
 using std::endl;
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
 namespace test {
   
   struct DummyEntity { };    ////////////////////////TODO of course the key idea is to mix in TypedID::link, to get an automatic registration and deregistartion
   
-  typedef lumiera::P<DummyEntity> PDum;
+  typedef P<DummyEntity> PDum;
   
-}}}
+}}}}
 
 namespace lumiera{  ///////TODO: shouldn't that be namespace lib? or proc?
 namespace query  {
@@ -73,16 +74,17 @@ namespace query  {
    * Of course this is a test/dummy/demonstration.
    */
   template<>
-  struct TypeHandlerXX<mobject::session::test::DummyEntity>
+  struct TypeHandlerXX<proc::mobject::session::test::DummyEntity>
     {
       static Symbol getID() { return "typed-id-test-dummy"; }
       
     };
   
-  }}
+}}
 
 
 
+namespace proc {
 namespace asset{
 namespace test {
   
@@ -242,4 +244,4 @@ namespace test {
   LAUNCHER (TypedID_test, "unit asset");
   
   
-}} // namespace asset::test
+}}} // namespace proc::asset::test

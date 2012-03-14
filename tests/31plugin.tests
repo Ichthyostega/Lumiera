@@ -10,7 +10,8 @@ export LUMIERA_PLUGIN_PATH=modules
 export LUMIERA_CONFIG_PATH=./
 
 TEST "discovering plugins" plugin_discover <<END
-out: found plugin: modules/examplepluginc.lum
+out: found plugin: modules/test-c-plugin.lum
+out: found plugin: modules/test-cpp-plugin.lum
 return: 0
 END
 
@@ -20,7 +21,7 @@ out: plugin discovered after unload: \(nil\)
 return: 0
 END
 
-TEST "C plugin test" plugin_examplepluginc <<END
+TEST "C plugin test" plugin_exampleplugin <<END
 out: Hallo Welt!
 out: Tschuess Welt!
 out: Hello World!
@@ -28,13 +29,23 @@ out: Bye World!
 return: 0
 END
 
-TEST "C plugin test, nested" plugin_examplepluginc_nested <<END
+TEST "C plugin test, nested" plugin_exampleplugin_nested <<END
 out: config path is: \./
 out: plugin path is: modules
 out: Hallo Welt!
 out: Hello World!
 out: Bye World!
 out: Tschuess Welt!
+return: 0
+END
+
+TEST "C++ plugin test" plugin_exampleplugin_cpp <<END
+out: opened 0x.+ global interfaces 0x...
+out: Hallo Welt!
+out: Tschüss schnöde Welt!
+out: Hello World!
+out: Bye Vale of Tears!
+out: dying
 return: 0
 END
 

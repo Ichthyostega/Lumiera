@@ -279,6 +279,14 @@ namespace lib {
           typedef typename IterSource<Val>::iterator Iter;
         };
       
+      template<class IT, class FUN>
+      struct _TransformIterT
+        {
+          typedef typename _ProducedOutput<FUN>::Type ResVal;          
+          typedef TransformIter<IT,ResVal>         TransIter;
+          typedef typename IterSource<ResVal>::iterator Iter;
+        };
+      
       template<class IT>
       struct _PairIterT
         {
@@ -326,6 +334,28 @@ namespace lib {
       typedef typename _IterT<IT>::Val ValType;
       
       return IterSource<ValType>::build (new WrappedLumieraIterator<IT> (source));
+    }
+    
+    
+    /** pipes a given Lumiera Forward Iterator through
+     *  a transformation function and wraps the resulting
+     *  transforming Iterator, exposing just an IterSource.
+     *  This convenience shortcut can be used to build a
+     *  processing chain; the resulting IterSource will
+     *  hide any detail types involved.
+     * @note as with any IterSource, there is one virtual
+     *       function call for every fetched element.
+     */
+    template<class IT, class FUN>
+    typename _TransformIterT<IT,FUN>::Iter
+    transform (IT const& source, FUN processingFunc)
+    {
+      typedef typename _TransformIterT<IT,FUN>::ResVal    ValType;
+      typedef typename _TransformIterT<IT,FUN>::TransIter TransIT;
+      
+      return IterSource<ValType>::build (
+          new WrappedLumieraIterator<TransIT> (
+              transformIterator (source, processingFunc)));
     }
     
     
@@ -424,6 +454,7 @@ namespace lib {
 
   }
   using iter_source::wrapIter;
+  using iter_source::transform;
   using iter_source::eachMapKey;
   using iter_source::eachDistinctKey;
   using iter_source::eachValForKey;

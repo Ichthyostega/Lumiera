@@ -30,14 +30,17 @@
 
 #include "gui/widgets/timeline/timeline-tool.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/time/timequant.hpp"
+#include "lib/time/control.hpp"
 
-#include <gtkmm.h>
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
 using lib::time::TimeVar;
+using lib::time::TimeSpan;
+using lib::time::Control;
 
 /**
  * A helper class to implement the timeline i-beam tool
@@ -135,12 +138,12 @@ private:
   enum DragType
     {
       /**
-       * No drag is occuring
+       * No drag is occurring
        */
       None,
       
       /**
-       * A selection drag is occuring.
+       * A selection drag is occurring.
        * @remarks The position of one end of the selection was set at
        * mouse-down of the drag, and the other end is set by
        * drag-release.
@@ -159,6 +162,8 @@ private:
     };
 
   /* ==== Internals ===== */
+  Control<TimeSpan> selectionControl;
+
   /**
    * Specifies the type of drag currently taking place.
    */

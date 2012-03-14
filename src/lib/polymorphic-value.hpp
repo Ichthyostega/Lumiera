@@ -34,8 +34,8 @@
  ** assume the presence of a garbage collector or similar mechanism,
  ** so 'objects' need just to be mentioned by reference.
  ** 
- ** In C++ to employ many of the well known techniques, you're more or less
- ** bound to explicitly put the objects somewhere in heap allocated memory
+ ** In C++, in order to employ many of the well known techniques, we're bound
+ ** more or less to explicitly put the objects somewhere in heap allocated memory
  ** and then pass an interface pointer or reference into the actual algorithm.
  ** Often, this hinders a design based on constant values and small descriptor
  ** objects used inline, thus forcing into unnecessarily complex and heavyweight
@@ -68,7 +68,7 @@
  ** Moreover, the PolymorphicValue container provides static builder functions,
  ** allowing to place a concrete instance of a subclass into the content buffer.
  ** After construction, the actual type of this instance will be forgotten
- ** (``type erasure''), but because the embedded vtable, on access the
+ ** (``type erasure''), but because of the embedded vtable, on access the
  ** proper implementation functions will be invoked.
  ** 
  ** Expanding on that pattern, the copying and cloning operations of the whole
@@ -86,7 +86,7 @@
  **   the copy or clone operations, we need to do an elaborate re-cast operation,
  **   first going down to the leaf type and then back up into the mixed in
  **   management interface. Basically this operation is performed by using
- **   an \c dynamic_cast<CopyAPI&>(bufferContents)
+ **   a \c dynamic_cast<CopyAPI&>(bufferContents)
  ** - but when the used client types provide some collaboration and implement
  **   this management interface either directly on the API or as an immediate
  **   sub-interface, then this copy/management interface is located within the
@@ -146,6 +146,7 @@
 #include "lib/meta/duck-detector.hpp"
 
 #include <boost/utility/enable_if.hpp>
+#include <boost/static_assert.hpp>
 
 
 namespace lib {
@@ -155,8 +156,8 @@ namespace lib {
     
     namespace error = lumiera::error;
     using boost::enable_if;
-    using lumiera::Yes_t;
-    using lumiera::No_t;
+    using lib::meta::Yes_t;
+    using lib::meta::No_t;
     
     struct EmptyBase{ };
     
@@ -345,7 +346,7 @@ namespace lib {
    * - the caller cares for thread safety. No concurrent get calls while in mutation!
    * 
    * @warning when a create or copy-into operation fails with exception, the whole
-   *          PolymorphicValue object is in undefined state and must not be used further.
+   *          PolymorphicValue object is in undefined state and must not be used henceforth.
    */
   template
     < class IFA                  ///< the nominal Base/Interface class for a family of types
@@ -384,26 +385,27 @@ namespace lib {
       template<class IMP>
       PolymorphicValue (IMP*)
         {
-          REQUIRE (siz >= sizeof(IMP));
+          BOOST_STATIC_ASSERT (siz >= sizeof(IMP));
+          
           new(&buf_) IMP();
         }
       
       template<class IMP, typename A1>
-      PolymorphicValue (IMP*, A1& a1)
+      PolymorphicValue (IMP*, A1 a1)
         {
           REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP (a1);
         }
       
       template<class IMP, typename A1, typename A2>
-      PolymorphicValue (IMP*, A1& a1, A2& a2)
+      PolymorphicValue (IMP*, A1 a1, A2 a2)
         {
           REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP (a1,a2);
         }
       
       template<class IMP, typename A1, typename A2, typename A3>
-      PolymorphicValue (IMP*, A1& a1, A2& a2, A3& a3)
+      PolymorphicValue (IMP*, A1 a1, A2 a2, A3 a3)
         {
           REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP (a1,a2,a3);
@@ -444,13 +446,13 @@ namespace lib {
           Adapter() : IMP() { }
           
           template<typename A1>
-          Adapter (A1& a1) : IMP(a1) { }
+          Adapter (A1 a1) : IMP(a1) { }
           
           template<typename A1, typename A2>
-          Adapter (A1& a1, A2& a2) : IMP(a1,a2) { }
+          Adapter (A1 a1, A2 a2) : IMP(a1,a2) { }
           
           template<typename A1, typename A2, typename A3>
-          Adapter (A1& a1, A2& a2, A3& a3) : IMP(a1,a2,a3) { }
+          Adapter (A1 a1, A2 a2, A3 a3) : IMP(a1,a2,a3) { }
           
           /* using default copy and assignment */
         };
@@ -505,31 +507,31 @@ namespace lib {
       static PolymorphicValue
       build ()
         {
-          Adapter<IMP>* type_to_build_in_buffer;
+          Adapter<IMP>* type_to_build_in_buffer(0);
           return PolymorphicValue (type_to_build_in_buffer);
         }
       
       template<class IMP, typename A1>
       static PolymorphicValue
-      build (A1& a1)
+      build (A1 a1)
         {
-          Adapter<IMP>* type_to_build_in_buffer;
+          Adapter<IMP>* type_to_build_in_buffer(0);
           return PolymorphicValue (type_to_build_in_buffer, a1);
         }
       
       template<class IMP, typename A1, typename A2>
       static PolymorphicValue
-      build (A1& a1, A2& a2)
+      build (A1 a1, A2 a2)
         {
-          Adapter<IMP>* type_to_build_in_buffer;
+          Adapter<IMP>* type_to_build_in_buffer(0);
           return PolymorphicValue (type_to_build_in_buffer, a1,a2);
         }
       
       template<class IMP, typename A1, typename A2, typename A3>
       static PolymorphicValue
-      build (A1& a1, A2& a2, A3& a3)
+      build (A1 a1, A2 a2, A3 a3)
         {
-          Adapter<IMP>* type_to_build_in_buffer;
+          Adapter<IMP>* type_to_build_in_buffer(0);
           return PolymorphicValue (type_to_build_in_buffer, a1,a2,a3);
         }
       

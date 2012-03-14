@@ -173,11 +173,21 @@ namespace lib {
           return *obj;
         }
       
+      TY& 
+      create (TY const& o)    ///< place new content object using copy ctor
+        {
+          ASSERT (!created_);
+          TY * obj = new(content_) TY(o);
+          ++created_;
+          return *obj;
+        }
+      
       void
       clear ()
         {
           if (created_)
             get()->~TY();
+          created_ = false;
         }
       
       

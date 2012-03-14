@@ -42,6 +42,11 @@ namespace time {
   
   namespace error = lumiera::error;
   
+  // forwards...
+  class FrameRate;
+  class TimeSpan;
+  class Mutation;
+  
   
   /**
    * basic constant internal time value.
@@ -193,6 +198,11 @@ namespace time {
         : TimeValue(TimeVar(target) -= origin)
         { }
       
+      Offset (int64_t count, FrameRate const& fps);
+      
+      static const Offset ZERO;
+      
+      
       TimeValue
       abs()  const
         {
@@ -241,7 +251,6 @@ namespace time {
    * @warning do not mix up gavl_time_t and FSecs */
   typedef boost::rational<long> FSecs;
   
-  class FrameRate;
   
   /**
    * Lumiera's internal time value datatype.
@@ -275,6 +284,9 @@ namespace time {
       static const Time MIN ;
       static const Time ZERO;
       
+      static const Time ANYTIME;  ///< border condition marker value. #ANYTIME <= any time value
+      static const Time NEVER;   ///<  border condition marker value. #NEVER >= any time value
+      
       explicit 
       Time (TimeValue const& val =TimeValue(0))
         : TimeValue(val)
@@ -304,8 +316,6 @@ namespace time {
   
   
   
-  class TimeSpan;
-  class Mutation;
   
   /**
    * Duration is the internal Lumiera time metric.
@@ -315,33 +325,63 @@ namespace time {
    * possibility to send a \em Mutation message.
    */
   class Duration
-    : public Offset
+    : public TimeValue
     {
       /// direct assignment prohibited
       Duration& operator= (Duration const&);
       
     public:
       Duration (Offset const& distance)
-        : Offset(distance.abs())
+        : TimeValue(distance.abs())
         { }
       
       explicit
       Duration (TimeValue const& timeSpec)
-        : Offset(Offset(timeSpec).abs())
+        : TimeValue(Offset(timeSpec).abs())
         { }
       
       explicit
       Duration (FSecs const& timeSpan_in_secs)
-        : Offset(Offset(Time(timeSpan_in_secs)).abs())
+        : TimeValue(Offset(Time(timeSpan_in_secs)).abs())
         { }
       
       Duration (TimeSpan const& interval);
-      Duration (ulong count, FrameRate const& fps);
+      Duration (int64_t count, FrameRate const& fps);
       
       static const Duration NIL;
       
       void accept (Mutation const&);
+      
+      /// Supporting backwards use as offset
+      Offset operator- ()  const;
+      
     };
+    
+  //-- support using a Duration to build offsets ---------------
+  
+  inline Duration
+  operator+ (Duration const& base, Duration const& toAdd)
+  {
+    return Offset(base) + Offset(toAdd);
+  }
+  
+  inline Offset
+  operator* (int factor, Duration const& dur)
+  {
+    return factor * Offset(dur);
+  }
+  
+  inline Offset
+  operator* (Duration const& dur, int factor)
+  {
+    return factor*dur;
+  }
+  
+  inline Offset
+  Duration::operator- ()  const
+  {
+    return -1 * (*this); 
+  }
   
   
   
@@ -493,7 +533,7 @@ namespace time {
   
   inline
   Duration::Duration (TimeSpan const& interval)
-    : Offset(interval.duration())
+    : TimeValue(interval.duration())
     { }
   
   inline

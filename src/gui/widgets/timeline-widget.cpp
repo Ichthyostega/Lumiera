@@ -27,7 +27,8 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace boost;
+using namespace std::tr1;
+
 using namespace util;
 using namespace gui::widgets::timeline;
 
@@ -40,21 +41,19 @@ namespace widgets {
 const int TimelineWidget::TrackPadding = 1;
 const int TimelineWidget::HeaderWidth = 150;
 const int TimelineWidget::HeaderIndentWidth = 10;
-const double TimelineWidget::ZoomIncrement = 1.25;
-const int64_t TimelineWidget::MaxScale = 30000000;
 
-TimelineWidget::TimelineWidget(
-  boost::shared_ptr<timeline::TimelineState> source_state) :
-  Table(2, 2),
-  layoutHelper(*this),
-  headerContainer(NULL),
-  body(NULL),
-  ruler(NULL),
-  horizontalAdjustment(0, 0, 0),
-  verticalAdjustment(0, 0, 0),
-  horizontalScroll(horizontalAdjustment),
-  verticalScroll(verticalAdjustment),
-  update_tracks_frozen(false)
+
+TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
+  : Table(2, 2)
+  , layoutHelper(*this)
+  , headerContainer(NULL)
+  , body(NULL)
+  , ruler(NULL)
+  , horizontalAdjustment(0, 0, 0)
+  , verticalAdjustment(0, 0, 0)
+  , horizontalScroll(horizontalAdjustment)
+  , verticalScroll(verticalAdjustment)
+  , update_tracks_frozen(false)
 {
   body = manage(new TimelineBody(*this));
   ENSURE(body != NULL);
@@ -62,7 +61,7 @@ TimelineWidget::TimelineWidget(
   ENSURE(headerContainer != NULL);
   ruler = manage(new TimelineRuler(*this));
   ENSURE(ruler != NULL);
-    
+
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
   verticalAdjustment.signal_value_changed().connect( sigc::mem_fun(
@@ -71,7 +70,7 @@ TimelineWidget::TimelineWidget(
     this, &TimelineWidget::on_motion_in_body_notify_event) );
     
   update_tracks();
-  
+
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
   attach(*ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
   attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
@@ -93,7 +92,7 @@ TimelineWidget::~TimelineWidget()
 
 /* ===== Data Access ===== */
 
-boost::shared_ptr<timeline::TimelineState>
+shared_ptr<timeline::TimelineState>
 TimelineWidget::get_state()
 {
   return state;
@@ -102,6 +101,7 @@ TimelineWidget::get_state()
 void
 TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
 { 
+
   state = new_state;
   
   // Clear the track tree
@@ -125,17 +125,17 @@ TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
   update_tracks();
   
   // Send the state changed signal
-  stateChangedSignal.emit();
+  stateChangedSignal.emit (state);
 }
 
 void
-TimelineWidget::zoom_view(int zoom_size)
+TimelineWidget::zoom_view(double timescale_ratio)
 {
   if(state)
-    {
-      const int view_width = body->get_allocation().get_width();
-      state->get_view_window().zoom_view(view_width / 2, zoom_size);
-    }
+  {
+    const int view_width = body->get_allocation().get_width();
+    state->get_view_window().zoom_view(view_width / 2, timescale_ratio);
+  }
 }
 
 ToolType
@@ -178,7 +178,7 @@ TimelineWidget::hovering_track_changed_signal() const
   return hoveringTrackChangedSignal;
 }
 
-sigc::signal<void>
+TimelineWidget::TimelineStateChangeSignal
 TimelineWidget::state_changed_signal() const
 {
   return stateChangedSignal;
@@ -212,10 +212,12 @@ TimelineWidget::on_view_window_changed()
   if(state)
     { 
       timeline::TimelineViewWindow &window = state->get_view_window();
+
       const int view_width = body->get_allocation().get_width();
-      
+
       horizontalAdjustment.set_page_size(
         window.get_time_scale() * view_width);
+
       horizontalAdjustment.set_value(_raw(window.get_time_offset()));
     }
 }
@@ -331,8 +333,8 @@ TimelineWidget::create_timeline_track_from_modelTrack(
 void
 TimelineWidget::remove_orphaned_tracks()
 {
-  std::map<boost::shared_ptr<model::Track>,
-    boost::shared_ptr<timeline::Track> >
+  std::map<shared_ptr<model::Track>,
+    shared_ptr<timeline::Track> >
     orphan_track_map(trackMap);
   
   // Remove all tracks which are still present in the sequence
@@ -353,9 +355,9 @@ TimelineWidget::remove_orphaned_tracks()
 
 void
 TimelineWidget::search_orphaned_tracks_in_branch(
-    boost::shared_ptr<model::Track> modelTrack,
-    std::map<boost::shared_ptr<model::Track>,
-    boost::shared_ptr<timeline::Track> > &orphan_track_map)
+    shared_ptr<model::Track> modelTrack,
+    std::map<shared_ptr<model::Track>,
+    shared_ptr<timeline::Track> > &orphan_track_map)
 {
   REQUIRE(modelTrack);
   
@@ -411,12 +413,13 @@ TimelineWidget::update_scroll()
   
   if(state)
     {
+                                            ///////////////////////////////////////////////TICKET #861 shoudln't that be performed by TimelineViewWindow, instead of manipulating values from the outside?
       timeline::TimelineViewWindow &window = state->get_view_window();
       
       //----- Horizontal Scroll ------//
       
       // TEST CODE
-      horizontalAdjustment.set_upper(1000 * GAVL_TIME_SCALE / 200);
+      horizontalAdjustment.set_upper( 1000 * GAVL_TIME_SCALE / 200);
       horizontalAdjustment.set_lower(-1000 * GAVL_TIME_SCALE / 200);
       
       // Set the page size
@@ -477,7 +480,7 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
   return true;
 }
 
-boost::shared_ptr<model::Sequence>
+shared_ptr<model::Sequence>
 TimelineWidget::sequence() const
 {
   if(!state)

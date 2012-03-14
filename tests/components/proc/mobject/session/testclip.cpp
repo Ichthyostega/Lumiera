@@ -29,6 +29,7 @@
 #include "lib/singleton.hpp"
 #include "lib/time/timevalue.hpp"
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -90,4 +91,4 @@ namespace test    {
   const Duration LENGTH_TestClip(Time(0,25,0,0));   //////TODO hard wired as of (1/10). See MediaFactory::operator()  in media.cpp / mediaaccessmock.cpp
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

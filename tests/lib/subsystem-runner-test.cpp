@@ -76,6 +76,7 @@ namespace test  {
       LUMIERA_ERROR_DEFINE( TEST, "simulated failure.");
       
       using error::LUMIERA_ERROR_LOGIC;
+      using error::LUMIERA_ERROR_STATE;
       
       
       
@@ -400,7 +401,7 @@ namespace test  {
             unit3.depends (unit2);
             SubsystemRunner runner(dummyOpt);
             
-            VERIFY_ERROR (LOGIC, runner.maybeRun (unit4) );   // failure to bring up prerequisites is detected
+            VERIFY_ERROR (STATE, runner.maybeRun (unit4) );   // failure to bring up prerequisites is detected
             CHECK ( unit1.isRunning());
             CHECK ( unit2.isRunning());
             CHECK (!unit3.isRunning());

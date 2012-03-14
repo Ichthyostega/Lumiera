@@ -25,10 +25,10 @@
  ** A closure enabling self-contained execution of commands within the ProcDispatcher.
  ** After defining a proc-layer command, at some point the function arguments
  ** of the contained operation are "closed" by storing concrete argument values.
- ** These values will later on be fed to the operation when the command is invoked.
+ ** These values will be fed later on to the operation when the command is invoked.
  ** 
- ** Most of the command machinery accesses this function closure through the interface
- ** CmdClosure, while, when defining a command, subclasses typed to the specific
+ ** Most of the command machinery accesses this function closure through the generic
+ ** interface CmdClosure, while, when defining a command, subclasses typed to the specific
  ** function arguments are created. Especially, there is an ArgumentHolder template,
  ** which is used to define the storage for the concrete arguments. This ArgumentHolder
  ** internally contains an Closure<SIG> instance (where SIG is the signature of the
@@ -43,10 +43,10 @@
  ** 
  ** Later on, any command needs to be made ready for execution by binding it to a specific
  ** execution environment, which especially includes the target objects to be mutated by the
- ** command. Effectively, this means "closing" the Mutation (and UNDO) functor(s) with the
+ ** command. Effectively, this means "closing" the Mutation (and UNDO) functor(s)) with the
  ** actual function arguments. These arguments are stored embedded within an ArgumentHolder,
  ** which thereby acts as closure. Besides, the ArgumentHolder also has to accommodate for
- ** storage holding the captured UNDO state (memento). Thus, internally the ArgumentHolder
+ ** storage holding the captured UNDO state (memento). Internally the ArgumentHolder
  ** has to keep track of the actual types, thus allowing to re-construct the concrete
  ** function signature when closing the Mutation.
  ** 
@@ -67,7 +67,6 @@
 #ifndef CONTROL_COMMAND_CLOSURE_H
 #define CONTROL_COMMAND_CLOSURE_H
 
-//#include "pre.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/function.hpp"
@@ -75,7 +74,7 @@
 #include "lib/meta/function-erasure.hpp"
 #include "lib/meta/tuple.hpp"
 #include "lib/meta/maybe-compare.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "lib/typed-allocation-manager.hpp"
@@ -89,17 +88,18 @@
 
 
 
+namespace proc {
 namespace control {
   
-  using lumiera::typelist::FunctionSignature;
-  using lumiera::typelist::Tuple;
-  using lumiera::typelist::BuildTupleAccessor;
-  using lumiera::typelist::func::TupleApplicator;
-  using lumiera::typelist::FunErasure;
-  using lumiera::typelist::StoreFunction;
-  using lumiera::typelist::NullType;
+  using lib::meta::FunctionSignature;
+  using lib::meta::Tuple;
+  using lib::meta::BuildTupleAccessor;
+  using lib::meta::func::TupleApplicator;
+  using lib::meta::FunErasure;
+  using lib::meta::StoreFunction;
+  using lib::meta::NullType;
   
-  using lumiera::typelist::equals_safeInvoke;
+  using lib::meta::equals_safeInvoke;
   using lib::TypedAllocationManager;
   using util::unConst;
   using std::tr1::function;
@@ -214,7 +214,7 @@ namespace control {
       friend bool
       compare (ParamAccessor const&, ParamAccessor const&)
         {
-          return true;;
+          return true;
         }
     };
   
@@ -303,5 +303,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

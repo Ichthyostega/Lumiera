@@ -3,12 +3,81 @@ Plugin Brainstorm
 :Author: Christian Thäter
 :Date: 2008-09-15
 
-Raw Version
------------
+Lumiera will use a very simple and language neutral plugin system. The focus is on easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
+
+.Concept
+Plugins are just shared libraries which offer well defined Interfaces.
+A Plugin may offer more than one interface and may in turn request/use interfaces
+from other Plugins or from the main application.
 
 
-[cpp]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Interface Definition
+--------------------
+
+Interfaces are declared in header files. They use some tool macros to give a convenient definition language.
+Basically, Interfaces are fixed -- with the exception that new functions may be added.
+link:PluginVersioning.html[Plugin Version Management] should stay out of the view most of the time.
+
+Plugin interfaces are simple C structs with some metadata at the beginning and function prototypes
+added at the end. With some macros we can map simple functions to versioned interfaces.
+Compiled plugins will stay compatible even if the interface is extended, while sourcecode need maintenance.
+
+An interface needs a name and a version. They define a block where the actual function prototypes can be added.
+New prototypes have to be added at the end, existing prototypes must never be changed.
+Each function prototype must be given with its different parts:
+
+- return type
+- name
+- arguments list
+- version.
+
+
+.Example
+[source,c]
+-----------------------------------------
+LUMIERA_INTERFACE(foo, 1,
+	LUMIERA_IPROTO(void, bar, (void)),
+	LUMIERA_IPROTO(int, baz, (int i))
+);
+
+LUMIERA_INTERFACE(foo, 2,
+	LUMIERA_IPROTO(void, bar, (void)),
+	LUMIERA_IPROTO(int, baz, (float i))
+);
+-----------------------------------------
+
+Note that the version 2 interface _changed the parameter from int to float_ for the 'baz' function.
+
+The interface/plugin framework will expand the above definitions into:
+
+[source,c]
+-----------------------------------------
+struct lumiera_interface_foo_1
+{
+	struct lumiera_interface interface_header_;
+	void (*bar) (void);
+	int (*baz) (int i);
+};
+
+struct lumiera_interface_foo_2
+{
+	struct lumiera_interface interface_header_;
+	void (*bar) (void);
+	int (*baz) (float i);
+};
+-----------------------------------------
+
+
+Implementation of Interfaces
+----------------------------
+Interfaces can be implemented either in core code or through plugins.
+In each case, such an _instantiation_ of an interface means that actual functions are mapped
+to the corresponding slots in the interface structure.
+
+
+.Implementing an interface
+[source,c]
+-----------------------------------------
 LUMIERA_INTERFACE_DECLARE (interface_descriptor, 0,
                            /* The following slots are some human-readable descriptions of certain properties */
                            LUMIERA_INTERFACE_SLOT (const char*, name, (LumieraInterface)),
@@ -18,4 +87,21 @@ LUMIERA_INTERFACE_DECLARE (interface_descriptor, 0,
                            LUMIERA_INTERFACE_SLOT (const char*, license, (LumieraInterface))
                            /* TODO add more things here, dependencies, provisions etc */
                            );
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------------------
+
+
+Lumiera Plugin API
+-------------------
+The Lumiera Interface/Plugin framework provides some functions to manage Plugins.
+Actually a user requests interfaces. The libraries which implement Plugins are managed transparently.
+Interfaces are exported as instances and are not necessary singleton. This means that a single Plugin
+can export the same interface type several times under different names. The naming rules for interfaces
+need to be defined elsewhere.
+
+loading and opening a Plugin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Plugins are looked up in `$LUMIERA_PLUGIN_PATH`, which is a colon separated list of directories,
+and then in a specific ``Lumiera plugin dir'', where standard plugins get installed alongside
+with the Application
+
+

@@ -32,7 +32,7 @@ namespace gui {
 namespace model {
 
   Clip::Clip()
-    : timeCoord_(Time(FSecs(1)), FSecs(2))
+    : timeCoord_(Time(FSecs(1)), FSecs(3))
   {  }
   
   
@@ -40,14 +40,14 @@ namespace model {
   Clip::setBegin (Time newStartTime)
   {
     timeCoord_.accept (Mutation::changeTime (newStartTime));
-    // TODO: emit signal
+    TODO("Emit A Signal");
   }
 
   void
   Clip::setDuration (Duration newLength)
   {
     timeCoord_.accept (Mutation::changeDuration(newLength));
-    // TODO: emit signal
+    TODO("Emit A Signal");
   }
 
   void

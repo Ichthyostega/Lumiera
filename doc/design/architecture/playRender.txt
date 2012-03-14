@@ -70,8 +70,8 @@ proceeding along a timeline).
 
 Reconfiguration
 ^^^^^^^^^^^^^^^
-Some of these operation modes need to be prepared to an unpredictable live reconfiguration,
-driven by user interactions:
+Some of these operation modes need to be prepared to encounter an unpredictable live
+reconfiguration, driven by user interactions:
 
 - any part of background rendering can be invalidated and restarted, while other parts
   should be re-integrated, possibly with adjusted position
@@ -108,7 +108,7 @@ playback location, and it can be hooked up with a play-control GUI widget
 
 Each play-controller in turn gets associated with several *play/render-processes*,
 one for each independent media stream (channel) to be produced. Of course this
-isn't an operating system process; rather, ach such process is a compound of entries
+isn't an operating system process; rather, each such process is a compound of entries
 in a registration table, which serve the purpose of tying several other services together,
 which we initiate and use in order to make that render process happen.
 Most notably, we'll use the services of the actual engine, which provides us with kind of
@@ -126,7 +126,7 @@ Viewer and Output connection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Creating a player instance binds together three partners: a _timeline_, a _viewer_
 and _the engine_. While the timeline provides the content to play, the _viewer connection_
-is crutial for working out the actual output sink(s) and thus the output format to use.
+is crucial for working out the actual output sink(s) and thus the output format to use.
 Thus, a viewer connection is prerequisite for creating a player instance.
 
 Viewer connections exist as associations in the session/model -- as entities separate
@@ -135,13 +135,13 @@ such a connection is (still) missing, building a player instance recurs to the s
 to get a suitable viewer _allocated_. The viewer connection can't be broken during the
 lifetime of that player instance (or putting it the other way: breaking that viewer
 connection, e.g. by forcing a different connection or by shutting down the viewer,
-immediately terminates the player. This detaching works synchroneously, i.e. it
-blocks untlil all the allocated _output slots_ could be released.
+immediately terminates the player. This detaching works synchronously, i.e. it
+blocks until all the allocated _output slots_ could be released.
 
 Live switching
 ^^^^^^^^^^^^^^
 While the viewer connection can be treated as fixed during the lifespan of a player
-instance, several life switching and reconfiguration operations might happen anytime:
+instance, several life switching and reconfiguration operations might happen any time:
 The _model port_ (place where data is retrieved from calculation), the output characteristics
 (framerate, direction) and the delivery goals (playback position, loop playing, scrubbing)
 all may be changed during playback -- we need a way for the player to ``cancel'' and
@@ -164,7 +164,7 @@ the quantisation, which leaves us with just a few possible junction points
 where to place quantisation: The backend, the GUI, the player, the session.
 
 - putting it into the backend seems to be the most reasonable at first sight:
-  We can ``do away'' with nasty things soon, especially if they are technicallities,
+  We can ``do away'' with nasty things soon, especially if they are technicalities,
   ``get a clean state soon'' -- and hasn't frame quantisation something to do
   with media data, which is handled in the backend?
 +  
@@ -174,7 +174,7 @@ amount of degraded information flows throughout the whole system; thus the
 general rule to do it as late as possible. Uncrippled information is
 enablement. And last but not least: the frame quantisation is connected
 to the _output_ format -- and the backend is likely within the whole
-application the subsytem most remote and unaware of output requirements.
+application the subsystem most remote and unaware of output requirements.
 
 - rounding/quantising in the GUI is extremely common within media applications;
   unfortunately there seems to be not a single rational argument supporting that habit.
@@ -184,7 +184,7 @@ Which leaves us with the player and the session. Both positions could
 arguably be supported. Here, a more careful consideration shows, that
 the ``act of frame rounding'' can be decomposed: into the _act of quantisation_
 and the _frame grid:. Basically its the session which has the ability
-to form the *frame grid*, but it is lacking crutial information about
+to form the *frame grid*, but it is lacking crucial information about
 the output. Only when connecting both -- which is the essence of the
 player -- frame quantisation can actually be performed. Thus, the
 player is the natural location to perform that quantisation operation.

@@ -63,6 +63,7 @@
 
 
 
+namespace proc {
 namespace mobject {
   
   namespace { // Helper to extract and rebind definition types
@@ -400,5 +401,5 @@ namespace mobject {
   }
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

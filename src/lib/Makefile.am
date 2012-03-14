@@ -63,6 +63,7 @@ liblumiera_la_SOURCES =					\
 	$(liblumiera_la_srcdir)/test/testoption.cpp	\
 	$(liblumiera_la_srcdir)/time.cpp		\
 	$(liblumiera_la_srcdir)/time/lumitime.cpp	\
+	$(liblumiera_la_srcdir)/time/mutation.cpp	\
 	$(liblumiera_la_srcdir)/time/quantiser.cpp	\
 	$(liblumiera_la_srcdir)/time/timecode.cpp	\
 	$(liblumiera_la_srcdir)/tmpbuf.c		\
@@ -83,7 +84,6 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/lifecycleregistry.hpp		\
 	$(liblumiera_la_srcdir)/lockerror.h			\
 	$(liblumiera_la_srcdir)/luid.h				\
-	$(liblumiera_la_srcdir)/lumitime.hpp			\
 	$(liblumiera_la_srcdir)/meta/configflags.hpp		\
 	$(liblumiera_la_srcdir)/meta/generator.hpp		\
 	$(liblumiera_la_srcdir)/meta/typelist-util.hpp		\
@@ -110,12 +110,20 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/singleton.hpp			\
 	$(liblumiera_la_srcdir)/sync-classlock.hpp		\
 	$(liblumiera_la_srcdir)/sync.hpp			\
-	$(liblumiera_la_srcdir)/test/mockinjector.hpp		\
 	$(liblumiera_la_srcdir)/test/run.hpp			\
 	$(liblumiera_la_srcdir)/test/suite.hpp			\
 	$(liblumiera_la_srcdir)/test/test-helper.hpp		\
 	$(liblumiera_la_srcdir)/test/testoption.hpp		\
 	$(liblumiera_la_srcdir)/time.h				\
+	$(liblumiera_la_srcdir)/time/diagnostics.hpp		\
+	$(liblumiera_la_srcdir)/time/digxel.hpp			\
+	$(liblumiera_la_srcdir)/time/display.hpp		\
+	$(liblumiera_la_srcdir)/time/formats.hpp		\
+	$(liblumiera_la_srcdir)/time/grid.hpp			\
+	$(liblumiera_la_srcdir)/time/mutation.hpp		\
+	$(liblumiera_la_srcdir)/time/quantiser.hpp		\
+	$(liblumiera_la_srcdir)/time/timecode.hpp		\
+	$(liblumiera_la_srcdir)/time/timevalue.hpp		\
 	$(liblumiera_la_srcdir)/tmpbuf.h			\
 	$(liblumiera_la_srcdir)/tree.hpp			\
 	$(liblumiera_la_srcdir)/util.hpp			\

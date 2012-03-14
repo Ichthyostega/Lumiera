@@ -47,7 +47,7 @@ namespace lib {
 namespace time{
 namespace test{
   
-  using asset::meta::TimeGrid;
+  using proc::asset::meta::TimeGrid;
   
   
   /********************************************************

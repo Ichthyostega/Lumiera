@@ -32,36 +32,30 @@ using std::string;
 using std::cout;
 
 
-namespace mobject
-  {
-  namespace builder
+namespace proc {
+namespace mobject {
+namespace builder {
+namespace test {
+  
+  
+  
+  
+  /*******************************************************************
+   * @test the builder core functionality: create a render pipeline
+   *       for a given segment of the Session/Timeline.
+   */
+  class BuildSegment_test : public Test
     {
-    namespace test
-      {
-      
-      
-      
-      
-      /*******************************************************************
-       * @test the builder core functionality: create a render pipeline
-       *       for a given segment of the Session/Timeline.
-       */
-      class BuildSegment_test : public Test
+      virtual void run(Arg) 
         {
-          virtual void run(Arg) 
-            {
-              UNIMPLEMENTED ("oh my");
-            } 
-        };
-      
-      
-      /** Register this test class... */
-      LAUNCHER (BuildSegment_test, "function builder");
-      
-      
-      
-    } // namespace test
-    
-  } // namespace builder
-
-} // namespace mobject
+          UNIMPLEMENTED ("oh my");
+        } 
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (BuildSegment_test, "function builder");
+  
+  
+  
+}}}} // namespace proc::mobject::builder::test

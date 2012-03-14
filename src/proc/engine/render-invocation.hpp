@@ -37,11 +37,12 @@
 //#include "proc/state.hpp"
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/buffhandle.hpp"
-//#include "proc/engine/bufftable.hpp"
+//#include "proc/engine/bufftable-obsolete.hpp"
 
 
 
 
+namespace proc {
 namespace engine {
   
   
@@ -74,5 +75,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

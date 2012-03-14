@@ -52,6 +52,11 @@
 
 
 namespace proc {
+  namespace node {
+    class DummyImageGenerator;
+    class TickService;
+  }
+  
   namespace play {
   
     using std::string;
@@ -59,15 +64,15 @@ namespace proc {
     using lumiera::Display;
     using lumiera::DummyPlayer;
     
+    using proc::node::DummyImageGenerator;
+    using proc::node::TickService;
     
-    class DummyImageGenerator;
-    class TickService;
     
     
     /********************************************************************
      * Actual implementation of a single (dummy) playback process.
      * The DummyPlayerService (see below) maintains a collection of such
-     * actively running playback processes, while the client code gets 
+     * actively running playback processes, while the client code gets
      * DummyPlayer::Process handles to track any ongoing use. Users of
      * the plain C interface get a direct bare pointer to the respective
      * ProcessImpl instance and have to manage the lifecycle manually.

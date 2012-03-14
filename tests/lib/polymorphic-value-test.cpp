@@ -117,7 +117,7 @@ namespace test{
         virtual long
         apiFunc()
           {
-            long rr = ii * (rand() % MAX_RAND);
+            long rr = ii * (1 + rand() % MAX_RAND);
             mark (rr);
             _callSum += rr;
             return rr;

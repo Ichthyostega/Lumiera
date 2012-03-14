@@ -42,6 +42,7 @@
 //using std::endl;
 
 
+namespace proc    {
 namespace mobject {
 namespace test    {
   
@@ -155,4 +156,4 @@ namespace test    {
   LAUNCHER (PlacementObjectIdentity_test, "function session");
   
   
-}} // namespace mobject::test
+}}} // namespace proc::mobject::test

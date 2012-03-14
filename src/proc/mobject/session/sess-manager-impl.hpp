@@ -28,6 +28,7 @@
 #include "lib/sync.hpp"
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -42,7 +43,7 @@ namespace session {
     : public SessManager
     , public lib::Sync<>
     {
-      scoped_ptr<SessionImplAPI>   pImpl_;
+      scoped_ptr<SessionImplAPI>   pSess_;
       scoped_ptr<LifecycleAdvisor> lifecycle_;
       
       SessManagerImpl()  throw();
@@ -69,5 +70,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

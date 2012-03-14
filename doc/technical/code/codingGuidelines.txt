@@ -1,0 +1,117 @@
+Coding Guidelines
+=================
+:Date: Autumn 2011
+
+
+_this page summarises some style and coding guidelines for the Lumiera code base_
+
+Style Guide
+-----------
+The Lumiera project uses GNU indentation style with slight adaptations.
+
+- *no tabs* please. The typical ``semi indent'' of GNU style thus becomes 2 spaces.
+- maximum line length is rather around *110 characters*.
+- originally, GNU style focussed on plain-C code. +
+  We thus apply some relaxations and clarifications ...
+  
+  * the braces for a class scope are indented by 2 spaces
+  * the access modifiers start at this brace level, while all declarations and definitions
+    within the class are again indented by 2 spaces
+  * the line breaking rules are relaxed. Definitions and statements may be written as single line,
+    provided that the length remains below 110 chars and the result _remains legible_. Otherwise,
+    we'll fall back to the default and wrap the lines. More specifically
+  
+    ** function declarations may be written in one line
+    ** same for definitions with just a single statement in the body
+    ** same for simple if-statements without else-branch.
+  
+  * the space between function name and opening parenthesis of the argument list is not
+    enforced when this doesn't make sense, esp. for argument-less functions, chained calls
+    or constructor syntax. But in all other cases, we really value this additional space,
+    it improves legibility.
+  * template argument declarations are _always_ written on a separate line, above the
+    return type declaration. This rule holds even if the rest of a definition can be
+    written within a single line.
+  * the opening brace of namespaces is placed on the same line. Optionally, the namespace
+    body may be indented, as long as this helps underpinning the nesting structure. But
+    there is no need to use 3 indents on a 3 level nested namespace. One level is enough
+    to highlight the presence of a nesting.
+
+Naming conventions
+~~~~~~~~~~~~~~~~~~
+Naming conventions are used to characterise the kind of element at hand and give a visual
+clue to the reader. We use our own conventions -- there is no point in arguing that this
+and that library or language uses other conventions.
+
+- type names start with an uppercase letter
+- variable and function names start with lowercase.
+- fields within a class, especially the private ones are decorated with a trailing underscore
+- a leading underscore may be used to emphasize the strictly internal or technical nature of a type,
+  variable or function
+- namespaces are all-lowercase
+- macros and constants are preferably all-caps (at least where this makes sense)
+
+There is a preference for *CamelCase* -- yet underscores are acceptable, especially when the
+name is more like a sentence than just a compound term.
+
+plain-C names
+^^^^^^^^^^^^^
+Since C has no namespaces, we strictly require a +lumiera_+ prefix on all non-local names and definitions.
+Generally, names should be formed according to the following pattern:
+
+ namespace[_object][_verb[_subjects]][_version]
+
+In case a definition actually denotes an object, there should be
+
+- a basic struct name: `typedef struct namespace_foo_struct namespace_foo;`
+- plus an object pointer/handle: `typedef namespace_foo* NamespaceFoo;`
+
+The object pointer/handle should be passed as 1^st^ argument with the name +self+
+
+
+General Code Arrangement and Layout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Headers and translation units are named `*.hpp` and `*.cpp` rsp. `*.h` and `*.c` +
+  Multilingual headers are called `*.h`
+- Each header should be named according to the primary facility it exposes. For the filesystem name,
+  the +CamelCaseWords+ of this type are translated into +camel-case-words.hpp+
+- Each file should start with the GNU licence preamble. The headline should give a one-line summary.
+  The primary author(s) and the year of the initial copyright claim should be mentioned.
+- Each header should be focussed on a specific purpose. Preferably it starts with a file-level
+  doxygen comment explaining the intention and anything not obvious from reading the code.
+- when arranging headers and compilation units, please take care of the compilation times and the
+  code size. Avoid unnecessary includes. Use forward declarations where applicable.
+  Yet still, _all immediately required includes should be mentioned_ (even if already included by
+  another dependency)
+- The include block starts with our own dependencies, followed by a second block with the library
+  dependencies. After that, optionally some symbols may be brought into scope (through +using+ clauses).
+  Avoid cluttering top-level namespaces. Never import full namespaces (no +using namespace boost;+ please!)
+- the includes for our own dependencies shall be given relative to source-root (or test root). Don't use
+  relative includes for headers located in the same directory, or -- worse still -- in the parent directory.
+- sometimes, the actual translation units will combine several facilities for technical reasons, e.g.
+  when sharing an implementation-level class or even singleton instance.
+  Anonymous namespaces should be used liberally to avoid unnecessary exports.
+- template code mostly needs to reside in headers. (same for metaprogramming code).
+  We employ the simple inclusion model (``Borland model'') for template instantiation.
+- But in some specific situations it is preferable to drive explicit instantiations from within
+  a +*.cpp+ file. Most notably this is the case when defining some core class hierarchies.
+  Such explicit instantiations should be limited to just a view obvious places. They should be
+  written into a block at the end of some central implementation file. See +assetmanager.cpp+
+  for an example.
+- deliberately there is _no single top-level namespace._ The +namespace lumiera+ is the root of
+  our _exported interfaces_ -- intended for use by external scripts and libraries. Everything
+  implementation related is arranged in per-subsystem trees of namespaces. The APIs of the
+  subsystems are exported explicitly into the +lumiera+ namespace.
+
+
+Design Guidelines and Values
+----------------------------
+Code is written for *being read by humans*; code shall convey its meaning even to the casual reader.
+On the long run, this language nature of code is more important than any performance tweaks. Recall,
+every idiot can figure out how to make a computer perform something. Yet the real challenge is to
+write legible code. Code that operates exactly the way you'd guess just from reading it.
+Black magic and all kinds of surprise trickery and cleverness are nothing to be proud off.
+
+-> please have a look at the link:/project/background/CleanCodeDevelopment.html[Clean Code] page
+for a coherent system of design principles
+

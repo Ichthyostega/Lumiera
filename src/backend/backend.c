@@ -102,7 +102,8 @@ lumiera_backend_init (void)
 
   lumiera_backend_pagesize = sysconf(_SC_PAGESIZE);
 
-  TODO ("add config options to override following defaults");
+  /////////////////////////////////////////////////////////////////////TICKET #838 add config options to override following defaults"
+
 
   const char* filehandles = lumiera_tmpbuf_snprintf (SIZE_MAX,
                                                      "backend.file.max_handles = %d",
@@ -168,7 +169,7 @@ lumiera_backend_mpool_purge (enum lumiera_resource_try itr, void* data, void* co
   (void) context;
   (void) data;
   (void) itr;
-  TODO("mpool_purge ((MPool) data)");
+  ///////////////////////////////////////////////////////////TICKET #837 actually implement mpool purging
   return LUMIERA_RESOURCE_NONE;
 }
 

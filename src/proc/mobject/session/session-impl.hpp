@@ -43,8 +43,8 @@
  */
 
 
-#ifndef MOBJECT_SESSION_SESSIONIMPL_H
-#define MOBJECT_SESSION_SESSIONIMPL_H
+#ifndef PROC_MOBJECT_SESSION_SESSIONIMPL_H
+#define PROC_MOBJECT_SESSION_SESSIONIMPL_H
 
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/fixture.hpp"
@@ -63,6 +63,7 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -289,5 +290,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

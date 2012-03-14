@@ -57,11 +57,9 @@
 #ifndef CONTROL_COMMAND_REGISTRY_H
 #define CONTROL_COMMAND_REGISTRY_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
 #include "lib/sync.hpp"
-#include "lib/format.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
 
@@ -79,6 +77,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using boost::hash;
@@ -269,5 +268,5 @@ namespace control {
     };
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

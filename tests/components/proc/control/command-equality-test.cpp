@@ -36,12 +36,13 @@
 #include <iostream>
 #include <string>
 
+namespace proc {
 namespace control {
 namespace test    {
   
   
   
-  using namespace lumiera::typelist;
+  using namespace lib::meta;
   using lib::Symbol;
   using util::isnil;
   using util::isSameObject;
@@ -98,10 +99,11 @@ namespace test    {
    * To conduct this test, we set up two sets of functions, and then build both complete
    * command objects and command implementation facilities based on them.
    * 
-   * @note The hidden problem with those comparisons is the equivalence of function objects,
-   *       which is required by TR1, but refused to implement by lib boost. We use a low level
-   *       hack, based on internals of the boost function implementation, but this solution
-   *       fails to detect equivalent functions under some circumstances (e.g. when there is
+   * @note The hidden problem with those comparisons is the equivalence of function objects.
+   *       While required by TR1, unfortunately lib boost refuses to implement functor equality.
+   *       Which forces us to resort to a low level hack, based on internals of the boost function
+   *       implementation. This workaround reliably pinpoints differing functions, but sometimes
+   *       fails to detect equivalent functions under specific circumstances (e.g. when there is
    *       binding involved, and / or the binders have been cloned). Bottom line: \c == is
    *       reliable, \c != might be wrong.
    * 
@@ -112,6 +114,7 @@ namespace test    {
    * @see  control::MementoTie
    * @see  control::CommandImpl
    * @see  command-basic-test.hpp
+   * @see  functor-util.hpp functor equality workaround
    */
   class CommandEquality_test : public Test
     {
@@ -315,4 +318,4 @@ namespace test    {
   LAUNCHER (CommandEquality_test, "function controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

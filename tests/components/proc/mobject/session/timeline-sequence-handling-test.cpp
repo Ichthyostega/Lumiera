@@ -41,6 +41,7 @@ using std::string;
 using std::cout;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -260,7 +261,7 @@ namespace test    {
           CHECK (num_sequences == sess->sequences.size());
           CHECK (!contains (sess->timelines, aTimeline));
           CHECK (!contains (sess->sequences, aSequence));
-
+          
           CHECK (1 == aTimeline.use_count());   
           CHECK (1 == aSequence.use_count());   
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
@@ -282,7 +283,7 @@ namespace test    {
           // indirectly cause a new sequence to come to life...
           RTrack newTrack = sess->getRoot().attach (someTrack);        // attach new Placement<Track> to root scope
           CHECK (newTrack != someTrack); // it's a new placement
-
+          
           CHECK (num_sequences + 1 == sess->sequences.size());         // this root-attachment created a new sequence by sideeffect
           PSequence aSequence = sess->sequences[num_sequences];
           CHECK (newTrack == aSequence->getTracks());
@@ -302,7 +303,7 @@ namespace test    {
           CHECK (!assetM.known (aSequence->getID()));
           CHECK (num_sequences == sess->sequences.size());
           CHECK (!contains (sess->sequences, aSequence));
-
+          
           CHECK (someTrack);
           CHECK (newTrack);
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
@@ -315,4 +316,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

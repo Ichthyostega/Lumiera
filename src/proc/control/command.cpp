@@ -54,7 +54,6 @@
 #include <sstream>
 #include <string>
 
-using namespace lumiera;
 using std::ostringstream;
 using std::string;
 using boost::format;
@@ -62,7 +61,9 @@ using boost::str;
 using util::cStr;
 
 
+namespace proc {
 namespace control {
+  namespace error = lumiera::error;
   
   LUMIERA_ERROR_DEFINE (INVALID_COMMAND,   "Unknown or insufficiently defined command");
   LUMIERA_ERROR_DEFINE (DUPLICATE_COMMAND, "Attempt to redefine an already existing command definition");
@@ -412,4 +413,4 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control

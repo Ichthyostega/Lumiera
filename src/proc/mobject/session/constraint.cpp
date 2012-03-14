@@ -23,15 +23,12 @@
 
 #include "proc/mobject/session/constraint.hpp"
 
-namespace mobject
-  {
-  namespace session
-    {
-    
-    /** */
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  /** */
+  
+  
+  
+}}} // namespace mobject::session

@@ -51,8 +51,17 @@ namespace time {
                            , LUMIERA_ERROR_UNKNOWN_GRID);
       return grid_found;
     }
-    
   }//(End) implementation helpers
+  
+  
+  PQuant
+  getDefaultGridFallback()
+  {
+    static PQuant globalDefaultGrid (new FixedFrameQuantiser(1));
+    return globalDefaultGrid;                                                    ///////////////////////TICKET #810
+  };
+  
+  
   
   
   
@@ -191,7 +200,7 @@ namespace time {
   {
     Time gt(gridTime);
     TimeVar timePoint = gt + origin_;
-    timePoint += gridOffset * raster_;
+    timePoint += gridOffset * Offset(raster_);
     return timePoint;
   }
   

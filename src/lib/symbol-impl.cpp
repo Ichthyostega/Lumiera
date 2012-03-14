@@ -50,6 +50,9 @@ using boost::hash_combine;
 
 namespace lib {
   
+  const size_t STRING_MAX_RELEVANT = 1000;
+  
+  
   /** equality on Symbol values is defined
    *  based on the content, not the address. */
   bool

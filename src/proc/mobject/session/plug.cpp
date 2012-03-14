@@ -24,15 +24,12 @@
 #include "proc/mobject/session/plug.hpp"
 #include "proc/asset/pipe.hpp"
 
-namespace mobject
-  {
-  namespace session
-    {
-    
-    /** */
-    
-    
-    
-  } // namespace mobject::session
-
-} // namespace mobject
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  /** */
+  
+  
+  
+}}} // namespace proc::mobject::session

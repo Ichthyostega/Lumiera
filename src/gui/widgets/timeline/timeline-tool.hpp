@@ -133,7 +133,7 @@ protected:
   /**
    * A helper function to get the state
    */
-  boost::shared_ptr<TimelineState> get_state() const;
+  shared_ptr<TimelineState> get_state() const;
   
   /**
    * A helper function to get the view window

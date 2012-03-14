@@ -34,35 +34,32 @@ using util::isnil;
 using std::string;
 
 
-namespace asset
-  {
-  namespace test
+namespace proc {
+namespace asset{
+namespace test {
+  
+  
+  
+  
+  /***********************************************************************
+   * This test documents the Interface used by MediaFactory when loading
+   * media files for querying Lumiera's backend layer for information
+   * on how the media file is structured.
+   */
+  class MediaStructureQuery_test : public Test
     {
-    
-    
-    
-    
-    /***********************************************************************
-     * This test documents the Interface used by MediaFactory when loading
-     * media files for querying Lumiera's backend layer for information
-     * on how the media file is structured.
-     */
-    class MediaStructureQuery_test : public Test
-      {
-        virtual void run(Arg) 
-          {
-            UNIMPLEMENTED ("querying media file structure from backend");
-          }
-        
-        
-      };
-    
-    
-    /** Register this test class... */
-    LAUNCHER (MediaStructureQuery_test, "unit asset");
-    
-    
-    
-  } // namespace test
-
-} // namespace asset
+      virtual void run(Arg) 
+        {
+          UNIMPLEMENTED ("querying media file structure from backend");
+        }
+      
+      
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (MediaStructureQuery_test, "unit asset");
+  
+  
+  
+}}} // namespace proc::asset::test

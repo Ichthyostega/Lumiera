@@ -35,7 +35,6 @@
 #ifndef CONTROL_PROC_DISPATCHER_H
 #define CONTROL_PROC_DISPATCHER_H
 
-//#include "pre.hpp"
 //#include "lib/symbol.hpp"
 #include "proc/control/command.hpp"
 #include "lib/singleton.hpp"
@@ -44,6 +43,7 @@
 
 
 
+namespace proc {
 namespace control {
   
 //  using lib::Symbol;
@@ -75,5 +75,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

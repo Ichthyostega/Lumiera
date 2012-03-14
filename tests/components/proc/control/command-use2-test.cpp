@@ -37,6 +37,7 @@
 #include <string>
 
 
+namespace proc {
 namespace control {
 namespace test    {
 
@@ -46,7 +47,7 @@ namespace test    {
   using boost::str;
   using std::tr1::function;
   using std::tr1::bind;
-  using boost::ref;
+  using std::tr1::ref;
   using boost::lexical_cast;
   using util::contains;
   
@@ -204,4 +205,4 @@ namespace test    {
   LAUNCHER (CommandUse2_test, "function controller");
       
       
-}} // namespace control::test
+}}} // namespace proc::control::test

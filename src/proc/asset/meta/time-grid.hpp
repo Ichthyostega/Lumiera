@@ -54,6 +54,7 @@
 
 
 
+namespace proc {
 namespace asset {
 namespace meta {
   
@@ -66,7 +67,7 @@ namespace meta {
   
   
   class TimeGrid;
-  typedef lumiera::P<TimeGrid> PGrid;
+  typedef P<TimeGrid> PGrid;
   
   
   /**
@@ -131,5 +132,5 @@ namespace meta {
       
     };
   
-}} // namespace asset::meta
+}}} // namespace proc::asset::meta
 #endif
