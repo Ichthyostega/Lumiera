@@ -23,12 +23,14 @@
 
 #include "lib/time/timevalue.hpp"
 #include "lib/time.h"
+#include "lib/util-quant.hpp"
 
 #include <limits>
 #include <string>
 #include <boost/rational.hpp>
 
 using std::string;
+using util::floordiv;
 
 
 namespace lib {
@@ -119,6 +121,16 @@ namespace time {
                          , error::LUMIERA_ERROR_BOTTOM_VALUE);
     
     return Duration (1, *this);
+  }
+  
+  
+  Offset
+  operator* (boost::rational<int64_t> factor, Offset const& o)
+  {
+    boost::rational<int64_t> distance (_raw(o));
+    distance *= factor;
+    gavl_time_t microTicks = floordiv (distance.numerator(), distance.denominator());
+    return Offset(TimeValue(microTicks));
   }
   
   

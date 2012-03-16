@@ -223,6 +223,13 @@ namespace time {
     return Offset(distance);
   }
   
+  template<typename INT>
+  inline Offset
+  operator* (Offset const& distance, INT factor)
+  {
+    return factor*distance;
+  }
+  
   inline Offset
   operator* (int factor, Offset const& o)
   {
@@ -231,12 +238,12 @@ namespace time {
     return Offset(distance);
   }
   
-  inline Offset
-  operator* (Offset const& distance, int factor)
-  {
-    return factor*distance;
-  }
+  /** stretch offset by a possibly fractional factor */
+  Offset
+  operator* (boost::rational<int64_t> factor, Offset const& o);
   
+  
+  /** flip offset direction */
   inline Offset
   Offset::operator- ()  const
   {
@@ -365,14 +372,16 @@ namespace time {
     return Offset(base) + Offset(toAdd);
   }
   
+  template<typename INT>
   inline Offset
-  operator* (int factor, Duration const& dur)
+  operator* (INT factor, Duration const& dur)
   {
     return factor * Offset(dur);
   }
   
+  template<typename INT>
   inline Offset
-  operator* (Duration const& dur, int factor)
+  operator* (Duration const& dur, INT factor)
   {
     return factor*dur;
   }

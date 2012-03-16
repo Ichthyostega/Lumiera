@@ -76,6 +76,7 @@ namespace test{
           buildTimeSpan (ref);
           compareTimeSpan (Time(ref));
           relateTimeIntervals (ref);
+          verify_fractionalOffset();
         } 
       
       
@@ -283,6 +284,28 @@ namespace test{
           
           CHECK (distance + point < zero);      // using the duration as offset
           CHECK (distance == backwards.abs()); //  while this didn't alter the duration as such
+        }
+      
+      
+      void
+      verify_fractionalOffset ()
+        {
+          typedef boost::rational<int64_t> Frac;
+          
+          Duration three (TimeValue(3));       // three micro seconds
+          
+          Offset o1 = Frac(1,2) * three;
+          CHECK (o1 > Time::ZERO);
+          CHECK (o1 == TimeValue(1));          // bias towards the next lower micro grid position
+          
+          Offset o2 = -Frac(1,2) * three;
+          CHECK (o2 < Time::ZERO);
+          CHECK (o2 == TimeValue(-2));
+          
+          CHECK (three * Frac(1,2) * 2 != three);
+          CHECK (three *(Frac(1,2) * 2) == three);
+          // integral arithmetics is precise,
+          // but not necessarily exact!
         }
       
       
