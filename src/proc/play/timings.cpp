@@ -59,6 +59,7 @@ namespace play {
   Timings::Timings (FrameRate fps)
     : grid_(buildStandardGridForFramerate(fps))
     , playbackUrgency (ASAP)
+    , outputLatency (Duration::NIL)
     { 
       ENSURE (grid_);
     }
@@ -90,7 +91,7 @@ namespace play {
   Duration
   Timings::getFrameDurationAt (int64_t refFrameNr)  const
   {
-    return Offset (grid_->timeOf(frameNr), grid_->timeOf(frameNr+1));
+    return Offset (grid_->timeOf(refFrameNr), grid_->timeOf(refFrameNr + 1));
   }
 
   

@@ -29,7 +29,9 @@
  ** @todo WIP-WIP-WIP 3/2012
  ** @todo this might be a good candidate also to provide some kind of
  **       translation service, i.e. a grid to anchor a logical time value
- **       with actual running wall clock time
+ **       with actual running wall clock time.
+ ** @todo not clear if this becomes some kind of central service (singleton)
+ **       or just a bunch of library routines
  ** 
  ** @see lib/time/timevalue.hpp
  */
@@ -42,7 +44,7 @@
 #include "lib/error.hpp"
 //#include "lib/handle.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/singleton.hpp"
+//#include "lib/singleton.hpp"
 //#include "proc/engine/buffer-provider.hpp"
 //#include "lib/iter-source.hpp"
 //#include "lib/sync.hpp"
@@ -76,25 +78,18 @@ namespace backend {
   class RealClock
     {
       
-     ~RealClock ();
-      RealClock ();
-      
-      friend class lib::singleton::StaticCreate<RealClock>;
-      
-      
-      static lib::Singleton<RealClock> _clock;
       
     public:
       
       static Time
       now()
         {
-          return Time(_clock().readSystemTime());
+          return Time(_readSystemTime());
         }
       
       
     private:
-      TimeValue readSystemTime();
+      static TimeValue _readSystemTime();
     };
   
   

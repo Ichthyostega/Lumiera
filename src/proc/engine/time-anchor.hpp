@@ -109,7 +109,9 @@ namespace engine {
       build (play::Timings timings, int64_t startFrame)
         {
           const boost::rational<uint> DEFAULT_LATENCY_FACTOR (1,3);
-          Offset startDelay = timings.getFrameDurationAt(startFrame) * DEFAULT_LATENCY_FACTOR;
+          Offset startDelay(timings.outputLatency
+                          + timings.getFrameDurationAt(startFrame) * DEFAULT_LATENCY_FACTOR
+                           );
           
           return TimeAnchor (timings,startDelay,startFrame);
         }

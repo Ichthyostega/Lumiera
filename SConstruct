@@ -70,7 +70,7 @@ env.Clean ('build', [ 'src/pre.gch' ])
 # pick up the targets defined by the sub SConscripts
 Import('lumiera plugins tools gui testsuite doxydoc')
 
-build = env.Alias('build', lumiera + plugins + tools +gui)
+build = env.Alias('build', lumiera + plugins + tools + gui)
 env.Default('build')
 # SCons default target
 

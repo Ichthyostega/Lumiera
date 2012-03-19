@@ -34,6 +34,22 @@ namespace engine {
   
   
   /** */
+  Dispatcher::CoordBuilder
+  Dispatcher::onCalcStream (ModelPort modelPort, uint channel)
+  {
+    UNIMPLEMENTED ("build coordinates of frame to render");
+  }
+  
+  
+  /** */
+  FrameCoord
+  Dispatcher::CoordBuilder::relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset)
+  {
+    UNIMPLEMENTED ("build coordinates of frame to render");
+  }
+  
+  
+  /** */
   JobTicket&
   Dispatcher::accessJobTicket (FrameCoord const& frameID)
   {

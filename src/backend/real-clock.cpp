@@ -22,46 +22,26 @@
 
 
 #include "backend/real-clock.hpp"
-#include "lib/time/timequant.hpp"
 
+#include <ctime>
 
 
 namespace backend {
   
-  
-//  using lib::time::PQuant;
-//  using lib::time::Time;
-  
-  namespace { // hidden local details of the service implementation....
-    
-    
-  } // (End) hidden service impl details
+#define MICRO_TICS_PER_NANOSECOND (1000*1000*1000 / GAVL_TIME_SCALE)
   
   
-  /** storage for the singleton accessor, holding
-   *  an instance of the RealClock service */
-  lib::Singleton<RealClock> RealClock::_clock;
   
-  
-  /** Initialise a service to retrieve system time with sufficient precision 
-   */
-  RealClock::RealClock ()
-    { 
-      UNIMPLEMENTED ("system clock service");
-    }
-  
-  RealClock::~RealClock ()
-    { 
-      UNIMPLEMENTED ("disconnect the system clock service");
-    }
-  
-  
-     
   TimeValue
-  RealClock::readSystemTime()
+  RealClock::_readSystemTime()
   {
-    UNIMPLEMENTED ("access the system clock");
-    gavl_time_t ticksSince1970 = 1261440000000000L;
+    timespec now;
+    clock_gettime(CLOCK_REALTIME, &now);
+                                      ////////////////////////////////////////////TODO shouldn't that be CLOCK_MONOTONIC ?
+                                      ////////////////////////////////////////////TODO (what happens on ntp adjustments?)
+    
+    gavl_time_t ticksSince1970 = now.tv_sec * GAVL_TIME_SCALE
+                               + now.tv_nsec / MICRO_TICS_PER_NANOSECOND; 
     
     ENSURE (ticksSince1970 == Time::limited (ticksSince1970));
     return TimeValue::buildRaw_(ticksSince1970);  // bypassing the limit check
