@@ -238,6 +238,13 @@ namespace time {
     return Offset(distance);
   }
   
+  template<typename INTX>
+  inline Offset
+  operator* (boost::rational<INTX> factor, Offset const& o)
+  {
+    return boost::rational<int64_t>(factor.numerator(), factor.denominator()) * o;
+  }
+  
   /** stretch offset by a possibly fractional factor */
   Offset
   operator* (boost::rational<int64_t> factor, Offset const& o);
