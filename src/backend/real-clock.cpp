@@ -39,6 +39,7 @@ namespace backend {
     clock_gettime(CLOCK_REALTIME, &now);
                                       ////////////////////////////////////////////TODO shouldn't that be CLOCK_MONOTONIC ?
                                       ////////////////////////////////////////////TODO (what happens on ntp adjustments?)
+                                      ////////////////////////////////////////////TICKET #886
     
     gavl_time_t ticksSince1970 = now.tv_sec * GAVL_TIME_SCALE
                                + now.tv_nsec / MICRO_TICS_PER_NANOSECOND; 

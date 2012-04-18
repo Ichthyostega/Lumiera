@@ -66,10 +66,10 @@ namespace engine {
       
       CoordBuilder onCalcStream (ModelPort modelPort, uint channel);
       
-      virtual FrameCoord locateFrameNext (uint frameCountOffset, TimeAnchor refPoint)   =0;
-      
       JobTicket& accessJobTicket (FrameCoord const&);
       
+    protected:      
+      virtual FrameCoord locateFrameNext (uint frameCountOffset, TimeAnchor refPoint)   =0;
     };
   
   

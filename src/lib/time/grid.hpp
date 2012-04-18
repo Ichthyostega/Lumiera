@@ -65,7 +65,7 @@ namespace time {
       virtual int64_t   gridPoint (TimeValue const& raw)  const   =0;
       virtual TimeValue gridAlign (TimeValue const& raw)  const   =0;
       virtual TimeValue timeOf    (int64_t gridPoint)     const   =0;
-      virtual TimeValue timeOf    (FSecs, int =0)         const   =0;
+      virtual TimeValue timeOf    (FSecs gridTime, int=0) const   =0;
     };
   
   typedef std::tr1::shared_ptr<const Grid> PGrid;

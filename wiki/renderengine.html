@@ -2138,7 +2138,7 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" modified="201202122109" created="201105222330" tags="def Rendering" changecount="14">
+<div title="FrameDispatcher" modifier="Ichthyostega" modified="201204151612" created="201105222330" tags="def Rendering" changecount="19">
 <pre>An implementation facility within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
 !defining the dispatcher interface
@@ -2147,7 +2147,7 @@ The purpose of this interface is to support the planning of new jobs, for a give
 !!!Invocation situation
 * our //current starting point//&amp;nbsp; is given as ''time anchor'' closure
 * we want to address a single frame, offset by a given number of frames relative to the current position
-* &amp;rArr; the dispatcher returns the //fundamental coordinates// of that frame, namely
+* &amp;rArr; the dispatcher returns the //fundamental coordinates// of that frame (''frame coordinates''), comprised of
 ** the absolute nominal time
 ** the absolute frame number
 ** a concrete ExitNode to pull for this frame
@@ -2157,6 +2157,11 @@ The purpose of this interface is to support the planning of new jobs, for a give
 
 !!!the ~TimeAnchor
 In fact, the whole process of playback or rendering is a continued series of exploration and evaluation. The outline of what needs to be calculated is determined continuously, proceeding in chunks of evaluation. The evaluation structure of the render engine is quite similar to the //fork-join//-pattern, just with the addition of timing constraints. This leads to an invocation pattern, where a partial evaluation happens from time to time. Each of those evaluations establishes a breaking point in time: everything //before// this point is settled and planned thus far. So, this point is an ''anchor'' or closure to root the next partial evaluation. More specifically, this ~TimeAnchor closure is the definitive binding between the abstract logical time of the session timeline, and the real wall-clock time forming the deadline for render evaluation.
+
+!!!related timelines and the frame grid
+The frame dispatch step joins and combines multiple time axes. Through the process of //scheduling,// the output generation is linked to real ''wall clock time'' and the dispatch step establishes the deadlines, taking the ''engine latency'' into account. As such, any render or playback process establishes an ''output time grid'', linking frame numbers to nominal output time or timecode, based on the ''output frame rate'' -- and both the framerate and the actual progression (speed) might be changed dynamically. But beyond all of this there is a third, basically independent temporal structure involved: the actual content to render, the ''effective session timeline''. While encoded in nominal, absolute, internal time values not necessarily grid aligned, in practice at least the //breaking points,// the temporal location where the content or structure of the pipeline changes, are aligned //to a grid used while creating the edit.// Yet this session timing structure need to be related in any way to the playback grid, nor is it necessarily the same as the ''source grid'' defined by the media data used to feed the pipeline.
+
+These complex relationships are reflected in the invocation structure leading to an individual frame job. The [[calculation stream|CalcStream]] provides the [[render/playback timings|Timings]], while the actual implementation of the dispatcher, backed by the [[Fixture]] and thus linked to the session models, gets to relate the effective nominal time, the frame number, the exit node and the //processing function.//
 
 !!!producing actual jobs
 The JobTicket is created on demand, specialised for a single [[segment|Segmentation]] of the timeline and a single [[feed|Feed]] of data frames to be pulled from a ModelPort. Thus, in turn, this means that all frames and all channels within that realm will rely on the same job ticket -- which is a //higher order function,// a function producing another function: when provided with the actual channel number and the specific frame coordinates, the job ticket produces a [[concrete job definition|RenderJob]], which itself is a function to be invoked by the [[scheduler|Scheduler]] just in time.
@@ -3163,7 +3168,7 @@ These are used as token for dealing with other objects and have no identity of t
 
 </pre>
 </div>
-<div title="ModelPort" modifier="Ichthyostega" modified="201105222218" created="201011100234" tags="def spec Model" changecount="11">
+<div title="ModelPort" modifier="Ichthyostega" modified="201204150027" created="201011100234" tags="def spec Model" changecount="13">
 <pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denotes a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network.
 
 A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination, while some other entity at the same time actually //uses this designation as a target,// either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
@@ -3173,7 +3178,7 @@ Model ports are the effective, resulting outputs of each timeline; additional po
 !formal specification
 Model port is a //conceptual entity,// denoting the possibility to pull generated data of a distinct (stream)type from a specific bus within the model -- any possible output produced or provided by Lumiera is bound to appear at a model port. The namespace of model ports is global, each being associated with a ~Pipe-ID.
 
-Model ports are represented by small non-copyable descriptor objects with distinct identity, which are owned and managed by the [[Fixture]]. Clients are bound to resolve a model port on each usage, as configuration changes within the model might cause ports to appear and decease. To stress this usage pattern, actually {{{ModelPort}}} instances are small copyable value objects (smart handles), which can be used to access data within an opaque registry. Each model port belongs to a specific Timeline and is aware of this association, as is the timeline, allowing to get the collection of all ports of a given timeline. Besides, within the Fixture each model port refers to a specific [[segmentation of the time axis|Segmentation]] (relevant for this special timeline actually). Thus, with the help of this segmentation, a model port can yield an ExitNode to pull frames for a given time.
+Model ports are represented by small non-copyable descriptor objects with distinct identity, which are owned and managed by the [[Fixture]]. Clients are mandated to resolve a model port on each usage, as configuration changes within the model might cause ports to appear and decease. To stress this usage pattern, actually {{{ModelPort}}} instances are small copyable value objects (smart handles), which can be used to access data within an opaque registry. Each model port belongs to a specific Timeline and is aware of this association, as is the timeline, allowing to get the collection of all ports of a given timeline. Besides, within the Fixture each model port refers to a specific [[segmentation of the time axis|Segmentation]] (relevant for this special timeline actually). Thus, with the help of this segmentation, a model port can yield an ExitNode to pull frames for a given time.
 
 </pre>
 </div>
@@ -5386,7 +5391,7 @@ We need to detect attaching and detaching of
 * root &amp;harr; [[Track]]
 </pre>
 </div>
-<div title="Segmentation" modifier="Ichthyostega" modified="201112171808" created="201012121901" tags="def spec Builder" changecount="34">
+<div title="Segmentation" modifier="Ichthyostega" modified="201204150033" created="201012121901" tags="def spec Builder" changecount="36">
 <pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
 When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
 * for each Timeline we get a Segmentation
@@ -5403,7 +5408,7 @@ When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Pla
 ;(2) commit stage
 : -- after the build process(es) are completed, the new fixture gets ''committed'', thus becoming the officially valid state to be rendered. As render processes might be going on in parallel, some kind of locking or barrier is required. It seems advisable to make the change into a single atomic hot-swap. Meaning we'd get a single access point to be protected. But there is another twist: We need to find out which render processes to cancel and restart, to pick up the changes introduced by this build process -- which might include adding and deleting of timelines as a whole, and any conceivable change to the segmentation grid. Because of the highly dynamic nature of the placements, on the other hand it isn't viable to expect the high-level model to provide this information. Thus we need to find out about a ''change coverage'' at this point. We might expand on that idea to //prune any new segments which aren't changed.// This way, only a write barrier would be necessary on switching the actually changed segments, and any render processes touching these would be //tainted.// Old allocations could be released after all tainted processes are known to be terminated.
 ;(3) rendering use
-:Each play/render process employs a ''frame dispatch step'' to get the right exit node for pulling a given frame. From there on, the process proceeds into the [[processing nodes|ProcNodes]], interleaved with backend/scheduler actions due to splitting into individually scheduled jobs. The storage of these processing nodes and accompanying wiring descriptors is hooked up behind the individual segments, by sharing a common {{{AllocationCluster}}}. Yet the calculation of individual frames also depends on ''parameters'' and especially ''automation'' linked with objects in the high-level model. It is likely that there might be some sharing or some kind of additional communication interface, as the intention was to allow ''live changes'' to automated values. &lt;br/&gt;{{red{WIP 12/2010}}} details need to be worked out. &amp;rarr; [[parameter wiring concept|Wiring]]
+:Each play/render process employs a ''frame dispatch step'' to get the right exit node for pulling a given frame (&amp;rarr; [[Dispatcher|FrameDispatcher]]). From there on, the process proceeds into the [[processing nodes|ProcNode]], interleaved with backend/scheduler actions due to splitting into individually scheduled jobs. The storage of these processing nodes and accompanying wiring descriptors is hooked up behind the individual segments, by sharing a common {{{AllocationCluster}}}. Yet the calculation of individual frames also depends on ''parameters'' and especially ''automation'' linked with objects in the high-level model. It is likely that there might be some sharing or some kind of additional communication interface, as the intention was to allow ''live changes'' to automated values. &lt;br/&gt;{{red{WIP 12/2010}}} details need to be worked out. &amp;rarr; [[parameter wiring concept|Wiring]]
 !!!observations
 * Storage and initialisation for explicit placements is an issue. We should strive at making that inline as much as possible.
 * the overall segmentation emerges from a sorting of time points, which are start points of explicit placements

@@ -58,6 +58,18 @@ namespace engine {
    * logical time of the session timeline, and the real
    * wall-clock time forming the deadline for rendering.
    * 
+   * \par internals
+   * The time anchor associates a nominal time, defined on the implicit time grid
+   * of some given Timings, with an actual wall clock time. Due to the usage situation,
+   * the TimeAnchor takes on the secondary meaning of a breaking point; everything \em before
+   * this anchor point has been handled during the preceding invocations of an ongoing chunk wise
+   * partial evaluation of the timeline to play back.
+   * - the #timings_ serve as an abstracted grid (actually, the implementation
+   *   does refer to a grid defined somewhere within the session)
+   * - the actual #anchorPoint_ is defined as frame number relative to this grid
+   * - this anchor point is scheduled to happen at a #relatedRealTime_, based on
+   *   system's real time clock scale (typically milliseconds since 1970)
+   * 
    * @todo 1/12 WIP-WIP-WIP just emerging as a concept
    *          /////////////////////////////////////////////////////////////////TODO: WIP needs to act as proxy for the grid, using the Timings
    */
@@ -68,7 +80,7 @@ namespace engine {
       Time relatedRealTime_;
       
       Time
-      expectedTimeofArival (play::Timings timings, Offset engineLatency)
+      expectedTimeofArival (play::Timings const& timings, Offset engineLatency)
         {
           TimeVar deadline;
           switch (timings.playbackUrgency)
@@ -119,6 +131,10 @@ namespace engine {
       //////////////////////////////////////////////////////////////////////////////////////////TODO: second builder function, relying on Engine timings
       
       
+      /** @internal for debugging and diagnostics:
+       * explicitly cast this TimeAnchor onto the underlying
+       * nominal time scale (as defined by the Timings of this
+       * playback or render process). */
       operator lib::time::TimeValue()  const
         {
           UNIMPLEMENTED ("representation of the Time Anchor closure");

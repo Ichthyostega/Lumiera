@@ -22,7 +22,7 @@
 
 /** @file timings.hpp
  ** How to define a timing specification or constraint.
- ** A timing spec is used to anchor an data stream with relation to a time axis or frame grid.
+ ** A timing spec is used to anchor a data stream with relation to a time axis or frame grid.
  ** There are two kinds of timing specs:
  ** - nominal timing specifications relate to the nominal time values
  **   of the frames in a data stream, i.e. the "should be" time values.

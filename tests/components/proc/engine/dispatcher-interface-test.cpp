@@ -32,13 +32,16 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/singleton.hpp"
+#include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/scoped_ptr.hpp>
 //#include <iostream>
+#include <vector>
 
 using test::Test;
 using util::isnil;
+using std::vector;
 //using std::cout;
 //using std::rand;
 
@@ -50,6 +53,8 @@ namespace test  {
   using lib::time::QuTime;
   using lib::time::FrameRate;
   using lib::time::Duration;
+  using lib::time::Offset;
+  using lib::time::TimeVar;
   using mobject::ModelPort;
   using play::Timings;
   
@@ -139,6 +144,7 @@ namespace test  {
                                              .relativeFrameLocation (refPoint, 15);
           CHECK (coordinates.absoluteNominalTime == Time(0,1));
           CHECK (coordinates.absoluteFrameNumber == 25);
+          CHECK (coordinates.remainingRealTime() <  Time(FSecs(25,25)));
           CHECK (coordinates.remainingRealTime() >= Time(FSecs(24,25)));
           CHECK (coordinates.modelPort == modelPort);
           CHECK (coordinates.channelNr == channel);
@@ -146,13 +152,10 @@ namespace test  {
           JobTicket& executionPlan = dispatcher.accessJobTicket (coordinates);
           CHECK (executionPlan.isValid());
           
-          JobTicket::JobsPlanning jobs = executionPlan.createJobsFor (coordinates);
-          CHECK (!isnil (jobs));
-          
-          Job headJob = *jobs;
-          CHECK (headJob.getNominalTime() == coordinates.absoluteNominalTime);
-          CHECK (0 < headJob.getInvocationInstanceID());
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+          Job frameJob = executionPlan.createJobFor (coordinates);
+          CHECK (frameJob.getNominalTime() == coordinates.absoluteNominalTime);
+          CHECK (0 < frameJob.getInvocationInstanceID());
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       
@@ -164,8 +167,45 @@ namespace test  {
       void
       verify_standardDispatcherUsage()
         {
+          Dispatcher& dispatcher = mockDispatcher();
+          Timings timings (FrameRate::PAL);
+          ModelPort modelPort (getTestPort());
+          uint startFrame(10);
+          uint channel(0);
+          
+          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+          JobTicket::JobsPlanning jobs = dispatcher.onCalcStream(modelPort,channel)
+                                                   .establishNextJobs(refPoint);
+          
+          // Verify the planned Jobs
+          
+          CHECK (!isnil (jobs));
+          vector<Job> plannedChunk;
+          lib::append_all (jobs, plannedChunk);
+          
+          uint chunksize = plannedChunk.size();
+          CHECK (chunksize == 1 + timings.getPlanningChunkSize());
+          
+          TimeVar nextFrameStart = refPoint;
+          Offset expectedTimeIncrement (1, FrameRate::PAL);
+          for (uint i=0; i < chunksize-1; ++i )
+            {
+              Job& thisJob = plannedChunk[i];
+              CHECK (nextFrameStart == thisJob.getNominalTime());
+              CHECK (prevInvocationID < thisJob.getInvocationInstanceID());
+              
+              prevInvocationID = thisJob.getInvocationInstanceID();
+              nextFrameStart += expectedTimeIncrement;
+            }
+          
+          // but especially the last Job planned is a continuation
+          Job continuation = plannedChunk.back();
+          CHECK (META_JOB = continuation.getKind());
+          
+          // the Continuation will be scheduled sufficiently ahead of the planning end
+          CHECK (continuation.getNominalTime() < nextFrameStart - expectedTimeIncrement);
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
     };

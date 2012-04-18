@@ -55,6 +55,9 @@ namespace engine {
    * - the actual node to pull data from
    * - the segment holding that node                //////////////TODO : is this information really required??
    * 
+   * @remarks consider frame coordinates being "boiled down" to the actual values.
+   *          There is no reference to any kind of time grid (or similar session internals).
+   * 
    * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
    */
   class FrameCoord
