@@ -121,6 +121,13 @@ namespace play {
   }
   
   
+  uint
+  Timings::getPlanningChunkSize()  const
+  {
+    UNIMPLEMENTED ("how to control the engine evaluation chunk size");
+  }
+  
+  
   Timings
   Timings::constrainedBy (Timings additionalConditions)
   {

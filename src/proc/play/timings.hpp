@@ -125,6 +125,14 @@ namespace play {
        */
       Time getTimeDue()  const;
       
+      /** number of jobs to be planned and scheduled in one sway.
+       *  The continuous planning of additional frame calculation jobs
+       *  for playback or rendering proceeds in chunks of jobs
+       *  controlled by this chunk size.
+       */
+      uint getPlanningChunkSize() const;
+      
+      
       //////////////TODO further accessor functions here
       
       Timings constrainedBy (Timings additionalConditions);

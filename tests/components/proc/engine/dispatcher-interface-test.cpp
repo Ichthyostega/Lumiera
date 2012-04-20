@@ -37,11 +37,13 @@
 
 //#include <boost/scoped_ptr.hpp>
 //#include <iostream>
+#include <tr1/functional>
 #include <vector>
 
 using test::Test;
 using util::isnil;
 using std::vector;
+using std::tr1::function;
 //using std::cout;
 //using std::rand;
 
@@ -55,6 +57,7 @@ namespace test  {
   using lib::time::Duration;
   using lib::time::Offset;
   using lib::time::TimeVar;
+  using lib::time::Time;
   using mobject::ModelPort;
   using play::Timings;
   
@@ -122,6 +125,7 @@ namespace test  {
         {
            verify_basicDispatch();
            verify_standardDispatcherUsage();
+           check_ContinuationBuilder();
         }
       
       
@@ -186,11 +190,11 @@ namespace test  {
           lib::append_all (jobs, plannedChunk);
           
           uint chunksize = plannedChunk.size();
-          CHECK (chunksize == 1 + timings.getPlanningChunkSize());
+          CHECK (chunksize == timings.getPlanningChunkSize());
           
           TimeVar nextFrameStart = refPoint;
           Offset expectedTimeIncrement (1, FrameRate::PAL);
-          for (uint i=0; i < chunksize-1; ++i )
+          for (uint i=0; i < chunksize; ++i )
             {
               Job& thisJob = plannedChunk[i];
               CHECK (nextFrameStart == thisJob.getNominalTime());
@@ -199,14 +203,66 @@ namespace test  {
               prevInvocationID = thisJob.getInvocationInstanceID();
               nextFrameStart += expectedTimeIncrement;
             }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+        }
+      
+      
+      /** @test usually at the end of each standard invocation,
+       * after scheduling a chunk of new Jobs, an additional
+       * continuation job is created to re-invoke this
+       * scheduling step.
+       * - the refPoint gets bumped beyond the planned segment
+       * - the continuation job embodies a suitable closure,
+       *   usable for self-re-invocation
+       */
+      void
+      check_ContinuationBuilder()
+        {
+          Dispatcher& dispatcher = mockDispatcher();
+          Timings timings (FrameRate::PAL);
+          ModelPort modelPort (getTestPort());
+          uint startFrame(10);
+          uint channel(0);
           
-          // but especially the last Job planned is a continuation
-          Job continuation = plannedChunk.back();
+          // prepare the rest of this test to be invoked as "continuation"
+          function<void(TimeAnchor)> testFunc = verify_invocation_of_Continuation;
+          
+          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+          JobTicket::JobsPlanning jobs = dispatcher.onCalcStream(modelPort,channel)
+                                                   .establishNextJobs(refPoint)
+                                                   .prepareContinuation(testFunc);
+          
+          // an additional "continuation" Job has been prepared....
+          Job continuation = lib::pull_last(jobs);
           CHECK (META_JOB = continuation.getKind());
           
+          uint nrJobs = timings.getPlanningChunkSize();
+          Duration frameDuration (1, FrameRate::PAL);
+          
           // the Continuation will be scheduled sufficiently ahead of the planning end
-          CHECK (continuation.getNominalTime() < nextFrameStart - expectedTimeIncrement);
+          CHECK (continuation.getNominalTime() < Time(refPoint) + (nrJobs-1) * frameDuration);
+          
+          // now invoke the rest of this test, which has been embedded into the continuation job.
+          // Since we passed testFunc as action for the continuation, we expect the invocation
+          // of the function verify_invocation_of_Continuation()
+          continuation.triggerJob();
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+        }
+      
+      /** action used as "continuation" in #check_ContinuationBuilder
+       *  This function expects to be invoked with a time anchor bumped up
+       *  to point exactly behind the end of the previously planned chunk of Jobs
+       */
+      static void
+      verify_invocation_of_Continuation (TimeAnchor nextRefPoint)
+        {
+          Timings timings (FrameRate::PAL);
+          uint startFrame(10);
+          uint nrJobs = timings.getPlanningChunkSize();
+          Duration frameDuration (1, FrameRate::PAL);
+          
+          CHECK (Time(nextRefPoint) == Time::ZERO + (startFrame + nrJobs) * frameDuration);
         }
     };
   
