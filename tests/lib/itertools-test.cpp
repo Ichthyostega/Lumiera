@@ -23,6 +23,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
 
@@ -46,6 +47,8 @@ namespace test{
   using std::cout;
   using std::endl;
   using std::rand;
+  
+  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
   
   
@@ -110,6 +113,8 @@ namespace test{
           verify_filterRepetitions();
           
           buildTransformingIterator (source.begin());
+          
+          verifyPullLast(source.begin());
         }
       
       
@@ -253,6 +258,17 @@ namespace test{
         }
       
       
+      void
+      verifyPullLast(Iter const& ii)
+        {
+          Iter::value_type lastElm = pull_last (ii);
+          CHECK (1 == lastElm);     // TestSource holds a decreasing sequence of numbers ending with 1
+          
+          Iter emptyIterator;
+          CHECK (isnil (emptyIterator));
+          
+          VERIFY_ERROR (ITER_EXHAUST, pull_last(emptyIterator) );
+        }
     };
   
   LAUNCHER (IterTools_test, "unit common");

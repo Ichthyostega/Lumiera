@@ -289,7 +289,7 @@ namespace lib {
         {
           return (cached_ && isOK_)
               || (cached_ = true
-                 &&(isOK_ = predicate_(*Raw::pipe())));            
+                 &&(isOK_ = predicate_(*Raw::pipe())));
         }
       
       void
@@ -538,6 +538,31 @@ namespace lib {
     for ( ; iter; ++iter )
       container.push_back (*iter);
   }
+  
+  
+  template<class IT>
+  inline typename IT::value_type
+  pull_last (IT iter)
+    {
+      typedef typename IT::value_type Val;
+      typedef wrapper::ItemWrapper<Val> Item;
+      
+      Item lastElm;
+      
+      while (iter)
+        {
+          lastElm = *iter;
+          ++iter;
+        }
+      
+      if (lastElm)
+        return *lastElm;
+      else
+        throw lumiera::error::State ("attempt to retrieve the last element "
+                                     "of an exhausted or empty iterator"
+                                    ,lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+    }
+  
   
   
   /** filters away repeated values
