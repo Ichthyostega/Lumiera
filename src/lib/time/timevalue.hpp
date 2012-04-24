@@ -154,7 +154,7 @@ namespace time {
       TimeVar& operator-= (TimeVar const& tx)  { t_ -= tx.t_; return *this; }
       
       // Supporting multiplication with integral factor
-      TimeVar& operator*= (int fact)           { t_ *= fact;  return *this; }
+      TimeVar& operator*= (int64_t fact)       { t_ *= fact;  return *this; }
       
       // Supporting sign flip
       TimeVar  operator-  ()         const     { return TimeVar(*this)*=-1; }
@@ -230,8 +230,9 @@ namespace time {
     return factor*distance;
   }
   
+  template<typename INT>
   inline Offset
-  operator* (int factor, Offset const& o)
+  operator* (INT factor, Offset const& o)
   {
     TimeVar distance(o);
     distance *= factor;
