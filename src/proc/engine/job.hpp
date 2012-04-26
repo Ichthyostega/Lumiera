@@ -42,6 +42,13 @@ enum JobState
     ABORTED    ///< got aborted
   };
 
+enum JobKind
+  {
+    CALC_JOB,  ///< calculating frame data, CPU bound
+    LOAD_JOB,  ///< accessing prerequisites, IO bound
+    META_JOB   ///< render process self organisation
+  };
+
 
 /** 
  * closure representing the execution context of a job.
@@ -109,7 +116,8 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "proc/common.hpp"
+//#include "proc/common.hpp"
+#include "lib/error.hpp"
 //#include "proc/state.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
@@ -172,9 +180,16 @@ using lib::time::Time;
           return this->parameter.invoKey;
         }
       
+      JobKind getKind()  const;
       bool isValid()  const;
     };
   
+    
+  inline JobKind
+  Job::getKind()  const
+    {
+      UNIMPLEMENTED ("need a better C-representation of the job");
+    }
   
   
 }} // namespace proc::engine

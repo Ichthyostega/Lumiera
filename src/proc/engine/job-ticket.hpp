@@ -99,8 +99,8 @@ namespace engine {
         }
       
       
-      JobsPlanning
-      createJobsFor (FrameCoord coordinates)
+      Job
+      createJobFor (FrameCoord coordinates)
         {
           UNIMPLEMENTED ("job planning and generation");
         }

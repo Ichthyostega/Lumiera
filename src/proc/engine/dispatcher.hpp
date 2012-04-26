@@ -33,12 +33,13 @@
 #include "lib/time/timevalue.hpp"
 
 #include <boost/noncopyable.hpp>
-
+#include <tr1/functional>
 
 
 namespace proc {
 namespace engine {
   
+  using std::tr1::function;
   using mobject::ModelPort;
   using lib::time::TimeSpan;
   using lib::time::FSecs;
@@ -52,19 +53,32 @@ namespace engine {
   class Dispatcher
     : boost::noncopyable
     {
-      struct CoordBuilder
+      struct JobBuilder
         {
           Dispatcher& dispatcher_;
           ModelPort modelPort_;
           uint channel_;
           
-          FrameCoord relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset);    
+          FrameCoord relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset);
+          
+          JobBuilder& establishNextJobs (TimeAnchor refPoint);
+          
+          JobBuilder& prepareContinuation (function<void(TimeAnchor)> delayedAction);
+          
+          operator JobTicket::JobsPlanning()
+            {
+              UNIMPLEMENTED ("how to represent the closure for defining and scheduling jobs");
+              
+              ////////TODO: use a closure based on the JobTicket (which can be accessed through the dispatcher backlink)
+              ////////////  Because this closure is what backs the IterSource, it needs to have a reliable storage though. 
+            }
+
         };
       
     public:
       virtual ~Dispatcher();  ///< this is an interface
       
-      CoordBuilder onCalcStream (ModelPort modelPort, uint channel);
+      JobBuilder onCalcStream (ModelPort modelPort, uint channel);
       
       JobTicket& accessJobTicket (FrameCoord const&);
       

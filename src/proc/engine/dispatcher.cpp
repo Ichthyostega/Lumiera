@@ -34,7 +34,7 @@ namespace engine {
   
   
   /** */
-  Dispatcher::CoordBuilder
+  Dispatcher::JobBuilder
   Dispatcher::onCalcStream (ModelPort modelPort, uint channel)
   {
     UNIMPLEMENTED ("build coordinates of frame to render");
@@ -43,10 +43,30 @@ namespace engine {
   
   /** */
   FrameCoord
-  Dispatcher::CoordBuilder::relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset)
+  Dispatcher::JobBuilder::relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset)
   {
     UNIMPLEMENTED ("build coordinates of frame to render");
   }
+  
+  
+  /** */
+  Dispatcher::JobBuilder& 
+  Dispatcher::JobBuilder::establishNextJobs (TimeAnchor refPoint)
+  {
+    UNIMPLEMENTED ("job planning and generation");
+    return *this;
+  }
+  
+  
+  /** */
+  Dispatcher::JobBuilder&
+  Dispatcher::JobBuilder::prepareContinuation (function<void(TimeAnchor)> delayedAction)
+    {
+      UNIMPLEMENTED ("wrap already planned jobs, appending a continuation to pick up later");
+      return *this;
+    }
+
+
   
   
   /** */

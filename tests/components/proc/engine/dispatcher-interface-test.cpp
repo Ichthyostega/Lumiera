@@ -156,10 +156,10 @@ namespace test  {
           JobTicket& executionPlan = dispatcher.accessJobTicket (coordinates);
           CHECK (executionPlan.isValid());
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           Job frameJob = executionPlan.createJobFor (coordinates);
           CHECK (frameJob.getNominalTime() == coordinates.absoluteNominalTime);
           CHECK (0 < frameJob.getInvocationInstanceID());
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       
@@ -179,7 +179,6 @@ namespace test  {
           
           TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           JobTicket::JobsPlanning jobs = dispatcher.onCalcStream(modelPort,channel)
                                                    .establishNextJobs(refPoint);
           
@@ -192,7 +191,8 @@ namespace test  {
           uint chunksize = plannedChunk.size();
           CHECK (chunksize == timings.getPlanningChunkSize());
           
-          TimeVar nextFrameStart = refPoint;
+          TimeVar nextFrameStart (refPoint);
+          InvocationInstanceID prevInvocationID(0);
           Offset expectedTimeIncrement (1, FrameRate::PAL);
           for (uint i=0; i < chunksize; ++i )
             {
@@ -203,6 +203,7 @@ namespace test  {
               prevInvocationID = thisJob.getInvocationInstanceID();
               nextFrameStart += expectedTimeIncrement;
             }
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       
@@ -228,14 +229,13 @@ namespace test  {
           function<void(TimeAnchor)> testFunc = verify_invocation_of_Continuation;
           
           TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           JobTicket::JobsPlanning jobs = dispatcher.onCalcStream(modelPort,channel)
                                                    .establishNextJobs(refPoint)
                                                    .prepareContinuation(testFunc);
           
           // an additional "continuation" Job has been prepared....
           Job continuation = lib::pull_last(jobs);
-          CHECK (META_JOB = continuation.getKind());
+          CHECK (META_JOB == continuation.getKind());
           
           uint nrJobs = timings.getPlanningChunkSize();
           Duration frameDuration (1, FrameRate::PAL);
@@ -247,6 +247,7 @@ namespace test  {
           // Since we passed testFunc as action for the continuation, we expect the invocation
           // of the function verify_invocation_of_Continuation()
           continuation.triggerJob();
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       
