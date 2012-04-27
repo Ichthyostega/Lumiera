@@ -148,7 +148,7 @@ namespace test  {
                                              .relativeFrameLocation (refPoint, 15);
           CHECK (coordinates.absoluteNominalTime == Time(0,1));
           CHECK (coordinates.absoluteFrameNumber == 25);
-          CHECK (coordinates.remainingRealTime() <  Time(FSecs(25,25)));
+          CHECK (coordinates.remainingRealTime() <  Time(FSecs(25,25))); ////////////////////////TODO the coordinates can't answer that question! Who else can?
           CHECK (coordinates.remainingRealTime() >= Time(FSecs(24,25)));
           CHECK (coordinates.modelPort == modelPort);
           CHECK (coordinates.channelNr == channel);
@@ -240,7 +240,7 @@ namespace test  {
           uint nrJobs = timings.getPlanningChunkSize();
           Duration frameDuration (1, FrameRate::PAL);
           
-          // the Continuation will be scheduled sufficiently ahead of the planning end
+          // the Continuation will be scheduled sufficiently ahead of the currently planned chunk's end
           CHECK (continuation.getNominalTime() < Time(refPoint) + (nrJobs-1) * frameDuration);
           
           // now invoke the rest of this test, which has been embedded into the continuation job.

@@ -73,6 +73,19 @@ namespace engine {
   }
   
   
+  /** find out about the classification of this job.
+   *  Typically its not necessary for the normal scheduling of
+   *  Jobs to know anything beyond the contents of the #lumiera_jobDescriptor,
+   *  but the JobClosure is able to answer any additional introspection queries
+   */
+  JobKind
+  Job::getKind()  const
+  {
+    REQUIRE (isValid());
+    myClosure(this).getJobKind();
+  }
+    
+  
   /** Render Job self verification.
    *  performs a parameter consistency check
    *  including a call-back to the defining JobTicket

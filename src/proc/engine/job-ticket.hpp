@@ -57,6 +57,13 @@ namespace engine {
     {
     public:
       
+      JobKind
+      getJobKind()  const
+        {
+          UNIMPLEMENTED ("representation of JobTicket and JobClosure");
+        }
+
+      
       bool
       verify (Time nominalJobTime)  const
         {

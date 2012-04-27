@@ -67,8 +67,8 @@ typedef struct lumiera_jobClosure* LumieraJobClosure;
  */
 struct lumiera_jobParameter_struct
   {
-    InvocationInstanceID invoKey;
     gavl_time_t nominalTime;
+    InvocationInstanceID invoKey;
     //////////////////////////////////////////////////////////////TODO: place an additional parameter value here, or make the instanceID globally unique?
   };
 typedef struct lumiera_jobParameter_struct lumiera_jobParameter;
@@ -78,8 +78,8 @@ typedef lumiera_jobParameter* LumieraJobParameter;
 /** complete definition of an individual job */
 struct lumiera_jobDefinition_struct
   {
-    LumieraJobClosure jobClosure;
-    lumiera_jobParameter parameter;
+    LumieraJobClosure jobClosure;     ///< type and context of the job, including the actual functor
+    lumiera_jobParameter parameter;   ///< the "moving parts" for this individual invocation (Job)
   };
 typedef struct lumiera_jobDefinition_struct lumiera_jobDefinition;
 
@@ -183,13 +183,6 @@ using lib::time::Time;
       JobKind getKind()  const;
       bool isValid()  const;
     };
-  
-    
-  inline JobKind
-  Job::getKind()  const
-    {
-      UNIMPLEMENTED ("need a better C-representation of the job");
-    }
   
   
 }} // namespace proc::engine

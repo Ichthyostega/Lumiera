@@ -82,6 +82,7 @@ namespace engine {
       Duration remainingRealTime()
         {
           UNIMPLEMENTED ("deterine the real wall clock time amount left until deadline");
+                                                ////////////////////////TODO the coordinates can't answer that question! Who else can?
         }
 
       
