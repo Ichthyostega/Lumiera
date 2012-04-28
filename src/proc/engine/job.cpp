@@ -62,7 +62,7 @@ namespace engine {
   void
   Job::triggerJob ()  const
   {
-    UNIMPLEMENTED ("how to access the JobTicket and build the RenderInvocation");
+    myClosure(this).invokeJobOperation (parameter);
   }
   
   
@@ -82,7 +82,7 @@ namespace engine {
   Job::getKind()  const
   {
     REQUIRE (isValid());
-    myClosure(this).getJobKind();
+    return myClosure(this).getJobKind();
   }
     
   
@@ -96,7 +96,6 @@ namespace engine {
     return this->jobClosure
         && this->parameter.invoKey > 0
         && myClosure(this).verify (getNominalTime());
-         ;
   }
   
   

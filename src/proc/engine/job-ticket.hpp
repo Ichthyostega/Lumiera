@@ -56,21 +56,16 @@ namespace engine {
     : public lumiera_jobClosure
     {
     public:
+      virtual ~JobClosure();     ///< this is an interface
       
-      JobKind
-      getJobKind()  const
-        {
-          UNIMPLEMENTED ("representation of JobTicket and JobClosure");
-        }
-
       
-      bool
-      verify (Time nominalJobTime)  const
-        {
-          UNIMPLEMENTED ("access the underlying JobTicket and verify the given job time is within the relevant timeline segment");
-          return false;
-        }
+      virtual void invokeJobOperation (JobParameter parameter)  =0;
+      virtual void signalFailure      (JobParameter parameter)  =0;
+      
+      JobKind getJobKind()  const                               =0;
+      bool verify (Time nominalJobTime)  const                  =0;
     };
+  
   
   
   /**

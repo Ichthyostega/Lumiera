@@ -135,6 +135,9 @@ using lib::time::Time;
 //  
 //class ExitNode;
   
+  typedef lumiera_jobParameter const& JobParameter;
+  
+  
   /**
    * Frame rendering task, represented as closure.
    * This functor encodes all information necessary to trigger
@@ -201,7 +204,7 @@ void lumiera_job_invoke  (lumiera_jobDefinition);
 /** signal inability to invoke this job
  * @todo decide what and how to communicate details of the failure
  * @remarks the purpose of this function is to allow for reliable checkpoints
- *          within the network of dependent jobs invocations, even after
+ *          within the network of dependent job invocations, even after
  *          missing deadlines or aborting a sequence of jobs */
 void lumiera_job_failure (lumiera_jobDefinition);
 
