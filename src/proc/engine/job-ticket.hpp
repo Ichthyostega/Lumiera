@@ -101,11 +101,8 @@ namespace engine {
         }
       
       
-      Job
-      createJobFor (FrameCoord coordinates)
-        {
-          UNIMPLEMENTED ("job planning and generation");
-        }
+      Job createJobFor (FrameCoord coordinates);
+      
       
       bool
       isValid()  const

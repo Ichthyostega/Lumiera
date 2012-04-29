@@ -156,7 +156,7 @@ namespace test  {
           JobTicket& executionPlan = dispatcher.accessJobTicket (coordinates);
           CHECK (executionPlan.isValid());
           
-          Job frameJob = executionPlan.createJobFor (coordinates);
+          Job frameJob = executionPlan.createJobFor (coordinates); //////////////////////////////TODO this is wrong: we never create a single job!
           CHECK (frameJob.getNominalTime() == coordinates.absoluteNominalTime);
           CHECK (0 < frameJob.getInvocationInstanceID());
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880

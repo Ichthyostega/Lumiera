@@ -90,6 +90,12 @@ namespace engine {
   
   
   /**  */
+  Job
+  JobTicket::createJobFor (FrameCoord coordinates)
+  {
+    UNIMPLEMENTED ("job planning and generation");
+  }
+  
   
   
 }} // namespace proc::engine

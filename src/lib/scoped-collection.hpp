@@ -30,7 +30,7 @@
  ** and never adjusted.
  ** 
  ** \par usage patterns
- ** The common ground for all usage of this container is to hold and some
+ ** The common ground for all usage of this container is to hold some elements
  ** with exclusive ownership; when the enclosing container goes out of scope,
  ** all the dtors of the embedded objects will be invoked. Frequently this
  ** side effect is the reason for using the container: we want to own some
