@@ -532,6 +532,11 @@ out: can_IterForEach<CustomForwardIter>	 : Yes
 END
 
 
+PLANNED "Linked iterable elements" LinkedElements_test <<END
+return: 0
+END
+
+
 TEST "Polymorphic value objects" PolymorphicValue_test  <<END
 return: 0
 END

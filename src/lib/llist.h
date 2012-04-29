@@ -33,18 +33,18 @@
  * this pointers point to the node itself. Note that these pointers can never ever become NULL.
  * This lists are used by using one node as 'root' node where its both pointers are the head/tail pointer to the actual list.
  * Care needs to be taken to ensure not to apply any operations meant to be applied to data nodes to the root node.
- * This way is the prefered way to use this lists.
+ * This way is the preferred way to use this lists.
  * Alternatively one can store only a chain of data nodes and use a LList pointer to point to the first item
  * (which might be NULL in case no data is stored). When using the 2nd approach care must be taken since most functions
  * below expect lists to have a root node.
  *
  * This header can be used in 2 different ways:
- * 1) (prerefered) just including it provides all functions as static inlined functions. This is the default
+ * 1) (preferred) just including it provides all functions as static inlined functions. This is the default
  * 2) #define LLIST_INTERFACE before including this header gives only the declarations
  *    #define LLIST_IMPLEMENTATION before including this header yields in definitions
  *    this can be used to generate a library. This is currently untested and not recommended.
  * The rationale for using inlined functions is that most functions are very small and likely to be used in performance critical parts.
- * Inlining can give a hughe performance and optimization improvement here.
+ * Inlining can give a huge performance and optimization improvement here.
  * The few functions which are slightly larger are expected to be the less common used ones, so inlining them too shouldn't be a problem either
  */
 
@@ -144,7 +144,7 @@ typedef llist ** LList_ref;
 
 /**
  * Iterate forward over a range.
- * @param start first node to be interated
+ * @param start first node to be iterated
  * @param end node after the last node be iterated
  * @param node pointer to the iterated node
  */
@@ -155,7 +155,7 @@ typedef llist ** LList_ref;
 
 /**
  * Iterate backward over a range.
- * @param rstart first node to be interated
+ * @param rstart first node to be iterated
  * @param rend node before the last node be iterated
  * @param node pointer to the iterated node
  */
@@ -281,7 +281,7 @@ LLIST_FUNC (unsigned llist_count (const_LList self),
             return cnt;
 );
 
-/* private, unlink self some any list but leaves self in a uninitialized state */
+/* private, unlink self some any list but leaves self in a uninitialised state */
 LLIST_FUNC (void llist_unlink_fast_ (LList self),
             LList nxt = self->next, pre = self->prev;
             nxt->prev = pre;
@@ -421,7 +421,7 @@ LLIST_FUNC (LList llist_inserbefore_range (LList self, LList start, LList end),
 
 /**
  * Swap a node with its next node.
- * @param self node to be advaced
+ * @param self node to be advanced
  * @return self
  * advancing will not stop at tail, one has to check that if this is intended
  */
@@ -534,13 +534,13 @@ LLIST_FUNC (LList llist_get_nth_stop (LList self, int n, const_LList stop),
 
 
 /**
- * The comparsion function function type.
- * certain sort and find functions depend on a user supplied coparsion function
- * @param a first operand for the comparsion
- * @param b second operand for the comparsion
+ * The comparison function function type.
+ * certain sort and find functions depend on a user supplied comparison function
+ * @param a first operand for the comparison
+ * @param b second operand for the comparison
  * @param extra user supplied data which passed through
- * @return shall return a value less than zero, zero, biggier than zero when
- *         a is less than, equal to, biggier than b
+ * @return shall return a value less than zero, zero, bigger than zero when
+ *         a is less than, equal to, bigger than b
  */
 typedef int (*llist_cmpfn)(const_LList a, const_LList b, void* extra);
 
@@ -623,11 +623,11 @@ LLIST_FUNC (LList llist_ufind (LList self, const_LList templ, llist_cmpfn cmp, v
 /**
  * Find a element in a sorted list.
  * searches the list until it find the searched element, exits searching when found an element
- * biggier than the searched one.
+ * bigger than the searched one.
  * @param self list to be searched
  * @param templ template for the element being searched
  * @param cmp function for comparing 2 nodes
- * @return pointer to the found LList element or NULL if nothing foound
+ * @return pointer to the found LList element or NULL if nothing found
  */
 LLIST_FUNC (LList llist_sfind (const_LList self, const_LList templ, llist_cmpfn cmp, void* extra),
             LLIST_FOREACH(self, node)
