@@ -24,8 +24,8 @@
  ** Intrusive single linked list with optional ownership.
  ** This helper template allows to attach a number of tightly integrated
  ** elements with low overhead. Typically, these elements are to be attached
- ** once and never changed. Optionally, elements can be created in-place using
- ** a custom allocation scheme; the holder might also take ownership. These
+ ** once and never changed. Optionally, elements can be created  using a
+ ** custom allocation scheme; the holder might also take ownership. These
  ** variations in functionality are controlled by policy templates.
  ** 
  ** The rationale for using this approach is
@@ -34,10 +34,20 @@
  ** - no need to template the holder on the number of elements
  ** - no heap allocations (contrast this to using std::vector)
  ** - clear and expressive notation at the usage site
+ ** - convenient access through Lumiera Forward Iterators
  ** - the need to integrate tightly with a custom allocator
  ** 
- ** @note
- ** @warning
+ ** @note this linked list container is \em intrusive and thus needs the help
+ **       of the element type, which must provide a pointer member \c next.
+ **       Consequently, each such node element can't be member in
+ **       multiple collections at the same time
+ ** @note as usual, any iterator relies on the continued existence and
+ **       unaltered state of the container. There is no sanity check.
+ ** @warning this container is deliberately not threadsafe
+ ** @warning be sure to understand the implications of taking ownership:
+ **       When adding an existing node element (by pointer) to a LinkedElements
+ **       list which takes ownership, the list will attempt to destroy or de-allocate
+ **       this node element when going out of scope.
  ** 
  ** @see LinkedElements_test
  ** @see llist.h
@@ -53,171 +63,356 @@
 #include "lib/error.hpp"
 #include "lib/iter-adapter.hpp"
 
-//#include <boost/noncopyable.hpp>
-//#include <boost/static_assert.hpp>
-//#include <boost/type_traits/is_same.hpp>
-//#include <boost/type_traits/is_base_of.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/static_assert.hpp>
+
 
 
 namespace lib {
   
   namespace error = lumiera::error;
-//  using error::LUMIERA_ERROR_CAPACITY;
-//  using error::LUMIERA_ERROR_INDEX_BOUNDS;
+  using error::LUMIERA_ERROR_INDEX_BOUNDS;
+  
+  
+  namespace linked_elements { ///< allocation policies for the LinkedElements list container
+    
+    /**
+     * Policy for LinkedElements: taking ownership
+     * and possibly creating heap allocated Nodes
+     */
+    struct OwningHeapAllocated
+      {
+        typedef void* CustomAllocator;
+        
+        /** this policy discards elements
+         *  by deallocating them from heap
+         */
+        template<class X>
+        void 
+        destroy (X* elm)
+          {
+            delete elm;
+          }
+        
+        
+        /** this policy creates new elements
+         *  simply by heap allocation */
+        template<class TY>
+        TY&
+        create ()
+          {
+            return *new TY();
+          }
+        
+        
+        template<class TY, typename A1>
+        TY&                                               //____________________________________________
+        create (A1 a1)                                   ///< create object of type TY, using 1-arg ctor
+          {
+            return *new TY(a1);
+          }
+        
+        
+        template< class TY
+                , typename A1
+                , typename A2
+                >
+        TY&                                               //____________________________________________
+        create (A1 a1, A2 a2)                            ///< create object of type TY, using 2-arg ctor
+          {
+            return *new TY(a1,a2);
+          }
+        
+        
+        template< class TY
+                , typename A1
+                , typename A2
+                , typename A3
+                >
+        TY&                                               //____________________________________________
+        create (A1 a1, A2 a2, A3 a3)                     ///< create object of type TY, using 3-arg ctor
+          {
+            return *new TY(a1,a2,a3);
+          }
+        
+        
+        template< class TY
+                , typename A1
+                , typename A2
+                , typename A3
+                , typename A4
+                >
+        TY&                                               //____________________________________________
+        create (A1 a1, A2 a2, A3 a3, A4 a4)              ///< create object of type TY, using 4-arg ctor
+          {
+            return *new TY(a1,a2,a3,a4);
+          }
+        
+        
+        template< class TY
+                , typename A1
+                , typename A2
+                , typename A3
+                , typename A4
+                , typename A5
+                >
+        TY&                                               //____________________________________________
+        create (A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)       ///< create object of type TY, using 5-arg ctor
+          {
+            return *new TY(a1,a2,a3,a4,a5);
+          }
+      };
+    
+    
+    
+    
+    
+    
+    /**
+     * Policy for LinkedElements: never create or destroy
+     * any elements, only allow to add already existing nodes.
+     * @note any added node needs to provide a \c next pointer
+     *       field, which is used ("intrusively") for managing
+     *       the list datastructure. But besides that, the
+     *       node element won't be altered or discarded
+     *       in any way.
+     */
+    struct NoOwnership
+      {
+        typedef void* CustomAllocator;
+        
+        /** this policy doesn't take ownership
+         *  and thus never discards anything
+         */
+        void 
+        destroy (void*)
+          {
+            /* does nothing */
+          }
+      };
+    
+    
+    
+    
+    
+#ifdef LIB_ALLOCATION_CLUSTER_H
+    
+    /**
+     * Policy for LinkedElements: especially using a
+     * lib::AllocationCluster instance for creating
+     * new node elements. It is mandatory to pass
+     * this cluster instance to the ctor of any
+     * LinkedElements list using this policy
+     * @note AllocationCluster always de-allocates
+     *       any created elements in one sway.
+     */
+    struct UseAllocationCluster
+      {
+        typedef AllocationCluster& CustomAllocator;
+        
+        CustomAllocator cluster_;
+        
+        
+        explicit
+        UseAllocationCluster (CustomAllocator clu)
+          : cluster_(clu)
+          { }
+        
+        
+        /** while this policy indeed implies creating and owing
+         *  new objects, the AllocationCluster doesn't support
+         *  discarding individual instances. All created objects
+         *  within the cluster will be bulk de-allocated
+         *  when the cluster as such goes out of scope.
+         */
+        void 
+        destroy (void*)
+          {
+            /* does nothing */
+          }
+        
+        
+        template<class TY>
+        TY&                                               //__________________________________________
+        create ()                                        ///< place object of type TY, by default ctor
+          {
+            return cluster_.create<TY>();
+          }
+        
+        
+        template<class TY, typename A1>
+        TY&                                               //___________________________________________
+        create (A1 a1)                                   ///< place object of type TY, using 1-arg ctor
+          {
+            return cluster_.create<TY> (a1);
+          }
+        
+        
+        template< class TY
+                , typename A1
+                , typename A2
+                >
+        TY&                                               //___________________________________________
+        create (A1 a1, A2 a2)                            ///< place object of type TY, using 2-arg ctor
+          {
+            return cluster_.create<TY> (a1,a2);
+          }
+        
+        
+        template< class TY
+                , typename A1
+                , typename A2
+                , typename A3
+                >
+        TY&                                               //___________________________________________
+        create (A1 a1, A2 a2, A3 a3)                     ///< place object of type TY, using 3-arg ctor
+          {
+            return cluster_.create<TY> (a1,a2,a3);
+          }
+        
+        
+        template< class TY
+                , typename A1
+                , typename A2
+                , typename A3
+                , typename A4
+                >
+        TY&                                               //___________________________________________
+        create (A1 a1, A2 a2, A3 a3, A4 a4)              ///< place object of type TY, using 4-arg ctor
+          {
+            return cluster_.create<TY> (a1,a2,a3,a4);
+          }
+      };
+    
+#endif //(End)if lib/allocation-cluster.hpp was included
+    
+  }//(END)namespace linked_elements
+  
+  
+  
+  
+  
+  
+  
   
   
   
   /**
-   * TODO write type comment
+   * Intrusive single linked list, possibly taking ownership of node elements.
+   * Additional elements can be pushed (prepended) to the list; element access
+   * is per index number (slow) or through an Lumiera Forward Iterator traversing
+   * the linked list. There is no support for changing the list contents aside
+   * of discarding any element in the list.
+   * 
+   * The allocation and ownership related behaviour is controlled by a policy class
+   * provided as template parameter. When this policy supports creation of new
+   * elements, these might be created and prepended in one step.
    */
   template
-    < class N                    ///< node class or Base/Interface class for nodes
+    < class N                 ///< node class or Base/Interface class for nodes
+    , class ALO = linked_elements::OwningHeapAllocated
     >
   class LinkedElements
     : boost::noncopyable
+    , ALO
     {
+      N* head_;
+      
       
     public:
-      
-      
-      
       
      ~LinkedElements ()
         { 
           clear();
         }
       
-      explicit
-      LinkedElements (size_t maxElements)
-        : level_(0)
-        , capacity_(maxElements)
-        , elements_(new ElementHolder[maxElements])
+      LinkedElements ()
+        : head_(0)
         { }
       
-      /** creating a ScopedCollection in RAII-style:
-       *  The embedded elements will be created immediately.
-       *  Ctor fails in case of any error during element creation.
-       * @param builder functor to be invoked for each "slot".
-       *        It gets an ElementHolder& as parameter, and should
-       *        use this to create an object of some I-subclass
+      /** @param allo custom allocator or memory manager
+       *         to be used by the policy for creating and
+       *         discarding of node elements
        */
-      template<class CTOR>
-      LinkedElements (size_t maxElements, CTOR builder)
-        : level_(0)
-        , capacity_(maxElements)
-        , elements_(new ElementHolder[maxElements])
-        {
-          populate_by (builder);
-        }
+      explicit
+      LinkedElements (typename ALO::CustomAllocator allo)
+        : ALO(allo)
+        , head_(0)
+        { }
       
-      /** variation of RAII-style: using a builder function,
-       *  which is a member of some object. This supports the
-       *  typical usage situation, where a manager object builds
-       *  a ScopedCollection of some components
-       * @param builder member function used to create the elements
-       * @param instance the owning class instance, on which the 
-       *        builder member function will be invoked ("this").
+      /** creating a LinkedElements list in RAII-style:
+       * @param elements iterator to provide all the elements
+       *        to be pushed into this newly created collection
+       * @note any exception while populating the container
+       *        causes already created elements to be destroyed
        */
-      template<class TY>
-      LinkedElements (size_t maxElements, void (TY::*builder) (ElementHolder&), TY * const instance)
-        : level_(0)
-        , capacity_(maxElements)
-        , elements_(new ElementHolder[maxElements])
+      template<class IT>
+      LinkedElements (IT elements)
+        : head_(0)
         {
-          populate_by (builder,instance);
-        }
+        try {
+            pushAll(elements);
+          }
+        catch(...)
+          {
+            WARN (progress, "Failure while populating LinkedElements list. "
+                            "All elements will be discarded");
+            clear();
+            throw;
+        } }
       
-      /* == some pre-defined Builders == */
       
-      template<typename IT>
-      class PullFrom;          ///< fills by copy-constructing values pulled from the iterator IT
       
-      template<typename IT>
-      static PullFrom<IT>
-      pull (IT iter)           ///< convenience shortcut to pull from any given Lumiera Forward Iterator
-        {
-          return PullFrom<IT> (iter);
-        }
-      
+      /** @note EX_FREE */
       void
       clear()
         {
-          REQUIRE (level_ <= capacity_, "Storage corrupted");
-          
-          while (level_)
+          while (head_)
             {
-              --level_;
+              N* elm = head_;
+              head_ = head_->next;
               try {
-                  elements_[level_].destroy();
+                  ALO::destroy(elm);
                 }
-              ERROR_LOG_AND_IGNORE (progress, "Clean-up of element in ScopedCollection")
+              ERROR_LOG_AND_IGNORE (progress, "Clean-up of element in LinkedElements list")
             }
         }
       
       
-      /** init all elements at once,
-       *  invoking a builder functor for each.
-       * @param builder to create the individual elements
-       *        this functor is responsible to invoke the appropriate
-       *        ElementHolder#create function, which places a new element
-       *        into the storage frame passed as parameter.
+      /** convenience shortcut to add all the elements
+       *  yielded by the given Lumiera Forward Iterator
+       *  @note EX_SANE
        */
-      template<class CTOR>
+      template<class IT>
       void
-      populate_by (CTOR builder)
-        try { 
-          while (level_ < capacity_)
-            {
-              ElementHolder& storageFrame (elements_[level_]);
-              builder (storageFrame);
-              ++level_;
-          } }
-        catch(...)
-          {
-            WARN (progress, "Failure while populating ScopedCollection. "
-                            "All elements will be discarded");
-            clear();
-            throw;
-          }
+      pushAll (IT elements)
+        {
+          for ( ; elements; ++elements )
+            push (*elements);
+        }
       
-      /** variation of element initialisation,
-       *  invoking a member function of some manager object
-       *  for each collection element to be created.
+      
+      
+      
+      /** accept the given element and prepend it to the list of elements;
+       *  depending on the allocation policy, this might imply taking ownership
+       * @note EX_STRONG
        */
-      template<class TY>
-      void
-      populate_by (void (TY::*builder) (ElementHolder&), TY * const instance)
-        try { 
-          while (level_ < capacity_)
-            {
-              ElementHolder& storageFrame (elements_[level_]);
-              (instance->*builder) (storageFrame);
-              ++level_;
-          } }
-        catch(...)
-          {
-            WARN (progress, "Failure while populating ScopedCollection. "
-                            "All elements will be discarded");
-            clear();
-            throw;
-          }
-      
-      
-      
-      /** push a new element of default type
-       *  to the end of this container
-       * @note EX_STRONG */
-      I& appendNewElement() { return appendNew<I>(); }
+      template<typename TY>
+      TY&
+      push (TY& elm)
+        {
+          elm.next = head_;
+          head_ = &elm;
+          return elm;
+        }
       
       
       template< class TY >
       TY&                                                  //_________________________________________
-      appendNew ()                                        ///< add object of type TY, using 0-arg ctor
+      pushNew ()                                          ///< add object of type TY, using 0-arg ctor
         {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>();
-          ++level_;
-          return newElm;
+          return push (ALO::template create<TY>());
         }
       
       
@@ -225,12 +420,9 @@ namespace lib {
               , typename A1
               >
       TY&                                                  //_________________________________________
-      appendNew (A1 a1)                                   ///< add object of type TY, using 1-arg ctor
+      pushNew (A1 a1)                                     ///< add object of type TY, using 1-arg ctor
         {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1);
-          ++level_;
-          return newElm;
+          return push (ALO::template create<TY>(a1));
         }
       
       
@@ -239,12 +431,9 @@ namespace lib {
               , typename A2
               >
       TY&                                                  //_________________________________________
-      appendNew (A1 a1, A2 a2)                            ///< add object of type TY, using 2-arg ctor
+      pushNew (A1 a1, A2 a2)                              ///< add object of type TY, using 2-arg ctor
         {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1,a2);
-          ++level_;
-          return newElm;
+          return push (ALO::template create<TY>(a1,a2));
         }
       
       
@@ -254,12 +443,9 @@ namespace lib {
               , typename A3
               >
       TY&                                                  //_________________________________________
-      appendNew (A1 a1, A2 a2, A3 a3)                     ///< add object of type TY, using 3-arg ctor
+      pushNew (A1 a1, A2 a2, A3 a3)                       ///< add object of type TY, using 3-arg ctor
         {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1,a2,a3);
-          ++level_;
-          return newElm;
+          return push (ALO::template create<TY>(a1,a2,a3));
         }
       
       
@@ -270,12 +456,9 @@ namespace lib {
               , typename A4
               >
       TY&                                                  //_________________________________________
-      appendNew (A1 a1, A2 a2, A3 a3, A4 a4)              ///< add object of type TY, using 4-arg ctor
+      pushNew (A1 a1, A2 a2, A3 a3, A4 a4)                ///< add object of type TY, using 4-arg ctor
         {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1,a2,a3,a4);
-          ++level_;
-          return newElm;
+          return push (ALO::template create<TY>(a1,a2,a3,a4));
         }
       
       
@@ -287,96 +470,97 @@ namespace lib {
               , typename A5
               >
       TY&                                                  //_________________________________________
-      appendNew (A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)       ///< add object of type TY, using 5-arg ctor
+      pushNew (A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)         ///< add object of type TY, using 5-arg ctor
         {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1,a2,a3,a4,a5);
-          ++level_;
-          return newElm;
+          return push (ALO::template create<TY>(a1,a2,a3,a4,a5));
         }
+      
+      
       
       
       
       /* === Element access and iteration === */
       
-      I&
+      N&
       operator[] (size_t index)  const
         {
-          if (index < level_)
-            return elements_[index].accessObj();
+          N* p = head_;
+          while (p && index)
+            {
+              p = p->next;
+              --index;
+            }
           
-          throw error::Logic ("Attempt to access not (yet) existing object in ScopedCollection"
-                             , LUMIERA_ERROR_INDEX_BOUNDS);
+          if (!p || index)
+            throw error::Logic ("Attempt to access element beyond the end of LinkedElements list"
+                               , LUMIERA_ERROR_INDEX_BOUNDS);
+          else
+            return *p;
+        }
+      
+      
+      /** @warning traverses to count the elements */
+      size_t
+      size ()  const
+        {
+          uint count=0;
+          N* p = head_;
+          while (p)
+            {
+              p = p->next;
+              ++count;
+            }
+          return count;
+        }
+      
+      
+      bool
+      empty () const
+        {
+          return !head_;
         }
       
       
       
-      typedef IterAdapter<      I *, const ScopedCollection *> iterator;
-      typedef IterAdapter<const I *, const ScopedCollection *> const_iterator;
+      typedef IterAdapter<      N*, const LinkedElements*> iterator;
+      typedef IterAdapter<const N*, const LinkedElements*> const_iterator;
       
       
-      iterator       begin()       { return iterator       (this, _access_begin()); }
-      const_iterator begin() const { return const_iterator (this, _access_begin()); }
+      iterator       begin()       { return iterator       (this, head_); }
+      const_iterator begin() const { return const_iterator (this, head_); }
       iterator       end ()        { return iterator();       }
       const_iterator end ()  const { return const_iterator(); }
       
       
-      size_t  size ()        const { return level_;      }
-      size_t  capacity ()    const { return capacity_;   }
-      bool    empty ()       const { return 0 == level_; }
       
-      
-      
-    private:
-      
-      
-      /* ==== internal callback API for the iterator ==== */
+    private: /* ==== internal callback API for the iterator ==== */
       
       /** Iteration-logic: switch to next position
-       * @note assuming here that the start address of the embedded object
-       *       coincides with the start of an array element (ElementHolder)
+       * @warning assuming the given node pointer belongs to this collection.
+       *          actually this is never checked; also the given node might
+       *          have been deallocated in the meantime.
        */
       friend void
-      iterNext (const ScopedCollection*, I* & pos)
+      iterNext (const LinkedElements*, N* & pos)
       {
-        ElementHolder* & storageLocation = reinterpret_cast<ElementHolder* &> (pos);
-        ++storageLocation;
+        pos = pos->next;
       }
       
       friend void
-      iterNext (const ScopedCollection*, const I* & pos)
+      iterNext (const LinkedElements*, const N* & pos)
       {
-        const ElementHolder* & storageLocation = reinterpret_cast<const ElementHolder* &> (pos);
-        ++storageLocation;
+        pos = pos->next;
       }
       
       /** Iteration-logic: detect iteration end. */
       template<typename POS>
       friend bool
-      hasNext (const ScopedCollection* src, POS & pos)
+      hasNext (const LinkedElements*, POS & pos)
       {
-        REQUIRE (src);
-        if ((pos) && (pos < src->_access_end()))
-          return true;
-        else
-          {
-            pos = 0;
-            return false;
-      }   }
-      
-      
-      I* _access_begin() const { return & elements_[0].accessObj(); }
-      I* _access_end()   const { return & elements_[level_].accessObj(); }
-      
+        return bool(pos);
+      }
     };
   
-  
-  
-  
-  /* === Supplement: pre-defined  === */
-  
-  /** \par usage
-   */
   
   
   

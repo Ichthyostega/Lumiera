@@ -26,10 +26,13 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
+#include "lib/allocation-cluster.hpp"
 #include "lib/linked-elements.hpp"
 #include "lib/test/testdummy.hpp"
+#include "lib/iter-source.hpp"
 
-//#include <cstdlib>
+#include <tr1/memory>
+
 
 
 namespace lib {
@@ -37,18 +40,29 @@ namespace test{
   
   namespace error = lumiera::error;
   
+  using util::isnil;
+  using util::isSameObject;
+  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  
   
   namespace { // test data...
     
+    LUMIERA_ERROR_DEFINE(PROVOKED_FAILURE, "provoked failure");
+    
     const uint NUM_ELEMENTS = 500;
+    int exception_trigger = -1;
     
-    LUMIERA_ERROR_DEFINE(SUBVERSIVE, "undercover action");
+    inline void __triggerErrorAt(int i) { exception_trigger = i; }
+    inline void __triggerError_reset()  { exception_trigger =-1; }
     
-    class Nummy
-      : public Dummy
+    
+    /**
+     * Test-Element, supporting intrusive linked list storage.
+     * Also tracks ctor/dtor calls by virtue of the Dummy baseclass.
+     */
+    struct Nummy
+      : Dummy
       {
-        
-      public:
         Nummy* next;
         
         Nummy() 
@@ -60,8 +74,78 @@ namespace test{
         Nummy (int i)
           : Dummy(i)
           , next(0)
+          {
+            if (i == exception_trigger)
+              throw error::Fatal("simulated error", LUMIERA_ERROR_PROVOKED_FAILURE);
+          }
+      };
+    
+    
+    /**
+     * to demonstrate holding subclasses
+     */
+    template<uint I>
+    struct Num
+      : Nummy
+      {
+        void* storage[I];   // note size depends on template parameter
+        
+        Num (int i=0, int j=0, int k=0)
+          : Nummy(I+i+j+k)
           { }
       };
+    
+    
+    
+    /**
+     * Helper to produce a pre-determined series 
+     * of objects to populate a LinkedElements list.
+     * @note just happily heap allocating new instances
+     *       and handing them out. The LinkedElements list
+     *       will take ownership of them and care for
+     *       clean de-allocation.
+     */
+    class NummyGenerator
+      : public IterSource<Nummy>
+      {
+        uint maxNum_;
+        
+        virtual Pos
+        firstResult()
+          {
+            return new Nummy(1);
+          }
+        
+        virtual void
+        nextResult(Pos& num)
+          {
+            uint current = num->getVal();
+            if (maxNum_ <= current)
+              num = 0;
+            else
+              num = new Nummy(current+1);
+          }
+        
+      public:
+        NummyGenerator (uint maxElms)
+          : maxNum_(maxElms)
+          { }
+      };
+    
+    /** Iterator-Frontend to generate this series of objects */
+    class Populator
+      : public NummyGenerator::iterator
+      {
+        
+      public:
+        explicit
+        Populator (uint numElms)
+          : NummyGenerator::iterator (
+              NummyGenerator::build (new NummyGenerator(numElms)))
+          { }
+      };
+    
+    
     
     
     inline uint
@@ -75,20 +159,22 @@ namespace test{
   
   
   
-  using util::isnil;
-  using util::isSameObject;
-//  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
+  /// default case: ownership for heap allocated nodes
   typedef LinkedElements<Nummy> List;
+  
+  /// managing existing node elements without taking ownership
   typedef LinkedElements<Nummy, linked_elements::NoOwnership> ListNotOwner;
+  
+  /// creating nodes in-place, using a custom allocator for creation and disposal
+  typedef LinkedElements<Nummy, linked_elements::UseAllocationCluster> ListCustomAllocated;
+  
   
   
   /********************************************************************
-   *  @test ScopedCollection manages a fixed set of objects, but these
-   *        child objects are noncopyable, may be polymorphic, an can
-   *        be created either all at once or chunk wise. The API is
-   *        similar to a vector and allows for element access
-   *        and iteration.
+   *  @test cover our custom single linked list template,
+   *        in combination with Lumiera Forward Iterators
+   *        and the usage of a custom allocator.
    */
   class LinkedElements_test : public Test
     {
@@ -103,6 +189,7 @@ namespace test{
           verify_ExceptionSafety();
           populate_by_iterator();
           verify_RAII_safety();
+          verify_customAllocator();
         }
       
       
@@ -136,9 +223,9 @@ namespace test{
             CHECK (0 == elements.size());
             CHECK (0 == Dummy::checksum());
             
-            elements.pushNew();
-            elements.pushNew();
-            elements.pushNew();
+            elements.pushNew<Nummy>();
+            elements.pushNew<Nummy>();
+            elements.pushNew<Nummy>();
             
             CHECK (3 == elements.size());
             CHECK (0 != Dummy::checksum());
@@ -200,6 +287,14 @@ namespace test{
         }
       
       
+      /** @test add some node elements to the LinkedElements list
+       *        but without taking ownership or performing any
+       *        memory management. This usage pattern is helpful
+       *        when the node elements are already managed elsewhere.
+       *  @note we're still (intrusively) using the next pointer
+       *        within the node elements. This means, that still
+       *        a given node can't be member in multiple lists.
+       */
       void
       verify_nonOwnership()
         {
@@ -249,7 +344,7 @@ namespace test{
             elements.pushNew<Nummy>(2);
             CHECK (1+2 == Dummy::checksum());
             
-            VERIFY_ERROR (SUBVERSIVE, elements.pushNew<Nummy>(3) );
+            VERIFY_ERROR (PROVOKED_FAILURE, elements.pushNew<Nummy>(3) );
             CHECK (1+2 == Dummy::checksum());
             CHECK (2 == elements.size());
             
@@ -290,6 +385,12 @@ namespace test{
         }
       
       
+      /** @test to support using LinkedElements within RAII-style components,
+       *        all the elements might be added in one sway, by pulling them
+       *        from a Lumiera Forward Iterator. In case this is done in the
+       *        ctor, any exception while doing so will trigger cleanup
+       *        of all elements (and then failure of the ctor alltogether)
+       */
       void
       verify_RAII_safety()
         {
@@ -297,7 +398,7 @@ namespace test{
           
           __triggerErrorAt(3);
           Populator yieldSomeElements(NUM_ELEMENTS);
-          VERIFY_ERROR (SUBVERSIVE, List(yieldSomeElements) );
+          VERIFY_ERROR (PROVOKED_FAILURE, List elements(yieldSomeElements) );
           
           CHECK (0 == Dummy::checksum());
           __triggerError_reset();
@@ -329,11 +430,10 @@ namespace test{
             CHECK (6+7+8+9 == elements[0].getVal());
             
             elements.clear();
-            CHECK (0 == allocator.size());
-            CHECK (0 == allocator.count<Num<1> >());
-            CHECK (0 == allocator.count<Num<3> >());
-            CHECK (0 == allocator.count<Num<6> >());
-            CHECK (0 == Dummy::checksum());
+            CHECK (3 == allocator.size());
+            CHECK (sum(9) == Dummy::checksum());
+            // note: elements won't be discarded unless
+            //       the AllocationCluster goes out of scope
           }
           CHECK (0 == Dummy::checksum());
         }
@@ -345,4 +445,3 @@ namespace test{
   
   
 }} // namespace lib::test
-

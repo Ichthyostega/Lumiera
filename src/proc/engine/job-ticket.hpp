@@ -62,8 +62,8 @@ namespace engine {
       virtual void invokeJobOperation (JobParameter parameter)  =0;
       virtual void signalFailure      (JobParameter parameter)  =0;
       
-      JobKind getJobKind()  const                               =0;
-      bool verify (Time nominalJobTime)  const                  =0;
+      virtual JobKind getJobKind()  const                       =0;
+      virtual bool verify (Time nominalJobTime)  const          =0;
     };
   
   

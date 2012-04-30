@@ -187,6 +187,11 @@ namespace test {
           // point at the objects we created. Just use them
           // and let them go. When clu goes out of scope,
           // all created object's dtors will be invoked.
+          
+          CHECK (4 == clu.size());
+          CHECK (1 == clu.count<Dummy<44> >());
+          CHECK (2 == clu.count<Dummy<37> >());
+          CHECK (1 == clu.count<Dummy<1234> >());
         }
       
       
