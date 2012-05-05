@@ -30,6 +30,7 @@
 #include "proc/engine/frame-coord.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
+#include "lib/linked-elements.hpp"
 #include "lib/iter-source.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -42,6 +43,7 @@ namespace engine {
 //using lib::time::Duration;
 //using lib::time::FSecs;
 //using lib::time::Time;
+using lib::LinkedElements;
 //  
 //class ExitNode;
   
@@ -76,7 +78,7 @@ namespace engine {
    * to a single model port). Once created, they are final for this segment,
    * stored together with the other descriptor objects (ProcNode and WiringDescriptor)
    * and finally discarded in bulk, in case that segment of the low-level model becomes
-   * obsolete and is replaced by a newly built new version of.
+   * obsolete and is replaced by a newly built new version of this model segment.
    * 
    * Job tickets are created by a classical recursive descent call on the exit node,
    * which figures out everything to be done for generating data from this node.
@@ -91,9 +93,28 @@ namespace engine {
   class JobTicket
     : boost::noncopyable
     {
+      struct Provision
+        {
+          Provision* next;
+        };
+      
+      struct Prerequisite
+        {
+          Prerequisite* next;
+        };
+      
+      struct Prerequisites
+        {
+          Prerequisites* next;
+          LinkedElements<Prerequisite> preparations_;
+        };
+      
+      
+      LinkedElements<Provision> channelConfig_;
+      LinkedElements<Prerequisites> requirement_;
       
     public:
-       typedef lib::IterSource<Job>::iterator  JobsPlanning;
+      typedef lib::IterSource<Job>::iterator  JobsPlanning;
       
       JobTicket()
         {
