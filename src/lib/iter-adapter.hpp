@@ -256,6 +256,100 @@ namespace lib {
   
   
   
+
+  /**
+   * Another Lumiera Forward Iterator building block, based on incorporating a state type 
+   * right into the iterator. Contrast this to IterAdapter referring to an controlling
+   * container behind the scenes. Here, all of the state is assumed to live in the
+   * custom type embedded into this iterator, accessed and manipulated through
+   * an set of free function to be resolved by ADL. 
+   * 
+   * @see IterExplorer a monadic iterator built on top of IterStateWrapper
+   * @see iter-explorer-test.hpp
+   * @see iter-adaptor-test.cpp
+   */
+  template<typename T, class ST =T>
+  class IterStateWrapper
+    : public lib::BoolCheckable<IterStateWrapper<T,ST> >
+    {
+      ST core_;
+      
+    public:
+      typedef typename iter::TypeBinding<T>::pointer pointer;
+      typedef typename iter::TypeBinding<T>::reference reference;
+      typedef typename iter::TypeBinding<T>::value_type value_type;
+      
+      IterStateWrapper (ST initialState)
+        : core_(initialState)
+        { 
+          checkPos(core_);
+        }
+      
+      IterStateWrapper ()
+        : core_()
+        { }
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      reference
+      operator*() const
+        {
+          _maybe_throw();
+          return yield (core_);   // extension point: yield
+        }
+      
+      pointer
+      operator->() const
+        {
+          _maybe_throw();
+          return & yield(core_);  // extension point: yield
+        }
+      
+      IterStateWrapper&
+      operator++()
+        {
+          _maybe_throw();
+          iterNext (core_);       // extension point: iterNext
+          return *this;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return checkPos(core_); // extension point: checkPos
+        }
+      
+      bool
+      empty ()    const
+        {
+          return !isValid();
+        }
+      
+      
+    private:
+      
+      void
+      _maybe_throw()  const
+        {
+          if (!isValid())
+            _throwIterExhausted();
+        }
+      
+      /// comparison of equivalent iterators
+      friend bool operator== (IterStateWrapper const& il, IterStateWrapper const& ir)
+      {
+        return (il.empty() && ir.empty())
+            || (il.isValid() && ir.isValid() && *il == *ir);
+      }
+      friend bool operator!= (IterStateWrapper const& il, IterStateWrapper const& ir)
+      {
+        return ! (il == ir);
+      }
+    };
+  
+  
+  
   
   
   

@@ -31,18 +31,34 @@
 #include "lib/linked-elements.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
+//#include <iostream>
+#include <sstream>
 #include <vector>
 
 
 
 namespace lib {
+  
+  namespace iter {
+    
+    template<>
+    struct TypeBinding<uint>
+      {
+        typedef uint value_type;
+        typedef uint const& reference;
+        typedef uint const* pointer;
+      };
+  }
+  
+
+  
 namespace test{
   
   using ::Test;
 //  using boost::lexical_cast;
 //  using util::for_each;
 //  using util::isnil;
+  using util::isnil;
   using util::isSameObject;
 //  using std::vector;
 //  using std::cout;
@@ -53,12 +69,86 @@ namespace test{
   
   namespace { // test dummy source iterator
   
-    uint NUM_ELMS = 10;
+//    uint NUM_ELMS = 10;
+    
+    class State
+      {
+        uint p,e;
+        
+      public:
+        State(uint start, uint end)
+          : p(start)
+          , e(end)
+          { }
+        
+        friend bool
+        checkPos (State const& st)
+        {
+          return st.p < st.e;
+        }
+        
+        friend uint const&
+        yield (State const& st)
+        {
+          return checkPos(st)? st.p : st.e;
+        }
+        
+        friend void
+        iterNext (State & st)
+        {
+          if (!checkPos (st)) return;
+          ++st.p;
+        }
+      };
+    
+    
     
     /** */
     class NumberSequence
+      : public IterStateWrapper<uint, State>
       {
+          
+        public:
+          explicit
+          NumberSequence(uint end = 0)
+            : IterStateWrapper<uint,State> (State(0,end))
+            { }
+          NumberSequence(uint start, uint end)
+            : IterStateWrapper<uint,State> (State(start,end))
+            { }
       };
+      
+    inline NumberSequence
+    seq (uint end)
+    {
+      return NumberSequence(end); 
+    }
+    
+    inline NumberSequence
+    seq (uint start, uint end)
+    {
+      return NumberSequence(start, end); 
+    }
+    
+    NumberSequence NIL_Sequence;
+    
+    
+    
+    /** Diagnostic helper: "squeeze out" the given iterator
+     * and join all yielded elements into a string
+     */
+    template<class II>
+    inline string
+    materialise (II & ii)
+    {
+      std::ostringstream buff;
+      while (ii)
+        {
+          buff << *ii;
+          if (++ii) buff << "-";
+        }
+      return buff.str();
+    }
     
   } // (END) impl test dummy container
   
@@ -104,10 +194,45 @@ namespace test{
     {
       
       virtual void
-      run (Arg arg)
+      run (Arg)
         {
-          verifyChainedIterators ();
-          verifyComparisons ();
+          verifyStateAdapter();
+          
+          UNIMPLEMENTED ("IterExplorer Monad");
+          verifyChainedIterators();
+          verifyRawChainedIterators();
+          
+          verifyDepthFirstExploration();
+          verifyBreadthFirstExploration();
+        }
+      
+      
+      
+      /** @test all of the following IterExplorer flavours are built on top
+       * of a special iterator adapter, centred at the notion of an iterable
+       * state element type. The actual iterator just embodies one element
+       * of this state representation, and typically there is not an hidden
+       * back-link to some kind of container in charge of the elements yielded
+       */
+      void
+      verifyStateAdapter ()
+        {
+          NumberSequence ii = seq(5);
+          CHECK (!isnil (ii));
+          CHECK (0 == *ii);
+          CHECK (materialise(ii) == "0-1-2-3-4");
+          CHECK ( isnil (ii));
+          CHECK (!ii);
+          
+          VERIFY_ERROR (ITER_EXHAUST, *ii );
+          VERIFY_ERROR (ITER_EXHAUST, ++ii );
+          
+          ii = seq(5,8);
+          CHECK (materialise(ii) == "5-6-7");
+          
+          ii = NIL_Sequence;
+          CHECK ( isnil (ii));
+          CHECK (!ii);
         }
       
       
@@ -122,6 +247,7 @@ namespace test{
       void
       verifyChainedIterators ()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
           typedef ChainedIters<NumberSequence> Chain;
           
           Chain ci = iter::chain (seq(5),seq(7),seq(9));
@@ -159,6 +285,7 @@ namespace test{
           CHECK (0 == *s9);
           pullOut (s9);
           CHECK (isnil(s9));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
       
@@ -169,6 +296,7 @@ namespace test{
       void
       verifyRawChainedIterators ()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
           typedef LinkedElements<NumberSequence, linked_elements::NoOwnership> IterContainer;
           typedef IterContainer::const_iterator IterIter;
           
@@ -236,6 +364,7 @@ namespace test{
           CHECK (isnil(s5));
           CHECK (isnil(s7));
           CHECK (isnil(s9));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
       
@@ -276,11 +405,13 @@ namespace test{
       void
       verifyDepthFirstExploration ()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
           typedef DepthFirstExplorer<NumberSequence> DepthFirst;
           DepthFirst root (seq(1));
           
           NumberSequence explorationResult = root >>= exploreChildren(8);
           CHECK (materialise(explorationResult) == "1-1-1-1-2-2-3-4-2-3-5-6-4-7-8");
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
       
@@ -294,11 +425,13 @@ namespace test{
       void
       verifyBreadthFirstExploration ()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
           typedef BreadthFirstExplorer<NumberSequence> BreadthFirst;
           BreadthFirst root (seq(1));
           
           NumberSequence explorationResult = root >>= exploreChildren(8);
           CHECK (materialise(explorationResult) == "1-1-2-1-2-3-4-1-2-3-4-5-6-7-8");
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
       
