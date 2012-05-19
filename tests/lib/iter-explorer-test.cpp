@@ -82,21 +82,21 @@ namespace test{
           { }
         
         friend bool
-        checkPos (State const& st)
+        checkPoint (State const& st)
         {
           return st.p < st.e;
         }
         
-        friend uint const&
+        friend uint&
         yield (State const& st)
         {
-          return checkPos(st)? st.p : st.e;
+          return util::unConst(checkPoint(st)? st.p : st.e);
         }
         
         friend void
         iterNext (State & st)
         {
-          if (!checkPos (st)) return;
+          if (!checkPoint(st)) return;
           ++st.p;
         }
       };

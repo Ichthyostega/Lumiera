@@ -112,7 +112,7 @@ namespace lib {
       /* == Iteration control API for IterAdapter frontend == */
       
       friend bool
-      hasNext (DataHandle const&, Pos const& pos)          ////TICKET #410
+      checkPoint (DataHandle const&, Pos const& pos)
         {
           return bool(pos);
         }

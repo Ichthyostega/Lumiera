@@ -526,7 +526,7 @@ namespace lib {
       /** Iteration-logic: detect iteration end. */
       template<typename POS>
       friend bool
-      hasNext (const ScopedCollection* src, POS & pos)
+      checkPoint (const ScopedCollection* src, POS & pos)
       {
         REQUIRE (src);
         if ((pos) && (pos < src->_access_end()))

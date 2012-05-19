@@ -147,7 +147,7 @@ namespace test{
          */
         template<class ITER>
         friend bool
-        hasNext (const TestContainer* src, ITER& pos)
+        checkPoint (const TestContainer* src, ITER& pos)
           {
             REQUIRE (src);
             if ((pos != ITER(0)) && (pos != src->numberz_.end()))

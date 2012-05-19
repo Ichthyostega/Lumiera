@@ -239,7 +239,7 @@ namespace session {
       
       
       friend bool
-      hasNext  (PReso const&, Result const& pos)          ////TICKET #410
+      checkPoint (PReso const&, Result const& pos)
         {
           return bool(pos);
         }

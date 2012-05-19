@@ -32,6 +32,9 @@
  ** Depending on the concrete situation, several flavours are provided:
  ** - the IterAdapter retains an active callback connection to the
  **   controlling container, thus allowing arbitrary complex behaviour.
+ ** - the IterStateWrapper uses a variation of that approach, where the
+ **   representation of the current state is embedded as an state value
+ **   element right into the iterator instance.
  ** - the RangeIter allows just to expose a range of elements defined
  **   by a STL-like pair of "start" and "end" iterators
  ** - often, objects are managed internally by pointers, while allowing
@@ -47,7 +50,7 @@
  ** extended with the help of itertools.hpp
  ** 
  ** Basically every class in compliance with our specific iterator concept
- ** can be used as a building block in this framework.
+ ** can be used as a building block within this framework.
  ** 
  ** 
  ** \par Lumiera forward iterator concept
@@ -74,8 +77,6 @@
  ** - when an iterator is \em not in the exhausted state, it may be
  **   \em dereferenced to yield the "current" value.
  ** - moreover, iterators may be incremented until exhaustion.
- ** 
- ** @todo naming of the iteration control function: TICKET #410
  ** 
  ** @see iter-adapter-test.cpp
  ** @see itertools.hpp
@@ -134,8 +135,8 @@ namespace lib {
    *       -# it should be convertible to the pointer type it declares
    *       -# dereferencing should yield a type that is convertible to the reference type
    * - CON points to the data source of this iterator (typically a data container type)
-   *       We store a pointer-like backlink to invoke a special iteration control API:     //////////////TICKET #410
-   *       -# \c hasNext yields true iff the source has yet more result values to yield
+   *       We store a pointer-like backlink to invoke a special iteration control API:
+   *       -# \c checkPoint yields true iff the source has yet more result values to yield
    *       -# \c iterNext advances the POS to the next element 
    * 
    * @see scoped-ptrvect.hpp usage example
@@ -158,7 +159,7 @@ namespace lib {
         : source_(src)
         , pos_(startpos)
         { 
-          checkPos();
+          check();
         }
       
       IterAdapter ()
@@ -194,7 +195,7 @@ namespace lib {
       bool
       isValid ()  const
         {
-          return checkPos();
+          return check();
         }
       
       bool
@@ -212,28 +213,25 @@ namespace lib {
        *        for example setting it to a "stop iteration" mark.
        */ 
       bool
-      checkPos()  const
-      {
-        return source_ && hasNext (source_,pos_);                    //////////////TICKET #410
-      }
+      check()  const
+        {
+          return source_ && checkPoint (source_,pos_);           // extension point: free function checkPoint(...)
+        }
       
       /** ask the controlling container to yield the next position.
        *  The call is dispatched only if the current position is valid;
-       *  any new position returned is again validated, so to detect
-       *  the iteration end as soon as possible.
+       *  any new position reached will typically be validated prior
+       *  to any further access, through invocation of #check.
        */
-      bool
-      iterate ()
-      {
-        if (!checkPos()) return false;
-        
-        iterNext (source_,pos_);
-        return checkPos();
-      }
+      void
+      iterate()
+        {
+          if (check())
+            iterNext (source_,pos_);                             // extension point: free function iterNext(...)
+        }
       
       
     private:
-      
       void
       _maybe_throw()  const
         {
@@ -262,9 +260,19 @@ namespace lib {
    * right into the iterator. Contrast this to IterAdapter referring to an controlling
    * container behind the scenes. Here, all of the state is assumed to live in the
    * custom type embedded into this iterator, accessed and manipulated through
-   * an set of free function to be resolved by ADL. 
+   * a set of free function to be resolved by ADL.
    * 
-   * @see IterExplorer a monadic iterator built on top of IterStateWrapper
+   * \par Assumptions when building iterators based on IterStateWrapper
+   * There is a custom state representation type ST.
+   * - default constructible
+   * - this default state represents the \em bottom (invalid) state.
+   * - copyable, because iterators are passed by value
+   * - this type needs to provide an <b>iteration control API</b> through free functions
+   *   -# \c checkPoint establishes, if the given state element represents a valid state
+   *   -# \c iterNext evolves this state by one step (sideeffect)
+   *   -# \c yield realises the given state, yielding an element of result type T
+   * 
+   * @see IterExplorer an iterator monad built on top of IterStateWrapper
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
    */
@@ -275,14 +283,14 @@ namespace lib {
       ST core_;
       
     public:
-      typedef typename iter::TypeBinding<T>::pointer pointer;
-      typedef typename iter::TypeBinding<T>::reference reference;
-      typedef typename iter::TypeBinding<T>::value_type value_type;
+      typedef T* pointer;
+      typedef T& reference;
+      typedef T  value_type;
       
       IterStateWrapper (ST initialState)
         : core_(initialState)
         { 
-          checkPos(core_);
+          checkPoint (core_);
         }
       
       IterStateWrapper ()
@@ -296,28 +304,28 @@ namespace lib {
       operator*() const
         {
           _maybe_throw();
-          return yield (core_);   // extension point: yield
+          return yield (core_);     // extension point: yield
         }
       
       pointer
       operator->() const
         {
           _maybe_throw();
-          return & yield(core_);  // extension point: yield
+          return & yield(core_);    // extension point: yield
         }
       
       IterStateWrapper&
       operator++()
         {
           _maybe_throw();
-          iterNext (core_);       // extension point: iterNext
+          iterNext (core_);         // extension point: iterNext
           return *this;
         }
       
       bool
       isValid ()  const
         {
-          return checkPos(core_); // extension point: checkPos
+          return checkPoint(core_); // extension point: checkPoint
         }
       
       bool
@@ -325,7 +333,6 @@ namespace lib {
         {
           return !isValid();
         }
-      
       
     private:
       
@@ -336,17 +343,29 @@ namespace lib {
             _throwIterExhausted();
         }
       
-      /// comparison of equivalent iterators
-      friend bool operator== (IterStateWrapper const& il, IterStateWrapper const& ir)
-      {
-        return (il.empty() && ir.empty())
-            || (il.isValid() && ir.isValid() && *il == *ir);
-      }
-      friend bool operator!= (IterStateWrapper const& il, IterStateWrapper const& ir)
-      {
-        return ! (il == ir);
-      }
+      
+      /// comparison is allowed to access state implementation core
+      template<class T1, class T2, class STX>
+      friend bool operator== (IterStateWrapper<T1,STX> const&, IterStateWrapper<T2,STX> const&);
     };
+  
+  
+  
+  /// Supporting equality comparisons of equivalent iterators (same state type)...
+  template<class T1, class T2, class ST>
+  bool operator== (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  {
+    return (il.empty() && ir.empty())
+        || (il.isValid() && ir.isValid() && il.core_ == ir.core_);
+  }
+  
+  template<class T1, class T2, class ST>
+  bool operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  { 
+    return ! (il == ir);
+  }
+  
+  
   
   
   
