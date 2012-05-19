@@ -278,7 +278,9 @@ namespace test{
             VERIFY_ERROR (ITER_EXHAUST, ++elements.end() );
             
             CHECK (ii == elements.end());
+            CHECK (ii == List::iterator());
             CHECK (cii == elements.end());
+            CHECK (cii == List::const_iterator());
             VERIFY_ERROR (ITER_EXHAUST, ++ii );
             VERIFY_ERROR (ITER_EXHAUST, ++cii );
             

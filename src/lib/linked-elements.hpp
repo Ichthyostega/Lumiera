@@ -520,14 +520,27 @@ namespace lib {
           return !head_;
         }
       
+      struct IterationState
+        {
+          N* node;
+          
+          IterationState(N* p=0)
+            : node(p)
+            { }
+          
+          friend bool
+          operator== (IterationState const& il, IterationState const& ir)
+          {
+            return il.node == ir.node;
+          }
+        };
+      
+      typedef IterStateWrapper<N, IterationState> iterator;
+      typedef IterStateWrapper<const N, IterationState> const_iterator;
       
       
-      typedef IterAdapter<      N*, const LinkedElements*> iterator;
-      typedef IterAdapter<const N*, const LinkedElements*> const_iterator;
-      
-      
-      iterator       begin()       { return iterator       (this, head_); }
-      const_iterator begin() const { return const_iterator (this, head_); }
+      iterator       begin()       { return iterator       (head_); }
+      const_iterator begin() const { return const_iterator (head_); }
       iterator       end ()        { return iterator();       }
       const_iterator end ()  const { return const_iterator(); }
       
@@ -541,23 +554,29 @@ namespace lib {
        *          have been deallocated in the meantime.
        */
       friend void
-      iterNext (const LinkedElements*, N* & pos)
+      iterNext (IterationState & pos)
       {
-        pos = pos->next;
+        pos.node = pos.node->next;
       }
       
       friend void
-      iterNext (const LinkedElements*, const N* & pos)
+      iterNext (IterationState const& pos)
       {
-        pos = pos->next;
+        pos.node = pos.node->next;
       }
       
       /** Iteration-logic: detect iteration end. */
-      template<typename POS>
       friend bool
-      hasNext (const LinkedElements*, POS & pos)
+      checkPoint (IterationState const& pos)
       {
-        return bool(pos);
+        return bool(pos.node);
+      }
+      
+      friend N&
+      yield (IterationState const& pos)
+      {
+        REQUIRE (pos.node);
+        return * unConst(pos).node;
       }
     };
   
