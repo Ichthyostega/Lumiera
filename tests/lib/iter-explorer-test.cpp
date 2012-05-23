@@ -38,20 +38,6 @@
 
 
 namespace lib {
-  
-  namespace iter {
-    
-    template<>
-    struct TypeBinding<uint>
-      {
-        typedef uint value_type;
-        typedef uint const& reference;
-        typedef uint const* pointer;
-      };
-  }
-  
-
-  
 namespace test{
   
   using ::Test;
@@ -71,6 +57,10 @@ namespace test{
   
 //    uint NUM_ELMS = 10;
     
+    /**
+     * This iteration state type describes
+     * a sequence of numbers still to be delivered.
+     */
     class State
       {
         uint p,e;
@@ -103,7 +93,10 @@ namespace test{
     
     
     
-    /** */
+    /** 
+     * A straight number sequence as basic test iterator.
+     * The tests will dress up this source sequence in various ways.
+     */
     class NumberSequence
       : public IterStateWrapper<uint, State>
       {
@@ -117,7 +110,7 @@ namespace test{
             : IterStateWrapper<uint,State> (State(start,end))
             { }
       };
-      
+    
     inline NumberSequence
     seq (uint end)
     {
@@ -135,7 +128,7 @@ namespace test{
     
     
     /** Diagnostic helper: "squeeze out" the given iterator
-     * and join all yielded elements into a string
+     * and join all the elements yielded into a string
      */
     template<class II>
     inline string
@@ -150,7 +143,7 @@ namespace test{
       return buff.str();
     }
     
-  } // (END) impl test dummy container
+  } // (END) test helpers
   
   
   

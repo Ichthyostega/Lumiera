@@ -520,6 +520,13 @@ namespace lib {
           return !head_;
         }
       
+    private:
+      /**
+       * Iteration is just following the single linked list.
+       * We encapsulate this simple pointer into a dedicated marker type
+       * to ease the handling and mixing of iterators and const iterators.
+       * (Explanation: IterationState depends on our type parameters...)
+       */
       struct IterationState
         {
           N* node;
@@ -535,7 +542,8 @@ namespace lib {
           }
         };
       
-      typedef IterStateWrapper<N, IterationState> iterator;
+    public:
+      typedef IterStateWrapper<      N, IterationState> iterator;
       typedef IterStateWrapper<const N, IterationState> const_iterator;
       
       
