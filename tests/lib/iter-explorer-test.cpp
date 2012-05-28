@@ -34,6 +34,7 @@
 //#include <iostream>
 #include <sstream>
 #include <vector>
+#include <string>
 
 
 
@@ -49,6 +50,7 @@ namespace test{
 //  using std::vector;
 //  using std::cout;
 //  using std::endl;
+  using std::string;
   using lib::LinkedElements;
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
@@ -191,6 +193,7 @@ namespace test{
         {
           verifyStateAdapter();
           
+          verifyMonadOperator ();
           UNIMPLEMENTED ("IterExplorer Monad");
           verifyChainedIterators();
           verifyRawChainedIterators();
@@ -425,6 +428,35 @@ namespace test{
           NumberSequence explorationResult = root >>= exploreChildren(8);
           CHECK (materialise(explorationResult) == "1-1-2-1-2-3-4-1-2-3-4-5-6-7-8");
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
+        }
+      
+      
+      
+      /** @test cover the basic monad bind operator,
+       * which is used to build all the specialised Iterator flavours.
+       * The default implementation ("Combinator strategy") uses heap allocations
+       * to keep track of the intermediary results. (Of course this can be changed)
+       */
+      void
+      verifyMonadOperator ()
+        {
+          typedef IterExplorer<iter_explorer::WrappedSequence<NumberSequence> > SrcSequence;
+          
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
+          SrcSequence src = exploreIter(seq(5));
+          
+          string result = materialise(src >>= explode);
+          CHECK (result == "0-0-1-0-1-2-0-1-2-3");
+          
+          result = materialise(src >>= explode >>= explode);
+          CHECK (result == "0-0-0-1-0-0-1-0-1-2");
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
+        }
+      
+      static NumberSequence
+      explode (uint top)
+        {
+          return seq(0,top);
         }
       
       
