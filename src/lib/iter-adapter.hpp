@@ -287,7 +287,7 @@ namespace lib {
       typedef T& reference;
       typedef T  value_type;
       
-      IterStateWrapper (ST initialState)
+      IterStateWrapper (ST const& initialState)
         : core_(initialState)
         { 
           checkPoint (core_);

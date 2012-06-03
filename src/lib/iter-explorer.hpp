@@ -29,6 +29,27 @@
  ** The implementation is based on the IterStateWrapper, which is one of the basic helper templates
  ** provided by iter-adapter.hpp.
  ** 
+ ** \par Iterators as Monad
+ ** The fundamental idea behind the implementation technique used here is the \em Monad pattern
+ ** known from functional programming. A Monad is a (abstract) container created by using some specific functions.
+ ** This is an quite abstract concept with a wide variety of applications (things like IO state, parsers, combinators,
+ ** calculations with exception handling but also simple data structures like lists or trees). The key point with
+ ** any monad is the ability to \em bind a function into the monad; this function will work on the \em internals
+ ** of the monad and produce a modified new monad instance. In the simple case of a list, "binding" a function
+ ** basically means to map the function onto the elements in the list.
+ ** 
+ ** \par Rationale
+ ** The primary benefit of using the monad pattern is to separate the transforming operation completely from
+ ** the mechanics of applying that operation and combining the results. More specifically, we rely on an iterator
+ ** to represent an abstracted source of data and we expose the combined and transformed results again as such
+ ** an abstracted data sequence. The transformation to apply can be selected at runtime (as a functor), and
+ ** also the logic how to combine elements can be implemented elsewhere. The monad pattern defines a sane
+ ** way of representing this partial evaluation state without requiring a container for intermediary
+ ** results. This is especially helpful when
+ ** - a flexible and unspecific source data structure needs to be processed
+ ** - and this evaluation needs to be done asynchronously and in parallel (no locking, immutable data)
+ ** - and a partial evaluation needs to be stored as continuation (not relying on the stack for partial results) 
+ ** 
  ** @see IterExplorer_test.cpp
  ** @see iter-adapter.hpp
  ** @see itertools.hpp
@@ -45,6 +66,7 @@
 //#include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/type_traits/remove_const.hpp>
 
@@ -92,7 +114,7 @@ namespace lib {
 
   namespace iter_explorer {
     
-    template<class FUN>
+    template<class SRC, class FUN>
     class DefaultCombinator;
   }
 
@@ -119,8 +141,9 @@ namespace lib {
    * functional programming language.
    * 
    * When invoking the bind (flat map) operator, a suitably represented \em functor
-   * is embedded into an instance of the Combinator template. The resulting object
-   * becomes the state core of the new IterExplorer object returned as result.
+   * is embedded into an instance of the Combinator template. Moreover, a copy of
+   * the current IterExplorer is embedded alongside. The resulting object becomes
+   * the state core of the new IterExplorer object returned as result.
    * So the result \em is an iterator, but -- when "pulled" -- it will in turn
    * pull from the source iterator and feed the provided elements through the
    * \em exploration functor, which this way has been \em bound into the resulting
@@ -135,23 +158,35 @@ namespace lib {
    *          chain of operations detailed elsewhere, and provided in a dynamic fashion
    *          (as functor at runtime). More specifically, these operations will expand
    *          and explore a dynamic source data set on the fly. Notably this allows
-   *          us to handle such an "exploration" on-the-fly, without the need to
-   *          allocate heap memory to store intermediary results, but also without
+   *          us to handle such an "exploration" in a flexible way, without the need
+   *          to allocate heap memory to store intermediary results, but also without
    *          using the stack and recursive programming.
+   * @warning be sure to consider the effects of copying iterators on any hidden state
+   *          referenced by the source iterator(s). Basically any iterator must behave
+   *          sane when copied while in iteration: IterExplorer first evaluates the
+   *          head element of the source (the explorer function should build an 
+   *          independent, new result sequence based on this first element).
+   *          Afterwards, the source is \em advanced and then \em copied 
+   *          into the result iterator.
    */
   template<class SRC
-          ,template<class> class _COM_ = iter_explorer::DefaultCombinator
+          ,template<class,class> class _COM_ = iter_explorer::DefaultCombinator
           >
   class IterExplorer
     : public IterStateWrapper<typename SRC::value_type, SRC>
     {
       
-      typedef typename SRC::value_type value_type;
-      typedef typename SRC::reference  reference;
-      
-
       
     public:
+      typedef typename SRC::value_type value_type;
+      typedef typename SRC::reference reference;
+      typedef typename SRC::pointer  pointer;
+      
+      
+      /** by default create an empty iterator */
+      IterExplorer() { }
+      
+      
       /** wrap an iterator like state representation
        *  to build it into a monad. The resulting entity
        *  is both an iterator yielding the elements generated
@@ -163,24 +198,37 @@ namespace lib {
         { }
       
       
-      /** monad bind ("flat map") operator */
+      /** monad bind ("flat map") operator.
+       *  Using a specific function to explore and work
+       *  on the "contents" of this IterExplorer, with the goal
+       *  to build a new IterExplorer combining the results of this
+       *  function application. The enclosing IterExplorer instance
+       *  provides a Strategy template _COM_, which defines how those
+       *  results are actually to be combined. An instantiation of
+       *  this "Combinator" strategy becomes the state core
+       *  of the result iterator. 
+       */
       template<class FUN>
-      IterExplorer<_COM_<FUN>, _COM_>
+      IterExplorer<_COM_<IterExplorer,FUN>, _COM_>
       operator >>= (FUN explorer)
         {
-          typedef _COM_<FUN> Combinator;
-        
-          return IterExplorer(
-                   Combinator(explorer)
-                             .startWith( explorer(accessFirstElement()))
-                             .followUp (accessRemainingElements()));
+          typedef _COM_<IterExplorer,FUN>         Combinator;       // instantiation of the combinator strategy
+          typedef IterExplorer<Combinator, _COM_> ResultsIter;      // result IterExplorer using that instance as state core
+          
+          Combinator combinator(explorer);                          // build a new iteration state core
+          if (this->isValid())                                      // if source iterator isn't empty...
+            {
+              combinator.startWith( explorer(accessHeadElement())); // immediately apply the function to the first element
+              combinator.followUp (accessRemainingElements());      // and provide state to allow for continued exploration later
+            }
+          return ResultsIter (combinator);                                    
         }
       
       
-    private:
       
+    private:
       reference
-      accessFirstElement()
+      accessHeadElement()
         {
           return this->operator* ();
         }
@@ -197,23 +245,31 @@ namespace lib {
     
     
   namespace iter_explorer { ///< predefined policies and configurations
-      
+    
+    using util::unConst;
       
     /**
      * a generic "Combinator strategy" for IterExplorer.
-     * This fallback solution just assumes that the source is a
-     * Lumiera Forward Iterator -- consequently we need to do heap
-     * allocations behind the scenes, as the size and structure of
-     * the expansion results is determined at runtime.
-     * @note the whole purpose of IterExplorer is to be more efficient
-     *       then this fallback, thus requiring more specific Combinator
-     *       strategies, able to exploit specific knowledge of the
-     *       source iterator's implementation.
+     * This fallback solution doesn't assume anything beyond the source
+     * and the intermediary result(s) being a Lumiera Forward Iterators.
+     * @note the implementation stores the functor into a std::function object,
+     *       which might cause heap allocations, depending on given function.
+     *       Besides, the implementation holds one instance of the (intermediary)
+     *       result iterator (yielded by invoking the function) and a copy of the
+     *       original IterExplorer source sequence, to get the further elements
+     *       when the initial results are exhausted.
      */
-    template<class FUN>
+    template<class SRC, class FUN>
     class DefaultCombinator
       {
         typedef typename _Fun<FUN>::Ret  ResultIter;
+        typedef typename SRC::value_type SrcElement;
+        typedef function<ResultIter(SrcElement)> Explorer;
+        
+         
+        SRC srcSeq_;
+        ResultIter results_;
+        Explorer explorer_;
         
       public:
         typedef typename ResultIter::value_type value_type;
@@ -221,49 +277,61 @@ namespace lib {
         typedef typename ResultIter::pointer    pointer;
   
         
+        DefaultCombinator() { }
         
-        DefaultCombinator(FUN explorer)
-          {
-            UNIMPLEMENTED ("representation of the sequence of partial results");
-          }
+        DefaultCombinator(FUN explorerFunction)
+          : srcSeq_()
+          , results_()
+          , explorer_(explorerFunction)
+          { }
         
-        DefaultCombinator &
+        // using standard copy operations
+        
+        
+        void
         startWith (ResultIter firstExplorationResult)
           {
-            UNIMPLEMENTED ("DefaultCombinator: yield first result");
-            return *this;
+            results_ = firstExplorationResult;
           }
         
-        template<class SRC>
-        DefaultCombinator&
-        followUp (SRC followUpSourceElements)
+        void
+        followUp (SRC & followUpSourceElements)
           {
-            UNIMPLEMENTED ("DefaultCombinator: follow up iteration");
-            return *this;
+            REQUIRE (explorer_);
+            srcSeq_ = followUpSourceElements;
           }
         
-        
+      private:
+        bool
+        findNextResultElement()
+          {
+            while (!results_ && srcSeq_)
+              {
+                results_ = explorer_(*srcSeq_);
+                ++srcSeq_;
+              }
+            return bool(results_);
+          
+          }
         /* === Iteration control API for IterStateWrapper== */
         
         friend bool
-        checkPoint (DefaultCombinator const& sequence)
+        checkPoint (DefaultCombinator const& seq)
         {
-          UNIMPLEMENTED ("how to determine exhausted state on the combined results");
-          return false;
+          return unConst(seq).findNextResultElement();
         }
         
         friend reference
-        yield (DefaultCombinator const& sequence)
+        yield (DefaultCombinator const& seq)
         {
-          UNIMPLEMENTED ("how to yield a result from the combined iterator");
+          return *(seq.results_);
         }
         
         friend void
-        iterNext (DefaultCombinator & sequence)
+        iterNext (DefaultCombinator & seq)
         {
-          UNIMPLEMENTED ("increment the source iterator and switch to the next partial result sequence if necessary");
+          ++(seq.results_);
         }
-        
       };
     
     
@@ -292,19 +360,19 @@ namespace lib {
         
         /* === Iteration control API for IterStateWrapper == */
   
-        inline bool
+        friend bool
         checkPoint (WrappedSequence const& sequence)
         {
           return bool(sequence);
         }
         
-        inline typename IT::reference
+        friend typename IT::reference
         yield (WrappedSequence const& sequence)
         {
           return *sequence;
         }
         
-        inline void
+        friend void
         iterNext (WrappedSequence & sequence)
         {
           ++sequence;

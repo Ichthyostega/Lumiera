@@ -31,7 +31,7 @@
 #include "lib/linked-elements.hpp"
 
 #include <boost/lexical_cast.hpp>
-//#include <iostream>
+#include <iostream>
 #include <sstream>
 #include <vector>
 #include <string>
@@ -48,8 +48,8 @@ namespace test{
   using util::isnil;
   using util::isSameObject;
 //  using std::vector;
-//  using std::cout;
-//  using std::endl;
+  using std::cout;
+  using std::endl;
   using std::string;
   using lib::LinkedElements;
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
@@ -134,7 +134,7 @@ namespace test{
      */
     template<class II>
     inline string
-    materialise (II & ii)
+    materialise (II ii)
     {
       std::ostringstream buff;
       while (ii)
@@ -143,6 +143,18 @@ namespace test{
           if (++ii) buff << "-";
         }
       return buff.str();
+    }
+    
+    template<class II>
+    inline void
+    pullOut (II & ii)
+    {
+      while (ii)
+        {
+          cout << *ii;
+          if (++ii) cout << "-";
+        }
+      cout << endl;
     }
     
   } // (END) test helpers
@@ -213,16 +225,20 @@ namespace test{
       void
       verifyStateAdapter ()
         {
-          NumberSequence ii = seq(5);
+          NumberSequence ii = seq(9);
           CHECK (!isnil (ii));
           CHECK (0 == *ii);
-          CHECK (materialise(ii) == "0-1-2-3-4");
+          ++ii;
+          CHECK (1 == *ii);
+          pullOut(ii);
           CHECK ( isnil (ii));
           CHECK (!ii);
           
           VERIFY_ERROR (ITER_EXHAUST, *ii );
           VERIFY_ERROR (ITER_EXHAUST, ++ii );
           
+          ii = seq(5);
+          CHECK (materialise(ii) == "0-1-2-3-4");
           ii = seq(5,8);
           CHECK (materialise(ii) == "5-6-7");
           
@@ -434,23 +450,53 @@ namespace test{
       
       /** @test cover the basic monad bind operator,
        * which is used to build all the specialised Iterator flavours.
-       * The default implementation ("Combinator strategy") uses heap allocations
-       * to keep track of the intermediary results. (Of course this can be changed)
+       * The default implementation ("Combinator strategy") just joins and flattens
+       * the result sequences created by the functor bound into the monad. For this test,
+       * we use a functor \c explode(top), which returns the sequence 0...top.
        */
       void
       verifyMonadOperator ()
         {
-          typedef IterExplorer<iter_explorer::WrappedSequence<NumberSequence> > SrcSequence;
+          // IterExplorer as such is an iterator wrapping the source sequence
+          string result = materialise (exploreIter(seq(5)));
+          CHECK (result == "0-1-2-3-4");
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
-          SrcSequence src = exploreIter(seq(5));
+          // now, if the source sequence yields exactly one element 5...
+          result = materialise (exploreIter(seq(5,6)));
+          CHECK (result == "5");
           
-          string result = materialise(src >>= explode);
+          // then binding the explode()-Function yields just the result of invoking explode(5) 
+          result = materialise (exploreIter(seq(5,6)) >>= explode);
+          CHECK (result == "0-1-2-3-4");
+          
+          // binding anything into an empty sequence still results in an empty sequence
+          result = materialise (exploreIter(seq(0)) >>= explode);
+          CHECK (result == "");
+          
+          // also, n case the bound function yields an empty sequence, the result remains empty
+          result = materialise (exploreIter(seq(1)) >>= explode);
+          CHECK (result == "");
+          
+          // combining an empty sequence and the one element sequence (seq(0,1)) results in just one element
+          result = materialise (exploreIter(seq(2)) >>= explode);
+          CHECK (result == "0");
+          
+          // multiple result sequences will be joined (flattened) into one sequence
+          result = materialise (exploreIter(seq(5)) >>= explode);
           CHECK (result == "0-0-1-0-1-2-0-1-2-3");
           
-          result = materialise(src >>= explode >>= explode);
+          // since the result is a monad, we can again bind yet another function
+          result = materialise((exploreIter(seq(5)) >>= explode) >>= explode);
           CHECK (result == "0-0-0-1-0-0-1-0-1-2");
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
+          
+                        // Explanation:
+                        // 0 -> empty sequence, gets dropped
+                        // 1 -> 1-element sequence {0}
+                        // 2 -> {0,1}
+                        // 3 -> {0,1,2}
+                        
+                        // Note: when cascading multiple >>= the parentheses are necessary, since in C++ unfortunately
+                        // the ">>=" associates to the right, while the proper monad bind operator should associate to the left
         }
       
       static NumberSequence
