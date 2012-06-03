@@ -22,7 +22,7 @@
 
 /** @file iter-explorer.hpp
  ** Helper template(s) for establishing various evaluation strategies for hierarchical data structures.
- ** Based on the <b>Lumiera Forward Iterators</b> concept and using the basic IterAdaptor templates,
+ ** Based on the <b>Lumiera Forward Iterator</b> concept and using the basic IterAdaptor templates,
  ** these components allow to implement typical evaluation strategies, like e.g. depth-first or
  ** breadth-first exploration of a hierarchical structure. Since the access to this structure is
  ** abstracted through the underlying iterator, what we effectively get is a functional datastructure.
@@ -32,10 +32,10 @@
  ** \par Iterators as Monad
  ** The fundamental idea behind the implementation technique used here is the \em Monad pattern
  ** known from functional programming. A Monad is a (abstract) container created by using some specific functions.
- ** This is an quite abstract concept with a wide variety of applications (things like IO state, parsers, combinators,
- ** calculations with exception handling but also simple data structures like lists or trees). The key point with
- ** any monad is the ability to \em bind a function into the monad; this function will work on the \em internals
- ** of the monad and produce a modified new monad instance. In the simple case of a list, "binding" a function
+ ** This is an rather abstract concept with a wide variety of applications (things like IO state, parsers, combinators,
+ ** calculations with exception handling but also simple data structures like lists or trees). The key point with any
+ ** monad is the ability to \em bind a function into the monad; this function will work on the \em internals of the
+ ** monad and produce a modified new monad instance. In the simple case of a list, "binding" a function
  ** basically means to map the function onto the elements in the list.
  ** 
  ** \par Rationale
@@ -168,6 +168,12 @@ namespace lib {
    *          independent, new result sequence based on this first element).
    *          Afterwards, the source is \em advanced and then \em copied 
    *          into the result iterator.
+   * @param SRC the source sequence or iterator to wrap
+   * @param _COM_ "Combinator" strategy template. When binding (\c >>= ) a function,
+   *          an instance of that strategy becomes the new SRC for the created new
+   *          IterExplorer. This instantiation of the strategy gets as type parameters
+   *          - this IterExplorer's instance type
+   *          - the type of the function bound with \c >>= 
    */
   template<class SRC
           ,template<class,class> class _COM_ = iter_explorer::DefaultCombinator
@@ -187,7 +193,7 @@ namespace lib {
       IterExplorer() { }
       
       
-      /** wrap an iterator like state representation
+      /** wrap an iterator-like state representation
        *  to build it into a monad. The resulting entity
        *  is both an iterator yielding the elements generated
        *  by the core, and it provides the (monad) bind operator.
@@ -247,29 +253,64 @@ namespace lib {
   namespace iter_explorer { ///< predefined policies and configurations
     
     using util::unConst;
-      
+    
     /**
-     * a generic "Combinator strategy" for IterExplorer.
-     * This fallback solution doesn't assume anything beyond the source
-     * and the intermediary result(s) being a Lumiera Forward Iterators.
-     * @note the implementation stores the functor into a std::function object,
-     *       which might cause heap allocations, depending on given function.
-     *       Besides, the implementation holds one instance of the (intermediary)
-     *       result iterator (yielded by invoking the function) and a copy of the
-     *       original IterExplorer source sequence, to get the further elements
-     *       when the initial results are exhausted.
+     * Building block: evaluating source elements.
+     * This strategy will be tied into a "Combinator"
+     * to hold the actual functor bound into the enclosing
+     * IterExplorer monad to work on the contained elements.
      */
-    template<class SRC, class FUN>
-    class DefaultCombinator
+    template<class SIG>
+    struct ExploreByFunction
+      : function<SIG>
       {
-        typedef typename _Fun<FUN>::Ret  ResultIter;
-        typedef typename SRC::value_type SrcElement;
-        typedef function<ResultIter(SrcElement)> Explorer;
+        template<typename FUN>
+        ExploreByFunction(FUN explorationFunctionDefinition)
+          : function<SIG>(explorationFunctionDefinition)
+          { }
         
-         
-        SRC srcSeq_;
+        ExploreByFunction()  { } ///< by default initialised to bottom function
+      };
+    
+    /**
+     * Support for a special use case: an Iterator of Iterators, joining results.
+     * In this case, already the source produces a sequence of Iterators, which
+     * just need to be passed through to the output buffer unaltered. Using this
+     * within the DefaultCombinator strategy creates a combined, flattened iterator
+     * of all the source iterator's contents.  
+     */
+    template<class SIG>
+    struct UnalteredPassThrough;
+    
+    template<class IT>
+    struct UnalteredPassThrough<IT(IT)>
+      {
+        IT operator() (IT elm)  const { return elm; }
+      };
+    
+    
+    /**
+     * Building block: evaluate and combine a sequence of iterators.
+     * This implementation helper provides two kinds of "buffers" (actually implemented
+     * as iterators): A result buffer (iterator) which holds a sequence of already prepared
+     * result elements, which can be retrieved through iteration right away. And a supply buffer
+     * (iterator) holding raw source elements. When the result buffer is exhausted, the next source
+     * element will be pulled from there and fed through the "evaluation strategy", which typically
+     * is a function processing the source element and producing a new result buffer (iterator). 
+     */
+    template<class SRC, class FUN
+            ,template<class> class  _EXP_  = ExploreByFunction   ///< Strategy: how to store and evaluate the function to apply on each element
+            >
+    class CombinedIteratorEvaluation
+      {
+        typedef typename _Fun<FUN>::Ret     ResultIter;
+        typedef typename SRC::value_type    SrcElement;
+        typedef _EXP_<ResultIter(SrcElement)> Explorer;
+        
+        
+        SRC         srcSeq_;
         ResultIter results_;
-        Explorer explorer_;
+        Explorer  explorer_;
         
       public:
         typedef typename ResultIter::value_type value_type;
@@ -277,9 +318,9 @@ namespace lib {
         typedef typename ResultIter::pointer    pointer;
   
         
-        DefaultCombinator() { }
+        CombinedIteratorEvaluation() { }
         
-        DefaultCombinator(FUN explorerFunction)
+        CombinedIteratorEvaluation(FUN explorerFunction)
           : srcSeq_()
           , results_()
           , explorer_(explorerFunction)
@@ -289,13 +330,13 @@ namespace lib {
         
         
         void
-        startWith (ResultIter firstExplorationResult)
+        setResultSequence (ResultIter firstExplorationResult)
           {
             results_ = firstExplorationResult;
           }
         
         void
-        followUp (SRC & followUpSourceElements)
+        setSourceSequence (SRC & followUpSourceElements)
           {
             REQUIRE (explorer_);
             srcSeq_ = followUpSourceElements;
@@ -316,24 +357,72 @@ namespace lib {
         /* === Iteration control API for IterStateWrapper== */
         
         friend bool
-        checkPoint (DefaultCombinator const& seq)
+        checkPoint (CombinedIteratorEvaluation const& seq)
         {
           return unConst(seq).findNextResultElement();
         }
         
         friend reference
-        yield (DefaultCombinator const& seq)
+        yield (CombinedIteratorEvaluation const& seq)
         {
           return *(seq.results_);
         }
         
         friend void
-        iterNext (DefaultCombinator & seq)
+        iterNext (CombinedIteratorEvaluation & seq)
         {
           ++(seq.results_);
         }
       };
     
+    /**
+     * a generic "Combinator strategy" for IterExplorer.
+     * This fallback solution doesn't assume anything beyond the source
+     * and the intermediary result(s) being a Lumiera Forward Iterators.
+     * @note the implementation stores the functor into a std::function object,
+     *       which might cause heap allocations, depending on given function.
+     *       Besides, the implementation holds one instance of the (intermediary)
+     *       result iterator (yielded by invoking the function) and a copy of the
+     *       original IterExplorer source sequence, to get the further elements
+     *       when the initial results are exhausted.
+     */
+    template<class SRC, class FUN>
+    class DefaultCombinator
+      : public CombinedIteratorEvaluation<SRC,FUN>
+      {
+        typedef typename _Fun<FUN>::Ret  ResultIter;
+        
+      public:
+        DefaultCombinator() { }
+        
+        DefaultCombinator(FUN explorerFunction)
+          : CombinedIteratorEvaluation<SRC,FUN>(explorerFunction)
+          { }
+        
+        
+        void
+        startWith (ResultIter firstExplorationResult)
+          {
+            this->setResultSequence (firstExplorationResult);
+          }
+        
+        void
+        followUp (SRC & followUpSourceElements)
+          {
+            this->setSourceSequence (followUpSourceElements);
+          }
+      };
+    
+    
+    /**
+     * Special configuration for combining / flattening the results
+     * of a sequence of iterators 
+     */
+    template<class SEQ>
+    class ChainedIters
+      {
+        /////////////TODO unimplemented
+      };
     
     /**
      * Helper template to bootstrap a chain of IterExplorers.

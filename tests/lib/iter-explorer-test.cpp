@@ -61,7 +61,7 @@ namespace test{
     
     /**
      * This iteration state type describes
-     * a sequence of numbers still to be delivered.
+     * a sequence of numbers yet to be delivered.
      */
     class State
       {
@@ -385,10 +385,11 @@ namespace test{
        * of a tree like system, built on top of the IterExplorer monad.
        * 
        * \par Test data structure
-       * We built a functional datastructure here, on the fly, while exploring it.
+       * We build a functional datastructure here, on the fly, while exploring it.
        * The \c exploreChildren(m) function generates this tree like datastructure:
        * For a given node with number value i, it returns the children (2*i-1) and 2*i
        * -- but only up to the given maximum value m.
+       * 
        * If we start such a tree structure with a root node 1, and maximum = 8, this yields:
        * \code
        * (       1       )
@@ -400,9 +401,9 @@ namespace test{
        * 
        * \par How the exploration works
        * We use a pre defined Template \link DepthFirstExplorer \endlink, which is built on top of IterExplorer.
-       * It contains the depth-first exploration strategy hardwired. Actually this effect is achieved by
-       * defining a specific way how to \em combine the results of a \em exploration -- the latter being
-       * the function which generates the data structure. To yield a depth-first exploration, all we have to do
+       * It contains the depth-first exploration strategy in a hardwired fashion. Actually this effect is achieved
+       * by defining a specific way how to \em combine the results of an \em exploration -- the latter being the
+       * function which generates the data structure. To yield a depth-first exploration, all we have to do
        * is to delve down immediately into the children, right after visiting the node itself.
        * 
        * Now, when creating such a DepthFirstExplorer by wrapping a given source iterator, the result is again
@@ -421,8 +422,8 @@ namespace test{
           typedef DepthFirstExplorer<NumberSequence> DepthFirst;
           DepthFirst root (seq(1));
           
-          NumberSequence explorationResult = root >>= exploreChildren(8);
-          CHECK (materialise(explorationResult) == "1-1-1-1-2-2-3-4-2-3-5-6-4-7-8");
+          string explorationResult = materialise(root >>= exploreChildren(8));
+          CHECK (explorationResult == "1-1-1-1-2-2-3-4-2-3-5-6-4-7-8");
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
@@ -441,8 +442,8 @@ namespace test{
           typedef BreadthFirstExplorer<NumberSequence> BreadthFirst;
           BreadthFirst root (seq(1));
           
-          NumberSequence explorationResult = root >>= exploreChildren(8);
-          CHECK (materialise(explorationResult) == "1-1-2-1-2-3-4-1-2-3-4-5-6-7-8");
+          string explorationResult = materialise(root >>= exploreChildren(8));
+          CHECK (explorationResult == "1-1-2-1-2-3-4-1-2-3-4-5-6-7-8");
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
@@ -504,9 +505,8 @@ namespace test{
         {
           return seq(0,top);
         }
-      
-      
     };
+  
   
   LAUNCHER (IterExplorer_test, "unit common");
   
