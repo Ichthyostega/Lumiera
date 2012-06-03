@@ -303,21 +303,21 @@ namespace lib {
       reference
       operator*() const
         {
-          _maybe_throw();
+          __throw_if_empty();
           return yield (core_);     // extension point: yield
         }
       
       pointer
       operator->() const
         {
-          _maybe_throw();
+          __throw_if_empty();
           return & yield(core_);    // extension point: yield
         }
       
       IterStateWrapper&
       operator++()
         {
-          _maybe_throw();
+          __throw_if_empty();
           iterNext (core_);         // extension point: iterNext
           return *this;
         }
@@ -334,10 +334,18 @@ namespace lib {
           return !isValid();
         }
       
-    private:
+    protected:
+      
+      /** allow derived classes to
+       *  access state representation */
+      ST &
+      stateCore()
+        {
+          return core_;
+        }
       
       void
-      _maybe_throw()  const
+      __throw_if_empty()  const
         {
           if (!isValid())
             _throwIterExhausted();
