@@ -188,22 +188,37 @@
 
 
 
-/** Detector for a prefix increment operator. Works like function detection */
-#define META_DETECT_OPERATOR_INC()                         \
-    template<typename TY>                                   \
-    class HasOperator_inc                                    \
-      {                                                       \
-        template<typename X, X& (X::*)(void)>                  \
-        struct Probe                                            \
-          { };                                                   \
-                                                                  \
-        template<class X>                                          \
-        static Yes_t check(Probe<X, &X::operator++> * );            \
-        template<class>                                              \
-        static No_t  check(...);                                      \
-                                                                       \
-      public:                                                           \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0))); \
+/** Detector for a prefix increment operator.
+ * @note there is a twist: because of the prefix and postfix version of increment,
+ *       detection through member-check will fail when both are present (ambiguity).
+ *       OTOH, when using function signature detection, the return type must match.
+ *       The latter fails in the common situation, when the increment operator was
+ *       mixed in through some base class. As a pragmatic solution, we do both kinds
+ *       of tests; so either remove one of the operators (typically postfix), or
+ *       add an forwarding override in the class to be checked */
+#define META_DETECT_OPERATOR_INC()                    \
+    template<typename TY>                              \
+    class HasOperator_inc                               \
+      {                                                  \
+        template<typename X, X& (X::*)(void)>             \
+        struct Probe_1                                     \
+          { };                                              \
+        template<typename X, int i = sizeof(&X::operator++)> \
+        struct Probe_2                                        \
+          { };                                                 \
+                                                                \
+        template<class X>                                        \
+        static Yes_t check1(Probe_1<X, &X::operator++> * );       \
+        template<class>                                            \
+        static No_t  check1(...);                                   \
+        template<class X>                                            \
+        static Yes_t check2(Probe_2<X> * );                           \
+        template<class>                                                \
+        static No_t  check2(...);                                       \
+                                                                         \
+      public:                                                             \
+        static const bool value = (sizeof(Yes_t)==sizeof(check1<TY>(0))    \
+                                 ||sizeof(Yes_t)==sizeof(check2<TY>(0)));   \
       };
 
 

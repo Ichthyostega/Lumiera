@@ -331,13 +331,6 @@ namespace lib {
       FilterIter (IT const& src, PRED filterPredicate)
         : _Impl(_Filter(src,filterPredicate))
         { }
-      
-      FilterIter&
-      operator++ ()
-        {
-          _Impl::operator++();
-          return *this;
-        }
     };
   
   
@@ -478,13 +471,6 @@ namespace lib {
       TransformIter (IT const& src, FUN trafoFunc)
         : _IteratorImpl(_Trafo(src,trafoFunc))
         { }
-      
-      TransformIter&
-      operator++ ()
-        {
-          _IteratorImpl::operator++();
-          return *this;
-        }
     };
   
   
