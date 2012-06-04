@@ -25,10 +25,10 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
-#include "lib/util-foreach.hpp"
+//#include "lib/util-foreach.hpp"
+#include "lib/iter-adapter-stl.hpp"
 
 #include "lib/iter-explorer.hpp"
-#include "lib/linked-elements.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
@@ -36,6 +36,7 @@
 #include <vector>
 #include <string>
 
+#include "lib/meta/trait.hpp"
 
 
 namespace lib {
@@ -51,7 +52,7 @@ namespace test{
   using std::cout;
   using std::endl;
   using std::string;
-  using lib::LinkedElements;
+  using lib::iter_stl::eachElm;
   using lib::iter_explorer::ChainedIters;
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
@@ -112,6 +113,10 @@ namespace test{
           NumberSequence(uint start, uint end)
             : IterStateWrapper<uint,State> (State(start,end))
             { }
+          
+          /** allow using NumberSequence in LinkedElements
+           * (intrusive single linked list) */
+          NumberSequence* next;
       };
     
     inline NumberSequence
@@ -306,9 +311,8 @@ namespace test{
       void
       verifyRawChainedIterators ()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
-          typedef LinkedElements<NumberSequence, linked_elements::NoOwnership> IterContainer;
-          typedef IterContainer::const_iterator IterIter;
+          typedef std::vector<NumberSequence> IterContainer;
+          typedef RangeIter<IterContainer::iterator> IterIter;
           
           typedef ChainedIters<IterIter> Chain;
           
@@ -321,60 +325,39 @@ namespace test{
           CHECK (8 == *s9);
           
           IterContainer srcIters;
-          srcIters.push (s9);
-          srcIters.push (s7);
-          srcIters.push (s5);
+          srcIters.push_back (s5);
+          srcIters.push_back (s7);
+          srcIters.push_back (s9);
           
-          IterIter iti(srcIters.begin());
+          IterIter iti = eachElm(srcIters);
           CHECK (!isnil (iti));
-          CHECK (isSameObject (s5, *iti));
+          
+          // note: iterator has been copied
+          CHECK ( isSameObject (srcIters[0], *iti));
+          CHECK (!isSameObject (s5,          *iti));
           
           Chain chain(iti);
           CHECK (!isnil (iti));
           CHECK (1 == *chain);
-          
+
           ++chain;
           CHECK (2 == *chain);
-          CHECK (2 == *s5);
+          
+          CHECK (1 == *s5);    // unaffected of course...
           CHECK (5 == *s7);
           CHECK (8 == *s9);
           
           ++++chain;
           CHECK (4 == *chain);
-          CHECK (4 == *s5);
-          CHECK (5 == *s7);
-          CHECK (8 == *s9);
-          
           ++chain;
-          CHECK (5 == *chain);
-          CHECK (isnil(s5));
-          CHECK (5 == *s7);
-          CHECK (8 == *s9);
-          
-          ++chain;
-          CHECK (6 == *chain);
-          CHECK (isnil(s5));
-          CHECK (6 == *s7);
-          CHECK (8 == *s9);
-          
-          ++++chain;
-          CHECK (8 == *chain);
-          CHECK (isnil(s5));
-          CHECK (isnil(s7));
-          CHECK (8 == *s9);
-          
-          ++chain;
+          CHECK (5 == *chain); // switch over to contents of 2nd iterator
+          ++++++++chain;
           CHECK (9 == *chain);
-          CHECK (isnil(s5));
-          CHECK (isnil(s7));
-          CHECK (9 == *s9);
           
           ++chain;
           CHECK (isnil(chain));
-          CHECK (isnil(s5));
-          CHECK (isnil(s7));
-          CHECK (isnil(s9));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
+          VERIFY_ERROR (ITER_EXHAUST, *chain );
+          VERIFY_ERROR (ITER_EXHAUST, ++chain );
         }
       
       
