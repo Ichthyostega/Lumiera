@@ -66,9 +66,13 @@
 //#include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/iter-stack.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/type_traits/remove_const.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <stack>
 
 
 namespace lib {
@@ -239,7 +243,7 @@ namespace lib {
           return this->operator* ();
         }
       
-      IterExplorer&
+      IterExplorer const&
       accessRemainingElements()
         {
           this->operator++ ();
@@ -253,6 +257,8 @@ namespace lib {
   namespace iter_explorer { ///< predefined policies and configurations
     
     using util::unConst;
+    using boost::enable_if;
+    using boost::disable_if;
     
     /**
      * Building block: evaluating source elements.
@@ -286,6 +292,7 @@ namespace lib {
     struct UnalteredPassThrough<IT(IT)>
       {
         IT operator() (IT elm)  const { return elm; }
+        bool operator! ()       const { return false; }  ///< identity function is always valid
       };
     
     
@@ -336,7 +343,7 @@ namespace lib {
           }
         
         void
-        setSourceSequence (SRC & followUpSourceElements)
+        setSourceSequence (SRC const& followUpSourceElements)
           {
             REQUIRE (explorer_);
             srcSeq_ = followUpSourceElements;
@@ -407,26 +414,94 @@ namespace lib {
           }
         
         void
-        followUp (SRC & followUpSourceElements)
+        followUp (SRC const& followUpSourceElements)
           {
             this->setSourceSequence (followUpSourceElements);
           }
       };
     
     
-    /**
-     * Special configuration for combining / flattening the results
-     * of a sequence of iterators 
-     */
-    template<class SEQ>
-    class ChainedIters
+     
+    template<class IT>
+    struct _is_iterator_of_iterators
       {
-        /////////////TODO unimplemented
+        typedef typename IT::value_type IteratorElementType;
+        
+        enum{ value = meta::can_IterForEach<IteratorElementType>::value };
+      };
+    
+    
+    template<class ITI, class SEQ>
+    class ChainedIteratorImpl
+      : public CombinedIteratorEvaluation<ITI, SEQ(SEQ)
+                                        , UnalteredPassThrough
+                                        >
+      { };
+    
+    
+    /**
+     * Special iterator configuration for combining / flattening the
+     * results of a sequence of iterators. This sequence of source iterators
+     * is assumed to be available as "Iterator yielding Iterators".
+     * The resulting class is a Lumiera Forward Iterator, delivering all the
+     * elements of all source iterators in sequence.
+     * @remarks this is quite similar to the IterExplorer monad, but without
+     *        binding an exploration function to produce the result sequences.
+     *        Rather, the result sequences are directly pulled from the source
+     *        sequence, which thus needs to be an "Iterator of Iterators".
+     *        Beyond that, the implementation relies on the same building
+     *        blocks as used for the full-blown IterExplorer.
+     * @param ITI iterator of iterators
+     * @param SEQ type of the individual sequence (iterator).
+     *            The value_type of this sequence will be the overall
+     *            resulting value type of the flattened sequence
+     */
+    template<class ITI, class SEL = void>
+    class ChainedIters;
+    
+    template<class ITI>
+    class ChainedIters<ITI,     typename enable_if< _is_iterator_of_iterators<ITI> >::type
+                      >
+      : public IterStateWrapper<typename ITI::value_type::value_type 
+                               ,ChainedIteratorImpl<ITI, typename ITI::value_type>
+                               >
+      {
+      public:
+        ChainedIters(ITI const& iteratorOfIterators)
+          { //  note: default ctor on parent -> empty sequences
+            this->stateCore().setSourceSequence (iteratorOfIterators);
+          }
+      };
+    
+    /**
+     * Convenience specialisation: manage the sequence of iterators automatically.
+     * @note in this case the \em first template parameter denotes the \em element sequence type;
+     *       we use a IterStack to hold the sequence-of-iterators in heap storage.
+     * @warning this specialisation will not be picked, if the \em value-type
+     *       of the given iterator is itself an iterator
+     */ 
+    template<class SEQ>
+    class ChainedIters<SEQ,     typename disable_if< _is_iterator_of_iterators<SEQ> >::type
+                      > 
+      : public IterStateWrapper<typename SEQ::value_type
+                               ,ChainedIteratorImpl<IterStack<SEQ>, SEQ>
+                               >
+      { 
+      public:
+        typedef IterStack<SEQ> IteratorIterator;
+        
+        ChainedIters(IteratorIterator const& iteratorOfIterators)
+          {
+            this->stateCore().setSourceSequence (iteratorOfIterators);
+          }
+        
+        /** empty result sequence by default */
+        ChainedIters() { }
       };
     
     /**
      * Helper template to bootstrap a chain of IterExplorers.
-     * This is a "state corer", which basically just wraps a given
+     * This is a "state core", which basically just wraps a given
      * source iterator and provides the necessary free functions
      * (iteration control API) to use this as iteration state
      * within IterExplorer.
@@ -474,15 +549,73 @@ namespace lib {
   
   
   template<class IT>
-  IterExplorer<iter_explorer::WrappedSequence<IT> >
+  inline IterExplorer<iter_explorer::WrappedSequence<IT> >
   exploreIter (IT const& srcSeq)
   {
     return IterExplorer<iter_explorer::WrappedSequence<IT> > (srcSeq);
   }
-    
-    
   
   
+  
+  template<class IT>
+  inline iter_explorer::ChainedIters<IT>
+  iterChain(IT const& seq)
+  {
+    typename iter_explorer::ChainedIters<IT>::IteratorIterator sequenceOfIterators;
+    
+    sequenceOfIterators.push (seq);
+    return iter_explorer::ChainedIters<IT>(sequenceOfIterators);
+  }
+  
+  template<class IT>
+  inline iter_explorer::ChainedIters<IT>
+  iterChain(IT const& seq1, IT const& seq2)
+  {
+    typename iter_explorer::ChainedIters<IT>::IteratorIterator sequenceOfIterators;
+    
+    sequenceOfIterators.push (seq2);
+    sequenceOfIterators.push (seq1);
+    return iter_explorer::ChainedIters<IT>(sequenceOfIterators);
+  }
+  
+  template<class IT>
+  inline iter_explorer::ChainedIters<IT>
+  iterChain(IT const& seq1, IT const& seq2, IT const& seq3)
+  {
+    typename iter_explorer::ChainedIters<IT>::IteratorIterator sequenceOfIterators;
+    
+    sequenceOfIterators.push (seq3);
+    sequenceOfIterators.push (seq2);
+    sequenceOfIterators.push (seq1);
+    return iter_explorer::ChainedIters<IT>(sequenceOfIterators);
+  }
+  
+  template<class IT>
+  inline iter_explorer::ChainedIters<IT>
+  iterChain(IT const& seq1, IT const& seq2, IT const& seq3, IT const& seq4)
+  {
+    typename iter_explorer::ChainedIters<IT>::IteratorIterator sequenceOfIterators;
+    
+    sequenceOfIterators.push (seq4);
+    sequenceOfIterators.push (seq3);
+    sequenceOfIterators.push (seq2);
+    sequenceOfIterators.push (seq1);
+    return iter_explorer::ChainedIters<IT>(sequenceOfIterators);
+  }
+  
+  template<class IT>
+  inline iter_explorer::ChainedIters<IT>
+  iterChain(IT const& seq1, IT const& seq2, IT const& seq3, IT const& seq4, IT const& seq5)
+  {
+    typename iter_explorer::ChainedIters<IT>::IteratorIterator sequenceOfIterators;
+    
+    sequenceOfIterators.push (seq5);
+    sequenceOfIterators.push (seq4);
+    sequenceOfIterators.push (seq3);
+    sequenceOfIterators.push (seq2);
+    sequenceOfIterators.push (seq1);
+    return iter_explorer::ChainedIters<IT>(sequenceOfIterators);
+  }
   
   
   

@@ -52,6 +52,7 @@ namespace test{
   using std::endl;
   using std::string;
   using lib::LinkedElements;
+  using lib::iter_explorer::ChainedIters;
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
   
@@ -206,7 +207,6 @@ namespace test{
           verifyStateAdapter();
           
           verifyMonadOperator ();
-          UNIMPLEMENTED ("IterExplorer Monad");
           verifyChainedIterators();
           verifyRawChainedIterators();
           
@@ -249,20 +249,19 @@ namespace test{
       
       
       
-      /** @test a simple and practical helper built on top of IterExplorer.
+      /** @test a convenient helper built using IterExplorer building blocks.
        * The resulting iterator \em combines and \em flattens a sequence
        * of source iterators, resulting in a simple sequence accessible
-       * again as iterator. Here we verify the convenience / default
-       * implementation; it uses a STL container behind the scenes
-       * to keep track of all the added source iterators
+       * as iterator again. Here we verify the convenience / default
+       * implementation; it uses a STL container (actually std:deque)
+       * behind the scenes to keep track of all added source iterators.
        */
       void
       verifyChainedIterators ()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
           typedef ChainedIters<NumberSequence> Chain;
           
-          Chain ci = iter::chain (seq(5),seq(7),seq(9));
+          Chain ci = iterChain (seq(5),seq(7),seq(9));
           
           CHECK (!isnil (ci));
           pullOut (ci);
@@ -271,11 +270,11 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, ++ci );
           
           CHECK (isnil(Chain()));
-          CHECK (iter::chain (NIL_Sequence));
+          CHECK (!iterChain (NIL_Sequence));
           
-          // Iterator chaining "flattens" one level of indirection
+          // Iterator chaining "flattens" one level of packaging
           NumberSequence s9 = seq(9); 
-          ci = iter::chain (s9);
+          ci = iterChain (s9);
           
           for ( ; s9 && ci; ++s9, ++ci )
             CHECK (*s9 == *ci);
@@ -288,7 +287,7 @@ namespace test{
           //       per-instance state (like e.g. NumberSequence used for this test),
           //       then the created chain is independent from the source iterators.
           s9 = seq(9);
-          ci = iter::chain (s9);
+          ci = iterChain (s9);
           CHECK (0 == *s9);
           CHECK (0 == *ci);
           
@@ -297,7 +296,6 @@ namespace test{
           CHECK (0 == *s9);
           pullOut (s9);
           CHECK (isnil(s9));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
       
