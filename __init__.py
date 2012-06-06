@@ -2,10 +2,10 @@
 # -*- mode:python; coding:utf-8; -*-
 #
 # Astxx, the Asterisk C++ API and Utility Library.
-# Copyright (C) 2005, 2006  Matthew A. Nicholson
-# Copyright (C) 2006  Tim Blechmann
-#
-#  Copyright (C) 2007 Christoph Boehme
+# Copyright (C) 2005, 2006 Matthew A. Nicholson
+# Copyright (C) 2006 Tim Blechmann
+# Copyright (C) 2007 Christoph Boehme
+# Copyright (C) 2012 Eric Anderson
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -200,7 +200,9 @@ def DoxyEmitter(source, target, env):
    # add our output locations
    for (k, v) in output_formats.items():
       if data.get("GENERATE_" + k, v[0]) == "YES":
-         targets.append(env.Dir( os.path.join(out_dir, data.get(k + "_OUTPUT", v[1]))) )
+         dir = env.Dir(os.path.join(out_dir, data.get(k + "_OUTPUT", v[1])))
+         targets.append(dir.File(".last_updated"))
+         ##targets.append(dir.File(".content_hash"))
 
    # add the tag file if neccessary:
    tagfile = data.get("GENERATE_TAGFILE", "")
@@ -220,6 +222,20 @@ def DoxyEmitter(source, target, env):
 
    return (targets, source)
 
+def generate_doxygen_commands(source, target, env, for_signature):
+
+   """Generate the doxygen command line (easy) and the post-execution
+   timestamping (harder).  The second part requires us to know which
+   directories are being built, which is why we do this as a Generator
+   (after the Emitter has run)"""
+   
+   dox_cmd = "cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}"
+   timestamp_cmds = ["date > %s"%(str(t)) for t in target]
+   print dox_cmd
+   print timestamp_cmds
+   return [dox_cmd] + timestamp_cmds
+   
+
 def generate(env):
    """
    Add builders and construction variables for the
@@ -233,7 +249,7 @@ def generate(env):
 
    import SCons.Builder
    doxyfile_builder = SCons.Builder.Builder(
-      action = "cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}",
+      generator = generate_doxygen_commands,
       emitter = DoxyEmitter,
       target_factory = env.fs.Entry,
       single_source = True,
