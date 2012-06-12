@@ -368,15 +368,14 @@ namespace test{
        * \par Test data structure
        * We build a functional datastructure here, on the fly, while exploring it.
        * The \c exploreChildren(m) function generates this tree like datastructure:
-       * For a given node with number value i, it returns the children (2*i-1) and 2*i
-       * -- but only up to the given maximum value m.
+       * For a given number, it tries to divide by 5, 3 and 2 respectively, possibly
+       * generating multiple decimation sequences.
        * 
-       * If we start such a tree structure with a root node 1, and maximum = 8, this yields:
+       * If we start such a tree structure e.g. with a root node 30, this scheme yields:
        * \code
-       * (       1       )
-       * (   1       2   )
-       * ( 1   2   3   4 )
-       * (1 2 3 4 5 6 7 8)
+       * (       30       )
+       * (   6   10   15  )
+       * ( 2 3  2  5  3 5 )
        * \endcode
        * This tree has no meaning in itself, beyond being an easy testbed for tree exploration schemes.
        * 
@@ -401,10 +400,10 @@ namespace test{
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
           typedef DepthFirstExplorer<NumberSequence> DepthFirst;
-          DepthFirst root (seq(1));
+          DepthFirst root (seq(30));
           
-          string explorationResult = materialise(root >>= exploreChildren(8));
-          CHECK (explorationResult == "1-1-1-1-2-2-3-4-2-3-5-6-4-7-8");
+          string explorationResult = materialise(root >>= exploreChildren);
+          CHECK (explorationResult == "30-6-2-3-10-2-5-15-3-5");
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
@@ -421,10 +420,10 @@ namespace test{
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
           typedef BreadthFirstExplorer<NumberSequence> BreadthFirst;
-          BreadthFirst root (seq(1));
+          BreadthFirst root (seq(30));
           
-          string explorationResult = materialise(root >>= exploreChildren(8));
-          CHECK (explorationResult == "1-1-2-1-2-3-4-1-2-3-4-5-6-7-8");
+          string explorationResult = materialise(root >>= exploreChildren);
+          CHECK (explorationResult == "30-6-10-15-2-3-2-5-3-5");
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       

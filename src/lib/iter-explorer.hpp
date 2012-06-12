@@ -225,28 +225,17 @@ namespace lib {
           typedef _COM_<IterExplorer,FUN>         Combinator;       // instantiation of the combinator strategy
           typedef IterExplorer<Combinator, _COM_> ResultsIter;      // result IterExplorer using that instance as state core
           
-          Combinator combinator(explorer);                          // build a new iteration state core
-          if (this->isValid())                                      // if source iterator isn't empty...
-            {
-              combinator.startWith( explorer(accessHeadElement())); // immediately apply the function to the first element
-              combinator.followUp (accessRemainingElements());      // and provide state to allow for continued exploration later
-            }
-          return ResultsIter (combinator);                                    
+          return ResultsIter (
+                  Combinator (explorer                              // build a new iteration state core
+                             ,accessRemainingElements()));          // based on a copy of this iterator / sequence
         }
       
       
       
     private:
-      reference
-      accessHeadElement()
-        {
-          return this->operator* ();
-        }
-      
       IterExplorer const&
       accessRemainingElements()
         {
-          this->operator++ ();
           return *this;
         }
     };
@@ -337,12 +326,6 @@ namespace lib {
         
         
         void
-        setResultSequence (ResultIter firstExplorationResult)
-          {
-            results_ = firstExplorationResult;
-          }
-        
-        void
         setSourceSequence (SRC const& followUpSourceElements)
           {
             REQUIRE (explorer_);
@@ -402,21 +385,10 @@ namespace lib {
       public:
         DefaultCombinator() { }
         
-        DefaultCombinator(FUN explorerFunction)
+        DefaultCombinator(FUN explorerFunction, SRC const& sourceElements)
           : CombinedIteratorEvaluation<SRC,FUN>(explorerFunction)
-          { }
-        
-        
-        void
-        startWith (ResultIter firstExplorationResult)
-          {
-            this->setResultSequence (firstExplorationResult);
-          }
-        
-        void
-        followUp (SRC const& followUpSourceElements)
-          {
-            this->setSourceSequence (followUpSourceElements);
+          { 
+            this->setSourceSequence (sourceElements);
           }
       };
     
@@ -498,6 +470,95 @@ namespace lib {
         /** empty result sequence by default */
         ChainedIters() { }
       };
+    
+    
+    
+    /** 
+     * A "Combinator strategy" allowing to expand and evaluate a
+     * (functional) data structure successively and recursively.
+     * Contrary to the DefaultCombinator, here the explorer is evaluated
+     * repeatedly, feeding back the results until exhaustion. The concrete
+     * exploration function needs to embody some kind of termination condition,
+     * e.g. by returning an empty sequence at some point, otherwise infinite
+     * recursion might happen. Another consequence of this repeated re-evaluation
+     * is the requirement of the source sequence's element type to be compatible
+     * to the result sequence's element type -- we can't \em transform the contents
+     * of the source sequence into another data type, just explore and expand those
+     * contents into sub-sequences based on the same data type.
+     * 
+     * To build a concrete combinator a special strategy template is required to define
+     * the actual implementation logic how to proceed with the evaluation (i.e. how to
+     * find the feed of the "next elements" and how to re-integrate the results of an
+     * evaluation step into the already expanded sequence of intermediary results.
+     * Moreover, these implementation strategy pattern is used as a data buffer
+     * to hold those intermediary results. Together, this allows to create
+     * various expansion patterns, e.g. depth-first or breadth-first.
+     */
+    template<class SRC, class FUN
+            ,template<class> class _BUF_
+            >
+    class RecursiveExhaustingEvaluation
+      {
+        typedef typename _Fun<FUN>::Ret   ResultIter;
+        typedef typename SRC::value_type  Val;
+        typedef typename SRC::reference   reference;
+        typedef function<ResultIter(Val)> Explorer;
+        typedef _BUF_<Val>                Buffer;
+        
+        SRC   srcSequence_;
+        Buffer  resultBuf_;
+        Explorer  explore_;
+        
+        
+      public:
+        RecursiveExhaustingEvaluation() { };
+        
+        RecursiveExhaustingEvaluation (Explorer fun, SRC const& src)
+          : srcSequence_(src)
+          , resultBuf_()
+          , explore_(fun)
+          { }
+        
+        // standard copy operations
+        
+        
+      private:
+        ResultIter &
+        feed()
+          {
+            return resultBuf_.getFeed (srcSequence_);
+          }
+        
+        void
+        iterate ()
+          {
+            ResultIter nextStep = explore_(*feed());
+            ++ feed();
+            resultBuf_.feedBack (nextStep);
+          }
+        
+        
+        /* === Iteration control API for IterStateWrapper== */
+        
+        friend bool
+        checkPoint (RecursiveExhaustingEvaluation const& seq)
+        {
+          return bool(unConst(seq).feed());
+        }
+        
+        friend reference
+        yield (RecursiveExhaustingEvaluation const& seq)
+        {
+          return *(unConst(seq).feed());
+        }
+        
+        friend void
+        iterNext (RecursiveExhaustingEvaluation & seq)
+        {
+          seq.iterate();
+        }
+      };
+    
     
     /**
      * Helper template to bootstrap a chain of IterExplorers.
