@@ -30,7 +30,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
-#include <stack>
+#include <deque>
 
 
 namespace lib {
@@ -44,28 +44,29 @@ namespace lib {
      * as "state core" within lib::IterStateWrapper
      */
     template<class TY>
-    struct IterStackStorage
-      : std::stack<TY>
+    struct IterDequeStorage
+      : std::deque<TY>
       {
         /* === Iteration control API for IterStateWrapper == */
         
         friend bool
-        checkPoint (IterStackStorage const& elements)
+        checkPoint (IterDequeStorage const& elements)
         {
           return !elements.empty();
         }
         
         friend TY &
-        yield (IterStackStorage const& elements)
+        yield (IterDequeStorage const& elements)
         {
-          return unConst(elements).top();
+          REQUIRE (!elements.empty());
+          return unConst(elements).back();
         }
         
         friend void
-        iterNext (IterStackStorage & elements)
+        iterNext (IterDequeStorage & elements)
         {
           REQUIRE (!elements.empty());
-          elements.pop();
+          elements.pop_back();
         }
       };
   }//(End) Wrapper/Helper
@@ -85,7 +86,7 @@ namespace lib {
    */
   template<class TY>
   struct IterStack
-    : IterStateWrapper<TY, IterStackStorage<TY> >
+    : IterStateWrapper<TY, IterDequeStorage<TY> >
     {
       
       // using default create and copy operations
@@ -93,15 +94,15 @@ namespace lib {
       void
       push (TY const& elm)
         {
-          this->stateCore().push (elm);
+          this->stateCore().push_back (elm);
         }
       
       TY
       pop()
         {
           this->__throw_if_empty();
-          TY frontElement (this->stateCore().top());
-          this->stateCore().pop();
+          TY frontElement (this->stateCore().back());
+          this->stateCore().pop_back();
           return frontElement;
         }
     };
