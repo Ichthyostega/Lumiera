@@ -134,6 +134,31 @@ namespace test{
     NumberSequence NIL_Sequence;
     
     
+
+    struct NumberSequenceBuilder
+      {
+        template<typename IT>
+        NumberSequence
+        usingSequence (IT const& src)
+          {
+            uint justOne = src? *src : 0;
+            return NumberSequence(justOne);
+          }
+      };
+          
+    inline NumberSequenceBuilder
+    build (NumberSequence const&)
+    {
+      return NumberSequenceBuilder();
+    }
+    
+    
+    inline NumberSequence
+    exploreChildren (uint top)
+    {
+      return seq(0,top/2);
+    }
+
     
     /** Diagnostic helper: "squeeze out" the given iterator
      * and join all the elements yielded into a string
@@ -398,14 +423,12 @@ namespace test{
       void
       verifyDepthFirstExploration ()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
-          typedef DepthFirstExplorer<NumberSequence> DepthFirst;
-          DepthFirst root (seq(30));
-          
-          string explorationResult = materialise(root >>= exploreChildren);
+          string explorationResult = materialise(depthFirst(seq(4,5)) >>= exploreChildren);
           CHECK (explorationResult == "30-6-2-3-10-2-5-15-3-5");
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
+
       
       
       

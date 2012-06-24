@@ -68,6 +68,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-stack.hpp"
 #include "lib/meta/trait.hpp"
+#include "lib/null-value.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/type_traits/remove_const.hpp>
@@ -393,7 +394,7 @@ namespace lib {
       };
     
     
-     
+    /** Metafunction to detect an iterator yielding an iterator sequence */
     template<class IT>
     struct _is_iterator_of_iterators
       {
@@ -473,7 +474,7 @@ namespace lib {
     
     
     
-    /** 
+    /**
      * A "Combinator strategy" allowing to expand and evaluate a
      * (functional) data structure successively and recursively.
      * Contrary to the DefaultCombinator, here the explorer is evaluated
@@ -484,8 +485,12 @@ namespace lib {
      * is the requirement of the source sequence's element type to be compatible
      * to the result sequence's element type -- we can't \em transform the contents
      * of the source sequence into another data type, just explore and expand those
-     * contents into sub-sequences based on the same data type.
+     * contents into sub-sequences based on the same data type. (While this contradicts
+     * the full requirements for building a Monad, we can always work around that kind
+     * of restriction by producing the element type of the target sequence by implicit
+     * type conversion)
      * 
+     * \par strategy requirements
      * To build a concrete combinator a special strategy template is required to define
      * the actual implementation logic how to proceed with the evaluation (i.e. how to
      * find the feed of the "next elements" and how to re-integrate the results of an
@@ -493,6 +498,10 @@ namespace lib {
      * Moreover, these implementation strategy pattern is used as a data buffer
      * to hold those intermediary results. Together, this allows to create
      * various expansion patterns, e.g. depth-first or breadth-first.
+     * - \c Strategy::getFeed() accesses the point from where
+     *   to pull the next element to be expanded. This function <i>must not</i>
+     *   yield an empty sequence, \em unless the overall exploration is exhausted
+     * - \c Strategy::feedBack() re-integrates the results of an expansion step
      */
     template<class SRC, class FUN
             ,template<class> class _BUF_
@@ -501,37 +510,65 @@ namespace lib {
       {
         typedef typename _Fun<FUN>::Ret   ResultIter;
         typedef typename SRC::value_type  Val;
-        typedef typename SRC::reference   reference;
         typedef function<ResultIter(Val)> Explorer;
-        typedef _BUF_<Val>                Buffer;
+        typedef _BUF_<ResultIter>         Buffer;
         
-        SRC   srcSequence_;
         Buffer  resultBuf_;
         Explorer  explore_;
         
         
       public:
-        RecursiveExhaustingEvaluation() { };
+        typedef typename ResultIter::value_type value_type;
+        typedef typename ResultIter::reference reference;
+        typedef typename ResultIter::pointer  pointer;
         
         RecursiveExhaustingEvaluation (Explorer fun, SRC const& src)
-          : srcSequence_(src)
-          , resultBuf_()
+          : resultBuf_()
           , explore_(fun)
-          { }
+          { 
+            resultBuf_.feedBack(
+                initEvaluation (src));
+          }
+        
+        RecursiveExhaustingEvaluation() { };
         
         // standard copy operations
         
         
       private:
-        ResultIter &
-        feed()
+        /** Extension point: build the initial evaluation state
+         * based on the source sequence (typically an IterExplorer).
+         * This is a tricky problem, since the source sequence is not
+         * necessarily assignment compatible to the ResultIter type
+         * and there is no general method to build a ResultIter.
+         * The solution is to rely on a "builder trait", which
+         * needs to be defined alongside with the concrete
+         * ResultIter type. The actual builder trait will
+         * be picked up through a free function (ADL). */
+        ResultIter
+        initEvaluation (SRC const& initialElements)
           {
-            return resultBuf_.getFeed (srcSequence_);
+            ResultIter startSet;
+            return build(startSet).usingSequence(initialElements);
+          }                                   // extension point: free function build (...)
+        
+        
+        /** @note \c _BUF_::getFeed is required to yield a non-empty sequence,
+         * until everything is exhausted. Basically the buffer- and re-integrated
+         * result sequences can be expected to be pulled until finding the next
+         * non-empty supply. This is considered hidden internal state and thus
+         * concealed within this \em const and \em idempotent function.
+         */
+        ResultIter &
+        feed()  const
+          {
+            return unConst(this)->resultBuf_.getFeed();
           }
         
         void
         iterate ()
           {
+            REQUIRE (feed());
             ResultIter nextStep = explore_(*feed());
             ++ feed();
             resultBuf_.feedBack (nextStep);
@@ -543,13 +580,13 @@ namespace lib {
         friend bool
         checkPoint (RecursiveExhaustingEvaluation const& seq)
         {
-          return bool(unConst(seq).feed());
+          return bool(seq.feed());
         }
         
         friend reference
         yield (RecursiveExhaustingEvaluation const& seq)
         {
-          return *(unConst(seq).feed());
+          return *(seq.feed());
         }
         
         friend void
@@ -557,6 +594,70 @@ namespace lib {
         {
           seq.iterate();
         }
+      };
+    
+    
+    /**
+     * Strategy for recursive exhausting \em depth-first evaluation.
+     * Implemented using a heap-allocated stack of partially evaluated iterators.
+     * The next evaluation step will happen at the iterator returned by #getFeed,
+     * which is the most recently pushed intermediary result. 
+     * @warning uses an empty-iterator marker object to signal exhaustion
+     *          - this marker \c IT() may be re-initialised concurrently
+     *          - accessing this marker during app shutdown might access
+     *            an already defunct object 
+     */
+    template<class IT>
+    class DepthFirstEvaluationBuffer
+      {
+        IterStack<IT> intermediaryResults_;
+        
+        
+        /** @return default constructed (=empty) iterator
+         * @remarks casting away const is safe here, since all
+         * you can do with an NIL iterator is to test for emptiness.  
+         */
+        IT &
+        emptySequence()
+          {
+            return unConst(NullValue<IT>::get());
+          }                            // unsafe during shutdown 
+        
+        
+      public:
+        IT &
+        getFeed ()
+          {
+            // fast forward to find the next non-empty result sequence
+            while (intermediaryResults_ && ! *intermediaryResults_)
+              ++intermediaryResults_;
+            
+            if (intermediaryResults_)
+              return *intermediaryResults_;
+            else
+              return emptySequence();
+          }
+        
+        void
+        feedBack (IT const& newEvaluationResults)
+          {
+            intermediaryResults_.push (newEvaluationResults);
+          }
+      };
+    
+    
+    /**
+     * preconfigured IterExplorer "state core" resulting in depth-first exhaustive evaluation 
+     */
+    template<class SRC, class FUN>
+    struct DepthFirstEvaluationConbinator
+      : RecursiveExhaustingEvaluation<SRC, FUN, DepthFirstEvaluationBuffer>
+      {
+        DepthFirstEvaluationConbinator() { }
+        
+        DepthFirstEvaluationConbinator(FUN explorerFunction, SRC const& sourceElements)
+          : RecursiveExhaustingEvaluation<SRC, FUN, DepthFirstEvaluationBuffer> (explorerFunction,sourceElements)
+          {  }
       };
     
     
@@ -603,7 +704,19 @@ namespace lib {
           ++sequence;
         }
       };
-      
+    
+    
+    template<class SRC>
+    struct DepthFirst
+      : IterExplorer<WrappedSequence<SRC>, DepthFirstEvaluationConbinator>
+      {
+        DepthFirst() { };
+        DepthFirst(SRC const& srcSeq)
+          : IterExplorer<WrappedSequence<SRC>, DepthFirstEvaluationConbinator> (srcSeq)
+          { }
+      };
+    
+    
   }//(End) namespace iter_explorer : predefined policies and configurations
   
   
@@ -614,6 +727,14 @@ namespace lib {
   exploreIter (IT const& srcSeq)
   {
     return IterExplorer<iter_explorer::WrappedSequence<IT> > (srcSeq);
+  }
+  
+  
+  template<class IT>
+  inline iter_explorer::DepthFirst<IT>
+  depthFirst (IT const& srcSeq)
+  {
+    return iter_explorer::DepthFirst<IT> (srcSeq);
   }
   
   
