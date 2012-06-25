@@ -512,6 +512,10 @@ TEST "Stack-like iterator" IterStack_test
 END
 
 
+TEST "Queue-like iterator" IterQueue_test
+END
+
+
 TEST "Iterable type detection" IterableClassification_test <<END
 out: can_STL_ForEach<LongVector>	 : Yes
 out: can_STL_ForEach<TimeSet>	 : Yes

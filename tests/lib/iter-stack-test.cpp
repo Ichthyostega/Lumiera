@@ -47,7 +47,7 @@ namespace test{
   
   /*********************************************************************
    * @test cover behaviour of a convenience class built by using a
-   *       std::stack as "state core" of an Lumiera IterStateWrapper.
+   *       \c std::deque as "state core" of an Lumiera IterStateWrapper.
    *       - iterable according to the Lumiera Forward Iterator concept
    *       - can push and pop values repeatedly
    *       - iterating and push / pop can be mixed
