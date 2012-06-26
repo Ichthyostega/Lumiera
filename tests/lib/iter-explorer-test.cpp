@@ -24,9 +24,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
-//#include "lib/util-foreach.hpp"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/util.hpp"
 
 #include "lib/iter-explorer.hpp"
 
@@ -43,12 +42,8 @@ namespace lib {
 namespace test{
   
   using ::Test;
-//  using boost::lexical_cast;
-//  using util::for_each;
-//  using util::isnil;
   using util::isnil;
   using util::isSameObject;
-//  using std::vector;
   using std::cout;
   using std::endl;
   using std::string;
@@ -57,12 +52,11 @@ namespace test{
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
   
-  namespace { // test dummy source iterator
-  
-//    uint NUM_ELMS = 10;
+  namespace { // test material: simple number sequence iterator
+    
     
     /**
-     * This iteration state type describes
+     * This iteration "state core" type describes
      * a sequence of numbers yet to be delivered.
      */
     class State
@@ -98,7 +92,7 @@ namespace test{
     
     
     /** 
-     * A straight number sequence as basic test iterator.
+     * A straight ascending number sequence as basic test iterator.
      * The tests will dress up this source sequence in various ways.
      */
     class NumberSequence
@@ -134,31 +128,30 @@ namespace test{
     NumberSequence NIL_Sequence;
     
     
-
-    struct NumberSequenceBuilder
-      {
-        template<typename IT>
-        NumberSequence
-        usingSequence (IT const& src)
-          {
-            uint justOne = src? *src : 0;
-            return NumberSequence(justOne);
-          }
-      };
-          
-    inline NumberSequenceBuilder
-    build (NumberSequence const&)
-    {
-      return NumberSequenceBuilder();
-    }
+    /** 
+     * an arbitrary series of numbers
+     * @note deliberately this is another type
+     * and not equivalent to a NumberSequence,
+     * while both do share the same value type
+     */
+    typedef IterQueue<int> NumberSeries;
     
     
-    inline NumberSequence
-    exploreChildren (uint top)
+    /** "exploration function" to generate a functional datastructure.
+     * Divide the given number by 5, 3 and 2, if possible. Repeatedly
+     * applying this function yields a tree of decimation sequences,
+     * each leading down to 1
+     */
+    inline NumberSeries
+    exploreChildren (uint node)
     {
-      return seq(0,top/2);
+      NumberSeries results;
+      if (0 == node % 5 && node/5 > 0) results.feed (node/5);
+      if (0 == node % 3 && node/3 > 0) results.feed (node/3);
+      if (0 == node % 2 && node/2 > 0) results.feed (node/2);
+      return results;
     }
-
+    
     
     /** Diagnostic helper: "squeeze out" the given iterator
      * and join all the elements yielded into a string
@@ -331,7 +324,7 @@ namespace test{
       
       /** @test variation of the iterator chaining facility.
        * This is the "raw" version without any convenience shortcuts.
-       * The source iterators are given as iterator yielding other iterators. 
+       * The source iterators are given as iterator yielding other iterators.
        */
       void
       verifyRawChainedIterators ()
@@ -364,7 +357,7 @@ namespace test{
           Chain chain(iti);
           CHECK (!isnil (iti));
           CHECK (1 == *chain);
-
+          
           ++chain;
           CHECK (2 == *chain);
           
@@ -401,6 +394,7 @@ namespace test{
        * (       30       )
        * (   6   10   15  )
        * ( 2 3  2  5  3 5 )
+       * ( 1 1  1  1  1 1 )
        * \endcode
        * This tree has no meaning in itself, beyond being an easy testbed for tree exploration schemes.
        * 
@@ -419,16 +413,25 @@ namespace test{
        * The result of applying this \c >>= operation is a \em transformed version of the source iterator,
        * i.e. it is again an iterator, which yields the results of the exploration function, combined together
        * in the order as defined by the built-in exploration strategy (here: depth first)
+       * 
+       * @note technical detail: the result type of the exploration function (here \c exploreChildren() ) determines
+       *       the iterator type used within IterExplorer and to drive the evaluation. The source sequence used to
+       *       seed the evaluation process actually can be any iterator yielding assignment compatible values: The
+       *       second example uses a NumberSequence with unsigned int values 0..6, while the actual expansion and
+       *       evaluation is based on NumberSeries using signed int values.
        */
       void
       verifyDepthFirstExploration ()
         {
-          string explorationResult = materialise(depthFirst(seq(4,5)) >>= exploreChildren);
-          CHECK (explorationResult == "30-6-2-3-10-2-5-15-3-5");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
+          NumberSeries root = elements(30);
+          string explorationResult = materialise (depthFirst(root) >>= exploreChildren);
+          CHECK (explorationResult == "30-6-2-1-3-1-10-2-1-5-1-15-3-1-5-1");
+          
+          NumberSequence to7 = seq(7);
+          explorationResult = materialise (depthFirst(to7) >>= exploreChildren);
+          CHECK (explorationResult == "0-1-2-1-3-1-4-2-1-5-1-6-2-1-3-1");
         }
-
+      
       
       
       
@@ -442,11 +445,9 @@ namespace test{
       verifyBreadthFirstExploration ()
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
-          typedef BreadthFirstExplorer<NumberSequence> BreadthFirst;
-          BreadthFirst root (seq(30));
-          
-          string explorationResult = materialise(root >>= exploreChildren);
-          CHECK (explorationResult == "30-6-10-15-2-3-2-5-3-5");
+          NumberSeries root = elements(30);
+          string explorationResult = materialise (breadthFirst(root) >>= exploreChildren);
+          CHECK (explorationResult == "30-6-10-15-2-3-2-5-3-5-1-1-1-1-1-1");
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
@@ -509,6 +510,7 @@ namespace test{
           return seq(0,top);
         }
     };
+  
   
   
   LAUNCHER (IterExplorer_test, "unit common");

@@ -50,7 +50,7 @@
  ** - and this evaluation needs to be done asynchronously and in parallel (no locking, immutable data)
  ** - and a partial evaluation needs to be stored as continuation (not relying on the stack for partial results) 
  ** 
- ** @see IterExplorer_test.cpp
+ ** @see IterExplorer_test
  ** @see iter-adapter.hpp
  ** @see itertools.hpp
  ** @see IterSource (completely opaque iterator)
@@ -368,8 +368,8 @@ namespace lib {
     
     /**
      * a generic "Combinator strategy" for IterExplorer.
-     * This fallback solution doesn't assume anything beyond the source
-     * and the intermediary result(s) being a Lumiera Forward Iterators.
+     * This default / fallback solution doesn't assume anything beyond the
+     * source and the intermediary result(s) being Lumiera Forward Iterators.
      * @note the implementation stores the functor into a std::function object,
      *       which might cause heap allocations, depending on given function.
      *       Besides, the implementation holds one instance of the (intermediary)
