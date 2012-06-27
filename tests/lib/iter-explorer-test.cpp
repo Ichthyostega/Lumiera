@@ -52,8 +52,7 @@ namespace test{
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
   
-  namespace { // test material: simple number sequence iterator
-    
+  namespace { // test substrate: simple number sequence iterator
     
     /**
      * This iteration "state core" type describes
@@ -444,11 +443,9 @@ namespace test{
       void
       verifyBreadthFirstExploration ()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
           NumberSeries root = elements(30);
           string explorationResult = materialise (breadthFirst(root) >>= exploreChildren);
           CHECK (explorationResult == "30-6-10-15-2-3-2-5-3-5-1-1-1-1-1-1");
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #892
         }
       
       

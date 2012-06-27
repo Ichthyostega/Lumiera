@@ -122,6 +122,13 @@ namespace lib {
           return *this;
         }
       
+      IterStack&
+      insert (TY const& elm)
+        {
+          return push(elm);
+        }
+      
+      
       TY
       pop()
         {
@@ -160,6 +167,12 @@ namespace lib {
         {
           this->stateCore().push_front (elm);
           return *this;
+        }
+      
+      IterQueue&
+      insert (TY const& elm)
+        {
+          return feed(elm);
         }
       
       TY

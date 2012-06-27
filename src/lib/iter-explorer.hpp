@@ -50,6 +50,24 @@
  ** - and this evaluation needs to be done asynchronously and in parallel (no locking, immutable data)
  ** - and a partial evaluation needs to be stored as continuation (not relying on the stack for partial results) 
  ** 
+ ** \par preconfigured solutions
+ ** This header provides some preconfigured applications of this pattern
+ ** - the DefaultCombinator processes the source elements on demand, feeding them through
+ **   the given functor and using the resulting iterator to deliver the result elements
+ ** - Chained iterator uses similar building blocks just to get the "flattening" of
+ **   a sequence of iterators into a single result iterator
+ ** - the RecursiveExhaustingEvaluation is another kind of combination strategy,
+ **   which recursively evaluates the given function and combines the results
+ **   such as to produce classical depth-first and breadth-first search orders.
+ **   
+ ** Alternatively, just the basic IterExplorer template can be used together with a custom
+ ** "combinator strategy" to implement very specific and optimised data structure evaluation patterns.
+ ** This strategy needs to define some way to hold onto the original source elements, feed them through
+ ** the functor on demand and recombine the result sets into a new sequence to be delivered on demand.
+ ** Actually this is what we utilise for the continuous render job generation within the scheduler.
+ ** The preconfigured variants where created as proof-of-concept, to document and verify this
+ ** implementation technique as such.
+ ** 
  ** @see IterExplorer_test
  ** @see iter-adapter.hpp
  ** @see itertools.hpp
@@ -63,7 +81,6 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-stack.hpp"
@@ -71,7 +88,6 @@
 #include "lib/null-value.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/type_traits/remove_const.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <stack>
 
@@ -240,10 +256,16 @@ namespace lib {
           return *this;
         }
     };
-      
-      
-    
-    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   namespace iter_explorer { ///< predefined policies and configurations
     
     using util::unConst;
@@ -286,6 +308,7 @@ namespace lib {
       };
     
     
+    
     /**
      * Building block: evaluate and combine a sequence of iterators.
      * This implementation helper provides two kinds of "buffers" (actually implemented
@@ -313,7 +336,7 @@ namespace lib {
         typedef typename ResultIter::value_type value_type;
         typedef typename ResultIter::reference  reference;
         typedef typename ResultIter::pointer    pointer;
-  
+        
         
         CombinedIteratorEvaluation() { }
         
@@ -474,6 +497,9 @@ namespace lib {
     
     
     
+    
+    
+    
     /**
      * A "Combinator strategy" allowing to expand and evaluate a
      * (functional) data structure successively and recursively.
@@ -598,24 +624,29 @@ namespace lib {
     
     
     /**
-     * Strategy for recursive exhausting \em depth-first evaluation.
-     * Implemented using a heap-allocated stack of partially evaluated iterators.
-     * The next evaluation step will happen at the iterator returned by #getFeed,
-     * which is the most recently pushed intermediary result. 
+     * Strategy building block for recursive exhausting evaluation.
+     * Allows to create depth-fist or breadth-first evaluation patters, just
+     * by using a suitably intermediary storage container to hold the partially
+     * evaluated iterators created at each evaluation step. Using a stack and
+     * pushing results will create a depth-first pattern, while using a queue
+     * will evaluate in layers (breadth-first). In both cases, the next
+     * evaluation step will happen at the iterator returned by #getFeed. 
      * @warning uses an empty-iterator marker object to signal exhaustion
      *          - this marker \c IT() may be re-initialised concurrently
      *          - accessing this marker during app shutdown might access
      *            an already defunct object 
      */
-    template<class IT>
-    class DepthFirstEvaluationBuffer
+    template< class IT
+            , template<class> class _QUEUE_   ///< the actual container to use for storage of intermediary results
+            >
+    class EvaluationBufferStrategy
       {
-        IterStack<IT> intermediaryResults_;
+        _QUEUE_<IT> intermediaryResults_;
         
         
         /** @return default constructed (=empty) iterator
          * @remarks casting away const is safe here, since all
-         * you can do with an NIL iterator is to test for emptiness.  
+         * you can do with an NIL iterator is to test for emptiness.
          */
         IT &
         emptySequence()
@@ -641,13 +672,35 @@ namespace lib {
         void
         feedBack (IT const& newEvaluationResults)
           {
-            intermediaryResults_.push (newEvaluationResults);
+            intermediaryResults_.insert (newEvaluationResults);
           }
       };
     
     
+    
     /**
-     * preconfigured IterExplorer "state core" resulting in depth-first exhaustive evaluation 
+     * concrete strategy for recursive \em depth-first evaluation.
+     * Using heap allocated storage in a STL Deque (used stack-like)
+     */
+    template<class IT>
+    struct DepthFirstEvaluationBuffer
+      : EvaluationBufferStrategy<IT, IterStack>
+      { };
+    
+    /**
+     * concrete strategy for recursive \em breadth-first evaluation.
+     * Using heap allocated storage in a STL Deque (used queue-like)
+     */
+    template<class IT>
+    struct BreadthFirstEvaluationBuffer
+      : EvaluationBufferStrategy<IT, IterQueue>
+      { };
+    
+    
+    
+    /**
+     * preconfigured IterExplorer "state core" resulting in
+     * depth-first exhaustive evaluation 
      */
     template<class SRC, class FUN>
     struct DepthFirstEvaluationConbinator
@@ -657,6 +710,21 @@ namespace lib {
         
         DepthFirstEvaluationConbinator(FUN explorerFunction, SRC const& sourceElements)
           : RecursiveExhaustingEvaluation<SRC, FUN, DepthFirstEvaluationBuffer> (explorerFunction,sourceElements)
+          {  }
+      };
+    
+    /**
+     * preconfigured IterExplorer "state core" resulting in
+     * breadth-first exhaustive evaluation 
+     */
+    template<class SRC, class FUN>
+    struct BreadthFirstEvaluationConbinator
+      : RecursiveExhaustingEvaluation<SRC, FUN, BreadthFirstEvaluationBuffer>
+      {
+        BreadthFirstEvaluationConbinator() { }
+        
+        BreadthFirstEvaluationConbinator(FUN explorerFunction, SRC const& sourceElements)
+          : RecursiveExhaustingEvaluation<SRC, FUN, BreadthFirstEvaluationBuffer> (explorerFunction,sourceElements)
           {  }
       };
     
@@ -685,7 +753,7 @@ namespace lib {
         
         
         /* === Iteration control API for IterStateWrapper == */
-  
+        
         friend bool
         checkPoint (WrappedSequence const& sequence)
         {
@@ -716,11 +784,23 @@ namespace lib {
           { }
       };
     
+    template<class SRC>
+    struct BreadthFirst
+      : IterExplorer<WrappedSequence<SRC>, BreadthFirstEvaluationConbinator>
+      {
+        BreadthFirst() { };
+        BreadthFirst(SRC const& srcSeq)
+          : IterExplorer<WrappedSequence<SRC>, BreadthFirstEvaluationConbinator> (srcSeq)
+          { }
+      };
+    
     
   }//(End) namespace iter_explorer : predefined policies and configurations
   
   
   
+  
+  /* ==== convenient builder free functions ==== */
   
   template<class IT>
   inline IterExplorer<iter_explorer::WrappedSequence<IT> >
@@ -735,6 +815,14 @@ namespace lib {
   depthFirst (IT const& srcSeq)
   {
     return iter_explorer::DepthFirst<IT> (srcSeq);
+  }
+  
+  
+  template<class IT>
+  inline iter_explorer::BreadthFirst<IT>
+  breadthFirst (IT const& srcSeq)
+  {
+    return iter_explorer::BreadthFirst<IT> (srcSeq);
   }
   
   
