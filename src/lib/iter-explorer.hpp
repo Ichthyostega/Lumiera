@@ -93,54 +93,15 @@
 
 
 namespace lib {
-
   
-  
-  namespace { // internal helpers
-    
-    using std::tr1::function;
-    using meta::FunctionSignature;
-    
-    /**
-     * Helper to dissect an arbitrary function signature,
-     * irrespective if the parameter is given as function reference,
-     * function pointer, member function pointer or functor object.
-     * The base case assumes a (language) function reference.
-     */
-    template<typename SIG>
-    struct _Fun
-      {
-        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-        typedef typename FunctionSignature<function<SIG> >::Args Args;
-      };
-    /** Specialisation for using a function pointer */
-    template<typename SIG>
-    struct _Fun<SIG*>
-      {
-        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-        typedef typename FunctionSignature<function<SIG> >::Args Args;
-      };
-    /** Specialisation for passing a functor */
-    template<typename SIG>
-    struct _Fun<function<SIG> >
-      {
-        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-        typedef typename FunctionSignature<function<SIG> >::Args Args;
-      };
-    
-    
-    
-    
-  }
-
   namespace iter_explorer {
     
     template<class SRC, class FUN>
     class DefaultCombinator;
   }
-
   
-
+  
+  
   /**
    * Adapter for using an Iterator in the way of a Monad
    * This allows to "bind" or "flatMap" a functor, thereby creating
@@ -194,7 +155,7 @@ namespace lib {
    *          an instance of that strategy becomes the new SRC for the created new
    *          IterExplorer. This instantiation of the strategy gets as type parameters
    *          - this IterExplorer's instance type
-   *          - the type of the function bound with \c >>= 
+   *          - the type of the function bound with \c >>=
    */
   template<class SRC
           ,template<class,class> class _COM_ = iter_explorer::DefaultCombinator
@@ -271,6 +232,9 @@ namespace lib {
     using util::unConst;
     using boost::enable_if;
     using boost::disable_if;
+    using std::tr1::function;    
+    using meta::_Fun;
+
     
     /**
      * Building block: evaluating source elements.

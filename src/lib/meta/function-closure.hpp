@@ -68,149 +68,6 @@ namespace func{
     using tuple::element;
     
     /**
-     * Helper to dissect an arbitrary function signature,
-     * irrespective if the parameter is given as function reference,
-     * function pointer, member function pointer or functor object.
-     * The base case assumes a (language) function reference.
-     */
-    template<typename SIG>
-    struct _Fun
-      {
-        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-        typedef typename FunctionSignature<function<SIG> >::Args Args;
-      };
-    /** Specialisation for using a function pointer */
-    template<typename SIG>
-    struct _Fun<SIG*>
-      {
-        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-        typedef typename FunctionSignature<function<SIG> >::Args Args;
-      };
-    /** Specialisation for passing a functor */
-    template<typename SIG>
-    struct _Fun<function<SIG> >
-      {
-        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-        typedef typename FunctionSignature<function<SIG> >::Args Args;
-      };
-    
-    /** Specialisations for member function pointers */
-    template<typename RET, class CLASS>
-    struct _Fun<RET (CLASS::*) (void) >
-      {
-        typedef RET Ret;
-        typedef Types<CLASS* const> Args;
-      };
-    
-    template< typename RET, class CLASS
-            , typename A1
-            >
-    struct _Fun<RET (CLASS::*) (A1) >
-      {
-        typedef RET Ret;
-        typedef Types<CLASS* const, A1> Args;
-      };
-    
-    template< typename RET, class CLASS
-            , typename A1
-            , typename A2
-            >
-    struct _Fun<RET (CLASS::*) (A1,A2) >
-      {
-        typedef RET Ret;
-        typedef Types<CLASS* const, A1,A2> Args;
-      };
-    
-    template< typename RET, class CLASS
-            , typename A1
-            , typename A2
-            , typename A3
-            >
-    struct _Fun<RET (CLASS::*) (A1,A2,A3) >
-      {
-        typedef RET Ret;
-        typedef Types<CLASS* const, A1,A2,A3> Args;
-      };
-    
-    template< typename RET, class CLASS
-            , typename A1
-            , typename A2
-            , typename A3
-            , typename A4
-            >
-    struct _Fun<RET (CLASS::*) (A1,A2,A3,A4) >
-      {
-        typedef RET Ret;
-        typedef Types<CLASS* const, A1,A2,A3,A4> Args;
-      };
-    
-    template< typename RET, class CLASS
-            , typename A1
-            , typename A2
-            , typename A3
-            , typename A4
-            , typename A5
-            >
-    struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5) >
-      {
-        typedef RET Ret;
-        typedef Types<CLASS* const, A1,A2,A3,A4,A5> Args;
-      };
-    
-    template< typename RET, class CLASS
-            , typename A1
-            , typename A2
-            , typename A3
-            , typename A4
-            , typename A5
-            , typename A6
-            >
-    struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5,A6) >
-      {
-        typedef RET Ret;
-        typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6> Args;
-      };
-    
-    template< typename RET, class CLASS
-            , typename A1
-            , typename A2
-            , typename A3
-            , typename A4
-            , typename A5
-            , typename A6
-            , typename A7
-            >
-    struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5,A6,A7) >
-      {
-        typedef RET Ret;
-        typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6,A7> Args;
-      };
-    
-    template< typename RET, class CLASS
-            , typename A1
-            , typename A2
-            , typename A3
-            , typename A4
-            , typename A5
-            , typename A6
-            , typename A7
-            , typename A8
-            >
-    struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5,A6,A7,A8) >
-      {
-        typedef RET Ret;
-        typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6,A7,A8> Args;
-      };
-    
-    
-    template<typename FUN>
-    struct is_Functor                 { static const bool value = false; };
-    template<typename SIG>
-    struct is_Functor<function<SIG> > { static const bool value = true;  };
-    
-    
-    
-    /**
      * this Helper with repetitive specialisations for up to nine arguments
      * is used either to apply a function to arguments given as a tuple, or
      * to create the actual closure (functor) over all function arguments.
@@ -584,8 +441,8 @@ namespace func{
   template<typename SIG>
   class FunctionClosure
     {
-      typedef typename func::_Fun<SIG>::Args Args;
-      typedef typename func::_Fun<SIG>::Ret  Ret;
+      typedef typename _Fun<SIG>::Args Args;
+      typedef typename _Fun<SIG>::Ret  Ret;
       
       function<Ret(void)> closure_;
       
@@ -790,8 +647,8 @@ namespace func{
   template<typename F1, typename RET>
   class FunctionComposition
     {
-      typedef typename func::_Fun<F1>::Args Args;
-      typedef typename func::_Fun<F1>::Ret  Ret1;
+      typedef typename _Fun<F1>::Args Args;
+      typedef typename _Fun<F1>::Ret  Ret1;
       
       typedef Types<Ret1> ArgsF2;
       typedef typename FunctionTypedef<RET, ArgsF2>::Sig SigF2;
