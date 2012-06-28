@@ -132,9 +132,10 @@ namespace test{
         /** Implementation of Iteration-logic: pull next element. */
         template<class ITER>
         friend void
-        iterNext (const TestContainer*, ITER& pos)
+        iterNext (const TestContainer* src, ITER& pos)
           {
             ++pos;
+            checkPoint (src,pos);
           }
         
         /** Implementation of Iteration-logic: detect iteration end.
