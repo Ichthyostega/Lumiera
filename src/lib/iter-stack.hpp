@@ -207,6 +207,13 @@ namespace lib {
               return queue_;
             }
           
+          IterQueue
+          wrapping (TY elm)
+            {
+              queue_.feed (elm);
+              return queue_;
+            }
+          
         private:
           IterQueue queue_;
         };

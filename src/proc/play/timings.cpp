@@ -99,7 +99,7 @@ namespace play {
   /** @remarks the purpose of this function is to support scheduling
    *           and frame handling even in case the frame rate isn't constant.
    *           To indicate the case the frame rate is changing right now,
-   *           this function might returns Duration::NIL
+   *           this function might return Duration::NIL
    *  @todo implement real support for variable frame rates      
    */                                  ////////////////////////////////////////////////////////TICKET #236
   Duration

@@ -179,11 +179,12 @@ namespace test  {
           
           TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
           
-          JobTicket::JobsPlanning jobs = dispatcher.onCalcStream(modelPort,channel)
-                                                   .establishNextJobs(refPoint);
+          JobPlanningSequence jobs = dispatcher.onCalcStream(modelPort,channel)
+                                               .establishNextJobs(refPoint);
           
           // Verify the planned Jobs
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           CHECK (!isnil (jobs));
           vector<Job> plannedChunk;
           lib::append_all (jobs, plannedChunk);
@@ -203,7 +204,6 @@ namespace test  {
               prevInvocationID = thisJob.getInvocationInstanceID();
               nextFrameStart += expectedTimeIncrement;
             }
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       
@@ -229,10 +229,11 @@ namespace test  {
           function<void(TimeAnchor)> testFunc = verify_invocation_of_Continuation;
           
           TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
-          JobTicket::JobsPlanning jobs = dispatcher.onCalcStream(modelPort,channel)
-                                                   .establishNextJobs(refPoint)
-                                                   .prepareContinuation(testFunc);
+          JobPlanningSequence jobs = dispatcher.onCalcStream(modelPort,channel)
+                                               .establishNextJobs(refPoint)
+                                               .prepareContinuation(testFunc);
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           // an additional "continuation" Job has been prepared....
           Job continuation = lib::pull_last(jobs);
           CHECK (META_JOB == continuation.getKind());
@@ -247,7 +248,6 @@ namespace test  {
           // Since we passed testFunc as action for the continuation, we expect the invocation
           // of the function verify_invocation_of_Continuation()
           continuation.triggerJob();
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       

@@ -87,9 +87,9 @@ namespace engine{
    * sink in a timely fashion. Actually the CalculationStream
    * instances provided through this (facade) interface are
    * backed by jobs executed through the scheduler in the
-   * backend layer. The implementation of this service
-   * cares to create the right job entries in the correct
-   * order and to enqueue these into the scheduler.
+   * backend layer. The implementation of this service is
+   * responsible for creating the right job entries in the
+   * correct order and to enqueue these into the scheduler.
    */
   class EngineService
     : boost::noncopyable

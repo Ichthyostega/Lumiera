@@ -234,6 +234,7 @@ namespace test{
           
           verifyDepthFirstExploration();
           verifyBreadthFirstExploration();
+          verifyRecursiveSelfIntegration();
         }
       
       
@@ -445,6 +446,25 @@ namespace test{
         {
           NumberSeries root = elements(30);
           string explorationResult = materialise (breadthFirst(root) >>= exploreChildren);
+          CHECK (explorationResult == "30-6-10-15-2-3-2-5-3-5-1-1-1-1-1-1");
+        }
+      
+      
+      
+      /** @test a variation of depth-first exploration, this time directly
+       * relying on the result set iterator type to provide the re-integration
+       * of intermediary results.
+       */
+      void
+      verifyRecursiveSelfIntegration ()
+        {
+          typedef NumberSeries Seq;
+          typedef IterExplorer<iter_explorer::WrappedSequence<Seq>
+                              ,iter_explorer::RecursiveSelfIntegration> SelfIntegratingExploration;
+          
+          Seq root = elements(5,10,20);
+          SelfIntegratingExploration exploration(root);
+          string explorationResult = materialise (exploration >>= exploreChildren);
           CHECK (explorationResult == "30-6-10-15-2-3-2-5-3-5-1-1-1-1-1-1");
         }
       

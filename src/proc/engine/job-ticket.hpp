@@ -31,7 +31,6 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
 #include "lib/linked-elements.hpp"
-#include "lib/iter-source.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -103,18 +102,21 @@ using lib::LinkedElements;
           Prerequisite* next;
         };
       
-      struct Prerequisites
+      struct Prerequisites ///< per channel
         {
           Prerequisites* next;
           LinkedElements<Prerequisite> preparations_;
         };
       
       
-      LinkedElements<Provision> channelConfig_;
+      LinkedElements<Provision>   channelConfig_;
       LinkedElements<Prerequisites> requirement_;
       
     public:
-      typedef lib::IterSource<Job>::iterator  JobsPlanning;
+      
+      class ExplorationStack;
+      
+      friend class ExplorationStack;
       
       JobTicket()
         {
@@ -131,6 +133,14 @@ using lib::LinkedElements;
           UNIMPLEMENTED ("validity self check");
         }
     };
+  
+    class JobTicket::ExplorationStack
+      {
+        JobTicket top_;
+        
+      public:
+        
+      };
   
   
   

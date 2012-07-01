@@ -170,6 +170,14 @@ namespace lib {
       typedef typename SRC::reference reference;
       typedef typename SRC::pointer  pointer;
       
+      /** Metafunction: the resulting type when binding a functor of type FUN */
+      template<class FUN>
+      struct Binding
+        {
+          typedef IterExplorer<_COM_<IterExplorer,FUN>, _COM_> Type;
+        };
+      
+      
       
       /** by default create an empty iterator */
       IterExplorer() { }
@@ -691,6 +699,119 @@ namespace lib {
           : RecursiveExhaustingEvaluation<SRC, FUN, BreadthFirstEvaluationBuffer> (explorerFunction,sourceElements)
           {  }
       };
+    
+    
+    
+    
+    /** 
+     * IterExplorer "state core" for progressively expanding
+     * an initial result set. This is a partially reduced and hard-coded
+     * variation on the #RecursiveExhaustingEvaluation in depth-first configuration.
+     * This setup works in conjunction with a <i>special result sequence</i> type,
+     * with the ability to re-integrate results yielded by partial evaluation.
+     * But the working pattern is more similar to the #CombinedIteratorEvaluation,
+     * where the focal point of further expansion is always at the front end of
+     * further items yet to be consumed and expanded; thus the evaluation is
+     * bound to proceed depth-first (i.e. it is \em not possible to "integrate"
+     * any intermediary result with the \em whole result set, only with the part
+     * reachable immediately at the evaluation front)
+     * 
+     * \par usage considerations
+     * There needs to be a specific sequence or iterator type, which is used to
+     * hold the result set(s). This custom type together with the Explorer function
+     * are performing the actual expansion and re-integration steps. The latter is
+     * accessed through the free function \c build(sequence) -- which is expected
+     * to yield a "builder trait" for manipulating the element set yielded by
+     * the custom iterator type returned by the Explorer function.
+     * 
+     * @param SRC the initial result set sequence; this iterator needs to yield
+     *            values of the special ResultIter type, which are then expanded
+     *            until exhaustion by repeated calls to the Explorer function
+     * @param FUN the Explorer function of type ResultIter -> ResultIter
+     * @note the ResultIter type is defined implicitly through the result type
+     *            of the Explorer function. Similarly the result value type
+     *            is defined through the typedef \c ResultIter::value_type
+     */
+    template<class SRC, class FUN>
+    class RecursiveSelfIntegration
+      {
+          typedef typename _Fun<FUN>::Ret   ResultIter;
+          typedef typename SRC::value_type  Val;
+          typedef function<ResultIter(Val)> Explorer;
+          
+          SRC        srcSeq_;
+          ResultIter outSeq_;
+          Explorer  explore_;
+          
+        public:
+          typedef typename ResultIter::value_type value_type;
+          typedef typename ResultIter::reference reference;
+          typedef typename ResultIter::pointer  pointer;
+          
+          RecursiveSelfIntegration (Explorer fun, SRC const& src)
+            : srcSeq_(src)
+            , outSeq_()
+            , explore_(fun)
+            { }
+          
+          RecursiveSelfIntegration() { };
+          
+          // standard copy operations
+          
+          
+        private:
+          /** assure the next elements to be processed
+           * will appear at outSeq_ head. When outSeq_
+           * is still empty after this function,
+           * we're done.
+           * @note \em not calling this function after
+           *       construction, because the typical user
+           *       of this template will do that implicitly
+           *       through invocation of #checkPoint */
+          bool
+          findNextResultElement()
+            {
+              while (!outSeq_ && srcSeq_)
+                {
+                  Val& nextElement(*srcSeq_);
+                  build(outSeq_).wrapping(nextElement);    // extension point: free function build (...).wrapping(...)
+                  ++srcSeq_;
+                }
+              return bool(outSeq_);
+            }
+          
+          void
+          iterate ()
+            {
+              REQUIRE (outSeq_);
+              ResultIter nextStep = explore_(*outSeq_);
+              ++ outSeq_;
+              build(outSeq_).usingSequence(nextStep);      // extension point: free function build (...).usingSequence(...)
+            }
+          
+          
+          /* === Iteration control API for IterStateWrapper== */
+          
+          friend bool
+          checkPoint (RecursiveSelfIntegration const& seq)
+          {
+            return unConst(seq).findNextResultElement();
+          }
+          
+          friend reference
+          yield (RecursiveSelfIntegration const& seq)
+          {
+            return *(seq.outSeq_);
+          }
+          
+          friend void
+          iterNext (RecursiveSelfIntegration & seq)
+          {
+            seq.iterate();
+          }
+      };
+    
+    
     
     
     /**

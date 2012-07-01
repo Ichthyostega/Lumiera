@@ -30,6 +30,7 @@
 #include "proc/engine/time-anchor.hpp"
 #include "proc/engine/frame-coord.hpp"
 #include "proc/engine/job-ticket.hpp"
+#include "proc/engine/job-planning.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -65,7 +66,7 @@ namespace engine {
           
           JobBuilder& prepareContinuation (function<void(TimeAnchor)> delayedAction);
           
-          operator JobTicket::JobsPlanning()
+          operator JobPlanningSequence()
             {
               UNIMPLEMENTED ("how to represent the closure for defining and scheduling jobs");
               
