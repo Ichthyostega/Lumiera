@@ -59,14 +59,19 @@
  ** - the RecursiveExhaustingEvaluation is another kind of combination strategy,
  **   which recursively evaluates the given function and combines the results
  **   such as to produce classical depth-first and breadth-first search orders.
- **   
+ ** - the more low-level RecursiveSelfIntegration combinator strategy actually
+ **   delegates to the result set iterator implementation to perform the collecting
+ **   and re-integrating of intermediary results. This approach is what we actually
+ **   use in the proc::engine::Dispatcher
+ ** 
  ** Alternatively, just the basic IterExplorer template can be used together with a custom
- ** "combinator strategy" to implement very specific and optimised data structure evaluation patterns.
- ** This strategy needs to define some way to hold onto the original source elements, feed them through
- ** the functor on demand and recombine the result sets into a new sequence to be delivered on demand.
+ ** "combinator strategy" and typically even a specific iterator or sequence to implement very specific
+ ** and optimised data structure evaluation patterns. This strategy needs to define some way to hold onto
+ ** the original source elements, feed them through the functor on demand and recombine the result sets
+ ** into a new sequence to be delivered on demand.
  ** Actually this is what we utilise for the continuous render job generation within the scheduler.
- ** The preconfigured variants where created as proof-of-concept, to document and verify this
- ** implementation technique as such.
+ ** All the other preconfigured variants defined here where created as proof-of-concept, to document
+ ** and verify this implementation technique as such.
  ** 
  ** @see IterExplorer_test
  ** @see iter-adapter.hpp
@@ -153,7 +158,7 @@ namespace lib {
    * @param SRC the source sequence or iterator to wrap
    * @param _COM_ "Combinator" strategy template. When binding (\c >>= ) a function,
    *          an instance of that strategy becomes the new SRC for the created new
-   *          IterExplorer. This instantiation of the strategy gets as type parameters
+   *          IterExplorer. This instantiation of the strategy gets as type parameters:
    *          - this IterExplorer's instance type
    *          - the type of the function bound with \c >>=
    */

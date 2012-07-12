@@ -203,8 +203,9 @@ namespace test{
    * combination, the goal is to separate and isolate the mechanics
    * of combination, so we can focus on the actual computation steps:
    * The mechanics of combination are embedded into the Monad type,
-   * which acts as a kind of container, holding elements to be processed.
-   * The actual processing steps are then fed to the monad as parameters.
+   * which acts as a kind of container, holding some entities
+   * to be processed. The actual processing steps are then
+   * fed to the monad as "function object" parameters.
    * 
    * Using the monad pattern is well suited when both the mechanics of
    * combination and the individual computation steps tend to be complex.
@@ -451,21 +452,31 @@ namespace test{
       
       
       
-      /** @test a variation of depth-first exploration, this time directly
+      /** @test a variation of recursive exploration, this time directly
        * relying on the result set iterator type to provide the re-integration
-       * of intermediary results.
+       * of intermediary results. Since our \c exploreChildren() function returns
+       * a NumberSeries, which basically is a IterQueue, the re-integration of expanded
+       * elements will happen at the end, resulting in breadth-first visitation order --
+       * but contrary to the dedicated \c breadthFirst(..) explorer, this expansion is done
+       * separately for each element in the initial seed sequence. Note for example how the
+       * expansion series for number 30, which is also generated in
+       * \link #verifyBreadthFirstExploration \endlink, appears here at the end of the
+       * explorationResult sequence
+       * @remarks this "combinator strategy" is really intended for use with custom sequences,
+       *          where the "Explorer" function works together with a specific implementation.
+       *          Actually this is what we use in the proc::engine::Dispatcher to generate a
+       *          series of frame render jobs, including all prerequisite jobs
        */
       void
       verifyRecursiveSelfIntegration ()
         {
-          typedef NumberSeries Seq;
-          typedef IterExplorer<iter_explorer::WrappedSequence<Seq>
+          typedef IterExplorer<iter_explorer::WrappedSequence<NumberSeries>
                               ,iter_explorer::RecursiveSelfIntegration> SelfIntegratingExploration;
           
-          Seq root = elements(5,10,20);
+          NumberSeries root = elements(10,20,30);
           SelfIntegratingExploration exploration(root);
           string explorationResult = materialise (exploration >>= exploreChildren);
-          CHECK (explorationResult == "30-6-10-15-2-3-2-5-3-5-1-1-1-1-1-1");
+          CHECK (explorationResult == "10-2-5-1-1-20-4-10-2-2-5-1-1-1-30-6-10-15-2-3-2-5-3-5-1-1-1-1-1-1");
         }
       
       

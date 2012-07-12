@@ -28,6 +28,14 @@
  ** contents of the container in a standard fashion, especially by using util::for_each,
  ** or by feeding them into a iterator based pipeline.
  ** 
+ ** \par the builder extension point
+ ** while Lumiera Forward Iterators only allow to retrieve some elements once,
+ ** the special extension point \c build(sequence) allows abstracted access to some
+ ** limited manipulation of the sequence, without tying the client to a specific
+ ** sequence or iterator implementation. This is intended for library templates,
+ ** which typically can't make any assumptions regarding the iterator types
+ ** used for instantiation.
+ ** 
  ** @remarks contrary to the usual (STL) containers, this wrapper \em is an iterator
  **          and a container at the same time. Which opens the interesting possibility
  **          to intermix retrieval and feeding of new elements. It can be seen as a
@@ -191,15 +199,15 @@ namespace lib {
        * to prepare and pre-fill a sequence
        */
       struct Builder
+        : util::no_copy_by_client
         {
-          Builder() { }
-          Builder(IterQueue const& initialElements)
+          Builder(IterQueue& initialElements)
             : queue_(initialElements)
             { }
            // standard copy operations allowed
           
           template<typename IT>
-          IterQueue
+          IterQueue &
           usingSequence (IT src)
             {
               for ( ; src; ++src )
@@ -207,15 +215,15 @@ namespace lib {
               return queue_;
             }
           
-          IterQueue
-          wrapping (TY elm)
+          IterQueue &
+          wrapping (TY const& elm)
             {
               queue_.feed (elm);
               return queue_;
             }
           
         private:
-          IterQueue queue_;
+          IterQueue& queue_;
         };
       
       /** Extension point to be picked up by ADL.
@@ -228,7 +236,7 @@ namespace lib {
        *        function by ADL 
        */
       friend IterQueue::Builder
-      build (IterQueue const& initial)
+      build (IterQueue& initial)
       {
         return Builder(initial);
       }
