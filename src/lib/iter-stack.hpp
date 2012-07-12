@@ -50,13 +50,13 @@
 
 #include "lib/error.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include <deque>
 
 
 namespace lib {
-  
   
   namespace { 
     using util::unConst;

@@ -29,6 +29,7 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -52,15 +53,6 @@ namespace session {
   using std::tr1::function;
   using std::string;
   
-  class no_copy_by_client
-    {
-     protected:
-       ~no_copy_by_client() {}
-        no_copy_by_client() {}
-        no_copy_by_client (no_copy_by_client const&) {}
-        no_copy_by_client const&
-        operator=(no_copy_by_client const&) { return *this; }
-    };
   
   class Goal;
   class Resolution;
@@ -77,7 +69,7 @@ namespace session {
    * Query ABC
    */
   class Goal
-    : no_copy_by_client
+    : util::no_copy_by_client
     {
     public:
       virtual ~Goal() ;
