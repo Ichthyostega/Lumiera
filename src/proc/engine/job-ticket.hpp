@@ -31,6 +31,7 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
 #include "lib/linked-elements.hpp"
+#include "lib/iter-adapter.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -105,8 +106,36 @@ using lib::LinkedElements;
       struct Prerequisites ///< per channel
         {
           Prerequisites* next;
-          LinkedElements<Prerequisite> preparations_;
+          LinkedElements<Prerequisite> requiredJobs_;
         };
+      
+      
+      struct PrerequisitesDiscovery
+        {
+          /////////////TODO
+          
+          /* === Iteration control API for IterStateWrapper== */
+      
+          friend bool
+          checkPoint (PrerequisitesDiscovery const& plan)
+          {
+            UNIMPLEMENTED ("detect end of prerequisites");
+          }
+          
+          friend JobTicket&
+          yield (PrerequisitesDiscovery const& plan)
+          {
+            UNIMPLEMENTED ("access prerequisite and follow up to prerequisite JobTicket");
+          }
+          
+          friend void
+          iterNext (PrerequisitesDiscovery & plan)
+          {
+            UNIMPLEMENTED ("step ahead to next prerequisite");
+          }      
+          
+        };
+      
       
       
       LinkedElements<Provision>   channelConfig_;
@@ -117,12 +146,21 @@ using lib::LinkedElements;
       class ExplorationStack;
       
       friend class ExplorationStack;
+
+      typedef lib::IterStateWrapper<JobTicket, PrerequisitesDiscovery> iterator;
+      
       
       JobTicket()
         {
           UNIMPLEMENTED ("job representation, planning and scheduling");
         }
       
+      
+      iterator
+      discoverPrerequisites()  const
+        {
+          UNIMPLEMENTED("delve into the requirement_ datastructure");
+        }
       
       Job createJobFor (FrameCoord coordinates);
       

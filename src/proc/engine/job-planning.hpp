@@ -43,75 +43,25 @@
 namespace proc {
 namespace engine {
   
+  namespace error = lumiera::error;
+  
 //using lib::time::TimeSpan;
 //using lib::time::Duration;
 //using lib::time::FSecs;
 //using lib::time::Time;
 //using lib::LinkedElements;
   using util::isnil;
+  using util::unConst;
 //  
 //class ExitNode;
   
-  class JobPlanning;
 
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #827
-  class Evaluation
-    {
-      JobTicket::ExplorationStack focusPoint_;
-      FUN& explore_;
-      
-    public:
-      /** inactive evaluation */
-      Evaluation()
-        {
-          UNIMPLEMENTED ("how to represent an inactive evaluation");
-        }
-      
-      
-      JobPlanning &
-      getFeed ()
-        {
-          while (focusPoint_ && focusPoint_.currentLevelExhausted())
-            focusPoint_.pop();
-            
-          return dressUp(this); /////////////TODO: bad smell
-        }
-      
-      void
-      recurse ()
-        {
-          focusPoint_.visitPrerequisites();
-        }
-
-      
-      /* === Iteration control API for IterStateWrapper== */
-      
-      friend bool
-      checkPoint (Evaluation const& eval)
-      {
-        return bool(seq.feed());
-      }
-      
-      friend JobPlanning&
-      yield (Evaluation const& eval)
-      {
-        return *(seq.feed());
-      }
-      
-      friend void
-      iterNext (Evaluation & eval)
-      {
-        seq.iterate();
-      }      
-    };
-  
-  
   /** 
    */ 
   class JobPlanning
-    : public lib::IterStateWrapper<JobPlanning, Evaluation>
     {
-      typedef lib::IterStateWrapper<JobPlanning, Evaluation> _Iter;
+      JobTicket::iterator plannedOperations_;
+      FrameCoord point_to_calculate_;
       
     public:
       /** by default create the bottom element of job planning,
@@ -119,31 +69,149 @@ namespace engine {
        *  using an inactive state core (default constructed)
        */
       JobPlanning()
-        {
-          UNIMPLEMENTED ("create the bottom job planning");
-        }
+        { }
       
       /** further job planning can be initiated by continuing
        * off a given previous planning state. This is how
        * the forks are created, expanding into a multitude
        * of prerequisites of a given job
        */
-      JobPlanning (Evaluation const& startingPoint)
-        : _Iter(startingPoint)
+      JobPlanning (JobTicket::iterator const& startingPoint, FrameCoord requestedFrame)
+        : plannedOperations_(startingPoint)
+        , point_to_calculate_(requestedFrame)
         { }
       
-//      operator Evaluation&()
-//        {
-//          return stateCore();
-//        }
+      // using the standard copy operations 
       
+      
+      /** cast and explicate this job planning information
+       *  to create a frame job descriptor, ready to be scheduled
+       */
       operator Job()
         {
-          UNIMPLEMENTED ("yield a Job descriptor to reflect this planning information");
+          if (isnil (plannedOperations_))
+            throw error::Logic("Attempt to plan a frame-Job based on a missing, "
+                               "unspecified, exhausted or superseded job description"
+                              ,error::LUMIERA_ERROR_BOTTOM_VALUE);
+          
+          return plannedOperations_->createJobFor (point_to_calculate_);
         }
+      
+      
+      /** build a new JobPlanning object,
+       * set to explore the prerequisites 
+       * at the given planning situation
+       */
+      JobPlanning
+      discoverPrerequisites()  const
+        {
+          if (isnil (plannedOperations_))
+            return JobPlanning();
+          else
+            return JobPlanning (plannedOperations_->discoverPrerequisites()
+                               ,this->point_to_calculate_);
+        }
+      
+      
+      /* === Iteration control API for IterStateWrapper== */
+      
+      friend bool
+      checkPoint (JobPlanning const& plan)
+      {
+        return !isnil (plan.plannedOperations_);
+      }
+      
+      friend JobPlanning&
+      yield (JobPlanning const& plan)
+      {
+        REQUIRE (checkPoint (plan));
+        return unConst(plan);
+      }
+      
+      friend void
+      iterNext (JobPlanning & plan)
+      {
+        ++plan.plannedOperations_;
+      }      
     };
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #827
+  
+    
+  class PlanningState
+    : public lib::IterStateWrapper<JobPlanning>
+    {
+      typedef lib::IterStateWrapper<JobPlanning> _Iter;
+      
+      JobTicket::ExplorationStack explorationStack_;
+      
+    public:
+      /** inactive evaluation */
+      PlanningState()
+        : _Iter()
+        , explorationStack_()
+        { }
+      
+      explicit
+      PlanningState (JobPlanning const& startingPoint)
+        : _Iter(startingPoint)   // note: invoking copy ctor on state core
+        , explorationStack_()
+        { }
+      
+      // using the standard copy operations 
+      
+      
+      
+      /** attach and integrate the given planning details into this planning state.
+       *  Actually the evaluation proceeds depth-first with the other state, returning
+       *  later on to the current position for further evaluation */
+      PlanningState &
+      wrapping (JobPlanning const& startingPoint)
+        {
+          explorationStack_.push (stateCore());
+          stateCore() = startingPoint;
+          return *this;
+        }
+
+      PlanningState &
+      usingSequence (PlanningState const& prerequisites)
+        {
+          if (isnil (prerequisites))
+            return *this;
+          else
+            return this->wrapping(*prerequisites);
+        }
+      
+      ///TODO what elements are accepted by the explorationStack? provide conversion operator to extract those from stateCore()
+      
+      
+      
+      /** Extension point to be picked up by ADL.
+       *  Provides access for the JobPlanningSequence
+       *  for combining and expanding partial results. 
+       */
+      friend PlanningState&
+      build (PlanningState& attachmentPoint)
+      {
+        return attachmentPoint;
+      }
+
+
+    };
+    
   
   
+  inline PlanningState
+  expandPrerequisites (JobPlanning const& calculationStep)
+  {
+    PlanningState newSubEvaluation(
+                    calculationStep.discoverPrerequisites());
+    return newSubEvaluation;
+  }
+  
+  
+
+    
+    
   /**
    * Generate a sequence of starting points for Job planning,
    * based on the underlying frame grid. This sequence will be
@@ -178,12 +246,6 @@ namespace engine {
     };
   
   
-  inline JobPlanning
-  explorePrerequisites(JobPlanning step)
-  {
-    Evaluation planningState_(step);
-    return planningState_.explorePrerequisites();
-  }
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #827
   
   
