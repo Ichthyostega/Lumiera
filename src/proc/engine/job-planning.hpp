@@ -62,7 +62,7 @@ namespace engine {
     {
       JobTicket::iterator plannedOperations_;
       FrameCoord point_to_calculate_;
-      
+     
     public:
       /** by default create the bottom element of job planning,
        *  which happens to to plan no job at all. It is represented
@@ -112,6 +112,12 @@ namespace engine {
                                ,this->point_to_calculate_);
         }
       
+      friend void
+      integrate (JobPlanning const& newStartingPoint, JobPlanning existingPlan)
+      {
+        existingPlan.plannedOperations_.push (newStartingPoint.plannedOperations_);
+      }
+      
       
       /* === Iteration control API for IterStateWrapper== */
       
@@ -131,10 +137,12 @@ namespace engine {
       friend void
       iterNext (JobPlanning & plan)
       {
-        ++plan.plannedOperations_;
+        ++(plan.plannedOperations_);
       }      
     };
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #827
+  
+  
+  
   
     
   class PlanningState
@@ -142,33 +150,32 @@ namespace engine {
     {
       typedef lib::IterStateWrapper<JobPlanning> _Iter;
       
-      JobTicket::ExplorationStack explorationStack_;
       
     public:
       /** inactive evaluation */
       PlanningState()
         : _Iter()
-        , explorationStack_()
         { }
       
       explicit
       PlanningState (JobPlanning const& startingPoint)
         : _Iter(startingPoint)   // note: invoking copy ctor on state core
-        , explorationStack_()
         { }
       
       // using the standard copy operations 
       
       
       
+      
+      /* === API for JobPlanningSequence to expand the tree of prerequisites === */
+      
       /** attach and integrate the given planning details into this planning state.
-       *  Actually the evaluation proceeds depth-first with the other state, returning
-       *  later on to the current position for further evaluation */
+       *  Actually the evaluation proceeds depth-first with the other state,
+       *  returning later on to the current position for further evaluation */
       PlanningState &
       wrapping (JobPlanning const& startingPoint)
         {
-          explorationStack_.push (stateCore());
-          stateCore() = startingPoint;
+          integrate (startingPoint, this->stateCore());
           return *this;
         }
 
@@ -179,6 +186,10 @@ namespace engine {
             return *this;
           else
             return this->wrapping(*prerequisites);
+               //  explanation: PlanningState represents a sequence of successive planning points.
+              //                actually this is implemented by switching an embedded JobPlanning element
+             //                 through a sequence of states. Thus the initial state of the investigation
+            //                  (which is a JobPlanning) can stand-in for the sequence of prerequisites
         }
       
       ///TODO what elements are accepted by the explorationStack? provide conversion operator to extract those from stateCore()
@@ -194,17 +205,15 @@ namespace engine {
       {
         return attachmentPoint;
       }
-
-
     };
     
   
   
   inline PlanningState
-  expandPrerequisites (JobPlanning const& calculationStep)
+  expandPrerequisites (PlanningState const& calculationStep)
   {
     PlanningState newSubEvaluation(
-                    calculationStep.discoverPrerequisites());
+                    calculationStep->discoverPrerequisites());
     return newSubEvaluation;
   }
   
@@ -224,28 +233,35 @@ namespace engine {
    */
   class PlanningStepGenerator
     {
+    public:
+      typedef JobPlanning value_type;
+      typedef JobPlanning& reference;
+      typedef JobPlanning *  pointer;
+      
+      
       /* === Iteration control API for IterStateWrapper== */
       
       friend bool
       checkPoint (PlanningStepGenerator const& gen)
       {
-        return bool(seq.feed());
+        UNIMPLEMENTED ("determine planing chunk size"); /// return bool(seq.feed());
       }
       
       friend JobPlanning&
       yield (PlanningStepGenerator const& gen)
       {
-        return *(seq.feed());
+        UNIMPLEMENTED ("generate a single frame job planning tree");  ///return *(seq.feed());
       }
       
       friend void
       iterNext (PlanningStepGenerator & gen)
       {
-        seq.iterate();
+        UNIMPLEMENTED ("proceed to next frame");  ///////seq.iterate();
       }      
     };
   
   
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #827
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #827
   
   
@@ -254,6 +270,8 @@ namespace engine {
    * @todo 6/12 WIP-WIP-WIP how to prepare jobs for scheduling
    */
   class JobPlanningSequence
+    : public lib::IterExplorer<PlanningStepGenerator
+                              ,lib::iter_explorer::RecursiveSelfIntegration>
     {
       
     public:

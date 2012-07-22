@@ -34,6 +34,7 @@
 #include "lib/iter-adapter.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <stack>
 
 
 namespace proc {
@@ -101,6 +102,7 @@ using lib::LinkedElements;
       struct Prerequisite
         {
           Prerequisite* next;
+          JobTicket* descriptor;
         };
       
       struct Prerequisites ///< per channel
@@ -110,44 +112,19 @@ using lib::LinkedElements;
         };
       
       
-      struct PrerequisitesDiscovery
-        {
-          /////////////TODO
-          
-          /* === Iteration control API for IterStateWrapper== */
-      
-          friend bool
-          checkPoint (PrerequisitesDiscovery const& plan)
-          {
-            UNIMPLEMENTED ("detect end of prerequisites");
-          }
-          
-          friend JobTicket&
-          yield (PrerequisitesDiscovery const& plan)
-          {
-            UNIMPLEMENTED ("access prerequisite and follow up to prerequisite JobTicket");
-          }
-          
-          friend void
-          iterNext (PrerequisitesDiscovery & plan)
-          {
-            UNIMPLEMENTED ("step ahead to next prerequisite");
-          }      
-          
-        };
-      
-      
       
       LinkedElements<Provision>   channelConfig_;
       LinkedElements<Prerequisites> requirement_;
       
+      
+      class ExplorationState;
+      friend class ExplorationState;
+      
+      struct TraversalOfPrerequisites;
+        
     public:
-      
-      class ExplorationStack;
-      
-      friend class ExplorationStack;
-
-      typedef lib::IterStateWrapper<JobTicket, PrerequisitesDiscovery> iterator;
+        
+      typedef TraversalOfPrerequisites iterator;
       
       
       JobTicket()
@@ -156,11 +133,7 @@ using lib::LinkedElements;
         }
       
       
-      iterator
-      discoverPrerequisites()  const
-        {
-          UNIMPLEMENTED("delve into the requirement_ datastructure");
-        }
+      iterator discoverPrerequisites()  const;
       
       Job createJobFor (FrameCoord coordinates);
       
@@ -172,13 +145,59 @@ using lib::LinkedElements;
         }
     };
   
-    class JobTicket::ExplorationStack
+  
+  class JobTicket::ExplorationState
+    {
+      typedef LinkedElements<Prerequisite>::iterator SubTicketSeq;
+      typedef std::stack<SubTicketSeq> SubTicketStack;               //////////////////////////TODO use a custom container to avoid heap allocations
+      
+      SubTicketStack toExplore_;
+      
+    public:
+      // using default ctor and copy operations
+      
+      
+      
+      /* === Iteration control API for IterStateWrapper== */
+  
+      friend bool
+      checkPoint (ExplorationState const& plan)
       {
-        JobTicket top_;
-        
-      public:
-        
-      };
+        UNIMPLEMENTED ("detect end of prerequisites");
+      }
+      
+      friend JobTicket&
+      yield (ExplorationState const& plan)
+      {
+        UNIMPLEMENTED ("access prerequisite and follow up to prerequisite JobTicket");
+      }
+      
+      friend void
+      iterNext (ExplorationState & plan)
+      {
+        UNIMPLEMENTED ("step ahead to next prerequisite");
+      }      
+    };
+    
+  
+  struct JobTicket::TraversalOfPrerequisites
+    : lib::IterStateWrapper<JobTicket, JobTicket::ExplorationState>
+    {
+      void
+      push (TraversalOfPrerequisites subExploration)
+        {
+          UNIMPLEMENTED ("integrate a branch of prerequisites");
+        }
+      
+    };
+  
+  
+  inline JobTicket::iterator
+  JobTicket::discoverPrerequisites()  const
+  {
+    UNIMPLEMENTED("delve into the requirement_ datastructure");
+  }
+
   
   
   

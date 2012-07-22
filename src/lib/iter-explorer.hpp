@@ -789,9 +789,9 @@ namespace lib {
           iterate ()
             {
               REQUIRE (outSeq_);
-              ResultIter nextStep = explore_(*outSeq_);
+              ResultIter nextSteps = explore_(*outSeq_);
               ++ outSeq_;
-              build(outSeq_).usingSequence(nextStep);      // extension point: free function build (...).usingSequence(...)
+              build(outSeq_).usingSequence(nextSteps);     // extension point: free function build (...).usingSequence(...)
             }
           
           
