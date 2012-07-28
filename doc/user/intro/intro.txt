@@ -355,6 +355,11 @@ Configuration
 
 Plugins/Interfaces
 ~~~~~~~~~~~~~~~~~~
+
+
+What are Plugins?
+^^^^^^^^^^^^^^^^^
+
 A Plug-in is a kind of generalisation of a library.
 
 All applications use, to varying degrees of intensity, libraries. A programmer
@@ -379,7 +384,7 @@ libraries are being constantly improved. If the application wants to use new
 features, it will have to be recompiled with the new library which provides the
 new features.
 
-_Dynamic Linking_ helps rectify the the necessity of having to recompile. If a
+_Dynamic Linking_ helps rectify the necessity of having to recompile. If a
 new, improved library becomes available, all the user has to do is to install
 the new library onto the operating system, restart the application and the new
 features can be used by the application. The features provided by a dynamic
@@ -393,13 +398,15 @@ available to an application is known as run-time linking, aka plug-ins.
 Plug-ins offer other benifits: the application can continue to use both the old
 features and the new features together, side-by-side, by using the version
 number associated with the plug-in. This saves the application from considerable
-headaches associated with other linking methods, havocked library versiojn
+headaches associated with other linking methods, havocked library version
 incompatibility. 
 
 Most modern applications use plug-ins, some are heavily dependent on plug-ins
 and only provide limited functionality without any plug-ins.
 Lumiera will not reinvent the wheel. One major goal is to provide considerable
 functionality via well-designed, external code supplied to Lumiera by plug-ins.
+
+
 
 
 
