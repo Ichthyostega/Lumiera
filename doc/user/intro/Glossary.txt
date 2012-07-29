@@ -2,17 +2,19 @@ Glossary
 ========
 
 
-'NOTE Draft, please help rephrase/review and sort this terms, shorten
+'NOTE Draft, please help rephrase/review and shorten
 explanations, the long explanation is the topic of the document above..'
 
  anchor:AssetsView[] link:#AssetsView[->]Assets View::
-        The windows showing and managing the available things to work with.
-        This are the ingested footage, already composed Clips, available
-        Sub-Projects, Effects, Transitions and internal artefacts.
+	Windows displaying and managing various things that can be edited,
+	worked on, etc   are collectively known as the Assets View.
+	Ingested footage, clips that have already been composed, available
+	sub-projects, effects, transitions and internal artifacts are typical
+	examples.
 
  anchor:Builder[] link:#Builder[->]Builder::
-        A kind of compiler which creates Low Level/Processing Graphs, by
-        traversing and evaluating the relevant parts of the high-level-model
+        This is a kind of compiler that creates low-level, or processing, graphs
+        by traversing and evaluating the relevant parts of the high-level-model
         and using the Rules System.
 
  anchor:Busses[] link:#Busses[->]Busses::
@@ -26,9 +28,9 @@ explanations, the long explanation is the topic of the document above..'
         Provides defaults for all kinds of application configurations. These
         include machine specific configurations for performance
         characteristics, File and Plugins Paths and configuration data and so
-        on. Note that this only provides defaults for otherwise not yet set
-        data. Many settings will then be stored within the project and the
-        Config/Preferences becomes overridden by that.
+        on. Note that this only provides defaults for data that has not already
+        been set. Many settings will then be stored within the project which
+        override Config/Preferences.
 
  anchor:ControllerGui[] link:#ControllerGui[->]Controller Gui::
         This can be either a full Software implementation for a Transport
@@ -37,7 +39,7 @@ explanations, the long explanation is the topic of the document above..'
         gui-entities (Viewers, Timeline Views)
 
  anchor:Cursor[] link:#Cursor[->]Cursor::
-        playback- or edit position
+        Playback- or edit position
 
  anchor:Focus[] link:#Focus[->]Focus::
         TBD
@@ -48,8 +50,8 @@ explanations, the long explanation is the topic of the document above..'
         Builder into the Low Level Model for rendering.
 
  anchor:InputDevice[] link:#InputDevice[->]Input Device::
-        some hardware controler, like a extra Keyboard, Midi Mixer, Jog, ..
-        TODO: decide if the main keyboard as special (global) state.
+        Some hardware controler, like an extra keyboard, midi mixer, Jog, ..
+        TODO: decide on whether the main keyboard is in a special (global) state.
 
  anchor:LowLevelModel[] link:#LowLevelModel[->]Low Level Model::
         The generated Processing Graph, to be ``performed'' within the engine
@@ -64,27 +66,27 @@ explanations, the long explanation is the topic of the document above..'
 
  anchor:OutputDesignation[] link:#OutputDesignation[->]OutputDesignation::
         A specification denoting where to connect the output of a pipe.
-        It might either be given _absoulutely_, i.e as Pipe-ID,
-        or by an _relative_ or _indirect_ specification
+        It might either be given _absoulutely_, i.e as a Pipe-ID,
+        or by a _relative_ or an _indirect_ specification
         
  anchor:OutputManager[] link:#OutputManager[->]OutputManager::
-        manages all external outputs of the application and provides output
+        Manages all external outputs of the application and provides output
         slots targetting these.
 
  anchor:OutputMapping[] link:#OutputMapping[->]OutputMapping::
-        translates one output designation into another one, e.g. when hooking
-        up a sequence as virtual clip within another sequence
+        Diverts one output designation into another designation, e.g. when hooking
+        up a sequence as a virtual clip within another sequence.
 
  anchor:OutputSlot[] link:#OutputSlot[->]OutputSlot::
-        opaque descriptor for an output facility, ready to dispose frames
+        Opaque descriptor for an output facility, ready to dispose frames
         of data to be output.
 
  anchor:Pipe[] link:#Pipe[->]Pipe::
         Conceptual building block of the high-level model. It can be thought
-        off as simple linear processing chain. A stream can be 'sent to' a
+        of as simple linear processing chain. A stream can be 'sent to' a
         pipe, in which case it will be mixed in at the input, and you can
-        'plug' the output of a pipe to another destination. Further, effects
-        or processors can be attached to the pipe. Besides the global pipes
+        'plug' the output of a pipe to another destination. Furthermore, effects
+        or processors can be attached to the pipe. In addition to global pipes
         (busses) in each Timeline, each clip automatically creates N pipes
         (one for each distinct content stream. Typically N=2, for video and
         audio)
@@ -130,12 +132,11 @@ explanations, the long explanation is the topic of the document above..'
         A collection of *Media Objects* (clips, effects, transitions, labels,
         automation) placed onto a tree of tracks. By means of this placement,
         the objects could be anchored relative to each other, relative to
-        external objects, absolute in time. A sequence can connect to the
-        global pipes when used as top-level sequence within a timeline, or
+        external objects, absolute in time. A sequence can connect to 
+        global pipes when used as a top-level sequence within a timeline, or
         alternatively it can act as a virtual-media when used within a
-        meta-clip (nested sequence). In the default configuration, a Sequence
-        contains just a single root track and sends directly to the master bus
-        of the timeline.
+        meta-clip (nested sequence). A Sequence by default contains just a
+        single root track and directly sends to the master bus of the Timeline.
 
  anchor:Session[] link:#Session[->]Session::
         the current in-memory representation of the Project when opened within
@@ -209,7 +210,7 @@ explanations, the long explanation is the topic of the document above..'
           that..
 
  anchor:Viewer[] link:#Viewer[->]Viewer::
-        the display destination showing video frame and possibly some effect
+        The display destination showing video frame and possibly some effect
         overlays (masking etc.). When attached to a timeline, a viewer
         reflects the state of the timeline's associated PlayController, and it
         attaches to the timeline's global pipes (stream-type match or
@@ -219,9 +220,4 @@ explanations, the long explanation is the topic of the document above..'
         stream as (partial) overlay for comparison, or to be collapsed to a
         mere control for sending video to a dedicated monitor (separate X
         display or firewire)
-
-
-
-
-
 
