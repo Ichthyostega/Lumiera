@@ -117,7 +117,7 @@ explanations, the long explanation is the topic of the document above..'
         objects to be edited. 
 
  anchor:RenderTask[] link:#RenderTask[->]RenderTask::
-        This is basically a PlayController, but directlz collects output without
+        This is basically a PlayController, but directly collects output without
         moving a PlayheadCursor (could be a progress indicator) and not operating
         in a timed fashion, but freewheeling or in background mode
 
@@ -214,10 +214,11 @@ explanations, the long explanation is the topic of the document above..'
         overlays (masking etc.). When attached to a timeline, a viewer
         reflects the state of the timeline's associated PlayController, and it
         attaches to the timeline's global pipes (stream-type match or
-        explicitly), showing video as monitor image and sending audio to the
-        system audio port. Possible extensions are for a viewer to be able to
-        attach to probe points within the render network, to show a second
-        stream as (partial) overlay for comparison, or to be collapsed to a
-        mere control for sending video to a dedicated monitor (separate X
-        display or firewire)
-
+        explicitly), showing video as a monitor image and sending audio to the
+        system audio port. A number of supplimentary features are possible: the
+        viewer could  support the ability to attach to view points within the
+        render network; the capability to display a second stream as an overlay
+        (partially) which would enable user comparison or it might even be
+        possible to allow the Viewer to be collapsed to a control, thus,
+        allowing a video to be sent to a dedicated monitor, e.g., to a separate
+        X/-display or to a firewire. 
