@@ -117,8 +117,8 @@ explanations, the long explanation is the topic of the document above..'
         objects to be edited. 
 
  anchor:RenderTask[] link:#RenderTask[->]RenderTask::
-        basically a PlayController, but collecting output directly, without
-        moving a PlayheadCursor (maybe a progress indicator) and not operating
+        This is basically a PlayController, but directlz collects output without
+        moving a PlayheadCursor (could be a progress indicator) and not operating
         in a timed fashion, but freewheeling or in background mode
 
  anchor:RulesSystem[] link:#RulesSystem[->]Rules System::
