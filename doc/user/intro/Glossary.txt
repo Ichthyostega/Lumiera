@@ -70,7 +70,7 @@ explanations, the long explanation is the topic of the document above..'
         or by a _relative_ or an _indirect_ specification
         
  anchor:OutputManager[] link:#OutputManager[->]OutputManager::
-        manages all external outputs of the application and provides output
+        Manages all external outputs of the application and provides output
         slots targetting these.
 
  anchor:OutputMapping[] link:#OutputMapping[->]OutputMapping::
