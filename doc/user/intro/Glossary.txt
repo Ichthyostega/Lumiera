@@ -66,8 +66,8 @@ explanations, the long explanation is the topic of the document above..'
 
  anchor:OutputDesignation[] link:#OutputDesignation[->]OutputDesignation::
         A specification denoting where to connect the output of a pipe.
-        It might either be given _absoulutely_, i.e as Pipe-ID,
-        or by an _relative_ or _indirect_ specification
+        It might either be given _absoulutely_, i.e as a Pipe-ID,
+        or by a _relative_ or an _indirect_ specification
         
  anchor:OutputManager[] link:#OutputManager[->]OutputManager::
         manages all external outputs of the application and provides output
