@@ -132,12 +132,11 @@ explanations, the long explanation is the topic of the document above..'
         A collection of *Media Objects* (clips, effects, transitions, labels,
         automation) placed onto a tree of tracks. By means of this placement,
         the objects could be anchored relative to each other, relative to
-        external objects, absolute in time. A sequence can connect to the
-        global pipes when used as top-level sequence within a timeline, or
+        external objects, absolute in time. A sequence can connect to 
+        global pipes when used as a top-level sequence within a timeline, or
         alternatively it can act as a virtual-media when used within a
-        meta-clip (nested sequence). In the default configuration, a Sequence
-        contains just a single root track and sends directly to the master bus
-        of the timeline.
+        meta-clip (nested sequence). A Sequence by default contains just a
+        single root track and directly sends to the master bus of the Timeline.
 
  anchor:Session[] link:#Session[->]Session::
         the current in-memory representation of the Project when opened within
@@ -211,7 +210,7 @@ explanations, the long explanation is the topic of the document above..'
           that..
 
  anchor:Viewer[] link:#Viewer[->]Viewer::
-        the display destination showing video frame and possibly some effect
+        The display destination showing video frame and possibly some effect
         overlays (masking etc.). When attached to a timeline, a viewer
         reflects the state of the timeline's associated PlayController, and it
         attaches to the timeline's global pipes (stream-type match or
@@ -221,9 +220,4 @@ explanations, the long explanation is the topic of the document above..'
         stream as (partial) overlay for comparison, or to be collapsed to a
         mere control for sending video to a dedicated monitor (separate X
         display or firewire)
-
-
-
-
-
 
