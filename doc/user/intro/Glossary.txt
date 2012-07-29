@@ -78,7 +78,7 @@ explanations, the long explanation is the topic of the document above..'
         up a sequence as a virtual clip within another sequence.
 
  anchor:OutputSlot[] link:#OutputSlot[->]OutputSlot::
-        opaque descriptor for an output facility, ready to dispose frames
+        Opaque descriptor for an output facility, ready to dispose frames
         of data to be output.
 
  anchor:Pipe[] link:#Pipe[->]Pipe::
