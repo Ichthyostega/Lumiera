@@ -2,13 +2,15 @@ Glossary
 ========
 
 
-'NOTE Draft, please help rephrase/review and sort this terms, shorten
+'NOTE Draft, please help rephrase/review and shorten
 explanations, the long explanation is the topic of the document above..'
 
  anchor:AssetsView[] link:#AssetsView[->]Assets View::
-        The windows showing and managing the available things to work with.
-        This are the ingested footage, already composed Clips, available
-        Sub-Projects, Effects, Transitions and internal artefacts.
+	Windows displaying and managing various things that can be edited,
+	worked on, etc   are collectively known as the Assets View.
+	Ingested footager, clips that have already been composed, available
+	sub-projects, effects, transitions and internal artifacts are typical
+	examples.
 
  anchor:Builder[] link:#Builder[->]Builder::
         A kind of compiler which creates Low Level/Processing Graphs, by
