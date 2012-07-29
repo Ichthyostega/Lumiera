@@ -13,8 +13,8 @@ explanations, the long explanation is the topic of the document above..'
 	examples.
 
  anchor:Builder[] link:#Builder[->]Builder::
-        A kind of compiler which creates Low Level/Processing Graphs, by
-        traversing and evaluating the relevant parts of the high-level-model
+        This is a kind of compiler that creates low-level, or processing, graphs
+        by traversing and evaluating the relevant parts of the high-level-model
         and using the Rules System.
 
  anchor:Busses[] link:#Busses[->]Busses::
