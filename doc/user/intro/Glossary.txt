@@ -83,10 +83,10 @@ explanations, the long explanation is the topic of the document above..'
 
  anchor:Pipe[] link:#Pipe[->]Pipe::
         Conceptual building block of the high-level model. It can be thought
-        off as simple linear processing chain. A stream can be 'sent to' a
+        of as simple linear processing chain. A stream can be 'sent to' a
         pipe, in which case it will be mixed in at the input, and you can
-        'plug' the output of a pipe to another destination. Further, effects
-        or processors can be attached to the pipe. Besides the global pipes
+        'plug' the output of a pipe to another destination. Furthermore, effects
+        or processors can be attached to the pipe. In addition to global pipes
         (busses) in each Timeline, each clip automatically creates N pipes
         (one for each distinct content stream. Typically N=2, for video and
         audio)
