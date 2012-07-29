@@ -111,10 +111,10 @@ explanations, the long explanation is the topic of the document above..'
         envisaged as data flow, while the nodes represent data processing.
 
  anchor:Project[] link:#Project[->]Project::
-        the top-level context in which all edit work is done over an extended
-        period of time. The Project can be saved and re-opened. It is
-        comprised of the collection of all things the user is working on, it
-        contains all informations, assets, state and objects to be edited.
+        The top-level context in which all editing is done over an extended
+        period of time. A Project can be saved and re-opened. It consists of
+        various things a user is working on: user-information, assets, state and
+        objects to be edited. 
 
  anchor:RenderTask[] link:#RenderTask[->]RenderTask::
         basically a PlayController, but collecting output directly, without
