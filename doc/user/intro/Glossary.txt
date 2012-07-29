@@ -107,8 +107,8 @@ explanations, the long explanation is the topic of the document above..'
         media data needed for playback.
 
  anchor:ProcessingGraph[] link:#ProcessingGraph[->]Processing Graph::
-        Rendering is expressed as detailed network of Nodes, each defining a
-        processing step.
+        Rendering is expressed as a detailed network of nodes. The edges can be
+        envisaged as data flow, while the nodes represent data processing.
 
  anchor:Project[] link:#Project[->]Project::
         the top-level context in which all edit work is done over an extended
