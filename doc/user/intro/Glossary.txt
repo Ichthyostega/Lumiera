@@ -74,8 +74,8 @@ explanations, the long explanation is the topic of the document above..'
         slots targetting these.
 
  anchor:OutputMapping[] link:#OutputMapping[->]OutputMapping::
-        translates one output designation into another one, e.g. when hooking
-        up a sequence as virtual clip within another sequence
+        Diverts one output designation into another designation, e.g. when hooking
+        up a sequence as a virtual clip within another sequence.
 
  anchor:OutputSlot[] link:#OutputSlot[->]OutputSlot::
         opaque descriptor for an output facility, ready to dispose frames
