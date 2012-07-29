@@ -39,7 +39,7 @@ explanations, the long explanation is the topic of the document above..'
         gui-entities (Viewers, Timeline Views)
 
  anchor:Cursor[] link:#Cursor[->]Cursor::
-        playback- or edit position
+        Playback- or edit position
 
  anchor:Focus[] link:#Focus[->]Focus::
         TBD
