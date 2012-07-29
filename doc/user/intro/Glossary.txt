@@ -28,9 +28,9 @@ explanations, the long explanation is the topic of the document above..'
         Provides defaults for all kinds of application configurations. These
         include machine specific configurations for performance
         characteristics, File and Plugins Paths and configuration data and so
-        on. Note that this only provides defaults for otherwise not yet set
-        data. Many settings will then be stored within the project and the
-        Config/Preferences becomes overridden by that.
+        on. Note that this only provides defaults for data that has not already
+        been set. Many settings will then be stored within the project which
+        override Config/Preferences.
 
  anchor:ControllerGui[] link:#ControllerGui[->]Controller Gui::
         This can be either a full Software implementation for a Transport
