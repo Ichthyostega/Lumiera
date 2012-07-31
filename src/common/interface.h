@@ -28,69 +28,82 @@
 /* TODO better doxygen formating */
 
 /**
- * @file
- * Lumiera interface macros and structures.
+ * @file interface.h
+ * @brief Lumiera interface macros and structures.
  *
- * Instead just simple function/library bindings, Lumiera uses a system of
- * versioned interfaces. This interfaces are C-binding compatible and thus
- * can be used by any language which can bind to C. This interfaces are versioned
- * to provide exceptional forward and backward compatibility for both, source and
- * binary deployment of modules. This interfaces play a central role on the Lumiera
- * architecture, other facilities, like serializing sessions and distributed computing
+ * Lumiera uses a system of versioned interfaces instead of just employing a
+ * simple library (containg the functions and data) and header file strategy. 
+ * The interfaces defined here are C compatible and, thus, can be used by any
+ * language able to bind to C. The interfaces are versioned to provide forward
+ * and backward compatibility for both source and binary deployment of
+ * modules. The interfaces play a central role in the Lumiera architecture.
+ * Other facilities, such as serializing sessions and distributed computing
  * will use them extensively.
  *
  * Overview
  *
- * Interfaces are used for two purposes in Lumiera:
- *  1. The core uses them internally and exports its functionality though them.
- *  2. Plugins (effects,...) extend Lumiera by providing interfaces
+ * Interfaces are used for 2 reasons in Lumiera:
+ *  -# The Lumiera core system uses them internally and exports its functionality though them.
+ *  -# Plugins (effects, ...) extend Lumiera by providing interfaces
  *
- * We define some macros here which ease the declaration and definition of interfaces.
+ * To make an interface available to code so that the code can use the
+ * interface, the interface needs to be declared and then defined. We provide a
+ * number of macros here which ease this process.
  *
- * Declaration of an interface happens in a header and has the form:
- * LUMIERA_INTERFACE_DECLARE(name, version,
- *                           LUMIERA_INTERFACE_SLOT(ret, name, params),
- *                           ...
- *                          )
- * Any code which want to use this interface must then include its declaration.
- *
- * Basic definition of an interface is done by mapping functions to slots or giving
- * inline definitions for slot functions:
- * LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, acquire, release,
- *                            LUMIERA_INTERFACE_MAP (slot, luid, function),
- *                            LUMIERA_INTERFACE_INLINE (slot, luid, ret, params, {body}),
+ * The interface is declared by placing the following macro in a
+ * header file: 
+ * \code
+ *  LUMIERA_INTERFACE_DECLARE(name, version,
+ *                            LUMIERA_INTERFACE_SLOT(ret, name, params),
  *                            ...
  *                           )
+ * 
+ * \endcode
+ * Any code that wants to use this interface must then include the header file.
  *
- * There are 2 ways to define collections of interfaces:
+ * The interface is defined by mapping interface functions to slots, or
+ * providing inline definitions for slot functions. Defining the interface has
+ * the following form:
+ * \code
+ *  LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, acquire, release,
+ *                             LUMIERA_INTERFACE_MAP (slot, luid, function),
+ *                             LUMIERA_INTERFACE_INLINE (slot, luid, ret, params, {body}),
+ *                             ...
+ *                            )
+ * \endcode
+ *
+ * A collection of interfaces can be defined in 2 different ways depending on
+ * where whether the interface is exported by the core, or by a plugin:
+ * \code 
  * LUMIERA_EXPORT(queryfunc,
  *                LUMIERA_INTERFACE_DEFINE(...),
  *                ...
- *               )
- * to export interfaces from the core.
- *
- * LUMIERA_PLUGIN(descriptor, acquire, release, luid,
- *                LUMIERA_INTERFACE_DEFINE(...),
- *                ...
- *               )
- * is used to export interfaces from a plugin.
+ *                ) // Exporting from the core
+ * 
+ *  LUMIERA_PLUGIN(descriptor, acquire, release, luid,
+ *                 LUMIERA_INTERFACE_DEFINE(...),
+ *                 ...
+ *                 ) // Exporting from an interface
+ * \endcode
  *
  * Naming and Versioning
+ *
  * Interfaces have unique names and a major and minor version. The name and the major version
- * is used to construct a C identifier for the interface, the minor version is implicit defined
- * by the number of functions a interface. Interface instances are not versioned by the
- * interface system, versioning these shall be defined somewhere else.
+ * is used to construct a C identifier for the interface, the minor version is implicitly defined
+ * by the number of functions in the interface. Interface instances are not versioned by the
+ * interface system, versioning these wii be defined somewhere else.
  *
  * Slot names are normal C identifiers, how these shall be versioned has to be defined somewhere
- * else and is not subject of the interface system. Each function can has its own unique uuid.
+ * else and is not the subject of the interface system. Each function can have its own unique uuid.
  */
 
 
 /*
-  Interface declaration macros
+  Macros to Declare an Interface 
  */
 
 /**
+ * 
  * Construct a type identifier for an interface
  * @param name name of the interface
  * @param version major version of this interface
@@ -107,7 +120,7 @@
 #define LUMIERA_INTERFACE_DNAME(iname, version, dname) PPMPL_CAT (LUMIERA_INTERFACE_INAME (iname, version), _##dname)
 
 /**
- * Construct a definition string r for an interface
+ * Construct a definition string for an interface
  * @param iname name of the interface
  * @param version major version of the interface
  * @param dname name for the instance
@@ -145,14 +158,14 @@
 /**
  * Declare an interface.
  * @param name name of the interface
- * @param version major version of this interface declaration. 0 denotes a experimental interface,
- * otherwise this shall be counting from 1 upwards for each new (incompatible) change of an interface.
+ * @param version major version of this interface declaration. 0 denotes an experimental interface,
+ * otherwise this will begin at 1 onwards for each new (incompatible) change to an interface.
  * The older interface declarations may still be maintained in parallel (backwards compatibility!).
  * @param ... Slot declarations for the functions provided by this interface @see LUMIERA_INTERFACE_SLOT
  * The number of Slots in an interface defines its 'minor' version.
  * New slots must be added at the end. The prototype and order of existing slots must not be changed.
  * Slots may be renamed, for example a slot 'foo' can be renamed to 'foo_old' when a new 'foo' slot is
- * added. Binary modules will then still use the 'foo_old' slot which was the 'foo' slot at their
+ * added. Binary modules will then still use the 'foo_old' slot which was the 'foo' slot at the
  * compile time while compiling modules from source will use the new 'foo' slot. This may be
  * intentionally used to break compilation and force the update of modules to a new api.
  */
@@ -164,7 +177,7 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
 }
 
 /**
- * Declare function slot inside an interface.
+ * Declare a function slot inside an interface.
  * @param ret return type of the function
  * @param name name of this slot
  * @param params parentized list of parameters for the function
@@ -175,11 +188,11 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
 
 
 /*
-  Interface definition macros
+  Macros to Define an Interface
  */
 
 /**
- * Define a interface instance.
+ * Define an interface instance.
  * @param iname name of the interface to instance
  * @param version major version of the interface to instance
  * @param name name of the instance
