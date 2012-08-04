@@ -30,11 +30,6 @@
 #  include <libintl.h>
 #endif
 
-#include <gdl/gdl-tools.h>
-#include <gdl/gdl-dock.h>
-#include <gdl/gdl-dock-bar.h>
-#include <gdl/gdl-dock-item.h>
-#include <gdl/gdl-dock-placeholder.h>
 
 
 using namespace Gtk;
