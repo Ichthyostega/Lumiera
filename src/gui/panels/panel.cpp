@@ -125,7 +125,7 @@ Panel::lock(bool lock)
 bool
 Panel::is_locked() const
 {
-  ////REQUIRE(dockItem != NULL);
+  REQUIRE(dockItem.gobj() != NULL);
   return !GDL_DOCK_ITEM_NOT_LOCKED(dockItem.gobj());
 }
 
