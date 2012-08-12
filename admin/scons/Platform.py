@@ -108,7 +108,7 @@ def configure(env):
     if not conf.CheckPkgConfig('alsa', '1.0.23'):
         problems.append('Support for ALSA sound output is required')
     
-    if not conf.CheckPkgConfig('gtkmm-2.4', 2.8):
+    if not conf.CheckPkgConfig('gtkmm-3.0', 3.0):
         problems.append('Unable to configure GTK--')
         
     if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
@@ -120,8 +120,8 @@ def configure(env):
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
         problems.append('Unable to configure Cairo--')
     
-    verGDL = '2.27.1'
-    if not conf.CheckPkgConfig('gdl-1.0', verGDL, alias='gdl'):
+    verGDL = '3.0.0'
+    if not conf.CheckPkgConfig('gdl-3.0', verGDL, alias='gdl'):
         print 'No sufficiently recent (>=%s) version of GDL found. Maybe use custom package gdl-lum?' % verGDL
         if not conf.CheckPkgConfig('gdl-lum', verGDL, alias='gdl'):
             problems.append('GNOME Docking Library not found. We either need a sufficiently recent GDL '
