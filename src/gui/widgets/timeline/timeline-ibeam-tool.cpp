@@ -64,7 +64,7 @@ IBeamTool::get_type() const
   return IBeam;
 }
 
-Gdk::Cursor
+Glib::RefPtr<Gdk::Cursor>
 IBeamTool::get_cursor() const
 {
   // Are we dragging?
@@ -72,11 +72,11 @@ IBeamTool::get_cursor() const
   switch(dragType)
     {
     case Selection:
-      return Gdk::Cursor(Gdk::XTERM);
+      return Gdk::Cursor::create(Gdk::XTERM);
     case GrabStart:
-      return Gdk::Cursor(Gdk::LEFT_SIDE);
+      return Gdk::Cursor::create(Gdk::LEFT_SIDE);
     case GrabEnd:
-      return Gdk::Cursor(Gdk::RIGHT_SIDE);
+      return Gdk::Cursor::create(Gdk::RIGHT_SIDE);
     default:
       break;
     }
@@ -84,12 +84,12 @@ IBeamTool::get_cursor() const
   // Are we hovering over the ends of the selection?
   // Make the cursor indicate that the user can resize the selection.
   if(is_mouse_in_start_drag_zone())
-    return Gdk::Cursor(Gdk::LEFT_SIDE);
+    return Gdk::Cursor::create(Gdk::LEFT_SIDE);
   if(is_mouse_in_end_drag_zone())
-    return Gdk::Cursor(Gdk::RIGHT_SIDE);
+    return Gdk::Cursor::create(Gdk::RIGHT_SIDE);
   
   // By default return an I-beam cursor
-  return Gdk::Cursor(Gdk::XTERM);
+  return Gdk::Cursor::create(Gdk::XTERM);
 }
 
 void

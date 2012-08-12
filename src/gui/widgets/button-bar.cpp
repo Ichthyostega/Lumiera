@@ -35,7 +35,7 @@ namespace widgets {
 
 ButtonBar::ButtonBar()
 {
-  set_flags(Gtk::NO_WINDOW);
+  set_has_window(false);
 }
 
 void
@@ -47,6 +47,7 @@ ButtonBar::append(Widget &widget)
 void
 ButtonBar::on_size_request(Gtk::Requisition* requisition)
 {
+#if 0
   REQUIRE(requisition);
     
   requisition->width = 0;
@@ -67,11 +68,13 @@ ButtonBar::on_size_request(Gtk::Requisition* requisition)
   
   ENSURE(requisition->width >= 0);
   ENSURE(requisition->height >= 0);
+#endif
 }
   
 void
 ButtonBar::on_size_allocate(Gtk::Allocation& allocation)
 {
+#if 0
   //Use the offered allocation for this container:
   set_allocation(allocation);
   
@@ -108,6 +111,7 @@ ButtonBar::on_size_allocate(Gtk::Allocation& allocation)
           widget->set_child_visible(true);
         }
     }
+#endif
 }
 
 } // widgets

@@ -121,7 +121,7 @@ private:
    * An implementation of the a container function that specifies the
    * types of child widget that this widget will accept.
    */
-  GtkType child_type_vfunc() const;
+  GType child_type_vfunc() const;
 
   /**
    * Registers all the styles that this class will respond to.

@@ -61,7 +61,7 @@ Panel::Panel(workspace::PanelManager &panel_manager,
   gtk_widget_show (GTK_WIDGET(dockItem));
   
   // Connect the signals
-	hide_panel_handler_id = g_signal_connect (GTK_OBJECT(dockItem),
+	hide_panel_handler_id = g_signal_connect (GTK_WIDGET(dockItem),
 	  "hide",	G_CALLBACK(on_item_hidden), this);
 }
 
@@ -79,7 +79,7 @@ Panel::~Panel()
     
   // Detach the signals
   g_signal_handler_disconnect(
-    GTK_OBJECT(dockItem), hide_panel_handler_id);
+    GTK_WIDGET(dockItem), hide_panel_handler_id);
 
   // Unref the dock item
   g_object_unref(dockItem);
@@ -104,7 +104,7 @@ bool
 Panel::is_shown() const
 {
   REQUIRE(dockItem != NULL);
-  return GTK_WIDGET_VISIBLE((GtkWidget*)dockItem);
+  return gtk_widget_get_visible((GtkWidget*)dockItem);
 }
 
 void

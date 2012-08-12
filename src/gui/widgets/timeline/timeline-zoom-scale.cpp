@@ -58,7 +58,7 @@ namespace timeline {
 
 TimelineZoomScale::TimelineZoomScale()
   : HBox()
-  , adjustment(0.5, 0.0, 1.0, 0.000001)
+  , adjustment(Gtk::Adjustment::create(0.5, 0.0, 1.0, 0.000001))
   , slider()
   , zoomIn(Stock::ZOOM_IN)
   , zoomOut(Stock::ZOOM_OUT)
@@ -79,7 +79,7 @@ TimelineZoomScale::TimelineZoomScale()
       connect (sigc::mem_fun(this, &TimelineZoomScale::on_zoom_in_clicked));
   zoomOut.signal_clicked().
       connect (sigc::mem_fun(this, &TimelineZoomScale::on_zoom_out_clicked));
-  adjustment.signal_value_changed().
+  adjustment->signal_value_changed().
       connect (sigc::mem_fun(this, &TimelineZoomScale::on_zoom));
 
   /* Add Our Widgets and show them */
@@ -105,27 +105,27 @@ TimelineZoomScale::on_timeline_state_changed (shared_ptr<TimelineState> newState
   REQUIRE (newState);
   timelineState = newState;
   
-  adjustment.set_value (getViewWindow().get_smoothed_time_scale());
+  adjustment->set_value (getViewWindow().get_smoothed_time_scale());
 }
 
 void
 TimelineZoomScale::on_zoom_in_clicked()
 {
-  double newValue = adjustment.get_value() - button_step_size;
-  adjustment.set_value(newValue);
+  double newValue = adjustment->get_value() - button_step_size;
+  adjustment->set_value(newValue);
 }
 
 void
 TimelineZoomScale::on_zoom_out_clicked()
 {
-  double newValue = adjustment.get_value() + button_step_size;
-  adjustment.set_value(newValue);
+  double newValue = adjustment->get_value() + button_step_size;
+  adjustment->set_value(newValue);
 }
 
 void
 TimelineZoomScale::on_zoom()
 {
-  zoomSignal.emit (adjustment.get_value()) ;
+  zoomSignal.emit (adjustment->get_value()) ;
 }
 
 sigc::signal<void, double>

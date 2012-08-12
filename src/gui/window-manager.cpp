@@ -213,13 +213,14 @@ WindowManager::add_stock_icon_set (Glib::RefPtr<IconFactory> const& factory,
                                    cuString& id,
                                    cuString& label)
 {
-  Gtk::IconSet icon_set;
+  Glib::RefPtr<Gtk::IconSet> icon_set =
+                                 Gtk::IconSet::create();
   
   // Load all the sizes, wildcarding the first, largest icon to be
   // loaded
   bool no_icons = true;
   no_icons &= !add_stock_icon(
-    icon_set, icon_name, GiantIconSize, no_icons);  
+    icon_set, icon_name, GiantIconSize, no_icons);
   no_icons &= !add_stock_icon(
     icon_set, icon_name, ICON_SIZE_BUTTON, no_icons);
   no_icons &= !add_stock_icon(
@@ -245,7 +246,7 @@ WindowManager::add_stock_icon_set (Glib::RefPtr<IconFactory> const& factory,
 
 
 bool
-WindowManager::add_stock_icon (Gtk::IconSet &icon_set,
+WindowManager::add_stock_icon (const Glib::RefPtr<Gtk::IconSet> &icon_set,
                                cuString& icon_name,
                                Gtk::IconSize size,
                                bool wildcard)
@@ -269,7 +270,7 @@ WindowManager::add_stock_icon (Gtk::IconSet &icon_set,
 
 
 bool
-WindowManager::add_theme_icon_source (Gtk::IconSet &icon_set,
+WindowManager::add_theme_icon_source (const Glib::RefPtr<Gtk::IconSet> &icon_set,
                                       cuString& icon_name,
                                       Gtk::IconSize size,
                                       bool wildcard)
@@ -295,7 +296,7 @@ WindowManager::add_theme_icon_source (Gtk::IconSet &icon_set,
 
 
 bool
-WindowManager::add_non_theme_icon_source (Gtk::IconSet &icon_set,
+WindowManager::add_non_theme_icon_source (const Glib::RefPtr<Gtk::IconSet> &icon_set,
                                           cuString& base_dir, cuString& icon_name,
                                           Gtk::IconSize size, bool wildcard)
 {
@@ -314,7 +315,7 @@ WindowManager::add_non_theme_icon_source (Gtk::IconSet &icon_set,
 
 bool
 WindowManager::add_stock_icon_from_path (string path,
-                                         Gtk::IconSet &icon_set,
+		const Glib::RefPtr<Gtk::IconSet> &icon_set,
                                          Gtk::IconSize size,
                                          bool wildcard)
 {
@@ -326,7 +327,7 @@ WindowManager::add_stock_icon_from_path (string path,
       source.set_size_wildcarded(wildcard);
       source.set_size(size);
       
-      icon_set.add_source(source);
+      icon_set->add_source(source);
       
       return true;
     }

@@ -43,7 +43,7 @@ NameChooser::NameChooser(Window &parent, cuString title,
   hBox.pack_start(name);
   hBox.set_spacing(BoxSpacing);
 
-  VBox* const v_box = get_vbox();
+  Box* const v_box = get_vbox();
   REQUIRE(v_box != NULL);
   v_box->pack_start(hBox);
   

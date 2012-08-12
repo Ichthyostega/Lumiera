@@ -282,10 +282,12 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cr,
   // Preparation steps
   const int height = ruler_rect.get_height();
   Glib::RefPtr<Pango::Layout> pango_layout = create_pango_layout("");
+#if 0
   Glib::RefPtr<Style> style = get_style();
   
   // Render the background, and clip inside the area
   Gdk::Cairo::set_source_color(cr, style->get_bg(STATE_NORMAL));
+#endif
   cr->rectangle(0, 0, 
     ruler_rect.get_width(), ruler_rect.get_height());
   cr->fill_preserve();
@@ -294,9 +296,10 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cr,
   // Make sure we don't have impossible zoom
   if(time_scale <= 0)
     return;
-  
+#if 0
   // Render ruler annotations
   Gdk::Cairo::set_source_color(cr, style->get_fg(STATE_NORMAL));
+#endif
   
   const gavl_time_t major_spacing = calculate_major_spacing();
   const gavl_time_t minor_spacing = major_spacing / 10;
@@ -356,11 +359,11 @@ TimelineRuler::draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cr,
   if(mouseChevronOffset < 0 ||
     mouseChevronOffset >= ruler_rect.get_width())
     return;
-  
+#if 0
   // Set the source colour
   Glib::RefPtr<Style> style = get_style();
   Gdk::Cairo::set_source_color(cr, style->get_fg(STATE_NORMAL));
-  
+#endif
   cr->move_to(mouseChevronOffset + 0.5,
     ruler_rect.get_height());
   cr->rel_line_to(-mouseChevronSize, -mouseChevronSize);
@@ -380,8 +383,10 @@ TimelineRuler::draw_selection(Cairo::RefPtr<Cairo::Context> cr,
   
   const TimelineViewWindow &window = timelineState->get_view_window();
 
+#if 0
   Glib::RefPtr<Style> style = get_style();
   Gdk::Cairo::set_source_color(cr, style->get_fg(STATE_NORMAL));
+#endif
   
   // Draw the selection start chevron
   const int a = 1 + window.time_to_x(timelineState->getSelectionStart());

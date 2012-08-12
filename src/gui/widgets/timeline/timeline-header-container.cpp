@@ -53,13 +53,13 @@ TimelineHeaderContainer::TimelineHeaderContainer(
     timelineWidget(timeline_widget)
 {
   // This widget will not have a window at first
-  set_flags(Gtk::NO_WINDOW);
+  //set_flags(Gtk::NO_WINDOW);
   
   set_redraw_on_allocate(false);
   
   // Connect to the timeline widget's vertical scroll event,
   // so that we get notified when the view shifts
-  timelineWidget.verticalAdjustment.signal_value_changed().connect(
+  timelineWidget.verticalAdjustment->signal_value_changed().connect(
     sigc::mem_fun(this, &TimelineHeaderContainer::on_scroll) );
     
   // Connect to the timeline widget's hover event,
@@ -67,12 +67,13 @@ TimelineHeaderContainer::TimelineHeaderContainer(
   timelineWidget.hovering_track_changed_signal().connect(
     sigc::mem_fun(this,
     &TimelineHeaderContainer::on_hovering_track_changed) );
-    
+#if 0
   // Create the context menu
   Menu::MenuList& menu_list = contextMenu.items();
   menu_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
     sigc::mem_fun(timelineWidget,
     &TimelineWidget::on_add_track_command) ) );
+#endif
 }
  
 void
@@ -107,7 +108,7 @@ TimelineHeaderContainer::clear_headers()
 void
 TimelineHeaderContainer::on_realize()
 {
-  set_flags(Gtk::NO_WINDOW);
+  //set_flags(Gtk::NO_WINDOW);
   
   // Call base class:
   Gtk::Container::on_realize();
@@ -130,12 +131,12 @@ TimelineHeaderContainer::on_realize()
 
   gdkWindow = Gdk::Window::create(get_window(), &attributes,
           GDK_WA_X | GDK_WA_Y);
-  unset_flags(Gtk::NO_WINDOW);
+  //unset_flags(Gtk::NO_WINDOW);
   set_window(gdkWindow);
   
   // Unset the background so as to make the colour match the parent
   // window
-  unset_bg(STATE_NORMAL);
+  //unset_bg(STATE_NORMAL);
 
   // Make the widget receive expose events
   gdkWindow->set_user_data(gobj());
@@ -269,8 +270,8 @@ TimelineHeaderContainer::on_size_request (Requisition* requisition)
         {
           Widget &widget =
             lookup_timeline_track(*iterator)->get_header_widget();
-          if(widget.is_visible())
-            widget.size_request();
+          if(widget.get_visible())
+            { /* widget.size_request(); */ }
         }
     }
     
@@ -402,14 +403,14 @@ TimelineHeaderContainer::layout_headers()
               
               // Apply the allocation to the header
               widget.size_allocate (*header_rect);
-              if(!widget.is_visible())
+              if(!widget.get_visible())
                 {
                   widget.show();
                   headers_shown = true;
                 }
             }
           else // No header rect, so the track must be hidden
-            if(widget.is_visible())
+            if(widget.get_visible())
               widget.hide();
         }
         
@@ -448,7 +449,7 @@ TimelineHeaderContainer::begin_drag()
   
   // Set the cursor to a hand
   REQUIRE(gdkWindow);
-  gdkWindow->set_cursor(Gdk::Cursor(Gdk::FLEUR));
+  //gdkWindow->set_cursor(Gdk::Cursor(Gdk::FLEUR));
 }
 
 void
@@ -465,7 +466,7 @@ TimelineHeaderContainer::end_drag(bool apply)
     
   // Reset the arrow as a cursor
   REQUIRE(gdkWindow);
-  gdkWindow->set_cursor(Gdk::Cursor(Gdk::LEFT_PTR));
+  //gdkWindow->set_cursor(Gdk::Cursor(Gdk::LEFT_PTR));
 }
 
 void

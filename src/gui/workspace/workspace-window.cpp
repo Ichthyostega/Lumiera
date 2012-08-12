@@ -30,7 +30,7 @@
 #  include <libintl.h>
 #endif
 
-#include <gdl/gdl-tools.h>
+//#include <gdl/gdl-tools.h>
 #include <gdl/gdl-dock.h>
 #include <gdl/gdl-dock-bar.h>
 #include <gdl/gdl-dock-item.h>
@@ -113,7 +113,8 @@ WorkspaceWindow::create_ui()
   baseContainer.pack_start(dockContainer, PACK_EXPAND_WIDGET);
     
   //----- Create the status bar -----//
-  statusBar.set_has_resize_grip();
+  //statusBar.set_has_resize_grip();
+  statusBar.set_resize_mode(Gtk::RESIZE_PARENT);
   baseContainer.pack_start(statusBar, PACK_SHRINK);
  
   show_all_children();

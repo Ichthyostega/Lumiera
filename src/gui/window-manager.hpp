@@ -154,7 +154,7 @@ private:
    * @param wildcard \c true if this icon is to be wildcarded.
    * @return \c true if the icon was loaded successfully.
    */
-  bool add_stock_icon(Gtk::IconSet &icon_set,
+  bool add_stock_icon(const Glib::RefPtr<Gtk::IconSet> &icon_set,
     cuString& icon_name, Gtk::IconSize size, bool wildcard);
 
   /**
@@ -165,7 +165,7 @@ private:
    * @param wildcard \c true if this icon is to be wildcarded.
    * @return \c true if the icon was loaded successfully.
    */
-  bool add_theme_icon_source(Gtk::IconSet &icon_set,
+  bool add_theme_icon_source(const Glib::RefPtr<Gtk::IconSet> &icon_set,
     cuString& icon_name, Gtk::IconSize size, bool wildcard);
   
   /**
@@ -177,7 +177,7 @@ private:
    * @param wildcard \c true if this icon is to be wildcarded.
    * @return \c true if the icon was loaded successfully.
    */
-  bool add_non_theme_icon_source(Gtk::IconSet &icon_set,
+  bool add_non_theme_icon_source(const Glib::RefPtr<Gtk::IconSet> &icon_set,
     cuString& base_dir, cuString& icon_name,
     Gtk::IconSize size, bool wildcard);
 
@@ -190,7 +190,7 @@ private:
    * @return \c true if the icon was loaded successfully.
    */
   bool add_stock_icon_from_path(string path,
-    Gtk::IconSet &icon_set, Gtk::IconSize size, bool wildcard);
+		  const Glib::RefPtr<Gtk::IconSet> &icon_set, Gtk::IconSize size, bool wildcard);
 
 
 private:

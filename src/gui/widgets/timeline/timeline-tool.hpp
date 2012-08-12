@@ -113,7 +113,7 @@ protected:
    * Gets the cursor to display for this tool at this moment.
    * @remarks This must be implemented by all timeline tool classes.
    */
-  virtual Gdk::Cursor get_cursor() const = 0;
+  virtual Glib::RefPtr<Gdk::Cursor> get_cursor() const = 0;
 
 protected:
   /* ===== Utilities ===== */

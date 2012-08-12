@@ -34,8 +34,8 @@ namespace dialogs {
 PreferencesDialog::PreferencesDialog(Window &parent) :
   Dialog(_("Preferences"), parent, true)
 {
-  VBox *v_box = get_vbox();
-  g_assert(v_box != NULL);
+  Box *v_box = get_vbox();
+  REQUIRE(v_box != NULL);
 
   interfaceBox.pack_start(interfaceThemeCombo, PACK_SHRINK);
   interfaceBox.set_spacing(4);

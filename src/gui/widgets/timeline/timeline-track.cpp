@@ -50,7 +50,7 @@ Track::Track(TimelineWidget &timeline_widget,
   REQUIRE(modelTrack);
   
   titleMenuButton.set_relief(RELIEF_HALF);
-  titleMenuButton.unset_flags(CAN_FOCUS);
+  //titleMenuButton.unset_flags(CAN_FOCUS);
     
   buttonBar.append(enableButton, mem_fun(this, &Track::onToggleEnabled));
   buttonBar.append(lockButton, mem_fun(this, &Track::onToggleLocked));
@@ -61,7 +61,7 @@ Track::Track(TimelineWidget &timeline_widget,
   headerBox.pack_start(buttonBar, PACK_SHRINK);
   
   headerWidget.show_all();
-  
+#if 0
   // Setup the title menu button
   Menu::MenuList& title_list = titleMenuButton.get_menu().items();
   title_list.push_back( Menu_Helpers::MenuElem(_("_Name..."),
@@ -69,20 +69,20 @@ Track::Track(TimelineWidget &timeline_widget,
   title_list.push_back( Menu_Helpers::SeparatorElem() );
   title_list.push_back( Menu_Helpers::MenuElem(_("_Remove"),
     mem_fun(this, &Track::on_remove_track) ) );
-    
+#endif
   updateEnableButton();
 
   updateLockButton();
 
   updateName();
-
+#if 0
   // Setup the context menu
   Menu::MenuList& context_list = contextMenu.items();
   //context_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
   //  mem_fun(timelineWidget, &TimelineWidget::on_add_track_command) ) );
   context_list.push_back( Menu_Helpers::MenuElem(_("_Remove Track"),
     mem_fun(this, &Track::on_remove_track) ) );
-    
+#endif
   // Connect to the model
   modelTrack->signalEnabledChanged().connect(sigc::mem_fun(this,
     &Track::onEnabledChanged));

@@ -21,6 +21,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+#if 0
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/output/gdkdisplayer.hpp"
@@ -83,3 +84,5 @@ GdkDisplayer::put( const void* image )
 
 }   // namespace output
 }   // namespace gui
+
+#endif

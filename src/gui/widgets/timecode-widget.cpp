@@ -598,6 +598,7 @@ TimeCode::field_key_release_event(GdkEventKey *ev, Field field)
   }
 
   switch (ev->keyval) {
+#if 0
   case GDK_0:
   case GDK_KP_0:
     new_char = '0';
@@ -659,7 +660,7 @@ TimeCode::field_key_release_event(GdkEventKey *ev, Field field)
     clock_base.grab_focus();
     ChangeAborted();  /*  EMIT SIGNAL  */
     return true;
-
+#endif
   default:
     return false;
   }
@@ -759,14 +760,14 @@ TimeCode::field_key_release_event(GdkEventKey *ev, Field field)
     }
 
   }
-
+#if 0
   //if user hit Enter, lose focus
   switch (ev->keyval) {
   case GDK_Return:
   case GDK_KP_Enter:
     clock_base.grab_focus();
   }
-
+#endif
   return true;
 }
 
@@ -779,37 +780,37 @@ TimeCode::field_focus_gain_event(GdkEventFocus*, Field field)
 
   switch (field) {
   case SMPTE_Hours:
-    hours_ebox.set_flags(Gtk::HAS_FOCUS);
+    //hours_ebox.set_flags(Gtk::HAS_FOCUS);
     hours_ebox.set_state(Gtk::STATE_ACTIVE);
     break;
   case SMPTE_Minutes:
-    minutes_ebox.set_flags(Gtk::HAS_FOCUS);
+    //minutes_ebox.set_flags(Gtk::HAS_FOCUS);
     minutes_ebox.set_state(Gtk::STATE_ACTIVE);
     break;
   case SMPTE_Seconds:
-    seconds_ebox.set_flags(Gtk::HAS_FOCUS);
+    //seconds_ebox.set_flags(Gtk::HAS_FOCUS);
     seconds_ebox.set_state(Gtk::STATE_ACTIVE);
     break;
   case SMPTE_Frames:
-    frames_ebox.set_flags(Gtk::HAS_FOCUS);
+    //frames_ebox.set_flags(Gtk::HAS_FOCUS);
     frames_ebox.set_state(Gtk::STATE_ACTIVE);
     break;
 
   case VFrames:
-    audio_frames_ebox.set_flags(Gtk::HAS_FOCUS);
+    ///audio_frames_ebox.set_flags(Gtk::HAS_FOCUS);
     audio_frames_ebox.set_state(Gtk::STATE_ACTIVE);
     break;
 
   case MS_Hours:
-    ms_hours_ebox.set_flags(Gtk::HAS_FOCUS);
+    //ms_hours_ebox.set_flags(Gtk::HAS_FOCUS);
     ms_hours_ebox.set_state(Gtk::STATE_ACTIVE);
     break;
   case MS_Minutes:
-    ms_minutes_ebox.set_flags(Gtk::HAS_FOCUS);
+    //ms_minutes_ebox.set_flags(Gtk::HAS_FOCUS);
     ms_minutes_ebox.set_state(Gtk::STATE_ACTIVE);
     break;
   case MS_Seconds:
-    ms_seconds_ebox.set_flags(Gtk::HAS_FOCUS);
+    //ms_seconds_ebox.set_flags(Gtk::HAS_FOCUS);
     ms_seconds_ebox.set_state(Gtk::STATE_ACTIVE);
     break;
   }
@@ -823,37 +824,37 @@ TimeCode::field_focus_loss_event(GdkEventFocus*, Field field)
   switch (field) {
 
   case SMPTE_Hours:
-    hours_ebox.unset_flags(Gtk::HAS_FOCUS);
+    //hours_ebox.unset_flags(Gtk::HAS_FOCUS);
     hours_ebox.set_state(Gtk::STATE_NORMAL);
     break;
   case SMPTE_Minutes:
-    minutes_ebox.unset_flags(Gtk::HAS_FOCUS);
+    //minutes_ebox.unset_flags(Gtk::HAS_FOCUS);
     minutes_ebox.set_state(Gtk::STATE_NORMAL);
     break;
   case SMPTE_Seconds:
-    seconds_ebox.unset_flags(Gtk::HAS_FOCUS);
+    //seconds_ebox.unset_flags(Gtk::HAS_FOCUS);
     seconds_ebox.set_state(Gtk::STATE_NORMAL);
     break;
   case SMPTE_Frames:
-    frames_ebox.unset_flags(Gtk::HAS_FOCUS);
+    //frames_ebox.unset_flags(Gtk::HAS_FOCUS);
     frames_ebox.set_state(Gtk::STATE_NORMAL);
     break;
 
   case VFrames:
-    audio_frames_ebox.unset_flags(Gtk::HAS_FOCUS);
+    //audio_frames_ebox.unset_flags(Gtk::HAS_FOCUS);
     audio_frames_ebox.set_state(Gtk::STATE_NORMAL);
     break;
 
   case MS_Hours:
-    ms_hours_ebox.unset_flags(Gtk::HAS_FOCUS);
+    //ms_hours_ebox.unset_flags(Gtk::HAS_FOCUS);
     ms_hours_ebox.set_state(Gtk::STATE_NORMAL);
     break;
   case MS_Minutes:
-    ms_minutes_ebox.unset_flags(Gtk::HAS_FOCUS);
+    //ms_minutes_ebox.unset_flags(Gtk::HAS_FOCUS);
     ms_minutes_ebox.set_state(Gtk::STATE_NORMAL);
     break;
   case MS_Seconds:
-    ms_seconds_ebox.unset_flags(Gtk::HAS_FOCUS);
+    //ms_seconds_ebox.unset_flags(Gtk::HAS_FOCUS);
     ms_seconds_ebox.set_state(Gtk::STATE_NORMAL);
     break;
   }
@@ -1249,6 +1250,7 @@ TimeCode::audio_time_from_display () const
 void
 TimeCode::build_ops_menu ()
 {
+#if 0
  using namespace Menu_Helpers;
  ops_menu = new Menu;
  MenuList& ops_items = ops_menu->items();
@@ -1258,6 +1260,7 @@ TimeCode::build_ops_menu ()
  ops_items.push_back (MenuElem ("Minutes:Seconds", bind (mem_fun(*this, &TimeCode::set_mode), MinSec)));
  ops_items.push_back (MenuElem ("Frames", bind (mem_fun(*this, &TimeCode::set_mode), Frames)));
  ops_items.push_back (MenuElem ("Off", bind (mem_fun(*this, &TimeCode::set_mode), Off)));
+#endif
 }
 
 void
@@ -1342,7 +1345,7 @@ TimeCode::set_size_request_to_display_given_text(Gtk::Widget &w, const gchar *te
                gint hpadding, gint vpadding)
 {
   int width, height;
-  w.ensure_style();
+  //w.ensure_style();
   
   get_ink_pixel_size(w.create_pango_layout(text), width, height);
   w.set_size_request(width + hpadding, height + vpadding);

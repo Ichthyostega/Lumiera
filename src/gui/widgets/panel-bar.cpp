@@ -47,7 +47,7 @@ PanelBar::PanelBar(panels::Panel &owner_panel, const gchar *stock_id) :
   set_border_width(1);
   
   panelButton.set_relief(RELIEF_NONE);
-  panelButton.unset_flags(CAN_FOCUS);
+  panelButton.set_can_focus(false);
   panelButton.show();
   pack_start(panelButton, PACK_SHRINK);
   
@@ -57,10 +57,11 @@ PanelBar::PanelBar(panels::Panel &owner_panel, const gchar *stock_id) :
 void
 PanelBar::setup_panel_button()
 {
+#if 0
   REQUIRE(lockItem == NULL);
   
   Menu& menu = panelButton.get_menu();
-  Menu::MenuList& list = menu.items();
+  MenuList& list = menu.items();
   
   // Add items for each type of panel
   for(int i = 0; i < PanelManager::get_panel_description_count(); i++)
@@ -88,12 +89,13 @@ PanelBar::setup_panel_button()
   list.push_back( Menu_Helpers::MenuElem(_("Split _Vertical"),
     bind(mem_fun(*this, &PanelBar::on_split_panel),
       ORIENTATION_VERTICAL) ) );
+#endif
 }
 
 void
 PanelBar::on_realize()
 {
-  set_flags(Gtk::NO_WINDOW);
+  set_has_window(false);
   
   // Call base class:
   Gtk::Container::on_realize();
@@ -118,17 +120,18 @@ PanelBar::on_realize()
           GDK_WA_X | GDK_WA_Y);
   
   window->set_user_data(gobj());
-  window->set_cursor(Gdk::Cursor(Gdk::LEFT_PTR));
+ // window->set_cursor(Gdk::Cursor(Gdk::LEFT_PTR));
   
   set_window(window);
-  unset_flags(Gtk::NO_WINDOW);
+  set_has_window(false);
   
-  unset_bg(STATE_NORMAL);
+  //unset_bg(STATE_NORMAL);
 }
 
 void
 PanelBar::on_size_request(Gtk::Requisition* requisition)
 {
+#if 0
   REQUIRE(requisition);
     
   requisition->width = 0;
@@ -153,11 +156,13 @@ PanelBar::on_size_request(Gtk::Requisition* requisition)
   
   ENSURE(requisition->width >= 0);
   ENSURE(requisition->height >= 0);
+#endif
 }
 
 void
 PanelBar::on_size_allocate(Gtk::Allocation& allocation)
 {
+#if 0
   struct RequestResult
   {
     Requisition requisition;
@@ -239,6 +244,7 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
             total_width + border_width * 2, allocation.get_height());
         }
     }
+#endif
 }
 
 void

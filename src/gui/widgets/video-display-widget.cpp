@@ -52,7 +52,7 @@ namespace widgets {
     Gtk::Widget::on_realize ();
     
     // Set colours
-    modify_bg (Gtk::STATE_NORMAL, Gdk::Color ("black"));
+    //modify_bg (Gtk::STATE_NORMAL, Gdk::Color ("black"));
     
     if (displayer != NULL) delete displayer;
     displayer = createDisplayer (this, 320, 240);

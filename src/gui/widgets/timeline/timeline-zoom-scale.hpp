@@ -51,7 +51,7 @@ public:
    */
   sigc::signal<void, double> signal_zoom();
 
-  void set_value(double val) { adjustment.set_value(val); }
+  void set_value(double val) { adjustment->set_value(val); }
 
   void wireTimelineState (shared_ptr<TimelineState> currentState,
                           TimelineWidget::TimelineStateChangeSignal);
@@ -87,7 +87,7 @@ private:
   TimelineViewWindow& getViewWindow();
 
   /* Widgets */
-  Gtk::Adjustment adjustment;
+  Glib::RefPtr<Gtk::Adjustment> adjustment;
   Gtk::HScale slider;
   MiniButton zoomIn;
   MiniButton zoomOut;

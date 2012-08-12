@@ -1,5 +1,4 @@
 /*
-  timeline-header-widget.cpp  -  Implementation of the timeline
   header widget
 
   Copyright (C)         Lumiera.org
@@ -47,7 +46,7 @@ TimelineHeaderWidget::TimelineHeaderWidget(
   margin(-1),
   expand_button_size(12)
 {
-  set_flags(Gtk::NO_WINDOW);
+  //set_flags(Gtk::NO_WINDOW);
   set_redraw_on_allocate(false);
   
   // Install style properties
@@ -60,7 +59,7 @@ TimelineHeaderWidget::TimelineHeaderWidget(
 void
 TimelineHeaderWidget::on_realize()
 {
-  set_flags(Gtk::NO_WINDOW);
+  //set_flags(Gtk::NO_WINDOW);
    
   Container::on_realize();
 
@@ -86,12 +85,12 @@ TimelineHeaderWidget::on_realize()
 
   gdkWindow = Gdk::Window::create(get_window(), &attributes,
           GDK_WA_X | GDK_WA_Y);
-  unset_flags(Gtk::NO_WINDOW);
+  //unset_flags(Gtk::NO_WINDOW);
   set_window(gdkWindow);
   
   // Unset the background so as to make the colour match the parent
   // window
-  unset_bg(STATE_NORMAL);
+  //unset_bg(STATE_NORMAL);
 
   // Make the widget receive expose events
   gdkWindow->set_user_data(gobj());
@@ -120,10 +119,10 @@ TimelineHeaderWidget::on_size_request(Requisition* requisition)
   REQUIRE(requisition); 
 
   Requisition child_requisition = {0, 0};
-
-  if(widget && widget->is_visible())
+#if 0
+  if(widget && widget->get_visible())
     child_requisition = widget->size_request();
-
+#endif
   requisition->width = child_requisition.width,
   requisition->height = child_requisition.height;
   
@@ -151,13 +150,14 @@ TimelineHeaderWidget::on_size_allocate(Gtk::Allocation& allocation)
     max(allocation.get_width() - expand_button_size - margin * 2, 0),
     allocation.get_height() - margin*2);
 
-  if(widget && widget->is_visible())
+  if(widget && widget->get_visible())
     widget->size_allocate(child_allocation);
 }
 
 bool
 TimelineHeaderWidget::on_expose_event(GdkEventExpose *event)
-{  
+{
+#if 0
   Glib::RefPtr<Style> style = get_style();
   REQUIRE(style);
   REQUIRE(gdkWindow);
@@ -190,8 +190,8 @@ TimelineHeaderWidget::on_expose_event(GdkEventExpose *event)
       box.get_x() + expand_button_size / 2 + margin,
       box.get_y() + box.get_height() / 2,
       track.get_expander_style());
-
-  return Container::on_expose_event(event);
+#endif
+  return true; //Container::on_expose_event(event);
 }
 
 bool
@@ -268,7 +268,7 @@ TimelineHeaderWidget::on_remove(Gtk::Widget* child)
   
   if(child)
     {
-      const bool visible = child->is_visible();
+      const bool visible = child->get_visible();
 
       if(child == widget)
         {
@@ -281,7 +281,7 @@ TimelineHeaderWidget::on_remove(Gtk::Widget* child)
     }
 }
 
-GtkType
+GType
 TimelineHeaderWidget::child_type_vfunc() const
 {
   // If there is still space for one widget, then report the type of

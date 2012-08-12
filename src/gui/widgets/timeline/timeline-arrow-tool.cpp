@@ -42,10 +42,10 @@ namespace timeline {
     return Arrow;
   }
 
-  Gdk::Cursor
+  Glib::RefPtr<Gdk::Cursor>
   ArrowTool::get_cursor() const
   {
-    return Gdk::Cursor(Gdk::LEFT_PTR);
+    return Gdk::Cursor::create(Gdk::LEFT_PTR);
   }
 
   void

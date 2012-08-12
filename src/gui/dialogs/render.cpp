@@ -43,7 +43,7 @@ Render::Render(Window &parent) :
   audioFrame(_("Audio")),
   videoFrame(_("Video"))
 {
-  VBox *v_box = get_vbox();
+  Box *v_box = get_vbox();
   REQUIRE(v_box != NULL);
 
   // The Output File Row
@@ -78,7 +78,7 @@ Render::Render(Window &parent) :
   Button *render_button = add_button(Stock::OK, RESPONSE_OK);
   render_button->set_label(_("_Render"));
   render_button->set_image(renderButtonImage);
-  render_button->set_flags(Gtk::CAN_DEFAULT);
+  //render_button->set_flags(Gtk::CAN_DEFAULT);
   render_button->grab_default();
 
   show_all_children();

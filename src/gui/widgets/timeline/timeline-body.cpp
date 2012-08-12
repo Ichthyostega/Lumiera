@@ -484,13 +484,13 @@ TimelineBody::begin_shift_drag()
 int
 TimelineBody::get_vertical_offset() const
 {
-  return (int)timelineWidget.verticalAdjustment.get_value();
+  return (int)timelineWidget.verticalAdjustment->get_value();
 }
 
 void
 TimelineBody::set_vertical_offset(int offset)
 {
-  timelineWidget.verticalAdjustment.set_value(offset);
+  timelineWidget.verticalAdjustment->set_value(offset);
 }
 
 void

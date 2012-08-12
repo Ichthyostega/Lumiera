@@ -49,8 +49,8 @@ TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
   , headerContainer(NULL)
   , body(NULL)
   , ruler(NULL)
-  , horizontalAdjustment(0, 0, 0)
-  , verticalAdjustment(0, 0, 0)
+  , horizontalAdjustment(Gtk::Adjustment::create(0, 0, 0))
+  , verticalAdjustment(Gtk::Adjustment::create(0, 0, 0))
   , horizontalScroll(horizontalAdjustment)
   , verticalScroll(verticalAdjustment)
   , update_tracks_frozen(false)
@@ -62,9 +62,9 @@ TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
   ruler = manage(new TimelineRuler(*this));
   ENSURE(ruler != NULL);
 
-  horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
+  horizontalAdjustment->signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
-  verticalAdjustment.signal_value_changed().connect( sigc::mem_fun(
+  verticalAdjustment->signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
   body->signal_motion_notify_event().connect( sigc::mem_fun(
     this, &TimelineWidget::on_motion_in_body_notify_event) );
@@ -191,7 +191,7 @@ TimelineWidget::on_scroll()
 {
   if(state)
     {
-      TimeValue newStartOffset ((gavl_time_t)horizontalAdjustment.get_value());
+      TimeValue newStartOffset ((gavl_time_t)horizontalAdjustment->get_value());
       state->get_view_window().set_time_offset(Time(newStartOffset));
     }
 }
@@ -215,10 +215,10 @@ TimelineWidget::on_view_window_changed()
 
       const int view_width = body->get_allocation().get_width();
 
-      horizontalAdjustment.set_page_size(
+      horizontalAdjustment->set_page_size(
         window.get_time_scale() * view_width);
 
-      horizontalAdjustment.set_value(_raw(window.get_time_offset()));
+      horizontalAdjustment->set_value(_raw(window.get_time_offset()));
     }
 }
 
@@ -410,7 +410,7 @@ TimelineWidget::update_scroll()
 {
   REQUIRE(body != NULL);
   const Allocation body_allocation = body->get_allocation();
-  
+
   if(state)
     {
                                             ///////////////////////////////////////////////TICKET #861 shoudln't that be performed by TimelineViewWindow, instead of manipulating values from the outside?
@@ -419,11 +419,11 @@ TimelineWidget::update_scroll()
       //----- Horizontal Scroll ------//
       
       // TEST CODE
-      horizontalAdjustment.set_upper( 1000 * GAVL_TIME_SCALE / 200);
-      horizontalAdjustment.set_lower(-1000 * GAVL_TIME_SCALE / 200);
+      horizontalAdjustment->set_upper( 1000 * GAVL_TIME_SCALE / 200);
+      horizontalAdjustment->set_lower(-1000 * GAVL_TIME_SCALE / 200);
       
       // Set the page size
-      horizontalAdjustment.set_page_size(
+      horizontalAdjustment->set_page_size(
         window.get_time_scale() * body_allocation.get_width());
       
       //----- Vertical Scroll -----//
@@ -436,10 +436,10 @@ TimelineWidget::update_scroll()
       
       // If by resizing we're now over-scrolled, scroll back to
       // maximum distance
-      if((int)verticalAdjustment.get_value() > y_scroll_length)
-          verticalAdjustment.set_value(y_scroll_length);
+      if((int)verticalAdjustment->get_value() > y_scroll_length)
+          verticalAdjustment->set_value(y_scroll_length);
       
-      verticalAdjustment.set_upper(y_scroll_length);
+      verticalAdjustment->set_upper(y_scroll_length);
       
       // Hide the scrollbar if no scrolling is possible
 #if 0
@@ -456,13 +456,13 @@ TimelineWidget::update_scroll()
 int
 TimelineWidget::get_y_scroll_offset() const
 {
-  return (int)verticalAdjustment.get_value();
+  return (int)verticalAdjustment->get_value();
 }
 
 void
 TimelineWidget::set_y_scroll_offset(const int offset)
 {
-  verticalAdjustment.set_value(offset);
+  verticalAdjustment->set_value(offset);
 }
 
 bool

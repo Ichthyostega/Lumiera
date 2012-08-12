@@ -39,12 +39,12 @@ Tool::Tool(TimelineBody &timelineBody) :
 bool
 Tool::apply_cursor()
 {     
-  Glib::RefPtr<Window> window = timelineBody.get_window();
+  Glib::RefPtr<Gdk::Window> window = timelineBody.get_window();
   if (!window)
     return false;
-  
+#if 0
   window->set_cursor(get_cursor());
-
+#endif
   return true;
 }
 

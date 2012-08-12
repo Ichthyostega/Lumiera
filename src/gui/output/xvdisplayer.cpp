@@ -49,8 +49,8 @@ XvDisplayer::XvDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
 
   Glib::RefPtr<Gdk::Window> area_window = drawing_area->get_window();
 
-  window = gdk_x11_drawable_get_xid( area_window->gobj() );
-  display = gdk_x11_drawable_get_xdisplay( area_window->gobj() );
+  window = GDK_WINDOW_XID (area_window->gobj());
+  display = GDK_WINDOW_XDISPLAY (area_window->gobj());
 
   unsigned int  count;
   XvAdaptorInfo  *adaptorInfo;
@@ -157,10 +157,12 @@ XvDisplayer::XvDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
               shmInfo.shmaddr = ( char * ) shmat( shmInfo.shmid, 0, 0 );
               xvImage->data = shmInfo.shmaddr;
               shmInfo.readOnly = 0;
-              if ( !XShmAttach( gdk_display, &shmInfo ) )
+
+              if ( !XShmAttach( display, &shmInfo ) )
               {
                 gotPort = false;
               }
+
               XSync( display, false );
               shmctl( shmInfo.shmid, IPC_RMID, 0 );
             }

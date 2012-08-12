@@ -75,7 +75,7 @@ private:
    * a given area for itself.
    * @param allocation The area to allocate for this widget.
    */
-  void on_size_allocate(Gtk::Allocation& allocation);
+  virtual void on_size_allocate(Gtk::Allocation& allocation);
 };
 
 } // gui

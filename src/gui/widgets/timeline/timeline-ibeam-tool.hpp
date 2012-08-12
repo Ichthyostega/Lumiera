@@ -69,7 +69,7 @@ protected:
   /**
    * Gets the cursor to display for this tool at this moment.
    */
-  Gdk::Cursor get_cursor() const;
+  Glib::RefPtr<Gdk::Cursor> get_cursor() const;
   
 protected:
   /**

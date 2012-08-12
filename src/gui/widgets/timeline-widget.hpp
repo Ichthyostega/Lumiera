@@ -268,7 +268,7 @@ protected:
   timeline::TimelineBody *body;
   timeline::TimelineRuler *ruler;
 
-  Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
+  Glib::RefPtr<Gtk::Adjustment> horizontalAdjustment, verticalAdjustment;
   Gtk::HScrollbar horizontalScroll;
   Gtk::VScrollbar verticalScroll;
   
