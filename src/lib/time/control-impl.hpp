@@ -145,7 +145,7 @@ namespace mutation {
       void
       attach (SIG const& toNotify)
         {
-          ChangeSignal newListener (ref(toNotify));
+          ChangeSignal newListener (std::tr1::ref(toNotify));
           listeners_.push_back (newListener);
         }
       

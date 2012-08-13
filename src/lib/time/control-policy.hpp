@@ -243,7 +243,7 @@ namespace mutation {
       processValueChange (TAR& target, SRC const& change)  ///< standard case: plain value change
         {
           imposeChange (target, maybeMaterialise(change));
-          return buildChangedValue (maybeMaterialise(target));
+          return Link::buildChangedValue (maybeMaterialise(target));
         }
       
       static TI
