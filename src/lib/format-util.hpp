@@ -102,8 +102,20 @@ namespace util {
   }//(End) guards/helpers
   
   
+  /** @return a string denoting the type. */
+  template<typename TY>
+  inline string
+  tyStr (const TY* =0)
+  {
+    return string("«")+typeid(TY).name()+"»";
+  }
   
+  template<typename TY>
+  inline string
+  tyStr (TY const& ref)
+  { return tyStr(&ref); }
   
+
   /** try to get an object converted to string.
    *  A custom/standard conversion to string is used,
    *  if applicable; otherwise, some standard types can be
@@ -125,22 +137,6 @@ namespace util {
       return fallback? string(fallback)
                      : tyStr(val);
   }
-  
-  
-  
-  /** @return a string denoting the type. */
-  template<typename TY>
-  inline string
-  tyStr (const TY* =0)
-  {
-    return string("«")+typeid(TY).name()+"»";
-  }
-  
-  template<typename TY>
-  inline string
-  tyStr (TY const& ref)
-  { return tyStr(&ref); }
-  
   
 } // namespace util
 #endif
