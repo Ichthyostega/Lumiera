@@ -34,7 +34,9 @@ namespace gui {
 namespace widgets {
 
 ButtonBar::ButtonBar()
+: last_width (calculate_width())
 {
+  set_orientation(Gtk::ORIENTATION_HORIZONTAL);
   set_has_window(false);
 }
 
@@ -42,14 +44,16 @@ void
 ButtonBar::append(Widget &widget)
 {
   pack_start(widget, Gtk::PACK_SHRINK);
+  last_width = calculate_width();
 }
+
 
 void
 ButtonBar::on_size_request(Gtk::Requisition* requisition)
 {
 #if 0
   REQUIRE(requisition);
-    
+
   requisition->width = 0;
   requisition->height = 0;
   
@@ -70,31 +74,89 @@ ButtonBar::on_size_request(Gtk::Requisition* requisition)
   ENSURE(requisition->height >= 0);
 #endif
 }
-  
+
+int
+ButtonBar::calculate_width()
+{
+  typedef vector<Widget*> BoxList;
+  BoxList list = get_children();
+  BoxList::const_iterator i;
+
+  int w = 0;
+  for(i = list.begin(); i != list.end(); i++)
+    {
+      Widget *widget = *i;
+      REQUIRE(widget);
+      w += widget->get_width();
+    }
+  REQUIRE(w >= 0);
+  return w;
+}
+
+Gtk::SizeRequestMode
+ButtonBar::get_request_mode_vfunc() const
+{
+  return Gtk::SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+void
+ButtonBar::get_preferred_width_vfunc(int& minimum_width,
+                                     int& natural_width) const
+{
+  minimum_width = natural_width = last_width;
+}
+
+void
+ButtonBar::get_preferred_height_for_width_vfunc(int width,
+                                                int& minimum_height,
+                                                int& natural_height) const
+{
+  Gtk::Box::get_preferred_height_for_width_vfunc(
+      width, minimum_height, natural_height
+  );
+}
+
+void
+ButtonBar::get_preferred_height_vfunc(int& minimum_height,
+                                      int& natural_height) const
+{
+  FIXME("Calculate height from child widgets");
+  minimum_height = natural_height = 30;
+}
+
+void
+ButtonBar::get_preferred_width_for_height_vfunc(int height,
+                                                int& minimum_width,
+                                                int& natural_width) const
+{
+  minimum_width = natural_width = last_width;
+}
+
+
 void
 ButtonBar::on_size_allocate(Gtk::Allocation& allocation)
 {
-#if 0
   //Use the offered allocation for this container:
   set_allocation(allocation);
   
   int offset = 0;
-  Box::BoxList &list = children();
-  Box::BoxList::const_iterator i;
+  typedef vector<Widget*> BoxList;
+  BoxList list = get_children();
+  BoxList::const_iterator i;
   
   for(i = list.begin(); i != list.end(); i++)
     {
-      Widget *widget = (*i).get_widget();
+      Widget *widget = *i;
       REQUIRE(widget);
      
-      const Requisition child_requisition = widget->size_request();
+      int cw,ch;
+      widget->get_size_request(cw,ch);
       Gtk::Allocation child_allocation(
           allocation.get_x() + offset,
           allocation.get_y(),
-          child_requisition.width,
-          allocation.get_height());
+          cw, ch);
           
-      offset += child_requisition.width;
+      offset += cw;
       
       if(get_direction() == TEXT_DIR_RTL)
         {
@@ -111,8 +173,11 @@ ButtonBar::on_size_allocate(Gtk::Allocation& allocation)
           widget->set_child_visible(true);
         }
     }
-#endif
+
+  /* In case we get resized */
+  last_width = calculate_width();
 }
+
 
 } // widgets
 } // gui
