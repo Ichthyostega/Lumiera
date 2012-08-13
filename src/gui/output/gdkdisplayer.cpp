@@ -21,11 +21,20 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
-#if 0
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/output/gdkdisplayer.hpp"
 
+/** The GdkDisplayer class is not supported in Gtk3.
+ * This is due to Gtk3 only supporting drawing with
+ * Cairo
+ */
+void
+gdkdisplayer_gtk3_removal_func()
+{
+  FIXME("Remove: gtk3 does not support drawing with Gdk.");
+}
+#if 0
 #include <gdk/gdkx.h>
 #include <iostream>
 
