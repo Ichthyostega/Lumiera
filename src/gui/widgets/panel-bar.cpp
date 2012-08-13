@@ -27,6 +27,7 @@
 #include "gui/util/rectangle.hpp"
 #include "include/logging.h"
 
+#include <boost/foreach.hpp>
 #include <algorithm>
 
 using namespace Gtk;
@@ -162,7 +163,6 @@ PanelBar::on_size_request(Gtk::Requisition* requisition)
 void
 PanelBar::on_size_allocate(Gtk::Allocation& allocation)
 {
-#if 0
   struct RequestResult
   {
     Requisition requisition;
@@ -177,19 +177,18 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
   // Requisition each widget
   int index = 0;
   int total_width = 0;
-  Box::BoxList &list = children();
-  Box::BoxList::const_iterator i;
   
-  const int child_count = list.size();
+  const int child_count = get_children().size();
   RequestResult *requestResults = new RequestResult[child_count];
   REQUIRE(requestResults);
 
-  for(i = list.begin(); i != list.end(); i++)
+  BOOST_FOREACH (Widget *widget, get_children())
     {
-      Widget *widget = (*i).get_widget();
       REQUIRE(widget);
-      
-      RequestResult result = {widget->size_request(), widget};
+      Requisition req;
+      req.width = widget->get_width();
+      req.height = widget->get_height();
+      RequestResult result = {req, widget};
       total_width += result.requisition.width;
       requestResults[index++] = result;
     }
@@ -244,7 +243,6 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
             total_width + border_width * 2, allocation.get_height());
         }
     }
-#endif
 }
 
 void
