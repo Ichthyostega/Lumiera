@@ -442,14 +442,12 @@ TimelineWidget::update_scroll()
       verticalAdjustment->set_upper(y_scroll_length);
       
       // Hide the scrollbar if no scrolling is possible
-#if 0
       // Having this code included seems to cause a layout loop as the
       // window is shrunk
-      if(y_scroll_length <= 0 && verticalScroll.is_visible())
+      if(y_scroll_length <= 0 && verticalScroll.get_visible())
         verticalScroll.hide();
-      else if(y_scroll_length > 0 && !verticalScroll.is_visible())
+      else if(y_scroll_length > 0 && !verticalScroll.get_visible())
         verticalScroll.show();
-#endif
     }
 }
 
