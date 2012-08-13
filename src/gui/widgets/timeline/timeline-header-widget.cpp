@@ -46,7 +46,7 @@ TimelineHeaderWidget::TimelineHeaderWidget(
   margin(-1),
   expand_button_size(12)
 {
-  //set_flags(Gtk::NO_WINDOW);
+  set_has_window(false);
   set_redraw_on_allocate(false);
   
   // Install style properties
@@ -59,8 +59,7 @@ TimelineHeaderWidget::TimelineHeaderWidget(
 void
 TimelineHeaderWidget::on_realize()
 {
-  //set_flags(Gtk::NO_WINDOW);
-   
+  set_has_window(false);
   Container::on_realize();
 
   // Create the GdkWindow:
@@ -85,7 +84,7 @@ TimelineHeaderWidget::on_realize()
 
   gdkWindow = Gdk::Window::create(get_window(), &attributes,
           GDK_WA_X | GDK_WA_Y);
-  //unset_flags(Gtk::NO_WINDOW);
+  set_has_window(true);
   set_window(gdkWindow);
   
   // Unset the background so as to make the colour match the parent
@@ -99,7 +98,7 @@ TimelineHeaderWidget::on_realize()
 void
 TimelineHeaderWidget::on_unrealize()
 {
-  // Unreference any window we may have created
+  // Un-reference any window we may have created
   gdkWindow.clear();
 
   // Call base class:

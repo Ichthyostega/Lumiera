@@ -53,7 +53,7 @@ TimelineHeaderContainer::TimelineHeaderContainer(
     timelineWidget(timeline_widget)
 {
   // This widget will not have a window at first
-  //set_flags(Gtk::NO_WINDOW);
+  set_has_window (false);
   
   set_redraw_on_allocate(false);
   
@@ -108,14 +108,14 @@ TimelineHeaderContainer::clear_headers()
 void
 TimelineHeaderContainer::on_realize()
 {
-  //set_flags(Gtk::NO_WINDOW);
+  set_has_window (false);
   
   // Call base class:
   Gtk::Container::on_realize();
   
   // Create the GdkWindow:
   GdkWindowAttr attributes;
-  memset(&attributes, 0, sizeof(attributes));
+  memset(&attributes, 0, sizeof (attributes));
 
   Allocation allocation = get_allocation();
 
