@@ -113,7 +113,7 @@ namespace lib {
           REQUIRE (obj);
           try 
             {
-              push_back (obj);
+              this->push_back (obj);
               return *obj;
             }
           catch(...)

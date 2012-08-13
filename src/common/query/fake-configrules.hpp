@@ -140,7 +140,7 @@ namespace lumiera {
         virtual bool 
         resolve (Ret& solution, Query<TY> const& q)
           {
-            const any& entry = fetch_from_table_for (q.asKey());
+            const any& entry = this->fetch_from_table_for (q.asKey());
             if (!isnil (entry))
               {
                 Ret const& candidate (any_cast<Ret const&> (entry));
@@ -163,7 +163,7 @@ namespace lumiera {
             if (is_defaults_query (newQuery))  // modified query..
               return solution = Session::current->defaults (newQuery);
                                              //   may cause recursion
-            if (detect_case (solution, newQuery))
+            if (this->detect_case (solution, newQuery))
               return resolve (solution, newQuery);
             
             return solution = Ret();     // fail: return default-constructed empty smart ptr

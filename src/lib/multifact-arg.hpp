@@ -111,8 +111,8 @@ namespace lib {
         Product
         operator() (ID const& id, ARG arg)
           {
-            Creator& func = selectProducer (id);
-            return wrap (func(arg));
+            Creator& func = this->selectProducer (id);
+            return this->wrap (func(arg));
           }
         
       };

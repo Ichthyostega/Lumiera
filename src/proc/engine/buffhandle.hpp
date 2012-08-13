@@ -97,7 +97,7 @@ namespace engine {
    */
   struct BufferDescriptor
     {
-      lumiera::StreamType& sType_;
+      lumiera::StreamType* sType_;
     };
   
   

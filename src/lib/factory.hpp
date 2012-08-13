@@ -74,7 +74,7 @@ namespace lib {
          *  using some special custom allocator.
          *  Note: non-virtual.
          */
-        typename WR::PType operator() () { return wrap (new T ); }
+        typename WR::PType operator() () { return this->wrap (new T ); }
         
       };
     
@@ -129,7 +129,7 @@ namespace lib {
       public:
         typedef std::auto_ptr<T> PType;
         
-        PType operator() (){ return wrap (static_cast<T*> (new TImpl)); };
+        PType operator() (){ return this->wrap (static_cast<T*> (new TImpl)); };
       };
       
       
