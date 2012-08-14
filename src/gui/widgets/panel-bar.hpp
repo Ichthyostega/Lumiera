@@ -62,25 +62,6 @@ private:
   void setup_panel_button();
 
 private:
-  
-  /**
-   * An override to intercept realize events.
-   */
-  void on_realize();
-
-  /**
-   * An event handler that is called to offer an allocation to this
-   * widget.
-   * @param requisition The area offered for this widget.
-   */
-  void on_size_request(Gtk::Requisition* requisition);
-
-  /**
-   * An override to intercept size allocate events.
-   */
-  void on_size_allocate(Gtk::Allocation& allocation);
-  
-private:
 
   /**
    * An event handler for when a panel type is chosen.
