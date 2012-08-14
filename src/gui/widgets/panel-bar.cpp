@@ -51,46 +51,66 @@ PanelBar::PanelBar(panels::Panel &owner_panel, const gchar *stock_id) :
   panelButton.set_can_focus(false);
   panelButton.show();
   pack_start(panelButton, PACK_SHRINK);
-  
+
   setup_panel_button();
 }
 
 void
 PanelBar::setup_panel_button()
 {
-#if 0
   REQUIRE(lockItem == NULL);
-  
-  Menu& menu = panelButton.get_menu();
-  MenuList& list = menu.items();
   
   // Add items for each type of panel
   for(int i = 0; i < PanelManager::get_panel_description_count(); i++)
     {
-      list.push_back( Menu_Helpers::StockMenuElem(
-        StockID(PanelManager::get_panel_stock_id(i)),
-        bind(mem_fun(*this, &PanelBar::on_panel_type), i) ));
+
+      uString title = uString(PanelManager::get_panel_title(i));
+      uString slug (title);
+
+      /** Slug should be a char only string, no spaces, numbers, or
+       * symbols. Currently all panel titles are single words. So
+       * the above works ok for now.
+       */
+
+      slot<void> func =
+          bind(mem_fun(*this, &PanelBar::on_panel_type), i);
+      panelButton.append (slug, title, func);
+
+      /** Keeping this snippet for easy reference
+      * list.push_back( Menu_Helpers::StockMenuElem(
+      * StockID(PanelManager::get_panel_stock_id(i)),
+      * bind(mem_fun(*this, &PanelBar::on_panel_type), i) ));
+      **/
     }
 
+  FIXME("Update for gtk3");
+#if 0
   list.push_back( Menu_Helpers::SeparatorElem() );
+#endif
 
   // Add extra commands
-  list.push_back( Menu_Helpers::MenuElem(_("_Hide"),
-    mem_fun(*this, &PanelBar::on_hide) ) );
+  slot<void> hide = mem_fun(*this, &PanelBar::on_hide);
+  panelButton.append("Hide","_Hide", hide);
 
-  list.push_back( Menu_Helpers::CheckMenuElem(_("_Lock"),
-    mem_fun(*this, &PanelBar::on_lock) ) );
+  slot<void> lock = mem_fun(*this, &PanelBar::on_lock);
+  panelButton.append("Lock", "_Lock", lock);
+
+  FIXME("Update for gtk3");
+#if 0
   lockItem = dynamic_cast<CheckMenuItem*>(&list.back());
   ENSURE(lockItem);
   lockItem->set_active(panel.is_locked());
-  
-  list.push_back( Menu_Helpers::MenuElem(_("Split _Horizontal"),
-    bind(mem_fun(*this, &PanelBar::on_split_panel),
-      ORIENTATION_HORIZONTAL) ) );
-  list.push_back( Menu_Helpers::MenuElem(_("Split _Vertical"),
-    bind(mem_fun(*this, &PanelBar::on_split_panel),
-      ORIENTATION_VERTICAL) ) );
 #endif
+
+  slot<void> hfunc =
+      bind(mem_fun(*this, &PanelBar::on_split_panel),
+      ORIENTATION_HORIZONTAL);
+  panelButton.append("SplitHorizontal", "Split _Horizontal",hfunc);
+  
+  slot<void> vfunc = bind(mem_fun(*this, &PanelBar::on_split_panel),
+        ORIENTATION_VERTICAL);
+  panelButton.append("SplitVertical", "Split _Vertical", vfunc);
+
 }
 
 void
