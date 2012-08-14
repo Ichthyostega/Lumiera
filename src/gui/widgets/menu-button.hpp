@@ -28,49 +28,58 @@
 
 #include "gui/gtk-base.hpp"
 
+#include <iostream>
+
+
+using namespace Gtk;
+
 namespace gui {
 namespace widgets {
 
 /**
  * A button that display a menu when clicked on.
  */
-class MenuButton : public Gtk::ToggleButton
+class MenuButton : public ToggleButton
 {
 public:
 
   /**
    * Create an empty button.
-   * @remarks With an empty button, you can Gtk::Button::add() a widget
-   * such as a Gtk::Pixmap or Gtk::Box. If you just wish to add a
-   * Gtk::Label, you may want to use the
-   * Gtk::MenuButton(cuString& label) ctor directly instead.
+   * @remarks With an empty button, you can Button::add() a widget
+   * such as a Pixmap or Box. If you just wish to add a
+   * Label, you may want to use the
+   * MenuButton(cuString& label) ctor directly instead.
    */
   MenuButton();
 
   /**
    * Creates a new Button containing the image and text from a stock
    * item. 
-   * @remarks Stock ids have identifiers like Gtk::Stock::OK and
-   * Gtk::Stock::APPLY.
+   * @remarks Stock ids have identifiers like Stock::OK and
+   * Stock::APPLY.
    */
-  MenuButton(const Gtk::StockID& stock_id);
+  MenuButton(const StockID& stock_id);
   
   /**
    * Creates a simple Push Button with label.
    * @remarks Create a button with the given label inside. You won't be
    * able to add a widget in this button since it already has a
-   * Gtk::Label in it
+   * Label in it
    */
   MenuButton(cuString& label, bool mnemonic=false);
   
+  void dump_xml() { std::cout << uimanager->get_ui() << std::endl; }
   /**
    * Gets the menu which will be displayed when the button is clicked
    * on.
    * @return Returns a reference to the menu that will be clicked on.
    * This reference can be used to populate the menu with items.
    */
-  Gtk::Menu& get_menu();
+  Menu& get_menu();
   
+  void append (uString &slug, uString &title, sigc::slot<void>& callback);
+  void append (const char *slug, const char* title, sigc::slot<void>& callback);
+
   /**
    * Pops up the menu.
    */
@@ -79,7 +88,7 @@ public:
 protected:
 
   /**
-   * An internal method which sets up the button at creat time.
+   * An internal method which sets up the button at create time.
    */
   void setup_button();
 
@@ -112,28 +121,31 @@ private:
   /**
    * The hBox for the layout of image, caption and arrow.
    */
-  Gtk::HBox hBox;
+  HBox hBox;
   
   /**
    * The image that will optionally display an icon.
    */
-  Gtk::Image image;
+  Image image;
   
   /**
    * The caption text label to show on the button.
    */
-  Gtk::Label caption;
+  Label caption;
   
   /**
    * The arrow widget that will be displayed to hint the user that this
    * button is a drop-down.
    */
-  Gtk::Arrow arrow;
+  Arrow arrow;
 
   /**
    * The internal menu object which is the popup menu of this widget.
    */
-  Gtk::Menu menu;
+  Menu menu;
+
+  Glib::RefPtr<UIManager> uimanager;
+  Glib::RefPtr<ActionGroup> actions;
 
 };
 

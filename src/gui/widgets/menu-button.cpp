@@ -26,8 +26,11 @@
 
 
 using namespace Gtk;
+using namespace Glib;
 using namespace sigc;
 
+#define POPUP_SLUG "TheMenu"
+#define POPUP_PATH "/" POPUP_SLUG
 const int CaptionPadding = 4;
 
 namespace gui {
@@ -38,7 +41,9 @@ const ShadowType shadowType = SHADOW_NONE;
   
 MenuButton::MenuButton() :
   ToggleButton(),
-  arrow(arrowType, shadowType)
+  arrow(arrowType, shadowType),
+  uimanager(UIManager::create()),
+  actions(ActionGroup::create())
 {
   setup_button();
 }
@@ -52,9 +57,7 @@ MenuButton::MenuButton(const StockID& stock_id) :
   StockItem stock_item;
   REQUIRE(StockItem::lookup(stock_id, stock_item));
   caption.set_text_with_mnemonic(stock_item.get_label());
-
   hBox.pack_start(image);
-
   setup_button();
 }  
 
@@ -66,24 +69,61 @@ MenuButton::MenuButton(cuString& label, bool mnemonic) :
   setup_button();
 }
 
-Gtk::Menu&
+Menu&
 MenuButton::get_menu()
 {
-  return menu;
+  uString path ("/");
+  path.append (POPUP_SLUG);
+  Menu* p_menu = dynamic_cast<Menu*>(
+              uimanager->get_widget(path));
+  REQUIRE (p_menu);
+  return *p_menu;
+}
+
+void
+MenuButton::append (uString &slug, uString &title,
+                    sigc::slot<void> &callback)
+{
+  actions->add(Action::create(slug, title), callback);
+  uimanager->add_ui(uimanager->new_merge_id(),
+                    ustring("ui/").append(POPUP_SLUG),
+                    title,slug, Gtk::UI_MANAGER_MENUITEM,
+                    false);
+  uimanager->ensure_update();
+}
+
+void
+MenuButton::append (const char *slug, const char* title,
+                    sigc::slot<void>& callback)
+{
+  uString uSlug (slug);
+  uString uTitle (_(title));
+  append (uSlug, uTitle, callback);
 }
 
 void
 MenuButton::popup()
 {
-  menu.popup( mem_fun(this, &MenuButton::on_menu_position),
+  get_menu().popup( mem_fun(this, &MenuButton::on_menu_position),
     0, gtk_get_current_event_time());
   set_active();
+  dump_xml();
 }
 
 void
 MenuButton::setup_button()
 {
-  menu.signal_deactivate().connect(mem_fun(
+  uimanager = UIManager::create();
+  actions = ActionGroup::create();
+  uimanager->insert_action_group(actions);
+
+  // Setup the UIManager with a popup menu
+  const guint rootId = uimanager->new_merge_id();
+  uimanager->add_ui(rootId, "ui",
+      POPUP_SLUG, POPUP_SLUG,
+      Gtk::UI_MANAGER_POPUP);
+
+  get_menu().signal_deactivate().connect(mem_fun(
     this, &MenuButton::on_menu_deactivated));
   
   arrow.set(ARROW_DOWN, SHADOW_NONE);
