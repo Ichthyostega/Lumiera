@@ -68,7 +68,9 @@ public:
    */
   MenuButton(cuString& label, bool mnemonic=false);
   
-  void dump_xml() { std::cout << uimanager->get_ui() << std::endl; }
+  /* Testing Code */
+  void dump_xml() { /* std::cout << uimanager->get_ui() << std::endl; */ }
+
   /**
    * Gets the menu which will be displayed when the button is clicked
    * on.
