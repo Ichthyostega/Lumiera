@@ -59,40 +59,8 @@ public:
     button.signal_clicked().connect(clicked_slot);
     append(button);
   }
-  
-private:
-  int calculate_width();
-
-  /* ===== Overrides ===== */
-
-  /**
-   * An event handler that is called to offer an allocation to this
-   * widget.
-   * @param requisition The area offered for this widget.
-   */
-  void on_size_request(Gtk::Requisition* requisition);
-  
-  virtual Gtk::SizeRequestMode get_request_mode_vfunc() const;
-  virtual void get_preferred_width_vfunc(int& minimum_width, int& natural_width) const;
-  virtual void get_preferred_height_for_width_vfunc(int width, int& minimum_height, int& natural_height) const;
-  virtual void get_preferred_height_vfunc(int& minimum_height, int& natural_height) const;
-  virtual void get_preferred_width_for_height_vfunc(int height, int& minimum_width, int& natural_width) const;
-
-  /**
-   * An event handler that is called to notify this widget to allocate
-   * a given area for itself.
-   * @param allocation The area to allocate for this widget.
-   */
-  virtual void on_size_allocate(Gtk::Allocation& allocation);
-
-  /**
-   * The last stored width for this widget
-   */
-  int last_width;
 };
 
-} // gui
-} // widgets
+}} /* gui::widgets */
 
 #endif // BUTTON_BAR_HPP
-
