@@ -94,7 +94,7 @@ bool
 Panel::is_shown() const
 {
   //REQUIRE(dockItem != NULL);
-  return dockItem.is_visible();
+  return dockItem.get_visible();
 }
 
 void
