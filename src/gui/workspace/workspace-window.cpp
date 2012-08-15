@@ -30,11 +30,6 @@
 #  include <libintl.h>
 #endif
 
-//#include <gdl/gdl-tools.h>
-#include <gdl/gdl-dock.h>
-#include <gdl/gdl-dock-bar.h>
-#include <gdl/gdl-dock-item.h>
-#include <gdl/gdl-dock-placeholder.h>
 
 
 using namespace Gtk;
@@ -57,7 +52,7 @@ WorkspaceWindow::WorkspaceWindow(Project &source_project,
 
 WorkspaceWindow::~WorkspaceWindow()
 {
-  INFO (gui_dbg, "closing workspace window...");
+  INFO (gui_dbg, "Closing workspace window...");
 }
 
 Project&
@@ -103,13 +98,8 @@ WorkspaceWindow::create_ui()
 
   //----- Create the Docks -----//
   panelManager.setup_dock();
-  
-  GdlDock const *dock = panelManager.get_dock();
-  
-  gtk_box_pack_start(GTK_BOX(dockContainer.gobj()),
-    GTK_WIDGET(panelManager.get_dock_bar()), FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(dockContainer.gobj()),
-    GTK_WIDGET(dock), TRUE, TRUE, 0);
+  dockContainer.pack_start(panelManager.get_dock_bar(),false,false,0);
+  dockContainer.pack_start(panelManager.get_dock(),true,true,0);
   baseContainer.pack_start(dockContainer, PACK_EXPAND_WIDGET);
     
   //----- Create the status bar -----//
@@ -129,3 +119,4 @@ WorkspaceWindow::set_close_window_sensitive(bool enable)
 
 }   // namespace workspace
 }   // namespace gui
+

@@ -27,11 +27,10 @@
 #ifndef PANEL_HPP
 #define PANEL_HPP
 
-
 #include "gui/gtk-lumiera.hpp"
 #include "gui/widgets/panel-bar.hpp"
 
-#include <gdl/gdl-dock-item.h>
+#include <gdlmm.h>
 
 namespace gui {
 
@@ -56,7 +55,7 @@ protected:
    * @param stock_id The stock_id of this panel.
    */
   Panel(workspace::PanelManager &panel_manager,
-    GdlDockItem *dock_item, const gchar* long_name,
+    Gdl::DockItem &dock_item, const gchar* long_name,
     const gchar *stock_id);
 
 public:
@@ -65,7 +64,7 @@ public:
   /**
    * Returns a pointer to the underlying GdlDockItem structure
    */
-  GdlDockItem* get_dock_item() const;
+  Gdl::DockItem& get_dock_item();
 
   /**
    * Shows or hides the panel.
@@ -134,9 +133,8 @@ private:
 
   /**
    * An event handler for when dockItem is hidden.
-   * @param func_data A pointer to the panel that owns dock_item
    */
-  static void on_item_hidden(GdlDockItem*, Panel *panel);
+  void on_item_hidden();
 
 protected:
 
@@ -149,17 +147,12 @@ protected:
    * The owner dock item widget that will host the widgets in this
    * panel.
    */
-  GdlDockItem* dockItem;
+  Gdl::DockItem &dockItem;
   
   /**
    * A signal that fires when the dock item is hidden.
    */
   sigc::signal<void> hidePanelSignal;
-
-  /**
-   * The id of the hide panel handler.
-   */
-  gulong hide_panel_handler_id;
   
   /**
    * The panel bar to attach to the panel grip.

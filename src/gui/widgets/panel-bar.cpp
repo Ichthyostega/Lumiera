@@ -83,18 +83,25 @@ PanelBar::setup_panel_button()
       **/
     }
 
-  panelButton.appendSeparator();
+  FIXME("Update for gtk3");
+#if 0
+  list.push_back( Menu_Helpers::SeparatorElem() );
+#endif
 
   // Add extra commands
   slot<void> hide = mem_fun(*this, &PanelBar::on_hide);
   panelButton.append("Hide","_Hide", hide);
 
   slot<void> lock = mem_fun(*this, &PanelBar::on_lock);
-  panelButton.append("Lock", "_Lock", lock, true);
+  panelButton.append("Lock", "_Lock", lock);
 
-  lockItem = dynamic_cast<CheckMenuItem*>(panelButton.get("Lock"));
+  FIXME("Update for gtk3");
+#if 0
+  lockItem = dynamic_cast<CheckMenuItem*>(&list.back());
   ENSURE(lockItem);
   lockItem->set_active(panel.is_locked());
+#endif
+
 
   slot<void> hfunc =
       bind(mem_fun(*this, &PanelBar::on_split_panel),

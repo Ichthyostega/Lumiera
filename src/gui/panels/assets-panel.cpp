@@ -27,7 +27,7 @@ namespace gui {
 namespace panels {
 
 AssetsPanel::AssetsPanel(workspace::PanelManager &panel_manager,
-    GdlDockItem *dock_item) :
+    Gdl::DockItem &dock_item) :
   Panel(panel_manager, dock_item, get_title(), get_stock_id())
 {
   notebook.append_page(media, _("Media"));

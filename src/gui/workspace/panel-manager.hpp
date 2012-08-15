@@ -30,7 +30,7 @@
 
 #include "gui/panels/panel.hpp"
 
-#include <gdl/gdl.h>
+#include <gdlmm.h>
 #include <typeinfo>
 
 
@@ -70,13 +70,13 @@ public:
    * Gets a pointer to the dock object.
    * @remarks Note that this must not be called before setup_dock.
    */
-  GdlDock* get_dock() const;
+  Gdl::Dock& get_dock();
   
   /**
    * Gets a pointer to the dock bar.
    * @remarks Note that this must not be called before setup_dock.
    */
-  GdlDockBar* get_dock_bar() const;
+  Gdl::DockBar& get_dock_bar();
   
   /**
    * Returns a reference to the owner workspace window.
@@ -157,7 +157,7 @@ private:
    * @return Returns a pointer to the new instantiated panel object.
    */
   panels::Panel* create_panel_by_index(
-    const int index, GdlDockItem *dock_item);
+    const int index, Gdl::DockItem &dock_item);
 
   /**
    * Creates a panel by class name.
@@ -204,19 +204,19 @@ private:
    * The pointer to GDL dock widget.
    * @remarks This value is NULL until setup_dock has been called.
    */
-  GdlDock *dock;
-  
+  Gdl::Dock dock;
+
   /**
    * The pointer to GDL dock bar widget.
    * @remarks This value is NULL until setup_dock has been called.
    */
-  GdlDockBar *dockBar;
+  Gdl::DockBar dockBar;
   
   /**
    * The pointer to GDL dock layout object.
    * @remarks This value is NULL until setup_dock has been called.
    */
-  GdlDockLayout *dockLayout;
+  Glib::RefPtr<Gdl::DockLayout> dockLayout;
 
   /**
    * Pointers to the 4 root place holders.
@@ -244,7 +244,7 @@ private:
     protected:
     
       typedef panels::Panel* (*const CreatePanelProc)(
-        PanelManager&, GdlDockItem*);
+        PanelManager&, Gdl::DockItem&);
     
     protected:
       /**
@@ -309,7 +309,7 @@ private:
        * @return Returns a pointer to the panel object.
        */
       panels::Panel* create(
-        PanelManager &panel_manager, GdlDockItem* dock_item) const
+        PanelManager &panel_manager, Gdl::DockItem &dock_item) const
         {
           REQUIRE(createPanelProc);
           return createPanelProc(panel_manager, dock_item);
@@ -357,11 +357,11 @@ private:
       /**
        * A helper function that will create a panel of type P
        * @param panel_manager The owner panel manager.
-       * @param dock_item The GdlDockItem that will host this panel.
+       * @param dock_item The Gdl::DockItem that will host this panel.
        * @return Returns a pointer to the panel object.
        */
       static panels::Panel* create_panel(
-        PanelManager &panel_manager, GdlDockItem* dock_item)
+        PanelManager &panel_manager, Gdl::DockItem &dock_item)
           {
             return new P(panel_manager, dock_item);
           }
