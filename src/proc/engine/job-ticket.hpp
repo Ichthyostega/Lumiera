@@ -117,14 +117,9 @@ using lib::LinkedElements;
       LinkedElements<Prerequisites> requirement_;
       
       
+    public:
       class ExplorationState;
       friend class ExplorationState;
-      
-      struct TraversalOfPrerequisites;
-        
-    public:
-        
-      typedef TraversalOfPrerequisites iterator;
       
       
       JobTicket()
@@ -133,7 +128,7 @@ using lib::LinkedElements;
         }
       
       
-      iterator discoverPrerequisites()  const;
+      ExplorationState discoverPrerequisites()  const;
       
       Job createJobFor (FrameCoord coordinates);
       
@@ -157,42 +152,39 @@ using lib::LinkedElements;
       // using default ctor and copy operations
       
       
+      bool
+      empty()  const
+        {
+          UNIMPLEMENTED ("detect empty/no prerequisites");
+        }
       
-      /* === Iteration control API for IterStateWrapper== */
-  
-      friend bool
-      checkPoint (ExplorationState const& plan)
-      {
-        UNIMPLEMENTED ("detect end of prerequisites");
-      }
       
-      friend JobTicket&
-      yield (ExplorationState const& plan)
-      {
-        UNIMPLEMENTED ("access prerequisite and follow up to prerequisite JobTicket");
-      }
-      
-      friend void
-      iterNext (ExplorationState & plan)
-      {
-        UNIMPLEMENTED ("step ahead to next prerequisite");
-      }      
-    };
-    
-  
-  struct JobTicket::TraversalOfPrerequisites
-    : lib::IterStateWrapper<JobTicket, JobTicket::ExplorationState>
-    {
       void
-      push (TraversalOfPrerequisites subExploration)
+      pullNext()
+        {
+          UNIMPLEMENTED ("step ahead to next prerequisite, maybe pop");
+        }
+      
+      void
+      push (ExplorationState subExploration)
         {
           UNIMPLEMENTED ("integrate a branch of prerequisites");
         }
       
+      
+      JobTicket*
+      operator->() const
+        {
+          UNIMPLEMENTED ("yield the current job ticket");
+          // access prerequisite and follow up to prerequisite JobTicket
+        }
+      
     };
+    
   
   
-  inline JobTicket::iterator
+  
+  inline JobTicket::ExplorationState
   JobTicket::discoverPrerequisites()  const
   {
     UNIMPLEMENTED("delve into the requirement_ datastructure");

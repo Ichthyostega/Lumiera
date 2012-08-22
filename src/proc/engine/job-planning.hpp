@@ -60,8 +60,8 @@ namespace engine {
    */ 
   class JobPlanning
     {
-      JobTicket::iterator plannedOperations_;
-      FrameCoord point_to_calculate_;
+      JobTicket::ExplorationState plannedOperations_;
+      FrameCoord                 point_to_calculate_;
      
     public:
       /** by default create the bottom element of job planning,
@@ -71,12 +71,11 @@ namespace engine {
       JobPlanning()
         { }
       
-      /** further job planning can be initiated by continuing
-       * off a given previous planning state. This is how
-       * the forks are created, expanding into a multitude
-       * of prerequisites of a given job
+      /** further job planning can be initiated by continuing off a given previous planning state.
+       *  This is how the forks are created, expanding into a multitude of prerequisites for
+       *  the job in question.
        */
-      JobPlanning (JobTicket::iterator const& startingPoint, FrameCoord requestedFrame)
+      JobPlanning (JobTicket::ExplorationState const& startingPoint, FrameCoord requestedFrame)
         : plannedOperations_(startingPoint)
         , point_to_calculate_(requestedFrame)
         { }
@@ -112,6 +111,9 @@ namespace engine {
                                ,this->point_to_calculate_);
         }
       
+      /** integrate another chain of prerequisites into the current evaluation line.
+       *  Further evaluation will start to visit prerequisites from the new starting point,
+       *  and return to the current evaluation chain later on exhaustion of the side chain. */
       friend void
       integrate (JobPlanning const& newStartingPoint, JobPlanning existingPlan)
       {
@@ -137,7 +139,7 @@ namespace engine {
       friend void
       iterNext (JobPlanning & plan)
       {
-        ++(plan.plannedOperations_);
+        plan.plannedOperations_.pullNext();
       }      
     };
   
@@ -191,8 +193,6 @@ namespace engine {
              //                 through a sequence of states. Thus the initial state of the investigation
             //                  (which is a JobPlanning) can stand-in for the sequence of prerequisites
         }
-      
-      ///TODO what elements are accepted by the explorationStack? provide conversion operator to extract those from stateCore()
       
       
       
