@@ -8,7 +8,7 @@ explanations, the long explanation is the topic of the document above..'
  anchor:AssetsView[] link:#AssetsView[->]Assets View::
 	Windows displaying and managing various things that can be edited,
 	worked on, etc   are collectively known as the Assets View.
-	Ingested footager, clips that have already been composed, available
+	Ingested footage, clips that have already been composed, available
 	sub-projects, effects, transitions and internal artifacts are typical
 	examples.
 
