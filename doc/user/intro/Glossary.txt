@@ -50,7 +50,9 @@ explanations, the long explanation is the topic of the document above..'
 
  anchor:InputDevice[] link:#InputDevice[->]Input Device::
         Some hardware controler, like an extra keyboard, midi mixer, Jog, ..
-        TODO: decide on whether the main keyboard is in a special (global) state.
+        TODO: we still need to decide on whether we can treat the main keyboard 
+        as special global state or whether we can handle the keyboard as a generic 
+        input devide. 
 
  anchor:LowLevelModel[] link:#LowLevelModel[->]Low Level Model::
         The generated Processing Graph, to be ``performed'' within the engine
