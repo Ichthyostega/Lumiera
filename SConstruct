@@ -77,6 +77,7 @@ env.Default('build')
 
 env.Alias ('all', build + testsuite + doxydoc)
 env.Alias ('doc', doxydoc)
+env.Alias ('none')
 
 env.Alias('install', gui)
 env.Alias('install', '$DESTDIR')
