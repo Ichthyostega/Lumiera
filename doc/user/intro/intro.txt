@@ -2,32 +2,33 @@ Lumiera (as seen) from Outer Space
 ==================================
 :Author: Lumiera_Core_Developers
 :Date: Summer 2010
-
+ 
 
 [abstract]
 ******************************************************************************
-The Lumiera Community creates a non linear video editing and compositing FOSS
-application for Linux/Unix/Posix Operating Systems, suitable for professional
-and quality oriented work, building on common open source video, sound and GUI
-toolkits and libraries, providing flexibility and a high degree of
-configurability and full control of all parameters, but at the same time a
-smooth workflow which scales well to larger and more complicated editing
-projects. This Document outlines the Design from some distance,
-helping people to understand the Ideas behind Lumiera and understand the tools
-they get to work with. It is aimed for workflow designers any anyone who wants
-to know how the program works in general.
+The Lumiera Community is in the process of making a non-linear video editing 
+and compositing FOSS application for Linux/Unix/Posix Operating Systems.  The
+application is geared towards professional, high-quality work; but
+it is equally suitable for low-end users, due to its in-design scalability.
+Lumiera builds on common open source video, sound and GUI toolkits and
+libraries, being highly flexibile, configurable---user-control over a broad
+spectrum of configurable parameters---and with smoth workflows that scale well
+to larger more intricate projects as and more smaller projects.
+
+This document outlines the design from a more general perspective,
+providing potential users with sufficient insight into the tools and technology
+behind Lumiera to get started working with Lumiera quickly.
 ******************************************************************************
 
 // all things starting with '//' are asciidoc comments and drafts/notes while
 // working on this document
 
 .About this Document
-This document is meant to be read electronically, it contains a lot
-hyper-links between explanations denoted by an arrow ->. Lumiera is still in
-development, we describe here planned features without explicitly tagging them;
-some things are not worked out in detail yet. Although this document is heavily
-cross-linked we try to start with a broad overview and work out more detailed
-things towards the end.
+// It contains many hyper-links to explanations which are denoted by an arrow ->. 
+Lumiera is still under active development. Here we describe planned features
+without explicitly tagging them; some points have still to be worked out in
+detail. Although this document is heavily cross-linked, we try to start with a
+broad overview and developing details towards the end.
 
 
 Vision
@@ -35,41 +36,48 @@ Vision
 
 // objective and goals of the project
 
-Lumiera claims to be a _professional non-linear video editor_. To start with, we should
+Lumiera strives towards being a _professional non-linear video editor_. To start with, we should
 point out that ``professional'' does not necessarily mean ``commercial'' or ``industrial''.
-It's more of an attitude or mindset -- doing work seriously, and to be subject to any
-kind of wider goal, demand, or purpose. When it comes to editing film, this might be
-artistry, a narration or meaning to convey, a political message or something to show
-to your audience. Anyhow, for the tools, the editing software used to this end,
-we can identify several properties and requirements, to be labeled ``professional'':
+It's more of an attitude or frame of mind -- doing work seriously, and to be subject to any
+kind of wider goal, demand, or purpose. 
+
+The concept of professionality in film editing can mean something of an artistic
+nature, a narrative or having a meaning to convey, a political message, or
+portray something to an audience.  
+
+Anyhow, for the tools, the editing software used to this end, we can identify
+several properties and requirements, to be labeled ``professional'':
+
+With this perspective in mind, we can identify a number of key properties
+of professional film production tools: 
 
  Reliability::
-        Whatever happens, your work must be safe, protected against software
-        glitches and incompatibilities. Ideally Lumiera should be very stable and
-        never crash, in practice even crashes or power outages should not
-        result in lost work.
+        Your work must be safe and protected at all costs against software
+        glitches and incompatibilities. Ideally, Lumiera should be reliable,
+        very stable and not crash. In practice, even crashes or power outages
+        should not result in data or work loss..
 
  Quality::
-        If you work with high quality, cinema grade digital video material you
-        want to be sure that you can deliver crisp quality without compromise,
-        throughout the whole workflow to your final product. All rendering
-        must be reproducible to the bit.
-
+        The demands placed on high-quality, cinema grade digital video material
+        requires crisp-quality without any compromsise throught the entire work
+        flow in the final product.  All rendering will have to be reproducable
+        down to the last digit.
+ 
  Performance and Productivity::
-        Professionals want to get things done, in time, but optionally with control
-        over every aspect. Balancing these goals should be the central concern for 
-        workflow design and usability.
+        Professionals want to get things done, in time and content, but ideally
+        with control over all details. The fine balance of these goals is a
+        central goal of workflow design and usability.
 
  Scalability and Adaptability::
         Projects and budgets differ, hardware advances, Lumiera must scale
-        in different dimensions and use the available resources as best as it
+        in different dimensions and use available resources as best it
         can. From small Laptops to multi core computers and Renderfarms.
 
  Durability::
         Soft and Hardware advances at a fast pace. We must not lock into the
-        current state of technology but being flexible to extend the System
-        without breaking compatibility. Projects you create nowadays with
-        Lumiera should be usable in foreseeable future, at least there needs
+        current state of technology but must be flexible enough to extend the
+        system without breaking compatibility. Projects you create nowadays with
+        Lumiera should be usable in the foreseeable future, there at least needs
         to be a guaranteed upgrade path.
 
 
@@ -137,24 +145,24 @@ final video.
 Pulling not Pushing
 ~~~~~~~~~~~~~~~~~~~
 
-On a first glance, it looks fairly natural to set up the graphs xref:graphs[->]
+At a first glance, it looks fairly natural to set up the graphs xref:graphs[->]
 as described above and then push data into the system through the input nodes
 whereas the final result can then be seen soon on the output node. Several
-multimedia frameworks use this approach. But it has a lot of shortcomings
-which make it inappropriate for non-linear video editing.
+multimedia frameworks use this approach. However this scheme exhibits a number
+of shortcomings which make it inappropriate for non-linear video editing.
 
-Lumiera instead pulls data though the pipe, that is a request starts at the
-output node and makes it way up to the inputs. This has certain advantages
-xref:pull[->], explained later.
+Lumiera instead pulls data though the pipe, i.e., a request starts at the
+output node and makes its way up to the inputs. This has certain advantages
+xref:pull[->], which will be explained later.
 
 
 Don't waste work
 ~~~~~~~~~~~~~~~~
 
-Rendering A/V Data can be quite CPU intensive, to ensure that we do not waste
-CPU power by rendering things twice, or the worse, have to throw results away
-because they couldn't be rendered in time, we use sophisticated caching
-xref:caching[->] and profiling xref:profiling[->].
+Rendering A/V Data can be quite CPU intensive. To ensure that we do not waste
+any CPU power by rendering things twice, or worse still, having to throw away
+results because it couldn't rendered in time, we use in Lumiera sophisticated
+caching xref:caching[->] and profiling xref:profiling[->].
 
 
 The visible Universe
@@ -180,18 +188,14 @@ xref:screenconcept[->] to adapt to different workplaces and workflows.
 
 Viewer
 ~~~~~~
-[red]#to be written#
 
-// only one viewer type used for everything
-// how is audio integrated in the viewer
-// effects may add overlays (masking/rotoscoping, information for example)
-//  these may be manipulateable in the viewer, but not part of the rendered
-//  video. Maybe effects can add widgets to the viewer too (how, where?)
-// one can open as many viewers he needs
-// these can be attached everyhere in the processing graph (pre/post effect)
-// have bus in front to adapt output format
-// detachable window, fullscreen, external screen
-
+The viewer is an area where material can be displayed, i.e., ``play-back'',
+which also supports audio playback connections. As there are many sources that
+can be displayed, a viewer is attached to a source via the viewer switch board.
+Timelines, probepoints, wiretaps and individual clips are examlpes of sources
+that can be atached to a viewer. Moreover, the number of viewers open at any one
+time is only limited by the hardware, and each viewer can be collapsed, hooked
+up to a beamer or monitor.
 
 
 Transport Controls
@@ -222,13 +226,26 @@ no magic here.
 Timeline View
 ~~~~~~~~~~~~~
 
-hierarchical tracks, not just a list
+A timeline is a container that provides a time axis and an output. The output
+can de derived from various sources and have different configurations.  An
+output can have various configurations, for each output configuration, there
+will be one timeline. A timeline does not temporally arrange material, this is
+performed by a sequence, which can be snapped to a timeline.
 
-Format Independent Timeline, one can put anything on the timeline.
-the busses constrain what kind of data is pulled out and in turn the
-builder creates a processing graph which does the necessary conversions and
-stuff.
+A typical film will define many sequences, but only a few timelines. A sequence
+contains a number of tracks which are ordered in a hierarchy. Tracs do not have
+any format associated with them and more or less anything can be put into a
+track. Consequently, audio and video material can be equally assigned to a
+track, there is no discrimination between audio and video in the Lumiera concept
+of a track.
 
+A timeline must be assigned to viewer if playback viewing is desired.
+
+//Format Independent Timeline, one can put anything on the timeline.
+//the busses constrain what kind of data is pulled out and in turn the
+//builder creates a processing graph which does the necessary conversions and
+//stuff.
+//
 // Q: how to handle interaction, for example when some conversion can only be
 //    done in a lossy way and some conversion node may or may not be inserted
 //    (i mean gui wise)?
@@ -246,19 +263,30 @@ stuff.
 
 Busses
 ~~~~~~
+
 The GUI provides a separate _bus view_, showing the master busses (subgroups)
-in a manner similar to an audio mixing desk. Any bus is just a means to collect
-and sum up the output of a specific kind of media (video, audio, number of channels),
-produced by various processing elements and other busses. Conceptionally, these global
-busses are considered a part of the timeline
+in a manner similar to an audio mixing desk. Any bus is just a means of collecting
+and and adding (aka overlaying) together the output of various kinds of media
+(video, audio, number of channels), produced by various processing elements and
+from other busses. These global busses can be concieved as being part of the
+timeline. 
 
 
 Asset View
 ~~~~~~~~~~
+We can conceive the Asset View as the timeline's book keeper: it manages the various
+constituent in the timeline.  Moreover, in addition to managing timeline
+constituents, raw material, clips, bins (folders) are managed by the Asset
+View, i.e., typical management operations including, deleting, adding,
+naming, tagging, groupping into bins, etc. all occur here.
+
+Plugins are also managed in the Asset View.
+
+
 
 Manages all assets available in one project.
   * source media/footage/soundfiles
-  * prepared clips, known subprojects
+
   * all available effects and transitions
   * internal artefacts like sequences and automation data sets
 
@@ -285,18 +313,20 @@ Manages all assets available in one project.
 Dark Matter
 -----------
 
-[red]#to be written#
-coarse overview about things the user does not see but have some contact
-with, details later...
+The material in this section provides a cursory view of features not required by
+a typical user, but of more importance to people loking under the hod, i.e.,
+programers, etc.
 
 
-Now lets take a look under the hood.
 
 
 Session storage
 ~~~~~~~~~~~~~~~
 [red]#to be written#
 
+
+
+//databank with logging, no data loss.
 // not generateable data
 
 // its the timeline mostly
@@ -406,6 +436,8 @@ and only provide limited functionality without any plug-ins.
 Lumiera will not reinvent the wheel. One major goal is to provide considerable
 functionality via well-designed, external code supplied to Lumiera by plug-ins.
 
+How are Plugins Implemented?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 
