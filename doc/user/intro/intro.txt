@@ -7,17 +7,17 @@ Lumiera (as seen) from Outer Space
 [abstract]
 ******************************************************************************
 The Lumiera Community is in the process of making a non-linear video editing 
-and compositing FOSS application for Linux/Unix/Posix Operating Systems.  The
+and compositing FOSS application for Linux/Unix/Posix operating systems.  The
 application is geared towards professional, high-quality work; but
 it is equally suitable for low-end users, due to its in-design scalability.
 Lumiera builds on common open source video, sound and GUI toolkits and
 libraries, being highly flexibile, configurable---user-control over a broad
-spectrum of configurable parameters---and with smoth workflows that scale well
-to larger more intricate projects as and more smaller projects.
+spectrum of configurable parameters---and with smooth workflows that scale well
+to larger more intricate projects and smaller projects.
 
 This document outlines the design from a more general perspective,
 providing potential users with sufficient insight into the tools and technology
-behind Lumiera to get started working with Lumiera quickly.
+behind Lumiera to start working with Lumiera quickly.
 ******************************************************************************
 
 // all things starting with '//' are asciidoc comments and drafts/notes while
@@ -28,7 +28,7 @@ behind Lumiera to get started working with Lumiera quickly.
 Lumiera is still under active development. Here we describe planned features
 without explicitly tagging them; some points have still to be worked out in
 detail. Although this document is heavily cross-linked, we try to start with a
-broad overview and developing details towards the end.
+broad overview, then develop details towards the end.
 
 
 Vision
@@ -39,7 +39,7 @@ Vision
 Lumiera strives towards being a _professional non-linear video editor_. To start with, we should
 point out that ``professional'' does not necessarily mean ``commercial'' or ``industrial''.
 It's more of an attitude or frame of mind -- doing work seriously, and to be subject to any
-kind of wider goal, demand, or purpose. 
+kind of wider goal, requirement, or purpose. 
 
 The concept of professionality in film editing can mean something of an artistic
 nature, a narrative or having a meaning to convey, a political message, or
@@ -87,20 +87,21 @@ Fundamental Forces
 // the basic ideas which drive the Lumiera design
 
 The Lumiera design is guided by a small number of basic principles. Keeping
-these in mind will help to understand how actually more interesting things can
-be built up on that foundation.
+these principles in mind will help you understand how more interesting things can
+be built up from these fundamental principles.
 
 
-Open ended combining of Building Blocks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Open Ended Combination of Building Blocks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Lumiera is not so much defined in terms of _features_ -- rather it allows to
-combine basic _building blocks._ These basic modules, entities or objects each
-have a distinct _type_ explicitly limiting the connections. Within these
-limits, any conceivable combination shall be supported without further hidden
-limitations.
+Lumiera is not so much defined in terms of _features_. It is more like a
+workshop, where individual _basic building-blocks_ can be combined together in 
+interesting ways to form more complex structures. These basic modules, entities
+or objects each have a distinct _type_ explicitly limiting the
+connections. Within these limits, any conceivable combination is supported
+without further hidden limitations.
 
-Lumiera is neither a set of Lego bricks, nor is it the business application
+Lumiera is neither a set of Lego bricks, nor is it a business application
 driven by finite usage stories.
 
 
@@ -112,13 +113,17 @@ user may, if desired, directly manipulate through the GUI clips, individual
 effects, masks, and even the placements xref:placement[->] used to stitch the
 objects together, which is comparatively low-level. On the other hand, these
 abstractions shield the user from the actual technical details like format
-conversions and the accessing of individual channels.
+conversions and accessing individual channels.
 
 To complement this approach, Lumiera does _not_ rely on hard wired, global
 conventions -- rather we allow to build up project specific conventions and
 rules xref:rules[->] to fit the given requirements and preferred working
-style. To help getting started, Lumiera will ship with a fairly conventional
-project template and default configuration.
+style. 
+
+To ease the user in getting started with Lumiera, it will be supplied with a
+rather conventional template and a default configuration will be supplied that
+is relative conventional.
+
 
 
 [[graphs]]
@@ -174,15 +179,17 @@ Now its time to take a look at the prelimary Lumiera GUI:
 
 image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 
-The GUI is a plugin by itself and only one way to work Lumiera, it will become
-possible to create special-purpose GUIs or control Lumiera in different ways,
-like a headless rendernode xref:rendernode[->] or frameserver
-xref:frameserver[->]. Completely script driven interfaces for automated
-processing are also planned.
 
-The GUI screenshot you see above is faily default as when you start Lumiera up
-for the first time (the plan is to add a 2nd Viewer to the default
-configuration). While we support a much more sophisticated screen concept
+Lumiera consists of three major parts: the GUI, proc and backend. The initial
+GUI Lumiera will ship with is not the only GUI possible, indeed Lumiera can work
+satisfactorily without a GUI, for example, for specail purposes. 
+headless rendernode xref:rendernode[->] or frameserver
+xref:frameserver[->]. Later scripts will be written for automated
+processing. Special purpose GUIs are also envisaged later.
+
+The GUI screenshot you above is more or less the default you see when when you
+start Lumiera up for the first time.  A 2nd viewer is planned for later to be
+added to the default. We support a much more sophisticated screen concept
 xref:screenconcept[->] to adapt to different workplaces and workflows.
 
 
@@ -314,10 +321,11 @@ Dark Matter
 -----------
 
 The material in this section provides a cursory view of features not required by
-a typical user, but of more importance to people loking under the hod, i.e.,
+a typical user, but of more importance to people loking under the hud, i.e.,
 programers, etc.
 
-
+Most of the material in this section is to be found in the proc layer and in the
+backend.
 
 
 Session storage
@@ -365,9 +373,32 @@ rendering...
 rules system
 [red]#to be written#
 
-I/O Subsystem
-~~~~~~~~~~~~~
-[red]#to be written#
+Input-Output  Subsystem
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Lumiera will process large quantities of data and it is of critical imnportance
+to perform this efficiently.  The input and output subsystem are all processed
+in the backend, in fact, this is one very important function provided by the
+back end.
+
+The typical Lumiera user will have many clips, in various configurations located
+at various places.  All this data will have to be stored by the backend,
+moreover all this data will have to be rapidly retrieved from storage and
+provided to the user. The demands on memory are high: huge chunks of data,
+that can be quickly stored and equally quickly fetched, even if stored over
+longer periods of time. Moreover, due to the scalability requirement of Lumiera,
+this process will have to perform adequately on lower-end hardware, and perform
+efficiently on higher-end hardware.
+
+Lumiera will break down processes that need to be processed into smaller units
+called _tasks_. Typically, there will be many hundreds of tasks waiting for
+processing at any one time. These tasks are qued for processing and the order in
+which this is performed is managed by the _scheduler_.  This is all done in the
+back end.
+
+Apart from memory, the backend will be responsible for accessing and saving
+files. It will be of the utmost to do this efficiently. This will be carried out
+in the backend using low-level mechanisms.
 
 // file handling
 //  vault, work, cache
