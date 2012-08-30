@@ -1,0 +1,146 @@
+Semantic tags
+=============
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _Do 30 Aug 2012 21:06:54 CEST_
+*Proposed by*   Christian Thaeter <ct@pipapo.org>
+-------------------------------------
+
+********************************************************************************
+.Abstract
+We have a lot documentation which needs to be cross referenced. Adding well the
+known 'tags' concept and extend it slightly with some semantics will aid future
+automatic processing.
+********************************************************************************
+
+Description
+-----------
+//description: add a detailed description:
+
+Every document (including sourcecode) could extended with some metadata, aka tags
+which are then used to build automatic crossreferences.
+
+Commonly tags are just 'words' which are picked up and crossreferenceds. I propose
+to extend this scheme slightly.
+
+Overall this scheme must be very natual and easy to use. A user should not need to
+know about the underlying machinery and a tag as in a single lowercase 'word' should
+be sufficient in almost all cases. Moreover Tags should be optional.
+
+
+.Ontology
+
+To give tags some sematics we introduce a simple ontology:
+
+- Tags can have namespaces, delimited by a dot 'foo.bar.baz'.
+  Tags are looked up from right to left 'baz' would suffice as long it is unique.
+  Non unique cases will be handled in context (sometimes non uniqunes is desired)
+- We introduce simple "Is a" and "Has a" relationships. These are defined by the
+  casing of the tag: 'ALL_UPPERCASE' means "Is a" and anything else (including
+  mixed case) means "Has a". Note that for most cases the "Is a" relation will be
+  defined implicitly, ín normal cases one doesnt need to care.
+- define some tag algebra for lookups (group tags by comma and semicolons, where
+  comma means 'and' and semicolon means 'or'). Used to query the tag database.
+  regex/globbing might become handy too.
+  
+.Implicit Tags
+
+Tags can be implicit by generating them from the document:
+
+- Derrive tags from the type and location of the Document.
+  RFC's are 'RFC', source files are 'SOURCE.C' and so on.
+  
+- Derrive Tags from the content of the document.
+  Asciidoc titles will be used here. A simple preprocessor
+  generates a tag from a title (make it CamelCase, simplify etc.)
+  The resulting tag is only used iff it is unique
+
+
+.Use this tags
+
+Tags are collected/discovered by some script which creates a tag-database
+(possibly plaintext asciidoc files) as big project index linking back to the content,
+details need to be worked out.
+ 
+We create special asciidoc macros for crossreferencing tags for example: 'RFC:foobar'
+'SOURCE:builder', details need to be worked out later.
+
+Note: this Proposal is about including tags in the first place, processing them is only
+suggested and left out for later.
+
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+// * first step ([green]#✔ done#)
+// * second step [,yellow]#WIP#
+
+We need to define how to integrate tags in different documents syntactically.
+For RFC's these will likely become a part of the initial table. in other Asciidoc
+documents they could be a special comment or header. For Source files special comments
+will be used.
+
+Tags themself will be added lazily on demand (unless we find someone with the patience
+to go over all documents and tag them properly).
+
+Creating the infrastructure handling this tags (cross indexing etc) is not part of
+this proposal, nevertheless we planning this since some time and it will be defined in
+other RFC's.
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+// add a fact list/enumeration which make this suitable:
+//  * foo
+//  * bar ...
+
+ * Gives a simple graspable way to build a cross reference over the whole project
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+
+ * adding tags and developing the tools manging them will take some time
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+
+We have the ht/dig search function over the Website which give a much simpler way to
+find documents.
+
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+
+It is very urgent and important that we make our content much easier accessible.
+
+
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+
+//endof_comments:
+
+''''
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
