@@ -102,6 +102,16 @@ MenuButton::append (const char *slug, const char* title,
 }
 
 void
+MenuButton::appendSeparator()
+{
+  uimanager->add_ui_separator(
+      uimanager->new_merge_id(),
+      ustring("ui/").append(POPUP_SLUG),
+      "Separator", Gtk::UI_MANAGER_SEPARATOR,
+      false);
+}
+
+void
 MenuButton::popup()
 {
   get_menu().popup( mem_fun(this, &MenuButton::on_menu_position),

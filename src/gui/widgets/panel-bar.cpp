@@ -83,10 +83,7 @@ PanelBar::setup_panel_button()
       **/
     }
 
-  FIXME("Update for gtk3");
-#if 0
-  list.push_back( Menu_Helpers::SeparatorElem() );
-#endif
+  panelButton.appendSeparator();
 
   // Add extra commands
   slot<void> hide = mem_fun(*this, &PanelBar::on_hide);

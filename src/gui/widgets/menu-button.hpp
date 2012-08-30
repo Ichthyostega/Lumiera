@@ -79,8 +79,26 @@ public:
    */
   Menu& get_menu();
   
+  /**
+   * Append a Menu Item to the Menu
+   * @param slug Unique identifier in the UI Manager
+   * @param title The title of the item
+   * @param callback The signal handler when clicked
+   */
   void append (uString &slug, uString &title, sigc::slot<void>& callback);
+
+  /**
+   * Append a Menu Item to the Menu
+   * @param slug Unique identifier in the UI Manager
+   * @param title The title of the item
+   * @param callback The signal handler when clicked
+   */
   void append (const char *slug, const char* title, sigc::slot<void>& callback);
+
+  /**
+   * Append a Gtk::SeparatorMenuItem to the Menu
+   */
+  void appendSeparator();
 
   /**
    * Pops up the menu.
