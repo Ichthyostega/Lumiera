@@ -1,11 +1,10 @@
-Accepted Design Proposals
-=========================
+Design Proposal Pool
+====================
 
-//Menu: label accepted
+//Menu: off
 //Menu: sort children
 
 -> read link:../rfc.html[more about Lumiera RfC] and the Design Process
 
-The RfC entries listed here where discussed, maybe modified and finally agreed upon
-during some developers meeting in the past. So they represent design decisions taken.
+This is the poll where all Design Proposals are stored.
 
