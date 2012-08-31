@@ -90,14 +90,11 @@ PanelBar::setup_panel_button()
   panelButton.append("Hide","_Hide", hide);
 
   slot<void> lock = mem_fun(*this, &PanelBar::on_lock);
-  panelButton.append("Lock", "_Lock", lock);
+  panelButton.append("Lock", "_Lock", lock, true);
 
-  FIXME("Update for gtk3");
-#if 0
-  lockItem = dynamic_cast<CheckMenuItem*>(&list.back());
+  lockItem = dynamic_cast<CheckMenuItem*>(panelButton.get("Lock"));
   ENSURE(lockItem);
   lockItem->set_active(panel.is_locked());
-#endif
 
   slot<void> hfunc =
       bind(mem_fun(*this, &PanelBar::on_split_panel),

@@ -67,9 +67,6 @@ public:
    * Label in it
    */
   MenuButton(cuString& label, bool mnemonic=false);
-  
-  /* Testing Code */
-  void dump_xml() { /* std::cout << uimanager->get_ui() << std::endl; */ }
 
   /**
    * Gets the menu which will be displayed when the button is clicked
@@ -84,21 +81,38 @@ public:
    * @param slug Unique identifier in the UI Manager
    * @param title The title of the item
    * @param callback The signal handler when clicked
+   * @param toggle
    */
-  void append (uString &slug, uString &title, sigc::slot<void>& callback);
+  void append (uString &slug, uString &title,
+                  sigc::slot<void>& callback, bool toggle=false);
 
   /**
    * Append a Menu Item to the Menu
    * @param slug Unique identifier in the UI Manager
    * @param title The title of the item
    * @param callback The signal handler when clicked
+   * @param toggle
    */
-  void append (const char *slug, const char* title, sigc::slot<void>& callback);
+  void append (const char *slug, const char* title,
+                  sigc::slot<void>& callback, bool toggle=false);
+
 
   /**
    * Append a Gtk::SeparatorMenuItem to the Menu
    */
   void appendSeparator();
+
+
+  /**
+   * Get an object from the Menu
+   *
+   * @param slug The slug that created the object
+   * @return Widget* Returns a valid Gtk::Widget or NULL if not found
+   * @remarks Typically you'll 'get' a MenuItem of sorts. Use
+   * MenuButton::get_menu() to get the menu as a whole
+   */
+  Gtk::Widget* get(uString slug);
+
 
   /**
    * Pops up the menu.

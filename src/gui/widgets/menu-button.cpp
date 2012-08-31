@@ -69,6 +69,16 @@ MenuButton::MenuButton(cuString& label, bool mnemonic) :
   setup_button();
 }
 
+Gtk::Widget*
+MenuButton::get(uString slug)
+{
+  //TODO: if (slug == "Menu") return &get_menu();
+  uString path (POPUP_PATH);
+  path.append("/");
+  return uimanager->get_widget(path.append(slug));
+}
+
+
 Menu&
 MenuButton::get_menu()
 {
@@ -82,23 +92,27 @@ MenuButton::get_menu()
 
 void
 MenuButton::append (uString &slug, uString &title,
-                    sigc::slot<void> &callback)
+                    sigc::slot<void> &callback, bool toggle)
 {
-  actions->add(Action::create(slug, title), callback);
+  if (!toggle)
+    actions->add(Action::create(slug, title,""), callback);
+  else
+    actions->add(ToggleAction::create(slug, title,"",false), callback);
+
   uimanager->add_ui(uimanager->new_merge_id(),
                     ustring("ui/").append(POPUP_SLUG),
-                    title,slug, Gtk::UI_MANAGER_MENUITEM,
+                    slug, slug, Gtk::UI_MANAGER_AUTO,
                     false);
   uimanager->ensure_update();
 }
 
 void
 MenuButton::append (const char *slug, const char* title,
-                    sigc::slot<void>& callback)
+                    sigc::slot<void>& callback, bool toggle)
 {
   uString uSlug (slug);
   uString uTitle (_(title));
-  append (uSlug, uTitle, callback);
+  append (uSlug, uTitle, callback, toggle);
 }
 
 void
@@ -114,10 +128,9 @@ MenuButton::appendSeparator()
 void
 MenuButton::popup()
 {
-  get_menu().popup( mem_fun(this, &MenuButton::on_menu_position),
+  get_menu().popup(mem_fun(this, &MenuButton::on_menu_position),
     0, gtk_get_current_event_time());
   set_active();
-  dump_xml();
 }
 
 void
