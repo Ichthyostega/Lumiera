@@ -1,0 +1,167 @@
+Git Commit Message Format
+=========================
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _Fr 31 Aug 2012 03:54:14 CEST_
+*Proposed by*   Christian Thaeter <ct@pipapo.org>
+-------------------------------------
+
+********************************************************************************
+.Abstract
+This RFC describes the format of commit messages, based on already used
+practice.
+********************************************************************************
+
+Description
+-----------
+//description: add a detailed description:
+
+Git commit messages are almost free form text, the only exception is that git
+threats the first line in a commit message specially to form the header one
+sees in various outputs.
+
+Since we aim to automate some processing we refine the format for commit
+messages sightly more.
+
+
+.General
+
+Commit Messages will be shown in space limited areas (lists on webpages,
+emails, tooltips). Unlike source code where we are quite lax about line
+lengths commit messages should not exceed 80 characters per line.
+
+The first line is treated as Header as described below, followed by an empty
+line and then the Body of the commit message. The Body is optional but
+recommended.
+
+
+.Header
+
+The Header is free form text explaining the purpose of the commit in a few
+words. It may start with one uppercased keyword and a colon if appobiate. This
+Keywords are optional but recommended since automatic processing acts upon
+them. Normal work doesn't have any of these keywords but just free form text.
+
+'WIP:'::
+        'Work in Progress', commits marked as this may be incomplete and fail
+        in various ways. For example automatic git-bisecting will skip them.
+        WIP should take precedence, if for example one needs multiple commits
+        to fix a bug, then only the final commit is tagged as FIX: and the
+        leading commits are WIP:
+
+'FIX:'::
+        Bugfix. The Text should explain what error got fixed, Details like a
+        bugtracker number or other references shall not be part of the Header.
+
+'RFC:'::
+        This commit adds or modifies a RFC but doesn't touch the codebase
+        (tests/examples are permitted).
+
+'DOC:'::
+        This commit only alters documentation but no code.
+
+'STASH:'::
+        When 'git-stash' is not enough (for example one wants to move
+        unfinished changes changes to another repository or commit as backup and amend
+        things later). Normally such commits should not remain in a published
+        repository and not become merged.
+
+'DRAFT:'::
+        Much like WIP: but will not break compilation and is sane to use. For
+        example mockups, documentation and skeleton code for new facilities
+        may use this.
+
+'TODO:'::
+        This commit adds a documentation, comments or tests about something to
+        be done. Same rules as NoBug's TODO apply.
+
+'FIXME:'::
+        This commit adds a documentation, comments or tests about something to
+        be fixed. Aka a known bug which can not be fixed instantly for some
+        reason. Same rules as NoBug's FIXME apply.
+
+'PLANNED:'::
+        This commit adds a documentation, comments or tests about something
+        planned. Same rules as NoBug's PLANNED apply.
+
+
+... any other suggestions? ...
+
+
+.Body
+
+Adding a body is optional but recommended but for the most simple changes.
+A body, if present should separate from the header by one empty line.
+
+It is suggested not to make any lines longer than 80 characters and use
+asciidoc formatting. In most cases this means just free form text and maybe
+use of bulleted list.
+
+Care should be taken to write clean understandable commit messages. In some
+extent they may repeat the comments and documentation from the committed code
+in a short form. Think that anyone else reading only the commit message should
+understand whats going on.
+
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+// * first step ([green]#✔ done#)
+// * second step [,yellow]#WIP#
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+// add a fact list/enumeration which make this suitable:
+//  * foo
+//  * bar ...
+
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+
+
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+
+This RFC is based on existing practice, we almost done it this way. some minor
+glitches are present in the project history (no colon after keywords,
+lowercase keywords). Automatic processing becomes simpler when we formalize
+these things in an unambigous way. Commits failing this definitions might
+confuse the toolchain (builddrone) but this failures shall not be critical.
+
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+
+//endof_comments:
+
+''''
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
