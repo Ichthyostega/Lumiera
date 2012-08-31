@@ -374,6 +374,9 @@ process)
     done
     :
     ;;
+search)
+    grep -r -C3 -n "$1" ./doc/devel/rfc | less -F
+    ;;
 find|list|ls)
     if [[ "$2" ]]; then
         find_rfc "$1" | xargs grep -i -C3 -n "$2"
