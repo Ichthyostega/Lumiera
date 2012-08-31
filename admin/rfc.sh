@@ -258,9 +258,10 @@ function process_file()
         exit 1
     esac
 
-    local oldpath=./doc/devel/rfc_*/$basename
+    local oldpath
+    for oldpath in ./doc/devel/rfc_*/$basename; do :; done
 
-    if [[ "$oldpath" != './doc/devel/rfc_*/'"$basename" ]]; then
+    if [[ -h "$oldpath" ]]; then
         if [[ "$oldpath" != "$linkdest/$basename" ]]; then
             git mv "$oldpath" "$linkdest/$basename"
         fi
@@ -454,8 +455,15 @@ comment)
     ;;
 discard)
     name=$(unique_name "$1")
+
     if [[ "$name" ]]; then
-        git rm "${name}"
+        for link in ./doc/devel/rfc_*/${name##*/}; do :; done
+
+        if [[ -h "$link" ]]; then
+            git rm -f "${link}" || rm "${link}"
+        fi
+
+        git rm -f "${name}" || rm "${name}"
     fi
     ;;
 wrap)
