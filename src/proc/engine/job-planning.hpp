@@ -28,6 +28,7 @@
 //#include "proc/state.hpp"
 #include "proc/engine/job.hpp"
 #include "proc/engine/job-ticket.hpp"
+#include "proc/engine/time-anchor.hpp"
 //#include "proc/engine/frame-coord.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
@@ -190,7 +191,7 @@ namespace engine {
             return this->wrapping(*prerequisites);
                //  explanation: PlanningState represents a sequence of successive planning points.
               //                actually this is implemented by switching an embedded JobPlanning element
-             //                 through a sequence of states. Thus the initial state of the investigation
+             //                 through a sequence of states. Thus the initial state of an investigation
             //                  (which is a JobPlanning) can stand-in for the sequence of prerequisites
         }
       
@@ -210,10 +211,10 @@ namespace engine {
   
   
   inline PlanningState
-  expandPrerequisites (PlanningState const& calculationStep)
+  expandPrerequisites (JobPlanning const& calculationStep)
   {
     PlanningState newSubEvaluation(
-                    calculationStep->discoverPrerequisites());
+                    calculationStep.discoverPrerequisites());
     return newSubEvaluation;
   }
   
@@ -233,11 +234,18 @@ namespace engine {
    */
   class PlanningStepGenerator
     {
+      engine::TimeAnchor anchor_;
+      
     public:
       typedef JobPlanning value_type;
       typedef JobPlanning& reference;
       typedef JobPlanning *  pointer;
       
+//      PlanningStepGenerator() { }
+      
+      PlanningStepGenerator(engine::TimeAnchor startPoint)
+        : anchor_(startPoint)
+        { }
       
       /* === Iteration control API for IterStateWrapper== */
       
@@ -261,8 +269,14 @@ namespace engine {
     };
   
   
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #827
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #827
+  
+  
+  typedef PlanningState (*SIG_expandPrerequisites) (JobPlanning const&);
+  
+  typedef lib::IterExplorer<PlanningStepGenerator
+                           ,lib::iter_explorer::RecursiveSelfIntegration>      JobPlanningChunkStartPoint;
+
+  typedef JobPlanningChunkStartPoint::FlatMapped<SIG_expandPrerequisites>::Type  ExpandedPlanningSequence;
   
   
   
@@ -270,11 +284,18 @@ namespace engine {
    * @todo 6/12 WIP-WIP-WIP how to prepare jobs for scheduling
    */
   class JobPlanningSequence
-    : public lib::IterExplorer<PlanningStepGenerator
-                              ,lib::iter_explorer::RecursiveSelfIntegration>
+    : public ExpandedPlanningSequence
     {
       
     public:
+//    JobPlanningSequence() { }
+      
+      JobPlanningSequence(engine::TimeAnchor startPoint)
+        : ExpandedPlanningSequence(
+            JobPlanningChunkStartPoint(
+                PlanningStepGenerator(startPoint))
+            >>= expandPrerequisites)
+        { }
       
     };
   

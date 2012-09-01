@@ -230,6 +230,13 @@ namespace meta{
       typedef typename FunctionSignature<function<SIG> >::Ret Ret;
       typedef typename FunctionSignature<function<SIG> >::Args Args;
     };
+  /** Specialisation when using a function reference */
+  template<typename SIG>
+  struct _Fun<SIG&>
+    {
+      typedef typename FunctionSignature<function<SIG> >::Ret Ret;
+      typedef typename FunctionSignature<function<SIG> >::Args Args;
+    };
   /** Specialisation for passing a functor */
   template<typename SIG>
   struct _Fun<function<SIG> >

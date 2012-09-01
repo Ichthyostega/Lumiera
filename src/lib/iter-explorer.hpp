@@ -175,9 +175,11 @@ namespace lib {
       typedef typename SRC::reference reference;
       typedef typename SRC::pointer  pointer;
       
-      /** Metafunction: the resulting type when binding a functor of type FUN */
+      /** Metafunction: the resulting type when binding ("flat mapping")
+       *  a functor of type FUN. Basically the result of binding a function
+       *  is again an IterExplorer (with an "expanded" state core type) */
       template<class FUN>
-      struct Binding
+      struct FlatMapped
         {
           typedef IterExplorer<_COM_<IterExplorer,FUN>, _COM_> Type;
         };
@@ -210,11 +212,11 @@ namespace lib {
        *  of the result iterator. 
        */
       template<class FUN>
-      IterExplorer<_COM_<IterExplorer,FUN>, _COM_>
+      typename FlatMapped<FUN>::Type
       operator >>= (FUN explorer)
         {
           typedef _COM_<IterExplorer,FUN>         Combinator;       // instantiation of the combinator strategy
-          typedef IterExplorer<Combinator, _COM_> ResultsIter;      // result IterExplorer using that instance as state core
+          typedef typename FlatMapped<FUN>::Type ResultsIter;       // result IterExplorer using that instance as state core
           
           return ResultsIter (
                   Combinator (explorer                              // build a new iteration state core
