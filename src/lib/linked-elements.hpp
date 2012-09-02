@@ -62,6 +62,7 @@
 
 #include "lib/error.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/static_assert.hpp>
@@ -72,6 +73,7 @@ namespace lib {
   
   namespace error = lumiera::error;
   using error::LUMIERA_ERROR_INDEX_BOUNDS;
+  using util::unConst;
   
   
   namespace linked_elements { ///< allocation policies for the LinkedElements list container

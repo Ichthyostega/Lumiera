@@ -108,7 +108,7 @@ namespace engine {
           if (isnil (plannedOperations_))
             return JobPlanning();
           else
-            return JobPlanning (plannedOperations_->discoverPrerequisites()
+            return JobPlanning (plannedOperations_->discoverPrerequisites (point_to_calculate_.channelNr)
                                ,this->point_to_calculate_);
         }
       
@@ -116,7 +116,7 @@ namespace engine {
        *  Further evaluation will start to visit prerequisites from the new starting point,
        *  and return to the current evaluation chain later on exhaustion of the side chain. */
       friend void
-      integrate (JobPlanning const& newStartingPoint, JobPlanning existingPlan)
+      integrate (JobPlanning const& newStartingPoint, JobPlanning& existingPlan)
       {
         existingPlan.plannedOperations_.push (newStartingPoint.plannedOperations_);
       }

@@ -32,6 +32,7 @@
 //#include "lib/time/timequant.hpp"
 #include "lib/linked-elements.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <stack>
@@ -45,6 +46,7 @@ namespace engine {
 //using lib::time::FSecs;
 //using lib::time::Time;
 using lib::LinkedElements;
+using util::isnil;
 //  
 //class ExitNode;
   
@@ -128,7 +130,7 @@ using lib::LinkedElements;
         }
       
       
-      ExplorationState discoverPrerequisites()  const;
+      ExplorationState discoverPrerequisites (uint channelNr)  const;
       
       Job createJobFor (FrameCoord coordinates);
       
@@ -136,6 +138,9 @@ using lib::LinkedElements;
       bool
       isValid()  const
         {
+          if (channelConfig_.size() != requirement_.size())
+            return false;
+          
           UNIMPLEMENTED ("validity self check");
         }
     };
@@ -155,39 +160,87 @@ using lib::LinkedElements;
       bool
       empty()  const
         {
-          UNIMPLEMENTED ("detect empty/no prerequisites");
+          return toExplore_.empty();
         }
       
       
       void
       pullNext()
         {
-          UNIMPLEMENTED ("step ahead to next prerequisite, maybe pop");
+          if (empty())
+            throw lumiera::error::Logic ("Exploration of Job prerequisites floundered. "
+                                         "Attempt to iterate beyond the end of prerequisite list"
+                                        ,lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+          ASSERT (toExplore_.top().isValid());
+          
+          ++(toExplore_.top());
+          while ( !toExplore_.empty()
+                && toExplore_.top().empty())
+            toExplore_.pop();
+          
+          ENSURE (empty() || toExplore_.top().isValid());
         }
+      
       
       void
       push (ExplorationState subExploration)
         {
-          UNIMPLEMENTED ("integrate a branch of prerequisites");
+          if (subExploration.empty()) return;
+          
+          pushAllPrerequisites (subExploration.toExplore_);
+        }
+      
+      void
+      push (Prerequisites& prerequisites)
+        {
+          if (prerequisites.requiredJobs_.empty()) return;
+          toExplore_.push (prerequisites.requiredJobs_.begin());
         }
       
       
       JobTicket*
       operator->() const
         {
-          UNIMPLEMENTED ("yield the current job ticket");
-          // access prerequisite and follow up to prerequisite JobTicket
+          REQUIRE (!empty() && toExplore_.top().isValid());
+          REQUIRE (toExplore_.top()->descriptor);
+          REQUIRE (toExplore_.top()->descriptor->isValid());
+          
+          return toExplore_.top()->descriptor;
         }
       
+      
+    private:
+      void
+      pushAllPrerequisites (SubTicketStack& furtherPrerequisites)
+        {
+          REQUIRE (!isnil (furtherPrerequisites));
+          
+          if (1 == furtherPrerequisites.size())
+            {
+              this->toExplore_.push (furtherPrerequisites.top());
+            }
+          else 
+            { // pathological case: several levels of prerequisites
+              // --> push recursively to retain level ordering
+              SubTicketSeq deepestLevel (furtherPrerequisites.top());
+              furtherPrerequisites.pop();
+              pushAllPrerequisites (furtherPrerequisites);
+              this->toExplore_.push (deepestLevel);
+            }
+        }
     };
-    
+  
   
   
   
   inline JobTicket::ExplorationState
-  JobTicket::discoverPrerequisites()  const
+  JobTicket::discoverPrerequisites (uint channelNr)  const
   {
-    UNIMPLEMENTED("delve into the requirement_ datastructure");
+    REQUIRE (channelNr < requirement_.size());
+    
+    ExplorationState explorer;
+    explorer.push (requirement_[channelNr]);
+    return explorer;
   }
 
   
