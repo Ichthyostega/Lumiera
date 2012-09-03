@@ -154,7 +154,15 @@ using util::isnil;
       SubTicketStack toExplore_;
       
     public:
-      // using default ctor and copy operations
+      ExplorationState() { }
+      
+      ExplorationState (Prerequisites& prerequisites)
+        {
+          if (!isnil (prerequisites.requiredJobs_))
+            toExplore_.push (prerequisites.requiredJobs_.begin());
+        }
+      
+      // using default copy operations
       
       
       bool
@@ -188,13 +196,6 @@ using util::isnil;
           if (subExploration.empty()) return;
           
           pushAllPrerequisites (subExploration.toExplore_);
-        }
-      
-      void
-      push (Prerequisites& prerequisites)
-        {
-          if (prerequisites.requiredJobs_.empty()) return;
-          toExplore_.push (prerequisites.requiredJobs_.begin());
         }
       
       
@@ -238,9 +239,7 @@ using util::isnil;
   {
     REQUIRE (channelNr < requirement_.size());
     
-    ExplorationState explorer;
-    explorer.push (requirement_[channelNr]);
-    return explorer;
+    return ExplorationState (requirement_[channelNr]);
   }
 
   
