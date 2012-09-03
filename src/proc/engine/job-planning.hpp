@@ -114,10 +114,16 @@ namespace engine {
       
       /** integrate another chain of prerequisites into the current evaluation line.
        *  Further evaluation will start to visit prerequisites from the new starting point,
-       *  and return to the current evaluation chain later on exhaustion of the side chain. */
+       *  and return to the current evaluation chain later on exhaustion of the side chain.
+       *  Especially in case the current evaluation is empty or already exhausted, the
+       *  new starting point effectively replaces the current evaluation point */
       friend void
       integrate (JobPlanning const& newStartingPoint, JobPlanning& existingPlan)
       {
+        if (isnil (existingPlan.plannedOperations_))
+          { // current evaluation is exhausted: switch to new starting point
+            existingPlan.point_to_calculate_ = newStartingPoint.point_to_calculate_;
+          }
         existingPlan.plannedOperations_.push (newStartingPoint.plannedOperations_);
       }
       

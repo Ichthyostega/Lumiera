@@ -130,6 +130,7 @@ using util::isnil;
         }
       
       
+      ExplorationState startExploration()                      const;
       ExplorationState discoverPrerequisites (uint channelNr)  const;
       
       Job createJobFor (FrameCoord coordinates);
@@ -231,6 +232,17 @@ using util::isnil;
         }
     };
   
+  
+  
+  
+  inline JobTicket::ExplorationState
+  JobTicket::startExploration()  const
+  {
+    UNIMPLEMENTED ("somehow build a self-referential pseudo-prerequisite, and seed an ExplorationState with that");
+    /////////////////////TODO problem is: we need an JobTicket::Prerequisite instance, where the descriptor points to "self" (this JobTicket)
+    /////////////////////TODO           : but this instance needs to reside somewhere at a safe location, since we want to embed an LinkedElements-iterator
+    /////////////////////TODO           : into the ExplorationState. And obviously we do not want that instance in each JobTicket, only in the top level ones
+  }
   
   
   
