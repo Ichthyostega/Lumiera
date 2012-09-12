@@ -75,6 +75,10 @@ them. Normal work doesn't have any of these keywords but just free form text.
         example mockups, documentation and skeleton code for new facilities
         may use this.
 
+'DONE:'::
+        Final commit/merge when some noteworthy part is done. The idea here is
+        that finished things could be easily filtered out for our quarterly reports.
+
 'TODO:'::
         This commit adds a documentation, comments or tests about something to
         be done. Same rules as NoBug's TODO apply.
@@ -88,10 +92,17 @@ them. Normal work doesn't have any of these keywords but just free form text.
         This commit adds a documentation, comments or tests about something
         planned. Same rules as NoBug's PLANNED apply.
 
+'ALPHA:'::
+        Notifies the CI system that this commit defines an ALPHA release, the CI
+        may take this and build an package accordingly
 
-'DONE:'::
-        Final commit/merge when some noteworthy part is done. The idea here is
-        that finished things could be easily filtered out for our quarterly reports.
+'BETA:'::
+        Notifies the CI system that this commit defines an BETA release, the CI
+        may take this and build an package accordingly
+
+'RELEASE:'::
+        Notifies the CI system that this commit defines an production release, the CI
+        may take this and build an package accordingly
 
 
 ... any other suggestions? ...
