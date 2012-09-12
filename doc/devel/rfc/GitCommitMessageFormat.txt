@@ -89,6 +89,11 @@ them. Normal work doesn't have any of these keywords but just free form text.
         planned. Same rules as NoBug's PLANNED apply.
 
 
+'DONE:'::
+        Final commit/merge when some noteworthy part is done. The idea here is
+        that finished things could be easily filtered out for our quarterly reports.
+
+
 ... any other suggestions? ...
 
 
