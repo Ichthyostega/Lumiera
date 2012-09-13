@@ -38,13 +38,31 @@ The first line is treated as Header as described below, followed by an empty
 line and then the Body of the commit message. The Body is optional but
 recommended.
 
+This formalized keywords for headers are optional, if in doubt then don't use any.
+But if one uses them, then use only one defined here since automatic processing
+only knows about these.
+
 
 .Header
 
 The Header is free form text explaining the purpose of the commit in a few
-words. It may start with one uppercased keyword and a colon if appobiate. This
-Keywords are optional but recommended since automatic processing acts upon
-them. Normal work doesn't have any of these keywords but just free form text.
+words. It may start with one uppercased keyword and a colon if appobiate directly
+followed by some (optional, defined elsewhere) metadata. This Keywords are
+optional but recommended since automatic processing acts upon them. Normal commits
+need these keywords and are just free form text.
+
+To be exact, here is a regex matching valid Headers:
+
+ ^[[:upper:]]+:[[:punct:]]?[[:alnum:][:punct:]]*
+
+Legal headers are for example:
+
+ DONE: some feature
+ FIX:#1234 Segv when starting
+ RELEASE:1.0 Party
+
+
+.List of Defined headers:
 
 'WIP:'::
         'Work in Progress', commits marked as this may be incomplete and fail
@@ -54,8 +72,8 @@ them. Normal work doesn't have any of these keywords but just free form text.
         leading commits are WIP:
 
 'FIX:'::
-        Bugfix. The Text should explain what error got fixed, Details like a
-        bugtracker number or other references shall not be part of the Header.
+        Bugfix. The Text should explain what error got fixed. A referenence to
+        a bug number is not optional and not needed.
 
 'RFC:'::
         This commit adds or modifies a RFC but doesn't touch the codebase
@@ -105,7 +123,7 @@ them. Normal work doesn't have any of these keywords but just free form text.
         may take this and build an package accordingly
 
 
-... any other suggestions? ...
+Note: This list will be updated as need arises
 
 
 .Body
