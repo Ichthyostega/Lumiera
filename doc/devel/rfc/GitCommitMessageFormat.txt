@@ -5,7 +5,7 @@ Git Commit Message Format
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Final_
 *Date*          _Fr 31 Aug 2012 03:54:14 CEST_
 *Proposed by*   Christian Thaeter <ct@pipapo.org>
 -------------------------------------
@@ -193,6 +193,13 @@ confuse the toolchain (builddrone) but this failures shall not be critical.
 Comments
 --------
 //comments: append below
+
+.State -> Final
+//add reason
+
+We decided on the sept. 2012 devel meeting to finlize this RFC.
+
+Christian Thaeter:: 'Do 13 Sep 2012 03:57:23 CEST' ~<ct@pipapo.org>~
 
 
 //endof_comments:
