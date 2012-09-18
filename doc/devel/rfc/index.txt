@@ -1,10 +1,13 @@
 Design Proposal Pool
 ====================
 
-//Menu: off
+//Menu: discard
 //Menu: sort children
 
 -> read link:../rfc.html[more about Lumiera RfC] and the Design Process
 
-This is the poll where all Design Proposals are stored.
+This is the pool where all Design Proposals are stored.
+According to the current state of each RfC (pending, final, dropped, parked),
+there is also a symlink from the respective subdirectory to the actual document
+stored here.
 

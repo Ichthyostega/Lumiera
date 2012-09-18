@@ -1,18 +1,19 @@
 Design Process
 ==============
 
-//Menu:   include rfc
-//Menu:   include rfc_parked
+//Menu:   include rfc_final
 //Menu:   include rfc_pending
+//Menu:   include rfc_parked
 //Menu:   include rfc_dropped
 
-//Menu:   put child 'rfc_dropped' after 'rfc'
+//Menu: put child 'rfc_dropped' after 'rfc_final'
+
 
 How it Works
 ------------
 Design Process entries (Request for Comment) can be created by anyone.
 Each entry goes through several stages until it's accepted (or rejected).
-All our RfC entries are filed here, either in the  link:rfc/index.html[RfC accepted] section,
+All our RfC entries are filed here, either in the  link:rfc_final/index.html[RfC accepted] section,
 or as link:rfc_pending/index.html[pending RfC] or as link:rfc_dropped/index.html[RfC dropped].
 
 * Every proposal starts out as _*Idea*_, allowing other people to review and comment on it, while still working out details.
