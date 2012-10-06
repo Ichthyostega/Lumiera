@@ -242,6 +242,9 @@ using util::isnil;
     /////////////////////TODO problem is: we need an JobTicket::Prerequisite instance, where the descriptor points to "self" (this JobTicket)
     /////////////////////TODO           : but this instance needs to reside somewhere at a safe location, since we want to embed an LinkedElements-iterator
     /////////////////////TODO           : into the ExplorationState. And obviously we do not want that instance in each JobTicket, only in the top level ones
+    
+    /////////////////////TODO : on second thought -- better have a top-level entry point to the evaluation of a frame
+    /////////////////////TODO                        basically this inherits from Prerequisite and lives somehow in the dispatcher-table or segment
   }
   
   

@@ -60,6 +60,8 @@ namespace engine {
           ModelPort modelPort_;
           uint channel_;
           
+          /////TODO need storage for the continuation
+          
           FrameCoord relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset);
           
           JobBuilder& establishNextJobs (TimeAnchor refPoint);
@@ -70,8 +72,9 @@ namespace engine {
             {
               UNIMPLEMENTED ("how to represent the closure for defining and scheduling jobs");
               
-              ////////TODO: use a closure based on the JobTicket (which can be accessed through the dispatcher backlink)
-              ////////////  Because this closure is what backs the IterSource, it needs to have a reliable storage though. 
+              ////////TODO: use a closure based on FrameCoord plus a back-reference to the Dispatcher.
+              ////////////  Thus actually we need a *generator* for a sequence of FrameCoord
+              ////////////  This generator is then wrapped up into an evaluation-Monad (IterExplorer) 
             }
 
         };
@@ -83,8 +86,9 @@ namespace engine {
       
       JobTicket& accessJobTicket (FrameCoord const&);
       
-    protected:      
-      virtual FrameCoord locateFrameNext (uint frameCountOffset, TimeAnchor refPoint)   =0;
+    protected:
+      virtual FrameCoord locateRelative (FrameCoord, uint frameCountOffset)   =0;
+      virtual FrameCoord locateRelative (TimeAnchor, uint frameCountOffset)   =0;
     };
   
   
