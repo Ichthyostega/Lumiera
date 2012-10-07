@@ -1,12 +1,14 @@
 Design Process
 ==============
 
+//Menu:   include rfc
 //Menu:   include rfc_final
 //Menu:   include rfc_pending
 //Menu:   include rfc_parked
 //Menu:   include rfc_dropped
 
 //Menu: put child 'rfc_dropped' after 'rfc_final'
+//Menu: attach child 'rfc'
 
 
 How it Works
