@@ -195,7 +195,7 @@ Alternatives
   * separation from the code tree, lack of seamless SCM integration
   * the general penalties of using a database backed system
 
-. _writing our own integrated authoring framework_: obviously, this would be the perfect solution... +
+. _writing our own integrated authoring framework_: obviously, this would be the perfect solution...
   Anyone(TM) to volunteer?
 
 
@@ -223,6 +223,20 @@ can be considered a one-time investment.
 Comments
 --------
 //comments: append below
+
+To put this RfC into perspective, I'd like to add that Benny and myself reworked several
+of the introductory pages during our last meeting at FrOSCon 2012. We had some discussions
+about what needs to be done in order to make the existing content more readily available.
+
+In the previous years, I've written a good deal of the existing content, so I might claim
+some knowledge about the real world usage situation. This RfC is an attempt to share my
+understanding about the inherent impediments of our setup and infrastructure. Especially,
+when compared with a full-featured wiki or CMS, a list of the most lacking features
+can be distilled; I am in no way against fancy stuff, but if we're about to dedicate
+some effort to our infrastructure, it should be directed foremost towards fixing
+those stuff which matters in practice.
+
+Ichthyostega:: 'So 07 Okt 2012 07:31:25 CEST' ~<prg@ichthyostega.de>~
 
 
 //endof_comments:

@@ -5,7 +5,7 @@ WebsiteNavigation
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Draft_
 *Date*          _Mi 08 Dez 2010 11:32:32 CET_
 *Proposed by*   Ichthyostega <prg@ichthyostega.de>
 -------------------------------------
@@ -110,37 +110,22 @@ The following features would be handy, but can be considered optional
 
 Tasks
 ~~~~~
-// List what would need to be done to implement this Proposal in a few words:
-// * item ...
-
-
-
-Discussion
-~~~~~~~~~~
-
-Pros
-^^^^
-// add just a fact list/enumeration which make this suitable:
-//  * foo
-//  * bar ...
-
-
-
-Cons
-^^^^
-// fact list of the known/considered bad implications:
-
-
-
-Alternatives
-^^^^^^^^^^^^
-//alternatives: explain alternatives and tell why they are not viable:
+ * define markup for the various features ([green]#✔ done#)
+ * get a technical solution for the menu to work ([green]#✔ done#)
+ * write a script to traverse contents and generate the menu ([green]#✔ done#)
+ * test and integrate it into the website ([green]#✔ done#)
 
 
 
 Rationale
 ---------
 //rationale: Describe why it should be done *this* way:
+Maintaining the navigation within a website beyond just some pages is a daunting task.
+When frequent rearrangements of pages are to be expected, the only viable solution is
+to automate this task. Moreover, there needs to be a secondary path to each page,
+asside of the direct links which might or might not be provided. A automatically
+generated navigation menu separate of the actual page content helps to address
+these issues.
 
 
 
@@ -155,6 +140,14 @@ Rationale
 Comments
 --------
 //comments: append below
+
+.State -> Draft
+//add reason
+A Menu generator script based on these principles is deployed and working
+since a looooong time now. We still need to build the tagging facility though.
+This is covered by another RfC.
+
+Ichthyostega:: 'So 07 Okt 2012 07:30:17 CEST' ~<prg@ichthyostega.de>~
 
 
 //endof_comments:
