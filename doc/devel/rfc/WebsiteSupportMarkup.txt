@@ -1,0 +1,231 @@
+WebsiteSupportMarkup
+====================
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _Sa 06 Okt 2012 16:47:44 CEST_
+*Proposed by*   Ichthyostega <prg@ichthyostega.de>
+-------------------------------------
+
+********************************************************************************
+.Abstract
+The Lumiera Website and Documentation uses a lightweight, plaintext based
+Infrastructure built on top of Asciidoc and Git. To help with everyday
+authoring and editorial tasks, a set of support facilities is proposed,
+to be integrated seamlessly into the existing infrastructure. The front-end
+to these tools is specific markup, allowing for *cross-linking*, *tag*-based
+*link lists* and semi-automatic building of *glossary pages*.
+********************************************************************************
+
+Description
+-----------
+//description: add a detailed description:
+Some time ago, the Lumiera core developer team _decided against_ using a Content
+Management System for the Website and Documentation. While the rationale backing those
+decisions still remains valid, CMS do exist for a reason. The everyday task of authoring
+and editing a large body of text poses some specific challenges -- this RfC proposes a
+set of rather simple support tools to help coping with these.
+
+
+Use Cases
+~~~~~~~~~
+
+Authoring::
+  For now, the _authoring of new content_ is mostly a responsibility of the core developers.
+  It needs to be done close to the actual coding activities, typically once a new facility
+  is roughly finished. It is crucial for this activity not to impose a _context switch_
+  on the writer. It must be ``just writing down the obvious'' -- otherwise developers tend
+  to defer this activity ``for later''. This situation creates some unique problems...
+  
+  - during the write-up, the coder-author realises several external presuppositions, which,
+    during the act of coding, seemed to be ``obvious'' and ``self evident''.
+  - since expanding on all of those secondary topics is out of question (the author will rather
+    abandon the task of documentation altogether), the only solution is to allow for *cross linking*,
+    even if the created links are dangling for the moment.
+  - the author can't effort to locate other documents and determine URLs; he won't even be willing
+    to consult a markup syntax reference. Because, what he's about to write is essentially hard to
+    put into words and thus requires his full attention.
+
+Integrating Content::
+  This task is often prompted by some kind of external cause: it might be someone asking for
+  explanations and while trying to respond, it was determined that ``this should be in the documentation''.
+  Thus, some existing markup is extracted from an external system and pasted into some location,
+  ``just for the moment''. Of course, this content will be forgotten and rest there for
+  years to come. To deal with this situation...
+  
+  - adapting the structural cross-references of the integrated markup needs to be an easy task.
+  - we need a way to hook the new content somehow into our existing categorisation
+  - the person integrating the content wont't be willing to visit a lot of other locations,
+    or to read a syntax reference for some kind of advanced markup.
+
+Editorial work::
+  The _editor_ is reviewing existing content. He'll try to emulate an assumed user's point of view
+  to judge the adequacy of the presentation. This leads to rearranging and re-locating pages and whole
+  trees of pages, even splitting some of them, and adding introductory paragraphs and pages here and
+  there -- all without the ability to read and understand any of the reviewed material in-depth.
+  
+  - this work will be performed on the primary content using its ``natural'' representation: that is,
+    the editor will copy and move files in the file system and edit text. There is no room for using
+    any external system (unless such an external system is a fully integrated authoring environment).
+  - the editor needs an easy way for creating thematic groupings and overview pages.
+  - rearranging and splitting of pages must not break any meta-markup.
+
+
+Tools for the task at hand
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+This RfC proposes a set of tools to cope with those problems. More specifically, this proposal details
+a possible _front end_ for these tools, in a way which blends well with the existing Git / Asciidoc
+website infrastructure.
+
+Cross-linking by textual ID
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Some kind of markup allowing the author _at his own discretion_ (read: not automagically) to create
+a *cross-link* to another piece of information, identified just by a textual short-hand or ID (read: not
+requiring any kind of URL). The markup must be very lightweight and should be very similar, if not identical
+to the markup for setting an external link, e.g. `link:SomeTopic[see the explanation of Some Topic]`
+
+Variations and extensions
+
+- we might consider detecting _CamelCaseWords_. This has some Pros and Cons. If we do so, we need some
+  easy to use escape mechanism, and this CamelCase detection must not trigger within code examples and 
+  other kinds of literal quotes.
+- specifying the displayed link text should be optional
+- we might consider adding some domain prefixes, e.g. +link:rfc:SomeTopic+ or +link:ticket:SomeTopic+
+  or +link:code:SomeTopic+
+
+Obviously, these cross-links needs to be resilient towards content reorganisation after-the-fact.
+Effectively this mandates introducing some kind of indirection, since we can't effort to regenerate the
+whole website's HTML pages after each localised change. A possible solution could be to make the rendered
+cross link invoke a JavaScript function, which in turn consults some kind of index table. Another solution
+would be to let the cross link point to a server sided script.
+
+Tag extractor and Index
+^^^^^^^^^^^^^^^^^^^^^^^
+Define suitable ways for attaching *tags* to various kinds of content. The syntax will be tailored to the
+kind of content in question, typically placing the tags in some kind of comment or specific header. For
+larger documents, it would be desirable to attach tags in a more fine-grained manner, e.g. tag only one
+paragraph or sub-section (but this is a nice-to-have, since it is anything but trivial to implement).
+
+Based on these tags, there should be a mechanism to integrate a list of links into some Asciidoc page.
+Obviously this list needs to be dynamic, e.g. by using JavaScript or by including pre-fabricated HTML
+fragments into an IFrame, since it is impossible to re-generate all overview pages whenever some new
+resource gets tagged.
+
+Tags should optionally support a key-value structure, allowing for additional structures and
+functionality to be built on top. E.g. the cross-linking facility detailed above could rely on
+additional tags +id:SomeTopic+ for disambiguation. The values in such a key-value definition
+should be an ordered list, allowing to use all, or alternatively for the first-one or last-one
+to take precedence.
+
+Definition entries
+^^^^^^^^^^^^^^^^^^
+Define a suitable format to promote an existing piece of information into a *definition*. While not
+interfering with the presentation at the textual location of this definition, this mechanism should
+allow to extract this definition and present it within a glossary of terms. It would be nice if
+such a generated glossary could provide an automatic back-link to the location where the definition
+was picked up initially.
+
+Of course, defining such a markup includes some reasoning about the suitable format of a glossary
+and definition-of-terms. (Scope? Just a sentence? Just a paragraph? How to utilise existing headings?)
+
+Additionally, this term-definition facility could be integrated with the other facilities described above:
+
+- cross links could pick up the ID of term definitions
+- tags could be used to create focussed definition lists.
+
+
+Constraints
+~~~~~~~~~~~
+Please consider that the user of these facilities, i.e. the author or documentation editor, is in no way
+interested in using them. He will not recall any fancy syntax, and he won't stick to any rules for sure.
+So, anything not outright obvious is out of question.
+
+- since we don't want fully dynamic page generation and we can't afford regenerating the whole website
+  for each small update, all of these facilities need some way to adapt after-the-fact.
+- we need to build leeway into the system at various places. E.g. the cross-link facility needs a
+  strategy to generate and match the IDs and order possible matches in a sensible way. What initially
+  links to some doxygen comment might later on point to a glossary if applicable.
+- since content will be re-arranged just by editing text, each markup needs to be close to the
+  related content text, to increase the chances of keeping it intact.
+
+
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+ * identify the actual use case(s) ([green]#✔ done#)
+ * define the required facilities ([green]#✔ done#)
+ * consider an implementation strategy [yellow-background]#WIP#
+ * define a suitable markup [yellow-background]#WIP#
+ * write the necessary scripts [red yellow-background]#TBD#
+ * test and integrate it into the website [red yellow-background]#TBD#
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+ * in line with the general spirit of our Website infrastructure
+ * can be adopted gradually
+
+
+
+Cons
+^^^^
+ * the required scripts are non-trivial
+ * added complexity to the page template and website framework
+ * running multiple scripts on git push might become a performance bottleneck
+
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+. _status quo_: not doing anything to address this issues won't hurt us much right now, +
+  but increasingly works against building a well structured body of information
+
+. _using a mature CMS_: this is what most people do, so it can't be uttermost wrong. +
+  Yet still, the benefits of running a CMS need to outweigh the known problems, especially
+  
+  * lock-in, ``insular'' ecosystem, being tied to the evolution of a platform ``not invented here''
+  * separation from the code tree, lack of seamless SCM integration
+  * the general penalties of using a database backed system
+
+. _writing our own integrated authoring framework_: obviously, this would be the perfect solution... +
+  Anyone(TM) to volunteer?
+
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+Since we still want to run our website based on very lightweight infrastructure, we need to
+amend some of the shortcomings and provide a minimal set of support tools. The primary purpose
+of these tools is to reduce the burden of providing structured access to the documentation content.
+Using some special markup and a preprocessor/extractor script allows for gradual adoption and seamless
+integration with the existing content. The proposed markup is deliberately kept simple and self-evident
+for the user; the price to pay for that ease of use comes in terms of script complexity -- the latter
+can be considered a one-time investment.
+
+
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+
+//endof_comments:
+
+''''
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
