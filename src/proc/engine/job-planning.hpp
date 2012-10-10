@@ -263,6 +263,23 @@ namespace engine {
       FrameLocator* locationGenerator_;
       FrameCoord    currentLocation_;
       
+      //////////////////////////////////////////TODO duplicated storage of a FrameCoord record
+      //////////////////////////////////////////TODO nextEvaluation_ is only needed to initialise the "current" sequence 
+      //////////////////////////////////////////TODO within the RecursiveSelfIntegration strategy. Maybe this storage could be collapsed?
+      mutable JobPlanning nextEvaluation_;
+      
+      JobPlanning&
+      use_current_location_as_planning_start()
+        {
+          JobTicket& processingPlan = locationGenerator_->getJobTicketFor (currentLocation_);
+          
+          nextEvaluation_ = JobPlanning(processingPlan.startExploration()
+                                       ,currentLocation_);
+          return nextEvaluation_;
+        }
+      
+      
+      
     public:
       typedef JobPlanning value_type;
       typedef JobPlanning& reference;
@@ -288,13 +305,13 @@ namespace engine {
       friend JobPlanning&
       yield (PlanningStepGenerator const& gen)
       {
-        UNIMPLEMENTED ("generate a single frame job planning tree");  ///return *(seq.feed());
+        return unConst(gen).use_current_location_as_planning_start();
       }
       
       friend void
       iterNext (PlanningStepGenerator & gen)
       {
-        UNIMPLEMENTED ("proceed to next frame");  ///////seq.iterate();
+        gen.currentLocation_ = gen.locationGenerator_->getNextFrame (gen.currentLocation_);
       }      
     };
   
