@@ -28,8 +28,8 @@
 //#include "proc/state.hpp"
 #include "proc/engine/job.hpp"
 #include "proc/engine/job-ticket.hpp"
-#include "proc/engine/time-anchor.hpp"
-//#include "proc/engine/frame-coord.hpp"
+//#include "proc/engine/time-anchor.hpp"
+#include "proc/engine/frame-coord.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
 //#include "lib/meta/function.hpp"
@@ -226,7 +226,27 @@ namespace engine {
   
   
 
-    
+
+  /**
+   * Abstraction: a Facility to establish frame coordinates
+   * and identify and access the execution plan for this frame.
+   * @see Dispatcher the service interface actually used
+   */
+  class FrameLocator
+    : public FrameSequencer
+    {
+    public:
+      
+      JobTicket&
+      getJobTicketFor (FrameCoord location)
+        {
+          return accessJobTicket (location.modelPort, location.absoluteNominalTime);
+        }
+      
+    protected:
+      virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
+    };
+  
     
   /**
    * Generate a sequence of starting points for Job planning,
@@ -240,25 +260,22 @@ namespace engine {
    */
   class PlanningStepGenerator
     {
-      engine::FrameSequencer* locationGenerator_;
-      engine::FrameCoord      current_;
+      FrameLocator* locationGenerator_;
+      FrameCoord    currentLocation_;
       
     public:
       typedef JobPlanning value_type;
       typedef JobPlanning& reference;
       typedef JobPlanning *  pointer;
       
-//      PlanningStepGenerator() { }
       
-      PlanningStepGenerator(engine::TimeAnchor startPoint)
-        : anchor_(startPoint)
+      PlanningStepGenerator(FrameCoord startPoint, FrameLocator& locator)
+        : locationGenerator_(&locator)
+        , currentLocation_(startPoint)
         { }
-      //////////////////////////////////////////////////////////////TODO actually we need two distinct services
-      //////////////////////////////////////////////////////////////TODO - getting the next FrameCoord
-      //////////////////////////////////////////////////////////////TODO - getting the JobTicket for this location
-      //////////////////////////////////////////////////////////////TODO Actually, the Dispatcher would provide exactly those services,
-      //////////////////////////////////////////////////////////////TODO but depending on the Dispatcher constitutes a cyclic dependency.
-      //////////////////////////////////////////////////////////////TODO There seems to be a problem hidden somewhere in this design.
+      
+      // default copyable
+      
       
       /* === Iteration control API for IterStateWrapper== */
       
@@ -325,10 +342,10 @@ namespace engine {
     public:
 //    JobPlanningSequence() { }
       
-      JobPlanningSequence(engine::TimeAnchor startPoint)
+      JobPlanningSequence(engine::FrameCoord startPoint, FrameLocator& locator)
         : ExpandedPlanningSequence(
             JobPlanningChunkStartPoint(
-                PlanningStepGenerator(startPoint))
+                PlanningStepGenerator(startPoint,locator))
             >>= expandPrerequisites)
         { }
       

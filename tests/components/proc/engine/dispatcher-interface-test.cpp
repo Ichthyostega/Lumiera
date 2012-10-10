@@ -83,6 +83,22 @@ namespace test  {
           {
             UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
           }
+        FrameCoord
+        locateRelative (FrameCoord, uint frameCountOffset)
+          {
+            UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
+          }
+        FrameCoord
+        locateRelative (TimeAnchor, uint frameCountOffset)
+          {
+            UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
+          }
+      
+        JobTicket&
+        accessJobTicket (ModelPort, TimeValue nominalTime)
+          {
+            UNIMPLEMENTED ("dummy implementation of the model backbone / segmentation");
+          }
 
       public:
         
@@ -153,7 +169,7 @@ namespace test  {
           CHECK (coordinates.modelPort == modelPort);
           CHECK (coordinates.channelNr == channel);
           
-          JobTicket& executionPlan = dispatcher.accessJobTicket (coordinates);
+          JobTicket& executionPlan = dispatcher.getJobTicketFor (coordinates);
           CHECK (executionPlan.isValid());
           
           Job frameJob = executionPlan.createJobFor (coordinates); //////////////////////////////TODO this is wrong: we never create a single job!
@@ -184,11 +200,11 @@ namespace test  {
           
           // Verify the planned Jobs
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           CHECK (!isnil (jobs));
           vector<Job> plannedChunk;
           lib::append_all (jobs, plannedChunk);
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           uint chunksize = plannedChunk.size();
           CHECK (chunksize == timings.getPlanningChunkSize());
           

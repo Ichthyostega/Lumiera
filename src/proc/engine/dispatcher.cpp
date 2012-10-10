@@ -30,7 +30,8 @@
 namespace proc {
 namespace engine {
 
-  Dispatcher::~Dispatcher() { }  // emit VTable here....
+  Dispatcher::~Dispatcher() { }  // emit VTables and Typeinfo here....
+  FrameSequencer::~FrameSequencer() { }
   
   
   /** */
@@ -65,16 +66,7 @@ namespace engine {
       UNIMPLEMENTED ("wrap already planned jobs, appending a continuation to pick up later");
       return *this;
     }
-
-
   
-  
-  /** */
-  JobTicket&
-  Dispatcher::accessJobTicket (FrameCoord const& frameID)
-  {
-    UNIMPLEMENTED ("figure out and create the actual JobTicket, for the current segment and the given port");
-  }
   
   
   

@@ -49,20 +49,40 @@ namespace engine {
 //  class ExitNode;
   
   /**
-   * @todo 11/11 extremely fuzzy at the moment
+   * Internal abstraction: a service within the engine
+   * for translating a logical calculation stream (corresponding to a PlayProcess)
+   * into a sequence of individual RenderJob entries for calculations and data access.
+   * The actual implementation of this service is tied to the low-level-model, i.e.
+   * the render nodes network. The Dispatcher service is used to implement the CalcStreams
+   * during playback and rendering; there will be a continuous, chunk-wise proceeding
+   * evaluation and planning of new jobs, which can then be handed over to the Scheduler
+   * for time-bound activation.
+   * 
+   * \par usage considerations
+   * the asynchronous and ongoing nature of the render process mandates to avoid a central
+   * instance for operating this planning process. Instead, each chunk of planned jobs
+   * contains a continuation job, which -- on activation -- will pick up the planning
+   * of the next chunk. The Dispatcher interface was shaped to support this process,
+   * with a local JobBuilder to be used within the continuation job, and a TimeAnchor
+   * to represent the continuation point. All the complexities of planning jobs are
+   * hidden within the JobPlanningSequence, which, for the purpose of dispatching
+   * a series of jobs just looks like a sequence of job descriptors
+   * 
+   * @todo 10/12 still WIP, but conceptually settled by now
    */
   class Dispatcher
-    : boost::noncopyable
+    : public FrameLocator
     {
       struct JobBuilder
         {
           Dispatcher& dispatcher_;
+          TimeAnchor refPoint_;
           ModelPort modelPort_;
           uint channel_;
           
           /////TODO need storage for the continuation
           
-          FrameCoord relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset);
+          FrameCoord relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset =0);
           
           JobBuilder& establishNextJobs (TimeAnchor refPoint);
           
@@ -70,11 +90,10 @@ namespace engine {
           
           operator JobPlanningSequence()
             {
-              UNIMPLEMENTED ("how to represent the closure for defining and scheduling jobs");
+              TODO ("build the continuation job if necessary, wrap the sequence");
               
-              ////////TODO: use a closure based on FrameCoord plus a back-reference to the Dispatcher.
-              ////////////  Thus actually we need a *generator* for a sequence of FrameCoord
-              ////////////  This generator is then wrapped up into an evaluation-Monad (IterExplorer) 
+              return JobPlanningSequence(
+                  relativeFrameLocation(refPoint_), dispatcher_); 
             }
 
         };
@@ -84,11 +103,12 @@ namespace engine {
       
       JobBuilder onCalcStream (ModelPort modelPort, uint channel);
       
-      JobTicket& accessJobTicket (FrameCoord const&);
       
     protected:
       virtual FrameCoord locateRelative (FrameCoord, uint frameCountOffset)   =0;
-      virtual FrameCoord locateRelative (TimeAnchor, uint frameCountOffset)   =0;
+      virtual FrameCoord locateRelative (TimeAnchor, uint frameCountOffset)   =0;     //////////TODO is this really an interface operation, or just a convenience shortcut?
+      
+      virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
     };
   
   

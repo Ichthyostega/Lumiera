@@ -63,8 +63,9 @@ namespace builder {
     : boost::noncopyable
     {
       
+      /////////////////////////////////////////////////TODO: placeholder code
+      /////////////////////////////////////////////////TODO: see the planned structure at http://lumiera.org/wiki/renderengine.html#Fixture
       typedef ID<Pipe>   PID;
-//      typedef ID<Struct> StID;
       
     public:
       

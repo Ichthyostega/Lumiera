@@ -39,7 +39,7 @@ namespace engine {
 //using lib::time::TimeSpan;
   using lib::time::Duration;
 //using lib::time::FSecs;
-  using lib::time::Time;
+  using lib::time::TimeVar;
 //  
 //  class ExitNode;
   
@@ -50,7 +50,7 @@ namespace engine {
    * A frame render job can be characterised by
    * - the nominal (timeline) time of the frame
    * - the corresponding frame-number
-   * - the real wall-clock time of expected delivery
+   * - the real wall-clock time of expected delivery//////////////TODO : might be handy, but not sure if this information is substantial here
    * - timing constraints (e.g. latency to observe) //////////////TODO : not clear if we repeat this information here
    * - the actual node to pull data from
    * - the segment holding that node                //////////////TODO : is this information really required??
@@ -64,7 +64,7 @@ namespace engine {
     {
       
     public:
-      Time absoluteNominalTime;
+      TimeVar absoluteNominalTime;
       int64_t absoluteFrameNumber;
       
       ModelPort modelPort;
