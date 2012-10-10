@@ -4,12 +4,16 @@ This documentation section contains documentation for both users and developers.
 
 == User ==
 
-The user manual containing the full reference for using Lumiera :
+As a start, you should visit the introductory text
+link:user/intro/intro.html[Lumiera (as seen) from Outer Space]
+
+A user manual containing the full reference for using Lumiera is planned:
 
  * link:user/manual.html[User Manual]  _(planned)_
 
 == Developer ==
-Informations about the structure of Lumiera, they give an overview on the main components of the application :
+Information about the structure and concepts Lumiera is based upon.
+These documents give an overview on the main components of the application:
 
  * link:design/index.html[Design Documents]
 

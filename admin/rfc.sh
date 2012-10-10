@@ -2,6 +2,14 @@
 shopt -s extglob
 
 
+#
+# RFC's are created from ./doc/devel/template/new_rfc.sh and stored in
+# ./doc/devel/rfc/ . There are directories for the various states
+# ./doc/devel/rfc_final, ./doc/devel/rfc_pending, ./doc/devel/rfc_parked,
+# ./doc/devel/rfc_dropped . Which contain symlinks back to ../rfc/ 
+#
+
+
 function usage()
 {
     grep -v '^// ' <<"EOF" | less -F
@@ -199,7 +207,7 @@ function find_rfc()
     local globstate=$(shopt -p nocasematch)
     shopt -s nocasematch
 
-    for file in $(find ./doc/devel/rfc* -name '*.txt');
+    for file in $(find ./doc/devel/rfc/ -name '*.txt');
     do
         local name="/${file##*/}"
         if [[ "$name" =~ $match ]]; then
@@ -229,28 +237,38 @@ function process_file()
     local file="$1"
     local path="${1%/*}"
     local basename="${1##*/}"
-    local destpath="$path"
+    local linkdest="$path"
     local state=$(grep '^\*State\* *' "$file")
 
     case "$state" in
     *Final*)
-        destpath="./doc/devel/rfc"
+        linkdest="./doc/devel/rfc_final"
         ;;
     *Idea*|*Draft*)
-        destpath="./doc/devel/rfc_pending"
+        linkdest="./doc/devel/rfc_pending"
         ;;
     *Parked*)
-        destpath="./doc/devel/rfc_parked"
+        linkdest="./doc/devel/rfc_parked"
         ;;
     *Dropped*)
-        destpath="./doc/devel/rfc_dropped"
+        linkdest="./doc/devel/rfc_dropped"
         ;;
+    *)
+        echo "Unknown State: '$state'" >&2
+        exit 1
     esac
 
-    if [[ "$path" != "$destpath" ]]; then
-        git mv "$file" "$destpath"
+    local oldpath
+    for oldpath in ./doc/devel/rfc_*/$basename; do :; done
+
+    if [[ -h "$oldpath" ]]; then
+        if [[ "$oldpath" != "$linkdest/$basename" ]]; then
+            git mv "$oldpath" "$linkdest/$basename"
+        fi
+    elif [[ ! -s "$linkdest/$basename" ]]; then
+        ln -s "../rfc/$basename" "$linkdest/"
+        git add "$linkdest/$basename"
     fi
-    git add "$destpath/$basename"
 }
 
 
@@ -336,7 +354,7 @@ function change_state()
     local state="$2"
 
     local nl=$'\n'
-    local comment=".State -> $state$nl//add reason$nl    $(date +%c) $(git config --get user.name) <$(git config --get user.email)>$nl"
+    local comment=".State -> $state$nl//add reason$nl$nl$(git config --get user.name):: '$(date +%c)' ~<$(git config --get user.email)>~$nl"
     edit_state "$name" "$state" "$comment"
     edit "$name" -4 "endof_comments"
     process_file "$name"
@@ -349,12 +367,15 @@ shift
 case "$command" in
 process)
     # for all rfc's
-    for file in $(find ./doc/devel/rfc* -name '*.txt');
+    for file in $(find ./doc/devel/rfc -name '*.txt');
     do
         echo "process $file"
         process_file "$file"
     done
     :
+    ;;
+search)
+    grep -r -C3 -n "$1" ./doc/devel/rfc | less -F
     ;;
 find|list|ls)
     if [[ "$2" ]]; then
@@ -373,14 +394,13 @@ show|less|more)
 create)
     TITLE="$@"
     name=$(camel_case "$TITLE")
-    if [[ -f "./doc/devel/rfc/${name}.txt" ||
-          -f "./doc/devel/rfc_pending/${name}.txt" ||
-          -f "./doc/devel/rfc_dropped/${name}.txt" ]]; then
+    if [[ -f "./doc/devel/rfc/${name}.txt" ]]; then
         echo "$name.txt exists already"
     else
-        source ./doc/devel/template/new_rfc.sh >"./doc/devel/rfc_pending/${name}.txt"
-        edit "./doc/devel/rfc_pending/${name}.txt" 2 abstract
-        process_file "./doc/devel/rfc_pending/${name}.txt"
+        source ./doc/devel/template/new_rfc.sh >"./doc/devel/rfc/${name}.txt"
+        edit "./doc/devel/rfc/${name}.txt" 2 abstract
+        git add "./doc/devel/rfc/${name}.txt"
+        process_file "./doc/devel/rfc/${name}.txt"
     fi
     ;;
 edit)
@@ -438,8 +458,15 @@ comment)
     ;;
 discard)
     name=$(unique_name "$1")
+
     if [[ "$name" ]]; then
-        git rm "${name}"
+        for link in ./doc/devel/rfc_*/${name##*/}; do :; done
+
+        if [[ -h "$link" ]]; then
+            git rm -f "${link}" || rm "${link}"
+        fi
+
+        git rm -f "${name}" || rm "${name}"
     fi
     ;;
 wrap)

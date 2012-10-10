@@ -1,6 +1,22 @@
 Contributing to Lumiera
 =======================
 
+All files in the Lumiera project are managed by *Git*. Although *Git* was
+primarily brought to life to manage source code, it plays a fundamental role in
+Lumiera project communication and contributing to Lumiera.
+If you'd like to contribute to Lumiera, you will have to acquire some
+understanding of *Git* at some stage or other. Please note, this is not the only
+way to contribute to Lumiera, you can always send direct contributions to the
+mailing list.
+
+
+a powerful tool
+that not only 
+ 
+
+ which is a distributed 
+source code management system. 
+
 The Lumiera project uses an infrastructure based on *Git*, the distibuted
 sourcecode management software. This deliberately places the barrier for
 contributing very low: No formal ``commit right'' is necessary; you can
@@ -9,6 +25,8 @@ start right away and present your first results in the _mob repository_.
 For starters, follow the
 http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html[basic
 instructions] for using Git, notably the following parts:
+
+http://gitref.org/
 
 ------------------------------------------------------------
 $ git config --global user.name "Your Name Comes Here"

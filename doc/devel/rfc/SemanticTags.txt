@@ -1,0 +1,199 @@
+Semantic tags
+=============
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _Do 30 Aug 2012 21:06:54 CEST_
+*Proposed by*   Christian Thaeter <ct@pipapo.org>
+-------------------------------------
+
+********************************************************************************
+.Abstract
+We have a lot documentation which needs to be cross referenced. Adding well the
+known 'tags' concept and extend it slightly with some semantics will aid future
+automatic processing.
+********************************************************************************
+
+Description
+-----------
+//description: add a detailed description:
+
+Every document (including sourcecode) could extended with some metadata, aka tags
+which are then used to build automatic crossreferences.
+
+Commonly tags are just 'words' which are picked up and crossreferenceds. I propose
+to extend this scheme slightly.
+
+Overall this scheme must be very natual and easy to use. A user should not need to
+know about the underlying machinery and a tag as in a single lowercase 'word' should
+be sufficient in almost all cases. Moreover Tags should be optional.
+
+
+.Ontology
+
+To give tags some sematics we introduce a simple ontology:
+
+- Tags can have namespaces, delimited by a dot 'foo.bar.baz'.
+  Tags are looked up from right to left 'baz' would suffice as long it is unique.
+  Non unique cases will be handled in context (sometimes non uniqunes is desired)
+- We introduce simple "Is a" and "Has a" relationships. These are defined by the
+  casing of the tag: 'ALL_UPPERCASE' means "Is a" and anything else (including
+  mixed case) means "Has a". Note that for most cases the "Is a" relation will be
+  defined implicitly, ín normal cases one doesnt need to care.
+- define some tag algebra for lookups (group tags by comma and semicolons, where
+  comma means 'and' and semicolon means 'or'). Used to query the tag database.
+  regex/globbing might become handy too.
+  
+.Implicit Tags
+
+Tags can be implicit by generating them from the document:
+
+- Derrive tags from the type and location of the Document.
+  RFC's are 'RFC', source files are 'SOURCE.C' and so on.
+  
+- Derrive Tags from the content of the document.
+  Asciidoc titles will be used here. A simple preprocessor
+  generates a tag from a title (make it CamelCase, simplify etc.)
+  The resulting tag is only used iff it is unique
+
+
+.Use this tags
+
+Tags are collected/discovered by some script which creates a tag-database
+(possibly plaintext asciidoc files) as big project index linking back to the content,
+details need to be worked out.
+ 
+We create special asciidoc macros for crossreferencing tags for example: 'RFC:foobar'
+'SOURCE:builder', details need to be worked out later.
+
+Note: this Proposal is about including tags in the first place, processing them is only
+suggested and left out for later.
+
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+// * first step ([green]#✔ done#)
+// * second step [,yellow]#WIP#
+
+We need to define how to integrate tags in different documents syntactically.
+For RFC's these will likely become a part of the initial table. in other Asciidoc
+documents they could be a special comment or header. For Source files special comments
+will be used.
+
+Tags themself will be added lazily on demand (unless we find someone with the patience
+to go over all documents and tag them properly).
+
+Creating the infrastructure handling this tags (cross indexing etc) is not part of
+this proposal, nevertheless we planning this since some time and it will be defined in
+other RFC's.
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+// add a fact list/enumeration which make this suitable:
+//  * foo
+//  * bar ...
+
+ * Gives a simple graspable way to build a cross reference over the whole project
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+
+ * adding tags and developing the tools manging them will take some time
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+
+We have the ht/dig search function over the Website which give a much simpler way to
+find documents.
+
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+
+It is very urgent and important that we make our content much easier accessible.
+
+
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+//edit comment
+You may recall this proposal created some heated debate at the last developer meeting.
+After thinking it over some time, I can see now more clearly what irritated me.
+
+. for me, the proposal seems somewhat to lack focus. Right now we have some shortcomings at
+  rather basic operations when *authoring content* at the website. This proposal tends to be more
+  interested in some kind of automated content discovery.
+. the term ``tag'' in this proposal is overlayed with different meanings. For one it means an attached
+  textual property of some document, but also it denotes to some kind of inferred categorisation.
+  I'd rather propose to stick to the former meaning (which is common place) and treat the latter
+  as one _source for data_ within an categorisation algorithm. This way, such categorisation
+  sources can remain an implementation detail and don't need to be fixed in an universal way.
+. I have serious concerns against the _ontology_ part of the proposal. Not only is the syntax
+  unintuitive, but more importantly, this ontology is not well aligned with real world usage.
++
+To underpin the last diagnosis, just look at the existing tags in our Wiki:
+
+    * automation (3)
+    * Builder (20)
+    * classes (6)
+    * Concepts (9)
+    * decision (19)
+    * def (90)
+    * design (43)
+    * discuss (19)
+    * draft (55)
+    * example (3)
+    * excludeMissing (6)
+    * GuiIntegration (6)
+    * img (40)
+    * impl (36)
+    * Model (22)
+    * operational (19)
+    * overview (20)
+    * Player (12)
+    * plugin (2)
+    * Rendering (24)
+    * rewrite (3)
+    * Rules (8)
+    * SessionLogic (30)
+    * spec (76)
+    * systemConfig (9)
+    * Types (4)
+
+The absolute majority of these are neither _is-a_ nor _has-a_. The great thing with
+tags, why everyone seems to love them, is exactly that they are *not formalized*.
+You can just throw in some tags and keywords and use them for a plethora of
+unrelated and unstructured purposes and generally just assume that your
+reader will somehow ``get it''.
+
+Ichthyostega:: 'Mi 10 Okt 2012 05:36:35 CEST' ~<prg@ichthyostega.de>~
+
+
+
+//endof_comments:
+
+''''
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

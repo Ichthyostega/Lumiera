@@ -12,6 +12,47 @@ Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
 
+************************
+During Summer 2011 again the regular monthly meethings
+were mostly informal detail discussions plus some
+organisational planning. Not much to account for.
+************************
+
+
+11 Jan 2012
+-----------
+
+Topics
+~~~~~~
+ * Website status. Clean-up of TiddlyWikis
+ * cross-links and link checking for the website
+ * promotion: Libre Graphics Magazine
+ * rendering to file: library solutions
+
+Summary
+^^^^^^^
+ * link:2012-01-11.html[Summary (by cehteh)]
+
+
+
+
+14 Dec 2011
+-----------
+
+Topics
+~~~~~~
+ * discussion about build systems.
+ * review of the SCons build scripts
+ * some details about the scheduler and invoking render jobs
+
+////
+Summary
+^^^^^^^
+ * link:2011-12-14.html[IRC Transcript (prepared by XXXX)]
+////
+
+
+************************
 During Summer 2011 we kept up our monthly IRC meetings -- rather casual exchange
 for the time being.
 
@@ -21,7 +62,7 @@ for the time being.
 - 10 Aug 2011
 - 13 Jul 2011
 - 8 Jun 2011
-
+************************
 
 11 May 2011
 -----------

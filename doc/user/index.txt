@@ -5,7 +5,7 @@ User Documentation
 // Menu :  attach child 'manual' after 'intro'
 
  * link:manual.html[User Manual]    _(planned)_
- * The following document might become an introductory overview: +
+ * The following document contains an introductory overview: +
    link:intro/intro.html[Lumiera (as seen) from Outer Space]
  * link:intro/Glossary.html[Glossary of common terms]
 

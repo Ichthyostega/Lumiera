@@ -1,0 +1,155 @@
+SystematicMetadata
+==================
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _Mo 08 Okt 2012 04:39:16 CEST_
+*Proposed by*   Ichthyostega <prg@ichthyostega.de>
+-------------------------------------
+
+********************************************************************************
+.Abstract
+_give a short summary of this proposal_
+********************************************************************************
+
+Lumiera is a metadata processing application: _Data_ is _media data_, and everything
+else is _metadata_. Since our basic decision is to rely on existing libraries for
+handling data, the ``metadata part'' is what _we are building anew._
+
+This RfC describes a fundamental approach towards metadata handling.
+
+
+Description
+-----------
+//description: add a detailed description:
+Metadata is conceived as a huge uniform tree. This tree is conceptual -- it is
+never represented as a whole. In the implemented system, we only ever see parts
+of this virtual tree being cast into concrete data representations. These parts
+are like islands of explicitly defined and typed structure, yet they never need
+to span the whole virtual model, and thus there never needs to be an universal
+model data structure definition. Data structure becomes implementation detail.
+
+Parts of the system talk to each other by _describing_ some subtree of metadata.
+This description is _always pushed:_ the receiver implements an API allowing the
+sender to navigate to some path-like scope and populate it with values, similar
+to populating a filesystem. It is up to the receiver to assemble these information
+into a suitable representation. Some receiver might invoke an object factory, while
+another serialises data into an external textual or binary representation.
+
+
+Abstract Metadata Model
+~~~~~~~~~~~~~~~~~~~~~~~
+The conceptual model for metadata is close to what the JSON format uses: +
+There are primitive values as +null+, string, number and boolean. Compund values
+can be arrays or records, the latter being a sub-scope populated with key-value pairs.
+
+We might consider some extensions
+
+ * having data values similar to BSON of MongoDB: integrals, floats, timestamps
+ * introducing two _special magic keys_ for records: `"type"` and `"id"`
+
+
+Sources and Overlays
+~~~~~~~~~~~~~~~~~~~~
+Metadata is delivered from _sources_, which can be _layered_. Similarly, on the
+receiving side, there can be multiple _writeable layers_, with a routing strategy
+to decide which writeable layer receives a given metadata element. This routing
+is implemented within a pipeline connecting sender and receiver; if the default
+routing strategy isn't sufficient, we can control the routing by introducing a
+a meta-tree in some separate branch, this way making the metadata self-referential.
+
+
+Some points to note
+~~~~~~~~~~~~~~~~~~~
+- this concept doesn't say anything about the actual meaning of the metadata elements,
+  since that is always determined by the receiver, based on the current context.
+- likewise, this concept doesn't state anything about the actual interactions, the
+  involved parts and how the interaction is initiated and configured; this is considered
+  an external topic, which needs to be solved within the applicable context (e.g. the
+  session has a specific protocol how to retrieve a persisted session snapshot)
+- there is no separate _system configuration_ -- configuration appears just as a
+  local record of key-value pairs, which is interpreted according to the context.
+- in a similar vein, this concept deliberately doesn't state anything regarding the
+  handling of _defaults_, since these are so highly dependent on the actual context.
+
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+// * first step ([green]#✔ done#)
+ * define the interaction API [yellow-background]#WIP#
+ * scrutinise this concept to find the pitfalls [yellow-background]#WIP#
+ * build a demonstration prototype, where the receiver fabricates an object [red yellow-background]#TBD#
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+- the basic implementation is strikingly simple, much simpler than building
+  a huge data structure or any kind of serialisation/deserialisation scheme
+- parts can be combined in an open fashion, we don't need a final concept up-front
+- even complex routing and overlaying strategies become manageable, since they can be
+  treated in isolation, local for a given scope and apart from the storage representation
+- library implementations for textual representations can be integrated.
+
+
+
+Cons
+^^^^
+- the theoretical view is challenging and rather uncommon
+- a naive implementation holds the whole data tree in memory twice
+- how the coherent ``islands'' are combined is only a matter of invocation order
+  and thus dangerously flexible
+
+
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+The classical alternative is to define a common core data structure, which
+needs to be finalised quickly. Isolated functional modules will then be written
+to work on that common data set, which leads to a high degree of coupling.
+Since this approach effectively doesn't scale well, what happens in practice is
+that several independent storage and exchange systems start to exist in parallel,
+e.g. system configuration, persisted object model, plug-in parameters, presentation
+state.
+
+
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+Basically common (meta) data could take on a lot of shapes between two extremes:
+
+- the _precise typed structure_, which also is a contract
+- the _open dynamic structure_, which leaves the contract implicit
+
+The concept detailed in this RfC tries to reconcile those extremes by avoiding
+a global concrete representation; +
+this way the actual interaction -- with the necessity
+of defining a contract -- is turned into a local problem.
+
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+
+//endof_comments:
+
+''''
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
