@@ -53,7 +53,7 @@ namespace lumiera {
     string
     resolve (fsys::path iniSpec)
     {
-      string file = iniSpec.leaf();
+      string file = iniSpec.leaf().string();
       string searchpath = iniSpec.branch_path().string();
       return resolveModulePath (file, searchpath);
     }

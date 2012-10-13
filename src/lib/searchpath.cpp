@@ -71,7 +71,7 @@ namespace lib {
   {
     static const regex PICK_ORIGIN_TOKEN ("\\$?ORIGIN/?");
     static const string expandedOriginDir  
-      = fsys::path (findExePath()).remove_leaf().directory_string();
+      = fsys::path (findExePath()).remove_leaf().string() + "/";          ///////////TICKET #896
     
     return boost::regex_replace(src, PICK_ORIGIN_TOKEN, expandedOriginDir);
   }
