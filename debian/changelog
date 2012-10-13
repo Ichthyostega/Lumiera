@@ -1,3 +1,11 @@
+lumiera (0.pre.01-3+wheezy) UNRELEASED; urgency=low
+
+  * packaged for Debian Wheezy (pre-stable)
+  * apply the GCC 4.7 compilation fixed (thanks to mfisher31@gmail.com)
+  * workaround for supporting Boost filesystem 2 and 3
+
+ -- Hermann Vosseler <deb@ichthyostega.de>  Sat, 13 Oct 2012 03:10:10 +0200
+
 lumiera (0.pre.01-3+squeeze) squeeze; urgency=low
 
   * packaged for Debian Squeeze (stable)
