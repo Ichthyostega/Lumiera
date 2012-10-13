@@ -111,7 +111,7 @@ namespace lib {
    *  @return the absolute pathname of the module file found
    *  @throws error::Config when the resolution fails  
    */
-  string resolveModulePath (string moduleName, string searchPath = "");
+  string resolveModulePath (fsys::path moduleName, string searchPath = "");
   
   
   
