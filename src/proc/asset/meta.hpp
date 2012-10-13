@@ -60,8 +60,8 @@
 
 #include "proc/asset.hpp"
 #include "proc/asset/entry-id.hpp"
-#include "lib/factory.hpp"
 
+#include <boost/noncopyable.hpp>
 
 
 namespace proc {
@@ -145,7 +145,8 @@ namespace asset {
   /** 
    * Factory specialised for creating Metadata Asset objects.
    */ 
-  class MetaFactory : public lib::Factory<asset::Meta>
+  class MetaFactory
+    : boost::noncopyable
     {
     public:
       typedef P<asset::Meta> PType;

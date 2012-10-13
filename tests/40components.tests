@@ -280,42 +280,6 @@ out: caught error::Logic: LUMIERA_ERROR_LOGIC:internal logic broken \(the big ba
 END
 
 
-TEST "Factory_test" Factory_test 5  <<END
-out: ctor TargetObj\(5\) successful
-out: now the smart-ptr has refcount=3
-out: .....TargetObj\(5\): data="\*\*\*\*\*", array\[5\]=\{0,1,2,3,4,\}
-out: dtor ~TargetObj\(5\) successful
-END
-
-
-TEST "Factory_special_test" Factory_special_test 5  <<END
-out: checkPlacement--------
-out: ctor TargetObj\(5\) successful
-out: created 3 shared_ptrs to Object placed in static buffer.
-out: .....TargetObj\(5\): data="\*\*\*\*\*", array\[5\]=\{0,1,2,3,4,\}
-out: dtor ~TargetObj\(5\) successful
-out: ctor TargetObj\(6\) successful
-out: created 4 shared_ptrs to Object placed in static buffer.
-out: dtor ~TargetObj\(6\) successful
-out: checkPrivate--------
-out: ctor TargetObj\(5\) successful
-out: created 3 shared_ptrs to paranoid Object.
-out: .....TargetObj\(5\): data="\*\*\*\*\*", array\[5\]=\{0,1,2,3,4,\}
-out: dtor ~TargetObj\(5\) successful
-out: checkMalloc--------
-out: ctor TargetObj\(7\) successful
-out: created auto_ptr to malloc-ed Object.
-out: .....TargetObj\(7\): data="\*\*\*\*\*\*\*", array\[7\]=\{0,1,2,3,4,5,6,\}
-out: dtor ~TargetObj\(7\) successful
-out: checkPImpl--------
-out: ctor TargetObj\(12\) successful
-out: created auto_ptr to Interface Object.
-out: .....ImplObj::funky\(\) called
-out: .....TargetObj\(12\): data="\*\*\*\*\*\*\*\*\*\*\*\*", array\[12\]=\{0,1,2,3,4,5,6,7,8,9,10,11,\}
-out: dtor ~TargetObj\(12\) successful
-END
-
-
 TEST "formatting/diagnostics helpers" FormatHelper_test <<END
 out: Displaying some types....
 out: «..util.test.Reticent.»

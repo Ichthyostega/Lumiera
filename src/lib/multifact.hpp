@@ -21,12 +21,13 @@
 */
 
 /** @file multifact.hpp
- ** Building blocks to create a configurable factory, generating families of related objects.
- ** Serving the "classical" factory situation: obtaining objects of various kinds, which
- ** are related somehow (usually through an common interface). The creation of these
- ** objects is non-trivial while number and exact parametrisation aren't known beforehand
- ** and need to be figured out at runtime. Thus, a number of "fabrication lines" is set up,
- ** to be selected on invocation through an ID (which may be symbolic, hashed or structural).
+ ** Framework for building a configurable factory, to generae families of related objects.
+ ** These building blocks are targeted towards the "classical" factory situation: obtaining
+ ** objects of various kinds, which are related somehow (usually through an common interface).
+ ** The creation of these objects might be non-trivial, while the number of flavours to be
+ ** produced and the exact parametrisation isn't known beforehand and needs to be figured out
+ ** at runtime. As a solution, thus a number of "fabrication lines" is set up, to be selected
+ ** on invocation through an ID (which may be symbolic, hashed or structural).
  ** 
  ** Usually, the issue of object and storage management is closely related, while it is
  ** desirable to keep the object production logic clean of these rather technical concerns.
@@ -38,7 +39,7 @@
  ** function.
  ** 
  ** \par Singleton generation
- ** For the very common situation of needing various singleton objects, accessible by ID,
+ ** For the very common situation of building a family of singleton objects, accessible by ID,
  ** there is a convenience shortcut: The nested MultiFact::Singleton template can be instantiated
  ** within the context providing the objects (usually a static context). In itself a lib::Singleton
  ** factory, it automatically registers the singleton access function as "fabrication" function
@@ -48,6 +49,7 @@
  **       for the special case when the fabrication functions need additional invocation arguments.
  ** 
  ** @see multifact-test.cpp
+ ** @see multifact-argument-test.cpp
  ** @see SingletonFactory
  ** @see lib::factory::Factory
  */
@@ -70,7 +72,7 @@
 namespace lib {
   namespace factory {
     
-    /////////////////////////////////TICKET #470 : couldn't these wrappers be extracted into a separate header?
+    // Helpers to wrap the factory's product
     
     /**
      * Dummy "wrapper",

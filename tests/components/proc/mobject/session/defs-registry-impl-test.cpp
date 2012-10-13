@@ -25,7 +25,6 @@
 #include "lib/util.hpp"
 
 #include "proc/mobject/session/defs-registry.hpp"
-#include "lib/factory.hpp"
 #include "lib/query.hpp"
 #include "lib/p.hpp"
 
@@ -83,6 +82,13 @@ namespace test    {
   template<int I>
   string Dummy<I>::name = str (typePatt % I);
   
+  template<int I>
+  inline P<Dummy<I> >
+  fabricate()
+  {
+    return P<Dummy<I> >(new Dummy<I>);
+  }
+  
   
   
   
@@ -109,22 +115,21 @@ namespace test    {
       typedef DefsRegistry::Iter<Dummy<23> > Iter23;
       
       
-      // fabricating Objects wrapped into smart-ptrs
-      lib::factory::RefcountFac<Dummy<13> > oFac;
-      lib::factory::RefcountFac<Dummy<23> > pFac;
-      
+      // some test objects...
       Obj o1, o2, o3;
       Q13 q1, q2, q3, q4, q5;
       map<Q23, Prd> ps;
       
     public:
       DefsRegistryImpl_test ()
-        : o1 (oFac()), o2 (oFac()), o3 (oFac()),
-          q1 (garbage_query (1)),
-          q2 (garbage_query (2)),
-          q3 (garbage_query (3)),
-          q4 (garbage_query (4)),
-          q5 (garbage_query (5))
+        : o1 (fabricate<13>())
+        , o2 (fabricate<13>())
+        , o3 (fabricate<13>())
+        , q1 (garbage_query (1))
+        , q2 (garbage_query (2))
+        , q3 (garbage_query (3))
+        , q4 (garbage_query (4))
+        , q5 (garbage_query (5))
         { }
       
       
@@ -158,7 +163,7 @@ namespace test    {
           ps.clear();
           for (int i=0; i<100; ++i)
             {
-              Prd px (pFac());
+              Prd px (fabricate<23>());
               Q23 qx (garbage_query());
               ps[qx] = px;
               reg_->put (px, qx);
@@ -276,7 +281,7 @@ namespace test    {
           CHECK (!reg_->forget (o1)); // failure, because it's already removed
           CHECK ( reg_->forget (o2));
           
-          o3 = oFac();        // another object is another object (it's irrelevant...)
+          o3 = fabricate<13>();    // another object is another object (it's irrelevant...)
           
           i = reg_->candidates(q2);
           CHECK (! (*i));  // empty

@@ -59,10 +59,9 @@
 
 #include "proc/asset.hpp"
 #include "lib/query.hpp"
-#include "lib/factory.hpp"
-#include "lib/singleton.hpp"
 #include "lib/symbol.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <string>
 
@@ -134,7 +133,8 @@ namespace asset {
   /** 
    * Factory specialised for creating Structural Asset objects.
    */ 
-  class StructFactory : public lib::Factory<asset::Struct>
+  class StructFactory
+    : boost::noncopyable
     {
       scoped_ptr<StructFactoryImpl> impl_;
       
