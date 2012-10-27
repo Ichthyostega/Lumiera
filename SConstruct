@@ -96,6 +96,7 @@ def setupBasicEnvironment(localDefinitions):
                )
     handleNoBugSwitches(env)
     
+    env.Append(LINKFLAGS = '-Wl,--allow-shlib-undefined')    ### Workaround for building old Lumiera version (with some inconsistent dependencies) on Ubuntu Precise
     env.Append(CPPDEFINES = '_GNU_SOURCE')
     appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
 #   appendCppDefine(env,'OPENGL','USE_OPENGL')
@@ -341,9 +342,9 @@ def defineBuildTargets(env, artifacts):
     
     
     lLib  = env.SharedLibrary('lumiera',        srcSubtree(env,'src/lib'),    install=True)
-    lApp  = env.SharedLibrary('lumieracommon',  srcSubtree(env,'src/common'), install=True, LIBS=lLib)
-    lBack = env.SharedLibrary('lumierabackend', srcSubtree(env,'src/backend'),install=True)
-    lProc = env.SharedLibrary('lumieraproc',    srcSubtree(env,'src/proc'),   install=True)
+    lApp  = env.SharedLibrary('lumieracommon',  srcSubtree(env,'src/common')+lLib, install=True)
+    lBack = env.SharedLibrary('lumierabackend', srcSubtree(env,'src/backend')+lApp,install=True)
+    lProc = env.SharedLibrary('lumieraproc',    srcSubtree(env,'src/proc')+lBack,   install=True)
     
     core = lLib+lApp+lBack+lProc
     
