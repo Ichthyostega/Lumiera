@@ -24,11 +24,10 @@
 #include "proc/mobject/session/defs-manager.hpp"
 #include "proc/mobject/session/defs-registry.hpp"
 #include "common/configrules.hpp"
+#include "lib/format-string.hpp"
 #include "lib/error.hpp"
 
-#include <boost/format.hpp>
-
-using boost::format;
+using util::_Fmt;
 
 using lumiera::ConfigRules;
 using lumiera::query::QueryHandler;
@@ -64,8 +63,9 @@ namespace session {
     P<TAR> res;
     QueryHandler<TAR>& typeHandler = ConfigRules::instance();
     for (DefsRegistry::Iter<TAR> i = defsRegistry->candidates(capabilities);
-         res = *i ; ++i )
+         bool(*i) ; ++i )
       {
+        res = *i;
         typeHandler.resolve (res, capabilities);
         if (res)
           return res;
@@ -120,8 +120,8 @@ namespace session {
       res = create (capabilities); // not yet known as default, create new
     
     if (!res)
-      throw lumiera::error::Config ( str(format("The following Query could not be resolved: %s.")
-                                               % capabilities.asKey())
+      throw lumiera::error::Config (_Fmt("The following Query could not be resolved: %s.")
+                                        % capabilities.asKey()
                                    , LUMIERA_ERROR_CAPABILITY_QUERY );
     else
       return res;

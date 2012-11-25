@@ -1614,7 +1614,7 @@ For this to work, we need each of the //participating object types// to provide 
 
 @@clear(left):display(block):@@</pre>
 </div>
-<div title="ConfigRules" modifier="Ichthyostega" modified="201010280156" created="200801171352" tags="overview spec Rules" changecount="20">
+<div title="ConfigRules" modifier="Ichthyostega" modified="201210280250" created="200801171352" tags="overview spec Rules" changecount="22">
 <pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Lumiera the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Lumiera's behaviour to great extent.
 
 [[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
@@ -1631,7 +1631,21 @@ Queries are represented by instantiations of the {{{Query&lt;TYPE&gt;}}} templat
 A special kind of configuration query includes the predicate {{{default(X)}}}, which is kind-of an existential quantisation of the variable {{{X}}}. Using this predicate states that a suitable //default-configured// object exists somehow. This behaviour could be used as an fallback within a config query, allowing us always to return a solution. The latter can be crucial when it comes to integrating the query subsystem into an existing piece of implementation logic, which requires us to give some guarantees.
 &amp;rarr; see DefaultsManagement on details how to access these captured defaults
 
-But note, the exact relation of configuration queries and query-for-default still needs to be worked out, especially when to use which flavour. {{red{WIP 10/2010 &amp;rArr; see Ticket [[#705|http://issues.lumiera.org/ticket/705]]}}}
+But note, the exact relation of configuration queries and query-for-default still needs to be worked out, especially when to use which flavour. 
+
+! {{red{WIP 2012}}} front-end and integration
+The overall architecture of this rules based configuration system remains to be worked out
+* the generic front-end to unite all kinds of configuration queries
+* how to configure the various [[query resolvers|QueryResolver]]
+* how to pick and address a suitable resolver for a given query situation
+* the taxonomy of queries:
+** capability queries
+** retrieval queries
+** defaults queries
+** discovery queries
+** connection queries
+** ...
+{{red{WIP 10/2010 &amp;rArr; see Ticket [[#705|http://issues.lumiera.org/ticket/705]]}}}
 
 !executing a Configuration Query
 Actually posing such an configuration query, for example to the [[Defaults Manager in the Sessison|DefaultsManagement]], may trigger several actions: First it is checked against internal object registries (depending on the target object type), which may cause the delivery of an already existing object (as reference, clone, or smart pointer). Otherwise, the system tries to figure out an viable configuration for a newly created object instance, possibly by issuing recursive queries. In the most general case this may silently impose additional decisions onto the //execution context // of the query &amp;mdash; by default the session.
@@ -4826,6 +4840,12 @@ See also the notes on
 &amp;nbsp; &amp;rarr; QueryRegistration
 </pre>
 </div>
+<div title="QueryExchange" modifier="Ichthyostega" modified="201211151656" created="201211060206" tags="Rules draft" changecount="3">
+<pre>There is a common denominator amongst all queries: they describe a pattern of relations, which can be //satisfied// by providing a //solution.// But queries can be used in a wide variety of situations, each binding them to a more specific meaning and each opening the possibility to use a specialised resolution mechanism. For example, a query //might// actually mean to fetch and filter the contents of some sub-section of the session model. Or it might cause the fabrication an registration of some new model content object. In order to tie those disjoint kinds of queries together, we need a mechanism to exchange one kind of query with another one, or to derive one from another one. This ''exchange of queries'' actually is a way of ''remoulding'' and rebuilding a query -- which is based on a common syntactic representation of all queries, cast into terms of predicate logic. Besides, there is a common, unspecific, generic resolution mechanism ({{red{planned 11/12}}}) , which can delegate to more specialised resolvers when applicable.
+
+!handling of queries
+Queries are are always exposed or revealed at some point or facility allowing to pose queries. This facility remains the owner of the query instances and knows its concrete flavour (type). But queries can be referred to and exchanged through the {{{Query&lt;TY&gt;}}}-abstraction.</pre>
+</div>
 <div title="QueryFocus" modifier="Ichthyostega" modified="201006190505" created="200910140244" tags="def spec img" changecount="34">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
@@ -4889,9 +4909,10 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;configuration data&quot; (including the actual plugin implementation to be loaded)
 </pre>
 </div>
-<div title="QueryRegistration" modifier="Ichthyostega" created="201006190112" tags="Rules draft impl discuss" changecount="1">
+<div title="QueryRegistration" modifier="Ichthyostega" modified="201211151653" created="201006190112" tags="Rules draft impl discuss" changecount="4">
 <pre>//Querying for some suitable element,// instead of relying on hard wired dependencies, is considered a core pattern within Lumiera.
-But we certainly can't expect to subsume every query situation to one single umbrella interface, so we need some kind of '''query dispatch''' and a registration mechanism to support this indirection. Closely related is the &amp;rarr; TypedQueryProblem
+But we certainly can't expect to subsume every query situation to one single umbrella interface, so we need some kind of ''query dispatch'' and a registration mechanism to support this indirection. This could lead to a situation, where the term &amp;raquo;query&amp;laquo; is just a vaguely defined umbrella, holding together several disjoint subsistems. Yet, while in fact this describes the situation in the code base as of this writing, {{red{11/2012}}}, actually all kinds of queries are intended to share a //common semantic space.// So, in the end, we need a mechanism to [[exchange queries|QueryExchange]] with one another, and this mechanism ought to be based on the common //syntactic representation through terms of predicate logic.//
+Closely related is the &amp;rarr; TypedQueryProblem
 
 !Plans and preliminary implementation
 As of 6/10, the intention is to be able just to //pose queries eventually.// Behind the scenes, a suitable QueryResolver should then be picked to process the query and yield a resultset. Thus the {{{Goal}}} and {{{Query&lt;TY&gt;}}} interfaces are to become the access point to a generic dispatching service and a bundle of specialised resolution mechanisms.

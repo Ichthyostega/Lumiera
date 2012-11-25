@@ -53,7 +53,6 @@ namespace proc {
 namespace control {
 
 //  using lib::P;
-//  using lumiera::Query;
   
 //  using std::string;
 //  using boost::format;

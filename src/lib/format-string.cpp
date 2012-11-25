@@ -206,6 +206,7 @@ namespace util {
    * used to fed parameters has a higher precedence than the
    * assignment or comparison operators, ensuring that all parameters
    * are evaluated and formatted prior to receiving the formatted result
+   * @note EX_FREE
    */
   _Fmt::operator string()  const
   try {

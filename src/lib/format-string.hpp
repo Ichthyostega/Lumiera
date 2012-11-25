@@ -215,6 +215,7 @@ namespace util {
    * @param val arbitrary value or pointer to be included into the result
    * @warning you need to provide exactly the right number of parameters,
    *          i.e. matching the number of fields in the format string.
+   * @note EX_FREE
    */
   template<typename VAL>
   inline _Fmt&

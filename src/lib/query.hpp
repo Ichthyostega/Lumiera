@@ -28,8 +28,6 @@
 #include <string>
 #include <typeinfo>
 
-#include <boost/format.hpp>                      /////////////////////////////////////////TICKET #166  Oh RLY ... need to do away with this 
-
 #include "lib/symbol.hpp"
 
 
@@ -60,19 +58,26 @@ namespace lumiera {
    *       of the atoms in the query.
    */
   template<class OBJ>
-  class Query : public std::string
+  class Query
     {
+       std::string predicateForm_;
+       
     public:
-      explicit Query (string const& predicate="") : string(predicate) {}
-//    explicit Query (format& pattern)            : string(str(pattern)) {} //////////////TICKET #166  outch... that needs to disappear
+      explicit Query (string const& predicate="")
+        : predicateForm_(predicate)
+        { }
       
-      const string asKey()  const
+
+      void
+      clear()
         {
-          return string(typeid(OBJ).name())+": "+*this;
+          predicateForm_.clear();
         }
       
-      operator string& () { return *this; }      //TICKET #710 : needed temporarily by fake-configrules 
-    };                                          //               for calling removeTerm on the string-ref....
+      operator string()  const { return predicateForm_; }
+      
+//    operator string& () { return predicateForm_; }      //TICKET #710 : needed temporarily by fake-configrules 
+    };                                                   //               for calling removeTerm on the string-ref....
   
   
   namespace query {

@@ -32,6 +32,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
+#include <boost/lexical_cast.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <tr1/functional>
@@ -177,10 +178,15 @@ namespace session {
           return id;
         }
       
+      class Builder;
+      
     public:
       Query()
         : Goal (defineQueryTypeID())
         { }
+      
+      static QueryBuilder
+      build (Kind queryType = Goal::GENERIC);
       
       
       /* results retrieval */
@@ -211,11 +217,33 @@ namespace session {
         : Goal (qID)
         { }
       
+      friend class Builder;
+      
     };
   
   
   
   
+    /** 
+     * Helper for establishing,
+     * reworking and remolding queries. 
+     */
+    template<class RES>
+    class Query<RES>::Builder
+      {
+        string predicateForm_;
+        
+      public:
+        
+      const string
+      asKey()  const
+        {
+          return "type("
+               + lexial_cast<string> (getResultTypeID<RES>())
+               + "), "+predicateForm_;
+        }
+      
+      };
   
   /** 
    * ABC denoting the result set

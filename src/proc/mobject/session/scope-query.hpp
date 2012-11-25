@@ -126,7 +126,7 @@ namespace session {
    * object holds it's own discovery iterator and thus is completely
    * self contained. The query is issued automatically on construction,
    * thus the embedded iterator immediately points at the first result.
-   * Moreover, as any Lumiera Forward Iterator is \c bool checkable,
+   * Moreover, since any Lumiera Forward Iterator is \c bool checkable,
    * a ScopeQuery not yielding any results will evaluate to \c false
    * immediately after construction, allowing convenient inline checks.
    * The query can be re-issued by the function operator, and the

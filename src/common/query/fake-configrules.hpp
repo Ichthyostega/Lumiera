@@ -62,6 +62,7 @@ namespace lumiera {
     using proc::mobject::Session;
     using lib::meta::InstantiateChained;
     
+    using util::contains;
     using util::isnil;
     
     using boost::any;
@@ -85,9 +86,9 @@ namespace lumiera {
        *  This implementation is quite crude, of course it would be necessary actually to
        *  parse and evaluate the query. @note query is modified if "default" ... */
       inline bool
-      is_defaults_query (string& query)
+      treat_as_defaults_query (string& querySpec)
       {
-        return !isnil (removeTerm ("default", query));
+        return !isnil (removeTerm ("default", querySpec));
       }
       
     } // details (end)
@@ -130,7 +131,7 @@ namespace lumiera {
     
     /** 
      * building block defining how to do 
-     * the mock implementation for \e one type.
+     * the mock implementation for \em one type.
      * We simply access a table holding pre-created objects.
      */
     template<class TY, class BASE>
@@ -148,7 +149,7 @@ namespace lumiera {
               {
                 Ret const& candidate (any_cast<Ret const&> (entry));
                 if (! solution
-                   ||(solution &&  solution == candidate)    // simulates a real unification
+                   ||(solution &&  solution == candidate)      // simulates a real unification
                    )
                   return solution = candidate;
               }
@@ -159,17 +160,21 @@ namespace lumiera {
         bool
         try_special_case (Ret& solution, Query<TY> const& q)
           {
-            if (solution && isFakeBypass(q))       // backdoor for tests
+            if (solution && isFakeBypass(q))        // backdoor for tests
               return solution;
             
+            string querySpec (q);
+            if (treat_as_defaults_query (querySpec))
+              {
+                Query<TY> defaultsQuery(querySpec);
+                return solution = Session::current->defaults (defaultsQuery);
+              }                             //   may cause recursion
+                                            
             Query<TY> newQuery = q;
-            if (is_defaults_query (newQuery))  // modified query..
-              return solution = Session::current->defaults (newQuery);
-                                             //   may cause recursion
             if (this->detect_case (solution, newQuery))
               return resolve (solution, newQuery);
             
-            return solution = Ret();     // fail: return default-constructed empty smart ptr
+            return solution = Ret();  // fail: return default-constructed empty smart ptr
           }
       };
     
