@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/mobject/session/query-resolver.hpp"
+#include "lib/query-resolver.hpp"
 #include "lib/singleton.hpp"
 
 #include <iostream>

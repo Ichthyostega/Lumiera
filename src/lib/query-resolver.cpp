@@ -21,15 +21,11 @@
 * *****************************************************/
 
 
-#include "proc/mobject/session/query-resolver.hpp"
+#include "lib/query-resolver.hpp"
 #include "lib/multifact-arg.hpp"
 
-namespace proc {
-namespace mobject {
-namespace session {
+namespace lib {
   
-  using lib::factory::MultiFact;
-  using lib::factory::BuildRefcountPtr;
   
   
   /* generate vtables here... */
@@ -123,4 +119,4 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+} // namespace lib

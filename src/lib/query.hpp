@@ -26,6 +26,7 @@
 
 
 #include <string>
+#include <cctype>
 #include <typeinfo>
 
 #include "lib/symbol.hpp"
@@ -36,7 +37,6 @@ namespace lumiera {
   using lib::Symbol;
   using lib::Literal;
   using std::string;
-  using boost::format;
   
   /* ==== common definitions for rule based queries ==== */
   

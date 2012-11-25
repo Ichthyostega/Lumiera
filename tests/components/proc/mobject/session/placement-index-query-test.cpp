@@ -22,11 +22,11 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session/query-resolver.hpp"
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/session/placement-index-query-resolver.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
+#include "lib/query-resolver.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>

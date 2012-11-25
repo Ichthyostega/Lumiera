@@ -47,7 +47,7 @@
 #define MOBJECT_SESSION_SESSION_SERVICE_EXPLORE_SCOPE_H
 
 #include "proc/mobject/placement.hpp"
-#include "proc/mobject/session/query-resolver.hpp"
+#include "lib/query-resolver.hpp"
 
 
 

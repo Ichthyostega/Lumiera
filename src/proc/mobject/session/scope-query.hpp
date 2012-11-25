@@ -43,7 +43,7 @@
 
 
 #include "proc/mobject/placement.hpp"
-#include "proc/mobject/session/query-resolver.hpp"
+#include "lib/query-resolver.hpp"
 
 #include <tr1/functional>
 

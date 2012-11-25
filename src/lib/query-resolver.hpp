@@ -43,13 +43,12 @@
 //using std::vector;
 //using std::string;
 
-namespace proc {
-namespace mobject {
-namespace session {
+namespace lib {
   
   using lib::IxID;
   using util::unConst;
   using boost::noncopyable;
+  using boost::lexical_cast;
   using boost::scoped_ptr;
   using std::tr1::function;
   using std::string;
@@ -185,7 +184,7 @@ namespace session {
         : Goal (defineQueryTypeID())
         { }
       
-      static QueryBuilder
+      static Builder
       build (Kind queryType = Goal::GENERIC);
       
       
@@ -239,7 +238,7 @@ namespace session {
       asKey()  const
         {
           return "type("
-               + lexial_cast<string> (getResultTypeID<RES>())
+               + lexical_cast<string> (getResultTypeID<RES>())
                + "), "+predicateForm_;
         }
       
@@ -357,5 +356,5 @@ namespace session {
   }
   
   
-}}} // namespace proc::mobject::session
+} // namespace lib
 #endif
