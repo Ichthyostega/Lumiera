@@ -119,7 +119,7 @@ namespace session {
    *  of contents discovery queries to the PlacementIndex
    *  managed within the session 
    */
-  QueryResolver const&
+  lib::QueryResolver const&
   ScopeLocator::theResolver()
   {
     return SessionServiceExploreScope::getResolver();

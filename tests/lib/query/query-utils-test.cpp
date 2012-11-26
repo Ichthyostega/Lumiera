@@ -32,7 +32,7 @@
 #include <tr1/functional>
 #include <iostream>
 
-using lumiera::Query;
+using lib::Query;
 using lib::Cmdline;
 using util::isnil;
 using util::contains;
@@ -46,7 +46,7 @@ using std::endl;
 
 
 
-namespace lumiera {
+namespace lib {
 namespace query {
 namespace test{
   
@@ -83,7 +83,8 @@ namespace test{
       void
       check_Query ()
         {
-          cout << Query<Thing> ("I am writing a test sentence.").asKey() << endl;
+          UNIMPLEMENTED ("generate a generic query key");////////////////////////////////////////////////////////////////////////////////////////////TODO
+//        cout << Query<Thing> ("I am writing a test sentence.").asKey() << endl;////////////////////////////////////////////////////////////////////////////////////////////TODO
         }
       
       
@@ -166,4 +167,4 @@ namespace test{
   
   
   
-}}} // namespace lumiera::query::test
+}}} // namespace lib::query::test

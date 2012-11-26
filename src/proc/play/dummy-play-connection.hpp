@@ -124,8 +124,8 @@ namespace play {
     using asset::PTimeline;
     using mobject::ModelPort;
     using mobject::builder::ModelPortRegistry;
-    using lumiera::Query;
     using util::contains;
+    using lib::Query;
 //  using lib::ScopedCollection;
 //  using lib::Literal;
     using lib::eachEntry;
@@ -139,7 +139,7 @@ namespace play {
     inline PID
     getPipe (string id)
     {
-      return Pipe::query("id("+id+")");
+      return Pipe::query (Query<Pipe> ("id("+id+")"));
     }
     
     inline TID

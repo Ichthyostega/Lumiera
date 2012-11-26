@@ -87,7 +87,7 @@ namespace session {
    *   * more generally, any ScopeQuery with these properties, in some variations
    */
   class PlacementIndexQueryResolver
-    : public session::QueryResolver
+    : public lib::QueryResolver
     {
       
       function<IndexLink> _getIndex;
@@ -106,7 +106,7 @@ namespace session {
       void defineHandling();
         
       template<typename MO>
-      Resolution* resolutionFunction (Goal const& goal);
+      lib::Resolution* resolutionFunction (Goal const& goal);
       
       
     public:

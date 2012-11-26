@@ -228,7 +228,7 @@ namespace advice {
   inline Binding const&
   Binding::addTypeGuard()
   {
-    atoms_.insert (Atom ("advice.type."+lumiera::query::buildTypeID<TY>()));
+    atoms_.insert (Atom ("advice.type."+lib::query::buildTypeID<TY>()));
     return *this;
   }
   

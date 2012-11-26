@@ -36,7 +36,7 @@
 using boost::format;
 
 using lib::Symbol;
-using lumiera::query::normaliseID;
+using lib::query::normaliseID;
 using lumiera::query::QueryHandler;
 using lumiera::ConfigRules;
 

@@ -84,7 +84,7 @@ namespace test    {
   
   
   
-  using lumiera::Query;
+  using lib::Query;
   using asset::Timeline;
   using asset::PTimeline;
   using asset::AssetManager;

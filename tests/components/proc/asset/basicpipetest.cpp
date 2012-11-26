@@ -47,8 +47,8 @@ namespace asset {
 namespace test  {
   
   using mobject::Session;
-  using lumiera::Query;
-  using lumiera::query::normaliseID;
+  using lib::Query;
+  using lib::query::normaliseID;
   
   
   
@@ -107,19 +107,19 @@ namespace test  {
         { 
           normaliseID (pID);
           
-          PPipe pipe1 = Pipe::query ("pipe("+pID+")");
+          PPipe pipe1 = Pipe::query (Query<Pipe> ("pipe("+pID+")"));
           CHECK (pipe1);
           CHECK (pipe1->getPipeID() == pID);
           
           string pID2 = "another-" + pID;
-          PPipe pipe2 = Pipe::query ("pipe("+pID2+")");
+          PPipe pipe2 = Pipe::query (Query<Pipe> ("pipe("+pID2+")"));
           CHECK (pipe2);
           CHECK (pipe2 != pipe1);
           Category c1 = pipe1->ident.category;
           Category c2 = pipe2->ident.category;
           CHECK (c1 == c2);
           
-          PPipe pipe3 = Pipe::query ("pipe("+pID2+")");
+          PPipe pipe3 = Pipe::query (Query<Pipe> ("pipe("+pID2+")"));
 //////////////////////////////////////////////////////////////TODO: that's broken; creating a new one instead to find the existing one, as it should be            
           CHECK (pipe3 == pipe2);
         }
@@ -127,7 +127,7 @@ namespace test  {
       
       void create_using_default()
         { 
-          PPipe pipe1 = Pipe::query (""); // "the default pipe"
+          PPipe pipe1 = Pipe::query (Query<Pipe>("")); // "the default pipe"
           PPipe pipe2;
           CHECK (pipe1);
           CHECK (pipe1 == Session::current->defaults (Query<Pipe>()));
@@ -145,7 +145,7 @@ namespace test  {
           CHECK (pipe2 == pipe1);
           
           string sID = pipe1->getStreamID(); // sort of a "default stream type"
-          PPipe pipe3 = Pipe::query ("stream("+sID+")");
+          PPipe pipe3 = Pipe::query (Query<Pipe> ("stream("+sID+")"));
           CHECK (pipe3);
           CHECK (pipe3->getStreamID() == StreamType::ID(sID));
           CHECK (pipe3->getProcPatt() == Session::current->defaults (Query<const ProcPatt>("stream("+sID+")")));
@@ -157,7 +157,7 @@ namespace test  {
           typedef P<Pipe> PPipe;                                                         /////TODO: transition to P<>
           typedef P<const ProcPatt> PProcPatt;
           
-          PPipe thePipe = Pipe::query ("pipe("+pID+")");
+          PPipe thePipe = Pipe::query (Query<Pipe> ("pipe("+pID+")"));
           CHECK (thePipe);
           PProcPatt thePatt = thePipe->getProcPatt();
           CHECK (thePatt);
@@ -171,7 +171,7 @@ namespace test  {
             // now querying for a pipe using this pattern (created on-the-fly)
            //  note: because the pattern is new, this new pipe will be used as
           //         default pipe for this pattern automatically
-          PPipe pipe2x = Pipe::query ("pattern(another)");
+          PPipe pipe2x = Pipe::query (Query<Pipe> ("pattern(another)"));
           CHECK (pattern2 == pipe2x->getProcPatt());
           CHECK (pipe2x == Session::current->defaults (Query<Pipe>("pattern(another)")));
           
@@ -193,7 +193,7 @@ namespace test  {
           CHECK (thePipe->getProcPatt());
           CHECK (              pattern3 == pattern2); // but is still valid, as long as the ref is alive....
           
-          PPipe pipe3x = Pipe::query ("pattern(another)");
+          PPipe pipe3x = Pipe::query (Query<Pipe> ("pattern(another)"));
           pattern3 = pipe3x->getProcPatt();                                              /////TODO: transition to P<>
           CHECK (pattern3 != pattern2);  // because pattern2 is already unlinked...
           CHECK (pipe3x == Session::current->defaults (Query<Pipe>("pattern(another)")));

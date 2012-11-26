@@ -39,6 +39,10 @@ namespace session {
   
   using boost::scoped_ptr;
   
+  using lib::Goal;
+  using lib::Query;
+  using lib::Resolution;
+  using lib::getResultTypeID;
   
   
   typedef PlacementIndex::ID PID;
@@ -190,7 +194,7 @@ namespace session {
    * there is a smart-ptr managing this ResultSet.
    */
   class ResultSet
-    : public Resolution
+    : public lib::Resolution
     {
       ContentFilter acceptable_;
       ExplorerBuilder buildExploartion_;

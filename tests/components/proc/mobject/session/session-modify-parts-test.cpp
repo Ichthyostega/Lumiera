@@ -58,7 +58,7 @@ namespace test    {
   using asset::PSequence;
   using asset::Sequence;
   
-  using lumiera::Query;
+  using lib::Query;
   
   typedef MORef<session::Clip> RClip;
   typedef PlacementMO::ID PID;

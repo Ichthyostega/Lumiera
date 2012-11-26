@@ -96,7 +96,7 @@ namespace mobject {
   }//(End) type rebinding helper
   
   namespace error = lumiera::error;
-  using lumiera::Query;
+  using lib::Query;
   using asset::HashVal;
   
   

@@ -68,7 +68,7 @@ namespace session {
    */
   struct SessionServiceExploreScope
     {
-      static QueryResolver const& getResolver();
+      static lib::QueryResolver const& getResolver();
       
       static PlacementMO& getScope (PlacementMO const&);
       static PlacementMO& getScope (PlacementMO::ID const&);

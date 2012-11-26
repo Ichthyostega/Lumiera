@@ -126,7 +126,7 @@ namespace session {
                 REQUIRE (0 == session_->timelines.size(), "injecting default timeline, but session isn't pristine");
                 
                 // issue a default query to retrieve or create a Timeline and a default Sequence
-                asset::PTimeline initialTimeline = session_->defaults (lumiera::Query<asset::Timeline> ());
+                asset::PTimeline initialTimeline = session_->defaults (lib::Query<asset::Timeline> ());
                 
                 // these got registered automatically
                 ENSURE (1  == session_->timelines.size());

@@ -98,9 +98,9 @@ namespace test {
           Mapping map;
           CHECK (isnil (map));
           
-          PPipe p1 = Pipe::query("id(hairy)");
-          PPipe p2 = Pipe::query("id(furry)");
-          PPipe pX = Pipe::query("id(curly)");
+          PPipe p1 = Pipe::query(Query<Pipe> ("id(hairy)"));
+          PPipe p2 = Pipe::query(Query<Pipe> ("id(furry)"));
+          PPipe pX = Pipe::query(Query<Pipe> ("id(curly)"));
           
           map[p1] = p2;
           CHECK (!isnil (map));
@@ -125,9 +125,9 @@ namespace test {
         {
           Mapping m1;
           
-          PPipe p1 = Pipe::query("id(hairy)");
-          PPipe p2 = Pipe::query("id(furry)");
-          PPipe pi = Pipe::query("id(nappy)");
+          PPipe p1 = Pipe::query(Query<Pipe> ("id(hairy)"));
+          PPipe p2 = Pipe::query(Query<Pipe> ("id(furry)"));
+          PPipe pi = Pipe::query(Query<Pipe> ("id(nappy)"));
           
           m1[pi] = p1;
           Mapping m2(m1);
@@ -158,8 +158,8 @@ namespace test {
           Mapping map;
           CHECK (isnil (map));
           
-          PPipe p1 = Pipe::query("stream(hairy)");
-          PPipe p2 = Pipe::query("stream(furry)");
+          PPipe p1 = Pipe::query(Query<Pipe> ("stream(hairy)"));
+          PPipe p2 = Pipe::query(Query<Pipe> ("stream(furry)"));
           
           CHECK (map[p1] == "master_hairy");
           CHECK (map[p2] == "master_furry");

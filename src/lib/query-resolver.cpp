@@ -30,8 +30,6 @@ namespace lib {
   
   /* generate vtables here... */
   
-  Goal::~Goal() { }
-  
   Resolution::~Resolution() { }
   
   QueryResolver::~QueryResolver() { }
@@ -57,12 +55,14 @@ namespace lib {
   
   /* == dispatch to resolve typed queries == */
   
+  using factory::BuildRefcountPtr;
+  
   /** factory used as dispatcher table
    *  for resolving typed queries  */
-  typedef MultiFact< Resolution(Goal const&) // nominal signature of fabrication
-                   , Goal::QueryID          //  select resolution function by kind-of-Query
-                   , BuildRefcountPtr      //   wrapper: manage result set by smart-ptr
-                   > DispatcherTable;     //
+  typedef factory::MultiFact< Resolution(Goal const&) // nominal signature of fabrication
+                            , Goal::QueryID          //  select resolution function by kind-of-Query
+                            , BuildRefcountPtr      //   wrapper: manage result set by smart-ptr
+                            > DispatcherTable;     //
   
   struct QueryDispatcher
     : DispatcherTable

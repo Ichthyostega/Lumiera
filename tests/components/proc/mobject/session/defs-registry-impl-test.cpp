@@ -34,8 +34,8 @@
 #include <boost/format.hpp>
 #include <map>
 
-using lumiera::Query;
-using lumiera::query::test::garbage_query;
+using lib::Query;
+using lib::query::test::garbage_query;
 using util::isnil;
 using lib::P;
 
@@ -165,9 +165,11 @@ namespace test    {
             {
               Prd px (fabricate<23>());
               Q23 qx (garbage_query());
-              ps[qx] = px;
+              UNIMPLEMENTED ("generic query key and ordering for map access");////////////////////////////////////////////////////////////////////////////////////////////TODO
+//            ps[qx] = px;
               reg_->put (px, qx);
-              px->instanceID = qx;
+              UNIMPLEMENTED ("Query building from predicate string");////////////////////////////////////////////////////////////////////////////////////////////TODO
+//            px->instanceID = qx;////////////////////////////////////////////////////////////////////////////////////////////TODO
             }
         }
       
@@ -213,8 +215,10 @@ namespace test    {
             {
               CHECK ( *j );
               Q23 qx ((*j)->instanceID);
-              CHECK ( ps[qx] == (*j));
-              d = lumiera::query::countPred (qx);
+              UNIMPLEMENTED ("generic query key and ordering for map access");////////////////////////////////////////////////////////////////////////////////////////////TODO
+//            CHECK ( ps[qx] == (*j));////////////////////////////////////////////////////////////////////////////////////////////TODO
+              UNIMPLEMENTED ("Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
+//            d = lib::query::countPred (qx);////////////////////////////////////////////////////////////////////////////////////////////TODO
               CHECK ( d_prev <= d );
               d_prev = d;
             }

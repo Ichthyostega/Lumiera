@@ -72,7 +72,7 @@ namespace asset {
   
   using std::string;
   using boost::scoped_ptr;
-  using lumiera::Query;
+  using lib::Query;
   using lib::Symbol;
   
   class Struct;

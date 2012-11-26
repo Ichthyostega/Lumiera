@@ -55,7 +55,7 @@ namespace test    {
   using asset::PSequence;
   using asset::Pipe;
   
-  using lumiera::Query;
+  using lib::Query;
   
   
   /********************************************************************************

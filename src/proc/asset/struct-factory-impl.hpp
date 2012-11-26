@@ -69,7 +69,7 @@ namespace asset {
   using util::isnil;
   using util::contains;
   using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
-  using lumiera::query::extractID;
+  using lib::query::extractID;
   
   using proc::mobject::Session;
   using proc::mobject::MObject;
@@ -113,9 +113,11 @@ namespace asset {
       createIdent (Query<STRU> const& query)
         {
           // does the query somehow specify the desired name-ID?
-          string nameID = extractID (genericIdSymbol, query);
+          string nameID = "TODO";//extractID (genericIdSymbol, query);////////////////////////////////////////////////////////////////////////////////////////////TODO
+          UNIMPLEMENTED("Query rebuilding");////////////////////////////////////////////////////////////////////////////////////////////TODO
           if (isnil (nameID))
-            nameID = extractID (StructTraits<STRU>::idSymbol(), query);
+            nameID = "TODO";//extractID (StructTraits<STRU>::idSymbol(), query);////////////////////////////////////////////////////////////////////////////////////////////TODO
+          UNIMPLEMENTED("Query rebuilding");////////////////////////////////////////////////////////////////////////////////////////////TODO
           if (isnil (nameID))
             {
                // no name-ID contained in the query...
@@ -127,7 +129,8 @@ namespace asset {
           ENSURE (!isnil (nameID));
           
           // does the query actually demand the Nth instance/element?
-          string seqID = extractID (seqNrPredicate, query);
+          string seqID = "TODO";//extractID (seqNrPredicate, query);////////////////////////////////////////////////////////////////////////////////////////////TODO
+        UNIMPLEMENTED("Query rebuilding");////////////////////////////////////////////////////////////////////////////////////////////TODO)
           if (!isnil (seqID) && 1 < asNumber(seqID))
             nameID += "."+seqID;
           
@@ -200,7 +203,8 @@ namespace asset {
   StructFactoryImpl::fabricate (Query<Pipe> const& caps)
   {
     const Asset::Ident idi (createIdent (caps));
-    string streamID = extractID ("stream", caps);
+    string streamID = "TODO";//extractID ("stream", caps);////////////////////////////////////////////////////////////////////////////////////////////TODO
+    UNIMPLEMENTED("fabricate a Pipe by query");////////////////////////////////////////////////////////////////////////////////////////////TODO
     if (isnil (streamID)) streamID = "default"; 
     PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
     return new Pipe( idi
@@ -215,7 +219,8 @@ namespace asset {
   {
     TODO ("extract additional properties/capabilities from the query...");
     const Asset::Ident idi (createIdent (caps));
-    string sequenceID = extractID ("sequence", caps);
+    string sequenceID = "TODO";//extractID ("sequence", caps);////////////////////////////////////////////////////////////////////////////////////////////TODO
+    UNIMPLEMENTED("fabricate a Timeline by query");////////////////////////////////////////////////////////////////////////////////////////////TODO
     Query<Sequence> desiredSequence (isnil (sequenceID)? "" : "id("+sequenceID+")");
     PSequence sequence = recursive_create_(desiredSequence);
     ASSERT (sequence);
@@ -232,7 +237,8 @@ namespace asset {
   {
     // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
     TODO ("actually extract properties/capabilities from the query...");
-    string trackID = extractID ("track", caps);
+    string trackID = "TODO";//extractID ("track", caps);////////////////////////////////////////////////////////////////////////////////////////////TODO
+    UNIMPLEMENTED("fabricate a Sequence by query");////////////////////////////////////////////////////////////////////////////////////////////TODO
     Query<Track> desiredTrack (isnil (trackID)? "" : "id("+trackID+")");
 //  PTrack track = Session::current->query (desiredTrack);        ///////////////////////////////////TICKET #639
     // TODO: handle the following cases

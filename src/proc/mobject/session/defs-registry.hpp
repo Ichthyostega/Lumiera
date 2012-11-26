@@ -59,7 +59,7 @@ namespace mobject {
 namespace session {
   
   using lib::P;
-  using lumiera::Query;
+  using lib::Query;
   using lib::ClassLock;
   using std::tr1::weak_ptr;
   
@@ -97,10 +97,12 @@ namespace session {
         weak_ptr<TAR> objRef;
         
         Record (const Query<TAR>& q, const P<TAR>& obj)
-          : degree (lumiera::query::countPred (q)),
+          : degree (lib::query::countPred ("TODO")),//q)),////////////////////////////////////////////////////////////////////////////////////////////TODO
             query (q),
             objRef (obj)
-          { }
+          { 
+            UNIMPLEMENTED("Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
+          }
         
         
         struct Search  ///< Functor searching for a specific object
@@ -123,8 +125,9 @@ namespace session {
             inline bool
             operator() (Record one, Record two) ///< @note doesn't touch the objRef
               {
+                UNIMPLEMENTED ("arbitrary total ordering of queries");
                 return (  one.degree < two.degree
-                       ||(one.degree == two.degree && one.query < two.query)
+                       ||(one.degree == two.degree && false)//one.query < two.query)////////////////////////////////////////////////////////////////////////////////////////////TODO
                        );
               }
           };

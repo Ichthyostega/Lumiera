@@ -21,65 +21,56 @@
 */
 
 
-#ifndef LUMIERA_TEST_QUERY_QUERYDIAGNOSTICS_H
-#define LUMIERA_TEST_QUERY_QUERYDIAGNOSTICS_H
+#ifndef LIB_QUERY_TEST_QUERYDIAGNOSTICS_H
+#define LIB_QUERY_TEST_QUERYDIAGNOSTICS_H
 
 
-#include <boost/format.hpp>
+#include "lib/format-string.hpp"
 
-using boost::format;
+using util::_Fmt;
 using std::string;
 using std::rand;
 
 
 
-namespace lumiera
-  {
-  namespace query
-    {
-    namespace test
-      {
-      
-      namespace // implementation constants
-        {
-        
-        format predicatePatt ("%s_%2i( %s )");
-        const string garbage ("asdfghjklqwertzuiop");
+namespace lib  {
+namespace query{
+namespace test {
   
-        const uint MAX_DEGREE_RAND = 9;
-        
-      }
-      
-      
-      
-      inline string
-      garbage_term ()         ///< yields a random string of 3 letters
-      {
-        return str (predicatePatt 
-                   % char ('a'+ rand() % 26)
-                   % (rand() % 100)
-                   % garbage.substr(rand() % 17 , 3)
-                   );
-      }
-      
-      inline string
-      garbage_query (int degree=0)    ///< fabricating (random) query strings
-      {
-        string fake;
-        if (!degree) 
-          degree = 1 + rand() % MAX_DEGREE_RAND;
-        while (0 < --degree)
-          fake += garbage_term() + ", ";
-        fake += garbage_term() + ".";
-        return fake;
-      }
-      
-      
-      
-      
-    } // namespace test
+  namespace {// implementation constants
     
-  } // namespace query
-
-} // namespace lumiera
+    _Fmt predicatePattern ("%s_%2i( %s )");
+    const string garbage ("asanisimasabibeddiboom");
+    
+    const uint MAX_DEGREE_RAND = 9;
+    
+  }
+  
+  
+  
+  inline string
+  garbage_term ()         ///< yields a random string of 3 letters
+  {
+    return predicatePattern
+         % char ('a'+ rand() % 26)
+         % (rand() % 100)
+         % garbage.substr(rand() % 19 , 3);
+  }
+  
+  inline string
+  garbage_query (int degree=0)    ///< fabricating (random) query strings
+  {
+    string fake;
+    if (!degree) 
+      degree = 1 + rand() % MAX_DEGREE_RAND;
+    while (0 < --degree)
+      fake += garbage_term() + ", ";
+    fake += garbage_term() + ".";
+    return fake;
+  }
+  
+  
+  
+  
+}}} // namespace lib::query::test
 #endif

@@ -43,7 +43,7 @@ namespace test  {
   using asset::Struct;
   using asset::Timeline;
   using asset::PTimeline;
-  using lumiera::Query;
+  using lib::Query;
 //  
   typedef asset::ID<Pipe> PID;
   typedef asset::ID<Struct> TID;
@@ -56,7 +56,7 @@ namespace test  {
     inline PID
     getPipe (string id)
     {
-      return Pipe::query("id("+id+")");
+      return Pipe::query (Query<Pipe> ("id("+id+")"));
     }
     
     inline TID

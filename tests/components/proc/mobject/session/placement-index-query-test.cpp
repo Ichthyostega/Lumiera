@@ -39,6 +39,7 @@ namespace mobject {
 namespace session {
 namespace test    {
   
+  using lib::QueryResolver;
   using session::PathQuery;
   using session::ContentsQuery;
   using util::isSameObject;

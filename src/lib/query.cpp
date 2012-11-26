@@ -1,5 +1,5 @@
 /*
-  Query  -  interface for capability queries
+  Query  -  interface for generic queries
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -40,7 +40,7 @@ using util::contains;
 using util::isnil;
 
 
-namespace lumiera {
+namespace lib {
   namespace query {
     
     namespace { // local definitions
@@ -142,7 +142,9 @@ namespace lumiera {
   } // namespace query
     
   
-  /** */
+  
+  Goal::~Goal() { }
+  
 
 
-} // namespace lumiera
+} // namespace lib

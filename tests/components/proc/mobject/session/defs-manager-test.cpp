@@ -54,8 +54,8 @@ namespace test    {
   using asset::Pipe;
   using asset::PPipe;
   using asset::Struct;
-  using lumiera::Query;
-  using lumiera::query::normaliseID;
+  using lib::Query;
+  using lib::query::normaliseID;
   
   
   /** shortcut: run just a query
@@ -103,13 +103,13 @@ namespace test    {
       void
       retrieveSimpleDefault (string)
         {
-          PPipe pipe1 = Pipe::query (""); // "the default pipe"
+          PPipe pipe1 = Pipe::query (Query<Pipe> ("")); // "the default pipe"
           PPipe pipe2;
           
           // several variants to query for "the default pipe"
-          pipe2 = Pipe::query ("");
+          pipe2 = Pipe::query (Query<Pipe> (""));
           CHECK (pipe2 == pipe1);
-          pipe2 = Pipe::query ("default(X)");
+          pipe2 = Pipe::query (Query<Pipe> ("default(X)"));
           CHECK (pipe2 == pipe1);
           pipe2 = Session::current->defaults(Query<Pipe> ());
           CHECK (pipe2 == pipe1);
@@ -123,7 +123,7 @@ namespace test    {
       void
       retrieveConstrainedDefault (string pID, string sID)
         {
-          PPipe pipe1 = Pipe::query (""); // "the default pipe"
+          PPipe pipe1 = Pipe::query (Query<Pipe> ("")); // "the default pipe"
           CHECK ( pipe1->getStreamID() != StreamType::ID(sID),
                   "stream-ID \"%s\" not suitable for test, because "
                   "the default-pipe \"%s\" happens to have the same "
@@ -132,10 +132,10 @@ namespace test    {
                  );
           
           string query_for_sID ("stream("+sID+")");
-          PPipe pipe2 = Pipe::query (query_for_sID);
+          PPipe pipe2 = Pipe::query (Query<Pipe> (query_for_sID));
           CHECK (pipe2->getStreamID() == StreamType::ID(sID));
           CHECK (pipe2 != pipe1);
-          CHECK (pipe2 == Pipe::query (query_for_sID));   // reproducible
+          CHECK (pipe2 == Pipe::query (Query<Pipe> (query_for_sID)));   // reproducible
         }
       
       

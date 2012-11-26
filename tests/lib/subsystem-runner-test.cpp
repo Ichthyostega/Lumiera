@@ -42,6 +42,8 @@ using std::tr1::bind;
 using util::isnil;
 using util::cStr;
 using test::Test;
+using lib::Literal;
+using lib::query::extractID;
 using backend::Thread;
 
 
@@ -50,7 +52,7 @@ namespace test  {
     
     namespace { // private test classes and data...
       
-      using query::extractID;
+      using lib::query::extractID;
       
       /** limit for the randomly selected duration of
        *  subsystem's running phase (milliseconds) */

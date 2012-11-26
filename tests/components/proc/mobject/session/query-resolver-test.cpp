@@ -31,10 +31,8 @@
 
 
 
-namespace proc    {
-namespace mobject {
-namespace session {
-namespace test    {
+namespace lib {
+namespace test{
   
   using lib::test::showSizeof;
   using std::string;
@@ -223,4 +221,4 @@ namespace test    {
   LAUNCHER (QueryResolver_test, "unit session");
   
   
-}}}} // namespace proc::mobject::session::test
+}} // namespace lib::test

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "common/query/fake-configrules.hpp"
+#include "proc/mobject/session/query/fake-configrules.hpp"
 
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/track.hpp"
@@ -31,13 +31,17 @@
 
 
 #include "include/logging.h"
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
+using lib::Literal;
 using util::isnil;
 
 //////////////////////////////////////////////////////////////////TICKET #710 : to be removed entirely in Alpha
 
-namespace lumiera {
+namespace proc {
+namespace mobject {
+namespace session {
   
   namespace query {
     
@@ -49,7 +53,7 @@ namespace lumiera {
     using asset::PProcPatt;
     
 //  using lumiera::query::extractID;
-    using lumiera::query::removeTerm;
+    using lib::query::removeTerm;
     
     
     namespace {
@@ -58,9 +62,10 @@ namespace lumiera {
       
       /** helper to simplify creating mock table entries, wrapped correctly */
       template<class TY>
-      AnyPair entry (const string& query, typename WrapReturn<TY>::Wrapper& obj)
+      AnyPair entry (Query<TY> const& query, typename WrapReturn<TY>::Wrapper& obj)
       {
-        return AnyPair ( Query<TY> (query).asKey()
+        UNIMPLEMENTED ("generic query-key");////////////////////////////////////////////////////////////////////////////////////////////TODO
+        return AnyPair ( "TODO"//Query<TY> (query).asKey()////////////////////////////////////////////////////////////////////////////////////////////TODO
                        , any(obj)); 
       }
       
@@ -73,7 +78,8 @@ namespace lumiera {
         string capabilities (caps);
         Query<STRU> query (capabilities); 
         Ptr obj = Struct::retrieve (query);
-        return AnyPair(query.asKey(), obj);
+        UNIMPLEMENTED("generic query-key");
+//      return AnyPair(query.asKey(), obj);////////////////////////////////////////////////////////////////////////////////////////////TODO
       }
       
       /** shortcut for simply accessing a table entry */ 
@@ -81,7 +87,8 @@ namespace lumiera {
       any&
       item (PTAB& table, const string& query)
       {
-        return (*table)[Query<STRU>(query).asKey()];
+        UNIMPLEMENTED ("generic Query-key");////////////////////////////////////////////////////////////////////////////////////////////TODO
+        //return (*table)[Query<STRU>(query).asKey()];////////////////////////////////////////////////////////////////////////////////////////////TODO
       }
     
     }
@@ -162,13 +169,14 @@ namespace lumiera {
     {
       typedef asset::Timeline aTl;
       typedef WrapReturn<aTl>::Wrapper Ptr;
-      
-      string nameID = removeTerm ("id", query);
+  
+      UNIMPLEMENTED ("generic query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
+      string nameID = "TODO";//removeTerm ("id", query);////////////////////////////////////////////////////////////////////////////////////////////TODO
       if (isnil (nameID))
-        nameID = removeTerm ("timeline", query);
+        nameID = "TODO";//removeTerm ("timeline", query);////////////////////////////////////////////////////////////////////////////////////////////TODO
       if (isnil (nameID))
         nameID = "prime";
-      query.insert (0, "id("+nameID+"), ");
+//    query.insert (0, "id("+nameID+"), ");
       
       // try to find an existing one with the desired id
       Ptr newTimeline;
@@ -193,13 +201,14 @@ namespace lumiera {
     {
       typedef asset::Sequence aSq;
       typedef WrapReturn<aSq>::Wrapper Ptr;
-      
-      string nameID = removeTerm ("id", query);
+  
+      UNIMPLEMENTED ("generic Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
+      string nameID = "TODO";//removeTerm ("id", query);////////////////////////////////////////////////////////////////////////////////////////////TODO
       if (isnil (nameID))
-        nameID = removeTerm ("sequence", query);
+        nameID = "TODO";//removeTerm ("sequence", query);////////////////////////////////////////////////////////////////////////////////////////////TODO
       if (isnil (nameID))
         nameID = "first";
-      query.insert (0, "id("+nameID+"), ");
+//    query.insert (0, "id("+nameID+"), ");
       
       // try to find an existing sequence with the desired id
       Ptr newSequence;
@@ -224,7 +233,8 @@ namespace lumiera {
     bool 
     MockTable::set_new_mock_solution (Query<TY>& q, typename WrapReturn<TY>::Wrapper& obj)
     {
-      answer_->erase (q.asKey());
+      UNIMPLEMENTED ("generic query-key");////////////////////////////////////////////////////////////////////////////////////////////TODO
+//    answer_->erase (q.asKey());////////////////////////////////////////////////////////////////////////////////////////////TODO
       answer_->insert (entry<TY> (q, obj));
       return true;
     }
@@ -275,5 +285,4 @@ namespace lumiera {
 
   
   } // namespace query
-
-} // namespace lumiera
+}}} // namespace proc::mobject::session

@@ -39,6 +39,7 @@ namespace session {
   
   
   using lib::P;
+  using lib::Query;
   using boost::scoped_ptr;
   
   namespace impl { class DefsRegistry; }
@@ -73,14 +74,14 @@ namespace session {
        *         is considered \e misconfiguration. 
        */
       template<class TAR>
-      P<TAR> operator() (lumiera::Query<TAR> const&);
+      P<TAR> operator() (Query<TAR> const&);
       
       
       /** search through the registered defaults, never create anything.
        *  @return object fulfilling the query, \c empty ptr if not found. 
        */
       template<class TAR>
-      P<TAR> search  (lumiera::Query<TAR> const&);
+      P<TAR> search  (Query<TAR> const&);
       
       /** retrieve an object fulfilling the query and register it as default.
        *  The resolution is delegated to the ConfigQuery system (which may cause
@@ -88,7 +89,7 @@ namespace session {
        *  @return object fulfilling the query, \c empty ptr if no solution.
        */ 
       template<class TAR>
-      P<TAR> create  (lumiera::Query<TAR> const&);
+      P<TAR> create  (Query<TAR> const&);
       
       /** register the given object as default, after ensuring it fulfils the
        *  query. The latter may cause some properties of the object to be set,
@@ -97,7 +98,7 @@ namespace session {
        *  @note only a weak ref to the object is stored
        */ 
       template<class TAR>
-      bool define  (P<TAR> const&, lumiera::Query<TAR> const&  =lumiera::Query<TAR>());
+      bool define  (P<TAR> const&, Query<TAR> const&  =Query<TAR>());
       
       /** remove the defaults registration of the given object, if there was such
        *  @return false if nothing has been changed because the object wasn't registered

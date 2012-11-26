@@ -45,13 +45,13 @@ namespace session {
 namespace test    {
   
   using lib::Symbol;
+  using lib::Query;
+  using lib::query::normaliseID;
   using asset::Asset;
   using asset::AssetManager;
   using asset::Pipe;
   using asset::PPipe;
   using asset::Struct;
-  using lumiera::Query;
-  using lumiera::query::normaliseID;
   
   using lumiera::ConfigRules;
   using lumiera::query::QueryHandler;
@@ -154,7 +154,7 @@ lumiera::query::setFakeBypass("stream("+sID+")"); //////////////////////////////
       void
       forget (string pID)
         {
-          PPipe pipe = Pipe::query ("pipe("+pID+")");
+          PPipe pipe = Pipe::query (Query<Pipe> ("pipe("+pID+")"));
           REQUIRE (find (pipe->getPipeID()), "test assumes pre-registered default pipe");
           long cnt = pipe.use_count();
           

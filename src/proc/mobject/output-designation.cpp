@@ -49,10 +49,10 @@
 #include <cstdlib>
 
 using lumiera::query::QueryHandler;
-using lumiera::query::removeTerm;
-using lumiera::query::extractID;
 using lumiera::ConfigRules;
 using lumiera::Symbol;
+using lib::query::removeTerm;
+using lib::query::extractID;
 
 namespace proc {
 namespace mobject {
@@ -179,7 +179,8 @@ namespace mobject {
     uint
     is_defaults_query_with_channel (Query<asset::Pipe> const& query4pipe)
     {
-      string seqNr = extractID (SEQNR_PREDICATE, query4pipe);
+      string seqNr = "TODO";//extractID (SEQNR_PREDICATE, query4pipe);////////////////////////////////////////////////////////////////////////////////////////////TODO
+      UNIMPLEMENTED ("Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
       return abs(std::atoi (seqNr.c_str()));  // also 0 in case of an invalid number
     }
     
@@ -187,7 +188,8 @@ namespace mobject {
     build_corresponding_sourceQuery (Query<asset::Pipe> const& query4pipe)
     {
       Query<asset::Pipe> srcQuery = query4pipe;
-      removeTerm (SEQNR_PREDICATE, srcQuery);
+//    removeTerm (SEQNR_PREDICATE, srcQuery);////////////////////////////////////////////////////////////////////////////////////////////TODO
+      UNIMPLEMENTED ("Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
       return srcQuery;
     }
   }

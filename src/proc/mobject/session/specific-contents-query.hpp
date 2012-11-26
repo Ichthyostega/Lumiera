@@ -37,6 +37,8 @@ namespace session {
   
   using std::tr1::function;
   
+  using lib::QueryResolver;
+  
   
   /**
    * Specialised version of the ContentsQuery to pick some objects

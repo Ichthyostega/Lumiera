@@ -27,6 +27,7 @@
 #include "proc/asset/struct.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/streamtype.hpp"
+#include "lib/query.hpp"
 
 #include <string>
 
@@ -35,6 +36,7 @@
 namespace proc {
 namespace asset {
   
+  using lib::Query;
   using std::string;
   
   class Pipe;
@@ -96,7 +98,7 @@ namespace asset {
       void switchProcPatt (PProcPatt& another);
       
       /** convenience shortcut for retrieving default configured pipes */
-      static PPipe query (string properties);
+      static PPipe query (Query<Pipe> const& properties);
       
       /** convenience shortcut for lookup by id */
       static PPipe lookup (ID<Pipe> id);

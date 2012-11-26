@@ -91,7 +91,7 @@ namespace test  {
           EngineService& engine = EngineService::instance();
           EngineDiagnostics monitor(engine);
           
-          PID pipe = Pipe::query("id(dummy)");
+          PID pipe = Pipe::query(lib::Query<Pipe> ("id(dummy)"));
           ModelPort port(pipe);
           
           OutputSlot& oSlot = DiagnosticOutputSlot::build();

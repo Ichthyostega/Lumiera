@@ -37,8 +37,8 @@
  */
 
 
-#ifndef LUMIERA_FAKECONFIGRULES_H
-#define LUMIERA_FAKECONFIGRULES_H
+#ifndef MOBJECT_SESSION_QUERY_FAKECONFIGRULES_H
+#define MOBJECT_SESSION_QUERY_FAKECONFIGRULES_H
 
 #include "proc/mobject/session.hpp"
 #include "common/configrules.hpp"
@@ -51,7 +51,9 @@
 
 
 
-namespace lumiera {
+namespace proc {
+namespace mobject {
+namespace session {
   namespace query {
     
     namespace asset = proc::asset;
@@ -61,6 +63,11 @@ namespace lumiera {
     using asset::PProcPatt;
     using proc::mobject::Session;
     using lib::meta::InstantiateChained;
+    
+    using lib::Query;
+    using lib::query::removeTerm;   //////////////TODO better use Query::Builder
+    using lib::query::extractID;   ///////////////TODO dto
+    using lumiera::query::isFakeBypass;  /////////TODO placeholder until there is a real resolution engine
     
     using util::contains;
     using util::isnil;
@@ -144,7 +151,7 @@ namespace lumiera {
         virtual bool 
         resolve (Ret& solution, Query<TY> const& q)
           {
-            const any& entry = this->fetch_from_table_for (q.asKey());
+            const any& entry = this->fetch_from_table_for ("TODO");//q.asKey());////////////////////////////////////////////////////////////////////////////////////////////TODO
             if (!isnil (entry))
               {
                 Ret const& candidate (any_cast<Ret const&> (entry));
@@ -160,10 +167,10 @@ namespace lumiera {
         bool
         try_special_case (Ret& solution, Query<TY> const& q)
           {
-            if (solution && isFakeBypass(q))        // backdoor for tests
+            if (true)//solution && isFakeBypass(q))        // backdoor for tests////////////////////////////////////////////////////////////////////////////////////////////TODO
               return solution;
             
-            string querySpec (q);
+            string querySpec ;//(q);////////////////////////////////////////////////////////////////////////////////////////////TODO
             if (treat_as_defaults_query (querySpec))
               {
                 Query<TY> defaultsQuery(querySpec);
@@ -184,19 +191,19 @@ namespace lumiera {
     inline bool 
     MockTable::detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY>& q)
     {
-      q.clear(); // end recursion
+//    q.clear(); // end recursion////////////////////////////////////////////////////////////////////////////////////////////TODO
       return false;
     }
     template<>
     inline bool 
     MockTable::detect_case (WrapReturn<Pipe>::Wrapper& candidate, Query<Pipe>& q)
     {
-      if (!isnil (extractID("make", q)))
+      if (true)//!isnil (extractID("make", q)))////////////////////////////////////////////////////////////////////////////////////////////TODO
         // used by tests to force fabrication of a new "solution"
         return fabricate_just_new_Pipe (q);
       
-      const string pipeID   = extractID("pipe", q);
-      const string streamID = extractID("stream", q);
+      const string pipeID   = "TODO";//extractID("pipe", q);////////////////////////////////////////////////////////////////////////////////////////////TODO
+      const string streamID = "TODO";//extractID("stream", q);////////////////////////////////////////////////////////////////////////////////////////////TODO
       
       if (candidate && pipeID == candidate->getPipeID())
         return set_new_mock_solution (q, candidate); // "learn" this solution to be "valid"
@@ -207,19 +214,19 @@ namespace lumiera {
       if (!candidate && (!isnil(streamID) || !isnil(pipeID)))
         return fabricate_just_new_Pipe (q);
       
-      q.clear();
+//    q.clear();////////////////////////////////////////////////////////////////////////////////////////////TODO
       return false;
     }
     template<>
     inline bool 
     MockTable::detect_case (WrapReturn<const ProcPatt>::Wrapper& candidate, Query<const ProcPatt>& q)
     {
-      const string streamID = extractID("stream", q);
+      const string streamID = "TODO";//extractID("stream", q);////////////////////////////////////////////////////////////////////////////////////////////TODO
       
       if (!candidate && !isnil(streamID))
           return fabricate_ProcPatt_on_demand (q);
       
-      q.clear();
+//    q.clear();////////////////////////////////////////////////////////////////////////////////////////////TODO
       return false;
     }
     template<>
@@ -229,7 +236,7 @@ namespace lumiera {
       if (!candidate)
           return fabricate_Timeline_on_demand (q);
       
-      q.clear();
+//    q.clear();////////////////////////////////////////////////////////////////////////////////////////////TODO
       return bool(candidate);
     }
     template<>
@@ -239,7 +246,7 @@ namespace lumiera {
       if (!candidate)
           return fabricate_Sequence_on_demand (q);
       
-      q.clear();
+//    q.clear();////////////////////////////////////////////////////////////////////////////////////////////TODO
       return bool(candidate);
     }
     
@@ -254,7 +261,7 @@ namespace lumiera {
      * values for some types of interest for testing and debugging.
      */
     class MockConfigRules 
-      : public InstantiateChained < InterfaceTypes           
+      : public InstantiateChained < lumiera::InterfaceTypes           
                                   , LookupPreconfigured  // building block used for each of the types
                                   , MockTable           //  for implementing the base class (interface) 
                                   >
@@ -272,6 +279,6 @@ namespace lumiera {
       
     
     
-  
-}} // namespace lumiera::query
+  } // namespace query
+}}} // namespace proc::mobject::session
 #endif

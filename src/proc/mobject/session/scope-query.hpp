@@ -56,6 +56,9 @@ namespace session {
   using std::tr1::function;
   using std::tr1::placeholders::_1;
   
+  using lib::Goal;
+  using lib::Query;
+  
   
   
   /**

@@ -118,10 +118,11 @@ namespace session {
       return res;
     else
       res = create (capabilities); // not yet known as default, create new
-    
+
+    UNIMPLEMENTED("String representation of queries, here just for diagnostics");
     if (!res)
       throw lumiera::error::Config (_Fmt("The following Query could not be resolved: %s.")
-                                        % capabilities.asKey()
+                                        % "TODO"//capabilities.asKey()////////////////////////////////////////////////////////////////////////////////////////////TODO
                                    , LUMIERA_ERROR_CAPABILITY_QUERY );
     else
       return res;

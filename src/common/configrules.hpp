@@ -41,6 +41,7 @@
  ** @see mobject::session::DefsManager
  ** @see asset::StructFactory 
  ** @see fake-configrules.hpp currently used dummy-implementation
+ ** @see 
  **
  */
 
@@ -98,6 +99,7 @@ namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
     
     using lib::Symbol;
     using lib::Literal;
+    using lib::Query;
     
 /** placeholder definition for later.
  *  @todo intention is to integrate with lib::Symbol

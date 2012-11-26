@@ -24,7 +24,7 @@
 
 #include "lib/error.hpp"
 #include "common/configrules.hpp"
-#include "common/query/fake-configrules.hpp"
+#include "proc/mobject/session/query/fake-configrules.hpp"
 
 
 
@@ -39,7 +39,7 @@ namespace lumiera {
   namespace {
     
     /** type of the actual ConfigRules implementation to use */
-    lib::singleton::UseSubclass<query::MockConfigRules> typeinfo;
+    lib::singleton::UseSubclass<proc::mobject::session::query::MockConfigRules> typeinfo;
   }
   
   

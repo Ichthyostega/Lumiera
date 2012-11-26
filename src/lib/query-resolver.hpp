@@ -1,5 +1,5 @@
 /*
-  QUERY-RESOLVER.hpp  -  interface for discovering contents of a scope
+  QUERY-RESOLVER.hpp  -  framework for resolving generic queries
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,235 +21,41 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_QUERY_RESOLVER_H
-#define PROC_MOBJECT_SESSION_QUERY_RESOLVER_H
+#ifndef LIB_QUERY_RESOLVER_H
+#define LIB_QUERY_RESOLVER_H
 
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement.hpp"
-#include "lib/bool-checkable.hpp"
-#include "lib/typed-counter.hpp"
+#include "lib/query.hpp"
 #include "lib/iter-adapter.hpp"
-#include "lib/nocopy.hpp"
-#include "lib/util.hpp"
 
-#include <boost/lexical_cast.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <tr1/functional>
 #include <tr1/memory>
-//#include <vector>
 #include <string>
 
-//using std::vector;
-//using std::string;
+using std::tr1::function;
 
 namespace lib {
   
-  using lib::IxID;
-  using util::unConst;
   using boost::noncopyable;
-  using boost::lexical_cast;
   using boost::scoped_ptr;
-  using std::tr1::function;
   using std::string;
   
   
-  class Goal;
   class Resolution;
   class QueryResolver;
   class QueryDispatcher;
   
   /** Allow for taking ownership of a result set */
   typedef std::tr1::shared_ptr<Resolution> PReso;
-
-
   
-  /**
-   * TODO type comment
-   * Query ABC
-   */
-  class Goal
-    : util::no_copy_by_client
-    {
-    public:
-      virtual ~Goal() ;
-      
-      enum Kind
-        { GENERIC = 0
-        , DISCOVERY
-        };
-      
-      struct QueryID
-        {
-          Kind kind;
-          IxID type;
-        };
-      
-      QueryID const&
-      getQID()  const
-        {
-          return id_;
-        }
-      
-      
-      /** 
-       * Single Solution, possibly part of a result set.
-       * A pointer-like object, usually to be down-casted
-       * to a specifically typed Query::Cursor
-       * @see Resolution
-       */
-      class Result
-        : public lib::BoolCheckable<Result>
-        {
-          void* cur_;
-          
-        protected:
-          void point_at(void* p) { cur_ = p; }
-          
-          template<typename RES>
-          RES&
-          access()
-            {
-              REQUIRE (cur_);
-              return *reinterpret_cast<RES*> (cur_);
-            }
-          
-        public:
-          bool isValid()  const { return bool(cur_); }
-          
-          Result() : cur_(0)  { } ///< create an NIL result
-        };
-      
-      
-      
-    protected:
-      QueryID id_;
-      
-      Goal (QueryID qid)
-        : id_(qid)
-        { }
-      
-    };
-  
-  
-  inline bool
-  operator== (Goal::QueryID const& id1, Goal::QueryID const& id2)
-  {
-    return id1.kind == id2.kind
-        && id1.type == id2.type;
-  }
-  
-  inline bool
-  operator!= (Goal::QueryID const& id1, Goal::QueryID const& id2)
-  {
-    return ! (id1  == id2);
-  }
-  
-  
-  
-  /** Context used for generating type-IDs to denote
-   *  the specific result types of issued queries  */
-  typedef lib::TypedContext<Goal::Result> ResultType;
-  
-  template<typename RES>
-  inline IxID
-  getResultTypeID()  ///< @return unique ID denoting result type RES
-  {
-    return ResultType::ID<RES>::get();
-  }
-  
-  
-  
-  
-  /**
-   * TODO type comment
-   * Concrete query to yield specifically typed result elements
-   */
-  template<class RES>
-  class Query
-    : public Goal
-    {
-    protected:
-      static QueryID
-      defineQueryTypeID (Kind queryType = Goal::GENERIC)
-        {
-          QueryID id = {queryType, getResultTypeID<RES>() };
-          return id;
-        }
-      
-      class Builder;
-      
-    public:
-      Query()
-        : Goal (defineQueryTypeID())
-        { }
-      
-      static Builder
-      build (Kind queryType = Goal::GENERIC);
-      
-      
-      /* results retrieval */
-      class Cursor
-        : public Goal::Result
-        {
-        public:
-          typedef RES value_type;
-          typedef RES& reference;
-          typedef RES* pointer;
-          
-          RES& operator* ()    { return   access<RES>();  }
-          RES* operator->()    { return & access<RES>();  }
-          
-          void point_at(RES* r){ Goal::Result::point_at(r);}
-          void point_at(RES& r){ Goal::Result::point_at(&r);}
-        };
-      
-      
-      typedef lib::IterAdapter<Cursor,PReso> iterator;
-      
-      iterator operator() (QueryResolver const& resolver)  const;
-      iterator resolveBy  (QueryResolver const& resolver)  const;
-      
-      
-    protected:
-      Query (QueryID qID)
-        : Goal (qID)
-        { }
-      
-      friend class Builder;
-      
-    };
-  
-  
-  
-  
-    /** 
-     * Helper for establishing,
-     * reworking and remolding queries. 
-     */
-    template<class RES>
-    class Query<RES>::Builder
-      {
-        string predicateForm_;
-        
-      public:
-        
-      const string
-      asKey()  const
-        {
-          return "type("
-               + lexical_cast<string> (getResultTypeID<RES>())
-               + "), "+predicateForm_;
-        }
-      
-      };
   
   /** 
-   * ABC denoting the result set
+   * ABC representing the result set
    * of an individual query resolution
    */
   class Resolution
-    : noncopyable
+    : boost::noncopyable
     {
     public:
       typedef Goal::Result Result;
