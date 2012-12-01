@@ -60,7 +60,7 @@ namespace time {
       PQuant quantiser_;
       
     public:
-      QuTime (TimeValue raw, Symbol gridID);
+      QuTime (TimeValue raw, Symbol gridID);                ///< @note defined in common-services.cpp
       QuTime (TimeValue raw, PQuant quantisation_to_use);
       
       operator PQuant()  const;
