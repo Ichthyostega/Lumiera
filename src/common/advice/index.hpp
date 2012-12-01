@@ -83,24 +83,24 @@
  */
 
 
-#ifndef LIB_ADVICE_INDEX_H
-#define LIB_ADVICE_INDEX_H
+#ifndef LUMIERA_ADVICE_INDEX_H
+#define LUMIERA_ADVICE_INDEX_H
 
 
 #include "lib/error.hpp"
-#include "lib/advice/binding.hpp"
 #include "lib/symbol.hpp"
 #include "include/logging.h"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
+#include "common/advice/binding.hpp"
 
 #include <boost/operators.hpp>
 #include <tr1/unordered_map>
 #include <iostream>
 #include <string>
 
-namespace lib    {
+namespace lumiera{
 namespace advice {
   
   namespace error = lumiera::error;
@@ -249,7 +249,7 @@ namespace advice {
                  cout << "E...:"<< (*i) << endl;
              }
            
-           RangeIter<EIter>
+           lib::RangeIter<EIter>
            allElms ()
              {
                return eachElm (elms_);
@@ -591,5 +591,5 @@ namespace advice {
 #undef VERIFY
   
   
-}} // namespace lib::advice
+}} // namespace lumiera::advice
 #endif

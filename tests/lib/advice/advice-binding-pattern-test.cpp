@@ -24,18 +24,19 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include "lib/advice.hpp"
 #include "lib/time/timevalue.hpp"
+#include "common/advice.hpp"
 
 #include <iostream>
 
+using lib::time::Time;
 using std::cout;
 using std::endl;
 
 
 
-namespace lib   {
-namespace advice{
+namespace lumiera {
+namespace advice {
 namespace test  {
   
   namespace {
@@ -127,11 +128,11 @@ namespace test  {
           b2.addPredicate("cat3(zzz)");
           CHECK (b1 != b2);
           
-          b1.addTypeGuard<time::Time>();
+          b1.addTypeGuard<Time>();
           CHECK (b1 != b2);
           b1.addPredicate(" cat3(  zzz   )  ");
           CHECK (b1 != b2);
-          b2.addTypeGuard<time::Time>();
+          b2.addTypeGuard<Time>();
           CHECK (b1 == b2);
           
           cout << "b2==" << b2 << endl;
@@ -214,4 +215,4 @@ namespace test  {
   LAUNCHER (AdviceBindingPattern_test, "unit common");
   
   
-}}} // namespace lib::advice::test
+}}} // namespace lumiera::advice::test

@@ -43,7 +43,7 @@
 
 
 #include "proc/mobject/placement.hpp"
-#include "lib/query-resolver.hpp"
+#include "common/query/query-resolver.hpp"
 
 #include <tr1/functional>
 
@@ -56,8 +56,8 @@ namespace session {
   using std::tr1::function;
   using std::tr1::placeholders::_1;
   
-  using lib::Goal;
-  using lib::Query;
+  using lumiera::Goal;
+  using lumiera::Query;
   
   
   

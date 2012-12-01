@@ -27,10 +27,10 @@
 
 #include "proc/asset/category.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/query.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/asset/asset-diagnostics.hpp"
+#include "common/query.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
@@ -47,8 +47,8 @@ namespace asset {
 namespace test  {
   
   using mobject::Session;
-  using lib::Query;
-  using lib::query::normaliseID;
+  using lumiera::Query;
+  using lumiera::query::normaliseID;
   
   
   

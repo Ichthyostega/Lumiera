@@ -73,8 +73,8 @@
 #include "lib/element-tracker.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
-#include "proc/mobject/session/defs-manager.hpp"
 #include "proc/mobject/session/element-query.hpp"
+#include "common/query/defs-manager.hpp"
 
 
 
@@ -96,8 +96,8 @@ namespace session {
   struct SessionInterfaceModules
     : boost::noncopyable
     {
-      DefsManager defaultsManager_;
-      ElementQuery elementQueryAPI_;
+      lumiera::query::DefsManager defaultsManager_;
+      mobject::session::ElementQuery elementQueryAPI_;
       TimelineTracker timelineRegistry_;
       SequenceTracker sequenceRegistry_;
       

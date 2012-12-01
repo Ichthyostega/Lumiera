@@ -1,5 +1,5 @@
 /*
-  CONFIGRULES.hpp  -  interface for rule based configuration
+  CONFIG-RULES.hpp  -  interface for rule based configuration
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file configrules.hpp
+/** @file config-rules.hpp
  ** Interface for accessing rule based configuration.
  ** By using the Query template, you can pose a query in prolog syntax and get some
  ** existing or newly created object fulfilling the requested predicates. The actual 
@@ -46,33 +46,25 @@
  */
 
 
-#ifndef LUMIERA_CONFIGRULES_H
-#define LUMIERA_CONFIGRULES_H
+#ifndef LUMIERA_CONFIG_RULES_H
+#define LUMIERA_CONFIG_RULES_H
 
 #include "lib/p.hpp"
-#include "lib/query.hpp"
 #include "lib/symbol.hpp"
 #include "lib/meta/generator.hpp"
-#include "lib/singleton-subclass.hpp"
-
-//TODO: is it sensible to bring in the types explicitly here? (it's not necessary, but may be convenient...)
-#include "proc/mobject/session/track.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/pipe.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
+#include "common/query.hpp"
 
 #include <string>
 
 
 
-namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
+namespace lumiera {
   
   using std::string;
   using lib::P;
   
   
-  
+  /////////////////////////////////////////////////////////////////////TICKET #705 this is draft/preview code; a real resolution system needs to be integrated
   
   namespace query {
     
@@ -93,13 +85,13 @@ namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
     
     class Resolver
       {
-        
+        ///////////////////////////////////////////////////////////////TICKET #705 a real resolution system needs to be integrated
       };
     
     
     using lib::Symbol;
     using lib::Literal;
-    using lib::Query;
+    using lumiera::Query;
     
 /** placeholder definition for later.
  *  @todo intention is to integrate with lib::Symbol
@@ -206,34 +198,6 @@ namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
   
   
   
-  
-  
-  /* ============= global configuration ==================== */
-  
-  /** 
-   *  the list of all concrete types participating in the
-   *  rule based config query system
-   */
-  typedef lib::meta::Types < proc::mobject::session::Track
-                           , proc::asset::Pipe
-                           , const proc::asset::ProcPatt
-                           , proc::asset::Timeline
-                           , proc::asset::Sequence
-                           > ::List
-                             InterfaceTypes;
-  
-  /** 
-   * user-visible Interface to the ConfigRules subsystem.
-   * Configured as Singleton (with hidden Implementation class)
-   */
-  class ConfigRules
-    : public query::ConfigRules<InterfaceTypes>
-    {
-  
-    public:
-      static lib::SingletonSub<ConfigRules> instance;
-      
-    };
   
   
   

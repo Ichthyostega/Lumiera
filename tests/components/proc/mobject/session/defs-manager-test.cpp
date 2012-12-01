@@ -23,8 +23,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/symbol.hpp"
-#include "lib/query.hpp"
 #include "lib/util.hpp"
+#include "common/query.hpp"
 
 #include "proc/asset.hpp"
 #include "proc/asset/pipe.hpp"
@@ -54,8 +54,8 @@ namespace test    {
   using asset::Pipe;
   using asset::PPipe;
   using asset::Struct;
-  using lib::Query;
-  using lib::query::normaliseID;
+  using lumiera::Query;
+  using lumiera::query::normaliseID;
   
   
   /** shortcut: run just a query

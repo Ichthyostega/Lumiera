@@ -1,6 +1,6 @@
 
 /*
-  ConfigRules  -  interface for rule based configuration
+  ConfigResolver  -  concrete setup for rule based configuration
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,18 +23,12 @@
 
 
 #include "lib/error.hpp"
-#include "common/configrules.hpp"
+#include "proc/config-resolver.hpp"
 #include "proc/mobject/session/query/fake-configrules.hpp"
 
 
 
-namespace lumiera {
-  namespace query {
-    
-    LUMIERA_ERROR_DEFINE (CAPABILITY_QUERY, "unresolvable capability query");
-    
-    
-  } // namespace query
+namespace proc {
   
   namespace {
     
@@ -44,23 +38,55 @@ namespace lumiera {
   
   
   /** Singleton factory instance, parametrised to actual impl. type. */
-  lib::SingletonSub<ConfigRules> ConfigRules::instance (typeinfo);
+  lib::SingletonSub<ConfigResolver> ConfigResolver::instance (typeinfo);
   
   
+} // namespace proc
+
+
+
+
+
+
+
+
+#include "common/query/defs-manager-impl.hpp"
+
+
+
+   /***************************************************************/
+   /* explicit template instantiations for querying various Types */
+   /***************************************************************/
+
+#include "proc/asset/procpatt.hpp"
+#include "proc/asset/pipe.hpp"
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/sequence.hpp"
+#include "proc/mobject/session/track.hpp"
+
+namespace lumiera{
+namespace query  {
+  
+  using proc::asset::Pipe;
+  using proc::asset::PPipe;
+  using proc::asset::ProcPatt;
+  using proc::asset::PProcPatt;
+  using proc::asset::Timeline;
+  using proc::asset::PTimeline;
+  using proc::asset::Sequence;
+  using proc::asset::PSequence;
+  
+  using proc::mobject::session::Track;
+  using proc::mobject::session::PTrack;
+  
+  template PPipe       DefsManager::operator() (Query<Pipe>     const&);
+  template PProcPatt   DefsManager::operator() (Query<const ProcPatt> const&);
+  template PTrack      DefsManager::operator() (Query<Track>    const&);
+  template PTimeline   DefsManager::operator() (Query<Timeline> const&);
+  template PSequence   DefsManager::operator() (Query<Sequence> const&);
+  
+  template bool DefsManager::define (PPipe const&, Query<Pipe> const&);
+  template bool DefsManager::forget (PPipe const&);
   
   
-  
-  namespace query {
-    namespace { // local definitions: implementing a backdoor for tests
-        string fakeBypass;
-    } 
-    
-    void setFakeBypass(string const& q)  { fakeBypass = q; }
-    bool isFakeBypass (string const& q)  { return q == fakeBypass; }
-    /////////////////////////////////////////////////////////////////////////////TICKET 710
-    
-  } // namespace query
-  
-  
-  
-} // namespace lumiera
+}} // namespace lumiera::query

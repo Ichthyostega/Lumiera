@@ -21,11 +21,11 @@
 */
 
 
-#ifndef LIB_QUERY_RESOLVER_H
-#define LIB_QUERY_RESOLVER_H
+#ifndef LUMIERA_QUERY_RESOLVER_H
+#define LUMIERA_QUERY_RESOLVER_H
 
-#include "lib/query.hpp"
 #include "lib/iter-adapter.hpp"
+#include "common/query.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -35,7 +35,7 @@
 
 using std::tr1::function;
 
-namespace lib {
+namespace lumiera {
   
   using boost::noncopyable;
   using boost::scoped_ptr;
@@ -162,5 +162,5 @@ namespace lib {
   }
   
   
-} // namespace lib
+} // namespace lumiera
 #endif

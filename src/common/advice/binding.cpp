@@ -21,9 +21,9 @@
 * *****************************************************/
 
 
-#include "lib/advice/binding.hpp"
-#include "lib/symbol.hpp"
 #include "lib/util.hpp"
+#include "lib/symbol.hpp"
+#include "common/advice/binding.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>
@@ -41,7 +41,7 @@ using boost::hash_combine;
 using boost::lexical_cast;
 
 
-namespace lib {
+namespace lumiera{
 namespace advice {
   
   LUMIERA_ERROR_DEFINE (BINDING_PATTERN_SYNTAX, "Unable to parse the given binding pattern definition");
@@ -191,4 +191,4 @@ namespace advice {
   
   
   
-}} // namespace lib::advice
+}} // namespace lumiera::advice

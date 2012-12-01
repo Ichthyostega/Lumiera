@@ -52,11 +52,11 @@
 #ifndef PROC_MOBJECT_OUTPUT_MAPPING_H
 #define PROC_MOBJECT_OUTPUT_MAPPING_H
 
+#include "lib/error.hpp"
+#include "lib/util.hpp"
 #include "proc/asset/pipe.hpp"
 #include "lib/bool-checkable.hpp"
-#include "lib/error.hpp"
-#include "lib/query.hpp"
-#include "lib/util.hpp"
+#include "common/query.hpp"
 
 #include <boost/operators.hpp>
 #include <map>
@@ -96,7 +96,7 @@ namespace mobject {
   }//(End) type rebinding helper
   
   namespace error = lumiera::error;
-  using lib::Query;
+  using lumiera::Query;
   using asset::HashVal;
   
   
@@ -213,7 +213,7 @@ namespace mobject {
            *  This operation is invoked when client code accesses
            *  the result of an OutputMapping query. 
            * @return result of invoking the configured \c DEF::output functor
-           * @throw  error::Logic when resoving an \em unconnected mapping
+           * @throw  error::Logic when resolving an \em unconnected mapping
            */
           operator Target()
             {

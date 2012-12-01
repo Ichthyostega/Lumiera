@@ -25,7 +25,7 @@
 #define MOBJECT_BUILDER_OPERATIONPOINT_H
 
 //#include "proc/engine/procnode.hpp"         /////TODO can we get rid of this header here?
-#include "lib/query.hpp"
+//#include "common/query.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>

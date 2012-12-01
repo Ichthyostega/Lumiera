@@ -30,6 +30,9 @@
 #include "proc/mobject/session/binding.hpp"
 #include "proc/asset/clip.hpp"
 #include "proc/asset/effect.hpp"
+#include "common/query/defs-manager.hpp"
+
+using lumiera::query::DefsManager;
 
 namespace proc {
 namespace mobject {

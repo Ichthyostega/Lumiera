@@ -30,7 +30,7 @@
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
@@ -55,7 +55,7 @@ namespace test    {
   using asset::PSequence;
   using asset::Pipe;
   
-  using lib::Query;
+  using lumiera::Query;
   
   
   /********************************************************************************

@@ -41,8 +41,9 @@
 #define MOBJECT_SESSION_QUERY_FAKECONFIGRULES_H
 
 #include "proc/mobject/session.hpp"
-#include "common/configrules.hpp"
+#include "proc/config-resolver.hpp"
 #include "lib/util.hpp"
+#include "lib/p.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/any.hpp>
@@ -63,11 +64,12 @@ namespace session {
     using asset::PProcPatt;
     using proc::mobject::Session;
     using lib::meta::InstantiateChained;
+    using lib::P;
     
-    using lib::Query;
-    using lib::query::removeTerm;   //////////////TODO better use Query::Builder
-    using lib::query::extractID;   ///////////////TODO dto
-    using lumiera::query::isFakeBypass;  /////////TODO placeholder until there is a real resolution engine
+    using lumiera::Query;
+    using lumiera::query::removeTerm;   //////////////TODO better use Query::Builder
+    using lumiera::query::extractID;   ///////////////TODO dto
+    using lumiera::query::isFakeBypass;      /////////TODO placeholder until there is a real resolution engine
     
     using util::contains;
     using util::isnil;
@@ -106,7 +108,8 @@ namespace session {
      * the actual table holding preconfigured answers
      * packaged as boost::any objects. 
      */
-    class MockTable : public lumiera::ConfigRules
+    class MockTable
+      : public proc::ConfigResolver
       {
         typedef std::map<string,any> Tab;
         typedef boost::scoped_ptr<Tab> PTab;
@@ -261,7 +264,7 @@ namespace session {
      * values for some types of interest for testing and debugging.
      */
     class MockConfigRules 
-      : public InstantiateChained < lumiera::InterfaceTypes           
+      : public InstantiateChained < proc::InterfaceTypes           
                                   , LookupPreconfigured  // building block used for each of the types
                                   , MockTable           //  for implementing the base class (interface) 
                                   >

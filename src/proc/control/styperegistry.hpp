@@ -38,7 +38,7 @@
 
 
 #include "proc/control/stypemanager.hpp"
-//#include "lib/query.hpp"
+//#include "common/query.hpp"
 //#include "lib/util.hpp"
 //#include "lib/p.hpp"
 

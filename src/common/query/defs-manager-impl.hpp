@@ -1,5 +1,5 @@
 /*
-  DefsManager  -  access to preconfigured default objects and definitions
+  DEFS-MANAGER-IMPL.h  -  access to preconfigured default objects and definitions
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,25 +18,46 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+*/
 
 
-#include "proc/mobject/session/defs-manager.hpp"
-#include "proc/mobject/session/defs-registry.hpp"
-#include "common/configrules.hpp"
+/** @file defs-manager-impl.hpp
+ ** Implementation of the core defaults-management operations.
+ ** These generic implementations are factored out into a separate header (include)
+ ** to improve readability. To actually generate code, it is necessary to pull in this
+ ** include to create explicit template instantiations with the concrete types to be used
+ ** for definition and retrieval of default-configured objects.
+ ** 
+ ** For the standard use-case within the session / Proc-Layer, this is performed for the
+ ** core MObject types, alongside with the definition of the generic config-query-resolver.
+ ** 
+ ** @see config-resolver.cpp definition of the explicit specialisiations for the session 
+ ** @see proc::ConfigResolver
+ **
+ */
+
+
+
+
+#ifndef LUMIERA_QUERY_DEFS_MANAGER_IMPL_H
+#define LUMIERA_QUERY_DEFS_MANAGER_IMPL_H
+
+
+#include "common/query/defs-manager.hpp"
+#include "common/query/defs-registry.hpp"
+#include "common/config-rules.hpp"
 #include "lib/format-string.hpp"
 #include "lib/error.hpp"
 
 using util::_Fmt;
 
-using lumiera::ConfigRules;
+using proc::ConfigResolver;
 using lumiera::query::QueryHandler;
 using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
 
 
-namespace proc {
-namespace mobject {
-namespace session {
+namespace lumiera{
+namespace query  {
   
   
   
@@ -61,7 +82,7 @@ namespace session {
   DefsManager::search  (const Query<TAR>& capabilities)
   {
     P<TAR> res;
-    QueryHandler<TAR>& typeHandler = ConfigRules::instance();
+    QueryHandler<TAR>& typeHandler = ConfigResolver::instance();
     for (DefsRegistry::Iter<TAR> i = defsRegistry->candidates(capabilities);
          bool(*i) ; ++i )
       {
@@ -79,7 +100,7 @@ namespace session {
   DefsManager::create  (const Query<TAR>& capabilities)
   {
     P<TAR> res;
-    QueryHandler<TAR>& typeHandler = ConfigRules::instance();
+    QueryHandler<TAR>& typeHandler = ConfigResolver::instance();
     typeHandler.resolve (res, capabilities);
     if (res)
       defsRegistry->put (res, capabilities);
@@ -92,7 +113,7 @@ namespace session {
   DefsManager::define  (const P<TAR>& defaultObj, const Query<TAR>& capabilities)
   {
     P<TAR> candidate (defaultObj);
-    QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
+    QueryHandler<TAR>& typeHandler = ConfigResolver::instance();  
     typeHandler.resolve (candidate, capabilities);
     if (!candidate)
       return false;
@@ -128,48 +149,5 @@ namespace session {
       return res;
   }
   
-}}} // namespace mobject::session
-
-
-
-
-
-
-   /***************************************************************/
-   /* explicit template instantiations for querying various Types */
-   /***************************************************************/
-
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/pipe.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
-#include "proc/mobject/session/track.hpp"
-
-namespace proc {
-namespace mobject {
-namespace session {
-  
-  
-  using asset::Pipe;
-  using asset::PPipe;
-  using asset::ProcPatt;
-  using asset::PProcPatt;
-  using asset::Timeline;
-  using asset::PTimeline;
-  using asset::Sequence;
-  using asset::PSequence;
-  
-  using mobject::session::Track;
-  using mobject::session::PTrack;
-  
-  template PPipe       DefsManager::operator() (Query<Pipe>     const&);
-  template PProcPatt   DefsManager::operator() (Query<const ProcPatt> const&);
-  template PTrack      DefsManager::operator() (Query<Track>    const&);
-  template PTimeline   DefsManager::operator() (Query<Timeline> const&);
-  template PSequence   DefsManager::operator() (Query<Sequence> const&);
-  
-  template bool DefsManager::define (PPipe const&, Query<Pipe> const&);
-  template bool DefsManager::forget (PPipe const&);
-  
-  
-}}} // namespace proc::mobject::session
+}} // namespace lumiera::query
+#endif /* LUMIERA_QUERY_DEFS_MANAGER_IMPL_H */

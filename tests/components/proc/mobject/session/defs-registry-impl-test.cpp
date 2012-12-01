@@ -24,8 +24,8 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "proc/mobject/session/defs-registry.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
+#include "common/query/defs-registry.hpp"
 #include "lib/p.hpp"
 
 #include "../lib/query/querydiagnostics.hpp"
@@ -34,8 +34,6 @@
 #include <boost/format.hpp>
 #include <map>
 
-using lib::Query;
-using lib::query::test::garbage_query;
 using util::isnil;
 using lib::P;
 
@@ -47,9 +45,8 @@ using std::map;
 
 
 
-namespace proc    {
-namespace mobject {
-namespace session {
+namespace lumiera {
+namespace query   {
 namespace test    {
   
   format typePatt ("Dummy<%2i>");
@@ -299,4 +296,4 @@ namespace test    {
   
   
   
-}}}} // namespace proc::mobject::session::test
+}}} // namespace lumiera::query::test

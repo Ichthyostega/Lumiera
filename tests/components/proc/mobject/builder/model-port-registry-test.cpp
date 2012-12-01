@@ -26,7 +26,7 @@
 #include "proc/mobject/builder/model-port-registry.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
 #include "lib/util.hpp"
 
 
@@ -43,7 +43,7 @@ namespace test  {
   using asset::Struct;
   using asset::Timeline;
   using asset::PTimeline;
-  using lib::Query;
+  using lumiera::Query;
   
   typedef asset::ID<Pipe> PID;
   typedef asset::ID<Struct> TID;

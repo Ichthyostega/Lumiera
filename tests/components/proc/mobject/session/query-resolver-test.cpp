@@ -23,15 +23,16 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/query-resolver.hpp"
 #include "lib/singleton.hpp"
+
+#include "common/query/query-resolver.hpp"
 
 #include <iostream>
 #include <string>
 
 
 
-namespace lib {
+namespace lumiera {
 namespace test{
   
   using lib::test::showSizeof;
@@ -221,4 +222,4 @@ namespace test{
   LAUNCHER (QueryResolver_test, "unit session");
   
   
-}} // namespace lib::test
+}} // namespace lumiera::test

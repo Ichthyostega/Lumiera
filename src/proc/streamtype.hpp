@@ -36,7 +36,7 @@
 
 
 #include "lib/symbol.hpp"
-#include "lib/query.hpp"
+//#include "common/query.hpp"
 #include "proc/asset/entry-id.hpp"
 
 #include <boost/noncopyable.hpp>

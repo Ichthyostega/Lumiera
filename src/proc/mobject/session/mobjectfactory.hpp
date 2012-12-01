@@ -29,6 +29,10 @@
 #include "lib/symbol.hpp"
 
 
+namespace lumiera {
+namespace query {
+  class DefsManager;
+}}
 
 namespace proc {
 namespace asset {
@@ -52,7 +56,6 @@ namespace session {
   class Label;
   class Binding;
   
-  class DefsManager;
   
   
   class MObjectFactory
@@ -64,7 +67,7 @@ namespace session {
       
     public:
       
-      Placement<Root>   operator() (DefsManager&);
+      Placement<Root>   operator() (lumiera::query::DefsManager&);
       Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
       Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
       Placement<Track>  operator() (asset::EntryID<Track> const&);

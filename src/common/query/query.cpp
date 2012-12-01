@@ -21,10 +21,10 @@
 * *****************************************************/
 
 
-#include "lib/query.hpp"
 #include "lib/util.hpp"
 #include "lib/symbol.hpp"
 #include "include/logging.h"
+#include "common/query.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
@@ -40,7 +40,7 @@ using util::contains;
 using util::isnil;
 
 
-namespace lib {
+namespace lumiera {
   namespace query {
     
     namespace { // local definitions
@@ -147,4 +147,4 @@ namespace lib {
   
 
 
-} // namespace lib
+} // namespace lumiera

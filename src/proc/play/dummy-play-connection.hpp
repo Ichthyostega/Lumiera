@@ -85,7 +85,7 @@
 #include "proc/mobject/builder/model-port-registry.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
 #include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 
@@ -125,7 +125,7 @@ namespace play {
     using mobject::ModelPort;
     using mobject::builder::ModelPortRegistry;
     using util::contains;
-    using lib::Query;
+    using lumiera::Query;
 //  using lib::ScopedCollection;
 //  using lib::Literal;
     using lib::eachEntry;

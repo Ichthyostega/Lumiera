@@ -26,13 +26,13 @@
 #include "lib/util-foreach.hpp"
 
 #include "lib/cmdline.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
 #include "query/querydiagnostics.hpp"
 
 #include <tr1/functional>
 #include <iostream>
 
-using lib::Query;
+using lumiera::Query;
 using lib::Cmdline;
 using util::isnil;
 using util::contains;
@@ -46,7 +46,7 @@ using std::endl;
 
 
 
-namespace lib {
+namespace lumiera {
 namespace query {
 namespace test{
   

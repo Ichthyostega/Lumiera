@@ -27,9 +27,8 @@
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/display.hpp"
-#include "lib/advice.hpp"
+#include "common/advice.hpp"
 #include "lib/util.hpp"
-//#include "include/logging.h"
 
 #include <boost/format.hpp>
 #include <string>
@@ -67,7 +66,7 @@ namespace meta {
   using lib::time::FixedFrameQuantiser;
   using std::tr1::dynamic_pointer_cast;
   
-  namespace advice = lib::advice;
+  namespace advice = lumiera::advice;
   
   namespace {
     

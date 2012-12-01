@@ -27,10 +27,11 @@
 #include "proc/asset.hpp"
 #include "proc/asset/pipe.hpp"
 #include "proc/asset/struct.hpp"
-#include "common/configrules.hpp"
+#include "proc/config-resolver.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/streamtype.hpp"
+#include "common/query.hpp"
 
 #include <boost/format.hpp>
 
@@ -45,16 +46,17 @@ namespace session {
 namespace test    {
   
   using lib::Symbol;
-  using lib::Query;
-  using lib::query::normaliseID;
   using asset::Asset;
   using asset::AssetManager;
   using asset::Pipe;
   using asset::PPipe;
   using asset::Struct;
   
-  using lumiera::ConfigRules;
+  using lumiera::Query;
   using lumiera::query::QueryHandler;
+  using lumiera::query::normaliseID;
+  
+  using proc::ConfigResolver;
   
   
   
@@ -136,7 +138,7 @@ lumiera::query::setFakeBypass("stream("+sID+")"); //////////////////////////////
           Query<Pipe> query_for_streamID ("stream("+sID+")");
           
           // issue a ConfigQuery directly, without involving the DefaultsManager
-          QueryHandler<Pipe>& typeHandler = ConfigRules::instance();
+          QueryHandler<Pipe>& typeHandler = ConfigResolver::instance();
           PPipe pipe1;
           typeHandler.resolve (pipe1, query_for_streamID);
           CHECK (pipe1);

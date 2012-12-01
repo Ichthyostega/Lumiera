@@ -90,20 +90,21 @@
  */
 
 
-#ifndef LIB_ADVICE_H
-#define LIB_ADVICE_H
+#ifndef LUMIERA_ADVICE_H
+#define LUMIERA_ADVICE_H
 
 
 #include "lib/error.hpp"
 #include "lib/null-value.hpp"
-#include "lib/advice/binding.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
+
+#include "common/advice/binding.hpp"
 
 #include <boost/noncopyable.hpp>
 
 
-namespace lib    {
+namespace lumiera{
 namespace advice {
   
   using lib::Symbol;
@@ -227,7 +228,7 @@ namespace advice {
    * piece of advice they're looking for.
    * 
    * Any advice::Provision remains inactive and thus invisible, until
-   * \link #setAdvice setting the concrete advice data \endlink. After that,
+   * \link #setAdvice setting the concrete advice data.\endlink After that,
    * the provided data is \em copied into the AdviceSystem and remains available
    * even after the original Provision goes out of scope. Consequently, it isn't
    * possible to \em modify advice data once set. But client code may retract
@@ -271,6 +272,7 @@ namespace advice {
               AdviceLink::operator= (o);
               setSolution ( NULL );
             }
+          return *this;
         }
       
       
@@ -433,7 +435,7 @@ namespace advice {
       AD const&
       handleMissingSolution()  const  ///< @warning might segfault when used during shutdown
         {
-          return NullValue<AD>::get();
+          return lib::NullValue<AD>::get();
         }
       
       
@@ -477,5 +479,5 @@ namespace advice {
   
   
   
-}} // namespace lib::advice
+}} // namespace lumiera::advice
 #endif

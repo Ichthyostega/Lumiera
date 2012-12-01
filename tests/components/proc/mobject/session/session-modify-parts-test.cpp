@@ -31,7 +31,7 @@
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/mobject-ref.hpp"
 #include "proc/mobject/placement.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
 
 #include <tr1/functional>
 #include <iostream>
@@ -58,7 +58,7 @@ namespace test    {
   using asset::PSequence;
   using asset::Sequence;
   
-  using lib::Query;
+  using lumiera::Query;
   
   typedef MORef<session::Clip> RClip;
   typedef PlacementMO::ID PID;

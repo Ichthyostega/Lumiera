@@ -36,15 +36,15 @@
 
 
 
-#ifndef PROC_MOBJECT_SESSION_DEFS_REGISTRY_H
-#define PROC_MOBJECT_SESSION_DEFS_REGISTRY_H
+#ifndef LUMIERA_QUERY_DEFS_REGISTRY_H
+#define LUMIERA_QUERY_DEFS_REGISTRY_H
 
 
-#include "lib/sync-classlock.hpp"
-#include "lib/query.hpp"
+#include "lib/p.hpp"
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
-#include "lib/p.hpp"
+#include "lib/sync-classlock.hpp"
+#include "common/query.hpp"
 
 #include <set>
 #include <vector>
@@ -54,12 +54,10 @@
 #include <boost/lambda/lambda.hpp>
 
 
-namespace proc {
-namespace mobject {
-namespace session {
+namespace lumiera{
+namespace query  {
   
   using lib::P;
-  using lib::Query;
   using lib::ClassLock;
   using std::tr1::weak_ptr;
   
@@ -97,7 +95,7 @@ namespace session {
         weak_ptr<TAR> objRef;
         
         Record (const Query<TAR>& q, const P<TAR>& obj)
-          : degree (lib::query::countPred ("TODO")),//q)),////////////////////////////////////////////////////////////////////////////////////////////TODO
+          : degree (lumiera::query::countPred ("TODO")),//q)),////////////////////////////////////////////////////////////////////////////////////////////TODO
             query (q),
             objRef (obj)
           { 
@@ -343,5 +341,5 @@ namespace session {
   using impl::DefsRegistry;
   
   
-}}} // namespace proc::mobject::session
+}} // namespace lumiera::query
 #endif

@@ -27,7 +27,7 @@
 #include "proc/asset/struct.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/streamtype.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
 
 #include <string>
 
@@ -36,7 +36,7 @@
 namespace proc {
 namespace asset {
   
-  using lib::Query;
+  using lumiera::Query;
   using std::string;
   
   class Pipe;

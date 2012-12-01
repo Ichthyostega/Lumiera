@@ -22,8 +22,9 @@
 
 
 #include "proc/mobject/session/root.hpp"
-#include "proc/mobject/session/defs-manager.hpp"
+#include "common/query/defs-manager.hpp"
 
+using lumiera::query::DefsManager;
 
 namespace proc {
 namespace mobject {

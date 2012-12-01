@@ -23,7 +23,7 @@
 
 
 #include "lib/error.hpp"
-#include "common/configrules.hpp"
+#include "common/config-rules.hpp"
 #include "proc/mobject/session/query/fake-configrules.hpp"
 
 
@@ -35,16 +35,6 @@ namespace lumiera {
     
     
   } // namespace query
-  
-  namespace {
-    
-    /** type of the actual ConfigRules implementation to use */
-    lib::singleton::UseSubclass<proc::mobject::session::query::MockConfigRules> typeinfo;
-  }
-  
-  
-  /** Singleton factory instance, parametrised to actual impl. type. */
-  lib::SingletonSub<ConfigRules> ConfigRules::instance (typeinfo);
   
   
   
@@ -59,8 +49,5 @@ namespace lumiera {
     bool isFakeBypass (string const& q)  { return q == fakeBypass; }
     /////////////////////////////////////////////////////////////////////////////TICKET 710
     
-  } // namespace query
-  
-  
-  
+  }// namespace query
 } // namespace lumiera

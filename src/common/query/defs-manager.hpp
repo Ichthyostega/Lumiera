@@ -21,25 +21,24 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_DEFS_MANAGER_H
-#define PROC_MOBJECT_SESSION_DEFS_MANAGER_H
+#ifndef LUMIERA_QUERY_DEFS_MANAGER_H
+#define LUMIERA_QUERY_DEFS_MANAGER_H
 
 
 #include "lib/p.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 
 
-namespace proc {
-namespace mobject {
-namespace session {
+namespace lumiera{
+namespace query  {
   
   
   using lib::P;
-  using lib::Query;
+  using lumiera::Query;
   using boost::scoped_ptr;
   
   namespace impl { class DefsRegistry; }
@@ -126,5 +125,5 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+}} // namespace lumiera::query
 #endif

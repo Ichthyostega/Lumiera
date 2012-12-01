@@ -26,7 +26,7 @@
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/session/placement-index-query-resolver.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
-#include "lib/query-resolver.hpp"
+#include "common/query/query-resolver.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
@@ -39,7 +39,7 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using lib::QueryResolver;
+  using lumiera::QueryResolver;
   using session::PathQuery;
   using session::ContentsQuery;
   using util::isSameObject;

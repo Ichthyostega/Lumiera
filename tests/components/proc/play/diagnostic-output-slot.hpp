@@ -41,9 +41,9 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/iter-source.hpp"
-#include "lib/advice.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
+#include "common/advice.hpp"
 #include "proc/engine/testframe.hpp"
 //#include "lib/sync.hpp"
 
@@ -80,7 +80,7 @@ namespace play {
     getTestTimeGrid()
     {
       Symbol gridID("DiagnosticOutputSlot-buffer-grid");
-      lib::advice::Request<PGrid> query4grid(gridID) ;
+      lumiera::advice::Request<PGrid> query4grid(gridID) ;
       PGrid testGrid25 = query4grid.getAdvice();
       
       if (!testGrid25)

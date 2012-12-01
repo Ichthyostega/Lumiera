@@ -90,25 +90,26 @@
 
 
 #include "lib/error.hpp"
-#include "lib/advice.hpp"
-#include "lib/advice/index.hpp"
 #include "lib/del-stash.hpp"
 #include "lib/singleton.hpp"
 #include "lib/symbol.hpp"
 #include "lib/sync.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"
+#include "common/advice.hpp"
+#include "common/advice/index.hpp"
 
 #include <boost/noncopyable.hpp>
 
 using lib::Symbol;
 using lib::Singleton;
+using lib::DelStash;
 using util::unConst;
 
 typedef void (DeleterFunc)(void*);
 
 
-namespace lib {
+namespace lumiera{
 namespace advice {
   
   namespace { // ======= implementation of the AdviceSystem ============
@@ -159,6 +160,8 @@ namespace advice {
               {
                 throw error::Fatal("Unable to store Advice due to memory exhaustion");
               }
+            ERROR_LOG_AND_IGNORE (memory, "Storing a piece of Advice")
+            throw error::Fatal("Unable to store Advice data");
           }
         
         void

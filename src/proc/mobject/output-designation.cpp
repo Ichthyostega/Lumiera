@@ -43,16 +43,16 @@
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/output-designation.hpp"
 #include "proc/mobject/output-mapping.hpp"
-#include "common/configrules.hpp"
+#include "proc/config-resolver.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <cstdlib>
 
-using lumiera::query::QueryHandler;
-using lumiera::ConfigRules;
 using lumiera::Symbol;
-using lib::query::removeTerm;
-using lib::query::extractID;
+using lumiera::query::QueryHandler;
+using lumiera::query::removeTerm;
+using lumiera::query::extractID;
+using proc::ConfigResolver;
 
 namespace proc {
 namespace mobject {
@@ -168,7 +168,7 @@ namespace mobject {
     resolveQuery (Query<asset::Pipe> const& query4pipe)
     {
       PPipe res;
-      QueryHandler<asset::Pipe>& typeHandler = ConfigRules::instance();  
+      QueryHandler<asset::Pipe>& typeHandler = ConfigResolver::instance();  
       typeHandler.resolve (res, query4pipe);
       HashVal resulting_targetPipeID (res? (HashVal)res->getID() : 0 );
       return resulting_targetPipeID;

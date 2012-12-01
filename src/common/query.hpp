@@ -39,7 +39,7 @@
 #include <string>
 
 
-namespace lib {
+namespace lumiera {
   
   using lib::IxID;
   using lib::Symbol;

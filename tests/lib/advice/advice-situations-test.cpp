@@ -24,7 +24,8 @@
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
 
-#include "lib/advice.hpp"
+#include "common/advice.hpp"
+
 //#include "lib/p.hpp"
 //#include "proc/assetmanager.hpp"
 //#include "proc/asset/inventory.hpp"
@@ -52,7 +53,7 @@
 
 
 
-namespace lib {
+namespace lumiera {
 namespace advice {
 namespace test {
   
@@ -112,4 +113,4 @@ namespace test {
   LAUNCHER (AdviceSituations_test, "function common");
   
   
-}}} // namespace lib::advice::test
+}}} // namespace lumiera::advice::test

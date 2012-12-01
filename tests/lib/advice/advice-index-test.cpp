@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/advice/index.hpp"
+#include "common/advice/index.hpp"
 
 #include <vector>
 
@@ -30,7 +30,7 @@ using lib::Literal;
 
 
 
-namespace lib {
+namespace lumiera {
 namespace advice {
 namespace test {
   
@@ -430,4 +430,4 @@ namespace test {
   LAUNCHER (AdviceIndex_test, "function common");
   
   
-}}} // namespace lib::advice::test
+}}} // namespace lumiera::advice::test

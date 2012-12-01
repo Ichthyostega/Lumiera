@@ -57,9 +57,9 @@
 #ifndef ASSET_STRUCT_H
 #define ASSET_STRUCT_H
 
-#include "proc/asset.hpp"
-#include "lib/query.hpp"
 #include "lib/symbol.hpp"
+#include "proc/asset.hpp"
+#include "common/query.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -72,7 +72,7 @@ namespace asset {
   
   using std::string;
   using boost::scoped_ptr;
-  using lib::Query;
+  using lumiera::Query;
   using lib::Symbol;
   
   class Struct;

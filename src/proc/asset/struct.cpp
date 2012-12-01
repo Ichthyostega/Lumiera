@@ -23,22 +23,23 @@
 
 #include "proc/asset/struct.hpp"
 #include "proc/assetmanager.hpp"
-#include "common/configrules.hpp"
+#include "proc/config-resolver.hpp"
 
 #include "proc/asset/struct-factory-impl.hpp"
 
 #include "lib/util.hpp"
 #include "lib/symbol.hpp"
 #include "include/logging.h"
+#include "common/query.hpp"
 
 #include <boost/format.hpp>
 
 using boost::format;
 
 using lib::Symbol;
-using lib::query::normaliseID;
+using lumiera::query::normaliseID;
 using lumiera::query::QueryHandler;
-using lumiera::ConfigRules;
+using proc::ConfigResolver;
 
 using util::contains;
 
@@ -101,7 +102,7 @@ namespace asset {
   StructFactory::operator() (Query<STRU> const& capabilities)
   {
     P<STRU> res;
-    QueryHandler<STRU>& typeHandler = ConfigRules::instance();  
+    QueryHandler<STRU>& typeHandler = ConfigResolver::instance();  
     typeHandler.resolve (res, capabilities);
     
     if (res)

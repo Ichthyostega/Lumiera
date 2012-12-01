@@ -24,7 +24,6 @@
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
 
-#include "lib/advice.hpp"
 //#include "lib/p.hpp"
 //#include "proc/assetmanager.hpp"
 //#include "proc/asset/inventory.hpp"
@@ -33,6 +32,7 @@
 //#include "lib/meta/trait-special.hpp"
 //#include "lib/util-foreach.hpp"
 //#include "lib/symbol.hpp"
+#include "common/advice.hpp"
 
 //#include <iostream>
 //#include <string>
@@ -52,7 +52,7 @@
 
 
 
-namespace lib {
+namespace lumiera {
 namespace advice {
 namespace test {
   
@@ -131,4 +131,4 @@ namespace test {
   LAUNCHER (AdviceMultiplicity_test, "function common");
   
   
-}}} // namespace lib::advice::test
+}}} // namespace lumiera::advice::test

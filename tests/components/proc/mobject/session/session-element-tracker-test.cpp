@@ -29,7 +29,8 @@
 #include "proc/mobject/session.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
+#include "lib/p.hpp"
 
 
 
@@ -84,7 +85,8 @@ namespace test    {
   
   
   
-  using lib::Query;
+  using lib::P;
+  using lumiera::Query;
   using asset::Timeline;
   using asset::PTimeline;
   using asset::AssetManager;

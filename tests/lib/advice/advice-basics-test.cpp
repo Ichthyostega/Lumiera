@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/advice.hpp"
+#include "common/advice.hpp"
 
 #include <cstdlib>
 
@@ -30,7 +30,7 @@ using std::rand;
 
 
 
-namespace lib {
+namespace lumiera {
 namespace advice {
 namespace test {
   
@@ -264,4 +264,4 @@ namespace test {
   LAUNCHER (AdviceBasics_test, "unit common");
   
   
-}}} // namespace lib::advice::test
+}}} // namespace lumiera::advice::test

@@ -205,7 +205,7 @@ namespace time {
       materialiseGridPoint (Symbol gridID, int steps)
         {
           REQUIRE (!isnil (gridID));
-          PQuant grid = Quantiser::retrieve(gridID);
+          PQuant grid;//////////TODO = Quantiser::retrieve(gridID);
           return Offset(grid->timeOf(0), grid->timeOf(steps));
         }
       

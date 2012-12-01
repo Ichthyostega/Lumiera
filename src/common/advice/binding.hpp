@@ -55,6 +55,8 @@
  ** the symbolic definition is parsed, then normalised and finally, after creating the matcher
  ** functor, the full pattern definition can be discarded.
  ** 
+ ** @remarks while binding is defined in the context of the advice system for now,
+ **       obviously this is the foundation of a more generic system to deal with predicate terms. 
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
  **       at various places within proc-layer.
@@ -69,21 +71,22 @@
  */
 
 
-#ifndef LIB_ADVICE_BINDING_H
-#define LIB_ADVICE_BINDING_H
+#ifndef LUMIERA_ADVICE_BINDING_H
+#define LUMIERA_ADVICE_BINDING_H
 
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
 
 #include <iostream>
 #include <string>
 #include <set>
 
-namespace lib    {
+namespace lumiera{
 namespace advice {
   
+  using lib::Literal;
   using std::string;
   
   typedef size_t HashVal;
@@ -228,7 +231,7 @@ namespace advice {
   inline Binding const&
   Binding::addTypeGuard()
   {
-    atoms_.insert (Atom ("advice.type."+lib::query::buildTypeID<TY>()));
+    atoms_.insert (Atom ("advice.type."+lumiera::query::buildTypeID<TY>()));
     return *this;
   }
   
@@ -297,5 +300,5 @@ namespace advice {
   
   
   
-}} // namespace lib::advice
+}} // namespace lumiera::advice
 #endif

@@ -42,12 +42,12 @@
 #include "proc/mobject/session/element-query.hpp"
 #include "proc/mobject/session/session-query.hpp"
 #include "proc/mobject/session/scope.hpp"
-#include "common/configrules.hpp"
+#include "common/config-rules.hpp"
+#include "common/query.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/query.hpp"
 
 #include "proc/asset/struct-scheme.hpp"
 
@@ -68,8 +68,9 @@ namespace asset {
   using lib::Symbol;
   using util::isnil;
   using util::contains;
+  using lumiera::Query;
   using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
-  using lib::query::extractID;
+  using lumiera::query::extractID;
   
   using proc::mobject::Session;
   using proc::mobject::MObject;
