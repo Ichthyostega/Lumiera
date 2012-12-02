@@ -109,7 +109,10 @@ namespace time {
       static EncapsulatedMutation adjust (Offset);
       static EncapsulatedMutation materialise (QuTime const&);
       static EncapsulatedMutation nudge (int adjustment);
-      static EncapsulatedMutation nudge (int adjustment, Symbol gridID);
+      static EncapsulatedMutation nudge (int adjustment, Symbol gridID);      ///<@note defined in common-services.cpp
+#ifdef LIB_TIME_TIMEQUQNT_H
+      static EncapsulatedMutation nudge (int adjustment, PQuant const& grid);
+#endif
       
     protected:
       static TimeValue& imposeChange (TimeValue&, TimeValue const&);

@@ -56,6 +56,7 @@ namespace error = lumiera::error;
 
 #include "lib/time/timequant.hpp"
 #include "lib/time/quantiser.hpp"
+#include "lib/time/mutation.hpp"
 #include "common/advice.hpp"
 
 
@@ -105,6 +106,20 @@ namespace time {
   {
     return retrieveQuantiser (gridID);
   }
+  
+  
+  /** build a time mutation to \em nudge the target time value in steps based on a pre-defined grid.
+   * @param adjustment number of grid steps to apply as offset
+   * @param gridID symbolic reference to a grid, which needs to be defined "somewhere"
+   *        within the system, typically within the session.
+   * @see #nudge(int,PQuant) variant of this function using a direct grid reference
+   */
+  EncapsulatedMutation
+  Mutation::nudge (int adjustment, Symbol gridID)
+  {
+    return nudge (adjustment, Quantiser::retrieve(gridID));
+  }
+
   
   
 }} // namespace lib::time

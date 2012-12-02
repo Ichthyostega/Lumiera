@@ -202,16 +202,15 @@ namespace time {
     {
       
       static Offset
-      materialiseGridPoint (Symbol gridID, int steps)
+      materialiseGridPoint (PQuant const& grid, int steps)
         {
-          REQUIRE (!isnil (gridID));
-          PQuant grid;//////////TODO = Quantiser::retrieve(gridID);
+          REQUIRE (grid);
           return Offset(grid->timeOf(0), grid->timeOf(steps));
         }
       
     public:
-      NudgeMutation (int relativeSteps, Symbol gridID)
-        : ImposeOffsetMutation(materialiseGridPoint (gridID,relativeSteps))
+      NudgeMutation (int relativeSteps, PQuant const& grid)
+        : ImposeOffsetMutation(materialiseGridPoint (grid,relativeSteps))
         { }
     };
   
@@ -343,14 +342,18 @@ namespace time {
    *  resulting in the net result of two quantisation operations
    *  being applied in sequence.  
    * @param adjustment number of grid steps to apply as offset
-   * @param gridID symbolic name used to register or define a
-   *        suitable nudge grid, typically somewhere globally
-   *        in the session (as meta asset)
+   * @param grid reference to a concrete grid instance
+   * @note there is a variant of this function, using just a
+   *       symbolic name to refer to the grid, allowing to nudge
+   *       based on a grid known to exist somewhere in the session.
+   *       Using this approach involves the Advice system and thus
+   *       requires linking against \c liblumieracommon.so
+   * @see #nudge(int,Symbol)
    */
   EncapsulatedMutation
-  Mutation::nudge (int adjustment, Symbol gridID)
+  Mutation::nudge (int adjustment, PQuant const& grid)
   {
-    return EncapsulatedMutation::build<NudgeMutation> (adjustment, gridID);
+    return EncapsulatedMutation::build<NudgeMutation> (adjustment, grid);
   }
   
   
