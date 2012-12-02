@@ -1,5 +1,5 @@
 /*
-  TimeMutation(Test)  -  explicitly changing time spcifications
+  TimeMutation(Test)  -  explicitly changing time specifications
 
   Copyright (C)         Lumiera.org
     2011,               Hermann Vosseler <Ichthyostega@web.de>
@@ -30,13 +30,10 @@
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 
 using boost::lexical_cast;
 using util::isnil;
-using std::cout;
-using std::endl;
 using std::string;
 
 
