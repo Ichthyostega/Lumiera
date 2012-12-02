@@ -65,7 +65,7 @@ namespace asset {
   namespace idi {
     
     using lib::hash::LuidH;
-    typedef size_t HashVal;
+    using lib::HashVal;
     
     
     /** build up a hash value, packaged as LUID.

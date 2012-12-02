@@ -58,6 +58,7 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "proc/asset/category.hpp"
+#include "lib/hash-value.h"
 #include "lib/p.hpp"
 
 #include <boost/type_traits/is_base_of.hpp>
@@ -83,11 +84,11 @@ namespace asset {
   using std::size_t;
   using std::tr1::shared_ptr;
   using std::tr1::static_pointer_cast;
-
+  
+  using lib::HashVal;
   using lib::P;
   
   
-  typedef size_t HashVal;                        /////////////////TICKET #722
   
   /** 
    * thin wrapper around a size_t hash ID 

@@ -27,8 +27,6 @@
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "proc/asset/unknown.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/mobjectfactory.hpp"
 #include "backend/media-access-facade.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"

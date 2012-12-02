@@ -52,6 +52,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/hash-value.h"
 #include "proc/streamtype.hpp"
 #include "lib/bool-checkable.hpp"
 
@@ -62,7 +63,7 @@ namespace engine {
   namespace error = lumiera::error;
   using error::LUMIERA_ERROR_LIFECYCLE;
   
-  typedef size_t HashVal;           ////////////TICKET #722
+  using lib::HashVal;
   
   class BuffHandle;
   class BufferProvider;

@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/hash-value.h"
 #include "common/advice/index.hpp"
 
 #include <vector>

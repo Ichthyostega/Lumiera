@@ -54,9 +54,12 @@
 #ifndef LIB_HASH_INDEXED_H
 #define LIB_HASH_INDEXED_H
 
+#include "lib/hash-value.h"
+
 extern "C" {
 #include "lib/luid.h"
 }
+
 #include <functional>
 
 
@@ -73,10 +76,10 @@ namespace lib {
      */
     class Plain
       {
-        const size_t hash_;
+        const HashVal hash_;
         
       public:
-        Plain (size_t val)
+        Plain (HashVal val)
           : hash_(val)
           { }
         
@@ -85,7 +88,7 @@ namespace lib {
           : hash_(hash_value (something))  // ADL
           { }
         
-        operator size_t()  const { return hash_; }
+        operator HashVal()  const { return hash_; }
       };
     
     /**
@@ -103,9 +106,7 @@ namespace lib {
             ENSURE (0 < lumiera_uid_hash(&luid_));
           }
         
-        typedef lumiera_uid* LUID;
-        
-        operator size_t ()                const { return lumiera_uid_hash (get()); }
+        operator HashVal()                const { return lumiera_uid_hash (get()); }
         bool operator== (LuidH const& o)  const { return lumiera_uid_eq (get(), o.get()); }
         bool operator!= (LuidH const& o)  const { return !operator== (o); }
         
@@ -115,8 +116,8 @@ namespace lib {
     
     
     /* === for use within unordered_map === */
-    inline size_t hash_value (Plain const& plainHash)  { return plainHash; }
-    inline size_t hash_value (LuidH const& luid_Hash)  { return luid_Hash; }
+    inline HashVal hash_value (Plain const& plainHash)  { return plainHash; }
+    inline HashVal hash_value (LuidH const& luid_Hash)  { return luid_Hash; }
     
   } // namespace "hash"
   
@@ -155,16 +156,16 @@ namespace lib {
       
       /** enables use of BA objects as keys within tr1::unordered_map */
       struct UseEmbeddedHash
-        : public std::unary_function<BA, size_t>
+        : public std::unary_function<BA, HashVal>
         {
-          size_t operator() (BA const& obj)  const { return obj.getID(); }
+          HashVal operator() (BA const& obj)  const { return obj.getID(); }
         };
       
       /** trivial hash functor using the ID as hash */
       struct UseHashID
-        : public std::unary_function<ID, size_t>
+        : public std::unary_function<ID, HashVal>
         {
-          size_t operator() (ID const& id)  const { return id; }
+          HashVal operator() (ID const& id)  const { return id; }
         };
       
       

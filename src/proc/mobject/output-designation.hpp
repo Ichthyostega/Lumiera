@@ -25,12 +25,10 @@
 #define PROC_MOBJECT_OUTPUT_DESIGNATION_H
 
 #include "proc/asset/pipe.hpp"
+#include "lib/hash-value.h"
 #include "lib/opaque-holder.hpp"
 #include "lib/meta/typelist-manip.hpp"
 
-extern "C" {
-#include "lib/luid.h"
-}
 
 namespace proc {
 namespace mobject {

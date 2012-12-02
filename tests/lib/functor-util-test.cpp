@@ -23,14 +23,12 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/util.hpp"
 #include "lib/functor-util.hpp"
 
 #include <tr1/functional>
 #include <boost/functional/hash.hpp>
 #include <iostream>
 
-//using util::isnil;
 using lib::HashVal;
 using std::cout;
 using std::tr1::function;

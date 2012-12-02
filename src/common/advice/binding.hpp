@@ -77,6 +77,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/hash-value.h"
 #include "common/query.hpp"
 
 #include <iostream>
@@ -88,8 +89,7 @@ namespace advice {
   
   using lib::Literal;
   using std::string;
-  
-  typedef size_t HashVal;
+  using lib::HashVal;
   
   LUMIERA_ERROR_DECLARE (BINDING_PATTERN_SYNTAX); ///< Unable to parse the given binding pattern definition
   

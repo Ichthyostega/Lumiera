@@ -53,6 +53,7 @@ using lumiera::query::QueryHandler;
 using lumiera::query::removeTerm;
 using lumiera::query::extractID;
 using proc::ConfigResolver;
+using lib::HashVal;
 
 namespace proc {
 namespace mobject {

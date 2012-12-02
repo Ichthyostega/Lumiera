@@ -54,6 +54,7 @@
 
 #include "lib/error.hpp"
 #include "lib/util.hpp"
+#include "lib/hash-value.h"
 #include "proc/asset/pipe.hpp"
 #include "lib/bool-checkable.hpp"
 #include "common/query.hpp"
@@ -97,7 +98,7 @@ namespace mobject {
   
   namespace error = lumiera::error;
   using lumiera::Query;
-  using asset::HashVal;
+  using lib::HashVal;
   
   
   

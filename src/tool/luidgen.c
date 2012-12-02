@@ -1,8 +1,8 @@
 /*
-  luidgen.c  - generate a lumiera uuid
+  Luidgen  -  generate and replace Lumiera UIDs for source files
 
   Copyright (C)         Lumiera.org
-    2008                Christian Thaeter <ct@pipapo.org>
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -17,7 +17,24 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
+
+/** @file luidgen.c
+ ** Generate a fixed LUID to be hard-wired into source code.
+ ** This Helper generates and prints a Lumiera UID as octal escaped string
+ ** or processes a file, replacing the token \c LUIDGEN with the octal representation
+ ** of a newly generated LUID. This can be used to fill in some LUID values into
+ ** new source code prior to compiling it for the first time.
+ ** 
+ ** The Lumiera build system generates stand-alone executable from this source file.
+ ** 
+ ** @see luid.h
+ ** @see interface.h
+ **
+ */
+
 
 #include "lib/tmpbuf.h"
 #include "lib/luid.h"
@@ -29,11 +46,6 @@
 #include <string.h>
 #include <nobug.h>
 
-/**
- * @file
- * Generate amd print a Lumiera uid as octal escaped string
- * or process a file replaceing 'LUIDGEN' with a octal escaped string
- */
 
 
 int

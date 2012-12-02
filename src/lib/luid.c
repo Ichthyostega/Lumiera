@@ -1,5 +1,5 @@
 /*
-  luid  -  Lumiera unique identifiers
+  LUID  -  Lumiera unique identifiers
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "lib/luid.h"
 
@@ -28,6 +30,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdint.h>
+
+
 
 void
 lumiera_uid_set_ptr (lumiera_uid* luid, void* ptr)
@@ -79,8 +83,9 @@ lumiera_uid_gen (lumiera_uid* luid)
             abort ();
         }
     }
-  /* we identify generic pointers by having some zeros in the luid,
-   * this happens very unlikely to be in a random luid, just regenerate it then */
+  /* we identify generic pointers by having some zeros in the LUID,
+   * Accidentally, but very unlikely this might happen within a random LUID;
+   * just regenerate in this case */
   while (!*(((intptr_t*)luid)+1));
 }
 

@@ -26,13 +26,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/hash-value.h"
 
 #include <boost/functional/hash.hpp>
 
-
-namespace lib {
-  typedef size_t HashVal;
-}
 
 namespace proc {
 namespace engine {

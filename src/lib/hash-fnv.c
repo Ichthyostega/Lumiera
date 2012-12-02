@@ -1,47 +1,32 @@
 /*
- hash_fnv.c     - FNV hash functions
+  HashFNV  -  FNV hash functions
 
- Copyright (C)
-   2010, 2011,                  Christian Thaeter <ct@pipapo.org>
+  adapted by            Lumiera.org
+    2010, 2011          Christian Thaeter <ct@pipapo.org>
 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
+  original by           chongo <Landon Curt Noll> /\oo/\
+                          http://www.isthe.com/chongo/
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+  Please do not copyright this code.  This code is in the public domain.
 
- You should have received a copy of the GNU General Public License
- along with this program; if not, contact Christian Thaeter <ct@pipapo.org>.
+  LANDON CURT NOLL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+  INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO
+  EVENT SHALL LANDON CURT NOLL BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+  CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
+  USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
 
-The actual fnv functions are taken from Landon Curt Noll's original code,
-slightly modified and adapted to C99; no copyright applies:
- ***
- *
- * Please do not copyright this code.  This code is in the public domain.
- *
- * LANDON CURT NOLL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
- * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO
- * EVENT SHALL LANDON CURT NOLL BE LIABLE FOR ANY SPECIAL, INDIRECT OR
- * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
- * USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
- * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- *
- * By:
- *	chongo <Landon Curt Noll> /\oo/\
- *      http://www.isthe.com/chongo/
- *
- * Share and Enjoy!	:-)
-*/
+  Share and Enjoy! :-)
+
+* *****************************************************/
 
 
 #include "lib/hash-fnv.h"
 
 #include <nobug.h>
+
+
 
 uint64_t
 hash_fnv64a_buf (const void *buf, size_t len, uint64_t hval)
