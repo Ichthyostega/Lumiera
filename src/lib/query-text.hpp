@@ -1,0 +1,108 @@
+/*
+  QUERY-TEXT.hpp  -  syntactical standard representation for queries
+
+  Copyright (C)         Lumiera.org
+    2012,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
+
+/** @file query-text.hpp
+ ** A generic syntactical representation for all kinds of queries.
+ ** Within Lumiera, its a common pattern to query for parts to be combined,
+ ** instead of using a hard wired builder logic. Consequently, there are various
+ ** flavours of queries used by different subsystems. As a common denominator,
+ ** we use a syntactical query representation, based on predicate notation
+ ** (mathematical logic, using prolog syntax). While subsystems typically
+ ** might resolve a specialised query directly, as a fallback this
+ ** syntactical representation allows for \em generic query dispatch.
+ ** And it can be used as intermediary format for remolding queries.
+ ** 
+ ** @note as of 12/2012 this AST-representation is not defined at all;
+ **       instead we use a plain string as placeholder for the "real thing"
+ ** @todo actually build the term representation      /////////////////////////////TICKET #899
+ ** 
+ ** @see QueryText_test usage example
+ ** 
+ */
+
+
+#ifndef LIB_QUERY_TEXT_H
+#define LIB_QUERY_TEXT_H
+
+#include "lib/error.hpp"
+#include "lib/hash-value.h"
+#include "lib/util.hpp"
+
+#include <string>
+
+namespace lib {
+  
+  using lib::HashVal;
+  using std::string;
+  
+  /**
+   * Syntactical query representation.
+   * Used as a backbone to allow for generic queries and to
+   * enable programmatically rebuilding and remolding of queries.
+   * 
+   * @todo this is placeholder code and just embeds a string
+   *       with the raw query definition, instead of parsing
+   *       the definition and transforming it into an AST
+   * 
+   * @see Query
+   */
+  class QueryText
+    {
+      string definition_;
+      
+      
+    public:
+      QueryText() { }
+      
+      explicit
+      QueryText (string const& syntacticRepr) :
+          definition_ (syntacticRepr)
+        { }
+      
+      // using default copy/assignment
+      
+      operator string()  const
+        {
+          return definition_;
+        }
+      
+      
+      bool
+      empty()  const
+        {
+          return definition_.empty();
+        }
+      
+      bool
+      hasAtom(string const& predSymbol)
+        {
+          return util::contains (definition_, predSymbol);
+        }
+      
+      
+      friend HashVal hash_value (QueryText const& entry);
+    };
+  
+  
+} // namespace lib
+#endif /*LIB_QUERY_TEXT_H*/
