@@ -1,8 +1,8 @@
 /*
-  Query  -  interface for generic queries
+  QueryUtil  -  support for working with terms and queries
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2008, 2012          Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -23,8 +23,7 @@
 
 #include "lib/util.hpp"
 #include "lib/symbol.hpp"
-#include "include/logging.h"
-#include "common/query.hpp"
+#include "lib/query-util.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
