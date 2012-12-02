@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LIB_QUERY_H
-#define LIB_QUERY_H
+#ifndef LUMIERA_QUERY_H
+#define LUMIERA_QUERY_H
 
 
 #include "lib/bool-checkable.hpp"
@@ -288,37 +288,5 @@ namespace lumiera {
   
   
   
-  namespace query {
-    
-    /** ensure standard format for a given id string.
-     *  Trim, sanitise and ensure the first letter is lower case.
-     *  @note modifies the given string ref in place
-     */
-    void normaliseID (string& id);
-    
-    
-    /** count the top-level predicates in the query string.
-     *  usable for ordering queries, as more predicates usually
-     *  mean more conditions, i.e. more constriction
-     */
-    uint countPred (const string&);
-    
-    
-    const string extractID (Symbol, const string& termString);
-    
-    const string removeTerm (Symbol, string& termString);
-    
-    
-    template<typename TY>
-    const string
-    buildTypeID()
-    {
-      string typeID (typeid(TY).name());
-      normaliseID (typeID);
-      return typeID;
-    }
-    
-    
-    
-}} // namespace lumiera::query
+} // namespace lumiera
 #endif

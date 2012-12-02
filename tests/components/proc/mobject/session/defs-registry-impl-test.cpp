@@ -87,6 +87,8 @@ namespace test    {
   }
   
   
+  using lib::query::test::garbage_query;
+  
   
   
   

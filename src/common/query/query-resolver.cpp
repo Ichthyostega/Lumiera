@@ -30,6 +30,8 @@ namespace lumiera {
   
   /* generate vtables here... */
   
+  Goal::~Goal() { }
+  
   Resolution::~Resolution() { }
   
   QueryResolver::~QueryResolver() { }

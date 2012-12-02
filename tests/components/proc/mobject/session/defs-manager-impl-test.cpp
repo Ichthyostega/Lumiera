@@ -31,6 +31,7 @@
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/streamtype.hpp"
+#include "lib/query-util.hpp"
 #include "common/query.hpp"
 
 #include <boost/format.hpp>
@@ -54,7 +55,7 @@ namespace test    {
   
   using lumiera::Query;
   using lumiera::query::QueryHandler;
-  using lumiera::query::normaliseID;
+  using lib::query::normaliseID;
   
   using proc::ConfigResolver;
   

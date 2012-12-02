@@ -39,6 +39,8 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/query-util.hpp"
+#include "common/query/query-resolver.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/output-designation.hpp"
@@ -50,8 +52,8 @@
 
 using lumiera::Symbol;
 using lumiera::query::QueryHandler;
-using lumiera::query::removeTerm;
-using lumiera::query::extractID;
+using lib::query::removeTerm;
+using lib::query::extractID;
 using proc::ConfigResolver;
 using lib::HashVal;
 

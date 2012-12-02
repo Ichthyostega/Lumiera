@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LUMIERA_QUERY_TEST_QUERYDIAGNOSTICS_H
-#define LUMIERA_QUERY_TEST_QUERYDIAGNOSTICS_H
+#ifndef LIB_QUERY_TEST_QUERYDIAGNOSTICS_H
+#define LIB_QUERY_TEST_QUERYDIAGNOSTICS_H
 
 
 #include "lib/format-string.hpp"
@@ -33,7 +33,7 @@ using std::rand;
 
 
 
-namespace lumiera {
+namespace lib  {
 namespace query{
 namespace test {
   
@@ -72,5 +72,5 @@ namespace test {
   
   
   
-}}} // namespace lumiera::query::test
+}}} // namespace lib::query::test
 #endif

@@ -26,10 +26,10 @@
 #include "common/subsys.hpp"
 #include "common/subsystem-runner.hpp"
 #include "common/option.hpp"
-#include "common/query.hpp"
 
 #include "lib/symbol.hpp"
 #include "backend/thread-wrapper.hpp"
+#include "lib/query-util.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "lib/sync.hpp"
@@ -43,7 +43,7 @@ using util::isnil;
 using util::cStr;
 using test::Test;
 using lib::Literal;
-using lumiera::query::extractID;
+using lib::query::extractID;
 using backend::Thread;
 
 
@@ -52,7 +52,7 @@ namespace test  {
     
     namespace { // private test classes and data...
       
-      using lumiera::query::extractID;
+      using lib::query::extractID;
       
       /** limit for the randomly selected duration of
        *  subsystem's running phase (milliseconds) */

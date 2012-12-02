@@ -30,6 +30,7 @@
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/asset/asset-diagnostics.hpp"
+#include "lib/query-util.hpp"
 #include "common/query.hpp"
 
 #include <boost/format.hpp>
@@ -48,7 +49,7 @@ namespace test  {
   
   using mobject::Session;
   using lumiera::Query;
-  using lumiera::query::normaliseID;
+  using lib::query::normaliseID;
   
   
   

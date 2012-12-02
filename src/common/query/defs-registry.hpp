@@ -44,6 +44,7 @@
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/sync-classlock.hpp"
+#include "lib/query-util.hpp"
 #include "common/query.hpp"
 
 #include <set>
@@ -95,7 +96,7 @@ namespace query  {
         weak_ptr<TAR> objRef;
         
         Record (const Query<TAR>& q, const P<TAR>& obj)
-          : degree (lumiera::query::countPred ("TODO")),//q)),////////////////////////////////////////////////////////////////////////////////////////////TODO
+          : degree (lib::query::countPred ("TODO")),//q)),////////////////////////////////////////////////////////////////////////////////////////////TODO
             query (q),
             objRef (obj)
           { 

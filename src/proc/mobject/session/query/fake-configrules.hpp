@@ -42,6 +42,7 @@
 
 #include "proc/mobject/session.hpp"
 #include "proc/config-resolver.hpp"
+#include "lib/query-util.hpp"
 #include "lib/util.hpp"
 #include "lib/p.hpp"
 
@@ -67,8 +68,8 @@ namespace session {
     using lib::P;
     
     using lumiera::Query;
-    using lumiera::query::removeTerm;   //////////////TODO better use Query::Builder
-    using lumiera::query::extractID;   ///////////////TODO dto
+    using lib::query::removeTerm;   //////////////TODO better use Query::Builder
+    using lib::query::extractID;   ///////////////TODO dto
     using lumiera::query::isFakeBypass;      /////////TODO placeholder until there is a real resolution engine
     
     using util::contains;

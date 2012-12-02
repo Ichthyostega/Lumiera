@@ -27,8 +27,8 @@
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
+#include "lib/query-util.hpp"
 #include "common/query.hpp"
-
 
 #include "include/logging.h"
 #include "lib/symbol.hpp"
@@ -52,8 +52,8 @@ namespace session {
     using asset::ProcPatt;
     using asset::PProcPatt;
     
-//  using lumiera::query::extractID;
-    using lumiera::query::removeTerm;
+//  using lib::query::extractID;
+    using lib::query::removeTerm;
     
     
     namespace {

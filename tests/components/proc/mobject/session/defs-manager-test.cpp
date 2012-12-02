@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
+#include "lib/query-util.hpp"
 #include "common/query.hpp"
 
 #include "proc/asset.hpp"
@@ -55,7 +56,7 @@ namespace test    {
   using asset::PPipe;
   using asset::Struct;
   using lumiera::Query;
-  using lumiera::query::normaliseID;
+  using lib::query::normaliseID;
   
   
   /** shortcut: run just a query

@@ -78,7 +78,7 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/hash-value.h"
-#include "common/query.hpp"
+#include "lib/query-util.hpp"
 
 #include <iostream>
 #include <string>
@@ -231,7 +231,7 @@ namespace advice {
   inline Binding const&
   Binding::addTypeGuard()
   {
-    atoms_.insert (Atom ("advice.type."+lumiera::query::buildTypeID<TY>()));
+    atoms_.insert (Atom ("advice.type."+lib::query::buildTypeID<TY>()));
     return *this;
   }
   

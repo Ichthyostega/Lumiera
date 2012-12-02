@@ -29,6 +29,7 @@
 
 #include "lib/util.hpp"
 #include "lib/symbol.hpp"
+#include "lib/query-util.hpp"
 #include "include/logging.h"
 #include "common/query.hpp"
 
@@ -37,7 +38,7 @@
 using boost::format;
 
 using lib::Symbol;
-using lumiera::query::normaliseID;
+using lib::query::normaliseID;
 using lumiera::query::QueryHandler;
 using proc::ConfigResolver;
 

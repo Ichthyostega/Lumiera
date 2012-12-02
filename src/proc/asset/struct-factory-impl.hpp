@@ -51,6 +51,7 @@
 
 #include "proc/asset/struct-scheme.hpp"
 
+#include "lib/query-util.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
@@ -70,7 +71,7 @@ namespace asset {
   using util::contains;
   using lumiera::Query;
   using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
-  using lumiera::query::extractID;
+  using lib::query::extractID;
   
   using proc::mobject::Session;
   using proc::mobject::MObject;
