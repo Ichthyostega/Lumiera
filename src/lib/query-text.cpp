@@ -44,6 +44,18 @@ namespace lib {
   } // internal details
   
   
+  /** Parse, verify and normalise the raw query definition
+   * @warning right now (2012) we don't normalise at all
+   * @todo when integrating a real resolution engine, we
+   *       need to parse and verify the given string.
+   */
+  string
+  QueryText::normalise (string const& rawDefinition)
+  {
+    return rawDefinition;
+  }
+  
+  
   /** support using queries in hashtables. 
    * @warning right now (2012) the dummy implementation of QueryText
    *          doesn't normalise the query in any way, which makes the

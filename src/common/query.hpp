@@ -28,6 +28,7 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/query-text.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
@@ -70,10 +71,11 @@ namespace lumiera {
     : util::no_copy_by_client
     {
     public:
-      virtual ~Goal() ;
+      virtual ~Goal(); ///< this is a marker baseclass
       
       enum Kind
-        { GENERIC = 0
+        { EMPTY      = 0
+        , GENERIC    = 1
         , DISCOVERY
         };
       
@@ -191,6 +193,9 @@ namespace lumiera {
   class Query
     : public Goal
     {
+      /** generic syntactical definition */
+      lib::QueryText def_;
+      
     protected:
       static QueryID
       defineQueryTypeID (Kind queryType = Goal::GENERIC)
@@ -199,22 +204,44 @@ namespace lumiera {
           return id;
         }
       
+      /**
+       * Extension point for specific kinds of queries
+       * to generate a generic definition from some specialised
+       * internal representation.
+       * @return a complete definition of this query in predicate form
+       */
+      virtual lib::QueryText
+      buildSyntacticRepresentation()
+        {
+          return this->def_;
+        }
+      
       class Builder;
+
+      Query (QueryID qID)
+        : Goal (qID)
+        , def_(this->buildSyntacticRepresentation())
+        { }
+      
+      friend class Builder;
+      
       
     public:
       Query()
-        : Goal (defineQueryTypeID())
+        : Goal (defineQueryTypeID(Goal::EMPTY))
         { }
       
       explicit
       Query (string querySpec)
         : Goal (defineQueryTypeID(Goal::GENERIC))
-        {
-          UNIMPLEMENTED("how to issue generic queries");////////////////////////////////////////////////////////////////////////////////////////////TODO
-        }
+        , def_(querySpec)
+        { }
       
       static Builder
       build (Kind queryType = Goal::GENERIC);
+      
+      Builder
+      rebuild()  const;
       
       
       /* results retrieval */
@@ -242,22 +269,14 @@ namespace lumiera {
       friend size_t
       hash_value (Query const& q)
       {
-        UNIMPLEMENTED("generic standard representation");////////////////////////////////////////////////////////////////////////////////////////////TODO
+        return hash_value (q.def_);
       }
       
       friend bool
       operator== (Query const& q1, Query const& q2)
       {
-        UNIMPLEMENTED("how to define equality on queries");////////////////////////////////////////////////////////////////////////////////////////////TODO
+        return q1.def_ == q2.def_;
       }
-
-    protected:
-      Query (QueryID qID)
-        : Goal (qID)
-        { }
-      
-      friend class Builder;
-      
     };
   
   
@@ -270,7 +289,16 @@ namespace lumiera {
     template<class RES>
     class Query<RES>::Builder
       {
+        QueryID typeID_;
         string predicateForm_;
+        
+        Builder (QueryID kind, string baseDef ="")
+          : typeID_(kind)
+          , predicateForm_(baseDef)
+          { }
+        
+        friend class Query<RES>;
+        
         
       public:
         
@@ -281,10 +309,7 @@ namespace lumiera {
                + lexical_cast<string> (getResultTypeID<RES>())
                + "), "+predicateForm_;
         }
-      
       };
-  
-  
   
   
   

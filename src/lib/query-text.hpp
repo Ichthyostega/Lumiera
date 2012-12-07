@@ -74,9 +74,8 @@ namespace lib {
     public:
       QueryText() { }
       
-      explicit
-      QueryText (string const& syntacticRepr) :
-          definition_ (syntacticRepr)
+      QueryText (string const& syntacticRepr)
+        : definition_ (normalise (syntacticRepr))
         { }
       
       // using default copy/assignment
@@ -99,6 +98,15 @@ namespace lib {
           return util::contains (definition_, predSymbol);
         }
       
+    private:
+      string normalise (string const& rawDefinition);
+      
+            
+      friend bool
+      operator== (QueryText const& q1, QueryText const& q2)
+      {
+        return q1.definition_ == q2.definition_;
+      }
       
       friend HashVal hash_value (QueryText const& entry);
     };
