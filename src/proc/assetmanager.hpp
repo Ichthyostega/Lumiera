@@ -28,7 +28,13 @@
  ** These classes are placed into namespace asset and proc_interface.
  **
  ** @todo 10/10 meanwhile I'm unhappy with some aspects of this implementation //////////////TICKET #691
- **
+ ** @todo 12/12 and meanwhile I'm way more unhappy with the whole design. Looks like I wasn't proficient
+ **             enough with OO design in C++ when writing that original design. Especially, this design
+ **             couples the object creation, the memory management and the registration way too tightly.
+ **             Having a registration magic in the asset baseclass ctor is just too clever and a half.
+ **             Rather, there should be a responsibility chain, using completely passive Asset objects:
+ **             Factory -> AssetManaager -> Asset object
+ ** 
  ** @see asset.hpp
  ** @see mobject.hpp
  */
@@ -108,7 +114,7 @@ namespace asset {
       /** deleter function used by the Asset smart pointers to delete Asset objects */
       static void destroy (Asset* aa) { delete aa; }
       
-      friend Asset::Asset (const Asset::Ident& idi);
+      friend Asset::Asset (Asset::Ident const& idi);
       
       AssetManager ();
       

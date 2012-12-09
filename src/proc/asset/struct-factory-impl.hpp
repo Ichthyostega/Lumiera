@@ -115,11 +115,9 @@ namespace asset {
       createIdent (Query<STRU> const& query)
         {
           // does the query somehow specify the desired name-ID?
-          string nameID = "TODO";//extractID (genericIdSymbol, query);////////////////////////////////////////////////////////////////////////////////////////////TODO
-          UNIMPLEMENTED("Query rebuilding");////////////////////////////////////////////////////////////////////////////////////////////TODO
+          string nameID = query.extractID (genericIdSymbol);
           if (isnil (nameID))
-            nameID = "TODO";//extractID (StructTraits<STRU>::idSymbol(), query);////////////////////////////////////////////////////////////////////////////////////////////TODO
-          UNIMPLEMENTED("Query rebuilding");////////////////////////////////////////////////////////////////////////////////////////////TODO
+            nameID = query.extractID (StructTraits<STRU>::idSymbol());
           if (isnil (nameID))
             {
                // no name-ID contained in the query...
@@ -131,8 +129,7 @@ namespace asset {
           ENSURE (!isnil (nameID));
           
           // does the query actually demand the Nth instance/element?
-          string seqID = "TODO";//extractID (seqNrPredicate, query);////////////////////////////////////////////////////////////////////////////////////////////TODO
-        UNIMPLEMENTED("Query rebuilding");////////////////////////////////////////////////////////////////////////////////////////////TODO)
+          string seqID = query.extractID (seqNrPredicate);
           if (!isnil (seqID) && 1 < asNumber(seqID))
             nameID += "."+seqID;
           
@@ -205,8 +202,7 @@ namespace asset {
   StructFactoryImpl::fabricate (Query<Pipe> const& caps)
   {
     const Asset::Ident idi (createIdent (caps));
-    string streamID = "TODO";//extractID ("stream", caps);////////////////////////////////////////////////////////////////////////////////////////////TODO
-    UNIMPLEMENTED("fabricate a Pipe by query");////////////////////////////////////////////////////////////////////////////////////////////TODO
+    string streamID = caps.extractID ("stream");
     if (isnil (streamID)) streamID = "default"; 
     PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
     return new Pipe( idi
@@ -221,7 +217,7 @@ namespace asset {
   {
     TODO ("extract additional properties/capabilities from the query...");
     const Asset::Ident idi (createIdent (caps));
-    string sequenceID = "TODO";//extractID ("sequence", caps);////////////////////////////////////////////////////////////////////////////////////////////TODO
+    string sequenceID = caps.extractID ("sequence");
     UNIMPLEMENTED("fabricate a Timeline by query");////////////////////////////////////////////////////////////////////////////////////////////TODO
     Query<Sequence> desiredSequence (isnil (sequenceID)? "" : "id("+sequenceID+")");
     PSequence sequence = recursive_create_(desiredSequence);
@@ -239,7 +235,7 @@ namespace asset {
   {
     // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
     TODO ("actually extract properties/capabilities from the query...");
-    string trackID = "TODO";//extractID ("track", caps);////////////////////////////////////////////////////////////////////////////////////////////TODO
+    string trackID = caps.extractID ("track");
     UNIMPLEMENTED("fabricate a Sequence by query");////////////////////////////////////////////////////////////////////////////////////////////TODO
     Query<Track> desiredTrack (isnil (trackID)? "" : "id("+trackID+")");
 //  PTrack track = Session::current->query (desiredTrack);        ///////////////////////////////////TICKET #639

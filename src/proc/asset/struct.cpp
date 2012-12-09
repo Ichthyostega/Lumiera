@@ -72,6 +72,8 @@ namespace asset {
    * @throw error::Invalid in case of ID clash with an existing Asset
    * @return  an Struct smart ptr linked to the internally registered smart ptr
    *        created as a side effect of calling the concrete Struct subclass ctor.
+   * @todo using the AssetManager this way for picking up the previously stored
+   *        asset is a code smell ////////////////////////////TICKET #691
    */
   template<class STRU>
   P<STRU>
@@ -84,17 +86,19 @@ namespace asset {
   
   
   
-  /** Retrieve a suitable Structural Asset instance, possibly create.
+  /** Retrieve a suitable Structural Asset instance, possibly create one.
    *  First tries to resolve the asset by issuing an capability query.
    *  If unsuccessful, use some internally specialised ctor call.
    *  @todo work out the struct asset naming scheme! /////////////////////////////////TICKET #565
    *  @todo for now we're using a faked config query, just pulling preconfigured
    *        hardwired answers from a table. Should be replaced by a real resolution engine.
    *  @note the exact calling sequence implemented here can be considered a compromise,
-   *        due to not having neither a working resolution, nor a generic interface for
+   *        due to having neither a working resolution, nor a generic interface for
    *        issuing queries. Thus, directly calling this factory acts as a replacement
-   *        for both. The final algorithm to be implemented later should fabricate
-   *        \em first, and then then query as a second step to define the capabilities.
+   *        for both. The intended solution would be to have a dedicated QueryResolver,
+   *        which is fully integrated into a generic rules driven query subsystem, but
+   *        has the additional ability to "translate" capabilities directly into the
+   *        respective properties of of asset::Struct subclasses.
    *  @return an Struct smart ptr linked to the internally registered smart ptr
    *        created as a side effect of calling the concrete Struct subclass ctor.
    */

@@ -33,13 +33,25 @@
  ** Fully implementing this facility would require the participating objects to register capabilities
  ** they want to provide, together with functors carrying out the necessary configuration steps.
  ** All details and consequences of this approach still have to be worked out...
+ ** 
+ ** \par relation to Query and QueryResolver
+ ** The ConfigRules resolver is just a special kind of QueryResolver, able to handle specific kinds
+ ** of queries. Clients using the ConfigRules directly get a more easy to use point-and-shot style
+ ** interface, allowing just to retrieve some \em suitable solution, instead of having to iterate
+ ** through a result set.
+ ** 
+ ** @todo right now (12/2012) the above paragraph is a lie.
+ **       ConfigQuery is way older than QueryResolver and will be retrofitted step by step.
+ **       Not much of a problem, since the currently utilised mock implementation isn't able to
+ **       deal with a real query anyway.
  **
- ** @note this is rather a scrapbook and in flux... don't take this code too literal!
+ ** @note this is rather a concept draft and left as such for now... don't take this code too literal!
  ** @todo clarify the relation of config query and query-for-defaults   ///////////////TICKET #705
  **
  ** @see lumiera::Query
  ** @see mobject::session::DefsManager
  ** @see asset::StructFactory 
+ ** @see config-resolver.hpp specialised setup for the Proc-Layer
  ** @see fake-configrules.hpp currently used dummy-implementation
  ** @see 
  **
@@ -137,6 +149,7 @@ namespace lumiera {
      * type TY fulfilling the given Query. To start with,
      * we use a mock implementation. 
      * (this code works and is already used 2/2008)
+     * @todo retrofit this to install and use a QueryResolver
      * @see lumiera::query::LookupPreconfigured
      * @see lumiera::query::MockTable
      */

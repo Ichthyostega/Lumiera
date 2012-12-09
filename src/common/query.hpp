@@ -29,6 +29,7 @@
 #include "lib/typed-counter.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/query-text.hpp"
+#include "lib/query-util.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
@@ -243,6 +244,12 @@ namespace lumiera {
       Builder
       rebuild()  const;
       
+      string
+      extractID (Symbol predicate)  const
+        {
+          return this->rebuild().extractID (predicate);
+        }
+      
       
       /* results retrieval */
       class Cursor
@@ -266,6 +273,7 @@ namespace lumiera {
       iterator operator() (QueryResolver const& resolver)  const;
       iterator resolveBy  (QueryResolver const& resolver)  const;
       
+      
       friend size_t
       hash_value (Query const& q)
       {
@@ -282,34 +290,50 @@ namespace lumiera {
   
   
   
-    /** 
-     * Helper for establishing,
-     * reworking and remolding queries. 
-     */
-    template<class RES>
-    class Query<RES>::Builder
-      {
-        QueryID typeID_;
-        string predicateForm_;
-        
-        Builder (QueryID kind, string baseDef ="")
-          : typeID_(kind)
-          , predicateForm_(baseDef)
-          { }
-        
-        friend class Query<RES>;
-        
-        
-      public:
-        
-      const string
+  /**
+   * Helper for establishing,
+   * reworking and remolding queries.
+   */
+  template<class RES>
+  class Query<RES>::Builder
+    {
+      QueryID typeID_;
+      string predicateForm_;
+      
+      Builder (QueryID kind, string baseDef ="")
+        : typeID_(kind)
+        , predicateForm_(baseDef)
+        { }
+      
+      friend class Query<RES>;
+      
+      
+    public:
+      
+      string
       asKey()  const
         {
           return "type("
                + lexical_cast<string> (getResultTypeID<RES>())
                + "), "+predicateForm_;
         }
-      };
+      
+      
+      string
+      extractID (Symbol predicate)  const
+        {
+          return lib::query::extractID (predicate, this->predicateForm_);
+        }
+      
+    };
+  
+  
+  template<class RES>
+  typename Query<RES>::Builder
+  Query<RES>::rebuild()  const
+  {
+    return Builder(this->id_, this->def_);
+  }
   
   
   

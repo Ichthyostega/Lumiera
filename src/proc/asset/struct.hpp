@@ -144,8 +144,6 @@ namespace asset {
       
       
     public:
-      typedef P<asset::Struct> PType;
-      
       template<class STRU>
       P<STRU> operator() (Query<STRU> const& query); 
       
