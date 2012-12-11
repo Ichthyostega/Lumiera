@@ -35,6 +35,7 @@
 
 
 #include "lib/symbol.hpp"
+#include "include/limits.h"
 extern "C" {
 #include "lib/safeclib.h"
 }
@@ -50,7 +51,7 @@ using boost::hash_combine;
 
 namespace lib {
   
-  const size_t STRING_MAX_RELEVANT = 1000;
+  const size_t STRING_MAX_RELEVANT = LUMIERA_IDSTRING_MAX_RELEVANT;
   
   
   /** equality on Symbol values is defined

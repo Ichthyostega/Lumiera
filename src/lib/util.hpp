@@ -24,6 +24,8 @@
 #ifndef LIB_UTIL_H
 #define LIB_UTIL_H
 
+#include "include/limits.h"
+
 #include <set>
 #include <string>
 #include <algorithm>
@@ -54,6 +56,54 @@ namespace util {
   max (N1 n1, N2 n2)
   {
     return n1 < n2? N1(n2) : n1;
+  }
+  
+  /** cut a numeric value to be >=0 */
+  template <typename NUM>
+  inline NUM 
+  noneg (NUM val)
+  {
+    return (0<val? val : 0);
+  }
+  
+  /** force a numeric to be within bounds, inclusively */
+  template <typename NUM, typename NB>
+  inline NUM 
+  limited (NB lowerBound, NUM val, NB upperBound)
+  {
+    return min ( max (val, lowerBound)
+               , upperBound);
+  }
+  
+  /** positive integral number from textual representation
+   * @return always a number, 0 in case of unparseable text,  
+   *         limited to 0 <= num <= LUMIERA_MAX_ORDINAL_NUMBER */
+  inline uint
+  uNum (const char* pCStr)
+  {
+    if (!pCStr) return 0;
+    int parsedNumber(std::atoi (pCStr));
+    return limited (0, parsedNumber, LUMIERA_MAX_ORDINAL_NUMBER);
+  }
+  
+  inline int
+  sNum (const char* pCStr)
+  {
+    if (!pCStr) return 0;
+    int parsedNumber(std::atoi (pCStr));
+    return limited (-LUMIERA_MAX_ORDINAL_NUMBER, parsedNumber, LUMIERA_MAX_ORDINAL_NUMBER);
+  }
+  
+  inline uint
+  uNum (string const& spec)
+  {
+    return uNum (spec.c_str());
+  }
+  
+  inline int
+  sNum (string const& spec)
+  {
+    return sNum (spec.c_str());
   }
   
   
@@ -90,13 +140,6 @@ namespace util {
   }
   
   
-  /** cut a numeric value to be >=0 */
-  template <typename NUM>
-  inline NUM 
-  noneg (NUM val)
-  {
-    return (0<val? val : 0);
-  }
   
   /** shortcut for containment test on a map */
   template <typename MAP>
