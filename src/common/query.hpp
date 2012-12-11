@@ -218,11 +218,19 @@ namespace lumiera {
         }
       
       class Builder;
-
-      Query (QueryID qID)
-        : Goal (qID)
+      
+      explicit
+      Query (QueryID typeID)
+        : Goal (typeID)
         , def_(this->buildSyntacticRepresentation())
         { }
+      
+      Query (QueryID typeID, string querySpec)
+        : Goal (defineQueryTypeID(typeID.kind))
+        , def_(querySpec)
+        { 
+          REQUIRE (this->getQID().type == typeID.type);
+        }
       
       friend class Builder;
       
@@ -309,7 +317,17 @@ namespace lumiera {
       
       
     public:
+      /** when done with defining or reworking the query,
+       *  the result may be retrieved by type conversion */
+      operator Query<RES>()
+        {
+          return Query<RES>(typeID_, predicateForm_);
+        }
       
+      
+      /** @return a string representation usable for hashing
+       *  @note includes the type parameter of the underlying query
+       */
       string
       asKey()  const
         {
@@ -319,13 +337,32 @@ namespace lumiera {
         }
       
       
+      /** extract an ID term defined as (single) parameter for the given predicate.
+       *  E.g. when using the query "foo(a), bar(b)", \c extractID("bar") returns "b"
+       * @param predicate symbol of the predicate to investigate
+       * @warning preliminary implementation
+       */
       string
       extractID (Symbol predicate)  const
         {
           return lib::query::extractID (predicate, this->predicateForm_);
         }
       
+      
+      /** remove the first term from this query definition,
+       *  which matches the given predicate symbol
+       * @warning preliminary implementation
+       */
+      Builder&
+      removeTerm (Symbol termPredicate)
+        {
+          lib::query::removeTerm(termPredicate, this->predicateForm_);
+          return *this;
+        }
+      
     };
+  
+  
   
   
   template<class RES>

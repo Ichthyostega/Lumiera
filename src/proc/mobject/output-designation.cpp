@@ -46,6 +46,7 @@
 #include "proc/mobject/output-designation.hpp"
 #include "proc/mobject/output-mapping.hpp"
 #include "proc/config-resolver.hpp"
+#include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <cstdlib>
@@ -56,6 +57,7 @@ using lib::query::removeTerm;
 using lib::query::extractID;
 using proc::ConfigResolver;
 using lib::HashVal;
+using util::uNum;
 
 namespace proc {
 namespace mobject {
@@ -182,18 +184,15 @@ namespace mobject {
     uint
     is_defaults_query_with_channel (Query<asset::Pipe> const& query4pipe)
     {
-      string seqNr = "TODO";//extractID (SEQNR_PREDICATE, query4pipe);////////////////////////////////////////////////////////////////////////////////////////////TODO
-      UNIMPLEMENTED ("Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
-      return abs(std::atoi (seqNr.c_str()));  // also 0 in case of an invalid number
+      string seqNr = query4pipe.extractID (SEQNR_PREDICATE);
+      return uNum (seqNr);  // defaults to 0 in case of an invalid number
     }
     
     Query<asset::Pipe>
     build_corresponding_sourceQuery (Query<asset::Pipe> const& query4pipe)
     {
-      Query<asset::Pipe> srcQuery = query4pipe;
-//    removeTerm (SEQNR_PREDICATE, srcQuery);////////////////////////////////////////////////////////////////////////////////////////////TODO
-      UNIMPLEMENTED ("Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
-      return srcQuery;
+      return query4pipe.rebuild()
+                       .removeTerm (SEQNR_PREDICATE);
     }
   }
   

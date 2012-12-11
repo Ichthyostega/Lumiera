@@ -67,6 +67,7 @@ namespace asset {
   using boost::format;
   
   using lib::Symbol;
+  using util::uNum;
   using util::isnil;
   using util::contains;
   using lumiera::Query;
@@ -88,11 +89,6 @@ namespace asset {
     Symbol genericIdSymbol ("id");
     Symbol seqNrPredicate  ("ord");
     
-    inline uint
-    asNumber (string const& spec)
-    {
-      return abs(std::atoi (spec.c_str()));
-    }        // returns 0 in case of unparseable number
   }
   
   
@@ -130,7 +126,7 @@ namespace asset {
           
           // does the query actually demand the Nth instance/element?
           string seqID = query.extractID (seqNrPredicate);
-          if (!isnil (seqID) && 1 < asNumber(seqID))
+          if (!isnil (seqID) && 1 < uNum(seqID))
             nameID += "."+seqID;
           
           Category cat (STRUCT, StructTraits<STRU>::catFolder());

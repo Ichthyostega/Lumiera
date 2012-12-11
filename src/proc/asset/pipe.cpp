@@ -60,7 +60,7 @@ namespace asset {
   PPipe 
   Pipe::query (Query<Pipe> const& properties)
   { 
-    UNIMPLEMENTED ("maybe provide a direct way to query, based on a predicate string?");//////////////////////////////////TODO
+    //////////////////////////////////////////////////TODO maybe provide a direct way to query, based on a predicate string?
     return Struct::retrieve (properties); 
   }
   
