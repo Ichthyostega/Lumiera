@@ -58,9 +58,11 @@ namespace lib {
     uint countPred (const string&);
     
     
-    const string extractID (Symbol, const string& termString);
+    const string extractID (Symbol, string const& termString);
     
     const string removeTerm (Symbol, string& termString);
+    
+    string appendTerms (string const& pred1, string const& pred2);
     
     
     template<typename TY>

@@ -23,10 +23,18 @@
 
 /** @file defs-registry.hpp
  ** A piece of implementation code factored out into a separate header (include).
- ** Only used in defs-manager.cpp and for the unit tests. We can't place it into
- ** a separate compilation unit, because defs-manager.cpp defines some explicit
+ ** Only used through defs-manager-impl.hpp and for the unit tests. We can't place it
+ ** into a separate compilation unit, because config-resolver.cpp defines some explicit
  ** template instantiation, which cause the different Slots of the DefsrRegistry#table_
  ** to be filled with data and defaults for the specific Types.
+ ** 
+ ** Basically, this piece of code defines a specialised index / storage table to hold
+ ** Queries-for-default objects. This allows to remember what actually was used as
+ ** "default" solution for some query and to oder possible default solutions.
+ ** @remarks as of 2012, we're still using a fake implementation of the resolution,
+ **          no real resolution engine. While the basic idea of this "defaults registry"
+ **          is likely to stay, the actual order relation and maybe even the components
+ **          to be stored in this registry might be subject to change. 
  ** 
  ** @see mobject::session::DefsManager
  ** @see DefsRegistryImpl_test
@@ -44,13 +52,13 @@
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/sync-classlock.hpp"
+#include "lib/format-string.hpp"
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
 
 #include <set>
 #include <vector>
 #include <tr1/memory>
-#include <boost/format.hpp>
 #include <boost/utility.hpp>
 #include <boost/lambda/lambda.hpp>
 
@@ -70,8 +78,10 @@ namespace query  {
   namespace impl {
     
     namespace {
+      using util::_Fmt;
+      
       uint maxSlots (0); ///< number of different registered Types
-      format dumpRecord ("%2i| %64s --> %s\n");
+      _Fmt dumpRecord ("%2i| %64s --> %s\n");
     }
     
     
@@ -95,7 +105,7 @@ namespace query  {
         Query<TAR> query;
         weak_ptr<TAR> objRef;
         
-        Record (const Query<TAR>& q, const P<TAR>& obj)
+        Record (Query<TAR> const& q, P<TAR> const& obj)
           : degree (lib::query::countPred ("TODO")),//q)),////////////////////////////////////////////////////////////////////////////////////////////TODO
             query (q),
             objRef (obj)
@@ -106,13 +116,13 @@ namespace query  {
         
         struct Search  ///< Functor searching for a specific object
           {
-            Search (const P<TAR>& obj)
+            Search (P<TAR> const& obj)
               : obj_(obj) { }
             
-            const P<TAR>& obj_;
+            P<TAR> const& obj_;
             
             bool 
-            operator() (const Record& rec)
+            operator() (Record const& rec)
             {
               P<TAR> storedObj (rec.objRef.lock());
               return storedObj && (storedObj == obj_);
@@ -131,7 +141,7 @@ namespace query  {
               }
           };
         
-        operator string ()  const { return str (dumpRecord % degree % query % dumpObj()); }
+        operator string ()  const { return dumpRecord % degree % query % dumpObj(); }
         string  dumpObj ()  const { P<TAR> o (objRef.lock()); return o? string(*o):"dead"; }
       };
       
@@ -141,7 +151,8 @@ namespace query  {
      *  separate tree (set) of registry entries
      */
     template<class TAR>
-    struct Slot : public TableEntry
+    struct Slot
+      : public TableEntry
       {
         typedef typename Record<TAR>::OrderRelation Ordering;
         typedef std::set<Record<TAR>, Ordering> Registry;
@@ -195,7 +206,8 @@ namespace query  {
      * @todo as of 3/2008 the real query implementation is missing, and the
      * exact behaviour has to be defined.
      */
-    class DefsRegistry : private boost::noncopyable
+    class DefsRegistry
+      : boost::noncopyable
       {
         Table table_;
         
@@ -223,7 +235,8 @@ namespace query  {
                 operator++ ();  // init to first element (or to null if empty)
               }
             
-            P<TAR> findNext ()  throw()
+            P<TAR>
+            findNext ()  ///< EX_FREE
               {
                 while (!next)
                   {
@@ -256,7 +269,8 @@ namespace query  {
          *  @note none of the queries will be evaluated (we're just counting predicates)
          */
         template<class TAR>
-        Iter<TAR> candidates (const Query<TAR>& query)
+        Iter<TAR>
+        candidates (Query<TAR> const& query)
           {
             P<TAR> dummy;
             Record<TAR> entry (query, dummy);
@@ -282,7 +296,8 @@ namespace query  {
          *          case, also the param obj shared-ptr is rebound!
          */
         template<class TAR>
-        bool put (P<TAR>& obj, const Query<TAR>& query)
+        bool
+        put (P<TAR>& obj, Query<TAR> const& query)
           {
             Record<TAR> entry (query, obj);
             typedef typename Slot<TAR>::Registry Registry;
@@ -311,7 +326,8 @@ namespace query  {
          *  @return false if the object wasn't registered at all.
          */
         template<class TAR>
-        bool forget (const P<TAR>& obj)
+        bool
+        forget (P<TAR> const& obj)
           {
             typedef typename Slot<TAR>::Registry Registry;
             typedef typename Record<TAR>::Search SearchFunc;
@@ -325,7 +341,8 @@ namespace query  {
          *  @note to use it, your objects need an operator string()
          */
         template<class TAR>
-        string dump()
+        string
+        dump ()
           {
             string res;
             util::for_each ( Slot<TAR>::access(table_)

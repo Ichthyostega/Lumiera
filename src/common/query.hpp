@@ -35,6 +35,7 @@
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
+#include <boost/operators.hpp>
 #include <tr1/memory>
 #include <typeinfo>
 #include <cctype>
@@ -55,7 +56,9 @@ namespace lumiera {
   
   class Goal;
   class Resolution;
-  class QueryResolver;
+  class QueryResolver;      
+  class QueryKey;
+
   
   /** Allow for taking ownership of a result set */
   typedef std::tr1::shared_ptr<Resolution> PReso;
@@ -253,10 +256,10 @@ namespace lumiera {
       rebuild()  const;
       
       string
-      extractID (Symbol predicate)  const
-        {
-          return this->rebuild().extractID (predicate);
-        }
+      extractID (Symbol predicate)  const;
+      
+      operator QueryKey()  const;
+      
       
       
       /* results retrieval */
@@ -294,6 +297,55 @@ namespace lumiera {
         return q1.def_ == q2.def_;
       }
     };
+  
+  
+  
+  
+  /** 
+   * Wrapper for indexing and ordering.
+   * Defines a synthetic totally ordered index value.
+   * Implicitly convertible to and from Query instances.
+   */
+  class QueryKey
+    : boost::totally_ordered< QueryKey>
+    {
+      Goal::QueryID id_;      
+      lib::QueryText def_;
+      
+    public:
+      QueryKey (Goal::QueryID id, lib::QueryText def)
+        : id_(id)
+        , def_(q)
+        { }
+      
+      // default copyable
+      
+      template<class RES>
+      operator Query<RES>()  const
+        {
+          return Query<RES>::build().withConditions(def_);
+        }
+      
+      uint
+      degree()  const
+        {
+          return def_.degree();
+        }
+      
+      
+      friend bool
+      operator< (QueryKey const& q1, QueryKey const& q2)
+      {
+        return q1.degree() < q2.degree();
+      }
+      
+      friend size_t
+      hash_value (QueryKey const& q)
+      {
+        return hash_value (q.def_);  /////////////////TODO include the QueryID into the generated hash?
+      }
+    };
+  
   
   
   
@@ -360,17 +412,52 @@ namespace lumiera {
           return *this;
         }
       
+      Builder&
+      withConditions (string additionalQueryPredicates)
+        {
+          lib::query::appendTerms(this->predicateForm_, additionalQueryPredicates);
+          return *this;
+        }
+      
     };
   
   
   
   
   template<class RES>
-  typename Query<RES>::Builder
+  inline typename Query<RES>::Builder
   Query<RES>::rebuild()  const
   {
     return Builder(this->id_, this->def_);
   }
+  
+  
+  /** convenience shortcut to extract a desired name-ID.
+   * @todo used extensively for the mock implementation of query resolution.
+   *       For real resolution queries, such a function is quite nonsensical.
+   *       To be revisited and (likely) to be removed on the long run
+   * @see Query::Builder#extractID
+   */
+  template<class RES>
+  inline string
+  Query<RES>::extractID (Symbol predicate)  const
+  {
+    return this->rebuild().extractID (predicate);
+  }
+  
+  
+  /** automatic conversion from Query to QueryKey for indexing and ordering.
+   *  By defining a parameter of type QueryKey, any provided Query will be
+   *  automatically transformed into an generic representation usable for
+   *  ordered storage in sets, maps and for generation of metrics.
+   */
+  template<class RES>
+  Query<RES>::operator QueryKey()  const
+  {
+    return QueryKey (this->id_, this->def_);
+  }
+      
+
   
   
   

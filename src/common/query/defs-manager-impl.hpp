@@ -31,7 +31,7 @@
  ** For the standard use-case within the session / Proc-Layer, this is performed for the
  ** core MObject types, alongside with the definition of the generic config-query-resolver.
  ** 
- ** @see config-resolver.cpp definition of the explicit specialisiations for the session 
+ ** @see config-resolver.cpp definition of the explicit specialisations for the session 
  ** @see proc::ConfigResolver
  **
  */
@@ -139,11 +139,10 @@ namespace query  {
       return res;
     else
       res = create (capabilities); // not yet known as default, create new
-
-    UNIMPLEMENTED("String representation of queries, here just for diagnostics");
+    
     if (!res)
       throw lumiera::error::Config (_Fmt("The following Query could not be resolved: %s.")
-                                        % "TODO"//capabilities.asKey()////////////////////////////////////////////////////////////////////////////////////////////TODO
+                                        % capabilities.rebuild().asKey()
                                    , LUMIERA_ERROR_CAPABILITY_QUERY );
     else
       return res;

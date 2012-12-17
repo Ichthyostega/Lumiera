@@ -138,6 +138,18 @@ namespace lib {
       return cnt;
     }
     
+    
+    /** @note preliminary implementation without any syntax checks
+     * @return a conjunction of the predicates
+     */
+    string
+    appendTerms (string const& pred1, string const& pred2)
+    {
+      string res(pred1);
+      return res + ", " + pred2;
+    }
+    
+    
   } // namespace query
   
 } // namespace lib
