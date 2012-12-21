@@ -46,6 +46,7 @@
 
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
+#include "lib/query-util.hpp"
 #include "lib/util.hpp"
 
 #include <string>
@@ -93,9 +94,22 @@ namespace lib {
         }
       
       bool
-      hasAtom(string const& predSymbol)
+      hasAtom (string const& predSymbol)
         {
           return util::contains (definition_, predSymbol);
+        }
+      
+      /** synthetic total order to classify query definitions.
+       *  Queries with more specific conditions should yield larger values.
+       * @warning this is rather a design idea and it's not clear
+       *          if this metric can be made to work in practice
+       * @todo using a rather deaf placeholder implementation
+       *       based just on counting the top level predicates.
+       */
+      uint
+      degree_of_constriction()  const
+        {
+          return query::countPred (definition_);
         }
       
     private:
@@ -106,6 +120,11 @@ namespace lib {
       operator== (QueryText const& q1, QueryText const& q2)
       {
         return q1.definition_ == q2.definition_;
+      }
+      friend bool
+      operator<  (QueryText const& q1, QueryText const& q2)
+      {
+        return q1.definition_ < q2.definition_;
       }
       
       friend HashVal hash_value (QueryText const& entry);

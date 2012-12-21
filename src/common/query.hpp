@@ -307,13 +307,13 @@ namespace lumiera {
    * Implicitly convertible to and from Query instances.
    */
   class QueryKey
-    : boost::totally_ordered< QueryKey>
+    : boost::totally_ordered<QueryKey>
     {
       Goal::QueryID id_;      
       lib::QueryText def_;
       
     public:
-      QueryKey (Goal::QueryID id, lib::QueryText def)
+      QueryKey (Goal::QueryID id, lib::QueryText q)
         : id_(id)
         , def_(q)
         { }
@@ -323,20 +323,32 @@ namespace lumiera {
       template<class RES>
       operator Query<RES>()  const
         {
-          return Query<RES>::build().withConditions(def_);
+          REQUIRE (getResultTypeID<RES>() == id_.type);
+          return Query<RES>::build(id_.kind).withConditions(def_);
         }
+      
+      operator string()  const
+        {
+          return "kind=" + lexical_cast<string>(id_.kind)
+               +",type=" + lexical_cast<string>(id_.type)
+               +",def="  + string(def_);
+        }
+      
       
       uint
       degree()  const
         {
-          return def_.degree();
+          return def_.degree_of_constriction();
         }
       
       
       friend bool
       operator< (QueryKey const& q1, QueryKey const& q2)
       {
-        return q1.degree() < q2.degree();
+        uint d1 = q1.degree();
+        uint d2 = q2.degree();
+        return d1 < d2
+            ||(d1 == d2 && q1.def_ < q2.def_);  
       }
       
       friend size_t
@@ -426,6 +438,14 @@ namespace lumiera {
   
   template<class RES>
   inline typename Query<RES>::Builder
+  Query<RES>::build (Kind queryType)
+  {
+    return Builder(defineQueryTypeID (queryType));
+  }
+  
+  
+  template<class RES>
+  inline typename Query<RES>::Builder
   Query<RES>::rebuild()  const
   {
     return Builder(this->id_, this->def_);
@@ -452,6 +472,7 @@ namespace lumiera {
    *  ordered storage in sets, maps and for generation of metrics.
    */
   template<class RES>
+  inline
   Query<RES>::operator QueryKey()  const
   {
     return QueryKey (this->id_, this->def_);

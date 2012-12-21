@@ -71,7 +71,6 @@ namespace query  {
   using std::tr1::weak_ptr;
   
   using std::string;
-  using boost::format;
   using boost::lambda::_1;
   using boost::lambda::var;  
   
@@ -101,17 +100,15 @@ namespace query  {
     template<class TAR>
     struct Record
       {
-        uint degree;
-        Query<TAR> query;
+        QueryKey queryKey;
         weak_ptr<TAR> objRef;
+        uint degree;
         
         Record (Query<TAR> const& q, P<TAR> const& obj)
-          : degree (lib::query::countPred ("TODO")),//q)),////////////////////////////////////////////////////////////////////////////////////////////TODO
-            query (q),
-            objRef (obj)
-          { 
-            UNIMPLEMENTED("Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
-          }
+          : queryKey (q)
+          , objRef (obj)
+          , degree(queryKey.degree())
+          { }
         
         
         struct Search  ///< Functor searching for a specific object
@@ -129,19 +126,13 @@ namespace query  {
             }
           };
         
-        struct OrderRelation
-          {
-            inline bool
-            operator() (Record one, Record two) ///< @note doesn't touch the objRef
-              {
-                UNIMPLEMENTED ("arbitrary total ordering of queries");
-                return (  one.degree < two.degree
-                       ||(one.degree == two.degree && false)//one.query < two.query)////////////////////////////////////////////////////////////////////////////////////////////TODO
-                       );
-              }
-          };
+        friend bool
+        operator< (Record one, Record two) ///< @note doesn't touch the objRef
+        {
+          return one.queryKey < two.queryKey;
+        }
         
-        operator string ()  const { return dumpRecord % degree % query % dumpObj(); }
+        operator string ()  const { return dumpRecord % degree % queryKey % dumpObj(); }
         string  dumpObj ()  const { P<TAR> o (objRef.lock()); return o? string(*o):"dead"; }
       };
       
@@ -154,8 +145,7 @@ namespace query  {
     struct Slot
       : public TableEntry
       {
-        typedef typename Record<TAR>::OrderRelation Ordering;
-        typedef std::set<Record<TAR>, Ordering> Registry;
+        typedef std::set<Record<TAR> > Registry;
         
         Registry registry;
         static size_t index; ///< where to find this Slot in every Table
@@ -306,7 +296,7 @@ namespace query  {
             Registry& registry = Slot<TAR>::access(table_);
             RIter pos = registry.lower_bound (entry);
             if (  pos!=registry.end()
-               && pos->query == query)
+               && pos->queryKey == query)
               {
                 P<TAR> storedObj (pos->objRef.lock());
                 if (storedObj)
