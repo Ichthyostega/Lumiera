@@ -177,7 +177,7 @@ namespace session {
             string querySpec ;//(q);////////////////////////////////////////////////////////////////////////////////////////////TODO
             if (treat_as_defaults_query (querySpec))
               {
-                Query<TY> defaultsQuery(querySpec);
+                Query<TY> defaultsQuery = Query<TY>::build().fromText(querySpec);
                 return solution = Session::current->defaults (defaultsQuery);
               }                             //   may cause recursion
                                             

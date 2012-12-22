@@ -105,7 +105,7 @@ namespace test    {
       scoped_ptr<DefsRegistry> reg_;
       
       typedef P<Dummy<13> > Obj;
-      typedef P<Dummy<23> > Prd;
+      typedef P<Dummy<23> > Pra;
       
       typedef Query<Dummy<13> > Q13;
       typedef Query<Dummy<23> > Q23;
@@ -117,7 +117,7 @@ namespace test    {
       // some test objects...
       Obj o1, o2, o3;
       Q13 q1, q2, q3, q4, q5;
-      map<Q23, Prd> ps;
+      map<QueryKey, Pra> ps;
       
     public:
       DefsRegistryImpl_test ()
@@ -162,13 +162,13 @@ namespace test    {
           ps.clear();
           for (int i=0; i<100; ++i)
             {
-              Prd px (fabricate<23>());
+              Pra px (fabricate<23>());
               Q23 qx (garbage_query());
-              UNIMPLEMENTED ("generic query key and ordering for map access");////////////////////////////////////////////////////////////////////////////////////////////TODO
-//            ps[qx] = px;
               reg_->put (px, qx);
-              UNIMPLEMENTED ("Query building from predicate string");////////////////////////////////////////////////////////////////////////////////////////////TODO
-//            px->instanceID = qx;////////////////////////////////////////////////////////////////////////////////////////////TODO
+              
+              // store for verification....
+              px->instanceID = QueryKey(qx).display();
+              ps[qx] = px; 
             }
         }
       
@@ -214,10 +214,8 @@ namespace test    {
             {
               CHECK ( *j );
               Q23 qx ((*j)->instanceID);
-              UNIMPLEMENTED ("generic query key and ordering for map access");////////////////////////////////////////////////////////////////////////////////////////////TODO
-//            CHECK ( ps[qx] == (*j));////////////////////////////////////////////////////////////////////////////////////////////TODO
-              UNIMPLEMENTED ("Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
-//            d = lib::query::countPred (qx);////////////////////////////////////////////////////////////////////////////////////////////TODO
+              CHECK ( ps[qx] == (*j));
+              d = QueryKey(qx).degree();
               CHECK ( d_prev <= d );
               d_prev = d;
             }
@@ -225,7 +223,8 @@ namespace test    {
           
           // calling with an arbitrary (registered) query
           // yields the corresponding object at start of the enumeration
-          j = reg_->candidates(ps.begin()->first);
+          Q23 someQuery(ps.begin()->first);
+          j = reg_->candidates(someQuery);
           CHECK ( *j == ps.begin()->second);
           
         }

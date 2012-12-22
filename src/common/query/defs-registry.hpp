@@ -132,7 +132,7 @@ namespace query  {
           return one.queryKey < two.queryKey;
         }
         
-        operator string ()  const { return dumpRecord % degree % queryKey % dumpObj(); }
+        operator string ()  const { return dumpRecord % degree % queryKey.display() % dumpObj(); }
         string  dumpObj ()  const { P<TAR> o (objRef.lock()); return o? string(*o):"dead"; }
       };
       

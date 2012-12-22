@@ -327,7 +327,8 @@ namespace lumiera {
           return Query<RES>::build(id_.kind).withConditions(def_);
         }
       
-      operator string()  const
+      string
+      display()  const
         {
           return "kind=" + lexical_cast<string>(id_.kind)
                +",type=" + lexical_cast<string>(id_.type)
@@ -428,6 +429,13 @@ namespace lumiera {
       withConditions (string additionalQueryPredicates)
         {
           lib::query::appendTerms(this->predicateForm_, additionalQueryPredicates);
+          return *this;
+        }
+      
+      Builder&
+      fromText (string queryPredicates)
+        {
+          this->predicateForm_ = queryPredicates;
           return *this;
         }
       
