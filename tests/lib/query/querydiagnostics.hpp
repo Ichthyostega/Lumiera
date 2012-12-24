@@ -39,7 +39,7 @@ namespace test {
   
   namespace {// implementation constants
     
-    _Fmt predicatePattern ("%s_%2i( %s )");
+    _Fmt predicatePattern ("%s_%02i( %s )");
     const string garbage ("asanisimasabibeddiboom");
     
     const uint MAX_DEGREE_RAND = 9;

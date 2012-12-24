@@ -280,14 +280,14 @@ namespace query  {
         
         /** register the object as being "default" when searching something
          *  similar as designated by the given query. Only a weak ref is stored.
-         *  @param obj Will be rebound, if another object is already stored.
-         *  @return true if object has actually been stored, false if another
-         *          object is registered for exactly the same query. In this
-         *          case, also the param obj shared-ptr is rebound!
+         *  @param obj to be recorded as "default". Only a weak pointer will be stored
+         *  @retval true if object has actually been stored
+         *  @retval false if another object is registered for exactly the same query
+         *                Nothing is changed in this case
          */
         template<class TAR>
         bool
-        put (P<TAR>& obj, Query<TAR> const& query)
+        put (P<TAR> const& obj, Query<TAR> const& query)
           {
             Record<TAR> entry (query, obj);
             typedef typename Slot<TAR>::Registry Registry;
@@ -302,7 +302,7 @@ namespace query  {
                 if (storedObj)
                   return (storedObj == obj);
                 else
-                  // use the opportunity and purge the expired entry
+                  // use the opportunity to purge the expired entry
                   registry.erase(pos++);
               }
             // no existing entry....

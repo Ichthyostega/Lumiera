@@ -324,7 +324,7 @@ namespace lumiera {
       operator Query<RES>()  const
         {
           REQUIRE (getResultTypeID<RES>() == id_.type);
-          return Query<RES>::build(id_.kind).withConditions(def_);
+          return Query<RES>::build(id_.kind).fromText(def_);
         }
       
       string
@@ -333,6 +333,12 @@ namespace lumiera {
           return "kind=" + lexical_cast<string>(id_.kind)
                +",type=" + lexical_cast<string>(id_.type)
                +",def="  + string(def_);
+        }
+      
+      string
+      getQueryString()  const
+        {
+          return string(def_);
         }
       
       
@@ -428,7 +434,8 @@ namespace lumiera {
       Builder&
       withConditions (string additionalQueryPredicates)
         {
-          lib::query::appendTerms(this->predicateForm_, additionalQueryPredicates);
+          this->predicateForm_ =
+              lib::query::appendTerms(this->predicateForm_, additionalQueryPredicates);
           return *this;
         }
       

@@ -26,19 +26,19 @@
 
 #include "common/query.hpp"
 #include "common/query/defs-registry.hpp"
+#include "lib/format-string.hpp"
 #include "lib/p.hpp"
 
 #include "../lib/query/querydiagnostics.hpp"
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/format.hpp>
 #include <map>
 
 using util::isnil;
+using util::_Fmt;
 using lib::P;
 
 using boost::scoped_ptr;
-using boost::format;
 using std::string;
 using std::rand;
 using std::map;
@@ -49,43 +49,45 @@ namespace lumiera {
 namespace query   {
 namespace test    {
   
-  format typePatt ("Dummy<%2i>");
-  format instancePatt ("obj_%s_%i");
-  format predicatePatt ("%s_%2i( %s )");
-  
-  
-  
-  /** create a random new ID */
-  string
-  newID (string prefix)
-  {
-    return str (instancePatt % prefix % rand());
-  }
-  
-  
-  /** template for generating some different test types */
-  template<int I>
-  struct Dummy
+  namespace { // Test helpers...
+    
+    _Fmt typePatt ("Dummy<%2i>");
+    _Fmt instancePatt ("obj_%s_%i");
+    
+    
+    
+    /** create a random new ID */
+    string
+    newID (string prefix)
     {
-      static string name;
-      string instanceID;
-      operator string ()                  const { return instanceID; }
-      bool operator== (const Dummy& odu)  const { return this == &odu; }
-      
-      
-      Dummy () : instanceID (newID (name)) {}
-    };
-  
-  template<int I>
-  string Dummy<I>::name = str (typePatt % I);
-  
-  template<int I>
-  inline P<Dummy<I> >
-  fabricate()
-  {
-    return P<Dummy<I> >(new Dummy<I>);
-  }
-  
+      return instancePatt % prefix % rand();
+    }
+    
+    
+    /** template for generating some different test types */
+    template<int I>
+    struct Dummy
+      {
+        static string name;
+        string instanceID;
+        operator string ()                  const { return instanceID; }
+        bool operator== (const Dummy& odu)  const { return this == &odu; }
+        
+        
+        Dummy () : instanceID (newID (name)) {}
+      };
+    
+    template<int I>
+    string Dummy<I>::name = (typePatt % I);
+    
+    template<int I>
+    inline P<Dummy<I> >
+    fabricate()
+    {
+      return P<Dummy<I> >(new Dummy<I>);
+    }
+    
+  }//(End)Test helpers
   
   using lib::query::test::garbage_query;
   
@@ -154,7 +156,7 @@ namespace test    {
           
           reg_->put (o1, q5);
           reg_->put (o2, q4);
-          reg_->put (o3, q3);
+          reg_->put (o2, q3);
           reg_->put (o3, q2);
           reg_->put (o2, q1);
           reg_->put (o1, Q13()); // the empty query
@@ -167,7 +169,7 @@ namespace test    {
               reg_->put (px, qx);
               
               // store for verification....
-              px->instanceID = QueryKey(qx).display();
+              px->instanceID = QueryKey(qx).getQueryString();
               ps[qx] = px; 
             }
         }
@@ -179,20 +181,20 @@ namespace test    {
           Iter13 i (reg_->candidates(Q13 ("irrelevant query")));
           CHECK ( i.hasNext());
           CHECK ( *i == o1); ++i;   // ordered according to the degree of the queries
-          CHECK ( *i == o2); ++i;
-          CHECK ( *i == o3); ++i;
-          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o2); ++i;   // degree == 1
+          CHECK ( *i == o3); ++i;   // degree == 2
+          CHECK ( *i == o2); ++i;   // ...
           CHECK ( *i == o2); ++i;
           CHECK ( *i == o1);
           CHECK (!i.hasNext());
           CHECK (! *++i ); // null after end
           
-          i = reg_->candidates(q3);
+          i = reg_->candidates(q2);
           CHECK ( *i == o3); ++i;   // found by direct match
           CHECK ( *i == o1); ++i;   // followed by the ordered enumeration
           CHECK ( *i == o2); ++i;
           CHECK ( *i == o3); ++i;
-          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o2); ++i;
           CHECK ( *i == o2); ++i;
           CHECK ( *i == o1); ++i;
           CHECK (!i.hasNext());
@@ -202,7 +204,7 @@ namespace test    {
           CHECK ( *i == o1); ++i;
           CHECK ( *i == o2); ++i;
           CHECK ( *i == o3); ++i;
-          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o2); ++i;
           CHECK ( *i == o2); ++i;
           CHECK ( *i == o1); ++i;
           CHECK (!i.hasNext());
@@ -240,8 +242,8 @@ namespace test    {
           CHECK ( *i == o1); ++i;    // ordered according to the degree of the queries
                                      // but the o2 entries are missing
           CHECK ( *i == o3); ++i;
-          CHECK ( *i == o3); ++i;
-                                  // missing
+                                     // o2 missing
+                                     // o2 missing
           CHECK ( *i == o1);
           CHECK (!i.hasNext());
           
@@ -251,7 +253,7 @@ namespace test    {
           i = reg_->candidates(Q13 ("something"));
           CHECK ( i.hasNext());
           CHECK ( *i == o1); ++i;    // ordered according to the degree of the queries
-                                     // but now also the o3 entries are missing...
+                                     // but now also the o3 entry is missing...
           CHECK ( *i == o1);
           CHECK (!i.hasNext());
           
@@ -275,7 +277,7 @@ namespace test    {
           i = reg_->candidates(q2);
           CHECK ( *i == o2); ++i; // direct match
           CHECK ( *i == o1); ++i;
-          CHECK ( *i == o2); ++i; // inserted here in the dataset
+          CHECK ( *i == o2); ++i; // inserted here in the dataset, since q2 has degree 2
           CHECK ( *i == o1); ++i;
           CHECK (!i.hasNext());
           

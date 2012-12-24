@@ -145,8 +145,8 @@ namespace lib {
     string
     appendTerms (string const& pred1, string const& pred2)
     {
-      string res(pred1);
-      return res + ", " + pred2;
+      return isnil(pred1)? pred2
+                         : pred1 + ", " + pred2;
     }
     
     
