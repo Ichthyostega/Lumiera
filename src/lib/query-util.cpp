@@ -92,7 +92,7 @@ namespace lib {
      *  \code extractID ("stream", "id(abc), stream(mpeg)") \endcode 
      *  yields \c "mpeg"
      */
-    const string
+    string
     extractID (Symbol sym, const string& termString)
     {
       smatch match;
@@ -106,20 +106,30 @@ namespace lib {
     /** (preliminary) helper: cut a term with the given symbol. 
      *  The term is matched, removed from the original string and returned
      *  @note parameter termString will be modified!
+     *  @todo as it seems we're not using the extracted term anymore,
+     *        we could save the effort of rebuilding that term.
      */
-    const string
-    removeTerm (Symbol sym, string& termString)
+    string
+    removeTerm (Symbol sym, string& queryString)
     {
       smatch match;
-      if (regex_search (termString, match, getTermRegex (sym)))
+      if (regex_search (queryString, match, getTermRegex (sym)))
         {
           string res (sym); res += "("+match[1]+")";
-          termString.erase (match.position(), match[0].length());
+          queryString.erase (match.position(), match[0].length());
           return res;
         }
       else
         return "";
-    } 
+    }
+    
+    
+    bool
+    hasTerm (Symbol sym, string const& queryString)
+    {
+      smatch match;
+      return regex_search (queryString, match, getTermRegex (sym));
+    }
   
     
     /** @note this is a very hackish preliminary implementation. 
@@ -146,6 +156,7 @@ namespace lib {
     appendTerms (string const& pred1, string const& pred2)
     {
       return isnil(pred1)? pred2
+           : isnil(pred2)? pred1
                          : pred1 + ", " + pred2;
     }
     

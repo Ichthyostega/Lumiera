@@ -87,6 +87,12 @@ namespace lumiera {
         {
           Kind kind;
           IxID type;
+          
+          explicit
+          QueryID(Kind k =EMPTY, IxID t=1)
+            : kind(k)
+            , type(t)
+            { }
         };
       
       QueryID const&
@@ -151,15 +157,18 @@ namespace lumiera {
   
   
   
-  /** Context used for generating type-IDs to denote
-   *  the specific result types of issued queries  */
-  typedef lib::TypedContext<Goal::Result> ResultType;
-  
-  template<typename RES>
-  inline IxID
-  getResultTypeID()  ///< @return unique ID denoting result type RES
-  {
-    return ResultType::ID<RES>::get();
+  namespace {
+    /** Context used for generating type-IDs to denote
+     *  the specific result types of issued queries  */
+    typedef lib::TypedContext<Goal::Result> ResultType;
+    
+    template<typename RES>
+    inline IxID
+    getResultTypeID()  ///< @return unique ID denoting result type RES
+    {
+      return ResultType::ID<RES>::get();
+    }
+    
   }
   
   
@@ -204,7 +213,7 @@ namespace lumiera {
       static QueryID
       defineQueryTypeID (Kind queryType = Goal::GENERIC)
         {
-          QueryID id = {queryType, getResultTypeID<RES>() };
+          QueryID id(queryType, getResultTypeID<RES>());
           return id;
         }
       
@@ -249,16 +258,13 @@ namespace lumiera {
         , def_(querySpec)
         { }
       
-      static Builder
-      build (Kind queryType = Goal::GENERIC);
-      
-      Builder
-      rebuild()  const;
-      
-      string
-      extractID (Symbol predicate)  const;
-      
       operator QueryKey()  const;
+      
+      static Builder build (Kind queryType = Goal::GENERIC);
+      Builder rebuild()  const;
+      
+      string extractID (Symbol predicate)  const;
+      bool usesPredicate (Symbol predicate)  const;
       
       
       
@@ -290,12 +296,6 @@ namespace lumiera {
       {
         return hash_value (q.def_);
       }
-      
-      friend bool
-      operator== (Query const& q1, Query const& q2)
-      {
-        return q1.def_ == q2.def_;
-      }
     };
   
   
@@ -316,6 +316,12 @@ namespace lumiera {
       QueryKey (Goal::QueryID id, lib::QueryText q)
         : id_(id)
         , def_(q)
+        { }
+      
+      /** the empty or bottom query key */
+      QueryKey()
+        : id_()
+        , def_("NIL")
         { }
       
       // default copyable
@@ -348,6 +354,12 @@ namespace lumiera {
           return def_.degree_of_constriction();
         }
       
+      bool
+      empty()  const
+        {
+          return Goal::EMPTY == id_.kind;
+        }
+      
       
       friend bool
       operator< (QueryKey const& q1, QueryKey const& q2)
@@ -357,6 +369,12 @@ namespace lumiera {
         return d1 < d2
             ||(d1 == d2 && q1.def_ < q2.def_);  
       }
+      
+      friend bool
+      operator== (QueryKey const& q1, QueryKey const& q2)
+      {
+        return q1.def_ == q2.def_;  
+      } 
       
       friend size_t
       hash_value (QueryKey const& q)
@@ -440,6 +458,14 @@ namespace lumiera {
         }
       
       Builder&
+      prependConditions (string additionalQueryPredicates)
+        {
+          this->predicateForm_ =
+              lib::query::appendTerms(additionalQueryPredicates, this->predicateForm_);
+          return *this;
+        }
+      
+      Builder&
       fromText (string queryPredicates)
         {
           this->predicateForm_ = queryPredicates;
@@ -478,6 +504,14 @@ namespace lumiera {
   Query<RES>::extractID (Symbol predicate)  const
   {
     return this->rebuild().extractID (predicate);
+  }
+  
+  
+  template<class RES>
+  inline bool
+  Query<RES>::usesPredicate (Symbol predicate)  const
+  {
+    return lib::query::hasTerm(predicate, this->def_);
   }
   
   

@@ -158,8 +158,8 @@ namespace test{
         DummyTypedSolutionProducer()
           : QueryResolver()
           {
-            Goal::QueryID case1 = {Goal::GENERIC, getResultTypeID<int>()};
-            Goal::QueryID case2 = {Goal::GENERIC, getResultTypeID<string>()};
+            Goal::QueryID case1(Goal::GENERIC, getResultTypeID<int>());
+            Goal::QueryID case2(Goal::GENERIC, getResultTypeID<string>());
             
             installResolutionCase(case1, &resolutionFunction<int> );
             installResolutionCase(case2, &resolutionFunction<string> );

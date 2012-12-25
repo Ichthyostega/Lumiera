@@ -53,6 +53,7 @@ namespace session {
     using asset::PProcPatt;
     
 //  using lib::query::extractID;
+    using lib::query::extractID;   ///////////////TODO dto
     using lib::query::removeTerm;
     
     
@@ -128,7 +129,7 @@ namespace session {
     
     /** special case: create a new pipe with matching pipe and stream IDs on the fly when referred... */
     bool 
-    MockTable::fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID)
+    MockTable::fabricate_matching_new_Pipe (Query<Pipe> const& q, string const& pipeID, string const& streamID)
     {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
@@ -139,7 +140,7 @@ namespace session {
     
     /** special case: create a new pipe for a specific stream ID */
     bool 
-    MockTable::fabricate_just_new_Pipe (Query<Pipe>& q )
+    MockTable::fabricate_just_new_Pipe (Query<Pipe> const& q )
     {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
@@ -150,7 +151,7 @@ namespace session {
     
     /** special case: create/retrieve new processing pattern for given stream ID... */
     bool 
-    MockTable::fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q)
+    MockTable::fabricate_ProcPatt_on_demand (Query<const ProcPatt> const& q)
     {
       typedef const ProcPatt cPP;
       typedef WrapReturn<cPP>::Wrapper Ptr;
@@ -165,18 +166,22 @@ namespace session {
      *  the session's timelines / sequences to retrieve an existing object
      *  with matching ID... */
     bool 
-    MockTable::fabricate_Timeline_on_demand (Query<asset::Timeline>& query)
+    MockTable::fabricate_Timeline_on_demand (Query<asset::Timeline> const& query)
     {
-      typedef asset::Timeline aTl;
-      typedef WrapReturn<aTl>::Wrapper Ptr;
-  
-      UNIMPLEMENTED ("generic query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
-      string nameID = "TODO";//removeTerm ("id", query);////////////////////////////////////////////////////////////////////////////////////////////TODO
+      typedef asset::Timeline aTL;
+      typedef WrapReturn<aTL>::Wrapper Ptr;
+      
+      string nameID = query.extractID("id");
       if (isnil (nameID))
-        nameID = "TODO";//removeTerm ("timeline", query);////////////////////////////////////////////////////////////////////////////////////////////TODO
+        nameID = query.extractID("timeline");
       if (isnil (nameID))
         nameID = "prime";
-//    query.insert (0, "id("+nameID+"), ");
+      
+      Query<aTL> normalisedQuery =
+          query.rebuild()
+               .removeTerm("id")
+               .removeTerm("timeline")
+               .prependConditions("id("+nameID+")");
       
       // try to find an existing one with the desired id
       Ptr newTimeline;
@@ -189,26 +194,29 @@ namespace session {
           }
       
       if (!newTimeline)
-        newTimeline = Struct::retrieve.made4fake (query);     // no suitable Timeline found: create and attach new one
-      
-      answer_->insert (entry<aTl> (query, newTimeline));    //   "learn" the found/created Timeline as new solution
+        newTimeline = Struct::retrieve.made4fake (normalisedQuery); // no suitable Timeline found: create and attach new one
+      answer_->insert (entry<aTL> (normalisedQuery, newTimeline));  // "learn" the found/created Timeline as new solution
       return true;
     }
     
     /** special case: fabricate new Timeline, maybe using ID specs from the query... */
     bool 
-    MockTable::fabricate_Sequence_on_demand (Query<asset::Sequence>& query)
+    MockTable::fabricate_Sequence_on_demand (Query<asset::Sequence> const& query)
     {
-      typedef asset::Sequence aSq;
-      typedef WrapReturn<aSq>::Wrapper Ptr;
-  
-      UNIMPLEMENTED ("generic Query remolding");////////////////////////////////////////////////////////////////////////////////////////////TODO
-      string nameID = "TODO";//removeTerm ("id", query);////////////////////////////////////////////////////////////////////////////////////////////TODO
+      typedef asset::Sequence aSeq;
+      typedef WrapReturn<aSeq>::Wrapper Ptr;
+      
+      string nameID = query.extractID("id");
       if (isnil (nameID))
-        nameID = "TODO";//removeTerm ("sequence", query);////////////////////////////////////////////////////////////////////////////////////////////TODO
+        nameID = query.extractID("sequence");
       if (isnil (nameID))
         nameID = "first";
-//    query.insert (0, "id("+nameID+"), ");
+      
+      Query<aSeq> normalisedQuery =
+          query.rebuild()
+               .removeTerm("id")
+               .removeTerm("sequence")
+               .prependConditions("id("+nameID+")");
       
       // try to find an existing sequence with the desired id
       Ptr newSequence;
@@ -220,10 +228,9 @@ namespace session {
             break;
           }
       
-      if (!newSequence)                                            
-        newSequence = Struct::retrieve.made4fake (query);   // no suitable found: create and attach new Sequence
-      
-      answer_->insert (entry<aSq> (query, newSequence));
+      if (!newSequence)
+        newSequence = Struct::retrieve.made4fake (normalisedQuery);  // no suitable found: create and attach new Sequence
+      answer_->insert (entry<aSeq> (normalisedQuery, newSequence));  // "learn" the found/created new solution
       return true;
     }
     
@@ -231,7 +238,7 @@ namespace session {
     /** for entering "valid" solutions on-the-fly from tests */
     template<class TY>
     bool 
-    MockTable::set_new_mock_solution (Query<TY>& q, typename WrapReturn<TY>::Wrapper& obj)
+    MockTable::set_new_mock_solution (Query<TY> const& q, typename WrapReturn<TY>::Wrapper& obj)
     {
       UNIMPLEMENTED ("generic query-key");////////////////////////////////////////////////////////////////////////////////////////////TODO
 //    answer_->erase (q.asKey());////////////////////////////////////////////////////////////////////////////////////////////TODO
@@ -239,7 +246,7 @@ namespace session {
       return true;
     }
     // generate the necessary specialisations-----------------------------
-    template bool MockTable::set_new_mock_solution (Query<Pipe>&, PPipe&);
+    template bool MockTable::set_new_mock_solution (Query<Pipe> const&, PPipe&);
     
 
     

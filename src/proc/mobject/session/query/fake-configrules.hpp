@@ -29,6 +29,12 @@
  ** -- later on, when we use a real Prolog interpreter, it still may be useful for
  ** testing and debugging.
  ** 
+ ** @remarks the primary purpose of this header and fake-configrules.cpp is to define
+ **          the type specialisations of the \c QueryHandler<TY>::resolve(solution,query)
+ **          function(s). Below, there is a really confusing and ugly ping-pong game involving
+ **          the faked solutions and the mocked defaults manager. This is spaghetti code, written
+ **          for the reason everyone writes spaghetti code: to get away with it. So please look
+ **          away, some day the real thing will be there, displacing this mess without further notice.
  ** @todo to be removed in Alpha, when integrating a real resolution engine /////////////////TICKET #710
  ** 
  ** @see lumiera::Query
@@ -68,8 +74,7 @@ namespace session {
     using lib::P;
     
     using lumiera::Query;
-    using lib::query::removeTerm;   //////////////TODO better use Query::Builder
-    using lib::query::extractID;   ///////////////TODO dto
+    using lumiera::QueryKey;
     using lumiera::query::isFakeBypass;      /////////TODO placeholder until there is a real resolution engine
     
     using util::contains;
@@ -95,10 +100,11 @@ namespace session {
       /** helper detecting if a query actually intended to retrieve a "default" object.
        *  This implementation is quite crude, of course it would be necessary actually to
        *  parse and evaluate the query. @note query is modified if "default" ... */
+      template<typename TY>
       inline bool
-      treat_as_defaults_query (string& querySpec)
+      is_defaults_query (Query<TY> const& querySpec)
       {
-        return !isnil (removeTerm ("default", querySpec));
+        return querySpec.usesPredicate ("default");
       }
       
     } // details (end)
@@ -107,7 +113,12 @@ namespace session {
     
     /** 
      * the actual table holding preconfigured answers
-     * packaged as boost::any objects. 
+     * packaged as boost::any objects. MockTable is the implementation base;
+     * subclasses for the individual types are layered below to define the
+     * \c resolve(..) functions. Finally #MockConfigRules wraps things up.
+     * 
+     * The implementation relies on boost::any records to stash the objects
+     * in automatically managed heap memory. 
      */
     class MockTable
       : public proc::ConfigResolver
@@ -124,15 +135,15 @@ namespace session {
         
         // special cases....
         template<class TY> 
-        bool detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY>& q);
-        bool fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID);
-        bool fabricate_just_new_Pipe     (Query<Pipe>& q);
-        bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q);
-        bool fabricate_Timeline_on_demand (Query<asset::Timeline>& q);
-        bool fabricate_Sequence_on_demand (Query<asset::Sequence>& q);
+        bool detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY> const&);
+        bool fabricate_matching_new_Pipe  (Query<Pipe> const& q, string const& pipeID, string const& streamID);
+        bool fabricate_just_new_Pipe      (Query<Pipe> const& q);
+        bool fabricate_ProcPatt_on_demand (Query<const ProcPatt> const& q);
+        bool fabricate_Timeline_on_demand (Query<asset::Timeline> const& q);
+        bool fabricate_Sequence_on_demand (Query<asset::Sequence> const& q);
         
         template<class TY>
-        bool set_new_mock_solution (Query<TY>& q, typename WrapReturn<TY>::Wrapper& candidate);
+        bool set_new_mock_solution (Query<TY> const& q, typename WrapReturn<TY>::Wrapper& candidate);
 
         
       private:
@@ -141,8 +152,8 @@ namespace session {
     
     
     /** 
-     * building block defining how to do 
-     * the mock implementation for \em one type.
+     * building block providing the 
+     * mock implementation for a \em single type.
      * We simply access a table holding pre-created objects.
      */
     template<class TY, class BASE>
@@ -171,19 +182,17 @@ namespace session {
         bool
         try_special_case (Ret& solution, Query<TY> const& q)
           {
-            if (true)//solution && isFakeBypass(q))        // backdoor for tests////////////////////////////////////////////////////////////////////////////////////////////TODO
+            if (solution && isFakeBypass(q))        // backdoor for tests
               return solution;
             
-            string querySpec ;//(q);////////////////////////////////////////////////////////////////////////////////////////////TODO
-            if (treat_as_defaults_query (querySpec))
+            if (is_defaults_query (q))
               {
-                Query<TY> defaultsQuery = Query<TY>::build().fromText(querySpec);
+                Query<TY> defaultsQuery = q.rebuild().removeTerm("default");
                 return solution = Session::current->defaults (defaultsQuery);
-              }                             //   may cause recursion
+              }                             //  may lead to recursion
                                             
-            Query<TY> newQuery = q;
-            if (this->detect_case (solution, newQuery))
-              return resolve (solution, newQuery);
+            if (this->detect_case (solution, q))
+              return resolve (solution, q);
             
             return solution = Ret();  // fail: return default-constructed empty smart ptr
           }
@@ -193,21 +202,20 @@ namespace session {
     /** Hook for treating very special cases for individual types only */
     template<class TY>
     inline bool 
-    MockTable::detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY>& q)
+    MockTable::detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY> const&)
     {
-//    q.clear(); // end recursion////////////////////////////////////////////////////////////////////////////////////////////TODO
       return false;
     }
     template<>
     inline bool 
-    MockTable::detect_case (WrapReturn<Pipe>::Wrapper& candidate, Query<Pipe>& q)
+    MockTable::detect_case (WrapReturn<Pipe>::Wrapper& candidate, Query<Pipe> const& q)
     {
-      if (true)//!isnil (extractID("make", q)))////////////////////////////////////////////////////////////////////////////////////////////TODO
+      if (q.usesPredicate ("make"))
         // used by tests to force fabrication of a new "solution"
         return fabricate_just_new_Pipe (q);
       
-      const string pipeID   = "TODO";//extractID("pipe", q);////////////////////////////////////////////////////////////////////////////////////////////TODO
-      const string streamID = "TODO";//extractID("stream", q);////////////////////////////////////////////////////////////////////////////////////////////TODO
+      const string pipeID   = q.extractID("pipe");
+      const string streamID = q.extractID("stream");
       
       if (candidate && pipeID == candidate->getPipeID())
         return set_new_mock_solution (q, candidate); // "learn" this solution to be "valid"
@@ -218,39 +226,35 @@ namespace session {
       if (!candidate && (!isnil(streamID) || !isnil(pipeID)))
         return fabricate_just_new_Pipe (q);
       
-//    q.clear();////////////////////////////////////////////////////////////////////////////////////////////TODO
       return false;
     }
+    
     template<>
     inline bool 
-    MockTable::detect_case (WrapReturn<const ProcPatt>::Wrapper& candidate, Query<const ProcPatt>& q)
+    MockTable::detect_case (WrapReturn<const ProcPatt>::Wrapper& candidate, Query<const ProcPatt> const& q)
     {
-      const string streamID = "TODO";//extractID("stream", q);////////////////////////////////////////////////////////////////////////////////////////////TODO
+      const string streamID = q.extractID("stream");
       
       if (!candidate && !isnil(streamID))
           return fabricate_ProcPatt_on_demand (q);
-      
-//    q.clear();////////////////////////////////////////////////////////////////////////////////////////////TODO
       return false;
     }
+    
     template<>
     inline bool 
-    MockTable::detect_case (WrapReturn<asset::Timeline>::Wrapper& candidate, Query<asset::Timeline>& q)
+    MockTable::detect_case (WrapReturn<asset::Timeline>::Wrapper& candidate, Query<asset::Timeline> const& q)
     {
       if (!candidate)
           return fabricate_Timeline_on_demand (q);
-      
-//    q.clear();////////////////////////////////////////////////////////////////////////////////////////////TODO
       return bool(candidate);
     }
+    
     template<>
     inline bool 
-    MockTable::detect_case (WrapReturn<asset::Sequence>::Wrapper& candidate, Query<asset::Sequence>& q)
+    MockTable::detect_case (WrapReturn<asset::Sequence>::Wrapper& candidate, Query<asset::Sequence> const& q)
     {
       if (!candidate)
           return fabricate_Sequence_on_demand (q);
-      
-//    q.clear();////////////////////////////////////////////////////////////////////////////////////////////TODO
       return bool(candidate);
     }
     

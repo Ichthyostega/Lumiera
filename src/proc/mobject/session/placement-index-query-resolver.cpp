@@ -275,7 +275,7 @@ namespace session {
     QueryID
     whenQueryingFor()
       {
-        QueryID qID = {Goal::DISCOVERY, getResultTypeID<Placement<MO> >()};
+        QueryID qID(Goal::DISCOVERY, getResultTypeID<Placement<MO> >());
         return qID;
       }
     

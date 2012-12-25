@@ -58,9 +58,10 @@ namespace lib {
     uint countPred (const string&);
     
     
-    const string extractID (Symbol, string const& termString);
+    string extractID (Symbol, string const& termString);
     
-    const string removeTerm (Symbol, string& termString);
+    string removeTerm (Symbol, string& queryString);
+    bool hasTerm (Symbol sym, string const& queryString);
     
     string appendTerms (string const& pred1, string const& pred2);
     

@@ -25,6 +25,12 @@
 /** @file config-resolver.hpp
  ** Definition of the concrete frontend for rule based configuration within the session.
  ** 
+ ** @remarks This code will act as a hub to pull in, instrument and activate a lot of further code.
+ **          All the types mentioned in the #InterfaceTypes typelist will be prepared to be used
+ **          in rules based setup and configuration; this definition will drive the generation of
+ **          all the necessary bindings and registration entries to make this work. This is in
+ **          accordance with the principle of <i>generic programming:</i> Instead of making things
+ **          uniform, we use related things in a similar manner.
  ** @note this is placeholder code using a preliminary/mock implementation... don't take this code too literal!
  ** @todo clarify the relation of config query and query-for-defaults   ///////////////TICKET #705
  ** 

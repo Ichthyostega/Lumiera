@@ -117,11 +117,13 @@ namespace test    {
           CHECK (!find (pipe2->getPipeID()), "accidental clash of random test-IDs");
           
           // now declare that these objects should be considered "default"
-lumiera::query::setFakeBypass("");  /////////////////////////////////////////////////TODO mock resolution
-          CHECK (Session::current->defaults.define (pipe1, Query<Pipe> ("")));   // unrestricted default
+          Query<Pipe> justAnyPipe ("");
+lumiera::query::setFakeBypass(justAnyPipe);  /////////////////////////////////////////////////TODO mock resolution
+          CHECK (Session::current->defaults.define (pipe1, justAnyPipe));   // unrestricted default
           
-lumiera::query::setFakeBypass("stream("+sID+")"); ///////////////////////////////////TODO mock resolution
-          CHECK (Session::current->defaults.define (pipe2, Query<Pipe> ("stream("+sID+")")));
+          Query<Pipe> pipeWithSpecificStream("stream("+sID+")");
+lumiera::query::setFakeBypass(pipeWithSpecificStream); ///////////////////////////////////TODO mock resolution
+          CHECK (Session::current->defaults.define (pipe2, pipeWithSpecificStream));
           
           CHECK ( find (pipe1->getPipeID()), "failure declaring object as default");
           CHECK ( find (pipe2->getPipeID()), "failure declaring object as default");

@@ -166,7 +166,7 @@ namespace lumiera {
          *  @query any goals to be fulfilled by the solution.
          *  @return false if resolution failed. In this case, solution ptr is empty.
          */
-        virtual bool resolve (P<TY>& solution, const Query<TY>& q) = 0;
+        virtual bool resolve (P<TY>& solution, Query<TY> const& q) = 0;
       };
     
     // TODO: the Idea is to provide specialisations for the concrete types
@@ -221,8 +221,8 @@ namespace lumiera {
      *  will magically succeed with every candidate object provided. This
      *  is currently necessary to get objects into the defaults manager,
      *  as the query system is not able to do real query resolution */
-    void setFakeBypass(string const& q);
-    bool isFakeBypass (string const& q);
+    void setFakeBypass(lumiera::QueryKey const& q);
+    bool isFakeBypass (lumiera::QueryKey const& q);
     /////////////////////////////////////////////////////////////////////////////TICKET 710
     
   } // namespace query

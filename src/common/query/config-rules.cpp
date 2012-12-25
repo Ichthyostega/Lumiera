@@ -23,9 +23,11 @@
 
 
 #include "lib/error.hpp"
+#include "common/query.hpp"
 #include "common/config-rules.hpp"
 #include "proc/mobject/session/query/fake-configrules.hpp"
 
+using lumiera::QueryKey;
 
 
 namespace lumiera {
@@ -42,11 +44,11 @@ namespace lumiera {
   
   namespace query {
     namespace { // local definitions: implementing a backdoor for tests
-        string fakeBypass;
+        QueryKey fakeBypass;
     } 
     
-    void setFakeBypass(string const& q)  { fakeBypass = q; }
-    bool isFakeBypass (string const& q)  { return q == fakeBypass; }
+    void setFakeBypass(QueryKey const& q)  { fakeBypass = q; }
+    bool isFakeBypass (QueryKey const& q)  { return q == fakeBypass; }
     /////////////////////////////////////////////////////////////////////////////TICKET 710
     
   }// namespace query
