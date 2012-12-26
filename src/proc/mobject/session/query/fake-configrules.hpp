@@ -52,7 +52,6 @@
 #include "lib/util.hpp"
 #include "lib/p.hpp"
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/any.hpp>
 #include <string>
 #include <map>
@@ -123,15 +122,14 @@ namespace session {
     class MockTable
       : public proc::ConfigResolver
       {
-        typedef std::map<string,any> Tab;
-        typedef boost::scoped_ptr<Tab> PTab;
+        typedef std::map<QueryKey,any> Tab;
         
-        PTab answer_;
+        Tab  answer_;
         bool isInit_;
         
       protected:
         MockTable ();
-        const any& fetch_from_table_for (const string& queryStr);
+        any const& fetch_from_table_for (QueryKey const& query);
         
         // special cases....
         template<class TY> 
@@ -148,6 +146,14 @@ namespace session {
         
       private:
         void fill_mock_table ();
+        
+        /** shortcut for simply accessing a table entry */ 
+        template<class STRU>
+        any&
+        item (string const& querySpec)
+        {
+          return answer_[Query<STRU>(querySpec)];
+        }
       };
     
     
@@ -166,7 +172,7 @@ namespace session {
         virtual bool 
         resolve (Ret& solution, Query<TY> const& q)
           {
-            const any& entry = this->fetch_from_table_for ("TODO");//q.asKey());////////////////////////////////////////////////////////////////////////////////////////////TODO
+            any const& entry = this->fetch_from_table_for(q);
             if (!isnil (entry))
               {
                 Ret const& candidate (any_cast<Ret const&> (entry));

@@ -59,15 +59,13 @@ namespace session {
     
     namespace {
       
-      typedef std::pair<const string, any> AnyPair;
+      typedef std::pair<const QueryKey, any> AnyPair;
       
       /** helper to simplify creating mock table entries, wrapped correctly */
       template<class TY>
       AnyPair entry (Query<TY> const& query, typename WrapReturn<TY>::Wrapper& obj)
       {
-        UNIMPLEMENTED ("generic query-key");////////////////////////////////////////////////////////////////////////////////////////////TODO
-        return AnyPair ( "TODO"//Query<TY> (query).asKey()////////////////////////////////////////////////////////////////////////////////////////////TODO
-                       , any(obj)); 
+        return AnyPair(query, any(obj)); 
       }
       
       /** helper especially for creating structural assets from a capability query */
@@ -79,19 +77,8 @@ namespace session {
         string capabilities (caps);
         Query<STRU> query (capabilities); 
         Ptr obj = Struct::retrieve (query);
-        UNIMPLEMENTED("generic query-key");
-//      return AnyPair(query.asKey(), obj);////////////////////////////////////////////////////////////////////////////////////////////TODO
+        return AnyPair(query, obj);
       }
-      
-      /** shortcut for simply accessing a table entry */ 
-      template<class STRU, class PTAB>
-      any&
-      item (PTAB& table, const string& query)
-      {
-        UNIMPLEMENTED ("generic Query-key");////////////////////////////////////////////////////////////////////////////////////////////TODO
-        //return (*table)[Query<STRU>(query).asKey()];////////////////////////////////////////////////////////////////////////////////////////////TODO
-      }
-    
     }
     
     
@@ -110,14 +97,14 @@ namespace session {
       
       
       // for baiscpipetest.cpp ---------
-      answer_->insert (entry_Struct<cPP> ("stream(video)"));
-      answer_->insert (entry_Struct<cPP> ("stream(teststream)"));
-      item<cPP> (answer_, "stream(default)")  = item<cPP> (answer_,"stream(video)"); // set up a default stream
+      answer_.insert (entry_Struct<cPP> ("stream(video)"));
+      answer_.insert (entry_Struct<cPP> ("stream(teststream)"));
+      item<cPP> ("stream(default)")  = item<cPP> ("stream(video)"); // set up a default stream
       
-      answer_->insert (entry_Struct<Pipe> ("pipe(master), stream(video)"));
-      item<Pipe> (answer_, "") = item<Pipe>(answer_,"pipe(master), stream(video)");//   use as default
+      answer_.insert (entry_Struct<Pipe> ("pipe(master), stream(video)"));
+      item<Pipe> ("") = item<Pipe>("pipe(master), stream(video)");//   use as default
       
-      answer_->insert (entry_Struct<Pipe> ("pipe(ambiance)"));
+      answer_.insert (entry_Struct<Pipe> ("pipe(ambiance)"));
     }
     
     
@@ -134,8 +121,8 @@ namespace session {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
       Ptr newPipe (Struct::retrieve.newPipe (pipeID, streamID));
-      answer_->insert (entry<Pipe> (q, newPipe));
-      return true; // denotes query will now succeed...
+      answer_.insert (entry<Pipe> (q, newPipe));
+      return true; // indicates that the query will now succeed...
     }
     
     /** special case: create a new pipe for a specific stream ID */
@@ -145,7 +132,7 @@ namespace session {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
       Ptr newPipe (Struct::retrieve.made4fake (q));
-      answer_->insert (entry<Pipe> (q, newPipe));
+      answer_.insert (entry<Pipe> (q, newPipe));
       return true;
     }
     
@@ -157,7 +144,7 @@ namespace session {
       typedef WrapReturn<cPP>::Wrapper Ptr;
       
       Ptr newPP (Struct::retrieve.made4fake (q));
-      answer_->insert (entry<cPP> (q, newPP));
+      answer_.insert (entry<cPP> (q, newPP));
       return true;
     }
     
@@ -195,7 +182,7 @@ namespace session {
       
       if (!newTimeline)
         newTimeline = Struct::retrieve.made4fake (normalisedQuery); // no suitable Timeline found: create and attach new one
-      answer_->insert (entry<aTL> (normalisedQuery, newTimeline));  // "learn" the found/created Timeline as new solution
+      answer_.insert (entry<aTL> (normalisedQuery, newTimeline));  // "learn" the found/created Timeline as new solution
       return true;
     }
     
@@ -230,7 +217,7 @@ namespace session {
       
       if (!newSequence)
         newSequence = Struct::retrieve.made4fake (normalisedQuery);  // no suitable found: create and attach new Sequence
-      answer_->insert (entry<aSeq> (normalisedQuery, newSequence));  // "learn" the found/created new solution
+      answer_.insert (entry<aSeq> (normalisedQuery, newSequence));  // "learn" the found/created new solution
       return true;
     }
     
@@ -240,15 +227,14 @@ namespace session {
     bool 
     MockTable::set_new_mock_solution (Query<TY> const& q, typename WrapReturn<TY>::Wrapper& obj)
     {
-      UNIMPLEMENTED ("generic query-key");////////////////////////////////////////////////////////////////////////////////////////////TODO
-//    answer_->erase (q.asKey());////////////////////////////////////////////////////////////////////////////////////////////TODO
-      answer_->insert (entry<TY> (q, obj));
+      answer_.erase (q);
+      answer_.insert (entry<TY> (q, obj));
       return true;
     }
-    // generate the necessary specialisations-----------------------------
+    // generate the necessary specialisations-----------------------------------
     template bool MockTable::set_new_mock_solution (Query<Pipe> const&, PPipe&);
     
-
+    
     
     
     
@@ -259,37 +245,37 @@ namespace session {
     
     
     MockTable::MockTable ()
-      : answer_(new Tab()),
-        isInit_(false)
+      : answer_()
+      , isInit_(false)
     { }
-
     
-
+    
+    
     
     /** this is the (preliminary/mock) implementation
      *  handling queries for objects of a specific type
      *  and with capabilities or properties defined by
      *  the query. The real implementation would require
      *  a rule based system (Ichthyo plans to use YAP Prolog),
-     *  while this dummy implementation simply relpies based
+     *  while this dummy implementation simply replies based
      *  on a table of pre-fabricated objects. Never fails.
      *  @return smart ptr (or similar) holding the object,
      *          maybe an empty smart ptr if not found
      */
-    const any& 
-    MockTable::fetch_from_table_for (const string& queryStr)
+    any const& 
+    MockTable::fetch_from_table_for (QueryKey const& query)
     {
       static const any NOTFOUND;
       if (!isInit_) fill_mock_table();
       
-      Tab::iterator i = answer_->find (queryStr);
-      if (i == answer_->end())
+      Tab::iterator i = answer_.find (query);
+      if (i == answer_.end())
         return NOTFOUND;
       else
         return i->second;
     }
-    
-
+  
+  
   
   } // namespace query
 }}} // namespace proc::mobject::session
