@@ -148,7 +148,7 @@ namespace session {
   LocatingPin::LocatingSolution::getPipe()
   {
     TODO ("implement Placement LocatingSolution");
-    return asset::Pipe::query (lumiera::Query<asset::Pipe>("pipe(master)"));  // yet another idiotic dummy
+    return asset::Pipe::query ("pipe(master)");  // yet another idiotic dummy
   }
   
   

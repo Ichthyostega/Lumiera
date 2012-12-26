@@ -139,7 +139,7 @@ namespace play {
     inline PID
     getPipe (string id)
     {
-      return Pipe::query (Query<Pipe> ("id("+id+")"));
+      return Pipe::query ("id("+id+")");
     }
     
     inline TID

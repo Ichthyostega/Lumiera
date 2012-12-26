@@ -159,7 +159,7 @@ lumiera::query::setFakeBypass(pipeWithSpecificStream); /////////////////////////
       void
       forget (string pID)
         {
-          PPipe pipe = Pipe::query (Query<Pipe> ("pipe("+pID+")"));
+          PPipe pipe = Pipe::query ("pipe("+pID+")");
           REQUIRE (find (pipe->getPipeID()), "test assumes pre-registered default pipe");
           long cnt = pipe.use_count();
           

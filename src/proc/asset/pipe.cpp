@@ -58,10 +58,9 @@ namespace asset {
   
   
   PPipe 
-  Pipe::query (Query<Pipe> const& properties)
+  Pipe::query (string const& properties)
   { 
-    //////////////////////////////////////////////////TODO maybe provide a direct way to query, based on a predicate string?
-    return Struct::retrieve (properties); 
+    return Struct::retrieve (Query<Pipe> (properties));
   }
   
   

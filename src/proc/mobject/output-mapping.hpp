@@ -387,7 +387,7 @@ namespace mobject {
             // treat the special case
             // when actually requesting the "Nth default of this kind" 
             PPipe corresponding_sourcePipe
-              = asset::Pipe::query(
+              = asset::Struct::retrieve (
                   _mapping::build_corresponding_sourceQuery (query4pipe));
             ENSURE (corresponding_sourcePipe);
             
