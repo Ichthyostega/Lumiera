@@ -38,18 +38,8 @@ namespace lumiera {
   
   
   
-  
   typedef Goal::QueryID const& QID;
   
-  /** we're going to use QueryID as Map key... */
-  inline bool
-  operator< (QID q1, QID q2)
-  {
-    return (q1.kind < q2.kind)
-        || (q1.kind == q2.kind
-         && q1.type < q2.type
-           );
-  }
   
   
   

@@ -24,36 +24,16 @@
 /** @file hash-util.h
  ** Hash value types and utilities.
  ** This header defines the basic hash value types and provides some simple
- ** utilities to support working with hash valuesWhile the actual storage is assumed to be based on a POD, the type info is crucial
- ** to circumvent the problems with an "object" base class. Frequently, the need to
- ** manage some objects in a central facility drives us to rely on a common base class,
- ** irrespective of an actual common denominator in the semantics of the objects to
- ** be managed within this collection. Typically this results in this common base class
- ** being almost worthless as an API or interface, causing lots of type casts when using
- ** such a common object management facility. Passing additional context or API information
- ** on a metaprogramming level through the management interface helps avoiding these
- ** shortcomings. 
- ** 
- ** Here we build an ID facility with the following properties:
- ** - based on a configurable storage/implementation of the actual hash or index code.
- ** - tied to a specific hierarchy of objects (template parameter "BA")
- ** - providing an additional template parameter to pass the desired type info
- ** - establishing an type hierarchy relation between ID related to the base class
- **   and the IDs denoting specific subclasses, such that the latter can stand-in
- **   for the generic ID.
- ** - providing a Mixin, which allows any hierarchy to use this facility without 
- **   much code duplication, including an adapter for tr1::unordered_map
- ** - equality comparison
+ ** utilities to support working with hash values.
  **
- ** @see HashIndexed_test
- ** @see Placement usage example
+ ** @see HashIndexed
  **
  */
 
 
 
-#ifndef LIB_HASH_UTIL_H
-#define LIB_HASH_UTIL_H
+#ifndef LIB_HASH_VALUE_H
+#define LIB_HASH_VALUE_H
 
 
 /** 
@@ -79,6 +59,21 @@ namespace lib {
   
   
   namespace hash {
+    
+    /** meld the additional hash value into the given
+     *  base hash value. This is the standard formula
+     *  used by the STL and Boost to combine the
+     *  hash values of parts into a composite.
+     */
+    inline void
+    combine (size_t & combinedHash, size_t additionalHash)
+    {
+      combinedHash ^= additionalHash
+                    + 0x9e3779b9
+                    + (combinedHash<<6)
+                    + (combinedHash>>2);
+    }
+    
     // WIP more utils to come here....
   }
   

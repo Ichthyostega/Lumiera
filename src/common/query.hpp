@@ -30,6 +30,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/query-text.hpp"
 #include "lib/query-util.hpp"
+#include "lib/hash-value.h"
 #include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
@@ -143,6 +144,13 @@ namespace lumiera {
   
   
   inline bool
+  operator< (Goal::QueryID const& id1, Goal::QueryID const& id2)
+  {
+    return id1.kind < id2.kind
+        ||(id1.kind == id2.kind && id1.type < id2.type);
+  }
+  
+  inline bool
   operator== (Goal::QueryID const& id1, Goal::QueryID const& id2)
   {
     return id1.kind == id2.kind
@@ -169,6 +177,14 @@ namespace lumiera {
       return ResultType::ID<RES>::get();
     }
     
+    /** includes the QueryID type distinction into the given hash value */
+    inline size_t
+    taggedHash (size_t hash, Goal::QueryID typeID)
+    {
+      lib::hash::combine (hash, typeID.kind);
+      lib::hash::combine (hash, typeID.type);
+      return hash;
+    }
   }
   
   
@@ -294,7 +310,7 @@ namespace lumiera {
       friend size_t
       hash_value (Query const& q)
       {
-        return hash_value (q.def_);
+        return taggedHash (hash_value(q.def_), q.id_);
       }
     };
   
@@ -367,7 +383,8 @@ namespace lumiera {
         uint d1 = q1.degree();
         uint d2 = q2.degree();
         return d1 < d2
-            ||(d1 == d2 && q1.def_ < q2.def_);  
+            ||(d1 == d2 && (  q1.def_ < q2.def_ 
+                           ||(q1.def_ == q2.def_ && q1.id_ < q2.id_)));  
       }
       
       friend bool
@@ -379,7 +396,7 @@ namespace lumiera {
       friend size_t
       hash_value (QueryKey const& q)
       {
-        return hash_value (q.def_);  /////////////////TODO include the QueryID into the generated hash?
+        return taggedHash (hash_value(q.def_), q.id_);
       }
     };
   
