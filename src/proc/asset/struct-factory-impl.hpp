@@ -214,7 +214,6 @@ namespace asset {
     TODO ("extract additional properties/capabilities from the query...");
     const Asset::Ident idi (createIdent (caps));
     string sequenceID = caps.extractID ("sequence");
-    UNIMPLEMENTED("fabricate a Timeline by query");////////////////////////////////////////////////////////////////////////////////////////////TODO
     Query<Sequence> desiredSequence (isnil (sequenceID)? "" : "id("+sequenceID+")");
     PSequence sequence = recursive_create_(desiredSequence);
     ASSERT (sequence);
@@ -232,7 +231,6 @@ namespace asset {
     // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
     TODO ("actually extract properties/capabilities from the query...");
     string trackID = caps.extractID ("track");
-    UNIMPLEMENTED("fabricate a Sequence by query");////////////////////////////////////////////////////////////////////////////////////////////TODO
     Query<Track> desiredTrack (isnil (trackID)? "" : "id("+trackID+")");
 //  PTrack track = Session::current->query (desiredTrack);        ///////////////////////////////////TICKET #639
     // TODO: handle the following cases

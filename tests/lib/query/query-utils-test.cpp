@@ -68,21 +68,10 @@ namespace test{
         {
           if (isnil(arg))  arg = Cmdline ("Query normaliseID extractID removeTerm countPred");
           
-          if (contains (arg, "Query"      ))   check_Query ();
           if (contains (arg, "normaliseID"))   check_normaliseID();
           if (contains (arg, "extractID"  ))   check_extractID  ();
           if (contains (arg, "removeTerm" ))   check_removeTerm ();
           if (contains (arg, "countPred"  ))   check_countPred ();
-        }
-      
-      
-      
-      /** @test Query wrapper class basics */
-      void
-      check_Query ()
-        {
-          UNIMPLEMENTED ("generate a generic query key");////////////////////////////////////////////////////////////////////////////////////////////TODO
-//        cout << Query<Thing> ("I am writing a test sentence.").asKey() << endl;////////////////////////////////////////////////////////////////////////////////////////////TODO
         }
       
       
