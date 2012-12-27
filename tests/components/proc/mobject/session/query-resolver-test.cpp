@@ -199,11 +199,11 @@ namespace test{
       run (Arg) 
         {
           QueryResolver& resolver = buildTestQueryResolver();
-          Query<int> firstQuery;
-          explore (firstQuery (resolver));
+          Query<int> firstQuery("");
+          explore (firstQuery.resolveBy (resolver));
           
-          Query<string> secondQuery;
-          explore (secondQuery(resolver));
+          Query<string> secondQuery("");
+          explore (secondQuery.resolveBy(resolver));
         }
       
       template<typename ITER>
