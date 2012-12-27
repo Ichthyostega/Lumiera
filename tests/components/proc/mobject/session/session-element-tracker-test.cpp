@@ -211,11 +211,11 @@ namespace test    {
       /** @test ensure the asset cleanup doesn't interfere with session shutdown
        */
       void
-      verify_cleanup (PTimeline aTimeline_in_session)
+      verify_cleanup (PTimeline const& aTimeline_in_session)
         {
           CHECK (1 < aTimeline_in_session.use_count(), "test object should still be attached to session");
           Session::current.reset();
-          aTimeline_in_session->detach();              // should be a no-op and not cause any invalid access
+          CHECK (1 == aTimeline_in_session.use_count(), "session reset should have de-registered the test object");
         }
     };
   

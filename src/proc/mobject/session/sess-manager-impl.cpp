@@ -245,7 +245,8 @@ namespace session {
   SessManagerImpl::close ()
   {
     Lock sync(this);
-    lifecycle_->shutDown();
+    if (isUp())
+      lifecycle_->shutDown();
     pSess_.reset();
   }
   
@@ -258,7 +259,8 @@ namespace session {
   SessManagerImpl::reset ()
   {
     Lock sync(this);
-    lifecycle_->shutDown();
+    if (isUp())
+      lifecycle_->shutDown();
     lifecycle_->pullUp();
   }
   
@@ -268,7 +270,8 @@ namespace session {
   {
     UNIMPLEMENTED ("load serialised session");
     Lock sync(this);
-    lifecycle_->shutDown();
+    if (isUp())
+      lifecycle_->shutDown();
     lifecycle_->pullUp();
   }
   

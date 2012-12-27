@@ -530,7 +530,7 @@ END
 
 
 TEST "Query support utilities" QueryUtils_test  <<END
-out-lit: ..original : a A AA dufte 1a _1 A_A BÄH    White	 space  §&Ω%€GΩ%€ar  ☠☠☠  baäääääge!!!!!  :
+out-lit: ..original : a A AA dufte 1a _1 A_A BÄH    White 	 space  §&Ω%€GΩ%€ar  ☠☠☠  baäääääge!!!!!  :
 out-lit: normalised : a a aA dufte o1a o_1 a_A bH o white_space gar_bage :
 return: 0
 END

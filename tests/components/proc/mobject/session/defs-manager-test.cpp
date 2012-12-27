@@ -112,9 +112,9 @@ namespace test    {
           CHECK (pipe2 == pipe1);
           pipe2 = Pipe::query ("default(X)");
           CHECK (pipe2 == pipe1);
-          pipe2 = Session::current->defaults(Query<Pipe> ());
+          pipe2 = Session::current->defaults(Query<Pipe> (""));
           CHECK (pipe2 == pipe1);
-          pipe2 = asset::Struct::retrieve (Query<Pipe> ());
+          pipe2 = asset::Struct::retrieve (Query<Pipe> (""));
           CHECK (pipe2 == pipe1);
           pipe2 = asset::Struct::retrieve (Query<Pipe> ("default(P)"));
           CHECK (pipe2 == pipe1);
@@ -143,7 +143,7 @@ namespace test    {
       void
       failureCreatesNewDefault()
         {
-          PPipe pipe1 = Session::current->defaults(Query<Pipe> ());   // "the default pipe"
+          PPipe pipe1 = Session::current->defaults(Query<Pipe> ("")); // "the default pipe"
           
           string new_pID (str (format ("dummy_%s_%i")
                                % pipe1->getPipeID()

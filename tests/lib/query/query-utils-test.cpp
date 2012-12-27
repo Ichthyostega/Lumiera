@@ -66,7 +66,7 @@ namespace test{
       virtual void
       run (Arg arg) 
         {
-          if (isnil(arg))  arg = Cmdline ("Query normaliseID extractID removeTerm countPred");
+          if (isnil(arg))  arg = Cmdline ("normaliseID extractID removeTerm countPred");
           
           if (contains (arg, "normaliseID"))   check_normaliseID();
           if (contains (arg, "extractID"  ))   check_extractID  ();
@@ -85,11 +85,11 @@ namespace test{
           tokens.push_back ("  White \t space ");
           tokens.push_back ("§&Ω%€GΩ%€ar  ☠☠☠  baäääääge!!!!! ");
           
-          cout << "..original : " << tokens << " :"<<endl;
+          cout << "..original : "<<tokens<<" :"<<endl;
           
           for_each (tokens, normaliseID, _1 );
           
-          cout << "normalised : " << tokens << " :"<<endl;
+          cout << "normalised : "<<tokens<<" :"<<endl;
         }
       
       
