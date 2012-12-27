@@ -64,9 +64,9 @@ namespace query  {
   
   /** initialise the most basic internal defaults. */
   DefsManager::DefsManager ()  throw()
-    : defsRegistry(new DefsRegistry)
+    : defsRegistry_(new DefsRegistry)
   {
-    TODO ("setup basic defaults of the session");
+    TODO ("setup basic technical defaults of the session?");
   }
   
   
@@ -76,6 +76,13 @@ namespace query  {
   DefsManager::~DefsManager() {}
   
   
+  void
+  DefsManager::clear()
+  {
+    defsRegistry_.reset(new DefsRegistry);
+  }
+  
+  
   
   template<class TAR>
   P<TAR>
@@ -83,7 +90,7 @@ namespace query  {
   {
     P<TAR> res;
     QueryHandler<TAR>& typeHandler = ConfigResolver::instance();
-    for (DefsRegistry::Iter<TAR> i = defsRegistry->candidates(capabilities);
+    for (DefsRegistry::Iter<TAR> i = defsRegistry_->candidates(capabilities);
          bool(*i) ; ++i )
       {
         res = *i;
@@ -103,7 +110,7 @@ namespace query  {
     QueryHandler<TAR>& typeHandler = ConfigResolver::instance();
     typeHandler.resolve (res, capabilities);
     if (res)
-      defsRegistry->put (res, capabilities);
+      defsRegistry_->put (res, capabilities);
     return res;
   }
   
@@ -118,7 +125,7 @@ namespace query  {
     if (!candidate)
       return false;
     else
-      return defsRegistry->put (candidate, capabilities);
+      return defsRegistry_->put (candidate, capabilities);
   }
   
   
@@ -126,7 +133,7 @@ namespace query  {
   bool 
   DefsManager::forget  (const P<TAR>& defaultObj)
   {
-    return defsRegistry->forget (defaultObj);
+    return defsRegistry_->forget (defaultObj);
   }
   
   

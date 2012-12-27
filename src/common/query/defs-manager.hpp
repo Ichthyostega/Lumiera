@@ -60,7 +60,7 @@ namespace query  {
    */
   class DefsManager : private boost::noncopyable
     {
-      scoped_ptr<impl::DefsRegistry> defsRegistry;
+      scoped_ptr<impl::DefsRegistry> defsRegistry_;
       
     public:
       
@@ -104,6 +104,10 @@ namespace query  {
        */
       template<class TAR>
       bool forget  (P<TAR> const&);
+      
+      
+      /** @internal for session lifecycle */
+      void clear();
       
       
 // Q: can we have something along the line of...?
