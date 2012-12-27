@@ -123,8 +123,13 @@ namespace std { // forward declaration to avoid including <iostream>
   class basic_ostream;
   
   typedef basic_ostream<char, char_traits<char> > ostream;
+
 }
 
+namespace lib {
+  class Literal; 
+  class Symbol; 
+}
 
 
 namespace util {
@@ -350,6 +355,21 @@ namespace util {
           format (cString? cString : "↯", impl);
         }
     };
+  
+  template<>
+  struct _Fmt::Converter<lib::Literal>
+    {
+      static void
+      dump (lib::Literal const& literal, Implementation& impl)
+        {
+          format (literal.empty()? "" : literal.c(), impl);
+        }
+    };
+  
+  template<>
+  struct _Fmt::Converter<lib::Symbol>
+    : _Fmt::Converter<lib::Literal>
+    { };
   
   /** some custom types explicitly provide a string representation */
   template<typename VAL>

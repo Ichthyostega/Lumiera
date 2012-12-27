@@ -25,7 +25,7 @@
  ** 
  ** @todo for the (currently just planned as of 11/08) rules based configuration
  ** in the Proc-Layer a explicit Symbol datatype will probably very helpful.
- ** For now we just a typedef is sufficient. A real Symbol datatype should 
+ ** For now just a typedef is sufficient. A real Symbol datatype should 
  ** - be definable by string constant
  ** - integrate smoothly with std::string
  ** - provide a unique numeric index for each distinct Symbol

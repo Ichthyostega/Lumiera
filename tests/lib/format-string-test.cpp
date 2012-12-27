@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/format-string.hpp"
+#include "lib/symbol.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
@@ -180,6 +181,24 @@ namespace test {
           CHECK (_Fmt("%10s") % str == "   Lumiera" );
           CHECK (_Fmt("%7.4s") %str == "   Lumi"    );
           CHECK (_Fmt("%10c") % str == "         L" );
+          
+          const char* pch("edit");
+          CHECK (_Fmt("%s") %   pch == "edit"       );
+          CHECK (_Fmt("%10s") % pch == "      edit" );
+          CHECK (_Fmt("%7.3s") %pch == "    edi"    );
+          CHECK (_Fmt("%10c") % pch == "         e" );
+          
+          lib::Literal lit("your");
+          CHECK (_Fmt("%s") %   lit == "your"       );
+          CHECK (_Fmt("%10s") % lit == "      your" );
+          CHECK (_Fmt("%7.2s") %lit == "     yo"    );
+          CHECK (_Fmt("%10c") % lit == "         y" );
+          
+          lib::Symbol sym("freedom");
+          CHECK (_Fmt("%s") %   sym == "freedom"    );
+          CHECK (_Fmt("%10s") % sym == "   freedom" );
+          CHECK (_Fmt("%7.5s") %sym == "  freed"    );
+          CHECK (_Fmt("%10c") % sym == "         f" );
         }
       
       
@@ -248,6 +267,9 @@ namespace test {
           x.i_ = 42;
           CHECK (_Fmt("!!%s!!") % rv  == "!!Number-042!!");
           CHECK (_Fmt("!!%s!!") % x   == "!!Number-042!!");
+          
+          lib::Symbol sym("42");
+          CHECK (_Fmt("!!%s!!") % sym == "!!42!!");   // but especially Symbol datatype is explicitly treated like a string
         }
       
       
