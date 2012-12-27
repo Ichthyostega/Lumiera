@@ -210,6 +210,13 @@ namespace asset {
   }
   
   
+  void
+  AssetManager::clear()
+  {
+    INFO (progress, "Clearing the Asset registry...");
+    registry.clear();
+  }
+  
   
   list<PcAsset> 
   AssetManager::listContent() const

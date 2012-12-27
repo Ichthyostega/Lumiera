@@ -175,7 +175,7 @@ namespace session {
         void
         deconfigure()
           {
-            TODO ("reset the assets registered with AssetManager");
+            AssetManager::instance().clear();
             /////////////////////////////////////////////////////////////////// TICKET #154
           }
         

@@ -93,23 +93,43 @@ namespace asset {
     {
       IdHashtable table;
       
-      DB () : table() { }
-      ~DB ()          {clear();}
+      DB()
+        : table()
+        { }
+      
+     ~DB()
+        {
+         clear();
+        }
       
       friend class lib::singleton::StaticCreate<DB>;
       
       
     public:
       template<class KIND>
-      void  put (ID<KIND> hash, P<KIND>& ptr) { table[hash] = static_pointer_cast (ptr);  }
-      void  put (ID<Asset> hash, PAsset& ptr) { table[hash] = ptr; }
-      bool  del (ID<Asset> hash)              { return table.erase (hash); }
-      
-      template<class KIND>
       P<KIND> 
       get (ID<KIND> hash)  const
         {
           return dynamic_pointer_cast<KIND,Asset> (find (hash));
+        }
+      
+      template<class KIND>
+      void
+      put (ID<KIND> hash, P<KIND>& ptr)
+        {
+          table[hash] = static_pointer_cast (ptr);
+        }
+      
+      void
+      put (ID<Asset> hash, PAsset& ptr)
+        {
+          table[hash] = ptr;
+        }
+      
+      bool
+      del (ID<Asset> hash)
+        {
+          return table.erase (hash); 
         }
       
       /** removes all registered assets and does something similar 
@@ -120,28 +140,21 @@ namespace asset {
        *  could result in segfaults. This doesn't seem to be
        *  a problem, though, because we register and process
        *  \e all assets and the net effect is just breaking
-       *  any cyclic dependencies) 
+       *  any cyclic dependencies)
+       * @note EX_FREE 
        */ 
       void
-      clear () throw()
-        {
-          try
-            {
-              IdHashtable::iterator i = table.begin(); 
-              IdHashtable::iterator e = table.end(); 
-              for ( ; i!=e ; ++i )
-                i->second->dependants.clear();
-              
-              table.clear();
-            }
-          catch (lumiera::Error& EX)
-            {
-              WARN (progress, "Problems while clearing Asset registry: %s", EX.what());
-            }
-          catch (...)
-            {
-              ERROR (progress, "Serious trouble while clearing Asset registry.");
-        }   }
+      clear ()
+        try
+          {
+            IdHashtable::iterator i = table.begin(); 
+            IdHashtable::iterator e = table.end(); 
+            for ( ; i!=e ; ++i )
+              i->second->dependants.clear();
+            
+            table.clear();
+          }
+        ERROR_LOG_AND_IGNORE (progress, "cleaning the Asset registry")
       
       
       /** intended for diagnostics */
@@ -153,6 +166,7 @@ namespace asset {
           for ( ; i!=e ; ++i )  
             output.push_back (i->second);
         }
+      
       
     private:
       const PAsset &
