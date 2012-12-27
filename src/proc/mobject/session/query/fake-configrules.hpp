@@ -129,6 +129,7 @@ namespace session {
         
       protected:
         MockTable ();
+        virtual void reset();
         any const& fetch_from_table_for (QueryKey const& query);
         
         // special cases....

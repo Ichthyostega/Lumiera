@@ -51,12 +51,12 @@
 
 #include "proc/asset/struct-scheme.hpp"
 
+#include "lib/format-string.hpp"
 #include "lib/query-util.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
 #include <cstdlib>
 
 
@@ -64,9 +64,8 @@
 namespace proc {
 namespace asset {
   
-  using boost::format;
-  
   using lib::Symbol;
+  using util::_Fmt;
   using util::uNum;
   using util::isnil;
   using util::contains;
@@ -119,8 +118,9 @@ namespace asset {
                // no name-ID contained in the query...
               //  so we'll create a new one
               static int i=0;
-              static format namePattern ("%s.%d");
-              nameID = str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );
+              nameID = _Fmt("%s.%d")
+                           % StructTraits<STRU>::namePrefix()
+                           % (++i);
             }
           ENSURE (!isnil (nameID));
           
@@ -176,7 +176,7 @@ namespace asset {
       template<class STRU>
       STRU* fabricate (Query<STRU> const& caps)
         {
-        throw error::Config ( str(format("The following Query could not be resolved: %s.") % caps.asKey())
+        throw error::Config ("The following Query could not be resolved: " + caps.asKey()
                             , LUMIERA_ERROR_CAPABILITY_QUERY );
         }
       

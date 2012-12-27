@@ -108,6 +108,19 @@ namespace session {
     }
     
     
+    /** clear the contents of the mock solution table.
+     *  Used by Session lifecycle to restore pristine state
+     */
+    void
+    MockTable::reset()
+    {
+      answer_.clear();
+      isInit_ = false;
+      INFO (config, "discarded all config query mock answers.");
+    }
+    
+    
+    
     
     
     /* under some circumstances we need to emulate the behaviour *
@@ -183,6 +196,7 @@ namespace session {
       if (!newTimeline)
         newTimeline = Struct::retrieve.made4fake (normalisedQuery); // no suitable Timeline found: create and attach new one
       answer_.insert (entry<aTL> (normalisedQuery, newTimeline));  // "learn" the found/created Timeline as new solution
+      answer_.insert (entry<aTL> (query, newTimeline));
       return true;
     }
     
@@ -218,6 +232,7 @@ namespace session {
       if (!newSequence)
         newSequence = Struct::retrieve.made4fake (normalisedQuery);  // no suitable found: create and attach new Sequence
       answer_.insert (entry<aSeq> (normalisedQuery, newSequence));  // "learn" the found/created new solution
+      answer_.insert (entry<aSeq> (query, newSequence));
       return true;
     }
     

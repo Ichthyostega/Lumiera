@@ -199,6 +199,10 @@ namespace lumiera {
         virtual ~ConfigRules() {} 
         
       public:
+        /** roll back to a pristine yet operational state.
+         *  Discards all information collected through use */
+        virtual void reset()   =0;
+        
         // TODO: find out what operations we need to support here for the »real solution« (using Prolog)
       };
       

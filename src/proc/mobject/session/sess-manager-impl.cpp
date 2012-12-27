@@ -42,6 +42,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/sess-manager-impl.hpp"
 #include "proc/mobject/session/lifecycle-advisor.hpp"
+#include "proc/config-resolver.hpp"
 #include "proc/asset/timeline.hpp"
 #include "common/query/defs-manager.hpp"
 #include "common/query.hpp"
@@ -175,6 +176,8 @@ namespace session {
         void
         deconfigure()
           {
+            session_->defaults.clear();
+            ConfigResolver::instance().reset();    // forget any configuration rules
             AssetManager::instance().clear();
             /////////////////////////////////////////////////////////////////// TICKET #154
           }
