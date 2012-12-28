@@ -96,7 +96,8 @@ namespace session {
       
       
       DiscoveryQuery ()
-        : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
+        : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY)
+                 , lib::QueryText("TODO")) /////////////////////////////////////////////TODO: generate syntactic representation
         { }
       
     private:

@@ -233,24 +233,12 @@ namespace lumiera {
           return id;
         }
       
-      /**
-       * Extension point for specific kinds of queries
-       * to generate a generic definition from some specialised
-       * internal representation.
-       * @return a complete definition of this query in predicate form
-       */
-      virtual lib::QueryText
-      buildSyntacticRepresentation()
-        {
-          return this->def_;
-        }
       
       class Builder;
       
-      explicit
-      Query (QueryID typeID)
+      Query (QueryID typeID, lib::QueryText const& genericQuerySpec)
         : Goal (typeID)
-        , def_(this->buildSyntacticRepresentation())
+        , def_(genericQuerySpec)
         { }
       
       Query (QueryID typeID, string querySpec)

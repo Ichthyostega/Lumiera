@@ -4840,8 +4840,22 @@ See also the notes on
 &amp;nbsp; &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="QueryExchange" modifier="Ichthyostega" modified="201211151656" created="201211060206" tags="Rules draft" changecount="3">
-<pre>There is a common denominator amongst all queries: they describe a pattern of relations, which can be //satisfied// by providing a //solution.// But queries can be used in a wide variety of situations, each binding them to a more specific meaning and each opening the possibility to use a specialised resolution mechanism. For example, a query //might// actually mean to fetch and filter the contents of some sub-section of the session model. Or it might cause the fabrication an registration of some new model content object. In order to tie those disjoint kinds of queries together, we need a mechanism to exchange one kind of query with another one, or to derive one from another one. This ''exchange of queries'' actually is a way of ''remoulding'' and rebuilding a query -- which is based on a common syntactic representation of all queries, cast into terms of predicate logic. Besides, there is a common, unspecific, generic resolution mechanism ({{red{planned 11/12}}}) , which can delegate to more specialised resolvers when applicable.
+<div title="QueryDefinition" modifier="Ichthyostega" created="201212282318" tags="Rules draft" changecount="1">
+<pre>While there are various //specialised queries// to be issued and resolved efficiently, as a common denominator we use a common ''syntactic representation'' of queries based on predicate logic. This allows for standardised processing when applicable, since a //generic query// can be used as a substitute of any given specialised kind of query. Moreover, using the predicate logic format as common definition format allows for programmatic extension, reshaping, combining and generic meta processing of queries within the system.
+
+!the textual syntactic form
+{{red{WIP 12/2012}}} for the moment we don't use any kind of  &quot;real&quot; resolution engine, thus the syntactic representation is kind of a design draft.
+The plan is to use a syntax which can be fed directly to a Prolog interpreter or similar existing rules based systems.
+
+!the necessity of using an internal representation
+Since the intention is to use queries pervasively as a means of orchestrating the interplay of the primary controlling facilities, the internal representation of this syntactic exchange format might become a performance bottleneck. The typical usage pattern is just to create and issue a query to retrieve some result value -- thus, in practice, we rarely need the syntactic representation, while being bound to create this representation for sake of consistency.
+
+!textual vs parsed-AST representation
+For the initial version of the implementation, just storing a string in Prolog syntax is enough to get us going. But on the long run, for the real system, a pre-parsed representation in the style of an _A_bstract __S__yntax __T__ree seems more appropriate: through the use of some kind of symbol table, actual queries can be tagged with the common syntactic representation just by attaching some symbol numbers.
+</pre>
+</div>
+<div title="QueryExchange" modifier="Ichthyostega" modified="201212282254" created="201211060206" tags="Rules draft" changecount="4">
+<pre>There is a common denominator amongst all queries: they describe a pattern of relations, which can be //satisfied// by providing a //solution.// But queries can be used in a wide variety of situations, each binding them to a more specific meaning and each opening the possibility to use a specialised resolution mechanism. For example, a query //might// actually mean to fetch and filter the contents of some sub-section of the session model. Or it might cause the fabrication an registration of some new model content object. In order to tie those disjoint kinds of queries together, we need a mechanism to exchange one kind of query with another one, or to derive one from another one. This ''exchange of queries'' actually is a way of ''remoulding'' and rebuilding a query -- which is based on a [[common syntactic representation|QueryDefinition]] of all queries, cast into terms of predicate logic. Besides, there is a common, unspecific, generic resolution mechanism ({{red{planned 11/12}}}) , which can delegate to more specialised resolvers when applicable.
 
 !handling of queries
 Queries are are always exposed or revealed at some point or facility allowing to pose queries. This facility remains the owner of the query instances and knows its concrete flavour (type). But queries can be referred to and exchanged through the {{{Query&lt;TY&gt;}}}-abstraction.</pre>
@@ -4909,9 +4923,10 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;configuration data&quot; (including the actual plugin implementation to be loaded)
 </pre>
 </div>
-<div title="QueryRegistration" modifier="Ichthyostega" modified="201211151653" created="201006190112" tags="Rules draft impl discuss" changecount="4">
+<div title="QueryRegistration" modifier="Ichthyostega" modified="201212282256" created="201006190112" tags="Rules draft impl discuss" changecount="5">
 <pre>//Querying for some suitable element,// instead of relying on hard wired dependencies, is considered a core pattern within Lumiera.
 But we certainly can't expect to subsume every query situation to one single umbrella interface, so we need some kind of ''query dispatch'' and a registration mechanism to support this indirection. This could lead to a situation, where the term &amp;raquo;query&amp;laquo; is just a vaguely defined umbrella, holding together several disjoint subsistems. Yet, while in fact this describes the situation in the code base as of this writing, {{red{11/2012}}}, actually all kinds of queries are intended to share a //common semantic space.// So, in the end, we need a mechanism to [[exchange queries|QueryExchange]] with one another, and this mechanism ought to be based on the common //syntactic representation through terms of predicate logic.//
+Common definition forma &amp;rarr; QueryDefinition
 Closely related is the &amp;rarr; TypedQueryProblem
 
 !Plans and preliminary implementation
