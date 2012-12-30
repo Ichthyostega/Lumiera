@@ -354,10 +354,30 @@ Most of the material in this section is to be found in the proc layer and in the
 backend.
 
 
-Session storage
-~~~~~~~~~~~~~~~
-[red]#to be written#
 
+Session Storage
+~~~~~~~~~~~~~~~
+[red]#Deatils to be written#
+The current representation of a project resident in memory is internally known 
+as a session, whereas from a GUI user perspective, this is known as a project.
+In this section, we will use the term ``session'' as we discussing the internals
+of Lumiera here. 
+
+Everything is stored in a session.  If a user saves a session, then there should
+be no difference to the user whether they continue working or throw all their
+work away and load the session that has just been saved. In other words
+``everything is stored in a session!''
+
+This ambitious goal has a number of advantages.  If all steps are to be stored,
+then all steps must be available as an object to be stored. We can perform
+operations on these objects.  For example unlimited ability to undo previous
+steps, selective undo of previous steps or the possibility of merging various
+steps might even be a possibility.  For example, work on a project at the
+office and work on the same project at home can be merged each morning and
+evening. 
+
+Session storage is envisaged to be performed as databank with logging, some
+search facilities and a number of features associated with databanks.
 
 
 //databank with logging, no data loss.
@@ -375,7 +395,7 @@ Placements
 ~~~~~~~~~~
 
 Generic mechanism to stitch together media objects. Any placement may contain
-a list of conditions how to locate the placed object, examples being
+a list of conditions on how to locate the placed object, examples being
 time-absolute/relative, relative to another object, or relative to some
 specific source media frame.
 
