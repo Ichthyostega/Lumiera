@@ -97,80 +97,87 @@ be built up from these fundamental principles.
 Open Ended Combination of Building Blocks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Lumiera is not so much defined in terms of _features_. It is more like a
-workshop, where individual _basic building-blocks_ can be combined together in 
-interesting ways to form more complex structures. These basic modules, entities
-or objects each have a distinct _type_ explicitly limiting the
-connections. Within these limits, any conceivable combination is supported
-without further hidden limitations.
+Lumiera is not so much defined in terms of _features_.  Instead it can be better
+envisaged as a workshop in which the emphasis is on individual 
+_basic building-blocks_ that can be combined together in interesting ways to
+form more complex structures. These basic modules, entities 
+or objects each have a distinct _type_ which explicitly limits the
+connections between the modules. Within these limits, any conceivable
+combination is possible without additional hidden restrictions.
 
-Lumiera is neither a set of Lego bricks, nor is it a business application
+Lumiera is not a set of Lego bricks, nor is it a business application
 driven by finite usage stories.
 
 
-Medium level Abstraction and Project specific Conventions
+Medium Level Abstraction and Project Specific Conventions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 These building blocks within Lumiera create a moderate level of abstraction; a
-user may, if desired, directly manipulate through the GUI clips, individual
-effects, masks, and even the placements xref:placement[->] used to stitch the
-objects together, which is comparatively low-level. On the other hand, these
-abstractions shield the user from the actual technical details like format
-conversions and accessing individual channels.
+user may, if desired, directly manipulate -- using, for example, GUI clips -- 
+individual effects, masks, and even the placements xref:placement[->] used to
+stitch the objects together, which is comparatively low-level. Such abstraction
+protects the user from technical details such as format conversion or access
+to individual channels. 
 
-To complement this approach, Lumiera does _not_ rely on hard wired, global
-conventions -- rather we allow to build up project specific conventions and
-rules xref:rules[->] to fit the given requirements and preferred working
-style. 
+To complement this approach, Lumiera does _not_ rely on hard-wired, global
+conventions -- rather we allow the building up of project specific conventions and
+rules xref:rules[->] to fit a given requirement and preferred working style. 
 
-To ease the user in getting started with Lumiera, it will be supplied with a
-rather conventional template and a default configuration will be supplied that
-is relative conventional.
-
+Lumiera will be supplied with a conventional template and a default
+configuration to ease the learning curve #for new users.
 
 
 [[graphs]]
 Rendering is Graph Processing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Processing of Video (and audio) data can be generalized as graph processing
-(more precisely ``directed acyclic graphs''). Data flows on the edges of these
-graphs and is processed in the nodes.
+Processing video (and audio) data can be conceived as a graph (more precisely
+``directed acyclic graphs'').  In this model of video processing, data flows
+along the edges of the graph and is processed at the nodes.
+
+The following figure depicts manipulating video data as a graph.  The nodes of
+the root of the graph is where data input occurs. From there, the data moves on
+to the next nodes: the direct syblings of the root.  Here, the video data
+pre-processing occurs.  All other operations on the data can be represented by
+nodes, and data flows from one operation to the next along the nodes of the
+graph.
+
 
 image:{imgd}/lumiera_big_graph.png[Example for a graph]
 
 When we look at this model we discover that we only need to build
 xref:builder[->] such graphs, the nodes themselves can be seen as black boxes
 and will be implemented by plugins xref:plugins[->]. Moreover one can
-preconfigure subgraphs and handle them as single entity xref:pluginstack[->].
+pre-configure subgraphs and handle them as a single entity xref:pluginstack[->].
 
-In Lumiera everything will be translated into such a graph. Your footage will
-be demultiplexed xref:demultiplexer[->] at a first node, down to the encoding
-xref:encoder[->] and multiplexer xref:multiplexer[->] which assembles the
-final video.
+In Lumiera everything will be translated into such a graph. Footage will
+be demultiplexed xref:demultiplexer[->] at the first node, thereafter to the
+encoding stage xref:encoder[->] and on to the multiplexer xref:multiplexer[->]
+which assembles the final video.
 
 
 Pulling not Pushing
 ~~~~~~~~~~~~~~~~~~~
 
 At a first glance, it looks fairly natural to set up the graphs xref:graphs[->]
-as described above and then push data into the system through the input nodes
-whereas the final result can then be seen soon on the output node. Several
-multimedia frameworks use this approach. However this scheme exhibits a number
-of shortcomings which make it inappropriate for non-linear video editing.
+as described above.  Data can then be pushed into the system through the input
+nodes and the final result can be seen at the output node. Several multimedia
+frameworks use this approach. However this scheme exhibits a number of
+shortcomings which make it inappropriate for non-linear video editing. 
 
-Lumiera instead pulls data though the pipe, i.e., a request starts at the
-output node and makes its way up to the inputs. This has certain advantages
-xref:pull[->], which will be explained later.
+Lumiera takes a different approach.  Data is pulled through a pipe, i.e., a
+request starts at the output node and makes its way back up through the graph to
+the inputs. This scheme offers a number of advantages over the naive scheme
+xref:pull[->], beu we will defer the reasons until later. 
 
 
 Don't waste work
 ~~~~~~~~~~~~~~~~
 
-Rendering A/V Data can be quite CPU intensive. To ensure that we do not waste
-any CPU power by rendering things twice, or worse still, having to throw away
-results because it couldn't rendered in time, we use in Lumiera sophisticated
-caching xref:caching[->] and profiling xref:profiling[->].
+Rendering A/V data can be CPU intensive. To relieve the CPU  workload by not
+rendering material twice or avoiding having to throw away material because it
+could not be rendered in time, Lumiera employs a sophisticated means of using
+cache xref:caching[->] and profiling xref:profiling[->].
 
 
 The visible Universe
