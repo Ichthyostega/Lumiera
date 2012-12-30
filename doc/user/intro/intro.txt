@@ -36,6 +36,7 @@ Vision
 
 // objective and goals of the project
 
+
 Lumiera strives towards being a _professional non-linear video editor_.  It is
 important to note that by ``professional'' we do not necessarily imply
 ``commercial'' or even ``industrial''.  We do, however, wish to suggest an
