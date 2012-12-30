@@ -190,26 +190,41 @@ Now its time to take a look at the prelimary Lumiera GUI:
 image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 
 
-Lumiera consists of three major parts: the GUI, proc and backend. The initial
-GUI Lumiera will ship with is not the only GUI possible, indeed Lumiera can work
-satisfactorily without a GUI, for example, for specail purposes. 
-headless rendernode xref:rendernode[->] or frameserver
-xref:frameserver[->]. Later scripts will be written for automated
-processing. Special purpose GUIs are also envisaged later.
+Lumiera consists of three major parts: 
+- Graphical User Interface (GUI)
+- Proc layer 
+- Backend
 
-The GUI screenshot you above is more or less the default you see when when you
-start Lumiera up for the first time.  A 2nd viewer is planned for later to be
-added to the default. We support a much more sophisticated screen concept
-xref:screenconcept[->] to adapt to different workplaces and workflows.
+In this section, we discuss only the GUI.
+
+Lumiera will initially ship with a standard, default GUI. This, however, is not
+the only GUI possible to operate Lumiera.  Indeed, Lumiera can work
+satisfactorily without a GUI, for example, for special purposes.  
+headless rendernode xref:rendernode[->] or frameserver
+xref:frameserver[->].  At a later stage in the project,  scripts will be written
+to faciltate automated processing.  GUIs geared towrads special purposes are
+also envisaged later.
+
+The screenshot of the GUI presented above is more or less the standard GUI when
+it is started for the first time without any user configuration etc.  A second
+viewer is planned for later to be added to the default. We support a much more
+sophisticated screen concept xref:screenconcept[->] to adapt to different
+workplaces and workflows. 
+
+At a first glance, the GUI might seem somewhat overwhelming, something similar
+to the cockpit of a jumbo jet.  However, nearly all the bells and whistles can
+be subdivided into groups according to their functionality.  The following
+sub-sections discusses the more prominent groupings.
 
 
 Viewer
 ~~~~~~
 
-The viewer is an area where material can be displayed, i.e., ``play-back'',
-which also supports audio playback connections. As there are many sources that
+The viewer is an area where material can be displayed, i.e., ``play-back''.
+A viewer is a window where material can not only be played back or viewed, but
+support for audio will also be provided.  As there are many sources that
 can be displayed, a viewer is attached to a source via the viewer switch board.
-Timelines, probepoints, wiretaps and individual clips are examlpes of sources
+Timelines, probepoints, wiretaps and individual clips are examples of sources
 that can be atached to a viewer. Moreover, the number of viewers open at any one
 time is only limited by the hardware, and each viewer can be collapsed, hooked
 up to a beamer or monitor.
@@ -218,21 +233,22 @@ up to a beamer or monitor.
 Transport Controls
 ~~~~~~~~~~~~~~~~~~
 
-The layout in current gui is rather preliminary -- it is not finally decided
-where transport controls will be integrated; possibly as its own gui element
+The preliminary layout in the current gui is rather provisional -- a final decision
+has yet to be taken on where the transport controls will be located.  In later
+versions of the standard GUI, the transport controls will change.  There is even
+a possibility that the transport controls will be allocated their own GUI element.
 
-This are devices either controlled by widgets or by some input device
-(MIDI, control surface, etc) so their gui may look differently.
-Either way they connect to a Play Controler xref.. in the core which
-manages playing and cursor positioning.
+Transport controls are devices that are controlled by widgets or by some input device
+(MIDI, control surface, etc) so the look-and-feel of the transport control
+widget may vary, depending on what the transport controls have been assigned
+to.  Irrespective of their look-and-feel, they are connected to a play
+controller.
+// TODO xref..
+A play controller coordinates playback, cueing and rewinding.  Transport
+controls are ganged when they attach to the same play controler.
 
-thus there will be some gui facility to attach Transport controls to Play
-Controllers. Transport controls are ganged when they attach to the same
-Play Controler.
-
-just playing some footage for preview creates a simple internal timeline,
-no magic here.
-
+// just playing some footage for preview creates a simple internal timeline,
+// no magic here.
 // TODO: bit unrelated, think about how ganging controls in general should
 // work, also for faders, masks and so on
 // Note by Ichthyo: the connection to a fader is handled through the placements,
@@ -244,17 +260,17 @@ Timeline View
 ~~~~~~~~~~~~~
 
 A timeline is a container that provides a time axis and an output. The output
-can de derived from various sources and have different configurations.  An
+can be derived from various sources, each with a different configuration.  An
 output can have various configurations, for each output configuration, there
 will be one timeline. A timeline does not temporally arrange material, this is
-performed by a sequence, which can be snapped to a timeline.
+performed by a sequence, which can be connected (snapped) to a timeline.
 
-A typical film will define many sequences, but only a few timelines. A sequence
-contains a number of tracks which are ordered in a hierarchy. Tracs do not have
-any format associated with them and more or less anything can be put into a
-track. Consequently, audio and video material can be equally assigned to a
-track, there is no discrimination between audio and video in the Lumiera concept
-of a track.
+A typical film will define many sequences, but will only have a few timelines. A
+sequence contains a number of tracks which are ordered in a hierarchy. Tracs do
+not have any format associated with them and more or less anything can be put
+into a track. Consequently, audio and video material can equally be assigned to
+a track, there is no discrimination between audio and video in the Lumiera
+concept of a track.
 
 A timeline must be assigned to viewer if playback viewing is desired.
 
@@ -280,10 +296,10 @@ A timeline must be assigned to viewer if playback viewing is desired.
 
 Busses
 ~~~~~~
-
+// TODO: needs rewriting.
 The GUI provides a separate _bus view_, showing the master busses (subgroups)
 in a manner similar to an audio mixing desk. Any bus is just a means of collecting
-and and adding (aka overlaying) together the output of various kinds of media
+and and adding (aka overlaying) together output of various kinds of media
 (video, audio, number of channels), produced by various processing elements and
 from other busses. These global busses can be concieved as being part of the
 timeline. 
@@ -291,8 +307,8 @@ timeline.
 
 Asset View
 ~~~~~~~~~~
-We can conceive the Asset View as the timeline's book keeper: it manages the various
-constituent in the timeline.  Moreover, in addition to managing timeline
+An Asset View can be conceived as the timeline's book keeper: it manages the
+various constituents in the timeline.  Moreover, in addition to managing timeline
 constituents, raw material, clips, bins (folders) are managed by the Asset
 View, i.e., typical management operations including, deleting, adding,
 naming, tagging, groupping into bins, etc. all occur here.
@@ -302,8 +318,8 @@ Plugins are also managed in the Asset View.
 
 
 Manages all assets available in one project.
-  * source media/footage/soundfiles
 
+  * source media/footage/soundfiles
   * all available effects and transitions
   * internal artefacts like sequences and automation data sets
 
