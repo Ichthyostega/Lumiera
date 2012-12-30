@@ -38,6 +38,7 @@
 #include "proc/mobject/builder/segmentation.hpp"
 #include "proc/mobject/builder/fixture-change-detector.hpp"
 
+namespace proc {
 namespace mobject {
 namespace builder {
   
@@ -82,4 +83,4 @@ namespace builder {
   
   
   
-}}// namespace mobject::builder
+}}}// namespace proc::mobject::builder

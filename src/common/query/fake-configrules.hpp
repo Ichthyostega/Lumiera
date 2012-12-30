@@ -54,10 +54,13 @@
 namespace lumiera {
   namespace query {
     
+    namespace asset = proc::asset;
+    
     using asset::Pipe;
     using asset::ProcPatt;
     using asset::PProcPatt;
-    using mobject::Session;
+    using proc::mobject::Session;
+    using lib::meta::InstantiateChained;
     
     using util::isnil;
     
@@ -140,7 +143,7 @@ namespace lumiera {
         virtual bool 
         resolve (Ret& solution, Query<TY> const& q)
           {
-            const any& entry = fetch_from_table_for (q.asKey());
+            const any& entry = this->fetch_from_table_for (q.asKey());
             if (!isnil (entry))
               {
                 Ret const& candidate (any_cast<Ret const&> (entry));
@@ -163,7 +166,7 @@ namespace lumiera {
             if (is_defaults_query (newQuery))  // modified query..
               return solution = Session::current->defaults (newQuery);
                                              //   may cause recursion
-            if (detect_case (solution, newQuery))
+            if (this->detect_case (solution, newQuery))
               return resolve (solution, newQuery);
             
             return solution = Ret();     // fail: return default-constructed empty smart ptr
@@ -246,10 +249,10 @@ namespace lumiera {
      * values for some types of interest for testing and debugging.
      */
     class MockConfigRules 
-      : public typelist::InstantiateChained < InterfaceTypes           
-                                            , LookupPreconfigured  // building block used for each of the types
-                                            , MockTable           //  for implementing the base class (interface) 
-                                            >
+      : public InstantiateChained < InterfaceTypes           
+                                  , LookupPreconfigured  // building block used for each of the types
+                                  , MockTable           //  for implementing the base class (interface) 
+                                  >
       {
       protected:
         MockConfigRules ();                                   ///< to be used only by the singleton factory

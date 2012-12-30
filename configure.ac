@@ -110,7 +110,7 @@ AC_CHECK_FUNCS(clock_gettime,
 	AC_MSG_NOTICE([clock_gettime is in the clib]),
 	AC_CHECK_LIB(rt, clock_gettime,
 		[LUMIERA_LIBS="$LUMIERA_LIBS -lrt"],
-		AC_MSG_ERROR([No library providing clock_gettime found])	
+		AC_MSG_ERROR([No library providing clock_gettime found])
 	)
 )
 
@@ -142,6 +142,13 @@ AC_CHECK_HEADER([boost/regex.hpp],
         [LUMIERA_BOOST_LIBS="$LUMIERA_BOOST_LIBS -lboost_regex-mt"],
         AC_MSG_ERROR([boost::regex missing                      (http://www.boost.org/)])
         )
+
+AC_CHECK_HEADER([boost/filesystem.hpp],
+        [LUMIERA_BOOST_LIBS="$LUMIERA_BOOST_LIBS -lboost_filesystem-mt"],
+        AC_MSG_ERROR([boost::filesystem missing                 (http://www.boost.org/)])
+        )
+
+
 
 AC_LANG_POP([C++])
 AC_SUBST(LUMIERA_BOOST_CFLAGS)

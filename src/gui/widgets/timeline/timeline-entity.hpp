@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
 /** @file timeline-entity.hpp
  ** Declares the Timeline Entity class.
  */
@@ -26,21 +27,22 @@
 #ifndef TIMELINE_ENTITY_HPP
 #define TIMELINE_ENTITY_HPP
 
+#include "gui/gtk-base.hpp"
+#include "lib/time/timevalue.hpp"
+
 #include <string>
-
-// TODO: Remove once we get better measure of duration.
-extern "C" {
-#include <stdint.h>
-#include <gavl/gavltime.h>
-}
-
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 #include <cairomm/cairomm.h>
+
 
 namespace gui {
 namespace widgets {
 namespace timeline {
-
+  
+  using lib::time::Time;
+  using std::tr1::shared_ptr;
+  
+  
   class DrawStrategy;
   class TimelineViewWindow;
 
@@ -51,14 +53,12 @@ namespace timeline {
   class Entity {
   protected:
 
-    Entity(boost::shared_ptr<timeline::DrawStrategy> drawStrategy);
+    Entity (shared_ptr<timeline::DrawStrategy> drawStrategy);
 
     virtual ~Entity();
 
   public:
 
-    virtual gavl_time_t
-    getBegin () const = 0;
     
     virtual void
     draw(Cairo::RefPtr<Cairo::Context> cairo,
@@ -67,7 +67,10 @@ namespace timeline {
     bool
     getEnabled () const;
 
-    virtual gavl_time_t
+    virtual Time
+    getBegin () const = 0;
+    
+    virtual Time
     getEnd () const = 0;
 
     virtual std::string
@@ -80,7 +83,7 @@ namespace timeline {
 
     bool enabled;
 
-    boost::shared_ptr<timeline::DrawStrategy> drawStrategy;
+    shared_ptr<timeline::DrawStrategy> drawStrategy;
   };
 
 }   // namespace timeline

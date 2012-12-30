@@ -82,6 +82,12 @@ namespace lib {
    *          to be used within the builder, which executes in a dedicated
    *          thread. Thus I doubt lock contention could be a problem and
    *          we can avoid using a mutex per instance. Re-evaluate this!
+   * @todo    currently all AllocationCluster instances share the same type-IDs.
+   *          When used within different usage contexts this leads to some slots
+   *          remaining empty, because not every situation uses any type encountered.
+   *          wouldn't it be desirable to have multiple distinct contexts, each with
+   *          its own set of Type-IDs and maybe also separate locking?
+   *          Is this issue worth the hassle?            //////////////////////////////TICKET #169
    */
   class AllocationCluster
     : boost::noncopyable
@@ -133,6 +139,14 @@ namespace lib {
         }
       
       
+      /* === diagnostics === */
+      
+      size_t size()  const;
+      
+      template<class TY>
+      size_t count() const;
+      
+      
     private:
       /** initiate an allocation for the given type */
       template<class TY>
@@ -153,7 +167,7 @@ namespace lib {
       
       /**
        * low-level memory manager responsible for
-       * the allocations of one specific type.  
+       * the allocations of one specific type.
        */
       class MemoryManager;
       
@@ -167,14 +181,22 @@ namespace lib {
       
       
       typedef ScopedPtrHolder<MemoryManager> HMemManager;
-      typedef Allocator_TransferNoncopyable<HMemManager> Allo; 
+      typedef Allocator_TransferNoncopyable<HMemManager> Allo;
       typedef std::vector<HMemManager,Allo> ManagerTable;
       
-      ManagerTable typeHandlers_;  ///< table of active MemoryManager instances 
+      ManagerTable typeHandlers_;  ///< table of active MemoryManager instances
       
       
-      HMemManager& 
+      
+      HMemManager&
       handler (size_t slot)
+        {
+          ASSERT (0<slot && slot<=typeHandlers_.size());
+          return typeHandlers_[slot-1];
+        }
+      
+      HMemManager const&
+      handler (size_t slot)  const
         {
           ASSERT (0<slot && slot<=typeHandlers_.size());
           return typeHandlers_[slot-1];
@@ -188,6 +210,9 @@ namespace lib {
       /** enrol the allocation after successful ctor call */
       void finishAlloc (size_t& slot, void*);
       
+      /** @internal helper for diagnostics,
+       *            delegating to actual memory manager */
+      size_t countActiveInstances (size_t& slot)  const;
     };
   
   
@@ -273,6 +298,19 @@ namespace lib {
     finishAlloc (TypeSlot<TY>::get(), obj);
     return *obj;
   }
+  
+  
+  /** helper for diagnostics
+   * @return number of currently allocated
+   *         object instances of the given type
+   */
+  template<class TY>
+  size_t
+  AllocationCluster::count()  const
+  {
+    return countActiveInstances (TypeSlot<TY>::get());
+  }
+  
   
   
   

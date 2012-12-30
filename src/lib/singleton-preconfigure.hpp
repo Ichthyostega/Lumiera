@@ -44,7 +44,7 @@
 #ifndef LIB_SINGLETON_PRECONFIGURE_H
 #define LIB_SINGLETON_PRECONFIGURE_H
 
-#include "lib/test/mockinjector.hpp"
+#include "lib/test/mock-injector.hpp"
 
 
 namespace lib {
@@ -71,11 +71,17 @@ namespace lib {
   } // namespace test
 }  // namespace lumiera
 
-namespace backend_interface {
+namespace backend {
   class MediaAccessFacade;
   using lib::Singleton;
   
-} // namespace backend_interface
+} // namespace backend
+
+namespace proc {
+namespace engine {
+  class EngineService;
+  using lib::Singleton;
+}}
 
 
 
@@ -97,8 +103,14 @@ namespace lib {
   
   
   template<>
-  class Singleton<backend_interface::MediaAccessFacade>
-    : public MockInjector<backend_interface::MediaAccessFacade>
+  class Singleton<backend::MediaAccessFacade>
+    : public MockInjector<backend::MediaAccessFacade>
+    { };
+  
+  
+  template<>
+  class Singleton<proc::engine::EngineService>
+    : public MockInjector<proc::engine::EngineService>
     { };
 
 } // namespace lib

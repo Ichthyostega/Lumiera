@@ -22,14 +22,14 @@
 
 
 /** @file buildinstruct.hpp
- ** Helper classes used by asset::ProcPatt to represent the processing informations.
+ ** Helper classes used by asset::ProcPatt to represent the processing information.
  ** Consider these classes as owned by ProcPatt. Non-inline functions go to procpatt.cpp 
  **
  */
 
 
-#ifndef ASSET_BUILDINSTRUCT_H
-#define ASSET_BUILDINSTRUCT_H
+#ifndef PROC_ASSET_BUILDINSTRUCT_H
+#define PROC_ASSET_BUILDINSTRUCT_H
 
 
 #include "lib/symbol.hpp"
@@ -41,9 +41,10 @@ using std::string;
 
 
 
+namespace proc {
 namespace asset {
 
-  using lumiera::P;
+  using lib::P;
   using lib::Symbol;
   using lib::Literal;
   
@@ -127,5 +128,5 @@ namespace asset {
     
     
     
-} // namespace asset
+}} // namespace proc::asset
 #endif

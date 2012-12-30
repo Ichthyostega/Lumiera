@@ -26,9 +26,10 @@
 
 #include <boost/format.hpp>
 
-using boost::format;
 using util::isnil;
+using boost::format;
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -58,4 +59,4 @@ namespace session {
   }
   
   
-}} // namespace mobject::session
+}}} // namespace mobject::session

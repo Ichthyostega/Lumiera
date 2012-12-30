@@ -27,6 +27,7 @@
 using std::tr1::static_pointer_cast;
 
 
+namespace proc {
 namespace asset {
   
   namespace {
@@ -105,4 +106,4 @@ namespace asset {
 
 
 
-} // namespace asset
+}} // namespace proc::asset

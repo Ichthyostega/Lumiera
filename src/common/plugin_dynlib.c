@@ -34,7 +34,7 @@
 LumieraPlugin
 lumiera_plugin_load_DYNLIB (const char* name)
 {
-  TRACE (pluginloader_dbg);
+  TRACE (pluginloader_dbg, "load DYNLIB: %s", name);
   REQUIRE (name);
   LumieraPlugin self = lumiera_plugin_new (name);
   LumieraInterface plugin = NULL;

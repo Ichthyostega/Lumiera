@@ -83,7 +83,7 @@ namespace test{
         {
           std::cout << "Displaying types and sizes....\n";
           
-          typedef Wrmrmpft<Murpf> Wrmpf1;
+          typedef Wrmrmpft<Murpf>   Wrmpf1;
           typedef Wrmrmpft<char[2]> Wrmpf2;
           typedef Wrmrmpft<char[3]> Wrmpf3;
           
@@ -110,7 +110,7 @@ namespace test{
         }
       
       
-  
+      
       
       void
       checkGarbageStr()

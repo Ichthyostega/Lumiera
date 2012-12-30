@@ -20,65 +20,47 @@
 
 * *****************************************************/
 
-#include "clip.hpp"
+
+#include "gui/model/clip.hpp"
+#include "lib/time/mutation.hpp"
+
+using lib::time::FSecs;
+using lib::time::Mutation;
+
 
 namespace gui {
 namespace model {
 
   Clip::Clip()
-    : begin(1000000),
-      end(2000000)
+    : timeCoord_(Time(FSecs(1)), FSecs(3))
   {  }
-
-  gavl_time_t
-  Clip::getBegin() const
+  
+  
+  void
+  Clip::setBegin (Time newStartTime)
   {
-    return begin;
-  }
-
-  gavl_time_t
-  Clip::getEnd() const
-  {
-    return end;
-  }
-
-  const std::string
-  Clip::getName() const
-  {
-    return name;
-  }
-
-  bool
-  Clip::isPlayingAt(lumiera::Time position) const
-  {
-    return (begin <= position && end >= position);
+    timeCoord_.accept (Mutation::changeTime (newStartTime));
+    TODO("Emit A Signal");
   }
 
   void
-  Clip::setBegin(gavl_time_t begin)
+  Clip::setDuration (Duration newLength)
   {
-    this->begin = begin;
-    // TODO: emit signal
+    timeCoord_.accept (Mutation::changeDuration(newLength));
+    TODO("Emit A Signal");
   }
 
   void
-  Clip::setEnd(gavl_time_t end)
+  Clip::setName (string const& name)
   {
-    this->end = end;
-    // TODO: emit signal
-  }
-
-  void
-  Clip::setName(const std::string &name)
-  {
-    this->name = name;
-    nameChangedSignal.emit(name);
+    this->name_ = name;
+    nameChangedSignal_.emit (name);
   }
 
   sigc::signal<void, std::string>
   Clip::signalNameChanged() const
   {
-    return nameChangedSignal;
+    return nameChangedSignal_;
   }
 
 }   // namespace model

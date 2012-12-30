@@ -3,25 +3,31 @@
 ## SConscript  -  SCons buildscript for tool subdirectory (called by SConstruct)
 ##
 
-Import('env','artifacts','core')
+Import('env core support_lib icons')
 
-support_lib = artifacts['support']
 
 envSvg = env.Clone()
 envSvg.mergeConf(['librsvg-2.0'])
 envSvg.Append(LIBS=support_lib)
 
+envSnd = env.Clone()
+envSnd.mergeConf(['alsa'])
 
-luidgen =    env.Program('luidgen', 'luidgen.c', LIBS=support_lib, install=True) ## for generating Lumiera-UIDs
+
+outputProbe = envSnd.Program('lumiera-output-probe'
+                            , ['main.c', 'alsa.c'] + core, install=True)         ## Odin's ALSA experiments
+
+luidgen =    env.Program('luidgen', ['luidgen.c'] + support_lib, install=True)   ## for generating Lumiera-UIDs
 rsvg    = envSvg.Program('rsvg-convert','rsvg-convert.c')                        ## for rendering SVG icons (uses librsvg) 
 
 # build additional test and administrative tools....
-artifacts['tools'] = [ env.Program('hello-world','hello.c', install=True)      #### hello world (checks C build)      
-                     + env.Program('try', 'try.cpp', LIBS=support_lib)         #### to try out some feature...
-                     + luidgen
-                     + rsvg
-                     ]
+tools = [ env.Program('hello-world','hello.c', install=True)                   #### hello world (checks C build)      
+        + outputProbe                                                          #### for output connection tests
+        + luidgen
+        + rsvg
+        ]
+Export('tools')
 
 # Rendering the SVG Icons depends on rsvg-convert
-env.Depends(artifacts['icons'], rsvg)
+env.Depends(icons, rsvg)
 

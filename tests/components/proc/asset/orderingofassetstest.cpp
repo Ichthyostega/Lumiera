@@ -29,100 +29,104 @@
 #include "proc/asset/proc.hpp"
 
 #include "proc/asset/asset-diagnostics.hpp"
+#include "backend/media-access-mock.hpp"
 
+using lib::test::Use4Test;
 using util::isnil;
 using std::string;
 
 
-namespace asset {
-  namespace test {
-    
-    
-    
-    
-    /******************************************************
-     * @test validate the equality and order relations of 
-     *       Asset::Ident and Asset objects.
-     * @note a known problem is that only Asset smart ptrs
-     *       are supported for comparison, not smartpointers
-     *       of Asset subclasses. To solve this, we would
-     *       either have to repeat the operator definitions,
-     *       or resort to template metaprogramming tricks.
-     *       Just providing templated comparison operators
-     *       would generally override the behaviour of 
-     *       boost::shared_ptr, which is not desirable. 
-     * @see  Asset::Ident#compare
-     */
-    class OrderingOfAssets_test : public Test
-      {
-        virtual void run(Arg) 
-          {
-            Asset::Ident key1("Au-1", Category(AUDIO), "ichthyo", 5);
-            PAsset mm1 = asset::Media::create(key1, "Name-1");
-            
-            Asset::Ident key2("Au-1", Category(AUDIO), "ichthyo", 7);
-            PAsset mm2 = asset::Media::create(key2, "Name-2");
-            
-            Asset::Ident key3("Au-2", Category(AUDIO), "ichthyo", 5);
-            PAsset mm3 = asset::Media::create(key3, "Name-3");
-            
-            Asset::Ident key4("Au-2", Category(AUDIO), "stega", 5);
-            PAsset mm4 = asset::Media::create(key4, "Name-4");
-            
-            Asset::Ident key5("Au-1", Category(VIDEO), "ichthyo", 5);
-            PAsset mm5 = asset::Media::create(key5, "Name-5");
-            
-            
-            // ordering of keys
-            CHECK (key1 == key2);
-            CHECK (key2 != key3);
-            CHECK (key3 != key4);
-            CHECK (key4 != key5);
-            CHECK (key1 != key5);
-
-            CHECK ( 0 > key2.compare(key3));
-            CHECK ( 0 < key3.compare(key2));
-
-            CHECK ( 0 > key3.compare(key4));
-            CHECK ( 0 > key4.compare(key5));
-            CHECK ( 0 > key1.compare(key5));
-            CHECK ( 0 > key2.compare(key5));
-            CHECK ( 0 > key3.compare(key5));
-            CHECK ( 0 > key1.compare(key3));
-            CHECK ( 0 > key1.compare(key4));
-            CHECK ( 0 > key2.compare(key4));
-            
-            
-            // ordering of Asset smart ptrs
-            CHECK (mm1 == mm2);
-            CHECK (mm2 != mm3);
-            CHECK (mm3 != mm4);
-            CHECK (mm4 != mm5);
-            CHECK (mm1 != mm5);
-
-            CHECK (mm2 < mm3);
-            CHECK (mm2 <= mm3);
-            CHECK (mm3 > mm2);
-            CHECK (mm3 >= mm2);
-
-            CHECK (mm3 < mm4);
-            CHECK (mm4 < mm5);
-            CHECK (mm1 < mm5);
-            CHECK (mm2 < mm5);
-            CHECK (mm3 < mm5);
-            CHECK (mm1 < mm3);
-            CHECK (mm1 < mm4);
-            CHECK (mm2 < mm4);
-
-          }
-      };
-    
-    
-    /** Register this test class... */
-    LAUNCHER (OrderingOfAssets_test, "unit asset");
-    
-    
-    
-  } // namespace test
-
-} // namespace asset
+namespace proc {
+namespace asset{
+namespace test {
+  
+  
+  
+  
+  /******************************************************
+   * @test validate the equality and order relations of 
+   *       Asset::Ident and Asset objects.
+   * @note a known problem is that only Asset smart ptrs
+   *       are supported for comparison, not smartpointers
+   *       of Asset subclasses. To solve this, we would
+   *       either have to repeat the operator definitions,
+   *       or resort to template metaprogramming tricks.
+   *       Just providing templated comparison operators
+   *       would generally override the behaviour of 
+   *       std::shared_ptr, which is not desirable. 
+   * @see  Asset::Ident#compare
+   */
+  class OrderingOfAssets_test : public Test
+    {
+      virtual void run(Arg) 
+        {
+          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          
+          
+          Asset::Ident key1("test-1", Category(AUDIO), "ichthyo", 5);
+          PAsset mm1 = asset::Media::create(key1, "Name-1");
+          
+          Asset::Ident key2("test-1", Category(AUDIO), "ichthyo", 7);
+          PAsset mm2 = asset::Media::create(key2, "Name-2");
+          
+          Asset::Ident key3("test-2", Category(AUDIO), "ichthyo", 5);
+          PAsset mm3 = asset::Media::create(key3, "Name-3");
+          
+          Asset::Ident key4("test-2", Category(AUDIO), "stega", 5);
+          PAsset mm4 = asset::Media::create(key4, "Name-4");
+          
+          Asset::Ident key5("test-1", Category(VIDEO), "ichthyo", 5);
+          PAsset mm5 = asset::Media::create(key5, "Name-5");
+          
+          
+          // ordering of keys
+          CHECK (key1 == key2);
+          CHECK (key2 != key3);
+          CHECK (key3 != key4);
+          CHECK (key4 != key5);
+          CHECK (key1 != key5);
+          
+          CHECK ( 0 > key2.compare(key3));
+          CHECK ( 0 < key3.compare(key2));
+          
+          CHECK ( 0 > key3.compare(key4));
+          CHECK ( 0 > key4.compare(key5));
+          CHECK ( 0 > key1.compare(key5));
+          CHECK ( 0 > key2.compare(key5));
+          CHECK ( 0 > key3.compare(key5));
+          CHECK ( 0 > key1.compare(key3));
+          CHECK ( 0 > key1.compare(key4));
+          CHECK ( 0 > key2.compare(key4));
+          
+          
+          // ordering of Asset smart ptrs
+          CHECK (mm1 == mm2);
+          CHECK (mm2 != mm3);
+          CHECK (mm3 != mm4);
+          CHECK (mm4 != mm5);
+          CHECK (mm1 != mm5);
+          
+          CHECK (mm2 < mm3);
+          CHECK (mm2 <= mm3);
+          CHECK (mm3 > mm2);
+          CHECK (mm3 >= mm2);
+          
+          CHECK (mm3 < mm4);
+          CHECK (mm4 < mm5);
+          CHECK (mm1 < mm5);
+          CHECK (mm2 < mm5);
+          CHECK (mm3 < mm5);
+          CHECK (mm1 < mm3);
+          CHECK (mm1 < mm4);
+          CHECK (mm2 < mm4);
+          
+        }
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (OrderingOfAssets_test, "unit asset");
+  
+  
+  
+}}} // namespace proc::asset::test

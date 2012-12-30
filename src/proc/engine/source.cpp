@@ -23,6 +23,7 @@
 
 #include "proc/engine/source.hpp"
 
+namespace proc {
 namespace engine
   {
 
@@ -31,4 +32,4 @@ namespace engine
 
 
 
-} // namespace engine
+}} // namespace engine

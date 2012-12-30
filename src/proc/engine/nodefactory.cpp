@@ -27,6 +27,7 @@
 
 #include "proc/engine/nodewiring.hpp"
 
+namespace proc {
 namespace engine {
   
   namespace { // Details of node fabrication
@@ -53,4 +54,4 @@ namespace engine {
   }
 
 
-} // namespace engine
+}} // namespace engine

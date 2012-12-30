@@ -111,7 +111,6 @@ test_components_SOURCES =								\
 
 
 noinst_HEADERS +=							\
-	$(testcomponents_srcdir)/backend/mediaaccessmock.hpp		\
 	$(testcomponents_srcdir)/proc/asset/asset-diagnostics.hpp	\
 	$(testcomponents_srcdir)/proc/asset/testasset.hpp		\
 	$(testcomponents_srcdir)/proc/asset/testclipasset.hpp		\

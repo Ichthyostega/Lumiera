@@ -44,8 +44,9 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/advice/advice-multiplicity-test.cpp		\
 	$(testlib_srcdir)/advice/advice-situations-test.cpp		\
 	$(testlib_srcdir)/allocation-cluster-test.cpp			\
-	$(testlib_srcdir)/appconfigtest.cpp				\
+	$(testlib_srcdir)/app-config-test.cpp				\
 	$(testlib_srcdir)/bool-checkable-test.cpp			\
+	$(testlib_srcdir)/cmdline-wrapper-test.cpp			\
 	$(testlib_srcdir)/custom-shared-ptr-test.cpp			\
 	$(testlib_srcdir)/del-stash-test.cpp				\
 	$(testlib_srcdir)/exceptionerrortest.cpp			\
@@ -61,6 +62,7 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/iter-source-test.cpp				\
 	$(testlib_srcdir)/itertools-test.cpp				\
 	$(testlib_srcdir)/lifecycletest.cpp				\
+	$(testlib_srcdir)/lumitime-test.cpp				\
 	$(testlib_srcdir)/mainsuite.cpp					\
 	$(testlib_srcdir)/meta/config-flags-test.cpp			\
 	$(testlib_srcdir)/meta/duck-detector-test.cpp			\
@@ -83,8 +85,8 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/removefromsettest.cpp				\
 	$(testlib_srcdir)/sanitised-identifier-test.cpp			\
 	$(testlib_srcdir)/scoped-holder-test.cpp			\
-	$(testlib_srcdir)/scoped-ptrvect-test.cpp			\
 	$(testlib_srcdir)/scoped-holder-transfer-test.cpp		\
+	$(testlib_srcdir)/scoped-ptrvect-test.cpp			\
 	$(testlib_srcdir)/singleton-subclass-test.cpp			\
 	$(testlib_srcdir)/singleton-test.cpp				\
 	$(testlib_srcdir)/singleton-testmock-test.cpp			\
@@ -97,15 +99,13 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/sync-classlock-test.cpp			\
 	$(testlib_srcdir)/sync-locking-test.cpp				\
 	$(testlib_srcdir)/sync-waiting-test.cpp				\
-	$(testlib_srcdir)/test/cmdlinewrappertest.cpp			\
 	$(testlib_srcdir)/test/test-helper-test.cpp			\
 	$(testlib_srcdir)/test/testoptiontest.cpp			\
 	$(testlib_srcdir)/thread-wrapper-join-test.cpp			\
 	$(testlib_srcdir)/thread-wrapper-test.cpp			\
-	$(testlib_srcdir)/lumitime-test.cpp				\
-	$(testlib_srcdir)/time/time-value-test.cpp			\
-	$(testlib_srcdir)/time/time-quantisation-test.cpp		\
 	$(testlib_srcdir)/time/time-formats-test.cpp			\
+	$(testlib_srcdir)/time/time-quantisation-test.cpp		\
+	$(testlib_srcdir)/time/time-value-test.cpp			\
 	$(testlib_srcdir)/typed-allocation-manager-test.cpp		\
 	$(testlib_srcdir)/typed-counter-test.cpp			\
 	$(testlib_srcdir)/util-foreach-test.cpp				\

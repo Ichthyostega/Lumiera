@@ -47,12 +47,21 @@ namespace time {
       advice::Request<PQuant> query(gridID);
       PQuant grid_found = query.getAdvice();
       if (!grid_found)
-        throw error::Logic ("unable to fetch the quantisation grid -- is it already defined?"
+        throw error::Logic ("unable to fetch the quantisation grid -- was it already defined?"    ////////TICKET #197
                            , LUMIERA_ERROR_UNKNOWN_GRID);
       return grid_found;
     }
-    
   }//(End) implementation helpers
+  
+  
+  PQuant
+  getDefaultGridFallback()
+  {
+    static PQuant globalDefaultGrid (new FixedFrameQuantiser(1));
+    return globalDefaultGrid;                                                    ///////////////////////TICKET #810
+  };
+  
+  
   
   
   
@@ -101,6 +110,38 @@ namespace time {
   
   
   
+  /** Access an existing grid definition or quantiser, known by the given symbolic ID.
+   *  Typically this fetches a meta::TimeGrid (asset) from the session.
+   * @throw error::Logic if the given gridID wasn't registered
+   * @return smart-ptr to the quantiser instance */
+  PQuant
+  Quantiser::retrieve (Symbol gridID)
+  {
+    return retrieveQuantiser (gridID);
+  }
+  
+  
+  
+  /** convenience shortcut: \em materialise a raw time value
+   *  based on this grid or time axis, but returning a raw time value. 
+   *  Implemented as combination of the #gridAlign and #timeOf operations,
+   *  i.e. we quantise into this scale, but transform the result back onto
+   *  the raw time value scale.
+   * @warning this operation incurs information loss. Values may be rounded
+   *          and / or clipped, according to the grid used. And, contrary to
+   *          a QuTime value, the information about the actual grid is
+   *          discarded. Please don't use this operation if you just
+   *          "want a number" but feel to too lazy to understand
+   *          properly what quantisation means!
+   */
+  TimeValue
+  Quantiser::materialise  (TimeValue const& raw)  const
+  {
+    return timeOf (gridPoint (raw));
+  }
+  
+  
+  
   /** alignment to a simple fixed size grid.
    *  The actual calculation first determines the number
    *  of the grid interval containing the given rawTime,
@@ -128,7 +169,7 @@ namespace time {
    *      range when converting back into a TimeValue.
    * @see #lumiera_quantise_frames
    */
-  long
+  int64_t
   FixedFrameQuantiser::gridPoint (TimeValue const& rawTime)  const
   {
     return lumiera_quantise_frames (_raw(rawTime), _raw(origin_), _raw(raster_));
@@ -141,7 +182,7 @@ namespace time {
    *      valid range of lumiera::Time
    */
   TimeValue
-  FixedFrameQuantiser::timeOf (long gridPoint)  const
+  FixedFrameQuantiser::timeOf (int64_t gridPoint)  const
   {
     return TimeValue (lumiera_time_of_gridpoint (gridPoint, _raw(origin_), _raw(raster_)));
   }
@@ -159,7 +200,7 @@ namespace time {
   {
     Time gt(gridTime);
     TimeVar timePoint = gt + origin_;
-    timePoint += gridOffset * raster_;
+    timePoint += gridOffset * Offset(raster_);
     return timePoint;
   }
   

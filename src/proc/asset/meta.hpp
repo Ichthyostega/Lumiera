@@ -48,7 +48,7 @@
  ** and can be another already existing asset::Meta (inheriting from meta::Descriptor)
  ** Generally this yields a Builder object, which can be used for outfitting the new
  ** or changed metadata entry, finally \em committing this builder to yield a new
- ** asset::Meta (which, in case of a mutation, might superseede an existin one).
+ ** asset::Meta (which, in case of a mutation, might supersede an existing one).
  ** 
  ** @see asset.hpp explanation of assets in general
  ** @see MetaFactory creating concrete asset::Meta instances
@@ -58,14 +58,13 @@
 #ifndef ASSET_META_H
 #define ASSET_META_H
 
-#include "pre_a.hpp"
-
 #include "proc/asset.hpp"
 #include "proc/asset/entry-id.hpp"
 #include "lib/factory.hpp"
 
 
 
+namespace proc {
 namespace asset {
   
   class Meta;
@@ -120,7 +119,8 @@ namespace asset {
     public:
       static MetaFactory create;
       
-      virtual const ID<Meta>& getID()  const    ///< @return ID of kind Meta 
+      /** @return ID of kind Meta */
+      virtual const ID<Meta>& getID()  const 
         { 
           return static_cast<const ID<Meta>& > (Asset::getID());
         }
@@ -161,5 +161,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

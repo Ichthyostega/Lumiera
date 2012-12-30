@@ -19,7 +19,12 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
+
+
+#include "timecode-widget.hpp"
+#include "gui/util/convert.hpp"
+#include "lib/time/diagnostics.hpp"  ////////////TODO: temporary solution to get H:M:S components. Use TimeCode instead!
 
 #include <cmath>
 #include <stdint.h>
@@ -29,9 +34,6 @@
 
 #include <gavl/gavl.h>
 #include <sigc++/bind.h>
-
-#include "timecode-widget.hpp"
-#include "gui/util/convert.hpp"
 
 using namespace sigc;
 using namespace Gtk;
@@ -69,7 +71,7 @@ TimeCode::TimeCode(std::string clock_name, std::string widget_name, bool allow_e
     colon4(":"),
     colon5(":")
 {
-  last_when = Time(0);
+  last_when = Time::ZERO;
   last_pdelta = 0;
   last_sdelta = 0;
   key_entry_state = 0;
@@ -187,8 +189,7 @@ TimeCode::set_widget_name(string name)
 void
 TimeCode::setup_events()
 {
-  // FIXME: change to set_can_focus(true) once Debian squeeze is released
-  clock_base.set_flags(CAN_FOCUS);
+  clock_base.set_can_focus(true);
 
   const Gdk::EventMask eventMask =
     Gdk::BUTTON_PRESS_MASK|
@@ -208,15 +209,14 @@ TimeCode::setup_events()
   ms_seconds_ebox.add_events(eventMask);
   audio_frames_ebox.add_events(eventMask);
 
-  // FIXME: change to set_can_focus(true) once Debian squeeze is released
-  hours_ebox.set_flags(CAN_FOCUS);
-  minutes_ebox.set_flags(CAN_FOCUS);
-  seconds_ebox.set_flags(CAN_FOCUS);
-  frames_ebox.set_flags(CAN_FOCUS);
-  audio_frames_ebox.set_flags(CAN_FOCUS);
-  ms_hours_ebox.set_flags(CAN_FOCUS);
-  ms_minutes_ebox.set_flags(CAN_FOCUS);
-  ms_seconds_ebox.set_flags(CAN_FOCUS);
+  hours_ebox.set_can_focus(true);
+  minutes_ebox.set_can_focus(true);
+  seconds_ebox.set_can_focus(true);
+  frames_ebox.set_can_focus(true);
+  audio_frames_ebox.set_can_focus(true);
+  ms_hours_ebox.set_can_focus(true);
+  ms_minutes_ebox.set_can_focus(true);
+  ms_seconds_ebox.set_can_focus(true);
 
   hours_ebox.signal_motion_notify_event().connect(bind(mem_fun(
     *this, &TimeCode::field_motion_notify_event), SMPTE_Hours));
@@ -423,8 +423,10 @@ TimeCode::set(Time when, bool force)
 void
 TimeCode::set_frames(Time when, bool force)
 {
+  ///////////////////////////TICKET #750 : integrate Timecode formats, let Digxel class do the formatting  
+    
   char buf[32];
-  snprintf(buf, sizeof(buf), "%u", (unsigned int)when);
+  snprintf(buf, sizeof(buf), "%u", uint(123));
   audio_frames_label.set_text(buf);
 }  
 
@@ -432,10 +434,10 @@ void
 TimeCode::set_minsec(Time when, bool force)
 {
   char buf[32];
-
-  int hrs    = when.getHours();
-  int mins   = when.getMins();
-  float secs = when.getSecs();
+                          ////////////TICKET #750 : temporary solution to get H:M:S components. Use TimeCode instead!
+  int hrs    = getHours(when);
+  int mins   = getMins (when);
+  float secs = getSecs (when);
   
   if (force || hrs != ms_last_hrs)
     {
@@ -463,11 +465,11 @@ void
 TimeCode::set_smpte(Time when, bool force)
 {
   char buf[32];
-
+                          ////////////TICKET #750 : temporary solution to get H:M:S components. Use TimeCode instead!
   int smpte_negative = 0; // FIXME: when < 0;
-  int smpte_hours    = when.getHours();
-  int smpte_minutes  = when.getMins();
-  int smpte_seconds  = when.getSecs();
+  int smpte_hours    = getHours(when);
+  int smpte_minutes  = getMins(when);
+  int smpte_seconds  = getSecs(when);
   int smpte_frames   = 0; //when.getFrames(framerate);
 
   // if (is_duration) {
@@ -1043,20 +1045,22 @@ TimeCode::field_motion_notify_event (GdkEventMotion *ev, Field field)
   if (trunc(drag_accum) != 0)
     {
       int frames;
-      Time pos;
+      TimeVar pos(current_time());
       int dir;
       dir = (drag_accum < 0 ? 1:-1);
-      pos = current_time();
       frames = get_frames(field,pos,dir);
-    
-      if (frames  != 0 &&  frames * drag_accum < ((gavl_time_t)current_time()))
+                        /////////////////////////////////////////////////////////////TICKET #750 : factor out all timecode calculations
+                                                                       //////////////              and concentrate them in lib/time/timecode.cpp
+                                                                       
+      if (frames  != 0 &&  frames * drag_accum < (_raw(current_time())))
         {
           // minus because up is negative in computer-land
-          set ((Time) floor (pos - drag_accum * frames), false);
+          pos = TimeValue (floor (pos - drag_accum * frames));
+          set (pos, false);
         }
       else
         {
-          set (Time(0) , false);
+          set (Time::ZERO, false);
         }
 
       drag_accum = 0;
@@ -1106,7 +1110,7 @@ TimeCode::get_frames(Field field, Time pos, int dir)
 Time
 TimeCode::current_time(Time pos) const
 {
-  Time ret = Time(0);
+  TimeVar ret;
 
   switch (_mode)
     {
@@ -1132,7 +1136,7 @@ TimeCode::current_time(Time pos) const
 Time
 TimeCode::current_duration(Time pos) const
 {
-  Time ret = Time(0);
+  TimeVar ret;
 
   switch (_mode)
     {
@@ -1202,7 +1206,7 @@ TimeCode::smpte_time_from_display() const
 
   // session->smpte_to_sample(smpte, sample, false /* use_offset */, false /* use_subframes */ );
   
-  return Time(0);
+  return Time::ZERO;
 }
 
 Time
@@ -1218,13 +1222,14 @@ TimeCode::minsec_time_from_display () const
 
   // return (Time) floor ((hrs * 60.0f * 60.0f * sr) + (mins * 60.0f * sr) + (secs * sr));
 
-  return Time(0);
+  return Time::ZERO;
 }
 
 Time
 TimeCode::audio_time_from_display () const
 {
-  return Time((gavl_time_t) atoi (audio_frames_label.get_text()));
+  gavl_time_t parsedAudioFrames = atoi (audio_frames_label.get_text());
+  return Time(TimeValue(parsedAudioFrames));
 }
 
 void

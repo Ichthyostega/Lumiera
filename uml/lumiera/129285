@@ -1,6 +1,6 @@
 format 58
 "ProcessingLayer" // ProcessingLayer
-  revision 26
+  revision 27
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -29,6 +29,8 @@ format 58
   package_ref 128133 // Asset
 
   package_ref 129029 // Control
+
+  package_ref 133637 // Play
 
   package_ref 128261 // MObject
 
@@ -330,8 +332,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 131333 // ouput
         end
     end
 
@@ -350,8 +350,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 131589 // 
         end
     end
 
@@ -360,8 +358,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 131717 // vid_a
         end
     end
 
@@ -370,8 +366,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 131461 // input
         end
     end
 
@@ -430,8 +424,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 133893 // HUE
         end
     end
 
@@ -440,8 +432,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 134021 // vid_a
         end
     end
 
@@ -464,8 +454,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 133253 // HUE
         end
     end
 
@@ -474,8 +462,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 132869 // input
         end
     end
 
@@ -506,8 +492,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 133125 // ouput
         end
     end
 
@@ -516,8 +500,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 132613 // devnull
         end
     end
 
@@ -534,8 +516,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 134021 // vid_a
         end
     end
 
@@ -558,8 +538,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 134149 // input
         end
     end
 
@@ -568,8 +546,6 @@ format 58
       attributes
         end
       relations
-        relation_ref 135429 // <unidirectional association>
-          classinstance_ref 134405 // ouput
         end
     end
 

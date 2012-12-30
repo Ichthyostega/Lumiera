@@ -24,27 +24,24 @@
 #include "proc/mobject/session/relativelocation.hpp"
 #include "proc/mobject/mobject.hpp"
 
-namespace mobject
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  RelativeLocation* 
+  RelativeLocation::clone ()  const
+  { 
+    return new RelativeLocation (*this);
+  }
+  
+  
+  void 
+  RelativeLocation::intersect (LocatingSolution& solution)  const
   {
-  namespace session
-    {
-
-    RelativeLocation* 
-    RelativeLocation::clone ()  const
-    { 
-      return new RelativeLocation (*this); 
-    }
+    LocatingPin::intersect (solution);
     
-    
-    void 
-    RelativeLocation::intersect (LocatingSolution& solution)  const
-    {
-      LocatingPin::intersect (solution);
-        
-      TODO ("either set position or make overconstrained");
-    }
-
-    
-  } // namespace mobject::session
-
-} // namespace mobject
+    TODO ("either set position or make overconstrained");
+  }
+  
+  
+}}} // namespace proc::mobject::session

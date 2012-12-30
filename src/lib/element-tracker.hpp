@@ -66,7 +66,6 @@
 
 namespace lib {
   
-  using lumiera::P;
   using util::isSameObject;
   
   /**
@@ -115,7 +114,7 @@ namespace lib {
         {
           REQUIRE (asset, "Attempt to track a NIL element");
           remove (*asset);
-          push_back (asset);
+          this->push_back (asset);
         }
       
       void
@@ -125,7 +124,7 @@ namespace lib {
                i != _Vec::end() ; ++i )
             if (asset == **i)       // _Vec contains smart-ptrs
               {                    //   ELM is required to define '=='
-                erase (i);
+                this->erase (i);
                 return;
               }
         }
@@ -189,7 +188,7 @@ namespace lib {
         }
       
       
-      typedef lumiera::P<TAR> PTarget;
+      typedef P<TAR> PTarget;
       
       /** factory for creating smart-ptr managed
        *  TAR instances, automatically registered

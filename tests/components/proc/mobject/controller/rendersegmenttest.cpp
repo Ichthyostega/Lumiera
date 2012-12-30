@@ -32,42 +32,36 @@ using std::string;
 using std::cout;
 
 
-namespace mobject
-  {
-  namespace controller
+namespace proc {
+namespace mobject {
+namespace controller {
+namespace test {
+  
+  
+  
+  
+  /********************************************************************
+   * @test create a render process from a given segment of the Session.
+   *       Basically this includes cooperation of all parts of the
+   *       Lumiera Proc Layer. For a prepared test-Session we invoke the
+   *       controller to create a render process. This includes building
+   *       the render pipeline. Finally, we analyze all the created 
+   *       Structures. 
+   * @note this test doesn't cover the actual rendering.
+   * @see  proc_interface::ControllerFacade
+   */
+  class RenderSegment_test : public Test
     {
-    namespace test
-      {
-      
-      
-      
-      
-      /********************************************************************
-       * @test create a render process from a given segment of the Session.
-       *       Basically this includes cooperation of all parts of the
-       *       Lumiera Proc Layer. For a prepared test-Session we invoke the
-       *       controller to create a render process. This includes building
-       *       the render pipeline. Finally, we analyze all the created 
-       *       Structures. 
-       * @note this test doesn't cover the actual rendering.
-       * @see  proc_interface::ControllerFacade
-       */
-      class RenderSegment_test : public Test
+      virtual void run(Arg arg) 
         {
-          virtual void run(Arg arg) 
-            {
-              UNIMPLEMENTED ("complete render process for a given test segment of the Session");
-            } 
-        };
-      
-      
-      /** Register this test class... */
-      LAUNCHER (RenderSegment_test, "function operate");
-      
-      
-      
-    } // namespace test
-    
-  } // namespace controller
-
-} // namespace mobject
+          UNIMPLEMENTED ("complete render process for a given test segment of the Session");
+        } 
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (RenderSegment_test, "function operate");
+  
+  
+  
+}}}} // namespace proc::mobject::controller::test

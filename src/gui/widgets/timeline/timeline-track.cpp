@@ -26,9 +26,10 @@
 #include "gui/dialogs/name-chooser.hpp"
 #include "include/logging.h"
 
-using namespace boost;
 using namespace Gtk;
 using namespace sigc;
+
+using std::tr1::shared_ptr;
 
 namespace gui {
 namespace widgets {
@@ -120,11 +121,11 @@ Track::get_expanded() const
   return expanded;
 }
 
-boost::shared_ptr<timeline::Clip>
-Track::getClipAt(lumiera::Time) const
+shared_ptr<timeline::Clip>
+Track::getClipAt(Time) const
 {
   // Default implementation returns empty pointer
-  return boost::shared_ptr<timeline::Clip>();
+  return shared_ptr<timeline::Clip>();
 }
 
 void
@@ -271,7 +272,7 @@ void
 Track::on_remove_track()
 {
   REQUIRE(modelTrack);
-  boost::shared_ptr<TimelineState> state = timelineWidget.get_state();
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
   REQUIRE(state);
   
   state->get_sequence()->remove_descendant_track(modelTrack);

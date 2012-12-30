@@ -188,7 +188,7 @@ namespace backend {
     
     
     /** @note by design there is no possibility to find out
-     *  just based on the thread handle, if the thread is alive.
+     *  just based on the thread handle if some thread is alive.
      *  We define our own accounting here based on the internals
      *  of the thread wrapper. This will break down, if you mix
      *  uses of the C++ wrapper with the raw C functions. */
@@ -200,7 +200,7 @@ namespace backend {
     
     
     /** Synchronisation barrier. In the function executing in this thread
-     *  needs to be a corresponding Thread::sync() call. Blocking until
+     *  needs to be a corresponding Thread::syncPoint() call. Blocking until
      *  both the caller and the thread have reached the barrier.
      */
     void

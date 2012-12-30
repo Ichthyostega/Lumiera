@@ -24,13 +24,12 @@
 #ifndef MOBJECT_MOBJECT_H
 #define MOBJECT_MOBJECT_H
 
-#include "pre.hpp"
-
-
 #include "proc/common.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset.hpp"                    //TODO finally not needed?
+#include "lib/p.hpp"
+#include "lib/time/timevalue.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
@@ -43,10 +42,11 @@ using proc_interface::IDA;                   //TODO finally not needed?
 //using proc_interface::PAsset;              //TODO: only temporarily
 using proc_interface::AssetManager;
 
+namespace proc {
 namespace mobject {
   
   using std::string;
-  using lumiera::P;
+  using lib::P;
   
   //NOBUG_DECLARE_FLAG (mobjectmem);
   
@@ -68,10 +68,9 @@ namespace mobject {
       boost::equality_comparable< MObject >
     {
     protected:
-      typedef lumiera::Time Time;
+      typedef lib::time::Duration Duration;
       
-      // TODO: how to represent time intervals best?
-      Time length_;
+      Duration length_;
       
       mutable string shortID_;
       
@@ -93,7 +92,7 @@ namespace mobject {
       /** MObject self-test (usable for asserting) */
       virtual bool isValid()  const =0;
       
-      virtual Time& getLength() =0; ///< @todo how to deal with the time/length field?? ////TICKET #448
+      virtual Duration& getLength() =0;                                           ////////////////////TICKET #448
             
       virtual bool operator== (const MObject& oo)  const =0;  ///< needed for handling by lumiera::P
       
@@ -108,5 +107,5 @@ namespace mobject {
   typedef Placement<MObject> PMO;
 
 
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

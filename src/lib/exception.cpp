@@ -79,8 +79,11 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (ASSERTION, "assertion failure");
     
     /* some further generic error situations */
+    LUMIERA_ERROR_DEFINE (LIFECYCLE, "Lifecycle assumptions violated");
     LUMIERA_ERROR_DEFINE (WRONG_TYPE, "runtime type mismatch");
     LUMIERA_ERROR_DEFINE (ITER_EXHAUST, "end of sequence reached");
+    LUMIERA_ERROR_DEFINE (CAPACITY,     "predefined fixed storage capacity");
+    LUMIERA_ERROR_DEFINE (INDEX_BOUNDS, "index out of bounds");
     LUMIERA_ERROR_DEFINE (BOTTOM_VALUE, "invalid or NIL value");
     LUMIERA_ERROR_DEFINE (UNCONNECTED, "missing connection");
     LUMIERA_ERROR_DEFINE (UNIMPLEMENTED, "using a feature not yet implemented....");

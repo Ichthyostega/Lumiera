@@ -21,12 +21,14 @@
 */
 
 
-#ifndef MOBJECT_SESSION_CLIP_H
-#define MOBJECT_SESSION_CLIP_H
+#ifndef PROC_MOBJECT_SESSION_CLIP_H
+#define PROC_MOBJECT_SESSION_CLIP_H
 
 #include "proc/mobject/session/abstractmo.hpp"
+#include "lib/time/timevalue.hpp"
 
 
+namespace proc {
 namespace asset {
   class Media;
   class Clip;
@@ -36,6 +38,8 @@ namespace mobject {
 namespace session {
   
   using asset::Media;
+  using lib::time::TimeVar;
+  
   typedef P<Media> PMedia;
   typedef P<asset::Clip> PClipAsset;
   
@@ -67,7 +71,7 @@ namespace session {
       
     protected:
       /** start position in source */
-      Time start_;
+      TimeVar start_;
       
       /** @todo using a mere ref here is against the scheme and only
           done as temporal solution, until we work out how to handle
@@ -98,10 +102,10 @@ namespace session {
       DEFINE_PROCESSABLE_BY (builder::BuilderTool);
       
     };
-    
+  
   typedef Placement<Clip> PClipMO;
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

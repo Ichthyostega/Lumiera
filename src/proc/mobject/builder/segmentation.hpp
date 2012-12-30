@@ -45,6 +45,7 @@
 
 //#include <map>
 
+namespace proc    {
 namespace mobject {
 namespace builder {
   
@@ -62,8 +63,9 @@ namespace builder {
     : boost::noncopyable
     {
       
+      /////////////////////////////////////////////////TODO: placeholder code
+      /////////////////////////////////////////////////TODO: see the planned structure at http://lumiera.org/wiki/renderengine.html#Fixture
       typedef ID<Pipe>   PID;
-//      typedef ID<Struct> StID;
       
     public:
       
@@ -83,5 +85,5 @@ namespace builder {
   
   
   
-}} // namespace mobject::builder
+}}} // namespace proc::mobject::builder
 #endif

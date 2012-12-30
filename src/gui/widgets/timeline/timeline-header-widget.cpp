@@ -28,8 +28,9 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace boost;
 using namespace util;
+
+using std::tr1::shared_ptr;
 
 namespace gui {
 namespace widgets {

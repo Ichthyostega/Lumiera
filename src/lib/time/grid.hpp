@@ -46,7 +46,7 @@ namespace time {
    * grid point, usable for grid aligning values.
    * 
    * \par usage
-   * For one there is the lib::time::Quantiser, which directly
+   * First off, there is the lib::time::Quantiser, which directly
    * implements this interface and plays a central role when it comes
    * to converting continuous time into any kind of frame based timecode.
    * Besides that, the session stores asset::TimeGrid definitions, which
@@ -62,10 +62,10 @@ namespace time {
       virtual ~Grid();   ///< this is an Interface
       
       
-      virtual long      gridPoint (TimeValue const& raw)  const   =0;
+      virtual int64_t   gridPoint (TimeValue const& raw)  const   =0;
       virtual TimeValue gridAlign (TimeValue const& raw)  const   =0;
-      virtual TimeValue timeOf    (long gridPoint)        const   =0;
-      virtual TimeValue timeOf    (FSecs, int =0)         const   =0;
+      virtual TimeValue timeOf    (int64_t gridPoint)     const   =0;
+      virtual TimeValue timeOf    (FSecs gridTime, int=0) const   =0;
     };
   
   typedef std::tr1::shared_ptr<const Grid> PGrid;

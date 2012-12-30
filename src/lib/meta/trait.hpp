@@ -33,7 +33,7 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/remove_cv.hpp>
-#include <boost/utility/enable_if.hpp>
+
 #include <string>
 
 //Forward declarations for the Unwrap helper....
@@ -42,14 +42,14 @@ namespace boost{
 }
 namespace std {
 namespace tr1 {
-  template<class X> class reference_wrapper; 
+  template<class X> class reference_wrapper;
   template<class X> class shared_ptr; 
 }}
-namespace lumiera{
-  template<class X, class B>  class P; 
+namespace lib{
+  template<class X, class B>  class P;
 }
 namespace mobject{
-  template<class X, class B>  class Placement; 
+  template<class X, class B>  class Placement;
 }
 
 
@@ -127,12 +127,12 @@ namespace meta {
     };
   
   template<typename X, class B>
-  struct Unwrap<lumiera::P<X, B> >
+  struct Unwrap<P<X, B> >
     {
       typedef X  Type;
       
       static X&
-      extract (lumiera::P<X,B> ptr)
+      extract (P<X,B> ptr)
         {
           ASSERT (ptr);
           return *ptr;

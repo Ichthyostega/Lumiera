@@ -19,40 +19,46 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
 /** @file draw-strategy.hpp
  ** Declares the timeline entity drawing strategy interface.
  */
 
-#ifndef TIMELINE_DRAW_STRATEGY_HPP
-#define TIMELINE_DRAW_STRATEGY_HPP
+#ifndef WIDGETS_TIMELINE_DRAW_STRATEGY_HPP
+#define WIDGETS_TIMELINE_DRAW_STRATEGY_HPP
 
-#include "timeline-entity.hpp"
-#include "timeline-view-window.hpp"
+#include "gui/gtk-base.hpp"
+#include "gui/widgets/timeline/timeline-entity.hpp"
+#include "gui/widgets/timeline/timeline-view-window.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
-
+  
+  /////////TODO some questions:
+  /////////     1) who is allowed to destroy DrawStrategy objects
+  /////////     2) shouldn't DrawStragegy be boost::noncopyable?
+  
+  
   /**
    * An interface for drawing strategies for timeline entities.
    */
   class DrawStrategy
-  {
-  protected:
-
-    DrawStrategy() {  }
-
-    virtual ~DrawStrategy() {  }
-
-  public:
-
-    virtual void draw(const Entity &entity,
-      Cairo::RefPtr<Cairo::Context> cr,
-      TimelineViewWindow* const window) const = 0;
-  };
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
-
+    {
+    protected:
+  
+      DrawStrategy() { }
+  
+      virtual ~DrawStrategy();
+  
+    public:
+  
+      virtual void
+      draw (const Entity &entity,
+            Cairo::RefPtr<Cairo::Context> cr,
+            TimelineViewWindow* const window) const  = 0;
+    };
+  
+  
+}}}    // namespace gui::widgets::timeline
 #endif // TIMELINE_DRAW_STRATEGY_HPP

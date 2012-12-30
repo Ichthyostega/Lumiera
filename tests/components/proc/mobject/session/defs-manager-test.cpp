@@ -21,8 +21,6 @@
 * *****************************************************/
 
 
-#include "pre_a.hpp"
-
 #include "lib/test/run.hpp"
 #include "lib/symbol.hpp"
 #include "lib/query.hpp"
@@ -33,7 +31,7 @@
 #include "proc/asset/struct.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 
 #include <boost/format.hpp>
 
@@ -43,6 +41,7 @@ using std::string;
 
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -57,7 +56,6 @@ namespace test    {
   using asset::Struct;
   using lumiera::Query;
   using lumiera::query::normaliseID;
-  using lumiera::StreamType;
   
   
   /** shortcut: run just a query
@@ -201,4 +199,4 @@ namespace test    {
   LAUNCHER (DefsManager_test, "function session");
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

@@ -1,0 +1,130 @@
+format 74
+
+classinstance 128005 class_ref 178437 // Client
+  name ""   xyz 53.1 3.7 2000 life_line_z 2000
+classinstance 128133 class_ref 176133 // OutputSlot
+  name ""   xyz 285.4 5 2000 life_line_z 2000
+classinstance 128261 class_ref 178565 // DataSink
+  name ""   xyz 143.6 27.9 2000 life_line_z 2000
+classinstance 128389 class_ref 178693 // BufferProvider
+  name ""   xyz 471.5 5 2000 life_line_z 2000
+fragment 131845 "client side"
+  xyzwh 41.4 28.1 1995 156 279
+end
+fragment 131973 "output implementation"
+  xyzwh 281.3 29.1 1995 262 277
+end
+durationcanvas 128517 classinstance_ref 128005 // :Client
+  xyzwh 72 81.7 2010 11 52
+end
+durationcanvas 129541 classinstance_ref 128005 // :Client
+  xyzwh 72 211.1 2010 11 41
+end
+durationcanvas 129669 classinstance_ref 128261 // :DataSink
+  xyzwh 166 238 2010 11 25
+end
+durationcanvas 129925 classinstance_ref 128133 // :OutputSlot
+  xyzwh 313 242.3 2010 11 63
+  overlappingdurationcanvas 133637
+    xyzwh 319 271.5 2020 11 28
+  end
+end
+durationcanvas 130309 classinstance_ref 128389 // :BufferProvider
+  xyzwh 507 250.2 2010 11 26
+end
+durationcanvas 131333 classinstance_ref 128133 // :OutputSlot
+  xyzwh 313 85.1 2010 11 34
+end
+durationcanvas 132101 classinstance_ref 128261 // :DataSink
+  xyzwh 166 107.9 2010 11 25
+end
+durationcanvas 132485 classinstance_ref 128005 // :Client
+  xyzwh 72 167 2010 11 27
+end
+durationcanvas 132613 classinstance_ref 128261 // :DataSink
+  xyzwh 166 169.1 2010 11 25
+end
+durationcanvas 132869 classinstance_ref 128133 // :OutputSlot
+  xyzwh 313 173.5 2010 11 25
+end
+durationcanvas 133125 classinstance_ref 128005 // :Client
+  xyzwh 72 211.5 2010 11 29
+end
+durationcanvas 133381 classinstance_ref 128389 // :BufferProvider
+  xyzwh 507 180.2 2010 11 25
+end
+durationcanvas 133893 classinstance_ref 128389 // :BufferProvider
+  xyzwh 507 280.2 2010 11 25
+end
+msg 129797 synchronous
+  from durationcanvas_ref 129541
+  to durationcanvas_ref 129669
+  yz 238 2015 explicitmsg "emit()"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 110 231
+msg 130053 synchronous
+  from durationcanvas_ref 129669
+  to durationcanvas_ref 129925
+  yz 242 2020 explicitmsg "transfer()"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 220 235
+msg 130437 synchronous
+  from durationcanvas_ref 129925
+  to durationcanvas_ref 130309
+  yz 250 2030 explicitmsg "transition to EMITTED"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 383 244
+msg 131461 synchronous
+  from durationcanvas_ref 128517
+  to durationcanvas_ref 131333
+  yz 85 2015 explicitmsg "allocate()"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 105 76
+msg 132229 synchronous
+  from durationcanvas_ref 131333
+  to durationcanvas_ref 132101
+  yz 108 2020 explicitmsg "create DataSink"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 208 100
+msg 132357 return
+  from durationcanvas_ref 132101
+  to durationcanvas_ref 128517
+  yz 116 2025 explicitmsg "DataSink"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 105 122
+msg 132741 synchronous
+  from durationcanvas_ref 132485
+  to durationcanvas_ref 132613
+  yz 169 2015 explicitmsg "lockBuffer()"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 102 160
+msg 132997 synchronous
+  from durationcanvas_ref 132613
+  to durationcanvas_ref 132869
+  yz 175 2020 explicitmsg "lock()"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 227 166
+reflexivemsg 133253 synchronous
+  to durationcanvas_ref 133125
+  yz 211 2020 explicitmsg "generate Data"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 90 200
+msg 133509 synchronous
+  from durationcanvas_ref 132869
+  to durationcanvas_ref 133381
+  yz 180 2025 explicitmsg "transition to LOCKED"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 383 174
+reflexivemsg 133765 synchronous
+  to durationcanvas_ref 133637
+  yz 272 2040 explicitmsg "pushout()"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 328 261
+msg 134021 synchronous
+  from durationcanvas_ref 133637
+  to durationcanvas_ref 133893
+  yz 289 2025 explicitmsg "transition to FREE"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 381 283
+preferred_whz 586 416 1
+end

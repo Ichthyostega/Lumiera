@@ -73,8 +73,8 @@ Credits for many further implementation ideas go to
 
 
 
-#ifndef LUMIERA_VISITOR_H
-#define LUMIERA_VISITOR_H
+#ifndef LIB_VISITOR_H
+#define LIB_VISITOR_H
 
 #include "lib/visitor-policies.hpp"
 #include "lib/visitor-dispatcher.hpp"
@@ -82,8 +82,10 @@ Credits for many further implementation ideas go to
 #include "lib/meta/typelist.hpp"
 
 
-namespace lumiera {
+namespace lib {
 namespace visitor {
+  
+  namespace typelist = lib::meta;
   
   
   /** 
@@ -225,5 +227,5 @@ namespace visitor {
   
   
   
-}} // namespace lumiera::visitor
+}} // namespace lib::visitor
 #endif

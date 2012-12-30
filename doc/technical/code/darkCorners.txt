@@ -1,0 +1,54 @@
+Dark Corners
+============
+
+_this page accounts for some problematic areas, sketchy solutions,
+nonportable hacks, terrorism and other misdemeanour_
+
+Library
+-------
+
+Equality of Functors
+~~~~~~~~~~~~~~~~~~~~
+One of the more important recent additions to the C++ language are function objects.
+In addition to the features actually provided by the boost implementation, the tr1 report
+also requires function instances to implement an equality operator. Unfortunately the
+implementation approach choosen by boost makes a 100% correct implementation of
+comparision very dificult, if not impossible. Thus, the boost developers refused
+to implement this feature.
+
+The bad news is that really using the power of opaque function objects quickly drove
+us (Lumiera) into a situation where such an equalty test and a hash calculation on
+function objects would be necessary. The whole point of using function objects is
+the ability to ``erase'' specific details, which has the downside that the resulting
+generic objects are opaque and often dificult to manage, when it comes to storing
+and retrieving objects building on such functors.
+
+Thus I built an hack, based on the implementation details of boost::function.
+In +functor-util.hpp+ we define a +class HijackedFunction+, which has the same
+data layout as the original boost::function. After forcibly casting such an function
+(reference or pointer) into a +HijackedFunction+, we're able to inspect and evaluate
+the implementation pointers for equality comparison and hash value calculation.
+This approach works and actually detects copied functions to be _equal_, but is
+unable to pinpoint _equivalence_, e.g. functors bound to the same function with
+the same arguments through separate but otherwise identical invocations of +bind+.
+Besides, should boost or the standard library implementors eventually change the
+implementation, this workaround will break.
+
+
+Size of standard library facilities
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Sometimes we need to know the size of an STL or Boost class, but can't afford
+to include the header and just write a `sizeof()`. Because including some of those
+headers incurs quite some price in terms of compilation time and even size of the
+debug executable.
+
+Obviously, a simple solution would be to measure those sizes and hardcode them.
+But what about portability? To get out of that dilemma, I created a traits class
+which mimics the implementation memory layout of those facilities in question,
+simplified as much as possible. As long as the GNU libstdc++ or Boost don't
+change their implementation layout, this give us precise and fast size bounds.
+
+When relying on that hack, we should make sure always to place some kind of
+STATIC_ASSERT into the corresponding implementation files to ensure the real
+facilites actually _do fit_ into the guessed storage dimensions.
+

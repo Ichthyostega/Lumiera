@@ -21,13 +21,16 @@
 * *****************************************************/
 
 
-#include "pre.hpp"
+#include "lib/error.hpp"
+#include "proc/common.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "proc/asset/unknown.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
+#include "backend/media-access-facade.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"
 
@@ -36,6 +39,10 @@
 
 
 using util::isnil;
+using lib::time::FSecs;
+using lib::time::Duration;
+using backend_interface::MediaDesc;
+using backend_interface::MediaAccessFacade;
 
 using boost::format;
 using boost::regex;
@@ -43,12 +50,13 @@ using boost::smatch;
 using boost::regex_search;
 using std::tr1::dynamic_pointer_cast;
 
+namespace error = lumiera::error;
 
-namespace asset
-  {
+namespace proc {
+namespace asset {
   
-  namespace // Implementation details
-  {
+  namespace { // Implementation details
+    
     /** helper: extract a name token out of a given path/filename
      *  @return sanitised token based on the name (minus extension),
      *          empty string if not the common filename pattern.
@@ -116,7 +124,7 @@ namespace asset
   }
   
   
-  lumiera::Time
+  Duration
   Media::getLength()  const
   {
      return len_;
@@ -132,6 +140,7 @@ namespace asset
    *  either a asset::Media object or an "Unknown" placeholder will be provided. If
    *  the given Category already contains an "Unkown", we just get the
    *  corresponding smart-ptr. Otherwise a new asset::Unknown is created.
+   *  @throw  error::Invalid when media file is inaccessible or inappropriate
    *  @return an Media smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Media subclass ctor.
    */
@@ -141,7 +150,7 @@ namespace asset
     asset::Media* pM (0);
     AssetManager& aMang = AssetManager::instance();
     
-    TODO ("check and fix Category if necessary");
+    //////////////////////////////////////////////////////////TICKET #841 check and fix Category if necessary
     
     if (isnil (file))
       {
@@ -155,10 +164,12 @@ namespace asset
     else
       {
         if (isnil (key.name)) key.name=extractName(file);
-        TODO ("file exists?");
-        TODO ("extract media file properties");
-        Time length(25);
-        TODO ("detecting and wiring multichannel compound media!");
+        
+        MediaAccessFacade& maf = MediaAccessFacade::instance();
+        MediaDesc& handle = maf.queryFile(key.name);
+        Duration length = handle.length;
+        
+        //////////////////////////////////////////////////////////TICKET #841 detecting and wiring multichannel compound media
         pM = new Media (key,file,length); 
       }
     ASSERT (pM);
@@ -219,18 +230,18 @@ namespace asset
    *  @throw Invalid if the given media asset is not top-level,
    *         but rather part or a multichannel (compound) media
    */
-  P<asset::Clip>
-  MediaFactory::operator() (asset::Media& mediaref)  throw(lumiera::error::Invalid)
+  P<Clip>
+  MediaFactory::operator() (Media& mediaref)
   {
     if (mediaref.checkCompound())
-      throw lumiera::error::Invalid (str(format("Attempt to create a asset::Clip from the media %s, "
-                                                "which is not toplevel but rather part or a compound "
-                                                "(multichannel) media. Found parent Media %s.") 
-                                                % string(mediaref) 
-                                                % string(*mediaref.checkCompound()))
-                                    ,LUMIERA_ERROR_PART_OF_COMPOUND
-                                    );
-    asset::Clip* pC = new asset::Clip (mediaref);
+      throw error::Invalid (str(format("Attempt to create a asset::Clip from the media %s, "
+                                       "which is not toplevel but rather part or a compound "
+                                       "(multichannel) media. Found parent Media %s.") 
+                                       % string(mediaref) 
+                                       % string(*mediaref.checkCompound()))
+                           ,LUMIERA_ERROR_PART_OF_COMPOUND
+                           );
+    Clip* pC = new Clip (mediaref);
     return AssetManager::instance().wrap (*pC);
   }
   
@@ -239,4 +250,4 @@ namespace asset
 
 
 
-} // namespace asset
+}} // namespace asset

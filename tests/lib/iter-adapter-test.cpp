@@ -132,9 +132,10 @@ namespace test{
         /** Implementation of Iteration-logic: pull next element. */
         template<class ITER>
         friend void
-        iterNext (const TestContainer*, ITER& pos)
+        iterNext (const TestContainer* src, ITER& pos)
           {
             ++pos;
+            checkPoint (src,pos);
           }
         
         /** Implementation of Iteration-logic: detect iteration end.
@@ -147,7 +148,7 @@ namespace test{
          */
         template<class ITER>
         friend bool
-        hasNext (const TestContainer* src, ITER& pos)
+        checkPoint (const TestContainer* src, ITER& pos)
           {
             REQUIRE (src);
             if ((pos != ITER(0)) && (pos != src->numberz_.end()))
@@ -215,7 +216,10 @@ namespace test{
           
           // now for example the client could....
           while ( range )
-            cout << "::" << *range++;
+            {
+              cout << "::" << *range;
+              ++range;
+            }
           
           cout << endl;
           CHECK (isnil (range));
@@ -317,7 +321,7 @@ namespace test{
           TestContainer::ref_iterator rI (elms.begin_ref());
           
           CHECK (0 == *rI );
-          CHECK (0 == *rI++);
+          ++rI;
           CHECK (1 == *rI  );
           CHECK (2 == *++rI);
           

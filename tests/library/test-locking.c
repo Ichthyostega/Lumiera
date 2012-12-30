@@ -19,7 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "tests/test.h"
+#include "lib/test/test.h"
 #include "lib/mutex.h"
 #include "lib/recmutex.h"
 #include "lib/condition.h"

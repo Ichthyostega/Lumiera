@@ -56,7 +56,7 @@ namespace wrapper {
   
   using util::unConst;
   using util::isSameObject;
-  using lumiera::typelist::FunctionSignature;
+  using lib::meta::FunctionSignature;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   using boost::remove_const;
@@ -64,7 +64,7 @@ namespace wrapper {
   
   
   /** 
-   * Extension to boost::reference_wrapper: 
+   * Extension to std::reference_wrapper: 
    * Allows additionally to re-bind to another reference,
    * almost like a pointer. Helpful for building templates.
    * @warning potentially dangerous 
@@ -128,7 +128,7 @@ namespace wrapper {
    * A copyable, assignable value object, not managing ownership.
    * It can be default constructed and \c bool evaluated to detect
    * an empty holder. The value is retrieved pointer-like, by
-   * explicit dereferentiation. (Contrast this to boost::ref,
+   * explicit dereferentiation. (Contrast this to std::ref,
    * where the original reference is retrieved by conversion)
    * 
    * The purpose of this template is to be able to remember
@@ -380,7 +380,7 @@ namespace wrapper {
         {
           using std::tr1::bind;
           using std::tr1::placeholders::_1;
-          using lumiera::typelist::func::chained;
+          using lib::meta::func::chained;
                                                       // note: binding "this" mandates noncopyable
           function<Res(Res)> doCaptureResult  = bind (&FunctionResult::captureResult, this, _1 );
           function<SIG> chainedWithResCapture = chained (targetFunction, doCaptureResult); 

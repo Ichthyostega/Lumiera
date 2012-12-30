@@ -1,0 +1,141 @@
+Iterators and Pipelines
+=======================
+
+The link:http://c2.com/cgi/wiki?IteratorPattern[Iterator Pattern] allows to
+expose the contents or elements of any kind of collection, set or container
+for use by client code, without exposing the implementation of the underlying
+data structure. Thus, iterators are one of the primary API building blocks.
+
+Lumiera Forward Iterator
+------------------------
+While most modern languages provide some kind of _Iterator,_ the actual semantics
+and the fine points of the implementation vary greatly from language to language.
+Unfortunately the C++ standard library uses a very elaborate and rather low-level
+notion of iterators, which doesn't mix well with the task of building clean interfaces.
+
+Thus, within the Lumiera core application, we're using our own Iterator concept,
+initially defined as link:{ldoc}/devel/rfc/LumieraForwardIterator.html[RfC],
+which places the primary focus on interfaces and decoupling, trading off
+readability and simplicity for (lesser) performance.
+
+.Definition
+An Iterator is a self-contained token value,
+representing the promise to pull a sequence of data
+
+ - rather then deriving from an specific interface, anything behaving
+   appropriately _is a Lumiera Forward Iterator._ (``duck typing'')
+ - the client finds a typedef at a suitable, nearby location. Objects of this
+   type can be created, copied and compared.
+ - any Lumiera forward iterator can be in _exhausted_ (invalid) state, which
+   can be checked by +bool+ conversion.
+ - especially, default constructed iterators are fixed to that state.
+   Non-exhausted iterators may only be obtained by API call.
+ - the exhausted state is final and can't be reset, meaning that any iterator
+   is a disposable one-way-off object.
+ - when an iterator is _not_ in the exhausted state, it may be _dereferenced_
+   (`*i`), yielding the ``current'' value
+ - moreover, iterators may be incremented (`++i`) until exhaustion.
+
+
+Motivation
+~~~~~~~~~~
+The Lumiera Forward Iterator concept is a blend of the STL iterators and
+iterator concepts found in Java, C#, Python and Ruby. The chosen syntax should
+look familiar to C++ programmers and indeed is compatible to STL containers and
+ranges. To the contrary, while a STL iterator can be thought of as being just
+a disguised pointer, the semantics of Lumiera Forward Iterators is deliberately
+reduced to a single, one-way-off forward iteration, they can't be reset,
+manipulated by any arithmetic, and the result of assigning to an dereferenced
+iterator is unspecified, as is the meaning of post-increment and stored copies
+in general. You _should not think of an iterator as denoting a position_ --
+just a one-way off promise to yield data.
+
+Another notable difference to the STL iterators is the default ctor and the
++bool+ conversion. The latter allows using iterators painlessly within +for+
+and +while+ loops; a default constructed iterator is equivalent to the STL
+container's +end()+ value -- indeed any _container-like_ object exposing
+Lumiera Forward Iteration is encouraged to provide such an `end()`-function,
+additionally enabling iteration by `std::for_each` (or Lumiera's even more
+convenient `util::for_each()`).
+
+Implementation
+~~~~~~~~~~~~~~
+As pointed out above, within Lumiera the notion of ``Iterator'' is a concept
+(generic programming) and doesn't mean a supertype (object orientation). Any
+object providing a suitable set of operations can be used for iteration.
+
+- must be default constructible to _exhausted state_
+- must be a copyable value object
+- must provide a `bool` conversion to detect _exhausted state_
+- must provide a pre-increment operator (`++i`)
+- must allow dreferentiation (`*i`) to yield the current object
+- must throw on any usage in _exhausted state_.
+
+But, typically you wouldn't write all those operations again and again.
+Rather, there are two basic styles of iterator implementations, each of which
+is supported by some pre defined templates and a framework of helper functions.
+
+Iterator Adapters
+^^^^^^^^^^^^^^^^^
+Iterators built based on these adaptor templates are lightweight and simple to use
+for the implementor. But they don't decouple from the actual implementation, and
+the resulting type of the iterator usually is rather convoluted. So the typical
+usage scenario is, when defining some kind of custom container, we want to add
+a `begin()` and `end()` function, allowing to make it behave similar to a STL
+container. There should be an embedded typedef `iterator` (and maybe `const_iterator`).
+This style is best used within generic code at the implementation level, but is not
+well suited for interfaces.
+
+-> see 'lib/iter-adapter.hpp'
+
+Iteration Sources
+^^^^^^^^^^^^^^^^^
+Here we define a classical abstract base class to be used at interfaces. The template
+`lib::IterSource<TY>` is an abstract promise to yield elements of type TY. It defines
+an embedded type `iterator` (which is an iterator adapter, just only depending on
+this abstract interface). Typically, interfaces declare to return an
+`IterSource<TY>::iterator` as the result of some API call. These iterators will
+hold an embedded back-reference to ``their'' source, while the exact nature of this
+source remains opaque. Obviously, the price to pay for this abstraction barrier is
+calling through virtual functions into the actual implementation of the ``source''.
+
+Helpers to define iterators
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+For both kinds of iterator implementation, there is a complete set of adaptors based
+on STL containers. Thus, it's possible to expose the contents of such a container,
+or the keys, the values or the unique values just with a single line of code. Either
+as iterator adapter (-> see 'lib/iter-adapter-stl.hpp'), or as iteration source
+(-> see 'lib/iter-source.hpp')
+
+
+Pipelines
+---------
+The extended use of iterators as an API building block naturally leads to building
+_filter pipelines_: This technique form functional programming completely abstracts
+away the actual iteration, focussing solely on the selecting and processing of
+individual items. For this to work, we need special manipulation functions, which
+take an iterator and yield a new iterator incorporating the manipulation. (Thus,
+in the terminology of functional programming, these would be considered to be
+``higher order functions'', i.e. functions processing other functions, not values).
+The most notable building blocks for such pipelines are
+
+filtering::
+  each element yielded by the _source iterator_ is evaluated by a _predicate function,_
+  i.e. a function taking the element as argument and returning a `bool`, thus answering
+  a ``yes or no'' question. Only elements passing the test by the predicate can pass
+  on and will appear from the result iterator, which thus is a _filtered iterator_
+
+transforming::
+  each element yielded by the _source iterator_ is passed through a _transformnig function,_
+  i.e. a function taking an source element and returing a ``transformed'' element, which
+  thus may be of a completely different type than the source.
+
+Since these elements can be chained up, such a pipeline may pass several abstraction barriers
+and APIs, without either the source or the destination being aware of this fact. The actual
+processing only happens _on demand_, when pulling elements from the end of the pipeline.
+Oten, this end is either a _collecting step_ (pulling all elements and filling a new container)
+or again a IterSource to expose the promise to yield elements of the target type.
+
+Pipelines work best on _value objects_ -- special care is necessary when objects with _reference
+semantics_ are involved.
+

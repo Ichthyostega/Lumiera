@@ -26,6 +26,7 @@
 
 //#include <boost/ptr_container/ptr_vector.hpp>
 
+namespace proc {
 namespace mobject {
 namespace builder {
   
@@ -91,4 +92,4 @@ namespace builder {
   
   
   
-}} // namespace mobject::builder
+}}} // namespace proc::mobject::builder

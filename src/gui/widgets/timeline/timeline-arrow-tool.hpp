@@ -19,20 +19,22 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file timeline-arrow-tool.hpp
  ** This file contains the definition of the arrow tool class
  */
 
-#ifndef TIMELINE_ARROW_TOOL_HPP
-#define TIMELINE_ARROW_TOOL_HPP
+#ifndef WIDGETS_TIMELINE_ARROW_TOOL_H
+#define WIDGETS_TIMELINE_ARROW_TOOL_H
 
-#include <gtkmm.h>
 
-#include "timeline-tool.hpp"
-
+#include "gui/gtk-base.hpp"
 #include "gui/widgets/timeline-widget.hpp"
-#include "timeline-body.hpp"
-#include "timeline-track.hpp"
+#include "gui/widgets/timeline/timeline-tool.hpp"
+#include "gui/widgets/timeline/timeline-body.hpp"
+#include "gui/widgets/timeline/timeline-track.hpp"
+
+#include "lib/time/timevalue.hpp"
 
 namespace gui {
 namespace widgets {
@@ -79,7 +81,7 @@ namespace timeline {
 
   private:
 
-    boost::shared_ptr<timeline::Track>
+    shared_ptr<timeline::Track>
     getHoveringTrack ();
 
     bool selectionRectangleActive;

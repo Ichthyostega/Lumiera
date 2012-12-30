@@ -27,6 +27,7 @@
 
 
 
+namespace proc {
 namespace mobject {
   
   template<class VAL> class ParamProvider;
@@ -50,5 +51,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

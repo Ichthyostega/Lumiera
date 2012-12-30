@@ -24,6 +24,7 @@
 #include "proc/mobject/session/track.hpp"
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -32,7 +33,7 @@ namespace session {
    *  will be set to 0 
    */
   Track::Track (TrackID const& trackID)
-    : start_(0)
+    : start_(Time::ZERO)                     //////////////////////////////////TODO something more inspired please
     , id_(trackID)
   {
     throwIfInvalid();
@@ -47,4 +48,4 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

@@ -24,7 +24,7 @@
 /** @file function-closure-test.cpp
  ** Testing a combination of tr1::function objects and metaprogramming.
  ** Argument types will be extracted and represented as typelist, so they
- ** can be manipulated at compile time. This test uses some functions with
+ ** can be manipulated at compile time. This test uses some test functions
  ** and systematically applies or binds them to corresponding data tuples.
  ** Moreover, closure objects will be constructed in various flavours,
  ** combining a function object and a set of parameters.
@@ -38,7 +38,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "meta/typelist-diagnostics.hpp"
@@ -52,9 +52,9 @@ using std::cout;
 using std::endl;
 
 
-namespace lumiera {
-namespace typelist{
-namespace test    {
+namespace lib  {
+namespace meta {
+namespace test {
       
       
       namespace { // test data
@@ -352,4 +352,4 @@ namespace test    {
   
   
   
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test

@@ -25,7 +25,7 @@
  ** Interplay of typelists, type tuples and simple record
  ** data types build on top of them.
  ** 
- ** @see lumiera::typelist::Tuple
+ ** @see lib::meta::Tuple
  ** @see tuple.hpp
  ** @see function-closure.hpp
  ** @see control::CmdClosure real world usage example
@@ -45,8 +45,8 @@ using std::cout;
 using std::endl;
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib  {
+namespace meta {
 namespace test {
   
   
@@ -451,8 +451,8 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (TypeTuple_test, "unit common");
+  LAUNCHER (TypeTuple_test, "unit meta");
   
   
   
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test

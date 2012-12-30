@@ -21,7 +21,6 @@
 * *****************************************************/
 
 
-//#include "pre.hpp"
 #include "proc/mobject/session/placement-index-query-resolver.hpp"
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/placement.hpp"
@@ -34,6 +33,7 @@
 #include <stack>
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -397,4 +397,4 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

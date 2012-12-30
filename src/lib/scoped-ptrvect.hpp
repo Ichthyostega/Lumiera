@@ -35,6 +35,8 @@
  ** - TODO: detaching of objects...
  ** - TODO: retro-fit with RefArray interface
  ** 
+ ** @warning deliberately \em not threadsafe
+ ** 
  ** @see scoped-ptrvect-test.cpp
  ** @see scoped-holder.hpp
  ** @see gui::DisplayService usage example
@@ -48,8 +50,10 @@
 #include "include/logging.h"
 #include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
+#include "lib/util.hpp"
 
 #include <vector>
+#include <algorithm>
 #include <boost/noncopyable.hpp>
 
 
@@ -113,7 +117,7 @@ namespace lib {
           REQUIRE (obj);
           try 
             {
-              push_back (obj);
+              this->push_back (obj);
               return *obj;
             }
           catch(...)
@@ -123,22 +127,43 @@ namespace lib {
         }   }
       
       
+      /** withdraw responsibility for a specific object.
+       *  This object will be removed form this collection
+       *  and returned as-is; it won't be deleted when the
+       *  ScopedPtrVect goes out of scope.
+       * @param obj address of the object in question.
+       * @return pointer to the object, if found.
+       *         Otherwise, NULL will be returned and the
+       *         collection of managed objects remains unaltered
+       * @note EX_STRONG
+       * @todo TICKET #856 better return a Maybe<T&> instead of a pointer?
+       */
+      T*
+      detach (void* objAddress)
+        {
+          T* extracted = static_cast<T*> (objAddress);
+          VIter pos = std::find (_Vec::begin(),_Vec::end(), extracted);
+          if (pos != _Vec::end() && bool(*pos))
+            {
+              extracted = *pos;
+              _Vec::erase(pos);  // EX_STRONG
+              return extracted;
+            }
+          return NULL;
+        }
+      
+      
       void
       clear()
         { 
           VIter e = _Vec::end();
           for (VIter i = _Vec::begin(); i!=e; ++i)
-            {
-              if (*i)
-                try
-                  {
-                    delete *i;
-                    *i = 0;
-                  }
-                catch(std::exception& ex)
-                  {
-                    WARN (library, "Problem while deallocating ScopedPtrVect: %s", ex.what());
-            }     }
+            if (*i)
+              try {
+                  delete *i;
+                  *i = 0;
+                }
+              ERROR_LOG_AND_IGNORE (library, "Clean-up of ScopedPtrVect");
           _Vec::clear();
         }
       
@@ -155,9 +180,9 @@ namespace lib {
       typedef ConstIterType const_iterator;
       
       iterator       begin()        { return       iterator (allPtrs()); }
-      const_iterator begin()  const { return const_iterator (allPtrs()); }
       iterator       end()          { return       iterator ( RIter() ); }
-      const_iterator end()    const { return const_iterator (RcIter() ); }
+      const_iterator begin()  const { return const_iterator::build_by_cast (allPtrs()); }
+      const_iterator end()    const { return const_iterator::nil();      }
       
       
       
@@ -187,6 +212,12 @@ namespace lib {
       allPtrs ()
         {
           return RIter (_Vec::begin(), _Vec::end());
+        }
+      RIter
+      allPtrs ()  const
+        {
+          _Vec& elements = util::unConst(*this);
+          return RIter (elements.begin(), elements.end());
         }
     };
   

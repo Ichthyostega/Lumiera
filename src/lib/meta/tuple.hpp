@@ -44,8 +44,8 @@
  */
 
 
-#ifndef LUMIERA_META_TUPLE_H
-#define LUMIERA_META_TUPLE_H
+#ifndef LIB_META_TUPLE_H
+#define LIB_META_TUPLE_H
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
@@ -54,8 +54,8 @@
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta {
   
   
   
@@ -283,6 +283,7 @@ namespace typelist{
   namespace tuple { // some convenience access functions
   
     template<uint n, class TUP> 
+    inline
     typename Shifted<TUP,n>::Head&
     element (TUP& tup)
     {
@@ -743,5 +744,5 @@ namespace typelist{
   
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

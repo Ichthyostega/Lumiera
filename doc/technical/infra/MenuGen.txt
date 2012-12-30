@@ -204,6 +204,7 @@ supported placement directives
 commandline options
 ^^^^^^^^^^^^^^^^^^^
 The behaviour of the +menugen+ script can be influenced by some options:
+
 predefined:: using the built-in predefined nodes
 scan::    discover nodes 
 debug::   dump data structure after discovery

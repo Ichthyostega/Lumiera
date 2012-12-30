@@ -29,8 +29,8 @@
 
 using util::isnil;
 
-namespace asset
-  {
+namespace proc {
+namespace asset {
   
   
   /** new processing pattern with empty instruction list.
@@ -117,4 +117,4 @@ namespace asset
   
 
 
-} // namespace asset
+}} // namespace asset

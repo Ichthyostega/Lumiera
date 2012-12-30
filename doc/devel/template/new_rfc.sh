@@ -12,9 +12,9 @@ ${TITLE//?/=}
 *Proposed by*   $(git config --get user.name) <$(git config --get user.email)>
 -------------------------------------
 
-[abstract]
 ********************************************************************************
-
+.Abstract
+_give a short summary of this proposal_
 ********************************************************************************
 
 Description
@@ -27,7 +27,8 @@ Tasks
 ~~~~~
 // List what needs to be done to implement this Proposal:
 // * first step ([green]#✔ done#)
-// * second step [,yellow]#WIP#
+// * second step [yellow-background]#WIP#
+// * third step [red yellow-background]#TBD#
 
 
 Discussion

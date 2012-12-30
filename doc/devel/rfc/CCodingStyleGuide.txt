@@ -65,16 +65,11 @@ For each `struct namespace_foo_struct` we have following typedefs:
 
 [source,C]
 ----
-typedef struct namespace_foo_struct namespace_foo;          // canonical
-typename
-typedef const namespace_foo * const_NamespaceFoo;           // pointer to const
-object
-typedef namespace_foo* link:NamespaceFoo[];                 // canonical
-pointer/handle
-typedef namespace_foo ** link:NamespaceFoo[]_ref;           // when intend to
-mutate the handle itself
-typedef const namespace_foo ** const_NamespaceFoo_ref;      // for const object
-handle
+typedef struct namespace_foo_struct namespace_foo;   // basic struct name
+typedef namespace_foo* NamespaceFoo;                 // canonical object pointer/handle
+typedef const namespace_foo * const_NamespaceFoo;    // pointer to const object
+typedef namespace_foo ** NamespaceFoo_ref;           // when intend to mutate the handle itself
+typedef const namespace_foo ** const_NamespaceFoo_ref;  // same for const object handle
 ----
 
 Examples:

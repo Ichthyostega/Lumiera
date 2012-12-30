@@ -44,7 +44,6 @@
 #ifndef CONTROL_HANDLING_PATTERN_H
 #define CONTROL_HANDLING_PATTERN_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/bool-checkable.hpp"
@@ -53,6 +52,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using std::string;
@@ -67,6 +67,7 @@ namespace control {
    * It is returned when invoking a HandlingPattern
    * and can be used to check for success and/or re-throw
    * any Exception encountered during the command execution.
+   * @todo couldn't that be replaced by a lib::Result<void> instance??
    */
   class ExecResult
     : public lib::BoolCheckable<ExecResult>
@@ -146,5 +147,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

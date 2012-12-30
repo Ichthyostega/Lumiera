@@ -23,19 +23,22 @@
 
 #include "lib/test/run.hpp"
 #include "proc/control/command-def.hpp"
-#include "lib/lumitime.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/p.hpp"
 
 #include <cstdlib>
 
-using lumiera::Time;
 using std::rand;
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
-  using lumiera::P;
+  using lib::P;
+  using lib::time::Time;
+  using lib::time::TimeVar;
+  using lib::time::TimeValue;
   
   
   
@@ -44,19 +47,19 @@ namespace test    {
   namespace  { // functions to be invoked through the command system
     
     void
-    operate (P<Time> dummyObj, int randVal)
+    operate (P<TimeVar> dummyObj, int randVal)
     {
-      *dummyObj += Time(randVal);
+      *dummyObj += TimeValue(randVal);
     }
     
-    Time
-    capture (P<Time> dummyObj, int)
+    TimeVar
+    capture (P<TimeVar> dummyObj, int)
     {
       return *dummyObj;
     }
     
     void
-    undoIt (P<Time> dummyObj, int, Time oldVal)
+    undoIt (P<TimeVar> dummyObj, int, TimeVar oldVal)
     {
       *dummyObj = oldVal;
     }
@@ -87,8 +90,10 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          P<Time> obj (new Time(5));
           int randVal ((rand() % 10) - 5);
+          Time five(TimeValue(5));
+          TimeValue randomTime(randVal);
+          P<TimeVar> obj (new TimeVar(five));
           
           CommandDef ("test.command1")
               .operation (operate)
@@ -101,13 +106,13 @@ namespace test    {
           Command ourCmd = Command::get("test.command1");
           
           // invoke the command
-          CHECK (*obj == Time(5));
+          CHECK (*obj == five);
           ourCmd();
-          CHECK (*obj == Time(5) + Time(randVal));
+          CHECK (*obj == five + randomTime);
           
           // undo the effect of the command
           ourCmd.undo();
-          CHECK (*obj == Time(5));
+          CHECK (*obj == five);
         }
     };
   
@@ -116,4 +121,4 @@ namespace test    {
   LAUNCHER (CommandBasic_test, "unit controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

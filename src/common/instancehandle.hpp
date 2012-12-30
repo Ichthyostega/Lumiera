@@ -184,7 +184,7 @@ namespace lumiera {
       
     public:
       /** Set up an InstanceHandle representing a plugin.
-       *  Should be placed at the client side. 
+       *  Should be placed at the client side.
        *  @param iName unmangled name of the interface
        *  @param version major version
        *  @param minminor minimum acceptable minor version number
@@ -203,7 +203,7 @@ namespace lumiera {
        *  registration and deregistration of interface(s).
        *  Should be placed at the service providing side.
        *  @param a (single) interface descriptor, which can be created with
-       *         LUMIERA_INTERFACE_INSTANCE and referred to by LUMIERA_INTERFACE_REF 
+       *         LUMIERA_INTERFACE_INSTANCE and referred to by LUMIERA_INTERFACE_REF
        */
       InstanceHandle (LumieraInterface descriptor)
         : desc_(descriptor)
@@ -222,9 +222,9 @@ namespace lumiera {
       
       
       
-      /** act as smart pointer providing access through the facade. 
+      /** act as smart pointer providing access through the facade.
        *  @note we don't provide operator*                      */
-      FA * operator-> ()  const { return &(facadeLink_(*this)); }      
+      FA * operator-> ()  const { return &(facadeLink_(*this)); }
       
       /** directly access the instance via the CL interface */
       I& get ()  const { ENSURE(instance_); return *instance_; }

@@ -1,0 +1,232 @@
+2008-10-10 Lumiera Developers Meeting
+=====================================
+:Author: Ichthyo
+:Date: 2008-10-15
+
+Oct 10, 2008 on #lumiera 19:00 - 23:15 UTC +
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ * joelholdsworth
+ * alcarinque
+ * !KenSentMe
+ * Plouj
+ * raffa
+ * thorwil
+ * Victor_Sigma
+ * wildhostile
+
+
+organisational
+--------------
+Not much of a fixed agenda this time.
+ +
+Agreement to start with the Logo discussion, as this is of general interest, followed by the design drafts and similar dev topics.
+
+
+The Lumiera Logo
+----------------
+Summary of the situation: discussion regarding a logo for Lumiera is going on sporadically since quite some time. Several people from the community have made proposals. Also, there was discussion about the criteria a logo would have to fulfil. Especially the core devs raised the bar and required quite some professional level of design. On the contrary, several members of the community were concerned that such a demanding attitude will hinder creativity in a domain which is far off from coding. Moreover, many people complained they are really excited about Lumiera and strongly want to participate in some manner, but find it very difficult in the current phase of the project to give any valuable contribution.
+
+This summer, one of the proposals by http://farm4.static.flickr.com/3060/2927333034_ac94be80ea_b.jpg[Leandro Ribeiro] gained some popularity and especially was embraced by two of the core devs, while the GUI core dev wasn't convinced and http://www.pipapo.org/pipawiki/JoelHoldsworth/LogoThoughts[explained] his reservation. Prior to this meeting some people joined a brainstorming session and came up with http://www.pipapo.org/pipawiki/Lumiera/Logos?action=AttachFile&do=get&target=combo.png[another design] compiled of several proposals, which could meet the acceptance of the core devs. At the same time, Raffa made an argument for conducting a public contest, similar to the one which gave us the name of Lumiera. The situation for Lumiera is somewhat special. Usually, the community builds when the product is already minimally usable; we can't have users for now, but we have a lot of prospective users.
+
+Thus, while basically it would be possible for the core devs to shorten the process by just picking a design which is acceptable for all, maybe after augmenting it a little, several of the arguments articulated this far are in favour of a more formal decision by a contest:
+
+ * it would allow for a lot of people to really participate
+ * it could help to shape a general (graphic) style for Lumiera
+ * it could underpin the fact Lumiera indeed is a collaborative effort
+ * it doesn't mean additional work for the core devs on the whole
+ * it helps spreading the word
+
+Then, there is some discussion about the requirements. The core devs are concerned to keep up some quality level, because there is the possibility for the community to embrace a design, but when Lumiera enters the area it is intended to do, the standards of comparison will be different. The GIMP logo can be quoted as a negative example here.
+
+
+Conclusion
+~~~~~~~~~~
+There will be a Lumiera Logo contest.
+
+ * we should further discuss requirements on the Mailinglist until the end of the next week
+ * the '''deadline for submissions''' will be the next meeting (Nov 12 2008)
+ * then, after a pre-selection phase, the vote shall be conducted prior to the December meeting.
+
+Some minimal technical requirements will be enforced:
+
+ * the basic sign fits a compact rather quadratic bounding box (like 4:3)
+ * easy to print on various media (on posters, t-shirts, ..)
+ * basically a shape, using only a small number of solid colours (web safe)
+ * should work on different backgrounds, esp. not requiring white background
+ * the design should scale from microscopic size (favicon) up to big posters
+ * vector graphic source is mandatory
+
+Besides, we give some artistic guidelines
+
+ * it should be recognisable
+ * it should contain something like a sign, not just "Lumiera" in a fancy font
+ * it should not rely on transparencies, gradients and subtle shades,
+ * it should be viable, possibly work well in different presentation styles, able to be simplified as well as graphically augmented
+
+Raffa volunteers to help organizing the contest and the voting.
+
+
+
+
+
+Recurring Topics: design proposals
+----------------------------------
+Discussion of open http://www.pipapo.org/pipawiki/Lumiera/DesignProcess[design process] drafts.
+
+
+Mistakes to avoid
+~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/MistakestoAvoid[Mistakes to avoid in the Lumiera Design]
+We are carrying this one along since quite some time and we'd like to get rid of it, either by reworking it or by dropping it as-is. Because it contains a mixture of things
+
+ * we fully agree to 80% of the statements made there, but we think those statements are so very basic and self-evident as to be considered off-topic here. We are aware of the recurring problems with open source video editing. That's why we are here.
+ * the proposal draws conclusions on two technically substantial points, at which we don't agree. And it fails to provide sufficient (technically sound) arguments to prove these statements.
+
+While it is certainly ''desirable'' to be cross-platform as much as possible and especially '''target Microsoft Windows''', we don't see much possibilities with today's mainstream technology to build an application which is as technologically demanding as a video editor is. We would end up developing two or even three sister applications, or we are forced to sacrifice performance for portability. When put up to face such options, we have a clear preference to concentrate on a really free and open platform.
+
+While it is certainly ''desirable'' to make the application as robust as possible, we don't see how '''using multiple separate processes''' could help us with this goal ''without creating major scalability or performance problems'' due to the use of shared memory. And, yet more important: we don't share the basic assumption made in the proposal, namely that video processing is inherently dangerous. We think the basic algorithms involved are sufficiently well-known and understandable to implement them in a sound manner.
+
+__Conclusion__: drop it
+
+
+on the question of separate processes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The only practical solution would be to separate the GUI. Separating backend and proc-layer doesn't make much sense, technically speaking. We re-considered this question. Joelholdsworth (GUI) and Ichthyo (Proc-layer)prefer running the GUI in-process and to avoid the additional hassle with shared memory. Cehteh (backend) doesn't care for know and would like to re-discuss it as an option later on. This is somewhat similar to the possibility of running Lumiera distributed over the network, which is a goal, but not an immediate one.
+
+
+
+Tag Clouds
+~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/TagCloudsOnResources[Tag clouds on resources]
+Tags are considered very important. Meanwhile, we have a much more advanced proposal, which superseeds this one: http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/DelectusShotEvaluator["Delectus"]
+
+__Conclusion__: drop it
+
+
+
+
+Overview of Lumiera Architecture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ArchitectureOverview[Architecture Overview]
+The purpose of this drawing to give an first impression what subsystem is where and what the names mean. Since discussed last time, Ichthyo re-arranged the plugins as requested and added some details for the backend. Joelholdsworth points out that it's OK for him to show the GUI just as a single block here (and of course the GUI has much more internal structure). Cehteh adds that maintaining this drawing surely is a moving target, so we better remove the rendered image and just retain the textual description and link to the source (SVG), which is in GIT.
+
+__Conclusion__: accept it, change the image to a link
+
+
+
+
+EDLs as Meta-Clips
+~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/EDLsAreMetaClips[EDLs are meta-clips]
+This is just a high-level proposal, which doesn't go into technical details of implementing nested EDLs. It just poses the question "do we want to treat nested EDLs as being meta-clip" -- which we do.
+
+__Conclusion__: accepted
+
+
+
+
+The Builder
+~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ProcBuilder[Builder in the Proc-Layer]
+Similar to the previous one, this is a high-level proposal. It covers the fundamental approach Ichthyo takes within the Proc-Layer. Cehteh adds that he agrees to 98% and the remaining 2% are just matter of favour. Personally, he would have preferred one large graph which gets garbage collected (instead of the segmented graph)
+
+__Conclusion__: accepted
+
+
+
+
+High-level Model
+~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ProcHighLevelModel[Overview of the High-level model within the Proc-Layer]
+Cehteh queries if this shouldn't be better moved over to the documentation? He is fine with the contents, but it seems to be a bit voluminous for a design proposal. Ichthyo asks to leave it there just for now, as he feels it still needs review.
+
+__Conclusion__: leave it for now, maybe retract it from the design proposals and file it as documentation?
+
+
+
+
+Lua scripting language
+~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ScriptingLanguage[use Lua as required scripting language]
+All core devs agree with this decision. Joelholdsworth points out that he is fine with Lua, just he didn't want to write the GUI in it. Ichthyo adds that Lua is probably the best choice from today's mainstream scripting languages, because it is very lightweight. He further points out, that having Lua as ''required'' scripting language doesn't rule out using other popular languages (Python, Ruby) for scripting. Just they aren't required for running Lumiera. Cehteh will have a look at the details as soon as possible, but has currently other more urgent things in the queue. (Plouj shows interest to help here)
+
+__Conclusion__: accepted
+
+
+
+
+Time Handling
+~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/time_handling[time handling]
+A long standing proposal; meanwhile we've decided to build on GAVL, which is now reflected in the text of this proposal too. Ichthyo points out he changed the rounding rule in this proposal from "mathematical" to "floor (x+0.5)". Cehteh asks if we should use a thin library layer on top of gavl, to centralize all the time calculations. There seems to be agreement that this should actually be done ''on demand.'' Joelholdsworth sais sometimes he'd prefer to have a simple raw type to represent time, because it makes calculations much easier. Ichthyo adds that internally (within the layers, but not on interfaces) one could use a thin C++ wrapper with overloaded operators, which is default-convertible to gavl_time.
+
+__Conclusion__: accepted
+
+Note: the proposed rigid testsuite for time handling is necessary only when we introduce a wrapper...
+
+
+Interface naming convention
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+See the design proposal http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/InterfaceNamespaces[Interface Namespaces]. While working on the plugin loader, '''Cehteh''' and '''nasa''' did some brainstorming about a plugin naming scheme and how to get unique interface identifiers. The idea is to use a distinctive prefix, like a condensed organisation domain or email name, or a GPG fingerprint or even a UID, followed by the interface namespace hierarchy. These would be combined into a single identifier (valid C name). The intention is to get non-ambiguous names, yet avoiding the need of a central registry.
+
+__Conclusion__: accepted
+
+general Topics
+
+
+Config System
+-------------
+'''cehteh''' landed the first version of this subsystem and asked for review and testing. Currently it's "work with no progress", but it is basically usable (you can get values, you can set values by environment variables, but you can't persist). It should be augmented on demand, e.g. by adding the support for more value types (value types are a hint how to parse, and link the parsed value to a given C type).
+
+
+
+Use of Namespaces
+-----------------
+Currently there is no clear uniform rule regarding namespaces use. *Joelholdsworth* places his code within lumiera::gui and below. He points out that external libs like Cairo, GTK, GLib will bring in their hierarchies and all of Lumiera should comply and put anything below a lumiera:: root. On the contrary, *Ichthyo* deliberately moved his implementation code away from the central lumiera:: interface hierarchy into shallow namespaces and avoids nesting. He argues that having all code below lumiera:: effectively makes this namespace global or forces it to be void of any function; rather he'd prefer to import every interface explicitly into the implementation namespace. *Cehteh* argues that having a global lumiera::, even if empty, would mark a general claim and stand for the uniformity of the project. Generally, there should be some correspondence between folders and namespaces.
+
+No conclusion yet, to be discussed further.
+
+
+
+Interface Definition Language
+-----------------------------
+In his work on the plugin loader, '''Cehteh''' created a first draft how to export an interface, and calls for review. An example can be found in http://www.lumiera.org/gitweb?p=lumiera/ct;a=blob;f=tests/backend/test-interfaces.c;h=fb1c4d30a34414767a313d24df60e679c96ad2a7;hb=7323114e77348995ccaf03417136aef7ee332776[tests/backend/test-interfaces.c]
+
+An interface is a list of "slots" mapping functions. The interface descriptor is itself realised as interface, an thus can be versioned, extended and specialised. By use of some glue code and macros we create a simple Interface Definition Language
+
+ * after exporting a header with the C interface, including the types to be used...
+ * LUMIERA_INTERFACE_DECLARE creates an interface description (i.e. the official interface)
+ * implementing such an interface can be done in 3 major ways
+   * LUMIERA_INTERFACE_INSTANCE creates an instance on-the-fly (e.g. for descriptors)
+   * LUMIERA_EXPORT for defining a table of functions/interfaces to export from the core
+   * LUMIERA_PLUGIN for defining an interface table for functions located within a dynlib module (plugin)
+ * besides, with LUMIERA_INTERFACE_INLINE you can create a function on-the-fly while LUMIERA_INTERFACE_MAP maps onto an existing function directly
+
+The plugin loading system cares for mapping the given implementation function to the interface slots. Interfaces from the core need to be registered before they can be used, while for plugins this is done automatically on loading the module. The client code later just calls {{{interface_open()}}} and {{{interface_close()}}} where it doesn't matter anymore if the invoked function is in the core or loaded from an dynlib (plugin); loader, registry and/or plugin-DB shall manage it transparently.
+
+Version numbering starts with 1 and uses minor version numbers for compatible changes and major version numbers for everything that breaks existing asumptions. Version number zero is reserved for experimental work and per definition always the most recent version number.
+
+The system is designed to be very flexible and extensible, but this foundation really needs thorough review.
+
+Joelholdworth expresses some concern regarding the UIDs in octal notation used within the interface description. Cehteh explains they never need to be specified by client code. They are just distinctive IDs and provided for some special case within the plugin loader / serializer. He plans to provide a simple tool which automatically replaces a $LUIDGEN with such a bitstring. The octal notation was chosen, because it is the most compact albeit portable notation possible in C source code.
+
+
+Conclusion
+~~~~~~~~~~
+
+looks good, agreement by all core devs.
+ +
+Should be reviewed and investigated in detail to find any hidden problems.
+
+
+
+Next meeting
+------------
+
+There were some problems with the meeting schedule. Using the first week of month seems to be problematic. We'll try with second wednesday...
+
+The next meeting is scheduled for '''Wednesday Nov 12 2008 19:30 UTC''' at #lumiera

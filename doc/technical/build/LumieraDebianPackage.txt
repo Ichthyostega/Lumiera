@@ -1,0 +1,89 @@
+The Lumiera Debian Package
+==========================
+:Author: Hermann Voßeler deb@ichthyostega.de
+:Date: 11/2011
+
+//Menu: label Debian Package
+
+Since several of the Lumiera core developers run a Debian flavour as their primary development platform,
+it seems natural to care for the debian packaging of Lumiera ourselves. Moreover, we've declared 
+Debian/Stable to be our *reference platform* -- we'll provide any additionally required, more recent
+packages through our own link:http://Lumiera.org/debian[Debian Apt-Repository] (Debian depot).
+
+TIP: readers new to debian packages may want to have a look into our
+     link:{ldoc}/user/tutorials/DebianBuilding.html[Debian build tutorial],
+     describing the commands for building and the structure of a debian
+     (source) package in general
+
+
+Package build process
+---------------------
+As our whole infrastructure relies heavily on the Git version management tool, it's only natural
+also to organise the (debian) packaging with the help of Git. Fortunatlely, there is a nifty tool
+called link:https://honk.sigxcpu.org/piki/projects/git-buildpackage/[git-buildpackage], written
+by Guido Günther exactly for this purpuse: It treats the _debianisation_ as a branch in the
+Git repository, forking off the mainline at the release point.
+
+For Lumiera, this _debianisation branch_ is called 'deb' and can be found in the
+link:http://git.lumiera.org/gitweb?p=lumiera/debian;a=summary[git:/git.lumiera.org/lumiera/debian] repository.
+
+Installing Lumiera
+~~~~~~~~~~~~~~~~~~
+The link:SCons.html[SCons build] generates a relocatable distribution directory structure,
+holding the main executable, additional tools and utilities, plus the core libraries and resources.
+Here _relocatable_ means that this subtree can be moved and placed anywhere on the system.
+As long as the relative directory layout remains intact, the executables will be able to find
+and load the accompanying libraries and resources. By invoking the +scons install+ target,
+this directory structure is placed into the installation target directory.
+
+Actually, this lookup process at application startup is performed in two phases
+
+- in the first phase the main application locates the directly linked shared libraries.
+  Especially those libraries belonging first class to the Lumiera application are built
+  with a relative searche path ('rpath' with $ORIGIN token). These libraries are placed
+  into the +modules/+ subfolder
+
+- after successfully launching the executable, the second phase performes a lookup programatically,
+  starting from the path location of the executable, trying to find a +setup.ini+ which defines
+  additional plug-ins and resources to load. Notably, the GUI to launch is loaded as a
+  plug-in through this mechanism. Moreover, this bootstrap configuration defines the
+  additional platform and user configuration to load for further outfitting of the system.
+
+LSB Installation Layout
+~~~~~~~~~~~~~~~~~~~~~~~
+This organisation is used as foundation for packaging and installing. The primariy application
+distribution structure will be located into a subfolder below +/usr/lib/+. Only the main application
+executable will be symlinked into +/usr/bin/+. The LSB explicitly allows for such a layout, which is
+typically used by large application bundles (OpenOffice, Gimp, Eclipse). Since the application
+startup encompasses two phases, loading the extended configuration programmatically after
+launching the application, such extended resources can easily be relocated into a separate
+folder below +/usr/share/+, as required by LSB.
+
+
+Releases, Branches and Conventions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Official releases are marked by a tag on the master branch. Usually, we'll also fork a
+*release branch* at that point, featuring bugfixes only. From here we'll merge to the
+*debian branch*
+
+
+Package build commands
+~~~~~~~~~~~~~~~~~~~~~~
+To (re)build the debian package
+
+. +git clone git:/git.lumiera.org/lumiera/debian+
+. +mkdir pack.deb+
+. +cd debian+
+. +git-buildpackage --git-upstream-branch=+ _RELEASE-TAG_
+
+-- here _RELEASE-TAG_ denotes the point in the Git history, which should become
+the reference source and be packaged into the *.orig.tar.gz. Usually, it's just
+sufficient to use 'master' for that purpose.
+
+
+Debian-Depot for installation via Apt
+-------------------------------------
+In addition to the packaging, we maintain a dedicated Apt-Repository for automated
+installation and upgrades. We try to build the package for several Debian derived
+distributions (like Ubuntu). -> link:../infra/debianDepot.html[more on the repository organisation]
+

@@ -48,17 +48,18 @@
 #include "lib/hash-indexed.hpp"
 #include "lib/util.hpp"
 
+#include <boost/functional/hash.hpp>
 #include <boost/operators.hpp>
 #include <iostream>
 #include <string>
 
 
+namespace proc {
 namespace asset {
   
   using std::string;
   using std::ostream;
   
-  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
   
   namespace idi {
@@ -81,12 +82,16 @@ namespace asset {
      *        conjunction with LUID. How to create a LuidH instance, if not generating
      *        a new random value. How to make EntryID and asset::Ident interchangeable,  /////////TICKET #739
      *        which would require both to yield the same hash values....
+     *  @warning there is a weakness in boost::hash for strings of running numbers, causing
+     *        collisions already for a small set with less than 100000 entries.
+     *        To ameliorate the problem, we hash the symbol twice                        /////////TICKET #865
      *  @warning this code isn't portable and breaks if sizeof(size_t) < sizeof(void*)
      */
     inline LuidH
     buildHash (string const& sym, HashVal seed =0)
     {
       boost::hash_combine(seed, sym);
+      boost::hash_combine(seed, sym);                                     ////////////////////////TICKET #865
       lumiera_uid tmpLUID;
       lumiera_uid_set_ptr (&tmpLUID, reinterpret_cast<void*> (seed));
       return reinterpret_cast<LuidH&> (tmpLUID);
@@ -172,6 +177,11 @@ namespace asset {
    * EntryID template share a common baseclass, usable for type erased common registration.
    * @todo currently storing the symbolic-ID as string. It should be a lib::Symbol,
    *       but this isn't possible unless we use a symbol table. //////TICKET #158
+   * @warning there is a weakness in boost::hash applied to strings. EntryID by default
+   *       generates symbolic IDs from a type prefix plus a running number, which causes
+   *       collisions already with less than 100000 entries.
+   * @todo As a temporary workaround, we hash the symbolic ID twice, but we should look
+   *       into using a better hash function               ////////////TICKET #865
    * 
    * @see mobject::session::Track
    */
@@ -232,9 +242,9 @@ namespace asset {
       recast (BareEntryID const& bID)
         {
           if (!canRecast(bID))
-            throw lumiera::error::Logic ("unable to recast EntryID: desired type "
-                                         "doesn't match original definition"
-                                        , LUMIERA_ERROR_WRONG_TYPE);
+            throw error::Logic ("unable to recast EntryID: desired type "
+                                "doesn't match original definition"
+                               , error::LUMIERA_ERROR_WRONG_TYPE);
           return EntryID (bID.getSym());
         }
       
@@ -277,5 +287,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

@@ -26,7 +26,10 @@
 #ifndef TIMELINE_STATE_HPP
 #define TIMELINE_STATE_HPP
 
-#include "timeline-view-window.hpp"
+#include "gui/widgets/timeline/timeline-view-window.hpp"
+#include "lib/time/mutation.hpp"
+#include "lib/time/control.hpp"
+
 
 namespace gui {
   
@@ -36,6 +39,43 @@ class Sequence;
   
 namespace widgets { 
 namespace timeline {
+
+using lib::time::Control;
+using lib::time::Mutation;
+
+typedef Control<TimeSpan> SelectionControl;
+
+
+/**
+ * SelectionListener is a template class which emits a signal when
+ * the value is changed by it's associated time::Control object.
+ * SelectionListener wraps a sigc::signal that emits every time
+ * the selection is changed by the time::Control object.
+ * SelectionListener does NOT emit the signal if a change to the
+ * selection is made outside of the Control/Listener partnership.
+ */
+template<class TI>
+class SelectionListener
+  : boost::noncopyable
+  {
+    sigc::signal<void, TI> valueChangedSignal;
+    
+  public:
+    SelectionListener() { }
+
+    void
+    operator() (TI const& changeValue)  const
+      {
+        valueChangedSignal.emit (changeValue);
+      }
+
+
+    void connect (const sigc::slot<void, TI> &connection)
+      {
+        valueChangedSignal.connect (connection);
+      }
+
+  };
 
 /**
  * TimelineState is a container for the state data for TimelineWidget.
@@ -47,11 +87,10 @@ class TimelineState
 public:
 
   /**
-   * Constructor
    * @param source_sequence The sequence on which the TimelineWidget
    * will operate when this TimelineState is attached.
    */
-  TimelineState(boost::shared_ptr<model::Sequence> source_sequence);
+  TimelineState (shared_ptr<model::Sequence> source_sequence);
   
 public:
 
@@ -59,7 +98,7 @@ public:
    * Gets the sequence that is attached to this timeline state object.
    * @return Returns a shared_ptr to the sequence object.
    */
-  boost::shared_ptr<model::Sequence> get_sequence() const;
+  shared_ptr<model::Sequence> get_sequence() const;
 
   /**
    * Gets a reference to the timeline view window object.
@@ -67,57 +106,42 @@ public:
    */
   timeline::TimelineViewWindow& get_view_window();
   
-  /**
-   * Gets the time at which the selection begins.
-   */
-  lumiera::Time get_selection_start() const;
+  SelectionListener<TimeSpan>&
+  get_selection_listener()            { return selectionListener; }
+
+  Time getSelectionStart()      const { return selection_.start();}
+  Time getSelectionEnd()        const { return selection_.end();  }
+  Time getPlaybackPeriodStart() const { return selection_.start();}
+  Time getPlaybackPeriodEnd()   const { return selection_.end();  }
   
-  /**
-   * Gets the time at which the selection begins.
-   */
-  lumiera::Time get_selection_end() const;
+  Time getPlaybackPoint()       const { return playbackPoint_; }
+  
+  
+  /** is there currently any ongoing playback process?
+   *  Otherwise the #getPlaybackPoint is meaningless */
+  bool isPlaying() const { return isPlayback_; }
+  
+  void set_selection_control (SelectionControl &control);
   
   /**
    * Sets the period of the selection.
-   * @param start The start time.
-   * @param end The end time.
-   * @param reset_playback_period Specifies whether to set the playback
-   * period to the same as this new selection.
+   * @param resetPlaybackPeriod Specifies whether to set the
+   *        playback period to the same as this new selection.
    */
-  void set_selection(lumiera::Time start, lumiera::Time end,
-    bool reset_playback_period = true);
+  void setSelection(Mutation const& change,
+                    bool resetPlaybackPeriod = true);
+  
+  void setPlaybackPeriod(Mutation const& change);
   
   /**
-   * Gets the time at which the playback period begins.
+   * Sets the time which is currently being played back.
+   * @param point The time index being played.
+   * @todo do we ever get the situation that we don't have such a position?
+   * @todo very likely to be handled differently, once
+   *       the GUI is really connected to the Player
    */
-  lumiera::Time get_playback_period_start() const;
-  
-  /**
-   * Gets the time at which the playback period ends.
-   */
-  lumiera::Time get_playback_period_end() const;
-  
-  /**
-   * Sets the playback period.
-   * @param start The start time.
-   * @param end The end time.
-   */
-  void set_playback_period(lumiera::Time start, lumiera::Time end);
-  
-  /**
-   * Sets the time which is currenty being played back.
-   * @param point The time index being played. This value may be
-   * GAVL_TIME_UNDEFINED, if there is no playback point.
-   */
-  void set_playback_point(lumiera::Time point);
-  
-  /**
-   * Gets the current playback point.
-   * @return The time index of the playback point. This value may be
-   * GAVL_TIME_UNDEFINED, if there is no playback point.
-   */
-  lumiera::Time get_playback_point() const;
-  
+  void setPlaybackPoint(Time newPos);
+
   /**
    * A signal to notify when the selected period has changed.
    */
@@ -128,51 +152,53 @@ public:
    * changed.
    */
   sigc::signal<void> playback_changed_signal() const; 
+
+private:
+
+  /* ========= Event Handlers ========== */
+
+  /**
+   * Event handler for when the selection is changed
+   */
+  void on_selection_changed (TimeSpan selection);
   
 private:
 
   /**
-   * A pointer to the sequence object which this timeline_widget will
-   * represent.
+   * A pointer to the sequence object which this timeline_widget will represent.
    * @remarks This pointer is set by the constructor and is constant, so
    * will not change in value during the lifetime of the class.
    */
-  boost::shared_ptr<model::Sequence> sequence;
+  shared_ptr<model::Sequence> sequence;
   
-  // View State
-  /**
-   * The ViewWindow for the TimelineWidget display with.
-   */
+  
+  /* == View State == */
+  
+  /** ViewWindow for the TimelineWidget display */
   timeline::TimelineViewWindow viewWindow;
   
-  // Selection State
   
-  /**
-   * The start time of the selection period.
+  /* == Selection State == */
+  
+  /** currently selected time period. */
+  TimeSpan selection_;
+  
+  /** listens for a selection change */
+  SelectionListener<TimeSpan> selectionListener;
+
+  /** current playback period. */
+  TimeSpan playbackPeriod_;
+  
+  /** current playback position.
+   * @todo very likely to be handled differently
+   *       when actually integrated with the Player
    */
-  lumiera::Time selectionStart;
+  TimeVar playbackPoint_;
+
+  bool isPlayback_;
   
-  /**
-   * The end time of the selection period.
-   */
-  lumiera::Time selectionEnd;
   
-  /**
-   * The start time of the playback period.
-   */
-  lumiera::Time playbackPeriodStart;
-  
-  /**
-   * The end time of the playback period.
-   */
-  lumiera::Time playbackPeriodEnd;
-  
-  /**
-   * The time of the playback point.
-   */
-  lumiera::Time playbackPoint;
-  
-  // Signals
+  /* == Signals == */
   
   /**
    * A signal to notify when the selected period has changed.
@@ -186,8 +212,7 @@ private:
   sigc::signal<void> playbackChangedSignal;
 };
 
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+
+}}}   // namespace gui::widgets::timeline
 
 #endif // TIMELINE_STATE_HPP

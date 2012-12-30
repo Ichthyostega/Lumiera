@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_SCOPE_H
-#define MOBJECT_SESSION_SCOPE_H
+#ifndef PROC_MOBJECT_SESSION_SCOPE_H
+#define PROC_MOBJECT_SESSION_SCOPE_H
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
@@ -31,6 +31,7 @@
 #include <string>
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -116,5 +117,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

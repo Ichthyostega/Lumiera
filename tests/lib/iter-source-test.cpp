@@ -24,7 +24,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/lumitime-fmt.hpp"
+#include "lib/time/diagnostics.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-source.hpp"
@@ -44,9 +44,9 @@ namespace lib {
 namespace test{
   
   using ::Test;
-  using lumiera::Time;
   using boost::lexical_cast;
   using boost::noncopyable;
+  using lib::time::TimeVar;
   using lib::test::randStr;
   using lib::test::randTime;
   using util::isnil;
@@ -153,10 +153,10 @@ namespace test{
       typedef IterSource<int>::iterator IntIter;
       typedef IterSource<CStr>::iterator StrIter;
       typedef IterSource<string>::iterator StringIter;
-      typedef IterSource<Time>::iterator TimeIter;
+      typedef IterSource<TimeVar>::iterator TimeIter;
       
-      typedef std::map<string,Time>                TreeMap;
-      typedef std::tr1::unordered_map<string,Time> HashMap;
+      typedef std::map<string,TimeVar>                TreeMap;
+      typedef std::tr1::unordered_map<string,TimeVar> HashMap;
       
       typedef std::multimap<int,int>               TreeMultimap;
       typedef std::tr1::unordered_multimap<int,int>HashMultimap;
@@ -168,6 +168,7 @@ namespace test{
           if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
           
           verify_simpleIters();
+          verify_transformIter();
           
           verify_MapWrappers<TreeMap>();
           verify_MapWrappers<HashMap>();
@@ -200,6 +201,28 @@ namespace test{
           CHECK (!iii);
           CHECK (!isi);
           CHECK (!cii);
+        }
+      
+      
+      void
+      verify_transformIter()
+        {
+          WrappedList customList(NUM_ELMS);
+          WrappedList::iterator sourceValues = customList.begin(); 
+          
+          TimeIter tIt (transform (sourceValues, makeTime));
+          CHECK (!isnil (tIt));
+          pullOut (tIt);
+          CHECK (!tIt);
+        }
+      
+      /** transformation function, to be applied for each element:
+       *  just build a time value, using the input as 1/4 seconds
+       */
+      static TimeVar
+      makeTime (int input_sec)
+        {
+          return time::Time (time::FSecs (input_sec, 4));
         }
       
       
@@ -280,7 +303,6 @@ namespace test{
           CHECK (vals);
           pullOut (vals); // should produce anything between 1 and 100 entries
           CHECK (!vals);
-          
         }
     };
   

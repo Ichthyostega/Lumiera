@@ -67,6 +67,8 @@ namespace lib {
       MemoryManager(TypeInfo info) : top_(0) { reset(info); }
       ~MemoryManager()                       { purge(); }
       
+      size_t size()  const;
+      
       void purge();
       void reset(TypeInfo info);
       
@@ -78,6 +80,17 @@ namespace lib {
       void clearStorage();
     };
   
+  
+  
+  /** the top_ index always points at the next slot 
+   *  not yet holding a finished, committed allocation.
+   *  Index is zero based, thus top_ == count of living objects
+   */
+  size_t
+  AllocationCluster::MemoryManager::size()  const
+  {
+    return top_;
+  }
   
   
   void
@@ -240,14 +253,36 @@ namespace lib {
   }
   
   
+  /* === diagnostics helpers === */
+  
+  /** @return total number of objects
+   *          currently managed by this allocator */
+  size_t
+  AllocationCluster::size()  const
+  {
+    size_t size(0);
+    typedef ManagerTable::const_iterator Iter;
+    
+    for (Iter ii= typeHandlers_.begin(); ii != typeHandlers_.end(); ++ii )
+      if (*ii)
+        size += (*ii)->size();
+    
+    return size;
+  }
+  
+  
+  size_t
+  AllocationCluster::countActiveInstances (size_t& slot)  const
+  {
+    if (handler (slot))
+      return handler(slot)->size();
+    else
+      return 0;
+  }
+  
+  
+  
+  
   
   
 } // namespace lib
-
-/*
-// Local Variables:
-// mode: C
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/

@@ -1,0 +1,189 @@
+2008-03-06 Lumiera Developers Meeting
+=====================================
+:Author: cehteh
+:Date: 2008-03-07
+
+__Participants__
+
+ * hermanr
+ * cehteh
+ * ichthyo
+ * Plouj
+ * SimAV
+ * akirad
+ * _MMA_
+ * rgareus
+ * ddennedy
+ * edrz
+ * anewcomb
+ * gmerlin
+ * oracle2025
+ * gisle
+
+
+Boilerplate
+-----------
+
+Organization of this meeting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * cehteh writes the protocol
+ * hermanr does chairman
+
+
+Leftovers from last meeting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+We concluded there are no leftovers
+
+
+Go through Ideas and Drafts in design process
+---------------------------------------------
+
+
+Idea: time_handling
+~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/time_handling[]
+
+Point 1 is superseded by using gavl.
+
+Points 2 and 3 are still valid.
+
+Ichthyo asked gmerlin if there are any problems according gavl for the points 2 (position of frames) and 3 (position for keyframes and automation). Gmerlin acknowledges that he doesnt see any problems.
+
+Oracle2025 brings interlacing on topic "are you aware that automations and keyframes could/should also apply to fields?". We agree that this must be handled "in interlacing, a frame is a pair of 2 subsequent fields".
+
+Conclusion:
+ Refactor the proposal according to the discussion and work it out, make it draft then. Discuss about it on the next meeting
+
+
+Idea: Unit tests in Python
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/UnitTests_Python[]
+
+We have a testsuite based on cehtehs 'test.sh' which superseedes this proposal.
+
+Conclusion:
+ Drop it.
+
+
+Idea: Todo Lists
+~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/TodoLists[]
+
+This Idea is in a very early state an not yet mature.
+Cehteh explains: "I want something which doesn't need much human care and i want one big \'milestones' thing and a small \'mini-task' thing". Ichthyo refines this as "Roadmap" and "Near time task list". We agree that this shall not be too strict. There are some ideas floating, like adding this things to the testsuite or use the wiki. Ichthyo shows how he uses the tiddlywiki's task macro (http://ichthyostega.de/cin3/wiki/renderengine.html#PlanningNodeCreatorTool[]). He likes it but doubts its usefulness when it is used without guessing the hours/days of work.
+
+Conclusion:
+ We use the Tiddlywiki task macro thing for now.
+
+
+Draft: CCodingStyleGuide
+~~~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/CCodingStyleGuide[]
+
+Ichthyo tells that the discussion on the wiki page made this clear now. Cehteh explains that he uses this style with success for diffrent projects. We make clear that this is meant for C, in C++ we use namespaces. Overall we agree that code shall be self-documenting.
+
+Conclusion:
+ Make it final.
+
+
+Draft: DevelopmentFramework
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/DevelopmentFramework[]
+
+Cehteh explains that he will transfer this propoal to a tiddlywiki covering compatibility guides and dependencies. We conclude that this wiki must reflect the actual practice (NoBug, Doxygen, test.sh) despite the proposal is not concrete yet.
+
+A short discussion about build systems came up, we still use autotools and scons in parallel, delaying the decision later. oracle2025 mentioned that scons could be used for development and autotools for release. No decision about that everyone has different opinions. But we agree that it works as is.
+
+Conclusion:
+ Cehteh will make the proposed wiki which shall be maintained to reflect the state and this topic will be finalized by that.
+
+
+Draft: Skills Collection
+~~~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/SkillsCollection[]
+
+This might be only useful if there are more developers working on the project.
+
+Conclusion:
+ Leave in draft state for now.
+
+
+Draft: Architecture Overview
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ArchitectureOverview[]
+
+Ichthyo drawn a diagram showing the planned architecture. Cehteh raises concerns about codecs/plugins/effects in backend. After that there was some discussion about details. Cehteh suggests to place plugins in a extra box, gmerlin suggests that \'plugins' don't fit into the diagram, there should be "filters", "sources",..; Followed by some more discussion, showing that we basically agree and understand the design but the drawing needs some refinements.
+
+Conclusion:
+ Good idea, needs some refinements, work in progress.
+
+
+
+Call for Design
+---------------
+
+Ichthyo explains that the wants the overall design a bit more formalized. He put this topic on the agenda to remind that we have to work it out in link:DesignProcess[] and already started to make some design proposals.
+
+Conclusion:
+ Things need to be worked out in link:DesignProcess[], take a look and review it.
+
+
+Naming
+------
+
+Raffa, Velmont, goibhniu and others collected and managed proposed names past weeks which finally ended in a community voting. Results are at http://www.cs.cornell.edu/w8/~andru/cgi-perl/civs/results.pl?id=E_9fad0d1d10c23d38[]
+Lumiera won, Lumiera.org is free and no one of in this meeting has objections against this name. Velmont offers to register and pay for the lumiera.org domain which will be hosted on our own server (see topic below). Hermanr raises concerns if it is ok when the name is registered on another site and by another person than the server, cehteh explains that he like this distribution where doable and no one other objects. Ichthyo asks about a short name for Lumiera which will be used for C++ namespaces and such kinds. After a short discussion we agree that we use the full name and no abbreviation. We now have to rename the source and the wiki. Anyone renames the sourcecode where he is responsible for. Cehteh will go over the pipapo.org wiki and rename things.
+
+Finally we express our great thanks to the people who put the efforts into the name selection, thanks raffa, Velmont, goibhniu & co.
+
+Conclusion:
+ Projectname is Lumiera, we have a lot things to rename.
+
+
+Project Server, setup, organization, administration
+---------------------------------------------------
+Some people gathered together and rented a server at http://www.hetzner.de[hetzner.de] which will host some free project pages and personal sites. Cehteh is the one who signed for the server and officially respobsible for it.
+
+The server is split into isolated \'vservers' which are created as needed. Idea is to work cooperatively to get the best out of its resources.
+
+For our projects (cinelerra.org and lumiera.org) we now need volunteers who help setting it up and administrating things. Velmont offered to help with lumiera.org, hermanr takes care of cinelerra.org, raffa will help with maintaining the webpages. oracle2025 will care for developer chroots, build and test environments. cehteh will make a page on pipapo.org which reflects the current server setup http://www.pipapo.org/pipawiki/RootServerSetup[]. There are still a lot jobs to do!
+
+Cehteh asked about how to manage emergency root access on the host/root server when he is unreachable. There where several suggestions between one root key for all who pay for the server to shared key schemes. We finally agreed that anyone who payed for the server can send a ssh key to ssh to be registered for emergency access.
+
+The concrete server setup will be worked out next days. Ideas are one frontend proxy and a shared nameserver. A shared nameserver, A developer vserver shared between all developers. Maybe a shared mail server.
+
+Hermanr asked about how to handle distribution of large media files. There was some discussion about bittorrent vs http. We concluded to work that out as needed.
+
+In the forthcoming discussion about cehteh stresses that "it is a public server, if you place confidential information unencrypted on it, its you fault". Ssh keys shall be kept secret by the users but we can't enforce policies on those.
+
+Ichthyo asks about how to setup lumiera.org (wiki?), oracle2025 suggests webgit, cehteh explains that webgit isn't ready yet but should be useable in a few days (pipapo.org will use that too). Velmont suggest a \'real' website for the time when non-developers want to use it. Git will be set up on lumiera.org the same way as it is currently set up on pipapo.org.
+
+Hermanr asked Velmont about some help moving the bugs.cinelerra.org over, this might be little challenging since it needs an MTA and other things.
+
+Ichthyo asks about keeping the Lumiera project pages on pipapo.org until the server is ready, this is ok.
+
+Conclusions:
+ We have our own server which now needs volunteers for maintenance. The projects will slowly move there, until ready Lumiera stays on pipapo.org.
+
+
+
+GPL3 pros cons, license rationale
+---------------------------------
+
+Ichthyo and cehteh would like to investigate a license change to GPLv3, neither of us has experience with problems this
+might raise. Questions are if we lock us out from potential libraries which are GPLv2 only or lock out possible contributors because of unforeseen patent clauses. The others here thinking that "GPLv2 or later" would be most-compatible. Gmerlin tells that he uses some "GPLv2 only" mplayer code in gavl which is itself "GPLv2 or later". Cehteh explains that "GPLv2 only" code is a problem, where "GPLv2 or later" is not. Ichthyo raises concerns that the Support library may need to be LGPL, cehteh mentions that it would likely be enough if we only apply that to the plugin-loader. After all it turns out that there is a lot of confusion, misunderstanding and interpretation used with licenses and no one of us knows for sure. Finally we conclude that the interpretation and license enforcement is ruled by the copyright owner.
+
+Conclusion:
+ Learn more about GPLv3, use GPLv2 or later and propose to switch to GPLv3 when we are ready to do public beta releases when possible.
+
+
+
+Next meeting
+------------
+
+The next meeting will be at thuesday 3rd april 21:00GMT (if not rescheduled see below).
+
+Ichthyo tells that Martin Ellison wrote he couldn't attend because of the time. So again we made a short discussion about changing/alternating timings to allow people in downunder/japan to attend. They have to speak up an make time suggestions.
+
+Conclusion:
+ Next meeting 3rd april 21:00GMT. But Aussies, please speak up if you want the time changed!

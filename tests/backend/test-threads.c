@@ -27,7 +27,7 @@
 #include "include/logging.h"
 #include "lib/mutex.h"
 #include "backend/threads.h"
-#include "tests/test.h"
+#include "lib/test/test.h"
 
 #include <unistd.h>
 #include <errno.h>

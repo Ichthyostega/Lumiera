@@ -22,8 +22,8 @@
 
 
 #include "proc/play/dummy-player-service.hpp"
-#include "proc/play/dummy-image-generator.hpp"
-#include "proc/play/tick-service.hpp"
+#include "proc/engine/worker/dummy-image-generator.hpp"
+#include "proc/engine/worker/tick-service.hpp"
 #include "lib/singleton.hpp"
 
 extern "C" {
@@ -45,6 +45,7 @@ namespace proc  {
     using std::auto_ptr;
     using boost::scoped_ptr;
     using std::tr1::bind;
+    
     
     
     namespace { // hidden local details of the service implementation....

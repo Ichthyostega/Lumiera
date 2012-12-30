@@ -52,21 +52,24 @@
 #define ENGINE_NODEWIRING_CONFIG_H
 
 
-#include "lib/util.hpp"
 #include "lib/meta/configflags.hpp"
+#include "lib/util.hpp"
 
 #include <tr1/functional>
 #include <bitset>
 #include <map>
 
 
+namespace proc {
 namespace engine {
 namespace config {
   
   using util::contains;
-  using lumiera::typelist::FlagInfo;
+  using lib::meta::FlagInfo;
   
-  using lumiera::typelist::CONFIG_FLAGS_MAX;
+  using lib::meta::CONFIG_FLAGS_MAX;
+  
+  typedef size_t IxID;                 ///////////////////////////////TICKET #863
   
   
   /**
@@ -124,7 +127,7 @@ namespace config {
       
       
       typedef std::tr1::shared_ptr<FacFunction> PFunc;
-      typedef std::map<size_t, PFunc> ConfigTable;
+      typedef std::map<IxID, PFunc> ConfigTable;
       
       ConfigTable possibleConfig_; ///< Table of factories
       
@@ -147,7 +150,7 @@ namespace config {
           
           template<class CONF>
           void
-          visit (size_t code)
+          visit (IxID code)
             {
               PFunc pFactory (new FactoryHolder<Factory<CONF> > (ctor_param_));
               factories_[code] = pFactory;
@@ -169,7 +172,7 @@ namespace config {
         }
       
       FacFunction&
-      operator[] (size_t configFlags) ///< retrieve the factory corresponding to the given config
+      operator[] (IxID configFlags) ///< retrieve the factory corresponding to the given config
         {
           if (contains (possibleConfig_, configFlags))
             return *possibleConfig_[configFlags];
@@ -181,5 +184,5 @@ namespace config {
   
   
   
-}} // namespace engine::config
+}}} // namespace proc::engine::config
 #endif

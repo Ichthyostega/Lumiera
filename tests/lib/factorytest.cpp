@@ -61,7 +61,7 @@ namespace test{
   
   /** Test-Factory specialised to create TargetObj instances
    *  using the 1-argument constructor TargetObj::TargetObj(int).
-   *  It will create boost::shared_ptr instances, because 
+   *  It will create std::shared_ptr instances, because 
    *  factory::RefcountFac was parametrised with this smart pointer type.
    */ 
   class ObjFactory : public factory::RefcountFac<TargetObj>
@@ -79,7 +79,7 @@ namespace test{
   
   
   /** shorthand for the created smart-pointer class,
-   *  here it's a (refcounting) boost::shared_ptr
+   *  here it's a (refcounting) std::shared_ptr
    */
   typedef ObjFactory::PType pTarget;
   
@@ -93,7 +93,7 @@ namespace test{
   /*******************************************************************
    * @test the basic object creation Factory behaviour: We declared
    *       a static field TargetObj::create to be a ObjFactory. So,
-   *       by invoking this functor, we get a boost::shared_ptr
+   *       by invoking this functor, we get a std::shared_ptr
    *       wrapping a new TargetObj instance. From this we copy
    *       further shared-ptrs, invoke a member function and
    *       finally, when leaving the scope, our TargetObj

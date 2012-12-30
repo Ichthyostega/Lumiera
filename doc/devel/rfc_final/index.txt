@@ -1,0 +1,13 @@
+Accepted Design Proposals
+=========================
+
+//Menu: label accepted
+//Menu: sort children
+
+-> read link:../rfc.html[more about Lumiera RfC] and the Design Process
+
+The RfC entries listed here where discussed, modified and finally agreed upon
+during some developers meeting in the past.
+
+So they represent design decisions taken and can be considered binding.
+

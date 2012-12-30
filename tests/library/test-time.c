@@ -21,10 +21,17 @@
 
 typedef unsigned int uint;
 
-#include "tests/test.h"
+#include "lib/test/test.h"
 #include "lib/time.h"
 
 #include <nobug.h>
+
+static int
+calculate_framecount (gavl_time_t t, uint fps)
+{
+  return lumiera_quantise_frames_fps (t,0,fps);
+}
+
 
 TESTS_BEGIN
 
@@ -33,7 +40,7 @@ const int MILLIS = 700;
 const int SECONDS = 20;
 const int MINUTES = 55;
 const int HOURS = 3;
-const float FPS = 24.0;
+const int FPS = 24;
 
 /*
  * 1. Basic functionality
@@ -44,29 +51,29 @@ TEST (basic)
   // Zero
   gavl_time_t t = lumiera_build_time (0,0,0,0);
 
-  CHECK ((gavl_time_t) t                     == 0);
-  CHECK (lumiera_time_millis (t)             == 0);
-  CHECK (lumiera_time_seconds (t)            == 0);
-  CHECK (lumiera_time_minutes (t)            == 0);
-  CHECK (lumiera_time_hours (t)              == 0);
-  CHECK (lumiera_time_frames (t, FPS)        == 0);
-  CHECK (lumiera_time_frames (t, FPS+5)      == 0);
-  CHECK (lumiera_time_frame_count (t, FPS)   == 0);
-  CHECK (lumiera_time_frame_count (t, FPS+5) == 0);
+  CHECK ((gavl_time_t) t                 == 0);
+  CHECK (lumiera_time_millis (t)         == 0);
+  CHECK (lumiera_time_seconds (t)        == 0);
+  CHECK (lumiera_time_minutes (t)        == 0);
+  CHECK (lumiera_time_hours (t)          == 0);
+  CHECK (lumiera_time_frames (t, FPS)    == 0);
+  CHECK (lumiera_time_frames (t, FPS+5)  == 0);
+  CHECK (calculate_framecount (t,FPS)    == 0);
+  CHECK (calculate_framecount (t, FPS+5) == 0);
 
   ECHO ("%s", lumiera_tmpbuf_print_time (t));
 
   // Non-zero
   t = lumiera_build_time (MILLIS, SECONDS, MINUTES, HOURS);
 
-  CHECK (lumiera_time_millis (t)             == MILLIS);
-  CHECK (lumiera_time_seconds (t)            == SECONDS);
-  CHECK (lumiera_time_minutes (t)            == MINUTES);
-  CHECK (lumiera_time_hours (t)              == HOURS);
-  CHECK (lumiera_time_frames (t, FPS)        == (int)((FPS * MILLIS) / 1000));
-  CHECK (lumiera_time_frames (t, FPS+5)      == (int)(((FPS+5) * MILLIS) / 1000));
-  CHECK (lumiera_time_frame_count (t, FPS)   == 338897);
-  CHECK (lumiera_time_frame_count (t, FPS+5) == 409500);
+  CHECK (lumiera_time_millis (t)         == MILLIS);
+  CHECK (lumiera_time_seconds (t)        == SECONDS);
+  CHECK (lumiera_time_minutes (t)        == MINUTES);
+  CHECK (lumiera_time_hours (t)          == HOURS);
+  CHECK (lumiera_time_frames (t, FPS)    == FPS * MILLIS / 1000);
+  CHECK (lumiera_time_frames (t, FPS+5)  == (FPS+5) * MILLIS / 1000);
+  CHECK (calculate_framecount (t, FPS)   == 338896);
+  CHECK (calculate_framecount (t, FPS+5) == 409500);
 
   ECHO ("%s", lumiera_tmpbuf_print_time (t));
 }
@@ -79,14 +86,14 @@ TEST (fps)
 {
   gavl_time_t t = lumiera_build_time_fps (FPS, FRAMES, SECONDS, MINUTES, HOURS);
 
-  CHECK (lumiera_time_millis (t)             == (int)(FRAMES * (1000.0 / FPS)));
-  CHECK (lumiera_time_seconds (t)            == SECONDS);
-  CHECK (lumiera_time_minutes (t)            == MINUTES);
-  CHECK (lumiera_time_hours (t)              == HOURS);
-  CHECK (lumiera_time_frames (t, FPS)        == FRAMES);
-  CHECK (lumiera_time_frames (t, FPS+5)      == (int)(((FPS+5) * 625) / 1000));
-  CHECK (lumiera_time_frame_count (t, FPS)   == 338895);
-  CHECK (lumiera_time_frame_count (t, FPS+5) == 409498);
+  CHECK (lumiera_time_millis (t)         == FRAMES * 1000 / FPS);
+  CHECK (lumiera_time_seconds (t)        == SECONDS);
+  CHECK (lumiera_time_minutes (t)        == MINUTES);
+  CHECK (lumiera_time_hours (t)          == HOURS);
+  CHECK (lumiera_time_frames (t, FPS)    == FRAMES);
+  CHECK (lumiera_time_frames (t, FPS+5)  == FRAMES * (FPS+5)/FPS); 
+  CHECK (calculate_framecount (t, FPS)   == 338895);
+  CHECK (calculate_framecount (t, FPS+5) == 409498);
 }
 
 /*
@@ -98,40 +105,37 @@ TEST (ntsc_drop_frame)
   // Make sure frame 0 begins at 0
   gavl_time_t t = lumiera_build_time_ntsc_drop (0, 0, 0, 0);
 
-  CHECK ((gavl_time_t) t                     == 0);
-  CHECK (lumiera_time_millis (t)             == 0);
-  CHECK (lumiera_time_seconds (t)            == 0);
-  CHECK (lumiera_time_minutes (t)            == 0);
-  CHECK (lumiera_time_hours (t)              == 0);
-  CHECK (lumiera_time_frames (t, FPS)        == 0);
-  CHECK (lumiera_time_frames (t, FPS+5)      == 0);
-  CHECK (lumiera_time_frame_count (t, FPS)   == 0);
-  CHECK (lumiera_time_frame_count (t, FPS+5) == 0);
-
-  // Use some arbitrary value to test with
-  const int FRAMES = 15;
-  const int SECONDS = 20;
-  const int MINUTES = 55;
-  const int HOURS = 3;
-  const float FPS = 24.0;
-
+  CHECK ((gavl_time_t) t                 == 0);
+  CHECK (lumiera_time_millis (t)         == 0);
+  CHECK (lumiera_time_seconds (t)        == 0);
+  CHECK (lumiera_time_minutes (t)        == 0);
+  CHECK (lumiera_time_hours (t)          == 0);
+  CHECK (lumiera_time_frames (t, FPS)    == 0);
+  CHECK (lumiera_time_frames (t, FPS+5)  == 0);
+  CHECK (calculate_framecount (t, FPS)   == 0);
+  CHECK (calculate_framecount (t, FPS+5) == 0);
+  
+  
+  
   t = lumiera_build_time_ntsc_drop (FRAMES, SECONDS, MINUTES, HOURS);
-
-  CHECK (lumiera_time_millis (t)             == 486);
-  CHECK (lumiera_time_seconds (t)            == SECONDS);
-  CHECK (lumiera_time_minutes (t)            == MINUTES);
-  CHECK (lumiera_time_hours (t)              == HOURS);
-
-  // Check standard frame calculations to verify build_time_ntsc_drop
-  CHECK (lumiera_time_frames (t, FPS)        == 11);
-  CHECK (lumiera_time_frames (t, FPS+5)      == 14);
-  CHECK (lumiera_time_frame_count (t, FPS)   == 338892);
-  CHECK (lumiera_time_frame_count (t, FPS+5) == 409494);
-
-  // Frames for NTSC drop
-  CHECK (lumiera_time_ntsc_drop_frames (t)                 == 15);
-  CHECK (lumiera_time_frame_count (t, NTSC_DROP_FRAME_FPS) == 423191);  
-
+  
+  // Calculate manually what result to expect....
+  int frames = FRAMES + 30*SECONDS + 30*60*MINUTES + 30*60*60*HOURS;   // sum up using nominal 30fps
+  int minutes_to_drop_frames = (MINUTES - MINUTES/10) + (HOURS * 54);  // but every minute, with the exception of every 10 minutes...
+  frames -= 2*minutes_to_drop_frames;                                  // ...drop 2 frames
+  int64_t expectedMillis = 1000LL * frames  * 1001/30000;              // now convert frames to time, using the real framerate
+  
+  expectedMillis %= 1000;                                              // look at the remainder..
+  CHECK (lumiera_time_millis (t)  == expectedMillis);
+  
+  CHECK (lumiera_time_seconds (t) == SECONDS);                         // while all other components should come out equal as set
+  CHECK (lumiera_time_minutes (t) == MINUTES);
+  CHECK (lumiera_time_hours (t)   == HOURS);
+  
+  // Reverse calculate frames for NTSC drop
+//CHECK (lumiera_quantise_frames (t, 0, dropFrameDuration) == frames); // the total nominal frames
+  CHECK (lumiera_time_ntsc_drop_frames (t) == FRAMES);        // maximum one frame off due to rounding
+  
   // Cover the whole value range;
   // Manually construct a drop-frame timecode
   // Make sure our library function returns the same times.
@@ -140,8 +144,8 @@ TEST (ntsc_drop_frame)
   int frame;
   int hrs;
   for (hrs = 0; hrs <= 24; hrs += 6)
-    for (min = 0; min <= 59; min += 8)
-      for (sec = 0; sec <= 59; sec += 8)
+    for (min = 0; min <= 59; min += 1)
+      for (sec = 0; sec <= 59; sec += 10)
         for (frame = 0; frame <= 29; frame++)
           {
             // Skip dropped frames
@@ -149,14 +153,15 @@ TEST (ntsc_drop_frame)
               continue;
 
             t = lumiera_build_time_ntsc_drop(frame, sec, min, hrs);
-
-            /* ECHO ("%02d:%02d:%02d.%02d", */
-            /*       lumiera_time_ntsc_drop_hours (t), */
-            /*       lumiera_time_ntsc_drop_minutes (t), */
-            /*       lumiera_time_ntsc_drop_seconds (t), */
-            /*       lumiera_time_ntsc_drop_frames (t)); */
-
-            CHECK (lumiera_time_ntsc_drop_frames (t)  == frame);
+            /*
+            ECHO ("%02d:%02d:%02d;%02d"
+                 , lumiera_time_ntsc_drop_hours (t)
+                 , lumiera_time_ntsc_drop_minutes (t)
+                 , lumiera_time_ntsc_drop_seconds (t)
+                 , lumiera_time_ntsc_drop_frames (t)
+                 );
+            */
+            CHECK (lumiera_time_ntsc_drop_frames (t) == frame);
             CHECK (lumiera_time_ntsc_drop_seconds (t) == sec);
             CHECK (lumiera_time_ntsc_drop_minutes (t) == min);
             CHECK (lumiera_time_ntsc_drop_hours (t)   == hrs % 24);

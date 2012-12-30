@@ -36,7 +36,6 @@
 #include "proc/control/command-impl.hpp"
 #include "proc/control/command-registry.hpp"
 //#include "proc/control/command-def.hpp"
-//#include "lib/lumitime.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -50,13 +49,13 @@
 //#include <string>
 
 
+namespace proc {
 namespace control {
 namespace test    {
 
 
 //  using boost::format;
 //  using boost::str;
-  //using lumiera::Time;
   //using util::contains;
   using std::tr1::function;
 //  using std::tr1::bind;
@@ -73,7 +72,7 @@ namespace test    {
 //  using lumiera::P;
   
   
-  //using lumiera::typelist::BuildTupleAccessor;
+  //using lib::meta::BuildTupleAccessor;
 //  using lumiera::error::LUMIERA_ERROR_EXTERNAL;
   
   namespace { // test data and helpers...
@@ -121,6 +120,6 @@ namespace test    {
   
   /** Register this test class... */
   LAUNCHER (HandlingPatternStandardImpl_test, "function controller");
-      
-      
-}} // namespace control::test
+  
+  
+}}} // namespace proc::control::test

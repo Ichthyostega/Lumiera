@@ -27,7 +27,7 @@
 #ifndef SEQUENCE_HPP
 #define SEQUENCE_HPP
 
-#include "parent-track.hpp"
+#include "gui/model/parent-track.hpp"
 
 namespace gui {
 namespace model {

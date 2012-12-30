@@ -30,8 +30,8 @@
 using boost::algorithm::starts_with;
 using util::isnil;
 
-namespace asset
-  {
+namespace proc {
+namespace asset {
   
   /** human readable representation of the asset::Category.
    *  @todo to be localized.
@@ -69,4 +69,4 @@ namespace asset
   }
 
 
-} // namespace asset
+}} // namespace asset

@@ -25,11 +25,7 @@
 #define ASSET_TESTASSET_H
 
 
-#include "pre_a.hpp"
-
 #include "proc/asset.hpp"
-//#include "lib/util.hpp"
-
 
 #include <boost/format.hpp>
 
@@ -38,45 +34,42 @@ using boost::format;
 using std::string;
 
 
-namespace asset
-  {
-  namespace test
+namespace proc {
+namespace asset{
+namespace test {
+  
+  
+  /**
+   * Test(mock) asset subclass usable for hijacking a given
+   * asset class (template parameter) and subsequently accessing
+   * internal facillities for writing unit tests. Prerequisite
+   * for using this template is that the used asset base class
+   * has a (protected) ctor taking an Asset::Ident....
+   */
+  template<class A>
+  class TestAsset : public A
     {
-    
-    
-    /**
-     * Test(mock) asset subclass usable for hijacking a given
-     * asset class (template parameter) and subsequently accessing
-     * internal facillities for writing unit tests. Prerequisite
-     * for using this template is that the used asset base class
-     * has a (protected) ctor taking an Asset::Ident....
-     */
-    template<class A>
-    class TestAsset : public A
-      {
-        TestAsset () ;
-        TestAsset (PAsset&);  ///< declared dependant on the given Asset
-        
-        static void deleter (TestAsset<A>* aa) { delete aa; }
-        
-      public:
-        typedef P<TestAsset<A> > PA;
-        
-        static PA create ()             { return (new TestAsset<A>       )->ptrFromThis(); }
-        static PA create (PAsset& pRef) { return (new TestAsset<A> (pRef))->ptrFromThis(); }
-        
-        /* === interesting asset features we want to access for tests === */
-        void call_unlink ()             { this->unlink (); }
-        void call_unlink (IDA target)   { this->unlink (target); }
-        void set_depend (PAsset parent) { this->defineDependency (parent); }
-        
-      private:
-        PA ptrFromThis ();
-      };
+      TestAsset () ;
+      TestAsset (PAsset&);  ///< declared dependant on the given Asset
+      
+      static void deleter (TestAsset<A>* aa) { delete aa; }
+      
+    public:
+      typedef P<TestAsset<A> > PA;
+      
+      static PA create ()             { return (new TestAsset<A>       )->ptrFromThis(); }
+      static PA create (PAsset& pRef) { return (new TestAsset<A> (pRef))->ptrFromThis(); }
+      
+      /* === interesting asset features we want to access for tests === */
+      void call_unlink ()             { this->unlink (); }
+      void call_unlink (IDA target)   { this->unlink (target); }
+      void set_depend (PAsset parent) { this->defineDependency (parent); }
+      
+    private:
+      PA ptrFromThis ();
+    };
   
   
   
-  } // namespace test
-  
-} // namespace asset
+}}} // namespace proc::asset::test
 #endif

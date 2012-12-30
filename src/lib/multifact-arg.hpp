@@ -54,9 +54,9 @@ namespace lib {
   namespace factory {
     
     
-    using lumiera::typelist::Types;
-    using lumiera::typelist::FunctionSignature;
-    using lumiera::typelist::FunctionTypedef;
+    using lib::meta::Types;
+    using lib::meta::FunctionSignature;
+    using lib::meta::FunctionTypedef;
     using std::tr1::function;
     
     
@@ -111,8 +111,8 @@ namespace lib {
         Product
         operator() (ID const& id, ARG arg)
           {
-            Creator& func = selectProducer (id);
-            return wrap (func(arg));
+            Creator& func = this->selectProducer (id);
+            return this->wrap (func(arg));
           }
         
       };

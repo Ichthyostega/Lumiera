@@ -26,13 +26,16 @@
 
 #include "proc/asset/pipe.hpp"
 #include "lib/opaque-holder.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 
 extern "C" {
 #include "lib/luid.h"
 }
 
+namespace proc {
 namespace mobject {
+  
+  namespace mp = lib::meta;
   
   class MObject;
   
@@ -46,7 +49,7 @@ namespace mobject {
   /**
    * Descriptor to denote the desired target of produced media data.
    * OutputDesignation is always an internal and relative specification
-   * and boils down to referring an asset::Pipe by ID. In order to get
+   * and boils down to referring an asset::Pipe by ID. In order to become
    * actually effective, some object within the model additionally
    * needs to \em claim this pipe-ID, meaning that this object
    * states to root and represent this pipe. When the builder
@@ -54,9 +57,11 @@ namespace mobject {
    * an actual stream connection will be wired in the
    * processing node network.
    * 
-   * @todo couldn't the inline buffer be "downgraded" to InPlaceBuffer ??
+   * @todo couldn't the inline buffer be "downgraded" to InPlaceBuffer or PolymorphicValue??
    *       Seemingly we never-ever need to re-discover the erased type of the embedded spec.
    *       Thus for this to work, we'd just need to add an "empty" spec       ///////////////////TICKET #723
+   * 
+   * @see OutputMapping_test
    */
   class OutputDesignation
     {
@@ -98,10 +103,12 @@ namespace mobject {
         };
       
     private:
-      enum {
-        SPEC_SIZ = lumiera::typelist::maxSize<
-                       lumiera::typelist::Types<PID,lumiera_uid,uint>::List>::value 
-      };
+      enum
+        { VTABLE   = sizeof(size_t)
+        , SPEC_SIZ = VTABLE
+                   + mp::maxSize<
+                       mp::Types< PID, lumiera_uid, uint>::List>::value 
+        };
       typedef lib::OpaqueHolder<TargetSpec, SPEC_SIZ> SpecBuff;
       
       
@@ -112,5 +119,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

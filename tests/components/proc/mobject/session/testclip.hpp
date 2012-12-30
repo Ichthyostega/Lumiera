@@ -26,7 +26,7 @@
 
 
 #include "proc/mobject/session/clip.hpp"
-#include "lib/lumitime.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 
@@ -34,6 +34,7 @@ using std::tr1::shared_ptr;
 using std::string;
 
 
+namespace proc {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -78,8 +79,8 @@ namespace test    {
   
   
   /* == some test data to check == */
-  extern const lumiera::Time LENGTH_TestClip;
+  extern const lib::time::Duration LENGTH_TestClip;
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test
 #endif

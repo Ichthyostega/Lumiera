@@ -21,18 +21,29 @@
 */
 
 /** @file buffhandle.hpp
- ** Various bits needed to support the buffer management within the render nodes.
+ ** A front-end to support the buffer management within the render nodes.
  ** When pulling data from predecessor nodes and calculating new data, each render node
- ** needs several input and output buffers. These may be allocated and provided by several
- ** different "buffer providers" (for example the frame cache). For accessing those buffers,
- ** the node needs to keep a table of buffer pointers, and for releasing the buffers later
- ** on, we need some handles. The usage pattern of those buffer pointer tables is stack-like,
- ** thus it makes sense to utilise a single large buffer pointer array per pull() calldown
- ** sequence and dynamically claim small chunks for each node.
- **
- ** @see nodewiring-def.hpp
- ** @see nodeoperation.hpp
- ** @see bufftable.hpp       storage for the buffer table
+ ** needs several input and output buffers. These may be allocated and provided by various
+ ** different "buffer providers" (for example the frame cache). Typically, the real buffers
+ ** will be passed as parameters to the actual job instance when scheduled, drawing on the
+ ** results of prerequisite jobs. Yet the actual job implementation remains agnostic with
+ ** respect to the way actual buffers are provided; the invocation just pushes BuffHandle
+ ** objects around. The actual render function gets an array of C-pointers to the actual
+ ** buffers, and for accessing those buffers, the node needs to keep a table of buffer
+ ** pointers, and for releasing the buffers later on, we utilise the buffer handles.
+ ** 
+ ** These buffer handles are based on a buffer descriptor record, which is opaque as far
+ ** as the client is concerned. BufferDescriptor acts as a representation of the type or
+ ** kind of buffer. The only way to obtain such a BufferDescriptor is from a concrete
+ ** BufferProvider implementation. A back-link to this owning and managing provider is
+ ** embedded into the BufferDescriptor, allowing to retrieve an buffer handle, corresponding
+ ** to an actual buffer provided and managed behind the scenes. There is no automatic
+ ** resource management; clients are responsible to invoke BuffHandle#release when done.
+ ** 
+ ** @see BufferProvider
+ ** @see BufferProviderProtocol_test usage demonstration
+ ** @see OutputSlot
+ ** @see bufftable.hpp      storage for the buffer table
  ** @see engine::RenderInvocation
  */
 
@@ -41,11 +52,55 @@
 
 
 #include "lib/error.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 #include "lib/bool-checkable.hpp"
 
 
+namespace proc {
 namespace engine {
+  
+  namespace error = lumiera::error;
+  using error::LUMIERA_ERROR_LIFECYCLE;
+  
+  typedef size_t HashVal;           ////////////TICKET #722
+  
+  class BuffHandle;
+  class BufferProvider;
+  
+  
+  
+  /**
+   * An opaque descriptor to identify the type and further properties of a data buffer.
+   * For each kind of buffer, there is somewhere a BufferProvider responsible for the
+   * actual storage management. This provider may "lock" a buffer for actual use,
+   * returning a BuffHandle.
+   * @note this descriptor and especially the #subClassification_ is really owned
+   *       by the BufferProvider, which may use (and even change) the opaque contents
+   *       to organise the internal buffer management.
+   */
+  class BufferDescriptor
+    {
+    protected:
+      BufferProvider* provider_;
+      HashVal subClassification_;
+      
+      BufferDescriptor(BufferProvider& manager, HashVal detail)
+        : provider_(&manager)
+        , subClassification_(detail)
+      { }
+      
+      friend class BufferProvider;
+      friend class BuffHandle;
+      
+    public:
+      // using standard copy operations
+      
+      bool verifyValidity()  const;
+      size_t determineBufferSize() const;
+      
+      operator HashVal()  const { return subClassification_; }
+    };
+  
   
   
   
@@ -53,17 +108,42 @@ namespace engine {
    * Handle for a buffer for processing data, abstracting away the actual implementation.
    * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
    */
-  struct BuffHandle
-    : lib::BoolCheckable<BuffHandle>
+  class BuffHandle
+    : public lib::BoolCheckable<BuffHandle>
     {
-      typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
+      typedef StreamType::ImplFacade::DataBuffer Buff;
+      
+      BufferDescriptor descriptor_;
+      Buff* pBuffer_; 
+      
+      
+    public:
       typedef Buff* PBuff;
       
-      PBuff 
-      operator->()  const 
-        { 
-          return pBuffer_; 
-        }
+      /** @internal a buffer handle may be obtained by "locking"
+       *  a buffer from the corresponding BufferProvider */
+      BuffHandle(BufferDescriptor const& typeInfo, void* storage = 0)
+        : descriptor_(typeInfo)
+        , pBuffer_(static_cast<PBuff>(storage))
+        { }
+      
+      // using standard copy operations
+      
+      
+      
+      void emit();
+      void release();
+      
+      
+      template<typename BU>
+      BU& create();
+      
+      template<typename BU>
+      BU& accessAs();
+      
+      
+      //////////////////////////////////////////TICKET #249 this operator looks obsolete. The Buff type is a placeholder type,
+      //////////////////////////////////////////TODO         it should never be accessed directly from within Lumiera engine code
       Buff&
       operator* ()  const
         {
@@ -74,49 +154,32 @@ namespace engine {
       bool
       isValid()  const
         {
-          return pBuffer_;
+          return bool(pBuffer_)
+              && descriptor_.verifyValidity();
         }
       
+      HashVal
+      entryID()  const
+        {
+          return HashVal(descriptor_);
+        }
       
-      //////////////////////TODO: the whole logic how to create a BuffHandle needs to be solved in a more clever way. --> Ticket 249
-      BuffHandle()
-        : pBuffer_(0),
-          sourceID_(0)
-        { }
+      size_t
+      size()  const
+        {
+          return descriptor_.determineBufferSize();
+        }
       
     private:
-      PBuff pBuffer_; 
-      long sourceID_;
-    };
-  
-  
-  /**
-   * Buffer Type information.
-   * Given a BufferDescriptor, it is possible to allocate a buffer
-   * of suitable size and type by using State::allocateBuffer().
-   */
-  struct BufferDescriptor
-    {
-      lumiera::StreamType& sType_;
-    };
-  
-  
-  class ProcNode;
-  typedef ProcNode* PNode;
-  
-  
-  struct ChannelDescriptor  ///////TODO collapse this with BufferDescriptor?
-    {
-      BufferDescriptor bufferType;
-    };
-  
-  struct InChanDescriptor : ChannelDescriptor
-    {
-      PNode dataSrc;    ///< the ProcNode to pull this input from
-      uint srcChannel; ///<  output channel to use on the predecessor node
+      template<typename BU>
+      void takeOwnershipFor();
+      void takeOwnershipFor(BufferDescriptor const& type);
+      
+      void emergencyCleanup();
     };
   
   
   
-} // namespace engine
+  
+}} // namespace proc::engine
 #endif

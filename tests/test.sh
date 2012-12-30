@@ -134,6 +134,7 @@ fi
 #valgrind false positives in 'vgsuppression'. Care must be taken that this file is simple and does
 #valgrind not generate true positives.
 #valgrind
+echo "NOTE: CPU time limit: $LIMIT_CPU sec"
 ulimit -S -t ${LIMIT_CPU:-5} -v ${LIMIT_VSZ:-524288}
 valgrind=""
 LIMIT_TIME_REAL="$LIMIT_TIME"

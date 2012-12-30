@@ -47,8 +47,8 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib  {
+namespace meta {
 namespace test {
   
   /** template for generating lots of different test types */
@@ -134,7 +134,7 @@ namespace test {
           subInterface.eat (b13);
           me_can_has_more_numberz.eat();
           
-          INFO (test, "SizeOf = %lu", sizeof(me_can_has_more_numberz));
+          INFO (test, "SizeOf = %zu", sizeof(me_can_has_more_numberz));
         }
     };
   
@@ -144,4 +144,4 @@ namespace test {
   
   
   
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test

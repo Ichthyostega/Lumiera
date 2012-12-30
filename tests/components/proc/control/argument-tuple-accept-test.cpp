@@ -26,7 +26,7 @@
 #include "proc/control/argument-tuple-accept.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple.hpp"
-#include "lib/lumitime-fmt.hpp"
+#include "lib/time/diagnostics.hpp"
 
 #include <tr1/functional>
 #include <iostream>
@@ -35,16 +35,17 @@ using std::cout;
 using std::endl;
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
   using lib::test::showSizeof;
   using lib::test::randTime;
   
-  using lumiera::Time;
+  using lib::time::TimeVar;
   using std::tr1::function;
-  using lumiera::typelist::FunctionSignature;
-  using lumiera::typelist::Tuple;
+  using lib::meta::FunctionSignature;
+  using lib::meta::Tuple;
   
   
   
@@ -103,7 +104,7 @@ namespace test    {
       run (Arg) 
         {
           TestClass<void()> testVoid;
-          TestClass<int(Time,int)> testTime;
+          TestClass<int(TimeVar,int)> testTime;
           
           testVoid.bind();
           testTime.bind(randTime(),23);
@@ -123,4 +124,4 @@ namespace test    {
   LAUNCHER (ArgumentTupleAccept_test, "unit controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

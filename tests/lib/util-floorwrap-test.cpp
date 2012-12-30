@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
+#include "lib/util-quant.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -36,6 +36,7 @@ using std::endl;
 using boost::format;
 using boost::lexical_cast;
 using lib::test::showType;
+using util::floorwrap;
 
 
 namespace util {

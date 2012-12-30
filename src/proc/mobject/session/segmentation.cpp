@@ -24,13 +24,12 @@
 
 
 
+namespace proc {
 namespace mobject {
-  namespace session {
-
-    /** */
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+namespace session {
+  
+  /** */
+  
+  
+  
+}}} // namespace proc::mobject::session

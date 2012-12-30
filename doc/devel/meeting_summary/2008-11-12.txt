@@ -1,0 +1,785 @@
+2008-11-12 Lumiera Developers Meeting
+=====================================
+:Author: Ichthyostega
+:Date: 2008-11-12
+
+Dec 11, 2012 on #lumiera 20:00 - 01:15 UTC +
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ * joelholdsworth
+ * raffa
+ 
+_Summary and transcript supplemented by Ichthyo 11/2011_
+
+
+
+Platform and lib dependency status
+----------------------------------
+Right away, there is agreement between all 3 core devs that the Lumiera project
+should try to stay close to a *stable reference linux distribution*. Usually, 
+developers tend to stick to ``latest greatest'', causing lots of difficult to resolve
+problems to packagers and ursers of their software. The Lumiera team wants to go into
+the opposite direction: staying close to a mature and stable distro and rather try to
+backport any newer libraries, when they are _really required_ for getting ahead with
+the coding. Since _cehteh_ and _ichthyo_ are Debian users and _joelholdsworth_ tends
+to use a moderately recent Ubuntu, the intention is to use Debian/stable as reference.
+
+Conclusion
+~~~~~~~~~~
+
+ * use *Debian/stable* (currently Lenny) as reference distribution
+ * care for backports of any newer libraries required
+ * use VMs to verify the build on a moderate selection of more recent distros
+
+
+
+Problems with GUI Plugins
+-------------------------
+The core devs are aware of some challenging problems regarding plug-ins for the
+GUI and effect plug-ins requiring an specific GUI control or option pane. Still the more
+since the intention is for Lumiera to adapt _existing plug-in systems_ rather then
+rolling yet-another new plug-in standard no one else cares to support. Initially,
+specific Lumiera plug-ins will be provided only for some very basic modular functionality,
+eg. fader, panner, blur.
+
+_joelholdsworth_ points out that configurability can't replace real GUI and workflow design.
+He quotes from a recent Blender GUI discussion
+
+[quote, the Belnder UI reviews]
+____________________________________________________________________
+Lastly, I’d like to address another misconception, this time about customizability.
+There has been a notion that the solution to most of the UI problems can be solved with added customizability.
+The notion goes that if the UI is inefficient, the user can simply customize it herself to suit her needs.
+This claim is wrong for several reasons:
+
+- It is impossible to customize something you have not fully comprehended yet,
+  so it in no way helps the learning process.
+- It makes an application less predictable, because the user cannot rely on the application
+  to always act the same.
+- It takes focus away from the users content, and over to managing the application itself,
+  which is what we wanted to avoid in the first place.
+- It undermines the portability of Blender, because you cannot rely on Blender
+  functioning the same way across different systems.
+- Customizability does not equate to flexibility.
+- 99% of Blenders user will use the default setup anyway.
+
+This is not to say that customizability is always bad - having the ability to change the hotkeys
+from the defaults to match another 3D application such as Maya or Softimage XSI can make it easier
+for users of those applications to adapt to Blender.
+____________________________________________________________________
+
+Consequently, Joel wants to try just doing the UI _right_, then add a little bit of customization back in here and there.
+Additionally, agreement is to have a kind-of ``perspective switcher'' (like in Eclipse), so saving different
+panel layouts would be covered easily
+
+
+.-- Discussion about foreseeable problems with GUI Plugins --
+[caption="☉Transcript☉ "]
+----------------------------
+[2008-11-12 21:53:50] <ichthyo> I thought we could just discuss the problem informally
+                                and share some thoughts what we think is most critical
+[2008-11-12 22:06:01] <ichthyo> there are plugins which don't provide a GUI, and some plugin systems allow
+                                for a standard method for creating plugin guis
+
+[2008-11-12 22:05:46] <joelholdsworth> so bundling GUI together with plugins is easier now, right?
+[2008-11-12 22:05:59] <joelholdsworth> we implement some kind of parameters system
+[2008-11-12 22:06:03] <ichthyo> yes
+[2008-11-12 22:06:14] <cehteh> joelholdsworth: thats up to you .. but the plugin system is ready 
+[2008-11-12 22:06:27] <joelholdsworth> yeah that's fine
+[2008-11-12 22:06:38] <joelholdsworth> if you want to extend the GUI you just expose and interface for it
+
+[2008-11-12 22:07:51] * cehteh thinks about some canvas widget which the plugin can use to draw stuff there
+[2008-11-12 22:08:26] <joelholdsworth> cehteh: as in overlays on the video canvas?
+[2008-11-12 22:09:19] <cehteh> joelholdsworth: up to you, not necessary overlays
+
+[2008-11-12 22:05:07] <ichthyo> I see some problems we should thik about
+[2008-11-12 22:06:50] <ichthyo> so, basically loading a processing routine from
+                                a plugin and using it to process video/audio is no problem. Basically you define
+                                some interface (first in C++) then translate it to the lumiera interface macros
+                                but with the GUI there are several conceptual problems
+
+[2008-11-12 22:07:35] <ichthyo> first: There are plugins which don't have a GUI. Thats fine
+[2008-11-12 22:08:05] <ichthyo> we need to define a parameter system, as joel pointed out
+[2008-11-12 22:08:38] <ichthyo> and then we need to fit the existing plugin systems, each one, to use this parameter system
+[2008-11-12 22:08:45] <cehteh> thats type:key:value at simplest
+[2008-11-12 22:08:51] <cehteh> maybe with some representation hints
+[2008-11-12 22:08:58] <ichthyo> there is more about it
+[2008-11-12 22:09:03] <ichthyo> representation hints
+[2008-11-12 22:09:07] <ichthyo> type of gui control
+[2008-11-12 22:09:15] <ichthyo> logarithmic/linear scale
+[2008-11-12 22:09:17] <ichthyo> zero point
+[2008-11-12 22:09:19] <ichthyo> range
+[2008-11-12 22:09:27] <ichthyo> but it is manageable
+[2008-11-12 22:09:38] <ichthyo> LADSPA is a prominent example
+[2008-11-12 22:09:55] <ichthyo> then, the problem in the GUI is how to arrange those controls
+[2008-11-12 22:10:20] <ichthyo> anyway, I think this alternative is the most simple one and the one which will
+                                create the least problems
+[2008-11-12 22:10:34] <joelholdsworth> ichthyo: I figured the UI will just expose parameters
+[2008-11-12 22:10:42] <joelholdsworth> so you expose them semantically - maybe in a tree
+[2008-11-12 22:10:51] <joelholdsworth> and add rich presentation hints
+[2008-11-12 22:11:00] <joelholdsworth> that hit the UI how to lay out out
+[2008-11-12 22:10:59] <cehteh> i think layout should be optional by some config/stylesheet
+[2008-11-12 22:11:05] <ichthyo> cehteh: possible. But those things are already defined by the
+                                plugin systems we want to wrap up.
+[2008-11-12 22:13:01] <cehteh> you have a list (or maybe tree) of parameters .. presentation aside
+                               ... tree just because some parameters depend on the presence of some else
+                               and you have a presentation .. 
+                                
+[2008-11-12 22:11:53] <ichthyo> next problem is: 
+[2008-11-12 22:12:16] <ichthyo> the plugins need to allocate some space in the GUI and should not clutter
+                                the workspace this is a tough really tough interface design problem
+                                because some plugins aren't just some "optional stuff", but wired
+                                right into the core operation
+                                
+[2008-11-12 22:12:54] <joelholdsworth> well ichthyo: I'm not planning to allow plugins to "take over"
+                                handling workflow. they get to extend very specific parts of the UI
+[2008-11-12 22:13:09] <joelholdsworth> e.g. params
+[2008-11-12 22:13:11] <joelholdsworth> or the canvas
+[2008-11-12 22:13:15] <joelholdsworth> or timeline
+[2008-11-12 22:13:22] <joelholdsworth> and only in very specific ways
+
+[2008-11-12 22:14:15] <joelholdsworth> ichthyo: and most of the time plugins wont extend anything --
+                                their whole UI will be exposed semantically (with UI presentation hints)
+                                (in addition to the plain semantics)
+[2008-11-12 22:13:27] <ichthyo> thats fine
+
+[2008-11-12 22:14:58] <ichthyo> but do you see the interface design problem?
+                                basically you want to design a smooth handling. but now you need to rely
+                                on some module which is plugged in and you don't know much about this module
+                                how is it possible to tweak effects easily while you just don't know much
+                                about those effects?
+[2008-11-12 22:15:23] <joelholdsworth> yes I agree
+
+[2008-11-12 22:15:48] <ichthyo> then there is another problem:
+[2008-11-12 22:15:56] <ichthyo> key bindings and MIDI bindings
+[2008-11-12 22:16:10] <ichthyo> you want to bind key shortcuts and external controllers to GUI elements
+[2008-11-12 22:16:20] <ichthyo> and of course plugins need to be included into this system
+[2008-11-12 22:16:35] <joelholdsworth> ok that's quite easy - you just right click on the control
+                                (or click a tiny button) that opens up a menu that lets you set this stuff
+
+[2008-11-12 22:16:59] <joelholdsworth> UI design? well that's what presentation hints help with
+[2008-11-12 22:17:26] <joelholdsworth> they set size, layout, the appropriate type of slider
+                                for example to expose this value
+[2008-11-12 22:17:29] <ichthyo> and what happens when the respective plugin options window isn't opened at all?
+[2008-11-12 22:17:47] <ichthyo> or when you have multiple instances of the same plugin?
+[2008-11-12 22:17:48] <joelholdsworth> what do you mean?
+[2008-11-12 22:18:11] <ichthyo> for example: you use a sound panner plugin
+                                and you want to adjust the sound pan in 3 dimensions by key shortcuts,
+                                or to bind them to some knobs on an external control surface
+                                and now you have multiple instances of the same panner plugin
+                                so we need a naming scheme
+                                
+[2008-11-12 22:19:03] <cehteh> how i thought about this:
+                               1) plugin provides the list of its parameters (maybe as tree)
+                               2) there is a config file (config system) which gets installed
+                                  with the plugins which defines the default layout
+                               3) user might override that in his own configs ... 
+                                  but still only defaults for new instances of the things
+                               4) the actual configured state is saved with the session
+                               while all this config just is a definition which gets applied to a kindof stylesheet
+
+[2008-11-12 22:20:05] <ichthyo> as tree for sure, because many plugins have nested windows for each instance
+[2008-11-12 22:21:49] <ichthyo> which means we need a naming/addressing scheme
+[2008-11-12 22:22:20] <ichthyo> ...which creates sort of a cascading scheme
+[2008-11-12 22:22:42] <ichthyo> I mean,  a naming/addressing scheme
+[2008-11-12 22:23:04] <ichthyo> for distinguishing identical parameters in different instances of yet-unknown plugins
+[2008-11-12 22:23:19] <ichthyo> and now consider: where should these key bindings attach to?
+[2008-11-12 22:23:39] <ichthyo> to a specific instance, or to the suitable instance which is just in focus?
+[2008-11-12 22:23:46] <ichthyo> or both (probably)
+[2008-11-12 22:24:03] <ichthyo> you may want to bind a different knob to each different panner plugin
+[2008-11-12 22:24:25] <ichthyo> or alternatively, you may want to bind "the pan knob" to the "current pannner"
+[2008-11-12 22:24:42] <ichthyo> this would require that we introduce a focus concept
+[2008-11-12 22:25:00] <ichthyo> I think thorwil proposed something similar in the last discussion
+[2008-11-12 22:25:16] <ichthyo> so we have a notion of the "current track", "current clip"
+[2008-11-12 22:25:49] <ichthyo> and then there is another problem with plugin GUIs
+[2008-11-12 22:26:10] <ichthyo> many plugin systems, especially VST have custom GUIs
+[2008-11-12 22:26:27] <ichthyo> and may not even work properly without using those
+[2008-11-12 22:26:48] <ichthyo> which means, some GUI code in the plugin takes over. That is something I utterly dislike
+
+[2008-11-12 22:33:29] <cehteh> no thats not needed
+[2008-11-12 22:33:29] <cehteh> in the session each object has a uuid thats its address 
+[2008-11-12 22:33:29] <cehteh> each parameter has a uuid too(interface system)
+[2008-11-12 22:33:31] <cehteh> so you can say parameter 0x2344545645654534 of object 0x4543765732525t643 ....
+[2008-11-12 22:33:34] <cehteh> "yet unknown" doesnt exist .. it is either unknown or known :)
+
+[2008-11-12 22:55:26] <ichthyo> well ..the problem is just: you can't avoid things like a user binding
+                                some external control surface to a certain gui control. All I wanted is
+                                to bring the problem to everyones attention, also, that we need a parameter system
+                                and that this parameter system is probably tree-like, not just flat
+[2008-11-12 22:57:06] <cehteh> i want anythnig be addressable with uuid(manipulating_function)+uuid(object)
+[2008-11-12 22:58:41] <ichthyo> for me, this is just a opaque reference which is implemented in some way. So, assumed
+                                I have the object representing the connectionn to the plugin, I can provide the GUI with
+                                some means for re-addressing a certain parameter, e.g. for a key binding, and, of course
+                                for re-establishing the same binding when re-creating the session from storage
+                               
+[2008-11-12 23:00:50] <ichthyo> Further, with plugin guis instances there is yet another problem in that you probably
+                                have more option windows of some plugins as you can show in any reasonable GUI
+                                These issues were one of the reasons I made this "FeatureBundle" proposal some time ago,
+                                Meaning there is a mechanism allowing you to bundle
+                                - an existing external plugin
+                                - an adaptation we do for connecting it to the gui
+                                - maybe a script or gui
+                                - customisation info we need for the gui layout
+                                ...and provide all together as a single bundle the user can install
+[2008-11-12 23:11:15] <ichthyo> joelholdsworth: maybe you have already some ideas how to deal with all those plugin
+                                option windows? they are a real problem for getting a smooth handling and workflow.
+                                because: you'll spend a considerable amount of the whole project time with tewaking
+[2008-11-12 23:12:28] <ichthyo> (yes, that's what I am about to point out....)
+[2008-11-12 23:13:05] <ichthyo> ...if you work on tweaking, you typically have a small amount of plugin windows
+                                which need to stay open with maybe subtabs for all active plugins
+                                say some color correction on 2 tracks, and then you open and close variouos plugins
+                                for several different clips ...plus, maybe the possibility to "pin" some of the plugin
+                                windows, while others just allocate the next free slot
+                                
+[2008-11-12 23:13:14] <joelholdsworth> I guess we need some modeless way of putting plugin controls in a panel
+[2008-11-12 23:15:32] <joelholdsworth> so maybe having panels open up - or do it like inkscape with a scrollable panel 
+                                container that gets longer as more panels are opened
+
+[2008-11-12 23:20:10] <cehteh> Cinelerra's plugin guis who constantly get lost behind the main window are really a mess
+[2008-11-12 23:19:28] <ichthyo> joelholdsworth: have you already any ideas about focus handling? 
+[2008-11-12 23:20:15] <ichthyo> joelholdsworth: do we get a "current object", a "current track" or the like
+                                which receives keybord input
+[2008-11-12 23:20:37] <joelholdsworth> keybaord focus, yes - that was the plan
+[2008-11-12 23:20:54] <ichthyo> thorwil recently pointed at the concept of having an "active element" within
+                                a larger selected group of elements e.g. you have a "current clip" and within it
+                                a currently active effect attachment and if you press the shortcut, you switch over
+                                to the automation curve of this plugin if there is one, etc. etc...
+
+[2008-11-12 23:21:44] <cehteh> think about future ... multiple elements have focus from different devices
+[2008-11-12 23:22:06] <cehteh> multitouch ... and other controlers
+[2008-11-12 23:22:06] <joelholdsworth> I think we have to treat keyboard focus as special
+[2008-11-12 23:22:23] <cehteh> next X version will utilitze multiple mouse pointers
+[2008-11-12 23:22:35] <ichthyo> e.g. what's with the mouse wheel?
+[2008-11-12 23:22:42] <ichthyo> what's with a jog dial on a control surface
+[2008-11-12 23:23:03] <ichthyo> or with the play/stop buttons on a control surface?
+
+[2008-11-12 23:23:03] <joelholdsworth> my plan is to treat the jog dial as special
+[2008-11-12 23:23:23] <joelholdsworth> yes again - special button assignment
+[2008-11-12 23:23:23] <ichthyo> sort of like the mouse wheel?
+[2008-11-12 23:23:34] <cehteh>  imagine user wants a 2nd normal pc keyboard as video controler
+[2008-11-12 23:23:42] <ichthyo> because all those rather follow sort of  a focus
+[2008-11-12 23:23:56] <ichthyo> maybe together with modifier keys
+
+[2008-11-12 23:24:04] <joelholdsworth> yes again that would work via an auxialiry controller setup config
+                                the primary keybaord and mouse work in the normal way
+                                we can't have two keyboard focusses - it's just won't work
+                                we can have a second keyboard - a board of hotkeys
+[2008-11-12 23:25:21] <joelholdsworth> there's mouse, keyboard and auxiliary controllers
+[2008-11-12 23:25:34] <joelholdsworth> and those controllers would be mapped to the UI using a cunning dialog
+[2008-11-12 23:25:58] <ichthyo> and what I said some time ago today with the binding for the "current" pan
+                                is a similar idea. Because also such a binding should rather follow the focus
+                                it doesn't help if you bind it to a specific instance of the panner plugin
+                                the moment you have more then 8 panners, it won't scale
+                                rather, it would be helpful, if you had a "current" fade and pan and sound level,
+                                which would follow the focus, so you could e.g. navigate the focus with the
+                                right hand at the cursor keys, and leave the left hand on your control surface's knobs
+                                please understand me right: I don't want to push features, and I will stay out of GUI
+                                issues. All I want is that everyone in the project is aware of this problems
+[2008-11-12 23:27:44] <joelholdsworth> yes ok
+[2008-11-12 23:28:45] <joelholdsworth> I see the problem
+[2008-11-12 23:28:58] <ichthyo> ok thanks
+
+[2008-11-12 23:31:54] <ichthyo> but it's fine we are all aware of the problem and seemingly share the same approach
+                                config system +  some sort of automatic persistent references within proc +  some
+                                indirection + maybe a focus system
+                                
+[2008-11-12 23:33:10] <ichthyo> and another point I want to note is: all of us are rather reluctant to allow plugins
+                                to create GUIs on their own
+[2008-11-12 23:33:27] <joelholdsworth> depends what you mean by that
+[2008-11-12 23:33:29] <cehteh> i guess we cant avoid that
+[2008-11-12 23:33:38] <ichthyo> but note: there is a great urge from some some users for such things
+[2008-11-12 23:33:39] <cehteh> for really external plugins
+[2008-11-12 23:33:47] <joelholdsworth> yes
+[2008-11-12 23:34:01] <cehteh> i am more cared about them fireing threads up :P
+[2008-11-12 23:34:13] <ichthyo> thats part of the problem
+[2008-11-12 23:34:37] <ichthyo> some start registering their own key shortcuts and all sorts of horrible things
+[2008-11-12 23:34:42] <joelholdsworth> if you let each plugin create every bit of it's ui, you get a lot of code
+                                copy/paste and a lot of diverging GUI, so you need to "help" the plugins
+                                by putting them in a strict framework. Then, on top of that we allow
+                                extensions which allow a little more flexibility
+                                
+[2008-11-12 23:35:20] <ichthyo> Steinberg failed to address this problem properly and VST bears on this heritage until today
+[2008-11-12 23:35:35] <cehteh> make it in a way where the 'correct' way is also the most convenient for any programmer is
+                                all and the best we can do
+[2008-11-12 23:35:49] * ichthyo nods
+[2008-11-12 23:36:04] <joelholdsworth> yes
+[2008-11-12 23:36:07] <cehteh> note the 'any' ... 
+[2008-11-12 23:36:20] <ichthyo> :-P
+[2008-11-12 23:36:26] <cehteh> means mad programmers, beginner programmers, experienced programmers, html programmers ... 
+
+[2008-11-12 23:36:52] <joelholdsworth> but I'm thinking we do need to remember that the majority of our plugin developers
+                               will be part of this project team
+[2008-11-12 23:38:09] <ichthyo> joelholdsworth: no, it won't be this way. Rather, there are some mainstream plugin systems.
+                               People will foremost want to use plugins they know already, letting asside a small set of
+                               core plugins, yes, those are the ones we provide as native lumiera plugins
+[2008-11-12 23:38:42] <joelholdsworth> hmm ok
+[2008-11-12 23:38:44] <ichthyo> a fader, a mask etc.
+[2008-11-12 23:38:50] <ichthyo> but anything besides that
+[2008-11-12 23:39:06] <ichthyo> every sound engenieer has his favorite eq and compressor
+[2008-11-12 23:39:26] <ichthyo> and he will rather swich to another application than being forced
+                               to use a compressor he isn't fine with. Same for advanced video stuff
+----------------------------
+
+
+Source code organisation
+------------------------
+In the weeks before that meeting some discussions regarding the start-up of the main application
+took place, including the question how to load and pull up the Lumiera GTK GUI as a plug-in.
+Moreover, _cehteh_ just ``landed'' the branch with the first draft of his new plugin/interface
+system. Which prompted us to sort out the locations and arrangement of those parts of the source
+dealing with the application framework. The decision was to place that code into a small library,
+which we call the *Lumiera common application services* (+liblumieracommon.so+), to be kept separate
+from the *support library* (+liblumiera.so+).
+
+.-- Include dir and namespaces --
+[caption="☉Transcript☉ "]
+----------------------------
+[2008-11-12 23:49:43] <ichthyo> There is the namespace issue we left open on the last meeting
+[2008-11-12 23:50:34] <cehteh> its really oblivious that you dont need to reflect the C++ namespaces
+                               1:1 in the directory structure. I still think having all our stuff into lumiera::
+                               would be good .. but :)
+[2008-11-12 23:51:33] <ichthyo> in any case, it is closely interconnected to the "interface namespace":
+                                which means the following: there are some interfaces (opaque datatypes
+                                plus forward decls for C, abstract base classes for C++)
+                                plus the things defined via the interface/plugin system
+                                this stuff is our "public interface"
+[2008-11-12 23:53:01] <ichthyo> and I really try hard to keep it separate from the implementation
+
+[2008-11-12 23:53:14] <cehteh> the interface/plugin system has now its own rules which are somewhat special
+                               and good by that way. I am thinking about a interface_doc.h which can be used
+                               to generate documentation from the interface language with some special gcc/cpp flags
+                               
+[2008-11-12 23:53:18] <ichthyo> those interface parts will be contained in a "Lumiera sdk"
+                                and probably all those interfaces (for C++) will go into namespace lumiera::
+                                because it's just the best and most natural pick
+                                and, as said, I really want us to try hard to get this interface part
+                                a real interface part and cleanly separated from the implementation
+                                meaning: I don't want *.c and *.cpp files in this package/directory/namespace,
+                                unless they are really needed there
+                                
+[2008-11-12 23:55:55] <cehteh> well interfaces themself need to be .c they need to be implemented
+                               and the implementation might adapt the code for example the config system
+                               sometimes returns internal state as success/failure indicator
+                               but its interface just returns integers 
+
+[2008-11-12 23:56:13] <ichthyo> so the question regarding namespaces is connected to the question:
+                                how is the implementation organized in relation to the interface part?
+
+[2008-11-12 23:59:41] <cehteh> config_interface.h needs to be installed someday (with a better name maybe)
+[2008-11-13 00:01:52] <cehteh> do we want a src/includes/   ?
+[2008-11-13 00:02:04] <cehteh> for includes which get installed
+[2008-11-13 00:00:07] <ichthyo> so, someone *using* the interface system probably will need to include config_interface.h
+[2008-11-13 00:00:19] <ichthyo> but he doesn't need config.c
+[2008-11-13 00:00:29] <cehteh> config_interface.c is the mapping/actual implementation ...
+                                which gets linked in but the user doesn't need it
+[2008-11-13 00:00:52] <ichthyo> yes, thats my point. So we should try to separate those cleanly.
+
+
+[2008-11-12 23:59:38] <ichthyo> so lets assume src/lumiera contains our interface
+                                (I just take it as an example to make my point more clear)
+[2008-11-13 00:01:01] <ichthyo> Let me explain it on another more elaborate example
+
+[2008-11-13 00:01:47] <ichthyo> I have a class "Session" which is located in a file session.hpp
+[2008-11-13 00:01:58] <ichthyo> but it is just a ABC
+[2008-11-13 00:02:18] <ichthyo> and I have a Class SessionImpl which is contained in sessionimpl.hpp and sessionimpl.cpp
+[2008-11-13 00:02:44] <ichthyo> and in the "interface package" there should be *only* session.hpp
+[2008-11-13 00:03:11] <ichthyo> probably this class Session should be moved into namespace lumiera::
+[2008-11-13 00:03:16] <ichthyo> then the situation would be clean
+
+[2008-11-13 00:03:32] <ichthyo> note: up to now i wrote only implementation code.
+[2008-11-13 00:03:50] <cehteh>  yes, me too
+
+[2008-11-13 00:04:07] <ichthyo> but I already made the class hierarchy this way, i.e. everyone *uses* just the class Session
+[2008-11-13 00:04:28] <ichthyo> and only the class SessManagerImpl knows of the implementation class SessionImpl
+[2008-11-13 00:04:32] <ichthyo> and so on
+
+[2008-11-13 00:04:50] <cehteh> well thats not important yet... 
+                               I currently have some 'mess' of includes because its just easier for now to mix them
+                               all together and relative easy to clean up when done, and I don't have a differentiation
+                               between interface and implementation headers .. because
+                               a) its all implementation code yet 
+[2008-11-13 00:06:06] <cehteh> b) i was under the impression that i only wanted to export interfaces
+                                  over 'Interfaces'
+[2008-11-13 00:06:25] <ichthyo> ...which is fine
+
+[2008-11-13 00:08:24] <cehteh> so .. public interfaces ... place in:
+                               [ ] src/include/*.h
+                               [ ] src/*/*_interface.h
+[2008-11-13 00:08:45] <ichthyo> I am for the former: put them into a separate directory
+[2008-11-13 00:08:55] <ichthyo> put them in a clearly separated namespace
+[2008-11-13 00:08:29] <ichthyo> but... on the long run I am sure we don't just get one "includes" package,
+                                rather I guess we get a (very small) tree of interfaces.
+                                That's the rationale behind my keeping the implementation namespaces completely apart
+                                
+[2008-11-13 00:08:53] <cehteh> ok
+[2008-11-13 00:09:43] <cehteh> the _interface.c  is the glue code which can stay in the implementation dir imo
+[2008-11-13 00:10:16] <cehteh> actually i wanted a include dir too .. i just didnt start because i wanted to ask you too
+[2008-11-13 00:10:41] <cehteh> ah another thing i asked joel before .. i dump the tests dir out of the Doxyfile
+[2008-11-13 00:10:58] <ichthyo> really?
+[2008-11-13 00:11:09] <cehteh> main documentation should have less noise,
+                               the include graphs are messed up with all test dependencies.
+                               But we can make special doxyfiles for special purposes
+                               Doxyfile.all Doxyfile.small Doxyfile.browser
+
+[2008-11-13 00:13:34] <ichthyo> yes, thats fine.
+                               So we make a "small" doc set with just the core facilities, and a "complete" doc set,
+                               which includes: test cases and documentation on private members, so someone really
+                               needing to find out how something works in detail can use the "complete" set.
+                               At the end, I bet we will have almost 60% test code and 40% actual code
+
+[2008-11-13 00:16:29] <ichthyo> ok, back to the include dir question:
+                               My proposal would be to use src/lumiera/... and namespace lumiera::...
+                               (and its children) for the public interfaces
+                               
+[2008-11-13 00:17:04] <cehteh> mhm thats the usual reversal operation
+[2008-11-13 00:17:31] <cehteh> src/lumiera/include/ ... gets installed in /usr/include/lumiera :P
+[2008-11-13 00:17:40] <cehteh> ok you dont have the include
+[2008-11-13 00:17:52] <cehteh> but i'd rather use the name include
+[2008-11-13 00:17:59] <ichthyo> so src/lumiera/** -> /usr/include/lumiera/**
+[2008-11-13 00:18:22] <ichthyo> this would make the namespaces match 100% to the directories
+
+[2008-11-13 00:18:13] <cehteh> i dont like that much
+[2008-11-13 00:18:18] <cehteh> better src/include
+[2008-11-13 00:18:22] <cehteh> rationale:
+[2008-11-13 00:18:43] <cehteh> when i look at some project i dont know and see a ./include
+                               i know that there are the interfaces. If it is ./projectname then
+                               i expect there a huge tree of code which makes the project
+[2008-11-13 00:20:04] <cehteh> which is actually true for most project ...
+                               at least i dont know anyone which names its includes projectname
+[2008-11-13 00:20:14] <ichthyo> thats a good argument
+[2008-11-13 00:20:23] <cehteh> the projectname/include is somewhat common .. but bit bloated
+[2008-11-13 00:20:48] <cehteh> so better include
+[2008-11-13 00:20:49] <ichthyo> yeah, thats a good point
+
+[2008-11-13 00:21:04] <ichthyo> so namespace lumiera::  -> /src/include
+[2008-11-13 00:21:35] <ichthyo> namespace lumiera::edit -> /src/include/edit  (just as an example)
+
+[2008-11-13 00:22:00] <ichthyo> while namespace proc::builder -> src/proc/builder
+
+[2008-11-13 00:22:31] <cehteh>  but i think keeping it flat would be ok
+[2008-11-13 00:22:58] <ichthyo> I didn't say I want it. But it may happen to be necessary or just better,
+                                when the root of the interfaces gets too big
+[2008-11-13 00:23:00] <cehteh>  at least i dont plan  to make a tree behind it
+[2008-11-13 00:23:08] <ichthyo> neither do I
+[2008-11-13 00:23:11] <ichthyo> but... well
+[2008-11-13 00:23:14] <cehteh>  i doubt that it will get very big
+[2008-11-13 00:23:29] <ichthyo> I've seen enough projects to prove the contrary
+[2008-11-13 00:23:45] <ichthyo> and when an interface dir as 60 entries it starts to get messy
+[2008-11-13 00:23:37] <cehteh>  even with 100 files there it will still be manageable
+[2008-11-13 00:24:02] <cehteh>  and if not .. we may reconsider that before we release
+[2008-11-13 00:24:38] <cehteh>  a deeper hierarchy which is very sparse is much more annoying
+                                than a dir with up to 100 files
+
+[2008-11-13 00:24:49] <ichthyo> but anyway, the important point is I really want to try hard to get public interfaces
+                                and implementation code cleanly separated
+[2008-11-13 00:25:31] <cehteh> for C++ absolutely .. for C i less that a *little* bit
+[2008-11-13 00:25:54] <cehteh> for performance reasons and because most of the backend wont end in public interfaces anyway
+
+[2008-11-13 00:26:27] <ichthyo> just out of curiosity: what are the performance reasons?
+[2008-11-13 00:26:51] <cehteh>  i have some static inline accessor functions ..
+                                which need to be in the .h and need full public structure definitions
+                                which expose private details. I think these will stay private
+                                but if not i wont really care.
+                                
+[2008-11-13 00:27:06] <ichthyo> ah, I see
+[2008-11-13 00:27:59] <ichthyo> probably those just count as "reasonable exceptions from the rule"
+[2008-11-13 00:28:33] <cehteh> well C has no access protection at all .. you have to do whats allowed/documented
+[2008-11-13 00:28:47] <cehteh> any improvisation counts as undefined behaviour .. point
+
+[2008-11-13 00:28:26] <ichthyo> and besides: also within the implementation of one layer,
+                                there are further interfaces, e.g the builder has an interface
+
+
+[2008-11-13 00:32:03] <ichthyo> actually, I wanted to write something down, but couldn't find the time
+[2008-11-13 00:32:17] <ichthyo> But I may well tell it just informally if that's ok ?
+
+[2008-11-13 00:33:02] <ichthyo> I always assume we have separate interface namespace(s)
+                                and implementation is in a different namespace then the exported interface
+                                basically I see two scenarios:
+                                
+                                so, the first scenario I'd call "libarry type"
+                                it means that the implementation namespace is nested
+                                eg namespace mylib  <-- the stuff the library users include and use in their code
+[2008-11-13 00:34:23] <ichthyo> namespace mylib::impl and mylib::impl::special   <- the actual code making the library work
+
+[2008-11-13 00:34:50] <ichthyo> second scenario is rather what I was aiming for
+                                namespace lumiera  <-- the interfaces
+[2008-11-13 00:35:45] <ichthyo> namespace proc::builder:.... <-- the implementation has a completely separate hierarchy
+                                                                 for each subsystem
+
+[2008-11-13 00:36:08] <ichthyo> my rationale for prefering the second aproach is:
+[2008-11-13 00:36:32] <ichthyo> in our case, we are "implementation heavy".
+                                We will certainly have much more implementation code than interfaces
+                                we often will build more nested namespaces for the implementation,
+                                but can live with just one shallow public interface
+                                besides, you can just grab one directory and install it as "include",
+                                the way we discussed
+                                for a real library, the situation is reversed: Often you have much code close
+                                to the interface, maybe even inline
+                                e.g. think at boost: 
+                                half of the code is immediately inline within the interface classes you use
+                                and the more technical parts are in shallow sub-namespaces below
+                                the good side of course is, that the implementation code doesn't need
+                                to pull in the interface, because he already sees it because of the nesting.
+                                but for our situation, for me, the need to pull in explicitly any interface
+                                you want to use or implement counts rather as a good thing
+                                because it clearly documents what non-local parts you use
+                                that was my rationale for keeping the implementation part
+                                in a completely separate hierarchy.
+                                
+[2008-11-13 00:43:17] <ichthyo> joelholdsworth: so you moved your gui code within namespace gui, is that correct?
+[2008-11-13 00:43:50] <joelholdsworth> yes that's right!
+[2008-11-13 00:43:59] <ichthyo> because, then the issue seems to be settled.
+                                Originally I had yet more shallow trees.
+                                But your argument with the matching directory names and the consistency
+                                is an important point. So then, I'll go ahead and move my implementationn code
+                                into a new root namespace proc and then start cleaning up the library part
+[2008-11-13 00:44:47] <joelholdsworth> great :)
+[2008-11-13 00:45:20] <ichthyo> meaning, you can expect quite some stuff moving between /src/common and /src/lib
+[2008-11-13 00:45:40] <ichthyo> on the long run, probably the intention should be for "common" to disappear
+[2008-11-13 00:46:08] <ichthyo> either stuff goes into namespace lumiera::, meaning it's an interface
+                                and the header should go into "src/include" or stuff is heavy support lib
+                                implementation stuff and thus goes below src/lib
+----------------------------
+
+
+.-- build system, plugin tree --
+[caption="☉Transcript☉ "]
+----------------------------
+[2008-11-13 00:47:06] <ichthyo> which brings us to another question
+[2008-11-13 00:47:18] <ichthyo> how do we organize building plugins?
+                                because: one plugin may contain several source files and headers,
+                                but needs to be linked into one module
+
+[2008-11-13 00:47:55] <cehteh> plugins dir
+[2008-11-13 00:48:11] <cehteh> and a tree there
+[2008-11-13 00:48:22] <cehteh> plugins/video/effects
+[2008-11-13 00:49:56] <cehteh> plugins/video/effects/foo/ ...    with foobar.c foobaz.c    links to foo.lum
+[2008-11-13 00:52:38] <cehteh> plugins/video/effects/foo/foo.c   builds   foo.lum and
+                                                                 installs it in $(pkglibdir)/plugins/video/effects/foo.lum
+
+[2008-11-13 00:48:24] <ichthyo> background is: I am aiming to get the build process as much rules-directed as possible
+[2008-11-13 00:48:27] <ichthyo> thus:
+[2008-11-13 00:48:54] <ichthyo> can we come up with a rule about how plugins will be built?
+[2008-11-13 00:50:33] <ichthyo> again the notorious namespace question
+[2008-11-13 00:51:08] <ichthyo> if it's a rather large plugin, e.g. a plugin providing an adapter for an
+                                external media type libarary or such stuff then it probably can have nested namespaces
+[2008-11-13 00:51:56] <cehteh> we really dont need a 1:1 relation between dirs and namespaces
+[2008-11-13 00:52:08] <ichthyo> so, then, how can the build system tell at what level of the tree below plugins
+                                we'd need to start with building one shared libarary?
+                                
+[2008-11-13 00:52:46] <ichthyo> would the following rule be ok for you?
+[2008-11-13 00:52:58] <ichthyo> start with dir src/plugins and descend
+[2008-11-13 00:53:12] <ichthyo> depth-first tree search
+[2008-11-13 00:53:28] <ichthyo> when you enter a directory which contains a real source file
+[2008-11-13 00:53:46] <ichthyo> then build everything below it into one shared module
+
+[2008-11-13 00:53:31] <cehteh> well i just suggesting here .. for the plugin loader ist relative simple
+[2008-11-13 00:53:56] <cehteh> it just searches in the paths you give him (and doesnt descend itself)
+[2008-11-13 00:54:19] <ichthyo> no, I really want to configure as few pathes as possible
+[2008-11-13 00:54:23] <cehteh> if you think thats ok, then do it
+
+[2008-11-13 00:54:57] <ichthyo> note, the limitation is: you can't just put some isolated code
+                                file *.c *cpp in some of the root directories...
+                                the moment you add a *c or *cpp file in some new sub tree,
+                                you'll find a <subtree-rootdirname>.lum in the corresponding bin dir
+                                
+[2008-11-13 00:55:17] <cehteh> thats prolly a good choice anyways
+[2008-11-13 00:55:28] <cehteh> plugins shall be only at the leaves of the tree
+
+[2008-11-13 00:55:42] <cehteh> be careful when linking 
+[2008-11-13 00:56:16] <cehteh> the autoconf build included a lot libs from configure which where not needed for plugins
+
+[2008-11-13 00:56:57] <ichthyo> besides, I will set up a different "build environment" for plugins
+[2008-11-13 00:57:16] <ichthyo> in SCons, each build environment has a fixed set of libraries attached
+[2008-11-13 00:57:28] <cehteh> you likely need specialized ones for some plugins
+[2008-11-13 00:57:43] <cehteh> but you can inherit them
+[2008-11-13 00:58:02] <ichthyo> yes, I can inherit them
+[2008-11-13 00:58:12] <ichthyo> and I match them from the directory name
+[2008-11-13 00:58:20] <ichthyo> the rest is fully automatic
+
+[2008-11-13 00:58:14] * cehteh thinks 
+[2008-11-13 00:58:38] <cehteh> a bare plugin doesnt need any lib
+[2008-11-13 00:59:04] <ichthyo> not even the lumiera support lib?
+[2008-11-13 00:59:11] <ichthyo> liblumiera.a
+[2008-11-13 00:59:12] <ichthyo> ?
+[2008-11-13 00:59:29] <cehteh> nope
+[2008-11-13 00:59:43] <cehteh> only if it needs somthing from that
+
+[2008-11-13 01:00:01] <cehteh>  -DLUMIERA_PLUGIN   for compiling plugins
+[2008-11-13 01:00:11] <ichthyo> plus libdl
+[2008-11-13 01:00:24] <cehteh>  stop. no
+[2008-11-13 01:00:34] <cehteh>  libdl actually breaks the isolation :P
+[2008-11-13 01:00:41] <ichthyo> ah, only for the part which loads the lib
+[2008-11-13 01:00:51] <cehteh> the host needs libdl not the plugin
+[2008-11-13 01:00:54] <ichthyo> but what is when a plugin wants to open another interface
+[2008-11-13 01:01:11] <cehteh> it asks the host to do it
+[2008-11-13 01:01:17] <ichthyo> doesn't it need to link against your plugin system impl?
+[2008-11-13 01:01:32] <cehteh> nope .. just the interface.h 
+[2008-11-13 01:02:49] <cehteh> interface.h defines some functions .. but these are not available for the plugin either
+                               but the nature of plugins is to extend the system ..
+                               thus follows that they will need some more specific libs in many cases
+
+[2008-11-13 01:02:29] <ichthyo> please understand my goal: I want to make the build as automatic and rules based as possible
+[2008-11-13 01:02:58] <cehteh> yes ...
+[2008-11-13 01:03:09] <ichthyo> for SCons, this is already mostly the case currently,
+                                but the autotools build is a maintainance nightmare right now
+                                because the paths and dependencies are so much hard wired there
+[2008-11-13 01:03:24] <ichthyo> i spent already a considerable time to fix it again and again
+[2008-11-13 01:03:52] <cehteh> huh i feel comfortable with autotools
+[2008-11-13 01:04:04] <ichthyo> fine for you, but I fix it all the time
+
+[2008-11-13 01:06:44] <ichthyo> for now I didn't use any special switches
+[2008-11-13 01:06:59] <ichthyo> I just defined exampleplugin to be an dynamic module
+[2008-11-13 01:07:10] <cehteh> sounds reasonable
+[2008-11-13 01:07:41] <ichthyo> as said, in future I'll tell scons
+                                "build everything below this root  dir into a dynamic module"
+                                and scons will derive the necessary compile and link commands
+                                
+[2008-11-13 01:10:32] <ichthyo> ah, another little issue
+[2008-11-13 01:10:42] <ichthyo> we have two tools directories currently
+[2008-11-13 01:10:53] <ichthyo> one as "src/tool"
+[2008-11-13 01:10:57] <ichthyo> and  another as
+[2008-11-13 01:11:12] <ichthyo> just "admin"
+[2008-11-13 01:11:29] <ichthyo> within admin, there is the icon rendering and the vgsuppression
+[2008-11-13 01:12:01] <ichthyo> the idea was, that all this special support tools would be in src/tool
+[2008-11-13 01:12:52] <cehteh> admin are administrative scripts .. tools shall be moved into src/tool
+[2008-11-13 01:13:00] <ichthyo> ok
+[2008-11-13 01:13:07] <ichthyo> so joelholdsworth:
+[2008-11-13 01:13:29] <ichthyo> would it be ok for you to move the icon building executable into src/tool ?
+[2008-11-13 01:13:41] <ichthyo> and probably vgsuppression too?
+[2008-11-13 01:14:00] <ichthyo> so the build process doesn't need to build anything in admin
+[2008-11-13 01:15:29] <joelholdsworth> yes that's ok!
+[2008-11-13 01:15:39] <joelholdsworth> that really is just a tool
+[2008-11-13 01:15:43] <ichthyo> that is built lilke a tool, so I'd like to move it into src/tool
+[2008-11-13 01:16:15] <joelholdsworth> it's the standard rsvg utility with some options added
+[2008-11-13 01:16:58] <ichthyo> a propos: joelholdsworth:
+                                I've built some additional directory checks into the accompanying python script
+                                you have probably noticed that I call directly from the SConstruct into your
+                                python script to invoke the icon rendering, and I built some additional checks
+                                and move non-empty dirs away as "*.bak"
+[2008-11-13 01:17:50] <joelholdsworth> I hadn't actually looked
+[2008-11-13 01:17:59] <joelholdsworth> but yes that makes perfect snese
+[2008-11-13 01:18:31] <joelholdsworth> actually it is supposed to overwrite any prior renderings
+[2008-11-13 01:18:39] <ichthyo> ah?
+[2008-11-13 01:19:00] <joelholdsworth> so if you change the SVG the PNGs get created fresh
+[2008-11-13 01:19:01] <ichthyo> so I could change it and just do a recursive remove if the target dir exists?
+[2008-11-13 01:19:10] <joelholdsworth> yes
+[2008-11-13 01:19:32] <joelholdsworth> like obj files - it's supposed to just overwrite any previous bits
+[2008-11-13 01:19:50] <joelholdsworth> well the targets are just build temporaries
+[2008-11-13 01:20:01] <ichthyo> ok
+[2008-11-13 01:22:25] <ichthyo> ok. then regariding the build system, the only bit of cleanup is the tests
+[2008-11-13 01:22:46] <ichthyo> cehteh: we talked about it when I visited you
+[2008-11-13 01:23:02] <ichthyo> it's not urgent right now
+[2008-11-13 01:23:14] <ichthyo> but.. as we agreed at that time
+[2008-11-13 01:23:39] <ichthyo> we should make a separate tree for the test-support code, maybe in a subdirectory of /tests
+[2008-11-13 01:24:01] <ichthyo> and this tree of course reflects the main tree. That was the idea if I recall correct
+[2008-11-13 01:25:11] <cehteh> ichthyo: yes .. i know
+[2008-11-13 01:25:13] <cehteh> pending
+[2008-11-13 01:25:18] <ichthyo> yes, not urgent
+[2008-11-13 01:25:26] <ichthyo> works as-is for now
+[2008-11-13 01:25:45] <ichthyo> I have some similar cleanup for my part
+
+[2008-11-13 01:27:24] <ichthyo> btw: do we need "test plugins"?
+[2008-11-13 01:27:52] <ichthyo> i.e. something similar to the src/plugin subdirs we discussed just a moment ago
+[2008-11-13 01:28:53] <cehteh> you mean some which get installed?
+[2008-11-13 01:29:09] <ichthyo> no, just plugins which are needed only from within tests
+[2008-11-13 01:29:18] <cehteh> yes we need them
+[2008-11-13 01:29:19] <ichthyo> i.e. /tests/plugin
+[2008-11-13 01:29:39] <ichthyo> and everything below will be built exactly similar as everything below /src/plugin
+[2008-11-13 01:29:44] <cehteh> i currently build them in place example_plugin.c
+[2008-11-13 01:29:54] <ichthyo> just it will be only used for test runs
+[2008-11-13 01:29:56] <ichthyo> yes, ok
+
+[2008-11-13 01:32:18] <cehteh> another thing: shall plugins override existing interfaces or barf out?
+[2008-11-13 01:32:33] <cehteh> both has pros and cons
+[2008-11-13 01:32:46] <cehteh> both can easily circumvented with some effort
+[2008-11-13 01:33:27] <ichthyo> ehm, I don't fully understand the situation.
+                                Could you explain it? Lets say: we have interface A
+                                now a plugin wants to provide an implementation of interface A
+                                i.e. the client of this plugin would use interface A to access it
+                                
+[2008-11-13 01:34:03] <cehteh> in a mail to you i explained that i would like mockup plugins which
+                               override core functionality
+                               
+[2008-11-13 01:35:07] <ichthyo> so, wouldn't the mockup just be another implementation of interface A ?
+[2008-11-13 01:35:09] <cehteh> well you query an interface+implementation tuple
+[2008-11-13 01:35:35] <cehteh> you cant just open a interface .. you open a implementation of an interface
+[2008-11-13 01:35:49] <ichthyo> yes, but you use this (interface+implemntation) just for opening the interface, or?
+[2008-11-13 01:36:05] <cehteh> so mocplugin  can provide blurfoo
+[2008-11-13 01:36:15] <cehteh> even if blurfoo.lum provides it too
+
+[2008-11-13 01:40:32] <cehteh> imagine 2 *.lum modules implement and export exactly the same thing
+                               (or at least announce it as exactly the same thing)
+                               
+[2008-11-13 01:40:57] <ichthyo> I'd just try to relate it to the similar situation with classes
+[2008-11-13 01:41:16] <ichthyo> you have an interface and now you have two subclasses
+[2008-11-13 01:41:12] <cehteh> nah classes are different
+[2008-11-13 01:41:27] <ichthyo> no they aren't. really different
+[2008-11-13 01:41:43] <cehteh> subtle different
+[2008-11-13 01:41:47] <ichthyo> so both subclasses claim to implement the contract which is defined by the interface
+[2008-11-13 01:42:04] <ichthyo> now I have a factory which instantiates one of those subclasses
+[2008-11-13 01:42:14] <ichthyo> or the other or both
+[2008-11-13 01:42:18] <ichthyo> same situation as for the plugins
+
+[2008-11-13 01:42:44] <cehteh> err no
+[2008-11-13 01:42:48] <cehteh> you have only one class
+[2008-11-13 01:42:49] <ichthyo> the client just wants an "instance" of the contract defined by the interface
+[2008-11-13 01:43:01] <ichthyo> and doesn't care which one it is
+[2008-11-13 01:43:14] <cehteh> you didnt understand my problem because it doesnt exist in C++
+[2008-11-13 01:43:33] <cehteh> class foo {...};
+[2008-11-13 01:43:43] <cehteh> foo this_is_it;
+[2008-11-13 01:43:44] <cehteh> foo this_is_it;
+[2008-11-13 01:43:57] <cehteh> ... redefinition of the same instance is my problem
+[2008-11-13 01:44:08] <cehteh> not even exactly
+[2008-11-13 01:44:37] <ichthyo> ah, in C++ the two would either be rejected by the compiler,
+                                or they would be allowed if in different scopes
+[2008-11-13 01:44:43] <cehteh> even worse the 2nd can say the it is a identical instance but it isnt
+[2008-11-13 01:45:07] <cehteh> thats a good way to inject moc objects
+
+[2008-11-13 01:45:15] <cehteh> so now my solution:
+[2008-11-13 01:46:01] <cehteh> *thinking*
+[2008-11-13 01:46:29] <cehteh> minor versions must differ, biggier minor will win
+[2008-11-13 01:46:41] <cehteh> (newer one for certain)
+[2008-11-13 01:46:53] <cehteh> thats intended
+[2008-11-13 01:47:11] <cehteh> now a mock object might claim it is some *exact* same ..
+[2008-11-13 01:47:57] <cehteh> that will be rejected .. so a mock object must do some heavy work
+                               to throw out the old one from the nest
+[2008-11-13 01:48:10] <cehteh> thats ok for testing purposes
+
+[2008-11-13 01:48:12] <ichthyo> well... at some point you will be able to tell the loader:
+                                load this module for use as interface A
+[2008-11-13 01:48:20] <cehteh> nah
+[2008-11-13 01:48:37] <cehteh> but you forget that modules != interfaces 
+[2008-11-13 01:49:07] <ichthyo> I understand the modules as being like a "subclass" of the interface
+[2008-11-13 01:49:23] <ichthyo> meaning, each of them can "stand-in" for the interface
+[2008-11-13 01:49:18] <cehteh> nope wrong
+[2008-11-13 01:49:41] <cehteh> modules are a collection of interfaces
+[2008-11-13 01:49:47] <cehteh> completely unrelated
+[2008-11-13 01:49:54] <ichthyo> huh?
+[2008-11-13 01:50:19] <cehteh> a module could provide a video effect and a gui plugin and a fancy format exporter at once
+[2008-11-13 01:50:36] <cehteh> no one shall do that ... but modules are just collections of interfaces
+[2008-11-13 01:50:37] <ichthyo> which would be 3 interfaces
+[2008-11-13 01:50:41] <cehteh> yes
+[2008-11-13 01:51:00] <ichthyo> but what then is the term for the implementation of an interface?
+[2008-11-13 01:51:08] <ichthyo> because, at an extension point
+[2008-11-13 01:51:21] <ichthyo> you just want to tell: this is the interface to be used at this extension point
+[2008-11-13 01:51:28] <cehteh> but the module is just a bunch of interfaces .. and module itself doesnt give them a purpose 
+[2008-11-13 01:52:09] <ichthyo> thats clear. Something like the feature bundle could give it a speficic purpose,
+                                or something similar, which itself is loaded as plugin 
+[2008-11-13 01:52:46] <cehteh> modules are just the bucket .. it is pretty unspecified what you put in
+[2008-11-13 01:53:01] <ichthyo> yes thats fine, to start with
+[2008-11-13 01:53:23] <ichthyo> anything more specific can be built on top of such a system
+[2008-11-13 01:53:35] <ichthyo> for example take the video effect
+                                at some point, you define an interface "VideoEffect"
+                                probably this interface isn't loaded from a module, rather it's defined from the core,
+                                but this doesn't matter for the point in question here
+                                now, everything you can ever use as an implementation of this "VideoEffect"
+                                must use this interface, because the client of the interface
+                                (which in this case is the core which uses this interface for rendering)
+                                doesn't care about the implementation and doesn't know any differences
+----------------------------
+

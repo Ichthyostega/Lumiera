@@ -26,16 +26,15 @@
 
 #include "proc/asset/struct.hpp"
 #include "proc/asset/procpatt.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 
 #include <string>
 
 
 
+namespace proc {
 namespace asset {
   
-  using lumiera::P;
-  using lumiera::StreamType;
   using std::string;
   
   class Pipe;
@@ -125,5 +124,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

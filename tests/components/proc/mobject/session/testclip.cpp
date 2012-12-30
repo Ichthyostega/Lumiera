@@ -22,20 +22,23 @@
 
 
 #include "proc/mobject/session/testclip.hpp"
-#include "backend/mediaaccessfacade.hpp"
-#include "backend/mediaaccessmock.hpp"
+#include "backend/media-access-facade.hpp"
+#include "backend/media-access-mock.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "lib/singleton.hpp"
+#include "lib/time/timevalue.hpp"
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
   
-  using lumiera::Time;
+  using lib::time::Time;
+  using lib::time::Duration;
   typedef shared_ptr<asset::Media> PM;
   typedef backend_interface::MediaAccessFacade MAF;
-  using backend_interface::test::MediaAccessMock;
+  using backend::test::MediaAccessMock;
   using asset::VIDEO;
   
   
@@ -85,7 +88,7 @@ namespace test    {
   
   /* == define some data for verification in unit tests == */
   
-  const Time LENGTH_TestClip = Time(25);   //////TODO hard wired as of (1/10). See MediaFactory::operator()  in media.cpp
+  const Duration LENGTH_TestClip(Time(0,25,0,0));   //////TODO hard wired as of (1/10). See MediaFactory::operator()  in media.cpp / mediaaccessmock.cpp
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_DEFS_MANAGER_H
-#define MOBJECT_SESSION_DEFS_MANAGER_H
+#ifndef PROC_MOBJECT_SESSION_DEFS_MANAGER_H
+#define PROC_MOBJECT_SESSION_DEFS_MANAGER_H
 
 
 #include "lib/p.hpp"
@@ -33,11 +33,12 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
   
-  using lumiera::P;
+  using lib::P;
   using boost::scoped_ptr;
   
   namespace impl { class DefsRegistry; }
@@ -124,5 +125,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

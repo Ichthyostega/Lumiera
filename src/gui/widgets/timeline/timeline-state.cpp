@@ -20,34 +20,54 @@
 
 * *****************************************************/
 
-#include "timeline-state.hpp"
 
-using namespace boost;
+#include "gui/widgets/timeline/timeline-state.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/time/mutation.hpp"
+#include "lib/time/control.hpp"
+
 using namespace Gtk;
 using namespace sigc;
-using namespace lumiera;
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineState::TimelineState(
-  boost::shared_ptr<model::Sequence> source_sequence) :
-  sequence(source_sequence),
-  viewWindow(Time(0), 1),
-  selectionStart(0),
-  selectionEnd(0),
-  playbackPeriodStart(0),
-  playbackPeriodEnd(0),
-  playbackPoint(Time(GAVL_TIME_UNDEFINED))
+using lib::time::FSecs;
+using lib::time::Offset;
+using lib::time::Duration;
+using lib::time::Mutation;
+using lib::time::Control;
+using std::tr1::shared_ptr;
+
+
+TimelineState::TimelineState (shared_ptr<model::Sequence> source_sequence)
+  : sequence(source_sequence)
+  , viewWindow(Offset(Time::ZERO), 1)
+  , selection_(Time::ZERO, Duration::NIL)
+  , selectionListener()
+  , playbackPeriod_(Time::ZERO, Duration::NIL)
+  , playbackPoint_(Time::ZERO)
+  , isPlayback_(false)
 {
   REQUIRE(sequence);
+
+  // Initialize the selection listener
+  selectionListener (TimeSpan (Time::ZERO, Duration::NIL));
+  selectionListener.connect(
+      mem_fun(*this, &TimelineState::on_selection_changed));
+
+  ////////////////////////////////////////////////////////////TICKET #798: how to handle GUI default state
+  const int64_t DEFAULT_TIMELINE_SCALE =6400;
   
-  viewWindow.set_time_scale(GAVL_TIME_SCALE / 200);
-  set_selection(Time(2000000), Time(4000000));
+  viewWindow.set_time_scale(DEFAULT_TIMELINE_SCALE);
+
+  setSelection (Mutation::changeTime (Time(FSecs(2))));
+  setSelection (Mutation::changeDuration (Duration(FSecs(2))));
+  //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all
 }
 
-boost::shared_ptr<model::Sequence>
+shared_ptr<model::Sequence>
 TimelineState::get_sequence() const
 {
   return sequence;
@@ -59,85 +79,37 @@ TimelineState::get_view_window()
   return viewWindow;
 }
 
-Time
-TimelineState::get_selection_start() const
-{
-  return selectionStart;
-}
-
-Time
-TimelineState::get_selection_end() const
-{
-  return selectionEnd;
-}
-
 void
-TimelineState::set_selection(Time start, Time end,
-  bool reset_playback_period)
-{    
-  if(start < end)
-    {
-      selectionStart = start;
-      selectionEnd = end;
-    }
-  else
-    {
-      // The selection is back-to-front, flip it round
-      selectionStart = end;
-      selectionEnd = start;
-    }
-    
-  if(reset_playback_period)
-    {
-      playbackPeriodStart = selectionStart;
-      playbackPeriodEnd = selectionEnd;
-    }
-    
+TimelineState::setSelection (Mutation const& change,
+                             bool resetPlaybackPeriod)
+{ 
+  selection_.accept (change);
+  if (resetPlaybackPeriod)
+    setPlaybackPeriod(change);
+  
   selectionChangedSignal.emit();
 }
-
-Time
-TimelineState::get_playback_period_start() const
-{
-  return playbackPeriodStart;
-}
-  
-Time
-TimelineState::get_playback_period_end() const
-{
-  return playbackPeriodEnd;
-}
   
 void
-TimelineState::set_playback_period(Time start, Time end)
+TimelineState::setPlaybackPeriod (Mutation const& change)
 {
-  
-  if(start < end)
-    {
-      playbackPeriodStart = start;
-      playbackPeriodEnd = end;
-    }
-  else
-    {
-      // The period is back-to-front, flip it round
-      playbackPeriodStart = end;
-      playbackPeriodEnd = start;
-    }
-  
+  playbackPeriod_.accept (change);
   playbackChangedSignal.emit();
 }
 
 void
-TimelineState::set_playback_point(Time point)
+TimelineState::setPlaybackPoint (Time newPosition)
 {
-  playbackPoint = point;
+  playbackPoint_ = newPosition;
   playbackChangedSignal.emit();
 }
 
-Time
-TimelineState::get_playback_point() const
+void
+TimelineState::set_selection_control (SelectionControl &control)
 {
-  return playbackPoint;
+  control.disconnect();
+  selection_.accept (control);
+  control.connectChangeNotification (selectionListener);
 }
 
 sigc::signal<void>
@@ -150,6 +122,12 @@ sigc::signal<void>
 TimelineState::playback_changed_signal() const
 {
   return playbackChangedSignal;
+}
+
+void
+TimelineState::on_selection_changed (TimeSpan selection)
+{
+  selectionChangedSignal.emit();
 }
 
 }   // namespace timeline

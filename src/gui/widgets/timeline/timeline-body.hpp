@@ -19,15 +19,17 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file timeline-body.hpp
  ** This file contains the definition of timeline body widget
  */
 
-#ifndef TIMELINE_BODY_HPP
-#define TIMELINE_BODY_HPP
+#ifndef WIDGETS_TIMELINE_BODY_H
+#define WIDGETS_TIMELINE_BODY_H
 
 #include "gui/gtk-lumiera.hpp"
-#include "timeline-tool.hpp"
+#include "gui/widgets/timeline/timeline-tool.hpp"
+#include "lib/time/timevalue.hpp"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -43,8 +45,13 @@ class TimelineWidget;
 
 namespace timeline {
 
+using lib::time::TimeVar;
+using lib::time::TimeSpan;
+
+
 class Track;
 class TimelineViewWindow;
+
 
 /**
  * Implementation of the timeline body subwidget. This widget is
@@ -62,10 +69,7 @@ public:
    */
   TimelineBody(gui::widgets::TimelineWidget &timeline_widget);
   
-  /**
-   * Destructor
-   */
-  ~TimelineBody();
+  virtual ~TimelineBody();
   
   TimelineWidget&
   getTimelineWidget () const;
@@ -81,7 +85,7 @@ public:
    * @param tool_type The type of tool to set.
    */
   void
-  set_tool(ToolType tool_type);
+  set_tool(ToolType tool_type, bool force=false);
   
   /* ===== Events ===== */
 protected:
@@ -119,13 +123,18 @@ protected:
   bool on_motion_notify_event(GdkEventMotion *event);
   
   /**
-   * The event handler for when the TimelineWidget's state object is
-   * replaced.
+   * The event handler for when the TimelineWidget's state is switched.
    */
-  void on_state_changed();
+  void on_state_changed (shared_ptr<TimelineState> newState);
   
   /* ===== Internals ===== */
 private:
+  /**
+   * Access the current timeline view window
+   * @warning must not be called unless the TimlineWidget
+   *          has a valid state.
+   */
+  TimelineViewWindow& viewWindow() const;
 
   /**
    * Draws the timeline tracks.
@@ -134,8 +143,8 @@ private:
   void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
   
   void draw_track(Cairo::RefPtr<Cairo::Context> cr,
-    boost::shared_ptr<timeline::Track> timeline_track,
-    const int view_width) const;
+                  shared_ptr<timeline::Track> timeline_track,
+                  const int view_width) const;
   
   /**
    * Draws the selected timeline period.
@@ -155,13 +164,9 @@ private:
   
   void set_vertical_offset(int offset);
   
-  /**
-   * A helper function to get the view window
-   * @remarks This function must not be called unless the TimlineWidget
-   * has a valid state.
-   */
-  TimelineViewWindow& view_window() const;
-   
+  /** adjust to the new timeline state */
+  void propagateStateChange();
+
   /**
    * Registers all the styles that this class will respond to.
    */
@@ -186,7 +191,7 @@ private:
   
   // Scroll State
   DragType dragType;
-  gavl_time_t beginShiftTimeOffset;
+  TimeVar beginShiftTimeOffset;
   int beginShiftVerticalOffset; 
 
   // Style properties
@@ -196,6 +201,8 @@ private:
   Cairo::RefPtr<Cairo::SolidPattern> playbackPointColour;
   
   gui::widgets::TimelineWidget &timelineWidget;
+  shared_ptr<TimelineState> timelineState;
+  
 
   friend class Tool;
   friend class ArrowTool;

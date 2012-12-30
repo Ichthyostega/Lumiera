@@ -67,8 +67,8 @@
  */
 
 
-#ifndef MOBJECT_SESSION_INTERFACE_MODULES_H
-#define MOBJECT_SESSION_INTERFACE_MODULES_H
+#ifndef PROC_MOBJECT_SESSION_INTERFACE_MODULES_H
+#define PROC_MOBJECT_SESSION_INTERFACE_MODULES_H
 
 #include "lib/element-tracker.hpp"
 #include "proc/asset/timeline.hpp"
@@ -79,6 +79,7 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -129,5 +130,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

@@ -56,7 +56,6 @@
 #ifndef LIB_TYPED_COUNTER_H
 #define LIB_TYPED_COUNTER_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/sync-classlock.hpp"
 
@@ -65,6 +64,8 @@
 
 
 namespace lib {
+  
+  typedef size_t IxID;              //////////////////////TICKET #863
   
   using std::vector;
   
@@ -81,11 +82,11 @@ namespace lib {
   template<class CX>
   class TypedContext
     {
-      static size_t lastGeneratedTypeID;
+      static IxID lastGeneratedTypeID;
       
     public:
-      static size_t
-      newTypeID (size_t& typeID)
+      static IxID
+      newTypeID (IxID& typeID)
         {
           ClassLock<TypedContext> synchronised();
           if (!typeID)
@@ -97,10 +98,10 @@ namespace lib {
       template<typename TY>
       class ID
         {
-          static size_t typeID;
+          static IxID typeID;
           
         public:
-          static size_t
+          static IxID
           get()
             {
               if (typeID)
@@ -113,12 +114,12 @@ namespace lib {
   
   /** storage for the type-ID generation mechanism */
   template<class CX>
-  size_t TypedContext<CX>::lastGeneratedTypeID (0);
+  IxID TypedContext<CX>::lastGeneratedTypeID (0);
   
   /** table holding all the generated type-IDs */
   template<class CX>
   template<typename TY>
-  size_t TypedContext<CX>::ID<TY>::typeID (0);
+  IxID TypedContext<CX>::ID<TY>::typeID (0);
   
   
   
@@ -132,10 +133,10 @@ namespace lib {
       mutable vector<long> counters_;
       
       template<typename TY>
-      size_t
+      IxID
       slot()  const
         {
-          size_t typeID = TypedContext<TypedCounter>::ID<TY>::get();
+          IxID typeID = TypedContext<TypedCounter>::ID<TY>::get();
           if (size() < typeID)
             counters_.resize (typeID);
           

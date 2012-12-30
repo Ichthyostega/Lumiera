@@ -27,28 +27,24 @@
 #include "proc/engine/renderengine.hpp"
 
 
-
-namespace mobject
-  {
-  namespace builder
+namespace proc    {
+namespace mobject {
+namespace builder {
+  
+  
+  /**
+   * This is the actual building facility:
+   * provided the correct tools and associations, 
+   * it serves to build and connect the individual ProcNode objects
+   */
+  class Assembler
     {
-
-
-    /**
-     * This is the actual building facility:
-     * provided the correct tools and associations, 
-     * it serves to build and connect the individual ProcNode objects
-     */
-    class Assembler
-      {
-      public:
-        engine::RenderEngine & build () ;
-        // TODO: allocation, GC???
-      };
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+    public:
+      engine::RenderEngine & build () ;
+      // TODO: allocation, GC???
+    };
+  
+  
+  
+}}} // namespace proc::mobject::builder
 #endif

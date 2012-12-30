@@ -40,14 +40,17 @@
 #include "lib/singleton.hpp"
 
 
-using lib::Symbol;
-using lib::Singleton;
-using mobject::session::SessManager;
-using mobject::session::SessManagerImpl;
-using mobject::session::SessionImplAPI;
 
+namespace proc {
 namespace mobject {
   
+  using lib::Symbol;
+  using lib::Singleton;
+  using session::SessManager;
+  using session::SessManagerImpl;
+  using session::SessionImplAPI;
+
+
   
   /** temporary fix for init problems
    *  @todo really solve the basic init of session manager TICKET #518
@@ -138,4 +141,4 @@ namespace mobject {
 
 
 
-} // namespace mobject
+}} // namespace proc::mobject

@@ -22,35 +22,50 @@
 
 /** @file iter-adapter.hpp
  ** Helper template(s) for creating <b>lumiera forward iterators</b>.
+ ** These are the foundation to build up iterator like types from scratch.
  ** Usually, these templates will be created and provided by a custom
  ** container type and accessed by the client through a typedef name
  ** "iterator" (similar to the usage within the STL). For more advanced
  ** usage, the providing container might want to subclass these iterators,
  ** e.g. to provide an additional, specialised API.
  ** 
- ** Depending on the concrete situation, there are several flavours
+ ** Depending on the concrete situation, several flavours are provided:
  ** - the IterAdapter retains an active callback connection to the
  **   controlling container, thus allowing arbitrary complex behaviour.
+ ** - the IterStateWrapper uses a variation of that approach, where the
+ **   representation of the current state is embedded as an state value
+ **   element right into the iterator instance.
  ** - the RangeIter allows just to expose a range of elements defined
  **   by a STL-like pair of "start" and "end" iterators
  ** - often, objects are managed internally by pointers, while allowing
  **   the clients to use direct references; to support this usage scenario,
  **   PtrDerefIter wraps an existing iterator, while dereferencing any value
- **   automatically on access.  
+ **   automatically on access.
+ ** 
+ ** There are many further ways of yielding a Lumiera forward iterator.
+ ** For example, lib::IterSource builds a "iterable" source of data elements,
+ ** while hiding the actual container or generator implementation behind a
+ ** vtable call. Besides, there are adapters for the most common usages
+ ** with STL containers, and such iterators can also be combined and
+ ** extended with the help of itertools.hpp
+ ** 
+ ** Basically every class in compliance with our specific iterator concept
+ ** can be used as a building block within this framework.
  ** 
  ** 
  ** \par Lumiera forward iterator concept
  ** 
  ** Similar to the STL, instead of using a common "Iterator" base class,
- ** instead we define a common set of functions and behaviour which can
+ ** we rather define a common set of functions and behaviour which can
  ** be expected from any such iterator. These rules are similar to STL's
  ** "forward iterator", with the addition of an bool check to detect
- ** iteration end. The latter s inspired by the \c hasNext() function
+ ** iteration end. The latter is inspired by the \c hasNext() function
  ** found in many current languages supporting iterators. In a similar
  ** vein (inspired from functional programming), we deliberately don't
  ** support the various extended iterator concepts from STL and boost
- ** (random access iterators, output iterators and the like). According
- ** to this concept, <i>an iterator is a promise for pulling values,</i>
+ ** (random access iterators, output iterators, arithmetics, difference
+ ** between iterators and the like). According to this concept,
+ ** <i>an iterator is a promise for pulling values,</i>
  ** and nothing beyond that.
  ** 
  ** - Any Lumiera forward iterator can be in a "exhausted" (invalid) state,
@@ -58,12 +73,10 @@
  **   created by the default ctor is always fixed to that state. This
  **   state is final and can't be reset, meaning that any iterator is
  **   a disposable one-way-off object.
- ** - iterators are copyable and comparable
+ ** - iterators are copyable and equality comparable
  ** - when an iterator is \em not in the exhausted state, it may be
  **   \em dereferenced to yield the "current" value.
  ** - moreover, iterators may be incremented until exhaustion.
- ** 
- ** @todo naming of the iteration control function: TICKET #410
  ** 
  ** @see iter-adapter-test.cpp
  ** @see itertools.hpp
@@ -122,8 +135,8 @@ namespace lib {
    *       -# it should be convertible to the pointer type it declares
    *       -# dereferencing should yield a type that is convertible to the reference type
    * - CON points to the data source of this iterator (typically a data container type)
-   *       We store a pointer-like backlink to invoke a special iteration control API:     //////////////TICKET #410
-   *       -# \c hasNext yields true iff the source has yet more result values to yield
+   *       We store a pointer-like backlink to invoke a special iteration control API:
+   *       -# \c checkPoint yields true iff the source has yet more result values to yield
    *       -# \c iterNext advances the POS to the next element 
    * 
    * @see scoped-ptrvect.hpp usage example
@@ -146,7 +159,7 @@ namespace lib {
         : source_(src)
         , pos_(startpos)
         { 
-          checkPos();
+          check();
         }
       
       IterAdapter ()
@@ -179,19 +192,10 @@ namespace lib {
           return *this;
         }
       
-      IterAdapter
-      operator++(int)
-        {
-          _maybe_throw();
-          IterAdapter oldPos(*this);
-          iterate();
-          return oldPos;
-        }
-      
       bool
       isValid ()  const
         {
-          return checkPos();
+          return check();
         }
       
       bool
@@ -209,28 +213,25 @@ namespace lib {
        *        for example setting it to a "stop iteration" mark.
        */ 
       bool
-      checkPos()  const
-      {
-        return source_ && hasNext (source_,pos_);                    //////////////TICKET #410
-      }
+      check()  const
+        {
+          return source_ && checkPoint (source_,pos_);           // extension point: free function checkPoint(...)
+        }
       
       /** ask the controlling container to yield the next position.
        *  The call is dispatched only if the current position is valid;
-       *  any new position returned is again validated, so to detect
-       *  the iteration end as soon as possible.
+       *  any new position reached will typically be validated prior
+       *  to any further access, through invocation of #check.
        */
-      bool
-      iterate ()
-      {
-        if (!checkPos()) return false;
-        
-        iterNext (source_,pos_);
-        return checkPos();
-      }
+      void
+      iterate()
+        {
+          if (check())
+            iterNext (source_,pos_);                             // extension point: free function iterNext(...)
+        }
       
       
     private:
-      
       void
       _maybe_throw()  const
         {
@@ -250,6 +251,129 @@ namespace lib {
   
   template<class P1, class P2, class CON>
   bool operator!= (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return !(il == ir); }
+  
+  
+  
+
+  /**
+   * Another Lumiera Forward Iterator building block, based on incorporating a state type 
+   * right into the iterator. Contrast this to IterAdapter referring to an controlling
+   * container behind the scenes. Here, all of the state is assumed to live in the
+   * custom type embedded into this iterator, accessed and manipulated through
+   * a set of free function to be resolved by ADL.
+   * 
+   * \par Assumptions when building iterators based on IterStateWrapper
+   * There is a custom state representation type ST.
+   * - default constructible
+   * - this default state represents the \em bottom (invalid) state.
+   * - copyable, because iterators are passed by value
+   * - this type needs to provide an <b>iteration control API</b> through free functions
+   *   -# \c checkPoint establishes, if the given state element represents a valid state
+   *   -# \c iterNext evolves this state by one step (sideeffect)
+   *   -# \c yield realises the given state, yielding an element of result type T
+   * 
+   * @see IterExplorer an iterator monad built on top of IterStateWrapper
+   * @see iter-explorer-test.hpp
+   * @see iter-adaptor-test.cpp
+   */
+  template<typename T, class ST =T>
+  class IterStateWrapper
+    : public lib::BoolCheckable<IterStateWrapper<T,ST> >
+    {
+      ST core_;
+      
+    public:
+      typedef T* pointer;
+      typedef T& reference;
+      typedef T  value_type;
+      
+      IterStateWrapper (ST const& initialState)
+        : core_(initialState)
+        { 
+          checkPoint (core_);
+        }
+      
+      IterStateWrapper ()
+        : core_()
+        { }
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      reference
+      operator*() const
+        {
+          __throw_if_empty();
+          return yield (core_);     // extension point: yield
+        }
+      
+      pointer
+      operator->() const
+        {
+          __throw_if_empty();
+          return & yield(core_);    // extension point: yield
+        }
+      
+      IterStateWrapper&
+      operator++()
+        {
+          __throw_if_empty();
+          iterNext (core_);         // extension point: iterNext
+          return *this;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return checkPoint(core_); // extension point: checkPoint
+        }
+      
+      bool
+      empty ()    const
+        {
+          return !isValid();
+        }
+      
+    protected:
+      
+      /** allow derived classes to
+       *  access state representation */
+      ST &
+      stateCore()
+        {
+          return core_;
+        }
+      
+      void
+      __throw_if_empty()  const
+        {
+          if (!isValid())
+            _throwIterExhausted();
+        }
+      
+      
+      /// comparison is allowed to access state implementation core
+      template<class T1, class T2, class STX>
+      friend bool operator== (IterStateWrapper<T1,STX> const&, IterStateWrapper<T2,STX> const&);
+    };
+  
+  
+  
+  /// Supporting equality comparisons of equivalent iterators (same state type)...
+  template<class T1, class T2, class ST>
+  bool operator== (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  {
+    return (il.empty() && ir.empty())
+        || (il.isValid() && ir.isValid() && il.core_ == ir.core_);
+  }
+  
+  template<class T1, class T2, class ST>
+  bool operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  { 
+    return ! (il == ir);
+  }
+  
+  
   
   
   
@@ -320,13 +444,6 @@ namespace lib {
           _maybe_throw();
           ++p_;
           return *this;
-        }
-      
-      RangeIter
-      operator++(int)
-        {
-          _maybe_throw();
-          return RangeIter (p_++,e_);
         }
       
       bool
@@ -408,7 +525,7 @@ namespace lib {
       typedef typename RemovePtr<TY>::Type ValueType;
       
       template<class T2>
-      struct SimilarIter
+      struct SimilarIter  ///< rebind to a similarly structured Iterator with value type T2
         {
           typedef Iter<T2,CON> Type;
         };
@@ -445,7 +562,12 @@ namespace lib {
     public:
       typedef typename IT::value_type           pointer;
       typedef typename RemovePtr<pointer>::Type value_type;
-      typedef value_type&                       reference; 
+      typedef value_type&                       reference;
+      
+      // for use with STL algorithms
+      typedef void difference_type;
+      typedef std::forward_iterator_tag iterator_category;
+      
       
       // the purpose of the following typedefs is to ease building a correct "const iterator"
       
@@ -462,6 +584,7 @@ namespace lib {
       /** PtrDerefIter is always created 
        *  by wrapping an existing iterator.
        */
+      explicit
       PtrDerefIter (IT srcIter)
         : i_(srcIter)
         { }
@@ -485,7 +608,29 @@ namespace lib {
       operator= (PtrDerefIter<WrappedIterType> const& ref)
         {
           i_ = reinterpret_cast<IT const&> (ref.getBase());
+          return *this;
         }
+      
+      
+      /** explicit builder to allow creating a const variant from the basic srcIter type. 
+       *  Again, the reason necessitating this "backdoor" is that we want to swallow one level
+       *  of indirection. Generally speaking \code const T ** \endcode is not the same as
+       *  \code T * const * \endcode, but in our specific case the API ensures that a
+       *  PtrDerefIter<WrappedConstIterType> only exposes const elements. 
+       */
+      static PtrDerefIter
+      build_by_cast (WrappedIterType const& srcIter)
+        {
+          return PtrDerefIter (reinterpret_cast<IT const&> (srcIter));
+        }
+      
+      static PtrDerefIter
+      nil()
+        {
+          return PtrDerefIter (IT());
+        }
+      
+      
       
       
       
@@ -509,12 +654,6 @@ namespace lib {
         {
           ++i_;
           return *this;
-        }
-      
-      PtrDerefIter
-      operator++(int)
-        {
-          return PtrDerefIter (i_++);
         }
       
       bool

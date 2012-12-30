@@ -31,7 +31,7 @@ liblumierabackend_la_SOURCES =					\
 	$(liblumierabackend_la_srcdir)/filehandle.c		\
 	$(liblumierabackend_la_srcdir)/filehandlecache.c	\
 	$(liblumierabackend_la_srcdir)/fileheader.c		\
-	$(liblumierabackend_la_srcdir)/mediaaccessfacade.cpp	\
+	$(liblumierabackend_la_srcdir)/media-access-facade.cpp	\
 	$(liblumierabackend_la_srcdir)/mmap.c			\
 	$(liblumierabackend_la_srcdir)/mmapcache.c		\
 	$(liblumierabackend_la_srcdir)/mmapings.c		\

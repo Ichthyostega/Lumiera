@@ -1,6 +1,7 @@
 Technical Documentation
 =======================
 
+// Menu :  prepend child library
 // Menu :  prepend child backend
 // Menu :  prepend child proc
 // Menu :  prepend child gui
@@ -29,7 +30,9 @@ components.
 == Tools
 
 .Development
-* link:http://www.lumiera.org/doxy/[*Doxygen generated documentation*] : Complete reference for the code of Lumiera.
+* link:http://www.lumiera.org/doxy/[*Doxygen generated documentation*] : API documentation of the Lumiera code.
+* organisation of the link:code/index.html[Code Base] in general
+* link:code/codingGuidelines.html[Coding Style] and further guidelines
 
 .Building
 * link:build/index.html[*Buildsystem*] : Installation & compilation tools, dependencies and packaging.

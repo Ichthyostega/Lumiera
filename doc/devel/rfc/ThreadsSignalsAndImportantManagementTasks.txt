@@ -1,0 +1,164 @@
+Threads, Signals and important management tasks
+===============================================
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _Sat Jul 24 21:59:02 2010_
+*Proposed by*   Christian Thaeter <ct@pipapo.org>
+-------------------------------------
+
+[abstract]
+******************************************************************************
+Handling of Signals in a multithreaded Application is little special, I define
+here how we going to implement this.
+******************************************************************************
+
+
+Description
+-----------
+//description: add a detailed description:
+
+By default in POSIX signals are send to whatever thread is running and handled
+there. This is quite unfortunate because a thread might be in some time
+constrained situation, hold some locks or have some special priority. The
+common way to handle this is blocking (most) signals in all threads except
+having one dedicated signal handling thread. Moreover it makes sense that the
+initial thread does this signal handling.
+
+For Lumiera I propose to follow this practice and extend it a little by
+dedicate a thread to some management tasks. These are:
+ * signal handling, see below.
+ * resource management (resource-collector), waiting on a condition variable or
+   message queue to execute actions.
+ * watchdog for threads, not being part of the application schedulers but
+   waking up periodically (infrequently, every so many seconds) and check if
+   any thread got stuck (threads.h defines a deadline api which threads may
+   use). We may add some flag to threads defining what to do with a given
+   thread when it got stuck (emergency shutdown or just cancel the thread).
+   Generally threads should not get stuck but we have to be prepared against
+   rogue plugins and programming errors.
+
+
+.Signals which need to be handled
+
+This are mostly proposals about how the application shall react on signals and
+comments about possible signals.
+
+ SIGTERM::
+        Send on computer shutdown to all running apps. When running with GUI
+        but we likely lost the Xserver connection before, this needs to be
+        handled from the GUI. Nevertheless in any case (most importantly when
+        running headless) we should do a fast application shutdown, no
+        data/work should go lost, a checkpoint in the log is created. Some
+        caveat might be that Lumiera has to sync a lot of data to disk. This
+        means that usual timeouts from SIGTERM to SIGKILL as in nomal shutdown
+        might be not sufficient, there is nothing we can do there. The user has
+        to configure his system to extend this timeouts (alternative: see
+        SIGUSR below).
+
+ SIGINT::
+        This is the CTRL-C case from terminal, in most cases this means that a
+        user wants to break the application immediately. We trigger an
+        emergency shutdown. Recents actions are be logged already, so no work
+        gets lost, but no checkpoint in the log gets created so one has to
+        explicitly recover the interrupted state.
+
+ SIGBUS::
+        Will be raised by I/O errors in mapped memory. This is a kindof
+        exceptional signal which might be handled in induvidual threads. When
+        the cause of the error is traceable then the job/thread worked on this
+        data goes into a errorneous mode, else we can only do a emergency
+        shutdown.
+
+ SIGFPE::
+        Floating point exception, divison by zero or something similar. Might
+        be allowed to be handled by each thread. In the global handler we may
+        just ignore it or do an emergency shutdown. tbd.
+
+ SIGHUP::
+        For daemons this signal is usually used to re-read configuration data.
+        We shall do so too when running headless. When running with GUI this
+        might be either act like SIGTERM or SIGINT. possibly this can be
+        configureable.
+
+ SIGSEGV::
+        Should not be handled, at the time a SEGV appears we are in a undefined
+        state and anything we do may make things worse.
+
+ SIGUSR1::
+        First user defined signal. Sync all data to disk, generate a
+        checkpoint. The application may block until this is completed. This can
+        be used in preparation of a shutdown or periodically to create some
+        safe-points.
+
+ SIGUSR2::
+        Second user defined signal. Produce diagnostics, to terminal and file.
+
+ SIGXCPU::
+        CPU time limit exceeded. Emergency Shutdown.
+
+ SIGXFSZ::
+        File size limit exceeded. Emergency Shutdown.
+
+
+Tasks
+~~~~~
+// List what would need to be done to implement this Proposal in a few words:
+// * item ...
+
+We have appstate::maybeWait() which already does such a loop. It needs to be
+extended by the proposed things above.
+
+
+
+Discussion
+~~~~~~~~~~
+
+
+Pros
+^^^^
+// add just a fact list/enumeration which make this suitable:
+//  * foo
+//  * bar ...
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: if possible explain/link alternatives and tell why they are not
+
+
+
+Rationale
+---------
+//rationale: Describe why it should be done *this* way:
+
+This is rather common practice. I describe this here for Documentation purposes
+and to point out which details are not yet covered.
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final) write some
+
+
+
+
+Comments
+--------
+//comments: append below
+
+.State -> Final
+ichthyo wants this to be a dedicated thread (own subsystem) instead running in
+the initial thread. Fixed this in the proposal above, this makes this accepted. 
+    Do 14 Apr 2011 03:40:41 CEST Christian Thaeter <ct@pipapo.org>
+
+
+//endof_comments:

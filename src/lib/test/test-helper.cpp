@@ -22,6 +22,7 @@
 
 
 #include "lib/test/test-helper.hpp"
+#include "lib/test/testdummy.hpp"
 
 #include <boost/format.hpp>
 
@@ -55,7 +56,12 @@ namespace test{
       garbage[--p] = alpha[rand() % MAXAL];
     return garbage;
   }
+
   
+  /** storage for testdummy flags */
+    
+  long Dummy::_local_checksum = 0;
+  bool Dummy::_throw_in_ctor = false;
   
   
 }} // namespace lib::test

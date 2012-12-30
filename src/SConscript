@@ -1,0 +1,48 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for the Lumiera Application.
+##                Definitions how to build the main tree
+##
+
+from Buildhelper import srcSubtree
+from Buildhelper import scanSubtree
+
+Import('env icons config')
+
+# define the source file/dirs comprising each artifact to be built.
+
+lLib  = env.SharedLibrary('lumiera',        srcSubtree('lib'),    install=True)
+lApp  = env.SharedLibrary('lumieracommon',  srcSubtree('common'), install=True, LIBS=lLib)
+lBack = env.SharedLibrary('lumierabackend', srcSubtree('backend'),install=True)
+lProc = env.SharedLibrary('lumieraproc',    srcSubtree('proc'),   install=True)
+
+core        = lLib+lApp+lBack+lProc
+core_lib    = core
+support_lib = lLib
+
+lumiera = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
+          + config
+          )
+
+# Install the lumiera application:
+# symlink the executable into the bin dir
+env.SymLink('#$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
+
+
+# building Lumiera Plugins
+plugins = [] # currently none 
+
+
+# the Lumiera GTK GUI
+envGtk = env.Clone()
+envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'])
+envGtk.Append(LIBS=core)
+
+guimodule = envGtk.LumieraPlugin('gtk_gui', srcSubtree('gui'), install=True)
+gui       = ( guimodule
+            + icons
+            + [env.GuiResource(f) for f in env.Glob('gui/*.rc')]
+            )
+
+
+Export('lumiera core core_lib support_lib plugins gui')

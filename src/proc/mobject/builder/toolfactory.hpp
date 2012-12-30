@@ -35,6 +35,7 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace builder {
   
@@ -69,5 +70,5 @@ namespace builder {
   
   
   
-}} // namespace mobject::builder
+}}} // namespace proc::mobject::builder
 #endif

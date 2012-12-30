@@ -64,6 +64,17 @@ namespace time {
   }
   
   
+  
+  /** @todo placeholder for accessing
+   *        a current or default session grid.
+   *        To be implemented later.
+   */
+  PQuant getDefaultGridFallback();                                        ///////////////////////TICKET #810
+  
+  
+  
+  
+  
   /**
    * Facility to create grid-aligned time values.
    * Effectively, a quantiser exposes the value Grid API, but
@@ -92,11 +103,14 @@ namespace time {
           return supportedFormats_.check<FMT>(); 
         }
       
+      static PQuant retrieve (Symbol gridID);
+      TimeValue materialise  (TimeValue const& raw)       const;
+      
       
       //------Grid-API----------------------------------------------
-      virtual long      gridPoint (TimeValue const& raw)  const   =0;
+      virtual int64_t   gridPoint (TimeValue const& raw)  const   =0;
       virtual TimeValue gridAlign (TimeValue const& raw)  const   =0;
-      virtual TimeValue timeOf    (long gridPoint)        const   =0;
+      virtual TimeValue timeOf    (int64_t gridPoint)     const   =0;
       virtual TimeValue timeOf    (FSecs, int =0)         const   =0;
     };
   
@@ -123,9 +137,9 @@ namespace time {
       FixedFrameQuantiser (FrameRate const& frames_per_second, TimeValue referencePoint  =TimeValue(0));
       FixedFrameQuantiser (Duration const& frame_duration,     TimeValue referencePoint  =TimeValue(0));
       
-      long      gridPoint (TimeValue const&)  const;
+      int64_t   gridPoint (TimeValue const&)  const;
       TimeValue gridAlign (TimeValue const&)  const;
-      TimeValue timeOf    (long gridPoint)    const;
+      TimeValue timeOf    (int64_t gridPoint) const;
       TimeValue timeOf    (FSecs, int =0)     const;
       
     };

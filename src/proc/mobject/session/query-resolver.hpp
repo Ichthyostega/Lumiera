@@ -21,14 +21,15 @@
 */
 
 
-#ifndef MOBJECT_SESSION_QUERY_RESOLVER_H
-#define MOBJECT_SESSION_QUERY_RESOLVER_H
+#ifndef PROC_MOBJECT_SESSION_QUERY_RESOLVER_H
+#define PROC_MOBJECT_SESSION_QUERY_RESOLVER_H
 
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -41,24 +42,17 @@
 //using std::vector;
 //using std::string;
 
+namespace proc {
 namespace mobject {
 namespace session {
   
+  using lib::IxID;
   using util::unConst;
   using boost::noncopyable;
   using boost::scoped_ptr;
   using std::tr1::function;
   using std::string;
   
-  class no_copy_by_client
-    {
-     protected:
-       ~no_copy_by_client() {}
-        no_copy_by_client() {}
-        no_copy_by_client (no_copy_by_client const&) {}
-        no_copy_by_client const&
-        operator=(no_copy_by_client const&) { return *this; }
-    };
   
   class Goal;
   class Resolution;
@@ -75,7 +69,7 @@ namespace session {
    * Query ABC
    */
   class Goal
-    : no_copy_by_client
+    : util::no_copy_by_client
     {
     public:
       virtual ~Goal() ;
@@ -88,7 +82,7 @@ namespace session {
       struct QueryID
         {
           Kind kind;
-          size_t type;
+          IxID type;
         };
       
       QueryID const&
@@ -158,7 +152,7 @@ namespace session {
   typedef lib::TypedContext<Goal::Result> ResultType;
   
   template<typename RES>
-  inline size_t
+  inline IxID
   getResultTypeID()  ///< @return unique ID denoting result type RES
   {
     return ResultType::ID<RES>::get();
@@ -237,7 +231,7 @@ namespace session {
       
       
       friend bool
-      hasNext  (PReso const&, Result const& pos)          ////TICKET #410
+      checkPoint (PReso const&, Result const& pos)
         {
           return bool(pos);
         }
@@ -335,5 +329,5 @@ namespace session {
   }
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

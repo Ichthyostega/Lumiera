@@ -21,17 +21,17 @@
 */
 
 
-#ifndef MOBJECT_SESSION_META_H
-#define MOBJECT_SESSION_META_H
+#ifndef PROC_MOBJECT_SESSION_META_H
+#define PROC_MOBJECT_SESSION_META_H
 
 #include "proc/mobject/session/abstractmo.hpp"
 
 
-
+namespace proc {
 namespace mobject {
 namespace session {
-
-
+  
+  
   /**
    * Meta-MObject doesn't represent real Media Content,
    * but rather all sorts of Processing Instructions
@@ -53,5 +53,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace mobject::session
 #endif

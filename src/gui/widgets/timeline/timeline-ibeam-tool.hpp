@@ -19,20 +19,28 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file timeline-ibeam-tool.hpp
  ** This file contains the definition of ibeam tool class
  ** tool objects
  */
 
-#ifndef TIMELINE_IBEAM_TOOL_HPP
-#define TIMELINE_IBEAM_TOOL_HPP
+#ifndef WIDGETS_TIMELINE_IBEAM_TOOL_H
+#define WIDGETS_TIMELINE_IBEAM_TOOL_H
 
-#include <gtkmm.h>
-#include "timeline-tool.hpp"
+#include "gui/widgets/timeline/timeline-tool.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/time/timequant.hpp"
+#include "lib/time/control.hpp"
+
 
 namespace gui {
 namespace widgets {
 namespace timeline {
+
+using lib::time::TimeVar;
+using lib::time::TimeSpan;
+using lib::time::Control;
 
 /**
  * A helper class to implement the timeline i-beam tool
@@ -130,12 +138,12 @@ private:
   enum DragType
     {
       /**
-       * No drag is occuring
+       * No drag is occurring
        */
       None,
       
       /**
-       * A selection drag is occuring.
+       * A selection drag is occurring.
        * @remarks The position of one end of the selection was set at
        * mouse-down of the drag, and the other end is set by
        * drag-release.
@@ -154,6 +162,8 @@ private:
     };
 
   /* ==== Internals ===== */
+  Control<TimeSpan> selectionControl;
+
   /**
    * Specifies the type of drag currently taking place.
    */
@@ -164,7 +174,7 @@ private:
    * the mouse, the other is pinned. pinnedDragTime specifies the time
    * of that point.
    */
-  lumiera::Time pinnedDragTime;
+  TimeVar pinnedDragTime;
   
   /**
    * This connection is used to represent the timer which causes scroll

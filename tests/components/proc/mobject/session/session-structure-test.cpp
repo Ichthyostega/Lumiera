@@ -27,7 +27,6 @@
 #include "proc/assetmanager.hpp"          //////??
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
-#include "lib/lumitime.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
@@ -37,6 +36,7 @@ using std::string;
 using std::cout;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -47,7 +47,6 @@ namespace test    {
   using asset::PTimeline;
   using asset::PSequence;
   
-  using lumiera::Time;
   
   
   /*******************************************************************************
@@ -140,4 +139,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

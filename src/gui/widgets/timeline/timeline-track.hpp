@@ -38,6 +38,7 @@
 #include "gui/widgets/timeline/timeline-clip.hpp"
 #include "gui/widgets/timeline/timeline-header-container.hpp"
 #include "gui/widgets/timeline/timeline-header-widget.hpp"
+#include "lib/time/timevalue.hpp"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -45,6 +46,8 @@
 namespace gui {
 namespace widgets { 
 namespace timeline {
+
+using lib::time::Time;
   
 class TimelineViewWindow;
 
@@ -69,20 +72,14 @@ public:
     Collapse
   };
   
-  /**
-   * Constructor
-   */
   Track(TimelineWidget &timeline_widget,
-    boost::shared_ptr<model::Track> track);
-   
-  /**
-   * Destructor
-   */
-  ~Track();
+        shared_ptr<model::Track> track);
+  
+  virtual ~Track();
   
   Gtk::Widget& get_header_widget();
   
-  boost::shared_ptr<model::Track>
+  shared_ptr<model::Track>
   getModelTrack() const;
   
   /**
@@ -152,8 +149,8 @@ public:
    * The default implementation simply returns an empty pointer.
    * @param the given time
    */
-  virtual boost::shared_ptr<timeline::Clip>
-  getClipAt(lumiera::Time position) const;
+  virtual shared_ptr<timeline::Clip>
+  getClipAt (Time position) const;
 
 private:
 
@@ -206,7 +203,7 @@ private:
 protected:
 
   TimelineWidget &timelineWidget;
-  boost::shared_ptr<model::Track> modelTrack;
+  shared_ptr<model::Track> modelTrack;
 
 private:
   /**

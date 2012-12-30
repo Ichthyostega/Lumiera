@@ -2,21 +2,193 @@ Glossary
 ========
 
 
-'NOTE Draft, please help rephrase/review and sort this terms, shorten
+'NOTE Draft, please help rephrase/review and shorten
 explanations, the long explanation is the topic of the document above..'
 
+ anchor:AssetsView[] link:#AssetsView[->]Assets View::
+	Windows displaying and managing various things that can be edited,
+	worked on, etc are collectively known as the Assets View.
+	AssetsView consists of ingested footage, clips that have already been composed, available
+	sub-projects, effects, transitions and internal artifacts.
+
+ anchor:Builder[] link:#Builder[->]Builder::
+        This is a kind of compiler that creates low-level, or processing, graphs
+        by traversing and evaluating the relevant parts of the high-level-model
+        and using the Rules System.
+
+ anchor:Busses[] link:#Busses[->]Busses::
+        A list of 'global Pipes' representing the possible outputs (master
+        busses) similar to audio mixing desk. A bus defines the properties of
+        the rendered output (Framerate, Resolution, Colorformat and so on).
+        Busses are part of a Timeline.
+
+ anchor:ConfigSystem_Preferences[] link:#ConfigSystem_Preferences[->]Config System/Preferences::
+        TODO: agree on one term here
+        Provides defaults for all kinds of application configurations. These
+        include machine specific configurations for performance
+        characteristics, File and Plugins Paths and configuration data and so
+        on. Note that this only provides defaults for data that has not already
+        been set. Many settings will then be stored within the project which
+        override Config/Preferences.
+
+ anchor:ControllerGui[] link:#ControllerGui[->]Controller Gui::
+        This can be either a full Software implementation for a Transport
+        control (Widgets for Start/Stop/Rev/Ffw etc) or some Gui managing an
+        Input Device. They share some feature to attach them to controllable
+        gui-entities (Viewers, Timeline Views)
+
+ anchor:Cursor[] link:#Cursor[->]Cursor::
+        Playback- or edit position
+
+ anchor:Focus[] link:#Focus[->]Focus::
+        TBD
+
+ anchor:HighLevelModel[] link:#HighLevelModel[->]High Level Model::
+        All the session content to be edited and manipulated by the user
+        through the GUI. The high-level-model will be translated by the
+        Builder into the Low Level Model for rendering.
+
+ anchor:InputDevice[] link:#InputDevice[->]Input Device::
+        Some hardware controler, like an extra keyboard, midi mixer, Jog, ..
+        TODO: we still need to decide on whether we can treat the main keyboard 
+        as special global state or whether we can handle the keyboard as a generic 
+        input devide. 
+
+ anchor:LowLevelModel[] link:#LowLevelModel[->]Low Level Model::
+        The generated Processing Graph, to be ``performed'' within the engine
+        to yield rendered output
+
+ anchor:MediaStream[] link:#MediaStream[->]MediaStream::
+        Media data is supposed to appear structured as stream(s) over time.
+        While there may be an inherent internal structuring, at a given
+        perspective any stream is a unit and homogeneous. In the context of
+        digital media data processing, streams are always quantized, which means
+        they appear as a temporal sequence of data chunks called frames.
+
+ anchor:OutputDesignation[] link:#OutputDesignation[->]OutputDesignation::
+        A specification denoting where to connect the output of a pipe.
+        It might either be given _absoulutely_, i.e as a Pipe-ID,
+        or by a _relative_ or an _indirect_ specification
+        
+ anchor:OutputManager[] link:#OutputManager[->]OutputManager::
+        Manages all external outputs of the application and provides output
+        slots targetting these.
+
+ anchor:OutputMapping[] link:#OutputMapping[->]OutputMapping::
+        Diverts one output designation into another designation, e.g. when hooking
+        up a sequence as a virtual clip within another sequence.
+
+ anchor:OutputSlot[] link:#OutputSlot[->]OutputSlot::
+        Opaque descriptor for an output facility, ready to dispose frames
+        of data to be output.
+
+ anchor:Pipe[] link:#Pipe[->]Pipe::
+        Conceptual building block of the high-level model. It can be thought
+        of as simple linear processing chain. A stream can be 'sent to' a
+        pipe, in which case it will be mixed in at the input, and you can
+        'plug' the output of a pipe to another destination. Furthermore, effects
+        or processors can be attached to the pipe. In addition to global pipes
+        (busses) in each Timeline, each clip automatically creates N pipes
+        (one for each distinct content stream. Typically N=2, for video and
+        audio)
+
+ anchor:Placement[] link:#Placement[->]Placement::
+        A Placement represents a relation: it is always linked to a Subject
+        (this being a Media Object) and has the meaning to place this Subject
+        in some manner, either relatively to other Media Objects, by some
+        Constraint or simply absolute at (time, output). Placements are used
+        to stitch together the objects in the high-level-model. Placements
+        thus are organised hierarchically and need to be _resolved_ to obtain
+        a specific value (time point, output routing, layering, fade,...)
+
+ anchor:PlayController[] link:#PlayController[->]PlayController::
+        coordinating playback, cueing and rewinding of a playback position,
+        visible as 'Playhead' cursor in the GUI. When in play state, a
+        PlayController requests and directs a render process to deliver the
+        media data needed for playback.
+
+ anchor:ProcessingGraph[] link:#ProcessingGraph[->]Processing Graph::
+        Rendering is expressed as a detailed network of nodes. The edges can be
+        envisaged as data flow, while the nodes represent data processing.
 
  anchor:Project[] link:#Project[->]Project::
-        the top-level context in which all edit work is done over an extended
-        period of time. The Project can be saved and re-opened. It is
-        comprised of the collection of all things the user is working on, it
-        contains all informations, assets, state and objects to be edited.
+        The top-level context in which all editing is done over an extended
+        period of time. A Project can be saved and re-opened. It consists of
+        various things a user is working on: user-information, assets, state and
+        objects to be edited. 
+
+ anchor:RenderTask[] link:#RenderTask[->]RenderTask::
+        This is basically a PlayController, but directly collects output without
+        moving a PlayheadCursor (could be a progress indicator) and not operating
+        in a timed fashion, but freewheeling or in background mode
+
+ anchor:RulesSystem[] link:#RulesSystem[->]Rules System::
+        Translating the Timeline to the underlying Processing Graphs involves
+        some logic and knowledge about handling/converting data. This may be
+        configued with this Rules System. Typically Lumiera will provide sane
+        defaults for most purposes but may extended/refined for site specific
+        things.  
+
+ anchor:Sequence[] link:#Sequence[->]Sequence::
+        A collection of *Media Objects* (clips, effects, transitions, labels,
+        automation) placed onto a tree of tracks. By means of this placement,
+        the objects could be anchored relative to each other, relative to
+        external objects, absolute in time. A sequence can connect to 
+        global pipes when used as a top-level sequence within a timeline, or
+        alternatively it can act as a virtual-media when used within a
+        meta-clip (nested sequence). A Sequence by default contains just a
+        single root track and directly sends to the master bus of the Timeline.
 
  anchor:Session[] link:#Session[->]Session::
         the current in-memory representation of the Project when opened within
         an instance of Lumiera. This is an implementation-internal term. For
         the GUI and the users POV we should always prefer the term "Project"
         for the general concept.
+
+ anchor:StreamType[] link:#StreamType[->]StreamType::
+        Classification of a media stream. StreamType is a descriptor record.
+        While external media processing libraries usually do provide some kind
+        of classification already, within lumiera we rely on an uniform yet
+        abstract classification which is owned by the project and geared to
+        fit the internal needs, especially for the wiring and connecting.
+        A Lumiera stream type is comprised of the parts
+        - media kind (Video, Image, Audio, MIDI, Text,... )
+        - prototype (open ended collection of semantical kinds of media,
+          examples being stereoscopic, periphonic, monaural, binaural,
+          film quality, TV, youtube).
+        - implementation type (e.g. 96kHz 24bit PCM, 2 channels muxed)
+        - intention tag (Source, Raw, Intermediary and Target)
+
+ anchor:TimeAxis[] link:#TimeAxis[->]Time Axis::
+        An entity defining the temporal properties of a timeline. A time axis
+        defines the time base, kind of timecode and absolute anchor point.
+        Besides, it manages a set of frame quantisation grids, corresponding
+        to the outputs configured for this timeline (through the global
+        busses). The GUI representation is a time ruler with configurable time
+        ticks showed on top of the timeline view
+
+ anchor:Timeline[] link:#Timeline[->]Timeline::
+        the top level element(s) within the Project. It is visible within a
+        'timeline view' in the GUI and represents the effective (resulting)
+        arrangement of media objects, resolved to a finite time axis, to be
+        rendered for output or viewed in a Monitor (viewer window).
+        Timeline(s) are top-level and may not be further combined. A timeline
+        is comprised of:
+         * Time axis, defining the time base
+         * Play Controller (WIP: discussion if thats belongs to the timeline
+           and if we want a 1:N relation here). Note by Ichthyo: yes, our
+           current discussion showed us that a play controller rather gets
+           allocated to a timeline, but isn't contained therein.
+         * global pipes, i.e. global busses like in a mixing desk
+         * exactly one top level Sequence
+
+ anchor:TimelineSegment[] link:#TimelineSegment[->]Timeline Segment::
+        A range in the timeline which yields in one Processing graph, commonly
+        the range between cut points (which require a reconfiguration of the
+        graph).
+
+// Note by Ichthyo: "Extent" sounds somewhat cool, just it didn't occur to me as a term.
+// We may well agree on it, if "extent" communicates the meaning better. Up to now, I called it "segment"
 
  anchor:TimelineView[] link:#TimelineView[->]Timeline View::
         A view in the GUI featuring a given Timeline. There might be multiple
@@ -38,185 +210,16 @@ explanations, the long explanation is the topic of the document above..'
           patchbay, that is not the main purpose and they can do things beyond
           that..
 
- anchor:Timeline[] link:#Timeline[->]Timeline::
-        the top level element(s) within the Project. It is visible within a
-        'timeline view' in the GUI and represents the effective (resulting)
-        arrangement of media objects, resolved to a finite time axis, to be
-        rendered for output or viewed in a Monitor (viewer window).
-        Timeline(s) are top-level and may not be further combined. A timeline
-        is comprised of:
-         * Time axis, defining the time base
-         * Play Controller (WIP: discussion if thats belongs to the timeline
-           and if we want a 1:N relation here). Note by Ichthyo: yes, our
-           current discussion showed us that a play controller rather gets
-           allocated to a timeline, but isn't contained therein.
-         * global pipes, i.e. global busses like in a mixing desk
-         * exactly one top level Sequence
-
- anchor:TimeAxis[] link:#TimeAxis[->]Time Axis::
-        An entity defining the temporal properties of a timeline. A time axis
-        defines the time base, kind of timecode and absolute anchor point.
-        Besides, it manages a set of frame quantisation grids, corresponding
-        to the outputs configured for this timeline (through the global
-        busses). The GUI representation is a time ruler with configurable time
-        ticks showed on top of the timeline view
-
- anchor:Busses[] link:#Busses[->]Busses::
-        A list of 'global Pipes' representing the possible outputs (master
-        busses) similar to audio mixing desk. A bus defines the properties of
-        the rendered output (Framerate, Resolution, Colorformat and so on).
-        Busses are part of a Timeline.
-
- anchor:Sequence[] link:#Sequence[->]Sequence::
-        A collection of *Media Objects* (clips, effects, transitions, labels,
-        automation) placed onto a tree of tracks. By means of this placement,
-        the objects could be anchored relative to each other, relative to
-        external objects, absolute in time. A sequence can connect to the
-        global pipes when used as top-level sequence within a timeline, or
-        alternatively it can act as a virtual-media when used within a
-        meta-clip (nested sequence). In the default configuration, a Sequence
-        contains just a single root track and sends directly to the master bus
-        of the timeline.
-
- anchor:Placement[] link:#Placement[->]Placement::
-        A Placement represents a relation: it is always linked to a Subject
-        (this being a Media Object) and has the meaning to place this Subject
-        in some manner, either relatively to other Media Objects, by some
-        Constraint or simply absolute at (time, output). Placements are used
-        to stitch together the objects in the high-level-model. Placements
-        thus are organised hierarchically and need to be _resolved_ to obtain
-        a specific value (time point, output routing, layering, fade,...)
-
- anchor:Pipe[] link:#Pipe[->]Pipe::
-        Conceptual building block of the high-level model. It can be thought
-        off as simple linear processing chain. A stream can be 'sent to' a
-        pipe, in which case it will be mixed in at the input, and you can
-        'plug' the output of a pipe to another destination. Further, effects
-        or processors can be attached to the pipe. Besides the global pipes
-        (busses) in each Timeline, each clip automatically creates N pipes
-        (one for each distinct content stream. Typically N=2, for video and
-        audio)
-
- anchor:MediaStream[] link:#MediaStream[->]MediaStream::
-        Media data is supposed to appear structured as stream(s) over time.
-        While there may be an inherent internal structuring, at a given
-        perspective any stream is a unit and homogeneous. In the context of
-        digital media data processing, streams are always quantized, which means
-        they appear as a temporal sequence of data chunks called frames.
-
- anchor:StreamType[] link:#StreamType[->]StreamType::
-        Classification of a media stream. StreamType is a descriptor record.
-        While external media processing libraries usually do provide some kind
-        of classification already, within lumiera we rely on an uniform yet
-        abstract classification which is owned by the project and geared to
-        fit the internal needs, especially for the wiring and connecting.
-        A Lumiera stream type is comprised of the parts
-        - media kind (Video, Image, Audio, MIDI, Text,... )
-        - prototype (open ended collection of semantical kinds of media,
-          examples being stereoscopic, periphonic, monaural, binaural,
-          film quality, TV, youtube).
-        - implementation type (e.g. 96kHz 24bit PCM, 2 channels muxed)
-        - intention tag (Source, Raw, Intermediary and Target)
-        
- anchor:OutputDesignation[] link:#OutputDesignation[->]OutputDesignation::
-        A specification denoting where to connect the output of a pipe.
-        It might either be given _absoulutely_, i.e as Pipe-ID,
-        or by an _relative_ or _indirect_ specification
-        
- anchor:OutputMapping[] link:#OutputMapping[->]OutputMapping::
-        translates one output designation into another one, e.g. when hooking
-        up a sequence as virtual clip within another sequence
-
- anchor:OutputSlot[] link:#OutputSlot[->]OutputSlot::
-        opaque descriptor for an output facility, ready to dispose frames
-        of data to be output.
-
- anchor:OutputManager[] link:#OutputManager[->]OutputManager::
-        manages all external outputs of the application and provides output
-        slots targetting these.
-
- anchor:PlayController[] link:#PlayController[->]PlayController::
-        coordinating playback, cueing and rewinding of a playback position,
-        visible as 'Playhead' cursor in the GUI. When in play state, a
-        PlayController requests and directs a render process to deliver the
-        media data needed for playback.
-
- anchor:RenderTask[] link:#RenderTask[->]RenderTask::
-        basically a PlayController, but collecting output directly, without
-        moving a PlayheadCursor (maybe a progress indicator) and not operating
-        in a timed fashion, but freewheeling or in background mode
-
- anchor:ControllerGui[] link:#ControllerGui[->]Controller Gui::
-        This can be either a full Software implementation for a Transport
-        control (Widgets for Start/Stop/Rev/Ffw etc) or some Gui managing an
-        Input Device. They share some feature to attach them to controllable
-        gui-entities (Viewers, Timeline Views)
-
  anchor:Viewer[] link:#Viewer[->]Viewer::
-        the display destination showing video frame and possibly some effect
+        The display destination showing video frame and possibly some effect
         overlays (masking etc.). When attached to a timeline, a viewer
         reflects the state of the timeline's associated PlayController, and it
         attaches to the timeline's global pipes (stream-type match or
-        explicitly), showing video as monitor image and sending audio to the
-        system audio port. Possible extensions are for a viewer to be able to
-        attach to probe points within the render network, to show a second
-        stream as (partial) overlay for comparison, or to be collapsed to a
-        mere control for sending video to a dedicated monitor (separate X
-        display or firewire)
-
- anchor:HighLevelModel[] link:#HighLevelModel[->]High Level Model::
-        All the session content to be edited and manipulated by the user
-        through the GUI. The high-level-model will be translated by the
-        Builder into the Low Level Model for rendering.
-
- anchor:LowLevelModel[] link:#LowLevelModel[->]Low Level Model::
-        The generated Processing Graph, to be ``performed'' within the engine
-        to yield rendered output
-
- anchor:Builder[] link:#Builder[->]Builder::
-        A kind of compiler which creates Low Level/Processing Graphs, by
-        traversing and evaluating the relevant parts of the high-level-model
-        and using the Rules System.
-
- anchor:TimelineSegment[] link:#TimelineSegment[->]Timeline Segment::
-        A range in the timeline which yields in one Processing graph, commonly
-        the range between cut points (which require a reconfiguration of the
-        graph).
-
-// Note by Ichthyo: "Extent" sounds somewhat cool, just it didn't occur to me as a term.
-// We may well agree on it, if "extent" communicates the meaning better. Up to now, I called it "segment"
-
- anchor:AssetsView[] link:#AssetsView[->]Assets View::
-        The windows showing and managing the available things to work with.
-        This are the ingested footage, already composed Clips, available
-        Sub-Projects, Effects, Transitions and internal artefacts.
-
- anchor:RulesSystem[] link:#RulesSystem[->]Rules System::
-        Translating the Timeline to the underlying Processing Graphs involves
-        some logic and knowledge about handling/converting data. This may be
-        configued with this Rules System. Typically Lumiera will provide sane
-        defaults for most purposes but may extended/refined for site specific
-        things.  
-
- anchor:ProcessingGraph[] link:#ProcessingGraph[->]Processing Graph::
-        Rendering is expressed as detailed network of Nodes, each defining a
-        processing step.
-
- anchor:ConfigSystem_Preferences[] link:#ConfigSystem_Preferences[->]Config System/Preferences::
-        TODO: agree on one term here
-        Provides defaults for all kinds of application configurations. These
-        include machine specific configurations for performance
-        characteristics, File and Plugins Paths and configuration data and so
-        on. Note that this only provides defaults for otherwise not yet set
-        data. Many settings will then be stored within the project and the
-        Config/Preferences becomes overridden by that.
-
- anchor:InputDevice[] link:#InputDevice[->]Input Device::
-        some hardware controler, like a extra Keyboard, Midi Mixer, Jog, ..
-        TODO: decide if the main keyboard as special (global) state.
-
- anchor:Focus[] link:#Focus[->]Focus::
-        TBD
-
- anchor:Cursor[] link:#Cursor[->]Cursor::
-        playback- or edit position
+        explicitly), showing video as a monitor image and sending audio to the
+        system audio port. A number of supplimentary features are possible: the
+        viewer could  support the ability to attach to view points within the
+        render network; the capability to display a second stream as an overlay
+        (partially) which would enable user comparison or it might even be
+        possible to allow the Viewer to be collapsed to a control, thus,
+        allowing a video to be sent to a dedicated monitor, e.g., to a separate
+        X/-display or to a firewire. 

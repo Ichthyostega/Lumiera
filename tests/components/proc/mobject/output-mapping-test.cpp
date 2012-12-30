@@ -35,8 +35,9 @@ using util::isnil;
 using std::string;
 
 
+namespace proc {
 namespace mobject {
-namespace test  {
+namespace test {
   
   using asset::Pipe;
   using asset::PPipe;
@@ -179,4 +180,4 @@ namespace test  {
   
   
   
-}} // namespace mobject::test
+}}} // namespace proc::mobject::test

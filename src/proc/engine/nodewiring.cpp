@@ -26,19 +26,20 @@
 #include "proc/engine/nodeoperation.hpp"
 #include "proc/engine/nodewiring-config.hpp"
 
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 
 
+namespace proc {
 namespace engine {
 
   namespace config {
     
-    using lumiera::typelist::Flags;
-    using lumiera::typelist::CombineFlags;
-    using lumiera::typelist::DefineConfigByFlags;
-    using lumiera::typelist::Instantiation;
-    using lumiera::typelist::Apply;
-    using lumiera::typelist::Filter;
+    using lib::meta::Flags;
+    using lib::meta::CombineFlags;
+    using lib::meta::DefineConfigByFlags;
+    using lib::meta::Instantiation;
+    using lib::meta::Apply;
+    using lib::meta::Filter;
     
     using lib::AllocationCluster;
     
@@ -116,8 +117,8 @@ namespace engine {
    *  for the specific wiring situations) use the AllocationCluster
    *  of the current build process, we need to create a new instance
    *  for each newly built segment of the low-level model.
-   *  @note As this ctor creates a WiringFactoryImpl instance, 
-   *        compiling this invocation actually drives the necessary
+   *  @note This ctor creates a WiringFactoryImpl instance, thus 
+   *        compiling this definition actually drives the necessary
    *        template instantiations for all cases encountered while
    *        building the node network.
    */
@@ -149,4 +150,4 @@ namespace engine {
   }
   
   
-} // namespace engine
+}} // namespace proc::engine

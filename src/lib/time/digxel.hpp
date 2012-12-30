@@ -72,6 +72,7 @@
 #include <boost/lexical_cast.hpp>
 #include <tr1/functional>
 #include <string>
+#include <cstdio>
 #include <cmath>
 
 #include <cstdio>
@@ -129,7 +130,7 @@ namespace time {
               {
                 size_t space = std::snprintf (printbuffer_, bufsiz, formatSpec_, val);
                 REQUIRE (space < bufsiz, "Digxel value exceeded available buffer size. "
-                                         "For showing %s, %lu+1 chars instead of just %lu+1 would be required."
+                                         "For showing %s, %zu+1 chars instead of just %zu+1 would be required."
                                        , cStr(lexical_cast<string>(val)), space, len);               ///////////TICKET #197
               }
             ENSURE (!empty());
@@ -319,7 +320,7 @@ namespace time {
   typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
   typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
   typedef Digxel< int, digxel::HourFormatter> HourDigit;  ///< for displaying hours in H:M.S
-  typedef Digxel<long, digxel::CountFormatter> CountVal;  ///< for displaying a counter
+  typedef Digxel<long, digxel::CountFormatter> CountVal;  ///< for displaying a counter      ///////////TICKET #882 : outch!
   
   
   /** special Digxel to show a sign.

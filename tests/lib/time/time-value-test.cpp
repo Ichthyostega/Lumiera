@@ -29,12 +29,10 @@
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
-//#include <cstdlib>
 #include <string>
 
 using boost::lexical_cast;
 using util::isnil;
-//using std::rand;
 using std::cout;
 using std::endl;
 using std::string;
@@ -71,11 +69,14 @@ namespace test{
           
           checkBasicTimeValues (ref);
           checkMutableTime (ref);
-          checkTimeConveniance (ref);
+          checkTimeConvenience (ref);
           verify_invalidFramerateProtection();
           createOffsets (ref);
           buildDuration (ref);
           buildTimeSpan (ref);
+          compareTimeSpan (Time(ref));
+          relateTimeIntervals (ref);
+          verify_fractionalOffset();
         } 
       
       
@@ -159,7 +160,7 @@ namespace test{
        *        especially by the canonical Time values.
        */
       void
-      checkTimeConveniance (TimeValue org)
+      checkTimeConvenience (TimeValue org)
         {
           Time o1(org);
           TimeVar v(org);
@@ -167,8 +168,8 @@ namespace test{
           CHECK (o1 == o2);
           CHECK (o1 == org);
           
-          // integer interpreted as second
-          Time t1(1);
+          // time in seconds
+          Time t1(FSecs(1));
           CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
           
           // create from fractional seconds
@@ -190,7 +191,7 @@ namespace test{
           CHECK (th+th == t1);
           CHECK (t1-th == th);
           CHECK (((t1-th)*=2) == t1);
-          CHECK (th-th == Time(0));
+          CHECK (th-th == TimeValue(0));
           
           // that was indeed a temporary and didn't affect the originals
           CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
@@ -233,7 +234,14 @@ namespace test{
           CHECK (9 == off9);
           // simple linear combinations
           CHECK (7 == -2*off9 + off5*5);
-        }
+          
+          // build offset by number of frames
+          Offset byFrames(-125, FrameRate::PAL);
+          CHECK (Time(FSecs(-5)) == byFrames);
+          
+          CHECK (Offset(-5, FrameRate(5,4)) == -Offset(5, FrameRate(5,4)));
+          CHECK (Offset(3, FrameRate(3)) == Offset(12345, FrameRate(24690,2)));
+        }                                // precise rational number calculations
       
       
       void
@@ -252,14 +260,14 @@ namespace test{
           CHECK (distance == backwards.abs());
           
           Duration len1(Time(23,4,5,6));
-          CHECK (len1 == Time(FSecs(23,1000)) + Time(4 + 5*60 + 6*3600));
+          CHECK (len1 == Time(FSecs(23,1000)) + Time(0, 4 + 5*60 + 6*3600));
           
-          Duration len2(Time(-10)); // negative specs...
-          CHECK (len2 == Time(10));//
-          CHECK (len2 > zero);    //   will be taken absolute
+          Duration len2(Time(FSecs(-10))); // negative specs...
+          CHECK (len2 == Time(FSecs(10)));//
+          CHECK (len2 > zero);           //   will be taken absolute
           
           Duration unit(50, FrameRate::PAL);
-          CHECK (Time(2) == unit);              // duration of 50 frames at 25fps is... (guess what)
+          CHECK (Time(0,2,0,0) == unit);       // duration of 50 frames at 25fps is... (guess what)
           
           CHECK (FrameRate::PAL.duration() == Time(FSecs(1,25)));
           CHECK (FrameRate::NTSC.duration() == Time(FSecs(1001,30000)));
@@ -280,6 +288,28 @@ namespace test{
       
       
       void
+      verify_fractionalOffset ()
+        {
+          typedef boost::rational<int64_t> Frac;
+          
+          Duration three (TimeValue(3));       // three micro seconds
+          
+          Offset o1 = Frac(1,2) * three;
+          CHECK (o1 > Time::ZERO);
+          CHECK (o1 == TimeValue(1));          // bias towards the next lower micro grid position
+          
+          Offset o2 = -Frac(1,2) * three;
+          CHECK (o2 < Time::ZERO);
+          CHECK (o2 == TimeValue(-2));
+          
+          CHECK (three * Frac(1,2) * 2 != three);
+          CHECK (three *(Frac(1,2) * 2) == three);
+          // integral arithmetics is precise,
+          // but not necessarily exact!
+        }
+      
+      
+      void
       buildTimeSpan (TimeValue org)
         {
           TimeValue zero;
@@ -296,15 +326,117 @@ namespace test{
           CHECK (theLength == Offset(org,five).abs());
           
           Time endpoint = interval.end();
-          TimeSpan successor (endpoint, Duration(Time(2)));
+          TimeSpan successor (endpoint, FSecs(2));
           
           CHECK (Offset(interval,endpoint) == Offset(org,five).abs());
           CHECK (Offset(endpoint,successor.end()) == Duration(successor));
           
-          cout <<   "Interval-1: " << interval 
-               << "  Interval-2: " << successor 
+          cout <<   "Interval-1: " << interval
+               << "  Interval-2: " << successor
                << "  End point: "  << successor.end()
-               << endl; 
+               << endl;
+        }          
+      
+      
+      void
+      compareTimeSpan (Time const& org)
+        {
+          TimeSpan span1 (org, org+org);                  // using the distance between start and end point
+          TimeSpan span2 (org, Offset(org, Time::ZERO));  // note: the offset is taken absolute, as Duration
+          TimeSpan span3 (org, FSecs(5,2));               // Duration given explicitly, in seconds
+          TimeSpan span4 (org, FSecs(5,-2));              // again: the Duration is taken absolute
+          
+          CHECK (span1 == span2);
+          CHECK (span2 == span1);
+          CHECK (span3 == span4);
+          CHECK (span4 == span3);
+          
+          CHECK (span1 != span3);
+          CHECK (span3 != span1);
+          CHECK (span1 != span4);
+          CHECK (span4 != span1);
+          CHECK (span2 != span3);
+          CHECK (span3 != span2);
+          CHECK (span2 != span4);
+          CHECK (span4 != span2);
+          
+          // especially note that creating a TimeSpan
+          // based on offset will take the offset absolute
+          CHECK (span1.end() == span2.end());
+          CHECK (span3.end() == span4.end());
+          
+          // Verify the extended order on time intervals
+          TimeSpan span1x (org+org, Duration(org));       // starting later than span1
+          TimeSpan span3y (org,     FSecs(2));            // shorter than span3
+          TimeSpan span3z (org+org, FSecs(2));            // starting later and shorter than span3
+          
+          CHECK (span1 != span1x);
+          CHECK (span3 != span3y);
+          CHECK (span3 != span3z);
+          
+          CHECK (  span1 <  span1x);
+          CHECK (  span1 <= span1x);
+          CHECK (!(span1 >  span1x));
+          CHECK (!(span1 >= span1x));
+          
+          CHECK (  span3 >  span3y);
+          CHECK (  span3 >= span3y);
+          CHECK (!(span3 <  span3y));
+          CHECK (!(span3 <= span3y));
+          
+          CHECK (  span3 < span3z);    // Note: the start point takes precedence on comparison
+          CHECK ( span3y < span3z);
+          
+          // Verify this order is really different
+          // than the basic ordering of time values
+          CHECK (span1 < span1x);
+          CHECK (span1.duration() == span1x.duration());
+          CHECK (span1.start() < span1x.start());
+          CHECK (span1.end()   < span1x.end());
+          
+          CHECK (span3 > span3y);
+          CHECK (span3.duration() > span3y.duration());
+          CHECK (span3.start() == span3y.start());
+          CHECK (span3.end()    > span3y.end());
+          CHECK (Time(span3)   == Time(span3y));
+          
+          CHECK (span3 < span3z);
+          CHECK (span3.duration() > span3z.duration());
+          CHECK (span3.start() < span3z.start());
+          CHECK (span3.end()  != span3z.end());        // it's shorter, and org can be random, so that's all we know
+          CHECK (Time(span3)   < Time(span3z));
+          
+          CHECK (span3y < span3z);
+          CHECK (span3y.duration() == span3z.duration());
+          CHECK (span3y.start() < span3z.start());
+          CHECK (span3y.end()  < span3z.end());
+          CHECK (Time(span3)  < Time(span3z));
+        }
+      
+      
+      void
+      relateTimeIntervals (TimeValue org)
+        {
+          Time oneSec(FSecs(1));
+          
+          TimeSpan span1 (org,          FSecs(2));
+          TimeSpan span2 (oneSec + org, FSecs(2));
+          
+          TimeVar probe(org);
+          CHECK ( span1.contains(probe));
+          CHECK (!span2.contains(probe));
+          
+          probe = span2;
+          CHECK ( span1.contains(probe));
+          CHECK ( span2.contains(probe));
+          
+          probe = span1.end();
+          CHECK (!span1.contains(probe));              // Note: end is always exclusive
+          CHECK ( span2.contains(probe));
+          
+          probe = span2.end();
+          CHECK (!span1.contains(probe));
+          CHECK (!span2.contains(probe));
         }
     };
   

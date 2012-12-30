@@ -26,10 +26,20 @@
 
 #include "proc/common.hpp"
 #include "proc/state.hpp"
+#include "lib/time/timevalue.hpp"
 
 
+/////////////////////////////TODO 7/11 this is a piece of debris, left over from the first attempt to complete the render nodes network.
+/////////////////////////////TODO Meanwhile the intention is to treat the render nodes network more like a data structure,
+/////////////////////////////TODO consequently this will become some kind of root or anchor point for this network
 
+
+namespace proc {
 namespace engine {
+  
+  using lib::time::TimeSpan;
+  using lib::time::FSecs;
+  using lib::time::Time;
   
   class ExitNode;
   
@@ -41,15 +51,19 @@ namespace engine {
     protected:
       ExitNode * output;
       
-      /** begin of the timerange covered by this RenderGraph */
-      lumiera::Time start;
+      /** timerange covered by this RenderGraph */
+      TimeSpan segment_;
       
-      /**end (exclusive) of the timerange  */
-      lumiera::Time end;
+    public:
+      RenderGraph()
+        : segment_(Time::ZERO, FSecs(5))
+        {
+          UNIMPLEMENTED ("anything regarding the Fixture datastructure");
+        }
       
     };
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

@@ -22,9 +22,11 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
 #include <cmath>
+#include <time.h>
 #include <vector>
 #include <iostream>
 #include <boost/format.hpp>
@@ -90,6 +92,7 @@ namespace test {
   
   /**********************************************************************
    * @test Evaluate a custom built integer floor function.
+   *       Also known as Knuth's floor division.
    *       This function is crucial for Lumiera's rule of quantisation
    *       of time values into frame intervals. This rule requires time
    *       points to be rounded towards the next lower frame border always,
@@ -110,6 +113,12 @@ namespace test {
       run (Arg arg)
         {
           verifyBehaviour ();
+          
+          verifyIntegerTypes<int>();
+          verifyIntegerTypes<long>();
+          verifyIntegerTypes<short>();
+          verifyIntegerTypes<int64_t>();
+          verifyIntegerTypes<long long int>();
           
           if (!isnil (arg))
             runPerformanceTest();
@@ -144,6 +153,22 @@ namespace test {
           CHECK (-3 == floordiv (-10,4));
           CHECK (-3 == floordiv (-11,4));
           CHECK (-3 == floordiv (-12,4));
+        }
+      
+      
+      template<typename I>
+      void
+      verifyIntegerTypes ()
+        {
+          I n,d,expectedRes;
+          
+          for (int i=-12; i <= 12; ++i)
+            {
+              n = i;
+              d = 4;
+              expectedRes = floordiv (i,4);
+              CHECK (floordiv(n,d) == expectedRes);
+            }
         }
       
       

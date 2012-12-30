@@ -34,39 +34,49 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace boost;
 using namespace lumiera;
 
 using gui::util::CairoUtil;
+using std::tr1::shared_ptr;
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineBody::TimelineBody(TimelineWidget &timelineWidget) :
-    Glib::ObjectBase("TimelineBody"),
-    tool(NULL),
-    mouseDownX(0),
-    mouseDownY(0),
-    dragType(None),
-    beginShiftTimeOffset(0),
-    selectionAlpha(0.5),
-    timelineWidget(timelineWidget)
+TimelineBody::TimelineBody (TimelineWidget &timelineWidget)
+  : Glib::ObjectBase("TimelineBody")
+  , tool(NULL)
+  , mouseDownX(0)
+  , mouseDownY(0)
+  , dragType(None)
+  , beginShiftTimeOffset()
+  , selectionAlpha(0.5)
+  , timelineWidget(timelineWidget)
 {      
   // Connect up some events
   timelineWidget.state_changed_signal().connect(
     sigc::mem_fun(this, &TimelineBody::on_state_changed) );
   
+  // Set a default Tool
+  this->set_tool(Arrow);
+
   // Install style properties
   register_styles();
-  
+
   // Reset the state
-  on_state_changed();
+  propagateStateChange();
 }
 
 TimelineBody::~TimelineBody()
 {
   WARN_IF(!tool, gui, "An invalid tool pointer is unexpected here");
+}
+
+TimelineViewWindow&
+TimelineBody::viewWindow() const
+{
+  REQUIRE(timelineState);
+  return timelineState->get_view_window();
 }
 
 TimelineWidget&
@@ -83,10 +93,10 @@ TimelineBody::get_tool() const
 }
   
 void
-TimelineBody::set_tool(timeline::ToolType tool_type)
+TimelineBody::set_tool(timeline::ToolType tool_type, bool force)
 {  
   // Tidy up old tool
-  if(tool)
+  if(tool && !force)
     {
       // Do we need to change tools?
       if(tool->get_type() == tool_type)
@@ -147,7 +157,7 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   // Makes sure the widget styles have been loaded
   read_styles();
   
-  if(timelineWidget.get_state())
+  if (timelineState)
     {
       // Prepare to render via cairo
       const Allocation allocation = get_allocation();
@@ -169,9 +179,9 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
 {
   REQUIRE(event != NULL);
   
-  if(timelineWidget.get_state())
+  if (timelineState)
     {
-      TimelineViewWindow &window = view_window();
+      TimelineViewWindow &window = viewWindow();
       const Allocation allocation = get_allocation();
       
       if(event->state & GDK_CONTROL_MASK)
@@ -255,19 +265,20 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
   
-  if(timelineWidget.get_state())
+  if (timelineState)
     {
-      // Handle a middle-mouse drag if one is occuring
+      // Handle a middle-mouse drag if one is occurring
+                                   /////////////////////////////TICKET #861 : shoudln't all of that be performed by TimelineViewWindow, instead of manipulating values from the outside?
       switch(dragType)
         {
         case Shift:
           {
-            TimelineViewWindow &window = view_window();
-            
+                                   /////////////////////////////TICKET #795 : don't reach in from outside and manipulate internals of the timeline view!
+                                   /////////////////////////////            : either encapsulate this entirely here, or leave it to the timeline view!            
+            TimelineViewWindow &window = viewWindow();
             const int64_t scale = window.get_time_scale();
-            Time offset(beginShiftTimeOffset +
-              (int64_t)(mouseDownX - event->x) * scale);
-            window.set_time_offset(offset);
+            window.set_time_offset(beginShiftTimeOffset
+                                 + TimeValue(scale * (mouseDownX - event->x)));
             
             set_vertical_offset((int)(mouseDownY - event->y) +
               beginShiftVerticalOffset);
@@ -293,15 +304,26 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 }
 
 void
-TimelineBody::on_state_changed()
+TimelineBody::on_state_changed (shared_ptr<TimelineState> newState)
 {
-  if(timelineWidget.get_state())
+  REQUIRE (newState);
+  timelineState = newState;
+  propagateStateChange();
+}
+
+void
+TimelineBody::propagateStateChange()
+{
+  if (timelineState)
     {
       // Connect up some events
-      view_window().changed_signal().connect(
+      viewWindow().changed_signal().connect(
         sigc::mem_fun(this, &TimelineBody::on_update_view) );
     }
-    
+
+  // Need to reload the current tool...
+  set_tool (get_tool(), true);
+
   // Redraw
   queue_draw();
 }
@@ -334,7 +356,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
       const shared_ptr<timeline::Track> timeline_track =
         timelineWidget.lookup_timeline_track(*iterator);
         
-      optional<Gdk::Rectangle> rect =
+      boost::optional<Gdk::Rectangle> rect =
         layout_helper.get_track_header_rect(timeline_track);
       
       // Is this track visible?
@@ -372,7 +394,7 @@ TimelineBody::draw_track(Cairo::RefPtr<Cairo::Context> cr,
 
   // Render the track
   cr->save();
-  TimelineViewWindow &window = view_window();
+  TimelineViewWindow &window = viewWindow();
   timeline_track->draw_track(cr, &window);
   cr->restore();
 }
@@ -385,12 +407,11 @@ TimelineBody::draw_selection(Cairo::RefPtr<Cairo::Context> cr)
   // Prepare
   const Allocation allocation = get_allocation();
   
-  shared_ptr<TimelineState> state = timelineWidget.get_state();
-  REQUIRE(state);
+  REQUIRE(timelineState);
   
-  const TimelineViewWindow &window = state->get_view_window();
-  const int start_x = window.time_to_x(state->get_selection_start());
-  const int end_x = window.time_to_x(state->get_selection_end());
+  TimelineViewWindow const& window = timelineState->get_view_window();
+  const int start_x = window.time_to_x(timelineState->getSelectionStart());
+  const int end_x   = window.time_to_x(timelineState->getSelectionEnd());
   
   // Draw the cover
   if(end_x > 0 && start_x < allocation.get_width())
@@ -426,18 +447,13 @@ TimelineBody::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr)
 {   
   REQUIRE(cr);
   
-  // Prepare
-  
-  shared_ptr<TimelineState> state = timelineWidget.get_state();
-  if(state)
+  if (timelineState)
     {
-      const Allocation allocation = get_allocation();
-        
-      const gavl_time_t point = state->get_playback_point();
-      if(point == (gavl_time_t)GAVL_TIME_UNDEFINED)
-        return;
+      if (!timelineState->isPlaying()) return;
       
-      const int x = view_window().time_to_x(point);
+      const Allocation allocation = get_allocation();
+      Time point = timelineState->getPlaybackPoint();
+      const int x = viewWindow().time_to_x(point);
         
       // Set source
       cr->set_source(playbackPointColour);
@@ -456,10 +472,10 @@ TimelineBody::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr)
 void
 TimelineBody::begin_shift_drag()
 {
-  if(timelineWidget.get_state())
+  if (timelineState)
     {
       dragType = Shift;
-      beginShiftTimeOffset = view_window().get_time_offset();
+      beginShiftTimeOffset = viewWindow().get_time_offset();
       beginShiftVerticalOffset = get_vertical_offset();
     }
 }
@@ -474,14 +490,6 @@ void
 TimelineBody::set_vertical_offset(int offset)
 {
   timelineWidget.verticalAdjustment.set_value(offset);
-}
-
-TimelineViewWindow&
-TimelineBody::view_window() const
-{
-  shared_ptr<TimelineState> state = timelineWidget.get_state();
-  REQUIRE(state);
-  return state->get_view_window();
 }
 
 void

@@ -33,6 +33,7 @@ using std::tr1::bind;
 using std::rand;
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
@@ -180,4 +181,4 @@ namespace test    {
   LAUNCHER (MementoTie_test, "unit controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

@@ -122,8 +122,11 @@ namespace lumiera {
     LUMIERA_ERROR_DECLARE (ASSERTION);    ///< assertion failure
     
     /* generic error situations */
+    LUMIERA_ERROR_DECLARE (LIFECYCLE);    ///< Lifecycle assumptions violated
     LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch
     LUMIERA_ERROR_DECLARE (ITER_EXHAUST); ///< end of sequence reached
+    LUMIERA_ERROR_DECLARE (CAPACITY);     ///< predefined fixed storage capacity
+    LUMIERA_ERROR_DECLARE (INDEX_BOUNDS); ///< index out of bounds
     LUMIERA_ERROR_DECLARE (BOTTOM_VALUE); ///< invalid or NIL value
     LUMIERA_ERROR_DECLARE (UNCONNECTED);  ///< missing connection
     LUMIERA_ERROR_DECLARE (UNIMPLEMENTED);///< unimplemented feature
@@ -213,6 +216,27 @@ namespace lumiera {
   
   
 } // namespace lumiera
+
+/******************************************************
+ * convenience shortcut for a sequence of catch blocks
+ * just logging and consuming an error. Typically
+ * this sequence will be used within destructors,
+ * which, by convention, must not throw
+ */
+#define ERROR_LOG_AND_IGNORE(_FLAG_,_OP_DESCR_) \
+  catch (std::exception& problem)                \
+    {                                             \
+      const char* errID = lumiera_error();         \
+      WARN (_FLAG_, "%s failed: %s", _OP_DESCR_, problem.what()); \
+      TRACE (debugging, "Error flag was: %s", errID);\
+    }                                                 \
+  catch (...)                                          \
+    {                                                   \
+      const char* errID = lumiera_error();               \
+      ERROR (_FLAG_, "%s failed with unknown exception; " \
+                     "error flag is: %s"                   \
+                   , _OP_DESCR_, errID);                    \
+    }
 
 
 

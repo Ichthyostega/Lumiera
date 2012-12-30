@@ -33,7 +33,7 @@
  ** Typically there is another subclass of the Facade interfaces sitting "on the other side"
  ** of the interface barrier and actually implementing the functionality. The template
  ** facade::Accessor can be thought of as a factory creating such a proxy instance of the
- ** facade interface for the client code to use. Typically, in instance of the \em factory
+ ** facade interface for the client code to use. Typically, an instance of the \em factory
  ** is embedded (as a static functor member object) right within the otherwise abstract 
  ** facade interface, this way allowing the client code to write e.g. \c XYZInterface::facade()
  ** to yield a reference to a proxy object implementing \c XYZInterface.
@@ -48,17 +48,18 @@
  ** Any sort of dependency management is outside the scope of the InstanceHandle (for the core
  ** services, it is handled by the dependency of subsystems, while the plugin loader cares
  ** for dependency issues regarding loadable modules, thereby building on the deployment
- ** descriptors.
+ ** descriptors.)
  ** 
  ** For the Layer separation interfaces, the process of loading and opening is abstracted as
  ** an InstanceHandle object. When creating such an InstanceHandle using the appropriate
  ** template and ctor parameters, in addition to the registration with the Interface/Plugin 
- ** system, the corresponding facade::Proxy factory is addressed and "opened" by creating
- ** the right proxy object instance. Similarly, when the InstanceHandle object goes out
- ** of scope, prior to detaching from the Interface/Proxy system, the corresponding 
- ** lumiera::facade::Accessor factory is "closed", which additionally means destroying
- ** the proxy object instance and switching any further access to throwing and exception. 
- **
+ ** system, the corresponding facade::Proxy factory is addressed and the interface instance
+ ** is "opened" by creating the appropriate proxy object instance. Similarly, when the
+ ** InstanceHandle object goes out of scope, prior to detaching from the Interface/Proxy
+ ** system, the corresponding lumiera::facade::Accessor frontend is "closed", which
+ ** additionally means destroying the proxy object instance and switching any
+ ** further access to throwing and exception. 
+ ** 
  ** While client code just includes the interface header (including interfaceproxy.hpp
  ** in turn), there needs to be an actual implementation of each proxy object located in
  ** some translation unit. The usual place is interfaceproxy.cpp, which gets linked into 
@@ -82,45 +83,66 @@
 
 
 namespace lumiera {
-  namespace facade {
-  
-    /** error-ID for accessing a (currently) closed facade */
-    LUMIERA_ERROR_DECLARE(FACADE_LIFECYCLE);  
+namespace facade {
 
+  /** error-ID for accessing a (currently) closed facade */
+  LUMIERA_ERROR_DECLARE(FACADE_LIFECYCLE);  
+
+
+  /*********************************************************************
+   * access-frontend to the implementation of a service.
+   * Usually, an instance of Accessor is placed as static member
+   * right into the facade interface used to access the service.
+   * This allows clients to get the current actual implementation
+   * of that service, just by invoking the function operator on
+   * that member, e.g. \c lumiera::Play::facade()
+   * 
+   * The reason for this rather indirect access technique is Lifecycle:
+   * Service implementations may come up and go down; moreover, a service
+   * might be implemented through a plugin component and thus the actual
+   * invocation needs to be passed through a binding layer. In this case,
+   * clients rather access a proxy object, which then passes on any call
+   * through that binding layer to the actual implementation located
+   * "somewhere".
+   * 
+   * @note the pointer to the actual implementation is a static variable.
+   *       This has two consequences. For one, we're dealing with kind of
+   *       singleton service here. And, secondly, the implementation or
+   *       proxy accessor can inherit from Accessor<FA> where FA is the
+   *       facade interface. Being a subclass, allows the implementation
+   *       to set that pointer when the service comes up, and to clear
+   *       it when the service goes down and the access needs to
+   *       be closed.
+   */
+  template<class FA>
+  class Accessor
+    {
+    protected:
+      static FA* implProxy_;
+      
+      
+    public:
+      FA&
+      operator() ()
+        {
+          if (implProxy_)
+            return *implProxy_;
+          else
+            throw error::State("Facade interface currently closed."
+                              , LUMIERA_ERROR_FACADE_LIFECYCLE);
+        }
+    };
   
-    /*********************************************************************
-     * 
-     */
-    template<class FA>
-    class Accessor
-      {
-      protected:
-        static FA* implProxy_;
-        
-        
-      public:
-        FA&
-        operator() ()
-          {
-            if (implProxy_)
-              return *implProxy_;
-            else
-              throw error::State("Facade interface currently closed.");
-          }
-      };
-    
-    template<class IHA>
-    void openProxy (IHA const&);
-    
-    template<class IHA>
-    void closeProxy ();
-    
-    template<class IHA>
-    class Proxy;
-    
-    
-  } // namespace facade
+  template<class IHA>
+  void openProxy (IHA const&);
   
-} // namespace lumiera
+  template<class IHA>
+  void closeProxy ();
+  
+  template<class IHA>
+  class Proxy;
+  
+  
+}} // namespace lumiera::facade
 
 #endif

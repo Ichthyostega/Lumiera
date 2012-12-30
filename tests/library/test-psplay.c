@@ -24,7 +24,7 @@
 #include <nobug.h>
 
 #include "lib/psplay.h"
-#include "tests/test.h"
+#include "lib/test/test.h"
 
 struct testitem
 {

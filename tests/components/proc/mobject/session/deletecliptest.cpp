@@ -42,6 +42,7 @@ using proc_interface::IDA;
 using std::tr1::dynamic_pointer_cast;        /// TODO only temp
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -91,4 +92,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

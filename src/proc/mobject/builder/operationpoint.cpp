@@ -26,11 +26,12 @@
 #include "proc/asset/media.hpp"
 #include "proc/asset/proc.hpp"
 #include "proc/engine/nodefactory.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 //#include "common/util.hpp"
 
 //#include <boost/ptr_container/ptr_vector.hpp>
 
+namespace proc {
 namespace mobject {
 namespace builder {
   
@@ -38,7 +39,6 @@ namespace builder {
   using engine::NodeFactory;
   
   using engine::PNode;
-  using lumiera::StreamType;
   
   
   struct RefPoint
@@ -108,4 +108,4 @@ namespace builder {
   
   
   
-}} // namespace mobject::builder
+}}} // namespace proc::mobject::builder

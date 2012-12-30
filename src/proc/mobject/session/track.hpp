@@ -26,20 +26,23 @@
 
 #include "proc/mobject/session/meta.hpp"
 #include "proc/asset/entry-id.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {     //////////////////////////////////////////////////////TICKET #637
-    
-    using lumiera::P;
-    
-    class Track;
-    
-    typedef P<Track> PTrack;
-
+  
+  using lib::P;
+  using lib::time::Time;
+  
+  class Track;
+  
+  typedef P<Track> PTrack;
+  
 }}
-    
+
 namespace asset {       //////////////////////////////////////////////////////TICKET #637
   
   typedef EntryID<mobject::session::Track> TrackID;
@@ -49,9 +52,12 @@ namespace asset {       //////////////////////////////////////////////////////TI
 namespace mobject {
 namespace session {
   
-    using asset::TrackID;
-    
+  using asset::TrackID;
   
+  
+                        //////////////////////////////////////////////////////TICKET #646
+                        //////////////////////////////////////////////////////TICKET #715
+    
     /**
      * A Track is grouping device within the Session.
      * The corresponding Placement by which this Track object is referred
@@ -73,7 +79,7 @@ namespace session {
      */
     class Track : public Meta
       {
-        Time start_;
+        Time start_;    /////////////////////////////////TODO: this doesn't belong here. The start position is governed by the Placement!!!
         TrackID id_;
         
       
@@ -104,13 +110,13 @@ namespace session {
     {
       return refID == id_.getSym();
     }
-      
-      
+    
+    
   } // namespace mobject::session
   
   /** Placement<Track> defined to be subclass of Placement<Meta> */
   template class Placement<session::Track, session::Meta>;
   typedef Placement<session::Track, session::Meta> PTrack;
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

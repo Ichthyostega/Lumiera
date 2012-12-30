@@ -28,6 +28,7 @@
 
 
 
+namespace proc {
 namespace mobject {
   
   
@@ -83,5 +84,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

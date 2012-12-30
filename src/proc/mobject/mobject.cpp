@@ -23,10 +23,13 @@
 
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 
+using lib::time::Time;
 using util::isnil;
 
+namespace proc {
 namespace mobject {
 
   using ::NOBUG_FLAG(memory);
@@ -39,7 +42,7 @@ namespace mobject {
 
   
   MObject::MObject()
-    : length_()
+    : length_(Time::ZERO)
     , shortID_()
     { }
   
@@ -58,4 +61,4 @@ namespace mobject {
 
 
 
-} // namespace mobject
+}} // namespace mobject

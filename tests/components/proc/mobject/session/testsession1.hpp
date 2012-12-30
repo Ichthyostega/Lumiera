@@ -37,6 +37,7 @@ using std::string;
 using std::cout;
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -68,5 +69,5 @@ namespace session {
   const string SESSION1_CLIP("TODO: some sensible way to refer to a clip");
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

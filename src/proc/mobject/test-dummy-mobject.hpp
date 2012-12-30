@@ -60,6 +60,7 @@ using std::cout;
 
 
 
+namespace proc    {
 namespace mobject {
 namespace test    {
   
@@ -90,7 +91,7 @@ namespace test    {
       string
       display(Symbol name)  const
         {
-          static format fmt("%s(ID=%4d)");
+          static format fmt("%s(ID=%03d)");
           return boost::str(fmt % name % this->id_);
         }
     };
@@ -162,5 +163,5 @@ namespace test    {
   
   
   
-}} // namespace mobject::test
+}}} // namespace proc::mobject::test
 #endif

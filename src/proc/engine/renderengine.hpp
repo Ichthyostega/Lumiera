@@ -31,7 +31,13 @@
 
 using std::list;
 
+/////////////////////////////TODO 7/11 this is a piece of debris, left over from the first attempt to complete the render nodes network.
+/////////////////////////////TODO Meanwhile the intention is to treat the render nodes network more like a data structure,
+/////////////////////////////TODO consequently this will become some kind of root or anchor point for this network
 
+//////////TODO for the "real" engine API: look at engine-serivce.hpp
+
+namespace proc {
 namespace engine {
   
   
@@ -54,5 +60,5 @@ namespace engine {
       
     };
 
-} // namespace engine
+}} // namespace proc::engine
 #endif

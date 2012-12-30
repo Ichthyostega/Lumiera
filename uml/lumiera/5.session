@@ -1,11 +1,17 @@
-window_sizes 1615 1020 270 1335 872 71
+window_sizes 1619 1028 270 1339 881 71
 diagrams
   classdiagram_ref 136453 // Session backbone
     631 352 100 4 0 0
   objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
-  active  classdiagram_ref 142725 // Time flavours
-    595 646 100 4 0 0
+  classdiagram_ref 143877 // Player Entities
+    663 654 100 4 0 0
+  objectdiagram_ref 144005 // Play Process Structure
+    562 424 100 4 0 0
+  sequencediagram_ref 145157 // output data exchange
+    586 416 100 4 0 0
+  active  classdiagram_ref 151685 // Player Output
+    643 590 92 4 0 0
 end
 show_stereotypes
 selected 
@@ -13,31 +19,19 @@ selected
 open
   
   package_ref 128005 // design
-  class_ref 160389 // VirtualMedia
-  class_ref 136837 // Proc
-  class_ref 160901 // Timeline
-  class_ref 139269 // DoRecurse
-  class_ref 162821 // TypedID::Link
   classview_ref 128389 // Controller Workings
-  class_ref 139653 // Session
-  class_ref 145541 // Timeline
-  class_ref 128133 // Seq
-  class_ref 160517 // Root
-  class_ref 128389 // Track
-  class_ref 152325 // Binding
-  class_ref 129797 // ExplicitPlacement
-  class_ref 129029 // Effect
-  class_ref 139909 // LocatingPin
-  class_ref 152453 // PlacementRef
-  classrelation_ref 178437 // <realization>
+  class_ref 185221 // Allocation
+  class_ref 178565 // DataSink
+  class_ref 185349 // Connection
+  class_ref 185477 // OutputSlotImpl
+  class_ref 178693 // BufferProvider
+  
+  package_ref 132229 // Session
   class_ref 153733 // QueryFocusStack
-  expansionregion_ref 128133 // establish partitioning
   usecaseview_ref 128261 // config examples
-  classview_ref 128133 // Engine Workings
-  classdiagram_ref 142725 // Time flavours
-  class_ref 134917 // Time
-  class_ref 169221 // TimeGrid
-  classview_ref 128645 // Service Components
-  classview_ref 128266 // SmartPointers
+  
+  package_ref 128389 // RenderEngine
+  
+  package_ref 129157 // BackendLayer
 end
 end

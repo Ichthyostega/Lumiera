@@ -44,8 +44,8 @@
  */
 
 
-#ifndef LUMIERA_META_FUNCTION_H
-#define LUMIERA_META_FUNCTION_H
+#ifndef LIB_META_FUNCTION_H
+#define LIB_META_FUNCTION_H
 
 #include "lib/meta/typelist.hpp"
 
@@ -53,8 +53,8 @@
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta{
 
   using std::tr1::function;
   
@@ -209,6 +209,164 @@ namespace typelist{
   
   
   
+  
+  
+  /**
+   * Helper to dissect an arbitrary function signature,
+   * irrespective if the parameter is given as function reference,
+   * function pointer, member function pointer or functor object.
+   * The base case assumes a (language) function reference.
+   */
+  template<typename SIG>
+  struct _Fun
+    {
+      typedef typename FunctionSignature<function<SIG> >::Ret Ret;
+      typedef typename FunctionSignature<function<SIG> >::Args Args;
+    };
+  /** Specialisation for using a function pointer */
+  template<typename SIG>
+  struct _Fun<SIG*>
+    {
+      typedef typename FunctionSignature<function<SIG> >::Ret Ret;
+      typedef typename FunctionSignature<function<SIG> >::Args Args;
+    };
+  /** Specialisation when using a function reference */
+  template<typename SIG>
+  struct _Fun<SIG&>
+    {
+      typedef typename FunctionSignature<function<SIG> >::Ret Ret;
+      typedef typename FunctionSignature<function<SIG> >::Args Args;
+    };
+  /** Specialisation for passing a functor */
+  template<typename SIG>
+  struct _Fun<function<SIG> >
+    {
+      typedef typename FunctionSignature<function<SIG> >::Ret Ret;
+      typedef typename FunctionSignature<function<SIG> >::Args Args;
+    };
+  
+  /** Specialisations for member function pointers */
+  template<typename RET, class CLASS>
+  struct _Fun<RET (CLASS::*) (void) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const> Args;
+    };
+  
+  template< typename RET, class CLASS
+          , typename A1
+          >
+  struct _Fun<RET (CLASS::*) (A1) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1> Args;
+    };
+  
+  template< typename RET, class CLASS
+          , typename A1
+          , typename A2
+          >
+  struct _Fun<RET (CLASS::*) (A1,A2) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1,A2> Args;
+    };
+  
+  template< typename RET, class CLASS
+          , typename A1
+          , typename A2
+          , typename A3
+          >
+  struct _Fun<RET (CLASS::*) (A1,A2,A3) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1,A2,A3> Args;
+    };
+  
+  template< typename RET, class CLASS
+          , typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          >
+  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1,A2,A3,A4> Args;
+    };
+  
+  template< typename RET, class CLASS
+          , typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          , typename A5
+          >
+  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1,A2,A3,A4,A5> Args;
+    };
+  
+  template< typename RET, class CLASS
+          , typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          , typename A5
+          , typename A6
+          >
+  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5,A6) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6> Args;
+    };
+  
+  template< typename RET, class CLASS
+          , typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          , typename A5
+          , typename A6
+          , typename A7
+          >
+  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5,A6,A7) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6,A7> Args;
+    };
+  
+  template< typename RET, class CLASS
+          , typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          , typename A5
+          , typename A6
+          , typename A7
+          , typename A8
+          >
+  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5,A6,A7,A8) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6,A7,A8> Args;
+    };
+  
+  
+  
+  template<typename FUN>
+  struct is_Functor                 { static const bool value = false; };
+  template<typename SIG>
+  struct is_Functor<function<SIG> > { static const bool value = true;  };
+  
+  
+  
+  
+  
+  
+  
+  
   /**
    * Build function types from given Argument types.
    * As embedded typedefs, you'll find a tr1 functor #Func
@@ -357,5 +515,5 @@ namespace typelist{
   
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

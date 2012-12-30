@@ -20,47 +20,52 @@
 
 * *****************************************************/
 
-#include <boost/foreach.hpp>
 
 #include "gui/gtk-lumiera.hpp"
-#include "timeline-panel.hpp"
+#include "gui/panels/timeline-panel.hpp"
+#include "gui/widgets/timeline/timeline-zoom-scale.hpp"
 
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/model/project.hpp"
 #include "gui/controller/controller.hpp"
 
-#include "lib/time.h"
+#include "lib/util.hpp"
 
+#include <boost/foreach.hpp>
 
 using namespace Gtk;
 using namespace sigc;
-using namespace std;
-using namespace boost;
-using namespace util;
 using namespace gui::widgets;
+using namespace gui::widgets::timeline;
 using namespace gui::model;
+
+using std::tr1::shared_ptr;
+using std::tr1::weak_ptr;
+using util::contains;
 
 namespace gui {
 namespace panels {
   
 const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
-TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
-    GdlDockItem *dock_item) :
-  Panel(panel_manager, dock_item, get_title(), get_stock_id()),
-  timeCode("sequence_clock", "timecode_widget", true),
-  previousButton(Stock::MEDIA_PREVIOUS),
-  rewindButton(Stock::MEDIA_REWIND),
-  playPauseButton(Stock::MEDIA_PLAY),
-  stopButton(Stock::MEDIA_STOP),
-  forwardButton(Stock::MEDIA_FORWARD),
-  nextButton(Stock::MEDIA_NEXT),
-  arrowTool(Gtk::StockID("tool_arrow")),
-  iBeamTool(Gtk::StockID("tool_i_beam")),
-  zoomIn(Stock::ZOOM_IN),
-  zoomOut(Stock::ZOOM_OUT),
-  updatingToolbar(false),
-  currentTool(timeline::Arrow)
+
+TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
+                              GdlDockItem *dock_item) 
+  : Panel(panel_manager, dock_item, get_title(), get_stock_id())
+  , timeCode("sequence_clock", "timecode_widget", true)
+  , previousButton(Stock::MEDIA_PREVIOUS)
+  , rewindButton(Stock::MEDIA_REWIND)
+  , playPauseButton(Stock::MEDIA_PLAY)
+  , stopButton(Stock::MEDIA_STOP)
+  , forwardButton(Stock::MEDIA_FORWARD)
+  , nextButton(Stock::MEDIA_NEXT)
+  , arrowTool(Gtk::StockID("tool_arrow"))
+  , iBeamTool(Gtk::StockID("tool_i_beam"))
+  , zoomIn(Stock::ZOOM_IN)
+  , zoomOut(Stock::ZOOM_OUT)
+  , zoomScale()
+  , updatingToolbar(false)
+  , currentTool(timeline::Arrow)
 {
   // Hook up notifications
   get_project().get_sequences().signal_changed().connect(mem_fun(this,
@@ -100,14 +105,15 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
     
   toolbar.append(separator2);
   
-  toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
-  toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
-   
+  toolbar.append(zoomScale);
+  zoomScale.signal_zoom().
+    connect(mem_fun(this,&TimelinePanel::on_zoom));
+
   toolbar.show_all();
   panelBar.pack_start(toolbar, PACK_SHRINK);
 
   // Setup tooltips
-  sequenceChooser     .set_tooltip_text(_("Change sequence"));
+  sequenceChooser .set_tooltip_text(_("Change sequence"));
 
   previousButton  .set_tooltip_text(_("To beginning"));
   rewindButton    .set_tooltip_text(_("Rewind"));
@@ -121,23 +127,23 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
 
   zoomIn          .set_tooltip_text(_("Zoom in"));
   zoomOut         .set_tooltip_text(_("Zoom out"));
+  zoomScale       .set_tooltip_text(_("Adjust timeline zoom scale"));
 
   // Setup the timeline widget
-  shared_ptr<Sequence> sequence
-    = *get_project().get_sequences().begin();  
+  shared_ptr<Sequence> sequence = *(get_project().get_sequences().begin());
   timelineWidget.reset(new TimelineWidget(load_state(sequence)));
   pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
-  
+
+  // since TimelineWidget is now initialised,
+  // wire the zoom slider to react on timeline state changes
+  zoomScale.wireTimelineState (timelineWidget->get_state(),
+                               timelineWidget->state_changed_signal());
+
   // Set the initial UI state
   update_sequence_chooser();
   update_tool_buttons();
   update_zoom_buttons();
-  show_time(0);
-}
-
-TimelinePanel::~TimelinePanel()
-{
-
+  show_time (Time::ZERO);
 }
 
 const char*
@@ -187,6 +193,13 @@ TimelinePanel::on_ibeam_tool()
 }
 
 void
+TimelinePanel::on_zoom(double time_scale_ratio)
+{
+  REQUIRE(timelineWidget);
+  timelineWidget->zoom_view(time_scale_ratio);
+}
+
+void
 TimelinePanel::on_zoom_in()
 {
   REQUIRE(timelineWidget);
@@ -203,9 +216,9 @@ TimelinePanel::on_zoom_out()
 }
 
 void
-TimelinePanel::on_mouse_hover(gavl_time_t time)
+TimelinePanel::on_mouse_hover(Time)
 {
-  (void)time;
+  /* do nothing */
 }
 
 void
@@ -216,8 +229,8 @@ TimelinePanel::on_playback_period_drag_released()
   
   REQUIRE(timelineWidget);
     
-  timelineWidget->get_state()->set_playback_point(
-    timelineWidget->get_state()->get_playback_period_start());
+  timelineWidget->get_state()->setPlaybackPoint(
+    timelineWidget->get_state()->getPlaybackPeriodStart());
   //----- END TEST CODE
   
   play();
@@ -239,18 +252,19 @@ TimelinePanel::on_sequence_chosen()
     {
       weak_ptr<Sequence> sequence_ptr = 
         (*iter)[sequenceChooserColumns.sequenceColumn];
+
       shared_ptr<Sequence> sequence(sequence_ptr.lock());
+
       if(sequence)
         {
           shared_ptr<timeline::TimelineState> old_state(
             timelineWidget->get_state());
           REQUIRE(old_state);
-            
           if(sequence != old_state->get_sequence())
             timelineWidget->set_state(load_state(sequence));
         }
     }
-    
+
   update_zoom_buttons();
 }
 
@@ -319,19 +333,9 @@ TimelinePanel::update_tool_buttons()
 void
 TimelinePanel::update_zoom_buttons()
 {
-  REQUIRE(timelineWidget);
-
-  const shared_ptr<timeline::TimelineState> state =
-    timelineWidget->get_state();
-  if(state)
-    {
-      timeline::TimelineViewWindow &viewWindow = 
-        state->get_view_window();
-      
-      zoomIn.set_sensitive(viewWindow.get_time_scale() != 1);
-      zoomOut.set_sensitive(viewWindow.get_time_scale()
-        != TimelineWidget::MaxScale);
-    }
+/* This function is no longer needed
+ * TODO: Let the ZoomScaleWidget perform
+ * the update on its own */
 }
 
 void
@@ -365,36 +369,27 @@ TimelinePanel::set_tool(timeline::ToolType tool)
 }
 
 void
-TimelinePanel::show_time(gavl_time_t time)
+TimelinePanel::show_time(Time time)
 {
-  // timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
+  ////////////TODO integrate the Timecode Widget  
+  
+  // timeIndicator.set_text(string(time));
 }
 
 bool
 TimelinePanel::on_frame()
 {
-  // TEST CODE!  
-  /*const gavl_time_t point = timelineWidget.get_playback_point()
-    + GAVL_TIME_SCALE / 25;
-  if(point < timelineWidget.get_playback_period_end())
-    {
-      show_time(point);
-      timelineWidget.set_playback_point(point);
-      
-      
-    }
-  else
-    on_stop();*/
-    
+  /////////TODO what happens here??
   return true;
 }
 
 shared_ptr<timeline::TimelineState>
 TimelinePanel::load_state(weak_ptr<Sequence> sequence)
 {
+  /* state exists */
   if(contains(timelineStates, sequence))
-    return timelineStates[sequence];
-  
+      return timelineStates[sequence];
+
   shared_ptr<Sequence> shared_sequence = sequence.lock();
   if(shared_sequence)
     {
@@ -407,5 +402,4 @@ TimelinePanel::load_state(weak_ptr<Sequence> sequence)
   return shared_ptr< timeline::TimelineState >();
 }
 
-}   // namespace panels
-}   // namespace gui
+}}   // namespace gui::panels

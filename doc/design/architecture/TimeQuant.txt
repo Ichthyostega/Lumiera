@@ -1,0 +1,212 @@
+Time values and Time quantisation
+=================================
+:Author:	Hermann Voßeler
+:Email:	<Ichthyostega@web.de>
+:Date:      Spring 2011
+
+//Menu: label Time Quantisation
+
+.Definitions
+The term &raquo;Time&laquo; spans a variety of vastly different entities. +
+Within a NLE we get to deal with various _flavours of time values._
+
+continuous time::
+  without any additional assumptions, *points in time* can be specified with
+  arbitrary precision. The time values are just numbers; the point of reference
+  and the meaning is implicit. Within Lumiera, time is encoded as integral
+  number of _micro ticks,_ practically continuous
+  
+time distance::
+  a range of time, a *distance* on the time axis, measured with the same
+  arbitrary precision as time points. Distances can be determined by
+  _subtracting_ two time points, consequently they are _signed numbers._
+
+offset::
+  a distance can be used to adjust (offset) a time or a duration: this means
+  applying a relative change. The _target_ of an offset operation is a time or
+  duration, while it's _argument_ is a distance (synonymous to offset).
+
+duration::
+  the length of a time range yields a *time metric*.
+  +
+  the duration can be defined as the _absolute value_ of the offset between
+  start and endpoint of the time range. A duration always abstracts from the
+  time _when_ this duration or distance happens, the relation to any time scale
+  remains implicit
+
+time span::
+  contrary to a mere duration, a *time interval* or time span is actually
+  _anchored_ at a specific point in time. It can be seen as a _special kind of
+  duration,_ which explicitly states the information _when_ this time span takes
+  place.
+
+changing time::
+  Time values are _immutable,_ like numbers.
+  +
+  Only a *time variable* can be changed -- yet some of the special time entities
+  can recieve link:TimeMutation[mutation messages], allowing e.g. for
+  adjustments to a time interval selection from the GUI
+
+''''
+internal time::
+  While the basic continuous time values don't imply any commitment regarding
+  the time scale and origin to be used, actually, within the implementation of
+  the application, the meaning of time values is uniform and free of
+  contradictions. Thus effectively there is an *implementation time scale* --
+  but its scope of validity is _strictly limited to the implementation level of
+  a single application instance._ It is never exposed and never persisted. It
+  might not be reproducible over multiple instantiations of the application. The
+  implementation reserves the right to recalibrate this internal scale. Later,
+  when Lumiera gains the capability to run within a network of render nodes,
+  these instance connections will include a negotiation about the internal time
+  scale, which remains completely opaque to the outer world. This explains, why
+  `lumiera::Time` instances lack the ability to show their time value beyond
+  debugging purposes. This is to avoid confusion and to stress their opaque
+  nature.
+
+wall clock and system time::
+  The core property of any external real world time is that it is _running_ --
+  we have to synchronise to an external time source. This implies the presence
+  of a _running synchronisation process,_ with the authority to adjust the time
+  base;
+  +
+  contrast this to the internal time, which is static and unconnected -- 
+
+quantised time::
+  The *act of quantisation* transforms a continuous property into a *discrete*
+  structure. Prominent examples can be found in the domain of micro physics and
+  with digital information processing. In a broader sense, any measurement or
+  _quantification_ also encompasses a quantisation. Regarding time and time
+  measurement, quantisation means alignment to a predefined *time grid*.
+  Quantisation necessarily is an _irreversible process_ -- possible
+  additional information is discarded.
+  +
+  Note that quantisation introduces a *time origin* and a *reference scale*
+
+frame count::
+  within the context of film and media editing, the specification of a *frame number*
+  is an especially important instance of quantisation.
+  +
+  all the properties of quantisation apply indeed to this special case: it is a
+  time measurement or specification, where the values are aligned to a grid, and
+  there is a reference time point where the counting starts (origin) and a
+  reference scale (frames per second). Handling of quantised time values in
+  Lumiera is defined such as to ensure the presence of all those bits of
+  information. Without such precautions, operating with bare frame numbers leads
+  itself to all kinds of confusions, mismatches, quantisation errors and
+  unnecessary limitations of functionality.
+
+timecode::
+  Quantisation also is the foundation of all kinds of formalised time specifications
+  actually even a frame count is some kind of (informal) timecode -- other timecodes
+  employ a standardised format. //Every// presentation of time values and every
+  persistent storage and exchange of such values is based on time codes.
+  Yet quantisation and time code aren't identical: a given quantised time value
+  typically can be cast into multiple timecode formats.
+
+
+
+Patterns for handling quantised time
+------------------------------------
+
+When it comes to actually handling quantised time values, several patterns are
+conceivable for dealing with the quantisation operation and representing
+quantised data. As guideline for judging these patterns, the general properties
+of time quantisation, as detailed above, should be taken into account.
+Quantising a time value means both _discarding information,_ while at the same
+time _adding explicit information_ pertaining the assumptions of the context.
+
+.casual handling
+this is rather an frequently encountered *anti pattern*. When reading such
+code, the most striking observation is the sense of general unawareness of the
+problem, which is then ``discovered'' on a per case base, which leads to
+numerous repetitions of the same basic undertakings, but done with individual
+treatment of each instance (not so much copy-n-paste). +
+Typical code smells:
+
+  * the rounding, modulo and subtract-base operations pertinent with scale
+    handling are seemingly inserted as bugfix
+  * local code path forks to circumvent or compensate for otherwise hard wired
+    calculations based on specific ways to invoke a function
+  * playing strikingly clever tricks or employing heuristics to "figure out" the
+    missing scale information from accessible context after the fact
+  * advertising support for some of the conceivable cases as special feature, or
+    adding it as plugin or extension module with limited scope
+  * linking parts of the necessary additional information to completely
+    unrelated other structures, thus causing code tangling and scattering
+  * result or behaviour of calculations depends on the way things are set up in
+    a seemingly contingent way, forcing users to stick to very specific procedures
+    and ordered steps.
+
+.static typing
+an analysis of the cases to be expected establishes common patterns and some
+base cases, which are then represented by distinct types with well established
+conversions. This can be combined with generic programming for the common parts.
+Close to the data input, a factory establishes these statically typed values.
+
+.Summary
+****************************************************************************
+Lumiera uses (fixed) static typing for the plain _time values_, with a class
+wrapping a simple 64bit integer as common denominator. The strict typing is
+used to enforce a sane conversion path to quantised time values. For these
+grid alinged values, and especially for the common time codes, the principle
+of _delayed quantisation_ is preferred; the implementation relies on runtime
+typing with type erasure, but provides conversion to statically tagged values
+for the most important special formats
+
+image:{imgd}/uml.time-entities.png["Time and Time Quantisation in Lumiera"]
+****************************************************************************
+
+.tagged values
+quantised values are explicitly created out of continuous values by a quantiser
+entity. These quantised data values contain a copy of the original data,
+adjusted to be exactly aligned with respect to the underlying time grid. In
+addition, they carry a tag or ID to denote the respective scale, grid or
+timecode system. This tag can be used later on to assess compatibility or to
+recast values into another timecode system.
+
+.delayed quantisation
+with this approach, the information loss is delayed as long as possible.
+Quantised time values are rather treated as promise for quantisation, while the
+actual time data remains unaltered. Additionally, they carry a tag, or even a
+direct link to the responsible quantiser instance. Effectively, these are
+specialised time values, instances of a sub-concept, able to stand-in for
+general time values, but exposing additional accessors to get a quantised value.
+
+
+discussion
+~~~~~~~~~~
+For Lumiera, the static typing approach is of limited value -- it excels when
+values belonging to different scales are actually treated differently. There are
+such cases, but rather on the data handling level, e.g. sound samples are always
+handled block wise. But regarding time values, the unifying aspect is more
+important, which leads to prefering a dynamic (run time typed) approach, while
+_erasing_ the special differences most of the time. Yet the dynamic and open
+nature of the Lumiera high-level model favours the delayed quantisation pattern;
+the same values may require different quantisation depending on the larger model
+context an object is encountered in. This solution might be too general and
+heavy weight at times though. Thus, for important special cases, the accessors
+should return tagged values, preferably even with differing static type. Time
+codes can be integrated this way, but most notably the *frame numbers* used
+for addressing throughout the backend, can be implemented as such specifically
+typed tagged values; the tag here denotes the quantiser and thus the underlying
+grid -- it should be implemented as hash-ID for smooth integration with code
+written in plain C.
+
+At the level of individual timecode formats, we're lacking a common denominator;
+thus it is preferrable to work with different concrete timecode classes through
+_generic programming._ This way, each timecode format can expose operations
+specific only to the given format. Especially, different timecode formats expose
+different _component fields,_ modelled by the generic *Digxel* concept.
+There is a common baseclass `TCode` though, which can be used as marker
+or for _type erasure._
+
+-> more on link:TimeUsage.html[usage situations]
+////
+// TODO integrate those cross links
++
+-> Timecode link:TimecodeFormat[format and quantisation]
++
+-> Quantiser link:QuantiserImpl[implementation details]
+////
+

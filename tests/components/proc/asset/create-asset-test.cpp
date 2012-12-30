@@ -30,12 +30,15 @@
 #include "proc/asset/proc.hpp"
 
 #include "proc/asset/asset-diagnostics.hpp"
+#include "backend/media-access-mock.hpp"
 
+using lib::test::Use4Test;
 using util::isnil;
 using std::string;
 
 
-namespace asset {
+namespace proc {
+namespace asset{
 namespace test {
 
 
@@ -49,6 +52,8 @@ namespace test {
     {
       virtual void run(Arg arg)
         {
+          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          
           createMedia();
           factoryVariants();
 
@@ -70,10 +75,10 @@ namespace test {
       void createMedia()
         {
           Category cat(VIDEO,"bin1");
-          Asset::Ident key("Name-1", cat, "ichthyo", 5);
+          Asset::Ident key("test-1", cat, "ichthyo", 5);
           PM mm1 = asset::Media::create(key,"testfile.mov");
-          PM mm2 = asset::Media::create("testfile1.mov", cat);
-          PM mm3 = asset::Media::create("testfile2.mov", VIDEO);
+          PM mm2 = asset::Media::create("test-1.mov", cat);
+          PM mm3 = asset::Media::create("test-2.mov", VIDEO);
 
           // Assets have been registered and can be retrieved by ID
           AssetManager& aMang = AssetManager::instance();
@@ -124,9 +129,9 @@ namespace test {
 
 
           // checking the Ident-Fields
-          CHECK (mm1->ident.name == "Name-1");
-          CHECK (mm2->ident.name == "testfile1");
-          CHECK (mm3->ident.name == "testfile2");
+          CHECK (mm1->ident.name == "test-1");
+          CHECK (mm2->ident.name == "test-1");
+          CHECK (mm3->ident.name == "test-2");
 
           CHECK (cat == Category (VIDEO,"bin1"));
           CHECK (mm1->ident.category == Category (VIDEO,"bin1"));
@@ -142,8 +147,8 @@ namespace test {
           CHECK (mm3->ident.version == 1);
 
           CHECK (mm1->getFilename() == "testfile.mov");
-          CHECK (mm2->getFilename() == "testfile1.mov");
-          CHECK (mm3->getFilename() == "testfile2.mov");
+          CHECK (mm2->getFilename() == "test-1.mov");
+          CHECK (mm3->getFilename() == "test-2.mov");
 
 
           TRACE (asset_mem, "leaving test method scope");
@@ -159,25 +164,25 @@ namespace test {
         {
           PM candi;
 
-          Asset::Ident key1("Au-1", Category(AUDIO), "ichthyo", 5);
+          Asset::Ident key1("test-1", Category(AUDIO), "ichthyo", 5);
           candi = asset::Media::create(key1);
           CHECK ( checkProperties (candi, key1, ""));
 
-          candi = asset::Media::create(key1, string("testfile.wav"));
-          CHECK ( checkProperties (candi, key1, "testfile.wav"));
+          candi = asset::Media::create(key1, string("test-1.wav"));
+          CHECK ( checkProperties (candi, key1, "test-1.wav"));
 
           Asset::Ident key2("", Category(AUDIO), "ichthyo", 5);
-          candi = asset::Media::create(key2, string("testfile2.wav"));
-          CHECK ( checkProperties (candi, key2, "testfile2.wav"));
-          CHECK (key2.name == "testfile2"); // name filled in automatically
+          candi = asset::Media::create(key2, string("test-2.wav"));
+          CHECK ( checkProperties (candi, key2, "test-2.wav"));
+          CHECK (key2.name == "test-2"); // name filled in automatically
 
-          candi = asset::Media::create(string("testfile3.wav"), Category(AUDIO));
-          CHECK ( checkProperties (candi, Asset::Ident("testfile3", Category(AUDIO), "lumi", 1)
-                                         , "testfile3.wav"));
+          candi = asset::Media::create(string("test-3.wav"), Category(AUDIO));
+          CHECK ( checkProperties (candi, Asset::Ident("test-3", Category(AUDIO), "lumi", 1)
+                                         , "test-3.wav"));
 
-          candi = asset::Media::create("some/path/testfile4.wav", Category(AUDIO));
-          CHECK ( checkProperties (candi, Asset::Ident("testfile4", Category(AUDIO), "lumi", 1)
-                                         , "some/path/testfile4.wav"));
+          candi = asset::Media::create("some/path/test-4.wav", Category(AUDIO));
+          CHECK ( checkProperties (candi, Asset::Ident("test-4", Category(AUDIO), "lumi", 1)
+                                         , "some/path/test-4.wav"));
 
           candi = asset::Media::create("", Category(AUDIO,"sub/bin"));
           CHECK ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO,"sub/bin"), "lumi", 1)
@@ -201,4 +206,4 @@ namespace test {
 
 
 
-}} // namespace asset::test
+}}} // namespace proc::asset::test

@@ -38,9 +38,8 @@
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement.hpp"
 
-//#include <boost/format.hpp>
-//using boost::str;
 
+namespace proc {
 namespace mobject {
   
   /** */
@@ -54,4 +53,4 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject

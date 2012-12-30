@@ -29,23 +29,32 @@
 #ifndef TIMELINE_PANEL_HPP
 #define TIMELINE_PANEL_HPP
 
-#include "panel.hpp"
+#include "gui/panels/panel.hpp"
 #include "gui/widgets/timecode-widget.hpp"
 #include "gui/widgets/timeline-widget.hpp"
+#include "gui/widgets/timeline/timeline-zoom-scale.hpp"
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include "lib/time/timevalue.hpp"
+
+#include <tr1/memory>
 
 using namespace gui::widgets;
 
-
 namespace gui {
+  
+using std::tr1::shared_ptr;
+using std::tr1::weak_ptr;
+
 
 namespace model {
 class Sequence;
 }
   
 namespace panels {
+
+using lib::time::Time;
+
+
 
 /**
  * The definition of the timeline panel class, which holds timeline
@@ -55,17 +64,12 @@ class TimelinePanel : public Panel
 {
 public:
   /**
-   * Constructor.
    * @param panel_manager The owner panel manager widget.
    * @param dock_item The GdlDockItem that will host this panel.
    */
   TimelinePanel(workspace::PanelManager &panel_manager,
-    GdlDockItem *dock_item);
+                GdlDockItem *dock_item);
 
-  /**
-   * Destructor 
-   */
-  ~TimelinePanel();
   
   /**
    * Get the title of the panel.
@@ -88,12 +92,13 @@ private:
   void on_arrow_tool();
   void on_ibeam_tool();
   
+  void on_zoom(double time_scale_ratio);
   void on_zoom_in();
   void on_zoom_out();
   
   void on_time_pressed();
     
-  void on_mouse_hover(gavl_time_t time);
+  void on_mouse_hover(Time);
   void on_playback_period_drag_released();
   
   /**
@@ -121,12 +126,12 @@ private:
   
   bool is_playing();
   
-  void set_tool(gui::widgets::timeline::ToolType tool);
+  void set_tool (gui::widgets::timeline::ToolType tool);
   
-  void show_time(gavl_time_t time);
+  void show_time (Time);
     
-  boost::shared_ptr<widgets::timeline::TimelineState> load_state(
-    boost::weak_ptr<model::Sequence> sequence);
+  shared_ptr<widgets::timeline::TimelineState>
+  load_state (weak_ptr<model::Sequence> sequence);
   
 private:
 
@@ -146,7 +151,7 @@ private:
      * An invisible column which will be used to identify the sequence
      * of a row.
      */
-    Gtk::TreeModelColumn< boost::weak_ptr<model::Sequence> >
+    Gtk::TreeModelColumn< weak_ptr<model::Sequence> >
       sequenceColumn;
       
     /**
@@ -170,9 +175,10 @@ private:
   
   // Body Widgets
   boost::scoped_ptr<TimelineWidget> timelineWidget;
-  
-  std::map< boost::weak_ptr<model::Sequence>,
-    boost::shared_ptr<widgets::timeline::TimelineState> >
+
+  std::map< weak_ptr<model::Sequence>
+          , shared_ptr<widgets::timeline::TimelineState>
+          > 
     timelineStates;
   
   // Toolbar Widgets
@@ -192,6 +198,7 @@ private:
   
   MiniButton zoomIn;
   MiniButton zoomOut;
+  gui::widgets::timeline::TimelineZoomScale zoomScale;
   
   Gtk::SeparatorToolItem separator2;
     

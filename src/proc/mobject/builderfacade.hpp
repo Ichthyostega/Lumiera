@@ -28,7 +28,7 @@
 #include "proc/engine/renderengine.hpp"
 
 
-
+namespace proc {
 namespace mobject {
   
   LUMIERA_ERROR_DECLARE (BUILDER_LIFECYCLE);  ///< Builder activated while in non operational state
@@ -54,5 +54,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

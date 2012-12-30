@@ -62,9 +62,10 @@
 
 
 
+namespace proc {
 namespace asset {
-  class Timeline;    typedef lumiera::P<Timeline> PTimeline;
-  class Sequence;    typedef lumiera::P<Sequence> PSequence;
+  class Timeline;    typedef P<Timeline> PTimeline;
+  class Sequence;    typedef P<Sequence> PSequence;
 }
 
 namespace mobject {
@@ -205,5 +206,5 @@ namespace mobject {
 
   } // namespace mobject::session
 
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

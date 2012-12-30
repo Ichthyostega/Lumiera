@@ -28,6 +28,7 @@
 #include "proc/mobject/session/relativelocation.hpp"
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -189,7 +190,7 @@ namespace session {
   
   
   RelativeLocation& 
-  LocatingPin::operator() (PlaRef& refObj, Time offset)
+  LocatingPin::operator() (PlaRef& refObj, Offset const& offset)
   {
     return static_cast<RelativeLocation&> 
               (addChain (new RelativeLocation (refObj, offset)));
@@ -198,4 +199,4 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

@@ -27,7 +27,6 @@
 //#include "proc/assetmanager.hpp"          //////??
 //#include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
-//#include "lib/lumitime.hpp"
 #include "lib/util-foreach.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/mobject-ref.hpp"
@@ -35,11 +34,10 @@
 #include "lib/query.hpp"
 
 #include <tr1/functional>
-#include <boost/ref.hpp>
 #include <iostream>
 #include <set>
 
-using boost::ref;
+using std::tr1::ref;
 using std::tr1::placeholders::_1;
 using util::isSameObject;
 using util::and_all;
@@ -48,6 +46,7 @@ using std::cout;
 using std::set;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -59,7 +58,6 @@ namespace test    {
   using asset::PSequence;
   using asset::Sequence;
   
-//  using lumiera::Time;
   using lumiera::Query;
   
   typedef MORef<session::Clip> RClip;
@@ -321,7 +319,7 @@ namespace test    {
         {
           TODO ("verify the commands issued by this test");   ////////////////////////TICKET #567
         }
-
+      
     };
   
   
@@ -330,4 +328,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

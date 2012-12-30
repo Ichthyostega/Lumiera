@@ -45,7 +45,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
 #include "lib/functor-util.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>
@@ -53,12 +53,13 @@
 #include <string>
 
 
+namespace proc {
 namespace control {
   
   using boost::equality_comparable;
-  using lumiera::typelist::func::bindLast;
-  using lumiera::typelist::func::chained;
-  using lumiera::typelist::equals_safeInvoke;
+  using lib::meta::func::bindLast;
+  using lib::meta::func::chained;
+  using lib::meta::equals_safeInvoke;
     
   LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);  ///<  Undo functor not yet usable, because no undo state has been captured
   
@@ -213,5 +214,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

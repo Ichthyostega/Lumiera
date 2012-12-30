@@ -25,8 +25,8 @@
 #include "proc/mobject/parameter.hpp"
 #include "proc/mobject/interpolator.hpp"
 
-namespace mobject
-  {
+namespace proc {
+namespace mobject {
 
 
   template<class VAL>
@@ -36,4 +36,4 @@ namespace mobject
 
 
 
-} // namespace mobject
+}} // namespace proc::mobject

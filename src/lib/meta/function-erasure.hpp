@@ -22,6 +22,7 @@
 
 
 /** @file function-erasure.hpp
+ ** Generic holder for functor objects, concealing the concrete function type.
  ** When working with generic function objects and function pointers typed to
  ** arbitrary signatures, often there is the necessity to hold onto such a functor
  ** while hiding the actual signature behind an common interface ("type erasure").
@@ -51,8 +52,8 @@
  */
 
 
-#ifndef LUMIERA_META_FUNCTION_ERASURE_H
-#define LUMIERA_META_FUNCTION_ERASURE_H
+#ifndef LIB_META_FUNCTION_ERASURE_H
+#define LIB_META_FUNCTION_ERASURE_H
 
 #include "lib/util.hpp"
 #include "lib/error.hpp"
@@ -63,8 +64,8 @@
 #include <tr1/functional>
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta{
   
   using std::tr1::function;
   using util::unConst;
@@ -239,5 +240,5 @@ namespace typelist{
   
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

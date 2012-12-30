@@ -25,18 +25,18 @@
 #include "lib/error.hpp"
 
 #include "proc/engine/procnode.hpp"
-#include "proc/engine/bufftable.hpp"
+#include "proc/engine/bufftable-obsolete.hpp"
 #include "lib/ref-array.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <iostream>
-#include <ctime>
 
 using test::Test;
 using std::cout;
 using std::rand;
 
 
+namespace proc {
 namespace engine{
 namespace test  {
 
@@ -81,6 +81,7 @@ namespace test  {
     
     
     
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #852
     void*
     detect_start_level (BuffTableStorage& sto)
     {
@@ -116,6 +117,7 @@ namespace test  {
           && (not_within(b.inHandle,  b.outBuff, &b.inBuff[num.nrO]))
            ;
     }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #852
   } // (End) internal defs
   
   
@@ -137,12 +139,13 @@ namespace test  {
       virtual void run(Arg) 
         {
            counter = 0;
-           std::srand (time (NULL));
            
            // allocate storage block to be used chunk wise
            pStorage.reset (new BuffTableStorage (TABLE_SIZ));
            
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #852
            invocation (0, detect_start_level(*pStorage));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #852
            
            pStorage.reset(0);  // dtor throws assertion error if corrupted
            
@@ -161,12 +164,14 @@ namespace test  {
             return; // end recursion
           
           ++counter;
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
           BuffTableChunk thisChunk (numbers, *pStorage);
           CHECK (consistencyCheck (thisChunk, numbers, lastLevel));
           
           uint nrBranches ( 1 + (rand() % WIDTH_MAX));
           while (nrBranches--)
             invocation (consumed, first_behind (thisChunk,numbers.getNrI()));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
         }
     };
   
@@ -176,4 +181,4 @@ namespace test  {
   
   
   
-}} // namespace engine::test
+}}} // namespace proc::engine::test

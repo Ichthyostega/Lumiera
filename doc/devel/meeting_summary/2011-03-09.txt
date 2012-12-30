@@ -1,0 +1,208 @@
+Lumiera Developers Meeting
+==========================
+:Author: Stefan Kangas
+:Date: 2011-03-09
+
+March 9, 2011 on +#lumiera+ +
+^20:00 GMT - 23:30 GMT^
+
+//Menu: label 2011-03-09 
+
+__Participants__
+
+* Christian Thaeter (cehteh)
+* Francesco Siddi (fsiddi)
+* Hermann Voßeler (ichthyo)
+* Odin Hørthe Omdal (Velmont)
+* Raffaella Traniello (raffa)
+* Stefan Kangas (skangas)
+
+The New Website
+---------------
+
+The new website is finally online.
+
+How do we proceed with the graphical layout?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    21:37 <fsiddi> the template code is not ready yet
+    21:37 <fsiddi> and there are some incorrect uses of tags in the current one
+    21:37 <fsiddi> so i will go on coding a static html layout
+    21:38 <fsiddi> then will submit it to your critique and then we can make a template out of it
+    ...
+    21:50 <ichthyo> fsiddi: I liked the way you provided a slightly larger content area
+                               for the tutorial part
+    
+image:{img}/meetings/2011-03-09-mockup_dev_1.jpg["Website Proposal Mockup number 3", width=128, link="{img}/meetings/2011-03-09-mockup_dev_1.jpg"]
+
+image:{img}/meetings/2011-03-09-mockup_dev_2.jpg["Website Proposal Mockup number 2", width=128, link="{img}/meetings/2011-03-09-mockup_dev_2.jpg"]
+
+Discussion about the IFrame
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The only serious alternative to IFrames seems to be SSI, since we want to keep
+generating pages with asciidoc, and not have to regenerate the entire website
+just because one page changed.
+
+Conclusion was that we will stick with IFrames for now and change later when/if
+that becomes a problem.
+
+Old stuff in the repository
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There is a folder /attic on the website.
+
+This information is supposed to be merged with the rest of the website, and then
+deleted from its current location. This work is on-going and considered a
+"background task".
+
+IRC Logs
+--------
+
+A discussion was brought up about how to handle IRC logs.
+
+For privacy reasons we do not want to save them routinely in public
+locations. If we put them on the web they will most probably be kept by Google
+until the sun burns out.
+
+*robots.txt* might be respected by Google or not. Surely some other search
+engines will not respect it. Private logs or other logs not publically available
+are fine though.
+
+    22:40 <cehteh> well ... IRC should *not* be for persistent documentation .. we shall
+                   force/educate ourself to document things (and decisions) properly, irc
+                   should be volatile
+    ...
+    22:41 <ichthyo> in the past, sometimes we had very "contentful" dicussions
+    22:41 <ichthyo> in that cases we just saved a transcript
+    ...
+    22:44 <ichthyo> so personally I prefer to make transcripts of the *really* contentful
+                    discussions and put them in the public documentation
+    22:44 <ichthyo> "transcript" means cleaned up irc log
+    22:44 <cehteh> yes
+    22:45 <cehteh> so for meetings we should prolly do that
+    22:47 <cehteh> not further edited but just leave all join/parts/noise and silly
+                   comments out
+    22:47 <cehteh> (and also rants and stuff)
+    22:48 <cehteh> only conclusions and most important arguments shall stay
+    22:48 <cehteh> maybe reorder it a bit as it happens that we talk about 2 things at the
+                   same time
+    22:48 <cehteh> but also not too much work on it
+    22:49 <cehteh> and more importantly: document decisions and proposals in a more
+                   offical way: that is 'rfc'
+    22:49 <skangas_> Agreed. It is more important to preserve information in an accessible
+                     way for the future than focusing on mundane details like
+                     join/part/order/ranting etc.
+    22:50 <skangas_> This means I personally always prefer shorter summaries of a
+                     discussion to IRC logs, given that they do not leave anything
+                     important out.
+
+VoIP discussions over Mumble?
+-----------------------------
+
+There seems to be link:http://kitenet.net/~joey/blog/entry/12_hours_of_talking/[ongoing discussions]. on using VoIP more in Debian GNU/Linux.
+
+It was decided that while the idea is nice, it will not be used for developer
+meetings. We might use it for developer discussions outside meetings if we feel
+the need though. This will probably be more common as the number of developers
+increase.
+
+Also, the point was brought up that GNU Emacs has really nice support for
+several people sharing the same session. Everyone gets their own point, and with
+some hacks it is even possible to color them differently. This needs to be done
+on an untrusted remote server though -- Emacs can do anything and it is thus
+highly insecure.
+
+Version numbering
+-----------------
+
+Hermann has written an rfc for version numbers.
+
+    23:19 <cehteh> so in my words: we will have a usuall major.minor.patch for releases
+    23:20 <cehteh> and   major+1~develtag for devel snapshots
+    23:20 <cehteh> where develtag is a timestamp
+    23:20 <ichthyo> and we *could* make a stream of development versions
+    23:21 <cehteh> YYYYMMDD should suffice
+    23:21 <cehteh> or maybe just monotonic increading from 1
+    23:21 <ichthyo> well... optional suffix+ number
+    23:21 <ichthyo> for the rare cases that you roll two releases a day
+
+    ...
+
+    23:20 <ichthyo> and the third idea of my proposal: *not* use major.minor.patch before 1.0
+    23:24 <ichthyo> i.e. in the whole alpha... beta range
+    23:24 <ichthyo> we just do 0.01  0.02 ... 0.99
+    23:25 <skangas_> Does it go without saying that minor versions can go on above 1.9.0
+                     to 1.10.0 etc?
+    23:25 <ichthyo> yes, I didn't mention that, but thats important
+    23:26 <ichthyo> its not nice, and usually you get a major first, but it can happen
+    23:27 <ichthyo> so i'd say, we have discussed it now, we could comment on it and then
+                    revisit it next time (and maybe decide on the proposal then)
+
+    23:27 <skangas_> Do we want a stable version and a development version?
+    23:28 <skangas_> e.g. 1.0 is stable and 1.1 is unstable
+    23:28 <skangas_> I am thinking about the scheme that wine and linux is using.
+    23:28 <cehteh> i think linux won a lot with abadon this odd/even practice
+    23:28 <ichthyo> regarding stable versions
+    23:28 <ichthyo> personally, I don't like that idea
+    23:29 <skangas_> cehteh: I did not know they had abandoned it.
+    23:29 <cehteh> skangas: linux dont use that anymore
+    23:29 <cehteh> since 2.6 years ago
+    23:29 <ichthyo> because they tend to rot
+    23:29 <skangas_> ichthyo: The stable versions?
+    23:29 <cehteh> you just make a release and done .. everything after that is for the
+                   next version
+    23:29 <ichthyo> yes
+    23:29 <cehteh> the only thing to discuss is how you count there
+    23:30 <ichthyo> also, it is more in line with the "extreme programming" style
+    23:30 <ichthyo> i.e. don't do too disruptive changes
+    23:30 <cehteh> if you want 'pre' or 'rc'
+    23:30 <ichthyo> but rather refactor often 
+    23:30 <skangas_> OK.
+    23:31 <ichthyo> there is onre concern though
+    23:31 <ichthyo> there *needs* to be some stability then
+    23:31 <cehteh> releases get only bugfixes and *maybe* you can declare some release as
+                   LTS ... but for lumiera i would think really hard about that and likely
+                   deny that
+    23:31 <ichthyo> because people are working with the software
+    23:31 <ichthyo> but we want to have that with our compatibility scheme
+    23:31 <cehteh> (our interface system should provide backward compatibility)
+    23:31 <ichthyo> yes
+    23:31 <ichthyo> but anyway, it *might* turn out that we fail with that promise
+    23:32 <ichthyo> and then we'll have to reconsider a "stable" line
+    23:32 <cehteh> so maintaining some LTS while having another development branch will
+                   suck developer resources
+    23:32 <ichthyo> yes
+    23:32 <ichthyo> so I'd really try hard to avoid that
+    23:33 <cehteh> well a stable line yes ... that is 'stable' until the next stable
+                   release is there .. and then 'maintained' as in adding important
+                   bugfixes for some (but not excessive) time
+    23:33 <cehteh> we need to care for a stable for sure
+    23:33 <ichthyo> indeed, but it shouldnt digress too much from the active development
+    23:33 <cehteh> but we dont want some really old release to get permanent updates and
+                   care because we declared it as LTS
+    23:33 <skangas_> ichthyo: Is your RFC open to editing/additions?
+    23:34 <ichthyo> yes
+    23:34 <ichthyo> please go ahead, just add comments etc.
+    23:34 <cehteh> use the rfc.sh comment function :)
+    23:34 <skangas_> I was just thiking about writing this down in some way, that we
+                            specifically do not want this.
+
+    23:23 <cehteh> also do we want 'rc' releases?
+    23:23 <cehteh> or do we just declare certain devel snapshots as rc (i like the later)
+    23:23 <ichthyo> yes, thats what I'd prefer too
+    23:24 <cehteh> devel snapshots should be automatic buildable by builddrone
+    23:25 <cehteh> I would like to make builddrone an automatic staging system
+    23:25 <cehteh> add some 'rules' there ..
+    23:26 <cehteh> if build and testsuite succeeds and test-install works and latests
+                   commit doesnt contain WIP: then stage a devel snapshot
+    23:27 <cehteh> (eventually or maybe we might even put tests/bugs there which prevent
+                   certain staging actions, finally all integration and complete releases
+                   could be automatized)
+    23:26 <cehteh> remember in test.sh i reserved the 90-99* area for 'bugs' 
+    23:26 <cehteh> we may put some blocking tests there which prevent staging
+
+Next meeting
+------------
+
+The next meeting will be at Wednesday April 13 20:00 UTC.

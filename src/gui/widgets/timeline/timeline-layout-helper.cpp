@@ -30,7 +30,7 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace boost;
+using namespace std::tr1;
 using namespace lumiera;
 using namespace util;
 using namespace gui::util;
@@ -80,17 +80,17 @@ TimelineLayoutHelper::add_branch(
     }
 }
 
-optional<Gdk::Rectangle>
+boost::optional<Gdk::Rectangle>
 TimelineLayoutHelper::get_track_header_rect(
-  boost::weak_ptr<timeline::Track> track)
+  std::tr1::weak_ptr<timeline::Track> track)
 {
   if(contains(headerBoxes, track))
   {
     Gdk::Rectangle rect(headerBoxes[track]);
     rect.set_y(rect.get_y() - timelineWidget.get_y_scroll_offset());
-    return optional<Gdk::Rectangle>(rect);
+    return boost::optional<Gdk::Rectangle>(rect);
   }
-  return optional<Gdk::Rectangle>();
+  return boost::optional<Gdk::Rectangle>();
 }
 
 shared_ptr<timeline::Track>
@@ -112,8 +112,8 @@ TimelineLayoutHelper::header_from_point(Gdk::Point point)
   return shared_ptr<timeline::Track>();
 }
 
-boost::shared_ptr<timeline::Track>
-TimelineLayoutHelper::track_from_y(int y)
+shared_ptr<timeline::Track>
+TimelineLayoutHelper::track_from_y (int y)
 {
   // Apply the scroll offset
   y += timelineWidget.get_y_scroll_offset();
@@ -299,8 +299,7 @@ TimelineLayoutHelper::is_animating() const
 }
 
 TimelineLayoutHelper::TrackTree::pre_order_iterator
-TimelineLayoutHelper::iterator_from_track(
-  boost::shared_ptr<model::Track> modelTrack)
+TimelineLayoutHelper::iterator_from_track(shared_ptr<model::Track> modelTrack)
 {
   REQUIRE(modelTrack);
   
@@ -666,7 +665,7 @@ TimelineLayoutHelper::apply_drop_to_modelTree(
   timelineWidget.thaw_update_tracks();
 }
 
-boost::shared_ptr<model::Sequence>
+shared_ptr<model::Sequence>
 TimelineLayoutHelper::get_sequence() const
 {
   REQUIRE(timelineWidget.state);

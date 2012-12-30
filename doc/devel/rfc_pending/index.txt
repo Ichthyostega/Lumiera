@@ -15,7 +15,7 @@ The RfC entries listed here where proposed but not finally decided or agreed on 
   but sometimes they are kept _on hold_ -- maybe there is something controversial
   or some details need to be investigated further.
 * sometimes we just decide to postpone the discussion -> see
-  link:../rfc_dropped/index.html[dropped and parked entries]
+  link:../rfc_parked/index.html[parked entries]
 
 
 

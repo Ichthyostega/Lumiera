@@ -35,10 +35,10 @@ using lumiera::query::QueryHandler;
 using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
-  using lumiera::P;
   
   
   
@@ -127,7 +127,7 @@ namespace session {
       return res;
   }
   
-}} // namespace mobject::session
+}}} // namespace mobject::session
 
 
 
@@ -144,6 +144,7 @@ namespace session {
 #include "proc/asset/sequence.hpp"
 #include "proc/mobject/session/track.hpp"
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -170,4 +171,4 @@ namespace session {
   template bool DefsManager::forget (PPipe const&);
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

@@ -8,6 +8,64 @@ used for building and maintaining documentation and website.
 
  * see link:../build/index.html[separate page for the Buildsystem]
  * generating the link:MenuGen.html[navigation menu] for the website
+ * how to use the link:rfcsh.html[rfc.sh] script for maintaining RFC's
 
 
+
+Other tools in the ./admin folder
+---------------------------------
+
+There are various other small tools and scripts in the admin folder which are
+not yet fully documented (Read the Source!).
+
+.headercheck
+This is a small tool which checks that all headers are sufficiently standalone
+and include anything they need. In future we might extend this to find out
+bogus includes by predefining (-D) headerguards they include, effectively
+disableing this include for a test.
+
+.render_icon.py
+used by the buildsystem to translate svg icons to bitmaps (png)
+
+.treeinfo.sh
+Generates a report about the projects directory structure by parsing the
+DIR_INFO files (which have to be maintained manually)
+
+A DIR_INFO is just a small text file where the first line shall give a short
+summary about the purpose of this directory followed by arbitary text giving
+more details.
+
+.git_hooks
+A directory containing example git hooks for signing and pushing on commit.
+Only use them when you know what you are doing.
+
+.lumiera_c_skeleton
+A script which instantiates a new pair of .c/.h files.
+
+.vg-run.sh
+convenience wrapper script to run an executable with valgrind
+using "typical options"; output goes to a logfile, which is
+fed to less afterwards.
+
+A valgrind suppression file is generated automatically, in
+case there is an executable "vgsuppression" located in the same
+directory as the target executable.
+
+.gnu-indent
+call the "indent" tool with parameters suitable for our (GNU derrived) coding style
+
+.testrunner
+Script driving make and running a test, possibly under valgrind. Works only
+for autotools build.
+
+.vgsuppression_gen.sh
+Use an existing 'vgsupression' executable to generate a valgrind supression file.
+
+Bitrot
+------
+
+Scripts which are not in use and need some makeover to be removed
+
+ testfilter.sh
+ rsync_docs_to_lumieraorg.sh
 

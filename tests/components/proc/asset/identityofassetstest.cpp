@@ -30,12 +30,15 @@
 #include "proc/asset/proc.hpp"
 
 #include "proc/asset/asset-diagnostics.hpp"
+#include "backend/media-access-mock.hpp"
 
+using lib::test::Use4Test;
 using util::isnil;
 using std::string;
 
 
-namespace asset {
+namespace proc {
+namespace asset{
 namespace test {
   
   
@@ -68,13 +71,15 @@ namespace test {
        */
       void createDuplicate()
         { 
-          PM mm1 = asset::Media::create ("testfile1.mov", VIDEO);
+          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          
+          PM mm1 = asset::Media::create ("test-1.mov", VIDEO);
           
           Asset::Ident idi (mm1->ident);         // duplicate Ident record
           PM mm1X = asset::Media::create (idi); //  note: we actually don't call any ctor
           CHECK (mm1 == mm1X);                 //         instead, we got mm1 back.
           
-          PM mm2 = asset::Media::create (idi,"testfile2.mov");
+          PM mm2 = asset::Media::create (idi,"test-2.mov");
           
           CHECK (mm1->getID() == mm2->getID()); // different object, same hash
           
@@ -84,10 +89,10 @@ namespace test {
           
           CHECK (aMang.known (mm1->getID()));
           CHECK (aMang.known (mm2->getID()));
-          CHECK (mm1->ident.name == "testfile1");
-          CHECK (mm2->ident.name == "testfile1");
-          CHECK (mm1->getFilename() == "testfile1.mov");
-          CHECK (mm2->getFilename() == "testfile2.mov");
+          CHECK (mm1->ident.name == "test-1");
+          CHECK (mm2->ident.name == "test-1");
+          CHECK (mm1->getFilename() == "test-1.mov");
+          CHECK (mm2->getFilename() == "test-2.mov");
           
           
           TRACE (asset_mem, "leaving test method scope");
@@ -101,4 +106,4 @@ namespace test {
   
   
   
-}} // namespace asset::test
+}}} // namespace proc::asset::test

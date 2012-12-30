@@ -22,16 +22,19 @@
 
 
 /** @file typelist-diagnostics.hpp
+ ** Support for writing metaprogramming unit-tests dealing with typelists and flags.  
  ** a Printer template usable for debugging the structure of a typelist built
  ** upon some simple debugging-style types. Examples being a Num<int> template,
  ** or the Flag type. A Printer type generated from this template provides
- ** a static \c print() function returning a string visualising the structure
- ** of the typelist provided as parameter to the Printer template.
- **
+ ** a static \c print() function. The string returned from this function
+ ** visualises the structure of the typelist provided as parameter
+ ** to the Printer template.
+ ** 
  ** @see typelist-manip-test.cpp
  ** @see config-flags-test.cpp
  **
  */
+
 #ifndef META_TYPELIST_DIAGNOSTICS_H
 #define META_TYPELIST_DIAGNOSTICS_H
 
@@ -50,15 +53,15 @@ using boost::format;
 using boost::enable_if;
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib  {
+namespace meta {
   
   /** dummy interface / baseclass for diagnostics */
   struct Numz
     {
-      char o_;
-      Numz (char x =0) : o_(x) { }
-      operator char ()  const { return o_; }
+      uint o_;
+      Numz (uint x =0) : o_(x) { }
+      operator uint ()  const { return o_; }
     };
   
   
@@ -70,18 +73,18 @@ namespace typelist{
     {
       enum{ VAL=I };
       
-      Num (char x = char(I)) : Numz(x) { }
+      Num (uint x = uint(I)) : Numz(x) { }
     };
   
   
   
   /* some forwards used by config-flags-test.cpp */
-  template<char bit> struct Flag;
-  template< char f1
-          , char f2
-          , char f3
-          , char f4
-          , char f5
+  template<uint bit> struct Flag;
+  template< uint f1
+          , uint f2
+          , uint f3
+          , uint f4
+          , uint f5
           >
   struct Config;
   
@@ -95,7 +98,7 @@ namespace typelist{
   
   
   
-  namespace test { //< unit tests covering typelist manipulating templates
+  namespace test { //  unit tests covering typelist manipulating templates
     namespace {   // hidden internals for diagnostics....
       
       using boost::format;
@@ -127,7 +130,7 @@ namespace typelist{
           static string print () { return str( fmt % uint(Num<I>::VAL) % BASE::print()); }
         };
       
-      template<class BASE, char Fl>
+      template<class BASE, uint Fl>
       struct Printer<Flag<Fl>, BASE>  ///< display the presence of a Flag in the typelist
         : BASE
         {
@@ -166,7 +169,7 @@ namespace typelist{
             }
         };
       
-      template<char f1, char f2, char f3, char f4, char f5, class BASE>
+      template<uint f1, uint f2, uint f3, uint f4, uint f5, class BASE>
       struct Printer<Config<f1,f2,f3,f4,f5>, BASE>
         : BASE
         {
@@ -198,14 +201,14 @@ namespace typelist{
     
     
 #define DISPLAY(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showType<NAME>() << "\n";
+        cout << STRINGIFY(NAME) << "\t:" << showType<NAME>() << endl;
     
 #define DUMPVAL(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showDump (NAME) << "\n";
+        cout << STRINGIFY(NAME) << "\t:" << showDump (NAME) << endl;
     
     
     
     
     
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test
 #endif

@@ -112,7 +112,7 @@ namespace test{
   class SingletonTestMock_test : public Test
     {
       
-      Singleton<TestSingletonO> instance;
+      Singleton<TestSingletonO> sing;
       
       void
       run (Arg arg)
@@ -140,30 +140,26 @@ namespace test{
       void
       injectBoth ()
         {
-          TestSingletonO* sing = &instance();
-          sing->doIt();
-          sing->doIt();
-          CHECK (sing->getCnt() == 2);
+          sing().doIt();
+          sing().doIt();
+          CHECK (sing().getCnt() == 2);
           
-          instance.injectSubclass (new Mock_1);
-          sing = &instance();
-          sing->doIt();
-          sing->doIt();
-          sing->doIt();
-          sing->doIt();
-          sing->doIt();
-          CHECK (sing->getCnt() == 5);
+          sing.injectSubclass (new Mock_1);
+          sing().doIt();
+          sing().doIt();
+          sing().doIt();
+          sing().doIt();
+          sing().doIt();
+          CHECK (sing().getCnt() == 5);
           
-          instance.injectSubclass (new Mock_2);
-          sing = &instance();
-          sing->doIt();
-          CHECK (sing->getCnt() == 1);
+          sing.injectSubclass (new Mock_2);
+          sing().doIt();
+          CHECK (sing().getCnt() == 1);
           
-          instance.injectSubclass (0); // un-shadowing original instance
-          sing = &instance();
-          CHECK (sing->getCnt() == 2);
-          sing->doIt();
-          CHECK (sing->getCnt() == 3);
+          sing.injectSubclass (0);  // un-shadowing original instance
+          CHECK (sing().getCnt() == 2);
+          sing().doIt();
+          CHECK (sing().getCnt() == 3);
         }
       
       
@@ -171,8 +167,7 @@ namespace test{
       void
       noMock ()
         {
-          TestSingletonO& sing = instance();
-          sing.doIt();
+          sing().doIt();
         }
       
       
@@ -181,9 +176,8 @@ namespace test{
       void
       onlyMock ()
         {
-          instance.injectSubclass (new Mock_1);
-          TestSingletonO& sing = instance();
-          sing.doIt();
+          sing.injectSubclass (new Mock_1);
+          sing().doIt();
         }
       
       
@@ -194,16 +188,14 @@ namespace test{
       void
       firstMock ()
         {
-          instance.injectSubclass (new Mock_1);
-          TestSingletonO* sing = &instance();
-          sing->doIt();
-          sing->doIt();
-          CHECK (sing->getCnt() == 2);
+          sing.injectSubclass (new Mock_1);
+          sing().doIt();
+          sing().doIt();
+          CHECK (sing().getCnt() == 2);
           
-          instance.injectSubclass (0);
-          sing = &instance();
-          sing->doIt();
-          CHECK (sing->getCnt() == 1);
+          sing.injectSubclass (0);
+          sing().doIt();
+          CHECK (sing().getCnt() == 1);
         }
     };
   

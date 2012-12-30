@@ -28,13 +28,23 @@
 #define TIMELINE_VIEW_WINDOW_HPP
 
 #include "gui/gtk-lumiera.hpp"
+#include "lib/time/timevalue.hpp"
 
 namespace gui {
 namespace widgets {
 
 class TimelineWidget;
-  
+
+
 namespace timeline {
+
+using lib::time::Time;
+using lib::time::TimeVar;
+using lib::time::TimeValue;
+using lib::time::TimeSpan;
+using lib::time::Duration;
+using lib::time::Offset;
+
 
 /**
  * TimelineViewWindow is a helper class for TimelineWidget which manages
@@ -44,30 +54,46 @@ namespace timeline {
 class TimelineViewWindow
 {
 public:
- 
-  /**
-   * Constructor
-   * @param offset The initial view offset.
-   * @param scale The initial scale.
-   */
-  TimelineViewWindow(lumiera::Time offset, int64_t scale);
     
   /**
-   * Gets the time offset. This is the time value displaid at the
-   * left-hand edge of the timeline body area.
+   * The maximum scale for timeline display.
+   * @remarks At MaxScale, every pixel on the timeline is equivalent
+   * to 30000000 lumiera::Time increments.
+   */ 
+  static const int64_t MaxScale;
+  static const double ZoomSmoothing;
+  static const double ZoomIncrement;
+  
+ 
+  /**
+   * @param offset The initial view offset.
+   * @param scale The initial view scale.
    */
-  lumiera::Time get_time_offset() const;
+  TimelineViewWindow(Offset offset, int64_t scale);
+    
+  /**
+   * Gets the time offset. This is the time value displayed at the
+   * left-hand edge of the timeline body area.
+   * @todo obviously this must be switched to use the relevant time grid
+   *       from the session / current timeline to be displayed. It doesn't
+   *       make sense to display raw time values here, as each timeline might
+   *       turn out to have a different origin; this is the result of resolving
+   *       a placement, and only the session has the necessary information...
+   */
+  Offset get_time_offset() const;
 
   /**
    * Sets the time offset. This is the time value displaid at the
    * left-hand edge of the timeline body area.
+   * @todo this is private detail that shouldn't be exposed to the outside //////////////////TICKET# 795
    */
-  void set_time_offset(lumiera::Time time_offset);
+  void set_time_offset(TimeValue const&);
   
   /**
    * Gets the time scale value.
    * @return The scale factor, which is the number of microseconds per
    * screen pixel.
+   * @todo this is private detail that shouldn't be exposed to the outside //////////////////TICKET# 795
    */
   int64_t get_time_scale() const;
   
@@ -78,14 +104,18 @@ public:
    * zero
    */
   void set_time_scale(int64_t time_scale);
-    
+  void set_time_scale(double ratio);
+  
+  /** get the current time scale with zoom smoothing applied */
+  double get_smoothed_time_scale()  const;
+  
   /**
    * Zooms the view in or out as by a number of steps while keeping a 
    * given point on the timeline still.
-   * @param zoom_size The number of steps to zoom by. The scale factor
-   * is 1.25^(-zoom_size).
+   * @param new_time_scale The number of steps to zoom by. The scale factor
+   * is 1.25^(-new_time_scale).
    */
-  void zoom_view(int point, int zoom_size);
+  void zoom_view(int point, double timescale_ratio);
   
   /**
    * Scrolls the view horizontally as a proportion of the view area.
@@ -100,15 +130,20 @@ public:
    * @return Returns the x-value as pixels from the left hand edge of
    * the timeline body.
    */
-  int time_to_x(int64_t time) const;
+  int time_to_x(TimeValue const&) const;
   
   /**
    * Converts x coordinates in pixels to time values.
    * @param x The x coordinte (as pixels from the left hand edge of
    * the timeline body) to convert.
    * @return Returns the time at the coordinate.
+   * 
+   * @todo 5/11 this is good for now, but on the long run I'm tinking
+   *       we rather should treat that like a special frame grid
+   *       (display coordinate system) and then use the same framework
+   *       we use for timecodes and frame counts.
    */
-  lumiera::Time x_to_time(int x) const;
+  Time x_to_time(int x) const;
   
   /**
    * A signal to indicate that the scale or offset have been changed.
@@ -116,7 +151,14 @@ public:
   sigc::signal<void> changed_signal() const; 
 
 private:
-  lumiera::Time timeOffset;
+  TimeVar timeOffset;
+
+  /**
+   * The scale of the Timline Body.
+   * @remarks This value represents the time span that is visible in
+   * the TimelineBodyWidget. Smaller numbers here will "zoom in"
+   * while larger numbers will "zoom out"
+   */
   int64_t timeScale;
   
   sigc::signal<void> changedSignal;

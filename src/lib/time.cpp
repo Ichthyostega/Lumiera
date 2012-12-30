@@ -22,13 +22,13 @@
 
 #include "lib/time.h"
 #include "lib/error.hpp"
-#include "lib/util.hpp"
+#include "lib/util-quant.hpp"
 
 extern "C" {
 #include "lib/tmpbuf.h"
 }
 
-#include <limits.h>
+#include <limits>
 #include <math.h>
 
 using util::floordiv;
@@ -81,6 +81,14 @@ lumiera_rational_to_time (FSecs const& fractionalSeconds)
   return rational_cast<gavl_time_t> (GAVL_TIME_SCALE * fractionalSeconds);
 }
 
+gavl_time_t
+lumiera_framecount_to_time (uint64_t frameCount, FrameRate const& fps)
+{
+  // convert to 64bit
+  boost::rational<uint64_t> framerate (fps.numerator(), fps.denominator());
+  
+  return rational_cast<gavl_time_t> (GAVL_TIME_SCALE * frameCount / framerate);
+}
 
 gavl_time_t
 lumiera_frame_duration (FrameRate const& fps)
@@ -94,21 +102,53 @@ lumiera_frame_duration (FrameRate const& fps)
 }
 
 
-namespace { // implementation helper
+namespace { // implementation: basic frame quantisation....
   
-  inline long
+  inline int64_t
   calculate_quantisation (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
   {
     time -= origin;
     return floordiv (time,grid);
   }
+  
+  inline int64_t
+  calculate_quantisation (gavl_time_t time, gavl_time_t origin, uint framerate, uint framerate_divisor=1)
+  {
+    REQUIRE (framerate);
+    REQUIRE (framerate_divisor);
+    
+    const int64_t limit_num = std::numeric_limits<gavl_time_t>::max() / framerate;
+    const int64_t limit_den = std::numeric_limits<gavl_time_t>::max() / framerate_divisor;
+    const int64_t microScale(GAVL_TIME_SCALE);
+    
+    // protect against numeric overflow 
+    if (abs(time) < limit_num && microScale < limit_den)
+      {
+        // safe to calculate "time * framerate"
+        time -= origin;
+        return floordiv (time*framerate, microScale*framerate_divisor);
+      }
+    else
+      {
+        // direct calculation will overflow.
+        // use the less precise method instead...
+        gavl_time_t frameDuration = microScale / framerate; // truncated to µs
+        return calculate_quantisation (time,origin, frameDuration);
+      }
+  }
 }
 
 
-long
+int64_t
 lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
 {
   return calculate_quantisation (time, origin, grid);
+}
+
+int64_t
+lumiera_quantise_frames_fps (gavl_time_t time, gavl_time_t origin, uint framerate)
+{
+  return calculate_quantisation (time,origin,framerate);
 }
 
 gavl_time_t
@@ -120,7 +160,7 @@ lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
 }
 
 gavl_time_t
-lumiera_time_of_gridpoint (long nr, gavl_time_t origin, gavl_time_t grid)
+lumiera_time_of_gridpoint (int64_t nr, gavl_time_t origin, gavl_time_t grid)
 {
   gavl_time_t offset = nr * grid;    
   return origin + offset;
@@ -139,27 +179,14 @@ lumiera_build_time(long millis, uint secs, uint mins, uint hours)
 }
 
 gavl_time_t
-lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours)
+lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours)
 {
-  gavl_time_t time = frames * (1000.0 / fps)
+  gavl_time_t time = 1000LL * frames/fps
                    + 1000 * secs
                    + 1000 * 60 * mins
                    + 1000 * 60 * 60 * hours;
   time *= GAVL_TIME_SCALE_MS;
   return time;
-}
-
-gavl_time_t
-lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)
-{
-  int total_mins = 60 * hours + mins;
-  int total_frames  = 108000 * hours
-                    + 1800 * mins
-                    + 30 * secs
-                    + frames
-                    - 2 * (total_mins - total_mins / 10);
-  
-  return (total_frames / 29.97f) * 1000 * GAVL_TIME_SCALE_MS;
 }
 
 int
@@ -187,56 +214,84 @@ lumiera_time_millis (gavl_time_t time)
 }
 
 int
-lumiera_time_frames (gavl_time_t time, float fps)
+lumiera_time_frames (gavl_time_t time, uint fps)
 {
-  return (fps * (lumiera_time_millis(time))) / 1000;
+  REQUIRE (fps < uint(std::numeric_limits<int>::max()));
+  return floordiv (lumiera_time_millis(time) * int(fps), GAVL_TIME_SCALE_MS);
 }
 
-int
-lumiera_time_frame_count (gavl_time_t time, float fps)
-{
-  REQUIRE (fps > 0);
-  
-  return roundf((time / GAVL_TIME_SCALE_MS / 1000.0f) * fps);
-}
 
-/**
- * This function is used in the NTSC drop-frame functions to avoid code
- * repetition.
- * @return the frame number for given time
- */
-static int
-ntsc_drop_get_frame_number (gavl_time_t time)
-{
-  int frame = lumiera_time_frame_count (time, NTSC_DROP_FRAME_FPS);
+
+
+/* ===== NTSC drop-frame conversions ===== */
+
+
+namespace { // implementation helper
   
-  int d = frame / 17982; // 17982 = 600 * 29.97
-  int m = frame % 17982; // 17982 = 600 * 29.97
+  const uint FRAMES_PER_10min = 10*60 * 30000/1001;
+  const uint FRAMES_PER_1min  =  1*60 * 30000/1001;
+  const uint DISCREPANCY      = (1*60 * 30) - FRAMES_PER_1min;
+   
   
-  return frame + 18*d + 2*((m - 2) / 1798); // 1798 = 60 * 29.97
+  /** reverse the drop-frame calculation
+   * @param  time absolute time value in micro ticks 
+   * @return the absolute frame number using NTSC drop-frame encoding
+   * @todo I doubt this works correct for negative times!! 
+   */
+  inline int64_t
+  calculate_drop_frame_number (gavl_time_t time)
+  {
+    int64_t frameNr = calculate_quantisation (time, 0, 30000, 1001);
+    
+    // partition into 10 minute segments
+    lldiv_t tenMinFrames = lldiv (frameNr, FRAMES_PER_10min);
+    
+    // ensure the drop-frame incidents happen at full minutes;
+    // at start of each 10-minute segment *no* drop incident happens,
+    // thus we need to correct discrepancy between nominal/real framerate once: 
+    int64_t remainingMinutes = (tenMinFrames.rem - DISCREPANCY) / FRAMES_PER_1min;
+    
+    int64_t dropIncidents = (10-1) * tenMinFrames.quot + remainingMinutes;
+    return frameNr + 2*dropIncidents;
+  }
 }
 
 int
 lumiera_time_ntsc_drop_frames (gavl_time_t time)
 {
-  return ntsc_drop_get_frame_number(time) % 30;
+  return calculate_drop_frame_number(time) % 30;
 }
 
 int
 lumiera_time_ntsc_drop_seconds (gavl_time_t time)
 {
-  return ntsc_drop_get_frame_number(time) / 30 % 60;
+  return calculate_drop_frame_number(time) / 30 % 60;
 }
 
 int
 lumiera_time_ntsc_drop_minutes (gavl_time_t time)
 {
-  return ntsc_drop_get_frame_number(time) / 30 / 60 % 60;
+  return calculate_drop_frame_number(time) / 30 / 60 % 60;
 }
 
 int
 lumiera_time_ntsc_drop_hours (gavl_time_t time)
 {
-  return ntsc_drop_get_frame_number(time) / 30 / 60 / 60 % 24;
+  return calculate_drop_frame_number(time) / 30 / 60 / 60 % 24;
 }
 
+gavl_time_t
+lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)
+{
+  uint64_t total_mins = 60 * hours + mins;
+  uint64_t total_frames  = 30*60*60 * hours
+                         + 30*60 * mins
+                         + 30 * secs
+                         + frames
+                         - 2 * (total_mins - total_mins / 10);
+  gavl_time_t result = lumiera_framecount_to_time (total_frames, FrameRate::NTSC);
+  
+  if (0 != result) // compensate for truncating down on conversion
+    result += 1;  //  without this adjustment the frame number  
+  return result; //   would turn out off by -1 on back conversion
+}

@@ -33,12 +33,11 @@ using util::cStr;
 
 using namespace Gtk;
 using namespace Glib;
-using namespace boost;
 using namespace std;
+using namespace std::tr1;
 using namespace gui::workspace;
 
 namespace fsys = boost::filesystem;
-
 
 namespace gui {
   

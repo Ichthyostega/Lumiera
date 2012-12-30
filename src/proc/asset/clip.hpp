@@ -30,8 +30,9 @@
 
 /////////////////////////TODO: 1/2010 very likely the handling of the clip-asset needs to be rewritten
 
-namespace asset
-  {
+namespace proc {
+namespace asset {
+  
   /**
    * bookkeeping (Asset) view of a media clip.
    */
@@ -52,14 +53,14 @@ namespace asset
       
       virtual PClip getClipAsset ();
       virtual PMedia checkCompound ();
-
+      
     };
-    
-    typedef P<const asset::Clip> PClipAsset;
-    
-    const string CLIP_SUBFOLDER = "clips";      // TODO: handling of hard-wired constants....
-    
-    
-    
-} // namespace asset
+  
+  typedef P<const asset::Clip> PClipAsset;
+  
+  const string CLIP_SUBFOLDER = "clips";      // TODO: handling of hard-wired constants....
+  
+  
+  
+}} // namespace proc:asset
 #endif

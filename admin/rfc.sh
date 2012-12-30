@@ -2,66 +2,90 @@
 shopt -s extglob
 
 
+#
+# RFC's are created from ./doc/devel/template/new_rfc.sh and stored in
+# ./doc/devel/rfc/ . There are directories for the various states
+# ./doc/devel/rfc_final, ./doc/devel/rfc_pending, ./doc/devel/rfc_parked,
+# ./doc/devel/rfc_dropped . Which contain symlinks back to ../rfc/ 
+#
+
+
 function usage()
 {
-    less <<"EOF"
-Script to maintain Lumiera RFC's
+    grep -v '^// ' <<"EOF" | less -F
+Lumiera RFC maintenance script
+==============================
+// Note: the source of this documentation is maintained
+//       directly admin/rfc.sh in its usage() function
+//       edit it only there and then regenerate
+//       doc/devel/technical/infra/ with:
+//       ./admin/rfc.sh help >doc/technical/infra/rfcsh.txt
 
-usage:
+Usage
+-----
+
  ./admin/rfc.sh <command> [options]
 
-options:
- title                  - Quoted string used as RFC title
- rfc                    - Name of the RFC, smart matched, unique
- rfcs                   - Name of the RFC, smart matched, multiple
- regex                  - Regex matched against the content of a RFC
- chapter                - Heading of a section
+Commands (with <mandatory> and [optional] parameters)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-commands (with <mandatory> and [optional] parameters):
- find <rfcs> [regex]    - List all matching RFC's (matching 'regex')
- show <rfcs> [regex]    - Read RFC's (matching 'regex')
- create <title>         - Create a new RFC
- edit <rfc> [chapter]   - Edit RFC at chapter
- asciidoc <rfc>         - pass the rfc.txt to 'asciidoc' command
- comment <rfc>          - Add a new comment to a RFC
- draft <rfc>            - Change RFC to Draft state
- final <rfc>            - Change RFC to Final state
- park <rfc>             - Change RFC to Parked state
- drop <rfc>             - Change RFC to Dropped state
- supersede <rfc> <new>  - Supersede RFC with a new RFC
- discard <rfc>          - Delete an RFC
- help                   - Show this help
- process                - Do automatic maintenance work
- wrap <rfcs>            - canonical reformatting
+ find <rfcs> [regex]::    List all matching RFC's (matching `regex`)
+ show <rfcs> [regex]::    Read RFC's (matching `regex`)
+ create <title>::         Create a new RFC
+ edit <rfc> [chapter]::   Edit RFC at chapter
+ asciidoc <rfc>::         pass the rfc.txt to `asciidoc` command
+ comment <rfc>::          Add a new comment to a RFC
+ draft <rfc>::            Change RFC to Draft state
+ final <rfc>::            Change RFC to Final state
+ park <rfc>::             Change RFC to Parked state
+ drop <rfc>::             Change RFC to Dropped state
+ supersede <rfc> <new>::  Supersede RFC with a new RFC
+ discard <rfc>::          Delete an RFC
+ help::                   Show this help
+ process::                Do automatic maintenance work
+ wrap <rfcs>::            canonical reformatting
 
-Smart matching:
- RFC names don't need to be given exactly, they use a globbing pattern.
- This is:
-  - case insensitive
-  - whitespaces are ignored
-  - '*' stands for any number of parameters
-  - '?' is any single character
-  - when starting with '/' they are matched against the begin of the name
-  - some regex operators work too
- 'find' and 'show' can operate on many matches so the given rfc name doesn't
- need to be unique. The other commands will complain when the RFC name given
- doesn't resolve to one unique RFC.
+Option types
+~~~~~~~~~~~~
 
-Notes:
- When less presents multiple files one can go forth and back with the ':n'
- and ':p' commands.
+ title::                Quoted string used as RFC title
+ rfc::                  Name of the RFC, smart matched, unique
+ rfcs::                 Name of the RFC, smart matched, multiple
+ regex::                Regex matched against the content of a RFC
+ chapter::              Heading of a section
 
- The tile for 'create' should be a normal document title. Possibly quoted
- since it may contain spaces and not too long. The filename is this title
- in CamelCase with all spaces and special characters removed.
 
- Chapter machching single lines containing this word, special asciidoc
- comments in the form '//word:.*' and asciidoc block attributes '[word.*]'
- on a single line. When a chapter pattern is not unique, the last one is
- picked.
+Smart matching
+--------------
 
- rfc.sh executes git add/rm/mv commands, but never commits. One should do a
- commit as soon he finished editing.
+RFC names don't need to be given exactly, they use a globbing pattern.
+This is:
+
+ * case insensitive
+ * whitespaces are ignored
+ * `*` stands for any number of parameters
+ * `?` is any single character
+ * when starting with `/` they are matched against the begin of the name
+ * some regex operators work too
+
+`find` and `show` can operate on many matches so the given rfc name doesn't
+need to be unique. The other commands will complain when the RFC name given
+doesn't resolve to one unique RFC.
+
+When `less` presents multiple files one can go forth and back with the `:n`
+and `:p` commands.
+
+The tile for `create` should be a normal document title. Possibly quoted
+since it may contain spaces and not too long. The filename is this title
+in CamelCase with all spaces and special characters removed.
+
+Chapter machching single lines containing this word, special asciidoc
+comments in the form `//word:.*` and asciidoc block attributes `[word.*]`
+on a single line. When a chapter pattern is not unique, the last one is
+picked.
+
+rfc.sh executes git add/rm/mv commands, but never commits. One should do a
+commit as soon he finished editing.
 
 EOF
 }
@@ -183,7 +207,7 @@ function find_rfc()
     local globstate=$(shopt -p nocasematch)
     shopt -s nocasematch
 
-    for file in $(find ./doc/devel/rfc* -name '*.txt');
+    for file in $(find ./doc/devel/rfc/ -name '*.txt');
     do
         local name="/${file##*/}"
         if [[ "$name" =~ $match ]]; then
@@ -208,29 +232,43 @@ function find_chapter()
 
 
 
-function process()
+function process_file()
 {
     local file="$1"
     local path="${1%/*}"
+    local basename="${1##*/}"
+    local linkdest="$path"
     local state=$(grep '^\*State\* *' "$file")
 
     case "$state" in
     *Final*)
-        if [[ "$path" != "./doc/devel/rfc" ]]; then
-            git mv "$file" "./doc/devel/rfc"
-        fi
+        linkdest="./doc/devel/rfc_final"
         ;;
     *Idea*|*Draft*)
-        if [[ "$path" != "./doc/devel/rfc_pending" ]]; then
-            git mv "$file" "./doc/devel/rfc_pending"
-        fi
+        linkdest="./doc/devel/rfc_pending"
         ;;
-    *Parked*|*Dropped*)
-        if [[ "$path" != "./doc/devel/rfc_dropped" ]]; then
-            git mv "$file" "./doc/devel/rfc_dropped"
-        fi
+    *Parked*)
+        linkdest="./doc/devel/rfc_parked"
         ;;
+    *Dropped*)
+        linkdest="./doc/devel/rfc_dropped"
+        ;;
+    *)
+        echo "Unknown State: '$state'" >&2
+        exit 1
     esac
+
+    local oldpath
+    for oldpath in ./doc/devel/rfc_*/$basename; do :; done
+
+    if [[ -h "$oldpath" ]]; then
+        if [[ "$oldpath" != "$linkdest/$basename" ]]; then
+            git mv "$oldpath" "$linkdest/$basename"
+        fi
+    elif [[ ! -s "$linkdest/$basename" ]]; then
+        ln -s "../rfc/$basename" "$linkdest/"
+        git add "$linkdest/$basename"
+    fi
 }
 
 
@@ -273,7 +311,7 @@ function add_comment()
 {
     local name="$1"
     local nl=$'\n'
-    local comment="//edit comment$nl    $(date +%c) $(git config --get user.name) <$(git config --get user.email)>$nl"
+    local comment="//edit comment$nl$nl$(git config --get user.name):: '$(date +%c)' ~<$(git config --get user.email)>~$nl"
 
     ed "$name" 2>/dev/null <<EOF
 /endof_comments:/-1i
@@ -316,10 +354,10 @@ function change_state()
     local state="$2"
 
     local nl=$'\n'
-    local comment=".State -> $state$nl//add reason$nl    $(date +%c) $(git config --get user.name) <$(git config --get user.email)>$nl"
+    local comment=".State -> $state$nl//add reason$nl$nl$(git config --get user.name):: '$(date +%c)' ~<$(git config --get user.email)>~$nl"
     edit_state "$name" "$state" "$comment"
     edit "$name" -4 "endof_comments"
-    process "$name"
+    process_file "$name"
 }
 
 
@@ -329,12 +367,15 @@ shift
 case "$command" in
 process)
     # for all rfc's
-    for file in $(find ./doc/devel/rfc* -name '*.txt');
+    for file in $(find ./doc/devel/rfc -name '*.txt');
     do
         echo "process $file"
-        process "$file"
+        process_file "$file"
     done
     :
+    ;;
+search)
+    grep -r -C3 -n "$1" ./doc/devel/rfc | less -F
     ;;
 find|list|ls)
     if [[ "$2" ]]; then
@@ -353,22 +394,20 @@ show|less|more)
 create)
     TITLE="$@"
     name=$(camel_case "$TITLE")
-    if [[ -f "./doc/devel/rfc/${name}.txt" ||
-          -f "./doc/devel/rfc_pending/${name}.txt" ||
-          -f "./doc/devel/rfc_dropped/${name}.txt" ]]; then
+    if [[ -f "./doc/devel/rfc/${name}.txt" ]]; then
         echo "$name.txt exists already"
     else
-        source ./doc/devel/template/new_rfc.sh >"./doc/devel/rfc_pending/${name}.txt"
-        edit "./doc/devel/rfc_pending/${name}.txt" 2 abstract
-        git add "./doc/devel/rfc_pending/${name}.txt"
-        process "./doc/devel/rfc_pending/${name}.txt"
+        source ./doc/devel/template/new_rfc.sh >"./doc/devel/rfc/${name}.txt"
+        edit "./doc/devel/rfc/${name}.txt" 2 abstract
+        git add "./doc/devel/rfc/${name}.txt"
+        process_file "./doc/devel/rfc/${name}.txt"
     fi
     ;;
 edit)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         edit "${name}" 2 "$2"
-        git add "$name"
+        process_file "$name"
     fi
     ;;
 asciidoc)
@@ -381,21 +420,18 @@ draft)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Draft
-        git add "$name"
     fi
     ;;
 park)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Parked
-        git add "$name"
     fi
     ;;
 final)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Final
-        git add "$name"
     fi
     ;;
 supersede)
@@ -405,32 +441,38 @@ supersede)
     newname="${newname%.txt}"
     if [[ "$name" && "$newname" ]]; then
         change_state "$name" "Superseded by $newname"
-        git add "$name"
     fi
     ;;
 drop)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Dropped
-        git add "$name"
     fi
     ;;
 comment)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         add_comment "${name}"
-        git add "$name"
+        process_file "$name"
     fi
     ;;
 discard)
     name=$(unique_name "$1")
+
     if [[ "$name" ]]; then
-        git rm "${name}"
+        for link in ./doc/devel/rfc_*/${name##*/}; do :; done
+
+        if [[ -h "$link" ]]; then
+            git rm -f "${link}" || rm "${link}"
+        fi
+
+        git rm -f "${name}" || rm "${name}"
     fi
     ;;
 wrap)
     find_rfc "$1" | while read file; do
         smart_wrap "$file" 80
+        process_file "$file"
     done
     ;;
 smart_wrap)

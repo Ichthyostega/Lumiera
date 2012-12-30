@@ -30,7 +30,7 @@
  ** Because, if we can get a \c bool answer to such a question <i>at compile time,</i> we can use
  ** \c boost::enable_if to pick a special implementation based on the test result. Together, these
  ** techniques allow to adopt a duck-typed programming style, where an arbitrary object is allowed
- ** to enter a given API function, provided this object supports some special operations.
+ ** to enter a given API function, provided this object supports some specific operations.
  ** 
  ** While C++ certainly isn't a dynamic language and doesn't provide any kind of run time introspection,
  ** doing such check-and branch at compile time allows even to combine such a flexible approach with
@@ -60,9 +60,25 @@
  **   specific function signature and then try to assign the named member. This allows even
  **   to determine if a member function of a type in question has the desired signature.
  ** 
- ** All these detection building blocks are written such as to provide a bool member \v ::value,
+ ** All these detection building blocks are written such as to provide a bool member \c ::value,
  ** which is in accordance to the conventions of boost metaprogramming. I.e. you can immediately
- ** use them within boost::enable_if
+ ** use them within \c boost::enable_if
+ ** 
+ ** \par some pitfalls to consider
+ ** 
+ ** @warning The generated metafunctions all yield the \c false value by default.
+ **          Effectively this means that an error in the test expression might go unnoticed;
+ **          you'd be better off explicitly checking the detection result by an unit test.
+ ** 
+ ** There are several typical problems to care about
+ ** - a member can be both a variable or a function of that name
+ ** - function signatures need to match precisely, including const modifiers
+ ** - the generated metafunction (template) uses a type parameter 'TY', which could
+ **   shadow or conflict with an type parameter in the enclosing scope
+ ** - the member and function checks rely on member pointers, which generally rely on
+ **   the explicit static type. These checks don't see any inherited members / functions.
+ ** - obviously, all those checks are never able to detect anything depending on runtime
+ **   types or RTTI
  ** 
  ** @see util-foreach.hpp usage example
  ** @see duck-detector-test.cpp
@@ -75,16 +91,6 @@
 
 
 #include "lib/meta/util.hpp"
-
-namespace lib {
-namespace meta{
-  
-                      ///////////////TICKET #175  sort out meta namespace
-  using lumiera::Yes_t;
-  using lumiera::No_t;
-    
-}} // namespace lib::meta
-
 
 
 
@@ -182,22 +188,37 @@ namespace meta{
 
 
 
-/** Detector for a prefix increment operator. Works like function detection */
-#define META_DETECT_OPERATOR_INC()                         \
-    template<typename TY>                                   \
-    class HasOperator_inc                                    \
-      {                                                       \
-        template<typename X, X& (X::*)(void)>                  \
-        struct Probe                                            \
-          { };                                                   \
-                                                                  \
-        template<class X>                                          \
-        static Yes_t check(Probe<X, &X::operator++> * );            \
-        template<class>                                              \
-        static No_t  check(...);                                      \
-                                                                       \
-      public:                                                           \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0))); \
+/** Detector for a prefix increment operator.
+ * @note there is a twist: because of the prefix and postfix version of increment,
+ *       detection through member-check will fail when both are present (ambiguity).
+ *       OTOH, when using function signature detection, the return type must match.
+ *       The latter fails in the common situation, when the increment operator was
+ *       mixed in through some base class. As a pragmatic solution, we do both kinds
+ *       of tests; so either remove one of the operators (typically postfix), or
+ *       add an forwarding override in the class to be checked */
+#define META_DETECT_OPERATOR_INC()                    \
+    template<typename TY>                              \
+    class HasOperator_inc                               \
+      {                                                  \
+        template<typename X, X& (X::*)(void)>             \
+        struct Probe_1                                     \
+          { };                                              \
+        template<typename X, int i = sizeof(&X::operator++)> \
+        struct Probe_2                                        \
+          { };                                                 \
+                                                                \
+        template<class X>                                        \
+        static Yes_t check1(Probe_1<X, &X::operator++> * );       \
+        template<class>                                            \
+        static No_t  check1(...);                                   \
+        template<class X>                                            \
+        static Yes_t check2(Probe_2<X> * );                           \
+        template<class>                                                \
+        static No_t  check2(...);                                       \
+                                                                         \
+      public:                                                             \
+        static const bool value = (sizeof(Yes_t)==sizeof(check1<TY>(0))    \
+                                 ||sizeof(Yes_t)==sizeof(check2<TY>(0)));   \
       };
 
 

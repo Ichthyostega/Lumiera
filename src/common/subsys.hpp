@@ -104,9 +104,12 @@ namespace lumiera {
       
       
       /** initiate termination of this subsystem.
-       *  may be called repeatedly any time...
-       *  @warning must not block nor throw. */
-      virtual void triggerShutdown ()  throw() =0;
+       *  This trigger may be called repeatedly any time...
+       *  When the subsystem actually has terminated,
+       *  the SigTerm passed to #start must be invoked.
+       * @note called within a locked context (barrier) 
+       * @warning must not block nor throw. */
+      virtual void triggerShutdown ()  throw()  =0;
       
       
       const std::vector<Subsys*>
@@ -114,7 +117,7 @@ namespace lumiera {
       
       
     private:
-      /** weather this subsystem is actually operational.
+      /** whether this subsystem is actually operational.
        *  When returning \c false here, the application may 
        *  terminate at any point without further notice
        *  Note further, that a subsystem must not be in

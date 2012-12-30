@@ -25,15 +25,14 @@
 #define PROC_INTERFACE_STATE_H
 
 
-#include "pre.hpp"
-
-#include "proc/common.hpp"
+#include "lib/error.hpp"
 #include "lib/frameid.hpp"
 #include "proc/engine/buffhandle.hpp"
 
 #include <cstddef>
 
 
+namespace proc {
 namespace engine { 
   
   using lumiera::FrameID;
@@ -54,6 +53,7 @@ namespace engine {
    */
   class State
     {
+                                   ////////////////////////////////////////////////TICKET #826  expected to be reworked to quite some extent (9/2011)
     public:
       /** allocate a new writable buffer with type and size according to
        *  the BufferDescriptor. The actual provider of this buffer depends
@@ -62,7 +62,7 @@ namespace engine {
        *  @return a BuffHandle encapsulating the information necessary to get
        *          at the actual buffer address and for releasing the buffer.
        */
-      virtual BuffHandle allocateBuffer (BufferDescriptor const&)  =0;
+      virtual BuffHandle allocateBuffer (const lumiera::StreamType*)  =0;
       
       /** resign control of the buffer denoted by the handle */
       virtual void releaseBuffer (BuffHandle&)  =0;
@@ -110,13 +110,13 @@ namespace engine {
       friend class engine::StateAdapter;
     };
   
-} // namespace engine
+}} // namespace proc::engine
 
 
 
 namespace proc_interface {
 
-  using engine::State;
+  using proc::engine::State;
     
     
 } // namespace proc_interface

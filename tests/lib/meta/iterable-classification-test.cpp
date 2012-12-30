@@ -26,9 +26,9 @@
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/session/effect.hpp"
 #include "lib/meta/duck-detector.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/itertools.hpp"
-#include "lib/lumitime.hpp"
 
 /////////////////////////////////////////////////////////////TODO draft
 #include <boost/type_traits/is_convertible.hpp>
@@ -41,13 +41,13 @@
 #include <set>
 
 
-namespace lib {
-namespace meta{
-namespace test{
+namespace lib  {
+namespace meta {
+namespace test {
   
-  using lumiera::Time;
-  using mobject::session::Effect;
-  using mobject::session::ScopeQuery;
+  using proc::mobject::session::Effect;
+  using proc::mobject::session::ScopeQuery;
+  typedef lib::time::TimeVar Time;
   
   using std::cout;
   using std::endl;

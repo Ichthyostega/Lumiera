@@ -20,17 +20,21 @@
 
 * *****************************************************/
 
-#include "timeline-clip.hpp"
+
+#include "gui/widgets/timeline/timeline-clip.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
+  
+  using std::tr1::shared_ptr;
+  
 
-  Clip::Clip(boost::shared_ptr<model::Clip> clip,
-             boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
-    : Entity(drawStrategy),
-      modelClip(clip),
-      selected(false)
+  Clip::Clip (shared_ptr<model::Clip> clip,
+              shared_ptr<timeline::DrawStrategy> drawStrategy)
+    : Entity(drawStrategy)
+    , modelClip(clip)
+    , selected(false)
   {
     REQUIRE(modelClip);
 
@@ -39,35 +43,33 @@ namespace timeline {
     //  &Clip::onNameChanged);
   }
 
-  gavl_time_t
-  Clip::getBegin () const
+  Time
+  Clip::getBegin() const
   {
     REQUIRE (modelClip);
     return modelClip->getBegin();
   }
 
-  gavl_time_t
-  Clip::getEnd () const
+  Time
+  Clip::getEnd() const
   {
     REQUIRE (modelClip);
     return modelClip->getEnd();
   }
 
-  std::string
-  Clip::getName () const
+  string
+  Clip::getName() const
   {
     REQUIRE (modelClip);
     return modelClip->getName();
   }
 
   void
-  Clip::setSelected(bool selected)
+  Clip::setSelected (bool selected)
   {
     this->selected = selected;
   }
 
 
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+}}}   // namespace gui::widgets::timeline
 

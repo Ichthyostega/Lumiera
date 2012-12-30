@@ -26,7 +26,7 @@
 
 
 #include "lib/symbol.hpp"
-#include "lib/lumitime.hpp"
+#include "lib/time/timevalue.hpp"
 
 #include <typeinfo>
 #include <string>
@@ -38,7 +38,6 @@ namespace lib {
 namespace test{
   
   using lib::Literal;
-  using lumiera::Time;
   using std::string;
   using std::rand;
   
@@ -104,10 +103,10 @@ namespace test{
   
     
   /** create a random but not insane Time value */    
-  inline Time
+  inline lib::time::Time
   randTime ()
   {
-    return Time (500 * (rand() % 2), (rand() % 600));
+    return lib::time::Time (500 * (rand() % 2), (rand() % 600));
   }
   
   /** create garbage string of given length

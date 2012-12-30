@@ -1,0 +1,81 @@
+2008-06-06 Lumiera Developers Meeting
+=====================================
+:Author: ichthyo
+:Date: 2008-06-07
+
+21:00 -23:15 UTC on #lumiera
+
+Participants:
+-------------
+ * cehteh
+ * ichthyo
+ * joelholdsworth
+ * rcbarnes
+ * raffa
+
+
+Left over from the last meeting
+-------------------------------
+Nothing left over and no urgent topics. Seemingly, work is proceeding in all parts of the application.
+
+
+Discuss Ideas and Drafts in design process
+------------------------------------------
+There are no new design proposals and no proposals that can be finalized.
+
+Ichthyo points out that he's about to work out the details of some of his proposals, which are currently in "idea" state. Following that, most of the meeting is spent on discussing the details of two of these proposals.
+
+
+Idea: Design the Render Nodes interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/DesignRenderNodesInterface[]
+
+*Cehteh* points out that, as we are in the pre-alpha phase, interfaces may be growing on-demand. Later on, interface versions will be numbered. If needed, we could add a special "draft" or "experimental" tag, or, alternatively, use the common numbering scheme, where odd major version numbers denote the development line of an interface.
+
+*Ichthyo* agrees, but adds he also meant "interface" in this proposal in a wider sense, like in "what do we need and require from a processing node". Knowing how generally Lumiera will handle the processing nodes while rendering helps him with defining and implementing the builder
+
+__Conclusion__: "currently in work". For now, grow interfaces on demand.
+
+
+
+Idea: Placement Metaphor used within the high-level view of Proc-Layer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ProcPlacementMetaphor[]
+
+In the course of the discussion, *Ichthyo* explains the rationale
+
+ * one common mechanism for sticking objects together and putting them into the session
+ * either specify the "placement"-parameters (time, output destination, track) directly, link to another object's parameters, or derive some or all of those values from the context (up the tree of tracks)
+ * ability to build a system of high-level media objects (clips, effects...) which re-adjust automatically on change
+ * extensible to handle or derive some parameters based on conditions and rules, e.g. for semi-automatic wiring of the output destination based on tags
+
+*Joelholdsworth* is concerned that this proposal may go too far and tries to tie things together which aren't really connected. While basically it's no problem having the time position of a clip either absolute, or derived by a link to another object, he can't see a clear benefit of controlling sound pan or video layer order from the placement. Pan, for example, is just an parameter value or interpolated curve, similar to colour correction or gamma adjustment. For the gui, he points out, it's probably better to stick to the object metaphor, so start time, output, layer number or sound pan would be properties of the object.
+
+But that's exactly what Ichthyo wants to avoid. Obviously, this would be the standard solution employed by most current editing apps, and works reasonably well in average cases. But he is looking for a solution which covers this standard case, but also doesn't get into the way when dealing with advanced compositing, working with spatial sound systems (Ambisonics, Wave Field Synthesis) or stereoscopic (3D) video.
+
+On the whole, there is no conclusion yet. Certainly, this proposal needs more discussion, parts need to be defined much more clear (esp. the "Pro" arguments), maybe parts of the functionality should be separated out.
+
+While in this discussion, several aspects of the cooperation of GUI and Proc layer are considered.
+
+ * it is not necessary to make all of the Placement proposal visible to the GUI (and the user). Proc layer may as well provide a simplyfied and hard wired API for the most common properties (layer index, pan) and only use this part of the Placement concept for building and wiring the nodes.
+ * the adjustment of objects linked together by a placement can be handled as follows: 
+   . GUI notifies Proc of a position/parameter change of one object and gets immediate, synchronous feedback (OK or fail)
+   . Proc detects the other linked objects affected by the change and notifies GUI (both synchronous and asynchronous is possible) to update information regarding those objects
+   . GUI pulls the necessary properties by calling Proc on a per object base.
+ * as a rule of thumb, GUI <--> Proc is mostly synchronous, while Backend <--> GUI is often asynchronous, but there are exceptions from the rule
+ * we have general _parameters_, which are automatible. These are represented as _control data connections between the nodes_. We certainly don't want to represent some things in this way, though. For example, the in/out points of clips are fixed values.
+ * in Ichthyo's concept, the Placement doesn't itself provide such parameter values/sources, rather it can be used to _find_ or _derive_ parameter sources.
+ * the node graph is built bottom up, starting at the source, then via the effects attached locally to a clip, further on upwards (directed by the tree of tracks) to be finally connected via global busses to the output ports. Rendering pulls from these output ports.
+ * Joelholdsworth, Cehteh, Ichthyo and Rcbarnes agree that the plain _node-editor_ approach is problematic in the context of a NLE. It shows too much details and fails to capture the temporal aspect. We strive at having node-like features and flexibility, but rather within the timeline.
+ * especially, the topology of the node graph isn't constant over the whole timeline. But it's the job of the builder in the Proc layer to deal with these complexities, the user shouldn't be overwhelmed with all those details.
+
+
+
+Next meeting
+------------
+ * some people in europe complained that 21:00 UTC is too late, esp. with daylight saving
+ * there was the proposal to alternate between the current schedule, and sunday 16:00 UTC
+ * but Joel can't attend on sunday afternoon for now
+ * so we settle down on thursday, 16:30
+
+Next meeting: *Thursday 3. July 2008 16:30 UTC*

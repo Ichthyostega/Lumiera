@@ -28,18 +28,22 @@
 #ifndef TIMELINE_CLIP_TRACK_HPP
 #define TIMELINE_CLIP_TRACK_HPP
 
-#include <vector>
-
-#include "basic-draw-strategy.hpp"
-#include "timeline-track.hpp"
+#include "gui/widgets/timeline/basic-draw-strategy.hpp"
+#include "gui/widgets/timeline/timeline-track.hpp"
 #include "gui/model/clip-track.hpp"
+#include "lib/time/timevalue.hpp"
+
+#include <vector>
 
 namespace gui {
 namespace widgets {
 namespace timeline {
-
+  
+  using lib::time::Time;
+  
   class Clip;
   class TimelineViewWindow;
+  
   
   class ClipTrack : public timeline::Track
   {
@@ -48,7 +52,7 @@ namespace timeline {
      * Constructor.
      */
     ClipTrack(TimelineWidget &timelineWidget,
-              boost::shared_ptr<model::ClipTrack> track);
+              shared_ptr<model::ClipTrack> track);
   
     /**
      * Draw the track in the timeline.
@@ -62,8 +66,8 @@ namespace timeline {
      * pointer.
      * @param the given time
      */
-    boost::shared_ptr<timeline::Clip>
-    getClipAt(lumiera::Time position) const;
+    shared_ptr<timeline::Clip>
+    getClipAt(Time position) const;
 
   private:
 
@@ -76,7 +80,7 @@ namespace timeline {
     /**
      * Gets the modelTrack as a ClipTrack.
      */
-    boost::shared_ptr<model::ClipTrack>
+    shared_ptr<model::ClipTrack>
     getModelTrack ();
 
     /**
@@ -103,8 +107,8 @@ namespace timeline {
      * The clipMap maps model clips to timeline widget clips which are responsible for the
      * UI representation of a clip.
      */
-    std::map<boost::shared_ptr<model::Clip>,
-             boost::shared_ptr<timeline::Clip> >
+    std::map<shared_ptr<model::Clip>,
+             shared_ptr<timeline::Clip> >
       clipMap;
   };
 

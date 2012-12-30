@@ -289,7 +289,7 @@ namespace lib {
         {
           return (cached_ && isOK_)
               || (cached_ = true
-                 &&(isOK_ = predicate_(*Raw::pipe())));            
+                 &&(isOK_ = predicate_(*Raw::pipe())));
         }
       
       void
@@ -331,13 +331,6 @@ namespace lib {
       FilterIter (IT const& src, PRED filterPredicate)
         : _Impl(_Filter(src,filterPredicate))
         { }
-      
-      FilterIter&
-      operator++ ()
-        {
-          _Impl::operator++();
-          return *this;
-        }
     };
   
   
@@ -478,20 +471,13 @@ namespace lib {
       TransformIter (IT const& src, FUN trafoFunc)
         : _IteratorImpl(_Trafo(src,trafoFunc))
         { }
-      
-      TransformIter&
-      operator++ ()
-        {
-          _IteratorImpl::operator++();
-          return *this;
-        }
     };
   
   
   
   namespace { // Helper to pick up the produced value type automatically
     
-    using lumiera::typelist::FunctionSignature;
+    using lib::meta::FunctionSignature;
     
     template<typename SIG>
     struct _ProducedOutput
@@ -540,10 +526,35 @@ namespace lib {
   }
   
   
+  template<class IT>
+  inline typename IT::value_type
+  pull_last (IT iter)
+    {
+      typedef typename IT::value_type Val;
+      typedef wrapper::ItemWrapper<Val> Item;
+      
+      Item lastElm;
+      
+      while (iter)
+        {
+          lastElm = *iter;
+          ++iter;
+        }
+      
+      if (lastElm)
+        return *lastElm;
+      else
+        throw lumiera::error::State ("attempt to retrieve the last element "
+                                     "of an exhausted or empty iterator"
+                                    ,lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+    }
+  
+  
+  
   /** filters away repeated values
    *  emitted by source iterator */
   template<class IT>
-  FilterIter<IT>
+  inline FilterIter<IT>
   filterRepetitions (IT const& source)
   {
     typedef typename IT::value_type Val;

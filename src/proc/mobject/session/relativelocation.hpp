@@ -30,8 +30,11 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
+  
+  using lib::time::Offset;
   
   
   /**
@@ -56,14 +59,14 @@ namespace session {
       };
       
     protected:
-      RelativeLocation (PlaRef const& a, Time ofs) : anchor_(a), offset_(ofs) { }
+      RelativeLocation (PlaRef const& a, Offset const& ofs) : anchor_(a), offset_(ofs) { }
       friend class LocatingPin;
       
       /** the kind of relation denoted by this Placement */
       RelType relType;
       
       /** Offset the actual position by this (time) value relative to the anchor point. */
-      Time offset_;
+      Offset offset_;
       //TODO: suitable representation?
       
       
@@ -77,5 +80,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

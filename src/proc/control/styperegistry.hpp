@@ -37,6 +37,7 @@
 #define CONTROL_STYPEREGISTRY_H
 
 
+#include "proc/control/stypemanager.hpp"
 //#include "lib/query.hpp"
 //#include "lib/util.hpp"
 //#include "lib/p.hpp"
@@ -48,9 +49,10 @@
 #include <boost/noncopyable.hpp>
 
 
+namespace proc {
 namespace control {
 
-//  using lumiera::P;
+//  using lib::P;
 //  using lumiera::Query;
   
 //  using std::string;
@@ -63,7 +65,7 @@ namespace control {
   
   /**
    * @internal Helper for organising preconfigured default objects.
-   * Maintaines a collection of objects known or encountered as "default"
+   * Maintains a collection of objects known or encountered as "default"
    * for a given type. This collection is ordered by "degree of constriction",
    * which is implemented by counting the number of predicates in the query
    * used to define or identify each object.
@@ -73,7 +75,8 @@ namespace control {
    * @todo as of 3/2008 the real query implementation is missing, and the
    * exact behaviour has to be defined.
    */
-  class STypeManager::Registry : private boost::noncopyable
+  class STypeManager::Registry
+    : boost::noncopyable
     {
     public:
       
@@ -81,6 +84,5 @@ namespace control {
   
   
   
-} // namespace control
-
+}} // namespace proc::control
 #endif

@@ -30,6 +30,7 @@
 #include "lib/util.hpp"
 
 
+namespace proc {
 namespace mobject {
 namespace builder {
 namespace test  {
@@ -257,7 +258,7 @@ namespace test  {
           CHECK (pwc);
           
           registry.rollback();
-          CHECK ( registry.contains (pipeA));    // no effect to the officialy visible state
+          CHECK ( registry.contains (pipeA));    // no effect to the officially visible state
           CHECK (!registry.contains (pipeB));
           CHECK ( registry.contains (pipeWC));
           
@@ -272,4 +273,4 @@ namespace test  {
   
   
   
-}}} // namespace mobject::builder::test
+}}}} // namespace proc::mobject::builder::test

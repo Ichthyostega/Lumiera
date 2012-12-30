@@ -47,7 +47,7 @@ namespace lib {
 namespace time{
 namespace test{
   
-  using asset::meta::TimeGrid;
+  using proc::asset::meta::TimeGrid;
   
   
   /********************************************************
@@ -75,8 +75,8 @@ namespace test{
       virtual void
       run (Arg arg) 
         {
-          Time ref (random_or_get(arg));
-          CHECK (Time(0) < ref);
+          Time ref (0,random_or_get(arg),0,0);
+          CHECK (TimeValue(0) < ref);
           
           checkSimpleUsage (ref);
           check_theFullStory (ref);
@@ -154,7 +154,7 @@ namespace test{
       checkGridBinding (TimeValue org)
         {
           // refer to a grid not yet defined
-          VERIFY_ERROR (UNKNOWN_GRID, QuTime wired(org, "special_funny_grid"));
+          VERIFY_ERROR (UNKNOWN_GRID, QuTime weird(org, "special_funny_grid"));
           
           TimeGrid::build("special_funny_grid", 1);      // provide the grid's definition (1 frame per second)
           

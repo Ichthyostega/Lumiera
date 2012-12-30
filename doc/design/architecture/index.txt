@@ -1,0 +1,20 @@
+Design Documents: Lumiera Architecture
+======================================
+
+This section will feature some rather high-level considerations regarding
+the architecture of the application.
+
+.Executive Summary
+See link:ArchitectureSummary.html[here] for a short summary of the core architecture
+ideas of the envisioned Lumiera Application.
+
+.Rendering and Playback Control
+This part of the architecture is concened with how to initiate, coordinate and control
+the calculation processes necessary to generate visible / audible data from our source
+media. This design is _not so much_ concerned with the actual calculations; indeed it
+takes on an ``bird eye's view'', treating the actual render engine mostly just as an
+opaque entity providing some service.
+
+-> link:playRender.html[Design: Playback and Rendering]
+
+

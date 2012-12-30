@@ -42,6 +42,11 @@ namespace time {
   
   namespace error = lumiera::error;
   
+  // forwards...
+  class FrameRate;
+  class TimeSpan;
+  class Mutation;
+  
   
   /**
    * basic constant internal time value.
@@ -73,6 +78,9 @@ namespace time {
           t_ = o.t_;
           return *this;
         }
+      
+      /** some subclasses may receive modification messages */
+      friend class Mutation;
       
     public:
       /** explicit limit of allowed time range */
@@ -109,7 +117,7 @@ namespace time {
    * @note supports scaling by a factor,
    *       which \em deliberately is chosen 
    *       as int, not gavl_time_t, because the
-   *       multiplying times is meaningless.
+   *       multiplying of times is meaningless.
    */
   class TimeVar
     : public TimeValue
@@ -146,7 +154,7 @@ namespace time {
       TimeVar& operator-= (TimeVar const& tx)  { t_ -= tx.t_; return *this; }
       
       // Supporting multiplication with integral factor
-      TimeVar& operator*= (int fact)           { t_ *= fact;  return *this; }
+      TimeVar& operator*= (int64_t fact)       { t_ *= fact;  return *this; }
       
       // Supporting sign flip
       TimeVar  operator-  ()         const     { return TimeVar(*this)*=-1; }
@@ -170,8 +178,11 @@ namespace time {
     : public TimeValue
     {
     protected:
+      /** generally immutable,
+       *  but derived classes allow some limited mutation
+       *  through special API calls */
       Offset&
-      operator= (Offset const& o) ///< derived classes allow mutation
+      operator= (Offset const& o) 
         {
           TimeValue::operator= (o);
           return *this;
@@ -187,11 +198,19 @@ namespace time {
         : TimeValue(TimeVar(target) -= origin)
         { }
       
+      Offset (int64_t count, FrameRate const& fps);
+      
+      static const Offset ZERO;
+      
+      
       TimeValue
       abs()  const
         {
           return TimeValue(std::llabs (t_));
         }
+      
+      // Supporting sign flip
+      Offset operator- ()  const;
     };
   
   //-- support linear offset chaining ---------------
@@ -204,20 +223,40 @@ namespace time {
     return Offset(distance);
   }
   
+  template<typename INT>
   inline Offset
-  operator* (int factor, Offset const& o)
+  operator* (Offset const& distance, INT factor)
+  {
+    return factor*distance;
+  }
+  
+  template<typename INT>
+  inline Offset
+  operator* (INT factor, Offset const& o)
   {
     TimeVar distance(o);
     distance *= factor;
     return Offset(distance);
   }
   
+  template<typename INTX>
   inline Offset
-  operator* (Offset const& distance, int factor)
+  operator* (boost::rational<INTX> factor, Offset const& o)
   {
-    return factor*distance;
+    return boost::rational<int64_t>(factor.numerator(), factor.denominator()) * o;
   }
   
+  /** stretch offset by a possibly fractional factor */
+  Offset
+  operator* (boost::rational<int64_t> factor, Offset const& o);
+  
+  
+  /** flip offset direction */
+  inline Offset
+  Offset::operator- ()  const
+  {
+    return -1 * (*this); 
+  }
   
   
   
@@ -227,7 +266,6 @@ namespace time {
    * @warning do not mix up gavl_time_t and FSecs */
   typedef boost::rational<long> FSecs;
   
-  class FrameRate;
   
   /**
    * Lumiera's internal time value datatype.
@@ -237,18 +275,15 @@ namespace time {
    * 
    * Lumiera Time provides some limited capabilities for
    * direct manipulation; Time values can be created directly
-   * from \c (h,m,s,ms) specification and there is an string
-   * representation intended for internal use (reporting and
-   * debugging). Any real output, formatting and persistent
+   * from \c (ms,sec,min,hour) specification and there is an
+   * string representation intended for internal use (reporting
+   * and debugging). Any real output, formatting and persistent
    * storage should be based on the (quantised) timecode
    * formats though, which can be generated from time values.
    * 
-   * Non constant Time objects can receive an encapsulated
-   * \em mutation message, which is also the basis for
-   * changing time spans, durations and for re-aligning
-   * quantised values to some other grid.
-   * 
-   * @todo define these mutations
+   * Similar to TimeValue, also Time objects are considered
+   * immutable values. As convenience shortcut, some operators
+   * are provided, creating a TimVar for further calculations.
    */
   class Time
     : public TimeValue
@@ -256,9 +291,16 @@ namespace time {
       /// direct assignment prohibited
       Time& operator= (Time const);
       
+      /// suppress possible direct conversions
+      Time(int);
+      
     public:
       static const Time MAX ; 
       static const Time MIN ;
+      static const Time ZERO;
+      
+      static const Time ANYTIME;  ///< border condition marker value. #ANYTIME <= any time value
+      static const Time NEVER;   ///<  border condition marker value. #NEVER >= any time value
       
       explicit 
       Time (TimeValue const& val =TimeValue(0))
@@ -269,6 +311,7 @@ namespace time {
         : TimeValue(calcResult)
         { }
       
+      explicit
       Time (FSecs const& fractionalSeconds);
       
       Time ( long millis
@@ -288,37 +331,74 @@ namespace time {
   
   
   
-  class TimeSpan;
   
   /**
    * Duration is the internal Lumiera time metric.
    * It is an absolute (positive) value, but can be
-   * promoted from an offset. Similar to Time,
-   * Duration can receive mutation messages.
-   * 
-   * @todo define these mutations
+   * promoted from an offset. While Duration generally
+   * is treated as immutable value, there is the 
+   * possibility to send a \em Mutation message.
    */
   class Duration
-    : public Offset
+    : public TimeValue
     {
       /// direct assignment prohibited
       Duration& operator= (Duration const&);
       
     public:
       Duration (Offset const& distance)
-        : Offset(distance.abs())
+        : TimeValue(distance.abs())
         { }
       
       explicit
-      Duration (Time const& timeSpec)
-        : Offset(Offset(timeSpec).abs())
+      Duration (TimeValue const& timeSpec)
+        : TimeValue(Offset(timeSpec).abs())
+        { }
+      
+      explicit
+      Duration (FSecs const& timeSpan_in_secs)
+        : TimeValue(Offset(Time(timeSpan_in_secs)).abs())
         { }
       
       Duration (TimeSpan const& interval);
-      Duration (ulong count, FrameRate const& fps);
+      Duration (int64_t count, FrameRate const& fps);
       
       static const Duration NIL;
+      
+      void accept (Mutation const&);
+      
+      /// Supporting backwards use as offset
+      Offset operator- ()  const;
+      
     };
+    
+  //-- support using a Duration to build offsets ---------------
+  
+  inline Duration
+  operator+ (Duration const& base, Duration const& toAdd)
+  {
+    return Offset(base) + Offset(toAdd);
+  }
+  
+  template<typename INT>
+  inline Offset
+  operator* (INT factor, Duration const& dur)
+  {
+    return factor * Offset(dur);
+  }
+  
+  template<typename INT>
+  inline Offset
+  operator* (Duration const& dur, INT factor)
+  {
+    return factor*dur;
+  }
+  
+  inline Offset
+  Duration::operator- ()  const
+  {
+    return -1 * (*this); 
+  }
   
   
   
@@ -330,20 +410,47 @@ namespace time {
    * to fully specify the temporal properties of an
    * object within the model.
    * 
-   * Similar to Time and Duration, a TimeSpan may
-   * also receive an (opaque) mutation message.
+   * As an exception to the generally immutable Time
+   * entities, a non constant TimeSpan may receive
+   * \em mutation messages, both for the start point
+   * and the duration. This allows for changing
+   * position and length of objects in the timeline.
+   * 
+   * @todo define these mutations
    */
   class TimeSpan
     : public Time
+    , boost::totally_ordered<TimeSpan>
     {
       Duration dur_;
       
     public:
-      TimeSpan(Time start, Duration length)
+      TimeSpan(TimeValue const& start, Duration const& length)
         : Time(start)
         , dur_(length)
         { }
-                                                ///////////TODO creating timespans needs to be more convenient....
+      
+      TimeSpan(TimeValue const& start, Offset const& reference_distance)
+        : Time(start)
+        , dur_(reference_distance)
+        { }
+      
+      TimeSpan(TimeValue const& start, TimeValue const& end)
+        : Time(start)
+        , dur_(Offset(start,end))
+        { }
+      
+      TimeSpan(TimeValue const& start, FSecs(duration_in_secs))
+        : Time(start)
+        , dur_(duration_in_secs)
+        { }
+      
+      
+      Duration&
+      duration() 
+        {
+          return dur_;
+        }
       
       Duration
       duration()  const 
@@ -352,11 +459,32 @@ namespace time {
         }
       
       Time
+      start()  const
+        {
+          return *this;
+        }
+      
+      Time
       end()  const
         {
-          TimeVar startPoint (*this);
-          return (startPoint + dur_);
+          return TimeVar(*this) += dur_;
         }
+      
+      bool
+      contains (TimeValue const& tp)  const
+        {
+          return *this <= tp
+              && tp < end();
+        }
+      
+      /** may change start / duration */
+      void accept (Mutation const&);
+      
+      
+      /// Supporting extended total order, based on start and interval length
+      friend bool operator== (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_==t2.t_ && t1.dur_==t2.dur_; }
+      friend bool operator<  (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_< t2.t_ ||
+                                                                               (t1.t_==t2.t_ && t1.dur_< t2.dur_);}
     };
   
   
@@ -422,7 +550,7 @@ namespace time {
   
   inline
   Duration::Duration (TimeSpan const& interval)
-    : Offset(interval.duration())
+    : TimeValue(interval.duration())
     { }
   
   inline

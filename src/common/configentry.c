@@ -43,7 +43,7 @@ lumiera_configentry_new (LumieraConfigitem tmp)
   LumieraConfigentry self = lumiera_malloc (sizeof (*self));
   lumiera_configitem_move ((LumieraConfigitem)self, tmp);
 
-  TODO ("initialize other stuff here (lookup, parent, ...)");
+  //////////////////////////////////////////////////////////////////TICKET #839 initialise other stuff here (lookup, parent, ...)
 
   return (LumieraConfigitem)self;
 }
@@ -52,7 +52,7 @@ lumiera_configentry_new (LumieraConfigitem tmp)
 LumieraConfigitem
 lumiera_configentry_destroy (LumieraConfigitem self)
 {
-  TODO ("cleanup other stuff here (lookup, parent, ...)");
+  //////////////////////////////////////////////////////////////////TICKET #839 cleanup other stuff here (lookup, parent, ...)
 
   return self;
 }

@@ -24,16 +24,21 @@
 #include "common/config.h"
 #include "common/configitem.h"
 
-#include "tests/test.h"
+#include "lib/test/test.h"
 
 TESTS_BEGIN
 
 TEST (init)
 {
-/*  lumiera_config_init ("./"); */
+/* Note:  lumiera_config_init and lumiera_config_destroy are
+ *        invoked automatically from ConfigFacade
+ */
   printf ("initialized\n");
   lumiera_config_destroy ();
   printf ("destroyed\n");
+  /* there will be a warning about destroying the already 
+   * destroyed or uninitialised config system....
+   */
 }
 
 
@@ -56,8 +61,6 @@ TEST (configitem_simple)
     }
 
   lumiera_configitem_delete (item, NULL);
-
-  lumiera_config_destroy ();
 }
 
 
@@ -77,7 +80,6 @@ TEST (lookup)
   CHECK (!lumiera_config_lookup_item_find (&lookup, "foo.bar"));
 
   lumiera_config_lookup_destroy (&lookup);
-  lumiera_config_destroy ();
 }
 
 
@@ -104,8 +106,6 @@ TEST (change_value)
     printf ("%s\n", value);
   else
     printf ("failure retrieving '%s': %s\n", argv[2], lumiera_error ());
-
-  lumiera_config_destroy ();
 }
 
 
@@ -126,8 +126,6 @@ TEST (basic_set_get)
     printf ("%s\n", value);
   else
     printf ("failure retrieving '%s': %s\n", argv[2], lumiera_error ());
-
-  lumiera_config_destroy ();
 }
 
 
@@ -146,8 +144,6 @@ TEST (number_get)
     printf ("%lld\n", number);
   else
     printf ("%s, %lld\n", lumiera_error (), number);
-
-  lumiera_config_destroy ();
 }
 
 
@@ -161,8 +157,6 @@ TEST (number_get_nodefault)
     printf ("%lld\n", number);
   else
     printf ("%s\n", lumiera_error ());
-
-  lumiera_config_destroy ();
 }
 
 
@@ -180,8 +174,6 @@ TEST (number_set)
     printf ("'%lld'\n", number);
   else
     printf ("%s\n", lumiera_error ());
-
-  lumiera_config_destroy ();
 }
 
 
@@ -198,8 +190,6 @@ TEST (string_get)
     printf ("'%s'\n", string);
   else
     printf ("%s, '%s'\n", lumiera_error (), string);
-
-  lumiera_config_destroy ();
 }
 
 
@@ -216,8 +206,6 @@ TEST (string_set)
     printf ("'%s'\n", string);
   else
     printf ("%s\n", lumiera_error ());
-
-  lumiera_config_destroy ();
 }
 
 
@@ -252,8 +240,6 @@ TEST (word_set)
     printf ("'%s'\n", word);
   else
     printf ("%s\n", lumiera_error ());
-
-  lumiera_config_destroy ();
 }
 
 
@@ -264,8 +250,6 @@ TEST (configitem_simple_ctor_dtor)
   LumieraConfigitem item;
 
   item = lumiera_configitem_new (argv[2]);
-
-  lumiera_config_destroy ();
 }
 
 
@@ -293,8 +277,6 @@ TEST (configitem_simple_content_check)
     {
       printf("item->delim = '%s'\n", item->delim);
     }
-
-  lumiera_config_destroy ();
 }
 
 
@@ -310,8 +292,6 @@ TEST (wordlist_get_nth)
   const char* word = lumiera_config_wordlist_get_nth (argv[2], atoi (argv[4]), " \t,;");
 
   printf ("'%s'\n", word?word:"NULL");
-
-  lumiera_config_destroy ();
 }
 
 
@@ -327,8 +307,6 @@ TEST (wordlist_find)
   int n = lumiera_config_wordlist_find (argv[2], argv[4], " \t,;");
 
   printf ("'%d'\n", n);
-
-  lumiera_config_destroy ();
 }
 
 
@@ -349,8 +327,6 @@ TEST (wordlist_replace)
     printf ("'%s'\n", wordlist);
   else
     printf ("%s\n", lumiera_error ());
-
-  lumiera_config_destroy ();
 }
 
 
@@ -375,8 +351,6 @@ TEST (wordlist_add)
     printf ("'%s'\n", wordlist);
   else
     printf ("%s\n", lumiera_error ());
-
-  lumiera_config_destroy ();
 }
 
 

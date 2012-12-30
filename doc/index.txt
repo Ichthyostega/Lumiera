@@ -1,23 +1,41 @@
-== Documentation
+= Documentation =
 
 This documentation section contains documentation for both users and developers.
 
-=== User
+== User ==
 
-The user manual containing the full reference for using Lumiera :
+As a start, you should visit the introductory text
+link:user/intro/intro.html[Lumiera (as seen) from Outer Space]
+
+A user manual containing the full reference for using Lumiera is planned:
 
  * link:user/manual.html[User Manual]  _(planned)_
 
-=== Developer
-Informations about the structure of Lumiera, they give an overview on the main components of the application :
+== Developer ==
+Information about the structure and concepts Lumiera is based upon.
+These documents give an overview on the main components of the application:
 
  * link:design/index.html[Design Documents]
 
 Programming-oriented details about the functional layers of Lumiera as well as a Doxygen documentation :
 
  * link:technical/index.html[Technical Documents]
+ * link:technical/code/codingGuidelines.html[Style and Coding Guidelines]
 
-=== Presentation documents
-Documents that you can use as you wish to present or promote Lumiera :
+=== the TiddlyWiki ===
+Currently, Lumiera is still in the design- and evolution phase.
+There is an embedded JavaScript wiki (TiddlyWiki) within the source tree, mostly
+used as design notebook, featuring day-to-day design sketches, notes but also
+quite some more persistent planning. Finished documentation text is constantly
+moved over to the documentation section(s) of the Lumiera website.
 
- * link:/media/index.html[Whitepapers and Presentations]
+-> access the Proy-Layer link:http://lumiera.org/wiki/renderengine.html[TiddlyWiki online here]
+
+
+== Media and Presentations ==
+
+This section holds documents and materials used to present and promote Lumiera,
+articles, summaries and whitepapers
+ -> link:/media/index.html[Index]
+
+

@@ -31,6 +31,7 @@
 #include "proc/asset/clip.hpp"
 #include "proc/asset/effect.hpp"
 
+namespace proc {
 namespace mobject {
 namespace session {
     ////////////////////////////////////////////////////////////////////////////////TICKET #414
@@ -107,4 +108,4 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace mobject::session

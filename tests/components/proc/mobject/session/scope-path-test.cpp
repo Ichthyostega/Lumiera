@@ -33,6 +33,7 @@
 #include <string>
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -108,7 +109,7 @@ namespace test    {
           VERIFY_ERROR (NOT_IN_SESSION, Scope invalid (notRelated2anything) );
           
           Scope const& scopeOfEvil = fabricate_invalidScope();
-          REQUIRE (!scopeOfEvil.isValid());
+          CHECK (!scopeOfEvil.isValid());
           
           VERIFY_ERROR (INVALID_SCOPE, ScopePath outsideCurrentModel (scopeOfEvil) );
           
@@ -404,4 +405,4 @@ namespace test    {
   LAUNCHER (ScopePath_test, "unit session");
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

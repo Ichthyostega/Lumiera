@@ -42,7 +42,7 @@ The Application can be installed and started to bring up an GTK GUI outline,
 but the GUI is very preliminary and not connected to core functionality.
 The video processing pipeline is still not complete.
 
-See the http://issues.lumiera.org/roadmap[Project roadmap]
+See http://issues.lumiera.org/roadmap[Project roadmap]
 
 
 Build Requirements
@@ -66,8 +66,8 @@ or the local Copy of this page in the file INSTALL
 
 Debian Package
 --------------
-[verse]
-Hermann Vosseler (aka Ichthyo) maintains a *Debian* packaging of the source tree,
-which can be pulled from +git://git.lumiera.org/lumiera/debian+
-It can be built by +git-buildpackage+
+Hermann Vosseler (aka Ichthyo) maintains a *Debian* packaging of the source tree
+
+- the package definition can be pulled from +git://git.lumiera.org/lumiera/debian+
+- the package can be built by +git-buildpackage+
 

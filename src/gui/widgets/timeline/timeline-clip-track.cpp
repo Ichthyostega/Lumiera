@@ -22,13 +22,13 @@
 
 #include <boost/foreach.hpp>
 
-#include "timeline-clip.hpp"
-#include "timeline-clip-track.hpp"
-#include "timeline-view-window.hpp"
+#include "gui/widgets/timeline/timeline-clip.hpp"
+#include "gui/widgets/timeline/timeline-clip-track.hpp"
+#include "gui/widgets/timeline/timeline-view-window.hpp"
 
 using namespace Gtk;
-using boost::dynamic_pointer_cast;
-using boost::shared_ptr;
+
+using std::tr1::shared_ptr;
 using util::contains;
 
 namespace gui {
@@ -57,8 +57,8 @@ namespace timeline {
     REQUIRE (window);
 
     // Draw a rectangle to let us know it works? :-)
-    cairo->rectangle(window->time_to_x(0), 1,
-      window->time_to_x(500000) - window->time_to_x(0),
+    cairo->rectangle(window->time_to_x(Time::ZERO), 1,
+      window->time_to_x(Time(500,0)) - window->time_to_x(Time::ZERO),
       get_height() - 2);
 
     cairo->set_source_rgb(0.5, 0.5, 0.5);
@@ -76,19 +76,19 @@ namespace timeline {
       }
   }
 
-  boost::shared_ptr<timeline::Clip>
-  ClipTrack::getClipAt(lumiera::Time position) const
+  shared_ptr<timeline::Clip>
+  ClipTrack::getClipAt(Time position) const
   {
     std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip> >
       pair; 
     BOOST_FOREACH (pair, clipMap)
       {
-        if (pair.first->isPlayingAt(position))
+        if (pair.first->isPlayingAt (position))
           return pair.second;
       }
 
     // Nothing found
-    return boost::shared_ptr<timeline::Clip>();
+    return shared_ptr<timeline::Clip>();
   }
 
   //// private methods
@@ -97,8 +97,8 @@ namespace timeline {
   ClipTrack::createTimelineClips()
   {
     // Share the draw strategy between all objects
-    // TODO: use factory/builder here
-    static boost::shared_ptr<timeline::DrawStrategy> drawStrategy(new BasicDrawStrategy());
+    TODO("Use factory/builder to create Timline Clips");
+    static shared_ptr<timeline::DrawStrategy> drawStrategy(new BasicDrawStrategy());
     BOOST_FOREACH (shared_ptr<model::Clip> modelClip, getModelTrack()->getClipList())
       {
         // Is a timeline UI clip present in the map already?
@@ -115,7 +115,7 @@ namespace timeline {
   shared_ptr<model::ClipTrack>
   ClipTrack::getModelTrack ()
   {
-    return dynamic_pointer_cast<model::ClipTrack>(modelTrack);
+    return std::tr1::dynamic_pointer_cast<model::ClipTrack>(modelTrack);
   }
 
   void

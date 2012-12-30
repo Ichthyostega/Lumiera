@@ -26,9 +26,9 @@
  ** OutputMapping is a complement to the OutputDesignation handles
  ** used at various places in the high-level model. It is used when
  ** translating a given output spec into another connection target
- ** - when connecting an model port to a concrete external output
+ ** - when connecting a model port to a concrete external output
  ** - when connecting a timeline to a viewer element
- ** - for implementing the viewer input selection "switchbord"
+ ** - for implementing the viewer input selection "switchboard"
  ** - for translating output designation of virtual clips
  ** OutputMapping is to be used as value object, holding concrete
  ** connections and wiring. For each of the mentioned usage situations,
@@ -38,7 +38,7 @@
  ** This definition context is actually instantiated (as base class).
  ** The mapping table actually just stores an association of hash
  ** values, which typically are interpreted as asset::ID<Pipe>.
- ** But the actual mapping result is retrieved on each acces
+ ** But the actual mapping result is retrieved on each access
  ** by invoking a functor on the stored hash value,
  ** thus the final resolution is done \em late.
  ** 
@@ -63,6 +63,7 @@
 
 
 
+namespace proc {
 namespace mobject {
   
   namespace { // Helper to extract and rebind definition types
@@ -103,10 +104,12 @@ namespace mobject {
   
   /**
    * OutputMapping is a facility to resolve output designations.
-   * For a given specification, resolution to the desired
-   * target specification may be derived. Here, the 
-   * type of the target specification is defined 
-   * through the type parameter.
+   * The session/model uses preliminary or partial output specifications,
+   * which are to be resolved to an actual system output while building
+   * and preparing a render network for operation (playback/rendering).
+   * For a given specification, resolution to the desired target spec
+   * may be derived by querying the OutputMapping. Here, the kind of
+   * the target specification is defined through the type parameter.
    * 
    * \par definition of specific mapping behaviour
    * 
@@ -400,5 +403,5 @@ namespace mobject {
   }
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

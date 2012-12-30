@@ -44,8 +44,8 @@
  */
 
 
-#ifndef LUMIERA_META_FUNCTION_CLOSURE_H
-#define LUMIERA_META_FUNCTION_CLOSURE_H
+#ifndef LIB_META_FUNCTION_CLOSURE_H
+#define LIB_META_FUNCTION_CLOSURE_H
 
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple.hpp"
@@ -54,9 +54,9 @@
 
 
 
-namespace lumiera {
-namespace typelist{
-namespace func    {
+namespace lib {
+namespace meta{
+namespace func{
   
   using std::tr1::function;
   
@@ -66,32 +66,6 @@ namespace func    {
   namespace { // helpers for binding and applying a function to an argument tuple
     
     using tuple::element;
-    
-    template<typename SIG>
-    struct _Fun
-      {
-        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-        typedef typename FunctionSignature<function<SIG> >::Args Args;
-      };
-    template<typename SIG>
-    struct _Fun<SIG*>
-      {
-        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-        typedef typename FunctionSignature<function<SIG> >::Args Args;
-      };
-    template<typename SIG>
-    struct _Fun<function<SIG> >
-      {
-        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-        typedef typename FunctionSignature<function<SIG> >::Args Args;
-      };
-    
-    template<typename FUN>
-    struct is_Functor                 { static const bool value = false; };
-    template<typename SIG>
-    struct is_Functor<function<SIG> > { static const bool value = true;  };
-    
-    
     
     /**
      * this Helper with repetitive specialisations for up to nine arguments
@@ -467,8 +441,8 @@ namespace func    {
   template<typename SIG>
   class FunctionClosure
     {
-      typedef typename func::_Fun<SIG>::Args Args;
-      typedef typename func::_Fun<SIG>::Ret  Ret;
+      typedef typename _Fun<SIG>::Args Args;
+      typedef typename _Fun<SIG>::Ret  Ret;
       
       function<Ret(void)> closure_;
       
@@ -673,8 +647,8 @@ namespace func    {
   template<typename F1, typename RET>
   class FunctionComposition
     {
-      typedef typename func::_Fun<F1>::Args Args;
-      typedef typename func::_Fun<F1>::Ret  Ret1;
+      typedef typename _Fun<F1>::Args Args;
+      typedef typename _Fun<F1>::Ret  Ret1;
       
       typedef Types<Ret1> ArgsF2;
       typedef typename FunctionTypedef<RET, ArgsF2>::Sig SigF2;
@@ -796,10 +770,11 @@ namespace func    {
   /*  ========== function-style interface =============  */
   
   /** build a TupleApplicator, which embodies the given
-   *  argument tuple and can be used to apply various
-   *  functions to them.
+   *  argument tuple and can be used to apply them
+   *  to various functions repeatedly.
    */
   template<typename ARG>
+  inline
   typename _Sig<void, ARG>::Applicator
   tupleApplicator (Tuple<ARG>& args)
   {
@@ -810,6 +785,7 @@ namespace func    {
   
   /** apply the given function to the argument tuple */
   template<typename SIG, typename ARG>
+  inline
   typename _Fun<SIG>::Ret
   apply (SIG& f, Tuple<ARG>& args)
   {
@@ -824,6 +800,7 @@ namespace func    {
    *          invoked later to yield the
    *          function result. */
   template<typename SIG, typename ARG>
+  inline
   typename _Clo<SIG,ARG>::Type
   closure (SIG& f, Tuple<ARG>& args)
   {
@@ -836,6 +813,7 @@ namespace func    {
   
   /** close the given function over the first argument */
   template<typename SIG, typename ARG>
+  inline
   typename _PapS<SIG>::Function
   applyFirst (SIG& f, ARG arg)
   {
@@ -848,6 +826,7 @@ namespace func    {
   
   /** close the given function over the last argument */
   template<typename SIG, typename ARG>
+  inline
   typename _PapE<SIG>::Function
   applyLast (SIG& f, ARG arg)
   {
@@ -862,6 +841,7 @@ namespace func    {
   /** bind the last function argument to an arbitrary term,
    *  which especially might be a (nested) binder... */
   template<typename SIG, typename TERM>
+  inline
   typename _PapE<SIG>::Function
   bindLast (SIG& f, TERM const& arg)
   {
@@ -875,6 +855,7 @@ namespace func    {
   
   /** build a functor chaining the given functions */
   template<typename SIG1, typename SIG2>
+  inline
   typename _Chain<SIG1,SIG2>::Function
   chained (SIG1& f1, SIG2& f2)
   {
@@ -884,5 +865,5 @@ namespace func    {
   
   
   
-}}} // namespace lumiera::typelist::func
+}}} // namespace lib::meta::func
 #endif

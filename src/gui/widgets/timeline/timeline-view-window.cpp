@@ -31,28 +31,36 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineViewWindow::TimelineViewWindow(
-  Time offset, int64_t scale) :
-  timeOffset(offset),
-  timeScale(scale)
+/* == public constants == */
+  
+const int64_t TimelineViewWindow::MaxScale = 30000000; // 30 Million
+const double TimelineViewWindow::ZoomIncrement = 1.25; // Not currently used
+const double TimelineViewWindow::ZoomSmoothing = 9.0;
+
+
+
+TimelineViewWindow::TimelineViewWindow (Offset offset, int64_t scale)
+  : timeOffset(offset)
+  , timeScale(scale)
 {
+
 }
 
-Time
-TimelineViewWindow::get_time_offset() const
+Offset
+TimelineViewWindow::get_time_offset() const      /////////////////////TICKET #795: this function shouldn't be accessible from outside
 {
-  return timeOffset;
+  return Offset (timeOffset);
 }
 
 void
-TimelineViewWindow::set_time_offset(Time offset)
+TimelineViewWindow::set_time_offset(TimeValue const& offset) /////////TICKET #795: this function shouldn't be accessible from outside
 {
   timeOffset = offset;
   changedSignal.emit();
 }
 
 int64_t
-TimelineViewWindow::get_time_scale() const
+TimelineViewWindow::get_time_scale() const       /////////////////////TICKET #795: this function shouldn't be accessible from outside
 {
   return timeScale;
 }
@@ -65,24 +73,51 @@ TimelineViewWindow::set_time_scale(int64_t scale)
 }
 
 void
-TimelineViewWindow::zoom_view(int point, int zoom_size)
-{ 
-  int64_t new_time_scale = (double)timeScale * pow(1.25, -zoom_size);
-  
-  // Limit zooming in too close
-  if(new_time_scale < 1) new_time_scale = 1;
-  
-  // Nudge zoom problems caused by integer rounding
-  if(new_time_scale == timeScale && zoom_size < 0)
-    new_time_scale++;
-    
-  // Limit zooming out too far
-  if(new_time_scale > TimelineWidget::MaxScale)
-    new_time_scale = TimelineWidget::MaxScale;
-  
+TimelineViewWindow::set_time_scale(double ratio)
+{
+  int64_t max = MaxScale;
+  int64_t min = 1;
+
+  if(ratio <= 0.0)
+    {
+      set_time_scale((int64_t)min);
+      return;
+    }
+
+  if(ratio > 1.0)
+    {
+      ratio = 1.0;
+    }
+
+   set_time_scale((int64_t)(ratio * max));
+}
+
+double
+TimelineViewWindow::get_smoothed_time_scale()  const
+{
+  double linear_scale ( 1.0 / MaxScale * timeScale);
+
+  // reverse the effect of zoom scale smoothing
+  return pow (linear_scale, (1.0 / ZoomSmoothing));
+}
+
+void
+TimelineViewWindow::zoom_view(int point, double time_scale_ratio)
+{
+  // Apply the smoothing factor
+  int64_t new_time_scale(pow (time_scale_ratio, ZoomSmoothing)
+                         * double(MaxScale));
+
+  /* Prevent Zooming in To Close and Far */
+  if(new_time_scale < 1)
+    new_time_scale = 1;
+
+  if(new_time_scale > MaxScale)
+    new_time_scale = MaxScale;
+
   // The view must be shifted so that the zoom is centred on the cursor
-  set_time_offset(Time((gavl_time_t)get_time_offset() +
-    (timeScale - new_time_scale) * point));
+  TimeVar newStartPoint = timeOffset + TimeValue(point * (timeScale - new_time_scale));
+  set_time_offset (newStartPoint);
     
   // Apply the new scale
   set_time_scale(new_time_scale);
@@ -91,20 +126,20 @@ TimelineViewWindow::zoom_view(int point, int zoom_size)
 void
 TimelineViewWindow::shift_view(int view_width, int shift_size)
 {
-  set_time_offset(Time((gavl_time_t)get_time_offset() +
-    shift_size * timeScale * view_width / 256));
+  set_time_offset (timeOffset + TimeValue(timeScale * shift_size * view_width / 256));
 }
 
 int
-TimelineViewWindow::time_to_x(gavl_time_t time) const
+TimelineViewWindow::time_to_x(TimeValue const& time) const
 {
-  return (int)((time - timeOffset) / timeScale);
+  return int (_raw(time - timeOffset) / timeScale); //////TODO protect against values out-of range
 }
 
 Time
 TimelineViewWindow::x_to_time(int x) const
 {
-  return Time((gavl_time_t)((int64_t)x * timeScale + timeOffset));
+  TimeValue time_in_view (timeScale * x);
+  return timeOffset + time_in_view;
 }
 
 sigc::signal<void>
@@ -113,7 +148,5 @@ TimelineViewWindow::changed_signal() const
   return changedSignal;
 }
 
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+}}} // namespace gui::widgets::timeline
 

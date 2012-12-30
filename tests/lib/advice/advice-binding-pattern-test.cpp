@@ -25,7 +25,7 @@
 #include "lib/test/test-helper.hpp"
 
 #include "lib/advice.hpp"
-#include "lib/time.h"
+#include "lib/time/timevalue.hpp"
 
 #include <iostream>
 
@@ -127,11 +127,11 @@ namespace test  {
           b2.addPredicate("cat3(zzz)");
           CHECK (b1 != b2);
           
-          b1.addTypeGuard<lumiera::Time>();
+          b1.addTypeGuard<time::Time>();
           CHECK (b1 != b2);
           b1.addPredicate(" cat3(  zzz   )  ");
           CHECK (b1 != b2);
-          b2.addTypeGuard<lumiera::Time>();
+          b2.addTypeGuard<time::Time>();
           CHECK (b1 == b2);
           
           cout << "b2==" << b2 << endl;

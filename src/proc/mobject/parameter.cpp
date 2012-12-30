@@ -25,6 +25,7 @@
 #include "proc/mobject/parameter.hpp"
 #include "proc/mobject/paramprovider.hpp"
 
+namespace proc {
 namespace mobject {
   
   
@@ -37,4 +38,4 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace mobject
