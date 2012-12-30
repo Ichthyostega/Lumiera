@@ -11,8 +11,8 @@ and compositing FOSS application for Linux/Unix/Posix operating systems.  The
 application is geared towards professional, high-quality work; but
 it is equally suitable for low-end users, due to its in-design scalability.
 Lumiera builds on common open source video, sound and GUI toolkits and
-libraries, being highly flexibile, configurable---user-control over a broad
-spectrum of configurable parameters---and with smooth workflows that scale well
+libraries, being highly flexibile, configurable -- user-control over a broad
+spectrum of configurable parameters -- and with smooth workflows that scale well
 to larger more intricate projects and smaller projects.
 
 This document outlines the design from a more general perspective,
