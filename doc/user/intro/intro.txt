@@ -36,50 +36,53 @@ Vision
 
 // objective and goals of the project
 
-Lumiera strives towards being a _professional non-linear video editor_. To start with, we should
-point out that ``professional'' does not necessarily mean ``commercial'' or ``industrial''.
-It's more of an attitude or frame of mind -- doing work seriously, and to be subject to any
-kind of wider goal, requirement, or purpose. 
-
-The concept of professionality in film editing can mean something of an artistic
-nature, a narrative or having a meaning to convey, a political message, or
-portray something to an audience.  
+Lumiera strives towards being a _professional non-linear video editor_.  It is
+important to note that by ``professional'' we do not necessarily imply
+``commercial'' or even ``industrial''.  We do, however, wish to suggest an
+attitude or frame of mind in how this work is approached, but not the goal,
+requirement or purpose of this work.  The concept of professionality in film
+editing can indicate something of an artistic nature, suggest that there is a
+narration, meaning or political messages revealed by the work; or, simply, that
+the work attempts to convey something to an audience.
 
 Anyhow, for the tools, the editing software used to this end, we can identify
 several properties and requirements, to be labeled ``professional'':
 
 With this perspective in mind, we can identify a number of key properties
-of professional film production tools: 
+film production tools should have and be professional: 
 
  Reliability::
-        Your work must be safe and protected at all costs against software
-        glitches and incompatibilities. Ideally, Lumiera should be reliable,
-        very stable and not crash. In practice, even crashes or power outages
-        should not result in data or work loss..
+        All work must be secure and be safe against any software glitches,
+        incompatibility or instability.  Ideally, Lumiera should be reliable,
+        very stable and not susceptible to software crashes, i.e., crashes or
+        power failure should ideally not result in data or work loss.
 
  Quality::
         The demands placed on high-quality, cinema grade digital video material
-        requires crisp-quality without any compromsise throught the entire work
-        flow in the final product.  All rendering will have to be reproducable
-        down to the last digit.
+        requires crisp-quality results with no concessions made throughout the
+        entire workflow that might compromise quality of the final work.
+	It will be necessary to be able to reconstruct all rendering down to a
+        single digit. 
  
  Performance and Productivity::
-        Professionals want to get things done, in time and content, but ideally
-        with control over all details. The fine balance of these goals is a
+        Professionals want to get things done in time and content, but, ideally,
+        with control over all detail. The fine balance of these goals is a
         central goal of workflow design and usability.
 
  Scalability and Adaptability::
-        Projects and budgets differ, hardware advances, Lumiera must scale
-        in different dimensions and use available resources as best it
-        can. From small Laptops to multi core computers and Renderfarms.
+        Projects and budgets differ, hardware advances; and Lumiera must scale
+        in different dimensions and make optimum use of the resources that are
+        available. From small Laptops to multi-core computers up to render farms,
+        Lumiera must be adept in optimum use of the hardware at hand.
 
  Durability::
-        Soft and Hardware advances at a fast pace. We must not lock into the
-        current state of technology but must be flexible enough to extend the
-        system without breaking compatibility. Projects you create nowadays with
-        Lumiera should be usable in the foreseeable future, there at least needs
-        to be a guaranteed upgrade path.
-
+        The rapid pace at which software and hardware rampage forward is surely 
+        a warning to new software projects and the dangers of locking into any
+        current technological ``fashion'' to achieve a ``cheap'' goal, feature
+        or performance boost.  Once the fad fades, the software woes begin.
+        The software must be able to engage new technological developments
+        without any compromise to functionality or backward compatibility.
+	
 
 Fundamental Forces
 ------------------
