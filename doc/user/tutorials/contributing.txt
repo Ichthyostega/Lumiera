@@ -3,41 +3,91 @@ Contributing to Lumiera
 
 All files in the Lumiera project are managed by *Git*. Although *Git* was
 primarily brought to life to manage source code, it plays a fundamental role in
-Lumiera project communication and contributing to Lumiera.
-If you'd like to contribute to Lumiera, you will have to acquire some
+the Lumiera project.  It is central to communication and contribution in the
+project.  If you'd like to contribute to Lumiera, you will have to acquire some 
 understanding of *Git* at some stage or other. Please note, this is not the only
 way to contribute to Lumiera, you can always send direct contributions to the
 mailing list.
 
-
-a powerful tool
-that not only 
- 
-
- which is a distributed 
-source code management system. 
-
 The Lumiera project uses an infrastructure based on *Git*, the distibuted
 sourcecode management software. This deliberately places the barrier for
-contributing very low: No formal ``commit right'' is necessary; you can
-start right away and present your first results in the _mob repository_.
+contributing very low: No formal ``commit permission'' is necessary; you can
+start right away and present your first results to the _mob repository_.
 
-For starters, follow the
+
+
+Git: Lumiera Essentials
+-----------------------
+
+One very useful place to begin with using Git is the following:
 http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html[basic
-instructions] for using Git, notably the following parts:
+instructions].  In particular, the following parts:
 
 http://gitref.org/
+
+In the following, we assume you have set up Git on your system.  If you are
+experiencing problems with Git, just ask the Lumiera community.
+
+
+Letting People Know Who You Are
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ------------------------------------------------------------
 $ git config --global user.name "Your Name Comes Here"
 $ git config --global user.email you@yourdomain.example.com
 ------------------------------------------------------------
 
-If you followed the link:building.html[building-lumiera tutorial], you created
-already a local clone of the Lumiera repository. So you are ready to go,
-you can edit build and commit your changes to the lumiera code locally in
-your cloned repository. Please commit frequently, do small commits which
-fix/improve only one single thing and use meaningful commit messages.
+Obtaining Lumiera Code
+~~~~~~~~~~~~~~~~~~~~~~
+
+------------------------------------------------------------
+$ git clone git://git.lumiera.org/LUMIERA
+------------------------------------------------------------
+
+If everything goes ok, you should have the Lumiera source code.  However, you do
+not have enough code to build as there are some external packages missing that
+are required to build Lumiera.  Please refer to the
+link:building.html[building-lumiera tutorial] on how to obtain all packages to
+build Lumiera.
+
+
+Contributing
+~~~~~~~~~~~~
+
+So you are ready to go, you can edit and commit your changes to the
+lumiera code locally in your cloned repository. Please commit frequently, do
+small commits which fix or improve only one single thing and try to use
+meaningful commit messages. 
+
+Let's assume, as an example, you've made changes to this file:
+_.../doc/users/tutorials/contributing.txt_.
+
+Here's how to add your changes to Git:
+
+------------------------------------------------------------
+$ cd .../doc/users/tutorials
+$ git add contributing.txt
+$ git commit contributing.txt -m "Corrected a grammatical error in section Git"
+------------------------------------------------------------
+
+You can, of course, add more detailed information to your commit message.  To do
+this, you'll have to set-up git to use your favourite editor.  Here's how to get
+Git to use emacs:
+
+------------------------------------------------------------
+$ git config --global core.editor emacs
+------------------------------------------------------------
+
+Then while commiting, do not use the _-m_ option.  Your editor will appear
+requiring you to enter your comments.  Enter, as your first line, a one line
+summary of less than 80 characters in length (some applications use this line 
+for various purposes and longer entries tend to cause difficulties).
+The line following your one line summary should be blank. Then on the third
+line, you can begin your exposition on your changes.
+ 
+
+Publishing Your Contribution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Check that you didn't break anything, by running the testsuite.
 
@@ -47,7 +97,32 @@ Finally you can push your changes to the lumiera server to the 'mob' repository:
 $ git push git://git.lumiera.org/lumiera/mob master:refs/heads/YOURNAME 
 ------------------------------------------------------------
 
-This creates a new branch 'YOURNAME' on the mob repository. Then you notify the
-other devs on the mailinglist and they may merge your code into the mainline.
+This creates a new branch 'YOURNAME' on the mob repository.
+
+Check that indeed your changes are public by visiting 
+http://www.lumiera.org/gitweb [http://www.lumiera.org/gitweb].  The lumiera/mob
+repository should indicate 'right now' as its _Last Change_ entry.
+
+Thereafter, notify the other developers on the mailinglist and they may merge
+your code into the main project line. 
+
+
+Lumiera Communication Channels
+------------------------------
+
+
+The Mailing List
+~~~~~~~~~~~~~~~~
+
+lumiera@lists.lumiera.org 
+
+
+IRC Meetings
+~~~~~~~~~~~~
+The Lumiera community generally meets on the second Wednesday of each month at
+20:00 uucp on: _freenode #Lumiera_.
+
+All are more than welcome to join and to contribute to the discussions there.
+
 
 
