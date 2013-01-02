@@ -98,6 +98,7 @@ namespace lumiera {
   using lib::IxID;
   using lib::Symbol;
   using lib::Literal;
+  using util::isnil;
   using util::unConst;
   using boost::lexical_cast;
   using std::string;
@@ -132,6 +133,7 @@ namespace lumiera {
         { EMPTY      = 0
         , GENERIC    = 1
         , DISCOVERY
+        , PLACEMENT
         };
       
       struct QueryID
@@ -258,6 +260,12 @@ namespace lumiera {
    * of specific resolution mechanisms. This way, clients may retrieve a set of results,
    * each representing a possible solution to the posed query.
    * 
+   * @remarks lumiera::Query is an interface, but can be used as-is to represent a generic query.
+   *          Specialised subclasses are required to provide a syntactic representation, but are
+   *          free to do so only on demand. In this case, generate an \em empty lib::QueryText
+   *          definition and implement the Query#buildSyntacticRepresentation function.
+   *          Every fundamentally different kind of query needs to be listed in Goal::Kind.
+   * 
    * @note until really integrating a rules based system
    *       this is largely dummy placeholder implementation.
    *       Some more specific query resolvers are available already,
@@ -273,7 +281,7 @@ namespace lumiera {
     : public Goal
     {
       /** generic syntactical definition */
-      lib::QueryText def_;
+      mutable lib::QueryText def_;
       
     protected:
       static QueryID
@@ -281,6 +289,33 @@ namespace lumiera {
         {
           QueryID id(queryType, getResultTypeID<RES>());
           return id;
+        }
+      
+      /**
+       * Extension point to generate a generic query definition on demand.
+       * Some specialised kinds of queries, intended to be treated by a specific resolver,
+       * may choose skip constructing a generic query representation, but are then bound
+       * to supplement such a generic definition through this function when required.
+       * The generated query definition must be sufficient to reconstruct the query
+       * in all respects.
+       * @return a complete definition of this query in predicate form
+       * @retval bottom token to indicate failure to comply to this requirement.
+       */
+      virtual lib::QueryText
+      buildSyntacticRepresentation()  const
+        {
+          WARN (query, "internal query not outfitted with a suitable query definition");
+          return string("bottom");
+        }
+      
+      /** access the complete syntactical representation of this query.
+       *  May trigger on-demand initialisation */
+      lib::QueryText
+      getQueryDefinition()  const
+        {
+          if (isnil(this->def_))
+            def_ = this->buildSyntacticRepresentation();
+          return def_;
         }
       
       
@@ -348,7 +383,7 @@ namespace lumiera {
       friend size_t
       hash_value (Query const& q)
       {
-        return taggedHash (hash_value(q.def_), q.id_);
+        return taggedHash (hash_value(q.getQueryDefinition()), q.id_);
       }
     };
   
@@ -370,12 +405,14 @@ namespace lumiera {
       QueryKey (Goal::QueryID id, lib::QueryText q)
         : id_(id)
         , def_(q)
-        { }
+        {
+          ENSURE (!isnil(def_));
+        }
       
       /** the empty or bottom query key */
       QueryKey()
         : id_()
-        , def_("NIL")
+        , def_("false")
         { }
       
       // default copyable
@@ -544,7 +581,7 @@ namespace lumiera {
   inline typename Query<RES>::Builder
   Query<RES>::rebuild()  const
   {
-    return Builder(this->id_, this->def_);
+    return Builder(this->id_, getQueryDefinition());
   }
   
   
@@ -566,7 +603,7 @@ namespace lumiera {
   inline bool
   Query<RES>::usesPredicate (Symbol predicate)  const
   {
-    return lib::query::hasTerm(predicate, this->def_);
+    return lib::query::hasTerm(predicate, getQueryDefinition());
   }
   
   
@@ -579,7 +616,7 @@ namespace lumiera {
   inline
   Query<RES>::operator QueryKey()  const
   {
-    return QueryKey (this->id_, this->def_);
+    return QueryKey (this->id_, getQueryDefinition());
   }
       
 

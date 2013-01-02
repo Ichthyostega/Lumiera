@@ -164,6 +164,9 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (   plugins,                    progress);
 /** base channel flag to track overall working of the render engine */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  render,                      logging);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  config,                      logging);       //TODO: here seems to be an ambiguity weather "config" should denote the global config channel or the config-loder internals
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   rules,                      config);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   query,                      config);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   resolver,                   config);
 
 /** base flag for software testing */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  test,                        logging);

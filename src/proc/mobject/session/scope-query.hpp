@@ -44,6 +44,7 @@
 
 #include "proc/mobject/placement.hpp"
 #include "common/query/query-resolver.hpp"
+#include "lib/format-string.hpp"
 
 #include <tr1/functional>
 
@@ -97,7 +98,7 @@ namespace session {
       
       DiscoveryQuery ()
         : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY)
-                 , lib::QueryText("TODO")) /////////////////////////////////////////////TODO: generate syntactic representation
+                 , lib::QueryText(""))  //  syntactic representation supplied on demand
         { }
       
     private:
@@ -188,6 +189,22 @@ namespace session {
       buildContentFilter()  const
         {
           return bind (&PlacementMO::isCompatible<MO>, _1 );
+        }
+      
+      /** supplement a syntactic representation (as generic query in predicate form).
+       *  Building this representation is done on demand for performance reasons;
+       *  typically a ScopeQuery is issued immediately into a known sub scope
+       *  of the Session/Model and resolved by the PlacementIndex
+       * @todo we need a readable and sensible representation as generic query ///////////////////TICKET #901
+       */
+      lib::QueryText
+      buildSyntacticRepresentation()  const
+        {
+          using util::_Fmt;
+          TODO ("valid syntactic representation of scope queries");
+          return lib::QueryText (_Fmt ("scope(X, %08X), scopeRelation(X, %d)")
+                                      % hash_value(searchScope())        ////////TODO how to represent a placement in queries
+                                      % uint(searchDirection()));        ////////TODO how to translate that in textual terms
         }
     };
   
