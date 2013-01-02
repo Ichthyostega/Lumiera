@@ -4840,7 +4840,7 @@ See also the notes on
 &amp;nbsp; &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="QueryDefinition" modifier="Ichthyostega" created="201212282318" tags="Rules draft" changecount="1">
+<div title="QueryDefinition" modifier="Ichthyostega" modified="201212292049" created="201212282318" tags="Rules draft" changecount="3">
 <pre>While there are various //specialised queries// to be issued and resolved efficiently, as a common denominator we use a common ''syntactic representation'' of queries based on predicate logic. This allows for standardised processing when applicable, since a //generic query// can be used as a substitute of any given specialised kind of query. Moreover, using the predicate logic format as common definition format allows for programmatic extension, reshaping, combining and generic meta processing of queries within the system.
 
 !the textual syntactic form
@@ -4851,7 +4851,7 @@ The plan is to use a syntax which can be fed directly to a Prolog interpreter or
 Since the intention is to use queries pervasively as a means of orchestrating the interplay of the primary controlling facilities, the internal representation of this syntactic exchange format might become a performance bottleneck. The typical usage pattern is just to create and issue a query to retrieve some result value -- thus, in practice, we rarely need the syntactic representation, while being bound to create this representation for sake of consistency.
 
 !textual vs parsed-AST representation
-For the initial version of the implementation, just storing a string in Prolog syntax is enough to get us going. But on the long run, for the real system, a pre-parsed representation in the style of an _A_bstract __S__yntax __T__ree seems more appropriate: through the use of some kind of symbol table, actual queries can be tagged with the common syntactic representation just by attaching some symbol numbers.
+For the initial version of the implementation, just storing a string in Prolog syntax is enough to get us going. But on the long run, for the real system, a pre-parsed representation in the style of an __A__bstract __S__yntax __T__ree seems more appropriate: through the use of some kind of symbol table, actual queries can be tagged with the common syntactic representation just by attaching some symbol numbers, without the overhead of creating, attaching and parsing a string representation in most cases
 </pre>
 </div>
 <div title="QueryExchange" modifier="Ichthyostega" modified="201212282254" created="201211060206" tags="Rules draft" changecount="4">
@@ -4941,7 +4941,7 @@ We might end up with a full blown subsystem, and possibly with a hierarchy of di
 But for now the decision is to proceed with isolated and specialised QueryResolver subclasses, and to pass a basically suitable resolver to the query explicitly when it comes to retrieving results. This resolver should be obtained by some system service suitable for the concrete usage situation, like e.g. the ~SessionServiceExploreScope, which exposes a resolver to query session contents through the PlacementIndex. Nonetheless, the actual dispatch mechanism is already implemented (by using an ~MultiFact instance), and each concrete resolution mechanism is required to do an registration within the ctor, by calling the inherited {{{QueryResolver::installResolutionCase(..)}}}.
 </pre>
 </div>
-<div title="QueryResolver" modifier="Ichthyostega" modified="200911090412" created="200910210300" tags="Rules spec draft img" changecount="26">
+<div title="QueryResolver" modifier="Ichthyostega" modified="201212292057" created="200910210300" tags="Rules spec draft img" changecount="27">
 <pre>Within the Lumiera Proc-Layer, there is a general preference for issuing [[queries|Query]] over hard wired configuration (or even mere table based configuration). This leads to the demand of exposing a //possibility to issue queries// &amp;mdash; without actually disclosing much details of the facility implementing this service. For example, for shaping the general session interface (in 10/09), we need a means of exposing a hook to discover HighLevelModel contents, without disclosing how the model is actually organised internally (namely by using an PlacementIndex).
 
 !Analysis of the problem
@@ -4967,6 +4967,8 @@ The //client// &amp;nbsp;(code using query-resolver.hpp) either wants a ''goal''
 * we endorse that uttermost performance is less important than clean separation an extensibility. Thus we accept accessing the current position pointer through reference and we use a ref-counting mechanism alongside with the iterator to be handed out to the client
 * the result set is not tied to the query &amp;mdash; at least not by design. The query can be discarded while further exploring the result set.
 * for dealing with the TypedQueryProblem, we require the concrete resolving facilities to register with a system startup hook, to build a dispatcher table on the implementation side. This allows us to downcast to the concrete Cursor type on iteration and results retrieval.
+* the intention is to employ a mix of generic processing (through a common generic [[syntactic query representation|QueryDefinition]]) and optimised processing of specialised queries relying on concrete query subtypes. The key for achieving this goal is the registration menchanism, which could evolve into a generic query dispatch system -- but right now the exact balance of this two approaches remains a matter of speculation...
+
 </pre>
 </div>
 <div title="RSSReaderPlugin" modifier="Ichthyostega" created="200708081515" tags="systemConfig" changecount="1">

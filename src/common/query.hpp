@@ -21,6 +21,56 @@
 */
 
 
+/** @file query.hpp
+ ** Basic and generic representation of an internal query.
+ ** This header provides the foundation for issuing queries instead of using hard wired
+ ** logic and defaults. This is a fundamental architecture pattern within Lumiera, and serves
+ ** to decouple the parts of the application and allows for a rules based configuration and
+ ** orchestration of the internal workings.
+ ** 
+ ** A Query is a request for just \em someone to come up with a solution, a preconfigured
+ ** setup, some existing data object or contextual information. In order to be usable,
+ ** a QueryResolver needs to be available for computing the solution and retrieving
+ ** the results. As a common denominator, queries can be <i>generic queries</i> given
+ ** in predicate logic syntax; in this case a generic query resolver (Planned feature
+ ** as of 1/2013) will be able at least to determine a suitable facility for delegating
+ ** the resolution. Besides, specific subsystems are using more specific kinds of
+ ** queries and provide a specialised resolution mechanism, which in these cases
+ ** can be addressed directly.
+ ** 
+ ** \par General usage pattern
+ ** Some parts of the application allow to issue queries -- typically these parts do
+ ** also expose a service point for clients to issue similar queries. In any case, a
+ ** query remains in the ownership of the issuer, which is also responsible to keep
+ ** the storage alive during results retrieval. Queries can't be copied and are passed
+ ** by reference, since #Query is an interface baseclass. Each query instance bears
+ ** at least a type tag to indicate the type of the returned result, plus a classification
+ ** tag indicate the kind of query. Generally, queries are also required to provide a
+ ** syntactical representation, allowing to transform each query into a generic query.
+ ** 
+ ** To resolve the query, a lumiera::QueryResolver instance is necessary, and this
+ ** query resolver needs the ability to deal with this specific kind of query. Typically
+ ** this is achieved by installing a resolution function into the resolver on application start.
+ ** The QueryResolver returns a result set, actually a Query::Cursor, which can be used to
+ ** enumerate multiple solutions, if any.
+ ** 
+ ** Queries are \em immutable, but it is possible to re-build and remould a query using
+ ** a Query<TY>::Builder, accessible via Query#build() and Query#rebuild().
+ ** 
+ ** @note as of 1/2013 this is rather a concept draft, but some parts of the code base
+ **       are already actively using some more specific queries
+ **
+ ** @see lumiera::QueryResolver
+ ** @see mobject::session::DefsManager
+ ** @see asset::StructFactory 
+ ** @see config-resolver.hpp specialised setup for the Proc-Layer
+ ** @see fake-configrules.hpp currently used dummy-implementation
+ ** @see SessionServiceExploreScope
+ ** @see PlacementIndexQueryResolver 
+ ** 
+ */
+
+
 #ifndef LUMIERA_QUERY_H
 #define LUMIERA_QUERY_H
 
