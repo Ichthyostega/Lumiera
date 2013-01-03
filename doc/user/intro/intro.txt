@@ -285,15 +285,21 @@ footage for preview creates a simple internal timeline.
 
 
 
-Busses
-~~~~~~
+Global Pipes
+~~~~~~~~~~~~
 // TODO: needs rewriting.
-The GUI provides a separate _bus view_, showing the master busses (subgroups)
-in a manner similar to an audio mixing desk. Any bus is just a means of collecting
-and and adding (aka overlaying) together output of various kinds of media
-(video, audio, number of channels), produced by various processing elements and
-from other busses. These global busses can be conceived as being part of the
-timeline. 
+The GUI provides a separate _bus view_, showing the _global pipes_. These are the
+master busses for each kind of output (image and sound) and collect the output of
+the subgroups, in a manner similar to an audio mixing desk. Any _pipe_ is just a
+means of collecting, mixing or overlaying output produced by other pipes.
+A simple (linear) chain of effects can be applied within each pipe.
+
+Most of the pipes are managed automatically, e.g. the pipes corresponding to
+individual clips, or the pipes collecting output from transitions, from nested
+sequences and from groups of tracks. At some point, at the level of the
+timeline, all of the processed data is collected within the aforementioned
+global pipes to form the small number of output streams produced by rendering
+and playback. Each timeline uses a separate set of global pipes.
 
 
 Asset View
