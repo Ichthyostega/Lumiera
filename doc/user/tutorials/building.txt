@@ -1,13 +1,19 @@
 Building Lumiera from source
 ============================
 
-Currently, after building the application, you can try out the Lumiera GUI
-and you can run the test suite. This tutorial details the basic procedure
-to compile Lumiera on a Linux (or comparable) system. We'll assume that
-the reader has acquired basic _commandline survival skills_ and is able
-to figure out the usage of the Git version management system from the
-documentation (but we'll mention each actually required command
-explicitly)
+At the moment you can build Lumiera, start the standard Lumiera GUI and run the
+Lumiera test suite.
+
+This tutorial outlines the fundamental steps required to compile Lumiera on
+Linux (or a comparable) system. We'll assume that you have a certain familiarity
+with _commandline survival skills_ on your system. Although Git is required if
+you do not use the Debian package, we'll explicitly provide all giot commands.
+
+There are two distinct methods to build:
+
+- use the Debian source code package of Lumiera
+- use Git to retrieve all source code
+
 
 NOTE: just compiling Lumieara on a _Debian-based_ system (e.g. Ubuntu)
       is much simpler using the Debian source package. See the separate
@@ -16,24 +22,30 @@ NOTE: just compiling Lumieara on a _Debian-based_ system (e.g. Ubuntu)
       The purpose of this tutorial here is to show you the elementary
       and generic steps to compile Lumiera from source.
 
-For building Lumiera, besides the GNU C/C++ compiler (Version 4.X), you will need:
+
+Requirements
+------------
+
+To build Lumiera, you'll require GNU C/C++ compiler (Version 4.X) in addition to
+the following:
 
  * link:http://git-scm.com/[Git VCS]
  * link:http://www.scons.org/[SCons build system]
  * link:http://www.boost.org/[Boost libraries]
  * link:http://gmerlin.sourceforge.net/[GAVL library]
  * *NoBug* (see below)
+ * Lumiera source code 
 
-The GUI depends on:
+The GUI depends on the following:
 
  * http://www.gtkmm.org/en/[gtkmm]
  * http://cgit.freedesktop.org/xorg/lib/libXv[libXv]
 
-TIP: Generally speaking, when you want to build software, you need the
-_development_ version of the packages, containing the headers and pre-built
-libraries to link against. Usually, these packages are named `-devel` or `-dev`
+TIP: Generally speaking, when you want to build software, you'll need the
+_development_ version of the packages that contain the headers and pre-built
+libraries to link against. These packages are ususally named `-devel` or `-dev`.
 
-For Debian based systems, e.g. Ubuntu, you can install these dependencies with:
+For Debian based systems, e.g. Ubuntu, you can install these packages as follows:
 
 -------------------------------------------------------------------------------------
 sudo apt-get install build-essential autoconf scons valgrind libtool git-core \
@@ -44,42 +56,47 @@ libgavl-dev libgdl-1-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
 Optionally, you may also want to install the *gtk2-engines* package.
 
 
-Build directory
+Build Directory
 ---------------
 
-You need a directory for checking out the sources and running the build. This
-could be a temp directory, or some "workspace" directory below your home
-directory. We'll call it _workspace directory_ from now on.
+You'll need to check out the source code in some directory or other. You'll also
+have to use this directory to build Lumiera. This could be a temporary
+directory, or some "workspace" directory below your home directory. We'll refer
+to this directory as _workspace directory_ . 
 
-Lumiera specific libraries
+Lumiera Specific Libraries
 --------------------------
 
-Now that you have your basic build system setup, Lumiera needs a few more
-special support libraries.  Currently you need to build those from source and
-install them, so the Lumiera build process can pick them up.
+Now that you have your basic build system setup, you'll next have obtain support
+libraries required by Lumiera that are not directly part of the Lumiera project
+itself. At the moment, you'll have to get the source code for the support
+libraries at build them from source. We do not have them pre-packaged at the
+moment, but this will hopefully change over time. However, it is not too
+difficult to build the support libraries and the instructions following here
+should not be too difficult.
 
 WARNING: Note that the following procedures will try to install files into your
 base system below `/usr/local`.
 
-To do so, you'll need administrative permissions for the machine you're working
+To do so, you'll need administrative permission for the machine you're working
 on. These additions might interfere with other libraries installed by your
 package manager (if you get into trouble updating your system later on,
-sometimes you need to remove these manually built libraries).
+you might have to manually remove these libraries).
 
-Installing NoBug
-~~~~~~~~~~~~~~~~
+NoBug: obtaining, building and installing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 *NoBug* is an instrumentation and diagnostics library. +
-Go into the mentioned _workspace direcory_ (maybe create a new
-directory). First, let's get the NoBug source code:
+Enter _workspace direcory_ as explained above. 
+Get the NoBug source code:
 
 ------------------------------------------------------------
 git clone git://git.pipapo.org/nobug
 ------------------------------------------------------------
 
-This will create a (sub)directory called nobug with source code in your current
-directory. +
-Compile NoBug with the following commands
+This will create a (sub)directory called nobug that contains source code. +
+Compile and install NoBug with the following commands: (this will try to install
+the NoBug library in /usr/lib, so you will require root privilages to do so!)
 
 ------------------------------------------------------------
 cd nobug
@@ -91,8 +108,8 @@ make
 sudo make install
 ------------------------------------------------------------
 
-Installing GDL
-~~~~~~~~~~~~~~
+GDL: obtaining, building and installing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The *GNOME Docking library* is generally available through your package manager,
 but we contributed some improvements, which are only available in the very
@@ -126,8 +143,8 @@ check library linkage
 The compile will warn you to add various directories to /etc/ld.so.conf and then
 run ldconfig. This will allow your dynamic liker to pick up the newly built
 libraries later when you try to start Lumiera.  If you don't want to reconfigure
-your system and add `/usr/local/lib` to the mentioned linker configuration, you
-may alternatively just add the directories to your LD_LIBRARY_PATH environment
+your system and add `/usr/local/lib` to the linker configuration, you may
+alternatively just add the directories to your LD_LIBRARY_PATH environment
 variable.
 
 Either way, check that all libraries are accessible and OK:
@@ -144,27 +161,30 @@ and you should get a list of the libraries, part of which should look like this:
         libgdl-lum.so.0 -> /usr/local/lib/libgdl-lum.so.0.0.0
 ------------------------------------------------------------
 
-or similar. The same holds true for 'libgdl-lum.so.0' if you needed to build it
-explicitly for your system. If any if these libraries are not listed,
-investigate why before continuing. 
+or similar. The same applies to 'libgdl-lum.so.0' if you needed to build it
+explicitly for your system. If any of these libraries are not listed, you'll
+have to see why before you can continue.
 
 
 Building Lumiera
 ----------------
 
-Up to now, Lumiera has had two maintained (and equivalent) build systems: *scons* and
-*autotools*. (Note 3/2011: Right now, the autotools build is broken. It is always a good
-idea to check the current build stats from our *builddrone*, which automatically builds
-the latest version from master repository. Please have a look at this
+Up to now, Lumiera has had (and equivalent) build systems: *scons* and
+*autotools*. (Note 3/2011: At the moment, the autotools build system is
+broken; only the scons build mechanism is working. It is always a good idea to
+check the current build stats from our *builddrone*, which automatically builds 
+the latest version from the master repository. Please have a look at this
 http://lumiera.org/builddrone/table.html[current build stats]-page.)
 
-Next, after having built and installed the prerequisite libraries, go into the
-_workspace directory_ to retrieve the Lumiera source code and build it.
+Next, after having built and installed the external libraries, go into the
+_workspace directory_ and retrieve the Lumiera source code. Thereafter, build
+Lumiera. 
 
 
- * to retrieve the source code with git and then build with *scons*:
+ * Issue the following command to retireve the Lumiera source code and,
+ thereafter, build Lumiera using *scons*:
 + 
-(see available build options by issuing `scons -h` )
+(more options for building with scons can be found via:`scons -h` )
 +
 -----------------
 git clone git://git.lumiera.org/LUMIERA
@@ -173,7 +193,8 @@ scons
 -----------------
 +
    
- * alternatively, if you prefer building with *autotools* _(not working currently 3/11)_:
+ * Alternatively, if you'd prefer to build using *autotools* _(not working
+ currently 3/11)_, issue the following commands:
 +
 -----------------
 git clone git://git.lumiera.org/LUMIERA
@@ -187,17 +208,17 @@ make
 
 maybe build and run the test suite by issuing `scons check` or `make check`
 
-This will take some time.
+The build process will take some time, so sit back and relax.
 
-NOTE: you do not need to _install_ Lumiera. It will find its required files
-relative to the generated directory structure, which is freely relocatable
+NOTE: you do not need to _install_ Lumiera. It will find all files it requires
+relative to the directory structure it generates, which is freely relocatable
 as a whole. Just invoke the +target/lumiera+ executable. The current
-working directory is not relevant.
+working directory is not particularly relevant.
 
 After the build has finished successfully, you should be able to start Lumiera.
 Currently, this will bring up the GUI, without any further functionality
 
-You should see something like:
+You should see something like this:
 
 image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 
@@ -205,7 +226,7 @@ image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 What's next?
 ------------
 If you're a coder, maybe you've found something to improve...? +
-Contributing to Lumiera is made easy, thanks to *Git*
+Contributing to Lumiera is easy, thanks to *Git*
 
 -> Tutorial link:contributing.html[Contributing to Lumiera coding]
 
