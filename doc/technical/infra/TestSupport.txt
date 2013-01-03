@@ -1,0 +1,235 @@
+Test Support Tools
+==================
+:Author: Hermann Voßeler
+:Date: 2012
+
+.copied from TiddlyWiki
+NOTE: This page holds content copied from the old "main" TiddlyWiki +
+      It needs to be reworked, formatted and generally brought into line
+
+********************************************
+.Lumiera relies on *test-driven development*
+This page discusses the overall organisation
+of test code, and the tools used for
+running test cases
+********************************************
+
+Tests are the only form of documentation, known to provides some resilience against
+becoming outdated. Tests help to focus on the usage, instead of engaging in spurious
+implementation details. Developers are highly encourraged to write the tests _before_
+the actual implementation, or at least alongside and interleaved with expanding the
+feature set of the actual code.
+There may be exceptions to this rule. Not every single bit needs to be covered by tests.
+Some features are highly cross-cutting and exceptionally difficult to cover with thests.
+And sometimes, just an abstract specification is a better choice.
+
+As a rule of thumb, consider to write test code which is easy to read and understand,
+_like a narration_ to show off the relevant properties of the test subject.
+
+Test Structure
+--------------
+- a *test case* is an executable, expected to run without failure, and optionally producing
+  some verifiable output
+- simple test cases may be written as stand-alone application, while the more tightly
+  integrated test cases can be written as classes within the Lumiera application framework.
+- test cases should use the +CHECK+ macro of NoBug to verify test results, since the normal
+  assertions may be deconfigured for optimised release builds.
+- our test runner script 'test.sh' provides mechanisms for checking for expected output
+
+Several levels of aggregation are available. At the lowest level, a test typically runs
+several functions within the same test fixture. This allows to create a ``narrative''
+in the code: first do this, than do that, and now that, and now this should happen...
+Generally speaking, it is up to the individual test to take care or isolate himself
+from any _dependencies_. Test code and application code uses the same mechanisms
+for accessing other components within the application. Up to now (2012), there
+was no need for any kind of _dependency injection_, nor did we face any
+difficulties with tainted state.
+
+Test classes are organised into a tree closely mirroring the main application source
+code tree. Large sections of this test tree are linked together into *test runners*
+Individual test classes integrate into this framework by placing a simple declaration
+(actually using the `LAUNCHER` macro), which typically also defines some tags and
+classification alongside.
+Using command line parameters for invocation of the test runners, it is possible to
+run some category or especially tagged test classes, or to invoke just a single test class
+in isolation (using the ID, which is also the class name).
+
+The next level of aggregation is provided by the top level test collection definitions
+located in the 'test/' subdirectory. For running these collections as automatic tests within
+the build process, we use Cehteh's simple `test.sh` shell script.
+
+Tools and conventions
+---------------------
+Test code and application code has to be kept separate; the application may be built without any
+tests, since test code has a tendency to bloat the executables, especially in debug mode. Generic
+test support code may be included in the library, and it is common for core components to offer
+dedicated test support and diagnostic features as part of the main application.
+
+Conventions for the Buildsystem
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+to help with automating the build and test execution, test code should adhere to the following conventions:
+
+- test class names should end with the suffix +_test+
+- their tree and namespace location should correspond to the structure of the main application
+- test classes should be placed into a sub namespace +...::test+
+- specific definitions for a single test case may rely on global variables,
+  but these should live within an anonymous namespace
+- all test executables should be named according to the pattern +test-*+
+- all test source code is within the 'tests' subtree
+- immediately within the 'tests/' directory are the test collection definitions +*.tests+,
+  ordered by number prefixes
+- below are the source directories for each of the aforementioned test-executables.
+- there are two kinds of subdirectories or sub collections
+
+  * subtrees of test classes are linked into a single test runner executable. +
+    Currently, we use 'test-lib' and 'test-components' (from the directories 'test/lib' and 'test/components')
+  * collections of simple tests are grouped into several directories thematically. +
+    Within these directories, each source file must provide a main method and is linked into a separate executable.
+
+Internal testsuite runner
+~~~~~~~~~~~~~~~~~~~~~~~~~
+The class `test::Suite` ('src/lib/test/suite.hpp') helps building an executable which will run _all registered
+test case objects,_ or some group of such testcases. Each test case implements a simple interface and thus provides
+a `run (args)` function, moreover, it registers itself immediately alongside with his definition; this works by the
+usual trick of defining a static class object and calling some registration function from the constructor of this static var. See the following
+
+.hello-world-test example
+[source,C]
+----------------------------------------------------------------
+#include "lib/test/run.hpp"
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+namespace test   {
+    
+  class HelloWorld_test
+    : public Test
+    {
+      virtual void
+      run (Arg) 
+        {
+          greeting();
+        } 
+
+      void greeting() 
+        { 
+          cout << "goodbye cruel world..." <<endl; 
+        }
+    };
+
+  /** Register this test class to be invoked in some test groups (suites) */
+  LAUNCHER (HelloWorld_test, "unit function common");    
+}
+----------------------------------------------------------------
+
+.Notes:
+* type Arg is compatible to `std::vector<string> &`
+* this vector may be `arg.size()==0`, which means no comandline args available.
+* these args may contain further arguments passed from system commandline (or the testsuite definition).
+* the test can/should produce output that can be checked with 'test.sh'
+* the macro `LAUNCHER` expands to `Launch<HelloWorld_test> run_HelloWorld_test("HelloWorld_test","unit function common");`
+* note the second parameter to the macro (or the `Laucher`-ctor) is a space-delimited list of group names
+* thus any test can declare itself as belonging to some groups, and we can create a `test::Suite` for each group if we want.
+
+invoking a testrunner executable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The class `test::TestOption` predefines a boost-commandlineparser to support the following optons:
+
+[width="90%",cols="<.<,^4"]
+|====  
+2+<| `./test-components --group <groupID> [testID [arguments...]]`
+|`--help` | options summary
+|`-g <groupID>` | build a Testsuite out of all tests from this group. If missing, ALL tests will be included
+|`[testID]` | (optional) one single testcase. If missing, all testcases of the group will be invoked
+|`--describe`| print all registered tests to stdout in a format suited for use with test.sh
+|====
+Further commandline arguments are deliverd to a single testcase only if you specify a `testID`. Otherwise, all commandline arguments remaining after options parsing will be discarded and all tests of the suite will be run with an commandline vector of `size()==0`
+
+
+
+The Test Script `test.sh`
+~~~~~~~~~~~~~~~~~~~~~~~~~
+To drive the various tests, we use the script 'tests/test.sh'. +
+All tests are run under valgrind control by default (if available), unless `VALGRINDFLAGS=DISABLE` is defined
+(Valgrind is sometimes prohibitively slow). The buildsystem will build and run the testcode when executing
+the target `scons check`. The target `scons testcode` will just build but not execute any tests.
+
+Options for running the Test Script
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Valgrind can be disabled with `VALGRINDFLAGS=DISABLE`
+- one may define `TESTMODE` containing any one of the following strings:
+ 
+  * `FAST` only run tests which failed recently
+  * `FIRSTFAIL` abort the tests at the first failure
+
+- the variable `TESTSUITES` may contain a list of string which are used to select which tests are run. +
+  If not given, all available tests are run.
+
+
+.Examples:
+. running a very fast check while hacking::
+
+  (cd target; TESTSUITES=41 VALGRINDFLAGS=DISABLE TESTMODE=FAST+FIRSTFAIL ../tests/test.sh)
+  
+. invoking the buildsystem, rebuilding if necessary, then invoking just the proc-layer test collections::  
+
+  scons VALGRIND=false TESTSUITES=4 check
+
+. Running the testsuite with everything enabled is just::
+
+  scons check
+
+
+Writing test collection definitions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The definitions for test collections usable with `test.sh` are written in files named '##name.tests'
+in the 'tests/' directory dir, where ## is a number defining the order of the various test files.
+Of course, ``name'' should be a descriptive name about whats going to be tested. Each test collection
+may invoke _only a single binary_ -- yet it may define numerous test cases, each invoking this binary
+while supplementing different arguments. Combined with the ability of our test runner executables to
+invoke individual test classes, this allows for fine grained test case specifications.
+
+In a `*.tests` file the following things should be defined:
+
+- `TESTING <description> <binary>` sets the program binary to be tested to the command line `<binary>`,
+  while `<description>` should be a string which is displayed as header before running following tests
+- `TEST <description> [optargs] <<END`  invokes the previously set binary, optionally with additional arguments.
+  `<description>` is displayed when running this individual test case.
+  A detailed test spec must follow this command and be terminated with `END` on a single line.
+- these detailed test specs can contain following statements:
+
+  * `in: <line>` sends `<line>` to stdin of the test program
+  * `out: <regexp>` matches the STDOUT of the test program with the reguar expression
+  * `out-lit: <line>` expects <line> to appear literally in the stdout of the test program
+  * `err: <regexp>`
+  * `err-lit: <line>` similar for STDERR
+  * `return: <status>` expect <status> as exit status of the program
+
+- if no `out:` or `err:` is given, stdout and stderr are not considered as part of the test.
+- if no `return:` is given, then 0 is expected.
+- a detailed log of the test collection invocation is saved in ,testlog
+
+
+Numbering of test collection definitions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+We establish some numbering conventions to ensure running simpler tests prior to more complex ones.
+Likewise, more advanced integration features should be tested after the application basics.
+
+The currently employed numbering scheme is as follows
+[width="75%",cols="^,<7"]
+|====
+|00 |The test system itself
+|01 |Infrastructure, package consistency
+|10 |Basic support library functionality
+|20 |Higher level support library services
+|30 |Backend Unit tests
+|40 |Proc Layer Unit tests
+|50 |User interface Unit tests (Gui, Scripting)
+|60 |Component integration tests
+|70 |Functionality tests on the complete application
+|80 |Reported bugs which can be expressed in a test case
+|90 |Optional tests, example code
+|====
+

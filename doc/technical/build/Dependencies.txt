@@ -50,6 +50,7 @@ Languages and Tools
    On rare occasions, we _did_ use some GCC extensions, but there would be workarounds,
    should this become a problem.
  - std::tr1 extensions for C++ (smart-ptrs, hashtables, function objects)
+ - *note* switch to C++11 can be expected in the near future
  
 * BOOST (listed below are the DEBIAN package names)
  - libboost-dev (at least 1.40)
