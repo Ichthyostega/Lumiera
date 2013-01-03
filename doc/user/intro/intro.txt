@@ -306,33 +306,24 @@ Asset View
 ~~~~~~~~~~
 An Asset View can be conceived as the timeline's book keeper: it manages the
 various constituents in the timeline.  Moreover, in addition to managing timeline
-constituents, raw material, clips, bins (folders) are managed by the Asset
-View, i.e., typical management operations including, deleting, adding,
+constituents, raw material, clips, bins (folders) and effects are managed by the
+Asset View, i.e., typical management operations including, deleting, adding,
 naming, tagging, grouping into bins, etc. all occur here.
 
-Plugins are also managed in the Asset View.
-
-
-
-Manages all assets available in one project.
+There are various kinds of assets available in any project.
 
   * source media/footage/soundfiles
   * all available effects and transitions
+  * user defined ``effect stacks'' and effect collections ("effect palette")
   * internal artefacts like sequences and automation data sets
+  * markers, labels, tags and similar kinds of metadata
 
-// (much) Later it is planed to make this a database driven interface, where
-// the tabs showing things are basically just database queries. Then it
-// becomes possible to create/extend this by customized queries and augment
-// assets with all kinds of metadata which can be queried
-
-// The user may build custom effect collections ("effect palette")
-
-// Actually, the same underlying data structure is used to implement the
-// asset view with folders, clip bins and effect palettes, and the timeline
-// view with tracks, clips and attached effects. Technically, there is no
-// difference between a track or a clip bin -- just the presentation varies.
-// Timeline contents can be viewed like assets for bookkeeping purposes, and
-// the contents of a clip bin can be played like a storyboard
+Actually, the same underlying data structure is used to implement the
+asset view with folders, clip bins and effect palettes, and the timeline
+view with tracks, clips and attached effects. Technically, there is no
+difference between a track or a clip bin -- just the presentation varies.
+Timeline contents can be viewed like assets for bookkeeping purposes, and
+the contents of a clip bin can be played like a storyboard
 
 
 
