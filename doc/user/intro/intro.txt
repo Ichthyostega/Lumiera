@@ -25,10 +25,15 @@ behind Lumiera to start working with Lumiera quickly.
 // working on this document
 
 .About this Document
-Lumiera is still under active development. Here we describe planned features
-without explicitly tagging them; some points have still to be worked out in
-detail. Although this document is heavily cross-linked, we try to start with a
-broad overview, then develop details towards the end.
+Lumiera is an innovative video editing software, still under active development
+by an open source community. This document acts as introduction, we try to start
+with a broad overview, then explain some core concepts towards the end.
+We describe planned features here without explicitly tagging them and we'll omit
+any technical details.
+There is a link:Glossary.html[Glossary of common terms]; readers curious about
+the inner workings might want to continue their path of exploration into
+link:{ldoc}/technical/overview.html[The Inner Core]
+
 
 
 
@@ -517,15 +522,36 @@ Integration with external libraries, frameworks and applications
 ----------------------------------------------------------------
 [red]#to be written#
 
+____
+ .
+ .
+ .
+____
+
+''''
 
 
-
-
+Further reading
+---------------
 
 Glossary
---------
+~~~~~~~~
 
 The above outline of the design uses a lot of special terms and common terms
 used with specific meaning within Lumiera. To ease the understanding, we've
 collected a link:Glossary.html[Glossary of common terms].
+
+Tutorials and User Manual
+~~~~~~~~~~~~~~~~~~~~~~~~~
+For most users, the next step would be to skim the user manual and to install
+the application. But we aren't this far, unfortunately. As of 1/2013, Lumiera
+isn't usable in any way. Later, when we approach the alpha and beta development phase,
+we'll care for a user manual and a tutorial section.
+
+The Inner Core
+~~~~~~~~~~~~~~
+Developers and Readers curious about the inner workings of the application
+might want to have a look into the overview document of our technical
+documentation section. Learn more about 
+link:{ldoc}/technical/overview.html[The Inner Core]...
 
