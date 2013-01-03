@@ -2,14 +2,15 @@ Glossary
 ========
 
 
-'NOTE Draft, please help rephrase/review and shorten
-explanations, the long explanation is the topic of the document above..'
+NOTE: Draft, please help rephrase/review and shorten explanations!
 
  anchor:AssetsView[] link:#AssetsView[->]Assets View::
-	Windows displaying and managing various things that can be edited,
-	worked on, etc are collectively known as the Assets View.
-	AssetsView consists of ingested footage, clips that have already been composed, available
-	sub-projects, effects, transitions and internal artifacts.
+        The session contains various things that can be edited, worked on
+        and connected. These things are collectively known as the _assets_.
+        The _assets view_ is a ``bookkeeping view'' for displaying and managing
+        the assets of the current session. It provides a list of all ingested footage,
+        a list of all clips, effects, transitions, available timelines and sub-sequences,
+        automation data, time grids, tags, labels and similar internal artefacts.
 
  anchor:Builder[] link:#Builder[->]Builder::
         This is a kind of compiler that creates low-level, or processing, graphs

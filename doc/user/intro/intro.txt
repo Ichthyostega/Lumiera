@@ -129,7 +129,7 @@ conventions -- rather we allow the building up of project specific conventions a
 rules xref:rules[<-] to fit a given requirement and preferred working style. 
 
 Lumiera will be supplied with a conventional template and a default
-configuration to ease the learning curve #for new users.
+configuration to ease the learning curve for new users.
 
 
 [[graphs]]
@@ -137,7 +137,7 @@ Rendering is Graph Processing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Processing video (and audio) data can be conceived as a graph (more precisely
-``directed acyclic graphs'').  In this model of video processing, data flows
+_directed acyclic graphs_).  In this model of video processing, data flows
 along the edges of the graph and is processed at the nodes.
 
 The following figure depicts manipulating video data as a graph.  The nodes of
@@ -285,48 +285,45 @@ footage for preview creates a simple internal timeline.
 
 
 
-Busses
-~~~~~~
+Global Pipes
+~~~~~~~~~~~~
 // TODO: needs rewriting.
-The GUI provides a separate _bus view_, showing the master busses (subgroups)
-in a manner similar to an audio mixing desk. Any bus is just a means of collecting
-and and adding (aka overlaying) together output of various kinds of media
-(video, audio, number of channels), produced by various processing elements and
-from other busses. These global busses can be conceived as being part of the
-timeline. 
+The GUI provides a separate _bus view_, showing the _global pipes_. These are the
+master busses for each kind of output (image and sound) and collect the output of
+the subgroups, in a manner similar to an audio mixing desk. Any _pipe_ is just a
+means of collecting, mixing or overlaying output produced by other pipes.
+A simple (linear) chain of effects can be applied within each pipe.
+
+Most of the pipes are managed automatically, e.g. the pipes corresponding to
+individual clips, or the pipes collecting output from transitions, from nested
+sequences and from groups of tracks. At some point, at the level of the
+timeline, all of the processed data is collected within the aforementioned
+global pipes to form the small number of output streams produced by rendering
+and playback. Each timeline uses a separate set of global pipes.
 
 
 Asset View
 ~~~~~~~~~~
 An Asset View can be conceived as the timeline's book keeper: it manages the
 various constituents in the timeline.  Moreover, in addition to managing timeline
-constituents, raw material, clips, bins (folders) are managed by the Asset
-View, i.e., typical management operations including, deleting, adding,
+constituents, raw material, clips, bins (folders) and effects are managed by the
+Asset View, i.e., typical management operations including, deleting, adding,
 naming, tagging, grouping into bins, etc. all occur here.
 
-Plugins are also managed in the Asset View.
-
-
-
-Manages all assets available in one project.
+There are various kinds of assets available in any project.
 
   * source media/footage/soundfiles
   * all available effects and transitions
+  * user defined ``effect stacks'' and effect collections ("effect palette")
   * internal artefacts like sequences and automation data sets
+  * markers, labels, tags and similar kinds of metadata
 
-// (much) Later it is planed to make this a database driven interface, where
-// the tabs showing things are basically just database queries. Then it
-// becomes possible to create/extend this by customized queries and augment
-// assets with all kinds of metadata which can be queried
-
-// The user may build custom effect collections ("effect palette")
-
-// Actually, the same underlying data structure is used to implement the
-// asset view with folders, clip bins and effect palettes, and the timeline
-// view with tracks, clips and attached effects. Technically, there is no
-// difference between a track or a clip bin -- just the presentation varies.
-// Timeline contents can be viewed like assets for bookkeeping purposes, and
-// the contents of a clip bin can be played like a storyboard
+Actually, the same underlying data structure is used to implement the
+asset view with folders, clip bins and effect palettes, and the timeline
+view with tracks, clips and attached effects. Technically, there is no
+difference between a track or a clip bin -- just the presentation varies.
+Timeline contents can be viewed like assets for bookkeeping purposes, and
+the contents of a clip bin can be played like a storyboard
 
 
 
@@ -370,15 +367,15 @@ steps might even be a possibility.  For example, work on a project at the
 office and work on the same project at home can be merged each morning and
 evening. 
 
-Session storage is envisaged to be performed as database with logging, some
-search facilities and a number of features associated with databases.
+Session storage is envisaged to operate similar to a database or journalling
+file system. Any operation will be logged prior to execution. This protects
+the session contents against corruption and allows for automated recovery
+in case of a crash. The actual storage is delegated to several back-ends.
+One of these back-ends implements a _binary storage format_ for performance
+reasons, while another one exposes all of the session contents in textual,
+human readable form. The storage format is designed in a way to ensure
+a certain degree of compatibility while the application evolves.
 
-[red]#Details to be written#
-//database with logging, no data loss.
-// not generateable data
-
-// its the timeline mostly
-// session storage
 
 
 [[placement]]
