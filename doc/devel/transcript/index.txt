@@ -1,0 +1,24 @@
+IRC Transcripts
+===============
+
+
+While we generally don't publish literal logs of our IRC discussions, in some case
+a discussion was found to be so instructive, that we save a literal transcript and
+provide an (slightly condensed) excerpt for later referral.
+
+.allocation of processing buffers
+How to control and to what extent to pre-calculate the allocation of processing buffers.
+These buffers are used by the processing node to be invoked, to get the ``input data''
+and to store the ``output data''. This topic might get us into some complications,
+since some nodes take multiple input/output buffers, while other nodes require to
+calculate ``in-place'' +
+->link:2008-06_BufferAllocation.html[IRC June 2008]
+
+.frame identification
+We need a way of identifying a frame within the cache; this frame might hold an
+intermediary result; so the access key needs to include the position in the graph,
+as well as the output process and some generation number. This topic was touched
+in one of our earliest meetings +
+->link:{ldoc}/devel/meeting_summary/2007-08-10.html[summary]
+
+

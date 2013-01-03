@@ -1,0 +1,141 @@
+Buffer Allocation (IRC 2008-06)
+===============================
+
+//MENU: label Buffer Allocation
+
+
+5.June 2008 on #lumiera +
+
+__cehteh__ and __ichthyo__
+
+
+.-- allocating processing buffers
+[caption="☉Transcript☉ "]
+----------------------------
+[19:21:21] <cehteh> do you need me? .. i am away if not .. i have no much to say for the today meeting either
+[19:21:57] <ichthyo> I have one topic I want to discuss with you, cehteh
+[19:22:07] <ichthyo> but it need not be now, or in the meeting
+[19:22:07] <cehteh> ok
+[19:22:24] <ichthyo> it's about allocating processing buffers 
+[19:23:20] <cehteh> the backend will provide them as temporary files/cyclic buffers
+[19:23:52] <cehteh> its not there yet but in my mind
+[19:24:11] <ichthyo> haha, same for the builder... it's mostly just in my mind
+[19:24:42] <cehteh> opened almost like a normal file but giving frame properties instead filename
+[19:24:56] <cehteh> (there will be a distinct api for that)
+[19:25:01] <ichthyo> ok
+[19:25:05] <ichthyo> regarding the buffers: my question is more special
+[19:25:19] <ichthyo> if you want to cache a frame (intermediary result)
+[19:25:35] <ichthyo> then I thought we could avoid the copy operation
+[19:25:44] <ichthyo> I could arrange things accordingly
+[19:25:46] <cehteh> then the backend creates a backing mmaped file for that maybe manages its size (or do you want to tell how much frames you want to cache?)
+[19:26:06] <cehteh> yes perfect .. thats what i am planning
+[19:26:26] <ichthyo> you know, many processing nodes will be able to process "in place"
+[19:26:34] <ichthyo> but ther are some that can't do this
+[19:27:44] <ichthyo> so basically each processing function will "see" input frame buffer(s) and output frame buffer(s). but when a node is "in-place-capable", actually the in and out buffer may point to the same location
+[19:26:55] <cehteh> basiically all temporary frames with the same properties are allcoated from the same backing file (well maybe 2 caching levels but not important here)
+[19:27:06] <cehteh> the index give them meaning
+[19:27:49] <cehteh> do you can query (and lock) a frame by that
+[19:28:04] <ichthyo> that sounds good
+[19:28:24] <cehteh> do some inplace editing and then tell the backend "this is now frame N of node X"
+[19:28:34] <ichthyo> yeah, exactly
+[19:28:44] <cehteh> (plus a uuid or preferably genertion number)
+[19:28:39] <ichthyo> basically my Idea was as follows:
+[19:29:47] <ichthyo> when I know the result will be cached, I'll let the node process into the location of the cache frame, and any node which will /use/ this frame as an input will be wired such that it isn't allowed to modify this frame (which is supposed to be located in the cache)
+[19:30:45] <cehteh> yes thats managed in the index
+[19:30:48] <ichthyo> for this to work, I need to "allocate and lock" a location in the cache, and release it when it contains the final processed result
+[19:31:17] <cehteh> well i try to make no locks there, you query frames which are uniquely identified
+[19:31:44] <ichthyo> it doesnt need to be a "lock
+[19:31:55] <ichthyo> just some way to tell that this frame is "under construction"
+[19:32:01] <cehteh> yes
+[19:32:14] <cehteh> we thinking the same :)
+[19:32:57] <cehteh> well problem is when shortly after that another node queries the source frame which got destructed .. thats something the builder needs to avoid, nothing i can do then
+[19:33:21] <ichthyo> yes, builder will care for that
+[19:33:41] <ichthyo> I can even tell in advance the maximum number of temporary buffers I need
+[19:33:51] <cehteh> and it not only needs a under-construcion
+[19:34:44] <cehteh> there are 2 indices one for source and one for destination
+[19:35:11] <cehteh> indices will have a pointer to the 'job' working on it i tihnk
+[19:35:24] <ichthyo> ok
+[19:35:48] <cehteh> (actually there is a list planed many jobs can read-share an frame)
+[19:36:40] <cehteh> i would like if I do not need to do *any* checks in that direction ... means the builder delivers clean jobs which dont step on their own foot
+[19:36:54] <ichthyo> my understanding too
+[19:37:07] <ichthyo> also, I want the nodes to be freed of any checks
+[19:37:33] <ichthyo> so they can assume they get a valid buffer pointer to the right sort of buffer
+[19:37:54] <cehteh> yes thats guranteed
+[19:37:41] <cehteh> if it fails then we get some hairy bugs ... but checking job dependencies afterwards is costly
+[19:38:53] <ichthyo> I mean -- I want to prepare everything as much as possible while building, so that all that needs to be "filled in" when starting the processing are the actual buffer locations
+[19:38:58] <cehteh> *thinkin* prolly easier than it looks
+[19:39:10] <cehteh> exaxctly
+[19:39:50] <ichthyo> we can't prepare everything, because, some nodes may include a variable ammount of source frames
+[19:40:11] <ichthyo> and this number can depend on automation. Classic example is the "time average" video effect
+[19:39:53] <cehteh> problem is only when the builder generates one node which takes X and in-place generates Y from it
+[19:40:10] <cehteh> and you have a 2nd node which takes X too 
+[19:40:23] <cehteh> this needs to be serialized somehow
+[19:41:12] <ichthyo> regarding the problem you mention: I want to exclude/avoid this situation already when building
+[19:41:35] <cehteh> yes thats what i was thinking .. thats easiest addressed there
+[19:41:46] <cehteh> and a very ugly bug when it fails :(
+[19:41:42] <ichthyo> when a node puts its result into a frame located within the cache
+[19:41:59] <ichthyo> this frame is treated as if it is read-only
+[19:42:21] <ichthyo> no node depending on this frame will be wired in a way that allows "in-place"
+[19:42:33] <cehteh> about the time averaging: i plan to hint some dependencies so you can ask for "maybe" or by some priority depending on quality/whatever
+[19:43:19] <cehteh> where quality should be runtime adjusted by the profiler
+[19:43:39] <ichthyo> the problem with time averaging is: we don't know how much frames will be averaged at build time, because that's a automatable effect parameter
+[19:43:47] <cehteh> thats a case where a dependencie might not be fullfilled .. but only on request
+[19:44:08] <ichthyo> but the "quality" thing sounds like a good idea
+[19:44:17] <cehteh> yes then split that rendering into 3 passes?
+[19:44:27] <cehteh> 1st pass : building the graph
+[19:44:53] <cehteh> 2nd pass: determine dependencies (by inspecting automation)
+[19:45:00] <cehteh> 3rd pass: do the render
+[19:45:10] <ichthyo> maybe?
+[19:45:17] <ichthyo> 1st pass of course is clear
+[19:45:25] <cehteh> well do you have a better idea?
+[19:45:49] <cehteh> so far i thought about 2 pass where the dependency analysis was part of the builder
+[19:46:02] <ichthyo> agreed
+[19:46:28] <cehteh> but making it three pass shouldnt be a problem or?
+[19:46:51] <ichthyo> I also thought after having finished the raw graph, I'll do some configuration calldown, e.g. to determine the maximum number of buffers needed
+[19:46:59] <cehteh> maybe even adaptive 2/3 pass depending on effects ... but maybe that would complicate it unnecessary
+[19:47:43] <ichthyo> its not really a problem, just need to be aware and work the details out correctlyy
+[19:47:49] <cehteh> i dont think you need  to count the buffers (not yet, maybe i oversee soemthing)
+[19:48:08] <cehteh> otherwise the backend should manage that automatically
+[19:48:18] <ichthyo> yes, I'm fine with that
+[19:48:46] <ichthyo> just to note, if it helps with the allocation, I /can/ tell the maximum number of buffers needed
+[19:49:00] <ichthyo> (for a given segment of the graph, of course)
+[19:49:09] <cehteh> not sure if i overseen something, but i think when needed such a 'configuration calldown' (and optimizing pass) could be added later
+[19:49:27] <ichthyo> sure
+[19:49:50] <cehteh> buffers itself doesnt cost .. but if you really need a lot it will cause IO
+[19:49:57] <cehteh> but that unavoidable anyways
+[19:50:05] <ichthyo> no no
+[19:50:19] <cehteh> yes yes
+[19:50:20] <ichthyo> I'll try to minimize buffer use as much as possible
+[19:50:24] <cehteh> :)
+[19:50:30] <cehteh> of course
+[19:51:00] <cehteh> but there are always some limits on finite machines
+[19:51:26] <ichthyo> the problematic case are usual rather rare corner cases, but it should handle those flawless, of course
+[19:51:36] <ichthyo> similar for the size of the buffers
+[19:51:46] <ichthyo> I dont want Lumiera to clip the image
+[19:51:49] <ichthyo> as cinelerra does
+[19:52:04] <ichthyo> e.g. when using the motion tracker
+[19:52:20] <cehteh> well if you need safe-regions around you need to use biggier frames
+[19:52:31] <cehteh> but memory requirements grow quadratic!
+[19:52:46] <ichthyo> the user should NEVER need to set up the processing buffer size, as is necessary in cinelerra
+[19:52:59] <cehteh> yes agreed
+[19:53:15] <ichthyo> I don't think we need safe-regions allways, 
+[19:53:31] <ichthyo> but, as e.g. the motion tracking will create automation data in Lumiera
+[19:53:38] <cehteh> yes only for some effect .. motion tracker doesnt need it
+[19:53:50] <ichthyo> it means the actual buffer size depends on automation data for a given frame
+[19:53:56] <cehteh> that just xyr transformation
+[19:54:35] <cehteh> a blur is something which might require a small safe-region to bleed over the edges
+[19:54:43] <ichthyo> yes, you are right
+[19:54:52] <ichthyo> if the motion tracker is wired intelligently
+[19:55:05] <ichthyo> it doesn't need to move anyting itself
+[19:55:18] <cehteh> mapping the motion tracker transformation to a destionation might need safe regions
+[19:55:30] <cehteh> (in case of rotations)
+[19:55:36] <ichthyo> yes agreed
+[19:56:16] <cehteh> well temp buffers will be allcocated for frames of the same 'class' i aleready saied that
+[19:56:50] <cehteh> and i will group these classes so that some similar sizes fall in the same class 
+[19:57:19] <cehteh> that might waste some memory on disk at the end of each frame .. but that doesnt need to be mapped in
+[19:57:32] <cehteh> the kernel will do that automatically for us
+[19:57:37] <ichthyo> :)
+[19:57:59] <cehteh> well mostly .. i need to whip it with the right hints ;)
+[19:58:10] <ichthyo> :-o
+----------------------------
+
