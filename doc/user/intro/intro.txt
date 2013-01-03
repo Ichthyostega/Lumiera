@@ -1,7 +1,7 @@
 Lumiera (as seen) from Outer Space
 ==================================
 :Author: Lumiera_Core_Developers
-:Date: Summer 2010
+:Date: Winter 2012
  
 
 ******************************************************************************
@@ -66,8 +66,8 @@ film production tools should have and be professional:
         The demands placed on high-quality, cinema grade digital video material
         requires crisp-quality results with no concessions made throughout the
         entire workflow that might compromise quality of the final work.
-        It will be necessary to be able to reconstruct all rendering down to a
-        single digit. 
+        A common requirement is the ability to reproduce all rendering
+        calculations down to a single digit. 
  
  Performance and Productivity::
         Professionals want to get things done in time and content, but, ideally,
@@ -117,11 +117,12 @@ Medium Level Abstraction and Project Specific Conventions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 These building blocks within Lumiera create a moderate level of abstraction; a
-user may, if desired, directly manipulate -- using, for example, GUI clips -- 
-individual effects, masks, and even the placements xref:placement[<-] used to
-stitch the objects together, which is comparatively low-level. Such abstraction
-protects the user from technical details such as format conversion or access
-to individual channels. 
+user may use the GUI to manipulate several elements directly -- not only the
+clips and effects, but also individual effect parameter automation, masks, layering,
+and even the placements xref:placement[<-] used to stitch the objects together,
+which is comparatively low-level. Such moderate abstraction encourages to
+understand the inner workings, while shielding the user from merely technical
+details such as header format conversion or access to individual channels.
 
 To complement this approach, Lumiera does _not_ rely on hard-wired, global
 conventions -- rather we allow the building up of project specific conventions and
@@ -155,9 +156,10 @@ and will be implemented by plugins xref:plugins[<-]. Moreover one can
 pre-configure subgraphs and handle them as a single entity xref:pluginstack[<-].
 
 In Lumiera everything will be translated into such a graph. Footage will
-be demultiplexed xref:demultiplexer[<-] at the first node, thereafter to the
-encoding stage xref:encoder[<-] and on to the multiplexer xref:multiplexer[<-]
-which assembles the final video.
+be demultiplexed xref:demultiplexer[<-] at the first node, thereafter passed
+to the actual processing nodes for calculating effects, masks and layering,
+and finally be forwarded to the encoding stage xref:encoder[<-] and on to
+the multiplexer xref:multiplexer[<-] which assembles the final video.
 
 
 Pulling not Pushing
@@ -169,7 +171,7 @@ nodes and the final result can be seen at the output node. Several multimedia
 frameworks use this approach. However this scheme exhibits a number of
 shortcomings which make it inappropriate for non-linear video editing. 
 
-Lumiera takes a different approach.  Data is pulled through a pipe, i.e., a
+Lumiera takes a different approach.  Data is pulled through a pipe: any rendering
 request starts at the output node and makes its way back up through the graph to
 the inputs. This scheme offers a number of advantages over the naive scheme.
 
@@ -178,9 +180,9 @@ the inputs. This scheme offers a number of advantages over the naive scheme.
 Don't waste work
 ~~~~~~~~~~~~~~~~
 
-Rendering A/V data can be CPU intensive. To relieve the CPU  workload by not
-rendering material twice or avoiding having to throw away material because it
-could not be rendered in time, Lumiera employs a sophisticated means of using
+Rendering A/V data can be computationally intensive. To relieve the core workload
+by not rendering material twice or avoiding having to throw away material because
+it could not be rendered in time, Lumiera employs a sophisticated means of using
 cache xref:caching[<-] and profiling xref:profiling[<-].
 
 
@@ -206,10 +208,10 @@ image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 Lumiera consists of three major parts:
 
 - Graphical User Interface (GUI)
-- Proc-layer 
-- Backend
+- Processing layer (``Proc-layer'')
+- Backend for storage and access
 
-In this section, we discuss only the GUI.
+In this section, we discuss the user's perspective, when working with the GUI.
 
 Lumiera will initially ship with a standard, default GUI. This, however, is not
 the only GUI possible to operate Lumiera.  Indeed, Lumiera can work
@@ -234,9 +236,8 @@ sub-sections discusses the more prominent groupings.
 Viewer
 ~~~~~~
 
-The viewer is an area where footage can be displayed (``play-back'').
-A viewer is a window where material can not only be played back or viewed, but
-support for audio will also be provided.  As there are many sources that
+The viewer is an area where footage and the assembled edit can be played back and investigated.
+Obviously, support for audio will also be provided.  As there are many sources that
 can be displayed, a viewer is attached to a source via the viewer switch board.
 Timelines, probe points, wire taps and individual clips are examples of sources
 that can be attached to a viewer. Moreover, the number of viewers open at any one
@@ -258,30 +259,29 @@ widget may vary, depending on what the transport controls have been assigned
 to.  Irrespective of their look-and-feel, they are connected to a play
 controller.
 // TODO xref..
-A play controller coordinates playback, cueing and rewinding.  Transport
+A _play controller_ coordinates playback, cueing and rewinding.  Transport
 controls are ganged when they attach to the same play controller.
-
-// just playing some footage for preview creates a simple internal timeline,
-// no magic here.
 
 
 Timeline View
 ~~~~~~~~~~~~~
 
-A timeline is a container that provides a time axis and an output. The output
-can be derived from various sources, each with a different configuration.  An
-output can have various configurations, for each output configuration, there
-will be one timeline. A timeline does not temporally arrange material, this is
+A timeline is a container that provides a time axis and an output. There may be
+connections to various output designations, each with a different configuration.
+A more elaborate production setup will use several timelines, one for each distinct
+output configuration. A timeline does not temporally arrange material, this is
 performed by a sequence, which can be connected (snapped) to a timeline.
 
 A typical film will define many sequences, but will only have a few timelines. A
-sequence contains a number of tracks which are ordered in a hierarchy. Tracs do
+sequence contains a number of tracks which are ordered in a hierarchy. Tracks do
 not have any format associated with them and more or less anything can be put
 into a track. Consequently, audio and video material can equally be assigned to
 a track, there is no discrimination between audio and video in the Lumiera
 concept of a track.
 
-A timeline must be assigned to viewer if playback viewing is desired.
+A timeline must be assigned to viewer and transport control if playback viewing is desired.
+In most cases, these connections are created automatically, on demand: Just playing some
+footage for preview creates a simple internal timeline.
 
 
 
@@ -433,8 +433,8 @@ this process will have to perform adequately on lower-end hardware, and perform
 efficiently on higher-end hardware.
 
 Lumiera will break down processes that need to be processed into smaller units
-called _tasks_. Typically, there will be many hundreds of tasks waiting for
-processing at any one time. These tasks are queued for processing and the order
+called _frame job_. Typically, there will be many hundreds of jobs waiting for
+processing at any one time. These jobs are queued for processing and the order
 in which this is performed is managed by the _scheduler_.
 This is all done in the back-end.
 
