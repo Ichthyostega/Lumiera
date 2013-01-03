@@ -367,15 +367,15 @@ steps might even be a possibility.  For example, work on a project at the
 office and work on the same project at home can be merged each morning and
 evening. 
 
-Session storage is envisaged to be performed as database with logging, some
-search facilities and a number of features associated with databases.
+Session storage is envisaged to operate similar to a database or journalling
+file system. Any operation will be logged prior to execution. This protects
+the session contents against corruption and allows for automated recovery
+in case of a crash. The actual storage is delegated to several back-ends.
+One of these back-ends implements a _binary storage format_ for performance
+reasons, while another one exposes all of the session contents in textual,
+human readable form. The storage format is designed in a way to ensure
+a certain degree of compatibility while the application evolves.
 
-[red]#Details to be written#
-//database with logging, no data loss.
-// not generateable data
-
-// its the timeline mostly
-// session storage
 
 
 [[placement]]
