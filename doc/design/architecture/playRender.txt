@@ -149,7 +149,7 @@ reconfigure the backend services.
 
 Frame quantisation
 ^^^^^^^^^^^^^^^^^^
-Quantisation is a kind of rounding; like any kind of rounding, quantisation is
+link:../TimeQuant.html[Quantisation] is a kind of rounding; like any kind of rounding, quantisation is
 a dangerous operation because it kills information content.
 
 Thus there are three fundamental guidelines when it comes to rounding
@@ -183,7 +183,7 @@ application the subsystem most remote and unaware of output requirements.
 Which leaves us with the player and the session. Both positions could
 arguably be supported. Here, a more careful consideration shows, that
 the ``act of frame rounding'' can be decomposed: into the _act of quantisation_
-and the _frame grid:. Basically its the session which has the ability
+and the _frame grid_. Basically it's the session which has the ability
 to form the *frame grid*, but it is lacking crucial information about
 the output. Only when connecting both -- which is the essence of the
 player -- frame quantisation can actually be performed. Thus, the
