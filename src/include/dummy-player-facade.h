@@ -57,6 +57,11 @@ namespace lumiera {
      * experiences regarding integration of the application layers.
      * Lumiera is not yet able actually to deliver rendered video data.
      * 
+     * In hindsight, this design study highlighted some relevant problems
+     * with our interface layout and the way we create bindings to the
+     * implementation. The moment we attempt to use other abstractions
+     * within an interface (as we do here with the Process interface),
+     * we're running into serious maintenance and library dependency problems. 
      */
     class DummyPlayer
       {

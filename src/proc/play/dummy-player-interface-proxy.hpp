@@ -74,6 +74,7 @@ namespace lumiera {
          *  it directly within the client (=GUI) bypasses the C interface
          *  and thus leaves us only with one level of indirection,
          *  irrespective if using the C or C++ interface.
+         *  @note in hindsight this turned out as a very bad idea
          */
         Process start(LumieraDisplaySlot viewerHandle)
           {
@@ -83,7 +84,7 @@ namespace lumiera {
               throw lumiera::error::State("failed to start DummyPlayer", lumiera_error());
             
             return pP->createHandle();
-          }
+          }            //////////////////TODO here we get library linking problems: createHandle is implemented in liblumieraproc.so and this is necessarily so.
         
         
         
