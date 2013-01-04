@@ -12,8 +12,25 @@ Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
 
+12 Sep 2012
+-----------
+
+Topics
+~~~~~~
+ * RFCs
+ * Upgrade to Wheezy/GTK-3
+ * Master and the Documentation repository
+ * Builddrone v2
+ * Trac problems
+ * Git Commit Message Format
+
+Summary
+^^^^^^^
+ * link:2012-09-12.html[Summary (by cehteh)]
+
+
 ************************
-During Summer 2011 again the regular monthly meethings
+During 2012 again the regular monthly meethings
 were mostly informal detail discussions plus some
 organisational planning. Not much to account for.
 ************************

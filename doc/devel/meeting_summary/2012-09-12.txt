@@ -1,0 +1,130 @@
+2012-09-12 Lumiera Developers Meeting
+=====================================
+:Author: Christian Thaeter <ct@pipapo.org>
+:Date: 2012-09-12
+
+Sep 12, 2012 on #lumiera 20:00 - 23:40 UTC +
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ * mfisher31
+
+ 
+_Summary written by cehteh_
+
+
+
+RFCs
+----
+
+It was not clear what state
+http://lumiera.org/documentation/devel/rfc.html[RFCs] have in our
+documentation structure. The question was if they should, after
+becoming finalized integrated into some other document or stay first
+class and be referenced from other documents.
+
+_Ichthyo_ points out that RFCs and doxygen comments alone aren't
+sufficient and that there is the need for summarizing technical
+documentation pages. There is agreement that we want to avoid multiple
+redundant point for one and the same thing. When things evolve and are
+implemented they are documented elsewhere, thus multiple places for
+the same thing but at different states come up.
+
+Conclusion
+~~~~~~~~~~
+So we define the following procedure:
+
+ * RFC's are first class citizens, _cehteh_ already made some relevant
+   changes to the RFC system to provide static paths (the states are
+   now symlinks to a pool)
+ * If some more detailed design or implementation documentation arises
+   then it should link back to the relevant RFC's
+ * We add links to the RFC's themselves to link to any further
+   Documentation describing details thereof
+ * _cehteh_ will write an RFC about this Documentation workflow itself
+
+
+
+Upgrade to Wheezy/GTK-3
+-----------------------
+
+*Debian 7* (wheezy) is in the freeze, we considered in the previous
+meeting to bump our _reference platform_ to wheezy and by that switch
+over to GTK-3.
+
+_mfisher31_ did some work, fixing some bugs gcc4.7 pointed out and
+compile Lumiera with GTK-3. There are some issues remaining:
+
+. There is some library loading glitch, after building Lumiera won't
+  start but on the next boot it works fine.
+. It is not clear what effort is actually necessary to switch to GTK-3
+. Theming is completely different in GTK-3, only using cairo rendering,
+  Lumiera with GTK-3 has only the default theme right now.
+. The video player widget is broken
+. There is no libgdlmm3 debian package in wheezy.
+
+Nevertheless we agree on the following...
+
+Roadmap
+~~~~~~~
+
+- The devel server will be upgraded to wheezy
+- Builddrone v2 will be deployed there (see below)
+- The master branch will stay with GTK-2 and made compilable on wheezy
+  (apply the gcc4.7 fixes) and then be frozen.
+- We will provide a custom gdlmm3 package as we did before
+- Work progresses on GTK-3 and we merge that back to the master
+  branch when it is in par with what the GTK-2 looks alike already (no
+  regressions)
+
+
+
+Workflow between the Master and the Documentation repository
+------------------------------------------------------------
+
+There was some confusion how the master and the documentation
+repository relate to each other.
+
+We agreed on merging back and forth between in a bidirectional way,
+but doing this lazy on demand.
+
+(_cehteh_ will document this in a RFC)
+
+
+
+Builddrone v2
+-------------
+
+A complete rewrite of Builddrone (a continuous integration system) is
+now (almost) finished and will be deployed on our build server within
+the next days. It has numerous improvements over the old one. More
+information and documentation will appear at
+http://builddrone.pipapo.org/ soon. Stay tuned.
+
+Thanks to Lenny for helping with the documentation and Simon for the
+Logo.
+
+
+
+Trac
+----
+
+Trac is broken somehow, resetting passwords doesn't work anymore,
+don't loose your cookies or you are lost. Manually resetting the
+password by an admin works though. We could not figure out whats
+wrong, will see next time what to do and fix it.
+
+
+
+Git Commit Message Format
+-------------------------
+
+To ease automatic processing (builddrone, quaterly news,
+changelogs,..) we agreed and finalized a
+link:{rfc}/GitCommitMessageFormat.html[RFC GitCommitMessageFormat]
+defining some formalism about commit messages.
+
+
+

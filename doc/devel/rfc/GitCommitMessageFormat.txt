@@ -46,10 +46,10 @@ only knows about these.
 .Header
 
 The Header is free form text explaining the purpose of the commit in a few
-words. It may start with one uppercased keyword and a colon if appobiate directly
+words. It may start with one uppercased keyword and a colon if appropriate directly
 followed by some (optional, defined elsewhere) metadata. This Keywords are
-optional but recommended since automatic processing acts upon them. Normal commits
-need these keywords and are just free form text.
+optional but recommended since automatic processing acts upon them.
+Normal commits don't need these keywords and are just free form text.
 
 To be exact, here is a regex matching valid Headers:
 
@@ -72,7 +72,7 @@ Legal headers are for example:
         leading commits are WIP:
 
 'FIX:'::
-        Bugfix. The Text should explain what error got fixed. A referenence to
+        Bugfix. The Text should explain what error got fixed. A reference to
         a bug number is not optional and not needed.
 
 'RFC:'::
@@ -140,34 +140,6 @@ extent they may repeat the comments and documentation from the committed code
 in a short form. Think that anyone else reading only the commit message should
 understand whats going on.
 
-
-Tasks
-~~~~~
-// List what needs to be done to implement this Proposal:
-// * first step ([green]#✔ done#)
-// * second step [,yellow]#WIP#
-
-
-Discussion
-~~~~~~~~~~
-
-Pros
-^^^^
-// add a fact list/enumeration which make this suitable:
-//  * foo
-//  * bar ...
-
-
-
-Cons
-^^^^
-// fact list of the known/considered bad implications:
-
-
-
-Alternatives
-^^^^^^^^^^^^
-//alternatives: explain alternatives and tell why they are not viable:
 
 
 
