@@ -11,12 +11,12 @@ Import('env icons config')
 
 # define the source file/dirs comprising each artifact to be built.
 
-lLib  = env.SharedLibrary('lumiera',        srcSubtree('lib'),    install=True)
-lApp  = env.SharedLibrary('lumieracommon',  srcSubtree('common'), install=True, LIBS=lLib)
-lBack = env.SharedLibrary('lumierabackend', srcSubtree('backend'),install=True)
-lProc = env.SharedLibrary('lumieraproc',    srcSubtree('proc'),   install=True)
+lLib  = env.SharedLibrary('lumiera',        srcSubtree('lib'),     install=True)
+lApp  = env.SharedLibrary('lumieracommon',  srcSubtree('common'),  install=True)
+lBack = env.SharedLibrary('lumierabackend', srcSubtree('backend'), install=True)
+lProc = env.SharedLibrary('lumieraproc',    srcSubtree('proc'),    install=True)
 
-core        = lLib+lApp+lBack+lProc
+core        = lProc+lBack+lApp+lLib    # in reverse dependency order
 core_lib    = core
 support_lib = lLib
 
