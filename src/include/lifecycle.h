@@ -27,7 +27,8 @@
  ** a callback can be registered to be executed on a specific application lifecycle
  ** event. Examples being #ON_BASIC_INIT, #ON_GLOBAL_INIT. Other subsystems may
  ** register additional events for more specific purpose.
- **
+ ** 
+ ** @note the implementation resides in lib/lifecycle.cpp and gets linked into liblumiera.so
  ** @see lumiera::AppState
  ** @see main.cpp
  */
@@ -48,6 +49,7 @@ namespace lumiera {
   
   using lib::Symbol;
   
+  //defined in liblumiera.so
   extern const char * ON_BASIC_INIT;      ///< automatic static init. treated specially
   extern const char * ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
   extern const char * ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
@@ -95,6 +97,7 @@ namespace lumiera {
 #else /* =========== C interface ====================== */
 
 
+//defined in liblumiera.so
 extern const char * lumiera_ON_BASIC_INIT;
 extern const char * lumiera_ON_GLOBAL_INIT;
 extern const char * lumiera_ON_GLOBAL_SHUTDOWN;

@@ -25,7 +25,6 @@
 #include "lib/error.hpp"
 #include "common/query.hpp"
 #include "common/config-rules.hpp"
-#include "proc/mobject/session/query/fake-configrules.hpp"
 
 using lumiera::QueryKey;
 

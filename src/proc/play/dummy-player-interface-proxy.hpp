@@ -27,7 +27,20 @@
  ** 
  ** The purpose is to define a proxy implementation of lumiera::DummyPlayer, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_DummyPlayer"
- **
+ ** 
+ ** @remarks the implementation of this interface proxy for the DummyPlayer highlighted
+ **          some interesting design issues. The way we're defining our interfaces and
+ **          bindings seems to have some shortcomings when attempting to express an
+ **          interface (here DummyPlayer) in terms of another abstraction
+ **          (here the DummyPlayer::Process), since the implementation of this
+ **          abstraction has to be mapped and indirected via the interface-system
+ **          as well. This forces us to duplicate all of these secondary interface
+ **          functions several times, and incurs a further forwarding through the
+ **          smart-Handle, since our interface system doesn't support suitable
+ **          lifecycle support out of the box and instead places this burden
+ **          onto the client code (or, as in this case here, the intermediary
+ **          proxy used by the client code to access the interface).
+ ** 
  ** @see dummy-player-facade.hpp
  ** @see dummy-player-service.hpp actual implementation within the Proc-Layer 
  */
@@ -39,7 +52,8 @@
 
     /* ==================== DummyPlayer ======================================= */
     
-#include "proc/play/dummy-player-service.hpp"
+//#include "proc/play/dummy-player-service.hpp"
+#include "include/dummy-player-facade.h"
 
 namespace lumiera {
   
@@ -56,7 +70,7 @@ namespace lumiera {
   namespace facade {
     
     typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
-                                   , proc::play::DummyPlayer
+                                   , lumiera::DummyPlayer
                                    > IHandle_DummyPlayer;
     
     
@@ -65,7 +79,7 @@ namespace lumiera {
       : public Holder<IHandle_DummyPlayer>
       {
         //----Proxy-Implementation-of-DummyPlayer--------
-        typedef proc::play::DummyPlayer::Process Process;
+        typedef lumiera::DummyPlayer::Process Process;
         typedef proc::play::ProcessImpl ProcessImpl;
         
         /** @note as an optimisation we hand out a direct reference
@@ -74,17 +88,19 @@ namespace lumiera {
          *  it directly within the client (=GUI) bypasses the C interface
          *  and thus leaves us only with one level of indirection,
          *  irrespective if using the C or C++ interface.
-         *  @note in hindsight this turned out as a very bad idea
+         *  @note in hindsight this turned out as a very bad idea,
+         *  since it complicated the definition of the facade proxy
+         *  and created quite involved library dependency problems.
          */
         Process start(LumieraDisplaySlot viewerHandle)
           {
-            ProcessImpl* pP = static_cast<ProcessImpl*> (_i_.startPlay (viewerHandle));
+            ProcessImplementationLink* pP = static_cast<ProcessImplementationLink*> (_i_.startPlay (viewerHandle));
             
             if (!pP)
               throw lumiera::error::State("failed to start DummyPlayer", lumiera_error());
             
             return pP->createHandle();
-          }            //////////////////TODO here we get library linking problems: createHandle is implemented in liblumieraproc.so and this is necessarily so.
+          }
         
         
         
@@ -98,5 +114,20 @@ namespace lumiera {
     
     
   } // namespace facade
+  
+  
+   /* === Forwarding function(s) on the Process handle === */
+  
+  void
+  DummyPlayer::Process::play (bool yes)
+    {
+      // access the implementation via smart-Handle
+      impl().doPlay(yes);
+    }
+  
+  // emit the VTable and typeinfo for this interface here (in liblumieracommon.so)
+  DummyPlayer::ProcessImplementationLink::~ProcessImplementationLink() { };
+  
+  
   
 } // namespace lumiera

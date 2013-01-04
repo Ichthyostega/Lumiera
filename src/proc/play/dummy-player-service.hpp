@@ -31,7 +31,7 @@
  ** This service is the implementation of a layer separation facade interface. Clients should use
  ** proc::play::DummyPlayer#facade to access this service. This header defines the interface used
  ** to \em provide this service, not to access it.
- **
+ ** 
  ** @see lumiera::DummyPlayer
  ** @see gui::PlaybackController usage example 
  */
@@ -78,7 +78,7 @@ namespace proc {
      * ProcessImpl instance and have to manage the lifecycle manually.
      */
     class ProcessImpl
-      : public lumiera_playprocess,
+      : public lumiera::DummyPlayer::ProcessImplementationLink,
         boost::noncopyable
       {
         uint fps_;
@@ -109,7 +109,7 @@ namespace proc {
         /* Lifecycle */
         
         DummyPlayer::Process createHandle();
-        static void terminate(ProcessImpl* process);
+        static void terminate(DummyPlayer::ProcessImplementationLink*);
         
       private:
         void doFrame (); ///< periodically invoked while playing
@@ -164,3 +164,4 @@ namespace proc {
 
 } // namespace proc
 #endif
+

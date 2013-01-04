@@ -74,10 +74,12 @@ namespace lumiera {
         /** get an implementation instance of this service */
         static lumiera::facade::Accessor<DummyPlayer> facade;
         
+        class ProcessImplementationLink;
         
         /**
-         * Continuous playback process, which has been started with a specific
-         * output size, format and framerate. It is a handle to a calculation process,
+         * Playback process, front-end to be used by client code.
+         * This handle represents a continuous playback process, which has been started
+         * with a specific  output size, format and framerate. It is a handle to a calculation process,
          * which is about to produce a stream of frames and push them to the viewer widget,
          * specified by a LumieraDisplaySlot when starting this process.
          * 
@@ -89,14 +91,33 @@ namespace lumiera {
          * @see dummy-player-service.cpp implementation
          */
         class Process
-          : public lib::Handle<proc::play::ProcessImpl>
+          : public lib::Handle<ProcessImplementationLink>
           {
           public:
             void play(bool); ///< play/pause toggle
           };
         
+        /**
+         * Mediator to allow the client to communicate with
+         * the Process implementation via the Process handle,
+         * without having to map each implementation-level function
+         * into the dummy player interface. We can't access the
+         * implementation in Proc-Layer without this indirection
+         * through a VTable, since a direct call would require
+         * us to link against liblumieraproc.so
+         */
+        class ProcessImplementationLink
+          : public lumiera_playprocess
+          {
+          public:
+              virtual ~ProcessImplementationLink(); ///< this is an interface
+
+              virtual Process createHandle()    =0; ///< activate the Process-frontend and link it to the process implementation
+              virtual void doPlay(bool yes)     =0; ///< forward the play/pause toggle to the play process implementation
+          };
         
-        //////////////////TODO: define some dummy negotiation about size and framerate....
+        
+        
         
         /** create a new playback process outputting to the given viewer/display */
         virtual Process start(LumieraDisplaySlot viewerHandle)   =0;
