@@ -46,6 +46,9 @@ namespace lumiera {
   /** storage for the DummyPlayer facade proxy factory... */
   lumiera::facade::Accessor<DummyPlayer> DummyPlayer::facade;
   
+  // emit the vtable here into this translation unit within liblumieracommon.so ...
+  DummyPlayer::~DummyPlayer()  { }
+  
   
   
   

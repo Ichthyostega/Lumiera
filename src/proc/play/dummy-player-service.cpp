@@ -376,8 +376,5 @@ namespace lumiera { /* === Forwarding function(s) on the Process handle === */
     return proc::play::theDummyPlayerDescriptor();
   }
   
-  // emit the vtable here into this translation unit within liblumieraproc.so ...
-  DummyPlayer::~DummyPlayer()      { }
-  
   
 } // namespace lumiera
