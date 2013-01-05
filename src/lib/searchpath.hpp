@@ -55,7 +55,7 @@ namespace lib {
   
   /** replace $ORIGIN tokens in the given string
    *  @return copy with expansions applied */
-  string replaceTokens (string const& src);
+  string replaceMagicLinkerTokens (string const& src);
   
   
   /**
@@ -77,7 +77,7 @@ namespace lib {
       
     public:
       SearchPathSplitter (string const& searchPath)
-        : pathSpec_(replaceTokens (searchPath))
+        : pathSpec_(replaceMagicLinkerTokens (searchPath))
         , pos_(pathSpec_.begin(),pathSpec_.end(), EXTRACT_PATHSPEC)
         , end_()
         { }

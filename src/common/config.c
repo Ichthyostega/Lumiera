@@ -202,7 +202,7 @@ lumiera_config_get (const char* key, const char** value)
         }
       else
         {
-          TODO ("follow '<' delegates?");
+          /////////////////////////TODO "follow '<' delegates?";
           LumieraConfigitem item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key);
 
           if (item)
@@ -231,8 +231,8 @@ lumiera_config_get_default (const char* key, const char** value)
 
   *value = NULL;
 
-  TODO ("follow '<' delegates?");
-  TODO ("refactor _get and get_default to iterator access (return LList or Lookupentry)");
+          /////////////////////////TODO follow '<' delegates?
+          /////////////////////////TODO refactor _get and get_default to iterator access (return LList or Lookupentry)
   LumieraConfigitem item = lumiera_config_lookup_item_tail_find (&lumiera_global_config->keys, key);
 
   if (item && item->parent == &lumiera_global_config->defaults)

@@ -256,7 +256,7 @@ lumiera_config_wordlist_get (const char* key, const char** value)
           else
             LUMIERA_ERROR_SET_WARNING (config, CONFIG_NO_ENTRY, key);
 
-          TODO ("remove the ERROR_SET because config_get sets it already? also in all other getters in this file");
+          /////////////////////////TODO "remove the ERROR_SET because config_get sets it already? also in all other getters in this file
         }
     }
 
@@ -339,7 +339,7 @@ lumiera_config_word_set (const char* key, const char** value)
 
   LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
-      const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
+      const char* fmt = "= %s"; ///////////////////////TODO use the config system (config.format*...) to deduce the desired format for this key
       item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, scan_word (*value)));
     }
 
@@ -356,7 +356,7 @@ lumiera_config_bool_get (const char* key, int* value)
 {
   (void) key; (void) value;
   TRACE (configtyped_dbg);
-  UNIMPLEMENTED();
+  UNIMPLEMENTED("get bool from config system");
   return 0;
 }
 
@@ -366,7 +366,7 @@ lumiera_config_bool_set (const char* key, int* value)
 {
   (void) key; (void) value;
   TRACE (configtyped_dbg);
-  UNIMPLEMENTED();
+  UNIMPLEMENTED("set bool in config system");
   return 0;
 }
 

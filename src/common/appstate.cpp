@@ -68,14 +68,13 @@ namespace lumiera {
   
   
   /** perform initialisation triggered on first access. 
-   *  Will execute the ON_BASIC_INIT hook, but under typical
-   *  circumstances this is a NOP, because when callbacks are
-   *  added to this hook, the AppState singleton instance has
-   *  already been created. For this reason, there is special
-   *  treatment for the ON_BASIC_INIT in LifecycleHook::add,
-   *  causing the provided callbacks to be fired immediately.
-   *  (btw, this is nothing to be worried of, because from
-   *  client codes POV it just behaves like intended). 
+   *  Will execute BasicSetup sequence to determine the location
+   *  of the executable and read in \c setup.ini  --
+   *  Since above a LifecycleHook is installed ON_BASIC_INIT,
+   *  this can be expected to happen on static initialisation
+   *  of this compilation unit, if not earlier (if some other
+   *  static initialisation code accesses the instance).
+   * @note all further application startup is conducted by \c main.cpp
    */
   AppState::AppState()
     : setup_(LUMIERA_LOCATION_OF_BOOTSTRAP_INI)
@@ -124,7 +123,6 @@ namespace lumiera {
     lumiera_interfaceregistry_init ();
     _THROW_IF
     
-    TODO ("use a plugindb instead of loading all plugins at once");
     lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
     _THROW_IF
     

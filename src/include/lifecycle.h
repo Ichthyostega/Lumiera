@@ -21,8 +21,8 @@
 */
 
 /** @file lifecycle.h
- ** Interface for registering and triggering application lifecycle event callbacks.
- ** This service is a facade for and implemented by lumiera::AppState.
+ ** Installing and invoking of application lifecycle event callbacks.
+ ** This service is a facade for and implemented by the lumiera::LifecycleRegistry.
  ** By placing a static LifecycleHook variable or by calling LifecycleHook::add,
  ** a callback can be registered to be executed on a specific application lifecycle
  ** event. Examples being #ON_BASIC_INIT, #ON_GLOBAL_INIT. Other subsystems may
@@ -50,7 +50,7 @@ namespace lumiera {
   using lib::Symbol;
   
   //defined in liblumiera.so
-  extern const char * ON_BASIC_INIT;      ///< automatic static init. treated specially
+  extern const char * ON_BASIC_INIT;      ///< automatic static init. treated specially to run as soon as possible
   extern const char * ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
   extern const char * ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
   
@@ -65,12 +65,12 @@ namespace lumiera {
    *  define and register a callback for a specific lifecycle event.
    *  The purpose of this class is to be defined as a static variable in the implementation
    *  of some subsystem (i.e. in the cpp file), providing the ctor with the pointer to a 
-   *  callback function. Thus the callback gets enroled when the corresponding object file
-   *  is loaded. The event ON_BASIC_INIT is handled specifically, firing off the referred 
-   *  callback function as soon as possible. All other labels are just arbitrary (string)
+   *  callback function. Thus the specified callback gets enrolled when the corresponding
+   *  object file is loaded. The event ON_BASIC_INIT is handled specifically, firing off the
+   *  referred callback function as soon as possible. All other labels are just arbitrary (string)
    *  constants and it is necessary that "someone" cares to fire off the lifecycle events
    *  at the right place. For example, lumiera-main (and the test runner) calls 
-   *  \c AppState::instance().execute(ON_GLOBAL_INIT) (and..SHUTDOWN)
+   *  \c LifecycleHook::trigger(ON_GLOBAL_INIT) (and..SHUTDOWN)
    *  @note duplicate or repeated calls with the same callback are NOP 
    */
   class LifecycleHook

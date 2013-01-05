@@ -94,9 +94,10 @@ namespace lumiera {
       string fetchSetupValue (lib::Literal key);
       
       
-      /** building on the state determined by #evaluate, decide if the given Subsys
+      /** building on the state determined by #init, decide if the given Subsys
        *  needs to be pulled up and, if necessary, register the Subsys and its
-       *  prerequisites to be maintained throughout the application's lifetime. */
+       *  prerequisites to be maintained throughout the application's lifetime.
+       */
       void maybeStart (lumiera::Subsys&);
       
       
@@ -107,12 +108,14 @@ namespace lumiera {
         FAILED_EMERGENCY_EXIT
       };
       
-      /** put the main thread of the application into a wait state, if some subsystem(s)
-       *  registered with #maybeStart still need to be maintained. On termination of
-       *  one of those components, tear down the remaining components and initiate
-       *  a normal or emergency shutdown of the application, depending on the
-       *  triggering component's mode of termination (exit or exception). 
-       *  @return global application exit code */
+      /** put the main thread of the application into a wait state, as long as some
+       *  subsystem(s) registered with #maybeStart still need to be maintained.
+       *  On termination of one of those components, tear down the remaining
+       *  components and initiate a normal or emergency shutdown of the
+       *  application, depending on the triggering component's
+       *  mode of termination (exit or exception). 
+       *  @return global application exit code
+       */
       ExitCode maybeWait();
       
       

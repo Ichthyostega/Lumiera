@@ -67,7 +67,7 @@ namespace lib {
    *  @note also picks ORIGIN, $ORIGIN/, ORIGIN/ 
    */
   string
-  replaceTokens (string const& src)
+  replaceMagicLinkerTokens (string const& src)
   {
     static const regex PICK_ORIGIN_TOKEN ("\\$?ORIGIN/?");
     static const string expandedOriginDir  
@@ -86,21 +86,19 @@ namespace lib {
     fsys::path modulePathName (moduleName);
     SearchPathSplitter searchLocation(searchPath);                        ///////////TICKET #896
     
-    while (true)
+    while (!fsys::exists (modulePathName))
       {
-        if (fsys::exists (modulePathName))
-          {
-            INFO (config, "found module %s", modulePathName.string().c_str());
-            return modulePathName.string();                               ///////////TICKET #896
-          }
-        
         // try / continue search path
         if (searchLocation.isValid())
           modulePathName = fsys::path() / searchLocation.next() / moduleName;
         else
           throw error::Config ("Module \""+moduleName.string()+"\" not found"   /////TICKET #896
                               + (searchPath.empty()? ".":" in search path: "+searchPath));
-  }   }
+      }
+    
+    INFO (config, "found module %s", modulePathName.string().c_str());
+    return modulePathName.string();                                       ///////////TICKET #896
+  }
   
   
   
