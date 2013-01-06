@@ -45,7 +45,6 @@ link:{ldoc}/technical/overview.html[The Inner Core]
 
 Vision
 ------
-
 Lumiera strives towards being a *professional non-linear video editing system*.  It is
 important to note that by ``professional'' we do not necessarily imply
 ``commercial'' or even ``industrial''.  We do, however, wish to suggest an
@@ -294,16 +293,16 @@ Global Pipes
 // TODO: needs rewriting.
 The GUI provides a separate _bus view_, showing the _global pipes_. These are the
 master busses for each kind of output (image and sound) and collect the output of
-the subgroups, in a manner similar to an audio mixing desk. Any _pipe_ is just a
+subgroups together in a manner similar to an audio mixing desk. Any _pipe_ is just a
 means of collecting, mixing or overlaying output produced by other pipes.
 A simple (linear) chain of effects can be applied within each pipe.
 
-Most of the pipes are managed automatically, e.g. the pipes corresponding to
+Most pipes are managed automatically, e.g. the pipes corresponding to
 individual clips, or the pipes collecting output from transitions, from nested
-sequences and from groups of tracks. At some point, at the level of the
-timeline, all of the processed data is collected within the aforementioned
-global pipes to form the small number of output streams produced by rendering
-and playback. Each timeline uses a separate set of global pipes.
+sequences and from groups of tracks. At some point, at the timeline level, all 
+processed data is collected within the aforementioned global pipes to form the
+small number of output streams produced by rendering and playback. Each timeline
+uses a separate set of global pipes. 
 
 
 Asset View
@@ -314,7 +313,7 @@ constituents, raw material, clips, bins (folders) and effects are managed by the
 Asset View, i.e., typical management operations including, deleting, adding,
 naming, tagging, grouping into bins, etc. all occur here.
 
-There are various kinds of assets available in any project.
+There are various kinds of assets available in any project:
 
   * source media/footage/soundfiles
   * all available effects and transitions
@@ -325,9 +324,9 @@ There are various kinds of assets available in any project.
 Actually, the same underlying data structure is used to implement the
 asset view with folders, clip bins and effect palettes, and the timeline
 view with tracks, clips and attached effects. Technically, there is no
-difference between a track or a clip bin -- just the presentation varies.
-Timeline contents can be viewed like assets for bookkeeping purposes, and
-the contents of a clip bin can be played like a storyboard
+difference between a track or a clip bin -- just the presentation appears
+different. Timeline contents can be viewed, just like assets, for bookkeeping
+purposes, and the contents of a clip bin can be played like a storyboard.
 
 
 
@@ -355,7 +354,7 @@ Session Storage
 
 The current representation of a project resident in memory is internally known 
 as a session, whereas from a GUI user perspective, this is known as a project.
-In this section, we will use the term ``session'' as we discussing the internals
+In this section, we will use the term ``session'' as we are discussing the internals
 of Lumiera here. 
 
 Everything is stored in a session.  If a user saves a session, then there should
@@ -365,18 +364,18 @@ work away and load the session that has just been saved. In other words
 
 This ambitious goal has a number of advantages.  If all steps are to be stored,
 then all steps must be available as an object to be stored. We can perform
-operations on these objects.  For example unlimited ability to undo previous
+operations on these objects.  For example, unlimited ability to undo previous
 steps, selective undo of previous steps or the possibility of merging various
-steps might even be a possibility.  For example, work on a project at the
-office and work on the same project at home can be merged each morning and
+steps might even be a possibility.  On a practical note, work on a project at
+the office and work on the same project at home can be merged each morning and
 evening. 
 
 Session storage is envisaged to operate similar to a database or journalling
 file system. Any operation will be logged prior to execution. This protects
 the session contents against corruption and allows for automated recovery
-in case of a crash. The actual storage is delegated to several back-ends.
-One of these back-ends implements a _binary storage format_ for performance
-reasons, while another one exposes all of the session contents in textual,
+in case a crash occurs. The actual storage itself is delegated to several backends.
+One of these backends implements a _binary storage format_ for performance
+reasons, while another exposes all session contents in textual,
 human readable form. The storage format is designed in a way to ensure
 a certain degree of compatibility while the application evolves.
 
@@ -437,7 +436,7 @@ Lumiera will break down processes that need to be processed into smaller units
 called _frame job_. Typically, there will be many hundreds of jobs waiting for
 processing at any one time. These jobs are queued for processing and the order
 in which this is performed is managed by the _scheduler_.
-This is all done in the back-end.
+This is all done in the backend.
 
 Apart from memory, the backend will be responsible for accessing and saving
 files. It will be of the utmost to do this efficiently. This will be carried out
@@ -537,15 +536,16 @@ Glossary
 ~~~~~~~~
 
 The above outline of the design uses a lot of special terms and common terms
-used with specific meaning within Lumiera. To ease the understanding, we've
-collected a link:Glossary.html[Glossary of common terms].
+used with specific meaning within Lumiera. To ease understanding, we've
+collected together a link:Glossary.html[glossary of common terms].
 
 Tutorials and User Manual
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-For most users, the next step would be to skim the user manual and to install
-the application. But we aren't this far, unfortunately. As of 1/2013, Lumiera
-isn't usable in any way. Later, when we approach the alpha and beta development phase,
-we'll care for a user manual and a tutorial section.
+For most users, the next step would be to skim through the user manual and to
+install the application. But we are not this far yet, unfortunately. As of
+1/2013, Lumiera isn't usable in any way. Later, when we approach the alpha and
+beta development phase, we'll devote some attention to a user manual and provide
+a sections on tutorials.
 
 The Inner Core
 ~~~~~~~~~~~~~~
