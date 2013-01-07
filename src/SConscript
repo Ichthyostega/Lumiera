@@ -17,8 +17,10 @@ lBack = env.SharedLibrary('lumierabackend', srcSubtree('backend'), install=True)
 lProc = env.SharedLibrary('lumieraproc',    srcSubtree('proc'),    install=True)
 
 core        = lProc+lBack+lApp+lLib    # in reverse dependency order
-core_lib    = core
 support_lib = lLib
+app_lib     = lApp+support_lib
+backend_lib = lBack+app_lib
+core_lib    = core
 
 lumiera = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
           + config
@@ -45,4 +47,4 @@ gui       = ( guimodule
             )
 
 
-Export('lumiera core core_lib support_lib plugins gui')
+Export('lumiera core core_lib app_lib backend_lib support_lib plugins gui')

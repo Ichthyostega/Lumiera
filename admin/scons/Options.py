@@ -45,7 +45,8 @@ def defineCmdlineVariables(buildVars):
         ,BoolVariable('OPTIMIZE', 'Build with strong optimisation (-O3)', False)
         ,BoolVariable('VALGRIND', 'Run Testsuite under valgrind control', True)
         ,BoolVariable('VERBOSE',  'Print full build commands', False)
-        ,('TESTSUITES', 'Run only Testsuites matching the given pattern', '')
+        ,('TESTSUITES', 'Run only test suites matching the given pattern', '')
+        ,('TESTMODE',   'test suite error mode for test.sh', '')
 #       ,BoolVariable('OPENGL', 'Include support for OpenGL preview rendering', False)
 #       ,EnumVariable('DIST_TARGET', 'Build target architecture', 'auto', 
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)

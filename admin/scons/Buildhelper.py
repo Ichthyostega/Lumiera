@@ -84,7 +84,7 @@ def globRootdirs(roots):
 def findSrcTrees(location, patterns=SRCPATTERNS):
     """ find possible source tree roots, starting with the given location.
         When delving down from the initial location(s), a source tree is defined
-        as a directory containidsource files and possibly further sub directories.
+        as a directory containing source files and possibly further sub directories.
         After having initially expanded the given location with #globRootdirs, each
         directory is examined depth first, until encountering a directory containing
         source files, which then yields a result. Especially, this can be used to traverse
@@ -102,7 +102,7 @@ def findSrcTrees(location, patterns=SRCPATTERNS):
 
 def isSrcDir(path, patterns=SRCPATTERNS):
     """ helper: investigate the given (relative) path
-        @param patterns: list of wildcards defining what counts as "source file" 
+        @param patterns: list of wildcards to define what counts as "source file" 
         @return: True if it's a directory containing any source file
     """
     if not os.path.isdir(path):
