@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: Render Engine parts" ./test-components --group=engine
+TESTING "Component Test Suite: Render Engine parts" ./test-suite --group=engine
 
 
 

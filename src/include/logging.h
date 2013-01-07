@@ -54,13 +54,13 @@
  ** \code NOBUG_LOG='progress:INFO' ./lumiera \endcode
  **
  ** @todo logging to files?    NOBUG_LOG='progress:INFO@file(name=filename)' api to set this statically up by the program will follow  --cehteh
- ** @todo review this documentation ################################################################################################################################
  */
 
 
 #include <nobug.h>
 
-#ifndef LUMIERA_LOGGING_CXX
+/// magic to generate NoBug definitions
+#ifndef LUMIERA_NOBUG_INIT_CPP
 #undef NOBUG_DECLARE_ONLY
 #define NOBUG_DECLARE_ONLY 1
 #endif
@@ -190,16 +190,9 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (  gui_event,                   all);
 
 
 
-#ifndef LUMIERA_LOGGING_CXX
+#ifndef LUMIERA_NOBUG_INIT_CPP
 #undef NOBUG_DECLARE_ONLY
 #define NOBUG_DECLARE_ONLY 0
 #endif
 
 #endif
-/*
-// Local Variables:
-// mode: C
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/

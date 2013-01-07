@@ -1,8 +1,8 @@
 /*
-  NoBugInit  -  NoBug static initialisation and definition of logging vars 
+  errortest.c  -  executable for running bug regression tests
 
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,26 +21,39 @@
 * *****************************************************/
 
 
-#include "lib/nobug-init.hpp"
+#include "lib/test/run.hpp"
 
-/// magic to generate NoBug logging definitions
-#define LUMIERA_NOBUG_INIT_CPP
-#include "include/logging.h"
+#include <iostream>
+
+using std::cerr;
+using std::endl;
 
 
-
-namespace lumiera {
-  
-  void 
-  initialise_NoBug () 
-  {
-    NOBUG_INIT;
-    
-#if NOBUG_MODE_ALPHA
-    static uint callCount = 0;
-    ASSERT ( 0 == callCount++ );
-#endif
-  }
+namespace lumiera{
+namespace test   {
   
   
-}
+  /******************************************
+   * @todo come up with some more bugs
+   * @test cover known regressions
+   */
+  class HelloBug_test
+    : public Test
+    {
+      virtual void
+      run(Arg) 
+      {
+        std::cerr << "hello sunshine, no bugs whatsoever" <<endl;
+      } 
+    };
+  
+  
+  
+  
+  
+  /** Register this test class... */
+  LAUNCHER (HelloBug_test, "function regression");
+  
+  
+  
+}} // namespace lumiera::test

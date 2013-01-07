@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: GUI Model Parts" ./test-components --group=gui
+TESTING "Component Test Suite: GUI Model Parts" ./test-suite --group=gui
 
 PLANNED "ModelClipTrack_test" ModelClipTrack_test <<END
 END

@@ -1,4 +1,4 @@
-TESTING "test configuration system" ./test-config
+TESTING "test configuration system" ./test-configloader
 
 TEST "initializing config system" init <<END
 out: initialized

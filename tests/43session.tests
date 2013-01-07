@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: MObjects and Session/Model" ./test-components --group=session
+TESTING "Component Test Suite: MObjects and Session/Model" ./test-suite --group=session
 
 
 

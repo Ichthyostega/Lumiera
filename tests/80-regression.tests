@@ -1,0 +1,11 @@
+TESTING "Regression Tests: Known bugs" ./test-suite --group=regressiongui
+
+
+
+TEST "Smile test" HelloBug_test <<END
+err: hello sunshine
+END
+
+
+PLANNED "Suicide test" ElectricSuicide_test <<END
+END
