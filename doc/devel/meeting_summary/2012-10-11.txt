@@ -1,0 +1,35 @@
+2012-10-11 Lumiera Developers Meeting
+=====================================
+:Author: benn
+:Date: 2012-10-11
+
+Oct 11, 2012 on #lumiera 20:00 - 01:30
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ * benn
+ * mfisher31_
+ * skangas 
+
+Summary of The Meeting 
+----------------------
+
+. _cehteh_ now Debian package maintainer for NoBug as is  _ichthyo_.
+. Discussed the naming convention for the Debian package of the Gnome Docking
+  Library, (Lumiera have added some features to this library):  libgdlmm-lum
+  and libgdlmm-#-dev; where '#' is a number that changes with each change in
+  the ABI to ensure compatibility.
+. _cehteh_ reports that progress on the builddrone progressing nicely.
+. Discussed improving the Asciidoc documentation in particular the many broken
+  links to other documents and how cumbersome it is to get references to other
+  documents correct while trying to concentrate on content.
+  Moreover, we discussed at Froscon the desire of having some
+  automatic means of generating a glossary of terms, i.e., automatically
+  generating the glossary.txt files, we decided to do all these things together. 
+  _benn_ agreed to write a script that would do the above. The script will be
+  called directly by build_website.sh.
+. git://www.lumiera.org/website-staging is for experiments and contained the
+  new Lumiera site (http://staging.lumiera.org/). This was changed to contain
+  the contents of the current Lumiera web site.
