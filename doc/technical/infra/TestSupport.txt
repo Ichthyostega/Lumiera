@@ -78,17 +78,20 @@ to help with automating the build and test execution, test code should adhere to
 - all test source code is within the 'tests' subtree
 - immediately within the 'tests/' directory are the test collection definitions +*.tests+,
   ordered by number prefixes
-- below are the source directories for each of the aforementioned test-executables.
-- there are two kinds of subdirectories or sub collections
+- below are the directories with test cases, to be grouped into the aforementioned test-executables.
+- we distinguish two ways to write and link tests: _standalone_ and _suite_
 
-  * subtrees of test classes are linked into a single test runner executable. +
-    Currently, we use 'test-lib' and 'test-components' (from the directories 'test/lib' and 'test/components')
-  * collections of simple tests are grouped into several directories thematically. +
-    Within these directories, each source file must provide a main method and is linked into a separate executable.
+  * subtrees of test classes (C++) are linked into one shared library per subtree. In the final linking step,
+    these are linked together into a single testrunner, which is also linked against the application core.
+    The resulting executable 'test-suite' is able to invoke any of the test classes in
+    isolation, or a group / categroy of tests. +
+  * simple plain-C tests (names starting with 'test-*') are grouped into several directories thematically, 
+    and linked according to the application layer. Each of those simple tests needs to be self contained
+    and provide a main method.
 
 Internal testsuite runner
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-The class `test::Suite` ('src/lib/test/suite.hpp') helps building an executable which will run _all registered
+The class `test::Suite` (as used by 'tests/testrunner.cpp') helps building an executable which will run _all registered
 test case objects,_ or some group of such testcases. Each test case implements a simple interface and thus provides
 a `run (args)` function, moreover, it registers itself immediately alongside with his definition; this works by the
 usual trick of defining a static class object and calling some registration function from the constructor of this static var. See the following
@@ -113,7 +116,8 @@ namespace test   {
           greeting();
         } 
 
-      void greeting() 
+      void
+      greeting() 
         { 
           cout << "goodbye cruel world..." <<endl; 
         }
@@ -139,9 +143,9 @@ The class `test::TestOption` predefines a boost-commandlineparser to support the
 
 [width="90%",cols="<.<,^4"]
 |====  
-2+<| `./test-components --group <groupID> [testID [arguments...]]`
+2+<| `./test-suite --group <groupID> [testID [arguments...]]`
 |`--help` | options summary
-|`-g <groupID>` | build a Testsuite out of all tests from this group. If missing, ALL tests will be included
+|`-g <groupID>` | run all tests from this group as suite. If missing, ALL tests will be included
 |`[testID]` | (optional) one single testcase. If missing, all testcases of the group will be invoked
 |`--describe`| print all registered tests to stdout in a format suited for use with test.sh
 |====
