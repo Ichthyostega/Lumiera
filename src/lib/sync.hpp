@@ -342,7 +342,7 @@ namespace lib {
         
         /** allow copy, without interfering with the identity of IMPL */
         Monitor (Monitor const& ref) : IMPL(), timeout_(ref.timeout_) { }
-        const Monitor& operator= (Monitor const& ref) { timeout_ = ref.timeout_; }
+        const Monitor& operator= (Monitor const& ref) { timeout_ = ref.timeout_; return *this; }
         
         
         void acquireLock() { IMPL::acquire(); }
