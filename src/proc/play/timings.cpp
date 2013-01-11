@@ -59,6 +59,7 @@ namespace play {
   Timings::Timings (FrameRate fps)
     : grid_(buildStandardGridForFramerate(fps))
     , playbackUrgency (ASAP)
+    , playbackSpeed (1)
     , outputLatency (Duration::NIL)
     { 
       ENSURE (grid_);
@@ -118,6 +119,16 @@ namespace play {
       }
     else
       return Time::NEVER;
+  }
+  
+  
+  Offset
+  Timings::getRealOffset (int64_t frameOffset)  const
+  {
+    Offset nominalOffset (grid_->timeOf(0), grid_->timeOf(frameOffset));
+    return isOriginalSpeed()? nominalOffset
+                            : nominalOffset * playbackSpeed;
+                                             ////////////////////////TICKET #902  for full-featured variable speed playback, we need to integrate (sum up step wise) instead of just using a fixed factor 
   }
   
   

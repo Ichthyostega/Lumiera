@@ -35,7 +35,6 @@ namespace proc {
 namespace engine {
   
   using mobject::ModelPort;
-  using lib::time::Duration;
   using lib::time::TimeVar;
   
   
@@ -73,14 +72,6 @@ namespace engine {
         }
       
       // using default copy operations
-      
-      
-      Duration remainingRealTime()
-        {
-          UNIMPLEMENTED ("deterine the real wall clock time amount left until deadline");
-                                                ////////////////////////TODO the coordinates can't answer that question! Who else can?
-        }
-
       
     };
   

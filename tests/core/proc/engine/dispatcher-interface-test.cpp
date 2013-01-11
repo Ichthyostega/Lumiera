@@ -164,8 +164,8 @@ namespace test  {
                                              .relativeFrameLocation (refPoint, 15);
           CHECK (coordinates.absoluteNominalTime == Time(0,1));
           CHECK (coordinates.absoluteFrameNumber == 25);
-          CHECK (coordinates.remainingRealTime() <  Time(FSecs(25,25))); ////////////////////////TODO the coordinates can't answer that question! Who else can?
-          CHECK (coordinates.remainingRealTime() >= Time(FSecs(24,25)));
+          CHECK (refPoint.remainingRealTimeFor(coordinates) <  Time(FSecs(25,25)));
+          CHECK (refPoint.remainingRealTimeFor(coordinates) >= Time(FSecs(24,25)));
           CHECK (coordinates.modelPort == modelPort);
           CHECK (coordinates.channelNr == channel);
           

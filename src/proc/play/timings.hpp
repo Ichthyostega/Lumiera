@@ -53,6 +53,7 @@
 //#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
+#include <boost/rational.hpp>
 #include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 
@@ -99,6 +100,7 @@ namespace play {
       
     public:
       PlaybackUrgency playbackUrgency;
+      boost::rational<int64_t> playbackSpeed;                     /////////////TICKET #902 we need a more generic representation for variable speed playback
       Duration outputLatency;
       
       Timings (FrameRate fps);
@@ -125,6 +127,18 @@ namespace play {
        */
       Time getTimeDue()  const;
       
+      /** calculate the given frame's distance from origin,
+       *  but do so using the real time scale, including any
+       *  playback speed factory and similar corrections.
+       * @param frameOffset frame number relative to the implicit grid
+       * @return real time value relative to the implicit grid's zero point
+       * @note since the Timings don't contain any information relating the
+       *       nominal time scale to wall clock time, this result is just
+       *       a relative offset, but expressed in real time scale values
+       * @see proc::engine::TimeAnchor for an absolutely anchored conversion
+       */
+      Offset getRealOffset (int64_t frameOffset)  const;
+      
       /** number of jobs to be planned and scheduled in one sway.
        *  The continuous planning of additional frame calculation jobs
        *  for playback or rendering proceeds in chunks of jobs
@@ -133,11 +147,24 @@ namespace play {
       uint getPlanningChunkSize() const;
       
       
+      bool isOriginalSpeed()  const;
+      
+      
       //////////////TODO further accessor functions here
       
       Timings constrainedBy (Timings additionalConditions);
       
     };
+  
+  
+  
+  
+  
+  inline bool
+  Timings::isOriginalSpeed()  const
+  {
+    return 1 == playbackSpeed;
+  }
   
   
   

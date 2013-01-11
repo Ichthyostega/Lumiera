@@ -28,6 +28,7 @@
 #include "backend/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
 #include "proc/play/timings.hpp"
+#include "proc/engine/frame-coord.hpp"
 
 #include <boost/rational.hpp>
 
@@ -132,6 +133,17 @@ namespace engine {
       operator lib::time::TimeValue()  const
         {
           UNIMPLEMENTED ("representation of the Time Anchor closure");
+        }
+      
+      
+      
+      Offset
+      remainingRealTimeFor (FrameCoord plannedFrame)
+        {
+          int64_t frameOffset = plannedFrame.absoluteFrameNumber - anchorPoint_;
+          return Offset(this->relatedRealTime_
+                      + timings_.getRealOffset(frameOffset)
+                      - RealClock::now());
         }
     };
   
