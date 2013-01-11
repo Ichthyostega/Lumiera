@@ -61,9 +61,8 @@ typedef struct lumiera_jobClosure* LumieraJobClosure;
 
 
 /** 
- * invocation parameter for the individual
- * frame calculation job. Embedded into the job descriptor
- * and passed to #lumiera_job_invoke when triggering
+ * invocation parameter for the individual frame calculation job.
+ * Embedded into the job descriptor and passed to #lumiera_job_invoke when triggering
  */
 struct lumiera_jobParameter_struct
   {
@@ -114,26 +113,21 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 
 
 
+
+
+
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-//#include "proc/common.hpp"
 #include "lib/error.hpp"
-//#include "proc/state.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/time/timequant.hpp"
 
 
 
 namespace proc {
 namespace engine {
   
-//using lib::time::TimeSpan;
-//using lib::time::Duration;
-//using lib::time::FSecs;
-using lib::time::TimeValue;
-using lib::time::Time;
-//  
-//class ExitNode;
+  using lib::time::TimeValue;
+  using lib::time::Time;
   
   typedef lumiera_jobParameter const& JobParameter;
   

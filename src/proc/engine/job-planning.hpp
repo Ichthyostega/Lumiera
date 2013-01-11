@@ -57,7 +57,22 @@ namespace engine {
 //class ExitNode;
   
 
-  /** 
+  /**
+   * View on the execution planning for a single calculation step.
+   * When this view-frontend becomes accessible, behind the scenes all
+   * the necessary information has be pulled and collected from the
+   * low-level model and the relevant rendering/playback configuration.
+   * Typically, clients will materialise this planning into a Job (descriptor)
+   * ready to be entered into the scheduler.
+   * 
+   * JobPlanning is indeed a view; the represented planning information is not
+   * persisted (other then in the job to be created). The implementation draws
+   * on a recursive exploration of the corresponding JobTicket, which acts as
+   * a general blueprint for creating jobs within this segment of the timeline.
+   * 
+   * @remarks on the implementation level, JobPlanning is used as "state core"
+   *          for a PlanningState iterator, to visit and plan subsequently all
+   *          the individual operations necessary to render a timeline chunk.
    */ 
   class JobPlanning
     {
@@ -216,6 +231,14 @@ namespace engine {
     
   
   
+  
+  /** this is the core operation to drive planning ahead:
+   *  discover the prerequisites of some operation -- here
+   *  "prerequisites" are those operations to be performed
+   *  within separate Jobs beforehand.
+   * @note this function is intended to be flat-mapped (">>=")
+   *       onto a tree-like monad representing the evaluation process.
+   */
   inline PlanningState
   expandPrerequisites (JobPlanning const& calculationStep)
   {
@@ -225,8 +248,9 @@ namespace engine {
   }
   
   
-
-
+  
+  
+  
   /**
    * Abstraction: a Facility to establish frame coordinates
    * and identify and access the execution plan for this frame.
@@ -357,13 +381,11 @@ namespace engine {
     {
       
     public:
-//    JobPlanningSequence() { }
-      
       JobPlanningSequence(engine::FrameCoord startPoint, FrameLocator& locator)
         : ExpandedPlanningSequence(
             JobPlanningChunkStartPoint(
                 PlanningStepGenerator(startPoint,locator))
-            >>= expandPrerequisites)
+            >>= expandPrerequisites)                    // "flat map" (monad operation)
         { }
       
     };

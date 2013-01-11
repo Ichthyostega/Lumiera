@@ -25,7 +25,6 @@
 #define PROC_ENGINE_TIME_ANCHOR_H
 
 #include "proc/common.hpp"
-//#include "proc/state.hpp"
 #include "backend/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
 #include "proc/play/timings.hpp"
@@ -38,12 +37,10 @@ namespace proc {
 namespace engine {
   
   using backend::RealClock;
-//  using lib::time::TimeSpan;
   using lib::time::Offset;
-//  using lib::time::FSecs;
   using lib::time::TimeVar;
   using lib::time::Time;
-//  class ExitNode;
+  
   
   /**
    * The process of playback or rendering is a continued series of exploration and evaluation.

@@ -25,7 +25,6 @@
 #define PROC_ENGINE_FRAME_COORD_H
 
 #include "proc/common.hpp"
-//#include "proc/state.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
@@ -36,12 +35,9 @@ namespace proc {
 namespace engine {
   
   using mobject::ModelPort;
-//using lib::time::TimeSpan;
   using lib::time::Duration;
-//using lib::time::FSecs;
   using lib::time::TimeVar;
-//  
-//  class ExitNode;
+  
   
   /**
    * effective coordinates of a frame to be calculated.
