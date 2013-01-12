@@ -29,6 +29,7 @@
 
 using boost::rational;
 using lib::time::FrameRate;
+using lib::time::FSecs;
 
 
 namespace backend{
@@ -39,8 +40,8 @@ namespace engine {
     const rational<uint> ONE_THIRD(1,3);
     const rational<uint> EIGHTY_PERCENT(8,10);
     
-    const Duration DEFAULT_ENGINE_LATENCY = EIGHTY_PERCENT * Duration(1, FrameRate::PAL);
-    
+    const Duration DEFAULT_ENGINE_LATENCY  = EIGHTY_PERCENT * Duration(1, FrameRate::PAL);
+    const Duration DEFAULT_JOB_PLANNING_TURNOVER(FSecs(3,2));
     
   }//(End)hard wired settings
   
@@ -70,6 +71,11 @@ namespace engine {
   }
   
   
+  Duration
+  EngineConfig::currentJobPlanningRhythm()  const
+  {
+    return DEFAULT_JOB_PLANNING_TURNOVER;
+  }
   
 }} // namespace backend::engine
 

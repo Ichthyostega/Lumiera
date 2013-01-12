@@ -25,7 +25,6 @@
 #define PROC_ENGINE_DISPATCHER_H
 
 #include "proc/common.hpp"
-//#include "proc/state.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/engine/time-anchor.hpp"
 #include "proc/engine/frame-coord.hpp"
@@ -45,8 +44,7 @@ namespace engine {
   using lib::time::TimeSpan;
   using lib::time::FSecs;
   using lib::time::Time;
-//  
-//  class ExitNode;
+  
   
   /**
    * Internal abstraction: a service within the engine

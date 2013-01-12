@@ -290,7 +290,7 @@ namespace lib {
       IterStateWrapper (ST const& initialState)
         : core_(initialState)
         { 
-          checkPoint (core_);
+          checkPoint (core_);       // extension point: checkPoint
         }
       
       IterStateWrapper ()

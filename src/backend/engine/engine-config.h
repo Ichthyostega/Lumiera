@@ -85,6 +85,14 @@ namespace engine {
        */
       Duration currentEngineLatency()  const;
       
+      
+      /** Time interval for ahead planning of render jobs.
+       *  Frame calculation is broken down into individual jobs, and these
+       *  jobs are prepared and scheduled chunk wise, while they are invoked
+       *  as late as possible. This setting defines the time span to prepare
+       *  and cover in a single planning chunk.
+       */
+      Duration currentJobPlanningRhythm()  const;
     };
 
 }} // namespace backend::engine

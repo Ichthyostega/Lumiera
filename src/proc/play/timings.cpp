@@ -22,6 +22,7 @@
 
 
 #include "proc/play/timings.hpp"
+#include "backend/engine/engine-config.h"
 #include "lib/time/formats.hpp"
 #include "lib/time/timequant.hpp"
 
@@ -30,9 +31,11 @@
 namespace proc {
 namespace play {
   
-  
+  using backend::engine::EngineConfig;
   using lib::time::PQuant;
   using lib::time::Time;
+  using lib::time::TimeVar;
+  
   
   namespace { // hidden local details of the service implementation....
     
@@ -42,8 +45,8 @@ namespace play {
       return PQuant (new lib::time::FixedFrameQuantiser (fps));
     }                         //////TODO maybe caching these quantisers? they are immutable and threadsafe
     
-    
   } // (End) hidden service impl details
+  
   
   
   /** Create a default initialised Timing constraint record.
@@ -66,7 +69,7 @@ namespace play {
       ENSURE (grid_);
     }
   
-  //////////////////////////////////////////////////////////////////TODO ctors for use in the real player/engine
+  //////////////////////////////////////////////////////////////////TODO ctors for use in the real player/engine?
   
   
   
@@ -74,6 +77,13 @@ namespace play {
   Timings::getOrigin()  const
   {
     return grid_->timeOf(0);
+  }
+  
+  
+  TimeValue
+  Timings::getFrameStartAt (int64_t frameNr)  const
+  {
+    return grid_->timeOf(frameNr);
   }
   
   
@@ -107,7 +117,7 @@ namespace play {
    *  @todo implement real support for variable frame rates      
    */                                  ////////////////////////////////////////////////////////TICKET #236
   Duration
-  Timings::constantFrameTimingsInterval (TimeValue startPoint)  const
+  Timings::constantFrameTimingsInterval (TimeValue)  const
   {
     return Duration (Time::ANYTIME);
   }
@@ -140,8 +150,33 @@ namespace play {
   Duration
   Timings::getPlanningChunkDuration()  const
   {
-    UNIMPLEMENTED ("how to control the engine evaluation chunk size");
+    return EngineConfig::get().currentJobPlanningRhythm();
   }
+  
+  
+  int64_t
+  Timings::establishNextPlanningChunkStart(int64_t currentAnchorFrame)  const
+  {
+    TimeVar breakingPoint = grid_->timeOf(currentAnchorFrame);
+    breakingPoint += getPlanningChunkDuration();
+    int64_t nextFrame = grid_->gridPoint (breakingPoint);
+    
+    ASSERT (breakingPoint <= grid_->timeOf(nextFrame));
+    ASSERT (breakingPoint >  grid_->timeOf(nextFrame-1));
+    
+    if (grid_->timeOf(nextFrame) == breakingPoint)
+      return nextFrame;
+    else
+      return nextFrame+1;
+  }
+  
+  
+  Duration
+  Timings::currentEngineLatency()  const
+  {
+    return EngineConfig::get().currentEngineLatency();
+  }
+  
   
   
   Timings

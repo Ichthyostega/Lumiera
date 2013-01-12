@@ -110,9 +110,10 @@ namespace play {
       
       TimeValue getOrigin()  const;
       
-      Offset   getFrameOffsetAt   (TimeValue refPoint)  const;
-      Duration getFrameDurationAt (TimeValue refPoint)  const;
-      Duration getFrameDurationAt (int64_t refFrameNr)  const;
+      TimeValue getFrameStartAt    (int64_t frameNr)     const;
+      Offset    getFrameOffsetAt   (TimeValue refPoint)  const;
+      Duration  getFrameDurationAt (TimeValue refPoint)  const;
+      Duration  getFrameDurationAt (int64_t refFrameNr)  const;
       
       /** the frame spacing and duration remains constant for some time...
        * @param startPoint looking from that time point into future
@@ -151,6 +152,20 @@ namespace play {
        *  a continuation job for the next planning chunk.
        */
       Duration getPlanningChunkDuration() const;
+      
+      /** establish the time point to anchor the next planning chunk,
+       *  in accordance with #getPlanningChunkDuration
+       * @param currentAnchorFrame frame number where the current planning started
+       * @return number of the first frame, which is located strictly more than
+       *         the planning chunk duration into the future
+       * @remarks this value is used by the frame dispatcher to create a
+       *          follow-up planning job */
+      int64_t establishNextPlanningChunkStart(int64_t currentAnchorFrame)  const;
+      
+      /** reasonable guess of the current engine working delay.
+       *  Frame calculation deadlines will be readjusted by that value,
+       *  to be able to deliver in time with sufficient probability. */
+      Duration currentEngineLatency()  const;
       
       
       bool isOriginalSpeed()  const;

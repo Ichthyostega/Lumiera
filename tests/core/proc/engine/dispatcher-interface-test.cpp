@@ -276,7 +276,7 @@ namespace test  {
         {
           Timings timings (FrameRate::PAL);
           uint startFrame(10);
-          uint nrJobs = timings.getPlanningChunkSize();
+          uint nrJobs = 0; /////////////TODO timings.getPlanningChunkSize();
           Duration frameDuration (1, FrameRate::PAL);
           
           CHECK (Time(nextRefPoint) == Time::ZERO + (startFrame + nrJobs) * frameDuration);
