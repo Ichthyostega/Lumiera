@@ -159,6 +159,13 @@ namespace engine {
         }
       
       
+      /** @return the frame at which any job planning
+       *          for this planning chunk will start */
+      int64_t getStartFrame()  const
+        {
+          return anchorPoint_;
+        }
+      
       
       Offset
       remainingRealTimeFor (FrameCoord plannedFrame)

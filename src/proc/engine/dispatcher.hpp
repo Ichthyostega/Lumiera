@@ -88,10 +88,14 @@ namespace engine {
           
           operator JobPlanningSequence()
             {
+              TimeAnchor nextPlanningAnchor = refPoint_.buildNextAnchor();
+              
               TODO ("build the continuation job if necessary, wrap the sequence");
               
               return JobPlanningSequence(
-                  relativeFrameLocation(refPoint_), dispatcher_); 
+                  relativeFrameLocation(refPoint_),
+                  nextPlanningAnchor.getStartFrame(),
+                  dispatcher_); 
             }
 
         };
