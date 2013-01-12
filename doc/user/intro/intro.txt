@@ -286,6 +286,11 @@ The preliminary layout in the current GUI is rather provisional -- a final decis
 has yet to be taken on where the transport controls will be located.  In later
 versions of the standard GUI, the transport controls will change.  There is even
 a possibility that the transport controls will be allocated their own GUI element.
+// TODO:
+// A final decision about where the transport controls are located?
+// Isn't the whole point of enabling multiple GUIs that there won't be
+// final  decisions?  Only provisional ones?
+
 
 Transport controls are devices that are controlled by widgets or by some input device
 (MIDI, control surface, etc) so the look-and-feel of the transport control
@@ -415,6 +420,8 @@ a certain degree of compatibility while the application evolves.
 [[placement]]
 Placements
 ~~~~~~~~~~
+
+// Can placements place things in space as well as in time??
 
 Generic mechanism to stitch together media objects. Any placement may contain
 a list of conditions on how to locate the placed object, examples being
