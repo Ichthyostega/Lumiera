@@ -49,20 +49,17 @@ Vision
 NOTE: this section is still in discussion
 
 ''''
-Lumiera strives towards being a *professional non-linear video editor*. It
+Lumiera is to be a *professional non-linear video editor*. It
 is important to note that by ``professional'' we do not necessarily imply
 ``commercial'' or even ``industrial''.  We do, however, wish to suggest an
-attitude or frame of mind in how this work is approached, but not the goal,
+attitude or frame of mind in how we approach this work, but not the goal,
 requirement or purpose of this work.  The concept of professionality in film
 editing can indicate something of an artistic nature, suggest that there is
 a narration, meaning or political messages revealed by the work; or, simply,
 that the work attempts to convey something to an audience.
 
-Anyhow, for the tools, the editing software used to this end, we can identify
-several properties and requirements, to be labelled ``professional'':
-
 With this perspective in mind, we can identify a number of key properties
-film production tools should have and be professional
+film production tools should have to be considered professional
 
 ''''
 
@@ -80,29 +77,31 @@ your audience, to let them see, feel and perceive.
 ''''
 
 With this perspective in mind and for the editing software used to this end, we can identify
-a number of key properties film production tools should have to be labelled ``professional'':
+a number of key properties film production tools should have to be considered ``professional'':
 
  Reliability::
-        All work must be secure and be safe against any software glitches,
-        incompatibility or instability.  Ideally, Lumiera should be reliable,
-        very stable and not susceptible to software crashes, i.e., crashes or
-        power failure should ideally not result in data or work loss.
+        All work must be secure and safe against any software glitches,
+        incompatibility or instability.  Lumiera should be reliable,
+        very stable and resistant to software crashes.  Even
+        power failures should not result in data or work loss.
 
  Quality::
-        The demands placed on high-quality, cinema grade digital video material
+        High-quality, cinema grade digital video material
         requires crisp-quality results with no concessions made throughout the
         entire workflow that might compromise quality of the final work.
         A common requirement is the ability to reproduce all rendering
         calculations down to a single digit. 
  
+        ??What does this mean, a single digit??
+
  Performance and Productivity::
-        Professionals want to get things done in time and content, but, ideally,
+        Professionals want to get things done on time ??and content??, but
         with control over all detail. The fine balance of these goals is a
         central goal of workflow design and usability.
 
  Scalability and Adaptability::
         Projects and budgets differ, hardware advances; and Lumiera must scale
-        in different dimensions and make optimum use of the resources that are
+        in many ways and make optimum use of the resources that are
         available. From small Laptops to multi-core computers up to render farms,
         Lumiera must be adept in optimum use of the hardware at hand.
 
