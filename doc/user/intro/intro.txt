@@ -162,13 +162,13 @@ Rendering is Graph Processing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Processing video (and audio) data can be conceived as a graph (more precisely
-_directed acyclic graphs_).  In this model of video processing, data flows
+a _directed acyclic graph_).  In this model of video processing, data flows
 along the edges of the graph and is processed at the nodes.
 
 The following figure depicts manipulating video data as a graph.  The nodes of
-the root of the graph is where data input occurs. From there, the data moves on
-to the next nodes: the direct siblings of the root.  Here, the video data
-pre-processing occurs.  All other operations on the data can be represented by
+the ??root?? of the graph are where data input occurs. From there, the data moves on
+to the next nodes: the direct siblings of the root.  Here, the video data is
+pre-processed.  All other operations on the data can be represented by
 nodes, and data flows from one operation to the next along the nodes of the
 graph.
 
@@ -205,9 +205,9 @@ the inputs. This scheme offers a number of advantages over the naive scheme.
 Don't waste work
 ~~~~~~~~~~~~~~~~
 
-Rendering A/V data can be computationally intensive. To relieve the core workload
-by not rendering material twice or avoiding having to throw away material because
-it could not be rendered in time, Lumiera employs a sophisticated means of using
+Rendering A/V data can be computationally intensive.  To avoid duplicated or wasted work and 
+ensure it is possible to render on time, 
+Lumiera employs a sophisticated means of using
 cache xref:caching[<-] and profiling xref:profiling[<-].
 
 
