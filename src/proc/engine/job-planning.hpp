@@ -20,25 +20,42 @@
 
 */
 
+/** @file job-planning.hpp
+ ** The "mechanics" of discovering and planning frame calculation jobs.
+ ** This is a rather abstract chunk of code, dealing especially with the technicalities
+ ** of \em organising the discovery of prerequisites and of joining all the discovered operations
+ ** into a sequence of planning steps. The net result is to present a <i>sequence of job planing</i>
+ ** to the user, while actually encapsulating a depth-first tree exploration, which proceeds on demand.
+ ** 
+ ** \par participating elements
+ ** All of these job planning operations are implemented on top of the JobTicket. This is where to look
+ ** for "actual" implementation code. Here, within this header, the following entities cooperate to
+ ** create a simple sequence out of this implementation level tasks:
+ ** - JobPlanningSequence is the entry point for client code: it allows to generate a sequence of jobs
+ ** - JobPlanning is a view on top of all the collected planning information for a single job
+ ** - PlanningState is an iterator, successively exposing a sequence of JobPlanning views
+ ** - #expandPrerequisites(JobPlanning cons&) is the operation to explore further prerequisite Jobs
+ ** - PlanningStepGenerator yields the underlying "master beat": a sequence of frame locations to be planned
+ ** 
+ ** @see DispatcherInterface_test simplified usage examples
+ ** @see JobTicket
+ ** @see Dispatcher
+ ** @see EngineService
+ **
+ */
+
 
 #ifndef PROC_ENGINE_JOB_PLANNING_H
 #define PROC_ENGINE_JOB_PLANNING_H
 
 #include "proc/common.hpp"
-//#include "proc/state.hpp"
 #include "proc/engine/job.hpp"
 #include "proc/engine/job-ticket.hpp"
-//#include "proc/engine/time-anchor.hpp"
 #include "proc/engine/frame-coord.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/time/timequant.hpp"
-//#include "lib/meta/function.hpp"
-#include "lib/iter-adapter.hpp"
 #include "lib/iter-explorer.hpp"
-//#include "lib/linked-elements.hpp"
+#include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/noncopyable.hpp>
 
 
 namespace proc {
@@ -46,17 +63,11 @@ namespace engine {
   
   namespace error = lumiera::error;
   
-//using lib::time::TimeSpan;
-//using lib::time::Duration;
-//using lib::time::FSecs;
-//using lib::time::Time;
-//using lib::LinkedElements;
-  using util::isnil;
   using util::unConst;
-//  
-//class ExitNode;
+  using util::isnil;
   
-
+  
+  
   /**
    * View on the execution planning for a single calculation step.
    * When this view-frontend becomes accessible, behind the scenes all
@@ -73,7 +84,7 @@ namespace engine {
    * @remarks on the implementation level, JobPlanning is used as "state core"
    *          for a PlanningState iterator, to visit and plan subsequently all
    *          the individual operations necessary to render a timeline chunk.
-   */ 
+   */
   class JobPlanning
     {
       JobTicket::ExplorationState plannedOperations_;
@@ -96,7 +107,7 @@ namespace engine {
         , point_to_calculate_(requestedFrame)
         { }
       
-      // using the standard copy operations 
+      // using the standard copy operations
       
       
       /** cast and explicate this job planning information
@@ -114,7 +125,7 @@ namespace engine {
       
       
       /** build a new JobPlanning object,
-       * set to explore the prerequisites 
+       * set to explore the prerequisites
        * at the given planning situation
        */
       JobPlanning
@@ -162,13 +173,15 @@ namespace engine {
       iterNext (JobPlanning & plan)
       {
         plan.plannedOperations_.pullNext();
-      }      
+      }
     };
   
   
   
   
-    
+  /**
+   * iterator, exposing a sequence of JobPlanning elements
+   */
   class PlanningState
     : public lib::IterStateWrapper<JobPlanning>
     {
@@ -202,7 +215,7 @@ namespace engine {
           integrate (startingPoint, this->stateCore());
           return *this;
         }
-
+      
       PlanningState &
       usingSequence (PlanningState const& prerequisites)
         {
@@ -220,7 +233,7 @@ namespace engine {
       
       /** Extension point to be picked up by ADL.
        *  Provides access for the JobPlanningSequence
-       *  for combining and expanding partial results. 
+       *  for combining and expanding partial results.
        */
       friend PlanningState&
       build (PlanningState& attachmentPoint)
@@ -271,7 +284,8 @@ namespace engine {
       virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
     };
   
-    
+  
+  
   /**
    * Generate a sequence of starting points for Job planning,
    * based on the underlying frame grid. This sequence will be
@@ -338,25 +352,26 @@ namespace engine {
       iterNext (PlanningStepGenerator & gen)
       {
         gen.currentLocation_ = gen.locationGenerator_->getNextFrame (gen.currentLocation_);
-      }      
+      }
     };
   
   
   
+  /* type definitions for building the JobPlaningSequence */
   
   typedef PlanningState (*SIG_expandPrerequisites) (JobPlanning const&);
   
   typedef lib::IterExplorer<PlanningStepGenerator
                            ,lib::iter_explorer::RecursiveSelfIntegration>      JobPlanningChunkStartPoint;
-
+  
   typedef JobPlanningChunkStartPoint::FlatMapped<SIG_expandPrerequisites>::Type  ExpandedPlanningSequence;
   
   
   
   /**
    * This iterator represents a pipeline to pull planned jobs from.
-   * For dispatching individual frame jobs for rendering, this pipeline is
-   * generated and internally wired such as to interpret the render node definitions.
+   * To dispatch individual frame jobs for rendering, this pipeline is generated
+   * and wired internally such as to interpret the render node definitions.
    * 
    * \par Explanation of the structure
    * 
@@ -375,8 +390,10 @@ namespace engine {
    * - this basic frame grid is generated by the PlanningStepGenerator, which is
    *   effectively backed by the Dispatcher and thus the render node model. 
    * 
-   * 
-   * @todo 6/12 WIP-WIP-WIP how to prepare jobs for scheduling
+   * @remarks JobPlanningSequence is a monad, and the operation to explore the prerequisites
+   *          is applied by the \c >>= (monad flat map operation). This approach allows us
+   *          to separate the technicalities of exhausting tree exploration from the actual
+   *          "business code" to deal with frame job dependencies
    */
   class JobPlanningSequence
     : public ExpandedPlanningSequence
@@ -387,9 +404,9 @@ namespace engine {
         : ExpandedPlanningSequence(
             JobPlanningChunkStartPoint(
                 PlanningStepGenerator(startPoint,stopPoint,locator))
+            
             >>= expandPrerequisites)                    // "flat map" (monad operation)
         { }
-      
     };
   
   
