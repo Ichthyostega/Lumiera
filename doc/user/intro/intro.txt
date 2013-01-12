@@ -25,11 +25,11 @@ behind Lumiera to start working with Lumiera quickly.
 // working on this document
 
 .About this Document
-Lumiera is an innovative video editing software, still under active development
-by an open source community. This document acts as introduction, we try to start
+Lumiera is innovative video editing software, still under active development
+by an open-source community. This document acts as introduction. We try to start
 with a broad overview, then explain some core concepts towards the end.
-We describe planned features here without explicitly tagging them and we'll omit
-any technical details.
+We describe planned features here without explicitly tagging them as such and we
+omit technical details.
 There is a link:Glossary.html[Glossary of common terms]; readers curious about
 the inner workings might want to continue their path of exploration into
 link:{ldoc}/technical/overview.html[The Inner Core]
@@ -128,12 +128,12 @@ Open Ended Combination of Building Blocks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Lumiera is not so much defined in terms of _features_.
-Instead it can be better envisaged as a workshop in which the emphasis is on
+Instead it can be better seen as a workshop in which the emphasis is on
 individual _basic building-blocks_ that can be combined together in interesting
 ways to form more complex structures. These basic modules, entities or objects
-each have a distinct _type_ which explicitly limits the connections between the
-modules. Within these limits, any conceivable combination is possible without
-additional hidden restrictions.
+each have a distinct _type_ which explicitly identifies the possible connections between
+modules. Within these constraints, any combination is possible without
+hidden restrictions.
 
 Lumiera is not a set of Lego bricks, nor is it a business application
 driven by finite usage stories.
@@ -146,7 +146,7 @@ These building blocks within Lumiera create a moderate level of abstraction; a
 user may use the GUI to manipulate several elements directly -- not only the
 clips and effects, but also individual effect parameter automation, masks, layering,
 and even the placements xref:placement[<-] used to stitch the objects together,
-which is comparatively low-level. Such moderate abstraction encourages to
+which is comparatively low-level. Such moderate abstraction encourages the user to
 understand the inner workings, while shielding the user from merely technical
 details such as header format conversion or access to individual channels.
 
@@ -267,7 +267,7 @@ Obviously, support for audio will also be provided.  As there are many sources t
 can be displayed, a viewer is attached to a source via the viewer switch board.
 Timelines, probe points, wire taps and individual clips are examples of sources
 that can be attached to a viewer. Moreover, the number of viewers open at any one
-time is only limited by the hardware, and each viewer can be collapsed, hooked
+time is only limited by the hardware, and each viewer can be collapsed or hooked
 up to a beamer or monitor.
 
 
@@ -462,7 +462,7 @@ in which this is performed is managed by the _scheduler_.
 This is all done in the backend.
 
 Apart from memory, the backend will be responsible for accessing and saving
-files. It will be of the utmost to do this efficiently. This will be carried out
+files. It is essential to do this efficiently. This will be carried out
 in the backend using low-level mechanisms.
 
 // file handling
@@ -510,7 +510,7 @@ libraries are being constantly improved. If the application wants to use new
 features, it will have to be recompiled with the new library which provides the
 new features.
 
-_Dynamic Linking_ helps rectify the necessity of having to recompile. If a
+_Dynamic Linking_ helps avoid the necessity of having to recompile. If a
 new, improved library becomes available, all the user has to do is to install
 the new library onto the operating system, restart the application and the new
 features can be used by the application. The features provided by a dynamic
