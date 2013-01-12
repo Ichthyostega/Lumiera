@@ -60,10 +60,13 @@ namespace play {
     : grid_(buildStandardGridForFramerate(fps))
     , playbackUrgency (ASAP)
     , playbackSpeed (1)
+    , scheduledDelivery(Time::NEVER)
     , outputLatency (Duration::NIL)
     { 
       ENSURE (grid_);
     }
+  
+  //////////////////////////////////////////////////////////////////TODO ctors for use in the real player/engine
   
   
   
@@ -111,11 +114,13 @@ namespace play {
   
   
   Time
-  Timings::getTimeDue()  const
+  Timings::getTimeDue(int64_t frameOffset)  const
   {
     if (TIMEBOUND == playbackUrgency)
       {
-        UNIMPLEMENTED ("scheduled delivery spec");
+        REQUIRE (scheduledDelivery != Time::NEVER);
+        return scheduledDelivery
+             + getRealOffset (frameOffset);
       }
     else
       return Time::NEVER;
@@ -132,8 +137,8 @@ namespace play {
   }
   
   
-  uint
-  Timings::getPlanningChunkSize()  const
+  Duration
+  Timings::getPlanningChunkDuration()  const
   {
     UNIMPLEMENTED ("how to control the engine evaluation chunk size");
   }

@@ -75,7 +75,7 @@ namespace engine {
       Time relatedRealTime_;
       
       Time
-      expectedTimeofArival (play::Timings const& timings, Offset engineLatency)
+      expectedTimeofArival (play::Timings const& timings, int64_t startFrame, Offset engineLatency)
         {
           TimeVar deadline;
           switch (timings.playbackUrgency)
@@ -86,7 +86,7 @@ namespace engine {
               break;
             
             case play::TIMEBOUND:
-              deadline = timings.getTimeDue() - engineLatency; 
+              deadline = timings.getTimeDue(startFrame) - engineLatency; 
               break;
             }
           return deadline - timings.outputLatency;
@@ -96,7 +96,7 @@ namespace engine {
       TimeAnchor (play::Timings timings, Offset engineLatency, int64_t startFrame)
         : timings_(timings)
         , anchorPoint_(startFrame)
-        , relatedRealTime_(expectedTimeofArival(timings, engineLatency))
+        , relatedRealTime_(expectedTimeofArival(timings,startFrame,engineLatency))
         { }
       
     public:

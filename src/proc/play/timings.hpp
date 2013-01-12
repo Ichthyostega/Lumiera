@@ -101,6 +101,7 @@ namespace play {
     public:
       PlaybackUrgency playbackUrgency;
       boost::rational<int64_t> playbackSpeed;                     /////////////TICKET #902 we need a more generic representation for variable speed playback
+      Time scheduledDelivery;
       Duration outputLatency;
       
       Timings (FrameRate fps);
@@ -119,14 +120,6 @@ namespace play {
        *         to assume unaltered frame dimensions */
       Duration constantFrameTimingsInterval (TimeValue startPoint)  const;
       
-      /** for scheduled time of delivery, which is signalled
-       *  by \code playbackUrgency == TIMEBOUND \endcode
-       * @return wall clock time to expect delivery of data corresponding
-       *         to \link #getOrigin time axis origin \endlink
-       * @note for other playback urgencies \c Time::NEVER
-       */
-      Time getTimeDue()  const;
-      
       /** calculate the given frame's distance from origin,
        *  but do so using the real time scale, including any
        *  playback speed factory and similar corrections.
@@ -139,12 +132,25 @@ namespace play {
        */
       Offset getRealOffset (int64_t frameOffset)  const;
       
-      /** number of jobs to be planned and scheduled in one sway.
-       *  The continuous planning of additional frame calculation jobs
-       *  for playback or rendering proceeds in chunks of jobs
-       *  controlled by this chunk size.
+      /** real time deadline for the given frame, without any latency.
+       *  This value is provided in case of scheduled time of delivery,
+       *  which is signalled  by \code playbackUrgency == TIMEBOUND \endcode
+       * @return wall clock time to expect delivery of data
+       *         corresponding to a frame specified relative
+       *         to \link #getOrigin time axis origin \endlink
+       * @note for other playback urgencies \c Time::NEVER
        */
-      uint getPlanningChunkSize() const;
+      Time getTimeDue(int64_t frameOffset)  const;
+      
+      /** the minimum time span to be covered by frame calculation jobs
+       *  planned in one sway. The ongoing planning of additional jobs
+       *  proceeds in chunks of jobs added at once to the schedule.
+       *  This setting defines the minimum time to plan ahead; after
+       *  covering at least this time span with new jobs, the
+       *  frame dispatcher concludes "enough for now" and emits
+       *  a continuation job for the next planning chunk.
+       */
+      Duration getPlanningChunkDuration() const;
       
       
       bool isOriginalSpeed()  const;

@@ -205,8 +205,8 @@ namespace test  {
           lib::append_all (jobs, plannedChunk);
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
-          uint chunksize = plannedChunk.size();
-          CHECK (chunksize == timings.getPlanningChunkSize());
+          Duration coveredTime (refPoint, last(plannedChunk).getNominalTime());
+          CHECK (coveredTime >= timings.getPlanningChunkDuration());
           
           TimeVar nextFrameStart (refPoint);
           InvocationInstanceID prevInvocationID(0);
