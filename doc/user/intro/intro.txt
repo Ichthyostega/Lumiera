@@ -225,32 +225,41 @@ cache xref:caching[<-] and profiling xref:profiling[<-].
 The visible Universe
 --------------------
 
-Now its time to take a look at the preliminary Lumiera GUI:
-
-image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
-
-
 Lumiera consists of three major parts:
 
 - Graphical User Interface (GUI)
 - Processing layer (``Proc-layer'')
 - Backend for storage and access
 
-In this section, we discuss the user's perspective, when working with the GUI.
+In this section, we discuss the user's perspective when working with the GUI.
 
-Lumiera will initially ship with a standard, default GUI. This, however, is not
-the only GUI possible to operate Lumiera.  Indeed, Lumiera can work
+
+Although Lumiera will initially ship with a standard, default GUI, we do not presume that this GUI will be suitable for all uses.
+We expect there to be multiple, different GUIs, each designed for different kinds of tasks.  We expect that some of these will be written by users, and the proc-layer is designed to make this easy.
+
+Indeed, Lumiera can even work
 satisfactorily without a GUI, for example, for special purposes
 (e.g. as headless rendernode xref:rendernode[<-] or frameserver
-xref:frameserver[<-]).  At a later stage in the project,  scripts will be written
-to facilitate automated processing.  GUIs geared towards special purposes are
-also envisaged later.
+xref:frameserver[<-]).  Scripts will eventually be written
+to facilitate automated processing.
+
+
+Now it is time to take a look at the preliminary Lumiera GUI:
+
+image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
+
+We expect this GUI to change once we are at the point of having feedback from actual users.
 
 The screenshot of the GUI presented above is more or less the standard GUI when
 it is started for the first time without any user configuration etc.  A second
 viewer is planned for later to be added to the default. We support a much more
 sophisticated screen concept xref:screenconcept[<-] to adapt to different
 workplaces and workflows. 
+// TODO
+// The above paragrph isn't all it should be, but I can't tell what it should
+// be without seeing it in the context of the other changes I'm making.
+// I suspect it's better to discuss how rewritable the GUI is rather than
+// the specifics ot the GUI presented above. -- hendrik
 
 At a first glance, the GUI might seem somewhat overwhelming, something similar
 to the cockpit of a jumbo jet.  However, nearly all the bells and whistles can
