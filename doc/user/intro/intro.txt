@@ -531,9 +531,9 @@ memory and possibly increasing performance. This scheme of making features
 available to an application is known as run-time linking, aka plug-ins.
 Plug-ins offer other benefits: the application can continue to use both the old
 features and the new features together, side-by-side, by using the version
-number associated with the plug-in. This saves the application from considerable
-headaches associated with other linking methods, havocked library version
-incompatibility. 
+number associated with the plug-in. This saves the application from the havoc
+of library incompatibility that is 
+associated with other linking methods.
 
 Most modern applications use plug-ins, some are heavily dependent on plug-ins
 and only provide limited functionality without any plug-ins.
