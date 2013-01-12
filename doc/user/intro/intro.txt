@@ -25,11 +25,11 @@ behind Lumiera to start working with Lumiera quickly.
 // working on this document
 
 .About this Document
-Lumiera is an innovative video editing software, still under active development
-by an open source community. This document acts as introduction, we try to start
+Lumiera is innovative video editing software, still under active development
+by an open-source community. This document acts as introduction. We try to start
 with a broad overview, then explain some core concepts towards the end.
-We describe planned features here without explicitly tagging them and we'll omit
-any technical details.
+We describe planned features here without explicitly tagging them as such and we omit
+technical details.
 There is a link:Glossary.html[Glossary of common terms]; readers curious about
 the inner workings might want to continue their path of exploration into
 link:{ldoc}/technical/overview.html[The Inner Core]
@@ -46,42 +46,41 @@ link:{ldoc}/technical/overview.html[The Inner Core]
 Vision
 ------
 
-Lumiera strives towards being a _professional non-linear video editor_.  It is
+Lumiera is to be a _professional non-linear video editor_.  It is
 important to note that by ``professional'' we do not necessarily imply
 ``commercial'' or even ``industrial''.  We do, however, wish to suggest an
-attitude or frame of mind in how this work is approached, but not the goal,
+attitude or frame of mind in how we approach this work, but not the goal,
 requirement or purpose of this work.  The concept of professionality in film
 editing can indicate something of an artistic nature, suggest that there is a
 narration, meaning or political messages revealed by the work; or, simply, that
 the work attempts to convey something to an audience.
 
-Anyhow, for the tools, the editing software used to this end, we can identify
-several properties and requirements, to be labelled ``professional'':
-
 With this perspective in mind, we can identify a number of key properties
-film production tools should have and be professional: 
+film production tools should have to be considered professional: 
 
  Reliability::
-        All work must be secure and be safe against any software glitches,
-        incompatibility or instability.  Ideally, Lumiera should be reliable,
-        very stable and not susceptible to software crashes, i.e., crashes or
-        power failure should ideally not result in data or work loss.
+        All work must be secure and safe against any software glitches,
+        incompatibility or instability.  Lumiera should be reliable,
+        very stable and resistant to software crashes.  Even
+        power failures should not result in data or work loss.
 
  Quality::
-        The demands placed on high-quality, cinema grade digital video material
+        High-quality, cinema grade digital video material
         requires crisp-quality results with no concessions made throughout the
         entire workflow that might compromise quality of the final work.
         A common requirement is the ability to reproduce all rendering
         calculations down to a single digit. 
  
+        ??What does this mean, a single digit??
+
  Performance and Productivity::
-        Professionals want to get things done in time and content, but, ideally,
+        Professionals want to get things done on time ??and content??, but
         with control over all detail. The fine balance of these goals is a
         central goal of workflow design and usability.
 
  Scalability and Adaptability::
         Projects and budgets differ, hardware advances; and Lumiera must scale
-        in different dimensions and make optimum use of the resources that are
+        in many ways and make optimum use of the resources that are
         available. From small Laptops to multi-core computers up to render farms,
         Lumiera must be adept in optimum use of the hardware at hand.
 
@@ -107,12 +106,12 @@ Open Ended Combination of Building Blocks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Lumiera is not so much defined in terms of _features_.
-Instead it can be better envisaged as a workshop in which the emphasis is on
+Instead it can be better seen as a workshop in which the emphasis is on
 individual _basic building-blocks_ that can be combined together in interesting
 ways to form more complex structures. These basic modules, entities or objects
-each have a distinct _type_ which explicitly limits the connections between the
-modules. Within these limits, any conceivable combination is possible without
-additional hidden restrictions.
+each have a distinct _type_ which explicitly identifies the possible connections between
+modules. Within these constraints, any combination is possible without
+hidden restrictions.
 
 Lumiera is not a set of Lego bricks, nor is it a business application
 driven by finite usage stories.
@@ -125,7 +124,7 @@ These building blocks within Lumiera create a moderate level of abstraction; a
 user may use the GUI to manipulate several elements directly -- not only the
 clips and effects, but also individual effect parameter automation, masks, layering,
 and even the placements xref:placement[<-] used to stitch the objects together,
-which is comparatively low-level. Such moderate abstraction encourages to
+which is comparatively low-level. Such moderate abstraction encourages the user to
 understand the inner workings, while shielding the user from merely technical
 details such as header format conversion or access to individual channels.
 
@@ -142,13 +141,13 @@ Rendering is Graph Processing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Processing video (and audio) data can be conceived as a graph (more precisely
-_directed acyclic graphs_).  In this model of video processing, data flows
+a _directed acyclic graph_).  In this model of video processing, data flows
 along the edges of the graph and is processed at the nodes.
 
 The following figure depicts manipulating video data as a graph.  The nodes of
-the root of the graph is where data input occurs. From there, the data moves on
-to the next nodes: the direct siblings of the root.  Here, the video data
-pre-processing occurs.  All other operations on the data can be represented by
+the ??root?? of the graph are where data input occurs. From there, the data moves on
+to the next nodes: the direct siblings of the root.  Here, the video data is
+pre-processed.  All other operations on the data can be represented by
 nodes, and data flows from one operation to the next along the nodes of the
 graph.
 
@@ -185,9 +184,9 @@ the inputs. This scheme offers a number of advantages over the naive scheme.
 Don't waste work
 ~~~~~~~~~~~~~~~~
 
-Rendering A/V data can be computationally intensive. To relieve the core workload
-by not rendering material twice or avoiding having to throw away material because
-it could not be rendered in time, Lumiera employs a sophisticated means of using
+Rendering A/V data can be computationally intensive.  To avoid duplicated or wasted work and 
+ensure it is possible to render on time, 
+Lumiera employs a sophisticated means of using
 cache xref:caching[<-] and profiling xref:profiling[<-].
 
 
@@ -205,32 +204,41 @@ cache xref:caching[<-] and profiling xref:profiling[<-].
 The visible Universe
 --------------------
 
-Now its time to take a look at the preliminary Lumiera GUI:
-
-image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
-
-
 Lumiera consists of three major parts:
 
 - Graphical User Interface (GUI)
 - Processing layer (``Proc-layer'')
 - Backend for storage and access
 
-In this section, we discuss the user's perspective, when working with the GUI.
+In this section, we discuss the user's perspective when working with the GUI.
 
-Lumiera will initially ship with a standard, default GUI. This, however, is not
-the only GUI possible to operate Lumiera.  Indeed, Lumiera can work
+
+Although Lumiera will initially ship with a standard, default GUI, we do not presume that this GUI will be suitable for all uses.
+We expect there to be multiple, different GUIs, each designed for different kinds of tasks.  We expect that some of these will be written by users, and the proc-layer is designed to make this easy.
+
+Indeed, Lumiera can even work
 satisfactorily without a GUI, for example, for special purposes
 (e.g. as headless rendernode xref:rendernode[<-] or frameserver
-xref:frameserver[<-]).  At a later stage in the project,  scripts will be written
-to facilitate automated processing.  GUIs geared towards special purposes are
-also envisaged later.
+xref:frameserver[<-]).  Scripts will eventually be written
+to facilitate automated processing.
+
+
+Now it is time to take a look at the preliminary Lumiera GUI:
+
+image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
+
+We expect this GUI to change once we are at the point of having feedback from actual users.
 
 The screenshot of the GUI presented above is more or less the standard GUI when
 it is started for the first time without any user configuration etc.  A second
 viewer is planned for later to be added to the default. We support a much more
 sophisticated screen concept xref:screenconcept[<-] to adapt to different
 workplaces and workflows. 
+// TODO
+// The above paragrph isn't all it should be, but I can't tell what it should
+// be without seeing it in the context of the other changes I'm making.
+// I suspect it's better to discuss how rewritable the GUI is rather than
+// the specifics ot the GUI presented above. -- hendrik
 
 At a first glance, the GUI might seem somewhat overwhelming, something similar
 to the cockpit of a jumbo jet.  However, nearly all the bells and whistles can
@@ -246,7 +254,7 @@ Obviously, support for audio will also be provided.  As there are many sources t
 can be displayed, a viewer is attached to a source via the viewer switch board.
 Timelines, probe points, wire taps and individual clips are examples of sources
 that can be attached to a viewer. Moreover, the number of viewers open at any one
-time is only limited by the hardware, and each viewer can be collapsed, hooked
+time is only limited by the hardware, and each viewer can be collapsed or hooked
 up to a beamer or monitor.
 
 
@@ -257,6 +265,11 @@ The preliminary layout in the current GUI is rather provisional -- a final decis
 has yet to be taken on where the transport controls will be located.  In later
 versions of the standard GUI, the transport controls will change.  There is even
 a possibility that the transport controls will be allocated their own GUI element.
+// TODO:
+// A final decision about where the transport controls are located?
+// Isn't the whole point of enabling multiple GUIs that there won't be
+// final  decisions?  Only provisional ones?
+
 
 Transport controls are devices that are controlled by widgets or by some input device
 (MIDI, control surface, etc) so the look-and-feel of the transport control
@@ -387,6 +400,8 @@ a certain degree of compatibility while the application evolves.
 Placements
 ~~~~~~~~~~
 
+// Can placements place things in space as well as in time??
+
 Generic mechanism to stitch together media objects. Any placement may contain
 a list of conditions on how to locate the placed object, examples being
 time-absolute/relative, relative to another object, or relative to some
@@ -441,7 +456,7 @@ in which this is performed is managed by the _scheduler_.
 This is all done in the backend.
 
 Apart from memory, the backend will be responsible for accessing and saving
-files. It will be of the utmost to do this efficiently. This will be carried out
+files. It is essential to do this efficiently. This will be carried out
 in the backend using low-level mechanisms.
 
 // file handling
@@ -489,7 +504,7 @@ libraries are being constantly improved. If the application wants to use new
 features, it will have to be recompiled with the new library which provides the
 new features.
 
-_Dynamic Linking_ helps rectify the necessity of having to recompile. If a
+_Dynamic Linking_ helps avoid the necessity of having to recompile. If a
 new, improved library becomes available, all the user has to do is to install
 the new library onto the operating system, restart the application and the new
 features can be used by the application. The features provided by a dynamic
@@ -502,9 +517,9 @@ memory and possibly increasing performance. This scheme of making features
 available to an application is known as run-time linking, aka plug-ins.
 Plug-ins offer other benefits: the application can continue to use both the old
 features and the new features together, side-by-side, by using the version
-number associated with the plug-in. This saves the application from considerable
-headaches associated with other linking methods, havocked library version
-incompatibility. 
+number associated with the plug-in. This saves the application from the havoc
+of library incompatibility that is 
+associated with other linking methods.
 
 Most modern applications use plug-ins, some are heavily dependent on plug-ins
 and only provide limited functionality without any plug-ins.
