@@ -33,6 +33,7 @@
 #include "lib/time/timequant.hpp"
 #include "lib/singleton.hpp"
 #include "lib/itertools.hpp"
+#include "lib/util-coll.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/scoped_ptr.hpp>
@@ -42,6 +43,7 @@
 
 using test::Test;
 using util::isnil;
+using util::last;
 using std::vector;
 using std::tr1::function;
 //using std::cout;
@@ -204,8 +206,8 @@ namespace test  {
           vector<Job> plannedChunk;
           lib::append_all (jobs, plannedChunk);
           
+          Duration coveredTime (Offset(refPoint, last(plannedChunk).getNominalTime()));
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
-          Duration coveredTime (refPoint, last(plannedChunk).getNominalTime());
           CHECK (coveredTime >= timings.getPlanningChunkDuration());
           
           TimeVar nextFrameStart (refPoint);

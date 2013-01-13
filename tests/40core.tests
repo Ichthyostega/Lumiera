@@ -1420,6 +1420,11 @@ out: :0:1$
 END
 
 
+TEST "collection utils" UtilCollection_test <<END
+return: 0
+END
+
+
 TEST "VectorTransfer_test" VectorTransfer_test <<END
 return: 0
 END
