@@ -254,6 +254,31 @@ namespace meta {
   
   
   
+  /** Trait template to detect a type usable immediately as
+   *  "Lumiera Forward Iterator" in a specialised for-each loop
+   *  This is just a heuristic, based on some common properties
+   *  of such iterators; it is enough to distinguish it from an 
+   *  STL container, but can certainly be refined.
+   */
+  template<typename T>
+  class can_IterForEach
+    {
+      typedef typename Strip<T>::Type Type;
+       
+      META_DETECT_NESTED(value_type);
+      META_DETECT_OPERATOR_DEREF();
+      META_DETECT_OPERATOR_INC();
+      
+    public:
+      enum{ value = boost::is_convertible<Type, bool>::value
+                 && HasNested_value_type<Type>::value
+                 && HasOperator_deref<Type>::value
+                 && HasOperator_inc<Type>::value
+          };
+    };
+  
+  
+  
   /** Trait template to detect a type usable with the STL for-each loop.
    *  Basically we're looking for the functions to get the begin/end iterator
    */
@@ -294,28 +319,43 @@ namespace meta {
     };
   
   
-  /** Trait template to detect a type usable immediately as
-   *  "Lumiera Forward Iterator" in a specialised for-each loop
-   *  This is just a heuristic, based on some common properties
-   *  of such iterators; it is enough to distinguish it from an 
-   *  STL container, but can certainly be refined.
-   */
+  /** Trait template to detect a type also supporting STL-style backwards iteration */
   template<typename T>
-  class can_IterForEach
+  class can_STL_backIteration
     {
       typedef typename Strip<T>::Type Type;
-       
-      META_DETECT_NESTED(value_type);
-      META_DETECT_OPERATOR_DEREF();
-      META_DETECT_OPERATOR_INC();
+      
+      struct is_backIterable
+        {
+          META_DETECT_NESTED(reverse_iterator);
+          META_DETECT_FUNCTION(typename X::reverse_iterator, rbegin,(void));
+          META_DETECT_FUNCTION(typename X::reverse_iterator, rend  ,(void));
+          
+          enum { value = HasNested_reverse_iterator<Type>::value
+                      && HasFunSig_rbegin<Type>::value
+                      && HasFunSig_rend<Type>::value
+           };
+        };
+      
+      struct is_const_backIterable
+        {
+          META_DETECT_NESTED(const_reverse_iterator);
+          META_DETECT_FUNCTION(typename X::const_reverse_iterator, rbegin,(void) const);
+          META_DETECT_FUNCTION(typename X::const_reverse_iterator, rend  ,(void) const);
+          
+          enum { value = HasNested_const_reverse_iterator<Type>::value
+                      && HasFunSig_rbegin<Type>::value
+                      && HasFunSig_rend<Type>::value
+           };
+        };
+      
       
     public:
-      enum{ value = boost::is_convertible<Type, bool>::value
-                 && HasNested_value_type<Type>::value
-                 && HasOperator_deref<Type>::value
-                 && HasOperator_inc<Type>::value
-          };
+      enum { value = is_backIterable::value
+                  || is_const_backIterable::value
+           };
     };
+  
   
   
 }} // namespace lib::meta
