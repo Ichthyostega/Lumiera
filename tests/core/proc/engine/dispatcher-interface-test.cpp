@@ -30,7 +30,7 @@
 #include "proc/engine/dispatcher.hpp"
 #include "proc/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/time/timequant.hpp"
+//#include "lib/time/timequant.hpp"
 #include "lib/singleton.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util-coll.hpp"
@@ -54,7 +54,6 @@ namespace proc {
 namespace engine{
 namespace test  {
   
-  using lib::time::QuTime;
   using lib::time::FrameRate;
   using lib::time::Duration;
   using lib::time::Offset;
@@ -95,13 +94,13 @@ namespace test  {
           {
             UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
           }
-      
+        
         JobTicket&
         accessJobTicket (ModelPort, TimeValue nominalTime)
           {
             UNIMPLEMENTED ("dummy implementation of the model backbone / segmentation");
           }
-
+        
       public:
         
         ModelPort
@@ -121,9 +120,20 @@ namespace test  {
     {
       return mockDispatcher().provideMockModelPort();
     }
-      
+    
+    
+    /* == test parameters == */
+    
+    const uint START_FRAME(10);
+    const uint CHANNEL(0);
+    
+    bool continuation_has_been_triggered = false;
     
   } // (End) internal defs
+  
+  
+  
+  
   
   
   
@@ -156,30 +166,30 @@ namespace test  {
           Dispatcher& dispatcher = mockDispatcher();
           Timings timings (FrameRate::PAL);
           ModelPort modelPort (getTestPort());
-          uint startFrame(10);
-          uint channel(0);
+          ENSURE (START_FRAME == 10);
           
-          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
+          TimeAnchor refPoint = TimeAnchor::build (timings, START_FRAME);
           CHECK (refPoint == Time::ZERO + Duration(10, FrameRate::PAL));
           
-          FrameCoord coordinates = dispatcher.onCalcStream (modelPort,channel)
+          FrameCoord coordinates = dispatcher.onCalcStream (modelPort,CHANNEL)
                                              .relativeFrameLocation (refPoint, 15);
           CHECK (coordinates.absoluteNominalTime == Time(0,1));
           CHECK (coordinates.absoluteFrameNumber == 25);
           CHECK (refPoint.remainingRealTimeFor(coordinates) <  Time(FSecs(25,25)));
           CHECK (refPoint.remainingRealTimeFor(coordinates) >= Time(FSecs(24,25)));
           CHECK (coordinates.modelPort == modelPort);
-          CHECK (coordinates.channelNr == channel);
+          CHECK (coordinates.channelNr == CHANNEL);
           
           JobTicket& executionPlan = dispatcher.getJobTicketFor (coordinates);
           CHECK (executionPlan.isValid());
           
-          Job frameJob = executionPlan.createJobFor (coordinates); //////////////////////////////TODO this is wrong: we never create a single job!
+          Job frameJob = executionPlan.createJobFor (coordinates);
           CHECK (frameJob.getNominalTime() == coordinates.absoluteNominalTime);
           CHECK (0 < frameJob.getInvocationInstanceID());
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
+      
       
       
       /** @test the standard invocation sequence
@@ -192,12 +202,10 @@ namespace test  {
           Dispatcher& dispatcher = mockDispatcher();
           Timings timings (FrameRate::PAL);
           ModelPort modelPort (getTestPort());
-          uint startFrame(10);
-          uint channel(0);
           
-          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
+          TimeAnchor refPoint = TimeAnchor::build (timings, START_FRAME);
           
-          JobPlanningSequence jobs = dispatcher.onCalcStream(modelPort,channel)
+          JobPlanningSequence jobs = dispatcher.onCalcStream(modelPort,CHANNEL)
                                                .establishNextJobs(refPoint);
           
           // Verify the planned Jobs
@@ -207,23 +215,31 @@ namespace test  {
           lib::append_all (jobs, plannedChunk);
           
           Duration coveredTime (Offset(refPoint, last(plannedChunk).getNominalTime()));
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           CHECK (coveredTime >= timings.getPlanningChunkDuration());
           
-          TimeVar nextFrameStart (refPoint);
+          TimeVar frameStart (refPoint);
           InvocationInstanceID prevInvocationID(0);
           Offset expectedTimeIncrement (1, FrameRate::PAL);
-          for (uint i=0; i < chunksize; ++i )
+          for (uint i=0; i < plannedChunk.size(); ++i )
             {
               Job& thisJob = plannedChunk[i];
-              CHECK (nextFrameStart == thisJob.getNominalTime());
               CHECK (prevInvocationID < thisJob.getInvocationInstanceID());
-              
               prevInvocationID = thisJob.getInvocationInstanceID();
-              nextFrameStart += expectedTimeIncrement;
+              
+              if (frameStart != thisJob.getNominalTime())
+                {
+                  frameStart += expectedTimeIncrement;
+                  CHECK (frameStart == thisJob.getNominalTime());
+                }
             }
+          // now, after having passed over the whole planned chunk
+          CHECK (frameStart                        == Time(refPoint) + coveredTime);
+          CHECK (frameStart                        >= Time(refPoint) + timings.getPlanningChunkDuration());
+          CHECK (frameStart + expectedTimeIncrement > Time(refPoint) + timings.getPlanningChunkDuration());
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
+      
       
       
       /** @test usually at the end of each standard invocation,
@@ -240,32 +256,30 @@ namespace test  {
           Dispatcher& dispatcher = mockDispatcher();
           Timings timings (FrameRate::PAL);
           ModelPort modelPort (getTestPort());
-          uint startFrame(10);
-          uint channel(0);
           
           // prepare the rest of this test to be invoked as "continuation"
           function<void(TimeAnchor)> testFunc = verify_invocation_of_Continuation;
           
-          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
-          JobPlanningSequence jobs = dispatcher.onCalcStream(modelPort,channel)
+          TimeAnchor refPoint = TimeAnchor::build (timings, START_FRAME);
+          JobPlanningSequence jobs = dispatcher.onCalcStream(modelPort,CHANNEL)
                                                .establishNextJobs(refPoint)
                                                .prepareContinuation(testFunc);
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           // an additional "continuation" Job has been prepared....
           Job continuation = lib::pull_last(jobs);
           CHECK (META_JOB == continuation.getKind());
           
-          uint nrJobs = timings.getPlanningChunkSize();
-          Duration frameDuration (1, FrameRate::PAL);
-          
           // the Continuation will be scheduled sufficiently ahead of the currently planned chunk's end
-          CHECK (continuation.getNominalTime() < Time(refPoint) + (nrJobs-1) * frameDuration);
+          CHECK (continuation.getNominalTime() < Time(refPoint) + timings.getPlanningChunkDuration());
           
           // now invoke the rest of this test, which has been embedded into the continuation job.
           // Since we passed testFunc as action for the continuation, we expect the invocation
           // of the function verify_invocation_of_Continuation()
+          continuation_has_been_triggered = false;
+          
           continuation.triggerJob();
+          CHECK (continuation_has_been_triggered);
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       
@@ -277,11 +291,13 @@ namespace test  {
       verify_invocation_of_Continuation (TimeAnchor nextRefPoint)
         {
           Timings timings (FrameRate::PAL);
-          uint startFrame(10);
-          uint nrJobs = 0; /////////////TODO timings.getPlanningChunkSize();
           Duration frameDuration (1, FrameRate::PAL);
+          Time startAnchor = Time::ZERO + START_FRAME*frameDuration;
+          Duration time_to_cover = timings.getPlanningChunkDuration();
           
-          CHECK (Time(nextRefPoint) == Time::ZERO + (startFrame + nrJobs) * frameDuration);
+          CHECK (Time(nextRefPoint) >= startAnchor + time_to_cover);
+          CHECK (Time(nextRefPoint) <  startAnchor + time_to_cover + 1*frameDuration);
+          continuation_has_been_triggered = true;
         }
     };
   
