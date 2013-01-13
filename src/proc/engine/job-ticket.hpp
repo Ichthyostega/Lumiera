@@ -99,6 +99,7 @@ using util::isnil;
       struct Provision
         {
           Provision* next;
+          ////////////////////TODO some channel or format descriptor here
         };
       
       struct Prerequisite

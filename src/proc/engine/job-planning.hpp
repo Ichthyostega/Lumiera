@@ -308,7 +308,7 @@ namespace engine {
       mutable JobPlanning nextEvaluation_;
       
       JobPlanning&
-      use_current_location_as_planning_start()
+      use_current_location_as_starting_point_for_planning()
         {
           JobTicket& processingPlan = locationGenerator_->getJobTicketFor (currentLocation_);
           
@@ -339,13 +339,13 @@ namespace engine {
       friend bool
       checkPoint (PlanningStepGenerator const& gen)
       {
-        return gen.currentLocation_.absoluteFrameNumber < gen.stopFrame_;
+        return gen.currentLocation_.absoluteFrameNumber < gen.stopFrame_;   //////////////////TODO this breaks when we want to play in backward direction!!
       }
       
       friend JobPlanning&
       yield (PlanningStepGenerator const& gen)
       {
-        return unConst(gen).use_current_location_as_planning_start();
+        return unConst(gen).use_current_location_as_starting_point_for_planning();
       }
       
       friend void

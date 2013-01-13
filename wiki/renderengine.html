@@ -2060,7 +2060,7 @@ To support this usage pattern, the Fixture implementation makes use of the [[PIm
 * moreover, this necessitates a tight integration down to implementation level, both with the clean-up and the render processes themselves
 </pre>
 </div>
-<div title="FixtureStorage" modifier="Ichthyostega" modified="201112171930" created="201012140231" tags="Builder impl operational draft" changecount="43">
+<div title="FixtureStorage" modifier="Ichthyostega" modified="201301132208" created="201012140231" tags="Builder impl operational draft" changecount="44">
 <pre>The Fixture &amp;rarr; [[data structure|FixtureDatastructure]] acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
 Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes (&amp;rarr; CalcStream) are known to be terminated.
 
@@ -2078,7 +2078,7 @@ Basically the concern is that each new CalcStream had to access the shared count
 There are. As the builder is known to be run again and again, no one forces us to deallocate as soon as we could. That's the classical argument exploited by any garbage collector too. Thus we could just note the fact that a calculation stream is done and re-evaluate all those noted results on later occasion. Obviously, the [[Scheduler]] is in the best position for notifying the rest of the system when this and that [[job|RenderJob]] has terminated, because the Scheduler is the only facility required to touch each job reliably. Thus it seems favourable to add basic support for either termination callbacks or for guaranteed execution of some notification jobs to the [[Scheduler's requirements|SchedulerRequirements]].
 
 !!exploiting the frame-dispatch step
-Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process (maybe even each CalcStream)  a //copy//&amp;nbsp; of an dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add some kind of back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
+Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process (maybe even each CalcStream)  a //copy//&amp;nbsp; of a dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add some kind of back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
 
 !!assessment {{red{WIP 12/10}}}
 But the primary question here is to judge the impact of such an implementation. What would be the costs?
@@ -2113,6 +2113,17 @@ But actually I'm struck here, because of the yet limited knowledge about those r
 * how do we //join// an aborted/changed rendering process to his successor, without creating a jerk in the output?
 * is it even possible to continue a process when parts of the covered time-range are affected by a build?
 If the latter question is answered with &quot;No!&quot;, then the problem gets simple in solution, but maybe memory consuming: In that case, //all//&amp;nbsp; processes linked to a timeline gets affected and thus tainted; we'd just dump them onto a pile and delay releasing all of the superseded segments until all of them are known to be terminated.
+
+!!re-visited {{red{WIP 1/13}}}
+the last conclusions drawn above where confirmed by the further development of the overall design. Yes, we do //supersede// frequently and liberally. This isn't much of a problem, since the preparation of new jobs, i.e. the [[frame dispatch step|Dispatcher]] is performed chunk wise. A //continuation job// is added at the end of each chunk, and this continuation will pick up the task of job planning in time.
+
+At the 1/2013 developer's meeting, Cehteh and myself had a longer conversation regarding the topic of notifications and superseding of jobs within the scheduler. The conclusion was to give ''each play process a separate LUID'' and treat this as ''job group''. The scheduler interface will offer a call to supersede all jobs within a given group.
+
+Some questions remain though
+* what are those nebulous dispatcher tables?
+* do they exist per CalcStream ?
+* is it possible, to file these dedicated dispatch informations gradually?
+* how to store and pass on the control information for NonLinearPlayback?
 </pre>
 </div>
 <div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
@@ -3318,6 +3329,24 @@ some points to note:
 
 &amp;rarr; the [[&quot;mechanics&quot; of the render process|RenderMechanics]]
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
+</pre>
+</div>
+<div title="NonLinearPlayback" modifier="Ichthyostega" created="201301132217" tags="def Player Rendering draft" changecount="1">
+<pre>The calculations for rendering and playback are designed with a base case in mind: calculating a linear sequence of frames consecutive in time.
+But there are several important modes of playback, which violate that assumption...
+* jump-to / skip
+* looping
+* pause
+* reversed direction
+* changed speed
+** slow-motion
+** fast-forward/backward shuffling 
+* scrubbing
+* freewheeling (as fast as possible) 
+
+!search for a suitable implementation approach {{red{WIP 1/2013}}}
+The crucial point seems to be when we're picking a starting point for the planning related to a new frame. &amp;rarr; {{{PlanningStepGenerator}}}
+Closely related is the question when and how to terminate a planning chunk, what to dispose as a continuation, and when to cease planning altogether.
 </pre>
 </div>
 <div title="ObjectCreation" modifier="Ichthyostega" modified="201004031621" created="200709030139" tags="impl design" changecount="20">
@@ -7565,17 +7594,20 @@ Actually, what the GUI creates and uses is the //view// of a given timeline. Thi
 To complement this possibilities, I'd propose to give the //timeline view// the possibility to be re-linked to a sub-sequence. This way, it would stay connected to the main play control, but at the same time show a sub-sequence //in the way it will be treated as  embedded// within the top-level sequence. This would be the default operation mode when a meta-clip is opened (and showed in a separate tab with such a linked timeline view). The reason for this proposed handling is again to give the user the least surprising behaviour. Because, when &amp;mdash; on the contrary &amp;mdash; the sub-sequence would be opened as //separate timeline,// a different absolute time position and a different signal routing may result; doing such should be reserved for advanced use, e.g. when multiple editors cooperate on a single project and a sequence has to be prepared in isolation prior to being integrated in the global sequence (featuring the whole movie).
 </pre>
 </div>
-<div title="Timings" modifier="Ichthyostega" modified="201202060103" created="201202042240" tags="spec draft Rendering Player" changecount="2">
+<div title="Timings" modifier="Ichthyostega" modified="201301132100" created="201202042240" tags="spec draft Rendering Player" changecount="3">
 <pre>//Timing constraints of a render or playback process.//
 
-!design quest {{red{WIP 1/2012}}}
-The Timings record is used at various places at the engine interface level. Up to now mostly as placeholder for future work.
+!constituents
+The Timings record is used at various places at the engine interface level, since it links together several pieces of information crucial for playback control.
+* a reference to the underlying frame grid.
+** the frame grid defines time origin and framerate
+** additionally the grid translates nominal time into frame numbers
+* the Timings record provides information about latency -- both output latency and engine latency are exposed here
+* moreover, the basic link to real wall clock time is recorded here, by linking the grid origin to a specific real time.
+* indication of the service class or playback urgency is included, e.g. {{{ASAP, NICE, TIMEBOUND}}}
+* from the usage view the Timings record represents a //constraint// -- with the ability to specify additional constraining conditions
 
-* it is clear that a concrete frame grid needs to be part of the timings.
-* this defines time origin and framerate
-* additionally it's clear that the Timings record represents a //constraint// -- with the ability to specify additional constraining conditions
-* besides, it's clear that the Timings record is consulted to find out about latency
-* question: do we need a relation to wall-clock time?
+note: still {{red{WIP as of 1/2013}}}
 
 !where are the timings definied?
 Timing constraint records are used at various places within the engine. Basically we need such a timings record for starting any kind of playback or render.
