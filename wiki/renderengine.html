@@ -2060,7 +2060,7 @@ To support this usage pattern, the Fixture implementation makes use of the [[PIm
 * moreover, this necessitates a tight integration down to implementation level, both with the clean-up and the render processes themselves
 </pre>
 </div>
-<div title="FixtureStorage" modifier="Ichthyostega" modified="201301132208" created="201012140231" tags="Builder impl operational draft" changecount="44">
+<div title="FixtureStorage" modifier="Ichthyostega" modified="201301152312" created="201012140231" tags="Builder impl operational draft" changecount="46">
 <pre>The Fixture &amp;rarr; [[data structure|FixtureDatastructure]] acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
 Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes (&amp;rarr; CalcStream) are known to be terminated.
 
@@ -2115,7 +2115,7 @@ But actually I'm struck here, because of the yet limited knowledge about those r
 If the latter question is answered with &quot;No!&quot;, then the problem gets simple in solution, but maybe memory consuming: In that case, //all//&amp;nbsp; processes linked to a timeline gets affected and thus tainted; we'd just dump them onto a pile and delay releasing all of the superseded segments until all of them are known to be terminated.
 
 !!re-visited {{red{WIP 1/13}}}
-the last conclusions drawn above where confirmed by the further development of the overall design. Yes, we do //supersede// frequently and liberally. This isn't much of a problem, since the preparation of new jobs, i.e. the [[frame dispatch step|Dispatcher]] is performed chunk wise. A //continuation job// is added at the end of each chunk, and this continuation will pick up the task of job planning in time.
+the last conclusions drawn above where confirmed by the further development of the overall design. Yes, we do //supersede// frequently and liberally. This isn't much of a problem, since the preparation of new jobs, i.e. the [[frame dispatch step|FrameDispatcher]] is performed chunk wise. A //continuation job// is added at the end of each chunk, and this continuation will pick up the task of job planning in time.
 
 At the 1/2013 developer's meeting, Cehteh and myself had a longer conversation regarding the topic of notifications and superseding of jobs within the scheduler. The conclusion was to give ''each play process a separate LUID'' and treat this as ''job group''. The scheduler interface will offer a call to supersede all jobs within a given group.
 
@@ -2124,6 +2124,9 @@ Some questions remain though
 * do they exist per CalcStream ?
 * is it possible, to file these dedicated dispatch informations gradually?
 * how to store and pass on the control information for NonLinearPlayback?
+
+since the intention is to have dedicated dispatch tables, these would implement the {{{engine.Dispatcher}}} inteface and incorporate some kind of strategy corresponding to the mode of playback. The chunk wise continuation of the job planning process would have to be reformulated in terms of //real wall clock time rather// -- since the relation of the playback process to nominal time can't be assumed to be a simple linear progression in all cases.
+
 </pre>
 </div>
 <div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
@@ -3331,7 +3334,7 @@ some points to note:
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
 </pre>
 </div>
-<div title="NonLinearPlayback" modifier="Ichthyostega" created="201301132217" tags="def Player Rendering draft" changecount="1">
+<div title="NonLinearPlayback" modifier="Ichthyostega" modified="201301192102" created="201301132217" tags="def Player Rendering draft" changecount="26">
 <pre>The calculations for rendering and playback are designed with a base case in mind: calculating a linear sequence of frames consecutive in time.
 But there are several important modes of playback, which violate that assumption...
 * jump-to / skip
@@ -3342,11 +3345,78 @@ But there are several important modes of playback, which violate that assumption
 ** slow-motion
 ** fast-forward/backward shuffling 
 * scrubbing
-* freewheeling (as fast as possible) 
+* free-wheeling (as fast as possible) 
 
 !search for a suitable implementation approach {{red{WIP 1/2013}}}
 The crucial point seems to be when we're picking a starting point for the planning related to a new frame. &amp;rarr; {{{PlanningStepGenerator}}}
 Closely related is the question when and how to terminate a planning chunk, what to dispose as a continuation, and when to cease planning altogether.
+
+!requirement analysis
+These non linear playback modes do pose some specific challenges on the overall control structure distributed over the various collaborators within the play and render subsystem.The following description treats each of the special modes within its relations to this engine context
+;jumping
+:creates a discontinuity in //nominal time,// while the progress of real wall clock time deadlines remains unaffected
+:we need to distinguish two cases
+:* a //pre planned jump// can be worked into the frame dispatch just like normal progression. It doesn't create any additional challenge on timely delivery
+:* to the contrary, a //spontaneous re-adjustment of playback position// deprives the engine of any delivery headroom, forcing us to catch up anew.&lt;br/&gt;&amp;rarr; we should introduce a configurable slippage offset, to be added on the real time deadlines in this case, to give the engine some head start
+:since each skip might create an output discontinuity, the de-clicking facility in the output sink should be notified explicitly (implying that we need an API, reachable from within the JobClosure)
+;looping
+:looped playback is implemented as repeated skip at the loop boundary; as such, this case always counts as pre planned jump.
+;pausing
+:paused playback represents a special state of the engine, where we expect playback to be able to commence right away, with minimal latency
+:&amp;rarr;we need to take several coordinated measures to make this happen
+:* when going to paused state, previously scheduled jobs aren't cancelled, rather rescheduled to background rendering, but in a way which effectively pins the first frames within cache
+:* additionally, the OutputSlot needs to provide a special mode where output is //frozen// and any delivery is silently blocked. The reason is, we can't cancel already triggered output jobs
+:* on return to normal playback, we need to ensure that the availability of cached results will reliably prevent superfluous prerequisite jobs from being scheduled at all &amp;rarr; we need conditional prerequisites
+:The availability of such a pausing mechanism has several ramifications. We could conceive an auto-paused mode, switching to playback after sufficient background pre rendering to ensure the necessary scheduling headroom. Since the link to wall clock time and thus the real time deadlines are established the moment actual playback starts, we might even transition through auto paused mode whenever playback starts from scratch into some play mode.
+;single stepping
+:this can be seen as application of paused mode: we'd schedule a single play-out job, as if resuming from paused state, but we re-enter paused state immediately
+;reversed play direction
+:while basically trivial to implement, the challenge lies in possible naive implementation decisions assuming monotonic ascending frame times. Additionally, media decoders might need some hinting
+:reversed (and speed adjusted) sound playback is surprisingly tricky -- even the most simplistic solution foces us to insert an effect processor into the calculation path.
+;speed variations
+:the relation between nominal time and real wall clock time needs to include a //speed factor.//
+;fast cueing
+:the purpose of cuing is to skip through a large amount of material to spot some specific parts. For this to work, the presented material needs to be still recognisable in some way. Typically this is done by presenting small continuous chunks of material interleaved with regular skips. For editing purposes, this method is often perceived as lacking, especially by experienced editors. The former, mechanical editing systems to the contrary had the ability to run with actually increased frame rate, without skipping any material.
+:&amp;rarr; for one, this is a very specific configuration of the loop play mode.
+:&amp;rarr; it is desirable to improve the editor's working experience here. We might consider actually increasing the frame rate, given the increased availability of high-framerate capable displays. Another approach would be to apply some kind of granular synthesis, dissolving several consecutive segments of material. The latter would prompt to include a specific buffering and processing device not present in the render path for normal playback. Since we do dedicated scheduling for each playback mode, we're indeed in a position to implement such facilities.
+;scrubbing
+:the actual scrubbing facility is an interactive device, typically even involving some kind of hardware control interface. But the engine needs to support scrubbing, which translates into chasing a playback target, which is re-adjusted regularly. The implementation facilities discussed thus far are sufficient to implement this feature, combined with the ability of life changes to the playback mode.
+;free-wheeling
+:at first sight, this feature is trivial to implement. All it takes is to ignore any real time scheduling targets, so it boils down to including a flag into the [[timing descriptor|Timings]]. But there is a catch. Since free-wheeling only makes sense for writing to a file like sink, actually the engine might be overrunning the consumer. In the end, we get to choose between the following alternatives: do we allow the output jobs to block in that case, or do we want to implement some kind of flow regulation?
+
+!essential implementation level features
+Drawing from this requirement analysis, we might identify some mandatory implementation elements necessary to incorporate these playback modes into the player and engine subsystem.
+;for the __job planning stage__:
+:we need a way to interact with a planning strategy, included when constituting the CalcStream
+:* ability for planned discontinuities in the nominal time of the &quot;next frame&quot;
+:* ability for placing such discontinuities repeatedly, as for looped playback
+:* allow for interleaved skips and processed chunks, possibly with increased speed
+:* ability to inject meta jobs under specific circumstances
+:* placing callbacks into these meta jobs, e.g. for auto-paused mode
+;for the __timings__:
+:we need flexibility when establishing the deadlines
+:* allow for an added offset when re-establishing the link between nominal and real time on replanning and superseeding of planned jobs
+:* flexible link between nominal and real time, allowing vor reversed playback and changed speed
+:* configurable slippage offset
+;for the __play controller__:
+:basically all changes regarding non linear playback modes are initiated and controlled here
+:* a paused state
+:* re-entering playback by callback
+:* re-entering paused state by callback
+:* a link to the existing feeds and calculation streams for superseding the current planning
+:* use a strategy for fast-cueing (interleaved skips, increased speed, higher framerate, change model port to use a preconfigured granulator device)
+;for the __scheduler interface__:
+:we need some structural devices actually to implement those non-standard modes of operation
+:* conditional prerequisites (prevent evaluation, re-evaluate later)
+:* special &quot;as available&quot; delivery, both for free-wheeling and background
+:* special way of cancelling jobs, which effectively re-schedules them into background.
+:* a way for hinting the cache to store background frames with decreasing priority, thus ensuring the foremost availability of the first frames when picking up playback again
+;for the __output sinks__:
+:on the receiver side, we need some support to generate smooth and error free output delivery
+:* automated dection of timing glitches, activating the discontinuity handling (&amp;raquo;de-click facility&amp;laquo;)
+:* low-level API for signalling discontinuity to the OutputSlot. This information pertains to the currently delivered frame -- this is necessary when this frame //is actually being delivered timely.//
+:* high-level API to switch any OutputSlot into &quot;frozen mode&quot;, disabling any further output, even in case of accidental delivery of further data by jobs currently in progression.
+:* possibility to detect and signal overload of the receiver, either for blocking or for flow-control
 </pre>
 </div>
 <div title="ObjectCreation" modifier="Ichthyostega" modified="201004031621" created="200709030139" tags="impl design" changecount="20">

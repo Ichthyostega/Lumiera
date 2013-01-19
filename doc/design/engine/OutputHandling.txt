@@ -5,11 +5,64 @@ Design: Output Handling
 
 //Menu: label Output handling
 
-Some ideas....
+The topic of proper output handling relates several subsystems and re-appears on
+various levels of abstraction within the application design and implementation.
 
+output format::
+  the availability of a specific output sink is prerequisite for supporting a
+  given format, configuration or frame rate. It might be desitable to prepare
+  the same edit for multiple output formats, which can be done by using the same
+  top-level sequence within several timelines with suitably output configuration.
+
+number of output streams::
+  the concrete structure of objects within the session creates the ability to deliver
+  multiple streams of output data. On the other hand, using a given sequence as virtual
+  clip within another sequence creates the demand for a distinct number of output designations
+
+actual system configuration::
+  working on the same edit on multiple systems creates the challenge to adapt to
+  different output possibilities. Since studio setups can be involved, we need to recall
+  a very special setup, even when it can not be used all the time on the current system.
+
+adapting and transforming::
+  since the actual output designation is resolved in several steps, it might become necessary
+  to adapt or transform media streams to be rendered into a provided output sink. For example,
+  a sound panning device might become necessary to render one sound representation system
+  into another one. Since the resolution of output is driven by context information,
+  the necessity of such transformations can arise any time and might be treated
+  at a location remote from the actual source of the change.
+
+timeline viewer connection::
+  any kind of playback requires the colaboration of some model content, a viewer device
+  and the render engine. For example, only after connecting a timeline to a viewer, an actual
+  playback position and play control becomes available.
+
+viewer switch board::
+  the typical viewer in the GUI includes a switch board to choose between various probe points
+  and source during playback. Thus, establishing a timeline viewer connection both adds new
+  sources to the switch board and necessitates to build an additional output connection and
+  transformation network behind the scenes.
+
+output sinks::
+  while each output provides some kind of destination to dispose buffers with prepared media data,
+  unfortunately, the various output systems and support libraries come with a wide array of often
+  incompatible assumptions and protocols for the client to comply.
+
+playback modes::
+  supporting the various kinds of playback modes makes the engine require some support from the
+  actual output device, e.g. for freezing a frame, for treating delivery glitches gracefully, or
+  to inhibit further output during reconfiguration stages.
+  
+
+Basic design principles...
+--------------------------
 - abstract away the actual technology used for output
 - have generic *output designations* and translate them into an *output slot*
 - the OutputSlot interface can be designed to match the requirements of the Engine
 - assume a mechanism to handle timeouts, glitches and skips within each concrete OutputSlot implementation
+
+Please refer to the more technical and in-depth
+link:/wiki/renderengine.html#OutputDesignation%20OutputSlot%20OutputManagement%20OutputMapping%20Wiring[
+discussion in the TiddlyWiki]
 
 
