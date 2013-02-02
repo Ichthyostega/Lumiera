@@ -327,11 +327,12 @@ footage for preview creates a simple internal timeline.
 Global Pipes
 ~~~~~~~~~~~~
 
-The GUI provides a separate _bus view_, showing the _global pipes_. These are the
-master busses for each kind of output (image and sound) and collect the output of
-subgroups together in a manner similar to an audio mixing desk. Any _pipe_ is just a
-means of collecting, mixing or overlaying output produced by other pipes.
-A simple (linear) chain of effects can be applied within each pipe.
+The GUI provides a separate _bus view_ which displays the _global pipes_. _Global
+pipes_ are master buses for each type of output--which includes both sound and
+image--and collect the outputs of subgroups together in a manner similar to an
+audio mixing desk. Any _pipe_ is just a means of collecting, mixing or
+overlaying output produced by other pipes. A simple (linear) chain of effects
+can be applied within each pipe.
 
 Most pipes are managed automatically, e.g. the pipes corresponding to
 individual clips, or the pipes collecting output from transitions, from nested
