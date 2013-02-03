@@ -223,7 +223,7 @@ We expect there to be multiple, different GUIs, each designed for different kind
 
 Indeed, Lumiera can even work
 satisfactorily without a GUI, for example, for special purposes
-(e.g. as headless rendernode xref:rendernode[<-] or frameserver
+(e.g. as headless render-node xref:rendernode[<-] or frameserver
 xref:frameserver[<-]).  Scripts will eventually be written
 to facilitate automated processing.
 
@@ -500,7 +500,7 @@ application. (There are other things to be done, but we'll call these 'details',
 which wont concern us here.) There are different ways to _link_ a library
 into an application: statically linking and dynamically linking.
 
-_Statical Linking_ is done while the application is being built, or
+_Statically Linking_ is done while the application is being built, or
 compiled. It is performed by the linker. The linker can perform some checks
 (mostly checks on syntax) and warn the user that some particular feature is
 being used incorrectly. The user can then correct the offending code, and
@@ -532,11 +532,32 @@ and only provide limited functionality without any plug-ins.
 Lumiera will not reinvent the wheel. One major goal is to provide considerable
 functionality via well-designed, external code supplied to Lumiera by plug-ins.
 
+
 How are Plugins Implemented?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[red]#to be written#
 
+We can view Lumiera itself as being a slender application with many of the bells
+and whistles being supplied __directly_ by external FOSS tools.  Such tools will
+be made available to the Lumiera code base via the Lumiera Plugin Interface (LPI).
 
+As LPI will be used throughout most layers of Lumiera--from the low-level
+backend, right up to the GUI--the interface will have to be compatible to both C
+and C++. In effect, this means that LPI will be implemented in C.
+
+Using LPI a plugin interface can be defined for each external library.  The
+Lumiera code base can then use the external library by including the 
+plugin interface for that particular library.
+
+LPI defines a uniform framework of how to manage plugins within Lumiera. It
+declares a number of macros that allow details of a plugin to be defined:
+    - name of the plugin
+    - version of the plugin (include major and minor version numbers)
+    - name each call-back function defined by the plugin and exported by the
+      external library 
+    - methods to initialise and destroy the plugin
+
+Defining some plugin interface then entails using LPI to specify the details of
+the plugin.
 
 
 Integration with external libraries, frameworks and applications
