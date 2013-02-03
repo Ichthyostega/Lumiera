@@ -48,36 +48,20 @@ Vision
 
 NOTE: this section is still in discussion
 
-''''
-Lumiera is to be a *professional non-linear video editor*. It
-is important to note that by ``professional'' we do not necessarily imply
-``commercial'' or even ``industrial''.  We do, however, wish to suggest an
-attitude or frame of mind in how we approach this work, but not the goal,
-requirement or purpose of this work.  The concept of professionality in film
-editing can indicate something of an artistic nature, suggest that there is
-a narration, meaning or political messages revealed by the work; or, simply,
-that the work attempts to convey something to an audience.
-
-With this perspective in mind, we can identify a number of key properties
-film production tools should have to be considered professional
-
-''''
-
-Lumiera strives to be a *professional non-linear video editing system*.  It is
-important to note that by ``professional'' we do not necessarily imply
-``commercial'' or even ``industrial''.  We do, however, wish to suggest an
-attitude or frame of mind in how an approach to such work is made.
-
+Lumiera strives to be a *professional non-linear video editing system*. It is
+important to note that by ``professional'' we do not imply ``commercial'' nor
+``industrial''. We do, however, wish to convey an attitude or frame of mind in
+the approach made to such work; not its goal, requirement or purpose.
+ 
 Professionalism implies _doing work with sincerity and being subject to any
 kind of wider goal, demand, or purpose._ When it comes to editing film, this
-wider goal, demand, or purpose might be artistry, a narration or have meaning to convey,
-a political message or commercial revenue -- it might be something to reveal to
-your audience, to let them see, feel and perceive.
+wider goal, demand, or purpose might be artistry, a narration or have meaning to
+convey, a political message or commercial revenue -- it might be something to
+reveal to your audience, to let them see, feel and perceive.
 
-''''
-
-With this perspective in mind and for the editing software used to this end, we can identify
-a number of key properties film production tools should have to be considered ``professional'':
+Bearing this idea of professionalism in mind, we can identify a number of key
+aspects film production tools will have to exhibit to aspire to be labelled
+'professional':
 
  Reliability::
         All work must be secure and safe against any software glitches,
