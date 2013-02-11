@@ -304,16 +304,15 @@ namespace engine {
       //////////////////////////////////////////TODO duplicated storage of a FrameCoord record
       //////////////////////////////////////////TODO nextEvaluation_ is only needed to initialise the "current" sequence 
       //////////////////////////////////////////TODO within the RecursiveSelfIntegration strategy. Maybe this storage could be collapsed?
-      mutable JobPlanning nextEvaluation_;
+      JobPlanning nextEvaluation_;
       
-      JobPlanning&
+      void
       use_current_location_as_starting_point_for_planning()
         {
           JobTicket& processingPlan = locationGenerator_->getJobTicketFor (currentLocation_);
           
           nextEvaluation_ = JobPlanning(processingPlan.startExploration()
                                        ,currentLocation_);
-          return nextEvaluation_;
         }
       
       
@@ -327,7 +326,10 @@ namespace engine {
       PlanningStepGenerator(FrameCoord startPoint, FrameLocator& locator)
         : locationGenerator_(&locator)
         , currentLocation_(startPoint)
-        { }
+        { 
+          REQUIRE (startPoint.isDefined());
+          use_current_location_as_starting_point_for_planning();
+        }
       
       // default copyable
       
@@ -343,13 +345,16 @@ namespace engine {
       friend JobPlanning&
       yield (PlanningStepGenerator const& gen)
       {
-        return unConst(gen).use_current_location_as_starting_point_for_planning();
+        ENSURE (checkPoint (gen));
+        return unConst(gen).nextEvaluation_;
       }
       
       friend void
       iterNext (PlanningStepGenerator & gen)
       {
         gen.currentLocation_ = gen.locationGenerator_->getNextFrame (gen.currentLocation_);
+        if (checkPoint (gen))
+          gen.use_current_location_as_starting_point_for_planning();
       }
     };
   
@@ -398,10 +403,10 @@ namespace engine {
     {
       
     public:
-      JobPlanningSequence(engine::FrameCoord startPoint, int64_t stopPoint, FrameLocator& locator)
+      JobPlanningSequence(engine::FrameCoord startPoint, FrameLocator& locator)
         : ExpandedPlanningSequence(
             JobPlanningChunkStartPoint(
-                PlanningStepGenerator(startPoint,stopPoint,locator))
+                PlanningStepGenerator(startPoint,locator))
             
             >>= expandPrerequisites)                    // "flat map" (monad operation)
         { }

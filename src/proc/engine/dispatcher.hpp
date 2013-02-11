@@ -94,7 +94,6 @@ namespace engine {
               
               return JobPlanningSequence(
                   relativeFrameLocation(refPoint_),
-                  nextPlanningAnchor.getStartFrame(),
                   dispatcher_); 
             }
 

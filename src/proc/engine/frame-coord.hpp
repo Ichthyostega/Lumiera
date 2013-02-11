@@ -36,6 +36,7 @@ namespace engine {
   
   using mobject::ModelPort;
   using lib::time::TimeVar;
+  using lib::time::Time;
   
   
   /**
