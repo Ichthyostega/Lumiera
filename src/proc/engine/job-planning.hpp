@@ -300,7 +300,6 @@ namespace engine {
     {
       FrameLocator* locationGenerator_;
       FrameCoord    currentLocation_;
-      int64_t       stopFrame_;
       
       //////////////////////////////////////////TODO duplicated storage of a FrameCoord record
       //////////////////////////////////////////TODO nextEvaluation_ is only needed to initialise the "current" sequence 
@@ -325,10 +324,9 @@ namespace engine {
       typedef JobPlanning *  pointer;
       
       
-      PlanningStepGenerator(FrameCoord startPoint, int64_t stopPoint, FrameLocator& locator)
+      PlanningStepGenerator(FrameCoord startPoint, FrameLocator& locator)
         : locationGenerator_(&locator)
         , currentLocation_(startPoint)
-        , stopFrame_(stopPoint)
         { }
       
       // default copyable
@@ -339,7 +337,7 @@ namespace engine {
       friend bool
       checkPoint (PlanningStepGenerator const& gen)
       {
-        return gen.currentLocation_.absoluteFrameNumber < gen.stopFrame_;   //////////////////TODO this breaks when we want to play in backward direction!!
+        return gen.currentLocation_.isDefined();   // locationGenrator may signal end-of playback this way
       }
       
       friend JobPlanning&

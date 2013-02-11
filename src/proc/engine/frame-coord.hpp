@@ -73,6 +73,13 @@ namespace engine {
       
       // using default copy operations
       
+      /** @remarks sometimes we use NIL frame coordinate records
+       *  to mark an exceptional condition, e.g. playback stop */
+      bool
+      isDefined()  const
+        {
+          return absoluteNominalTime != Time::NEVER;
+        }
     };
   
   

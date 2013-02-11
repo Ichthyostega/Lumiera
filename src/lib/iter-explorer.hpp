@@ -793,7 +793,7 @@ namespace lib {
               while (!outSeq_ && srcSeq_)
                 {
                   Val& nextElement(*srcSeq_);
-                  build(outSeq_).wrapping(nextElement);    // extension point: free function build (...).wrapping(...)
+                  build(outSeq_).wrapping(nextElement);    // extension point: free function build(...).wrapping(...)
                   ++srcSeq_;
                 }
               return bool(outSeq_);
@@ -805,7 +805,7 @@ namespace lib {
               REQUIRE (outSeq_);
               ResultIter nextSteps = explore_(*outSeq_);
               ++ outSeq_;
-              build(outSeq_).usingSequence(nextSteps);     // extension point: free function build (...).usingSequence(...)
+              build(outSeq_).usingSequence(nextSteps);     // extension point: free function build(...).usingSequence(...)
             }
           
           

@@ -164,8 +164,8 @@ namespace test  {
       verify_basicDispatch()
         {
           Dispatcher& dispatcher = mockDispatcher();
-          Timings timings (FrameRate::PAL);
           ModelPort modelPort (getTestPort());
+          Timings timings (FrameRate::PAL);
           ENSURE (START_FRAME == 10);
           
           TimeAnchor refPoint = TimeAnchor::build (timings, START_FRAME);
@@ -200,8 +200,8 @@ namespace test  {
       verify_standardDispatcherUsage()
         {
           Dispatcher& dispatcher = mockDispatcher();
-          Timings timings (FrameRate::PAL);
           ModelPort modelPort (getTestPort());
+          Timings timings (FrameRate::PAL);
           
           TimeAnchor refPoint = TimeAnchor::build (timings, START_FRAME);
           
@@ -212,7 +212,7 @@ namespace test  {
           
           CHECK (!isnil (jobs));
           vector<Job> plannedChunk;
-          lib::append_all (jobs, plannedChunk);
+          lib::append_all (jobs, plannedChunk);                          //////////////////////////TODO probably can't do it this way; rather the JobPlanningSequence is infinite and only partially evaluated
           
           Duration coveredTime (Offset(refPoint, last(plannedChunk).getNominalTime()));
           CHECK (coveredTime >= timings.getPlanningChunkDuration());
@@ -254,8 +254,8 @@ namespace test  {
       check_ContinuationBuilder()
         {
           Dispatcher& dispatcher = mockDispatcher();
-          Timings timings (FrameRate::PAL);
           ModelPort modelPort (getTestPort());
+          Timings timings (FrameRate::PAL);
           
           // prepare the rest of this test to be invoked as "continuation"
           function<void(TimeAnchor)> testFunc = verify_invocation_of_Continuation;

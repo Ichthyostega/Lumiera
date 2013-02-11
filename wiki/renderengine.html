@@ -2166,15 +2166,17 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" modified="201207010020" created="201105222330" tags="def Rendering" changecount="21">
-<pre>An implementation facility within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
+<div title="FrameDispatcher" modifier="Ichthyostega" modified="201302110107" created="201105222330" tags="def Rendering" changecount="28">
+<pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
+
+The dispatcher works together with the job ticket(s) and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the backend, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
 
 !defining the dispatcher interface
 The purpose of this interface is to support the planning of new jobs, for a given CalcStream. From time to time, a chunk of new RenderJob entries will be prepared for the [[Scheduler]]. Each job knows his frame number and the actual ProcNode to operate. So, to start planning jobs, we need to translate time &amp;rarr; frame number &amp;rarr; segment &amp;rarr; real exit node.
 
 !!!Invocation situation
 * our //current starting point//&amp;nbsp; is given as ''time anchor'' closure
-* we want to address a single frame, offset by a given number of frames relative to the current position
+* we want to address a specific frame, offset by a given number of frames relative to the current position
 * &amp;rArr; the dispatcher returns the //fundamental coordinates// of that frame (''frame coordinates''), comprised of
 ** the absolute nominal time
 ** the absolute frame number
@@ -2190,6 +2192,11 @@ In fact, the whole process of playback or rendering is a continued series of exp
 The frame dispatch step joins and combines multiple time axes. Through the process of //scheduling,// the output generation is linked to real ''wall clock time'' and the dispatch step establishes the deadlines, taking the ''engine latency'' into account. As such, any render or playback process establishes an ''output time grid'', linking frame numbers to nominal output time or timecode, based on the ''output frame rate'' -- and both the framerate and the actual progression (speed) might be changed dynamically. But beyond all of this there is a third, basically independent temporal structure involved: the actual content to render, the ''effective session timeline''. While encoded in nominal, absolute, internal time values not necessarily grid aligned, in practice at least the //breaking points,// the temporal location where the content or structure of the pipeline changes, are aligned //to a grid used while creating the edit.// Yet this session timing structure need not be related in any way to the playback grid, nor is it necessarily the same as the ''source grid'' defined by the media data used to feed the pipeline.
 
 These complex relationships are reflected in the invocation structure leading to an individual frame job. The [[calculation stream|CalcStream]] provides the [[render/playback timings|Timings]], while the actual implementation of the dispatcher, backed by the [[Fixture]] and thus linked to the session models, gets to relate the effective nominal time, the frame number, the exit node and the //processing function.//
+
+!!!controlling the planning process
+New render jobs are planned as an ongoing process, proceeding in chunks of evaluation. Typically, to calculate a single frame, several jobs are necessary -- to find out which and how, we'll have to investigate the model structures corresponding to this frame, to find out about the tree or prerequisites. Basically, the planning for each frame is seeded by establishing the nominal time position, in accordance to the current [[mode of playback|NonLinearPlayback]]. Conducted by the [[play controller|PlayController]], there is a strategy to define the precise way of spacing and sequence of frames to be calculated -- yet for the actual process of evaluating the prerequisites and planning the jobs, these details are irrelevant and hidden behind the dispatcher interface, as is most of the model and context information. The planning operation just produces a sequence of job definitions, which can then be associated with real time (wall clock) deadlines for delivery. The relation between the spacing and progression of the nominal frame time (as controlled by the playback mode) and the actual sequence of deadlines (which is more or less dictated by the output device) is rather loose and established anew for each planning chunk, relying on the ''time anchor''. The latter in turn uses the [[timings record|Timings]] of the [[calculation stream|CalcStream]] currently being planned, and these timings act as a strategy to represent the underlying timing grid and playback modalities.
+
+While the sequence of frame jobs to be planned is possibly infinite, the actual evaluation is confined to the current planning chunk. At the end of planning such a chunk of jobs, an additional ''continuation job'' is included to re-invoke the planning function to prepare the next chunk of jobs. Terminating playback is equivalent to not including or not invoking this continuation job. Please note that planning proceeds independently for each [[Feed]] -- in Lumiera the //current playback position//&amp;nbsp; is just a conceptual projection of wall clock time to nominal time, yet there is no such thing like a synchronously proceeding &quot;Playhead&quot; 
 
 !!!producing actual jobs
 The JobTicket is created on demand, specialised for a single [[segment|Segmentation]] of the timeline and a single [[feed|Feed]] of data frames to be pulled from a ModelPort. Thus, in turn, this means that all frames and all channels within that realm will rely on the same job ticket -- which is a //higher order function,// a function producing another function: when provided with the actual channel number and the specific frame coordinates, the job ticket produces a [[concrete job definition|RenderJob]], which itself is a function to be invoked by the [[scheduler|Scheduler]] just in time.
@@ -3334,7 +3341,7 @@ some points to note:
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
 </pre>
 </div>
-<div title="NonLinearPlayback" modifier="Ichthyostega" modified="201301192102" created="201301132217" tags="def Player Rendering draft" changecount="26">
+<div title="NonLinearPlayback" modifier="Ichthyostega" modified="201302081845" created="201301132217" tags="def Player Rendering draft" changecount="28">
 <pre>The calculations for rendering and playback are designed with a base case in mind: calculating a linear sequence of frames consecutive in time.
 But there are several important modes of playback, which violate that assumption...
 * jump-to / skip
@@ -3395,8 +3402,8 @@ Drawing from this requirement analysis, we might identify some mandatory impleme
 :* placing callbacks into these meta jobs, e.g. for auto-paused mode
 ;for the __timings__:
 :we need flexibility when establishing the deadlines
-:* allow for an added offset when re-establishing the link between nominal and real time on replanning and superseeding of planned jobs
-:* flexible link between nominal and real time, allowing vor reversed playback and changed speed
+:* allow for an added offset when re-establishing the link between nominal and real time on replanning and superseding of planned jobs
+:* flexible link between nominal and real time, allowing for reversed playback and changed speed
 :* configurable slippage offset
 ;for the __play controller__:
 :basically all changes regarding non linear playback modes are initiated and controlled here
@@ -3413,10 +3420,10 @@ Drawing from this requirement analysis, we might identify some mandatory impleme
 :* a way for hinting the cache to store background frames with decreasing priority, thus ensuring the foremost availability of the first frames when picking up playback again
 ;for the __output sinks__:
 :on the receiver side, we need some support to generate smooth and error free output delivery
-:* automated dection of timing glitches, activating the discontinuity handling (&amp;raquo;de-click facility&amp;laquo;)
+:* automated detection of timing glitches, activating the discontinuity handling (&amp;raquo;de-click facility&amp;laquo;)
 :* low-level API for signalling discontinuity to the OutputSlot. This information pertains to the currently delivered frame -- this is necessary when this frame //is actually being delivered timely.//
 :* high-level API to switch any OutputSlot into &quot;frozen mode&quot;, disabling any further output, even in case of accidental delivery of further data by jobs currently in progression.
-:* possibility to detect and signal overload of the receiver, either for blocking or for flow-control
+:* ability to detect and signal overload of the receiver, either through blocking or for flow-control
 </pre>
 </div>
 <div title="ObjectCreation" modifier="Ichthyostega" modified="201004031621" created="200709030139" tags="impl design" changecount="20">

@@ -123,7 +123,7 @@ namespace play {
       
       /** calculate the given frame's distance from origin,
        *  but do so using the real time scale, including any
-       *  playback speed factory and similar corrections.
+       *  playback speed factor and similar corrections.
        * @param frameOffset frame number relative to the implicit grid
        * @return real time value relative to the implicit grid's zero point
        * @note since the Timings don't contain any information relating the
@@ -140,6 +140,9 @@ namespace play {
        *         corresponding to a frame specified relative
        *         to \link #getOrigin time axis origin \endlink
        * @note for other playback urgencies \c Time::NEVER
+       * 
+       * @warning not clear as of 1/13 if it is even possible to have such a function
+       *          on the Timings record. 
        */
       Time getTimeDue(int64_t frameOffset)  const;
       
