@@ -103,8 +103,10 @@ namespace test {
           Time point (myGrid->timeOf (randomFrame));
           CHECK (point == testOrigin + randomFrame * testFps.duration());
           
-          uint fract = 1 + rand() % DIRT_GRAIN;
+          uint fract = 2 + rand() % DIRT_GRAIN;
           FSecs dirt = rational_cast<FSecs> (1 / testFps / fract);
+          ASSERT (Time(dirt) < testFps.duration());
+          ASSERT (0 < dirt);
           
           Time dirty(point + Time(dirt));
           CHECK (point == testOrigin + myGrid->gridAlign(dirty));
