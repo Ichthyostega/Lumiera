@@ -506,7 +506,7 @@ namespace test{
           result = materialise (exploreIter(seq(0)) >>= explode);
           CHECK (result == "");
           
-          // also, n case the bound function yields an empty sequence, the result remains empty
+          // also, in case the bound function yields an empty sequence, the result remains empty
           result = materialise (exploreIter(seq(1)) >>= explode);
           CHECK (result == "");
           

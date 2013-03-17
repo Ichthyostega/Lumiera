@@ -217,6 +217,12 @@ namespace test  {
           Duration coveredTime (Offset(refPoint, last(plannedChunk).getNominalTime()));
           CHECK (coveredTime >= timings.getPlanningChunkDuration());
           
+          ///TODO nachfolgendes muß komplett umgeschrieben werden
+          ///TODO definieren, wie das scheduler-interface angesprochen wird
+          ///TODO dann stub dafür bauen
+          ///TODO Idee/Frage: kann man nach den Prerequisites nochmal zum Job *zurückkehren* ?
+          /////////////////// Antwort: nein man kann nicht.
+          
           TimeVar frameStart (refPoint);
           InvocationInstanceID prevInvocationID(0);
           Offset expectedTimeIncrement (1, FrameRate::PAL);
