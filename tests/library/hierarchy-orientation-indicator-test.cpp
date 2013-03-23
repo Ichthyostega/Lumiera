@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 
 #include "hierarchy-orientation-indicator.hpp"
 #include "lib/iter-adapter-stl.hpp"
@@ -49,12 +50,16 @@ namespace test {
     
     using std::rand;
 //  using std::vector;
+    using std::tr1::ref;
     using iter_stl::eachElm;
     using lib::IterStateWrapper;
     
     const uint MAX_ID(100);
     const uint MAX_CHILDREN(5);
     const double CHILD_PROBABILITY(0.02);
+    
+    const uint CHILDREN_SEED(20);
+    
     
     /**
      * pick a random child count below #MAX_CHILDREN
@@ -101,6 +106,12 @@ namespace test {
           {
             return ChildSeq (children_.begin());
           }
+        
+        bool
+        hasChild (Node const& o)
+          {
+            return util::contains (children_, o);
+          }
       };
     
     
@@ -121,24 +132,13 @@ namespace test {
     }
     
     
-
-    
     typedef std::tr1::reference_wrapper<Node> NodeRef;
     typedef lib::IterQueue<NodeRef> NodeSeq;
     
-    struct VisitationData
-      {
-        int id;
-        int orientation;
-        
-        VisitationData(int refID,
-                       int direction =HierarchyOrientationIndicator::NEUTRAL)
-          : id(refID)
-          , orientation(direction)
-          { }
-      };
     
-
+    /**
+     * Function to generate a depth-first tree visitation
+     */
     NodeSeq
     exploreChildren (Node& node)
     {
@@ -147,6 +147,19 @@ namespace test {
       return children_to_visit;
     }
     
+    
+    
+    struct VisitationData
+      {
+        int id;
+        int orientation;
+        
+        VisitationData(int refID,
+                       int direction =0)
+          : id(refID)
+          , orientation(direction)
+          { }
+      };
     
     /**
      * This functor visits the nodes to produce the actual test data.
@@ -158,14 +171,16 @@ namespace test {
      */
     class NodeVisitor
       {
-        std::deque<NodeRef> trail_;
-        HierarchyOrientationIndicator orientation_;
+        typedef std::deque<NodeRef> NodePath;
+        typedef NodePath::reverse_iterator PathIter;
+        
+        NodePath path_;
         
       public:
         // using default ctor and copy operations
         
         VisitationData
-        operator() (Node const& node)
+        operator() (Node& node)
           {
             int direction = establishRelation (node);
             return VisitationData(node.id_, direction);
@@ -179,31 +194,59 @@ namespace test {
         int
         establishRelation (Node& nextNode)
           {
-            Node& currNode = trail_.back();
-            if (currNode.hasChild(nextNode))
+            uint level = path_.size();
+            uint refLevel = level;
+            for (PathIter p = path_.rbegin();
+                 0 < level ; --level, ++p )
               {
-                // one level down
-                trail_.push_back (nextNode);
-                return +1;
-              }
-            else
-              {
-                level = 0;
-                for (trail_; ;)
+                Node& parent = *p;
+                if (parent.hasChild (nextNode))
                   {
-                    Node& parent; ///////
-                    if (parent.hasChild(nextNode))
-                      {
-                        // remove level elements
-                        return 1-level;
-                      }
+                    // visitation continues with children below this level
+                    path_.resize(level);
+                    path_.push_back(ref(nextNode));
+                    return (level - refLevel) + 1;
                   }
               }
-            NOTREACHED ("corrupted test data tree");
+            ASSERT (0 == level);
+            if (isnil (path_)) 
+              { // add first node at begin of tree visitation
+                path_.push_back(ref(nextNode));
+                return +1;
+              }
+            throw error::Logic("corrupted test data tree or tree visitation floundered");
           }
       };
     
     
+    
+    struct TreeRebuilder
+      {
+        Node tree;
+        
+        template<class IT>
+        TreeRebuilder (IT treeTraversal)
+          : tree(0,0)
+          {
+            populate (transformIterator (treeTraversal, NodeVisitor()));
+          }
+        
+      private:
+        template<class IT>
+        void
+        populate (IT treeVisitation)
+          {
+            util::for_each(treeVisitation, attachNodeClone, this);
+          }
+        
+        
+        void
+        attachNodeClone (VisitationData const& originalStructureInformation)
+          {
+            
+          }
+        
+      };
     
   
   } //(End) test fixture
@@ -224,7 +267,7 @@ namespace test {
       
       virtual void run (Arg)
         {
-          demonstrate_weakness ();
+          demonstrate_tree_rebuilding ();
         }
       
       /** @test demonstrate a serious weakness of
@@ -232,11 +275,14 @@ namespace test {
        * 
        * This problem is especially dangerous when...
        */
-      void demonstrate_weakness ( )
+      void demonstrate_tree_rebuilding ( )
         {
-          typedef XX hashFunction;
+          Node testTree (-1, CHILDREN_SEED);
+          NodeSeq root (testTree);
           
-          CHECK (0 < collisions, "xx is expected to");
+          TreeRebuilder reconstructed (depthFirst(root) >>= exploreChildren);
+          
+          CHECK (reconstructed.tree == testTree);
         }
       
     };
