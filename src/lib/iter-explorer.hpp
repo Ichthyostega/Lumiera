@@ -500,7 +500,7 @@ namespace lib {
      * the actual implementation logic how to proceed with the evaluation (i.e. how to
      * find the feed of the "next elements" and how to re-integrate the results of an
      * evaluation step into the already expanded sequence of intermediary results.
-     * Moreover, these implementation strategy pattern is used as a data buffer
+     * Moreover, this implementation strategy pattern is used as a data buffer
      * to hold those intermediary results. Together, this allows to create
      * various expansion patterns, e.g. depth-first or breadth-first.
      * - \c Strategy::getFeed() accesses the point from where

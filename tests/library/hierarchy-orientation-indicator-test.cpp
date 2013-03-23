@@ -26,10 +26,12 @@
 
 #include "hierarchy-orientation-indicator.hpp"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/iter-explorer.hpp"
 
 //#include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
 //#include <iostream>
+#include <tr1/functional>
 #include <string>
 #include <vector>
 #include <cstdlib>
@@ -93,6 +95,12 @@ namespace test {
             REQUIRE (i < children_.size());
             return children_[i];
           }
+        
+        ChildSeq
+        childSequence()
+          {
+            return ChildSeq (children_.begin());
+          }
       };
     
     
@@ -113,78 +121,89 @@ namespace test {
     }
     
     
+
+    
+    typedef std::tr1::reference_wrapper<Node> NodeRef;
+    typedef lib::IterQueue<NodeRef> NodeSeq;
+    
     struct VisitationData
       {
         int id;
         int orientation;
         
-        VisitationData(int refID)
+        VisitationData(int refID,
+                       int direction =HierarchyOrientationIndicator::NEUTRAL)
           : id(refID)
-          , orientation(HierarchyOrientationIndicator::NEUTRAL)
+          , orientation(direction)
           { }
       };
+    
+
+    NodeSeq
+    exploreChildren (Node& node)
+    {
+      NodeSeq children_to_visit;
+      build(children_to_visit).usingSequence (node.childSequence());
+      return children_to_visit;
+    }
     
     
     /**
-     * This iteration "state core" type describes
-     * a sequence of numbers yet to be delivered.
+     * This functor visits the nodes to produce the actual test data.
+     * The intention is to describe a visitation path through a tree structure
+     * by a sequence of "up", "down", and "level" orientations. The test we're
+     * preparing here will attempt to re-create a given tree based on these
+     * directional information. The actual visitation path is created by
+     * a depth-first exploration of the source tree.
      */
-    class Exploration
+    class NodeVisitor
       {
-        Node::ChildSeq subject_;
+        std::deque<NodeRef> trail_;
         HierarchyOrientationIndicator orientation_;
-        VisitationData currentVisitationView_;
         
       public:
-        Exploration(Node const& position)
-          : subject_(eachElm (position.children_))
-          , orientation_()
-          , currentVisitationView_(position.id_)
-          { }
+        // using default ctor and copy operations
         
-        friend bool
-        checkPoint (Exploration const& st)
-        {
-          return bool(st.subject_);
-        }
+        VisitationData
+        operator() (Node const& node)
+          {
+            int direction = establishRelation (node);
+            return VisitationData(node.id_, direction);
+          }
         
-        friend VisitationData&
-        yield (Exploration const& st)
-        {
-          return currentVisitationView_;
-        }
-        
-        friend void
-        iterNext (Exploration & st)
-        {
-          if (!checkPoint(st)) return;
-          ++st.subject_;
-        }
+      private:
+        /** Helper for this test only: find out about the hierarchical relation.
+         *  In the real usage situation, the key point is that we \em record
+         *  this relation on-the-fly, when visiting the tree, instead of
+         *  determining it after the fact. */
+        int
+        establishRelation (Node& nextNode)
+          {
+            Node& currNode = trail_.back();
+            if (currNode.hasChild(nextNode))
+              {
+                // one level down
+                trail_.push_back (nextNode);
+                return +1;
+              }
+            else
+              {
+                level = 0;
+                for (trail_; ;)
+                  {
+                    Node& parent; ///////
+                    if (parent.hasChild(nextNode))
+                      {
+                        // remove level elements
+                        return 1-level;
+                      }
+                  }
+              }
+            NOTREACHED ("corrupted test data tree");
+          }
       };
     
     
-    
-    /** 
-     * A straight ascending number sequence as basic test iterator.
-     * The tests will dress up this source sequence in various ways.
-     */
-    class NumberSequence
-      : public IterStateWrapper<uint, Exploration>
-      {
-          
-        public:
-          explicit
-          NumberSequence(uint end = 0)
-            : IterStateWrapper<uint,Exploration> (Exploration(0,end))
-            { }
-          NumberSequence(uint start, uint end)
-            : IterStateWrapper<uint,Exploration> (Exploration(start,end))
-            { }
-          
-          /** allow using NumberSequence in LinkedElements
-           * (intrusive single linked list) */
-          NumberSequence* next;
-      };
     
   
   } //(End) test fixture
