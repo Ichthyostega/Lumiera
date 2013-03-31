@@ -35,7 +35,7 @@
 #include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "p/FI.hpp"
+//#include "p/FI.hpp"
 #include "hierarchy-orientation-indicator.hpp"
 
 //#include <boost/noncopyable.hpp>
@@ -53,10 +53,7 @@ namespace lib {
   namespace { // internal details
   
   } // internal details
-  
-  NA::~NA ( )
-    {
-    }
+
   
   /**
    * 

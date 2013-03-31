@@ -119,7 +119,7 @@ namespace lib {
       
       friend HashVal hash_value (HierarchyOrientationIndicator const& entry)
         {
-          return hash_value (entry.nothing_);
+//        return hash_value (entry.nothing_);
         }
     };
   

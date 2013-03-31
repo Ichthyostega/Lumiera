@@ -23,11 +23,12 @@
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
-#include "lib/util-foreach.hpp"
+//#include "lib/util-foreach.hpp"
 
-#include "hierarchy-orientation-indicator.hpp"
+#include "lib/hierarchy-orientation-indicator.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/iter-explorer.hpp"
+#include "lib/itertools.hpp"
 
 //#include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
@@ -40,6 +41,7 @@
 //using boost::lexical_cast;
 using util::contains;
 using std::string;
+using util::isnil;
 //using std::cout;
 //using std::endl;
 
@@ -48,11 +50,15 @@ namespace test {
   
   namespace { // test fixture: a random Tree to navigate...
     
+    namespace error=lumiera::error;
+    
     using std::rand;
 //  using std::vector;
     using std::tr1::ref;
+    using std::tr1::function;
     using iter_stl::eachElm;
     using lib::IterStateWrapper;
+    using lib::transformIterator;
     
     const uint MAX_ID(100);
     const uint MAX_CHILDREN(5);
@@ -80,10 +86,10 @@ namespace test {
     
     
     struct Node
-      : boost::EqualityComparable<Node>
+      : boost::equality_comparable<Node>
       {
         typedef std::vector<Node> Children;
-        typedef RangeIter<Children> ChildSeq;
+        typedef RangeIter<Children::iterator> ChildSeq;
         
         int id_;
         Children children_;
@@ -95,7 +101,7 @@ namespace test {
           { }
         
         Node const&
-        child (uint i)
+        child (uint i)  const
           {
             REQUIRE (i < children_.size());
             return children_[i];
@@ -104,7 +110,7 @@ namespace test {
         ChildSeq
         childSequence()
           {
-            return ChildSeq (children_.begin());
+            return ChildSeq (children_.begin(), children_.end());
           }
         
         bool
@@ -132,7 +138,17 @@ namespace test {
     }
     
     
-    typedef std::tr1::reference_wrapper<Node> NodeRef;
+    class NodeRef
+      {
+        Node* n_;
+        
+      public:
+        NodeRef()        : n_(0)  { }
+        NodeRef(Node& n) : n_(&n) { }
+        
+        operator Node& ()  const { return *n_; }
+      };
+    
     typedef lib::IterQueue<NodeRef> NodeSeq;
     
     
@@ -204,14 +220,14 @@ namespace test {
                   {
                     // visitation continues with children below this level
                     path_.resize(level);
-                    path_.push_back(ref(nextNode));
+                    path_.push_back(nextNode);
                     return (level - refLevel) + 1;
                   }
               }
             ASSERT (0 == level);
             if (isnil (path_)) 
               { // add first node at begin of tree visitation
-                path_.push_back(ref(nextNode));
+                path_.push_back(nextNode);
                 return +1;
               }
             throw error::Logic("corrupted test data tree or tree visitation floundered");
@@ -228,7 +244,8 @@ namespace test {
         TreeRebuilder (IT treeTraversal)
           : tree(0,0)
           {
-            populate (transformIterator (treeTraversal, NodeVisitor()));
+            populate (transformIterator (treeTraversal, 
+                                         function<VisitationData(Node&)>(NodeVisitor())));
           }
         
       private:
@@ -236,14 +253,62 @@ namespace test {
         void
         populate (IT treeVisitation)
           {
-            util::for_each(treeVisitation, attachNodeClone, this);
+                struct Builder
+                  {
+                    void
+                    populateBy (IT& treeVisitation)
+                      {
+                        while (treeVisitation)
+                          {
+                            int direction = treeVisitation->orientation; 
+                            if (direction < 0)
+                              {
+                                treeVisitation->orientation += 1;
+                                return;
+                              }
+                            else
+                            if (direction > 0)
+                              {
+                                treeVisitation->orientation -= 1;
+                                startChildTransaction();
+                                populateBy (treeVisitation);
+                                commitChildTransaction();
+                              }
+                            else
+                              {
+                                addNode (treeVisitation->id);
+                                ++treeVisitation;
+                              }
+                          }
+                      }
+                    
+                    void
+                    startChildTransaction()
+                      {
+                        
+                      }
+                    
+                    void
+                    commitChildTransaction()
+                      {
+                        
+                      }
+                    
+                    void
+                    addNode (int id)
+                      {
+                        
+                      }
+                  };
+            
+            Builder builder;
+            builder.populateBy (treeVisitation);
           }
         
         
         void
         attachNodeClone (VisitationData const& originalStructureInformation)
           {
-            
           }
         
       };
@@ -278,7 +343,8 @@ namespace test {
       void demonstrate_tree_rebuilding ( )
         {
           Node testTree (-1, CHILDREN_SEED);
-          NodeSeq root (testTree);
+          NodeSeq root;
+          root.feed (testTree);
           
           TreeRebuilder reconstructed (depthFirst(root) >>= exploreChildren);
           
