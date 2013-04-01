@@ -32,7 +32,7 @@
 
 //#include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
-//#include <iostream>
+#include <iostream>  //////////////////////////////TODO
 #include <tr1/functional>
 #include <string>
 #include <vector>
@@ -42,8 +42,8 @@
 using util::contains;
 using std::string;
 using util::isnil;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
 
 namespace lib {
 namespace test {
@@ -63,8 +63,10 @@ namespace test {
     const uint MAX_ID(100);
     const uint MAX_CHILDREN(5);
     const double CHILD_PROBABILITY(0.02);
+    const uint CHILDREN_TOTAL_LIMIT(20);
     
     const uint CHILDREN_SEED(20);
+    uint random_children_created(0);
     
     
     /**
@@ -80,7 +82,10 @@ namespace test {
       ASSERT (0 < bottom);
       ASSERT (bottom < limit);
       
+      ++random_children_created;
       int cnt = (rand() % limit) - bottom;
+      if (random_children_created > CHILDREN_TOTAL_LIMIT) cnt=0;
+      if (0 < MAX (0, cnt)) cout << "Kau: "<< cnt <<endl;
       return MAX (0, cnt); 
     }
     
@@ -97,8 +102,11 @@ namespace test {
         Node(int i =(rand() % MAX_ID),
              uint c =pick_random_count())
           : id_(i)
-          , children_(c) // populate with c random children
-          { }
+          , children_()
+          { 
+            for (uint j=0; j<c; ++j)  // populate with c random children
+              children_.push_back(Node());
+          }
         
         Node const&
         child (uint i)  const
@@ -117,6 +125,13 @@ namespace test {
         hasChild (Node const& o)
           {
             return util::contains (children_, o);
+          }
+        
+        Node&
+        makeChild (int childID)
+          {
+            children_.push_back (Node(childID, 0));
+            return children_.back();
           }
       };
     
@@ -255,6 +270,11 @@ namespace test {
           {
                 struct Builder
                   {
+                    Builder (Node& startPoint)
+                      : parent(&startPoint)
+                      , current(0)
+                      { }
+                    
                     void
                     populateBy (IT& treeVisitation)
                       {
@@ -270,45 +290,46 @@ namespace test {
                             if (direction > 0)
                               {
                                 treeVisitation->orientation -= 1;
-                                startChildTransaction();
+                                Node& refPoint = startChildTransaction();
                                 populateBy (treeVisitation);
-                                commitChildTransaction();
+                                commitChildTransaction(refPoint);
                               }
                             else
                               {
                                 addNode (treeVisitation->id);
                                 ++treeVisitation;
-                              }
-                          }
-                      }
-                    
-                    void
-                    startChildTransaction()
-                      {
-                        
-                      }
-                    
-                    void
-                    commitChildTransaction()
-                      {
-                        
-                      }
+                              }}}
+                      
+                  private:
+                    Node* parent;
+                    Node* current;
                     
                     void
                     addNode (int id)
                       {
-                        
+                        current = & parent->makeChild(id);
+                      }
+                    
+                    Node&
+                    startChildTransaction()
+                      {
+                        Node& oldRefPoint (*parent);
+                        ASSERT (current);
+                        parent = current;  // set new ref point
+                        return oldRefPoint;
+                      }
+                    
+                    void
+                    commitChildTransaction(Node& refPoint)
+                      {
+                        parent = &refPoint;
+                        current = parent;
                       }
                   };
             
-            Builder builder;
+            
+            Builder builder(this->tree);
             builder.populateBy (treeVisitation);
-          }
-        
-        
-        void
-        attachNodeClone (VisitationData const& originalStructureInformation)
-          {
           }
         
       };
@@ -343,6 +364,7 @@ namespace test {
       void demonstrate_tree_rebuilding ( )
         {
           Node testTree (-1, CHILDREN_SEED);
+          cout << "testing with a tree of size="<<random_children_created<< endl;
           NodeSeq root;
           root.feed (testTree);
           
