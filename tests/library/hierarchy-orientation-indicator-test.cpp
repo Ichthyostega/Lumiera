@@ -56,13 +56,12 @@ namespace test {
 //  using std::vector;
     using std::tr1::ref;
     using std::tr1::function;
-    using iter_stl::eachElm;
     using lib::IterStateWrapper;
     using lib::transformIterator;
     
     const uint MAX_ID(100);
     const uint MAX_CHILDREN(5);
-    const double CHILD_PROBABILITY(0.02);
+    const double CHILD_PROBABILITY(0.06);
     const uint CHILDREN_TOTAL_LIMIT(20);
     
     const uint CHILDREN_SEED(20);
@@ -84,7 +83,7 @@ namespace test {
       
       ++random_children_created;
       int cnt = (rand() % limit) - bottom;
-      if (random_children_created > CHILDREN_TOTAL_LIMIT) cnt=0;
+//      if (random_children_created > CHILDREN_TOTAL_LIMIT) cnt=0;
       if (0 < MAX (0, cnt)) cout << "Kau: "<< cnt <<endl;
       return MAX (0, cnt); 
     }
@@ -99,11 +98,14 @@ namespace test {
         int id_;
         Children children_;
         
-        Node(int i =(rand() % MAX_ID),
-             uint c =pick_random_count())
+        Node(int i)
           : id_(i)
-          , children_()
-          { 
+          { }
+        
+        Node()
+          : id_(rand() % MAX_ID)
+          {
+            uint c = pick_random_count();
             for (uint j=0; j<c; ++j)  // populate with c random children
               children_.push_back(Node());
           }
@@ -130,7 +132,7 @@ namespace test {
         Node&
         makeChild (int childID)
           {
-            children_.push_back (Node(childID, 0));
+            children_.push_back (Node(childID));
             return children_.back();
           }
       };
@@ -171,8 +173,9 @@ namespace test {
      * Function to generate a depth-first tree visitation
      */
     NodeSeq
-    exploreChildren (Node& node)
+    exploreChildren (NodeRef ref)
     {
+      Node& node(ref);
       NodeSeq children_to_visit;
       build(children_to_visit).usingSequence (node.childSequence());
       return children_to_visit;
@@ -240,10 +243,11 @@ namespace test {
                   }
               }
             ASSERT (0 == level);
-            if (isnil (path_)) 
+            if (1 >= path_.size()) 
               { // add first node at begin of tree visitation
+                path_.clear();
                 path_.push_back(nextNode);
-                return +1;
+                return 0; // by convention, here the root is an implicitly pre-existing context
               }
             throw error::Logic("corrupted test data tree or tree visitation floundered");
           }
@@ -252,12 +256,11 @@ namespace test {
     
     
     struct TreeRebuilder
+      : Node
       {
-        Node tree;
-        
         template<class IT>
         TreeRebuilder (IT treeTraversal)
-          : tree(0,0)
+          : Node(0)
           {
             populate (transformIterator (treeTraversal, 
                                          function<VisitationData(Node&)>(NodeVisitor())));
@@ -328,7 +331,7 @@ namespace test {
                   };
             
             
-            Builder builder(this->tree);
+            Builder builder(*this); // pre-existing implicit root context
             builder.populateBy (treeVisitation);
           }
         
@@ -363,14 +366,17 @@ namespace test {
        */
       void demonstrate_tree_rebuilding ( )
         {
-          Node testTree (-1, CHILDREN_SEED);
-          cout << "testing with a tree of size="<<random_children_created<< endl;
-          NodeSeq root;
-          root.feed (testTree);
+          Node::Children testWood;
+          for (uint i=0; i < CHILDREN_SEED; ++i)
+            testWood.push_back(Node());
           
-          TreeRebuilder reconstructed (depthFirst(root) >>= exploreChildren);
+          using iter_stl::eachElm;
+
           
-          CHECK (reconstructed.tree == testTree);
+          TreeRebuilder reconstructed (depthFirst (eachElm (testWood)) >>= exploreChildren);
+          
+          cout << reconstructed.children_.size() << "=?=" << testWood.size();
+          CHECK (reconstructed.children_ == testWood);
         }
       
     };
