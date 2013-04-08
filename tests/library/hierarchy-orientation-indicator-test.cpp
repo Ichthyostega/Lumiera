@@ -155,29 +155,18 @@ namespace test {
     }
     
     
-    class NodeRef
-      {
-        Node* n_;
-        
-      public:
-        NodeRef()        : n_(0)  { }
-        NodeRef(Node& n) : n_(&n) { }
-        
-        operator Node& ()  const { return *n_; }
-      };
-    
-    typedef lib::IterQueue<NodeRef> NodeSeq;
+    typedef lib::IterQueue<Node*> NodeSeq;
     
     
     /**
      * Function to generate a depth-first tree visitation
      */
     NodeSeq
-    exploreChildren (NodeRef ref)
+    exploreChildren (Node* ref)
     {
-      Node& node(ref);
+      Node& node(*ref);
       NodeSeq children_to_visit;
-      build(children_to_visit).usingSequence (node.childSequence());
+      build(children_to_visit).usingSequence (AddressExposingIter<Node::ChildSeq>(node.childSequence()));
       return children_to_visit;
     }
     
@@ -205,7 +194,7 @@ namespace test {
      */
     class NodeVisitor
       {
-        typedef std::deque<NodeRef> NodePath;
+        typedef std::deque<Node*> NodePath;
         typedef NodePath::reverse_iterator PathIter;
         
         NodePath path_;
@@ -214,10 +203,10 @@ namespace test {
         // using default ctor and copy operations
         
         VisitationData
-        operator() (Node& node)
+        operator() (Node* node)
           {
             int direction = establishRelation (node);
-            return VisitationData(node.id_, direction);
+            return VisitationData(node->id_, direction);
           }
         
       private:
@@ -226,15 +215,16 @@ namespace test {
          *  this relation on-the-fly, when visiting the tree, instead of
          *  determining it after the fact. */
         int
-        establishRelation (Node& nextNode)
+        establishRelation (Node* nextNode)
           {
+            REQUIRE (nextNode);
             uint level = path_.size();
             uint refLevel = level;
             for (PathIter p = path_.rbegin();
                  0 < level ; --level, ++p )
               {
-                Node& parent = *p;
-                if (parent.hasChild (nextNode))
+                Node* parent = *p;
+                if (parent->hasChild (*nextNode))
                   {
                     // visitation continues with children below this level
                     path_.resize(level);
@@ -263,7 +253,7 @@ namespace test {
           : Node(0)
           {
             populate (transformIterator (treeTraversal, 
-                                         function<VisitationData(Node&)>(NodeVisitor())));
+                                         function<VisitationData(Node*)>(NodeVisitor())));
           }
         
       private:
@@ -371,9 +361,13 @@ namespace test {
             testWood.push_back(Node());
           
           using iter_stl::eachElm;
+          using lib::AddressExposingIter;
 
           
-          TreeRebuilder reconstructed (depthFirst (eachElm (testWood)) >>= exploreChildren);
+          TreeRebuilder reconstructed (depthFirst (AddressExposingIter<Node::ChildSeq>(eachElm (testWood))) >>= exploreChildren);
+          
+          //////////////////TODO: problem is in WrappedSequence. The operator*() returns a ref, but AddressExposingIter returns a value
+          //////////////////TODO: solution idea: use a specialisation for AddressexposingIter in "depthFirst"
           
           cout << reconstructed.children_.size() << "=?=" << testWood.size();
           CHECK (reconstructed.children_ == testWood);
