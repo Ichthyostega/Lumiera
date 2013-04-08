@@ -41,6 +41,11 @@
  **   the clients to use direct references; to support this usage scenario,
  **   PtrDerefIter wraps an existing iterator, while dereferencing any value
  **   automatically on access.
+ ** - for some (very specific) usage situations we intend to explore the
+ **   contents of a stable and unmodifiable data structure through pointers.
+ **   The AddressExposingIter wraps another Lumiera Forward Iterator and
+ **   exposes addresses -- assuming the used source iterator is exposing
+ **   references to pre-existing storage locations (not temporaries). 
  ** 
  ** There are many further ways of yielding a Lumiera forward iterator.
  ** For example, lib::IterSource builds a "iterable" source of data elements,
@@ -684,6 +689,170 @@ namespace lib {
     
   template<class I1, class I2>
   bool operator!= (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return !(il == ir); }
+  
+  
+  
+  
+  
+  /** 
+   * wrapper for an existing Iterator type to expose the address of each value yielded.
+   * Typically this can be used to build visitation sequences based on values living
+   * within a stable data structure (e.g. unmodifiable STL vector)
+   * @warning use of this wrapper might lead to taking the address of temporaries.
+   *          The continued existence of the exposed storage locations must be guaranteed.
+   * @note bool checkable if and only if source is...
+   */
+  template<class IT>
+  class AddressExposingIter
+    : public lib::BoolCheckable<AddressExposingIter<IT> >
+    {
+      IT i_;  ///< nested source iterator
+      
+      
+    public:
+      typedef typename IT::value_type *  value_type;
+      typedef typename IT::value_type ** pointer;
+      typedef typename IT::value_type *& reference;
+      
+      
+      
+      /** AddressExposingIter is always created 
+       *  by wrapping an existing iterator.
+       */
+      explicit
+      AddressExposingIter (IT srcIter)
+        : i_(srcIter)
+        { }
+      
+      
+      
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      value_type
+      operator*() const
+        {
+          return &(*i_);
+        }
+      
+      typename IT::pointer
+      operator->() const
+        {
+          return i_.operator->();
+        }
+      
+      AddressExposingIter&
+      operator++()
+        {
+          ++i_;
+          return *this;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return bool(i_);
+        }
+      
+      bool
+      empty ()    const
+        {
+          return !isValid();
+        }
+      
+      
+      /** access the wrapped implementation iterator */
+      IT const&
+      getBase()  const
+        {
+          return i_;
+        }
+    };
+  
+  
+  /// Supporting equality comparisons...
+  template<class I1, class I2>
+  bool operator== (AddressExposingIter<I1> const& il, AddressExposingIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
+    
+  template<class I1, class I2>
+  bool operator!= (AddressExposingIter<I1> const& il, AddressExposingIter<I2> const& ir)  { return !(il == ir); }
+  
+  
+  
+  
+  
+  
+  /** wrapper to declare exposed values const */
+  template<class IT>
+  class ConstIter
+    : public lib::BoolCheckable<ConstIter<IT> >
+    {
+      IT i_;  ///< nested source iterator
+      
+      
+    public:
+      typedef const typename IT::value_type value_type;
+      typedef const typename IT::pointer    pointer;
+      typedef const typename IT::reference  reference;
+      
+      ConstIter (IT srcIter)
+        : i_(srcIter)
+        { }
+      
+      
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      reference
+      operator*() const
+        {
+          return *i_;
+        }
+      
+      pointer
+      operator->() const
+        {
+          return i_.operator->();
+        }
+      
+      ConstIter&
+      operator++()
+        {
+          ++i_;
+          return *this;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return bool(i_);
+        }
+      
+      bool
+      empty ()    const
+        {
+          return !isValid();
+        }
+      
+      
+      /** access the wrapped implementation iterator */
+      IT const&
+      getBase()  const
+        {
+          return i_;
+        }
+    };
+  
+  
+  /// Supporting equality comparisons...
+  template<class I1, class I2>
+  bool operator== (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
+    
+  template<class I1, class I2>
+  bool operator!= (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return !(il == ir); }
+  
   
   
 } // namespace lib

@@ -194,6 +194,7 @@ namespace test{
           
           iterTypeVariations (testElms);
           verifyComparisons (testElms);
+          exposeDataAddresses();
         }
       
       
@@ -311,6 +312,49 @@ namespace test{
              // *iter = i+1;   ///////////TODO this should be const, but it isn't
             }
         }
+      
+      
+      /** @test build an iterator to expose
+       *        the address of underlying data elements */
+      void
+      exposeDataAddresses()
+        {
+          vector<int> numbz;
+          for (uint i=0; i < NUM_ELMS; ++i)
+            numbz.push_back(i);
+          
+          typedef vector<int>::iterator      RawIter;
+          typedef RangeIter<RawIter>         Range;
+          typedef AddressExposingIter<Range> AddrIter;
+          
+          AddrIter ii(Range(numbz.begin(), numbz.end()));
+          for (uint i=0; i < numbz.size(); ++i)
+            {
+              CHECK (ii);
+              int* p = *ii;
+              CHECK (p == & numbz[i]);
+              ++ii;
+            }
+          CHECK (!ii);
+          
+          // building a const iterator needs to be done in a somewhat weird way;
+          // since we're exposing the pointer as value, the solution is to add
+          // the const on the immediately wrapped iterator type 
+          typedef vector<int>::const_iterator     ConstRawIter;
+          typedef ConstIter<Range>                ConstRange;
+          typedef AddressExposingIter<ConstRange> ConstAddrIter;
+          
+          ConstAddrIter iic(ConstRange(Range(numbz.begin(), numbz.end())));
+          for (uint i=0; i < numbz.size(); ++i)
+            {
+              CHECK (iic);
+              const int* p = *iic;
+              CHECK (p == & numbz[i]);
+              ++iic;
+            }
+          CHECK (!iic);
+        }
+      
       
       
       

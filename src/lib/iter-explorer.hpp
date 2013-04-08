@@ -155,6 +155,14 @@ namespace lib {
    *          independent, new result sequence based on this first element).
    *          Afterwards, the source is \em advanced and then \em copied 
    *          into the result iterator.
+   * @warning IterExplorer and all the provided combination strategies are deliberately
+   *          designed to work on sequences <b>of values</b>. These values will indeed
+   *          be \em copied for invocation of the exploration function. The rationale
+   *          for this choice is data locality and the danger of dangling references
+   *          to an implicitly created temporary (since in it is so common practice
+   *          in C++ to use \c const& ). Thus, if you need to work on references
+   *          to a common data structure, you need to use either pointers or
+   *          some reference wrapper explicitly as value type right from start.
    * @param SRC the source sequence or iterator to wrap
    * @param _COM_ "Combinator" strategy template. When binding (\c >>= ) a function,
    *          an instance of that strategy becomes the new SRC for the created new
@@ -514,7 +522,7 @@ namespace lib {
     class RecursiveExhaustingEvaluation
       {
         typedef typename _Fun<FUN>::Ret   ResultIter;
-        typedef typename SRC::value_type  Val;
+        typedef typename SRC::value_type  Val;        // note: deliberately using the value
         typedef function<ResultIter(Val)> Explorer;
         typedef _BUF_<ResultIter>         Buffer;
         
@@ -591,7 +599,8 @@ namespace lib {
         friend reference
         yield (RecursiveExhaustingEvaluation const& seq)
         {
-          return *(seq.feed());
+          reference result = *(seq.feed());
+          return result;
         }
         
         friend void
