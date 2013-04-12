@@ -1,8 +1,8 @@
 Lumiera User Manual
 ===================
 
-The plan is to create the users manual later in a colaborative
-fashion, similar to what turned out so effective for Cinelerra.
+The plan is to create the users manual later in a collaborative
+fashion, which was effective for Cinelerra.
 
 This work is postponed until the software is actually working.
 
