@@ -233,13 +233,12 @@ namespace test {
                   }
               }
             ASSERT (0 == level);
-            if (1 >= path_.size()) 
-              { // add first node at begin of tree visitation
-                path_.clear();
-                path_.push_back(nextNode);
-                return 0; // by convention, here the root is an implicitly pre-existing context
-              }
-            throw error::Logic("corrupted test data tree or tree visitation floundered");
+            
+            // nextNode not found as child (i.e. fork) within current tree path
+            // --> start new tree path at root
+            path_.clear();
+            path_.push_back(nextNode);
+            return 0; // by convention, here the root is an implicitly pre-existing context
           }
       };
     
@@ -365,9 +364,6 @@ namespace test {
 
           
           TreeRebuilder reconstructed (depthFirst (AddressExposingIter<Node::ChildSeq>(eachElm (testWood))) >>= exploreChildren);
-          
-          //////////////////TODO: problem is in WrappedSequence. The operator*() returns a ref, but AddressExposingIter returns a value
-          //////////////////TODO: solution idea: use a specialisation for AddressexposingIter in "depthFirst"
           
           cout << reconstructed.children_.size() << "=?=" << testWood.size();
           CHECK (reconstructed.children_ == testWood);

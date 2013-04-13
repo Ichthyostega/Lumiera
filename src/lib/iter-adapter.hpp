@@ -706,23 +706,37 @@ namespace lib {
   class AddressExposingIter
     : public lib::BoolCheckable<AddressExposingIter<IT> >
     {
+    public:
+      typedef typename IT::value_type ** pointer;
+      typedef typename IT::value_type *& reference;
+      typedef typename IT::value_type *  value_type;
+      
+    private:
       IT i_;  ///< nested source iterator
+      
+      mutable value_type currPtr_;
+      
+      
+      void
+      takeAddress()
+        {
+          if (i_.isValid())
+            currPtr_ = & (*i_);
+          else
+            currPtr_ = 0;
+        }
       
       
     public:
-      typedef typename IT::value_type *  value_type;
-      typedef typename IT::value_type ** pointer;
-      typedef typename IT::value_type *& reference;
-      
-      
-      
       /** AddressExposingIter is always created 
        *  by wrapping an existing iterator.
        */
       explicit
       AddressExposingIter (IT srcIter)
         : i_(srcIter)
-        { }
+        {
+          takeAddress();
+        }
       
       
       
@@ -730,22 +744,28 @@ namespace lib {
       
       /* === lumiera forward iterator concept === */
       
-      value_type
+      /** @return address of the source iteraor's current result
+       * @warning exposing a reference to an internal pointer for sake of compatibility.
+       *          Clients must not store that reference, but rather use it to initialise
+       *          a copy. The internal pointer exposed here will be changed on increment.  
+       */
+      reference
       operator*() const
         {
-          return &(*i_);
+          return currPtr_;
         }
       
-      typename IT::pointer
+      pointer
       operator->() const
         {
-          return i_.operator->();
+          return currPtr_;
         }
       
       AddressExposingIter&
       operator++()
         {
           ++i_;
+          takeAddress();
           return *this;
         }
       
