@@ -59,14 +59,11 @@ namespace test {
     using lib::IterStateWrapper;
     using lib::transformIterator;
     
-    const uint MAX_ID(100);
     const uint MAX_CHILDREN(5);
-    const double CHILD_PROBABILITY(0.06);
-    const uint CHILDREN_TOTAL_LIMIT(20);
+    const double CHILD_PROBABILITY(0.45);
     
-    const uint CHILDREN_SEED(20);
-    uint random_children_created(0);
-    
+    const uint CHILDREN_SEED(50);
+    uint nextChildID(1);
     
     /**
      * pick a random child count below #MAX_CHILDREN
@@ -81,10 +78,7 @@ namespace test {
       ASSERT (0 < bottom);
       ASSERT (bottom < limit);
       
-      ++random_children_created;
       int cnt = (rand() % limit) - bottom;
-//      if (random_children_created > CHILDREN_TOTAL_LIMIT) cnt=0;
-      if (0 < MAX (0, cnt)) cout << "Kau: "<< cnt <<endl;
       return MAX (0, cnt); 
     }
     
@@ -103,11 +97,15 @@ namespace test {
           { }
         
         Node()
-          : id_(rand() % MAX_ID)
+          : id_(nextChildID++)
           {
             uint c = pick_random_count();
+            cout << "++-----Node-"<<id_<<" ("<<c<<")"<<endl;
             for (uint j=0; j<c; ++j)  // populate with c random children
+              {
               children_.push_back(Node());
+              cout << "  -++-----"<<id_<<" +-child-"<<children_.back().id_<<endl;
+              }
           }
         
         Node const&
@@ -137,10 +135,12 @@ namespace test {
           }
       };
     
-    
+    bool TOGZ(false);
+      
     inline bool
     have_equivalent_children (Node const& l, Node const& r)
     {
+      if (TOGZ && l.children_.size() != r.children_.size()) cout << "####### mismatch at Node-"<<l.id_<<": "<<l.children_.size()<<"=!="<<r.children_.size()<<endl;
       if (l.children_.size() != r.children_.size()) return false;
       for (uint i=0; i<l.children_.size(); ++i)
         if (l.child(i) != r.child(i)) return false;
@@ -150,6 +150,7 @@ namespace test {
     inline bool
     operator== (Node const& l, Node const& r)
     {
+      if (TOGZ && l.id_ != r.id_) cout << "####### mismatch at "<<l.id_<<"=!="<<r.id_<<endl;
       return l.id_ == r.id_
           && have_equivalent_children(l,r);
     }
@@ -229,6 +230,7 @@ namespace test {
                     // visitation continues with children below this level
                     path_.resize(level);
                     path_.push_back(nextNode);
+                    cout << "-----fork-at-"<<level<<" --- parent="<<parent->id_<<" new-child="<<nextNode->id_<<" ("<<nextNode->children_.size()<<")"<<endl;
                     return (level - refLevel) + 1;
                   }
               }
@@ -238,8 +240,9 @@ namespace test {
             // --> start new tree path at root
             path_.clear();
             path_.push_back(nextNode);
-            return 0; // by convention, here the root is an implicitly pre-existing context
-          }
+                    cout << "-----new-path-child="<<nextNode->id_<<" ("<<nextNode->children_.size()<<")"<<endl;
+            return (0 - refLevel) + 1;
+          } // by convention, root is an implicitly pre-existing context at level 0
       };
     
     
@@ -263,8 +266,8 @@ namespace test {
                 struct Builder
                   {
                     Builder (Node& startPoint)
-                      : parent(&startPoint)
-                      , current(0)
+                      : parent(NULL)
+                      , current(&startPoint)
                       { }
                     
                     void
@@ -276,18 +279,21 @@ namespace test {
                             if (direction < 0)
                               {
                                 treeVisitation->orientation += 1;
+                                cout << "Node "<<treeVisitation->id<<" : ^"<<endl;
                                 return;
                               }
                             else
                             if (direction > 0)
                               {
                                 treeVisitation->orientation -= 1;
+                                cout << "Node "<<treeVisitation->id<<" : V"<<endl;
                                 Node& refPoint = startChildTransaction();
                                 populateBy (treeVisitation);
                                 commitChildTransaction(refPoint);
                               }
                             else
                               {
+                                cout << "Node "<<treeVisitation->id<<" : ++>"<<endl;
                                 addNode (treeVisitation->id);
                                 ++treeVisitation;
                               }}}
@@ -365,8 +371,28 @@ namespace test {
           
           TreeRebuilder reconstructed (depthFirst (AddressExposingIter<Node::ChildSeq>(eachElm (testWood))) >>= exploreChildren);
           
-          cout << reconstructed.children_.size() << "=?=" << testWood.size();
+          cout << "total children "<<nextChildID-1<<endl;
+          cout << reconstructed.children_.size() << "=?=" << testWood.size() <<endl;
+          if (reconstructed.children_ != testWood)
+            {
+              cout << "Aiiieeee!"<<endl;
+              cout <<"orig:"<<endl;
+              dump_tree(testWood);
+              cout <<"reco:"<<endl;
+              dump_tree(reconstructed.children_);
+              TOGZ = true;
+            }
           CHECK (reconstructed.children_ == testWood);
+        }
+      
+      static void
+      dump_tree (Node::Children const& chi)
+        {
+          for (uint i=0; i<chi.size(); ++i)
+            {
+              cout << "Node-"<<chi[i].id_<<" ("<<chi[i].children_.size()<<")"<<endl;
+              dump_tree (chi[i].children_);
+            }
         }
       
     };
