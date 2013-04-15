@@ -22,90 +22,78 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/util.hpp"
-//#include "lib/util-foreach.hpp"
 
 #include "lib/hierarchy-orientation-indicator.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/itertools.hpp"
+#include "lib/util.hpp"
 
-//#include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
-#include <iostream>  //////////////////////////////TODO
 #include <tr1/functional>
 #include <string>
 #include <vector>
 #include <cstdlib>
 
-//using boost::lexical_cast;
-using util::contains;
-using std::string;
-using util::isnil;
-using std::cout;
-using std::endl;
 
 namespace lib {
 namespace test {
   
   namespace { // test fixture: a random Tree to navigate...
     
-    namespace error=lumiera::error;
-    
     using std::rand;
-//  using std::vector;
-    using std::tr1::ref;
     using std::tr1::function;
-    using lib::IterStateWrapper;
     using lib::transformIterator;
+    using lib::iter_stl::eachAddress;
+    using util::contains;
+    using util::max;
     
-    const uint MAX_CHILDREN(5);
-    const double CHILD_PROBABILITY(0.45);
-    
-    const uint CHILDREN_SEED(50);
+    /* -- size of the test tree ---- */
+    const uint MAX_CHILDREN_CNT(5);            // children per Node (5 means 0 to 4 children)
+    const double CHILD_PROBABILITY(0.45);      // probability for a Node to have any children
+    const uint TEST_SEQUENCE_LENGTH(50);       // test uses a sequence of Node trees
+                                               // 5 - 45% - 50  produce roughly 1000 Nodes and tree depths of about 12
     uint nextChildID(1);
     
+    
     /**
-     * pick a random child count below #MAX_CHILDREN
+     * pick a random child count below #MAX_CHILDREN_CNT
      * with a probability to get any count above zero
      * as defined by CHILD_PROBABILITY
      */
     inline uint
     pick_random_count()
     {
-      uint bottom((1.0/CHILD_PROBABILITY - 1) * MAX_CHILDREN);
-      uint limit = bottom + MAX_CHILDREN;
+      uint bottom((1.0/CHILD_PROBABILITY - 1) * MAX_CHILDREN_CNT);
+      uint limit = bottom + MAX_CHILDREN_CNT;
       ASSERT (0 < bottom);
       ASSERT (bottom < limit);
       
       int cnt = (rand() % limit) - bottom;
-      return MAX (0, cnt); 
+      return max(0, cnt); 
     }
     
-    
+    /** (sub)tree of test data */
     struct Node
       : boost::equality_comparable<Node>
       {
         typedef std::vector<Node> Children;
-        typedef RangeIter<Children::iterator> ChildSeq;
         
         int id_;
         Children children_;
         
-        Node(int i)
+        
+        Node(int i)  ///< build node explicitly without children
           : id_(i)
           { }
         
-        Node()
+        
+        Node()  ///<  build a random test subtree
           : id_(nextChildID++)
           {
             uint c = pick_random_count();
-            cout << "++-----Node-"<<id_<<" ("<<c<<")"<<endl;
             for (uint j=0; j<c; ++j)  // populate with c random children
-              {
               children_.push_back(Node());
-              cout << "  -++-----"<<id_<<" +-child-"<<children_.back().id_<<endl;
-              }
           }
         
         Node const&
@@ -113,12 +101,6 @@ namespace test {
           {
             REQUIRE (i < children_.size());
             return children_[i];
-          }
-        
-        ChildSeq
-        childSequence()
-          {
-            return ChildSeq (children_.begin(), children_.end());
           }
         
         bool
@@ -135,12 +117,10 @@ namespace test {
           }
       };
     
-    bool TOGZ(false);
-      
+    
     inline bool
     have_equivalent_children (Node const& l, Node const& r)
     {
-      if (TOGZ && l.children_.size() != r.children_.size()) cout << "####### mismatch at Node-"<<l.id_<<": "<<l.children_.size()<<"=!="<<r.children_.size()<<endl;
       if (l.children_.size() != r.children_.size()) return false;
       for (uint i=0; i<l.children_.size(); ++i)
         if (l.child(i) != r.child(i)) return false;
@@ -150,7 +130,6 @@ namespace test {
     inline bool
     operator== (Node const& l, Node const& r)
     {
-      if (TOGZ && l.id_ != r.id_) cout << "####### mismatch at "<<l.id_<<"=!="<<r.id_<<endl;
       return l.id_ == r.id_
           && have_equivalent_children(l,r);
     }
@@ -163,11 +142,10 @@ namespace test {
      * Function to generate a depth-first tree visitation
      */
     NodeSeq
-    exploreChildren (Node* ref)
+    exploreChildren (Node* node)
     {
-      Node& node(*ref);
       NodeSeq children_to_visit;
-      build(children_to_visit).usingSequence (AddressExposingIter<Node::ChildSeq>(node.childSequence()));
+      build(children_to_visit).usingSequence (eachAddress (node->children_));
       return children_to_visit;
     }
     
@@ -203,6 +181,10 @@ namespace test {
       public:
         // using default ctor and copy operations
         
+        static function<VisitationData(Node*)>
+        create () { return NodeVisitor(); }
+        
+        
         VisitationData
         operator() (Node* node)
           {
@@ -230,7 +212,6 @@ namespace test {
                     // visitation continues with children below this level
                     path_.resize(level);
                     path_.push_back(nextNode);
-                    cout << "-----fork-at-"<<level<<" --- parent="<<parent->id_<<" new-child="<<nextNode->id_<<" ("<<nextNode->children_.size()<<")"<<endl;
                     return (level - refLevel) + 1;
                   }
               }
@@ -240,13 +221,20 @@ namespace test {
             // --> start new tree path at root
             path_.clear();
             path_.push_back(nextNode);
-                    cout << "-----new-path-child="<<nextNode->id_<<" ("<<nextNode->children_.size()<<")"<<endl;
             return (0 - refLevel) + 1;
           } // by convention, root is an implicitly pre-existing context at level 0
       };
     
     
-    
+    /**
+     * the core of this test: rebuilding a tree
+     * based on visitation data, including the \em orientation
+     * of the visitation path (up, down, siblings). After construction,
+     * the embedded #children_ will reflect the original sequence as
+     * described by the given treeTraversal.
+     * @remarks this is a blueprint for the scheduler interface,
+     *          which accepts a sequence of jobs with dependencies.
+     */
     struct TreeRebuilder
       : Node
       {
@@ -255,7 +243,7 @@ namespace test {
           : Node(0)
           {
             populate (transformIterator (treeTraversal, 
-                                         function<VisitationData(Node*)>(NodeVisitor())));
+                                         NodeVisitor::create()));
           }
         
       private:
@@ -266,8 +254,8 @@ namespace test {
                 struct Builder
                   {
                     Builder (Node& startPoint)
-                      : parent(NULL)
-                      , current(&startPoint)
+                      : parent_(NULL)
+                      , current_(&startPoint)
                       { }
                     
                     void
@@ -279,49 +267,46 @@ namespace test {
                             if (direction < 0)
                               {
                                 treeVisitation->orientation += 1;
-                                cout << "Node "<<treeVisitation->id<<" : ^"<<endl;
                                 return;
                               }
                             else
                             if (direction > 0)
                               {
                                 treeVisitation->orientation -= 1;
-                                cout << "Node "<<treeVisitation->id<<" : V"<<endl;
                                 Node& refPoint = startChildTransaction();
                                 populateBy (treeVisitation);
                                 commitChildTransaction(refPoint);
                               }
                             else
                               {
-                                cout << "Node "<<treeVisitation->id<<" : ++>"<<endl;
                                 addNode (treeVisitation->id);
                                 ++treeVisitation;
                               }}}
                       
                   private:
-                    Node* parent;
-                    Node* current;
+                    Node* parent_;
+                    Node* current_;
                     
                     void
                     addNode (int id)
                       {
-                        current = & parent->makeChild(id);
+                        current_ = & parent_->makeChild(id);
                       }
                     
                     Node&
                     startChildTransaction()
                       {
-                        Node& oldRefPoint (*parent);
-                        ASSERT (current);
-                        parent = current;  // set new ref point
+                        Node& oldRefPoint (*parent_);
+                        ASSERT (current_);
+                        parent_ = current_;  // set new ref point
                         return oldRefPoint;
                       }
                     
                     void
                     commitChildTransaction(Node& refPoint)
                       {
-                        parent = &refPoint;
-                        current = parent;
+                        parent_ = &refPoint;
+                        current_ = parent_;
                       }
                   };
             
@@ -329,7 +314,6 @@ namespace test {
             Builder builder(*this); // pre-existing implicit root context
             builder.populateBy (treeVisitation);
           }
-        
       };
     
   
@@ -340,11 +324,11 @@ namespace test {
   
   
   /***************************************************************************
-   * @test cover various detail aspects regarding
-   *       - weakness of 
+   * @test describing and rebuilding a tree structure
+   *       while visiting the tree in depth first order.
    *       
-   * @see HashIndexed_test
    * @see HierarchyOrientationIndicator
+   * @see DispatcherInterface_test
    */
   class HierarchyOrientationIndicator_test : public Test
     {
@@ -354,45 +338,25 @@ namespace test {
           demonstrate_tree_rebuilding ();
         }
       
-      /** @test demonstrate a serious weakness of
-       * When...
+      /** @test demonstrate how a Node tree structure can be rebuilt
+       * just based on the visitation sequence of an original tree.
+       * This visitation captures the local data of the Node (here the ID)
+       * and the orientation of the visitation path (down, next sibling, up)
        * 
-       * This problem is especially dangerous when...
+       * This is a demonstration and blueprint for constructing the scheduler interface.
+       * The Scheduler accepts a series of new jobs, but jobs may depend on each other,
+       * and the jobs are created while exploring the dependencies in the render engine's
+       * node graph (low-level-model).
        */
       void demonstrate_tree_rebuilding ( )
         {
           Node::Children testWood;
-          for (uint i=0; i < CHILDREN_SEED; ++i)
+          for (uint i=0; i < TEST_SEQUENCE_LENGTH; ++i)
             testWood.push_back(Node());
           
-          using iter_stl::eachElm;
-          using lib::AddressExposingIter;
-
+          TreeRebuilder reconstructed (depthFirst (eachAddress (testWood)) >>= exploreChildren);
           
-          TreeRebuilder reconstructed (depthFirst (AddressExposingIter<Node::ChildSeq>(eachElm (testWood))) >>= exploreChildren);
-          
-          cout << "total children "<<nextChildID-1<<endl;
-          cout << reconstructed.children_.size() << "=?=" << testWood.size() <<endl;
-          if (reconstructed.children_ != testWood)
-            {
-              cout << "Aiiieeee!"<<endl;
-              cout <<"orig:"<<endl;
-              dump_tree(testWood);
-              cout <<"reco:"<<endl;
-              dump_tree(reconstructed.children_);
-              TOGZ = true;
-            }
           CHECK (reconstructed.children_ == testWood);
-        }
-      
-      static void
-      dump_tree (Node::Children const& chi)
-        {
-          for (uint i=0; i<chi.size(); ++i)
-            {
-              cout << "Node-"<<chi[i].id_<<" ("<<chi[i].children_.size()<<")"<<endl;
-              dump_tree (chi[i].children_);
-            }
         }
       
     };
