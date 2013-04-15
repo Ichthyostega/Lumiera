@@ -341,7 +341,7 @@ namespace test{
           // since we're exposing the pointer as value, the solution is to add
           // the const on the immediately wrapped iterator type 
           typedef vector<int>::const_iterator     ConstRawIter;
-          typedef ConstIter<Range>                ConstRange;
+          typedef RangeIter<ConstRawIter>         ConstRange;
           typedef AddressExposingIter<ConstRange> ConstAddrIter;
           
           ConstAddrIter iic(ConstRange(Range(numbz.begin(), numbz.end())));

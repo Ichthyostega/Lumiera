@@ -527,8 +527,6 @@ namespace lib {
       typedef CON Container;
       typedef TY  ElemType;
       
-      typedef typename RemovePtr<TY>::Type ValueType;
-      
       template<class T2>
       struct SimilarIter  ///< rebind to a similarly structured Iterator with value type T2
         {
@@ -706,15 +704,11 @@ namespace lib {
   class AddressExposingIter
     : public lib::BoolCheckable<AddressExposingIter<IT> >
     {
-    public:
-      typedef typename IT::value_type ** pointer;
-      typedef typename IT::value_type *& reference;
-      typedef typename IT::value_type *  value_type;
+      typedef typename IT::pointer _Ptr;
       
-    private:
       IT i_;  ///< nested source iterator
       
-      mutable value_type currPtr_;
+      mutable _Ptr currPtr_;
       
       
       void
@@ -728,6 +722,11 @@ namespace lib {
       
       
     public:
+      typedef typename IT::pointer const* pointer;
+      typedef typename IT::pointer const& reference;
+      typedef typename IT::pointer const  value_type;
+      
+      
       /** AddressExposingIter is always created 
        *  by wrapping an existing iterator.
        */
@@ -755,7 +754,7 @@ namespace lib {
           return currPtr_;
         }
       
-      pointer
+      _Ptr
       operator->() const
         {
           return currPtr_;
