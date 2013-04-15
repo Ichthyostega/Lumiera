@@ -80,7 +80,7 @@ namespace lumiera {
   {
     string extendedConfigSearchPath = AppState::instance().fetchSetupValue (KEY_CONFIG_PATH);
     lumiera_config_init (cStr(extendedConfigSearchPath));
-    INFO (config, "Config system ready.");
+    TRACE (config, "Config system ready.");
   }
   
   
