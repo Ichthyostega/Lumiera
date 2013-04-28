@@ -333,9 +333,11 @@ namespace test {
   class HierarchyOrientationIndicator_test : public Test
     {
       
-      virtual void run (Arg)
+      virtual void
+      run (Arg)
         {
-          demonstrate_tree_rebuilding ();
+          demonstrate_tree_rebuilding();
+          verify_OrientationIndicator();
         }
       
       /** @test demonstrate how a Node tree structure can be rebuilt
@@ -348,17 +350,55 @@ namespace test {
        * and the jobs are created while exploring the dependencies in the render engine's
        * node graph (low-level-model).
        */
-      void demonstrate_tree_rebuilding ( )
+      void
+      demonstrate_tree_rebuilding ()
         {
           Node::Children testWood;
           for (uint i=0; i < TEST_SEQUENCE_LENGTH; ++i)
             testWood.push_back(Node());
           
-          TreeRebuilder reconstructed (depthFirst (eachAddress (testWood)) >>= exploreChildren);
+          TreeRebuilder reconstructed (depthFirst (eachAddress(testWood)) >>= exploreChildren);
           
           CHECK (reconstructed.children_ == testWood);
         }
       
+      
+      void
+      verify_OrientationIndicator ()
+        {
+          OrientationIndicator orient;
+          
+          CHECK (0 == orient);
+          ++orient;
+          CHECK (+1 == orient);
+          ----orient;
+          CHECK (-1 == orient);
+          
+          orient.markRefLevel (2);
+          CHECK (+3 == orient);
+          
+          orient.markRefLevel (2);
+          CHECK ( 0 == orient);
+          
+          orient.markRefLevel (3);
+          CHECK (+1 == orient);
+          
+          orient.markRefLevel (4);
+          orient.markRefLevel (5);
+          CHECK (+1 == orient);
+          
+          orient.markRefLevel (2);
+          CHECK (-3 == orient);
+          
+          orient += 200;
+          orient -= 190;
+          CHECK (+13 == orient);
+          
+          OrientationIndicator o2(orient);
+          o2.markRefLevel(0);
+          CHECK (+3 == o2);
+          CHECK (+13 == orient);
+        }
     };
   
   /** Register this test class... */

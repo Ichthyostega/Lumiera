@@ -30,6 +30,7 @@
 #include "proc/engine/frame-coord.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
+#include "lib/hierarchy-orientation-indicator.hpp"
 #include "lib/linked-elements.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
@@ -46,6 +47,7 @@ namespace engine {
 //using lib::time::FSecs;
 //using lib::time::Time;
 using lib::LinkedElements;
+using lib::OrientationIndicator;
 using util::isnil;
 //  
 //class ExitNode;
@@ -154,6 +156,7 @@ using util::isnil;
       typedef std::stack<SubTicketSeq> SubTicketStack;               //////////////////////////TODO use a custom container to avoid heap allocations
       
       SubTicketStack toExplore_;
+      OrientationIndicator orientation_;
       
     public:
       ExplorationState() { }
@@ -171,6 +174,13 @@ using util::isnil;
       empty()  const
         {
           return toExplore_.empty();
+        }
+      
+      
+      void
+      markTreeLocation()
+        {
+          UNIMPLEMENTED ("establish tree relation to previous point");
         }
       
       
@@ -193,7 +203,7 @@ using util::isnil;
       
       
       void
-      push (ExplorationState subExploration)
+      push (ExplorationState subExploration)                 // note: passing deliberately by value
         {
           if (subExploration.empty()) return;
           

@@ -37,6 +37,22 @@
  ** - #expandPrerequisites(JobPlanning cons&) is the operation to explore further prerequisite Jobs
  ** - PlanningStepGenerator yields the underlying "master beat": a sequence of frame locations to be planned
  ** 
+ ** \par how the PlanningState (sequence) is advanced
+ ** PlanningState is an iterator, exposing a sequence of JobPlanning elements. On the implementation level,
+ ** there is always just a single JobPlanning element, which represents the \em current element; this element
+ ** lives as "state core" within the PlanningState object. Advancing to the next JobPlanning element (i.e. to
+ ** consider the next job or prerequisite job to be planned for scheduling) is performed through the iteration
+ ** control API exposed by JobPlanning (the free functions \c checkPoint, \c yield and \c iterNext. Actually,
+ ** these functions are invoked through the depth-first tree exploration performed by JobPlaningSequence.
+ ** The implementation of these invocations can be found within the IterExplorer strategy
+ ** lib::iter_explorer::RecursiveSelfIntegration. The net result is
+ ** - the current element is always accessed through \c yield
+ ** - advancing to the next element happens \em either
+ **   
+ **   - by invoking \c iterNext (when processing a sequence of sibling job prerequisites)
+ **   - by invoking \c integrate (when starting to explore the next level of children) 
+ ** 
+ ** 
  ** @see DispatcherInterface_test simplified usage examples
  ** @see JobTicket
  ** @see Dispatcher
@@ -151,6 +167,7 @@ namespace engine {
             existingPlan.point_to_calculate_ = newStartingPoint.point_to_calculate_;
           }
         existingPlan.plannedOperations_.push (newStartingPoint.plannedOperations_);
+        existingPlan.plannedOperations_.markTreeLocation();
       }
       
       
@@ -173,6 +190,7 @@ namespace engine {
       iterNext (JobPlanning & plan)
       {
         plan.plannedOperations_.pullNext();
+        plan.plannedOperations_.markTreeLocation();
       }
     };
   
@@ -208,7 +226,7 @@ namespace engine {
       
       /** attach and integrate the given planning details into this planning state.
        *  Actually the evaluation proceeds depth-first with the other state,
-       *  returning later on to the current position for further evaluation */
+       *  returning to the current position later for further evaluation */
       PlanningState &
       wrapping (JobPlanning const& startingPoint)
         {
@@ -366,7 +384,6 @@ namespace engine {
   
   typedef lib::IterExplorer<PlanningStepGenerator
                            ,lib::iter_explorer::RecursiveSelfIntegration>      JobPlanningChunkStartPoint;
-  
   typedef JobPlanningChunkStartPoint::FlatMapped<SIG_expandPrerequisites>::Type  ExpandedPlanningSequence;
   
   
