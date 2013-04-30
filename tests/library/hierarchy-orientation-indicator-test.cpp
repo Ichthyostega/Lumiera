@@ -326,6 +326,9 @@ namespace test {
   /***************************************************************************
    * @test describing and rebuilding a tree structure
    *       while visiting the tree in depth first order.
+   *       To keep track of the level changes during that navigation,
+   *       we use an indicator to represent the relative level difference
+   *       compared to the previously visited node in the tree.
    *       
    * @see HierarchyOrientationIndicator
    * @see DispatcherInterface_test
@@ -375,7 +378,7 @@ namespace test {
           CHECK (-1 == orient);
           
           orient.markRefLevel (2);
-          CHECK (+3 == orient);
+          CHECK (+2 == orient);
           
           orient.markRefLevel (2);
           CHECK ( 0 == orient);
@@ -392,14 +395,15 @@ namespace test {
           
           orient += 200;
           orient -= 190;
-          CHECK (+13 == orient);
+          CHECK (+7 == orient);
           
           OrientationIndicator o2(orient);
           o2.markRefLevel(0);
-          CHECK (+3 == o2);
-          CHECK (+13 == orient);
+          CHECK (-2 == o2);
+          CHECK (+7 == orient);
         }
     };
+  
   
   /** Register this test class... */
   LAUNCHER(HierarchyOrientationIndicator_test, "unit common");

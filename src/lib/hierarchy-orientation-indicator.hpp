@@ -43,6 +43,8 @@
 #define HIERARCHY_ORIENTATION_INDICATOR_H
 
 
+#include <cstddef>
+#include <limits>
 #include <string>
 
 namespace lib {
@@ -52,39 +54,44 @@ namespace lib {
   
   class OrientationIndicator
     {
-      string nothing_;
-
+      size_t refLevel_;
+      ptrdiff_t offset_;
+      
     public:
       OrientationIndicator()
-        : nothing_ ()
-        {
-        }
+        : refLevel_(0)
+        , offset_(0)
+        { }
       
       // using default copy/assignment
       
-      operator int()  const
+      operator ptrdiff_t()  const
         {
-          UNIMPLEMENTED ("tbw");
+          return offset_;
         }
       
-      /* == X interface for == */
-
+      
+      
       void
       markRefLevel (size_t newRefLevel)
         {
-          UNIMPLEMENTED ("tbw");
+          REQUIRE (newRefLevel < size_t(std::numeric_limits<ptrdiff_t>::max()) );
+          
+          offset_ = newRefLevel - refLevel_;
+          refLevel_ = newRefLevel;
         }
       
       OrientationIndicator&
       operator+= (int adj)
         {
-          UNIMPLEMENTED ("tbw");
+          offset_ += adj;
+          return *this;
         }
       
       OrientationIndicator&
       operator-= (int adj)
         {
-          this->operator +=(-adj);
+          offset_ -= adj;
           return *this;
         }
       
