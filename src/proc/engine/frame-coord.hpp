@@ -46,22 +46,22 @@ namespace engine {
    * A frame render job can be characterised by
    * - the nominal (timeline) time of the frame
    * - the corresponding frame-number
-   * - the real wall-clock time of expected delivery//////////////TODO : might be handy, but not sure if this information is substantial here
-   * - timing constraints (e.g. latency to observe) //////////////TODO : not clear if we repeat this information here
-   * - the actual node to pull data from
-   * - the segment holding that node                //////////////TODO : is this information really required??
+   * - a real wall-clock time deadline for delivery
+   * - the actual node to pull data from, defined indirectly through
+   *   ModelPort and channel number (as used within the Segmentation)
    * 
    * @remarks consider frame coordinates being "boiled down" to the actual values.
    *          There is no reference to any kind of time grid (or similar session internals).
    * 
    * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
    */
-  class FrameCoord
+  struct FrameCoord
     {
       
-    public:
       TimeVar absoluteNominalTime;
       int64_t absoluteFrameNumber;
+      
+      TimeVar absoluteRealDeadline;
       
       ModelPort modelPort;
       uint      channelNr;

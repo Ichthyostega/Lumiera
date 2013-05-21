@@ -2190,7 +2190,7 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="201302110107" tags="def Rendering">
+<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="201305202308" tags="def Rendering" changecount="2">
 <pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
 The dispatcher works together with the job ticket(s) and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the backend, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
@@ -2218,12 +2218,12 @@ The frame dispatch step joins and combines multiple time axes. Through the proce
 These complex relationships are reflected in the invocation structure leading to an individual frame job. The [[calculation stream|CalcStream]] provides the [[render/playback timings|Timings]], while the actual implementation of the dispatcher, backed by the [[Fixture]] and thus linked to the session models, gets to relate the effective nominal time, the frame number, the exit node and the //processing function.//
 
 !!!controlling the planning process
-New render jobs are planned as an ongoing process, proceeding in chunks of evaluation. Typically, to calculate a single frame, several jobs are necessary -- to find out which and how, we'll have to investigate the model structures corresponding to this frame, to find out about the tree or prerequisites. Basically, the planning for each frame is seeded by establishing the nominal time position, in accordance to the current [[mode of playback|NonLinearPlayback]]. Conducted by the [[play controller|PlayController]], there is a strategy to define the precise way of spacing and sequence of frames to be calculated -- yet for the actual process of evaluating the prerequisites and planning the jobs, these details are irrelevant and hidden behind the dispatcher interface, as is most of the model and context information. The planning operation just produces a sequence of job definitions, which can then be associated with real time (wall clock) deadlines for delivery. The relation between the spacing and progression of the nominal frame time (as controlled by the playback mode) and the actual sequence of deadlines (which is more or less dictated by the output device) is rather loose and established anew for each planning chunk, relying on the ''time anchor''. The latter in turn uses the [[timings record|Timings]] of the [[calculation stream|CalcStream]] currently being planned, and these timings act as a strategy to represent the underlying timing grid and playback modalities.
+New render jobs are planned as an ongoing process, proceeding in chunks of evaluation. Typically, to calculate a single frame, several jobs are necessary -- to find out which and how, we'll have to investigate the model structures corresponding to this frame, leading to tree of prerequisites. Basically, the planning for each frame is seeded by establishing the nominal time position, in accordance to the current [[mode of playback|NonLinearPlayback]]. Conducted by the [[play controller|PlayController]], there is a strategy to define the precise way of spacing and sequence of frames to be calculated -- yet for the actual process of evaluating the prerequisites and planning the jobs, these details are irrelevant and hidden behind the dispatcher interface, as is most of the model and context information. The planning operation just produces a sequence of job definitions, which can then be associated with real time (wall clock) deadlines for delivery. The relation between the spacing and progression of the nominal frame time (as controlled by the playback mode) and the actual sequence of deadlines (which is more or less dictated by the output device) is rather loose and established anew for each planning chunk, relying on the ''time anchor''. The latter in turn uses the [[timings record|Timings]] of the [[calculation stream|CalcStream]] currently being planned, and these timings act as a strategy to represent the underlying timing grid and playback modalities.
 
 While the sequence of frame jobs to be planned is possibly infinite, the actual evaluation is confined to the current planning chunk. At the end of planning such a chunk of jobs, an additional ''continuation job'' is included to re-invoke the planning function to prepare the next chunk of jobs. Terminating playback is equivalent to not including or not invoking this continuation job. Please note that planning proceeds independently for each [[Feed]] -- in Lumiera the //current playback position//&amp;nbsp; is just a conceptual projection of wall clock time to nominal time, yet there is no such thing like a synchronously proceeding &quot;Playhead&quot; 
 
 !!!producing actual jobs
-The JobTicket is created on demand, specialised for a single [[segment|Segmentation]] of the timeline and a single [[feed|Feed]] of data frames to be pulled from a ModelPort. Thus, in turn, this means that all frames and all channels within that realm will rely on the same job ticket -- which is a //higher order function,// a function producing another function: when provided with the actual channel number and the specific frame coordinates, the job ticket produces a [[concrete job definition|RenderJob]], which itself is a function to be invoked by the [[scheduler|Scheduler]] just in time.
+The JobTicket is created on demand, specialised for a single [[segment|Segmentation]] of the timeline and a single [[feed|Feed]] of data frames to be pulled from a ModelPort. Consequently this means that all frames and all channels within that realm will rely on the same job ticket -- which is a //higher order function,// a function producing another function: when provided with the actual channel number and the specific frame coordinates, the job ticket produces a [[concrete job definition|RenderJob]], which itself is a function to be invoked by the [[scheduler|Scheduler]] just in time.
 </pre>
 </div>
 <div title="GAVL" modifier="Ichthyostega" created="200809220251" tags="def">
@@ -3147,7 +3147,7 @@ some points to note:
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
 </pre>
 </div>
-<div title="NonLinearPlayback" modifier="Ichthyostega" created="201301132217" modified="201302081845" tags="def Player Rendering draft">
+<div title="NonLinearPlayback" modifier="Ichthyostega" created="201301132217" modified="201305200122" tags="def Player Rendering draft" changecount="1">
 <pre>The calculations for rendering and playback are designed with a base case in mind: calculating a linear sequence of frames consecutive in time.
 But there are several important modes of playback, which violate that assumption...
 * jump-to / skip
@@ -3184,8 +3184,8 @@ These non linear playback modes do pose some specific challenges on the overall 
 ;single stepping
 :this can be seen as application of paused mode: we'd schedule a single play-out job, as if resuming from paused state, but we re-enter paused state immediately
 ;reversed play direction
-:while basically trivial to implement, the challenge lies in possible naive implementation decisions assuming monotonic ascending frame times. Additionally, media decoders might need some hinting
-:reversed (and speed adjusted) sound playback is surprisingly tricky -- even the most simplistic solution foces us to insert an effect processor into the calculation path.
+:while basically trivial to implement, the challenge lies in possible naive implementation decisions assuming monotonic ascending frame times. Additionally, media decoders might need some hinting...
+:however, reversed (and speed adjusted) sound playback is surprisingly tricky -- even the most simplistic solution foces us to insert an effect processor into the calculation path.
 ;speed variations
 :the relation between nominal time and real wall clock time needs to include a //speed factor.//
 ;fast cueing
@@ -3222,13 +3222,13 @@ Drawing from this requirement analysis, we might identify some mandatory impleme
 :we need some structural devices actually to implement those non-standard modes of operation
 :* conditional prerequisites (prevent evaluation, re-evaluate later)
 :* special &quot;as available&quot; delivery, both for free-wheeling and background
-:* special way of cancelling jobs, which effectively re-schedules them into background.
+:* a special way of &quot;cancelling&quot; jobs, which effectively re-schedules them into background.
 :* a way for hinting the cache to store background frames with decreasing priority, thus ensuring the foremost availability of the first frames when picking up playback again
 ;for the __output sinks__:
 :on the receiver side, we need some support to generate smooth and error free output delivery
 :* automated detection of timing glitches, activating the discontinuity handling (&amp;raquo;de-click facility&amp;laquo;)
 :* low-level API for signalling discontinuity to the OutputSlot. This information pertains to the currently delivered frame -- this is necessary when this frame //is actually being delivered timely.//
-:* high-level API to switch any OutputSlot into &quot;frozen mode&quot;, disabling any further output, even in case of accidental delivery of further data by jobs currently in progression.
+:* high-level API to switch any ~OutputSlot into &quot;frozen mode&quot;, disabling any further output, even in case of accidental delivery of further data by jobs currently in progression.
 :* ability to detect and signal overload of the receiver, either through blocking or for flow-control
 </pre>
 </div>
@@ -7477,7 +7477,7 @@ Actually, what the GUI creates and uses is the //view// of a given timeline. Thi
 To complement this possibilities, I'd propose to give the //timeline view// the possibility to be re-linked to a sub-sequence. This way, it would stay connected to the main play control, but at the same time show a sub-sequence //in the way it will be treated as  embedded// within the top-level sequence. This would be the default operation mode when a meta-clip is opened (and showed in a separate tab with such a linked timeline view). The reason for this proposed handling is again to give the user the least surprising behaviour. Because, when &amp;mdash; on the contrary &amp;mdash; the sub-sequence would be opened as //separate timeline,// a different absolute time position and a different signal routing may result; doing such should be reserved for advanced use, e.g. when multiple editors cooperate on a single project and a sequence has to be prepared in isolation prior to being integrated in the global sequence (featuring the whole movie).
 </pre>
 </div>
-<div title="Timings" modifier="Ichthyostega" created="201202042240" modified="201301132100" tags="spec draft Rendering Player">
+<div title="Timings" modifier="Ichthyostega" created="201202042240" modified="201305202313" tags="spec draft Rendering Player" changecount="1">
 <pre>//Timing constraints of a render or playback process.//
 
 !constituents
@@ -7494,7 +7494,7 @@ note: still {{red{WIP as of 1/2013}}}
 
 !where are the timings definied?
 Timing constraint records are used at various places within the engine. Basically we need such a timings record for starting any kind of playback or render.
-The effective timings are established when //allocating an OutputSlot// -- based on the timings defined for the ModelPort  to //perform,// i.e. the global bus to render.</pre>
+The effective timings are established when //allocating an OutputSlot// -- based on the timings defined for the ModelPort  to be //performed,// i.e. the global bus to render.</pre>
 </div>
 <div title="Track" modifier="Ichthyostega" created="200801062320" modified="200911202133" tags="def design decision">
 <pre>Tracks are just a structure used to organize the Media Objects within the Sequence. Tracks are associated allways to a specific Sequence and the Tracks of an Sequence form a //tree.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.

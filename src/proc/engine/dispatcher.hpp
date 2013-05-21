@@ -80,6 +80,8 @@ namespace engine {
           
           /////TODO need storage for the continuation
           
+          /////////TODO somehow need to represent the dimensions of a "planning chunk"...
+          
           FrameCoord relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset =0);
           
           JobBuilder& establishNextJobs (TimeAnchor refPoint);

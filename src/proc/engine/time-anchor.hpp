@@ -61,7 +61,7 @@ namespace engine {
    * of some given Timings, with an actual wall clock time. Due to the usage situation,
    * the TimeAnchor takes on the secondary meaning of a breaking point; everything \em before
    * this anchor point has been handled during the preceding invocations of an ongoing chunk wise
-   * partial evaluation of the timeline to play back.
+   * partial evaluation of the timeline to be "performed" within this play process.
    * - the #timings_ serve as an abstracted grid (actually, the implementation
    *   does refer to a grid defined somewhere within the session)
    * - the actual #anchorPoint_ is defined as frame number relative to this grid
@@ -74,7 +74,7 @@ namespace engine {
    *          of these planning operations is likely to be specific for a given stream.
    *          The relation to real time is established anew at each time anchor, so any
    *          adjustments to the engine latency will be reflected in the planned job's
-   *          deadlines. Actually, the embedded Timings record is responsible for these
+   *          deadlines. Actually, the embedded Timings record is responsible for this
    *          timing calculation and for fetching the current EngineConfig.
    * 
    * @see Dispatcher
@@ -169,6 +169,7 @@ namespace engine {
       
       Offset
       remainingRealTimeFor (FrameCoord plannedFrame)
+      //////////////////////////////////////////////////TODO break this into two sensible operations, using the deadline from the FrameCoord
         {
           int64_t frameOffset = plannedFrame.absoluteFrameNumber - anchorPoint_;
           return Offset(this->relatedRealTime_
