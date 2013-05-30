@@ -29,6 +29,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 
+#include <limits>
 
 
 namespace proc {
@@ -67,10 +68,14 @@ namespace engine {
       uint      channelNr;
       
       
+      /** build an \em undefined frame location */
       FrameCoord()
-        {
-          UNIMPLEMENTED ("anything regarding the Node Invocation");
-        }
+        : absoluteNominalTime(Time::ANYTIME)
+        , absoluteFrameNumber(std::numeric_limits<int64_t>::max())
+        , absoluteNominalTime(Time::NEVER)
+        , modelPort() // unconnected
+        , channelNr(0)
+        { }
       
       // using default copy operations
       
@@ -79,7 +84,7 @@ namespace engine {
       bool
       isDefined()  const
         {
-          return absoluteNominalTime != Time::NEVER;
+          return absoluteRealDeadline != Time::NEVER;
         }
     };
   

@@ -27,6 +27,7 @@
 
 
 #include "lib/error.hpp"
+#include "proc/play/timings.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
@@ -69,11 +70,11 @@ namespace engine{
    * A calculation stream groups and abstracts a series of
    * calculation jobs, delivering frames into the configured
    * OutputSlot in a timely fashion. Behind the scenes, this
-   * gets translated into several jobs enqueued with the
-   * scheduler in the backend layer. The calculation stream
-   * implementation cares to create and configure these
-   * jobs and to manage the necessary dependencies and
-   * callbacks.
+   * "stream of calculations" will be translated into several
+   * jobs enqueued with the scheduler in the backend layer.
+   * The implementation of the \link Dispatcher frame dispatch
+   * step \endlink cares to create and configure these jobs
+   * and to manage the necessary dependencies and callbacks.
    * 
    * Regarding the implementation, a CalcStream is an const
    * value object holding the metadata necessary to manage
@@ -85,10 +86,11 @@ namespace engine{
   class CalcStream
     {
       RenderEnvironmentClosure* env_;
+      play::Timings timings_;
       
     protected:
-      CalcStream (RenderEnvironmentClosure& engine)
-        : env_(&engine)
+      CalcStream (RenderEnvironmentClosure& abstractEngine)
+        : env_(&abstractEngine)
         { }
       
       friend class EngineService;
@@ -97,10 +99,12 @@ namespace engine{
     public:
       CalcStream()
         : env_(0)
+        , timings_()
         { }
       
       CalcStream (CalcStream const& o)
         : env_(o.env_)
+        , timings_(o.timings_)
         { }
       
      ~CalcStream() { }

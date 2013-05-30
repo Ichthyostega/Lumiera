@@ -293,13 +293,20 @@ namespace engine {
     public:
       
       JobTicket&
-      getJobTicketFor (FrameCoord location)
+      getJobTicketFor (FrameCoord const& location)
         {
           return accessJobTicket (location.modelPort, location.absoluteNominalTime);
         }
       
+      bool canContinue (FrameCoord const& location)
+        {
+          return seamlessNextFrame (location.absoluteFrameNumber,
+                                    location.modelPort);
+        }
+      
     protected:
-      virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
+      virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)  =0;
+      virtual bool       seamlessNextFrame (int64_t, ModelPort port)         =0;
     };
   
   
@@ -357,8 +364,9 @@ namespace engine {
       friend bool
       checkPoint (PlanningStepGenerator const& gen)
       {
-        return gen.currentLocation_.isDefined();   // locationGenrator may signal end-of playback this way
-      }
+        return gen.currentLocation_.isDefined();
+      }     // might indicate end of this planning chunk (or of playback altogether)
+      
       
       friend JobPlanning&
       yield (PlanningStepGenerator const& gen)
@@ -367,12 +375,20 @@ namespace engine {
         return unConst(gen).nextEvaluation_;
       }
       
+      
       friend void
       iterNext (PlanningStepGenerator & gen)
       {
-        gen.currentLocation_ = gen.locationGenerator_->getNextFrame (gen.currentLocation_);
-        if (checkPoint (gen))
-          gen.use_current_location_as_starting_point_for_planning();
+        if (gen.locationGenerator_->canContinue (gen.currentLocation_))
+          {
+            gen.currentLocation_ = gen.locationGenerator_->getNextFrame (gen.currentLocation_);
+            gen.use_current_location_as_starting_point_for_planning();
+            ENSURE (checkPoint (gen));
+          }
+        else 
+          {  // indicate end-of playback or a jump to another playback position
+            gen.currentLocation_ = FrameCoord();
+          }
       }
     };
   

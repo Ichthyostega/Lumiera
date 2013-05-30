@@ -95,6 +95,12 @@ namespace test  {
             UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
           }
         
+        bool
+        seamlessNextFrame (int64_t, ModelPort port)
+          {
+            UNIMPLEMENTED ("determine when to finish a planning chunk");
+          }
+
         JobTicket&
         accessJobTicket (ModelPort, TimeValue nominalTime)
           {

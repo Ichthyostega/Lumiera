@@ -1795,7 +1795,7 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
-<div title="DesignPlayerSubsystem" modifier="Ichthyostega" created="201105220216" modified="201108141649" tags="Player design draft">
+<div title="DesignPlayerSubsystem" modifier="Ichthyostega" created="201105220216" modified="201305220140" tags="Player design draft" changecount="1">
 <pre>//Currently (5/2011) this page is used to collect and build up a coherent design for the player subsystem of Lumiera..//
 
 !Starting point
@@ -1819,11 +1819,17 @@ Reworking the dummy player into the [[Player subsystem|PlayService]] is a larger
 * the ~DisplayService needs to be generalised into an OutputManager interface
 * we need to introduce a new kind of StructAsset, the ViewerAsset.
 * then, of course, the PlayService interface needs to be created
+* several interfaces need to be shaped: the ''engine façade'' and a ''scheduler frontend''.
+* the realms of player and rendering are interconnected within the [[dispatch operation|FrameDispatcher]]
 * as a temporary soltion, a ''~DummyPlayConnection'' will be created hard-wired, within the ~DummyPlayer service. This dumy container is a test setup, explicitly creating a OutputManager implementation, a GeneratorMO, a GeneratorNode (thus omitting the not-yet-implemented Builder) and the corresponding ModelPort. This way, the ~DummyPlayer service can be changed to use the real PlayService for creating the dummy generated output data. It will then pass back the resulting PlayController to the existing GUI setup.
 
 The Method of pushing frames to the Viewer widget is changed fundamentally during that transition: while previously, in the PlayerDummy design study, the GUI opened a Display-façade interface -- now rather the GUI has to register an OutputSlot implementation with the global OutputManager. Such a registration requires an explicit deregistration on shutdown, and this can be made to block, until no further data will be delivered. Using this approach we hope to circumvent problems with occasional crashes on closing the application, due to dispatching frame output signals in the event thread while shutdown is already in progress.
 
 </pre>
+</div>
+<div title="DispatcherTables" creator="Ichthyostega" modifier="Ichthyostega" created="201305212334" tags="Player Rendering design draft" changecount="1">
+<pre>The Dispatcher Tables are hosted within the [[Segmentation]] and serve as a ''strategy'' governing the play process.
+For each [[calculation stream|CalcStream]] there is a concrete implementation of the [[dispatcher|FrameDispatcher]] interface, based on a specific configuration of dispatcher tables.</pre>
 </div>
 <div title="DisplayFacade" modifier="Ichthyostega" created="200902080703" modified="201201150238" tags="spec">
 <pre>LayerSeparationInterface provided by the GUI.
@@ -7477,7 +7483,7 @@ Actually, what the GUI creates and uses is the //view// of a given timeline. Thi
 To complement this possibilities, I'd propose to give the //timeline view// the possibility to be re-linked to a sub-sequence. This way, it would stay connected to the main play control, but at the same time show a sub-sequence //in the way it will be treated as  embedded// within the top-level sequence. This would be the default operation mode when a meta-clip is opened (and showed in a separate tab with such a linked timeline view). The reason for this proposed handling is again to give the user the least surprising behaviour. Because, when &amp;mdash; on the contrary &amp;mdash; the sub-sequence would be opened as //separate timeline,// a different absolute time position and a different signal routing may result; doing such should be reserved for advanced use, e.g. when multiple editors cooperate on a single project and a sequence has to be prepared in isolation prior to being integrated in the global sequence (featuring the whole movie).
 </pre>
 </div>
-<div title="Timings" modifier="Ichthyostega" created="201202042240" modified="201305202313" tags="spec draft Rendering Player" changecount="1">
+<div title="Timings" modifier="Ichthyostega" created="201202042240" modified="201305292208" tags="spec draft Rendering Player" changecount="10">
 <pre>//Timing constraints of a render or playback process.//
 
 !constituents
@@ -7486,9 +7492,11 @@ The Timings record is used at various places at the engine interface level, sinc
 ** the frame grid defines time origin and framerate
 ** additionally the grid translates nominal time into frame numbers
 * the Timings record provides information about latency -- both output latency and engine latency are exposed here
-* moreover, the basic link to real wall clock time is recorded here, by linking the grid origin to a specific real time.
 * indication of the service class or playback urgency is included, e.g. {{{ASAP, NICE, TIMEBOUND}}}
 * from the usage view the Timings record represents a //constraint// -- with the ability to specify additional constraining conditions
+
+!!!!role of the ~TimeAnchor
+While the timings define the nature of a specific playback feed, they omit the actual link to wall clock time. The latter is established and maintained during the planning process, which preceds in chunks of evaluation: each planning chunk is pinned to a specific real time deadline through the ''time anchor'' used as closure to define this planning chunk. Whenever a chunk of frames has been planned, a new time anchor is established and scheduled as a follow-up job to pick up the frame planning work.
 
 note: still {{red{WIP as of 1/2013}}}
 

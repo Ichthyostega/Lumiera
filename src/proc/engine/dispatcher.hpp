@@ -111,6 +111,17 @@ namespace engine {
       virtual FrameCoord locateRelative (FrameCoord, uint frameCountOffset)   =0;
       virtual FrameCoord locateRelative (TimeAnchor, uint frameCountOffset)   =0;     //////////TODO is this really an interface operation, or just a convenience shortcut?
       
+      virtual bool       seamlessNextFrame (int64_t, ModelPort port)          =0;
+
+      ////////TODO: API-1 = just get next frame, without limitations  .... CHECK
+      ////////TODO: API-2 = query limitation of planning chunk        .... CHECK
+      ////////TODO: API-3 = establish next chunk                      .... still WIP
+      
+      ////////TODO: Question: why not embedding the time anchor directly within the location generator??
+      ////////      Answer: no this would lead to a huge blob called "the dispatcher"
+      
+      ////////TODO: immediate point to consider:  the time anchor is responsible for the real timing calculations. But how to introduce the play strategy *here* ?
+      
       virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
     };
   
