@@ -52,28 +52,6 @@ using util::isnil;
 //  
 //class ExitNode;
   
-  /** 
-   * a job closure represents the execution context of a job.
-   * This allows us to enqueue simple job-"functions" with the scheduler.
-   * By virtue of the JobClosure-pointer, embedded into #lumiera_jobDefinition,
-   * the invocation of such a job may re-gain the full context, including the
-   * actual ProcNode to pull and further specifics, like the media channel.
-   */ 
-  class JobClosure
-    : public lumiera_jobClosure
-    {
-    public:
-      virtual ~JobClosure();     ///< this is an interface
-      
-      
-      virtual void invokeJobOperation (JobParameter parameter)  =0;
-      virtual void signalFailure      (JobParameter parameter)  =0;
-      
-      virtual JobKind getJobKind()  const                       =0;
-      virtual bool verify (Time nominalJobTime)  const          =0;
-    };
-  
-  
   
   /**
    * execution plan for pulling a specific exit node.

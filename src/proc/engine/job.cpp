@@ -57,6 +57,18 @@ namespace engine {
 //  using mobject::session::Effect;
   
   
+  
+  /**
+   * emit the VTable for JobClosure within this compilation unit,
+   * which is still part of the backend. The actual job implementation
+   * classes are defined in the Proc-Layer
+   */
+  JobClosure::~JobClosure() { }
+  
+  
+  
+  
+  
   /** @todo WIP-WIP 2/12  
    */
   void

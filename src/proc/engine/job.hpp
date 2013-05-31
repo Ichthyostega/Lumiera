@@ -133,7 +133,7 @@ namespace engine {
   
   
   /**
-   * Frame rendering task, represented as closure.
+   * Individual frame rendering task, forwarding to a closure.
    * This functor encodes all information necessary to trigger
    * and invoke the actual rendering operation. It will be embedded
    * by value into a job descriptor and then enqueued with the scheduler
@@ -179,6 +179,35 @@ namespace engine {
       
       JobKind getKind()  const;
       bool isValid()  const;
+    };
+  
+  
+  /**
+   * Interface of the closure for frame rendering jobs.
+   * Hidden behind this interface resides all of the context re-building
+   * and invocation mechanics to get the actual calculations going. While
+   * the job descriptor, as handled by the scheduler, contains the variable
+   * "moving parts", the corresponding job closure represents the execution
+   * context of a job and is shared between several jobs within the same
+   * segment of the timeline.
+   * 
+   * This allows us to enqueue simple job-"functions" with the scheduler.
+   * By virtue of the JobClosure-pointer, embedded into #lumiera_jobDefinition,
+   * the invocation of such a job may re-gain the full context, including the
+   * actual ProcNode to pull and further specifics, like the media channel.
+   */
+  class JobClosure
+    : public lumiera_jobClosure
+    {
+    public:
+      virtual ~JobClosure();     ///< this is an interface
+      
+      
+      virtual void invokeJobOperation (JobParameter parameter)  =0;
+      virtual void signalFailure      (JobParameter parameter)  =0;
+      
+      virtual JobKind getJobKind()  const                       =0;
+      virtual bool verify (Time nominalJobTime)  const          =0;
     };
   
   

@@ -45,7 +45,6 @@ namespace engine {
 //  using mobject::session::Effect;
   
   
-  JobClosure::~JobClosure() { }
   
   
   
