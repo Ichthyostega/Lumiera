@@ -218,7 +218,7 @@ namespace test  {
           
           CHECK (!isnil (jobs));
           vector<Job> plannedChunk;
-          lib::append_all (jobs, plannedChunk);                          //////////////////////////TODO probably can't do it this way; rather the JobPlanningSequence is infinite and only partially evaluated
+          lib::append_all (jobs, plannedChunk);
           
           Duration coveredTime (Offset(refPoint, last(plannedChunk).getNominalTime()));
           CHECK (coveredTime >= timings.getPlanningChunkDuration());
@@ -265,6 +265,7 @@ namespace test  {
       void
       check_ContinuationBuilder()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           Dispatcher& dispatcher = mockDispatcher();
           ModelPort modelPort (getTestPort());
           Timings timings (FrameRate::PAL);
@@ -291,7 +292,6 @@ namespace test  {
           
           continuation.triggerJob();
           CHECK (continuation_has_been_triggered);
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       

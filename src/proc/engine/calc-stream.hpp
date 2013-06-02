@@ -28,6 +28,7 @@
 
 #include "lib/error.hpp"
 #include "proc/play/timings.hpp"
+#include "proc/engine/calc-plan-continuation.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
@@ -81,16 +82,17 @@ namespace engine{
    * the underlying jobs. The only way to create a CalcStream
    * properly is to retrieve it from the  factory functions
    * of the EngineService. At that point, the corresponding
-   * jobs will be configured and enqueued. 
+   * jobs will already be configured and enqueued.
    */
   class CalcStream
     {
-      RenderEnvironmentClosure* env_;
+      RenderEnvironmentClosure* eng_;
       play::Timings timings_;
+      engine::CalcPlanContinuation* plan_;
       
     protected:
       CalcStream (RenderEnvironmentClosure& abstractEngine)
-        : env_(&abstractEngine)
+        : eng_(&abstractEngine)
         { }
       
       friend class EngineService;
@@ -98,16 +100,14 @@ namespace engine{
       
     public:
       CalcStream()
-        : env_(0)
+        : eng_(0)
+        , plan_(0)
         , timings_()
         { }
       
-      CalcStream (CalcStream const& o)
-        : env_(o.env_)
-        , timings_(o.timings_)
-        { }
-      
      ~CalcStream() { }
+     
+     // using standard copy operations
       
     };
   

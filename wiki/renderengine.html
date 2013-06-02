@@ -5172,13 +5172,13 @@ We //do employ//&amp;nbsp; some virtual calls for the buffer management in order
 @@clear(right):display(block):@@
 </pre>
 </div>
-<div title="RenderJob" modifier="Ichthyostega" created="201202162156" modified="201202162316" tags="spec Rendering">
+<div title="RenderJob" modifier="Ichthyostega" created="201202162156" modified="201305310017" tags="spec Rendering" changecount="1">
 <pre>An unit of operation, to be [[scheduled|Scheduler]] for calculating media frame data just in time.
 Within each CalcStream, render jobs are produced by the associated FrameDispatcher, based on the corresponding JobTicket used as blue print (execution plan).
 
 !Anatomy of a render job
 Basically, each render job is a //closure// -- hiding all the prepared, extended execution context and allowing the scheduler to trigger the job as a simple function.
-When activated, by virtue of this closure, the actual ''node invocation'' is constructed, which is a private and safe execution environment for the actual calculations. This (mostly stack based) environment embodies a StateProxy, acting as communication hub for accessing anything possibly stateful within the larger scope of the currently ongoing render process. The node invocation sequence is what actually implements the ''pulling of data'': on exit, all cacluated data is expected to be available in the output buffers. Typically (but not necessarily) each node embodies a ''calculation function'', holding the actual data processing algorithm.
+When activated, by virtue of this closure, the concrete ''node invocation'' is constructed, which is a private and safe execution environment for the actual frame data calculations. This (mostly stack based) environment embodies a StateProxy, acting as communication hub for accessing anything possibly stateful within the larger scope of the currently ongoing render process. The node invocation sequence is what actually implements the ''pulling of data'': on exit, all cacluated data is expected to be available in the output buffers. Typically (but not necessarily) each node embodies a ''calculation function'', holding the actual data processing algorithm.
 
 !{{red{open questions 2/12}}}
 * what are the job's actual parameters?

@@ -86,8 +86,6 @@ namespace engine {
           
           JobBuilder& establishNextJobs (TimeAnchor refPoint);
           
-          JobBuilder& prepareContinuation (function<void(TimeAnchor)> delayedAction);
-          
           operator JobPlanningSequence()
             {
               TimeAnchor nextPlanningAnchor = refPoint_.buildNextAnchor();
@@ -121,6 +119,11 @@ namespace engine {
       ////////      Answer: no this would lead to a huge blob called "the dispatcher"
       
       ////////TODO: immediate point to consider:  the time anchor is responsible for the real timing calculations. But how to introduce the play strategy *here* ?
+      
+      ////////////TODO: the solution is simple: get rid of the additional job placed magically into the chunk
+      ////////////      instead, provide a dedicated API function to create exactly that job
+      ////////////      and *enclosed* into a specialised JobClosure subclass, embody the code for the follow-up
+      ////////////      As a corollary: the scheduling deadline should be defined right *within* the job!
       
       virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
     };
