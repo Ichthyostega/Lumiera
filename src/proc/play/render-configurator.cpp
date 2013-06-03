@@ -109,7 +109,7 @@ namespace play {
     
     
     /** @internal decision point about how to configure the rendering.
-     * This would be the point to switch the render engine used. */
+     * This would be the point for possibly switching the concrete render engine used. */
     inline RenderConfigurator*
     how_to_render (POutputManager outputPossibilities, Timings playTimings)
     {

@@ -22,6 +22,7 @@
 
 
 #include "proc/engine/engine-service.hpp"
+#include "lib/itertools.hpp"
 
 //#include <string>
 //#include <memory>
@@ -37,12 +38,31 @@ namespace engine{
 //    using lumiera::Subsys;
 //    using std::auto_ptr;
 //    using boost::scoped_ptr;
-//    using std::tr1::bind;
-  
+  using std::function;
+  using std::tr1::bind;
+  using lib::transform;
+  using lib::append_all;
+
   
   namespace { // hidden local details of the service implementation....
     
+    /** @internal build a representation of a single, ongoing calculation effort.
+     * This "CalcStream" is tied to the actual engine implementation, but only
+     * through an opaque link, representing this concrete engine as an
+     * RenderEnvironmentClosure. This enables the created CalcStream to be
+     * re-configured and adjusted while running.
+     */
+    CalcStream
+    activateCalculation (play::DataSink sink, RenderEnvironmentClosure& engineCallback)
+    {
+      CalcStream calcStream(engineCallback);
+      calcStream.sendToOutput (sink);
+      return calcStream;
+    }
+    
   } // (End) hidden service impl details
+  
+  
   
   
   
@@ -72,7 +92,19 @@ namespace engine{
                            OutputConnection& output,
                            Quality serviceQuality)
   {
-    UNIMPLEMENTED ("build a list of standard calculation streams");
+    RenderEnvironmentClosure& renderConfig = configureCalculation (mPort,nominalTimings,serviceQuality);
+    function<CalcStream(play::DataSink)> triggerRenderStart = bind (activateCalculation, renderConfig, _1);
+
+    CalcStreams runningCalculations;
+    append_all (transform (output.getOpenedSinks()
+                          ,triggerRenderStart
+                          )
+               ,runningCalculations);
+    return runningCalculations;
+/////////////////////////////////////////////////////////////////////////////////////////////TICKET #874 : use a pipeline builder to write it as follows:
+//                      treat_all(output.getOpenedSinks())
+//                        .apply (activateCalculation, renderConfig, _1)
+//                        .buildVector();
   }
   
   
@@ -87,17 +119,6 @@ namespace engine{
   }
   
   
-  /** @internal build a representation of a single, ongoing calculation effort.
-   * This "CalcStream" is tied to the actual engine implementation, but only
-   * through an opaque link, representing this concrete engine as an
-   * RenderEnvironmentClosure. This enables the created CalcStream to be
-   * re-configured and adjusted while running.
-   */
-  CalcStream
-  EngineService::activateCalculation (RenderEnvironmentClosure& engineCallback)
-  {
-    return CalcStream (engineCallback); 
-  }
   
   
   /** @internal extension point
@@ -113,9 +134,13 @@ namespace engine{
    *       created render activity
    */
   RenderEnvironmentClosure&
-  EngineService::configureCalculation ()
+  EngineService::configureCalculation (ModelPort mPort,
+                                       Timings nominalTimings,
+                                       Quality serviceQuality)
   {
-    UNIMPLEMENTED ("represent *this as RenderEnvironmentClosure)");
+    UNIMPLEMENTED ("Access and wire to the Scheduler-frontend. "
+                   "Then access the Segmentation and invoke a builder function for a suitable dispatcher table. "
+                   "Package all of this into a suitable RenderEnvironementClosure subclass.");
     RenderEnvironmentClosure* todo_fake(0);  ////KABOOOM
     
     return *todo_fake; 

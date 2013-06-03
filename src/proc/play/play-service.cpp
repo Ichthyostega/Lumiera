@@ -212,10 +212,25 @@ namespace lumiera {
   /* ==== convenience shortcuts for creating a PlayProcess ==== */
   
   /**
+   * Generic point-of-Service for starting playback.
+   * Activating this service will "perform" the given exit points
+   * of the model, by "pulling" calculated data from these ports and
+   * feeding the results into suitable external outputs.
+   * @return a state machine front-end to control the ongoing
+   *         play/render process.
+   */
+  Play::Controller
+  Play::perform (ModelPorts ports, Output output)
+  {
+    return this->connect (ports, output);
+  }
+  
+  
+  /**
    * 
    */
   Play::Controller
-  Play::perform(Pipes, Output)
+  Play::perform (Pipes, Output)
   {
     UNIMPLEMENTED ("build PlayProcess based on a set of pipes");
   }
@@ -225,7 +240,7 @@ namespace lumiera {
    * 
    */
   Play::Controller
-  Play::perform(Timeline)
+  Play::perform (Timeline)
   {
     UNIMPLEMENTED ("build PlayProcess for a Timeline");
   }
@@ -235,7 +250,7 @@ namespace lumiera {
    * 
    */
   Play::Controller
-  Play::perform(Viewer)
+  Play::perform (Viewer)
   {
     UNIMPLEMENTED ("build PlayProcess directly for a Viewer element");
   }
@@ -245,7 +260,7 @@ namespace lumiera {
    * 
    */
   Play::Controller
-  Play::perform(Track)
+  Play::perform (Track)
   {
     UNIMPLEMENTED ("build PlayProcess for a single Track");
   }
@@ -255,7 +270,7 @@ namespace lumiera {
    * 
    */
   Play::Controller
-  Play::perform(Clip)
+  Play::perform (Clip)
   {
     UNIMPLEMENTED ("build virtual Timeline and PlayProcess to show a single Clip");
   }

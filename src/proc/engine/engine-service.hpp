@@ -64,6 +64,7 @@
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
+#include <functional>
 //#include <string>
 
 
@@ -74,6 +75,7 @@ namespace engine{
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
+//  using std::tr1::function;
   using mobject::ModelPort;
   using proc::play::Timings;
   
@@ -153,11 +155,8 @@ namespace engine{
                           Quality serviceQuality =QoS_BACKGROUND);
       
       
-    private:
-      CalcStream activateCalculation (RenderEnvironmentClosure&);
-      
     protected:
-      virtual RenderEnvironmentClosure& configureCalculation ();
+      virtual RenderEnvironmentClosure& configureCalculation (ModelPort,Timings,Quality);
       
       void activateTracing();
       void disableTracing(); ///< EX_FREE

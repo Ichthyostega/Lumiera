@@ -127,12 +127,9 @@ namespace lumiera {
         typedef proc::asset::PTimeline Timeline;
         typedef proc::asset::PViewer Viewer;
         
-        /** core operation: create a new playback process
-         *  outputting to the given viewer/display  */
-        virtual Controller connect(ModelPorts, Output)      =0;
-        
         
         /* ==== convenience shortcuts for common use cases ==== */
+        Controller perform(ModelPorts, Output);
         Controller perform(Pipes, Output);
         Controller perform(Timeline);
         Controller perform(Viewer);
@@ -141,6 +138,10 @@ namespace lumiera {
         
       protected:
         virtual ~Play();
+        
+        /** core operation: create a new playback process
+         *  outputting to the given viewer/display  */
+        virtual Controller connect(ModelPorts, Output)      =0;
       };
     
     

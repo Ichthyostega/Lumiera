@@ -28,6 +28,7 @@
 
 #include "lib/error.hpp"
 #include "proc/play/timings.hpp"
+#include "proc/play/output-slot.hpp"
 #include "proc/engine/calc-plan-continuation.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
@@ -108,6 +109,13 @@ namespace engine{
      ~CalcStream() { }
      
      // using standard copy operations
+     
+     CalcStream
+     sendToOutput (play::DataSink)
+       {
+         UNIMPLEMENTED ("set up dispatcher to start calculating and feeding to the given output sink");
+         return *this;
+       }
       
     };
   
