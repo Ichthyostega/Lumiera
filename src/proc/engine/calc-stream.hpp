@@ -43,6 +43,8 @@
 
 namespace proc  {
 namespace engine{
+  
+  namespace error = lumiera::error;
 
 //    using std::string;
 //    using lumiera::Subsys;
@@ -62,7 +64,9 @@ namespace engine{
   class RenderEnvironmentClosure
     {
     public:
-      virtual ~RenderEnvironmentClosure() { }   ///< this is an interface 
+      virtual ~RenderEnvironmentClosure() { }   ///< this is an interface
+      
+      virtual play::Timings& effectiveTimings()   =0;
     };
   
   
@@ -88,7 +92,6 @@ namespace engine{
   class CalcStream
     {
       RenderEnvironmentClosure* eng_;
-      play::Timings timings_;
       engine::CalcPlanContinuation* plan_;
       
     protected:
@@ -103,7 +106,6 @@ namespace engine{
       CalcStream()
         : eng_(0)
         , plan_(0)
-        , timings_()
         { }
       
      ~CalcStream() { }
@@ -115,6 +117,16 @@ namespace engine{
        {
          UNIMPLEMENTED ("set up dispatcher to start calculating and feeding to the given output sink");
          return *this;
+       }
+     
+     play::Timings const&
+     getTimings()
+       {
+         if (!eng_)
+           throw error::State ("attempt to get the playback timings "
+                               "of an unconfigured, disabled or halted calculation stream"
+                              ,error::LUMIERA_ERROR_LIFECYCLE);
+         return eng_->effectiveTimings();
        }
       
     };

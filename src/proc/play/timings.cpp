@@ -72,6 +72,10 @@ namespace play {
   //////////////////////////////////////////////////////////////////TODO ctors for use in the real player/engine?
   
   
+  /** a special marker Timings record,
+   * indicating disabled or halted output */
+  Timings Timings::DISABLED(FrameRate::HALTED);
+  
   
   TimeValue
   Timings::getOrigin()  const

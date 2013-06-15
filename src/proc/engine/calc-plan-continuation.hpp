@@ -128,6 +128,11 @@ namespace engine {
       performJobPlanningChunk()
         {
           UNIMPLEMENTED ("the actual meat: do the planning for a chunk of jobs");
+          
+                    
+          JobPlanningSequence jobs = dispatcher_->onCalcStream(modelPort_, channel_)
+                                                 .establishNextJobs(refPoint_);
+
         }
     };
   

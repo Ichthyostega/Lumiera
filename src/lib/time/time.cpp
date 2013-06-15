@@ -151,6 +151,8 @@ namespace time {
   const FrameRate FrameRate::PAL  (25);
   const FrameRate FrameRate::NTSC (30000,1001);
   
+  const FrameRate FrameRate::HALTED (1,std::numeric_limits<int>::max());
+  
   
   /** @return time span of one frame of this rate,
    *   cast into internal Lumiera time scale */

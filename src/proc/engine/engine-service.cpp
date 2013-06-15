@@ -26,7 +26,7 @@
 
 //#include <string>
 //#include <memory>
-//#include <tr1/functional>
+#include <tr1/functional>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -38,27 +38,14 @@ namespace engine{
 //    using lumiera::Subsys;
 //    using std::auto_ptr;
 //    using boost::scoped_ptr;
-  using std::function;
+  using std::tr1::function;
   using std::tr1::bind;
+  using std::tr1::ref;
   using lib::transform;
   using lib::append_all;
 
   
   namespace { // hidden local details of the service implementation....
-    
-    /** @internal build a representation of a single, ongoing calculation effort.
-     * This "CalcStream" is tied to the actual engine implementation, but only
-     * through an opaque link, representing this concrete engine as an
-     * RenderEnvironmentClosure. This enables the created CalcStream to be
-     * re-configured and adjusted while running.
-     */
-    CalcStream
-    activateCalculation (play::DataSink sink, RenderEnvironmentClosure& engineCallback)
-    {
-      CalcStream calcStream(engineCallback);
-      calcStream.sendToOutput (sink);
-      return calcStream;
-    }
     
   } // (End) hidden service impl details
   
@@ -93,7 +80,7 @@ namespace engine{
                            Quality serviceQuality)
   {
     RenderEnvironmentClosure& renderConfig = configureCalculation (mPort,nominalTimings,serviceQuality);
-    function<CalcStream(play::DataSink)> triggerRenderStart = bind (activateCalculation, renderConfig, _1);
+    function<CalcStream(play::DataSink)> triggerRenderStart = bind (activateCalculation, _1, ref(renderConfig));
 
     CalcStreams runningCalculations;
     append_all (transform (output.getOpenedSinks()
@@ -119,7 +106,21 @@ namespace engine{
   }
   
   
-  
+  /** @internal build a representation of a single, ongoing calculation effort.
+   * This "CalcStream" is tied to the actual engine implementation, but only
+   * through an opaque link, representing this concrete engine as an
+   * RenderEnvironmentClosure. This enables the created CalcStream to be
+   * re-configured and adjusted while running.
+   */
+  CalcStream
+  EngineService::activateCalculation (play::DataSink sink, RenderEnvironmentClosure& engineCallback)
+  {
+    CalcStream calcStream(engineCallback);
+    calcStream.sendToOutput (sink);
+    return calcStream;
+  }
+    
+
   
   /** @internal extension point
    * Install and activate a single, ongoing calculation effort.

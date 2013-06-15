@@ -70,9 +70,8 @@ namespace engine {
       
       /** build an \em undefined frame location */
       FrameCoord()
-        : absoluteNominalTime(Time::ANYTIME)
+        : absoluteNominalTime(Time::NEVER)
         , absoluteFrameNumber(std::numeric_limits<int64_t>::max())
-        , absoluteNominalTime(Time::NEVER)
         , modelPort() // unconnected
         , channelNr(0)
         { }

@@ -104,9 +104,14 @@ namespace play {
       Time scheduledDelivery;
       Duration outputLatency;
       
+      explicit
       Timings (FrameRate fps);
       
       // default copy acceptable
+      
+      
+      /** marker for halted output */
+      static Timings DISABLED;
       
       TimeValue getOrigin()  const;
       

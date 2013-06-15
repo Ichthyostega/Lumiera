@@ -509,6 +509,8 @@ namespace time {
       static const FrameRate PAL;
       static const FrameRate NTSC;
       
+      static const FrameRate HALTED;
+      
       /** duration of one frame */
       Duration duration() const;
     };
@@ -525,7 +527,7 @@ namespace time {
     __ensure_nonzero (NUM n)
     {
       if (n == 0)
-        throw error::Logic ("Zero spaced grid not allowed"
+        throw error::Logic ("Degenerated frame grid not allowed"
                            , error::LUMIERA_ERROR_BOTTOM_VALUE);
       return n;
     }

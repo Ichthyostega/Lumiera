@@ -25,10 +25,11 @@
 #define PROC_ENGINE_JOB_H
 
 
+#include "lib/llist.h"
+
 #include <gavl/gavl.h>
 
 
-typedef void* LList; ////////////////////////////////////TODO
 typedef uint64_t InvocationInstanceID;  /////////////////TODO
 
 

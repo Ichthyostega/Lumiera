@@ -162,6 +162,9 @@ namespace engine{
       void disableTracing(); ///< EX_FREE
       
       friend class EngineDiagnostics;
+      
+    private:
+      static CalcStream activateCalculation (play::DataSink, RenderEnvironmentClosure&);
     };
   
   
