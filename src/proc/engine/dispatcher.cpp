@@ -50,24 +50,6 @@ namespace engine {
   }
   
   
-  /** */
-  Dispatcher::JobBuilder& 
-  Dispatcher::JobBuilder::establishNextJobs (TimeAnchor refPoint)
-  {
-    UNIMPLEMENTED ("job planning and generation");
-    return *this;
-  }
-  
-  
-  /** */
-  Dispatcher::JobBuilder&
-  Dispatcher::JobBuilder::prepareContinuation (function<void(TimeAnchor)> delayedAction)
-    {
-      UNIMPLEMENTED ("wrap already planned jobs, appending a continuation to pick up later");
-      return *this;
-    }
-  
-  
   
   
   

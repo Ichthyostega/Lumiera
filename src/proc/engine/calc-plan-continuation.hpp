@@ -87,7 +87,7 @@ namespace engine {
       void
       invokeJobOperation (JobParameter parameter)
         {
-          UNIMPLEMENTED ("representation of the job functor, especially the invocation instance idea for this planning chunk");
+          UNIMPLEMENTED ("representation of the job functor, especially the invocation instance ID for this planning chunk");
         }
       
       
@@ -127,12 +127,18 @@ namespace engine {
       void
       performJobPlanningChunk()
         {
-          UNIMPLEMENTED ("the actual meat: do the planning for a chunk of jobs");
-          
-                    
           JobPlanningSequence jobs = dispatcher_->onCalcStream(modelPort_, channel_)
                                                  .establishNextJobs(refPoint_);
-
+          
+          UNIMPLEMENTED ("the actual meat: access the scheduler and fed those jobs");
+        }
+      
+      Job
+      buildFollowUpJobFromThis()
+        {
+          refPoint_.setNextAnchorPoint();
+          
+          UNIMPLEMENTED ("create the follow-up job, wired with this closure");
         }
     };
   

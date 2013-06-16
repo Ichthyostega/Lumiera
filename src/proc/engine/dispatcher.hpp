@@ -74,7 +74,6 @@ namespace engine {
       struct JobBuilder
         {
           Dispatcher& dispatcher_;
-          TimeAnchor refPoint_;
           ModelPort modelPort_;
           uint channel_;
           
@@ -82,22 +81,17 @@ namespace engine {
           
           /////////TODO somehow need to represent the dimensions of a "planning chunk"...
           
-          FrameCoord relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset =0);
+          FrameCoord relativeFrameLocation (TimeAnchor& refPoint, uint frameCountOffset =0);
           
-          JobBuilder& establishNextJobs (TimeAnchor refPoint);
-          
-          operator JobPlanningSequence()
+          JobPlanningSequence
+          establishNextJobs (TimeAnchor& refPoint)
             {
-              TimeAnchor nextPlanningAnchor = refPoint_.buildNextAnchor();
-              
-              TODO ("build the continuation job if necessary, wrap the sequence");
-              
               return JobPlanningSequence(
                   relativeFrameLocation(refPoint_),
                   dispatcher_); 
             }
-
         };
+      
       
     public:
       virtual ~Dispatcher();  ///< this is an interface

@@ -87,7 +87,7 @@ namespace engine {
       int64_t anchorPoint_;
       Time relatedRealTime_;
       
-      Time
+      static Time
       expectedTimeofArival (play::Timings const& timings, int64_t startFrame, Offset startDelay)
         {
           Duration totalLatency = startDelay
@@ -133,19 +133,20 @@ namespace engine {
         }
       
       
-      /** create a follow-up TimeAnchor.
+      /** set a follow-up TimeAnchor point.
        *  After planning a chunk of jobs, the dispatcher uses
        *  this function to set up a new breaking point (TimeAnchor)
        *  and places a continuation job to resume the planning activity.
-       * @return new TimeAchor which precisely satisfies the <i>planning
-       *         chunk duration</i>: it will be anchored at the following
-       *         grid point, resulting in seamless coverage of the timeline 
+       * @note precisely satisfies the <i>planning chunk duration</i>:
+       *       afterwards the start point will be anchored at the grid point
+       *       following the end of the previous planning chunk, resulting
+       *       in a seamless coverage of the timeline 
        */
-      TimeAnchor
-      buildNextAnchor() const
+      void
+      setNextAnchorPoint()
         {
-          int64_t nextStart = timings_.establishNextPlanningChunkStart (this->anchorPoint_);
-          return TimeAnchor(this->timings_, nextStart);
+          this->anchorPoint_ = timings_.establishNextPlanningChunkStart (this->anchorPoint_);
+          this->relatedRealTime_ = expectedTimeofArival(this->timings_,this->anchorPoint_, Offset::ZERO);
         }
       
       
