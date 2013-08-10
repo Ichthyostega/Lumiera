@@ -3,7 +3,7 @@
 <head>
 <script id="versionArea" type="text/javascript">
 //<![CDATA[
-var version = {title: "TiddlyWiki", major: 2, minor: 7, revision: 2, date: new Date("May 15, 2013"), extensions: {}};
+var version = {title: "TiddlyWiki", major: 2, minor: 8, revision: 1, date: new Date("June 23, 2013"), extensions: {}};
 
 //]]>
 </script>
@@ -46,7 +46,7 @@ DAMAGE.
 <!--}}}-->
 
 <!--PRE-HEAD-END-->
-<title> Empty TiddlyWiki 2.7.2 - a local web scrapbook in a single HTML page </title>
+<title> Empty TiddlyWiki 2.8.1 - a local web scrapbook in a single HTML page </title>
 <style id="styleArea" type="text/css">
 #saveTest {display:none;}
 #messageArea {display:none;}
@@ -862,6 +862,8 @@ merge(config.messages,{
 	emptySaved: "Empty template saved",
 	emptyFailed: "Failed to save empty template file",
 	mainSaved: "Main TiddlyWiki file saved",
+	mainDownload: "Downloading/saving main TiddlyWiki file",
+	mainDownloadManual: "RIGHT CLICK HERE to download/save main TiddlyWiki file",
 	mainFailed: "Failed to save main TiddlyWiki file. Your changes have not been saved",
 	macroError: "Error in macro <<%0>>",
 	macroErrorDetails: "Error while executing macro <<%0>>:\n%1",
@@ -1275,11 +1277,17 @@ var pluginInfo,tiddler; // Used to pass information to plugins in loadPlugins()
 // Whether this file can be saved back to the same location [Preemption]
 window.allowSave = window.allowSave || function(l)
 {
+	return true;
+}
+
+// Whether this file is being viewed locally
+window.isLocal = function()
+{
 	return (document.location.protocol == "file:");
 }
 
 // Whether to use the JavaSaver applet
-var useJavaSaver = window.allowSave() && (config.browser.isSafari || config.browser.isOpera);
+var useJavaSaver = window.isLocal() && (config.browser.isSafari || config.browser.isOpera);
 
 // Allow preemption code a chance to tweak config and useJavaSaver [Preemption]
 if (window.tweakConfig) window.tweakConfig();
@@ -1291,6 +1299,7 @@ if(!window || !window.console) {
 // Starting up
 function main()
 {
+	window.originalHTML=recreateOriginal();
 
 	var t10,t9,t8,t7,t6,t5,t4,t3,t2,t1,t0 = new Date();
 	startingUp = true;
@@ -1318,7 +1327,7 @@ function main()
 	t3 = new Date();
 	invokeParamifier(params,"onload");
 	t4 = new Date();
-	readOnly = window.allowSave() ? false : config.options.chkHttpReadOnly;
+	readOnly = window.isLocal() ? false : config.options.chkHttpReadOnly;
 	var pluginProblem = loadPlugins("systemConfig");
 	doc.trigger("loadPlugins");
 	t5 = new Date();
@@ -6605,9 +6614,40 @@ function autoSaveChanges(onlyIfDirty,tiddlers)
 function loadOriginal(localPath)
 {
 	var content=loadFile(localPath);
+	if (!content) content=window.originalHTML||recreateOriginal();
 	return content;
 }
 
+function recreateOriginal()
+{
+	// construct doctype
+	var content = "<!DOCTYPE ";
+	var t=document.doctype;
+	if (!t) 
+		content+="html"
+	else {
+		content+=t.name;
+		if      (t.publicId)		content+=' PUBLIC "'+t.publicId+'"';
+		else if (t.systemId)		content+=' SYSTEM "'+t.systemId+'"';
+	}
+	content+=' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"';
+	content+='>\n';
+
+	// append current document content
+	content+=document.documentElement.outerHTML;
+
+	content=content.replace(/<div id="saveTest">savetest<\/div>/,'<div id="saveTest"></div>');
+	content=content.replace(/script><applet [^\>]*><\/applet>/g,'script>');
+	content=content.replace(/><head>/,'>\n<head>');
+	content=content.replace(/\n\n<\/body><\/html>$/,'</body>\n</html>\n');
+	content=content.replace(/(<(meta) [^\>]*[^\/])>/g,'$1 />');
+	content=content.replace(/<noscript>[^\<]*<\/noscript>/,
+		function(m){return m.replace(/&lt;/g,'<').replace(/&gt;/g,'>');});
+	content=content.replace(/<div id="copyright">[^\<]*<\/div>/,
+		function(m){return m.replace(/\xA9/g,'&copy;');});
+
+	return content;
+}
 
 // Save this tiddlywiki with the pending changes
 function saveChanges(onlyIfDirty,tiddlers)
@@ -6637,16 +6677,22 @@ function saveChanges(onlyIfDirty,tiddlers)
 		alert(msg.invalidFileError.format([localPath]));
 		return;
 	}
+	var co=config.options; //# abbreviation
+	config.saveByDownload=false;
+	config.saveByManualDownload=false;
 	saveMain(localPath,original,posDiv);
-	if(config.options.chkSaveBackups)
-		saveBackup(localPath,original);
-	if(config.options.chkSaveEmptyTemplate)
-		saveEmpty(localPath,original,posDiv);
-	if(config.options.chkGenerateAnRssFeed && saveRss instanceof Function)
-		saveRss(localPath);
-	if(config.options.chkDisplayInstrumentation)
+	if (!config.saveByDownload && !config.saveByManualDownload) {
+		if(co.chkSaveBackups)
+			saveBackup(localPath,original);
+		if(co.chkSaveEmptyTemplate)
+			saveEmpty(localPath,original,posDiv);
+		if(co.chkGenerateAnRssFeed && saveRss instanceof Function)
+			saveRss(localPath);
+	}
+	if(co.chkDisplayInstrumentation)
 		displayMessage("saveChanges " + (new Date()-t0) + " ms");
 }
+
 
 function saveMain(localPath,original,posDiv)
 {
@@ -6658,7 +6704,16 @@ function saveMain(localPath,original,posDiv)
 		showException(ex);
 	}
 	if(save) {
-		displayMessage(config.messages.mainSaved,"file://" + localPath);
+		if (!config.saveByManualDownload) {
+			if (config.saveByDownload) { //# set by HTML5DownloadSaveFile()
+				var link = getDataURI(revised);
+				var msg  = config.messages.mainDownload;
+			} else {
+				var link = "file://" + localPath;
+				var msg  = config.messages.mainSaved;
+			}
+			displayMessage(msg,link);
+		}
 		store.setDirty(false);
 	} else {
 		alert(config.messages.mainFailed);
@@ -6819,6 +6874,10 @@ window.saveFile = window.saveFile || function(fileUrl,content)
 		r = ieSaveFile(fileUrl,content);
 	if(!r)
 		r = javaSaveFile(fileUrl,content);
+	if(!r)
+		r = HTML5DownloadSaveFile(fileUrl,content);
+	if(!r)
+		r = manualSaveFile(fileUrl,content);
 	return r;
 }
 
@@ -7048,7 +7107,66 @@ function javaLoadFile(filePath)
 	return content.join("\n");
 }
 
-//--
+function HTML5DownloadSaveFile(filePath,content)
+{
+	if(document.createElement("a").download !== undefined) {
+		config.saveByDownload=true;
+		var slashpos=filePath.lastIndexOf("/");
+		if (slashpos==-1) slashpos=filePath.lastIndexOf("\\"); 
+		var filename=filePath.substr(slashpos+1);
+		var uri = getDataURI(content);
+		var link = document.createElement("a");
+		link.setAttribute("target","_blank");
+		link.setAttribute("href",uri);
+		link.setAttribute("download",filename);
+		document.body.appendChild(link); link.click(); document.body.removeChild(link);
+		return true;
+	}
+	return null;
+}
+
+// Returns null if it can't do it, false if there's an error, true if it saved OK
+function manualSaveFile(filePath,content)
+{
+	// FALLBACK for showing a link to data: URI
+	config.saveByManualDownload=true;
+	var slashpos=filePath.lastIndexOf("/");
+	if (slashpos==-1) slashpos=filePath.lastIndexOf("\\"); 
+	var filename=filePath.substr(slashpos+1);
+	var uri = getDataURI(content);
+	displayMessage(config.messages.mainDownloadManual,uri);
+	return true;
+}
+
+// construct data URI (using base64 encoding to preserve multi-byte encodings)
+function getDataURI(data) {
+	if (config.browser.isIE)
+		return "data:text/html,"+encodeURIComponent(data);
+	else
+		return "data:text/html;base64,"+encodeBase64(data);
+}
+
+function encodeBase64(data) {
+	if (!data) return "";
+	var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+	var out = "";
+	var chr1,chr2,chr3="";
+	var enc1,enc2,enc3,enc4="";
+	for (var count=0,i=0; i<data.length; ) {
+		chr1=data.charCodeAt(i++);
+		chr2=data.charCodeAt(i++);
+		chr3=data.charCodeAt(i++);
+		enc1=chr1 >> 2;
+		enc2=((chr1 & 3) << 4) | (chr2 >> 4);
+		enc3=((chr2 & 15) << 2) | (chr3 >> 6);
+		enc4=chr3 & 63;
+		if (isNaN(chr2)) enc3=enc4=64;
+		else if (isNaN(chr3)) enc4=64;
+		out+=keyStr.charAt(enc1)+keyStr.charAt(enc2)+keyStr.charAt(enc3)+keyStr.charAt(enc4);
+		chr1=chr2=chr3=enc1=enc2=enc3=enc4="";
+	}
+	return out;
+}//--
 //-- Filesystem utilities
 //--
 
