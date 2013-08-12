@@ -11,6 +11,7 @@ from doxygen import DoxyfileParse
 class TestParser(unittest.TestCase):
     def testSimpleParse(self):
         text="""
+# comment
 INPUT  = test.h
 """
         result = DoxyfileParse(text)
