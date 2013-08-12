@@ -8,7 +8,6 @@
 #  Copyright © 2007 Christoph Boehme
 #
 #  Copyright © 2012 Dirk Baechle
-#  Copyright © 2012 Eric Anderson
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -296,29 +295,7 @@ def DoxyEmitter(target, source, env):
          tagfile = os.path.join(conf_dir, tagfile)
       targets.append(env.File(tagfile))
 
-   # don't clobber targets
-   for node in targets:
-      env.Precious(node)
-
-   # set up cleaning stuff
-   for node in targets:
-      env.Clean(node, node)
-
    return (targets, source)
-
-def generate_doxygen_commands(source, target, env, for_signature):
-
-   """Generate the doxygen command line (easy) and the post-execution
-   timestamping (harder).  The second part requires us to know which
-   directories are being built, which is why we do this as a Generator
-   (after the Emitter has run)"""
-
-   dox_cmd = "cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}"
-   timestamp_cmds = ["date > %s"%(str(t)) for t in target]
-   print dox_cmd
-   print timestamp_cmds
-   return [dox_cmd] + timestamp_cmds
-
 
 def generate(env):
    """
@@ -333,7 +310,7 @@ def generate(env):
 
    import SCons.Builder
    doxyfile_builder = SCons.Builder.Builder(
-      generator = generate_doxygen_commands,
+      action = "cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}",
       emitter = DoxyEmitter,
       target_factory = env.fs.Entry,
       single_source = True,
