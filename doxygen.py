@@ -58,9 +58,9 @@ def DoxyfileParse(file_contents):
 
    lineno = lex.lineno
    token = lex.get_token()
-   key = token   # the first token should be a key
+   key = None
    last_token = ""
-   key_token = False
+   key_token = True # the first token should be a key
    next_key = False
    new_data = True
 
