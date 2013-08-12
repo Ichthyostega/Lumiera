@@ -77,10 +77,6 @@ namespace engine {
           ModelPort modelPort_;
           uint channel_;
           
-          /////TODO need storage for the continuation
-          
-          /////////TODO somehow need to represent the dimensions of a "planning chunk"...
-          
           FrameCoord relativeFrameLocation (TimeAnchor& refPoint, uint frameCountOffset =0);
           
           JobPlanningSequence
@@ -118,6 +114,10 @@ namespace engine {
       ////////////      instead, provide a dedicated API function to create exactly that job
       ////////////      and *enclosed* into a specialised JobClosure subclass, embody the code for the follow-up
       ////////////      As a corollary: the scheduling deadline should be defined right *within* the job!
+      
+      ////////////TODO: remaining issues
+      ////////////    - the TimeAnchor needs to be created directly from the JobParameter. No mutable state!
+      ////////////    - but this leads to a lot of duplicated Timings records, unless we rewrite the TimeAnchor to be noncopyable and use a Timings const&
       
       virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
     };

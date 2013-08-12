@@ -1795,7 +1795,7 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
-<div title="DesignPlayerSubsystem" modifier="Ichthyostega" created="201105220216" modified="201305220140" tags="Player design draft">
+<div title="DesignPlayerSubsystem" modifier="Ichthyostega" created="201105220216" modified="201305220140" tags="Player design draft" changecount="1">
 <pre>//Currently (5/2011) this page is used to collect and build up a coherent design for the player subsystem of Lumiera..//
 
 !Starting point
@@ -2196,7 +2196,7 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="201305202308" tags="def Rendering" changecount="2">
+<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="201308122215" tags="def Rendering" changecount="6">
 <pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
 The dispatcher works together with the job ticket(s) and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the backend, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
@@ -2224,9 +2224,9 @@ The frame dispatch step joins and combines multiple time axes. Through the proce
 These complex relationships are reflected in the invocation structure leading to an individual frame job. The [[calculation stream|CalcStream]] provides the [[render/playback timings|Timings]], while the actual implementation of the dispatcher, backed by the [[Fixture]] and thus linked to the session models, gets to relate the effective nominal time, the frame number, the exit node and the //processing function.//
 
 !!!controlling the planning process
-New render jobs are planned as an ongoing process, proceeding in chunks of evaluation. Typically, to calculate a single frame, several jobs are necessary -- to find out which and how, we'll have to investigate the model structures corresponding to this frame, leading to tree of prerequisites. Basically, the planning for each frame is seeded by establishing the nominal time position, in accordance to the current [[mode of playback|NonLinearPlayback]]. Conducted by the [[play controller|PlayController]], there is a strategy to define the precise way of spacing and sequence of frames to be calculated -- yet for the actual process of evaluating the prerequisites and planning the jobs, these details are irrelevant and hidden behind the dispatcher interface, as is most of the model and context information. The planning operation just produces a sequence of job definitions, which can then be associated with real time (wall clock) deadlines for delivery. The relation between the spacing and progression of the nominal frame time (as controlled by the playback mode) and the actual sequence of deadlines (which is more or less dictated by the output device) is rather loose and established anew for each planning chunk, relying on the ''time anchor''. The latter in turn uses the [[timings record|Timings]] of the [[calculation stream|CalcStream]] currently being planned, and these timings act as a strategy to represent the underlying timing grid and playback modalities.
+New render jobs are planned as an ongoing process, proceeding in chunks of evaluation. Typically, to calculate a single frame, several jobs are necessary -- to find out which and how, we'll have to investigate the model structures corresponding to this frame, resulting in a tree of prerequisites. Basically, the planning for each frame is seeded by establishing the nominal time position, in accordance to the current [[mode of playback|NonLinearPlayback]]. Conducted by the [[play controller|PlayController]], there is a strategy to define the precise way of spacing and sequence of frames to be calculated -- yet for the actual process of evaluating the prerequisites and planning the jobs, those details are irrelevant and hidden behind the dispatcher interface, as is most of the model and context information. The planning operation just produces a sequence of job definitions, which can then be associated with real time (wall clock) deadlines for delivery. The relation between the spacing and progression of the nominal frame time (as controlled by the playback mode) and the actual sequence of deadlines (which is more or less dictated by the output device) is rather loose and established anew for each planning chunk, relying on the ''time anchor''. The latter in turn uses the [[timings record|Timings]] of the [[calculation stream|CalcStream]] currently being planned, and these timings act as a strategy to represent the underlying timing grid and playback modalities.
 
-While the sequence of frame jobs to be planned is possibly infinite, the actual evaluation is confined to the current planning chunk. At the end of planning such a chunk of jobs, an additional ''continuation job'' is included to re-invoke the planning function to prepare the next chunk of jobs. Terminating playback is equivalent to not including or not invoking this continuation job. Please note that planning proceeds independently for each [[Feed]] -- in Lumiera the //current playback position//&amp;nbsp; is just a conceptual projection of wall clock time to nominal time, yet there is no such thing like a synchronously proceeding &quot;Playhead&quot; 
+While the sequence of frame jobs to be planned is possibly infinite, the actual evaluation is confined to the current planning chunk. When done with planning such a chunk of jobs, an additional ''continuation job'' is included to prepare a re-invocation of the planning function for preparation of the next chunk. Terminating playback is equivalent to not including or not invoking this continuation job. Please note that planning proceeds independently for each [[Feed]] -- in Lumiera the //current playback position//&amp;nbsp; is just a conceptual projection of wall clock time to nominal time, yet there is no such thing like a synchronously proceeding &quot;Playhead&quot; 
 
 !!!producing actual jobs
 The JobTicket is created on demand, specialised for a single [[segment|Segmentation]] of the timeline and a single [[feed|Feed]] of data frames to be pulled from a ModelPort. Consequently this means that all frames and all channels within that realm will rely on the same job ticket -- which is a //higher order function,// a function producing another function: when provided with the actual channel number and the specific frame coordinates, the job ticket produces a [[concrete job definition|RenderJob]], which itself is a function to be invoked by the [[scheduler|Scheduler]] just in time.
@@ -3121,7 +3121,7 @@ As an immediate consequence of not being able to reduce processing to elementary
 In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" created="200806010251" modified="201201192303" tags="Rendering operational">
+<div title="NodeOperationProtocol" modifier="Ichthyostega" created="200806010251" modified="201308100351" tags="Rendering operational" changecount="1">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. Meaning that there isn't a central entity to invoke nodes consecutively. Rather, the nodes themselves contain the detailed knowledge regarding prerequisites, so the calculation plan is worked out recursively. Yet still there are some prerequisite resources to be made available for any calculation to happen. So the actual calculation is broken down into atomic chunks of work, resulting in a 2-phase invocation whenever &quot;pulling&quot; a node. For this to work, we need the nodes to adhere to a specific protocol:
 ;planning phase
 :when a node invocation is foreseeable to be required for getting a specific frame for a specific nominal and actual time, the engine has to find out the actual operations to happen
@@ -3141,6 +3141,8 @@ In the most general case the render network may be just a DAG (not just a tree).
 :# since all buffers and prerequistes are available, the Node may now prepare a frame pointer array and finally invoke the external {{{process()}}} to kick off the actual calculations
 :# finally, when the {{{pull()}}} call returns, &quot;parent&quot; state originating the pull holds onto the buffers containing the calculated output result.
 {{red{WIP as of 9/11  -- many details here are still to be worked out and might change as we go}}}
+
+{{red{Update  8/13  -- work on this part of the code base has stalled, but now the plain is to get back to this topic when coding down from the Player to the Engine interface and from there to the NodeInvocation. The design as outlined above was mostly coded in 2011, but never really tested or finished; you can expect some reworkings and simplifications, but basically this design looks OK}}}
 
 some points to note:
 * the WiringDescriptor is {{{const}}} and precalculated while building (remember another thread may call in parallel)
@@ -5706,10 +5708,10 @@ And last but not least: the difficult part of this whole concept is encapsulated
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
 </div>
-<div title="SiteSubtitle" creator="Lumiera.org" modifier="Ichthyostega" created="200706190044" modified="200802030406">
+<div title="SiteSubtitle" modifier="Ichthyostega" created="200706190044" modified="200802030406">
 <pre>Building a Render Nodes Network from Objects in the Session</pre>
 </div>
-<div title="SiteTitle" creator="Ichthyostega" modifier="Ichthyostega" created="200706190042" modified="200708080212">
+<div title="SiteTitle" modifier="Ichthyostega" created="200706190042" modified="200708080212">
 <pre>Engine</pre>
 </div>
 <div title="SplashScreen" modifier="just me" created="200706220430">
