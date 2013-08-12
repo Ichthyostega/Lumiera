@@ -262,7 +262,7 @@ def DoxyEmitter(target, source, env):
          if k == 'MAN':
             # Is the given extension valid?
             manext = v[3]
-            if v[4]:
+            if v[4] and data.has_key(v[4]):
                manext = data.get(v[4])
             # Try to strip off dots
             manext = manext.replace('.','')
@@ -284,7 +284,7 @@ def DoxyEmitter(target, source, env):
          # Add target files
          if k != "MAN":
             # Is an extension override var given?
-            if v[4]:
+            if v[4] and data.has_key(v[4]):
                fname = v[2]+data.get(v[4])
             else:
                fname = v[2]+v[3]
