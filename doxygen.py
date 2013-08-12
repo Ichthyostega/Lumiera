@@ -43,16 +43,17 @@ output_formats = {
    "XML": ("NO", "xml", "index", ".xml", ""),
 }
 
-def DoxyfileParse(file_contents):
+def DoxyfileParse(file_contents, conf_dir, data=None):
    """
    Parse a Doxygen source file and return a dictionary of all the values.
    Values will be strings and lists of strings.
    """
-   data = {}
+   if data is None:
+      data = {}
 
    import shlex
    lex = shlex.shlex(instream = file_contents, posix = True)
-   lex.wordchars += "*+./-:"
+   lex.wordchars += "*+./-:@"
    lex.whitespace = lex.whitespace.replace("\n", "")
    lex.escape = ""
 
@@ -87,11 +88,27 @@ def DoxyfileParse(file_contents):
             if key == "TAGFILES" and data.has_key(key):
                append_data( data, key, False, "=" )
                new_data=False
+            elif key == "@INCLUDE" and data.has_key(key):
+               # don't reset the @INCLUDE list when we see a new @INCLUDE line.
+               pass
             else:
                data[key] = list()
+         elif key == "@INCLUDE":
+            # special case for @INCLUDE key: read the referenced
+            # file as a doxyfile too.
+            nextfile = token
+            if not os.path.isabs(nextfile):
+               nextfile = os.path.join(conf_dir, nextfile)
+            if nextfile in data[key]:
+               raise Exception("recursive @INCLUDE in Doxygen config: "+nextfile)
+            data[key].append(nextfile)
+            fh = open(nextfile,'r')
+            DoxyfileParse(fh.read(), conf_dir, data)
+            fh.close()
          else:
             append_data( data, key, new_data, token )
             new_data = True
+
 
       last_token = token
       token = lex.get_token()
@@ -106,7 +123,7 @@ def DoxyfileParse(file_contents):
          data.pop(k)
 
       # items in the following list will be kept as lists and not converted to strings
-      if k in ["INPUT", "FILE_PATTERNS", "EXCLUDE_PATTERNS", "TAGFILES"]:
+      if k in ["INPUT", "FILE_PATTERNS", "EXCLUDE_PATTERNS", "TAGFILES", "@INCLUDE"]:
          continue
 
       if len(v) == 1:
@@ -132,7 +149,13 @@ def DoxySourceFiles(node, env):
 
    sources = []
 
-   data = DoxyfileParse(node.get_contents())
+   # We're running in the top-level directory, but the doxygen
+   # configuration file is in the same directory as node; this means
+   # that relative pathnames in node must be adjusted before they can
+   # go onto the sources list
+   conf_dir = os.path.dirname(str(node))
+
+   data = DoxyfileParse(node.get_contents(), conf_dir)
 
    if data.get("RECURSIVE", "NO") == "YES":
       recursive = True
@@ -141,12 +164,6 @@ def DoxySourceFiles(node, env):
 
    file_patterns = data.get("FILE_PATTERNS", default_file_patterns)
    exclude_patterns = data.get("EXCLUDE_PATTERNS", default_exclude_patterns)
-
-   # We're running in the top-level directory, but the doxygen
-   # configuration file is in the same directory as node; this means
-   # that relative pathnames in node must be adjusted before they can
-   # go onto the sources list
-   conf_dir = os.path.dirname(str(node))
 
    input = data.get("INPUT")
    if input:
@@ -184,6 +201,10 @@ def DoxySourceFiles(node, env):
       else:
          for pattern in file_patterns:
             sources.extend(glob.glob(pattern))
+
+   # Add @INCLUDEd files to the list of source files:
+   for node in data.get("@INCLUDE", []):
+      sources.append(node)
 
    # Add tagfiles to the list of source files:
    for node in data.get("TAGFILES", []):
@@ -226,12 +247,12 @@ def DoxySourceScanCheck(node, env):
 def DoxyEmitter(target, source, env):
    """Doxygen Doxyfile emitter"""
    doxy_fpath = str(source[0])
-   data = DoxyfileParse(source[0].get_contents())
+   conf_dir = os.path.dirname(doxy_fpath)
+   data = DoxyfileParse(source[0].get_contents(), conf_dir)
 
    targets = []
    out_dir = data.get("OUTPUT_DIRECTORY", ".")
    if not os.path.isabs(out_dir):
-      conf_dir = os.path.dirname(doxy_fpath)
       out_dir = os.path.join(conf_dir, out_dir)
 
    # add our output locations
@@ -291,7 +312,6 @@ def DoxyEmitter(target, source, env):
    tagfile = data.get("GENERATE_TAGFILE", "")
    if tagfile != "":
       if not os.path.isabs(tagfile):
-         conf_dir = os.path.dirname(str(source[0]))
          tagfile = os.path.join(conf_dir, tagfile)
       targets.append(env.File(tagfile))
 
