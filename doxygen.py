@@ -39,7 +39,7 @@ output_formats = {
    "HTML": ("YES", "html", "index", ".html", "HTML_FILE_EXTENSION"),
    "LATEX": ("YES", "latex", "refman", ".tex", ""),
    "RTF": ("NO", "rtf", "refman", ".rtf", ""),
-   "MAN": ("YES", "man", "", ".3", "MAN_EXTENSION"),
+   "MAN": ("NO", "man", "", ".3", "MAN_EXTENSION"),
    "XML": ("NO", "xml", "index", ".xml", ""),
 }
 
