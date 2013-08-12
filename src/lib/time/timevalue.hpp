@@ -20,6 +20,23 @@
 
 */
 
+/** @file timevalue.hpp
+ ** a family of time value like entities and their relationships.
+ ** This is the foundation for the Lumiera time handling framework. On the implementation
+ ** level, time values are represented as 64bit integer values \c gavl_time_t. But for the
+ ** actual use, we create several kinds of time "values", based on their logical properties.
+ ** These time values are considered to be fixed (immutable) values, which may only be
+ ** created through some well defined construction paths, and any time based calculation
+ ** is forced to go through our time calculation library. This is prerequisite for
+ ** the definition of <i>frame aligned</i> time values and time code representation
+ ** implemented as display format based on these frame quantised time values.
+ ** 
+ ** @see time.h basic time calculation library functions
+ ** @see timequant.hpp
+ ** @see TimeValue_test
+ ** 
+ */
+
 
 #ifndef LIB_TIME_TIMEVALUE_H
 #define LIB_TIME_TIMEVALUE_H
