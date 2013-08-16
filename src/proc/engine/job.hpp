@@ -132,6 +132,8 @@ namespace engine {
   
   typedef lumiera_jobParameter const& JobParameter;
   
+  class JobClosure;
+  
   
   /**
    * Individual frame rendering task, forwarding to a closure.
@@ -154,9 +156,12 @@ namespace engine {
       
     public:
       
-      Job()
+      Job (JobClosure& specificJobDefinition
+          ,InvocationInstanceID invoKey
+          ,Time nominalFrameTime)
         {
-          UNIMPLEMENTED ("job creation, planning and scheduling");
+          this->jobClosure = &specificJobDefinition;
+          this->parameter = {_raw(nominalFrameTime), invoKey };
         }
       
       // using standard copy operations
@@ -199,6 +204,7 @@ namespace engine {
    */
   class JobClosure
     : public lumiera_jobClosure
+    , boost::noncopyable          // ....has distinct identity and stable address
     {
     public:
       virtual ~JobClosure();     ///< this is an interface
