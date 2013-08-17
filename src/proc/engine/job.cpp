@@ -72,16 +72,16 @@ namespace engine {
   /** @todo WIP-WIP 2/12  
    */
   void
-  Job::triggerJob ()  const
+  Job::triggerJob()  const
   {
-    myClosure(this).invokeJobOperation (parameter);
+    myClosure(this).invokeJobOperation (parameter, currentTime);
   }
   
   
   void
-  Job::signalFailure ()  const
+  Job::signalFailure()  const
   {
-    UNIMPLEMENTED ("how to organise job failure and abortion");
+    myClosure(this).signalFailure (parameter, now);
   }
   
   

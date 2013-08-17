@@ -63,8 +63,8 @@ namespace engine {
     , boost::noncopyable
     {
       
-      Dispatcher* dispatcher_;
-      TimeAnchor refPoint_;
+      play::Timings const& timings_;
+      Dispatcher& dispatcher_;
       const ModelPort modelPort_;
       const uint channel_;
       
@@ -87,7 +87,9 @@ namespace engine {
       void
       invokeJobOperation (JobParameter parameter)
         {
-          UNIMPLEMENTED ("representation of the job functor, especially the invocation instance ID for this planning chunk");
+          ASSERT (parameter.nominalTime == timings_.getFrameStartAt (parameter.invoKey.frameNumber));
+          
+          this->performJobPlanningChunk (parameter.invoKey.frameNumber);
         }
       
       
@@ -97,7 +99,7 @@ namespace engine {
           UNIMPLEMENTED ("what needs to be done when a planning continuation cant be invoked?");
         }
       
-
+      
       
     public:
       /**
@@ -106,39 +108,52 @@ namespace engine {
       CalcPlanContinuation(play::Timings const& timings
                           ,Dispatcher& dispatcher
                           ,ModelPort modelPort
-                          ,int64_t startFrame
                           ,uint channel)
-        : dispatcher_(&dispatcher)
-        , refPoint_(TODO)
+        : timings_(timings) 
+        , dispatcher_(dispatcher)
         , modelPort_(modelPort)
         , channel_(channel)
-        {
-          UNIMPLEMENTED ("how to set up the initial playback start point"); 
-        }
+        { }
       
+      /** create the "start trigger job"
+       *  Scheduling this job will effectively get a calculation stream
+       *  into active processing, since it causes the first chunk of job planning
+       *  plus the automated scheduling of follow-up planning jobs. The relation
+       *  to real (wall clock) time will be established when the returned job
+       *  is actually invoked
+       * @param startFrame where to begin rendering, relative to the nominal
+       *        time grid implicitly related to the ModelPort to be pulled
+       */
       Job
-      initiateRenderPlanning ()
+      prepareRenderPlanningFrom (int64_t startFrame)
         {
-          UNIMPLEMENTED ("setup of the initial planning job");
+          InvocationInstanceID invoKey;
+          invoKey.frameNumber = startFrame;
+          Time nominalPlanningStartTime = timings_.getFrameStartAt (startFrame);
+          
+          return Job(this, invoKey, nominalPlanningStartTime);
         }
       
       
     private:
       void
-      performJobPlanningChunk()
+      performJobPlanningChunk(int64_t nextStartFrame)
         {
-          JobPlanningSequence jobs = dispatcher_->onCalcStream(modelPort_, channel_)
-                                                 .establishNextJobs(refPoint_);
+          TimeAnchor refPoint(timings_, nextStartFrame);
+          JobPlanningSequence jobs = dispatcher_.onCalcStream(modelPort_, channel_)
+                                                .establishNextJobs(refPoint);
+          
+          Job nextChunkOfPlanning = buildFollowUpJobFrom (refPoint);
           
           UNIMPLEMENTED ("the actual meat: access the scheduler and fed those jobs");
         }
       
+      
       Job
-      buildFollowUpJobFromThis()
+      buildFollowUpJobFrom (TimeAnchor const& refPoint)
         {
-          refPoint_.setNextAnchorPoint();
-          
-          UNIMPLEMENTED ("create the follow-up job, wired with this closure");
+          return this->prepareRenderPlanningFrom(
+                         refPoint.getNextAnchorPoint());
         }
     };
   

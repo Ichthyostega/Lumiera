@@ -101,6 +101,14 @@ namespace engine{
       
       friend class EngineService;
       
+     
+      CalcStream
+      sendToOutput (play::DataSink)
+        {
+          UNIMPLEMENTED ("set up dispatcher to start calculating and feeding to the given output sink");
+          return *this;
+        }
+      
       
     public:
       CalcStream()
@@ -109,25 +117,19 @@ namespace engine{
         { }
       
      ~CalcStream() { }
+      
+      // using standard copy operations
      
-     // using standard copy operations
      
-     CalcStream
-     sendToOutput (play::DataSink)
-       {
-         UNIMPLEMENTED ("set up dispatcher to start calculating and feeding to the given output sink");
-         return *this;
-       }
-     
-     play::Timings const&
-     getTimings()
-       {
-         if (!eng_)
-           throw error::State ("attempt to get the playback timings "
-                               "of an unconfigured, disabled or halted calculation stream"
-                              ,error::LUMIERA_ERROR_LIFECYCLE);
-         return eng_->effectiveTimings();
-       }
+      play::Timings const&
+      getTimings()
+        {
+          if (!eng_)
+            throw error::State ("attempt to get the playback timings "
+                                "of an unconfigured, disabled or halted calculation stream"
+                               ,error::LUMIERA_ERROR_LIFECYCLE);
+          return eng_->effectiveTimings();
+        }
       
     };
   

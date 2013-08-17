@@ -26,18 +26,28 @@
 
 
 #include "lib/llist.h"
+#include "lib/hash-value.h"
 
 #include <gavl/gavl.h>
 
 
-typedef uint64_t InvocationInstanceID;  /////////////////TODO
+/** opaque ID attached to each individual job invocation.
+ *  Used by the implementation of the Jobs (i.e. the JobClosure)
+ *  for internal organisation; will be fed back on job activation.
+ */
+union InvocationInstanceID
+  {
+    int64_t frameNumber;
+    lumiera_uid luid;
+  };
+
 
 
 enum JobState
   { 
-    DONE,      ///< already done, nothing to do
+    DONE,      ///< mission accomplished
     RUNNING,   ///< job is currently running
-    WAITING,   ///< waits for some prerequisite resource
+    WAITING,   ///< waiting for some prerequisite
     REJECTED,  ///< sorry, can't do that Dave
     EXPIRED,   ///< deadline expired
     ABORTED    ///< got aborted
@@ -49,6 +59,7 @@ enum JobKind
     LOAD_JOB,  ///< accessing prerequisites, IO bound
     META_JOB   ///< render process self organisation
   };
+
 
 
 /** 

@@ -1,5 +1,5 @@
 /*
-  HASH-UTIL.hpp  -  collection of tools and definitions for working with hashes
+  HASH-VALUE.hpp  -  collection of tools and definitions for working with hashes
 
   Copyright (C)         Lumiera.org
     2012,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file hash-util.h
+/** @file hash-value.h
  ** Hash value types and utilities.
  ** This header defines the basic hash value types and provides some simple
  ** utilities to support working with hash values.

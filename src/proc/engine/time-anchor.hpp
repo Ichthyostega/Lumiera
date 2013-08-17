@@ -109,44 +109,32 @@ namespace engine {
         }
       
       
+    public:
       TimeAnchor (play::Timings timings, int64_t startFrame, Offset startDelay =Offset::ZERO)
         : timings_(timings)
         , anchorPoint_(startFrame)
         , relatedRealTime_(expectedTimeofArival(timings,startFrame,startDelay))
         { }
       
-    public:
       // using default copy operations
       
-      
-      /** create a TimeAnchor for playback/rendering start at the given startFrame.
-       *  For latency calculations, the EngineConfig will be queried behind the scenes.
-       *  regarding the reaction latency required to get the engine
-       * @note this builder function adds an additional, hard wired start margin
-       *       of one frame duration, to compensate for first time effects.
-       */
-      static TimeAnchor
-      build (play::Timings timings, int64_t startFrame)
-        {
-          Offset startDelay(timings.getFrameDurationAt(startFrame));
-          return TimeAnchor (timings,startFrame,startDelay);
-        }
       
       
       /** set a follow-up TimeAnchor point.
        *  After planning a chunk of jobs, the dispatcher uses
        *  this function to set up a new breaking point (TimeAnchor)
        *  and places a continuation job to resume the planning activity.
-       * @note precisely satisfies the <i>planning chunk duration</i>:
-       *       afterwards the start point will be anchored at the grid point
-       *       following the end of the previous planning chunk, resulting
-       *       in a seamless coverage of the timeline 
+       * @note precisely satisfies the <i>planning chunk duration</i>
+       * @return a frame number suitable to build the next TimeAnchor
+       *       based on the current play::Timings. This new start point
+       *       will be anchored at the grid point following the end of
+       *       the previous planning chunk, resulting in a seamless
+       *       coverage of the timeline 
        */
-      void
-      setNextAnchorPoint()
+      int64_t
+      getNextAnchorPoint()  const
         {
-          this->anchorPoint_ = timings_.establishNextPlanningChunkStart (this->anchorPoint_);
-          this->relatedRealTime_ = expectedTimeofArival(this->timings_,this->anchorPoint_, Offset::ZERO);
+          return timings_.establishNextPlanningChunkStart (this->anchorPoint_);
         }
       
       
