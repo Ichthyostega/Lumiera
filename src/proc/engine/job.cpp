@@ -74,14 +74,14 @@ namespace engine {
   void
   Job::triggerJob()  const
   {
-    myClosure(this).invokeJobOperation (parameter, currentTime);
+    myClosure(this).invokeJobOperation (parameter);
   }
   
   
   void
   Job::signalFailure()  const
   {
-    myClosure(this).signalFailure (parameter, now);
+    myClosure(this).signalFailure (parameter);
   }
   
   
@@ -106,7 +106,6 @@ namespace engine {
   Job::isValid()  const
   {
     return this->jobClosure
-        && this->parameter.invoKey > 0
         && myClosure(this).verify (getNominalTime());
   }
   

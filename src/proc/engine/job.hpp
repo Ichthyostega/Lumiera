@@ -143,62 +143,6 @@ namespace engine {
   
   typedef lumiera_jobParameter const& JobParameter;
   
-  class JobClosure;
-  
-  
-  /**
-   * Individual frame rendering task, forwarding to a closure.
-   * This functor encodes all information necessary to trigger
-   * and invoke the actual rendering operation. It will be embedded
-   * by value into a job descriptor and then enqueued with the scheduler
-   * for invocation just in time. The job interface exposes everything necessary
-   * to plan, handle, schedule and abort jobs. The implementation refers to the
-   * concrete "execution plan" encoded into the corresponding engine::JobTicket.
-   * The latter is embedded into the storage for one segment of the low-level model
-   * and thus is shared for all frames and channels within this part of the timeline.
-   * Thus, the lumiera_jobParameter struct contains the "moving parts"
-   * different for each \em individual job.
-   * 
-   * @todo 2/12 WIP-WIP-WIP defining the invocation sequence and render jobs
-   */
-  class Job
-    : public lumiera_jobDefinition
-    {
-      
-    public:
-      
-      Job (JobClosure& specificJobDefinition
-          ,InvocationInstanceID invoKey
-          ,Time nominalFrameTime)
-        {
-          this->jobClosure = &specificJobDefinition;
-          this->parameter = {_raw(nominalFrameTime), invoKey };
-        }
-      
-      // using standard copy operations
-      
-      
-      void triggerJob()    const;
-      void signalFailure() const;
-      
-      
-      Time
-      getNominalTime()  const
-        {
-          return Time (TimeValue(parameter.nominalTime));
-        }
-      
-      InvocationInstanceID
-      getInvocationInstanceID()  const
-        {
-          return this->parameter.invoKey;
-        }
-      
-      JobKind getKind()  const;
-      bool isValid()  const;
-    };
-  
-  
   /**
    * Interface of the closure for frame rendering jobs.
    * Hidden behind this interface resides all of the context re-building
@@ -226,6 +170,60 @@ namespace engine {
       
       virtual JobKind getJobKind()  const                       =0;
       virtual bool verify (Time nominalJobTime)  const          =0;
+    };
+  
+  
+  
+  
+  /**
+   * Individual frame rendering task, forwarding to a closure.
+   * This functor encodes all information necessary to trigger
+   * and invoke the actual rendering operation. It will be embedded
+   * by value into a job descriptor and then enqueued with the scheduler
+   * for invocation just in time. The job interface exposes everything necessary
+   * to plan, handle, schedule and abort jobs. The implementation refers to the
+   * concrete "execution plan" encoded into the corresponding engine::JobTicket.
+   * The latter is embedded into the storage for one segment of the low-level model
+   * and thus is shared for all frames and channels within this part of the timeline.
+   * Thus, the lumiera_jobParameter struct contains the "moving parts"
+   * different for each \em individual job.
+   */
+  class Job
+    : public lumiera_jobDefinition
+    {
+      
+    public:
+      
+      Job (JobClosure& specificJobDefinition
+          ,InvocationInstanceID invoKey
+          ,Time nominalFrameTime)
+        {
+          this->jobClosure = &specificJobDefinition;
+          this->parameter.nominalTime = _raw(nominalFrameTime);
+          this->parameter.invoKey = invoKey;
+        }
+      
+      // using standard copy operations
+      
+      
+      void triggerJob()    const;
+      void signalFailure() const;
+      
+      
+      Time
+      getNominalTime()  const
+        {
+          return Time (TimeValue(parameter.nominalTime));
+        }
+      
+      InvocationInstanceID
+      getInvocationInstanceID()  const
+        {
+          return this->parameter.invoKey;
+        }
+      
+      JobKind getKind()  const;
+      bool isValid()  const;
     };
   
   

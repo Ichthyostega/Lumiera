@@ -174,7 +174,7 @@ namespace test  {
           Timings timings (FrameRate::PAL);
           ENSURE (START_FRAME == 10);
           
-          TimeAnchor refPoint = TimeAnchor::build (timings, START_FRAME);
+          TimeAnchor refPoint(timings, START_FRAME);
           CHECK (refPoint == Time::ZERO + Duration(10, FrameRate::PAL));
           
           FrameCoord coordinates = dispatcher.onCalcStream (modelPort,CHANNEL)
@@ -191,7 +191,6 @@ namespace test  {
           
           Job frameJob = executionPlan.createJobFor (coordinates);
           CHECK (frameJob.getNominalTime() == coordinates.absoluteNominalTime);
-          CHECK (0 < frameJob.getInvocationInstanceID());
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
@@ -209,7 +208,7 @@ namespace test  {
           ModelPort modelPort (getTestPort());
           Timings timings (FrameRate::PAL);
           
-          TimeAnchor refPoint = TimeAnchor::build (timings, START_FRAME);
+          TimeAnchor refPoint = TimeAnchor(timings, START_FRAME);
           
           JobPlanningSequence jobs = dispatcher.onCalcStream(modelPort,CHANNEL)
                                                .establishNextJobs(refPoint);
@@ -226,9 +225,8 @@ namespace test  {
           ///TODO nachfolgendes muß komplett umgeschrieben werden
           ///TODO definieren, wie das scheduler-interface angesprochen wird
           ///TODO dann stub dafür bauen
-          ///TODO Idee/Frage: kann man nach den Prerequisites nochmal zum Job *zurückkehren* ?
-          /////////////////// Antwort: nein man kann nicht.
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           TimeVar frameStart (refPoint);
           InvocationInstanceID prevInvocationID(0);
           Offset expectedTimeIncrement (1, FrameRate::PAL);
@@ -248,7 +246,6 @@ namespace test  {
           CHECK (frameStart                        == Time(refPoint) + coveredTime);
           CHECK (frameStart                        >= Time(refPoint) + timings.getPlanningChunkDuration());
           CHECK (frameStart + expectedTimeIncrement > Time(refPoint) + timings.getPlanningChunkDuration());
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       

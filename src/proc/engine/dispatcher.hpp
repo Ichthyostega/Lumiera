@@ -83,7 +83,7 @@ namespace engine {
           establishNextJobs (TimeAnchor& refPoint)
             {
               return JobPlanningSequence(
-                  relativeFrameLocation(refPoint_),
+                  relativeFrameLocation(refPoint),
                   dispatcher_); 
             }
         };

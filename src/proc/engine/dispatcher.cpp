@@ -44,7 +44,7 @@ namespace engine {
   
   /** */
   FrameCoord
-  Dispatcher::JobBuilder::relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset)
+  Dispatcher::JobBuilder::relativeFrameLocation (TimeAnchor& refPoint, uint frameCountOffset)
   {
     UNIMPLEMENTED ("build coordinates of frame to render");
   }

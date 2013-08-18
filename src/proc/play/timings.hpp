@@ -113,12 +113,12 @@ namespace play {
       /** marker for halted output */
       static Timings DISABLED;
       
-      TimeValue getOrigin()  const;
+      Time     getOrigin()  const;
       
-      TimeValue getFrameStartAt    (int64_t frameNr)     const;
-      Offset    getFrameOffsetAt   (TimeValue refPoint)  const;
-      Duration  getFrameDurationAt (TimeValue refPoint)  const;
-      Duration  getFrameDurationAt (int64_t refFrameNr)  const;
+      Time     getFrameStartAt    (int64_t frameNr)     const;
+      Offset   getFrameOffsetAt   (TimeValue refPoint)  const;
+      Duration getFrameDurationAt (TimeValue refPoint)  const;
+      Duration getFrameDurationAt (int64_t refFrameNr)  const;
       
       /** the frame spacing and duration remains constant for some time...
        * @param startPoint looking from that time point into future

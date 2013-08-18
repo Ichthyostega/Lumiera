@@ -77,17 +77,17 @@ namespace play {
   Timings Timings::DISABLED(FrameRate::HALTED);
   
   
-  TimeValue
+  Time
   Timings::getOrigin()  const
   {
-    return grid_->timeOf(0);
+    return Time(grid_->timeOf(0));
   }
   
   
-  TimeValue
+  Time
   Timings::getFrameStartAt (int64_t frameNr)  const
   {
-    return grid_->timeOf(frameNr);
+    return Time(grid_->timeOf(frameNr));
   }
   
   

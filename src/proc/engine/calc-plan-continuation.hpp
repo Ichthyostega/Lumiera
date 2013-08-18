@@ -131,7 +131,7 @@ namespace engine {
           invoKey.frameNumber = startFrame;
           Time nominalPlanningStartTime = timings_.getFrameStartAt (startFrame);
           
-          return Job(this, invoKey, nominalPlanningStartTime);
+          return Job(*this, invoKey, nominalPlanningStartTime);
         }
       
       
