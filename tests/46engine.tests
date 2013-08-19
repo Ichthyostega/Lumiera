@@ -57,3 +57,7 @@ END
 
 PLANNED "source reading Node" NodeSource_test <<END
 END
+
+
+PLANNED "scheduler interface" SchedulerInterface_test <<END
+END

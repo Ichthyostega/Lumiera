@@ -1,5 +1,5 @@
 /*
-  HierarchyOrientationIndicator(Test)  -  verify generation details
+  HierarchyOrientationIndicator(Test)  -  mechanism for reproducing a tree (of jobs)
   
   Copyright (C)         Lumiera.org
     2013,               Hermann Vosseler <Ichthyostega@web.de>
@@ -273,7 +273,7 @@ namespace test {
                             if (direction > 0)
                               {
                                 treeVisitation->orientation -= 1;
-                                Node& refPoint = startChildTransaction();
+                                Node* refPoint = startChildTransaction();
                                 populateBy (treeVisitation);
                                 commitChildTransaction(refPoint);
                               }
@@ -293,19 +293,19 @@ namespace test {
                         current_ = & parent_->makeChild(id);
                       }
                     
-                    Node&
+                    Node*
                     startChildTransaction()
                       {
-                        Node& oldRefPoint (*parent_);
+                        Node* oldRefPoint = parent_;
                         ASSERT (current_);
                         parent_ = current_;  // set new ref point
                         return oldRefPoint;
                       }
                     
                     void
-                    commitChildTransaction(Node& refPoint)
+                    commitChildTransaction(Node* refPoint)
                       {
-                        parent_ = &refPoint;
+                        parent_ = refPoint;
                         current_ = parent_;
                       }
                   };
@@ -408,4 +408,4 @@ namespace test {
   /** Register this test class... */
   LAUNCHER(HierarchyOrientationIndicator_test, "unit common");
   
-}} // namespace lib
+}} // namespace lib::test

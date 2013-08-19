@@ -24,6 +24,7 @@
 #ifndef PROC_ENGINE_JOB_H
 #define PROC_ENGINE_JOB_H
 
+///////////////////////////////////////////////////////////////////TICKET #926 : Job descriptor belongs into backend
 
 #include "lib/llist.h"
 #include "lib/hash-value.h"
