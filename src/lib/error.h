@@ -1,5 +1,5 @@
 /*
-  error.h  -  Lumiera Error handling
+  ERROR.h  -  Lumiera Error handling interface (C-style)
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,23 +17,42 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
+
+
+/** @file error.h
+ ** Lumiera error handling (C interface).
+ ** This header declares the interface for C-style error handling
+ ** based on a thread local error flag. This error state is "sticky";
+ ** client code is bound to clear the error flag explicitly before
+ ** being able to set another error state.
+ ** 
+ ** Error states are tightly integrated with NoBug based logging, as well
+ ** as with the exceptions used by the C++ part of the application: throwing
+ ** an exception automatically sets the error flag, and by policy, any
+ ** catch clause has to check, log and clear the error flag too.
+ ** 
+ ** @see error.hpp C++ interface
+ ** @see error-state.c
+ ** @see error-exception.cpp
+ **
+ */
+
+
 #ifndef LUMIERA_ERROR_H
 #define LUMIERA_ERROR_H
 
 #ifdef __cplusplus
 extern "C" {
 #elif 0
-} /*eek, fixes emacs indenting for now*/
+} /* fixes broken emacs indenting */
 #endif
+
 
 #include <nobug.h>
 #include <stdlib.h>
 
-/**
- * @file
- * C Error handling in Lumiera, header.
- */
 
 typedef const char* lumiera_err;
 

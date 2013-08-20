@@ -37,14 +37,12 @@
 #ifndef FUNCTOR_UTIL_H_
 #define FUNCTOR_UTIL_H_
 
+#include "lib/hash-value.h"
+
 #include <tr1/functional>
 #include <boost/functional/hash.hpp>
 
 
-
-namespace lib {
-  typedef size_t HashVal;
-}
 
 namespace util { ////////////TODO: refactor namespace. But probably not directly into namespace lib. Needs some more consideration though
   

@@ -43,7 +43,8 @@
 
 
 #include "proc/mobject/placement.hpp"
-#include "proc/mobject/session/query-resolver.hpp"
+#include "common/query/query-resolver.hpp"
+#include "lib/format-string.hpp"
 
 #include <tr1/functional>
 
@@ -55,6 +56,9 @@ namespace session {
   using std::tr1::bind;
   using std::tr1::function;
   using std::tr1::placeholders::_1;
+  
+  using lumiera::Goal;
+  using lumiera::Query;
   
   
   
@@ -93,7 +97,8 @@ namespace session {
       
       
       DiscoveryQuery ()
-        : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
+        : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY)
+                 , lib::QueryText(""))  //  syntactic representation supplied on demand
         { }
       
     private:
@@ -126,7 +131,7 @@ namespace session {
    * object holds it's own discovery iterator and thus is completely
    * self contained. The query is issued automatically on construction,
    * thus the embedded iterator immediately points at the first result.
-   * Moreover, as any Lumiera Forward Iterator is \c bool checkable,
+   * Moreover, since any Lumiera Forward Iterator is \c bool checkable,
    * a ScopeQuery not yielding any results will evaluate to \c false
    * immediately after construction, allowing convenient inline checks.
    * The query can be re-issued by the function operator, and the
@@ -184,6 +189,22 @@ namespace session {
       buildContentFilter()  const
         {
           return bind (&PlacementMO::isCompatible<MO>, _1 );
+        }
+      
+      /** supplement a syntactic representation (as generic query in predicate form).
+       *  Building this representation is done on demand for performance reasons;
+       *  typically a ScopeQuery is issued immediately into a known sub scope
+       *  of the Session/Model and resolved by the PlacementIndex
+       * @todo we need a readable and sensible representation as generic query ///////////////////TICKET #901
+       */
+      lib::QueryText
+      buildSyntacticRepresentation()  const
+        {
+          using util::_Fmt;
+          TODO ("valid syntactic representation of scope queries");
+          return lib::QueryText (_Fmt ("scope(X, %08X), scopeRelation(X, %d)")
+                                      % hash_value(searchScope())        ////////TODO how to represent a placement in queries
+                                      % uint(searchDirection()));        ////////TODO how to translate that in textual terms
         }
     };
   

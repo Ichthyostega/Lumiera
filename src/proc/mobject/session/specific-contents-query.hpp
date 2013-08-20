@@ -27,6 +27,7 @@
 
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/placement.hpp"
+#include "common/query/query-resolver.hpp"
 
 #include <tr1/functional>
 
@@ -36,6 +37,8 @@ namespace mobject {
 namespace session {
   
   using std::tr1::function;
+  
+  using lumiera::QueryResolver;
   
   
   /**

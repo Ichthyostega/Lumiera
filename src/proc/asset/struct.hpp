@@ -57,12 +57,11 @@
 #ifndef ASSET_STRUCT_H
 #define ASSET_STRUCT_H
 
-#include "proc/asset.hpp"
-#include "lib/query.hpp"
-#include "lib/factory.hpp"
-#include "lib/singleton.hpp"
 #include "lib/symbol.hpp"
+#include "proc/asset.hpp"
+#include "common/query.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <string>
 
@@ -134,7 +133,8 @@ namespace asset {
   /** 
    * Factory specialised for creating Structural Asset objects.
    */ 
-  class StructFactory : public lib::Factory<asset::Struct>
+  class StructFactory
+    : boost::noncopyable
     {
       scoped_ptr<StructFactoryImpl> impl_;
       
@@ -144,8 +144,6 @@ namespace asset {
       
       
     public:
-      typedef P<asset::Struct> PType;
-      
       template<class STRU>
       P<STRU> operator() (Query<STRU> const& query); 
       

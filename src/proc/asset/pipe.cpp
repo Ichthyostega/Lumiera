@@ -58,9 +58,9 @@ namespace asset {
   
   
   PPipe 
-  Pipe::query (string properties)
+  Pipe::query (string const& properties)
   { 
-    return Struct::retrieve (Query<Pipe> (properties)); 
+    return Struct::retrieve (Query<Pipe> (properties));
   }
   
   

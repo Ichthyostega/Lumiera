@@ -39,20 +39,25 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/query-util.hpp"
+#include "common/query/query-resolver.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/output-designation.hpp"
 #include "proc/mobject/output-mapping.hpp"
-#include "common/configrules.hpp"
+#include "proc/config-resolver.hpp"
+#include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <cstdlib>
 
-using lumiera::query::QueryHandler;
-using lumiera::query::removeTerm;
-using lumiera::query::extractID;
-using lumiera::ConfigRules;
 using lumiera::Symbol;
+using lumiera::query::QueryHandler;
+using lib::query::removeTerm;
+using lib::query::extractID;
+using proc::ConfigResolver;
+using lib::HashVal;
+using util::uNum;
 
 namespace proc {
 namespace mobject {
@@ -168,7 +173,7 @@ namespace mobject {
     resolveQuery (Query<asset::Pipe> const& query4pipe)
     {
       PPipe res;
-      QueryHandler<asset::Pipe>& typeHandler = ConfigRules::instance();  
+      QueryHandler<asset::Pipe>& typeHandler = ConfigResolver::instance();  
       typeHandler.resolve (res, query4pipe);
       HashVal resulting_targetPipeID (res? (HashVal)res->getID() : 0 );
       return resulting_targetPipeID;
@@ -179,16 +184,15 @@ namespace mobject {
     uint
     is_defaults_query_with_channel (Query<asset::Pipe> const& query4pipe)
     {
-      string seqNr = extractID (SEQNR_PREDICATE, query4pipe);
-      return abs(std::atoi (seqNr.c_str()));  // also 0 in case of an invalid number
+      string seqNr = query4pipe.extractID (SEQNR_PREDICATE);
+      return uNum (seqNr);  // defaults to 0 in case of an invalid number
     }
     
     Query<asset::Pipe>
     build_corresponding_sourceQuery (Query<asset::Pipe> const& query4pipe)
     {
-      Query<asset::Pipe> srcQuery = query4pipe;
-      removeTerm (SEQNR_PREDICATE, srcQuery);
-      return srcQuery;
+      return query4pipe.rebuild()
+                       .removeTerm (SEQNR_PREDICATE);
     }
   }
   

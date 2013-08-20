@@ -25,7 +25,6 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time.h"
-#include "lib/advice.hpp"
 
 #include <boost/rational.hpp>
 
@@ -37,21 +36,6 @@ namespace error = lumiera::error;
 
 namespace lib {
 namespace time {
-  
-  
-  namespace { // implementation helpers...
-    
-    PQuant
-    retrieveQuantiser (Symbol gridID)
-    {
-      advice::Request<PQuant> query(gridID);
-      PQuant grid_found = query.getAdvice();
-      if (!grid_found)
-        throw error::Logic ("unable to fetch the quantisation grid -- was it already defined?"    ////////TICKET #197
-                           , LUMIERA_ERROR_UNKNOWN_GRID);
-      return grid_found;
-    }
-  }//(End) implementation helpers
   
   
   PQuant
@@ -68,17 +52,11 @@ namespace time {
   Grid::~Grid() { } // hint to emit the VTable here...
   
   
-  /** 
-   * build a quantised time value, referring the time grid by-name.
-   * This is the preferred standard way of establishing a quantisation,
-   * but it requires an existing time scale defined in the Lumiera Session,
-   * as TimeGrid (meta asset). Usually, such a time scale gets built based
-   * on the format and parameters of an output bus.
+  /* Note: the ctor QuTime(TimeValue, Symbol) and the static function
+   *       PQuant Quantiser::retrieve (Symbol) are defined in common-services.cpp
+   *       To use this special convenience shortcuts, you need to link against liblumieracore.so
+   *       This allows to use the Advice-system to retrieve grid definitions directly from the session  
    */
-  QuTime::QuTime (TimeValue raw, Symbol gridID)
-    : Time(raw)
-    , quantiser_(retrieveQuantiser (gridID))
-    { }
   
   
   /**
@@ -108,17 +86,6 @@ namespace time {
     , raster_(__ensure_nonzero(frame_duration))
     { }
   
-  
-  
-  /** Access an existing grid definition or quantiser, known by the given symbolic ID.
-   *  Typically this fetches a meta::TimeGrid (asset) from the session.
-   * @throw error::Logic if the given gridID wasn't registered
-   * @return smart-ptr to the quantiser instance */
-  PQuant
-  Quantiser::retrieve (Symbol gridID)
-  {
-    return retrieveQuantiser (gridID);
-  }
   
   
   

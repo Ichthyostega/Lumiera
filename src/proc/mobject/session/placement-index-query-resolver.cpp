@@ -39,6 +39,10 @@ namespace session {
   
   using boost::scoped_ptr;
   
+  using lumiera::Goal;
+  using lumiera::Query;
+  using lumiera::Resolution;
+  using lumiera::getResultTypeID;
   
   
   typedef PlacementIndex::ID PID;
@@ -190,7 +194,7 @@ namespace session {
    * there is a smart-ptr managing this ResultSet.
    */
   class ResultSet
-    : public Resolution
+    : public lumiera::Resolution
     {
       ContentFilter acceptable_;
       ExplorerBuilder buildExploartion_;
@@ -271,7 +275,7 @@ namespace session {
     QueryID
     whenQueryingFor()
       {
-        QueryID qID = {Goal::DISCOVERY, getResultTypeID<Placement<MO> >()};
+        QueryID qID(Goal::DISCOVERY, getResultTypeID<Placement<MO> >());
         return qID;
       }
     
@@ -321,7 +325,7 @@ namespace session {
   bool
   PlacementIndexQueryResolver::canHandleQuery(QID qID)  const
   {
-    return qID.kind == Goal::DISCOVERY 
+    return qID.kind == Goal::DISCOVERY
        &&( qID.type == getResultTypeID<Placement<MObject> >()
          ||qID.type == getResultTypeID<Placement<Clip> >()
          ||qID.type == getResultTypeID<Placement<Effect> >()

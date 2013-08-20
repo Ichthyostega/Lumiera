@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: Player and Output" ./test-components --group=player
+TESTING "Component Test Suite: Player and Output" ./test-suite --group=player
 
 
 

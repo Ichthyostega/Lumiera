@@ -56,6 +56,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/hash-value.h"
 #include "lib/util-foreach.hpp"
 #include "include/logging.h"
 #include "proc/engine/type-handler.hpp"

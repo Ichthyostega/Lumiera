@@ -30,6 +30,7 @@
 #include "proc/engine/frame-coord.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
+#include "lib/hierarchy-orientation-indicator.hpp"
 #include "lib/linked-elements.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
@@ -46,31 +47,10 @@ namespace engine {
 //using lib::time::FSecs;
 //using lib::time::Time;
 using lib::LinkedElements;
+using lib::OrientationIndicator;
 using util::isnil;
 //  
 //class ExitNode;
-  
-  /** 
-   * a job closure represents the execution context of a job.
-   * This allows us to enqueue simple job-"functions" with the scheduler.
-   * By virtue of the JobClosure-pointer, embedded into #lumiera_jobDefinition,
-   * the invocation of such a job may re-gain the full context, including the
-   * actual ProcNode to pull and further specifics, like the media channel.
-   */ 
-  class JobClosure
-    : public lumiera_jobClosure
-    {
-    public:
-      virtual ~JobClosure();     ///< this is an interface
-      
-      
-      virtual void invokeJobOperation (JobParameter parameter)  =0;
-      virtual void signalFailure      (JobParameter parameter)  =0;
-      
-      virtual JobKind getJobKind()  const                       =0;
-      virtual bool verify (Time nominalJobTime)  const          =0;
-    };
-  
   
   
   /**
@@ -99,6 +79,7 @@ using util::isnil;
       struct Provision
         {
           Provision* next;
+          ////////////////////TODO some channel or format descriptor here
         };
       
       struct Prerequisite
@@ -153,6 +134,7 @@ using util::isnil;
       typedef std::stack<SubTicketSeq> SubTicketStack;               //////////////////////////TODO use a custom container to avoid heap allocations
       
       SubTicketStack toExplore_;
+      OrientationIndicator orientation_;
       
     public:
       ExplorationState() { }
@@ -170,6 +152,13 @@ using util::isnil;
       empty()  const
         {
           return toExplore_.empty();
+        }
+      
+      
+      void
+      markTreeLocation()
+        {
+          UNIMPLEMENTED ("establish tree relation to previous point");
         }
       
       
@@ -192,7 +181,7 @@ using util::isnil;
       
       
       void
-      push (ExplorationState subExploration)
+      push (ExplorationState subExploration)                 // note: passing deliberately by value
         {
           if (subExploration.empty()) return;
           

@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: Proc-Layer controller" ./test-components --group=controller
+TESTING "Component Test Suite: Proc-Layer controller" ./test-suite --group=controller
 
 
 

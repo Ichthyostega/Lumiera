@@ -123,8 +123,13 @@ namespace std { // forward declaration to avoid including <iostream>
   class basic_ostream;
   
   typedef basic_ostream<char, char_traits<char> > ostream;
+
 }
 
+namespace lib {
+  class Literal; 
+  class Symbol; 
+}
 
 
 namespace util {
@@ -215,6 +220,7 @@ namespace util {
    * @param val arbitrary value or pointer to be included into the result
    * @warning you need to provide exactly the right number of parameters,
    *          i.e. matching the number of fields in the format string.
+   * @note EX_FREE
    */
   template<typename VAL>
   inline _Fmt&
@@ -349,6 +355,21 @@ namespace util {
           format (cString? cString : "↯", impl);
         }
     };
+  
+  template<>
+  struct _Fmt::Converter<lib::Literal>
+    {
+      static void
+      dump (lib::Literal const& literal, Implementation& impl)
+        {
+          format (literal.empty()? "" : literal.c(), impl);
+        }
+    };
+  
+  template<>
+  struct _Fmt::Converter<lib::Symbol>
+    : _Fmt::Converter<lib::Literal>
+    { };
   
   /** some custom types explicitly provide a string representation */
   template<typename VAL>

@@ -44,6 +44,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/hash-value.h"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/type-handler.hpp"
 #include "proc/engine/buffer-local-key.hpp"

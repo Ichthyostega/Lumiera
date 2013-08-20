@@ -28,11 +28,15 @@
 #include "proc/mobject/builder/buildertool.hpp"
 
 
+namespace lumiera {
+namespace query {
+  class DefsManager;
+}}
+
 namespace proc {
 namespace mobject {
 namespace session {
     
-    class DefsManager;
     
     
     /**
@@ -50,7 +54,7 @@ namespace session {
      */
     class Root : public Meta
       {
-        DefsManager& defaults_;
+        lumiera::query::DefsManager& defaults_;
         
         ///////////TODO: timespan fields here or already in class Meta??
         ///////////TODO: any idea about the purpose of root's "timespan"??  ///////TICKET #448
@@ -64,7 +68,7 @@ namespace session {
         virtual bool isValid()  const;
         
       public:
-        Root (DefsManager&);
+        Root (lumiera::query::DefsManager&);
         
         DEFINE_PROCESSABLE_BY (builder::BuilderTool);
         

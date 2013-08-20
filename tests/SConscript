@@ -12,54 +12,70 @@ from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 from Buildhelper import createPlugins
 
-Import('env core tools config')
+Import('env core_lib app_lib backend_lib tools config')
 env = env.Clone()
 env.Append(CPPPATH='include')  # additional headers for tests
 
+# test classes of subcomponents linked in shared objects
+sharedTestLibs = {}
 
 
-def testExecutable(env,tree, exeName=None, obj=None):
-    """ declare all targets needed to create a standalone
-        Test executable of the given Sub-tree.
-        @note this tree uses separate Environment/Includepath
-    """
-    env = env.Clone()
-    env.Append(CPPPATH=tree) # add subdir to Includepath 
-    tree = env.subst(tree)  # expand Construction Vars
-    if obj:
-        obj = [path.join(tree,name) for name in obj]
+
+def linkContext(id):
+    if id.startswith('lib'):
+        return app_lib              # tests in 'lib*' subdirs only linked against application framework
+    elif id.startswith('back'):
+        return backend_lib          # tests in 'back*' subdirs only linked against backend layer
     else:
-        obj = srcSubtree(tree) # use all sourcefiles found in subtree
-    if not exeName:
-        exeName = 'test-%s' % tree
-    return env.Program(exeName, obj + core)
+        return core_lib             # all other tests linked against complete application core
 
 
-def testCollection(env,dir):
-    """ treat a Directory containing a collection of standalone tests.
-        Link each of them into an independent executable
+def exeTestName(srcName):
+    name = path.basename(path.splitext(srcName)[0])
+    if not name.startswith('test-'):
+        name = 'test-'+name
+    return name
+
+
+def testCases(env,dir):
+    """ visit a source subtree and declare all testcases.
+        Test classes will be linked into shared libraries,
+        while plain-C tests end up as standalone test-XXX.
+        @note: using the tree root as additional includepath
+        @note: linking scope chosen based on the name-prefix 
     """
     env = env.Clone()
-    env.Append(CPPPATH=dir) # add subdir to Includepath 
-    srcpatt = ['test-*.c']
-    exeName = lambda p: path.basename(path.splitext(p)[0])
-    buildIt = lambda p: env.Program(exeName(p), [p] + core)
-    return [buildIt(f) for f in scanSubtree(dir,srcpatt)] 
+    env.Append(CPPPATH=dir) # add subdir to Includepath
+    
+    # pick up all test classes and link them shared
+    testlib = []
+    testClasses = list(scanSubtree(dir,['*.cpp']))
+    if testClasses:
+        testlib = sharedTestLibs[dir] = env.SharedLibrary('test-'+dir, testClasses)
+    
+    # pick up standalone plain-C tests
+    standaloneTests = list(scanSubtree(dir,['test-*.c']))
+    simpletests = [env.Program(exeTestName(p), [p]+linkContext(dir)) for p in standaloneTests]
+    
+    return testlib + simpletests
 
 
 
 
-
-# have to treat some subdirs individually.
-specials = ['plugin','lib','components']
-moduledirs = globRootdirs('*')
-
+# have to treat some subdirs separately.
+specialDirs = ['plugin','tool','include']
+testSrcDirs = globRootdirs('*')
 
 
-testsuite = ( [ testExecutable(env, dir) for dir in ['lib','components'] ]
-            + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
+testcases  = [testCases(env, dir)  for dir in testSrcDirs if not dir in specialDirs]
+testLibs   = sharedTestLibs.values()
+testrunner = env.Program("test-suite", ["testrunner.cpp"]+testLibs+core_lib)
+
+
+testsuite = ( testcases
+            + testrunner
             + createPlugins(env, 'plugin')
-            + env.File(glob('*.tests'))     # depending on the test definition files for test.sh
+            + env.File(glob('*.tests'))     # depend explicitly on the test definition files for test.sh
             + config
             )
 Export('testsuite')
@@ -68,7 +84,7 @@ Export('testsuite')
 
 
 # for creating a Valgrind-Suppression file
-vgsuppr = env.Program('vgsuppression','tool/vgsuppression.c', LIBS=core)   ## for suppressing false valgrind alarms
+vgsuppr = env.Program('vgsuppression',['tool/vgsuppression.c']+core_lib)   ## for suppressing false valgrind alarms
 tools  += [vgsuppr]
 Depends(testsuite,vgsuppr)
 
@@ -79,7 +95,7 @@ Depends(testsuite,vgsuppr)
 #  - the product of running the Testsuite is the ",testlog"
 #  - it depends on all artifacts defined as "testsuite" above
 #  - including the tests/*.tests (suite definition files)
-#  - if not set via options switch, the environment variables
+#  - if not set via options switch, the environment variables TESTMODE,
 #    TESTSUITES and VALGRINDFLAGS are explicitly propagated to test.sh
 #
 testEnv = env.Clone()
@@ -90,19 +106,18 @@ if not valgrind and not env['VALGRIND']:
 
 testEnv.Append(ENV = { 'VALGRINDFLAGS' : valgrind
                      , 'LUMIERA_CONFIG_PATH' : './'
+                     , 'TEST_CONF' : env.File("test.conf").abspath
                      })
 
-testsuites = env['TESTSUITES'] or os.environ.get('TESTSUITES')
-if testsuites:
-    testEnv['ENV']['TESTSUITES'] = testsuites
-    
-pluginpath = os.environ.get('LUMIERA_PLUGIN_PATH')
-if testsuites:
-    testEnv['ENV']['LUMIERA_PLUGIN_PATH'] = pluginpath
+def propagateSetting(env, key):
+    setting = key in env and env[key] or os.environ.get(key)
+    if setting:
+        env['ENV'][key] = setting
 
-# specify path to test.conf
-testEnv['ENV']['TEST_CONF'] = env.File("test.conf").abspath
 
+propagateSetting(testEnv, 'TESTSUITES')
+propagateSetting(testEnv, 'TESTMODE')
+propagateSetting(testEnv, 'LUMIERA_PLUGIN_PATH')
 
 testDir = env.Dir('#$TARGDIR')
 runTest = env.File("test.sh").abspath

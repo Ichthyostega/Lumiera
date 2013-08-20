@@ -57,19 +57,31 @@ namespace engine {
 //  using mobject::session::Effect;
   
   
+  
+  /**
+   * emit the VTable for JobClosure within this compilation unit,
+   * which is still part of the backend. The actual job implementation
+   * classes are defined in the Proc-Layer
+   */
+  JobClosure::~JobClosure() { }
+  
+  
+  
+  
+  
   /** @todo WIP-WIP 2/12  
    */
   void
-  Job::triggerJob ()  const
+  Job::triggerJob()  const
   {
     myClosure(this).invokeJobOperation (parameter);
   }
   
   
   void
-  Job::signalFailure ()  const
+  Job::signalFailure()  const
   {
-    UNIMPLEMENTED ("how to organise job failure and abortion");
+    myClosure(this).signalFailure (parameter);
   }
   
   
@@ -94,7 +106,6 @@ namespace engine {
   Job::isValid()  const
   {
     return this->jobClosure
-        && this->parameter.invoKey > 0
         && myClosure(this).verify (getNominalTime());
   }
   

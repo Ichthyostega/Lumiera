@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: Asset Manager" ./test-components --group=asset
+TESTING "Component Test Suite: Asset Manager" ./test-suite --group=asset
 
 
 

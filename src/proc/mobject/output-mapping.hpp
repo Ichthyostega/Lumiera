@@ -52,11 +52,12 @@
 #ifndef PROC_MOBJECT_OUTPUT_MAPPING_H
 #define PROC_MOBJECT_OUTPUT_MAPPING_H
 
+#include "lib/error.hpp"
+#include "lib/util.hpp"
+#include "lib/hash-value.h"
 #include "proc/asset/pipe.hpp"
 #include "lib/bool-checkable.hpp"
-#include "lib/error.hpp"
-#include "lib/query.hpp"
-#include "lib/util.hpp"
+#include "common/query.hpp"
 
 #include <boost/operators.hpp>
 #include <map>
@@ -97,7 +98,7 @@ namespace mobject {
   
   namespace error = lumiera::error;
   using lumiera::Query;
-  using asset::HashVal;
+  using lib::HashVal;
   
   
   
@@ -213,7 +214,7 @@ namespace mobject {
            *  This operation is invoked when client code accesses
            *  the result of an OutputMapping query. 
            * @return result of invoking the configured \c DEF::output functor
-           * @throw  error::Logic when resoving an \em unconnected mapping
+           * @throw  error::Logic when resolving an \em unconnected mapping
            */
           operator Target()
             {
@@ -386,7 +387,7 @@ namespace mobject {
             // treat the special case
             // when actually requesting the "Nth default of this kind" 
             PPipe corresponding_sourcePipe
-              = asset::Pipe::query(
+              = asset::Struct::retrieve (
                   _mapping::build_corresponding_sourceQuery (query4pipe));
             ENSURE (corresponding_sourcePipe);
             

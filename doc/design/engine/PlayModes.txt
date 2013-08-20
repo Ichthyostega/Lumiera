@@ -1,0 +1,139 @@
+Analysis: Modes of Playback
+===========================
+:Date: January 2013
+:Author: Ichthyostega
+
+
+The *player* -- shorthand for ``playback and render control subsystem''
+is responsible for establishing and coordinating the processes and services
+necessary for generating continuous output or rendered media. The actual calculations
+take place within the render engine, while the player instructs the engine in case of
+any modification regarding the _parameters_ of timed data delivery. More specifically,
+there is a *play controller* (state machine) for each _instance_ of playback, managing
+an allocated *output slot* with a set of *output sinks*, plus a number of *calculation streams*,
+which in turn are cooperating with the *frame dispatcher* and the *scheduler interface*. The
+latter acts as low-level interface to the actual rendering operations, since it allows to
+schedule individual *frame jobs* together with their prerequisite dependencies. This
+setup creates a pattern of cooperation, with the goal of delivering a continuous stream
+of calculated data to the output sinks. Specific changes within the parametrisation of
+that cooperation pattern result in an overall changed mode of playback or rendering.
+
+
+Rendering of final results
+--------------------------
+The classic case of ``rendering the results'' is treated within this framework as a special
+case of _generic play-back_:  Any frames are to be delivered when done with the calculation,
+without any timing constraints, while, on the other hand, no glitches or quality compromises
+whatsoever are acceptable. Also, the play controller exposes only limited abilities: in case of
+rendering, all we need is the ability to pause and abort the process, plus an progress indicator.
+
+Regular playback
+----------------
+The *standard case of playback* delivers a sequence of media data frames at a given frame rate,
+with simple _linear temporal progression_. Typically, there are multiple playback feeds
+linked together, each delivering a specific kind of media at a specific frame or block rate,
+while being coordinated by a single play controller and working to a common delivery time goal
+(``play head'').  Which means in turn, that each individual frame has to be delivered within
+a pre planned time window. Lumiera employs an elaborate and precise timing control, based on
+triggering small atomic chunks of work in a ``just in time'' manner -- there is _no_ generic
+and built-in buffering beyond the low-level double buffering mechanisms utilised by most
+output facilities. Generally speaking, we prefer precise beforehand planning and discarding
+of untimely results over demand-driven and possibly blocking operations. Yet the buffer
+management and frame cache provided by the backend for storing and passing of intermediary
+and final results allows for a certain amount of leeway.
+
+
+Non-standard playback modes
+---------------------------
+The requirements of a software player, especially in the context of an editing application,
+call for support of several specific operation modes of playback -- which can be characterised
+by breaking with the rule of simple and linear progression in timed delivery. The following
+requirement analysis defines our understanding and implementation approach towards these
+mandatory features.
+
+Requirement analysis of playback modes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For the task of editing a piece of media, the following modes of playback presentation can be determined +
+See also the more
+link:wiki/renderengine.html#NonLinearPlayback%20PlayService%20PlayProcess%20CalcStream%20FrameDispatcher%20OutputManagement[
+technical discussion of playback in the TiddlyWiki]
+
+
+regular playback::
+  In this operation mode, some media or the arrangement on one of the timelines will be presented
+  in the intended order and with the nominal speed, possibly somewhat adjusted for the display
+  or monitoring device employed. There is a running time code display and an animated presentation
+  of the current nominal playback position (``play head'', ``cursor'', ``locator'') in the GUI.
+  Generally speaking, within Lumiera this playback position isn't incorporated as a specific
+  device -- rather it is treated as a conceptual mapping of nominal time to wall clock time.
+
+jumping::
+  creates a discontinuity in _nominal time,_ while the progress of _real wall clock time deadlines_
+  remains unaffected. We need to distinguish two kinds of _jumps_ or _skips_:
+  +
+  * a _pre planned jump_ can be worked into the progression of frames just like in normal progression.
+    Such a jump might be due to a _skip mark_ in the timeline, or it may be used to implement looped playback.
+  * to the contrary, a _spontaneous re-adjustment of playback position_ is caused by unpredictable external
+    events, like e.g. user interaction or remote control. Such an unpredictable change in the playback plan
+    deprives the engine of any delivery headroom; to allow for catch-up to timed delivery, a configurable
+    _slippage offset_ can be added to the newly established real time deadlines after the skip, in order
+    to prevent drop-outs.
++
+Since each skip might create an output discontinuity, a ``de-clicking'' or ``de-flickering'' device can be
+expected to intercept on the individual output connections to improve the usage experience while exploring media.
+
+looping::
+  In looped playback the nominal playback position jumps back to the starting point, after travelling over
+  a pre defined looping time span (``looping window''). This looping time span can be re-adjusted while in
+  playback, with immediate effect on the output. A fluid handling of loop playback is extremely important
+  for all kinds of fine tuning work. The loop boundaries may be chosen arbitrary, not necessarily aligned
+  to any frame grid (the fact this might cause some irregularities on the presented frame sequence is
+  acknowledged, yet it is deemed acceptable and preferred over employing any kind of additional
+  interpolation device not present in normal playback). +
+  Looped playback can be conceived as a series of regularly scheduled jumps.
+
+pausing::
+  _paused playback_ represents a special state of the player and engine, where we expect playback to be able
+  to commence right away, with minimal latency. Contrast this to entering playback from stopped state, where
+  services need to be initiated and connected, leading to an noticeable pre-delay. Basically, each other
+  playback mode can be entered from paused state right away, and it is reasonable for the engine to
+  prepare for this through background pre rendering.
+
+single stepping::
+  through user interaction, the current nominal playback position is moved to an adjacent frame,
+  while sending exactly this one frame to output as a still image. This is a critical operation for frame
+  accurate editing and should be reachable from any other playback mode with minimal latency. Lumiera treats
+  this mode of operation as an extension to _paused state_.
+  
+playback direction and speed::
+  while regular playback establishes a 1:1 relation between nominal time and wall clock time, a range of
+  other proportions need to be supported, like e.g. halved and doubled presentation speed both forwards and
+  backwards; it is conceivable to allow irregular fractions too. Support for speed adjustments in sound
+  playback is more involved as it might seem at first glance, so it is common to allow for a degraded
+  sound representation, or to fall back on fast-cueing.
+
+fast cueing::
+  The purpose of cuing is to skip through a large amount of material to spot some specific parts.
+  For this to work, the presented material needs to be still recognisable in some way. Typically this is done
+  by presenting small continuous chunks of material interleaved with regular skips. For editing purposes, this
+  method is often perceived as lacking, especially by experienced editors. To the contrary, the former,
+  mechanical editing systems had the ability to run with actually increased frame rate, without skipping
+  any material.
+  +
+  * it is very common to employ speed acceleration in multiple steps to alleviate travelling to more distant
+    locations within the media
+  * to improve the editor's working experience, we might consider actually to raise the frame rate, given the
+    increased availability of high-framerate capable displays.
+  * another approach would be to apply some kind of granular synthesis, dissolving several consecutive segments
+    of material. The latter would prompt to include a specific buffering and processing device not present
+    in the render path for normal playback.
+
+scrubbing::
+  this term relates to working with physical media, like magnetic tape or film strips the past: instead of using
+  the built-in transport device, the editor would spin the reels by hand in order to navigate to a desired position
+  intuitively. When translated to the world of digital media, the actual scrubbing facility is an interactive device,
+  typically even involving some kind of hardware control interface (``jog shuttle''). The playback engine needs to
+  support scrubbing, which translates into chasing a playback target, which is re-adjusted regularly. Again it
+  would be desirable to include some kind of acceleration strategy, especially to support a soft landing.
+
+

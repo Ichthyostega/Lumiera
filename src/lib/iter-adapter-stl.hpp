@@ -263,6 +263,7 @@ namespace iter_stl {
         typedef typename SEQ::iterator Iter;
         typedef RangeIter<Iter> Range;
         typedef DistinctIter<Range> DistinctVals;
+        typedef AddressExposingIter<Range> Addrs;
       };
     
     template<class SEQ>
@@ -271,6 +272,7 @@ namespace iter_stl {
         typedef typename SEQ::const_iterator Iter;
         typedef RangeIter<Iter> Range;
         typedef DistinctIter<Range> DistinctVals;
+        typedef AddressExposingIter<Range> Addrs;
       };
     
   }//(End) traits/helpers
@@ -287,6 +289,18 @@ namespace iter_stl {
   {
     typedef typename _SeqT<CON>::Range Range;
     return Range (coll.begin(), coll.end());
+  }
+  
+  
+  /** @return Lumiera Forward Iterator
+   *          exposing the address of each Element within a STL
+   */
+  template<class CON>
+  inline typename _SeqT<CON>::Addrs
+  eachAddress (CON& coll)
+  {
+    typedef typename _SeqT<CON>::Addrs Addresses;
+    return Addresses (eachElm (coll));
   }
   
   

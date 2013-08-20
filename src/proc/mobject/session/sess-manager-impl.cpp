@@ -38,13 +38,14 @@
  */
 
 
+#include "lib/error.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/sess-manager-impl.hpp"
-#include "proc/mobject/session/defs-manager.hpp"
 #include "proc/mobject/session/lifecycle-advisor.hpp"
+#include "proc/config-resolver.hpp"
 #include "proc/asset/timeline.hpp"
-#include "lib/error.hpp"
-#include "lib/query.hpp"
+#include "common/query/defs-manager.hpp"
+#include "common/query.hpp"
 
 using boost::scoped_ptr;
 
@@ -126,7 +127,7 @@ namespace session {
                 REQUIRE (0 == session_->timelines.size(), "injecting default timeline, but session isn't pristine");
                 
                 // issue a default query to retrieve or create a Timeline and a default Sequence
-                asset::PTimeline initialTimeline = session_->defaults (lumiera::Query<asset::Timeline> ());
+                asset::PTimeline initialTimeline = session_->defaults (lumiera::Query<asset::Timeline> (""));
                 
                 // these got registered automatically
                 ENSURE (1  == session_->timelines.size());
@@ -175,7 +176,9 @@ namespace session {
         void
         deconfigure()
           {
-            TODO ("reset the assets registered with AssetManager");
+            session_->defaults.clear();
+            ConfigResolver::instance().reset();    // forget any configuration rules
+            AssetManager::instance().clear();
             /////////////////////////////////////////////////////////////////// TICKET #154
           }
         
@@ -242,7 +245,8 @@ namespace session {
   SessManagerImpl::close ()
   {
     Lock sync(this);
-    lifecycle_->shutDown();
+    if (isUp())
+      lifecycle_->shutDown();
     pSess_.reset();
   }
   
@@ -255,7 +259,8 @@ namespace session {
   SessManagerImpl::reset ()
   {
     Lock sync(this);
-    lifecycle_->shutDown();
+    if (isUp())
+      lifecycle_->shutDown();
     lifecycle_->pullUp();
   }
   
@@ -265,7 +270,8 @@ namespace session {
   {
     UNIMPLEMENTED ("load serialised session");
     Lock sync(this);
-    lifecycle_->shutDown();
+    if (isUp())
+      lifecycle_->shutDown();
     lifecycle_->pullUp();
   }
   

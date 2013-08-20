@@ -36,10 +36,11 @@
 #define ASSET_MEDIA_H
 
 #include "proc/asset.hpp"
-#include "lib/factory.hpp"
 #include "lib/time/timevalue.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/clip.hpp"
+
+#include <boost/noncopyable.hpp>
 
 
 
@@ -138,7 +139,8 @@ namespace asset {
   /** 
    * Factory specialised for creating Media Asset objects.
    */ 
-  class MediaFactory : public lib::Factory<asset::Media>
+  class MediaFactory 
+    : boost::noncopyable
     {
     public:
       typedef P<Media> PType;

@@ -44,6 +44,7 @@
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : using the IterSource adapters here
+#include "common/query/query-resolver.hpp"
 
 #include <vector>
 
@@ -119,7 +120,7 @@ namespace session {
    *  of contents discovery queries to the PlacementIndex
    *  managed within the session 
    */
-  QueryResolver const&
+  lumiera::QueryResolver const&
   ScopeLocator::theResolver()
   {
     return SessionServiceExploreScope::getResolver();

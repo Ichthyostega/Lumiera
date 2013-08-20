@@ -25,7 +25,7 @@
  ** Implementation facility providing an operation skeleton of session lifecycle.
  ** This header is intended to be included into the session manager implementation;
  ** it should not be used by client code otherwise. The purpose of the LifecycleAdvisor
- ** is to to get a consolidated view on the whole lifecycle. Reading this source file
+ ** is to get a consolidated view on the whole lifecycle. Reading this source file
  ** should convey a complete picture about what is going on with respect to the
  ** session lifecycle. Besides that, no actual implementation code is to be found
  ** here; any implementation is delegated to the relevant session facilities.
@@ -33,7 +33,7 @@
  ** The idea of a LifecycleAdvisor is inspired by GUI frameworks, especially 
  ** Spring RichClient. Typically, such frameworks provide a means for flexible
  ** configuration of the application lifecycle. Configurability isn't the primary
- ** goal here, as there  is only one Lumiera application and the session lifecycle
+ ** goal here, as there is only one Lumiera application and the session lifecycle
  ** can be considered fixed, with the exception of some extension points, which are
  ** implemented as "lifecycle events".
  ** 
@@ -89,7 +89,7 @@ namespace session {
       void
       pullUp()
         {
-          createSessionFacilities();
+          createSessionFacilities();      // includes switch of the "current" Session
           emitEvent (ON_SESSION_START);
           injectSessionContent();
           emitEvent (ON_SESSION_INIT);
@@ -106,7 +106,8 @@ namespace session {
        *  cleanup and consolidation routines, the command framework is
        *  disconnected from the log, discarding any pending commands.
        *  This brings the session subsystem back into \em de-configured
-       *  state, all asset and content objects pending eviction.
+       *  state, all asset and content objects pending eviction,
+       *  and the internal knowledge-base rolled back to zero.
        */
       void
       shutDown()
@@ -132,7 +133,11 @@ namespace session {
       
       
       /**
-       * 
+       * Build and wire all the sub components together forming the session implementation.
+       * All these components are created to be operational in principle, but not initialised
+       * or outfitted with actual boilerplate state. After leaving this function, all of the
+       * technical / implementation level invariants are fulfilled. As a final step,
+       * the "current" session pointer is switched.
        */
       virtual void createSessionFacilities()   =0;
       
@@ -174,7 +179,16 @@ namespace session {
       
       
       /**
-       * 
+       * This final stage of the session lifecycle terminates the operational state of
+       * all parts of the current session. When entering this phase, it can be assumed
+       * that no entity from outside the session will access any of these parts anymore.
+       * Now, all the internal indices and knowledge registries are advised to purge,
+       * thereby rendering any session content officially non-existent.
+       * @note even after leaving this phase, all session components remain valid
+       *       and basically operational. Already disconnected render processes
+       *       might still access implementation facilities or session content.
+       *       The actual unwinding and destruction is controlled by memory
+       *       management and thus by reference count.
        */
       virtual void deconfigure()               =0;
     };

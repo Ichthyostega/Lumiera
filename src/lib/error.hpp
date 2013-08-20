@@ -1,5 +1,5 @@
 /*
-  ERROR.hpp  -  Lumiera Exception Interface
+  ERROR.hpp  -  Lumiera Exception Interface (C++)
 
   Copyright (C)         Lumiera.org
     2008,2010           Hermann Vosseler <Ichthyostega@web.de>
@@ -19,6 +19,21 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
+/** @file error.hpp
+ ** Lumiera error handling (C++ interface).
+ ** This header declares the Lumiera exception hierarchy,
+ ** plus some of the most commonly used error flag values.
+ ** Within Lumiera, C-style error states and C++-style exceptions
+ ** are tightly integrated. Creating an exception sets the error flag,
+ ** and there are helpers available to throw an exception automatically
+ ** when a non-cleare error state is detected.
+ ** 
+ ** @see error-state.c
+ ** @see error.hpp
+ **
+ */
 
 
 #ifndef LUMIERA_ERROR_HPP_
@@ -95,7 +110,7 @@ namespace lumiera {
   
   
   
-  /* === Exception Sub-categories === */
+  /* === Exception sub-categories === */
   
   namespace error {
     
@@ -244,7 +259,7 @@ namespace lumiera {
  * if NoBug is used, redefine some macros 
  * to rather throw Lumiera Errors instead of aborting
  */
-#if 0 /*This will not work, nobug aborts are hard and may hold some locks, we discussed that before -- cehteh */
+#if 0 ///////////////////////////////////TODO disabled for now. NoBug aborts are hard and may hold some locks. There are hooks to allow throwing from NoBug  TODO use them....
 #ifdef NOBUG_ABORT
 #undef NOBUG_ABORT
 #define LUMIERA_NOBUG_LOCATION \

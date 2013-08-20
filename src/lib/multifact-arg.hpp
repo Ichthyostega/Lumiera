@@ -20,7 +20,7 @@
 
 */
 
-/** @file multifact.hpp
+/** @file multifact-arg.hpp
  ** Extension allowing the MultiFact to pass arguments to the fabrication.
  ** This extension is implemented by template specialisations and thus kicks in
  ** when specifying a function \em signature as factory "product type". The resulting

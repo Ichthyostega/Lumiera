@@ -53,6 +53,7 @@
 //#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
+#include <boost/rational.hpp>
 #include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 
@@ -86,7 +87,7 @@ namespace play {
   
   /*****************************************************************************
    * Generic frame timing specification. Defines the expected delivery interval,
-   * optionally also the expected quality-of-service
+   * optionally also the expected quality-of-service (urgency).
    * 
    * @note copyable value class
    * 
@@ -99,14 +100,22 @@ namespace play {
       
     public:
       PlaybackUrgency playbackUrgency;
+      boost::rational<int64_t> playbackSpeed;                     /////////////TICKET #902 we need a more generic representation for variable speed playback
+      Time scheduledDelivery;
       Duration outputLatency;
       
+      explicit
       Timings (FrameRate fps);
       
       // default copy acceptable
       
-      TimeValue getOrigin()  const;
       
+      /** marker for halted output */
+      static Timings DISABLED;
+      
+      Time     getOrigin()  const;
+      
+      Time     getFrameStartAt    (int64_t frameNr)     const;
       Offset   getFrameOffsetAt   (TimeValue refPoint)  const;
       Duration getFrameDurationAt (TimeValue refPoint)  const;
       Duration getFrameDurationAt (int64_t refFrameNr)  const;
@@ -117,20 +126,57 @@ namespace play {
        *         to assume unaltered frame dimensions */
       Duration constantFrameTimingsInterval (TimeValue startPoint)  const;
       
-      /** for scheduled time of delivery, which is signalled
-       *  by \code playbackUrgency == TIMEBOUND \endcode
-       * @return wall clock time to expect delivery of data corresponding
+      /** calculate the given frame's distance from origin,
+       *  but do so using the real time scale, including any
+       *  playback speed factor and similar corrections.
+       * @param frameOffset frame number relative to the implicit grid
+       * @return real time value relative to the implicit grid's zero point
+       * @note since the Timings don't contain any information relating the
+       *       nominal time scale to wall clock time, this result is just
+       *       a relative offset, but expressed in real time scale values
+       * @see proc::engine::TimeAnchor for an absolutely anchored conversion
+       */
+      Offset getRealOffset (int64_t frameOffset)  const;
+      
+      /** real time deadline for the given frame, without any latency.
+       *  This value is provided in case of scheduled time of delivery,
+       *  which is signalled  by \code playbackUrgency == TIMEBOUND \endcode
+       * @return wall clock time to expect delivery of data
+       *         corresponding to a frame specified relative
        *         to \link #getOrigin time axis origin \endlink
        * @note for other playback urgencies \c Time::NEVER
+       * 
+       * @warning not clear as of 1/13 if it is even possible to have such a function
+       *          on the Timings record. 
        */
-      Time getTimeDue()  const;
+      Time getTimeDue(int64_t frameOffset)  const;
       
-      /** number of jobs to be planned and scheduled in one sway.
-       *  The continuous planning of additional frame calculation jobs
-       *  for playback or rendering proceeds in chunks of jobs
-       *  controlled by this chunk size.
+      /** the minimum time span to be covered by frame calculation jobs
+       *  planned in one sway. The ongoing planning of additional jobs
+       *  proceeds in chunks of jobs added at once to the schedule.
+       *  This setting defines the minimum time to plan ahead; after
+       *  covering at least this time span with new jobs, the
+       *  frame dispatcher concludes "enough for now" and emits
+       *  a continuation job for the next planning chunk.
        */
-      uint getPlanningChunkSize() const;
+      Duration getPlanningChunkDuration() const;
+      
+      /** establish the time point to anchor the next planning chunk,
+       *  in accordance with #getPlanningChunkDuration
+       * @param currentAnchorFrame frame number where the current planning started
+       * @return number of the first frame, which is located strictly more than
+       *         the planning chunk duration into the future
+       * @remarks this value is used by the frame dispatcher to create a
+       *          follow-up planning job */
+      int64_t establishNextPlanningChunkStart(int64_t currentAnchorFrame)  const;
+      
+      /** reasonable guess of the current engine working delay.
+       *  Frame calculation deadlines will be readjusted by that value,
+       *  to be able to deliver in time with sufficient probability. */
+      Duration currentEngineLatency()  const;
+      
+      
+      bool isOriginalSpeed()  const;
       
       
       //////////////TODO further accessor functions here
@@ -138,6 +184,16 @@ namespace play {
       Timings constrainedBy (Timings additionalConditions);
       
     };
+  
+  
+  
+  
+  
+  inline bool
+  Timings::isOriginalSpeed()  const
+  {
+    return 1 == playbackSpeed;
+  }
   
   
   

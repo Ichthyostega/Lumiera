@@ -44,6 +44,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/hash-value.h"
 #include "proc/engine/buffer-provider.hpp"
 #include "lib/scoped-ptrvect.hpp"
 
@@ -58,6 +59,7 @@ namespace engine {
   namespace error = lumiera::error;
   
   using lib::ScopedPtrVect;
+  using lib::HashVal;
   
   namespace diagn {
     

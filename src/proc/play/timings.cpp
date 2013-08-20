@@ -22,6 +22,7 @@
 
 
 #include "proc/play/timings.hpp"
+#include "backend/engine/engine-config.h"
 #include "lib/time/formats.hpp"
 #include "lib/time/timequant.hpp"
 
@@ -30,9 +31,11 @@
 namespace proc {
 namespace play {
   
-  
+  using backend::engine::EngineConfig;
   using lib::time::PQuant;
   using lib::time::Time;
+  using lib::time::TimeVar;
+  
   
   namespace { // hidden local details of the service implementation....
     
@@ -42,8 +45,8 @@ namespace play {
       return PQuant (new lib::time::FixedFrameQuantiser (fps));
     }                         //////TODO maybe caching these quantisers? they are immutable and threadsafe
     
-    
   } // (End) hidden service impl details
+  
   
   
   /** Create a default initialised Timing constraint record.
@@ -59,17 +62,32 @@ namespace play {
   Timings::Timings (FrameRate fps)
     : grid_(buildStandardGridForFramerate(fps))
     , playbackUrgency (ASAP)
+    , playbackSpeed (1)
+    , scheduledDelivery(Time::NEVER)
     , outputLatency (Duration::NIL)
     { 
       ENSURE (grid_);
     }
   
+  //////////////////////////////////////////////////////////////////TODO ctors for use in the real player/engine?
   
   
-  TimeValue
+  /** a special marker Timings record,
+   * indicating disabled or halted output */
+  Timings Timings::DISABLED(FrameRate::HALTED);
+  
+  
+  Time
   Timings::getOrigin()  const
   {
-    return grid_->timeOf(0);
+    return Time(grid_->timeOf(0));
+  }
+  
+  
+  Time
+  Timings::getFrameStartAt (int64_t frameNr)  const
+  {
+    return Time(grid_->timeOf(frameNr));
   }
   
   
@@ -103,29 +121,66 @@ namespace play {
    *  @todo implement real support for variable frame rates      
    */                                  ////////////////////////////////////////////////////////TICKET #236
   Duration
-  Timings::constantFrameTimingsInterval (TimeValue startPoint)  const
+  Timings::constantFrameTimingsInterval (TimeValue)  const
   {
     return Duration (Time::ANYTIME);
   }
   
   
   Time
-  Timings::getTimeDue()  const
+  Timings::getTimeDue(int64_t frameOffset)  const
   {
     if (TIMEBOUND == playbackUrgency)
       {
-        UNIMPLEMENTED ("scheduled delivery spec");
+        REQUIRE (scheduledDelivery != Time::NEVER);
+        return scheduledDelivery
+             + getRealOffset (frameOffset);
       }
     else
       return Time::NEVER;
   }
   
   
-  uint
-  Timings::getPlanningChunkSize()  const
+  Offset
+  Timings::getRealOffset (int64_t frameOffset)  const
   {
-    UNIMPLEMENTED ("how to control the engine evaluation chunk size");
+    Offset nominalOffset (grid_->timeOf(0), grid_->timeOf(frameOffset));
+    return isOriginalSpeed()? nominalOffset
+                            : nominalOffset * playbackSpeed;
+                                             ////////////////////////TICKET #902  for full-featured variable speed playback, we need to integrate (sum up step wise) instead of just using a fixed factor 
   }
+  
+  
+  Duration
+  Timings::getPlanningChunkDuration()  const
+  {
+    return EngineConfig::get().currentJobPlanningRhythm();
+  }
+  
+  
+  int64_t
+  Timings::establishNextPlanningChunkStart(int64_t currentAnchorFrame)  const
+  {
+    TimeVar breakingPoint = grid_->timeOf(currentAnchorFrame);
+    breakingPoint += getPlanningChunkDuration();
+    int64_t nextFrame = grid_->gridPoint (breakingPoint);
+    
+    ASSERT (breakingPoint <= grid_->timeOf(nextFrame));
+    ASSERT (breakingPoint >  grid_->timeOf(nextFrame-1));
+    
+    if (grid_->timeOf(nextFrame) == breakingPoint)
+      return nextFrame;
+    else
+      return nextFrame+1;
+  }
+  
+  
+  Duration
+  Timings::currentEngineLatency()  const
+  {
+    return EngineConfig::get().currentEngineLatency();
+  }
+  
   
   
   Timings

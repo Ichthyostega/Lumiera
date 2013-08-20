@@ -67,11 +67,11 @@ namespace lib {
    *  @note also picks ORIGIN, $ORIGIN/, ORIGIN/ 
    */
   string
-  replaceTokens (string const& src)
+  replaceMagicLinkerTokens (string const& src)
   {
     static const regex PICK_ORIGIN_TOKEN ("\\$?ORIGIN/?");
     static const string expandedOriginDir  
-      = fsys::path (findExePath()).remove_leaf().directory_string();
+      = fsys::path (findExePath()).parent_path().string() + "/";          ///////////TICKET #896
     
     return boost::regex_replace(src, PICK_ORIGIN_TOKEN, expandedOriginDir);
   }
@@ -81,26 +81,24 @@ namespace lib {
   
   
   string
-  resolveModulePath (string moduleName, string searchPath)
+  resolveModulePath (fsys::path moduleName, string searchPath)
   {
     fsys::path modulePathName (moduleName);
-    SearchPathSplitter searchLocation(searchPath);
+    SearchPathSplitter searchLocation(searchPath);                        ///////////TICKET #896
     
-    while (true)
+    while (!fsys::exists (modulePathName))
       {
-        if (fsys::exists (modulePathName))
-          {
-            INFO (config, "found module %s", modulePathName.string().c_str());
-            return modulePathName.string();
-          }
-        
         // try / continue search path
         if (searchLocation.isValid())
           modulePathName = fsys::path() / searchLocation.next() / moduleName;
         else
-          throw error::Config ("Module \""+moduleName+"\" not found"
+          throw error::Config ("Module \""+moduleName.string()+"\" not found"   /////TICKET #896
                               + (searchPath.empty()? ".":" in search path: "+searchPath));
-  }   }
+      }
+    
+    INFO (config, "found module %s", modulePathName.string().c_str());
+    return modulePathName.string();                                       ///////////TICKET #896
+  }
   
   
   

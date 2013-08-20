@@ -25,7 +25,6 @@
 #define PROC_ENGINE_DISPATCHER_H
 
 #include "proc/common.hpp"
-//#include "proc/state.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/engine/time-anchor.hpp"
 #include "proc/engine/frame-coord.hpp"
@@ -45,8 +44,7 @@ namespace engine {
   using lib::time::TimeSpan;
   using lib::time::FSecs;
   using lib::time::Time;
-//  
-//  class ExitNode;
+  
   
   /**
    * Internal abstraction: a service within the engine
@@ -76,27 +74,20 @@ namespace engine {
       struct JobBuilder
         {
           Dispatcher& dispatcher_;
-          TimeAnchor refPoint_;
           ModelPort modelPort_;
           uint channel_;
           
-          /////TODO need storage for the continuation
+          FrameCoord relativeFrameLocation (TimeAnchor& refPoint, uint frameCountOffset =0);
           
-          FrameCoord relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset =0);
-          
-          JobBuilder& establishNextJobs (TimeAnchor refPoint);
-          
-          JobBuilder& prepareContinuation (function<void(TimeAnchor)> delayedAction);
-          
-          operator JobPlanningSequence()
+          JobPlanningSequence
+          establishNextJobs (TimeAnchor& refPoint)
             {
-              TODO ("build the continuation job if necessary, wrap the sequence");
-              
               return JobPlanningSequence(
-                  relativeFrameLocation(refPoint_), dispatcher_); 
+                  relativeFrameLocation(refPoint),
+                  dispatcher_); 
             }
-
         };
+      
       
     public:
       virtual ~Dispatcher();  ///< this is an interface
@@ -107,6 +98,26 @@ namespace engine {
     protected:
       virtual FrameCoord locateRelative (FrameCoord, uint frameCountOffset)   =0;
       virtual FrameCoord locateRelative (TimeAnchor, uint frameCountOffset)   =0;     //////////TODO is this really an interface operation, or just a convenience shortcut?
+      
+      virtual bool       seamlessNextFrame (int64_t, ModelPort port)          =0;
+
+      ////////TODO: API-1 = just get next frame, without limitations  .... CHECK
+      ////////TODO: API-2 = query limitation of planning chunk        .... CHECK
+      ////////TODO: API-3 = establish next chunk                      .... still WIP
+      
+      ////////TODO: Question: why not embedding the time anchor directly within the location generator??
+      ////////      Answer: no this would lead to a huge blob called "the dispatcher"
+      
+      ////////TODO: immediate point to consider:  the time anchor is responsible for the real timing calculations. But how to introduce the play strategy *here* ?
+      
+      ////////////TODO: the solution is simple: get rid of the additional job placed magically into the chunk
+      ////////////      instead, provide a dedicated API function to create exactly that job
+      ////////////      and *enclosed* into a specialised JobClosure subclass, embody the code for the follow-up
+      ////////////      As a corollary: the scheduling deadline should be defined right *within* the job!
+      
+      ////////////TODO: remaining issues
+      ////////////    - the TimeAnchor needs to be created directly from the JobParameter. No mutable state!
+      ////////////    - but this leads to a lot of duplicated Timings records, unless we rewrite the TimeAnchor to be noncopyable and use a Timings const&
       
       virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
     };

@@ -45,7 +45,7 @@ namespace engine {
     public:
        ///// TODO: find out about the public operations
        // note: the play controller lives in the proc-layer,
-       //       but is a subsystem separate of the sesison.
+       //       but is a subsystem separate of the session.
       
     private:
       

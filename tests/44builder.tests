@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: Builder" ./test-components --group=builder
+TESTING "Component Test Suite: Builder" ./test-suite --group=builder
 
 
 TEST "BuilderTool_test" BuilderTool_test <<END

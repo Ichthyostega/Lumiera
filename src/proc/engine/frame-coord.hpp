@@ -25,23 +25,20 @@
 #define PROC_ENGINE_FRAME_COORD_H
 
 #include "proc/common.hpp"
-//#include "proc/state.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 
+#include <limits>
 
 
 namespace proc {
 namespace engine {
   
   using mobject::ModelPort;
-//using lib::time::TimeSpan;
-  using lib::time::Duration;
-//using lib::time::FSecs;
   using lib::time::TimeVar;
-//  
-//  class ExitNode;
+  using lib::time::Time;
+  
   
   /**
    * effective coordinates of a frame to be calculated.
@@ -50,42 +47,44 @@ namespace engine {
    * A frame render job can be characterised by
    * - the nominal (timeline) time of the frame
    * - the corresponding frame-number
-   * - the real wall-clock time of expected delivery//////////////TODO : might be handy, but not sure if this information is substantial here
-   * - timing constraints (e.g. latency to observe) //////////////TODO : not clear if we repeat this information here
-   * - the actual node to pull data from
-   * - the segment holding that node                //////////////TODO : is this information really required??
+   * - a real wall-clock time deadline for delivery
+   * - the actual node to pull data from, defined indirectly through
+   *   ModelPort and channel number (as used within the Segmentation)
    * 
    * @remarks consider frame coordinates being "boiled down" to the actual values.
    *          There is no reference to any kind of time grid (or similar session internals).
    * 
    * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
    */
-  class FrameCoord
+  struct FrameCoord
     {
       
-    public:
       TimeVar absoluteNominalTime;
       int64_t absoluteFrameNumber;
+      
+      TimeVar absoluteRealDeadline;
       
       ModelPort modelPort;
       uint      channelNr;
       
       
+      /** build an \em undefined frame location */
       FrameCoord()
-        {
-          UNIMPLEMENTED ("anything regarding the Node Invocation");
-        }
+        : absoluteNominalTime(Time::NEVER)
+        , absoluteFrameNumber(std::numeric_limits<int64_t>::max())
+        , modelPort() // unconnected
+        , channelNr(0)
+        { }
       
       // using default copy operations
       
-      
-      Duration remainingRealTime()
+      /** @remarks sometimes we use NIL frame coordinate records
+       *  to mark an exceptional condition, e.g. playback stop */
+      bool
+      isDefined()  const
         {
-          UNIMPLEMENTED ("deterine the real wall clock time amount left until deadline");
-                                                ////////////////////////TODO the coordinates can't answer that question! Who else can?
+          return absoluteRealDeadline != Time::NEVER;
         }
-
-      
     };
   
   

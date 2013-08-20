@@ -51,7 +51,7 @@
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject-ref.hpp"
-#include "proc/mobject/session/defs-manager.hpp"               ////////////////////////////TICKET #643  forward declare this?
+#include "common/query/defs-manager.hpp"               ////////////////////////////TICKET #643  forward declare this?
 #include "lib/ref-array.hpp"
 #include "lib/singleton.hpp"
 #include "lib/symbol.hpp"
@@ -107,7 +107,7 @@ namespace mobject {
     : boost::noncopyable
     {
     protected:
-      typedef session::DefsManager&            DefaultsAccess;
+      typedef lumiera::query::DefsManager&     DefaultsAccess;
       typedef session::ElementQuery&           ElementsAccess;
       typedef lib::RefArray<asset::PTimeline>& TimelineAccess;
       typedef lib::RefArray<asset::PSequence>& SequenceAccess;

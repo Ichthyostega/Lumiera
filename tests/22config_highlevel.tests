@@ -1,4 +1,4 @@
-TESTING "test configuration system" ./test-config
+TESTING "test configuration system" ./test-configloader
 
 PLANNED "loading configfile, simple"  <<END
 END

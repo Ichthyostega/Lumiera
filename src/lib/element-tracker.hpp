@@ -45,6 +45,10 @@
  ** AutoRegistered::is_attached_to and AutoRegistered::deactivateRegistryLink
  ** can be used for detaching an Registry explicitly before destruction.
  ** Ignoring this might lead to segfault on application shutdown. /////////////////TICKET #574
+ ** @warning be sure to understand the implications of object identity,
+ ** especially when it comes to closing and opening the Session. Especially
+ ** note that Assets use a systematic identity, not an instance identity,
+ ** which might lead to removing an old instance from the new session.
  ** 
  ** @see session-element-tracker-test.cpp
  ** @see session-interface-modules.hpp

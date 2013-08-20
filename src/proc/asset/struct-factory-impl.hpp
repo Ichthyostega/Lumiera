@@ -42,20 +42,21 @@
 #include "proc/mobject/session/element-query.hpp"
 #include "proc/mobject/session/session-query.hpp"
 #include "proc/mobject/session/scope.hpp"
-#include "common/configrules.hpp"
+#include "common/config-rules.hpp"
+#include "common/query.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/query.hpp"
 
 #include "proc/asset/struct-scheme.hpp"
 
+#include "lib/format-string.hpp"
+#include "lib/query-util.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
 #include <cstdlib>
 
 
@@ -63,13 +64,14 @@
 namespace proc {
 namespace asset {
   
-  using boost::format;
-  
   using lib::Symbol;
+  using util::_Fmt;
+  using util::uNum;
   using util::isnil;
   using util::contains;
+  using lumiera::Query;
   using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
-  using lumiera::query::extractID;
+  using lib::query::extractID;
   
   using proc::mobject::Session;
   using proc::mobject::MObject;
@@ -86,11 +88,6 @@ namespace asset {
     Symbol genericIdSymbol ("id");
     Symbol seqNrPredicate  ("ord");
     
-    inline uint
-    asNumber (string const& spec)
-    {
-      return abs(std::atoi (spec.c_str()));
-    }        // returns 0 in case of unparseable number
   }
   
   
@@ -113,22 +110,23 @@ namespace asset {
       createIdent (Query<STRU> const& query)
         {
           // does the query somehow specify the desired name-ID?
-          string nameID = extractID (genericIdSymbol, query);
+          string nameID = query.extractID (genericIdSymbol);
           if (isnil (nameID))
-            nameID = extractID (StructTraits<STRU>::idSymbol(), query);
+            nameID = query.extractID (StructTraits<STRU>::idSymbol());
           if (isnil (nameID))
             {
                // no name-ID contained in the query...
               //  so we'll create a new one
               static int i=0;
-              static format namePattern ("%s.%d");
-              nameID = str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );
+              nameID = _Fmt("%s.%d")
+                           % StructTraits<STRU>::namePrefix()
+                           % (++i);
             }
           ENSURE (!isnil (nameID));
           
           // does the query actually demand the Nth instance/element?
-          string seqID = extractID (seqNrPredicate, query);
-          if (!isnil (seqID) && 1 < asNumber(seqID))
+          string seqID = query.extractID (seqNrPredicate);
+          if (!isnil (seqID) && 1 < uNum(seqID))
             nameID += "."+seqID;
           
           Category cat (STRUCT, StructTraits<STRU>::catFolder());
@@ -178,7 +176,7 @@ namespace asset {
       template<class STRU>
       STRU* fabricate (Query<STRU> const& caps)
         {
-        throw error::Config ( str(format("The following Query could not be resolved: %s.") % caps.asKey())
+        throw error::Config ("The following Query could not be resolved: " + caps.asKey()
                             , LUMIERA_ERROR_CAPABILITY_QUERY );
         }
       
@@ -200,7 +198,7 @@ namespace asset {
   StructFactoryImpl::fabricate (Query<Pipe> const& caps)
   {
     const Asset::Ident idi (createIdent (caps));
-    string streamID = extractID ("stream", caps);
+    string streamID = caps.extractID ("stream");
     if (isnil (streamID)) streamID = "default"; 
     PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
     return new Pipe( idi
@@ -215,7 +213,7 @@ namespace asset {
   {
     TODO ("extract additional properties/capabilities from the query...");
     const Asset::Ident idi (createIdent (caps));
-    string sequenceID = extractID ("sequence", caps);
+    string sequenceID = caps.extractID ("sequence");
     Query<Sequence> desiredSequence (isnil (sequenceID)? "" : "id("+sequenceID+")");
     PSequence sequence = recursive_create_(desiredSequence);
     ASSERT (sequence);
@@ -232,7 +230,7 @@ namespace asset {
   {
     // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
     TODO ("actually extract properties/capabilities from the query...");
-    string trackID = extractID ("track", caps);
+    string trackID = caps.extractID ("track");
     Query<Track> desiredTrack (isnil (trackID)? "" : "id("+trackID+")");
 //  PTrack track = Session::current->query (desiredTrack);        ///////////////////////////////////TICKET #639
     // TODO: handle the following cases

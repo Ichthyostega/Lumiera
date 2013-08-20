@@ -57,8 +57,9 @@
 #define MOBJECT_SESSION_PLACEMENT_INDEX_QUERY_RESOLVER_H
 
 #include "proc/mobject/session/placement-index.hpp"
-#include "proc/mobject/session/query-resolver.hpp"
 #include "proc/mobject/session/scope-query.hpp"
+
+#include "common/query.hpp"
 
 #include <tr1/functional>
 
@@ -68,6 +69,7 @@ namespace mobject {
 namespace session {
  
   using std::tr1::function;
+  using lumiera::Goal;
   
   typedef PlacementIndex& IndexLink(void);
   
@@ -86,7 +88,7 @@ namespace session {
    *   * more generally, any ScopeQuery with these properties, in some variations
    */
   class PlacementIndexQueryResolver
-    : public session::QueryResolver
+    : public lumiera::QueryResolver
     {
       
       function<IndexLink> _getIndex;
@@ -105,7 +107,7 @@ namespace session {
       void defineHandling();
         
       template<typename MO>
-      Resolution* resolutionFunction (Goal const& goal);
+      lumiera::Resolution* resolutionFunction (Goal const& goal);
       
       
     public:

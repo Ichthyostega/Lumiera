@@ -291,21 +291,29 @@ namespace proc  {
     }
     
     
+    /** deleter function for lib::Handle */
     void
-    ProcessImpl::terminate (ProcessImpl* process)  ///< deleter function for lib::Handle
+    ProcessImpl::terminate (DummyPlayer::ProcessImplementationLink* process)
     {
       if (process)
         delete process;
     }
     
     
-    
+    /**
+     * activate a forwarding smart-Handle
+     * to be used by client code for communication with the play process implementation.
+     * The handle manages the lifecycle of the interface / play process connection.
+     * This virtual function is used by the interface proxy to connect the client side
+     * and the actual play process, after creating the latter through the interface system.
+     */
     DummyPlayer::Process
     ProcessImpl::createHandle()
     {
       DummyPlayer::Process handle;
-      handle.activate(this, &terminate);  // note the deleter function...
-      return handle;
+      DummyPlayer::ProcessImplementationLink *const implementationLink = this;
+      handle.activate(implementationLink, &terminate);
+      return handle;                    // note the deleter function...
     }
     
     
@@ -344,7 +352,7 @@ namespace proc  {
       {
         REQUIRE (isActive());
         ASSERT (imageGen_);
-
+        
         if (play_)
           display_(imageGen_->next());
         else
@@ -361,13 +369,7 @@ namespace proc  {
 
 
 
-namespace lumiera { /* === Forwarding function(s) on the Process handle === */
-  
-  void DummyPlayer::Process::play(bool yes)  { impl().doPlay(yes); }
-  
-  
-  
-  
+namespace lumiera {  
   
   /** @internal intended for use by main(). */
   lumiera::Subsys&
@@ -375,9 +377,6 @@ namespace lumiera { /* === Forwarding function(s) on the Process handle === */
   {
     return proc::play::theDummyPlayerDescriptor();
   }
-  
-  // emit the vtable here into this translation unit within liblumieraproc.so ...
-  DummyPlayer::~DummyPlayer()      { }
   
   
 } // namespace lumiera

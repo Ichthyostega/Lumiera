@@ -1,5 +1,5 @@
 /*
-  NoBugInit  -  pull up NoBug automagically in static initialisation 
+  NoBugInit  -  NoBug static initialisation and definition of logging vars 
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,6 +22,10 @@
 
 
 #include "lib/nobug-init.hpp"
+
+/// magic to generate NoBug logging definitions
+#define LUMIERA_NOBUG_INIT_CPP
+#include "include/logging.h"
 
 
 

@@ -24,7 +24,6 @@
 #ifndef ASSET_PROCPATT_H
 #define ASSET_PROCPATT_H
 
-#include "lib/query.hpp"
 #include "proc/asset/struct.hpp"
 
 #include <vector>

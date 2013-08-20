@@ -24,19 +24,31 @@
 #ifndef PROC_ENGINE_JOB_H
 #define PROC_ENGINE_JOB_H
 
+///////////////////////////////////////////////////////////////////TICKET #926 : Job descriptor belongs into backend
+
+#include "lib/llist.h"
+#include "lib/hash-value.h"
 
 #include <gavl/gavl.h>
 
 
-typedef void* LList; ////////////////////////////////////TODO
-typedef uint64_t InvocationInstanceID;  /////////////////TODO
+/** opaque ID attached to each individual job invocation.
+ *  Used by the implementation of the Jobs (i.e. the JobClosure)
+ *  for internal organisation; will be fed back on job activation.
+ */
+union InvocationInstanceID
+  {
+    int64_t frameNumber;
+    lumiera_uid luid;
+  };
+
 
 
 enum JobState
   { 
-    DONE,      ///< already done, nothing to do
+    DONE,      ///< mission accomplished
     RUNNING,   ///< job is currently running
-    WAITING,   ///< waits for some prerequisite resource
+    WAITING,   ///< waiting for some prerequisite
     REJECTED,  ///< sorry, can't do that Dave
     EXPIRED,   ///< deadline expired
     ABORTED    ///< got aborted
@@ -50,6 +62,7 @@ enum JobKind
   };
 
 
+
 /** 
  * closure representing the execution context of a job.
  * The information reachable through this closure is specific
@@ -61,9 +74,8 @@ typedef struct lumiera_jobClosure* LumieraJobClosure;
 
 
 /** 
- * invocation parameter for the individual
- * frame calculation job. Embedded into the job descriptor
- * and passed to #lumiera_job_invoke when triggering
+ * invocation parameter for the individual frame calculation job.
+ * Embedded into the job descriptor and passed to #lumiera_job_invoke when triggering
  */
 struct lumiera_jobParameter_struct
   {
@@ -114,32 +126,58 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 
 
 
+
+
+
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-//#include "proc/common.hpp"
 #include "lib/error.hpp"
-//#include "proc/state.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/time/timequant.hpp"
 
 
 
 namespace proc {
 namespace engine {
   
-//using lib::time::TimeSpan;
-//using lib::time::Duration;
-//using lib::time::FSecs;
-using lib::time::TimeValue;
-using lib::time::Time;
-//  
-//class ExitNode;
+  using lib::time::TimeValue;
+  using lib::time::Time;
   
   typedef lumiera_jobParameter const& JobParameter;
   
+  /**
+   * Interface of the closure for frame rendering jobs.
+   * Hidden behind this interface resides all of the context re-building
+   * and invocation mechanics to get the actual calculations going. While
+   * the job descriptor, as handled by the scheduler, contains the variable
+   * "moving parts", the corresponding job closure represents the execution
+   * context of a job and is shared between several jobs within the same
+   * segment of the timeline.
+   * 
+   * This allows us to enqueue simple job-"functions" with the scheduler.
+   * By virtue of the JobClosure-pointer, embedded into #lumiera_jobDefinition,
+   * the invocation of such a job may re-gain the full context, including the
+   * actual ProcNode to pull and further specifics, like the media channel.
+   */
+  class JobClosure
+    : public lumiera_jobClosure
+    , boost::noncopyable          // ....has distinct identity and stable address
+    {
+    public:
+      virtual ~JobClosure();     ///< this is an interface
+      
+      
+      virtual void invokeJobOperation (JobParameter parameter)  =0;
+      virtual void signalFailure      (JobParameter parameter)  =0;
+      
+      virtual JobKind getJobKind()  const                       =0;
+      virtual bool verify (Time nominalJobTime)  const          =0;
+    };
+  
+  
+  
   
   /**
-   * Frame rendering task, represented as closure.
+   * Individual frame rendering task, forwarding to a closure.
    * This functor encodes all information necessary to trigger
    * and invoke the actual rendering operation. It will be embedded
    * by value into a job descriptor and then enqueued with the scheduler
@@ -150,8 +188,6 @@ using lib::time::Time;
    * and thus is shared for all frames and channels within this part of the timeline.
    * Thus, the lumiera_jobParameter struct contains the "moving parts"
    * different for each \em individual job.
-   * 
-   * @todo 2/12 WIP-WIP-WIP defining the invocation sequence and render jobs
    */
   class Job
     : public lumiera_jobDefinition
@@ -159,9 +195,13 @@ using lib::time::Time;
       
     public:
       
-      Job()
+      Job (JobClosure& specificJobDefinition
+          ,InvocationInstanceID invoKey
+          ,Time nominalFrameTime)
         {
-          UNIMPLEMENTED ("job creation, planning and scheduling");
+          this->jobClosure = &specificJobDefinition;
+          this->parameter.nominalTime = _raw(nominalFrameTime);
+          this->parameter.invoKey = invoKey;
         }
       
       // using standard copy operations

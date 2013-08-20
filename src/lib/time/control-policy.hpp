@@ -270,7 +270,7 @@ namespace mutation {
       static TI
       dontChange (TAR& target)  ///< @note: not touching the target
         {
-          return buildChangedValue(target);
+          return Link::buildChangedValue(target);
         }
     };
   

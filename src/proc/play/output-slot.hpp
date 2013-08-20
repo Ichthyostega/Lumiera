@@ -160,6 +160,13 @@ namespace play {
   
   
   
+  /** 
+   * denotes an opened connection ready to receive media data for output.
+   * Each DataSink (handle) corresponds to an OutputSlot::Connection entry.
+   * Data is handed over frame wise in a two-phase protocol: first, the client
+   * gets exclusive access to an output buffer, and then, when done, the buffer
+   * is handed over by an #emit call. 
+   */
   class DataSink
     : public lib::Handle<OutputSlot::Connection>
     {

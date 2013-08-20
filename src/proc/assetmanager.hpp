@@ -28,7 +28,13 @@
  ** These classes are placed into namespace asset and proc_interface.
  **
  ** @todo 10/10 meanwhile I'm unhappy with some aspects of this implementation //////////////TICKET #691
- **
+ ** @todo 12/12 and meanwhile I'm way more unhappy with the whole design. Looks like I wasn't proficient
+ **             enough with OO design in C++ when writing that original design. Especially, this design
+ **             couples the object creation, the memory management and the registration way too tightly.
+ **             Having a registration magic in the asset baseclass ctor is just too clever and a half.
+ **             Rather, there should be a responsibility chain, using completely passive Asset objects:
+ **             Factory -> AssetManaager -> Asset object
+ ** 
  ** @see asset.hpp
  ** @see mobject.hpp
  */
@@ -88,9 +94,17 @@ namespace asset {
       /** @return true if the given id is registered with the given Category  */
       bool known (IDA id, const Category& cat) ;
       
-      /**remove the given asset from the internal DB.
+      /** remove the given asset from the internal DB.
        * <i>together with all its dependents</i> */
       void remove (IDA id) ;
+      
+      /** deregister and evict all known Assets.
+       * @note the actual object instances are managed by reference count,
+       *       i.e. typically the Assets will be kept alive by MObjects from the sesison
+       * @warning unsure if this design is sane. Asset subsystem needs a rework   ////////////////////////////TICKET #691
+       * @todo verify this actually works, especially with session shutdown       ////////////////////////////TICKET #154
+       */
+      void clear() ;
       
       /** extract a sorted list of all registered Assets */
       list<PcAsset> listContent() const;
@@ -108,7 +122,7 @@ namespace asset {
       /** deleter function used by the Asset smart pointers to delete Asset objects */
       static void destroy (Asset* aa) { delete aa; }
       
-      friend Asset::Asset (const Asset::Ident& idi);
+      friend Asset::Asset (Asset::Ident const& idi);
       
       AssetManager ();
       

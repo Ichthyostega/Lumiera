@@ -95,7 +95,7 @@ namespace engine{
       
       
     protected:
-      virtual RenderEnvironmentClosure& configureCalculation ();
+      virtual RenderEnvironmentClosure& configureCalculation (ModelPort,Timings,Quality);
     };
   
   

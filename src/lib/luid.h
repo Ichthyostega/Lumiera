@@ -1,5 +1,5 @@
 /*
-  luid  -  Lumiera unique identifiers
+  LUID.h  -  Lumiera unique identifiers
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,20 +18,46 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef LUMIERA_LUID_H
-#define LUMIERA_LUID_H
+
+
+/** @file luid.h
+ ** Lumiera unique object identifier.
+ ** Lumiera unique identifiers are 128 byte random values. Unlike standard uuid's
+ ** we don't tag a version within them and we may store generic pointers within the
+ ** storage space occupied by an LUID.
+ ** 
+ ** Due to the extremely huge number space, LUID values can be used as unique identifiers
+ ** without the need to check for duplicates or collisions. At various places, LUIDs are
+ ** thus used right away on creation of new object instances or elements, in case a
+ ** distinguishable <i>object identity</i> is required, e.g.
+ ** - any new attachment of an object into the session ("placement")
+ ** - unique output designation discovered during the translation into a low-level
+ **   node graph ("builder")
+ ** - interface slots for external binding and plug-ins
+ ** 
+ ** Moreover, there is a \link luidgen.c Luidgen \endlink tool to generate fixed LUIDs
+ ** to be included into source code. It works by replacing the token \c LUIDGEN in the
+ ** source code text by a newly generated (random) LUID in octal representation.
+ ** 
+ ** LUIDs can also be used to generate hash values for hash table storage.
+ ** 
+ ** @see HashIndexed Adapter for including a LUID into an object
+ ** @see Placement usage example
+ ** @see luidgen.c
+ ** @see hash-util.h hash type definitions
+ **
+ */
+
+
+#ifndef LIB_LUID_H
+#define LIB_LUID_H
+
+
+#include "lib/hash-value.h"  /* Types lumiera_uid and LumieraUid */
 
 #include <stdlib.h>
 
-/**
- * @file
- * Lumiera unique identifiers are 128 byte random value. Unlike standard uuid's we
- * don't tag a version within them and we may store generic pointers in the space
- * occupied by an luid.
- */
 
-typedef unsigned char lumiera_uid[16];
-typedef lumiera_uid* LumieraUid;
 
 /*
  C++ can't initialize arrays from string literals with the trailing \0 cropped
@@ -103,16 +129,9 @@ lumiera_uid_eq (lumiera_uid* luida, lumiera_uid* luidb);
 
 
 /**
- * Generate a hashsum over an luid
+ * Generate a hash sum over an luid
  */
 size_t
 lumiera_uid_hash (lumiera_uid* luid);
 
-#endif
-/*
-// Local Variables:
-// mode: C
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/
+#endif /*LIB_LUID_H*/

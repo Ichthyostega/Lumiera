@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: Render Engine parts" ./test-components --group=engine
+TESTING "Component Test Suite: Render Engine parts" ./test-suite --group=engine
 
 
 
@@ -56,4 +56,8 @@ END
 
 
 PLANNED "source reading Node" NodeSource_test <<END
+END
+
+
+PLANNED "scheduler interface" SchedulerInterface_test <<END
 END

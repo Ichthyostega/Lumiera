@@ -155,6 +155,14 @@ namespace lib {
    *          independent, new result sequence based on this first element).
    *          Afterwards, the source is \em advanced and then \em copied 
    *          into the result iterator.
+   * @warning IterExplorer and all the provided combination strategies are deliberately
+   *          designed to work on sequences <b>of values</b>. These values will indeed
+   *          be \em copied for invocation of the exploration function. The rationale
+   *          for this choice is data locality and the danger of dangling references
+   *          to an implicitly created temporary (since in it is so common practice
+   *          in C++ to use \c const& ). Thus, if you need to work on references
+   *          to a common data structure, you need to use either pointers or
+   *          some reference wrapper explicitly as value type right from start.
    * @param SRC the source sequence or iterator to wrap
    * @param _COM_ "Combinator" strategy template. When binding (\c >>= ) a function,
    *          an instance of that strategy becomes the new SRC for the created new
@@ -500,7 +508,7 @@ namespace lib {
      * the actual implementation logic how to proceed with the evaluation (i.e. how to
      * find the feed of the "next elements" and how to re-integrate the results of an
      * evaluation step into the already expanded sequence of intermediary results.
-     * Moreover, these implementation strategy pattern is used as a data buffer
+     * Moreover, this implementation strategy pattern is used as a data buffer
      * to hold those intermediary results. Together, this allows to create
      * various expansion patterns, e.g. depth-first or breadth-first.
      * - \c Strategy::getFeed() accesses the point from where
@@ -514,7 +522,7 @@ namespace lib {
     class RecursiveExhaustingEvaluation
       {
         typedef typename _Fun<FUN>::Ret   ResultIter;
-        typedef typename SRC::value_type  Val;
+        typedef typename SRC::value_type  Val;        // note: deliberately using the value
         typedef function<ResultIter(Val)> Explorer;
         typedef _BUF_<ResultIter>         Buffer;
         
@@ -591,7 +599,8 @@ namespace lib {
         friend reference
         yield (RecursiveExhaustingEvaluation const& seq)
         {
-          return *(seq.feed());
+          reference result = *(seq.feed());
+          return result;
         }
         
         friend void
@@ -712,8 +721,20 @@ namespace lib {
     
     /** 
      * IterExplorer "state core" for progressively expanding
-     * an initial result set. This is a partially reduced and hard-coded
-     * variation on the #RecursiveExhaustingEvaluation in depth-first configuration.
+     * an initial result set. This initial set can be conceived to hold the seed
+     * or starting points of evaluation. Elements are consumed by an iterator, at
+     * the front. Each element is fed to the "explorer function". This exploration
+     * returns an expanded result sequence, which is immediately integrated into the
+     * overall result sequence, followed by further exploration of the then-to-be first
+     * element of the result sequence. All this exploration is driven on-demand, by
+     * consuming the result sequence. Exploration will proceed until exhaustion,
+     * in which case the exploration function will yield an empty result set.
+     * 
+     * This strategy is intended for use with the IterExplorer -- most prominently
+     * in use for discovering render prerequisites and creating new render jobs for
+     * the engine. The RecursiveSelfIntegration  strategy is a partially reduced
+     * and hard-coded variation on the #RecursiveExhaustingEvaluation in depth-first
+     * configuration.
      * This setup works in conjunction with a <i>special result sequence</i> type,
      * with the ability to re-integrate results yielded by partial evaluation.
      * But the working pattern is more similar to the #CombinedIteratorEvaluation,
@@ -728,7 +749,7 @@ namespace lib {
      * hold the result set(s). This custom type together with the Explorer function
      * are performing the actual expansion and re-integration steps. The latter is
      * accessed through the free function \c build(sequence) -- which is expected
-     * to yield a "builder trait" for manipulating the element set yielded by
+     * to return a "builder trait" for manipulating the element set yielded by
      * the custom iterator type returned by the Explorer function.
      * 
      * @param SRC the initial result set sequence; this iterator needs to yield
@@ -781,7 +802,7 @@ namespace lib {
               while (!outSeq_ && srcSeq_)
                 {
                   Val& nextElement(*srcSeq_);
-                  build(outSeq_).wrapping(nextElement);    // extension point: free function build (...).wrapping(...)
+                  build(outSeq_).wrapping(nextElement);    // extension point: free function build(...).wrapping(...)
                   ++srcSeq_;
                 }
               return bool(outSeq_);
@@ -793,7 +814,7 @@ namespace lib {
               REQUIRE (outSeq_);
               ResultIter nextSteps = explore_(*outSeq_);
               ++ outSeq_;
-              build(outSeq_).usingSequence(nextSteps);     // extension point: free function build (...).usingSequence(...)
+              build(outSeq_).usingSequence(nextSteps);     // extension point: free function build(...).usingSequence(...)
             }
           
           

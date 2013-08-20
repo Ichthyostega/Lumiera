@@ -97,7 +97,7 @@ namespace session {
       friend class lib::singleton::StaticCreate<ScopeLocator>;
       
     private:
-      QueryResolver const& theResolver();
+      lumiera::QueryResolver const& theResolver();
     };
   
   

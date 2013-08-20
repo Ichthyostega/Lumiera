@@ -85,7 +85,7 @@
 #include "proc/mobject/builder/model-port-registry.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/query.hpp"
+#include "common/query.hpp"
 #include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 
@@ -124,8 +124,8 @@ namespace play {
     using asset::PTimeline;
     using mobject::ModelPort;
     using mobject::builder::ModelPortRegistry;
-    using lumiera::Query;
     using util::contains;
+    using lumiera::Query;
 //  using lib::ScopedCollection;
 //  using lib::Literal;
     using lib::eachEntry;
@@ -139,7 +139,7 @@ namespace play {
     inline PID
     getPipe (string id)
     {
-      return Pipe::query("id("+id+")");
+      return Pipe::query ("id("+id+")");
     }
     
     inline TID

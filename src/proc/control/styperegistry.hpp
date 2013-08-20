@@ -38,7 +38,7 @@
 
 
 #include "proc/control/stypemanager.hpp"
-//#include "lib/query.hpp"
+//#include "common/query.hpp"
 //#include "lib/util.hpp"
 //#include "lib/p.hpp"
 
@@ -53,7 +53,6 @@ namespace proc {
 namespace control {
 
 //  using lib::P;
-//  using lumiera::Query;
   
 //  using std::string;
 //  using boost::format;

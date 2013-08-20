@@ -46,8 +46,16 @@
  ** between multiple time grids may be happen, possibly resulting in a re-quantisation of
  ** the message into the target object's own time grid.
  ** 
- ** @todo WIP-WIP-WIP
- **
+ ** @note this header is defined such as to be used with or without including the time quantisation
+ **      facility, which is a more heavyweight regarding code size and compilation times. For this
+ **      toggle to work, the header \c timequant.hpp needs to be included \em prior to \c mutation.hpp
+ **      Obviously, you can't define any mutation involving quantised (grid aligned) values without this.
+ ** @warning when defining more fancy kinds of concrete mutations using the technique with
+ **      the EncapsulatedMutation to hide the implementation, then please be sure to understand
+ **      the size limitation for the implementation and maybe adjust MUTATION_IMPL_SIZE accordingly.
+ ** @see TimeMutation_test
+ ** @see TimeControl_test
+ ** 
  */
 
 #ifndef LIB_TIME_MUTATION_H
@@ -59,17 +67,12 @@
 #include "lib/symbol.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <iostream>
-//#include <boost/operators.hpp>
-//#include <string>
 
 
 namespace lib {
 namespace time {
   
   using lib::Symbol;
-//using std::string;
-//using lib::Literal;
   
   LUMIERA_ERROR_DECLARE (INVALID_MUTATION); ///< Changing a time value in this way was not designated
   
@@ -91,7 +94,8 @@ namespace time {
    * Interface: an opaque change imposed onto some time value.
    * 
    * @see time::TimeSpan#accept(Mutation const&)
-   * @todo WIP-WIP-WIP
+   * @see TimeMutation_test
+   * @see polymorphic-value.hpp
    */
   class Mutation
     {
@@ -109,7 +113,10 @@ namespace time {
       static EncapsulatedMutation adjust (Offset);
       static EncapsulatedMutation materialise (QuTime const&);
       static EncapsulatedMutation nudge (int adjustment);
-      static EncapsulatedMutation nudge (int adjustment, Symbol gridID);
+      static EncapsulatedMutation nudge (int adjustment, Symbol gridID);      ///<@note defined in common-services.cpp
+#ifdef LIB_TIME_TIMEQUQNT_H
+      static EncapsulatedMutation nudge (int adjustment, PQuant const& grid);
+#endif
       
     protected:
       static TimeValue& imposeChange (TimeValue&, TimeValue const&);
@@ -120,7 +127,7 @@ namespace time {
   
   
   /* === defining the visitation responses === */
-    
+  
   inline void Duration::accept (Mutation const& muta) { muta.change (*this); }
   inline void TimeSpan::accept (Mutation const& muta) { muta.change (*this); }
   
@@ -175,6 +182,7 @@ namespace time {
     return imposeChange (target, grid->timeOf (adjustedGridPoint));
   }
 #endif
+  
   
   
 }} // lib::time

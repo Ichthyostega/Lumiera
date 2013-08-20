@@ -20,25 +20,58 @@
 
 */
 
+/** @file job-planning.hpp
+ ** The "mechanics" of discovering and planning frame calculation jobs.
+ ** This is a rather abstract chunk of code, dealing especially with the technicalities
+ ** of \em organising the discovery of prerequisites and of joining all the discovered operations
+ ** into a sequence of planning steps. The net result is to present a <i>sequence of job planing</i>
+ ** to the user, while actually encapsulating a depth-first tree exploration, which proceeds on demand.
+ ** 
+ ** \par participating elements
+ ** All of these job planning operations are implemented on top of the JobTicket. This is where to look
+ ** for "actual" implementation code. Here, within this header, the following entities cooperate to
+ ** create a simple sequence out of this implementation level tasks:
+ ** - JobPlanningSequence is the entry point for client code: it allows to generate a sequence of jobs
+ ** - JobPlanning is a view on top of all the collected planning information for a single job
+ ** - PlanningState is an iterator, successively exposing a sequence of JobPlanning views
+ ** - #expandPrerequisites(JobPlanning cons&) is the operation to explore further prerequisite Jobs
+ ** - PlanningStepGenerator yields the underlying "master beat": a sequence of frame locations to be planned
+ ** 
+ ** \par how the PlanningState (sequence) is advanced
+ ** PlanningState is an iterator, exposing a sequence of JobPlanning elements. On the implementation level,
+ ** there is always just a single JobPlanning element, which represents the \em current element; this element
+ ** lives as "state core" within the PlanningState object. Advancing to the next JobPlanning element (i.e. to
+ ** consider the next job or prerequisite job to be planned for scheduling) is performed through the iteration
+ ** control API exposed by JobPlanning (the free functions \c checkPoint, \c yield and \c iterNext. Actually,
+ ** these functions are invoked through the depth-first tree exploration performed by JobPlaningSequence.
+ ** The implementation of these invocations can be found within the IterExplorer strategy
+ ** lib::iter_explorer::RecursiveSelfIntegration. The net result is
+ ** - the current element is always accessed through \c yield
+ ** - advancing to the next element happens \em either
+ **   
+ **   - by invoking \c iterNext (when processing a sequence of sibling job prerequisites)
+ **   - by invoking \c integrate (when starting to explore the next level of children) 
+ ** 
+ ** 
+ ** @see DispatcherInterface_test simplified usage examples
+ ** @see JobTicket
+ ** @see Dispatcher
+ ** @see EngineService
+ **
+ */
+
 
 #ifndef PROC_ENGINE_JOB_PLANNING_H
 #define PROC_ENGINE_JOB_PLANNING_H
 
 #include "proc/common.hpp"
-//#include "proc/state.hpp"
 #include "proc/engine/job.hpp"
 #include "proc/engine/job-ticket.hpp"
-//#include "proc/engine/time-anchor.hpp"
 #include "proc/engine/frame-coord.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/time/timequant.hpp"
-//#include "lib/meta/function.hpp"
-#include "lib/iter-adapter.hpp"
 #include "lib/iter-explorer.hpp"
-//#include "lib/linked-elements.hpp"
+#include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/noncopyable.hpp>
 
 
 namespace proc {
@@ -46,19 +79,28 @@ namespace engine {
   
   namespace error = lumiera::error;
   
-//using lib::time::TimeSpan;
-//using lib::time::Duration;
-//using lib::time::FSecs;
-//using lib::time::Time;
-//using lib::LinkedElements;
-  using util::isnil;
   using util::unConst;
-//  
-//class ExitNode;
+  using util::isnil;
   
-
-  /** 
-   */ 
+  
+  
+  /**
+   * View on the execution planning for a single calculation step.
+   * When this view-frontend becomes accessible, behind the scenes all
+   * the necessary information has be pulled and collected from the
+   * low-level model and the relevant rendering/playback configuration.
+   * Typically, clients will materialise this planning into a Job (descriptor)
+   * ready to be entered into the scheduler.
+   * 
+   * JobPlanning is indeed a view; the represented planning information is not
+   * persisted (other then in the job to be created). The implementation draws
+   * on a recursive exploration of the corresponding JobTicket, which acts as
+   * a general blueprint for creating jobs within this segment of the timeline.
+   * 
+   * @remarks on the implementation level, JobPlanning is used as "state core"
+   *          for a PlanningState iterator, to visit and plan subsequently all
+   *          the individual operations necessary to render a timeline chunk.
+   */
   class JobPlanning
     {
       JobTicket::ExplorationState plannedOperations_;
@@ -81,7 +123,7 @@ namespace engine {
         , point_to_calculate_(requestedFrame)
         { }
       
-      // using the standard copy operations 
+      // using the standard copy operations
       
       
       /** cast and explicate this job planning information
@@ -99,7 +141,7 @@ namespace engine {
       
       
       /** build a new JobPlanning object,
-       * set to explore the prerequisites 
+       * set to explore the prerequisites
        * at the given planning situation
        */
       JobPlanning
@@ -125,6 +167,7 @@ namespace engine {
             existingPlan.point_to_calculate_ = newStartingPoint.point_to_calculate_;
           }
         existingPlan.plannedOperations_.push (newStartingPoint.plannedOperations_);
+        existingPlan.plannedOperations_.markTreeLocation();
       }
       
       
@@ -147,13 +190,16 @@ namespace engine {
       iterNext (JobPlanning & plan)
       {
         plan.plannedOperations_.pullNext();
-      }      
+        plan.plannedOperations_.markTreeLocation();
+      }
     };
   
   
   
   
-    
+  /**
+   * iterator, exposing a sequence of JobPlanning elements
+   */
   class PlanningState
     : public lib::IterStateWrapper<JobPlanning>
     {
@@ -180,14 +226,14 @@ namespace engine {
       
       /** attach and integrate the given planning details into this planning state.
        *  Actually the evaluation proceeds depth-first with the other state,
-       *  returning later on to the current position for further evaluation */
+       *  returning to the current position later for further evaluation */
       PlanningState &
       wrapping (JobPlanning const& startingPoint)
         {
           integrate (startingPoint, this->stateCore());
           return *this;
         }
-
+      
       PlanningState &
       usingSequence (PlanningState const& prerequisites)
         {
@@ -205,7 +251,7 @@ namespace engine {
       
       /** Extension point to be picked up by ADL.
        *  Provides access for the JobPlanningSequence
-       *  for combining and expanding partial results. 
+       *  for combining and expanding partial results.
        */
       friend PlanningState&
       build (PlanningState& attachmentPoint)
@@ -216,6 +262,14 @@ namespace engine {
     
   
   
+  
+  /** this is the core operation to drive planning ahead:
+   *  discover the prerequisites of some operation -- here
+   *  "prerequisites" are those operations to be performed
+   *  within separate Jobs beforehand.
+   * @note this function is intended to be flat-mapped (">>=")
+   *       onto a tree-like monad representing the evaluation process.
+   */
   inline PlanningState
   expandPrerequisites (JobPlanning const& calculationStep)
   {
@@ -225,8 +279,9 @@ namespace engine {
   }
   
   
-
-
+  
+  
+  
   /**
    * Abstraction: a Facility to establish frame coordinates
    * and identify and access the execution plan for this frame.
@@ -238,16 +293,24 @@ namespace engine {
     public:
       
       JobTicket&
-      getJobTicketFor (FrameCoord location)
+      getJobTicketFor (FrameCoord const& location)
         {
           return accessJobTicket (location.modelPort, location.absoluteNominalTime);
         }
       
+      bool canContinue (FrameCoord const& location)
+        {
+          return seamlessNextFrame (location.absoluteFrameNumber,
+                                    location.modelPort);
+        }
+      
     protected:
-      virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
+      virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)  =0;
+      virtual bool       seamlessNextFrame (int64_t, ModelPort port)         =0;
     };
   
-    
+  
+  
   /**
    * Generate a sequence of starting points for Job planning,
    * based on the underlying frame grid. This sequence will be
@@ -266,16 +329,15 @@ namespace engine {
       //////////////////////////////////////////TODO duplicated storage of a FrameCoord record
       //////////////////////////////////////////TODO nextEvaluation_ is only needed to initialise the "current" sequence 
       //////////////////////////////////////////TODO within the RecursiveSelfIntegration strategy. Maybe this storage could be collapsed?
-      mutable JobPlanning nextEvaluation_;
+      JobPlanning nextEvaluation_;
       
-      JobPlanning&
-      use_current_location_as_planning_start()
+      void
+      use_current_location_as_starting_point_for_planning()
         {
           JobTicket& processingPlan = locationGenerator_->getJobTicketFor (currentLocation_);
           
           nextEvaluation_ = JobPlanning(processingPlan.startExploration()
                                        ,currentLocation_);
-          return nextEvaluation_;
         }
       
       
@@ -289,7 +351,10 @@ namespace engine {
       PlanningStepGenerator(FrameCoord startPoint, FrameLocator& locator)
         : locationGenerator_(&locator)
         , currentLocation_(startPoint)
-        { }
+        { 
+          REQUIRE (startPoint.isDefined());
+          use_current_location_as_starting_point_for_planning();
+        }
       
       // default copyable
       
@@ -299,38 +364,50 @@ namespace engine {
       friend bool
       checkPoint (PlanningStepGenerator const& gen)
       {
-        UNIMPLEMENTED ("determine planing chunk size"); /// return bool(seq.feed());
-      }
+        return gen.currentLocation_.isDefined();
+      }     // might indicate end of this planning chunk (or of playback altogether)
+      
       
       friend JobPlanning&
       yield (PlanningStepGenerator const& gen)
       {
-        return unConst(gen).use_current_location_as_planning_start();
+        ENSURE (checkPoint (gen));
+        return unConst(gen).nextEvaluation_;
       }
+      
       
       friend void
       iterNext (PlanningStepGenerator & gen)
       {
-        gen.currentLocation_ = gen.locationGenerator_->getNextFrame (gen.currentLocation_);
-      }      
+        if (gen.locationGenerator_->canContinue (gen.currentLocation_))
+          {
+            gen.currentLocation_ = gen.locationGenerator_->getNextFrame (gen.currentLocation_);
+            gen.use_current_location_as_starting_point_for_planning();
+            ENSURE (checkPoint (gen));
+          }
+        else 
+          {  // indicate end-of playback or a jump to another playback position
+            gen.currentLocation_ = FrameCoord();
+          }
+      }
     };
   
   
   
+  /* type definitions for building the JobPlaningSequence */
   
   typedef PlanningState (*SIG_expandPrerequisites) (JobPlanning const&);
   
   typedef lib::IterExplorer<PlanningStepGenerator
                            ,lib::iter_explorer::RecursiveSelfIntegration>      JobPlanningChunkStartPoint;
-
   typedef JobPlanningChunkStartPoint::FlatMapped<SIG_expandPrerequisites>::Type  ExpandedPlanningSequence;
   
   
   
   /**
    * This iterator represents a pipeline to pull planned jobs from.
-   * For dispatching individual frame jobs for rendering, this pipeline is
-   * generated and internally wired such as to interpret the render node definitions.
+   * To dispatch individual frame jobs for rendering, this pipeline is generated
+   * and wired internally such as to interpret the render node definitions.
    * 
    * \par Explanation of the structure
    * 
@@ -349,23 +426,23 @@ namespace engine {
    * - this basic frame grid is generated by the PlanningStepGenerator, which is
    *   effectively backed by the Dispatcher and thus the render node model. 
    * 
-   * 
-   * @todo 6/12 WIP-WIP-WIP how to prepare jobs for scheduling
+   * @remarks JobPlanningSequence is a monad, and the operation to explore the prerequisites
+   *          is applied by the \c >>= (monad flat map operation). This approach allows us
+   *          to separate the technicalities of exhausting tree exploration from the actual
+   *          "business code" to deal with frame job dependencies
    */
   class JobPlanningSequence
     : public ExpandedPlanningSequence
     {
       
     public:
-//    JobPlanningSequence() { }
-      
       JobPlanningSequence(engine::FrameCoord startPoint, FrameLocator& locator)
         : ExpandedPlanningSequence(
             JobPlanningChunkStartPoint(
                 PlanningStepGenerator(startPoint,locator))
-            >>= expandPrerequisites)
+            
+            >>= expandPrerequisites)                    // "flat map" (monad operation)
         { }
-      
     };
   
   

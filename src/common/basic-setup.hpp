@@ -52,7 +52,7 @@ namespace lumiera {
    * Lumiera executable; from there the initial configuration
    * locates a \c setup.ini to read in the fundamental settings.
    * This is even prerequisite for loading any extension modules
-   * or reading in extended application configuration; usually
+   * or reading any extended application configuration; usually
    * this bootstrap process happens at or before the start of
    * the \c main() function. Any failure leads to immediate
    * termination of the application.

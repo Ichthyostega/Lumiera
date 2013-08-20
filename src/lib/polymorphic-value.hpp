@@ -22,7 +22,7 @@
 
 /** @file polymorphic-value.hpp
  ** A mechanism to allow for opaque polymorphic value objects.
- ** This template helps to overcome a problem frequently encountered in
+ ** This template helps to overcome a problem occasionally encountered in
  ** C++ programming, based on the fundamental design of C++, which favours
  ** explicit low-level control, copying of values and strict ctor-dtor pairs.
  ** Many object oriented design patterns build on polymorphism, where the
@@ -37,7 +37,7 @@
  ** In C++, in order to employ many of the well known techniques, we're bound
  ** more or less to explicitly put the objects somewhere in heap allocated memory
  ** and then pass an interface pointer or reference into the actual algorithm.
- ** Often, this hinders a design based on constant values and small descriptor
+ ** Sometimes, this hinders a design based on constant values and small descriptor
  ** objects used inline, thus forcing into unnecessarily complex and heavyweight
  ** alternatives. While it's certainly pointless to fight the fundamental nature
  ** of the programming language, we may try to pull some (template based) trickery
@@ -84,7 +84,7 @@
  **   this concrete type is irrelevant after finishing the placement constructor.
  **   In order to re-access this management interface, so to be able to invoke
  **   the copy or clone operations, we need to do an elaborate re-cast operation,
- **   first going down to the leaf type and then back up into the mixed in
+ **   first going down to the leaf type and then back up into the mixed-in
  **   management interface. Basically this operation is performed by using
  **   a \c dynamic_cast<CopyAPI&>(bufferContents)
  ** - but when the used client types provide some collaboration and implement
@@ -97,6 +97,16 @@
  ** Thus, in this latter (optimal) case, the fact that PolymorphicValue allows
  ** to conceal the actual implementation type comes with zero runtime overhead,
  ** compared with direct usage of a family of polymorphic types (with VTable).
+ ** 
+ ** So, how can the implementation of copy or assignment know the actual type
+ ** to be copied? Basically we exploit the fact that the actual instance lives
+ ** in an opaque buffer within the "outer" container. More specifically, \em we
+ ** place it into that buffer -- thus we're able to control the actual type used.
+ ** This way, the actual copy operations reside in an Adapter type, which lives
+ ** at the absolute leaf end of the inheritance chain. It even inherits from
+ ** the "implementation type" specified by the client. Thus, within the
+ ** context of the copy operation, we know all the concrete types.  
+ ** 
  ** 
  ** \par using polymorphic value objects
  ** 

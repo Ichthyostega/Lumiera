@@ -25,12 +25,10 @@
 #define PROC_ENGINE_TIME_ANCHOR_H
 
 #include "proc/common.hpp"
-//#include "proc/state.hpp"
 #include "backend/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
 #include "proc/play/timings.hpp"
-
-#include <boost/rational.hpp>
+#include "proc/engine/frame-coord.hpp"
 
 
 
@@ -38,12 +36,11 @@ namespace proc {
 namespace engine {
   
   using backend::RealClock;
-//  using lib::time::TimeSpan;
   using lib::time::Offset;
-//  using lib::time::FSecs;
+  using lib::time::Duration;
   using lib::time::TimeVar;
   using lib::time::Time;
-//  class ExitNode;
+  
   
   /**
    * The process of playback or rendering is a continued series of exploration and evaluation.
@@ -51,24 +48,38 @@ namespace engine {
    * chunks of evaluation. Each of these continued partial evaluations establishes a distinct
    * anchor or breaking point in time: everything before this point can be considered settled
    * and planned thus far. Effectively, this time point acts as a <i>evaluation closure</i>,
-   * to be picked up on the next partial evaluation. More specifically, the TimeAnchor closure
-   * is the definitive binding between the abstract logical time of the session timeline, and
-   * the real wall-clock time forming the deadline for rendering.
+   * to be picked up for the next partial evaluation. Each time anchor defines a span of the
+   * timeline, which will be covered with the next round of job planning; the successive next
+   * TimeAnchor will be located at the first frame \em after this time span, resulting in
+   * seamless coverage of the whole timeline. Whenever a TimeAnchor is created, a relation
+   * between nominal time, current engine latency and wall clock time is established, This way,
+   * the TimeAnchor closure is the definitive binding between the abstract logical time of the
+   * session timeline, and the real wall-clock time forming the deadline for rendering.
    * 
    * \par internals
    * The time anchor associates a nominal time, defined on the implicit time grid
    * of some given Timings, with an actual wall clock time. Due to the usage situation,
    * the TimeAnchor takes on the secondary meaning of a breaking point; everything \em before
    * this anchor point has been handled during the preceding invocations of an ongoing chunk wise
-   * partial evaluation of the timeline to play back.
+   * partial evaluation of the timeline to be "performed" within this play process.
    * - the #timings_ serve as an abstracted grid (actually, the implementation
    *   does refer to a grid defined somewhere within the session)
    * - the actual #anchorPoint_ is defined as frame number relative to this grid
    * - this anchor point is scheduled to happen at a #relatedRealTime_, based on
-   *   system's real time clock scale (typically milliseconds since 1970)
+   *   system's real time clock scale (typically milliseconds since 1970).
+   *   This schedule contains a compensation for engine and output latency.
    * 
-   * @todo 1/12 WIP-WIP-WIP just emerging as a concept
-   *          /////////////////////////////////////////////////////////////////TODO: WIP needs to act as proxy for the grid, using the Timings
+   * @remarks please note that time anchors are set per CalcStream.
+   *          Since different streams might use different frame grids, the rhythm
+   *          of these planning operations is likely to be specific for a given stream.
+   *          The relation to real time is established anew at each time anchor, so any
+   *          adjustments to the engine latency will be reflected in the planned job's
+   *          deadlines. Actually, the embedded Timings record is responsible for this
+   *          timing calculation and for fetching the current EngineConfig.
+   * 
+   * @see Dispatcher
+   * @see DispatcherInterface_test
+   * @see Timings
    */
   class TimeAnchor
     {
@@ -76,56 +87,55 @@ namespace engine {
       int64_t anchorPoint_;
       Time relatedRealTime_;
       
-      Time
-      expectedTimeofArival (play::Timings const& timings, Offset engineLatency)
+      static Time
+      expectedTimeofArival (play::Timings const& timings, int64_t startFrame, Offset startDelay)
         {
+          Duration totalLatency = startDelay
+                                + timings.currentEngineLatency()
+                                + timings.outputLatency;
           TimeVar deadline;
           switch (timings.playbackUrgency)
             {
             case play::ASAP:
             case play::NICE:
-              deadline = RealClock::now() + engineLatency;
+              deadline = RealClock::now() + totalLatency;
               break;
             
             case play::TIMEBOUND:
-              deadline = timings.getTimeDue() - engineLatency; 
+              deadline = timings.getTimeDue(startFrame) - totalLatency;
               break;
             }
-          return deadline - timings.outputLatency;
+          return deadline;
         }
       
       
-      TimeAnchor (play::Timings timings, Offset engineLatency, int64_t startFrame)
+    public:
+      TimeAnchor (play::Timings timings, int64_t startFrame, Offset startDelay =Offset::ZERO)
         : timings_(timings)
         , anchorPoint_(startFrame)
-        , relatedRealTime_(expectedTimeofArival(timings, engineLatency))
+        , relatedRealTime_(expectedTimeofArival(timings,startFrame,startDelay))
         { }
       
-    public:
       // using default copy operations
       
       
-      /** create a TimeAnchor for playback/rendering start
-       *  at the given startFrame. Since no information is given
-       *  regarding the reaction latency required to get the engine
-       *  to deliver at a given time, this "engine latency" is guessed
-       *  to be 1/3 of the frame duration.
-       * @note using this function in case of "background" rendering
-       *       doesn't make much sense; you should indeed retrieve the
-       *       start delay from internals of the engine in this case.
-       */
-      static TimeAnchor
-      build (play::Timings timings, int64_t startFrame)
-        {
-          const boost::rational<uint> DEFAULT_LATENCY_FACTOR (1,3);
-          Offset startDelay(timings.outputLatency
-                          + timings.getFrameDurationAt(startFrame) * DEFAULT_LATENCY_FACTOR
-                           );
-          
-          return TimeAnchor (timings,startDelay,startFrame);
-        }
       
-      //////////////////////////////////////////////////////////////////////////////////////////TODO: second builder function, relying on Engine timings
+      /** set a follow-up TimeAnchor point.
+       *  After planning a chunk of jobs, the dispatcher uses
+       *  this function to set up a new breaking point (TimeAnchor)
+       *  and places a continuation job to resume the planning activity.
+       * @note precisely satisfies the <i>planning chunk duration</i>
+       * @return a frame number suitable to build the next TimeAnchor
+       *       based on the current play::Timings. This new start point
+       *       will be anchored at the grid point following the end of
+       *       the previous planning chunk, resulting in a seamless
+       *       coverage of the timeline 
+       */
+      int64_t
+      getNextAnchorPoint()  const
+        {
+          return timings_.establishNextPlanningChunkStart (this->anchorPoint_);
+        }
       
       
       /** @internal for debugging and diagnostics:
@@ -134,7 +144,26 @@ namespace engine {
        * playback or render process). */
       operator lib::time::TimeValue()  const
         {
-          UNIMPLEMENTED ("representation of the Time Anchor closure");
+          return timings_.getFrameStartAt (anchorPoint_);
+        }
+      
+      
+      /** @return the frame at which any job planning
+       *          for this planning chunk will start */
+      int64_t getStartFrame()  const
+        {
+          return anchorPoint_;
+        }
+      
+      
+      Offset
+      remainingRealTimeFor (FrameCoord plannedFrame)
+      //////////////////////////////////////////////////TODO break this into two sensible operations, using the deadline from the FrameCoord
+        {
+          int64_t frameOffset = plannedFrame.absoluteFrameNumber - anchorPoint_;
+          return Offset(this->relatedRealTime_
+                      + timings_.getRealOffset(frameOffset)
+                      - RealClock::now());
         }
     };
   

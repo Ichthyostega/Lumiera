@@ -21,21 +21,37 @@
 * *****************************************************/
 
 
+/** @file mutation.cpp 
+ ** A collection of concrete forms of time mutation.
+ ** This compilation unit defines some "mutators" based on explicitly given time values,
+ ** to be applied to time durations, time spans and quantised time values. The intended
+ ** usage is to build these "mutators" inline through use of the corresponding static
+ ** builder functions defined in class Mutation. All the mutators defined here are
+ ** "polymorphic value objects", i.e. they can be treated like simple time values, while
+ ** actually hiding the concrete implementation and just exposing the #Mutation interface.
+ ** 
+ ** @remarks these mutators are for casual use at places where you'd intuitively just want
+ **          set a simple more or less hard wired value. The benefit of this seemingly complicated
+ **          solution is that all the tricky corner cases for grid aligned time values will be
+ **          treated automatically. Incidentally, there is another, quite different use case
+ **          for time mutations, when it comes to receive continuous and ongoing changes to
+ **          a time value (e.g. a cursor). This separate use case is handled by time::Control
+ ** 
+ ** @see time::Control
+ ** @see lib::PolymorphicValue
+ ** @see TimeMutation_test
+ ** @see TimeControl_test
+ **
+ */
+
+
 #include "lib/error.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/time/mutation.hpp"
-//#include "lib/time.h"
 #include "lib/util-quant.hpp"
-#include "lib/util.hpp"
 
-//#include <tr1/functional>
-
-//using std::string;
-//using util::unConst;
-//using util::floorwrap;
-using util::isnil;
 
 namespace error = lumiera::error;
 
@@ -52,8 +68,9 @@ namespace time {
   
   
   
+  /* Warning: all the classes defined here must be of size below MUTATION_IMPL_SIZE */ 
   
-  /** 
+  /**
    * concrete time value mutation:
    * impose fixed new start time.
    */
@@ -94,7 +111,7 @@ namespace time {
     };
   
   
-  /** 
+  /**
    * concrete time value mutation:
    * set a new overall duration for an extended timespan.
    */
@@ -135,7 +152,7 @@ namespace time {
     };
   
   
-  /** 
+  /**
    * concrete time value mutation:
    * adjust the given time entity by an offset amount.
    */
@@ -175,7 +192,7 @@ namespace time {
     };
   
   
-  /** 
+  /**
    * concrete time value mutation:
    * make the grid aligned time value explicit,
    * and impose the resulting value to the given
@@ -192,7 +209,7 @@ namespace time {
     };
   
   
-  /** 
+  /**
    * concrete time value mutation:
    * nudge target value by the given number of 'steps',
    * relative to the given grid.
@@ -202,21 +219,20 @@ namespace time {
     {
       
       static Offset
-      materialiseGridPoint (Symbol gridID, int steps)
+      materialiseGridPoint (PQuant const& grid, int steps)
         {
-          REQUIRE (!isnil (gridID));
-          PQuant grid = Quantiser::retrieve(gridID);
+          REQUIRE (grid);
           return Offset(grid->timeOf(0), grid->timeOf(steps));
         }
       
     public:
-      NudgeMutation (int relativeSteps, Symbol gridID)
-        : ImposeOffsetMutation(materialiseGridPoint (gridID,relativeSteps))
+      NudgeMutation (int relativeSteps, PQuant const& grid)
+        : ImposeOffsetMutation(materialiseGridPoint (grid,relativeSteps))
         { }
     };
   
   
-  /** 
+  /**
    * concrete time value mutation:
    * nudge based on a implicit grid, which is
    * either a quantised target value's own grid,
@@ -343,18 +359,22 @@ namespace time {
    *  resulting in the net result of two quantisation operations
    *  being applied in sequence.  
    * @param adjustment number of grid steps to apply as offset
-   * @param gridID symbolic name used to register or define a
-   *        suitable nudge grid, typically somewhere globally
-   *        in the session (as meta asset)
+   * @param grid reference to a concrete grid instance
+   * @note there is a variant of this function, using just a
+   *       symbolic name to refer to the grid, allowing to nudge
+   *       based on a grid known to exist somewhere in the session.
+   *       Using this approach involves the Advice system and thus
+   *       requires linking against \c liblumieracommon.so
+   * @see #nudge(int,Symbol)
    */
   EncapsulatedMutation
-  Mutation::nudge (int adjustment, Symbol gridID)
+  Mutation::nudge (int adjustment, PQuant const& grid)
   {
-    return EncapsulatedMutation::build<NudgeMutation> (adjustment, gridID);
+    return EncapsulatedMutation::build<NudgeMutation> (adjustment, grid);
   }
   
   
   
   
 }} // lib::time
-  
+

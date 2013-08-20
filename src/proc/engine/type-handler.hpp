@@ -43,6 +43,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/hash-value.h"
 #include "lib/functor-util.hpp"
 
 #include <tr1/functional>
