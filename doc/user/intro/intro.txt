@@ -46,13 +46,11 @@ link:{ldoc}/technical/overview.html[The Inner Core]
 Vision
 ------
 
-NOTE: this section is still in discussion
-
 Lumiera strives to be a *professional non-linear video editing system*. It is
 important to note that by ``professional'' we do not imply ``commercial'' nor
-``industrial''. We do, however, wish to convey an attitude or frame of mind in
-the approach made to such work; not its goal, requirement or purpose.
- 
+``industrial''. We do, however, wish to convey an attitude or frame of mind
+in the approach made to such work; not its goal or purpose.
+
 Professionalism implies _doing work with sincerity and being subject to any
 kind of wider goal, demand, or purpose._ When it comes to editing film, this
 wider goal, demand, or purpose might be artistry, a narration or have meaning to
@@ -74,12 +72,10 @@ aspects film production tools will have to exhibit to aspire to be labelled
         requires crisp-quality results with no concessions made throughout the
         entire workflow that might compromise quality of the final work.
         A common requirement is the ability to reproduce all rendering
-        calculations down to a single digit. 
- 
-        ??What does this mean, a single digit??
+        calculations down to the last bit. 
 
  Performance and Productivity::
-        Professionals want to get things done on time ??and content??, but
+        Professionals want to get things done on time, but
         with control over all detail. The fine balance of these goals is a
         central goal of workflow design and usability.
 
@@ -149,8 +145,8 @@ Processing video (and audio) data can be conceived as a graph (more precisely
 a _directed acyclic graph_).  In this model of video processing, data flows
 along the edges of the graph and is processed at the nodes.
 
-The following figure depicts manipulating video data as a graph.  The nodes of
-the ??root?? of the graph are where data input occurs. From there, the data moves on
+The following figure depicts manipulating video data as a graph.  The nodes at
+the top of the graph are where data input occurs. From there, the data moves on
 to the next nodes: the direct siblings of the root.  Here, the video data is
 pre-processed.  All other operations on the data can be represented by
 nodes, and data flows from one operation to the next along the nodes of the

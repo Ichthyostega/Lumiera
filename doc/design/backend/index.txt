@@ -1,22 +1,22 @@
 Design Documents: Backend
 =========================
 
-What follows is a summary regarding the design of Lumiera's *Data Handling Backend*
+What follows is a summary of Lumiera's *Data Handling Backend*
 
 This is the foundation layer responsible for any high performance or high volume
-data access. Within Lumiera, ther are two main kinds how data is handled:
+data access. Within Lumiera, there are two main kinds of data handling:
 
-* The Session and the object models manipulated through the GUI is kept in memory.
-  It is backed by a _storage backend,_ which provides database like storage and
+* The Session and the object models manipulated through the GUI are kept in memory.
+  They are backed by a _storage backend,_ which provides database-like storage and
   especially logging, replaying and ``Undo'' of all ongoing modifications..
 * Media data is handled _frame wise_ -- as described below.
 
 The backend uses *memory mapping* to make data available to the program.
 This is somewhat different to the more common open/read/write/close file access,
 while giving superior performance and much better memory utilization.
-The data backend must be capable to handle more data than will fit into the memory
+The data backend must be able to handle more data than will fit into the memory
 or even address space on 32 bit architectures. Moreover, a project might access more files
-than the OS can handle at a any time, thus the for _Files used by the Backend,_ it needs a
+than the OS can keep open simultaneously, thus the for _Files used by the Backend,_ it needs a
 *FilehandleCache* to manage file handle dynamically.
 
 Which parts of a file are actually mapped to physical RAM is managed by the kernel;

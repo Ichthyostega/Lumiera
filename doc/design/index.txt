@@ -10,18 +10,19 @@ Lumiera Design Documents
 // Menu :  append child plugins
 // Menu :  append child workflow
 
-The goal of Lumiera is to provide a professional tool for video editing on
+Lumiera is to be a professional tool for video editing on
 GNU/Linux systems.  The vision of the development team defines a modern design
-for the core of a Non-Linear Editing software.  One of the key aspect of Lumiera
-is the strong separation between the user interface and the processing core.
-Lumiera as a software will come along with a GTK GUI but that does not make this
-exclusive, any other GUI could be written as well as scripts to drive the core.
+for the core of a Non-Linear Editing software.  A key aspect of Lumiera
+is strong separation between the user interface and the processing core.
+Lumiera will have a GTK GUI but that will not be
+exclusive; other GUIs can be written, even by users,
+as well as scripts to drive the core.
 This is made possible by an ongoing effort to decrease coupling. Each major
 component in the application strives to be open to extensions, but closed
 against external modification. The presentation, the model and the ``performing''
 of the model are separate and self-contained parts of the application.  Lumiera
-as a processing core will be able to do anything possibly conceivable, therefore it
-may be used to do any task on video (and audio?), even unrelated to video editing.
+as a processing core will be able to perform any conceivable
+task on video and audio, even some unrelated to video editing.
 
 .Workflow
 *****************
@@ -35,19 +36,19 @@ but is also the concern of deeper and more technical parts of the application.
 Overview
 --------
 
-The internal structure of Lumiera is divided into numerous subsystems.  This
-overview will provide a general description of the major areas that make up
-Lumiera from the highest down to the lowest level. Lumiera can be considered to
-be composed of three main areas with an additional extra components. We discuss
-theses areas below.
+Lumiera is built from numerous subsystems.  This
+overview will provide a general description of the major components
+from the highest to the lowest level. Lumiera 
+is composed of three main areas with a few additional extra components. We discuss
+these areas below.
 
 Graphical User Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-User interfaces are basically implemented as a plugin. As a consequence, it is
+User interfaces are implemented as plug-ins. As a consequence, it is
 possible to interface with Lumiera through scripts. It is also possible to create
-specialised GUIs.  The interface is the closest component to the user. It is
-a purely visual interaction with the user. There the user manipulates,
+specialised GUIs.  The interface is the component that is closest to the user. It
+provides purely visual interaction with the user. There the user manipulates,
 organizes, loads, configures all sorts of data, especially MObjects (media
 objects) and Assets. These elements are contained within a structure called the Session. +
 -> link:gui/index.html[GUI design documents]
@@ -56,10 +57,10 @@ objects) and Assets. These elements are contained within a structure called the 
 The Processing Layer
 ~~~~~~~~~~~~~~~~~~~~
 
-The processing layer (``Proc-layer'' or ``proc'') covers several closely related aspects.
-While the user works with the GUI, all the clips, effects and other components presented
+The processing layer (``Proc-layer'' or ``proc'') has several closely related aspects.
+When the user works with the GUI, all the clips, effects and other components presented
 there are actually stored within the _Session model_ (``high-level model''). Any editing
-operations initiated by the user are actually performed here. Next, after each change,
+operations initiated by the user are actually performed there. Next, after each change,
 a component known as _the Builder_ assembles the contents of this model and transforms
 them to form a network of nodes, which can be _performed_ efficiently for rendering.
 Often, we refer to this node structure as the ``low-level model''. On rendering or
@@ -89,7 +90,7 @@ The Application
 ~~~~~~~~~~~~~~~
 
 The application controls the initialization and shutdown procedures as well as
-loading external elements such as plugins, which are widely used throughout
+loading external elements such as plug-ins, which are widely used throughout
 Lumiera. It acts as the framework which supports core component operations. This
 framework is complemented by a library of commonly used components, algorithms and data structures. +
 -> link:application/index.html[Application framework]
@@ -98,11 +99,11 @@ framework is complemented by a library of commonly used components, algorithms a
 link:plugins/index.html[Plugins]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Plugins play an important role within Lumiera since the application relies
+Plug-ins play an important role within Lumiera since the application relies
 heavily on current FLOSS implementations and external libraries. Moreover, the
-application is envisioned to be configurable and can be extended in various
+application will be configurable and can be extended in various
 ways; whenever some extension isn't permanent or will be used only on demand, it
 is packaged as a separate module into a plug-in. For example, the GUI of Lumiera
 is a plugin. + 
--> design doruments regarding the link:plugins/index.html[Plugins]
+-> design documents regarding the link:plugins/index.html[Plugins]
 
