@@ -61,6 +61,15 @@ enum JobKind
     META_JOB   ///< render process self organisation
   };
 
+/**
+ * @todo the kinds of failures that are possible
+ */
+enum JobFailureReason
+  {
+    TIMEOUT, 
+    PREREQUISITE_NOT_AVAILABLE  ///////////////TODO
+  };
+
 
 
 /** 
@@ -94,14 +103,23 @@ struct lumiera_jobDefinition_struct
     lumiera_jobParameter parameter;   ///< the "moving parts" for this individual invocation (Job)
   };
 typedef struct lumiera_jobDefinition_struct lumiera_jobDefinition;
+typedef lumiera_jobDefinition* LumieraJobDefinition;
 
 
 /**
+ * 
+ * \brief Description of a job
+ * 
+ * This describes a job which is passed by the Proc-Layer to the Back-End. 
+ * 
  * descriptor record used by the scheduler to organise job invocation.
  * The actual job's definition, i.e. the invocation parameter and
  * the closure necessary to invoke the job as a function
  * is embedded (by value) into this descriptor.
  * 
+ * @remarks all fields of interest only to the backend,
+ *       except #jobDefinition, which is provided by and of
+ *       interest to the Proc-Layer
  * @note while this descriptor as such is self-contained,
  *       the referred LumieraJobClosure needs to be allocated
  *       and managed separately. Indeed, this closure happens
@@ -109,10 +127,10 @@ typedef struct lumiera_jobDefinition_struct lumiera_jobDefinition;
  */
 struct lumiera_jobDescriptor_struct
   {
-    gavl_time_t when;
+    gavl_time_t when; /// deadline (real wall clock time)
     JobState jobState;
     
-    lumiera_jobDefinition jobDefinition;
+    lumiera_jobDefinition jobDefinition; /// of interest only to Proc-Layer
     
     /* == Job prerequisites == */
     LList waiting;
@@ -234,19 +252,19 @@ namespace engine {
 
 
 extern "C" {
-#endif /* =========================== CL Interface ===================== */
+#endif /* =========================== C Interface ===================== */
 
 
 /** trigger execution of a specific job,
  *  assuming availability of all prerequisites */
-void lumiera_job_invoke  (lumiera_jobDefinition);
+void lumiera_job_invoke  (LumieraJobDefinition);
 
 /** signal inability to invoke this job
  * @todo decide what and how to communicate details of the failure
  * @remarks the purpose of this function is to allow for reliable checkpoints
  *          within the network of dependent job invocations, even after
  *          missing deadlines or aborting a sequence of jobs */
-void lumiera_job_failure (lumiera_jobDefinition);
+void lumiera_job_failure (LumieraJobDefinition, JobFailureReason);
 
 
 

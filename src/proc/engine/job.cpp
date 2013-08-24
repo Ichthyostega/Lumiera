@@ -130,14 +130,16 @@ namespace {
 extern "C" { /* ==== implementation C interface for job invocation ======= */
   
 void
-lumiera_job_invoke  (lumiera_jobDefinition jobDef)
+lumiera_job_invoke  (LumieraJobDefinition jobDef)
 {
-  forwardInvocation(jobDef).triggerJob();
+  REQUIRE (jobDef);
+  forwardInvocation(*jobDef).triggerJob();
 }
 
 void
-lumiera_job_failure (lumiera_jobDefinition jobDef)
+lumiera_job_failure (LumieraJobDefinition jobDef, JobFailureReason)
 {
-  forwardInvocation(jobDef).signalFailure();
+  REQUIRE (jobDef);
+  forwardInvocation(*jobDef).signalFailure();   ////TODO forward the JobFailureReason parameter
 }
 }
