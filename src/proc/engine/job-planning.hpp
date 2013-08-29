@@ -65,7 +65,7 @@
 #define PROC_ENGINE_JOB_PLANNING_H
 
 #include "proc/common.hpp"
-#include "proc/engine/job.hpp"
+#include "backend/engine/job.h"
 #include "proc/engine/job-ticket.hpp"
 #include "proc/engine/frame-coord.hpp"
 #include "lib/iter-explorer.hpp"

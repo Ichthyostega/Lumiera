@@ -30,8 +30,8 @@
 #include "proc/engine/frame-coord.hpp"
 #include "proc/engine/job-ticket.hpp"
 #include "proc/engine/dispatcher.hpp"
-#include "proc/engine/job.hpp"
 #include "proc/play/timings.hpp"
+#include "backend/engine/job.h"
 #include "lib/time/timevalue.hpp"
 
 #include <boost/noncopyable.hpp>

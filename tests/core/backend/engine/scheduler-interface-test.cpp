@@ -25,7 +25,7 @@
 
 #include "proc/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
-#include "proc/engine/job.hpp"    ////////////////////////////////////////////TICKET #926 : Job descriptor belongs into backend
+#include "backend/engine/job.h"
 
 
 namespace backend {
@@ -37,7 +37,6 @@ namespace test {
   using lib::time::Duration;
   using lib::time::FSecs;
   
-  using proc::engine::Job;
   using proc::engine::JobClosure;
   using proc::engine::JobParameter;
   
