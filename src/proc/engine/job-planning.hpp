@@ -68,6 +68,7 @@
 #include "backend/engine/job.h"
 #include "proc/engine/job-ticket.hpp"
 #include "proc/engine/frame-coord.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
@@ -79,6 +80,7 @@ namespace engine {
   
   namespace error = lumiera::error;
   
+  using lib::time::TimeValue;
   using util::unConst;
   using util::isnil;
   

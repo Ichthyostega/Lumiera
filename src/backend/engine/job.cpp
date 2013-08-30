@@ -23,8 +23,8 @@
 
 /** @file job.cpp 
  ** Implementation of render job invocation.
- ** Within this translation unit, the actual invocation of a frame rendering
- ** job takes place, after reconstruction of the job's execution environment (closure).
+ ** Within this translation unit, the actual invocation of a frame rendering job
+ ** takes place, after reconstruction of the job's execution environment (closure).
  ** 
  ** @see JobTicket
  ** @see ProcNode
@@ -33,11 +33,10 @@
  */
 
 
-#include "proc/engine/job.hpp"
-#include "proc/engine/job-ticket.hpp"
+#include "backend/engine/job.h"
 
 
-namespace proc {
+namespace backend {
 namespace engine {
   
   namespace { // Details...
@@ -79,9 +78,9 @@ namespace engine {
   
   
   void
-  Job::signalFailure()  const
+  Job::signalFailure (JobFailureReason reason)  const
   {
-    myClosure(this).signalFailure (parameter);
+    myClosure(this).signalFailure (parameter, reason);
   }
   
   
@@ -110,10 +109,10 @@ namespace engine {
   }
   
   
-}} // namespace proc::engine
+}} // namespace backend::engine
 
 namespace {
-  using proc::engine::Job;
+  using backend::engine::Job;
     
   inline Job& 
   forwardInvocation (lumiera_jobDefinition& jobDef)
@@ -137,9 +136,9 @@ lumiera_job_invoke  (LumieraJobDefinition jobDef)
 }
 
 void
-lumiera_job_failure (LumieraJobDefinition jobDef, JobFailureReason)
+lumiera_job_failure (LumieraJobDefinition jobDef, JobFailureReason reason)
 {
   REQUIRE (jobDef);
-  forwardInvocation(*jobDef).signalFailure();   ////TODO forward the JobFailureReason parameter
+  forwardInvocation(*jobDef).signalFailure(reason);
 }
 }

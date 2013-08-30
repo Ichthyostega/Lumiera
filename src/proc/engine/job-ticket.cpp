@@ -43,7 +43,8 @@ namespace engine {
   
 //  using mobject::Placement;
 //  using mobject::session::Effect;
-  
+using backend::engine::JobParameter;
+using backend::engine::JobClosure;
   
   
   
@@ -76,7 +77,7 @@ namespace engine {
       
       
       void
-      signalFailure (JobParameter parameter)
+      signalFailure (JobParameter parameter, JobFailureReason reason)
         {
           UNIMPLEMENTED ("what needs to be done when a job cant be invoked?");
         }

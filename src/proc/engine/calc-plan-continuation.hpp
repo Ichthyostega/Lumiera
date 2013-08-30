@@ -42,6 +42,8 @@ namespace proc {
 namespace engine {
   
 //  using std::tr1::function;
+  using backend::engine::JobParameter;
+  using backend::engine::JobClosure;
   using mobject::ModelPort;
 //  using lib::time::TimeSpan;
 //  using lib::time::FSecs;
@@ -94,7 +96,7 @@ namespace engine {
       
       
       void
-      signalFailure (JobParameter parameter)
+      signalFailure (JobParameter parameter, JobFailureReason reason)
         {
           UNIMPLEMENTED ("what needs to be done when a planning continuation cant be invoked?");
         }

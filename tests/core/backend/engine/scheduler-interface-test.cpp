@@ -37,8 +37,8 @@ namespace test {
   using lib::time::Duration;
   using lib::time::FSecs;
   
-  using proc::engine::JobClosure;
-  using proc::engine::JobParameter;
+  using backend::engine::JobClosure;
+  using backend::engine::JobParameter;
   
   
   namespace { // test fixture: a dummy job operation...
@@ -53,7 +53,7 @@ namespace test {
           }
         
         void
-        signalFailure (JobParameter)
+        signalFailure (JobParameter,JobFailureReason)
           {
             NOTREACHED ("Job failure is not subject of this test");
           }

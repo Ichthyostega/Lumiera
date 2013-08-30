@@ -1,5 +1,5 @@
 /*
-  JOB.hpp  -  render job closure
+  JOB.h  -  render job closure
 
   Copyright (C)         Lumiera.org
     2012,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,15 +21,38 @@
 */
 
 
-#ifndef PROC_ENGINE_JOB_H
-#define PROC_ENGINE_JOB_H
+/** @file job.h
+ ** Definition of a render job.
+ ** Jobs are defined within Proc-Layer and passed to the scheduler in the Back-end
+ ** for time bound invocation. This header defines the data structures used to describe
+ ** a job, and the basic data structures used by the scheduler to keep track of individual
+ ** jobs. Moreover, within the C++ part of this header, some classes are layered on top
+ ** of these data structures; especially the JobClosure ABC describes the \em generic part
+ ** of each job, while the "moving parts" are embedded within the lumiera_jobParameter.
+ ** 
+ ** A render job is a parameterless function, ready to be invoked by the scheduler..
+ ** Since every non trivial job actually needs some parameters (at least a frame number)
+ ** and relies on additional definitions and data structures, a \em closure is created
+ ** to make these dependencies explicit and opaque for the scheduler. The actual
+ ** job invocation is forwarded to a virtual function JobClosure#invokeJobOperation(JobParameter),
+ ** which is defined "somewhere" in a subclass and remains opaque for the scheduler;
+ ** the \link proc::engine::Dispatcher frame dispatcher \endlink takes care to configure
+ ** each job descriptor with the correct pointer to a concrete closure prior to handing
+ ** the job over to the scheduler.
+ ** 
+ ** @see SchedulerFrontend
+ ** @see JobTicket
+ **
+ */
 
-///////////////////////////////////////////////////////////////////TICKET #926 : Job descriptor belongs into backend
+
+#ifndef BACKEND_ENGINE_JOB_H
+#define BACKEND_ENGINE_JOB_H
+
 
 #include "lib/llist.h"
 #include "lib/hash-value.h"
-
-#include <gavl/gavl.h>
+#include "lib/time.h"
 
 
 /** opaque ID attached to each individual job invocation.
@@ -61,8 +84,9 @@ enum JobKind
     META_JOB   ///< render process self organisation
   };
 
+
 /**
- * @todo the kinds of failures that are possible
+ * @todo find out about the possible kinds of failure
  */
 enum JobFailureReason
   {
@@ -107,15 +131,12 @@ typedef lumiera_jobDefinition* LumieraJobDefinition;
 
 
 /**
+ * Description of a job. Jobs are passed by the Proc-Layer to the Back-End. 
  * 
- * \brief Description of a job
- * 
- * This describes a job which is passed by the Proc-Layer to the Back-End. 
- * 
- * descriptor record used by the scheduler to organise job invocation.
- * The actual job's definition, i.e. the invocation parameter and
- * the closure necessary to invoke the job as a function
- * is embedded (by value) into this descriptor.
+ * This descriptor record is used by the scheduler to organise job invocation.
+ * The actual job's definition, i.e. the invocation parameter and the closure
+ * necessary to invoke the job as a function is embedded (by value)
+ * into this descriptor.
  * 
  * @remarks all fields of interest only to the backend,
  *       except #jobDefinition, which is provided by and of
@@ -127,10 +148,10 @@ typedef lumiera_jobDefinition* LumieraJobDefinition;
  */
 struct lumiera_jobDescriptor_struct
   {
-    gavl_time_t when; /// deadline (real wall clock time)
+    gavl_time_t deadline;                ///< given in real wall clock time
     JobState jobState;
     
-    lumiera_jobDefinition jobDefinition; /// of interest only to Proc-Layer
+    lumiera_jobDefinition jobDefinition; ///< of interest only to Proc-Layer
     
     /* == Job prerequisites == */
     LList waiting;
@@ -149,12 +170,10 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "lib/error.hpp"
-#include "lib/time/timevalue.hpp"
 
 
 
-namespace proc {
+namespace backend {
 namespace engine {
   
   using lib::time::TimeValue;
@@ -184,11 +203,11 @@ namespace engine {
       virtual ~JobClosure();     ///< this is an interface
       
       
-      virtual void invokeJobOperation (JobParameter parameter)  =0;
-      virtual void signalFailure      (JobParameter parameter)  =0;
+      virtual void invokeJobOperation (JobParameter parameter)   =0;
+      virtual void signalFailure (JobParameter,JobFailureReason) =0;
       
-      virtual JobKind getJobKind()  const                       =0;
-      virtual bool verify (Time nominalJobTime)  const          =0;
+      virtual JobKind getJobKind()  const                        =0;
+      virtual bool verify (Time nominalJobTime)  const           =0;
     };
   
   
@@ -225,8 +244,8 @@ namespace engine {
       // using standard copy operations
       
       
-      void triggerJob()    const;
-      void signalFailure() const;
+      void triggerJob()                     const;
+      void signalFailure (JobFailureReason) const;
       
       
       Time
@@ -246,7 +265,7 @@ namespace engine {
     };
   
   
-}} // namespace proc::engine
+}} // namespace backend::engine
 
 
 

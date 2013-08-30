@@ -46,6 +46,7 @@ namespace engine {
 //using lib::time::Duration;
 //using lib::time::FSecs;
 //using lib::time::Time;
+using backend::engine::Job;
 using lib::LinkedElements;
 using lib::OrientationIndicator;
 using util::isnil;
