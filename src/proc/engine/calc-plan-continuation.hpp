@@ -27,15 +27,11 @@
 #include "proc/common.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/engine/time-anchor.hpp"
-#include "proc/engine/frame-coord.hpp"
-#include "proc/engine/job-ticket.hpp"
 #include "proc/engine/dispatcher.hpp"
 #include "proc/play/timings.hpp"
 #include "backend/engine/job.h"
-#include "lib/time/timevalue.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <tr1/functional>
 
 
 namespace proc {
@@ -79,27 +75,12 @@ namespace engine {
           return META_JOB;
         }
       
-      bool
-      verify (Time nominalJobTime)  const
-        {
-          UNIMPLEMENTED ("verify the planning coordinates");
-          return false;
-        }
+      bool verify (Time nominalJobTime)  const;
+      size_t hashOfInstance (InvocationInstanceID) const;
       
-      void
-      invokeJobOperation (JobParameter parameter)
-        {
-          ASSERT (parameter.nominalTime == timings_.getFrameStartAt (parameter.invoKey.frameNumber));
-          
-          this->performJobPlanningChunk (parameter.invoKey.frameNumber);
-        }
+      void invokeJobOperation (JobParameter);
+      void signalFailure (JobParameter, JobFailureReason);
       
-      
-      void
-      signalFailure (JobParameter parameter, JobFailureReason reason)
-        {
-          UNIMPLEMENTED ("what needs to be done when a planning continuation cant be invoked?");
-        }
       
       
       
@@ -126,37 +107,12 @@ namespace engine {
        * @param startFrame where to begin rendering, relative to the nominal
        *        time grid implicitly related to the ModelPort to be pulled
        */
-      Job
-      prepareRenderPlanningFrom (int64_t startFrame)
-        {
-          InvocationInstanceID invoKey;
-          invoKey.frameNumber = startFrame;
-          Time nominalPlanningStartTime = timings_.getFrameStartAt (startFrame);
-          
-          return Job(*this, invoKey, nominalPlanningStartTime);
-        }
+      Job prepareRenderPlanningFrom (int64_t startFrame);
       
       
     private:
-      void
-      performJobPlanningChunk(int64_t nextStartFrame)
-        {
-          TimeAnchor refPoint(timings_, nextStartFrame);
-          JobPlanningSequence jobs = dispatcher_.onCalcStream(modelPort_, channel_)
-                                                .establishNextJobs(refPoint);
-          
-          Job nextChunkOfPlanning = buildFollowUpJobFrom (refPoint);
-          
-          UNIMPLEMENTED ("the actual meat: access the scheduler and fed those jobs");
-        }
-      
-      
-      Job
-      buildFollowUpJobFrom (TimeAnchor const& refPoint)
-        {
-          return this->prepareRenderPlanningFrom(
-                         refPoint.getNextAnchorPoint());
-        }
+      void performJobPlanningChunk(int64_t nextStartFrame);
+      Job buildFollowUpJobFrom (TimeAnchor const& refPoint);
     };
   
   

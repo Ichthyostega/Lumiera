@@ -22,16 +22,86 @@
 
 
 #include "proc/engine/calc-plan-continuation.hpp"
+#include "proc/engine/frame-coord.hpp"
+#include "proc/engine/job-ticket.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/frameid.hpp"
 //#include "proc/state.hpp"
+
+#include <boost/functional/hash.hpp>
 
 
 
 namespace proc {
 namespace engine {
-
   
-  /** */
+  
+  /** entry point (interface JobClosure): invoke the concrete job operation.
+   *  In this case, the job operation is responsible for planning a chunk of actual render jobs.
+   */
+  void
+  CalcPlanContinuation::invokeJobOperation (JobParameter parameter)
+  {
+    ASSERT (parameter.nominalTime == timings_.getFrameStartAt (parameter.invoKey.frameNumber));
+    
+    this->performJobPlanningChunk (parameter.invoKey.frameNumber);
+  }
+  
+  
+  void
+  CalcPlanContinuation::signalFailure (JobParameter parameter, JobFailureReason reason)
+  {
+    UNIMPLEMENTED ("what needs to be done when a planning continuation cant be invoked?");
+  }
+  
+  
+  bool
+  CalcPlanContinuation::verify (Time nominalJobTime)  const
+  {
+    UNIMPLEMENTED ("verify the planning coordinates");
+    return false;
+  }
+  
+  size_t
+  CalcPlanContinuation::hashOfInstance (InvocationInstanceID invoKey) const
+  {
+    return boost::hash_value (invoKey.frameNumber);
+  }
+  
+  
+  
+  
+  
+  Job
+  CalcPlanContinuation::prepareRenderPlanningFrom (int64_t startFrame)
+  {
+    InvocationInstanceID invoKey;
+    invoKey.frameNumber = startFrame;
+    Time nominalPlanningStartTime = timings_.getFrameStartAt (startFrame);
+    
+    return Job(*this, invoKey, nominalPlanningStartTime);
+  }
+  
+  
+  void
+  CalcPlanContinuation::performJobPlanningChunk(int64_t nextStartFrame)
+  {
+    TimeAnchor refPoint(timings_, nextStartFrame);
+    JobPlanningSequence jobs = dispatcher_.onCalcStream(modelPort_, channel_)
+                                          .establishNextJobs(refPoint);
+    
+    Job nextChunkOfPlanning = buildFollowUpJobFrom (refPoint);
+    
+    UNIMPLEMENTED ("the actual meat: access the scheduler and fed those jobs");
+  }
+  
+  
+  Job
+  CalcPlanContinuation::buildFollowUpJobFrom (TimeAnchor const& refPoint)
+  {
+    return this->prepareRenderPlanningFrom(
+                   refPoint.getNextAnchorPoint());
+  }
   
   
   
