@@ -39,6 +39,7 @@
 
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
+#include "lib/time/timevalue.hpp"
 #include "backend/engine/scheduler-frontend.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
@@ -51,6 +52,7 @@
 //#include "lib/polymorphic-value.hpp"
 //#include "lib/singleton.hpp"
 //
+
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
@@ -64,6 +66,7 @@ namespace engine {
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
 //  using proc::play::Timings;
+  using lib::time::Time;
   using lib::HashVal;
   
   
@@ -135,6 +138,18 @@ namespace engine {
       is_scheduled_background (Job const& job)
         {
           return is_scheduled_background (hash_value (job));
+        }
+      
+      bool
+      has_job_scheduled_at (Time deadline)
+        {
+          UNIMPLEMENTED ("query for job scheduled for specific deadline");
+        }
+      
+      Job const&
+      job_at (Time deadline)
+        {
+          UNIMPLEMENTED ("query for job scheduled for specific deadline");
         }
     };
   

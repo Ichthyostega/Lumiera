@@ -263,10 +263,12 @@ namespace engine {
       
       JobKind getKind()  const;
       bool isValid()  const;
+      
+      /** provide a hash based Job ID */
+      friend lib::HashVal hash_value (Job const&);
     };
   
   
-  size_t hash_value (Job const&);
   
   
   

@@ -24,11 +24,11 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "proc/play/timings.hpp"
-#include "lib/time/timevalue.hpp"
-#include "backend/engine/job.h"
+#include "backend/real-clock.hpp"
 #include "backend/engine/scheduler-frontend.hpp"
 #include "backend/engine/scheduler-diagnostics.hpp"
+
+#include <boost/functional/hash.hpp>
 
 
 namespace backend {
@@ -37,13 +37,9 @@ namespace test {
   
   using util::isSameObject;
   
-  using lib::time::Time;
-  using lib::time::TimeVar;
   using lib::time::Duration;
+  using lib::time::Offset;
   using lib::time::FSecs;
-  
-  using backend::engine::JobClosure;
-  using backend::engine::JobParameter;
   
   
   namespace { // test fixture: a dummy job operation...
@@ -78,7 +74,7 @@ namespace test {
         size_t
         hashOfInstance(InvocationInstanceID invoKey) const
           {
-            UNIMPLEMENTED ("how to interpret the invoKey to create a hash value");
+            return boost::hash_value (invoKey.frameNumber);
           }
       };
     
@@ -86,71 +82,21 @@ namespace test {
     DummyClosure dummyClosure;
     
     
-    /**
-     * @todo this is a draft and shall be incorporated into the SchedulerFrontend
-     * Definition context for jobs to be scheduled.
-     * Allows to specify individual jobs, and to attach a transaction for prerequisite jobs
-     */
-    class JobTransaction
-      {
-        
-      public:
-        JobTransaction()
-          {
-            UNIMPLEMENTED ("suitable representation, link to the actual scheduler?");
-          }
-        
-        // using default copy operations
-        
-        
-        /** define a render job
-         *  for time-bound calculation
-         */
-        void
-        addJob (Time deadline, Job const& job)
-          {
-            UNIMPLEMENTED ("a mock implementation for adding a single job; change this later to talk to the real scheduler");
-          }
-        
-        /** define a job for background rendering. */
-        void
-        addBackground (Job const& job)
-          {
-            UNIMPLEMENTED ("a mock implementation for adding a single background job; change this later to talk to the real scheduler");
-          }
-        
-        /** define a render job
-         *  to be calculated as soon as resources permit.
-         *  Typically this call is used for rendering final results.
-         */
-        void
-        addFreewheeling (Job const& job)
-          {
-            UNIMPLEMENTED ("a mock implementation for adding a single job for immediate calculation; change this later to talk to the real scheduler");
-          }
-        
-        void
-        attach (JobTransaction const& prerequisites)
-          {
-            UNIMPLEMENTED ("a mock implementation for adding a tree of prerequisite jobs; change this later to talk to the real scheduler");
-          }
-        
-        JobTransaction startPrerequisiteTx();
-        
-      };
-    
-    JobTransaction
-    JobTransaction::startPrerequisiteTx()
-      {
-        UNIMPLEMENTED ("how to start a nested job definition context");
-      }
     
     
-    TimeVar testStartTime(Time::ZERO);
+    Time TEST_START_TIME (backend::RealClock::now());
     const Duration TEST_FRAME_DURATION(FSecs(1,2));
+    
+    inline Offset
+    dummyFrameStart (uint frameNr)
+    {
+      return frameNr * TEST_FRAME_DURATION;
+    }
   
   } //(End) test fixture
   
+  
+  typedef SchedulerFrontend::JobTransaction JobTransaction;
   
   
   /***************************************************************************
@@ -175,7 +121,7 @@ namespace test {
       
       
       void
-      verify_simple_job_specification (SchedulerFronend& scheduler)
+      verify_simple_job_specification (SchedulerFrontend& scheduler)
         {
           SchedulerDiagnostics monitor(scheduler);
           
@@ -183,11 +129,10 @@ namespace test {
           invoKey.frameNumber = 111;
           
           Job job(dummyClosure, invoKey, Time::ZERO);
+          Time deadline(TEST_START_TIME);
           
-          
-          JobTransaction definitionContext;
           scheduler.startJobTransaction()
-                   .addJob(job)
+                   .addJob(deadline, job)
                    .commit();
           
           CHECK ( monitor.is_scheduled_timebound (job));
@@ -197,7 +142,7 @@ namespace test {
       
       
       void
-      verify_job_specification_variations (SchedulerFronend& scheduler)
+      verify_job_specification_variations (SchedulerFrontend& scheduler)
         {
           SchedulerDiagnostics monitor(scheduler);
           
@@ -233,21 +178,21 @@ namespace test {
        * @see HierarchyOrientationIndicator_test#demonstrate_tree_rebuilding
        */
       void
-      demonstrate_nested_job_specification (SchedulerFronend& scheduler)
+      demonstrate_nested_job_specification (SchedulerFrontend& scheduler)
         {
           SchedulerDiagnostics monitor(scheduler);
           
           JobTransaction startTx = scheduler.startJobTransaction();
-          uint dummyLevel = 5;
           
+          uint dummyLevel = 5;
           specifyJobs (startTx, dummyLevel);
           
           startTx.commit();
           
           for (uint i=0; i <=5; ++i)
             {
-              Time nominalTime(dummyLevel*TEST_FRAME_DURATION); 
-              Time deadline(testStartTime + i*TEST_FRAME_DURATION);
+              Time nominalTime(dummyFrameStart (i));
+              Time deadline(TEST_START_TIME + nominalTime);
               
               CHECK (monitor.has_job_scheduled_at (deadline));
               CHECK (isSameObject (dummyClosure, monitor.job_at(deadline).jobClosure));
@@ -263,11 +208,12 @@ namespace test {
       static void
       specifyJobs (JobTransaction& currentTx, uint dummyLevel)
         {
+          uint frameNr = dummyLevel;
           InvocationInstanceID invoKey;
-          invoKey.frameNumber = dummyLevel;
+          invoKey.frameNumber = frameNr;
           
-          Time nominalTime(dummyLevel*TEST_FRAME_DURATION); 
-          Time deadline(testStartTime + dummyLevel*TEST_FRAME_DURATION);
+          Time nominalTime(dummyFrameStart(frameNr));
+          Time deadline(TEST_START_TIME + nominalTime);
           
           Job job(dummyClosure, invoKey, nominalTime);
           

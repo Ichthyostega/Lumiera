@@ -26,12 +26,15 @@
 
 
 
-//using std::list;
 #include "lib/singleton.hpp"
+#include "lib/time/timevalue.hpp"
+#include "backend/engine/job.h"
 
 
 namespace backend{
 namespace engine {
+  
+  using lib::time::Time;
   
   
   /**
@@ -57,11 +60,98 @@ namespace engine {
        *           by the player. Client code should use the Player.
        */
       static lib::Singleton<SchedulerFrontend> instance;
-
       
-       ///// TODO: find out about the public operations
-       // note: the play controller lives in the proc-layer,
-       //       but is a subsystem separate of the session.
+      
+      /**
+       * Definition context for jobs to be scheduled.
+       * This builder allows to specify individual jobs,
+       * and to attach a transaction for prerequisite jobs.
+       * When done, the #commit operation can be used
+       * to activate all jobs defined this far.
+       */
+      class JobTransaction
+        {
+          SchedulerFrontend* sched_;
+          
+          
+          JobTransaction (SchedulerFrontend* s)
+            : sched_(s)
+            {
+              UNIMPLEMENTED ("suitable representation, link to the actual scheduler?");
+            }
+          
+          friend class SchedulerFrontend;
+          
+          // using default copy operations
+          
+          
+        public:
+          /** finish this set of job definitions.
+           *  All jobs attached to this transaction thus far,
+           *  and all dependent transactions will be scheduled
+           * @note transaction should not be used beyond this point;
+           *       contents and data structures are cleared right away;
+           */
+          void
+          commit()
+            {
+              UNIMPLEMENTED ("feed all the attached jobs and transactions to the scheduler");
+            }
+          
+          /** define a render job
+           *  for time-bound calculation */
+          JobTransaction&
+          addJob (Time deadline, Job const& job)
+            {
+              UNIMPLEMENTED ("a mock implementation for adding a single job; change this later to talk to the real scheduler");
+              return *this;
+            }
+          
+          /** define a job for background rendering. */
+          JobTransaction&
+          addBackground (Job const& job)
+            {
+              UNIMPLEMENTED ("a mock implementation for adding a single background job; change this later to talk to the real scheduler");
+              return *this;
+            }
+          
+          /** define a render job
+           *  to be calculated as soon as resources permit.
+           *  Typically this call is used for rendering final results.
+           */
+          JobTransaction&
+          addFreewheeling (Job const& job)
+            {
+              UNIMPLEMENTED ("a mock implementation for adding a single job for immediate calculation; change this later to talk to the real scheduler");
+              return *this;
+            }
+          
+          JobTransaction&
+          attach (JobTransaction const& prerequisites)
+            {
+              UNIMPLEMENTED ("a mock implementation for adding a tree of prerequisite jobs; change this later to talk to the real scheduler");
+              return *this;
+            }
+          
+          JobTransaction
+          startPrerequisiteTx()
+            {
+              UNIMPLEMENTED ("how to start a nested job definition context");
+              return JobTransaction(sched_);
+            }
+          
+        };
+      
+      
+      JobTransaction
+      startJobTransaction()
+        {
+          return JobTransaction(this);
+        }
+      
+      
+      ///// TODO: find out about further public operations
+       
       
     protected:
       void activateTracing();
