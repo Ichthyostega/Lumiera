@@ -69,6 +69,12 @@ using backend::engine::JobClosure;
           return false;
         }
       
+      size_t
+      hashOfInstance (InvocationInstanceID invoKey) const
+        {
+          UNIMPLEMENTED ("interpret the invoKey and create a suitable hash");
+        }
+      
       void
       invokeJobOperation (JobParameter parameter)
         {

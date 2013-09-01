@@ -29,9 +29,9 @@
  ** 
  ** The central concept provided through this facade interface is the <i>calculation stream</i>.
  ** This represents a series of calculations, expected to happen in a timely fashion and in order
- ** to deliver a frame data stream onto an opened output connection. On the implementation side,
- ** a calculation stream will be translated into a series of jobs invoking render nodes,
- ** to be executed through the scheduler in the backend layer.
+ ** to deliver a frame data stream into an opened output connection. On the implementation side,
+ ** a calculation stream will be translated into a series of jobs to invoke render nodes;
+ ** these jobs are to be executed through the scheduler in the backend layer.
  ** 
  ** While the individual CalcStram is simple, linear and unmodifiable, any CalcStream may be
  ** \em superseded by a new definition. In this case, the engine will care for a seamless

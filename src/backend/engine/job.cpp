@@ -35,6 +35,9 @@
 
 #include "backend/engine/job.h"
 
+#include <boost/functional/hash.hpp>
+#include <typeinfo>
+
 
 namespace backend {
 namespace engine {
@@ -68,8 +71,6 @@ namespace engine {
   
   
   
-  /** @todo WIP-WIP 2/12  
-   */
   void
   Job::triggerJob()  const
   {
@@ -106,6 +107,23 @@ namespace engine {
   {
     return this->jobClosure
         && myClosure(this).verify (getNominalTime());
+  }
+  
+  
+  /** hash value based on all relevant job data.
+   *  Job records hashing to the same value shall be considered equivalent.
+   *  Since the interpretation of the #InvocationInstanceID is a private detail
+   *  of the JobClosure, calculating this hash requires a virtual call into the
+   *  concrete JobClosure. This is not considered problematic, as the normal
+   *  job operation and scheduling doesn't rely on the job's hash. Only some
+   *  diagnostic facilities do. */
+  size_t
+  hash_value (Job const& job)
+  {
+    size_t hash = myClosure(&job).hashOfInstance (job.parameter.invoKey);
+    boost::hash_combine(hash, typeid(job.jobClosure).name());
+    boost::hash_combine(hash, job.parameter.nominalTime);
+    return hash;
   }
   
   

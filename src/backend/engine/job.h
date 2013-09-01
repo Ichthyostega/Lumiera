@@ -208,6 +208,7 @@ namespace engine {
       
       virtual JobKind getJobKind()  const                        =0;
       virtual bool verify (Time nominalJobTime)  const           =0;
+      virtual size_t hashOfInstance(InvocationInstanceID) const  =0;
     };
   
   
@@ -263,6 +264,10 @@ namespace engine {
       JobKind getKind()  const;
       bool isValid()  const;
     };
+  
+  
+  size_t hash_value (Job const&);
+  
   
   
 }} // namespace backend::engine

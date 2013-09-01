@@ -69,6 +69,12 @@ namespace test {
           {
             UNIMPLEMENTED ("what the hell do we need to mock for this operation????");
           }
+        
+        size_t
+        hashOfInstance(InvocationInstanceID invoKey) const
+          {
+            UNIMPLEMENTED ("how to interpret the invoKey to create a hash value");
+          }
       };
     
     /** actual instance of the test dummy job operation */
@@ -166,7 +172,7 @@ namespace test {
           InvocationInstanceID invoKey;
           invoKey.frameNumber = 111;
           
-          Job job(dummyClosure,invoKey, Time::ZERO);
+          Job job(dummyClosure, invoKey, Time::ZERO);
           
           
           JobTransaction definitionContext;   ///////////////TODO: get this "somehow" from the SchedulerFrontend
@@ -181,6 +187,10 @@ namespace test {
       /** @test demonstrate how a tree of dependent render jobs
        * can be handed over to the scheduler within a single "transaction"
        * 
+       * @remarks in the real usage situation, the definition of jobs will be
+       *      driven by the exploration of a tree-like structure (the JobTicket).
+       *      For the purpose of this interface demonstration test this recursive
+       *      invocation structure is just emulated by a simple tail recursion.
        * @see HierarchyOrientationIndicator_test#demonstrate_tree_rebuilding
        */
       void
@@ -202,7 +212,7 @@ namespace test {
       static void
       specifyJobs (JobTransaction& currentTx, uint dummyLevel)
         {
-          InvocationInstanceID invoKey;       ///////////////TODO: get this "somehow" from the SchedulerFrontend
+          InvocationInstanceID invoKey;
           invoKey.frameNumber = dummyLevel;
           
           Time nominalTime(dummyLevel*TEST_FRAME_DURATION); 

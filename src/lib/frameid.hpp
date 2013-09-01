@@ -76,6 +76,6 @@ namespace lumiera {
   
   
   
-   
+  
 } // namespace lumiera
 #endif
