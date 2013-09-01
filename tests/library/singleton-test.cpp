@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
 #include "testtargetobj.hpp"
@@ -29,12 +30,11 @@
 
 #include <tr1/functional>
 #include <boost/lexical_cast.hpp>
-#include <boost/format.hpp>
 #include <iostream>
 
 using std::tr1::function;
 using boost::lexical_cast;
-using boost::format;
+using util::_Fmt;
 using util::isnil;
 using std::string;
 using std::cout;
@@ -115,7 +115,7 @@ namespace test{
       
       void useInstance (uint num, string kind)
         {
-          cout << format("testing TargetObj(%d) as Singleton(%s)\n") % num % kind;
+          cout << _Fmt("testing TargetObj(%d) as Singleton(%s)\n") % num % kind;
           TargetObj::setCountParam(num);
           TargetObj& t1 = instance();
           TargetObj& t2 = instance();

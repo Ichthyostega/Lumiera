@@ -24,23 +24,24 @@
 #include "proc/asset.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/asset-format.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
 #include <tr1/functional>
+#include <string>
 
 
 using std::tr1::function;
 using std::tr1::placeholders::_1;
 using std::tr1::bind;
-using boost::format;
 using util::contains;
 using util::removeall;
 using util::for_each;
 using util::and_all;
 using util::isnil;
 using util::cStr;
+using util::_Fmt;
 
 
 namespace proc {
@@ -77,15 +78,21 @@ namespace asset {
 
   Asset::Ident::operator string ()  const
   {
-    format id_tuple("(%2%:%3%.%1% v%4%)");
-    return str (id_tuple % name % category % org % version);
+    return string (_Fmt("(%2%:%3%.%1% v%4%)")
+                       % name
+                       % category
+                       % org
+                       % version);
   }
   
 
   Asset::operator string ()  const
   {
-    format id_tuple("Asset(%2%:%3%.%1% v%4%)");
-    return str (id_tuple % ident.name % ident.category % ident.org % ident.version);
+    return string (_Fmt("Asset(%2%:%3%.%1% v%4%)")
+                       % ident.name
+                       % ident.category
+                       % ident.org
+                       % ident.version);
   }
   
   

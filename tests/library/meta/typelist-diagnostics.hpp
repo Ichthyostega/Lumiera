@@ -41,15 +41,14 @@
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/format-string.hpp"
 #include "lib/meta/util.hpp"
 
 #include <boost/utility/enable_if.hpp>
-#include <boost/format.hpp>
-
+#include <string>
 
 
 using std::string;
-using boost::format;
 using boost::enable_if;
 
 
@@ -101,9 +100,8 @@ namespace meta {
   namespace test { //  unit tests covering typelist manipulating templates
     namespace {   // hidden internals for diagnostics....
       
-      using boost::format;
       
-      format fmt ("-<%u>%s");
+      util::_Fmt fmt ("-<%u>%s");
       
       struct NullP
         {
@@ -120,28 +118,28 @@ namespace meta {
       struct Printer<NullType, BASE>
         : BASE
         {
-          static string print () { return str( fmt % "·" % BASE::print()); }
+          static string print () { return string( fmt % "·" % BASE::print()); }
         };
       
       template<class BASE, int I>
       struct Printer<Num<I>, BASE>    ///< display the presence of a Num instance in the typelist
         : BASE
         {
-          static string print () { return str( fmt % uint(Num<I>::VAL) % BASE::print()); }
+          static string print () { return string( fmt % uint(Num<I>::VAL) % BASE::print()); }
         };
       
       template<class BASE, uint Fl>
       struct Printer<Flag<Fl>, BASE>  ///< display the presence of a Flag in the typelist
         : BASE
         {
-          static string print () { return str( fmt % uint(Fl) % BASE::print()); }
+          static string print () { return string( fmt % uint(Fl) % BASE::print()); }
         };
       
       template<class BASE>
       struct Printer<int, BASE>  ///< display the presence of a plain int in the typelist
         : BASE
         {
-          static string print () { return str( fmt % 'i' % BASE::print()); }
+          static string print () { return string( fmt % 'i' % BASE::print()); }
         };
       
       

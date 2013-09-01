@@ -37,6 +37,7 @@
 
 
 #include "meta/typelist-diagnostics.hpp"
+#include "lib/format-string.hpp"
 #include "lib/meta/tuple.hpp"
 
 #include <boost/utility/enable_if.hpp>
@@ -45,8 +46,6 @@
 #include <string>
 
 using std::string;
-using boost::str;
-using boost::format;
 using boost::enable_if;
 using boost::lexical_cast;
 using util::unConst;
@@ -65,10 +64,10 @@ namespace test {
     string
     showTupElement(Num<i> o) 
     {
-      static format   constElm("(%i)");
-      static format changedElm("{%i}");
+      static util::_Fmt   constElm("(%i)");
+      static util::_Fmt changedElm("{%i}");
       
-      return str ( (o.o_==i? constElm:changedElm) % int(o.o_));
+      return string( (o.o_==i? constElm:changedElm) % int(o.o_));
     }
     
     string

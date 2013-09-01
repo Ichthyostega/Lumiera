@@ -25,11 +25,6 @@
 #define LIB_META_DUMMY_FUNCTIONS_H
 
 
-//#include <boost/format.hpp>
-//#include <string>
-
-//using std::string;
-//using boost::format;
 
 
 namespace lib  {

@@ -22,11 +22,10 @@
 * *****************************************************/
 
 
-#include <iostream>
-#include <boost/format.hpp>
 
 #include "common/interfacedescriptor.h"
 #include "common/config_interface.h"
+#include "lib/format-string.hpp"
 
 extern "C" {
 #include "common/interface.h"
@@ -35,7 +34,8 @@ extern "C" {
 #include "interface/say_hello.h"
 }
 
-using boost::format;
+#include <iostream>
+
 using std::cout;
 using std::endl;
 
@@ -47,7 +47,7 @@ class ExamplePlugin
     static LumieraInterface
     myopen (LumieraInterface self, LumieraInterface interfaces)
       {
-        static format fmt("opened %x global interfaces %x");
+        static util::_Fmt fmt("opened %x global interfaces %x");
         cout << fmt % self % interfaces << endl;
         return self;
       }

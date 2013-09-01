@@ -26,13 +26,13 @@
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
 #include "proc/control/handling-pattern.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
 
 #include <tr1/functional>
 #include <boost/ref.hpp>
-#include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 #include <string>
 
@@ -42,9 +42,8 @@ namespace control {
 namespace test    {
 
 
+  using util::_Fmt;
   using std::string;
-  using boost::format;
-  using boost::str;
   using std::tr1::function;
   using std::tr1::bind;
   using std::tr1::ref;
@@ -87,7 +86,7 @@ namespace test    {
       
       string randomTxt()
         {
-          format fmt ("invoked( %2d )");
+          _Fmt fmt ("invoked( %2d )");
           
           randVal_ = rand() % 100;
           return str (fmt % randVal_);

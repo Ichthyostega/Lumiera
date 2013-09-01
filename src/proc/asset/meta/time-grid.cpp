@@ -27,15 +27,15 @@
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/display.hpp"
+#include "lib/format-string.hpp"
 #include "common/advice.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
 #include <string>
 
+using util::_Fmt;
 using util::cStr;
 using util::isnil;
-using boost::format;
 using boost::str;
 using std::string;
 
@@ -146,8 +146,8 @@ namespace meta {
     
     if (isnil (id_))
       {
-        format gridIdFormat("grid(%f_%d)");
-        id_ = str(gridIdFormat % fps_ % _raw(origin_));
+        _Fmt gridIdFormat("grid(%f_%d)");
+        id_ = string(gridIdFormat % fps_ % _raw(origin_));
       }
     EntryID<TimeGrid> nameID (id_);
     

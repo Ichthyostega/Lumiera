@@ -38,10 +38,11 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-string.hpp"
 #include "lib/meta/generator.hpp"
 
-#include <boost/format.hpp>
 #include <iostream>
+#include <string>
 
 using std::string;
 using std::cout;
@@ -60,10 +61,10 @@ namespace test {
     };
   
   
-  boost::format fmt ("Block<%2i>");
+  util::_Fmt fmt ("Block<%2i>");
   
   template<int I>
-  string Block<I>::name = str (fmt % I);
+  string Block<I>::name = string (fmt % I);
   
   
   

@@ -56,12 +56,14 @@ extern "C" {
 #include <limits>
 #include <string>
 #include <boost/rational.hpp>
+#include <boost/lexical_cast.hpp>
 
 using std::string;
 using util::floordiv;
 using lib::time::FSecs;
 using lib::time::FrameRate;
 using boost::rational_cast;
+using boost::lexical_cast;
 
 namespace error = lumiera::error;
 
@@ -165,6 +167,18 @@ namespace time {
     
     return Duration (1, *this);
   }
+  
+  
+  /** visual framerate representation (for diagnostics) */
+  FrameRate::operator string() const
+  {
+    return 1==denominator() ? lexical_cast<string> (numerator())+"FPS"
+                            : lexical_cast<string> (numerator())
+                               + "/"
+                               + lexical_cast<string> (denominator())
+                               + "FPS";
+  }
+
   
   
   Offset

@@ -25,8 +25,8 @@
 #include "lib/meta/generator.hpp"
 #include "lib/meta/generator-combinations.hpp"
 #include "meta/typelist-diagnostics.hpp"
+#include "lib/format-string.hpp"
 
-#include <boost/format.hpp>
 #include <iostream>
 
 using ::test::Test;
@@ -52,9 +52,7 @@ namespace test {
                  >        Types2;
     
     
-    using boost::str;
-    using boost::format;
-    format formatted ("-<%u%u>%s");
+    util::_Fmt formatted ("-<%u%u>%s");
     
     /**
      * A Test-Template to be instantiated
@@ -70,9 +68,9 @@ namespace test {
           {
             T1 param1;
             T2 param2;
-            return str(formatted % uint(param1)
-                                 % uint(param2)
-                                 % BASE::visitAll());
+            return string(formatted % uint(param1)
+                                    % uint(param2)
+                                    % BASE::visitAll());
           }
       };
     

@@ -35,6 +35,8 @@
 #ifndef LIB_HASH_VALUE_H
 #define LIB_HASH_VALUE_H
 
+#include <stdlib.h>
+
 
 /** 
  * storage for a Lumiera unique ID,

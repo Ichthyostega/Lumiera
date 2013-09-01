@@ -22,15 +22,15 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
 #include "proc/asset/category.hpp"
 #include "proc/asset/asset-format.hpp"
 
-#include <boost/format.hpp>
 #include <iostream>
 
-using boost::format;
+using util::_Fmt;
 using util::isnil;
 using std::string;
 using std::cout;
@@ -68,7 +68,7 @@ namespace test {
           Category c3 (VIDEO,"bin1/subbin");
           Category c4 (EFFECT,"some_kind");
           
-          format fmt ("Category: %s");
+          _Fmt fmt ("Category: %s");
           
           cout << fmt % c1 << "\n";
           cout << fmt % c2 << "\n";

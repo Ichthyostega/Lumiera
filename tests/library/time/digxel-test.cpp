@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-string.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/display.hpp"
 #include "lib/time/digxel.hpp"
@@ -30,7 +31,6 @@
 #include <time.h>
 #include <cstdlib>
 #include <iostream>
-#include <boost/format.hpp>
 
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
 using util::isSameObject;
@@ -347,7 +347,7 @@ namespace test{
           digi = 1;
           
           clock_t start(0), stop(0);
-          boost::format resultDisplay("timings(%s)%|36T.|%4.0fns\n");
+          util::_Fmt resultDisplay("timings(%s)%|36T.|%4.0fns\n");
           
 #define   START_TIMINGS start=clock();
 #define   DISPLAY_TIMINGS(ID)\

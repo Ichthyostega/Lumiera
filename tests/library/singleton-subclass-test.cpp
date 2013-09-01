@@ -23,17 +23,17 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
 #include "testtargetobj.hpp"
 #include "lib/singleton-subclass.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/format.hpp>
 #include <iostream>
 
 using boost::lexical_cast;
-using boost::format;
+using util::_Fmt;
 using util::isnil;
 using std::string;
 using std::cout;
@@ -99,7 +99,7 @@ namespace test{
         {
           uint num= isnil(arg)? 1 : lexical_cast<uint>(arg[1]);
           
-          cout << format("using the Singleton should create TargetObj(%d)...\n") % num;
+          cout << _Fmt("using the Singleton should create TargetObj(%d)...\n") % num;
           
           Interface::setCountParam(num);
           
@@ -107,7 +107,7 @@ namespace test{
           singleton::UseSubclass<Impl> typeinfo;
           
           // define an instance of the Singleton factory,
-          // Specialised to create the concrete Type passed in
+          // specialised to create the concrete Type passed in
           SingletonSubclassFactory<Interface> instance (typeinfo);
           
           // Now use the Singleton factory...

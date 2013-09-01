@@ -28,10 +28,8 @@
 #include "lib/test/run.hpp"
 //#include "lib/util.hpp"
 
-//#include <boost/format.hpp>
 #include <iostream>
 
-//using boost::format;
 using std::string;
 using std::cout;
 

@@ -41,7 +41,7 @@ namespace test {
     Asset::Ident
     make_new_ident ()
     {
-      return Asset::Ident ( str(format("TestAsset.%i") % counter)
+      return Asset::Ident ( string(_Fmt("TestAsset.%i") % counter)
                           , Category (META)
                           , "test"
                           , counter++
@@ -50,8 +50,8 @@ namespace test {
     Asset::Ident
     make_new_ident (PAsset& ref)
     {
-      return Asset::Ident ( str(format("%s-TestAsset.%i") % ref->ident.name
-                                                          % counter)
+      return Asset::Ident ( string(_Fmt("%s-TestAsset.%i") % ref->ident.name
+                                                           % counter)
                           , ref->ident.category
                           , "test"
                           , counter++

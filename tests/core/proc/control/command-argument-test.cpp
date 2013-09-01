@@ -27,22 +27,22 @@
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/time/diagnostics.hpp"
 #include "lib/meta/tuple.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
 #include <tr1/functional>
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
 #include <string>
 
+using util::_Fmt;
 using util::isnil;
 using util::for_each;
 using lib::time::Time;
 using lib::time::TimeVar;
 using lib::time::TimeValue;
-using boost::format;
 using std::string;
 using std::ostream;
 using std::ostringstream;
@@ -128,7 +128,7 @@ namespace test    {
     void
     doIt (Tracker<TimeVar> time, Tracker<string> str, int rand)
       {
-        static format fmt ("doIt( Time=%s \"%s\" rand=%2d )");
+        static _Fmt fmt ("doIt( Time=%s \"%s\" rand=%2d )");
         cout << "invoke operation..." << endl;
         protocol << fmt % *time % *str % rand;
       }

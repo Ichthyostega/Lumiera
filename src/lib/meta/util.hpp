@@ -72,7 +72,7 @@ namespace meta {
   
   
   /** detect possibility of a conversion to string.
-   *  Naive implementation just trying a the direct conversion.
+   *  Naive implementation just trying the direct conversion.
    *  The embedded constant #value will be true in case this succeeds.
    *  Might fail in more tricky situations (references, const, volatile)
    * @see string-util.hpp more elaborate solution including lexical_cast

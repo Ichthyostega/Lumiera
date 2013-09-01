@@ -530,6 +530,8 @@ namespace time {
       
       /** duration of one frame */
       Duration duration() const;
+      
+      operator std::string() const;
     };
   
   

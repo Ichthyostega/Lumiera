@@ -33,10 +33,8 @@
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
 
-#include <boost/format.hpp>
 #include <iostream>
 
-using boost::format;
 using util::contains;
 using util::isnil;
 using std::string;
@@ -187,7 +185,7 @@ namespace test  {
           aMang.remove (pattern2->getID());
           CHECK ( aMang.known (thePatt->getID()));
           CHECK (!aMang.known (pattern2->getID()));
-          CHECK (!aMang.known (thePipe->getID()));  // has been unlinked too, because dependant on pattern2
+          CHECK (!aMang.known (thePipe->getID()));  // has been unlinked too, because dependent on pattern2
           
           CHECK (thePipe);
           PProcPatt pattern3 = thePipe->getProcPatt();                                   /////TODO: transition to P<>

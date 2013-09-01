@@ -23,12 +23,11 @@
 
 #include "lib/test/test-helper.hpp"
 #include "lib/test/testdummy.hpp"
+#include "lib/format-string.hpp"
 
-#include <boost/format.hpp>
+#include <string>
 
-using boost::format;
-using boost::str;
-
+using std::string;
 
 namespace lib {
 namespace test{
@@ -37,8 +36,8 @@ namespace test{
   string
   showSizeof (size_t siz, const char* name)
   {
-    static format fmt ("sizeof( %s ) %|30t|= %3d");
-    return str (fmt % (name? name:"?") % siz);
+    static util::_Fmt fmt ("sizeof( %s ) %|30t|= %3d");
+    return string (fmt % (name? name:"?") % siz);
   }
   
   
@@ -58,7 +57,7 @@ namespace test{
   }
 
   
-  /** storage for testdummy flags */
+  /** storage for test-dummy flags */
     
   long Dummy::_local_checksum = 0;
   bool Dummy::_throw_in_ctor = false;

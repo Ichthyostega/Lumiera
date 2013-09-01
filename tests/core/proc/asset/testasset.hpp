@@ -26,23 +26,21 @@
 
 
 #include "proc/asset.hpp"
+#include "lib/format-string.hpp"
 
-#include <boost/format.hpp>
-
-using std::tr1::shared_ptr;
-using boost::format;
-using std::string;
 
 
 namespace proc {
 namespace asset{
 namespace test {
   
+  using util::_Fmt;
+  
   
   /**
    * Test(mock) asset subclass usable for hijacking a given
    * asset class (template parameter) and subsequently accessing
-   * internal facillities for writing unit tests. Prerequisite
+   * internal facilities for writing unit tests. Prerequisite
    * for using this template is that the used asset base class
    * has a (protected) ctor taking an Asset::Ident....
    */
@@ -50,7 +48,7 @@ namespace test {
   class TestAsset : public A
     {
       TestAsset () ;
-      TestAsset (PAsset&);  ///< declared dependant on the given Asset
+      TestAsset (PAsset&);  ///< declared dependent on the given Asset
       
       static void deleter (TestAsset<A>* aa) { delete aa; }
       
