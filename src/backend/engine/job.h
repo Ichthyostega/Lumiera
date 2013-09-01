@@ -274,6 +274,18 @@ namespace engine {
       friend lib::HashVal hash_value (Job const&);
     };
   
+  inline bool
+  operator== (Job const& left, Job const& right)
+  {
+    return hash_value (left) == hash_value (right);
+  }
+  
+  inline bool
+  operator!= (Job const& left, Job const& right)
+  {
+    return hash_value (left) != hash_value (right);
+  }
+  
   
   
   

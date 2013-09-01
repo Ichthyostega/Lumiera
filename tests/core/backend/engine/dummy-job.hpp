@@ -80,9 +80,8 @@ namespace engine {
   }
   
   
-  class DummyJob
+  struct DummyJob
     {
-    public:
       static Job
       build()
         {
@@ -104,6 +103,19 @@ namespace engine {
           
           return Job(dummyClosure, invoKey, nominalTime);
         }
+      
+      static bool
+      was_invoked (Job const& job)
+        {
+          UNIMPLEMENTED ("look up invocation from logging hashtable");
+        }
+      
+      static Time
+      invocationTime (Job const& job)
+        {
+          UNIMPLEMENTED ("look up invocation from logging hashtable");
+        }
+      
     };
   
 

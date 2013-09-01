@@ -190,6 +190,6 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER(SchedulerInterface_test, "unit common");
+  LAUNCHER(SchedulerInterface_test, "unit engine");
   
 }}} // namespace backend::engine::test
