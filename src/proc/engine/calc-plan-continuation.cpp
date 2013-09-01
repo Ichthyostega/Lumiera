@@ -56,7 +56,7 @@ namespace engine {
   
   
   bool
-  CalcPlanContinuation::verify (Time nominalJobTime)  const
+  CalcPlanContinuation::verify (Time nominalTime, InvocationInstanceID invoKey)  const
   {
     UNIMPLEMENTED ("verify the planning coordinates");
     return false;

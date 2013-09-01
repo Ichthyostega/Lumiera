@@ -55,17 +55,6 @@
 #include "lib/time.h"
 
 
-/** opaque ID attached to each individual job invocation.
- *  Used by the implementation of the Jobs (i.e. the JobClosure)
- *  for internal organisation; will be fed back on job activation.
- */
-union InvocationInstanceID
-  {
-    int64_t frameNumber;
-    lumiera_uid luid;
-  };
-
-
 
 enum JobState
   { 
@@ -104,6 +93,23 @@ enum JobFailureReason
  */ 
 struct lumiera_jobClosure { /* placeholder */ };
 typedef struct lumiera_jobClosure* LumieraJobClosure;
+
+
+
+/** opaque ID attached to each individual job invocation.
+ *  Used by the implementation of the Jobs (i.e. the JobClosure)
+ *  for internal organisation; will be fed back on job activation.
+ */
+union InvocationInstanceID
+  {
+    int64_t frameNumber;
+    lumiera_uid    luid;
+    
+    struct {int a,b;}
+               metaInfo;
+  };
+
+
 
 
 /** 
@@ -206,8 +212,8 @@ namespace engine {
       virtual void invokeJobOperation (JobParameter parameter)   =0;
       virtual void signalFailure (JobParameter,JobFailureReason) =0;
       
-      virtual JobKind getJobKind()  const                        =0;
-      virtual bool verify (Time nominalJobTime)  const           =0;
+      virtual JobKind getJobKind()                        const  =0;
+      virtual bool verify (Time, InvocationInstanceID)    const  =0;
       virtual size_t hashOfInstance(InvocationInstanceID) const  =0;
     };
   

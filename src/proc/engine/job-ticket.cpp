@@ -63,7 +63,7 @@ using backend::engine::JobClosure;
         }
       
       bool
-      verify (Time nominalJobTime)  const
+      verify (Time nominalTime, InvocationInstanceID invoKey)  const
         {
           UNIMPLEMENTED ("access the underlying JobTicket and verify the given job time is within the relevant timeline segment");
           return false;

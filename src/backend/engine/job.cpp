@@ -106,7 +106,8 @@ namespace engine {
   Job::isValid()  const
   {
     return this->jobClosure
-        && myClosure(this).verify (getNominalTime());
+        && myClosure(this).verify (getNominalTime(),
+                                   getInvocationInstanceID());
   }
   
   

@@ -75,7 +75,7 @@ namespace engine {
           return META_JOB;
         }
       
-      bool verify (Time nominalJobTime)  const;
+      bool verify (Time, InvocationInstanceID)     const;
       size_t hashOfInstance (InvocationInstanceID) const;
       
       void invokeJobOperation (JobParameter);

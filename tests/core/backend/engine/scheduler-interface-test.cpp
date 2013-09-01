@@ -27,8 +27,7 @@
 #include "backend/real-clock.hpp"
 #include "backend/engine/scheduler-frontend.hpp"
 #include "backend/engine/scheduler-diagnostics.hpp"
-
-#include <boost/functional/hash.hpp>
+#include "backend/engine/dummy-job.hpp"
 
 
 namespace backend {
@@ -42,46 +41,7 @@ namespace test {
   using lib::time::FSecs;
   
   
-  namespace { // test fixture: a dummy job operation...
-    
-    class DummyClosure
-      : public JobClosure
-      {
-        void
-        invokeJobOperation (JobParameter parameter)
-          {
-            UNIMPLEMENTED ("conjure a verifiable dummy job operation");
-          }
-        
-        void
-        signalFailure (JobParameter,JobFailureReason)
-          {
-            NOTREACHED ("Job failure is not subject of this test");
-          }
-        
-        JobKind
-        getJobKind()  const
-          {
-            return META_JOB;
-          }
-        
-        bool
-        verify (Time nominalJobTime)  const
-          {
-            UNIMPLEMENTED ("what the hell do we need to mock for this operation????");
-          }
-        
-        size_t
-        hashOfInstance(InvocationInstanceID invoKey) const
-          {
-            return boost::hash_value (invoKey.frameNumber);
-          }
-      };
-    
-    /** actual instance of the test dummy job operation */
-    DummyClosure dummyClosure;
-    
-    
+  namespace { // test fixture: scheduling a dummy job operation...
     
     
     Time TEST_START_TIME (backend::RealClock::now());
@@ -94,6 +54,9 @@ namespace test {
     }
   
   } //(End) test fixture
+  
+  
+  
   
   
   typedef SchedulerFrontend::JobTransaction JobTransaction;
@@ -125,10 +88,7 @@ namespace test {
         {
           SchedulerDiagnostics monitor(scheduler);
           
-          InvocationInstanceID invoKey;
-          invoKey.frameNumber = 111;
-          
-          Job job(dummyClosure, invoKey, Time::ZERO);
+          Job job = DummyJob::build();
           Time deadline(TEST_START_TIME);
           
           scheduler.startJobTransaction()
@@ -146,25 +106,28 @@ namespace test {
         {
           SchedulerDiagnostics monitor(scheduler);
           
-          InvocationInstanceID invoKey;
-          invoKey.frameNumber = 111;
-          
-          Job job(dummyClosure, invoKey, Time::ZERO);
-          
           JobTransaction tx = scheduler.startJobTransaction();
           
-          tx.addFreewheeling(job);
-          tx.addBackground (job);
+          Job job1 = DummyJob::build();
+          Job job2 = DummyJob::build();
           
-          CHECK (!monitor.is_scheduled_timebound (job));
-          CHECK (!monitor.is_scheduled_background (job));
-          CHECK (!monitor.is_scheduled_freewheeling (job));
+          tx.addFreewheeling(job1);
+          tx.addBackground (job2);
+          
+          CHECK (!monitor.is_scheduled_timebound (job1));
+          CHECK (!monitor.is_scheduled_timebound (job2));
+          CHECK (!monitor.is_scheduled_background (job1));
+          CHECK (!monitor.is_scheduled_background (job2));
+          CHECK (!monitor.is_scheduled_freewheeling (job1));
+          CHECK (!monitor.is_scheduled_freewheeling (job2));
           
           tx.commit();
           
-          CHECK (!monitor.is_scheduled_timebound (job));
-          CHECK ( monitor.is_scheduled_background (job));
-          CHECK ( monitor.is_scheduled_freewheeling (job));
+          CHECK (!monitor.is_scheduled_timebound (job1));
+          CHECK (!monitor.is_scheduled_timebound (job2));
+          
+          CHECK ( monitor.is_scheduled_background (job1));
+          CHECK ( monitor.is_scheduled_freewheeling (job2));
         }
       
       
@@ -209,13 +172,10 @@ namespace test {
       specifyJobs (JobTransaction& currentTx, uint dummyLevel)
         {
           uint frameNr = dummyLevel;
-          InvocationInstanceID invoKey;
-          invoKey.frameNumber = frameNr;
-          
           Time nominalTime(dummyFrameStart(frameNr));
           Time deadline(TEST_START_TIME + nominalTime);
           
-          Job job(dummyClosure, invoKey, nominalTime);
+          Job job = DummyJob::build(nominalTime, frameNr);
           
           currentTx.addJob (deadline, job);
           
