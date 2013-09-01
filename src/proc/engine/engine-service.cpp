@@ -156,6 +156,28 @@ namespace engine{
   
   
   
+  /**
+   * Switch the complete engine into diagnostics mode.
+   * This activates additional logging and reporting facilities,
+   * allowing to verify some specific operations within the engine
+   * did indeed happen. Activating this mode incurs a performance hit.
+   */
+  void
+  EngineService::activateTracing()
+  {
+    UNIMPLEMENTED ("tracing/diagnostics mode of the render engine");
+  }
+  
+  void
+  EngineService::disableTracing()
+  {
+    UNIMPLEMENTED ("tracing/diagnostics mode of the render engine");
+    ///////////TODO ensure this is EX_FREE
+  }
+  
+  
+  
+  
   
   /* ===== Quality-of-Service ===== */
   

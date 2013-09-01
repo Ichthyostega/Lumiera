@@ -75,6 +75,9 @@ namespace engine{
    * EngineDiagnostics public functions. The object acts
    * like a smart handle, i.e. the tracing facilities will
    * be disabled and disconnected when going out of scope.
+   * @warning not reentrant, no reference-counting.
+   *          At any given time, at most a single instance
+   *          of EngineDiagnostics may be used.  
    */
   class EngineDiagnostics
     : boost::noncopyable

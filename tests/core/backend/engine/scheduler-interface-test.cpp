@@ -22,15 +22,20 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/util.hpp"
 
 #include "proc/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
 #include "backend/engine/job.h"
+#include "backend/engine/scheduler-frontend.hpp"
+#include "backend/engine/scheduler-diagnostics.hpp"
 
 
 namespace backend {
 namespace engine {
 namespace test {
+  
+  using util::isSameObject;
   
   using lib::time::Time;
   using lib::time::TimeVar;
@@ -161,26 +166,60 @@ namespace test {
       virtual void
       run (Arg)
         {
-          verify_simple_job_specification();
-          demonstrate_nested_job_specification();
+          SchedulerFrontend& scheduler = SchedulerFrontend::instance();
+          
+          verify_simple_job_specification (scheduler);
+          verify_job_specification_variations (scheduler);
+          demonstrate_nested_job_specification (scheduler);
         }
       
       
       void
-      verify_simple_job_specification ()
+      verify_simple_job_specification (SchedulerFronend& scheduler)
         {
+          SchedulerDiagnostics monitor(scheduler);
+          
           InvocationInstanceID invoKey;
           invoKey.frameNumber = 111;
           
           Job job(dummyClosure, invoKey, Time::ZERO);
           
           
-          JobTransaction definitionContext;   ///////////////TODO: get this "somehow" from the SchedulerFrontend
+          JobTransaction definitionContext;
+          scheduler.startJobTransaction()
+                   .addJob(job)
+                   .commit();
           
-          definitionContext.addFreewheeling(job);
-          definitionContext.addBackground (job);
+          CHECK ( monitor.is_scheduled_timebound (job));
+          CHECK (!monitor.is_scheduled_background (job));
+          CHECK (!monitor.is_scheduled_freewheeling (job));
+        }
+      
+      
+      void
+      verify_job_specification_variations (SchedulerFronend& scheduler)
+        {
+          SchedulerDiagnostics monitor(scheduler);
           
-          UNIMPLEMENTED ("find a way to verify what has been scheduled");
+          InvocationInstanceID invoKey;
+          invoKey.frameNumber = 111;
+          
+          Job job(dummyClosure, invoKey, Time::ZERO);
+          
+          JobTransaction tx = scheduler.startJobTransaction();
+          
+          tx.addFreewheeling(job);
+          tx.addBackground (job);
+          
+          CHECK (!monitor.is_scheduled_timebound (job));
+          CHECK (!monitor.is_scheduled_background (job));
+          CHECK (!monitor.is_scheduled_freewheeling (job));
+          
+          tx.commit();
+          
+          CHECK (!monitor.is_scheduled_timebound (job));
+          CHECK ( monitor.is_scheduled_background (job));
+          CHECK ( monitor.is_scheduled_freewheeling (job));
         }
       
       
@@ -194,14 +233,26 @@ namespace test {
        * @see HierarchyOrientationIndicator_test#demonstrate_tree_rebuilding
        */
       void
-      demonstrate_nested_job_specification ()
+      demonstrate_nested_job_specification (SchedulerFronend& scheduler)
         {
-          JobTransaction startTx;
+          SchedulerDiagnostics monitor(scheduler);
+          
+          JobTransaction startTx = scheduler.startJobTransaction();
           uint dummyLevel = 5;
           
           specifyJobs (startTx, dummyLevel);
           
-          UNIMPLEMENTED ("find a way to verify what has been scheduled");
+          startTx.commit();
+          
+          for (uint i=0; i <=5; ++i)
+            {
+              Time nominalTime(dummyLevel*TEST_FRAME_DURATION); 
+              Time deadline(testStartTime + i*TEST_FRAME_DURATION);
+              
+              CHECK (monitor.has_job_scheduled_at (deadline));
+              CHECK (isSameObject (dummyClosure, monitor.job_at(deadline).jobClosure));
+              CHECK (nominalTime == monitor.job_at(deadline).parameter.nominalTime);
+            }
         }
       
       /** recursive helper function to add several levels of prerequisites
@@ -218,7 +269,7 @@ namespace test {
           Time nominalTime(dummyLevel*TEST_FRAME_DURATION); 
           Time deadline(testStartTime + dummyLevel*TEST_FRAME_DURATION);
           
-          Job job(dummyClosure,invoKey, nominalTime);
+          Job job(dummyClosure, invoKey, nominalTime);
           
           currentTx.addJob (deadline, job);
           
