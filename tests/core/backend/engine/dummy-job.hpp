@@ -27,94 +27,27 @@
 
 
 #include "backend/engine/job.h"
-#include "lib/test/test-helper.hpp"
-
-#include <cstdlib>
-#include <boost/functional/hash.hpp>
+#include "lib/time/timevalue.hpp"
 
 
 namespace backend{
 namespace engine {
   
-  namespace {
-    
-    class DummyClosure
-      : public JobClosure
-      {
-        void
-        invokeJobOperation (JobParameter parameter)
-          {
-            UNIMPLEMENTED ("conjure a verifiable dummy job operation");
-          }
-        
-        void
-        signalFailure (JobParameter,JobFailureReason)
-          {
-            NOTREACHED ("Job failure is not subject of this test");
-          }
-        
-        JobKind
-        getJobKind()  const
-          {
-            return META_JOB;
-          }
-        
-        bool
-        verify (Time nominalJobTime, InvocationInstanceID invoKey)  const
-          {
-            UNIMPLEMENTED ("what the hell do we need to mock for this operation????");
-          }
-        
-        size_t
-        hashOfInstance(InvocationInstanceID invoKey) const
-          {
-            return boost::hash_value (invoKey.metaInfo.a);
-          }
-      };
-    
-    /** actual instance of the test dummy job operation */
-    DummyClosure dummyClosure;
-    
-    const int MAX_PARAM_A(1000);
-    const int MAX_PARAM_B(10);
-  }
+  using lib::time::Time;
   
   
+  /**
+   * Test helper: generate test dummy jobs with built-in diagnostics.
+   * Each invocation of such a dummy job will be logged internally
+   * and can be investigated and verified afterwards.
+   */
   struct DummyJob
     {
-      static Job
-      build()
-        {
-          InvocationInstanceID invoKey;
-          invoKey.metaInfo.a = rand() % MAX_PARAM_A;
-          invoKey.metaInfo.b = rand() % MAX_PARAM_B;
-          
-          Time nominalTime = lib::test::randTime();
-          
-          return Job(dummyClosure, invoKey, nominalTime);
-        }
+      static Job build(); ///< uses random job definition values
+      static Job build (Time nominalTime, int additionalKey);
       
-      static Job
-      build (Time nominalTime, int additionalKey)
-        {
-          InvocationInstanceID invoKey;
-          invoKey.metaInfo.a = additionalKey;
-          invoKey.metaInfo.b = rand() % MAX_PARAM_B;
-          
-          return Job(dummyClosure, invoKey, nominalTime);
-        }
-      
-      static bool
-      was_invoked (Job const& job)
-        {
-          UNIMPLEMENTED ("look up invocation from logging hashtable");
-        }
-      
-      static Time
-      invocationTime (Job const& job)
-        {
-          UNIMPLEMENTED ("look up invocation from logging hashtable");
-        }
+      static bool was_invoked (Job const& job);
+      static Time invocationTime (Job const& job);
       
     };
   

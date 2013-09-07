@@ -158,7 +158,6 @@ namespace test {
               Time deadline(TEST_START_TIME + nominalTime);
               
               CHECK (monitor.has_job_scheduled_at (deadline));
-              CHECK (isSameObject (dummyClosure, monitor.job_at(deadline).jobClosure));
               CHECK (nominalTime == monitor.job_at(deadline).parameter.nominalTime);
             }
         }

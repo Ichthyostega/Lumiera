@@ -43,7 +43,8 @@ PLANNED "Frame Dispatcher Interface" DispatcherInterface_test <<END
 END
 
 
-PLANNED "Render job properties" JobHash_test <<END
+TEST "Render job properties" JobHash_test <<END
+return: 0
 END
 
 

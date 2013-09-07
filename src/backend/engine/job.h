@@ -215,6 +215,8 @@ namespace engine {
       virtual JobKind getJobKind()                        const  =0;
       virtual bool verify (Time, InvocationInstanceID)    const  =0;
       virtual size_t hashOfInstance(InvocationInstanceID) const  =0;
+      
+      lib::HashVal hash_value (JobParameter)  const;
     };
   
   
@@ -269,6 +271,8 @@ namespace engine {
       
       JobKind getKind()  const;
       bool isValid()  const;
+      
+      bool usesClosure (JobClosure const&)  const;
       
       /** provide a hash based Job ID */
       friend lib::HashVal hash_value (Job const&);

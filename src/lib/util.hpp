@@ -190,6 +190,23 @@ namespace util {
       return defaultVal;
   }
   
+  /** expose a reference to a map entry, with fall-back to some default object
+   * @note exposing a const reference; especially the default needs to reside
+   *       somewhere at a safe storage location.
+   * @see lib::NullValue
+   */
+  template <typename MAP>
+  inline typename MAP::mapped_type const &
+  access_or_default (MAP& map, typename MAP::key_type const& key
+                             , typename MAP::mapped_type const&  refDefault)
+  {
+    typename MAP::const_iterator pos = map.find (key);
+    if (pos != map.end())
+      return pos->second;
+    else
+      return refDefault;
+  }
+  
   /** shortcut for removing all copies of an Element
    *  in any sequential collection */
   template <typename SEQ>

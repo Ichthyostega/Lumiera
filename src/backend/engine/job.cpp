@@ -34,6 +34,7 @@
 
 
 #include "backend/engine/job.h"
+#include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <typeinfo>
@@ -55,8 +56,8 @@ namespace engine {
   } // (END) Details...
   
   
-//  using mobject::Placement;
-//  using mobject::session::Effect;
+  using lib::HashVal;
+  using util::isSameObject;
   
   
   
@@ -111,6 +112,14 @@ namespace engine {
   }
   
   
+  bool
+  Job::usesClosure (JobClosure const& otherClosure)  const
+    {
+      return isSameObject (myClosure(this), otherClosure);
+    }
+
+  
+  
   /** hash value based on all relevant job data.
    *  Job records hashing to the same value shall be considered equivalent.
    *  Since the interpretation of the #InvocationInstanceID is a private detail
@@ -118,14 +127,20 @@ namespace engine {
    *  concrete JobClosure. This is not considered problematic, as the normal
    *  job operation and scheduling doesn't rely on the job's hash. Only some
    *  diagnostic facilities do. */
-  size_t
+  HashVal
   hash_value (Job const& job)
   {
-    size_t hash = myClosure(&job).hashOfInstance (job.parameter.invoKey);
-    boost::hash_combine(hash, typeid(job.jobClosure).name());
-    boost::hash_combine(hash, job.parameter.nominalTime);
-    return hash;
+    return myClosure(&job).hash_value (job.parameter);
   }
+  
+  HashVal
+  JobClosure::hash_value (JobParameter parameter)  const
+    {
+      HashVal hash = this->hashOfInstance (parameter.invoKey);
+      boost::hash_combine(hash, typeid(*this).name());
+      boost::hash_combine(hash, parameter.nominalTime);
+      return hash;
+    }
   
   
 }} // namespace backend::engine
