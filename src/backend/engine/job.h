@@ -73,6 +73,14 @@ enum JobKind
     META_JOB   ///< render process self organisation
   };
 
+enum JobPriority
+  {
+    TIMEBOUND_JOB,   ///< regular job scheduled for time-bound delivery
+    PAUSED_JOB,      ///< @todo do we need this special state?
+    ASAP_JOB,        ///< job for freewheeling calculation of final results
+    BACKGROUND_JOB   ///< background rendering job
+  };
+
 
 /**
  * @todo find out about the possible kinds of failure
@@ -313,6 +321,9 @@ void lumiera_job_invoke  (LumieraJobDefinition);
  *          within the network of dependent job invocations, even after
  *          missing deadlines or aborting a sequence of jobs */
 void lumiera_job_failure (LumieraJobDefinition, JobFailureReason);
+
+/** calculate a hash value based on the Job's \em identity. */
+size_t lumiera_job_get_hash (LumieraJobDefinition);
 
 
 

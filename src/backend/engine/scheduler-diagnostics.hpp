@@ -41,20 +41,8 @@
 #include "lib/hash-value.h"
 #include "lib/time/timevalue.hpp"
 #include "backend/engine/scheduler-frontend.hpp"
-//#include "include/dummy-player-facade.h"
-//#include "include/display-facade.h"
-//#include "proc/engine/calc-stream.hpp"
-//#include "proc/mobject/model-port.hpp"
-//#include "proc/play/timings.hpp"
-//#include "proc/play/output-slot.hpp"
-//#include "common/instancehandle.hpp"
-//#include "lib/singleton-ref.hpp"
-//#include "lib/polymorphic-value.hpp"
-//#include "lib/singleton.hpp"
-//
 
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
 //#include <string>
 
 
@@ -62,10 +50,6 @@ namespace backend{
 namespace engine {
 
 //    using std::string;
-//    using lumiera::Subsys;
-//    using lumiera::Display;
-//    using lumiera::DummyPlayer;
-//  using proc::play::Timings;
   using lib::time::Time;
   using lib::HashVal;
   
@@ -92,13 +76,11 @@ namespace engine {
       SchedulerDiagnostics (SchedulerFrontend& sch)
         : scheduler_(sch)
         {
-          UNIMPLEMENTED ("attach tracing connector");
           scheduler_.activateTracing();
         }
       
      ~SchedulerDiagnostics()
         {
-          TODO ("detach tracing connector");
           scheduler_.disableTracing();
         }
       
@@ -143,6 +125,9 @@ namespace engine {
       bool
       has_job_scheduled_at (Time deadline)
         {
+          ///////////////TODO this would be a classical use case for some kind of Maybe monad.
+          ///////////////TODO I am considering to add such a helper since quite some time, maybe really do it now??
+          
           UNIMPLEMENTED ("query for job scheduled for specific deadline");
         }
       

@@ -175,4 +175,11 @@ lumiera_job_failure (LumieraJobDefinition jobDef, JobFailureReason reason)
   REQUIRE (jobDef);
   forwardInvocation(*jobDef).signalFailure(reason);
 }
+
+size_t
+lumiera_job_get_hash (LumieraJobDefinition jobDef)
+{
+  REQUIRE (jobDef);
+  return hash_value (forwardInvocation (*jobDef));
+}
 }

@@ -76,9 +76,7 @@ namespace engine {
           
           JobTransaction (SchedulerFrontend* s)
             : sched_(s)
-            {
-              UNIMPLEMENTED ("suitable representation, link to the actual scheduler?");
-            }
+            { }
           
           friend class SchedulerFrontend;
           
@@ -126,6 +124,14 @@ namespace engine {
               return *this;
             }
           
+          /**
+           * define a set of prerequisites of the current JobTransaction.
+           * @param prerequisites a set of job definitions, which need to be executed
+           *        successfully before any job of the current JobTransaction may be
+           *        invoked.
+           * @note prerequisites may be nested recursively, a prerequisite transaction
+           *        might rely on further prerequisites
+           */
           JobTransaction&
           attach (JobTransaction const& prerequisites)
             {
@@ -136,7 +142,6 @@ namespace engine {
           JobTransaction
           startPrerequisiteTx()
             {
-              UNIMPLEMENTED ("how to start a nested job definition context");
               return JobTransaction(sched_);
             }
           
