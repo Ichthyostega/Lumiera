@@ -5,53 +5,77 @@ Developer Documentation Structure
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Draft_
 *Date*          _Mon Aug  2 18:03:25 2010_
-*Proposed by*   Christian Thaeter <ct@pipapo.org>
+*Proposed by*   Cehteh + Ichthyo
 -------------------------------------
 
-[abstract] 
 ******************************************************************************** 
-I describe here how to bring the Lumiera Developer Documentation into an simple 
-hierarchical structure. Previously we accumulated a lot Documentation which 
-ended in quite a few different places. This should be tidied up. 
+We describe here how to bring the Lumiera Developer Documentation into an simple
+yet systematic structure. Previously we accumulated a lot Documentation which
+ended in quite a few different places. This will gradually be tidied up.
 ********************************************************************************
 
 Description
 -----------
 //description: add a detailed description:
 
-I propose to reorganize the developer documentation in the following way:
+The Lumiera (developer) documentation shall be organised in the following way:
 
- * make a 3 (or more, see below) level documentation structure:
-  1. The entry level becomes the 'Lumiera: The inner Core' document which shall
-     not go into details but give a hint what everything is made for. This
-     will be the first introductory doc for new developers.
-  2. second level are the RFC's which descibe the design as planned on a
-     general level, not going (except for some example snippets) into
-     implementation details.
-  3. the third level is the doxygen documentation which describes what
-     actually got implemented in detail. This can be further split into
-     an external reference and a internal part.
+ * the documentation sources are kept *within the main source tree*,
+   except for heavyweight binary content (e.g. videos)
+ * using a simple git hook script, these contents are *automatically published*
+   at the Lumiera.org website
+ * documentation is organised into several *tiers*:
 
-We using test-driven-development, our tests are our specifications. This leads 
-to the idea that ideas, design and intentions for tests should be documented 
-there too. In a higher level abstract human written form. I propose to use my 
-pipadoc documentation extractor (that means, writing asciidoc within the code as 
-special comments) for this.
+   . an entry level »Intro« is given within the document
+     link:{ldoc}/user/intro/intro.html[Lumiera from Outer Space],
+     which outlines our vision and the fundamental concepts.
+   . there is a section holding our link:{ldoc}/design/[design documents].
+     Deliberately, these are written so to omit any technicalities,
+     which keeps them valid as the technology evolves.
+   . the entrance to the technical documentation is formed by
+     link:{ldoc}/technical/overview.html[The inner Core] document.
+     Here, the interested reader finds a round trip visiting each subsystem
+     and each globally relevant facility, without going too much into details.
+     This reading should provide a fair understanding of the primary parts
+     of the application and their interplay. Each section should provide
+     links into the relevant technical detail documentation.
+   . the extensive link:{ldoc}/technical/[technical documentation]
+     is comprised of several bodies of information existing side by side
+     
+     - there is a hierarchy of written documentation to explain the workings
+       of subsystems and components. Typically, these writings emerge from
+       working notes and design drafts.
+     - crucial 'decisions' and the results of 'discussions' are captured
+       in a formalised style within our link:{rfc}/[RfC documents]
+     - often, a chosen design is the result of extensive discussions,
+       which can be comprehended by reference to mailing list threads
+       and IRC transcripts
+     - there is a section with link:{ldoc}/technical/howto/[developer HOWTOs and tutorials]
+     
+   . the documentation of technical details is always kept close to the
+     actual source
+     
+     - file level link:{doxy}/[Doxygen] comments serve as overview and explanations
+       of 'key abstractions' and 'components'.
+     - unit tests are often written in a ``narative'' fashion and
+       are considered part of the detailed specification.
+     - link:{doxy}/classes.html[class level Doxygen] comments serve as definition and summary
+
 
 
 Tasks
 ~~~~~
 // List what would need to be done to implement this Proposal in a few words:
-// * item ...
 
- * Go over the old content of the asciidoced tiddlywikis, integrate it either in 
-   the "Lumiera: The inner Core" document or write single RFC's for them.
+ * Go over the existing content and the remainder of the asciidoced tiddlywikis,
+   integrate this content either in directly into the "Lumiera: The inner Core"
+   document or write separate documentation pages or RFC's. ([green]#✔ done#)
  * The 'proc' tiddlywiki is a bit special, we need a plan how to integrate this.
-   Possibly making a own document-dir for this, or refactor it in plenty RFC's.
-   This is ichthyos decision.
- * Decide how to proceed with the UML model
+   [red yellow-background]#TBD#
+ * Create a facility to support the cross-linking between the various kinds of documents
+   [yellow-background]#WIP#
  
 
 
@@ -59,7 +83,7 @@ Pros
 ^^^^
 // add just a fact list/enumeration which make this suitable:
 
-Much easier entry to the whole developer documentation. Reading the "Inner Core" 
+Much easier entry to the whole developer documentation. Reading the »Inner Core«
 document should be sufficient to get a good idea about the Lumiera design and 
 layout. All details are linked from there and thus easily findable.
 
@@ -68,18 +92,22 @@ Cons
 ^^^^
 // fact list of the known/considered bad implications:
 
-There are some open ends yet, doxygen for example doesn't integrate nicely, we 
-possibly can't link to single doxygen entities since these have no permanent 
-link (to my understanding, to be investigated). Other parts like the UML model 
-are not yet decided and moving the other existing content over needs some (not 
-really much) work.
+There are some open ends yet, Doxygen for example doesn't integrate so nicely.
+Same for the mailing list archives and the issue tracker.
+Other parts like the UML model are not decided yet; moving the other existing
+content over and establishing the necessary cross-links requires quite some work.
+
 
 Alternatives
 ------------
 //alternatives: explain alternatives and tell why they are not viable:
 
-Spring 2010 we discussed and decided an overall website and documentation structure.
-We could just stick to that.
+- Spring 2010 we discussed and decided an overall website and documentation structure.
+  We could just stick to that and hook up everything into this structure
+- use the extended *Doxygen* facilities to build the whole documentation entirely
+  within the source files
+- use an external *Content Management System* or Wiki for documentation
+- write our own documentation system
 
 
 Rationale
@@ -131,6 +159,18 @@ Comments
   and can be referred to from the main documentation. (I agree with the observation
   regarding permanent links into doxygen. But I can't imagine there isn't some
   existing solution to this problem)
-  -- link:Ichthyostega[] 2010-10-15
+
+Ichthyostega:: '2010-10-15' ~<prg@ichthyostega.de>~
+
+
+.State -> Draft
+Now I've edited this RfC to reflect our actual documentation structure more
+closely. In the end, the differences to Cehteh's original proposal turned out
+to be rather minor points. Most notalbly, we couldn't agree on building the
+second tier solely out of RfCs. In fact, there exists already a whole body of
+documentation in textual form, which is inherentely structured.
+
+Ichthyostega:: 'Mo 09 Sep 2013 01:01:25 CEST' ~<prg@ichthyostega.de>~
+
 
 //endof_comments:
