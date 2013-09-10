@@ -27,10 +27,12 @@ Description
 The *Scheduler* is responsible for getting the individual _render jobs_ to run.
 The basic idea is that individual render jobs _should never block_ -- and thus
 the calculation of a single frame might be split into several atomic jobs,
-including resource fetching. Together with the data exchange protocol defined
-for the `OutputSlot`, and the requirements of storage management (especially
-releasing of superseded render nodes -> `Fixture` storage), this leads to
-certain requirements to be ensured by the scheduler:
+including resource fetching. This expected usage should be considered together
+with the data exchange protocol defined for data output through the `OutputSlot`
+instances; moreover the extended data of the low-level model can be hot-swapped
+while rendering continues to go on, necessitating to release blocks of superseded
+model data at well defined points. Combining all these known usage constraints
+leads to the following requirements for the scheduler:
 
 ordering of jobs::
   the scheduler has to ensure all prerequisites of a given job are met
@@ -41,23 +43,41 @@ job time window::
 
 failure propagation::
   when a job fails, either due to an job internal error, or by timing glitch,
-  any dependent jobs need to receive that failure state
+  the effect of this failure needs to propagate reliably; we need a mechanism
+  for dependent jobs to receive a notification of such a failure state
 
-guaranteed execution::
-  some jobs are marked as ``ensure run''. These need to run reliable, even when
-  prerequisite jobs fail -- and this failure state needs to be propagated
+conditional scheduling::
+  we need to provide some way to tie the activity of jobs to external conditions,
+  notable examples being the availability of cached data, or the arrival of data
+  loaded from storage
+
+superseding of planned jobs::
+  changes in playback modes require us to ``change the plan on-the-fly'' --
+  essentially this means we need to 'supersede' a group of already planned jobs.
+  Moreover, we need certain ordering guarantees to ensure the resulting switch
+  in the effective output data happens once and without glitches.
+
+The scheduler interface and specification establishes some kind of micro-language
+to encode the patterns of behaviour prompted by the playback control and the
+interpretation of the render node model. Together these basic requirements
+help to address some relevant themes
+
+dependency on prerequisites
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Render tasks don't exist in isolation; they depend on prerequisites, both preceding
+calculations and the availability of data. Since our primary decision is to avoid
+blocking waits, these prerequisites need to be modelled as other jobs, which leads
+to dependencies and conditional scheduling.
+
 
 detecting termination
 ~~~~~~~~~~~~~~~~~~~~~
-
 The way other parts of the system are built, requires us to obtain a guaranteed
-knowledge of some job's termination. It is possible to obtain that knowledge
-with some limited delay, but it needs to be absolutely reliable (violations
-leading to segfault). The requirements stated above assume this can be achieved
-through _jobs with guaranteed execution._ Alternatively we could consider
-installing specific callbacks -- in this case the scheduler itself has to
-_guarantee the invocation of these callbacks,_ even if the corresponding job
-fails or is never invoked. It doesn't seem like there is any other option.
+knowledge of some specific job's termination. More precisely, we need to find out
+when a ``stream of calculations'' has left a well defined domain -- and this can
+be modelled by passing of some marker jobs. It is possible to obtain that knowledge
+with some timing leeway, but in the end, this information needs to arrive with
+absolutely reliability (violations leading to segfault).
 
 
 
