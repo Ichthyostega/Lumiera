@@ -99,6 +99,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (  gui_dbg,                     debugging);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  library_dbg,                 debugging);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   mpool_dbg,                  library_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   psplay_dbg,                 library_dbg);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   priqueue,                   library_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   resourcecollector_dbg,      library_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   mutex_dbg,                  library_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   cond_dbg,                   library_dbg);
