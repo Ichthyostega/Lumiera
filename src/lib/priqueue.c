@@ -31,12 +31,12 @@
 
 
 
-PriQueue
-priqueue_init (PriQueue self,
-               size_t element_size,
-               priqueue_cmp_fn cmpfn,
-               priqueue_copy_fn copyfn,
-               priqueue_resize_fn resizefn)
+LumieraPriQueue
+lumiera_priqueue_init (LumieraPriQueue self,
+                       size_t element_size,
+                       lumiera_priqueue_cmp_fn cmpfn,
+                       lumiera_priqueue_copy_fn copyfn,
+                       lumiera_priqueue_resize_fn resizefn)
 {
   TRACE (priqueue, "%p", self);
 
@@ -55,7 +55,7 @@ priqueue_init (PriQueue self,
       self->copyfn = copyfn;
 
       if (!resizefn)
-        resizefn = priqueue_clib_resize;
+        resizefn = lumiera_priqueue_clib_resize;
       self->resizefn = resizefn;
 
       self = self->resizefn (self);
@@ -65,8 +65,8 @@ priqueue_init (PriQueue self,
 
 
 
-PriQueue
-priqueue_destroy (PriQueue self)
+LumieraPriQueue
+lumiera_priqueue_destroy (LumieraPriQueue self)
 {
   TRACE (priqueue, "%p", self);
   if (self)
@@ -80,8 +80,8 @@ priqueue_destroy (PriQueue self)
 
 
 
-PriQueue
-priqueue_reserve (PriQueue self, unsigned elements)
+LumieraPriQueue
+lumiera_priqueue_reserve (LumieraPriQueue self, unsigned elements)
 {
   TRACE (priqueue, "%p %d", self, elements);
   if (self)
@@ -105,8 +105,8 @@ priqueue_reserve (PriQueue self, unsigned elements)
 
 
 
-PriQueue
-priqueue_clib_resize (PriQueue self)
+LumieraPriQueue
+lumiera_priqueue_clib_resize (LumieraPriQueue self)
 {
   if (self)
     {
@@ -168,14 +168,14 @@ priqueue_clib_resize (PriQueue self)
 
 
 static inline void*
-pq_index (PriQueue self, unsigned nth)
+pq_index (LumieraPriQueue self, unsigned nth)
 {
   return (char*)self->queue+self->element_size*nth;
 }
 
 
 static inline void
-pq_up (PriQueue self, void* tmp)
+pq_up (LumieraPriQueue self, void* tmp)
 {
   unsigned i = self->used;
   unsigned p = i/2;
@@ -191,8 +191,8 @@ pq_up (PriQueue self, void* tmp)
 
 
 
-PriQueue
-priqueue_insert (PriQueue self, void* element)
+LumieraPriQueue
+lumiera_priqueue_insert (LumieraPriQueue self, void* element)
 {
   TRACE (priqueue, "%p: insert %p", self, element);
 
@@ -211,7 +211,7 @@ priqueue_insert (PriQueue self, void* element)
 
 
 static inline void
-pq_down (PriQueue self, void* tmp)
+pq_down (LumieraPriQueue self, void* tmp)
 {
   if (!self->used)
     return;
@@ -234,8 +234,8 @@ pq_down (PriQueue self, void* tmp)
 }
 
 
-PriQueue
-priqueue_remove (PriQueue self)
+LumieraPriQueue
+lumiera_priqueue_remove (LumieraPriQueue self)
 {
   TRACE (priqueue, "%p: remove", self);
 
@@ -253,138 +253,3 @@ priqueue_remove (PriQueue self)
 
   return self;
 }
-
-
-
-
-
-
-
-
-
-#ifdef PRIQUEUE_TEST  /* testing */
-
-#include <stdio.h>
-
-
-void
-nobug_priqueue_invariant (PriQueue self, int depth, const struct nobug_context invariant_context, void* extra)
-{
-  intptr_t n = 1+(intptr_t)extra;
-
-  intptr_t m=n+n;
-
-  if (self && depth && m <= self->used)
-    {
-      INVARIANT_ASSERT (self->cmpfn (pq_index(self, n-1), pq_index(self, m-1)) <= 0, "%d %d", (int)n-1, (int)m-2);
-      nobug_priqueue_invariant (self, depth-1, invariant_context, (void*)m-1);
-
-      if (m<self->used)
-        {
-          INVARIANT_ASSERT (self->cmpfn (pq_index(self, n-1), pq_index(self, m)) <= 0, "%d %d", (int)n-1, (int)m-1);
-          nobug_priqueue_invariant (self, depth-1, invariant_context, (void*)m);
-        }
-    }
-}
-
-
-static int
-cmpintptr (void* a, void* b)
-{
-  return *(int*)a - *(int*)b;
-}
-
-NOBUG_DEFINE_FLAG (priqueue_test);
-
-int main()
-{
-  NOBUG_INIT;
-  NOBUG_INIT_FLAG (priqueue_test);
-
-  priqueue pq;
-
-  PriQueue r;
-
-  int data;
-
-  r = priqueue_init (&pq,
-                     sizeof (int),
-                     cmpintptr,
-                     NULL,
-                     NULL);
-  ENSURE (r==&pq);
-
-#if 1
-  data = 10;
-  r = priqueue_insert (&pq, &data);
-  ENSURE (r==&pq);
-  TRACE (priqueue_test, "inserted %d", data);
-#endif
-
-#if 0
-  data = 5;
-  r = priqueue_insert (&pq, &data);
-  ENSURE (r==&pq);
-  TRACE (priqueue_test, "inserted %d", data);
-#endif
-
-
-#if 0
-  data = 15;
-  r = priqueue_insert (&pq, &data);
-  ENSURE (r==&pq);
-  TRACE (priqueue_test, "inserted %d", data);
-
-  data = 20;
-  r = priqueue_insert (&pq, &data);
-  ENSURE (r==&pq);
-  TRACE (priqueue_test, "inserted %d", data);
-#endif
-
-
-
-
-#if 1
-  for (int i = 0; i < 1000000; ++i)
-    {
-      data = i;
-      r = priqueue_insert (&pq, &data);
-      ENSURE (r==&pq);
-      TRACE (priqueue_test, "inserted %d", data);
-    }
-
-#endif
-
-#if 1
-  for (int i = 0; i < 1000000; ++i)
-    {
-      data = rand()%1000000;
-      r = priqueue_insert (&pq, &data);
-      ENSURE (r==&pq);
-      TRACE (priqueue_test, "inserted %d", data);
-    }
-#endif
-
-  NOBUG_INVARIANT(priqueue, &pq, 100, NULL);
-
-
-#if 1
-  for (int i = 0; pq.used; ++i)
-    {
-      TRACE (priqueue_test, "TOP: %d", *(int*)priqueue_peek (&pq));
-      r = priqueue_remove (&pq);
-      ENSURE (r==&pq);
-    }
-#endif
-
-
-  r = priqueue_destroy (&pq);
-  ENSURE (r==&pq);
-
-  return 0;
-}
-
-
-
-
-#endif

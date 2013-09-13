@@ -40,7 +40,7 @@ return: 0
 END
 
 TEST "C++ plugin test" plugin_exampleplugin_cpp <<END
-out: opened 0x.+ global interfaces 0x...
+out: opened \S+ global interfaces \S+
 out: Hallo Welt!
 out: Tschüss schnöde Welt!
 out: Hello World!

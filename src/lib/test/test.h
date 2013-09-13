@@ -38,14 +38,13 @@
 #include <string.h>
 #include <nobug.h>
 
-NOBUG_DEFINE_FLAG_LIMIT(TEST, LOG_DEBUG);
+
 
 #define TESTS_BEGIN                             \
 int                                             \
 main (int argc, const char** argv)              \
 {                                               \
   NOBUG_INIT;                                   \
-  NOBUG_INIT_FLAG (TEST);                       \
   unsigned testcnt=0;                           \
   int ret = 0;                                  \
                                                 \

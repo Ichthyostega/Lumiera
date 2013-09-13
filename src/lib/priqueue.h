@@ -47,22 +47,22 @@
 #include "lib/error.h"
 
 
-typedef struct priqueue_struct priqueue;
-typedef priqueue* PriQueue;
+typedef struct lumiera_priqueue_struct lumiera_priqueue;
+typedef lumiera_priqueue* LumieraPriQueue;
 
 /** function to compare 2 keys, mandatory */
-typedef int (*priqueue_cmp_fn)(void*, void*);
+typedef int (*lumiera_priqueue_cmp_fn)(void*, void*);
 
 /** function to copy elements, optional.
  *  Has the same prototype as memcpy which is used by default */
-typedef void *(*priqueue_copy_fn)(void *dest, const void *src, size_t n);
+typedef void *(*lumiera_priqueue_copy_fn)(void *dest, const void *src, size_t n);
 
 /** called when used hits the high or low water marks and initially by priqueue_init() (with queue==NULL)
  *  or at priqueue_destroy (with queue != NULL, used elements == 0), optional.
  *  
  * @note must be aware of resizes by more than just incrementing the queue by one
  */
-typedef PriQueue (*priqueue_resize_fn) (PriQueue);
+typedef LumieraPriQueue (*lumiera_priqueue_resize_fn) (LumieraPriQueue);
 
 
 /**
@@ -71,7 +71,7 @@ typedef PriQueue (*priqueue_resize_fn) (PriQueue);
  *          which has to reallocate the queue and update
  *          the high and low water marks.
  */
-struct priqueue_struct
+struct lumiera_priqueue_struct
 {
   void* queue;
   size_t element_size;
@@ -79,10 +79,10 @@ struct priqueue_struct
   unsigned high_water;                          ///< elements in the queue
   unsigned low_water;                           ///< size for shrinking the queue
 
-  priqueue_cmp_fn cmpfn;
-  priqueue_copy_fn copyfn;
+  lumiera_priqueue_cmp_fn cmpfn;
+  lumiera_priqueue_copy_fn copyfn;
 
-  priqueue_resize_fn resizefn;
+  lumiera_priqueue_resize_fn resizefn;
 };
 
 
@@ -90,17 +90,17 @@ struct priqueue_struct
 
 
 
-PriQueue
-priqueue_init (PriQueue self,
-               size_t element_size,
-               priqueue_cmp_fn cmpfn,
-               priqueue_copy_fn copyfn,
-               priqueue_resize_fn resizefn);
+LumieraPriQueue
+lumiera_priqueue_init (LumieraPriQueue self,
+                       size_t element_size,
+                       lumiera_priqueue_cmp_fn cmpfn,
+                       lumiera_priqueue_copy_fn copyfn,
+                       lumiera_priqueue_resize_fn resizefn);
 
 
 
-PriQueue
-priqueue_destroy (PriQueue self);
+LumieraPriQueue
+lumiera_priqueue_destroy (LumieraPriQueue self);
 
 
 /**
@@ -108,8 +108,8 @@ priqueue_destroy (PriQueue self);
  * and then sets low_water to 0, disabling shrinking
  * @note on overflow resize will re-enable low_water if it is not aware of this
  */
-PriQueue
-priqueue_reserve (PriQueue self, unsigned elements);
+LumieraPriQueue
+lumiera_priqueue_reserve (LumieraPriQueue self, unsigned elements);
 
 
 /**
@@ -118,8 +118,8 @@ priqueue_reserve (PriQueue self, unsigned elements);
  * doubles this when the high water mark is hit,
  * shrinks at high_water/8-8 (that is, 64 is the minimum size)
  */
-PriQueue
-priqueue_clib_resize (PriQueue self);
+LumieraPriQueue
+lumiera_priqueue_clib_resize (LumieraPriQueue self);
 
 
 
@@ -129,8 +129,8 @@ priqueue_clib_resize (PriQueue self);
  * the element will be copied
  * @return \c NULL on error
  */
-PriQueue
-priqueue_insert (PriQueue self, void* element);
+LumieraPriQueue
+lumiera_priqueue_insert (LumieraPriQueue self, void* element);
 
 
 /**
@@ -139,7 +139,7 @@ priqueue_insert (PriQueue self, void* element);
  *       as no insert or remove is called
  */
 static inline void*
-priqueue_peek (PriQueue self)
+lumiera_priqueue_peek (LumieraPriQueue self)
 {
   if (self && self->queue)
     return self->queue;
@@ -152,8 +152,8 @@ priqueue_peek (PriQueue self)
  * removes the topmost element
  * @return \c NULL on error (empty queue, resize failure)
  */
-PriQueue
-priqueue_remove (PriQueue self);
+LumieraPriQueue
+lumiera_priqueue_remove (LumieraPriQueue self);
 
 
 
