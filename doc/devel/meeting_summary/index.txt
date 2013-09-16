@@ -17,6 +17,45 @@ archives and other documentation.
 
 Topics
 ~~~~~~
+ * Doxygen
+ * FrOSCon aftermath
+ * Scheduler interface and requirements definition
+
+Summary
+^^^^^^^
+ * link:2013-09-12.html[Summary (by ichthyo)]
+
+
+************************
+Most of our monthly developer meetings are informal discussions currently.
+At times, there is only one developer working at the code, and thus there
+is not much need for coordination. Sometimes, in-depth technical discussions
+and decisions take place, and we'll publish at least an IRC transcript in
+those cases; typically we also create a RfC to summarise the decisions.
+************************
+
+
+11 Oct 2012
+-----------
+
+Topics
+~~~~~~
+ * automatisation of packaging
+ * dealing with GTK-3 and the Gnome Docking Library
+ * builddrone improvements
+ * creating support tools for documentation writing,
+   especially for cross-links and glossary
+
+Summary
+^^^^^^^
+ * link:2012-10-11.html[Summary (by benn)]
+
+
+12 Sep 2012
+-----------
+
+Topics
+~~~~~~
  * RFCs
  * Upgrade to Wheezy/GTK-3
  * Master and the Documentation repository

@@ -17,12 +17,12 @@ _Summary written by XXXXX_
 
 Recurring Topics
 ----------------
-Discussion of open link:/documentation/devel/rfc.html[design process] drafts.
+Discussion of open link:{ldoc}/devel/rfc.html[design process] drafts.
 
 
 Prop1
 ~~~~~
-link:/documentation/devel/rfc_pending/SomeProposal[descriptive name]
+link:{rfc}/SomeProposal[descriptive name]
 Summary what issues are discussed
 ..Details..
 
@@ -50,7 +50,7 @@ Conclusion
 Next meeting
 ------------
 
-The next meeting will be at Wednesday XX XX 20:00 UTC
+The next meeting will be Thursday XX XX 20:00 UTC
 
 
 ''''

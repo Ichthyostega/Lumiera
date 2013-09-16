@@ -16,7 +16,7 @@ __Participants__
 Summary of The Meeting 
 ----------------------
 
-. _cehteh_ now Debian package maintainer for NoBug as is  _ichthyo_.
+. _cehteh_ now also cares for Debian packaging of NoBug, as does _ichthyo_.
 . Discussed the naming convention for the Debian package of the Gnome Docking
   Library, (Lumiera have added some features to this library):  libgdlmm-lum
   and libgdlmm-#-dev; where '#' is a number that changes with each change in
@@ -31,5 +31,5 @@ Summary of The Meeting
   _benn_ agreed to write a script that would do the above. The script will be
   called directly by build_website.sh.
 . git://www.lumiera.org/website-staging is for experiments and contained the
-  new Lumiera site (http://staging.lumiera.org/). This was changed to contain
+  new Lumiera site graphics design draft. This was changed to contain
   the contents of the current Lumiera web site.

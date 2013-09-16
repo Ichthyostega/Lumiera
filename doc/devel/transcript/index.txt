@@ -21,4 +21,19 @@ as well as the output process and some generation number. This topic was touched
 in one of our earliest meetings +
 ->link:{ldoc}/devel/meeting_summary/2007-08-10.html[summary]
 
+.shaping the engine interface
+Prompted by a RfC regarding the engine service, this discussion in May 2011 covered
+various aspects of architecture and implementation regarding the engine and especially
+scheduler and render jobs; aborting and superseding of jobs, questions of resource handling,
+waitstates, dedicated time bound operations. +
+->link:{ldoc}/devel/meeting_summary/2011-05-11.html#irctranscript[IRC transcript from 5/2011 dev meeting]
+
+.scheduler requirements
+This discussion in September 2013 touched various requirements for the scheduler
+and the ramifications for a possible implementation. More specifically, from the
+design and implementation for the playback and rendering subsystem done meanwhile
+we can derive some specific requirements to be imposed on the scheduler from the
+client's point of view. +
+->link:{ldoc}/devel/meeting_summary/2013-09-12.html#irctranscript[IRC transcript from 9/2013 dev meeting]
+
 

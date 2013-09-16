@@ -57,7 +57,30 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 
 ''''
 
+++++
+<br/>
+<br/>
+<br/>
+<br/>
+++++
 
+[[irctranscript]]
+IRC Transcript
+--------------
+- xref:scheduler[Engine and Scheduler interface]
+- xref:latency[Latency of GUI reaction]
+- xref:jobproperties[Aborting of Jobs, rescheduling, Job dependencies]
+- xref:resourcecleanup[Ressource handling, Callbacks after Modifications]
+- xref:externalrequirements[Requirements for integration with external libs/services]
+- xref:waitstate[explicit wait state on Jobs?]
+- xref:architecture[Interfaces and components working together?]
+- xref:responsibilities[Responsibilities: who cares for what part]
+- xref:timer[Dedicated Timer facility]
+- xref:guianimation[Animating the GUI during playback]
+- xref:collaborations[Interaction between proc and backend]
+- xref:prerequisites[Handling of prerequisite ressources]
+
+[[scheduler]]
 .-- Engine Interface ⟺ Scheduler Interface --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -102,6 +125,10 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
                                (potentially aborted) jobs
 ----------------------------
 
+
+
+
+[[latency]]
 .-- Latency of GUI reaction --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -133,6 +160,10 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-11 22:29:39] <hermanr> Indeed
 ----------------------------
 
+
+
+
+[[jobproperties]]
 .-- Aborting of Jobs, rescheduling, Job dependencies --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -168,6 +199,10 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-11 22:43:48] <ichthyo> but we can (and need) to 'abort' whole calculation streams
 ----------------------------
 
+
+
+
+[[resourcecleanup]]
 .-- Ressource handling, Callbacks after Modifications --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -238,6 +273,10 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-11 23:09:09] <cehteh> i write some low-level notes for the interface (nothing concrete)
 ----------------------------
 
+
+
+
+[[externalrequirements]]
 .-- one central service ⟺ integrating with external libs/services --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -346,6 +385,9 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-11 23:39:07] <ichthyo> yes, probably better approaching it that way
 ----------------------------
 
+
+
+[[waitstate]]
 .-- explicit wait state on Jobs? --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -388,6 +430,10 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-11 23:55:59] * ichthyo thinks the same
 ----------------------------
 
+
+
+
+[[architecture]]
 .-- Interfaces and components working together --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -437,6 +483,9 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-12 00:19:01] <cehteh> ok
 ----------------------------
 
+
+
+[[responsibilities]]
 .-- Responsibilities: who cares for what part --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -465,7 +514,11 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-12 00:28:50] <ichthyo> ok
 ----------------------------
 
-.-- Dedicated Time facility --
+
+
+
+[[timer]]
+.-- Dedicated Timer facility --
 [caption="☉Transcript☉ "]
 ----------------------------
 [2011-05-12 00:22:48] <cehteh> we once talked about that we want a timer facility (outside of player)
@@ -494,6 +547,9 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-12 00:37:08] <cehteh> (also a reason to make the tinyjobs which are much simpler)
 ----------------------------
 
+
+
+[[guianimation]]
 .-- animating the GUI during playback --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -585,6 +641,9 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-12 01:13:53] <cehteh> yep
 ----------------------------
 
+
+
+[[collaborations]]
 .-- interaction between proc and backend --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -650,6 +709,9 @@ The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
 [2011-05-12 01:39:41] <ichthyo> especially for those cases, which combine several frames (e.g. time average, motion tracking)
 ----------------------------
 
+
+
+[[prerequisites]]
 .-- handling of prerequisite ressources --
 [caption="☉Transcript☉ "]
 ----------------------------
