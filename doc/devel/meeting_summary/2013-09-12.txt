@@ -1,0 +1,679 @@
+2012-12-12 Lumiera Developers Meeting
+=====================================
+:Author: Ichthyo
+:Date: 2012-12-21
+
+Dec 20, 2012 on #lumiera 20:00 - 23:23 UTC +
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ * Benny
+ * Hendrik
+ 
+_Summary written by ichthyo_
+
+
+
+Doxygen woes
+------------
+_Hendik_ pointed out an example where the handling and presentation
+of extracted documentation was confusing. It turned out that didn't recognise
+some documentation comments and thus retained those within the pretty printed source.
+Basically this was known and documented behaviour, but confusing still the less.
+
+_ichthyo_ slightly tweaked the configuration. Moreover, currently he creates and uploads
+the API-doc manually and irregularly , so the content on the website is quite outdated at
+times. Automatic publishing was previously done by builddrone; _cehteh_ promised to finish
+and install an improved version...
+
+We all agree that we somehow dislike Doxygen, but aren't aware of reasonable alternatives.
+
+Conclusion
+~~~~~~~~~~
+
+ * _ichthyo_ will fix the comments not recognised by Doxygen
+ * we reconfirm that we do _not_ want to create all our documentation based on Doxygen
+
+
+
+FrOSCon aftermath
+-----------------
+The visits, hiking together, and the meeting at FrOSCon was refreshing and reassuring.
+In the end, all went well. Everyone survived the after-froscon party and Benny's car is
+fixed and working again.
+
+_Benny_ proposes to create a page with some pictures, just to retain some traces of this
+event. _Ichthyo_ is a bit reluctant, since he didn't care especially about documentation
+this time, but he promises to look what usable images he's gotten.
+
+Conclusion
+~~~~~~~~~~
+
+ * create a page with some images
+ * conclusion about FrOSCon? ``it was fun'' ... 
+
+
+
+Scheduler: Interface and requirements
+-------------------------------------
+_Benny_ showed interest to work on that topic. The first step would be to build or use
+a priority queue textbook implementation as starting point. Some time ago, _cehteh_ included
+a suitable implementation in his link:http://git.pipapo.org/?p=cehsrc;a=summary[cehlib],a
+collection of basic C library routines, mostly extracted from Lumiera's library. _ichthyo_
+integrates this priority queue into the Lumiera tree.
+
+The rest of the meeting was an extended discussion touching and affirming the most relevant
+issues and considerations of the scheduler implementation to be expected.
+
+- the core scheduler has to be kept rather simple
+- the actual job function is wrapped into an extended function, which is tightly integrated
+  with the scheduler's implementation. This approach allows to implement more elaborate
+  strategies, without increasing the complexity of the actual scheduler.
+- handling of dependencies between jobs is considered as one of the tricky requirements
+- the intention is to pre-process and transform prerequisites in lists of dependent jobs
+- prerequisites require us to build in some mechanisms for ``conditionals''
+- notably, the data required for processing will become available asynchronously.
+- thus, the scheduler must include some form of _polling_ to detect when prerequisites
+  are finally met and unblock dependent jobs as a consequence.
+- our scheduling works strictly ordered by time. There is no throttling. But we provide
+  _multiple_ scheduler queues, which use _different_ ``thread classes''
+- a given job can be in multiple queues at the same time; first invocation wins.
+- we intend to employ _work stealing_
+- some special kinds of scheduling are not time bound (e.g. background rendering,
+  ``freewheeling'' rendering). But we use time bound delivery as the fundamental
+  model and treat these as corner cases
+- ``the scheduler'' as a service and sub-system encompasses more than just the
+  low-level implementation of a priority queue. We need an integrated _manager_
+  or _controller_ to provide the more high-level services required by the
+  ``player'' subsystem in Proc-Layer.
+- we need a mechanism to obsolete or supersede jobs, which are already planned,
+  but not yet triggered. The reason lies in the interactive nature of the Player.
+- the implementation needs to be worked out; this is an internal detail of the
+  scheduler (seen as a subsystem), but likely it is not implemented in the
+  low-level scheduler queue. One promising implementation approach is to
+  use special ``group leader'' marker jobs.
+- when jobs are superseded, the switch from the old to the new version should
+  happen in a clean way; there are several options how to achieve that in practice
+- jobs will not only defined by their deadline; rather, we'll allow to define
+  a _time window_, during which a job must be triggered for regular execution.
+
+_see below for a slightly shortened transcript of these discussions_
+
+Conclusion
+~~~~~~~~~~
+ * The scheduler service has a high-level interface
+ * there are multiple really simple, low-level scheduler queues
+ * some kind of manager or controller connects both levels
+ * superseding of planned jobs can be implemented through ``group leader'' jobs
+ * the link:{rfc}/SchedulerRequirements.html[RfC] should be augmented accordingly
+
+
+
+Next meeting
+------------
+
+The next meeting will be Thursday October 10, 20:00 UTC
+
+
+''''
+
+++++
+<br/>
+<br/>
+<br/>
+<br/>
+++++
+
+
+[[irctranscript]]
+IRC Transcript
+--------------
+- xref:dependencies[dependant jobs and conditionals]
+- xref:schedulingmodes[various modes of scheduling]
+- xref:architecture[questions of architecture]
+- xref:superseding[aborting/superseding of jobs]
+- xref:cleanswitch[clean switch when superseding planned jobs]
+
+
+.-- Discussion of details --
+[caption="☉Transcript☉ "]
+----------------------------
+[2013-09-12 22:55:00] <ichthyo> bennI_  you said you might look into that topic, as time permits, of course
+[2013-09-12 22:49:29] <cehteh> .. scheduler .. shall I explain what I have in mind for the backend lowest level?
+[2013-09-12 22:55:12] <cehteh> a low level job should be very very simple, that is: a single pointer to a
+                               'job function' and a list of prerequisite jobs (and maybe little more)
+[2013-09-12 22:55:57] <cehteh> all things like rescheduling, aborting, etc. are on the lowest level handled over
+                               this single job function which gets a parameter about the state/condition on which
+                               its run (in time, aborting, expired, ....)
+[2013-09-12 22:57:22] <cehteh> anything more, especially dispatching on different functions to handle the actual state
+                               should be implemented on a level above (and maybe already in C++ by Proc) then
+[2013-09-12 22:57:41] <bennI_> but the job function is just a call back function, defined elsewhere
+[2013-09-12 22:57:48] <cehteh> yes
+[2013-09-12 22:58:16] <bennI_> so it's the jobs that are being scheduled
+[2013-09-12 22:58:26] <cehteh> yes
+[2013-09-12 22:58:58] <ichthyo> basically yes, but as you said, this low-level job function also has to handle
+                                the state and maybe dispatch to the right high-level function. A different function
+                                for working, than for aborting, for example
+[2013-09-12 22:59:45] <cehteh> yes, but want to leave that out of the scheduler itself, that's handled on a higher level
+[2013-09-12 22:59:45] <ichthyo> so that is kind of a thin layer on top of the basic scheduler
+----------------------------
+
+
+
+
+[[dependencies]]
+.-- dependant jobs and conditionals --
+[caption="☉Transcript☉ "]
+----------------------------
+[2013-09-12 22:59:46] <bennI_> what about the dependent jobs?
+[2013-09-12 23:00:03] <ichthyo> thats the most important question I think, since *that* is something special
+[2013-09-12 23:00:19] <cehteh> yes dependencies need to be handled by the scheduler 
+[2013-09-12 23:00:52] <ichthyo> well... at least the scheduler needs to poll them in some way
+[2013-09-12 23:01:01] <ichthyo> poll or notify or re-try or the like
+[2013-09-12 23:01:03] <cehteh> one question: shall jobs be in the priority queue even if their dependencies
+                               are not yet satisfied? ... I'd tend to say yes
+                               
+[2013-09-12 23:01:11] <bennI_> so we're not going to have a scheduler with simple jobs
+[2013-09-12 23:01:31] <cehteh> the scheduler must maintain lists of dependencies. Nodes for these lists are likely
+                               to be allocated by the small object allocator I've written some time ago;
+                               because 2 different jobs can depend on a single other job and other more complex
+                               cross dependencies
+...
+
+[2013-09-12 23:02:54] <cehteh> dependencies are the results of jobs
+[2013-09-12 23:03:04] <ichthyo> so you propose to pre-process that prerequisites and rather store them
+                                as dependencies internally?
+[2013-09-12 23:03:11] <cehteh> a 'job' might be a no-op if the resource is available
+[2013-09-12 23:03:04] <bennI_> but these prerequisites are IN the scheduler
+[2013-09-12 23:03:10] <bennI_> not in the higher level?
+[2013-09-12 23:03:41] <ichthyo> bennI_ the scheduler needs only to be aware that there is some kind of dependency
+[2013-09-12 23:03:43] <cehteh> yes the scheduler needs to be aware of dependencies so anything needs to be abstracted somehow,
+                               that's why I'd like to say anything is a 'job', even if that's technically not completely true
+                               because something might be a 'singleton instance' and no job needs to be run to create it
+[2013-09-12 23:04:21] <ichthyo> on that level indeed, yes
+[2013-09-12 23:04:45] <ichthyo> any more fancy functionality is encapsulated within that simple job abstraction
+[2013-09-12 23:06:18] <cehteh> as long some resource (which can become a prerequisite/dependency of any other job) exists
+                               it has some ultra-lightweight job structure associated with it 
+
+[2013-09-12 23:06:45] <ichthyo> now, for example, lets consider the loading of data from a file.
+                                How does this work in practice? do we get a callback when the data arrives?
+                                and where do we get that callback? guess in another thread.
+                                and then, how do we instruct the scheduler so that the jobs dependant on the
+                                arrival of that data can now become active?
+[2013-09-12 23:08:07] <cehteh> note that we do memory mapping, we never really load data as in calling read()
+                               but we might create prefetch jobs which complete when data is in memory.
+                               The actual loading is done by the kernel
+[2013-09-12 23:08:24] <ichthyo> yes, my understanding too
+[2013-09-12 23:08:38] <ichthyo> but it is asynchronous, right?
+[2013-09-12 23:08:42] <cehteh> yes
+[2013-09-12 23:08:58] <bennI_> from the schedulers perspective, it's juts a callback, so it is defined elsewhere
+                               i.e., data loading and details are implemented elsewhere in the callback itself
+                               
+[2013-09-12 23:09:43] <ichthyo> But... there is a problem: not the scheduler invokes that callback,
+                                someone else (triggered by the kernel) invokes this callback, and
+                                this must result in the unblocking of the dependant jobs, right?
+[2013-09-12 23:10:35] <bennI_> the scheduler just has the callback waiting, then when all conditions are met
+                               it just gets scheduled
+[2013-09-12 23:10:21] <cehteh> nope 
+[2013-09-12 23:10:54] <cehteh> note: we need a 'polling' state for a job
+[2013-09-12 23:10:57] <ichthyo> so the scheduler polls a variable, signalling that the data is there (or isn't yet)
+[2013-09-12 23:11:14] <cehteh> yes
+[2013-09-12 23:11:22] <cehteh> but even if not we can ignore the fact; then our job might block,
+                               in practice that should happen *very* rarely
+[2013-09-12 23:11:37] <ichthyo> we could abstract that as a very simple conditional
+                                the scheduler is polling some conditional
+[2013-09-12 23:11:47] <bennI_> unless the presence of the data for the job is a precondition
+[2013-09-12 23:12:28] <ichthyo> bennI_: yes, the presence of the data *is* a precondition for a render job
+                                thus the scheduler must not start the render job, unless the data is already there
+[2013-09-12 23:13:11] <bennI_> so the job cannot be 'scheduled' until data is present -- this is one of the preconditions
+[2013-09-12 23:12:47] <cehteh> loading data:   have a job calling posix_memadvice(..WILLNEED) soon enough
+                               before calling the job which needs the data
+                               if we can not afford blocking, then we can poll the data with mincore()
+                               and if the data is not there abort the job or take some other action.
+                               I prolly add some (rather small budget) memory locking to the backend too
+[2013-09-12 23:14:13] <ichthyo> OK, but then this would require some kind of re-trying or polling of jobs.
+                                do we want this? I mean a job can start processing, once the data is there
+                                and we are in the pre defined time window
+[2013-09-12 23:15:08] <cehteh> then if *really* needed you can make a job which locks the data in ram
+                               (that is really loading it and only completes when its loaded)
+                               this way you can avoid polling too. But that's rather something we should
+                               do only for really important things
+[2013-09-12 23:15:39] <ichthyo> urghs, that would block the thread, right? so polling sounds more sane
+[2013-09-12 23:16:22] <cehteh> blocking the thread is no issue as we have a thread pool and this thread pool
+                               should later be aware that some threads might be blocking.
+                               (I planned to add some thread class for that)
+[2013-09-12 23:16:36] <bennI_> what about having 2 jobs: one is the load, the other is a precondition,
+                               i.e., the presence of the data
+[2013-09-12 23:16:52] <cehteh> bennI_: yes exactly like that
+[2013-09-12 23:16:53] <ichthyo> bennI_ yes that was what I was thinking too
+[2013-09-12 23:17:05] <ichthyo> one job to prepare / trigger the loading
+                                one job to verify the data is there (this is a conditional)
+[2013-09-12 23:17:19] <cehteh> but either one can block .. we a free to decide which one blocks
+[2013-09-12 23:17:28] <bennI_> so we have two stupid jobs, where onne can only happen if the other happens
+[2013-09-12 23:17:29] <ichthyo> and then the actual calculation job
+[2013-09-12 23:18:22] <cehteh> well the scheduler on the lowest level should be unaware of all that
+                               .. just dead dumb scheduling. All logic is rolled on higher levels
+                               that allows us for more smart things depending on the actual use case,
+                               different strategies for different things 
+[2013-09-12 23:17:50] <bennI_> we could even have only ONE job: it has a linked lists of jobs
+                               but why not -- instead of ONE job, it can have a linked list of small jobs
+                               once it's scheduled, maybe only one job gets run, i.e. data gets loaded.
+                               the next schedule of the same job, loads the actual file, then the dependency
+[2013-09-12 23:20:36] <cehteh> bennI_: first is a priqueue which schedules jobs by time
+                               maybe aside of that there is a list of jobs ready to run
+                               and a list of jobs not ready to run b/c their dependencies are not satisfied
+[2013-09-12 23:22:21] <cehteh> (mhm ready to run? maybe not, just run it!)
+[2013-09-12 23:22:49] <bennI_> ok, so the jobs themselves are going to be a bit more complex
+                               I think we'll need a bit of trial and error; we cannot possibly envisage
+                               everything right now. Maybe some of the jobs will not be a simple linked list,
+                               but a tree
+[2013-09-12 23:22:36] <cehteh> OK plan:
+                               scheduler first picks job from the priqueue and checks if all dependencies are met
+                               either way it calls the job function, either with "in time" or with "missing dependencies"
+[2013-09-12 23:23:44] <bennI_> dumping some branches altogether?
+[2013-09-12 23:24:30] <cehteh> then if state is "missing dependencies" the job function *might* insert the job
+                               into the list of blocked jobs (or cancel the job or call anything else)
+                               whenever a job completes, it might release one or more jobs from the 'blocked' list,
+                               maybe even move them to a delayed list, and then the scheduler (after handling the priqueue)
+                               picks any jobs from this delayed list up and runs them
+[2013-09-12 23:25:02] <ichthyo> OK
+[2013-09-12 23:25:39] <bennI_> do ALL jobs get equally scheduled
+                               or do dependent jobs only enter in a linked list of jobs for one scheduled job,
+                               if you know what I mean...
+[2013-09-12 23:27:16] <cehteh> bennI_: jobs are scheduled by the priqueue which is ordered by time .. plus maybe some small
+                               integer so you can give a order to jobs ought to be run at the same time
+                               we have no job priorities otherwise, but we will have (at least) 2 schedulers
+                               one is for the hard jobs which must be run in time, and one is for background task
+                               and one (but these rather needs special attention) will be some realtime scheduler
+                               which does the hard timing stuff, like switching video frames or such, but that's
+                               not part of the normal processing
+[2013-09-12 23:28:03] <bennI_> yes, but some jobs are not jobs in themselves, only depend on other jobs
+[2013-09-12 23:28:16] <bennI_> do these su, dependent jobs get priqued?
+[2013-09-12 23:29:23] <ichthyo> bennI_: I think this is a question of design. Both approaches will work, but it depends
+                                on the implementer of the scheduler to prefer one approach over the other
+[2013-09-12 23:30:12] <cehteh> bennI_: my idea was that each job might be in both queues (in-time and background)
+                               so for example when the system is reasonable idle a job might be first scheduled
+                               by the 'background' scheduler because its normal scheduled time is way ahead
+----------------------------
+
+
+
+
+[[schedulingmodes]]
+.-- various modes of scheduling --
+[caption="☉Transcript☉ "]
+----------------------------
+[2013-09-12 23:30:23] <ichthyo> cehteh: we certainly get a third (or better a fourth) mode of operation:
+                                the "freewheeling" calculation. This is what we use on final rendering.
+                                Do any calculation as soon as possible, but without any timing constraints
+[2013-09-12 23:31:31] <cehteh> ichthyo: the freewheeling is rather simple: just put jobs with time==0
+                               into the background scheduler
+                               or?
+[2013-09-12 23:32:10] <ichthyo> OK, so it can be implemented as a special case of background scheduling,
+                                where we just use all available resources to 100%
+[2013-09-12 23:32:36] <cehteh> or not time=0 but time==now
+[2013-09-12 23:32:59] <cehteh> because other jobs should eventually be handled too
+                               anyways I think that's not becoming complicated
+[2013-09-12 23:33:42] * ichthyo nods
+[2013-09-12 23:34:24] <ichthyo> only the meaning is a bit different, not so much the implementation
+                                background == throttle resource usage
+                                freewheeling == get me all the power that is available
+[2013-09-12 23:36:52] <cehteh> background wont throttle, it just doesn't get scheduled when there are
+                               more important things to do
+[2013-09-12 23:37:19] <ichthyo> mhm, might be, not entirely sure
+[2013-09-12 23:37:35] <cehteh> there is no point in putting something into the background queue
+                               if we never need the stuff. But it should have some safety margin there
+                               and maybe a different thread class (OS priority for the thread)
+[2013-09-12 23:38:11] <ichthyo> for example: user works with the application and plays back,
+                                but at the same time, excess resources are used for pre-rendering
+[2013-09-12 23:38:19] <cehteh> yes
+[2013-09-12 23:38:21] <ichthyo> but without affecting the responsiveness.
+                                thus we don't want to use 100% of the IO bandwidth for background
+[2013-09-12 23:38:53] <cehteh> then schedule less or more sparse background jobs
+[2013-09-12 23:39:35] <cehteh> but we cant really throttle IO in a more direct way, since that's obligation
+                               of the kernel and we can only hint it
+[2013-09-12 23:39:54] <ichthyo> ok, but someone has to do that.
+                                Proc certainly can't do that, it can only give you a whole bunch of jobs
+                                for background rendering
+[2013-09-12 23:40:07] <cehteh> the job function might be aware if its scheduled because of in-time or 
+                               background queue and adjust itself
+[2013-09-12 23:40:57] <cehteh> we only schedule background jobs if nothing else is to do
+[2013-09-12 23:41:18] <ichthyo> what means "nothing else"?
+                                for example, if we're waiting for data to arrive, can we meanwhile schedule
+                                background calculation (non-IO) jobs? 
+[2013-09-12 23:41:45] <cehteh> and if I/O becomes the bottleneck some logic to throttle background jobs
+                               might be implemented on the higher level job functions...
+[2013-09-12 23:42:12] <cehteh> I abstracted "thread classes" in the worker pool remember
+[2013-09-12 23:42:23] * ichthyo nods
+[2013-09-12 23:42:33] <cehteh> these are not just priorities but define rather the purpose of a thread
+                               we can have "background IO" thread classes there .. and if a job gets scheduled
+                               from the background queue it might query the IO load and rather abort/delay the job
+
+[2013-09-12 23:43:51] <ichthyo> another thing worth mentioning
+[2013-09-12 23:43:55] <ichthyo> the planning of new jobs happens within jobs
+                                there are some special planning jobs from time to time
+                                but that certainly remains opaque for the scheduler
+                                
+[2013-09-12 23:44:15] <cehteh> the scheduler should not be aware/responsible for any other resource managemnt
+[2013-09-12 23:44:38] <bennI_> you can feed a nice to the scheduler, but the scheduler only uses the nice value
+                               to reshuffle. Someone else must decide when to issue a nice
+[2013-09-12 23:45:47] <cehteh> bennI_: there is no 'nice' value our schedulers are time based
+                               niceness is defined by the 'thread classes' which can define even more
+                               (io priority, aborting policies,...) -- even (hard) realtime and OS scheduling policies
+----------------------------
+
+
+
+
+[[architecture]]
+.-- questions of architecture --
+[caption="☉Transcript☉ "]
+----------------------------
+[2013-09-12 23:45:31] <ichthyo> as I see it: we have several low-level priqueues.
+                                And we have a high-level scheduler interface. Some facility in between decides
+                                which low-level queue to use. Proc will only state the rough class of a job,
+                                i.e. timebound, or background. Thus these details are kept out of the low-level
+                                (actual) scheduler (implementation), but are configured close to the scheduler,
+                                when we add jobs
+[2013-09-12 23:48:16] <cehteh> the creator of a job (proc in most case) tells what purpose a job has
+                               (numbercrunching, io, user-interface, foo, bar): that's a 'threadclass'
+                               the actual implementation of threadclasses are defined elsewhere
+
+[2013-09-12 23:49:09] <ichthyo> from Proc-Layer's perspective, all these details happen within the
+                                scheduler as a black box. Proc only states a rough class (or purpose) of the job.
+                                When the job is added, this gets translated into using a suitable thread class,
+                                and we'll put the job in the right low-level scheduler queue
+[2013-09-12 23:49:44] <cehteh> actually for each job you can do 2 of such things .. as i mentioned earlier,
+                               each job can be in both queues, so you can define time+threadclass for background
+                               and for in-time scheduler ... with a little caveat about priority inversion,
+                               threadclass should be the same when you insert something in both queues,
+                               only for freewheeling or other special jobs they might differ
+[2013-09-12 23:51:52] <cehteh> bennI_: btw implementation detail I didnt tell you yet..
+                               you know "work stealing schedulers" ?
+                               we absolutely want that :)
+[2013-09-12 23:52:09] <ichthyo> yes ;-)
+                                its a kind of load balancing -- a very simple and clever one
+[2013-09-12 23:52:11] <cehteh> that is: each OS thread has its own scheduler.
+                               each job running on a thread which creates new thread puts these on the scheduler
+                               of its own thread and only if a thread has nothing else to do, and the system
+                               is not loaded, then it steals jobs from other threads. That gives far more locality
+                               and much less contention.
+[2013-09-12 23:56:23] <cehteh> another detail:  we need to figure out if we need a pool of threads for each
+                               threadclass OR if switching a thread to another threadclass is more performant.
+[2013-09-12 23:56:45] <ichthyo> *this* probably needs some experimentation
+[2013-09-12 23:56:49] <cehteh> yes
+
+
+[2013-09-12 23:57:32] <ichthyo> OK, so please let me recap one thing: how we handle prerequisites
+[2013-09-12 23:58:00] <ichthyo> namely, (1) we translate them into dependent jobs (jobs that follow)
+                                and (2) we have conditional jobs, which are polled regularly,
+                                until they signal that a condition is met (or their deadline has passed)
+                                
+[2013-09-12 23:58:59] <cehteh> ichthyo: I think job creation is a (at least) 2 step process .. first you create
+                               the job structure, fill in any data (jobs it depends on). These 'jobs it depends on'
+                               might be just created of course .. and then when done you unleash it to the scheduler
+[2013-09-12 23:59:39] <ichthyo> indeed
+[2013-09-12 23:59:52] <ichthyo> on high-level, I hand over jobs as "transactions" or batches
+                                then, the scheduler-frontend might do some preprocessing and re-grouping
+                                and finally hands over the right data structures to the low-level interface
+                                
+[2013-09-13 00:00:35] <cehteh> after you given it to the scheduler, shall the scheduler dispose it when done
+                               (I mean really done) or give it back to you 
+[2013-09-13 00:00:49] <ichthyo> never give it back
+[2013-09-13 00:00:52] <cehteh> OK
+[2013-09-13 00:00:56] <ichthyo> it is really point-and-shot
+[2013-09-13 00:00:58] <ichthyo> BUT -- there is a catch
+                                mind me
+                                we need to be able to "change the plan"
+[2013-09-13 00:01:18] <cehteh> there must be no catch .. if there is one, then you have to get it back :)
+[2013-09-13 00:01:33] <ichthyo> for example
+[2013-09-13 00:01:37] <cehteh> yes
+[2013-09-13 00:01:46] <cehteh> but that's completely on your side
+[2013-09-13 00:01:52] <ichthyo> no
+[2013-09-13 00:02:00] <ichthyo> lets assume Proc has given the jobs for the next second to the scheduler
+                                that is 25 frames * 3 jobs per frame * number of channels.
+                                then, 20 ms later, the User in the GUI hits the pause button
+[2013-09-13 00:02:52] <ichthyo> now we need a way to "call back" *exactly those* jobs,
+                                no other jobs (other timelines)
+[2013-09-13 00:03:19] <ichthyo> so we need a "scope", and we need to be able to "cancel" or "retarget"
+                                the jobs already given to the scheduler. But never *individual* jobs,
+                                always whole groups of jobs
+[2013-09-13 00:03:00] <cehteh> you prolly create a higher level "render-job" class.
+                               Now, if you want to be able to abort or move it then you have a flag there
+                               (and/or maybe a backpointer to the low level job)
+[2013-09-13 00:04:05] <ichthyo> no
+[2013-09-13 00:04:10] <cehteh> wait
+[2013-09-13 00:04:20] <ichthyo> I am absolutely sure I don't keep any pointer to the low level job
+                                since I don't have any place to manage that.
+                                it is really point and shot
+[2013-09-13 00:04:39] <cehteh> yes
+[2013-09-13 00:05:15] <cehteh> you don't need to manage .. this is just a tag
+[2013-09-13 00:05:24] <ichthyo> but some kind of flag or tag would work indeed, yes
+[2013-09-13 00:06:02] <cehteh> your job function just handles that
+                               if (self->job == myself) .... else oops_i_got_dumped()
+                               of course self->job needs to be protected by some mutex
+[2013-09-13 00:07:14] <ichthyo> I think that is an internal detail of the scheduler (as a subsystem)
+[2013-09-13 00:07:29] <cehteh> now when you reschedule you just create a new (low level)job .. and tag
+                               the higher level job with that job and unleash it
+[2013-09-13 00:07:34] <ichthyo> the *scheduler* wraps the actual job into a job function, of course
+[2013-09-13 00:08:15] <cehteh> so this self->job is just a tag about the owner, no need to manage
+                               you only need to check for equality and maybe some special case like NULL for aborts
+                               no need to release or manage it
+[2013-09-13 00:08:57] <ichthyo> well yes. but that is not Proc
+                                not Proc or the Player is doing that, but the scheduler (in the wider sense) is doing that
+                                since in my understanding, only the scheduler has access to the jobs, after they
+                                have been handed over 
+[2013-09-13 00:09:41] <cehteh> well proc creates the job  
+[2013-09-13 00:09:47] <cehteh> yes
+[2013-09-13 00:10:12] <cehteh> but you certainly augment the low level job structure with some higher level data
+[2013-09-13 00:10:30] <ichthyo> yes
+[2013-09-13 00:10:49] <ichthyo> and the scheduler itself will certainly also put some metadata into the job descriptor struct
+[2013-09-13 00:10:50] <bennI_> then throw them at the scheduler and say goodby?
+[2013-09-13 00:10:53] <cehteh> there you just add a mutex and a tag (job pointer)
+[2013-09-13 00:11:16] <ichthyo> I'd like to see that entirely as an implementation detail within the scheduler
+[2013-09-13 00:11:23] <cehteh> the job descriptor must become very small
+[2013-09-13 00:11:28] <ichthyo> since it highly depends on thread management and the like
+[2013-09-13 00:11:50] <cehteh> no need 
+[2013-09-13 00:12:15] <ichthyo> essentially, Proc will try to keep out of that discussion
+[2013-09-13 00:12:16] <cehteh> it can become an implementation detail of some middle layer .. above the scheduler
+----------------------------
+
+
+
+[[superseding]]
+.-- how to handle aborting/superseding --
+[caption="☉Transcript☉ "]
+----------------------------
+[2013-09-13 00:12:19] <bennI_> how is the proc going to say 'stop some job' 
+[2013-09-13 00:12:28] <ichthyo> yes that's the question. That's what I'm getting at
+[2013-09-13 00:12:49] <ichthyo> Proc will certainly never ask you to stop a specific job
+                                this is sure.
+[2013-09-13 00:12:54] <bennI_> Proc doesn't have a handle or the like
+[2013-09-13 00:13:09] <ichthyo> BUT -- Proc will ask you to re-target / abort or whatever all jobs within a certain scope
+                                and this scope is given with the job definition as a tag
+[2013-09-13 00:13:15] <cehteh> only proc knows to stop something but you need  some grip on it .. and of course that are
+                               the proc own datastructures (higher level job descriptors)
+[2013-09-13 00:13:34] <ichthyo> as said -- proc tags each job with e.g. some number XXX
+                                and then it might come to the scheduler and say:
+                                please halt all jobs with number XXX
+[2013-09-13 00:14:09] <cehteh> the 'tag' can be the actual job handle .. even if you don't own it any more
+[2013-09-13 00:14:32] <bennI_> 'IT' ?
+                               the proc?
+[2013-09-13 00:14:44] <cehteh> why number .. why not the low level job pointer?
+                               that is guaranteed to be a valid unique number for each job 
+[2013-09-13 00:15:06] <ichthyo> cehteh: since Proc never retains knowledge regarding individual jobs
+[2013-09-13 00:15:17] <cehteh> uhm -- when you create a job it does
+[2013-09-13 00:15:24] <bennI_> 'cause the Proc layer wants to give the job to the scheduler and say goodby,
+                               I know nothing about you anymore
+[2013-09-13 00:15:35] <ichthyo> exactly. Proc finds out what needs to be calculated, creates those job descriptors,
+                                tags them as a group and then throws it over the wall
+[2013-09-13 00:15:52] <bennI_> but proc can't throw it over the wall
+[2013-09-13 00:16:10] <bennI_> it has a vested interessted in the job, i.e. abort!!!
+[2013-09-13 00:16:05] <cehteh> OK but I see this "tags these as groups" as layer above the dead simple scheduler
+                               I dont really like the idea to implement that on the lowest level, but the job-function
+                               can add a layer above and handle this
+[2013-09-13 00:17:19] <ichthyo> no, you don't need to implement it on the lowest level, of course
+                                but basically its is an internal detail of "the scheduler"
+[2013-09-13 00:17:50] <cehteh> nah .. "the manager" :)
+[2013-09-13 00:17:57] <ichthyo> :-D
+[2013-09-13 00:18:01] <cehteh> the scheduler doesnt care
+[2013-09-13 00:18:07] <bennI_> who handles the layer?
+[2013-09-13 00:18:18] <ichthyo> anyway, then "the manager" is also part of "the scheduler" damn it ;-)
+[2013-09-13 00:18:26] <bennI_> is it the WALL where the proc thows over the job
+[2013-09-13 00:18:31] <cehteh> it just schedules .. and if a job is canceled then the job-function
+                               has to figure that out and make a no-op 
+[2013-09-13 00:18:28] <ichthyo> Backend handles that layer. "The scheduler" is a high level thing
+                                it contains multiple low-level schedulers, priqueues and all the management stuff,
+                                and "the scheduler" as a subsystem can arrange this stuff in an optimal way.
+                                No one else can.
+[2013-09-13 00:18:49] <bennI_> stop -- I see this as a slight problem
+[2013-09-13 00:19:20] <bennI_> ...and all the management stuff?
+[2013-09-13 00:19:15] <cehteh> bennI_: we never wanted to remove jobs from the priority queue,
+                               because that's relative expensive
+[2013-09-13 00:19:43] <bennI_> yes, removing jobs is not really a schedulers job
+[2013-09-13 00:20:07] <ichthyo> true, no doubt
+[2013-09-13 00:20:18] <ichthyo> but as a client I just expect this service
+[2013-09-13 00:20:23] <bennI_> its that mystically 'layer' or manager?
+[2013-09-13 00:20:29] <ichthyo> yes
+[2013-09-13 00:20:43] <ichthyo> and this mystical manager needs internal knowledge how the scheduler works
+[2013-09-13 00:20:45] <cehteh> so the logic is all in the job function .. 
+[2013-09-13 00:20:47] <bennI_> as a client you can expect the manager to do this
+[2013-09-13 00:20:55] <bennI_> but the manager belongs not to the scheduler
+[2013-09-13 00:21:00] <ichthyo> but the client doesn't need internal knowledge how the scheduler works
+[2013-09-13 00:21:11] <ichthyo> thus, clearly, the manager belongs to the scheduler, not the client
+[2013-09-13 00:22:43] <bennI_> this will not be directly implemented within the scheduler
+[2013-09-13 00:23:15] <ichthyo> bennI_: absolutely, this is not in the low-level scheduler.
+                                But it is closer to the low-level scheduler, than it is to the player
+
+
+[2013-09-13 00:21:26] <bennI_> ok, WHO wants to stop or abort jobs?
+[2013-09-13 00:21:46] <cehteh> proc :>
+[2013-09-13 00:21:48] <ichthyo> the player 
+[2013-09-13 00:22:11] <ichthyo> more precisely: the player doesn't want to stop jobs, but he wants to change the playback mode
+[2013-09-13 00:22:29] <cehteh> ichthyo: do you really need a 'scope' or can you have a 'leader' which you abort
+                               This leader is practically implemented as a job which is already finished but others wait on it
+[2013-09-13 00:22:44] <ichthyo> such a leader would likely be a solution
+[2013-09-13 00:23:35] <cehteh> ichthyo: agreed
+[2013-09-13 00:24:03] <ichthyo> cehteh: actually I really don't care *how* it is implemented.
+                                Proc can try to support that feature with giving the right information
+                                grouping or tagging would be one option
+[2013-09-13 00:24:26] <ichthyo> just look at the requirement from the player:
+                                consider the pause button or loop playing, while the user moves the loop boundaries 
+[2013-09-13 00:24:50] <ichthyo> or think at scrubbing where the user drags the "playhead" marker while it move
+[2013-09-13 00:24:19] <cehteh> I opt for the leader implementation
+                               because that needs no complicated scope lookup and can be implemented with the facilities
+                               already there. But that still means that someone has to manage this leaders,
+                               i.e. a small structure above the low level jobs (struct{mutex; enum state})
+                               and these leaders then have an identity/handle/pointer you need to care for
+[2013-09-13 00:27:00] <ichthyo> let's say, *someone* has to care
+[2013-09-13 00:27:12] <cehteh> ahh
+
+[2013-09-13 00:27:50] <bennI_> I think we're going to need an intermediate layer between the job creator and the scheduler
+[2013-09-13 00:27:59] <ichthyo> yes, my thinking too
+[2013-09-13 00:28:13] <bennI_> 'cause not only the job creator has access to the jobs,
+                               some one else will also want to kill jobs, which is not the job creator
+                               and how is the job killer supposed to know WHICH tag, or handle, of a job to kill
+[2013-09-13 00:29:25] <cehteh> we use a strict ownership paradigm
+                               if someone else wants to operate on something it has to be its owner
+[2013-09-13 00:30:22] <ichthyo> yes, and thus this management tasks need to be done within "the scheduler" in the wider sense
+[2013-09-13 00:30:31] <cehteh> but that's not really a problem here
+                               Proc creates jobs and this (slightly special) leader job and hands it over to the player
+[2013-09-13 00:30:52] <ichthyo> wait, the other way round
+[2013-09-13 00:30:53] <cehteh> or other way around the player creates this leader and asks Proc to fill out the rest for it
+[2013-09-13 00:30:58] <bennI_> but the killer, who is not the creator, doesn't own the job
+                               but the scheduler KNOIWS NOTHING about jobs, only dependencies
+[2013-09-13 00:31:13] <cehteh> but someone knows the leader; you just 'kill' the leader
+----------------------------
+
+
+
+[[cleanswitch]]
+.-- clean switch when superseding planned jobs --
+[caption="☉Transcript☉ "]
+----------------------------
+[2013-09-13 00:31:44] <ichthyo> the player only requests "all jobs in this timeline and for this play process"
+                                to be superseded by new jobs, and this is expressed by some tag or number or handle
+                                or whatever (the player doesn't care)
+[2013-09-13 00:32:38] <ichthyo> so please note, it is not even just killing, effectively it is superseding,
+                                but this is probably irrelevant for the scheduler, since the scheduler just
+                                sees new jobs coming in afterwards
+
+[2013-09-13 00:34:24] <ichthyo> unfortunately there is one other, nasty detail:
+                                we need that switch for the superseding to happen in a clean manner.
+[2013-09-13 00:34:42] <ichthyo> This doesn't need to happen immediately, nor does it need to happen even at the same time
+                                in each channel. But it cant't be that the old version for a frame job and the new version
+                                of a frame job will both be triggered. It must be the old version, and then a clean switch,
+                                and from then on the new version, otherwise we'll get lots of flickering and crappy noise
+                                on the sound tracks
+[2013-09-13 00:36:16] <cehteh> eh?
+[2013-09-13 00:36:29] <ichthyo> yes, new and old can't be interleaved
+[2013-09-13 00:36:38] <cehteh> that never happens
+[2013-09-13 00:36:45] <ichthyo> ok, then fine...
+[2013-09-13 00:36:49] <cehteh> because of the 'functional' model
+[2013-09-13 00:37:03] <cehteh> you never render into the same buffer if the buffer is still in use
+                               in the worst, the invalidated jobs already runs and the actual job is out of luck
+[2013-09-13 00:37:34] <ichthyo> well, we talked a thousand times about that:
+                                this doesn't work for the output, since we don't and never can't manage the output buffers
+[2013-09-13 00:38:02] <cehteh> I think that will work for output as well
+[2013-09-13 00:38:16] <ichthyo> I know, cehteh that you want to think that ;-)
+[2013-09-13 00:38:22] <cehteh> even if I cant, they are abstracted and interlocked
+[2013-09-13 00:38:44] <ichthyo> but actually it is the other way round. You use some library for output, and this
+                                just gives *us* some buffer managed by the library, and then we have to ensure
+                                that our jobs exactly match the time window and dispose the data into this buffer
+[2013-09-13 00:39:15] <cehteh> yes but we have can have only one job at a time writing to that buffer
+[2013-09-13 00:39:28] <ichthyo> this is the nasty corner case where our nice concept collides with the rest of the world ;-)
+[2013-09-13 00:39:32] <cehteh> these jobs are atomic -- at least we should make these atomic
+[2013-09-13 00:40:00] <ichthyo> yes, that's important
+[2013-09-13 00:40:21] <cehteh> even if that means rendering an invalidated frame that's better than rendering garbage
+[2013-09-13 00:40:40] <ichthyo> of course
+[2013-09-13 00:41:17] <ichthyo> but anyway, it is easy for the scheduler to ensure that either the old version runs,
+                                or that all jobs belonging to the old version are marked as cancelled and only then
+                                the processing of the new jobs takes place
+                                that is kind of a transactional switch
+                                such is really easy for the implementation of the scheduler to ensure.
+                                But it is near impossible for anyone else in the system to ensure that
+[2013-09-13 00:42:22] <cehteh> I really see no problem .. of course I would like if all buffers are under our control,
+                               but even if not, or if we need to make a memcpy .. still this resource is abstracted
+                               and only one writer can be there and all readers are blocked until the writer job is finished
+[2013-09-13 00:43:35] <cehteh> reader in this case might be a hard-realtime buffer-flip by the player
+[2013-09-13 00:44:15] <ichthyo> I also think this isn't really a problem, but something to be aware off.
+                                Moreover at some point we need to tell the output mechanism where the data is
+                                and there are two possibilities:
+                                (1) within the callback which is activated by the output library,
+                                    we copy the data from an intermediary buffer
+                                or
+                                (2) our jobs immediately render into the address given by the output mechanism
+[2013-09-13 00:45:45] <ichthyo> (1) looks simpler, but incurs an additional memcopy -- not really much of a problem
+[2013-09-13 00:46:33] <ichthyo> but for (1), when such a switch happens, at the moment when the output library prompts us
+                                to deliver, we need to know from *which* internal buffer to get the data
+[2013-09-13 00:46:38] <cehteh> i'd aim for both varieties .. and make that somehow configurable
+[2013-09-13 00:46:48] <ichthyo> yes, that would be ideal
+[2013-09-13 00:46:49] <cehteh> nothing needs to be fixed there
+                               ideally we might even mmap output buffers directly on the graphics card memory
+                               and manage that with our backend and tell the output lib (opengl) what to display.
+                               I really want to have this very flexible
+[2013-09-13 00:47:14] * ichthyo thinks the same
+----------------------------
+
+
+.-- define jobs by time window --
+[caption="☉Transcript☉ "]
+----------------------------
+[2013-09-13 00:47:39] <ichthyo> this leads to another small detail: we really need a *time window* for
+                                the activation of jobs, i.e. a start time, and a deadline
+                                start time == not activate this job before time xxx
+                                and deadline == mark this job as failed if it can't be started before this deadline
+                                do you think such a start or minimum time is a problem for the scheduler implementation ?
+                                it is kind of an additional pre-condition
+                                The reason is simple. If we get our scheduling to work very precise,
+                                we can dispose of a lot of other handover and blocking mechanisms
+[2013-09-13 00:51:40] <cehteh> I was thinking about that too
+                               Initially I once had the idea to have the in-time scheduler scheduled by start time
+                               and the background scheduler by "not after" -- but prolly both schedulers should
+                               just have time+span, making them both the same.
+[2013-09-13 00:53:03] <ichthyo> fine
+----------------------------
+
+
