@@ -5,7 +5,7 @@ SchedulerRequirements
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Draft_
 *Date*          _Mi 09 Jan 2013 12:04:03 CET_
 *Proposed by*   Ichthyostega <prg@ichthyostega.de>
 -------------------------------------
@@ -18,7 +18,7 @@ general assumptions and requirements other parts of the application are relying
 on
 ********************************************************************************
 
-Define the core properties and requirements of the Scheduler.
+Define core properties and requirements of the Scheduler service.
 
 Description
 -----------
@@ -75,23 +75,51 @@ detecting termination
 The way other parts of the system are built, requires us to obtain a guaranteed
 knowledge of some specific job's termination. More precisely, we need to find out
 when a ``stream of calculations'' has left a well defined domain -- and this can
-be modelled by passing of some marker jobs. It is possible to obtain that knowledge
-with some timing leeway, but in the end, this information needs to arrive with
-absolutely reliability (violations leading to segfault).
+be modelled by the activation of specific marker jobs. It is possible to obtain
+that knowledge with some timing leeway, but in the end, this information needs
+to arrive with absolutely reliability (violations leading to segfault).
+
+
+job scheduling modes
+~~~~~~~~~~~~~~~~~~~~
+The scheduler offers various modes of treatment on a per job base. The default is to
+handle jobs time based with a moderate latency. Alternatively jobs can be handled as
+_background_ jobs, as _freewheeling_ jobs (maximum usage of performance and bandwidth),
+or as _low-latency timed_ jobs.
+
+
+
+latency, reliability and precision
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+By involving a scheduler component we employ an asynchronous calculation model.
+This allows and necessitates to define special guarantees regarding various properties
+of job execution.
+
+- it is acknowledged that every scheduling involves some *latency* -- which needs to be
+  included into any calculation of deadlines. The latency limits the minimum time window
+  we can target for scheduling an operation
+- it is acknowledged that timing specifications include some degree of fuzziness -- but
+  it is possible to give guarantees regarding correctness. The defined state transitions
+  and notifications will happen *reliably*
+- it is acknowledged that the behaviour of the scheduler is non-deterministic (the way
+  this term is used in computer science). Yet still we'll impose some ordering guarantees,
+  which will be observed with *precision*: both the _adding_ and the _superseding_ of
+  a group of jobs happens in a transactional way, to retain the ordering according
+  to dependency and job time.
+
 
 
 
 Tasks
 ~~~~~
 // List what needs to be done to implement this Proposal:
-// * first step ([green]#✔ done#)
- * define the job interface [yellow-background]#WIP#
+// * first step [yellow-background]#WIP#
+ * define the job interface ([green]#✔ done#)
  * define a protocol for job state handling [red yellow-background]#TBD#
  * define the representation of dependencies and the notifications in practice [red yellow-background]#TBD#
  * verify the proposed requirements by an scheduler implementation sketch [red yellow-background]#TBD#
 
 
-///////
 
 Discussion
 ~~~~~~~~~~
@@ -99,28 +127,45 @@ Discussion
 Pros
 ^^^^
 // add a fact list/enumeration which make this suitable:
-//  * foo
-//  * bar ...
-
+ * the entity ``job with defined properties'' serves as an interface
+ * open and complex patterns of behaviour can be built on top
+ * a proper scheduler replaces several other mechanisms (threaded output backend, producer-consumer queue
+   with locking, GUI animation services)
+ * to provide an _atomic execution service_ allows us to control various aspects of execution explicitly
+ * in the end, this enables to scale and use various kinds of hardware
 
 
 Cons
 ^^^^
 // fact list of the known/considered bad implications:
-
-
+ * there is no ``for-loop'' to base any playback control structures on
+ * compliance to externally imposed deadlines and memory management are challenging.
 
 Alternatives
 ^^^^^^^^^^^^
 //alternatives: explain alternatives and tell why they are not viable:
 
-/////////
+ . use a synchronous player with buffering
+ . use a simplistic scheduler with entirely atomic jobs
+
+We do not want (1), since it is tied to an obsolete hardware model and lacks the ability to be
+adapted to the new kinds of hardware available today or to be expected in near future. We do not
+want (2) since it essentially doesn't solve any problem, but rather pushes complexity into the
+higher layers (Session, GUI), which are lacking the information about individual jobs and timing.
+
 
 
 Rationale
 ---------
 //rationale: Give a concise summary why it should be done *this* way:
-[red yellow-background]#to be written#
+We use a scheduler to gain flexibility in controlling various aspects of computation and I/O usage.
+Moreover, we turn the scheduler into an interface between Backend and Proc-Layer; while the exact
+outfitting of the individual jobs highly depends on internals of the Session and Engine models,
+the properties of _actual job execution_, closely related to system programming are akin
+to the Backend. The actual requirements outlined in this RfC are derived from the internals
+of the player implementation, while _the way_ these requirements are defined, and especially
+the aspects _omitted_ from specification are derived from knowledge regarding the possible
+scheduler and backend implementation.
 
 
 //Conclusion
@@ -134,6 +179,15 @@ Rationale
 Comments
 --------
 //comments: append below
+
+.State -> Draft
+This RfC emerged from the work on the _player implementation_, which is the immediate
+client built on top of the scheduler service. At FrOSCon 2013 and the following developer meeting,
+we had an extended discussion covering various aspects of the possible scheduler implementation.
+The goal is to settle down on an interface definition, so the player and engine implementation
+can be developed independently of the scheduler implementation
+
+Ichthyostega:: 'Do 19 Sep 2013 21:31:07 CEST' ~<prg@ichthyostega.de>~
 
 
 //endof_comments:

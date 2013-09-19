@@ -73,7 +73,7 @@ issues and considerations of the scheduler implementation to be expected.
   strategies, without increasing the complexity of the actual scheduler.
 - handling of dependencies between jobs is considered as one of the tricky requirements
 - the intention is to pre-process and transform prerequisites in lists of dependent jobs
-- prerequisites require us to build in some mechanisms for ``conditionals''
+- support for prerequisites prompts us to provide some mechanism for ``conditionals''
 - notably, the data required for processing will become available asynchronously.
 - thus, the scheduler must include some form of _polling_ to detect when prerequisites
   are finally met and unblock dependent jobs as a consequence.
@@ -96,7 +96,7 @@ issues and considerations of the scheduler implementation to be expected.
   use special ``group leader'' marker jobs.
 - when jobs are superseded, the switch from the old to the new version should
   happen in a clean way; there are several options how to achieve that in practice
-- jobs will not only defined by their deadline; rather, we'll allow to define
+- jobs will not only be constrained by their deadline; rather, we'll allow to define
   a _time window_, during which a job must be triggered for regular execution.
 
 _see below for a slightly shortened transcript of these discussions_
