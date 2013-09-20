@@ -55,6 +55,8 @@ namespace asset {
     {
       InstructionSequence instructions_;
       
+     ~ProcPatt();
+      
       ProcPatt (const Asset::Ident&, const InstructionSequence&);
       
     protected:

@@ -546,7 +546,7 @@ namespace engine {
       HashVal family_;
       
       metadata::Table table_;
-      
+                                          ///////////////////////////TICKET #854 : ensure proper locking happens "somewhere" when mutating metadata
       
     public:
       typedef metadata::Key Key;

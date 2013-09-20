@@ -191,12 +191,19 @@ namespace visitor {
     >
   class Visitable
     {
+    public:
+      typedef typename TOOL::ReturnType ReturnType;
+      
+      /** to be defined by the DEFINE_PROCESSABLE_BY macro
+       *  in all classes wanting to be treated by some tool */
+      virtual ReturnType apply (TOOL&) = 0;
+      
+      
     protected:
       virtual ~Visitable () { };
       
       /// @note may differ from TOOL
       typedef typename TOOL::ToolBase ToolBase;
-      typedef typename TOOL::ReturnType ReturnType;
       
       /** @internal used by the #DEFINE_PROCESSABLE_BY macro.
        *            Dispatches to the actual operation on the 
@@ -209,11 +216,6 @@ namespace visitor {
         {
           return Dispatcher<TAR,ToolBase>::instance().forwardCall (target,tool);
         }
-      
-    public:
-      /** to be defined by the DEFINE_PROCESSABLE_BY macro
-       *  in all classes wanting to be treated by some tool */
-      virtual ReturnType apply (TOOL&) = 0;
     };
     
 

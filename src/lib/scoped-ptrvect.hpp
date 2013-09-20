@@ -84,6 +84,7 @@ namespace lib {
       
     public:
       typedef size_t   size_type;
+      typedef T        value_type;
       typedef T &      reference;
       typedef T const& const_reference;
       

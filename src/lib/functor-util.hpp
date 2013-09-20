@@ -54,7 +54,7 @@ namespace util { ////////////TODO: refactor namespace. But probably not directly
   /** "Combiner" which calls two functions one after another
    *  returning the result of the second invocation.  */
   template<typename SIG>
-  class CombineSequenced;
+  struct CombineSequenced;
   
   template<typename ARG, typename RET>
   struct CombineSequenced<RET(ARG)>

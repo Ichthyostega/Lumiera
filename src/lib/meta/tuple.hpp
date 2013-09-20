@@ -92,23 +92,29 @@ namespace meta {
       typedef Tuple<NullType> Tail;
       enum  { SIZE = 0 };
       
-      NullType getHead() { return NullType(); }
-      Tail&    getTail() { return *this;      }
+      NullType& getHead() { return bottom(); }
+      Tail&     getTail() { return *this; }
       
       Tuple (HeadType const&, Tail const&) { }
       Tuple ()                             { }
       
       template<uint> struct ShiftedTuple   { typedef Tail Type;};
       template<uint> Tail& getShifted ()   { return *this;     }
-      template<uint> NullType&  getAt ()   { return getHead(); }
+      template<uint> NullType&  getAt ()   { return bottom();  }
       
-      const NullType getHead_const() const { return NullType();}
+      const NullType getHead_const() const { return bottom();  }
       const Tail&    getTail_const() const { return *this;     }
       
       TupleType& 
       tupleCast ()
         {
           return reinterpret_cast<TupleType&> (*this);
+        }
+      
+      NullType&
+      bottom()  const
+        {
+          return (NullType&) (*this);
         }
     };
   

@@ -52,7 +52,7 @@ namespace asset {
       friend class MediaFactory;
       
       virtual PClip getClipAsset ();
-      virtual PMedia checkCompound ();
+      virtual PMedia checkCompound ()  const;
       
     };
   

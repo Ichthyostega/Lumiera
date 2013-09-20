@@ -47,8 +47,6 @@ using util::_Fmt;
 namespace proc {
 namespace asset {
   
-  using ::NOBUG_FLAG(memory);
-  NOBUG_CPP_DEFINE_FLAG_PARENT(assetmem,  memory);
   
   
   Asset::Ident::Ident(const string& n, const Category& cat, const string& o, const uint ver) 
@@ -67,12 +65,12 @@ namespace asset {
     , id(AssetManager::reg (this, idi))
     , enabled(true)
     {
-      TRACE (assetmem, "ctor Asset(id=%zu) :  adr=%p %s", size_t(id), this, cStr(this->ident) );
+      TRACE (asset_mem, "ctor Asset(id=%zu) :  adr=%p %s", size_t(id), this, cStr(this->ident) );
     }
   
   Asset::~Asset ()
     { 
-      TRACE (assetmem, "dtor Asset(id=%zu) :  adr=%p", size_t(id), this );
+      TRACE (asset_mem, "dtor Asset(id=%zu) :  adr=%p", size_t(id), this );
     }
   
 

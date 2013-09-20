@@ -180,7 +180,7 @@ namespace test{
           CHECK (Time::MIN          == case2.gridAlign( secs(-2)  ));        //              allowed range and thus will be clipped
           
           // maximum frame size is half the time range
-          Duration hugeFrame(Offset(Time::MAX));
+          Duration hugeFrame(Time::MAX);
           FixedFrameQuantiser case3 (hugeFrame);
           CHECK (Time::MIN          == case3.gridAlign(Time::MIN  ));
           CHECK (Time::MIN          == case3.gridAlign(Time::MIN +TimeValue(1) ));

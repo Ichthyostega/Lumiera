@@ -584,7 +584,8 @@ namespace lib {
   
   
   /**
-   * Variation of the concept realised by OpaqueHolder, but implemented here
+   * Buffer to place and maintain an object instance privately within another object.
+   * Variation of a similar concept as with OpaqueHolder, but implemented here
    * with reduced security and lesser overhead. InPlaceBuffer is just a chunk of
    * storage, which can be accessed through a common base class interface and
    * allows to place new objects there. It has no way to keep track of the
@@ -738,7 +739,7 @@ namespace lib {
       
       
       template<class SUB>
-      static SUB*
+      SUB*
       access ()
         {
           BA * asBase = &getObj();

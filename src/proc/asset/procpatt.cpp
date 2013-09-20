@@ -33,6 +33,11 @@ namespace proc {
 namespace asset {
   
   
+  /// emit VTable and member destructors here...
+  ProcPatt::~ProcPatt() { }
+  
+  
+  
   /** new processing pattern with empty instruction list.
    *  @todo preliminary implementation, storing the capabilities
    *        in the asset name field. We can do better, when

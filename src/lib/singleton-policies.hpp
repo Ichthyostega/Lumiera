@@ -50,8 +50,9 @@ namespace singleton {
    * Policy placing the Singleton instance into a statically allocated buffer
    */
   template<class S>
-  struct StaticCreate
+  class StaticCreate
     {
+    public:
       static S* create ()
         {
 #if NOBUG_MODE_ALPHA
@@ -72,8 +73,9 @@ namespace singleton {
    * Policy for creating the Singleton instance heap allocated
    */
   template<class S>
-  struct HeapCreate
+  class HeapCreate
     {
+    public:
       static S* create ()         { return new S; }
       static void destroy (S* pS) { delete pS;    }
     };

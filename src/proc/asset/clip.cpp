@@ -99,7 +99,7 @@ namespace asset {
    *  the media asset referred by this clip
    */ 
   Media::PMedia
-  Clip::checkCompound ()
+  Clip::checkCompound()  const
   {
     return source_.checkCompound();       ////////////////////////TODO better interface!!!
   }

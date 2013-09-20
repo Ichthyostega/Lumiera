@@ -227,7 +227,37 @@ namespace lib {
       };
     
     
-    class Timeout;
+    
+    /**
+     * helper for specifying an optional timeout for an timed wait.
+     * Wrapping a timespec-struct, it allows for easy initialisation
+     * by a given relative offset.
+     */
+    struct Timeout
+      : timespec
+      {
+        Timeout() { tv_sec=tv_nsec=0; }
+        
+        /** initialise to NOW() + offset (in milliseconds) */
+        Timeout&
+        setOffset (ulong offs)
+          {
+            if (offs)
+              {
+                clock_gettime(CLOCK_REALTIME, this);
+                tv_sec   += offs / 1000;
+                tv_nsec  += 1000000 * (offs % 1000);
+                if (tv_nsec >= 1000000000)
+                  {
+                    tv_sec += tv_nsec / 1000000000;
+                    tv_nsec %= 1000000000;
+              }   }
+            return *this;
+          }
+        
+        operator bool() { return 0 != tv_sec; } // allows if (timeout_)....
+      };
+    
     
     
     template<class MTX>
@@ -265,36 +295,6 @@ namespace lib {
           }
       };
     
-    
-    /**
-     * helper for specifying an optional timeout for an timed wait.
-     * Wrapping a timespec-struct, it allows for easy initialisation
-     * by a given relative offset.
-     */
-    struct Timeout
-      : timespec
-      {
-        Timeout() { tv_sec=tv_nsec=0; }
-        
-        /** initialise to NOW() + offset (in milliseconds) */
-        Timeout&
-        setOffset (ulong offs)
-          {
-            if (offs)
-              {
-                clock_gettime(CLOCK_REALTIME, this);
-                tv_sec   += offs / 1000;
-                tv_nsec  += 1000000 * (offs % 1000);
-                if (tv_nsec >= 1000000000)
-                  {
-                    tv_sec += tv_nsec / 1000000000;
-                    tv_nsec %= 1000000000;
-              }   }
-            return *this;
-          }
-        
-        operator bool() { return 0 != tv_sec; } // allows if (timeout_)....
-      };
     
     
     

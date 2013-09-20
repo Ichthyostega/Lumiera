@@ -76,7 +76,7 @@ namespace engine {
    * @warning all of BufferProvider is assumed to run within a threadsafe environment.
    * 
    * @todo as of 6/2011 buffer management within the engine is still a bit vague
-   * @todo as of 11/11 thread safety within the engine remains to be clarified
+   * @todo as of 11/11 thread safety within the engine remains to be clarified   ///////////////////////////TICKET #854
    */
   class BufferProvider
     : boost::noncopyable

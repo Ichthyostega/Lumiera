@@ -116,12 +116,15 @@ namespace asset {
       BuildInstruct (T& instr) : InstructEntry() {}
 
       // TODO: this ctor is *not* correct, just to make it compile
-      // There is a strange problem with boost::variant, probably becausse the
+      // There is a strange problem with boost::variant, probably because the
       // template parameter T could be anything (but actually we know it's one
       // of our Instruction types.
-      // I have to reinvestigate this design anyway, and probably will replace
+      // I have to re-investigate this design anyway, and probably will replace
       // the boost::variant by something else, derive from a common base or such.
       // Note: as of 8/2008 ProcPatt is just a draft and not implemented.
+      
+      // Note: 9/2013 : meanwhile the obvious solution would be to use our "polymorphic value",
+      //                which was invented exactly to solve this notorious design mismatch in C++
     };
     
     

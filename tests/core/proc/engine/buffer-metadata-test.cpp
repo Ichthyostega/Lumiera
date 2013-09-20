@@ -211,11 +211,11 @@ namespace test  {
           
           // later, when it comes to actually *locking* those buffers...
           typedef char RawBuffer[SIZE_B];
+          void* storage = malloc (2*SIZE_B);
           
-          // do the necessary memory allocations behind the scenes
-          TestFrame* frames = new TestFrame[3];
-          RawBuffer* rawbuf = new RawBuffer[2]; // coding explicit allocations here for sake of clarity;
-                                               //  a real-world BufferProvider would use some kind of allocator
+          // do the necessary memory allocations behind the scenes...
+          RawBuffer* rawbuf = (RawBuffer*)storage;   // coding explicit allocations here for sake of clarity;
+          TestFrame* frames = new TestFrame[3];     //  a real-world BufferProvider would use some kind of allocator
           
           // track individual buffers by metadata entries
           metadata::Entry& f0 = meta_->markLocked(bufferType1, &frames[0]);
@@ -298,7 +298,7 @@ namespace test  {
           
           // manual cleanup of test allocations
           delete[] frames;
-          delete[] rawbuf;
+          free(storage);
           
           CHECK (!meta_->isLocked(handle_f0));
           CHECK (!meta_->isLocked(handle_f1));

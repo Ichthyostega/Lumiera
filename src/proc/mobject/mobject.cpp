@@ -31,9 +31,7 @@ using util::isnil;
 
 namespace proc {
 namespace mobject {
-
-  using ::NOBUG_FLAG(memory);
-  NOBUG_CPP_DEFINE_FLAG_PARENT(mobjectmem, memory);
+  
   
   
   /** Storage for the (single, static) MObject factory object.
