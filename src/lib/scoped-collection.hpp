@@ -92,7 +92,7 @@ namespace lib {
    * 
    * All child objects reside in a common chunk of storage
    * and are owned and managed by this collection holder.
-   * Array style access and iteration.
+   * Array style access and iteration is provided.
    */
   template
     < class I                    ///< the nominal Base/Interface class for a family of types

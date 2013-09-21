@@ -110,8 +110,8 @@ namespace play {
       virtual void discard  (BuffHandle const&)   =0;
       virtual void shutDown ()                    =0;
     };
-      
-      
+  
+  
   
   /** 
    * Extension point for Implementation.
@@ -131,7 +131,22 @@ namespace play {
     };
   
   
-  /** 
+  
+  
+  /* ===== Building blocks for OutputSlot implementation ===== */
+  
+  /** Base for OutputSlot standard implementation */
+  class OutputSlotImplBase
+    : public OutputSlot
+    {
+    protected:
+      template<class CON>
+      class ConnectionManager;
+    };
+  
+  
+  /**
+   * Maintaining a list of active connections.
    * Base class for the typical implementation approach.
    * Using this class is \em not mandatory. But obviously,
    * we'd get to manage a selection of Connection objects
@@ -148,7 +163,7 @@ namespace play {
    * manages a collection of active Connection subclass objects.
    */
   template<class CON>
-  class ConnectionStateManager
+  class OutputSlotImplBase::ConnectionManager
     : public OutputSlot::ConnectionState
     {
       typedef lib::ScopedCollection<CON> Connections;
@@ -172,7 +187,7 @@ namespace play {
         {
           UNIMPLEMENTED ("find out about timing constraints");                   //////////////////////////TICKET #831
         }
-
+      
       bool
       isActive()  const
         {
@@ -191,7 +206,7 @@ namespace play {
       init() ///< derived classes need to invoke this to build the actual connections
         {
                                                                                  //////////////////////////TICKET #878  really build all at once? or on demand?
-          connections_.populate_by (&ConnectionStateManager::buildConnection, this);
+          connections_.populate_by (&ConnectionManager::buildConnection, this);
         }
       
       typedef typename Connections::ElementHolder& ConnectionStorage;
@@ -201,13 +216,13 @@ namespace play {
       virtual void buildConnection(ConnectionStorage)  =0;
       
       
-      ConnectionStateManager(uint numChannels)
+      ConnectionManager(uint numChannels)
         : connections_(numChannels)
         { }
       
     public:
       virtual
-     ~ConnectionStateManager()
+     ~ConnectionManager()
         { }
       
       

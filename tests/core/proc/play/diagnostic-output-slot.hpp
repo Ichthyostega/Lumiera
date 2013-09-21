@@ -254,33 +254,12 @@ namespace play {
     };
   
   
-  /**
-   * Special diagnostic connection state implementation,
-   * establishing diagnostic output connections for each channel,
-   * thus allowing to verify the handling of individual buffers
-   */
-  class SimulatedOutputSequences
-    : public ConnectionStateManager<TrackingInMemoryBlockSequence>
-    {
-      typedef ConnectionStateManager<TrackingInMemoryBlockSequence> _Base;
-      
-      void
-      buildConnection(ConnectionStorage storage)
-        {
-          storage.create<TrackingInMemoryBlockSequence>();
-        }
-      
-    public:
-      SimulatedOutputSequences (uint numChannels)
-        : _Base(numChannels)
-        {
-          init();
-        }
-    };
   
-    
-    
-    
+  
+  
+  
+  
+  
   
   /********************************************************************
    * Helper for unit tests: Mock output sink.
@@ -296,7 +275,7 @@ namespace play {
    *   remains in memory until shutdown of the current executable
    */
   class DiagnosticOutputSlot
-    : public OutputSlot
+    : public OutputSlotImplBase
     {
       
       static const uint MAX_CHANNELS = 5;
@@ -309,6 +288,32 @@ namespace play {
         {
           return MAX_CHANNELS;
         }
+      
+      
+      /**
+       * Special diagnostic connection state implementation,
+       * establishing diagnostic output connections for each channel,
+       * thus allowing to verify the handling of individual buffers
+       */
+      class SimulatedOutputSequences
+        : public ConnectionManager<TrackingInMemoryBlockSequence>
+        {
+          typedef ConnectionManager<TrackingInMemoryBlockSequence> _Base;
+          
+          void
+          buildConnection(ConnectionStorage storage)
+            {
+              storage.create<TrackingInMemoryBlockSequence>();
+            }
+          
+        public:
+          SimulatedOutputSequences (uint numChannels)
+            : _Base(numChannels)
+            {
+              init();
+            }
+        };
+      
       
       
       /** hook into the OutputSlot frontend */
