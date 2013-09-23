@@ -98,29 +98,30 @@ namespace lib {
       
       
     private: /* === friend operators injected into enclosing namespace for ADL === */
-      template<typename _O_>
+                                                                                          //////////////////TICKET #932 Clang is unable to fill in the default template argument. Resolved in newer versions of Clang. Temporary workaround: add second parameter B
+      template<typename _O_,typename B>
       friend inline bool
-      operator== (P const& p, P<_O_> const& q) { return (p && q)? (*p == *q) : (!p && !q); }
+      operator== (P const& p, P<_O_, B> const& q) { return (p && q)? (*p == *q) : (!p && !q); }
       
-      template<typename _O_>
+      template<typename _O_,typename B>
       friend inline bool
-      operator!= (P const& p, P<_O_> const& q) { return (p && q)? (*p != *q) : !(!p && !q); }
+      operator!= (P const& p, P<_O_, B> const& q) { return (p && q)? (*p != *q) : !(!p && !q); }
       
-      template<typename _O_>
+      template<typename _O_,typename B>
       friend inline bool
-      operator<  (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *p < *q; }   ///< @note deliberately not allowing comparison on NIL ////TICKET #307  : problem with equality test in associative containers, where equal(a,b) := !(a < b) && !(b < a)
+      operator<  (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *p < *q; }   ///< @note deliberately not allowing comparison on NIL ////TICKET #307  : problem with equality test in associative containers, where equal(a,b) := !(a < b) && !(b < a)
       
-      template<typename _O_>
+      template<typename _O_,typename B>
       friend inline bool
-      operator>  (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *q < *p; }
+      operator>  (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *q < *p; }
       
-      template<typename _O_>
+      template<typename _O_,typename B>
       friend inline bool
-      operator<= (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *p <= *q;}
+      operator<= (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *p <= *q;}
       
-      template<typename _O_>
+      template<typename _O_,typename B>
       friend inline bool
-      operator>= (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *p >= *q;}
+      operator>= (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *p >= *q;}
       
     };
   
