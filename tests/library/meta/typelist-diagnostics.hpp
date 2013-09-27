@@ -101,7 +101,7 @@ namespace meta {
     namespace {   // hidden internals for diagnostics....
       
       
-      util::_Fmt fmt ("-<%u>%s");
+      using util::_Fmt;
       
       struct NullP
         {
@@ -118,28 +118,28 @@ namespace meta {
       struct Printer<NullType, BASE>
         : BASE
         {
-          static string print () { return string( fmt % "·" % BASE::print()); }
+          static string print () { return _Fmt("-<%u>%s") % "·" % BASE::print(); }
         };
       
       template<class BASE, int I>
       struct Printer<Num<I>, BASE>    ///< display the presence of a Num instance in the typelist
         : BASE
         {
-          static string print () { return string( fmt % uint(Num<I>::VAL) % BASE::print()); }
+          static string print () { return _Fmt("-<%u>%s") % uint(Num<I>::VAL) % BASE::print(); }
         };
       
       template<class BASE, uint Fl>
       struct Printer<Flag<Fl>, BASE>  ///< display the presence of a Flag in the typelist
         : BASE
         {
-          static string print () { return string( fmt % uint(Fl) % BASE::print()); }
+          static string print () { return _Fmt("-<%u>%s") % uint(Fl) % BASE::print(); }
         };
       
       template<class BASE>
       struct Printer<int, BASE>  ///< display the presence of a plain int in the typelist
         : BASE
         {
-          static string print () { return string( fmt % 'i' % BASE::print()); }
+          static string print () { return _Fmt("-<%u>%s") % 'i' % BASE::print(); }
         };
       
       

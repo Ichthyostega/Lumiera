@@ -52,7 +52,7 @@ namespace test {
                  >        Types2;
     
     
-    util::_Fmt formatted ("-<%u%u>%s");
+    using util::_Fmt;
     
     /**
      * A Test-Template to be instantiated
@@ -68,9 +68,9 @@ namespace test {
           {
             T1 param1;
             T2 param2;
-            return string(formatted % uint(param1)
-                                    % uint(param2)
-                                    % BASE::visitAll());
+            return _Fmt("-<%u%u>%s") % uint(param1)
+                                     % uint(param2)
+                                     % BASE::visitAll();
           }
       };
     
