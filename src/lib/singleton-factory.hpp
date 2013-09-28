@@ -66,11 +66,10 @@ namespace lib {
     >
   class SingletonFactory
     {
-      typedef SI* volatile  PType;
       typedef lib::ClassLock<SI> ThreadLock;
       
-      static PType pInstance_;
-      static bool isDead_;
+      static SI* volatile pInstance_;
+      static bool         isDead_;
       
       
     public:
@@ -122,8 +121,7 @@ namespace lib {
       template <class> class C,
       template <class> class L
     >
-    typename SingletonFactory<SI,C,L>::PType
-    SingletonFactory<SI,C,L>::pInstance_;
+    SI* volatile SingletonFactory<SI,C,L>::pInstance_;
   
   template
     < class SI,
