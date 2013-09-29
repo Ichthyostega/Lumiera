@@ -3,7 +3,6 @@
 
 #include "proc/config-resolver.hpp"
 
-namespace proc {
 namespace test {
 
   template<typename T>
@@ -40,5 +39,4 @@ namespace test {
   
   
   
-}} // namespace proc::test
-  
+} // namespace test

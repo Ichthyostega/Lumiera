@@ -1,7 +1,7 @@
 #include "lib/test/run.hpp"
-#include "proc/hh.hpp"
 
 #include "proc/config-resolver.hpp"
+#include "clang-static-init.hpp"
 
 #include <iostream>
 
@@ -12,27 +12,19 @@ using std::cout;
 using std::endl;
 
 
-namespace proc {
-namespace test {
+int
+main (int, char**)
+  {
+    cout <<  "\n.gulp.\n";
+    
+    ConfigResolver& ref1 = ConfigResolver::instance();
+    
+    ConfigResolver& sub2 = test::fabricate();
+    
+    cout << "sub1="<< &ref1 << " sub2="<< &sub2 <<"\n";
+    
+    
+    return 0;
+  }
 
-  class StaticInstance_test : public Test
-    {
-      virtual void
-      run (Arg) 
-        {
-          ConfigResolver& ref1 = ConfigResolver::instance();
-          
-          ConfigResolver& sub2 = fabricate();
-          
-          cout << "sub1="<< &ref1 << " sub2="<< &sub2 <<"\n";
-          
-        }
-  
-    };
-  
-  /** Register this test class... */
-  LAUNCHER (StaticInstance_test, "unit bug");
-      
-  
-  
-}} // namespace proc::test
+

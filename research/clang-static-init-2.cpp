@@ -1,5 +1,5 @@
 
-#include "proc/hh.hpp"
+#include "clang-static-init.hpp"
 
 #include <iostream>
 
@@ -8,7 +8,6 @@ using std::cout;
 using std::endl;
 
 
-namespace proc {
 namespace test {
   
   
@@ -33,4 +32,4 @@ namespace test {
   }
   
   
-}} // namespace proc::test
+} // namespace test
