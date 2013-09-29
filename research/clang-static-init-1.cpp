@@ -1,25 +1,25 @@
 #include "lib/test/run.hpp"
 
-#include "proc/config-resolver.hpp"
 #include "clang-static-init.hpp"
 
 #include <iostream>
 
-using proc::ConfigResolver;
 
 using ::test::Test;
 using std::cout;
 using std::endl;
 
+using namespace test;
 
 int
 main (int, char**)
   {
     cout <<  "\n.gulp.\n";
     
-    ConfigResolver& ref1 = ConfigResolver::instance();
+    Factory fab1;
+    Subject& ref1 = fab1();
     
-    ConfigResolver& sub2 = test::fabricate();
+    Subject& sub2 = test::fabricate();
     
     cout << "sub1="<< &ref1 << " sub2="<< &sub2 <<"\n";
     

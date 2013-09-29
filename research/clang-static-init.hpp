@@ -1,7 +1,8 @@
 
 #include "lib/error.hpp"
 
-#include "proc/config-resolver.hpp"
+#include "lib/singleton-subclass.hpp"
+
 
 namespace test {
 
@@ -33,8 +34,10 @@ namespace test {
       
     };
   
+  typedef lib::Singleton<Subject> Factory;
   
-  proc::ConfigResolver& fabricate();
+  
+  Subject& fabricate();
   
   
   

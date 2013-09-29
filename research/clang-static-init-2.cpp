@@ -3,7 +3,6 @@
 
 #include <iostream>
 
-using proc::ConfigResolver;
 using std::cout;
 using std::endl;
 
@@ -21,14 +20,15 @@ namespace test {
    
   
   namespace {
-    Holder<Subject> fab2;
+//  Holder<Subject> fab2;
+    Factory fab2;
   }
   
   
-  ConfigResolver&
+  Subject&
   fabricate()
   {
-    return ConfigResolver::instance();
+    return fab2();
   }
   
   
