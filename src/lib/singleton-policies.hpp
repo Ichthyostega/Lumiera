@@ -22,7 +22,7 @@
 This code is heavily inspired by  
  The Loki Library (loki-lib/trunk/include/loki/Singleton.h)
     Copyright (c) 2001 by Andrei Alexandrescu
-    This Loki code accompanies the book:
+    Loki code accompanies the book:
     Alexandrescu, Andrei. "Modern C++ Design: Generic Programming
         and Design Patterns Applied". 
         Copyright (c) 2001. Addison-Wesley. ISBN 0201704315
@@ -46,8 +46,8 @@ namespace singleton {
   
   /* === several Policies usable in conjunction with lib::Singleton === */
   
-  /** 
-   * Policy placing the Singleton instance into a statically allocated buffer
+  /**
+   * Policy to place the Singleton instance into a statically allocated buffer
    */
   template<class S>
   class StaticCreate
@@ -91,11 +91,29 @@ namespace singleton {
    * Policy relying on the compiler/runtime system for Singleton Lifecycle
    */
   template<class S>
-  struct AutoDestroy
+  class AutoDestroy
     {
+       class DeleteTrigger
+              {
+                vector<DelFunc> dels_;
+                
+              public:
+                void schedule (DelFunc del)
+                  {
+                    dels_.push_back(del);
+                  }
+               ~DeleteTrigger()
+                  {
+                    vector<DelFunc>::iterator del = dels_.begin();
+                    for ( ; del != dels_.end(); ++del )
+                      (*del)(); // invoke deleter function
+                  }
+              };
+       
+     public:
       /** implements the Singleton removal by calling
        *  the provided deleter function(s) at application shutdown,
-       *  relying on the runtime system calling destructors of static
+       *  relying on the runtime system to call destructors of static
        *  objects. Because this Policy class can be shared between 
        *  several Singletons, we need to memorise all registered
        *  deleter functions for calling them at shutdown.
@@ -103,23 +121,6 @@ namespace singleton {
       static void
       scheduleDelete (DelFunc kill_the_singleton)
         {
-             class DeleteTrigger
-                    {
-                      vector<DelFunc> dels_;
-                      
-                    public:
-                      void schedule (DelFunc del)
-                        { 
-                          dels_.push_back(del); 
-                        }
-                     ~DeleteTrigger()
-                        { 
-                          vector<DelFunc>::iterator i = dels_.begin();
-                          for ( ; i != dels_.end(); ++i )
-                            (*i)(); // invoke deleter function
-                        }
-                    };
-                    
           REQUIRE (kill_the_singleton);
           static DeleteTrigger finally;
           finally.schedule (kill_the_singleton);
@@ -128,7 +129,7 @@ namespace singleton {
       static void
       onDeadReference ()
         {
-          throw lumiera::error::Logic ("Trying to access the a Singleton instance that has "
+          throw lumiera::error::Logic ("Trying to access a Singleton instance that has "
                                        "already been released or finished its lifecycle.");
         }
     };

@@ -22,7 +22,7 @@
 This code is heavily inspired by  
  The Loki Library (loki-lib/trunk/include/loki/Singleton.h)
     Copyright (c) 2001 by Andrei Alexandrescu
-    This Loki code accompanies the book:
+    Loki code accompanies the book:
     Alexandrescu, Andrei. "Modern C++ Design: Generic Programming
         and Design Patterns Applied". 
         Copyright (c) 2001. Addison-Wesley. ISBN 0201704315
@@ -38,8 +38,6 @@ This code is heavily inspired by
 #include "lib/singleton-policies.hpp"  // several Policies usable together with SingletonFactory
 
 #include "lib/nobug-init.hpp"
-#include "include/logging.h"
-#include "lib/util.hpp"
 #include "lib/sync-classlock.hpp"
 
 namespace lib {
@@ -82,7 +80,7 @@ namespace lib {
         {
           if (!pInstance_)
             {
-              ThreadLock guard  SIDEEFFECT;
+              ThreadLock guard;
               
               if (!pInstance_)
                 {
