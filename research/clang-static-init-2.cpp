@@ -20,15 +20,16 @@ namespace test {
    
   
   namespace {
-//  Holder<Subject> fab2;
-    Factory fab2;
+      lib::singleton::UseSubclass<Subject> typeID;
   }
+  
+  Factory fab(typeID);
   
   
   Subject&
   fabricate()
   {
-    return fab2();
+    return fab();
   }
   
   

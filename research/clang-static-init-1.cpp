@@ -16,9 +16,7 @@ main (int, char**)
   {
     cout <<  "\n.gulp.\n";
     
-    Factory fab1;
-    Subject& ref1 = fab1();
-    
+    Subject& ref1 = fab();
     Subject& sub2 = test::fabricate();
     
     cout << "sub1="<< &ref1 << " sub2="<< &sub2 <<"\n";

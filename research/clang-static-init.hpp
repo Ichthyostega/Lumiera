@@ -34,7 +34,10 @@ namespace test {
       
     };
   
-  typedef lib::Singleton<Subject> Factory;
+  typedef lib::SingletonSub<Subject> Factory;
+  
+  extern Factory fab;
+  
   
   
   Subject& fabricate();
