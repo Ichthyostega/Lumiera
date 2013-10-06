@@ -22,7 +22,7 @@ namespace test {
         {
           if (!instance)
             {
-              cout << "Singleton Factory: invoke Fabrication ---> instance="<<&instance<<"...\n";
+              cout << "Singleton Factory: invoke Fabrication ---> address of static instance variable: "<<&instance<<"...\n";
               
               instance = Fac<I>::create();
             }
