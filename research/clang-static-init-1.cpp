@@ -1,26 +1,18 @@
 
 #include "clang-static-init.hpp"
 
-#include <iostream>
 
-
-using std::cout;
-using std::endl;
-
-using namespace test;
 
 int
 main (int, char**)
   {
-    cout <<  "\n.gulp.\n";
+    cout <<  "\nStart Testcase: invoking two instances of the configurable singleton factory...\n";
     
-    Subject& ref1 = fab.get();
-    Subject& sub2 = test::fabricate();
+    test::Subject& ref1 = test::fab.get();
+    test::Subject& sub2 = test::fabricate();
     
     cout << "sub1="<< &ref1 << " sub2="<< &sub2 <<"\n";
     
     
     return 0;
   }
-
-

@@ -1,29 +1,33 @@
 
 #include "clang-static-init.hpp"
 
-#include <iostream>
-
-using std::cout;
-using std::endl;
 
 
 namespace test {
   
   
-  int Subject::cnt = 0;
+  int Subject::creationCount = 0;
   
   Subject::Subject()
     {
-      ++cnt;
-      std::cout << "Subject("<<cnt<<")\n";
+      ++creationCount;
+      std::cout << "Subject("<<creationCount<<")\n";
     }
-   
+  
+  
   
   namespace {
-      //
+      TypeInfo<Subject> shall_build_a_Subject_instance;
   }
   
-  AccessPoint fab;
+  /**
+   * instance of the singleton factory
+   * @note especially for this example we're using just \em one
+   *       shared instance of the factory.
+   *       Yet still, the two (inlined) calls to the get() function
+   *       access different addresses for the embedded singleton instance
+   */
+  AccessPoint fab(shall_build_a_Subject_instance);
   
   
   Subject&
