@@ -63,8 +63,8 @@ def defineBuildEnvironment():
         define locations in source and target tree,
         parse the commandline and pick up options
     """
-    EnsureSConsVersion(1,0)
-    EnsurePythonVersion(2,4)
+    EnsureSConsVersion(2,0)
+    EnsurePythonVersion(2,6)
     Decider('MD5-timestamp')  # detect changed files by timestamp, then do a MD5
     
     buildVars = Variables([OPTCACHE, CUSTOPTFILE])

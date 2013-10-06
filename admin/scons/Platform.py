@@ -65,7 +65,7 @@ def configure(env):
         print 'Valgrind not found. The use of Valgrind is optional; building without.'
     
     if not conf.CheckPkgConfig('nobugmt', 201006.1):
-        problems.append('Did not find NoBug [http://www.lumiera.org/nobug_manual.html].')
+        problems.append('Did not find NoBug [http://nobug.pipapo.org/].')
     else:
         conf.env.mergeConf('nobugmt')
     
@@ -79,13 +79,13 @@ def configure(env):
             problems.append('We need boost::scoped_ptr (scoped_ptr.hpp).')
         if not conf.CheckCXXHeader('boost/format.hpp'):
             problems.append('We need boost::format (header).')
-        if not conf.CheckLibWithHeader('boost_program_options-mt','boost/program_options.hpp','C++'):
+        if not conf.CheckLibWithHeader('boost_program_options','boost/program_options.hpp','C++'):
             problems.append('We need boost::program_options (including binary lib for linking).')
-        if not conf.CheckLibWithHeader('boost_system-mt','boost/system/error_code.hpp','C++'):
+        if not conf.CheckLibWithHeader('boost_system','boost/system/error_code.hpp','C++'):
             problems.append('We need the boost::system support library (including binary lib).')
-        if not conf.CheckLibWithHeader('boost_filesystem-mt','boost/filesystem.hpp','C++'):
+        if not conf.CheckLibWithHeader('boost_filesystem','boost/filesystem.hpp','C++'):
             problems.append('We need the boost::filesystem lib (including binary lib for linking).')
-        if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
+        if not conf.CheckLibWithHeader('boost_regex','boost/regex.hpp','C++'):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
     
