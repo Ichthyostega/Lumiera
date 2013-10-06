@@ -14,7 +14,7 @@ envR.Append(CPPPATH='research')
 
 # build additional test and administrative tools....
 experiments = [ envR.Program('try', ['try.cpp'] + support_lib)          #### to try out some feature...
-              , envR.Program('clang-static-init', ['clang-static-init-1.cpp', 'clang-static-init-2.cpp'] + core)  
+              , envR.Program('clang-static-init', ['clang-static-init-1.cpp', 'clang-static-init-2.cpp'])  
               ]
 
 #

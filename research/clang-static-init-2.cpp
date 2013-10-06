@@ -20,16 +20,16 @@ namespace test {
    
   
   namespace {
-      lib::singleton::UseSubclass<Subject> typeID;
+      //
   }
   
-  Factory fab(typeID);
+  AccessPoint fab;
   
   
   Subject&
   fabricate()
   {
-    return fab();
+    return fab.get();
   }
   
   

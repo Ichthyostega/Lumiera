@@ -1,12 +1,10 @@
 
-#include "lib/error.hpp"
-
-#include "lib/singleton-subclass.hpp"
-
 
 namespace test {
 
-  template<typename T>
+  template<typename T
+          ,template <class> class Fac
+          >
   struct Holder
     {
       static T* instance;
@@ -16,15 +14,31 @@ namespace test {
         {
           if (!instance)
             {
-              instance = new T();
+              instance = Fac<T>::create();
             }
           return *instance;
         }
     };
   
   
+  template<typename T
+          ,template <class> class F
+          >
+  T* Holder<T,F>::instance;
+  
+  
+  
   template<typename T>
-  T* Holder<T>::instance;
+  struct Factory
+    {
+      static T*
+      create()
+        {
+          return new T();
+        }
+    };
+  
+  
   
   struct Subject
     {
@@ -34,9 +48,9 @@ namespace test {
       
     };
   
-  typedef lib::SingletonSub<Subject> Factory;
+  typedef Holder<Subject,Factory> AccessPoint;
   
-  extern Factory fab;
+  extern AccessPoint fab;
   
   
   

@@ -1,11 +1,9 @@
-#include "lib/test/run.hpp"
 
 #include "clang-static-init.hpp"
 
 #include <iostream>
 
 
-using ::test::Test;
 using std::cout;
 using std::endl;
 
@@ -16,7 +14,7 @@ main (int, char**)
   {
     cout <<  "\n.gulp.\n";
     
-    Subject& ref1 = fab();
+    Subject& ref1 = fab.get();
     Subject& sub2 = test::fabricate();
     
     cout << "sub1="<< &ref1 << " sub2="<< &sub2 <<"\n";
