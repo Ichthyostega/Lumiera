@@ -1,6 +1,8 @@
 Dependencies
-------------
+============
+:Author: core-devs
 :Date: 10/2013
+:toc:
 
 
 Lumiera is written for GNU/Linux. We try to make the best out of modern system programming techniques
@@ -44,13 +46,13 @@ Languages and Tools
 
 * C / C++
 
- - a C99 / C++98 compatible compiler footnote::[in practice, we build using GCC and
+ - a C99 / C++98 compatible compiler footnote:[in practice, we build using GCC and
    occasionally we check using Clang]
- - GCC *4.6* or Clang *3.0* should be fine footnote::[basically we try to use just the stock language.
+ - GCC *4.6* or Clang *3.0* should be fine footnote:[basically we try to use just the stock language.
    On rare occasions, we _did_ use some GCC extensions, like `typeof()`, but there are
    workarounds, in case this becomes a problem].
  - std::tr1 extensions for C++ (smart-ptrs, hashtables, function objects)
- - switch to C++11 can be expected in the near future footnote::[due to some
+ - switch to C++11 can be expected in the near future footnote:[due to some
    minor problems, we can't compile in `-std=c++11` mode yet. See the
    link:http://issues.lumiera.org/ticket/924[tracking ticket]. These issues aren't
    fundamental though, we used a modern programming style right from start.]
@@ -93,7 +95,7 @@ Libraries
  - libgdl-1-dev -- old version of the Gnome Docking Library footnote:[GDL isn't directly related to GNOME any more.
    We contributed to the improvement of this library in the past. Since we're still using GTK-2,
    for now we're forced to use a _really ancient version_, which isn't available from the official
-   repositories -- you can find the original tarball and several Debian/Ubuntu packages in
-   our link:http://lumiera.org/debian/pool/experimental/g/gdl/[Lumiera package repository] though.]
+   repositories -- you can find the original tarball and several Debian/Ubuntu packages in our
+   link:http://lumiera.org/debian/pool/experimental/g/gdl/[Lumiera package repository] though.]
 
 

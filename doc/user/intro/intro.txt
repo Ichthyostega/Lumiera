@@ -2,7 +2,7 @@ Lumiera (as seen) from Outer Space
 ==================================
 :Author: Lumiera_Core_Developers
 :Date: Winter 2012
- 
+:toc:
 
 ******************************************************************************
 .abstract
@@ -20,9 +20,7 @@ providing potential users with sufficient insight into the tools and technology
 behind Lumiera to start working with Lumiera quickly.
 ******************************************************************************
 
-// all things starting with '//' are asciidoc comments
-// and drafts/notes while
-// working on this document
+
 
 .About this Document
 Lumiera is innovative video editing software, still under active development

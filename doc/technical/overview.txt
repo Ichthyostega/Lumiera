@@ -1,6 +1,8 @@
 Lumiera: The Inner Core
 =======================
-
+:Author: Lumiera_Core_Developers
+:Date: Winter 2012
+:toc:
 
 [abstract]
 ******************************************************************************
