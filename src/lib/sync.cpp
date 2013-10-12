@@ -37,7 +37,6 @@ namespace sync {
   namespace { // private pthread attributes
     
     pthread_mutexattr_t attribute_;
-    pthread_once_t is_init_ = PTHREAD_ONCE_INIT;
     
     void
     initAttribute()
@@ -50,7 +49,8 @@ namespace sync {
     inline pthread_mutexattr_t*
     recursive_flag()
     {
-      pthread_once (&is_init_, initAttribute);
+      static pthread_once_t _is_init_sync_mutex_attribute_(PTHREAD_ONCE_INIT);
+      pthread_once (&_is_init_sync_mutex_attribute_, initAttribute);
       return &attribute_;
     }
   }
