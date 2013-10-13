@@ -40,7 +40,7 @@ namespace test{
   namespace { // private test setup...
     
                              /* WARNING: memory hungry */
-    const uint NUM_THREADS = 40;
+    const uint NUM_THREADS = 100;
     const uint MAX_RAND    = 100*1000;
     
     inline bool
@@ -148,9 +148,12 @@ namespace test{
        * take a snapshot of the full ContextStack and then unwind.
        * Thus the captured numbers must from a decreasing sequence
        * of odd values.
-       * @warning this test case causes memory pressure.
-       *          The reason seems to be the frequent re-allocations
-       *          of the vector used to take the snapshots 
+       * @warning this test case seems to cause memory pressure.
+       *          When running the test suite with VSize limit 500MB,
+       *          we frequently got aborts even with 40 threads.
+       *          This is surprising, since all of the lists
+       *          generated in the individual threads are
+       *          of size below 20 elements. 
        */
       void
       verify_heavilyParallelUsage()

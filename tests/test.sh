@@ -83,10 +83,10 @@ LOGSUPPRESS='^\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}[:!] \(TRACE\|INFO\|NOTICE\|WARNI
 #config
 LIMIT_CPU=5
 LIMIT_TIME=10
-LIMIT_VSZ=524288
+LIMIT_VSZ=1048576
 LIMIT_VG_CPU=20
 LIMIT_VG_TIME=30
-LIMIT_VG_VSZ=524288
+LIMIT_VG_VSZ=1048576
 
 
 #configf HEAD~ Configuration Files; configuration files; define variables to configure the test
