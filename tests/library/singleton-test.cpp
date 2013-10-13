@@ -25,7 +25,7 @@
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
-#include "testtargetobj.hpp"
+#include "test-target-obj.hpp"
 #include "lib/singleton.hpp"
 
 #include <tr1/functional>
@@ -34,6 +34,7 @@
 
 using std::tr1::function;
 using boost::lexical_cast;
+using util::isSameObject;
 using util::_Fmt;
 using util::isnil;
 using std::string;
@@ -120,7 +121,7 @@ namespace test{
           TargetObj& t1 = instance();
           TargetObj& t2 = instance();
           
-          CHECK ( &t1 == &t2, "not a Singleton, got two different instances." );
+          CHECK (isSameObject(t1, t2), "not a Singleton, got two different instances." );
           
           cout << "calling a non-static method on the Singleton instance\n"
                << string (t1) << "\n";

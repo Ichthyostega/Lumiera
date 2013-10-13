@@ -1966,58 +1966,21 @@ Explicit placements are just created and never mutated, but copying and storage 
 It would thus be desirable to have a fixed-sized allocation, able to hold the placement body as well as the (fixed) locating pins inline.
 </pre>
 </div>
-<div title="Factories" modifier="Ichthyostega" created="200708100401" modified="201003160211" tags="impl discuss excludeMissing rewrite">
-<pre>We use Factories
-* for centralizing [[memory management|MemoryManagement]]
-* to support polymorphism (of course...)
+<div title="Factories" modifier="Ichthyostega" created="200708100401" modified="201310132317" tags="def Concepts" changecount="6">
+<pre>The use of factories separates object creation, configuration and lifecycle from the actual usage context. Hidden behind a factory function
+* memory management can be delegated to a centralised facility
+* complex internal details of service implementation can be turned into locally encapsulated problems
+* the actual implementation can be changed, e.g. by substituting a test mock
 
-!Requirements
-* request the actual placement/allocation from the backend
-* allways hand out a smart-pointer
-* encapsulate / make configurable the smart-pointer type
-* install a callback into the smart-pointer for destroying the resource.
-* redirect the destroying request to the backend
+!common usage pattern
+Within Lumiera, factories are frequently placed as a static field right into the //service interface.// Common variable names for such an embedded factory are {{{instance}}} or {{{create}}}.
+The actual fabrication function is defined as function operator -- this way, the use of the factory reads like a simple function call. At usage site, only the reference to the //interface// or //kind of service// is announced.
 
-!Implementation Questions
-* how much genericity? (Ichthyo is rather inclined not to overdo this one. Often it is preferable to have repeated implementations follow a well known pattern, if this leads to short and simple implementations, while the complete general solution will be much more contrived).
-* how to specify the actual type needed?
-* how to implement the cases where a subtype needs to be selected (abstract factory pattern). Embody this into the Factory, pass it in as a Strategy or treat the Factory just as a simple service taking an explicit type-ID and providing the new object?
-
-!!chosen design
-My main goal is to have an easy-to-use interface for the implementer of individual classes using this factory mechanism. The intended use should mimic the standard use of operator new, and at the same time there should be a possibility to configure »real« Factory behaviour in.
-
-For this reason I make Factory a Functor, so it can be incorporated as a member into another class, while still looking like a function call to the client code. The users of this factory template typically either parametrize it with existing smart-pointer types, or they may chose to create a specialized Factory derived from this Factory template. After typically hiding this configuration behind a typedef, the user adds a static field to the class intended to use the Factory and initializes this field with the concrete Factory (this may pass internal ~IDs to the constructor of the Factory and from there on to the underlying Allocator).
-{{{
-#include &quot;common/factory.hpp&quot;
-
-  class Product
-    {
-      int wow_;
-
-    public:
-      typedef lumiera::factory::RefcntFactory&lt;Product&gt; Factory;
-      static Factory create;
-      
-      Product() : wow_(42) {} ;
-    };
-  
-  /** storage for a static Factory instance 
-   *  for creating refcounting Ptrs to Product objects 
-   */
-  Product::Factory Product::create;  // &lt;----note this is a ctor call
-}}}
-Now, the clients of {{{class Product}}} can create ref-counting pointers to Product-objects by doing a fully qualified {{{create()}}} functor call:
-{{{
-  std::tr1::shared_ptr&lt;Product&gt; huii = Product::create ();  // &lt;----will invoke the default Product() ctor 
-  std::tr1::shared_ptr&lt;Product&gt; pfuii = huii;
-}}}
-Some further details
-* the product class (or base class) cares for using an custom allocator via an overloaded {{{operator new(size_t)}}} if applicable.
-* thus, when Functor or any derived class issues a new XX(), our custom Allocator gains control
-* the Functor-behaviour relies on a custom {{{operator()}}} which can be overridden in derived classes to take various parameter lists.
-* additionally, such a Factory class derived from Functor can do specific magic and e.g. create some subclass
-* and, as the created smart-pointer is a template template parameter, such a custom Functor can create all sorts of Proxies, wrappers and the like
-* a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
+!flavours
+* A special kind of factory used at various places is the ''singleton'' factory for access to application wide services and facade interfaces. All singleton factories for the same target type share a single instance of the target, which is created lazily on first usage. Actually, this is our very special version of [[dependency injection|DependencyFactory]]
+* whenever there is a set of objects of some kind, which require registration and connection to a central entity, client code gets (smart) handles, which are emitted by a factory, which connects to the respective manager for registration automatically.
+* to bridge the complexities of using an external (plug-in based) interface, proxy objects are created by a factory, wired to invoke the external calls to forward any client invoked operation.
+* the ''configurable factory'' is used to define a family of production lines, which are addressed by the client by virtue of some type-ID. Runtime data and criteria are used to form this type-ID and thus pick the suitable factory function
 </pre>
 </div>
 <div title="Feed" modifier="Ichthyostega" created="201202122115" modified="201202122123" tags="def Rendering">
@@ -2420,7 +2383,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * from [[play process|PlayProcess]] to [[frame dispatching|FrameDispatcher]] and [[node invocation|NodeInvocation]]
 </pre>
 </div>
-<div title="ImplementationGuidelines" modifier="Ichthyostega" created="200711210531" modified="201111261555" tags="Concepts design discuss">
+<div title="ImplementationGuidelines" modifier="Ichthyostega" created="200711210531" modified="201310132316" tags="Concepts design discuss" changecount="1">
 <pre>!Observations, Ideas, Proposals
 ''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the Proc-Layer code.
 * ''Inversion of Control'' is the leading design principle.
@@ -2429,8 +2392,8 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * (almost) never {{{delete}}} an object directly, use {{{new}}} only when some smart pointer is at hand.
 * clearly distinguish ''value objects'' from objects with ''reference semantics'', i.e. objects having a distict //object identity.//
 * when user/client code is intended to create reference-semantics objects, make the ctor protected and provide a factory member called {{{create}}} instead, returning a smart pointer
-* similarly, when we need just one instance of a given service, make the ctor protected and provide a factory member called {{{instance}}}, to be implemented by the lumiera::[[Singleton]] factory.
-* whenever possible, prefer this (lazy initialised [[Singleton]]) approach and avoid static initialisation magic
+* similarly, when we need just one instance of a given service, make the ctor protected and provide a factory member called {{{instance}}}, to be implemented by the [[dependency factory|DependencyFactory]].
+* whenever possible, prefer this (lazy initialised [[dependency|DependencyFactory]]) approach and avoid static initialisation magic
 * avoid doing anything non-local during the startup phase or shutdown phase of the application, especially avoid doing substantial work in any dtor.
 * avoid asuming anything that can't be enforced by types, interfaces or signatures; this means: be prepared for open possibilities
 * prefer {{{const}}} and initialisation code over assignment and active changes (inspired by functional programming)
@@ -2875,7 +2838,7 @@ Because we deliberately won't make any asumptions about the implementation libra
 It would be possible to circumvent this problem by requiring all supported implementation libraries to be known at compile time, because then the actual media implementation type could be linked to a facade type by generic programming. Indeed, Lumiera follows this route with regards to the possible kinds of MObject or [[Asset]] &amp;mdash; but to the contraty, for the problem in question here, being able to include support for a new media data type just by adding a plugin by far outweights the benefits of compile-time checked implementation type selection. So, as a consequence of this design decision we //note the possibility of the media file type discovery code to be misconfigured// and select the //wrong implementation library at runtime.// And thus the render engine needs to be prepared for the source reading node of any pipe to flounder completely, and protect the rest of the system accordingly
 </pre>
 </div>
-<div title="MemoryManagement" modifier="Ichthyostega" created="200708100225" modified="201003160208" tags="impl decision rewrite">
+<div title="MemoryManagement" modifier="Ichthyostega" created="200708100225" modified="201310120030" tags="impl decision rewrite" changecount="2">
 <pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same level of performance, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
 
 !Problems
@@ -2885,7 +2848,7 @@ It would be possible to circumvent this problem by requiring all supported imple
 !C++ solution
 First of all -- this doesn't concern //every// allocation. It rather means there are certain //dangerous areas// which need to be identified. Anyhow, instead of carrying inherent complexities of the problem into the solution, we should rather look for  common solution pattern(s) which help factoring out complexity.
 
-For the case here in question this seems to be the ''resource allocation is construction'' pattern. Which boils down to basically never using bare pointers when concerned with ownership. Instead, ownership should be handled by smart-pointers.
+For the case here in question this seems to be the __R__esource __A__llocation __I__s __I__nitialisation pattern (''RAII''). Which boils down to basically never using bare pointers when concerned with ownership. Client code allways gets to use a wrapper object, which cannot be obtained unless going through some well defined construction site. As an extension to the baisc RAII pattern, C++ allows us to build //smart wrapper objects//, thereby delegating any kind of de-registration or resource freeing automatically. This usage pattern doesn't necessarily imply (and in fact isn't limited to) just ref-counting. 
 
 !!usage scenarios
 # __existence is being used__: Objects just live for being referred to in a object network. In this case, use refcounting smart-pointers for every ref. (note: problem with cyclic refs)
@@ -2905,7 +2868,7 @@ For the case here in question this seems to be the ''resource allocation is cons
 * the [[sequences|Sequence]] and the defined [[assets|Asset]] belong together to one [[Session]]. If the Session is closed, this means a internal shutdown of the whole ProcLayer, i.e. closing of all GUI representations and terminating all render processes. If these calles are implemented as blocking operations, we can assert that as long as any GUI representation or any render process is running, there is a valid session and model.
 
 !using Factories
-And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
+And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Generally speaking, client code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in handy. Questions of setup and lifecycle should allways be delegated, typically through the usage of some [[factory|Factories]], which might return the product conveniently wrapped into a RAII style handle. Memory allocation is crucial for performance, and needs to be adapted to the actual platform -- which is impossible unless abstracted and treated as a separate concern.
 </pre>
 </div>
 <div title="MetaAsset" modifier="Ichthyostega" created="201012290320" modified="201101151026" tags="def">

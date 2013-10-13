@@ -47,30 +47,35 @@ namespace test{
    */
   class TestSingletonO
     {
-      int callCnt;
-      Symbol typid;
-      format msg;
+      int callCnt_;
+      Symbol typid_;
+      format msg_;
       
     public:
       TestSingletonO(Symbol ty="TestSingletonO")
-          : callCnt (0), typid(ty), msg ("%s::doIt() call=%d\n")
-      {
-        TRACE (test, "ctor %s", typid.c());
-      }
-      virtual ~TestSingletonO()
-      {
-        TRACE (test, "dtor %s", typid.c());
-      }
+        : callCnt_(0)
+        , typid_(ty)
+        , msg_("%s::doIt() call=%d\n")
+        {
+          TRACE (test, "ctor %s", typid_.c());
+        }
+      
+      virtual
+     ~TestSingletonO()
+        {
+          TRACE (test, "dtor %s", typid_.c());
+        }
       
       void doIt ()
-      {
-        ++callCnt;
-        cout << msg % typid % callCnt;
-      }
+        {
+          ++callCnt_;
+          cout << msg_ % typid_ % callCnt_;
+        }
+      
       int getCnt ()
-      {
-        return callCnt;
-      }
+        {
+          return callCnt_;
+        }
       
     };
   
@@ -80,8 +85,7 @@ namespace test{
    */
   struct Mock_1 : TestSingletonO
     {
-      Mock_1() : TestSingletonO("Mock_1")
-      {};
+      Mock_1() : TestSingletonO("Mock_1") { };
     };
   
   /**
@@ -89,8 +93,7 @@ namespace test{
    */
   struct Mock_2 : TestSingletonO
     {
-      Mock_2() : TestSingletonO("Mock_2")
-      {};
+      Mock_2() : TestSingletonO("Mock_2") { };
     };
   
   

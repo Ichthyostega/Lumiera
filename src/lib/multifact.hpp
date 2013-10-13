@@ -21,7 +21,7 @@
 */
 
 /** @file multifact.hpp
- ** Framework for building a configurable factory, to generae families of related objects.
+ ** Framework for building a configurable factory, to generate families of related objects.
  ** These building blocks are targeted towards the "classical" factory situation: obtaining
  ** objects of various kinds, which are related somehow (usually through an common interface).
  ** The creation of these objects might be non-trivial, while the number of flavours to be
@@ -51,7 +51,6 @@
  ** @see multifact-test.cpp
  ** @see multifact-argument-test.cpp
  ** @see SingletonFactory
- ** @see lib::factory::Factory
  */
 
 

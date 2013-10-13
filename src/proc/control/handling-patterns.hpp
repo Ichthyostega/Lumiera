@@ -26,7 +26,7 @@
  ** There is a small number of different possibilities to handle execution
  ** and UNDO of proc-Layer commands. Each of these is defined as a subclass
  ** in this header and then hard wired into a small table. Handling patterns
- ** are stateless singleton objects, thus we build using SingletonSubclass
+ ** are stateless singleton objects, thus we build using multiple Singleton
  ** factory objects and configure them hard wired with the respective
  ** implementation classes. The index positions in this table match
  ** the sequence within the enum HandlingPattern::ID; all of this

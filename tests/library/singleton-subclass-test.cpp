@@ -26,7 +26,7 @@
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
-#include "testtargetobj.hpp"
+#include "test-target-obj.hpp"
 #include "lib/singleton-subclass.hpp"
 
 #include <boost/lexical_cast.hpp>

@@ -1,5 +1,5 @@
 /*
-  TESTTARGETOBJ.hpp  -  a test (stub) target object for testing the factories
+  TEST-TARGET-OBJ.hpp  -  a test (stub) target object for testing the factories
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,28 +21,26 @@
 */
 
 
-#ifndef LUMIERA_TEST_TESTTARGETOBJ_H
-#define LUMIERA_TEST_TESTTARGETOBJ_H
+#ifndef LIBRARY_TEST_TARGET_OBJ_H
+#define LIBRARY_TEST_TARGET_OBJ_H
 
 
 #include "lib/test/run.hpp"
-//#include "lib/util.hpp"
+#include "lib/format-string.hpp"
 
-#include <boost/algorithm/string/join.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/format.hpp>
 #include <iostream>
-
-using boost::algorithm::join;
-using boost::lexical_cast;
-using boost::format;
-using std::string;
-using std::cout;
+#include <string>
 
 
 namespace lib {
 namespace test{
 
+  using util::_Fmt;
+  using boost::lexical_cast;
+  using std::string;
+  using std::cout;
+  
   /**
    * Target object to be created by Test-Factories or as Singleton.
    * Allocates a variable amount of additional heap memory
@@ -51,28 +49,28 @@ namespace test{
   class TestTargetObj
     {
       uint cnt_;
-      string* heapData_; 
-      string* heapArray_; 
+      string* heapData_;
+      string* heapArray_;
       
     public:
       TestTargetObj(uint num);
-      ~TestTargetObj()  throw();
+      virtual ~TestTargetObj();
       
-      operator string () const;
+      virtual operator string () const;
     };
   
   
   
   inline
   TestTargetObj::TestTargetObj(uint num)
-    : cnt_ (num),
-      heapData_ (new string(num,'*')),
-      heapArray_ (new string[num])
-  {
-    for (uint i=0; i<cnt_; ++i)
-      heapArray_[i] = lexical_cast<string>(i);
-    cout << format("ctor TargetObj(%i) successful\n") % cnt_;
-  }
+    : cnt_ (num)
+    , heapData_ (new string(num,'*'))
+    , heapArray_ (new string[num])
+    {
+      for (uint i=0; i<cnt_; ++i)
+        heapArray_[i] = lexical_cast<string>(i);
+      cout << _Fmt("ctor TargetObj(%i) successful\n") % cnt_;
+    }
   
   
   inline
@@ -80,7 +78,7 @@ namespace test{
   {
     delete heapData_;
     delete[] heapArray_;
-    cout << format("dtor ~TargetObj(%i) successful\n") % cnt_;
+    cout << _Fmt("dtor ~TargetObj(%i) successful\n") % cnt_;
   }
   
   
@@ -93,11 +91,8 @@ namespace test{
       array_contents += heapArray_[i]+",";
     array_contents+="}";
     
-    return str (format(".....TargetObj(%1%): data=\"%2%\", array[%1%]=%3%")
-                      % cnt_ 
-                      % *heapData_ 
-                      % array_contents
-               );
+    return _Fmt(".....TargetObj(%1%): data=\"%2%\", array[%1%]=%3%")
+                      % cnt_          % *heapData_  % array_contents;
   }
   
   
