@@ -87,7 +87,13 @@ namespace test{
       virtual void
       run (Arg)
         {
-          UNIMPLEMENTED ("dependency creation");
+          verify_defaultSingletonCreation();
+          verify_renewal();
+          verify_SubclassCreation();
+          verify_FactoryDefinition_is_sticky();
+          verify_customFactory();
+          verify_temporaryReplacement();
+          verify_automaticReplacement();
         }
       
       
