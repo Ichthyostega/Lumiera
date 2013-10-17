@@ -213,7 +213,7 @@ namespace test{
           CHECK(!isSameObject (replacement, special() ));
           CHECK(!isSameObject (replacement, custom()  ));
           
-          genericAccessor.injectReplacement (NULL);
+          genericAccessor.dropReplacement();
           
           Sub& nextFetch = genericAccessor();
           CHECK (isSameObject (original, nextFetch));

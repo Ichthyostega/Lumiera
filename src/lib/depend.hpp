@@ -60,7 +60,7 @@ namespace lib {
   template<class SI>
   class Depend
     {
-      typedef ClassLock<SI> ThreadLock;
+      typedef ClassLock<SI> SyncLock;
       typedef DependencyFactory<SI> Factory;
       
       static SI* volatile instance;
@@ -78,7 +78,7 @@ namespace lib {
         {
           if (!instance)
             {
-              ThreadLock guard;
+              SyncLock guard;
               
               if (!instance)
                 instance = factory.buildInstance();
@@ -90,7 +90,7 @@ namespace lib {
       void
       shutdown()
         {
-          ThreadLock guard;
+          SyncLock guard;
           
           factory.deconfigure (instance);
           instance = NULL;
@@ -99,25 +99,26 @@ namespace lib {
       void
       injectReplacement (SI* mock)
         {
-          if (mock)
-            {
-              factory.takeOwnership (mock);   // EX_SANE
-              
-              ThreadLock guard;
-              factory.shaddow (instance);
-              instance = mock;
-            }
-          else
-            {
-              factory.discardMock (instance); // EX_FREE
-              
-              ThreadLock guard;
-              instance = factory.restore ();  // EX_SANE
-            }
+          REQUIRE (mock);
+          factory.takeOwnership (mock);   // EX_SANE
+          
+          SyncLock guard;
+          factory.shaddow (instance);     // EX_FREE
+          instance = mock;
         }
       
-      Depend ();
-      Depend (typename Factory::Constructor ctor);
+      void
+      dropReplacement()
+        {
+          SyncLock guard;
+          factory.discardMock (instance); // EX_FREE
+          instance = factory.restore ();  // EX_SANE
+        }
+      
+      
+      typedef typename Factory::InstanceConstructor Constructor;
+      
+      Depend (Constructor ctor = buildSingleton<SI>());
       
     private:
     };
