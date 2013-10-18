@@ -123,15 +123,14 @@ namespace lib {
         }
       
      ~DelStash ()
-        {
-          try { killAll(); }
-          
-          catch(...)
-            {
-              Symbol errID = lumiera_error();
-              WARN (memory, "Problems on de-allocation: %s", errID.c());
-            }
-        }
+        try { killAll(); }
+        
+        catch(...)
+          {
+            Symbol errID = lumiera_error();
+            WARN (memory, "Problems on de-allocation: %s", errID.c());
+          }
+      
       
       size_t
       size ()  const

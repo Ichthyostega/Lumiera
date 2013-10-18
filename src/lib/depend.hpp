@@ -74,10 +74,10 @@ namespace lib {
       
       
     public:
-      /** Interface to be used by SingletonFactory's clients.
-       *  Manages internally the instance creation, lifecycle
-       *  and access handling in a multithreaded context.
-       *  @return "the" single instance of class S
+      /** Interface to be used by clients to access the service instance.
+       *  Manages the instance creation, lifecycle and access in multithreaded context.
+       *  @return instance of class SI. When used in default configuration,
+       *          this service instance is a singleton
        */
       SI&
       operator() ()
@@ -94,8 +94,20 @@ namespace lib {
         }
       
       
+      
       typedef DependencyFactory::InstanceConstructor Constructor;
       
+      /**
+       * optionally, the instance creation process can be configured
+       * \em once per type. By default, a singleton instance will be created.
+       * Installing another factory function enables other kinds of dependency injection;
+       * this configuration must be done prior to any use the dependency factory.
+       * @remark typically the \c Depend<TY> factory will be placed into a static variable,
+       *         embedded into some service interface type. In this case, actual storage
+       *         for this static variable needs to be allocated within some translation unit.
+       *         And this is the point where this ctor will be invoked, in the static
+       *         initialisation phase of the respective translation unit (*.cpp)
+       */
       Depend (Constructor ctor = buildSingleton<SI>())
         {
           factory.installConstructorFunction (ctor);
@@ -104,8 +116,20 @@ namespace lib {
       // standard copy operations applicable
       
       
+      
       /* === Management / Test support interface === */
       
+      /** disable and destroy the actual service instance explicitly.
+       *  Next access will re-invoke the factory to create a new instance.
+       * @warning this is a very dangerous operation. Concurrent accesses
+       *          might get NULL or even a reference to the old instance,
+       *          which, worse still, resides typically in the same memory
+       *          location as the new instance. The only way to prevent this
+       *          would be to synchronise any \em access (which is expensive)
+       *          Thus it is the client's duty to ensure there is no such
+       *          concurrent access, i.e. all clients of the old instance
+       *          should be disabled prior to invoking this function.
+       */
       static void
       shutdown()
         {
@@ -115,6 +139,14 @@ namespace lib {
           instance = NULL;
         }
       
+      /** temporarily shadow the service instance with the given replacement.
+       *  The purpose of this operation is to support unit testing.
+       * @throw error::State in case there is already an installed replacement
+       * @param mock heap allocated instance of the replacement (mock).
+       * @warning not threadsafe. Same considerations as for \c shutdown() apply
+       * @note ownership of mock will be transferred; the mock instance
+       *       will be destroyed automatically when deconfigured.
+       */
       static void
       injectReplacement (SI* mock)
         {
@@ -133,6 +165,7 @@ namespace lib {
           factory.restore (instance);     // EX_FREE
         }
     };
+  
   
   
   // Storage for SingletonFactory's static fields...
