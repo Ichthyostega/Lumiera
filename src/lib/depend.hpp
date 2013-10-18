@@ -38,6 +38,13 @@ This code is heavily inspired by
 #include "lib/sync-classlock.hpp"
 #include "lib/dependency-factory.hpp"
 
+#include "lib/meta/duck-detector.hpp"   ////TODO move in separate header
+
+#include <boost/noncopyable.hpp>        ////TODO move in separate header
+#include <boost/static_assert.hpp>      ////TODO move in separate header
+#include <boost/utility/enable_if.hpp>  ////TODO move in separate header
+
+
 namespace lib {
   
   /**
@@ -86,7 +93,20 @@ namespace lib {
           return *instance;
         }
       
-      void
+      
+      typedef DependencyFactory::InstanceConstructor Constructor;
+      
+      Depend (Constructor ctor = buildSingleton<SI>())
+        {
+          factory.installConstructorFunction (ctor);
+        }
+      
+      // standard copy operations applicable
+      
+      
+      /* === Management / Test support interface === */
+      
+      static void
       shutdown()
         {
           SyncLock guard;
@@ -95,7 +115,7 @@ namespace lib {
           instance = NULL;
         }
       
-      void
+      static void
       injectReplacement (SI* mock)
         {
           REQUIRE (mock);
@@ -106,22 +126,12 @@ namespace lib {
           instance = mock;
         }
       
-      void
+      static void
       dropReplacement()
         {
           SyncLock guard;
-          factory.restore (instance); // EX_FREE
+          factory.restore (instance);     // EX_FREE
         }
-      
-      
-      typedef DependencyFactory::InstanceConstructor Constructor;
-      
-      Depend (Constructor ctor = buildSingleton<SI>())
-        {
-          factory.installConstructorFunction (ctor);
-        }
-      
-      // standard copy operations applicable
     };
   
   
@@ -133,6 +143,77 @@ namespace lib {
   DependencyFactory Depend<SI>::factory;
   
   
+  
+  
+  namespace { ///< details: inject a mock automatically in place of a singleton
+    
+    using boost::enable_if;
+    using lib::meta::Yes_t;
+    using lib::meta::No_t;
+    
+    /**
+     * Metafunction: does the Type in question
+     * give us a clue about what service interface to use?
+     */
+    template<class MOCK>
+    class defines_ServiceInterface
+      {
+        META_DETECT_NESTED  (ServiceInterface);
+        
+      public:
+        enum{ value = HasNested_ServiceInterface<MOCK>::value
+            };
+      };
+    
+    
+    /**
+     * Policy-Trait: determine the access point to install the mock.
+     * @note either the mock service implementation needs to provide
+     *       explicitly a typedef for the ServiceInterface, or we're
+     *       just creating a separate new instance of the singleton service,
+     *       while shadowing (but not destroying) the original instance.
+     */
+    template<class I, class YES =void>
+    struct ServiceInterface
+      {
+        typedef I Type;
+      };
+    
+    
+    template<class MOCK>
+    struct ServiceInterface<MOCK, typename enable_if< defines_ServiceInterface<MOCK> >::type>
+      {
+        typedef typename MOCK::ServiceInterface Type;
+      };
+    
+  }//(End) mock injection details
+  
+  
+  /**
+   * Scoped object for installing/deinstalling a mocked service automatically.
+   * Placing a suitably specialised instance of this template into a local scope
+   * will inject the corresponding mock installation and remove it when the
+   * control flow leaves this scope.
+   * @param TYPE the concrete mock implementation type to inject. It needs to
+   *        be default constructible. If TYPE is a subclass of the service interface,
+   *        it needs to expose a typedef \c ServiceInterface
+   */
+  template<class TYPE>
+  struct Use4Test
+    : boost::noncopyable
+    {
+      typedef typename ServiceInterface<TYPE>::Type Interface;
+      
+      Use4Test()
+        {
+          Depend<Interface>::injectReplacement (new TYPE);
+        }
+      
+     ~Use4Test()
+        {
+          Depend<Interface>::dropReplacement();
+        }
+    };
   
   
 } // namespace lib

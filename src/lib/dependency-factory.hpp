@@ -34,7 +34,7 @@
 namespace lib {
   
   /** 
-   * Factory to generate and manage service objects classified by type. 
+   * Factory to generate and manage service objects classified by type.
    */
   class DependencyFactory
     {

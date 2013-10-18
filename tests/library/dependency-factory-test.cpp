@@ -119,7 +119,7 @@ namespace test{
           uint id1 = accessor1().instanceID_;
           CHECK (id1 == accessor2().instanceID_);
           
-          accessor1.shutdown();
+          Depend<Sub>::shutdown();
           
           Sub & o2 = accessor2();
           uint id2 = accessor2().instanceID_;
@@ -154,7 +154,7 @@ namespace test{
           SubSub& oSub = otherSpecialAccessor();
           CHECK ( INSTANCEOF (SubSubSub, &oSub));
           
-          otherSpecialAccessor.shutdown();
+          Depend<SubSub>::shutdown();
           
           Depend<SubSub> yetAnotherSpecialAccessor;
           
@@ -166,7 +166,7 @@ namespace test{
       void
       verify_customFactory()
         {
-          Depend<SubSubSub> customisedAccessor(useFactory (&customFactoryFunction));
+          Depend<SubSubSub> customisedAccessor(&customFactoryFunction);
           Depend<SubSub>    otherSpecialAccessor;
           
           SubSub&     oSub = otherSpecialAccessor();
@@ -180,7 +180,7 @@ namespace test{
           CHECK (MAX_ID + 10      == oSubS.instanceID_);
         }
       
-      static SubSubSub*
+      static void*
       customFactoryFunction (void)
         {
           SubSubSub* newObject = static_cast<SubSubSub*> (DependencyFactory::createSingletonInstance<SubSubSub>());
@@ -193,11 +193,13 @@ namespace test{
       void
       verify_temporaryReplacement()
         {
-          Depend<Sub> genericAccessor;
+          typedef Depend<Sub> GenericAccessor;
+          
+          GenericAccessor genericAccessor;
           Sub& original = genericAccessor();
           uint oID = original.instanceID_;
           
-          genericAccessor.injectReplacement (new SubSubSub);
+          GenericAccessor::injectReplacement (new SubSubSub);
           
           Sub& replacement = genericAccessor();
           uint repID = replacement.instanceID_;
@@ -215,7 +217,7 @@ namespace test{
           CHECK(!isSameObject (replacement, special() ));
           CHECK(!isSameObject (replacement, custom()  ));
           
-          genericAccessor.dropReplacement();
+          GenericAccessor::dropReplacement();
           
           Sub& nextFetch = genericAccessor();
           CHECK (isSameObject (original, nextFetch));
@@ -248,6 +250,16 @@ namespace test{
             CHECK (repID == otherAccess.instanceID_);
             CHECK (repID == replacement.instanceID_);
             CHECK (  oID == original.instanceID_);
+            
+             // verify the instrumentation indeed targeted the generic accessor,
+            //  and *not* an accessor of the sub type, i.e Depend<SubSub>
+            Depend<SubSub> genericSubTypeAccessor;
+            SubSub& subTypeAccess = genericSubTypeAccessor();
+            CHECK ( INSTANCEOF (SubSub, &subTypeAccess));
+            CHECK (!isSameObject (replacement, subTypeAccess));
+            CHECK (!isSameObject (original,    subTypeAccess));
+            CHECK (repID != subTypeAccess.instanceID_);
+            CHECK (  oID != subTypeAccess.instanceID_);
           }
           
           Sub& nextFetch = genericAccessor();
