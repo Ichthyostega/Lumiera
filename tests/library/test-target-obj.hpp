@@ -74,7 +74,7 @@ namespace test{
   
   
   inline
-  TestTargetObj::~TestTargetObj()  throw()
+  TestTargetObj::~TestTargetObj()   ///< EX_FREE
   {
     delete heapData_;
     delete[] heapArray_;

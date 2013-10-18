@@ -46,7 +46,7 @@ namespace test{
     struct Sub
       : TestTargetObj
       {
-        static uint created = 0;
+        static uint created;
         uint instanceID_;
         
         Sub()
@@ -60,6 +60,8 @@ namespace test{
                  + TestTargetObj::operator string();
           }
       };
+    uint Sub::created = 0;
+    
     
     struct SubSub
       : Sub
@@ -181,7 +183,7 @@ namespace test{
       static SubSubSub*
       customFactoryFunction (void)
         {
-          SubSubSub* newObject = DependencyFactory::createSingleton<SubSubSub>();
+          SubSubSub* newObject = static_cast<SubSubSub*> (DependencyFactory::createSingletonInstance<SubSubSub>());
           newObject->instanceID_ = MAX_ID + 10;
           return newObject;
         }

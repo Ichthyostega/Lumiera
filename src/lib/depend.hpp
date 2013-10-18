@@ -35,8 +35,8 @@ This code is heavily inspired by
 #define LIB_DEPEND_H
 
 
-#include "lib/nobug-init.hpp"
 #include "lib/sync-classlock.hpp"
+#include "lib/dependency-factory.hpp"
 
 namespace lib {
   
@@ -52,7 +52,7 @@ namespace lib {
    *   constitute a memory barrier, such as to force any memory writes happening \em within
    *   the singleton ctor to be flushed and visible to other threads when releasing the lock?
    *   To my understanding, the answer is yes. See
-   *   [posix](http://www.opengroup.org/onlinepubs/000095399/basedefs/xbd_chap04.html#tag_04_10)
+   *   [POSIX](http://www.opengroup.org/onlinepubs/000095399/basedefs/xbd_chap04.html#tag_04_10)
    * @param SI the class of the Singleton instance
    * @param Create policy defining how to create/destroy the instance
    * @param Life policy defining how to manage Singleton Lifecycle
@@ -61,10 +61,9 @@ namespace lib {
   class Depend
     {
       typedef ClassLock<SI> SyncLock;
-      typedef DependencyFactory<SI> Factory;
       
       static SI* volatile instance;
-      static Factory       factory;
+      static DependencyFactory factory;
       
       
     public:
@@ -81,7 +80,7 @@ namespace lib {
               SyncLock guard;
               
               if (!instance)
-                instance = factory.buildInstance();
+                instance = static_cast<SI*> (factory.buildInstance());
             }
           ENSURE (instance);
           return *instance;
@@ -111,22 +110,27 @@ namespace lib {
       dropReplacement()
         {
           SyncLock guard;
-          factory.discardMock (instance); // EX_FREE
-          instance = factory.restore ();  // EX_SANE
+          factory.restore (instance); // EX_FREE
         }
       
       
-      typedef typename Factory::InstanceConstructor Constructor;
+      typedef DependencyFactory::InstanceConstructor Constructor;
       
-      Depend (Constructor ctor = buildSingleton<SI>());
+      Depend (Constructor ctor = buildSingleton<SI>())
+        {
+          factory.installConstructorFunction (ctor);
+        }
       
-    private:
+      // standard copy operations applicable
     };
   
   
   // Storage for SingletonFactory's static fields...
   template<class SI>
-    SI* volatile Depend<SI>::instance;
+  SI* volatile Depend<SI>::instance;
+  
+  template<class SI>
+  DependencyFactory Depend<SI>::factory;
   
   
   
