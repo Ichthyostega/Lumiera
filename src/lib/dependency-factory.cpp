@@ -84,15 +84,34 @@ namespace lib {
     
     
     
-//    struct TemporarySwitch
-//      {
-//        void*           originalInstance;
-//        InstanceConstructor originalCtor;
-//      };
-//    
-//    static TemporarySwitch temporarySwitch;
-
-
+    class TemporaryShadowedInstanceFactory
+      : boost::noncopyable
+      {
+        typedef DependencyFactory::InstanceConstructor Ctor;
+        
+        void* originalInstance_;
+        Ctor  originalCtor_;
+        
+      public:
+        TemporaryShadowedInstanceFactory(void* instance, Ctor ctor)
+          : originalInstance_(instance)
+          , originalCtor_(ctor)
+          { }
+        
+        void*
+        constructorInvocation()
+          {
+            REQUIRE (originalCtor_);
+            
+            if (!originalInstance_)
+              return originalCtor_();
+            
+            void* existingInstance = originalInstance_;
+            originalInstance_ = NULL;
+            return existingInstance;
+          }
+      };
+      
   }
   
   
