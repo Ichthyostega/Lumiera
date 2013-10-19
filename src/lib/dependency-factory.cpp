@@ -28,12 +28,71 @@
 
 
 #include "lib/dependency-factory.hpp"
+#include "lib/del-stash.hpp"
 
 
 namespace lib {
   
+  namespace error = lumiera::error;
   
   namespace { // private implementation details...
+  
+    class AutoDestructor
+      {
+        DelStash destructionExecutor_;
+        static bool shutdownLock;
+        
+        
+        static AutoDestructor&
+        instance()
+          {
+            static AutoDestructor _instance_;
+            return _instance_;
+          }
+        
+       ~AutoDestructor()
+          {
+            shutdownLock = true;
+          }
+         
+        static void
+        __lifecycleCheck()
+          {
+            if (shutdownLock)
+              throw error::Fatal("Attempt to re-access a service, "
+                                 "while Application is already in shutdown"
+                                ,error::LUMIERA_ERROR_LIFECYCLE);
+          }
+        
+      public:
+        static void
+        schedule (void* object, DependencyFactory::KillFun customDeleter)
+          {
+            __lifecycleCheck();
+            instance().destructionExecutor_.manage (object, customDeleter);
+          }
+        
+        static void
+        kill (void* object)
+          {
+            __lifecycleCheck();
+            instance().destructionExecutor_.kill (object);
+          }
+      };
+    
+    bool AutoDestructor::shutdownLock = false;
+    
+    
+    
+//    struct TemporarySwitch
+//      {
+//        void*           originalInstance;
+//        InstanceConstructor originalCtor;
+//      };
+//    
+//    static TemporarySwitch temporarySwitch;
+
+
   }
   
   
@@ -41,5 +100,18 @@ namespace lib {
   /** */
   
   
+  /** */
+  void
+  DependencyFactory::deconfigure (void* existingInstance)
+  {
+    AutoDestructor::kill (existingInstance);
+  }
+  
+  void
+  DependencyFactory::scheduleDestruction (void* object, KillFun customDeleter)
+  {
+    AutoDestructor::schedule (object, customDeleter);
+  }
+
   
 }// lib

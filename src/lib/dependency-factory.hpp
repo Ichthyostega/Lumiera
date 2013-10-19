@@ -32,122 +32,62 @@
 #include "lib/error.hpp"
 //#include "lib/sync-classlock.hpp"
 
-#include "lib/del-stash.hpp"   ////////TODO
 
 namespace lib {
   
   namespace error = lumiera::error;
   
-  class AutoDestructor
-    {
-      typedef void KillFun(void*);
-      
-      DelStash destructionExecutor_;
-      static bool shutdownLock;
-      
-      static AutoDestructor&
-      instance()
-        {
-          static AutoDestructor _instance_;
-          return _instance_;
-        }
-      
-     ~AutoDestructor()
-        {
-          shutdownLock = true;
-        }
-       
-      static void
-      __lifecycleCheck()
-        {
-          if (shutdownLock)
-            throw error::Fatal("Attempt to re-access a service, "
-                               "while Application is already in shutdown"
-                              ,error::LUMIERA_ERROR_LIFECYCLE);
-        }
-      
-    public:
-      static void
-      schedule (void* object, KillFun* customDeleter)
-        {
-          __lifecycleCheck();
-          instance().destructionExecutor_.manage (object, customDeleter);
-        }
-      
-      static void
-      kill (void* object)
-        {
-          __lifecycleCheck();
-          instance().destructionExecutor_.kill (object);
-        }
-    };
-  bool AutoDestructor::shutdownLock = false;
   
-  
-  template<typename TAR>
-  struct InstanceHolder
-    : boost::noncopyable
-    {
-      
-      TAR*
-      buildInstance ()
-        {
-#if NOBUG_MODE_ALPHA
-          static uint callCount = 0;
-          ASSERT ( 0 == callCount++ );
-#endif
-          
-          // place new instance into embedded buffer
-          TAR* newInstance = new(buff_) TAR;
-          
-          try
-            {
-              AutoDestructor::schedule (newInstance, &destroy_in_place);
-              return newInstance;
-            }
-          
-          catch (std::exception& problem)
-            {
-              _kill_immediately (newInstance);
-              throw error::State (problem, "Failed to install a deleter function "
-                                           "for clean-up at application shutdown. ");
-            }
-          catch (...)
-            {
-              _kill_immediately (newInstance);
-              throw error::State ("Unknown error while installing a deleter function.");
-            }
-        }
-      
-    private:
-      /** storage for the service instance */
-      char buff_[sizeof(TAR)];
-      
-      
-      static void
-      destroy_in_place (void* pInstance)
-        {
-          if (!pInstance) return;
-          static_cast<TAR*> (pInstance) -> ~TAR();
-        }
-      
-      
-      static void
-      _kill_immediately (void* allocatedObject)
-        {
-          destroy_in_place (allocatedObject);
-          const char* errID = lumiera_error();
-          WARN (memory, "Failure in DependencyFactory. Error flag was: %s", errID);
-        }
-    };
-
-  
-  /** 
+  /**
    * Factory to generate and manage service objects classified by type.
    */
   class DependencyFactory
     {
     public:
+      typedef void* (*InstanceConstructor)(void);
+      typedef void  (*KillFun)            (void*);
+      
+      /** ensure initialisation by installing a default constructor function,
+       *  but don't change an explicitly installed different constructor function.
+       * @remark deliberately this DependencyFactory has no constructor to
+       *         initialise the object field \c ctorFunction_  to zero.
+       *         The reason is, in the intended usage scenario, the
+       *         DependencyFactory lives within a static variable,
+       *         which might be constructed in no defined order
+       *         in relation to the Depend<TY> instance.
+       */
+      void
+      ensureInitialisation (InstanceConstructor defaultCtor)
+        {
+          if (!ctorFunction_)
+            this->ctorFunction_ = defaultCtor;
+          ENSURE (ctorFunction_);
+        }
+      
+      
+      /** explicitly set up constructor function, unless already configured
+       *  In the default configuration, the template \c Depend<TY> installs a
+       *  builder function to create a singleton instance in static memory.
+       *  But specific instances might install e.g. a factory to create a
+       *  implementation defined subclass; this might also be the place
+       *  to hook in some kind of centralised service manager in future.
+       * @param ctor a function to be invoked to create a new service instance
+       * @throw error::Fatal when attempting to change an existing configuration.
+       */
+      void
+      installConstructorFunction (InstanceConstructor ctor)
+        {
+          if (ctorFunction_ && ctor != ctorFunction_)
+            throw error::Fatal ("DependencyFactory: attempt to change the instance builder function "
+                                "after-the-fact. Before this call, a different function was installed "
+                                "and possibly also used already. Hint: visit all code locations, which "
+                                "actually create an instance of the Depend<TY> template."
+                               ,error::LUMIERA_ERROR_LIFECYCLE);
+          this->ctorFunction_ = ctor;
+        }
+      
+      
+      
       /** invoke the installed ctor function */
       void*
       buildInstance()
@@ -156,41 +96,96 @@ namespace lib {
           return ctorFunction_();
         }
       
-      void
-      deconfigure (void* existingInstance)
-        {
-          AutoDestructor::kill (existingInstance);
-        }
+      void deconfigure (void* existingInstance);
+      
       
       template<class TAR>
-      void
-      takeOwnership (TAR* newInstance)
-        {
-          UNIMPLEMENTED("enrol existing instance and prepare deleter function");
-        }
+      void takeOwnership (TAR*);
+      
       
       template<class TAR>
-      void
-      restore (TAR* volatile & activeInstance)
-        {
-          UNIMPLEMENTED("disable and destroy temporary shadowing instance and restore the dormant original instance");
-        }
+      void shaddow (TAR* volatile & activeInstance, TAR* replacement);
       
       template<class TAR>
-      void
-      shaddow (TAR* volatile & activeInstance)
+      void restore (TAR* volatile & activeInstance);
+      
+      
+      
+      
+      /** hook to install a deleter function to clean up a service object.
+       *  The standard constructor function uses this hook to schedule the
+       *  destructor invocation on application shutdown; custom constructors
+       *  are free to use this mechanism (or care for clean-up otherwise)
+       * @see lib::DelStash
+       */
+      static void scheduleDestruction (void*, KillFun);
+      
+      
+      
+    private:
+      /** pointer to the concrete function
+       *  used for building new service instances */
+      InstanceConstructor ctorFunction_;
+      
+      
+      
+      template<typename TAR>
+      class InstanceHolder
+        : boost::noncopyable
         {
-          UNIMPLEMENTED("set up a temporary replacement, allowing to restore the original later");
-        }
+          /** storage for the service instance */
+          char buff_[sizeof(TAR)];
+          
+          
+          /** deleter function to invoke the destructor
+           *  of the embedded service object instance.
+           *  A pointer to this deleter function will be
+           *  enrolled for execution at application shutdown
+           */
+          static void
+          destroy_in_place (void* pInstance)
+            {
+              if (!pInstance) return;
+              static_cast<TAR*> (pInstance) -> ~TAR();
+            }
+          
+          static void
+          _kill_immediately (void* allocatedObject)
+            {
+              destroy_in_place (allocatedObject);
+              const char* errID = lumiera_error();
+              WARN (memory, "Failure in DependencyFactory. Error flag was: %s", errID);
+            }
+          
+          
+        public:
+          TAR*
+          buildInstance ()
+            {
+              // place new instance into embedded buffer
+              TAR* newInstance = new(buff_) TAR;
+              
+              try
+                {
+                  scheduleDestruction (newInstance, &destroy_in_place);
+                  return newInstance;
+                }
+              
+              catch (std::exception& problem)
+                {
+                  _kill_immediately (newInstance);
+                  throw error::State (problem, "Failed to install a deleter function "
+                                               "for clean-up at application shutdown.");
+                }
+              catch (...)
+                {
+                  _kill_immediately (newInstance);
+                  throw error::State ("Unknown error while installing a deleter function.");
+                }
+            }
+        };
       
       
-      typedef void* (*InstanceConstructor)(void);
-      
-      void
-      installConstructorFunction (InstanceConstructor ctor)
-        {
-          UNIMPLEMENTED("set up constructor function, unless already configured");
-        }
       
       template<class TAR>
       static void*
@@ -208,9 +203,58 @@ namespace lib {
         return & createSingletonInstance<TAR>;
       }
       
-    private:
-      InstanceConstructor ctorFunction_;
     };
+  
+  
+  namespace {
+    /** helper: destroy heap allocated object.
+     *  This deleter function is used to clean-up
+     *  a heap allocated mock object, which was installed
+     *  as a temporary replacement for some service,
+     *  typically during an unit test
+     */
+    template<class X>
+    inline void
+    releaseOnHeap (void* o)
+    {
+      if (!o) return;
+      X* instance = static_cast<X*> (o);
+      delete instance;
+    }
+  }
+  
+  
+  template<class TAR>
+  void
+  DependencyFactory::takeOwnership (TAR* newInstance)
+  {
+    scheduleDestruction (newInstance, &releaseOnHeap<TAR>);
+  }
+  
+  /**
+   * set up a temporary replacement, allowing to restore the original later
+   * @param activeInstance
+   * @param replacement
+   */
+  template<class TAR>
+  void
+  DependencyFactory::shaddow (TAR* volatile & activeInstance, TAR* replacement)
+  {
+    ctorFunction_ = 0;  /////TODO how to implement a functor without explicitly allocated storage??
+    activeInstance = replacement;
+  }
+  
+  /**
+   * disable and destroy temporary shadowing instance and restore the dormant original instance
+   * @param activeInstance
+   */
+  template<class TAR>
+  void
+  DependencyFactory::restore (TAR* volatile & activeInstance)
+  {
+    deconfigure (activeInstance);
+    activeInstance = NULL;
+  }
   
   
 } // namespace lib

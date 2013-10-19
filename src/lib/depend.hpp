@@ -97,18 +97,30 @@ namespace lib {
       
       typedef DependencyFactory::InstanceConstructor Constructor;
       
+      
+      /** default configuration of the dependency factory
+       * is to build a singleton instance on demand */
+      Depend()
+        {
+          factory.ensureInitialisation (buildSingleton<SI>());
+        }
+      
       /**
-       * optionally, the instance creation process can be configured
+       * optionally, the instance creation process can be explicitly configured
        * \em once per type. By default, a singleton instance will be created.
        * Installing another factory function enables other kinds of dependency injection;
        * this configuration must be done prior to any use the dependency factory.
+       * @param ctor a constructor function, which will be invoked on first usage.
+       * @note basically a custom constructor function is responsible to manage any
+       *         created service instances. Optionally it may install a deleter function
+       *         via \c DependencyFactory::scheduleDestruction(void*,KillFun)
        * @remark typically the \c Depend<TY> factory will be placed into a static variable,
-       *         embedded into some service interface type. In this case, actual storage
-       *         for this static variable needs to be allocated within some translation unit.
+       *         embedded into another type or interface. In this case, actual storage for
+       *         this static variable needs to be allocated within some translation unit.
        *         And this is the point where this ctor will be invoked, in the static
        *         initialisation phase of the respective translation unit (*.cpp)
        */
-      Depend (Constructor ctor = buildSingleton<SI>())
+      Depend (Constructor ctor)
         {
           factory.installConstructorFunction (ctor);
         }
@@ -151,18 +163,17 @@ namespace lib {
       injectReplacement (SI* mock)
         {
           REQUIRE (mock);
-          factory.takeOwnership (mock);   // EX_SANE
+          factory.takeOwnership (mock);      // EX_SANE
           
           SyncLock guard;
-          factory.shaddow (instance);     // EX_FREE
-          instance = mock;
+          factory.shaddow (instance, mock);  // EX_FREE
         }
       
       static void
       dropReplacement()
         {
           SyncLock guard;
-          factory.restore (instance);     // EX_FREE
+          factory.restore (instance);        // EX_FREE
         }
     };
   

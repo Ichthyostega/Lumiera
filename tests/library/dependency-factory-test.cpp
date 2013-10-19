@@ -183,9 +183,12 @@ namespace test{
       static void*
       customFactoryFunction (void)
         {
-          SubSubSub* newObject = static_cast<SubSubSub*> (DependencyFactory::createSingletonInstance<SubSubSub>());
-          newObject->instanceID_ = MAX_ID + 10;
-          return newObject;
+          static SubSubSub specialInstance;
+              // NOTE: the factory function is responsible
+              //       for managing the instance's lifecycle
+          
+          specialInstance.instanceID_ = MAX_ID + 10;
+          return &specialInstance;
         }
       
       
