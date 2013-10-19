@@ -82,41 +82,8 @@ namespace lib {
     
     bool AutoDestructor::shutdownLock = false;
     
-    
-    
-    class TemporaryShadowedInstanceFactory
-      : boost::noncopyable
-      {
-        typedef DependencyFactory::InstanceConstructor Ctor;
-        
-        void* originalInstance_;
-        Ctor  originalCtor_;
-        
-      public:
-        TemporaryShadowedInstanceFactory(void* instance, Ctor ctor)
-          : originalInstance_(instance)
-          , originalCtor_(ctor)
-          { }
-        
-        void*
-        constructorInvocation()
-          {
-            REQUIRE (originalCtor_);
-            
-            if (!originalInstance_)
-              return originalCtor_();
-            
-            void* existingInstance = originalInstance_;
-            originalInstance_ = NULL;
-            return existingInstance;
-          }
-      };
-      
   }
   
-  
-  
-  /** */
   
   
   /** */
@@ -126,6 +93,12 @@ namespace lib {
     AutoDestructor::kill (existingInstance);
   }
   
+  /** hook to install a deleter function to clean up a service object.
+   *  The standard constructor function uses this hook to schedule the
+   *  destructor invocation on application shutdown; custom constructors
+   *  are free to use this mechanism (or care for clean-up otherwise)
+   * @see lib::DelStash
+   */
   void
   DependencyFactory::scheduleDestruction (void* object, KillFun customDeleter)
   {

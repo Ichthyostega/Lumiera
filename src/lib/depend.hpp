@@ -40,8 +40,8 @@ This code is heavily inspired by
 
 #include "lib/meta/duck-detector.hpp"   ////TODO move in separate header
 
+#include <boost/scoped_ptr.hpp>         ////TODO move in separate header
 #include <boost/noncopyable.hpp>        ////TODO move in separate header
-#include <boost/static_assert.hpp>      ////TODO move in separate header
 #include <boost/utility/enable_if.hpp>  ////TODO move in separate header
 
 
@@ -151,29 +151,24 @@ namespace lib {
           instance = NULL;
         }
       
-      /** temporarily shadow the service instance with the given replacement.
+      /** temporarily replace the service instance.
        *  The purpose of this operation is to support unit testing.
-       * @throw error::State in case there is already an installed replacement
-       * @param mock heap allocated instance of the replacement (mock).
+       * @param mock reference to an existing service instance (mock).
+       * @return reference to the currently active service instance.
        * @warning not threadsafe. Same considerations as for \c shutdown() apply
-       * @note ownership of mock will be transferred; the mock instance
-       *       will be destroyed automatically when deconfigured.
+       * @remark the replacement is not actively managed by the DependencyFactory,
+       *       it remains in ownership of the calling client (unit test). Typically
+       *       this test will keep the returned original service reference and
+       *       care for restoring the original state when done.
+       * @see Depend4Test scoped object for automated test mock injection
        */
-      static void
+      static SI*
       injectReplacement (SI* mock)
         {
-          REQUIRE (mock);
-          factory.takeOwnership (mock);      // EX_SANE
-          
           SyncLock guard;
-          factory.shaddow (instance, mock);  // EX_FREE
-        }
-      
-      static void
-      dropReplacement()
-        {
-          SyncLock guard;
-          factory.restore (instance);        // EX_FREE
+          SI* currentInstance = instance; 
+          instance = mock;
+          return currentInstance;
         }
     };
   
@@ -243,19 +238,23 @@ namespace lib {
    *        it needs to expose a typedef \c ServiceInterface
    */
   template<class TYPE>
-  struct Use4Test
+  struct Depend4Test
     : boost::noncopyable
     {
       typedef typename ServiceInterface<TYPE>::Type Interface;
       
-      Use4Test()
-        {
-          Depend<Interface>::injectReplacement (new TYPE);
-        }
+      boost::scoped_ptr<TYPE> mock_;
+      Interface* shadowedOriginal_;
       
-     ~Use4Test()
+      Depend4Test()
+        : mock_(new TYPE)
+        , shadowedOriginal_(Depend<Interface>::injectReplacement (mock_.get()))
+        { }
+      
+     ~Depend4Test()
         {
-          Depend<Interface>::dropReplacement();
+          ENSURE (mock_);
+          Depend<Interface>::injectReplacement (shadowedOriginal_);
         }
     };
   

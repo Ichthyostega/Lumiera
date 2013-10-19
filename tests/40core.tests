@@ -231,6 +231,25 @@ return: 0
 END
 
 
+TEST "Dependency injection" DependencyFactory_test <<END
+out-lit: ctor TargetObj(0) successful
+out-lit: dtor ~TargetObj(0) successful
+out-lit: ctor TargetObj(1) successful
+out-lit: ctor TargetObj(2) successful
+out-lit: dtor ~TargetObj(2) successful
+out-lit: ctor TargetObj(3) successful
+out-lit: ctor TargetObj(4) successful
+out-lit: ctor TargetObj(5) successful
+out-lit: dtor ~TargetObj(5) successful
+out-lit: ctor TargetObj(6) successful
+out-lit: dtor ~TargetObj(6) successful
+out-lit: dtor ~TargetObj(4) successful
+out-lit: dtor ~TargetObj(3) successful
+out-lit: dtor ~TargetObj(1) successful
+return: 0
+END
+
+
 TEST "A Digxel (numeric component)" Digxel_test <<END
 out-lit: empty____## +0.0 ##
 out-lit: value____##-88.8 ##

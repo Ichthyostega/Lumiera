@@ -30,7 +30,6 @@
 
 #include "lib/nobug-init.hpp"
 #include "lib/error.hpp"
-//#include "lib/sync-classlock.hpp"
 
 
 namespace lib {
@@ -98,26 +97,6 @@ namespace lib {
       
       void deconfigure (void* existingInstance);
       
-      
-      template<class TAR>
-      void takeOwnership (TAR*);
-      
-      
-      template<class TAR>
-      void shaddow (TAR* volatile & activeInstance, TAR* replacement);
-      
-      template<class TAR>
-      void restore (TAR* volatile & activeInstance);
-      
-      
-      
-      
-      /** hook to install a deleter function to clean up a service object.
-       *  The standard constructor function uses this hook to schedule the
-       *  destructor invocation on application shutdown; custom constructors
-       *  are free to use this mechanism (or care for clean-up otherwise)
-       * @see lib::DelStash
-       */
       static void scheduleDestruction (void*, KillFun);
       
       
@@ -205,56 +184,6 @@ namespace lib {
       
     };
   
-  
-  namespace {
-    /** helper: destroy heap allocated object.
-     *  This deleter function is used to clean-up
-     *  a heap allocated mock object, which was installed
-     *  as a temporary replacement for some service,
-     *  typically during an unit test
-     */
-    template<class X>
-    inline void
-    releaseOnHeap (void* o)
-    {
-      if (!o) return;
-      X* instance = static_cast<X*> (o);
-      delete instance;
-    }
-  }
-  
-  
-  template<class TAR>
-  void
-  DependencyFactory::takeOwnership (TAR* newInstance)
-  {
-    scheduleDestruction (newInstance, &releaseOnHeap<TAR>);
-  }
-  
-  /**
-   * set up a temporary replacement, allowing to restore the original later
-   * @param activeInstance
-   * @param replacement
-   */
-  template<class TAR>
-  void
-  DependencyFactory::shaddow (TAR* volatile & activeInstance, TAR* replacement)
-  {
-    ctorFunction_ = 0;  /////TODO how to implement a functor without explicitly allocated storage??
-    activeInstance = replacement;
-  }
-  
-  /**
-   * disable and destroy temporary shadowing instance and restore the dormant original instance
-   * @param activeInstance
-   */
-  template<class TAR>
-  void
-  DependencyFactory::restore (TAR* volatile & activeInstance)
-  {
-    deconfigure (activeInstance);
-    activeInstance = NULL;
-  }
   
   
 } // namespace lib

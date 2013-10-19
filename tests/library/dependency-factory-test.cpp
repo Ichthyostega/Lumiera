@@ -65,7 +65,9 @@ namespace test{
     
     struct SubSub
       : Sub
-      { };
+      {
+        typedef Sub ServiceInterface;
+      };
     
     struct SubSubSub
       : SubSub
@@ -202,17 +204,13 @@ namespace test{
           Sub& original = genericAccessor();
           uint oID = original.instanceID_;
           
-          GenericAccessor::injectReplacement (new SubSubSub);
+          SubSubSub mockObject;
+          Sub* shaddowedOriginal = GenericAccessor::injectReplacement (&mockObject);
           
           Sub& replacement = genericAccessor();
-          uint repID = replacement.instanceID_;
-          
-          CHECK (!INSTANCEOF (SubSubSub, &original));
-          CHECK ( INSTANCEOF (SubSubSub, &replacement));
+          CHECK ( isSameObject (replacement, mockObject));
           CHECK (!isSameObject (original, replacement));
-          
-          CHECK (oID != repID);
-          CHECK (oID == original.instanceID_);
+          CHECK ( isSameObject (original, *shaddowedOriginal));
           
           Depend<SubSub>   special;
           Depend<SubSubSub> custom;
@@ -220,7 +218,7 @@ namespace test{
           CHECK(!isSameObject (replacement, special() ));
           CHECK(!isSameObject (replacement, custom()  ));
           
-          GenericAccessor::dropReplacement();
+          GenericAccessor::injectReplacement (shaddowedOriginal);
           
           Sub& nextFetch = genericAccessor();
           CHECK (isSameObject (original, nextFetch));
@@ -237,7 +235,7 @@ namespace test{
           uint oID = original.instanceID_;
           
           {
-            Use4Test<SubSub> withinThisScope;
+            Depend4Test<SubSub> withinThisScope;
             
             Sub& replacement = genericAccessor();
             uint repID = replacement.instanceID_;
