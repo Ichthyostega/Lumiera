@@ -1,5 +1,5 @@
 /*
-  DEPEND.hpp  -  access point to singletons and dependencies
+  DEPEND4TEST.hpp  -  inject test mock singletons and dependencies
 
   Copyright (C)         Lumiera.org
     2013,               Hermann Vosseler <Ichthyostega@web.de>
@@ -31,12 +31,12 @@ This code is heavily inspired by
 
 
 
-#ifndef LIB_DEPEND_H
-#define LIB_DEPEND_H
+#ifndef LIB_TEST_DEPEND_4TEST_H
+#define LIB_TEST_DEPEND_4TEST_H
 
 
 #include "lib/sync-classlock.hpp"
-#include "lib/dependency-factory.hpp"
+#include "lib/depend.hpp"
 
 #include "lib/meta/duck-detector.hpp"   ////TODO move in separate header
 
