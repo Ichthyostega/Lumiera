@@ -126,7 +126,7 @@ namespace asset {
       
       AssetManager ();
       
-      friend class lib::DependencyFactory::InstanceHolder<AssetManager>;
+      friend class lib::DependencyFactory;
       
     };
     

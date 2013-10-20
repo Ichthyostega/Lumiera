@@ -115,6 +115,9 @@ namespace lib {
       
       
       
+      
+      
+      
     private:
       /** pointer to the concrete function
        *  used for building new service instances */
@@ -122,6 +125,21 @@ namespace lib {
       
       
       
+      /** function to build service instances.
+       *  A service class with private ctor can declare DependencyFactory as friend,
+       *  to indicate this is the expected way to create instances */
+      template<typename TAR>
+      static TAR*
+      create_in_buffer (void* buffer)
+        {
+          return new(buffer) TAR;
+        }
+      
+      
+      /**
+       * @internal Helper to manage a service instance within an embedded buffer.
+       * This helper and thus the service instance will be allocated into static memory.
+       */
       template<typename TAR>
       class InstanceHolder
         : boost::noncopyable
@@ -156,7 +174,7 @@ namespace lib {
           buildInstance ()
             {
               // place new instance into embedded buffer
-              TAR* newInstance = new(buff_) TAR;
+              TAR* newInstance = create_in_buffer<TAR>(buff_);
               
               try
                 {
@@ -189,25 +207,29 @@ namespace lib {
         }
       
       
-      /**
-       * DSL-style marker function for client code
-       * to configure the usage of a specific subclass.
-       * Typically this function is used right within the
-       * Constructor call for lib::Depend; this allows to
-       * confine the actual service implementation class
-       * to a single compilation unit, without the need
-       * for clients of the respective service to know
-       * the actual concrete implementation class
-       */
       template<class TAR>
-      friend InstanceConstructor
-      buildSingleton()
-      {
-        return & createSingletonInstance<TAR>;
-      }
+      friend InstanceConstructor buildSingleton();
       
     };
   
+  
+  
+  /**
+   * DSL-style marker function for client code
+   * to configure the usage of a specific subclass.
+   * Typically this function is used right within the
+   * Constructor call for lib::Depend; this allows to
+   * confine the actual service implementation class
+   * to a single compilation unit, without the need
+   * for clients of the respective service to know
+   * the actual concrete implementation class
+   */
+  template<class TAR>
+  inline DependencyFactory::InstanceConstructor
+  buildSingleton()
+  {
+    return & DependencyFactory::createSingletonInstance<TAR>;
+  }
   
   
 } // namespace lib

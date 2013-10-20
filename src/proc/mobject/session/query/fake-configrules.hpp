@@ -283,7 +283,7 @@ namespace session {
       {
       protected:
         MockConfigRules ();                                   ///< to be used only by the singleton factory
-        friend class lib::DependencyFactory::InstanceHolder<MockConfigRules>;
+        friend class lib::DependencyFactory;
 
         virtual ~MockConfigRules() {}
         

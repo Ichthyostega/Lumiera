@@ -88,7 +88,7 @@ namespace play {
     private:
       OutputDirector() ;
      ~OutputDirector() ;
-      friend class lib::DependencyFactory::InstanceHolder<OutputDirector>;
+      friend class lib::DependencyFactory;
       
       
       void bringDown (SigTerm completedSignal);

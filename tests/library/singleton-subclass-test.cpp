@@ -62,7 +62,7 @@ namespace test{
       Interface () : TestTargetObj(cnt) {}
       virtual ~Interface() {}
       
-      friend class DependencyFactory::InstanceHolder<Interface>;
+      friend class lib::DependencyFactory;
     };
   
   int Interface::cnt = 0;

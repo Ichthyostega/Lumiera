@@ -102,7 +102,7 @@ namespace asset {
          clear();
         }
       
-      friend class lib::DependencyFactory::InstanceHolder<DB>;
+      friend class lib::DependencyFactory;
       
       
     public:

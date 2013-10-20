@@ -94,7 +94,7 @@ namespace session {
     protected:
       ScopeLocator();
       
-      friend class lib::DependencyFactory::InstanceHolder<ScopeLocator>;
+      friend class lib::DependencyFactory;
       
     private:
       lumiera::QueryResolver const& theResolver();

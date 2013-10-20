@@ -79,7 +79,7 @@ namespace control {
       STypeManager() ;
       ~STypeManager();
       
-      friend class lib::DependencyFactory::InstanceHolder<STypeManager>;
+      friend class lib::DependencyFactory;
       
       /** Lifecycle: reset all type registration information
        *  to the <i>generic pristine default</i> state. This includes
