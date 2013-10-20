@@ -147,6 +147,9 @@ namespace lib {
           /** storage for the service instance */
           char buff_[sizeof(TAR)];
           
+#if NOBUG_MODE_ALPHA
+          static int createCnt;
+#endif
           
           /** deleter function to invoke the destructor
            *  of the embedded service object instance.
@@ -157,7 +160,9 @@ namespace lib {
           destroy_in_place (void* pInstance)
             {
               if (!pInstance) return;
+              
               static_cast<TAR*> (pInstance) -> ~TAR();
+              ENSURE (0 == --createCnt);
             }
           
           static void
@@ -176,6 +181,7 @@ namespace lib {
               // place new instance into embedded buffer
               TAR* newInstance = create_in_buffer<TAR>(buff_);
               
+              ENSURE (0 == createCnt++, "runtime system or compiler broken");
               try
                 {
                   scheduleDestruction (newInstance, &destroy_in_place);
@@ -231,6 +237,14 @@ namespace lib {
     return & DependencyFactory::createSingletonInstance<TAR>;
   }
   
+  
+  
+#if NOBUG_MODE_ALPHA
+  /** sanity check to guard against re-entrance while instance is still alive.
+   *  This helped us in 2013 to spot a compiler bug. */
+  template<typename TAR>
+  int DependencyFactory::InstanceHolder<TAR>::createCnt;
+#endif
   
 } // namespace lib
 #endif
