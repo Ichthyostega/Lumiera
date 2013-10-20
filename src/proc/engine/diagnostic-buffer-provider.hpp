@@ -31,7 +31,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/util.hpp"
 #include "proc/engine/type-handler.hpp"
 #include "proc/engine/buffer-provider.hpp"
@@ -63,7 +63,7 @@ namespace engine {
     {
       
       boost::scoped_ptr<TrackingHeapBlockProvider>    pImpl_;
-      static lib::Singleton<DiagnosticBufferProvider> diagnostics;
+      static lib::Depend<DiagnosticBufferProvider> diagnostics;
       
       
       TrackingHeapBlockProvider& reset();
@@ -73,7 +73,7 @@ namespace engine {
       DiagnosticBufferProvider();
      ~DiagnosticBufferProvider();
      
-      friend class lib::singleton::StaticCreate<DiagnosticBufferProvider>;
+      friend class lib::DependencyFactory::InstanceHolder<DiagnosticBufferProvider>;
      
     public:
       /** build a new Diagnostic Buffer Provider instance,

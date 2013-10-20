@@ -26,7 +26,7 @@
 
 
 #include "proc/streamtype.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -44,7 +44,7 @@ namespace control {
       boost::scoped_ptr<Registry> reg_;
       
     public:
-      static lib::Singleton<STypeManager> instance;
+      static lib::Depend<STypeManager> instance;
       
       typedef StreamType::ImplFacade ImplFacade;
       
@@ -79,7 +79,7 @@ namespace control {
       STypeManager() ;
       ~STypeManager();
       
-      friend class lib::singleton::StaticCreate<STypeManager>;
+      friend class lib::DependencyFactory::InstanceHolder<STypeManager>;
       
       /** Lifecycle: reset all type registration information
        *  to the <i>generic pristine default</i> state. This includes

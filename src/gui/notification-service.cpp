@@ -22,7 +22,7 @@
 
 
 #include "gui/notification-service.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
 

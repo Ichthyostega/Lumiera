@@ -73,7 +73,7 @@ namespace lumiera {
   
   
   /** storage for the single system-wide config facade instance */
-  lib::Singleton<Config> Config::instance;
+  lib::Depend<Config> Config::instance;
   
   
   Config::Config ()

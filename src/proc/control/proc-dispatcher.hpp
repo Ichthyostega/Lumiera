@@ -37,7 +37,7 @@
 
 //#include "lib/symbol.hpp"
 #include "proc/control/command.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 //#include <tr1/memory>
 
@@ -57,7 +57,7 @@ namespace control {
     {
       
     public:
-      static lib::Singleton<ProcDispatcher> instance;
+      static lib::Depend<ProcDispatcher> instance;
       
       void activate();
       void deactivate();

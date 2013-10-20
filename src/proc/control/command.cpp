@@ -98,7 +98,7 @@ namespace control {
   
   
   /** storage for the singleton factory used to access CommandRegistry */
-  lib::Singleton<CommandRegistry> CommandRegistry::instance;
+  lib::Depend<CommandRegistry> CommandRegistry::instance;
   
   
   Command::~Command() { }

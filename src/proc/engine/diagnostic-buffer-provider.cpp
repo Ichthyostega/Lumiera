@@ -33,7 +33,7 @@ namespace engine {
   
   
   /** Storage for the diagnostics frontend */
-  lib::Singleton<DiagnosticBufferProvider> DiagnosticBufferProvider::diagnostics;
+  lib::Depend<DiagnosticBufferProvider> DiagnosticBufferProvider::diagnostics;
   
   
   

@@ -55,7 +55,7 @@
 #include "gui/display-service.hpp"
 #include "common/subsys.hpp"
 #include "backend/thread-wrapper.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 extern "C" {
 #include "common/interface.h"

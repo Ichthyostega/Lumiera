@@ -37,7 +37,7 @@
 //#include "common/query/defs-manager.hpp"
 
 #include "lib/symbol.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 
 
@@ -45,7 +45,6 @@ namespace proc {
 namespace mobject {
   
   using lib::Symbol;
-  using lib::Singleton;
   using session::SessManager;
   using session::SessManagerImpl;
   using session::SessionImplAPI;
@@ -67,7 +66,7 @@ namespace mobject {
    *  you use dot-notation, while you access the <i>session object</i>
    *  via arrow notation (e.g. \code Session::current->getFixture() )
    */
-  SessManager& Session::current = Singleton<SessManagerImpl>()();
+  SessManager& Session::current = lib::Depend<SessManagerImpl>()();
   
   
   /** special access point allowing Proc-Layer internals

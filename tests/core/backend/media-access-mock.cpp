@@ -37,7 +37,7 @@
 #include "proc/mobject/session/testclip.hpp"
 
 #include "lib/util.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/time/mutation.hpp"
 #include "lib/symbol.hpp"
 
@@ -119,7 +119,7 @@ namespace test {
       };
       
       // instantiate TestCasses table
-      lib::Singleton<TestCases> testCases;
+      lib::Depend<TestCases> testCases;
       
   } // (end) implementation namespace
   

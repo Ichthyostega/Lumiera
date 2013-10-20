@@ -54,7 +54,7 @@ namespace engine{
   
   
   /** storage for the EngineService interface object */
-  lib::Singleton<EngineService> EngineService::instance;
+  lib::Depend<EngineService> EngineService::instance;
   
   
   

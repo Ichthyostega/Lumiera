@@ -26,7 +26,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <string>
@@ -57,7 +57,7 @@ namespace backend {
     public:
       typedef void* ChanHandle;
       
-      static Singleton<MediaAccessFacade> instance;
+      static lib::Depend<MediaAccessFacade> instance;
       
       /** request for testing the denoted files accessibility 
        *  @param name path and filename of the media file.

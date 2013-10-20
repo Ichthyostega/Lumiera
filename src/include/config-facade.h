@@ -44,7 +44,7 @@
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/symbol.hpp"
 
 #include <string>
@@ -67,13 +67,13 @@ namespace lumiera {
     public:
       static string get (lib::Literal key);
       
-      static lib::Singleton<Config> instance;
+      static lib::Depend<Config> instance;
       
       
     private:
       Config();
      ~Config();
-      friend class lib::singleton::StaticCreate<Config>;
+      friend class lib::DependencyFactory::InstanceHolder<Config>;
     };
   
   

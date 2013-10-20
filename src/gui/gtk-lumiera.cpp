@@ -26,7 +26,7 @@
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/controller/controller.hpp"
 #include "gui/model/project.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/symbol.hpp"
 
 #include "include/config-facade.h"
@@ -56,7 +56,7 @@ typedef std::vector<uString> UVector;
 namespace {
   
   /** storage for the Main Application object */
-  lib::Singleton<GtkLumiera> theApplicationInstance;
+  lib::Depend<GtkLumiera> theApplicationInstance;
   
   Literal KEY_TITLE      = "Lumiera.title";
   Literal KEY_VERSION    = "Lumiera.version";

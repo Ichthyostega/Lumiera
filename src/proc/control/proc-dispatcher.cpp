@@ -53,7 +53,7 @@ namespace control {
   }
   
   /** storage for Singleton access */
-  lib::Singleton<ProcDispatcher> ProcDispatcher::instance;
+  lib::Depend<ProcDispatcher> ProcDispatcher::instance;
   
   
   

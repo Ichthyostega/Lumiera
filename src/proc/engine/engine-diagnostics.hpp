@@ -48,7 +48,7 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //#include "lib/polymorphic-value.hpp"
-//#include "lib/singleton.hpp"
+//#include "lib/depend.hpp"
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>

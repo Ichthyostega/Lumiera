@@ -23,7 +23,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -108,46 +108,28 @@ namespace test{
   /*******************************************************************
    * @test inject a Mock object into the Singleton Factory,
    *       to be returned and used in place of the original object.
-   * Expected results: Mock(s) called, no memory leaks.
-   * @see  lib::Singleton
-   * @see  lib::singleton::Static
+   *       This test covers the full usage cycle: first access the
+   *       Client Object, then replace it by two different mocks,
+   *       and finally restore the original Client Object.
+   * @see  lib::Depend
+   * @see  lib::test::Depend4Test
+   * @see  DependencyFactory_test
    */
   class SingletonTestMock_test : public Test
     {
       
-      Singleton<TestSingletonO> sing;
-      
       void
       run (Arg arg)
         {
-          string scenario = isnil(arg)? "default" : arg[1];
+          Depend<TestSingletonO> sing;
           
-          if (scenario == "default")
-            injectBoth();
-          else
-            if (scenario == "noMock")
-              noMock();
-            else
-              if (scenario == "onlyMock")
-                onlyMock();
-              else
-                if (scenario == "firstMock")
-                  firstMock();
-        }
-      
-      
-      /** @test complete use sequence: first access the Client Object,
-       *        then replace it by two different mocks, and finally
-       *        restore the original Client Object 
-       */
-      void
-      injectBoth ()
-        {
           sing().doIt();
           sing().doIt();
           CHECK (sing().getCnt() == 2);
           
-          sing.injectSubclass (new Mock_1);
+          Mock_1 mock_1;
+          TestSingletonO* original =
+          sing.injectReplacement (&mock_1);
           sing().doIt();
           sing().doIt();
           sing().doIt();
@@ -155,50 +137,15 @@ namespace test{
           sing().doIt();
           CHECK (sing().getCnt() == 5);
           
-          sing.injectSubclass (new Mock_2);
+          Mock_2 mock_2;
+          sing.injectReplacement (&mock_2);
           sing().doIt();
           CHECK (sing().getCnt() == 1);
           
-          sing.injectSubclass (0);  // un-shadowing original instance
+          sing.injectReplacement (original);  // un-shadowing original instance
           CHECK (sing().getCnt() == 2);
           sing().doIt();
           CHECK (sing().getCnt() == 3);
-        }
-      
-      
-      /** @test just use Singleton Factory normally without any Mock. */
-      void
-      noMock ()
-        {
-          sing().doIt();
-        }
-      
-      
-      /** @test inject the Mock prior to using the Singleton Factory,
-       *        thus the original Client Object shouldn't be created.*/
-      void
-      onlyMock ()
-        {
-          sing.injectSubclass (new Mock_1);
-          sing().doIt();
-        }
-      
-      
-      /** @test inject the Mock prior to using the Singleton Factory,
-       *        but then reset the Mock, so following calls should
-       *        create the original Client Object. 
-       */
-      void
-      firstMock ()
-        {
-          sing.injectSubclass (new Mock_1);
-          sing().doIt();
-          sing().doIt();
-          CHECK (sing().getCnt() == 2);
-          
-          sing.injectSubclass (0);
-          sing().doIt();
-          CHECK (sing().getCnt() == 1);
         }
     };
   

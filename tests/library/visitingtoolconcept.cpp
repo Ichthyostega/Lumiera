@@ -54,22 +54,20 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
 #include <vector>
 
-using lib::Singleton;
 using boost::format;
 using std::string;
 using std::cout;
 
 
-namespace lumiera
-  {
-  namespace visitor_concept_draft
-    {
+namespace lumiera {
+  namespace visitor_concept_draft {
+    
     // ================================================================== Library ====
     
     
@@ -223,7 +221,7 @@ namespace lumiera
 
         
       public:
-        static Singleton<Dispatcher<TAR,TOOL> > instance;
+        static lib::Depend<Dispatcher<TAR,TOOL> > instance;
         
         inline ReturnType 
         forwardCall (TAR& target, TOOL& tool)
@@ -251,7 +249,7 @@ namespace lumiera
 
     /** storage for the dispatcher table(s) */
     template<class TAR, class TOOL>
-    Singleton<Dispatcher<TAR,TOOL> > Dispatcher<TAR,TOOL>::instance;
+    lib::Depend<Dispatcher<TAR,TOOL> > Dispatcher<TAR,TOOL>::instance;
 
     
     

@@ -24,7 +24,7 @@
 #include "proc/play/dummy-player-service.hpp"
 #include "proc/engine/worker/dummy-image-generator.hpp"
 #include "proc/engine/worker/tick-service.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 extern "C" {
 #include "common/interfacedescriptor.h"
@@ -92,7 +92,7 @@ namespace proc  {
             }
         };
       
-      lib::Singleton<DummyPlayerSubsysDescriptor> theDummyPlayerDescriptor;
+      lib::Depend<DummyPlayerSubsysDescriptor> theDummyPlayerDescriptor;
       
       
       

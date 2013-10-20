@@ -22,7 +22,7 @@
 
 
 #include "backend/netnodefacade.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 #include <string>
 
@@ -66,7 +66,7 @@ namespace backend {
     };
   
   namespace {
-    lib::Singleton<NetNodeSubsysDescriptor> theDescriptor;
+    lib::Depend<NetNodeSubsysDescriptor> theDescriptor;
   }
   
   

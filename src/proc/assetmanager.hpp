@@ -46,7 +46,7 @@
 
 #include "proc/asset.hpp"
 #include "lib/error.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 
 #include <cstddef>
@@ -74,7 +74,7 @@ namespace asset {
     
     
     public:
-      static lib::Singleton<AssetManager> instance;
+      static lib::Depend<AssetManager> instance;
       
       /** provide the unique ID for given Asset::Ident tuple */
       static ID<Asset> getID (const Asset::Ident&);
@@ -126,7 +126,7 @@ namespace asset {
       
       AssetManager ();
       
-      friend class lib::singleton::StaticCreate<AssetManager>;
+      friend class lib::DependencyFactory::InstanceHolder<AssetManager>;
       
     };
     

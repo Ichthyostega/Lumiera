@@ -91,7 +91,7 @@
 
 #include "lib/error.hpp"
 #include "lib/del-stash.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/symbol.hpp"
 #include "lib/sync.hpp"
 #include "lib/util.hpp"
@@ -102,7 +102,6 @@
 #include <boost/noncopyable.hpp>
 
 using lib::Symbol;
-using lib::Singleton;
 using lib::DelStash;
 using util::unConst;
 
@@ -254,7 +253,7 @@ namespace advice {
     
     
     /** hidden implementation-level access to the AdviceSystem */
-    Singleton<AdviceSystem> aSys;
+    lib::Depend<AdviceSystem> aSys;
     
     
   } //(End) AdviceSystem implementation

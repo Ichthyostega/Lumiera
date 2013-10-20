@@ -111,7 +111,7 @@ namespace session {
   
   
   /** Storage holding the single ScopeLocator instance */
-  lib::Singleton<ScopeLocator> ScopeLocator::instance;
+  lib::Depend<ScopeLocator> ScopeLocator::instance;
   
   
   /** @internal the one (and only) access point

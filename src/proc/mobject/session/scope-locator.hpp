@@ -28,7 +28,7 @@
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/placement.hpp"
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : the bare interface would be sufficient here
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -63,7 +63,7 @@ namespace session {
       scoped_ptr<QueryFocusStack> focusStack_;
       
     public:
-      static lib::Singleton<ScopeLocator> instance;
+      static lib::Depend<ScopeLocator> instance;
       
       ScopePath& currPath();
       ScopePath& pushPath();
@@ -94,7 +94,7 @@ namespace session {
     protected:
       ScopeLocator();
       
-      friend class lib::singleton::StaticCreate<ScopeLocator>;
+      friend class lib::DependencyFactory::InstanceHolder<ScopeLocator>;
       
     private:
       lumiera::QueryResolver const& theResolver();

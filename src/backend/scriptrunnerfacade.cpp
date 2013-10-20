@@ -22,7 +22,7 @@
 
 
 #include "backend/scriptrunnerfacade.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 #include <string>
 
@@ -67,7 +67,7 @@ namespace backend {
     };
   
   namespace {
-    lib::Singleton<ScriptRunnerSubsysDescriptor> theDescriptor;
+    lib::Depend<ScriptRunnerSubsysDescriptor> theDescriptor;
   }
   
   

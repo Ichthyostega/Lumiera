@@ -26,7 +26,7 @@
 #include "backend/media-access-mock.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/time/timevalue.hpp"
 
 namespace proc    {
@@ -72,7 +72,7 @@ namespace test    {
         { }
     };
       
-  lib::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip...
+  lib::Depend<Testbed> testbed_1; // invoke ctor when creating first TestClip...
   
   
   

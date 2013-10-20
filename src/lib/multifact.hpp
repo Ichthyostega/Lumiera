@@ -59,7 +59,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "util.hpp"
 
 #include <tr1/functional>
@@ -223,9 +223,9 @@ namespace lib {
          */
         template<class IMP>
         class Singleton
-          : lib::Singleton<IMP>
+          : lib::Depend<IMP>
           {
-            typedef lib::Singleton<IMP> SingFac;
+            typedef lib::Depend<IMP> SingFac;
             
             Creator
             createSingleton_accessFunction()

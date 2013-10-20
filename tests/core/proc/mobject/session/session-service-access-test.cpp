@@ -24,7 +24,7 @@
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
 #include "lib/meta/generator.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <string>
@@ -35,7 +35,7 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using lib::Singleton;
+  using lib::Depend;
   using boost::lexical_cast;
   using std::ostream;
   using std::string;
@@ -202,7 +202,7 @@ namespace test    {
     
     uint TSessionImpl::magic_;
     
-    TSessManager& TSession::current = Singleton<TSessManagerImpl>()();
+    TSessManager& TSession::current = Depend<TSessManagerImpl>()();
                                      //note: already during static initialisation
     
     template<>

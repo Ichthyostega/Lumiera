@@ -31,7 +31,7 @@
 #include "proc/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util-coll.hpp"
 #include "lib/util.hpp"
@@ -117,7 +117,7 @@ namespace test  {
           }
       };
     
-    lib::Singleton<MockDispatcherTable> mockDispatcher;
+    lib::Depend<MockDispatcherTable> mockDispatcher;
     
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #890

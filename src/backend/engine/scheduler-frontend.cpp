@@ -29,7 +29,7 @@ namespace engine {
   
   
   /** storage for the (singleton) scheduler access frontend */
-  lib::Singleton<SchedulerFrontend> SchedulerFrontend::instance;
+  lib::Depend<SchedulerFrontend> SchedulerFrontend::instance;
   
   
   

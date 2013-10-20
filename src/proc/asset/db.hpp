@@ -102,7 +102,7 @@ namespace asset {
          clear();
         }
       
-      friend class lib::singleton::StaticCreate<DB>;
+      friend class lib::DependencyFactory::InstanceHolder<DB>;
       
       
     public:

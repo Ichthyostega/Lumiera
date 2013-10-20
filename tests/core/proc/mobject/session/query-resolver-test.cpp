@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 #include "common/query/query-resolver.hpp"
 
@@ -167,7 +167,7 @@ namespace test{
       };
     
     
-    lib::Singleton<DummyTypedSolutionProducer> testResolver;
+    lib::Depend<DummyTypedSolutionProducer> testResolver;
     
     QueryResolver&
     buildTestQueryResolver ()

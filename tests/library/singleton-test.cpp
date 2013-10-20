@@ -26,7 +26,7 @@
 #include "lib/util.hpp"
 
 #include "test-target-obj.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 #include <tr1/functional>
 #include <boost/lexical_cast.hpp>
@@ -58,8 +58,7 @@ namespace test{
     protected:
       TargetObj () : TestTargetObj(cnt) {}
       
-      friend class singleton::StaticCreate<TargetObj>;
-      friend class singleton::HeapCreate<TargetObj>;
+      friend class DependencyFactory::InstanceHolder<TargetObj>;
     };
   
   int TargetObj::cnt = 0;
@@ -72,54 +71,25 @@ namespace test{
   
   /*******************************************************************
    * @test implement a Singleton class using our Singleton Template.
-   * Expected results: no memory leaks.
-   * @see  lib::Singleton
-   * @see  lib::singleton::StaticCreate
-   * @see  lib::singleton::HeapCreate
+   * Expected results: single instance created in static memory,
+   * single instance properly destroyed, no memory leaks.
+   * @see  lib::Depend
+   * @see  lib::DependencyFactory::InstanceHolder
    */
   class Singleton_test : public Test
     {
-      typedef function<TargetObj& ()> InstanceAccessFunc;
-      InstanceAccessFunc instance;
       
-      virtual void run(Arg arg)
+      virtual void
+      run (Arg arg)
         {
           uint num= isnil(arg)? 1 : lexical_cast<uint>(arg[1]);
           
-          testStaticallyAllocatedSingleton (num++);
-          testHeapAllocatedSingleton (num++);
-        }
-      
-      
-      /** @test parametrise the Singleton creation such as to create
-       *        the single TargetObj instance as a static variable.
-       */
-      void testStaticallyAllocatedSingleton (uint num)
-        {
-          SingletonFactory<TargetObj> single;
-          instance = single;
-          useInstance (num, "statically allocated");
-        }
-      
-      /** @test parametrise the Singleton creation such as to create
-       *        the single TargetObj instance allocated on the Heap
-       *        and deleted automatically at application shutdown.
-       */
-      void testHeapAllocatedSingleton (uint num)
-        {
-          SingletonFactory<TargetObj,singleton::HeapCreate> single;
-          instance = single;
-          useInstance (num, "heap allocated");
-        }
-      
-      
-      
-      void useInstance (uint num, string kind)
-        {
-          cout << _Fmt("testing TargetObj(%d) as Singleton(%s)\n") % num % kind;
+          Depend<TargetObj> singleton;
+          
+          cout << _Fmt("testing TargetObj(%d) as Singleton\n") % num;
           TargetObj::setCountParam(num);
-          TargetObj& t1 = instance();
-          TargetObj& t2 = instance();
+          TargetObj& t1 = singleton();
+          TargetObj& t2 = singleton();
           
           CHECK (isSameObject(t1, t2), "not a Singleton, got two different instances." );
           

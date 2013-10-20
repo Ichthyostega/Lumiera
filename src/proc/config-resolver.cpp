@@ -30,16 +30,10 @@
 
 namespace proc {
   
-  namespace {
-    
-    /** type of the actual ConfigRules implementation to use */
-    lib::singleton::UseSubclass<proc::mobject::session::query::MockConfigRules> typeinfo;
-  }
+  using lib::buildSingleton;
   
-  
-  /** Singleton factory instance, parametrised to actual impl. type. */
-  lib::SingletonSub<ConfigResolver> ConfigResolver::instance (typeinfo);
-  
+  /** Singleton factory instance, configured with the actual implementation type. */
+  lib::Depend<ConfigResolver> ConfigResolver::instance (buildSingleton<proc::mobject::session::query::MockConfigRules>());
   
 } // namespace proc
 

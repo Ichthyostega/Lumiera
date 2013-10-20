@@ -27,12 +27,13 @@
 #include "lib/util.hpp"
 
 #include "test-target-obj.hpp"
-#include "lib/singleton-subclass.hpp"
+#include "lib/depend.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 
 using boost::lexical_cast;
+using util::isSameObject;
 using util::_Fmt;
 using util::isnil;
 using std::string;
@@ -42,7 +43,7 @@ using std::cout;
 namespace lib {
 namespace test{
   
-  using lumiera::error::LUMIERA_ERROR_ASSERTION;
+  using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
   
   /**
    * Target object to be instantiated as Singleton
@@ -61,8 +62,7 @@ namespace test{
       Interface () : TestTargetObj(cnt) {}
       virtual ~Interface() {}
       
-      friend class singleton::StaticCreate<Interface>;
-      friend class singleton::HeapCreate<Interface>;
+      friend class DependencyFactory::InstanceHolder<Interface>;
     };
   
   int Interface::cnt = 0;
@@ -87,9 +87,9 @@ namespace test{
    *       subclasses (implementation classes) without coupling the
    *       caller to the concrete class type.
    * Expected results: an instance of the subclass is created.
-   * @see  lib::Singleton
-   * @see  lib::SingletonSubclassFactory
-   * @see  lib::singleton::Adapter
+   * @see  lib::Depend
+   * @see  lib::buildSingleton()
+   * @see  lib/dependency-factory.hpp
    */
   class SingletonSubclass_test : public Test
     {
@@ -104,29 +104,24 @@ namespace test{
           Interface::setCountParam(num);
           
           // marker to declare the concrete type to be created
-          singleton::UseSubclass<Impl> typeinfo;
+          DependencyFactory::InstanceConstructor factoryFunction = buildSingleton<Impl>();
           
           // define an instance of the Singleton factory,
           // specialised to create the concrete Type passed in
-          SingletonSubclassFactory<Interface> instance (typeinfo);
+          Depend<Interface> instance (factoryFunction);
           
           // Now use the Singleton factory...
           // Note: we get the Base type
           Interface& t1 = instance();
           Interface& t2 = instance();
           
-          CHECK ( &t1 == &t2, "not a Singleton, got two different instances." );
+          CHECK (isSameObject (t1, t2), "not a Singleton, got two different instances." );
           
           cout << "calling a non-static method on the Singleton-"
                << t1.identify() << "\n"
                << string (t1)   << "\n";
           
-///////////////////////////////////////////////////////////////////////////////TODO: find a way to configure NoBug to throw in case of assertion
-///////////////////////////////////////////////////////////////////////////////TODO: just for the proc tests. Also find a better way to configure
-///////////////////////////////////////////////////////////////////////////////TODO: the non-release check. Then re-enable these checks...
-//#ifdef DEBUG
-//        verify_error_detection ();
-//#endif
+          verify_error_detection ();
         }
       
       
@@ -134,19 +129,11 @@ namespace test{
       void
       verify_error_detection ()
         {
+          VERIFY_ERROR (LIFECYCLE, Depend<Interface> instance (buildSingleton<Impl_XXX>()) );
+          VERIFY_ERROR (LIFECYCLE, Depend<Interface> instance (buildSingleton<Unrelated>()) );
           
-          singleton::UseSubclass<Impl_XXX> more_special_type;
-          
-          VERIFY_ERROR (ASSERTION, SingletonSubclassFactory<Interface> instance (more_special_type) );
-              /* in debug mode, an attempt to re-configure an already
-               * configured SingletonSubclassFactory with another type
-               * should be detected and spotted by assertion failure */
-          
-          
-          // Note: the following won't compile, because the "subclass" isn't a subclass...
-          //
-          // singleton::UseSubclass<Unrelated> yet_another_type;
-          // SingletonSubclassFactory<Interface> instance (yet_another_type);
+          Depend<Interface> newFactory;
+          CHECK ( INSTANCEOF (Impl, &newFactory() )); // works as before
         }
     };
   

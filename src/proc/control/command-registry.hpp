@@ -58,7 +58,7 @@
 #define CONTROL_COMMAND_REGISTRY_H
 
 #include "lib/error.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/sync.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
@@ -129,7 +129,7 @@ namespace control {
       
       
     public:
-      static lib::Singleton<CommandRegistry> instance;
+      static lib::Depend<CommandRegistry> instance;
       
       
      ~CommandRegistry()

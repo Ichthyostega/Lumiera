@@ -32,7 +32,7 @@
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "lib/time/timevalue.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 
 
 namespace backend{
@@ -64,14 +64,14 @@ namespace engine {
       EngineConfig();
      ~EngineConfig();
       
-      friend class lib::singleton::StaticCreate<EngineConfig>;
+      friend class lib::DependencyFactory::InstanceHolder<EngineConfig>;
       
     public:
       /** access point to the Engine Interface.
        * @internal this is an facade interface for internal use
        *           by the player. Client code should use the Player.
        */
-      static lib::Singleton<EngineConfig> get;
+      static lib::Depend<EngineConfig> get;
 
       
       //////////////////////////////////////////////////////////////////// TODO: find out about required configuration and tweaking values

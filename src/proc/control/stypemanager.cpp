@@ -46,7 +46,7 @@ namespace control {
   
   /** access the system-wide stream type manager instance.
    *  Implemented as singleton. */
-  lib::Singleton<STypeManager> STypeManager::instance;
+  lib::Depend<STypeManager> STypeManager::instance;
   
   
   void 

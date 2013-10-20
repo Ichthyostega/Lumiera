@@ -50,7 +50,7 @@ namespace engine {
   
   
   /** storage for the Singleton accessor */
-  lib::Singleton<EngineConfig> EngineConfig::get;
+  lib::Depend<EngineConfig> EngineConfig::get;
   
   
   /** build up a new engine configuration set,

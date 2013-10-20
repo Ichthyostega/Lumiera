@@ -24,7 +24,7 @@
 #include "proc/play/dummy-play-connection.hpp"
 //#include "proc/play/dummy-image-generator.hpp"
 //#include "proc/play/tick-service.hpp"
-//#include "lib/singleton.hpp"
+//#include "lib/depend.hpp"
 
 //#include <string>
 //#include <memory>

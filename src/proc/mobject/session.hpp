@@ -53,7 +53,7 @@
 #include "proc/mobject/mobject-ref.hpp"
 #include "common/query/defs-manager.hpp"               ////////////////////////////TICKET #643  forward declare this?
 #include "lib/ref-array.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/symbol.hpp"
 #include "lib/p.hpp"
 

@@ -60,7 +60,7 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "lib/polymorphic-value.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
@@ -136,7 +136,7 @@ namespace engine{
        * @internal this is an facade interface for internal use
        *           by the player. Client code should use the Player.
        */
-      static lib::Singleton<EngineService> instance;
+      static lib::Depend<EngineService> instance;
       
       
       virtual ~EngineService() { }

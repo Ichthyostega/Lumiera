@@ -41,7 +41,7 @@ namespace play {
   
   
   /** storage for the single application wide OutputDirector instance */
-  lib::Singleton<OutputDirector> OutputDirector::instance;
+  lib::Depend<OutputDirector> OutputDirector::instance;
   
   
   /** bring up the framework for handling input/output connections.

@@ -28,7 +28,7 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "lib/sync-classlock.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/util.hpp"
 
 #include <vector>
@@ -38,7 +38,7 @@ namespace lib {
 namespace visitor {
   
   using lib::ClassLock;
-  using lib::Singleton;
+  using lib::Depend;
   
   
   template<class TOOL> class Tag;
@@ -180,7 +180,7 @@ namespace visitor {
       
       
     public:
-      static Singleton<Dispatcher<TAR,TOOL> > instance;
+      static Depend<Dispatcher<TAR,TOOL> > instance;
       
       inline ReturnType 
       forwardCall (TAR& target, TOOL& tool)
@@ -208,7 +208,7 @@ namespace visitor {
   
   /** storage for the dispatcher table(s) */
   template<class TAR, class TOOL>
-  Singleton<Dispatcher<TAR,TOOL> > Dispatcher<TAR,TOOL>::instance;
+  Depend<Dispatcher<TAR,TOOL> > Dispatcher<TAR,TOOL>::instance;
   
   
   

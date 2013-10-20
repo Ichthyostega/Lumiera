@@ -25,7 +25,7 @@
 #include "include/guinotification-facade.h"
 #include "lib/sync.hpp"
 #include "lib/error.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/functor-util.hpp"
 #include "common/instancehandle.hpp"
 
@@ -164,7 +164,7 @@ namespace gui {
           }
       };
     
-    lib::Singleton<GuiSubsysDescriptor> theDescriptor;
+    lib::Depend<GuiSubsysDescriptor> theDescriptor;
     
   } // (End) impl details
   

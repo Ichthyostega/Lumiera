@@ -36,7 +36,7 @@ using std::tr1::placeholders::_1;
 using boost::format;
 using util::for_each;
 
-using lib::Singleton;
+using lib::Depend;
 using lib::Sync;
 
 
@@ -84,10 +84,10 @@ namespace asset {
   /** get at the system-wide asset manager instance.
    *  Implemented as singleton.
    */
-  Singleton<AssetManager> AssetManager::instance;
+  Depend<AssetManager> AssetManager::instance;
   
   AssetManager::AssetManager ()
-    : registry (Singleton<asset::DB>() ())
+    : registry (Depend<asset::DB>() ())
   { }
   
   

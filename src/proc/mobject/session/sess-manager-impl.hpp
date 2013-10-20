@@ -47,7 +47,7 @@ namespace session {
       scoped_ptr<LifecycleAdvisor> lifecycle_;
       
       SessManagerImpl()  throw();
-      friend class lib::singleton::StaticCreate<SessManagerImpl>;
+      friend class lib::DependencyFactory::InstanceHolder<SessManagerImpl>;
       
      ~SessManagerImpl() ;
       

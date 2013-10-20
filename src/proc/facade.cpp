@@ -22,7 +22,7 @@
 
 
 #include "proc/facade.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "proc/play/output-director.hpp"
 
 #include <string>
@@ -151,9 +151,9 @@ namespace proc {
     };
   
   namespace {
-    lib::Singleton<BuilderSubsysDescriptor> theBuilderDescriptor;   
-    lib::Singleton<SessionSubsysDescriptor> theSessionDescriptor;
-    lib::Singleton<PlayOutSubsysDescriptor> thePlayOutDescriptor;
+    lib::Depend<BuilderSubsysDescriptor> theBuilderDescriptor;
+    lib::Depend<SessionSubsysDescriptor> theSessionDescriptor;
+    lib::Depend<PlayOutSubsysDescriptor> thePlayOutDescriptor;
   }
   
   

@@ -36,7 +36,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "proc/play/output-manager.hpp"
 #include "common/subsys.hpp"
 #include "lib/sync.hpp"
@@ -78,7 +78,7 @@ namespace play {
       scoped_ptr<PlayService> player_;
       
     public:
-      static lib::Singleton<OutputDirector> instance;
+      static lib::Depend<OutputDirector> instance;
       
       bool connectUp() ;
       void triggerDisconnect(SigTerm)  throw();
@@ -88,7 +88,7 @@ namespace play {
     private:
       OutputDirector() ;
      ~OutputDirector() ;
-      friend class lib::singleton::StaticCreate<OutputDirector>;
+      friend class lib::DependencyFactory::InstanceHolder<OutputDirector>;
       
       
       void bringDown (SigTerm completedSignal);

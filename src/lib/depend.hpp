@@ -31,6 +31,49 @@ This code is heavily inspired by
 
 
 
+/** @file depend.hpp
+ ** Singleton services and Dependency Injection.
+ ** The <b>Singleton Pattern</b> provides a single access point to a class or
+ ** service and exploits this ubiquitous access point to limit the number of objects
+ ** of this type to a single shared instance. Within Lumiera, we mostly employ a
+ ** factory template for this purpose; the intention is to use on-demand initialisation
+ ** and a standardised lifecycle. In the default configuration, this \c Depend<TY> factory
+ ** maintains a singleton instance of type TY. The possibility to install other factory
+ ** functions allows for subclass creation and various other kinds of service management. 
+ ** 
+ ** 
+ ** \par Why Singletons? Inversion-of-Control and Dependency Injection
+ ** 
+ ** Singletons are frequently over-used, and often they serve as disguised
+ ** global variables to support a procedural programming style. As a remedy, typically
+ ** the use of a »Dependency Injection Container« is promoted. And -- again typically --
+ ** these DI containers tend to evolve into heavyweight universal tools and substitute
+ ** the original problem by metadata hell.
+ ** 
+ ** Thus, for Lumiera, the choice to use Singletons was deliberate: we understand the
+ ** Inversion-of-Control principle, yet we want to stay just below the level of building
+ ** a central application manager core. At the usage site, we access a factory for some
+ ** service <i>by name</i>, where the »name« is actually the type name of an interface
+ ** or facade. Singleton is used as an implementation of this factory, when the service
+ ** is self-contained and can be brought up lazily.
+ ** 
+ ** \par Conventions, Lifecycle and Unit Testing
+ ** 
+ ** Usually we place an instance of the singleton factory (or some other kind of factory)
+ ** as a static variable within the interface class describing the service or facade.
+ ** As a rule, everything accessible as Singleton is sufficiently self-contained to come
+ ** up any time -- even prior to \c main(). But at shutdown, any deregistration must be
+ ** done explicitly using a lifecycle hook. Destructors aren't allowed to do any significant
+ ** work besides releasing references, and we acknowledge that singletons can be released
+ ** in \em arbitrary order.
+ ** 
+ ** @see Depend
+ ** @see DependencyFactory
+ ** @see singleton-test.cpp
+ ** @see dependency-factory-test.cpp
+ */
+
+
 #ifndef LIB_DEPEND_H
 #define LIB_DEPEND_H
 
@@ -49,8 +92,8 @@ namespace lib {
   
   /**
    * Access point to singletons and other kinds of dependencies.
-   * Actually this is a Factory object, which is typically placed into a static field
-   * of the Singleton (target) class or some otherwise suitable interface.
+   * Actually this is a Factory object, which is typically placed into a
+   * static field of the Singleton (target) class or some otherwise suitable interface.
    * @note uses static fields internally, so all factory instances share pInstance_
    * @remark there is an ongoing discussion regarding the viability of the
    *   Double Checked Locking pattern, which requires either the context of a clearly defined

@@ -32,7 +32,7 @@ namespace backend {
   
   /** storage for the SingletonFactory 
    *  (actually a lumiera::test::MockInjector) */
-  Singleton<MediaAccessFacade> MediaAccessFacade::instance;
+  lib::Depend<MediaAccessFacade> MediaAccessFacade::instance;
 
   
   

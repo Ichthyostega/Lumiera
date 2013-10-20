@@ -48,7 +48,7 @@
 
 #include "common/query.hpp"
 #include "common/config-rules.hpp"
-#include "lib/singleton-subclass.hpp"
+#include "lib/depend.hpp"
 
 // types for explicit specialisations....
 #include "proc/mobject/session/track.hpp"
@@ -87,7 +87,7 @@ namespace proc {
     {
   
     public:
-      static lib::SingletonSub<ConfigResolver> instance;
+      static lib::Depend<ConfigResolver> instance;
       
     };
   

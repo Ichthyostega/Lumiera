@@ -26,7 +26,7 @@
 
 
 
-#include "lib/singleton.hpp"
+#include "lib/depend.hpp"
 #include "lib/time/timevalue.hpp"
 #include "backend/engine/job.h"
 
@@ -59,7 +59,7 @@ namespace engine {
        * @internal this is an facade interface for internal use
        *           by the player. Client code should use the Player.
        */
-      static lib::Singleton<SchedulerFrontend> instance;
+      static lib::Depend<SchedulerFrontend> instance;
       
       
       /**
