@@ -23,6 +23,9 @@
 
 /** @file dependency-factory.cpp
  ** This compilation unit holds the common backend of all singleton and dependency factories.
+ ** Especially the code for tracking and clean-up of all service instance is located here.
+ ** This clean-up is triggered by the invocation of \c ~AutoDestructor() -- at this point
+ ** a special \c shutdownLock is set, which prevents any further singleton service creation.
  ** 
  */
 
@@ -32,8 +35,8 @@
 
 
 namespace lib {
-  
   namespace error = lumiera::error;
+  
   
   namespace { // private implementation details...
   
@@ -86,12 +89,18 @@ namespace lib {
   
   
   
-  /** */
+  /** explicitly shut down and destroy a service instance.
+   *  This can be used to re-start a service; by default, all
+   *  services are created on-demand and stay alive until
+   *  application shutdown. But a service deconfigured
+   *  through this function is destroyed right away. 
+   */
   void
   DependencyFactory::deconfigure (void* existingInstance)
   {
     AutoDestructor::kill (existingInstance);
   }
+  
   
   /** hook to install a deleter function to clean up a service object.
    *  The standard constructor function uses this hook to schedule the

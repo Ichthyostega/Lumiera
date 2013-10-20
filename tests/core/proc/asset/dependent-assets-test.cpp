@@ -25,11 +25,12 @@
 #include "proc/asset/testasset.hpp"
 #include "proc/asset/asset-diagnostics.hpp"
 #include "backend/media-access-mock.hpp"
+#include "lib/test/depend-4test.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "lib/util.hpp"
 
-using lib::test::Use4Test;
+using lib::test::Depend4Test;
 using util::contains;
 using util::isnil;
 
@@ -194,7 +195,7 @@ namespace test {
        */
       void checkRealAssetDependencyRegistration ()
         {
-          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
           
           // -----Media and Clip--------------------------------
           typedef P<Media> PM;

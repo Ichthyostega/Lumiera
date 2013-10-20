@@ -33,13 +33,14 @@
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "backend/media-access-mock.hpp"
+#include "lib/test/depend-4test.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
 
-using lib::test::Use4Test;
+using lib::test::Depend4Test;
 using lib::test::showSizeof;
 using lib::time::Duration;
 using lib::time::FSecs;
@@ -104,7 +105,7 @@ namespace test    {
       virtual void
       run (Arg)
         {
-          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
           
           
           // create data simulating a "Session"

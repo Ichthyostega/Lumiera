@@ -24,6 +24,7 @@
 #include "proc/mobject/session/testclip.hpp"
 #include "backend/media-access-facade.hpp"
 #include "backend/media-access-mock.hpp"
+#include "lib/test/depend-4test.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "lib/depend.hpp"
@@ -47,12 +48,11 @@ namespace test    {
   createTestMedia ()
   {
     // install Mock-Interface to Lumiera backend
-    MAF::instance.injectSubclass (new MediaAccessMock);
-    PM media = asset::Media::create("test-2", VIDEO); // query magic filename
-    MAF::instance.injectSubclass (0); // remove Mock-Interface
+    lib::test::Depend4Test<MediaAccessMock> withinThisScope;
     
-    return *media;
+    return *asset::Media::create("test-2", VIDEO); // query magic filename
   }
+  
   
   asset::Clip & 
   createTestClipAsset (asset::Media& media)

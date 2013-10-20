@@ -38,7 +38,15 @@ namespace lib {
   
   
   /**
-   * Factory to generate and manage service objects classified by type.
+   * @internal Factory to generate and manage service objects classified by type.
+   * An instance of this factory is placed <i>once for each type</i> for use by
+   * the \c lib::Depend<TY> front-end for dependency management. While the latter
+   * provides the singleton-style initialisation patter, the DependencyFacotry
+   * maintains a customisable factory function for instance creation. Moreover,
+   * the embedded helper template DependencyFactory::InstanceHolder actually
+   * creates and manages the singleton instances in default configuration;
+   * it is placed into a function-scope static variable; consequently
+   * the singleton instances are placed into static memory by default.
    */
   class DependencyFactory
     {
@@ -181,6 +189,16 @@ namespace lib {
         }
       
       
+      /**
+       * DSL-style marker function for client code
+       * to configure the usage of a specific subclass.
+       * Typically this function is used right within the
+       * Constructor call for lib::Depend; this allows to
+       * confine the actual service implementation class
+       * to a single compilation unit, without the need
+       * for clients of the respective service to know
+       * the actual concrete implementation class
+       */
       template<class TAR>
       friend InstanceConstructor
       buildSingleton()

@@ -27,6 +27,7 @@
 #include "lib/util.hpp"
 
 #include "lib/depend.hpp"
+#include "lib/test/depend-4test.hpp"
 #include "test-target-obj.hpp"
 
 #include <cstdlib>
@@ -54,7 +55,7 @@ namespace test{
           ,instanceID_(rand() % MAX_ID)
           { }
         
-        operator string()  const
+        virtual operator string()  const
           {
             return showType(*this)
                  + TestTargetObj::operator string();
@@ -66,6 +67,9 @@ namespace test{
     struct SubSub
       : Sub
       {
+        /** marker typedef for Depend4Test,
+         *  allowing to pick the correct Depend<ServiceInterface>
+         *  to apply the instrumentation with the test mock. */
         typedef Sub ServiceInterface;
       };
     
@@ -80,7 +84,11 @@ namespace test{
   
   /*******************************************************************************
    * @test verify the various modes of creating dependencies.
-   *       
+   *       - standard case is singleton creation
+   *       - configuration of a specific subclass for the singleton
+   *       - use of a custom factory function
+   *       - injection of a mock implementation for unit tests
+   * 
    * @see lib::Dependency
    * @see Singleton_test
    */

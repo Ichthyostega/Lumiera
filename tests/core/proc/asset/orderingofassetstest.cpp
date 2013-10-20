@@ -30,8 +30,9 @@
 
 #include "proc/asset/asset-diagnostics.hpp"
 #include "backend/media-access-mock.hpp"
+#include "lib/test/depend-4test.hpp"
 
-using lib::test::Use4Test;
+using lib::test::Depend4Test;
 using util::isnil;
 using std::string;
 
@@ -60,7 +61,7 @@ namespace test {
     {
       virtual void run(Arg) 
         {
-          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
           
           
           Asset::Ident key1("test-1", Category(AUDIO), "ichthyo", 5);

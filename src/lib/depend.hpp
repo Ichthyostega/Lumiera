@@ -39,7 +39,7 @@ This code is heavily inspired by
  ** factory template for this purpose; the intention is to use on-demand initialisation
  ** and a standardised lifecycle. In the default configuration, this \c Depend<TY> factory
  ** maintains a singleton instance of type TY. The possibility to install other factory
- ** functions allows for subclass creation and various other kinds of service management. 
+ ** functions allows for subclass creation and various other kinds of service management.
  ** 
  ** 
  ** \par Why Singletons? Inversion-of-Control and Dependency Injection
@@ -69,6 +69,7 @@ This code is heavily inspired by
  ** 
  ** @see Depend
  ** @see DependencyFactory
+ ** @see lib::test::Depend4Test
  ** @see singleton-test.cpp
  ** @see dependency-factory-test.cpp
  */
@@ -81,12 +82,6 @@ This code is heavily inspired by
 #include "lib/sync-classlock.hpp"
 #include "lib/dependency-factory.hpp"
 
-#include "lib/meta/duck-detector.hpp"   ////TODO move in separate header
-
-#include <boost/scoped_ptr.hpp>         ////TODO move in separate header
-#include <boost/noncopyable.hpp>        ////TODO move in separate header
-#include <boost/utility/enable_if.hpp>  ////TODO move in separate header
-
 
 namespace lib {
   
@@ -94,7 +89,7 @@ namespace lib {
    * Access point to singletons and other kinds of dependencies.
    * Actually this is a Factory object, which is typically placed into a
    * static field of the Singleton (target) class or some otherwise suitable interface.
-   * @note uses static fields internally, so all factory instances share pInstance_
+   * @note uses static fields internally, so all factory configuration is shared per type
    * @remark there is an ongoing discussion regarding the viability of the
    *   Double Checked Locking pattern, which requires either the context of a clearly defined
    *   language memory model (as in Java), or needs to be supplemented by memory barriers.
@@ -117,7 +112,7 @@ namespace lib {
       
       
     public:
-      /** Interface to be used by clients to access the service instance.
+      /** Interface to be used by clients for retrieving the service instance.
        *  Manages the instance creation, lifecycle and access in multithreaded context.
        *  @return instance of class SI. When used in default configuration,
        *          this service instance is a singleton
@@ -142,17 +137,17 @@ namespace lib {
       
       
       /** default configuration of the dependency factory
-       * is to build a singleton instance on demand */
+       *  is to build a singleton instance on demand */
       Depend()
         {
           factory.ensureInitialisation (buildSingleton<SI>());
         }
       
       /**
-       * optionally, the instance creation process can be explicitly configured
+       * optionally, the instance creation process can be configured explicitly
        * \em once per type. By default, a singleton instance will be created.
        * Installing another factory function enables other kinds of dependency injection;
-       * this configuration must be done prior to any use the dependency factory.
+       * this configuration must be done \em prior to any use the dependency factory.
        * @param ctor a constructor function, which will be invoked on first usage.
        * @note basically a custom constructor function is responsible to manage any
        *         created service instances. Optionally it may install a deleter function
@@ -181,7 +176,7 @@ namespace lib {
        *          which, worse still, resides typically in the same memory
        *          location as the new instance. The only way to prevent this
        *          would be to synchronise any \em access (which is expensive)
-       *          Thus it is the client's duty to ensure there is no such
+       *          Thus it is the \em client's duty to ensure there is no such
        *          concurrent access, i.e. all clients of the old instance
        *          should be disabled prior to invoking this function.
        */
@@ -217,89 +212,14 @@ namespace lib {
   
   
   
-  // Storage for SingletonFactory's static fields...
+  
+  // Storage for static per type instance management...
   template<class SI>
   SI* volatile Depend<SI>::instance;
   
   template<class SI>
   DependencyFactory Depend<SI>::factory;
   
-  
-  
-  
-  namespace { ///< details: inject a mock automatically in place of a singleton
-    
-    using boost::enable_if;
-    using lib::meta::Yes_t;
-    using lib::meta::No_t;
-    
-    /**
-     * Metafunction: does the Type in question
-     * give us a clue about what service interface to use?
-     */
-    template<class MOCK>
-    class defines_ServiceInterface
-      {
-        META_DETECT_NESTED  (ServiceInterface);
-        
-      public:
-        enum{ value = HasNested_ServiceInterface<MOCK>::value
-            };
-      };
-    
-    
-    /**
-     * Policy-Trait: determine the access point to install the mock.
-     * @note either the mock service implementation needs to provide
-     *       explicitly a typedef for the ServiceInterface, or we're
-     *       just creating a separate new instance of the singleton service,
-     *       while shadowing (but not destroying) the original instance.
-     */
-    template<class I, class YES =void>
-    struct ServiceInterface
-      {
-        typedef I Type;
-      };
-    
-    
-    template<class MOCK>
-    struct ServiceInterface<MOCK, typename enable_if< defines_ServiceInterface<MOCK> >::type>
-      {
-        typedef typename MOCK::ServiceInterface Type;
-      };
-    
-  }//(End) mock injection details
-  
-  
-  /**
-   * Scoped object for installing/deinstalling a mocked service automatically.
-   * Placing a suitably specialised instance of this template into a local scope
-   * will inject the corresponding mock installation and remove it when the
-   * control flow leaves this scope.
-   * @param TYPE the concrete mock implementation type to inject. It needs to
-   *        be default constructible. If TYPE is a subclass of the service interface,
-   *        it needs to expose a typedef \c ServiceInterface
-   */
-  template<class TYPE>
-  struct Depend4Test
-    : boost::noncopyable
-    {
-      typedef typename ServiceInterface<TYPE>::Type Interface;
-      
-      boost::scoped_ptr<TYPE> mock_;
-      Interface* shadowedOriginal_;
-      
-      Depend4Test()
-        : mock_(new TYPE)
-        , shadowedOriginal_(Depend<Interface>::injectReplacement (mock_.get()))
-        { }
-      
-     ~Depend4Test()
-        {
-          ENSURE (mock_);
-          Depend<Interface>::injectReplacement (shadowedOriginal_);
-        }
-    };
   
   
 } // namespace lib

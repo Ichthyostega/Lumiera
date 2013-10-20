@@ -23,6 +23,7 @@
 
 #include "backend/media-access-facade.hpp"
 #include "backend/media-access-mock.hpp"
+#include "lib/test/depend-4test.hpp"
 
 #include "lib/test/run.hpp"
 #include "lib/time/diagnostics.hpp"
@@ -30,7 +31,7 @@
 
 #include <iostream>
 
-using lib::test::Use4Test;
+using lib::test::Depend4Test;
 using lib::Literal;
 using std::string;
 using std::cout;
@@ -53,7 +54,7 @@ namespace test {
       
       virtual void run(Arg) 
         {
-          Use4Test<MediaAccessMock> within_this_scope;
+          Depend4Test<MediaAccessMock> within_this_scope;
           
           queryScenario ("test-1");
           queryScenario ("test-2");

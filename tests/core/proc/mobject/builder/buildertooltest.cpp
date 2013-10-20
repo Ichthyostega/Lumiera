@@ -30,6 +30,7 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "backend/media-access-mock.hpp"
+#include "lib/test/depend-4test.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
@@ -47,7 +48,7 @@ namespace test    {
       
       using session::Clip;
       using session::AbstractMO;
-      using lib::test::Use4Test;
+      using lib::test::Depend4Test;
       using namespace mobject::test;
       
       
@@ -112,7 +113,7 @@ namespace test    {
           virtual void
           run(Arg)
             {
-              Use4Test<backend::test::MediaAccessMock> within_this_scope;
+              Depend4Test<backend::test::MediaAccessMock> within_this_scope;
               
               
               TestTool t1;
