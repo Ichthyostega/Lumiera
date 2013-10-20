@@ -56,6 +56,10 @@ namespace lumiera {
   using util::isnil;
   using lib::Literal;
   
+
+  /** storage and setup for the single system-wide config facade instance */
+  lib::Depend<Config> Config::instance;
+  
   
   namespace {
     
@@ -70,10 +74,6 @@ namespace lumiera {
   }
   
   
-  
-  
-  /** storage for the single system-wide config facade instance */
-  lib::Depend<Config> Config::instance;
   
   
   Config::Config ()

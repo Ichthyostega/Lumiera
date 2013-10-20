@@ -91,7 +91,13 @@ namespace lib {
       void*
       buildInstance()
         {
-          REQUIRE (ctorFunction_);
+          if (!ctorFunction_)
+            throw error::Fatal ("lib::Depend: attempt to retrieve a service object prior to initialisation "
+                                "of the DependencyFactory. Typically, this happens due to a misconfiguration "
+                                "regarding static initialisation order. When lib::Depend<TY> is placed into "
+                                "a class static variable, then the definition and initialisation of that "
+                                "variable must happen prior to the call which caused this exception."
+                               ,error::LUMIERA_ERROR_LIFECYCLE);
           return ctorFunction_();
         }
       
