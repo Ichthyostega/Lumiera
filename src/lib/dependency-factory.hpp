@@ -31,6 +31,8 @@
 #include "lib/nobug-init.hpp"
 #include "lib/error.hpp"
 
+#include <iostream>  /////////////TODO debug
+#include <typeinfo>  /////////////TODO debug
 
 namespace lib {
   
@@ -161,6 +163,7 @@ namespace lib {
             {
               if (!pInstance) return;
               
+              std::cerr << "--dtor-- "<<typeid(TAR).name() <<"\n";
               static_cast<TAR*> (pInstance) -> ~TAR();
               ENSURE (0 == --createCnt);
             }
@@ -178,6 +181,7 @@ namespace lib {
           TAR*
           buildInstance ()
             {
+              std::cerr << "++ctor++ "<<typeid(TAR).name() <<"\n";
               // place new instance into embedded buffer
               TAR* newInstance = create_in_buffer<TAR>(buff_);
               
