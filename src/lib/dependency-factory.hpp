@@ -111,9 +111,6 @@ namespace lib {
           return ctorFunction_();
         }
       
-      static void scheduleDestruction (void*, KillFun);
-      
-      
       
       
       
@@ -146,61 +143,39 @@ namespace lib {
         {
           /** storage for the service instance */
           char buff_[sizeof(TAR)];
-          
-#if NOBUG_MODE_ALPHA
-          static int createCnt;
-#endif
-          
-          /** deleter function to invoke the destructor
-           *  of the embedded service object instance.
-           *  A pointer to this deleter function will be
-           *  enrolled for execution at application shutdown
-           */
-          static void
-          destroy_in_place (void* pInstance)
-            {
-              if (!pInstance) return;
-              
-              std::cerr << "--dtor-- "<<typeid(TAR).name() <<"\n";
-              static_cast<TAR*> (pInstance) -> ~TAR();
-              ENSURE (0 == --createCnt);
-            }
-          
-          static void
-          _kill_immediately (void* allocatedObject)
-            {
-              destroy_in_place (allocatedObject);
-              const char* errID = lumiera_error();
-              WARN (memory, "Failure in DependencyFactory. Error flag was: %s", errID);
-            }
+          uint lifecycle_;
           
           
         public:
+          InstanceHolder()
+            : lifecycle_(0)
+            { }
+          
+         ~InstanceHolder()
+            {
+              lifecycle_ |= 4;
+              if (1 & lifecycle_)
+                {
+                  std::cerr << "--dtor-- "<<typeid(TAR).name() <<"\n";
+                  reinterpret_cast<TAR&> (buff_). ~TAR();
+                  --lifecycle_;
+            }   }
+          
+          
           TAR*
           buildInstance ()
             {
+              if (0 < lifecycle_)
+                throw error::Fatal("Attempt to double-create a singleton service. "
+                                   "Either the application logic, or the compiler "
+                                   "or runtime system is seriously broken"
+                                  ,error::LUMIERA_ERROR_LIFECYCLE);
+              
               std::cerr << "++ctor++ "<<typeid(TAR).name() <<"\n";
               // place new instance into embedded buffer
               TAR* newInstance = create_in_buffer<TAR>(buff_);
-              
-              ENSURE (0 == createCnt++, "runtime system or compiler broken");
-              try
-                {
-                  scheduleDestruction (newInstance, &destroy_in_place);
-                  return newInstance;
-                }
-              
-              catch (std::exception& problem)
-                {
-                  _kill_immediately (newInstance);
-                  throw error::State (problem, "Failed to install a deleter function "
-                                               "for clean-up at application shutdown.");
-                }
-              catch (...)
-                {
-                  _kill_immediately (newInstance);
-                  throw error::State ("Unknown error while installing a deleter function.");
-                }
+              ++lifecycle_;
+              return newInstance;
             }
         };
       
@@ -210,7 +185,7 @@ namespace lib {
       static void*
       createSingletonInstance()
         {
-          static InstanceHolder<TAR> storage;
+          static InstanceHolder<TAR> storage;   // note: the singleton(s) live here
           return storage.buildInstance();
         }
       
@@ -239,14 +214,6 @@ namespace lib {
     return & DependencyFactory::createSingletonInstance<TAR>;
   }
   
-  
-  
-#if NOBUG_MODE_ALPHA
-  /** sanity check to guard against re-entrance while instance is still alive.
-   *  This helped us in 2013 to spot a compiler bug. */
-  template<typename TAR>
-  int DependencyFactory::InstanceHolder<TAR>::createCnt;
-#endif
   
 } // namespace lib
 #endif
