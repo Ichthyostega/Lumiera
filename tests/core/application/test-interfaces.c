@@ -477,7 +477,6 @@ TEST (plugin_discover)
     printf ("error: %s\n", lumiera_error ());
 
   lumiera_interfaceregistry_destroy ();
-  lumiera_config_destroy ();
 }
 
 
@@ -496,7 +495,6 @@ TEST (plugin_unload)
   CHECK (!p, "failed to unload plugin.");
 
   lumiera_interfaceregistry_destroy ();
-  lumiera_config_destroy ();
 }
 
 
@@ -523,7 +521,6 @@ TEST (plugin_exampleplugin)
   LUMIERA_INTERFACE_CLOSE (english);
 
   lumiera_interfaceregistry_destroy ();
-  lumiera_config_destroy ();
 }
 
 TEST (plugin_exampleplugin_nested)
@@ -541,7 +538,6 @@ TEST (plugin_exampleplugin_nested)
 
   lumiera_config_interface_destroy ();
   lumiera_interfaceregistry_destroy ();
-  lumiera_config_destroy ();
 }
 
 
@@ -567,7 +563,6 @@ TEST (plugin_exampleplugin_cpp)
   LUMIERA_INTERFACE_CLOSE (english);
 
   lumiera_interfaceregistry_destroy ();
-  lumiera_config_destroy ();
 }
 
 TESTS_END
