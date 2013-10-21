@@ -31,8 +31,6 @@
 #include "lib/nobug-init.hpp"
 #include "lib/error.hpp"
 
-#include <iostream>  /////////////TODO debug
-#include <typeinfo>  /////////////TODO debug
 
 namespace lib {
   
@@ -156,7 +154,6 @@ namespace lib {
               lifecycle_ |= 4;
               if (1 & lifecycle_)
                 {
-                  std::cerr << "--dtor-- "<<typeid(TAR).name() <<"\n";
                   reinterpret_cast<TAR&> (buff_). ~TAR();
                   --lifecycle_;
             }   }
@@ -171,7 +168,6 @@ namespace lib {
                                    "or runtime system is seriously broken"
                                   ,error::LUMIERA_ERROR_LIFECYCLE);
               
-              std::cerr << "++ctor++ "<<typeid(TAR).name() <<"\n";
               // place new instance into embedded buffer
               TAR* newInstance = create_in_buffer<TAR>(buff_);
               ++lifecycle_;
