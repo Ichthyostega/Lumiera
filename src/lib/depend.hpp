@@ -169,31 +169,15 @@ namespace lib {
       
       /* === Management / Test support interface === */
       
-      /** disable and destroy the actual service instance explicitly.
-       *  Next access will re-invoke the factory to create a new instance.
-       * @warning this is a very dangerous operation. Concurrent accesses
-       *          might get NULL or even a reference to the old instance,
-       *          which, worse still, resides typically in the same memory
-       *          location as the new instance. The only way to prevent this
-       *          would be to synchronise any \em access (which is expensive)
-       *          Thus it is the \em client's duty to ensure there is no such
-       *          concurrent access, i.e. all clients of the old instance
-       *          should be disabled prior to invoking this function.
-       */
-      static void
-      shutdown()
-        {
-          SyncLock guard;
-          
-          factory.deconfigure (instance);
-          instance = NULL;
-        }
-      
       /** temporarily replace the service instance.
        *  The purpose of this operation is to support unit testing.
        * @param mock reference to an existing service instance (mock).
        * @return reference to the currently active service instance.
-       * @warning not threadsafe. Same considerations as for \c shutdown() apply
+       * @warning this is a dangerous operation and not threadsafe.
+       *       Concurrent accesses might still get the old reference;
+       *       the only way to prevent this would be to synchronise
+       *       \em any access (which is too expensive).
+       *       This feature should only be used for unit tests thusly.
        * @remark the replacement is not actively managed by the DependencyFactory,
        *       it remains in ownership of the calling client (unit test). Typically
        *       this test will keep the returned original service reference and

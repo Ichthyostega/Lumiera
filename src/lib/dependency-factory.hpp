@@ -111,8 +111,6 @@ namespace lib {
           return ctorFunction_();
         }
       
-      void deconfigure (void* existingInstance);
-      
       static void scheduleDestruction (void*, KillFun);
       
       

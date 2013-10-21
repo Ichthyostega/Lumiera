@@ -100,7 +100,6 @@ namespace test{
       run (Arg)
         {
           verify_defaultSingletonCreation();
-          verify_renewal();
           verify_SubclassCreation();
           verify_FactoryDefinition_is_sticky();
           verify_customFactory();
@@ -118,26 +117,6 @@ namespace test{
           Sub & o1 = accessor1();
           Sub & o2 = accessor2();
           CHECK (isSameObject (o1, o2));
-        }
-      
-      
-      void
-      verify_renewal()
-        {
-          Depend<Sub> accessor1;
-          Depend<Sub> accessor2;
-          uint id1 = accessor1().instanceID_;
-          CHECK (id1 == accessor2().instanceID_);
-          
-          Depend<Sub>::shutdown();
-          
-          Sub & o2 = accessor2();
-          uint id2 = accessor2().instanceID_;
-          CHECK (id1 != id2);
-          
-          Sub & o1 = accessor1();
-          CHECK (isSameObject (o1, o2));
-          CHECK (id2 == accessor1().instanceID_);
         }
       
       
@@ -163,8 +142,6 @@ namespace test{
           
           SubSub& oSub = otherSpecialAccessor();
           CHECK ( INSTANCEOF (SubSubSub, &oSub));
-          
-          Depend<SubSub>::shutdown();
           
           Depend<SubSub> yetAnotherSpecialAccessor;
           

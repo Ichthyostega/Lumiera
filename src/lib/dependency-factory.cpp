@@ -74,32 +74,12 @@ namespace lib {
             __lifecycleCheck();
             instance().destructionExecutor_.manage (object, customDeleter);
           }
-        
-        static void
-        kill (void* object)
-          {
-            __lifecycleCheck();
-            instance().destructionExecutor_.kill (object);
-          }
       };
     
     bool AutoDestructor::shutdownLock = false;
     
   }
   
-  
-  
-  /** explicitly shut down and destroy a service instance.
-   *  This can be used to re-start a service; by default, all
-   *  services are created on-demand and stay alive until
-   *  application shutdown. But a service deconfigured
-   *  through this function is destroyed right away. 
-   */
-  void
-  DependencyFactory::deconfigure (void* existingInstance)
-  {
-    AutoDestructor::kill (existingInstance);
-  }
   
   
   /** hook to install a deleter function to clean up a service object.
