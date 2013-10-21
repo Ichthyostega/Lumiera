@@ -143,7 +143,7 @@ namespace lib {
               while (i<n)
                 factory(&array_[i++]);
             }
-          catch(...) { cleanup(i); throw; }
+          catch(...) { cleanup(i-1); throw; } // destroy finished part, without the failed object 
         }
       
       ~RefArrayTable() { cleanup(); }
