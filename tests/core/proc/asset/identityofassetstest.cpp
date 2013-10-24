@@ -45,7 +45,7 @@ namespace test {
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test creating several Assets and checking object identity,
    *       detection of duplicates and version handling.
    * @see  proc_interface::AssetManager#reg

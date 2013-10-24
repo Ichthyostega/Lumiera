@@ -123,7 +123,7 @@ cout << "__________________________\n" \
   
   
   
-  /**************************************************************************
+  /**********************************************************************//**
    * @test check the handling of types representing a specific configuration.
    *       Basically, this is a bitset like feature, but working on types
    *       instead of runtime values. The Goal is to detect automatically

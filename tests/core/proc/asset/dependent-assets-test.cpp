@@ -43,7 +43,7 @@ namespace test {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test the handling of Assets dependent on other Assets and the
    *       enabling/disabling of Assets.
    * @see  asset::Asset

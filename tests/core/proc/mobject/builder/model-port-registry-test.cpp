@@ -90,7 +90,7 @@ namespace test  {
   
   
   
-  /*********************************************************************************
+  /*****************************************************************************//**
    * @test create a standalone model port registry to verify the behaviour of
    *       model ports, accessed through reference handles. This test provides an
    *       example setup detached from the real usage situation within the builder.

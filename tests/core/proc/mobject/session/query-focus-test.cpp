@@ -55,7 +55,7 @@ namespace test    {
   using std::endl;
   
   
-  /***********************************************************************************
+  /*******************************************************************************//**
    * @test handling of current query focus when navigating a system of nested scopes.
    *       Using a pseudo-session (actually just a PlacementIndex), this test
    *       accesses some nested scopes and then checks moving the "current scope".

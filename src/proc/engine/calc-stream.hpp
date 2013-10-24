@@ -72,7 +72,7 @@ namespace engine{
   
   
   
-  /*********************************************************
+  /*****************************************************//**
    * A calculation stream groups and abstracts a series of
    * calculation jobs, delivering frames into the configured
    * OutputSlot in a timely fashion. Behind the scenes, this

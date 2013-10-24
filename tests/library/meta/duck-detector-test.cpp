@@ -59,7 +59,7 @@ namespace test{
   
   
   
-  /***********************************************************************************
+  /*******************************************************************************//**
    * @test verify building predicates to detect properties of a type at compile time.
    *       Especially, this allows us to detect if a type in question
    *       - has a nested type with a specific name

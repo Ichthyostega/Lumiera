@@ -44,7 +44,7 @@ namespace test {
   
   
   
-  /******************************************************
+  /**************************************************//**
    * @test validate the equality and order relations of 
    *       Asset::Ident and Asset objects.
    * @note a known problem is that only Asset smart ptrs

@@ -81,7 +81,7 @@ namespace test{
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test define a MultiFact (factory with dynamic registration),
    *       which accepts additional arguments and passes them
    *       through to the registered factory function(s).

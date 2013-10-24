@@ -139,7 +139,7 @@ namespace test{
   
   
   
-  /******************************************************************
+  /**************************************************************//**
    *  @test create some (opaque) data sources,
    *        and then pull the data out by iteration.
    *        Demonstrates simple usage of the IterSource interface

@@ -98,7 +98,7 @@ namespace test {
   using func::apply;
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    * @test building a function closure for a given function or functor,
    *       while arguments are passed in as tuple
    *       - accessing signatures as typelists

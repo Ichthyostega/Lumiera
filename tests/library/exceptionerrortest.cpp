@@ -54,7 +54,7 @@ namespace lumiera {
     LUMIERA_EXCEPTION_DECLARE (DerivedError, error::External,  LUMIERA_ERROR_DERIVED);
     
     
-    /**********************************************************
+    /******************************************************//**
      * Some aspects of C++ exception handling.
      * Not to be confused with the basic C-style error value 
      * mechanism used by the low-level parts of the backend.

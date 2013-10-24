@@ -61,7 +61,7 @@ namespace test {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test stress test for the Advice system:
    *       Concurrently add a multitude of advice provisions and check correct
    *       matching and dispatch of all advice.

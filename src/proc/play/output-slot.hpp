@@ -95,7 +95,7 @@ namespace play {
   
   
   
-  /********************************************************************************
+  /****************************************************************************//**
    * Interface: Generic output sink.
    * An OutputSlot represents the possibility to send data through multiple
    * channels to some kind of external sink (video in GUI window, video full screen,

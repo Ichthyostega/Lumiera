@@ -74,7 +74,7 @@ namespace test  {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test verify the properties of the BufferMetadata records used
    *       internally within BufferProvider to attach additional
    *       organisational data to the exposed buffers.

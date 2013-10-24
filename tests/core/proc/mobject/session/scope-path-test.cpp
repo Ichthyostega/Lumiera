@@ -50,7 +50,7 @@ namespace test    {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test properties and behaviour of the path of nested scopes.
    *       Using a pseudo-session (actually just a PlacementIndex),
    *       this test  creates some nested scopes, builds scope paths

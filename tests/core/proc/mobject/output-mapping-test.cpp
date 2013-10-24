@@ -45,7 +45,7 @@ namespace test {
   typedef asset::ID<Pipe> PID;
   
   
-  /*********************************************************************************
+  /*****************************************************************************//**
    * @test create a synthetic / example mapping to verify generic mapping behaviour.
    *       We're creating a custom mapping type here, for this test only: The
    *       struct DummyDef provides a "definition context" for this custom mapping

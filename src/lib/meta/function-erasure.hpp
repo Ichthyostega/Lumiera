@@ -72,7 +72,7 @@ namespace meta{
   
   
   
-  /******************************************************
+  /**************************************************//**
    * Generic wrapper carrying a function object
    * while hiding the actual function signature
    * - create it using a function ref or pointer

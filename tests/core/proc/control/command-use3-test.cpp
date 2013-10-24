@@ -60,7 +60,7 @@ namespace test    {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test command usage aspects III: elaborate handling patterns, like e.g.
    *       asynchronous or repeated invocation and command sequence bundles.
    *

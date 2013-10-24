@@ -72,7 +72,7 @@ namespace test {
   
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * @test verify some convenience shortcuts and helpers dealing
    * with Collections and sequences (Iterators).
    * - metafunctions to distinguish STL containers and Lumiera Iterators

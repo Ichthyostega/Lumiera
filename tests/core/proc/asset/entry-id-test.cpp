@@ -66,7 +66,7 @@ namespace test {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test proof-of-concept test for a combined symbolic and hash based ID.
    *       - create some symbolic IDs 
    *       - check default assignment works properly

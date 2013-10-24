@@ -32,7 +32,7 @@
 namespace backend {
   
   
-  /******************************************************************
+  /**************************************************************//**
    * Interface to the backend layer (renderfarm node):
    * Global access point for starting a server listening on a TCP port
    * and accepting render tasks. Possibly such a server could also

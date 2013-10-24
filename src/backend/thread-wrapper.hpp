@@ -53,7 +53,7 @@ namespace backend {
   
   
   
-  /****************************************************************************
+  /************************************************************************//**
    * A thin convenience wrapper for dealing with threads,
    * as implemented by the threadpool in the backend (based on pthread).
    * Using this wrapper...

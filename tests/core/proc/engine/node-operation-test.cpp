@@ -39,7 +39,7 @@ namespace test  {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test check render node operation modes and collaboration.
    */
   class NodeOperation_test : public Test

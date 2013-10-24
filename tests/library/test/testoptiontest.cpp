@@ -32,7 +32,7 @@ using std::endl;
 
 namespace test {
   
-  /****************************************************************
+  /************************************************************//**
    * invokes the TestOption parser for various example commandlines
    * @test for test::TestOption, parsing of commandline options
    * @see test::Suite

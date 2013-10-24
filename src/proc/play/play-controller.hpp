@@ -48,7 +48,7 @@ namespace play {
   using std::string;
   
   
-  /********************************************************************
+  /****************************************************************//**
    * TODO do we still need that??????
    * Isn't lumiera::Play::Controller already sufficient?
    */

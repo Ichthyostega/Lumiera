@@ -67,7 +67,7 @@ namespace test{
   
   
   
-  /****************************************************************************
+  /************************************************************************//**
    * @test for now (9/09) this is a playground for shaping a vague design idea
    *       - base types and casts 
    *       - exploring some extensions

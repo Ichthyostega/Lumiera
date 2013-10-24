@@ -55,7 +55,7 @@ namespace lumiera {
   using std::string;
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * C++ wrapper for convenient access to the Lumiera config system.
    * 
    * @warning Config system not fully implemented yet. Thus for now

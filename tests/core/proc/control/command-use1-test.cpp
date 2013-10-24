@@ -49,7 +49,7 @@ namespace test    {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test command usage aspects I: defining commands in various ways,
    *       then re-accessing those definitions, create instances,
    *       invoke them and undo the effect. Clean up finally.

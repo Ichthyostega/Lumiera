@@ -134,7 +134,7 @@ namespace test{
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test verify correct behaviour of an display "Digxel":
    *       A self-contained numeric element to support building displays.
    *       - build a Digxel

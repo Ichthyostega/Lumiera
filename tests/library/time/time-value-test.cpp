@@ -44,7 +44,7 @@ namespace time{
 namespace test{
   
   
-  /********************************************************
+  /****************************************************//**
    * @test verify handling of time values, time intervals.
    *       - creating times and time intervals
    *       - comparisons

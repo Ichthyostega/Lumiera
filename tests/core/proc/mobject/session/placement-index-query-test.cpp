@@ -48,7 +48,7 @@ namespace test    {
   using std::endl;
   
   
-  /****************************************************************************
+  /************************************************************************//**
    * @test accessing the PlacementIndex through the generic query interface,
    *       for discovering scope contents and containing scope.
    *       

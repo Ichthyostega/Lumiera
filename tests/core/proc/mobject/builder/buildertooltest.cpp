@@ -94,7 +94,7 @@ namespace test    {
       
       
       
-      /*************************************************************************************
+      /*********************************************************************************//**
        * @test the generic visitor pattern specialised for treating MObjects in the builder.
        * Besides using existing MObject types (at the moment session::Clip),
        * we create a yet-unknown new MObject subclass. When passing such to any

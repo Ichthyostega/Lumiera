@@ -85,7 +85,7 @@ namespace engine{
   
   
   
-  /******************************************************
+  /**************************************************//**
    * A service to schedule series of calculations,
    * delivering the rendered data into an external output
    * sink in a timely fashion. Actually the CalculationStream
@@ -108,7 +108,7 @@ namespace engine{
       
       
     public:
-      /*************************************************************
+      /*********************************************************//**
        * Quality-of-Service definition for an Render Engine usage.
        * This strategy defines how to decide between conflicting goals like
        * - timely delivery

@@ -51,7 +51,7 @@ namespace test  {
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test basic properties of Pipe (structural) Assets.
    *       <ul><li>created by referral</li>
    *           <li>access existing pipe by referral</li>

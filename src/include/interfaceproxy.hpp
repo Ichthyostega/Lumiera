@@ -89,7 +89,7 @@ namespace facade {
   LUMIERA_ERROR_DECLARE(FACADE_LIFECYCLE);  
 
 
-  /*********************************************************************
+  /*****************************************************************//**
    * access-frontend to the implementation of a service.
    * Usually, an instance of Accessor is placed as static member
    * right into the facade interface used to access the service.

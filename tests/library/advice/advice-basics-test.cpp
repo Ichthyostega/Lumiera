@@ -92,7 +92,7 @@ namespace test {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test proof-of-concept for the Advice collaboration.
    *       Advice allows data exchange without coupling the participants tightly.
    *       This test demonstrates the basic expected behaviour in a simple but

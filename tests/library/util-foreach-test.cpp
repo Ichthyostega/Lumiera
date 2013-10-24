@@ -108,7 +108,7 @@ namespace test {
   
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * @test Invoking an operation for each element of a collection.
    *       Covers the various flavours of these convenience helpers:
    *       They might operate either on a STL container (providing 

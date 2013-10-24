@@ -55,7 +55,7 @@ namespace asset {
     , META
     };
   
-  /*************************************
+  /************************************************************************************//**
    * Tree like classification of Assets.
    * By virtue of the Category, Assets can be organised in nested bins (folders).
    * This includes the distinction of different kinds of Assets, like Audio, Video, Effects...

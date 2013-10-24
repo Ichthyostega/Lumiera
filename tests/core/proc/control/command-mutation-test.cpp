@@ -69,7 +69,7 @@ namespace test    {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * Verify the behaviour of the type erased closure, which is used
    * by Proc-Layer commands to implement the capturing and later
    * re-invocation of a function.

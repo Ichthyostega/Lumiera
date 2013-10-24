@@ -78,7 +78,7 @@ namespace test {
   
   
   
-  /***********************************************************************************
+  /*******************************************************************************//**
    * @test verify the (static) classification/detection of iterables.
    *       Currently (1/10) we're able to detect the following
    *       - a STL like container with \c begin() and \c end()

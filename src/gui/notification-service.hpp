@@ -49,7 +49,7 @@ namespace gui {
   
   
   
-  /******************************************************
+  /**************************************************//**
    * Actual implementation of the GuiNotification service
    * within the Lumiera GTK GUI. Creating an instance of
    * this class automatically registers the interface

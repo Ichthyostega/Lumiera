@@ -33,7 +33,7 @@ namespace lumiera{
 namespace test   {
   
   
-  /******************************************
+  /**************************************//**
    * @todo come up with some more bugs
    * @test cover known regressions
    */

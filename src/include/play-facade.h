@@ -59,7 +59,7 @@ namespace lumiera {
   using std::tr1::weak_ptr;
     
     
-    /******************************************************************
+    /**************************************************************//**
      * Interface to the Player subsystem of Lumiera (Proc-Layer).
      * Global access point for starting playback and render processes,
      * calculating media data by running the render engine.

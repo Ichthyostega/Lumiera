@@ -52,7 +52,7 @@ namespace test    {
   
 
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test verify correct handling of object identity. Create test objects,
    *       add placements to a dummy index/session, then create PlacementRef
    *       and MObjectRef handles. Finally do cross comparisons.

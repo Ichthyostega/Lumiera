@@ -58,7 +58,7 @@ namespace test    {
   using lumiera::Query;
   
   
-  /********************************************************************************
+  /****************************************************************************//**
    * @test verify retrieval and instance management of the top level facade objects
    *       as integrated with the session and high-level model. Both sequences and
    *       timelines are at the same time structural assets and act as facades

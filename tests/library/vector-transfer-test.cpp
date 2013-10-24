@@ -114,7 +114,7 @@ namespace test {
   
   
   
-  /**********************************************************************************
+  /******************************************************************************//**
    *  @test growing (re-allocating) a vector with noncopyable objects, with the
    *        help of a special Allocator and a custom \c transfer_control operation
    *        provided by the contained objects. The idea is to allow some special

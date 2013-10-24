@@ -56,7 +56,7 @@ namespace test  {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test verify test helper for engine tests: a dummy data frame.
    *       TestFrame instances can be created right away, without any
    *       external library dependencies. A test frame is automatically

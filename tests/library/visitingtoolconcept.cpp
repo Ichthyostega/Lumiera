@@ -395,7 +395,7 @@ namespace lumiera {
       
       
       
-      /*************************************************************************
+      /*********************************************************************//**
        * @test build and run some common cases for developing and verifying
        *       ichthyo's implementation concept for the Visitor Pattern.
        *       Defines a hierarchy of test classes to check the following cases

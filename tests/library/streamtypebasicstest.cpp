@@ -41,7 +41,7 @@ namespace test_format {
   typedef StreamType::ImplFacade const& ImplType;
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test check the basic workings of the stream type handling.
    *       create some stream implementation data, build a 
    *       StreamType::ImplFacade from this, and derive a prototype

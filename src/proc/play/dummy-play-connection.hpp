@@ -210,7 +210,7 @@ namespace play {
   }
 
   
-  /********************************************************************
+  /****************************************************************//**
    * Framework for dummy playback and rendering.
    * A DummyPlayConnection provides a coherent set of placeholders,
    * allowing to start a data producing process while leaving out

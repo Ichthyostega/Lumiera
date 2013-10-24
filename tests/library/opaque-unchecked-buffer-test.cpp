@@ -123,7 +123,7 @@ namespace test{
   
   
   
-  /**********************************************************************************
+  /******************************************************************************//**
    *  @test use an inline buffer to place objects of a subclass, without any checks.
    *        InPlaceBuffer only provides minimal service, to be covered here, 
    *        including automatic dtor invocation and smart-ptr style access.

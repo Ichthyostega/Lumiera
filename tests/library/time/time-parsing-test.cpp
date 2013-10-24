@@ -92,7 +92,7 @@ namespace test{
   
   
   
-  /********************************************************
+  /****************************************************//**
    * @test parse textual time specifications given
    *       in the supported timecode formats
    */

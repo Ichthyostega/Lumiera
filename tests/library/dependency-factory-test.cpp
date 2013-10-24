@@ -82,7 +82,7 @@ namespace test{
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test verify the various modes of creating dependencies.
    *       - standard case is singleton creation
    *       - configuration of a specific subclass for the singleton

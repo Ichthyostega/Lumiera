@@ -41,7 +41,7 @@ namespace lib {
 namespace test{
   
   
-  /**********************************************************
+  /******************************************************//**
    * @test properties of Symbol data type. Currently this is
    *       just a thin wrapper for a const char *
    * @todo this test is very much WIP, as the implementation

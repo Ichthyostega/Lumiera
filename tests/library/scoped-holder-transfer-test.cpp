@@ -92,7 +92,7 @@ namespace test {
   
   
   
-  /**********************************************************************************
+  /******************************************************************************//**
    *  @test growing a vector containing noncopyable objects wrapped into ScopedHolder
    *        instances. This requires the use of a custom allocator, invoking a
    *        \c transfer_control() function to be provided for the concrete

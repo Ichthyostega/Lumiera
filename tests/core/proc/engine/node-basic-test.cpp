@@ -71,7 +71,7 @@ namespace test  {
   }
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test basic render node properties and behaviour.
    */
   class NodeBasic_test : public Test

@@ -159,7 +159,7 @@ namespace test{
   
   
   
-  /**********************************************************************
+  /******************************************************************//**
    * @test create multiple threads, all concurrently trying to increment
    * a number of counters with random steps and random pauses. Without
    * locking, the likely result will be differing counters.

@@ -72,7 +72,7 @@ namespace gui {
   
   
   
-  /********************************************************************
+  /****************************************************************//**
    * Actual implementation of a single displayer slot. Internally,
    * it is connected via the Glib::Dispatcher for outputting frames 
    * to a viewer widget, which executes within the GTK event thread.
@@ -109,7 +109,7 @@ namespace gui {
   
   
   
-  /******************************************************
+  /**************************************************//**
    * Actual implementation of the DisplayService.
    * Creating an instance of this class automatically
    * registers the interface lumieraorg_Display with

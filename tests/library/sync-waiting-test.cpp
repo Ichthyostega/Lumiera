@@ -118,7 +118,7 @@ namespace test{
   
   
   
-  /****************************************************************************
+  /************************************************************************//**
    * @test concurrent waiting and notification, implemented via object monitor.
    * This test covers the second part of the monitor pattern, which builds upon
    * the locking part, additionally using an embedded condition. We provide

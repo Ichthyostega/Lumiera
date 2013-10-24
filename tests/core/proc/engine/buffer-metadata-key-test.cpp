@@ -155,7 +155,7 @@ namespace test  {
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test verify calculation and relations of Buffer metadata type keys.
    *       These are used internally within the standard implementation
    *       of BufferProvider to keep track of various kinds of buffers,

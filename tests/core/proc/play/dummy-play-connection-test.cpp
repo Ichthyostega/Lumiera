@@ -48,7 +48,7 @@ namespace test {
   typedef DummyPlayConnection<PlayTestFrames_Strategy> DummyPlayer;
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test verify the OutputSlot interface and base implementation
    *       by performing full data exchange cycle. This is a
    *       kind of "dry run" for documentation purposes,

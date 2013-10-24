@@ -91,7 +91,7 @@ namespace test    {
   
   
   
-  /*************************************************************
+  /*********************************************************//**
    * @test Build a test object, which accepts a bind(...) call
    *       with specifically typed arguments.
    *       

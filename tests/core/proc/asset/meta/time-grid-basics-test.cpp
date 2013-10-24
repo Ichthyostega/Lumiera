@@ -61,7 +61,7 @@ namespace test {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test build some simple time grids and verify their behaviour
    *       for quantising (grid aligning) time values.
    * 

@@ -79,7 +79,7 @@ namespace test {
   
   
   
-  /**************************************************************************
+  /**********************************************************************//**
    * @test check the basic utilities for manipulating (fixed) type sequences.
    *       - re-build an sequence from a type list
    *       - prepend a type to a given type sequence

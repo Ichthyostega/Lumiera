@@ -61,7 +61,7 @@ namespace test    {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test basic behaviour of the nested placement search scopes.
    *       Using a pseudo-session (actually just a PlacementIndex),
    *       this test creates some nested scopes and then...

@@ -50,7 +50,7 @@ namespace test{
   using proc::asset::meta::TimeGrid;
   
   
-  /********************************************************
+  /****************************************************//**
    * @test verify handling of quantised time values.
    *       - the simple usage, just referring to an 
    *         predefined grid by name

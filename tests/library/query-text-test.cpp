@@ -49,7 +49,7 @@ namespace test{
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test cover basic properties of the generic syntactical query representation.
    *       - build from query string
    *       

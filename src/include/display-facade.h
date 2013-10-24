@@ -60,7 +60,7 @@
 namespace lumiera {
   
   
-  /******************************************************************
+  /**************************************************************//**
    * Interface for outputting frames to an (already allocated) viewer
    * or display. The viewer is addressed by an "slot" handle, which the 
    * client receives from some other public interface. This reflects

@@ -82,7 +82,7 @@ namespace test{
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test specialised variant of the Singleton Factory, for creating
    *       subclasses (implementation classes) without coupling the
    *       caller to the concrete class type.

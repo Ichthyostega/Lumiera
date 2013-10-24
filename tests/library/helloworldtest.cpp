@@ -34,7 +34,7 @@ using util::isnil;
 namespace lumiera{
 namespace test   {
   
-  /******************************************
+  /**************************************//**
    * Hellooooooo the world is just a test
    * @test demo of using the test framework
    */

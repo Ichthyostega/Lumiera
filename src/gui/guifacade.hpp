@@ -51,7 +51,7 @@ namespace gui {
   
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * Global access point for loading and starting up the Lumiera GTK GUI
    * and for controlling the GUI lifecycle. The implementation part of
    * this class also is responsible for making the "business" interface

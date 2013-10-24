@@ -123,7 +123,7 @@ namespace lib {
   
   
   
-  /************************************************************
+  /********************************************************//**
    * A Mixin to add a private ID type to the target class,
    * together with storage to hold an instance of this ID,
    * getter and setter, and a templated version of the ID type

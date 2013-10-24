@@ -54,7 +54,7 @@ namespace test{
   
   
   
-  /********************************************************
+  /****************************************************//**
    * @test cover the basic Quantiser API.
    * This test uses a standalone quantiser implementation
    * to demonstrate and verify the basic behaviour

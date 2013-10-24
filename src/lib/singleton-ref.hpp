@@ -51,7 +51,7 @@ namespace lib {
   
   namespace singleton {
   
-    /***************************************
+    /***********************************//**
      * Detail/Policy class specifying
      * how the SingletonRef can be accessed
      */
@@ -96,7 +96,7 @@ namespace lib {
   
   
   
-  /*************************************************************
+  /*********************************************************//**
    * Helper template providing singleton access without managing
    * object creation and lifecycle. Just the access to the
    * implementation instance is handled: on creation, access is

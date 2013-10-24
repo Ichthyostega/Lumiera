@@ -92,7 +92,7 @@ namespace test    {
   using asset::AssetManager;
   
   
-  /********************************************************************************
+  /****************************************************************************//**
    * @test verify the tracking of special session/model elements, to be exposed
    *       through an self-contained interface module on the session API.
    *       The basic element-tracking mechanism uses a simple (vector based)

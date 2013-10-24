@@ -50,7 +50,7 @@ namespace test{
   
   
   
-  /********************************************************************************
+  /****************************************************************************//**
    * @test timeout feature on condition wait as provided by pthread and accessible
    *       via the object monitor based locking/waiting mechanism. Without creating
    *       multiple threads, we engage into a blocking wait, which aborts due to

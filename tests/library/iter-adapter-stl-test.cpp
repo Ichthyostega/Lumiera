@@ -70,7 +70,7 @@ namespace test{
   
   
   
-  /************************************************************************
+  /********************************************************************//**
    * @test verify some of the adapters to expose typical container
    *       usage patterns as Lumiera Forward Iterators.
    *       - distinct values from a sequence

@@ -75,7 +75,7 @@ namespace test{
   
   
   
-  /***************************************************************************************
+  /***********************************************************************************//**
    * @test Investigate various situations of using a Maybe value or option monad.
    * @note this is a testbed for experiments for the time being 11/2011
    * 

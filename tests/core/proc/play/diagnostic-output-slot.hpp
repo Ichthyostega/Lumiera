@@ -261,7 +261,7 @@ namespace play {
   
   
   
-  /********************************************************************
+  /****************************************************************//**
    * Helper for unit tests: Mock output sink.
    * Complete implementation of the OutputSlot interface, with some
    * additional stipulations to support unit testing.

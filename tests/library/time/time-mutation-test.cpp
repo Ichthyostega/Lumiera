@@ -57,7 +57,7 @@ namespace test{
   
   
   
-  /****************************************************************
+  /************************************************************//**
    * @test cover all basic cases for mutating a time specification.
    *       - change to a given value
    *       - change by an offset

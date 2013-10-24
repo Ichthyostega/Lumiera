@@ -92,7 +92,7 @@ namespace test{
   typedef ScopedCollection<Dummy, sizeof(SubDummy)> CollD;
   
   
-  /********************************************************************
+  /****************************************************************//**
    *  @test ScopedCollection manages a fixed set of objects, but these
    *        child objects are noncopyable, may be polymorphic, an can
    *        be created either all at once or chunk wise. The API is

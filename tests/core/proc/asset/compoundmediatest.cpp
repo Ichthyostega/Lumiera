@@ -42,7 +42,7 @@ namespace test {
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * Verifying the special operations available for compound media assets
    * comprised of several elementary media assets.
    */

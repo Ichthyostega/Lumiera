@@ -90,7 +90,7 @@ namespace test    {
   
   
   
-  /*****************************************************************************************
+  /*************************************************************************************//**
    * @test cover command equality detection. Two commands are deemed equivalent, if they
    *       - build on the same Mutation functors
    *       - are either both incomplete or

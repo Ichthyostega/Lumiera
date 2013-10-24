@@ -56,7 +56,7 @@ namespace test{
   
   
   
-  /************************************************************************
+  /********************************************************************//**
    * @test check the various small helpers and utilities we utilise
    *       for dealing with ConfigQuery 
    */

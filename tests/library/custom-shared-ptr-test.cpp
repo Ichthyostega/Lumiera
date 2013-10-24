@@ -63,7 +63,7 @@ namespace test{
     };
   
   
-  /****************************************************************
+  /************************************************************//**
    * @test assure correct behaviour of lumiera's custom shared-ptr,
    *       including ADL of operators, shared ownership, typing
    *       and ordering

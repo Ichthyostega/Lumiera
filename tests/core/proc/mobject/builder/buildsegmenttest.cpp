@@ -40,7 +40,7 @@ namespace test {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test the builder core functionality: create a render pipeline
    *       for a given segment of the Session/Timeline.
    */

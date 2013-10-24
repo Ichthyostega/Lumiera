@@ -50,7 +50,7 @@ namespace test    {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test removing a test clip from the Session/Model.
    * @see  mobject::session::Clip
    * @see  mobject::Session

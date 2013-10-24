@@ -66,7 +66,7 @@ namespace test{
   
   
   
-  /**********************************************************
+  /******************************************************//**
    * @test verify the implementation of a validity check,
    *       to be accessed as an implicit conversion to bool.
    *       

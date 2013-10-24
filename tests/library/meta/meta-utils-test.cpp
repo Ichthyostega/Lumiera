@@ -39,7 +39,7 @@ namespace test {
   
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    * @test verify basic type trait and metaprogramming helpers.
    *       - marker types to tell which overload the compiler picks
    *       - simple trait to detect the possibility of a string conversion

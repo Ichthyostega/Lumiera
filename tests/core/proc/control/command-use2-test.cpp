@@ -71,7 +71,7 @@ namespace test    {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test command usage aspects II: patterns of invoking commands.
    * 
    * @todo this test is still on hold, as the non-trivial patterns aren't implemented as of 10/09

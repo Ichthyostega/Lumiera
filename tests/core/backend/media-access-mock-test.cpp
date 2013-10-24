@@ -44,7 +44,7 @@ namespace test {
   
   
   
-  /********************************************************************************
+  /****************************************************************************//**
    * @test inject a Mock object replacing the backend_interface::MediaAccessFacade.
    *       Verify if the Mock object behaves as expected when calling the Facade.
    */

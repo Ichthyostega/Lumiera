@@ -94,7 +94,7 @@ namespace test{
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test build several wrappers, each based on a different storage,
    * all providing RefArray access to a given vector. The rationale
    * for RefArray is to expose just the interface: the data structure

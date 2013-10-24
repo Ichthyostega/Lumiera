@@ -55,7 +55,7 @@ namespace test    {
   
   
   
-  /**********************************************************************************
+  /******************************************************************************//**
    * @test operate and verify a simple dummy command handling pattern.
    * @note this test covers mainly the behaviour of a handling pattern as a concept,
    *       not so much the behaviour of the (standard) handling pattern implementations.

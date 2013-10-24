@@ -70,7 +70,7 @@ namespace test {
   
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    * @test Cover various aspects of the type tuple.
    *       Check the metaprogramming behaviour...
    *       - build a tuple type from an existing typelist

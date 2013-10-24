@@ -79,7 +79,7 @@ namespace test{
   
   
   
-  /***************************************************************************************
+  /***********************************************************************************//**
    * @test cover the basic operations of a custom allocator, delegating to mpool.
    *       The SimpleAllocator doesn't provide any ref-counting or tracking facilities,
    *       nor does he support bulk de-allocation. The advantage over using std::allocator

@@ -70,7 +70,7 @@ namespace test{
   
   
   
-  /***************************************************************************************
+  /***********************************************************************************//**
    * @test cover the basic implementation of a custom allocator, delegating to mpool.
    *       TypedAllocationManager is a base class, used e.g. to build the CommandRegistry.
    * 

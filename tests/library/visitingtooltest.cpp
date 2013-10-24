@@ -95,7 +95,7 @@ namespace test1 {
   
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    * @test our lib implementation of the visitor pattern.
    *       Defines a hierarchy of test classes to check the following cases
    *       - calling the correct visiting tool specialised function

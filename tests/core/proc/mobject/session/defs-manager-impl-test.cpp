@@ -81,7 +81,7 @@ namespace test    {
   
   
   
-  /************************************************************************
+  /********************************************************************//**
    * @test verify some general assumptions regarding implementation details
    *       of the the defaults manager.
    * @see  DefsManager_test for the "big picture"

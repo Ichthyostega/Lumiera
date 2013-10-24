@@ -396,7 +396,7 @@ namespace lib {
   using sync::RecursiveLock_Waitable;
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    * Facility for monitor object based locking.
    * To be attached either on a per class base or per object base.
    * Typically, the client class will inherit from this template (but it

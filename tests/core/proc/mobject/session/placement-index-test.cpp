@@ -52,7 +52,7 @@ namespace test    {
   typedef PlacementIndex& Idx;
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test basic behaviour of the index mechanism used to keep track
    *       of individual Placements as added to the current Session.
    * @see  mobject::Placement

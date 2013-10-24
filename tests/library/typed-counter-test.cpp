@@ -299,7 +299,7 @@ namespace test{
   
   
   
-  /***************************************************************************************
+  /***********************************************************************************//**
    * @test build multiple sets of type-based contexts and run a simple counting operation
    *       in each of them concurrently. Check the proper allocation of type-IDs in each
    *       context and verify correct counting operation by checksum.

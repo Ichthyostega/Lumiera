@@ -82,7 +82,7 @@ namespace test{
   
   
   
-  /**************************************************************************
+  /**********************************************************************//**
    * @test use a wrapper to simplify handling of thread-local data.
    *       Create some threads, each referring to another piece of data
    *       through the "same" wrapper instance.

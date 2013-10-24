@@ -45,7 +45,7 @@ namespace test  {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test detailed coverage of the various CalcStream flavours
    *       supported by the render engine interface.
    * 

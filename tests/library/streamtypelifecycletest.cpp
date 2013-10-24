@@ -59,7 +59,7 @@ namespace test_format {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test check the stream type registration lifecycle. 
    *       Any internal or external component (plugin) can extend
    *       the Proc Layer's registry of media stream types.

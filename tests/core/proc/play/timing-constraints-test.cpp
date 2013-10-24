@@ -50,7 +50,7 @@ namespace test {
 //typedef DummyPlayConnection<PlayTestFrames_Strategy> DummyPlayer;
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test document and verify the definition and combining of
    *       timing constraints for playback and rendering.
    */

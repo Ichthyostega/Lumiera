@@ -79,7 +79,7 @@ namespace test    {
   
   
   
-  /**********************************************************************************************
+  /******************************************************************************************//**
    * @test how to discover contents or location of a container-like part of the high-level model.
    *       As this container-like object is just a concept and actually implemented by the
    *       PlacementIndex, this means querying the index for elements registered with

@@ -79,7 +79,7 @@ namespace gui {
   
   namespace { // implementation details
     
-    /******************************************************************************
+    /**************************************************************************//**
      * Implement the necessary steps for actually making the Lumiera Gui available.
      * Open the business interface(s) and start up the GTK GUI main event loop.
      */

@@ -67,7 +67,7 @@ namespace test{
   
   
   
-  /********************************************************
+  /****************************************************//**
    * @test verify handling of grid aligned timecode values.
    *       - full cycle from parsing to formatting
    *       - mutating the components of timecode

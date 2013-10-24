@@ -73,7 +73,7 @@ namespace test    {
   
   
   
-  /**********************************************************************************************
+  /******************************************************************************************//**
    * @test cover the part of the session API allowing to retrieve specific elements by query.
    *       - This test first picks an object from the test session, where the filter predicate
    *         utilises the specific MObject subclass (here DummyMO).

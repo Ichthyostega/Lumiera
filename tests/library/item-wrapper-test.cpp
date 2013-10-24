@@ -92,7 +92,7 @@ namespace test{
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test use the ItemWrapper to define inline-storage holding values,
    *       pointers and references. Verify correct behaviour in each case,
    *       including (self)assignment, empty check, invalid dereferentiation.

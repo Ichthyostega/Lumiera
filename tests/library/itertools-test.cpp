@@ -82,7 +82,7 @@ namespace test{
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    *  @test build combined and filtering iterators with the help of lib::IterTool.
    *        Check correct behaviour of the resulting iterators and
    *        verify they fulfil the Lumiera Forward Iterator concept

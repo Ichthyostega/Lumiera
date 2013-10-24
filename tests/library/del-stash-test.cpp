@@ -90,7 +90,7 @@ namespace test{
   
   
   
-  /****************************************************************************
+  /************************************************************************//**
    * @test create a bunch of objects with varying type and size, memorising
    *       how to kill them properly. Verify everyone is dead after mass-kill.
    *       Use a checksum not only to verify the number of objects created and

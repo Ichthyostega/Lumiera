@@ -48,7 +48,7 @@ namespace test{
   using time::FSecs;
   
   
-  /********************************************
+  /****************************************//**
    * @test sanity check of basic Time handling.
    */
   class TimeBasics_test : public Test

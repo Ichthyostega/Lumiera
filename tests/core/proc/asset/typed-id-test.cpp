@@ -99,7 +99,7 @@ namespace test {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test outline of an instance registration and accounting service.
    *       The service is self-contained and supports automatic registration
    *       and deregistration. The instance access is configurable on a 

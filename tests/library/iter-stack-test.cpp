@@ -45,7 +45,7 @@ namespace test{
   
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * @test cover behaviour of a convenience class built by using a
    *       \c std::deque as "state core" of an Lumiera IterStateWrapper.
    *       - iterable according to the Lumiera Forward Iterator concept

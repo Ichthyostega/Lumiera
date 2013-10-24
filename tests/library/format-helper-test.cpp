@@ -46,7 +46,7 @@ namespace test {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test verifies the proper working of some string-formatting helper functions.
    *       - util::str() provides a failsafe to-String conversion, preferring
    *         an built-in conversion, falling back to just a mangled type string.

@@ -95,7 +95,7 @@ namespace test{
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test verify simple setup of the MultiFact template.
    *       Define a hierarchy of test dummy objects, in order to
    *       register them automatically for creation through a suitable

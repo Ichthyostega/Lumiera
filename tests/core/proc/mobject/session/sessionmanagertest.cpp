@@ -39,7 +39,7 @@ namespace session {
 namespace test    {
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * Check the session management operations provided by mobject::session::Session
    * This includes accessing the current Session (somewhat a singleton).
    * @todo load a Mock session

@@ -32,7 +32,7 @@
 namespace backend {
   
   
-  /******************************************************************
+  /**************************************************************//**
    * Interface to the backend layer (render engine subsystem):
    * Global access point for starting the render engine subsystem and
    * for defining the public interface(s) for talking with the engine.

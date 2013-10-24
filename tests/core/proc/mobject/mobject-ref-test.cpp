@@ -84,7 +84,7 @@ namespace test    {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test properties and behaviour of the external reference-mechanism for
    *       MObjects placed into the session. We create a simple, simulated
    *       "session" (no real session datastructure) and a mock PlacementIndex.

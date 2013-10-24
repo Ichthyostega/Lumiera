@@ -39,7 +39,7 @@ namespace test  {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test creating and wiring various kinds of render nodes.
    */
   class NodeFabrication_test : public Test

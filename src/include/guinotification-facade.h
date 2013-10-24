@@ -49,7 +49,7 @@ namespace gui {
   using std::string;
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * Global access point to push state update and notification of events
    * from the lower layers into the Lumiera GUI. Typically, this happens
    * asynchronously and triggered by events within the lower layers.

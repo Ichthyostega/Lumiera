@@ -105,7 +105,7 @@ namespace test{
   
   
   
-  /**********************************************************************************
+  /******************************************************************************//**
    *  @test use the OpaqueHolder inline buffer to handle objects of a family of types
    *        through a common interface, without being forced to use heap storage
    *        or a custom allocator.

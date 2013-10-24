@@ -109,7 +109,7 @@ namespace test {
   typedef InstantiateChained<TheTypes,DoIt, BaseImpl>  NumberBabbler;
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    * @test check the helpers for dealing with lists-of-types.
    *       Build an interface and an implementation class
    *       by inheriting template instantiations

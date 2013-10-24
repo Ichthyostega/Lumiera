@@ -126,7 +126,7 @@ namespace test {
   
   
   
-  /******************************************************************************************
+  /**************************************************************************************//**
    * @test the Advice system uses an index datastructure to support matching the bindings
    *       to get pairs of participants to connect by an individual advice channel.
    *       

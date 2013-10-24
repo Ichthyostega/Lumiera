@@ -39,7 +39,7 @@ namespace test {
   
   
   
-  /***************************************************************************
+  /**********************************************************************//**
    * @test verify the basic properties of the job and job descriptor struct;
    *       especially verify that job data is passed properly back to the
    *       closure and that a identity can be constructed based on a

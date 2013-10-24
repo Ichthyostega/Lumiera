@@ -44,7 +44,7 @@ namespace test {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test adding an test clip to the Model/Session.
    * @see  mobject::session::Clip
    * @see  mobject::Session

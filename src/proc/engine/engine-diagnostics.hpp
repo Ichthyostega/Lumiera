@@ -68,7 +68,7 @@ namespace engine{
   
   
   
-  /******************************************************
+  /**************************************************//**
    * Render engine diagnostic facility. Creating an instance
    * will activate additional tracing facilities within the
    * render engine; results may be investigated through

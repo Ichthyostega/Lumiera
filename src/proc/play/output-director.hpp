@@ -64,7 +64,7 @@ namespace play {
   
   
   
-  /******************************************************
+  /**************************************************//**
    * Management of external Output connections.
    * 
    * @todo write Type comment

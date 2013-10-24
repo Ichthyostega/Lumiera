@@ -102,7 +102,7 @@ namespace session {
   typedef PlacementIndex::ID ID;
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * Storage and implementation backing the PlacementIndex
    * - #placementTab_ is an hashtable mapping IDs to Placement + Scope
    * - #scopeTab_ is an reverse association serving to keep track of 

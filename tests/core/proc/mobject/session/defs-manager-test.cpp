@@ -71,7 +71,7 @@ namespace test    {
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test basic behaviour of the defaults manager ("the big picture")
    *       - retrieving a "default" object repeatedly
    *       - retrieving a more constrained "default" object

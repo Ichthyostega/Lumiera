@@ -65,7 +65,7 @@ namespace facade {
   using lib::Literal;
   
   
-  /************************************************************************
+  /********************************************************************//**
    * simple access-frontend to the implementation of a service (C++ only).
    * Usually, an instance of Accessor is placed as static member right into
    * the facade interface used to access the service. This implementation

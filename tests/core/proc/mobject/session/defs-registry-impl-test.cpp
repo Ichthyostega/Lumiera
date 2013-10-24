@@ -95,7 +95,7 @@ namespace test    {
   
   
   
-  /************************************************************************
+  /********************************************************************//**
    * @test build an registry table (just for this test) configured for
    *       some artificial test Types. Register some entries and verify
    *       the intended behaviour of the storage structure.

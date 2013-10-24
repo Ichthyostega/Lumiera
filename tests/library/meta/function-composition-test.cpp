@@ -124,7 +124,7 @@ namespace test {
   
   
   
-  /******************************************************************************
+  /**************************************************************************//**
    * @test this test covers some extensions and variations on function closures:
    *       - partial application of a function, returning a partial closure
    *       - variation: binding an arbitrary term, might even be a nested binder

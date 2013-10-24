@@ -85,7 +85,7 @@ namespace play {
   
   
   
-  /*****************************************************************************
+  /*************************************************************************//**
    * Generic frame timing specification. Defines the expected delivery interval,
    * optionally also the expected quality-of-service (urgency).
    * 

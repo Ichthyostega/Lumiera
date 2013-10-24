@@ -44,7 +44,7 @@ namespace test{
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test cover various detail aspects regarding hash value generation
    *       - weakness of boost::hash
    *       

@@ -279,7 +279,7 @@ namespace test    {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * Verify the access mechanism both to the pubic session API and
    * to implementation level APIs used by Proc-Layer internals.
    * 

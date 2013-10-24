@@ -49,7 +49,7 @@ namespace test{
   typedef ScopedPtrHolder<Dummy> PtrHolderD;
   
   
-  /**********************************************************************************
+  /******************************************************************************//**
    *  @test ScopedHolder and ScopedPtrHolder are initially empty and copyable.
    *        After taking ownership, they prohibit copy operations, manage the
    *        lifecycle of the contained object and provide smart-ptr like access.

@@ -133,7 +133,7 @@ namespace test2  {
   
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    * @test more esoteric corner cases of our visitor lib implementation.
    *       Defines a hierarchy of test classes, which mix two different
    *       kinds of "visitable" by two disjoint tool base classes. One

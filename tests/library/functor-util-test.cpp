@@ -54,7 +54,7 @@ namespace test {
   
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * @test verify some aspects of the functor-util's behaviour.
    *       At times, this is just a scrapbook for new ideas....
    */

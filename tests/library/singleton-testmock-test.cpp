@@ -105,7 +105,7 @@ namespace test{
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test inject a Mock object into the Singleton Factory,
    *       to be returned and used in place of the original object.
    *       This test covers the full usage cycle: first access the

@@ -250,7 +250,7 @@ namespace test  {
     
     
     
-    /**************************************************************************
+    /**********************************************************************//**
      * @test managing start and stop of several dependent "subsystems"
      *       under various conditions. Using mock-subsystems, which actually
      *       spawn a thread and finish by themselves and generally behave sane.

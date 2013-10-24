@@ -68,7 +68,7 @@ namespace test    {
   typedef TestPlacement<DummyMO> PDummy;
   
   
-  /*********************************************************************************
+  /*****************************************************************************//**
    * @test cover the common behaviour of all MObjects. 
    * @note the MObject interface is still very preliminary (as of 10/10).
    *       It is expected to support some kind of metadata and object serialisation

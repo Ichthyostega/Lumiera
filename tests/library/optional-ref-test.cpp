@@ -39,7 +39,7 @@ namespace test{
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test verify a reference-like wrapper class,
    *       used to provide a switchable link to an already existing object.
    *       - bottom ref can be detected by bool check

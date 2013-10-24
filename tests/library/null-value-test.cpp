@@ -61,7 +61,7 @@ namespace test{
   
   
   
-  /***************************************************************************************
+  /***********************************************************************************//**
    * @test Access "NIL values" just by type, verify these are actually singletons
    *       and are indeed created on demand.
    * 

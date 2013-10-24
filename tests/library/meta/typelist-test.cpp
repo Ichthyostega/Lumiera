@@ -67,7 +67,7 @@ namespace test {
       
       typedef Chain<TheList,Zero> AssembledClass;
       
-      /*************************************************************************
+      /*********************************************************************//**
        * @test try out Loki-style typelist metaprogramming.
        *       Assembles a Class definition from parts specified as collection
        *       of types. The elementary building block has an talking ctor, so

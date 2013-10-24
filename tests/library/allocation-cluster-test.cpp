@@ -144,7 +144,7 @@ namespace test {
   
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    *  @test verify the proper workings of our custom allocation scheme
    *        managing families of interconnected objects for the segments
    *        of the low-level model.

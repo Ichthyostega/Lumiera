@@ -61,7 +61,7 @@ namespace test  {
   }
   
   
-  /******************************************************************************
+  /**************************************************************************//**
    * @test verify and demonstrate the usage cycle of data buffers for the engine
    *       based on the BufferProvider interface. This is kind of a "dry run"
    *       for documentation purposes, because the BufferProvider implementation

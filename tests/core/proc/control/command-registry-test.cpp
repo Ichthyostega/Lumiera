@@ -51,7 +51,7 @@ namespace test    {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test verify sane behaviour of the relevant operations on the CommandRegistry
    *       interface. Add/remove a command instance to the index, allocate an
    *       CommandImpl frame and verify it is removed properly on ref count zero.

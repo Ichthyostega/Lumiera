@@ -115,7 +115,7 @@ namespace test{
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test use the time::Control to push a sequence of modifications to
    *       various time entities; in all cases, a suitable change should
    *       be imposed to the target and then a notification signal

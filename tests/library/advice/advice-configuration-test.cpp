@@ -61,7 +61,7 @@ namespace test {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test this is a collection of tests to cover the configuration options
    *       available as policy arguments when establishing the collaboration.
    *       - default advice values, or blocking or throwing

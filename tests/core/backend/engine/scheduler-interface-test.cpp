@@ -62,7 +62,7 @@ namespace test {
   typedef SchedulerFrontend::JobTransaction JobTransaction;
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test verify and demonstrate the organisation of the high-level interface
    *       for defining jobs to be invoked by the scheduler.
    *       

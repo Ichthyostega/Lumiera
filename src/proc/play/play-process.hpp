@@ -111,7 +111,7 @@ namespace play {
   typedef std::vector<Feed>         OutputFeeds;
     
   
-  /******************************************************
+  /**************************************************//**
    * Playback/Render process within the Lumiera Player.
    * This is a top-level implementation entity, created
    * by the PlayService when \em performing a timeline

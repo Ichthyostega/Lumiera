@@ -65,7 +65,7 @@ namespace test    {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test perform the most important structural modifications on a session and
    *       verify they're carried out properly. 
    *       - attaching tracks

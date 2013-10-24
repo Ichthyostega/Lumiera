@@ -69,7 +69,7 @@ namespace proc {
     
     
     
-    /********************************************************************
+    /****************************************************************//**
      * Actual implementation of a single (dummy) playback process.
      * The DummyPlayerService (see below) maintains a collection of such
      * actively running playback processes, while the client code gets
@@ -117,7 +117,7 @@ namespace proc {
     
     
     
-    /******************************************************
+    /**************************************************//**
      * Actual implementation of the DummyPlayer service.
      * Creating an instance of this class automatically
      * registers the interface lumieraorg_DummyPlayer with

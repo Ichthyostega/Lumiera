@@ -45,7 +45,7 @@ namespace test {
 
 
 
-  /***********************************************************************
+  /*******************************************************************//**
    * @test creating new Assets and registering them with the AssetManager.
    * @see  proc_interface::AssetManager#reg
    */

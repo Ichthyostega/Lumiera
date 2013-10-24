@@ -40,7 +40,7 @@ namespace test {
   
   
   
-  /********************************************************************
+  /****************************************************************//**
    * @test create a render process from a given segment of the Session.
    *       Basically this includes cooperation of all parts of the
    *       Lumiera Proc Layer. For a prepared test-Session we invoke the

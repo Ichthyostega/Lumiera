@@ -83,7 +83,7 @@ namespace test    {
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test verify correct behaviour of all the command handling patterns
    *       provided by the default configuration of a lumiera session.
    *       - executing quasi synchronous

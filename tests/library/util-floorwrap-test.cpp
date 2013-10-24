@@ -46,7 +46,7 @@ namespace test {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test Verify a custom built integer scale division and wrapping function.
    *       This function is relevant for decimating values into a given scale,
    *       like splitting time measurements in hours, minutes, seconds etc.

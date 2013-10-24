@@ -92,7 +92,7 @@ namespace test {
   
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    * @test check utilities for generating case combinations.
    *       - verify the Cartesian product is built properly
    *       - instantiate a two-parameter test template

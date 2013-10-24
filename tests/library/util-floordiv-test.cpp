@@ -90,7 +90,7 @@ namespace test {
   
   
   
-  /**********************************************************************
+  /******************************************************************//**
    * @test Evaluate a custom built integer floor function.
    *       Also known as Knuth's floor division.
    *       This function is crucial for Lumiera's rule of quantisation

@@ -323,7 +323,7 @@ namespace test {
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test describing and rebuilding a tree structure
    *       while visiting the tree in depth first order.
    *       To keep track of the level changes during that navigation,

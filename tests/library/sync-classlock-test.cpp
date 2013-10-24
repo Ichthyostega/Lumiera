@@ -62,7 +62,7 @@ namespace test {
   
   
   
-  /**************************************************************************
+  /**********************************************************************//**
    * @test check proper handling of class (not instance)-based Monitor locks.
    * Because no instance is available in this case, a hidden storage for the
    * Monitor object needs to be provided in a way safe for use even in the

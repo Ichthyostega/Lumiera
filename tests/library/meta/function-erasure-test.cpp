@@ -54,7 +54,7 @@ namespace test {
   struct BuildEmptyFunctor<Efun> { typedef function<long(int,char)> Type; };
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test Create specifically typed functor objects and then wrap them
    *       into common holder objects, thereby discarding the specific
    *       signature type information. Later on, the concrete functor

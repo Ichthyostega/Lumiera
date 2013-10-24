@@ -49,7 +49,7 @@ namespace test    {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test access the current session and verify the correct
    *       structure of the most important components: The session
    *       contains an Sequence, we can get at the Fixture, we have at least

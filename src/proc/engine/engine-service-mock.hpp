@@ -76,7 +76,7 @@ namespace engine{
   
   
   
-  /****************************************************************
+  /************************************************************//**
    * Variant of the render engine, reconfigured for mock operation.
    * Especially, this setup leaves out most of the actual Lumiera
    * engine's implementation facilities. There is no scheduler

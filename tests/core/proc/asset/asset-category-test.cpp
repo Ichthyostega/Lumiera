@@ -43,7 +43,7 @@ namespace test {
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test checking the properties of Asset Category structs.
    *       They are included in the Asset::Ident identification tuple
    *       of Assets and can be used to organize Assets into a tree

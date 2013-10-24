@@ -47,7 +47,7 @@ namespace test {
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test creating a Clip MObject and an associated Clip Asset from 
    *       a given asset::Media.
    * @see  asset::Media#createClip

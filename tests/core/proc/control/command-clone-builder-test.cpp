@@ -52,7 +52,7 @@ namespace test    {
   
   
   
-  /********************************************************************************
+  /****************************************************************************//**
    * @test check creation of a command implementation clone from top level,
    *       without disclosing specific type information about the involved closure.
    *       This includes verifying sane allocation management.

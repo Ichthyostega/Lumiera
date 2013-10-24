@@ -61,7 +61,7 @@ namespace test{
   int dontThrow() { return 2+2; }
   
   
-  /*************************************************
+  /*********************************************//**
    * verifies the proper working of helper functions
    * frequently used within the Lumiera testsuite.
    * @see test-helper.hpp

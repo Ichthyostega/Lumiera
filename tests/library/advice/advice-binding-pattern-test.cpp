@@ -45,7 +45,7 @@ namespace test  {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test the pattern matching machinery used to find an Advice solution.
    *       Each advice::Provision and advice::Request specifies a binding, used
    *       to discern various pieces of advice. Whenever patterns on the two sides

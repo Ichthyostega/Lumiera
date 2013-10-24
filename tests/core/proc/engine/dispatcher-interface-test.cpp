@@ -143,7 +143,7 @@ namespace test  {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test document and verify the engine::Dispatcher interface, used
    *       to translate a CalcStream into individual node jobs.
    *       This test covers the definition of the interface itself,

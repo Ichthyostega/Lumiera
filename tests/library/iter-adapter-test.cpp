@@ -168,7 +168,7 @@ namespace test{
   
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * @test set up example implementations based on the iterator-adapter
    *       templates and verify the behaviour in accordance to the
    *       concept "lumiera forward iterator"

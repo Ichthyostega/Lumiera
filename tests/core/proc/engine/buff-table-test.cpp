@@ -122,7 +122,7 @@ namespace test  {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test create a random pattern of recursive invocations, each
    *       allocating a chunk out of a global buffer table storage.
    *       After returning, each allocation should be cleanly

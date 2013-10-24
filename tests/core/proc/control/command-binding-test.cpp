@@ -42,7 +42,7 @@ namespace test    {
   
   
   
-  /*****************************************************************************
+  /*************************************************************************//**
    * @test coverage for some specific situations when binding command arguments.
    * 
    * @todo add more test cases...

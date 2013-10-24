@@ -112,7 +112,7 @@ namespace backend {
     
     
     
-    /**************************************************************************
+    /**********************************************************************//**
      * @test use the Lumiera backend to create some new threads, utilising the
      *       lumiera::Thread wrapper for binding to an arbitrary operation
      *       and passing the appropriate context.

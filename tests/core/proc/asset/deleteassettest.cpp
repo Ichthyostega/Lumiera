@@ -37,7 +37,7 @@ namespace test {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test deleting an Asset includes removing all dependent Assets
    *       and all MObjects relying on these. Especially this means
    *       breaking all links between the involved Objects, so the

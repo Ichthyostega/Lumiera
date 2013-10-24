@@ -171,7 +171,7 @@ namespace test{
   
   
   
-  /********************************************************************
+  /****************************************************************//**
    *  @test cover our custom single linked list template,
    *        in combination with Lumiera Forward Iterators
    *        and the usage of a custom allocator.

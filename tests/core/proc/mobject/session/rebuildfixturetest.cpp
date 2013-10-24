@@ -45,7 +45,7 @@ namespace test    {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test (re)building the ExplicitPlacement objects from the objects
    *       placed into the Session/Model.
    * @see  mobject::session::Fixture

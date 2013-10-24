@@ -68,7 +68,7 @@ namespace test{
   
   
   
-  /**********************************************************************************
+  /******************************************************************************//**
    * @test verify a diagnostic facility to collect and access contextual information.
    *       DiagnosticContext frames are placed into automatic storage (as local
    *       variable within some function scope). Based on thread-local storage,

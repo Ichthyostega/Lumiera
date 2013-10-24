@@ -69,7 +69,7 @@ namespace test{
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test implement a Singleton class using our Singleton Template.
    * Expected results: single instance created in static memory,
    * single instance properly destroyed, no memory leaks.

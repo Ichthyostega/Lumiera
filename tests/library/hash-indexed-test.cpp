@@ -57,7 +57,7 @@ namespace test{
   
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test proof-of-concept test for a generic hash based and typed ID struct.
    *       - check the various ctors 
    *       - check default assignment works properly

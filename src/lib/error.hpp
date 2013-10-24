@@ -232,7 +232,7 @@ namespace lumiera {
   
 } // namespace lumiera
 
-/******************************************************
+/**************************************************//**
  * convenience shortcut for a sequence of catch blocks
  * just logging and consuming an error. Typically
  * this sequence will be used within destructors,
@@ -255,7 +255,7 @@ namespace lumiera {
 
 
 
-/******************************************************
+/**************************************************//**
  * if NoBug is used, redefine some macros 
  * to rather throw Lumiera Errors instead of aborting
  */

@@ -48,7 +48,7 @@ namespace test    {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test basic behaviour of Placements and access to MObjects.
    * @see  mobject::Placement
    * @see  mobject::MObject#create

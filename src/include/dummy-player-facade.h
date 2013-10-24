@@ -48,7 +48,7 @@ namespace proc   {
 namespace lumiera {
     
     
-    /******************************************************************
+    /**************************************************************//**
      * Experimental Interface Proc-Layer (or maybe the backend?): 
      * Global access point for starting a dummy playback, generating
      * some test image data for the GUI to display in a viewer window.

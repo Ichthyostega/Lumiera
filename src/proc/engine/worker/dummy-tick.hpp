@@ -53,7 +53,7 @@ namespace node {
   
   
   
-  /************************************************************
+  /********************************************************//**
    * Tick generating service for a periodic callback,
    * with adjustable frequency. Quick'n dirty implementation!
    */

@@ -43,7 +43,7 @@
 namespace proc {
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * Global access point for the services implemented by the Proc-Layer.
    * 
    * @todo this is a dummy placeholder as of 1/2009. Currently, there

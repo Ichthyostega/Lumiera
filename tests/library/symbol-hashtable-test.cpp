@@ -57,7 +57,7 @@ namespace test{
   typedef std::tr1::unordered_map< Symbol, string, hash<Symbol> > HTable;
   
   
-  /*************************************************************
+  /*********************************************************//**
    * @test build a hashtable using Symbol objects as Keys.
    *       Especially this verifies picking up a customised
    *       hash implementation via ADL

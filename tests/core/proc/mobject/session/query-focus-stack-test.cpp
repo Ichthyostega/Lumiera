@@ -41,7 +41,7 @@ namespace test    {
   using lumiera::error::LUMIERA_ERROR_INVALID;
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test behaviour of the stack of focus location paths.
    *       Basically this is just a stack, but has a somewhat unusual behaviour
    *       on pop(), as it considers the (intrusive) ref-count maintained within

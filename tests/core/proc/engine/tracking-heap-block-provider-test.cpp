@@ -66,7 +66,7 @@ namespace test  {
   }
   
   
-  /**********************************************************************
+  /******************************************************************//**
    * @test verify a test support facility, used to write mock components
    *       to test the lumiera engine. The TrackingHeapBlockProvider is a
    *       braindead implementation of the BufferProvider interface: it just

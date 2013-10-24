@@ -78,7 +78,7 @@ namespace test {
       
       
       
-      /*************************************************************************
+      /*********************************************************************//**
        * @test check utilities for manipulating lists-of-types.
        *       - build an list of constant-wrapper-types and
        *         print them for debugging purpose.

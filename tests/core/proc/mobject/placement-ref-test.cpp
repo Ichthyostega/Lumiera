@@ -51,7 +51,7 @@ namespace test    {
   typedef PlacementMO::ID P_ID;
   
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test properties and behaviour of the reference-mechanism for Placements.
    *       We create an mock placement index and install it to be used
    *       by all PlacementRef instances while conducting this test.

@@ -186,7 +186,7 @@ namespace test    {
   
   typedef lib::ScopedPtrVect<CmdClosure> ArgTuples;
   
-  /***************************************************************************
+  /***********************************************************************//**
    * @test Check storage handling of the command parameters and state memento.
    *
    * @see  control::CommandArgumentHolder

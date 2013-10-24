@@ -37,7 +37,7 @@ namespace lib {
 namespace test {
   
   
-  /******************************************************
+  /**************************************************//**
    * @test verify splitting a search path specification
    *       and retrieving the components by iteration.
    *       Embedded \c $ORIGIN tokens get resolved

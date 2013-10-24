@@ -188,7 +188,7 @@ namespace test{
   
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * @test use a simple source iterator yielding numbers
    *       to build various functional evaluation structures,
    *       based on the IterExplorer template.

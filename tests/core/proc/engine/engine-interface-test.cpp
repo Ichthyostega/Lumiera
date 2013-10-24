@@ -63,7 +63,7 @@ namespace test  {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test cover the basic service exposed at the engine interface:
    *       create a calculation stream and verify the translation
    *       into individual jobs.

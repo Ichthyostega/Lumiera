@@ -182,7 +182,7 @@ namespace test{
   
   
   
-  /***********************************************************************************
+  /*******************************************************************************//**
    * @test verify the mechanism for issuing typed queries through a generic interface,
    *       without disclosing the facility actually answering those queries. 
    *       Results are to be retrieved through a Lumiera Forward Iterator.

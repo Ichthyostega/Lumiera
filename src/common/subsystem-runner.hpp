@@ -64,7 +64,7 @@ namespace lumiera {
   }
   
   
-  /*****************************************************************************
+  /*************************************************************************//**
    * Implementation helper for managing execution of a collection of subsystems,
    * which may depend on one another and execute in parallel. Properties of the
    * subsystems are available through Subsys object refs, which act as handle.

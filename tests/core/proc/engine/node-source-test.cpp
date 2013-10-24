@@ -39,7 +39,7 @@ namespace test  {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * @test the source reading render node.
    */
   class NodeSource_test : public Test

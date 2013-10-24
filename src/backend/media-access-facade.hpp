@@ -42,7 +42,7 @@ namespace backend {
   struct ChanDesc;
   
   
-  /******************************************************************
+  /**************************************************************//**
    * Interface to the backend layer:
    * provides functions for querying (opening) a media file,
    * detecting the channels or streams found within this file etc. 

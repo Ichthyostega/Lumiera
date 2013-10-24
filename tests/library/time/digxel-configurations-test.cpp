@@ -48,7 +48,7 @@ namespace test{
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * @test verify correctness of the predefined standard Digxels.
    *       Some widely used standard configurations, including
    *       - default Digxel for int and double values

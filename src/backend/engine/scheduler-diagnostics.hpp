@@ -56,7 +56,7 @@ namespace engine {
   
   
   
-  /*******************************************************************
+  /***************************************************************//**
    * Render engine diagnostic facility. Creating an instance
    * will activate additional tracing and diagnostic facilities
    * within the scheduler implementation; results may be investigated

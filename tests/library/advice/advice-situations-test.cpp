@@ -62,7 +62,7 @@ namespace test {
   
   
   
-  /******************************************************************************************
+  /**************************************************************************************//**
    * @test documentation of the fundamental usage scenarios envisioned in the Advice concept.
    *       This test will be augmented and completed as the Lumiera application matures.
    * 

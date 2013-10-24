@@ -42,7 +42,7 @@ namespace test {
   
   
   
-  /*************************************************************************
+  /*********************************************************************//**
    * @test verify the simple helpers for working with lists-of-types.
    *       These are simple metafunctions to count the number of elements,
    *       calculate the maximum size or check for inclusion.

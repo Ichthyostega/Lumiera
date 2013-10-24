@@ -53,7 +53,7 @@ namespace engine {
   class TrackingHeapBlockProvider;
   
   
-  /********************************************************************
+  /****************************************************************//**
    * Helper for unit tests: Buffer provider reference implementation.
    * 
    * @todo write type comment

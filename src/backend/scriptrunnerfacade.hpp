@@ -32,7 +32,7 @@
 namespace backend {
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * Interface to the backend layer (script runner):
    * Global access point for starting a script within Lumiera application
    * context. 

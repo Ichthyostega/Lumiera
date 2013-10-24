@@ -32,7 +32,7 @@ namespace test {
   
   
   
-  /********************************************************
+  /****************************************************//**
    * @test check how support for a specific timecode format
    *       can be enabled and detected. Actually this test
    *       verifies a simple metaprogramming facility,

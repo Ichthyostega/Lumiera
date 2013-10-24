@@ -55,7 +55,7 @@ namespace test    {
   using lumiera::error::LUMIERA_ERROR_ASSERTION;
   
   
-  /***************************************************************************************
+  /***********************************************************************************//**
    * @test creating placements specifically typed, forming an hierarchy of placement types
    *       which loosely mirrors the hierarchy of the pointee types. Assignments between
    *       placement of differing type, while still sharing ownership.

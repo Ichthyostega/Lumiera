@@ -44,7 +44,7 @@ namespace test {
   
   
   
-  /*******************************************************************************
+  /***************************************************************************//**
    * @test verifies our front-end for printf-style format string based formatting.
    *       - the implementation is based on boost::format
    *       - we create a wrapper-object on-the fly, which is able to hold

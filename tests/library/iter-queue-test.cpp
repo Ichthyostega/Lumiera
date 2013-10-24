@@ -42,7 +42,7 @@ namespace test{
   
   
   
-  /*********************************************************************
+  /*****************************************************************//**
    * @test cover an easy to use queue, built as convenience wrapper
    *       on top of \c std::deque and allowing element retrieval
    *       by iteration.

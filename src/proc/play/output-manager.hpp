@@ -58,7 +58,7 @@ namespace play {
   
   
   
-  /******************************************************
+  /**************************************************//**
    * Management of external Output connections.
    * 
    * @todo need a concrete implementation

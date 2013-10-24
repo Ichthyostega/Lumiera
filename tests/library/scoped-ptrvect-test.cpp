@@ -41,7 +41,7 @@ namespace test{
   typedef ScopedPtrVect<Dummy> VectD;
   
   
-  /********************************************************************
+  /****************************************************************//**
    *  @test ScopedPtrVect manages the lifecycle of a number of objects.
    *        The API is similar to a vector and allows for element access
    *        and iteration. Individual elements can be detached and thus

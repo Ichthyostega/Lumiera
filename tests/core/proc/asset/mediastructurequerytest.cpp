@@ -41,7 +41,7 @@ namespace test {
   
   
   
-  /***********************************************************************
+  /*******************************************************************//**
    * This test documents the Interface used by MediaFactory when loading
    * media files for querying Lumiera's backend layer for information
    * on how the media file is structured.
