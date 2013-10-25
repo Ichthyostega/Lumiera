@@ -48,6 +48,7 @@
  ** all placements referring to this track, which could be sub tracks, clips,
  ** effects, automation or labels. 
  ** 
+ ** @ingroup asset
  ** @see asset.hpp for explanation regarding asset IDs
  ** @see StructFactory creating concrete asset::Struct instances
  **

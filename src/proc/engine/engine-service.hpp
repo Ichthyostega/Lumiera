@@ -38,6 +38,7 @@
  ** switch and continuation; under the hood, there is a mechanism to discard resources
  ** tied to the original CalcStream, once the switch to the new definition is complete.
  ** 
+ ** @ingroup engine
  ** @see EngineInterface_test
  ** @see CalcStream_test
  ** @see proc::play::PlayerService
@@ -94,6 +95,8 @@ namespace engine{
    * backend layer. The implementation of this service is
    * responsible for creating the right job entries in the
    * correct order and to enqueue these into the scheduler.
+   * @ingroup engine
+   * @ingroup player
    */
   class EngineService
     : boost::noncopyable

@@ -22,6 +22,7 @@
 
 
 /** @file session.hpp
+ ** @ingroup session
  ** Primary Interface to the current Session.
  ** The session interface can be used to discover session's contents.
  ** Mostly, these objects within the session are MObject subclasses, but they
@@ -101,7 +102,8 @@ namespace mobject {
    *       a reference to the SessManager and is accessible as the static
    *       field Session::current). Clients shouldn't try to get a direct
    *       pointer or reference to the Session object.
-   *  
+   * @ingroup session
+   * 
    */
   class Session 
     : boost::noncopyable

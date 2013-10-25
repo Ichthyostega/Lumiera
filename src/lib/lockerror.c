@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "lib/lockerror.h"
 
@@ -29,7 +31,7 @@ LUMIERA_ERROR_DEFINE (LOCK_RELEASE, "unlocking failed");
 LUMIERA_ERROR_DEFINE (LOCK_DESTROY, "lock destroy failed");
 
 /* runtime errors */
-LUMIERA_ERROR_DEFINE (LOCK_INVAL, "lock initialization error");
+LUMIERA_ERROR_DEFINE (LOCK_INVAL, "lock initialisation error");
 LUMIERA_ERROR_DEFINE (LOCK_BUSY, "already locked");
 LUMIERA_ERROR_DEFINE (LOCK_DEADLK, "already locked by this thread");
 LUMIERA_ERROR_DEFINE (LOCK_PERM, "not locked by this thread");

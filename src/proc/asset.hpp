@@ -21,6 +21,7 @@
 */
 
 /** @file asset.hpp
+ ** @ingroup asset
  ** Proc-Layer Interface: Assets.
  ** Declares the Asset top level Interface, the Asset::Ident identification tuple
  ** and the asset::ID primary key wrapper. Normally, Assets should be handled
@@ -45,7 +46,7 @@
  ** (Implementation detail: as g++ is not able to handle member function template
  ** instantiations completely automatic, we need to trigger some template instantiations
  ** at the end of assetmanager.cpp )
- **
+ ** 
  ** @see assetmanager.hpp
  ** @see media.hpp
  */

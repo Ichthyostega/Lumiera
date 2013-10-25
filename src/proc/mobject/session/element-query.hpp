@@ -102,7 +102,7 @@ namespace session {
        *  @return MObject ref to the fist suitable element. Might be an empty MObjectRef.
        *  @note  the embedded MObject subtype (MO) causes an additional filtering
        *         on that specific kind of MObject (e.g. considering just Clips)
-       *  @warning be sure the passed predicate actually takes a \code Placement<XX> const& \endcode
+       *  @warning be sure the passed predicate actually takes a `Placement<XX> const&`
        *         with XX being the correct type. Note the \c const& -- Failing to do so shows up as
        *         compiler error "no suitable function pick(.....)"
        */

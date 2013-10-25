@@ -61,6 +61,7 @@ namespace mobject {
    * All the contents and elements that can be placed and 
    * manipulated and finally rendered within Lumiera's
    * high-level model and Session are MObjects.
+   * @ingroup session
    */
   class MObject 
     : public Buildable,

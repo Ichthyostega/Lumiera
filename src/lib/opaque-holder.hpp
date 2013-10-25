@@ -196,8 +196,8 @@ namespace lib {
    * or cleared afterwards, and this #empty() state may be detected
    * at runtime. In a similar vein, when the stored object has a
    * \c bool validity check, this can be accessed though #isValid().
-   * Moreover \code !empty() && isValid() \endcode may be tested
-   * as by \bool conversion of the Holder object. The whole compound
+   * Moreover `!empty() && isValid()` may be tested as by `bool`
+   * conversion of the Holder object. The whole compound
    * is copyable if and only if the contained object is copyable.
    * 
    * @note assertion failure when trying to place an instance not

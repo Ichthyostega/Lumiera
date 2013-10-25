@@ -23,4 +23,5 @@ semantic.cache
 wiki/backups/*
 doc/devel/draw/*.png
 doc/devel/uml/fig128309.png
+doc/devel/lumiera.tag
 m4/*

@@ -37,18 +37,18 @@
  *
  * This user defined macro shall be undefed after use.
  *
- * @example
+ * @code
  * #define PPMPL_FOREACH_P1_FOO(arg) arg,
  *
  * {PPMPL_FOREACH(P1, FOO(1), FOO(2), FOO(3)), -1}
  *
  * #undef PPMPL_FOREACH_P1_FOO
+ * @endcode
  *
- * Would expand to the sequence:
- * {1, 2, 3, -1}
+ * This definition would be expanded to the sequence `{1, 2, 3, -1}`
  *
  * One can not recursively nest preprocessor macros. To allow this we define PPMPL_FOREACH_L1
- * to PPMPL_FOREACH_L2 with the same semantics as PPMPL_FOREACH, This allowes to nest the
+ * to PPMPL_FOREACH_L2 with the same semantics as PPMPL_FOREACH, This allows to nest the
  * FOREACH loop up to three nesting levels.
  */
 #define PPMPL_FOREACH(p, ...) PPMPL_FOREACH0(p, __VA_ARGS__, PPMPL_FOREACH_NIL))

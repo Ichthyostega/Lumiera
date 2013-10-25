@@ -1,5 +1,7 @@
+Documentation
+=============
 
-= Documentation =
+// Menu :  append child 'doxy'
 
 This documentation section contains documentation for both users and developers.
 
@@ -32,6 +34,11 @@ moved over to the documentation section(s) of the Lumiera website.
 
 -> access the Proc-Layer link:http://lumiera.org/wiki/renderengine.html[TiddlyWiki online here]
 
+=== API Documentation ===
+We use the link:http://www.doxygen.org/index.html[Doxygen] tool to extract
+code comments and generate code level API and reference documentation.
+
+-> link:http://lumiera.org/doxy/index.html[Doxygen generated documentation]
 
 == Media and Presentations ==
 

@@ -126,13 +126,14 @@ lumiera_resourcecollector_destroy (void);
  *                (to find out about the device) for STORAGE and CACHE resources
  * @return either returns 1 or calls _exit()
  *
- * @example
+ * @code
  * void* data;
  * size_t size = 1000;
  * enum lumiera_resource_try iteration = LUMIERA_RESOURCE_ONE;
  * do {
  *   data = malloc (size);
  * } while (!data && lumiera_resourcecollector_run (LUMIERA_RESOURCE_MEMORY, &iteration, &size));
+ * @endcode
  */
 int
 lumiera_resourcecollector_run (enum lumiera_resource which, enum lumiera_resource_try* iteration, void* context);

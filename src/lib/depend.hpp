@@ -67,8 +67,8 @@ This code is heavily inspired by
  ** work besides releasing references, and we acknowledge that singletons can be released
  ** in \em arbitrary order.
  ** 
- ** @see Depend
- ** @see DependencyFactory
+ ** @see lib::Depend
+ ** @see lib::DependencyFactory
  ** @see lib::test::Depend4Test
  ** @see singleton-test.cpp
  ** @see dependency-factory-test.cpp
@@ -99,8 +99,6 @@ namespace lib {
    *   To my understanding, the answer is yes. See
    *   [POSIX](http://www.opengroup.org/onlinepubs/000095399/basedefs/xbd_chap04.html#tag_04_10)
    * @param SI the class of the Singleton instance
-   * @param Create policy defining how to create/destroy the instance
-   * @param Life policy defining how to manage Singleton Lifecycle
    */
   template<class SI>
   class Depend

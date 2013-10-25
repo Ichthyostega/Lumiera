@@ -44,6 +44,8 @@ namespace engine {
    * handed over to the scheduler for time-bound or bandwidth-controlled
    * execution
    * 
+   * @ingroup engine
+   * @ingroup scheduler
    * @todo this is planned to become the frontend
    * to the render node network, which can be considered
    * at the lower end of the middle layer; the actual 

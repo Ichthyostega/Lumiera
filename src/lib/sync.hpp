@@ -59,8 +59,8 @@
  ** @see mutex.h
  ** @see sync-locking-test.cpp
  ** @see sync-waiting-test.cpp
- ** @see asset::AssetManager::reg() usage example
- ** @see subsystemrunner.hpp usage example
+ ** @see \ref asset::AssetManager::reg() "usage example: asset registration"
+ ** @see \ref subsystem-runner.hpp "usage example: subsystem start/shutdown"
  */
 
 
@@ -74,6 +74,7 @@ extern "C" {
 #include "lib/lockerror.h"
 }
 
+#include <boost/noncopyable.hpp>
 #include <pthread.h>
 #include <cerrno>
 #include <ctime>
@@ -421,7 +422,11 @@ namespace lib {
       
       
     public:
+      /*****************************************//**
+       * scoped object to control the actual locking.
+       */
       class Lock
+        : boost::noncopyable
         {
           Monitor& mon_;
           

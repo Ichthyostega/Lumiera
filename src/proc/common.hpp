@@ -50,27 +50,6 @@
 #include "lib/error.hpp"   // pulls in NoBug via loggging.h
 
 
-/**
- * Lumiera public interface.
- * Global interfaces and facilities accessible from plugins and scripts.
- * It's probably a good idea to pull it in explicitly and to avoid nesting
- * implementation namespaces within \c lumiera::
- */
-namespace lumiera {
-
-  /* additional global configuration goes here... */
-  
-  
-} // namespace lumiera
-
-
-/**
- * Implementation namespace for support and library code.
- */
-namespace lib { 
-  
-}
-
 
 /**
  * Proc-Layer implementation namespace root.

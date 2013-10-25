@@ -59,7 +59,7 @@ Credits for many further implementation ideas go to
  **         on some treat(VisitableInterface&) function.</li>
  **     <li>any concrete Visitable subclass wanting to be treated by some concrete tool
  **         needs to use the DECLARE_PROCESSABLE_BY(TOOLBASE) macro. By this, it gets an
- **         virtual \code apply(TOOLBASE&) function. Otherwise, it will be treated by the
+ **         virtual `apply(TOOLBASE&)` function. Otherwise, it will be treated by the
  **         interface of the next base class using this macro.</li>
  ** </ul>
  ** For design questions and more detailed implementation notes, see the Proc Layer Tiddly Wiki.  

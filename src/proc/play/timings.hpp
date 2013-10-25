@@ -140,7 +140,7 @@ namespace play {
       
       /** real time deadline for the given frame, without any latency.
        *  This value is provided in case of scheduled time of delivery,
-       *  which is signalled  by \code playbackUrgency == TIMEBOUND \endcode
+       *  which is signalled  by `playbackUrgency == TIMEBOUND`
        * @return wall clock time to expect delivery of data
        *         corresponding to a frame specified relative
        *         to \link #getOrigin time axis origin \endlink

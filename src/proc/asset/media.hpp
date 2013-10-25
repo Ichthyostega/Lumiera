@@ -23,10 +23,11 @@
 
 /** @file media.hpp
  ** Media data is a specific kind of Asset.
- ** For the different <i>kinds</i> of Assets, we use sub-intefaces inheriting
+ ** For the different <i>kinds</i> of Assets, we use sub-interfaces inheriting
  ** from the general Asset interface. To be able to get asset::Media instances
- ** directly from the AssetManager, we define a specialization of the Asset ID.
- **
+ ** directly from the AssetManager, we define a specialisation of the Asset ID.
+ ** 
+ ** @ingroup asset
  ** @see asset.hpp for explanation
  ** @see MediaFactory creating concrete asset::Media instances
  **
@@ -119,7 +120,7 @@ namespace asset {
       
       /** predicate to decide if this asset::Media
        *  is part of a compound (multichannel) media.
-       *  @return pointer to parent, or \code null
+       *  @return pointer to parent, or `null`
        */
       virtual PMedia checkCompound ()  const;
       friend class proc::asset::Clip;    ////////////////////////TODO better interface!!!

@@ -27,6 +27,7 @@
  ** from the general Asset interface. To be able to get asset::Proc instances
  ** directly from the AssetManager, we define a specialisation of the Asset ID.
  ** 
+ ** @ingroup asset
  ** @see asset.hpp for explanation
  ** @see ProcFactory creating concrete asset::Proc instances
  **
@@ -66,6 +67,8 @@ namespace asset {
   /**
    * key abstraction: data processing asset
    * @todo just a stub, have to figure out what a asset::Proc is
+   * @ingroup asset
+   * @ingroup session
    */
   class Proc : public Asset
     {

@@ -64,6 +64,7 @@ namespace lumiera {
      * Global access point for starting playback and render processes,
      * calculating media data by running the render engine.
      * 
+     * @ingroup player
      * @todo WIP-WIP-WIP 6/2011
      * @note Lumiera is not yet able actually to deliver rendered data.
      * @todo there should be an accompanying CL Interface defined for
@@ -90,6 +91,7 @@ namespace lumiera {
          * through this handle (by ref count). Client code is supposed to use the
          * API on this handle to navigate and control the playback mode.
          * 
+         * @ingroup player
          * @see handle.hpp 
          * @see player-service.cpp implementation
          */

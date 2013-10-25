@@ -3,7 +3,6 @@
 ## SConscript  -  SCons buildscript for Documentation
 ##
 
-from Buildhelper import scanSubtree
 
 Import('env')
 

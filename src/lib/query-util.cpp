@@ -89,8 +89,7 @@ namespace lib {
     /** (preliminary) helper: instead of really parsing and evaluating the terms,
      *  just do a regular expression match to extract the literal argument 
      *  behind the given predicate symbol. e.g calling
-     *  \code extractID ("stream", "id(abc), stream(mpeg)") \endcode 
-     *  yields \c "mpeg"
+     *  `extractID ("stream", "id(abc), stream(mpeg)")` yields \c "mpeg"
      */
     string
     extractID (Symbol sym, const string& termString)

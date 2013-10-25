@@ -111,7 +111,7 @@ namespace test{
    *        or a custom allocator.
    *
    *  @todo this test doesn't cover automatic conversions and conversions using RTTI
-   *        from the target objects, while \code OpaqueHolder.template get() \endcode
+   *        from the target objects, while `OpaqueHolder.template get()`
    *        would allow for such conversions. This is similar to Ticket #141, and
    *        actually based on the same code as variant.hpp (access-casted.hpp)
    */

@@ -59,30 +59,30 @@ def DoxyfileParse(file_contents):
             data[key][-1] += token
     
     while token:
-       if token in ['\n']:
-          if last_token not in ['\\']:
-              key_token = True
-       elif token in ['\\']:
-           pass
-       elif key_token:
-           key = token
-           key_token = False
-       else:
-           if token == "+=":
-               if not data.has_key(key):
-                   data[key] = list()
-           elif token == "=":
-               data[key] = list()
-           else:
-               append_data( data, key, new_data, token )
-               new_data = True
-       
-       last_token = token
-       token = lex.get_token()
-       
-       if last_token == '\\' and token != '\n':
-           new_data = False
-           append_data( data, key, new_data, '\\' )
+        if token in ['\n']:
+            if last_token not in ['\\']:
+                key_token = True
+        elif token in ['\\']:
+            pass
+        elif key_token:
+            key = token
+            key_token = False
+        else:
+            if token == "+=":
+                if not data.has_key(key):
+                    data[key] = list()
+            elif token == "=":
+                data[key] = list()
+            else:
+                append_data(data, key, new_data, token)
+                new_data = True
+        
+        last_token = token
+        token = lex.get_token()
+        
+        if last_token == '\\' and token != '\n':
+            new_data = False
+            append_data(data, key, new_data, '\\')
     
     # compress lists of len 1 into single strings
     for (k, v) in data.items():

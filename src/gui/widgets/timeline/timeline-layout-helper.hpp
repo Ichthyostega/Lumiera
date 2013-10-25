@@ -59,7 +59,7 @@ public:
   /**
    * Definition of the layout track tree type.
    */
-  typedef lumiera::tree< std::tr1::shared_ptr<model::Track> > TrackTree;
+  typedef lib::Tree< std::tr1::shared_ptr<model::Track> > TrackTree;
   
 public:
   /**

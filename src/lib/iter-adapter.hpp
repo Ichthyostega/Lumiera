@@ -617,9 +617,9 @@ namespace lib {
       
       /** explicit builder to allow creating a const variant from the basic srcIter type. 
        *  Again, the reason necessitating this "backdoor" is that we want to swallow one level
-       *  of indirection. Generally speaking \code const T ** \endcode is not the same as
-       *  \code T * const * \endcode, but in our specific case the API ensures that a
-       *  PtrDerefIter<WrappedConstIterType> only exposes const elements. 
+       *  of indirection. Generally speaking `const T **` is not the same as `T * const *`,
+       *  but in our specific case the API ensures that a `PtrDerefIter<WrappedConstIterType>`
+       *  only exposes const elements. 
        */
       static PtrDerefIter
       build_by_cast (WrappedIterType const& srcIter)

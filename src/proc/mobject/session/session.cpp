@@ -64,7 +64,7 @@ namespace mobject {
    * 
    *  Consequently, if you want to talk to the <i>session manager,</i>
    *  you use dot-notation, while you access the <i>session object</i>
-   *  via arrow notation (e.g. \code Session::current->getFixture() )
+   *  via arrow notation (e.g. `Session::current->getFixture()` )
    */
   SessManager& Session::current = lib::Depend<SessManagerImpl>()();
   

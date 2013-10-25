@@ -50,6 +50,7 @@
  ** or changed metadata entry, finally \em committing this builder to yield a new
  ** asset::Meta (which, in case of a mutation, might supersede an existing one).
  ** 
+ ** @ingroup asset
  ** @see asset.hpp explanation of assets in general
  ** @see MetaFactory creating concrete asset::Meta instances
  **

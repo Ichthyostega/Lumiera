@@ -1,0 +1,101 @@
+/*
+  DOXYGEN.dox  -  font page for the Doxygen API documentation
+ 
+
+  Copyright (C)         Lumiera.org
+    2013,               Hermann Vosseler <Ichthyostega@web.de>
+                        Christian Thaeter <ct@pipapo.org>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
+
+/** @mainpage Lumiera API Documentation
+
+This section contains the API and reference documentation
+of the Lumiera code base. It is generated automatically from the
+source code comments.
+
+Lumiera Documentation Structure
+===============================
+Lumiera comes with extensive documentation, which is organised into several tiers or layers,
+according to the target audience, the degree of detail and the level of technicality.
+Mostly, the sources of the documentation are kept in-tree; documentation pages are generated
+with the *ASCIIDOC* tool and published at the [Lumiera website](http://Lumiera.org/documentation)
+
+- as a general introduction, you should read the [»outer space« document](http://Lumiera.org/documentation/user/intro/intro.html)
+- further user documentation -- mostly tutorials -- is available in the [user section](http://Lumiera.org/documentation/user/)
+- Architecture and specification documents can be found in the [design section](http://www.lumiera.org/documentation/design/)
+- fundamental discussions and decisions are documented in the form of [RfC entries](http://www.lumiera.org/documentation/devel/design_process.html)
+- as entrance to the *technical level*, developers should read the [»inner core«](http://www.lumiera.org/documentation/technical/overview.html) document
+- from there, various pages in the [technical documentation](http://www.lumiera.org/documentation/technical) detail specific aspects
+  of implementation and technology. They treat some topics in a coherent fashion and introduce the concepts and abstractions
+  necessary to understand the actual code
+- right now, you are looking at the **API Documentation**, which is the entrance point to the actual code
+- on your exploration path down to the internal details, you might want to follow the overview given
+  + by the [Layer and Subsystem](modules.html) overview
+  + the file level comments of relevant interfaces
+
+*/
+
+/* ==== Layers ==== */
+
+/** @defgroup backend Backend-Layer
+*/
+
+/** @defgroup proc Proc-Layer
+*/
+
+/** @defgroup gui Graphical User Interface
+*/
+
+/* ==== Subsystems ==== */
+
+/** @defgroup asset Asset Management
+    @ingroup proc
+*/
+
+/** @defgroup session Session
+    @ingroup proc
+*/
+
+/** @defgroup player Playback and Render Control
+    @ingroup proc
+*/
+
+/** @defgroup engine Render Engine
+    @ingroup proc
+*/
+
+/** @defgroup scheduler Scheduler
+    @ingroup backend
+*/
+
+
+/* ==== Global Namespaces ==== */
+
+/** @namespace lumiera
+Lumiera public interface.
+Global interfaces and facilities accessible from plugins and scripts.
+It's probably a good idea to pull it in explicitly and to avoid nesting
+implementation namespaces within \c lumiera::
+*/
+
+
+/** @namespace lib
+Implementation namespace for support and library code.
+*/
+
