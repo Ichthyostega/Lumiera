@@ -24,7 +24,7 @@ This proposal stems from an discussion on the Mailinglist starting with the
 quote from Walter Murch "Marble and Clay".
  +
 It is thought to be in support and to complement nasa's
-[wiki:self:../DelectusShotEvaluator Delectus Shot Evaluator]
+link:DelectusShotEvaluator.html[Delectus Shot Evaluator]
 
 The central Idea is to remove the difference between "viewing", i.e. the media
 viewer and the timeline/Sequence on the other hand. Lumiera is designed to

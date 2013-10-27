@@ -1,7 +1,6 @@
 Documentation
 =============
 
-// Menu :  append child 'doxy'
 
 This documentation section contains documentation for both users and developers.
 

@@ -48,9 +48,9 @@ libraries to link against. These packages are ususally named `-devel` or `-dev`.
 For Debian based systems, e.g. Ubuntu, you can install these packages as follows:
 
 -------------------------------------------------------------------------------------
-sudo apt-get install build-essential autoconf scons valgrind libtool git-core \
+sudo apt-get install build-essential scons git-core valgrind intltool \
 libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
-libgavl-dev libgdl-1-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
+libgavl-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
 -------------------------------------------------------------------------------------
 
 Optionally, you may also want to install the *gtk2-engines* package.

@@ -2,10 +2,8 @@ Contributing to Lumiera
 =======================
 :Author: Benny <Benny.Lyons@gmx.net>
 :Date: Oct 2013
+:toc:
 
-
-Introduction
-------------
 
 This document is aimed at helping newcomers to contribute quickly to the
 project.
@@ -13,43 +11,48 @@ project.
 There are two major obstacles faced by people new to Lumiera:
 
  - _how_ can I contribute to Lumiera
- - _where_, i.e., in which areas of Lumiera, can I contribute
+ - _where_ can I contribute, i.e., in which areas of Lumiera.
 
 Git plays a fundamental role in Lumiera.  It features as one of the main
 methods in making contributions to Lumiera.  For this reason we provide a
 short Lumiera specific introduction on Git. This is less of a Git introduction,
 and more of how-to-obtain Lumiera code and publish your changes to the Lumiera
 community. While Git is not the only means of making your contributions
-avialable to the project, it is the method of choice if you were to become more
-involved in the project.  Of course, cou may also post your work to the
+available to the project, it is the method of choice if you were to become more
+involved in the project.  Of course, you may also post your work to the
 Lumiera mailing list, or simply ask one of the regular developers.
 
-Lumiera is an ambituous project.  While many areas of the project are involved and
+Lumiera is an ambitious project.  While many areas of the project are involved and
 require considerable experience, some sections require less experience whereas
 certain aspects might be ideal to new programmers. Thus we attempt here to
 describe a number of areas in the project to assist you in selecting an area in
 which you might like to make a contribution.
 Of course, you are more than welcome--and even encouraged--to select other areas
-in Lumiera toawards which you would like to contribute.
+in Lumiera towards which you would like to contribute.
 
+
+How to contribute to Lumiera
+----------------------------
 
 Git: Essentials for Lumiera
----------------------------
-All files in the Lumiera project are managed by *Git*. Although Git was
-primarily brought to life to manage source code, it plays a fundamental role in
-the Lumiera project.  It is central to communication and contribution in the
-project.  If you'd like to contribute to Lumiera, you will have to acquire some
-understanding of Git at some stage or other. Please note, this is not the only
-way to contribute to Lumiera, you can always send direct contributions to the
-mailing list.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+All files in the Lumiera project are managed by *Git*, the distributed sourcecode
+management software. Although Git was primarily brought to life to manage source
+code, it plays a fundamental role in the Lumiera project. It is central to
+communication and contribution in the project. If you'd like to contribute to
+Lumiera, you will have to acquire some understanding of Git at some stage or
+other. Please note, this is not the only way to contribute to Lumiera, you can
+always send direct contributions to the mailing list.
 
-The Lumiera project uses an infrastructure based on *Git*, the distibuted
-sourcecode management software. This deliberately places the barrier for
-contributing very low: No formal ``commit permission'' is necessary; you can
-start right away and present your first results to the _mob repository_.
+The Lumiera project uses an infrastructure based on Git. This deliberately
+places the barrier for contributing very low: Everyone works on his own
+repository, no formal ``commit permission'' is necessary; you can start
+right away and present your first results to the _mob repository_.
 
-One very useful place to begin with using Git is the following:
-link:http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html[basic Git tutorial at Kernel.org].
+First steps with Git
+^^^^^^^^^^^^^^^^^^^^
+One very useful place to begin with learning Git is the
+link:http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html[basic Git tutorial at Kernel.org]. +
 For more specific questions, you might consulte a link:http://gitref.org/[Git reference]
 
 In the following, we assume you have set up Git on your system.  If you are
@@ -57,7 +60,7 @@ experiencing problems with Git, just ask the Lumiera community.
 
 
 Letting People Know Who You Are
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ------------------------------------------------------------
 $ git config --global user.name "Your Name Comes Here"
@@ -65,32 +68,40 @@ $ git config --global user.email you@yourdomain.example.com
 ------------------------------------------------------------
 
 Obtaining Lumiera Code
-~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^
 
 ------------------------------------------------------------
 $ git clone git://git.lumiera.org/LUMIERA
 ------------------------------------------------------------
 
-If everything goes ok, you should have the Lumiera source code.  However, you do
-not have enough code to build as there are some external packages missing that
-are required to build Lumiera.
+If everything goes ok, you should have the Lumiera source code.  So the next step
+will be to learn how to build Lumiera from source code. Please refer to the
+link:building.html[building-Lumiera tutorial] for a more in-depth description
+of the necessary steps. The next section gives a brief summary of this process.
 
-Obtaining Packages Required by Lumiera
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Build Lumiera from source
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Apart from the Lumiera source code, you'll require additional packages to build
 Lumiera. These additional packages are of two kinds:
 
- - Packages not normally part of your distribution
- - Packages normally available with your distrubtion
+Packages normally available with your distribution::
+  for a Debian based system (including Mint, Ubuntu and similar flavours),
+  you should be able to install the necessary dependencies with the command
++
+------------------------------------------------------------
+sudo apt-get install build-essential scons git-core valgrind intltool \
+libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
+libgavl-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
+------------------------------------------------------------
+Packages not normally part of your distribution::
+  there are two packages most likely not available with your operating system
+  distribution, so you'll need to obtain the source code for these packages
+  and compile them yourself:
 
-There are two packages most likely not available with your operating system
-distribution, so you'll need to obtain the source code for these packages and
-compile: +NoBug+ and +Gdl+.
-
-
-NoBug
-^^^^^
+  - *NoBug* -- a diagnostics library
++
 ------------------------------------------------------------
 git clone git://git.pipapo.org/nobug
 cd nobug
@@ -100,9 +111,8 @@ mkdir build && cd build
 make
 sudo make install
 ------------------------------------------------------------
-
-Gdl
-^^^
+  - *GDL* -- a window docking library
++
 ------------------------------------------------------------
 git clone git://git.lumiera.org/gdl-package
 cd gdl-package
@@ -111,43 +121,23 @@ make
 sudo make install
 ------------------------------------------------------------
 
-Additional Packages
-^^^^^^^^^^^^^^^^^^^
-We'll describe obtaining the following packages for Debian, for other Linux
-distributions, please refer to our mailing list.
-
-------------------------------------------------------------
-sudo apt-get install build-essential autoconf scons valgrind libtool git-core \
-libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
-libgavl-dev libgdl-1-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
-------------------------------------------------------------
-
-
-Please refer to the
-link:building.html[building-lumiera tutorial] on how to obtain all packages to
-build Lumiera.
-
-
-Building Lumiera
-~~~~~~~~~~~~~~~~
-
+Start the Lumiera build process::
 ------------------------------------------------------------
 cd LUMIERA
 scons
 ------------------------------------------------------------
 
 If Lumiera is built correctly on your system, you should be able to shoot up
-the Lumiera GUI.
-
+the Lumiera GUI with the command
 ------------------------------------------------------------
-cd target
-lumiera
+target/lumiera
 ------------------------------------------------------------
-
 Congratulations! Now we can move on to making contributions.
 
-Contributing Your Efforts to the Lumiera Community
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Contribute your efforts to the Lumiera community
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 So you are ready to go.
 
@@ -186,7 +176,7 @@ Git to use emacs:
 $ git config --global core.editor emacs
 ------------------------------------------------------------
 
-Then while commiting, do not use the +-m+ option.  Your editor will appear,
+Then while committing, do not use the +-m+ option.  Your editor will appear,
 after you issue the +git commit+ command, and prompt you to enter your comments.
 Enter, as your first line, a one line summary of less than 60 characters in
 length (some applications use this line for various purposes and longer entries
@@ -197,13 +187,13 @@ changes.
  
 
 Publishing Your Contribution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 So all changes made up to now have been local to your own working environment.
 The next thing to do is to make your work available to the Lumiera community.
 
 Check that you didn't break anything, by running the testsuite.
 
-Finally you can +push+ your changes to the Lumiera server on the 'mob'
+Finally you can *push* your changes to the Lumiera server on the 'mob'
 repository:
 
 ------------------------------------------------------------
@@ -213,8 +203,9 @@ $ git push git://git.lumiera.org/lumiera/mob master:refs/heads/YOURNAME
 This creates a new branch +YOURNAME+ on the mob repository.
 
 Check that indeed your changes are public by visiting 
-link:http://Lumiera.org/gitweb[the Git-Web].  The lumiera/mob
-repository should indicate [green]#right now# as its ``Last Change'' entry.
+link:http://Lumiera.org/gitweb[the Git-Web]: +
+The lumiera/mob repository should indicate
+[green]#right now# as its ``Last Change'' entry.
 
 Thereafter, notify the other developers on the mailing list and they may examine
 your code into the main project line. 
