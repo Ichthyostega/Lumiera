@@ -212,70 +212,94 @@ your code into the main project line.
 
 
 Lumiera Communication Channels
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The mailing list is the central information hub of the project.
+If you're stuck in some way or the other, or need further explanation,
+don't hesitate to ask. When it comes to more informal exchange, the IRC
+is a good place too. If none of the core devs is online, just drop a message
+to the mailing list, and we'll arrange a schedule for an informal meeting.
+Besides, the Lumiera community generally meets on the second Thursday of
+each month at 20:00 UTC on IRC. All are more than welcome to join and
+to contribute to the discussions there.
+
+-> contact information link:{l}/project/contact.html[Mailing List & IRC]
+
+''''
 
 
-Mailing List
-~~~~~~~~~~~~
-------------------------------------------------------------
-lumiera@lists.lumiera.org 
-------------------------------------------------------------
-
-
-IRC Meetings
-~~~~~~~~~~~~
-
-The Lumiera community generally meets on the second Thursday of each month at
-20:00 UTC on:
-------------------------------------------------------------
-freenode#Lumiera
-------------------------------------------------------------
-
-All are more than welcome to join and to contribute to the discussions there.
-
-
-Lumiera: The Project
---------------------
- - GUI
- - Proc Layer
- - Backend
- - Website and its associated paraphernalia
- - Contents of the website
- - Miscellaneous
-
-GUI
----
-The Lumiera design does not restrict the application to having a single GUI, in
-fact, many user interfaces should be possible.
-The initial GUI on which considerable work has already been done has been
-implemented using the GTK toolkit.  However, considerable more work needs to be
-done on this present GUI.
-
-One immediate task that needs attention is to port the current GUI from
-GTK2 to GTK 3.
-
-Of course, you may prefer to start from scratch using a different toolkit,
-i.e. Qt. Contributions are are also most welcome.
-
-
-Proc Layer
-----------
-
-
-Backend
--------
-
-
-Website and its associated paraphernalia
+Lumiera: Areas for possible contribution
 ----------------------------------------
 
+GUI::
+The Lumiera design does not restrict the application to having a single GUI, in
+fact, many user interfaces should be possible.
+- The initial GUI on which considerable work has already been done has been
+  implemented using the GTK toolkit.  However, considerable more work needs to be
+  done on this present GUI.
+- One immediate task that needs attention is to port the current GUI from
+  GTK2 to GTK 3. Especially, our custom style sheet needs to be ported
+- we urgently need conceptual (non-coding) contributions
 
-Contents of the website
------------------------
+  * work out a coherent handling concept, in accordance with model and core
+  * we need a concept for key bindings and focus
+  * we need a concept for integration with control surfaces
+  * we need a concept for pen based handling
 
 
-Miscellaneous
--------------
-Do you havve any ideas?  Please speak up on the mailing list or on IRC.
+Proc Layer::
+- external connection systems
+
+  * investigate good ways to output video, both in-window and full screen.
+    Especially, the integration is what counts: it should be a well maintained
+    library, and play well with our intended framework and memory management.
+  * expand on the work done for ALSA and Jack audio.
+  * expand on the work done for LADSPA / L2. Make Lumiera a host for these plugin systems
+  * investigate how to discover sound card properties. Develop a concept how to describe
+    these in a generic fashion, independent of the concrete library used for output.
+    The purpose is to allow binding with the structure of the session model
+
+- memory management
+
+  * expand on the work done for a pooling small objects allocator.
+  * develop a backend for our various allocation schemes to use this allocator.
+
+- help with the C++11 transition
+- Command system at the GUI interface
+
+  * expand on the work done for generic commands
+  * implement a command dispatcher to allow blocking and queuing of commands
+  * develop a scheme how to code the GUI commands in practice
+
+- implement a symbol table for the `lib::Symbol` datatype
+- provide the foundation for symbolic rules and script bindings
+
+  * expand on the work done for symbolic and hash references
+  * implement a hierarchical registration service to support per-type symbol namespaces
+  * integrate (and maybe adapt or overhaul) the existing session (placement) index and
+    asset registry into this new symbol binding system
+
+- evolve and implement our stream type system
+
+
+/////////////////
+Backend::
+
+TODO: where to contribute to the backend??
+
+/////////////////
+
+
+
+Website and infrastructure::
+- authoring support scripts
+- implement the new website design
+- help with our continuous integration setup
+
+
+
+''''
+''''
+
+Do you have any further ideas?  Please speak up on the mailing list or on IRC.
 Such are always welcome.
 
