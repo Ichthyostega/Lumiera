@@ -91,7 +91,7 @@ Enter _workspace direcory_ as explained above.
 Get the NoBug source code:
 
 ------------------------------------------------------------
-git clone git://git.pipapo.org/nobug
+git clone git://git.lumiera.org/debian/nobug
 ------------------------------------------------------------
 
 This will create a (sub)directory called nobug that contains source code. +
@@ -124,8 +124,8 @@ Ubuntu 10.10 note::
   you need to install the +intltool+ package from the standard ubuntu repository
 
 ------------------------------------------------------------
-git clone git://git.lumiera.org/gdl-package
-cd gdl-package
+git clone git://git.lumiera.org/debian/gdl
+cd gdl
 ./configure
 make
 sudo make install

@@ -114,8 +114,8 @@ sudo make install
   - *GDL* -- a window docking library
 +
 ------------------------------------------------------------
-git clone git://git.lumiera.org/gdl-package
-cd gdl-package
+git clone git://git.lumiera.org/debian/gdl
+cd gdl
 ./configure
 make
 sudo make install
