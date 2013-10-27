@@ -1,24 +1,35 @@
 Building Lumiera from source
 ============================
+:Date: 2013
+:toc:
 
 At the moment you can build Lumiera, start the standard Lumiera GUI and run the
-Lumiera test suite.
+Lumiera test suite. The GUI you start might look like a mockup, but in fact is
+_is_ the real application; just there isn't any wiring between GUI, model and
+core yet. This will remain the state of affairs for the foreseeable future, since
+we're developing core components against a test suite with unit and integration
+tests. Thus, the growth of our test suite is the only visible indication of
+progress.
 
 This tutorial outlines the fundamental steps required to compile Lumiera on
 Linux (or a comparable) system. We'll assume that you have a certain familiarity
-with _commandline survival skills_ on your system. Although Git is required if
-you do not use the Debian package, we'll explicitly provide all giot commands.
+with _commandline survival skills_ on your system. To help you getting started,
+this tutorial lists all the necessary commands explicitly. footnote:[there are
+some minor differences between the various Debian based distributions, thus the
+exact version numbers and package names appearing in our example commands might
+be slightly different on your system]
 
 There are two distinct methods to build:
 
-- use the Debian source code package of Lumiera
-- use Git to retrieve all source code
+- use the Debian source code package of Lumiera (the »Debian way«)
+- use Git to retrieve all source code and build the »classical way«
 
 
-NOTE: just compiling Lumieara on a _Debian-based_ system (e.g. Ubuntu)
-      is much simpler using the Debian source package. See the separate
-      link:DebianBuilding.html[tutorial page] for this (or the general
-      link:/debian/[instructions for installing on Debian/Ubuntu]).
+NOTE: just compiling Lumieara on a _Debian-based_ system (e.g. Mint, Ubuntu...)
+      is much simpler when using the Debian source package. See the separate
+      link:DebianBuilding.html[tutorial page] for this footnote:[besides, there
+      is a separate page with general
+      link:/debian/[instructions for installing on Debian/Ubuntu]).]
       The purpose of this tutorial here is to show you the elementary
       and generic steps to compile Lumiera from source.
 
@@ -26,26 +37,38 @@ NOTE: just compiling Lumieara on a _Debian-based_ system (e.g. Ubuntu)
 Requirements
 ------------
 
-To build Lumiera, you'll require GNU C/C++ compiler (Version 4.X) in addition to
-the following:
+To build Lumiera, you'll need a _build environment_ together with the
+_development packages_ of the libraries Lumiera depends on.
+footnote:[there is a separate documentation page listing the
+link:{ldoc}/technical/build/Dependencies.html[build dependencies] explicitly.
+We'll try to keep that information up to date -- but in the end, the really
+authoritative information about the build dependencies is encoded into the
+link:{ldoc}/technical/build/SCons.html[build system]. Thus, when the build
+system aborts, indicating that a never version of some library is required,
+then usually the build system is right...]
+More specifically, you'll need the GNU C/C++ compiler (Version 4.X)
+in addition to the following tools and libraries:
 
  * link:http://git-scm.com/[Git VCS]
  * link:http://www.scons.org/[SCons build system]
  * link:http://www.boost.org/[Boost libraries]
  * link:http://gmerlin.sourceforge.net/[GAVL library]
- * *NoBug* (see below)
+ * link:http://nobug.pipapo.org/[NoBug] (see below)
  * Lumiera source code 
 
 The GUI depends on the following:
 
- * http://www.gtkmm.org/en/[gtkmm]
- * http://cgit.freedesktop.org/xorg/lib/libXv[libXv]
+ * link:http://www.gtkmm.org/en/[gtkmm]
+ * link:http://cgit.freedesktop.org/xorg/lib/libXv[libXv]
+ * link:https://wiki.gnome.org/LibRsvg[lib R SVG]
+ * link:https://git.gnome.org/browse/gdl[lib GDL]
+ 
 
 TIP: Generally speaking, when you want to build software, you'll need the
 _development_ version of the packages that contain the headers and pre-built
-libraries to link against. These packages are ususally named `-devel` or `-dev`.
+libraries to link against. These packages are usually named `-devel` or `-dev`.
 
-For Debian based systems, e.g. Ubuntu, you can install these packages as follows:
+For Debian based systems, e.g. Mint, Ubuntu..., you can install these packages as follows:
 
 -------------------------------------------------------------------------------------
 sudo apt-get install build-essential scons git-core valgrind intltool \
@@ -53,7 +76,7 @@ libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem
 libgavl-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
 -------------------------------------------------------------------------------------
 
-Optionally, you may also want to install the *gtk2-engines* package.
+Optionally, you may also want to install the `gtk2-engines` package.
 
 
 Build Directory
@@ -64,29 +87,31 @@ have to use this directory to build Lumiera. This could be a temporary
 directory, or some "workspace" directory below your home directory. We'll refer
 to this directory as _workspace directory_ . 
 
+
 Lumiera Specific Libraries
 --------------------------
-
-Now that you have your basic build system setup, you'll next have obtain support
-libraries required by Lumiera that are not directly part of the Lumiera project
-itself. At the moment, you'll have to get the source code for the support
-libraries at build them from source. We do not have them pre-packaged at the
-moment, but this will hopefully change over time. However, it is not too
-difficult to build the support libraries and the instructions following here
-should not be too difficult.
+Now that you have your basic build environment prepared, the next step is to care
+for some special libraries required by Lumiera that are not directly part of the
+Lumiera project itself, but aren't readily available through the usual package
+manager of the common distributions either. footnote:[we maintain our own Debian
+package depot at Lumiera.org and provide binary Debian packages for a range of
+distributions; yet this tutorial strives at showing the basic and generic method
+for building. Thus we'll show you here how to build these libraries from source
+yourself] Thus, we'll have to get the source code for these support libraries,
+build and install them before we're able to compile Lumiera.
 
 WARNING: Note that the following procedures will try to install files into your
-base system below `/usr/local`.
-
+base system below `/usr/local`. +
 To do so, you'll need administrative permission for the machine you're working
 on. These additions might interfere with other libraries installed by your
 package manager (if you get into trouble updating your system later on,
 you might have to manually remove these libraries).
 
-NoBug: obtaining, building and installing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-*NoBug* is an instrumentation and diagnostics library. +
+NoBug: building and installing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+link:http://nobug.pipapo.org/[NoBug] is an instrumentation and diagnostics library. +
 Enter _workspace direcory_ as explained above. 
 Get the NoBug source code:
 
@@ -95,9 +120,9 @@ git clone git://git.lumiera.org/debian/nobug
 ------------------------------------------------------------
 
 This will create a (sub)directory called nobug that contains source code. +
-Compile and install NoBug with the following commands: (this will try to install
-the NoBug library in /usr/lib, so you will require root privilages to do so!)
-
+Compile and install NoBug with the following commands:
+footnote:[this will try to install the NoBug library in `/usr/lib`,
+so you will require root privileges to do so!]
 ------------------------------------------------------------
 cd nobug
 autoreconf -i
@@ -108,20 +133,23 @@ make
 sudo make install
 ------------------------------------------------------------
 
-GDL: obtaining, building and installing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+GDL: building and installing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The *GNOME Docking library* is generally available through your package manager,
-but we contributed some improvements, which are only available in the very
-recent development versions of GDL. If your distribution provides a GDL >= 2.27,
-you're fine. Otherwise we've created a special package, which doesn't interfere
-with an existing (older) installation of GDL.
+The *GNOME Docking library* is sometimes available through your package manager,
+but we provide a suitable custom package as well; the following shows how to
+build the latter
 
-Ubuntu 9.04 note::
-  intltool-update is not patched, you must add +/usr/share/intltool-debian/+
-  to get the gdl-package to configure correctly (JSC).
-Ubuntu 10.10 note::
-  you need to install the +intltool+ package from the standard ubuntu repository
+Version limitation::
+  we contributed some improvements to GDL, which are only available in upstream
+  versions since 2.27. Moreover, the GDL development switched meanwhile to GNOME-3
+  and GTK-3. Since we haven't upgraded GTK yet, we need to stick to a version prior
+  to this switch. If your distribution provides a 2.27 =< GDL =< 2.30, you're fine.
+  Otherwise we've created a special package, which doesn't interfere
+  with an existing (older) installation of GDL.
+
+Ubuntu note::
+  you need to install the `intltool` package from the standard Ubuntu repository
 
 ------------------------------------------------------------
 git clone git://git.lumiera.org/debian/gdl
@@ -131,20 +159,16 @@ make
 sudo make install
 ------------------------------------------------------------
 
-For more detailed instructions on how to build GDL (also how to build it into a
-Debian package) see
-http://lists.lumiera.org/pipermail/lumiera/2009-April/000891.html[this message +
-on the Lumiera mailing list].
 
 
-check library linkage
-^^^^^^^^^^^^^^^^^^^^^
+verify library linkage
+~~~~~~~~~~~~~~~~~~~~~~
 
-The compile will warn you to add various directories to /etc/ld.so.conf and then
-run ldconfig. This will allow your dynamic liker to pick up the newly built
+The compile might warn you to add various directories to `/etc/ld.so.conf` and then
+to run `ldconfig`. This will allow your dynamic linker to pick up the newly built
 libraries later when you try to start Lumiera.  If you don't want to reconfigure
 your system and add `/usr/local/lib` to the linker configuration, you may
-alternatively just add the directories to your LD_LIBRARY_PATH environment
+alternatively just add the directories to your `LD_LIBRARY_PATH` environment
 variable.
 
 Either way, check that all libraries are accessible and OK:
@@ -169,44 +193,17 @@ have to see why before you can continue.
 Building Lumiera
 ----------------
 
-Up to now, Lumiera has had (and equivalent) build systems: *scons* and
-*autotools*. (Note 3/2011: At the moment, the autotools build system is
-broken; only the scons build mechanism is working. It is always a good idea to
-check the current build stats from our *builddrone*, which automatically builds 
-the latest version from the master repository. Please have a look at this
-http://lumiera.org/builddrone/table.html[current build stats]-page.)
-
 Next, after having built and installed the external libraries, go into the
 _workspace directory_ and retrieve the Lumiera source code. Thereafter, build
-Lumiera. 
-
-
- * Issue the following command to retireve the Lumiera source code and,
- thereafter, build Lumiera using *scons*:
-+ 
-(more options for building with scons can be found via:`scons -h` )
-+
+Lumiera by invoking the *scons* build
+footnote:[more options for building with scons can be found via:`scons -h` ]
 -----------------
 git clone git://git.lumiera.org/LUMIERA
 cd LUMIERA
 scons
 -----------------
-+
-   
- * Alternatively, if you'd prefer to build using *autotools* _(not working
- currently 3/11)_, issue the following commands:
-+
------------------
-git clone git://git.lumiera.org/LUMIERA
-cd LUMIERA
-autoreconf -fi
-mkdir build
-cd build
-../configure
-make
------------------
 
-maybe build and run the test suite by issuing `scons check` or `make check`
+maybe build and run the test suite by issuing `scons check`
 
 The build process will take some time, so sit back and relax.
 

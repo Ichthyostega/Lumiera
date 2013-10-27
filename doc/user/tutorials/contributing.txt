@@ -111,7 +111,10 @@ mkdir build && cd build
 make
 sudo make install
 ------------------------------------------------------------
-  - *GDL* -- a window docking library
+  - *GDL* -- a window docking library footnote:[GDL _is_ usually available
+    through the standard package manager, albeit in a GTK-3 based version;
+    since we haven't managed to port our GUI to GTK-3, we're sticking to a
+    rather ancient version of the Gnome Docking Library for now]
 +
 ------------------------------------------------------------
 git clone git://git.lumiera.org/debian/gdl

@@ -93,9 +93,11 @@ Libraries
  - libxv-dev
  - librsvg-2.0 and librsvg2-dev for rendering Icons
  - libgdl-1-dev -- old version of the Gnome Docking Library footnote:[GDL isn't directly related to GNOME any more.
-   We contributed to the improvement of this library in the past. Since we're still using GTK-2,
-   for now we're forced to use a _really ancient version_, which isn't available from the official
-   repositories -- you can find the original tarball and several Debian/Ubuntu packages in our
-   link:http://lumiera.org/debian/pool/experimental/g/gdl/[Lumiera package repository] though.]
+   We contributed to the improvement of this library in the past. These improvements went upstream
+   with GDL-2.27. Since we're still using GTK-2, for now we're forced to use a _really ancient version_,
+   which isn't available from the official repositories -- you can find the original tarball and several
+   Debian/Ubuntu packages in our
+   link:http://lumiera.org/debian/pool/experimental/g/gdl/[Lumiera package repository] though.
+   Basically we need 2.27 =< GDL =< 2.30]
 
 

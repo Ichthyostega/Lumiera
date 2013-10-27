@@ -1,11 +1,13 @@
-building from source -- the Debian Way
-======================================
+building from source -- the »Debian Way«
+========================================
 :Author: Ichthyostega
 :Date: 3/2011
+:toc:
 
-When you're using a Debian-based system (e.g. Ubuntu), instead of compiling
-Lumiera from source in the classical (hard) way, you might prefer building
-from the Debian source package.
+In case you're using a Debian-based system (e.g. Mint, Ubuntu...), there
+is a simple alternative to the manaual compiling and installing of library
+dependencies. Instead of building Lumiera from source in the classical (hard)
+way, you might prefer *building from the Debian source packages*.
 
 Why -- what are the benefits?
 
@@ -19,23 +21,23 @@ Under some circumstances, these very benefits might be a drawback, though.
 Sometimes you don't want to install; or you might have a version of Lumiera
 installed, but want to try out a (maybe newer / development) version...
 
-No problem -- basically it's always possible to run Lumiera _without installation._
-It is deliberately made such as to find its components actively, within the standard
-directory structure created by the buildsystem. While, thus, Lumiera can be just
-run directly from such a folder tree, the software still relies on some other
-libraries, which somehow need to be installed on your system.
+No problem -- basically it is always possible to run Lumiera _without installation._
+We deliberately constructed the application such as to find its components actively,
+within the standard directory structure created by the buildsystem. However, while,
+Lumiera itself can be just run directly from such a folder tree, the software still
+relies on some other libraries, which somehow need to be installed on your system.
 
 
 building from source package
 ----------------------------
-Generally speaking, operations which _modify_ the installation/configuration of your
+NOTE: Generally speaking, operations which _modify_ the installation/configuration of your
 linux system require root permissions. To the contrary, just _building_ a package 
 should _not_ be done as root.
 
 . add a suitable source line to your *Apt configuration* ('/etc/apt/sources.lst')
 +
 ----
-deb-src http://lumiera.org/debian/ squeeze experimental
+deb-src http://lumiera.org/debian/ wheezy experimental
 ----
 . get all the *build dependencies*
 +
@@ -58,7 +60,7 @@ apt-get source --compile nobug-dev
 +
 Finally, you'll find several new +*.deb+ packages in the directory where you started
 the build. You need to _install_ these packages then using the basic debian package
-manager 'dpkg'
+manager `dpkg`
 +
 ----
 sudo dpkg -i libnobug2_201008.1-1_i386.deb nobug-dev_201008.1-1_i386.deb
@@ -75,15 +77,17 @@ situation.
 You can delete the source tree used for compiling. If you never intend to
 re-install the package, you could also delete the created package and source package
 components after installing it. But especially when trying out development versions
-it might be a good idea to file those packages somewhere, as we're not keeping _every_
-package in the online Lumiera debian depot. While every package could be reproduced
-exactly with a bit of Git knowledge, just keeping the +*.deb+ might be more convenient.
+it might be a good idea to stash those packages somewhere, as we're not keeping _every_
+package in the online Lumiera debian depot. While any package could be reproduced
+exactly with a bit of Git knowledge, just keeping the `*.deb` might be more convenient.
 
+*That's it* -- you're done! Debian building is convenient, isn't it?
+
+NOTE: What follows is a background information and configuration for advanced users. +
+      You can safely skip and ignore the remainder of this page if in doubt.
 
 Required and recommended Debian packages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-What follows is a note about configuration for advanced users. You can safely skip and
-ignore this section if in doubt.
 
 The Debian package manager stores for each package not only the required prerequisites,
 but also some additional _recommended_ packages: Software likely to make using the given
@@ -106,8 +110,8 @@ APT::Install-Recommends "false";
 ^_Disclaimer:_ please be sure you understand the consequences...^
 
 
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-What follows are some more in-depth explanations and background informations
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+The rest of this tutorial contains some more in-depth explanations for the curious
 
 
 anatomy of a debian source package
@@ -144,8 +148,8 @@ the package. With the exception of the following:
 - the top entry in the 'debian/changelog' defines the *actual package name and version*
 - the actual build process is conducted by invoking several pre defined targets in the
   'debian/rules' *makefile*. But modern debian packages often make use of the ``common
-  debian build system'' -- basically a set of macros allowing to write these 'rules'
-  in a very short and concise fashion
+  debian build system'' link:http://build-common.alioth.debian.org/cdbs-doc.html[CDBS] --
+  basically a set of macros allowing to write these _rules_ in a very short and concise fashion
 
 
 commands for handling source packages
@@ -174,7 +178,7 @@ modify parts.
 - 'dpkg-checkbuilddeps' checks that all the requirements of the package are satisfied.
   It just prints out what is missing; this is especially useful if the fully automated
   install did not work entirely, so you have to fix / reinstall parts manually
-- 'dpkg-buildpackage -rfakeroot' starts the full build. This includes re-generating
+- 'dpkg-buildpackage' starts the full build. This includes re-generating
   the source package (and especially the diff). If you only want to build the binary
   package, you can skip the diff- / source-package generation with '-b'
 
