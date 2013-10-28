@@ -133,15 +133,15 @@ configuration example
 [source,python]
 --------------------------------------------------------------------------
 def addPredefined():
-    root = Node(TREE_ROOT, label='Lumiera')                                <1>
-    proj = root.linkChild('project')                                       <2>
+    root = Node(TREE_ROOT, label='Lumiera')                                # <1>
+    proj = root.linkChild('project')                                       # <2>
     proj.linkChild('faq')
     
-    proj.prependChild ('screenshots')                                      <3>
+    proj.prependChild ('screenshots')                                      # <3>
     proj.putChildLast ('press')
-    proj.putChildAfter('faq', refPoint=Node('screenshots'))                <4>
+    proj.putChildAfter('faq', refPoint=Node('screenshots'))                # <4>
     
-    proj.link('http://issues.lumiera.org/roadmap', label="Roadmap (Trac)") <5>
+    proj.link('http://issues.lumiera.org/roadmap', label="Roadmap (Trac)") # <5>
     Node('rfc').sortChildren()
 --------------------------------------------------------------------------
 <1> the _root node_ by convention uses a special ID token. Additional

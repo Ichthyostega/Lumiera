@@ -21,34 +21,6 @@
 */
 
 
-/** @file bool-checkable.hpp
- ** When working with generic function objects and function pointers typed to
- ** arbitrary signatures, often there is the necessity to hold onto such a functor
- ** while hiding the actual signature behind an common interface ("type erasure").
- ** The usual solution based on subclassing has the downside of requiring separate
- ** storage for the concrete functor object, which might become problematic when
- ** dealing with lots of functor objects. 
- ** 
- ** Especially when dealing with tr1::function objects, all of the type differences
- ** are actually encoded into 3 internal pointers, thus yielding the same size for
- ** all various types of functors. Building on this observation, we can create an
- ** common container object to store the varying functors inline, while hiding the
- ** actual signature.
- ** 
- ** There remains the problem of re-accessing the concrete functor later on. As
- ** C++ has only rudimental introspection capabilities, we can only rely on the
- ** usage context to provide the correct function signature; only when using a
- ** virtual function for the re-access, we can perform at least a runtime-check.
- ** 
- ** Thus there are various flavours for actually implementing this idea, and the
- ** picking a suitable implementation depends largely on the context. Thus we
- ** provide a common and expect the client code to pick an implementation policy.
- ** 
- ** @see control::Mutation usage example
- ** @see function-erasure-test.cpp
- ** 
- */
-
 
 #ifndef LIB_BOOL_CHECKABLE_H
 #define LIB_BOOL_CHECKABLE_H
@@ -63,7 +35,7 @@ namespace lib {
   }
   
   
-  /*
+  /**
    * Provide an implicit conversion to "bool".
    * Inherit (mix-in) from this template by providing the
    * concrete subclass type ("CRTP"). Additionally, to implement

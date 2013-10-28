@@ -424,7 +424,18 @@ rendering...
 [[builder]]
 builder
 ^^^^^^^
-[red]#to be written#
+The inner workings of Lumiera exhibit some striking similarities to the implementation
+of a programming language compiler. On one side, there is a tree-like data structure
+which represents the high-level meaning of the edit currently in the works. We call
+this data structure the ``high-level model'' -- it is comprised of timelines and
+sequences, tracks, bins, clips and effects. On the other side, the render engine
+requires a properly wired network of low-level processing nodes, where every connection
+has been made explicit, and any indirection has been resolved.
+
+The *Builder* is the entity performing the translation between these both flip sides
+of the coin: it creates the low-level processing graphs by traversing and evaluating
+the relevant parts of the high-level-model. Indirections will be resolved and
+connections will be made explicit by querying the _rules system_.
 
 rules system
 ^^^^^^^^^^^^
@@ -492,13 +503,14 @@ libraries.
 A library is used in an application by _linking_ the library into the
 application. (There are other things to be done, but we'll call these 'details',
 which wont concern us here.) There are different ways to _link_ a library
-into an application: statically linking and dynamically linking.
+into an application: linking statically and linking dynamically.
 
-_Statically Linking_ is done while the application is being built, or
-compiled. It is performed by the linker. The linker can perform some checks
-(mostly checks on syntax) and warn the user that some particular feature is
-being used incorrectly. The user can then correct the offending code, and
-recompile. 
+_Static Linking_ is done while the application is being built, or
+compiled. It is performed by the linker, which executes as the last step
+of the compilation process. The linker can perform some sanity checks
+(mostly checks regarding formally correct function invocation) and warn the user
+hat some particular feature is being used incorrectly. The user can then correct
+the offending code, and recompile. +
 There are a number of disadvantages associated with static linking. Features and
 libraries are being constantly improved. If the application wants to use new
 features, it will have to be recompiled with the new library which provides the
@@ -531,11 +543,11 @@ How are Plugins Implemented?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We can view Lumiera itself as being a slender application with many of the bells
-and whistles being supplied __directly_ by external FOSS tools.  Such tools will
+and whistles being supplied _directly_ by external FOSS tools.  Such tools will
 be made available to the Lumiera code base via the Lumiera Plugin Interface (LPI).
 
-As LPI will be used throughout most layers of Lumiera--from the low-level
-backend, right up to the GUI--the interface will have to be compatible to both C
+As LPI will be used throughout most layers of Lumiera -- from the low-level
+backend, right up to the GUI -- the interface will have to be compatible to both C
 and C++. In effect, this means that LPI will be implemented in C.
 
 Using LPI a plugin interface can be defined for each external library.  The
