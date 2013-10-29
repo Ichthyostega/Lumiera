@@ -5,7 +5,7 @@ cat <<EOF
 usage:
  $0 name description...
 creates C skeleton files name.h and name.c for lumiera
-and adds them to the Makefile.am in the current dir
+and adds them to the Makefile.am in the current dir (if available)
 EOF
 exit
 fi

@@ -1,5 +1,0 @@
-#!/bin/sh
-
-#test rig for running programs manually under libtool and valgrind
-export NOBUG_LOG LUMIERA_PLUGIN_PATH
-make ${CONCURRENCY_LEVEL:+-j$CONCURRENCY_LEVEL} "$1" && libtool --mode=execute valgrind --leak-check=full -q "./$@"

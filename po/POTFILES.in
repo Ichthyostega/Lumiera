@@ -1,4 +1,10 @@
 # List of source files containing translatable strings.
+#
+# As of 10/2013, this is a leftover from the initial GUI development and is currently not used.
+# This list can be considered fairly complete.
+# Please note: starting with SCons 2.3 there is a gettext builder which mostly automates
+# this build task. When we're about to care for i18n, we'll probably use a mechansim to
+# detect the files with translatable strings automatically.
 
 src/gtk-lumiera.cpp
 
