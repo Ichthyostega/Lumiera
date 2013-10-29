@@ -37,7 +37,6 @@
 #include <errno.h>
 
 
-//NOBUG_DEFINE_FLAG_PARENT (filedescriptor, file_all);
 
 /* lookup and creation of files, initialized in backend.c */
 

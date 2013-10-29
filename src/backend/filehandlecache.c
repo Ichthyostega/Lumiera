@@ -25,7 +25,6 @@
 #include "backend/file.h"
 #include "backend/filehandlecache.h"
 
-//NOBUG_DEFINE_FLAG_PARENT (filehandlecache, file_all);
 
 /* errors */
 
@@ -40,7 +39,6 @@ lumiera_filehandlecache_new (int max_entries)
 {
   REQUIRE (!lumiera_fhcache, "Filehandlecache already initialized");
 
-  //NOBUG_INIT_FLAG (filehandlecache);
   lumiera_fhcache = lumiera_malloc (sizeof (lumiera_filehandlecache));
   lumiera_mrucache_init (&lumiera_fhcache->cache, lumiera_filehandle_destroy_node);
   lumiera_fhcache->available = max_entries;

@@ -36,21 +36,6 @@
 #include <unistd.h>
 #include <sys/resource.h>
 
-//NOBUG_DEFINE_FLAG_PARENT (backend, lumiera); TODO
-//NOBUG_DEFINE_FLAG (backend);
-//NOBUG_DEFINE_FLAG_PARENT (file_all, backend);
-//NOBUG_DEFINE_FLAG_PARENT (filehandle, file_all);
-
-//NOBUG_DEFINE_FLAG_PARENT (mmapings, mmap_all);
-
-
-
-//NOBUG_DECLARE_FLAG (file);
-
-//NOBUG_DECLARE_FLAG (mmap_all);
-//NOBUG_DECLARE_FLAG (mmap);
-//NOBUG_DECLARE_FLAG (mmapings);
-//NOBUG_DECLARE_FLAG (mmapcache);
 
 
 
@@ -70,14 +55,6 @@ size_t lumiera_backend_pagesize;
 int
 lumiera_backend_init (void)
 {
-  //NOBUG_INIT_FLAG (backend);
-  //NOBUG_INIT_FLAG (file_all);
-  //NOBUG_INIT_FLAG (file);
-  //NOBUG_INIT_FLAG (filehandle);
-  //NOBUG_INIT_FLAG (mmap_all);
-  //NOBUG_INIT_FLAG (mmap);
-  //NOBUG_INIT_FLAG (mmapings);
-  //NOBUG_INIT_FLAG (mmapcache);
 
   TRACE (backend_dbg);
   lumiera_mutex_init (&lumiera_filecreate_mutex, "fileaccess", &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);

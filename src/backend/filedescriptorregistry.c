@@ -28,7 +28,6 @@
 #include "backend/filedescriptor.h"
 #include "backend/filedescriptorregistry.h"
 
-//NOBUG_DEFINE_FLAG_PARENT (filedescriptorregistry, file_all);
 
 /*
   Filedescriptor registry

@@ -41,12 +41,6 @@
  *
  */
 
-//NOBUG_DEFINE_FLAG_PARENT (config_all, lumiera_all);
-//NOBUG_DEFINE_FLAG_PARENT (configsys, config_all);
-//NOBUG_DEFINE_FLAG_PARENT (config_typed, config_all);
-//NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
-//NOBUG_DEFINE_FLAG_PARENT (config_item, config_all);
-//NOBUG_DEFINE_FLAG_PARENT (config_lookup, config_all);
 
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "syntax error in configfile");
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_KEY, "syntax error in key");
@@ -99,12 +93,6 @@ lumiera_config_init (const char* path)
   REQUIRE (!lumiera_global_config, "Configuration subsystem already initialized");
   REQUIRE (path);
 
-  //NOBUG_INIT_FLAG (config_all);
-  //NOBUG_INIT_FLAG (configsys);
-  //NOBUG_INIT_FLAG (config_typed);
-  //NOBUG_INIT_FLAG (config_file);
-  //NOBUG_INIT_FLAG (config_item);
-  //NOBUG_INIT_FLAG (config_lookup);
 
   lumiera_global_config = lumiera_malloc (sizeof (*lumiera_global_config));
   lumiera_config_lookup_init (&lumiera_global_config->keys);

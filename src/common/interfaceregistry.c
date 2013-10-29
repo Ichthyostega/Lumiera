@@ -39,10 +39,6 @@
  * by their name and major version.
  */
 
-//NOBUG_DEFINE_FLAG_PARENT (interface_all, lumiera_all);
-//NOBUG_DEFINE_FLAG_PARENT (plugin, interface_all);
-//NOBUG_DEFINE_FLAG_PARENT (interfaceregistry, interface_all);
-//NOBUG_DEFINE_FLAG_PARENT (interface, interface_all);
 
 PSplay lumiera_interfaceregistry;
 PSplay lumiera_pluginregistry;
@@ -91,10 +87,6 @@ lumiera_interfacenode_delete (LumieraInterfacenode self)
 void
 lumiera_interfaceregistry_init (void)
 {
-  //NOBUG_INIT_FLAG (interface_all);
-  //NOBUG_INIT_FLAG (interfaceregistry);
-  //NOBUG_INIT_FLAG (interface);
-  //NOBUG_INIT_FLAG (plugin);
 
   TRACE (interfaceregistry_dbg);
   REQUIRE (!lumiera_interfaceregistry);

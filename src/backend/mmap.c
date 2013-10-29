@@ -35,8 +35,6 @@
  *
  */
 
-//NOBUG_DEFINE_FLAG_PARENT (mmap_all, backend);
-//NOBUG_DEFINE_FLAG_PARENT (mmap, mmap_all);
 
 
 LUMIERA_ERROR_DEFINE (MMAP_NWRITE, "Backing file not writable");

@@ -10,22 +10,22 @@ it seems natural to care for the debian packaging of Lumiera ourselves. Moreover
 Debian/Stable to be our *reference platform* -- we'll provide any additionally required, more recent
 packages through our own link:http://Lumiera.org/debian[Debian Apt-Repository] (Debian depot).
 
-TIP: readers new to debian packages may want to have a look into our
+TIP: readers new to Debian packages may want to have a look into our
      link:{ldoc}/user/tutorials/DebianBuilding.html[Debian build tutorial],
-     describing the commands for building and the structure of a debian
+     describing the commands for building and the structure of a Debian
      (source) package in general
 
 
 Package build process
 ---------------------
 As our whole infrastructure relies heavily on the Git version management tool, it's only natural
-also to organise the (debian) packaging with the help of Git. Fortunatlely, there is a nifty tool
+also to organise the (debian) packaging with the help of Git. Fortunately, there is a nifty tool
 called link:https://honk.sigxcpu.org/piki/projects/git-buildpackage/[git-buildpackage], written
-by Guido Günther exactly for this purpuse: It treats the _debianisation_ as a branch in the
+by Guido Günther exactly for this purpose: It treats the _debianisation_ as a branch in the
 Git repository, forking off the mainline at the release point.
 
 For Lumiera, this _debianisation branch_ is called 'deb' and can be found in the
-link:http://git.lumiera.org/gitweb?p=lumiera/debian;a=summary[git:/git.lumiera.org/lumiera/debian] repository.
+link:http://git.lumiera.org/gitweb?p=debian/lumiera;a=summary[git:/git.lumiera.org/debian/lumiera] repository.
 
 Installing Lumiera
 ~~~~~~~~~~~~~~~~~~
@@ -33,38 +33,48 @@ The link:SCons.html[SCons build] generates a relocatable distribution directory 
 holding the main executable, additional tools and utilities, plus the core libraries and resources.
 Here _relocatable_ means that this subtree can be moved and placed anywhere on the system.
 As long as the relative directory layout remains intact, the executables will be able to find
-and load the accompanying libraries and resources. By invoking the +scons install+ target,
+and load the accompanying libraries and resources. By invoking the `scons install` target,
 this directory structure is placed into the installation target directory.
 
 Actually, this lookup process at application startup is performed in two phases
 
-- in the first phase the main application locates the directly linked shared libraries.
+- in the first phase the main application locates the explicitly linked shared libraries.
+  footnote:[generally speaking, we have to distinguish between dynamic libraries explicitly
+  linked as part of the application, libraries linked as direct library dependencies, other
+  transitive library dependencies, and finally shared objects, which are loaded at runtime
+  through the `dlopen()` call.]
   Especially those libraries belonging first class to the Lumiera application are built
-  with a relative searche path ('rpath' with $ORIGIN token). These libraries are placed
+  with a relative search path ('rpath' with $ORIGIN token). These libraries are placed
   into the +modules/+ subfolder
 
-- after successfully launching the executable, the second phase performes a lookup programatically,
-  starting from the path location of the executable, trying to find a +setup.ini+ which defines
+- after successfully launching the executable, the second phase performs a lookup programmatically,
+  starting from the path location of the executable. The goal is to find a +setup.ini+ which defines
   additional plug-ins and resources to load. Notably, the GUI to launch is loaded as a
-  plug-in through this mechanism. Moreover, this bootstrap configuration defines the
+  plug-in through this mechanism. Moreover, this *bootstrap configuration* defines the
   additional platform and user configuration to load for further outfitting of the system.
 
 LSB Installation Layout
 ~~~~~~~~~~~~~~~~~~~~~~~
-This organisation is used as foundation for packaging and installing. The primariy application
+This organisation is used as foundation for packaging and installing. The primary application
 distribution structure will be located into a subfolder below +/usr/lib/+. Only the main application
 executable will be symlinked into +/usr/bin/+. The LSB explicitly allows for such a layout, which is
 typically used by large application bundles (OpenOffice, Gimp, Eclipse). Since the application
 startup encompasses two phases, loading the extended configuration programmatically after
-launching the application, such extended resources can easily be relocated into a separate
-folder below +/usr/share/+, as required by LSB.
+launching the application, extended resources from the application bundle can easily be
+relocated into a separate folder below `/usr/share/`, as required by LSB.
 
 
 Releases, Branches and Conventions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Official releases are marked by a tag on the master branch. Usually, we'll also fork a
-*release branch* at that point, featuring bugfixes only. From here we'll merge to the
-*debian branch*
+Official releases are marked by a tag on the master branch. At that point, master should be
+in good shape, release documentation is polished; experimental features are removed or disabled.
+Usually, we'll also fork a  *release branch* at that point, featuring bugfixes only.
+From here we'll merge to the *debian branch*
+
+Typically the release will lead to the discovery of more or less serious bugs, which are
+fixed on the release branch and backported to master. The result is a sequence of point
+releases. At the end of a stable release series, the release branch will be upgraded
+with a single merge commit to the level of the next major release.
 
 
 Package build commands

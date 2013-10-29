@@ -24,6 +24,7 @@ t;h=74471e255e6ebfedb642e450bdfd3f79e346c600;hb=backend[NoBug_flags]
 I've added the things I planning for the backend, others might add their own
 plans there too. So far this is an early draft, comments welcome.
 
+NOTE: outdated information. Have a look at `include/logging.h`
 
 Tasks
 ~~~~~
@@ -43,12 +44,23 @@ Rationale
 We need some easy way to control logging, later on when lumiera runs in beta
 tests it must be easy to tell a tester how to create useable debugging logs.
 
+
 Comments
 --------
+//comments: append below
 
 cehteh will care for further integration
- -- link:ct[] [[DateTime(2008-07-26T09:11:29Z)]]
+
+ct:: '2008-07-26T09:11:29Z'
+
+The basic idea is still valid, but information in this RfC is quite outdated.
+Meanwhile, we have a somewhat different and largely extended log hierarchy.
+And it turned out, that it isn't practical to scatter the NOBUG_FLAG_PARENT
+definitions all over the code base. Rather, we use a single include file
+`include/logging.h` to define all flags in a systematic way
+
+Ichthyostega:: 'Di 29 Okt 2013 05:52:34 CET' ~<prg@ichthyostega.de>~
 
 
-
+//endof_comments:
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

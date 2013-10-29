@@ -35,7 +35,6 @@
  *
  */
 
-//NOBUG_DEFINE_FLAG_PARENT (fileheader, /*TODO insert parent flag here */);
 
 LUMIERA_ERROR_DEFINE (FILEHEADER_NOWRITE, "File is not writeable");
 LUMIERA_ERROR_DEFINE (FILEHEADER_HEADER, "Error in header");

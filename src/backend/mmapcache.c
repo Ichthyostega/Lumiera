@@ -29,7 +29,6 @@
  *
  */
 
-//NOBUG_DEFINE_FLAG_PARENT (mmapcache, mmap_all);
 
 LumieraMMapcache lumiera_mcache = NULL;
 

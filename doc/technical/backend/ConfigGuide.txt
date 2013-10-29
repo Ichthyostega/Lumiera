@@ -1,8 +1,16 @@
 The incomplete Guide to Lumiera Configuration
-==============================================
+=============================================
+:author: ct
+:date: 8/2008
 
-DONT EDIT THE CONFIG IF YOU DONT KNOW WHAT YOU ARE DOING!
-Misconfiguration will break Lumiera and may destroy all your data!
+WARNING: this is a draft from the early days of Lumiera +
+         IMHO, the whole topic ``Configuration'' requires further
+         discussion and design.
++
+-- -- Ichthyo
+
+'''''''''''''
+'''''''''''''
 
 Order is roughly alphabetically, depending on the mood of the writer.
 Defaults are noted if present. Not all are implemented yet.
