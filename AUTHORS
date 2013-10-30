@@ -1,84 +1,59 @@
 Lumiera Authors and Credits
 ===========================
-Version: 0.pre.0.1
-Date: 2/2011
+Version: 0.pre.02
+:Date: 10/2013
 
 
-'`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Architecture and Design,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-graphical user interface, JOEL HOLDSWORTH
- 			, CLAY BARNES
-processing layer	, HERMANN VOSSELER
-backend 		, CHRISTIAN THÄTER
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|==========================================
+|*Architecture and Design*|
+|graphical
+    user interface | JOEL HOLDSWORTH
+|                  | HERMANN VOSSELER
+|                  | BRIAN RYTEL
+|processing layer  | HERMANN VOSSELER
+|backend           | CHRISTIAN THÄTER
 
-'`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Programming,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-rendering engine,	HERMANN VOSSELER
-backend,		CHRISTIAN THÄTER
-GTK-GUI,          JOEL HOLDSWORTH
-       ,          STEFAN KANGAS
-library,	      HERMANN VOSSELER
-       ,          CHRISTIAN THÄTER
-       ,          ANTON YAKOVLEV
-       ,          SIMEON VÖLKEL
-testsuite,		CHRISTIAN THÄTER
-       ,		NICHOLAS SINNOTT-ARMSTRONG
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|                  |
+|                  |
+|*Workflow design* |
+|concept           | BRIAN RYTEL
+|                  | MIKE PROVOST
+|                  | NIKOLA DUPER
 
-'`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Programming Documentation,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-, MICHAEL PLOUJNIKOV
-, ODIN HØRTHE OMDAL
-, SIMON LARCHER
-, SIMEON VÖLKEL
-, MANO STIENEN
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|                  |
+|                  |
+|*Programming*|
+|session and engine| HERMANN VOSSELER
+|backend           | CHRISTIAN THÄTER
+|                  | MICHAEL PLOUJNIKOV
+|graphical
+     user interface| JOEL HOLDSWORTH
+|                  | STEFAN KANGAS
+|                  | MICHAEL FISHER
+|library           | HERMANN VOSSELER
+|                  | CHRISTIAN THÄTER
+|                  | ANTON YAKOVLEV
+|                  | STEFAN KANGAS
+|testsuite         | CHRISTIAN THÄTER
+|                  | NICHOLAS SINNOTT-ARMSTRONG
+|                  | HERMANN VOSSELER
 
-
-'`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Used Software and Libraries,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-boost libraries,
-gavl libraries,
-gtk+ toolkit,
-lua,
-nobug,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-'`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Builddrone,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-idea and implementation, CHRISTIAN THÄTER
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-//'`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ,Testing
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ,
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-'`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Workflow design,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-concept	, NIKOLA DUPER
-		, BRIAN RYTEL
-		, MIKE PROVOST
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-'`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Server Administration,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-, CHRISTIAN THÄTER
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|                  |
+|                  |
+|*Programming Documentation*|
+|                  | CHRISTIAN THÄTER
+|                  | HERMANN VOSSELER
+|                  | MICHAEL PLOUJNIKOV
+|                  | ODIN HØRTHE OMDAL
+|                  | SIMEON VÖLKEL
+|                  | MANO STIENEN
+|                  | HENDRIK BOOM
+|                  | BENNY LYONS
+|                  |
+|                  |
+|*Server Administration*|
+|                  | CHRISTIAN THÄTER
+|==========================================
 
 
 
@@ -90,13 +65,9 @@ It started out as a partial rewrite of Cinelerra in 2007
 and turned into a complete rewrite and redesign in Spring 2008
 
 
-'`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The Lumiera project feels especially obliged to,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Cinelerra's original Author, ADAM WILLIAMS / aka. "Jack Crossfire" / aka "HV"
-Cinelerra-CV , all the numerous contributors
-             , of the "Community Version"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Lumiera project feels especially obliged to::
+* Cinelerra's original Author, *Adam Williams* (aka.``Jack Crossfire''/ ``HV'')
+* Cinelerra-CV and all the numerous contributors to the ``Community Version''
  
 
 
@@ -104,31 +75,8 @@ Cinelerra-CV , all the numerous contributors
 
 Further Credits
 ---------------
+- inspirations and some GUI components were taken from http://Ardour.org[Ardour]
 
-Parts of the Proc-Layer Implementation are heavily inspired by
-
-
-.The Loki Library
-[quote]
-__________________________________________________________________________
-Copyright (c) 2001 by *Andrei Alexandrescu* +
-
-.Loki Copyright Notice
-* Loki is governed by a MIT-License. See: http://loki-lib.sourceforge.net
-* Permission to use, copy, modify, distribute and sell this software for any
-  purpose is hereby granted without fee, provided that the above copyright
-  notice appear in all copies and that both that copyright notice and this
-  permission notice appear in supporting documentation.
-  The author makes no representations about the suitability of this software
-  for any purpose. It is provided "as is" without express or implied warranty.
-
-
-.the ``Loki Book''
-[verse]
-Alexandrescu, Andrei. 
- "Modern C++ Design: Generic Programming and Design Patterns Applied".
- Copyright (c) 2001. Addison-Wesley.
- ISBN 0201704315
-_____________________________________________________________________________
-
+- Parts of the Implementation are heavily inspired by +
+  *The Loki Library*  (c) 2001 by *Andrei Alexandrescu*
 

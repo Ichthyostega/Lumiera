@@ -90,6 +90,8 @@ namespace lumiera {
                                "URL of the Lumiera website")
         ("Lumiera.authors",    opt::value<string>(),
                                "names of Lumiera authors, for 'about' dialog. Separated by '|'")
+        ("Lumiera.copyright",  opt::value<string>(),
+                               "year(s) for the author's copyright claim")
 
         ("Gui.stylesheet",     opt::value<string>(),
                                "name of the GTK stylesheet to use. Will be searched in resource path")

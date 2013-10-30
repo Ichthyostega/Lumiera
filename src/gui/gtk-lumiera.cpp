@@ -26,6 +26,7 @@
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/controller/controller.hpp"
 #include "gui/model/project.hpp"
+#include "lib/format-string.hpp"
 #include "lib/depend.hpp"
 #include "lib/symbol.hpp"
 
@@ -33,6 +34,7 @@
 
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <string>
 #include <vector>
 
 namespace gui {
@@ -48,6 +50,8 @@ using boost::algorithm::split;
 
 using lumiera::Config;
 using lib::Literal;
+using ::util::_Fmt;
+using std::string;
 
 typedef std::vector<uString> UVector;
 
@@ -62,6 +66,7 @@ namespace {
   Literal KEY_VERSION    = "Lumiera.version";
   Literal KEY_WEBSITE    = "Lumiera.website";
   Literal KEY_AUTHORS    = "Lumiera.authors";
+  Literal KEY_COPYRIGHT  = "Lumiera.copyright";
   
   Literal KEY_STYLESHEET = "Gui.stylesheet";
   Literal KEY_UIRES_PATH = "Gui.resourcepath";
@@ -124,7 +129,10 @@ GtkLumiera::getAppVersion()
 cuString
 GtkLumiera::getCopyright()
 {
-  return _("© 2012 The Lumiera Team");
+  return string (
+    _Fmt(_("© %s The Lumiera Team\n"
+           "Lumiera is Free Software (GPL)"))
+          % Config::get (KEY_COPYRIGHT));
 }
 
 

@@ -1,10 +1,32 @@
-The Lumiera source code is (C) by the original authors (see AUTHORS)
-
-=======================================================================
+- the *Lumiera* source code is (C) by the original authors (see `AUTHORS`)
++
+-----------------------------------------------------------------------------
 Lumiera is free software -- you may use and redistribute it under the
 Terms and conditions of the GNU GENERAL PUBLIC LICENSE (GPL); 
 either version 2 of the License, or (at your option) any later version.
-=======================================================================
-For a copy of the GPL Version 2 see the file "COPYING"
+
+For a copy of the GPL Version 2 see the file COPYING
+-----------------------------------------------------------------------------
+
+
+
+- Website, design documents and accompanying materials are covered by
+  the same license as the source code, +
+  in addition they are also dual-licensed under *CC-By-SA 3*
+
+
+
+- Parts of the Implementation are heavily inspired by +
+  *The Loki Library*  (C) 2001 by *Andrei Alexandrescu*
++
+-----------------------------------------------------------------------------
+Loki is governed by a MIT-License. See: http://loki-lib.sourceforge.net
+Permission to use, copy, modify, distribute and sell this software for any
+purpose is hereby granted without fee, provided that the above copyright
+notice appear in all copies and that both that copyright notice and this
+permission notice appear in supporting documentation.
+The author makes no representations about the suitability of this software
+for any purpose. It is provided "as is" without express or implied warranty.
+-----------------------------------------------------------------------------
       
 

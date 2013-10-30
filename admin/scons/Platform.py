@@ -64,7 +64,7 @@ def configure(env):
     else:
         print 'Valgrind not found. The use of Valgrind is optional; building without.'
     
-    if not conf.CheckPkgConfig('nobugmt', 201006.1):
+    if not conf.CheckPkgConfig('nobugmt', 201008.1):
         problems.append('Did not find NoBug [http://nobug.pipapo.org/].')
     else:
         conf.env.mergeConf('nobugmt')
