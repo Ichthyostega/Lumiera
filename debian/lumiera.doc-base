@@ -1,0 +1,16 @@
+Document: lumiera
+Title: Lumiera Users Manual
+Author: The Lumiera community
+Abstract: This manual will be an introduction to Lumiera,
+ the new emerging Non-linea video/film editor for Linux.
+ Lumiera is not usable yet, and the manual still needs to be written.
+Section: Video
+
+Format: text
+Files: /usr/share/doc/lumiera/README
+
+Format: HTML
+Index: /usr/share/doc/lumiera/html/index.html
+Files: /usr/share/doc/lumiera/html/*.html
+
+

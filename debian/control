@@ -1,0 +1,35 @@
+Source: lumiera
+Section: graphics
+Priority: extra
+Maintainer: Hermann Vosseler <deb@ichthyostega.de>
+Build-Depends: debhelper (>= 7), cdbs (>= 0.4.73), scons (>= 1), pkg-config, asciidoc, libboost-dev (>= 1.42), libboost-program-options-dev  (>= 1.42), libboost-filesystem-dev  (>= 1.42), libboost-regex-dev  (>= 1.42), nobug-dev (>= 201008.1), libgavl-dev (>= 1), libgtkmm-2.4-dev (>= 1:2.8), libglibmm-2.4-dev (>= 2.16), libglib2.0-dev (>= 2.16), libglade2-dev (>= 2.6.2), libgdl-1-dev (>= 2.27.1) | libgdl-lum-dev (>= 2.27.1), libcairomm-1.0-dev (>= 1.6), librsvg2-dev (>=2.18.1), libxv-dev (>= 2:1.0), libxext-dev, libx11-dev
+Standards-Version: 3.8.0
+Vcs-Git: git://git.lumiera.org/LUMIERA
+Vcs-Browser: http://git.lumiera.org/gitweb?p=lumiera;a=shortlog;h=refs/heads/debian
+Homepage: http://Lumiera.org
+
+Package: lumiera
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: nonlinear video editing and compositing tool. 
+ The Application allows to edit footabe based on the common
+ multimedia formats (quicktime, avi, ogg) and audio/video
+ compression codecs (divx, xvid, mpeg1/2/4, ...)
+ .
+ Lumiera features non-destructive editing, compositing tools,
+ a selection of effects plugins, processing in RGB, YUV and
+ RGB-float colour models and the ability to mix media with
+ differing sizes and framerates. Lumiera is especially well
+ suited for large and complicated professional editing tasks
+ with lots of material, several scenes, nested sequences,
+ colour grading, 3D support, full fledged sound montage
+ and multiple edit versions prepared in parallel.
+ .
+ NOTE: as of 1/2011, Lumiera is in early development stage;
+ it is not usable yet. The above describes the Lumiera project
+ vision, which will need years to implement. This Debian package
+ installs a current development snapshot in pre-alpha stage.
+ .
+ Visit http://Lumiera.org and join the mailing list
+ when interested in Lumiera planning and development.
+

@@ -1,0 +1,8 @@
+?package(lumiera):\
+  needs="X11"\
+  section="Applications/Video"\
+  title="Lumiera"\
+  longtitle="Lumiera video/film editor"\
+  command="/usr/bin/lumiera"\
+  hints="Expert,Editor,Film"
+
