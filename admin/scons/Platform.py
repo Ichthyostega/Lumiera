@@ -129,6 +129,7 @@ def configure(env):
         problems.append('Xlib.h and Xutil.h required. Please install libx11-dev.')
     
     if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
+    if not conf.CheckPkgConfig('x11') : problems.append('Need X-lib...')   # for the xvdisplayer widget
     if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')
     
     
