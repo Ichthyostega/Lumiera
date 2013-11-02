@@ -15,9 +15,7 @@ DEB_SCONS_INSTALL_OPTIONS = \
     INSTALLDIR=debian/lumiera
 
 DEB_SCONS_BUILD_TARGET = build
-DEB_SCONS_CHECK_TARGET = check TESTSUITES=4
-################################ NOTE: only running the Proc-Layer tests for now
-#                              #       backend has some breakages
+DEB_SCONS_CHECK_TARGET = check
 
 # Compilation flags already handled internally
 # by SCons build; no need to pass them explicitly
