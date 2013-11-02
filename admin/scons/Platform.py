@@ -56,6 +56,10 @@ def configure(env):
         conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
         conf.env.Append(CCFLAGS = ' -pthread')
     
+    if not conf.CheckLib(symbol='clock_gettime', library='rt'):
+        problems.append('We expect the POSIX realtime extensions to be available through librt. ' +
+                        'Unable to use clock_gettime()')
+    
     if conf.CheckCHeader('execinfo.h'):
         conf.env.Append(CPPFLAGS = ' -DHAVE_EXECINFO_H')
     
@@ -88,12 +92,6 @@ def configure(env):
         if not conf.CheckLibWithHeader('boost_regex','boost/regex.hpp','C++'):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
-    
-    if conf.CheckLib(symbol='clock_gettime'):
-        print 'Using function clock_gettime() as defined in the C-lib...'
-    else:
-        if not conf.CheckLib(symbol='clock_gettime', library='rt'):
-            problems.append('No library known to provide the clock_gettime() function.')
     
     if not conf.CheckPkgConfig('gavl', 1.0):
         problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
@@ -129,6 +127,7 @@ def configure(env):
         problems.append('Xlib.h and Xutil.h required. Please install libx11-dev.')
     
     if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
+    if not conf.CheckPkgConfig('x11') : problems.append('Need X-lib...')   # for the xvdisplayer widget
     if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')
     
     

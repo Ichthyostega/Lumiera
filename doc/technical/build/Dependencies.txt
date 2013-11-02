@@ -90,7 +90,7 @@ Libraries
  - libgtkmm-2.4-dev
  - libcairomm-1.0-dev
  - libglibmm-2.4-dev, requiring glib2.0 and gthread-2.0
- - libxv-dev
+ - libxv-dev and X-lib footnote:[for the XV viewer widget `gui/output/xvdisplayer.cpp`]
  - librsvg-2.0 and librsvg2-dev for rendering Icons
  - libgdl-1-dev -- old version of the Gnome Docking Library footnote:[GDL isn't directly related to GNOME any more.
    We contributed to the improvement of this library in the past. These improvements went upstream

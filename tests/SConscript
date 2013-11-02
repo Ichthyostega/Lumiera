@@ -51,7 +51,7 @@ def testCases(env,dir):
     testlib = []
     testClasses = list(scanSubtree(dir,['*.cpp']))
     if testClasses:
-        testlib = sharedTestLibs[dir] = env.SharedLibrary('test-'+dir, testClasses)
+        testlib = sharedTestLibs[dir] = env.SharedLibrary('test-'+dir, testClasses, addLibs=core_lib)   ### TICKET #938 : should be:  addLibs=linkContext(dir))
     
     # pick up standalone plain-C tests
     standaloneTests = list(scanSubtree(dir,['test-*.c']))
@@ -74,7 +74,7 @@ testrunner = env.Program("test-suite", ["testrunner.cpp"]+testLibs+core_lib)
 
 testsuite = ( testcases
             + testrunner
-            + createPlugins(env, 'plugin')
+            + createPlugins(env, 'plugin', addLibs=core_lib)
             + env.File(glob('*.tests'))     # depend explicitly on the test definition files for test.sh
             + config
             )
