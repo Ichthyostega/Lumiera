@@ -77,6 +77,7 @@ def defineBuildEnvironment():
                , CXXFLAGS='-Wno-enum-compare'
                , CFLAGS='-std=gnu99' 
                )
+    env.Append(LINKFLAGS='-Wl,--no-undefined')  # require every dependency is given on link, in the right order
     handleVerboseMessages(env)
     handleNoBugSwitches(env)
     
