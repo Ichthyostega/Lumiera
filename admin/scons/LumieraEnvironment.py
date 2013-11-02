@@ -270,6 +270,8 @@ class LumieraExeBuilder(WrappedStandardExeBuilder):
         """
         custEnv = lumiEnv.Clone()
         custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/modules,--enable-new-dtags" )
+        if 'addLibs' in kw:
+            custEnv.Append(LIBS = kw['addLibs'])
         return custEnv
     
     def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildExe
@@ -286,6 +288,8 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
         """
         custEnv = lumiEnv.Clone()
         custEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))
+        if 'addLibs' in kw:
+            custEnv.Append(LIBS = kw['addLibs'])
         return custEnv
     
     def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildLib
