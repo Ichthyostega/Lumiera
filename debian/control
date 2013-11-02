@@ -12,24 +12,26 @@ Package: lumiera
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: nonlinear video editing and compositing tool. 
- The Application allows to edit footabe based on the common
- multimedia formats (quicktime, avi, ogg) and audio/video
- compression codecs (divx, xvid, mpeg1/2/4, ...)
+ This is a development preview snapshot not suitable for users.
+ .
+ The Application will allow to edit footage in the common
+ multimedia formats (quicktime, ogg, mkv, avi) and audio/video
+ stream codecs (dv, mpeg1/2/4, h264 ...)
  .
  Lumiera features non-destructive editing, compositing tools,
  a selection of effects plugins, processing in RGB, YUV and
  RGB-float colour models and the ability to mix media with
  differing sizes and framerates. Lumiera is especially well
- suited for large and complicated professional editing tasks
+ suited for large and elaborate professional editing tasks
  with lots of material, several scenes, nested sequences,
  colour grading, 3D support, full fledged sound montage
  and multiple edit versions prepared in parallel.
  .
- NOTE: as of 1/2011, Lumiera is in early development stage;
+ NOTE: as of 10/2013, Lumiera is in early development stage;
  it is not usable yet. The above describes the Lumiera project
  vision, which will need years to implement. This Debian package
  installs a current development snapshot in pre-alpha stage.
  .
  Visit http://Lumiera.org and join the mailing list
- when interested in Lumiera planning and development.
+ when interested in Lumiera planning and development. 
 
