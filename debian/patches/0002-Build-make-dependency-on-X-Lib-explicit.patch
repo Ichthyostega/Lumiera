@@ -1,0 +1,37 @@
+From: Ichthyostega <prg@ichthyostega.de>
+Date: Sun, 3 Nov 2013 00:05:20 +0100
+Subject: Build: make dependency on X-Lib explicit
+
+The XV-Viewer widget in our GUI uses four direct calls
+to the X-Lib. This was discovered by strict dependency checking,
+as mandated by new Debian policy
+---
+ admin/scons/Platform.py              |    1 +
+ doc/technical/build/Dependencies.txt |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/admin/scons/Platform.py b/admin/scons/Platform.py
+index 2a59314..c74b8e3 100644
+--- a/admin/scons/Platform.py
++++ b/admin/scons/Platform.py
+@@ -129,6 +129,7 @@ def configure(env):
+         problems.append('Xlib.h and Xutil.h required. Please install libx11-dev.')
+     
+     if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
++    if not conf.CheckPkgConfig('x11') : problems.append('Need X-lib...')   # for the xvdisplayer widget
+     if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')
+     
+     
+diff --git a/doc/technical/build/Dependencies.txt b/doc/technical/build/Dependencies.txt
+index 1b7b026..967ac6b 100644
+--- a/doc/technical/build/Dependencies.txt
++++ b/doc/technical/build/Dependencies.txt
+@@ -90,7 +90,7 @@ Libraries
+  - libgtkmm-2.4-dev
+  - libcairomm-1.0-dev
+  - libglibmm-2.4-dev, requiring glib2.0 and gthread-2.0
+- - libxv-dev
++ - libxv-dev and X-lib footnote:[for the XV viewer widget `gui/output/xvdisplayer.cpp`]
+  - librsvg-2.0 and librsvg2-dev for rendering Icons
+  - libgdl-1-dev -- old version of the Gnome Docking Library footnote:[GDL isn't directly related to GNOME any more.
+    We contributed to the improvement of this library in the past. These improvements went upstream

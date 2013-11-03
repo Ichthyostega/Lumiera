@@ -1,0 +1,30 @@
+From: Ichthyostega <prg@ichthyostega.de>
+Date: Sat, 2 Nov 2013 23:54:45 +0100
+Subject: SCons: ability to define additional libraries in a flexible way
+
+---
+ admin/scons/LumieraEnvironment.py |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/admin/scons/LumieraEnvironment.py b/admin/scons/LumieraEnvironment.py
+index 8d2d8db..85d5c5a 100644
+--- a/admin/scons/LumieraEnvironment.py
++++ b/admin/scons/LumieraEnvironment.py
+@@ -270,6 +270,8 @@ class LumieraExeBuilder(WrappedStandardExeBuilder):
+         """
+         custEnv = lumiEnv.Clone()
+         custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/modules,--enable-new-dtags" )
++        if 'addLibs' in kw:
++            custEnv.Append(LIBS = kw['addLibs'])
+         return custEnv
+     
+     def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildExe
+@@ -286,6 +288,8 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
+         """
+         custEnv = lumiEnv.Clone()
+         custEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))
++        if 'addLibs' in kw:
++            custEnv.Append(LIBS = kw['addLibs'])
+         return custEnv
+     
+     def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildLib
