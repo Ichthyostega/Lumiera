@@ -21,6 +21,7 @@ DEB_SCONS_CHECK_TARGET = check
 
 
 clean::
+	rm -rf target/.sconf_temp
 	rm -f admin/scons/*.pyc
 	rm -f optcache
 
