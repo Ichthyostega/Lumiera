@@ -1,3 +1,4 @@
 0001-SCons-ability-to-define-additional-libraries-in-a-fl.patch
 0002-Build-make-dependency-on-X-Lib-explicit.patch
 0003-Debian-Policy-3.9.x-enforce-strict-dependencies-on-d.patch
+0004-Build-always-link-explicitly-agrainst-lib-rt.patch
