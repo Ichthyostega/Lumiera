@@ -310,7 +310,7 @@ END
 
 TEST "formatting by string template" FormatString_test <<END
 out-lit: --format-template--int=0012--double=+1.23--string=Lumiera  --
-out: 0x....+ _____ .
+out: 0x....+ _____+ .
 out: «.+util.+test.+Silent.»
 out-lit: __nix_
 out-lit: ____
