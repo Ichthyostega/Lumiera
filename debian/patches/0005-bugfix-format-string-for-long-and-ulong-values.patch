@@ -1,0 +1,90 @@
+From: Ichthyostega <prg@ichthyostega.de>
+Date: Sat, 9 Nov 2013 02:30:16 +0100
+Subject: bugfix: format-string for long and ulong values
+
+our front-end for boost::format, the class lib::_Fmt
+was lacking an reliable  specialisation for long and ulong.
+
+This is due to the notorious problem of these types being
+of platform dependant size. As a fix, we're speclialising
+explicitly for int16_t, int32_t and int64_t and avoid the
+common names 'short', 'int' and 'long' alltogether.
+
+And especially for non-64bit-platform (NONPORTABLE)
+we add an explicit specialisation for long
+---
+ src/lib/format-string.cpp |   12 ++++++++----
+ src/lib/format-string.hpp |   12 ++++++++----
+ tests/40core.tests        |    2 +-
+ 3 files changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/src/lib/format-string.cpp b/src/lib/format-string.cpp
+index 82a9d7e..bea186a 100644
+--- a/src/lib/format-string.cpp
++++ b/src/lib/format-string.cpp
+@@ -186,10 +186,10 @@ namespace util {
+   
+   template void _Fmt::format (const char,    Implementation&);
+   template void _Fmt::format (const uchar,   Implementation&);
+-  template void _Fmt::format (const int,     Implementation&);
+-  template void _Fmt::format (const uint,    Implementation&);
+-  template void _Fmt::format (const short,   Implementation&);
+-  template void _Fmt::format (const ushort,  Implementation&);
++  template void _Fmt::format (const int16_t, Implementation&);
++  template void _Fmt::format (const uint16_t,Implementation&);
++  template void _Fmt::format (const int32_t, Implementation&);
++  template void _Fmt::format (const uint32_t,Implementation&);
+   template void _Fmt::format (const int64_t, Implementation&);
+   template void _Fmt::format (const uint64_t,Implementation&);
+   template void _Fmt::format (const float,   Implementation&);
+@@ -197,6 +197,10 @@ namespace util {
+   template void _Fmt::format (const string,  Implementation&);
+   template void _Fmt::format (const void *,  Implementation&);
+   template void _Fmt::format (const char *,  Implementation&);
++#ifndef __x86_64__
++  template void _Fmt::format (const long,    Implementation&);
++  template void _Fmt::format (const ulong,   Implementation&);
++#endif
+   
+   
+   
+diff --git a/src/lib/format-string.hpp b/src/lib/format-string.hpp
+index 1f4c403..fa884b1 100644
+--- a/src/lib/format-string.hpp
++++ b/src/lib/format-string.hpp
+@@ -247,14 +247,18 @@ namespace util {
+     template<> struct _allow_call<string>  { enum{ value = true }; };
+     template<> struct _allow_call<char>    { enum{ value = true }; };
+     template<> struct _allow_call<uchar>   { enum{ value = true }; };
+-    template<> struct _allow_call<int>     { enum{ value = true }; };
+-    template<> struct _allow_call<uint>    { enum{ value = true }; };
+-    template<> struct _allow_call<short>   { enum{ value = true }; };
+-    template<> struct _allow_call<ushort>  { enum{ value = true }; };
++    template<> struct _allow_call<int16_t> { enum{ value = true }; };
++    template<> struct _allow_call<uint16_t>{ enum{ value = true }; };
++    template<> struct _allow_call<int32_t> { enum{ value = true }; };
++    template<> struct _allow_call<uint32_t>{ enum{ value = true }; };
+     template<> struct _allow_call<int64_t> { enum{ value = true }; };
+     template<> struct _allow_call<uint64_t>{ enum{ value = true }; };
+     template<> struct _allow_call<float>   { enum{ value = true }; };
+     template<> struct _allow_call<double>  { enum{ value = true }; };
++#ifndef __x86_64__
++    template<> struct _allow_call<long>    { enum{ value = true }; };
++    template<> struct _allow_call<ulong>   { enum{ value = true }; };
++#endif
+     
+     template<typename X>
+     struct _shall_format_directly
+diff --git a/tests/40core.tests b/tests/40core.tests
+index 7348788..063202d 100644
+--- a/tests/40core.tests
++++ b/tests/40core.tests
+@@ -310,7 +310,7 @@ END
+ 
+ TEST "formatting by string template" FormatString_test <<END
+ out-lit: --format-template--int=0012--double=+1.23--string=Lumiera  --
+-out: 0x....+ _____ .
++out: 0x....+ _____+ .
+ out: «.+util.+test.+Silent.»
+ out-lit: __nix_
+ out-lit: ____

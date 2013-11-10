@@ -2,3 +2,7 @@
 0002-Build-make-dependency-on-X-Lib-explicit.patch
 0003-Debian-Policy-3.9.x-enforce-strict-dependencies-on-d.patch
 0004-Build-always-link-explicitly-agrainst-lib-rt.patch
+0005-bugfix-format-string-for-long-and-ulong-values.patch
+0006-partial-fix-use-64-framecounts-Ticket-882.patch
+0007-bugfix-occasional-wrap-around-on-32bit-FSecs-value-i.patch
+

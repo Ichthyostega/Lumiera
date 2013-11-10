@@ -8,8 +8,9 @@ lumiera (0.pre.02-1) UNRELEASED; urgency=low
   * clean *.pcy and optcache prior to packaging
   * build with -fstack-protector --param=ssp-buffer-size=4
   * enable using all available CPU cores for build
+  * fix some 32/64bit problems found while packaging
 
- -- Hermann Vosseler <deb@ichthyostega.de>  Sat, 02 Nov 2013 00:19:51 +0100
+ -- Hermann Vosseler <deb@ichthyostega.de>  Sun, 10 Nov 2013 23:03:23 +0100
 
 lumiera (0.pre.01-3+precise) precise; urgency=low
 

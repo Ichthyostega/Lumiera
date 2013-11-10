@@ -1,0 +1,27 @@
+From: Ichthyostega <prg@ichthyostega.de>
+Date: Sun, 10 Nov 2013 03:52:46 +0100
+Subject: bugfix: occasional wrap-around on 32bit FSecs value in test code
+
+this is rather a workaround.
+The problem is a wraparound while calculating the common denominator in
+
+Time rawTime (dirt + frames*F25);
+
+The actual solution would be to switch to int64_t for FSecs. See Ticket #939
+---
+ tests/library/time/quantiser-basics-test.cpp |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/library/time/quantiser-basics-test.cpp b/tests/library/time/quantiser-basics-test.cpp
+index dbcfa69..edc4ced 100644
+--- a/tests/library/time/quantiser-basics-test.cpp
++++ b/tests/library/time/quantiser-basics-test.cpp
+@@ -90,7 +90,7 @@ namespace test{
+           uint frames = (rand() % MAX_FRAMES);
+           FSecs dirt  = (F25 / (2 + rand() % DIRT_GRAIN));
+           
+-          Time rawTime (dirt + frames*F25);
++          Time rawTime = Time(frames*F25) + Duration(dirt);            ////////////////TICKET #939 : should better use 64bit base type for FSecs ??
+           
+           CHECK (Time( frames   *F25) <= rawTime);
+           CHECK (Time((frames+1)*F25) >  rawTime);
