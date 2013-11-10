@@ -90,7 +90,7 @@ namespace test{
           uint frames = (rand() % MAX_FRAMES);
           FSecs dirt  = (F25 / (2 + rand() % DIRT_GRAIN));
           
-          Time rawTime (dirt + frames*F25);
+          Time rawTime = Time(frames*F25) + Duration(dirt);            ////////////////TICKET #939 : should better use 64bit base type for FSecs ??
           
           CHECK (Time( frames   *F25) <= rawTime);
           CHECK (Time((frames+1)*F25) >  rawTime);
