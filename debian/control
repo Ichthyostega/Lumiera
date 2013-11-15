@@ -5,6 +5,7 @@ Maintainer: Hermann Vosseler <deb@ichthyostega.de>
 Build-Depends: debhelper (>= 7),
                cdbs (>= 0.4.73),
                scons (>= 1),
+               clang (>= 3.0),
                pkg-config,
                asciidoc,
                libboost-dev (>= 1.42),

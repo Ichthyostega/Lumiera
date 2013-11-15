@@ -3,6 +3,11 @@
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/scons.mk
 
+# Workaround on Debian/Jessie:
+# use Clang for building (GCC-4.8 has a regression in TR1)
+CC = clang
+CXX = clang++
+
 # Core build options for Lumiera
 #
 DEB_SCONS_OPTIONS = \
