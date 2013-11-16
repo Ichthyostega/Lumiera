@@ -58,13 +58,14 @@ namespace engine {
    * 
    * \par usage considerations
    * the asynchronous and ongoing nature of the render process mandates to avoid a central
-   * instance for operating this planning process. Instead, each chunk of planned jobs
-   * contains a continuation job, which -- on activation -- will pick up the planning
-   * of the next chunk. The Dispatcher interface was shaped to support this process,
-   * with a local JobBuilder to be used within the continuation job, and a TimeAnchor
-   * to represent the continuation point. All the complexities of planning jobs are
-   * hidden within the JobPlanningSequence, which, for the purpose of dispatching
-   * a series of jobs just looks like a sequence of job descriptors
+   * instance for operating this planning process. Instead, together with each chunk of
+   * planned jobs we generate a continuation job, which -- on activation -- will pick up
+   * the planning of the next chunk. The Dispatcher interface was shaped especially to
+   * support this process, with a local JobBuilder for use within the continuation job,
+   * and a TimeAnchor to represent the continuation point. All the complexities of
+   * actually planning the jobs are hidden within the JobPlanningSequence,
+   * which, for the purpose of dispatching a series of jobs just looks
+   * like a sequence of job descriptors
    * 
    * @todo 10/12 still WIP, but conceptually settled by now
    */
@@ -99,7 +100,7 @@ namespace engine {
       virtual FrameCoord locateRelative (FrameCoord, uint frameCountOffset)   =0;
       virtual FrameCoord locateRelative (TimeAnchor, uint frameCountOffset)   =0;     //////////TODO is this really an interface operation, or just a convenience shortcut?
       
-      virtual bool       seamlessNextFrame (int64_t, ModelPort port)          =0;
+      virtual bool       isEndOfChunk   (int64_t, ModelPort port)             =0;
 
       ////////TODO: API-1 = just get next frame, without limitations  .... CHECK
       ////////TODO: API-2 = query limitation of planning chunk        .... CHECK

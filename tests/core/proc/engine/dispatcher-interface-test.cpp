@@ -96,7 +96,7 @@ namespace test  {
           }
         
         bool
-        seamlessNextFrame (int64_t, ModelPort port)
+        isEndOfChunk (int64_t, ModelPort port)
           {
             UNIMPLEMENTED ("determine when to finish a planning chunk");
           }

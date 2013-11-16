@@ -302,13 +302,13 @@ namespace engine {
       
       bool canContinue (FrameCoord const& location)
         {
-          return seamlessNextFrame (location.absoluteFrameNumber,
-                                    location.modelPort);
+          return !isEndOfChunk (location.absoluteFrameNumber,
+                                location.modelPort);
         }
       
     protected:
       virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)  =0;
-      virtual bool       seamlessNextFrame (int64_t, ModelPort port)         =0;
+      virtual bool       isEndOfChunk    (int64_t, ModelPort port)           =0;
     };
   
   
