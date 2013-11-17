@@ -73,7 +73,7 @@ namespace engine {
   
   
   Job
-  CalcPlanContinuation::prepareRenderPlanningFrom (int64_t startFrame)
+  CalcPlanContinuation::prepareRenderPlanningFrom (FrameCnt startFrame)
   {
     InvocationInstanceID invoKey;
     invoKey.frameNumber = startFrame;
@@ -84,7 +84,7 @@ namespace engine {
   
   
   void
-  CalcPlanContinuation::performJobPlanningChunk(int64_t nextStartFrame)
+  CalcPlanContinuation::performJobPlanningChunk(FrameCnt nextStartFrame)
   {
     TimeAnchor refPoint(timings_, nextStartFrame);
     JobPlanningSequence jobs = dispatcher_.onCalcStream(modelPort_, channel_)

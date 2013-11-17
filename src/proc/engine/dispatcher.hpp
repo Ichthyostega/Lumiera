@@ -41,6 +41,7 @@ namespace engine {
   
   using std::tr1::function;
   using mobject::ModelPort;
+  using lib::time::FrameCnt;
   using lib::time::TimeSpan;
   using lib::time::FSecs;
   using lib::time::Time;
@@ -100,7 +101,7 @@ namespace engine {
       virtual FrameCoord locateRelative (FrameCoord, uint frameCountOffset)   =0;
       virtual FrameCoord locateRelative (TimeAnchor, uint frameCountOffset)   =0;     //////////TODO is this really an interface operation, or just a convenience shortcut?
       
-      virtual bool       isEndOfChunk   (int64_t, ModelPort port)             =0;
+      virtual bool       isEndOfChunk   (FrameCnt, ModelPort port)            =0;
 
       ////////TODO: API-1 = just get next frame, without limitations  .... CHECK
       ////////TODO: API-2 = query limitation of planning chunk        .... CHECK

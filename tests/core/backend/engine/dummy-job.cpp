@@ -85,7 +85,7 @@ namespace engine {
             return Time::NEVER < nominalJobTime
                 && 0 <= invoKey.metaInfo.a
                 && invoKey.metaInfo.a < MAX_PARAM_A
-                && -MAX_PARAM_B < invoKey.metaInfo.b
+                && -MAX_PARAM_B <= invoKey.metaInfo.b
                 && invoKey.metaInfo.b < MAX_PARAM_B;
           }
         

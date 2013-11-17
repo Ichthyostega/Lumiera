@@ -62,9 +62,9 @@ namespace time {
       virtual ~Grid();   ///< this is an Interface
       
       
-      virtual int64_t   gridPoint (TimeValue const& raw)  const   =0;
+      virtual FrameCnt  gridPoint (TimeValue const& raw)  const   =0;
       virtual TimeValue gridAlign (TimeValue const& raw)  const   =0;
-      virtual TimeValue timeOf    (int64_t gridPoint)     const   =0;
+      virtual TimeValue timeOf    (FrameCnt gridPoint)    const   =0;
       virtual TimeValue timeOf    (FSecs gridTime, int=0) const   =0;
     };
   

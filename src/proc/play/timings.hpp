@@ -66,6 +66,7 @@ namespace time{
 namespace proc {
 namespace play {
 
+  using lib::time::FrameCnt;
   using lib::time::FrameRate;
   using lib::time::TimeValue;
   using lib::time::Duration;
@@ -100,7 +101,7 @@ namespace play {
       
     public:
       PlaybackUrgency playbackUrgency;
-      boost::rational<int64_t> playbackSpeed;                     /////////////TICKET #902 we need a more generic representation for variable speed playback
+      boost::rational<FrameCnt> playbackSpeed;                     /////////////TICKET #902 we need a more generic representation for variable speed playback
       Time scheduledDelivery;
       Duration outputLatency;
       
@@ -115,10 +116,10 @@ namespace play {
       
       Time     getOrigin()  const;
       
-      Time     getFrameStartAt    (int64_t frameNr)     const;
+      Time     getFrameStartAt    (FrameCnt frameNr)    const;
       Offset   getFrameOffsetAt   (TimeValue refPoint)  const;
       Duration getFrameDurationAt (TimeValue refPoint)  const;
-      Duration getFrameDurationAt (int64_t refFrameNr)  const;
+      Duration getFrameDurationAt (FrameCnt refFrameNr) const;
       
       /** the frame spacing and duration remains constant for some time...
        * @param startPoint looking from that time point into future
@@ -136,7 +137,7 @@ namespace play {
        *       a relative offset, but expressed in real time scale values
        * @see proc::engine::TimeAnchor for an absolutely anchored conversion
        */
-      Offset getRealOffset (int64_t frameOffset)  const;
+      Offset getRealOffset (FrameCnt frameOffset)  const;
       
       /** real time deadline for the given frame, without any latency.
        *  This value is provided in case of scheduled time of delivery,
@@ -149,7 +150,7 @@ namespace play {
        * @warning not clear as of 1/13 if it is even possible to have such a function
        *          on the Timings record. 
        */
-      Time getTimeDue(int64_t frameOffset)  const;
+      Time getTimeDue(FrameCnt frameOffset)  const;
       
       /** the minimum time span to be covered by frame calculation jobs
        *  planned in one sway. The ongoing planning of additional jobs
@@ -168,7 +169,7 @@ namespace play {
        *         the planning chunk duration into the future
        * @remarks this value is used by the frame dispatcher to create a
        *          follow-up planning job */
-      int64_t establishNextPlanningChunkStart(int64_t currentAnchorFrame)  const;
+      FrameCnt establishNextPlanningChunkStart(FrameCnt currentAnchorFrame)  const;
       
       /** reasonable guess of the current engine working delay.
        *  Frame calculation deadlines will be readjusted by that value,

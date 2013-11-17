@@ -317,7 +317,9 @@ namespace time {
   typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
   typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
   typedef Digxel< int, digxel::HourFormatter> HourDigit;  ///< for displaying hours in H:M.S
-  typedef Digxel<int64_t, digxel::CountFormatter> CountVal;  ///< for displaying a counter      ///////////TICKET #882 : should better use a typedef for frame counts
+  
+  typedef int64_t FrameCnt;
+  typedef Digxel<FrameCnt, digxel::CountFormatter> CountVal;  ///< for displaying a counter
   
   
   /** special Digxel to show a sign.

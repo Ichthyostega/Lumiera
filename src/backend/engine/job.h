@@ -91,6 +91,8 @@ enum JobFailureReason
     PREREQUISITE_NOT_AVAILABLE  ///////////////TODO
   };
 
+typedef int64_t FrameCnt;
+
 
 
 /** 
@@ -110,7 +112,7 @@ typedef struct lumiera_jobClosure* LumieraJobClosure;
  */
 union InvocationInstanceID
   {
-    int64_t frameNumber;
+    FrameCnt frameNumber;
     lumiera_uid    luid;
     
     struct {int a,b;}

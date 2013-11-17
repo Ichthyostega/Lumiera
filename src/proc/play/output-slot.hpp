@@ -82,6 +82,7 @@ namespace play {
   
   using proc::engine::BuffHandle;
   using proc::engine::BufferProvider;
+  using lib::time::FrameCnt;
   using lib::time::TimeValue;
   using lib::time::Time;
   
@@ -91,7 +92,7 @@ namespace play {
   
   class DataSink;
   
-  typedef int64_t FrameID;
+  typedef FrameCnt FrameID;
   
   
   

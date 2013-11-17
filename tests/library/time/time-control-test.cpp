@@ -354,14 +354,14 @@ namespace test{
     
     template<class TAR>
     void
-    ____verify_nudged (TAR const& target, TAR const& refState, int64_t offsetSteps)
+    ____verify_nudged (TAR const& target, TAR const& refState, FrameCnt offsetSteps)
     {
       CHECK (target != refState  || !offsetSteps);
       CHECK (target == Time(refState)+Time(FSecs(offsetSteps)));
     }
     template<>
     void
-    ____verify_nudged (QuTime const& target, QuTime const& refState, int64_t offsetSteps)
+    ____verify_nudged (QuTime const& target, QuTime const& refState, FrameCnt offsetSteps)
     {
       CHECK (target != refState  || !offsetSteps);
       CHECK (target == Time (materialise(refState))

@@ -308,7 +308,7 @@ namespace engine {
       
     protected:
       virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)  =0;
-      virtual bool       isEndOfChunk    (int64_t, ModelPort port)           =0;
+      virtual bool       isEndOfChunk    (FrameCnt, ModelPort port)          =0;
     };
   
   

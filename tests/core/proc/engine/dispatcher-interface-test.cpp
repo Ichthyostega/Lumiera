@@ -96,7 +96,7 @@ namespace test  {
           }
         
         bool
-        isEndOfChunk (int64_t, ModelPort port)
+        isEndOfChunk (FrameCnt, ModelPort port)
           {
             UNIMPLEMENTED ("determine when to finish a planning chunk");
           }

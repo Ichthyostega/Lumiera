@@ -177,8 +177,8 @@ namespace time {
   Mutation::imposeChange (QuTime& target, int steps)
   {
     PQuant const& grid (target);
-    int64_t originalGridPoint = grid->gridPoint(target);
-    int64_t adjustedGridPoint = originalGridPoint + steps;
+    FrameCnt originalGridPoint = grid->gridPoint(target);
+    FrameCnt adjustedGridPoint = originalGridPoint + steps;
     return imposeChange (target, grid->timeOf (adjustedGridPoint));
   }
 #endif

@@ -70,7 +70,7 @@ namespace time {
       static regex frameNr_parser  ("(?<![\\.\\-\\d])(-?\\d+)#");   // no leading [.-\d],  number+'#'
       smatch match;
       if (regex_search (frameNumber, match, frameNr_parser))
-        return frameGrid.timeOf (lexical_cast<int64_t> (match[1]));
+        return frameGrid.timeOf (lexical_cast<FrameCnt> (match[1]));
       else
         throw error::Invalid ("unable to parse framecount \""+frameNumber+"\""
                              , LUMIERA_ERROR_INVALID_TIMECODE);
@@ -205,9 +205,9 @@ namespace time {
     uint
     Smpte::getFramerate (QuantR quantiser_, TimeValue const& rawTime)
     {
-      int64_t refCnt = quantiser_.gridPoint(rawTime);
-      int64_t newCnt = quantiser_.gridPoint(Time(0,1) + rawTime);
-      int64_t effectiveFrames = newCnt - refCnt;
+      FrameCnt refCnt = quantiser_.gridPoint(rawTime);
+      FrameCnt newCnt = quantiser_.gridPoint(Time(0,1) + rawTime);
+      FrameCnt effectiveFrames = newCnt - refCnt;
       ENSURE (1000 > effectiveFrames);
       ENSURE (0 < effectiveFrames);
       return uint(effectiveFrames);

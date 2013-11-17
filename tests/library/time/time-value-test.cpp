@@ -290,7 +290,7 @@ namespace test{
       void
       verify_fractionalOffset ()
         {
-          typedef boost::rational<int64_t> Frac;
+          typedef boost::rational<FrameCnt> Frac;
           
           Duration three (TimeValue(3));       // three micro seconds
           

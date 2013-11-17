@@ -52,12 +52,12 @@ namespace test{
   using format::Smpte;
   
   namespace{
-    const int64_t MAX_FRAME = 265*24*60*60*25;
+    const FrameCnt MAX_FRAME = 265*24*60*60*25;
     
     string
     generateRandomFrameNr()
     {
-      int64_t frameNr(0);                               /////////TICKET #882 : better use a typedef for frame counts 
+      FrameCnt frameNr(0);
       while (!frameNr)
         frameNr = rand() % (2*MAX_FRAME) - MAX_FRAME;
       

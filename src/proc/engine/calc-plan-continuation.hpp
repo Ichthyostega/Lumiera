@@ -44,6 +44,7 @@ namespace engine {
 //  using lib::time::TimeSpan;
 //  using lib::time::FSecs;
 //  using lib::time::Time;
+  using lib::time::FrameCnt;
   
   
   /**
@@ -107,11 +108,11 @@ namespace engine {
        * @param startFrame where to begin rendering, relative to the nominal
        *        time grid implicitly related to the ModelPort to be pulled
        */
-      Job prepareRenderPlanningFrom (int64_t startFrame);
+      Job prepareRenderPlanningFrom (FrameCnt startFrame);
       
       
     private:
-      void performJobPlanningChunk(int64_t nextStartFrame);
+      void performJobPlanningChunk(FrameCnt nextStartFrame);
       Job buildFollowUpJobFrom (TimeAnchor const& refPoint);
     };
   
