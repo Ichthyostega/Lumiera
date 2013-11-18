@@ -80,17 +80,7 @@ namespace test  {
         /* == mock Dispatcher implementation == */
         
         FrameCoord
-        locateFrameNext (uint frameCountOffset, TimeAnchor refPoint)
-          {
-            UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
-          }
-        FrameCoord
-        locateRelative (FrameCoord, uint frameCountOffset)
-          {
-            UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
-          }
-        FrameCoord
-        locateRelative (TimeAnchor, uint frameCountOffset)
+        locateRelative (FrameCoord const&, FrameCnt frameOffset)
           {
             UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
           }

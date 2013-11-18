@@ -73,6 +73,7 @@ namespace engine {
       FrameCoord()
         : absoluteNominalTime(Time::NEVER)
         , absoluteFrameNumber(std::numeric_limits<FrameCnt>::max())
+        , absoluteRealDeadline(Time::NEVER)
         , modelPort() // unconnected
         , channelNr(0)
         { }
@@ -113,7 +114,7 @@ namespace engine {
         }
       
     protected:
-      virtual FrameCoord locateRelative (FrameCoord, uint frameCountOffset)   =0;
+      virtual FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset)   =0;
     };
   
   

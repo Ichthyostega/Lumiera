@@ -180,6 +180,10 @@ namespace play {
       bool isOriginalSpeed()  const;
       
       
+      /** Consistency self-check */
+      bool isValid()  const;
+      
+      
       //////////////TODO further accessor functions here
       
       Timings constrainedBy (Timings additionalConditions);

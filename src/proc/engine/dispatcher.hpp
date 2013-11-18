@@ -75,18 +75,18 @@ namespace engine {
     {
       struct JobBuilder
         {
-          Dispatcher& dispatcher_;
+          Dispatcher* dispatcher_;
           ModelPort modelPort_;
           uint channel_;
           
-          FrameCoord relativeFrameLocation (TimeAnchor& refPoint, uint frameCountOffset =0);
+          FrameCoord relativeFrameLocation (TimeAnchor& refPoint, FrameCnt frameCountOffset =0);
           
           JobPlanningSequence
           establishNextJobs (TimeAnchor& refPoint)
             {
               return JobPlanningSequence(
                   relativeFrameLocation(refPoint),
-                  dispatcher_); 
+                  *dispatcher_);
             }
         };
       
@@ -98,10 +98,14 @@ namespace engine {
       
       
     protected:
-      virtual FrameCoord locateRelative (FrameCoord, uint frameCountOffset)   =0;
-      virtual FrameCoord locateRelative (TimeAnchor, uint frameCountOffset)   =0;     //////////TODO is this really an interface operation, or just a convenience shortcut?
+      /** core dispatcher operation: based on the coordinates of a reference point,
+       *  establish binding frame number, nominal time and real (wall clock) deadline.
+       * @return new FrameCoord record (copy), with the nominal time, frame number
+       *         and deadline adjusted in accordance to the given frame offset.
+       */
+      virtual FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset)  =0;
       
-      virtual bool       isEndOfChunk   (FrameCnt, ModelPort port)            =0;
+      virtual bool       isEndOfChunk   (FrameCnt, ModelPort port)                 =0;
 
       ////////TODO: API-1 = just get next frame, without limitations  .... CHECK
       ////////TODO: API-2 = query limitation of planning chunk        .... CHECK

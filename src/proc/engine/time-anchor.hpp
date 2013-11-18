@@ -157,14 +157,32 @@ namespace engine {
         }
       
       
+      /** define the deadline for a grid point relative to this reference point.
+       *  Since a TimeAnchor represents the definitive link between nominal time
+       *  and ongoing wall clock time, and since all of the current output stream
+       *  related timing information is available -- including the engine and the
+       *  output latency -- this is the place to do the final decision.
+       * @param frameOffset frame count offset relative to this TimeAnchor point
+       * @return the latest real absolute wall clock time at which this frame
+       *         has to be delivered to the OutputSlot. This deadline is exclusive,
+       *         i.e. time < deadline is required.
+       */
+      Time
+      establishDeadlineFor (FrameCnt frameOffset)
+        {
+          return this->relatedRealTime_
+               + timings_.getRealOffset(frameOffset);
+        }
+      
+      
+      /** convenience shortcut, employing the deadline calculation in relation
+       *  to current wall clock time */
       Offset
       remainingRealTimeFor (FrameCoord plannedFrame)
-      //////////////////////////////////////////////////TODO break this into two sensible operations, using the deadline from the FrameCoord
         {
           FrameCnt frameOffset = plannedFrame.absoluteFrameNumber - anchorPoint_;
-          return Offset(this->relatedRealTime_
-                      + timings_.getRealOffset(frameOffset)
-                      - RealClock::now());
+          return Offset(RealClock::now()
+                       ,establishDeadlineFor(frameOffset));
         }
     };
   

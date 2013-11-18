@@ -58,9 +58,11 @@ namespace engine {
   bool
   CalcPlanContinuation::verify (Time nominalTime, InvocationInstanceID invoKey)  const
   {
-    UNIMPLEMENTED ("verify the planning coordinates");
-    return false;
+    return timings_.isValid()
+        && Time::MIN < nominalTime && nominalTime < Time::MAX
+        && nominalTime == timings_.getFrameStartAt (invoKey.frameNumber);
   }
+  
   
   size_t
   CalcPlanContinuation::hashOfInstance (InvocationInstanceID invoKey) const

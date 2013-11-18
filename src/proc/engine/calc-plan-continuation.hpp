@@ -59,7 +59,6 @@ namespace engine {
    */
   class CalcPlanContinuation
     : public JobClosure
-    , boost::noncopyable
     {
       
       play::Timings const& timings_;

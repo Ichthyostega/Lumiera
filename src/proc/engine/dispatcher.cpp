@@ -38,15 +38,24 @@ namespace engine {
   Dispatcher::JobBuilder
   Dispatcher::onCalcStream (ModelPort modelPort, uint channel)
   {
-    UNIMPLEMENTED ("build coordinates of frame to render");
+    JobBuilder builder = {this, modelPort,channel};
+    return builder;
   }
   
   
   /** */
   FrameCoord
-  Dispatcher::JobBuilder::relativeFrameLocation (TimeAnchor& refPoint, uint frameCountOffset)
+  Dispatcher::JobBuilder::relativeFrameLocation (TimeAnchor& refPoint, FrameCnt frameOffset)
   {
-    UNIMPLEMENTED ("build coordinates of frame to render");
+    FrameCoord frame;
+    frame.absoluteNominalTime = refPoint;
+    frame.absoluteFrameNumber = refPoint.getStartFrame();
+    frame.absoluteRealDeadline = refPoint.establishDeadlineFor (frameOffset);
+    frame.modelPort = this->modelPort_;
+    frame.channelNr = this->channel_;
+    
+    ENSURE (frame.isDefined());
+    return dispatcher_->locateRelative (frame, frameOffset);
   }
   
   

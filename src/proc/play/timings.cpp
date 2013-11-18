@@ -78,6 +78,20 @@ namespace play {
   Timings Timings::DISABLED(FrameRate::HALTED);
   
   
+  
+  /** @internal typically invoked from assertions */
+  bool
+  Timings::isValid()  const
+  {
+    return bool(grid_)
+        && (( (ASAP == playbackUrgency || NICE == playbackUrgency)
+            && Time::NEVER == scheduledDelivery)
+           ||
+            (TIMEBOUND == playbackUrgency
+            && Time::MIN < scheduledDelivery && scheduledDelivery < Time::MAX)
+           );
+  }
+  
   Time
   Timings::getOrigin()  const
   {
