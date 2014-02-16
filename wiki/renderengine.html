@@ -5554,7 +5554,7 @@ As detailed above, {{{Session::current}}} exposes the management / lifecycle API
 {{red{none of the above is implemented as of 11/09}}}
 </pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" created="200904242110" modified="201112222248" tags="overview">
+<div title="SessionLogic" modifier="Ichthyostega" created="200904242110" modified="201402162038" tags="overview" changecount="1">
 <pre>The Session contains all information, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
 As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes. Proc-Layer state is rooted within the session and guided by the [[session's lifecycle events|SessionLifecycle]].
 Implementation facilities within the Proc-Layer may access a somewhat richer [[session service API|SessionServices]].
@@ -5562,7 +5562,7 @@ Implementation facilities within the Proc-Layer may access a somewhat richer [[s
 Currently (as of 3/10), Ichthyo is working on getting a preliminary implementation of the [[Session in Memory|SessionDataMem]] settled.
 
 !Session, Model and Engine
-The session is a SubSystem and acts as a frontend to most of the Proc-Layer. But it doesn't contain much operational logic; its primary contents are the [[model|Model]], which is closely [[interconnected to the assets|AssetModelConnection]].
+The session is a [[Subsystem]] and acts as a frontend to most of the Proc-Layer. But it doesn't contain much operational logic; its primary contents are the [[model|Model]], which is closely [[interconnected to the assets|AssetModelConnection]].
 
 !Design and handling of Objects within the Session
 Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched|ProcDispatcher]] as [[mutation operation|SessionMutation]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
@@ -6140,6 +6140,26 @@ h1,h2,h3,h4,h5,h6 {
         background: #91a6af;
 }
 /*}}}*/
+</pre>
+</div>
+<div title="Subsystem" creator="Ichthyostega" modifier="Ichthyostega" created="201402162047" modified="201402162058" tags="def" changecount="6">
+<pre>The term ''Subsystem'' denotes a coherent and tightly coupled and integrated part of the application's functionality.
+A Subsystem exists as an entity at runtime -- it has state and a lifecycle and might depend on other subsystems.
+The arrangement of subsystems is part of the architecture; separation into subsystems is a more fine grained structuring and somewhat orthogonal to the arrangement of functionality into ''Layers'', which are more of conceptual nature.
+
+!Layers and Subsystems
+;GUI
+:the actual user interface is loaded and started as a plug-in. It is typically monolithic and thus counts as //one// subsystem (but there might be several alternative interfaces)
+;~Proc-Layer
+:this is the metadata and organisational layer and serves to accomodate the user oriented view to the technical necessities of rendering and playback
+:* [[Session]]
+:* [[Builder]]
+:* [[Player]]
+:* RenderEngine
+;Backend
+:here the goal is to provide system level services for the upper layers. The structuring is not so clear yet {{red {1/2014}}}
+:* probably the [[Scheduler]] gets the ability to be started explicitly
+:* the other services are started in conjunction and form a common subsystem
 </pre>
 </div>
 <div title="SwitchBoard" modifier="Ichthyostega" created="201105221831" modified="201105221902" tags="def SessionLogic Player">
