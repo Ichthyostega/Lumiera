@@ -564,7 +564,7 @@ In a more elaborate scheme, the advised entity could provide a signal to be invo
 &amp;rarr; AdviceImplementation
 </pre>
 </div>
-<div title="AdviceImplementation" modifier="Ichthyostega" created="201004100056" modified="201211300647" tags="impl draft img">
+<div title="AdviceImplementation" modifier="Ichthyostega" created="201004100056" modified="201402162059" tags="impl draft img" changecount="1">
 <pre>[&lt;img[Advice solution|uml/fig141573.png]]
 
 
@@ -637,7 +637,7 @@ To start with, any advice matching and solution will //always happen within matc
 The above considerations don't fully solve the question how to represent a computed solution within the index data structure, candidates being to use the index within the provision list, or a direct pointer to the provision or even just to re-use the pointer stored into the ~AdviceRequest. My decision is to do the latter. Besides solutions found by matching, we need //fallback solutions// holding a default constructed piece of advice of the requested type. As these defaults aren't correlated at all to the involved bindings, but only to the advice type as such, it seems reasonable to keep them completely apart, like e.g. placing them into static memory managed by the ~AdviceProvision template instantiations.
 
 !!!interactions to be served by the index
-[&gt;img[Advice solution|draw/AdviceBindingIndex1.png]]
+[&gt;img[Advice solution|draw/adviceBindingIndex1.png]]
 
 ;add request
 :check existing provisions starting from top until match; use default solution in case no match is found; publish solution into the new request; finally attach the new request entry
@@ -4282,13 +4282,13 @@ Placement references mimic the behaviour of a real placement, i.e. they proxy th
 
 </pre>
 </div>
-<div title="PlacementScope" modifier="Ichthyostega" created="200905120304" modified="200911202127" tags="SessionLogic spec img">
+<div title="PlacementScope" modifier="Ichthyostega" created="200905120304" modified="201402162034" tags="SessionLogic spec img" changecount="1">
 <pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the possibility of //grouping or container objects,// e.g. [[sequences|Sequence]] or [[tracks|Track]] or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
 
 Thus, while the [[sequences|Sequence]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. The latter is called the ''scope top''. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
 
 
-[&gt;img[Structure of Placment Scopes|draw/ScopeStructure1.png]]
+[&gt;img[Structure of Placment Scopes|draw/scopeStructure1.png]]
 !Kinds of scopes
 There is only a limited number of situations constituting a scope
 * conceptually, the very top level is a scope of general rules.
@@ -4480,13 +4480,13 @@ Yet it addresses some central concerns:
 The player subsystem is currently about to be designed and built up; some time ago, __Joel Holdsworth__ and __Ichthyo__ did a design study with a PlayerDummy, which is currently hooked up with the TransportControl in the Lumiera GUI. Starting from these experiences, and the general requirements of an NLE, the [[design of the Player subsystem|DesignPlayerSubsystem]] is being worked out.
 </pre>
 </div>
-<div title="PlayerDummy" modifier="Ichthyostega" created="200901300209" modified="201201150237" tags="GuiIntegration operational img">
+<div title="PlayerDummy" modifier="Ichthyostega" created="200901300209" modified="201402162032" tags="GuiIntegration operational img" changecount="2">
 <pre>__Joelholdsworth__ and __Ichthyo__ created this player mockup in 1/2009 to find out about the implementation details regarding integration and colaboration between the layers. There is no working render engine yet, thus we use a ~DummyImageGenerator for creating faked yuv frames to display. Within the GUI, there is a ~PlaybackController hooked up with the transport controls on the timeline pane. 
 # first everything was contained within ~PlaybackController, which spawns a thread for periodically creating those dummy frames
 # then, a ~PlayerService was factored out, now implemented within ~Proc-Layer (later to delegate to the emerging real render engine implementation).&lt;br/&gt;A new LayerSeparationInterface called ''~DummyPlayer'' was created and set up as a [[Subsystem]] within main().
 # the next step was to support multiple playback processes going on in parallel. Now, the ~PlaybackController holds an smart-handle to the ~PlayProcess currently generating output for this viewer, and invokes the transport control functions and the pull frame call on this handle.
 # then, also the tick generation (and thus the handling of the thread which pulls the frames) was factored out and pushed down into the mentioned ~PlayProcess. For this to work, the ~PlaybackController now makes a display slot available on the public GUI DisplayFacade interface, so the ~PlayProcessImpl can push up the frames for display within the GUI
-[img[Overview to the dummy player operation|draw/PlayerArch1.png]]
+[img[Overview to the dummy player operation|draw/playerArch1.png]]
 
 !when playing...
 As a prerequisite, a viewer has to be prepared within the GUI. A XV video display widget is wired up to a sigc++ signal slot, using the Glib::Dispatcher to forward calls from the play process thread to the GTK main event loop thread. All of this wiring actually is encapsulated as a DisplayerSlot, created and registered with the DisplayService.
@@ -4569,11 +4569,11 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" created="200706190056" modified="201202181622" tags="overview">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" created="200706190056" modified="201402162030" tags="overview" changecount="2">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Relying on system level services and retrieving raw audio and video data through [[Lumiera's Backend|Backend]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the Proc-Layer, spans the area between these two exteremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
 
 !About this wiki page
-|background-color:#E3F3F1;width:96ex;padding:2ex; This TiddlyWiki is the central location for design, planning and documentation of the Lumiera Proc-Layer. Some parts are used as //extended brain// &amp;mdash; collecting ideas, considerations and conclusions &amp;mdash; while other tiddlers contain the decisions and document the planned or implemented facilities. The intention is to move over the more mature parts into the emerging technical documentation section on the [[Lumiera website|http://www.lumiera.org]] eventually. &lt;br/&gt;&lt;br/&gt;Besides cross-references, content is largely organised through [[Tags|TabTags]], most notably &lt;br/&gt;&lt;&lt;tag overview&gt;&gt; &amp;middot; &lt;&lt;tag def&gt;&gt; &amp;middot; &lt;&lt;tag decision&gt;&gt; &amp;middot; &lt;&lt;tag Concepts&gt;&gt; &lt;br/&gt; &lt;&lt;tag Model&gt;&gt; &amp;middot; &lt;&lt;tag SessionLogic&gt;&gt; &amp;middot; &lt;&lt;tag GuiIntegration&gt;&gt; &amp;middot; &lt;&lt;tag Builder&gt;&gt; &amp;middot; &lt;&lt;tag Rendering&gt;&gt; &amp;middot; &lt;&lt;tag Player&gt;&gt; &amp;middot; &lt;&lt;tag Rules&gt;&gt; &amp;middot; &lt;&lt;tag Types&gt;&gt; |
+|background-color:#e3f3f1;width:96ex;padding:2ex; This TiddlyWiki is the central location for design, planning and documentation of the Lumiera Proc-Layer. Some parts are used as //extended brain// &amp;mdash; collecting ideas, considerations and conclusions &amp;mdash; while other tiddlers contain the decisions and document the planned or implemented facilities. The intention is to move over the more mature parts into the emerging technical documentation section on the [[Lumiera website|http://www.lumiera.org]] eventually. &lt;br/&gt;&lt;br/&gt;Besides cross-references, content is largely organised through [[Tags|TabTags]], most notably &lt;br/&gt;&lt;&lt;tag overview&gt;&gt; &amp;middot; &lt;&lt;tag def&gt;&gt; &amp;middot; &lt;&lt;tag decision&gt;&gt; &amp;middot; &lt;&lt;tag Concepts&gt;&gt; &lt;br/&gt; &lt;&lt;tag Model&gt;&gt; &amp;middot; &lt;&lt;tag SessionLogic&gt;&gt; &amp;middot; &lt;&lt;tag GuiIntegration&gt;&gt; &amp;middot; &lt;&lt;tag Builder&gt;&gt; &amp;middot; &lt;&lt;tag Rendering&gt;&gt; &amp;middot; &lt;&lt;tag Player&gt;&gt; &amp;middot; &lt;&lt;tag Rules&gt;&gt; &amp;middot; &lt;&lt;tag Types&gt;&gt; |
 
 !~Proc-Layer Summary
 When editing, the user operates several kinds of //things,// organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[Project or Session|Session]], we can use these as &amp;raquo;[[Media Objects|MObjects]]&amp;laquo; &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the session and relative to one another.
@@ -4640,13 +4640,13 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QuantiserImpl" modifier="Ichthyostega" created="201101061212" modified="201104252333" tags="impl spec">
+<div title="QuantiserImpl" modifier="Ichthyostega" created="201101061212" modified="201402162035" tags="impl spec" changecount="1">
 <pre>The Quantiser implementation works by determining the grid interval containing a given raw time.
 These grid intervals are denoted by ordinal numbers (frame numbers), with interval #0 starting at the grid's origin and negative ordinals allowed.
 
 !frame quantisation convention
 Within Lumiera, there is a fixed convention how these frame intervals are to be defined (&amp;rArr; [[time handling RfC|http://lumiera.org/documentation/devel/rfc/TimeHandling.html]])
-[img[Lumiera's frame quantisation convention|draw/FramePositions1.png]]
+[img[Lumiera's frame quantisation convention|draw/framePositions1.png]]
 Especially, this convention is agnostic of the actual zero-point of the scale and allows direct length calculations and seamless sequences of intervals.
 The //nominal coordinate// of an interval is also the starting point -- for automation keys frames we'll utilise special provisions.
 
@@ -5433,7 +5433,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201010210035" tags="SessionLogic GuiIntegration design draft discuss">
+<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201402162033" tags="SessionLogic GuiIntegration design draft discuss" changecount="1">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -5453,7 +5453,7 @@ The HighLevelModel exposes two kinds of interfaces (which are interconnected and
 * the [[Session]] object itself corresponds to the ModelRootMO
 * the one (or multiple) [[Timeline]] objects correspond to the BindingMO instances attached immediately below the model root
 * the [[sequences|Sequence]] bound into these timelines (by the ~BindingMOs) correspond to the top level [[Track]]-~MObjects within each of these sequences.
-[&lt;img[Object relations on the session façade|draw/SessionFacade1.png]]
+[&lt;img[Object relations on the session façade|draw/sessionFacade1.png]]
 
 Thus, there is a convenient and meaningful access path through these façade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
 
