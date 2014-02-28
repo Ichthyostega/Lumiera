@@ -105,7 +105,7 @@ namespace engine {
        *  to real (wall clock) time will be established when the returned job
        *  is actually invoked
        * @param startFrame where to begin rendering, relative to the nominal
-       *        time grid implicitly related to the ModelPort to be pulled
+       *        time grid implicitly given by the ModelPort to be pulled
        */
       Job prepareRenderPlanningFrom (FrameCnt startFrame);
       

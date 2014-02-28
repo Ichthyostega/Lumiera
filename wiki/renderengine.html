@@ -2109,7 +2109,7 @@ To support this usage pattern, the Fixture implementation makes use of the [[PIm
 * moreover, this necessitates a tight integration down to implementation level, both with the clean-up and the render processes themselves
 </pre>
 </div>
-<div title="FixtureStorage" modifier="Ichthyostega" created="201012140231" modified="201301152312" tags="Builder impl operational draft">
+<div title="FixtureStorage" modifier="Ichthyostega" created="201012140231" modified="201403071814" tags="Builder impl operational draft" changecount="22">
 <pre>The Fixture &amp;rarr; [[data structure|FixtureDatastructure]] acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
 Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes (&amp;rarr; CalcStream) are known to be terminated.
 
@@ -2127,7 +2127,7 @@ Basically the concern is that each new CalcStream had to access the shared count
 There are. As the builder is known to be run again and again, no one forces us to deallocate as soon as we could. That's the classical argument exploited by any garbage collector too. Thus we could just note the fact that a calculation stream is done and re-evaluate all those noted results on later occasion. Obviously, the [[Scheduler]] is in the best position for notifying the rest of the system when this and that [[job|RenderJob]] has terminated, because the Scheduler is the only facility required to touch each job reliably. Thus it seems favourable to add basic support for either termination callbacks or for guaranteed execution of some notification jobs to the [[Scheduler's requirements|SchedulerRequirements]].
 
 !!exploiting the frame-dispatch step
-Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process (maybe even each CalcStream)  a //copy//&amp;nbsp; of a dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add some kind of back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
+Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process (maybe even each CalcStream)  a //copy//&amp;nbsp; of a dispatcher table object -- basically just a list of breaking points in time and a pointer to the corresponding relevant exit node. If we keep track of those dispatcher tables, add some kind of back-link to identify the process and require the process in turn to deregister, we might get a tracking of tainted processes for free.
 
 !!assessment {{red{WIP 12/10}}}
 But the primary question here is to judge the impact of such an implementation. What would be the costs?
@@ -2153,17 +2153,19 @@ Above estimation hints at the necessity of frequently finding some 30 to 100 seg
 
 ;Model A
 :use a logarithmic datastructure, e.g. a priority queue. Possibly together with LRU ordering
-:problem here is that the priorities change, which either means shared access or a lot of &quot;superseded&quot; entries
+:problem here is that the priorities change, which either means shared access or a lot of &quot;obsoleted&quot; entries in this queue
 ;Model B
 :keep all superseded segments around and track the tainted processes instead
 :problem here is how to get the tainted processes precisely and with low overhead
-//currently {{red{12/10}}} I tend to prefer Model B...// while the priority queue remains to be investigated in more detail for organising the actual build process.
-But actually I'm struck here, because of the yet limited knowledge about those render processes....
+//as of 12/10, decision was taken to prefer Model B...//
+Simply because the problems caused by Model A seem to be fundamental, while the problems related to Model B could be overcome with some additional cleverness.
+
+But actually, at that point I'm struck here, because of the yet limited knowledge about those render processes....
 * how do we //join// an aborted/changed rendering process to his successor, without creating a jerk in the output?
 * is it even possible to continue a process when parts of the covered time-range are affected by a build?
-If the latter question is answered with &quot;No!&quot;, then the problem gets simple in solution, but maybe memory consuming: In that case, //all//&amp;nbsp; processes linked to a timeline gets affected and thus tainted; we'd just dump them onto a pile and delay releasing all of the superseded segments until all of them are known to be terminated.
+If the latter question is answered with &quot;No!&quot;, then the problem gets simple in solution, but maybe memory consuming: In that case, //all//&amp;nbsp; the processes related to a timeline are affected and thus get tainted; we'd just dump them onto a pile and delay releasing all of the superseded segments until all of them are known to be terminated.
 
-!!re-visited {{red{WIP 1/13}}}
+!!re-visited 1/13
 the last conclusions drawn above where confirmed by the further development of the overall design. Yes, we do //supersede// frequently and liberally. This isn't much of a problem, since the preparation of new jobs, i.e. the [[frame dispatch step|FrameDispatcher]] is performed chunk wise. A //continuation job// is added at the end of each chunk, and this continuation will pick up the task of job planning in time.
 
 At the 1/2013 developer's meeting, Cehteh and myself had a longer conversation regarding the topic of notifications and superseding of jobs within the scheduler. The conclusion was to give ''each play process a separate LUID'' and treat this as ''job group''. The scheduler interface will offer a call to supersede all jobs within a given group.
@@ -2174,9 +2176,33 @@ Some questions remain though
 * is it possible, to file these dedicated dispatch informations gradually?
 * how to store and pass on the control information for NonLinearPlayback?
 
-since the intention is to have dedicated dispatch tables, these would implement the {{{engine.Dispatcher}}} inteface and incorporate some kind of strategy corresponding to the mode of playback. The chunk wise continuation of the job planning process would have to be reformulated in terms of //real wall clock time rather// -- since the relation of the playback process to nominal time can't be assumed to be a simple linear progression in all cases.
+since the intention is to have dedicated dispatch tables, these would implement the {{{engine.Dispatcher}}} interface and incorporate some kind of strategy corresponding to the mode of playback. The chunk wise continuation of the job planning process would have to be reformulated in terms of //real wall clock time rather// -- since the relation of the playback process to nominal time can't be assumed to be a simple linear progression in all cases.
 
-</pre>
+!liabilities of fixture storage {{red{WIP 1/14}}}
+The net effect of all the facilities related to fixture storage is to keep ongoing memory allocations sane. The same effect could be achieved by using garbage collection -- but the latter solves a much wider area of problems and as such incurs quite some price in terms of lock contention or excessive memory usage. Since our problem here is confined to a very controlled setup, employing a specific hand made solution will be more effective. Anyway, the core conflict is not to hinder parallel execution of jobs and to avoid excessive use of memory.
+
+The management of fixture storage has to deal with some distinct situations
+;superseding a CalcStream
+:as long as the respective calculations are still going on, the commonly used data structures need to stay put
+:* the {{{CalcPlanContinuation}}} closure used by the job planning jobs
+:* the {{{RenderEnvironmentClosure}}} shared by all ~CalcStreams for for the same output configuration
+:* the -- likewise possibly shared -- specific strategy record to govern the playback mode
+;superseding a [[Segment|Segmentation]]
+:as long as any of the //tainted// ~CalcStreams is still alive, all of the data structures held by the AllocationCluster of that segment need to stay around
+:* the DispatcherTables
+:* the JobTicket structure
+:* the [[processing nodes|ProcNode]] and accompanying WiringDescriptor records
+
+!!!conclusions for the implementation
+In the end, getting the memory management within Segmentation and Playback correct boils down into the following requirements
+* the ability to identify ~CalcStreams touching a segment about to be obsoleted
+* the ability to track such //tainted ~CalcStreams//
+* the ability to react on reaching a pre defined //control point,// after which releasing of resources is safe
+
+The building blocks for such a chain of triggers and reactions are provided by a helper facility, the &amp;rarr; SequencePointManager
+
+
+__3/2014__: The crucial point seems to be the impedance mismatch between segments and calculation streams. We have a really high number of segments, which change only occasionally. But we have a rather small number of calculation streams, which mutate rapidly. And, over time, any calculation stream might -- occasionally -- touch a large number of segments. Thus, care should be taken not to implement the dependency structure naively. We only need to care about the tainted calculation streams when it comes to discarding a segment.</pre>
 </div>
 <div title="ForwardIterator" modifier="Ichthyostega" created="200910312114" modified="200912190027" tags="Concepts def spec">
 <pre>The situation focussed by this concept is when an API needs to expose a sequence of results, values or objects, instead of just yielding a function result value. As the naive solution of passing an pointer or array creates coupling to internals, it was superseded by the ~GoF [[Iterator pattern|http://en.wikipedia.org/wiki/Iterator]]. Iteration can be implemented by convention, polymorphically or by generic programming; we use the latter approach.
@@ -3348,7 +3374,7 @@ some points to note:
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
 </pre>
 </div>
-<div title="NonLinearPlayback" modifier="Ichthyostega" created="201301132217" modified="201305200122" tags="def Player Rendering draft" changecount="1">
+<div title="NonLinearPlayback" modifier="Ichthyostega" created="201301132217" modified="201402161739" tags="def Player Rendering draft" changecount="3">
 <pre>The calculations for rendering and playback are designed with a base case in mind: calculating a linear sequence of frames consecutive in time.
 But there are several important modes of playback, which violate that assumption...
 * jump-to / skip
@@ -3418,7 +3444,7 @@ Drawing from this requirement analysis, we might identify some mandatory impleme
 :* re-entering playback by callback
 :* re-entering paused state by callback
 :* a link to the existing feeds and calculation streams for superseding the current planning
-:* use a strategy for fast-cueing (interleaved skips, increased speed, higher framerate, change model port to use a preconfigured granulator device)
+:* use a strategy for fast-cueing (interleaved skips, increased speed, higher framerate, change model port on-the-fly to use a preconfigured granulator device)
 ;for the __scheduler interface__:
 :we need some structural devices actually to implement those non-standard modes of operation
 :* conditional prerequisites (prevent evaluation, re-evaluate later)
@@ -3427,7 +3453,7 @@ Drawing from this requirement analysis, we might identify some mandatory impleme
 :* a way for hinting the cache to store background frames with decreasing priority, thus ensuring the foremost availability of the first frames when picking up playback again
 ;for the __output sinks__:
 :on the receiver side, we need some support to generate smooth and error free output delivery
-:* automated detection of timing glitches, activating the discontinuity handling (&amp;raquo;de-click facility&amp;laquo;)
+:* automated detection of timing glitches, leading to activation of the discontinuity handling (&amp;raquo;de-click facility&amp;laquo;)
 :* low-level API for signalling discontinuity to the OutputSlot. This information pertains to the currently delivered frame -- this is necessary when this frame //is actually being delivered timely.//
 :* high-level API to switch any ~OutputSlot into &quot;frozen mode&quot;, disabling any further output, even in case of accidental delivery of further data by jobs currently in progression.
 :* ability to detect and signal overload of the receiver, either through blocking or for flow-control
@@ -5618,6 +5644,32 @@ Actually, sequences are façade objects to quite some extent, delegating the imp
 A sequence is always tied to a root-placed track, it can't exist without such. When moving this track by changing it's [[Placement]], thus disconnecting it from the root scope, the corresponding sequence will be automatically removed from the session and discarded. On the other hand, sequences aren't required to be //bound// &amp;mdash; a sequence might just exist in the model (attached by its track placed into root scope) and thereby remain passive and invisible. Such an unbound sequence can't be edited, displayed in the GUI or rendered, it is only accessible as asset. Of course it can be re-activated by linking it to a new or existing timeline or VirtualClip.
 &amp;rarr; see detailed [[discussion of dependent objects' behaviour|ModelDependencies]]
 </pre>
+</div>
+<div title="SequencePointManager" creator="Ichthyostega" modifier="Ichthyostega" created="201402210007" modified="201403071821" tags="spec draft operational Player Rendering" changecount="27">
+<pre>A helper to implement a specific memory management scheme for playback and rendering control data structures.
+In this context, model and management data is structured into [[Segments|Segmentation]] of similar configuration within the project timeline. Beyond logical reasoning, these segments also serve as ''extents'' for memory allocation. Which leads to the necessity of [[segment related memory management|FixtureStorage]]. The handling of actual media data buffers is outside the realm of this topic; these are managed by the frame cache within the backend.
+
+When addressing this task, we're facing several closely related concerns.
+;throughput
+:playback operations are ongoing and incur a continuous memory consumption.Thus, we need to keep up a minimal clean-up rate
+;availability
+:the playback system operates time bound. &quot;Stop the World&quot; for clean-up isn't an option
+;contention
+:playback and rendering operations are essentially concurrent. We need reliable yet decentralised bookkeeping
+
+!sequence points
+A ''sequence point'' is a conceptual entity for the purpose of organisation of dependent operations. Any sequence point can be ''declared'', ''referred'', ''fulfilled'' and ''triggered''. The referral to sequence points creates an ordering -- another sequence point can be defined as being prerequisite or dependent. But the specific twist is: any of these operations can happen //in any thread.// Triggering a sequence point means to invoke an action (functor) tied to that point. This is allowed only when we're able to prove that this sequence point has been fulfilled, which means that all of its prerequisites have been fulfilled and that optionally an additional fulfilment signal was detected. After the triggering, a sequence point ceases to exist.
+
+!solution idea
+The solution idea is inspired by the pattern of operation within a garbage collector: The key point to note with this pattern is the ability to detect the usage status by external reasoning, without explicit help from //within// the actual context of usage. In a garbage collector, we're reasoning about reachability, and we're doing so at our own discretion, at some arbitrary point in time, later, when the opportunity for collecting garbage is exploited.
+
+For the specific problem for handling sequence points as outlined above, a similar structure can be established by introducing a concept of ''water level''. When we're able to prove a certain water level, any sequence points below that level must have been fulfilled. And for modern computing architectures the important point is that we're able to do this reasoning  for each thread separately, based just on local information. Once a given thread has proven a certain water level, this conclusion is published in a lock free manner -- meaning that this information will be available in any other thread //eventually, after some time.// After that, any triggers below water level can be performed in correct dependency order, any time and in any thread, just as we see fit.
+
+!!!complications
+The concurrent nature of the problem is what makes this simple task somewhat more involved. Also note that the &quot;water level&quot; cannot be a global property, since the graph of dependencies is not necessarily globally connected. In the general case, it's not a tree, but a wood.
+* information about fulfilling a sequence point may appear in various threads
+* referrals to already known sequence points might be added later, and also from different threads ({{red{WIP 3/14}}} not sure if we need to expand on this observation -- see CalcStream &amp;hArr; Segment)
+This structure looks like requiring a message passing approach: we can arrange for determining the actual dependencies and fulfillment state late, within a single consumer, which is responsible for invoking the triggers. The other clients (threads) just pass messages into a possibly lock-free messageing channel.</pre>
 </div>
 <div title="Session" modifier="Ichthyostega" created="200712100525" modified="201501171410" tags="def SessionLogic" changecount="1">
 <pre>The Session contains all information, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[Sequence]].
