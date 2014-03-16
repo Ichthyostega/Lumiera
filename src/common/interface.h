@@ -21,7 +21,6 @@
 #ifndef LUMIERA_INTERFACE_H
 #define LUMIERA_INTERFACE_H
 
-#include "lib/luid.h"
 #include "lib/ppmpl.h"
 #include "lib/psplay.h"
 
@@ -66,8 +65,8 @@
  * the following form:
  * \code
  *  LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, acquire, release,
- *                             LUMIERA_INTERFACE_MAP (slot, luid, function),
- *                             LUMIERA_INTERFACE_INLINE (slot, luid, ret, params, {body}),
+ *                             LUMIERA_INTERFACE_MAP (slot, function),
+ *                             LUMIERA_INTERFACE_INLINE (slot, ret, params, {body}),
  *                             ...
  *                            )
  * \endcode
@@ -80,7 +79,7 @@
  *                ...
  *                ) // Exporting from the core
  * 
- *  LUMIERA_PLUGIN(descriptor, acquire, release, luid,
+ *  LUMIERA_PLUGIN(descriptor, acquire, release,
  *                 LUMIERA_INTERFACE_DEFINE(...),
  *                 ...
  *                 ) // Exporting from an interface
@@ -184,7 +183,6 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
  */
 #define PPMPL_FOREACH_LUMIERA_INTERFACE_SLOT(ret, name, params)  \
         ret (*name) params; \
-                             lumiera_uid name##_uid;
 
 
 /*
@@ -221,28 +219,26 @@ PPMPL_FOREACH(_P2_, __VA_ARGS__)                                                
 /**
  * Map a function to a interface slot
  * @param slot name of the slot to be mapped
- * @param luid unique identifier for this function, use the magic word LUIDGEN here and run the
- *        lumiera uuid generator tool (to be written) over the source file to generate luid's automatically
  * @param function name of the function to be mapped on slot
  *
  * @note C++ requires that all mappings are in the same order than defined in the interface declaration,
  * this would be good style for C too anyways
  */
-#define PPMPL_FOREACH_P1_LUMIERA_INTERFACE_MAP(slot, luid, function)
+#define PPMPL_FOREACH_P1_LUMIERA_INTERFACE_MAP(slot, function)
 #ifdef __cplusplus
-#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_MAP(slot, luid, function) \
-  function, LUMIERA_UID_INITIALIZER (luid),
+#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_MAP(slot, function) \
+    function,\
+
 #else
-#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_MAP(slot, luid, function) \
-  .slot = function, .slot##_uid = LUMIERA_UID_INITIALIZER (luid),
+#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_MAP(slot, function) \
+    .slot = function,\
+
 #endif
 
 
 /**
  * Map a inline defined function to a interface slot
  * @param slot name of the slot to be mapped
- * @param luid unique identifier for this function, use the magic word LUIDGEN here and run the
- *        lumiera uuid generator tool (to be written) over the source file to generate luid's automatically
  * @param ret return type of the inline function
  * @param params parentized list of parameters given to the function
  * @param ... braced function body
@@ -250,17 +246,19 @@ PPMPL_FOREACH(_P2_, __VA_ARGS__)                                                
  * @note C++ requires that all mappings are in the same order than defined in the interface declaration,
  * this would be good style for C too anyways
  */
-#define PPMPL_FOREACH_P1_LUMIERA_INTERFACE_INLINE(slot, luid, ret, params, ...) \
+#define PPMPL_FOREACH_P1_LUMIERA_INTERFACE_INLINE(slot, ret, params, ...) \
   static ret                                                                    \
   LUMIERA_INTERFACE_INLINE_NAME(slot) params                                    \
   __VA_ARGS__
 
 #ifdef __cplusplus
-#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_INLINE(slot, luid, ret, params, ...) \
-  LUMIERA_INTERFACE_INLINE_NAME(slot), LUMIERA_UID_INITIALIZER (luid),
+#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_INLINE(slot, ret, params, ...) \
+    LUMIERA_INTERFACE_INLINE_NAME(slot),\
+
 #else
-#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_INLINE(slot, luid, ret, params, ...) \
-  .slot = LUMIERA_INTERFACE_INLINE_NAME(slot), .slot##_uid = LUMIERA_UID_INITIALIZER (luid),
+#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_INLINE(slot, ret, params, ...) \
+    .slot = LUMIERA_INTERFACE_INLINE_NAME(slot),\
+
 #endif
 
 #define LUMIERA_INTERFACE_INLINE_NAME(slot) PPMPL_CAT(lumiera_##slot##_l, __LINE__)
@@ -318,7 +316,6 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg__plugin, 0,                              
                             NULL,                                                       \
                             NULL,                                                       \
                             LUMIERA_INTERFACE_MAP (plugin_interfaces,                   \
-                                                   "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",  \
                                                    lumiera_plugin_interfaces)           \
                             );
 #define LUMIERA_INTERFACE_REGISTEREXPORTED
@@ -382,7 +379,6 @@ typedef lumiera_interface* LumieraInterface;
 struct lumiera_interfaceslot_struct
 {
   void (*func)(void);
-  lumiera_uid uid;
 };
 
 

@@ -316,11 +316,11 @@ LUMIERA_EXPORT(
                                          NULL,
                                          NULL,
                                          NULL,
-                                         LUMIERA_INTERFACE_MAP (open, "\322\165\227\133\252\355\125\104\157\167\253\267\117\273\174\022",
+                                         LUMIERA_INTERFACE_MAP (open,
                                                                 lumiera_interface_open),
-                                         LUMIERA_INTERFACE_MAP (close, "\264\037\253\243\312\273\024\104\030\007\076\006\154\071\340\102",
+                                         LUMIERA_INTERFACE_MAP (close,
                                                                 lumiera_interface_close),
-                                         LUMIERA_INTERFACE_MAP (version, "\004\272\070\214\006\235\047\212\007\165\115\221\146\274\217\324",
+                                         LUMIERA_INTERFACE_MAP (version,
                                                                 lumiera_interface_version),
                                          )
                )

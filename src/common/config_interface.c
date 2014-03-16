@@ -38,28 +38,28 @@ LUMIERA_EXPORT(
                                          NULL,
                                          NULL,
                                          NULL,
-                                         LUMIERA_INTERFACE_MAP (load, "\177\002\314\014\245\001\056\246\317\203\322\346\114\061\262\366",
+                                         LUMIERA_INTERFACE_MAP (load,
                                                                 lumiera_config_load),
-                                         LUMIERA_INTERFACE_MAP (save, "\271\141\152\017\060\312\103\343\342\063\007\142\374\201\163\334",
+                                         LUMIERA_INTERFACE_MAP (save,
                                                                 lumiera_config_save),
-                                         LUMIERA_INTERFACE_MAP (purge, "\321\275\170\140\010\075\323\340\371\050\345\131\267\070\076\130",
+                                         LUMIERA_INTERFACE_MAP (purge,
                                                                 lumiera_config_purge),
-                                         LUMIERA_INTERFACE_MAP (dump, "\317\357\304\076\137\035\100\023\130\021\327\253\314\237\311\045",
+                                         LUMIERA_INTERFACE_MAP (dump,
                                                                 lumiera_config_dump),
-                                         LUMIERA_INTERFACE_INLINE (setdefault, "\344\337\116\131\101\037\175\227\310\151\216\240\125\316\241\115",
+                                         LUMIERA_INTERFACE_INLINE (setdefault,
                                                                    int, (const char* line),
                                                                    {return !!lumiera_config_setdefault (line);}
                                                                    ),
-                                         LUMIERA_INTERFACE_MAP (reset, "\337\143\274\052\364\362\256\353\165\161\352\267\026\204\154\231",
+                                         LUMIERA_INTERFACE_MAP (reset,
                                                                 lumiera_config_reset),
-                                         LUMIERA_INTERFACE_MAP (info, "\355\305\326\372\236\302\122\253\114\024\376\010\326\055\132\130",
+                                         LUMIERA_INTERFACE_MAP (info,
                                                                 lumiera_config_info),
 
-                                         LUMIERA_INTERFACE_MAP (wordlist_get_nth, "\151\224\043\353\244\134\360\125\361\352\236\267\225\371\020\173",
+                                         LUMIERA_INTERFACE_MAP (wordlist_get_nth,
                                                                 lumiera_config_wordlist_get_nth),
-                                         LUMIERA_INTERFACE_MAP (wordlist_find, "\276\103\153\017\257\171\300\277\311\352\027\054\174\017\321\213",
+                                         LUMIERA_INTERFACE_MAP (wordlist_find,
                                                                 lumiera_config_wordlist_find),
-                                         LUMIERA_INTERFACE_INLINE (wordlist_replace, "\365\115\171\203\374\371\236\246\212\021\121\003\161\364\060\011",
+                                         LUMIERA_INTERFACE_INLINE (wordlist_replace,
                                                                    int, (const char* key,
                                                                          const char* value,
                                                                          const char* subst1,
@@ -67,70 +67,70 @@ LUMIERA_EXPORT(
                                                                          const char* delims),
                                                                    {return !!lumiera_config_wordlist_replace (key, value, subst1, subst2, delims);}
                                                                    ),
-                                         LUMIERA_INTERFACE_INLINE (wordlist_add, "\133\255\034\074\300\073\374\067\241\145\302\067\256\301\206\034",
+                                         LUMIERA_INTERFACE_INLINE (wordlist_add,
                                                                    int, (const char* key, const char* value, const char* delims),
                                                                    {return !!lumiera_config_wordlist_add (key, value, delims);}
                                                                    ),
 
-                                         LUMIERA_INTERFACE_INLINE (link_get, "\062\177\332\266\004\256\323\102\252\064\153\054\313\151\124\361",
+                                         LUMIERA_INTERFACE_INLINE (link_get,
                                                                    int, (const char* key, const char** value),
                                                                    {return !!lumiera_config_link_get (key, value);}
                                                                    ),
-                                         LUMIERA_INTERFACE_INLINE (link_set, "\303\273\325\021\071\344\270\041\342\341\233\072\262\216\333\100",
+                                         LUMIERA_INTERFACE_INLINE (link_set,
                                                                    int, (const char* key, const char** value),
                                                                    {return !!lumiera_config_link_set (key, value);}
                                                                    ),
 
-                                         LUMIERA_INTERFACE_INLINE (number_get, "\300\070\066\026\154\053\052\176\212\021\376\240\314\224\235\300",
+                                         LUMIERA_INTERFACE_INLINE (number_get,
                                                                    int, (const char* key, long long* value),
                                                                    {return !!lumiera_config_number_get (key, value);}
                                                                    ),
-                                         LUMIERA_INTERFACE_INLINE (number_set, "\231\142\147\006\243\203\002\354\152\237\147\074\115\363\345\127",
+                                         LUMIERA_INTERFACE_INLINE (number_set,
                                                                    int, (const char* key, long long* value),
                                                                    {return !!lumiera_config_number_set (key, value);}
                                                                    ),
 
-                                         LUMIERA_INTERFACE_INLINE (real_get, "\356\335\127\112\365\220\056\000\051\077\247\013\046\210\164\120",
+                                         LUMIERA_INTERFACE_INLINE (real_get,
                                                                    int, (const char* key, long double* value),
                                                                    {return !!lumiera_config_real_get (key, value);}
                                                                    ),
-                                         LUMIERA_INTERFACE_INLINE (real_set, "\205\011\020\140\014\112\134\076\232\352\246\025\274\227\347\047",
+                                         LUMIERA_INTERFACE_INLINE (real_set,
                                                                    int, (const char* key, long double* value),
                                                                    {return !!lumiera_config_real_set (key, value);}
                                                                    ),
 
-                                         LUMIERA_INTERFACE_INLINE (string_get, "\215\104\350\103\163\245\065\235\373\237\364\155\312\225\027\304",
+                                         LUMIERA_INTERFACE_INLINE (string_get,
                                                                    int, (const char* key, const char** value),
                                                                    {return !!lumiera_config_string_get (key, value);}
                                                                    ),
-                                         LUMIERA_INTERFACE_INLINE (string_set, "\014\003\357\020\117\035\073\353\302\026\231\351\037\051\163\346",
+                                         LUMIERA_INTERFACE_INLINE (string_set,
                                                                    int, (const char* key, const char** value),
                                                                    {return !!lumiera_config_string_set (key, value);}
                                                                    ),
 
-                                         LUMIERA_INTERFACE_INLINE (wordlist_get, "\000\276\355\321\257\366\166\247\246\141\224\304\142\306\047\131",
+                                         LUMIERA_INTERFACE_INLINE (wordlist_get,
                                                                    int, (const char* key, const char** value),
                                                                    {return !!lumiera_config_wordlist_get (key, value);}
                                                                    ),
-                                         LUMIERA_INTERFACE_INLINE (wordlist_set, "\340\352\216\303\161\056\354\264\121\162\003\061\345\001\306\265",
+                                         LUMIERA_INTERFACE_INLINE (wordlist_set,
                                                                    int, (const char* key, const char** value),
                                                                    {return !!lumiera_config_wordlist_set (key, value);}
                                                                    ),
 
-                                         LUMIERA_INTERFACE_INLINE (word_get, "\057\337\302\110\276\332\307\172\035\012\246\315\370\203\226\135",
+                                         LUMIERA_INTERFACE_INLINE (word_get,
                                                                    int, (const char* key, const char** value),
                                                                    {return !!lumiera_config_word_get (key, value);}
                                                                    ),
-                                         LUMIERA_INTERFACE_INLINE (word_set, "\151\276\334\165\173\165\333\224\076\264\352\371\205\174\105\013",
+                                         LUMIERA_INTERFACE_INLINE (word_set,
                                                                    int, (const char* key, const char** value),
                                                                    {return !!lumiera_config_word_set (key, value);}
                                                                    ),
 
-                                         LUMIERA_INTERFACE_INLINE (bool_get, "\204\254\234\117\147\323\210\236\102\234\123\323\124\221\305\234",
+                                         LUMIERA_INTERFACE_INLINE (bool_get,
                                                                    int, (const char* key, int* value),
                                                                    {return !!lumiera_config_bool_get (key, value);}
                                                                    ),
-                                         LUMIERA_INTERFACE_INLINE (bool_set, "\215\151\207\006\032\117\354\053\311\035\261\141\120\117\310\007",
+                                         LUMIERA_INTERFACE_INLINE (bool_set,
                                                                    int, (const char* key, int* value),
                                                                    {return !!lumiera_config_bool_set (key, value);}
                                                                    ),
