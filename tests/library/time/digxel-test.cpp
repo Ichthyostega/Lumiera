@@ -54,7 +54,7 @@ namespace test{
     inline double
     randomFrac()
       {
-        double arbitrary = (rand() % RAND_RANGE);
+        double arbitrary = (1 + rand() % RAND_RANGE);
         arbitrary /= (1 + rand() % RAND_DENOM);
         
         static double prevVal;
