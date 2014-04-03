@@ -27,7 +27,7 @@
 #include "lib/error.hpp"
 #include "meta/dummy-functions.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 using ::test::Test;
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
@@ -38,10 +38,10 @@ namespace lib  {
 namespace meta {
 namespace test {
   
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
-  using std::tr1::placeholders::_2;
-  using std::tr1::bind;
+  using std::function;
+  using std::placeholders::_1;
+  using std::placeholders::_2;
+  using std::bind;
   
   
   typedef FunErasure<StoreFunction> Efun;

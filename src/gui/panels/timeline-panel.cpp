@@ -39,8 +39,8 @@ using namespace gui::widgets;
 using namespace gui::widgets::timeline;
 using namespace gui::model;
 
-using std::tr1::shared_ptr;
-using std::tr1::weak_ptr;
+using std::shared_ptr;
+using std::weak_ptr;
 using util::contains;
 
 namespace gui {

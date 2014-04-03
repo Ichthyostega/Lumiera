@@ -41,12 +41,12 @@
 #include <boost/noncopyable.hpp>
 #include <cairomm/cairomm.h>
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 namespace gui {
   
 using std::string;
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 
 
 namespace model      { class Project; }

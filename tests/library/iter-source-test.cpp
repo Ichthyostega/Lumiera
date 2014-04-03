@@ -31,7 +31,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/noncopyable.hpp>
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -156,10 +156,10 @@ namespace test{
       typedef IterSource<TimeVar>::iterator TimeIter;
       
       typedef std::map<string,TimeVar>                TreeMap;
-      typedef std::tr1::unordered_map<string,TimeVar> HashMap;
+      typedef std::unordered_map<string,TimeVar> HashMap;
       
       typedef std::multimap<int,int>               TreeMultimap;
-      typedef std::tr1::unordered_multimap<int,int>HashMultimap;
+      typedef std::unordered_multimap<int,int>HashMultimap;
       
       
       virtual void

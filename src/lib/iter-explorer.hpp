@@ -255,7 +255,7 @@ namespace lib {
     using util::unConst;
     using boost::enable_if;
     using boost::disable_if;
-    using std::tr1::function;    
+    using std::function;
     using meta::_Fun;
 
     

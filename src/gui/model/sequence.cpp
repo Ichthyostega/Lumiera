@@ -23,11 +23,12 @@
 #include "sequence.hpp"
 #include "include/logging.h"
 
+#include <memory>
+
 // TEST CODE
 #include "group-track.hpp"
 #include "clip-track.hpp"
 
-using namespace std::tr1;
 
 namespace gui {
 namespace model {
@@ -37,8 +38,8 @@ Sequence::Sequence()
   // TEST CODE
   static bool first = true;
   
-  shared_ptr<GroupTrack> group_track, group_track2;
-  shared_ptr<ClipTrack> clip_track;
+  std::shared_ptr<GroupTrack> group_track, group_track2;
+  std::shared_ptr<ClipTrack> clip_track;
   tracks.push_back(group_track = shared_ptr<GroupTrack>(new GroupTrack()));
   group_track->set_name("Group Track");
     

@@ -54,13 +54,13 @@
 //#include <string>
 //#include <vector>
 #include <boost/rational.hpp>
-#include <tr1/memory>
+#include <memory>
 //#include <boost/scoped_ptr.hpp>
 
 namespace lib {
 namespace time{
   class Quantiser;
-  typedef std::tr1::shared_ptr<const Quantiser> PQuant;
+  typedef std::shared_ptr<const Quantiser> PQuant;
 }}
 
 namespace proc {
@@ -75,7 +75,7 @@ namespace play {
 //using std::string;
 
 //using std::vector;
-//using std::tr1::shared_ptr;
+//using std::shared_ptr;
 //using boost::scoped_ptr;
   
   enum PlaybackUrgency {

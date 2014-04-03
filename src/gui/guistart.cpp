@@ -62,14 +62,14 @@ extern "C" {
 #include "common/interfacedescriptor.h"
 }
 
-#include <tr1/functional>
+#include <functional>
 #include <string>
 
 
 
 using std::string;
 using backend::Thread;
-using std::tr1::bind;
+using std::bind;
 using lumiera::Subsys;
 using lumiera::error::LUMIERA_ERROR_STATE;
 using gui::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);

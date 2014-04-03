@@ -61,13 +61,13 @@
 #include "lib/opaque-holder.hpp"
 #include "lib/functor-util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 namespace lib {
 namespace meta{
   
-  using std::tr1::function;
+  using std::function;
   using util::unConst;
   
   

@@ -31,7 +31,7 @@
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
@@ -359,9 +359,9 @@ namespace test    {
           typedef function<void()> OpFun;
           
           // now close all the functions with the stored parameter values...
-          OpFun bound_doItFun = std::tr1::bind (&CmdClosure::invoke, args, CmdFunctor(doItFun));
-          OpFun bound_undoFun = std::tr1::bind (&CmdClosure::invoke, args, CmdFunctor(undoFun));
-          OpFun bound_captFun = std::tr1::bind (&CmdClosure::invoke, args, CmdFunctor(captFun));
+          OpFun bound_doItFun = std::bind (&CmdClosure::invoke, args, CmdFunctor(doItFun));
+          OpFun bound_undoFun = std::bind (&CmdClosure::invoke, args, CmdFunctor(undoFun));
+          OpFun bound_captFun = std::bind (&CmdClosure::invoke, args, CmdFunctor(captFun));
           
           protocol.seekp(0);
           protocol << "START...";

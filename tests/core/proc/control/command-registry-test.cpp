@@ -30,7 +30,7 @@
 
 #include "proc/control/test-dummy-commands.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 namespace proc {
@@ -38,7 +38,7 @@ namespace control {
 namespace test    {
   
   
-  using std::tr1::function;
+  using std::function;
   using util::isSameObject;
   using lib::Symbol;
   

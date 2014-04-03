@@ -27,12 +27,12 @@
 #include "lib/sync.hpp"
 #include "lib/util-foreach.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/format.hpp>
 
-using std::tr1::static_pointer_cast;
-using std::tr1::function;
-using std::tr1::placeholders::_1;
+using std::static_pointer_cast;
+using std::function;
+using std::placeholders::_1;
 using boost::format;
 using util::for_each;
 
@@ -165,7 +165,7 @@ namespace asset {
   bool
   AssetManager::known (IDA id)
   {
-    return ( registry.get (ID<Asset>(id)) );
+    return bool(registry.get (ID<Asset>(id)));
   }       // query most general Asset ID-kind and use implicit 
          //  conversion from smart-ptr to bool (test if empty)
   

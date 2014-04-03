@@ -31,7 +31,7 @@
 #include "lib/util-foreach.hpp"
 #include "lib/symbol.hpp"
 
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <iostream>
 #include <string>
 
@@ -249,7 +249,7 @@ namespace test {
       
       
                                    //---key--+-value-+-hash-function--- 
-      typedef std::tr1::unordered_map<DummyID, string, DummyID::UseEmbeddedHash> Hashtable;
+      typedef std::unordered_map<DummyID, string, DummyID::UseEmbeddedHash> Hashtable;
       
       /** @test build a hashtable, using EntryID as key,
        *        thereby using the embedded hash-ID */

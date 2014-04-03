@@ -27,10 +27,10 @@
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 
-using std::tr1::bind;
+using std::bind;
 using util::contains; 
 using util::for_each; 
 using std::string;

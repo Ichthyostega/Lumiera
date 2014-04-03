@@ -49,7 +49,7 @@
 #include "lib/util-foreach.hpp"
 #include "lib/sync.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <cstdlib>
 #include <vector>
 #include <time.h>
@@ -62,9 +62,9 @@ namespace test{
   using backend::ThreadJoinable;
   using util::for_each;
   using util::isnil;
-  using std::tr1::placeholders::_1;
-  using std::tr1::bind;
-  using std::tr1::ref;
+  using std::placeholders::_1;
+  using std::bind;
+  using std::ref;
   using std::vector;
   using std::rand;
   

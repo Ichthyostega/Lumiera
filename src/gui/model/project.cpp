@@ -20,13 +20,12 @@
 
 * *****************************************************/
 
-#include <boost/foreach.hpp>
 
 #include "project.hpp"
 #include "sequence.hpp"
 
-using namespace std;
-using namespace std::tr1;
+#include <memory>
+
 
 namespace gui {
 namespace model {
@@ -52,7 +51,7 @@ Project::get_sequences()
 void
 Project::add_new_sequence(uString name)
 {
-  shared_ptr<Sequence> sequence(new Sequence());
+  std::shared_ptr<Sequence> sequence(new Sequence());
   sequence->set_name(name);
   sequences.push_back(sequence);
 }

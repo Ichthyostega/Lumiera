@@ -32,13 +32,13 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/memory>
+#include <memory>
 #include <iostream>
 
 using lib::HashIndexed;
 using lib::test::Depend4Test;
 
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 using std::string;
 using std::cout;
 using std::endl;

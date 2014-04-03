@@ -30,7 +30,7 @@
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <string>
 #include <vector>
 #include <cstdlib>
@@ -42,7 +42,7 @@ namespace test {
   namespace { // test fixture: a random Tree to navigate...
     
     using std::rand;
-    using std::tr1::function;
+    using std::function;
     using lib::transformIterator;
     using lib::iter_stl::eachAddress;
     using util::contains;

@@ -62,8 +62,8 @@
 #include "lib/depend.hpp"
 #include "util.hpp"
 
-#include <tr1/functional>
-#include <tr1/memory>
+#include <functional>
+#include <memory>
 #include <map>
 
 
@@ -95,7 +95,7 @@ namespace lib {
     struct BuildRefcountPtr
       {
         typedef TAR*                      RType;
-        typedef std::tr1::shared_ptr<TAR> PType;
+        typedef std::shared_ptr<TAR> PType;
         
         PType wrap (RType ptr) { return PType (ptr); }
       };
@@ -113,7 +113,7 @@ namespace lib {
     template<typename SIG, typename ID>
     struct Fab
       {
-        typedef std::tr1::function<SIG> FactoryFunc;
+        typedef std::function<SIG> FactoryFunc;
         
         
         FactoryFunc&
@@ -230,7 +230,7 @@ namespace lib {
             Creator
             createSingleton_accessFunction()
               {
-                return std::tr1::bind (&SingFac::operator()
+                return std::bind (&SingFac::operator()
                                       , static_cast<SingFac*>(this));
               }
             

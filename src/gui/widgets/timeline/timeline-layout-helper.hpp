@@ -30,6 +30,7 @@
 #include "gui/gtk-lumiera.hpp"
 #include "lib/tree.hpp"
 
+#include <memory>
 #include <boost/optional.hpp>
 
 namespace gui {
@@ -45,6 +46,8 @@ class TimelineWidget;
   
 namespace timeline {
   
+using std::shared_ptr;
+  
 class Track;
 
 /**
@@ -59,7 +62,7 @@ public:
   /**
    * Definition of the layout track tree type.
    */
-  typedef lib::Tree< std::tr1::shared_ptr<model::Track> > TrackTree;
+  typedef lib::Tree< std::shared_ptr<model::Track> > TrackTree;
   
 public:
   /**
@@ -101,7 +104,7 @@ public:
    * @see update_layout()
    */
   boost::optional<Gdk::Rectangle> get_track_header_rect(
-    std::tr1::weak_ptr<timeline::Track> track);
+    std::weak_ptr<timeline::Track> track);
   
   /**
    * Searches for a header which has the specified point inside of it.
@@ -363,7 +366,7 @@ protected:
    * the update_layout method.
    * @see update_layout()
    */
-  std::map<std::tr1::weak_ptr<timeline::Track>, Gdk::Rectangle>
+  std::map<std::weak_ptr<timeline::Track>, Gdk::Rectangle>
     headerBoxes;
   
   /**

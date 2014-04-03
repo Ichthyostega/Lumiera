@@ -29,7 +29,7 @@
 #include "lib/util.hpp"
 #include "lib/util-quant.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/regex.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -277,8 +277,8 @@ namespace time {
     }
     
     
-    using std::tr1::bind;
-    using std::tr1::placeholders::_1;
+    using std::bind;
+    using std::placeholders::_1;
     
     /** bind the individual Digxel mutation functors
      *  to normalise raw component values */

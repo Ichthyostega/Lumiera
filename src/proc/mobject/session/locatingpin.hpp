@@ -51,7 +51,7 @@
 #include "lib/time/timevalue.hpp"
 
 #include <utility>
-#include <tr1/memory>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 using boost::scoped_ptr;
 
@@ -102,7 +102,7 @@ namespace mobject {
         typedef lib::time::TimeVar TimeVar;
         typedef lib::time::Offset Offset;
         typedef Time* Track; //TODO dummy declaration; we don't use Tracks as first-class entity any longer
-        typedef std::tr1::shared_ptr<asset::Pipe> Pipe;
+        typedef std::shared_ptr<asset::Pipe> Pipe;
         typedef std::pair<Time,Pipe> SolutionData;  //TICKET #100 (ichthyo considers better passing of solution by subclass)
         struct LocatingSolution;
       

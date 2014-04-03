@@ -58,7 +58,7 @@
 
 #include <set>
 #include <vector>
-#include <tr1/memory>
+#include <memory>
 #include <boost/utility.hpp>
 #include <boost/lambda/lambda.hpp>
 
@@ -68,7 +68,7 @@ namespace query  {
   
   using lib::P;
   using lib::ClassLock;
-  using std::tr1::weak_ptr;
+  using std::weak_ptr;
   
   using std::string;
   using boost::lambda::_1;

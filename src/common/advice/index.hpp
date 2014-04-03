@@ -96,7 +96,7 @@
 #include "common/advice/binding.hpp"
 
 #include <boost/operators.hpp>
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <iostream>
 #include <string>
 
@@ -105,8 +105,8 @@ namespace advice {
   
   namespace error = lumiera::error;
   
-  using std::tr1::placeholders::_1;
-  using std::tr1::unordered_map;
+  using std::placeholders::_1;
+  using std::unordered_map;
   using lib::iter_stl::eachVal;
   using lib::iter_stl::eachElm;
   using util::for_each;

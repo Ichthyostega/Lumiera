@@ -31,7 +31,7 @@
 #include "lib/time/timevalue.hpp"
 
 #include <string>
-#include <tr1/memory>
+#include <memory>
 #include <cairomm/cairomm.h>
 
 
@@ -40,7 +40,7 @@ namespace widgets {
 namespace timeline {
   
   using lib::time::Time;
-  using std::tr1::shared_ptr;
+  using std::shared_ptr;
   
   
   class DrawStrategy;

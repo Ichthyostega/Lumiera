@@ -29,11 +29,11 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <tr1/functional>
-#include <tr1/memory>
+#include <functional>
+#include <memory>
 #include <string>
 
-using std::tr1::function;
+using std::function;
 
 namespace lumiera {
   
@@ -47,7 +47,7 @@ namespace lumiera {
   class QueryDispatcher;
   
   /** Allow for taking ownership of a result set */
-  typedef std::tr1::shared_ptr<Resolution> PReso;
+  typedef std::shared_ptr<Resolution> PReso;
   
   
   /** 

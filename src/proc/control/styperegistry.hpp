@@ -44,7 +44,7 @@
 
 //#include <set>
 //#include <vector>
-//#include <tr1/memory>
+//#include <memory>
 //#include <boost/format.hpp>
 #include <boost/noncopyable.hpp>
 

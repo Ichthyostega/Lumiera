@@ -29,9 +29,9 @@
 #include "lib/error.hpp"
 #include "lib/sync.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
-using std::tr1::bind;
+using std::bind;
 using test::Test;
 
 

@@ -29,14 +29,14 @@
 #include "proc/mobject/placement.hpp"
 #include "common/query/query-resolver.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 namespace proc {
 namespace mobject {
 namespace session {
   
-  using std::tr1::function;
+  using std::function;
   
   using lumiera::QueryResolver;
   

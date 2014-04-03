@@ -30,7 +30,7 @@
 #include "lib/meta/generator.hpp"
 #include "lib/typed-counter.hpp"
 
-#include <tr1/memory>
+#include <memory>
 #include <string>
 #include <bitset>
 
@@ -49,7 +49,7 @@ namespace time {
   
   class Quantiser; // API for grid aligning
   typedef Quantiser const& QuantR;
-  typedef std::tr1::shared_ptr<const Quantiser> PQuant;
+  typedef std::shared_ptr<const Quantiser> PQuant;
   
   
   namespace format {

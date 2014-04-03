@@ -24,16 +24,16 @@
 
 #include <boost/foreach.hpp>
 #include <typeinfo>
-
-using namespace Gtk;
-using namespace std;
-using namespace std::tr1;
-
-using namespace util;
-using namespace gui::widgets::timeline;
+#include <memory>
 
 using lib::time::Time;
 using lib::time::TimeValue;
+using std::dynamic_pointer_cast;
+
+using namespace Gtk;
+
+using namespace util;
+using namespace gui::widgets::timeline;
 
 namespace gui {
 namespace widgets {

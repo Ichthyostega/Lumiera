@@ -53,14 +53,14 @@
 
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/noncopyable.hpp>
-#include <tr1/memory>
+#include <memory>
 
 
 
 
 namespace lib {
   
-  using std::tr1::shared_ptr;
+  using std::shared_ptr;
   
   
   

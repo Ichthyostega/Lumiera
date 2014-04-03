@@ -33,12 +33,12 @@
 #include "proc/mobject/placement.hpp"
 #include "common/query.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 #include <set>
 
-using std::tr1::ref;
-using std::tr1::placeholders::_1;
+using std::ref;
+using std::placeholders::_1;
 using util::isSameObject;
 using util::and_all;
 using std::string;

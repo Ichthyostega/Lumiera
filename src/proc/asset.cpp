@@ -28,13 +28,13 @@
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <string>
 
 
-using std::tr1::function;
-using std::tr1::placeholders::_1;
-using std::tr1::bind;
+using std::function;
+using std::placeholders::_1;
+using std::bind;
 using util::contains;
 using util::removeall;
 using util::for_each;

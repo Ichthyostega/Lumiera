@@ -36,14 +36,14 @@
 
 #include "lib/time/timevalue.hpp"
 
-#include <tr1/memory>
+#include <memory>
 
 using namespace gui::widgets;
 
 namespace gui {
   
-using std::tr1::shared_ptr;
-using std::tr1::weak_ptr;
+using std::shared_ptr;
+using std::weak_ptr;
 
 
 namespace model {

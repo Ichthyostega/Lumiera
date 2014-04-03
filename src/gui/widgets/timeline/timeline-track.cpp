@@ -29,7 +29,7 @@
 using namespace Gtk;
 using namespace sigc;
 
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 
 namespace gui {
 namespace widgets {

@@ -46,7 +46,7 @@
 #include "lib/hash-value.h"
 #include "lib/functor-util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/functional/hash.hpp>
 
 
@@ -54,9 +54,9 @@ namespace proc {
 namespace engine {
   
   using lib::HashVal;
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
+  using std::bind;
+  using std::function;
+  using std::placeholders::_1;
   
   namespace error = lumiera::error;
   

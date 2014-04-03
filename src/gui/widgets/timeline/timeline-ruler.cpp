@@ -36,7 +36,7 @@ using namespace gui;
 using namespace gui::widgets;
 using namespace gui::widgets::timeline;
 
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 using gui::util::CairoUtil;
 using lib::time::Time;
 using lib::time::TimeVar;

@@ -87,7 +87,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
-#include <tr1/memory>
+#include <memory>
 #include <typeinfo>
 #include <cctype>
 #include <string>
@@ -113,7 +113,7 @@ namespace lumiera {
 
   
   /** Allow for taking ownership of a result set */
-  typedef std::tr1::shared_ptr<Resolution> PReso;
+  typedef std::shared_ptr<Resolution> PReso;
 
   
   

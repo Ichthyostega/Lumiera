@@ -29,7 +29,7 @@
 #include "proc/mobject/mobject-ref.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <string>
 
 
@@ -39,9 +39,9 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using std::tr1::placeholders::_1;
-  using std::tr1::function;
-  using std::tr1::bind;
+  using std::placeholders::_1;
+  using std::function;
+  using std::bind;
   using std::string;
   
   using util::cStr;

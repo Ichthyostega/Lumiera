@@ -49,7 +49,7 @@
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <string>
 
 
@@ -135,7 +135,7 @@ namespace control {
       function<SIG> 
       tieUndoFunc()
         {
-          using std::tr1::bind;
+          using std::bind;
           
           return bindLast( undo_           // getState() bound to last argument of undo(...)
                          , bind (&MementoTie::getState, this)
@@ -150,7 +150,7 @@ namespace control {
       function<SIG>
       tieCaptureFunc()
         {
-          using std::tr1::placeholders::_1;
+          using std::placeholders::_1;
           
           function<void(MEM)> doCaptureMemento = bind (&MementoTie::capture, this, _1 );
           

@@ -24,7 +24,7 @@
 #include "proc/asset/clip.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
 
-using std::tr1::static_pointer_cast;
+using std::static_pointer_cast;
 
 
 namespace proc {

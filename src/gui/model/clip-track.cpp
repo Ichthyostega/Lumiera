@@ -24,7 +24,6 @@
 
 #include "clip.hpp"
 
-using namespace std::tr1;
 
 namespace gui {
 namespace model {

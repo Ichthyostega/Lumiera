@@ -37,7 +37,7 @@ using namespace std;
 using namespace lumiera;
 
 using gui::util::CairoUtil;
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 
 namespace gui {
 namespace widgets {

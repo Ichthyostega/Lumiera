@@ -70,8 +70,8 @@
 #include "lib/meta/tuple.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/memory>
-#include <tr1/functional>
+#include <memory>
+#include <functional>
 
 
 
@@ -79,10 +79,10 @@
 namespace proc {
 namespace control {
   
-  using std::tr1::shared_ptr;
-  using std::tr1::function;
-  using std::tr1::bind;
-  using std::tr1::placeholders::_1;
+  using std::shared_ptr;
+  using std::function;
+  using std::bind;
+  using std::placeholders::_1;
   using lib::Symbol;
   using util::cStr;
   

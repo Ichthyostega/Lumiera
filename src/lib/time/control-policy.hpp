@@ -106,7 +106,7 @@
 #include "lib/time/timevalue.hpp"
 
 #include <boost/utility/enable_if.hpp>
-#include <tr1/functional>
+#include <functional>
 
 
 namespace lib {
@@ -116,10 +116,10 @@ namespace mutation {
   
   using boost::disable_if;
   using lib::meta::is_sameType;
-  using std::tr1::placeholders::_1;
-  using std::tr1::function;
-  using std::tr1::bind;
-  using std::tr1::ref;
+  using std::placeholders::_1;
+  using std::function;
+  using std::bind;
+  using std::ref;
   
   
   

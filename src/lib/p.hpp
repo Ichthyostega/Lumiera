@@ -22,7 +22,7 @@
 
 /** @file p.hpp
  ** Customised refcounting smart pointer.
- ** Template derived from std::tr1::shared_ptr adding total ordering and 
+ ** Template derived from std::shared_ptr adding total ordering and
  ** type relationships implemented by forwarding to the pointees. In all other
  ** respects, it should behave exactly as shared_ptr and is able to cooperate
  ** and share ownership with other shared_ptr instantiations.
@@ -51,17 +51,17 @@
 
 
 #include "lib/error.hpp"
-#include <tr1/memory>
+#include <memory>
 
 
 namespace lib {
   
-  using std::tr1::shared_ptr;
-  using std::tr1::weak_ptr;
+  using std::shared_ptr;
+  using std::weak_ptr;
   
   /**
    * Customised refcounting smart pointer template, built upon
-   * std::tr1::shared_ptr, but forwarding type relationships and
+   * std::shared_ptr, but forwarding type relationships and
    * ordering operators to the pointee objects.
    * @param TAR the visible pointee type
    * @param BASE the shared-ptr type used as implementation

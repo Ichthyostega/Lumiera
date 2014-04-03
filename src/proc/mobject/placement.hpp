@@ -74,7 +74,7 @@
 
 #include "proc/asset/pipe.hpp"   //////////////TICKET #109 : get rid of this
 
-#include <tr1/memory>
+#include <memory>
 
 
 namespace proc {
@@ -85,8 +85,8 @@ namespace mobject {
   class MObject;
   class ExplicitPlacement;
   
-  using std::tr1::shared_ptr;
-  using std::tr1::static_pointer_cast;
+  using std::shared_ptr;
+  using std::static_pointer_cast;
   using lib::HashIndexed;
   
   

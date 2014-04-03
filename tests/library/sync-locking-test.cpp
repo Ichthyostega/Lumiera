@@ -28,9 +28,9 @@
 #include "backend/thread-wrapper.hpp"
 
 #include <iostream>
-#include <tr1/functional>
+#include <functional>
 
-using std::tr1::bind;
+using std::bind;
 
 using std::cout;
 using test::Test;

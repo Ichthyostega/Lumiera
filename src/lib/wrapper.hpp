@@ -48,7 +48,7 @@
 
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/noncopyable.hpp>
-#include <tr1/functional>
+#include <functional>
 
 
 namespace lib {
@@ -60,7 +60,7 @@ namespace wrapper {
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   using boost::remove_const;
-  using std::tr1::function;
+  using std::function;
   
   
   /** 
@@ -71,9 +71,9 @@ namespace wrapper {
    */
   template<typename TY>
   class AssignableRefWrapper
-    : public std::tr1::reference_wrapper<TY>
+    : public std::reference_wrapper<TY>
     {
-      typedef std::tr1::reference_wrapper<TY> RefWrapper;
+      typedef std::reference_wrapper<TY> RefWrapper;
     public:
       
       explicit AssignableRefWrapper(TY& ref)
@@ -378,8 +378,8 @@ namespace wrapper {
       template<typename FUN>
       FunctionResult (FUN targetFunction)
         {
-          using std::tr1::bind;
-          using std::tr1::placeholders::_1;
+          using std::bind;
+          using std::placeholders::_1;
           using lib::meta::func::chained;
                                                       // note: binding "this" mandates noncopyable
           function<Res(Res)> doCaptureResult  = bind (&FunctionResult::captureResult, this, _1 );

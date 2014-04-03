@@ -55,7 +55,7 @@
 #include "lib/meta/configflags.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <bitset>
 #include <map>
 
@@ -112,7 +112,7 @@ namespace config {
           >
   class ConfigSelector
     {
-      typedef std::tr1::function<FUNC> FacFunction;
+      typedef std::function<FUNC> FacFunction;
       
       template<class FAC>
       struct FactoryHolder ///< impl type erasure
@@ -126,7 +126,7 @@ namespace config {
         };
       
       
-      typedef std::tr1::shared_ptr<FacFunction> PFunc;
+      typedef std::shared_ptr<FacFunction> PFunc;
       typedef std::map<IxID, PFunc> ConfigTable;
       
       ConfigTable possibleConfig_; ///< Table of factories

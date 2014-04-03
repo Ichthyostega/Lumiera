@@ -56,7 +56,7 @@ namespace lumiera {
   
   namespace time = lib::time;
   
-  using std::tr1::weak_ptr;
+  using std::weak_ptr;
     
     
     /**************************************************************//**

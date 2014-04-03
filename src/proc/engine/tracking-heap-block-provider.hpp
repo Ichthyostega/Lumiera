@@ -48,7 +48,7 @@
 #include "proc/engine/buffer-provider.hpp"
 #include "lib/scoped-ptrvect.hpp"
 
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 
@@ -114,7 +114,7 @@ namespace engine {
       
     class BlockPool;
     
-    typedef std::tr1::unordered_map<HashVal,BlockPool> PoolTable;
+    typedef std::unordered_map<HashVal,BlockPool> PoolTable;
   }
   
   

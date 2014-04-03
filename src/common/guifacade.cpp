@@ -30,7 +30,7 @@
 #include "common/instancehandle.hpp"
 
 #include <boost/scoped_ptr.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <string>
 
 
@@ -38,8 +38,8 @@ namespace gui {
   
   using std::string;
   using boost::scoped_ptr;
-  using std::tr1::bind;
-  using std::tr1::placeholders::_1;
+  using std::bind;
+  using std::placeholders::_1;
   using lumiera::Subsys;
   using lumiera::InstanceHandle;
   using util::dispatchSequenced;

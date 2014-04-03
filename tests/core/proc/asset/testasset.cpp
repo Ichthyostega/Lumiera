@@ -24,7 +24,7 @@
 #include "proc/asset/testasset.hpp"
 #include "proc/assetmanager.hpp"
 
-using std::tr1::static_pointer_cast;
+using std::static_pointer_cast;
 
 
 namespace proc {

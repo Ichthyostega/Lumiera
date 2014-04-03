@@ -34,11 +34,11 @@
 #include "lib/util.hpp"
 #include "lib/sync.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 
 using std::cout;
-using std::tr1::bind;
+using std::bind;
 using util::isnil;
 using util::cStr;
 using test::Test;

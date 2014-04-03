@@ -79,8 +79,8 @@
 #include "proc/control/argument-erasure.hpp"
 #include "lib/typed-allocation-manager.hpp"
 
-#include <tr1/memory>
-#include <tr1/functional>
+#include <memory>
+#include <functional>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -102,7 +102,7 @@ namespace control {
   using lib::meta::equals_safeInvoke;
   using lib::TypedAllocationManager;
   using util::unConst;
-  using std::tr1::function;
+  using std::function;
   using std::ostream;
   using std::string;
   
@@ -121,7 +121,7 @@ namespace control {
   
   
   class CmdClosure;
-  typedef std::tr1::shared_ptr<CmdClosure> PClo;
+  typedef std::shared_ptr<CmdClosure> PClo;
   
   
   

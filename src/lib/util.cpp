@@ -24,7 +24,7 @@
 #include "lib/util.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <boost/bind.hpp>          // we need operator! for bind-expressions
 
 using boost::algorithm::trim_right_copy_if;
@@ -35,7 +35,7 @@ using boost::algorithm::is_space;
 
 namespace util {
 
-  using std::tr1::function;
+  using std::function;
   
   typedef function<bool(string::value_type)> ChPredicate;
   ChPredicate operator! (ChPredicate p) { return ! bind(p,_1); }

@@ -37,7 +37,7 @@
 namespace proc {
 namespace engine {
   
-//  using std::tr1::function;
+//  using std::function;
   using backend::engine::JobParameter;
   using backend::engine::JobClosure;
   using mobject::ModelPort;

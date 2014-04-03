@@ -83,8 +83,8 @@ namespace asset {
   namespace error = lumiera::error;
   
   using std::size_t;
-  using std::tr1::shared_ptr;
-  using std::tr1::static_pointer_cast;
+  using std::shared_ptr;
+  using std::static_pointer_cast;
   
   using lib::HashVal;
   using lib::P;

@@ -44,7 +44,7 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/track.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 
@@ -52,9 +52,9 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
+  using std::bind;
+  using std::function;
+  using std::placeholders::_1;
   
   ////////////TODO: shall we use a sub-namespace "query" ??
   

@@ -42,11 +42,14 @@
 
 #include "lib/time/timevalue.hpp"
 
+#include <memory>
+
 
 namespace gui {
 namespace widgets {
 
 using lib::time::Time;
+using std::shared_ptr;
 
   
 /**

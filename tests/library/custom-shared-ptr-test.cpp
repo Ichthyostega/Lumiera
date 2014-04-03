@@ -35,8 +35,8 @@ namespace lib {
 namespace test{
   
   using std::string;
-  using std::tr1::shared_ptr;
-  using std::tr1::weak_ptr;
+  using std::shared_ptr;
+  using std::weak_ptr;
   
   using lumiera::error::LUMIERA_ERROR_ASSERTION;
   

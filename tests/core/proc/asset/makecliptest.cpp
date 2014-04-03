@@ -38,7 +38,7 @@ using util::contains;
 using util::isnil;
 using std::string;
 
-using std::tr1::static_pointer_cast; //TODO only temporarily;
+using std::static_pointer_cast; //TODO only temporarily;
 
 namespace proc {
 namespace asset{

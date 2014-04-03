@@ -76,7 +76,7 @@ namespace engine{
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
-//  using std::tr1::function;
+//  using std::function;
   using mobject::ModelPort;
   using proc::play::Timings;
   

@@ -49,14 +49,14 @@
 
 #include "lib/meta/typelist.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 
 namespace lib {
 namespace meta{
 
-  using std::tr1::function;
+  using std::function;
   
   
   

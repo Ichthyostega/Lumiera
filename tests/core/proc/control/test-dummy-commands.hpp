@@ -41,7 +41,7 @@
 #include "lib/error.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <sstream>
 #include <string>
 
@@ -51,7 +51,7 @@ namespace control {
 namespace test    {
   
   using std::ostringstream;
-  using std::tr1::function;
+  using std::function;
   using std::string;
   
   

@@ -47,7 +47,7 @@
 #include "common/option.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -57,7 +57,7 @@ namespace lumiera {
   
   using std::string;
   using boost::noncopyable;
-  using std::tr1::function;
+  using std::function;
   
   
   

@@ -29,8 +29,8 @@
 #include "lib/error.hpp"
 #include "proc/asset.hpp"
 
-#include <tr1/memory>
-#include <tr1/unordered_map>
+#include <memory>
+#include <unordered_map>
 // #include <boost/functional/hash.hpp>   /////////TODO which boost include to use here??
 #include <boost/utility.hpp>
 
@@ -38,8 +38,8 @@
 namespace proc {
 namespace asset {
   
-  using std::tr1::static_pointer_cast;
-  using std::tr1::dynamic_pointer_cast;
+  using std::static_pointer_cast;
+  using std::dynamic_pointer_cast;
   
   using lib::Sync;
   using lib::RecursiveLock_NoWait;
@@ -77,7 +77,7 @@ namespace asset {
       operator() (size_t val)  const { return val; }
     };
   
-  typedef std::tr1::unordered_map<size_t, PAsset, IdentityHash> IdHashtable;
+  typedef std::unordered_map<size_t, PAsset, IdentityHash> IdHashtable;
   
   
   

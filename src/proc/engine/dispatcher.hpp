@@ -33,13 +33,13 @@
 #include "lib/time/timevalue.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <tr1/functional>
+#include <functional>
 
 
 namespace proc {
 namespace engine {
   
-  using std::tr1::function;
+  using std::function;
   using mobject::ModelPort;
   using lib::time::FrameCnt;
   using lib::time::TimeSpan;

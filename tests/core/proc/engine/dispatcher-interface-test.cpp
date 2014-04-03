@@ -38,14 +38,14 @@
 
 //#include <boost/scoped_ptr.hpp>
 //#include <iostream>
-#include <tr1/functional>
+#include <functional>
 #include <vector>
 
 using test::Test;
 using util::isnil;
 using util::last;
 using std::vector;
-using std::tr1::function;
+using std::function;
 //using std::cout;
 //using std::rand;
 

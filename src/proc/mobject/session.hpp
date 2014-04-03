@@ -59,7 +59,7 @@
 #include "lib/p.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <tr1/memory>
+#include <memory>
 
 
 
@@ -75,7 +75,7 @@ namespace mobject {
     class SessManager;
     class ElementQuery;
     class Fixture;
-    typedef std::tr1::shared_ptr<Fixture> PFix;
+    typedef std::shared_ptr<Fixture> PFix;
   }
   
   typedef session::SessManager& PSess;  ///< acts as a "PImpl" smart ptr

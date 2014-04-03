@@ -38,7 +38,7 @@ using lib::time::Offset;
 using lib::time::Duration;
 using lib::time::Mutation;
 using lib::time::Control;
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 
 
 TimelineState::TimelineState (shared_ptr<model::Sequence> source_sequence)

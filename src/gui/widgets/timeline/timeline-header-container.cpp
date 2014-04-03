@@ -28,9 +28,12 @@
 #include "gui/widgets/timeline-widget.hpp"
 #include "gui/util/rectangle.hpp"
 
+#include <memory>
+
+using std::pair;
+using std::shared_ptr;
+
 using namespace Gtk;
-using namespace std;
-using namespace std::tr1;
 using namespace util;
 
 namespace gui {

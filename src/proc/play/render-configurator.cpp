@@ -29,8 +29,8 @@
 
 //#include <string>
 //#include <memory>
-#include <tr1/memory>
-#include <tr1/functional>
+#include <memory>
+#include <functional>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -43,9 +43,9 @@ namespace play {
 //    using lumiera::Subsys;
 //    using std::auto_ptr;
 //    using boost::scoped_ptr;
-  using std::tr1::shared_ptr;
-  using std::tr1::bind;
-  using std::tr1::placeholders::_1;
+  using std::shared_ptr;
+  using std::bind;
+  using std::placeholders::_1;
   using engine::EngineService;
   
   typedef EngineService::QoS_Definition RenderQuality;
@@ -53,9 +53,9 @@ namespace play {
   
   namespace { // Implementation details...
     
-//    using std::tr1::bind;
-//    using std::tr1::function;
-//    using std::tr1::placeholders::_1;
+//    using std::bind;
+//    using std::function;
+//    using std::placeholders::_1;
 //    using lib::transform;
     
     class LumieraRenderProcessBuilder

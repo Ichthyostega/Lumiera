@@ -30,16 +30,16 @@
 #include "common/subsys.hpp"
 #include "lib/sync.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <vector>
 #include <string>
 
 
 namespace lumiera {
 
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
+  using std::bind;
+  using std::function;
+  using std::placeholders::_1;
   using std::vector;
   using std::string;
   using util::cStr;

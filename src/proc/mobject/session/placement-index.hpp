@@ -112,7 +112,7 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -171,7 +171,7 @@ namespace session {
       
       
       typedef PlacementMO::ID _PID;
-      typedef std::tr1::unordered_multimap<_PID,_PID>::const_iterator  ScopeIter;
+      typedef std::unordered_multimap<_PID,_PID>::const_iterator  ScopeIter;
       typedef lib::RangeIter<ScopeIter>                           ScopeRangeIter;
       typedef lib::TransformIter<ScopeRangeIter, PlacementMO&> _ID_TableIterator;
       

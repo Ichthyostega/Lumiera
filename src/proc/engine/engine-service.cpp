@@ -26,7 +26,7 @@
 
 //#include <string>
 //#include <memory>
-#include <tr1/functional>
+#include <functional>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -38,9 +38,9 @@ namespace engine{
 //    using lumiera::Subsys;
 //    using std::auto_ptr;
 //    using boost::scoped_ptr;
-  using std::tr1::function;
-  using std::tr1::bind;
-  using std::tr1::ref;
+  using std::function;
+  using std::bind;
+  using std::ref;
   using lib::transform;
   using lib::append_all;
 

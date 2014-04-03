@@ -24,7 +24,6 @@
 #include "gui/widgets/timeline-widget.hpp"
 
 using namespace Gtk;
-using namespace std::tr1;
 using namespace sigc;
 
 namespace gui {
@@ -32,7 +31,7 @@ namespace widgets {
 namespace timeline {
   
 GroupTrack::GroupTrack(TimelineWidget &timeline_widget,
-  shared_ptr<model::GroupTrack> track) :
+  std::shared_ptr<model::GroupTrack> track) :
   Track(timeline_widget, track)
 { 
   REQUIRE (track);

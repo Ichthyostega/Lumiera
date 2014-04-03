@@ -27,7 +27,7 @@
 using namespace gui::widgets;
 
 using lib::time::Mutation;
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 
 namespace gui {
 namespace widgets {

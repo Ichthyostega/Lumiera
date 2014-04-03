@@ -70,7 +70,7 @@
 
 #include <boost/operators.hpp>
 #include <boost/lexical_cast.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <string>
 #include <cstdio>
 #include <cmath>
@@ -196,9 +196,9 @@ namespace time {
   
   
   
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
+  using std::bind;
+  using std::function;
+  using std::placeholders::_1;
   
   
   /**

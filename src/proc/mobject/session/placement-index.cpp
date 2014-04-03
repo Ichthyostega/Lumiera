@@ -62,9 +62,9 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
-#include <tr1/unordered_map>
-#include <tr1/functional>
-#include <tr1/memory>
+#include <unordered_map>
+#include <functional>
+#include <memory>
 #include <string>
 
 
@@ -75,15 +75,15 @@ namespace session {
   using boost::hash;
   using boost::noncopyable;
   using boost::lambda::var;
-  using std::tr1::shared_ptr;
-  using std::tr1::unordered_map;
-  using std::tr1::unordered_multimap;
+  using std::shared_ptr;
+  using std::unordered_map;
+  using std::unordered_multimap;
   using lib::TypedAllocationManager;
   using lib::iter_stl::IterSnapshot;
   using lib::iter_stl::eachVal;
-  using std::tr1::placeholders::_1;
-  using std::tr1::function;
-  using std::tr1::bind;
+  using std::placeholders::_1;
+  using std::function;
+  using std::bind;
   using std::make_pair;
   using std::pair;
   
@@ -122,7 +122,7 @@ namespace session {
       // using hashtables to implement the index
       typedef PlacementMO::ID PID;
       typedef unordered_map<PID, PlacementEntry, hash<PID> > IDTable;
-      typedef std::tr1::unordered_multimap<PID,PID, hash<PID> > ScopeTable;
+      typedef std::unordered_multimap<PID,PID, hash<PID> > ScopeTable;
       
       typedef pair<ScopeIter, ScopeIter> ScopeContents;
       

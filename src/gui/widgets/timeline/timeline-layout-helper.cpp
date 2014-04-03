@@ -21,16 +21,19 @@
 
 * *****************************************************/
 
-#include <boost/foreach.hpp>
 
 #include "timeline-layout-helper.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 #include "gui/model/sequence.hpp"
 #include "gui/util/rectangle.hpp"
 
+#include <boost/foreach.hpp>
+#include <memory>
+
+using std::pair;
+using std::shared_ptr;
+
 using namespace Gtk;
-using namespace std;
-using namespace std::tr1;
 using namespace lumiera;
 using namespace util;
 using namespace gui::util;
@@ -82,7 +85,7 @@ TimelineLayoutHelper::add_branch(
 
 boost::optional<Gdk::Rectangle>
 TimelineLayoutHelper::get_track_header_rect(
-  std::tr1::weak_ptr<timeline::Track> track)
+  std::weak_ptr<timeline::Track> track)
 {
   if(contains(headerBoxes, track))
   {

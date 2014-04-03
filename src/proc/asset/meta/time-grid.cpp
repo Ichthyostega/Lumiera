@@ -64,7 +64,7 @@ namespace meta {
   using lib::time::PQuant;
   using lib::time::Quantiser;
   using lib::time::FixedFrameQuantiser;
-  using std::tr1::dynamic_pointer_cast;
+  using std::dynamic_pointer_cast;
   
   namespace advice = lumiera::advice;
   

@@ -51,15 +51,15 @@
 #include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
 
-#include <tr1/memory>
-#include <tr1/functional>
+#include <memory>
+#include <functional>
 
 
 namespace proc {
 namespace control {
   
-  using std::tr1::function;
-  using std::tr1::shared_ptr;
+  using std::function;
+  using std::shared_ptr;
   
   
   

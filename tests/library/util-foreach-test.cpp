@@ -28,7 +28,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/lambda/lambda.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 #include <vector>
 
@@ -40,8 +40,8 @@ using util::has_any;
 using util::and_all;
 
 using boost::lexical_cast;
-using std::tr1::function;
-using std::tr1::ref;
+using std::function;
+using std::ref;
 using std::cout;
 using std::endl;
 
@@ -63,7 +63,7 @@ namespace test {
     
     // need explicit definitions here, because we use
     // tr1/functional and boost::lambda at the same time
-    std::tr1::_Placeholder<1>        _1;
+    std::_Placeholder<1>        _1;
     boost::lambda::placeholder1_type _1_;
     
     
@@ -449,7 +449,7 @@ namespace test {
           for_each (buildTestNumberz(NUM_ELMS), _1_ = var(counter)-- );
           
           // passing a smart-ptr managed copy
-          std::tr1::shared_ptr<VecI> bySmartPtr (new VecI (coll));
+          std::shared_ptr<VecI> bySmartPtr (new VecI (coll));
           
           for_each (bySmartPtr,                 _1_ = var(counter)-- );
           

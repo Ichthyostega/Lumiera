@@ -26,7 +26,7 @@
 
 #include "lib/time/timevalue.hpp"
 
-#include <tr1/memory>
+#include <memory>
 
 
 namespace lib {
@@ -68,7 +68,7 @@ namespace time {
       virtual TimeValue timeOf    (FSecs gridTime, int=0) const   =0;
     };
   
-  typedef std::tr1::shared_ptr<const Grid> PGrid;
+  typedef std::shared_ptr<const Grid> PGrid;
   
   
   

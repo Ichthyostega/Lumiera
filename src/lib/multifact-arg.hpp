@@ -57,7 +57,7 @@ namespace lib {
     using lib::meta::Types;
     using lib::meta::FunctionSignature;
     using lib::meta::FunctionTypedef;
-    using std::tr1::function;
+    using std::function;
     
     
     /**

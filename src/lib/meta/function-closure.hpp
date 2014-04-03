@@ -50,7 +50,7 @@
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 
@@ -58,7 +58,7 @@ namespace lib {
 namespace meta{
 namespace func{
   
-  using std::tr1::function;
+  using std::function;
   
   
   
@@ -90,7 +90,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP&)
           {
-            return std::tr1::bind (f);
+            return std::bind (f);
           }
       };
     
@@ -109,7 +109,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<0>(arg));
+            return std::bind (f, element<0>(arg));
           }
       };
     
@@ -130,7 +130,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<0>(arg)
+            return std::bind (f, element<0>(arg)
                                     , element<1>(arg)
                                    );
           }
@@ -154,7 +154,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<0>(arg)
+            return std::bind (f, element<0>(arg)
                                     , element<1>(arg)
                                     , element<2>(arg)
                                    );
@@ -180,7 +180,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<0>(arg)
+            return std::bind (f, element<0>(arg)
                                     , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
@@ -208,7 +208,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<0>(arg)
+            return std::bind (f, element<0>(arg)
                                     , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
@@ -238,7 +238,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<0>(arg)
+            return std::bind (f, element<0>(arg)
                                     , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
@@ -270,7 +270,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<0>(arg)
+            return std::bind (f, element<0>(arg)
                                     , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
@@ -304,7 +304,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<0>(arg)
+            return std::bind (f, element<0>(arg)
                                     , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
@@ -340,7 +340,7 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<0>(arg)
+            return std::bind (f, element<0>(arg)
                                     , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
@@ -360,7 +360,7 @@ namespace func{
     
     /* ===== Helpers for partial function application ===== */
     
-    using std::tr1::_Placeholder;     // what is the "official" way to import them?
+    using std::_Placeholder;     // what is the "official" way to import them?
     
     
     /**
@@ -560,17 +560,17 @@ namespace func{
   
   
   namespace _composed { // repetitive impl.code for function composition
-    using std::tr1::bind;
-    using std::tr1::function;
-    using std::tr1::placeholders::_1;
-    using std::tr1::placeholders::_2;
-    using std::tr1::placeholders::_3;
-    using std::tr1::placeholders::_4;
-    using std::tr1::placeholders::_5;
-    using std::tr1::placeholders::_6;
-    using std::tr1::placeholders::_7;
-    using std::tr1::placeholders::_8;
-    using std::tr1::placeholders::_9;
+    using std::bind;
+    using std::function;
+    using std::placeholders::_1;
+    using std::placeholders::_2;
+    using std::placeholders::_3;
+    using std::placeholders::_4;
+    using std::placeholders::_5;
+    using std::placeholders::_6;
+    using std::placeholders::_7;
+    using std::placeholders::_8;
+    using std::placeholders::_9;
     
     template<typename RES, typename F1, typename F2, uint n>
     struct Build;

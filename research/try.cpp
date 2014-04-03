@@ -53,15 +53,15 @@
 #include "lib/meta/tuple.hpp"
 #include "lib/meta/function-closure.hpp"
 
-//#include <tr1/functional>
+//#include <functional>
 #include <iostream>
 
 using lib::meta::Types;
 using lib::meta::Tuple;
-//using std::tr1::placeholders::_1;
-//using std::tr1::placeholders::_2;
-using std::tr1::function;
-using std::tr1::bind;
+//using std::placeholders::_1;
+//using std::placeholders::_2;
+using std::function;
+using std::bind;
 
 using std::string;
 using std::cout;

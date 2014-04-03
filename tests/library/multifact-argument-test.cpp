@@ -26,7 +26,7 @@
 #include "lib/multifact-arg.hpp"
 
 #include <iostream>
-#include <tr1/functional>
+#include <functional>
 
 
 
@@ -35,9 +35,9 @@ namespace test{
   
   using std::cout;
   using std::endl;
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
+  using std::bind;
+  using std::function;
+  using std::placeholders::_1;
   using lib::test::showSizeof;
   
   

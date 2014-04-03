@@ -31,7 +31,7 @@
 #include "lib/util.hpp"
 
 #include <cstdlib>
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <boost/functional/hash.hpp>
 
 
@@ -43,7 +43,7 @@ namespace engine {
     using lib::HashVal;
     using lib::NullValue;
     using lib::time::TimeVar;
-    using std::tr1::unordered_map;
+    using std::unordered_map;
     using util::access_or_default;
     
     

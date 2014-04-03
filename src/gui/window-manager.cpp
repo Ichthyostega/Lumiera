@@ -28,13 +28,15 @@
 #include "lib/util.hpp"
 
 #include <boost/filesystem.hpp>
+#include <memory>
+#include <list>
 
 using util::cStr;
+using std::list;
+using std::shared_ptr;
 
 using namespace Gtk;
 using namespace Glib;
-using namespace std;
-using namespace std::tr1;
 using namespace gui::workspace;
 
 namespace fsys = boost::filesystem;

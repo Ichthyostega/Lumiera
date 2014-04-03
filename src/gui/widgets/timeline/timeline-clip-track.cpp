@@ -28,7 +28,7 @@
 
 using namespace Gtk;
 
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 using util::contains;
 
 namespace gui {
@@ -115,7 +115,7 @@ namespace timeline {
   shared_ptr<model::ClipTrack>
   ClipTrack::getModelTrack ()
   {
-    return std::tr1::dynamic_pointer_cast<model::ClipTrack>(modelTrack);
+    return std::dynamic_pointer_cast<model::ClipTrack>(modelTrack);
   }
 
   void

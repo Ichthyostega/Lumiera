@@ -32,7 +32,7 @@
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 #include <string>
 
@@ -47,8 +47,8 @@ namespace test    {
   using util::isnil;
   using util::isSameObject;
   
-  using std::tr1::function;
-  using std::tr1::bind;
+  using std::function;
+  using std::bind;
   using std::string;
   using std::cout;
   using std::endl;

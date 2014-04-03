@@ -31,7 +31,7 @@
 #include "lib/util.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <tr1/memory>
+#include <memory>
 #include <iostream>
 #include <sstream>
 #include <memory>
@@ -49,7 +49,7 @@ namespace test {
   using std::endl;
   using std::vector;
   using std::auto_ptr;
-  using std::tr1::shared_ptr;
+  using std::shared_ptr;
   using boost::algorithm::trim;
   
   using util::isnil;

@@ -75,13 +75,13 @@
 #include "lib/wrapper.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 
 namespace lib {
   
-  using std::tr1::function;
+  using std::function;
   using util::unConst;
   
   using lib::meta::RefTraits;

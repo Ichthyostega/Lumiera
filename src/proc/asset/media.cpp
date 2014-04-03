@@ -46,7 +46,7 @@ using boost::format;
 using boost::regex;
 using boost::smatch;
 using boost::regex_search;
-using std::tr1::dynamic_pointer_cast;
+using std::dynamic_pointer_cast;
 
 namespace error = lumiera::error;
 

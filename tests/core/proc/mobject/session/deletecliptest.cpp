@@ -39,7 +39,7 @@ using proc_interface::AssetManager;
 using proc_interface::PAsset;
 using proc_interface::IDA;
 
-using std::tr1::dynamic_pointer_cast;        /// TODO only temp
+using std::dynamic_pointer_cast;        /// TODO only temp
 
 
 namespace proc    {
