@@ -55,6 +55,7 @@
 #define LIB_HASH_INDEXED_H
 
 #include "lib/hash-value.h"
+#include "lib/hash-standard.hpp"
 
 extern "C" {
 #include "lib/luid.h"
@@ -208,4 +209,24 @@ namespace lib {
   
   
 } // namespace lib
+
+
+/////////////////////////////////////////////////////////////////////////TICKET #722 : should provide a generic bridge to use hash_value
+
+// The following doesn't work as expected, probably because of sub type relationship not being detected when picking a template specialisation
+// see also hash-standard.hpp
+
+//namespace std {
+//  
+//  template<typename BA, typename IMP>
+//  struct hash<lib::HashIndexed<BA,IMP> >
+//  {
+//    size_t
+//    operator() (lib::HashIndexed<BA,IMP> const& val)  const noexcept
+//      {
+//        return hash_value(val);
+//      }
+//  };
+//  
+//}
 #endif

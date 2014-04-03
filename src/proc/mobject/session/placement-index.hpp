@@ -117,6 +117,20 @@
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 
+namespace std {
+  
+  /////////////////////////////////////////////////////////////////////////TICKET #722 : should provide a generic bridge to use hash_value
+  template<>
+  struct hash<proc::mobject::PlacementMO::ID>
+  {
+    size_t
+    operator() (proc::mobject::PlacementMO::ID const& val)  const noexcept
+      {
+        return hash_value(val);
+      }
+  };
+}
+
 
 namespace proc {
 namespace mobject {
