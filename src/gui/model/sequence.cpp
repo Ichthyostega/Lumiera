@@ -1,5 +1,5 @@
 /*
-  sequence.hpp  -  Implementation of the Sequence class
+  Sequence  -  GUI-model: Sequence
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -33,7 +33,9 @@
 namespace gui {
 namespace model {
 
-Sequence::Sequence()
+
+void
+Sequence::populateDummySequence()
 {
   // TEST CODE
   static bool first = true;
@@ -68,14 +70,11 @@ Sequence::Sequence()
   INFO(gui, "\n%s", print_branch().c_str());
 }
 
+
 std::string
 Sequence::print_track()
 {
-  std::ostringstream os;
-  
-  os << "Sequence\t\"" << get_name() << "\"";
-  
-  return os.str();
+  return "Sequence\t\"" + get_name() + "\"";
 }
 
 }   // namespace model
