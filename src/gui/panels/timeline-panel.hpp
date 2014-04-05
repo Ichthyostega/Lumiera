@@ -35,8 +35,10 @@
 #include "gui/widgets/timeline/timeline-zoom-scale.hpp"
 
 #include "lib/time/timevalue.hpp"
+#include "lib/util-coll.hpp"
 
 #include <memory>
+#include <map>
 
 using namespace gui::widgets;
 
@@ -178,6 +180,7 @@ private:
 
   std::map< weak_ptr<model::Sequence>
           , shared_ptr<widgets::timeline::TimelineState>
+          , ::util::WeakPtrComparator
           > 
     timelineStates;
   

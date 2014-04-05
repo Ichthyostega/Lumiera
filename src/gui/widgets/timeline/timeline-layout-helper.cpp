@@ -29,9 +29,13 @@
 
 #include <boost/foreach.hpp>
 #include <memory>
+#include <list>
 
 using std::pair;
+using std::list;
 using std::shared_ptr;
+using std::weak_ptr;
+using std::dynamic_pointer_cast;
 
 using namespace Gtk;
 using namespace lumiera;
