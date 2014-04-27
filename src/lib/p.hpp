@@ -81,14 +81,16 @@ namespace lib {
       template<class Y, class D> P (Y* p, D d)              : BASE(p,d){}
       
                                  P (P const& r)             : BASE(r)  {}
+                                 P (P const&& rr)           : BASE(rr) {}
       template<class Y>          P (shared_ptr<Y> const& r) : BASE(r)  {}
       template<class Y> explicit P (weak_ptr<Y> const& wr)  : BASE(wr) {}
-      template<class Y> explicit P (std::auto_ptr<Y> & ar)  : BASE(ar) {}
+      template<class Y> explicit P (std::auto_ptr<Y> && ar) : BASE(std::move(ar)) {}
       
       
       P& operator= (P const& r)                               { BASE::operator= (r);  return *this; }
+      P& operator= (P const&& rr)                             { BASE::operator= (rr); return *this; }
       template<class Y> P& operator=(shared_ptr<Y> const& sr) { BASE::operator= (sr); return *this; }
-      template<class Y> P& operator=(std::auto_ptr<Y> & ar)   { BASE::operator= (ar); return *this; }
+      template<class Y> P& operator=(std::auto_ptr<Y> && ar)  { BASE::operator= (std::move(ar)); return *this; }
       
       TAR* get() const        { return dynamic_cast<TAR*> (BASE::get()); }
       TAR& operator*() const  { return *get(); }

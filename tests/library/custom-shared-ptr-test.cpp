@@ -76,6 +76,7 @@ namespace test{
         {
           check_refcounting ();
           check_shared_ownership ();
+          check_ownership_transfer ();
           check_type_relations ();
           check_ordering ();
         }
@@ -116,14 +117,9 @@ namespace test{
       void
       check_shared_ownership ()
         {
-          std::auto_ptr<X> au (new X(22));
-          CHECK (au.get());
-          
-          P<X> pX (au);
-          CHECK (!au.get());
+          P<X> pX (new X(22));
           CHECK (pX);
           CHECK (1 == pX.use_count());
-          CHECK (22 == pX->x_);
           
           weak_ptr<X> wX (pX);
           CHECK (wX.lock());
@@ -164,6 +160,33 @@ namespace test{
           pXX.reset();
           CHECK (!pXX);
           CHECK (!wX.lock());
+        }
+      
+      
+      void
+      check_ownership_transfer ()
+        {
+          std::auto_ptr<X> au (new X(23));
+          CHECK (au.get());
+          
+          P<X> pX (std::move(au));
+          CHECK (!au.get());
+          CHECK (pX);
+          CHECK (1 == pX.use_count());
+          CHECK (23 == pX->x_);
+          
+          au.reset (new X(21));
+          CHECK (au.get());
+          
+          pX.reset();
+          CHECK (!pX);
+          CHECK (0 == pX.use_count());
+          
+          pX = std::move(au);
+          CHECK (!au.get());
+          CHECK (pX);
+          CHECK (1 == pX.use_count());
+          CHECK (21 == pX->x_);
         }
       
       
