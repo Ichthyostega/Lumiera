@@ -164,8 +164,8 @@ private:
   bool field_button_scroll_event(GdkEventScroll *ev, Field);
   bool field_key_press_event(GdkEventKey *ev, Field);
   bool field_key_release_event(GdkEventKey *ev, Field);
-  bool field_focus_in_event(GdkEventFocus *ev, Field);
-  bool field_focus_out_event(GdkEventFocus *ev, Field);
+  bool field_focus_gain_event(GdkEventFocus*, Field);
+  bool field_focus_loss_event(GdkEventFocus*, Field);
   bool drop_focus_handler(GdkEventFocus *ev);
 
   void set_smpte(Time, bool);

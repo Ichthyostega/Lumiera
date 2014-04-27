@@ -35,15 +35,17 @@
 #include <gavl/gavl.h>
 #include <sigc++/bind.h>
 
-using namespace sigc;
-using namespace Gtk;
-using namespace std;
 
 using gui::util::atof;
 using gui::util::atoi;
+using sigc::mem_fun;
+using sigc::bind;
+
+using namespace Gtk;
 
 namespace gui {
 namespace widgets {
+
 
 // TODO: frame rate should not be a constant, but instead be per sequence
 const float framerate = 25;
@@ -217,149 +219,160 @@ TimeCode::setup_events()
   ms_hours_ebox.set_can_focus(true);
   ms_minutes_ebox.set_can_focus(true);
   ms_seconds_ebox.set_can_focus(true);
-
-  hours_ebox.signal_motion_notify_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_motion_notify_event), SMPTE_Hours));
-  minutes_ebox.signal_motion_notify_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_motion_notify_event), SMPTE_Minutes));
-  seconds_ebox.signal_motion_notify_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_motion_notify_event), SMPTE_Seconds));
-  frames_ebox.signal_motion_notify_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_motion_notify_event), SMPTE_Frames));
-  audio_frames_ebox.signal_motion_notify_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_motion_notify_event), VFrames));
-  ms_hours_ebox.signal_motion_notify_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_motion_notify_event), MS_Hours));
-  ms_minutes_ebox.signal_motion_notify_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_motion_notify_event), MS_Minutes));
-  ms_seconds_ebox.signal_motion_notify_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_motion_notify_event), MS_Seconds));
-
-  hours_ebox.signal_button_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_press_event), SMPTE_Hours));
-  minutes_ebox.signal_button_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_press_event), SMPTE_Minutes));
-  seconds_ebox.signal_button_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_press_event), SMPTE_Seconds));
-  frames_ebox.signal_button_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_press_event), SMPTE_Frames));
-  audio_frames_ebox.signal_button_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_press_event), VFrames));
-  ms_hours_ebox.signal_button_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_press_event), MS_Hours));
-  ms_minutes_ebox.signal_button_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_press_event), MS_Minutes));
-  ms_seconds_ebox.signal_button_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_press_event), MS_Seconds));
-
-  hours_ebox.signal_button_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_release_event), SMPTE_Hours));
-  minutes_ebox.signal_button_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_release_event), SMPTE_Minutes));
-  seconds_ebox.signal_button_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_release_event), SMPTE_Seconds));
-  frames_ebox.signal_button_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_release_event), SMPTE_Frames));
-  audio_frames_ebox.signal_button_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_release_event), VFrames));
-  ms_hours_ebox.signal_button_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_release_event), MS_Hours));
-  ms_minutes_ebox.signal_button_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_release_event), MS_Minutes));
-  ms_seconds_ebox.signal_button_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_release_event), MS_Seconds));
-
-  hours_ebox.signal_scroll_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_scroll_event), SMPTE_Hours));
-  minutes_ebox.signal_scroll_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_scroll_event), SMPTE_Minutes));
-  seconds_ebox.signal_scroll_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_scroll_event), SMPTE_Seconds));
-  frames_ebox.signal_scroll_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_scroll_event), SMPTE_Frames));
-  audio_frames_ebox.signal_scroll_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_scroll_event), VFrames));
-  ms_hours_ebox.signal_scroll_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_scroll_event), MS_Hours));
-  ms_minutes_ebox.signal_scroll_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_scroll_event), MS_Minutes));
-  ms_seconds_ebox.signal_scroll_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_button_scroll_event), MS_Seconds));
-
-  hours_ebox.signal_key_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_press_event), SMPTE_Hours));
-  minutes_ebox.signal_key_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_press_event), SMPTE_Minutes));
-  seconds_ebox.signal_key_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_press_event), SMPTE_Seconds));
-  frames_ebox.signal_key_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_press_event), SMPTE_Frames));
-  audio_frames_ebox.signal_key_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_press_event), VFrames));
-  ms_hours_ebox.signal_key_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_press_event), MS_Hours));
-  ms_minutes_ebox.signal_key_press_event().connect(bind(mem_fun(
-   *this, &TimeCode::field_key_press_event), MS_Minutes));
-  ms_seconds_ebox.signal_key_press_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_press_event), MS_Seconds));
-
-  hours_ebox.signal_key_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_release_event), SMPTE_Hours));
-  minutes_ebox.signal_key_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_release_event), SMPTE_Minutes));
-  seconds_ebox.signal_key_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_release_event), SMPTE_Seconds));
-  frames_ebox.signal_key_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_release_event), SMPTE_Frames));
-  audio_frames_ebox.signal_key_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_release_event), VFrames));
-  ms_hours_ebox.signal_key_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_release_event), MS_Hours));
-  ms_minutes_ebox.signal_key_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_release_event), MS_Minutes));
-  ms_seconds_ebox.signal_key_release_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_key_release_event), MS_Seconds));
-
-  hours_ebox.signal_focus_in_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_in_event), SMPTE_Hours));
-  minutes_ebox.signal_focus_in_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_in_event), SMPTE_Minutes));
-  seconds_ebox.signal_focus_in_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_in_event), SMPTE_Seconds));
-  frames_ebox.signal_focus_in_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_in_event), SMPTE_Frames));
-  audio_frames_ebox.signal_focus_in_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_in_event), VFrames));
-  ms_hours_ebox.signal_focus_in_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_in_event), MS_Hours));
-  ms_minutes_ebox.signal_focus_in_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_in_event), MS_Minutes));
-  ms_seconds_ebox.signal_focus_in_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_in_event), MS_Seconds));
-
-  hours_ebox.signal_focus_out_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_out_event), SMPTE_Hours));
-  minutes_ebox.signal_focus_out_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_out_event), SMPTE_Minutes));
-  seconds_ebox.signal_focus_out_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_out_event), SMPTE_Seconds));
-  frames_ebox.signal_focus_out_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_out_event), SMPTE_Frames));
-  audio_frames_ebox.signal_focus_out_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_out_event), VFrames));
-  ms_hours_ebox.signal_focus_out_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_out_event), MS_Hours));
-  ms_minutes_ebox.signal_focus_out_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_out_event), MS_Minutes));
-  ms_seconds_ebox.signal_focus_out_event().connect(bind(mem_fun(
-    *this, &TimeCode::field_focus_out_event), MS_Seconds));
+  
+  
+  auto connect_motion_event = [=] (EventBox& guiElm, Field fieldID)
+    {
+      auto handlerSlot = bind (mem_fun(this, &TimeCode::field_motion_notify_event), fieldID);
+      guiElm.signal_motion_notify_event().connect (handlerSlot);
+    };
+  
+  connect_motion_event (hours_ebox,   SMPTE_Hours);
+  connect_motion_event (minutes_ebox, SMPTE_Minutes);
+  connect_motion_event (seconds_ebox, SMPTE_Seconds);
+  connect_motion_event (frames_ebox,  SMPTE_Frames);
+  
+  connect_motion_event (audio_frames_ebox, VFrames);
+  
+  connect_motion_event (ms_hours_ebox,   MS_Hours);
+  connect_motion_event (ms_minutes_ebox, MS_Minutes);
+  connect_motion_event (ms_seconds_ebox, MS_Seconds);
+  
+  
+  auto connect_button_press = [=] (EventBox& guiElm, Field fieldID)
+    {
+      auto handlerSlot = bind (mem_fun(this, &TimeCode::field_button_press_event), fieldID);
+      guiElm.signal_button_press_event().connect (handlerSlot);
+    };
+  
+  connect_button_press (hours_ebox,   SMPTE_Hours);
+  connect_button_press (minutes_ebox, SMPTE_Minutes);
+  connect_button_press (seconds_ebox, SMPTE_Seconds);
+  connect_button_press (frames_ebox,  SMPTE_Frames);
+  
+  connect_button_press (audio_frames_ebox, VFrames);
+  
+  connect_button_press (ms_hours_ebox,   MS_Hours);
+  connect_button_press (ms_minutes_ebox, MS_Minutes);
+  connect_button_press (ms_seconds_ebox, MS_Seconds);
+  
+  
+  auto connect_button_release = [=] (EventBox& guiElm, Field fieldID)
+    {
+      auto handlerSlot = bind (mem_fun(this, &TimeCode::field_button_release_event), fieldID);
+      guiElm.signal_button_release_event().connect (handlerSlot);
+    };
+  
+  connect_button_release (hours_ebox,   SMPTE_Hours);
+  connect_button_release (minutes_ebox, SMPTE_Minutes);
+  connect_button_release (seconds_ebox, SMPTE_Seconds);
+  connect_button_release (frames_ebox,  SMPTE_Frames);
+  
+  connect_button_release (audio_frames_ebox, VFrames);
+  
+  connect_button_release (ms_hours_ebox,   MS_Hours);
+  connect_button_release (ms_minutes_ebox, MS_Minutes);
+  connect_button_release (ms_seconds_ebox, MS_Seconds);
+  
+  
+  auto connect_scroll_event = [=] (EventBox& guiElm, Field fieldID)
+    {
+      auto handlerSlot = bind (mem_fun(this, &TimeCode::field_button_scroll_event), fieldID);
+      guiElm.signal_scroll_event().connect (handlerSlot);
+    };
+  
+  connect_scroll_event (hours_ebox,   SMPTE_Hours);
+  connect_scroll_event (minutes_ebox, SMPTE_Minutes);
+  connect_scroll_event (seconds_ebox, SMPTE_Seconds);
+  connect_scroll_event (frames_ebox,  SMPTE_Frames);
+  
+  connect_scroll_event (audio_frames_ebox, VFrames);
+  
+  connect_scroll_event (ms_hours_ebox,   MS_Hours);
+  connect_scroll_event (ms_minutes_ebox, MS_Minutes);
+  connect_scroll_event (ms_seconds_ebox, MS_Seconds);
+  
+  
+  auto connect_key_press = [=] (EventBox& guiElm, Field fieldID)
+    {
+      auto handlerSlot = bind (mem_fun(this, &TimeCode::field_key_press_event), fieldID);
+      guiElm.signal_key_press_event().connect (handlerSlot);
+    };
+  
+  connect_key_press (hours_ebox,   SMPTE_Hours);
+  connect_key_press (minutes_ebox, SMPTE_Minutes);
+  connect_key_press (seconds_ebox, SMPTE_Seconds);
+  connect_key_press (frames_ebox,  SMPTE_Frames);
+  
+  connect_key_press (audio_frames_ebox, VFrames);
+  
+  connect_key_press (ms_hours_ebox,   MS_Hours);
+  connect_key_press (ms_minutes_ebox, MS_Minutes);
+  connect_key_press (ms_seconds_ebox, MS_Seconds);
+  
+  
+  auto connect_key_release = [=] (EventBox& guiElm, Field fieldID)
+    {
+      auto handlerSlot = bind (mem_fun(this, &TimeCode::field_key_release_event), fieldID);
+      guiElm.signal_key_release_event().connect (handlerSlot);
+    };
+  
+  connect_key_release (hours_ebox,   SMPTE_Hours);
+  connect_key_release (minutes_ebox, SMPTE_Minutes);
+  connect_key_release (seconds_ebox, SMPTE_Seconds);
+  connect_key_release (frames_ebox,  SMPTE_Frames);
+  
+  connect_key_release (audio_frames_ebox, VFrames);
+  
+  connect_key_release (ms_hours_ebox,   MS_Hours);
+  connect_key_release (ms_minutes_ebox, MS_Minutes);
+  connect_key_release (ms_seconds_ebox, MS_Seconds);
+  
+  
+  auto connect_focus_gain = [=] (EventBox& guiElm, Field fieldID)
+    {
+      auto handlerSlot = bind (mem_fun(this, &TimeCode::field_focus_gain_event), fieldID);
+      guiElm.signal_focus_in_event().connect (handlerSlot);
+    };
+  
+  connect_focus_gain (hours_ebox,   SMPTE_Hours);
+  connect_focus_gain (minutes_ebox, SMPTE_Minutes);
+  connect_focus_gain (seconds_ebox, SMPTE_Seconds);
+  connect_focus_gain (frames_ebox,  SMPTE_Frames);
+  
+  connect_focus_gain (audio_frames_ebox, VFrames);
+  
+  connect_focus_gain (ms_hours_ebox,   MS_Hours);
+  connect_focus_gain (ms_minutes_ebox, MS_Minutes);
+  connect_focus_gain (ms_seconds_ebox, MS_Seconds);
+  
+  
+  auto connect_focus_loss = [=] (EventBox& guiElm, Field fieldID)
+    {
+      auto handlerSlot = bind (mem_fun(this, &TimeCode::field_focus_loss_event), fieldID);
+      guiElm.signal_focus_out_event().connect (handlerSlot);
+    };
+  
+  connect_focus_loss (hours_ebox,   SMPTE_Hours);
+  connect_focus_loss (minutes_ebox, SMPTE_Minutes);
+  connect_focus_loss (seconds_ebox, SMPTE_Seconds);
+  connect_focus_loss (frames_ebox,  SMPTE_Frames);
+  
+  connect_focus_loss (audio_frames_ebox, VFrames);
+  
+  connect_focus_loss (ms_hours_ebox,   MS_Hours);
+  connect_focus_loss (ms_minutes_ebox, MS_Minutes);
+  connect_focus_loss (ms_seconds_ebox, MS_Seconds);
+  
+  
 
   clock_base.signal_focus_in_event().connect(mem_fun(
     *this, &TimeCode::drop_focus_handler));
 }
 
+
 bool
-TimeCode::drop_focus_handler(GdkEventFocus* ignored)
+TimeCode::drop_focus_handler(GdkEventFocus*)
 {
   // Keyboard::magic_widget_drop_focus();
   return false;
@@ -757,7 +770,7 @@ TimeCode::field_key_release_event(GdkEventKey *ev, Field field)
 }
 
 bool
-TimeCode::field_focus_in_event(GdkEventFocus *ev, Field field)
+TimeCode::field_focus_gain_event(GdkEventFocus*, Field field)
 {
   key_entry_state = 0;
 
@@ -804,7 +817,7 @@ TimeCode::field_focus_in_event(GdkEventFocus *ev, Field field)
 }
 
 bool
-TimeCode::field_focus_out_event(GdkEventFocus *ev, Field field)
+TimeCode::field_focus_loss_event(GdkEventFocus*, Field field)
 {
   switch (field) {
 
