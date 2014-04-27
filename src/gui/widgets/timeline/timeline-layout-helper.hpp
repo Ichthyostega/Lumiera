@@ -28,6 +28,7 @@
 #define TIMELINE_LAYOUT_HELPER_HPP
 
 #include "gui/gtk-lumiera.hpp"
+#include "lib/util-coll.hpp"
 #include "lib/tree.hpp"
 
 #include <memory>
@@ -366,7 +367,10 @@ protected:
    * the update_layout method.
    * @see update_layout()
    */
-  std::map<std::weak_ptr<timeline::Track>, Gdk::Rectangle>
+  std::map< std::weak_ptr<timeline::Track>
+          , Gdk::Rectangle
+          , ::util::WeakPtrComparator
+          >
     headerBoxes;
   
   /**

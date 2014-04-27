@@ -62,7 +62,7 @@ namespace test {
     
     
     // need explicit definitions here, because we use
-    // tr1/functional and boost::lambda at the same time
+    // <functional> and boost::lambda at the same time
     std::_Placeholder<1>        _1;
     boost::lambda::placeholder1_type _1_;
     
@@ -245,7 +245,7 @@ namespace test {
       check_ref_argument_bind (CO coll)
         {
           ANNOUNCE (assign_to_input);
-          function<bool(int,int,int)> fun2(function2);
+          function<bool(int,int,int&)> fun2(function2);
           
           for_each (coll, function2, 5, 5, _1 );             _NL_
           for_each (coll, &function2,5, 5, _1 );             _NL_
