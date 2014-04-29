@@ -1,7 +1,7 @@
 Lumiera -- the video NLE for Linux
 ====================================
 Version: 0.pre.02
-:Date: 10/2013
+:Date: 4/2014
 
 *************************************************************
 Lumiera is a non-linear video editing and compositing tool.
@@ -73,7 +73,7 @@ Build Requirements
 
 For building Lumiera, you'll need:
 
- * GNU C/C++ compiler `>=4.4` or Clang `>=3.0`
+ * C99 / C++11 compiler GCC `>=4.7` or Clang `>=3.0`
  * Git Version management system
  * http://www.scons.org/[SCons build system]
  * http://www.boost.org/[Boost libraries]

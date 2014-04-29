@@ -88,7 +88,7 @@ namespace proc  {
           bool 
           checkRunningState ()  throw()
             {
-              return (thePlayer_);
+              return bool(thePlayer_);
             }
         };
       

@@ -46,19 +46,14 @@ Languages and Tools
 
 * C / C++
 
- - a C99 / C++98 compatible compiler footnote:[in practice, we build using GCC and
+ - a C99 / C++11 compatible compiler footnote:[in practice, we build using GCC and
    occasionally we check using Clang]
- - GCC *4.6* or Clang *3.0* should be fine footnote:[basically we try to use just the stock language.
+ - GCC *4.7* or Clang *3.0* should be fine footnote:[basically we try to use just the stock language.
    On rare occasions, we _did_ use some GCC extensions, like `typeof()`, but there are
    workarounds, in case this becomes a problem].
- - std::tr1 extensions for C++ (smart-ptrs, hashtables, function objects)
- - switch to C++11 can be expected in the near future footnote:[due to some
-   minor problems, we can't compile in `-std=c++11` mode yet. See the
-   link:http://issues.lumiera.org/ticket/924[tracking ticket]. These issues aren't
-   fundamental though, we used a modern programming style right from start.]
  
 * BOOST (listed below are the Debian package names)
- - libboost-dev (at least *1.48*)
+ - libboost-dev (at least *1.55*)
  - libboost-program-options-dev
  - libboost-program-options-dev
  - libboost-filesystem-dev
@@ -82,7 +77,9 @@ We maintain a link:/documentation/technical/infra/debianDepot.html[Debian/Ubuntu
 Libraries
 ~~~~~~~~~
 
-* BOOST
+* BOOST footnote:[as of 5/2014, we rely on the quite recent Boost-1.55, which isn't in Debian/stable and not even in Debian/testing.
+  As always in such cases, we provide backported packages in our
+  link:http://lumiera.org/debian/pool/experimental/b/boost1.55/[Lumiera package repository], until these versions become mainstream.]
 * link:http://nobug.pipapo.org/[NoBug]
 * http://gmerlin.sourceforge.net/gavl.html[GAVL] (for raw media support)
 * ALSA: libasound2-dev

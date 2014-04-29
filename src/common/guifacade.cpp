@@ -126,7 +126,7 @@ namespace gui {
         bool 
         checkRunningState ()  throw()
           {
-            return (facade);
+            return bool(facade);
           }
         
         
@@ -184,7 +184,7 @@ namespace gui {
   bool
   GuiFacade::isUp ()
   {
-    return (facade);
+    return bool(facade);
   }
 
 

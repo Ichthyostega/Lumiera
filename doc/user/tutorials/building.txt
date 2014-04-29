@@ -46,7 +46,7 @@ authoritative information about the build dependencies is encoded into the
 link:{ldoc}/technical/build/SCons.html[build system]. Thus, when the build
 system aborts, indicating that a never version of some library is required,
 then usually the build system is right...]
-More specifically, you'll need the GNU C/C++ compiler (Version 4.X)
+More specifically, you'll need the GNU C/C++ compiler with C++11 support (Version >= 4.7)
 in addition to the following tools and libraries:
 
  * link:http://git-scm.com/[Git VCS]
