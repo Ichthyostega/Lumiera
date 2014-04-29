@@ -73,12 +73,19 @@ def configure(env):
     else:
         conf.env.mergeConf('nobugmt')
     
-    if not conf.CheckCXXHeader('tr1/memory'):
-        problems.append('We rely on the std::tr1 standard C++ extension for shared_ptr.')
+    if not conf.CheckCXXHeader('memory'):
+        problems.append('We rely on the C++11 smart-pointers.')
+    
+    if not conf.CheckCXXHeader('functional'):
+        problems.append('We rely on the C++11 functor objects.')
     
     if not conf.CheckCXXHeader('boost/config.hpp'):
         problems.append('We need the C++ boost-libraries.')
     else:
+        if not conf.CheckCXXHeader('boost/noncopyable.hpp'):
+            problems.append('We need boost::noncopyable')
+        if not conf.CheckCXXHeader('boost/lexical_cast.hpp'):
+            problems.append('We need boost::lexical_cast')
         if not conf.CheckCXXHeader('boost/scoped_ptr.hpp'):
             problems.append('We need boost::scoped_ptr (scoped_ptr.hpp).')
         if not conf.CheckCXXHeader('boost/format.hpp'):
