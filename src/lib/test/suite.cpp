@@ -195,7 +195,7 @@ namespace test {
    *  in this suite is invoked with a empty cmdline vector.
    *  @param cmdline ref to the vector of commandline tokens  
    */
-  void 
+  bool
   Suite::run (Arg cmdline)
   {
     PTestMap tests = testcases.getGroup(groupID_);
@@ -214,7 +214,7 @@ namespace test {
             cmdline.erase (cmdline.begin());
             VALID (test,testID);
             exitCode_ |= invokeTestCase (*(*test)(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
-            return;
+            return true;
           }
         else
           throw lumiera::error::Invalid ("unknown test : "+testID);
@@ -229,6 +229,7 @@ namespace test {
         VALID (test, i->first);
         exitCode_ |= invokeTestCase (*(*test)(), cmdline); // actually no cmdline arguments
       }
+    return true;
   }
   
   

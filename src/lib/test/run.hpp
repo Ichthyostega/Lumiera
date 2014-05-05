@@ -28,7 +28,7 @@
  ** 
  ** @see HelloWorld_test
  ** @see test::Suite
- ** @see mainsuite.cpp
+ ** @see testrunner.cpp
  ** @see main.cpp
  */
 

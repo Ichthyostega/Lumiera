@@ -1,5 +1,5 @@
 /*
-  mainsuite.cpp  -  execute a suite of test objects, possibly filtered by category
+  testrunner.cpp  -  execute a suite of test objects, possibly filtered by category
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -44,10 +44,10 @@ int main (int argc, const char* argv[])
   test::Suite suite (optparser.getTestgroup());
   LifecycleHook::trigger (ON_GLOBAL_INIT);
   
-  if (optparser.getDescribe())
+  if (optparser.shouldDescribe())
     suite.describe();
   else
-    suite.run (args);
+    optparser.handleHelpRequest() || suite.run (args);
 
   LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
   return suite.getExitCode();
