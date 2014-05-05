@@ -40,7 +40,8 @@ namespace test   {
    */
   class HelloWorld_test : public Test
     {
-      virtual void run(Arg arg) 
+      virtual void
+      run (Arg arg)
       {
         int num= isnil(arg)?  1 : lexical_cast<int> (arg[1]);
         

@@ -159,7 +159,7 @@ namespace test {
   
   
     
-#define VALID(test,testID) \
+#define IS_VALID(test,testID) \
   ASSERT ((test), "NULL testcase launcher for test '%s' found in testsuite '%s'", groupID_.c_str(),testID.c_str());
   
   
@@ -200,7 +200,7 @@ namespace test {
   {
     PTestMap tests = testcases.getGroup(groupID_);
     if (!tests)
-      throw lumiera::error::Invalid ("test group not found"); ///////// TODO: pass error description
+      throw lumiera::error::Invalid ("No tests found for test group \""+groupID_+"\"");
     
     if (0 < cmdline.size())
       {
@@ -211,8 +211,12 @@ namespace test {
             // first cmdline argument denotes a valid testcase registered in 
             // this group: invoke just this test with the remaining cmdline
             Launcher* test = (*tests)[testID];
-            cmdline.erase (cmdline.begin());
-            VALID (test,testID);
+            IS_VALID (test,testID);
+            
+            // Special contract: in case the cmdline holds no actual arguments
+            // beyond the test name, then it's cleared entirely.
+            if (1 == cmdline.size()) cmdline.clear();           // TODO this invalidates also testID -- really need to redesign the API ////TICKET #289
+            
             exitCode_ |= invokeTestCase (*(*test)(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
             return true;
           }
@@ -226,7 +230,7 @@ namespace test {
       {
         std::cout << "\n  ----------"<< i->first<< "----------\n";
         Launcher* test = (i->second);
-        VALID (test, i->first);
+        IS_VALID (test, i->first);
         exitCode_ |= invokeTestCase (*(*test)(), cmdline); // actually no cmdline arguments
       }
     return true;
@@ -251,7 +255,7 @@ namespace test {
         cout << "\n\n";
         cout << "TEST \""<<key<<"\" "<<key<<" <<END\n";
         Launcher* test = (i->second);
-        VALID (test, i->first);
+        IS_VALID (test, i->first);
         try
           {
             (*test)()->run(noCmdline); // run it to insert test generated output

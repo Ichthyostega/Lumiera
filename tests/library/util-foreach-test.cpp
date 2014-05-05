@@ -128,7 +128,7 @@ namespace test {
       void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
+          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
           
           VecI container = buildTestNumberz (NUM_ELMS);
           RangeI iterator(container.begin(), container.end());

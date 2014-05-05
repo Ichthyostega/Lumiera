@@ -98,7 +98,7 @@ namespace test{
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
+          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
           
           TestSource source(NUM_ELMS);
           
