@@ -72,6 +72,7 @@
 #include "lib/access-casted.hpp"
 #include "lib/util.hpp"
 
+#include <type_traits>
 #include <boost/noncopyable.hpp>
 #include <boost/static_assert.hpp>
 
@@ -85,17 +86,20 @@ namespace lib {
   
   namespace { // implementation helpers...
     
+    using boost::enable_if;
     using boost::disable_if;
-    using boost::is_convertible;
+    using std::is_constructible;
     
-    bool
-    validitySelfCheck (bool boolConvertible)
+    template<typename X>
+         typename enable_if< is_constructible<bool,X>,
+    bool >::type
+    validitySelfCheck (X const& boolConvertible)
       {
-        return boolConvertible;
+        return bool(boolConvertible);
       }
     
     template<typename X>
-        typename disable_if< is_convertible<X,bool>, 
+         typename disable_if< is_constructible<bool,X>,
     bool >::type
     validitySelfCheck (X const&)
       {

@@ -116,7 +116,7 @@ namespace meta{
   
                                
   /**
-   * Policy for FunErasure: store an embedded tr1::function
+   * Policy for FunErasure: store an embedded std::function
    * Using this policy allows to store arbitrary complex functor objects
    * embedded within a neutral container and retrieving them later type-safe.
    * The price to pay is vtable access and heap storage of function arguments.

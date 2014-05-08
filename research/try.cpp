@@ -23,41 +23,26 @@
 // 11/11 - using the boost random number generator(s)
 // 12/11 - how to detect if string conversion is possible?
 // 1/12  - is partial application of member functions possible?
+// 5/14  - c++11 transition: detect empty function object
 
 
 /** @file try.cpp
- ** Research: perform a partial application of a member function.
- ** The result of this partial application should be a functor expecting the remaining arguments.
- ** The idea was to use this at various library functions expecting a functor or callback, so to
- ** improve readability of the client code: clients could then just pass a member pointer, without
- ** the need to use any tr1::bind expression.
+ ** Investigation: empty and unbound function objects.
+ ** Since \c std::function is bool convertible, it should be possible to detect an empty or
+ ** unbound functor object and record this state in a VTable. Actually this approach used to
+ ** work with tr1::function objects. But it ceased to work after switching to c++11
  ** 
- ** \par Costs in code size
- ** While this turned out to be possible, even without much work, just based on the existing
- ** templates for partial functor application (function-closure.hpp), the resulting code size
- ** is rather sobering. Especially in debug mode, quite some overhead is created, which makes
- ** usage of this convenience feature in general purpose library code rather questionable.
- ** When compiling with -O3 though, most of the overhead will be removed
+ ** The reason is the more concise meaning of \em convertibility with C++11 -- now, an
+ ** automatic conversion is required; thus what we need is rather the ability to \em construct
+ ** our target type from the given source explicitly, which is a weaker requirement.
  ** 
- ** The following numbers could be observed:
- ** \code
- **                                  debug / stripped   // debug-O3 / stripped
- ** just using a member pointer:     39013 /  7048            42061 /  7056
- ** using tr1::bind and function:    90375 / 15416            65415 /  9376
- ** partial apply, passing functor: 158727 / 23576            97479 / 11296
- ** partial apply with mem pointer: 119495 / 17816            78031 /  9440
- ** \endcode
  */
 
 
-#include "lib/meta/tuple.hpp"
-#include "lib/meta/function-closure.hpp"
-
-//#include <functional>
+#include <type_traits>
+#include <functional>
 #include <iostream>
 
-using lib::meta::Types;
-using lib::meta::Tuple;
 //using std::placeholders::_1;
 //using std::placeholders::_2;
 using std::function;
@@ -68,96 +53,26 @@ using std::cout;
 using std::endl;
 
 
-namespace lib {
-namespace meta{
-namespace func{
-
-
-template<typename SIG, uint num>
-struct _PupS
-  {
-    typedef typename _Fun<SIG>::Ret Ret;
-    typedef typename _Fun<SIG>::Args::List Args;
-    typedef typename Splice<Args,NullType,num>::Front ArgsFront;
-    typedef typename Splice<Args,NullType,num>::Back  ArgsBack;
-    typedef typename Types<ArgsFront>::Seq            ArgsToClose;
-    typedef typename Types<ArgsBack>::Seq             ArgsRemaining;
-    typedef typename _Sig<Ret,ArgsRemaining>::Type    ReducedSignature;
-    
-    typedef function<ReducedSignature>                Function;
-  };
-
-template<typename SIG, typename A1>
-inline 
-typename _PupS<SIG,1>::Function
-papply (SIG f, A1 a1)
+uint
+funny (char c)
 {
-  typedef typename _PupS<SIG,1>::ArgsToClose ArgsToClose;
-  typedef Tuple<ArgsToClose>        ArgTuple;
-  ArgTuple val(a1);
-  return PApply<SIG,ArgsToClose>::bindFront (f, val);
+  return c;
 }
 
-template<typename SIG, typename A1, typename A2>
-inline 
-typename _PupS<SIG,2>::Function
-papply (SIG f, A1 a1, A2 a2)
-{
-  typedef typename _PupS<SIG,2>::ArgPrefix ArgsToClose;
-  typedef Tuple<ArgsToClose>        ArgTuple;
-  ArgTuple val(a1,a2);
-  return PApply<SIG,ArgsToClose>::bindFront (f, val);
-}
-
-
-}}} // namespace lib::meta::func
-
-class Something
-  {
-    int i_;
-    
-    void
-    privateFun(char a)
-      {
-        char aa(a + i_);
-        cout << "Char-->" << aa <<endl;
-      }
-    
-  public:
-    Something(int ii=0)
-      : i_(ii)
-      { }
-    
-    typedef function<void(char)> FunP;
-    
-    FunP
-    getBinding()
-      {
-//        function<void(Something*,char)> memf = bind (&Something::privateFun, _1, _2);
-//        return lib::meta::func::papply (memf, this);
-        return lib::meta::func::papply (&Something::privateFun, this);
-      }
-    
-//    typedef void (Something::*FunP) (char);
-//    
-//    FunP
-//    getBinding()
-//      {
-//        return &Something::privateFun;
-//      }
-  };
-
-
-
-
+using FUC = function<uint(char)>;
 
 int 
 main (int, char**)
   {
-    Something some(23);
-    Something::FunP fup = some.getBinding();
+    FUC fun(funny);
+    FUC empty;
     
-    fup ('a');
+    cout << "ASCII 'A' = " << fun('A');
+    cout << " defined: " << bool(fun)
+         << " undefd; " << bool(empty)
+         << " bool-convertible: " << std::is_convertible<FUC, bool>::value
+         << " can build bool: " << std::is_constructible<bool,FUC>::value
+         << " bool from string: " << std::is_constructible<bool,string>::value;
     
     cout <<  "\n.gulp.\n";
     

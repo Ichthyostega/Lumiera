@@ -252,13 +252,17 @@ namespace test {
       void
       detect_unboundFunctor (HOL h1, HOL h2, HOL h3)
         {
-          // fabricate an unbound functor...
-          
+          // fabricate a suitable, unbound functor to wrap...
           typedef typename BuildEmptyFunctor<HOL>::Type NoFunc;
           NoFunc noFunction = NoFunc();
+          
+          // wrap this (actually empty) functor into the holder type
           HOL emptyHolder (noFunction);
+          
+          // verify the older detects that the wrapped functor is empty
           CHECK (!emptyHolder);
           
+          // cross-verify that non-empty functors are not flagged as empty
           CHECK ( h1 );
           CHECK ( h2 );
           CHECK ( h3 );
