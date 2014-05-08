@@ -146,6 +146,8 @@ namespace test{
    *        
    * @see IterSource
    * @see PlacementIndex::Table#_eachEntry_4check real world usage example
+   * @todo the output order of the values produced by this test
+   *       is implementation dependent in for the hashmap case
    */
   class IterSource_test : public Test
     {

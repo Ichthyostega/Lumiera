@@ -153,7 +153,7 @@ namespace iter_stl {
     };
   
   /**
-   * Wrapped-Iter-Policy: picking the key part
+   * Wrapped-Iter-Policy: picking the value part
    * of a pair iterator (map or multimap).
    */
   template<typename IT>
