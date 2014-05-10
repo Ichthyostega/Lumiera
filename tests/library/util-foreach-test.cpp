@@ -156,7 +156,7 @@ namespace test {
           CHECK (int(NUM_ELMS) ==container[0]);
           
           check_ref_argument_bind (iterator);
-          CHECK (60+int(NUM_ELMS) ==container[0]);
+          CHECK (90+int(NUM_ELMS) ==container[0]);
           // changes got propagated through the iterator
           
           check_wrapped_container_passing(container);
@@ -233,7 +233,11 @@ namespace test {
       
       /** @test under some circumstances, it is even possible
        *        to take a ref to the data in the input sequence,
-       *        or to a summation variable.
+       *        or to a summation variable. In the example performed here,
+       *        the function to be applied takes the 3rd argument by reference
+       *        and assigns the sum of first and second argument to this parameter.
+       *        If we us a bind variable at that position, we end up assigning
+       *        by reference to the values contained in the collection.
        *  @note in case of invoking this test with a Lumiera Forward Iterator,
        *        the changes go through to the original container, in spite of
        *        passing the iterator by value. This behaviour is correct, as
@@ -256,13 +260,16 @@ namespace test {
           has_any (coll, function2,  5, 5, _1 );             _NL_
           has_any (coll, &function2, 5, 5, _1 );             _NL_
           
-          // note: when using a function object, 
-          // instead of directly using a binder,
-          // the pass-by reference doesn't work
+          // note: in C++11, the reference parameters are passed through
+          // even when wrapping the function or function pointer into a function object,
           for_each (coll,fun2,       5, 5, _1 );             _NL_
           and_all (coll, fun2,       5, 5, _1 );             _NL_
           has_any (coll, fun2,       5, 5, _1 );             _NL_
+          // at that point we have added 9 * (5+5) to the value at position zero.
+          // (note that the has_any only evaluates the function once)
           
+          
+          // the following test assigns the sum via the ref argument to a local variable.
           int sum=0;
           ANNOUNCE (assign_to_var);
           for_each (coll, function2, -10, _1, ref(sum) );    _NL_
@@ -417,7 +424,7 @@ namespace test {
         }
       
       
-      /** @test passing the collection to be iterated in various ways
+      /** @test pass the collection to be iterated in various ways
        *        - anonymous temporary
        *        - smart pointer
        *        - pointer
@@ -458,12 +465,12 @@ namespace test {
           CHECK (-2*int(NUM_ELMS)   == counter);
           CHECK (bySmartPtr->back() == counter+1);
           
-          // passing by pointer is also possible
+          // passing the container by pointer is also possible
           const VecI * const passByConstPointer (&coll);
           
           for_each (passByConstPointer,         _1_ = var(counter)-- );
           SHOW_CONTAINER
-          // ...and influences the original container
+          // ...and does indeed influence the original container
         }
       
     };
