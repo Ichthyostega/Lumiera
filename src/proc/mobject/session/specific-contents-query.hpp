@@ -42,7 +42,6 @@ namespace session {
   
   
   /**
-   * Specialised version of the ContentsQuery to pick some objects
    * from the session, based on a filter predicate. As the parent type,
    * ContentsQuery, the resolution of this query requires to explore the
    * given scope depth first; but in addition to filter based on type,
@@ -145,7 +144,7 @@ namespace session {
   
   
   
-  /** convenience shortcut to issue a SpecialContentsQuery,
+  /** convenience shortcut to issue a SpecificContentsQuery,
    *  figuring out the actual return/filter type automatically,
    *  based on the predicate given as parameter
    */
@@ -159,7 +158,7 @@ namespace session {
   }
   
   /** convenience shortcut (variant), automatically to build
-   *  and execute a suitable SpecialContentsQuery
+   *  and execute a suitable SpecificContentsQuery
    *  @return iterator yielding placements of the type as
    *          defined through the parameter of the predicate
    */

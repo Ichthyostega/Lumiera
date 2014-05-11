@@ -370,8 +370,7 @@ namespace test    {
           // now explore a completely separate branch....
           PMO& separatePlacement = *explore_testScope (
                                      *explore_testScope (
-                                       *explore_testScope (
-                                         root.getTop())));
+                                       retrieve_firstTestSubMO21()));
           path.navigate (separatePlacement);
           CHECK (path);
           CHECK (disjoint (path,refPath));

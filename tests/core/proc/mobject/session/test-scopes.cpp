@@ -69,6 +69,16 @@ namespace test    {
     return index;
   }
   
+  namespace {
+    template<class MO>
+    PlacementMO&
+    retrieve_firstElmOfType()
+    {
+      return *ContentsQuery<MO>(SessionServiceExploreScope::getScopeRoot())
+                     .resolveBy(SessionServiceExploreScope::getResolver());
+    }
+  }
+  
   
   /** @note this test helper only works if build_testScopes is invoked
    *  beforehand, and the returned smart-ptr to the created test/dummy index
@@ -79,8 +89,13 @@ namespace test    {
   PlacementMO&
   retrieve_startElm()
   {
-    return *ContentsQuery<TestSubMO1>(SessionServiceExploreScope::getScopeRoot())
-                           .resolveBy(SessionServiceExploreScope::getResolver());
+    return retrieve_firstElmOfType<TestSubMO1>();
+  }
+  
+  PlacementMO&
+  retrieve_firstTestSubMO21()
+  {
+    return retrieve_firstElmOfType<TestSubMO21>();
   }
   
   

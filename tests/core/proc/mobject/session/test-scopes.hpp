@@ -63,6 +63,8 @@ namespace test    {
    *  which is a Placement<> and way down into the hierarchy
    */
   PlacementMO& retrieve_startElm();
+
+  PlacementMO& retrieve_firstTestSubMO21();
   
   
   /** shortcut to explore the contents of a scope within the current index.

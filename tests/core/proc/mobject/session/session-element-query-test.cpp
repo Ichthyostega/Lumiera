@@ -55,18 +55,18 @@ namespace test    {
     
     /** a filter predicate to pick some objects from a resultset,
      *  based on string match with the element's self-display string.
-     *  @note using the specific API of DummyMO, without cast! */
-    bool
-    filter_typeID (PDummy candidate, string expectedText)
-    {
-      string desc = candidate->operator string();
-      return contains(desc, expectedText);
-    }
-    
+     *  @note the query system allows us to use the specific API of DummyMO,
+     *        without the need for any cast. It is sufficient to declare
+     *        a suitable signature on the query predicate! */
     inline function<bool(PDummy)>
     elementID_contains (string expectedText)
     {
-      return bind (filter_typeID, _1, expectedText);
+      return [=] (PDummy candidate)
+        {
+          REQUIRE (candidate.isValid());
+          string desc(candidate->operator string());
+          return contains(desc, expectedText);
+        };
     }
     
   }
@@ -127,7 +127,7 @@ namespace test    {
           MORef<DummyMO> findAgain = queryAPI.pick (elementID_contains(specificID));
           CHECK (!findAgain);     // empty result because searched element was removed from session...
           
-          MORef<DummyMO> otherElm = queryAPI.pick (elementID_contains("MO1"));
+          MORef<DummyMO> otherElm = queryAPI.pick (elementID_contains("MO21"));
           CHECK (otherElm);    // now pick just some other arbitrary element 
           
           testSession->insert(newPlacement, otherElm);

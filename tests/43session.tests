@@ -127,10 +127,10 @@ END
 
 TEST "Querying the index" PlacementIndexQuery_test <<END
 out: explore contents depth-first...
-out: Placement<.+TestSubMO21.> ..... use-cnt=1
 out: Placement<.+TestSubMO2.> ...... use-cnt=1
 out: Placement<.+TestSubMO1.> ...... use-cnt=1
 out: Placement<.+DummyMO.> .......... use-cnt=1
+out: Placement<.+TestSubMO21.> ..... use-cnt=1
 out: path to root starting at Placement<.+TestSubMO1
 out: Placement<.+TestSubMO2.> ...... use-cnt=1
 out: Placement<.+session.Label.> ......... use-cnt=1
@@ -139,24 +139,24 @@ END
 
 TEST "discovering scopes" ScopeQuery_test <<END
 out: --------------------------------Test-1: contents depth-first
-out: Placement<.+TestSubMO21.>
 out: Placement<.+TestSubMO2.>
 out: Placement<.+TestSubMO1.>
 out: Placement<.+DummyMO.>
+out: Placement<.+TestSubMO21.>
 out: --------------------------------Test-2: contents depth-first, filtered to Clip
 out: --------------------------------Test-3: contents depth-first, filtered to DummyMO
-out: Placement<.+TestSubMO21.>
 out: Placement<.+TestSubMO2.>
 out: Placement<.+TestSubMO1.>
 out: Placement<.+DummyMO.>
+out: Placement<.+TestSubMO21.>
 out: --------------------------------Test-4: contents depth-first, filtered to TestSubMO1
 out: Placement<.+TestSubMO1.>
 out: --------------------------------Test-5: contents depth-first, filtered to TestSubMO2
-out: Placement<.+TestSubMO21.>
 out: Placement<.+TestSubMO2.>
+out: Placement<.+TestSubMO21.>
 out: --------------------------------Test-6: contents depth-first, custom filtered DummyMO
-out: Placement<.+TestSubMO21.>
 out: Placement<.+TestSubMO2.>
+out: Placement<.+TestSubMO21.>
 out: --------------------------------Test-7: parents of the second TestSubMO2 element found
 out: Placement<.+TestSubMO21.>
 out: Placement<.+mobject.session.Label.>
@@ -175,21 +175,21 @@ END
 
 TEST "Placement search scope" PlacementScope_test <<END
 out: Scope: \[Label\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
-out: Scope: \[DummyMO\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
-out: Scope: \[DummyMO\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
-out: Scope: \[DummyMO\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
-out: Scope: \[DummyMO\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
-out: Scope: \[Label\.[0-9]{3}\]
 out: Placement<.+TestSubMO2.>
 out: Scope: \[DummyMO\.[0-9]{3}\]
 out: Placement<.+TestSubMO1.>
 out: Scope: \[Label\.[0-9]{3}\]
 out: Placement<.+DummyMO.>
+out: Scope: \[Label\.[0-9]{3}\]
+out: Placement<.+TestSubMO21.>
+out: Scope: \[DummyMO\.[0-9]{3}\]
+out: Placement<.+TestSubMO21.>
+out: Scope: \[DummyMO\.[0-9]{3}\]
+out: Placement<.+TestSubMO21.>
+out: Scope: \[DummyMO\.[0-9]{3}\]
+out: Placement<.+TestSubMO21.>
+out: Scope: \[DummyMO\.[0-9]{3}\]
+out: Placement<.+TestSubMO21.>
 return: 0
 END
 

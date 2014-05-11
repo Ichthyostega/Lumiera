@@ -486,7 +486,7 @@ namespace session {
   /** Retrieve all the elements attached to the given entry (scope)
    *  Each element (Placement) can act as a scope, containing other Placements,
    *  which will be discovered by this query one level deep (not recursive).
-   *  @return an Lumiera Forward Iterator, yielding the children,
+   *  @return a Lumiera Forward Iterator, yielding the children,
    *          possibly empty if the denoted element is a leaf.
    *  @note results are returned in arbitrary order (hashtable)
    */
