@@ -84,139 +84,139 @@ END
 
 
 TEST "CmdlineWrapper_test" CmdlineWrapper_test <<END
-out: wrapping cmdline:\.\.\.
-out: -->
-out: wrapping cmdline:
-out: 	 \.\.\.
-out: -->
-out: wrapping cmdline:spam...
-out: 0\|spam\|
-out: -->spam
-out: wrapping cmdline:
-out: spam...
-out: 0\|spam\|
-out: -->spam
-out: wrapping cmdline:eat more spam...
-out: 0\|eat\|
-out: 1\|more\|
-out: 2\|spam\|
-out: -->eat more spam
-out: wrapping cmdline: oo _O\(\)O_  ä \+ €...
-out: 0\|oo\|
-out: 1\|_O\(\)O_\|
-out: 2\|ä\|
-out: 3\|\+\|
-out: 4\|€\|
-out: -->oo _O\(\)O_ ä \+ €
-out: wrapping cmdline:Ω	ooΩ	oΩo	Ωoo...
-out: 0\|Ω\|
-out: 1\|ooΩ\|
-out: 2\|oΩo\|
-out: 3\|Ωoo\|
-out: -->Ω ooΩ oΩo Ωoo
-out: Standard Cmdlineformat:one  two
+out-lit: wrapping cmdline:...
+out-lit: -->
+out-lit: wrapping cmdline:
+out-lit: 	 ...
+out-lit: -->
+out-lit: wrapping cmdline:spam...
+out-lit: 0|spam|
+out-lit: -->spam
+out-lit: wrapping cmdline:
+out-lit: spam...
+out-lit: 0|spam|
+out-lit: -->spam
+out-lit: wrapping cmdline:eat more spam...
+out-lit: 0|eat|
+out-lit: 1|more|
+out-lit: 2|spam|
+out-lit: -->eat more spam
+out-lit: wrapping cmdline: oo _O()O_  ☭ + €...
+out-lit: 0|oo|
+out-lit: 1|_O()O_|
+out-lit: 2|☭|
+out-lit: 3|+|
+out-lit: 4|€|
+out-lit: -->oo _O()O_ ☭ + €
+out-lit: wrapping cmdline:Ω	ooΩ	oΩo	Ωoo...
+out-lit: 0|Ω|
+out-lit: 1|ooΩ|
+out-lit: 2|oΩo|
+out-lit: 3|Ωoo|
+out-lit: -->Ω ooΩ oΩo Ωoo
+out-lit: Standard Cmdlineformat:one  two
 END
 
 
 TEST "ConfigFlags_test" ConfigFlags_test <<END
-out: Conf0	:-
-out: Conf1	:-<1>-
-out: Conf2	:-<2>-
-out: Conf3	:-<3>-
-out: Conf4	:-<2>-<4>-
-out: AllFlags	:-<1>-<2>-<3>-<4>-
-out: __________________________$
-out: __________________________ check_flags\(\)
-out: Flags1	:-<2>-<4>-
-out: Flags2	:-<2>-<4>-
-out: SimpleConfig_defined_by_Typelist	:-<1>-
-out: AnotherConfig_defined_by_Typelist	:-<1>-<2>-<3>-<4>-
-out: __________________________$
-out: __________________________ check_instantiation\(\)
-out: defined Conf0\? ---> 0
-out: defined Conf1\? ---> 1
-out: defined Conf2\? ---> 1
-out: defined Conf3\? ---> 1
-out: defined Conf4\? ---> 1
-out: defined Trash\? ---> 0
-out: __________________________$
-out: __________________________ check_filter\(\)
-out: SomeFlagsets	:
-out: 	\+---<1>-<3>-\+
-out: 	\+---<2>-<4>-\+-
-out: Configs_defined_by_Flagsets	:
-out: 	\+-Conf-\[-<1>-<3>-\]
-out: 	\+-Conf-\[-<2>-<4>-\]-
-out: Filter_possible_Configs	:
-out: 	\+-Conf-\[-<2>-<4>-\]-
-out: AllFlagCombinations	:
-out: 	\+---<1>-<2>-<3>-<4>-<·>-\+
-out: 	\+---<1>-<2>-<3>-<·>-\+
-out: 	\+---<1>-<2>-<4>-<·>-\+
-out: 	\+---<1>-<2>-<·>-\+
-out: 	\+---<1>-<3>-<4>-<·>-\+
-out: 	\+---<1>-<3>-<·>-\+
-out: 	\+---<1>-<4>-<·>-\+
-out: 	\+---<1>-<·>-\+
-out: 	\+---<2>-<3>-<4>-<·>-\+
-out: 	\+---<2>-<3>-<·>-\+
-out: 	\+---<2>-<4>-<·>-\+
-out: 	\+---<2>-<·>-\+
-out: 	\+---<3>-<4>-<·>-\+
-out: 	\+---<3>-<·>-\+
-out: 	\+---<4>-<·>-\+
-out: 	\+---<·>-\+-
-out: ListAllConfigs	:
-out: 	\+-Conf-\[-<1>-<2>-<3>-<4>-\]
-out: 	\+-Conf-\[-<1>-<2>-<3>-\]
-out: 	\+-Conf-\[-<1>-<2>-<4>-\]
-out: 	\+-Conf-\[-<1>-<2>-\]
-out: 	\+-Conf-\[-<1>-<3>-<4>-\]
-out: 	\+-Conf-\[-<1>-<3>-\]
-out: 	\+-Conf-\[-<1>-<4>-\]
-out: 	\+-Conf-\[-<1>-\]
-out: 	\+-Conf-\[-<2>-<3>-<4>-\]
-out: 	\+-Conf-\[-<2>-<3>-\]
-out: 	\+-Conf-\[-<2>-<4>-\]
-out: 	\+-Conf-\[-<2>-\]
-out: 	\+-Conf-\[-<3>-<4>-\]
-out: 	\+-Conf-\[-<3>-\]
-out: 	\+-Conf-\[-<4>-\]
-out: 	\+-Conf-\[-\]-
-out: Filter_all_possible_Configs	:
-out: 	\+-Conf-\[-<1>-\]
-out: 	\+-Conf-\[-<2>-<3>-\]
-out: 	\+-Conf-\[-<2>-<4>-\]
-out: 	\+-Conf-\[-<2>-\]
-out: 	\+-Conf-\[-<3>-\]-
-out: __________________________$
-out: __________________________ check_FlagInfo\(\)
-out: Flags1	:-<1>-<3>-
-out: max bit    : 3
-out: binary code: 10
-out: SomeConfigs	:
-out: 	\+-Conf-\[-<1>-<3>-\]
-out: 	\+-Conf-\[-<2>-<4>-\]-
-out: max bit in \[SomeConfigs\] : 4
-out: TestVisitor application:
-out: visit\(code=10\) -->
-out: 	\+-Conf-\[-<1>-<3>-\]-
-out: visit\(code=20\) -->
-out: 	\+-Conf-\[-<2>-<4>-\]-
-out: __________________________$
-out: __________________________ check_ConfigSelector\(\)
-out: Possible_Configs	:
-out: 	\+-Conf-\[-<1>-\]
-out: 	\+-Conf-\[-<2>-<3>-\]
-out: 	\+-Conf-\[-<2>-<4>-\]
-out: 	\+-Conf-\[-<2>-\]
-out: 	\+-Conf-\[-<3>-\]-
-out:  Flag-code = 2 ConfigSelector\(\) ---> 1010
-out:  Flag-code = 12 ConfigSelector\(\) ---> 1023
-out:  Flag-code = 20 ConfigSelector\(\) ---> 1024
-out:  Flag-code = 4 ConfigSelector\(\) ---> 1020
-out:  Flag-code = 8 ConfigSelector\(\) ---> 1030
-out: LUMIERA_ERROR_INVALID:invalid input or parameters \(ConfigSelector: No preconfigured factory for config-bits=10111\)\.
+out-lit: Conf0	:-
+out-lit: Conf1	:-<1>-
+out-lit: Conf2	:-<2>-
+out-lit: Conf3	:-<3>-
+out-lit: Conf4	:-<2>-<4>-
+out-lit: AllFlags	:-<1>-<2>-<3>-<4>-
+out-lit: __________________________
+out-lit: __________________________ check_flags()
+out-lit: Flags1	:-<2>-<4>-
+out-lit: Flags2	:-<2>-<4>-
+out-lit: SimpleConfig_defined_by_Typelist	:-<1>-
+out-lit: AnotherConfig_defined_by_Typelist	:-<1>-<2>-<3>-<4>-
+out-lit: __________________________
+out-lit: __________________________ check_instantiation()
+out-lit: defined Conf0? ---> 0
+out-lit: defined Conf1? ---> 1
+out-lit: defined Conf2? ---> 1
+out-lit: defined Conf3? ---> 1
+out-lit: defined Conf4? ---> 1
+out-lit: defined Trash? ---> 0
+out-lit: __________________________
+out-lit: __________________________ check_filter()
+out-lit: SomeFlagsets	:
+out-lit: 	+---<1>-<3>-+
+out-lit: 	+---<2>-<4>-+-
+out-lit: Configs_defined_by_Flagsets	:
+out-lit: 	+-Conf-[-<1>-<3>-]
+out-lit: 	+-Conf-[-<2>-<4>-]-
+out-lit: Filter_possible_Configs	:
+out-lit: 	+-Conf-[-<2>-<4>-]-
+out-lit: AllFlagCombinations	:
+out-lit: 	+---<1>-<2>-<3>-<4>-<·>-+
+out-lit: 	+---<1>-<2>-<3>-<·>-+
+out-lit: 	+---<1>-<2>-<4>-<·>-+
+out-lit: 	+---<1>-<2>-<·>-+
+out-lit: 	+---<1>-<3>-<4>-<·>-+
+out-lit: 	+---<1>-<3>-<·>-+
+out-lit: 	+---<1>-<4>-<·>-+
+out-lit: 	+---<1>-<·>-+
+out-lit: 	+---<2>-<3>-<4>-<·>-+
+out-lit: 	+---<2>-<3>-<·>-+
+out-lit: 	+---<2>-<4>-<·>-+
+out-lit: 	+---<2>-<·>-+
+out-lit: 	+---<3>-<4>-<·>-+
+out-lit: 	+---<3>-<·>-+
+out-lit: 	+---<4>-<·>-+
+out-lit: 	+---<·>-+-
+out-lit: ListAllConfigs	:
+out-lit: 	+-Conf-[-<1>-<2>-<3>-<4>-]
+out-lit: 	+-Conf-[-<1>-<2>-<3>-]
+out-lit: 	+-Conf-[-<1>-<2>-<4>-]
+out-lit: 	+-Conf-[-<1>-<2>-]
+out-lit: 	+-Conf-[-<1>-<3>-<4>-]
+out-lit: 	+-Conf-[-<1>-<3>-]
+out-lit: 	+-Conf-[-<1>-<4>-]
+out-lit: 	+-Conf-[-<1>-]
+out-lit: 	+-Conf-[-<2>-<3>-<4>-]
+out-lit: 	+-Conf-[-<2>-<3>-]
+out-lit: 	+-Conf-[-<2>-<4>-]
+out-lit: 	+-Conf-[-<2>-]
+out-lit: 	+-Conf-[-<3>-<4>-]
+out-lit: 	+-Conf-[-<3>-]
+out-lit: 	+-Conf-[-<4>-]
+out-lit: 	+-Conf-[-]-
+out-lit: Filter_all_possible_Configs	:
+out-lit: 	+-Conf-[-<1>-]
+out-lit: 	+-Conf-[-<2>-<3>-]
+out-lit: 	+-Conf-[-<2>-<4>-]
+out-lit: 	+-Conf-[-<2>-]
+out-lit: 	+-Conf-[-<3>-]-
+out-lit: __________________________
+out-lit: __________________________ check_FlagInfo()
+out-lit: Flags1	:-<1>-<3>-
+out-lit: max bit    : 3
+out-lit: binary code: 10
+out-lit: SomeConfigs	:
+out-lit: 	+-Conf-[-<1>-<3>-]
+out-lit: 	+-Conf-[-<2>-<4>-]-
+out-lit: max bit in [SomeConfigs] : 4
+out-lit: TestVisitor application:
+out-lit: visit(code=10) -->
+out-lit: 	+-Conf-[-<1>-<3>-]-
+out-lit: visit(code=20) -->
+out-lit: 	+-Conf-[-<2>-<4>-]-
+out-lit: __________________________
+out-lit: __________________________ check_ConfigSelector()
+out-lit: Possible_Configs	:
+out-lit: 	+-Conf-[-<1>-]
+out-lit: 	+-Conf-[-<2>-<3>-]
+out-lit: 	+-Conf-[-<2>-<4>-]
+out-lit: 	+-Conf-[-<2>-]
+out-lit: 	+-Conf-[-<3>-]-
+out-lit:  Flag-code = 2 ConfigSelector() ---> 1010
+out-lit:  Flag-code = 12 ConfigSelector() ---> 1023
+out-lit:  Flag-code = 20 ConfigSelector() ---> 1024
+out-lit:  Flag-code = 4 ConfigSelector() ---> 1020
+out-lit:  Flag-code = 8 ConfigSelector() ---> 1030
+out-lit: LUMIERA_ERROR_INVALID:invalid input or parameters (ConfigSelector: No preconfigured factory for config-bits=10111).
 return: 0
 END
 
@@ -325,18 +325,18 @@ END
 
 
 TEST "functional closure" FunctionClosure_test <<END
-out: List1	:-<1>-<2>-<3>-
-out: List2	:-<5>-<6>-<7>-
-out: Args	:-<5>-<9>-
-out: NewArgs	:-<1>-<5>-<9>-
-out: 	:$
-out: 	: ---Apply---
-out: tup0	:...Tuple\(\)
-out: tup1	:...Tuple\(11\)
-out: tup2	:...Tuple\(11,12\)
-out: tup3	:...Tuple\(11,12,13\)
-out: 	:$
-out: 	: ---Bind----
+out-lit: List1	:-<1>-<2>-<3>-
+out-lit: List2	:-<5>-<6>-<7>-
+out-lit: Args	:-<5>-<9>-
+out-lit: NewArgs	:-<1>-<5>-<9>-
+out-lit: 	:
+out-lit: 	: ---Apply---
+out-lit: tup0	:...Tuple()
+out-lit: tup1	:...Tuple(11)
+out-lit: tup2	:...Tuple(11,12)
+out-lit: tup3	:...Tuple(11,12,13)
+out-lit: 	:
+out-lit: 	: ---Bind----
 return: 0
 END
 
@@ -410,10 +410,10 @@ END
 
 
 TEST "inline unchecked buffer" OpaqueUncheckedBuffer_test  <<END
-out: DD<0>: 
-out: DD<5>: \*\*\*\*\*
-out: DD<9>: I'm fine\*
-out: I'm special, what the f\*\* is going on here\?\*\*\*\*\*\*\*\*\*\*\*\*
+out: DD<0>:
+out-lit: DD<5>: *****
+out-lit: DD<9>: I'm fine*
+out-lit: I'm special, what the f** is going on here?************
 return: 0
 END
 
@@ -562,31 +562,31 @@ END
 
 
 TEST "RemoveFromSet_test" RemoveFromSet_test <<END
-out: removed  nothing  ---> \[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \]
-out: removed 0 ---> \[ 1, 2, 3, 4, 5, 6, 7, 8, 9, \]
-out: removed 9 ---> \[ 0, 1, 2, 3, 4, 5, 6, 7, 8, \]
-out: removed 5 ---> \[ 0, 1, 2, 3, 4, 6, 7, 8, 9, \]
-out: removed 0   2   4   6   8   ---> \[ 1, 3, 5, 7, 9, \]
-out: removed   1   3   5   7   9 ---> \[ 0, 2, 4, 6, 8, \]
-out: removed 0 1 2 3 4 5 6 7 8 9 ---> \[ \]
-out: removed 0 1 2 3 4 5 6 7 8   ---> \[ 9, \]
-out: removed   1 2 3 4 5 6 7 8 9 ---> \[ 0, \]
-out: removed 0 1 2 3 4   6 7 8 9 ---> \[ 5, \]
+out-lit: removed  nothing  ---> [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+out-lit: removed 0 ---> [ 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+out-lit: removed 9 ---> [ 0, 1, 2, 3, 4, 5, 6, 7, 8, ]
+out-lit: removed 5 ---> [ 0, 1, 2, 3, 4, 6, 7, 8, 9, ]
+out-lit: removed 0   2   4   6   8   ---> [ 1, 3, 5, 7, 9, ]
+out-lit: removed   1   3   5   7   9 ---> [ 0, 2, 4, 6, 8, ]
+out-lit: removed 0 1 2 3 4 5 6 7 8 9 ---> [ ]
+out-lit: removed 0 1 2 3 4 5 6 7 8   ---> [ 9, ]
+out-lit: removed   1 2 3 4 5 6 7 8 9 ---> [ 0, ]
+out-lit: removed 0 1 2 3 4   6 7 8 9 ---> [ 5, ]
 END
 
 
 TEST "SanitizedIdentifier_test" SanitizedIdentifier_test <<END
-out: 'Word' --> 'Word'
-out: 'a Sentence' --> 'a_Sentence'
-out: 'trailing Withespace
-out:        	' --> 'trailing_Withespace'
-out: 'with    a  	 lot
-out:   of Whitespace' --> 'with_a_lot_of_Whitespace'
-out: 'with"much \(punctuation\)\[\]!' --> 'withmuch_\(punctuation\)'
-out: '§&Ω%€  leading garbage' --> 'leading_garbage'
-out: 'mixed    Ω   garbage' --> 'mixed_garbage'
-out: 'Bääääh!!' --> 'Bh'
-out: '§&Ω%€' --> ''
+out-lit: 'Word' --> 'Word'
+out-lit: 'a Sentence' --> 'a_Sentence'
+out-lit: 'trailing Withespace
+out-lit:        	' --> 'trailing_Withespace'
+out-lit: 'with    a  	 lot
+out-lit:   of Whitespace' --> 'with_a_lot_of_Whitespace'
+out-lit: 'with"much (punctuation)[]!' --> 'withmuch_(punctuation)'
+out-lit: '§&Ω%€  leading garbage' --> 'leading_garbage'
+out-lit: 'mixed    Ω   garbage' --> 'mixed_garbage'
+out-lit: 'Bääääh!!' --> 'Bh'
+out-lit: '§&Ω%€' --> ''
 END
 
 
@@ -597,20 +597,20 @@ END
 
 
 TEST "ScopedHolderTransfer_test" ScopedHolderTransfer_test <<END
-out: checking ScopedHolder<Dummy>...
-out: \.$
-out: \.\.install one element at index\[0\]
-out: ^\.$
-out: \.\.\*\*\* resize table to 16 elements
-out: ^\.$
-out: ^\.throw some exceptions...
-out: checking ScopedPtrHolder<Dummy>...
-out: ^\.$
-out: ..install one element at index\[0\]
-out: ^\.$
-out: ..\*\*\* resize table to 16 elements
-out: ^\.$
-out: ^\.throw some exceptions...
+out-lit: checking ScopedHolder<Dummy>...
+out-lit: .
+out-lit: ..install one element at index[0]
+out-lit: .
+out-lit: ..*** resize table to 16 elements
+out-lit: .
+out-lit: .throw some exceptions...
+out-lit: checking ScopedPtrHolder<Dummy>...
+out-lit: .
+out-lit: ..install one element at index[0]
+out-lit: .
+out-lit: ..*** resize table to 16 elements
+out-lit: .
+out-lit: .throw some exceptions...
 END
 
 
@@ -1051,131 +1051,137 @@ END
 
 
 TEST "TypeTuple_test" TypeTuple_test <<END
-out: L1	:-<1>-<3>-<5>-
-out: L2	:-<2>-<4>-
-out: L3	:-<7>-
-out: Tup1	:TYPES-<>-<1>-<3>-<5>-
-out: Tup1\(\)	:...Tuple\(\(1\),\(3\),\(5\)\)
-out: tup1x	:...Tuple\(\{11\},\(3\),\(5\)\)
-out: Type1	:-<1>-<3>-<5>-
-out: T_L1	:TYPES-\[\]-<1>-<3>-<5>-
-out: T1	:TYPES-<>-<1>-<3>-<5>-
-out: tup1	:...Tuple\(\{8\},\(3\),\(5\)\)
-out: tup2	:...Tuple\(\{9\},\(3\),\(5\)\)
-out: Prepend	:TYPES-\[\]-<i>-<1>-<3>-<5>-
-out: prepend	:...Tuple\(22,\{9\},\(3\),\(5\)\)
-out: 	:$
-out: 	: ---Sub-Tuple-Types----
-out: T_L2	:TYPES-\[\]-<2>-<4>-<1>-<3>-<5>-
-out: Head	:-<2>-
-out: Tail	:-<4>-<1>-<3>-<5>-
-out: T2	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out: Head2	:-<2>-
-out: Tail2	:-<4>-<1>-<3>-<5>-
-out: T2::Type	:-<2>-<4>-<1>-<3>-<5>-
-out: T2::TailType	:-<4>-<1>-<3>-<5>-
-out: T2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out: T2::ThisType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out: T2::Tail	:TYPES-<>-<4>-<1>-<3>-<5>-
-out: T2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
-out: T_L2::Type	:-<2>-<4>-<1>-<3>-<5>-
-out: T_L2::TailType	:-<4>-<1>-<3>-<5>-
-out: T_L2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out: T_L2::ThisType	:TYPES-\[\]-<2>-<4>-<1>-<3>-<5>-
-out: T_L2::Tail	:TYPES-\[\]-<4>-<1>-<3>-<5>-
-out: T_L2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
-out: NulT::Type	:-
-out: NulT::TailType	:-
-out: NulT::TupleType	:TYPES-<>-
-out: NulT::ThisType	:TYPES-<>-
-out: NulT::Tail	:TYPES-<>-
-out: NulT::ArgList	:-
-out: NulL::Type	:-
-out: NulL::TailType	:-
-out: NulL::TupleType	:TYPES-<>-
-out: NulL::ThisType	:TYPES-\[\]-
-out: NulL::Tail	:TYPES-\[\]-
-out: NulL::ArgList	:-
-out: 	:$
-out: 	: ---Shifted-Tuple---
-out: Ty_0	:-<2>-<4>-<7>-
-out: Ty_1	:-<4>-<7>-
-out: Ty_2	:-<7>-
-out: Ty_3	:-
-out: Ty_4	:-
-out: T_0	:TYPES-\[\]-<2>-<4>-<7>-
-out: T_1	:TYPES-\[\]-<4>-<7>-
-out: T_2	:TYPES-\[\]-<7>-
-out: T_3	:TYPES-\[\]-
-out: T_4	:TYPES-\[\]-
-out: tu3	:...Tuple\(\(2\),\(4\),\(7\)\)
-out: tu3_0	:...Tuple\(\(2\),\(4\),\(7\)\)
-out: tu3_1	:...Tuple\(\(4\),\(7\)\)
-out: tu3_2	:...Tuple\(\(7\)\)
-out: tu3_3	:...Tuple\(\)
-out: tu3_4	:...Tuple\(\)
-out: 	:$
-out: 	: ---creating-Tuples---
-out: tup1	:...Tuple\(\(1\),\(3\),\(5\)\)
-out: tup11	:...Tuple\(\{11\},\(3\),\(5\)\)
-out: tup12	:...Tuple\(\(1\),\{33\},\(5\)\)
-out: tup13	:...Tuple\(\{11\},\{33\},\(5\)\)
-out: Tup2	:TYPES-<>-<i>-<i>-<11>-
-out: tup2	:...Tuple\(41,42,\{43\}\)
-out: Tup22	:TYPES-<>-<i>-<11>-
-out: tup22	:...Tuple\(42,\{43\}\)
-out: Tup222	:TYPES-<>-<11>-
-out: tup222	:...Tuple\(\{43\}\)
-out: T0T	:TYPES-<>-
-out: T0L	:TYPES-\[\]-
-out: nullT	:...Tuple\(\)
-out: nullL	:...Tuple\(\)
-out: nulTcpy	:...Tuple\(\)
-out: nulTref	:...Tuple\(\)
-out: 	:$
-out: 	: ---build-from-sub-Tuples---
-out: T1357L	:TYPES-\[\]-<1>-<3>-<5>-<7>-
-out: T1357T	:TYPES-<>-<1>-<3>-<5>-<7>-
-out: T135L	:TYPES-\[\]-<1>-<3>-<5>-
-out: T57T	:TYPES-<>-<5>-<7>-
-out: T35T	:TYPES-<>-<3>-<5>-
-out: sub135	:...Tuple\(\(1\),\(3\),\(5\)\)
-out: b_135	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
-out: sub57	:...Tuple\(\(5\),\(7\)\)
-out: b_57	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
-out: sub35	:...Tuple\(\{8\},\{8\}\)
-out: b_35	:...Tuple\(\(1\),\{8\},\{8\},\(7\)\)
-out: b_35	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
-out: sub78	:...Tuple\(\{77\},\{88\}\)
-out: b_78	:...Tuple\(\(1\),\(3\),\(5\),\{77\}\)
-out: b_nul	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
-out: b_nul2	:...Tuple\(\)
-out: 	:$
-out: 	: ---copy-operations---
-out: tup1	:...Tuple\(\{11\},\{33\},\(5\)\)
-out: tup11	:...Tuple\(\{11\},\{33\},\{44\}\)
-out: tup1	:...Tuple\(\{11\},\{33\},\{44\}\)
-out: tupL	:...Tuple\(\{11\},\{33\},\{44\}\)
-out: tup1L	:...Tuple\(\{11\},\{33\},\{44\}\)
-out: 	:$
-out: 	: ---value-access---
-out: TupX	:TYPES-\[\]-<2>-<4>-<2>-<4>-
-out: tupX	:...Tuple\(\(2\),\(4\),\(2\),\(4\)\)
-out: tu2	:...Tuple\(\(2\),\(4\)\)
-out: tu2	:...Tuple\(\{5\},\{5\}\)
-out: tupX	:...Tuple\(\(2\),\(4\),\{5\},\{5\}\)
-out: T4	:TYPES-<>-<2>-<4>-
-out: t4	:...Tuple\(\{5\},\{5\}\)
-out: TupX::Type	:-<2>-<4>-<2>-<4>-
-out: TupX::TailType	:-<4>-<2>-<4>-
-out: TupX::ThisType	:TYPES-\[\]-<2>-<4>-<2>-<4>-
-out: TupX::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
-out: TupT::Type	:-<2>-<4>-<2>-<4>-
-out: TupT::TailType	:-<4>-<2>-<4>-
-out: TupT::ThisType	:TYPES-<>-<2>-<4>-<2>-<4>-
-out: TupT::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
-out: tupXcopy	:...Tuple\(\(2\),\(4\),\{5\},\{5\}\)
-out: tupXcast	:...Tuple\(\(2\),\(4\),\{5\},\{5\}\)
+out-lit: L1	:-<1>-<3>-<5>-
+out-lit: L2	:-<2>-<4>-
+out-lit: L3	:-<7>-
+out-lit: Tup1	:TYPES-<>-<1>-<3>-<5>-
+out-lit: Tup1()	:...Tuple((1),(3),(5))
+out-lit: tup1x	:...Tuple({11},(3),(5))
+out-lit: Type1	:-<1>-<3>-<5>-
+out-lit: T_L1	:TYPES-[]-<1>-<3>-<5>-
+out-lit: T1	:TYPES-<>-<1>-<3>-<5>-
+out-lit: tup1	:...Tuple({8},(3),(5))
+out-lit: tup2	:...Tuple({9},(3),(5))
+out-lit: Prepend	:TYPES-[]-<i>-<1>-<3>-<5>-
+out-lit: prepend	:...Tuple(22,{9},(3),(5))
+out-lit: 	:
+out-lit: 	: ---Sub-Tuple-Types----
+out-lit: T_L2	:TYPES-[]-<2>-<4>-<1>-<3>-<5>-
+out-lit: Head	:-<2>-
+out-lit: Tail	:-<4>-<1>-<3>-<5>-
+out-lit: T2	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out-lit: Head2	:-<2>-
+out-lit: Tail2	:-<4>-<1>-<3>-<5>-
+out-lit: T2::Type	:-<2>-<4>-<1>-<3>-<5>-
+out-lit: T2::TailType	:-<4>-<1>-<3>-<5>-
+out-lit: T2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out-lit: T2::ThisType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out-lit: T2::Tail	:TYPES-<>-<4>-<1>-<3>-<5>-
+out-lit: T2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
+out-lit: T_L2::Type	:-<2>-<4>-<1>-<3>-<5>-
+out-lit: T_L2::TailType	:-<4>-<1>-<3>-<5>-
+out-lit: T_L2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out-lit: T_L2::ThisType	:TYPES-[]-<2>-<4>-<1>-<3>-<5>-
+out-lit: T_L2::Tail	:TYPES-[]-<4>-<1>-<3>-<5>-
+out-lit: T_L2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
+out-lit: NulT::Type	:-
+out-lit: NulT::TailType	:-
+out-lit: NulT::TupleType	:TYPES-<>-
+out-lit: NulT::ThisType	:TYPES-<>-
+out-lit: NulT::Tail	:TYPES-<>-
+out-lit: NulT::ArgList	:-
+out-lit: NulL::Type	:-
+out-lit: NulL::TailType	:-
+out-lit: NulL::TupleType	:TYPES-<>-
+out-lit: NulL::ThisType	:TYPES-[]-
+out-lit: NulL::Tail	:TYPES-[]-
+out-lit: NulL::ArgList	:-
+out-lit: 	:
+out-lit: 	: ---Shifted-Tuple---
+out-lit: Ty_0	:-<2>-<4>-<7>-
+out-lit: Ty_1	:-<4>-<7>-
+out-lit: Ty_2	:-<7>-
+out-lit: Ty_3	:-
+out-lit: Ty_4	:-
+out-lit: T_0	:TYPES-[]-<2>-<4>-<7>-
+out-lit: T_1	:TYPES-[]-<4>-<7>-
+out-lit: T_2	:TYPES-[]-<7>-
+out-lit: T_3	:TYPES-[]-
+out-lit: T_4	:TYPES-[]-
+out-lit: tu3	:...Tuple((2),(4),(7))
+out-lit: tu3_0	:...Tuple((2),(4),(7))
+out-lit: tu3_1	:...Tuple((4),(7))
+out-lit: tu3_2	:...Tuple((7))
+out-lit: tu3_3	:...Tuple()
+out-lit: tu3_4	:...Tuple()
+out-lit: 	:
+out-lit: 	: ---creating-Tuples---
+out-lit: tup1	:...Tuple((1),(3),(5))
+out-lit: tup11	:...Tuple({11},(3),(5))
+out-lit: tup12	:...Tuple((1),{33},(5))
+out-lit: tup13	:...Tuple({11},{33},(5))
+out-lit: Tup2	:TYPES-<>-<i>-<i>-<11>-
+out-lit: tup2	:...Tuple(41,42,{43})
+out-lit: Tup22	:TYPES-<>-<i>-<11>-
+out-lit: tup22	:...Tuple(42,{43})
+out-lit: Tup222	:TYPES-<>-<11>-
+out-lit: tup222	:...Tuple({43})
+out-lit: T0T	:TYPES-<>-
+out-lit: T0L	:TYPES-[]-
+out-lit: nullT	:...Tuple()
+out-lit: nullL	:...Tuple()
+out-lit: nulTcpy	:...Tuple()
+out-lit: nulTref	:...Tuple()
+out-lit: 	:
+out-lit: 	: ---build-from-sub-Tuples---
+out-lit: T1357L	:TYPES-[]-<1>-<3>-<5>-<7>-
+out-lit: T1357T	:TYPES-<>-<1>-<3>-<5>-<7>-
+out-lit: T135L	:TYPES-[]-<1>-<3>-<5>-
+out-lit: T57T	:TYPES-<>-<5>-<7>-
+out-lit: T35T	:TYPES-<>-<3>-<5>-
+out-lit: sub135	:...Tuple((1),(3),(5))
+out-lit: b_135	:...Tuple((1),(3),(5),(7))
+out-lit: b_135	:...Tuple((1),(3),(5),(7))
+out-lit: b_135	:...Tuple((1),(3),(5),(7))
+out-lit: b_135	:...Tuple((1),(3),(5),(7))
+out-lit: sub57	:...Tuple((5),(7))
+out-lit: b_57	:...Tuple((1),(3),(5),(7))
+out-lit: sub35	:...Tuple({8},{8})
+out-lit: b_35	:...Tuple((1),{8},{8},(7))
+out-lit: b_35	:...Tuple((1),(3),(5),(7))
+out-lit: b_35	:...Tuple((1),(3),(5),(7))
+out-lit: sub78	:...Tuple({77},{88})
+out-lit: b_78	:...Tuple((1),(3),(5),{77})
+out-lit: b_nul	:...Tuple((1),(3),(5),(7))
+out-lit: b_nul	:...Tuple((1),(3),(5),(7))
+out-lit: b_nul2	:...Tuple()
+out-lit: b_nul2	:...Tuple()
+out-lit: 	:
+out-lit: 	: ---copy-operations---
+out-lit: tup1	:...Tuple({11},{33},(5))
+out-lit: tup11	:...Tuple({11},{33},{44})
+out-lit: tup1	:...Tuple({11},{33},{44})
+out-lit: tupL	:...Tuple({11},{33},{44})
+out-lit: tup1L	:...Tuple({11},{33},{44})
+out-lit: 	:
+out-lit: 	: ---value-access---
+out-lit: TupX	:TYPES-[]-<2>-<4>-<2>-<4>-
+out-lit: tupX	:...Tuple((2),(4),(2),(4))
+out-lit: tu2	:...Tuple((2),(4))
+out-lit: tu2	:...Tuple({5},{5})
+out-lit: tupX	:...Tuple((2),(4),{5},{5})
+out-lit: T4	:TYPES-<>-<2>-<4>-
+out-lit: t4	:...Tuple({5},{5})
+out-lit: TupX::Type	:-<2>-<4>-<2>-<4>-
+out-lit: TupX::TailType	:-<4>-<2>-<4>-
+out-lit: TupX::ThisType	:TYPES-[]-<2>-<4>-<2>-<4>-
+out-lit: TupX::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
+out-lit: TupT::Type	:-<2>-<4>-<2>-<4>-
+out-lit: TupT::TailType	:-<4>-<2>-<4>-
+out-lit: TupT::ThisType	:TYPES-<>-<2>-<4>-<2>-<4>-
+out-lit: TupT::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
+out-lit: tupXcopy	:...Tuple((2),(4),{5},{5})
+out-lit: tupXcast	:...Tuple((2),(4),{5},{5})
 return: 0
 END
 
