@@ -28,7 +28,7 @@
  ** considered to be part of the session.
  ** 
  ** Simple hash based implementation. Seems adequate for now (12/09).
- ** A main table associates Placement-ID to an Placement \em instance, which is contained
+ ** A main table associates Placement-ID to a Placement \em instance, which is contained
  ** and managed within this index. A second hashtable allows to reverse lookup the scope
  ** associations, especially for enumerating the contents of a scope. The latter is done
  ** by wrapping up an STL iterator range into a "Lumiera Forward Iterator" (adapter).
@@ -59,7 +59,6 @@
 #include "lib/iter-source.hpp"
 #include "include/logging.h"
 
-#include <boost/lambda/lambda.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 #include <unordered_map>
@@ -74,7 +73,6 @@ namespace session {
   
   using boost::hash;
   using boost::noncopyable;
-  using boost::lambda::var;
   using std::shared_ptr;
   using std::unordered_map;
   using std::unordered_multimap;
@@ -578,8 +576,6 @@ namespace session {
                          ,LUMIERA_ERROR_INDEX_CORRUPTED)
           { }
       };
-    
-    boost::lambda::placeholder1_type _1_;
   }
   
   
@@ -632,7 +628,8 @@ namespace session {
             return;  //  because root is it's own scope
           
           iterator elementsInScope = tab.queryScopeContents(theScope);
-          bool properlyRegistered = has_any (elementsInScope, _1_ == var(theElement));
+          auto equalsTheElement   = [&](PMO& entry) { return entry == theElement; };
+          bool properlyRegistered = has_any (elementsInScope, equalsTheElement);
           
           VERIFY ( properlyRegistered,   "(1.8) Elements", "Element not registered as member of the enclosing scope: "+ theElement);
         }

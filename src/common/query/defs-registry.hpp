@@ -59,8 +59,7 @@
 #include <set>
 #include <vector>
 #include <memory>
-#include <boost/utility.hpp>
-#include <boost/lambda/lambda.hpp>
+#include <boost/noncopyable.hpp>
 
 
 namespace lumiera{
@@ -69,10 +68,7 @@ namespace query  {
   using lib::P;
   using lib::ClassLock;
   using std::weak_ptr;
-  
   using std::string;
-  using boost::lambda::_1;
-  using boost::lambda::var;  
   
   namespace impl {
     
@@ -336,7 +332,10 @@ namespace query  {
           {
             string res;
             util::for_each ( Slot<TAR>::access(table_)
-                           , var(res) += _1
+                           , [&] (Record<TAR>& entry)
+                                 {
+                                   res += string(entry);
+                                 }
                            );
             return res;
           }

@@ -53,8 +53,8 @@ namespace test    {
                  PlacementMO::ID derailed_;
                };
       
-      static Ambush _kinky_;
-      return *reinterpret_cast<Scope*> (&_kinky_);
+      static Ambush _shady_scope_;
+      return *reinterpret_cast<Scope*> (&_shady_scope_);
     }
   }
   

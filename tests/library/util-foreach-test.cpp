@@ -27,7 +27,6 @@
 
 
 #include <boost/lexical_cast.hpp>
-#include <boost/lambda/lambda.hpp>
 #include <functional>
 #include <iostream>
 #include <vector>
@@ -45,8 +44,6 @@ using std::ref;
 using std::cout;
 using std::endl;
 
-using namespace boost::lambda;
-
 
 namespace util {
 namespace test {
@@ -60,11 +57,8 @@ namespace test {
     
     uint NUM_ELMS = 10;
     
-    
-    // need explicit definitions here, because we use
-    // <functional> and boost::lambda at the same time
-    std::_Placeholder<1>        _1;
-    boost::lambda::placeholder1_type _1_;
+    // Placeholder for argument in bind-expressions
+    std::_Placeholder<1> _1;
     
     
     VecI
@@ -351,7 +345,7 @@ namespace test {
         }
       
       
-      /** @test use a lambda-expression, to be invoked for each element */
+      /** @test use lambda-expressions, to be invoked for each element */
       template<typename CO>
       void
       check_foreach_lambda (CO coll)
@@ -359,29 +353,29 @@ namespace test {
           ANNOUNCE (check_foreach_lambda);
           uint sum(0);
           
-          for_each (coll, var(sum) += _1_ );
+          for_each (coll, [&sum] (uint entry) { sum += entry; });
           
           CHECK (sum == (NUM_ELMS+1) * NUM_ELMS/2);
           
-          CHECK (!and_all  (coll, _1_ - 1 ));
-          CHECK ( has_any  (coll, _1_ + 1 ));
+          CHECK (!and_all  (coll, [] (uint elm) { return elm - 1; }));
+          CHECK ( has_any  (coll, [] (uint elm) { return elm + 1; }));
         }
       
       
       /** @test verify the logic of universal and existential quantisation.
-       *        We use a predicate generated on-the-fly as lambda expression */
+       *        Using lambda expressions as predicates */
       template<typename CO>
       void
       check_existence_quant (CO coll)
         {
           ANNOUNCE (check_existence_quant);
           
-          CHECK ( and_all (coll, 0 < _1_ ));
-          CHECK (!and_all (coll, 1 < _1_ ));
+          CHECK ( and_all (coll, [] (uint elm) { return 0 < elm; }));
+          CHECK (!and_all (coll, [] (uint elm) { return 1 < elm; }));
           
-          CHECK ( has_any (coll, 0 < _1_ ));
-          CHECK ( has_any (coll, _1_ >= NUM_ELMS ));
-          CHECK (!has_any (coll, _1_ >  NUM_ELMS ));
+          CHECK ( has_any (coll, [] (uint elm) { return 0 < elm; }));
+          CHECK ( has_any (coll, [] (uint elm) { return elm >= NUM_ELMS; }));
+          CHECK (!has_any (coll, [] (uint elm) { return elm >  NUM_ELMS; }));
         }
       
       
@@ -442,23 +436,28 @@ namespace test {
           
 #define SHOW_CONTAINER for_each (coll, plainFunc);           _NL_
           
+          int counter = NUM_ELMS;
+          auto assign_and_decrement = [&] (int& entry)
+                                          {
+                                            entry = counter--;
+                                          };
+          
           // use a const reference to pass the container...
           VecI const& passByConstRef (coll);
           
-          int counter = NUM_ELMS;
-          for_each (passByConstRef,             _1_ = var(counter)-- );
+          for_each (passByConstRef,             assign_and_decrement );
           
           SHOW_CONTAINER
           // indeed got modifications into the original container!
           CHECK (0 == counter);
           
           // passing anonymous temporary
-          for_each (buildTestNumberz(NUM_ELMS), _1_ = var(counter)-- );
+          for_each (buildTestNumberz(NUM_ELMS), assign_and_decrement );
           
           // passing a smart-ptr managed copy
           std::shared_ptr<VecI> bySmartPtr (new VecI (coll));
           
-          for_each (bySmartPtr,                 _1_ = var(counter)-- );
+          for_each (bySmartPtr,                 assign_and_decrement );
           
           // both didn't influence the original container
           SHOW_CONTAINER
@@ -468,7 +467,7 @@ namespace test {
           // passing the container by pointer is also possible
           const VecI * const passByConstPointer (&coll);
           
-          for_each (passByConstPointer,         _1_ = var(counter)-- );
+          for_each (passByConstPointer,         assign_and_decrement );
           SHOW_CONTAINER
           // ...and does indeed influence the original container
         }
