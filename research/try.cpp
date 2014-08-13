@@ -28,24 +28,90 @@
 
 
 /** @file try.cpp
- ** Investigation: how to supply a hash function for custom types
+ ** Investigation: how to supply a hash function for custom types.
+ ** This example defines two custom types, each of which provides a way
+ ** to calculate hash values. But in one case, we use the new \c std::hash
+ ** as a framework, in the other case we use the extension mechanism for
+ ** \c boost::hash. The latter has the benefit of being simpler and less verbose
+ ** to write, since a simple ADL function is sufficient as extension point
  ** 
  */
 
 
 //#include <type_traits>
 #include <iostream>
+#include <string>
+#include <vector>
 
+#include <boost/functional/hash.hpp>
+#include <functional>
+
+using std::vector;
 using std::string;
 using std::cout;
 using std::endl;
 
+class S
+  {
+    string s_;
+    
+    friend std::hash<S>;
+    
+  public:
+    S(string ss ="")
+      : s_(ss)
+      { }
+  };
+
+namespace std {
+  template<>
+  struct hash<S>
+    {
+      size_t
+      operator() (S const& val)  const noexcept
+        {
+          hash<string> string_hasher;
+          return string_hasher(val.s_);
+        }
+    };
+}
+
+class V
+  {
+    vector<string> v_;
+    
+  public:
+    V(string ss ="")
+      {
+        v_.push_back(ss);
+      }
+    
+    friend size_t
+    hash_value (V const& v)
+    {
+      return boost::hash_value(v.v_);
+    }
+  };
 
 
 int 
 main (int, char**)
   {
+    string p("Путин"), pp(p);
+    S s(p), ss(pp);
+    V v(p), vv(pp);
     
+    std::hash<string>   std_stringHasher;
+    boost::hash<string> boo_stringHasher;
+    
+    std::hash<S>   std_customHasher;
+    boost::hash<V> boo_customHasher;
+    
+    cout << "raw hash(std) = "        << std_stringHasher(p) <<"|"<< std_stringHasher(pp)
+         << " (boost) = "             << boo_stringHasher(p) <<"|"<< boo_stringHasher(pp)
+         << "\n custom hash (std)   " << std_customHasher(s) <<"|"<< std_customHasher(ss)
+         << "\n custom hash (boost) " << boo_customHasher(v) <<"|"<< boo_customHasher(vv)
+         ;
     cout <<  "\n.gulp.\n";
     
     return 0;
