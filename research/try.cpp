@@ -24,55 +24,27 @@
 // 12/11 - how to detect if string conversion is possible?
 // 1/12  - is partial application of member functions possible?
 // 5/14  - c++11 transition: detect empty function object
+// 7/14  - c++11 transition: std hash function vs. boost hash
 
 
 /** @file try.cpp
- ** Investigation: empty and unbound function objects.
- ** Since \c std::function is bool convertible, it should be possible to detect an empty or
- ** unbound functor object and record this state in a VTable. Actually this approach used to
- ** work with tr1::function objects. But it ceased to work after switching to c++11
- ** 
- ** The reason is the more concise meaning of \em convertibility with C++11 -- now, an
- ** automatic conversion is required; thus what we need is rather the ability to \em construct
- ** our target type from the given source explicitly, which is a weaker requirement.
+ ** Investigation: how to supply a hash function for custom types
  ** 
  */
 
 
-#include <type_traits>
-#include <functional>
+//#include <type_traits>
 #include <iostream>
-
-//using std::placeholders::_1;
-//using std::placeholders::_2;
-using std::function;
-using std::bind;
 
 using std::string;
 using std::cout;
 using std::endl;
 
 
-uint
-funny (char c)
-{
-  return c;
-}
-
-using FUC = function<uint(char)>;
 
 int 
 main (int, char**)
   {
-    FUC fun(funny);
-    FUC empty;
-    
-    cout << "ASCII 'A' = " << fun('A');
-    cout << " defined: " << bool(fun)
-         << " undefd; " << bool(empty)
-         << " bool-convertible: " << std::is_convertible<FUC, bool>::value
-         << " can build bool: " << std::is_constructible<bool,FUC>::value
-         << " bool from string: " << std::is_constructible<bool,string>::value;
     
     cout <<  "\n.gulp.\n";
     

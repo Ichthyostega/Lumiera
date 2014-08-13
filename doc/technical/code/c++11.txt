@@ -1,0 +1,94 @@
+Transition to C++11
+===================
+
+_this page is a notepad for topics and issues related to the new C++ standard_
+
+.the state of affairs
+In Lumiera, we used a contemporary coding style right from start -- whenever the actual
+language and compiler support wasn't ready for what we consider _state of the craft_, we
+amended deficiencies by rolling our own helper facilities, with a little help from Boost.
+Thus there was no urge for us to adopt the new language standard; we could simply wait for
+the compiler support to mature. In spring 2014, finally, we were able to switch our codebase
+to C++11 with minimal effort. Following this switch, we're now able to reap the benefits of
+this approach; we may now gradually replace our sometimes clunky helpers and workarounds
+with the smooth syntax of the ``new language'' -- without being forced to learn or adopt
+an entirely new coding style, since that style isn't exactly new for us.
+
+Conceptual Changes
+------------------
+At some places we'll have to face modest conceptual changes though.
+
+Automatic Type Conversions
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+The notion of a type conversion is more precise and streamlined now. With the new standard,
+we have to distinguish between
+
+. type relations, like being the same type (e.g. in case of a template instantiation) or a subtype.
+. the ability to convert to a target type
+. the ability to construct an instance of the target type
+
+The conversion really requires help from the source type to be performed automatically: it needs
+to expose an explicit conversion operator. This is now clearly distinguished from the construction
+of a new value, instance or copy with the target type. This _ability to construct_ is a way weaker
+condition than the _ability to convert_, since construction never happens out of the blue. Rather
+it happens in a situation, where the _usage context_ prompts to create a new value with the target
+type. For example, we invoke a function with value arguments of the new type, but provide a value
+or reference of the source type.
+
+Please recall, C++ always had, and still has that characteristic ``fixation'' on the act
+of copying things. Maybe, 20 years ago that was an oddity -- yet today this approach is highly
+adequate, given the increasing parallelism of modern hardware. If in doubt, we should always
+prefer to work on a private copy. Pointers aren't as ``inherently efficient'' as they were
+20 years ago.
+
+[source,c++]
+--------------------------------------------------------------------------
+#include <type_traits>
+#include <functional>
+#include <iostream>
+
+using std::function;
+
+using std::string;
+using std::cout;
+using std::endl;
+
+
+uint
+funny (char c)
+{
+  return c;
+}
+
+using Funky = function<uint(char)>;      // <1>
+
+int 
+main (int, char**)
+  {
+    Funky fun(funny);                    // <2>
+    Funky empty;                         // <3>
+    
+    cout << "ASCII 'A' = " << fun('A');
+    cout << " defined: " << bool(fun)    // <4>
+         << " undefd; " << bool(empty)
+         << " bool-convertible: " << std::is_convertible<Funky, bool>::value     // <5>
+         << " can build bool: "   << std::is_constructible<bool,Funky>::value    // <6>
+         << " bool from string: " << std::is_constructible<bool,string>::value;  // <7>
+--------------------------------------------------------------------------
+<1> a new-style type definition (type alias)
+<2> a function object can be _constructed_ from `funny`, which is a reference
+    to the C++ language function entity
+<3> a default constructed function object is in unbound (invalid) state
+<4> we can explicitly _convert_ any function object to `bool` by _constructing_ a Bool value.
+    This is idiomatic C usage to check for the validity of an object. In this case, the _bound_
+    function object yields `true`, while the _unbound_ function object yields `false`
+<5> but the function object is _not automatically convertible_ to bool
+<6> yet it is possible to _construct_ a `bool` from a funktor (we just did that)
+<7> while it is not possible to _construct_ a bool from a string (we'd need to interpret and
+    parse the string, which mustn't be confused with a conversion)
+
+This example prints the following output::
+
+ ASCII 'A' = 65 defined: 1 undefd; 0 bool-convertible: 0 can build bool: 1 bool from string: 0
+
+
