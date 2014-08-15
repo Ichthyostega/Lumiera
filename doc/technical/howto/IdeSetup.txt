@@ -1,0 +1,39 @@
+IDE Setup
+=========
+
+_this page is a loose collection of hints how to set up the work environment for Lumiera development_ +
+Please feel free to add instructions for further environments as applicable.
+
+There is no mandatory or even recommended IDE or editor -- use what you're familiar with and what
+fits the purpose. Even a plain text editor will do, but won't get you far; in a project of the size
+of Lumiera, the cross-linking and searching features of a capable Editor or real IDE are almost
+indispensable to make sense of the code base.
+
+Eclipse CDT
+-----------
+.Notes by _ichthyo_
+There is nothing really fancy with the configuration, things work as you'd expect. Use your common sense.
+ * create a _Makefile project_ (not a _managed_ project where the IDE issues the build commands).
+   There is a setup wizard ``Makefile Project with Existing Code'', but the manual setup works well too and is easy.
+ * visit the Project Properties. In the ``C++ Build'', replace the default `make` command:
+   * use `scons` as the basic make command and ensure you're in the top folder of the project
+   * you may set up a parallel build, with the ``optimal jobs'' setting (N# of jobs equal number of cores)
+   * as targets for the incremental build use `build testcode research`
+   * as argument for full project clean use `-c all`
+ * set up the Indexer / Scanner for editing support and cross linking
+   in the ``C++ General'' section of the Project properties
+   * define as _source location_ the directories `src`, `tests`, and maybe `research`
+   * define as _target location_ the directory `target`
+   * at some point in the past, I had problems with a lacking definiton of our own library
+     facilities. I could resolve them by adding the directory `target/modules` to the _Library Paths_ tab
+   * it might help to add the include paths of some of the most relevant libraries (in case the automatic discovery
+     fails to pick them up properly). Eg. the GTK includes and the glibmm includes. Hint: the automatic discovery
+     works better if you do a full build once with `scons VERBOSE=true`, so the IDE can see the full command lines.
+   * in _Preprocessor Paths, Macros_ we need to ensure that the ``builtin compiler'' configuration provider is
+     actually enabled. This provider is used by the IDE to retrieve definitions from the compiler for syntax checks
+     while you type and for building the search index. Typically, this provider is called ``GCC Builtin Compiler Settings'';
+     please ensure in the global (or the project specific) configuration that the invocation command line includes
+     the argument `-std=gnu++11` -- otherwise you'll get a lot of red squiggles on the new language features ;-)
+   * visit the _Indexer_ tab and ensure the full indexer is enabled. Maybe change a setting and hit ``apply'' to
+     force re-building of the index. Depending on your computer, this indexing might take quite some time initially
+

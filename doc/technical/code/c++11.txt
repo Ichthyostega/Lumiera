@@ -41,7 +41,7 @@ adequate, given the increasing parallelism of modern hardware. If in doubt, we s
 prefer to work on a private copy. Pointers aren't as ``inherently efficient'' as they were
 20 years ago.
 
-[source,c++]
+[source,c]
 --------------------------------------------------------------------------
 #include <type_traits>
 #include <functional>
@@ -87,8 +87,9 @@ main (int, char**)
 <7> while it is not possible to _construct_ a bool from a string (we'd need to interpret and
     parse the string, which mustn't be confused with a conversion)
 
-This example prints the following output::
-
- ASCII 'A' = 65 defined: 1 undefd; 0 bool-convertible: 0 can build bool: 1 bool from string: 0
+This example prints the following output: +
+----
+ASCII 'A' = 65 defined: 1 undefd; 0 bool-convertible: 0 can build bool: 1 bool from string: 0
+----
 
 
