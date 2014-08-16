@@ -124,6 +124,33 @@ namespace std {
 
 #include <boost/functional/hash.hpp>
 
+
+
+namespace lib {
+namespace meta {
+  
+  namespace {
+    struct NoUsableHashDefinition { size_t more_than_one[2]; };
+    typedef size_t HasUsableHashDefinition;
+    
+    NoUsableHashDefinition hash_value(...);
+    
+  }
+  
+  template<typename TY>
+  class provides_BoostHashFunction
+    {
+      TY const& unusedDummy = *(TY*)nullptr;
+      
+    public:
+      enum{ value = (sizeof(HasUsableHashDefinition) == sizeof(hash_value(unusedDummy))) };
+    };
+}}
+
+#include <boost/utility/enable_if.hpp>
+
+
+
 //#include <type_traits>
 #include <iostream>
 #include <string>
@@ -197,6 +224,8 @@ main (int, char**)
          << "\n      (boost) =      " << boo_stringHasher(p) <<"|"<< boo_stringHasher(pp)
          << "\n custom hash (std)   " << std_customHasher(s) <<"|"<< std_customHasher(ss)
          << "\n custom hash (boost) " << boo_customHasher(v) <<"|"<< boo_customHasher(vv)
+         << "\n has_boost_hash<S>   " << lib::meta::provides_BoostHashFunction<S>::value
+         << "\n has_boost_hash<V>   " << lib::meta::provides_BoostHashFunction<V>::value
 //       << "\n use std from boost: " << std2boo_crossHar(s) <<"|"<< std2boo_crossHar(ss)
 //       << "\n use boost from std: " << boo2std_crossHar(v) <<"|"<< boo2std_crossHar(vv)
          ;
