@@ -1,7 +1,7 @@
 /* try.cpp  -  for trying out some language features....
  *             scons will create the binary bin/try
  *
- */ 
+ */
 
 // 8/07  - how to control NOBUG??
 //         execute with   NOBUG_LOG='ttt:TRACE' bin/try
@@ -35,16 +35,99 @@
  ** \c boost::hash. The latter has the benefit of being simpler and less verbose
  ** to write, since a simple ADL function is sufficient as extension point
  ** 
+ ** Now it would be desirable to bridge automatically between the two systems of
+ ** defining hash functions. Unfortunately, the standard library since GCC 4.7
+ ** contains a default implementation of std::hash to trigger a static assertion.
+ ** Probably this was meant to educate people, but has the adverse side effect to
+ ** prohibit any metaprogramming through SFINAE
+ ** 
+ ** This mistake was corrected somewhere in the 4.8.x series, but in the meantime
+ ** we'll use the dirty trick proposed by "enobayram" to hijack and fix the problematic
+ ** definition from the standard library.
+ ** http://stackoverflow.com/questions/12753997/check-if-type-is-hashable
+ **
  */
 
+#include <cstddef>
+
+namespace std {
+  
+  template<typename Result, typename Arg>
+  struct __hash_base;
+  
+  /**
+   * Primary class template for std::hash.
+   * We provide no default implementation, but a marker type
+   * to allow detection of custom implementation through metaprogramming
+   */
+  template<typename TY>
+  struct hash
+    : public __hash_base<size_t, TY>
+    {
+      
+/////// deliberately NOT defined to allow for SFINAE...
+//    
+//    static_assert (sizeof(TY) < 0, "std::hash is not specialized for this type");
+//    size_t operator()(const _Tp&) const noexcept;
+      
+      typedef int NotHashable;
+    };
+  
+}
+
+
+
+#define hash hash_HIDDEN
+#define _Hash_impl _Hash_impl_HIDDEN
+#include <functional>
+#undef hash
+#undef _Hash_impl
+
+
+namespace std {
+  
+  struct _Hash_impl
+    : public std::_Hash_impl_HIDDEN
+    {
+      template<typename ... ARGS>
+      static auto
+      hash (ARGS&&... args) -> decltype(hash_HIDDEN (std::forward<ARGS>(args)...))
+        {
+          return hash_HIDDEN (std::forward<ARGS>(args)...);
+        }
+    };
+
+#define STD_HASH_IMPL(_TY_) \
+  template<> struct hash<_TY_> : public hash_HIDDEN<_TY_> { };
+
+  STD_HASH_IMPL (bool)
+  STD_HASH_IMPL (char)
+  STD_HASH_IMPL (signed char)
+  STD_HASH_IMPL (unsigned char)
+  STD_HASH_IMPL (wchar_t)
+  STD_HASH_IMPL (char16_t)
+  STD_HASH_IMPL (char32_t)
+  STD_HASH_IMPL (short)
+  STD_HASH_IMPL (int)
+  STD_HASH_IMPL (long)
+  STD_HASH_IMPL (long long)
+  STD_HASH_IMPL (unsigned short)
+  STD_HASH_IMPL (unsigned int)
+  STD_HASH_IMPL (unsigned long)
+  STD_HASH_IMPL (unsigned long long)
+  STD_HASH_IMPL (float)
+  STD_HASH_IMPL (double)
+  STD_HASH_IMPL (long double)
+  
+#undef STD_HASH_IMPL
+}
+
+#include <boost/functional/hash.hpp>
 
 //#include <type_traits>
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include <boost/functional/hash.hpp>
-#include <functional>
 
 using std::vector;
 using std::string;
@@ -94,7 +177,7 @@ class V
   };
 
 
-int 
+int
 main (int, char**)
   {
     string p("Путин"), pp(p);
@@ -107,10 +190,15 @@ main (int, char**)
     std::hash<S>   std_customHasher;
     boost::hash<V> boo_customHasher;
     
-    cout << "raw hash(std) = "        << std_stringHasher(p) <<"|"<< std_stringHasher(pp)
-         << " (boost) = "             << boo_stringHasher(p) <<"|"<< boo_stringHasher(pp)
+    std::hash<V>   boo2std_crossHar;
+    boost::hash<S> std2boo_crossHar;
+    
+    cout << "raw hash(std) =      "   << std_stringHasher(p) <<"|"<< std_stringHasher(pp)
+         << "\n      (boost) =      " << boo_stringHasher(p) <<"|"<< boo_stringHasher(pp)
          << "\n custom hash (std)   " << std_customHasher(s) <<"|"<< std_customHasher(ss)
          << "\n custom hash (boost) " << boo_customHasher(v) <<"|"<< boo_customHasher(vv)
+//       << "\n use std from boost: " << std2boo_crossHar(s) <<"|"<< std2boo_crossHar(ss)
+//       << "\n use boost from std: " << boo2std_crossHar(v) <<"|"<< boo2std_crossHar(vv)
          ;
     cout <<  "\n.gulp.\n";
     
