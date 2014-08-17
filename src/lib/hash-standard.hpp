@@ -66,7 +66,7 @@
 #ifndef LIB_HASH_STANDARD_H
 #define LIB_HASH_STANDARD_H
 #ifdef _FUNCTIONAL_HASH_H
-#error "unable to hijack std::hash, since <bits/functional_hash.> has already been included. \
+#error "unable to hijack std::hash, since <bits/functional_hash.hpp> has already been included. \
         Please ensure that lib/hash_standard.hpp is included first, before including <string> or <functional>"
 #endif
 
