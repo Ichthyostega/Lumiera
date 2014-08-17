@@ -45,15 +45,64 @@
  ** we'll use the dirty trick proposed by "enobayram" to hijack and fix the problematic
  ** definition from the standard library.
  ** http://stackoverflow.com/questions/12753997/check-if-type-is-hashable
+ ** 
+ ** Moreover, in this exploration, we build an automatic bridge to invoke
+ ** existing boost hash functions whenever a \c std::hash definition is required.
  **
  */
 
 #include <cstddef>
 
+namespace lib {
+namespace meta {
+  
+  namespace {
+    struct NoUsableHashDefinition { size_t more_than_one[2]; };
+    typedef size_t HasUsableHashDefinition;
+    
+    NoUsableHashDefinition hash_value(...);
+    
+  }
+  
+  template<typename TY>
+  class provides_BoostHashFunction
+    {
+      TY const& unusedDummy = *(TY*)nullptr;
+      
+    public:
+      enum{ value = (sizeof(HasUsableHashDefinition) == sizeof(hash_value(unusedDummy))) };
+    };
+
+}}
+
+#include <boost/utility/enable_if.hpp>
+
 namespace std {
   
   template<typename Result, typename Arg>
   struct __hash_base;
+  
+  
+  template<typename TY, typename TOGGLE = void>
+  struct _HashImplementationSelector
+    : public __hash_base<size_t, TY>
+    {
+      static_assert (sizeof(TY) < 0, "No hash implementation found. Either specialise std::hash or provide a boost-style hash_value via ADL.");
+      
+      typedef int NotHashable;
+    };
+  
+  template<typename TY>
+  struct _HashImplementationSelector<TY,   typename boost::enable_if< lib::meta::provides_BoostHashFunction<TY> >::type >
+    : public __hash_base<size_t, TY>
+    {
+      size_t
+      operator() (TY const& elm) const noexcept
+        {
+          return hash_value(elm);
+        }
+      
+    };
   
   /**
    * Primary class template for std::hash.
@@ -62,16 +111,8 @@ namespace std {
    */
   template<typename TY>
   struct hash
-    : public __hash_base<size_t, TY>
-    {
-      
-/////// deliberately NOT defined to allow for SFINAE...
-//    
-//    static_assert (sizeof(TY) < 0, "std::hash is not specialized for this type");
-//    size_t operator()(const _Tp&) const noexcept;
-      
-      typedef int NotHashable;
-    };
+    : public _HashImplementationSelector<TY>
+    { };
   
 }
 
@@ -122,36 +163,12 @@ namespace std {
 #undef STD_HASH_IMPL
 }
 
+
+
+
+
 #include <boost/functional/hash.hpp>
 
-
-
-namespace lib {
-namespace meta {
-  
-  namespace {
-    struct NoUsableHashDefinition { size_t more_than_one[2]; };
-    typedef size_t HasUsableHashDefinition;
-    
-    NoUsableHashDefinition hash_value(...);
-    
-  }
-  
-  template<typename TY>
-  class provides_BoostHashFunction
-    {
-      TY const& unusedDummy = *(TY*)nullptr;
-      
-    public:
-      enum{ value = (sizeof(HasUsableHashDefinition) == sizeof(hash_value(unusedDummy))) };
-    };
-}}
-
-#include <boost/utility/enable_if.hpp>
-
-
-
-//#include <type_traits>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -218,7 +235,6 @@ main (int, char**)
     boost::hash<V> boo_customHasher;
     
     std::hash<V>   boo2std_crossHar;
-    boost::hash<S> std2boo_crossHar;
     
     cout << "raw hash(std) =      "   << std_stringHasher(p) <<"|"<< std_stringHasher(pp)
          << "\n      (boost) =      " << boo_stringHasher(p) <<"|"<< boo_stringHasher(pp)
@@ -226,9 +242,14 @@ main (int, char**)
          << "\n custom hash (boost) " << boo_customHasher(v) <<"|"<< boo_customHasher(vv)
          << "\n has_boost_hash<S>   " << lib::meta::provides_BoostHashFunction<S>::value
          << "\n has_boost_hash<V>   " << lib::meta::provides_BoostHashFunction<V>::value
-//       << "\n use std from boost: " << std2boo_crossHar(s) <<"|"<< std2boo_crossHar(ss)
-//       << "\n use boost from std: " << boo2std_crossHar(v) <<"|"<< boo2std_crossHar(vv)
+         << "\n use boost from std: " << boo2std_crossHar(v) <<"|"<< boo2std_crossHar(vv)
          ;
+    
+//  Note: does not compile,
+//          since there is not automatic bridge from std to boost hash
+//  
+//  boost::hash<S>()(s);
+    
     cout <<  "\n.gulp.\n";
     
     return 0;
