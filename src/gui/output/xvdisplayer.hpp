@@ -34,13 +34,15 @@
 #ifndef GUI_OUTPUT_XVDISPLAYER_H
 #define GUI_OUTPUT_XVDISPLAYER_H
 
+
+#include "gui/output/displayer.hpp"
+#include "gui/gtk-base.hpp"
+
 #include <X11/Xlib.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <X11/extensions/XShm.h>
 #include <X11/extensions/Xvlib.h>
-
-#include "displayer.hpp"
 
 
 namespace Gtk {

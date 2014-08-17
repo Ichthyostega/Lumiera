@@ -29,9 +29,9 @@
 #ifndef VIDEO_DISPLAY_WIDGET_HPP
 #define VIDEO_DISPLAY_WIDGET_HPP
 
-#include <gtkmm.h>
-
+#include "gui/gtk-base.hpp"
 #include "gui/output/displayer.hpp"
+
 
 using namespace gui::output;
 

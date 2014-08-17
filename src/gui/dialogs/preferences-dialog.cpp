@@ -20,10 +20,11 @@
 
 * *****************************************************/
 
+
 #include "gui/gtk-lumiera.hpp"
 
-#include "preferences-dialog.hpp"
-#include "dialog.hpp"
+#include "gui/dialogs/preferences-dialog.hpp"
+#include "gui/dialogs/dialog.hpp"
 
 using namespace Gtk;
 

@@ -20,13 +20,13 @@
 
 * *****************************************************/
 
-#include "panel-bar.hpp"
+#include "gui/widgets/panel-bar.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/workspace/panel-manager.hpp"
 #include "gui/panels/panel.hpp"
 #include "gui/util/rectangle.hpp"
+#include "include/logging.h"
 
-#include <nobug.h>
 #include <algorithm>
 
 using namespace Gtk;

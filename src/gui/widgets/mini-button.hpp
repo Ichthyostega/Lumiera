@@ -26,7 +26,8 @@
 #ifndef MINI_BUTTON_HPP
 #define MINI_BUTTON_HPP
 
-#include <gtkmm.h>
+#include "gui/gtk-base.hpp"
+
 
 namespace gui {
 namespace widgets {

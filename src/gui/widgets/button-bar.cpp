@@ -20,9 +20,9 @@
 
 * *****************************************************/
 
-#include "button-bar.hpp"
+#include "gui/widgets/button-bar.hpp"
+#include "include/logging.h"
 
-#include <nobug.h>
 #include <algorithm>
 
 using namespace Gtk;

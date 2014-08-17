@@ -19,15 +19,18 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file name-chooser.hpp
  ** This file contains the definition of the name chooser dialog
  **
  */
 
+
 #ifndef NAME_CHOOSER_H
 #define NAME_CHOOSER_H
 
 #include "gui/gtk-lumiera.hpp"
+
 
 namespace gui {
 namespace dialogs {

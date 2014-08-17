@@ -23,9 +23,9 @@
 * *****************************************************/
 
 #include "gui/gtk-lumiera.hpp"
-#include "displayer.hpp"
-#include "xvdisplayer.hpp"
-#include "gdkdisplayer.hpp"
+#include "gui/output/displayer.hpp"
+#include "gui/output/xvdisplayer.hpp"
+#include "gui/output/gdkdisplayer.hpp"
 
 namespace gui {
 namespace output {

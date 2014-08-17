@@ -24,8 +24,8 @@
 #include "gui/controller/playback-controller.hpp"
 #include "gui/display-service.hpp"
 #include "lib/error.hpp"
+#include "include/logging.h"
 
-#include <nobug.h>
 
 namespace gui {
 namespace controller { 

@@ -20,11 +20,13 @@
 
 * *****************************************************/
 
+
 #include "gui/gtk-lumiera.hpp"
 
-#include "render.hpp"
-#include "dialog.hpp"
+#include "gui/dialogs/render.hpp"
+#include "gui/dialogs/dialog.hpp"
 #include "include/logging.h"
+
 
 using namespace Gtk;
 

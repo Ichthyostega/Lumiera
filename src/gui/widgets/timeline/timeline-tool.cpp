@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-#include "timeline-tool.hpp"
+#include "gui/widgets/timeline/timeline-tool.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 
 using namespace Gdk;

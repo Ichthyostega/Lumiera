@@ -21,13 +21,13 @@
 
 * *****************************************************/
 
-#include <boost/foreach.hpp>
 
-#include "timeline-header-container.hpp"
-#include "timeline-track.hpp"
+#include "gui/widgets/timeline/timeline-header-container.hpp"
+#include "gui/widgets/timeline/timeline-track.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 #include "gui/util/rectangle.hpp"
 
+#include <boost/foreach.hpp>
 #include <memory>
 
 using std::pair;

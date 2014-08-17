@@ -19,14 +19,17 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file controller/controller.hpp
  ** This file contains the definition of the controller object
  */
 
+
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "playback-controller.hpp"
+
+#include "gui/controller/playback-controller.hpp"
 
 
 namespace gui {

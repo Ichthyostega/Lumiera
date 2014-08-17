@@ -20,7 +20,8 @@
 
 * *****************************************************/
 
-#include "timeline-group-track.hpp"
+
+#include "gui/widgets/timeline/timeline-group-track.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 
 using namespace Gtk;

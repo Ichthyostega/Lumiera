@@ -22,7 +22,7 @@
 * *****************************************************/
 
 
-#include "timeline-layout-helper.hpp"
+#include "gui/widgets/timeline/timeline-layout-helper.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 #include "gui/model/sequence.hpp"
 #include "gui/util/rectangle.hpp"

@@ -20,10 +20,8 @@
 
 * *****************************************************/
 
-#include <cairomm/cairomm.h>
-#include <boost/foreach.hpp>
 
-#include "timeline-body.hpp"
+#include "gui/widgets/timeline/timeline-body.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 #include "gui/window-manager.hpp"
 #include "gui/util/cairo-util.hpp"
@@ -31,6 +29,9 @@
 #include "timeline-arrow-tool.hpp"
 #include "timeline-ibeam-tool.hpp"
 #include "include/logging.h"
+
+#include <cairomm/cairomm.h>
+#include <boost/foreach.hpp>
 
 using namespace Gtk;
 using namespace std;

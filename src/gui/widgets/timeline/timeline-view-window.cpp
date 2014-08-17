@@ -20,8 +20,10 @@
 
 * *****************************************************/
 
-#include "timeline-view-window.hpp"
+
+#include "gui/widgets/timeline/timeline-view-window.hpp"
 #include "gui/widgets/timeline-widget.hpp"
+
 
 using namespace Gtk;
 using namespace gui::widgets;

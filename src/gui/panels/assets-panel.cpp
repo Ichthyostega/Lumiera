@@ -21,7 +21,7 @@
 * *****************************************************/
 
 #include "gui/gtk-lumiera.hpp"
-#include "assets-panel.hpp"
+#include "gui/panels/assets-panel.hpp"
 
 namespace gui {
 namespace panels {

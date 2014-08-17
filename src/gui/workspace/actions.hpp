@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file actions.hpp
  ** This file contains the definition of a helper class for the
  ** main workspace window object, which registers and handles

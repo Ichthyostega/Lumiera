@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file project.hpp
  ** This file contains the definition of Project, a class which
  ** stores project data, and wraps proc layer data
@@ -26,6 +27,7 @@
 
 #ifndef PROJECT_HPP
 #define PROJECT_HPP
+
 
 #include "gui/model/sequence.hpp"
 #include "lib/observable-list.hpp"

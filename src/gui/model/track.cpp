@@ -20,8 +20,9 @@
 
 * *****************************************************/
 
-#include "track.hpp"
-#include "parent-track.hpp"
+
+#include "gui/model/track.hpp"
+#include "gui/model/parent-track.hpp"
 
 #include <boost/foreach.hpp>
 #include <memory>

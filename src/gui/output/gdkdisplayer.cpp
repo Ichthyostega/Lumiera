@@ -23,13 +23,14 @@
 * *****************************************************/
 
 #include "gui/gtk-lumiera.hpp"
+#include "gui/output/gdkdisplayer.hpp"
 
 #include <gdk/gdkx.h>
 #include <iostream>
+
 using std::cerr;
 using std::endl;
 
-#include "gdkdisplayer.hpp"
 
 namespace gui {
 namespace output {

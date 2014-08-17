@@ -19,18 +19,21 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file controller/playback-controller.hpp
  ** This file contains the definition of the playback controller object
  */
 
+
 #ifndef PLAYBACK_CONTROLLER_HPP
 #define PLAYBACK_CONTROLLER_HPP
 
+#include "gui/gtk-base.hpp"
 #include "include/dummy-player-facade.h"
 #include "include/display-facade.h"
 
-#include <glibmm.h>
 #include <boost/noncopyable.hpp>
+
 
 namespace gui {
 namespace controller {

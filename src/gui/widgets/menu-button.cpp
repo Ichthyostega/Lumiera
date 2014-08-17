@@ -20,9 +20,10 @@
 
 * *****************************************************/
 
-#include "menu-button.hpp"
 
-#include <nobug.h>
+#include "gui/widgets/menu-button.hpp"
+#include "include/logging.h"
+
 
 using namespace Gtk;
 using namespace sigc;

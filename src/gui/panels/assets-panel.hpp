@@ -26,7 +26,8 @@
 #ifndef ASSETS_PANEL_HPP
 #define ASSETS_PANEL_HPP
 
-#include "panel.hpp"
+
+#include "gui/panels/panel.hpp"
 
 namespace gui {
 namespace panels {

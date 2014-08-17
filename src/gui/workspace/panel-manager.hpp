@@ -28,10 +28,11 @@
 #ifndef PANEL_MANAGER_HPP
 #define PANEL_MANAGER_HPP
 
+#include "gui/panels/panel.hpp"
+
 #include <gdl/gdl.h>
 #include <typeinfo>
 
-#include "gui/panels/panel.hpp"
 
 using namespace gui::panels;
 

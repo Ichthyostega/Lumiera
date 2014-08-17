@@ -22,8 +22,9 @@
 * *****************************************************/
 
 
-#include "timecode-widget.hpp"
+#include "gui/widgets/timecode-widget.hpp"
 #include "gui/util/convert.hpp"
+
 #include "lib/time/diagnostics.hpp"  ////////////TODO: temporary solution to get H:M:S components. Use TimeCode instead!
 
 #include <cmath>

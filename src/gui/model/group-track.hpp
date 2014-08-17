@@ -19,14 +19,17 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file widgets/timeline/group-track.hpp
  ** This file contains the definition of group track timeline objects
  */
 
+
 #ifndef GROUP_TRACK_HPP
 #define GROUP_TRACK_HPP
 
-#include "parent-track.hpp"
+#include "gui/model/parent-track.hpp"
+
 
 namespace gui {
 namespace model {

@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-#include "panel-manager.hpp"
+#include "gui/workspace/panel-manager.hpp"
 
 #include "gui/panels/assets-panel.hpp"
 #include "gui/panels/viewer-panel.hpp"

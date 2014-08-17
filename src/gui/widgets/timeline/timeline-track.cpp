@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-#include "timeline-track.hpp"
+#include "gui/widgets/timeline/timeline-track.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 #include "gui/window-manager.hpp"
 #include "gui/dialogs/name-chooser.hpp"

@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-#include "project.hpp"
-#include "sequence.hpp"
+#include "gui/model/project.hpp"
+#include "gui/model/sequence.hpp"
 
 #include <memory>
 

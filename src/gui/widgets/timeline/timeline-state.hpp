@@ -27,6 +27,7 @@
 #define TIMELINE_STATE_HPP
 
 #include "gui/widgets/timeline/timeline-view-window.hpp"
+
 #include "lib/time/mutation.hpp"
 #include "lib/time/control.hpp"
 

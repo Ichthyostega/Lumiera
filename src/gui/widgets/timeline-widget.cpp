@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-#include "timeline-widget.hpp"
+#include "gui/widgets/timeline-widget.hpp"
 
 #include <boost/foreach.hpp>
 #include <typeinfo>

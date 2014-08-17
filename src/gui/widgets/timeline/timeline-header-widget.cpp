@@ -21,10 +21,11 @@
 
 * *****************************************************/
 
-#include <boost/foreach.hpp>
 
 #include "gui/widgets/timeline-widget.hpp"
 #include "gui/util/rectangle.hpp"
+
+#include <boost/foreach.hpp>
 
 using namespace Gtk;
 using namespace std;

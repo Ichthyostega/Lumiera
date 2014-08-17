@@ -26,13 +26,15 @@
 #ifndef PANEL_BAR_HPP
 #define PANEL_BAR_HPP
 
+#include "gui/widgets/menu-button.hpp"
+
 #include <gtkmm.h>
-#include "menu-button.hpp"
+
 
 namespace gui {
 
 namespace panels {
-class Panel; 
+  class Panel;
 }
   
 namespace widgets {

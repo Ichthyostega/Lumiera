@@ -19,15 +19,18 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file render.hpp
  ** This file contains the definition of the render output dialog
  **
  */
 
+
 #ifndef RENDER_HPP
 #define RENDER_HPP
 
 #include "gui/gtk-lumiera.hpp"
+
 
 namespace gui {
 namespace dialogs {

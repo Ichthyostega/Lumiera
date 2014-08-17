@@ -21,14 +21,16 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file displayer.hpp
- ** This file contains the defintion of Displayer; the base class
+ ** This file contains the definition of Displayer; the base class
  ** of all video display implementations
  ** @see displayer.cpp
  */
 
 #ifndef DISPLAYER_HPP
 #define DISPLAYER_HPP
+
 
 namespace gui {
 namespace output {

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-#include "actions.hpp"
-#include "workspace-window.hpp"
+#include "gui/workspace/actions.hpp"
+#include "gui/workspace/workspace-window.hpp"
 
 #include "gui/window-manager.hpp"
 

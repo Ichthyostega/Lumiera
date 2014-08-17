@@ -20,11 +20,11 @@
 
 * *****************************************************/
 
-#include <boost/foreach.hpp>
-
 #include "gui/widgets/timeline/timeline-clip.hpp"
 #include "gui/widgets/timeline/timeline-clip-track.hpp"
 #include "gui/widgets/timeline/timeline-view-window.hpp"
+
+#include <boost/foreach.hpp>
 
 using namespace Gtk;
 

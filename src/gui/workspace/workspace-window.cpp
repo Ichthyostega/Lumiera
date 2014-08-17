@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+#include "gui/gtk-lumiera.hpp"
+#include "workspace-window.hpp"
+#include "include/logging.h"
+
 #include <gtkmm/stock.h>
 
 #ifdef ENABLE_NLS
@@ -32,9 +36,6 @@
 #include <gdl/gdl-dock-item.h>
 #include <gdl/gdl-dock-placeholder.h>
 
-#include "gui/gtk-lumiera.hpp"
-#include "workspace-window.hpp"
-#include "include/logging.h"
 
 using namespace Gtk;
 using namespace Glib;

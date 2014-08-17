@@ -19,10 +19,12 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file render.hpp
  ** This file contains the definition of the application preferences dialog
  **
  */
+
 
 #ifndef PREFERENCES_DIALOG_HPP
 #define PREFERENCES_DIALOG_HPP
@@ -33,7 +35,7 @@ namespace gui {
 namespace dialogs {
 
 /** 
- * The defintion of render output dialog class
+ * The definition of render output dialog class
  */
 class PreferencesDialog : public Gtk::Dialog
 {

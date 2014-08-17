@@ -19,10 +19,12 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file render.hpp
  ** This file contains definitions of globals for dialogs
  **
  */
+
 
 #ifndef DIALOG_HPP
 #define DIALOG_HPP

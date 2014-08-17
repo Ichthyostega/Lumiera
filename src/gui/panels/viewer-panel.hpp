@@ -30,8 +30,6 @@
 #include "gui/panels/panel.hpp"
 #include "gui/widgets/video-display-widget.hpp"
 
-#include <gtkmm.h>
-
 namespace gui {
 namespace panels {
 

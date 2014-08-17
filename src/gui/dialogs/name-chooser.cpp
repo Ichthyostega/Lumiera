@@ -21,8 +21,8 @@
 * *****************************************************/
 
 #include "gui/gtk-lumiera.hpp"
-#include "name-chooser.hpp"
-#include "dialog.hpp"
+#include "gui/dialogs/name-chooser.hpp"
+#include "gui/dialogs/dialog.hpp"
 
 using namespace Gtk;
 using namespace Glib;

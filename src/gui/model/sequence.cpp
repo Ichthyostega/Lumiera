@@ -20,14 +20,14 @@
 
 * *****************************************************/
 
-#include "sequence.hpp"
+#include "gui/model/sequence.hpp"
 #include "include/logging.h"
 
 #include <memory>
 
 // TEST CODE
-#include "group-track.hpp"
-#include "clip-track.hpp"
+#include "gui/model/group-track.hpp"
+#include "gui/model/clip-track.hpp"
 
 
 namespace gui {

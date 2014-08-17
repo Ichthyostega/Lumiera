@@ -20,13 +20,13 @@
 
 * *****************************************************/
 
-#include <gdl/gdl-dock-item-grip.h>
 
 #include "gui/gtk-lumiera.hpp"
+#include "gui/panels/panel.hpp"
 #include "gui/workspace/panel-manager.hpp"
 #include "gui/workspace/workspace-window.hpp"
 
-#include "gui/panels/panel.hpp"
+#include <gdl/gdl-dock-item-grip.h>
 
 using namespace Gtk;
 

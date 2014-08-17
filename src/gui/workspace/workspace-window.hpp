@@ -29,14 +29,15 @@
 #ifndef WORKSPACE_WINDOW_HPP
 #define WORKSPACE_WINDOW_HPP
 
-#include <gtkmm.h>
 
-#include "actions.hpp"
-#include "panel-manager.hpp"
+#include "gui/workspace/actions.hpp"
+#include "gui/workspace/panel-manager.hpp"
 
 #include "gui/panels/assets-panel.hpp"
 #include "gui/panels/viewer-panel.hpp"
 #include "gui/panels/timeline-panel.hpp"
+
+#include <gtkmm.h>
 
 using namespace gui::panels;
 

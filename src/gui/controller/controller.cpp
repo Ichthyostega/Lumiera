@@ -20,7 +20,8 @@
 
 * *****************************************************/
 
-#include "controller.hpp"
+
+#include "gui/controller/controller.hpp"
 
 namespace gui {
 namespace controller {

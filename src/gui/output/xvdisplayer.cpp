@@ -22,12 +22,12 @@
 
 * *****************************************************/
 
+
 #include "gui/gtk-lumiera.hpp"
+#include "gui/output/xvdisplayer.hpp"
+#include "include/logging.h"
 
 #include <gdk/gdkx.h>
-
-#include "xvdisplayer.hpp"
-#include "include/logging.h"
 
 namespace gui {
 namespace output {
