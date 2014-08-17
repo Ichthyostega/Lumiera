@@ -41,6 +41,7 @@
 #ifndef LIB_SYMBOL_H
 #define LIB_SYMBOL_H
 
+#include "lib/hash-standard.hpp"
 
 #include <string>
 #include <cstring>

@@ -21,9 +21,9 @@
 */
 
 
-#include "lib/test/suite.hpp"
-#include "lib/test/testoption.hpp"
 #include "include/lifecycle.h"
+#include "lib/test/testoption.hpp"
+#include "lib/test/suite.hpp"
 
 using lumiera::LifecycleHook;
 using lumiera::ON_GLOBAL_INIT;

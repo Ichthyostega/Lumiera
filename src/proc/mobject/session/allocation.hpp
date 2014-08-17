@@ -24,11 +24,9 @@
 #ifndef PROC_MOBJECT_SESSION_ALLOCATION_H
 #define PROC_MOBJECT_SESSION_ALLOCATION_H
 
-#include <string>
-
 #include "proc/mobject/session/locatingpin.hpp"
 
-
+#include <string>
 using std::string;
 
 

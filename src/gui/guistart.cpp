@@ -45,9 +45,12 @@
  ** @see gui::GtkLumiera#main the GTK GUI main
  */
 
+//--------------------tricky special Include sequence
+#include "lib/hash-standard.hpp"// need to be before any inclusion of <string>
 #include <locale>               // need to include this to prevent errors when libintl.h defines textdomain (because gtk-lumiera removes the def when ENABLE_NLS isn't defined)
 
 #include "gui/gtk-lumiera.hpp"  // need to include this before nobugcfg.h, because types.h from GTK tries to shaddow the ERROR macro from windows, which kills nobug's ERROR macro
+//--------------------tricky special Include sequence
 
 #include "lib/error.hpp"
 #include "gui/guifacade.hpp"

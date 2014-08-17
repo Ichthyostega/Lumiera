@@ -39,11 +39,10 @@
 #ifndef LUMIERA_ERROR_HPP_
 #define LUMIERA_ERROR_HPP_
 
-#include <string>
 #include "include/logging.h"
 #include "include/lifecycle.h"
 #include "lib/error.h"
-
+#include <string>
 
 namespace lumiera {
   

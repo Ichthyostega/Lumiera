@@ -25,6 +25,7 @@
 #define LIB_UTIL_H
 
 #include "include/limits.h"
+#include "lib/hash-standard.hpp"
 
 #include <set>
 #include <string>

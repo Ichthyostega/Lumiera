@@ -40,6 +40,7 @@
 #define GUI_GTK_BASE_H
 
 //--------------------tricky special Include sequence
+#include "lib/hash-standard.hpp"
 #include <locale>
 #include <gtkmm.h>
 #include <nobug.h>

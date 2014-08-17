@@ -21,10 +21,9 @@
 * *****************************************************/
 
 
-#include "common/option.hpp"
-
 #include "lib/error.hpp"
 #include "lib/util.hpp"
+#include "common/option.hpp"
 
 
 

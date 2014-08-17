@@ -22,9 +22,9 @@
 
 
 
-#include "lib/cmdline.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"
+#include "lib/cmdline.hpp"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/join.hpp>

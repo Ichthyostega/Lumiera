@@ -21,10 +21,11 @@
 * *****************************************************/
 
 
-#include <iostream>
 #include "lib/test/run.hpp"
 #include "lib/test/testoption.hpp"
 #include "lib/util.hpp"
+
+#include <iostream>
 
 using lib::Cmdline;
 using util::isnil;

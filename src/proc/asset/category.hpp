@@ -25,6 +25,7 @@
 #define PROC_ASSET_CATEGORY_H
 
 #include "lib/symbol.hpp"
+#include "lib/hash-standard.hpp"
 
 #include <string>
 #include <boost/functional/hash.hpp>

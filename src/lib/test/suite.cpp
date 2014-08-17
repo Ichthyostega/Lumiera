@@ -23,10 +23,11 @@
 
 
 #include "include/logging.h"
-#include "lib/cmdline.hpp"
+#include "lib/hash-standard.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/suite.hpp"
 #include "lib/test/run.hpp"
+#include "lib/cmdline.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
