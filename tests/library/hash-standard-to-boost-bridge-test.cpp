@@ -23,6 +23,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/hash-standard.hpp"
+#include "lib/test/test-helper.hpp"
+#include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <unordered_set>
@@ -30,6 +32,8 @@
 #include <string>
 #include <vector>
 
+using util::contains;
+using std::unordered_set;
 using std::vector;
 using std::string;
 using std::cout;
@@ -55,6 +59,12 @@ namespace test{
       S(string ss ="")
         : s_(ss)
         { }
+      
+      bool
+      operator== (S const& os)  const
+        {
+          return s_ == os.s_;
+        }
     };
   
 }}
@@ -97,6 +107,12 @@ namespace test{
           v_.push_back(ss);
         }
       
+      bool
+      operator== (V const& ov)  const
+        {
+          return v_ == ov.v_;
+        }
+      
       friend size_t
       hash_value (V const& v)
       {
@@ -130,7 +146,7 @@ namespace test{
       run (Arg)
         {
           checkHashFunctionInvocation();
-//        checkHashtableUsage();
+          checkHashtableUsage();
         }
       
       
@@ -179,7 +195,36 @@ namespace test{
         }
       
       
-      
+      void
+      checkHashtableUsage ()
+        {
+          string o1{randStr(5)},
+                 o2{randStr(6)},
+                 o3{randStr(7)},
+                 o4{randStr(8)};
+          S s1{o1}, s2{o2}, s3{o3}, s4{o4}, s5{o2}, s6{o1};
+          V v1{o1}, v2{o2}, v3{o3}, v4{o4}, v5{o3}, v6{o2};
+          
+          unordered_set<S> us{s1,s2,s3,s4,s5,s6};
+          unordered_set<V> uv{v1,v2,v3,v1,v5,v6};
+          
+          CHECK(4 == us.size());
+          CHECK(3 == uv.size());
+          
+          CHECK(contains (us, s1));
+          CHECK(contains (us, s2));
+          CHECK(contains (us, s3));
+          CHECK(contains (us, s4));
+          CHECK(contains (us, s5));
+          CHECK(contains (us, s6));
+          
+          CHECK( contains (uv, v1));
+          CHECK( contains (uv, v2));
+          CHECK( contains (uv, v3));
+          CHECK(!contains (uv, v4));
+          CHECK( contains (uv, v5));
+          CHECK( contains (uv, v6));
+        }
     };
   
   
