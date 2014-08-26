@@ -163,7 +163,7 @@ namespace query  {
         static void
         createSlot (Table& table)
           {
-            ClassLock<TableEntry> guard();
+            ClassLock<TableEntry> guard;
             if (!index)
               index = ++maxSlots;
             if (index > table.size())

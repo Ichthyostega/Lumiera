@@ -254,7 +254,7 @@ namespace lib {
       static TypeInfo
       setup()
         {
-          ClassLock<AllocationCluster> guard();
+          ClassLock<AllocationCluster> guard;
           if (!id_)
             id_= ++maxTypeIDs;
           

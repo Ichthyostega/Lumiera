@@ -64,7 +64,7 @@ namespace visitor {
     static void
     generateID (size_t& id)
       {
-        ClassLock<Tag> guard();
+        ClassLock<Tag> guard;
         if (!id)
           id = ++lastRegisteredID;
       }
@@ -142,7 +142,7 @@ namespace visitor {
       void
       accomodate (size_t index)
         {
-          ClassLock<Dispatcher> guard();  // note: this lock is also used for the singleton!
+          ClassLock<Dispatcher> guard;    // note: this lock is also used for the singleton!
           if (index > table_.size())
             table_.resize (index);      // performance bottleneck?? TODO: measure the real impact!
         }

@@ -88,7 +88,7 @@ namespace lib {
       static IxID
       newTypeID (IxID& typeID)
         {
-          ClassLock<TypedContext> synchronised();
+          ClassLock<TypedContext> synchronised;
           if (!typeID)
             typeID = ++lastGeneratedTypeID;
           return typeID;

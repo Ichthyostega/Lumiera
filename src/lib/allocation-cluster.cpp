@@ -190,7 +190,7 @@ namespace lib {
   {
     try
       {                                         // avoiding a per-instance lock for now.
-        ClassLock<AllocationCluster> guard();  //  (see note in the class description)
+        ClassLock<AllocationCluster> guard;    //  (see note in the class description)
         
         TRACE (memory, "shutting down AllocationCluster");
         for (size_t i = typeHandlers_.size(); 0 < i; --i)
@@ -229,7 +229,7 @@ namespace lib {
     ASSERT (0 < slot);
     
       {                                         // avoiding a per-instance lock for now.
-        ClassLock<AllocationCluster> guard();  //  (see note in the class description)
+        ClassLock<AllocationCluster> guard;    //  (see note in the class description)
         
         if (slot > typeHandlers_.size())
           typeHandlers_.resize(slot);
