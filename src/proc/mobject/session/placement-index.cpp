@@ -119,8 +119,8 @@ namespace session {
       
       // using hashtables to implement the index
       typedef PlacementMO::ID PID;
-      typedef unordered_map<PID, PlacementEntry, hash<PID> > IDTable;
-      typedef std::unordered_multimap<PID,PID, hash<PID> > ScopeTable;
+      typedef unordered_map<PID, PlacementEntry>  IDTable;
+      typedef std::unordered_multimap<PID,PID> ScopeTable;
       
       typedef pair<ScopeIter, ScopeIter> ScopeContents;
       
