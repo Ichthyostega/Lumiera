@@ -93,8 +93,8 @@ namespace test{
             
             create_contained_object (holder);
             CHECK (holder);
-            CHECK (false!=holder);
-            CHECK (holder!=false);
+            CHECK (false != bool(holder));
+            CHECK (bool(holder) != false);
             
             CHECK (0 < Dummy::checksum());
             CHECK ( &(*holder));
