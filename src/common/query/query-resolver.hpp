@@ -46,7 +46,7 @@ namespace lumiera {
   class QueryResolver;
   class QueryDispatcher;
   
-  /** Allow for taking ownership of a result set */
+  /** Allow to take and transfer ownership of a result set */
   typedef std::shared_ptr<Resolution> PReso;
   
   
@@ -62,7 +62,7 @@ namespace lumiera {
       
       virtual ~Resolution();
       
-      
+      /** IterAdapter attached here */
       friend bool
       checkPoint (PReso const&, Result const& pos)
         {
@@ -90,7 +90,7 @@ namespace lumiera {
    * in response to specific queries of some kind, \link #canHandle if applicable \endlink.
    * Every resolution mechanism is expected to enrol by calling #installResolutionCase.
    * Such a registration is considered permanent; a factory function gets stored,
-   * assuming that the entity implementing this function remains available
+   * assuming that the entity to implement this function remains available
    * up to the end of Lumiera main(). The kind of query and a suitable
    * resolver is determined by the QueryID, which includes a type-ID.
    * Thus the implementation might downcast query and resultset.

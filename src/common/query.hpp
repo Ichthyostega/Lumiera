@@ -30,13 +30,13 @@
  ** 
  ** A Query is a request for just \em someone to come up with a solution, a preconfigured
  ** setup, some existing data object or contextual information. In order to be usable,
- ** a QueryResolver needs to be available for computing the solution and retrieving
+ ** actually a QueryResolver needs to be available to compute the solution and retrieve
  ** the results. As a common denominator, queries can be <i>generic queries</i> given
  ** in predicate logic syntax; in this case a generic query resolver (Planned feature
  ** as of 1/2013) will be able at least to determine a suitable facility for delegating
  ** the resolution. Besides, specific subsystems are using more specific kinds of
- ** queries and provide a specialised resolution mechanism, which in these cases
- ** can be addressed directly.
+ ** queries and provide a specialised resolution mechanism, kind of a shortcut,
+ ** which in these cases can be addressed directly.
  ** 
  ** \par General usage pattern
  ** Some parts of the application allow to issue queries -- typically these parts do
@@ -45,8 +45,8 @@
  ** the storage alive during results retrieval. Queries can't be copied and are passed
  ** by reference, since #Query is an interface baseclass. Each query instance bears
  ** at least a type tag to indicate the type of the returned result, plus a classification
- ** tag indicate the kind of query. Generally, queries are also required to provide a
- ** syntactical representation, allowing to transform each query into a generic query.
+ ** tag to indicate the kind of query. In addition, queries are usually required to provide
+ ** a syntactical representation, allowing to transform each query into a generic query.
  ** 
  ** To resolve the query, a lumiera::QueryResolver instance is necessary, and this
  ** query resolver needs the ability to deal with this specific kind of query. Typically
@@ -112,7 +112,7 @@ namespace lumiera {
   class QueryKey;
 
   
-  /** Allow for taking ownership of a result set */
+  /** Allow to take ownership of a result set */
   typedef std::shared_ptr<Resolution> PReso;
 
   
@@ -245,20 +245,20 @@ namespace lumiera {
   /**
    * Generic interface to express a query
    * for specifically typed result elements
-   * providing some capabilities or fulfilling
+   * exposing some capabilities or fulfilling
    * some properties. This is a generic umbrella
    * for several kinds of queries and provides a
    * mechanism for uniform usage of various
    * resolution mechanisms.
    * 
-   * Any query bears an internal type classification and can be
+   * Any query bears internal type classification and can be
    * represented in a common syntactical form based on predicate logic.
    * Query instances are created by some facilities allowing to query for objects.
    * These query providers \em do know the specific kind (type) of query to expose.
    * While client code uses these queries only by reference, there is the possibility
    * to involve a generic QueryResolver, which -- behind the scenes -- manages a registry
    * of specific resolution mechanisms. This way, clients may retrieve a set of results,
-   * each representing a possible solution to the posed query.
+   * where each result represents a possible solution to the original query.
    * 
    * @remarks lumiera::Query is an interface, but can be used as-is to represent a generic query.
    *          Specialised subclasses are required to provide a syntactic representation, but are
@@ -266,15 +266,15 @@ namespace lumiera {
    *          definition and implement the Query#buildSyntacticRepresentation function.
    *          Every fundamentally different kind of query needs to be listed in Goal::Kind.
    * 
-   * @note until really integrating a rules based system
-   *       this is largely dummy placeholder implementation.
+   * @note until we really integrate a rules based system
+   *       this can be considered dummy placeholder implementation.
    *       Some more specific query resolvers are available already,
    *       so, depending on the circumstances the actual resolution might be
-   *       substantial or just a fake.  
+   *       substantial or just a fake.
    * @warning especially the classical resolution-type queries are just
-   *       faked and use  the given query-string as-is, without any normalisation.
+   *       faked and use the given query-string as-is, without any normalisation.
    *       Moreover, as especially the fake-configrules match by string comparison,
-   *       this may led to unexpected mis-matches.
+   *       this may led to unexpected mis-matches. This is dummy code, after all.
    */
   template<class RES>
   class Query

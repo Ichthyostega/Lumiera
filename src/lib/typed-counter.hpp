@@ -71,13 +71,14 @@ namespace lib {
   
   
   /** 
-   * Providing type-IDs for a specific context.
+   * Provide type-IDs for a specific context.
    * This facility allows to access a numeric ID for each
-   * provided distinct type. Type-IDs may be used e.g. for
+   * given distinct type. Type-IDs may be used e.g. for
    * dispatcher tables or for custom allocators. 
    * The type-IDs generated here are not completely global though.
    * Rather, they are tied to a specific type context, e.g. a class
-   * implementing a custom allocator.
+   * implementing a custom allocator. These typed contexts are
+   * considered to be orthogonal and independent of each other.
    */
   template<class CX>
   class TypedContext

@@ -58,6 +58,7 @@ namespace lumiera {
                    , BuildRefcountPtr      //   wrapper: manage result set by smart-ptr
                    > DispatcherTable;     //
   
+  /** PImpl of the generic QueryResolver */
   struct QueryDispatcher
     : DispatcherTable
     {

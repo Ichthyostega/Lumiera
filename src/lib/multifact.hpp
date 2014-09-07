@@ -94,10 +94,10 @@ namespace lib {
     template<typename TAR>
     struct BuildRefcountPtr
       {
-        typedef TAR*                      RType;
+        typedef TAR*                 RType;
         typedef std::shared_ptr<TAR> PType;
         
-        PType wrap (RType ptr) { return PType (ptr); }
+        PType wrap (RType ptr) { return PType{ptr}; }
       };
     
     
@@ -218,7 +218,7 @@ namespace lib {
         
         /**
          * Convenience shortcut for automatically setting up
-         * a production line, fabricating a singleton instance
+         * a production line, to fabricate a singleton instance
          * of the given implementation target type (IMP)
          */
         template<class IMP>
