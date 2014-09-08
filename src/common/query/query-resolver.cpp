@@ -53,10 +53,10 @@ namespace lumiera {
   
   /** factory used as dispatcher table
    *  for resolving typed queries  */
-  typedef MultiFact< Resolution(Goal const&) // nominal signature of fabrication
-                   , Goal::QueryID          //  select resolution function by kind-of-Query
-                   , BuildRefcountPtr      //   wrapper: manage result set by smart-ptr
-                   > DispatcherTable;     //
+  typedef MultiFact< Resolution(Goal const&)  // nominal signature of fabrication
+                   , Goal::QueryID           //  select resolution function by kind-of-Query
+                   , BuildRefcountPtr       //   wrapper: manage result set by smart-ptr
+                   > DispatcherTable;      //
   
   /** PImpl of the generic QueryResolver */
   struct QueryDispatcher
@@ -69,8 +69,8 @@ namespace lumiera {
           QID qID = query.getQID();
           ENSURE (contains (qID));
           
-          return (*this) (qID, query); 
-        }               //qID picks the resolution function
+          return this->invokeFactory (qID, query);
+        }                    // qID picks the resolution function
     };
   
   
@@ -103,7 +103,7 @@ namespace lumiera {
   
   
   void
-  QueryResolver::installResolutionCase (QID qID, function<Resolution*(Goal const&)> resolutionFun)
+  QueryResolver::installResolutionCase (QID qID, ResolutionMechanism resolutionFun)
   {
     ENSURE (!dispatcher_->contains (qID),
             "duplicate registration of query resolution function");

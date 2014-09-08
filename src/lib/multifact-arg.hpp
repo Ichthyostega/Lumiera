@@ -23,7 +23,7 @@
 /** @file multifact-arg.hpp
  ** Extension allowing the MultiFact to pass arguments to the fabrication.
  ** This extension is implemented by template specialisations and thus kicks in
- ** when specifying a function \em signature as factory "product type". The resulting
+ ** when specifying a <i>function signature</i> as factory "product type". The resulting
  ** factory class exposes a function call operator matching this signature, additionally
  ** expecting the ID (to select the specific fabrication function) as first parameter.
  ** 
@@ -33,6 +33,7 @@
  **       should yield the product in a form suitable to be accepted by the
  **       wrapper. E.g., when building smart-ptrs, the fabrication function
  **       should actually deliver a raw pointer to a heap allocated object.
+ ** @todo still way to convoluted design. We can do better //////////TICKET #388
  ** 
  ** @see multifact-argument-test.cpp
  ** @see query-resolver.cpp usage example
@@ -114,6 +115,13 @@ namespace lib {
             Creator& func = this->selectProducer (id);
             return this->wrap (func(arg));
           }
+        
+        Product
+        invokeFactory (ID const& id, ARG arg)  ///< alias for the function operator
+          {
+            return this->operator() (id, arg);
+          }
+        
         
       };
     

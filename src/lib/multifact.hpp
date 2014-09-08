@@ -47,6 +47,7 @@
  ** 
  ** @note there is an extension header, multifact-arg.hpp, which provides template specialisations
  **       for the special case when the fabrication functions need additional invocation arguments.
+ ** @todo still way to convoluted design. We can do better //////////TICKET #388
  ** 
  ** @see multifact-test.cpp
  ** @see multifact-argument-test.cpp
@@ -202,6 +203,12 @@ namespace lib {
           {
             Creator& func = this->selectProducer (id);
             return this->wrap (func());
+          }
+        
+        Product
+        invokeFactory (ID const& id)  ///< alias for the function operator
+          {
+            return this->operator() (id);
           }
         
         

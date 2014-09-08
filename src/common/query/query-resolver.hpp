@@ -125,8 +125,10 @@ namespace lumiera {
       
       virtual bool canHandleQuery (Goal::QueryID const&)  const =0;
       
+      using ResolutionMechanism = function<Resolution*(Goal const&)>;
+      
       void installResolutionCase (Goal::QueryID const&,
-                                  function<Resolution*(Goal const&)>);
+                                  ResolutionMechanism);
       
       QueryResolver();
     };
