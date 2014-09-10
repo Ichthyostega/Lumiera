@@ -1,5 +1,5 @@
 /*
-  MultiFact(Test)  -  unittest for the configurable object-family creating factory
+  MultiFactSingleton(Test)  -  using lib::multifact to manage a family of singletons
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/muttifac.hpp"
+#include "lib/multifact.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -65,7 +65,7 @@ namespace test{
       , FOU
       };
     
-    typedef factory::MuttiFac<Interface, theID, factory::PassReference> TestFactory;
+    typedef factory::MultiFact<Interface, theID, factory::PassReference> TestFactory;
     
     
     template<theID ii>
@@ -103,7 +103,7 @@ namespace test{
    *       when invoking this MultiFac flavour.
    * @see  lib::MultiFact
    */
-  class MultiFact_test : public Test
+  class MultiFactSingleton_test : public Test
     {
       void
       run (Arg) 
@@ -130,7 +130,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (MultiFact_test, "unit common");
+  LAUNCHER (MultiFactSingleton_test, "unit common");
   
   
   
