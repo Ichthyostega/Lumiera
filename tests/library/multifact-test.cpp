@@ -27,7 +27,8 @@
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
+//#include <iostream>
+#include <functional>
 #include <string>
 
 
@@ -36,13 +37,15 @@ namespace lib {
 namespace test{
   
   using boost::lexical_cast;
-  using lib::test::showSizeof;
+//  using lib::test::showSizeof;
   using util::isSameObject;
   using util::isnil;
-  using std::ostream;
+//  using std::ostream;
   using std::string;
-  using std::cout;
-  using std::endl;
+  using std::function;
+  using std::bind;
+//  using std::cout;
+//  using std::endl;
   
   using lumiera::error::LUMIERA_ERROR_INVALID;
   
@@ -65,7 +68,6 @@ namespace test{
       , FOU
       };
     
-    typedef factory::MuttiFac<Interface, theID, factory::PassReference> TestFactory;
     
     
     template<theID ii>
@@ -78,29 +80,39 @@ namespace test{
           }
         
       public:
-        static theID getTypeID() { return ii; }
+//        static theID getTypeID() { return ii; }
       };
     
-    /** Factory instance for the tests... */
-    TestFactory theFact;
     
-    // Configure the products to be fabricated....
-    TestFactory::Singleton<Implementation<ONE> > holder1 (theFact,ONE);
-    TestFactory::Singleton<Implementation<TWO> > holder2 (theFact,TWO);
-    TestFactory::Singleton<Implementation<THR> > holder3 (theFact,THR);
-    TestFactory::Singleton<Implementation<FOU> > holder4 (theFact,FOU);
+    
+    template<typename X>
+    string
+    buildSome (X rawVal)
+    {
+      return lexical_cast<string> (rawVal);
+    }
+    
+    string
+    buildOne()
+    {
+      return buildSome(ONE);
+    }
   }
   
   
   
   
   
-  /***************************************************************//**
-   * @test verify simple setup of the MultiFact template.
-   *       Define a hierarchy of test dummy objects, in order to
-   *       register them automatically for creation through a suitable
-   *       instantiation of MultiFact. Verify we get the correct product
-   *       when invoking this MultiFac flavour.
+  /*************************************************************************//**
+   * @test verify the basic usage patterns of the configurable factory template.
+   *       - Depending on the concrete fabrication signature, the factory can produce
+   *         "things" by invoking suitable fabrication functions. These functions
+   *         are to be installed beforehand, and can be addressed through an ID.
+   *       - these fabrication functions are installed per instance of the factory.
+   *         Such a concrete factory configuration can be copied
+   *       - optionally each created product can be passed through a wrapper function
+   *       - there is a preconfigured wrapper for creating refcounting smart ptrs.
+   *       - it is possible to define a custom wrapper function on factory setup. 
    * @see  lib::MultiFact
    */
   class MultiFact_test : public Test
@@ -108,24 +120,99 @@ namespace test{
       void
       run (Arg) 
         {
-          cout << theFact(ONE) << endl;
-          cout << theFact(TWO) << endl;
-          cout << theFact(THR) << endl;
-          cout << theFact(FOU) << endl;
-          cout << showSizeof (theFact) << endl;
+          produce_simple_values();
+          produce_smart_pointers();
+          pass_additional_arguments();
+          fed_a_custom_finishing_functor();
+        }
+      
+      string
+      callMe (string val)
+        {
+          ++invocations_;
+          return val;
+        }
+      uint invocations_ = 0;
+      
+      
+      void
+      produce_simple_values()
+        {
+          using TestFactory = factory::MuttiFac<string, theID>;
           
-          Interface & o1 = theFact(ONE);
-          Interface & o2 = theFact(ONE);
-          CHECK (isSameObject(o1,o2));
+          TestFactory theFact;
+          
+          // the first "production line" is wired to a free function
+          theFact.defineProduction (ONE, buildOne);
+          
+          // second "production line" uses a explicit partial closure
+          theFact.defineProduction (TWO, bind (buildSome, TWO));
+          
+          // for the third "production line" we set up a function object
+          auto memberFunction = bind (&MultiFact_test::callMe, this, "lalü");
+          theFact.defineProduction (THR, memberFunction);
+          
+          // and the fourth "production line" uses a lambda, closed with a local reference
+          string backdoor("backdoor");
+          theFact.defineProduction (FOU, [&] {
+                                            return backdoor;
+                                         });
+          
+          CHECK (!isnil (theFact));
+          CHECK (theFact(ONE) == "1");
+          CHECK (theFact(TWO) == "2");
+          
+          CHECK (theFact(THR) == "lalü");
+          CHECK (invocations_ == 1);
+          
+          CHECK (theFact(FOU) == "backdoor");
+          backdoor = "I am " + backdoor.substr(0,4);
+          CHECK (theFact(FOU) == "I am back");
+          
           
           TestFactory anotherFact;
           CHECK (isnil (anotherFact));
           VERIFY_ERROR (INVALID, anotherFact(ONE) );
           
-          TestFactory::Singleton<Implementation<ONE> > anotherSingletonHolder (anotherFact,ONE);
-          Interface & o3 = anotherFact(ONE);
-          CHECK (isSameObject(o2,o3));
-        } 
+          anotherFact.defineProduction (ONE, memberFunction);
+          CHECK (anotherFact(ONE) == "lalü");
+          CHECK (invocations_ == 2);
+          
+          CHECK (theFact(THR) == "lalü");
+          CHECK (invocations_ == 3);
+          
+          
+          CHECK ( theFact.contains (FOU));
+          CHECK (!anotherFact.contains (FOU));
+          
+          anotherFact = theFact;
+          CHECK (anotherFact.contains (FOU));
+          CHECK (!isSameObject(theFact, anotherFact));
+          
+          CHECK (anotherFact(ONE) == "1");
+          CHECK (anotherFact(TWO) == "2");
+          CHECK (anotherFact(THR) == "lalü");
+          CHECK (anotherFact(FOU) == "I am back");
+          CHECK (invocations_ == 4);
+        }
+      
+      
+      void
+      produce_smart_pointers()
+        {
+        }
+      
+      
+      void
+      pass_additional_arguments()
+        {
+        }
+      
+      
+      void
+      fed_a_custom_finishing_functor()
+        {
+        }
     };
   
   
