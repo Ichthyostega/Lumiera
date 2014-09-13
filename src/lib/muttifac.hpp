@@ -45,9 +45,14 @@
  ** factory, it automatically registers the singleton access function as "fabrication" function
  ** into a suitable MultiFact instance passed in as ctor parameter.
  ** 
- ** @note there is an extension header, multifact-arg.hpp, which provides template specialisations
- **       for the special case when the fabrication functions need additional invocation arguments.
- ** @todo still way to convoluted design. We can do better //////////TICKET #388
+ ** @remarks this is the second attempt at building a skeleton of the core factory mechanics.
+ **       The first attempt was pre-C++11, relied on partial specialisations and was hard to
+ **       understand and maintain. In theory, with C++11 the task should be quite simple now,
+ **       relying on rvalue references and variadic templates. Unfortunately, as of 9/2014,
+ **       the compiler support is not yet robust enough on Debian/stable really to deal with
+ **       \em all the conceivable cases when forwarding arbitrary factory products. Thus
+ **       for now we choose to avoid the "perfect forwarding" problem and rather let the
+ **       wrapper invoke the fabrication function and handle the result properly.
  ** 
  ** @see multifact-test.cpp
  ** @see multifact-argument-test.cpp
@@ -64,6 +69,7 @@
 #include "util.hpp"
 
 #include <functional>
+#include <utility>
 #include <memory>
 #include <map>
 
@@ -76,15 +82,21 @@ namespace lib {
     
     /**
      * Dummy "wrapper",
-     * just returning a target-ref
+     * to perform the fabrication and return the unaltered product.
+     * @remarks this is a "perfect forwarding" implementation,
+     *          similar to std::forward, used as policy template
      */
     template<typename TAR>
-    struct PassReference
+    struct PassAsIs
       {
-        typedef TAR& RType;
-        typedef TAR& PType;
+        typedef TAR ResultType;
         
-        PType wrap (RType object) { return object; }
+        template<class FUN, typename... ARGS>
+        ResultType
+        wrap (FUN create, ARGS... args)  noexcept
+          {
+            return create(args...);
+          }
       };
     
     
@@ -95,10 +107,14 @@ namespace lib {
     template<typename TAR>
     struct BuildRefcountPtr
       {
-        typedef TAR*                 RType;
-        typedef std::shared_ptr<TAR> PType;
+        typedef std::shared_ptr<TAR> ResultType;
         
-        PType wrap (RType ptr) { return PType{ptr}; }
+        template<class FUN, typename... ARGS>
+        ResultType
+        wrap (FUN create, ARGS... args)  noexcept
+          {
+            return ResultType (create(args...));
+          }
       };
     
     
@@ -151,11 +167,12 @@ namespace lib {
     template< typename TY
             , template<class> class Wrapper
             >
-    struct FabWiring
-      : Wrapper<TY>
+    struct FabConfig
       {
-        typedef typename Wrapper<TY>::PType WrappedProduct;
-        typedef typename Wrapper<TY>::RType FabProduct;
+        using FabProduct     = TY;
+        using WrapFunctor    = Wrapper<TY>;
+        using WrappedProduct = typename WrapFunctor::ResultType;
+        
         typedef FabProduct SIG_Fab(void);
       };
     
@@ -171,22 +188,22 @@ namespace lib {
      * to be instantiated at the call site and acts as singleton factory,
      * accessible through a MultiFact instance as frontend.
      */
-    template< typename TY
+    template< typename SIG
             , typename ID
-            , template<class> class Wrapper
+            , template<class> class Wrapper = PassAsIs
             >
     class MuttiFac
-      : public FabWiring<TY,Wrapper>
+      : FabConfig<SIG,Wrapper>::WrapFunctor
       {
-        typedef FabWiring<TY,Wrapper> _Conf;
-        typedef typename _Conf::SIG_Fab SIG_Fab;
-        typedef Fab<SIG_Fab,ID> _Fab;
+        using   _Conf = FabConfig<SIG,Wrapper>;
+        using SIG_Fab = typename _Conf::SIG_Fab;
+        using    _Fab = Fab<SIG_Fab,ID>;
         
         _Fab funcTable_;
         
         
       protected:
-        typedef typename _Fab::FactoryFunc Creator;
+        using Creator = typename _Fab::FactoryFunc;
         
         Creator&
         selectProducer (ID const& id)
@@ -196,13 +213,13 @@ namespace lib {
         
         
       public:
-        typedef typename _Conf::WrappedProduct Product;
+        using Product = typename _Conf::WrappedProduct;
         
         Product
         operator() (ID const& id)
           {
-            Creator& func = this->selectProducer (id);
-            return this->wrap (func());
+            Creator& creator = selectProducer (id);
+            return this->wrap (creator);
           }
         
         Product
@@ -217,7 +234,7 @@ namespace lib {
          */
         template<typename FUNC>
         void
-        defineProduction (ID id, FUNC fun)
+        defineProduction (ID id, FUNC&& fun)
           {
             funcTable_.defineProduction (id, fun);
           }
@@ -257,21 +274,5 @@ namespace lib {
     
     
     
-  } // namespace factory
-  
-  
-  
-  /** 
-   * Standard configuration of the family-of-object factory
-   * @todo this is rather guesswork... find out what the best and most used configuration could be....
-   */
-  template< typename TY
-          , typename ID
-          >
-  class MuttiFact
-    : public factory::MuttiFac<TY,ID, factory::PassReference>
-    { };
-  
-  
-} // namespace lib
+}} // namespace lib::factory
 #endif

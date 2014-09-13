@@ -58,7 +58,7 @@ namespace test{
         virtual operator string () =0;
       };
     
-    inline ostream& operator<< (ostream& os, Interface& ifa) { return os << string(ifa); }
+//    inline ostream& operator<< (ostream& os, Interface& ifa) { return os << string(ifa); }
     
     
     enum theID
@@ -146,7 +146,7 @@ namespace test{
           theFact.defineProduction (ONE, buildOne);
           
           // second "production line" uses a explicit partial closure
-          theFact.defineProduction (TWO, bind (buildSome, TWO));
+          theFact.defineProduction (TWO, bind (buildSome<theID>, TWO));
           
           // for the third "production line" we set up a function object
           auto memberFunction = bind (&MultiFact_test::callMe, this, "lalü");
