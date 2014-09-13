@@ -89,6 +89,8 @@ namespace lib {
     template<typename TAR>
     struct PassAsIs
       {
+        typedef TAR RawType;
+        typedef TAR BareType;
         typedef TAR ResultType;
         
         template<class FUN, typename... ARGS>
@@ -107,7 +109,9 @@ namespace lib {
     template<typename TAR>
     struct BuildRefcountPtr
       {
-        typedef std::shared_ptr<TAR> ResultType;
+        using RawType    = typename std::remove_pointer<TAR>::type;
+        using BareType   = RawType *;
+        using ResultType = std::shared_ptr<RawType>;
         
         template<class FUN, typename... ARGS>
         ResultType
@@ -169,11 +173,11 @@ namespace lib {
             >
     struct FabConfig
       {
-        using FabProduct     = TY;
         using WrapFunctor    = Wrapper<TY>;
+        using BareProduct    = typename WrapFunctor::BareType;
         using WrappedProduct = typename WrapFunctor::ResultType;
         
-        typedef FabProduct SIG_Fab(void);
+        typedef BareProduct SIG_Fab(void);
       };
     
     
@@ -249,13 +253,13 @@ namespace lib {
         class Singleton
           : lib::Depend<IMP>
           {
-            typedef lib::Depend<IMP> SingFac;
+            typedef lib::Depend<IMP> SingleFac;
             
             Creator
             createSingleton_accessFunction()
               {
-                return std::bind (&SingFac::operator()
-                                      , static_cast<SingFac*>(this));
+                return std::bind (&SingleFac::operator()
+                                 , static_cast<SingleFac*>(this));
               }
             
           public:

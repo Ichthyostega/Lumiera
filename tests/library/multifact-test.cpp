@@ -200,6 +200,39 @@ namespace test{
       void
       produce_smart_pointers()
         {
+          using TestFactory = factory::MuttiFac<Interface, theID, factory::BuildRefcountPtr>;
+          using PIfa = shared_ptr<Interface>;
+          
+          TestFactory theFact;
+          
+          // the first "production line" is wired to a free function
+          theFact.defineProduction (ONE, [] { return new Implementation<ONE>; });
+          theFact.defineProduction (TWO, [] { return new Implementation<TWO>; });
+          theFact.defineProduction (THR, [] { return new Implementation<THR>; });
+          theFact.defineProduction (FOU, [] { return new Implementation<FOU>; });
+          CHECK (!isnil (theFact));
+          
+          PIfa p1 = theFact(ONE);
+          PIfa p2 = theFact(TWO);
+          PIfa p3 = theFact(THR);
+          PIfa p4 = theFact(FOU);
+          
+          PIfa p11 = theFact(ONE);
+          
+          CHECK ("Impl-1" == string(*p1));
+          CHECK ("Impl-2" == string(*p2));
+          CHECK ("Impl-3" == string(*p3));
+          CHECK ("Impl-4" == string(*p4));
+          
+          CHECK ("Impl-1" == string(*p11));
+          CHECK (!isSameObject(*p1, *p11));
+          
+          PIfa p12(p11);
+          CHECK (isSameObject(*p11, *p12));
+          CHECK ("Impl-1" == string(*p12));
+          CHECK (1 == p1.use_count());
+          CHECK (2 == p11.use_count());
+          CHECK (2 == p12.use_count());
         }
       
       
