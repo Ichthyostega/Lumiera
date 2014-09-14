@@ -74,13 +74,17 @@ namespace test{
     class Implementation
       : public Interface
       {
+        string instanceID_;
+        
         operator string()
           {
-            return "Impl-"+lexical_cast<string> (ii);
+            return instanceID_ + lexical_cast<string> (ii);
           }
         
       public:
-//        static theID getTypeID() { return ii; }
+        Implementation(string id = "Impl-")
+          : instanceID_(id)
+        { }
       };
     
     
@@ -239,6 +243,44 @@ namespace test{
       void
       pass_additional_arguments()
         {
+          using TestFactory = factory::MuttiFac<Interface*(string), theID>;
+          
+          TestFactory theFact;
+          
+          // the first "production line" is wired to a free function
+          theFact.defineProduction (ONE, [](string   ) { return new Implementation<ONE>;        });
+          theFact.defineProduction (TWO, [](string   ) { return new Implementation<TWO>("X");   });
+          theFact.defineProduction (THR, [](string id) { return new Implementation<THR>(id);    });
+          theFact.defineProduction (FOU, [](string id) { return new Implementation<FOU>("Z"+id);});
+          
+          Interface *p1 = theFact(ONE, "irrelevant"),
+                    *p2 = theFact(TWO, "ignored"),
+                    *p3 = theFact(THR, "idiocy"),
+                    *p4 = theFact(FOU, "omg"),
+                    *p5 = theFact(FOU, "z");
+          
+          // does not compile...
+          // theFact(ONE);
+          // theFact(ONE, "foo", bar);
+          
+          CHECK ("Impl-1" == string(*p1));
+          CHECK ("X2"     == string(*p2));
+          CHECK ("idiocy3"== string(*p3));
+          CHECK ("Zomg4"  == string(*p4));
+          CHECK ("Zz4"    == string(*p5));
+          
+          CHECK (!isSameObject(*p4, *p5));
+          CHECK (INSTANCEOF(Implementation<ONE>, p1));
+          CHECK (INSTANCEOF(Implementation<TWO>, p2));
+          CHECK (INSTANCEOF(Implementation<THR>, p3));
+          CHECK (INSTANCEOF(Implementation<FOU>, p4));
+          CHECK (INSTANCEOF(Implementation<FOU>, p5));
+          
+          delete p1;
+          delete p2;
+          delete p3;
+          delete p4;
+          delete p5;
         }
       
       

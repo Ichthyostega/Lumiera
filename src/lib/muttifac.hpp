@@ -178,7 +178,28 @@ namespace lib {
         using WrappedProduct = typename WrapFunctor::ResultType;
         
         typedef BareProduct SIG_Fab(void);
+        
+        enum{ ARGUMENT_CNT = 0 };
       };
+    /**
+     * @internal specialisation to deal with the generic case:
+     * using an arbitrary fabrication function with multiple arguments
+     */
+    template< typename RET
+            , typename... ARGS
+            , template<class> class Wrapper
+            >
+    struct FabConfig<RET(ARGS...), Wrapper>
+      {
+        using WrapFunctor    = Wrapper<RET>;
+        using BareProduct    = typename WrapFunctor::BareType;
+        using WrappedProduct = typename WrapFunctor::ResultType;
+        
+        typedef BareProduct SIG_Fab(ARGS...);
+        
+        enum{ ARGUMENT_CNT = sizeof...(ARGS)};
+      };
+    
     
     
     
@@ -219,17 +240,33 @@ namespace lib {
       public:
         using Product = typename _Conf::WrappedProduct;
         
+        /**
+         * Core operation of the factory:
+         * Select a production line and invoke the fabrication function.
+         * @param id select the actual pre installed fabrication function to use
+         * @param args additional arguments to pass to the fabrication.
+         * @note the template parameter #SIG defines the raw or nominal signature
+         *       of the fabrication, and especially the number of arguments
+         * @return the created product, after passing through the #Wrapper functor
+         */
+        template<typename... ARGS>
         Product
-        operator() (ID const& id)
+        operator() (ID const& id, ARGS&& ...args)
           {
+            static_assert (sizeof...(ARGS) == _Conf::ARGUMENT_CNT,
+                           "MultiFac instance invoked with the wrong number "
+                           "of fabrication arguments. See template parameter SIG");
+            
             Creator& creator = selectProducer (id);
-            return this->wrap (creator);
+            return this->wrap (creator, std::forward<ARGS>(args)...);
           }
         
+        /** more legible alias for the function operator */
+        template<typename... ARGS>
         Product
-        invokeFactory (ID const& id)  ///< alias for the function operator
+        invokeFactory (ID const& id, ARGS&& ...args)
           {
-            return this->operator() (id);
+            return this->operator() (id, std::forward<ARGS>(args)...);
           }
         
         
