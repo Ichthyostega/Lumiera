@@ -209,7 +209,7 @@ namespace test{
           
           TestFactory theFact;
           
-          // the first "production line" is wired to a free function
+          // set up the "production lines" by lambda
           theFact.defineProduction (ONE, [] { return new Implementation<ONE>; });
           theFact.defineProduction (TWO, [] { return new Implementation<TWO>; });
           theFact.defineProduction (THR, [] { return new Implementation<THR>; });
@@ -247,7 +247,7 @@ namespace test{
           
           TestFactory theFact;
           
-          // the first "production line" is wired to a free function
+          // set up the "production lines"
           theFact.defineProduction (ONE, [](string   ) { return new Implementation<ONE>;        });
           theFact.defineProduction (TWO, [](string   ) { return new Implementation<TWO>("X");   });
           theFact.defineProduction (THR, [](string id) { return new Implementation<THR>(id);    });
@@ -287,6 +287,35 @@ namespace test{
       void
       fed_a_custom_finishing_functor()
         {
+          using TestFactory = factory::MuttiFac<int(int), theID, factory::Build<long>::Wrapper>;
+          
+          TestFactory theFact;
+          
+          // Setup(1): each "production line" does a distinct calculation
+          theFact.defineProduction (ONE, [](int par) { return par;     });
+          theFact.defineProduction (TWO, [](int par) { return 2 * par; });
+          theFact.defineProduction (THR, [](int par) { return par*par; });
+          theFact.defineProduction (FOU, [](int par) { return 1 << par;});
+          
+          // Setup(2): and a common "wrapper functor" finishes
+          //           the output of the chosen "production line"
+          theFact.defineFinalWrapper([](int raw) { return raw + 1; });
+          
+          CHECK (long(1 + 1) == theFact(ONE, 1));
+          CHECK (long(1 + 2) == theFact(ONE, 2));
+          CHECK (long(1 + 3) == theFact(ONE, 3));
+          
+          CHECK (long(1 + 2) == theFact(TWO, 1));
+          CHECK (long(1 + 4) == theFact(TWO, 2));
+          CHECK (long(1 + 6) == theFact(TWO, 3));
+          
+          CHECK (long(1 + 1) == theFact(THR, 1));
+          CHECK (long(1 + 4) == theFact(THR, 2));
+          CHECK (long(1 + 9) == theFact(THR, 3));
+          
+          CHECK (long(1 + 2) == theFact(FOU, 1));
+          CHECK (long(1 + 4) == theFact(FOU, 2));
+          CHECK (long(1 + 8) == theFact(FOU, 3));
         }
     };
   

@@ -41,9 +41,9 @@
  ** \par Singleton generation
  ** For the very common situation of building a family of singleton objects, accessible by ID,
  ** there is a convenience shortcut: The nested MultiFact::Singleton template can be instantiated
- ** within the context providing the objects (usually a static context). In itself a lib::Singleton
- ** factory, it automatically registers the singleton access function as "fabrication" function
- ** into a suitable MultiFact instance passed in as ctor parameter.
+ ** within the context providing the objects (usually a static context). In itself a lib::Depend
+ ** singleton factory, it automatically registers the singleton access function as "fabrication"
+ ** function into a suitable MultiFact instance passed in as ctor parameter.
  ** 
  ** @remarks this is the second attempt at building a skeleton of the core factory mechanics.
  **       The first attempt was pre-C++11, relied on partial specialisations and was hard to
@@ -55,7 +55,7 @@
  **       wrapper invoke the fabrication function and handle the result properly.
  ** 
  ** @see multifact-test.cpp
- ** @see multifact-argument-test.cpp
+ ** @see multifact-singleton-test.cpp
  ** @see SingletonFactory
  */
 
@@ -106,19 +106,61 @@ namespace lib {
      * Wrapper taking ownership,
      * by wrapping into smart-ptr
      */
-    template<typename TAR>
+    template<typename RAW>
     struct BuildRefcountPtr
       {
-        using RawType    = typename std::remove_pointer<TAR>::type;
+        using RawType    = typename std::remove_pointer<RAW>::type;
         using BareType   = RawType *;
         using ResultType = std::shared_ptr<RawType>;
         
         template<class FUN, typename... ARGS>
         ResultType
-        wrap (FUN create, ARGS... args)  noexcept
+        wrap (FUN create, ARGS... args)
           {
             return ResultType (create(args...));
           }
+      };
+    
+    
+    /**
+     * Policy: use a custom functor
+     * to finish the generated product
+     * @remarks the nested structure allows to define
+     *          both the raw type and the wrapped type.
+     *          On instantiation of the MultiFact, pass
+     *          the nested Wrapper struct template param.
+     * @warning the RAW type must match the result type
+     *          of the MultiFac SIG. Beware of passing
+     *          references or pointers to local data.
+     */
+    template<typename TAR>
+    struct Build
+      {
+        template<typename RAW>
+        struct Wrapper
+          {
+            using RawType    = RAW;
+            using BareType   = RAW;
+            using ResultType = TAR;
+            
+            using WrapFunc = std::function<ResultType(BareType)>;
+            
+            void
+            defineFinalWrapper (WrapFunc&& fun)
+              {
+                this->wrapper_ = fun;
+              }
+            
+            template<class FUN, typename... ARGS>
+            ResultType
+            wrap (FUN create, ARGS&&... args)
+              {
+                return wrapper_(std::forward<BareType> (create(args...)));
+              }
+            
+          private:
+            WrapFunc wrapper_;
+          };
       };
     
     
@@ -203,6 +245,8 @@ namespace lib {
     
     
     
+    /* === Main type === */
+    
     /**
      * Factory for creating a family of objects by ID.
      * The actual factory functions are to be installed
@@ -218,7 +262,7 @@ namespace lib {
             , template<class> class Wrapper = PassAsIs
             >
     class MuttiFac
-      : FabConfig<SIG,Wrapper>::WrapFunctor
+      : public FabConfig<SIG,Wrapper>::WrapFunctor
       {
         using   _Conf = FabConfig<SIG,Wrapper>;
         using SIG_Fab = typename _Conf::SIG_Fab;
