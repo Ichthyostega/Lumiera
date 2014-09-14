@@ -60,8 +60,8 @@
  */
 
 
-#ifndef LIB_MUTTIFACT_H
-#define LIB_MUTTIFACT_H
+#ifndef LIB_MULTIFACT_H
+#define LIB_MULTIFACT_H
 
 
 #include "lib/error.hpp"
@@ -261,7 +261,7 @@ namespace lib {
             , typename ID
             , template<class> class Wrapper = PassAsIs
             >
-    class MuttiFac
+    class MultiFact
       : public FabConfig<SIG,Wrapper>::WrapFunctor
       {
         using   _Conf = FabConfig<SIG,Wrapper>;
@@ -344,7 +344,7 @@ namespace lib {
               }
             
           public:
-            Singleton (MuttiFac& factory, ID id)
+            Singleton (MultiFact& factory, ID id)
               {
                 factory.defineProduction(id, createSingleton_accessFunction());
               }
