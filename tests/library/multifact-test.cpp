@@ -1,8 +1,8 @@
 /*
-  MultiFact(Test)  -  unittest for the configurable object-family creating factory
+  MultiFact(Test)  -  cover the configurable object-family creating factory
 
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2014,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -23,11 +23,10 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/muttifac.hpp"
+#include "lib/multifact.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-//#include <iostream>
 #include <functional>
 #include <string>
 
@@ -37,15 +36,12 @@ namespace lib {
 namespace test{
   
   using boost::lexical_cast;
-//  using lib::test::showSizeof;
   using util::isSameObject;
   using util::isnil;
-//  using std::ostream;
-  using std::string;
+  
   using std::function;
+  using std::string;
   using std::bind;
-//  using std::cout;
-//  using std::endl;
   
   using lumiera::error::LUMIERA_ERROR_INVALID;
   
@@ -58,7 +54,6 @@ namespace test{
         virtual operator string () =0;
       };
     
-//    inline ostream& operator<< (ostream& os, Interface& ifa) { return os << string(ifa); }
     
     
     enum theID
@@ -107,7 +102,7 @@ namespace test{
   
   
   
-  /*************************************************************************//**
+  /******************************************************************************//**
    * @test verify the basic usage patterns of the configurable factory template.
    *       - Depending on the concrete fabrication signature, the factory can produce
    *         "things" by invoking suitable fabrication functions. These functions
@@ -142,7 +137,7 @@ namespace test{
       void
       produce_simple_values()
         {
-          using TestFactory = factory::MuttiFac<string, theID>;
+          using TestFactory = factory::MultiFact<string, theID>;
           
           TestFactory theFact;
           
@@ -204,7 +199,7 @@ namespace test{
       void
       produce_smart_pointers()
         {
-          using TestFactory = factory::MuttiFac<Interface, theID, factory::BuildRefcountPtr>;
+          using TestFactory = factory::MultiFact<Interface, theID, factory::BuildRefcountPtr>;
           using PIfa = shared_ptr<Interface>;
           
           TestFactory theFact;
@@ -243,7 +238,7 @@ namespace test{
       void
       pass_additional_arguments()
         {
-          using TestFactory = factory::MuttiFac<Interface*(string), theID>;
+          using TestFactory = factory::MultiFact<Interface*(string), theID>;
           
           TestFactory theFact;
           
@@ -287,7 +282,7 @@ namespace test{
       void
       fed_a_custom_finishing_functor()
         {
-          using TestFactory = factory::MuttiFac<int(int), theID, factory::Build<long>::Wrapper>;
+          using TestFactory = factory::MultiFact<int(int), theID, factory::Build<long>::Wrapper>;
           
           TestFactory theFact;
           

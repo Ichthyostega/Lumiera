@@ -334,13 +334,13 @@ namespace lib {
         class Singleton
           : lib::Depend<IMP>
           {
-            typedef lib::Depend<IMP> SingleFac;
+            typedef lib::Depend<IMP> SingleFact;
             
             Creator
             createSingleton_accessFunction()
               {
-                return std::bind (&SingleFac::operator()
-                                 , static_cast<SingleFac*>(this));
+                return std::bind (&SingleFact::operator()
+                                 , static_cast<SingleFact*>(this));
               }
             
           public:

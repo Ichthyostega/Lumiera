@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/multifact-arg.hpp"
+#include "lib/multifact.hpp"
 
 #include <iostream>
 #include <functional>

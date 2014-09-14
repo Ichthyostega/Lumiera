@@ -385,7 +385,7 @@ out: Impl-1
 out: Impl-2
 out: Impl-3
 out: Impl-4
-out: sizeof\( .+MultiFact.+Interface.+theID.+PassReference.+ \) =
+out: sizeof\( .+MultiFact.+Interface.+theID.+PassAsIs.+ \) =
 return: 0
 END
 

@@ -1,5 +1,5 @@
 /*
-  MultiFactSingleton(Test)  -  using lib::multifact to manage a family of singletons
+  MultiFactSingleton(Test)  -  using MultiFact to manage a family of singletons
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -65,20 +65,17 @@ namespace test{
       , FOU
       };
     
-    typedef factory::MultiFact<Interface, theID, factory::PassReference> TestFactory;
+    typedef factory::MultiFact<Interface&, theID> TestFactory;
     
     
     template<theID ii>
     class Implementation
       : public Interface
       {
-        operator string()
+        operator string()  override
           {
             return "Impl-"+lexical_cast<string> (ii);
           }
-        
-      public:
-        static theID getTypeID() { return ii; }
       };
     
     /** Factory instance for the tests... */
@@ -95,12 +92,21 @@ namespace test{
   
   
   
-  /***************************************************************//**
-   * @test verify simple setup of the MultiFact template.
-   *       Define a hierarchy of test dummy objects, in order to
-   *       register them automatically for creation through a suitable
-   *       instantiation of MultiFact. Verify we get the correct product
-   *       when invoking this MultiFac flavour.
+  /******************************************************************//**
+   * @test verify the use of the MultiFact template to access Singletons.
+   *       While generally speaking the MultiFact allows us to address
+   *       and invoke several "production lines" by ID, an obvious
+   *       use case would be to access a "family" of singletons
+   *       through this mechanism. And indeed, \c MultiFact::Singleton
+   *       is a preconfigured shortcut for this use case. The actual
+   *       singleton access factories are placed into a static context
+   *       (here in the anonymous namespace above) and their access
+   *       operation is wired as "factory function".
+   *       - we use a hierarchy of test dummy objects
+   *       - we set up a singleton factory for several subclasses
+   *       - the registration happens automatically in the ctor
+   *       - we verify that we indeed get the correct flavour.
+   * 
    * @see  lib::MultiFact
    */
   class MultiFactSingleton_test : public Test

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "lib/multifact-arg.hpp"
+#include "lib/multifact.hpp"
 #include "common/query/query-resolver.hpp"
 
 namespace lumiera {
@@ -53,15 +53,16 @@ namespace lumiera {
   
   /** factory used as dispatcher table
    *  for resolving typed queries  */
-  typedef MultiFact< Resolution(Goal const&)  // nominal signature of fabrication
+  typedef MultiFact< Resolution*(Goal const&) // raw signature of fabrication
                    , Goal::QueryID           //  select resolution function by kind-of-Query
                    , BuildRefcountPtr       //   wrapper: manage result set by smart-ptr
                    > DispatcherTable;      //
   
   /** PImpl of the generic QueryResolver */
-  struct QueryDispatcher
-    : DispatcherTable
+  class QueryDispatcher
+    : public DispatcherTable
     {
+    public:
       
       PReso
       handle (Goal const& query)

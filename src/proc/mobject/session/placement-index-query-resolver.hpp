@@ -94,9 +94,9 @@ namespace session {
       function<IndexLink> _getIndex;
       
       
-      virtual bool canHandleQuery(Goal::QueryID const&)  const;
+      virtual bool canHandleQuery(Goal::QueryID const&)  const override;
       
-      virtual operator string()  const { return "PlacementIndex"; }
+      virtual operator string()  const override { return "PlacementIndex"; }
       
       
       Explorer* setupExploration (PlacementIndex::ID startID, ScopeQueryKind direction);
