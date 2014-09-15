@@ -38,8 +38,6 @@
 #include <memory>
 #include <vector>
 #include <map>
-#include <cstdlib>
-#include <ctime>
 
 
 namespace test {
@@ -49,7 +47,6 @@ namespace test {
   using std::cerr;
   using std::endl;
   using std::vector;
-  using std::auto_ptr;
   using std::shared_ptr;
   using boost::algorithm::trim;
   
@@ -63,38 +60,44 @@ namespace test {
   
   
   
-  /** helper to collect and manage the test cases.
-   *  Every testcase class should create a Launch instance
-   *  which causes a call to Suite::enrol(), so we can add a
-   *  pointer to this Launcher into a map indexed by the
-   *  provided testIDs and groupIDs.
-   *  This enables us to build a Suite instance for any 
-   *  requested group and then instantiate and invoke
-   *  individual testcases accordingly.
-   */ 
-  class Registry
-    {
-      auto_ptr<GroupMap> groups;
-    public:
-      Registry() : groups(new GroupMap ) {};
-      PTestMap& getGroup (string grpID) { return (*groups)[grpID]; }; 
-      void add2group (Launcher* test, string testID, string groupID);
-    };
-    
-  void 
-  Registry::add2group (Launcher* test, string testID, string groupID)
-  {
-    REQUIRE( test );
-    REQUIRE( !isnil(testID) );
-    REQUIRE( !isnil(groupID) );
-    
-    PTestMap& group = getGroup(groupID);
-    if (!group)
-      group.reset( new TestMap );
-    (*group)[testID] = test;
+  namespace {
+    /**
+     * helper to collect and manage the test cases.
+     * Every testcase class should create a Launch instance,
+     * which causes a call to Suite::enrol(), so we can add a pointer
+     * to this Launcher into a map indexed by the provided testIDs and groupIDs.
+     * This enables us to build a Suite instance for any requested group
+     * and then instantiate and invoke individual testcases accordingly.
+     */
+    class Registry
+      {
+        GroupMap groups_;
+        
+      public:
+        Registry() { };
+        
+        PTestMap&
+        getGroup (string grpID)
+          {
+            return groups_[grpID];
+          };
+        
+        void
+        add2group (Launcher* test, string testID, string groupID)
+          {
+            REQUIRE( test );
+            REQUIRE( !isnil(testID) );
+            REQUIRE( !isnil(groupID) );
+            
+            PTestMap& group = getGroup(groupID);
+            if (!group)
+              group.reset( new TestMap );
+            (*group)[testID] = test;
+          }
+      };
+      
+    Registry testcases;
   }
-  
-  Registry testcases;
   
   
   
@@ -216,9 +219,9 @@ namespace test {
             
             // Special contract: in case the cmdline holds no actual arguments
             // beyond the test name, then it's cleared entirely.
-            if (1 == cmdline.size()) cmdline.clear();           // TODO this invalidates also testID -- really need to redesign the API ////TICKET #289
+            if (1 == cmdline.size()) cmdline.clear();                      // TODO this invalidates also testID -- really need to redesign the API ////TICKET #289
             
-            exitCode_ |= invokeTestCase (*(*test)(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
+            exitCode_ |= invokeTestCase (*test->makeInstance(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
             return true;
           }
         else
@@ -232,7 +235,7 @@ namespace test {
         std::cout << "\n  ----------"<< i->first<< "----------\n";
         Launcher* test = (i->second);
         IS_VALID (test, i->first);
-        exitCode_ |= invokeTestCase (*(*test)(), cmdline); // actually no cmdline arguments
+        exitCode_ |= invokeTestCase (*test->makeInstance(), cmdline); // actually no cmdline arguments
       }
     return true;
   }
@@ -259,7 +262,7 @@ namespace test {
         IS_VALID (test, i->first);
         try
           {
-            (*test)()->run(noCmdline); // run it to insert test generated output
+            test->makeInstance()->run(noCmdline); // run it to insert test generated output
           }
         catch (...) 
           {

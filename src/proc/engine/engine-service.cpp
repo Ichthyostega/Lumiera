@@ -36,7 +36,6 @@ namespace engine{
   
 //    using std::string;
 //    using lumiera::Subsys;
-//    using std::auto_ptr;
 //    using boost::scoped_ptr;
   using std::function;
   using std::bind;
