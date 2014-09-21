@@ -31,7 +31,16 @@
 /** @file try.cpp
  ** Investigation: pitfalls of "perfect forwarding".
  ** Find out about the corner cases where chained argument forwarding
- ** does not work as expected
+ ** does not work as expected. The key point is to put close attention on the
+ ** template parameters we're passing on to the next lower layer. It is crucial
+ ** either to add the reference explicitly, or to have it included implicitly
+ ** by relying on the way how template params are matched on function calls:
+ ** - lvalue -> parameter becomes TY &
+ ** - rvalue -> parameter becomes TY
+ ** 
+ ** In this final stage, the example shows what happens if we erroneously fail
+ ** to take the variadic arguments by '&&' on forwarding: we end-up with a
+ ** slicing copy to the base class.
  **
  */
 
@@ -62,7 +71,10 @@ class Interface
     
     
     virtual ~Interface() { }
-    virtual string op()  const  =0;
+    virtual string op()  const
+      {
+        return "happy SLICING";
+      }
   };
 
 class Impl
@@ -122,10 +134,10 @@ invoke (Interface const& ref)
 
 template<class FUN, typename...ARG>
 void
-indirect_1 (FUN fun, ARG&&... args)
+indirect_1 (FUN fun, ARG... args)  // NOTE: erroneously taking ARG as-is, which results in taking BY VALUE when used in the forwarding chain!
 {
-  diagnostics<ARG&&...> ("Indirect-1", args...);
-  fun (std::forward<ARG> (args)...);
+  diagnostics<ARG...> ("Indirect-1", args...);
+  fun (args...);
 }
 
 template<class FUN, typename...ARG>
