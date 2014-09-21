@@ -25,230 +25,105 @@
 // 1/12  - is partial application of member functions possible?
 // 5/14  - c++11 transition: detect empty function object
 // 7/14  - c++11 transition: std hash function vs. boost hash
+// 9/14  - variadic templates and perfect forwarding
 
 
 /** @file try.cpp
- ** Investigation: how to supply a hash function for custom types.
- ** This example defines two custom types, each of which provides a way
- ** to calculate hash values. But in one case, we use the new \c std::hash
- ** as a framework, in the other case we use the extension mechanism for
- ** \c boost::hash. The latter has the benefit of being simpler and less verbose
- ** to write, since a simple ADL function is sufficient as extension point
- ** 
- ** Now it would be desirable to bridge automatically between the two systems of
- ** defining hash functions. Unfortunately, the standard library since GCC 4.7
- ** contains a default implementation of std::hash to trigger a static assertion.
- ** Probably this was meant to educate people, but has the adverse side effect to
- ** prohibit any metaprogramming through SFINAE
- ** 
- ** This mistake was corrected somewhere in the 4.8.x series, but in the meantime
- ** we'll use the dirty trick proposed by "enobayram" to hijack and fix the problematic
- ** definition from the standard library.
- ** http://stackoverflow.com/questions/12753997/check-if-type-is-hashable
- ** 
- ** Moreover, in this exploration, we build an automatic bridge to invoke
- ** existing boost hash functions whenever a \c std::hash definition is required.
+ ** Investigation: pitfalls of "perfect forwarding".
+ ** Find out about the corner cases where chained argument forwarding
+ ** does not work as expected
  **
  */
 
+#include "lib/test/test-helper.hpp"
+#include "lib/util.hpp"
+
 #include <cstddef>
-
-namespace lib {
-namespace meta {
-  
-  namespace {
-    struct NoUsableHashDefinition { size_t more_than_one[2]; };
-    typedef size_t HasUsableHashDefinition;
-    
-    NoUsableHashDefinition hash_value(...);
-    
-  }
-  
-  template<typename TY>
-  class provides_BoostHashFunction
-    {
-      TY const& unusedDummy = *(TY*)nullptr;
-      
-    public:
-      enum{ value = (sizeof(HasUsableHashDefinition) == sizeof(hash_value(unusedDummy))) };
-    };
-
-}}
-
-#include <boost/utility/enable_if.hpp>
-
-namespace std {
-  
-  template<typename Result, typename Arg>
-  struct __hash_base;
-  
-  
-  template<typename TY, typename TOGGLE = void>
-  struct _HashImplementationSelector
-    : public __hash_base<size_t, TY>
-    {
-      static_assert (sizeof(TY) < 0, "No hash implementation found. Either specialise std::hash or provide a boost-style hash_value via ADL.");
-      
-      typedef int NotHashable;
-    };
-  
-  template<typename TY>
-  struct _HashImplementationSelector<TY,   typename boost::enable_if< lib::meta::provides_BoostHashFunction<TY> >::type >
-    : public __hash_base<size_t, TY>
-    {
-      size_t
-      operator() (TY const& elm) const noexcept
-        {
-          return hash_value(elm);
-        }
-      
-    };
-  
-  /**
-   * Primary class template for std::hash.
-   * We provide no default implementation, but a marker type
-   * to allow detection of custom implementation through metaprogramming
-   */
-  template<typename TY>
-  struct hash
-    : public _HashImplementationSelector<TY>
-    { };
-  
-}
-
-
-
-#define hash hash_HIDDEN
-#define _Hash_impl _Hash_impl_HIDDEN
-#include <functional>
-#undef hash
-#undef _Hash_impl
-
-
-namespace std {
-  
-  struct _Hash_impl
-    : public std::_Hash_impl_HIDDEN
-    {
-      template<typename ... ARGS>
-      static auto
-      hash (ARGS&&... args) -> decltype(hash_HIDDEN (std::forward<ARGS>(args)...))
-        {
-          return hash_HIDDEN (std::forward<ARGS>(args)...);
-        }
-    };
-
-#define STD_HASH_IMPL(_TY_) \
-  template<> struct hash<_TY_> : public hash_HIDDEN<_TY_> { };
-
-  STD_HASH_IMPL (bool)
-  STD_HASH_IMPL (char)
-  STD_HASH_IMPL (signed char)
-  STD_HASH_IMPL (unsigned char)
-  STD_HASH_IMPL (wchar_t)
-  STD_HASH_IMPL (char16_t)
-  STD_HASH_IMPL (char32_t)
-  STD_HASH_IMPL (short)
-  STD_HASH_IMPL (int)
-  STD_HASH_IMPL (long)
-  STD_HASH_IMPL (long long)
-  STD_HASH_IMPL (unsigned short)
-  STD_HASH_IMPL (unsigned int)
-  STD_HASH_IMPL (unsigned long)
-  STD_HASH_IMPL (unsigned long long)
-  STD_HASH_IMPL (float)
-  STD_HASH_IMPL (double)
-  STD_HASH_IMPL (long double)
-  
-#undef STD_HASH_IMPL
-}
-
-
-
-
-
-#include <boost/functional/hash.hpp>
-
+#include <utility>
 #include <iostream>
+#include <functional>
 #include <string>
-#include <vector>
 
-using std::vector;
 using std::string;
 using std::cout;
 using std::endl;
 
-class S
+class Interface
+  {
+  public:
+    virtual ~Interface() { }
+    virtual string op()  const  =0;
+  };
+
+class Impl
+  : public Interface
   {
     string s_;
     
-    friend std::hash<S>;
+    string
+    op()  const override
+      {
+        return s_;
+      }
     
   public:
-    S(string ss ="")
+    Impl(string ss ="IMP")
       : s_(ss)
       { }
   };
 
-namespace std {
-  template<>
-  struct hash<S>
-    {
-      size_t
-      operator() (S const& val)  const noexcept
-        {
-          hash<string> string_hasher;
-          return string_hasher(val.s_);
-        }
-    };
+template<typename X>
+void
+diagnostics (string id, const void* addr)
+{
+  cout << id << "\n"
+       << "invoked with.. " << lib::test::showType<X>()
+       << "\n Address ... " << addr
+       << "\n is lRef ... " << std::is_lvalue_reference<X>::value
+       << "\n is rRef ... " << std::is_rvalue_reference<X>::value
+       << "\n"
+       ;
 }
 
-class V
-  {
-    vector<string> v_;
-    
-  public:
-    V(string ss ="")
-      {
-        v_.push_back(ss);
-      }
-    
-    friend size_t
-    hash_value (V const& v)
-    {
-      return boost::hash_value(v.v_);
-    }
-  };
+
+void
+invoke (Interface const& ref)
+{
+  using Ty = Interface const&;
+  diagnostics<Ty> ("Invoke", &ref);
+  cout << "instanceof Impl?" << bool(INSTANCEOF(Impl, &ref)) <<"\n";
+  cout <<  ref.op();
+}
+
+template<class FUN, typename A>
+void
+indirect_1 (FUN fun, A&& a)
+{
+  diagnostics<A> ("Indirect-1", &a);
+  fun (std::forward<A> (a));
+}
+
+template<class FUN, typename A>
+void
+indirect_2 (FUN fun, A&& a)
+{
+  diagnostics<A> ("Indirect-2", &a);
+  indirect_1 (fun, std::forward<A> (a));
+}
 
 
 int
 main (int, char**)
   {
-    string p("Путин"), pp(p);
-    S s(p), ss(pp);
-    V v(p), vv(pp);
+    Impl obj;
+    Interface const& ref = obj;
     
-    std::hash<string>   std_stringHasher;
-    boost::hash<string> boo_stringHasher;
+    cout << "before call. Address... "<<&ref<<"\n";
     
-    std::hash<S>   std_customHasher;
-    boost::hash<V> boo_customHasher;
+    std::function<void(Interface const&)> fun(invoke);
     
-    std::hash<V>   boo2std_crossHar;
-    
-    cout << "raw hash(std) =      "   << std_stringHasher(p) <<"|"<< std_stringHasher(pp)
-         << "\n      (boost) =      " << boo_stringHasher(p) <<"|"<< boo_stringHasher(pp)
-         << "\n custom hash (std)   " << std_customHasher(s) <<"|"<< std_customHasher(ss)
-         << "\n custom hash (boost) " << boo_customHasher(v) <<"|"<< boo_customHasher(vv)
-         << "\n has_boost_hash<S>   " << lib::meta::provides_BoostHashFunction<S>::value
-         << "\n has_boost_hash<V>   " << lib::meta::provides_BoostHashFunction<V>::value
-         << "\n use boost from std: " << boo2std_crossHar(v) <<"|"<< boo2std_crossHar(vv)
-         ;
-    
-//  Note: does not compile,
-//          since there is not automatic bridge from std to boost hash
-//  
-//  boost::hash<S>()(s);
+    indirect_2 (fun, ref);
+    indirect_2 (fun, Impl("honk"));
     
     cout <<  "\n.gulp.\n";
     
