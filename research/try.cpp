@@ -51,6 +51,16 @@ using std::endl;
 class Interface
   {
   public:
+    Interface(){}
+    Interface(Interface const& o) { cout << "COPY.CT from "<<&o<<" !!!\n"; }
+    Interface(Interface const&& o) { cout << "MOVE.CT from "<<&o<<" !!!\n"; }
+    
+    Interface&
+    operator= (Interface const& o) { cout << "COPY= from "<<&o<<" !!!\n"; return *this; }
+    Interface&
+    operator= (Interface const&& o) { cout << "MOVE= from "<<&o<<" !!!\n"; return *this; }
+    
+    
     virtual ~Interface() { }
     virtual string op()  const  =0;
   };
@@ -73,16 +83,29 @@ class Impl
   };
 
 template<typename X>
-void
-diagnostics (string id, const void* addr)
+string
+showRefRRefVal()
 {
-  cout << id << "\n"
-       << "invoked with.. " << lib::test::showType<X>()
-       << "\n Address ... " << addr
-       << "\n is lRef ... " << std::is_lvalue_reference<X>::value
-       << "\n is rRef ... " << std::is_rvalue_reference<X>::value
+  return std::is_lvalue_reference<X>::value? " by REF"
+                                           : std::is_rvalue_reference<X>::value? " by MOVE": " VAL";
+}
+
+template<typename X>
+void
+diagnostics (string id, X const& x)
+{
+  cout << "--"<<id<<"--   Type... " << lib::test::showType<X>()
+       << "\n     Address ... " << &x
+       << showRefRRefVal<X>()
        << "\n"
        ;
+}
+template<typename X, typename... XS>
+void
+diagnostics (string id, X const& x, XS const&... xs)
+{
+  diagnostics<X> (id, x);
+  diagnostics<XS...> (id, xs...);
 }
 
 
@@ -90,25 +113,27 @@ void
 invoke (Interface const& ref)
 {
   using Ty = Interface const&;
-  diagnostics<Ty> ("Invoke", &ref);
+  diagnostics<Ty> ("Invoke", ref);
   cout << "instanceof Impl?" << bool(INSTANCEOF(Impl, &ref)) <<"\n";
-  cout <<  ref.op();
+  cout << "________________"
+       << ref.op()
+       << "____\n";
 }
 
-template<class FUN, typename A>
+template<class FUN, typename...ARG>
 void
-indirect_1 (FUN fun, A&& a)
+indirect_1 (FUN fun, ARG&&... args)
 {
-  diagnostics<A> ("Indirect-1", &a);
-  fun (std::forward<A> (a));
+  diagnostics<ARG&&...> ("Indirect-1", args...);
+  fun (std::forward<ARG> (args)...);
 }
 
-template<class FUN, typename A>
+template<class FUN, typename...ARG>
 void
-indirect_2 (FUN fun, A&& a)
+indirect_2 (FUN fun, ARG&&... args)
 {
-  diagnostics<A> ("Indirect-2", &a);
-  indirect_1 (fun, std::forward<A> (a));
+  diagnostics<ARG&&...> ("Indirect-2", args...);
+  indirect_1 (fun, std::forward<ARG>(args)...);
 }
 
 
