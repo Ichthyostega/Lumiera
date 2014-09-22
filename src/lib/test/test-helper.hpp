@@ -28,9 +28,10 @@
 #include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
 
+#include <boost/lexical_cast.hpp>
 #include <typeinfo>
-#include <string>
 #include <cstdlib>
+#include <string>
 
 
 
@@ -101,8 +102,40 @@ namespace test{
   
   
   
-    
-  /** create a random but not insane Time value */    
+  /** helper to discern the kind of reference of the argument type */
+  template<typename R>
+  string
+  showRefKind()
+  {
+    return std::is_lvalue_reference<R>::value? "REF"
+               : std::is_rvalue_reference<R>::value? "MOV"
+                                                   : "VAL";
+  }
+  
+  /** helper for investigating a variadic argument pack */
+  inline string
+  showVariadicTypes ()
+  {
+    return " :.";
+  }
+  
+  template<typename X, typename... XS>
+  string
+  showVariadicTypes (X const& x, XS const&... xs)
+  {
+    return " :---#"
+         + boost::lexical_cast<string>(1 + sizeof...(xs))
+         + "  -- Type: " + showType<X>()
+         + "  "          + showRefKind<X>()
+         + "  Address* " + boost::lexical_cast<string>(&x)
+         + "\n"
+         + showVariadicTypes (xs...);
+  }
+  
+  
+  
+  
+  /** create a random but not insane Time value */
   inline lib::time::Time
   randTime ()
   {

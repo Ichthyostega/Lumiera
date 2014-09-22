@@ -102,22 +102,14 @@ showRefRRefVal()
                                            : std::is_rvalue_reference<X>::value? " by MOVE": " VAL";
 }
 
-template<typename X>
+template<typename... XS>
 void
-diagnostics (string id, X const& x)
+diagnostics (string id, XS const&... xs)
 {
-  cout << "--"<<id<<"--   Type... " << lib::test::showType<X>()
-       << "\n     Address ... " << &x
-       << showRefRRefVal<X>()
+  cout << "--"<<id<<"--\n"
+       << lib::test::showVariadicTypes<XS...>(xs...)
        << "\n"
        ;
-}
-template<typename X, typename... XS>
-void
-diagnostics (string id, X const& x, XS const&... xs)
-{
-  diagnostics<X> (id, x);
-  diagnostics<XS...> (id, xs...);
 }
 
 
