@@ -95,9 +95,9 @@ namespace lib {
         
         template<class FUN, typename... ARGS>
         ResultType
-        wrap (FUN create, ARGS... args)  noexcept
+        wrap (FUN create, ARGS&&... args)  noexcept
           {
-            return create(args...);
+            return create(std::forward<ARGS>(args)...);
           }
       };
     
@@ -115,9 +115,9 @@ namespace lib {
         
         template<class FUN, typename... ARGS>
         ResultType
-        wrap (FUN create, ARGS... args)
+        wrap (FUN create, ARGS&&... args)
           {
-            return ResultType (create(args...));
+            return ResultType (create(std::forward<ARGS>(args)...));
           }
       };
     
@@ -155,7 +155,7 @@ namespace lib {
             ResultType
             wrap (FUN create, ARGS&&... args)
               {
-                return wrapper_(std::forward<BareType> (create(args...)));
+                return wrapper_(std::forward<BareType> (create(std::forward<ARGS>(args)...)));
               }
             
           private:
