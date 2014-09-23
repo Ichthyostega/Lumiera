@@ -822,6 +822,33 @@ out: sizeof.+lib.+test.+test.+Wrmrmpft.+Murpf.+ =   1
 END
 
 
+TEST "Variadic template diagnostics" TestHelperVariadic_test <<END
+out-lit: --no-arg--
+out-lit:  :.
+out-lit: --value--
+out: .+#1.+ Type: d  VAL  Address. 0x.+
+out-lit:  :.
+out-lit: --reference--
+out: .+#1.+ Type: d  REF  Address. 0x.+
+out-lit:  :.
+out-lit: --move--
+out: .+#1.+ Type: d  MOV  Address. 0x.+
+out-lit:  :.
+out-lit: --two values--
+out: .+#2.+ Type: A4_c  REF  Address. 0x.+
+out: .+#1.+ Type: l  MOV  Address. 0x.+
+out-lit:  :.
+out-lit: --matched--
+out: .+#3.+ Type: d  REF  Address. 0x.+
+out: .+#2.+ Type: d  REF  Address. 0x.+
+out: .+#1.+ Type: d  MOV  Address. 0x.+
+out-lit:  :.
+out-lit: --baseclass--
+out: .+#1.+ Type: .+lib.test.test.+Interface.  REF  Address. 0x.+
+out-lit:  :.
+END
+
+
 TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL

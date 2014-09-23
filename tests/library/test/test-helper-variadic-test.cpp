@@ -23,21 +23,15 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "lib/util.hpp"
 
 
-//#include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <utility>
 #include <string>
 #include <cmath>
-//#include <map>
 
-//using boost::lexical_cast;
-//using util::contains;
 using std::string;
 using std::cout;
-//using std::endl;
 
 
 namespace lib {
@@ -65,7 +59,7 @@ namespace test{
         string s_;
         
       public:
-        Impl(string ss ="IMP") : s_(ss) { }
+        Impl(string ss ="ZOMG") : s_(ss) { }
       };
     
     
@@ -106,28 +100,33 @@ namespace test{
         {
           double d = makeRvalue();
           double& dr = d;
-
+          
           Impl obj;
           Interface const& ref = obj;
-
+          
           cout << "--no-arg--\n" << showVariadicTypes() <<"\n";
           cout << "--value--\n"     << showVariadicTypes<double>(d) <<"\n";
           cout << "--reference--\n" << showVariadicTypes<double&>(d) <<"\n";
           cout << "--move--\n"      << showVariadicTypes<double&&>(d) <<"\n";
           
-          forwardFunction("two values", "foo", 42L);
-          forwardFunction("matched", d,dr,std::move(dr));
+          forwardFunction("two values", "foo", 42L);        // passed as REF, MOV
+          forwardFunction("matched", d,dr,std::move(dr));   // passed as REF, REF, MOV
           
           forwardFunction<Interface const&>("baseclass", ref);
         }
       
       
+      /** this dummy simulates a typical variadic call
+       *  which takes all arguments as '&&' for the purpose of "perfect forwarding"
+       */
       template<typename... ARGS>
       void
-      forwardFunction (string id, ARGS const&... args)
+      forwardFunction (string id, ARGS&&... args)
         {
+          // in reality here you'd invoke some factory(<std::forward<ARGS>(args)...)
+          //
           cout << "--"<<id<<"--\n"
-               << showVariadicTypes<ARGS...>(args...)
+               << showVariadicTypes<ARGS&&...>(args...)
                << "\n"
                ;
         }

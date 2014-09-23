@@ -112,7 +112,14 @@ namespace test{
                                                    : "VAL";
   }
   
-  /** helper for investigating a variadic argument pack */
+  /** helper for investigating a variadic argument pack
+   * @warning always spell out the template arguments explicitly
+   *          when invoking this diagnostics, e.g. \c showVariadicTypes<ARGS...>(args...)
+   *          otherwise the template argument matching for functions might mess up the
+   *          kind of reference you'll see in the diagnostics.
+   * @see test-helper-variadic-test.cpp
+   */
+  template<typename... EMPTY>
   inline string
   showVariadicTypes ()
   {
@@ -120,7 +127,7 @@ namespace test{
   }
   
   template<typename X, typename... XS>
-  string
+  inline string
   showVariadicTypes (X const& x, XS const&... xs)
   {
     return " :---#"
@@ -129,8 +136,9 @@ namespace test{
          + "  "          + showRefKind<X>()
          + "  Address* " + boost::lexical_cast<string>(&x)
          + "\n"
-         + showVariadicTypes (xs...);
+         + showVariadicTypes<XS...> (xs...);
   }
+  
   
   
   
