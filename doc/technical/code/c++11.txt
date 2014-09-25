@@ -1,5 +1,8 @@
 Transition to C++11
 ===================
+:Author: Ichthyo
+:Date: 2014
+:toc:
 
 _this page is a notepad for topics and issues related to the new C++ standard_
 
@@ -91,6 +94,47 @@ This example prints the following output: +
 ----
 ASCII 'A' = 65 defined: 1 undefd; 0 bool-convertible: 0 can build bool: 1 bool from string: 0
 ----
+
+Moving values
+~~~~~~~~~~~~~
+Amongst the most prominent improvements brought with C\+\+11 is the addition of *move semantics*. +
+This isn't a fundamental change, though. It doesn't change the fundamental approach like -- say,
+the introduction of function abstraction and lambdas. It is well along the lines C++ developers
+were thinking since ages; it is more like an official affirmation of that style of thinking.
+
+.recommended reading
+********************************************************************************************
+- http://thbecker.net/articles/rvalue_references/section_01.html[Thomas Becker's Overview] of moving and forwarding
+- http://web.archive.org/web/20121221100831/http://cpp-next.com/archive/2009/08/want-speed-pass-by-value[Dave Abrahams: Want Speed? Pass by Value]
+  and http://web.archive.org/web/20121221100546/http://cpp-next.com/archive/2009/09/move-it-with-rvalue-references[Move It with RValue References]
+********************************************************************************************
+The core idea is that at times you need to 'move' a value due to a change of ownership. Now,
+the explicit support for 'move semantics' allows to decouple this 'conceptual move' from actually
+moving memory contents on the raw implementation level. The whole idea behind C++ seems to be
+allowing people to think on a conceptual level, while 'retaining' awareness of the gory details
+below the hood. Such is achieved by 'removing' the need to worry about details, confident that
+there is a way to deal with those concerns in an orthogonal fashion.
+
+Guidlines
+^^^^^^^^^
+ * embrace value semantics. Copies are 'good' not 'evil'
+ * embrace fine grained abstractions. Make objects part of your everyday thinking style.
+ * embrace `swap` operations to decouple the moving of data from the moving of ownership
+ * embrace the abilities of the compiler, abandon the attempt to write ``smart'' implementations
+
+Thus, in everyday practice, we do not often use rvalue references explicitly. And when we do,
+it is by writing a 'move constructor.' In most cases, we try to cast our objects in such a way
+as to rely on the automatically generated default move and copy operations. The 'only exception
+to this rule' is when such operations necessitate some non trivial administrative concern.
+
+- when a copy on the conceptual level translates into 'registering' a new record in the back-end
+- when a move on the conceptual level translates into 'removing' a link within the originating entity.
+
+CAUTION: as soon as there is an explicitly defined copy operation, or even just an explicitly defined
+         destructor, the compiler 'ceases to auto define' move operations! This is a rather unfortunate
+         compromise decision of the C++ committee -- instead of either breaking no code at all or
+         boldly breaking code, they settled upon ``somewhat'' breaking existing code...
+
 
 
 
