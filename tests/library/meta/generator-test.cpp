@@ -44,6 +44,7 @@
 #include <iostream>
 #include <string>
 
+using util::_Fmt;
 using std::string;
 using std::cout;
 
@@ -61,10 +62,9 @@ namespace test {
     };
   
   
-  util::_Fmt fmt ("Block<%2i>");
   
   template<int I>
-  string Block<I>::name = string (fmt % I);
+  string Block<I>::name = _Fmt("Block<%2i>") % I;
   
   
   
