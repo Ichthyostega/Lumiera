@@ -216,7 +216,7 @@ out-lit:  Flag-code = 12 ConfigSelector() ---> 1023
 out-lit:  Flag-code = 20 ConfigSelector() ---> 1024
 out-lit:  Flag-code = 4 ConfigSelector() ---> 1020
 out-lit:  Flag-code = 8 ConfigSelector() ---> 1030
-out-lit: LUMIERA_ERROR_INVALID:invalid input or parameters (ConfigSelector: No preconfigured factory for config-bits=10111).
+out: LUMIERA_ERROR_INVALID:invalid input or parameters.+No preconfigured factory for config-bits=10111
 return: 0
 END
 
