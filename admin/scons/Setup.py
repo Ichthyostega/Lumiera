@@ -78,6 +78,7 @@ def defineBuildEnvironment():
                , CFLAGS='-std=gnu99' 
                )
     env.Append(LINKFLAGS='-Wl,--no-undefined')  # require every dependency is given on link, in the right order
+    env.Append(LINKFLAGS='-Wl,--as-needed')     # by default only link against dependencies actually needed to resolve symbols 
     handleVerboseMessages(env)
     handleNoBugSwitches(env)
     

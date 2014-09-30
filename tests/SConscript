@@ -62,6 +62,13 @@ def testCases(env,dir):
 
 
 
+# Specific linker treatment for the testsuite:
+# force explicit linking against all dependencies to ensure auto-registration of
+# any test-class on startup, even if no code dependency is visible to the linker 
+envSuite = env.Clone()
+envSuite.Append(LINKFLAGS='-Wl,--no-as-needed') 
+
+
 # have to treat some subdirs separately.
 specialDirs = ['plugin','tool','include']
 testSrcDirs = globRootdirs('*')
@@ -69,7 +76,7 @@ testSrcDirs = globRootdirs('*')
 
 testcases  = [testCases(env, dir)  for dir in testSrcDirs if not dir in specialDirs]
 testLibs   = sharedTestLibs.values()
-testrunner = env.Program("test-suite", ["testrunner.cpp"]+testLibs+core_lib)
+testrunner = envSuite.Program("test-suite", ["testrunner.cpp"]+testLibs+core_lib)
 
 
 testsuite = ( testcases
