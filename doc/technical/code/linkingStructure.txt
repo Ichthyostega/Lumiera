@@ -1,0 +1,142 @@
+Linking and Application Structure
+=================================
+:Date: Autumn 2014
+:Author: Ichthyostega
+:toc:
+
+This page focusses on some quite intricate aspects of the code structure,
+the build system organisation and the interplay of application parts on
+a rather technical level.
+
+Arrangement of code
+-------------------
+Since ``code'' may denote several different entities, the place ``where''
+some piece of code is located differs according to the context in question.
+
+Visibility vs Timing: the translation unit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To start with, when it comes to building code in C/C++, the fundamental entity
+is _a single translation unit_. Assembler code is emitted while the compiler
+progresses through a translation unit. Each translation unit is self contained
+and represents a path of definition and understanding. Each translation unit
+starts anew at a state of complete ignorance, at the end leading to a fully
+specified, coherent operational structure.
+
+Within this _definition of a coded structure_, there is an inherent tension
+between the _absoluteness_ of a definition (a definition in mathematical sense
+can not be changed, once given) and the _order of spelling out_ this definition.
+When put in such an abstract way, all of this might seem self evident and trivial,
+but let's just consider the following complications in practice...
+
+- Headers are included into multiple translation units. Which means, they appear
+  in several disjoint contexts, and must be written in a way independent of the
+  specific context.
+- Macros, from the point of their definition onwards, change the way the compiler
+  ``sees'' the actual code.
+- Namespaces are ``open'' -- meaning they can be re-opened several times and
+  populated with further definitions. Generally speaking, the actual contents of
+  any given namespace will be different in each and every translation unit.
+- a Template is not in itself code, but a constructor function for actual code.
+  It needs to be instantiated with concrete type arguments to produce code.
+  And when this happens, the template instantiation picks up definitions
+  _as visible at that specific point_ in the path through the translation unit.
+  A template instantiation might even pick up specific definitions depending
+  on the actual parameters, and the current content of the namespace these
+  parameter types are defined in. So it very much matters at which point a
+  specific template instantiation is first mentioned.
+- it is possible to generate globally visible (or statically visible) code
+  from a template instantiation. This may even happen several times when
+  compiling multiple translation units; the final linking stage will
+  silently remove such duplicate instantiations stemming from templates --
+  and this resolution step just assumes that these duplicate code entities
+  are actually equivalent. Mind me, this is an assumption and can not be
+  easily verified by the compiler. With a bit of criminal energy (think
+  namespaces), it is very much possible to produce several instantiations
+  of, say, a static initialiser within a template class, which are in
+  fact different operations. Such a setup puts us at the mercy of the
+  random way in which the linker sees these instances.
+
+Now the quest is to make _good use_ of these various ways of defining things.
+We want to write code which clearly conveys its meaning, without boring the
+reader with tedious details not necessary to understand the main point in
+question. And at the same time we want to write code which is easy to
+understand, easy to write and can be altered, extended and maintained.
+footnote:[Put blatantly, a ``simple clean language'' without any means of expression
+would not be of much help. All the complexities of reality would creep into the usage
+of our ``ideal'' language, and, even worse, be mixed up there with the entropy of
+doing the same things several times in a different way.]
+
+Since it is really hard to reconcile all these conflicting goals, we are bound
+to rely on *patterns of construction*, which are known to work out well in
+this regard.
+
+
+Code size and Code Bloat
+~~~~~~~~~~~~~~~~~~~~~~~~
+Each piece of code incurs costs of various kinds
+
+- it needs to be understood by the reader. Otherwise it will die
+  sooner or later and from then on haunt the code base as a zombie.
+- writing code produces bugs and defects at a largely constant rate.
+  The best code, the perfect code is code you _do not write_.
+- actual implementation produces machine code, which occupies
+  space, needs to be loaded into memory (think caching) and performed.
+- to the contrary, mere definitions are for free, _but_ --
+- even definitions consume compiler time (read: development cycle turnaround)
+- and since we're developing with debug builds, each and every definition
+  produces debug information in each and every translation unit referring it.
+
+Thus, for every piece of code we must ask ourselves how _visible_ this code
+is. And we must consider the dependencies the code incurs. It pays off to
+turn something into a detail and ``push it into the backyard''. This explains
+why we're using the frontend - backend split so frequently.
+
+
+Source dependencies vs binary dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To _use_ stuff while writing code, a definition or at least a declaration needs to
+be brought into scope. This is fine as long as definitions are rather cheap,
+omitting and hiding the details of implementation. The user does not need to understand
+these details, and the compiler does not need to parse them.
+
+The situation is somewhat different when it comes to _binary dependencies_ though.
+At execution time, there are just pieces of data, and functions able to process this
+specific data. Thus, whenever a specific piece of data is to be used, the corresponding
+functions need to be loaded and made available. Most of the time we're linking dynamically,
+and thus the above means that a dynamic library providing those functions needs to be loaded.
+This other dynamic library becomes a dependency of our executable or library; it is recorded
+in the 'dynamic' section of the headers of our ELF binary (executable or library). Such a
+'needed' dependency is recorded there in the form of a ``SONAME'': this is an unique, symbolic
+ID denoting the library we're depending on. At runtime, its the responsibility of the system's
+dynamic linker to translate these SONAMEs into actual libraries installed somewhere on the system,
+to load those libraries and to map the respective memory pages into our current process' address
+space, and finally to _relocate_ the references in our assembly code to point properly to the
+functions of this library we're depending on.
+
+Application Layer structure and dependency structure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Lumiera application uses a layered architecture, where upper layers may depend on the services
+of lower layers, but not vice versa. The top layer, the GUI is defined to be _strictly optional_.
+As long as all we had to deal with was code in upper layers using and invoking services in lower
+layers, there would not be much to worry. Yet to produce any tangible value, software has to
+collaborate on shared data. So the naive ``natural'' form of architecture would be to build
+everything around shared knowledge about the layout of this data. Unfortunately such an approach
+endangers the most central property of software, namely to be ``soft'', to be able to adapt to
+change. Inevitably, data centric architectures either grow into a rigid immobile structure,
+or they breed an intangible insider culture with esoteric knowledge and obscure conventions
+and incantations. The only known solution to this problem (incidentally a solution known
+since millennia), is to rely on subsidiarity. ``Tell, don't ask''
+
+This gets us into a tricky situation regarding binary dependencies. Subsidiarity leads to an
+interaction pattern based on handshakes and exchanges, which leads to mutual dependency. One
+side places a contract for offering some service, the other side reshapes its internal entities
+to comply to that contract superficially. Generally speaking, to handle the entities involved
+in each handshake, effectively we need the internal functions of both sides. Which is in
+contradiction to a ``clean'' layer hierarchy.
+
+For a tangible example, lets assume the our backend has to do some work on behalf of the GUI;
+so the backend offers a contract to outline the properties of stuff it can work on. In compliance
+with this contract, the GUI hands some data entities to the backend to work on -- but by their
+very nature, these data entities are and remain GUI entities. When the backend invokes compliant
+operations on these entities, it effectively invokes functionality implemented in the GUI. Which
+makes the backend _binary dependent on the GUI_.
