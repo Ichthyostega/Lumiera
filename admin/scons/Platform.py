@@ -120,16 +120,17 @@ def configure(env):
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
         problems.append('Unable to configure Cairo--')
     
-    verGDL = '2.27.1'
-    if not conf.CheckPkgConfig('gdl-1.0', verGDL, alias='gdl'):
-        print 'No sufficiently recent (>=%s) version of GDL found. Maybe use custom package gdl-lum?' % verGDL
-        if not conf.CheckPkgConfig('gdl-lum', verGDL, alias='gdl'):
-            problems.append('GNOME Docking Library not found. We either need a sufficiently recent GDL '
-                            'version (>=%s), or the custom package "gdl-lum" from Lumiera.org.' % verGDL)
-    verGDLmm = '2.30.0'
-    if not conf.CheckPkgConfig('gdlmm-1.0', verGDLmm, alias='gdlmm'):
-        problems.append('GNOME Docking Library not found. We need a sufficiently recent GDL mm-bindings '
-                            'version (>=%s).' % verGDL)
+    verGDL   = '3.12'
+    verGDLmm = '3.7.3'
+    urlGDLmm = 'http://ftp.gnome.org/pub/GNOME/sources/gdlmm/'
+    urlGDLmmDEB = 'http://lumiera.org/debian/'
+    if not conf.CheckPkgConfig('gdl-3.0', verGDL):
+        problems.append('GNOME Docking Library not found. We need at least GDL %s '
+                        'and suitable C++ ("mm")-bindings (GDLmm >=%s)' % (verGDL, verGDLmm))
+    if not conf.CheckPkgConfig('gdlmm-3.0', verGDLmm, alias='gdl'):
+        problems.append('We need the C++ bindings for GDL by Fabien Parent: GDLmm >=%s '
+                        '(either from GNOME %s or use the debian package from %s)' % 
+                        (verGDLmm, urlGDLmm, urlGDLmmDEB))
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
         problems.append('Need rsvg Library for rendering icons.')
