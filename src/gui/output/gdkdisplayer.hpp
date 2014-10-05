@@ -33,8 +33,8 @@
 #ifndef GUI_OUTPUT_GDKDISPLAYER_H
 #define GUI_OUTPUT_GDKDISPLAYER_H
 
-#include "gui/output/displayer.hpp"
 #include "gui/gtk-base.hpp"
+#include "gui/output/displayer.hpp"
 
 namespace Gtk {
   class Widget;
@@ -46,6 +46,10 @@ namespace output {
 /**
  * GdkDisplayer is a class which is responsible for rendering a video
  * image via GDK.
+ *
+ * @todo the GdkDisplayer class is not supported anymore in Gtk3.
+ *       This is due to Gtk3 only supporting drawing with Cairo
+ *       /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
  */
 class GdkDisplayer
   : public Displayer

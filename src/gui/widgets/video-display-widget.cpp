@@ -78,6 +78,7 @@ namespace widgets {
     if (displayer == NULL)
       {
         displayer = new GdkDisplayer (drawingArea, width, height);
+        ///////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
       }
     
     return displayer;

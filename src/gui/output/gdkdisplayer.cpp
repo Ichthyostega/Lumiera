@@ -25,17 +25,9 @@
 #include "gui/gtk-lumiera.hpp"
 #include "gui/output/gdkdisplayer.hpp"
 
-/** The GdkDisplayer class is not supported in Gtk3.
- * This is due to Gtk3 only supporting drawing with
- * Cairo
- */
-void
-gdkdisplayer_gtk3_removal_func()
-{
-  FIXME("Remove: gtk3 does not support drawing with Gdk.");
-}
-#if 0
+#if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
 #include <gdk/gdkx.h>
+#endif     ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
 #include <iostream>
 
 using std::cerr;
@@ -58,7 +50,7 @@ GdkDisplayer::GdkDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
 bool
 GdkDisplayer::usable()
 {
-  return true;
+  return false;  /////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
 }
 
 void
@@ -74,6 +66,7 @@ GdkDisplayer::put( const void* image )
   GdkWindow *window = drawingArea->get_window()->gobj();
   REQUIRE(window != NULL);  
     
+#if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
   GdkGC *gc = gdk_gc_new( window );
   REQUIRE(gc != NULL);
   
@@ -89,9 +82,8 @@ GdkDisplayer::put( const void* image )
   g_object_unref( scaled_image );
   g_object_unref( pixbuf );
   g_object_unref( gc );
+#endif     ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
 }
 
 }   // namespace output
 }   // namespace gui
-
-#endif
