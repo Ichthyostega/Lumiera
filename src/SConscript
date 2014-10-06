@@ -43,7 +43,7 @@ envGtk.Append(LIBS=core)
 guimodule = envGtk.LumieraPlugin('gtk_gui', srcSubtree('gui'), install=True)
 gui       = ( guimodule
             + icons
-            + [env.GuiResource(f) for f in env.Glob('gui/*.rc')]
+            + [env.GuiResource(f) for f in env.Glob('gui/*.css')]
             )
 
 

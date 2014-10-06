@@ -61,6 +61,7 @@ WindowManager::init (string const& iconPath, string const& resourcePath)
 void
 WindowManager::setTheme (string const& stylesheetName)
 {
+  //////////////////////////////////////////////////////////////////////////////////////////TICKET #937 : load here the CSS for GTK3
   gtk_rc_parse (cStr(lib::resolveModulePath (stylesheetName, resourceSerachPath_)));
   gtk_rc_reset_styles (gtk_settings_get_default());
 }
