@@ -1,10 +1,22 @@
-#
-# This is the GTK style file for Lumiera
-#
-#
+/*
+  gtk-lumiera.css  -  GTK-3 style sheet for the Lumiera GUI
 
-#---------- Styles for Standard Widgets ----------#
+  Copyright (C)         Lumiera.org
+    2014,               Hermann Vosseler <Ichthyostega@web.de>
 
+  Based on the GKT-2 stylesheet by Joel Holdsworth, which in turn
+  was based on the styling of the Ardour DAW software (Ardour.org)
+
+  Styles and Graphics of the Lumiera GUI can be used and redistributed
+  under the the terms of the GNU General Public License version 2 or
+  above, or (at your option) under Creative Commons CC-By-SA.
+
+* ********************************************************/
+
+
+
+/* ---------- Styles for Standard Widgets ---------- */
+/*
 style "medium_text"
 {
 
@@ -65,6 +77,7 @@ style "default_base" = "medium_text"
   }
 }
 
+*//*
 style "default_buttons_menus" 
 {
   fg[ACTIVE] = { 1.0, 1.0, 1.0 }
@@ -117,9 +130,12 @@ class "GtkLabel" style:highest "default_buttons_menus"
 class "GtkButton" style:highest "lumiera_button"
 class "GtkArrow" style:highest "tearoff_arrow"
 class "GtkProgressBar" style:highest "lumiera_progressbars"
+*/
 
-#---------- Styles for Lumiera Widgets ----------#
 
+
+/* ---------- Styles for Lumiera Widgets ---------- */
+/*
 style "timeline_body"
 {
   gtkmm__CustomObject_TimelineBody::background = "#7E838B"
@@ -161,4 +177,4 @@ class "gtkmm__CustomObject_TimelineBody" style:highest "timeline_body"
 class "gtkmm__CustomObject_TimelineRuler" style:highest "timeline_ruler"
 class "gtkmm__CustomObject_TimelineHeaderWidget" style:highest "timeline_header_widget"
 
-
+*/
