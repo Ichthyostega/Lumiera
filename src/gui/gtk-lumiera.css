@@ -15,6 +15,33 @@
 
 
 
+/* ---------- Default Colours and Style ------------ */
+
+@define-color bg_color rgb(35%, 35%, 40%);
+@define-color fg_color rgb(80%, 80%, 80%);
+@define-color field_color #1a1e20;
+
+
+  * {
+    engine: adwaita;
+    
+    border-width: 1px;
+    background-clip: padding-box;
+    
+    color: inherit; /* by default inherit content colour from parent widget */
+}
+
+GtkWindow {
+    color: @fg_color;
+    background-color: @bg_color;
+}
+
+  .entry {
+    /* any active or text input area */
+    background-color: @field_color;
+}
+
+
 /* ---------- Styles for Standard Widgets ---------- */
 /*
 style "medium_text"
@@ -27,7 +54,7 @@ style "medium_bold_entry" = "medium_text"
 	fg[NORMAL] = { 0.70, 0.70, 0.70 }
 	fg[ACTIVE] = { 0.70, 0.70, 0.70 }
 	
-	bg[NORMAL] = { 0.35, 0.35, 0.40 }
+    bg[NORMAL] = { 0.35, 0.35, 0.40 }                   ↻ redundant
 	
 	base[NORMAL] = { 0, 0, 0 }
 	base[ACTIVE] = { 0, 0, 0 }
@@ -44,19 +71,19 @@ style "default_base" = "medium_text"
   GtkTreeView::even-row-color = { 0, 0, 0 }
   GtkTreeView::odd-row-color = { 0, 0, 0 }
   
-  fg[NORMAL] = { 0.80, 0.80, 0.80 }	
+  fg[NORMAL] = { 0.80, 0.80, 0.80 }                      ✔ ported
   fg[ACTIVE] = { 0.80, 0.80, 0.80 }	
   fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
   fg[INSENSITIVE] = { 0.80, 0.80, 0.80 }	
   fg[SELECTED] = { 0.80, 0.80, 0.80 }	
   
-  bg[NORMAL] = { 0.35, 0.35, 0.40 }
+  bg[NORMAL] = { 0.35, 0.35, 0.40 }                      ✔
   bg[ACTIVE] = { 0.35, 0.35, 0.40 }
   bg[PRELIGHT] = "#565690"
   bg[INSENSITIVE] = { 0.10, 0.10, 0.10 }
   bg[SELECTED] = { 0.40, 0.40, 0.45 }
   
-  text[NORMAL] = { 0.80, 0.80, 0.80 }	
+  text[NORMAL] = { 0.80, 0.80, 0.80 }	                 ↻
   text[ACTIVE] = { 0.80, 0.80, 0.80 }	
   text[PRELIGHT] = { 0.80, 0.80, 0.80 }	
   text[INSENSITIVE] = { 0.80, 0.80, 0.80}	
