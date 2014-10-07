@@ -1,0 +1,34 @@
+Lumiera GUI style and theming
+=============================
+
+
+'this page collects some pieces of information regarding the visual appearance of the Lumiera GTK GUI'
+
+GTK-3 styles
+------------
+Styling of GTK-3 interfaces is based on CSS, with some specific conventions about the selectors
+and some additional makro functions to generate colours and gradients. When GTK actually renders a widget,
+id consults a 'strategy object' known as *Theme Engine*, passing it the region to draw in a abstracted way.
+The Theme Engine in turn uses a '``style provider''' to retrieve the generic style properties it uses for drawing.
+Thus, the Theme Engine defines the actual meaning of any style and is in the position to understand and thus
+introduce additional engine specific styles and settings.
+
+GTK-3 supports the powerful 'cascading' and 'contextual selectors' from CSS. Thus the nesting of elements
+in the GUI forms the base for creating styling rules. Obviously it is preferrable to keep those rules
+generic; we may refer to individual gui elements by name (`#ID`) though.
+
+Recommended reading
+~~~~~~~~~~~~~~~~~~~
+ * for technically precise coverage, consult the pages
+   https://developer.gnome.org/gtk3/3.4/GtkCssProvider.html[GtkCssProvider]
+   and
+   https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined style classes]
+   in the GTK-3 reference manual.
+ * to start, look at this http://thegnomejournal.wordpress.com/2011/03/15/styling-gtk-with-css/[introductory text],
+   or the more http://worldofgnome.org/making-gtk3-themes-part-1-basics/[hands-on series of articles from world of gnome]
+ * this http://forums.fedoraforum.org/showthread.php?t=281568[post from fedora forum] features a conciese description
+   of the task of theme creation
+ * to understand the old (now obsolete) GTK-2 stylesheets, you might
+   http://orford.org/gtk/[look here]
+
+
