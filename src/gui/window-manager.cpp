@@ -27,6 +27,7 @@
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 
+#include <gtkmm/stylecontext.h>
 #include <boost/filesystem.hpp>
 #include <memory>
 #include <list>
@@ -61,9 +62,13 @@ WindowManager::init (string const& iconPath, string const& resourcePath)
 void
 WindowManager::setTheme (string const& stylesheetName)
 {
-  //////////////////////////////////////////////////////////////////////////////////////////TICKET #937 : load here the CSS for GTK3
-  gtk_rc_parse (cStr(lib::resolveModulePath (stylesheetName, resourceSerachPath_)));
-  gtk_rc_reset_styles (gtk_settings_get_default());
+  auto screen = Gdk::Screen::get_default();
+  auto css_provider = CssProvider::create();
+  css_provider->load_from_path (lib::resolveModulePath (stylesheetName, resourceSerachPath_));
+                                                               /////////////////////////////////TICKET #953 should detect and notify CSS parsing errors. CssProvider offers a signal for this purpose
+  
+  StyleContext::add_provider_for_screen (screen, css_provider,
+                                         GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
 

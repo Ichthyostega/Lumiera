@@ -84,7 +84,7 @@ public:
 
   /**
    * Sets the theme to use for the Lumiera GUI.
-   * @param stylesheetName GTK stylesheet to load from the resourceSearchPath_
+   * @param stylesheetName GTK CSS stylesheet to load from the resourceSearchPath_
    * @throw error::Config if this stylesheet can't be resolved on the searchpath
    * @see #init
    * @see lumiera::Config
