@@ -26,7 +26,8 @@
     engine: adwaita;
     
     border-width: 1px;
-    background-clip: padding-box;
+    border-style: outset;
+    border-color: shade(@bg_color, 0.80);
     
     color: inherit; /* by default inherit content colour from parent widget */
 }
@@ -36,13 +37,12 @@ GtkWindow {
     background-color: @bg_color;
 }
 
-  .entry {
+  .entry, .view {
     /* any active or text input area */
     background-color: @field_color;
 }
 
 
-/* ---------- Styles for Standard Widgets ---------- */
 /*
 style "medium_text"
 {
@@ -90,7 +90,7 @@ style "default_base" = "medium_text"
   text[SELECTED] = { 1.0, 1.0, 1.0 }
   
   base[ACTIVE]     = "#272a2f"
-  base[NORMAL]      =  "#1a1e20"
+  base[NORMAL]      =  "#1a1e20"                         ✔
   base[PRELIGHT]     = { 0.20, 0.20, 0.20 }
   base[INSENSITIVE]  = "#4c5159"
   base[SELECTED]     = { 0.25, 0.25, 0.25 }
@@ -104,7 +104,13 @@ style "default_base" = "medium_text"
   }
 }
 
-*//*
+*/
+/* ---------- Styles for Standard Widgets ---------- */
+
+GtkComboBox {
+    background-color: @field_color;
+}
+/*
 style "default_buttons_menus" 
 {
   fg[ACTIVE] = { 1.0, 1.0, 1.0 }
