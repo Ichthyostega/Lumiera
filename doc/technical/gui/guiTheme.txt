@@ -14,8 +14,11 @@ Thus, the Theme Engine defines the actual meaning of any style and is in the pos
 introduce additional engine specific styles and settings.
 
 GTK-3 supports the powerful 'cascading' and 'contextual selectors' from CSS. Thus the nesting of elements
-in the GUI forms the base for creating styling rules. Obviously it is preferrable to keep those rules
-generic; we may refer to individual gui elements by name (`#ID`) though.
+in the GUI forms the base for creating styling rules. Hereby, widget class names translate into ``tag'' names
+in the CSS selectors. Widgets may also expose CSS classes for styling -- the standard widgets define a generic set
+of https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined CSS style classes],
+which can be used to establish the foundation for theming. Obviously it is preferable to keep styling rules as
+concise, generic and systematic as possible; yet we may still refer to individual gui elements by name (`#ID`) though.
 
 Recommended reading
 ~~~~~~~~~~~~~~~~~~~
@@ -30,5 +33,54 @@ Recommended reading
    of the task of theme creation
  * to understand the old (now obsolete) GTK-2 stylesheets, you might
    http://orford.org/gtk/[look here]
+
+
+learning how to style
+~~~~~~~~~~~~~~~~~~~~~
+Unfortunately, documentation about creating GTK-3 themes is still fragmentary. Most people seem to learn by
+studying existing themes. To make matters worse, CSS allows to address every widget under various contextual
+constraints -- and people tend to approach such possibilities with a case-by-case attitude, instead of a
+systematic approach, and this leads to incredible large and redundant stylesheets.
+
+binary themes
+~~~~~~~~~~~~~
+GTK-3 supports binary theme bundles, which combine CSS style sheets and accompanying images and vector graphics
+into a single archive file. See http://wibblystuff.blogspot.de/2012/06/building-binary-for-gtk3-theme.html[this blog entry]
+for a tutorial. But when it comes to investigating an existing theme, we need a way to 'extract' the original sources
+from such a distribution bundle. This can be achieved with the help of the `gresource` command. The following bash
+srcipt by mailto:peter@thecodergeek.com[Peter Gordon] (License:Public Domain) simplifies this process, allowing 
+to extract all resource files in a given GResource file, with the given base URL. For example, if a GResource file
+contained the resource with the URL `/org/foo/bar/baz.txt`, and the base URL defined as `"/org/foo/"`, then the resource
+named `/org/foo/bar/baz.txt` in that file would be extracted and written to `bar/baz.txt` in the current directory.
+
+[source, bash]
+---------------------------------
+#!/bin/bash
+
+# The GResource file name
+GR_FILE="gtk.gresource"
+
+# The base folder of  the extracted resources
+GR_BASEDIR="/org/gnome/"
+
+
+## Check for required utilities...
+for REQUIRED_PROG in gresource
+do
+	which ${REQUIRED_PROG} &>/dev/null
+	if [ $? -ne 0 ]; then
+		echo "Unable to find required program '${REQUIRED_PROG}' in PATH."
+		exit 1
+	fi
+done
+
+
+for RSRC in $(gresource list $GR_FILE)
+do
+	RSRC_FILE=$(echo "${RSRC#$GR_BASEDIR}")
+	mkdir -p $(dirname "$RSRC_FILE") ||:
+	gresource extract "$GR_FILE" "$RSRC" > "$RSRC_FILE"
+done
+---------------------------------
 
 
