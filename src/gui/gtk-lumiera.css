@@ -19,7 +19,19 @@
 
 @define-color bg_color rgb(35%, 35%, 40%);
 @define-color fg_color rgb(80%, 80%, 80%);
-@define-color field_color #1a1e20;
+
+@define-color hover_bg_color #565690;
+
+@define-color field_color       #1a1e20;
+@define-color hover_field_color #2B2B27;
+
+@define-color selected_fg_color #05182F;
+@define-color selected_bg_color #F0E592;
+
+@define-color disabled_fg_color shade(@fg_color, .6);
+@define-color disabled_bg_color #4C5159;
+
+@define-color menue_button_color shade(@bg_color, .85);
 
 
   * {
@@ -33,8 +45,22 @@
 }
 
 GtkWindow {
-    color: @fg_color;
+    color:            @fg_color;
     background-color: @bg_color;
+}
+
+  .default:HOVER,
+  .button:HOVER {
+    background-color: @hover_bg_color;
+}
+
+  .default:ACTIVE,
+  .button:ACTIVE {
+    color: shade(@fg_color, 1.2);
+    background-color: @hover_bg_color;
+    border-color: shade(@bg_color, 1.5);
+    border-style: solid;
+    border-width: 1px;
 }
 
   .entry, .view {
@@ -42,6 +68,44 @@ GtkWindow {
     background-color: @field_color;
 }
 
+  .entry:HOVER,
+  .view:HOVER {
+    background-color: @hover_field_color;
+}
+
+  .entry:SELECTED {
+    color:            @selected_fg_color;
+    background-color: @selected_bg_color;
+}
+
+  *:INSENSITIVE,
+  .buttonINSENSITIVE,
+  .entry:INSENSITIVE {
+    color:            @disabled_fg_color;
+    background-color: @disabled_bg_color;
+}
+
+
+  .menubar {
+    background-image: -gtk-gradient(linear, left top, left bottom,
+                                    from(shade(@bg_color, 1.2)),
+                                      to(@menue_button_color));
+}
+
+  .menuitem * {
+    /* can't style the background directly, thus use a contextual selector */
+    color:            @fg_color;
+    background-color: @menue_button_color;
+}
+
+  .menuitem:HOVER {
+    background-color: @hover_bg_color;
+}
+
+  .menuitem:INSENSITIVE * {
+    color:            @disabled_fg_color;
+    background-color: @disabled_bg_color;
+}
 
 /*
 style "medium_text"
@@ -72,28 +136,28 @@ style "default_base" = "medium_text"
   GtkTreeView::odd-row-color = { 0, 0, 0 }
   
   fg[NORMAL] = { 0.80, 0.80, 0.80 }                      ✔ ported
-  fg[ACTIVE] = { 0.80, 0.80, 0.80 }	
-  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+  fg[ACTIVE] = { 0.80, 0.80, 0.80 }                      ✗ changed
+  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }                       ✔
   fg[INSENSITIVE] = { 0.80, 0.80, 0.80 }	
   fg[SELECTED] = { 0.80, 0.80, 0.80 }	
   
   bg[NORMAL] = { 0.35, 0.35, 0.40 }                      ✔
-  bg[ACTIVE] = { 0.35, 0.35, 0.40 }
-  bg[PRELIGHT] = "#565690"
-  bg[INSENSITIVE] = { 0.10, 0.10, 0.10 }
-  bg[SELECTED] = { 0.40, 0.40, 0.45 }
+  bg[ACTIVE] = { 0.35, 0.35, 0.40 }                      ✗ changed
+  bg[PRELIGHT] = "#565690"                               ✔
+  bg[INSENSITIVE] = { 0.10, 0.10, 0.10 }                 ✔
+  bg[SELECTED] = { 0.40, 0.40, 0.45 }                    ↻ ✗
   
   text[NORMAL] = { 0.80, 0.80, 0.80 }	                 ↻
-  text[ACTIVE] = { 0.80, 0.80, 0.80 }	
-  text[PRELIGHT] = { 0.80, 0.80, 0.80 }	
-  text[INSENSITIVE] = { 0.80, 0.80, 0.80}	
-  text[SELECTED] = { 1.0, 1.0, 1.0 }
+  text[ACTIVE] = { 0.80, 0.80, 0.80 }                    ↻
+  text[PRELIGHT] = { 0.80, 0.80, 0.80 }                  ↻
+  text[INSENSITIVE] = { 0.80, 0.80, 0.80}                ↻
+  text[SELECTED] = { 1.0, 1.0, 1.0 }                     ✗ changed
   
   base[ACTIVE]     = "#272a2f"
   base[NORMAL]      =  "#1a1e20"                         ✔
-  base[PRELIGHT]     = { 0.20, 0.20, 0.20 }
-  base[INSENSITIVE]  = "#4c5159"
-  base[SELECTED]     = { 0.25, 0.25, 0.25 }
+  base[PRELIGHT]     = { 0.20, 0.20, 0.20 }              ↻
+  base[INSENSITIVE]  = "#4c5159"                         ✗
+  base[SELECTED]     = { 0.25, 0.25, 0.25 }              ✗ changed
 
   engine "clearlooks" 
   {

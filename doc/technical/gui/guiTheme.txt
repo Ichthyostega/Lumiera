@@ -35,12 +35,20 @@ Recommended reading
    http://orford.org/gtk/[look here]
 
 
-learning how to style
-~~~~~~~~~~~~~~~~~~~~~
+difficulties when learning how to style
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Unfortunately, documentation about creating GTK-3 themes is still fragmentary. Most people seem to learn by
 studying existing themes. To make matters worse, CSS allows to address every widget under various contextual
-constraints -- and people tend to approach such possibilities with a case-by-case attitude, instead of a
-systematic approach, and this leads to incredible large and redundant stylesheets.
+constraints -- and people tend to approach such abundant possibilities with a case-by-case attitude, instead
+of a systematic approach, and this leads to incredible large and redundant stylesheets.
+
+Often we'll also face the perils of over-constrained settings. More so, since every system contains several
+style sheets, and settings from those are combined (``cascaded''). When things are specified multiple times
+redundantly at different levels, we can never be sure as to _which_ change actually caused a visible effect.
+A good recommendation is really to ``probe'' settings by changing them temporarily to a really obvious value
+(e.g. `background-color: red`). It is just too easy to learn wrong techniques based on false conclusions.
+
+
 
 binary themes
 ~~~~~~~~~~~~~
@@ -48,7 +56,8 @@ GTK-3 supports binary theme bundles, which combine CSS style sheets and accompan
 into a single archive file. See http://wibblystuff.blogspot.de/2012/06/building-binary-for-gtk3-theme.html[this blog entry]
 for a tutorial. But when it comes to investigating an existing theme, we need a way to 'extract' the original sources
 from such a distribution bundle. This can be achieved with the help of the `gresource` command. The following bash
-srcipt by mailto:peter@thecodergeek.com[Peter Gordon] (License:Public Domain) simplifies this process, allowing 
+srcipt footnote:[published  by mailto:peter@thecodergeek.com[Peter Gordon] to the Public Domain 
+http://projects.thecodergeek.com/scripts/gresource-extract[at his blog] in 2012] simplifies this process, allowing 
 to extract all resource files in a given GResource file, with the given base URL. For example, if a GResource file
 contained the resource with the URL `/org/foo/bar/baz.txt`, and the base URL defined as `"/org/foo/"`, then the resource
 named `/org/foo/bar/baz.txt` in that file would be extracted and written to `bar/baz.txt` in the current directory.
@@ -60,20 +69,15 @@ named `/org/foo/bar/baz.txt` in that file would be extracted and written to `bar
 # The GResource file name
 GR_FILE="gtk.gresource"
 
-# The base folder of  the extracted resources
+# base URL of  the extracted resources
 GR_BASEDIR="/org/gnome/"
 
 
-## Check for required utilities...
-for REQUIRED_PROG in gresource
-do
-	which ${REQUIRED_PROG} &>/dev/null
-	if [ $? -ne 0 ]; then
-		echo "Unable to find required program '${REQUIRED_PROG}' in PATH."
-		exit 1
-	fi
-done
-
+which gresource &>/dev/null
+if [ $? -ne 0 ]; then
+	echo "Unable to find gresource program in PATH."
+	exit 1
+fi
 
 for RSRC in $(gresource list $GR_FILE)
 do
