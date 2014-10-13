@@ -104,7 +104,7 @@ namespace lumiera {
       vector<Subsys*> running_;
       
       function<void(Subsys*)>  start_,
-                               killIt_;
+                               stopIt_;
       
       
     public:
@@ -113,7 +113,7 @@ namespace lumiera {
         : opts_(opts)
         , emergency_(false)
         , start_(bind (&SubsystemRunner::triggerStartup, this,_1))
-        , killIt_(bind (&Subsys::triggerShutdown, _1))
+        , stopIt_(bind (&Subsys::triggerShutdown, _1))
         { }
       
       void
@@ -129,7 +129,7 @@ namespace lumiera {
       shutdownAll ()
         {
           Lock guard (this);
-          for_each (running_, killIt_);
+          for_each (running_, stopIt_);
         }
       
       void
