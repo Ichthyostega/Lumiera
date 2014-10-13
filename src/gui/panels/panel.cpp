@@ -66,6 +66,10 @@ Panel::Panel(workspace::PanelManager &panel_manager,
 
 Panel::~Panel()
 {
+    ///////////////////////////////////////////////////////TICKET #195 : violation of policy, dtors must not do any work 
+    ///////////////////////////////////////////////////////TICKET #172 : observed as a reason for crashes when closing the GUI. It was invoked after end of main, when the GUI as already gone.
+  
+#if false /////////////////////////////////////////////////TICKET #937 : disabled for GTK-3 transition. TODO investigate why this logic existed...    
   /* Detach the panel bar */
   GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
     gdl_dock_item_get_grip(dockItem.gobj()));
@@ -74,6 +78,7 @@ Panel::~Panel()
 
   /* Remove this panel's container from the DockItem */
   dockItem.remove((Gtk::Widget&)*this);
+#endif    /////////////////////////////////////////////////TICKET #937 : (End)disabled for GTK-3 transition.
 }
 
 Gdl::DockItem&
