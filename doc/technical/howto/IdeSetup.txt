@@ -13,27 +13,57 @@ Eclipse CDT
 -----------
 .Notes by _ichthyo_
 There is nothing really fancy with the configuration, things work as you'd expect. Use your common sense.
+
  * create a _Makefile project_ (not a _managed_ project where the IDE issues the build commands).
    There is a setup wizard ``Makefile Project with Existing Code'', but the manual setup works well too and is easy.
  * visit the Project Properties. In the ``C++ Build'', replace the default `make` command:
-   * use `scons` as the basic make command and ensure you're in the top folder of the project
-   * you may set up a parallel build, with the ``optimal jobs'' setting (N# of jobs equal number of cores)
-   * as targets for the incremental build use `build testcode research`
-   * as argument for full project clean use `-c all`
+   ** use `scons` as the basic make command and ensure you're in the top folder of the project
+   ** you may set up a parallel build, with the ``optimal jobs'' setting (`N#` of jobs equal number of cores)
+   ** as targets for the incremental build use `build testcode research`
+   ** as argument for full project clean use `-c all`
  * set up the Indexer / Scanner for editing support and cross linking
    in the ``C++ General'' section of the Project properties
-   * define as _source location_ the directories `src`, `tests`, and maybe `research`
-   * define as _target location_ the directory `target`
-   * at some point in the past, I had problems with a lacking definiton of our own library
-     facilities. I could resolve them by adding the directory `target/modules` to the _Library Paths_ tab
-   * it might help to add the include paths of some of the most relevant libraries (in case the automatic discovery
-     fails to pick them up properly). Eg. the GTK includes and the glibmm includes. Hint: the automatic discovery
-     works better if you do a full build once with `scons VERBOSE=true`, so the IDE can see the full command lines.
-   * in _Preprocessor Paths, Macros_ we need to ensure that the ``builtin compiler'' configuration provider is
-     actually enabled. This provider is used by the IDE to retrieve definitions from the compiler for syntax checks
-     while you type and for building the search index. Typically, this provider is called ``GCC Builtin Compiler Settings'';
-     please ensure in the global (or the project specific) configuration that the invocation command line includes
-     the argument `-std=gnu++11` -- otherwise you'll get a lot of red squiggles on the new language features ;-)
-   * visit the _Indexer_ tab and ensure the full indexer is enabled. Maybe change a setting and hit ``apply'' to
-     force re-building of the index. Depending on your computer, this indexing might take quite some time initially
+   ** define as _source location_ the directories `src`, `tests`, and maybe `research`
+   ** define as _target location_ the directory `target`
+   ** in _Preprocessor Paths, Macros_ we need to ensure that the ``builtin compiler'' configuration provider is
+      actually enabled. This provider is used by the IDE to retrieve definitions from the compiler for syntax checks
+      while you type and for building the search index. Typically, this provider is called ``GCC Builtin Compiler Settings'';
+      please ensure in the global (or the project specific) configuration that the invocation command line includes
+      the argument `-std=gnu++11` -- otherwise you'll get a lot of red squiggles on the new language features ;-)
 
+Indexer troubleshooting
+~~~~~~~~~~~~~~~~~~~~~~~
+When the searching and cross references just don't seem to work, make sure the indexer has run and actually
+was able to see the right files with the right locations
+
+ * visit the _Indexer_ tab and ensure the full indexer is enabled. Maybe change a setting and hit ``apply'' to
+   force re-building of the index. Depending on your computer, this indexing might take quite some time initially
+ * if the indexing process was onece interrupted by a crash or force shutdown of the IDE, the index database might
+   be corrupted. Try to remove it, either through the Gui, or try to locate the raw data and kill it while Eclipse
+   is not running. +
+   It is located in `<workspace-dir>/.metadata/.plugins/org.eclipse.cdt.core/`...
+ * at some point in the past, I had problems with a lacking definiton of our own library
+   facilities. I could resolve them by adding the directory `target/modules` to the _Library Paths_ tab
+ * it might help to add the include paths of some of the most relevant libraries (in case the automatic discovery
+   fails to pick them up properly). Eg. the GTK includes and the glibmm includes. _But_ do this systematically,
+   starting from those symbols marked with red squiggles in the code.
+ * Hint: the automatic discovery works by observing the output of the build process. It might work better
+   if you do a full build once with `scons VERBOSE=true`, so the IDE can see the full command lines.
+ * After upgrading to a new version of such libraries, it might be necessary to remove the old search paths
+   _manually_ -- more so if they are still accessible on the system. Dont blame the Indexer, which basically
+   has no way to find out he is looking at the obsolete source files...
+
+Debugger Breakpoints not working
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This seems to be a FAQ since Eclipse Kepler: If some or all breakpoints just refuse to work and you see
+messages on the debug console like `No source file named XYZ`, then you should
+
+. ensure you _really_ build with debug symbols on (but this is the default in our build system)
+. switch the ``debugging process launcher''
+  ** open the launch configuration you use to start the debugging session. (the ``bug'' icon in the toolbar
+     or the `Run` menu and from there ``Debug configurations...''
+  ** at the bottom below the content pane and left to the `Apply` and `Revert` buttons, there is a indication
+     ``using XYZ Process Launcher'' and a Hyperlink ``Select other''. Select the **Standard Create Process Launcher**.
+     You can make this even the workspace default, this is the more conservative setting which works most reliably.
+  ** verify the settings on the ``Debugger'' tab: Debugger combobox should be ``gdb/mi'', GDB command set should
+     be ``Standard (Linux)'' and your GDB command file should be OK (if you use one)
