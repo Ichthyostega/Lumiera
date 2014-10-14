@@ -110,6 +110,13 @@ namespace play {
   {
     Lock sync(this);
     string problemLog;
+    if (!isOperational())
+      {
+        WARN (play, "Attempt to OutputDirector::bringDown() -- "
+                    "which it is not in running state. Invocation ignored. "
+                    "This indicates an error in Lifecycle logic.");
+        return;
+      }
     try
       {
         TODO ("actually bring down the output generation");
