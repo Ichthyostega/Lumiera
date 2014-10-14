@@ -102,6 +102,7 @@ protected:
   
   /**
    * An event handler for when the window must be redrawn.
+   * @todo looks like this was the main drawing hook, and happens to be discontinued in GTK3.   ///////////////////TICKET #937 : custom timeline widget draw function not invoked anymore
    */
   bool on_expose_event(GdkEventExpose* event);
   
