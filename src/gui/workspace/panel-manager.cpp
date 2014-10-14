@@ -62,12 +62,16 @@ PanelManager::PanelManager(WorkspaceWindow &workspace_window) :
 
 PanelManager::~PanelManager()
 {
+    ///////////////////////////////////////////////////////TICKET #195 : violation of policy, dtors must not do any work 
+    ///////////////////////////////////////////////////////TICKET #172 : observed as a reason for crashes when closing the GUI. It was invoked after end of main, when the GUI as already gone.
   
+#if false /////////////////////////////////////////////////TICKET #937 : disabled for GTK-3 transition. TODO investigate why this logic existed...    
   for(int i = 0; i < 4; i++)
     if(dockPlaceholders[i])
       g_object_unref(dockPlaceholders[i]);
       
   clear_panels();
+#endif    /////////////////////////////////////////////////TICKET #937 : (End)disabled for GTK-3 transition.
 }
 
 void
@@ -311,6 +315,8 @@ PanelManager::remove_panel(panels::Panel* const panel)
 void
 PanelManager::clear_panels()
 {
+    ///////////////////////////////////////////////////////TICKET #195 : this whole approach smells like an obsolete "C-style" approach.  We should strive to let the runtime system do such stuff for us whenever possible, eg. by using smart pointers
+  
   list< panels::Panel* >::iterator i;
   for(i = panels.begin(); i != panels.end(); i++)
     delete *i;
