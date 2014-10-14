@@ -76,6 +76,9 @@ namespace play {
       typedef lumiera::Subsys::SigTerm SigTerm;
       
       scoped_ptr<PlayService> player_;
+      ///////TODO more components and connections to manage here...
+      
+      bool shutdown_initiated_ = false;   /////TODO probably need a way more elaborate lifecylce management
       
     public:
       static lib::Depend<OutputDirector> instance;

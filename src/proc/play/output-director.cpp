@@ -60,19 +60,19 @@ namespace play {
   /** connect and bring up the external input/output connections,
    *  handlers and interface services and the render/playback service.
    * @return true if the output subsystem can be considered operational
-   * 
-   * @todo WIP-WIP-WIP 6/2011
    */
   bool
   OutputDirector::connectUp()
   {
     Lock sync(this);
+    REQUIRE (!shutdown_initiated_);
     
     player_.reset (new PlayService);
     return this->isOperational();
   }
   
   
+  /** @todo WIP-WIP-WIP 6/2011 */
   bool
   OutputDirector::isOperational()  const
   {
@@ -92,7 +92,11 @@ namespace play {
   void
   OutputDirector::triggerDisconnect (SigTerm completedSignal)  throw()
   {
-    Thread ("Output shutdown supervisor", bind (&OutputDirector::bringDown, this, completedSignal));
+    if (!shutdown_initiated_)
+      {
+        shutdown_initiated_ = true;
+        Thread ("Output shutdown supervisor", bind (&OutputDirector::bringDown, this, completedSignal));
+      }
   }
   
   
