@@ -1,5 +1,5 @@
 /*
-  config_interface.h  -  Lumiera configuration interface
+  config-interface.h  -  Lumiera configuration interface
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

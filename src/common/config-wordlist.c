@@ -1,5 +1,5 @@
 /*
-  config_wordlist.c  -  Lumiera wordlist access functions
+  config-wordlist  -  Lumiera wordlist access functions
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

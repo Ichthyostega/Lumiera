@@ -1,5 +1,5 @@
 /*
-  plugin_dynlib.c  -  Lumiera Plugin loader for dynamic libraries
+  plugin-dynlib  -  Lumiera Plugin loader for dynamic libraries
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

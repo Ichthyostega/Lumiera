@@ -1,5 +1,5 @@
 /*
-  config_typed.c  -  Lumiera configuration highlevel interface
+  config-typed  -  Lumiera configuration highlevel interface
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

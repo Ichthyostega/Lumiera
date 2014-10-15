@@ -1,5 +1,5 @@
 /*
-  config_interface.c  -  Lumiera configuration interface implementation
+  config-interface  -  Lumiera configuration interface implementation
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -23,7 +23,7 @@
 
 
 //TODO: Lumiera header includes//
-#include "common/config_interface.h"
+#include "common/config-interface.h"
 #include "common/config.h"
 
 //TODO: internal/static forward declarations//

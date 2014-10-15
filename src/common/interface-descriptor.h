@@ -1,5 +1,5 @@
 /*
-  interfacedescriptor.h  -  Metadata interface for Lumiera interfaces
+  INTERFACE-DESCRIPTOR.h  -  Metadata interface for Lumiera interfaces
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

@@ -24,7 +24,7 @@
 #include "gui/display-service.hpp"
 
 extern "C" {
-#include "common/interfacedescriptor.h"
+#include "common/interface-descriptor.h"
 }
 
 

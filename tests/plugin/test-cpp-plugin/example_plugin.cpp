@@ -23,13 +23,13 @@
 
 
 
-#include "common/interfacedescriptor.h"
-#include "common/config_interface.h"
+#include "common/interface-descriptor.h"
+#include "common/config-interface.h"
 #include "lib/format-string.hpp"
 
 extern "C" {
 #include "common/interface.h"
-#include "common/interfacedescriptor.h"
+#include "common/interface-descriptor.h"
 
 #include "interface/say_hello.h"
 }
