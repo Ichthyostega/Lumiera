@@ -1,5 +1,5 @@
 /*
-  mmap.h  -  memory mapped access to files
+  MMAP  -  memory mapped access to files
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,10 +17,17 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_MMAP_H
-#define LUMIERA_MMAP_H
+
+/** @file mmap.h
+ ** MMap objects cover a memory mapped range in a file.
+ ** They are managed through a global mmap registry/cache.
+ */
+
+#ifndef BACKEND_MMAP_H
+#define BACKEND_MMAP_H
 
 #include "lib/llist.h"
 
@@ -36,26 +43,20 @@ typedef lumiera_mmap* LumieraMMap;
 #include <nobug.h>
 #include <sys/mman.h>
 
-//NOBUG_DECLARE_FLAG (mmap);
 
 
-/**
- * @file
- * MMap objects cover a memory maped range in a file
- */
 
 
 
 /**
- * mmaped area
- *
+ * Descriptor of a memory mapped area
  */
 struct lumiera_mmap_struct
 {
   /** used for the mrucache when checked in the cache **/
   llist cachenode;
 
-  /** all mmaps of a filedescriptor are chained in this list, used to find ranges **/
+  /** all mmaps regarding a file are chained in this list, used to find ranges **/
   llist searchnode;
 
   off_t start;
@@ -65,14 +66,15 @@ struct lumiera_mmap_struct
   /** accumulated references, this is 0 when checked into the cache **/
   long refcnt;
 
-  /** array with refcounters per chunk **/
-  short* refmap;       // TODO flexible array?
+  /** array with a refcounter per chunk **/
+  short* refmap;       ///////////////////// TODO make this a flexible array?
 };
 
+
 /**
- * Initialize a MMap object.
+ * Initialise a MMap object.
  * The mmap objects are aligned and shifted by the chunksize and bias defined for the file
- * @param self the mmap object to be initialized
+ * @param self the mmap object to be initialised
  * @param file file from which to map
  * @param start offset in file which must be part of the mmaped region
  * @param size minimum size after start to map
@@ -82,9 +84,9 @@ LumieraMMap
 lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size);
 
 /**
- * Initialize a MMap object.
+ * Initialise a MMap object.
  * Maps exactly the given range
- * @param self the mmap object to be initialized
+ * @param self the mmap object to be initialised
  * @param file file from which to map
  * @param start offset in file which must be part of the mmaped region
  * @param size minimum size after start to map
@@ -123,7 +125,7 @@ void*
 lumiera_mmap_destroy_node (LList node);
 
 
-#endif
+#endif /*BACKEND_MMAP_H*/
 /*
 // Local Variables:
 // mode: C

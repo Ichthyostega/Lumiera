@@ -86,23 +86,23 @@ struct mpool_struct
 extern void *(*mpool_malloc_hook)(size_t size);
 extern void (*mpool_free_hook)(void *ptr);
 
-/** called after a mpool got initialized */
+/** called after a mpool got initialised */
 extern void (*mpool_init_hook) (MPool self);
 /** called before a mpool gets destroyed */
 extern void (*mpool_destroy_hook) (MPool self);
 
 /*
-//index.mpool_init xref:mpool_init[mpool_init()]:: initialize a new memory pool
+//index.mpool_init xref:mpool_init[mpool_init()]:: Initialise a new memory pool
 //mpool [[mpool_init]]
 //mpool .mpool_init
-//mpool Initialize a memory pool, memory pools must be initialized before being used. One can supply
+//mpool Initialise a memory pool, memory pools must be initialised before being used. One can supply
 //mpool an optional destructor function for elements, this will be used to destroy elements which are still
-//mpool in the pool when it gets destroyed itself. The destructor is _NOT_ called when elemented are freed.
+//mpool in the pool when it gets destroyed itself. The destructor is _NOT_ called when elements are freed.
 //mpool
 //mpool  MPool mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_move_fn mv, mpool_destroy_fn dtor)
 //mpool
 //mpool  `self`::
-//mpool         pointer to the memory pool structure to be initialized
+//mpool         pointer to the memory pool structure to be initialised
 //mpool  `elem_size`::
 //mpool         size for a single element
 //mpool  `elements_per_cluster`::
@@ -124,13 +124,13 @@ mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_d
 //mpool A memory pool is not used anymore it should be destroyed. This frees all memory allocated with it.
 //mpool When a destructor was provided at construction time, then this destructor is used on all non free elements
 //mpool before before the clusters are freed. If no destructor was given then the clusters are just freed.
-//mpool The destroyed memory pool behaves as if it was freshly initialized and can be used again, this is some kindof
+//mpool The destroyed memory pool behaves as if it was freshly initialised and can be used again, this is some kindof
 //mpool exceptional behaviour.
 //mpool
 //mpool  MPool mpool_destroy (MPool self)
 //mpool
 //mpool  `self`::
-//mpool         pointer to an initialized memory pool to be destroyed.
+//mpool         pointer to an initialised memory pool to be destroyed.
 //mpool  return::
 //mpool         self
 //mpool

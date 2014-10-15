@@ -155,10 +155,10 @@ psplay_delete (PSplay self);
 
 
 /**
- * Initialize a splay tree node
+ * Initialise a splay tree node
  * The user has to place this nodes within his datastructure and must
- * initialize them before using them.
- * @param self pointer to the node to be initialized
+ * Initialise them before using them.
+ * @param self pointer to the node to be initialised
  * @return self
  */
 PSplaynode
@@ -195,7 +195,7 @@ psplay_find (PSplay self, const void* key, int splayfactor);
  * @param self pointer to the splay tree
  * @param node node to be removed
  * @return pointer to the removed node
- * removal is optimized for the case where one call it immediately after one did a
+ * removal is optimised for the case where one call it immediately after one did a
  * psplay_find() as last operation on that tree
  */
 PSplaynode

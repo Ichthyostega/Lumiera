@@ -1,5 +1,5 @@
 /*
-  mmapings.c  -  manage ranges of mmaped areas on a filedescriptor
+  MMapings  -  manage ranges of mmaped areas on a file descriptor
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/mutex.h"
@@ -27,11 +29,6 @@
 #include "backend/mmapings.h"
 #include "backend/mmapcache.h"
 
-
-/**
- * @file
- *
- */
 
 
 LumieraMMapings
@@ -102,7 +99,7 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, off_t sta
         /* find first matching mmap, crude way */
         LLIST_FOREACH (&self->mmaps, node)
           {
-            TODO ("improve this selection algorithm, choose mmaps by size, move mfu to head etc");
+            ////////////TODO improve the algorithm used here: choose mmaps by size, move mfu to head etc...
 
             LumieraMMap mmap = LLIST_TO_STRUCTP (node, lumiera_mmap, searchnode);
 

@@ -17,16 +17,19 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
-#ifndef LUMIERA_INTERFACEDESCRIPTOR_H
-#define LUMIERA_INTERFACEDESCRIPTOR_H
+
+
+#ifndef COMMON_INTERFACEDESCRIPTOR_H
+#define COMMON_INTERFACEDESCRIPTOR_H
 
 #include "common/interface.h"
 
 
 /**
  * Release state of an interface implementation.
- * The interface subsystem must be able to categorize implementations to present possible
+ * The interface subsystem must be able to categorise implementations to present possible
  * upgrade paths to the user. This is done by the tagging it to a certain state in concert
  * with the version and the user supplied version compare function. The respective numbers
  * are chosen in a way that a higher value indicates precedence when selecting an implementation.
@@ -73,7 +76,7 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_interfacedescriptor, 0,
 
 #if 0
 /**
- * For convenience, a copy'n'paste descriptor
+ * For convenience: a copy'n'paste descriptor
  */
 LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             /*IDENTIFIER*/,
@@ -131,7 +134,7 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
 #endif
 
 
-#endif /* LUMIERA_INTERFACEDESCRIPTORS_H */
+#endif /* COMMON_INTERFACEDESCRIPTOR_H */
 /*
 // Local Variables:
 // mode: C

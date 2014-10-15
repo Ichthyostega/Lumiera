@@ -1,5 +1,5 @@
 /*
-  filehandle  -  filehandle management and caching
+  FileHandle  -  filehandle management and caching
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/llist.h"
@@ -28,6 +30,8 @@
 #include "backend/filedescriptor.h"
 
 #include <unistd.h>
+
+
 
 LumieraFilehandle
 lumiera_filehandle_init (LumieraFilehandle self, LumieraFiledescriptor desc)
@@ -78,7 +82,7 @@ lumiera_filehandle_handle (LumieraFilehandle self)
       fd = open (lumiera_filedescriptor_name (self->descriptor), lumiera_filedescriptor_flags (self->descriptor) & LUMIERA_FILE_MASK);
       if (fd == -1)
         {
-          FIXME ("Handle EMFILE etc with the resourcecollector");
+          //////////////////////TODO Handle EMFILE etc with the resourcecollector
           LUMIERA_ERROR_SET_CRITICAL (file, ERRNO, lumiera_filedescriptor_name (self->descriptor));
         }
       else

@@ -1,5 +1,5 @@
 /*
-  mmapcache.c  -  handle aging of mmap objects
+  MMAP-Cache  -  handle aging of mmap objects
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,17 +17,15 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
 
 #include "backend/mmapcache.h"
 
-/**
- * @file
- *
- */
 
 
 LumieraMMapcache lumiera_mcache = NULL;
@@ -82,7 +80,7 @@ lumiera_mmapcache_mmap_acquire (void)
     }
   else
     {
-      TRACE (mmapcache_dbg, "poped mmap from cache");
+      TRACE (mmapcache_dbg, "Popped mmap from cache");
     }
 
   return map;
@@ -125,7 +123,7 @@ lumiera_mmapcache_age (void)
 
   LUMIERA_MUTEX_SECTION (mmapcache, &lumiera_mcache->lock)
     {
-      ret = lumiera_mrucache_age (&lumiera_mcache->cache, 10);      TODO ("age nelem == 20%(configureable) of the cache");
+      ret = lumiera_mrucache_age (&lumiera_mcache->cache, 10);      TODO ("age nelem == 20%(configurable) of the cache");
     }
 
   return ret;
@@ -140,7 +138,7 @@ lumiera_mmapcache_checkout (LumieraMMap handle)
 
   LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_mcache->lock)
     {
-      TODO ("cached stats");
+      ////////////////////TODO cached stats
       lumiera_mrucache_checkout (&lumiera_mcache->cache, &handle->cachenode);
     }
 
@@ -156,7 +154,7 @@ lumiera_mmapcache_checkin (LumieraMMap handle)
 
   LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_mcache->lock)
     {
-      TODO ("cached stats");
+      ////////////////////TODO cached stats
       lumiera_mrucache_checkin (&lumiera_mcache->cache, &handle->cachenode);
     }
 }

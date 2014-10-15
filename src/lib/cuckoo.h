@@ -75,7 +75,7 @@ typedef void (*cuckoo_movfunc)(void* dest, void* src, size_t size);
 
 
 /**
- * Function table used to specialize various funtions used by the hash.
+ * Function table used to specialise various functions used by the hash.
  * TODO some elements might be NULL, then defaults are used
  */
 struct cuckoo_vtable
@@ -90,11 +90,11 @@ struct cuckoo_vtable
 
 
 /**
- * Initialize a cuckoo hash.
- * @param self pointer to a uninitialized cuckoo datastructure
+ * Initialise a cuckoo hash.
+ * @param self pointer to a uninitialised cuckoo datastructure
  * @param itemsize size for a single hash entry, will be rounded up to align CUCKOO_GRANULARITY
- * @param vtable initialized vtable
- * @return The initialized hashtable or NULL at allocation failure
+ * @param vtable initialised vtable
+ * @return The initialised hashtable or NULL at allocation failure
  */
 Cuckoo
 cuckoo_init (Cuckoo self, size_t itemsize, struct cuckoo_vtable* vtable);
@@ -103,8 +103,8 @@ cuckoo_init (Cuckoo self, size_t itemsize, struct cuckoo_vtable* vtable);
  * Allocate a new cuckoo hash.
  * @param itemsize size for a single hash entry, will be rounded up to align CUCKOO_GRANULARITY
  * @param startsize initial size of table t3, as 2's exponent
- * @param vtable initialized vtable
- * @return The initialized hashtable or NULL at allocation failure
+ * @param vtable initialised vtable
+ * @return The initialised hashtable or NULL at allocation failure
  */
 Cuckoo
 cuckoo_new (size_t itemsize, struct cuckoo_vtable* vtable);
@@ -114,7 +114,7 @@ cuckoo_new (size_t itemsize, struct cuckoo_vtable* vtable);
  * Destroy a cuckoo hash.
  * Frees internal used resources.
  * @param self cuckoo hash to destroy
- * @return The now uninitialized hashtable
+ * @return The now uninitialised hashtable
  */
 Cuckoo
 cuckoo_destroy (Cuckoo self);

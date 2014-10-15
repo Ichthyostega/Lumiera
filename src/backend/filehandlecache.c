@@ -1,5 +1,5 @@
 /*
-  filehandlecache  -  filehandle management and caching
+  FileHandleCache  -  filehandle management and caching
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
@@ -26,18 +28,21 @@
 #include "backend/filehandlecache.h"
 
 
-/* errors */
 
 LUMIERA_ERROR_DEFINE (FILEHANDLECACHE_NOHANDLE, "No filehandle available");
 
 
+/**
+ * the global cache for file handles.
+ */
 LumieraFilehandlecache lumiera_fhcache = NULL;
+
 
 
 void
 lumiera_filehandlecache_new (int max_entries)
 {
-  REQUIRE (!lumiera_fhcache, "Filehandlecache already initialized");
+  REQUIRE (!lumiera_fhcache, "Filehandlecache already initialised");
 
   lumiera_fhcache = lumiera_malloc (sizeof (lumiera_filehandlecache));
   lumiera_mrucache_init (&lumiera_fhcache->cache, lumiera_filehandle_destroy_node);

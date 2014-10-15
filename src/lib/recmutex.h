@@ -94,9 +94,9 @@ typedef struct lumiera_recmutex_struct lumiera_recmutex;
 typedef lumiera_recmutex* LumieraRecmutex;
 
 /**
- * Initialize a recursive mutex variable
- * Initializes a 'recursive' mutex which might be locked by the same thread multiple times.
- * @param self is a pointer to the mutex to be initialized
+ * Initialise a recursive mutex variable
+ * Initialises a 'recursive' mutex which might be locked by the same thread multiple times.
+ * @param self is a pointer to the mutex to be initialised
  * @return self as given
  */
 LumieraRecmutex

@@ -1,5 +1,5 @@
 /*
-  config-interface  -  Lumiera configuration interface implementation
+  Config-interface  -  Lumiera configuration interface implementation
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,19 +17,13 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 
-//TODO: Support library includes//
+* *****************************************************/
 
 
-//TODO: Lumiera header includes//
 #include "common/config-interface.h"
 #include "common/config.h"
 
-//TODO: internal/static forward declarations//
-
-
-//TODO: System includes//
 
 
 LUMIERA_EXPORT(
@@ -155,10 +149,3 @@ lumiera_config_interface_destroy (void)
 
 #endif
 
-/*
-// Local Variables:
-// mode: C
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/

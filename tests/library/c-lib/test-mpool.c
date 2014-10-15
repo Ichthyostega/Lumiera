@@ -51,7 +51,7 @@ TEST (basic)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(void*), 10, dtor);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   void* element;
   element = mpool_alloc (&mypool);
@@ -74,7 +74,7 @@ TEST (destroy)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(void*), 10, dtor);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   void* element;
   element = mpool_alloc (&mypool);
@@ -92,7 +92,7 @@ TEST (clusters)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(void*), 2, dtor);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   for (int i = 1; i <= 5; ++i)
     {
@@ -113,7 +113,7 @@ TEST (clusters_big)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(void*), 200, dtor);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   for (int i = 1; i <= 700; ++i)
     {
@@ -134,7 +134,7 @@ TEST (alloc_free)
 {
   mpool mypool;
   mpool_init (&mypool, 24, 4, dtor);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   void* elem[32];
 
@@ -161,7 +161,7 @@ TEST (alloc_free_big)
 {
   mpool mypool;
   mpool_init (&mypool, 24, 4, dtor);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   void* elem[2000];
 
@@ -199,7 +199,7 @@ TEST (bench_mpool)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(struct teststruct), 2000, NULL);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   llist list;
   llist_init (&list);
@@ -228,7 +228,7 @@ TEST (bench_malloc)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(llist), 2000, NULL);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   llist list;
   llist_init (&list);
@@ -262,7 +262,7 @@ TEST (bench_mpool_sim)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(struct teststruct), 2000, NULL);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   llist list;
   llist_init (&list);
@@ -304,7 +304,7 @@ TEST (bench_malloc_sim)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(llist), 2000, NULL);
-  ECHO ("initialized");
+  ECHO ("initialised");
 
   llist list;
   llist_init (&list);

@@ -1,5 +1,5 @@
 /*
-  plugin-dynlib  -  Lumiera Plugin loader for dynamic libraries
+  PluginDynlib  -  Lumiera Plugin loader for dynamic libraries
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,13 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
+
+/** @file plugin-dynlib.c
+ ** Implementation of plugin loader for dynamic libraries.
+ */
 
 #include "include/logging.h"
 #include "lib/tmpbuf.h"
@@ -26,10 +32,6 @@
 #include <dlfcn.h>
 #include <nobug.h>
 
-/**
- * @file
- * Plugin loader for dynamic libraries.
- */
 
 LumieraPlugin
 lumiera_plugin_load_DYNLIB (const char* name)

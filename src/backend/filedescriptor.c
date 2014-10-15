@@ -1,5 +1,5 @@
 /*
-  filedescriptor.c  -  file handling
+  FileDescriptor  -  file handling
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/mutex.h"
@@ -38,7 +40,7 @@
 
 
 
-/* lookup and creation of files, initialized in backend.c */
+/* lookup and creation of files, initialised in backend.c */
 
 lumiera_mutex lumiera_filecreate_mutex;
 
@@ -221,7 +223,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
 
   lumiera_filedescriptorregistry_remove (self);
 
-  TODO ("destruct other members (WIP)");
+  TODO ("destroy other members (WIP)");
 
   lumiera_mmapings_delete (self->mmapings);
 
