@@ -242,6 +242,7 @@ protected:
   /**
    * The state that will be used as the data source for this timeline
    * widget.
+   * @deprecated for #955
    */
   shared_ptr<timeline::TimelineState> state;
 
@@ -253,6 +254,7 @@ protected:
    * @remarks The tree structure is maintained by the model, and as the
    * widget is updated with update_tracks, timeline tracks are added and
    * removed from the map in correspondence with the tree.
+   * @deprecated for #955
    */
   std::map<shared_ptr<model::Track>
           ,shared_ptr<timeline::Track> >

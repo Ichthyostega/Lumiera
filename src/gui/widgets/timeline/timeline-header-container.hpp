@@ -179,6 +179,7 @@ private:
    * track was found.
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
+   * @deprecated for #955
    */
   shared_ptr<timeline::Track>
   lookup_timeline_track (shared_ptr<model::Track> modelTrack);

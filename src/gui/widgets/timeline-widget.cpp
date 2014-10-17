@@ -92,12 +92,14 @@ TimelineWidget::~TimelineWidget()
 
 /* ===== Data Access ===== */
 
+/** @deprecated for #955 */
 shared_ptr<timeline::TimelineState>
 TimelineWidget::get_state()
 {
   return state;
 }
 
+/** @deprecated for #955 */
 void
 TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
 { 
@@ -290,6 +292,7 @@ TimelineWidget::create_timeline_tracks()
   headerContainer->update_headers();
 }
 
+/** @deprecated for #955 */
 void
 TimelineWidget::create_timeline_tracks_from_branch(
   shared_ptr<model::Track> modelTrack)
@@ -311,6 +314,7 @@ TimelineWidget::create_timeline_tracks_from_branch(
     create_timeline_tracks_from_branch(child);
 }
 
+/** @deprecated for #955 */
 shared_ptr<timeline::Track>
 TimelineWidget::create_timeline_track_from_modelTrack(
   shared_ptr<model::Track> modelTrack)
@@ -330,6 +334,7 @@ TimelineWidget::create_timeline_track_from_modelTrack(
   return shared_ptr<timeline::Track>();
 }
 
+/** @deprecated for #955 */
 void
 TimelineWidget::remove_orphaned_tracks()
 {
@@ -353,6 +358,7 @@ TimelineWidget::remove_orphaned_tracks()
     }
 }
 
+/** @deprecated for #955 */
 void
 TimelineWidget::search_orphaned_tracks_in_branch(
     shared_ptr<model::Track> modelTrack,
@@ -371,6 +377,7 @@ TimelineWidget::search_orphaned_tracks_in_branch(
     search_orphaned_tracks_in_branch(child, orphan_track_map);
 }
 
+/** @deprecated for #955 */
 shared_ptr<timeline::Track>
 TimelineWidget::lookup_timeline_track(
   shared_ptr<model::Track> modelTrack) const
@@ -478,6 +485,7 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
   return true;
 }
 
+/** @deprecated for #955 */
 shared_ptr<model::Sequence>
 TimelineWidget::sequence() const
 {

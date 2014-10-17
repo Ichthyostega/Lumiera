@@ -241,6 +241,7 @@ TimelinePanel::on_sequence_list_changed()
   update_sequence_chooser();
 }
 
+/** @deprecated for #955 : move this callback \em into the model! */
 void
 TimelinePanel::on_sequence_chosen()
 {
