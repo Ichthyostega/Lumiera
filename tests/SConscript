@@ -12,7 +12,7 @@ from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 from Buildhelper import createPlugins
 
-Import('env core_lib app_lib backend_lib tools config')
+Import('env core_lib app_lib backend_lib gui tools config')
 env = env.Clone()
 env.Append(CPPPATH='include')  # additional headers for tests
 
@@ -51,7 +51,7 @@ def testCases(env,dir):
     testlib = []
     testClasses = list(scanSubtree(dir,['*.cpp']))
     if testClasses:
-        testlib = sharedTestLibs[dir] = env.SharedLibrary('test-'+dir, testClasses, addLibs=core_lib)   ### TICKET #938 : should be:  addLibs=linkContext(dir))
+        testlib = sharedTestLibs[dir] = env.SharedLibrary('test-'+dir, testClasses, addLibs=linkContext(dir))  # note: linking dependencies according to application layers
     
     # pick up standalone plain-C tests
     standaloneTests = list(scanSubtree(dir,['test-*.c']))
@@ -64,7 +64,7 @@ def testCases(env,dir):
 
 # Specific linker treatment for the testsuite:
 # force explicit linking against all dependencies to ensure auto-registration of
-# any test-class on startup, even if no code dependency is visible to the linker 
+# any test-class on startup, even if no code dependency is visible for the linker 
 envSuite = env.Clone()
 envSuite.Append(LINKFLAGS='-Wl,--no-as-needed') 
 

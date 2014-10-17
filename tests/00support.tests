@@ -1,0 +1,52 @@
+TESTING "Test support and helpers" ./test-suite --group=common
+
+
+
+TEST "Test support functions" TestHelper_test <<END
+out: [a-z0-9]{80}$
+out: Displaying types and sizes....
+out: sizeof..theUniverse.+ =  42
+out: sizeof..just a char.+ =   1
+out: sizeof.+lib.+test.+test.+Murpf.+ =   1
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+ =   2
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+ =   3
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+Murpf.+ =   1
+END
+
+
+TEST "TestOption_test" TestOption_test <<END
+out: Testing invocation with cmdline: ...
+out: --> Testgroup=ALL
+out: --> Test-ID  =--missing--
+out: --> remaining=
+out: Testing invocation with cmdline: --help...
+out: --> Testgroup=ALL
+out: --> Test-ID  =--missing--
+out: --> remaining=
+out: Testing invocation with cmdline: --group TestGroupID...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =--missing--
+out: --> remaining=
+out: Testing invocation with cmdline:  SingleTestID...
+out: --> Testgroup=ALL
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID
+out: Testing invocation with cmdline:  SingleTestID --group TestGroupID...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID
+out: Testing invocation with cmdline:  --group TestGroupID SingleTestID ...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID
+out: Testing invocation with cmdline:  --group TestGroupID SingleTestID spam eggs...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID spam eggs
+out: Testing invocation with cmdline: 		SingleTestID spam --group TestGroupID    	 --eggs...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID spam --eggs
+END
+
+
