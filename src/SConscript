@@ -47,4 +47,4 @@ gui       = ( guimodule
             )
 
 
-Export('lumiera core core_lib app_lib backend_lib support_lib plugins gui')
+Export('lumiera core core_lib app_lib backend_lib support_lib plugins guimodule gui')

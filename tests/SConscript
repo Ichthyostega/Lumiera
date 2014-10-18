@@ -12,7 +12,7 @@ from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 from Buildhelper import createPlugins
 
-Import('env core_lib app_lib backend_lib gui tools config')
+Import('env core_lib app_lib backend_lib guimodule tools config')
 env = env.Clone()
 env.Append(CPPPATH='include')  # additional headers for tests
 
@@ -26,6 +26,8 @@ def linkContext(id):
         return app_lib              # tests in 'lib*' subdirs only linked against application framework
     elif id.startswith('back'):
         return backend_lib          # tests in 'back*' subdirs only linked against backend layer
+    elif id.startswith('gui'):
+        return guimodule+core_lib   # tests in 'gui*' are additionally linked against the GTK GUI module
     else:
         return core_lib             # all other tests linked against complete application core
 
