@@ -40,7 +40,7 @@ namespace test{
   namespace { // private test setup...
     
                              /* WARNING: memory hungry */
-    const uint NUM_THREADS = 100;
+    const uint NUM_THREADS = 75;
     const uint MAX_RAND    = 100*1000;
     
     inline bool

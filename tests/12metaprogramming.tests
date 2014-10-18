@@ -164,7 +164,7 @@ return: 0
 END
 
 
-TTEST "metaprogramming helpers" MetaUtils_test  <<END
+TEST "metaprogramming helpers" MetaUtils_test  <<END
 return: 0
 END
 
