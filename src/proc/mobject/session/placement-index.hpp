@@ -55,7 +55,7 @@
  ** \par placement scopes
  ** When adding a Placement to the index, it is mandatory to specify a Scope: this is
  ** another Placement already registered within the index; the new Placement can be thought
- ** off as being located "within" or "below" this scope-defining reference Placement. An
+ ** of as being located "within" or "below" this scope-defining reference Placement. An
  ** typical example would be the addition of a \c Placement<session::Clip>, specifying 
  ** a \c Placement<session::Track> as scope. Thus, all "object instances" within the 
  ** session are arranged in a tree-like fashion. On creation of the PlacementIndex,

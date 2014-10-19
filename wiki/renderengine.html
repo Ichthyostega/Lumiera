@@ -2280,13 +2280,16 @@ Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to u
 
 Probably the most important aspect regarding the GUI integration is how to get [[access to and operate on the Session|SessionInterface]]. More specifically, this includes [[referring to individual objects|MObjectRef]]. On top of these generic access mechanisms, we create a [[proxy GUI model|GuiModel]] for binding. The interface of this GUI model is tailored for display and translation into UI entities.</pre>
 </div>
-<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" tags="GuiIntegration design draft" changecount="1">
+<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201410190352" tags="GuiIntegration design draft" changecount="3">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
 Within the Lumiera GTK GUI, we use a proxying model as a mediating entity. It is based upon the ''generic aspect'' of the SessionInterface, but packaged and conditioned in a way to allow a direct mapping of GUI entities on top. The widgets in the GUI can be conceived as decorating this model. Callbacks can be wired back, allowing to transform UI events into a stream of commands for the Proc-Layer sitting below.
 
-The GUI model is largely comprised of immutable ID elements, which can be treated as values. A mutated model configuration in Proc-Layer is pushed upwards as a new structure to be consumed by the GUI widgets; it is broken into parts while being consumed -- leaving it to the leaf widgets to adapt themselves to reflect the new situation.</pre>
+The GUI model is largely comprised of immutable ID elements, which can be treated as values. A mutated model configuration in Proc-Layer is pushed upwards as a new structure to be consumed by the GUI widgets; it is broken into parts while being consumed -- leaving it to the leaf widgets to adapt themselves to reflect the new situation.
+
+!synchronisation guarantees
+We acknowledge that the gui model is typically used from within the GUI event dispatch thread. This is //not// the thread where any session state is mutated. Thus it is the repsonsibility of this proxying model within the GUI to ensure that the retrieved structure is a coherent snapshot of the session state. Especially the {{{gui::model::SessionFacade}}} ensures that there was a read barrier between the state retrieval and any preceding mutation command. Actually, this is implemented down in Proc-Layer, with the help of the ProcDispatcher.</pre>
 </div>
 <div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" tags="spec">
 <pre>LayerSeparationInterface provided by the GUI.
@@ -5349,8 +5352,8 @@ ScopePath represents an ''effective scoping location'' within the model &amp;mda
 ** clear a path (reset to default)
 </pre>
 </div>
-<div title="ScopeTrigger" modifier="Ichthyostega" created="201006132139" modified="201006132140" tags="SessionLogic impl draft">
-<pre>An implementation mechanism used within the PlacementIndex to detect some specific kinds of object connections(&amp;raquoMagicAttachment&amp;laquo;), which then need to trigger a special handling.
+<div title="ScopeTrigger" modifier="Ichthyostega" created="201006132139" modified="201410190030" tags="SessionLogic impl draft" changecount="1">
+<pre>An implementation mechanism used within the PlacementIndex to detect some specific kinds of object connections(&amp;raquo;MagicAttachment&amp;laquo;), which then need to trigger a special handling.
 
 {{red{planned feature as of 6/2010)}}}
 

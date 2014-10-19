@@ -1,5 +1,5 @@
 /*
-  SESSION-FACADE.hpp  -  service for
+  DIAGNOSTICS.hpp  -  helper for verifying the GUI-session connection
 
   Copyright (C)         Lumiera.org
     2014,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,21 +21,21 @@
 */
 
 
-/** @file session-facade.hpp
- ** Service for session-facade.
+/** @file diagnostics.hpp
+ ** Service for diagnostics.
  ** This header defines the basics of...
  ** 
  ** @note as of X/2014 this is complete bs
  ** @todo WIP  ///////////////////////TICKET #
  ** 
  ** @see ////TODO_test usage example
- ** @see session-facade.cpp implementation
+ ** @see diagnostics.cpp implementation
  ** 
  */
 
 
-#ifndef SESSION_FACADE_H_
-#define SESSION_FACADE_H_
+#ifndef GUI_MODEL_DIAGNOSTICS_H_
+#define GUI_MODEL_DIAGNOSTICS_H_
 
 
 #include "lib/error.hpp"
@@ -43,16 +43,19 @@
 //#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <string>
+//#include <string>
 
 
+  
 namespace gui {
 namespace model {
   
-//  using lib::HashVal;
 //  using util::isnil;
-  using std::string;
+//  using std::string;
   
+  enum ProbeMode {
+    TEST_SESSION_1
+  };
   
   /**
    * Basic (abstracted) view of...
@@ -60,32 +63,58 @@ namespace model {
    * @see SomeSystem
    * @see NA_test
    */
-  class SessionFacade
+  class Diagnostics
     : boost::noncopyable
     {
-      string nothing_;
       
     public:
-      SessionFacade();
-     ~SessionFacade();
       
       
-      static string beCreative ();
+      explicit
+      Diagnostics (ProbeMode m)
+        { }
+      
+     ~Diagnostics()
+        {
+          
+        }
+      
       
       /* == Adapter interface for == */
       
+      void
+      setSolution (string const& solution ="")
+        {
+          UNIMPLEMENTED ("tbw");
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          if (isDeaf())
+            this->transmogrify (solution);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+        }
       
       
     protected:
-      string maybe ()  const;
+      void maybe ()  const;
       
-      void lock_to_TestContent();
-      void releaseTestMode();
       
-      friend class Diagnostics;
     };
   
   
   
+  
+  
+  
+  /** @internal in case
+   */
+  inline void
+  Diagnostics::maybe ()  const
+  {
+    UNIMPLEMENTED ("tbw");
+  }
+  
+  
+  
+  
+  
 }} // namespace gui::model
-#endif /*SESSION_FACADE_H_*/
+#endif /*GUI_MODEL_DIAGNOSTICS_H_*/
