@@ -2280,24 +2280,54 @@ Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to u
 
 Probably the most important aspect regarding the GUI integration is how to get [[access to and operate on the Session|SessionInterface]]. More specifically, this includes [[referring to individual objects|MObjectRef]]. On top of these generic access mechanisms, we create a [[proxy GUI model|GuiModel]] for binding. The interface of this GUI model is tailored for display and translation into UI entities.</pre>
 </div>
-<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201410190352" tags="GuiIntegration design draft" changecount="3">
+<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201410250111" tags="GuiIntegration design draft" changecount="4">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
 Within the Lumiera GTK GUI, we use a proxying model as a mediating entity. It is based upon the ''generic aspect'' of the SessionInterface, but packaged and conditioned in a way to allow a direct mapping of GUI entities on top. The widgets in the GUI can be conceived as decorating this model. Callbacks can be wired back, allowing to transform UI events into a stream of commands for the Proc-Layer sitting below.
 
-The GUI model is largely comprised of immutable ID elements, which can be treated as values. A mutated model configuration in Proc-Layer is pushed upwards as a new structure to be consumed by the GUI widgets; it is broken into parts while being consumed -- leaving it to the leaf widgets to adapt themselves to reflect the new situation.
+The GUI model is largely comprised of immutable ID elements, which can be treated as values. A mutated model configuration in Proc-Layer is pushed upwards as a new structure to be consumed by the GUI widgets; it is broken into parts while being consumed -- leaving it to the leaf widgets to adapt themselves to reflect the new situation. &amp;rarr; [[GUI update mechanics|GuiModelUpdate]]
 
 !synchronisation guarantees
-We acknowledge that the gui model is typically used from within the GUI event dispatch thread. This is //not// the thread where any session state is mutated. Thus it is the repsonsibility of this proxying model within the GUI to ensure that the retrieved structure is a coherent snapshot of the session state. Especially the {{{gui::model::SessionFacade}}} ensures that there was a read barrier between the state retrieval and any preceding mutation command. Actually, this is implemented down in Proc-Layer, with the help of the ProcDispatcher.</pre>
+We acknowledge that the gui model is typically used from within the GUI event dispatch thread. This is //not// the thread where any session state is mutated. Thus it is the repsonsibility of this proxying model within the GUI to ensure that the retrieved structure is a coherent snapshot of the session state. Especially the {{{gui::model::SessionFacade}}} ensures that there was a read barrier between the state retrieval and any preceding mutation command. Actually, this is implemented down in Proc-Layer, with the help of the ProcDispatcher.
+</pre>
+</div>
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201410250136" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="6">
+<pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
+* we need incremental updates: we must not start redrawing each and everything on each tiny change
+* we need recursive programming, since this is the only sane way to deal with tree like nested structures.
+* we need specifically typed contexts, driven by the type demands on the consumer side. What doesn't make sense at a given scope needs to be silently ignored
+* we need a separation of model-structure code and UI widgets. The GUI has to capture event and intent and trigger signals, nothing else.
+* we need a naming and identification scheme. Proc must be able to &quot;cast&quot; callback state and information //somehow towards the GUI// -- without having to handle the specifics.
+
+!the UI bus
+Hereby we introduce a new in-layer abstraction.
+* some events and wiring is strictly UI related. This can be handled the conventional way: Connect a ~SigC handler to the slot, in the ctor of your widget.
+* but anything related to model interaction has to be targetted at the next applicable service point of the UI bus.
+* the UI bus is implemented and covered by unit tests -- and //must not expose any GTK dependecies.// (maybe with the exception of {{{GString}}})
+
+!!Decisions
+* the UI bus is strictly single threaded.
+* It performs in the GTK event thread.
+* no synchronisation is necessary
+* use constant values as far as possible
+* the UI bus is offered by the GUI model.
+* it is //owned// by the GUI model.
+* there is a global &quot;kill switch&quot;. If toggled &quot;off&quot; any invocation is NOP.
+* thus there is no need for any ownership or resource tracking
+* we use simple language functors.
+
+</pre>
 </div>
 <div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" tags="spec">
 <pre>LayerSeparationInterface provided by the GUI.
 Access point for the lower layers to push information and state changes (aynchronously) to the GUI. Actually, most operations within Lumiera are initiated by the user through the GUI. In the course of such actions, the GUI uses the services of the lower layer and typically recieves an synchronous response. In some exceptional cases, these operations may cause additional changes to happen asynchronously from the GUI's perspective. For example, an edit operation might trigger a re-build of the low-level model, which then detects an error.
 </pre>
 </div>
-<div title="GuiPattern" creator="Ichthyostega" modifier="Ichthyostega" created="201410160054" tags="overview" changecount="1">
-<pre>While the HighLevelModel is self-contained and forms an autonomous »Universe«, the Lumiera GUI uses a well defined set of Metaphors, structural patterns and conventions to represent the user's view upon the model within the session. </pre>
+<div title="GuiPattern" creator="Ichthyostega" modifier="Ichthyostega" created="201410160054" modified="201410250026" tags="overview" changecount="2">
+<pre>While the HighLevelModel is self-contained and forms an autonomous »Universe«, the Lumiera GUI uses a well defined set of Metaphors, structural patterns and conventions to represent the user's view upon the model within the session. 
+
+Based on these foundations, we have to take some design decisions regarding the [[organisation of our custom GUI|GuiTimelineWidgetStructure]]</pre>
 </div>
 <div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="200902080720" tags="GuiIntegration">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
