@@ -7698,6 +7698,27 @@ Using transitions is a very basic task and thus needs viable support by the GUI.
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
 </pre>
 </div>
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201410270334" tags="Model GuiPattern spec draft" changecount="17">
+<pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
+We build a slightly abstracted representation of tree changes and use this to propagate //change notifications// to the actual widgets. To keep the whole process space efficient, a demand-driven, stateless implementation approach is chosen. This reduces the problem into several layered stages.
+* our model is a heterogeneous tree &amp;rArr; use demand-driven recursion
+* the nodes are heterogeneous collections &amp;rArr; use filtering by type tag
+* find changes in ordered collections of children &amp;rArr; symbolic list diffing algorithm
+* problems with identity and state &amp;rArr; encapsulate state and have a airtight object identity scheme
+
+!list diffing algorithm
+| !source data|!|!desired result |
+|(a~~1~~, a~~2~~, a~~3~~, a~~4~~, a~~5~~) |&amp;hArr;| {{{delete}}}(a~~1~~, a~~2~~)&lt;br/&gt;{{{update}}}(a~~3~~, a~~4~~, a~~5~~)&lt;br/&gt;{{{insert}}}(//before a~~3~~//, b~~1~~)&lt;br/&gt;{{{insert}}}(//before a~~5~~//, b~~3~~)&lt;br/&gt;{{{append}}}(b~~4~~)|
+|(b~~1~~, a~~3~~, a~~4~~, b~~2~~, b~~3~~, a~~5~~, b~~4~~)|~|~|
+to cover reordering, we need to determine the deletes and (possible) updates in one set operation.
+After reordering the remaining updates to the target order, the inserts are determined in a final merging pass.
+
+Here all the fuzz about our {{{LUID}}} and identity management in the PlacementIndex definitively pays off: A standard multiset implementation should do.
+
+!typed views
+The consumer -- in our case the GUI widgets -- impose a preconfigured order of things: elements not expected in a given part of the session will not be rendered and exposed. Thus the expectations at the consumer side constitute a typed context. So all we need to do is to intersperse a filter and then let the diffing algorithm work on these views filtered by type. All of this sounds horribly complex, but it isn't -- functional programming to the rescue! We are dealing with lightweight symbolic value representations; everything can be implemented as a filtering and transforming pipeline. Thus we do not need any memory management, rather we (ab)use the storage of the client pulling the representation.
+</pre>
+</div>
 <div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201112222250" tags="Model Types Rules design draft">
 <pre>//drafted service as of 4/10 &amp;mdash; &amp;rarr;[[implementation plans|TypedLookup]]//
 A registration service to associate object identities, symbolic identifiers and types.
