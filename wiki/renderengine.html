@@ -2296,7 +2296,7 @@ We acknowledge that the gui model is typically used from within the GUI event di
 Forwarding the model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. This callback will be scheduled by the  widgets to perform in the GUI event  thread.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201410270247" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="10">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201411030118" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="13">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2323,8 +2323,13 @@ Hereby we introduce a new in-layer abstraction.
 
 
 !initiating model updates
-Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispatcher. A model update can be requested by the GUI -- but the actual update will arrive asynchronously. The update informations originate from within the [[build process|BuildFixture]]. {{red{TODO 10/2014 clarify the specifics}}}. When update informations arrive, a ''diff is generated'' against the current GuiModel contents. The GuiModel is updated to reflect the differences and the Receivers or Listeners are signalled. It is their responsibility in turn to schedule an update operation into the GUI event thread. When performing this update, the Listener thus actively retrieves and pulls the diffed information from within the GUI event thread. The GuiModel's object monitor is sufficient to coordinate this handover.
+Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispatcher. A model update can be requested by the GUI -- but the actual update will arrive asynchronously. The update information originate from within the [[build process|BuildFixture]]. {{red{TODO 10/2014 clarify the specifics}}}. When updates arrive, a ''diff is generated'' against the current GuiModel contents. The GuiModel is updated to reflect the differences and the Receivers or Listeners are signalled. It is their responsibility in turn to schedule an update operation into the GUI event thread. When performing this update, the Listener thus actively retrieves and pulls the diffed information from within the GUI event thread. The GuiModel's object monitor is sufficient to coordinate this handover.
 &amp;rarr; representation of changes as a [[tree of diffs|TreeDiffModel]]
+
+!!!timing and layering intricacies
+A relevant question to be settled is as to where the core of each change is constituted. This is relevant due to the intricacies of multithreading: Since the change originates in the build process, but the effect of the change is //pulled// later from within the GUI event thread, it might well happen that at this point, meanwhile further changes entered the moddel. As such, this is not problematic, as long as taking the diff remains atomic. This leads to quite different solution approaches:
+* we might, at the moment of performing the update, aquire a lock from the ProcDispatcher. The update process may then effectively query down into the session datastructure proper, even through the proxy of a diffing process. The obvious downside is that GUI response might block waiting on a extended operation in Proc, especially when a new build process was started meanwhile. A remedy might be to abort the update in such cases, since its effects will be obsoleted by the buil process anyway.
+* alternatively, we might incorporate a complete snapshot of all information relevant for the GUI into the GuiModel. Update messages from Proc must be complete and self contained in this case, since our goal is to avoid callbacks. Following this scheme, the first stage of any update would be a push from Proc to the GuiModel, followed by a callback pull from within the individual widgets receiving the notification later.
 </pre>
 </div>
 <div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" tags="spec">
@@ -7698,7 +7703,7 @@ Using transitions is a very basic task and thus needs viable support by the GUI.
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
 </pre>
 </div>
-<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201410270334" tags="Model GuiPattern spec draft" changecount="17">
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201411030105" tags="Model GuiPattern spec draft" changecount="20">
 <pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
 We build a slightly abstracted representation of tree changes and use this to propagate //change notifications// to the actual widgets. To keep the whole process space efficient, a demand-driven, stateless implementation approach is chosen. This reduces the problem into several layered stages.
 * our model is a heterogeneous tree &amp;rArr; use demand-driven recursion
@@ -7715,8 +7720,11 @@ After reordering the remaining updates to the target order, the inserts are dete
 
 Here all the fuzz about our {{{LUID}}} and identity management in the PlacementIndex definitively pays off: A standard multiset implementation should do.
 
-!typed views
-The consumer -- in our case the GUI widgets -- impose a preconfigured order of things: elements not expected in a given part of the session will not be rendered and exposed. Thus the expectations at the consumer side constitute a typed context. So all we need to do is to intersperse a filter and then let the diffing algorithm work on these views filtered by type. All of this sounds horribly complex, but it isn't -- functional programming to the rescue! We are dealing with lightweight symbolic value representations; everything can be implemented as a filtering and transforming pipeline. Thus we do not need any memory management, rather we (ab)use the storage of the client pulling the representation.
+!typed ordered views
+The consumer -- in our case the GUI widgets -- impose a preconfigured order of things: elements not expected in a given part of the session will not be rendered and exposed. Thus the expectations at the consumer side constitute a typed context. So all we need to do is to intersperse a filter and then let the diffing algorithm work on these views filtered by type. All of this sounds horribly expensive, but it isn't -- functional programming to the rescue! We are dealing with lightweight symbolic value representations; everything can be implemented as a filtering and transforming pipeline. Thus we do not need any memory management, rather we (ab)use the storage of the client pulling the representation.
+
+!structural differences
+The tricky part with changes in a tree like structure is that they might involve rearrangements of whole sub-trees. So the question we need to as is: to what extend to we need, and want to capture and represent those non local changes? In this respect, our situation is significantly different than what is relevant for version management systems; we are not interested in constructing a history of changes. A widget moved into a completely different part or the model likely needs to be rebuilt from scratch anyway, so it doesn't hurt if we represent this change as deletion and insert of a new sub-tree. But it would be beneficial if we're able to move a sequence of clips in a track, or even a whole track in on one level. As a corner case, we might even consider representing a &amp;raquo;fold-down/up&amp;laquo; operation, where a sequence of elements is wrapped into a new sub-node, or extracted up from there -- but this is likely the most far-reaching structural change still worth to be represented first class.
 </pre>
 </div>
 <div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201112222250" tags="Model Types Rules design draft">
