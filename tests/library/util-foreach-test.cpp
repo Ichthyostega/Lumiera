@@ -1,5 +1,5 @@
 /*
-  UtilForeach(Test)  -  helpers for doing something for each element
+  UtilForeach(Test)  -  helpers to perform something for each element
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>

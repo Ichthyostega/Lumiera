@@ -104,9 +104,13 @@ namespace util {
   
   /* === specialisations for STL containers and Lumiera Forward Iterators === */
   
-  /** operating on all elements of a STL container.
+  /** operate on all elements of a STL container.
    *  @note the container is taken by \c const& and
    *        the \c const is \em stripped before iteration.
+   *  @todo reconsider if using rvalue references covers
+   *        the "inline iteration" use case sufficiently,
+   *        so that we can get rid of the unwrapping and
+   *        thus get back to strict const correctness.
    *  @note this case is the default and kicks in
    *        \em unless we detect a Lumiera iterator.
    *        The handling is different for \c and_all
@@ -126,7 +130,7 @@ namespace util {
   }
   
   
-  /** operating on a Lumiera Forward Iterator until exhaustion. */
+  /** operate on a Lumiera Forward Iterator until exhaustion. */
   template <typename IT
            ,typename FUN
            >

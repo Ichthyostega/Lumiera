@@ -118,8 +118,8 @@ namespace lib {
 
   /**
    * Adapter for building an implementation of the lumiera forward iterator concept.
-   * The "current position" is represented as an opaque element (usually an nested iterator),
-   * with callbacks to the controlling container instance for managing this position.
+   * The "current position" is represented as an opaque element (usually a nested iterator),
+   * with callbacks into the controlling container instance to manage this position.
    * This allows to influence and customise the iteration process to a large extent.
    * Basically such an IterAdapter behaves like the similar concept from STL, but
    * - it is not just a disguised pointer (meaning, it's more expensive)
@@ -262,10 +262,10 @@ namespace lib {
 
   /**
    * Another Lumiera Forward Iterator building block, based on incorporating a state type 
-   * right into the iterator. Contrast this to IterAdapter referring to an controlling
+   * right into the iterator. Contrast this to IterAdapter, which refers to a managing
    * container behind the scenes. Here, all of the state is assumed to live in the
    * custom type embedded into this iterator, accessed and manipulated through
-   * a set of free function to be resolved by ADL.
+   * a set of free functions, picked up through ADL.
    * 
    * \par Assumptions when building iterators based on IterStateWrapper
    * There is a custom state representation type ST.
@@ -273,7 +273,7 @@ namespace lib {
    * - this default state represents the \em bottom (invalid) state.
    * - copyable, because iterators are passed by value
    * - this type needs to provide an <b>iteration control API</b> through free functions
-   *   -# \c checkPoint establishes, if the given state element represents a valid state
+   *   -# \c checkPoint establishes if the given state element represents a valid state
    *   -# \c iterNext evolves this state by one step (sideeffect)
    *   -# \c yield realises the given state, yielding an element of result type T
    * 

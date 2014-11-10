@@ -1,5 +1,5 @@
 /*
-  VisitingTool(Concept)  -  working out our own Visitor library implementation
+  VisitingTool(Concept)  -  concept draft of a Visitor library implementation
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,12 +21,12 @@
 * *****************************************************/
 
 
-/** @file visitingtoolconept.cpp
- ** While laying the foundations for Session and Builder, Ichthyo came across 
+/** @file visitingtool-conept.cpp
+ ** While laying the foundations for Session and Builder, Ichthyo came across
  ** the necessity to create a custom implementation of the Visitor Pattern
- ** optimally suited for Lumiera's needs. This implementation file was 
- ** used for the draft and is self-contained. The final solution was then
- ** extracted as library implementation to visitor.hpp 
+ ** optimally suited for Lumiera's needs. This implementation file was used
+ ** for the drafting process and is self-contained. The final solution was
+ ** then extracted later as library implementation into visitor.hpp
  **
  ** Basic considerations
  ** <ul><li>cyclic dependencies should be avoided or at least restricted
@@ -34,18 +34,18 @@
  **         user code should be as small as possible.</li>
  **     <li>Visitor is about <i>double dispatch</i>, thus we can't avoid
  **         using some table lookup implementation, and we can't avoid using
- **         some of the cooperating classes vtables. Besides that, the 
+ **         some of the cooperating classes' vtables. Besides that, the
  **         implementation should not be too wasteful...</li>
  **     <li>individual Visiting Tool implementation classes should be able
  **         to opt in or opt out on implementing functions treating some of
  **         the visitable subclasses.</li>
  **     <li>there should be a safe fallback mechanism backed by the
  **         visitable object's hierarchy relations. If some new class declares
- **         to be visitable, existing Visiting Tools not treating this new
- **         visitable type should fall back to the next best match in the
- **         hierarchy, not to some deaf base class</li>
+ **         to be visitable, existing Visiting Tools not yet treating this new
+ **         visitable type should fall back rather to the next best match up the
+ **         hierarchy, instead of invoking some almost abstract base class</li>
  ** </ul>
- **
+ ** 
  ** @see visitor.hpp the final lib implementation
  ** @see visitingtooltest.cpp test cases using our lib implementation
  ** @see BuilderTool one especially important instantiation
@@ -71,7 +71,7 @@ namespace lumiera {
     // ================================================================== Library ====
     
     
-
+    
     template<class TOOL> class Tag;
     
     
@@ -111,10 +111,10 @@ namespace lumiera {
     /** storage for the Tag registry for each concrete tool */
     template<class TOOL, class TOOLImpl>
     Tag<TOOL> TagTypeRegistry<TOOL,TOOLImpl>::tag; 
-
+    
     template<class TOOL>
     size_t Tag<TOOL>::lastRegisteredID (0);
-
+    
     
     
     
@@ -128,25 +128,27 @@ namespace lumiera {
         typedef RET ReturnType;
         typedef Tool<RET> ToolBase; ///< for templating the Tag and Dispatcher
         
-        virtual ~Tool ()  { };   ///< use RTTI for all visiting tools
+        virtual ~Tool()  { };     ///< use RTTI for all visiting tools
         
         /** allows discovery of the concrete Tool type when dispatching a
          *  visitor call. Can be implemented by inheriting from ToolType */
-        virtual Tag<ToolBase> getTag() = 0; 
+        virtual Tag<ToolBase> getTag()  =0;
       };
     
     
     /** Mixin for attaching a type tag to the concrete tool implementation */
-    template<class TOOLImpl, class BASE=Tool<void> >
-    class ToolType : public BASE
+    template<class TOOLImpl, class BASE =Tool<void>>
+    class ToolType
+      : public BASE
       {
         typedef typename BASE::ToolBase ToolBase;
         
       public:
-        virtual Tag<ToolBase> getTag()
+        virtual Tag<ToolBase>
+        getTag()
           {
-            TOOLImpl* typeref = 0;
-            return Tag<ToolBase>::get (typeref); 
+            TOOLImpl* typeKey = 0;
+            return Tag<ToolBase>::get (typeKey);
           }
       };
     
@@ -154,9 +156,9 @@ namespace lumiera {
 
 
     /**
-     * For each posible call entry point via some subclass of the visitable hierarchy,
+     * For each possible call entry point via some subclass of the visitable hierarchy,
      * we maintain a dispatcher table to keep track of all concrete tool implementations
-     * able to recieve and process calls on objects of this subclass.
+     * able to receive and process calls on objects of this subclass.
      */
     template<class TAR, class TOOL>
     class Dispatcher
@@ -164,7 +166,7 @@ namespace lumiera {
         typedef typename TOOL::ReturnType ReturnType;
         
         /** generator for Trampoline functions,
-         *  used to dispatch calls down to the 
+         *  used to dispatch calls down to the
          *  right "treat"-Function on the correct
          *  concrete tool implementation class
          */
@@ -173,7 +175,7 @@ namespace lumiera {
         callTrampoline (TAR& obj, TOOL& tool)
           {
             // cast down to real implementation type
-            CHECK (INSTANCEOF (TOOLImpl, &tool));  
+            CHECK (INSTANCEOF (TOOLImpl, &tool));
             TOOLImpl& toolObj = static_cast<TOOLImpl&> (tool);
             
             // trigger (compile time) overload resolution
@@ -183,19 +185,19 @@ namespace lumiera {
           }
         
         typedef ReturnType (*Trampoline) (TAR&, TOOL& );
-
         
-        /** VTable for storing the Trampoline pointers */
+        
+        /** custom VTable for storing the Trampoline pointers */
         std::vector<Trampoline> table_;
         
         
         inline bool
         is_known (size_t id)
           { 
-            return id<=table_.size() && table_[id-1]; 
+            return id<=table_.size() && table_[id-1];
           }
         
-        inline void 
+        inline void
         storePtr (size_t id, Trampoline func)
           {
             // lacks error- and concurrency handling....
@@ -204,7 +206,7 @@ namespace lumiera {
             table_[id-1] = func;
           }
         
-        inline Trampoline 
+        inline Trampoline
         storedTrampoline (size_t id)
           {
             if (id<=table_.size() && table_[id-1])
@@ -218,12 +220,12 @@ namespace lumiera {
           {
             cout << "Error Handler: unregistered combination of (Tool, TargetObject) invoked!\n";
           }
-
+        
         
       public:
-        static lib::Depend<Dispatcher<TAR,TOOL> > instance;
+        static lib::Depend<Dispatcher<TAR,TOOL>> instance;
         
-        inline ReturnType 
+        inline ReturnType
         forwardCall (TAR& target, TOOL& tool)
           {
             // get concrete type via tool's VTable
@@ -232,10 +234,10 @@ namespace lumiera {
           }
         
         template<class TOOLImpl>
-        inline void 
-        enrol(TOOLImpl* typeref)
+        inline void
+        enrol (TOOLImpl* typeKey)
           {
-            Tag<TOOL>& index = Tag<TOOL>::get (typeref);
+            Tag<TOOL>& index = Tag<TOOL>::get (typeKey);
             if (is_known (index))
               return;
             else
@@ -246,18 +248,18 @@ namespace lumiera {
               
           }
       };
-
+    
     /** storage for the dispatcher table(s) */
     template<class TAR, class TOOL>
     lib::Depend<Dispatcher<TAR,TOOL> > Dispatcher<TAR,TOOL>::instance;
-
+    
     
     
     
     
     /** 
-     * concrete visiting tool implementation has to inherit from this
-     * class for each kind of calls it wants to get dispatched, 
+     * any concrete visiting tool implementation has to inherit from
+     * this class for each kind of calls it wants to get dispatched,
      * Allowing us to record the type information.
      */
     template<class TAR, class TOOLImpl, class BASE=Tool<void> >
@@ -267,10 +269,10 @@ namespace lumiera {
         typedef typename BASE::ToolBase ToolBase;
         
       protected:
-        Applicable ()
+        Applicable()
           {
-            TOOLImpl* typeref = 0;
-            Dispatcher<TAR,ToolBase>::instance().enrol (typeref);
+            TOOLImpl* typeKey = 0;
+            Dispatcher<TAR,ToolBase>::instance().enrol (typeKey);
           }
         
         virtual ~Applicable () {}
@@ -289,19 +291,19 @@ namespace lumiera {
     /** Marker interface "visitable object".
      */
     template 
-      < class TOOL = Tool<void> 
+      < class TOOL = Tool<void>
       >
     class Visitable
       {
       protected:
-        virtual ~Visitable () { };
+        virtual ~Visitable() { };
         
         /// @note may differ from TOOL
         typedef typename TOOL::ToolBase ToolBase;
         typedef typename TOOL::ReturnType ReturnType;
 
         /** @internal used by the DEFINE_PROCESSABLE_BY macro.
-         *            Dispatches to the actual operation on the 
+         *            Dispatches to the actual operation on the
          *            "visiting tool" (visitor implementation)
          *            Note: creates a context templated on concrete TAR.
          */
@@ -329,16 +331,15 @@ namespace lumiera {
     
     
     // =============================================================(End) Library ====
-
     
     
     
     
-    namespace test
-      {
-        
+    
+    namespace test {
+      
       typedef Tool<void> VisitingTool;
-
+      
       class HomoSapiens : public Visitable<>
         {
         public:
@@ -356,7 +357,7 @@ namespace lumiera {
         public:
           DEFINE_PROCESSABLE_BY (VisitingTool);
         };
-        
+      
       class Leader : public Boss
         {
         };
@@ -364,7 +365,7 @@ namespace lumiera {
       class Visionary : public Leader
         {
         };
-
+      
       
       class VerboseVisitor
         : public VisitingTool
@@ -375,8 +376,8 @@ namespace lumiera {
               cout << format ("Hello %s, nice to meet you...\n") % guy;
             }
         };
-       
-        
+      
+      
       class Babbler
         : public Applicable<Boss,Babbler>,
           public Applicable<BigBoss,Babbler>,
@@ -388,10 +389,10 @@ namespace lumiera {
           void treat (BigBoss&) { talk_to("Big Boss"); }
           
         };
-
-        
-        
-        
+      
+      
+      
+      
       
       
       
@@ -408,11 +409,11 @@ namespace lumiera {
        */
       class VisitingTool_concept : public Test
         {
-          virtual void run(Arg) 
+          virtual void run(Arg)
             {
               known_visitor_known_class();
               visitor_not_visiting_some_class();
-            } 
+            }
           
           void known_visitor_known_class()
             {
@@ -453,8 +454,4 @@ namespace lumiera {
       
       
       
-    } // namespace test
-    
-  } // namespace visitor_concept_draft
-
-} // namespace lumiera
+}}} // namespace lumiera::visitor_concept_draft::test

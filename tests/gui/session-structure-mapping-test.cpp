@@ -100,6 +100,7 @@ namespace test {
       void
       retrieveSessionStructure ()
         {
+          
         }
       
     };
