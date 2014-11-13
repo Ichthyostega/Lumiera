@@ -24,9 +24,10 @@
 #include "lib/test/run.hpp"
 //#include "lib/util.hpp"
 #include "lib/format-string.hpp"
-
+#include "lib/meta/function.hpp"
 
 //#include <boost/lexical_cast.hpp>
+#include <initializer_list>
 //#include <iostream>
 #include <string>
 //#include <map>
@@ -42,9 +43,42 @@ using util::_Fmt;
 namespace lib {
 namespace test{
   
+  template<class REC, class SIG>
+  class VerbToken
+    {
+      using Ret = typename lib::meta::_Fun<SIG>::Ret;
+      
+      typedef Ret REC::*Handler (void);
+      
+      Handler handler_;
+      
+    public:
+      Ret
+      applyTo (REC& receiver)
+        {
+          return receiver.*handler_();
+        }
+    };
+  
+  class Receiver
+    {
+    public:
+      virtual ~Receiver() { } ///< this is an interface
+      
+      virtual string woof()   =0;
+      virtual string honk()   =0;
+      virtual string moo()    =0;
+      virtual string meh()    =0;
+    };
+  
   namespace {
     const string BEGINNING("silence");
+    
+    using Verb = VerbToken<Receiver, string(void)>;
+    using VerbSeq = std::initializer_list<Verb>;
   }
+  
+  
   /** 
    * a receiver of verb-tokens,
    * which renders them verbosely
