@@ -28,7 +28,7 @@
 
 //#include <boost/lexical_cast.hpp>
 #include <initializer_list>
-//#include <iostream>
+#include <iostream>
 #include <string>
 //#include <map>
 
@@ -36,7 +36,7 @@
 //using util::contains;
 using std::string;
 using util::_Fmt;
-//using std::cout;
+using std::cout;
 //using std::endl;
 
 
@@ -48,7 +48,7 @@ namespace test{
     {
       using Ret = typename lib::meta::_Fun<SIG>::Ret;
       
-      typedef Ret REC::*Handler (void);
+      typedef Ret (REC::*Handler) (void);
       
       Handler handler_;
       
@@ -56,9 +56,20 @@ namespace test{
       Ret
       applyTo (REC& receiver)
         {
-          return receiver.*handler_();
+          return (receiver.*handler_)();
         }
+      
+      operator string()
+        {
+          UNIMPLEMENTED("string representation of verb tokens");
+        }
+      
+      VerbToken(Handler handlerFunction)
+        : handler_(handlerFunction)
+        { }
+    protected:
     };
+  
   
   class Receiver
     {
@@ -76,6 +87,11 @@ namespace test{
     
     using Verb = VerbToken<Receiver, string(void)>;
     using VerbSeq = std::initializer_list<Verb>;
+    
+    Verb WOOF(&Receiver::woof);
+    Verb HONK(&Receiver::honk);
+    Verb  MOO(&Receiver::moo);
+    Verb  MEH(&Receiver::meh);
   }
   
   
