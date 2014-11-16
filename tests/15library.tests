@@ -441,7 +441,17 @@ return: 0
 END
 
 
+TEST "ownership of malloced data" UniqueMallocOwner_test <<END
+return: 0
+END
+
+
 TEST "collection utils" UtilCollection_test <<END
+return: 0
+END
+
+
+TEST "verb token based double dispatch helper" VerbFunctionDispatch_test <<END
 return: 0
 END
 
