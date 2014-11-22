@@ -50,9 +50,11 @@ namespace test {
   using std::shared_ptr;
   using boost::algorithm::trim;
   
+  using util::cStr;
   using util::isnil;
   using util::contains;
   using lib::test::showType;
+  using lib::test::demangleCxx;
   
   typedef map<string, Launcher*> TestMap;
   typedef shared_ptr<TestMap>  PTestMap;
@@ -174,7 +176,7 @@ namespace test {
     {
       try 
         {
-          INFO (test, "++------------------- invoking TEST: %s", showType(theTest).c());
+          INFO (test, "++------------------- invoking TEST: %s", cStr(demangleCxx(showType(theTest))));
           theTest.run (cmdline);
           return Suite::TEST_OK;
         }

@@ -14,7 +14,13 @@ out: sizeof.+lib.+test.+test.+Wrmrmpft.+Murpf.+ =   1
 END
 
 
-TEST "TestOption_test" TestOption_test <<END
+TEST "Helper to show demangled C++ names" TestHelperDemangling_test <<END
+out: .+lib.test.test.Space.+Outer.+Inner
+out-lit: lib::test::test::Space const* (*)(lib::test::test::Outer<lib::test::test::Space>::Inner const&&)
+END
+
+
+TEST "Testsuite option handling" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL
 out: --> Test-ID  =--missing--

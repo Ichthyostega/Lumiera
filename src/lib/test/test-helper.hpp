@@ -72,6 +72,19 @@ namespace test{
   }
   
   
+  /** reverse the effect of C++ name mangling.
+   * @return string in language-level form of a C++ type or object name,
+   *         or a string with the original input if demangling fails.
+   * @warning implementation relies on the cross vendor C++ ABI in use
+   *         by GCC and compatible compilers, so portability is limited.
+   *         The implementation is accessed through libStdC++
+   *         Name representation in emitted object code and type IDs is
+   *         essentially an implementation detail and subject to change.
+   */
+  string
+  demangleCxx (Literal rawName);
+  
+  
   /** for printing sizeof().
    *  prints the given size and name literally, without any further magic */
   string

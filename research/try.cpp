@@ -26,21 +26,11 @@
 // 5/14  - c++11 transition: detect empty function object
 // 7/14  - c++11 transition: std hash function vs. boost hash
 // 9/14  - variadic templates and perfect forwarding
+// 11/14 - pointer to member functions and name mangling
 
 
 /** @file try.cpp
- ** Investigation: pitfalls of "perfect forwarding".
- ** Find out about the corner cases where chained argument forwarding
- ** does not work as expected. The key point is to put close attention on the
- ** template parameters we're passing on to the next lower layer. It is crucial
- ** either to add the reference explicitly, or to have it included implicitly
- ** by relying on the way how template params are matched on function calls:
- ** - lvalue -> parameter becomes TY &
- ** - rvalue -> parameter becomes TY
- ** 
- ** In this final stage, the example shows what happens if we erroneously fail
- ** to take the variadic arguments by '&&' on forwarding: we end-up with a
- ** slicing copy to the base class.
+ ** Investigation: member function pointers, types and name mangling.
  **
  */
 
@@ -48,10 +38,11 @@
 #include "lib/util.hpp"
 
 #include <cstddef>
-#include <utility>
 #include <iostream>
-#include <functional>
 #include <string>
+
+using lib::test::showType;
+using lib::test::demangleCxx;
 
 using std::string;
 using std::cout;
@@ -60,21 +51,10 @@ using std::endl;
 class Interface
   {
   public:
-    Interface(){}
-    Interface(Interface const& o) { cout << "COPY.CT from "<<&o<<" !!!\n"; }
-    Interface(Interface const&& o) { cout << "MOVE.CT from "<<&o<<" !!!\n"; }
+    virtual ~Interface() { } ///< this is an interface
     
-    Interface&
-    operator= (Interface const& o) { cout << "COPY= from "<<&o<<" !!!\n"; return *this; }
-    Interface&
-    operator= (Interface const&& o) { cout << "MOVE= from "<<&o<<" !!!\n"; return *this; }
-    
-    
-    virtual ~Interface() { }
-    virtual string op()  const
-      {
-        return "happy SLICING";
-      }
+    virtual string moo()    =0;
+    virtual string boo()    =0;
   };
 
 class Impl
@@ -82,11 +62,8 @@ class Impl
   {
     string s_;
     
-    string
-    op()  const override
-      {
-        return s_;
-      }
+    string moo() { return s_ + " Moo"; }
+    string boo() { return s_ + " Boo"; }
     
   public:
     Impl(string ss ="IMP")
@@ -94,65 +71,27 @@ class Impl
       { }
   };
 
-template<typename X>
-string
-showRefRRefVal()
-{
-  return std::is_lvalue_reference<X>::value? " by REF"
-                                           : std::is_rvalue_reference<X>::value? " by MOVE": " VAL";
-}
 
-template<typename... XS>
-void
-diagnostics (string id, XS const&... xs)
-{
-  cout << "--"<<id<<"--\n"
-       << lib::test::showVariadicTypes<XS...>(xs...)
-       << "\n"
-       ;
-}
-
-
-void
-invoke (Interface const& ref)
-{
-  using Ty = Interface const&;
-  diagnostics<Ty> ("Invoke", ref);
-  cout << "instanceof Impl?" << bool(INSTANCEOF(Impl, &ref)) <<"\n";
-  cout << "________________"
-       << ref.op()
-       << "____\n";
-}
-
-template<class FUN, typename...ARG>
-void
-indirect_1 (FUN fun, ARG... args)  // NOTE: erroneously taking ARG as-is, which results in taking BY VALUE when used in the forwarding chain!
-{
-  diagnostics<ARG...> ("Indirect-1", args...);
-  fun (args...);
-}
-
-template<class FUN, typename...ARG>
-void
-indirect_2 (FUN fun, ARG&&... args)
-{
-  diagnostics<ARG&&...> ("Indirect-2", args...);
-  indirect_1 (fun, std::forward<ARG>(args)...);
-}
 
 
 int
 main (int, char**)
   {
     Impl obj;
-    Interface const& ref = obj;
+    Interface& ref = obj;
+    
+    typedef string (Interface::*Memfun) (void);
+    
     
     cout << "before call. Address... "<<&ref<<"\n";
     
-    std::function<void(Interface const&)> fun(invoke);
+    cout << ref.moo() << endl;
+    cout << ref.boo() << endl;
     
-    indirect_2 (fun, ref);
-    indirect_2 (fun, Impl("honk"));
+    Memfun memfun = &Interface::moo;
+    cout << demangleCxx (showType (memfun)) << endl;
+    cout << demangleCxx (showType(&Interface::moo)) << endl;
+    cout << (ref.*memfun) () << endl;
     
     cout <<  "\n.gulp.\n";
     
