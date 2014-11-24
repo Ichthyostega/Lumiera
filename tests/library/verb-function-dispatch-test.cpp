@@ -22,22 +22,18 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/util.hpp"
 #include "lib/format-string.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/symbol.hpp"
 
-//#include <boost/lexical_cast.hpp>
-#include <initializer_list>
 #include <iostream>
 #include <string>
-//#include <map>
+#include <vector>
 
-//using boost::lexical_cast;
-//using util::contains;
 using std::string;
 using util::_Fmt;
+using std::vector;
 using std::cout;
-//using std::endl;
 
 
 namespace lib {
@@ -51,6 +47,7 @@ namespace test{
       typedef Ret (REC::*Handler) (void);
       
       Handler handler_;
+      Literal token_;
       
     public:
       Ret
@@ -61,11 +58,12 @@ namespace test{
       
       operator string()
         {
-          UNIMPLEMENTED("string representation of verb tokens");
+          return string(token_);
         }
       
-      VerbToken(Handler handlerFunction)
+      VerbToken(Handler handlerFunction, Literal token)
         : handler_(handlerFunction)
+        , token_(token)
         { }
     protected:
     };
@@ -86,12 +84,13 @@ namespace test{
     const string BEGINNING("silence");
     
     using Verb = VerbToken<Receiver, string(void)>;
-    using VerbSeq = std::initializer_list<Verb>;
+    using VerbSeq = vector<Verb>;
     
-    Verb WOOF(&Receiver::woof);
-    Verb HONK(&Receiver::honk);
-    Verb  MOO(&Receiver::moo);
-    Verb  MEH(&Receiver::meh);
+    
+    Verb WOOF(&Receiver::woof, "woof");
+    Verb HONK(&Receiver::honk, "honk");
+    Verb  MOO(&Receiver::moo,  "moo");
+    Verb  MEH(&Receiver::meh,  "meh");
   }
   
   
@@ -148,10 +147,11 @@ namespace test{
   /***********************************************************************//**
    * @test Demonstration/Concept: dispatch a specific function
    *       based on the given verbs of an embedded custom language.
-   *       - weakness of 
+   *       Actually what we want to achieve here is a specific form
+   *       of double dispatch; thus the implementation relies on a
+   *       variation of the visitor pattern.
    *       
-   * @see HashIndexed_test
-   * @see 
+   * @see session-structure-mapping-test.cpp
    */
   class VerbFunctionDispatch_test : public Test
     {

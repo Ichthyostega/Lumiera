@@ -452,6 +452,10 @@ END
 
 
 TEST "verb token based double dispatch helper" VerbFunctionDispatch_test <<END
+out-lit: consuming woof ->  'Woof-Woof!'
+out-lit: consuming honk ->  'Honk-Honk!'
+out-lit: consuming moo ->  'Moo-Moo!'
+out-lit: consuming meh ->  'Meh!'
 return: 0
 END
 
