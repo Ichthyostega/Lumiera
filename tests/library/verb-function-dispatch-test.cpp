@@ -22,12 +22,10 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/verb-token.hpp"
 #include "lib/format-string.hpp"
-#include "lib/symbol.hpp"
-#include "lib/util.hpp"
 
 #include <iostream>
-#include <utility>
 #include <string>
 #include <vector>
 
@@ -39,37 +37,6 @@ using std::cout;
 
 namespace lib {
 namespace test{
-  
-  template<class REC, class SIG>
-  class VerbToken;
-  
-  template<class REC, class RET, typename... ARGS>
-  class VerbToken<REC, RET(ARGS...)>
-    {
-      typedef RET (REC::*Handler) (ARGS...);
-      
-      Handler handler_;
-      Literal token_;
-      
-    public:
-      RET
-      applyTo (REC& receiver, ARGS&&... args)
-        {
-          return (receiver.*handler_)(std::forward<ARGS>(args)...);
-        }
-      
-      operator string()
-        {
-          return string(token_);
-        }
-      
-      VerbToken(Handler handlerFunction, Literal token)
-        : handler_(handlerFunction)
-        , token_(token)
-        { }
-    };
-  
-#define VERB(RECEIVER, FUN) VERB_##FUN (&RECEIVER::FUN, STRINGIFY(FUN))
   
   
   class Receiver

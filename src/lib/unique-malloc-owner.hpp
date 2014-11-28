@@ -27,14 +27,14 @@
  ** mostly for the purpose of documenting the issue at the
  ** usage site.
  ** 
- ** @see cxx-demangle.cpp
+ ** @see lib::test::demangleCxx
  ** @see UniqueMallocOwner_test
  ** 
  */
 
 
-#ifndef UNIQUE_MALLOC_OWNER_H_
-#define UNIQUE_MALLOC_OWNER_H_
+#ifndef LIB_UNIQUE_MALLOC_OWNER_H
+#define LIB_UNIQUE_MALLOC_OWNER_H
 
 
 #include "lib/error.hpp"
@@ -83,4 +83,4 @@ namespace lib {
   
   
 } // namespace lib  
-#endif /*UNIQUE_MALLOC_OWNER_HPP_*/
+#endif /*LIB_UNIQUE_MALLOC_OWNER_H*/
