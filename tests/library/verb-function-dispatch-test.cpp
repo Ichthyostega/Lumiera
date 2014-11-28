@@ -23,10 +23,11 @@
 
 #include "lib/test/run.hpp"
 #include "lib/format-string.hpp"
-#include "lib/meta/function.hpp"
 #include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
+#include <utility>
 #include <string>
 #include <vector>
 
@@ -40,20 +41,21 @@ namespace lib {
 namespace test{
   
   template<class REC, class SIG>
-  class VerbToken
+  class VerbToken;
+  
+  template<class REC, class RET, typename... ARGS>
+  class VerbToken<REC, RET(ARGS...)>
     {
-      using Ret = typename lib::meta::_Fun<SIG>::Ret;
-      
-      typedef Ret (REC::*Handler) (void);
+      typedef RET (REC::*Handler) (ARGS...);
       
       Handler handler_;
       Literal token_;
       
     public:
-      Ret
-      applyTo (REC& receiver)
+      RET
+      applyTo (REC& receiver, ARGS&&... args)
         {
-          return (receiver.*handler_)();
+          return (receiver.*handler_)(std::forward<ARGS>(args)...);
         }
       
       operator string()
@@ -65,8 +67,9 @@ namespace test{
         : handler_(handlerFunction)
         , token_(token)
         { }
-    protected:
     };
+  
+#define VERB(RECEIVER, FUN) VERB_##FUN (&RECEIVER::FUN, STRINGIFY(FUN))
   
   
   class Receiver
@@ -87,14 +90,14 @@ namespace test{
     using VerbSeq = vector<Verb>;
     
     
-    Verb WOOF(&Receiver::woof, "woof");
-    Verb HONK(&Receiver::honk, "honk");
-    Verb  MOO(&Receiver::moo,  "moo");
-    Verb  MEH(&Receiver::meh,  "meh");
+    Verb VERB(Receiver, woof);
+    Verb VERB(Receiver, honk);
+    Verb VERB(Receiver, moo);
+    Verb VERB(Receiver, meh);
   }
   
   
-  /** 
+  /**
    * a receiver of verb-tokens,
    * which renders them verbosely
    */
@@ -126,10 +129,10 @@ namespace test{
         }
       
       
-      string woof() { return buildResultTerm (WOOF); }
-      string honk() { return buildResultTerm (HONK); }
-      string moo()  { return buildResultTerm (MOO);  }
-      string meh()  { return buildResultTerm (MEH);  }
+      string woof() { return buildResultTerm (VERB_woof); }
+      string honk() { return buildResultTerm (VERB_honk); }
+      string moo()  { return buildResultTerm (VERB_moo);  }
+      string meh()  { return buildResultTerm (VERB_meh);  }
       
       
     public:
@@ -171,10 +174,10 @@ namespace test{
       build_test_feed()
         {
           return {
-            WOOF,
-            HONK,
-            MOO,
-            MEH 
+            VERB_woof,
+            VERB_honk,
+            VERB_moo,
+            VERB_meh
           };
         }
       
