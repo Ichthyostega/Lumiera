@@ -22,7 +22,7 @@ from the GNU Subversion repository:
 
 * 'svn checkout'
    http://gcc.gnu.org/viewcvs/trunk/libstdc%2B%2B-v3/python/[svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python stlPrettyPrinter]
-* you need to activate them explicitly through your +~/.gdbinit
+* you need to activate them explicitly through your '~/.gdbinit'
 
 [source,python]
 ----

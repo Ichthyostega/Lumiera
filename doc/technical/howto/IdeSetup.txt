@@ -43,13 +43,15 @@ was able to see the right files with the right locations
    is not running. +
    It is located in `<workspace-dir>/.metadata/.plugins/org.eclipse.cdt.core/`...
  * at some point in the past, I had problems with a lacking definiton of our own library
-   facilities. I could resolve them by adding the directory `target/modules` to the _Library Paths_ tab
+   facilities. I could resolve them by adding the directory `target/modules` to the _Library Paths_ tab.
+   AFAIK, this is no longer necessary with Eclipse versions since Kepler.
  * it might help to add the include paths of some of the most relevant libraries (in case the automatic discovery
-   fails to pick them up properly). Eg. the GTK includes and the glibmm includes. _But_ do this systematically,
-   starting from those symbols marked with red squiggles in the code.
+   fails to pick them up properly). Eg. the GTK includes and the glibmm includes. _But_ please do this systematically,
+   starting from those symbols marked with red squiggles in the code. The Indexer assumes your settings are for real;
+   randomly adding some library source without any clue what you're doing will make things worse, not better.
  * Hint: the automatic discovery works by observing the output of the build process. It might work better
    if you do a full build once with `scons VERBOSE=true`, so the IDE can see the full command lines.
- * After upgrading to a new version of such libraries, it might be necessary to remove the old search paths
+ * After upgrading to a new version of such library dependencies, it might be necessary to remove the old search paths
    _manually_ -- more so if they are still accessible on the system. Dont blame the Indexer, which basically
    has no way to find out he is looking at the obsolete source files...
 
@@ -66,4 +68,6 @@ messages on the debug console like `No source file named XYZ`, then you should
      ``using XYZ Process Launcher'' and a Hyperlink ``Select other''. Select the **Standard Create Process Launcher**.
      You can make this even the workspace default, this is the more conservative setting which works most reliably.
   ** verify the settings on the ``Debugger'' tab: Debugger combobox should be ``gdb/mi'', GDB command set should
-     be ``Standard (Linux)'' and your GDB command file should be OK (if you use one)
+     be ``Standard (Linux)'' and your GDB command file '~/.gdbinit' (if you use one) should be sane, since it
+     is executed at the start of every GDB session.
+
