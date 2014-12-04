@@ -27,8 +27,10 @@
 //#include "lib/format-string.hpp"
 
 //#include <iostream>
+#include <boost/noncopyable.hpp>
 #include <string>
 #include <vector>
+#include <tuple>
 
 using util::isnil;
 using std::string;
@@ -40,29 +42,121 @@ using std::vector;
 namespace lib {
 namespace test{
   
-  
-  class Receiver
+  template<typename E>
+  struct DiffLanguage
     {
-    public:
-      virtual ~Receiver() { } ///< this is an interface
+      class Receiver
+        {
+        public:
+          virtual ~Receiver() { } ///< this is an interface
+          
+          virtual void ins(E e)    =0;
+          virtual void del(E e)    =0;
+          virtual void pick(E e)   =0;
+          virtual void push(E e)   =0;
+        };
       
-      virtual string woof()   =0;
-      virtual string honk()   =0;
-      virtual string moo()    =0;
-      virtual string meh()    =0;
+      using DiffVerb = VerbToken<Receiver, void(E)>;
+      
+      struct DiffStep
+        : std::tuple<DiffVerb, E>
+        {
+          DiffVerb& verb() { return std::get<0>(*this); }
+          E const&  elm()  { return std::get<1>(*this); }
+          
+          operator string()  const
+            {
+              return string(verb()) + "("+string(elm())+")";
+            }
+          
+          void
+          applyTo (Receiver& receiver)
+            {
+              verb().applyTo (receiver, elm());
+            }
+        };
+      
+#define DiffStep_CTOR(_ID_) \
+      DiffStep _ID_(E e) { return {DiffVerb(&Receiver::_ID_, STRINGIFY(_ID_)), e}; }
+      
+      DiffStep_CTOR(ins)
+      DiffStep_CTOR(del)
+      DiffStep_CTOR(pick)
+      DiffStep_CTOR(push)
+      
+    };
+  
+  template<class CON>
+  class DiffApplicationStrategy;
+  
+  template<typename E, typename...ARGS>
+  class DiffApplicationStrategy<vector<E,ARGS...>>
+    : public DiffLanguage<E>::Receiver
+    {
+      using Vec = vector<E,ARGS...>;
+      
+      Vec& seq_;
+      
+      void
+      ins(E e)
+        {
+          UNIMPLEMENTED("insert new element into target");
+        }
+      void
+      del(E e)
+        {
+          UNIMPLEMENTED("insert given element from target");
+        }
+      void
+      pick(E e)
+        {
+          UNIMPLEMENTED("pick denoted element from source");
+        }
+      void
+      push(E e)
+        {
+          UNIMPLEMENTED("push next element behind denoted in source");
+        }
+      
+    public:
+      explicit
+      DiffApplicationStrategy(vector<E>& targetVector)
+        : seq_(targetVector)
+        { }
+    };
+  
+  
+  template<class SEQ>
+  class DiffApplicator
+    : boost::noncopyable
+    {
+      using Val  = typename SEQ::value_type;
+      using Diff = DiffLanguage<Val>;
+      
+      using Receiver = DiffApplicationStrategy<SEQ>;
+      
+      Receiver target_;
+      
+    public:
+      explicit
+      DiffApplicator(SEQ& targetSeq)
+        : target_(targetSeq)
+        { }
+      
+      template<class DIFF>
+      void
+      consume (DIFF diff)
+        {
+          for ( ; diff; ++diff )
+            diff->applyTo(target_);
+        }
+      
+    protected:
     };
   
   namespace {
-    const string BEGINNING("silence");
     
-    using Verb = VerbToken<Receiver, string(void)>;
-    using VerbSeq = vector<Verb>;
-    
-    
-    Verb VERB(Receiver, woof);
-    Verb VERB(Receiver, honk);
-    Verb VERB(Receiver, moo);
-    Verb VERB(Receiver, meh);
+    using DataSeq = vector<string>;
     
     #define TOK(id) id(STRINGIFY(id))
     
@@ -71,18 +165,6 @@ namespace test{
   }
   
   
-  /**
-   * a receiver of verb-tokens,
-   * which renders them verbosely
-   */
-  class VerboseRenderer
-    : public Receiver
-    {
-      string woof() { return "Woof-Woof!"; }
-      string honk() { return "Honk-Honk!"; }
-      string moo()  { return "Moo-Moo!";   }
-      string meh()  { return "Meh!";       }
-    };
   
   
   
@@ -105,7 +187,7 @@ namespace test{
       virtual void
       run (Arg)
         {
-          DataSeq src{a1,a2,a3,a4,a5};
+          DataSeq src({a1,a2,a3,a4,a5});
           DiffSeq diff = generate_test_diff();
           CHECK (!isnil (diff));
           
