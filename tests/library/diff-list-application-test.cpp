@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/verb-token.hpp"
 #include "lib/util.hpp"
+#include "lib/iter-adapter-stl.hpp"
 //#include "lib/format-string.hpp"
 
 //#include <iostream>
@@ -57,12 +58,17 @@ namespace test{
         };
       
       using DiffVerb = VerbToken<Receiver, void(E)>;
+      using VerbTok = std::tuple<DiffVerb, E>;
       
       struct DiffStep
-        : std::tuple<DiffVerb, E>
+        : VerbTok
         {
           DiffVerb& verb() { return std::get<0>(*this); }
-          E const&  elm()  { return std::get<1>(*this); }
+          E         elm()  { return std::get<1>(*this); }
+          
+          DiffStep(DiffVerb verb, E e)
+            : VerbTok(verb,e)
+            { }
           
           operator string()  const
             {
@@ -77,7 +83,7 @@ namespace test{
         };
       
 #define DiffStep_CTOR(_ID_) \
-      DiffStep _ID_(E e) { return {DiffVerb(&Receiver::_ID_, STRINGIFY(_ID_)), e}; }
+      static DiffStep _ID_(E e) { return {DiffVerb(&Receiver::_ID_, STRINGIFY(_ID_)), e }; }
       
       DiffStep_CTOR(ins)
       DiffStep_CTOR(del)
@@ -153,7 +159,31 @@ namespace test{
       
     protected:
     };
+  namespace {
+    template<typename SEQ>
+    struct _OnceT
+      {
+        typedef typename SEQ::value_type value_type;
+        typedef iter_stl::IterSnapshot<value_type> iterator;
+      };
+  }
   
+  template<class CON>
+  inline typename _OnceT<CON>::iterator
+  onceEach(CON const& con)
+    {
+      using OnceIter = typename _OnceT<CON>::iterator;
+      return OnceIter(con);
+    }
+  
+  template<class VAL>
+  inline iter_stl::IterSnapshot<VAL>
+  onceEach(std::initializer_list<VAL> const& ili)
+    {
+      using OnceIter = iter_stl::IterSnapshot<VAL>;
+      return OnceIter(begin(ili), end(ili));
+    }
+    
   namespace {
     
     using DataSeq = vector<string>;
@@ -162,6 +192,29 @@ namespace test{
     
     string TOK(a1), TOK(a2), TOK(a3), TOK(a4), TOK(a5);
     string TOK(b1), TOK(b2), TOK(b3), TOK(b4);
+    
+    struct TestDiff
+      : DiffLanguage<string>
+      {
+        using DiffSeq = typename _OnceT<std::initializer_list<DiffStep>>::iterator;
+        
+        static DiffSeq
+        generate()
+          {
+            return onceEach({del(a1)
+                           , del(a2)
+                           , ins(b1)
+                           , pick(a3)
+                           , push(a5)
+                           , pick(a5)
+                           , ins(b2)
+                           , ins(b3)
+                           , pick(a4)
+                           , ins(b4)
+                           });
+            
+          }
+      };
   }
   
   
@@ -188,7 +241,7 @@ namespace test{
       run (Arg)
         {
           DataSeq src({a1,a2,a3,a4,a5});
-          DiffSeq diff = generate_test_diff();
+          auto diff = TestDiff::generate();
           CHECK (!isnil (diff));
           
           DataSeq target = src;
