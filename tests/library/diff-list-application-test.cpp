@@ -25,23 +25,26 @@
 #include "lib/verb-token.hpp"
 #include "lib/util.hpp"
 #include "lib/iter-adapter-stl.hpp"
-//#include "lib/format-string.hpp"
+#include "lib/format-string.hpp"
 
-//#include <iostream>
 #include <boost/noncopyable.hpp>
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <tuple>
 
 using util::isnil;
 using std::string;
-//using util::_Fmt;
+using util::_Fmt;
 using std::vector;
-//using std::cout;
+using std::move;
 
 
 namespace lib {
 namespace test{
+  namespace error = lumiera::error;
+  
+  LUMIERA_ERROR_DEFINE(DIFF_CONFLICT, "Collision in diff application: contents of target not as expected.");
   
   template<typename E>
   struct DiffLanguage
@@ -95,43 +98,132 @@ namespace test{
   template<class CON>
   class DiffApplicationStrategy;
   
+  /**
+   * concrete strategy to apply a list diff to a target sequence given as vector.
+   * The implementation swaps aside the existing content of the target sequence
+   * and then consumes it step by step, while building up the altered content
+   * within the previously emptied target vector. Whenever possible, elements
+   * are moved directly to the target location.
+   * @throws  lumiera::error::State when diff application fails due to the
+   *          target sequence being different than assumed by the given diff.
+   * @warning behaves only EX_SANE in case of diff application errors,
+   *          i.e. only partially modified / rebuilt sequence might be
+   *          in the target when diff application is aborted
+   */
   template<typename E, typename...ARGS>
   class DiffApplicationStrategy<vector<E,ARGS...>>
     : public DiffLanguage<E>::Receiver
     {
       using Vec = vector<E,ARGS...>;
+      using Iter = typename Vec::iterator;
       
+      Vec orig_;
       Vec& seq_;
+      Iter pos_;
+      
+      bool
+      end_of_target()
+        {
+          return pos_ == orig_.end();
+        }
+      
+      void
+      __expect_in_target (E const& e, Literal oper)
+        {
+          if (end_of_target())
+            throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
+                                    "no (further) elements in target sequence") % oper % e
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+          if (*pos_ != e)
+            throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
+                                    "found element %s on current target position instead")
+                                    % oper % e % *pos_
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+      
+      void
+      __expect_further_elements()
+        {
+          if (end_of_target())
+            throw error::State("Premature end of target sequence; unable to apply diff further."
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+      
+      void
+      __expect_found (E const& e, Iter const& targetPos)
+        {
+          if (targetPos == orig_.end())
+            throw error::State(_Fmt("Premature end of sequence; unable to locate "
+                                    "element %s as reference point in target.") % e
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+      
+      
+      /* == Implementation of the diff application primitives == */
       
       void
       ins(E e)
         {
-          UNIMPLEMENTED("insert new element into target");
+          seq_.push_back(e);
         }
+      
       void
       del(E e)
         {
-          UNIMPLEMENTED("insert given element from target");
+          __expect_in_target(e, "remove");
+          ++pos_;
         }
+      
       void
       pick(E e)
         {
-          UNIMPLEMENTED("pick denoted element from source");
+          __expect_in_target(e, "pick");
+          seq_.push_back (move(*pos_));
+          ++pos_;
         }
+      
       void
-      push(E e)
+      push(E anchor)
         {
-          UNIMPLEMENTED("push next element behind denoted in source");
+          __expect_further_elements();
+          E e(move(*pos_)); // consume current source element
+          ++pos_;
+          
+          // locate the insert position behind the given reference anchor
+          Iter insertPos = std::find(pos_, orig_.end(), anchor);
+          __expect_found (anchor, insertPos);
+          
+          // inserting the "pushed back" element behind the found position
+          // this might lead to reallocation and thus invalidate the iterators
+          auto currIdx = pos_ - orig_.begin();
+          orig_.insert (++insertPos, move(e));
+          pos_ = orig_.begin() + currIdx;
         }
+      
       
     public:
       explicit
       DiffApplicationStrategy(vector<E>& targetVector)
         : seq_(targetVector)
-        { }
+        , pos_(seq_.begin())
+        {
+          swap (seq_, orig_);  // pos_ still refers to original input sequence, which has been moved to orig_
+          seq_.reserve (targetVector.size() * 120 / 100);    // heuristics for storage pre-allocation
+        }
     };
   
   
+  /**
+   * generic builder to apply a list diff to a given target sequence.
+   * The usage pattern is as follows
+   * #. construct a DiffApplicator instance, wrapping the target sequence
+   * #. feed the list diff (sequence of diff verbs) to the #consume function
+   * #. the wrapped target sequence has been altered, to conform to the given diff 
+   * @note a suitable DiffApplicationStrategy will be picked, based on the type
+   *       of the concrete target sequence given at construction. (Effectively
+   *       this means you need a suitable DiffApplicationStrategy specialisation,
+   *       e.g. for a target sequence within a vector)
+   */
   template<class SEQ>
   class DiffApplicator
     : boost::noncopyable
@@ -151,14 +243,13 @@ namespace test{
       
       template<class DIFF>
       void
-      consume (DIFF diff)
+      consume (DIFF&& diff)
         {
           for ( ; diff; ++diff )
             diff->applyTo(target_);
         }
-      
-    protected:
     };
+  
   namespace {
     template<typename SEQ>
     struct _OnceT
@@ -183,7 +274,7 @@ namespace test{
       using OnceIter = iter_stl::IterSnapshot<VAL>;
       return OnceIter(begin(ili), end(ili));
     }
-    
+  
   namespace {
     
     using DataSeq = vector<string>;
