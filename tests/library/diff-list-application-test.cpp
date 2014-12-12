@@ -28,6 +28,7 @@
 #include "lib/format-string.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <functional>
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -46,21 +47,11 @@ namespace test{
   
   LUMIERA_ERROR_DEFINE(DIFF_CONFLICT, "Collision in diff application: contents of target not as expected.");
   
-  template<typename E>
+  template<typename E, class I>
   struct DiffLanguage
     {
-      class Receiver
-        {
-        public:
-          virtual ~Receiver() { } ///< this is an interface
-          
-          virtual void ins(E e)    =0;
-          virtual void del(E e)    =0;
-          virtual void pick(E e)   =0;
-          virtual void push(E e)   =0;
-        };
       
-      using DiffVerb = VerbToken<Receiver, void(E)>;
+      using DiffVerb = VerbToken<I, void(E)>;
       using VerbTok = std::tuple<DiffVerb, E>;
       
       struct DiffStep
@@ -79,19 +70,42 @@ namespace test{
             }
           
           void
-          applyTo (Receiver& receiver)
+          applyTo (I& interpreter)
             {
-              verb().applyTo (receiver, elm());
+              verb().applyTo (interpreter, elm());
             }
         };
+    };
+  
+  
+  template<typename E>
+  class ListDiffInterpreter
+    {
+    public:
+      virtual ~ListDiffInterpreter() { } ///< this is an interface
+      
+      virtual void ins(E e)    =0;
+      virtual void del(E e)    =0;
+      virtual void pick(E e)   =0;
+      virtual void push(E e)   =0;
+    };
+  
+  template<typename E>
+  struct ListDiffLanguage
+    : DiffLanguage<E, ListDiffInterpreter<E>>
+    {
+      using DiffStep = typename DiffLanguage<E, ListDiffInterpreter<E>>::DiffStep;
+      using DiffVerb = typename DiffLanguage<E, ListDiffInterpreter<E>>::DiffVerb;
+      
+      using Ip = ListDiffInterpreter<E>;
       
 #define DiffStep_CTOR(_ID_) \
-      static DiffStep _ID_(E e) { return {DiffVerb(&Receiver::_ID_, STRINGIFY(_ID_)), e }; }
+      static DiffStep _ID_(E e) { return {DiffVerb(&Ip::_ID_, STRINGIFY(_ID_)), e }; }
       
-      DiffStep_CTOR(ins)
-      DiffStep_CTOR(del)
-      DiffStep_CTOR(pick)
-      DiffStep_CTOR(push)
+      DiffStep_CTOR(ins);
+      DiffStep_CTOR(del);
+      DiffStep_CTOR(pick);
+      DiffStep_CTOR(push);
       
     };
   
@@ -112,7 +126,7 @@ namespace test{
    */
   template<typename E, typename...ARGS>
   class DiffApplicationStrategy<vector<E,ARGS...>>
-    : public DiffLanguage<E>::Receiver
+    : public ListDiffInterpreter<E>
     {
       using Vec = vector<E,ARGS...>;
       using Iter = typename Vec::iterator;
@@ -128,16 +142,16 @@ namespace test{
         }
       
       void
-      __expect_in_target (E const& e, Literal oper)
+      __expect_in_target (E const& elm, Literal oper)
         {
           if (end_of_target())
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
-                                    "no (further) elements in target sequence") % oper % e
+                                    "no (further) elements in target sequence") % oper % elm
                               , LUMIERA_ERROR_DIFF_CONFLICT);
-          if (*pos_ != e)
+          if (*pos_ != elm)
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "found element %s on current target position instead")
-                                    % oper % e % *pos_
+                                    % oper % elm % *pos_
                               , LUMIERA_ERROR_DIFF_CONFLICT);
         }
       
@@ -150,11 +164,11 @@ namespace test{
         }
       
       void
-      __expect_found (E const& e, Iter const& targetPos)
+      __expect_found (E const& elm, Iter const& targetPos)
         {
           if (targetPos == orig_.end())
             throw error::State(_Fmt("Premature end of sequence; unable to locate "
-                                    "element %s as reference point in target.") % e
+                                    "element %s as reference point in target.") % elm
                               , LUMIERA_ERROR_DIFF_CONFLICT);
         }
       
@@ -162,31 +176,31 @@ namespace test{
       /* == Implementation of the diff application primitives == */
       
       void
-      ins(E e)
+      ins (E elm)
         {
-          seq_.push_back(e);
+          seq_.push_back(elm);
         }
       
       void
-      del(E e)
+      del (E elm)
         {
-          __expect_in_target(e, "remove");
+          __expect_in_target(elm, "remove");
           ++pos_;
         }
       
       void
-      pick(E e)
+      pick (E elm)
         {
-          __expect_in_target(e, "pick");
+          __expect_in_target(elm, "pick");
           seq_.push_back (move(*pos_));
           ++pos_;
         }
       
       void
-      push(E anchor)
+      push (E anchor)
         {
           __expect_further_elements();
-          E e(move(*pos_)); // consume current source element
+          E elm(move(*pos_)); // consume current source element
           ++pos_;
           
           // locate the insert position behind the given reference anchor
@@ -196,7 +210,7 @@ namespace test{
           // inserting the "pushed back" element behind the found position
           // this might lead to reallocation and thus invalidate the iterators
           auto currIdx = pos_ - orig_.begin();
-          orig_.insert (++insertPos, move(e));
+          orig_.insert (++insertPos, move(elm));
           pos_ = orig_.begin() + currIdx;
         }
       
@@ -228,9 +242,6 @@ namespace test{
   class DiffApplicator
     : boost::noncopyable
     {
-      using Val  = typename SEQ::value_type;
-      using Diff = DiffLanguage<Val>;
-      
       using Receiver = DiffApplicationStrategy<SEQ>;
       
       Receiver target_;
@@ -251,25 +262,20 @@ namespace test{
     };
   
   namespace {
-    template<typename SEQ>
-    struct _OnceT
-      {
-        typedef typename SEQ::value_type value_type;
-        typedef iter_stl::IterSnapshot<value_type> iterator;
-      };
+    template<class CON>
+    using ContentSnapshot = iter_stl::IterSnapshot<typename CON::value_type>;
   }
   
   template<class CON>
-  inline typename _OnceT<CON>::iterator
-  onceEach(CON const& con)
+  inline ContentSnapshot<CON>
+  snapshot(CON const& con)
     {
-      using OnceIter = typename _OnceT<CON>::iterator;
-      return OnceIter(con);
+      return ContentSnapshot<CON>(begin(con), end(con));
     }
   
   template<class VAL>
   inline iter_stl::IterSnapshot<VAL>
-  onceEach(std::initializer_list<VAL> const& ili)
+  snapshot(std::initializer_list<VAL> const&& ili)
     {
       using OnceIter = iter_stl::IterSnapshot<VAL>;
       return OnceIter(begin(ili), end(ili));
@@ -285,14 +291,14 @@ namespace test{
     string TOK(b1), TOK(b2), TOK(b3), TOK(b4);
     
     struct TestDiff
-      : DiffLanguage<string>
+      : ListDiffLanguage<string>
       {
-        using DiffSeq = typename _OnceT<std::initializer_list<DiffStep>>::iterator;
+        using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
         
         static DiffSeq
         generate()
           {
-            return onceEach({del(a1)
+            return snapshot({del(a1)
                            , del(a2)
                            , ins(b1)
                            , pick(a3)
