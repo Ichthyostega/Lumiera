@@ -47,7 +47,7 @@ namespace test{
   
   LUMIERA_ERROR_DEFINE(DIFF_CONFLICT, "Collision in diff application: contents of target not as expected.");
   
-  template<typename E, class I>
+  template< class I, typename E>
   struct DiffLanguage
     {
       
@@ -77,6 +77,58 @@ namespace test{
         };
     };
   
+  template<class I, typename E>
+  using HandlerFun = void (I::*) (E);
+  
+  
+  template<typename SIG_HANDLER>
+  struct DiffStepBuilder;
+  
+  /** generator to produce specific language tokens */
+  template<class I, typename E>
+  struct DiffStepBuilder<HandlerFun<I,E>>
+    {
+      using Lang = DiffLanguage<I,E>;
+      using Step = typename Lang::DiffStep;
+      using Verb = typename Lang::DiffVerb;
+      
+      HandlerFun<I,E> handler;
+      Literal id;
+      
+      Step
+      operator() (E elm)  const
+        {
+          return { Verb(handler,id), elm };
+        }
+    };
+  
+  
+  /** set up a diff language token generator,
+   *  based on the specific handler function given.
+   *  This generator will produce tokens, wrapping  concrete content elements
+   *  of type \c E. In the end, the purpose is to send a sequence of such tokens
+   *  around, to feed them to a consumer, which implements the \em Interpreter
+   *  interface of the diff language. E.g. this consumer might apply the diff.
+   */
+  template<class H>
+  inline DiffStepBuilder<H>
+  diffTokenBuilder (H handlerFun, Literal id)
+  {
+    return { handlerFun, id };
+  }
+  
+/** shortcut to define tokens of the diff language.
+ *  Use it to define namespace level function objects, which,
+ *  when supplied with an argument value of type \c E, will generate
+ *  a specific language token wrapping a copy of this element.
+ * @note need a typedef \c Interpreter at usage site
+ *       to refer to the actual language interpreter interface;
+ *       the template parameters of the Language and the element
+ *       type will be picked up from the given member function pointer.
+ */
+#define DiffStep_CTOR(_ID_) \
+  const auto _ID_ = diffTokenBuilder (&Interpreter::_ID_, STRINGIFY(_ID_));
+  
   
   template<typename E>
   class ListDiffInterpreter
@@ -91,23 +143,11 @@ namespace test{
     };
   
   template<typename E>
-  struct ListDiffLanguage
-    : DiffLanguage<E, ListDiffInterpreter<E>>
-    {
-      using DiffStep = typename DiffLanguage<E, ListDiffInterpreter<E>>::DiffStep;
-      using DiffVerb = typename DiffLanguage<E, ListDiffInterpreter<E>>::DiffVerb;
-      
-      using Ip = ListDiffInterpreter<E>;
-      
-#define DiffStep_CTOR(_ID_) \
-      static DiffStep _ID_(E e) { return {DiffVerb(&Ip::_ID_, STRINGIFY(_ID_)), e }; }
-      
-      DiffStep_CTOR(ins);
-      DiffStep_CTOR(del);
-      DiffStep_CTOR(pick);
-      DiffStep_CTOR(push);
-      
-    };
+  using ListDiffLanguage = DiffLanguage<ListDiffInterpreter<E>, E>;
+  
+  
+  
+  
   
   template<class CON>
   class DiffApplicationStrategy;
@@ -281,7 +321,7 @@ namespace test{
       return OnceIter(begin(ili), end(ili));
     }
   
-  namespace {
+  namespace {//Test fixture....
     
     using DataSeq = vector<string>;
     
@@ -290,29 +330,33 @@ namespace test{
     string TOK(a1), TOK(a2), TOK(a3), TOK(a4), TOK(a5);
     string TOK(b1), TOK(b2), TOK(b3), TOK(b4);
     
-    struct TestDiff
-      : ListDiffLanguage<string>
-      {
-        using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
-        
-        static DiffSeq
-        generate()
-          {
-            return snapshot({del(a1)
-                           , del(a2)
-                           , ins(b1)
-                           , pick(a3)
-                           , push(a5)
-                           , pick(a5)
-                           , ins(b2)
-                           , ins(b3)
-                           , pick(a4)
-                           , ins(b4)
-                           });
-            
-          }
-      };
-  }
+    using Interpreter = ListDiffInterpreter<string>;
+    using DiffStep = ListDiffLanguage<string>::DiffStep;
+    using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
+    
+    DiffStep_CTOR(ins);
+    DiffStep_CTOR(del);
+    DiffStep_CTOR(pick);
+    DiffStep_CTOR(push);
+    
+    
+    inline DiffSeq
+    generateTestDiff()
+    {
+      return snapshot({del(a1)
+                     , del(a2)
+                     , ins(b1)
+                     , pick(a3)
+                     , push(a5)
+                     , pick(a5)
+                     , ins(b2)
+                     , ins(b3)
+                     , pick(a4)
+                     , ins(b4)
+                     });
+      
+    }
+  }//(End)Test fixture
   
   
   
@@ -338,7 +382,7 @@ namespace test{
       run (Arg)
         {
           DataSeq src({a1,a2,a3,a4,a5});
-          auto diff = TestDiff::generate();
+          auto diff = generateTestDiff();
           CHECK (!isnil (diff));
           
           DataSeq target = src;
