@@ -23,7 +23,57 @@
 
 /** @file diff-language.hpp
  ** Fundamental definitions for a representation of changes.
+ ** We describe differences in data structures or changes to be applied
+ ** in the form of a "linearised diff language". Such a diff can be represented
+ ** as a sequence of tokens of constant size. Using a linearised constant size
+ ** representation allows to process diff generation and diff application in
+ ** a pipeline, enabling maximum decoupling of sender and receiver.
+ ** Changes sent by diff serve as a generic meta-representation to keep separate
+ ** and different representations of the same logical structure in sync. This allows
+ ** for tight cooperation between strictly separated components, without the need
+ ** of a fixed, predefined and shared data structure.
  ** 
+ ** \par Basic Assumptions
+ ** While the \em linearisation folds knowledge about the underlying data structure
+ ** down into the actual diff, we deliberately assume that the data to be diffed is
+ ** \em structured data. Moreover, we'll assume implicitly that this data is \em typed,
+ ** and we'll assume explicitly that the atomic elements in the data structure have a
+ ** well-defined identity and can be compared with the \c == operator. We treat those
+ ** elements as values, which can be copied and moved cheaply. We include a copy of
+ ** all content elements right within the tokens of the diff language, either to
+ ** send the actual content data this way, or to serve as redundancy to verify
+ ** proper application of the changes at the diff receiver.
+ ** 
+ ** \par Solution Pattern
+ ** The representation of this linearised diff language relies on a specialised form
+ ** of the <b>visitor pattern</b>: We assume the vocabulary of the diff language to be
+ ** relatively fixed, while the actual effect when consuming the stream of diff tokens
+ ** is provided as a private detail of the receiver, implemented as a concrete "Interpreter"
+ ** (visitor) of the specific diff language flavour in use. Thus, our implementation relies
+ ** on \em double-dispatch, based both on the type of the individual diff tokens and on the
+ ** concrete implementation of the Interpreter. The typical usage will employ an DiffApplicator,
+ ** so the "interpretation" of the language means to apply it to a target data structure in
+ ** this standard case.
+ ** 
+ ** Due to the nature of double-dispatch, the interpretation of each token requires two
+ ** indirections. The first indirection forwards to a handler function corresponding to the
+ ** token, while the second indirection uses the VTable of the concrete Interpreter to pick
+ ** the actual implementation of this handler function for this specific case. Basically
+ ** the individual token ("verb") in the language is characterised by the handler function
+ ** it corresponds to (thus the meaning of a \em verb, an operation). To support diagnostics,
+ ** each token also bears a string id. And in addition, each token carries a single data
+ ** content element as argument. The idea is, that the "verbs", the handler functions and
+ ** the symbolic IDs are named alike (use the macro DiffStep_CTOR to define the tokens
+ ** in according to that rule). Such a combination of verb and data argument is called
+ ** a DiffStep, since it represents a single step in the process of describing changes
+ ** or transforming a data structure. For example, a list diff language can be built
+ ** using the following four verbs:
+ ** - pick-next
+ ** - insert-new
+ ** - delete-next
+ ** - push-back-next
+ ** 
+ ** @see list-diff-application.hpp
  ** @see diff-list-application-test.cpp
  ** @see VerbToken
  ** 
@@ -34,32 +84,36 @@
 #define LIB_DIFF_DIFF_LANGUAGE_H
 
 
-#include "lib/test/run.hpp"
+#include "lib/error.hpp"
 #include "lib/verb-token.hpp"
-#include "lib/util.hpp"
-#include "lib/iter-adapter-stl.hpp"
-#include "lib/format-string.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <functional>
-#include <algorithm>
-#include <string>
-#include <vector>
 #include <tuple>
 
-using util::isnil;
-using std::string;
-using util::_Fmt;
-using std::vector;
-using std::move;
 
 
 namespace lib {
-namespace test{
+namespace diff{
+  
   namespace error = lumiera::error;
   
   LUMIERA_ERROR_DEFINE(DIFF_CONFLICT, "Collision in diff application: contents of target not as expected.");
   
+  /**
+   * Definition frame for a language to describe differences in data structures.
+   * We use a \em linearised representation as a sequence of DiffStep messages
+   * of constant size. The actual verbs of the diff language in use are defined
+   * through the operations of the \em Interpreter; each #VerbToken corresponds
+   * to a handler function on the Interpreter interface. In addition to the verb,
+   * each DiffStep also carries an content data element, like e.g. "insert elm
+   * at next position".
+   * @param I Interpreter interface of the actual language to use
+   * @param E type of the elementary data elements.
+   * @remarks recommendation is to set up a builder function for each distinct
+   *          kind of verb to be used in the actual language: this #diffTokenBuilder
+   *          takes the data element as argument and wraps a copy in the created
+   *          DiffStep of the specific kind it is configured for.
+   */
   template< class I, typename E>
   struct DiffLanguage
     {
@@ -92,6 +146,7 @@ namespace test{
   
   template<class I, typename E>
   using HandlerFun = void (I::*) (E);
+  
   
   
   template<typename SIG_HANDLER>
@@ -143,141 +198,27 @@ namespace test{
   const auto _ID_ = diffTokenBuilder (&Interpreter::_ID_, STRINGIFY(_ID_));
   
   
-  template<typename E>
-  class ListDiffInterpreter
-    {
-    public:
-      virtual ~ListDiffInterpreter() { } ///< this is an interface
-      
-      virtual void ins(E e)    =0;
-      virtual void del(E e)    =0;
-      virtual void pick(E e)   =0;
-      virtual void push(E e)   =0;
-    };
-  
-  template<typename E>
-  using ListDiffLanguage = DiffLanguage<ListDiffInterpreter<E>, E>;
   
   
   
   
   
-  template<class CON>
-  class DiffApplicationStrategy;
+  
+  
+  
+  /* ==== Implementation Pattern for Diff Application ==== */
   
   /**
-   * concrete strategy to apply a list diff to a target sequence given as vector.
-   * The implementation swaps aside the existing content of the target sequence
-   * and then consumes it step by step, while building up the altered content
-   * within the previously emptied target vector. Whenever possible, elements
-   * are moved directly to the target location.
-   * @throws  lumiera::error::State when diff application fails due to the
-   *          target sequence being different than assumed by the given diff.
-   * @warning behaves only EX_SANE in case of diff application errors,
-   *          i.e. only partially modified / rebuilt sequence might be
-   *          in the target when diff application is aborted
+   * Extension point: define how a specific diff language
+   * can be applied to elements in a concrete container
+   * @remarks the actual diff fed to the DiffApplicator
+   *          assumes that this DiffApplicationStrategy is
+   *          an Interpreter for the given diff language.
+   * @warning the actual language remains unspecified;
+   *          it is picked from the visible context.
    */
-  template<typename E, typename...ARGS>
-  class DiffApplicationStrategy<vector<E,ARGS...>>
-    : public ListDiffInterpreter<E>
-    {
-      using Vec = vector<E,ARGS...>;
-      using Iter = typename Vec::iterator;
-      
-      Vec orig_;
-      Vec& seq_;
-      Iter pos_;
-      
-      bool
-      end_of_target()
-        {
-          return pos_ == orig_.end();
-        }
-      
-      void
-      __expect_in_target (E const& elm, Literal oper)
-        {
-          if (end_of_target())
-            throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
-                                    "no (further) elements in target sequence") % oper % elm
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
-          if (*pos_ != elm)
-            throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
-                                    "found element %s on current target position instead")
-                                    % oper % elm % *pos_
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
-        }
-      
-      void
-      __expect_further_elements()
-        {
-          if (end_of_target())
-            throw error::State("Premature end of target sequence; unable to apply diff further."
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
-        }
-      
-      void
-      __expect_found (E const& elm, Iter const& targetPos)
-        {
-          if (targetPos == orig_.end())
-            throw error::State(_Fmt("Premature end of sequence; unable to locate "
-                                    "element %s as reference point in target.") % elm
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
-        }
-      
-      
-      /* == Implementation of the diff application primitives == */
-      
-      void
-      ins (E elm)
-        {
-          seq_.push_back(elm);
-        }
-      
-      void
-      del (E elm)
-        {
-          __expect_in_target(elm, "remove");
-          ++pos_;
-        }
-      
-      void
-      pick (E elm)
-        {
-          __expect_in_target(elm, "pick");
-          seq_.push_back (move(*pos_));
-          ++pos_;
-        }
-      
-      void
-      push (E anchor)
-        {
-          __expect_further_elements();
-          E elm(move(*pos_)); // consume current source element
-          ++pos_;
-          
-          // locate the insert position behind the given reference anchor
-          Iter insertPos = std::find(pos_, orig_.end(), anchor);
-          __expect_found (anchor, insertPos);
-          
-          // inserting the "pushed back" element behind the found position
-          // this might lead to reallocation and thus invalidate the iterators
-          auto currIdx = pos_ - orig_.begin();
-          orig_.insert (++insertPos, move(elm));
-          pos_ = orig_.begin() + currIdx;
-        }
-      
-      
-    public:
-      explicit
-      DiffApplicationStrategy(vector<E>& targetVector)
-        : seq_(targetVector)
-        , pos_(seq_.begin())
-        {
-          swap (seq_, orig_);  // pos_ still refers to original input sequence, which has been moved to orig_
-          seq_.reserve (targetVector.size() * 120 / 100);    // heuristics for storage pre-allocation
-        }
-    };
+  template<class CON>
+  class DiffApplicationStrategy;
   
   
   /**
@@ -285,7 +226,7 @@ namespace test{
    * The usage pattern is as follows
    * #. construct a DiffApplicator instance, wrapping the target sequence
    * #. feed the list diff (sequence of diff verbs) to the #consume function
-   * #. the wrapped target sequence has been altered, to conform to the given diff 
+   * #. the wrapped target sequence has been altered, to conform to the given diff
    * @note a suitable DiffApplicationStrategy will be picked, based on the type
    *       of the concrete target sequence given at construction. (Effectively
    *       this means you need a suitable DiffApplicationStrategy specialisation,
@@ -295,9 +236,9 @@ namespace test{
   class DiffApplicator
     : boost::noncopyable
     {
-      using Receiver = DiffApplicationStrategy<SEQ>;
+      using Interpreter = DiffApplicationStrategy<SEQ>;
       
-      Receiver target_;
+      Interpreter target_;
       
     public:
       explicit
@@ -314,105 +255,7 @@ namespace test{
         }
     };
   
-  namespace {
-    template<class CON>
-    using ContentSnapshot = iter_stl::IterSnapshot<typename CON::value_type>;
-  }
-  
-  template<class CON>
-  inline ContentSnapshot<CON>
-  snapshot(CON const& con)
-    {
-      return ContentSnapshot<CON>(begin(con), end(con));
-    }
-  
-  template<class VAL>
-  inline iter_stl::IterSnapshot<VAL>
-  snapshot(std::initializer_list<VAL> const&& ili)
-    {
-      using OnceIter = iter_stl::IterSnapshot<VAL>;
-      return OnceIter(begin(ili), end(ili));
-    }
-  
-  namespace {//Test fixture....
-    
-    using DataSeq = vector<string>;
-    
-    #define TOK(id) id(STRINGIFY(id))
-    
-    string TOK(a1), TOK(a2), TOK(a3), TOK(a4), TOK(a5);
-    string TOK(b1), TOK(b2), TOK(b3), TOK(b4);
-    
-    using Interpreter = ListDiffInterpreter<string>;
-    using DiffStep = ListDiffLanguage<string>::DiffStep;
-    using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
-    
-    DiffStep_CTOR(ins);
-    DiffStep_CTOR(del);
-    DiffStep_CTOR(pick);
-    DiffStep_CTOR(push);
-    
-    
-    inline DiffSeq
-    generateTestDiff()
-    {
-      return snapshot({del(a1)
-                     , del(a2)
-                     , ins(b1)
-                     , pick(a3)
-                     , push(a5)
-                     , pick(a5)
-                     , ins(b2)
-                     , ins(b3)
-                     , pick(a4)
-                     , ins(b4)
-                     });
-      
-    }
-  }//(End)Test fixture
   
   
-  
-  
-  
-  
-  
-  
-  
-  /***********************************************************************//**
-   * @test Demonstration/Concept: a description language for list differences.
-   *       The representation is given as a linearised sequence of verb tokens.
-   *       This test demonstrates the application of such a diff representation
-   *       to a given source list, transforming this list to hold the intended
-   *       target list contents.
-   *       
-   * @see session-structure-mapping-test.cpp
-   */
-  class DiffListApplication_test : public Test
-    {
-      
-      virtual void
-      run (Arg)
-        {
-          DataSeq src({a1,a2,a3,a4,a5});
-          auto diff = generateTestDiff();
-          CHECK (!isnil (diff));
-          
-          DataSeq target = src;
-          DiffApplicator<DataSeq> application(target);
-          application.consume(diff);
-          
-          CHECK (isnil (diff));
-          CHECK (!isnil (target));
-          CHECK (src != target);
-          CHECK (target == DataSeq({b1,a3,a5,b2,b3,a4,b4}));
-        }
-    };
-  
-  
-  /** Register this test class... */
-  LAUNCHER (DiffListApplication_test, "unit common");
-  
-  
-  
-}} // namespace lib::test
+}} // namespace lib::diff
+#endif /*LIB_DIFF_DIFF_LANGUAGE_H*/

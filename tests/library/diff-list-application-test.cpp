@@ -22,26 +22,21 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/verb-token.hpp"
-#include "lib/util.hpp"
+#include "lib/diff/list-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
-#include "lib/format-string.hpp"
+#include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
-#include <functional>
-#include <algorithm>
 #include <string>
 #include <vector>
-#include <tuple>
 
+using lib::iter_stl::snapshot;
 using util::isnil;
 using std::string;
-using util::_Fmt;
 using std::vector;
-using std::move;
 
 
 namespace lib {
+namespace diff{
 namespace test{
   
   namespace {//Test fixture....
@@ -125,4 +120,4 @@ namespace test{
   
   
   
-}} // namespace lib::test
+}}} // namespace lib::diff::test
