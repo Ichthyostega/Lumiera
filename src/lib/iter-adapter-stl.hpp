@@ -524,6 +524,42 @@ namespace iter_stl {
         }
     };
   
+  namespace {
+    template<class CON>
+    using ContentSnapshot = IterSnapshot<typename CON::value_type>;
+  }
+  
+  
+  
+  /** Take a snapshot of the given STL compliant container
+   * @return Lumiera Forward Iterator to yield each Element from this snapshot
+   * @note the snapshot is stored within a vector, i.e. heap allocated.
+   * @warning copying the returned iterator object copies the snapshot vector
+   */
+  template<class CON>
+  inline ContentSnapshot<CON>
+  snapshot(CON const& con)
+    {
+      return ContentSnapshot<CON>(begin(con), end(con));
+    }
+  
+  /** Take a snapshot of the given \c std::initializer_list
+   * @return Lumiera Forward Iterator to yield each Element from this snapshot
+   * @remarks this can be a easy workaround for passing on a sequence of literal
+   *          values defined inline in a brace expression; the typical implementation
+   *          of brace initialiser lists allocates a temporary array on the stack.
+   *          By using this helper, we copy the elements from this local array
+   *          into a vector on the heap. Of course this isn't efficient,
+   *          but it's convenient, e.g. for testing.
+   */
+  template<class VAL>
+  inline iter_stl::IterSnapshot<VAL>
+  snapshot(std::initializer_list<VAL> const&& ili)
+    {
+      using OnceIter = iter_stl::IterSnapshot<VAL>;
+      return OnceIter(begin(ili), end(ili));
+    }  
+  
   
 }} // namespace lib::iter_stl
 #endif
