@@ -1,0 +1,143 @@
+/*
+  DiffListGeneration(Test)  -  demonstrate list diff generation
+
+  Copyright (C)         Lumiera.org
+    2014,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+* *****************************************************/
+
+
+#include "lib/test/run.hpp"
+#include "lib/diff/list-diff.hpp"
+#include "lib/itertools.hpp"
+#include "lib/util.hpp"
+
+#include <string>
+#include <vector>
+
+using lib::append_all;
+using util::isnil;
+using std::string;
+using std::vector;
+
+
+namespace lib {
+namespace diff{
+  //#########################
+  
+  template<class SEQ>
+  class DiffDetector
+    {
+      using Val = typename SEQ::value_type;
+      using Idx = IndexTable<Val>;
+      
+      Idx refIdx_;
+          
+    public:
+      explicit
+      DiffDetector(SEQ& refSeq)
+        : refIdx_(refSeq)
+        { }
+      
+      Diff
+      mutateTo (SEQ&& newSeq)
+        {
+          Idx newIdx(newSeq);
+          
+        }
+    };
+  
+  //#########################
+namespace test{
+  
+  namespace {//Test fixture....
+    
+    using DataSeq = vector<string>;
+    
+    #define TOK(id) id(STRINGIFY(id))
+    
+    string TOK(a1), TOK(a2), TOK(a3), TOK(a4), TOK(a5);
+    string TOK(b1), TOK(b2), TOK(b3), TOK(b4);
+    
+    using Interpreter = ListDiffInterpreter<string>;
+    using DiffStep = ListDiffLanguage<string>::DiffStep;
+    using DiffSeq = vector<DiffStep>;
+    
+    DiffStep_CTOR(ins);
+    DiffStep_CTOR(del);
+    DiffStep_CTOR(pick);
+    DiffStep_CTOR(push);
+      
+  }//(End)Test fixture
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /***********************************************************************//**
+   * @test Demonstration/Concept: how to derive a list diff representation
+   *       from the comparison of two sequences. The changes necessary to
+   *       transform one sequence into the other one are given as a linear
+   *       sequence of elementary mutation operations.
+   *       
+   *       The change detector assumes elements with well defined identity
+   *       and uses an index table for both sequences. The diff is generated
+   *       progressively, demand-driven.
+   *       
+   * @see DiffListApplication_test
+   */
+  class DiffListGeneration_test : public Test
+    {
+      
+      virtual void
+      run (Arg)
+        {
+          DataSeq original({a1,a2,a3,a4,a5});
+          DataSeq changed({b1,a3,a5,b2,b3,a4,b4});
+          
+          DiffDetector<DataSeq> detector(original);
+          auto changes = detector.mutateTo(changed);
+          CHECK (!isnil (changes));
+          
+          DiffSeq generatedDiff;
+          append_all (changes, generatedDiff);
+          
+          CHECK (changes == DiffSeq({del(a1)
+                                   , del(a2)
+                                   , ins(b1)
+                                   , pick(a3)
+                                   , push(a5)
+                                   , pick(a5)
+                                   , ins(b2)
+                                   , ins(b3)
+                                   , pick(a4)
+                                   , ins(b4)
+                                   }));
+        }
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (DiffListGeneration_test, "unit common");
+  
+  
+  
+}}} // namespace lib::diff::test
