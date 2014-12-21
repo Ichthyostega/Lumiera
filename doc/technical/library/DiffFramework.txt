@@ -1,0 +1,141 @@
+Diff Handling Framework
+=======================
+
+Within the support library, in the namespace `lib::diff`, there is a collection of loosely coupled of tools
+known as »the diff framework«. It revolves around generic representation and handling of structural differences.
+Beyond some rather general assumptions, to avoid stipulating the usage of specific data elements or containers,
+the framework is kept _generic_, cast in terms of *elements*, *sequences* and *strategies*
+for access, indexing and traversal.
+
+.motivation
+**********************
+Diff handling is multi purpose within Lumiera:
+Diff representation is seen as a meta language and abstraction mechanism;
+it enables tight collaboration without the need to tie and tangle the involved implementation data structures.
+Used this way, diff representation reduces coupling and helps to cut down overall complexity — so to justify
+the considerable amount of complexity seen within the diff framework implementation.
+**********************
+
+Definitions
+-----------
+element::
+  the atomic unit treated in diff detection, representation and application. +
+  Elements are considered to be
+
+  - lightweight copyable values
+  - equality comparable
+  - bearing distinct identity
+  - unique _as far as concerned_
+
+sequence::
+  data is delivered in the form of a sequence, which might or might not be _ordered,_
+  but in any case will be traversed once only.
+
+diff::
+  the changes necessary to transform an input sequence (``old sequence'') into a target sequence (``new sequence'')
+
+diff language::
+  differences are spelled out in linearised form: as a sequence of constant-size diff actions, called »diff verbs«
+
+diff verb::
+  a single element within a diff. Diff verbs are conceived as operations, which,
+  when applied consuming the input sequence, will produce the target sequence of the diff.
+
+diff application::
+  the process of consuming a diff (sequence of diff verbs), with the goal to produce some effect at the 
+  _target_ of diff application. Typically we want to apply a diff to a data sequence, to mutate it
+  into a new shape, conforming with the shape of the diff's ``target sequence''
+
+diff generator::
+  a facility producing a diff, which is a sequence of diff verbs.
+  Typically, a diff generator works lazily, demand driven.
+
+diff detector::
+  special kind of diff generator, which takes two data sequences as input:
+  an ``old sequence'' and a ``new sequence''. The diff detector traverses and compares
+  these sequences to produce a diff, which describes the steps necessary to transform
+  the ``old'' shape into the ``new'' shape of the data.
+
+
+List Diff Algorithm
+-------------------
+While in general this is a well studied subject, in Lumiera we'll confine ourselves to a very
+specific flavour of diff handling: we rely on _elementary atomic units_ with well established
+object identity. And in addition, within the scope of one coherent diff handling task,
+we require those elements to be 'unique'. The purpose of this design decision is to segregate
+the notorious matching problem and treat diff handling in isolation.
+
+Effectively this means that, for any given element, there can be at most _one_ matching
+counterpart in the other sequence, and the presence of such can be detected by using an *index*.
+In fact, we retrieve an index for every sequence involved into the diff detection task;
+this is our trade-off for simplicity in the diff detection algorithm.footnote:[traditionally,
+diff detection schemes, especially those geared at text diff detection, engage into great lengths
+of producing an ``optimal'' diff, which effectively means to build specifically tuned pattern
+or decision tables, from which the final diff can then be pulled or interpreted.
+We acknowledge that in our case building a lookup table index can be O(n log n); we might
+well be able to do better, but certainly for the price of an algorithm more mentally challenging.]
+In case this turns out as a performance problem, we might consider integrating the index
+maintenance into the data structure to be diffed, which shifts the additional impact of
+indexing onto the data population phase.footnote:[in the general tree diff case this is far
+from trivial, since we need an self-contained element index for every node, and we need the
+ability to take a snapshot of the ``old'' state before mutating a node into ``new'' shape]
+
+Element classification
+~~~~~~~~~~~~~~~~~~~~~~
+By using the indices of the old and the new sequence, we are able to _classify_ each element:
+
+- elements only present in the new sequence are treated as *inserts*
+- elements only present in the old sequence are treated as *deletes*
+- elements present in both sequences form the *permutation*
+
+Processing pattern
+~~~~~~~~~~~~~~~~~~
+We _consume both the old and the new sequence synchronously, while emitting the diff sequence_.
+
+The diff describes a sequence of operations, which, when applied, consume a sequence congruent
+to the old sequence, while emitting a sequence congruent to the new sequence. We use the
+following *list diff language* here:
+
+verb `ins(elm)`::
+  insert the given argument element `elm` at the _current processing position_
+  into the target sequence. This operation allows to inject new data
+verb `del(elm)`::
+  delete the _next_ element `elm` at _current position._
+  For sake of verification, the element to be deleted is also included as argument (redundancy).
+verb `pick(elm)`::
+  accepts the _next_ element at _current position_ into the resulting altered sequence.
+  The element is given redundantly as argument.
+verb `push(elm)`::
+  effect a re-ordering of the target list contents. This verb requires to take
+  the _next_ element, which happens to sit at _current processing position_ and
+  _push it back_ further into the list, to be placed at a position _behind_ the
+  _anchor element_ `elm` given as argument.
+
+Since _inserts_ and _deletes_ can be detected and emitted right at the processing frontier,
+for the rest of this theoretical discussion, we consider the insert / delete part filtered
+away conceptually, and concentrate on generating the permutation part.
+
+Handling sequence permutation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This paragraph describes how to consume two permutations of the same sequence simultaneously,
+while emitting `push` and `pick` verbs to describe the re-ordering. Consider the sequences
+split into an already-processed part, and a part still-to-be-processed.
+
+.Invariant
+Matters are arranged such, that, in the to-be-processed part, each element appearing at the
+front of the ``new'' sequence _can be picked right away_.
+
+Now, to arrive at that invariant, we have especially to deal with the case that a different
+(not matching) element appears at the front of the ``old'' list. We have to emit additional
+`push` verbs to get rid of non-matching elements in the ``old'' order, until we get into a state
+where the invariant is re-established (and we're able to `pick` to consume the same element
+from the existing sequence and the target sequence). Obviously, the tricky part is how to
+determine the *anchor element* for this `push` directrive...
+
+- we need to be sure the anchor _is indeed present_ in the current shape of the sequence in processing.
+- the anchor must be in the right place, so to conform to the target sequence at the point of picking it.
+- it is desirable to emit at most one `push` directive for any given element; we want it to settle at the
+  right place with a single shot
+
+
+
