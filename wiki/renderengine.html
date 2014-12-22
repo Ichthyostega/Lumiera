@@ -7723,7 +7723,7 @@ Before we can consider a diffing technique, we need to clarify the primitive ope
 &amp;rarr; [[Implementation considerations|TreeDiffImplementation]]
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201412210150" tags="Model GuiPattern design draft" changecount="8">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201412220418" tags="Model GuiPattern design draft" changecount="10">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -7741,6 +7741,22 @@ Provided as a loosely coupled collection of tools in the namespace {{{lib::diff}
 :a diff represents the changes necessary to transform an input sequence (&quot;old sequence&quot;) into a target sequence (&quot;new sequence&quot;)
 :differences are spelled out in ''linearised form'': as a sequence of constant-size diff actions (called &amp;raquo;diff verbs&amp;laquo;)
 :they are conceived as operations, which, when applied consuming the input sequence, will produce the target sequence of the diff.
+
+!{{red{WIP 12/2014}}}building a list diff detector
+transforming the algorithm sketch (&amp;rarr; see [[technical documentation|http://lumiera.org/documentation/technical/library/DiffFramework.html]]) into working code incurs some challenges at the level of technical details.
+
+!!!interface of the index component
+Obviously we want the helper indices to be an internal component abstraction, so the outline of the algorithm remains legible. Additionally this allows to introduce a strategy for obtaining the index. This is important, since in case of performance problems we might consider to integrate the indexing efforts into the external data structure, because this might enable to exploit external structural knowledge.
+So the challenge is to come up with an API not too high-level and not too low-level
+
+!!!calculating the »water level«
+While obvious in theory, this is far from trivial when combined with the presence of inserts and deletes: because now it is no longer obvious when we encounter the next applicable element; it is no longer &quot;n+1&quot; but rather &quot;n+d&quot; with d interspersed deletes. We need to look ahead and write back our findings.
+
+!!!criteria for the anchor search
+the search for the anchor used in a push operation is basically a nested scan. But the range to scan, the abort condition and the selection of elements to be excluded from search is technically challenging, since it relies on information available only in a transient fashion right within the main diff generation pass. It boils down to very precise timing when to exploit what additional &quot;side-effect&quot; like knowledge.
+
+!!!invocation mechanics for the decision of push vs pick
+this is tricky since we're passing the abstraction barrier created by the index component. The actual problem arises since we do //not want to execute// our own mutations while generating the diff -- that is, we do not actually want to push around input elements, just to keep track of what has been pushed already, and where. Unfortunately this means that the pushed elements are out of sight; we do not know when to assume that a pushed element re-appears in the input sequence at the new position. We need the index to help us with that information: the index needs to tell us when the next element we see is actually //behind// the position where the next {{{pick}}} directive is to be emitted to consume the pending element from the new sequence.
 </pre>
 </div>
 <div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201412210002" tags="Model GuiPattern spec draft" changecount="47">
