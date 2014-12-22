@@ -151,7 +151,7 @@ determine the *anchor element* for this `push` directrive...
 |6 |->3
 |6 |->3
 |5 |->3
-|6 |->5
+|7 |->5
 |5 |->4
 
 |5 |->4
