@@ -168,7 +168,7 @@ determine the *anchor element* for this `push` directrive...
 |6 |->5
 |4 |->3
 |5 |->4
-|6 |->6
+|6 |->5
 ||
 ||
 
