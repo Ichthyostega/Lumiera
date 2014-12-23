@@ -72,8 +72,9 @@ this is our trade-off for simplicity in the diff detection algorithm.footnote:[t
 diff detection schemes, especially those geared at text diff detection, engage into great lengths
 of producing an ``optimal'' diff, which effectively means to build specifically tuned pattern
 or decision tables, from which the final diff can then be pulled or interpreted.
-We acknowledge that in our case building a lookup table index with additional annotations can be O(n^2^);
-we might well be able to do better, but certainly for the price of an algorithm more mentally challenging.]
+We acknowledge that in our case building a lookup table index with additional annotations can
+be O(n^2^); we might well be able to do better, but likely for the price of turning the algorithm
+into some kind of mental challenge.]
 In case this turns out as a performance problem, we might consider integrating the index
 maintenance into the data structure to be diffed, which shifts the additional impact of
 indexing onto the data population phase.footnote:[in the general tree diff case this is far
@@ -112,14 +113,16 @@ verb `push(elm)`::
   _anchor element_ `elm` given as argument.
 
 Since _inserts_ and _deletes_ can be detected and emitted right at the processing frontier,
-for the rest of this theoretical discussion, we consider the insert / delete part filtered
+for the remaining theoretical discussion, we consider the insert / delete part filtered
 away conceptually, and concentrate on generating the permutation part.
 
 Handling sequence permutation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This paragraph describes how to consume two permutations of the same sequence simultaneously,
-while emitting `push` and `pick` verbs to describe the re-ordering. Consider the sequences
-split into an already-processed part, and a part still-to-be-processed.
+while emitting `push` and `pick` verbs to describe the re-ordering.footnote:[to stress this point:
+permutation handling is at the core of this algorithm; handling of inserts and deletes can be built
+on top, once we manage to describe a permutation diff]
+Consider the two sequences split into an already-processed part, and a part still-to-be-processed.
 
 .Invariant
 Matters are arranged such, that, in the to-be-processed part, each element appearing at the
@@ -194,13 +197,13 @@ Basically we get some kind of increasing ``*water level*'': the continuous seque
 number where all predecessors are present already. An element at this level can be picked and thus
 consumed -- since we're in conformance to the desired target sequence _up to this point_. But any
 elements still ``above water level'' can not yet be consumed, but need to be pushed back, since
-some predecessor has still to arrive. If we attribute each element with the water level reached
+some predecessor is still missing. If we attribute each element with the water level reached
 _at the point when we are visiting this element,_ we get a criterion for possible anchor elements:
 What is above water level, can not be an anchor, since it needs to move itself. But any element
-at water level is usable. And, in addition, any element already pushed once can serve as an anchor
-too. This follows by recursive argument: it has been moved behind a proper anchor, and thus will
+at water level is fine. And, in addition, any element already pushed once can serve as an anchor
+too. This follows by recursive argument: it has been moved behind an anchor properly, and thus will
 in turn remain stable. Of all the possible candidates we have to use the largest possible predecessor,
-otherwise there would be the possibility of messing up the ordering (e.g. if you place 6 behind 3
+otherwise there would be the possibility to mess up the ordering (e.g. if you place 7 behind 3
 instead of 5).
 
 .Rules
@@ -215,8 +218,8 @@ Implementation and Complexity
 We need an index lookup for an element from the ``old'' sequence to find the corresponding index number
 in the ``new'' sequence. Based on this attribution, the ``water level'' attribution can be calculated
 in the same linear pass. So we get two preprocessing passes, one for the ``new'' sequence and one for
-the ``old'', using lookups into the ``new''-index. After these preparations, the diff can be emitted
-in a further pass.
+the ``old'', using lookups into the ``new''-index. After these preparations are done, the diff can be
+emitted in a further pass.
 
 In fact we do not even need the numerical ``water level''; we need the relations. This allows to extend
 the argumentation to include the deletes and inserts and treat all from a single list. But, unfortunately
@@ -228,7 +231,7 @@ how _far apart_ the two sequences are in terms of atomic changes. This helps to 
 sub-scans will be shorter than the whole sequence (with n·d < n^2^). In our case, we would be able to
 find the anchor in close vicinity of the current position. +
 However, since our goal is to support permutations and we have to deal with arbitrary sequences, such
-an argument is somewhat pointless. Let's face it, structural diff computation is expensive; the only
+an argument looks somewhat pointless. Let's face it, structural diff computation is expensive; the only
 way to keep matters under control is to keep the local sequences short, which means to exploit structural
 knowledge instead of comparing the entire data as flat sequence]
 The additional space requirements footnote:[in _addition_ to the storage for the ``old'' and ``new'' sequence
