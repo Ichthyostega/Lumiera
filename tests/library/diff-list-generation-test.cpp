@@ -33,6 +33,8 @@ using lib::append_all;
 using util::isnil;
 using std::string;
 using std::vector;
+using std::move;
+using std::swap;
 
 
 namespace lib {
@@ -46,18 +48,22 @@ namespace diff{
       using Idx = IndexTable<Val>;
       
       Idx refIdx_;
+      SEQ const& currentData_;
           
     public:
       explicit
-      DiffDetector(SEQ& refSeq)
+      DiffDetector(SEQ const& refSeq)
         : refIdx_(refSeq)
+        , currentData_(refSeq)
         { }
       
       Diff
-      mutateTo (SEQ&& newSeq)
+      pullUpdate()
         {
-          Idx newIdx(newSeq);
-          
+          Idx newIdx (currentData_);
+          Diff changes (move(refIdx_), newIdx);
+          swap (newIdx, refIdx_);
+          return changes;
         }
     };
   
@@ -110,27 +116,31 @@ namespace test{
       virtual void
       run (Arg)
         {
-          DataSeq original({a1,a2,a3,a4,a5});
-          DataSeq changed({b1,a3,a5,b2,b3,a4,b4});
+          DataSeq toObserve({a1,a2,a3,a4,a5});
+          DiffDetector<DataSeq> detector(toObserve);
           
-          DiffDetector<DataSeq> detector(original);
-          auto changes = detector.mutateTo(changed);
+          CHECK (!detector.isChanged());
+          toObserve = {b1,a3,a5,b2,b3,a4,b4};
+          CHECK (detector.isChanged());
+          
+          auto changes = detector.pullUpdate();
           CHECK (!isnil (changes));
+          CHECK (!detector.isChanged());
           
           DiffSeq generatedDiff;
           append_all (changes, generatedDiff);
           
-          CHECK (changes == DiffSeq({del(a1)
-                                   , del(a2)
-                                   , ins(b1)
-                                   , pick(a3)
-                                   , push(a5)
-                                   , pick(a5)
-                                   , ins(b2)
-                                   , ins(b3)
-                                   , pick(a4)
-                                   , ins(b4)
-                                   }));
+          CHECK (generatedDiff == DiffSeq({del(a1)
+                                         , del(a2)
+                                         , ins(b1)
+                                         , pick(a3)
+                                         , push(a5)
+                                         , pick(a5)
+                                         , ins(b2)
+                                         , ins(b3)
+                                         , pick(a4)
+                                         , ins(b4)
+                                         }));
         }
     };
   
