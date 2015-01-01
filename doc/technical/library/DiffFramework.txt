@@ -106,11 +106,15 @@ verb `del(elm)`::
 verb `pick(elm)`::
   accepts the _next_ element at _current position_ into the resulting altered sequence.
   The element is given redundantly as argument.
-verb `push(elm)`::
-  effect a re-ordering of the target list contents. This verb requires to take
-  the _next_ element, which happens to sit at _current processing position_ and
-  _push it back_ further into the list, to be placed at a position _behind_ the
-  _anchor element_ `elm` given as argument.
+verb `find(elm)`::
+  effect a re-ordering of the target list contents. This verb requires to search
+  for the (next respective single occurrence of the) given element in the remainder
+  of the datastructure, to bring it forward and insert it as the _next_ element.
+verb `skip(elm)`::
+  processing hint, emitted at the position where an element previously fetched by
+  some `find` verb happened to sit in the old order. This allows an optimising
+  implementation to ``fetch'' a copy and just drop or skip the original,
+  thereby avoiding to shift other elements.
 
 Since _inserts_ and _deletes_ can be detected and emitted right at the processing frontier,
 for the remaining theoretical discussion, we consider the insert / delete part filtered
@@ -118,122 +122,61 @@ away conceptually, and concentrate on generating the permutation part.
 
 Handling sequence permutation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This paragraph describes how to consume two permutations of the same sequence simultaneously,
-while emitting `push` and `pick` verbs to describe the re-ordering.footnote:[to stress this point:
-permutation handling is at the core of this algorithm; handling of inserts and deletes can be built
-on top, once we manage to describe a permutation diff]
-Consider the two sequences split into an already-processed part, and a part still-to-be-processed.
+Permutation handling turns out to be the turning point and tricky part of diff generation;
+the handling of new and missing members can be built on top, once we manage to describe a
+permutation diff. If we consider -- for a theoretical discussion -- the _inserts_ and _deletes_
+to be filtered away, what remains is a permutation of index numbers to describe the re-ordering.
+We may describe this re-ordering by the index numbers in the new sequence, given in the order
+of the old sequence. For such a re-ordering permutation, the theoretically optimal result
+can be achieved by http://wikipedia.org/wiki/Cycle_sort[Cycle Sort] in _linear time_.footnote:[
+assuming random access by index is possible, *Cycle Sort* walks the sequence once. Whenever
+encountering an element out-of order, i.e. new postion != current position, we leap to the
+indicated new position, which necessarily will be out-of-order too, so we can leap from there
+to the next indicated position, until we jump back to the original position eventually. Such
+a closed cycle can then just be _rotated_ into proper position. Each permutation can be
+decomposed into a finite number of closed cycles, which means, after rotating all cycles
+out of order, the permutation will be sorted completely.] Starting from such ``cycle rotations'',
+we possibly could work out a minimal set of moving operations.
 
-.Invariant
-Matters are arranged such, that, in the to-be-processed part, each element appearing at the
-front of the ``new'' sequence _can be picked right away_.
+But there is a twist: Our design avoids using index numbers, since we aim at _stream processing_
+of diffs. We do not want to communicate index numbers to the consumer of the diff; rather we
+want to communicate reference elements with our _diff verbs_. Thus we prefer the most simplistic
+processing mechanism, which happens to be some variation of *Insertion Sort*.footnote:[to support
+this choice, Insertion Sort -- in spite of being O(n^2^) -- turns out to be the best choice for
+sorting small data sets for reasons of cache locality; even typical Quicksort implementations
+switch to insertion sorting of small subsets for performance reasons]
 
-Now, to arrive at that invariant, we have especially to deal with the case that a different
-(not matching) element appears at the front of the ``old'' list. We have to emit additional
-`push` verbs to get rid of non-matching elements in the ``old'' order, until we get into a state
-where the invariant is re-established (and we're able to `pick` to consume the same element
-from the existing sequence and the target sequence). Obviously, the tricky part is how to
-determine the *anchor element* for this `push` directrive...
-
-- we need to be sure the anchor _is indeed present_ in the current shape of the sequence in processing.
-- the anchor must be in the right place, so to conform to the target sequence at the point of picking it.
-- it is desirable to emit at most one `push` directive for any given element; we want it to settle at the
-  right place with a single shot
-
-.Some example push-directives
-[frame="topbot",grid="none", width="40%", float="right"]
-[cols=">s,<2m,>s,<2m,>s,<2m,>s,<2m,>s,<2m,>s,<2m,>s,<2m,>s,<2m"]
-|======
-|1 ||1 ||1 ||1 ||1 ||1 ||1 ||1|
-
-|2 ||2 ||2 ||2 ||2 ||2 ||2 ||2|
-
-|4 |->3
-|5 |->3
-|4 |->3
-|6 |->3
-|6 |->3
-|5 |->3
-|7 |->5
-|5 |->4
-
-|5 |->4
-|4 |->3
-|5 |->4
-|5 |->3
-|4 |->3
-|4 |->3
-|4 |->3
-|7 |->5
-
-||
-||
-|6 |->5
-|4 |->3
-|5 |->4
-|6 |->5
-||
-||
-
-|3 ||3 ||3 ||3 ||3 ||3 ||3 ||3 |
-
-||
-||
-||
-||
-||
-||
-|5 |
-|4 |
-|======
-
-To find out about rules for choosing the anchor element, we look at the sequence in ``old'' order,
-but we indicate the _index number in the ``new'' order_ for each element. Any discontinuity in the
-ascending sequence of these numbers indicates that we have to push elements back, until encountering
-the next lowest number still missing. The examples given in the table show such a gap after the
-second element -- we have to push back until we find the third element.
-
-Basically we get some kind of increasing ``*water level*'': the continuous sequence prefix, the highest
-number where all predecessors are present already. An element at this level can be picked and thus
-consumed -- since we're in conformance to the desired target sequence _up to this point_. But any
-elements still ``above water level'' can not yet be consumed, but need to be pushed back, since
-some predecessor is still missing. If we attribute each element with the water level reached
-_at the point when we are visiting this element,_ we get a criterion for possible anchor elements:
-What is above water level, can not be an anchor, since it needs to move itself. But any element
-at water level is fine. And, in addition, any element already pushed once can serve as an anchor
-too. This follows by recursive argument: it has been moved behind an anchor properly, and thus will
-in turn remain stable. Of all the possible candidates we have to use the largest possible predecessor,
-otherwise there would be the possibility to mess up the ordering (e.g. if you place 7 behind 3
-instead of 5).
-
-.Rules
-. pick at water level
-. push anything above water level
-. use as anchor the largest possible from...
-  * elements at water level
-  * or elements already pushed into place
 
 Implementation and Complexity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-We need an index lookup for an element from the ``old'' sequence to find the corresponding index number
-in the ``new'' sequence. Based on this attribution, the ``water level'' attribution can be calculated
-in the same linear pass. So we get two preprocessing passes, one for the ``new'' sequence and one for
-the ``old'', using lookups into the ``new''-index. After these preparations are done, the diff can be
-emitted in a further pass.
+Based on these choices, we're able to consume two permutations of the same sequence simultaneously,
+while emitting `find` and `pick` verbs to describe the re-ordering. Consider the two sequences
+split into an already-processed part, and a part still-to-be-processed.
 
-In fact we do not even need the numerical ``water level''; we need the relations. This allows to extend
-the argumentation to include the deletes and inserts and treat all from a single list. But, unfortunately
-the search for suitable anchor elements turns the algorithm into *quadratic complexity*: essentially this
-is a nested sub-pass to find a maximum -- O(n^2^) will dominate the O(n log n) from indexing.footnote:[In
-the theoretical treatment of diff problems it is common to introduce a *distance metric* to describe
-how _far apart_ the two sequences are in terms of atomic changes. This helps to make the quadratic
-(or worse) complexity of such algorithms look better: if we know the sequences are close, the nested
-sub-scans will be shorter than the whole sequence (with n·d < n^2^). In our case, we would be able to
-find the anchor in close vicinity of the current position. +
+.Invariant
+Matters are arranged such, that, in the to-be-processed part, each element appearing at the
+front of the ``new'' sequence _can be consumed right away_.
+
+Now, to arrive at that invariant, we use indices to determine
+
+- if the element at head of the old sequence is not present in the new sequence, which means
+  it has to be deleted
+- while an element at head of the new sequence not present in the old sequence has to be inserted
+- and especially a non-matching element at the old sequence prompts us to fetch the right
+  element from further down in the sequence and insert it a current position
+
+after that, the invariant is (re)established and we can consume the element and move the
+processing point forward.
+
+For generating the diff description, we need index tables of the ``old'' and the ``new'' sequence,
+which causes a O(n log n) complexity and storage in the order of the sequence length. Application
+of the diff is quadratic, due to the find-and-insert passes.footnote:[In the theoretical treatment
+of diff problems it is common to introduce a *distance metric* to describe how _far apart_ the
+two sequences are in terms of atomic changes. This helps to make the quadratic (or worse) complexity
+of such algorithms look better: if we know the sequences are close, the nested sub-scans will be
+shorter than the whole sequence (with n·d < n^2^). +
 However, since our goal is to support permutations and we have to deal with arbitrary sequences, such
 an argument looks somewhat pointless. Let's face it, structural diff computation is expensive; the only
 way to keep matters under control is to keep the local sequences short, which means to exploit structural
 knowledge instead of comparing the entire data as flat sequence]
-The additional space requirements footnote:[in _addition_ to the storage for the ``old'' and ``new'' sequence
-plus the storage for the generated diff output] of our solution is of O(`len(old)` + `len(new)`).
 

@@ -7723,7 +7723,7 @@ Before we can consider a diffing technique, we need to clarify the primitive ope
 &amp;rarr; [[Implementation considerations|TreeDiffImplementation]]
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201412222333" tags="Model GuiPattern design draft" changecount="11">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201501010306" tags="Model GuiPattern design draft" changecount="12">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -7749,17 +7749,14 @@ transforming the algorithm sketch (&amp;rarr; see [[technical documentation|http
 Obviously we want the helper indices to be an internal component abstraction, so the outline of the algorithm remains legible. Additionally this allows to introduce a strategy for obtaining the index. This is important, since in case of performance problems we might consider to integrate the indexing efforts into the external data structure, because this might enable to exploit external structural knowledge.
 So the challenge is to come up with an API not too high-level and not too low-level
 
-!!!calculating the »water level«
-While obvious in theory, this is far from trivial when combined with the presence of inserts and deletes: because now it is no longer obvious when we encounter the next applicable element; it is no longer &quot;n+1&quot; but rather &quot;n+d+1&quot; with d interspersed deletes. We need to look ahead and write back our findings.
+!!!how to implement re-ordering
+A first attempt was made to come up with a rather clever swapping and rotating scheme. But this turned out to be rather complex, due to the fact that we //do not want index numbers in the diff representation.// It turns out that a presumably optimal solution could be built on top of ''cycle sort'' -- but we're lacking any point of reference to determine if such an elaborate solution is worth the effort. Thus the decision to KISS and stick to plain flat insertion sort (which is known to be the best choice for small data sets). With clever usage of the indices, this approach allows us to emit the diff description right away, without any need to build a meta table or even to touch the given input sequences.
 
-!!!criteria for the anchor search
-the search for the anchor used in a push operation is basically a nested scan. But the range to scan, the abort condition and the selection of elements to be excluded from search is technically challenging, since it relies on information available only in a transient fashion right within the main diff generation pass. It boils down to very precise timing when to exploit what additional &quot;side-effect&quot; like knowledge.
-
-!!!invocation mechanics for the decision of push vs pick
-this is tricky since we're passing the abstraction barrier created by the index component. The actual problem arises since we do //not want to execute// our own mutations while generating the diff -- that is, we do not actually want to push around input elements, just to keep track of what has been pushed already, and where. Unfortunately this means that the pushed elements are out of sight; we do not know when to assume that a pushed element re-appears in the input sequence at the new position. We need the index to help us with that information: the index needs to tell us when the next element we see is actually //behind// the position where the next {{{pick}}} directive is to be emitted to consume the pending element from the new sequence.
+!!!goal of a generic implementation
+The diff handling framework we intend to build here is meant to be //generic// -- the actual element data type, as well as the underlying data structure and the index access shall be supplied by strategy and specialisation. This has the downside (maybe this is even a benefit?) that most efficiency considerations are moot at this level; we need to look at actual use cases and investigate the composite performance in practice later.
 </pre>
 </div>
-<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201412210002" tags="Model GuiPattern spec draft" changecount="47">
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201501010256" tags="Model GuiPattern spec draft" changecount="49">
 <pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
 We build a slightly abstracted representation of tree changes and use this to propagate //change notifications// to the actual widgets. To keep the whole process space efficient, a demand-driven, stateless implementation approach is chosen. This reduces the problem into several layered stages.
 * our model is a heterogeneous tree &amp;rArr; use demand-driven recursion
@@ -7773,7 +7770,7 @@ Doubtless we're dealing with a highly specific application here.
 
 !list diffing algorithm
 | !source data|!|!desired result |
-|(a~~1~~, a~~2~~, a~~3~~, a~~4~~, a~~5~~) |&amp;hArr;| {{{delete}}}(a~~1~~, a~~2~~)&lt;br/&gt;{{{update}}}(a~~3~~, a~~5~~, a~~4~~)&lt;br/&gt;{{{insert}}}(//before a~~3~~//, b~~1~~)&lt;br/&gt;{{{insert}}}(//before a~~4~~//, b~~2~~, b~~3~~)&lt;br/&gt;{{{append}}}(b~~4~~)|
+|(a~~1~~, a~~2~~, a~~3~~, a~~4~~, a~~5~~) |&amp;hArr;| {{{delete}}}(a~~1~~, a~~2~~)&lt;br/&gt;{{{permutate}}}(a~~3~~, a~~5~~, a~~4~~)&lt;br/&gt;{{{insert}}}(//before a~~3~~//, b~~1~~)&lt;br/&gt;{{{insert}}}(//before a~~4~~//, b~~2~~, b~~3~~)&lt;br/&gt;{{{append}}}(b~~4~~)|
 |(b~~1~~, a~~3~~, a~~5~~, b~~2~~, b~~3~~, a~~4~~, b~~4~~)|~|~|
 to cover reordering, we need to determine the deletes and (possible) updates in one set operation.
 After reordering the remaining updates to the target order, the inserts are determined in a final merging pass.
@@ -7794,14 +7791,14 @@ Thus, for our specific usage scenario, the foremost relevant question is //how t
 |{{{del}}}(a~~2~~) |!| ()|(a~~3~~, a~~4~~, a~~5~~) |
 |{{{ins}}}(b~~1~~) |!| (b~~1~~)|(a~~3~~, a~~4~~, a~~5~~) |
 |{{{pick}}}(a~~3~~) |!| (b~~1~~, a~~3~~)|(a~~4~~, a~~5~~) |
-|{{{push}}}( a~~5~~) |!| (b~~1~~, a~~3~~)|(a~~5~~, a~~4~~) |
+|{{{find}}}( a~~5~~) |!| (b~~1~~, a~~3~~)|(a~~5~~, a~~4~~) |
 |{{{pick}}}(a~~5~~) |!| (b~~1~~, a~~3~~, a~~5~~)|(a~~4~~) |
 |{{{ins}}}(b~~2~~) |!| (b~~1~~, a~~3~~, a~~5~~, b~~2~~)|(a~~4~~) |
 |{{{ins}}}(b~~3~~) |!| (b~~1~~, a~~3~~, a~~5~~, b~~2~~, b~~3~~)|(a~~4~~) |
 |{{{pick}}}(a~~4~~) |!| (b~~1~~, a~~3~~, a~~5~~, b~~2~~, b~~3~~, a~~4~~)|() |
 |{{{ins}}}(b~~4~~) |!| (b~~1~~, a~~3~~, a~~5~~, b~~2~~, b~~3~~, a~~4~~, b~~4~~)|() |
 
-__Implementation note__:The representation chosen here uses terms of constant size for the individual diff steps; in most cases, the argument is redundant and can be used for verification when applying the diff -- exceptions being the  {{{push}}} and {{{ins}}} terms, where it actually encodes additional information. Especially the {{{push}}}-representation is a compromise, since we encode as &quot;push the next term back behind the term a~~5~~&quot;. The more obvious rendering -- &quot;push term a~~4~~ back by +1 steps&quot; -- requires an additional integer argument not neccesary for any of the other diff verbs, defeating a fixed size value implementation.
+__Implementation note__:The representation chosen here uses terms of constant size for the individual diff steps; in most cases, the argument is redundant and can be used for verification when applying the diff -- exceptions being the {{{ins}}} term, where it actually encodes additional information. Especially the {{{find}}}-representation is a compromise, since we encode as &quot;search for the term a~~5~~ and insert it at curent position&quot;. The more obvious rendering -- &quot;push term a~~4~~ back by +1 steps&quot; -- requires an additional integer argument not neccesary for any of the other diff verbs, defeating a fixed size value implementation.
 
 !!!extension to tree changes
 Basically we could send messages for recursive descent right after each {{{pick}}} token -- yet, while minimal, such a representation would be unreadable, and requires a dedicated stack storage on both sides. Thus we arrange for the //recursive treatment of children// to be sent //postfix,// after the messages for the current node. Recursive descent is indicated by explicit (and slightly redundant) //bracketing tokens://
