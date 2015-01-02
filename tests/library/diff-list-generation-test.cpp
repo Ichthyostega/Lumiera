@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/diff/list-diff.hpp"
+#include "lib/iter-adapter.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
@@ -41,6 +42,18 @@ namespace lib {
 namespace diff{
   //#########################
   
+  template<typename VAL>
+  class IndexTable
+    {
+    public:
+      template<class SEQ>
+      IndexTable(SEQ const& seq)
+        {
+          UNIMPLEMENTED("build index");
+        }
+    };
+  
+  
   template<class SEQ>
   class DiffDetector
     {
@@ -49,7 +62,57 @@ namespace diff{
       
       Idx refIdx_;
       SEQ const& currentData_;
+      
+      
+      using DiffStep = typename ListDiffLanguage<Val>::DiffStep;
+      
+      /**
+       * @internal state frame for diff detection and generation.
+       * A diff generation process is built on top of an "old" reference point
+       * and a "new" state of the underlying sequence. Within this reference frame,
+       * an demand-driven evaluation of the differences is handed out to the client
+       * as an iterator. While consuming this evaluation process, both the old and
+       * the new version of the sequence will be traversed once. In case of re-orderings,
+       * a nested forward lookup similar to insertion sort will look for matches in the
+       * old sequence, rendering the whole evaluation quadratic in worst-case.
+       */
+      class DiffFrame
+        {
+          Idx old_;
+          Idx* new_;
           
+        public:
+          DiffFrame(Idx& current, Idx&& refPoint)
+            : old_(refPoint)
+            , new_(&current)
+            { }
+          
+          
+          /* === Iteration control API for IterStateWrapper== */
+          
+          friend bool
+          checkPoint (DiffFrame const& frame)
+          {
+            UNIMPLEMENTED("is the diff calculation exhausted?");
+          }
+          
+          friend DiffStep&
+          yield (DiffFrame const& frame)
+          {
+            REQUIRE (checkPoint (frame));
+            UNIMPLEMENTED("yield the diff verb to describe the current point in diff");
+          }
+          
+          friend void
+          iterNext (DiffFrame & frame)
+          {
+            UNIMPLEMENTED("diff generation core: consume the current state and re-establish the invariant");
+          }
+        };
+      
+      
+      
+      
     public:
       explicit
       DiffDetector(SEQ const& refSeq)
@@ -57,13 +120,41 @@ namespace diff{
         , currentData_(refSeq)
         { }
       
+      
+      /** does the current state of the underlying sequence differ
+       * from the state embodied into the last reference snapshot taken?
+       * @remarks will possibly evaluate and iterate the whole sequence
+       */
+      bool
+      isChanged()  const
+        {
+          UNIMPLEMENTED("change detection");
+        }
+      
+      
+      /** Diff is a iterator to yield a sequence of DiffStep elements */
+      using Diff = lib::IterStateWrapper<DiffStep, DiffFrame>;
+      
+      /** Diff generation core operation.
+       * Take a snapshot of the \em current state of the underlying sequence
+       * and establish a frame to find the differences to the previously captured
+       * \em old state. This possible difference evaluation is embodied into a #Diff
+       * iterator and handed over to the client, while the snapshot of the current state
+       * becomes the new reference point from now on.
+       * @return iterator to yield a sequence of DiffStep tokens, which describe the changes
+       *         between the previous reference state and the current state of the sequence.
+       * @note takes a new snapshot to supersede the old one, i.e. updates the DiffDetector.
+       * @warning the returned iterator retains a reference to the current (new) snapshot.
+       *         Any concurrent modification leads to undefined behaviour. You must not
+       *         invoke #pullUpdate while another client still explores the result
+       *         of an old evaluation.
+       */
       Diff
       pullUpdate()
         {
-          Idx newIdx (currentData_);
-          Diff changes (move(refIdx_), newIdx);
-          swap (newIdx, refIdx_);
-          return changes;
+          Idx mark (currentData_);
+          swap (mark, refIdx_);  // mark now refers to old reference point
+          return Diff(DiffFrame(refIdx_, move(mark)));
         }
     };
   
