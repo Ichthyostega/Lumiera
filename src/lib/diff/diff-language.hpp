@@ -97,7 +97,8 @@ namespace diff{
   
   namespace error = lumiera::error;
   
-  LUMIERA_ERROR_DEFINE(DIFF_CONFLICT, "Collision in diff application: contents of target not as expected.");
+  LUMIERA_ERROR_DECLARE(DIFF_CONFLICT); ///< Collision in diff application: contents of target not as expected.
+  
   
   /**
    * Definition frame for a language to describe differences in data structures.
