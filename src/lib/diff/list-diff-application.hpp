@@ -66,6 +66,7 @@ namespace diff{
    * @warning behaves only EX_SANE in case of diff application errors,
    *          i.e. only partially modified / rebuilt sequence might be
    *          in the target when diff application is aborted
+   * @see #ListDiffInterpreter explanation of the verbs
    */
   template<typename E, typename...ARGS>
   class DiffApplicationStrategy<vector<E,ARGS...>>
@@ -99,10 +100,11 @@ namespace diff{
         }
       
       void
-      __expect_further_elements()
+      __expect_further_elements (E const& elm)
         {
           if (end_of_target())
-            throw error::State("Premature end of target sequence; unable to apply diff further."
+            throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
+                                    "unable to apply diff further.") % elm
                               , LUMIERA_ERROR_DIFF_CONFLICT);
         }
       
@@ -111,7 +113,7 @@ namespace diff{
         {
           if (targetPos == orig_.end())
             throw error::State(_Fmt("Premature end of sequence; unable to locate "
-                                    "element %s as reference point in target.") % elm
+                                    "element %s in the remainder of the target.") % elm
                               , LUMIERA_ERROR_DIFF_CONFLICT);
         }
       
@@ -119,20 +121,20 @@ namespace diff{
       /* == Implementation of the diff application primitives == */
       
       void
-      ins (E elm)
+      ins (E elm)  override
         {
           seq_.push_back(elm);
         }
       
       void
-      del (E elm)
+      del (E elm)  override
         {
           __expect_in_target(elm, "remove");
           ++pos_;
         }
       
       void
-      pick (E elm)
+      pick (E elm)  override
         {
           __expect_in_target(elm, "pick");
           seq_.push_back (move(*pos_));
@@ -140,22 +142,20 @@ namespace diff{
         }
       
       void
-      push (E anchor)
+      skip (E elm)  override
         {
-          __expect_further_elements();
-          E elm(move(*pos_)); // consume current source element
+          __expect_further_elements (elm);
           ++pos_;
-          
-          // locate the insert position behind the given reference anchor
-          Iter insertPos = std::find(pos_, orig_.end(), anchor);
-          __expect_found (anchor, insertPos);
-          
-          // inserting the "pushed back" element behind the found position
-          // this might lead to reallocation and thus invalidate the iterators
-          auto currIdx = pos_ - orig_.begin();
-          orig_.insert (++insertPos, move(elm));
-          pos_ = orig_.begin() + currIdx;
-        }
+        }      // assume the actual content has been moved away by a previous find()
+      
+      void
+      find (E elm)  override
+        {
+          __expect_further_elements (elm);
+          Iter found = std::find(pos_, orig_.end(), elm);
+          __expect_found (elm, found);
+          seq_.push_back (move(*found));
+        }      // consume and leave waste, expected to be cleaned-up by skip() later
       
       
     public:

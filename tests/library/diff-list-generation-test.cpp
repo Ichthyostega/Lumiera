@@ -177,7 +177,8 @@ namespace test{
     DiffStep_CTOR(ins);
     DiffStep_CTOR(del);
     DiffStep_CTOR(pick);
-    DiffStep_CTOR(push);
+    DiffStep_CTOR(find);
+    DiffStep_CTOR(skip);
       
   }//(End)Test fixture
   
@@ -225,11 +226,11 @@ namespace test{
                                          , del(a2)
                                          , ins(b1)
                                          , pick(a3)
-                                         , push(a5)
-                                         , pick(a5)
+                                         , find(a5)
                                          , ins(b2)
                                          , ins(b3)
                                          , pick(a4)
+                                         , skip(a5)
                                          , ins(b4)
                                          }));
         }
