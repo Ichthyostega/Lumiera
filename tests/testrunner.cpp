@@ -1,5 +1,5 @@
 /*
-  testrunner.cpp  -  execute a suite of test objects, possibly filtered by category
+  Testrunner  -  execute a suite of test objects, possibly filtered by category
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,8 +18,8 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 
+* *****************************************************/
 
 #include "include/lifecycle.h"
 #include "lib/test/testoption.hpp"
