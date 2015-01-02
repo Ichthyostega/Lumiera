@@ -65,6 +65,10 @@ namespace lib {
    * as defined in the "receiver" interface (parameter \c REC).
    * The token is typically part of a DSL and can be applied
    * to a concrete receiver subclass.
+   * @remarks while the included ID Literal is mostly for diagnostics,
+   *       it also serves as identity for comparisons. Conceptually what
+   *       we want is to compare the function "offset", but this leads
+   *       into relying on implementation defined behaviour.
    * @note the #VERB macro simplifies definition of actual tokens
    */
   template<class REC, class SIG>
@@ -94,6 +98,19 @@ namespace lib {
         : handler_(handlerFunction)
         , token_(token)
         { }
+      
+      
+      bool
+      operator== (VerbToken const& o)  const     ///< @remarks member pointers to virtual functions aren't comparable, for good reason
+        {
+          return token_ == o.token_;
+        }
+      
+      bool
+      operator!= (VerbToken const& o)  const
+        {
+          return token_ != o.token_;
+        }
     };
   
 #define VERB(RECEIVER, FUN) VERB_##FUN (&RECEIVER::FUN, STRINGIFY(FUN))
