@@ -72,9 +72,9 @@ this is our trade-off for simplicity in the diff detection algorithm.footnote:[t
 diff detection schemes, especially those geared at text diff detection, engage into great lengths
 of producing an ``optimal'' diff, which effectively means to build specifically tuned pattern
 or decision tables, from which the final diff can then be pulled or interpreted.
-We acknowledge that in our case building a lookup table index with additional annotations can
-be O(n^2^); we might well be able to do better, but likely for the price of turning the algorithm
-into some kind of mental challenge.]
+We acknowledge that in our case building a lookup table index with additional annotations can be
+as bad as O(n^2^) and worse; we might well be able to do better, but likely for the price of
+turning the algorithm into some kind of mental challenge.]
 In case this turns out as a performance problem, we might consider integrating the index
 maintenance into the data structure to be diffed, which shifts the additional impact of
 indexing onto the data population phase.footnote:[in the general tree diff case this is far
@@ -142,7 +142,7 @@ But there is a twist: Our design avoids using index numbers, since we aim at _st
 of diffs. We do not want to communicate index numbers to the consumer of the diff; rather we
 want to communicate reference elements with our _diff verbs_. Thus we prefer the most simplistic
 processing mechanism, which happens to be some variation of *Insertion Sort*.footnote:[to support
-this choice, Insertion Sort -- in spite of being O(n^2^) -- turns out to be the best choice for
+this choice, *Insertion Sort* -- in spite of being O(n^2^) -- turns out to be the best choice for
 sorting small data sets for reasons of cache locality; even typical Quicksort implementations
 switch to insertion sorting of small subsets for performance reasons]
 
@@ -161,7 +161,7 @@ Now, to arrive at that invariant, we use indices to determine
 
 - if the element at head of the old sequence is not present in the new sequence, which means
   it has to be deleted
-- while an element at head of the new sequence not present in the old sequence has to be inserted
+- while an element at head of the new sequence but not present in the old sequence has to be inserted
 - and especially a non-matching element at the old sequence prompts us to fetch the right
   element from further down in the sequence and insert it a current position
 
@@ -177,6 +177,6 @@ of such algorithms look better: if we know the sequences are close, the nested s
 shorter than the whole sequence (with n·d < n^2^). +
 However, since our goal is to support permutations and we have to deal with arbitrary sequences, such
 an argument looks somewhat pointless. Let's face it, structural diff computation is expensive; the only
-way to keep matters under control is to keep the local sequences short, which means to exploit structural
-knowledge instead of comparing the entire data as flat sequence]
+way to keep matters under control is to keep the local sequences short, which prompts us to exploit
+structural knowledge instead of comparing the entire data as flat sequence]
 
