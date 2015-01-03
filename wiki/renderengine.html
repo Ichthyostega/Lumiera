@@ -2296,7 +2296,7 @@ We acknowledge that the gui model is typically used from within the GUI event di
 Forwarding the model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. This callback will be scheduled by the  widgets to perform in the GUI event  thread.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201411030123" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="14">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201501031058" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="21">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2330,6 +2330,16 @@ Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispa
 A relevant question to be settled is as to where the core of each change is constituted. This is relevant due to the intricacies of multithreading: Since the change originates in the build process, but the effect of the change is //pulled// later from within the GUI event thread, it might well happen that at this point, meanwhile further changes entered the model. As such, this is not problematic, as long as taking the diff remains atomic. This leads to quite different solution approaches:
 * we might, at the moment of performing the update, acquire a lock from the ProcDispatcher. The update process may then effectively query down into the session datastructure proper, even through the proxy of a diffing process. The obvious downside is that GUI response might block waiting on an extended operation in Proc, especially when a new build process was started meanwhile. A remedy might be to abort the update in such cases, since its effects will be obsoleted by the build process anyway.
 * alternatively, we might incorporate a complete snapshot of all information relevant for the GUI into the GuiModel. Update messages from Proc must be complete and self contained in this case, since our goal is to avoid callbacks. Following this scheme, the first stage of any update would be a push from Proc to the GuiModel, followed by a callback pull from within the individual widgets receiving the notification later.
+
+!!!switch of typed sub-context
+When dealing with structural (tree) diffing, there is a specific twist regarding child nodes of mixed type: In the general case, we can not assume that all children of a given node are of the same kind. The classical example is (X)HTML, where a node has //attributes,// various //nested tags// and //nested text content.// The //generic node// thus must be modelled as having several collections of children -- both ordered and un-ordered collections are possible -- and the content of each such sub-collection is itself polymorphic. This constitutes a challenge for the representation of data within the tree diff format. These difficulties can be overcome as follows
+#anything, even nested &quot;raw&quot; content is represented //as node//
+#all nodes can be addressed by an //generic identifier//
+#the diff is in //prefix order,// i.e. it first only mentions the ordering, additions and deletions of nodes designated by these ~IDs
+#we introduce a //bracing construct// into the diff language, to enter a subnode within the diff representation
+#the diff is produced and consumed //demand-driven (by pull)//
+#whenever a node sees this bracing construct, in invokes the respective child //recursively//
+This approach ensures each nested diff is consumed within a properly typed context, without any need of switching types from the outside: the actual consumer of each part of the whole diff description just happens to know the actual meaning of those elements he processes itself, and passes control to others with adequate knowledge for the rest. Changes are broken down and transformed into //atomic changes.// For an internal data exchange, this is sufficient: in the end we're dealing with references to binary data anyway. But when it comes to an external, self-contained representation of diffs, we additionally need a way to attach raw chunks of data corresponding to the description of those atomic changes.
 </pre>
 </div>
 <div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" tags="spec">
@@ -2397,7 +2407,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201410250103" tags="GuiPattern discuss decision impl" changecount="22">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201501030919" tags="GuiPattern discuss decision impl" changecount="23">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2421,7 +2431,7 @@ Our custom made UI elements impend to turn into a tremendous time sink (For refe
 There are some issues though, which more or less force us into custom drawing
 * for our task, we're suffering a horrible lack of screen real estate. This forces us into conceiving elaborate controls way beyond the capabilities of existing standard widgets
 * and for the feedback, we also need to tap into very precise event handling, which is hard to achieve with the huge amount of variability found with standard widgets
-* our display has to comply to a temporal metric, which is incompatible with the leeway present in standard widgets for the purpose of styling and skinning the UI
+* our timeline display has to comply to a temporal metric grid, which is incompatible with the leeway present in standard widgets for the purpose of styling and skinning the UI
 * the sheer amount of individual elements we need to get to screen is way beyond anything in a conventional GUI -- the UI toolkit set can not be expected to handle such load smoothly
 
 !Remedy: A Canvas Control
@@ -7703,7 +7713,7 @@ Using transitions is a very basic task and thus needs viable support by the GUI.
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
 </pre>
 </div>
-<div title="TreeDiffFundamentals" creator="Ichthyostega" modifier="Ichthyostega" created="201411070156" modified="201412210005" tags="Concepts design" changecount="17">
+<div title="TreeDiffFundamentals" creator="Ichthyostega" modifier="Ichthyostega" created="201411070156" modified="201501031131" tags="Concepts design" changecount="20">
 <pre>At various points within the implementation we encounter problems of structural difference computation, like finding the effective changes in a tree data structure, or using a diff represetation as notification message format. It might be in place to point out some observations, especially relating our approach(es) to the problem as generally known .
 
 !classical diff problem
@@ -7721,6 +7731,16 @@ The most fundamental distinction is the difference between //finding// a diff an
 Before we can consider a diffing technique, we need to clarify the primitive operations used as foundation. These primitives form //a language.// This incurs a problem and choice of context. We might base the representation language on the situation where the diff is applied, we may care for the conciseness of the representation, or the effort and space required to apply it. We should consider if the focus is on reading and understanding the diff, if we intend to derive something directly from the diff representation -- say, if and what and when something is changed -- and we should consider how the context where the diff is established relates to the context where it is applied.
 
 &amp;rarr; [[Implementation considerations|TreeDiffImplementation]]
+
+!diff as data representation
+We haven't said anything regarding the purpose of dif representation yet. There might be several. A human reader, for instance, may use a diff description to spot and judge the temporal evolution of data and structures. Another approach is to use diff representation as ''architecture for data exchange''. Connection through //diff messages// allows collaboration //without the need for shared data.// Going this route helps with focus and parallelisation. A self contained subsystem based on a private data representation is requires less resources for maintenance and inception. It incurs less overhead for coupling and dependencies with other subsystems, both in terms of human understanding and machine execution power.
+Used this way, diff representation helps to separate structure and raw data in exchange. Any changes are broken down into mutations of the structure and chunks of atomic data updates. The data still embedded into the diff description is reduced to //elementary data.// The intricacies of typing and type based special treatment of data is stripped out by this usage pattern. Types aren't going away, yet they are subsumed to the structure and pushed to the inside. //Elementary data// is data form a small selection of fundamental elementary types, all of which can be represented textually: strings, integers, floats, date, time and binary byte sequences. This data is complemented by a small number of //structuring primitives:// the ordered sequence, the unordered set and the associative array of (key, value) pairs. A complete diff representation language needs provisions for any of these fundamentals.
+;internal diff
+:this kind of exchange language is usable on the level of implementation. It confines raw data to the small set of basic types outlined above.
+:These are still passed on in binary form, either as value copies, by an ID based lookup mechanism, or by reference, supported by a synchronisation protocol
+;external diff
+:going full circle, this representation abstracts completely and removes the dependency on any binary format.
+:Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
 <div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201501010306" tags="Model GuiPattern design draft" changecount="12">
