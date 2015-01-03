@@ -120,17 +120,17 @@ namespace diff{
     {
       
       using DiffVerb = VerbToken<I, void(E)>;
-      using VerbTok = std::tuple<DiffVerb, E>;
+      using DiffToken = std::tuple<DiffVerb, E>;
       using Interpreter = I;
       
       struct DiffStep
-        : VerbTok
+        : DiffToken
         {
           DiffVerb& verb() { return std::get<0>(*this); }
           E         elm()  { return std::get<1>(*this); }
           
           DiffStep(DiffVerb verb, E e)
-            : VerbTok(verb,e)
+            : DiffToken(verb,e)
             { }
           
           operator string()  const
