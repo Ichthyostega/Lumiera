@@ -31,6 +31,7 @@
 #include <vector>
 
 using lib::append_all;
+using util::unConst;
 using util::isnil;
 using std::string;
 using std::vector;
@@ -51,8 +52,31 @@ namespace diff{
         {
           UNIMPLEMENTED("build index");
         }
+      
+      size_t
+      size()  const
+        {
+          UNIMPLEMENTED("sequence size");
+        }
+    };
+
+  template<typename VAL>
+  struct Token
+    {
+      using Interpreter = typename ListDiffLanguage<VAL>::Interpreter;
+      using HaHa = DiffStepBuilder<HandlerFun<Interpreter,VAL>>;
+      
+      HaHa skip = diffTokenBuilder (&Interpreter::skip, "skip");
     };
   
+  //DiffStep_CTOR(skip);
+  
+//  template<typename VAL>
+//  typename Token<VAL>::HaHa Token<VAL>::skip = diffTokenBuilder (&Interpreter::skip, "skip");
+  
+      
+      
+
   
   template<class SEQ>
   class DiffDetector
@@ -80,6 +104,15 @@ namespace diff{
         {
           Idx old_;
           Idx* new_;
+          size_t oldHead_=0,
+                 newHead_=0;
+          
+          static Token<Val> token;
+          
+          DiffStep currentStep_{token.skip(Val())};
+          
+          bool hasOld()  const { return oldHead_ < old_.size(); }
+          bool hasNew()  const { return newHead_ < new_->size(); }
           
         public:
           DiffFrame(Idx& current, Idx&& refPoint)
@@ -93,21 +126,39 @@ namespace diff{
           friend bool
           checkPoint (DiffFrame const& frame)
           {
-            UNIMPLEMENTED("is the diff calculation exhausted?");
+            return frame.hasNew() || frame.hasOld();
           }
           
           friend DiffStep&
           yield (DiffFrame const& frame)
           {
             REQUIRE (checkPoint (frame));
-            UNIMPLEMENTED("yield the diff verb to describe the current point in diff");
+            return unConst(frame).currentStep_;
           }
           
           friend void
           iterNext (DiffFrame & frame)
           {
-            UNIMPLEMENTED("diff generation core: consume the current state and re-establish the invariant");
+            frame.establishInvariant();
           }
+          
+        private:
+          void
+          establishInvariant()
+            {
+              if (canPick())
+                {
+                  
+                }
+            }
+          
+          bool
+          canPick()
+            {
+              return false;//TODO
+            }
+          
+
         };
       
       
@@ -157,6 +208,9 @@ namespace diff{
           return Diff(DiffFrame(refIdx_, move(mark)));
         }
     };
+  
+  template<class SEQ>
+  Token<typename DiffDetector<SEQ>::Val> DiffDetector<SEQ>::DiffFrame::token;
   
   //#########################
 namespace test{

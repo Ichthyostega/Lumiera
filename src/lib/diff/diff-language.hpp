@@ -121,6 +121,7 @@ namespace diff{
       
       using DiffVerb = VerbToken<I, void(E)>;
       using VerbTok = std::tuple<DiffVerb, E>;
+      using Interpreter = I;
       
       struct DiffStep
         : VerbTok
@@ -138,7 +139,7 @@ namespace diff{
             }
           
           void
-          applyTo (I& interpreter)
+          applyTo (Interpreter& interpreter)
             {
               verb().applyTo (interpreter, elm());
             }

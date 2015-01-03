@@ -99,6 +99,8 @@ namespace lib {
         , token_(token)
         { }
       
+      /* default copyable */
+      
       
       bool
       operator== (VerbToken const& o)  const     ///< @remarks member pointers to virtual functions aren't comparable, for good reason
