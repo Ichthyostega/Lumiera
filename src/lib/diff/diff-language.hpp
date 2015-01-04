@@ -175,6 +175,9 @@ namespace diff{
               verb().applyTo (interpreter, elm());
             }
         };
+      
+      
+      static const DiffStep NIL;
     };
   
   
@@ -218,19 +221,26 @@ namespace diff{
     return { handlerFun, id };
   }
   
-/** shortcut to define tokens of the diff language.
- *  Use it to define namespace or class level function objects, which,
- *  when supplied with an argument value of type \c E, will generate
- *  a specific language token wrapping a copy of this element.
- * @see ListDiffLanguage usage example
- * @note need a typedef \c Interpreter at usage site
- *       to refer to the actual language interpreter interface;
- *       the template parameters of the Language and the element
- *       type will be picked up from the given member function pointer.
- */
+  /** shortcut to define tokens of the diff language.
+   *  Use it to define namespace or class level function objects, which,
+   *  when supplied with an argument value of type \c E, will generate
+   *  a specific language token wrapping a copy of this element.
+   * @see ListDiffLanguage usage example
+   * @note need a typedef \c Interpreter at usage site
+   *       to refer to the actual language interpreter interface;
+   *       the template parameters of the Language and the element
+   *       type will be picked up from the given member function pointer.
+   */
 #define DiffStep_CTOR(_ID_) \
   const DiffStepBuilder<Interpreter> _ID_ = diffTokenBuilder (&Interpreter::_ID_, STRINGIFY(_ID_));
   
+  
+  
+  /** fixed "invalid" marker token
+   * @warning use for internal state marking only --
+   *          invoking this token produces undefined behaviour */
+  template<class I, typename E>
+  const typename DiffLanguage<I,E>::DiffStep DiffLanguage<I,E>::NIL = DiffStep(DiffVerb(), E());
   
   
   

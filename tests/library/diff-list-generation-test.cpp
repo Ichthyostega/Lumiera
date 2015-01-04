@@ -27,6 +27,7 @@
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <string>
 #include <vector>
 
@@ -58,14 +59,34 @@ namespace diff{
         {
           UNIMPLEMENTED("sequence size");
         }
+      
+      VAL const&
+      getElement (size_t i)  const
+        {
+          UNIMPLEMENTED("indexed value access");
+        }
+      
+      bool
+      contains (VAL const& elm)  const
+        {
+          return size() == pos(elm);
+        }
+      
+      size_t
+      pos (VAL const& elm)  const
+        {
+          UNIMPLEMENTED("index lookup");
+        }
     };
   
-      
-      
-
+  
+  
+  
+  
   
   template<class SEQ>
   class DiffDetector
+    : boost::noncopyable
     {
       using Val = typename SEQ::value_type;
       using Idx = IndexTable<Val>;
@@ -126,7 +147,7 @@ namespace diff{
           return Diff(DiffFrame(refIdx_, move(mark)));
         }
     };
-
+  
   
   
   
@@ -149,15 +170,14 @@ namespace diff{
       
       static ListDiffLanguage<Val> token;
       
-      DiffStep currentStep_{token.skip (Val())};
+      DiffStep currentStep_;
       
-      bool hasOld()  const { return oldHead_ < old_.size(); }
-      bool hasNew()  const { return newHead_ < new_->size(); }
       
     public:
       DiffFrame(Idx& current, Idx&& refPoint)
         : old_(refPoint)
         , new_(&current)
+        , currentStep_(establishNextState())
         { }
       
       
@@ -166,7 +186,7 @@ namespace diff{
       friend bool
       checkPoint (DiffFrame const& frame)
       {
-        return frame.hasNew() || frame.hasOld();
+        return token.NIL != frame.currentStep_;
       }
       
       friend DiffStep&
@@ -179,27 +199,44 @@ namespace diff{
       friend void
       iterNext (DiffFrame & frame)
       {
-        frame.establishInvariant();
+        frame.establishNextState();
       }
       
     private:
-      void
-      establishInvariant()
+      DiffStep
+      establishNextState()
         {
           if (canPick())
             {
-              
+              consumeOld();
+              return token.pick (consumeNew());
             }
+          if (canDelete())
+            return token.del (consumeOld());
+          if (canInsert())
+            return token.ins (consumeNew());
+          if (needFetch())
+            return token.find (consumeNew());
+          if (obsoleted())
+            return token.skip (consumeOld());
+          
+          return token.NIL;
         }
       
-      bool
-      canPick()
-        {
-          return false;//TODO
-        }
+      bool hasOld()    const { return oldHead_ < old_.size(); }
+      bool hasNew()    const { return newHead_ < new_->size(); }
+      bool canPick()   const { return hasOld() && hasNew() && oldElm()==newElm(); }
+      bool canDelete() const { return hasOld() && !new_->contains(oldElm());      }
+      bool canInsert() const { return hasNew() && !old_.contains(newElm());       }
+      bool needFetch() const { return hasNew() && oldHead_ < old_.pos(newElm());  }
+      bool obsoleted() const { return hasOld() && newHead_ > new_->pos(oldElm()); }
       
-  
+      Val const& oldElm()     const { return old_.getElement (oldHead_); }
+      Val const& newElm()     const { return new_->getElement (newHead_); }
+      Val const& consumeOld()       { return old_.getElement (oldHead_++); }
+      Val const& consumeNew()       { return new_->getElement (newHead_++); }
     };
+  
   
   /** allocate static storage for the diff language token builder functions */
   template<class SEQ>

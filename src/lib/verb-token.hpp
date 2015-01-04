@@ -53,6 +53,7 @@
 
 #include <utility>
 #include <string>
+#include <array>
 
 
 namespace lib {
@@ -86,6 +87,7 @@ namespace lib {
       RET
       applyTo (REC& receiver, ARGS&&... args)
         {
+          REQUIRE ("NIL" != token_);
           return (receiver.*handler_)(std::forward<ARGS>(args)...);
         }
       
@@ -98,6 +100,8 @@ namespace lib {
         : handler_(handlerFunction)
         , token_(token)
         { }
+      
+      VerbToken() : token_("NIL") { }
       
       /* default copyable */
       
