@@ -1,5 +1,5 @@
 /*
-  LIST-DIFF-APPLICATION.hpp  -  language to describe differences in linearised form
+  LIST-DIFF-APPLICATION.hpp  -  consume and apply a list diff
 
   Copyright (C)         Lumiera.org
     2014,               Hermann Vosseler <Ichthyostega@web.de>

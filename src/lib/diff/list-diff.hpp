@@ -1,5 +1,5 @@
 /*
-  LIST-DIFF.hpp  -  language to describe differences in linearised form
+  LIST-DIFF.hpp  -  language to describe differences between list like sequences
 
   Copyright (C)         Lumiera.org
     2014,               Hermann Vosseler <Ichthyostega@web.de>
