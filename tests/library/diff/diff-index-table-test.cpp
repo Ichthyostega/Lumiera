@@ -176,7 +176,7 @@ namespace test{
           CHECK ( idxB.contains(a1));
           CHECK (!idxB.contains(b1));
           
-          idxA = idxB;
+          idxB = idxA;
           CHECK (4 == idxA.size());
           CHECK (4 == idxB.size());
           

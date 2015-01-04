@@ -40,6 +40,8 @@
 
 
 #include "lib/error.hpp"
+#include "lib/util.hpp"
+#include "lib/format-string.hpp"
 
 #include <vector>
 #include <map>
@@ -48,42 +50,68 @@
 namespace lib {
 namespace diff{
   
-  using std::vector;
-  using std::map;
+  namespace error = lumiera::error;
+  
+  using util::_Fmt;
   
   
+  
+  /** data snapshot and lookup table */
   template<typename VAL>
   class IndexTable
     {
+      std::vector<VAL>    data_;
+      std::map<VAL,size_t> idx_;
+      
     public:
       template<class SEQ>
       IndexTable(SEQ const& seq)
         {
-          UNIMPLEMENTED("build index");
+          size_t i = 0;
+          for (auto const& elm : seq)
+            {
+              __rejectDuplicate(elm);
+              data_.push_back (elm);
+              idx_[elm] = i++;
+            }
         }
       
       size_t
       size()  const
         {
-          UNIMPLEMENTED("sequence size");
+          return data_.size();
         }
+      
       
       VAL const&
       getElement (size_t i)  const
         {
-          UNIMPLEMENTED("indexed value access");
+          REQUIRE (i < size());
+          return data_[i];
         }
+      
       
       bool
       contains (VAL const& elm)  const
         {
-          return size() == pos(elm);
+          return pos(elm) != size();
         }
+      
       
       size_t
       pos (VAL const& elm)  const
         {
-          UNIMPLEMENTED("index lookup");
+          auto entry = idx_.find (elm);
+          return entry==idx_.end()? size()
+                                  : entry->second;
+        }
+      
+    private:
+      void
+      __rejectDuplicate (VAL const& elm)
+        {
+          if (util::contains (idx_, elm))
+              throw error::Logic(_Fmt("Attempt to add duplicate %s to index table") % elm);
         }
     };
   
