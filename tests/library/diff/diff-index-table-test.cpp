@@ -78,6 +78,7 @@ namespace test{
         {
           simpleUsage();
           verifySnapshot();
+          sequenceIteration();
           duplicateDetection();
           copy_and_move();
         }
@@ -141,6 +142,19 @@ namespace test{
           CHECK (2 == idx.pos(a1));
           CHECK (3 == idx.pos(a4));
           CHECK (4 == idx.pos(a3));
+        }
+      
+      
+      void
+      sequenceIteration()
+        {
+          DataSeq data({a5,a2,a1,a4,a3});
+          
+          size_t i = 0;
+          for (auto elm : Index(data))
+            {
+              CHECK (elm == data[i++]);
+            }
         }
       
       

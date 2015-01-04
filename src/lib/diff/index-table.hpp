@@ -76,11 +76,19 @@ namespace diff{
             }
         }
       
-      size_t
-      size()  const
-        {
-          return data_.size();
-        }
+      /* === forwarded sequence access === */
+      
+      using iterator = typename std::vector<VAL>::iterator;
+      using const_iterator = typename std::vector<VAL>::const_iterator;
+      
+      iterator       begin()       { return data_.begin(); }
+      iterator       end()         { return data_.end();   }
+      const_iterator begin() const { return data_.begin(); }
+      const_iterator end()   const { return data_.end();   }
+      
+      size_t         size()  const { return data_.size();  }
+      
+      
       
       
       VAL const&
