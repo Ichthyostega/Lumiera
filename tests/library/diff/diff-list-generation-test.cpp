@@ -57,7 +57,7 @@ namespace test{
     DiffStep_CTOR(pick);
     DiffStep_CTOR(find);
     DiffStep_CTOR(skip);
-      
+    
   }//(End)Test fixture
   
   
@@ -95,7 +95,7 @@ namespace test{
           
           auto changes = detector.pullUpdate();
           CHECK (!isnil (changes));
-          CHECK (!detector.isChanged());
+          CHECK (!detector.isChanged());       // pullUpdate() also took a new snapshot
           
           DiffSeq generatedDiff;
           append_all (changes, generatedDiff);
@@ -108,8 +108,8 @@ namespace test{
                                          , ins(b2)
                                          , ins(b3)
                                          , pick(a4)
-                                         , skip(a5)
                                          , ins(b4)
+                                         , skip(a5)
                                          }));
         }
     };

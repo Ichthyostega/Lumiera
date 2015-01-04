@@ -74,7 +74,15 @@ namespace diff{
   using std::swap;
   
   
-  
+  /**
+   * Detect and describe changes in a monitored data sequence.
+   * The DiffDetector takes snapshot(s) of the observed data,
+   * to find all differences between the last snapshot and the
+   * current state. Whenever such a "List Diff" is pulled, a new
+   * baseline snapshot is taken automatically. The description of
+   * all changes can be retrieved from the returned diff iterator,
+   * as a sequence of \link ListDiffLanguage diff verbs\endlink
+   */
   template<class SEQ>
   class DiffDetector
     : boost::noncopyable
@@ -103,13 +111,18 @@ namespace diff{
       
       
       /** does the current state of the underlying sequence differ
-       * from the state embodied into the last reference snapshot taken?
+       *  from the state embodied into the last reference snapshot taken?
        * @remarks will possibly evaluate and iterate the whole sequence
        */
       bool
       isChanged()  const
         {
-          UNIMPLEMENTED("change detection");
+          auto snapshot = refIdx_.begin();
+          for (auto const& elm : currentData_)
+            if (snapshot != refIdx_.end() && elm != *snapshot++)
+              return true;
+          
+          return false;
         }
       
       
@@ -190,7 +203,7 @@ namespace diff{
       friend void
       iterNext (DiffFrame & frame)
       {
-        frame.establishNextState();
+        frame.currentStep_ = frame.establishNextState();
       }
       
     private:

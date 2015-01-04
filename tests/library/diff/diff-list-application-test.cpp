@@ -73,7 +73,6 @@ namespace test{
                      , skip(a5)
                      , ins(b4)
                      });
-      
     }
   }//(End)Test fixture
   
