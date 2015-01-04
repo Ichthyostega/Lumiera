@@ -28,10 +28,10 @@
  ** as a sequence of tokens of constant size. Using a linearised constant size
  ** representation allows to process diff generation and diff application in
  ** a pipeline, enabling maximum decoupling of sender and receiver.
- ** Changes sent by diff serve as a generic meta-representation to keep separate
- ** and different representations of the same logical structure in sync. This allows
- ** for tight cooperation between strictly separated components, without the need
- ** of a fixed, predefined and shared data structure.
+ ** Changes sent as diff message serve as a generic meta-representation to keep
+ ** separate and different representations of the same logical structure in sync.
+ ** Such an architecture allows for tight cooperation between strictly separated
+ ** components, without the need of a fixed, predefined and shared data structure.
  ** 
  ** \par Basic Assumptions
  ** While the \em linearisation folds knowledge about the underlying data structure
@@ -42,7 +42,7 @@
  ** elements as values, which can be copied and moved cheaply. We include a copy of
  ** all content elements right within the tokens of the diff language, either to
  ** send the actual content data this way, or to serve as redundancy to verify
- ** proper application of the changes at the diff receiver.
+ ** proper application of the changes at the diff receiver downstream.
  ** 
  ** \par Solution Pattern
  ** The representation of this linearised diff language relies on a specialised form
@@ -51,7 +51,7 @@
  ** is provided as a private detail of the receiver, implemented as a concrete "Interpreter"
  ** (visitor) of the specific diff language flavour in use. Thus, our implementation relies
  ** on \em double-dispatch, based both on the type of the individual diff tokens and on the
- ** concrete implementation of the Interpreter. The typical usage will employ an DiffApplicator,
+ ** concrete implementation of the Interpreter. Typical usage will employ a DiffApplicator,
  ** so the "interpretation" of the language means to apply it to a target data structure in
  ** this standard case.
  ** 
@@ -64,14 +64,14 @@
  ** each token also bears a string id. And in addition, each token carries a single data
  ** content element as argument. The idea is, that the "verbs", the handler functions and
  ** the symbolic IDs are named alike (use the macro DiffStep_CTOR to define the tokens
- ** in according to that rule). Such a combination of verb and data argument is called
+ ** in accordance to that rule). Such a combination of verb and data argument is called
  ** a DiffStep, since it represents a single step in the process of describing changes
  ** or transforming a data structure. For example, a list diff language can be built
  ** using the following four verbs:
  ** - pick-next
  ** - insert-new
  ** - delete-next
- ** - push-back-next
+ ** - find reordered element
  ** 
  ** @see list-diff-application.hpp
  ** @see diff-list-application-test.cpp
@@ -150,23 +150,50 @@ namespace diff{
   using HandlerFun = void (I::*) (E);
   
   
+  template<class I>
+  struct InterpreterScheme
+    {
+      using Interpreter = I;
+      using Val = typename I::Val;
+      using Handler = HandlerFun<I,Val>;
+    };
   
-  template<typename SIG_HANDLER>
-  struct DiffStepBuilder;
+  template<template<typename> class IP, typename E>
+  struct InterpreterScheme<IP<E>>
+    {
+      using Val = E;
+      using Interpreter = IP<E>;
+      using Handler = HandlerFun<Interpreter,Val>;
+    };
+  
+  template<class I, typename E>
+  struct InterpreterScheme<HandlerFun<I,E>>
+    {
+      using Val = E;
+      using Interpreter = I;
+      using Handler = HandlerFun<I,E>;
+    };
+  
+  
+  
   
   /** generator to produce specific language tokens */
-  template<class I, typename E>
-  struct DiffStepBuilder<HandlerFun<I,E>>
+  template<class I>
+  struct DiffStepBuilder
     {
-      using Lang = DiffLanguage<I,E>;
+      using Scheme  = InterpreterScheme<I>;
+      using Handler = typename Scheme::Handler;
+      using Val     = typename Scheme::Val;
+      
+      using Lang = DiffLanguage<I,Val>;
       using Step = typename Lang::DiffStep;
       using Verb = typename Lang::DiffVerb;
       
-      HandlerFun<I,E> handler;
+      Handler handler;
       Literal id;
       
       Step
-      operator() (E elm)  const
+      operator() (Val elm)  const
         {
           return { Verb(handler,id), elm };
         }
@@ -181,7 +208,7 @@ namespace diff{
    *  interface of the diff language. E.g. this consumer might apply the diff.
    */
   template<class H>
-  inline DiffStepBuilder<H>
+  inline DiffStepBuilder<typename InterpreterScheme<H>::Interpreter>
   diffTokenBuilder (H handlerFun, Literal id)
   {
     return { handlerFun, id };
@@ -197,7 +224,7 @@ namespace diff{
  *       type will be picked up from the given member function pointer.
  */
 #define DiffStep_CTOR(_ID_) \
-  const auto _ID_ = diffTokenBuilder (&Interpreter::_ID_, STRINGIFY(_ID_));
+  const DiffStepBuilder<Interpreter> _ID_ = diffTokenBuilder (&Interpreter::_ID_, STRINGIFY(_ID_));
   
   
   

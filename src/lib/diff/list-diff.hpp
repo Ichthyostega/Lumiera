@@ -82,7 +82,17 @@ namespace diff{
     };
   
   template<typename E>
-  using ListDiffLanguage = DiffLanguage<ListDiffInterpreter<E>, E>;
+  struct ListDiffLanguage
+    : DiffLanguage<ListDiffInterpreter<E>, E>
+    {
+      using Interpreter = ListDiffInterpreter<E>;
+      
+      DiffStep_CTOR(ins);
+      DiffStep_CTOR(del);
+      DiffStep_CTOR(pick);
+      DiffStep_CTOR(find);
+      DiffStep_CTOR(skip);
+    };
   
   
   

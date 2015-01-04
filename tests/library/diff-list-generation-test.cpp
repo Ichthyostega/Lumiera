@@ -59,20 +59,6 @@ namespace diff{
           UNIMPLEMENTED("sequence size");
         }
     };
-
-  template<typename VAL>
-  struct Token
-    {
-      using Interpreter = typename ListDiffLanguage<VAL>::Interpreter;
-      using HaHa = DiffStepBuilder<HandlerFun<Interpreter,VAL>>;
-      
-      HaHa skip = diffTokenBuilder (&Interpreter::skip, "skip");
-    };
-  
-  //DiffStep_CTOR(skip);
-  
-//  template<typename VAL>
-//  typename Token<VAL>::HaHa Token<VAL>::skip = diffTokenBuilder (&Interpreter::skip, "skip");
   
       
       
@@ -107,7 +93,7 @@ namespace diff{
           size_t oldHead_=0,
                  newHead_=0;
           
-          static Token<Val> token;
+          static ListDiffLanguage<Val> token;
           
           DiffStep currentStep_{token.skip(Val())};
           
@@ -210,7 +196,7 @@ namespace diff{
     };
   
   template<class SEQ>
-  Token<typename DiffDetector<SEQ>::Val> DiffDetector<SEQ>::DiffFrame::token;
+  ListDiffLanguage<typename DiffDetector<SEQ>::Val> DiffDetector<SEQ>::DiffFrame::token;
   
   //#########################
 namespace test{
