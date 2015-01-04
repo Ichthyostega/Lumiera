@@ -100,6 +100,37 @@ namespace diff{
   LUMIERA_ERROR_DECLARE(DIFF_CONFLICT); ///< Collision in diff application: contents of target not as expected.
   
   
+  template<class I, typename E>
+  using HandlerFun = void (I::*) (E);
+  
+  
+  /** @internal type rebinding helper */
+  template<class I>
+  struct InterpreterScheme               ///< base case is to expect typedef I::Val
+    {
+      using Interpreter = I;
+      using Val = typename I::Val;
+      using Handler = HandlerFun<I,Val>;
+    };
+  
+  template<template<typename> class IP, typename E>
+  struct InterpreterScheme<IP<E>>        ///< alternatively, the interpreter value type can be templated
+    {
+      using Val = E;
+      using Interpreter = IP<E>;
+      using Handler = HandlerFun<Interpreter,Val>;
+    };
+  
+  template<class I, typename E>
+  struct InterpreterScheme<HandlerFun<I,E>>
+    {
+      using Val = E;
+      using Interpreter = I;
+      using Handler = HandlerFun<I,E>;
+    };
+  
+  
+  
   /**
    * Definition frame for a language to describe differences in data structures.
    * We use a \em linearised representation as a sequence of DiffStep messages
@@ -146,33 +177,6 @@ namespace diff{
         };
     };
   
-  template<class I, typename E>
-  using HandlerFun = void (I::*) (E);
-  
-  
-  template<class I>
-  struct InterpreterScheme
-    {
-      using Interpreter = I;
-      using Val = typename I::Val;
-      using Handler = HandlerFun<I,Val>;
-    };
-  
-  template<template<typename> class IP, typename E>
-  struct InterpreterScheme<IP<E>>
-    {
-      using Val = E;
-      using Interpreter = IP<E>;
-      using Handler = HandlerFun<Interpreter,Val>;
-    };
-  
-  template<class I, typename E>
-  struct InterpreterScheme<HandlerFun<I,E>>
-    {
-      using Val = E;
-      using Interpreter = I;
-      using Handler = HandlerFun<I,E>;
-    };
   
   
   
@@ -215,9 +219,10 @@ namespace diff{
   }
   
 /** shortcut to define tokens of the diff language.
- *  Use it to define namespace level function objects, which,
+ *  Use it to define namespace or class level function objects, which,
  *  when supplied with an argument value of type \c E, will generate
  *  a specific language token wrapping a copy of this element.
+ * @see ListDiffLanguage usage example
  * @note need a typedef \c Interpreter at usage site
  *       to refer to the actual language interpreter interface;
  *       the template parameters of the Language and the element

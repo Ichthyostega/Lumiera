@@ -76,76 +76,8 @@ namespace diff{
       
       using DiffStep = typename ListDiffLanguage<Val>::DiffStep;
       
-      /**
-       * @internal state frame for diff detection and generation.
-       * A diff generation process is built on top of an "old" reference point
-       * and a "new" state of the underlying sequence. Within this reference frame,
-       * an demand-driven evaluation of the differences is handed out to the client
-       * as an iterator. While consuming this evaluation process, both the old and
-       * the new version of the sequence will be traversed once. In case of re-orderings,
-       * a nested forward lookup similar to insertion sort will look for matches in the
-       * old sequence, rendering the whole evaluation quadratic in worst-case.
-       */
-      class DiffFrame
-        {
-          Idx old_;
-          Idx* new_;
-          size_t oldHead_=0,
-                 newHead_=0;
-          
-          static ListDiffLanguage<Val> token;
-          
-          DiffStep currentStep_{token.skip(Val())};
-          
-          bool hasOld()  const { return oldHead_ < old_.size(); }
-          bool hasNew()  const { return newHead_ < new_->size(); }
-          
-        public:
-          DiffFrame(Idx& current, Idx&& refPoint)
-            : old_(refPoint)
-            , new_(&current)
-            { }
-          
-          
-          /* === Iteration control API for IterStateWrapper== */
-          
-          friend bool
-          checkPoint (DiffFrame const& frame)
-          {
-            return frame.hasNew() || frame.hasOld();
-          }
-          
-          friend DiffStep&
-          yield (DiffFrame const& frame)
-          {
-            REQUIRE (checkPoint (frame));
-            return unConst(frame).currentStep_;
-          }
-          
-          friend void
-          iterNext (DiffFrame & frame)
-          {
-            frame.establishInvariant();
-          }
-          
-        private:
-          void
-          establishInvariant()
-            {
-              if (canPick())
-                {
-                  
-                }
-            }
-          
-          bool
-          canPick()
-            {
-              return false;//TODO
-            }
-          
-
-        };
+      /** @internal state frame for diff detection and generation. */
+      class DiffFrame;
       
       
       
@@ -194,9 +126,85 @@ namespace diff{
           return Diff(DiffFrame(refIdx_, move(mark)));
         }
     };
+
   
+  
+  
+  /**
+   * A diff generation process is built on top of an "old" reference point
+   * and a "new" state of the underlying sequence. Within this reference frame,
+   * an demand-driven evaluation of the differences is handed out to the client
+   * as an iterator. While consuming this evaluation process, both the old and
+   * the new version of the sequence will be traversed once. In case of re-orderings,
+   * a nested forward lookup similar to insertion sort will look for matches in the
+   * old sequence, rendering the whole evaluation quadratic in worst-case.
+   */
+  template<class SEQ>
+  class DiffDetector<SEQ>::DiffFrame
+    {
+      Idx old_;
+      Idx* new_;
+      size_t oldHead_=0,
+             newHead_=0;
+      
+      static ListDiffLanguage<Val> token;
+      
+      DiffStep currentStep_{token.skip (Val())};
+      
+      bool hasOld()  const { return oldHead_ < old_.size(); }
+      bool hasNew()  const { return newHead_ < new_->size(); }
+      
+    public:
+      DiffFrame(Idx& current, Idx&& refPoint)
+        : old_(refPoint)
+        , new_(&current)
+        { }
+      
+      
+      /* === Iteration control API for IterStateWrapper== */
+      
+      friend bool
+      checkPoint (DiffFrame const& frame)
+      {
+        return frame.hasNew() || frame.hasOld();
+      }
+      
+      friend DiffStep&
+      yield (DiffFrame const& frame)
+      {
+        REQUIRE (checkPoint (frame));
+        return unConst(frame).currentStep_;
+      }
+      
+      friend void
+      iterNext (DiffFrame & frame)
+      {
+        frame.establishInvariant();
+      }
+      
+    private:
+      void
+      establishInvariant()
+        {
+          if (canPick())
+            {
+              
+            }
+        }
+      
+      bool
+      canPick()
+        {
+          return false;//TODO
+        }
+      
+  
+    };
+  
+  /** allocate static storage for the diff language token builder functions */
   template<class SEQ>
   ListDiffLanguage<typename DiffDetector<SEQ>::Val> DiffDetector<SEQ>::DiffFrame::token;
+  
   
   //#########################
 namespace test{
