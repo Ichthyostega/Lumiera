@@ -59,76 +59,19 @@
 
 
 #include "lib/diff/list-diff.hpp"
-#include "lib/format-string.hpp"
-
-#include <algorithm>
-#include <vector>
-#include <tuple>
-
-
-namespace lib {
-namespace diff{
-
-#include "lib/test/run.hpp"
-#include "lib/diff/list-diff.hpp"
+#include "lib/diff/index-table.hpp"
 #include "lib/iter-adapter.hpp"
-#include "lib/itertools.hpp"
-#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <string>
-#include <vector>
-
-using lib::append_all;
-using util::unConst;
-using util::isnil;
-using std::string;
-using std::vector;
-using std::move;
-using std::swap;
+#include <utility>
 
 
 namespace lib {
 namespace diff{
-  //#########################
   
-  template<typename VAL>
-  class IndexTable
-    {
-    public:
-      template<class SEQ>
-      IndexTable(SEQ const& seq)
-        {
-          UNIMPLEMENTED("build index");
-        }
-      
-      size_t
-      size()  const
-        {
-          UNIMPLEMENTED("sequence size");
-        }
-      
-      VAL const&
-      getElement (size_t i)  const
-        {
-          UNIMPLEMENTED("indexed value access");
-        }
-      
-      bool
-      contains (VAL const& elm)  const
-        {
-          return size() == pos(elm);
-        }
-      
-      size_t
-      pos (VAL const& elm)  const
-        {
-          UNIMPLEMENTED("index lookup");
-        }
-    };
-  
-  
-  
+  using util::unConst;
+  using std::move;
+  using std::swap;
   
   
   
@@ -289,11 +232,6 @@ namespace diff{
   /** allocate static storage for the diff language token builder functions */
   template<class SEQ>
   ListDiffLanguage<typename DiffDetector<SEQ>::Val> DiffDetector<SEQ>::DiffFrame::token;
-  
-  
-  //#########################
-  
-  
   
   
   
