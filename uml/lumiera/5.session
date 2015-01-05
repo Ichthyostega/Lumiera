@@ -1,37 +1,27 @@
-window_sizes 1619 1028 270 1339 881 71
+window_sizes 1619 1028 270 1339 883 71
 diagrams
   classdiagram_ref 136453 // Session backbone
     631 352 100 4 0 0
-  objectdiagram_ref 138885 // ModelAssetRelations
+  active  objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
-  classdiagram_ref 143877 // Player Entities
-    663 654 100 4 0 0
-  objectdiagram_ref 144005 // Play Process Structure
-    562 424 100 4 0 0
-  sequencediagram_ref 145157 // output data exchange
-    586 416 100 4 0 0
-  active  classdiagram_ref 151685 // Player Output
-    643 590 92 4 0 0
 end
 show_stereotypes
 selected 
-  package_ref 129 // lumiera
+package_ref 129 // lumiera
 open
   
-  package_ref 128005 // design
+package_ref 128005 // design
   classview_ref 128389 // Controller Workings
-  class_ref 185221 // Allocation
-  class_ref 178565 // DataSink
-  class_ref 185349 // Connection
-  class_ref 185477 // OutputSlotImpl
-  class_ref 178693 // BufferProvider
   
-  package_ref 132229 // Session
+package_ref 133637 // Play
+  
+package_ref 132229 // Session
   class_ref 153733 // QueryFocusStack
+  classview_ref 128261 // Builder Workings
   usecaseview_ref 128261 // config examples
   
-  package_ref 128389 // RenderEngine
+package_ref 128389 // RenderEngine
   
-  package_ref 129157 // BackendLayer
+package_ref 129157 // BackendLayer
 end
 end
