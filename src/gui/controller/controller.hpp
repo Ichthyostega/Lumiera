@@ -20,8 +20,10 @@
 
 */
 
-/** @file controller/controller.hpp
- ** This file contains the definition of the controller object
+/** @file controller.hpp
+ ** The top level UI controller.
+ ** 
+ ** @todo as of 1/2015, this needs to be reshaped ////////////////////TICKET #959
  */
 
 
@@ -40,6 +42,9 @@ class Project;
   
 namespace controller { 
 
+/**
+ * @todo needs to be reshaped for communication with Proc-Layer /////////////////TICKET #959
+ */
 class Controller
 {
 public:

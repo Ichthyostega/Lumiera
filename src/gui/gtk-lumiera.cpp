@@ -84,6 +84,9 @@ GtkLumiera::application()
 
 
 
+/**
+ * @remarks this function blocks until shutdown of the UI
+ */
 void
 GtkLumiera::main (int argc, char *argv[])
 {

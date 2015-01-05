@@ -68,7 +68,7 @@ using std::shared_ptr;
 /* ====== The Application Class ====== */
 
 /**
- *  The main application class.
+ *  Top level entry point: The Lumiera GTK UI.
  */
 class GtkLumiera
   : boost::noncopyable
@@ -83,6 +83,7 @@ class GtkLumiera
     
     
     
+    /** start up the GUI and run the event thread */
     void main(int argc, char *argv[]);
     
     WindowManager& windowManager();
