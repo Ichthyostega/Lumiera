@@ -24,8 +24,8 @@
 #include "gui/panels/viewer-panel.hpp"
 
 #include "gui/workspace/workspace-window.hpp"
-#include "gui/controller/controller.hpp"
-#include "gui/controller/playback-controller.hpp"
+#include "gui/ui-bus.hpp"  ///////////////////////////////////TODO why are we forced to include this after workspace-window.hpp ??  Ambiguity between std::ref and boost::reference_wrapper
+#include "gui/ctrl/playback-controller.hpp"
 #include "gui/display-service.hpp"
 
 

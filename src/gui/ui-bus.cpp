@@ -3,6 +3,7 @@
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2015,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,7 +22,7 @@
 * *****************************************************/
 
 
-#include "gui/controller/controller.hpp"
+#include "gui/ui-bus.hpp"
 
 namespace gui {
 namespace controller {

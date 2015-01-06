@@ -248,7 +248,7 @@ namespace test {
       
       
       
-                                   //---key--+-value-+-hash-function--- 
+                              //---key--+-value-+-hash-function--- 
       typedef std::unordered_map<DummyID, string, DummyID::UseEmbeddedHash> Hashtable;
       
       /** @test build a hashtable, using EntryID as key,

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "gui/controller/playback-controller.hpp"
+#include "gui/ctrl/playback-controller.hpp"
 #include "gui/display-service.hpp"
 #include "lib/error.hpp"
 #include "include/logging.h"

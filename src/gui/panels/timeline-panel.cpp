@@ -27,7 +27,7 @@
 
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/model/project.hpp"
-#include "gui/controller/controller.hpp"
+#include "gui/ui-bus.hpp"
 
 #include "lib/util.hpp"
 

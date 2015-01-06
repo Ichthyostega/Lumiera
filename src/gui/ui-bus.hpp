@@ -3,6 +3,7 @@
 
   Copyright (C)         Lumiera.org
     2009,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2015,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -31,7 +32,8 @@
 #define CONTROLLER_HPP
 
 
-#include "gui/controller/playback-controller.hpp"
+#include "gui/gtk-lumiera.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
+#include "gui/ctrl/playback-controller.hpp"
 
 
 namespace gui {

@@ -50,11 +50,12 @@ namespace test{
   /**
    * \par Implementation notes
    * GCC / G++ subscribes to a cross-vendor ABI for C++, sometimes called the IA64 ABI
-   * because it happens to be the native ABI for that platform. It is summarised
+   * because it happens to be the native ABI for that platform. It is summarised at
    * \link http://www.codesourcery.com/cxx-abi/ mentor-embedded \endlink
    * along with the current specification. For users of GCC greater than or equal to 3.x,
    * entry points are exposed through the standard library in \c <cxxabi.h>
-   * relies on a vendor neutral ABI for C++ compiled programs
+   * 
+   * This implementation relies on a vendor neutral ABI for C++ compiled programs
    * 
    *     char* abi::__cxa_demangle(const char* mangled_name,
    *                               char* output_buffer, size_t* length,
@@ -73,7 +74,7 @@ namespace test{
    *  - \c status
    *    error flag: `*status` is set to one of the following values:
    *             
-   *             0: The demangling operation succeeded.
+   *              0: The demangling operation succeeded.
    *             -1: A memory allocation failure occurred.
    *             -2: mangled_name is not a valid name under the C++ ABI mangling rules.
    *             -3: One of the arguments is invalid.

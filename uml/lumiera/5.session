@@ -2,26 +2,31 @@ window_sizes 1619 1028 270 1339 883 71
 diagrams
   classdiagram_ref 136453 // Session backbone
     631 352 100 4 0 0
-  active  objectdiagram_ref 138885 // ModelAssetRelations
+  objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
+  active  classdiagram_ref 158213 // UIBus
+    650 663 100 4 0 0
 end
 show_stereotypes
 selected 
-package_ref 129 // lumiera
+  package_ref 129 // lumiera
 open
   
-package_ref 128005 // design
-  classview_ref 128389 // Controller Workings
+  package_ref 128005 // design
   
-package_ref 133637 // Play
+  package_ref 129029 // Control
   
-package_ref 132229 // Session
+  package_ref 133637 // Play
+  
+  package_ref 132229 // Session
   class_ref 153733 // QueryFocusStack
   classview_ref 128261 // Builder Workings
   usecaseview_ref 128261 // config examples
   
-package_ref 128389 // RenderEngine
+  package_ref 128389 // RenderEngine
   
-package_ref 129157 // BackendLayer
+  package_ref 129157 // BackendLayer
+  class_ref 192773 // BusTerm
+  class_ref 193157 // Element
 end
 end
