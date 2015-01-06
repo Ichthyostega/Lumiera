@@ -1,5 +1,5 @@
 /*
-  displayer.cpp  -  Implements the base class for displaying video
+  Displayer  -  base class for displaying video
 
   Copyright (C)         Lumiera.org
     2000,               Arne Schirmacher <arne@schirmacher.de>
@@ -22,6 +22,7 @@
 
 * *****************************************************/
 
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/output/displayer.hpp"
 #include "gui/output/xvdisplayer.hpp"
@@ -29,41 +30,41 @@
 
 namespace gui {
 namespace output {
-
-bool
-Displayer::usable()
+  
+  bool
+  Displayer::usable()
   {
     return false;
   }
-
-DisplayerInput
-Displayer::format()
+  
+  DisplayerInput
+  Displayer::format()
   {
     return DISPLAY_NONE;
   }
-
-int
-Displayer::preferredWidth()
+  
+  int
+  Displayer::preferredWidth()
   {
     return imageWidth;
   }
-
-int
-Displayer::preferredHeight()
+  
+  int
+  Displayer::preferredHeight()
   {
     return imageHeight;
   }
-
-void
-Displayer::calculateVideoLayout(
-        int widget_width, int widget_height,
-        int image_width, int image_height,
-        int &video_x, int &video_y, int &video_width, int &video_height )
+  
+  void
+  Displayer::calculateVideoLayout(
+          int widget_width, int widget_height,
+          int image_width, int image_height,
+          int &video_x, int &video_y, int &video_width, int &video_height )
   {
-    REQUIRE(widget_width >= 0);
-    REQUIRE(widget_height >= 0);
-    REQUIRE(image_width >= 0);
-    REQUIRE(image_height >= 0);
+    REQUIRE (widget_width >= 0);
+    REQUIRE (widget_height >= 0);
+    REQUIRE (image_width >= 0);
+    REQUIRE (image_height >= 0);
 
     double ratio_width = ( double ) widget_width / ( double ) image_width;
     double ratio_height = ( double ) widget_height / ( double ) image_height;
@@ -74,11 +75,11 @@ Displayer::calculateVideoLayout(
     video_x = ( widget_width - video_width ) / 2;
     video_y = ( widget_height - video_height ) / 2;
     
-    ENSURE(video_x >= 0 && video_x < widget_width);
-    ENSURE(video_y >= 0 && video_y < widget_height);
-    ENSURE(video_width <= widget_width);
-    ENSURE(video_width <= widget_width);
+    ENSURE (video_x >= 0 && video_x < widget_width);
+    ENSURE (video_y >= 0 && video_y < widget_height);
+    ENSURE (video_width <= widget_width);
+    ENSURE (video_width <= widget_width);
   }
-
-}   // namespace output
-}   // namespace gui
+  
+  
+}} // namespace gui::output

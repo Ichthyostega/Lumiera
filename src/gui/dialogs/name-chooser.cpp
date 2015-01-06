@@ -1,5 +1,5 @@
 /*
-  name-chooser.cpp  -  Definition of the name chooser dialog object
+  NameChooser  -  dialog to enter a string name
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,6 +20,7 @@
 
 * *****************************************************/
 
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/dialogs/name-chooser.hpp"
 #include "gui/dialogs/dialog.hpp"
@@ -29,41 +30,38 @@ using namespace Glib;
 
 namespace gui {
 namespace dialogs {
-
-NameChooser::NameChooser(Window &parent, cuString title,
-    cuString default_name) :
-  Dialog::Dialog(title, parent, true),
-  caption(_("Name:"))
-{
-  // Add the controls
-  name.set_text(default_name);
-  name.set_activates_default();
   
-  hBox.pack_start(caption);
-  hBox.pack_start(name);
-  hBox.set_spacing(BoxSpacing);
-
-  Box* const v_box = get_vbox();
-  REQUIRE(v_box != NULL);
-  v_box->pack_start(hBox);
+  NameChooser::NameChooser (Window &parent,
+                            cuString title,
+                            cuString default_name)
+    : Dialog::Dialog(title, parent, true)
+    , caption(_("Name:"))
+    {
+      // Add the controls
+      name.set_text(default_name);
+      name.set_activates_default();
+      
+      hBox.pack_start (caption);
+      hBox.pack_start (name);
+      hBox.set_spacing (BoxSpacing);
+    
+      Box* const v_box = get_vbox();
+      REQUIRE (v_box != NULL);
+      v_box->pack_start (hBox);
+      
+      // Configure the dialog
+      v_box->set_spacing (BoxSpacing);
+      set_border_width (BorderPadding);
+      set_resizable (false);
+    
+      // Configure the Cancel and Render buttons    
+      add_button (Stock::CANCEL, RESPONSE_CANCEL);
+      add_button (Stock::OK, RESPONSE_OK);
+      set_default_response (RESPONSE_OK);
+    
+      show_all_children();
+    }
   
-  // Configure the dialog
-  v_box->set_spacing(BoxSpacing);
-  set_border_width(BorderPadding);
-  set_resizable(false);
-
-  // Configure the Cancel and Render buttons    
-  add_button(Stock::CANCEL, RESPONSE_CANCEL);
-  add_button(Stock::OK, RESPONSE_OK);
-  set_default_response(RESPONSE_OK);
-
-  show_all_children();
-}
-
-cuString NameChooser::get_name() const
-{
-  return name.get_text();
-}
-
-}   // namespace dialogs
-}   // namespace gui
+  
+  
+}} // namespace gui::dialog

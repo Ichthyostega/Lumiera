@@ -1,5 +1,5 @@
 /*
-  dialog.hpp  -  Definitions of globals for dialogs
+  DIALOG.hpp  -  Definitions of globals for dialogs
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,29 +20,23 @@
 
 */
 
-/** @file render.hpp
- ** This file contains definitions of globals for dialogs
- **
- */
 
-
-#ifndef DIALOG_HPP
-#define DIALOG_HPP
+#ifndef GUI_DIALOG_DIALOG_H
+#define GUI_DIALOG_DIALOG_H
 
 namespace gui {
 namespace dialogs {
-
-/**
- * The space in pixels to pad the border of Lumiera dialog boxes.
- */
-static const int BorderPadding = 8;
-
-/**
- * The spacing for VBoxes and HBoxes in Lumiera dialogs.
- */
-static const int BoxSpacing = 6;
-
-}   // namespace dialogs
-}   // namespace gui
-
-#endif // DIALOG_HPP
+  
+  /**
+   * The space in pixels to pad the border of Lumiera dialog boxes.
+   */
+  static const int BorderPadding = 8;
+  
+  /**
+   * The spacing for VBoxes and HBoxes in Lumiera dialogs.
+   */
+  static const int BoxSpacing = 6;
+  
+  
+}} // namespace gui::dialog
+#endif /*GUI_DIALOG_DIALOG_H*/

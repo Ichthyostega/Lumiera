@@ -1,5 +1,5 @@
 /*
-  displayer.hpp  -  Defines the base class for displaying video
+  DISPLAYER.hpp  -  base class for displaying video
 
   Copyright (C)         Lumiera.org
     2000,               Arne Schirmacher <arne@schirmacher.de>
@@ -23,111 +23,101 @@
 */
 
 /** @file displayer.hpp
- ** This file contains the definition of Displayer; the base class
- ** of all video display implementations
- ** @see displayer.cpp
+ ** The Displayer serves as base of all video display implementations
+ ** 
  */
 
-#ifndef DISPLAYER_HPP
-#define DISPLAYER_HPP
+
+#ifndef GUI_OUTPUT_DISPLAYER_H
+#define GUI_OUTPUT_DISPLAYER_H
 
 
 namespace gui {
 namespace output {
-
-/**
- * Supported Displayer formats
- */
-typedef enum {
-    DISPLAY_NONE,
-    DISPLAY_YUV,
-    DISPLAY_RGB,
-    DISPLAY_BGR,
-    DISPLAY_BGR0,
-    DISPLAY_RGB16
-}
-DisplayerInput;
-
-/**
- * A Displayer is a class which is responsible for rendering an image
- * in some way (ie: Xvideo, GDK, OpenGL etc).
- *
- * @remarks All Displayer classes must extend the Displayer class and
- * minimally rewrite:
- *
- * + usable() - to indicate if the object can be used, 
- * + format() - to indicate what type of input the put method expects
- * + put( void * ) - deal with an image of the expected type and size
- *
- * By default, all images will be delivered to the put method in a
- * resolution of IMG_WIDTH * IMG_HEIGHT. If another size is required,
- * then the rewrite the methods:
- *
- * + preferredWidth 
- * + preferredHeight
- *
- * If the widget being written to doesn't need a fixed size, then
- * rewrite the two other put methods as required.
- */
-class Displayer
-{
-public:
-
-  /** 
-   * Indicates if this object can be used to render images on the
-   * running system.
-   */
-  virtual bool usable();
-
-  /** 
-   * Indicates the format required by the abstract put method.
-  */
-  virtual DisplayerInput format();
-
-  /** 
-   * Expected width of input to put.
-   */
-  virtual int preferredWidth();
-
-  /** 
-   * Expected height of input to put.
-   */
-  virtual int preferredHeight();
-
-  /**
-   * Put an image of a given width and height with the expected input
-   * format (as indicated by the format method).
-   */
-  virtual void put( const void* ) = 0;
-
-protected:
+  
+  /** Supported Displayer formats */
+  enum DisplayerInput {
+      DISPLAY_NONE,
+      DISPLAY_YUV,
+      DISPLAY_RGB,
+      DISPLAY_BGR,
+      DISPLAY_BGR0,
+      DISPLAY_RGB16
+    };
+  
   
   /**
-   * Calculates the coordinates for placing a video image inside a
-   * widget
+   * A Displayer is a class which is responsible for rendering an image
+   * in some way (ie: Xvideo, GDK, OpenGL etc).
    *
-   * @param[in] widget_width   The width of the display widget.
-   * @param[in] widget_height  The height of the display widget.
-   * @param[in] image_width    The width of the video image.
-   * @param[in] image_height   The height of the video image.
-   * @param[out] video_x       The x-coordinate of the top left
-   *                           corner of the scaled video image.
-   * @param[out] video_y       The y-coordinate of the top left
-   *                           corner of the scaled video image.
-   * @param[out] video_width   The width of the scale video image.
-   * @param[out] video_height  The height of the scale video image.  
+   * @remarks All Displayer classes must extend the Displayer class and
+   * minimally rewrite:
+   *
+   * + usable() - to indicate if the object can be used, 
+   * + format() - to indicate what type of input the put method expects
+   * + put( void * ) - deal with an image of the expected type and size
+   *
+   * By default, all images will be delivered to the put method in a
+   * resolution of IMG_WIDTH * IMG_HEIGHT. If another size is required,
+   * then the rewrite the methods:
+   *
+   * + preferredWidth 
+   * + preferredHeight
+   *
+   * If the widget being written to doesn't need a fixed size, then
+   * rewrite the two other put methods as required.
    */
-  static void calculateVideoLayout(
-      int widget_width, int widget_height,
-      int image_width, int image_height,
-      int &video_x, int &video_y, int &video_width, int &video_height );
-
-protected:
-  int imageWidth;
-  int imageHeight;
-};
-
-}   // namespace output
-}   // namespace gui
-
-#endif // DISPLAYER_HPP
+  class Displayer
+    {
+    protected:
+      int imageWidth;
+      int imageHeight;
+      
+    public:
+      virtual ~Displayer() { }
+      
+      
+      /** Indicates if this object can be used to render images on the running system. */
+      virtual bool usable();
+      
+      /** Indicates the format required by the abstract put method. */
+      virtual DisplayerInput format();
+      
+      /** Expected width of input to put. */
+      virtual int preferredWidth();
+      
+      /** Expected height of input to put. */
+      virtual int preferredHeight();
+      
+      /**
+       * Put an image of a given width and height with the expected input
+       * format (as indicated by the format method).
+       */
+      virtual void put (void* const)  =0;
+      
+      
+    protected:
+      /**
+       * Calculates the coordinates for placing a video image inside a widget
+       * 
+       * @param[in] widget_width   The width of the display widget.
+       * @param[in] widget_height  The height of the display widget.
+       * @param[in] image_width    The width of the video image.
+       * @param[in] image_height   The height of the video image.
+       * @param[out] video_x       The x-coordinate of the top left
+       *                           corner of the scaled video image.
+       * @param[out] video_y       The y-coordinate of the top left
+       *                           corner of the scaled video image.
+       * @param[out] video_width   The width of the scale video image.
+       * @param[out] video_height  The height of the scale video image.
+       */
+      static void calculateVideoLayout(
+          int widget_width, int widget_height,
+          int image_width, int image_height,
+          int &video_x, int &video_y, int &video_width, int &video_height );
+    };
+    
+    
+  
+}} // namespace gui::output
+#endif /*GUI_OUTPUT_DISPLAYER_H*/

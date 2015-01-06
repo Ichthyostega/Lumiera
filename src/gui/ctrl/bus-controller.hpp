@@ -1,5 +1,5 @@
 /*
-  bus-controller.hpp  -  service for
+  BUS-CONTROLLER.hpp  -  the UI-Bus service
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>

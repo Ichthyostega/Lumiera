@@ -1,5 +1,5 @@
 /*
-  playback-controller.cpp  -  Implementation of the playback controller object
+  PlaybackController  -  playback controller object
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -29,67 +29,66 @@
 
 namespace gui {
 namespace controller { 
-
-
-
-PlaybackController::PlaybackController() :
-  playing(false),
-  viewerHandle_(0)
-{ }
-
-
-void
-PlaybackController::play()
-{
-  if (playHandle)
-    {
-      playHandle.play(true);
-      playing = true;
-    }
-  else if (viewerHandle_)
-    try
+  
+  
+  
+  PlaybackController::PlaybackController()
+    : playing(false)
+    , viewerHandle_(0)
+    { }
+  
+  
+  void
+  PlaybackController::play()
+  {
+    if (playHandle)
       {
-        playHandle =  lumiera::DummyPlayer::facade().start (viewerHandle_);
+        playHandle.play(true);
         playing = true;
       }
-    catch (lumiera::error::State& err)
-      {
-        WARN (gui, "failed to start playback: %s" ,err.what());
-        lumiera_error();
-        playing = false;
-      }
-}
-
-void
-PlaybackController::pause()
-{
-  if (playHandle)
-    playHandle.play(false);
-  playing = false;
-}
-
-void
-PlaybackController::stop()
-{
-  playHandle.close();
-  playing = false;
-}
-
-bool
-PlaybackController::is_playing()
-{
-  return playing;
-}
-
-
-
-void
-PlaybackController::use_display (LumieraDisplaySlot display)
-{
-  viewerHandle_ = display;
-}
-
-
-}   // namespace controller
-}   // namespace gui
+    else if (viewerHandle_)
+      try
+        {
+          playHandle =  lumiera::DummyPlayer::facade().start (viewerHandle_);
+          playing = true;
+        }
+      catch (lumiera::error::State& err)
+        {
+          WARN (gui, "failed to start playback: %s" ,err.what());
+          lumiera_error();
+          playing = false;
+        }
+  }
+  
+  void
+  PlaybackController::pause()
+  {
+    if (playHandle)
+      playHandle.play(false);
+    playing = false;
+  }
+  
+  void
+  PlaybackController::stop()
+  {
+    playHandle.close();
+    playing = false;
+  }
+  
+  bool
+  PlaybackController::is_playing()
+  {
+    return playing;
+  }
+  
+  
+  
+  void
+  PlaybackController::use_display (LumieraDisplaySlot display)
+  {
+    viewerHandle_ = display;
+  }
+  
+  
+}} // namespace gui::ctrl
 

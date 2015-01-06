@@ -1,5 +1,5 @@
 /*
-  name-chooser.hpp  -  Definition of the name chooser dialog object
+  NAME-CHOOSER.hpp  -  dialog to enter a string name
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,52 +20,49 @@
 
 */
 
-/** @file name-chooser.hpp
- ** This file contains the definition of the name chooser dialog
- **
- */
 
-
-#ifndef NAME_CHOOSER_H
-#define NAME_CHOOSER_H
+#ifndef GUI_DIALOG_NAME_CHOOSER_H
+#define GUI_DIALOG_NAME_CHOOSER_H
 
 #include "gui/gtk-lumiera.hpp"
 
 
 namespace gui {
 namespace dialogs {
-
-/** 
- * The name chooser dialog is a modal dialog box that prompts the user
- * to choose a string name.
- */
-class NameChooser : public Gtk::Dialog
-{
-public:
-  /**
-   * Creates a name chooser dialog.
-   * @param parent The window which will be the parent of this dialog.
-   * @param title The string for the title of this dialog.
-   * @param default_name The name that will be shown by default in the
-   * edit box of the dialog.
-   */
-  NameChooser(Gtk::Window &parent, cuString title,
-    cuString default_name);
   
   /**
-   * Gets the current name of the chosen in the dialog.
-   * @return Returns the name currently typed into the edit box of the
-   * dialog.
+   * The name chooser dialog is a modal dialog box that prompts the user
+   * to choose a string name.
    */
-  cuString get_name() const;
-
-private:
-  Gtk::HBox hBox;
-  Gtk::Label caption;
-  Gtk::Entry name;
-};
-
-}   // namespace dialogs
-}   // namespace gui
-
-#endif // NAME_CHOOSER_H
+  class NameChooser
+    : public Gtk::Dialog
+    {
+      Gtk::HBox hBox;
+      Gtk::Label caption;
+      Gtk::Entry name;
+      
+    public:
+      /**
+       * Creates a name chooser dialog.
+       * @param parent The window which will be the parent of this dialog.
+       * @param title The string for the title of this dialog.
+       * @param default_name The name that will be shown by default in the
+       * edit box of the dialog.
+       */
+      NameChooser(Gtk::Window &parent, cuString title, cuString default_name);
+      
+      /**
+       * Gets the current name of the chosen in the dialog.
+       * @return Returns the name currently typed into the edit box of the
+       * dialog.
+       */
+      cuString 
+      get_name()  const
+        {
+          return name.get_text();
+        }
+    };
+  
+  
+}} // namespace gui::dialog
+#endif /*GUI_DIALOG_NAME_CHOOSER_H*/

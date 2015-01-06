@@ -1,5 +1,5 @@
 /*
-  BusController  -  service for
+  BusController  -  the UI-Bus service
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -50,7 +50,9 @@ using util::contains;
 using util::isnil;
 
 
-  
+namespace gui {
+namespace controller { 
+
   namespace { // internal details
     
   } // internal details
@@ -72,4 +74,6 @@ using util::isnil;
   {
     return "x"+id;
   }
+  
+}} // namespace gui::ctrl
 

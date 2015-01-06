@@ -1,5 +1,5 @@
 /*
-  preferences-dialog.hpp  -  Definition of the application preferences dialog
+  PREFERENCES-DIALOG.hpp  -  dialog for application preferences
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,39 +20,56 @@
 
 */
 
-/** @file render.hpp
- ** This file contains the definition of the application preferences dialog
- **
- */
 
+#ifndef GUI_DIALOG_PREFERENCES_DIALOG_H
+#define GUI_DIALOG_PREFERENCES_DIALOG_H
 
-#ifndef PREFERENCES_DIALOG_HPP
-#define PREFERENCES_DIALOG_HPP
 
 #include "gui/gtk-lumiera.hpp"
+#include "gui/dialogs/dialog.hpp"
 
 namespace gui {
 namespace dialogs {
-
-/** 
- * The definition of render output dialog class
- */
-class PreferencesDialog : public Gtk::Dialog
-{
-public:
-  PreferencesDialog(Gtk::Window &parent);
-
-protected:
   
-
-protected:
-  Gtk::Notebook notebook;
-
-  Gtk::VBox interfaceBox;
-  Gtk::ComboBox interfaceThemeCombo;
-};
-
-}   // namespace dialogs
-}   // namespace gui
-
-#endif // PREFERENCES_DIALOG_HPP
+  
+  class PreferencesDialog
+    : public Gtk::Dialog
+    {
+      Gtk::Notebook notebook;
+    
+      Gtk::VBox interfaceBox;
+      Gtk::ComboBox interfaceThemeCombo;
+      
+    public:
+      PreferencesDialog(Gtk::Window &parent)
+        : Dialog(_("Preferences"), parent, true)
+        {
+          using namespace Gtk;
+          
+          Box *v_box = get_vbox();
+          REQUIRE (v_box != NULL);
+        
+          interfaceBox.pack_start (interfaceThemeCombo, PACK_SHRINK);
+          interfaceBox.set_spacing(4);
+          interfaceBox.set_border_width(5);
+        
+          notebook.append_page (interfaceBox, _("Interface"));
+          
+          v_box->pack_start (notebook);
+        
+          // Configure the dialog
+          v_box->set_spacing (BoxSpacing);
+          set_border_width (BorderPadding);
+          set_resizable (false);
+        
+          // Configure the Cancel and OK buttons    
+          add_button (Stock::CANCEL, RESPONSE_CANCEL);
+          add_button (Stock::OK, RESPONSE_OK);
+        
+          show_all_children();
+        }
+    };
+  
+  
+}} // namespace gui::dialog
+#endif /*GUI_DIALOG_PREFERENCES_DIALOG_H*/

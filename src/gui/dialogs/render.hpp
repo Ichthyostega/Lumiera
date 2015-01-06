@@ -1,5 +1,5 @@
 /*
-  render.hpp  -  Definition of the render output dialog
+  RENDER.hpp  -  dialog to define render output
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,50 +21,50 @@
 */
 
 /** @file render.hpp
- ** This file contains the definition of the render output dialog
+ ** definition of the render output dialog
  **
  */
 
 
-#ifndef RENDER_HPP
-#define RENDER_HPP
+#ifndef GUI_DIALOG_RENDER_H
+#define GUI_DIALOG_RENDER_H
 
 #include "gui/gtk-lumiera.hpp"
 
 
 namespace gui {
 namespace dialogs {
-
-/** 
- * The defintion of render output dialog class
- */
-class Render : public Gtk::Dialog
-{
-public:
-  Render(Gtk::Window &parent);
-
-protected:
-  void on_button_browse();
-
-protected:
-  Gtk::HBox outputFileHBox;
-  Gtk::Label outputFileLabel;
-  Gtk::Entry outputFilePathEntry;
-
-  Gtk::Image browseButtonImage;
-  Gtk::Button outputFileBrowseButton;
-
-  Gtk::HBox containerFormatHBox;
-  Gtk::Label containerFormatLabel;
-  Gtk::ComboBox containerFormat;
   
-  Gtk::Image renderButtonImage;
-
-  Gtk::Frame audioFrame;
-  Gtk::Frame videoFrame;
-};
-
-}   // namespace dialogs
-}   // namespace gui
-
-#endif // RENDER_HPP
+  
+  /** 
+   * A dialog to choose render output format and name
+   */
+  class Render
+    : public Gtk::Dialog
+    {
+      Gtk::HBox outputFileHBox;
+      Gtk::Label outputFileLabel;
+      Gtk::Entry outputFilePathEntry;
+    
+      Gtk::Image browseButtonImage;
+      Gtk::Button outputFileBrowseButton;
+    
+      Gtk::HBox containerFormatHBox;
+      Gtk::Label containerFormatLabel;
+      Gtk::ComboBox containerFormat;
+      
+      Gtk::Image renderButtonImage;
+    
+      Gtk::Frame audioFrame;
+      Gtk::Frame videoFrame;
+      
+    public:
+      Render (Gtk::Window& parent);
+      
+    private:
+      void on_button_browse();
+    };
+  
+  
+}} // namespace gui::dialog
+#endif /*GUI_DIALOG_RENDER_H*/

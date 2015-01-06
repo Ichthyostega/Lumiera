@@ -1,5 +1,5 @@
 /*
-  playback-controller.hpp  -  Declaration of the playback controller object
+  PLAYBACK-CONTROLLER.hpp  -  playback controller object
 
   Copyright (C)         Lumiera.org
     2009,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,6 +20,7 @@
 
 */
 
+
 /** @file controller/playback-controller.hpp
  ** This file contains the definition of the playback controller object
  */
@@ -37,43 +38,38 @@
 
 namespace gui {
 namespace controller {
+  
+  
+  
+  class PlaybackController
+    : boost::noncopyable
+    {
 
-
-
-class PlaybackController
-  : boost::noncopyable
-{
-public:
-
-  PlaybackController();
-
-  void play();
+      volatile bool playing;
+      
+      lumiera::DummyPlayer::Process playHandle;
+      
+      LumieraDisplaySlot viewerHandle_;
+      
+    public:
+    
+      PlaybackController();
+    
+      void play();
+      void pause();
+      void stop();
+      
+      bool is_playing();
+    
+      void use_display (LumieraDisplaySlot display);
+      
+    private:
+      
+      void on_frame();
+      
+    };
   
-  void pause();
   
-  void stop();
-  
-  bool is_playing();
-
-  void use_display (LumieraDisplaySlot display);
-  
-private:
-  
-  void on_frame();
-  
-  
-private:
-
-  volatile bool playing;
-  
-  lumiera::DummyPlayer::Process playHandle;
-  
-  LumieraDisplaySlot viewerHandle_;
-  
-};
-
-}   // namespace controller
-}   // namespace gui
-
+}} // namespace gui::controller
 #endif // PLAYBACK_CONTROLLER_HPP
 
