@@ -97,7 +97,7 @@ namespace session {
       operator Scope()                const;
       operator string()               const;
       
-      QueryFocus&     attach (Scope const&);
+      QueryFocus&      shift (Scope const&);
       static QueryFocus push (Scope const&);
       static QueryFocus push ();
       QueryFocus& reset ();

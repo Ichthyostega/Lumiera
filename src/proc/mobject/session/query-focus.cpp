@@ -51,7 +51,7 @@ namespace session {
   
   /**
    * @internal build a new QueryFocus
-   * as attached to an existing path.
+   * as located to an existing path.
    */
   QueryFocus::QueryFocus(ScopePath& path_to_attach)
     : focus_( &path_to_attach)
@@ -97,14 +97,14 @@ namespace session {
   
   
   
-  /** attach this QueryFocus to a container-like scope,
+  /** shift this QueryFocus to a container-like scope,
    *  causing it to \em navigate, changing the
    *  current ScopePath as a side-effect
    *  @throw error::Invalid if the given container is
    *         invalid or can't be located within the model 
    */
   QueryFocus&
-  QueryFocus::attach (Scope const& container)
+  QueryFocus::shift (Scope const& container)
   {
     ___check_validTaget (container);
     
@@ -124,7 +124,7 @@ namespace session {
     ___check_validTaget (otherContainer);
     
     QueryFocus newFocus (ScopeLocator::instance().pushPath());
-    newFocus.attach (otherContainer);
+    newFocus.shift (otherContainer);
     return newFocus;
   }
   
@@ -138,7 +138,7 @@ namespace session {
     ENSURE (currentLocation.isValid());
     
     QueryFocus newFocus (ScopeLocator::instance().pushPath());
-    newFocus.attach (currentLocation);
+    newFocus.shift (currentLocation);
     return newFocus;
   }
   

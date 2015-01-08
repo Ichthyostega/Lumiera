@@ -26,6 +26,7 @@
  ** This header defines the basics of...
  ** 
  ** @note as of X/2014 this is complete bs
+ ** @todo THE NAME IS UNFORTUNATE!!!! "SessionFacade" should rather be a facade in Proc!
  ** @todo WIP  ///////////////////////TICKET #
  ** 
  ** @see ////TODO_test usage example

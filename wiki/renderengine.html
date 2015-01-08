@@ -4895,11 +4895,11 @@ For the initial version of the implementation, just storing a string in Prolog s
 !handling of queries
 Queries are are always exposed or revealed at some point or facility allowing to pose queries. This facility remains the owner of the query instances and knows its concrete flavour (type). But queries can be referred to and exchanged through the {{{Query&lt;TY&gt;}}}-abstraction.</pre>
 </div>
-<div title="QueryFocus" modifier="Ichthyostega" created="200910140244" modified="201006190505" tags="def spec img">
+<div title="QueryFocus" modifier="Ichthyostega" created="200910140244" modified="201501081405" tags="def spec img" changecount="1">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
 !provided operations
-* attach to a given scope-like object. Causes the current focus to //navigate//
+* shift to a given scope-like object. Causes the current focus to //navigate//
 * open a new focus, thereby pushing the existing focus onto a [[focus stack|QueryFocusStack]]
 * return (pop) to the previous focus
 * get the current scope, represented by the &quot;top&quot; Placement of this scope
@@ -5586,7 +5586,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201402162033" tags="SessionLogic GuiIntegration design draft discuss" changecount="1">
+<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201501081350" tags="SessionLogic GuiIntegration design draft discuss" changecount="2">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -5656,7 +5656,7 @@ When adding an object, a [[scope|PlacementScope]] needs to be specified. Thus it
 * how is all of this related to the LayerSeparationInterfaces, here SessionFacade und EditFacade?
 
 &lt;&lt;&lt;
-__preliminary notes__: {{red{3/2010}}} Discovery functions accessible from the session API are always written such as to return ~MObjectRefs. These expose generic functions for modifying the structure: {{{attach(MObjectRef)}}} and {{{purge()}}}. The session API exposes variations of these functions. Actually, all these functions do dispatch the respective commands automatically. To the contrary, the raw functions for adding and removing placements are located on the PlacementIndex; they are accessible as SessionServices &amp;mdash; which are intended for Proc-Layer's internal use solely. This separation isn't meant to be airtight, just an reminder for proper use.
+__preliminary notes__: {{red{3/2010}}} Discovery functions accessible from the session API are always written such as to return ~MObjectRefs. These expose generic functions for modifying the structure: {{{attach(MObjectRef)}}} and {{{purge()}}}. The session API exposes variations of these functions. Actually, all these functions do dispatch the respective commands automatically. {{red{Note 1/2015 not implemented, not sure if thats a good idea}}} To the contrary, the raw functions for adding and removing placements are located on the PlacementIndex; they are accessible as SessionServices &amp;mdash; which are intended for Proc-Layer's internal use solely. This separation isn't meant to be airtight, just an reminder for proper use.
 
 Currently, I'm planning to modify MObjectRef to return only a const ref to the underlying facilities by default. Then, there would be a subclass which is //mutation enabled.// But this subclass will check for the presence of a mutation-permission token &amp;mdash; which is exposed via thread local storage, but //only within a command dispatch.// Again, no attempt is made to make this barrier airtight. Indeed, for tests, the mutation-permission token can just be created in the local scope. After all, this is not conceived as an authorisation scheme, rather as a automatic sanity check. It's the liability of the client code to ensure any mutation is dispatched.
 &lt;&lt;&lt;
