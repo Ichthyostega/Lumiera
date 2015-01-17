@@ -61,6 +61,7 @@ namespace asset {
    * By virtue of the Category, Assets can be organised in nested bins (folders).
    * This includes the distinction of different kinds of Assets, like Audio, Video, Effects...
    * 
+   * @remark the path in the tree constitutes a type classification scheme
    * @todo could be far more elaborate. could be a singleton like centralised tree, while
    *       just holding references to Category nodes in the individual Asset. At the moment,
    *       we just use the most simplistic implementation and handle Category objects 

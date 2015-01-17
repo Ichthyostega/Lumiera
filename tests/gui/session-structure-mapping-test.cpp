@@ -30,6 +30,7 @@
  ** 
  ** @note as of 10/2014 this is a initial draft into the blue...
  ** @todo WIP  ///////////////////////TICKET #955
+ ** @todo WIP  ///////////////////////TICKET #961
  ** 
  ** @see gui::model::SessionFacade
  ** 

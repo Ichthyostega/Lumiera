@@ -115,10 +115,10 @@ namespace mobject {
       typedef lib::RefArray<asset::PSequence>& SequenceAccess;
       
       
-      Session (DefaultsAccess
-              ,ElementsAccess
-              ,TimelineAccess
-              ,SequenceAccess)  throw();
+      Session (DefaultsAccess,
+               ElementsAccess,
+               TimelineAccess,
+               SequenceAccess)  throw();
       virtual ~Session ();
       
       

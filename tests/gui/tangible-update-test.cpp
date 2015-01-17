@@ -1,8 +1,8 @@
 /*
-  SessionStructureMapping(Test)  -  map session structure to GUI widgets
+  TangibleUpdate(Test)  -  how to update nested tangible UI elements
 
   Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+    2015,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,25 +21,24 @@
 * *****************************************************/
 
 
-/** @file session-structure-mapping-test.cpp
- ** This test is a concept study how to organise the proxy model
- ** in the Lumiera GUI. This mediating model shields access to the
- ** actual "high-level model" in Proc-Layer, it translates signals
- ** into command invocations and helps to push structure changes
- ** up to the timeline display.
+/** @file tangible-update-test.cpp
+ ** This test is a concept study regarding a generic structure of UI elements.
+ ** Such gui::model::Tangible elements share the ability to be updated through
+ ** a structural diff message. Which implies this test to be also an integration
+ ** test of Lumiera's tree diff handling framework
  ** 
- ** @note as of 10/2014 this is a initial draft into the blue...
- ** @todo WIP  ///////////////////////TICKET #955
+ ** @note as of 1/2015 this is a draft into the blue...
+ ** @todo WIP  ///////////////////////TICKET #959
  ** @todo WIP  ///////////////////////TICKET #961
  ** 
- ** @see gui::model::SessionFacade
+ ** @see gui::UiBus
  ** 
  */
 
 
 #include "lib/test/run.hpp"
-#include "gui/model/session-facade.hpp"
-#include "gui/model/diagnostics.hpp"
+//#include "gui/model/session-facade.hpp"
+//#include "gui/model/diagnostics.hpp"
 //#include "lib/util.hpp"
 
 
@@ -84,14 +83,12 @@ namespace test {
    * @see SessionElementQuery_test
    * @see gui::model::SessionFacade
    */
-  class SessionStructureMapping_test : public Test
+  class TangibleUpdate_test : public Test
     {
       
       virtual void
       run (Arg)
         {
-          gui::model::Diagnostics lock(TEST_SESSION_1);
-          retrieveSessionStructure();
         }
       
       
@@ -108,7 +105,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (SessionStructureMapping_test, "unit gui");
+  LAUNCHER (TangibleUpdate_test, "unit gui");
   
   
 }}} // namespace gui::model::test

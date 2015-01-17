@@ -99,7 +99,7 @@ namespace asset {
    *        which is fully integrated into a generic rules driven query subsystem, but
    *        has the additional ability to "translate" capabilities directly into the
    *        respective properties of of asset::Struct subclasses.
-   *  @return an Struct smart ptr linked to the internally registered smart ptr
+   *  @return a Struct smart ptr linked to the internally registered smart ptr
    *        created as a side effect of calling the concrete Struct subclass ctor.
    */
   template<class STRU>

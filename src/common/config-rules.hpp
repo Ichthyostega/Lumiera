@@ -128,8 +128,9 @@ namespace lumiera {
      * type of object. Registering  such a TypeHandler should create
      * the necessary handler functions to be installed into 
      * the Prolog system.
-     * @todo it can't be done exactly this way, but I leave it in
-     *       as a reminder for later, to show the intention
+     * @deprecated it can't be done exactly this way, but I leave it in the
+     *       current shape as a reminder for later, to show the intention...
+     * @todo 6/2010 unify this with the TypeHandler in typed-id.hpp
      */  
     template<class TY>
     class TypeHandler

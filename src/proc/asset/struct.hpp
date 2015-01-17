@@ -100,7 +100,11 @@ namespace asset {
    * 
    * Examples being tracks, sequences, timelines, pipes, processing patterns
    * @note embedded access point to instance creation or retrieval
-   *       through the static field #retrieve 
+   *       through the static field #retrieve
+   * @todo the actual meaning of a "structural asset" needs to be sharpened and evolved.
+   *       The idea is to have a generic mechanism for attaching properties and relations.
+   *       This will become relevant once we build the real query subsystem.
+   *       Right now (as of 1/2015), asset::Struct is just an ID provider.
    */
   class Struct : public Asset
     {

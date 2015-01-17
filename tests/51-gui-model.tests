@@ -11,6 +11,12 @@ PLANNED "Concept demonstration: retrieve session contents" SessionStructureMappi
 return: 0
 END
 
+
+PLANNED "Concept demonstration: update hierarchical elements" TangibleUpdate_test <<END
+return: 0
+END
+
+
 PLANNED "ModelClip_test" ModelClip_test <<END
 END
 

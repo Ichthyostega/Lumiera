@@ -102,8 +102,8 @@ namespace asset {
   class StructFactoryImpl
     {
       
-      /** @internal derive a sensible asset ident tuple when creating 
-       *  structural asset instances  based on a capability query
+      /** @internal derive a sensible asset ident tuple when creating
+       *  structural asset instances based on a capability query
        */
       template<class STRU>
       const Asset::Ident
@@ -176,8 +176,8 @@ namespace asset {
       template<class STRU>
       STRU* fabricate (Query<STRU> const& caps)
         {
-        throw error::Config ("The following Query could not be resolved: " + caps.asKey()
-                            , LUMIERA_ERROR_CAPABILITY_QUERY );
+          throw error::Config ("The following Query could not be resolved: " + caps.asKey()
+                              , LUMIERA_ERROR_CAPABILITY_QUERY );
         }
       
     };
