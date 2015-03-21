@@ -185,7 +185,7 @@ namespace diff{
         { }
       
       
-      /* === Iteration control API for IterStateWrapper== */
+      /* === Iteration control API for IterStateWrapper === */
       
       friend bool
       checkPoint (DiffFrame const& frame)

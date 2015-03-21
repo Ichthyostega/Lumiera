@@ -52,6 +52,33 @@
  ** of elements treated as children within the scope of the
  ** given record.
  ** 
+ ** \par Requirements
+ ** 
+ ** GenNode elements are to be used in the diff detection and implementation.
+ ** This implies some requirements for the (opaque) elements used in diff:
+ ** - they need to support the notion of equality
+ ** - we need to derive a key type for usage in index tables
+ **   - this implies the necessity to support std::less comparisons for trees
+ **   - and the necessity to support hash code generation for unordered maps
+ ** - moreover, the elements need to be values, to be copied and handled at will
+ ** - it will be beneficial, if these values explicitly support move semantics
+ ** - in addition, the tree diffing suggests a mechanism to re-gain the fully
+ **   typed context, based on some kind of embedded type tag
+ ** - finally, the handling of changes prompts us to support installation
+ **   of a specifically typed <i>change handling closure</i>.
+ ** 
+ ** \par monadic nature
+ ** 
+ ** As suggested by the usage for representation of tree shaped data, we acknowledge
+ ** that GenNode is a <b>Monad</b>. We support the basic operations \em construction
+ ** and \em flatMap. To fit in with this generic processing pattern, the one element
+ ** flavours of GenNode are considered the special case, while the collective flavours
+ ** form the base case -- every GenNode can be iterated. The \em construction requirement
+ ** suggests that GenNode may be created readily, just by wrapping any given and suitable
+ ** element, thereby picking up the element's type. For sake of code organisation and
+ ** dependency management, we solve this requirement with the help of a trait type,
+ ** expecting the actual usage to supply the necessary specialisations on site.
+ ** 
  ** @see diff-index-table-test.cpp
  ** @see diff-list-generation-test.cpp
  ** @see DiffDetector
