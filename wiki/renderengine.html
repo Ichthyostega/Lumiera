@@ -2334,7 +2334,7 @@ The workspace starts out with a single element, corresponding to the »model roo
 Speaking of implementation, this state and update mechanics relies on two crucial provisions: Lumiera's framework for [[tree diff representation|TreeDiffModel]] and an abstracted, ~DOM-like rendering of the relevant parts of the session; this model tree is comprised of [[generic node elements|GenNode]] acting as proxy for [[calls into|SessionInterface]] the [[session model|HighLevelModel]] proper.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201501061118" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="26">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201503172341" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="28">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2378,6 +2378,7 @@ When dealing with structural (tree) diffing, there is a specific twist regarding
 #the diff is produced and consumed //demand-driven (by pull)//
 #whenever a node sees this bracing construct, in invokes the respective child //recursively//
 This approach ensures each nested diff is consumed within a properly typed context, without any need of switching types from the outside: the actual consumer of each part of the whole diff description just happens to know the actual meaning of those elements he processes itself, and passes control to others with adequate knowledge for the rest. Changes are broken down and transformed into //atomic changes.// For an internal data exchange, this is sufficient: in the end we're dealing with references to binary data anyway. But when it comes to an external, self-contained representation of diffs, we additionally need a way to attach raw chunks of data corresponding to the description of those atomic changes.
+&amp;rarr; this is the purpose of the {{{DataCap}}} within our [[generic node element|GenNode]]
 </pre>
 </div>
 <div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" tags="spec">
@@ -7809,7 +7810,7 @@ Used this way, diff representation helps to separate structure and raw data in e
 :Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201501171503" tags="Model GuiPattern design draft" changecount="15">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201501231419" tags="Model GuiPattern design draft" changecount="17">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -7843,7 +7844,7 @@ The diff handling framework we intend to build here is meant to be //generic// -
 
 !{{red{WIP 1/2015}}}building the tree diff handling
 Our tree diff handling framework is conceived as a direct specialisation of and extension to list diffing. We rely on a very specific element type for the tree nodes: the GenNode. This specific node element type is inherently generic, and the tree diff handling explicitly relies on some part of this generic nature to represent object features. Following the gist of the linearised list diff representation, also tree handling relies on an implicit ''tree representation protocol'':
-* every GenNode is a single node and considered unique
+* every GenNode is a distinct element and considered unique within context.
 * nodes are inherently typed, but this typing is outside of the diff representation scope
 * nodes and subtrees are spelled out in prefix order; a node optionally is followed by a list of children.
 * nodes representing //objects// may have attribute children, which are always mentioned before the sub node children.
@@ -7852,7 +7853,7 @@ Our tree diff handling framework is conceived as a direct specialisation of and 
 Consequently, when an element appears in the diff description sequence, first of all, its type is immediately clear, so the receiver can use an appropriate handler for this kind of element. Moreover, if the element is of atomic type (an attribute), its value is part of the element itself and thus is known just by spelling out the element. Any structural changes can be dealt with on a completely generic level, without further knowledge about the object's nature. And finally, any internal alterations of the object and its children happen after the generic part and clearly delineated in the sequence of diff tokens -- a sub handler can be invoked recursively
 </pre>
 </div>
-<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201501092026" tags="Model GuiPattern spec draft" changecount="50">
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201503172340" tags="Model GuiPattern spec draft" changecount="52">
 <pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
 We build a slightly abstracted representation of tree changes and use this to propagate //change notifications// to the actual widgets. To keep the whole process space efficient, a demand-driven, stateless implementation approach is chosen. This reduces the problem into several layered stages.
 * our model is a heterogeneous tree &amp;rArr; use demand-driven recursion
@@ -7877,7 +7878,7 @@ Here all the fuzz about our {{{LUID}}} and identity management in the PlacementI
 The consumer -- in our case the GUI widgets -- impose a preconfigured order of things: elements not expected in a given part of the session will not be rendered and exposed. Thus the expectations at the consumer side constitute a typed context. So all we need to do is to intersperse a filter and then let the diffing algorithm work on these views filtered by type. All of this sounds horribly expensive, but it isn't -- functional programming to the rescue! We are dealing with lightweight symbolic value representations; everything can be implemented as a filtering and transforming pipeline. Thus we do not need any memory management, rather we (ab)use the storage of the client pulling the representation.
 
 !structural differences
-The tricky part with changes in a tree like structure is that they might involve rearrangements of whole sub-trees. So the question we need to pose is: to what extend to we need, and want to capture and represent those non local changes? In this respect, our situation here is significantly different than what is relevant for version management systems; we are not interested in //constructing a history of changes.// A widget moved into a completely different part or the model likely needs to be rebuilt from scratch anyway, so it doesn't hurt if we represent this change as deletion and insert of a new sub-tree. But it would be beneficial if we're able to move a sequence of clips in a track, or even a whole track in on one level. As a corner case, we might even consider representing a &amp;raquo;fold-down/up&amp;laquo; operation, where a sequence of elements is wrapped into a new sub-node, or extracted up from there -- but this is likely the most far-reaching structural change still worth to be represented first class.
+The tricky part with changes in a tree like structure is that they might involve rearrangements of whole sub-trees. So the question we need to pose is: to what extend do we need, and want to capture and represent those non local changes? In this respect, our situation here is significantly different than what is relevant for version management systems; we are not interested in //constructing a history of changes.// A widget moved into a completely different part or the model likely needs to be rebuilt from scratch anyway, so it doesn't hurt if we represent this change as deletion and insert of a new sub-tree. But it would be beneficial if we're able to move a sequence of clips in a track, or even a whole track at the current level. As a corner case, we might even consider representing a &amp;raquo;fold-down/up&amp;laquo; operation, where a sequence of elements is wrapped into a new sub-node, or extracted up from there -- but this is likely the most far-reaching structural change still worth to be represented first class.
 
 !diff representation
 Thus, for our specific usage scenario, the foremost relevant question is //how to represent the differences,// since our aim is to propagate complex structural changes through a narrow data mutation API as communication channel. The desired representation -- call it ''linearised diff representation'' -- can be constructed systematically from the predicate like notation used above to show the list differences. The principle is to break the representation down into atomic terms, and then to //push back//  any term repreatedly, until we come accross a term which can be //consumed right-away// at the current top of our &quot;old state&quot; list. This way we consume the incoming change messages and our existing data simultaneously, while dropping off the mutated structure in a single pass. Applying this technique, the above example becomes
@@ -7909,14 +7910,14 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201501142250" tags="Model Types Rules design draft" changecount="9">
+<div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201501181350" tags="Model Types Rules design draft" changecount="10">
 <pre>//drafted service as of 4/10 &amp;mdash; &amp;rarr;[[implementation plans|TypedLookup]]//
 A registration service to associate object identities, symbolic identifiers and types.
 
 !Motivation
 For maintaining persistent objects, generally an unique object ID is desirable. Within Lumiera, we employ 128 hash-~IDs (&amp;raquo;{{{LUID}}}&amp;laquo;). But hash-~IDs are difficult to handle for testing and configuration, as they aren't self explanatory for human readers. They're best used in a way avoiding textual representation altogether.
 
-Formal symmetry might be another motivation: we separate into objects and assets, where the latter represent the //bookkeeping view.// But there remain some cases where the asset side, the bookkeeping, is void of any substantial functionality. Just for the sake of orthogonality it //would be preferable//&amp;nbsp; to maintain a registration (for scripted use, for overview and organisational activities by the user, for diagnostics and repair work in the saved session state). A mere data record suffices to fulfil these requirements &amp;mdash; while there are indeed other kinds of asset exposing a substantial amount of functionality.
+Formal symmetry might be another motivation: we separate into objects and assets, where the latter represent the //bookkeeping view.// But there remain some cases where the asset side, the bookkeeping, is void of any substantial functionality. Just for the sake of orthogonality it //would be preferable//&amp;nbsp; to maintain a registration (for scripted use, for overview and organisational activities by the user, for diagnostics and repair work in the saved session state). A mere data record suffices to fulfil these requirements -- yet  there are indeed other kinds of asset exposing a substantial amount of functionality.
 
 Both these motivations highlight a tension between having a single global namespace of unique ~IDs, and having type-bound sub namespaces of limited scope, as the latter allows for using human readable symbolic ~IDs. Usually, when it comes to writing rules and configuration or creating instances explicitly from code, the specific context of the situation allows or even requires to focus down upon a single and distinct kind of objects immediately &amp;mdash; global uniqueness is not much of a concern here.
 
@@ -7958,8 +7959,8 @@ Just an ''registration scheme'' should be implemented right now, working complet
 see [[implementation planning|TypedLookup]]
 </pre>
 </div>
-<div title="TypedLookup" modifier="Ichthyostega" created="201004031607" modified="201501142253" tags="Rules Types spec impl draft" changecount="7">
-<pre>TypedID is a registration service to associate object identities, symbolic identifiers and types. It acts as frontend to the TypedLookup service within Proc-Layer, at the implementation level. While TypedID works within a strictly typed context, this type information is translated into an internal index on passing over to the implementation, which manages a set of tables holding base entries with a combined symbolic+hash ID, plus an opaque buffer. Thus, the strictly typed context is required to re-access the stored data. But the type information wasn't erased entirely, so this typed context can be re-gained with the help of an internal type index. All of this is considered implementation detail and may be subject to change without further notice; any access is assumed to happen through the TypedID frontend. Besides, there are two more specialised frontends.
+<div title="TypedLookup" modifier="Ichthyostega" created="201004031607" modified="201501181353" tags="Rules Types spec impl draft" changecount="8">
+<pre>TypedID is a registration service to associate object identities, symbolic identifiers and types. It acts as frontend to the TypedLookup system within Proc-Layer, at the implementation level. While TypedID works within a strictly typed context, this type information is translated into an internal index on passing over to the implementation, which manages a set of tables holding base entries with a combined symbolic+hash ID, plus an opaque buffer. Thus, the strictly typed context is required to re-access the stored data. But the type information wasn't erased entirely, so this typed context can be re-gained with the help of an internal type index. All of this is considered implementation detail and may be subject to change without further notice; any access is assumed to happen through the TypedID frontend. Besides, there are two more specialised frontends.
 
 !Front-ends
 * TypedID uses static but templated access functions, plus an singleton instance to manage a ~PImpl pointing to the ~TypedLookup table

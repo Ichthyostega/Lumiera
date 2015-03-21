@@ -60,7 +60,7 @@
  ** - and the actual implementation object assists with copying and cloning
  **   itself, observing the actual implementation data layout
  ** 
- ** The PolymorphicValue template implements this idea, by exposing an copyable
+ ** The PolymorphicValue template implements this idea, by exposing a copyable
  ** container with value semantics to the client code. On instantiation, a common
  ** base interface for the actual value objects needs to be provided; the resulting
  ** instance will be automatically convertible to this interface. Obviously this
@@ -287,7 +287,7 @@ namespace lib {
      * Default is no support by the API and implementation types.
      * In this case, the CopySupport interface is mixed in at the
      * level of the concrete implementation class and later on
-     * accessed through an \c dynamic_cast
+     * accessed through a \c dynamic_cast
      */
     template <class TY, class YES = void> 
     struct Trait

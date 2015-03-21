@@ -126,6 +126,21 @@ return: 0
 END
 
 
+PLANNED "GenNodeBasic_test" GenNodeBasic_test <<END
+return: 0
+END
+
+
+PLANNED "GenericRecordRepresentation_test" GenericRecordRepresentation_test <<END
+return: 0
+END
+
+
+PLANNED "GenericTreeRepresentation_test" GenericTreeRepresentation_test <<END
+return: 0
+END
+
+
 TEST "HashGenerator_test" HashGenerator_test <<END
 return: 0
 END

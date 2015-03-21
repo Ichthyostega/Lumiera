@@ -137,7 +137,7 @@ namespace diff{
    * of constant size. The actual verbs of the diff language in use are defined
    * through the operations of the \em Interpreter; each #VerbToken corresponds
    * to a handler function on the Interpreter interface. In addition to the verb,
-   * each DiffStep also carries an content data element, like e.g. "insert elm
+   * each DiffStep also carries a content data element, like e.g. "insert elm
    * at next position".
    * @param I Interpreter interface of the actual language to use
    * @param E type of the elementary data elements.
