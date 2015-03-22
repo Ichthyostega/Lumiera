@@ -2305,9 +2305,9 @@ We acknowledge that the gui model is typically used from within the GUI event di
 The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. This callback will be scheduled by the  widgets to perform in the GUI event  thread.
 </pre>
 </div>
-<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201501171411" tags="GuiIntegration design draft img" changecount="37">
+<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201503221614" tags="GuiIntegration design draft img" changecount="39">
 <pre>''Building Blocks for the User Interface Model and Control structure''
-The fundamental pattern for building graphical user interfaces is to segregates into the roles of __M__odel, __V__iew and __C__controler ([[MVC|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]). This approach is so succesful, that it turned into a de-facto standard in commen UI toolkit sets. But larger, more elaborate and specialised applications introduce several cross cutting concerns, which create a tension within this MVC solution pattern.
+The fundamental pattern for building graphical user interfaces is to segregate into the roles of __M__odel, __V__iew and __C__controler ([[MVC|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]). This approach is so succesful, that it turned into a de-facto standard in commen UI toolkit sets. But larger, more elaborate and specialised applications introduce several cross cutting concerns, which create a tension within this MVC solution pattern.
 [&lt;img[UI-Bus and GUI model elements|uml/fig158213.png]]
 
 
@@ -2329,12 +2329,12 @@ While GTK -- especially in the object oriented incantation given by Gtkmm -- hoo
 
 
 !building and updating the tree
-The workspace starts out with a single element, corresponding to the »model root« in the ~Proc-Layer HighLevelModel. Initially, or on notification, an element requests a //status update// -- which conceptually implies there is some kind of conversation state. The backbone, as represented by the UI-Bus, might be aware of the knowledge state of its clients and just send an update. Yet the authority or the backbone is absolute. It might, at its own discretion, send a full update, to which the client elements are expected to comply. The status and update information is exposed in the form of a diff iterator. The client element, which can be a widget or a controller within the workspace, is expected to pull and extract this diff information, adjusting itself and destroying or creating children as applicable. This implies a recursive tree visitation, passing down the diff iterator alongside.
+The workspace starts out with a single element, corresponding to the »model root« in the ~Proc-Layer HighLevelModel. Initially, or on notification, an element requests a //status update// -- which conceptually implies there is some kind of conversation state. The backbone, as represented by the UI-Bus, might be aware of the knowledge state of its clients and just send an incremental update. Yet the authority or the backbone is absolute. It might, at its own discretion, send a full state update, to which the client elements are expected to comply. The status and update information is exposed in the form of a diff iterator. The client element, which can be a widget or a controller within the workspace, is expected to pull and extract this diff information, adjusting itself and destroying or creating children as applicable. This implies a recursive tree visitation, passing down the diff iterator alongside.
 
 Speaking of implementation, this state and update mechanics relies on two crucial provisions: Lumiera's framework for [[tree diff representation|TreeDiffModel]] and an abstracted, ~DOM-like rendering of the relevant parts of the session; this model tree is comprised of [[generic node elements|GenNode]] acting as proxy for [[calls into|SessionInterface]] the [[session model|HighLevelModel]] proper.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201503172341" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="28">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201503221633" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="30">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2367,7 +2367,7 @@ Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispa
 !!!timing and layering intricacies
 A relevant question to be settled is as to where the core of each change is constituted. This is relevant due to the intricacies of multithreading: Since the change originates in the build process, but the effect of the change is //pulled// later from within the GUI event thread, it might well happen that at this point, meanwhile further changes entered the model. As such, this is not problematic, as long as taking the diff remains atomic. This leads to quite different solution approaches:
 * we might, at the moment of performing the update, acquire a lock from the ProcDispatcher. The update process may then effectively query down into the session datastructure proper, even through the proxy of a diffing process. The obvious downside is that GUI response might block waiting on an extended operation in Proc, especially when a new build process was started meanwhile. A remedy might be to abort the update in such cases, since its effects will be obsoleted by the build process anyway.
-* alternatively, we might incorporate a complete snapshot of all information relevant for the GUI into the GuiModel. Update messages from Proc must be complete and self contained in this case, since our goal is to avoid callbacks. Following this scheme, the first stage of any update would be a push from Proc to the GuiModel, followed by a callback pull from within the individual widgets receiving the notification later.
+* alternatively, we might incorporate a complete snapshot of all information relevant for the GUI into the GuiModel. Update messages from Proc must be complete and self contained in this case, since our goal is to avoid callbacks. Following this scheme, the first stage of any update would be a push from Proc to the GuiModel, followed by a callback pull from within the individual widgets receiving the notification later. This is the approach we choose for the Lumiera GUI.
 
 !!!switch of typed sub-context
 When dealing with structural (tree) diffing, there is a specific twist regarding child nodes of mixed type: In the general case, we can not assume that all children of a given node are of the same kind. The classical example is (X)HTML, where a node has //attributes,// various //nested tags// and //nested text content.// The //generic node// thus must be modelled as having several collections of children -- both ordered and un-ordered collections are possible -- and the content of each such sub-collection is itself polymorphic. This constitutes a challenge for the representation of data within the tree diff format. These difficulties can be overcome as follows
@@ -2446,7 +2446,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201501030919" tags="GuiPattern discuss decision impl" changecount="23">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201503221519" tags="GuiPattern discuss decision impl" changecount="25">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2463,7 +2463,7 @@ While the second approach intuitively seems to be adequate (and in fact, Cineler
 * we have to replicate and code up any behaviour we want and know from the standard GUI
 * chances are that we are handling some aspects different than the default, without even noticing there is a default
 * chances are that we are lacking the manpower to cope with all interdependencies of concrete presentation situation, custom styling and event state
-Our custom made UI elements impend to turn into a tremendous time sink (For reference, Paul Davis reported for Ardour 2.x that he spent 80% of the developer time not with audio processing, but rather with bashing the UI into shape), while delivering a crappy, home-brew and misaligned user experience and generally stand out as an alien element not playing well with the rest of the desktop.
+Our custom made UI elements impend to turn into a tremendous time sink (For reference, Paul Davis reported for Ardour 2.x that he spent 80% of the developer time not with audio processing, but rather with bashing the UI into shape), while non the less delivering just a crappy, home-brew and misaligned user experience which stands out as an alien element not playing well with the rest of the desktop.
 {{red{Well}}} //at least we are aware of the danger.//
 
 !!!is custom drawing necessary?
@@ -7810,7 +7810,7 @@ Used this way, diff representation helps to separate structure and raw data in e
 :Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201503211821" tags="Model GuiPattern design draft" changecount="18">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201503221638" tags="Model GuiPattern design draft" changecount="19">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -7867,6 +7867,11 @@ Within this framework, we represent //object-like// entities through a special f
 
 !!!handling of actual mutation
 This question is closely linked to the semantics of equality. In a simple list diff, this matter doesn't pose any problems; when an element is different, it is a different element, and this change can be encoded as a deletion and insertion of a new element. Not so in tree diff handling. We do not want to delete and re-build whole subtrees, because some tiny bit is altered somewhere down. Thus, a recursive sub-structure can be considered //the same entity,// yet still //mutated.// Our diff handling framework deals with the identity first, followed by an recourse into investigating //inner changes.// This recursive investigation is spelled out as a bracketed construct, which can be processed by recursive invocation. In the end, at the level of the tree leaves, handling those inner mutations boils down to invoking the //mutation closure,// as mentioned above. The knowledge of type context is thus confined to the receiving client, as long as every GenNode implementation offers support to detect an inner mutation and allows to install and invoke such a specifically typed closure to deal with the mutation. The twist to note is the point, //where// this closure is installed: it certainly doesn't make sense to install it on the generating side.
+
+!!!use cases of tree diff application
+Within the context of GuiModelUpdate, we discern two distinct situations necessitating an update driven by diff:
+* a GenNode representing an object pulls diff information provided by Proc. This information contains mutations of attributes, and //some// of these attributes are relevant for the GUI and thus represented within the GuiModel
+* a widget was notified of pending changes in the GuiModel and calls back to pull a diff. While interpreting the attributes mentioned in the diff, it has to determine which widget state corresponds to the mentioned attributes, if applicable. Detected changes need to be interpreted and pushed into the corresponding widget and GTK elements.
 </pre>
 </div>
 <div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201503172340" tags="Model GuiPattern spec draft" changecount="52">
