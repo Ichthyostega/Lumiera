@@ -7810,7 +7810,7 @@ Used this way, diff representation helps to separate structure and raw data in e
 :Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201503221638" tags="Model GuiPattern design draft" changecount="19">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201503292044" tags="Model GuiPattern design draft" changecount="30">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -7872,6 +7872,7 @@ This question is closely linked to the semantics of equality. In a simple list d
 Within the context of GuiModelUpdate, we discern two distinct situations necessitating an update driven by diff:
 * a GenNode representing an object pulls diff information provided by Proc. This information contains mutations of attributes, and //some// of these attributes are relevant for the GUI and thus represented within the GuiModel
 * a widget was notified of pending changes in the GuiModel and calls back to pull a diff. While interpreting the attributes mentioned in the diff, it has to determine which widget state corresponds to the mentioned attributes, if applicable. Detected changes need to be interpreted and pushed into the corresponding widget and GTK elements.
+the second case is what poses the real challenge in terms of writing well organised code. Since in that case, the receiver side has to translate generic diff verbs into operations on hard wired language level data structures -- structures, we can not control, predict or limit beforhand. We deal with this situation by introducing a specific intermediary, the &amp;rarr; TreeMutator.
 </pre>
 </div>
 <div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201503172340" tags="Model GuiPattern spec draft" changecount="52">
@@ -7929,6 +7930,52 @@ In addition, we might consider to introduce up/down folding primitives
 !!!deriving conventional representations
 On receiving the terms of this &quot;diff language&quot;, it is possible to generate the well known and more conventional diff representations,
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
+</pre>
+</div>
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201503292221" tags="Model Concepts GuiPattern design draft" changecount="18">
+<pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
+
+!Motivation
+In the context of Lumiera's metadata model and data exchange framework, we're facing a quite characteristic problem of generic programming: While in a classical ~OO-solution, a problem is defined by imposing distinct structural and typing constraints, the very idea of generic programming is to treat heterogeneous structures. More specifically, the whole approach of collaboration between loosely coupled components through the exchange of structural diff messages was chosen to subsume a wide array of individual structures under a model largely conceptual in nature. Without the need of a »master model« to be defined up-front. Without the danger of obsoleting this master plan in the course of discovering the actual specifics of implementation.
+
+While such an approach is certainly highly desirable, we may expect some kind of serious //impedance mismatch// at some level down into the implementation. On one side we'll get messages referring to an implicitly typed, hierarchically organised (meta) data structure. On the other hand we'll get bare bone implementation facilities, which represent those structures rather in the way of sticking to a logical and conceptual pattern of implementation. To describe this in a more tangible way: On one side we get a GuiModel, represented as tree of symbolic descriptor nodes, on the other hand we get a widget, reacting on the notification message due to pending changes pushed up from the lower layers. The widget implementation code calls back to pull a diff. While interpreting the attributes mentioned in the diff, it has to determine which widget state corresponds to the mentioned attributes, if applicable. Detected changes need to be interpreted and pushed into the corresponding widget and GTK elements. None of these details can be described in any way beforehand or designed as library component, since only down into the gory details of GUI implementation we'll get a real chance to give the abstract, symbolic meta description a tangible meaning.
+
+At the end of the day, this turns into a pragmatic challenge in terms of writing well organised code. Since in that case, the receiver side has to translate generic diff verbs into operations on hard wired language level data structures. Through the classical ~OO-style aproach -- which is always a good choice for backbone structures -- the //diff interpreter//-interface provides a backbone to be implemented, mapping the verbs of the diff language onto the invocation of virtual functions. Basically this is a double dispatch situation, i.e. some sort of visitor interface. While the implementation is still fairly straight-forward for re-ordering list elements, and can maybe even stretched to cover the management of children (adding, reordering, removing) -- the really tricky design quest comes with the elementary mutations: here we end up with a single call from the interface
+{{{
+  mutate(string attributeID, Attribute newValue)
+}}}
+where {{{Attribute}}} is a generic union type -- which unfortunately gets us right into {{{if}}}-cascades or forces us into switch-on-type cascades, combined with hard casts. This results in writing some kind of boilerplate code repeatedly into each and every widget implementation:
+{{{
+     if (attributeID == &quot;bla&quot;) {
+         float val = newValue.get&lt;float&gt;();
+         this.setXYZ(val);
+     } else
+     if (attributeID == &quot;foo&quot;) {
+         string val = newValue.get&lt;string&gt;();
+         int bar = interpretZYX(val);
+         this.collectionRR.add(bar);
+     } else...
+}}}
+
+Not only is this kind of code repetitive, noisy, redundant and error prone -- implementing the thinly disguised cast is either completely unsafe, or forces us to embed a type tag into the implementation of the {{{Attribute}}} type and perform an additional match operation on each invocation.
+
+
+!customisable intermediary
+There is one fundamental problem, we'll never be able to overcome: the //openness.// If we want to ensure -- structurally -- that all operations are wired up completely and correctly, we have to impose a structure plan onto the clients. And this always means the clients have to comply to a type or type class. This kind of build time safety is gone the moment we loosen this requirement (and there are very good reasons indeed to create some kind of loophole in every architecture you create, since only loopholes at the right places allow for growth and adaptation). Yet beyond that fundamental limitation, we may be able to remedy most of the practical problems by turning around the direction of the interaction. Yes, this is again the »Invetrsion of Control« principle at work. At the usage site, the transformed solution even looks almost identical to the naive solution:
+{{{
+     TreeMutator(...)
+       .change(&quot;bla&quot;) = [&amp;](float val) {
+           this.setXYZ(val);
+         }
+       .change(&quot;foo&quot;) = [&amp;](string val) {
+           int bar = interpretZYX(val);
+           this.collectionRR.add(bar);
+         }
+     ...
+}}}
+So this looks similar, but indeed now we create //operation bindings// up front, at creation time of the client (widget). Thus, the initiative originates from the implementing code, which //offers// a method as building block to implement the mutation of a conceptual tree-like structure. Actually, these &quot;methods&quot; are given as //closures//, implicitly tied into the implementation context. And since this configuration invocation carries implicit type information, we may generate the necessary adapters and visitor implementation at compile time.
+
+This construction pattern can be extended to offer several optional extension hooks for the clients to supply. Extending even to offering more generic hooks to deal with recursive changes to whole sub-trees or collections of children of a specific type. Facing towards the diff application, the generated TreeMutator will expose a standardised interface to support implementing all the diff verbs necessary to describe structural and data changes. Operations, attributes and properties not outfitted by the client with actual bindings will be supplemented as ~NOP-implementation, silently ignoring any changes targeted towards the corresponding structures. This is the remaining loophole: if a client &quot;forgets&quot; to install a binding for some part of the structure, any changes to this part will go by unnoticed.
 </pre>
 </div>
 <div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201501181350" tags="Model Types Rules design draft" changecount="10">
