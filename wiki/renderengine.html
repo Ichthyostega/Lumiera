@@ -7932,13 +7932,13 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201503292221" tags="Model Concepts GuiPattern design draft" changecount="18">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201504010044" tags="Model Concepts GuiPattern design draft" changecount="27">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 
 !Motivation
 In the context of Lumiera's metadata model and data exchange framework, we're facing a quite characteristic problem of generic programming: While in a classical ~OO-solution, a problem is defined by imposing distinct structural and typing constraints, the very idea of generic programming is to treat heterogeneous structures. More specifically, the whole approach of collaboration between loosely coupled components through the exchange of structural diff messages was chosen to subsume a wide array of individual structures under a model largely conceptual in nature. Without the need of a »master model« to be defined up-front. Without the danger of obsoleting this master plan in the course of discovering the actual specifics of implementation.
 
-While such an approach is certainly highly desirable, we may expect some kind of serious //impedance mismatch// at some level down into the implementation. On one side we'll get messages referring to an implicitly typed, hierarchically organised (meta) data structure. On the other hand we'll get bare bone implementation facilities, which represent those structures rather in the way of sticking to a logical and conceptual pattern of implementation. To describe this in a more tangible way: On one side we get a GuiModel, represented as tree of symbolic descriptor nodes, on the other hand we get a widget, reacting on the notification message due to pending changes pushed up from the lower layers. The widget implementation code calls back to pull a diff. While interpreting the attributes mentioned in the diff, it has to determine which widget state corresponds to the mentioned attributes, if applicable. Detected changes need to be interpreted and pushed into the corresponding widget and GTK elements. None of these details can be described in any way beforehand or designed as library component, since only down into the gory details of GUI implementation we'll get a real chance to give the abstract, symbolic meta description a tangible meaning.
+While such an approach is certainly highly desirable, we may expect some kind of serious //impedance mismatch// at some level down into the implementation. On one side we'll get messages referring to an implicitly typed, hierarchically organised (meta) data structure. On the other hand we'll get bare bone implementation facilities, which represent those structures rather in the way of sticking to a logical and conceptual pattern of implementation. To describe this in a more tangible way: On one side we get a GuiModel, represented as tree of symbolic descriptor nodes, on the other side we get a widget, reacting on the notification message due to pending changes pushed up from the lower layers. The widget implementation code calls back to pull a diff. While interpreting the attributes mentioned in the diff, it has to determine which widget state corresponds to the mentioned attributes, if applicable. Detected changes need to be interpreted and pushed into the corresponding widget and GTK elements. None of these details can be described in any way beforehand or designed as library component, since only down into the gory details of GUI implementation we'll get a real chance to give the abstract, symbolic meta description a tangible meaning.
 
 At the end of the day, this turns into a pragmatic challenge in terms of writing well organised code. Since in that case, the receiver side has to translate generic diff verbs into operations on hard wired language level data structures. Through the classical ~OO-style aproach -- which is always a good choice for backbone structures -- the //diff interpreter//-interface provides a backbone to be implemented, mapping the verbs of the diff language onto the invocation of virtual functions. Basically this is a double dispatch situation, i.e. some sort of visitor interface. While the implementation is still fairly straight-forward for re-ordering list elements, and can maybe even stretched to cover the management of children (adding, reordering, removing) -- the really tricky design quest comes with the elementary mutations: here we end up with a single call from the interface
 {{{
@@ -7975,7 +7975,40 @@ There is one fundamental problem, we'll never be able to overcome: the //opennes
 }}}
 So this looks similar, but indeed now we create //operation bindings// up front, at creation time of the client (widget). Thus, the initiative originates from the implementing code, which //offers// a method as building block to implement the mutation of a conceptual tree-like structure. Actually, these &quot;methods&quot; are given as //closures//, implicitly tied into the implementation context. And since this configuration invocation carries implicit type information, we may generate the necessary adapters and visitor implementation at compile time.
 
-This construction pattern can be extended to offer several optional extension hooks for the clients to supply. Extending even to offering more generic hooks to deal with recursive changes to whole sub-trees or collections of children of a specific type. Facing towards the diff application, the generated TreeMutator will expose a standardised interface to support implementing all the diff verbs necessary to describe structural and data changes. Operations, attributes and properties not outfitted by the client with actual bindings will be supplemented as ~NOP-implementation, silently ignoring any changes targeted towards the corresponding structures. This is the remaining loophole: if a client &quot;forgets&quot; to install a binding for some part of the structure, any changes to this part will go by unnoticed.
+This construction pattern can be extended to offer several optional extension hooks for the clients to supply. Extended even by offering more generic hooks to deal with recursive changes to whole sub-trees or collections of children of a specific type. Facing towards the diff application, the generated TreeMutator will expose a standardised interface to support implementing all the diff verbs necessary to describe structural and data changes. Operations, attributes and properties not outfitted by the client with actual bindings will be supplemented as ~NOP-implementation, silently ignoring any changes targeted towards the corresponding structures. This is the remaining loophole: if a client &quot;forgets&quot; to install a binding for some part of the structure, any changes to this part will go by unnoticed.
+
+!!!practical problems {{red{to be solved 3/2015}}}
+* still not sure how to design the generic data elements to represent &quot;Objects&quot; / &quot;records&quot;
+* how to generate a suitable //attribute visitor//  ^^&amp;rarr; looks like this can be achieved with a quite classical visitor impl, just the reflect-back are functors, instead of vcalls^^
+* how to integate the recursive invocation properly
+* how to deal with collections of children
+* how to integrate typed children
+
+!!!working with children
+Handling tree structured object data imposes some additional constraints, in comparision to generic changes done to a flat list. One notable difference is that there are pre-existing //attributes,// which can not be added and deleted, are known by-name, not by positional order. Another point worth noting is the fact that child objects may be segregated into several collections by type. Since our goal is to provide an intermediary with the ability to map to arbitrary structures, we need to define the primitive operations necessary to implement the structural operations represented in the form of a diff
+* add a child
+* remove a child
+* step to the next child
+* find a specific child and place it at current position
+* enter recursive mutation of a child
+All these basic operations are implicitly stateful, i.e. they work against an assumed implicit state (&quot;the current child&quot;): we assume the childs to be organised into ordered collection(s), possibly multiple collections segregated by type, and we assume that there is a current position, possible a separate current position for each typed sub collection.. Moreover, we assume that the diff description comes in accordance with the order of actual children, so that the implementation can be oganised into a &quot;pass&quot; over the children. This also implies that children are recognisable (have an identity), and that there is a way to enter a recursive mutation for a given child.
+
+!!!how to provide the actual operations
+To ease the repetitive part of the wiring, which is necessary for each individual application case, we can allow for some degree of //duck typing,// as far as building the TreeMutator is concerned. If there is a type, which provides the above mentioned functions for child management, these can be hooked up automatically into a suitable adapter. Otherwise, the client may supply closures, using the same definition pattern as shown for the attributes above. Here, the ID argument is optional and denotes a //type filter,// whereas the closure itself must accept a ~name-ID argument. The purpose of this construction is the ability to manage collections of similar children. For example
+{{{
+       .addChild(&quot;Track&quot;) = [&amp;](string type, string id) {
+           TrackType kind = determineTrackType(type);
+           this.tracks_.push_back(MyTrackImpl(kind, id);
+         }
+       .mutateChild(&quot;Track&quot;) = [&amp;](string id) {
+           MyTrackImpl&amp; track = findTrack(id);
+           return track.getMutator();
+         }
+     ...
+}}}
+The contract is as follows:
+* a hander typed as {{{&quot;Track&quot;}}} wil only be invoked, if the type of the child to be handled starts with such a type component, e.g. {{{&quot;Track.ruler&quot;}}}
+* the mutation handler has to return a reference to a suitable TreeMutator object, which is implicitly bound to the denoted track. It can be expected to be used for feeding mutations to this child right away.
 </pre>
 </div>
 <div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201501181350" tags="Model Types Rules design draft" changecount="10">
