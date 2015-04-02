@@ -141,6 +141,11 @@ return: 0
 END
 
 
+PLANNED "GenericTreeMutator_test" GenericTreeMutator_test <<END
+return: 0
+END
+
+
 TEST "HashGenerator_test" HashGenerator_test <<END
 return: 0
 END
