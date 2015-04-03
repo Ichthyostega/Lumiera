@@ -1746,7 +1746,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201202181641" tags="decision design discuss Concepts">
+<div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201504031806" tags="decision design discuss Concepts" changecount="2">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; yes of course, that's a //no-brainer,// todays. Rather, important is to note what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
@@ -1769,6 +1769,8 @@ Lumiera is not a connection manager, it is not an audio-visual real time perform
 Deliberately there is an limitaion on the flexibility of what can be added to the system via Plugins. We allow configuration and parametrisation to be extended and we allow processing and data handling to be extended, but we disallow extensions to the fundamental structure of the system by plugins. They may provide new implementations for already known subsystems, but they can't introduce new subsystems not envisioned in the general design of the application.
 * these fixed assortments include: the possbile kinds of MObject and [[Asset]], the possible automation parameter data types, the supported kinds of plugin systems
 * while plugins may extend: the supported kinds of media, the [[media handling libraries|MediaImplLib]] used to deal with those media, the session storage backends, the behaviour of placments
+
+A strong emphaisis is placed on ''Separation of Concerns'' and especially on ''Open Closed'' design. We resist the temptation to build an //universal model.// Rather, we understand our whole unterdaking a ''transformation of metadata'' -- which, as a whole, remains conceptual and is only ever implemented partially  within context. A [[language of diff exchanges|TreeDiffFundamentals]] serves as integrating backbone.
 </pre>
 </div>
 <div title="DesignGoals" modifier="Ichthyostega" created="200706210557" modified="200805300046" tags="design">
@@ -2517,7 +2519,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201501052156" tags="overview" changecount="1">
+<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201504031800" tags="overview" changecount="2">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -2551,6 +2553,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[Timecode]] -- especially the link of [[TC formats and quantisation|TimecodeFormat]]
 * designing how to [[build|BuildFixture]] the [[Fixture]] (...{{red{WIP}}}...)
 * from [[play process|PlayProcess]] to [[frame dispatching|FrameDispatcher]] and [[node invocation|NodeInvocation]]
+* how to shape the GuiConnection: with the help of a mediating GuiModel, which acts as UI-Bus, exchanging TreeDiffModel messages for GuiModelUpdate
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" created="200711210531" modified="201310132316" tags="Concepts design discuss" changecount="1">
@@ -7932,7 +7935,7 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201504010044" tags="Model Concepts GuiPattern design draft" changecount="27">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201504031750" tags="Model Concepts GuiPattern design draft" changecount="32">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 
 !Motivation
@@ -7994,7 +7997,7 @@ Handling tree structured object data imposes some additional constraints, in com
 All these basic operations are implicitly stateful, i.e. they work against an assumed implicit state (&quot;the current child&quot;): we assume the childs to be organised into ordered collection(s), possibly multiple collections segregated by type, and we assume that there is a current position, possible a separate current position for each typed sub collection.. Moreover, we assume that the diff description comes in accordance with the order of actual children, so that the implementation can be oganised into a &quot;pass&quot; over the children. This also implies that children are recognisable (have an identity), and that there is a way to enter a recursive mutation for a given child.
 
 !!!how to provide the actual operations
-To ease the repetitive part of the wiring, which is necessary for each individual application case, we can allow for some degree of //duck typing,// as far as building the TreeMutator is concerned. If there is a type, which provides the above mentioned functions for child management, these can be hooked up automatically into a suitable adapter. Otherwise, the client may supply closures, using the same definition pattern as shown for the attributes above. Here, the ID argument is optional and denotes a //type filter,// whereas the closure itself must accept a ~name-ID argument. The purpose of this construction is the ability to manage collections of similar children. For example
+To ease the repetitive part of the wiring, which is necessary for each individual application case, we can allow for some degree of //duck typing,// as far as building the TreeMutator is concerned. If there is a type, which provides the above mentioned functions for child management, these can be hooked up automatically into a suitable adapter. Otherwise, the client may supply closures, using the same definition pattern as shown for the attributes above. Here, the ID argument is optional and denotes a //type filter,// whereas the closure itself must accept a name-ID argument. The purpose of this construction is the ability to manage collections of similar children. For example
 {{{
        .addChild(&quot;Track&quot;) = [&amp;](string type, string id) {
            TrackType kind = determineTrackType(type);
@@ -8009,6 +8012,17 @@ To ease the repetitive part of the wiring, which is necessary for each individua
 The contract is as follows:
 * a hander typed as {{{&quot;Track&quot;}}} wil only be invoked, if the type of the child to be handled starts with such a type component, e.g. {{{&quot;Track.ruler&quot;}}}
 * the mutation handler has to return a reference to a suitable TreeMutator object, which is implicitly bound to the denoted track. It can be expected to be used for feeding mutations to this child right away.
+
+!!!Architecture
+The distinguising trait or Lumiera's diff handling framework is to treat a //diff language// as a scope, where some verbs or predications gain a specific meaning. While a concrete {{{DiffApplicator}}} binds to a specific agent or target environment, the meaning of the remains implicit. This approach bears on the observation, that dealing with structural differences actually addresses //several layers of language.// An odered collection is one of them, some kind of object notion another one, and the exact meaning of structure yet another one.
+
+In accordance with this understanding, the TreeMutator is shaped to form the attachment point of such a language construct onto a given structural context, which, through this very construct, remains opaque and decoupled. In the simple exemplary case of list diffing, the {{{DiffApplicator}}} requries the specialisation of some {{{DiffApplicationStrategy}}} to the concrete data container in use, most likely a STL {{{vector}}}. In a similar vein, a {{{DiffApplicator}}} for structural transformations requires the {{{DiffApplication}}}'s specialisation to a TreeMutator. Which -- consequently -- needs to expose an API well suited to implement what a structural diff language might want to express. Yet, in addition, the TreeMutator also needs a binding API to be linked into the actual structures subject to manipulation.
+
+At this point, practical performance considerations settle the remaining decisions: Language application is a ''double dispatch'' at least, so we won't be able to get below two indirections ever. We could strive at getting close to this theoretical minimum though. Unfortunately, one of the indirections is taken by the verbs of the language, while the other one is consumed by decoupling the language from the Applicator or Interpreter, i.e. abstracting the diff representation from the meaning of the described changes when considered within a specific target context -- which is the very core of using a diff representation.
+So we get to choose between
+* binding the Interpreter directly into a target context, which imposes an interface onto the constituents of this target -- or --
+* set up a flexible mapping through a third layer of indirection functors -- which, in a nutshell, is the design choice taken by the TreeMutator
+
 </pre>
 </div>
 <div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201501181350" tags="Model Types Rules design draft" changecount="10">

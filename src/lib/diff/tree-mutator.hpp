@@ -82,18 +82,75 @@ namespace diff{
             UNIMPLEMENTED("install closure");
           }
       };
+    
+    ////////TODO only preliminary....
+    typedef Literal ID;
+    typedef struct{ } Attribute;
   }
   
   
   /**
    * Customisable intermediary to abstract
-   * mutating operations on arbitrary, hierarchical
-   * object-like data
+   * mutating operations on arbitrary, hierarchical object-like data.
+   * The TreeMutator exposes two distinct interfaces
+   * - the \em operation API -- similar to what a container exposes --
+   *   is the entirety of abstract operations that can be done to the
+   *   subsumed, tree like target structure
+   * - the \em binding API allows to link some or all of these generic
+   *   activities to concrete manipulations known within target scope.
    */
   class TreeMutator
     {
       
     public:
+      
+      /* ==== operation API ==== */
+      
+      void
+      reiterate()
+        {
+          UNIMPLEMENTED("reset point of reference");
+        }
+      
+      void
+      insertChild (ID id)
+        {
+          UNIMPLEMENTED("establish new child node at current position");
+        }
+      
+      void
+      deleteChild (ID id)
+        {
+          UNIMPLEMENTED("destroy child node at current position");
+        }
+      
+      void
+      acceptChild (ID id)
+        {
+          UNIMPLEMENTED("acknowledge existence of child at current pos and move ahead");
+        }
+      
+      void
+      findChild (ID id)
+        {
+          UNIMPLEMENTED("look ahead, find and retrieve denoted child to be relocated at current position");
+        }
+      
+      TreeMutator&
+      mutateChild (ID id)
+        {
+          UNIMPLEMENTED("expose a recursive TreeMutator to transform the denoted child");
+        }
+      
+      void
+      setAttribute (ID id, Attribute newValue)
+        {
+          UNIMPLEMENTED("apply a value change to the named attribute");
+        }
+      
+      
+      /* ==== binding API ==== */
+      
       ChangeOperationBinder
       change (Literal attributeID)
         {

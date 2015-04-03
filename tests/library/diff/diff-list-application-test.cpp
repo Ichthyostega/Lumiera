@@ -100,7 +100,7 @@ namespace test{
       run (Arg)
         {
           DataSeq src({a1,a2,a3,a4,a5});
-          auto diff = generateTestDiff();
+          DiffSeq diff = generateTestDiff();
           CHECK (!isnil (diff));
           
           DataSeq target = src;
