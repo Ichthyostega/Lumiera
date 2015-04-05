@@ -73,15 +73,8 @@ namespace diff{
   using std::string;
   
   namespace {
-    class ChangeOperationBinder
-      {
-      public:
-        void
-        operator= (function<void(string)> closure)
-          {
-            UNIMPLEMENTED("install closure");
-          }
-      };
+    template<class PAR>
+    class Builder;
     
     ////////TODO only preliminary....
     typedef Literal ID;
@@ -106,59 +99,94 @@ namespace diff{
       
       /* ==== operation API ==== */
       
-      void
-      reiterate()
-        {
-          UNIMPLEMENTED("reset point of reference");
-        }
-      
-      void
+      virtual void
       insertChild (ID id)
         {
           UNIMPLEMENTED("establish new child node at current position");
         }
       
-      void
+      virtual void
       deleteChild (ID id)
         {
           UNIMPLEMENTED("destroy child node at current position");
         }
       
-      void
-      acceptChild (ID id)
-        {
-          UNIMPLEMENTED("acknowledge existence of child at current pos and move ahead");
-        }
-      
-      void
+      virtual void
       findChild (ID id)
         {
           UNIMPLEMENTED("look ahead, find and retrieve denoted child to be relocated at current position");
         }
       
-      TreeMutator&
+      virtual TreeMutator&
       mutateChild (ID id)
         {
           UNIMPLEMENTED("expose a recursive TreeMutator to transform the denoted child");
         }
       
-      void
+      virtual void
       setAttribute (ID id, Attribute newValue)
         {
-          UNIMPLEMENTED("apply a value change to the named attribute");
+          std::cout << "Empty Base Impl: apply a value change to the named attribute"<<std::endl;      ////////////////TODO empty implementation should be NOP
         }
       
-      
-      /* ==== binding API ==== */
-      
-      ChangeOperationBinder
-      change (Literal attributeID)
-        {
-          UNIMPLEMENTED ("setup binder");
-        }
+      /**
+       * start building a custom adapted tree mutator,
+       * where the operations are tied by closures or
+       * wrappers into the current implementation context.
+       */
+      static Builder<TreeMutator> build();
     };
   
+  namespace {
+    
+    template<class PAR>
+    struct ChangeOperation
+      : PAR
+      {
+        function<void(string)> change_;
+        
+        virtual void
+        setAttribute (ID id, Attribute newValue)
+          {
+            PAR::setAttribute(id, newValue);  ////////////////////TODO only as a check to verify the class chaining. Of course we do *not* want to call the inherited implementeation
+            
+            string dummy("blubb");
+            change_(dummy);
+          }
+        
+        ChangeOperation(function<void(string)> clo, PAR const& chain)
+          : PAR(chain)
+          , change_(clo)
+          { }
+      };
+    
+    template<class PAR>
+    struct Builder
+      : PAR
+      {
+        using Chain = ChangeOperation<PAR>;
+        
+        Builder(PAR par)
+          : PAR(par)
+          { }
+        
+        
+        /* ==== binding API ==== */
+        
+        Builder<Chain>
+        change (Literal attributeID, function<void(string)> closure)
+          {
+            return Builder<Chain> (Chain (closure, *this));
+          }
+      };
+
+  }
   
+  Builder<TreeMutator>
+  TreeMutator::build ()
+  {
+    return Builder<TreeMutator>(TreeMutator());
+  }
   
   
 }} // namespace lib::diff

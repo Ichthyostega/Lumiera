@@ -38,6 +38,9 @@ using std::string;
 using std::cout;
 using std::endl;
 
+using lib::test::showType;
+using lib::test::demangleCxx;
+
 
 namespace lib {
 namespace diff{
@@ -87,15 +90,25 @@ namespace test{
       simpleAttributeBinding()
         {
           string localData;
-          TreeMutator mutator;
+          auto mutator =
+          TreeMutator::build()
+            .change("something", [&](string val)
+              {
+                cout << "Oink-Oink"<<endl;
+                localData = "Oink-Oink";
+              })
+            .change("something", [&](string val)
+              {
+                cout << "Change closure invoked with val="<<val<<endl;
+                localData = val;
+              });
           
-          mutator.change("something") = [&](string val)
-            {
-              cout << "Change closure invoked with val="<<val<<endl;
-              localData = val;
-            };
+          cout << "concrete TreeMutator type="<< demangleCxx (showType (mutator)) <<endl;
           
           CHECK (isnil (localData));
+          mutator.setAttribute("zoing", {});
+          CHECK (!isnil (localData));
+          cout << "localData changed to:"<<localData<<endl;
         }
       
       
