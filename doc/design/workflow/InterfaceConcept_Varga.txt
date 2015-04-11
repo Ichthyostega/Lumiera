@@ -1,0 +1,21 @@
+Interface Concept
+=================
+:Author: Christoph Varga
+:Date: March 2015
+
+This Concept Proposal approaches questions of interface design focussing on the Workflow.
+Currently, the whole field of film production is in a state of transformation. Such a
+time of change enables us to conceive new routes. Video editing technology today has
+reached a level of maturity, powerful enough to shape it in accordance with our human
+mode of expression, our needs and abilities when working with media. Things shouldn't
+be done just because it's possible to do them -- to the contrary, we are entitled
+to ask which route we want to go and we build our own tools accordingly.
+
+*************************
+_Christoph Varga_ is a young documentary film maker.
+He lives in Vienna.
+*************************
+
+-> link:{imgg}/ChristophVarga.UserInterfaceConcept.pdf[User Interface Concept (PDF)]
+
+
