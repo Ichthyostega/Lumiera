@@ -24,11 +24,11 @@
 /** @file tree-mutator.hpp
  ** Customisable intermediary to abstract generic tree mutation operations.
  ** This is the foundation for generic treatment of tree altering operations,
- ** and especially to handling of changes (diff) to hierarchical data structures.
+ ** and especially the handling of changes (diff) to hierarchical data structures.
  ** The goal is to represent a standard set of conceptual operations working on
  ** arbitrary data structures, without the need for these data structures to
  ** comply to any interface or base type. Rather, we allow each instance to
- ** define binding closures, which allows to tap into any internal data
+ ** define binding closures, which allows to tap into arbitrary internal data
  ** representation, without any need of disclosure. The only assumption is
  ** that the data to be treated is \em hierarchical and \em object-like,
  ** i.e. it has (named) attributes and it may have a collection of children.
@@ -148,7 +148,8 @@ namespace diff{
         virtual void
         setAttribute (ID id, Attribute newValue)
           {
-            PAR::setAttribute(id, newValue);  ////////////////////TODO only as a check to verify the class chaining. Of course we do *not* want to call the inherited implementeation
+            // Decorator-style chained invocation of inherited implementation
+            PAR::setAttribute(id, newValue);
             
             string dummy("blubb");
             change_(dummy);
@@ -164,7 +165,7 @@ namespace diff{
     struct Builder
       : PAR
       {
-        using Chain = ChangeOperation<PAR>;
+        using Change = ChangeOperation<PAR>;
         
         Builder(PAR par)
           : PAR(par)
@@ -173,10 +174,10 @@ namespace diff{
         
         /* ==== binding API ==== */
         
-        Builder<Chain>
+        Builder<Change>
         change (Literal attributeID, function<void(string)> closure)
           {
-            return Builder<Chain> (Chain (closure, *this));
+            return Change (closure, *this);
           }
       };
 
@@ -185,7 +186,7 @@ namespace diff{
   Builder<TreeMutator>
   TreeMutator::build ()
   {
-    return Builder<TreeMutator>(TreeMutator());
+    return TreeMutator();
   }
   
   
