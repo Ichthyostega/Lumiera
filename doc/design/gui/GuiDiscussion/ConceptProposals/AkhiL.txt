@@ -1,7 +1,7 @@
 GUI Proposal by AkhIL
 =====================
 :Author: IL'dar AKHmetgaleev (»AkhIL«)
-:Date: 2008-30-03
+:Date: 2008-03-30
 
 
 Wiring nodes within the timeline

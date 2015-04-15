@@ -96,7 +96,7 @@ Hermann Vosseler (Ichthyo)
 
 Clay Barnes (rcbarnes)
 ~~~~~~~~~~~~~~~~~~~~~~
--> http://www.hci-matters.com/blog/2008/05/21/lumiera-timeline-first-draft/[]
+-> link:ConceptProposals/Barnes.html[Proposal by Clay Barnes] (http://www.hci-matters.com/blog/2008/05/21/lumiera-timeline-first-draft/[original blog entry])
 
 .Things I like
  * Nudge buttons are shown when the user hovers over the clip. This could be quite a timesaver.

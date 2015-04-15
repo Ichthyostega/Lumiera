@@ -10,17 +10,17 @@ GUI Proposal by Clay Barnes
 *Clay Barnes* holds a B.S. in Computer Science and a B.A. in Linguistics from the University of Arizona,
 and an M.S. in Human-Computer Interaction from Rensselaer Polytechnic Institute.
 For the last year and a half, he was the User Interface Architect in GE Energy’s Software Innovation Team.
-He previously worked for Intrigo as a User Experience Designer while living in Tucson. 
+He previously worked for Intrigo as a User Experience Designer while living in Tucson.
 ***********************************************************************************************************
 
 I’ve pulled together some drafts of my ideas for the design of the timeline portion
 of the Lumiera non-linear video editor (hopefully, the successor to http://cinelerra-cv.org[Cinelerra]).
 
 The un-annotated version::
-  (click to enlarge):
   image:{imgg}/Barnes.proposal.png[
   "Lumiera UI proposal",width=300,
-  link="{imgg}/Barnes.proposal.png"]
+  link="{imgg}/Barnes.proposal.png"] +
+  (click to enlarge)
 
 The annotated version::
   (explaining some of the finer points)

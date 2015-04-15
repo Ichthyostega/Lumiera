@@ -7,6 +7,7 @@ Over time, we got several UI proposals and design contributions.
 Since webpages tend to disappear after some time, we took the liberty
 to incorporate some of these contributions in our documentation tree.
 
-  *  link:ConceptProposals/AkhiL.html[AkhIL]
-  *  link:ConceptProposals/Alcarinque.html[Alcarinque]
-  *  link:ConceptProposals/RichardSpindler.html[Richard Spindler]
+  *  link:AkhiL.html[AkhIL]
+  *  link:Alcarinque.html[Alcarinque]
+  *  link:Barnes.html[Clay Barnes]
+  *  link:RichardSpindler.html[Richard Spindler]

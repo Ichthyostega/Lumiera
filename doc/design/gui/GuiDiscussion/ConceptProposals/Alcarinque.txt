@@ -1,7 +1,7 @@
 GUI Proposal by Alcarinque
 ==========================
 :Author: Francisco G. Rodriguez
-:Date: 07.05.2008
+:Date: 2008-05-07
 
 
 This are some of my ideas for the interface of Lumiera. Some of this ideas are
