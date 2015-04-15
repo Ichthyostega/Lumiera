@@ -1,4 +1,4 @@
-GUI Brainstorming Proposal
+GUI Proposal by Alcarinque
 ==========================
 :Author: Francisco G. Rodriguez
 :Date: 07.05.2008

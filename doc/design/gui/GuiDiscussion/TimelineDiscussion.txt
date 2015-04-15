@@ -17,7 +17,7 @@ Brainstorming
 
 Akhil
 ~~~~~
--> link:Proposal.AkhiL.html[AkhIL's Proposal]
+-> link:ConceptProposals/AkhiL.html[AkhIL's Proposal]
 
 .Things I like
  * The roots of group tracks show what's being rendered inside (_Ichthyo_ calls these root tracks "group bars").
@@ -42,7 +42,7 @@ Akhil
 
 Richard Spindler 
 ~~~~~~~~~~~~~~~~
--> link:Proposal.RichardSpindler.html[Richard's Proposal]
+-> link:ConceptProposals/RichardSpindler.html[Richard's Proposal]
 
 .Things I like
  * You've got a concept of sub-EDLs and metaclips. We're definitely going to do
@@ -66,7 +66,7 @@ Richard Spindler
 
 Alcarinque 
 ~~~~~~~~~~
--> http://telniratha.atspace.com/spec.html[]
+-> link:ConceptProposals/Alcarinque.html[Proposal by »Alcarinque« (Francisco G. Rodriguez)] (http://telniratha.atspace.com/spec.html[original page])
 
 .Things I like
  * Node Layouts in the media library. This isn't a page about the ML, but I like your ideas of having stored node layouts in the library. My own name for these is compound effects - but it's the same idea. Your idea of having collecting a library of these on the website is pretty cool as well. 

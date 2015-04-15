@@ -1,5 +1,5 @@
-GUI Brainstorming Proposal
-==========================
+GUI Proposal by AkhIL
+=====================
 :Author: IL'dar AKHmetgaleev (»AkhIL«)
 :Date: 2008-30-03
 

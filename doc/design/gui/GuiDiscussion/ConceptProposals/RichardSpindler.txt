@@ -1,5 +1,5 @@
-GUI Brainstorming Proposal
-==========================
+GUI Proposal by Richard Spindler
+================================
 :Author: Richard Spindler
 :Date: 2008-30-03
 
