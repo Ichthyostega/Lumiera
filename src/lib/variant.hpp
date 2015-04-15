@@ -27,7 +27,7 @@
  ** doesn't deal with alignment issues and is <b>not threadsafe</b>. 
  ** 
  ** Values can be stored using \c operator= . In order to access the value
- ** stored in lib::Variant, you additionally need to define a "functor" 
+ ** stored in lib::Variant, you additionally need to define an access "functor" 
  ** - with a typedef "Ret" for the return type
  ** - providing a `static Ret access(ELM&)` function
  **   for each of the types used in the Variant</li>

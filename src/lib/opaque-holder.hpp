@@ -74,7 +74,6 @@
 
 #include <type_traits>
 #include <boost/noncopyable.hpp>
-#include <boost/static_assert.hpp>
 
 
 namespace lib {
@@ -192,7 +191,7 @@ namespace lib {
   
   
   /**
-   * Inline buffer holding and owning an object while concealing the
+   * Inline buffer to hold and own an object while concealing the
    * concrete type. The object is given either as ctor parameter or
    * by direct assignment; it is copy-constructed into the buffer.
    * It is necessary to specify the required buffer storage space
@@ -207,6 +206,7 @@ namespace lib {
    * @note assertion failure when trying to place an instance not
    *       fitting into given size.
    * @note \em not threadsafe!
+   * @todo add support for moving of rvalue refs
    */
   template
     < size_t siz           ///< maximum storage required for the targets to be held inline
@@ -252,12 +252,12 @@ namespace lib {
         };
       
       
-      /** concrete subclass managing a specific kind of contained object.
+      /** concrete subclass to manage a specific kind of contained object.
        *  @note invariant: #content_ always contains a valid SUB object */
       template<typename SUB>
       struct Buff : Buffer
         {
-          BOOST_STATIC_ASSERT (siz >= sizeof(SUB));
+          static_assert (siz >= sizeof(SUB), "InPlaceAnyHolder: insufficient Buffer size");
           
           SUB&
           get()  const  ///< core operation: target is contained within the inline buffer
@@ -513,7 +513,7 @@ namespace lib {
   
   
   /**
-   * Inline buffer holding and owning an object while concealing the
+   * Inline buffer to hold and own an object while concealing the
    * concrete type. Access to the contained object is similar to a
    * smart-pointer, but the object isn't heap allocated. OpaqueHolder
    * may be created empty, which can be checked by a bool test.
@@ -620,7 +620,7 @@ namespace lib {
       void
       placeDefault()
         {
-          BOOST_STATIC_ASSERT (siz >= sizeof(DEFAULT));
+          static_assert (siz >= sizeof(DEFAULT), "InPlaceBuffer to small");
           
           new(&buf_) DEFAULT();
         }
@@ -649,7 +649,7 @@ namespace lib {
           destroy();                         \
           try                                 \
             {                                  \
-              BOOST_STATIC_ASSERT (siz >= sizeof(TY));\
+              static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");\
                                                  \
               return *new(&buf_) _CTOR_CALL_;     \
             }                                      \
