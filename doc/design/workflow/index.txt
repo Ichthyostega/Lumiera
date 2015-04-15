@@ -1,11 +1,13 @@
 Design Documents: Workflow
 ==========================
 
-In our discussions, *Workflow* denotes all considerations how certain tasks
-can be achieved within the application in the most suitable and stringent fashion.
-This effort is closely related to GUI and interface design, but at the same quite
-integral, so it's rather treated separately of individual GUI features.
+In our discussions, the term *Workflow* denotes specific considerations about _the way_
+a given task can be achieved, within the application, in the most suitable and stringent fashion.
+This effort is closely related to GUI and interface design, but likewise quite integral,
+so we tend to treat it as a distinct effort, separate from the design of individual GUI features.
+
+* link:LumieraWorkflowOutline.html[Workflow/Requirements outline by BJMR]
+* link:InterfaceConcept_Varga.html[Interface Concept by Christoph Varga]
 
 -> see also link:../gui/index.html[general GUI discussion...]
 
-* link:LumieraWorkflowOutline.html[Workflow outline by BJMR]
