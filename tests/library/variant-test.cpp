@@ -24,6 +24,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/variant.hpp"
 #include "lib/util.hpp"
 
 
@@ -44,6 +46,9 @@ namespace lib {
 namespace test{
   
   using ::Test;
+  using meta::Types;
+  using lib::time::Time;
+  using lib::time::TimeVar;
   
   namespace { // test fixture...
     
@@ -81,18 +86,18 @@ namespace test{
       void
       createVariant()
         {
+          Time someTime;
           TestVariant v0;
           TestVariant v1(11);
           TestVariant v2("lololo");
-          
-          auto v3 = TestVariant::empty<Time>();
+          TestVariant v3(someTime);
           
           VERIFY_ERROR (WRONG_TYPE, TestVariant(3.1415));
           
-          cout << v0 <<endl
-               << v1 <<endl
-               << v2 <<endl
-               << v3 <<endl;
+          cout << string(v0) <<endl
+               << string(v1) <<endl
+               << string(v2) <<endl
+               << string(v3) <<endl;
           
           CHECK (contains (string(v0), "Variant"));
           CHECK (contains (string(v0), "bool"));
@@ -115,18 +120,14 @@ namespace test{
       void
       accessVariant()
         {
-          int someVal = rand() % 10000;
-          int someStr = randStr(55);
-          int someTime = randTime();
+          int    someVal = rand() % 10000;
+          string someStr = randStr(55);
+          Time  someTime = randTime();
           
           TestVariant v3(someTime);
           TestVariant v2(someStr);
-          
-          auto v1 = TestVariant::empty<int64_t>();
-          v1 = someVal;
-          
-          TestVariant v0;
-          v0 = true;
+          TestVariant v1; v1 = someVal;
+          TestVariant v0; v0 = true;
           
           CHECK (true     == v0.get<bool>()   );
           CHECK (someVal  == v1.get<int64_t>());
@@ -152,14 +153,14 @@ namespace test{
           // does not compile:
           v0.get<long>();
           v1.get<double>();
-          v4.get<TimeVal>();
+          v3.get<TimeVar>();
           
           struct Accessor
             : TestVariant::Visitor
             {
               bool b_ = false;
               int  i_ = 12;
-              Time t_;
+              TimeVar t_;
               
               void handle (bool b) { b_ = b; }
               void handle (Time t) { t_ = t; }
@@ -171,7 +172,7 @@ namespace test{
                 }
             };
           
-          Accsssor acs;
+          Accessor acs;
           CHECK (!acs.b_);
           CHECK (acs.i_ == 12);
           
@@ -179,12 +180,12 @@ namespace test{
           CHECK (acs.b_);
           CHECK (acs.i_ == 12);
           
-          v4.accept (acs);
+          v3.accept (acs);
           CHECK (acs.b_);
           CHECK (acs.i_ == 12);
           CHECK (acs.t_ == someTime);
           
-          v3.accept (acs);
+          v2.accept (acs);
           // nothing changed,
           // since we defined no accessor function
           CHECK (acs.b_);
