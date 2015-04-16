@@ -26,7 +26,7 @@
 #define LUMIERA_WRAPPERPTR_H
 
 
-#include "lib/variant.hpp"
+#include "lib/variant-o.hpp"
 #include "lib/access-casted.hpp"
 
 #include "lib/meta/typelist.hpp"
@@ -59,7 +59,7 @@ namespace lumiera {
    * error reporting is similar to the behaviour of dynamic_cast<T>: when retrieving
    * a pointer, NULL is returned in case of mismatch.
    */
-  typedef lib::Variant<proc::WrapperTypes, util::AccessCasted> WrapperPtr;
+  typedef lib::VariantO<proc::WrapperTypes, util::AccessCasted> WrapperPtr;
   
   
   

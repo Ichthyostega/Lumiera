@@ -33,6 +33,7 @@
  ** type TAR. Alternatively, you may define an specialisation of EmptyVal,
  ** e.g. throwing an exception instead of creating a NULL value. 
  ** 
+ ** @todo                                         ///////////////////////////////////////////TICKET #738 needs slight overhaul and clean-up
  ** @see lumiera::WrapperPtr usage example to access a variant record
  ** @see lib::InPlaceAnyHolder usage example to access a subclass in embedded storage
  ** 
@@ -113,6 +114,7 @@ namespace util {
   
   
   
+                                ////////////////////////////////TODO: use lib::NullValue instead
   template<typename X>
   struct EmptyVal
     {

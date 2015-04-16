@@ -21,28 +21,35 @@
 */
 
 
-/** @file variant.hpp
+/** @file variant-o.hpp
  ** This file defines a simple alternative to boost::variant.
  ** It pulls in fewer headers and has a shorter code path, but also
  ** doesn't deal with alignment issues and is <b>not threadsafe</b>. 
  ** 
  ** Values can be stored using \c operator= . In order to access the value
- ** stored in lib::Variant, you additionally need to define an access "functor" 
+ ** stored in lib::VariantO, you additionally need to define an access "functor" 
  ** - with a typedef "Ret" for the return type
  ** - providing a `static Ret access(ELM&)` function
- **   for each of the types used in the Variant</li>
+ **   for each of the types used in the VariantO
+ ** "The" typical example for such an access "functor" is the util::AccessCasted template.
  ** 
+ ** @deprecated immature first try. Preferably use lib::Variant
  ** @todo the instance handling for the accessor seems somewhat
- **       misaligned: why do we create another accessor as static var
- **       within the access() function?? Why not putting that into the
- **       Holder::Storage instance created by the client code?
- ** @todo write an unit test   ///////////////////////////////////////TICKET #141
+ **       clumsy: we're creating a static accessor instance for each type
+ **       of access functor, and each of these accessors holds a trampoline table.
+ **       Why are we building a table, while we're using a templated access functor
+ **       anyway? This table inhibits inlining, and there seems to be no
+ **       runtime benefit. This whole design indeed was a hastily made
+ **       (prompted by actual need) first attempt. It should be rewritten
+ **       from scratch (HIV 4/2015)
+ ** @todo                         ///////////////////////////////////////TICKET #738 should be rewritten from scratch
+ ** @todo                         ///////////////////////////////////////TICKET #141 write an unit test for variant
  ** @see wrapperptr.hpp usage example
  */
 
 
-#ifndef LIB_VARIANT_H
-#define LIB_VARIANT_H
+#ifndef LIB_VARIANT_O_H
+#define LIB_VARIANT_O_H
 
 
 #include "lib/meta/typelist-util.hpp"
@@ -233,16 +240,17 @@ namespace lib {
    * Well -- after finishing this "exercise" I must admit that it is not really
    * much more simple than what boost::variant does internally. At least we are
    * pulling in fewer headers and the actual code path is shorter compared with
-   * boost::variant, at the price of being not so generic, not caring for
-   * alignment issues within the buffer and being <b>not threadsafe</b>
+   * boost::variant, at the price of being not so generic, no care for
+   * alignment issues within the buffer or for thread safety.
    * 
+   * @deprecated immature first design attempt. obsolete. Please use lib::Variant     ////////////////TICKET #738
    * @param TYPES   collection of possible types to be stored in this variant object
    * @param Access  policy how to access the stored value
    */
   template< typename TYPES
           , template<typename> class Access  
           >
-  class Variant 
+  class VariantO
     : boost::noncopyable
     {
       
@@ -262,10 +270,10 @@ namespace lib {
        *  variant holder buffer, thereby typically casting 
        *  or converting the given source type to the best 
        *  suited (base) type (out of the collection of possible
-       *  types for this Variant instance)
+       *  types for this VariantO instance)
        */ 
       template<typename SRC>
-      Variant&
+      VariantO&
       operator= (SRC src)
         {
           if (src) holder_.put (src);  // see Holder::PlacementAdaptor::put
