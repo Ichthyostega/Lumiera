@@ -61,6 +61,7 @@
 //#include "lib/util.hpp"
 
 #include <type_traits>
+#include <typeindex>
 //#include <utility>
 //#include <string>
 //#include <array>
@@ -68,12 +69,49 @@
 
 namespace lib {
   
-  using std::move;
   using std::string;
+  
+  using std::move;
+  using std::forward;
   using util::unConst;
   
   namespace error = lumiera::error;
-  using error::LUMIERA_ERROR_WRONG_TYPE;
+  
+  namespace { // implementation helpers
+    
+    using std::is_constructible;
+    using std::remove_reference;
+    using meta::NullType;
+    using meta::Node;
+    
+    
+    template<typename X, typename TYPES>
+    struct CanBuildFrom
+      : CanBuildFrom<typename remove_reference<X>::type
+                    ,typename TYPES::List
+                    >
+      { };
+    
+    template<typename X, typename TYPES>
+    struct CanBuildFrom<X, Node<X, TYPES>>
+      {
+        using Type = X;
+      };
+    
+    template<typename X, typename T,typename TYPES>
+    struct CanBuildFrom<X, Node<T, TYPES>>
+      {
+        using Type = typename CanBuildFrom<X,TYPES>::Type;
+      };
+    
+    template<typename X>
+    struct CanBuildFrom<X, NullType>
+      {
+        static_assert (0 > sizeof(X), "No type in Typelist can be built from the given argument");
+      };
+    
+    
+  }//(End) implementation helpers
   
   
   /**
@@ -104,6 +142,9 @@ namespace lib {
           virtual ~Buffer() {}           ///< this is an ABC with VTable
           
           virtual void  copyInto (void* targetStorage)  const =0;
+          virtual void  operator= (Buffer const&)             =0;
+          virtual void  operator= (Buffer&&)                  =0;
+          
         };
       
       
@@ -115,14 +156,14 @@ namespace lib {
           static_assert (SIZ >= sizeof(TY), "Variant record: insufficient embedded Buffer size");
           
           TY&
-          get()  const  ///< core operation: target is contained within the inline buffer
+          access()  const  ///< core operation: target is contained within the inline buffer
             {
               return *reinterpret_cast<TY*> (unConst(this)->ptr());
             }
           
          ~Buff()
             {
-              get().~TY();
+              access().~TY();
             }
           
           Buff (TY const& obj)
@@ -137,43 +178,28 @@ namespace lib {
           
           Buff (Buff const& oBuff)
             {
-              new(Buffer::ptr()) TY(oBuff.get());
+              new(Buffer::ptr()) TY(oBuff.access());
             }
           
           Buff (Buff && rBuff)
             {
-              new(Buffer::ptr()) TY(move (rBuff.get()));
+              new(Buffer::ptr()) TY(move (rBuff.access()));
             }
           
-          Buff&
-          operator= (TY const& obj)
+          void
+          assignValue (TY const& ob)
             {
-              if (&obj != Buffer::ptr())
-                get() = obj;
-              return *this;
+              if (&ob != Buffer::ptr())
+                this->access() = ob;
             }
           
-          Buff&
-          operator= (TY && robj)
+          void
+          assignValue (TY && rob)
             {
-              get() = move(robj);
-              return *this;
+              this->access() = move(rob);
             }
           
-          Buff&
-          operator= (Buff const& ref)
-            {
-              if (&ref != this)
-                get() = ref.get();
-              return *this;
-            }
           
-          Buff&
-          operator= (Buff && rref)
-            {
-              get() = move(rref.get());
-              return *this;
-            }
           
           
           /* == virtual access functions == */
@@ -181,7 +207,33 @@ namespace lib {
           virtual void
           copyInto (void* targetStorage)  const override
             {
-              new(targetStorage) Buff(get());
+              new(targetStorage) Buff(this->access());
+            }
+          
+          virtual void
+          operator= (Buffer const& ob)  override
+            {
+              assignValue (downcast(unConst(ob)).access());
+            }
+          
+          virtual void
+          operator= (Buffer&& rref)  override
+            {
+              assignValue (move (downcast(rref).access()));
+            }
+          
+          static Buff&
+          downcast (Buffer& b)
+            {
+              Buff* buff = dynamic_cast<Buff*> (&b);
+              
+              if (!buff)
+                throw error::Logic("Variant type mismatch: "
+                                   "the given variant record does not hold "
+                                   "a value of the type requested here"
+                                  ,error::LUMIERA_ERROR_WRONG_TYPE);
+              else
+               return *buff;
             }
         };
       
@@ -192,22 +244,91 @@ namespace lib {
        *  @note Invariant: always contains a valid Buffer subclass */
       char storage_[BUFFSIZE];
       
+      
+      
+    protected: /* === internal interface for managing the storage === */
+      
+      Buffer&
+      buffer()
+        {
+          return *reinterpret_cast<Buffer*> (&storage_);
+        }
+      Buffer const&
+      buffer()  const
+        {
+          return *reinterpret_cast<const Buffer*> (&storage_);
+        }
+      
+      template<typename X>
+      Buff<X>&
+      buff()
+        {
+          return Buff<X>::downcast(this->buffer());
+        }
+      
+      
     public:
       Variant()
         {
-          UNIMPLEMENTED("default constructed element of first type");
+          using DefaultType = typename TYPES::List::Head;
+          
+          new(storage_) Buff<DefaultType> (DefaultType());
+        }
+      
+      Variant (Variant& ref)
+        {
+          ref.buffer().copyInto (&storage_);
+        }
+      
+      Variant (Variant const& ref)
+        {
+          ref.buffer().copyInto (&storage_);
+        }
+      
+      Variant (Variant&& rref)
+        {
+          rref.buffer().copyInto (&storage_);
         }
       
       template<typename X>
-      Variant(X const& x)
+      Variant(X&& x)
         {
-          UNIMPLEMENTED("place buffer to hold element of type X");
+          using StorageType = typename CanBuildFrom<X, TYPES>::Type;
+          
+          new(storage_) Buff<StorageType> (forward<X>(x));
         }
       
       template<typename X>
-      Variant(X && x)
+      Variant&
+      operator= (X&& x)
         {
-          UNIMPLEMENTED("place buffer and move element of type X");
+          using RawType = typename remove_reference<X>::type;
+          static_assert (meta::isInList<RawType, typename TYPES::List>(),
+                         "Type error: the given variant could never hold the required type");
+          
+          buff<RawType>().assignValue (forward<X>(x));
+          return *this;
+        }
+      
+      Variant&
+      operator= (Variant& ovar)
+        {
+          buffer() = ovar.buffer();
+          return *this;
+        }
+      
+      Variant&
+      operator= (Variant const& ovar)
+        {
+          buffer() = ovar.buffer();
+          return *this;
+        }
+      
+      Variant&
+      operator= (Variant&& rvar)
+        {
+          buffer().operator= (move(rvar.buffer()));
+          return *this;
         }
       
       
@@ -226,7 +347,10 @@ namespace lib {
       X&
       get()
         {
-          UNIMPLEMENTED("value access");
+          static_assert (meta::isInList<X, typename TYPES::List>(),
+                         "Type error: the given variant could never hold the required type");
+          
+          return buff<X>().access();
         }
       
       

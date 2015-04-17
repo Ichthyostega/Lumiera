@@ -30,16 +30,12 @@
 
 
 //#include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
+#include <iostream>
 //#include <map>
 //using boost::lexical_cast;
-#include <vector>
+//#include <vector>
 
-using util::contains;
-using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib {
@@ -49,6 +45,14 @@ namespace test{
   using meta::Types;
   using lib::time::Time;
   using lib::time::TimeVar;
+  
+  using util::contains;
+  using std::string;
+  using std::cout;
+  using std::endl;
+  
+  using error::LUMIERA_ERROR_WRONG_TYPE;
+  
   
   namespace { // test fixture...
     
@@ -88,11 +92,12 @@ namespace test{
         {
           Time someTime;
           TestVariant v0;
-          TestVariant v1(11);
-          TestVariant v2("lololo");
+          TestVariant v1(11L);
+          TestVariant v2(string("lololo"));
           TestVariant v3(someTime);
           
-          VERIFY_ERROR (WRONG_TYPE, TestVariant(3.1415));
+          //// does not compile....
+          // TestVariant evil(3.1415);
           
           cout << string(v0) <<endl
                << string(v1) <<endl
@@ -126,7 +131,7 @@ namespace test{
           
           TestVariant v3(someTime);
           TestVariant v2(someStr);
-          TestVariant v1; v1 = someVal;
+          TestVariant v1 = int64_t(someVal);
           TestVariant v0; v0 = true;
           
           CHECK (true     == v0.get<bool>()   );
@@ -150,10 +155,10 @@ namespace test{
           VERIFY_ERROR (WRONG_TYPE, v3.get<int64_t>());
           VERIFY_ERROR (WRONG_TYPE, v3.get<string>() );
           
-          // does not compile:
-          v0.get<long>();
-          v1.get<double>();
-          v3.get<TimeVar>();
+          //// does not compile...
+          // v0.get<int>();
+          // v1.get<double>();
+          // v3.get<TimeVar>();
           
           struct Accessor
             : TestVariant::Visitor
@@ -208,20 +213,20 @@ namespace test{
       void
       verifyAssignment()
         {
-          TestVariant v1("boo");
-          TestVariant v2(23);
-          TestVariant v3(42);
+          TestVariant v1(string("boo"));
+          TestVariant v2(23L);
+          TestVariant v3(42L);
           
-          v1 = "booo";
+          v1 = string("booo");
           v2 = v3;
-          v3 = 24;
+          v3 = 24L;
           CHECK ("booo" == v1.get<string>());
           CHECK (42 == v2.get<int64_t>());
           CHECK (24 == v3.get<int64_t>());
           
           VERIFY_ERROR (WRONG_TYPE, v1 = v2 );
-          VERIFY_ERROR (WRONG_TYPE, v1 = 22 );
-          VERIFY_ERROR (WRONG_TYPE, v2 = "2");
+          VERIFY_ERROR (WRONG_TYPE, v1 = 22L );
+          VERIFY_ERROR (WRONG_TYPE, v2 = string("2"));
         }
     };
   
