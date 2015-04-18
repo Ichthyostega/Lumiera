@@ -48,6 +48,11 @@
 #include <boost/utility/enable_if.hpp>
 
 
+namespace lib {
+namespace test{ // see test-helper.cpp
+    std::string demangleCxx (lib::Literal rawName);
+}}
+
 
 namespace util {
   
@@ -107,7 +112,7 @@ namespace util {
   inline string
   tyStr (const TY* =0)
   {
-    return string("«")+typeid(TY).name()+"»";
+    return "«"+ lib::test::demangleCxx (typeid(TY).name())+"»";
   }
   
   template<typename TY>
