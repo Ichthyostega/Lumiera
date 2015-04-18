@@ -77,10 +77,16 @@ namespace lib {
   
   namespace error = lumiera::error;
   
+  template<typename TYPES>
+  class Variant;
+  
   namespace { // implementation helpers
     
     using std::is_constructible;
     using std::remove_reference;
+    using std::remove_const;
+    using std::is_same;
+    using std::enable_if;
     using meta::NullType;
     using meta::Node;
     
@@ -108,6 +114,168 @@ namespace lib {
     struct CanBuildFrom<X, NullType>
       {
         static_assert (0 > sizeof(X), "No type in Typelist can be built from the given argument");
+      };
+    
+    
+    template<typename T>
+    struct Bare
+      {
+        using Type = typename remove_const<
+                     typename remove_reference<T>::type>::type;
+      };
+    
+    template<class T>
+    struct is_Variant
+      {
+        static constexpr bool value = false;
+      };
+    
+    template<class TYPES>
+    struct is_Variant<Variant<TYPES>>
+      {
+        static constexpr bool value = true;
+      };
+    
+    template<class V>
+    struct use_if_is_Variant
+      : enable_if<is_Variant<typename Bare<V>::Type>::value, V>
+      { };
+    
+    
+    template<class B, class D>
+    class FullCopySupport
+      : public B
+      {
+        virtual void
+        copyInto (void* targetStorage)  const override
+          {
+            D const& src = static_cast<D const&> (*this);
+            new(targetStorage) D(src);
+          }
+        
+        virtual void
+        moveInto (void* targetStorage)  override
+          {
+            D& src = static_cast<D&> (*this);
+            new(targetStorage) D(move(src));
+          }
+        
+        virtual void
+        copyInto (B& target)  const override
+          {
+            D&       t = D::downcast(target);
+            D const& s = static_cast<D const&> (*this);
+            t = s;
+          }
+        
+        virtual void
+        moveInto (B& target)  override
+          {
+            D& t = D::downcast(target);
+            D& s = static_cast<D&> (*this);
+            t = move(s);
+          }
+      };
+    
+    
+    template<class B, class D>
+    class CloneSupport
+      : public B
+      {
+        virtual void
+        copyInto (void* targetStorage)  const override
+          {
+            D const& src = static_cast<D const&> (*this);
+            new(targetStorage) D(src);
+          }
+        
+        virtual void
+        moveInto (void* targetStorage)  override
+          {
+            D& src = static_cast<D&> (*this);
+            new(targetStorage) D(move(src));
+          }
+        
+        virtual void
+        copyInto (B& target)  const override
+          {
+            throw error::Logic("Assignment invoked but target is not assignable");
+          }
+        
+        virtual void
+        moveInto (B& target)  override
+          {
+            throw error::Logic("Assignment invoked but target is not assignable");
+          }
+      };
+    
+    
+    template<class B, class D>
+    class MoveSupport
+      : public B
+      {
+        virtual void
+        copyInto (void* targetStorage)  const override
+          {
+            throw error::Logic("Copy construction invoked but target allows only move construction");
+          }
+        
+        virtual void
+        moveInto (void* targetStorage)  override
+          {
+            D& src = static_cast<D&> (*this);
+            new(targetStorage) D(move(src));
+          }
+        
+        virtual void
+        copyInto (B& target)  const override
+          {
+            throw error::Logic("Assignment invoked but target is not assignable");
+          }
+        
+        virtual void
+        moveInto (B& target)  override
+          {
+            throw error::Logic("Assignment invoked but target is not assignable");
+          }
+      };
+    
+    
+    template<class B, class D>
+    class NoCopyMoveSupport
+      : public B
+      {
+        virtual void
+        copyInto (void* targetStorage)  const override
+          {
+            throw error::Logic("Copy construction invoked but target is noncopyable");
+          }
+        
+        virtual void
+        moveInto (void* targetStorage)  override
+          {
+            throw error::Logic("Move construction invoked but target is noncopyable");
+          }
+        
+        virtual void
+        copyInto (B& target)  const override
+          {
+            throw error::Logic("Assignment invoked but target is not assignable");
+          }
+        
+        virtual void
+        moveInto (B& target)  override
+          {
+            throw error::Logic("Assignment invoked but target is not assignable");
+          }
+      };
+    
+    
+    template<class X, class SEL=void>
+    struct CopySupport
+      {
+        template<class B, class D>
+        using Policy = NoCopyMoveSupport<B,D>;
       };
     
     
@@ -142,8 +310,11 @@ namespace lib {
           virtual ~Buffer() {}           ///< this is an ABC with VTable
           
           virtual void  copyInto (void* targetStorage)  const =0;
-          virtual void  operator= (Buffer const&)             =0;
-          virtual void  operator= (Buffer&&)                  =0;
+          virtual void  moveInto (void* targetStorage)        =0;
+          virtual void  copyInto (Buffer&      target)  const =0;
+          virtual void  moveInto (Buffer&      target)        =0;
+//        virtual void  operator= (Buffer const&)             =0;
+//        virtual void  operator= (Buffer&&)                  =0;
           
         };
       
@@ -151,7 +322,7 @@ namespace lib {
       /** concrete inner capsule specialised for a given type */
       template<typename TY>
       struct Buff
-        : Buffer
+        : CopySupport<TY>::template Policy<Buffer,Buff<TY>>
         {
           static_assert (SIZ >= sizeof(TY), "Variant record: insufficient embedded Buffer size");
           
@@ -210,17 +381,17 @@ namespace lib {
               new(targetStorage) Buff(this->access());
             }
           
-          virtual void
-          operator= (Buffer const& ob)  override
-            {
-              assignValue (downcast(unConst(ob)).access());
-            }
-          
-          virtual void
-          operator= (Buffer&& rref)  override
-            {
-              assignValue (move (downcast(rref).access()));
-            }
+//        virtual void
+//        operator= (Buffer const& ob)  override
+//          {
+//            assignValue (downcast(unConst(ob)).access());
+//          }
+//        
+//        virtual void
+//        operator= (Buffer&& rref)  override
+//          {
+//            assignValue (move (downcast(rref).access()));
+//          }
           
           static Buff&
           downcast (Buffer& b)
@@ -246,6 +417,36 @@ namespace lib {
       
       
       
+      template <class X, class SEL=void>
+      struct Assign
+        { 
+          using RawType = typename remove_reference<X>::type;
+          static_assert (meta::isInList<RawType, typename TYPES::List>(),
+                         "Type error: the given variant could never hold the required type");
+          
+          
+          static void
+          assign (Buffer& buffer, X&& x)
+            {
+              buff<RawType>().assignValue (forward<X>(x));
+            }
+          
+          
+        };
+      
+      template<class V>
+      struct Assign<V, typename use_if_is_Variant<V>::type>
+        {
+          
+          static void
+          assign (Buffer& buffer, V&& oVar)
+            {
+//              oVar.buffer()
+//              buff<RawType>().assignValue (forward<X>(oVar));
+            }
+        };
+      
+      
     protected: /* === internal interface for managing the storage === */
       
       Buffer&
@@ -268,6 +469,11 @@ namespace lib {
       
       
     public:
+     ~Variant()
+        {
+          buffer().~Buffer();
+        }
+      
       Variant()
         {
           using DefaultType = typename TYPES::List::Head;
@@ -300,16 +506,18 @@ namespace lib {
       
       template<typename X>
       Variant&
-      operator= (X&& x)
+      operator= (X x)
         {
-          using RawType = typename remove_reference<X>::type;
-          static_assert (meta::isInList<RawType, typename TYPES::List>(),
-                         "Type error: the given variant could never hold the required type");
+//        using RawType = typename remove_reference<X>::type;
+//        static_assert (meta::isInList<RawType, typename TYPES::List>(),
+//                       "Type error: the given variant could never hold the required type");
+//        
+//        buff<RawType>().assignValue (forward<X>(x));
           
-          buff<RawType>().assignValue (forward<X>(x));
+          Assign<X>::assign (this->buffer(), forward<X> (x));
           return *this;
         }
-      
+/*      
       Variant&
       operator= (Variant& ovar)
         {
@@ -330,7 +538,7 @@ namespace lib {
           buffer().operator= (move(rvar.buffer()));
           return *this;
         }
-      
+      */
       
 #ifdef LIB_TEST_TEST_HELPER_H
       /* == diagnostic helper == */
