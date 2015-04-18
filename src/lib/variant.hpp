@@ -83,6 +83,9 @@ namespace lib {
   namespace { // implementation helpers
     
     using std::is_constructible;
+    using std::is_move_constructible;
+    using std::is_copy_constructible;
+    using std::is_copy_assignable;
     using std::remove_reference;
     using std::remove_const;
     using std::is_same;
@@ -142,103 +145,20 @@ namespace lib {
       { };
     
     
-    template<class B, class D>
-    class FullCopySupport
-      : public B
+    
+    using EmptyBase = struct{};
+    
+    template<class IFA, class BASE = EmptyBase>
+    class VirtualCopySupportInterface
+      : public BASE
       {
-        virtual void
-        copyInto (void* targetStorage)  const override
-          {
-            D const& src = static_cast<D const&> (*this);
-            new(targetStorage) D(src);
-          }
-        
-        virtual void
-        moveInto (void* targetStorage)  override
-          {
-            D& src = static_cast<D&> (*this);
-            new(targetStorage) D(move(src));
-          }
-        
-        virtual void
-        copyInto (B& target)  const override
-          {
-            D&       t = D::downcast(target);
-            D const& s = static_cast<D const&> (*this);
-            t = s;
-          }
-        
-        virtual void
-        moveInto (B& target)  override
-          {
-            D& t = D::downcast(target);
-            D& s = static_cast<D&> (*this);
-            t = move(s);
-          }
+      public:
+        virtual void  copyInto (void* targetStorage)  const =0;
+        virtual void  moveInto (void* targetStorage)        =0;
+        virtual void  copyInto (IFA&         target)  const =0;
+        virtual void  moveInto (IFA&         target)        =0;
       };
     
-    
-    template<class B, class D>
-    class CloneSupport
-      : public B
-      {
-        virtual void
-        copyInto (void* targetStorage)  const override
-          {
-            D const& src = static_cast<D const&> (*this);
-            new(targetStorage) D(src);
-          }
-        
-        virtual void
-        moveInto (void* targetStorage)  override
-          {
-            D& src = static_cast<D&> (*this);
-            new(targetStorage) D(move(src));
-          }
-        
-        virtual void
-        copyInto (B&)  const override
-          {
-            throw error::Logic("Assignment invoked but target is not assignable");
-          }
-        
-        virtual void
-        moveInto (B&)  override
-          {
-            throw error::Logic("Assignment invoked but target is not assignable");
-          }
-      };
-    
-    
-    template<class B, class D>
-    class MoveSupport
-      : public B
-      {
-        virtual void
-        copyInto (void*)  const override
-          {
-            throw error::Logic("Copy construction invoked but target allows only move construction");
-          }
-        
-        virtual void
-        moveInto (void* targetStorage)  override
-          {
-            D& src = static_cast<D&> (*this);
-            new(targetStorage) D(move(src));
-          }
-        
-        virtual void
-        copyInto (B&)  const override
-          {
-            throw error::Logic("Assignment invoked but target is not assignable");
-          }
-        
-        virtual void
-        moveInto (B&)  override
-          {
-            throw error::Logic("Assignment invoked but target is not assignable");
-          }
-      };
     
     
     template<class B, class D>
@@ -271,11 +191,134 @@ namespace lib {
       };
     
     
+    template<class B, class D>
+    class MoveSupport
+      : NoCopyMoveSupport<B, D>
+      {
+        virtual void
+        copyInto (void*)  const override
+          {
+            throw error::Logic("Copy construction invoked but target allows only move construction");
+          }
+        
+        virtual void
+        moveInto (void* targetStorage)  override
+          {
+            D& src = static_cast<D&> (*this);
+            new(targetStorage) D(move(src));
+          }
+      };
+    
+    
+    template<class B, class D>
+    class CloneSupport
+      : public MoveSupport<B,D>
+      {
+        virtual void
+        copyInto (void* targetStorage)  const override
+          {
+            D const& src = static_cast<D const&> (*this);
+            new(targetStorage) D(src);
+          }
+      };
+    
+    
+    template<class B, class D>
+    class FullCopySupport
+      : public CloneSupport<B,D>
+      {
+        virtual void
+        copyInto (B& target)  const override
+          {
+            D&       t = D::downcast(target);
+            D const& s = static_cast<D const&> (*this);
+            t = s;
+          }
+        
+        virtual void
+        moveInto (B& target)  override
+          {
+            D& t = D::downcast(target);
+            D& s = static_cast<D&> (*this);
+            t = move(s);
+          }
+      };
+    
+    
+    
+    
+    /** workaround for GCC 4.7: need to exclude some types,
+     *  since they raise private access violation during probing.
+     *  Actually, in C++11 such a case should trigger substitution
+     *  failure, not an compilation error */
+    template<class X>
+    struct can_use_assignment
+      : is_copy_assignable<X>
+      { };
+    
+    template<>
+    struct can_use_assignment<lib::time::Time>
+      { static constexpr bool value = false; };
+    
+    
+    
+    template<class X>
+    struct use_if_supports_only_move
+      : enable_if<    is_move_constructible<X>::value
+                  && !is_copy_constructible<X>::value
+                  && !can_use_assignment<X>::value
+                 ,X
+                 >
+      { };
+      
+    template<class X>
+    struct use_if_supports_cloning
+      : enable_if<    is_move_constructible<X>::value
+                  &&  is_copy_constructible<X>::value
+                  && !can_use_assignment<X>::value
+                 ,X
+                 >
+      { };
+      
+    template<class X>
+    struct use_if_supports_copy_and_assignment
+      : enable_if<    is_move_constructible<X>::value
+                  &&  is_copy_constructible<X>::value
+                  && !can_use_assignment<X>::value
+                 ,X
+                 >
+      { };
+    
+    
+    
+    
+    
     template<class X, class SEL=void>
     struct CopySupport
       {
         template<class B, class D>
         using Policy = NoCopyMoveSupport<B,D>;
+      };
+    
+    template<class X>
+    struct CopySupport<X,            typename use_if_supports_only_move<X>::type>
+      {
+        template<class B, class D>
+        using Policy = MoveSupport<B,D>;
+      };
+    
+    template<class X>
+    struct CopySupport<X,            typename use_if_supports_cloning<X>::type>
+      {
+        template<class B, class D>
+        using Policy = CloneSupport<B,D>;
+      };
+    
+    template<class X>
+    struct CopySupport<X,            typename use_if_supports_copy_and_assignment<X>::type>
+      {
+        template<class B, class D>
+        using Policy = FullCopySupport<B,D>;
       };
     
     
@@ -301,6 +344,7 @@ namespace lib {
       
       /** Inner capsule managing the contained object (interface) */
       struct Buffer
+        : VirtualCopySupportInterface<Buffer>
         {
           char content_[SIZ];
           
@@ -308,11 +352,6 @@ namespace lib {
           
           
           virtual ~Buffer() {}           ///< this is an ABC with VTable
-          
-          virtual void  copyInto (void* targetStorage)  const =0;
-          virtual void  moveInto (void* targetStorage)        =0;
-          virtual void  copyInto (Buffer&      target)  const =0;
-          virtual void  moveInto (Buffer&      target)        =0;
           
         };
       
