@@ -183,7 +183,7 @@ namespace test {
       catch (lumiera::Error& failure)
         {
           lumiera_err errorID = lumiera_error(); // reset error flag
-          cerr << "*** Test Failure " << showType(theTest) << endl;
+          cerr << "*** Test Failure " << demangleCxx(showType(theTest)) << endl;
           cerr << "***            : " << failure.what() << endl;
           ERROR (test,     "Error state %s", errorID);
           WARN  (progress, "Caught exception %s", failure.what());

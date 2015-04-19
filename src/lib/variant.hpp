@@ -58,6 +58,7 @@
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
+#include "lib/meta/generator.hpp"
 //#include "lib/util.hpp"
 
 #include <type_traits>
@@ -79,6 +80,7 @@ namespace lib {
   
   template<typename TYPES>
   class Variant;
+
   
   namespace { // implementation helpers
     
@@ -284,7 +286,7 @@ namespace lib {
     struct use_if_supports_copy_and_assignment
       : enable_if<    is_move_constructible<X>::value
                   &&  is_copy_constructible<X>::value
-                  && !can_use_assignment<X>::value
+                  &&  can_use_assignment<X>::value
                  ,X
                  >
       { };
@@ -322,6 +324,18 @@ namespace lib {
       };
     
     
+    
+    template<class VAL>
+    struct ValueAcceptInterface
+      {
+        virtual void handle(VAL&) { /* NOP */ };
+      };
+    
+    template<typename TYPES>
+    using VisitorInterface
+        = meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
+    
+    
   }//(End) implementation helpers
   
   
@@ -340,8 +354,18 @@ namespace lib {
   template<typename TYPES>
   class Variant
     {
+    public:
       enum { SIZ = meta::maxSize<typename TYPES::List>::value };
       
+      class Visitor
+        : public VisitorInterface<TYPES>
+        {
+        public:
+          virtual ~Visitor() { } ///< this is an interface
+        };
+      
+      
+    private:
       /** Inner capsule managing the contained object (interface) */
       struct Buffer
         : VirtualCopySupportInterface<Buffer>
@@ -353,6 +377,8 @@ namespace lib {
           
           virtual ~Buffer() {}           ///< this is an ABC with VTable
           
+          virtual void dispatch (Visitor&)  =0;
+          virtual operator string()  const  =0;
         };
       
       
@@ -434,6 +460,16 @@ namespace lib {
               else
                return *buff;
             }
+          
+          void
+          dispatch (Visitor& visitor)
+            {
+              ValueAcceptInterface<TY>& typeDispatcher = visitor;
+              typeDispatcher.handle (this->access());
+            }
+          
+          /** diagnostic helper */
+          operator string()  const;
         };
       
       enum{ BUFFSIZE = sizeof(Buffer) };
@@ -538,14 +574,9 @@ namespace lib {
         }
       
       
-#ifdef LIB_TEST_TEST_HELPER_H
-      /* == diagnostic helper == */
+      /** diagnostic helper */
+      operator string()  const;
       
-      operator string()  const
-        {
-          UNIMPLEMENTED("diagnostic string conversion");
-        }
-#endif      
       
       /* === Access === */
       
@@ -560,20 +591,40 @@ namespace lib {
         }
       
       
-      class Visitor
-        {
-        public:
-          virtual ~Visitor() { } ///< this is an interface
-        };
-      
       void
       accept (Visitor& visitor)
         {
-          UNIMPLEMENTED("visitor style value access");
+          buffer().dispatch (visitor);
         }
     };
   
   
   
-} // namespace lib  
+} // namespace lib
+
+
+
+  /* == diagnostic helper == */
+  
+#ifdef LIB_FORMAT_UTIL_H
+namespace lib {
+  
+  template<typename TYPES>
+  Variant<TYPES>::operator string()  const
+  {
+    return string(buffer());
+  }
+  
+  template<typename TYPES>
+  template<typename TY>
+  Variant<TYPES>::Buff<TY>::operator string()  const
+  {
+    return "Variant|"
+        +  util::str (this->access(),
+                     (util::tyStr<TY>()+"|").c_str()
+                     );
+  }
+} // namespace lib
+
+#endif
 #endif /*LIB_VARIANT_H*/

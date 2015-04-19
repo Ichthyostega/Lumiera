@@ -25,6 +25,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-util.hpp"
 #include "lib/variant.hpp"
 #include "lib/util.hpp"
 
@@ -106,10 +107,10 @@ namespace test{
           
           CHECK (contains (string(v0), "Variant"));
           CHECK (contains (string(v0), "bool"));
-          CHECK (contains (string(v0), "false"));
+          CHECK (contains (string(v0), "0"));
           
           CHECK (contains (string(v1), "Variant"));
-          CHECK (contains (string(v1), "int64_t"));
+          CHECK (contains (string(v1), "int64_t") || contains (string(v1), "long") );
           CHECK (contains (string(v1), "11"));
           
           CHECK (contains (string(v2), "Variant"));
@@ -118,7 +119,7 @@ namespace test{
           
           CHECK (contains (string(v3), "Variant"));
           CHECK (contains (string(v3), "lib::time::Time"));
-          CHECK (contains (string(v3), "0:00:00:00"));
+          CHECK (contains (string(v3), "0:00:00.000"));
         }
       
       
@@ -167,8 +168,8 @@ namespace test{
               int  i_ = 12;
               TimeVar t_;
               
-              void handle (bool b) { b_ = b; }
-              void handle (Time t) { t_ = t; }
+              void handle (bool& b) { b_ = b; }
+              void handle (Time& t) { t_ = t; }
               
               void handle (int64_t& i6)
                 {
