@@ -99,7 +99,7 @@ END
 
 TEST "formatting/diagnostics helpers" FormatHelper_test <<END
 out: Displaying some types....
-out: «..util.test.Reticent.»
+out: «util::test::Reticent»
 out: <no comment>
 out: ^hey Joe!
 out: ^he says: hey Joe!
@@ -482,6 +482,15 @@ END
 
 
 TEST "collection utils" UtilCollection_test <<END
+return: 0
+END
+
+
+TEST "typesafe Variant record" Variant_test <<END
+out: Variant.«bool».0
+out: Variant.«(long|int64_t)».11
+out: Variant.«std::string».lololo
+out: Variant.«lib::time::Time».0:00:00.000
 return: 0
 END
 

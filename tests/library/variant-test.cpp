@@ -30,12 +30,8 @@
 #include "lib/util.hpp"
 
 
-//#include <boost/lexical_cast.hpp>
-#include <string>
 #include <iostream>
-//#include <map>
-//using boost::lexical_cast;
-//#include <vector>
+#include <string>
 
 
 
@@ -53,13 +49,12 @@ namespace test{
   using std::endl;
   
   using error::LUMIERA_ERROR_WRONG_TYPE;
+  using error::LUMIERA_ERROR_LOGIC;
   
   
-  namespace { // test fixture...
-    
-  }//(End) test fixture
-  
+  // Test fixture...
   typedef Variant<Types<bool,int64_t,string,Time>> TestVariant;
+  
   
   
   
@@ -228,6 +223,12 @@ namespace test{
           VERIFY_ERROR (WRONG_TYPE, v1 = v2 );
           VERIFY_ERROR (WRONG_TYPE, v1 = 22L );
           VERIFY_ERROR (WRONG_TYPE, v2 = string("2"));
+          
+          TestVariant v4  = Time();
+          TestVariant v44 = Time(0,4,4,4);  // OK: copy initialisation
+          VERIFY_ERROR (LOGIC, v4 = v44);   // Runtime Error: not assignable
+          
+          // v44 = Time(4,4);    // does not compile: Time is not assignable
         }
     };
   

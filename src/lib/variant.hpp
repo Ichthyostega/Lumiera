@@ -34,6 +34,14 @@
  ** Type mismatch is checked at runtime. As a fallback, we provide a visitor
  ** scheme for generic access.
  ** 
+ ** The design restrictions were chosen deliberately, since a variant type might
+ ** promote "probe and switch on type" style programming, which is known to be fragile.
+ ** Likewise, we do not want to support mutations of the variant type at runtime. Basically,
+ ** using a variant record is recommended only if either the receiving context has structural
+ ** knowledge about the type to expect, or when a visitor implementation can supply a sensible
+ ** handling for \em all the possible types. As an alternative, you might consider the
+ ** lib::PolymorphicValue to hold types implementing a common interface.
+ ** 
  ** \par implementation notes
  ** We use a similar "double capsule" implementation technique as for lib::OpaqueHolder.
  ** In fact, Variant is almost identical to the latter, just omitting unnecessary flexibility.
@@ -45,6 +53,11 @@
  ** a storage requirement of MAX<TYPES...> plus one "slot" for the VTable. (with "slot" we
  ** denote the smallest disposable storage size for the given platform after alignment,
  ** typically the size of a size_t).
+ ** 
+ ** To support copying and assignment of variant instances, but limit these operations
+ ** to variants holding the same type, we use a virtual assignment function. In case the
+ ** concrete type does not support assignment or copy construction, the respective access
+ ** function is replaced by an implementation raising a runtime error.
  ** 
  ** @see Veriant_test
  ** @see lib::diff::GenNode
@@ -59,13 +72,8 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
-//#include "lib/util.hpp"
 
 #include <type_traits>
-#include <typeindex>
-//#include <utility>
-//#include <string>
-//#include <array>
 
 
 namespace lib {
@@ -78,9 +86,6 @@ namespace lib {
   
   namespace error = lumiera::error;
   
-  template<typename TYPES>
-  class Variant;
-
   
   namespace { // implementation helpers
     
@@ -89,8 +94,6 @@ namespace lib {
     using std::is_copy_constructible;
     using std::is_copy_assignable;
     using std::remove_reference;
-    using std::remove_const;
-    using std::is_same;
     using std::enable_if;
     using meta::NullType;
     using meta::Node;
@@ -122,29 +125,6 @@ namespace lib {
       };
     
     
-    template<typename T>
-    struct Bare
-      {
-        using Type = typename remove_const<
-                     typename remove_reference<T>::type>::type;
-      };
-    
-    template<class T>
-    struct is_Variant
-      {
-        static constexpr bool value = false;
-      };
-    
-    template<class TYPES>
-    struct is_Variant<Variant<TYPES>>
-      {
-        static constexpr bool value = true;
-      };
-    
-    template<class V>
-    struct use_if_is_Variant
-      : enable_if<is_Variant<typename Bare<V>::Type>::value, V>
-      { };
     
     
     
@@ -195,7 +175,7 @@ namespace lib {
     
     template<class B, class D>
     class MoveSupport
-      : NoCopyMoveSupport<B, D>
+      : public NoCopyMoveSupport<B, D>
       {
         virtual void
         copyInto (void*)  const override
@@ -269,25 +249,22 @@ namespace lib {
       : enable_if<    is_move_constructible<X>::value
                   && !is_copy_constructible<X>::value
                   && !can_use_assignment<X>::value
-                 ,X
                  >
       { };
-      
+    
     template<class X>
     struct use_if_supports_cloning
       : enable_if<    is_move_constructible<X>::value
                   &&  is_copy_constructible<X>::value
                   && !can_use_assignment<X>::value
-                 ,X
                  >
       { };
-      
+    
     template<class X>
     struct use_if_supports_copy_and_assignment
       : enable_if<    is_move_constructible<X>::value
                   &&  is_copy_constructible<X>::value
                   &&  can_use_assignment<X>::value
-                 ,X
                  >
       { };
     
@@ -339,6 +316,7 @@ namespace lib {
   }//(End) implementation helpers
   
   
+  
   /**
    * Typesafe union record.
    * A Variant element may carry an embedded value of any of the predefined types.
@@ -350,6 +328,7 @@ namespace lib {
    * any access to the variant's value requires knowledge of the type
    * in question, but type mismatch will provoke an exception at runtime.
    * Generic access is possible using a visitor.
+   * @warning not threadsafe
    */
   template<typename TYPES>
   class Variant
@@ -547,6 +526,7 @@ namespace lib {
           using RawType = typename remove_reference<X>::type;
           static_assert (meta::isInList<RawType, typename TYPES::List>(),
                          "Type error: the given variant could never hold the required type");
+          static_assert (can_use_assignment<RawType>::value, "target type does not support assignment");
           
           buff<RawType>() = forward<X>(x);
           return *this;
@@ -605,7 +585,7 @@ namespace lib {
 
 
   /* == diagnostic helper == */
-  
+
 #ifdef LIB_FORMAT_UTIL_H
 namespace lib {
   
@@ -624,7 +604,7 @@ namespace lib {
                      (util::tyStr<TY>()+"|").c_str()
                      );
   }
-} // namespace lib
+}// namespace lib
 
 #endif
 #endif /*LIB_VARIANT_H*/
