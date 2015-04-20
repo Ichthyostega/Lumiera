@@ -22,45 +22,88 @@
 
 
 /** @file virtual-copy-support.hpp
- ** A typesafe union record to carry embedded values of unrelated type.
- ** This file defines a simple alternative to boost::variant. It pulls in
- ** fewer headers, has a shorter code path and is hopefully more readable,
- ** but also doesn't deal with alignment issues and is <b>not threadsafe</b>.
- **  
- ** Deliberately, the design rules out re-binding of the contained type. Thus,
- ** once created, a variant \em must hold a valid element and always an element
- ** of the same type. Beyond that, variant elements are copyable and mutable.
- ** Direct access requires knowledge of the embedded type (no switch-on type).
- ** Type mismatch is checked at runtime. As a fallback, we provide a visitor
- ** scheme for generic access.
+ ** Helper for building "virtual copy" operations.
+ ** Especially in conjunction with type erasure, sometimes we have to deal with
+ ** situations, where we want to copy or assign an object without knowing the
+ ** full implementation type. Obviously, the default (compiler generated) operations
+ ** will not work in such situations -- even worse, they will slice the objects on
+ ** copy. The reason is: we \em must know the full implementation and storage layout
+ ** of a type do provide any meaningful copy, assignment or move operation.
  ** 
- ** The design restrictions were chosen deliberately, since a variant type might
- ** promote "probe and switch on type" style programming, which is known to be fragile.
- ** Likewise, we do not want to support mutations of the variant type at runtime. Basically,
- ** using a variant record is recommended only if either the receiving context has structural
- ** knowledge about the type to expect, or when a visitor implementation can supply a sensible
- ** handling for \em all the possible types. As an alternative, you might consider the
- ** lib::PolymorphicValue to hold types implementing a common interface.
+ ** A possible workaround is to call into the actual implementation type through
+ ** a virtual function (which requires a VTable): Even if for everyone else any
+ ** knowledge regarding the exact implementation type has been discarded ("erased"),
+ ** the function pointers in the VTable still implicitly hold onto that precise
+ ** implementation type, since they were setup during construction, where the
+ ** type was still available. Such a scheme of dealing with "opaque" copy operations
+ ** is known as <b>virtual copy</b> -- it can be dangerous and tricky to get right
+ ** and is preferably used only in flat class hierarchies.
  ** 
- ** \par implementation notes
- ** We use a similar "double capsule" implementation technique as for lib::OpaqueHolder.
- ** In fact, Variant is almost identical to the latter, just omitting unnecessary flexibility.
- ** The outer capsule exposes the public handling interface, while the inner, private capsule
- ** is a polymorphic value holder. Since C++ as such does not support polymorphic values,
- ** the inner capsule is placed "piggyback" into a char buffer. The actual value is carried
- ** within yet another, nested char buffer. Thus, effectively the first "slot" of the storage
- ** will hold the VTable pointer, thereby encoding the actual type information -- leading to
- ** a storage requirement of MAX<TYPES...> plus one "slot" for the VTable. (with "slot" we
- ** denote the smallest disposable storage size for the given platform after alignment,
- ** typically the size of a size_t).
+ ** This helper template simplifies the construction of such a scheme.
+ ** - a base interface defines the available virtual copy operations
+ ** - a set of CRTP-style templates covers all the case of
+ **   - full copy support
+ **   - copy construction but not assignment
+ **   - only move construction allowed
+ **   - noncopyable type
+ ** - we use type traits and a policy template to pick the correct implementation
+ **   for a given data type. Any assignment or copy operations not supported by the
+ **   target type will be replaced by an implementation which raises a runtime error
+ **   (Exception).
  ** 
- ** To support copying and assignment of variant instances, but limit these operations
- ** to variants holding the same type, we use a virtual assignment function. In case the
- ** concrete type does not support assignment or copy construction, the respective access
- ** function is replaced by an implementation raising a runtime error.
+ ** \par prerequisites
+ ** The actual implementation type needs to provide the necessary standard / custom
+ ** copy and assignment operations with the usual signature. Moreover, the implementation
+ ** type provides a static function \c downcast(Base&) to perform a suitable dynamic
+ ** or static downcast from the interface type to the concrete implementation type.
  ** 
- ** @see Veriant_test
- ** @see lib::diff::GenNode
+ ** \par usage
+ ** The provided virtual operations are to be used in "backward" direction: invoked
+ ** on the source and affecting the target. The source, through the VTable, knows its
+ ** precise type and data layout. The target is handed in as parameter and treated
+ ** by the \c downcast() function -- which preferably performs a dynamic cast
+ ** (or at least asserts the correct type). This whole scheme can only work for
+ ** copy and assignment of objects, which actually have the same implementation
+ ** type -- it will never be possible to "cross copy" to an completely unrelated
+ ** target type, at least not generically.
+ ** 
+ ** Usage example
+ ** \code{.cpp}
+ **   Variant (Variant const& ref)
+ **     {
+ **       ref.buffer().copyInto (&storage_);
+ **     }
+ **   
+ **   Variant&
+ **   operator= (Variant const& ovar)
+ **     {
+ **       ovar.buffer().copyInto (this->buffer());
+ **       return *this;
+ **     }
+ **     
+ **   Buffer const&
+ **   buffer()  const
+ **     {
+ **       return *reinterpret_cast<const Buffer*> (&storage_);
+ **     }
+ ** \endcode
+ ** In this example, the concrete implementation of the \c Buffer interface
+ ** will mix in the Policy template with the implementations of the virtual copy
+ ** operations. The copy constructor uses the virtual \c copyInto(void*) to perform
+ ** a "placement new", whereas the assignment operator calls the virtual \c copyInto(Buffer&)
+ ** to downcast the target \c Buffer and in the end invokes the assignment operator on
+ ** the concrete \c Buffer implementation subclass.
+ ** 
+ ** @warning please make sure that \em only the virtual copy operation is invoked, since
+ **          this operation will delegate to the copy operation on the implementation class
+ **          and thus already invoke the whole chain of custom / compiler generated copy
+ **          implementations. Ignoring this warning can lead to insidious slicing or partial
+ **          copies. Additionally, if you \em really need multiple level deep inheritance,
+ **          you need to mix in the copy implementations on \em every level \em again, and
+ **          you need to provide custom copy operations on every level.
+ ** 
+ ** @see VirtualCopySupport_test
+ ** @see lib::Variant usage example
  ** 
  */
 
@@ -69,541 +112,207 @@
 #define LIB_META_VIRTUAL_COPY_SUPPORT_H
 
 
-#include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
-#include "lib/meta/generator.hpp"
+#include "lib/error.hpp"
 
 #include <type_traits>
-
+#include <utility>
 
 namespace lib {
-  
-  using std::string;
+namespace time{
+  class Time;   // forward declaration for GCC 4.7 workaround
+}}
+
+namespace lib {
+namespace meta{
   
   using std::move;
-  using std::forward;
   using util::unConst;
+  
+  using std::is_move_constructible;
+  using std::is_copy_constructible;
+  using std::is_copy_assignable;
+  using std::enable_if;
   
   namespace error = lumiera::error;
   
   
-  namespace { // implementation helpers
-    
-    using std::is_constructible;
-    using std::is_move_constructible;
-    using std::is_copy_constructible;
-    using std::is_copy_assignable;
-    using std::remove_reference;
-    using std::enable_if;
-    using meta::NullType;
-    using meta::Node;
-    
-    
-    template<typename X, typename TYPES>
-    struct CanBuildFrom
-      : CanBuildFrom<typename remove_reference<X>::type
-                    ,typename TYPES::List
-                    >
-      { };
-    
-    template<typename X, typename TYPES>
-    struct CanBuildFrom<X, Node<X, TYPES>>
-      {
-        using Type = X;
-      };
-    
-    template<typename X, typename T,typename TYPES>
-    struct CanBuildFrom<X, Node<T, TYPES>>
-      {
-        using Type = typename CanBuildFrom<X,TYPES>::Type;
-      };
-    
-    template<typename X>
-    struct CanBuildFrom<X, NullType>
-      {
-        static_assert (0 > sizeof(X), "No type in Typelist can be built from the given argument");
-      };
-    
-    
-    
-    
-    using EmptyBase = struct{};
-    
-    template<class IFA, class BASE = EmptyBase>
-    class VirtualCopySupportInterface
-      : public BASE
-      {
-      public:
-        virtual void  copyInto (void* targetStorage)  const =0;
-        virtual void  moveInto (void* targetStorage)        =0;
-        virtual void  copyInto (IFA&         target)  const =0;
-        virtual void  moveInto (IFA&         target)        =0;
-      };
-    
-    
-    
-    template<class B, class D>
-    class NoCopyMoveSupport
-      : public B
-      {
-        virtual void
-        copyInto (void*)  const override
-          {
-            throw error::Logic("Copy construction invoked but target is noncopyable");
-          }
-        
-        virtual void
-        moveInto (void*)  override
-          {
-            throw error::Logic("Move construction invoked but target is noncopyable");
-          }
-        
-        virtual void
-        copyInto (B&)  const override
-          {
-            throw error::Logic("Assignment invoked but target is not assignable");
-          }
-        
-        virtual void
-        moveInto (B&)  override
-          {
-            throw error::Logic("Assignment invoked but target is not assignable");
-          }
-      };
-    
-    
-    template<class B, class D>
-    class MoveSupport
-      : public NoCopyMoveSupport<B, D>
-      {
-        virtual void
-        copyInto (void*)  const override
-          {
-            throw error::Logic("Copy construction invoked but target allows only move construction");
-          }
-        
-        virtual void
-        moveInto (void* targetStorage)  override
-          {
-            D& src = static_cast<D&> (*this);
-            new(targetStorage) D(move(src));
-          }
-      };
-    
-    
-    template<class B, class D>
-    class CloneSupport
-      : public MoveSupport<B,D>
-      {
-        virtual void
-        copyInto (void* targetStorage)  const override
-          {
-            D const& src = static_cast<D const&> (*this);
-            new(targetStorage) D(src);
-          }
-      };
-    
-    
-    template<class B, class D>
-    class FullCopySupport
-      : public CloneSupport<B,D>
-      {
-        virtual void
-        copyInto (B& target)  const override
-          {
-            D&       t = D::downcast(target);
-            D const& s = static_cast<D const&> (*this);
-            t = s;
-          }
-        
-        virtual void
-        moveInto (B& target)  override
-          {
-            D& t = D::downcast(target);
-            D& s = static_cast<D&> (*this);
-            t = move(s);
-          }
-      };
-    
-    
-    
-    
-    /** workaround for GCC 4.7: need to exclude some types,
-     *  since they raise private access violation during probing.
-     *  Actually, in C++11 such a case should trigger substitution
-     *  failure, not an compilation error */
-    template<class X>
-    struct can_use_assignment
-      : is_copy_assignable<X>
-      { };
-    
-    template<>
-    struct can_use_assignment<lib::time::Time>
-      { static constexpr bool value = false; };
-    
-    
-    
-    template<class X>
-    struct use_if_supports_only_move
-      : enable_if<    is_move_constructible<X>::value
-                  && !is_copy_constructible<X>::value
-                  && !can_use_assignment<X>::value
-                 >
-      { };
-    
-    template<class X>
-    struct use_if_supports_cloning
-      : enable_if<    is_move_constructible<X>::value
-                  &&  is_copy_constructible<X>::value
-                  && !can_use_assignment<X>::value
-                 >
-      { };
-    
-    template<class X>
-    struct use_if_supports_copy_and_assignment
-      : enable_if<    is_move_constructible<X>::value
-                  &&  is_copy_constructible<X>::value
-                  &&  can_use_assignment<X>::value
-                 >
-      { };
-    
-    
-    
-    
-    
-    template<class X, class SEL=void>
-    struct CopySupport
-      {
-        template<class B, class D>
-        using Policy = NoCopyMoveSupport<B,D>;
-      };
-    
-    template<class X>
-    struct CopySupport<X,            typename use_if_supports_only_move<X>::type>
-      {
-        template<class B, class D>
-        using Policy = MoveSupport<B,D>;
-      };
-    
-    template<class X>
-    struct CopySupport<X,            typename use_if_supports_cloning<X>::type>
-      {
-        template<class B, class D>
-        using Policy = CloneSupport<B,D>;
-      };
-    
-    template<class X>
-    struct CopySupport<X,            typename use_if_supports_copy_and_assignment<X>::type>
-      {
-        template<class B, class D>
-        using Policy = FullCopySupport<B,D>;
-      };
-    
-    
-    
-    template<class VAL>
-    struct ValueAcceptInterface
-      {
-        virtual void handle(VAL&) { /* NOP */ };
-      };
-    
-    template<typename TYPES>
-    using VisitorInterface
-        = meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
-    
-    
-  }//(End) implementation helpers
   
+  using EmptyBase = struct{};
   
-  
-  /**
-   * Typesafe union record.
-   * A Variant element may carry an embedded value of any of the predefined types.
-   * The type may not be rebound: It must be created holding some value and each
-   * instance is fixed to the specific type used at construction time.
-   * Yet within the same type, variant elements are copyable and assignable.
-   * The embedded type is erased on the signature, but knowledge about the
-   * actual type is retained, encoded into the embedded VTable. Thus,
-   * any access to the variant's value requires knowledge of the type
-   * in question, but type mismatch will provoke an exception at runtime.
-   * Generic access is possible using a visitor.
-   * @warning not threadsafe
-   */
-  template<typename TYPES>
-  class Variant
+  template<class IFA, class BASE = EmptyBase>
+  class VirtualCopySupportInterface
+    : public BASE
     {
     public:
-      enum { SIZ = meta::maxSize<typename TYPES::List>::value };
-      
-      class Visitor
-        : public VisitorInterface<TYPES>
+      virtual void  copyInto (void* targetStorage)  const =0;
+      virtual void  moveInto (void* targetStorage)        =0;
+      virtual void  copyInto (IFA&         target)  const =0;
+      virtual void  moveInto (IFA&         target)        =0;
+    };
+  
+  
+  
+  template<class I, class D, class B =I>
+  class NoCopyMoveSupport
+    : public B
+    {
+      virtual void
+      copyInto (void*)  const override
         {
-        public:
-          virtual ~Visitor() { } ///< this is an interface
-        };
-      
-      
-    private:
-      /** Inner capsule managing the contained object (interface) */
-      struct Buffer
-        : VirtualCopySupportInterface<Buffer>
-        {
-          char content_[SIZ];
-          
-          void* ptr() { return &content_; }
-          
-          
-          virtual ~Buffer() {}           ///< this is an ABC with VTable
-          
-          virtual void dispatch (Visitor&)  =0;
-          virtual operator string()  const  =0;
-        };
-      
-      
-      /** concrete inner capsule specialised for a given type */
-      template<typename TY>
-      struct Buff
-        : CopySupport<TY>::template Policy<Buffer,Buff<TY>>
-        {
-          static_assert (SIZ >= sizeof(TY), "Variant record: insufficient embedded Buffer size");
-          
-          TY&
-          access()  const  ///< core operation: target is contained within the inline buffer
-            {
-              return *reinterpret_cast<TY*> (unConst(this)->ptr());
-            }
-          
-         ~Buff()
-            {
-              access().~TY();
-            }
-          
-          Buff (TY const& obj)
-            {
-              new(Buffer::ptr()) TY(obj);
-            }
-          
-          Buff (TY && robj)
-            {
-              new(Buffer::ptr()) TY(move(robj));
-            }
-          
-          Buff (Buff const& oBuff)
-            {
-              new(Buffer::ptr()) TY(oBuff.access());
-            }
-          
-          Buff (Buff && rBuff)
-            {
-              new(Buffer::ptr()) TY(move (rBuff.access()));
-            }
-          
-          void
-          operator= (Buff const& buff)
-            {
-              *this = buff.access();
-            }
-          
-          void
-          operator= (Buff&& rref)
-            {
-              *this = move (rref.access());
-            }
-          
-          void
-          operator= (TY const& ob)
-            {
-              if (&ob != Buffer::ptr())
-                this->access() = ob;
-            }
-          
-          void
-          operator= (TY && rob)
-            {
-              this->access() = move(rob);
-            }
-          
-          
-          
-          static Buff&
-          downcast (Buffer& b)
-            {
-              Buff* buff = dynamic_cast<Buff*> (&b);
-              
-              if (!buff)
-                throw error::Logic("Variant type mismatch: "
-                                   "the given variant record does not hold "
-                                   "a value of the type requested here"
-                                  ,error::LUMIERA_ERROR_WRONG_TYPE);
-              else
-               return *buff;
-            }
-          
-          void
-          dispatch (Visitor& visitor)
-            {
-              ValueAcceptInterface<TY>& typeDispatcher = visitor;
-              typeDispatcher.handle (this->access());
-            }
-          
-          /** diagnostic helper */
-          operator string()  const;
-        };
-      
-      enum{ BUFFSIZE = sizeof(Buffer) };
-      
-      /** embedded buffer actually holding the concrete Buff object,
-       *  which in turn holds and manages the target object.
-       *  @note Invariant: always contains a valid Buffer subclass */
-      char storage_[BUFFSIZE];
-      
-      
-      
-      
-      
-    protected: /* === internal interface for managing the storage === */
-      
-      Buffer&
-      buffer()
-        {
-          return *reinterpret_cast<Buffer*> (&storage_);
-        }
-      Buffer const&
-      buffer()  const
-        {
-          return *reinterpret_cast<const Buffer*> (&storage_);
+          throw error::Logic("Copy construction invoked but target is noncopyable");
         }
       
-      template<typename X>
-      Buff<X>&
-      buff()
+      virtual void
+      moveInto (void*)  override
         {
-          return Buff<X>::downcast(this->buffer());
+          throw error::Logic("Move construction invoked but target is noncopyable");
         }
       
-      
-    public:
-     ~Variant()
+      virtual void
+      copyInto (I&)  const override
         {
-          buffer().~Buffer();
+          throw error::Logic("Assignment invoked but target is not assignable");
         }
       
-      Variant()
+      virtual void
+      moveInto (I&)  override
         {
-          using DefaultType = typename TYPES::List::Head;
-          
-          new(storage_) Buff<DefaultType> (DefaultType());
+          throw error::Logic("Assignment invoked but target is not assignable");
+        }
+    };
+  
+  
+  template<class I, class D, class B =I>
+  class MoveSupport
+    : public NoCopyMoveSupport<I,D,B>
+    {
+      virtual void
+      copyInto (void*)  const override
+        {
+          throw error::Logic("Copy construction invoked but target allows only move construction");
         }
       
-      template<typename X>
-      Variant(X&& x)
+      virtual void
+      moveInto (void* targetStorage)  override
         {
-          using StorageType = typename CanBuildFrom<X, TYPES>::Type;
-          
-          new(storage_) Buff<StorageType> (forward<X>(x));
+          D& src = static_cast<D&> (*this);
+          new(targetStorage) D(move(src));
+        }
+    };
+  
+  
+  template<class I, class D, class B =I>
+  class CloneSupport
+    : public MoveSupport<I,D,B>
+    {
+      virtual void
+      copyInto (void* targetStorage)  const override
+        {
+          D const& src = static_cast<D const&> (*this);
+          new(targetStorage) D(src);
+        }
+    };
+  
+  
+  template<class I, class D, class B =I>
+  class FullCopySupport
+    : public CloneSupport<I,D,B>
+    {
+      virtual void
+      copyInto (I& target)  const override
+        {
+          D&       t = D::downcast(target);
+          D const& s = static_cast<D const&> (*this);
+          t = s;
         }
       
-      Variant (Variant& ref)
+      virtual void
+      moveInto (I& target)  override
         {
-          ref.buffer().copyInto (&storage_);
-        }
-      
-      Variant (Variant const& ref)
-        {
-          ref.buffer().copyInto (&storage_);
-        }
-      
-      Variant (Variant&& rref)
-        {
-          rref.buffer().moveInto (&storage_);
-        }
-      
-      template<typename X>
-      Variant&
-      operator= (X x)
-        {
-          using RawType = typename remove_reference<X>::type;
-          static_assert (meta::isInList<RawType, typename TYPES::List>(),
-                         "Type error: the given variant could never hold the required type");
-          static_assert (can_use_assignment<RawType>::value, "target type does not support assignment");
-          
-          buff<RawType>() = forward<X>(x);
-          return *this;
-        }
-      
-      Variant&
-      operator= (Variant& ovar)
-        {
-          ovar.buffer().copyInto (this->buffer());
-          return *this;
-        }
-      
-      Variant&
-      operator= (Variant const& ovar)
-        {
-          ovar.buffer().copyInto (this->buffer());
-          return *this;
-        }
-      
-      Variant&
-      operator= (Variant&& rvar)
-        {
-          rvar.buffer().moveInto (this->buffer());
-          return *this;
-        }
-      
-      
-      /** diagnostic helper */
-      operator string()  const;
-      
-      
-      /* === Access === */
-      
-      template<typename X>
-      X&
-      get()
-        {
-          static_assert (meta::isInList<X, typename TYPES::List>(),
-                         "Type error: the given variant could never hold the required type");
-          
-          return buff<X>().access();
-        }
-      
-      
-      void
-      accept (Visitor& visitor)
-        {
-          buffer().dispatch (visitor);
+          D& t = D::downcast(target);
+          D& s = static_cast<D&> (*this);
+          t = move(s);
         }
     };
   
   
   
-} // namespace lib
-
-
-
-  /* == diagnostic helper == */
-
-#ifdef LIB_FORMAT_UTIL_H
-namespace lib {
   
-  template<typename TYPES>
-  Variant<TYPES>::operator string()  const
-  {
-    return string(buffer());
-  }
+  /** workaround for GCC 4.7: need to exclude some types,
+   *  since they raise private access violation during probing.
+   *  Actually, in C++11 such a case should trigger substitution
+   *  failure, not an compilation error */
+  template<class X>
+  struct can_use_assignment
+    : is_copy_assignable<X>
+    { };
   
-  template<typename TYPES>
-  template<typename TY>
-  Variant<TYPES>::Buff<TY>::operator string()  const
-  {
-    return "Variant|"
-        +  util::str (this->access(),
-                     (util::tyStr<TY>()+"|").c_str()
-                     );
-  }
-}// namespace lib
-
-#endif
+  template<>
+  struct can_use_assignment<lib::time::Time>
+    { static constexpr bool value = false; };
+  
+  
+  
+  template<class X>
+  struct use_if_supports_only_move
+    : enable_if<    is_move_constructible<X>::value
+                && !is_copy_constructible<X>::value
+                && !can_use_assignment<X>::value
+               >
+    { };
+  
+  template<class X>
+  struct use_if_supports_cloning
+    : enable_if<    is_move_constructible<X>::value
+                &&  is_copy_constructible<X>::value
+                && !can_use_assignment<X>::value
+               >
+    { };
+  
+  template<class X>
+  struct use_if_supports_copy_and_assignment
+    : enable_if<    is_move_constructible<X>::value
+                &&  is_copy_constructible<X>::value
+                &&  can_use_assignment<X>::value
+               >
+    { };
+  
+  
+  
+  
+  /** Policy to pick a suitable implementation of "virtual copy operations".
+   * @note You need to mix in the VirtualCopySupportInterface
+   */
+  template<class X, class SEL=void>
+  struct CopySupport
+    {
+      template<class I, class D, class B =I>
+      using Policy = NoCopyMoveSupport<I,D,B>;
+    };
+  
+  template<class X>
+  struct CopySupport<X,            typename use_if_supports_only_move<X>::type>
+    {
+      template<class I, class D, class B =I>
+      using Policy = MoveSupport<I,D,B>;
+    };
+  
+  template<class X>
+  struct CopySupport<X,            typename use_if_supports_cloning<X>::type>
+    {
+      template<class I, class D, class B =I>
+      using Policy = CloneSupport<I,D,B>;
+    };
+  
+  template<class X>
+  struct CopySupport<X,            typename use_if_supports_copy_and_assignment<X>::type>
+    {
+      template<class I, class D, class B =I>
+      using Policy = FullCopySupport<I,D,B>;
+    };
+  
+  
+  
+  
+}} // namespace lib::meta
 #endif /*LIB_META_VIRTUAL_COPY_SUPPORT_H*/

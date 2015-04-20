@@ -117,7 +117,8 @@ namespace test {
    */
   class TypeListGenerator_test : public Test
     {
-      virtual void run(Arg)
+      virtual void
+      run (Arg)
         {
           NumberBabbler me_can_has_more_numberz;
           

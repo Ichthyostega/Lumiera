@@ -61,6 +61,7 @@
  ** 
  ** @see Veriant_test
  ** @see lib::diff::GenNode
+ ** @see virtual-copy-support.hpp
  ** 
  */
 
@@ -72,8 +73,11 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/meta/virtual-copy-support.hpp"
 
 #include <type_traits>
+#include <utility>
+#include <string>
 
 
 namespace lib {
@@ -89,12 +93,7 @@ namespace lib {
   
   namespace { // implementation helpers
     
-    using std::is_constructible;
-    using std::is_move_constructible;
-    using std::is_copy_constructible;
-    using std::is_copy_assignable;
     using std::remove_reference;
-    using std::enable_if;
     using meta::NullType;
     using meta::Node;
     
@@ -126,9 +125,18 @@ namespace lib {
     
     
     
+    template<class VAL>
+    struct ValueAcceptInterface
+      {
+        virtual void handle(VAL&) { /* NOP */ };
+      };
+    
+    template<typename TYPES>
+    using VisitorInterface
+        = meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
+    
+    
     /////TODO: *nur noch*
-    /////TODO: - CopySuport in eigenen Header
-    /////TODO: - diesen mit Unit-Test covern
     /////TODO: - den gefährlichen Cast aus AccessCasted weg
     /////TODO: - *nur* der Unit-Test für OpaqueBuffer ist betroffen. Diesen durch direkten statischen Cast ersetzen
     /////TODO: - unit-Test für AccessCasted nachliefern
@@ -168,7 +176,7 @@ namespace lib {
     private:
       /** Inner capsule managing the contained object (interface) */
       struct Buffer
-        : VirtualCopySupportInterface<Buffer>
+        : meta::VirtualCopySupportInterface<Buffer>
         {
           char content_[SIZ];
           
@@ -347,7 +355,7 @@ namespace lib {
           using RawType = typename remove_reference<X>::type;
           static_assert (meta::isInList<RawType, typename TYPES::List>(),
                          "Type error: the given variant could never hold the required type");
-          static_assert (can_use_assignment<RawType>::value, "target type does not support assignment");
+          static_assert (meta::can_use_assignment<RawType>::value, "target type does not support assignment");
           
           buff<RawType>() = forward<X>(x);
           return *this;

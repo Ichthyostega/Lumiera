@@ -2,7 +2,7 @@
   VirtualCopySupport(Test)  -  copy and clone type-erased objects
 
   Copyright (C)         Lumiera.org
-    2012,               Hermann Vosseler <Ichthyostega@web.de>
+    2015,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -38,6 +38,9 @@ using std::string;
 using std::cout;
 using std::endl;
 
+using lumiera::error::LUMIERA_ERROR_LOGIC;
+using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+
 
 namespace lib  {
 namespace meta {
@@ -61,7 +64,30 @@ namespace test {
     
     int _CheckSum_ = 0;
     
+    
+    /** Interface for the Virtual copy operations.
+     * @remarks we define this explicitly here for the tests solely.
+     *          In real use, you'd just mix in VirtualCopySupportInterface.
+     *          But since we want to verify the text fixture in isolation,
+     *          we use here empty base implementations instead of pure
+     *          virtual functions, so we can always instantiate all
+     *          test classes.
+     */
+    class CopyInterface
+      {
+      public:
+        virtual void  copyInto (void*     )  const { /* NOP */ };
+        virtual void  moveInto (void*     )        { /* NOP */ };
+        virtual void  copyInto (Interface&)  const { /* NOP */ };
+        virtual void  moveInto (Interface&)        { /* NOP */ };
+      };
+    
+    
+    /**
+     * The official Interface for our test class hierarchy
+     */
     class Interface
+      : public CopyInterface
       {
       public:
         virtual ~Interface()  { }
@@ -69,6 +95,9 @@ namespace test {
         virtual bool empty()       const =0;
       };
     
+    /**
+     * implementation class with "special" memory layout
+     */
     template<uint i>
     class Sub
       : public Interface
@@ -88,7 +117,8 @@ namespace test {
             return storage_[i-1];
           }
         
-      public:
+      public: /* == Implementation of the Interface == */
+        
         virtual operator string()  const override
           {
             return _Fmt("Sub|%s|%d|-%s")
@@ -102,6 +132,9 @@ namespace test {
           {
             return !bool(access());
           }
+        
+        
+      public: /* == full set of copy and assignment operations == */
         
        ~Sub()
           {
@@ -136,6 +169,7 @@ namespace test {
         Sub&
         operator= (Sub&& rsub)
           {
+            _CheckSum_ -= access();
             access() = 0;
             std::swap(access(),rsub.access());
             return *this;
@@ -154,7 +188,7 @@ namespace test {
     class UnAssignable
       : public Sub<c>
       {
-        void operator= (UnAssignable const&);
+        void operator= (UnAssignable const&); // private and unimplemented
       public:
         UnAssignable()                    = default;
         UnAssignable(UnAssignable&&)      = default;
@@ -180,8 +214,49 @@ namespace test {
         Noncopyable ()              = default;
       };
     
+    
+    
+    /* == concrete implementation subclass with virtual copy support == */
+    
+    template<class IMP>
+    class Opaque                          //-----Interface| CRTP-Impl  | direct Baseclass
+      : public CopySupport<IMP>::template Policy<Interface, Opaque<IMP>, IMP>
+      {
+      public:
+          static Opaque&
+          downcast (Interface& bas)
+            {
+              Opaque* impl = dynamic_cast<Opaque*> (&bas);
+              
+              if (!impl)
+                throw error::Logic("virtual copy works only on instances "
+                                   "of the same concrete implementation class"
+                                  ,error::LUMIERA_ERROR_WRONG_TYPE);
+              else
+               return *impl;
+            }
+      };
+    
+    // == Test subject(s)==========================
+    using RegularImpl  = Opaque<Regular<'a'>>;
+    using ClonableImpl = Opaque<UnAssignable<'b'>>;
+    using MovableImpl  = Opaque<OnlyMovable<'c'>>;
+    using ImobileImpl  = Opaque<Noncopyable<'d'>>;
+    
   }//(End)Test fixture
   
+  
+// GCC 4.7 workaround
+// SFINAE does not work properly on private functions
+// instead of dropping the template instance, it causes compilation failure
+
+}//now in namespace meta
+  
+  template<char c>
+  struct can_use_assignment<test::UnAssignable<c>>
+    { static constexpr bool value = false; };
+  
+namespace test {
   
   
   
@@ -203,8 +278,28 @@ namespace test {
           verify_TestFixture();
           
           CHECK(0 == _CheckSum_);
+          
+          verify_fullVirtualCopySupport();
+          verify_noAssignementSupport();
+          verify_onlyMovableSupport();
+          verify_disabledCopySupport();
+          
+          CHECK(0 == _CheckSum_);
         }
       
+      
+      /** @test our test fixture is comprised of
+       * - a common interface (#Interface)
+       * - a implementation template #Sub to hold a buffer and
+       *   manage a distinct random value at some position in that buffer,
+       *   which depends on the concrete implementation type
+       * - layered on top are adapters to make this implementation class
+       *   either fully copyable, non-assignable, only movable or noncopyable.
+       * - a global checksum, based on the random value of all instances,
+       *   which are incremented on construction and decremented on destruction.
+       *   After destroying everything this checksum should go to zero.
+       * This test case just verifies this implementation mechanic.
+       */
       void
       verify_TestFixture()
         {
@@ -221,6 +316,12 @@ namespace test {
           
           CHECK (string(a) == string(aa));
           CHECK (string(a) == string(a1));
+          CHECK (!isnil(a1));
+          
+          a = std::move(a1);
+          
+          CHECK (isnil(a1));
+          CHECK (string(a) == string(aa));
           
           
           /* == interface vs. concrete class == */
@@ -274,6 +375,168 @@ namespace test {
           // e = Noncopyable<'E'>();                 // does not compile
           
           CHECK (!isnil (e));
+        }
+      
+      
+      
+      
+      
+      
+      void
+      verify_fullVirtualCopySupport()
+        {
+          RegularImpl a,aa,aaa;
+          Interface& i(a);
+          Interface& ii(aa);
+          Interface& iii(aaa);
+          
+          char storage[sizeof(RegularImpl)];
+          Interface& iiii (*reinterpret_cast<Interface*> (&storage));
+          
+          string prevID = a;
+          CHECK (!isnil (a));
+          
+          i.moveInto(&storage);
+          CHECK (string(iiii) == prevID);
+          CHECK (!isnil(iiii));
+          CHECK ( isnil(i));
+          
+          ii.copyInto(i);
+          CHECK (!isnil(i));
+          CHECK (!isnil(ii));
+          CHECK (string(i) == string(ii));
+          
+          prevID = iii;
+          iii.moveInto(ii);
+          CHECK (!isnil(ii));
+          CHECK ( isnil(iii));
+          CHECK (string(ii) == prevID);
+          
+          // Verify that type mismatch in assignment is detected...
+          Opaque<Regular<'!'>> divergent;
+          Interface& evil(divergent);
+          VERIFY_ERROR (WRONG_TYPE, evil.copyInto(i));
+          VERIFY_ERROR (WRONG_TYPE, evil.moveInto(i));
+          
+          
+          cout << "==fullVirtualCopySupport=="<<endl
+               << string(i)   <<endl
+               << string(ii)  <<endl
+               << string(iii) <<endl
+               << string(iiii)<<endl;
+          
+          //need to clean-up the placement-new instance explicitly
+          iiii.~Interface();
+        }
+      
+      
+      void
+      verify_noAssignementSupport()
+        {
+          ClonableImpl b,bb,bbb;
+          Interface& i(b);
+          Interface& ii(bb);
+          Interface& iii(bbb);
+          
+          char storage[sizeof(ClonableImpl)];
+          Interface& iiii (*reinterpret_cast<Interface*> (&storage));
+          
+          string prevID = b;
+          CHECK (!isnil (b));
+          
+          i.moveInto(&storage);
+          CHECK (string(iiii) == prevID);
+          CHECK (!isnil(iiii));
+          CHECK ( isnil(i));
+          
+          iiii.~Interface(); //clean-up previously placed instance
+          
+          prevID = ii;
+          ii.copyInto(&storage);
+          CHECK (!isnil(ii));
+          CHECK (!isnil(iiii));
+          CHECK ( isnil(i));
+          CHECK (string(iiii) == prevID);
+          CHECK (string(ii) == prevID);
+          
+          prevID = iii;
+          VERIFY_ERROR (LOGIC, iii.copyInto(ii));
+          VERIFY_ERROR (LOGIC, iii.moveInto(ii));
+          CHECK (string(iii) == prevID);
+          CHECK (!isnil(iii));
+          
+          cout << "==noAssignementSupport=="<<endl
+               << string(i)   <<endl
+               << string(ii)  <<endl
+               << string(iii) <<endl
+               << string(iiii)<<endl;
+          
+          //clean-up placement-new instance
+          iiii.~Interface();
+        }
+      
+      
+      void
+      verify_onlyMovableSupport()
+        {
+          MovableImpl c,cc;
+          Interface& i(c);
+          Interface& ii(cc);
+          
+          char storage[sizeof(MovableImpl)];
+          Interface& iiii (*reinterpret_cast<Interface*> (&storage));
+          
+          string prevID = i;
+          CHECK (!isnil (i));
+          
+          i.moveInto(&storage);
+          CHECK (string(iiii) == prevID);
+          CHECK (!isnil(iiii));
+          CHECK ( isnil(i));
+          
+          prevID = ii;
+          VERIFY_ERROR (LOGIC, ii.copyInto(&storage));
+          VERIFY_ERROR (LOGIC, ii.copyInto(i));
+          VERIFY_ERROR (LOGIC, ii.moveInto(i));
+          CHECK (string(ii) == prevID);
+          CHECK (!isnil(ii));
+          CHECK ( isnil(i));
+          
+          cout << "==onlyMovableSupport=="<<endl
+               << string(i)   <<endl
+               << string(ii)  <<endl
+               << string(iiii)<<endl;
+          
+          //clean-up placement-new instance
+          iiii.~Interface();
+        }
+      
+      
+      void
+      verify_disabledCopySupport()
+        {
+          ImobileImpl d,dd;
+          Interface& i(d);
+          Interface& ii(dd);
+          char storage[sizeof(ImobileImpl)];
+          
+          CHECK (!isnil (i));
+          
+          string prevID = ii;
+          VERIFY_ERROR (LOGIC, ii.copyInto(&storage));
+          VERIFY_ERROR (LOGIC, ii.moveInto(&storage));
+          VERIFY_ERROR (LOGIC, ii.copyInto(i));
+          VERIFY_ERROR (LOGIC, ii.moveInto(i));
+          CHECK (string(ii) == prevID);
+          CHECK (!isnil(ii));
+          CHECK (!isnil (i));
+          
+          cout << "==disabledCopySupport=="<<endl
+               << string(i)   <<endl
+               << string(ii)  <<endl;
+          
+          //no clean-up,
+          //since we never created anything in the storage buffer
         }
     };
   

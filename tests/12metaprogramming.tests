@@ -771,3 +771,7 @@ END
 
 
 
+TEST "Virtual copying of opaque objects" VirtualCopySupport_test <<END
+return: 0
+END
+
