@@ -23,145 +23,19 @@
 
 
 #include "lib/test/run.hpp"
-
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_polymorphic.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-#include <boost/type_traits/remove_pointer.hpp>
-#include <boost/type_traits/remove_reference.hpp>
-#include <boost/utility/enable_if.hpp>
+#include "lib/access-casted.hpp"
 
 
 using std::string;
 using std::cout;
 using std::ostream;
 
-using boost::remove_pointer;
-using boost::remove_reference;
-using boost::is_convertible;
-using boost::is_polymorphic;
-using boost::is_base_of;
-using boost::enable_if;
 
-
-namespace lib  {
-namespace meta {
+namespace util {
 namespace test {
   
   
     
-    template <typename SRC, typename TAR>
-    struct can_cast : boost::false_type {};
-
-    template <typename SRC, typename TAR>
-    struct can_cast<SRC*,TAR*>          { enum { value = is_base_of<SRC,TAR>::value };};
-
-    template <typename SRC, typename TAR>
-    struct can_cast<SRC*&,TAR*>         { enum { value = is_base_of<SRC,TAR>::value };};
-
-    template <typename SRC, typename TAR>
-    struct can_cast<SRC&,TAR&>          { enum { value = is_base_of<SRC,TAR>::value };};
-    
-    
-    template <typename T>
-    struct has_RTTI
-      {
-        typedef typename remove_pointer<
-                typename remove_reference<T>::type>::type TPlain;
-      
-        enum { value = is_polymorphic<TPlain>::value };
-      };
-    
-    template <typename SRC, typename TAR>
-    struct use_dynamic_downcast
-      {
-        enum { value = can_cast<SRC,TAR>::value
-                       &&  has_RTTI<SRC>::value
-                       &&  has_RTTI<TAR>::value
-             };
-      };
-    
-    template <typename SRC, typename TAR>
-    struct use_static_downcast
-      {
-        enum { value = can_cast<SRC,TAR>::value
-                    && (  !has_RTTI<SRC>::value
-                       || !has_RTTI<TAR>::value
-                       )
-             };
-      };
-    
-    template <typename SRC, typename TAR>
-    struct use_conversion
-      {
-        enum { value = is_convertible<SRC,TAR>::value
-                    && !( use_static_downcast<SRC,TAR>::value
-                        ||use_dynamic_downcast<SRC,TAR>::value
-                        )
-             };
-      };
-    
-    
-    template<typename X>
-    struct EmptyVal
-      {
-        static X create() 
-          {
-            cout << " NULL() " << __PRETTY_FUNCTION__ <<"\n";
-            return X(); 
-          }
-      };
-    template<typename X>
-    struct EmptyVal<X*&>
-      {
-        static X*& create() 
-          {
-            cout << " NULL & " << __PRETTY_FUNCTION__ <<"\n";
-            static X* null(0);
-            return null; 
-          }
-      };
-    
-    
-    template<typename RET>
-    struct NullAccessor
-      {
-        typedef RET Ret;
-        
-        static RET access  (...) { return ifEmpty(); }
-        static RET ifEmpty ()    { return EmptyVal<RET>::create(); }
-      };
-    
-    template<typename TAR>
-    struct AccessCasted : NullAccessor<TAR>
-      {
-        using NullAccessor<TAR>::access;
-        
-        template<typename ELM>
-        static  typename enable_if< use_dynamic_downcast<ELM&,TAR>, TAR>::type
-        access (ELM& elem) 
-          { 
-            cout << " dynamic " << __PRETTY_FUNCTION__ <<"\n";
-            return dynamic_cast<TAR> (elem); 
-          }
-        
-        template<typename ELM>
-        static  typename enable_if< use_static_downcast<ELM&,TAR>, TAR>::type
-        access (ELM& elem) 
-          { 
-            cout << " static " << __PRETTY_FUNCTION__ <<"\n";
-            return static_cast<TAR> (elem); 
-          }
-        
-        template<typename ELM>
-        static  typename enable_if< use_conversion<ELM&,TAR>, TAR>::type
-        access (ELM& elem) 
-          { 
-            cout << " convert " << __PRETTY_FUNCTION__ <<"\n";
-            return elem; 
-          }
-            
-      };
   
   
   
@@ -273,4 +147,4 @@ namespace test {
   
   
   
-}}} // namespace lib::meta::test
+}} // namespace lib::meta::test

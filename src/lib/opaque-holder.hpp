@@ -69,7 +69,7 @@
 
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
-#include "lib/access-casted.hpp"
+#include "lib/access-casted-o.hpp"
 #include "lib/util.hpp"
 
 #include <type_traits>

@@ -21,7 +21,7 @@
 */
 
 
-/** @file access-casted.hpp
+/** @file access-casted-o.hpp
  ** Helper for accessing a value, employing either conversion or downcast,
  ** depending on the relation of the source type (type of the original value)
  ** and the target type (type we need within the usage context). 
@@ -33,15 +33,17 @@
  ** type TAR. Alternatively, you may define an specialisation of EmptyVal,
  ** e.g. throwing an exception instead of creating a NULL value. 
  ** 
- ** @todo WIP 4/2015 is being rewritten           ///////////////////////////////////////////TICKET #738 needs slight overhaul and clean-up
+ ** @deprecated old obsolete version              ///////////////////////////////////////////TICKET #738 clean-up access-casted, rewrite variant (4/2015)
+ ** @todo This is the obsoleted old version: It was excessively permissive, which 
+ **       I've learned to view as a danger, since it encourages a sloppy programming style.
  ** @see lumiera::WrapperPtr usage example to access a variant record
  ** @see lib::InPlaceAnyHolder usage example to access a subclass in embedded storage
  ** 
  */
 
 
-#ifndef UTIL_ACCESS_CASTED_H
-#define UTIL_ACCESS_CASTED_H
+#ifndef UTIL_ACCESS_CASTED_O_H
+#define UTIL_ACCESS_CASTED_O_H
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
