@@ -13,7 +13,7 @@ to ask which route we want to go and we build our own tools accordingly.
 
 *************************
 _Christoph Varga_ is a young documentary film maker.
-He lives in Vienna.
+He lives and studies in Vienna at the Academy of Fine Arts.
 *************************
 
 -> link:{imgg}/ChristophVarga.UserInterfaceConcept.pdf[User Interface Concept (PDF)]
