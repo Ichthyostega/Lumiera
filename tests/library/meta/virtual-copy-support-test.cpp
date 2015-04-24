@@ -54,12 +54,7 @@ namespace test {
     string
     typeID(Interface const& obj)
     {
-      string typeStr = lib::test::demangleCxx(
-                       lib::test::showType(obj));
-      size_t pos = typeStr.rfind("::");
-      if (pos != string::npos)
-        typeStr = typeStr.substr(pos+2);
-      return typeStr;
+      return lib::test::tyAbbr(obj);
     }
     
     int _CheckSum_ = 0;

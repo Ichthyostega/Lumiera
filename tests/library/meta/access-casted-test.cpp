@@ -23,6 +23,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/access-casted.hpp"
 
 
@@ -50,11 +51,12 @@ namespace test {
       };
     struct F : E {};
     
+    using lib::test::tyAbbr;
     
-    ostream& operator<< (ostream& s, const B& b) { return s << "B{} adr="<<&b; }
-    ostream& operator<< (ostream& s, const D& d) { return s << "D{} adr="<<&d; }
-    ostream& operator<< (ostream& s, const E& e) { return s << "E{} adr="<<&e; }
-    ostream& operator<< (ostream& s, const F& f) { return s << "F{} adr="<<&f; }
+    ostream& operator<< (ostream& s, const B& b) { return s << "B{} adr="<<&b<<" type: "<<tyAbbr(b); }
+    ostream& operator<< (ostream& s, const D& d) { return s << "D{} adr="<<&d<<" type: "<<tyAbbr(d); }
+    ostream& operator<< (ostream& s, const E& e) { return s << "E{} adr="<<&e<<" type: "<<tyAbbr(e); }
+    ostream& operator<< (ostream& s, const F& f) { return s << "F{} adr="<<&f<<" type: "<<tyAbbr(f); }
     
   }//(End)Test fixture
   
@@ -117,27 +119,27 @@ namespace test {
           cout <<  "use_dynamic_downcast<D*&,E*> = " << use_dynamic_downcast<D*&,E*>::value << "\n";
           
           
-          cout <<  "Access(D  as D&) --->" << AccessCasted<D&>::access(d)  << "\n";
-          cout <<  "Access(D& as D&) --->" << AccessCasted<D&>::access(rD) << "\n";
-          cout <<  "Access(B& as D&) --->" << AccessCasted<D&>::access(rB) << "\n";
-          cout <<  "Access(D* as D*) --->" << AccessCasted<D*>::access(pD) << "\n";
-          cout <<  "Access(B* as D*) --->" << AccessCasted<D*>::access(pB) << "\n";
-          cout <<  "Access(D*& as D*&) --->" << AccessCasted<D*&>::access(rpD) << "\n";
-          cout <<  "Access(B*& as D*&) --->" << AccessCasted<D*&>::access(rpB) << "\n";
+          cout <<  "Access(D  as D&)    --->" << AccessCasted<D&>::access(d)  << "\n";
+          cout <<  "Access(D& as D&)    --->" << AccessCasted<D&>::access(rD) << "\n";
+          cout <<  "Access(B& as D&)    --->" << AccessCasted<D&>::access(rB) << "\n";
+          cout <<  "Access(D* as D*)    --->" << AccessCasted<D*>::access(pD) << "\n";
+          cout <<  "Access(B* as D*)    --->" << AccessCasted<D*>::access(pB) << "\n";
+          cout <<  "Access(D*& as D*&)  --->" << AccessCasted<D*&>::access(rpD) << "\n";
+          cout <<  "Access(B*& as D*&)  --->" << AccessCasted<D*&>::access(rpB) << "\n";
           
-          cout <<  "Access(D  as B&) --->" << AccessCasted<B&>::access(d)  << "\n";
-          cout <<  "Access(D& as B&) --->" << AccessCasted<B&>::access(rD) << "\n";
-          cout <<  "Access(B& as B&) --->" << AccessCasted<D&>::access(rB) << "\n";
-          cout <<  "Access(D* as B*) --->" << AccessCasted<B*>::access(pD) << "\n";
-          cout <<  "Access(B* as B*) --->" << AccessCasted<B*>::access(pB) << "\n";
-          cout <<  "Access(D*& as B*&) --->" << AccessCasted<B*&>::access(rpD) << "\n";
-          cout <<  "Access(B*& as B*&) --->" << AccessCasted<B*&>::access(rpB) << "\n";
+          cout <<  "Access(D  as B&)    --->" << AccessCasted<B&>::access(d)  << "\n";
+          cout <<  "Access(D& as B&)    --->" << AccessCasted<B&>::access(rD) << "\n";
+          cout <<  "Access(B& as B&)    --->" << AccessCasted<D&>::access(rB) << "\n";
+          cout <<  "Access(D* as B*)    --->" << AccessCasted<B*>::access(pD) << "\n";
+          cout <<  "Access(B* as B*)    --->" << AccessCasted<B*>::access(pB) << "\n";
+          cout <<  "Access(D*& as B*&)  --->" << AccessCasted<B*&>::access(rpD) << "\n";
+          cout <<  "Access(B*& as B*&)  --->" << AccessCasted<B*&>::access(rpB) << "\n";
           
-          cout <<  "Access(D  as E&) --->" << AccessCasted<E&>::access(d) << "\n";
-          cout <<  "Access(E& as F&) --->" << AccessCasted<F&>::access(rE) << "\n";
+          cout <<  "Access(D  as E&)    --->" << AccessCasted<E&>::access(d) << "\n";
+          cout <<  "Access(E& as F&)    --->" << AccessCasted<F&>::access(rE) << "\n";
           cout <<  "Access(D(E)* as E*) --->" << AccessCasted<E*>::access(pDE) << "\n";
           cout <<  "Access(D(E)* as F*) --->" << AccessCasted<F*>::access(pDE) << "\n";
-          cout <<  "Access(E* as F*) --->" << AccessCasted<F*>::access(pE) << "\n";
+          cout <<  "Access(E* as F*)    --->" << AccessCasted<F*>::access(pE) << "\n";
         }
     };
   

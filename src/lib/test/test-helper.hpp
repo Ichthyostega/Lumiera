@@ -85,6 +85,27 @@ namespace test{
   demangleCxx (Literal rawName);
   
   
+  /** short yet distinct name identifying the given type.
+   * @return demangled type-id without any scopes. */
+  template<typename TY>
+  string
+  tyAbbr()
+  {
+    string typeStr = demangleCxx (showType<TY>());
+    size_t pos = typeStr.rfind("::");
+    if (pos != string::npos)
+      typeStr = typeStr.substr(pos+2);
+    return typeStr;
+  }
+  
+  template<typename TY>
+  string
+  tyAbbr(TY&&)
+  {
+    return tyAbbr<TY>();
+  }
+  
+  
   /** for printing sizeof().
    *  prints the given size and name literally, without any further magic */
   string
