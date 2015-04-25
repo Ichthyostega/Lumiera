@@ -26,10 +26,14 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/access-casted.hpp"
 
+#include <iostream>
+#include <utility>
+#include <string>
 
+using std::move;
 using std::string;
-using std::cout;
 using std::ostream;
+using std::cout;
 
 
 namespace util {
@@ -90,56 +94,61 @@ namespace test {
           E* pE = &f;
           D* pDE = pE;
           
-          cout <<  "is_base_of<B,D> = "   << is_base_of<B ,D >::value << "\n";
-          cout <<  "is_base_of<B*,D*> = " << is_base_of<B*,D*>::value << "\n";
-          cout <<  "is_base_of<B&,D&> = " << is_base_of<B&,D&>::value << "\n";
+          cout <<  "can_downcast<B,D>     = " << can_downcast<B,D>::value << "\n";
+          cout <<  "can_downcast<B*,D*>   = " << can_downcast<B*,D*>::value << "\n";
+          cout <<  "can_downcast<B&,D&>   = " << can_downcast<B&,D&>::value << "\n";
+          cout <<  "can_downcast<B&,D*>   = " << can_downcast<B&,D*>::value << "\n";
+          cout <<  "can_downcast<B*,D&>   = " << can_downcast<B*,D&>::value << "\n";
+          cout <<  "can_downcast<B*&,D*&> = " << can_downcast<B*&,D*&>::value << "\n";
+          cout <<  "can_downcast<D*&,D*&> = " << can_downcast<D*&,D*&>::value << "\n";
           
-          cout <<  "can_cast<B,D> = " << can_cast<B,D>::value << "\n";
-          cout <<  "can_cast<B*,D*> = " << can_cast<B*,D*>::value << "\n";
-          cout <<  "can_cast<B&,D&> = " << can_cast<B&,D&>::value << "\n";
-          cout <<  "can_cast<B&,D*> = " << can_cast<B&,D*>::value << "\n";
-          cout <<  "can_cast<B*,D&> = " << can_cast<B*,D&>::value << "\n";
-          cout <<  "can_cast<B*&,D*&> = " << can_cast<B*&,D*&>::value << "\n";
-          cout <<  "can_cast<D*&,D*&> = " << can_cast<D*&,D*&>::value << "\n";
-          
-          cout <<  "can_cast<D*,E*> = " << can_cast<D*,E*>::value << "\n";
-          cout <<  "can_cast<E*,F*> = " << can_cast<E*,F*>::value << "\n";
+          cout <<  "can_downcast<D*,E*>   = " << can_downcast<D*,E*>::value << "\n";
+          cout <<  "can_downcast<E*,F*>   = " << can_downcast<E*,F*>::value << "\n";
           
           cout <<  "has_RTTI<D*> = " << has_RTTI<D*>::value << "\n";
           cout <<  "has_RTTI<E*> = " << has_RTTI<E*>::value << "\n";
           cout <<  "has_RTTI<F*> = " << has_RTTI<F*>::value << "\n";
           
+          cout <<  "is_convertible<D,D&>  = " << std::is_convertible<D,D&>::value << "\n";
+          cout <<  "is_convertible<D&,D>  = " << std::is_convertible<D&,D>::value << "\n";
           
-          cout <<  "use_dynamic_downcast<B*,D*> = " << use_dynamic_downcast<B*,D*>::value << "\n";
-          cout <<  "use_static_downcast<B*,D*> = " << use_static_downcast<B*,D*>::value << "\n";
-          cout <<  "use_conversion<D*,B*> = "      << use_conversion<D*,B*>::value << "\n";
           
-          cout <<  "use_static_downcast<D*&,D*&> = " << use_static_downcast<D*&,D*&>::value << "\n";
-          cout <<  "use_static_downcast<D*,E*> = " << use_static_downcast<D*,E*>::value << "\n";
-          cout <<  "use_dynamic_downcast<D*&,E*> = " << use_dynamic_downcast<D*&,E*>::value << "\n";
+          cout <<  "can_use_dynamic_downcast<D,D&>  = " << can_use_dynamic_downcast<D,D&>::value << "\n";
+          cout <<  "can_use_conversion<D,D&>        = " << can_use_conversion<D,D&>::value << "\n";
+          cout <<  "can_use_dynamic_downcast<B*,D*> = " << can_use_dynamic_downcast<B*,D*>::value << "\n";
+          cout <<  "can_use_conversion<D*,B*>       = " << can_use_conversion<D*,B*>::value << "\n";
+          
+          cout <<  "can_use_dynamic_downcast<D*&,D*&> = " << can_use_dynamic_downcast<D*&,D*&>::value << "\n";
+          cout <<  "can_use_conversion<D*&,D*&>       = " << can_use_conversion<D*&,D*&>::value << "\n";
+          cout <<  "can_use_conversion<D*,E*>         = " << can_use_conversion<D*,E*>::value << "\n";
+          cout <<  "can_use_dynamic_downcast<D*&,E*>  = " << can_use_dynamic_downcast<D*&,E*>::value << "\n";
           
           
           cout <<  "Access(D  as D&)    --->" << AccessCasted<D&>::access(d)  << "\n";
           cout <<  "Access(D& as D&)    --->" << AccessCasted<D&>::access(rD) << "\n";
-          cout <<  "Access(B& as D&)    --->" << AccessCasted<D&>::access(rB) << "\n";
-          cout <<  "Access(D* as D*)    --->" << AccessCasted<D*>::access(pD) << "\n";
-          cout <<  "Access(B* as D*)    --->" << AccessCasted<D*>::access(pB) << "\n";
-          cout <<  "Access(D*& as D*&)  --->" << AccessCasted<D*&>::access(rpD) << "\n";
-          cout <<  "Access(B*& as D*&)  --->" << AccessCasted<D*&>::access(rpB) << "\n";
-          
-          cout <<  "Access(D  as B&)    --->" << AccessCasted<B&>::access(d)  << "\n";
-          cout <<  "Access(D& as B&)    --->" << AccessCasted<B&>::access(rD) << "\n";
-          cout <<  "Access(B& as B&)    --->" << AccessCasted<D&>::access(rB) << "\n";
-          cout <<  "Access(D* as B*)    --->" << AccessCasted<B*>::access(pD) << "\n";
-          cout <<  "Access(B* as B*)    --->" << AccessCasted<B*>::access(pB) << "\n";
-          cout <<  "Access(D*& as B*&)  --->" << AccessCasted<B*&>::access(rpD) << "\n";
-          cout <<  "Access(B*& as B*&)  --->" << AccessCasted<B*&>::access(rpB) << "\n";
-          
-          cout <<  "Access(D  as E&)    --->" << AccessCasted<E&>::access(d) << "\n";
-          cout <<  "Access(E& as F&)    --->" << AccessCasted<F&>::access(rE) << "\n";
-          cout <<  "Access(D(E)* as E*) --->" << AccessCasted<E*>::access(pDE) << "\n";
-          cout <<  "Access(D(E)* as F*) --->" << AccessCasted<F*>::access(pDE) << "\n";
-          cout <<  "Access(E* as F*)    --->" << AccessCasted<F*>::access(pE) << "\n";
+          cout <<  "Access(D  as D)     --->" << AccessCasted<D>::access(d) << "\n";
+          cout <<  "Access(D& as D)     --->" << AccessCasted<D>::access(rD) << "\n";
+          D dd1(d);
+          cout <<  "Access(D&& as D)    --->" << AccessCasted<D>::access(move(dd1)) << "\n";
+//        cout <<  "Access(B& as D&)    --->" << AccessCasted<D&>::access(rB) << "\n";
+//        cout <<  "Access(D* as D*)    --->" << AccessCasted<D*>::access(pD) << "\n";
+//        cout <<  "Access(B* as D*)    --->" << AccessCasted<D*>::access(pB) << "\n";
+//        cout <<  "Access(D*& as D*&)  --->" << AccessCasted<D*&>::access(rpD) << "\n";
+//        cout <<  "Access(B*& as D*&)  --->" << AccessCasted<D*&>::access(rpB) << "\n";
+//        
+//        cout <<  "Access(D  as B&)    --->" << AccessCasted<B&>::access(d)  << "\n";
+//        cout <<  "Access(D& as B&)    --->" << AccessCasted<B&>::access(rD) << "\n";
+//        cout <<  "Access(B& as B&)    --->" << AccessCasted<D&>::access(rB) << "\n";
+//        cout <<  "Access(D* as B*)    --->" << AccessCasted<B*>::access(pD) << "\n";
+//        cout <<  "Access(B* as B*)    --->" << AccessCasted<B*>::access(pB) << "\n";
+//        cout <<  "Access(D*& as B*&)  --->" << AccessCasted<B*&>::access(rpD) << "\n";
+//        cout <<  "Access(B*& as B*&)  --->" << AccessCasted<B*&>::access(rpB) << "\n";
+//        
+//        cout <<  "Access(D  as E&)    --->" << AccessCasted<E&>::access(d) << "\n";
+//        cout <<  "Access(E& as F&)    --->" << AccessCasted<F&>::access(rE) << "\n";
+//        cout <<  "Access(D(E)* as E*) --->" << AccessCasted<E*>::access(pDE) << "\n";
+//        cout <<  "Access(D(E)* as F*) --->" << AccessCasted<F*>::access(pDE) << "\n";
+//        cout <<  "Access(E* as F*)    --->" << AccessCasted<F*>::access(pE) << "\n";
         }
     };
   

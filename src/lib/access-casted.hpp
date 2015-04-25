@@ -43,132 +43,86 @@
 #ifndef UTIL_ACCESS_CASTED_H
 #define UTIL_ACCESS_CASTED_H
 
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/remove_pointer.hpp>
-#include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_polymorphic.hpp>
-#include <boost/type_traits/is_base_of.hpp>
+#include "lib/error.hpp"
+
+#include <type_traits>
+#include <utility>
 
 
 
 namespace util {
-  using boost::remove_pointer;
-  using boost::remove_reference;
-  using boost::is_convertible;
-  using boost::is_polymorphic;
-  using boost::is_base_of;
-  using boost::enable_if;
-  
-  
-  template <typename SRC, typename TAR>
-  struct can_cast : boost::false_type {};
-  
-  template <typename SRC, typename TAR>
-  struct can_cast<SRC*,TAR*>          { enum { value = is_base_of<SRC,TAR>::value };};
-  
-  template <typename SRC, typename TAR>
-  struct can_cast<SRC*&,TAR*>         { enum { value = is_base_of<SRC,TAR>::value };};
-  
-  template <typename SRC, typename TAR>
-  struct can_cast<SRC&,TAR&>          { enum { value = is_base_of<SRC,TAR>::value };};
+  using std::remove_pointer;
+  using std::remove_reference;
   
   
   template <typename T>
   struct has_RTTI
     {
-      typedef typename remove_pointer<
-              typename remove_reference<T>::type>::type TPlain;
+      using PlainType = typename remove_pointer<
+                        typename remove_reference<T>::type>::type;
     
-      enum { value = is_polymorphic<TPlain>::value };
+      static constexpr bool value = std::is_polymorphic<PlainType>::value;
     };
   
   template <typename SRC, typename TAR>
-  struct use_dynamic_downcast
+  struct can_downcast
     {
-      enum { value = can_cast<SRC,TAR>::value
-                     &&  has_RTTI<SRC>::value
-                     &&  has_RTTI<TAR>::value
-           };
+      using PlainSRC = typename remove_pointer<
+                       typename remove_reference<SRC>::type>::type;
+      using PlainTAR = typename remove_pointer<
+                       typename remove_reference<TAR>::type>::type;
+    
+      static constexpr bool value = std::is_base_of<PlainSRC, PlainTAR>::value;
     };
   
   template <typename SRC, typename TAR>
-  struct use_static_downcast
+  struct can_use_dynamic_downcast
     {
-      enum { value = can_cast<SRC,TAR>::value
-                  && (  !has_RTTI<SRC>::value
-                     || !has_RTTI<TAR>::value
-                     )
-           };
+      static constexpr bool value =  !std::is_convertible<SRC,TAR>::value
+                                   && can_downcast<SRC,TAR>::value
+                                   && has_RTTI<TAR>::value;
     };
   
   template <typename SRC, typename TAR>
-  struct use_conversion
-    {
-      enum { value = is_convertible<SRC,TAR>::value
-                  && !( use_static_downcast<SRC,TAR>::value
-                      ||use_dynamic_downcast<SRC,TAR>::value
-                      )
-           };
-    };
+  struct can_use_conversion
+    : std::is_convertible<SRC,TAR>
+    { };
   
   
+  template <typename SRC, typename TAR>
+  struct if_can_use_dynamic_downcast
+    : std::enable_if< can_use_dynamic_downcast<SRC,TAR>::value, TAR>
+    { };
   
-                                ////////////////////////////////TODO: use lib::NullValue instead
-  template<typename X>
-  struct EmptyVal
-    {
-      static X create()    { return X(); }
-    };
-  template<typename X>
-  struct EmptyVal<X*&>
-    {
-      static X*& create()  { static X* nullP(0); return nullP; }
-    };
+  template <typename SRC, typename TAR>
+  struct if_can_use_conversion
+    : std::enable_if< can_use_conversion<SRC,TAR>::value, TAR>
+    { };
+    
   
-  
-  
-  
-  
-  template<typename RET>
-  struct NullAccessor
-    {
-      typedef RET Ret;
       
-      static RET access  (...) { return ifEmpty(); }
-      static RET ifEmpty ()    { return EmptyVal<RET>::create(); }
-    };
-  
   template<typename TAR>
-  struct AccessCasted : NullAccessor<TAR>
+  struct AccessCasted
     {
-      using NullAccessor<TAR>::access;
+      typedef TAR Ret;
       
-      template<typename ELM>
-      static  typename enable_if< use_dynamic_downcast<ELM&,TAR>,
-      TAR     >::type
-      access (ELM& elem)
+      template<typename SRC>
+      static  typename if_can_use_dynamic_downcast<SRC&&,TAR>::type
+      access (SRC&& elem)
         {
-          return dynamic_cast<TAR> (elem);
+          std::cerr << "downcast-"<<lib::test::showRefKind<SRC>()<<" && ->"<<lib::test::showRefKind<SRC&&>()<<std::endl;
+          return dynamic_cast<TAR> (std::forward<SRC>(elem));
         }
       
-      template<typename ELM>
-      static  typename enable_if< use_static_downcast<ELM&,TAR>,
-      TAR     >::type
-      access (ELM& elem)
+      template<typename SRC>
+      static  typename if_can_use_conversion<SRC&&,TAR>::type
+      access (SRC&& elem)
         {
-          return static_cast<TAR> (elem);
-        }
-      
-      template<typename ELM>
-      static  typename enable_if< use_conversion<ELM&,TAR>,
-      TAR     >::type
-      access (ELM& elem)
-        {
-          return elem;
+          std::cerr << "convert-"<<lib::test::showRefKind<SRC>()<<" && ->"<<lib::test::showRefKind<SRC&&>()<<std::endl;
+          return std::forward<SRC> (elem);
         }
     };
   
-
+  
 } // namespace util
 #endif
