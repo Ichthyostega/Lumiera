@@ -148,6 +148,27 @@ namespace test {
           D* pNull(0);
           VERIFY_ERROR(BOTTOM_VALUE, AccessCasted<D>::access(pNull));
           
+          cout <<  "=== const correctness ==="<<endl;
+          cout <<  "Access(D  as D const&) --->" << AccessCasted<D const&>::access(d)  <<endl;
+          cout <<  "Access(D& as D const&) --->" << AccessCasted<D const&>::access(rD) <<endl;
+          cout <<  "Access(D  as const D)  --->" << AccessCasted<const D>::access(d) <<endl;
+          cout <<  "Access(D& as const D)  --->" << AccessCasted<const D>::access(rD) <<endl;
+          cout <<  "Access(D  as const D*) --->" << AccessCasted<const D*>::access(d)  <<endl;
+          cout <<  "Access(D& as const D*) --->" << AccessCasted<const D*>::access(rD) <<endl;
+          cout <<  "Access(D* as D const&) --->" << AccessCasted<D const&>::access(pD)  <<endl;
+          cout <<  "Access(D* as const D)  --->" << AccessCasted<const D>::access(pD)  <<endl;
+          const D cD(d);
+          D const& rcD(d);
+          const D* pcD(&cD);
+          cout <<  "Access(const D  as D const&) --->" << AccessCasted<D const&>::access(cD)  <<endl;
+          cout <<  "Access(D const& as D const&) --->" << AccessCasted<D const&>::access(rcD) <<endl;
+          cout <<  "Access(const D  as const D)  --->" << AccessCasted<const D>::access(cD) <<endl;
+          cout <<  "Access(D const& as const D)  --->" << AccessCasted<const D>::access(rcD) <<endl;
+          cout <<  "Access(const D  as const D*) --->" << AccessCasted<const D*>::access(cD)  <<endl;
+          cout <<  "Access(D const& as const D*) --->" << AccessCasted<const D*>::access(rcD) <<endl;
+          cout <<  "Access(const D* as D const&) --->" << AccessCasted<D const&>::access(pcD)  <<endl;
+          cout <<  "Access(const D* as const D)  --->" << AccessCasted<const D>::access(pcD)  <<endl;
+          
           cout <<  "=== work cases: actual conversions ==="<<endl;
 //        cout <<  "Access(B& as D&)    --->" << AccessCasted<D&>::access(rB) <<endl;
 //        cout <<  "Access(D* as D*)    --->" << AccessCasted<D*>::access(pD) <<endl;
