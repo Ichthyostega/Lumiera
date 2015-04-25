@@ -54,25 +54,22 @@ namespace util {
   using std::remove_pointer;
   using std::remove_reference;
   
+  namespace error = lumiera::error;
+  
+  template <typename T>
+  using PlainType = typename remove_pointer<
+                    typename remove_reference<T>::type>::type;
   
   template <typename T>
   struct has_RTTI
     {
-      using PlainType = typename remove_pointer<
-                        typename remove_reference<T>::type>::type;
-    
-      static constexpr bool value = std::is_polymorphic<PlainType>::value;
+      static constexpr bool value = std::is_polymorphic<PlainType<T>>::value;
     };
   
   template <typename SRC, typename TAR>
   struct can_downcast
     {
-      using PlainSRC = typename remove_pointer<
-                       typename remove_reference<SRC>::type>::type;
-      using PlainTAR = typename remove_pointer<
-                       typename remove_reference<TAR>::type>::type;
-    
-      static constexpr bool value = std::is_base_of<PlainSRC, PlainTAR>::value;
+      static constexpr bool value = std::is_base_of<PlainType<SRC>, PlainType<TAR>>::value;
     };
   
   template <typename SRC, typename TAR>
@@ -88,6 +85,20 @@ namespace util {
     : std::is_convertible<SRC,TAR>
     { };
   
+  template <typename SRC, typename TAR>
+  struct can_take_address
+    {
+      static constexpr bool value =  !std::is_pointer<typename remove_reference<SRC>::type>::value
+                                   && std::is_pointer<typename remove_reference<TAR>::type>::value;
+    };
+  
+  template <typename SRC, typename TAR>
+  struct can_dereference
+    {
+      static constexpr bool value =  !std::is_pointer<typename remove_reference<TAR>::type>::value
+                                   && std::is_pointer<typename remove_reference<SRC>::type>::value;
+    };
+  
   
   template <typename SRC, typename TAR>
   struct if_can_use_dynamic_downcast
@@ -97,6 +108,16 @@ namespace util {
   template <typename SRC, typename TAR>
   struct if_can_use_conversion
     : std::enable_if< can_use_conversion<SRC,TAR>::value, TAR>
+    { };
+  
+  template <typename SRC, typename TAR>
+  struct if_can_take_address
+    : std::enable_if< can_take_address<SRC,TAR>::value, TAR>
+    { };
+  
+  template <typename SRC, typename TAR>
+  struct if_can_dereference
+    : std::enable_if< can_dereference<SRC,TAR>::value, TAR>
     { };
     
   
@@ -120,6 +141,26 @@ namespace util {
         {
           std::cerr << "convert-"<<lib::test::showRefKind<SRC>()<<" && ->"<<lib::test::showRefKind<SRC&&>()<<std::endl;
           return std::forward<SRC> (elem);
+        }
+      
+      template<typename SRC>
+      static  typename if_can_take_address<SRC&&,TAR>::type
+      access (SRC&& elem)
+        {
+          std::cerr << "address-"<<lib::test::showRefKind<SRC>()<<" && ->"<<lib::test::showRefKind<SRC&&>()<<std::endl;
+          return AccessCasted<TAR>::access (&elem);
+        }
+      
+      template<typename SRC>
+      static  typename if_can_dereference<SRC&&,TAR>::type
+      access (SRC&& elem)
+        {
+          std::cerr << "deref-"<<lib::test::showRefKind<SRC>()<<" && ->"<<lib::test::showRefKind<SRC&&>()<<std::endl;
+          if (!elem)
+            throw error::Invalid("AccessCasted: attempt to build a value or reference from a NULL pointer"
+                                ,error::LUMIERA_ERROR_BOTTOM_VALUE);
+          
+          return AccessCasted<TAR>::access (*elem);
         }
     };
   
