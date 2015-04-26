@@ -225,9 +225,17 @@ namespace test {
           cout <<  "Access(E(F)* as F&) --->" << AccessCasted<F&>::access(pEF) <<endl;
           cout <<  "Access(E(F)& as F*) --->" << AccessCasted<F*>::access(pEF) <<endl;
           cout <<  "Access(F* as X*)    --->" << AccessCasted<X*>::access(pF)  <<endl; // upcast to the other mixin is OK
-          cout <<  "Access(F* as X*)    --->" << AccessCasted<X*>::access(pXF) <<endl; //
+          cout <<  "Access(X(F)* as X*) --->" << AccessCasted<X*>::access(pXF) <<endl; //
+          cout <<  "Access(F* as B*)    --->" << AccessCasted<B*>::access(pF)  <<endl; // upcast to base
           // AccessCasted<X*>::access(pEF);       // cross-cast not supported (to complicated to implement)
           // AccessCasted<F*>::access(pXF);       // downcast not possible, since X does not provide RTTI
+          
+          int i = 2;
+          float fp = 3.1415;
+          cout <<  "Access(int as double) --->" << AccessCasted<double>::access(i) <<endl;
+          cout <<  "Access(float as long) --->" << AccessCasted<long>::access(fp) <<endl;
+          // AccessCasted<double&>::access(i);    // would undermine the type system, thus ruled out
+          // AccessCasted<double const&>::access(i); // allowed, but warning: returning reference to temporary (and the warning is justified)
         }
     };
   
