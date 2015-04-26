@@ -69,7 +69,13 @@ namespace util {
   template <typename SRC, typename TAR>
   struct can_downcast
     {
-      static constexpr bool value = std::is_base_of<PlainType<SRC>, PlainType<TAR>>::value;
+      static constexpr bool value = std::is_base_of<PlainType<SRC>, PlainType<TAR>>::value
+                                    && (  (   std::is_pointer<typename remove_reference<SRC>::type>::value
+                                          &&  std::is_pointer<typename remove_reference<TAR>::type>::value
+                                          )
+                                        ||(  !std::is_pointer<typename remove_reference<SRC>::type>::value
+                                          && !std::is_pointer<typename remove_reference<TAR>::type>::value
+                                       ));
     };
   
   template <typename SRC, typename TAR>
@@ -77,6 +83,7 @@ namespace util {
     {
       static constexpr bool value =  !std::is_convertible<SRC,TAR>::value
                                    && can_downcast<SRC,TAR>::value
+                                   && has_RTTI<SRC>::value
                                    && has_RTTI<TAR>::value;
     };
   
@@ -128,13 +135,24 @@ namespace util {
     {
       typedef TAR Ret;
       
+      
       template<typename SRC>
       static  typename if_can_use_dynamic_downcast<SRC&&,TAR>::type
       access (SRC&& elem)
         {
           std::cerr << "downcast-"<<lib::test::showRefKind<SRC>()<<" && ->"<<lib::test::showRefKind<SRC&&>()<<std::endl;
-          return dynamic_cast<TAR> (std::forward<SRC>(elem));
+          try
+            {
+              return dynamic_cast<TAR> (std::forward<SRC>(elem));
+            }
+          catch (std::bad_cast& castError)
+            {
+              throw error::Invalid(castError
+                                  ,"AccessCasted: not the expected runtime type; downcast failed"
+                                  ,error::LUMIERA_ERROR_WRONG_TYPE);
+            }
         }
+      
       
       template<typename SRC>
       static  typename if_can_use_conversion<SRC&&,TAR>::type
@@ -144,6 +162,7 @@ namespace util {
           return std::forward<SRC> (elem);
         }
       
+      
       template<typename SRC>
       static  typename if_can_take_address<SRC&&,TAR>::type
       access (SRC&& elem)
@@ -151,6 +170,7 @@ namespace util {
           std::cerr << "address-"<<lib::test::showRefKind<SRC>()<<" && ->"<<lib::test::showRefKind<SRC&&>()<<std::endl;
           return AccessCasted<TAR>::access (&elem);
         }
+      
       
       template<typename SRC>
       static  typename if_can_dereference<SRC&&,TAR>::type

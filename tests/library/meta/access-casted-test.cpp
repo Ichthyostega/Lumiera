@@ -37,6 +37,7 @@ using std::cout;
 using std::endl;
 
 using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
+using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
 
 
 namespace util {
@@ -92,10 +93,11 @@ namespace test {
           D*& rpD = pD;
           B*& rpB = pB;
           
+          E e;
+          E& rE = e;
           F f;
-          E& rE = f;
-          E* pE = &f;
-          D* pDE = pE;
+          E& rEF = f;
+          E* pEF = &f;
           
           cout <<  "can_downcast<B,D>     = " << can_downcast<B,D>::value <<endl;
           cout <<  "can_downcast<B*,D*>   = " << can_downcast<B*,D*>::value <<endl;
@@ -152,7 +154,7 @@ namespace test {
           D* pdd1(pD);
           cout <<  "Access(D*&& as D)   --->" << AccessCasted<D>::access(move(pdd1))  <<endl;
           D* pNull(0);
-          VERIFY_ERROR(BOTTOM_VALUE, AccessCasted<D>::access(pNull));  // run-time NULL check
+          VERIFY_ERROR (BOTTOM_VALUE, AccessCasted<D>::access(pNull));  // run-time NULL check
           // AccessCasted<D&&>::access(pD);       // should not move away a value accessed through a pointer, there might be other users
           
           cout <<  "=== const correctness ==="<<endl;
@@ -188,25 +190,32 @@ namespace test {
           // AccessCasted<D*>::access(move(cD));  // and same for taking pointer from a moved value.
           
           cout <<  "=== work cases: actual conversions ==="<<endl;
-//        cout <<  "Access(B& as D&)    --->" << AccessCasted<D&>::access(rB) <<endl;
-//        cout <<  "Access(D* as D*)    --->" << AccessCasted<D*>::access(pD) <<endl;
-//        cout <<  "Access(B* as D*)    --->" << AccessCasted<D*>::access(pB) <<endl;
-//        cout <<  "Access(D*& as D*&)  --->" << AccessCasted<D*&>::access(rpD) <<endl;
-//        cout <<  "Access(B*& as D*&)  --->" << AccessCasted<D*&>::access(rpB) <<endl;
-//        
-//        cout <<  "Access(D  as B&)    --->" << AccessCasted<B&>::access(d)  <<endl;
-//        cout <<  "Access(D& as B&)    --->" << AccessCasted<B&>::access(rD) <<endl;
-//        cout <<  "Access(B& as B&)    --->" << AccessCasted<D&>::access(rB) <<endl;
-//        cout <<  "Access(D* as B*)    --->" << AccessCasted<B*>::access(pD) <<endl;
-//        cout <<  "Access(B* as B*)    --->" << AccessCasted<B*>::access(pB) <<endl;
-//        cout <<  "Access(D*& as B*&)  --->" << AccessCasted<B*&>::access(rpD) <<endl;
-//        cout <<  "Access(B*& as B*&)  --->" << AccessCasted<B*&>::access(rpB) <<endl;
-//        
-//        cout <<  "Access(D  as E&)    --->" << AccessCasted<E&>::access(d) <<endl;
-//        cout <<  "Access(E& as F&)    --->" << AccessCasted<F&>::access(rE) <<endl;
-//        cout <<  "Access(D(E)* as E*) --->" << AccessCasted<E*>::access(pDE) <<endl;
-//        cout <<  "Access(D(E)* as F*) --->" << AccessCasted<F*>::access(pDE) <<endl;
-//        cout <<  "Access(E* as F*)    --->" << AccessCasted<F*>::access(pE) <<endl;
+          cout <<  "Access(B& as B&)    --->" << AccessCasted<B&>::access(rB) <<endl;
+          cout <<  "Access(D& as B&)    --->" << AccessCasted<B&>::access(rD) <<endl;
+          cout <<  "Access(B* as B*)    --->" << AccessCasted<B*>::access(pB) <<endl;
+          cout <<  "Access(D* as B*)    --->" << AccessCasted<B*>::access(pD) <<endl;
+          cout <<  "Access(D& as B*)    --->" << AccessCasted<B*>::access(rD) <<endl;
+          cout <<  "Access(D* as B&)    --->" << AccessCasted<B&>::access(pD) <<endl;
+          cout <<  "Access(B*& as B*&)  --->" << AccessCasted<B*&>::access(rpB) <<endl;
+          cout <<  "Access(D*& as D*&)  --->" << AccessCasted<D*&>::access(rpD) <<endl;
+          cout <<  "Access(D& as const B*)       --->" << AccessCasted<const B*>::access(rD) <<endl;
+          cout <<  "Access(D* as B const&)       --->" << AccessCasted<B const&>::access(pD) <<endl;
+          cout <<  "Access(D const& as const B*) --->" << AccessCasted<const B*>::access(rcD) <<endl;
+          cout <<  "Access(const D* as B const&) --->" << AccessCasted<B const&>::access(pcD) <<endl;
+          // AccessCasted<B*&>::access(rpD);      // ruled out, since it would allow to sneak-in a non-D object into the D*
+          // AccessCasted<D&>::access(rB);        // any down-casts are ruled out,
+          // AccessCasted<D*>::access(pB);        // since neither B nor D has RTTI
+          // AccessCasted<D&>::access(pB);        //
+          // AccessCasted<D*>::access(rB);        //
+          // AccessCasted<E&>::access(rD);        // we need RTTI on both ends to perform a safe dynamic downcast.
+          // AccessCasted<D*>::access((B*)pD);    // dangerous, since we have no way to know for sure it's indeed a D object
+          // AccessCasted<E*>::access(pDE);       // same here, since E has RTTI but D hasn't, we have no way to find out the real type
+          
+          VERIFY_ERROR (WRONG_TYPE, AccessCasted<F&>::access(rE));                 // allowed by typing, but fails at runtime since it isn't an F-object
+          cout <<  "Access(E(F)& as F&) --->" << AccessCasted<F&>::access(rEF) <<endl;
+          cout <<  "Access(E(F)* as F*) --->" << AccessCasted<F*>::access(pEF) <<endl;
+          cout <<  "Access(E(F)* as F&) --->" << AccessCasted<F&>::access(pEF) <<endl;
+          cout <<  "Access(E(F)& as F*) --->" << AccessCasted<F*>::access(pEF) <<endl;
         }
     };
   
