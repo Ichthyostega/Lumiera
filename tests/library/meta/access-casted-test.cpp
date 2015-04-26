@@ -57,7 +57,13 @@ namespace test {
       {
         virtual ~E() {};
       };
-    struct F : E {};
+    
+    struct X {};
+    
+    struct F
+      : X
+      , E
+      { };
     
     using lib::test::tyAbbr;
     
@@ -98,6 +104,8 @@ namespace test {
           F f;
           E& rEF = f;
           E* pEF = &f;
+          X* pXF = &f;
+          F* pF  = &f;
           
           cout <<  "can_downcast<B,D>     = " << can_downcast<B,D>::value <<endl;
           cout <<  "can_downcast<B*,D*>   = " << can_downcast<B*,D*>::value <<endl;
@@ -216,6 +224,10 @@ namespace test {
           cout <<  "Access(E(F)* as F*) --->" << AccessCasted<F*>::access(pEF) <<endl;
           cout <<  "Access(E(F)* as F&) --->" << AccessCasted<F&>::access(pEF) <<endl;
           cout <<  "Access(E(F)& as F*) --->" << AccessCasted<F*>::access(pEF) <<endl;
+          cout <<  "Access(F* as X*)    --->" << AccessCasted<X*>::access(pF)  <<endl; // upcast to the other mixin is OK
+          cout <<  "Access(F* as X*)    --->" << AccessCasted<X*>::access(pXF) <<endl; //
+          // AccessCasted<X*>::access(pEF);       // cross-cast not supported (to complicated to implement)
+          // AccessCasted<F*>::access(pXF);       // downcast not possible, since X does not provide RTTI
         }
     };
   
