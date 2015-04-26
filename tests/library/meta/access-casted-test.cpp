@@ -47,7 +47,7 @@ namespace util {
 namespace test {
   
   
-    
+  
   
   
   
@@ -89,6 +89,10 @@ namespace test {
    * @test verify a helper template for accessing values either through conversion or (dynamic) downcast.
    *       Typically, this helper is used in value holder containers or variant-like data structures,
    *       where the actual type is given at instantiation time of the template and possibly erased.
+   * 
+   * @warning we can not really cover the negative cases, which ought to be rejected by the compiler.
+   *          These cases have been verified one by one, and are retained commented out. You ought
+   *          to re-check these cases manually when using a new compiler.
    */
   class AccessCasted_test : public Test
     {

@@ -3,6 +3,83 @@ TESTING "Library Test Suite: basic and low-level components" ./test-suite --grou
 
 
 TEST "casting or converting access helper" AccessCasted_test <<END
+out-lit: can_downcast<B,D>     = 1
+out-lit: can_downcast<B*,D*>   = 1
+out-lit: can_downcast<B&,D&>   = 1
+out-lit: can_downcast<B&,D*>   = 0
+out-lit: can_downcast<B*,D&>   = 0
+out-lit: can_downcast<B*&,D*&> = 1
+out-lit: can_downcast<D*&,D*&> = 1
+out-lit: can_downcast<D*,E*>   = 1
+out-lit: can_downcast<E*,F*>   = 1
+out-lit: has_RTTI<D*> = 0
+out-lit: has_RTTI<E*> = 1
+out-lit: has_RTTI<F*> = 1
+out-lit: is_convertible<D,D&>  = 0
+out-lit: is_convertible<D&,D>  = 1
+out-lit: can_use_dynamic_downcast<D,D&>  = 0
+out-lit: can_use_conversion<D,D&>        = 0
+out-lit: can_use_dynamic_downcast<B*,D*> = 0
+out-lit: can_use_conversion<D*,B*>       = 1
+out-lit: can_use_dynamic_downcast<D*&,D*&> = 0
+out-lit: can_use_conversion<D*&,D*&>       = 1
+out-lit: can_use_conversion<D*,E*>         = 0
+out-lit: can_use_dynamic_downcast<D*&,E*>  = 0
+out-lit: === standard case: References ===
+out: Access\(D  as D&\)    .+D.. adr=0x.+ type: D
+out: Access\(D& as D&\)    .+D.. adr=0x.+ type: D
+out-lit: === build a value object ===
+out: Access.D  as D.     .+D.. adr=0x.+ type: D
+out: Access.D& as D.     .+D.. adr=0x.+ type: D
+out: Access.D&& as D.    .+D.. adr=0x.+ type: D
+out-lit: === take a pointer ===
+out: Access.D  as D\*.    .+0x.+
+out: Access.D& as D\*.    .+0x.+
+out-lit: === dereference a pointer ===
+out: Access.D\* as D&.    .+D.. adr=0x.+ type: D
+out: Access.D\* as D.     .+D.. adr=0x.+ type: D
+out: Access.D\*&& as D.   .+D.. adr=0x.+ type: D
+out-lit: === const correctness ===
+out: Access.D  as D const&. .+D.. adr=0x.+ type: D
+out: Access.D& as D const&. .+D.. adr=0x.+ type: D
+out: Access.D  as const D.  .+D.. adr=0x.+ type: D
+out: Access.D& as const D.  .+D.. adr=0x.+ type: D
+out: Access.D  as const D\*. .+0x.+
+out: Access.D& as const D\*. .+0x.+
+out: Access.D\* as D const&. .+D.. adr=0x.+ type: D
+out: Access.D\* as const D.  .+D.. adr=0x.+ type: D
+out: Access.const D  as D const&. .+D.. adr=0x.+ type: D
+out: Access.D const& as D const&. .+D.. adr=0x.+ type: D
+out: Access.const D  as const D.  .+D.. adr=0x.+ type: D
+out: Access.D const& as const D.  .+D.. adr=0x.+ type: D
+out: Access.const D  as const D\*. .+0x.+
+out: Access.D const& as const D\*. .+0x.+
+out: Access.const D\* as D const&. .+D.. adr=0x.+ type: D
+out: Access.const D\* as const D.  .+D.. adr=0x.+ type: D
+out: Access.D const& as D.        .+D.. adr=0x.+ type: D
+out: Access.D const&& as D.       .+D.. adr=0x.+ type: D
+out-lit: === work cases: actual conversions ===
+out: Access.B& as B&.    .+B.. adr=0x.+ type: B
+out: Access.D& as B&.    .+B.. adr=0x.+ type: B
+out: Access.B\* as B\*.    .+0x.+
+out: Access.D\* as B\*.    .+0x.+
+out: Access.D& as B\*.    .+0x.+
+out: Access.D\* as B&.    .+B.. adr=0x.+ type: B
+out: Access.B\*& as B\*&.  .+0x.+
+out: Access.D\*& as D\*&.  .+0x.+
+out: Access.D& as const B\*.       .+0x.+
+out: Access.D\* as B const&.       .+B.. adr=0x.+ type: B
+out: Access.D const& as const B\*. .+0x.+
+out: Access.const D\* as B const&. .+B.. adr=0x.+ type: B
+out: Access.E\(F\)& as F&. .+F.. adr=0x.+ type: F
+out: Access.E\(F\)\* as F\*. .+0x.+
+out: Access.E\(F\)\* as F&. .+F.. adr=0x.+ type: F
+out: Access.E\(F\)& as F\*. .+0x.+
+out: Access.F\\* as X\*.    .+0x.+
+out: Access.X\(F\)\* as X\*. .+0x.+
+out: Access.F\* as B\*.    .+0x.+
+out-lit: Access(int as double) --->2
+out-lit: Access(float as long) --->3
 END
 
 
