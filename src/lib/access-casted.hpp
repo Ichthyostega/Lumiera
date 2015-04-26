@@ -88,8 +88,9 @@ namespace util {
   template <typename SRC, typename TAR>
   struct can_take_address
     {
-      static constexpr bool value =  !std::is_pointer<typename remove_reference<SRC>::type>::value
-                                   && std::is_pointer<typename remove_reference<TAR>::type>::value;
+      static constexpr bool value =   !std::is_rvalue_reference<SRC>::value
+                                   && !std::is_pointer<typename remove_reference<SRC>::type>::value
+                                   &&  std::is_pointer<typename remove_reference<TAR>::type>::value;
     };
   
   template <typename SRC, typename TAR>

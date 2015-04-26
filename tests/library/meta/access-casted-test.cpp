@@ -126,19 +126,25 @@ namespace test {
           cout <<  "can_use_conversion<D*,E*>         = " << can_use_conversion<D*,E*>::value <<endl;
           cout <<  "can_use_dynamic_downcast<D*&,E*>  = " << can_use_dynamic_downcast<D*&,E*>::value <<endl;
           
+          
+          
           cout <<  "=== standard case: References ==="<<endl;
           cout <<  "Access(D  as D&)    --->" << AccessCasted<D&>::access(d)  <<endl;
           cout <<  "Access(D& as D&)    --->" << AccessCasted<D&>::access(rD) <<endl;
+          D dd1(d);
+          // AccessCasted<D&>::access(move(dd1)); // does not compile since it would be dangerous; we can't take a l-value ref
+          // AccessCasted<D&&>::access(rD);       // from a r-value (move) reference and we can't move a l-value ref
+          // AccessCasted<D&&>::access(d);        //
           
           cout <<  "=== build a value object ==="<<endl;
           cout <<  "Access(D  as D)     --->" << AccessCasted<D>::access(d) <<endl;
           cout <<  "Access(D& as D)     --->" << AccessCasted<D>::access(rD) <<endl;
-          D dd1(d);
           cout <<  "Access(D&& as D)    --->" << AccessCasted<D>::access(move(dd1)) <<endl;
           
           cout <<  "=== take a pointer ==="<<endl;
           cout <<  "Access(D  as D*)    --->" << AccessCasted<D*>::access(d)  <<endl;
           cout <<  "Access(D& as D*)    --->" << AccessCasted<D*>::access(rD) <<endl;
+          // AccessCasted<D*>::access(move(dd1)); // should not take value moved by r-value-ref as pointer, otherwise the moved object would be lost
           
           cout <<  "=== dereference a pointer ==="<<endl;
           cout <<  "Access(D* as D&)    --->" << AccessCasted<D&>::access(pD)  <<endl;
@@ -146,7 +152,8 @@ namespace test {
           D* pdd1(pD);
           cout <<  "Access(D*&& as D)   --->" << AccessCasted<D>::access(move(pdd1))  <<endl;
           D* pNull(0);
-          VERIFY_ERROR(BOTTOM_VALUE, AccessCasted<D>::access(pNull));
+          VERIFY_ERROR(BOTTOM_VALUE, AccessCasted<D>::access(pNull));  // run-time NULL check
+          // AccessCasted<D&&>::access(pD);       // should not move away a value accessed through a pointer, there might be other users
           
           cout <<  "=== const correctness ==="<<endl;
           cout <<  "Access(D  as D const&) --->" << AccessCasted<D const&>::access(d)  <<endl;
@@ -168,6 +175,17 @@ namespace test {
           cout <<  "Access(D const& as const D*) --->" << AccessCasted<const D*>::access(rcD) <<endl;
           cout <<  "Access(const D* as D const&) --->" << AccessCasted<D const&>::access(pcD)  <<endl;
           cout <<  "Access(const D* as const D)  --->" << AccessCasted<const D>::access(pcD)  <<endl;
+          cout <<  "Access(D const& as D)        --->" << AccessCasted<D>::access(rcD)       <<endl;   // it's OK to construct a new (non-const) object from const ref
+          const D cD1(cD);                                                                             // likewise it's OK to construct from move-ref. Actually, we're not
+          cout <<  "Access(D const&& as D)       --->" << AccessCasted<D>::access(move(cD1)) <<endl;   // moving anything, but it's up to the receiving ctor to prevent that
+          // AccessCasted<D&>::access(rcD);       // normal ref from const ref is not const correct
+          // AccessCasted<D*>::access(rcD);       // likewise, regular pointer from const ref prohibited
+          // AccessCasted<D&>::access(pcD);       // likewise, regular ref from pointer-to-const
+          // AccessCasted<D*>::access(pcD);       // and regular pointer from pointer-to-const
+          // AccessCasted<D&&>::access(rcD);      // ruled out already because moving a reference is invalid
+          // AccessCasted<D&&>::access(pcD);      // ruled out already because moving a dereferenced pointer is invalid
+          // AccessCasted<D&>::access(move(cD));  // ruled out already because taking reference from moved value is invalid
+          // AccessCasted<D*>::access(move(cD));  // and same for taking pointer from a moved value.
           
           cout <<  "=== work cases: actual conversions ==="<<endl;
 //        cout <<  "Access(B& as D&)    --->" << AccessCasted<D&>::access(rB) <<endl;
