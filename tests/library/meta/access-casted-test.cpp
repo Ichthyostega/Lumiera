@@ -25,6 +25,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/access-casted.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
 #include <utility>
@@ -35,6 +36,8 @@ using std::string;
 using std::ostream;
 using std::cout;
 using std::endl;
+
+using util::isSameObject;
 
 using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
 using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
@@ -58,7 +61,10 @@ namespace test {
         virtual ~E() {};
       };
     
-    struct X {};
+    struct X
+      {
+        char x = 'x';
+      };
     
     struct F
       : X
@@ -225,7 +231,7 @@ namespace test {
           cout <<  "Access(E(F)* as F&) --->" << AccessCasted<F&>::access(pEF) <<endl;
           cout <<  "Access(E(F)& as F*) --->" << AccessCasted<F*>::access(pEF) <<endl;
           cout <<  "Access(F* as X*)    --->" << AccessCasted<X*>::access(pF)  <<endl; // upcast to the other mixin is OK
-          cout <<  "Access(X(F)* as X*) --->" << AccessCasted<X*>::access(pXF) <<endl; //
+          cout <<  "Access(X(F)* as X*) --->" << AccessCasted<X*>::access(pXF) <<endl; //  (and note: address adjustment due to mixin layout)
           cout <<  "Access(F* as B*)    --->" << AccessCasted<B*>::access(pF)  <<endl; // upcast to base
           // AccessCasted<X*>::access(pEF);       // cross-cast not supported (to complicated to implement)
           // AccessCasted<F*>::access(pXF);       // downcast not possible, since X does not provide RTTI
@@ -236,6 +242,14 @@ namespace test {
           cout <<  "Access(float as long) --->" << AccessCasted<long>::access(fp) <<endl;
           // AccessCasted<double&>::access(i);    // would undermine the type system, thus ruled out
           // AccessCasted<double const&>::access(i); // allowed, but warning: returning reference to temporary (and the warning is justified)
+          
+          CHECK (isSameObject (d, AccessCasted<B&>::access(d)));
+          CHECK (isSameObject (rD, AccessCasted<B&>::access(pD)));
+          CHECK (isSameObject (d, AccessCasted<B const&>::access(pD)));
+          CHECK (!isSameObject (d, AccessCasted<B>::access(rD)));
+          
+          CHECK (isSameObject (f, AccessCasted<F&>::access(rEF)));
+          CHECK (!isSameObject (f, AccessCasted<X&>::access(pF))); // note: address adjustment due to layout of mixin object X
         }
     };
   
