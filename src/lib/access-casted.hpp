@@ -162,7 +162,20 @@ namespace util {
           
           return AccessCasted<TAR>::access (*elem);
         }
+      
+      
+      /** catch-all to signal failure of conversion */
+      static TAR
+      access (...)
+        {
+          // NOTE: if you see this assertion failure, none of the above predicates were true.
+          //       Chances are that you requested a conversion that is logically impossible or dangerous,
+          //       like e.g. taking a reference from an anonymous value parameter
+          static_assert (!sizeof(TAR), "AccessCasted: No valid conversion or cast supported for these types.");
+          throw error::Invalid("impossible or unsafe type conversion requested");
+        }
     };
+  
   
   
 } // namespace util
