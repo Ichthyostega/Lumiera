@@ -41,8 +41,9 @@ namespace test{
   using util::isnil;
   using util::for_each;
   using util::isSameObject;
-  using lumiera::error::LUMIERA_ERROR_INVALID;
-  using lumiera::error::LUMIERA_ERROR_ASSERTION;
+  using error::LUMIERA_ERROR_BOTTOM_VALUE;
+  using error::LUMIERA_ERROR_WRONG_TYPE;
+  using error::LUMIERA_ERROR_ASSERTION;
   
   using std::vector;
   using std::cout;
@@ -216,7 +217,7 @@ namespace test{
           oo.clear();
           CHECK (!oo);
           CHECK (isnil(oo));
-          VERIFY_ERROR (INVALID, oo.get<D5>() );
+          VERIFY_ERROR (BOTTOM_VALUE, oo.get<D5>() );
 #if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
           VERIFY_ERROR (ASSERTION, oo->getIt() );
 #endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT

@@ -27,7 +27,7 @@
  ** and the target type (type we need within the usage context). 
  ** When instantiating AcessCasted<TAR>, we get a template static function
  ** \c AcessCasted<TAR>::access<SRC>(SRC& elm), but the actual implementation
- ** is chosen using boost::type_traits. If no sensible implementation can be
+ ** is chosen using std::type_traits. If no sensible implementation can be
  ** selected, \c EmptyVal<TAR>::create() is invoked instead, which by default
  ** creates a NULL value or similar by using the no-argument ctor of the
  ** type TAR. Alternatively, you may define an specialisation of EmptyVal,
@@ -45,89 +45,85 @@
 #ifndef UTIL_ACCESS_CASTED_O_H
 #define UTIL_ACCESS_CASTED_O_H
 
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/remove_pointer.hpp>
-#include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_polymorphic.hpp>
-#include <boost/type_traits/is_base_of.hpp>
+#include <type_traits>
 
 
 
 namespace util {
-  using boost::remove_pointer;
-  using boost::remove_reference;
-  using boost::is_convertible;
-  using boost::is_polymorphic;
-  using boost::is_base_of;
-  using boost::enable_if;
   
-  
-  template <typename SRC, typename TAR>
-  struct can_cast : boost::false_type {};
-  
-  template <typename SRC, typename TAR>
-  struct can_cast<SRC*,TAR*>          { enum { value = is_base_of<SRC,TAR>::value };};
-  
-  template <typename SRC, typename TAR>
-  struct can_cast<SRC*&,TAR*>         { enum { value = is_base_of<SRC,TAR>::value };};
-  
-  template <typename SRC, typename TAR>
-  struct can_cast<SRC&,TAR&>          { enum { value = is_base_of<SRC,TAR>::value };};
-  
-  
-  template <typename T>
-  struct has_RTTI
-    {
-      typedef typename remove_pointer<
-              typename remove_reference<T>::type>::type TPlain;
+  namespace {
+    using std::remove_pointer;
+    using std::remove_reference;
+    using std::is_convertible;
+    using std::is_polymorphic;
+    using std::is_base_of;
     
-      enum { value = is_polymorphic<TPlain>::value };
-    };
-  
-  template <typename SRC, typename TAR>
-  struct use_dynamic_downcast
-    {
-      enum { value = can_cast<SRC,TAR>::value
-                     &&  has_RTTI<SRC>::value
-                     &&  has_RTTI<TAR>::value
-           };
-    };
-  
-  template <typename SRC, typename TAR>
-  struct use_static_downcast
-    {
-      enum { value = can_cast<SRC,TAR>::value
-                  && (  !has_RTTI<SRC>::value
-                     || !has_RTTI<TAR>::value
-                     )
-           };
-    };
-  
-  template <typename SRC, typename TAR>
-  struct use_conversion
-    {
-      enum { value = is_convertible<SRC,TAR>::value
-                  && !( use_static_downcast<SRC,TAR>::value
-                      ||use_dynamic_downcast<SRC,TAR>::value
-                      )
-           };
-    };
-  
-  
-  
-                                ////////////////////////////////TODO: use lib::NullValue instead
-  template<typename X>
-  struct EmptyVal
-    {
-      static X create()    { return X(); }
-    };
-  template<typename X>
-  struct EmptyVal<X*&>
-    {
-      static X*& create()  { static X* nullP(0); return nullP; }
-    };
-  
+    
+    template <typename SRC, typename TAR>
+    struct can_cast : std::false_type {};
+    
+    template <typename SRC, typename TAR>
+    struct can_cast<SRC*,TAR*>          { enum { value = is_base_of<SRC,TAR>::value };};
+    
+    template <typename SRC, typename TAR>
+    struct can_cast<SRC*&,TAR*>         { enum { value = is_base_of<SRC,TAR>::value };};
+    
+    template <typename SRC, typename TAR>
+    struct can_cast<SRC&,TAR&>          { enum { value = is_base_of<SRC,TAR>::value };};
+    
+    
+    template <typename T>
+    struct hasRTTI
+      {
+        typedef typename remove_pointer<
+                typename remove_reference<T>::type>::type TPlain;
+      
+        enum { value = is_polymorphic<TPlain>::value };
+      };
+    
+    template <typename SRC, typename TAR>
+    struct use_dynamic_downcast
+      {
+        enum { value = can_cast<SRC,TAR>::value
+                       &&  hasRTTI<SRC>::value
+                       &&  hasRTTI<TAR>::value
+             };
+      };
+    
+    template <typename SRC, typename TAR>
+    struct use_static_downcast
+      {
+        enum { value = can_cast<SRC,TAR>::value
+                    && (  !hasRTTI<SRC>::value
+                       || !hasRTTI<TAR>::value
+                       )
+             };
+      };
+    
+    template <typename SRC, typename TAR>
+    struct use_conversion
+      {
+        enum { value = is_convertible<SRC,TAR>::value
+                    && !( use_static_downcast<SRC,TAR>::value
+                        ||use_dynamic_downcast<SRC,TAR>::value
+                        )
+             };
+      };
+    
+    
+    
+    template<typename X>
+    struct EmptyVal
+      {
+        static X create()    { return X(); }
+      };
+    template<typename X>
+    struct EmptyVal<X*&>
+      {
+        static X*& create()  { static X* nullP(0); return nullP; }
+      };
+    
+  }
   
   
   
@@ -142,12 +138,12 @@ namespace util {
     };
   
   template<typename TAR>
-  struct AccessCasted : NullAccessor<TAR>
+  struct AccessCasted_O : NullAccessor<TAR>
     {
       using NullAccessor<TAR>::access;
       
       template<typename ELM>
-      static  typename enable_if< use_dynamic_downcast<ELM&,TAR>,
+      static  typename std::enable_if< use_dynamic_downcast<ELM&,TAR>::value,
       TAR     >::type
       access (ELM& elem)
         {
@@ -155,7 +151,7 @@ namespace util {
         }
       
       template<typename ELM>
-      static  typename enable_if< use_static_downcast<ELM&,TAR>,
+      static  typename std::enable_if< use_static_downcast<ELM&,TAR>::value,
       TAR     >::type
       access (ELM& elem)
         {
@@ -163,7 +159,7 @@ namespace util {
         }
       
       template<typename ELM>
-      static  typename enable_if< use_conversion<ELM&,TAR>,
+      static  typename std::enable_if< use_conversion<ELM&,TAR>::value,
       TAR     >::type
       access (ELM& elem)
         {

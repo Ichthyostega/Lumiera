@@ -58,8 +58,11 @@ namespace lumiera {
    * Later on, stored values can be retrieved either utilising static or dynamic casts;
    * error reporting is similar to the behaviour of dynamic_cast<T>: when retrieving
    * a pointer, NULL is returned in case of mismatch.
+   * 
+   * @deprecated not sure if this was a good idea anyway. Better re-think how to handle wrapped objects in visitation
+   * @todo really need to switch to the new lib::Variant and util::AccessCasted implementation  ////////////////TICKET #450
    */
-  typedef lib::VariantO<proc::WrapperTypes, util::AccessCasted> WrapperPtr;
+  typedef lib::VariantO<proc::WrapperTypes, util::AccessCasted_O> WrapperPtr;
   
   
   
