@@ -222,7 +222,10 @@ return: 0
 END
 
 
-PLANNED "GenericTreeMutator_test" GenericTreeMutator_test <<END
+TEST "Generic recursive mutation with closure binding" GenericTreeMutator_test <<END
+out: concrete TreeMutator .+Builder<.+ChangeOperation<.+TreeMutator
+out-lit: "data" closure received something that would be acceptable
+out-lit: localData changed to: that would be acceptable
 return: 0
 END
 

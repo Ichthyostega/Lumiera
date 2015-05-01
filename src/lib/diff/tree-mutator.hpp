@@ -77,7 +77,6 @@ namespace diff{
     template<class PAR>
     class Builder;
     
-    ////////TODO only preliminary....
     typedef Literal ID;
     using Attribute = DataCap;
   }
@@ -124,11 +123,7 @@ namespace diff{
           UNIMPLEMENTED("expose a recursive TreeMutator to transform the denoted child");
         }
       
-      virtual void
-      setAttribute (ID id, Attribute& newValue)
-        {
-          std::cout << "Empty Base Impl: apply a value change to the named attribute"<<std::endl;      ////////////////TODO empty implementation should be NOP
-        }
+      virtual void setAttribute (ID, Attribute&) { /* do nothing by default */ }
       
       /**
        * start building a custom adapted tree mutator,
@@ -144,19 +139,22 @@ namespace diff{
     struct ChangeOperation
       : PAR
       {
+        ID attribID_;
         function<void(string)> change_;
         
         virtual void
         setAttribute (ID id, Attribute& newValue)
           {
-            // Decorator-style chained invocation of inherited implementation
-            PAR::setAttribute(id, newValue);
+            if (id == attribID_)
+              change_(newValue.get<string>());
             
-            change_(newValue.get<string>());
+            else // delegate to other closures (Decorator-style)
+              PAR::setAttribute(id, newValue);
           }
         
-        ChangeOperation(function<void(string)> clo, PAR const& chain)
+        ChangeOperation(ID id, function<void(string)> clo, PAR const& chain)
           : PAR(chain)
+          , attribID_(id)
           , change_(clo)
           { }
       };
@@ -177,7 +175,7 @@ namespace diff{
         Builder<Change>
         change (Literal attributeID, function<void(string)> closure)
           {
-            return Change (closure, *this);
+            return Change (attributeID, closure, *this);
           }
       };
 

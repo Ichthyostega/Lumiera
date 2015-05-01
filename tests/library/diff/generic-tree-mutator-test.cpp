@@ -92,24 +92,24 @@ namespace test{
           string localData;
           auto mutator =
           TreeMutator::build()
-            .change("something", [&](string val)
+            .change("data", [&](string val)
               {
-                cout << "Oink-Oink"<<endl;
-                localData = "Oink-Oink";
-              })
-            .change("something", [&](string val)
-              {
-                cout << "Change closure invoked with val="<<val<<endl;
+                cout << "\"data\" closure received something "<<val<<endl;
                 localData = val;
               });
           
-          cout << "concrete TreeMutator type="<< demangleCxx (showType (mutator)) <<endl;
+          cout << "concrete TreeMutator size=" << sizeof(mutator)
+               << " type="<< demangleCxx (showType (mutator))
+               << endl;
           
           CHECK (isnil (localData));
-              Attribute testAttribute(string ("boing"));
-              mutator.setAttribute ("zoing", testAttribute);
+          Attribute testAttribute(string ("that would be acceptable"));
+          mutator.setAttribute ("lore", testAttribute);
+          CHECK ( isnil (localData)); // nothing happens, nothing changed
+          mutator.setAttribute ("data", testAttribute);
           CHECK (!isnil (localData));
-          cout << "localData changed to:"<<localData<<endl;
+          cout << "localData changed to: "<<localData<<endl;
+          CHECK (localData == "that would be acceptable");
         }
       
       
