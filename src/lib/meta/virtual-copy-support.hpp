@@ -137,7 +137,7 @@ namespace meta{
   
   
   
-  using EmptyBase = struct{};
+  struct EmptyBase { };
   
   template<class IFA, class BASE = EmptyBase>
   class VirtualCopySupportInterface

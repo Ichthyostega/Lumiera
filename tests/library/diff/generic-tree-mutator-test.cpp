@@ -106,7 +106,8 @@ namespace test{
           cout << "concrete TreeMutator type="<< demangleCxx (showType (mutator)) <<endl;
           
           CHECK (isnil (localData));
-          mutator.setAttribute("zoing", {});
+              Attribute testAttribute(string ("boing"));
+              mutator.setAttribute ("zoing", testAttribute);
           CHECK (!isnil (localData));
           cout << "localData changed to:"<<localData<<endl;
         }

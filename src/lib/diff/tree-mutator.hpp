@@ -53,6 +53,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/diff/gen-node.hpp"
 //#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
 
@@ -78,7 +79,7 @@ namespace diff{
     
     ////////TODO only preliminary....
     typedef Literal ID;
-    typedef struct{ } Attribute;
+    using Attribute = DataCap;
   }
   
   
@@ -124,7 +125,7 @@ namespace diff{
         }
       
       virtual void
-      setAttribute (ID id, Attribute newValue)
+      setAttribute (ID id, Attribute& newValue)
         {
           std::cout << "Empty Base Impl: apply a value change to the named attribute"<<std::endl;      ////////////////TODO empty implementation should be NOP
         }
@@ -146,13 +147,12 @@ namespace diff{
         function<void(string)> change_;
         
         virtual void
-        setAttribute (ID id, Attribute newValue)
+        setAttribute (ID id, Attribute& newValue)
           {
             // Decorator-style chained invocation of inherited implementation
             PAR::setAttribute(id, newValue);
             
-            string dummy("blubb");
-            change_(dummy);
+            change_(newValue.get<string>());
           }
         
         ChangeOperation(function<void(string)> clo, PAR const& chain)

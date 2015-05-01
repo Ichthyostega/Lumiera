@@ -23,14 +23,14 @@
 
 /** @file gen-node.hpp
  ** Generic building block for tree shaped (meta)data structures.
- ** Representation built from GenNode elements is intended to support
+ ** A representation built from GenNode elements is intended to support
  ** introspection of data structures and exchange of mutations in the
  ** form of \link diff-language.hpp diff messages. \endlink
  ** 
  ** Despite of the name, GenNode is \em not meant to be an universal
  ** data representation; rather it is limited to embody a fixed hard
- ** wired set of data elements relevant to stand-in for attributes
- ** and scope contents of the lumiera high-level data model.
+ ** wired set of data elements, able to stand-in for attributes
+ ** and sub scope contents of the lumiera high-level data model.
  ** 
  ** \par Anatomy of a GenNode
  ** 
@@ -58,10 +58,10 @@
  ** This implies some requirements for the (opaque) elements used in diff:
  ** - they need to support the notion of equality
  ** - we need to derive a key type for usage in index tables
- **   - this implies the necessity to support std::less comparisons for trees
- **   - and the necessity to support hash code generation for unordered maps
- ** - moreover, the elements need to be values, to be copied and handled at will
- ** - it will be beneficial, if these values explicitly support move semantics
+ **   - this implies the necessity to support std::less comparisons for tree-maps
+ **   - and the necessity to support hash code generation for unordered (hash)maps
+ ** - moreover, the elements need to be values, able to be copied and handled at will
+ ** - it will be beneficial for these values to support move semantics explicitly
  ** - in addition, the tree diffing suggests a mechanism to re-gain the fully
  **   typed context, based on some kind of embedded type tag
  ** - finally, the handling of changes prompts us to support installation
@@ -90,11 +90,21 @@
 #define LIB_DIFF_GEN_NODE_H
 
 
+#include "lib/hash-indexed.hpp"                 ///< @warning needs to be first, see explanation in lib/hash-standard.hpp
+
 #include "lib/error.hpp"
+#include "lib/variant.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/diff/record.hpp"
 //#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
 
+#include "lib/format-util.hpp"
+#include "lib/variant.hpp"
+#include "lib/util.hpp"
+
 //#include <vector>
+#include <string>
 //#include <map>
 
 
@@ -103,15 +113,40 @@ namespace diff{
   
   namespace error = lumiera::error;
   
-//using util::_Fmt;
+  using std::string;
   
-  class DataCap;
+  class GenNode;
+  
+  using DataValues = meta::Types<int
+                                ,int64_t
+                                ,short
+                                ,char
+                                ,bool
+                                ,double
+                                ,string
+                                ,time::Time
+                                ,time::Duration
+                                ,time::TimeSpan
+                                ,hash::LuidH
+                                ,Record<GenNode>
+                                >;
+  
+  
+  
+  class DataCap
+    : public Variant<DataValues>
+    {
+    public:
+      template<typename X>
+      DataCap(X&& x)
+        : Variant<DataValues>(std::forward<X>(x))
+        { }
+    };
   
   
   /** generic data element node within a tree */
   class GenNode
     {
-      
     public:
     };
   

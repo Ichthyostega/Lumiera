@@ -43,7 +43,7 @@
  ** lib::PolymorphicValue to hold types implementing a common interface.
  ** 
  ** \par implementation notes
- ** We use a similar "double capsule" implementation technique as for lib::OpaqueHolder.
+ ** We use a "double capsule" implementation technique similar to lib::OpaqueHolder.
  ** In fact, Variant is almost identical to the latter, just omitting unnecessary flexibility.
  ** The outer capsule exposes the public handling interface, while the inner, private capsule
  ** is a polymorphic value holder. Since C++ as such does not support polymorphic values,
@@ -136,11 +136,7 @@ namespace lib {
         = meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
     
     
-    /////TODO: *nur noch*
-    /////TODO: - den gefährlichen Cast aus AccessCasted weg
-    /////TODO: - *nur* der Unit-Test für OpaqueBuffer ist betroffen. Diesen durch direkten statischen Cast ersetzen
-    /////TODO: - unit-Test für AccessCasted nachliefern
-    /////TODO: - forward-call für Konstruktor im Buffer? aber nur, wenn es sich verifizieren läßt!
+    /////TODO: - is it possible directly to forward the constructor invocation to the object within the buffer? Beware of unverifiable generic solutions! 
     
   }//(End) implementation helpers
   
@@ -409,14 +405,8 @@ namespace lib {
   
   
   
-} // namespace lib
-
-
-
   /* == diagnostic helper == */
 
-#ifdef LIB_FORMAT_UTIL_H
-namespace lib {
   
   template<typename TYPES>
   Variant<TYPES>::operator string()  const
@@ -429,11 +419,14 @@ namespace lib {
   Variant<TYPES>::Buff<TY>::operator string()  const
   {
     return "Variant|"
+#ifdef LIB_FORMAT_UTIL_H
         +  util::str (this->access(),
-                     (util::tyStr<TY>()+"|").c_str()
-                     );
-  }
-}// namespace lib
-
+                     (util::tyStr<TY>()+"|").c_str())
 #endif
+                     ;
+  }
+  
+  
+  
+}// namespace lib
 #endif /*LIB_VARIANT_H*/

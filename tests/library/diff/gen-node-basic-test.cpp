@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/diff/record.hpp"
 
 //#include <utility>
@@ -55,8 +56,8 @@ namespace test{
   
   
   /*****************************************************************************//**
-   * @test Verify properties of a special collection type meant for external representation
-   *       of object-loke data.
+   * @test Verify properties of a special collection type shaped for
+   *       external representation of object-like data.
    *       
    * @see IndexTable
    * @see DiffListApplication_test
