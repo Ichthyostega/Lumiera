@@ -135,24 +135,26 @@ namespace diff{
   
   namespace {
     
-    template<class PAR>
+    template<class PAR, typename VAL>
     struct ChangeOperation
       : PAR
       {
+        using Closure = function<void(VAL)>;
+        
         ID attribID_;
-        function<void(string)> change_;
+        Closure change_;
         
         virtual void
         setAttribute (ID id, Attribute& newValue)
           {
             if (id == attribID_)
-              change_(newValue.get<string>());
+              change_(newValue.get<VAL>());
             
             else // delegate to other closures (Decorator-style)
               PAR::setAttribute(id, newValue);
           }
         
-        ChangeOperation(ID id, function<void(string)> clo, PAR const& chain)
+        ChangeOperation(ID id, Closure clo, PAR const& chain)
           : PAR(chain)
           , attribID_(id)
           , change_(clo)
@@ -163,19 +165,23 @@ namespace diff{
     struct Builder
       : PAR
       {
-        using Change = ChangeOperation<PAR>;
-        
         Builder(PAR par)
           : PAR(par)
           { }
         
+        template<typename VAL>
+        using Change = ChangeOperation<PAR,VAL>;
+        template<typename VAL>
+        using Closure = typename Change<VAL>::Closure;
+        
         
         /* ==== binding API ==== */
         
-        Builder<Change>
-        change (Literal attributeID, function<void(string)> closure)
+        template<typename VAL>
+        Builder<Change<VAL>>
+        change (Literal attributeID, Closure<VAL> closure)
           {
-            return Change (attributeID, closure, *this);
+            return Change<VAL> (attributeID, closure, *this);
           }
       };
 

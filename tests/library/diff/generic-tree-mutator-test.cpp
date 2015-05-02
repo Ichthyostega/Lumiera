@@ -92,7 +92,7 @@ namespace test{
           string localData;
           auto mutator =
           TreeMutator::build()
-            .change("data", [&](string val)
+            .change<string>("data", [&](string val)
               {
                 cout << "\"data\" closure received something "<<val<<endl;
                 localData = val;

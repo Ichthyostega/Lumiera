@@ -223,7 +223,7 @@ END
 
 
 TEST "Generic recursive mutation with closure binding" GenericTreeMutator_test <<END
-out: concrete TreeMutator .+Builder<.+ChangeOperation<.+TreeMutator
+out: concrete TreeMutator .+Builder<.+ChangeOperation<.+TreeMutator, .+string
 out-lit: "data" closure received something that would be acceptable
 out-lit: localData changed to: that would be acceptable
 return: 0
