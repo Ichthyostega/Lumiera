@@ -15,6 +15,13 @@ For a copy of the GPL Version 2 see the file COPYING
   in addition they are also dual-licensed under *CC-By-SA 3*
 
 
+- at various places, the implementation draws on solutions
+  and comments published at http://Stackoverflow.com[Stackoverflow] --
+  according to the http://stackexchange.com/legal[License Agreement] page,
+  any ``subscriber content'' on that site is provided under *CC-By-SA 3*..
+  We attribute significant usages of solutions published this way
+  in the doxygen comments of the relevant source code entities.
+
 
 - Parts of the Implementation are heavily inspired by +
   *The Loki Library*  (C) 2001 by *Andrei Alexandrescu*

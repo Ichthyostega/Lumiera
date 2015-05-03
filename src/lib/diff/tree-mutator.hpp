@@ -135,26 +135,46 @@ namespace diff{
   
   namespace {
     
-    template<class PAR, typename VAL>
+    /**
+     * Type rebinding helper to pick up the actual argument type.
+     * Works both for functors and for lambda expressions
+     * @remarks Solution proposed 10/2011 by \link http://stackoverflow.com/users/224671/kennytm user "kennytm" \endlink
+     *          in this \link http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765
+     *          answer on stackoverflow \endlink
+     */
+    template<typename FUN>
+    struct _ClosureType
+      : _ClosureType<decltype(&FUN::operator())>
+      { };
+
+    template<class C, class RET, class ARG>
+    struct _ClosureType<RET (C::*)(ARG)  const>
+      {
+        typedef ARG ArgType;
+        typedef RET ReturnType;
+      };
+    
+    
+    template<class PAR, class CLO>
     struct ChangeOperation
       : PAR
       {
-        using Closure = function<void(VAL)>;
-        
         ID attribID_;
-        Closure change_;
+        CLO change_;
         
         virtual void
         setAttribute (ID id, Attribute& newValue)
           {
+            using ValueType = typename _ClosureType<CLO>::ArgType;
+            
             if (id == attribID_)
-              change_(newValue.get<VAL>());
+              change_(newValue.get<ValueType>());
             
             else // delegate to other closures (Decorator-style)
               PAR::setAttribute(id, newValue);
           }
         
-        ChangeOperation(ID id, Closure clo, PAR const& chain)
+        ChangeOperation(ID id, CLO clo, PAR const& chain)
           : PAR(chain)
           , attribID_(id)
           , change_(clo)
@@ -169,19 +189,17 @@ namespace diff{
           : PAR(par)
           { }
         
-        template<typename VAL>
-        using Change = ChangeOperation<PAR,VAL>;
-        template<typename VAL>
-        using Closure = typename Change<VAL>::Closure;
+        template<class CLO>
+        using Change = ChangeOperation<PAR,CLO>;
         
         
         /* ==== binding API ==== */
         
-        template<typename VAL>
-        Builder<Change<VAL>>
-        change (Literal attributeID, Closure<VAL> closure)
+        template<typename CLO>
+        Builder<Change<CLO>>
+        change (Literal attributeID, CLO closure)
           {
-            return Change<VAL> (attributeID, closure, *this);
+            return Change<CLO> (attributeID, closure, *this);
           }
       };
 
