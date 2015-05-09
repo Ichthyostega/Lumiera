@@ -77,7 +77,7 @@ namespace diff{
     template<class PAR>
     class Builder;
     
-    typedef Literal ID;
+    using ID        = Literal;
     using Attribute = DataCap;
   }
   
