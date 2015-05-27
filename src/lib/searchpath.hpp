@@ -61,13 +61,13 @@ namespace lib {
   /**
    * Helper: Access a path Specification as a sequence of filesystem Paths.
    * This iterator class dissects a ':'-separated path list. The individual
-   * components may use the symbol \c $ORIGIN to denote the directory holding
-   * the current executable.
+   * components may use the symbol \c $ORIGIN to refer to the directory
+   * holding the current executable.
    * @note #next picks the current component and advances the iteration. 
    */
   class SearchPathSplitter
     : public BoolCheckable<SearchPathSplitter
-      ,                    boost::noncopyable>
+    , boost::noncopyable>
     {
       string pathSpec_;
       sregex_iterator pos_,

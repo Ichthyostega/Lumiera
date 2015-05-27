@@ -3,6 +3,7 @@ Linking and Application Structure
 :Date: Autumn 2014
 :Author: Ichthyostega
 :toc:
+:toclevels: 3
 
 This page focusses on some quite intricate aspects of the code structure,
 the build system organisation and the interplay of application parts on
@@ -90,9 +91,9 @@ Each piece of code incurs cost of various kinds
   produces debug information in each and every translation unit referring it.
 
 Thus, for every piece of code we must ask ourselves how much _visible_ this
-code is. And we must consider the dependencies the code incurs. It pays off to
-turn something into a detail and ``push it into the backyard''. This explains
-why we're using the frontend - backend split so frequently.
+code is, need to be. And we must consider the dependencies the code incurs.
+It pays off to turn something into a detail and ``push it into the backyard''.
+This explains why we're using the frontend - backend split so frequently.
 
 
 Source and binary dependencies
@@ -150,12 +151,12 @@ layer operative, standalone, without the upper layer(s). The key is to introduce
 and then to _segregate_ along the realm of this abstraction, which needs to be chosen large enough
 in scope to cast the service and its contract entirely in terms of this abstraction, but at the same
 time it needs to be kept tight enough to prevent details of the client to leak into the abstraction.
-When this is achieved (which is the hard part), then any operations dealing with the abstraction solely
+When this is achieved (which is the hard part), then any operations dealing with the abstraction _solely_
 can be migrated into the entity offering the service, while the client hides the extended knowledge about
 the nature of the manipulated data behind a builder function footnote:[frequently this leads to the
 ``type erasure'' pattern, where specific knowledge about the nature of the fabricated entities -- thus
-a specific type -- is relinquished and dropped once fabrication is complete], but retains ownership
-on these entities, passing just a reference to the service implementation. This move ties the binary
+a specific type -- is relinquished and dropped once fabrication is complete]. This way, the client retains
+ownership on these entities, passing just a reference to the service implementation. This move ties the binary
 dependency on the client implementation to this factory function -- as long as _this factory_ remains
 within the client, the decoupling works and eliminates binary cross dependencies.
 
@@ -164,9 +165,93 @@ strict dependency checking (Link flag `--no-undefined`), so every violation of t
 hierarchical dependency order of our shared modules is spotted immediately during build.
 
 
-Finding dependencies at start-up
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[yellow-background]#to be written#
+Locating dependencies at start-up
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+We hope for Lumiera to be not only installed on desktop systems, but also used in a studio
+or production context, where you'll use a given system just for the duration of one project.
+This might even be specific hardware booted with a Live-System, or it might be a ``headless''
+render-farm node. For this reason, we impose the explicit requirement that Lumiera must be
+fully *usable without installation*. Unzip the application into some folder, launch,
+start working. There might be some problems with required media handling libraries,
+but the basic idea is to use a self-contained bundle or sub-tree, and the application
+needs to locate all the further required resources actively on start-up.
+
+On the other hand, we want Lumiera to be a good citizen, packaged in the usual way,
+compliant to the __F__ile__S__ystem __H__ierarchy standard. It turns out these two
+rather conflicting goals can be reconciled by leveraging some of the advanced features
+of the GNU dynamic linker: The application will figure out the whereabouts relatively,
+starting from the location of the executable, and with the help of some search paths
+and symlinks, the same mechanism can be made to work in the usual FSH compliant
+installation into `/usr/lib/lumiera` and `/usr/share/lumiera`
+
+This way, we end up with a rather elaborate start-up sequence, where the application
+works out it's own installation location and establishes all the further resources
+step by step
+
+. the first challenge are all the parts of the application built as dynamic libraries;
+  effectively most of the application code resides in some shared modules. Since we
+  most definitively do want a global link step in the build process, where unresolved
+  symbols will be spotted, and we want a coherent application core, so we use
+  dynamic linking right at start-up and thus need a way to make the linker locate
+  our further modules and components relative to the executable. Fortunately, the
+  GNU linker supports some extended attributes in the `.dynamic` section of ELF
+  executables (known as the ``new style d-tags'')
+
+  * any executable may define an extended search path through the `RUNPATH` tag,
+    which is searched to locate dynamic libraries and modules before looking
+    into the standard directories
+    footnote:[the linker also supports the old-style `RPATH` tag. In the glorious
+    old days of ancient Unix, it was considered good practice to compile the
+    installation location hard wired into the `RPATH` of each executable and library.
+    Meanwhile, in the age of multi-arch installation and virtual machines, this practice
+    is frowned upon and discouraged by many distributors. For the time being, our
+    build system sets both `RPATH` and the new-style, more secure `RUNPATH` to the
+    same value relative to the executable. We will cease using `RPATH` at
+    some point in the future]
+  * and this search patch may contain _relative_ entries, using the special
+    magic token `$ORIGIN` to point at the directory holding the executable
+    +
+    By convention, the Lumiera buildsystem bakes in the search location `$ORIGIN/modules`
+    -- so this subdirectory below the location of the executable is where all the dynamic
+    modules of the application will be placed by default
+
+. after the core application has been loaded and all direct dependencies are resolved,
+  but still before entering `main()`, the class `lumiera::AppState` will be initialised,
+  which in turn holds a member of type `lumiera::BasicSetup`. The latter will figure out
+  the location of the executable footnote:[this is a Linux-only trick, using `/proc/self/exe`]
+  and require a 'setup.ini' file in the same directory. This setup file is mandatory.
+
+. from there, the _search paths_ are retrieved to locate the extended resources of the
+  application. All these search paths are a colon separated list; the entries may
+  optionally also use the token `$ORIGIN` to refer to the location of the main executable.
+  The default version of 'setup.ini' is outfitted with search paths to cover both the
+  situation of a self-contained bundle, but also the situation of a FSH compliant
+  installation.
+
+  Lumiera.modulepath:: this is where the plugin loader looks for additional extensions and
+    plug-ins, most notably the *GUI plugin*
+
+  Lumiera.gui:: defines the name of this GUI plugin, which is loaded and activated from
+    `main()` -- unless Lumiera starts in ``headless'' mode
+
+  Lumiera.configpath:: all the extended application configuration will be picked up from
+    these directories (_not yet implemented as of 2015_)
+
+  Gui.iconpath:: root of the folder structure used to load icons and similar graphical
+    elements for the GTK-UI. Below, several subdirectories for various icon sizes are
+    recognised. Actually, most of our icons are defined as SVG and rendered using
+    libCairo during the build process.
+
+  Gui.resourcepath:: the place where the GTK-UI looks for further resources, most notably...
+
+  Gui.stylesheet:: the name of the CSS-stylesheet for GTK-3, which defines the
+    application specific look, link:{ldoc}/technical/gui/guiTheme.html[skinning and theme].
+
+While the first two steps, the relative locations `$ORIGIN/modules` and `$ORIGIN/setup.ini`
+are hard-wired, the further resolution steps rely on the contents of 'setup.ini' and are
+open for adjustments and reconfiguration, both for the packager or the advanced user.
+Any failure or mismatch during this start-up sequence will be considered fatal and abort
+the application execution.
 
 
 Transitive binary dependencies
@@ -194,7 +279,7 @@ Static registration magic
 
 Relative dependency location
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Locating binary dependencies relative to the executable (as described above) is complicated when several
+Locating binary dependencies relative to the executable (as described above) gets complicated when several
 of _our own dynamically linked modules_ depend on each other transitively. For example, a plug-in might
 depend on `liblumierabackend.so`, which in turn depends on `liblumierasupport.so`. Now, when we link
 `--as-needed`, the linker will add the direct dependency, but omit the transitive dependency on the

@@ -77,7 +77,7 @@ namespace lumiera {
                                "name of the Lumiera GUI plugin to load")
         ("Lumiera.modulepath", opt::value<string>(),
                                "search path for loadable modules. "
-                               "May us $ORIGIN to refer to the EXE location")
+                               "May use $ORIGIN to refer to the EXE location")
         ("Lumiera.configpath", opt::value<string>(),
                                "search path for extended configuration. "
                                "Extended Config system not yet implemented "

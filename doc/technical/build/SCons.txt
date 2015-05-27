@@ -105,17 +105,17 @@ the lower layers, the GUI is _optional_ and the application is fully operational
 GTK Gui is built and loaded as Lumiera a plug-in.
 
 .unit tests
-Since we're developing test-driven, about half of the overall code can be found in unit- and integration
-tests, residing below `test/`. There is a separate SConscript file, to define the various kinds of test
-artefacts to be created.
+Since our development is test-driven, about half of the overall code can be found in unit- and integration
+tests, residing below `test/`. There is a separate SConscript file, to define the various
+link:{ldoc}/technical/infra/TestSupport.html[kinds of test artefacts] to be created.
 
 - plain-C tests are defined in _test-collections_, grouped thematically into several subdirectories.
   Here, each translation unit provides a separate +main()+ function and is linked into a stand-alone
   executable (yet still linked against the appropriate shared libraries of the main application layers)
 - the tests covering C++ components are organised into test-suites, residing in separate sub-trees.
-  Currently (as of 10/2014), there is the *library suite* and the *proc components suite*. Here
-  individual translation units define individual test case classes, which are linked together with
-  a testrunner `main()` function.
+  Currently (as of 5/2015), we link each sub-tree into a shared test library. Here
+  individual translation units define individual test case classes. At the end, all these unit tests
+  are linked together with a testrunner `main()` into the `test-suite` executable.
 
 .research
 There is a separate subtree for research and experiments. The rationale being to avoid re-building most
