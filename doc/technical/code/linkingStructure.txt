@@ -64,7 +64,7 @@ question. And at the same time we want to write code which is easy to
 understand, easy to write and can be altered, extended and maintained.
 footnote:[Put blatantly, a ``simple clean language'' without any means of expression
 would not be of much help. All the complexities of reality would creep into the usage
-of our ``ideal'' language, and, even worse, be mixed up there with the entropy of
+of our »ideal« language, and, even worse, be mixed up there with the entropy of
 doing the same things several times in a different way.]
 
 Since it is really hard to reconcile all these conflicting goals, we are bound
@@ -153,9 +153,9 @@ in scope to cast the service and its contract entirely in terms of this abstract
 time it needs to be kept tight enough to prevent details of the client to leak into the abstraction.
 When this is achieved (which is the hard part), then any operations dealing with the abstraction _solely_
 can be migrated into the entity offering the service, while the client hides the extended knowledge about
-the nature of the manipulated data behind a builder function footnote:[frequently this leads to the
+the nature of the manipulated data behind a builder function.footnote:[frequently this leads to the
 ``type erasure'' pattern, where specific knowledge about the nature of the fabricated entities -- thus
-a specific type -- is relinquished and dropped once fabrication is complete]. This way, the client retains
+a specific type -- is relinquished and dropped once fabrication is complete] This way, the client retains
 ownership on these entities, passing just a reference to the service implementation. This move ties the binary
 dependency on the client implementation to this factory function -- as long as _this factory_ remains
 within the client, the decoupling works and eliminates binary cross dependencies.
@@ -255,33 +255,33 @@ the application execution.
 About RPATH, RUNPATH
 ^^^^^^^^^^^^^^^^^^^^
 Management of library dependencies can be a tricky subject, both obscure and contentious.
-There is a natural tension between the application developers (``upstream''), the packagers
+There is a natural tension between the application developers (»upstream«), the packagers
 and distributors. Developers have a natural tendency to cut short on ``secondary'' concerns
 in order to keep matters simple. As a developer, you always try to stretch to the limit,
 and this very tendency _limits your ability_ to care for intricate issues faced by just a
-few users, or to care for compatibility or even for extended documentation tutorials. So,
+few users, or to care for compatibility or even for extended tutorial documentation. So,
 as an upstream developer, if you know that the stuff you've built works just fine with
 a specific library version -- be it bleeding edge or be it outdated and obsoleted since
 years -- the most pragmatic and adequate answer is to demand from your users just to
 ``come along with you'' -- frankly, the active developer has zero inclination to look
 back to past issues already overcome in the course of development, nor has he much interest
-to engage in other fields of ongoing development not furthering his own concerns right now.
+to engage in other fields of ongoing debate not conductive to his own concerns right now.
 So the best solution for the developer would be just to wrap-up his own system and ship
 it as a huge bundle to the users. Every other solution seems inferior, just adding weight,
 efforts and pain without tangible benefit.
 
 Obviously, a distributor can not agree to that stance. To create a coherent and reliable whole
-out of the thousand individual variations the upstream developers provide, is in itself a
+out of the thousand individual variations the upstream developers breed, is in itself a
 herculean task and would simply be impossible without forcing some degree of standardisation
-onto the developers. In fact, the distributor's task becomes feasible only by offloading
+onto the developers. In fact, the distributor's task becomes feasible _only_ by offloading some
 efforts for compatibility in small portions onto the shoulders of the individual upstream
-developers. A preference for using a common set of shared libraries is even built into
+projects. A preference for using a common set of shared libraries is even built into
 the toolchain, and there is a distinct tendency to discourage and even hide away the
 mechanisms otherwise available to deal with a self contained bundle of libraries.
 
 Speaking in terms of history, explicit mechanisms to support packaging and distribution management
-are rather new and tend to conflict with the glorious ``unix way'' of doing things, they are
-cross-cutting, global and invasive. On Unix systems, traditionally there used to be two
+are a rather new phenomenon and tend to conflict with the _glorious »Unix Way«_ of doing things,
+they are cross-cutting, global and invasive. On Unix systems, traditionally there used to be two
 _overriding mechanisms_ for library resolution, one for the user, one for the developer:
 
 - the `LD_LIBRARY_PATH` environment variable allows the _user_ on invocation to manipulate
@@ -291,22 +291,22 @@ _overriding mechanisms_ for library resolution, one for the user, one for the de
   login profile and managed an extended set of private installation locations with custom
   compiled libraries. Obviously this caused an avalanche of problems at the point where
   significant functionality of a system started to be just ``provided'' and no single
-  person was able to manage all of the everyday functionality all alone. Basically,
-  the advent of graphical desktop systems marked this breaking point.
+  person was able to manage all of the everyday functionality alone on their own.
+  Basically, the advent of graphical desktop systems marked this breaking point.
 
-- the `RPATH` tag, which is the other override mechanism availabel for _the builder of software_,
+- the `RPATH` tag, which is the other override mechanism available for _the builder of software_,
   was made to defeat and overrule the effect of `LD_LIBRARY_PATH`. Search locations baked
   in as `DT_RPATH` take absolute precedence and can not be altered with any other means besides
   recompiling the executable (or at least rewriting the `.dynamic` section in the ELF binary).
-  Over time, it became ``best practice'' to bake in the installation location into each and
+  Over time, it became »best practice« to bake in the installation location into each and
   every binary, which kind-of helped the upstream developers to re-gain control over the
   libraries actually being used to execute their code. But unfortunately, the distributors
   were left with zero options to manage large-scale library dependency transitions, beyond
   patching the build system of each and every package.
 
 Based on this situation, the _new-style d-tags_ were designed to implement a different
-precedence hierarchy. Whenever the new d-tags are enabled footnote:[the `--enable-new-dtags`
-linker flag is default in many current distributions, and especially in the ``gold'' linker.]
+precedence hierarchy. Whenever the new d-tags are enabled,footnote:[the `--enable-new-dtags`
+linker flag is default in many current distributions, and especially in the »gold« linker.]
 the presence of a `DT_RUNPATH` tag in the `.dynamic` section of an ELF binary completely disables
 the effect of any `DT_RPATH`. Moreover, the `LD_LIBRARY_PATH` is automatically disabled, whenever
 a binary is installed as _set-user-ID_ or _set-group-ID_ -- which closes a blatant security loophole.
@@ -316,14 +316,14 @@ does not explicitly rule out the use of `RPATH` / `RUNPATH`, but it is considere
 footnote:[a good summary of the situation can be found on
 https://wiki.debian.org/RpathIssue[this Debian page] ] -- with the exception of using a _relative_
 `RUNPATH` with `$ORIGIN` to add non-standard library search locations to libraries that are only
-intended to be used by the executables or other libraries within the same source package. 
+intended for usage by the given executable or other libraries within the same source package.
 
 In the new system, the precedence order is as follows footnote:[see
 http://linux.die.net/man/8/ld.so[ld.so manpage on die.net] or
 http://manpages.ubuntu.com/manpages/lucid/man8/ld.so.8.html[ld.so manpage ubuntu.com (more recent)] ]
 
 . `LD_LIBRARY_PATH` entries, unless the executable is `setuid`/`setgid`
-. `DT_RUNPATH` from the `.dynamic` section of ELF binary, library or executable
+. `DT_RUNPATH` from the `.dynamic` section of that ELF binary, library or executable
   _causing_ the actual library lookup.
 . '/etc/ld.so.cache' entries, unless the `-z nodeflib` linker flaw was given at link time
 . '/lib', '/usr/lib' (and the platform-decorated variants) unless `-z nodeflib` was given at link time
@@ -338,14 +338,15 @@ NOTE: The new-style `DT_RUNPATH` is not extended recursively when resolving tran
       (to the contrary, the old `RPATH` used to visit all these locations). +
       This behaviour was chosen deliberately, in compliance with the ELF spec, as can be seen in this
       link:https://sourceware.org/bugzilla/show_bug.cgi?id=13945[glibc bug #13945] and the
-      mentioned developer comment by
+      developer comment by
       link:https://sourceware.org/ml/libc-hacker/2002-11/msg00011.html[Roland McGrath from 2002]
+      mentioned therein.
 
 
 the $ORIGIN token
 ^^^^^^^^^^^^^^^^^
-To support flexible `RUNPATH` (and `RPATH`) settings, the GNU ld.so (also the SUN and Irix linkers)
-allows the usage of some ``magic'' tokens in the `.dynamic` section of ELF binaries (both libraries
+To support flexible `RUNPATH` (and `RPATH`) settings, the GNU `ld.so` (also the SUN and Irix linkers)
+allow the usage of some ``magic'' tokens in the `.dynamic` section of ELF binaries (both libraries
 and executables):
 
 $ORIGIN:: the directory containing the executable or library _actually triggering_
@@ -360,7 +361,8 @@ when relying on relative locations, must provide _its own_ `RUNPATH` to point at
 dependencies at a relative location. This solution is a bit more tricky to set up, but in fact
 more logical and scalable on the long run. Incidentally, it can be quite a challenge to escape
 the `$ORIGIN` properly from any shell script or even build system -- it is crucial that the
-linker actually gets to ``see'' the dollar sign.
+linker itself, not the compiler driver, actually gets to ``see'' the dollar sign, plain,
+without spurious escapes.
 
 
 Transitive binary dependencies
@@ -375,8 +377,8 @@ in the software package definition, so users can install them through the packag
 There is a natural tendency to define those installation requirements too wide. For one, it is better
 to be on the safe side, otherwise users won't be able to run the executable at all. And on top of that,
 there is the general tendency towards frameworks, toolkit sets and library collections -- basically
-a setup which is known to work under a wide range of conditions. Using any of these typically means
-to add a _standard set of dependencies_, which is often way more than actually required to load and
+a setup which is known to work under a wide range of conditions. Using any of these frameworks typically
+means to add a _standard set of dependencies_, which is often way more than actually required to load and
 execute our code. One way to fight this kind of ``distribution dependency bloat'' is to link `--as-needed`.
 In this mode, the linker silently drops any binary dependency not necessary for _this concrete piece
 of code_ to work. This is just awesome, and indeed we set this toggle by default in our build process.
@@ -384,7 +386,27 @@ But there are some issues to be aware of.
 
 Static registration magic
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-[yellow-background]#to be written#
+The linker _actually needs to see the dependency._ Indirect, conceptual dependencies, where the client
+takes initiative and enrols itself actively with the server, will slip through unnoticed. Under some
+additional conditions, especially with self-configuring systems, this omission might even cause a whole
+dependency and subsystem to be disabled.
+
+As a practical example, our C\++ unit-tests are organised into test-suites, where the individual test uses
+a registration mechanism, providing the name of the suite and category tags. This way, the test runner
+may be started to execute just some category of tests. Now, switching tests to dynamic linking causes
+an insidious side effect: The registration mechanism uses static initialisation -- which is the commonly
+used mechanism for this kind of tasks in C++. Place a static variable into an anonymous namespace -- it
+will be initialised by the runtime system _on start-up_, causing any constructor code to run right when
+it is needed to enrol itself with the global (test) service. Unfortunately, static initialisation of
+shared objects is performed at load time of the library -- which never happens unless the linker has
+figured out the dependency and added the library to the required set. But the linker won't be able
+to see this dependency when building the test-runner, since the client, the individual test-case in
+the shared library is the one to call into the test-runner, not the other way round. The registration
+function resides in a common support library, picked as dependency both by the test-runner and the
+individual test case, but this won't help us either. So, in this case (and similar cases), we need
+either to fabricate a ``dummy'' call into the library holding the clients (tests), or we need to
+link the test-runner with `--no-as-needed` -- which is the preferred solution, and in fact is
+what we do.footnote:[see 'tests/SConscript']
 
 Relative dependency location
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -404,7 +426,7 @@ dependency_. In our example, `liblumierabackend.so` needs an additional search p
 reason, our build system by default supplies such a search hint with every Lumiera lib or dynamic
 module -- assuming that our own shared libraries are installed into a subdirectory `modules` below
 the location of the executable; other dynamic modules (plug-ins) may be placed in sibling directories.
-So, to summarise, the build defines the following `RPATH` and `RUNPATH` specs:
+So, to summarise, our build defines the following `RPATH` and `RUNPATH` specs:
 
 for executables::      `$ORIGIN/modules`
 for libs and modules:: `$ORIGIN/../modules`
