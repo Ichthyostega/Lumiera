@@ -177,7 +177,7 @@ but the basic idea is to use a self-contained bundle or sub-tree, and the applic
 needs to locate all the further required resources actively on start-up.
 
 On the other hand, we want Lumiera to be a good citizen, packaged in the usual way,
-compliant to the __F__ile__S__ystem __H__ierarchy standard. It turns out these two
+compliant to the Unix **F**ile**S**ystem **H**ierarchy standard. It turns out these two
 rather conflicting goals can be reconciled by leveraging some of the advanced features
 of the GNU dynamic linker: The application will figure out the whereabouts relatively,
 starting from the location of the executable, and with the help of some search paths
@@ -186,28 +186,27 @@ installation into `/usr/lib/lumiera` and `/usr/share/lumiera`
 
 This way, we end up with a rather elaborate start-up sequence, where the application
 works out it's own installation location and establishes all the further resources
-step by step
+actively step by step
 
 . the first challenge are all the parts of the application built as dynamic libraries;
   effectively most of the application code resides in some shared modules. Since we
-  most definitively do want a global link step in the build process, where unresolved
-  symbols will be spotted, and we want a coherent application core, so we use
+  most definitively want one global link step in the build process, where unresolved
+  symbols will be spotted, and we do want a coherent application core, so we use
   dynamic linking right at start-up and thus need a way to make the linker locate
   our further modules and components relative to the executable. Fortunately, the
   GNU linker supports some extended attributes in the `.dynamic` section of ELF
-  executables (known as the ``new style d-tags'')
+  executables, known as the ``new style d-tags'' -- see the extensive description
+  in the next section below
 
   * any executable may define an extended search path through the `RUNPATH` tag,
     which is searched to locate dynamic libraries and modules before looking
     into the standard directories
-    footnote:[the linker also supports the old-style `RPATH` tag. In the glorious
-    old days of ancient Unix, it was considered good practice to compile the
-    installation location hard wired into the `RPATH` of each executable and library.
-    Meanwhile, in the age of multi-arch installation and virtual machines, this practice
-    is frowned upon and discouraged by many distributors. For the time being, our
-    build system sets both `RPATH` and the new-style, more secure `RUNPATH` to the
-    same value relative to the executable. We will cease using `RPATH` at
-    some point in the future]
+    footnote:[the linker also supports the old-style `RPATH` tag, which is deprecated.
+    In the age of multi-arch installation and virtual machines, the practice of baking
+    in the installation location of each library into the `RPATH` is no longer adequate.
+    For the time being, our build system sets both `RPATH` and the new-style, more
+    secure `RUNPATH` to the same value relative to the executable. We will cease
+    using `RPATH` at some point in the future]
   * and this search patch may contain _relative_ entries, using the special
     magic token `$ORIGIN` to point at the directory holding the executable
     +
@@ -252,6 +251,116 @@ are hard-wired, the further resolution steps rely on the contents of 'setup.ini'
 open for adjustments and reconfiguration, both for the packager or the advanced user.
 Any failure or mismatch during this start-up sequence will be considered fatal and abort
 the application execution.
+
+About RPATH, RUNPATH
+^^^^^^^^^^^^^^^^^^^^
+Management of library dependencies can be a tricky subject, both obscure and contentious.
+There is a natural tension between the application developers (``upstream''), the packagers
+and distributors. Developers have a natural tendency to cut short on ``secondary'' concerns
+in order to keep matters simple. As a developer, you always try to stretch to the limit,
+and this very tendency _limits your ability_ to care for intricate issues faced by just a
+few users, or to care for compatibility or even for extended documentation tutorials. So,
+as an upstream developer, if you know that the stuff you've built works just fine with
+a specific library version -- be it bleeding edge or be it outdated and obsoleted since
+years -- the most pragmatic and adequate answer is to demand from your users just to
+``come along with you'' -- frankly, the active developer has zero inclination to look
+back to past issues already overcome in the course of development, nor has he much interest
+to engage in other fields of ongoing development not furthering his own concerns right now.
+So the best solution for the developer would be just to wrap-up his own system and ship
+it as a huge bundle to the users. Every other solution seems inferior, just adding weight,
+efforts and pain without tangible benefit.
+
+Obviously, a distributor can not agree to that stance. To create a coherent and reliable whole
+out of the thousand individual variations the upstream developers provide, is in itself a
+herculean task and would simply be impossible without forcing some degree of standardisation
+onto the developers. In fact, the distributor's task becomes feasible only by offloading
+efforts for compatibility in small portions onto the shoulders of the individual upstream
+developers. A preference for using a common set of shared libraries is even built into
+the toolchain, and there is a distinct tendency to discourage and even hide away the
+mechanisms otherwise available to deal with a self contained bundle of libraries.
+
+Speaking in terms of history, explicit mechanisms to support packaging and distribution management
+are rather new and tend to conflict with the glorious ``unix way'' of doing things, they are
+cross-cutting, global and invasive. On Unix systems, traditionally there used to be two
+_overriding mechanisms_ for library resolution, one for the user, one for the developer:
+
+- the `LD_LIBRARY_PATH` environment variable allows the _user_ on invocation to manipulate
+  the search location for loading dynamic libraries; it takes precedence over all default
+  configured system wide installation locations and over the contents of the linker cache.
+  In the past, astute users frequently configured an elaborate `LD_LIBRARY_PATH` into their
+  login profile and managed an extended set of private installation locations with custom
+  compiled libraries. Obviously this caused an avalanche of problems at the point where
+  significant functionality of a system started to be just ``provided'' and no single
+  person was able to manage all of the everyday functionality all alone. Basically,
+  the advent of graphical desktop systems marked this breaking point.
+
+- the `RPATH` tag, which is the other override mechanism availabel for _the builder of software_,
+  was made to defeat and overrule the effect of `LD_LIBRARY_PATH`. Search locations baked
+  in as `DT_RPATH` take absolute precedence and can not be altered with any other means besides
+  recompiling the executable (or at least rewriting the `.dynamic` section in the ELF binary).
+  Over time, it became ``best practice'' to bake in the installation location into each and
+  every binary, which kind-of helped the upstream developers to re-gain control over the
+  libraries actually being used to execute their code. But unfortunately, the distributors
+  were left with zero options to manage large-scale library dependency transitions, beyond
+  patching the build system of each and every package.
+
+Based on this situation, the _new-style d-tags_ were designed to implement a different
+precedence hierarchy. Whenever the new d-tags are enabled footnote:[the `--enable-new-dtags`
+linker flag is default in many current distributions, and especially in the ``gold'' linker.]
+the presence of a `DT_RUNPATH` tag in the `.dynamic` section of an ELF binary completely disables
+the effect of any `DT_RPATH`. Moreover, the `LD_LIBRARY_PATH` is automatically disabled, whenever
+a binary is installed as _set-user-ID_ or _set-group-ID_ -- which closes a blatant security loophole.
+
+The use of both `RPATH` and `LD_LIBRARY_PATH` is strongly discouraged. Debian policy for example
+does not explicitly rule out the use of `RPATH` / `RUNPATH`, but it is considered bad practice
+footnote:[a good summary of the situation can be found on
+https://wiki.debian.org/RpathIssue[this Debian page] ] -- with the exception of using a _relative_
+`RUNPATH` with `$ORIGIN` to add non-standard library search locations to libraries that are only
+intended to be used by the executables or other libraries within the same source package. 
+
+In the new system, the precedence order is as follows footnote:[see
+http://linux.die.net/man/8/ld.so[ld.so manpage on die.net] or
+http://manpages.ubuntu.com/manpages/lucid/man8/ld.so.8.html[ld.so manpage ubuntu.com (more recent)] ]
+
+. `LD_LIBRARY_PATH` entries, unless the executable is `setuid`/`setgid`
+. `DT_RUNPATH` from the `.dynamic` section of ELF binary, library or executable
+  _causing_ the actual library lookup.
+. '/etc/ld.so.cache' entries, unless the `-z nodeflib` linker flaw was given at link time
+. '/lib', '/usr/lib' (and the platform-decorated variants) unless `-z nodeflib` was given at link time
+. otherwise linking fails (``not found'').
+
+All the ``search paths'' mentioned here are colon separated lists of directories.
+
+NOTE: The new-style `DT_RUNPATH` is not extended recursively when resolving transitive dependencies,
+      as was the case with `RPATH`. That is, if we `dlopen()` 'libA.so', which in turn marks 'libB.so'
+      as `DT_NEEDED`, which in turn requires a 'libC.so' -- then the resolution for 'libC.so' will
+      visit _only_ the `RUNPATH` given in 'libB.so', but _not_ the `RUNPATH` given in 'libA.so'
+      (to the contrary, the old `RPATH` used to visit all these locations). +
+      This behaviour was chosen deliberately, in compliance with the ELF spec, as can be seen in this
+      link:https://sourceware.org/bugzilla/show_bug.cgi?id=13945[glibc bug #13945] and the
+      mentioned developer comment by
+      link:https://sourceware.org/ml/libc-hacker/2002-11/msg00011.html[Roland McGrath from 2002]
+
+
+the $ORIGIN token
+^^^^^^^^^^^^^^^^^
+To support flexible `RUNPATH` (and `RPATH`) settings, the GNU ld.so (also the SUN and Irix linkers)
+allows the usage of some ``magic'' tokens in the `.dynamic` section of ELF binaries (both libraries
+and executables):
+
+$ORIGIN:: the directory containing the executable or library _actually triggering_
+          the current (innermost) resolution step. Not to be confused with the entity
+          causing the whole linking procedure (an executable to be executed or a `dlopen()` call)
+$PLATFORM:: expands to the architecture/platform tag as provided by the OS kernel
+$LIB:: the system libraries directory, which is /lib for the native architecture
+       on FHS compliant GNU/Linux systems.
+
+Since the new-style `RUNPATH` is not extended for resolving transitive dependencies, each library,
+when relying on relative locations, must provide _its own_ `RUNPATH` to point at the direct
+dependencies at a relative location. This solution is a bit more tricky to set up, but in fact
+more logical and scalable on the long run. Incidentally, it can be quite a challenge to escape
+the `$ORIGIN` properly from any shell script or even build system -- it is crucial that the
+linker actually gets to ``see'' the dollar sign.
 
 
 Transitive binary dependencies
