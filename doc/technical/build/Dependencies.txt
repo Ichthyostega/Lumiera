@@ -1,12 +1,14 @@
 Dependencies
 ============
 :Author: core-devs
-:Date: 10/2013
+:Date: 5/2015
 :toc:
 
 
-Lumiera is written for GNU/Linux. We try to make the best out of modern system programming techniques
-to reach the best possible performance. Lumiera shall scale with the provided Hardware,
+_Lumiera is written for GNU/Linux._ +
+We try to get the best out of modern system programming
+techniques to reach a solid performance and good throughput.
+Lumiera shall scale with the provided Hardware,
 the more RAM and the more/faster CPU's you have the better.
 Nevertheless lower end 32bit machines are supported too.
 
@@ -18,16 +20,16 @@ Having said that -- for the time being, the core team won't spend much effort on
 
 Platform
 --------
-We work and test on PC hardware, 32 and 64 bit. It is intended that Lumiera supports
-other platforms running run GNU/Linux.
-Lumiera expects a 'standard' desktop installation running a Xserver.
+We develop and test on standard PC hardware, 32 and 64 bit.
+It is intended to target other platforms running run GNU/Linux eventually.
+Lumiera expects a `standard' desktop installation running a XServer.
 
 Graphics::
   There are no special requirements for the graphic system.
   Hardware acceleration will likely be added later through extensions,
-  but will remain strictly optional. (For now we'll watch the evolution
-  in that area and might revisit that topic when there are more compelling
-  and widely supported solutions available)
+  but will remain strictly optional.footnote:[For the time being, we'll watch
+  the evolution in that area and might revisit that topic when there are more
+  compelling and widely supported solutions available]
 
 Disks::
   No special requirements. Video editing requires decent disk speed though,
@@ -37,7 +39,7 @@ Special Hardware::
   Support for special hardware would be possible, but depends on certain conditions
 +
 * we need access / donations for the hardware
-* specs and APIs must be open.
+* Specs and APIs must be open.
 * someone to do the actual interfacing and support needs to join the team
 
 
@@ -48,8 +50,8 @@ Languages and Tools
 
  - a C99 / C++11 compatible compiler footnote:[in practice, we build using GCC and
    occasionally we check using Clang]
- - GCC *4.7* or Clang *3.0* should be fine footnote:[basically we try to use just the stock language.
-   On rare occasions, we _did_ use some GCC extensions, like `typeof()`, but there are
+ - GCC *4.7* or Clang *3.3* should be fine footnote:[basically we try to use just the stock language.
+   On rare occasions in the past, we _did_ use some GCC extensions, like `typeof()`, but we care for
    workarounds, in case this becomes a problem].
  
 * BOOST (listed below are the Debian package names)
@@ -77,24 +79,23 @@ We maintain a link:/documentation/technical/infra/debianDepot.html[Debian/Ubuntu
 Libraries
 ~~~~~~~~~
 
-* BOOST footnote:[as of 5/2014, we rely on the quite recent Boost-1.55, which isn't in Debian/stable and not even in Debian/testing.
+* BOOST footnote:[as of [yellow-background]#5/2014#, we rely on the quite recent Boost-1.55,
+  which isn't in Debian/stable and not even in Debian/testing. +
   As always in such cases, we provide backported packages in our
   link:http://lumiera.org/debian/pool/experimental/b/boost1.55/[Lumiera package repository], until these versions become mainstream.]
 * link:http://nobug.pipapo.org/[NoBug]
 * http://gmerlin.sourceforge.net/gavl.html[GAVL] (for raw media support)
 * ALSA: libasound2-dev
-* for the GUI: gtkmm-2.4 gdl-1.0 libglibmm-2.4 cairomm-1.0 xv
- - libgtkmm-2.4-dev
+* for the GUI: (*GTK-3*) gtkmm-3.0 gdlmm-3.0 glibmm-2.4 cairomm-1.0 xv
+ - libgtkmm-3.0-dev
  - libcairomm-1.0-dev
- - libglibmm-2.4-dev, requiring glib2.0 and gthread-2.0
- - libxv-dev and X-lib footnote:[for the XV viewer widget `gui/output/xvdisplayer.cpp`]
+ - libglibmm-2.4-dev, requiring at least glib2.0 and gthread-2.0
+ - libxv-dev footnote:[for the XV viewer widget `gui/output/xvdisplayer.cpp`
+     -- currently obsolete as of [yellow-background]#5/2015#][yellow-background]#TODO 5/2015# and X-lib
  - librsvg-2.0 and librsvg2-dev for rendering Icons
- - libgdl-1-dev -- old version of the Gnome Docking Library footnote:[GDL isn't directly related to GNOME any more.
+ - libgdl-3-0 or better through libgdlmm-3.0-2 -- the »Gnome Docking Library«footnote:[GDL isn't directly related to GNOME any more.
    We contributed to the improvement of this library in the past. These improvements went upstream
-   with GDL-2.27. Since we're still using GTK-2, for now we're forced to use a _really ancient version_,
-   which isn't available from the official repositories -- you can find the original tarball and several
-   Debian/Ubuntu packages in our
-   link:http://lumiera.org/debian/pool/experimental/g/gdl/[Lumiera package repository] though.
-   Basically we need 2.27 =< GDL =< 2.30]
+   with GDL-2.27. At times, we used to ship our own GDL package. Right now, a recent upstream version
+   together with the corresponding *mm-bindings will do]
 
 
