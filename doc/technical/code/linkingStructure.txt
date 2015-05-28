@@ -5,14 +5,14 @@ Linking and Application Structure
 :toc:
 :toclevels: 3
 
-This page focusses on some quite intricate aspects of the code structure,
+This page focusses on some rather intricate aspects of the code structure,
 the build system organisation and the interplay of application parts on
-a rather technical level.
+a technical level.
 
 Arrangement of code
 -------------------
-Since ``code'' may denote several different entities, the place ``where''
-some piece of code is located differs according to the context in question.
+Since the term ``code'' may denote several different kinds of entities, the place
+_where_ some piece of code is located differs according to the context in question.
 
 Visibility vs Timing: the translation unit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -20,14 +20,14 @@ To start with, when it comes to building code in C/C++, the fundamental entity
 is _a single translation unit_. Assembler code is emitted while the compiler
 progresses through a translation unit. Each translation unit is self contained
 and represents a path of definition and understanding. Each translation unit
-starts anew at a state of complete ignorance, at the end leading to a fully
+starts out anew at a state of complete ignorance, at the end leading to a fully
 specified, coherent operational structure.
 
 Within this _definition of a coded structure_, there is an inherent tension
 between the _absoluteness_ of a definition (a definition in mathematical sense
 can not be changed, once given) and the _order of spelling out_ this definition.
-When described in such an abstract way, these observations might be deemed self evident
-and trivial, but let's just consider the following complications in practice...
+When described in such an abstract way, this kind of observation might be deemed
+self evident and trivial, but let's just consider the following complications in practice...
 
 - Headers are included into multiple translation units. Which means, they appear
   in several disjoint contexts, and must be written in a way independent of the
@@ -60,19 +60,126 @@ and trivial, but let's just consider the following complications in practice...
 Now the quest is to make _good use_ of these various ways of defining things.
 We want to write code which clearly conveys its meaning, without boring the
 reader with tedious details not necessary to understand the main point in
-question. And at the same time we want to write code which is easy to
-understand, easy to write and can be altered, extended and maintained.
-footnote:[Put blatantly, a ``simple clean language'' without any means of expression
+question. And at the same time, we want to write code which is easy to
+understand, easy to write and can be altered, extended and maintained.footnote:[to put
+it blatantly, a ``simple clean language'' without any means of expression
 would not be of much help. All the complexities of reality would creep into the usage
-of our »ideal« language, and, even worse, be mixed up there with the entropy of
-doing the same things several times in a different way.]
+of our »ideal« language, and, even worse, be mixed up there with the all the entropy
+produced by doing the same things several times a different way.]
 
 Since it is really hard to reconcile all these conflicting goals, we are bound
 to rely on *patterns of construction*, which are known to work out well in
 this regard.
 
-[yellow-background]#to be written#
-Import order, forward decls, placement of ctors, wrappers, PImpl
+Imports and import order
+^^^^^^^^^^^^^^^^^^^^^^^^
+When we refer to other definitions by importing headers, these imports should be
+spelled out precisely to the point. Every relevant facility used in a piece of code
+must be reflected by the corresponding `#import` statement, yet there should not be any
+spurious imports. Ideally, just by reading the prologue of a source file, the reader should
+gain a clear understanding about the dependencies of this code. The standards are somewhat
+different for header files, since every user of this header gets these imports too. Each
+import incurs cost for the user -- so the _header_ should mention only those imports
+
+- which are really necessary to spell out our definition
+- which are likely to be useful for the _typical standard use_ of our definition
+
+Imports are to be listed in a strict order: *always start with our own references*,
+preferably starting with the facility most ``on topic''. Besides, for rather fundamental
+library headers, it is a good idea to start with a very fundamental header, like e.g. 'lib/error.hpp'.
+Of course, these widely used fundamental headers need to be carefully crafted, since the leverage
+of any other include pulled in through these headers is high.
+
+Any imports regarding *external or system libraries are given in a second block*, after our
+own headers. This discipline opens the possibility for our own headers to configure or modify
+some system facilities, in case the need arises. It is desirable for headers to be written
+in a way independent of the include order. But in some, rare cases we need to rely on a
+specific order of include. In such cases, it is a good idea to encode this specific order
+right into some very fundamental header, so it gets fixed and settled early in the include
+processing chain. Our 'gui/gtk-base.hpp', as used by 'gui/gtk-lumiera.hpp' is a good example.
+
+Forward declarations
+^^^^^^^^^^^^^^^^^^^^
+We need the full definition of an entity whenever we need to know its precise memory layout,
+be it to allocate space, to pass an argument by-value, or to point into some filed within
+a struct, array or object. The full definition may be preceded by an arbitrary number of
+redundant, equivalent declarations. We _do not actually need_ a full definition for any
+use _not dealing with the space or memory layout_ of an entity. Especially, handling
+some element by pointer or reference, or spelling out a function signature to take
+this entity other than by-value, does _not require a full definition_.
+
+Exploiting this fact allows us largely to reduce the load of dependencies, especially
+when it comes to ``subsystem'' or ``package'' headers, which define the access
+point to some central facility. Such headers should start with a list of the relevant
+core entities of this subsystem, but only in the form of ``lightweight'' forward declarations.
+Because, anyone actually to use _one of these_ participants, is bound to include the specific
+header of this element anyway; all other users may safely skip the efforts and transitive
+dependencies necessary to spell out the full definition of stuff not actually used and needed.
+
+In a similar vein, a façade interface does not actually need to pull in definitions for all
+the entities it is able to orchestrate. In most cases, it is sufficient to supply suitable
+and compatible `typedef`s in the public part of the interface, just to the point that we're
+able to spell out the bare API function signatures without compilation error.
+
+Placement of constructors
+^^^^^^^^^^^^^^^^^^^^^^^^^
+At the point, where a ctor is actually invoked, we require the full definition of the element
+about to be created. Consequently, at the place, where the ctor itself is _defined_ (not just
+declared), the full definition of _all the members_ of a class plus the full definition of
+all base classes is required. The impact of moving this point down into a single implementation
+translation unit can be huge, compared to incurring the same cost in each and every other
+translation unit just _using_ an entity.
+
+Yet there is a flip side of the coin: Whenever the compiler sees the full definition of an
+entity, it is able to inline operations. And the C\++ compiler uses elaborate metrics
+to judge the feasibility of inlining. Especially when almost all ctor implementations are
+trivial (which is the case when writing good C++ style code), the runtime impact can be
+huge, basically boiling down a whole pile of calls and recursive invocations into precisely
+zero assembler code to be generated. This way, abstraction barriers can evaporate
+to nothingness. So we're really dealing with a run time vs. development time
+and code size tradeoff here.
+
+On a related note: care has to be taken whenever a templated class defines virtual methods.
+Each instantiation of the template will cause the compiler to emit a function which generates
+the VTable, together with code for each of the virtual functions. This effect is known as
+``template code bloat''.
+
+The PImpl pattern
+^^^^^^^^^^^^^^^^^
+It is is the very nature of a good design pattern, the reason why it is remembered and applied
+over and over again: to allow otherwise destructive forces to move past each other in a
+seemingly ``friction-less'' way. In our case, there is a design pattern known to resolve
+the high tension and potential conflict inherent to the situations and issues described above.
+And, in addition, it circumvents the lack of a real interface definition construct in C++ elegantly:
+
+Whenever a facility has to offer an outward façade for the client, while at the same time engaging
+into heavy weight implementation activities, then you may split this entity into an interface shell
+and a private implementation delegate.footnote:[the common name for this pattern, »PImpl« means
+``point-to-implementation''] The interface part is defined in the header, fully eligible
+for inlining. It might even be generic -- templated to adapt to a wide array of parameter types.
+The implementation of the API functions is also given inline, and just performs the necessary
+administrative steps to accept the given parameters, before passing on the calls to the
+private implementation delegate. This implementation object is managed by (smart) pointer,
+so all of the dependencies and complexities of the implementation is moved into a single
+dedicated translation unit, which may even be reshaped and reworked without the need to
+recompile the usage site.
+
+Wrappers and opaque holders
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+These constructs serve a similar purpose: To segregate concerns, together with the related
+dependencies and overhead. They, too, represent some trade-off: a typically very intricate
+library construct is traded for a lean and flexible construction at usage site.
+
+A wrapper (smart-pointer or smart handle), based on the ability of C++ to invoke ctors and
+dtors of stack-allocated values and object members automatically, can be used so push some
+cross-cutting concern into a separate code location, together with all the accompanying
+management facilities and dependencies, so the actual ``business code'' remains untainted.
+
+In a related, but somewhat different style, an opaque holder allows to ``piggyback'' a value
+without revealing the actual implementation type. When hooked this way behind a strategy interface,
+extended compounds of implementation facilities can be secluded into a dedicated facility, without
+incurring dependency overhead or tight coupling or even in-depth knowledge onto the client, yet
+typesafe and with automatic tracking for clean-up and failure management.
 
 
 Code size and Code Bloat
@@ -188,7 +295,7 @@ This way, we end up with a rather elaborate start-up sequence, where the applica
 works out it's own installation location and establishes all the further resources
 actively step by step
 
-. the first challenge are all the parts of the application built as dynamic libraries;
+. the first challenge is posed by the parts of the application built as dynamic libraries;
   effectively most of the application code resides in some shared modules. Since we
   most definitively want one global link step in the build process, where unresolved
   symbols will be spotted, and we do want a coherent application core, so we use
@@ -306,7 +413,7 @@ _overriding mechanisms_ for library resolution, one for the user, one for the de
 
 Based on this situation, the _new-style d-tags_ were designed to implement a different
 precedence hierarchy. Whenever the new d-tags are enabled,footnote:[the `--enable-new-dtags`
-linker flag is default in many current distributions, and especially in the »gold« linker.]
+linker flag is default in many current distributions, and especially with the »gold« linker.]
 the presence of a `DT_RUNPATH` tag in the `.dynamic` section of an ELF binary completely disables
 the effect of any `DT_RPATH`. Moreover, the `LD_LIBRARY_PATH` is automatically disabled, whenever
 a binary is installed as _set-user-ID_ or _set-group-ID_ -- which closes a blatant security loophole.
