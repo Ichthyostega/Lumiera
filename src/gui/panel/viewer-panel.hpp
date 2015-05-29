@@ -1,5 +1,5 @@
 /*
-  viewer-panel.hpp  -  Definition of the viewer panel            
+  VIEWER-PANEL.hpp  -  Dockable panel to hold the video display widgets and controls            
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,59 +19,43 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file viewer-panel.hpp
  ** This file contains the definition of the viewer panel
  */
 
-#ifndef VIEWER_PANEL_HPP
-#define VIEWER_PANEL_HPP
+
+#ifndef GUI_PANEL_VIEWER_PANEL_H
+#define GUI_PANEL_VIEWER_PANEL_H
 
 
-#include "gui/panels/panel.hpp"
-#include "gui/widgets/video-display-widget.hpp"
+#include "gui/panel/panel.hpp"
+#include "gui/widget/video-display-widget.hpp"
 
-namespace gui {
-namespace panels {
-
-/**
- * A panel to display the video output.
- */
-class ViewerPanel : public Panel
-{
-public:
-  /**
-   * Contructor.
-   * @param panel_manager The owner panel manager widget.
-   * @param dock_item The GdlDockItem that will host this panel.
-   */
-  ViewerPanel(workspace::PanelManager &panel_manager,
-    Gdl::DockItem &dock_item);
+namespace gui  {
+namespace panel{
   
   /**
-   * Get the title of the panel.
-   * @return Returns a pointer to the string title of the panel.
+   * A panel to display the video output.
    */
-  static const char* get_title();
+  class ViewerPanel
+    : public Panel
+    {
+    public:
+      ViewerPanel (workspace::PanelManager&, Gdl::DockItem&);
+      
+      static const char* getTitle();
+      static const gchar* getStockID();
+      
+      
+    protected:
+      void on_frame(void *buffer);
+      
+    protected:
+      
+      /** widget to display the video content */
+      widget::VideoDisplayWidget display_;
+    };
   
-  /**
-   * Get the stock id for this type panel.
-   * @return Returns a pointer to the string stock id of the panel.
-   */
-  static const gchar* get_stock_id();
-  
-protected:
-
-  void on_frame(void *buffer);
-
-protected:
-
-  /**
-   * The video display widget, which will display the video.
-   */
-  widgets::VideoDisplayWidget display;
-};
-
-}   // namespace panels
-}   // namespace gui
-
-#endif // VIEWER_PANEL_HPP
+}}// namespace gui::panel
+#endif /*GUI_PANEL_VIEWER_PANEL_H*/

@@ -1,5 +1,5 @@
 /*
-  timeline-group-track.hpp  -  Declaration of the timeline group track object
+  TIMELINE-GROUP-TRACK.hpp  -  Declaration of the timeline group track object
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,33 +19,33 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-/** @file widgets/timeline/timeline-group-track.hpp
- ** This file contains the definition of group track timeline objects
- */
 
-#ifndef TIMELINE_GROUP_TRACK_HPP
-#define TIMELINE_GROUP_TRACK_HPP
 
-#include "gui/widgets/timeline/timeline-track.hpp"
+#ifndef GUI_WIDGET_TIMELINE_GROUP_TRACK_H
+#define GUI_WIDGET_TIMELINE_GROUP_TRACK_H
+
+#include "gui/widget/timeline/timeline-track.hpp"
 #include "gui/model/group-track.hpp"
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
   
-class GroupTrack : public timeline::Track
-{
-public:
-  GroupTrack (TimelineWidget &timeline_widget,
-              shared_ptr<model::GroupTrack> track);
-  
-  void draw_track (Cairo::RefPtr<Cairo::Context> cairo,
-                   TimelineViewWindow* constwindow)  const;
+  class GroupTrack
+    : public timeline::Track
+    {
+    public:
+      GroupTrack (TimelineWidget &timeline_widget,
+                  shared_ptr<model::GroupTrack> track);
+      
+      void
+      draw_track (Cairo::RefPtr<Cairo::Context> cairo,
+                  TimelineViewWindow* constwindow)  const;
+        
+    protected:
+      void on_child_list_changed();
+    };
     
-protected:
-  void on_child_list_changed();
-};
-
-
-}}}   // namespace gui::widgets::timeline
-#endif // TIMELINE_GROUP_TRACK_HPP
+    
+}}}// namespace gui::widget::timeline
+#endif /*GUI_WIDGET_TIMELINE_GROUP_TRACK_H*/

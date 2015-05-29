@@ -21,34 +21,33 @@
 * *****************************************************/
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/panels/assets-panel.hpp"
+#include "gui/panel/assets-panel.hpp"
 
-namespace gui {
-namespace panels {
-
-AssetsPanel::AssetsPanel(workspace::PanelManager &panel_manager,
-    Gdl::DockItem &dock_item) :
-  Panel(panel_manager, dock_item, get_title(), get_stock_id())
-{
-  notebook.append_page(media, _("Media"));
-  notebook.append_page(clips, _("Clips"));
-  notebook.append_page(effects, _("Effects"));
-  notebook.append_page(transitions, _("Transitions"));
-
-  pack_start(notebook);
-}
-
-const char*
-AssetsPanel::get_title()
-{
-  return _("Assets");
-}
-
-const gchar*
-AssetsPanel::get_stock_id()
-{
-  return "panel_assets";
-}
-
-}   // namespace panels
-}   // namespace gui
+namespace gui  {
+namespace panel{
+  
+  AssetsPanel::AssetsPanel(workspace::PanelManager& panelManager, Gdl::DockItem& dockItem)
+    : Panel(panelManager, dockItem, getTitle(), getStockID())
+    {
+      notebook_.append_page(media_, _("Media"));
+      notebook_.append_page(clips_, _("Clips"));
+      notebook_.append_page(effects_, _("Effects"));
+      notebook_.append_page(transitions_, _("Transitions"));
+      
+      pack_start(notebook_);
+    }
+  
+  const char*
+  AssetsPanel::getTitle()
+  {
+    return _("Assets");
+  }
+  
+  const gchar*
+  AssetsPanel::getStockID()
+  {
+    return "panel_assets";
+  }
+  
+  
+}}// namespace gui::panel

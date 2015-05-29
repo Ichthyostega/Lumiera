@@ -1,5 +1,5 @@
 /*
-  timeline-group-track.cpp  -  Implementation of the timeline group track object
+  TimelineGroupTrack  -  Implementation of the timeline group track object
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,41 +21,40 @@
 * *****************************************************/
 
 
-#include "gui/widgets/timeline/timeline-group-track.hpp"
-#include "gui/widgets/timeline-widget.hpp"
+#include "gui/widget/timeline/timeline-group-track.hpp"
+#include "gui/widget/timeline-widget.hpp"
 
 using namespace Gtk;
 using namespace sigc;
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
   
-GroupTrack::GroupTrack(TimelineWidget &timeline_widget,
-  std::shared_ptr<model::GroupTrack> track) :
-  Track(timeline_widget, track)
-{ 
-  REQUIRE (track);
+  GroupTrack::GroupTrack (TimelineWidget &timeline_widget,
+                          std::shared_ptr<model::GroupTrack> track)
+    : Track(timeline_widget, track)
+    { 
+      REQUIRE (track);
+      
+      // Receive notifications of changes to the tracks
+      track->get_child_track_list().signal_changed().connect(
+        sigc::mem_fun( this, &GroupTrack::on_child_list_changed ));
+    }
   
-  // Receive notifications of changes to the tracks
-  track->get_child_track_list().signal_changed().connect(
-    sigc::mem_fun( this, &GroupTrack::on_child_list_changed ) );
-}
-
-void
-GroupTrack::on_child_list_changed()
-{
-  timelineWidget.on_track_list_changed();
-}
-
-void
-GroupTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
-    TimelineViewWindow* const window) const
-{
-  (void)cairo;
-  (void)window;
-}
+  void
+  GroupTrack::on_child_list_changed()
+  {
+    timelineWidget.on_track_list_changed();
+  }
   
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+  void
+  GroupTrack::draw_track (Cairo::RefPtr<Cairo::Context> cairo,
+                          TimelineViewWindow* const window)  const
+  {
+    (void)cairo;
+    (void)window;
+  }
+  
+  
+}}}// namespace gui::widget::timeline

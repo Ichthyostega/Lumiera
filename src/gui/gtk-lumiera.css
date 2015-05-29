@@ -107,7 +107,8 @@ GtkWindow {
     background-color: @disabled_bg_color;
 }
 
-/*
+/* ==============/////TODO left-over from the old GTK-2 stylesheet
+
 style "medium_text"
 {
 

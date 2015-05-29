@@ -1,5 +1,5 @@
 /*
-  timeline-clip-track.hpp  -  Declaration of the timeline clip track object
+  TIMELINE-CLIP-TRACK.hpp  -  Declaration of the timeline clip track object
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,24 +19,25 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /**
- * @file widgets/timeline/timeline-clip-track.hpp
- * This file contains the definition of timeline track objects which
- * contain clips.
+ * @file timeline-clip-track.hpp
+ * timeline track objects which contain clips.
  */
 
-#ifndef TIMELINE_CLIP_TRACK_HPP
-#define TIMELINE_CLIP_TRACK_HPP
 
-#include "gui/widgets/timeline/basic-draw-strategy.hpp"
-#include "gui/widgets/timeline/timeline-track.hpp"
+#ifndef GUI_WIDGET_TIMELINE_CLIP_TRACK_H
+#define GUI_WIDGET_TIMELINE_CLIP_TRACK_H
+
+#include "gui/widget/timeline/basic-draw-strategy.hpp"
+#include "gui/widget/timeline/timeline-track.hpp"
 #include "gui/model/clip-track.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <vector>
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
   
   using lib::time::Time;
@@ -45,75 +46,68 @@ namespace timeline {
   class TimelineViewWindow;
   
   
-  class ClipTrack : public timeline::Track
-  {
-  public:
-    /**
-     * Constructor.
-     */
-    ClipTrack(TimelineWidget &timelineWidget,
-              shared_ptr<model::ClipTrack> track);
+  class ClipTrack
+    : public timeline::Track
+    {
+    public:
+      ClipTrack(TimelineWidget& timelineWidget,
+                shared_ptr<model::ClipTrack> track);
+      
+      /** Draw the track in the timeline. */
+      void
+      draw_track (Cairo::RefPtr<Cairo::Context> cairo,
+                  TimelineViewWindow* const window)  const;
+      
+      /**
+       * Gets the clip that is occupying the given time.
+       * If there is no track, return a NULL pointer.
+       * @param the given time
+       */
+      shared_ptr<timeline::Clip>
+      getClipAt(Time position) const;
+      
+    private:
+      /**
+       * Ensures timeline UI clips have been created for every model clip in track.
+       */
+      void
+      createTimelineClips();
+      
+      /**
+       * Gets the modelTrack as a ClipTrack.
+       */
+      shared_ptr<model::ClipTrack>
+      getModelTrack ();
+      
+      /**
+       * An event handler that receives notifications
+       * for when the models clip list has been changed.
+       */
+      void
+      onClipListChanged();
+      
+      /**
+       * Removes any UI clips which no longer have corresponding model clips present in the
+       * sequence.
+       */
+      void
+      removeOrphanedClips();
+      
+      /**
+       * Update the attached timeline clips.
+       */
+      void
+      updateClips();
+      
+      /**
+       * The clipMap maps model clips to timeline widget clips
+       * which are responsible for the UI representation of a clip.
+       */
+      std::map<shared_ptr<model::Clip>,
+               shared_ptr<timeline::Clip>>
+        clipMap;
+    };
   
-    /**
-     * Draw the track in the timeline.
-     */
-    void
-    draw_track(Cairo::RefPtr<Cairo::Context> cairo,
-      TimelineViewWindow* const window) const;
-
-    /**
-     * Gets the clip that is occupying the given time. If there is no track, return a NULL
-     * pointer.
-     * @param the given time
-     */
-    shared_ptr<timeline::Clip>
-    getClipAt(Time position) const;
-
-  private:
-
-    /**
-     * Ensures timeline UI clips have been created for every model clip in track.
-     */
-    void
-    createTimelineClips();
-
-    /**
-     * Gets the modelTrack as a ClipTrack.
-     */
-    shared_ptr<model::ClipTrack>
-    getModelTrack ();
-
-    /**
-     * An event handler that receives notifications for when the models clip list has been
-     * changed.
-     */
-    void
-    onClipListChanged();
-
-    /**
-     * Removes any UI clips which no longer have corresponding model clips present in the
-     * sequence.
-     */
-    void
-    removeOrphanedClips();
-
-    /**
-     * Update the attached timeline clips.
-     */
-    void
-    updateClips();
-
-    /**
-     * The clipMap maps model clips to timeline widget clips which are responsible for the
-     * UI representation of a clip.
-     */
-    std::map<shared_ptr<model::Clip>,
-             shared_ptr<timeline::Clip> >
-      clipMap;
-  };
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
-
-#endif // TIMELINE_CLIP_TRACK_HPP
+  
+}}}// namespace gui::widget::timeline
+#endif /*GUI_WIDGET_TIMELINE_CLIP_TRACK_H*/

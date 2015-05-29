@@ -33,7 +33,7 @@ namespace controller {
   
   
   PlaybackController::PlaybackController()
-    : playing(false)
+    : playing_(false)
     , viewerHandle_(0)
     { }
   
@@ -41,50 +41,50 @@ namespace controller {
   void
   PlaybackController::play()
   {
-    if (playHandle)
+    if (playHandle_)
       {
-        playHandle.play(true);
-        playing = true;
+        playHandle_.play(true);
+        playing_ = true;
       }
     else if (viewerHandle_)
       try
         {
-          playHandle =  lumiera::DummyPlayer::facade().start (viewerHandle_);
-          playing = true;
+          playHandle_ =  lumiera::DummyPlayer::facade().start (viewerHandle_);
+          playing_ = true;
         }
       catch (lumiera::error::State& err)
         {
           WARN (gui, "failed to start playback: %s" ,err.what());
           lumiera_error();
-          playing = false;
+          playing_ = false;
         }
   }
   
   void
   PlaybackController::pause()
   {
-    if (playHandle)
-      playHandle.play(false);
-    playing = false;
+    if (playHandle_)
+      playHandle_.play(false);
+    playing_ = false;
   }
   
   void
   PlaybackController::stop()
   {
-    playHandle.close();
-    playing = false;
+    playHandle_.close();
+    playing_ = false;
   }
   
   bool
   PlaybackController::is_playing()
   {
-    return playing;
+    return playing_;
   }
   
   
   
   void
-  PlaybackController::use_display (LumieraDisplaySlot display)
+  PlaybackController::useDisplay (LumieraDisplaySlot display)
   {
     viewerHandle_ = display;
   }

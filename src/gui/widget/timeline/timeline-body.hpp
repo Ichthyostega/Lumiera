@@ -24,11 +24,11 @@
  ** This file contains the definition of timeline body widget
  */
 
-#ifndef WIDGETS_TIMELINE_BODY_H
-#define WIDGETS_TIMELINE_BODY_H
+#ifndef GUI_WIDGET_TIMELINE_BODY_H
+#define GUI_WIDGET_TIMELINE_BODY_H
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/widgets/timeline/timeline-tool.hpp"
+#include "gui/widget/timeline/timeline-tool.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -39,7 +39,7 @@ namespace model {
 class Track;
 }
   
-namespace widgets {
+namespace widget {
 
 class TimelineWidget;
 
@@ -67,7 +67,7 @@ public:
    * @param timeline_widget A reference to the owner widget of this
    * ruler.
    */
-  TimelineBody(gui::widgets::TimelineWidget &timeline_widget);
+  TimelineBody(gui::widget::TimelineWidget &timeline_widget);
   
   virtual ~TimelineBody();
   
@@ -201,7 +201,7 @@ private:
   float selectionAlpha;
   Cairo::RefPtr<Cairo::SolidPattern> playbackPointColour;
   
-  gui::widgets::TimelineWidget &timelineWidget;
+  gui::widget::TimelineWidget &timelineWidget;
   shared_ptr<TimelineState> timelineState;
   
 
@@ -209,9 +209,7 @@ private:
   friend class ArrowTool;
   friend class IBeamTool;
 };
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
-
-#endif // TIMELINE_BODY_HPP
+  
+  
+}}}// namespace gui::widget::timeline
+#endif /*GUI_WIDGET_TIMELINE_BODY_H*/

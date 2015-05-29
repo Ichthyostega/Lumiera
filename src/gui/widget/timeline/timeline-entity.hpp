@@ -1,5 +1,5 @@
 /*
-  timeline-entity.hpp  -  Declaration of the timeline entity class
+  TIMELINE-ENTITY.hpp  -  Declaration of the timeline entity class
 
   Copyright (C)         Lumiera.org
     2010,               Stefan Kangas <skangas@skangas.se>
@@ -18,14 +18,15 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+*/
+
 
 /** @file timeline-entity.hpp
- ** Declares the Timeline Entity class.
+ ** any UI element that can be placed on the timeline.
  */
 
-#ifndef TIMELINE_ENTITY_HPP
-#define TIMELINE_ENTITY_HPP
+#ifndef GUI_WIDGET_TIMELINE_ENTITY_H
+#define GUI_WIDGET_TIMELINE_ENTITY_H
 
 #include "gui/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
@@ -36,7 +37,7 @@
 
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
   
   using lib::time::Time;
@@ -45,49 +46,46 @@ namespace timeline {
   
   class DrawStrategy;
   class TimelineViewWindow;
-
+  
   /**
    * Base class for timeline entities.
    * Everything that can be placed on the timeline is a timeline Entity.
    */
-  class Entity {
-  protected:
-
-    Entity (shared_ptr<timeline::DrawStrategy> drawStrategy);
-
-    virtual ~Entity();
-
-  public:
-
-    
-    virtual void
-    draw(Cairo::RefPtr<Cairo::Context> cairo,
-      TimelineViewWindow* const window) const;
-
-    bool
-    getEnabled () const;
-
-    virtual Time
-    getBegin () const = 0;
-    
-    virtual Time
-    getEnd () const = 0;
-
-    virtual std::string
-    getName () const = 0;
-
-    void
-    setEnabled(bool selected);
-
-  private:
-
-    bool enabled;
-
-    shared_ptr<timeline::DrawStrategy> drawStrategy;
-  };
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
-
-#endif // TIMELINE_ENTITY_HPP
+  class Entity
+    {
+      bool enabled_;
+      shared_ptr<timeline::DrawStrategy> drawStrategy_;
+      
+    protected:
+      
+      Entity (shared_ptr<timeline::DrawStrategy> drawStrategy);
+      
+      virtual ~Entity();
+      
+    public:
+      
+      
+      virtual void
+      draw(Cairo::RefPtr<Cairo::Context> cairo,
+        TimelineViewWindow* const window) const;
+      
+      bool
+      getEnabled () const;
+      
+      virtual Time
+      getBegin () const = 0;
+      
+      virtual Time
+      getEnd () const = 0;
+      
+      virtual std::string
+      getName () const = 0;
+      
+      void
+      setEnabled(bool selected);
+      
+    };
+  
+  
+}}}// namespace gui::widget::timeline
+#endif /*GUI_WIDGET_TIMELINE_ENTITY_H*/

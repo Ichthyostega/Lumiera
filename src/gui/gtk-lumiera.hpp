@@ -60,48 +60,48 @@
 
 
 namespace gui {
-
-using std::shared_ptr;
-
-
-
-/* ====== The Application Class ====== */
-
-/**
- *  Top level entry point: The Lumiera GTK UI.
- */
-class GtkLumiera
-  : boost::noncopyable
-  {
-    /** Central application window manager instance */
-    WindowManager windowManagerInstance_;
-    
-    
-  public:
-    /** access the the global application object */
-    static GtkLumiera& application();
-    
-    
-    
-    /** start up the GUI and run the event thread */
-    void main(int argc, char *argv[]);
-    
-    WindowManager& windowManager();
-    
-    
-    /** the name of the application */
-    static cuString getAppTitle();
-    
-    static cuString getAppVersion();
-    
-    static cuString getCopyright();
-    
-    static cuString getLumieraWebsite();
-    
-    /** alphabetical list of the application's authors */
-    static const std::vector<uString> getLumieraAuthors();
-    
-  };
-
+  
+  using std::shared_ptr;
+  
+  
+  
+  /* ====== The Application Class ====== */
+  
+  /**
+   *  Top level entry point: The Lumiera GTK UI.
+   */
+  class GtkLumiera
+    : boost::noncopyable
+    {
+      /** Central application window manager instance */
+      WindowManager windowManagerInstance_;
+      
+      
+    public:
+      /** access the the global application object */
+      static GtkLumiera& application();
+      
+      
+      
+      /** start up the GUI and run the event thread */
+      void main(int argc, char *argv[]);
+      
+      WindowManager& windowManager();
+      
+      
+      /** the name of the application */
+      static cuString getAppTitle();
+      
+      static cuString getAppVersion();
+      
+      static cuString getCopyright();
+      
+      static cuString getLumieraWebsite();
+      
+      /** alphabetical list of the application's authors */
+      static const std::vector<uString> getLumieraAuthors();
+      
+    };
+  
 }// namespace gui
 #endif

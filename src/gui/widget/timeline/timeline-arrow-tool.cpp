@@ -21,10 +21,10 @@
 * *****************************************************/
 
 
-#include "gui/widgets/timeline/timeline-arrow-tool.hpp"
+#include "gui/widget/timeline/timeline-arrow-tool.hpp"
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
   
   using lib::time::Time;
@@ -57,7 +57,7 @@ namespace timeline {
     // Convert the mouse click position to a Time
     shared_ptr<TimelineState> state = timelineBody.getTimelineWidget().get_state();
     REQUIRE(state);
-    TimelineViewWindow const& window = state->get_view_window();
+    TimelineViewWindow const& window = state->getViewWindow();
     Time tpoint = window.x_to_time(mousePoint.get_x());
 
     // Get the clip, if any
@@ -98,7 +98,6 @@ namespace timeline {
       timelineBody.getTimelineWidget().get_hovering_track());
     return track;
   }
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+  
+  
+}}}// namespace gui::widget::timeline

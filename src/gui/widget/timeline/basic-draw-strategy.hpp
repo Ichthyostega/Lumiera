@@ -20,31 +20,30 @@
 
 * *****************************************************/
 
-/** @file basic-draw-strategy.hpp
- ** Declares the Timeline Entity draw strategy class.
- */
 
-#ifndef WIDGETS_TIMELINE_BASIC_DRAW_STRATEGY_H
-#define WIDGETS_TIMELINE_BASIC_DRAW_STRATEGY_H
 
-#include "gui/widgets/timeline/draw-strategy.hpp"
+#ifndef GUI_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H
+#define GUI_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H
+
+#include "gui/widget/timeline/draw-strategy.hpp"
+
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
-
+  
   class BasicDrawStrategy
     : public DrawStrategy
     {
     public:
-  
+      
       BasicDrawStrategy() { };
-  
+      
       void
-      draw (const Entity &entity,
-            Cairo::RefPtr<Cairo::Context> cr,
-            TimelineViewWindow* const window) const;
+      draw (Entity const& entity
+           ,Cairo::RefPtr<Cairo::Context> cr
+           ,TimelineViewWindow* const window)  const;
     };
-
-}}}    // namespace gui::widgets::timeline
-#endif // TIMELINE_BASIC_DRAW_STRATEGY_HPP
+  
+}}}// namespace gui::widget::timeline
+#endif /*GUI_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H*/

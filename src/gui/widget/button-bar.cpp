@@ -1,5 +1,5 @@
 /*
-  button-bar.cpp  -  Implementation of the button bar widget
+  ButtonBar  -  button bar widget
 
   Copyright (C)         Lumiera.org
     2009,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,26 +20,26 @@
 
 * *****************************************************/
 
-#include "gui/widgets/button-bar.hpp"
+
+#include "gui/widget/button-bar.hpp"
 #include "include/logging.h"
 
-#include <algorithm>
-
-using namespace Gtk;
 
 namespace gui {
-namespace widgets {
-
+namespace widget {
+  
   ButtonBar::ButtonBar()
   {
-    set_orientation(ORIENTATION_HORIZONTAL);
-    set_has_window(false);
+    set_orientation (Gtk::ORIENTATION_HORIZONTAL);
+    set_has_window (false);
   }
   
+  
   void
-  ButtonBar::append(Widget &widget)
+  ButtonBar::append (Widget& widget)
   {
-    pack_start(widget, PACK_SHRINK);
+    pack_start(widget, Gtk::PACK_SHRINK);
   }
-
-}} /* gui::widgets */
+  
+  
+}}// gui::widget

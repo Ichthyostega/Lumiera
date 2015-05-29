@@ -1,5 +1,5 @@
 /*
-  controller.hpp  -  Declaration of the controller object
+  UI-BUS.hpp  -  UI model and control backbone
 
   Copyright (C)         Lumiera.org
     2009,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,15 +21,15 @@
 
 */
 
-/** @file controller.hpp
+/** @file ui-bus.hpp
  ** The top level UI controller.
  ** 
  ** @todo as of 1/2015, this needs to be reshaped ////////////////////TICKET #959
  */
 
 
-#ifndef CONTROLLER_HPP
-#define CONTROLLER_HPP
+#ifndef GUI_UI_BUS_H
+#define GUI_UI_BUS_H
 
 
 #include "gui/gtk-lumiera.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
@@ -37,31 +37,26 @@
 
 
 namespace gui {
-
-namespace model {
-class Project;
-} // namespace model
+  namespace model {
+    class Project;
+  } // namespace model
+    
+  namespace controller { 
+    
+    /**
+     * @todo needs to be reshaped for communication with Proc-Layer /////////////////TICKET #959
+     */
+    class Controller
+      {
+        model::Project&    project_;
+        PlaybackController playback_;
+        
+      public:
+        Controller (model::Project&);
+      
+        PlaybackController& get_playback_controller();
+      };
   
-namespace controller { 
-
-/**
- * @todo needs to be reshaped for communication with Proc-Layer /////////////////TICKET #959
- */
-class Controller
-{
-public:
-  Controller(model::Project &modelProject);
-
-  PlaybackController& get_playback_controller();
-
-private:
-  model::Project &project;
-  
-  PlaybackController playback;
-};
-
-}   // namespace controller
-}   // namespace gui
-
-#endif // CONTROLLER_HPP
+}}// namespace gui::controller
+#endif /*GUI_UI_BUS_H*/
 

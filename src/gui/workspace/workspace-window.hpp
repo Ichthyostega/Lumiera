@@ -1,5 +1,5 @@
 /*
-  workspace-window.hpp  -  Definition of the main workspace window object
+  WORKSPACE-WINDOW.hpp  -  the main workspace window of the GUI
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,90 +19,93 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file workspace-window.hpp
  ** This file contains the definition of the main workspace window
  ** parent, which is the toplevel parent of the whole workspace.
- **
+ ** 
  ** @see actions.hpp
  */
 
-#ifndef WORKSPACE_WINDOW_HPP
-#define WORKSPACE_WINDOW_HPP
+#ifndef GUI_WORKSPACE_WORKSPACE_WINDOW_H
+#define GUI_WORKSPACE_WORKSPACE_WINDOW_H
 
 
 #include "gui/workspace/actions.hpp"
 #include "gui/workspace/panel-manager.hpp"
 
-#include "gui/panels/assets-panel.hpp"
-#include "gui/panels/viewer-panel.hpp"
-#include "gui/panels/timeline-panel.hpp"
+#include "gui/panel/assets-panel.hpp"
+#include "gui/panel/viewer-panel.hpp"
+#include "gui/panel/timeline-panel.hpp"
 
 #include <gtkmm.h>
 
-using namespace gui::panels;
+using namespace gui::panel;
 
 namespace gui {
-
-namespace model {
-  class Project;
-} // model
-
-namespace controller {
-  class Controller;
-} // model
-
-namespace workspace {
-
-/** 
-* The main lumiera workspace window
-*/
-class WorkspaceWindow : public Gtk::Window
-{
-public:
-  WorkspaceWindow(gui::model::Project &source_project,
-    gui::controller::Controller &source_controller);
+  namespace model {
+    class Project;
+  }
+  namespace controller {
+    class Controller;
+  }
   
-  ~WorkspaceWindow();
+  namespace workspace {
   
-  gui::model::Project& get_project();
   
-  gui::controller::Controller& get_controller();
   
-  PanelManager& get_panel_manager();
-
-  void set_close_window_sensitive(bool enable);
-
-private:
-  void create_ui();
-  
-  /* ===== Model ===== */
-private:
-  gui::model::Project &project;
-
-  /* ===== Controller ===== */
-private:
-  gui::controller::Controller &controller;
-
-  /* ===== UI ===== */
-private:
-  Glib::RefPtr<Gtk::UIManager> uiManager;
-  Gtk::VBox baseContainer;
-  Gtk::HBox dockContainer;
-  
-  PanelManager panelManager;
-  
-  //----- Status Bar -----//
-  Gtk::Statusbar statusBar;
-       
-  /* ===== Helpers ===== */
-private:
   /**
-   * The instantiation of the actions helper class, which
-   * registers and handles user action events */
-  Actions actions;
-};
-
-}   // namespace workspace
-}   // namespace gui
-
-#endif // WORKSPACE_WINDOW_HPP
+   * The main Lumiera workspace window
+   */
+  class WorkspaceWindow
+    : public Gtk::Window
+    {
+    public:
+      WorkspaceWindow(gui::model::Project& source_project
+                     ,gui::controller::Controller& source_controller);
+      
+     ~WorkspaceWindow();
+      
+      
+      gui::model::Project& getProject();
+      gui::controller::Controller& getController();
+      PanelManager& getPanelManager();
+      
+      void set_close_window_sensitive (bool enable);
+      
+      
+    private:
+      void createUI();
+      
+      
+      
+      /* ===== Model ===== */
+      gui::model::Project& project_;
+      
+      
+      /* ===== Controller ===== */
+      gui::controller::Controller& controller_;
+      
+      
+      /* ===== UI ===== */
+      Glib::RefPtr<Gtk::UIManager> uiManager_;
+      Gtk::VBox baseContainer_;
+      Gtk::HBox dockContainer_;
+      
+      PanelManager panelManager_;
+      
+      //----- Status Bar -----//
+      Gtk::Statusbar statusBar_;
+      
+      
+      /**
+       * Helper to build the menu and for
+       * registering and handling of user action events
+       */
+      Actions actions_;
+    };
+  
+  
+}}// namespace gui::workspace
+#endif /*GUI_WORKSPACE_WORKSPACE_WINDOW_H*/

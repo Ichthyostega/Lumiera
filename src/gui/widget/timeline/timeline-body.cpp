@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-#include "gui/widgets/timeline/timeline-body.hpp"
-#include "gui/widgets/timeline-widget.hpp"
+#include "gui/widget/timeline/timeline-body.hpp"
+#include "gui/widget/timeline-widget.hpp"
 #include "gui/window-manager.hpp"
 #include "gui/util/cairo-util.hpp"
 
@@ -41,7 +41,7 @@ using gui::util::CairoUtil;
 using std::shared_ptr;
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
 
 TimelineBody::TimelineBody (TimelineWidget &timelineWidget)
@@ -77,7 +77,7 @@ TimelineViewWindow&
 TimelineBody::viewWindow() const
 {
   REQUIRE(timelineState);
-  return timelineState->get_view_window();
+  return timelineState->getViewWindow();
 }
 
 TimelineWidget&
@@ -161,7 +161,7 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   if (timelineState)
     {
       // Prepare to render via cairo
-      const Allocation allocation = get_allocation();
+      // const Allocation allocation = get_allocation();                   //////TODO why was this defined; it is not needed
       Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
 
       REQUIRE(cr);
@@ -410,7 +410,7 @@ TimelineBody::draw_selection(Cairo::RefPtr<Cairo::Context> cr)
   
   REQUIRE(timelineState);
   
-  TimelineViewWindow const& window = timelineState->get_view_window();
+  TimelineViewWindow const& window = timelineState->getViewWindow();
   const int start_x = window.time_to_x(timelineState->getSelectionStart());
   const int end_x   = window.time_to_x(timelineState->getSelectionEnd());
   
@@ -526,17 +526,16 @@ TimelineBody::register_styles() const
 void
 TimelineBody::read_styles()
 {
-  backgroundColour = WindowManager::read_style_colour_property(
+  backgroundColour = WindowManager::readStyleColourProperty(
     *this, "background", 0, 0, 0);
     
-  selectionColour = WindowManager::read_style_colour_property(
+  selectionColour = WindowManager::readStyleColourProperty(
     *this, "selection", 0, 0, 0);
   get_style_property("selection_alpha", selectionAlpha);
   
-  playbackPointColour = WindowManager::read_style_colour_property(
+  playbackPointColour = WindowManager::readStyleColourProperty(
     *this, "playback_point", 0, 0, 0);
 }
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+  
+  
+}}}// namespace gui::widget::timeline

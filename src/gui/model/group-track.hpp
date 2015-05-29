@@ -20,7 +20,7 @@
 
 */
 
-/** @file widgets/timeline/group-track.hpp
+/** @file widget/timeline/group-track.hpp
  ** This file contains the definition of group track timeline objects
  */
 

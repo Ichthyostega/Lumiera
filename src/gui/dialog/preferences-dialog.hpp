@@ -26,22 +26,22 @@
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/dialogs/dialog.hpp"
+#include "gui/dialog/dialog.hpp"
 
 namespace gui {
-namespace dialogs {
+namespace dialog {
   
   
   class PreferencesDialog
     : public Gtk::Dialog
     {
-      Gtk::Notebook notebook;
+      Gtk::Notebook notebook_;
     
-      Gtk::VBox interfaceBox;
-      Gtk::ComboBox interfaceThemeCombo;
+      Gtk::VBox     interfaceBox_;
+      Gtk::ComboBox interfaceThemeCombo_;
       
     public:
-      PreferencesDialog(Gtk::Window &parent)
+      PreferencesDialog (Gtk::Window &parent)
         : Dialog(_("Preferences"), parent, true)
         {
           using namespace Gtk;
@@ -49,13 +49,13 @@ namespace dialogs {
           Box *v_box = get_vbox();
           REQUIRE (v_box != NULL);
         
-          interfaceBox.pack_start (interfaceThemeCombo, PACK_SHRINK);
-          interfaceBox.set_spacing(4);
-          interfaceBox.set_border_width(5);
+          interfaceBox_.pack_start (interfaceThemeCombo_, PACK_SHRINK);
+          interfaceBox_.set_spacing(4);
+          interfaceBox_.set_border_width(5);
         
-          notebook.append_page (interfaceBox, _("Interface"));
+          notebook_.append_page (interfaceBox_, _("Interface"));
           
-          v_box->pack_start (notebook);
+          v_box->pack_start (notebook_);
         
           // Configure the dialog
           v_box->set_spacing (BoxSpacing);

@@ -166,7 +166,7 @@ namespace gui {
 
 
 
-extern "C" { /* ================== define an lumieraorg_Gui instance ======================= */
+extern "C" { /* ================== define a lumieraorg_Gui instance ======================= */
   
   
   LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0

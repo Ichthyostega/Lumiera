@@ -1,5 +1,5 @@
 /*
-  timeline-clip.hpp  -  Declaration of the timeline clip object
+  TIMELINE-CLIP.hpp  -  Declaration of the timeline clip object
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,33 +20,34 @@
 
 */
 
-/** @file widgets/timeline/timeline-clip.hpp
- ** This file contains the definition of timeline clip object
+/** @file timeline-clip.hpp
+ ** Representation of a clip on the timeline
  */
 
-#ifndef WIDGETS_TIMELINE_CLIP_H
-#define WIDGETS_TIMELINE_CLIP_H
+#ifndef GUI_WIDGET_TIMELINE_CLIP_H
+#define GUI_WIDGET_TIMELINE_CLIP_H
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/model/clip.hpp"
 #include "include/logging.h"
 #include "lib/time/timevalue.hpp"
 
-#include "gui/widgets/timeline/draw-strategy.hpp"
-#include "gui/widgets/timeline/timeline-entity.hpp"
+#include "gui/widget/timeline/draw-strategy.hpp"
+#include "gui/widget/timeline/timeline-entity.hpp"
 
 #include <string>
 
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
   
   using std::string;
   using lib::time::Time;
-
   
-  class Clip : public Entity
+  
+  class Clip
+    : public Entity
     {
     public:
       Clip (shared_ptr<model::Clip> clip,
@@ -59,17 +60,15 @@ namespace timeline {
       
       /** Sets the selected status of the clip. */
       void setSelected (bool);
-  
+      
     private:
-  
+      
       shared_ptr<model::Clip> modelClip;
-  
-      /**
-       * True when this clip is selected in the GUI.
-       */
+      
+      /** this clip is selected in the GUI */
       bool selected;
     };
   
   
-}}}    // namespace gui::widgets::timeline
-#endif // TIMELINE_CLIP_HPP
+}}}// namespace gui::widget::timeline
+#endif /*GUI_WIDGET_TIMELINE_CLIP_H*/

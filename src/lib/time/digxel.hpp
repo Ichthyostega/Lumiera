@@ -1,5 +1,5 @@
 /*
-  TIMECODE.hpp  -  grid aligned and fixed format time specifications
+  DIGXEL.hpp  -  grid aligned and fixed format time specifications
 
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>

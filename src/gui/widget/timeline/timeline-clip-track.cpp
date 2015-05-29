@@ -1,5 +1,5 @@
 /*
-  timeline-clip-track.cpp  -  Implementation of the timeline clip track object
+  TimelineClipTrack  -  Implementation of the timeline clip track object
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,9 +20,10 @@
 
 * *****************************************************/
 
-#include "gui/widgets/timeline/timeline-clip.hpp"
-#include "gui/widgets/timeline/timeline-clip-track.hpp"
-#include "gui/widgets/timeline/timeline-view-window.hpp"
+
+#include "gui/widget/timeline/timeline-clip.hpp"
+#include "gui/widget/timeline/timeline-clip-track.hpp"
+#include "gui/widget/timeline/timeline-view-window.hpp"
 
 #include <boost/foreach.hpp>
 
@@ -32,50 +33,48 @@ using std::shared_ptr;
 using util::contains;
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
-
+  
   ClipTrack::ClipTrack (TimelineWidget &timelineWidget,
-    shared_ptr<model::ClipTrack> track) :
-    Track(timelineWidget, track)
-  {
-    REQUIRE (track);
-
-    // Connect signals
-    track->getClipList().signal_changed().connect(
-      sigc::mem_fun(this, &ClipTrack::onClipListChanged));
-
-    updateClips();
-  }
-
+                        shared_ptr<model::ClipTrack> track)
+    : Track(timelineWidget, track)
+    {
+      REQUIRE (track);
+      
+      // Connect signals
+      track->getClipList().signal_changed().connect(
+        sigc::mem_fun(this, &ClipTrack::onClipListChanged));
+      
+      updateClips();
+    }
+  
   void
-  ClipTrack::draw_track (
-    Cairo::RefPtr<Cairo::Context> cairo,
-    TimelineViewWindow* const window) const
+  ClipTrack::draw_track (Cairo::RefPtr<Cairo::Context> cairo,
+                         TimelineViewWindow* const window) const
   {
     REQUIRE (cairo);
     REQUIRE (window);
-
+    
     // Draw a rectangle to let us know it works? :-)
     cairo->rectangle(window->time_to_x(Time::ZERO), 1,
       window->time_to_x(Time(500,0)) - window->time_to_x(Time::ZERO),
       get_height() - 2);
-
+    
     cairo->set_source_rgb(0.5, 0.5, 0.5);
     cairo->fill_preserve();
-  
+    
     cairo->set_source_rgb(0.25, 0.25, 0.25);
     cairo->stroke();
-
+    
     // Draw all clips
-    std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip> >
-      pair; 
+    std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip> > pair; 
     BOOST_FOREACH (pair, clipMap)
       {
         pair.second->draw(cairo, window);
       }
   }
-
+  
   shared_ptr<timeline::Clip>
   ClipTrack::getClipAt(Time position) const
   {
@@ -86,13 +85,13 @@ namespace timeline {
         if (pair.first->isPlayingAt (position))
           return pair.second;
       }
-
+    
     // Nothing found
     return shared_ptr<timeline::Clip>();
   }
-
+  
   //// private methods
-
+  
   void
   ClipTrack::createTimelineClips()
   {
@@ -111,31 +110,31 @@ namespace timeline {
           }
       }
   }
-
+  
   shared_ptr<model::ClipTrack>
   ClipTrack::getModelTrack ()
   {
     return std::dynamic_pointer_cast<model::ClipTrack>(modelTrack);
   }
-
+  
   void
   ClipTrack::onClipListChanged ()
   {
     updateClips ();
   }
-
+  
   void
   ClipTrack::removeOrphanedClips ()
   {
     std::map< shared_ptr<model::Clip>,
               shared_ptr<timeline::Clip> >
       orphanClipMap (clipMap);
-
+    
     // Remove all clips which are still present in the sequence
     BOOST_FOREACH (shared_ptr<model::Clip> modelClip, getModelTrack()->getClipList())
       if (contains (orphanClipMap, modelClip))
         orphanClipMap.erase(modelClip);
-
+    
     // orphanClipMap now contains all the orphaned clips
     // Remove them
     std::pair< shared_ptr<model::Clip>, shared_ptr<timeline::Clip> >
@@ -152,11 +151,10 @@ namespace timeline {
   {
     // Remove any clips which are no longer present in the model
     removeOrphanedClips ();
-
+    
     // Create timeline clips from all the model clips
     createTimelineClips ();
   }
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+  
+  
+}}}// namespace gui::widget::timeline

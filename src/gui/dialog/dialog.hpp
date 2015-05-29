@@ -25,7 +25,7 @@
 #define GUI_DIALOG_DIALOG_H
 
 namespace gui {
-namespace dialogs {
+namespace dialog {
   
   /**
    * The space in pixels to pad the border of Lumiera dialog boxes.

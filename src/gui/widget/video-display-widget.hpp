@@ -21,13 +21,10 @@
 */
 
 
-/** @file video-display-widget.hpp
- ** This file contains the definition of video viewer widget
- */
 
 
-#ifndef VIDEO_DISPLAY_WIDGET_HPP
-#define VIDEO_DISPLAY_WIDGET_HPP
+#ifndef GUI_WIDGET_VIDEO_DISPLAY_WIDGET_H
+#define GUI_WIDGET_VIDEO_DISPLAY_WIDGET_H
 
 #include "gui/gtk-base.hpp"
 #include "gui/output/displayer.hpp"
@@ -36,32 +33,29 @@
 using namespace gui::output;
 
 namespace gui {
-namespace widgets {
+namespace widget {
   
   class VideoDisplayWidget
     : public Gtk::DrawingArea
     {
+      Displayer* displayer_;
+      
     public:
       VideoDisplayWidget();
-      
      ~VideoDisplayWidget();
       
-      Displayer* get_displayer() const;
+      Displayer* getDisplayer() const;
       
-      /* ===== Overrides ===== */
-    private:
-      virtual void on_realize();
       
-      /* ===== Internals ===== */
-    private:
+    private: /* ===== Overrides ===== */
+      virtual void on_realize()  override;
+      
+      
+    private: /* ===== Internals ===== */
       static Displayer*
-      createDisplayer( Gtk::Widget *drawingArea, int width, int height );
-      
-    private:
-      
-      Displayer *displayer;
+      createDisplayer (Gtk::Widget* drawingArea, int width, int height);
     };
   
   
-}}   // namespace gui::widgets
-#endif // VIDEO_DISPLAY_WIDGET_HPP
+}}// gui::widget
+#endif /*GUI_WIDGET_VIDEO_DISPLAY_WIDGET_H*/

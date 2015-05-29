@@ -28,37 +28,41 @@
 #include "video-display-widget.hpp"
 
 namespace gui {
-namespace widgets {
+namespace widget {
   
-  VideoDisplayWidget::VideoDisplayWidget ( )
-    : displayer (NULL)
+  VideoDisplayWidget::VideoDisplayWidget()
+    : displayer_(NULL)
     { }
   
   
-  VideoDisplayWidget::~VideoDisplayWidget ( )
+  VideoDisplayWidget::~VideoDisplayWidget()
   {
-    if (displayer != NULL) delete displayer;
+    if (displayer_) delete displayer_;
   }
+  
   
   Displayer*
-  VideoDisplayWidget::get_displayer ( ) const
+  VideoDisplayWidget::getDisplayer()  const
   {
-    return displayer;
+    return displayer_;
   }
   
-  void VideoDisplayWidget::on_realize ( )
+  
+  void
+  VideoDisplayWidget::on_realize()
   {
-    // Call base class:
+    // invoke base implementation
     Gtk::Widget::on_realize ();
     
     // Set colours
     //modify_bg (Gtk::STATE_NORMAL, Gdk::Color ("black"));
     
-    if (displayer != NULL) delete displayer;
-    displayer = createDisplayer (this, 320, 240);
+    if (displayer_) delete displayer_;
+    displayer_ = createDisplayer (this, 320, 240);
     
     add_events (Gdk::ALL_EVENTS_MASK);
   }
+  
   
   Displayer*
   VideoDisplayWidget::createDisplayer (Gtk::Widget *drawingArea, int width, int height)
@@ -69,13 +73,13 @@ namespace widgets {
     Displayer *displayer = NULL;
     
     displayer = new XvDisplayer (drawingArea, width, height);
-    if (!displayer->usable ())
+    if (!displayer->usable())
       {
         delete displayer;
         displayer = NULL;
       }
     
-    if (displayer == NULL)
+    if (!displayer)
       {
         displayer = new GdkDisplayer (drawingArea, width, height);
         ///////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
@@ -84,4 +88,5 @@ namespace widgets {
     return displayer;
   }
   
-}}// namespace gui::widgets
+  
+}}// gui::widget

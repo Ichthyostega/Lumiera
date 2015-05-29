@@ -24,20 +24,20 @@
  ** This file contains the definition of the arrow tool class
  */
 
-#ifndef WIDGETS_TIMELINE_ARROW_TOOL_H
-#define WIDGETS_TIMELINE_ARROW_TOOL_H
+#ifndef GUI_WIDGET_TIMELINE_ARROW_TOOL_H
+#define GUI_WIDGET_TIMELINE_ARROW_TOOL_H
 
 
 #include "gui/gtk-base.hpp"
-#include "gui/widgets/timeline-widget.hpp"
-#include "gui/widgets/timeline/timeline-tool.hpp"
-#include "gui/widgets/timeline/timeline-body.hpp"
-#include "gui/widgets/timeline/timeline-track.hpp"
+#include "gui/widget/timeline-widget.hpp"
+#include "gui/widget/timeline/timeline-tool.hpp"
+#include "gui/widget/timeline/timeline-body.hpp"
+#include "gui/widget/timeline/timeline-track.hpp"
 
 #include "lib/time/timevalue.hpp"
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
 
   /**
@@ -86,9 +86,7 @@ namespace timeline {
 
     bool selectionRectangleActive;
   };
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
-
-#endif // TIMELINE_ARROW_TOOL_HPP
+  
+  
+}}}// namespace gui::widget::timeline
+#endif /*GUI_WIDGET_TIMELINE_ARROW_TOOL_H*/

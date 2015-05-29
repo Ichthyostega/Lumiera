@@ -33,7 +33,7 @@
 
 
 namespace gui {
-namespace dialogs {
+namespace dialog {
   
   
   /** 
@@ -42,21 +42,21 @@ namespace dialogs {
   class Render
     : public Gtk::Dialog
     {
-      Gtk::HBox outputFileHBox;
-      Gtk::Label outputFileLabel;
-      Gtk::Entry outputFilePathEntry;
+      Gtk::HBox  outputFileHBox_;
+      Gtk::Label outputFileLabel_;
+      Gtk::Entry outputFilePathEntry_;
     
-      Gtk::Image browseButtonImage;
-      Gtk::Button outputFileBrowseButton;
+      Gtk::Image  browseButtonImage_;
+      Gtk::Button outputFileBrowseButton_;
     
-      Gtk::HBox containerFormatHBox;
-      Gtk::Label containerFormatLabel;
-      Gtk::ComboBox containerFormat;
+      Gtk::HBox  containerFormatHBox_;
+      Gtk::Label containerFormatLabel_;
+      Gtk::ComboBox containerFormat_;
       
-      Gtk::Image renderButtonImage;
+      Gtk::Image renderButtonImage_;
     
-      Gtk::Frame audioFrame;
-      Gtk::Frame videoFrame;
+      Gtk::Frame audioFrame_;
+      Gtk::Frame videoFrame_;
       
     public:
       Render (Gtk::Window& parent);

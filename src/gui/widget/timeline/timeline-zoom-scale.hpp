@@ -1,5 +1,5 @@
 /*
-  timeline-zoom-scale.hpp  -  Declaration of the zoom scale widget
+  TIMELINE-ZOOM-SCALE.hpp  -  widget to control timeline zoom scale
 
   Copyright (C)         Lumiera.org
     2011,               Michael R. Fisher <mfisher31@gmail.com>
@@ -19,90 +19,77 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-/** @file timeline-zoom-scale.hpp
- ** This file contains the definition of the zoom scale widget
- */
 
-#ifndef TIMELINE_ZOOM_SCALE_HPP
-#define TIMELINE_ZOOM_SCALE_HPP
+
+
+#ifndef GUI_WIDGET_TIMELINE_ZOOM_SCALE_H
+#define GUI_WIDGET_TIMELINE_ZOOM_SCALE_H
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/widgets/mini-button.hpp"
-#include "gui/widgets/timeline-widget.hpp"
+#include "gui/widget/mini-button.hpp"
+#include "gui/widget/timeline-widget.hpp"
+#include "gui/widget/timeline/timeline-state.hpp"
 
 using namespace Gtk;
-using namespace gui::widgets;
+using namespace gui::widget;
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
-
-class TimelineZoomScale : public Gtk::HBox
-{
-public:
-  /**
-   * Constructor
-   */
-  TimelineZoomScale();
-
-  /**
-   * Accessor method to the zoomSignal
-   * @return the zoomSignal
-   */
-  sigc::signal<void, double> signal_zoom();
-
-  void set_value(double val) { adjustment->set_value(val); }
-
-  void wireTimelineState (shared_ptr<TimelineState> currentState,
-                          TimelineWidget::TimelineStateChangeSignal);
-
-private:
-  /* Event Handlers */
   
-  /**
-   * Update the slider position when the timeline state
-   * is changed.
-   */
-  void on_timeline_state_changed (shared_ptr<TimelineState> newState);
-
-  /**
-   * Event handler for when the zoomIn Button
-   * is clicked
-   */
-  void on_zoom_in_clicked();
-
-  /**
-   * Event handler for when the zoomIn Button
-   * is clicked
-   */
-  void on_zoom_out_clicked();
-
-  /**
-   * Event handler for when the adjustment
-   * value is changed
-   */
-  void on_zoom();
-
-  /** access current timeline state */
-  TimelineViewWindow& getViewWindow();
-
-  /* Widgets */
-  Glib::RefPtr<Gtk::Adjustment> adjustment;
-  Gtk::HScale slider;
-  MiniButton zoomIn;
-  MiniButton zoomOut;
-
-private:
-  /* Signals */
-  sigc::signal<void, double> zoomSignal;
-
-  const double button_step_size;
-
-  shared_ptr<TimelineState> timelineState;
-};
-
-} // namespace gui
-} // namespace widgets
-} // namespace timeline
-
-#endif /* TIMELINE_ZOOM_SCALE_HPP */
+  class TimelineZoomScale
+    : public Gtk::HBox
+    {
+    public:
+      TimelineZoomScale();
+      
+      sigc::signal<void, double> signal_zoom();
+      
+      void set_value(double val) { adjustment->set_value(val); }
+      
+      void wireTimelineState (shared_ptr<TimelineState> currentState,
+                              TimelineWidget::TimelineStateChangeSignal);
+      
+      
+      
+    private: /* ===== Event Handlers ===== */
+      
+      /**
+       * Update the slider position when the timeline state is changed.
+       */
+      void on_timeline_state_changed (shared_ptr<TimelineState> newState);
+      
+      /**
+       * Event handler for when the zoomIn Button is clicked
+       */
+      void on_zoom_in_clicked();
+      
+      /**
+       * Event handler for when the zoomIn Button is clicked
+       */
+      void on_zoom_out_clicked();
+      
+      /**
+       * Event handler for when the adjustment value is changed
+       */
+      void on_zoom();
+      
+      /** access current timeline state */
+      TimelineViewWindow& getViewWindow();
+      
+      /* Widgets */
+      Glib::RefPtr<Gtk::Adjustment> adjustment;
+      Gtk::HScale slider;
+      MiniButton zoomIn;
+      MiniButton zoomOut;
+      
+      
+    private:
+      sigc::signal<void, double> zoomSignal;
+      const double button_step_size;
+      shared_ptr<TimelineState> timelineState;
+    };
+  
+  
+}}}// namespace gui::widget::timeline
+#endif /*GUI_WIDGET_TIMELINE_ZOOM_SCALE_H*/

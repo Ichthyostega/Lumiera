@@ -1,5 +1,5 @@
 /*
-  timeline-clip.cpp  -  Implementation of the timeline clip object
+  TimelineClip  -  Implementation of the timeline clip object
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,10 +21,10 @@
 * *****************************************************/
 
 
-#include "gui/widgets/timeline/timeline-clip.hpp"
+#include "gui/widget/timeline/timeline-clip.hpp"
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
   
   using std::shared_ptr;
@@ -35,13 +35,12 @@ namespace timeline {
     : Entity(drawStrategy)
     , modelClip(clip)
     , selected(false)
-  {
-    REQUIRE(modelClip);
-
-    // TODO: Connect signals
-    //modelClip->signalNameChanged().connect(mem_fun(this,
-    //  &Clip::onNameChanged);
-  }
+    {
+      REQUIRE(modelClip);
+      // TODO: Connect signals
+      //modelClip->signalNameChanged().connect(mem_fun(this,
+      //  &Clip::onNameChanged);
+    }
 
   Time
   Clip::getBegin() const
@@ -69,7 +68,6 @@ namespace timeline {
   {
     this->selected = selected;
   }
-
-
-}}}   // namespace gui::widgets::timeline
-
+  
+  
+}}}// namespace gui::widget::timeline

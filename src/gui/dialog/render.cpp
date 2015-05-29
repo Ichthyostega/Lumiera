@@ -23,49 +23,49 @@
 
 #include "gui/gtk-lumiera.hpp"
 
-#include "gui/dialogs/render.hpp"
-#include "gui/dialogs/dialog.hpp"
+#include "gui/dialog/render.hpp"
+#include "gui/dialog/dialog.hpp"
 #include "include/logging.h"
 
 
 using namespace Gtk;
 
 namespace gui {
-namespace dialogs {
+namespace dialog {
   
   Render::Render (Window& parent)
     : Dialog(_("Render"), parent, true)
-    , outputFileLabel(_("Output File:"))
-    , browseButtonImage(StockID(Stock::INDEX), ICON_SIZE_BUTTON)
-    , outputFileBrowseButton(_("_Browse..."))
-    , containerFormatLabel(_("Container Format:"))
-    , renderButtonImage(StockID(Stock::OK), ICON_SIZE_BUTTON)
-    , audioFrame(_("Audio"))
-    , videoFrame(_("Video"))
+    , outputFileLabel_(_("Output File:"))
+    , browseButtonImage_(StockID(Stock::INDEX), ICON_SIZE_BUTTON)
+    , outputFileBrowseButton_(_("_Browse..."))
+    , containerFormatLabel_(_("Container Format:"))
+    , renderButtonImage_(StockID(Stock::OK), ICON_SIZE_BUTTON)
+    , audioFrame_(_("Audio"))
+    , videoFrame_(_("Video"))
     {
       Box* v_box = get_vbox();
       REQUIRE (v_box != NULL);
       
       // The Output File Row
-      outputFileHBox.pack_start (outputFileLabel, PACK_SHRINK);
-      outputFileHBox.pack_start (outputFilePathEntry);
+      outputFileHBox_.pack_start (outputFileLabel_, PACK_SHRINK);
+      outputFileHBox_.pack_start (outputFilePathEntry_);
       
-      outputFileBrowseButton.set_image (browseButtonImage);
-      outputFileBrowseButton.signal_clicked().connect(
+      outputFileBrowseButton_.set_image (browseButtonImage_);
+      outputFileBrowseButton_.signal_clicked().connect(
         sigc::mem_fun(*this, &Render::on_button_browse));  
       
-      outputFileHBox.pack_start (outputFileBrowseButton, PACK_SHRINK);
-      outputFileHBox.set_spacing(4);
-      v_box->pack_start (outputFileHBox, PACK_SHRINK);
+      outputFileHBox_.pack_start (outputFileBrowseButton_, PACK_SHRINK);
+      outputFileHBox_.set_spacing(4);
+      v_box->pack_start (outputFileHBox_, PACK_SHRINK);
       
       // The Container Format Row
-      containerFormatHBox.pack_start (containerFormatLabel, PACK_SHRINK);
-      containerFormatHBox.pack_start (containerFormat);
-      containerFormatHBox.set_spacing(4);
-      v_box->pack_start (containerFormatHBox, PACK_SHRINK);
+      containerFormatHBox_.pack_start (containerFormatLabel_, PACK_SHRINK);
+      containerFormatHBox_.pack_start (containerFormat_);
+      containerFormatHBox_.set_spacing(4);
+      v_box->pack_start (containerFormatHBox_, PACK_SHRINK);
       
-      v_box->pack_start (audioFrame);
-      v_box->pack_start (videoFrame);
+      v_box->pack_start (audioFrame_);
+      v_box->pack_start (videoFrame_);
       
       // Configure the dialog
       v_box->set_spacing (BoxSpacing);
@@ -77,7 +77,7 @@ namespace dialogs {
       
       Button* render_button = add_button (Stock::OK, RESPONSE_OK);
       render_button->set_label (_("_Render"));
-      render_button->set_image (renderButtonImage);
+      render_button->set_image (renderButtonImage_);
       //render_button->set_flags(Gtk::CAN_DEFAULT);
       render_button->grab_default();
       

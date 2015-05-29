@@ -24,7 +24,7 @@
 
 /** @file gtk-base.hpp
  ** A set of basic GTK includes.
- ** There are some tricky point to consider when including the
+ ** There are some tricky points to consider when including the
  ** basic GTKmm headers. Especially, GTK tries to shadow the ERROR macro
  ** from Microsoft Windows. Unfortunately this breaks the ERROR macro from NoBug;
  ** thus we need to include NoBug \em after GTK
@@ -75,7 +75,7 @@ namespace gui {
   
 
   /** Dialog box classes. */
-  namespace dialogs {}
+  namespace dialog {}
   
   /** The Lumiera GTK-GUI uses a thin proxy layer data model
    *  on top of the actual "high-level-model", which lives in the
@@ -93,10 +93,10 @@ namespace gui {
   namespace output {}
   
   /** Docking panel classes. */
-  namespace panels {}
+  namespace panel {}
   
   /** Lumiera custom widgets. */
-  namespace widgets {}
+  namespace widget {}
   
   /** The workspace window and it's helper classes. */
   namespace workspace {}

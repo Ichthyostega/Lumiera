@@ -1,5 +1,5 @@
 /*
-  timeline-entity.cpp  -  Implementation of the timeline entity object
+  TimelineEntity  -  Implementation of the timeline entity object
 
   Copyright (C)         Lumiera.org
     2010,               Stefan Kangas <skangas@skangas.se
@@ -22,44 +22,44 @@
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/widgets/timeline/timeline-entity.hpp"
-#include "gui/widgets/timeline/draw-strategy.hpp"
+#include "gui/widget/timeline/timeline-entity.hpp"
+#include "gui/widget/timeline/draw-strategy.hpp"
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
-
+  
   Entity::Entity (shared_ptr<timeline::DrawStrategy> drawStrategy)
-    : enabled(true),
-      drawStrategy(drawStrategy)
-  {  }
-
-  Entity::~Entity()
-  {  }
+    : enabled_(true)
+    , drawStrategy_(drawStrategy)
+    { }
+  
+  
+  Entity::~Entity() {  }
+  
   
   void
-  Entity::draw(Cairo::RefPtr<Cairo::Context> cr,
-    TimelineViewWindow* const window) const
+  Entity::draw (Cairo::RefPtr<Cairo::Context> cr,
+                TimelineViewWindow* const window)  const
   {
     REQUIRE (cr);
     REQUIRE (window);
-
-    drawStrategy->draw(*this, cr, window);
+    
+    drawStrategy_->draw(*this, cr, window);
   }
-
+  
+  
   bool
-  Entity::getEnabled () const
+  Entity::getEnabled()  const
   {
-    return enabled;
+    return enabled_;
   }
-
+  
   void
   Entity::setEnabled (bool enabled)
   {
-    this->enabled = enabled;
+    this->enabled_ = enabled;
   }
   
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
-
+  
+}}}// namespace gui::widget::timeline

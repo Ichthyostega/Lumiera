@@ -1,5 +1,5 @@
 /*
-  draw-strategy.hpp  -  Definition the timeline draw strategy interface
+  DRAW-STRATEGY.hpp  -  Definition the timeline draw strategy interface
 
   Copyright (C)         Lumiera.org
     2010,               Stefan Kangas <skangas@skangas.se
@@ -20,19 +20,17 @@
 
 * *****************************************************/
 
-/** @file draw-strategy.hpp
- ** Declares the timeline entity drawing strategy interface.
- */
 
-#ifndef WIDGETS_TIMELINE_DRAW_STRATEGY_HPP
-#define WIDGETS_TIMELINE_DRAW_STRATEGY_HPP
+
+#ifndef GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
+#define GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
 
 #include "gui/gtk-base.hpp"
-#include "gui/widgets/timeline/timeline-entity.hpp"
-#include "gui/widgets/timeline/timeline-view-window.hpp"
+#include "gui/widget/timeline/timeline-entity.hpp"
+#include "gui/widget/timeline/timeline-view-window.hpp"
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
   
   /////////TODO some questions:
@@ -46,13 +44,13 @@ namespace timeline {
   class DrawStrategy
     {
     protected:
-  
+      
       DrawStrategy() { }
-  
+      
       virtual ~DrawStrategy();
-  
+      
     public:
-  
+      
       virtual void
       draw (const Entity &entity,
             Cairo::RefPtr<Cairo::Context> cr,
@@ -60,5 +58,5 @@ namespace timeline {
     };
   
   
-}}}    // namespace gui::widgets::timeline
-#endif // TIMELINE_DRAW_STRATEGY_HPP
+}}}// namespace gui::widget::timeline
+#endif /*GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP*/

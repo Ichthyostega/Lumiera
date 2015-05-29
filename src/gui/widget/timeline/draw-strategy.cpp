@@ -1,5 +1,5 @@
 /*
-  DrawStrategy  -  Implementation of a basic draw strategy
+  BasicDrawStrategy  -  Implementation of a basic draw strategy
 
   Copyright (C)         Lumiera.org
     2010,               Stefan Kangas <skangas@skangas.se
@@ -21,27 +21,27 @@
 * *****************************************************/
 
 
-#include "gui/widgets/timeline/basic-draw-strategy.hpp"
+#include "gui/widget/timeline/basic-draw-strategy.hpp"
 
 namespace gui {
-namespace widgets {
+namespace widget {
 namespace timeline {
   
   DrawStrategy::~DrawStrategy() { }  // emit VTable here
   
   
   void
-  BasicDrawStrategy::draw (const Entity &entity,
-                           Cairo::RefPtr<Cairo::Context> cr,
-                           TimelineViewWindow* const window)  const
+  BasicDrawStrategy::draw (Entity const& entity
+                          ,Cairo::RefPtr<Cairo::Context> cr
+                          ,TimelineViewWindow* const window)  const
   {
     REQUIRE (cr);
     REQUIRE (window);
-
+    
     int x = window->time_to_x(entity.getBegin());
     int width = window->time_to_x(
       entity.getEnd()) - window->time_to_x(entity.getBegin());
-
+    
     // Draw a rectangle for the entity
     // TODO: get height from the timeline::Entity
     cr->rectangle(x, 1, width, 100-2);
@@ -52,7 +52,7 @@ namespace timeline {
     cr->fill_preserve();
     cr->set_source_rgb(0.25, 0.25, 0.25);
     cr->stroke();
-
+    
     // Show the entities name
     cr->rectangle(x, 1, width, 100-2);
     cr->clip();
@@ -63,5 +63,4 @@ namespace timeline {
   }
   
   
-}}}   // namespace gui::widgets::timeline
-
+}}}// namespace gui::widget::timeline

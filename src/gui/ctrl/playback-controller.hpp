@@ -45,9 +45,9 @@ namespace controller {
     : boost::noncopyable
     {
 
-      volatile bool playing;
+      volatile bool playing_;
       
-      lumiera::DummyPlayer::Process playHandle;
+      lumiera::DummyPlayer::Process playHandle_;
       
       LumieraDisplaySlot viewerHandle_;
       
@@ -61,7 +61,7 @@ namespace controller {
       
       bool is_playing();
     
-      void use_display (LumieraDisplaySlot display);
+      void useDisplay (LumieraDisplaySlot display);
       
     private:
       

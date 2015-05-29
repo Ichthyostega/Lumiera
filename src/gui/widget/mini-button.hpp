@@ -1,5 +1,5 @@
 /*
-  mini-button.hpp  -  Declaration of the mini button widget
+  MINI-BUTTON.hpp  -  a tool button-like widget
 
   Copyright (C)         Lumiera.org
     2009,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,75 +19,67 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-/** @file mini-button.hpp
- ** This file contains the definition of mini button widget
- */
 
-#ifndef MINI_BUTTON_HPP
-#define MINI_BUTTON_HPP
+
+
+#ifndef GUI_WIDGET_MINI_BUTTON_H
+#define GUI_WIDGET_MINI_BUTTON_H
 
 #include "gui/gtk-base.hpp"
 
 
 namespace gui {
-namespace widgets {
-
-/**
- * A wrapper for ToolButton-like Button widgets
- */
-template<class T>
-class MiniWrapper : public T
-{
-public:
-
-  /**
-   * Creates a new Button containing the image and text from a stock
-   * item. 
-   * @param stock_id The stock_id of the image.
-   * @param icon_size The size of the image to show.
-   * @remarks Stock ids have identifiers like Gtk::Stock::OK and
-   * Gtk::Stock::APPLY.
-   */
-  MiniWrapper(const Gtk::StockID& stock_id,
-    const Gtk::IconSize icon_size = Gtk::ICON_SIZE_LARGE_TOOLBAR) :
-    image(stock_id, icon_size)
-  {
-    T::add(image);
-    T::set_relief(Gtk::RELIEF_NONE);
-    T::set_focus_on_click(false);
-  }
-    
-  /**
-   * Sets a new image from a stock-id for this button.
-   * @param stock_id The stock_id of the image.
-   * @param icon_size The size of the image to show.
-   */
-  void set_stock_id(const Gtk::StockID& stock_id,
-    const Gtk::IconSize icon_size = Gtk::ICON_SIZE_LARGE_TOOLBAR)
-  {
-    image.set(stock_id, icon_size);
-  }
-  
-private:
+namespace widget {
   
   /**
-   * The image widget for the button.
+   * A wrapper for ToolButton-like Button widgets
    */
-  Gtk::Image image;
-};
-
-/**
- * A ToolButton-like widget
- */
-typedef MiniWrapper<Gtk::Button> MiniButton;
-
-/**
- * A ToggleToolButton-like widget
- */
-typedef MiniWrapper<Gtk::ToggleButton> MiniToggleButton;
-
-} // gui
-} // widgets
-
-#endif // MINI_BUTTON_HPP
-
+  template<class T>
+  class MiniWrapper
+    : public T
+    {
+      /** image widget for the button. */
+      Gtk::Image image_;
+      
+    public:
+      /**
+       * Creates a new Button containing the image and text from a stock item.
+       * @param stock_id The stock_id of the image.
+       * @param icon_size The size of the image to show.
+       * @remarks Stock IDs have identifiers like \c Gtk::Stock::OK and \c Gtk::Stock::APPLY.
+       */
+      MiniWrapper (Gtk::StockID const& stock_id
+                  ,const Gtk::IconSize icon_size = Gtk::ICON_SIZE_LARGE_TOOLBAR)
+        : image_(stock_id, icon_size)
+        {
+          T::add (image_);
+          T::set_relief (Gtk::RELIEF_NONE);
+          T::set_focus_on_click (false);
+        }
+      
+      
+      /**
+       * Sets a new image from a stock-id for this button.
+       * @param stock_id The stock_id of the image.
+       * @param icon_size The size of the image to show.
+       */
+      void
+      setStockID (Gtk::StockID const& stock_id
+                 ,const Gtk::IconSize icon_size = Gtk::ICON_SIZE_LARGE_TOOLBAR)
+        {
+          image_.set (stock_id, icon_size);
+        }
+    };
+  
+  
+  
+  /** A ToolButton-like widget */
+  using MiniButton = MiniWrapper<Gtk::Button>;
+  
+  /** A ToggleToolButton-like widget */
+  using MiniToggleButton = MiniWrapper<Gtk::ToggleButton>;
+  
+  
+  
+}}// gui::widget
+#endif /*GUI_WIDGET_MINI_BUTTON_H*/

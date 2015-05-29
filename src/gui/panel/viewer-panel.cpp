@@ -1,5 +1,5 @@
 /*
-  viewer-panel.cpp  -  Implementation of the viewer panel
+  ViewerPanel  -  Dockable panel to hold the video display widgets and controls
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/panels/viewer-panel.hpp"
+#include "gui/panel/viewer-panel.hpp"
 
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/ui-bus.hpp"  ///////////////////////////////////TODO why are we forced to include this after workspace-window.hpp ??  Ambiguity between std::ref and boost::reference_wrapper
@@ -30,46 +30,45 @@
 
 
 using namespace Gtk;
-using namespace gui::widgets;
+using namespace gui::widget;
 using namespace gui::controller;
 
 namespace gui {
-namespace panels {
-
-ViewerPanel::ViewerPanel(workspace::PanelManager &panel_manager,
-    Gdl::DockItem &dock_item) :
-  Panel(panel_manager, dock_item, get_title(), get_stock_id())
-{    
-  //----- Pack in the Widgets -----//
-  pack_start(display, PACK_EXPAND_WIDGET);
+namespace panel {
   
-  PlaybackController &playback =
-    get_controller().get_playback_controller();
+  ViewerPanel::ViewerPanel (workspace::PanelManager& panelManager
+                           ,Gdl::DockItem& dockItem)
+    : Panel(panelManager, dockItem, getTitle(), getStockID())
+    {
+      //----- Pack in the Widgets -----//
+      pack_start(display_, PACK_EXPAND_WIDGET);
+      
+      PlaybackController& playback(getController().get_playback_controller());
+      
+      FrameDestination outputDestination (sigc::mem_fun(this, &ViewerPanel::on_frame));
+      playback.useDisplay (DisplayService::setUp (outputDestination));
+    }
   
-  FrameDestination outputDestination (sigc::mem_fun(this, &ViewerPanel::on_frame));
-  playback.use_display (DisplayService::setUp (outputDestination));
-}
-
-const char*
-ViewerPanel::get_title()
-{
-  return _("Viewer");
-}
-
-const gchar*
-ViewerPanel::get_stock_id()
-{
-  return "panel_viewer";
-}
-
-void
-ViewerPanel::on_frame(void *buffer)
-{
-  Displayer *displayer = display.get_displayer();
-  REQUIRE(displayer);
+  const char*
+  ViewerPanel::getTitle()
+  {
+    return _("Viewer");
+  }
   
-  displayer->put(buffer);
-}
-
-}   // namespace panels
-}   // namespace gui
+  const gchar*
+  ViewerPanel::getStockID()
+  {
+    return "panel_viewer";
+  }
+  
+  void
+  ViewerPanel::on_frame (void* buffer)
+  {
+    Displayer *displayer = display_.getDisplayer();
+    REQUIRE(displayer);
+    
+    displayer->put(buffer);
+  }
+  
+  
+}}// namespace gui::panel

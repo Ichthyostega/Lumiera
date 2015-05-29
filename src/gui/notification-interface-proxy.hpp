@@ -27,16 +27,16 @@
  ** 
  ** The purpose is to define a proxy implementation of gui::GuiNotification, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_GuiNotification"
- **
+ ** 
  ** @see guinotification-facade.hpp
- ** @see notification-service.hpp actual implementation within the GUI 
+ ** @see notification-service.hpp actual implementation within the GUI
  */
 
 
 
 
 
-    /* ==================== GuiNotification =================================== */
+/* ==================== GuiNotification =================================== */
     
 #include "include/guinotification-facade.h"
 
@@ -51,31 +51,30 @@ namespace gui {
 
 
 namespace lumiera {
-  namespace facade {
-    
-    typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
-                          , gui::GuiNotification
-                          > IHandle_GuiNotification;
-    
-    
-    template<>
-    class Proxy<IHandle_GuiNotification>
-      : public Holder<IHandle_GuiNotification>
-      {
-        //----Proxy-Implementation-of-GuiNotification--------
-        
-        void displayInfo (string const& text)           { _i_.displayInfo (cStr(text)); }
-        void triggerGuiShutdown (string const& cause)   { _i_.triggerGuiShutdown (cStr(cause)); }
-        
-        
-      public:
-        Proxy (IHandle const& iha) : THolder(iha) {}
-      };
-    
-    
-    template  void openProxy<IHandle_GuiNotification>  (IHandle_GuiNotification const&);
-    template  void closeProxy<IHandle_GuiNotification> (void);
-    
-   } // namespace facade
+namespace facade {
   
-} // namespace lumiera
+  typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
+                        , gui::GuiNotification
+                        > IHandle_GuiNotification;
+  
+  
+  template<>
+  class Proxy<IHandle_GuiNotification>
+    : public Holder<IHandle_GuiNotification>
+    {
+      //----Proxy-Implementation-of-GuiNotification--------
+      
+      void displayInfo (string const& text)           { _i_.displayInfo (cStr(text)); }
+      void triggerGuiShutdown (string const& cause)   { _i_.triggerGuiShutdown (cStr(cause)); }
+      
+      
+    public:
+      Proxy (IHandle const& iha) : THolder(iha) {}
+    };
+  
+  
+  template  void openProxy<IHandle_GuiNotification>  (IHandle_GuiNotification const&);
+  template  void closeProxy<IHandle_GuiNotification> (void);
+  
+  
+}} // namespace lumiera::facade

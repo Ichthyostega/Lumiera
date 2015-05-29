@@ -28,7 +28,7 @@
 
 
 namespace gui {
-namespace dialogs {
+namespace dialog {
   
   /**
    * The name chooser dialog is a modal dialog box that prompts the user
@@ -37,9 +37,9 @@ namespace dialogs {
   class NameChooser
     : public Gtk::Dialog
     {
-      Gtk::HBox hBox;
-      Gtk::Label caption;
-      Gtk::Entry name;
+      Gtk::HBox  hBox_;
+      Gtk::Label caption_;
+      Gtk::Entry name_;
       
     public:
       /**
@@ -49,7 +49,7 @@ namespace dialogs {
        * @param default_name The name that will be shown by default in the
        * edit box of the dialog.
        */
-      NameChooser(Gtk::Window &parent, cuString title, cuString default_name);
+      NameChooser(Gtk::Window &parent, cuString title, cuString defaultName);
       
       /**
        * Gets the current name of the chosen in the dialog.
@@ -57,9 +57,9 @@ namespace dialogs {
        * dialog.
        */
       cuString 
-      get_name()  const
+      getName()  const
         {
-          return name.get_text();
+          return name_.get_text();
         }
     };
   

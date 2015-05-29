@@ -1,5 +1,5 @@
 /*
-  rectangle.cpp  -  Implements utility functions for GDK rects
+  Rectangle  -  utility functions for GDK rectangles
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,35 +20,36 @@
 
 * *****************************************************/
 
-#include "rectangle.hpp"
+#include "gui/util/rectangle.hpp"
 #include <algorithm>
 
-using namespace std;
+
+using std::max;
+using std::min;
 
 namespace gui {
-namespace util {
-
-bool
-pt_in_rect(const Gdk::Point &point, const Gdk::Rectangle &rect)
-{
-  return (point.get_x() >= rect.get_x() &&
-    point.get_x() < rect.get_x() + rect.get_width() &&
-    point.get_y() >= rect.get_y() &&
-    point.get_y() < rect.get_y() + rect.get_height());
-}
-
-bool
-rects_overlap(const Gdk::Rectangle &a, const Gdk::Rectangle &b)
-{ 
-  return (
-    max(a.get_x(), b.get_x()) <
-    min(a.get_x() + a.get_width(), b.get_x() + b.get_width())
-    &&
-    max(a.get_y(), b.get_y()) <
-    min(a.get_y() + a.get_height(), b.get_y() + b.get_height())
-    );
-}
-
-}   // namespace util
-}   // namespace gui
-
+namespace util{
+  
+  bool
+  pt_in_rect(const Gdk::Point &point, const Gdk::Rectangle &rect)
+  {
+    return (point.get_x() >= rect.get_x() &&
+      point.get_x() < rect.get_x() + rect.get_width() &&
+      point.get_y() >= rect.get_y() &&
+      point.get_y() < rect.get_y() + rect.get_height());
+  }
+  
+  bool
+  rects_overlap (Gdk::Rectangle const& a, Gdk::Rectangle const& b)
+  {
+    return (
+      max(a.get_x(), b.get_x()) <
+      min(a.get_x() + a.get_width(), b.get_x() + b.get_width())
+      &&
+      max(a.get_y(), b.get_y()) <
+      min(a.get_y() + a.get_height(), b.get_y() + b.get_height())
+      );
+  }
+  
+  
+}}// namespace gui::util

@@ -22,32 +22,32 @@
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/dialogs/name-chooser.hpp"
-#include "gui/dialogs/dialog.hpp"
+#include "gui/dialog/name-chooser.hpp"
+#include "gui/dialog/dialog.hpp"
 
 using namespace Gtk;
 using namespace Glib;
 
 namespace gui {
-namespace dialogs {
+namespace dialog {
   
   NameChooser::NameChooser (Window &parent,
                             cuString title,
-                            cuString default_name)
+                            cuString defaultName)
     : Dialog::Dialog(title, parent, true)
-    , caption(_("Name:"))
+    , caption_(_("Name:"))
     {
       // Add the controls
-      name.set_text(default_name);
-      name.set_activates_default();
+      name_.set_text (defaultName);
+      name_.set_activates_default();
       
-      hBox.pack_start (caption);
-      hBox.pack_start (name);
-      hBox.set_spacing (BoxSpacing);
+      hBox_.pack_start (caption_);
+      hBox_.pack_start (name_);
+      hBox_.set_spacing (BoxSpacing);
     
       Box* const v_box = get_vbox();
       REQUIRE (v_box != NULL);
-      v_box->pack_start (hBox);
+      v_box->pack_start (hBox_);
       
       // Configure the dialog
       v_box->set_spacing (BoxSpacing);

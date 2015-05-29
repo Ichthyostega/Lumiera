@@ -1,5 +1,5 @@
 /*
-  controllerk.cpp  -  Implementation of the timeline track object
+  UiBus  -  UI model and control backbone
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -26,18 +26,18 @@
 
 namespace gui {
 namespace controller {
+    
+  Controller::Controller (model::Project& modelProject)
+    : project_(modelProject)
+    , playback_()
+    { }
   
-Controller::Controller(model::Project &modelProject) :
-  project(modelProject)
-{
   
-}
-
-PlaybackController& Controller::get_playback_controller()
-{
-  return playback;
-}
-
-}   // namespace controller
-}   // namespace gui
+  
+  PlaybackController& Controller::get_playback_controller()
+  {
+    return playback_;
+  }
+  
+}}// namespace gui::controller
 
