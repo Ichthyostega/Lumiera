@@ -1,5 +1,5 @@
 /*
-  TRACK.hpp  -  A grouping device within the Session.
+  FORK.hpp  -  A grouping device within the Session.
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_TRACK_H
-#define MOBJECT_SESSION_TRACK_H
+#ifndef MOBJECT_SESSION_FORK_H
+#define MOBJECT_SESSION_FORK_H
 
 #include "proc/mobject/session/meta.hpp"
 #include "proc/asset/entry-id.hpp"
@@ -119,4 +119,4 @@ namespace session {
   typedef Placement<session::Track, session::Meta> PTrack;
   
 }} // namespace proc::mobject
-#endif
+#endif /*MOBJECT_SESSION_FORK_H*/
