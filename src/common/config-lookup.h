@@ -142,7 +142,7 @@ lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
 
 
 
-/* Lookup hash entries for the cuckoo hash */
+/* == lookup hash entries using the PSplay tree */
 
 
 /** @internal Structure defining single hash table entries.*/
