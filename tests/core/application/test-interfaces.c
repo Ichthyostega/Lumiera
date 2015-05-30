@@ -23,9 +23,9 @@
 
 #include "common/interface.h"
 #include "common/interfaceregistry.h"
-#include "common/interfacedescriptor.h"
+#include "common/interface-descriptor.h"
 #include "common/config.h"
-#include "common/config_interface.h"
+#include "common/config-interface.h"
 
 #include "lib/test/test.h"
 #include "interface/say_hello.h"

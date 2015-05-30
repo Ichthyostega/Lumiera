@@ -7,12 +7,14 @@ GUI concepts and -features and proposals.
 link:GuiDiscussion/index.html[Here] is a collection of documents from these early
 discussions.
 
-In our discussions, *Workflow* denotes all considerations how certain tasks
-can be achieved within the application in the most suitable and stringent fashion.
-This effort is closely related to GUI and interface design, but at the same quite
-integral, so its rather treated separately of individual GUI features.
--> link:../workflow/index.html[more here...]
 
-.*TODO* more contributions please... ;-)
+.[red]#TODO# more contributions please... ;-)
 We had several additional discussions and contributions on the mailinglist,
 several people did even concept drawings. Collect these and add them here
+
+NOTE: We use the term *Workflow* in our discussions to denote the more integral
+      concerns of how to achieve given tasks within the application in the most
+      suitable and stringent fashion. We tend to separate those more global
+      considerations from the discussion of individual GUI features.
+      -> link:../workflow/index.html[read more here...]
+

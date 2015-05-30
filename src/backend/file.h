@@ -1,5 +1,5 @@
 /*
-  file.h  -  interface to files by filename
+  FILE.h  -  interface to files by filename
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,32 +17,33 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_FILE_H
-#define LUMIERA_FILE_H
+
+/** @file file.h
+ ** File management.
+ ** Handling Files is split into different classes:
+ ** 1. The 'lumiera_file' class which acts as interface to the outside for managing files.
+ **    'lumiera_file' is addressed by the name of the file. Since files can have more than one name (hardlinks)
+ **    many 'lumiera_file' can point to a single 'lumiera_filedescriptor'
+ ** 2. The 'lumiera_filedescriptor' class which does the real work managing the file in the back.
+ ** 3. Since OS-filehandles are a limited resource we access the lazily as 'lumiera_filehandle' which are
+ **    managed in a 'lumiera_filehandlecache'
+ */
+
+#ifndef BACKEND_FILE_H
+#define BACKEND_FILE_H
 
 
 #include "lib/mutex.h"
 #include "lib/llist.h"
 #include "lib/error.h"
 
-//NOBUG_DECLARE_FLAG (file);
 
 LUMIERA_ERROR_DECLARE(FILE_CHANGED);
 LUMIERA_ERROR_DECLARE(FILE_NOMMAPINGS);
 
-/**
- * @file
- * File management
- * Handling Files is splitted into different classes:
- * 1. The 'lumiera_file' class which acts as interface to the outside for managing files.
- *    'lumiera_file' is addressed by the name of the file. Since files can have more than one name (hardlinks)
- *    many 'lumiera_file' can point to a single 'lumiera_filedescriptor'
- * 2. The 'lumiera_filedescriptor' class which does the real work managing the file in the back.
- * 3. Since OS-filehandles are a limited resource we access the lazily as 'lumiera_filehandle' which are
- *    managed in a 'lumiera_filehandlecache'
- */
 
 typedef struct lumiera_file_struct lumiera_file;
 typedef lumiera_file* LumieraFile;
@@ -55,17 +56,17 @@ typedef lumiera_file* LumieraFile;
 
 /**
  * File modes:
- * LUMIERA_FILE_READONLY        existing file for reading only
- * LUMIERA_FILE_READWRITE       existing file for reading and writing
- * LUMIERA_FILE_CREATE          non-existing file for reading and writing
- * LUMIERA_FILE_RECREATE        remove and recreated existing, file for reading and writing
+ * - \c LUMIERA_FILE_READONLY        existing file for reading only
+ * - \c LUMIERA_FILE_READWRITE       existing file for reading and writing
+ * - \c LUMIERA_FILE_CREATE          non-existing file for reading and writing
+ * - \c LUMIERA_FILE_RECREATE        remove and recreated existing, file for reading and writing
  */
 #define LUMIERA_FILE_READONLY (O_RDONLY | O_LARGEFILE | O_NOATIME)
 #define LUMIERA_FILE_READWRITE (O_RDWR | O_LARGEFILE | O_NOATIME)
 #define LUMIERA_FILE_CREATE (O_RDWR | O_LARGEFILE | O_NOATIME | O_CREAT | O_EXCL)
 #define LUMIERA_FILE_RECREATE (O_RDWR | O_LARGEFILE | O_NOATIME | O_CREAT | O_TRUNC)
 
-/* creat and excl flags will be masked out for descriptor lookup */
+/* \c creat and \c excl flags will be masked out for descriptor lookup */
 #define LUMIERA_FILE_MASK ~(O_CREAT | O_EXCL | O_TRUNC)
 
 struct lumiera_file_struct
@@ -78,7 +79,7 @@ struct lumiera_file_struct
 
 
 /**
- * Initialize a file structure.
+ * Initialise a file structure.
  * @param self pointer to the file structure
  * @param name filename
  * @param flags open flags
@@ -90,7 +91,7 @@ lumiera_file_init (LumieraFile self, const char* name, int flags);
 
 /**
  * Destroy a file structure.
- * frees all associated resources, releases the filedescriptor etc.
+ * frees all associated resources, releases the file descriptor etc.
  * @param self file structure to be destroyed
  * @param do_unlink if 1 then delete the file physically from disk (only the associated name)
  * @return self
@@ -128,8 +129,8 @@ lumiera_file_delete_unlink (LumieraFile self);
 /**
  * Get a POSIX filehandle for a file.
  * Filehandles are opened on demand and must be acquired for use.
- * Using filehandles is refcounted and might be nested.
- * After using them they must be released which puts them back into filehandlecache aging.
+ * The use of filehandles is refcounted and might be nested.
+ * After using them they must be released which puts them back into filehandle cache aging.
  * @param self file structure
  * @return POSIX filehandle or -1 on error, check lumiera_error() to retrieve the errorcode
  * Currently only LUMIERA_ERROR_ERRNO will be raised but this might change in future.
@@ -169,8 +170,8 @@ lumiera_file_release_mmap (LumieraFile self, LumieraMMap map);
 
 
 /**
- * helper macro for acquireing and releasing maped regions
- * @param nobugflag yet unused
+ * helper macro for acquiring and releasing maped regions
+ * @param nobugflag unused for now
  * @param file the file from from where to acquire the mapped region
  * @param start the start offset for the mmaped region
  * @param size the length of the requested block
@@ -210,8 +211,8 @@ lumiera_file_checkflags (LumieraFile self, int flags);
 
 /**
  * Set the chunksize for mapping operations
- * can only set once for a filedescriptor, subsequent calls are no-ops
- * @param chunksize allocation/mmaping granularity, must be 2's exponent of pagesize
+ * can only set once for a file descriptor, subsequent calls are no-ops
+ * @param chunksize allocation/mmaping granularity, must be 2's exponent of page size
  * @param bias offset to shift chunks, used for stepping over a header for example.
  * @return the effective chunksize used for the file
  */
@@ -237,9 +238,9 @@ lumiera_file_bias_get (LumieraFile self);
 
 
 /**
- * Place and remove locks on a file
+ * Place and remove locks on a file.
  * This locks are per thread and lock the file across multiple lumiera processes
- * (or any other programm which repects advisory file locking).
+ * (or any other program which respect to advisory file locking).
  * Only exclusive locks over the whole file are supported for initially accessing
  * a file, other locking is done somewhere else.
  */
@@ -277,12 +278,4 @@ lumiera_file_unlock (LumieraFile self);
 
 
 
-#endif
-
-/*
-// Local Variables:
-// mode: C
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/
+#endif /*BACKEND_FILE_H*/

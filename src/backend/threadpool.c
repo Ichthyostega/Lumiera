@@ -1,5 +1,5 @@
 /*
-  threadpool.c  -  Manage pools of threads
+  Threadpool  -  Manage pools of threads
 
   Copyright (C)         Lumiera.org
     2009,               Michael Ploujnikov <ploujj@gmail.com>
@@ -17,30 +17,24 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 
-//TODO: Support library includes//
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
-
-//TODO: Lumiera header includes//
 #include "backend/threadpool.h"
 
-//TODO: internal/static forward declarations//
-static lumiera_threadpool threadpool;
-
-//TODO: System includes//
 #include <pthread.h>
 
-/**
- * @file
- *
- */
 
 LUMIERA_ERROR_DEFINE(THREADPOOL_OFFLINE, "tried to acquire thread while threadpool is not available");
 
-//code goes here//
+
+
+static lumiera_threadpool threadpool;
+
+
 
 void
 lumiera_threadpool_init(void)
@@ -71,7 +65,7 @@ lumiera_threadpool_destroy(void)
     LUMIERA_CONDITION_SECTION (cond_sync, &threadpool.pool[i].sync)
       threadpool.pool[i].status = LUMIERA_THREADPOOL_OFFLINE;
 
-  /* wait that all theads have finished */
+  /* wait that all threads have finished */
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
       LUMIERA_CONDITION_SECTION (cond_sync, &threadpool.pool[i].sync)
@@ -104,7 +98,6 @@ lumiera_threadpool_destroy(void)
 }
 
 /**
- *
  * @return thread handle or NULL on error (lumiera error will be set)
  */
 LumieraThread
@@ -130,7 +123,7 @@ lumiera_threadpool_acquire_thread (enum lumiera_thread_class kind,
               TRACE (threadpool, "created thread %p", ret);
 
               /*
-                a newly created thread flows somewhere in the airm it isnt released yet into the idle list,
+                a newly created thread flows somewhere in the air; it is not yet released into the idle list,
                 nor in the working list, While we are holding this CONDITION_SECION we can safely put it on the working list,
                 this removes a small race.
               */

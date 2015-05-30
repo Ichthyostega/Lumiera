@@ -43,7 +43,7 @@
 void *(*mpool_malloc_hook)(size_t size) = malloc;
 void (*mpool_free_hook)(void *ptr) = free;
 
-/** called after a mpool got initialized */
+/** called after a mpool got initialised */
 void (*mpool_init_hook) (MPool self) = NULL;
 /** called before a mpool gets destroyed */
 void (*mpool_destroy_hook) (MPool self) = NULL;
@@ -196,7 +196,7 @@ mpool_cluster_alloc_ (MPool self)
   /* clear the bitmap */
   memset (&cluster->data, 0, MPOOL_BITMAP_SIZE (self->elements_per_cluster));
 
-  /* initialize freelist */
+  /* initialise freelist */
   for (unsigned i = 0; i < self->elements_per_cluster; ++i)
     {
       MPoolnode node = cluster_element_get (cluster, self, i);

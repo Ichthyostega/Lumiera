@@ -1,17 +1,34 @@
 GUI Design and Feature Discussion
 =================================
 
-In the early stages of the project, there was a lot of debate regarding
-GUI concepts and -features and proposals.
+//Menu: put child ConceptProposals after GuiBrainstormingWontImplement
+//Menu: put child TimelineDiscussion after ConceptProposals
 
-- link:GuiBrainstormingReviewed.html[GUI Brainstorming page]  '[red]#TODO#: explain whats this all about'
-- several Proposals
-  *  link:Proposal.AkhiL.html[AkhIL]
-  *  link:Proposal.Alcarinque.html[Alcarinque]
-  *  link:Proposal.RichardSpindler.html[Richard Spindler]
-  *  link:Workspaces.html[about Workspace organsiation]
+In the early days of the Lumiera project, there was a lot of debate regarding
+GUI concepts, -features and proposals.
+
+GUI Brainstorming::
+  We got a lot of proposed cool features. In order to channel this great influx of ideas,
+  we set up a wiki page to allow basically open proposals. *Joel Holdsworth*, our GUI developer
+  at that time, performed the herculean task to walk through this tremendous pile of entries,
+  consolidate them and conduct a discussion. The link:GuiBrainstormingReviewed.html[GUI Brainstorming page]
+  documents the discussion and some conclusions. Several proposals were sorted out -- it might be
+  inspiring to look on the reasons why we
+  link:GuiBrainstormingWontImplement.html[rejected some proposals].
+
+GUI Proposals::
+  In addition, several people contributed complete or focussed concepts and design proposals
+  *  link:ConceptProposals/AkhiL.html[AkhIL]
+  *  link:ConceptProposals/Alcarinque.html[Alcarinque]
+  *  link:ConceptProposals/Barnes.html[Clay Barnes]
+  *  link:ConceptProposals/RichardSpindler.html[Richard Spindler]
+  *  link:Workspaces.html[about Workspace organisation]
   *  link:scrolling.html[about scrolling..]
   *  link:MenuAndShortcuts.html[Ideas for menus and shortcuts]
-- link:TimelineDiscussion.html[Conclusions by Joel Holdsworth]
 
+Timeline Discussion::
+  In 2008, Joel reviewed all the available proposals and distilled a more coherent vision
+  especially about the timeline, which certainly is at the heart of any video editor.
+  This page with link:TimelineDiscussion.html[Conclusions by Joel Holdsworth] is
+  _must read_ for anyone engaged into Lumiera GUI development.
 

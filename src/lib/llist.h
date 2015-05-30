@@ -29,7 +29,7 @@
 /**
  * @file
  * Intrusive cyclic double linked list
- * There is only one node type which contains a forward and a backward pointer. In a empty initialized node,
+ * There is only one node type which contains a forward and a backward pointer. In a empty initialised node,
  * this pointers point to the node itself. Note that these pointers can never ever become NULL.
  * This lists are used by using one node as 'root' node where its both pointers are the head/tail pointer to the actual list.
  * Care needs to be taken to ensure not to apply any operations meant to be applied to data nodes to the root node.
@@ -44,7 +44,7 @@
  *    #define LLIST_IMPLEMENTATION before including this header yields in definitions
  *    this can be used to generate a library. This is currently untested and not recommended.
  * The rationale for using inlined functions is that most functions are very small and likely to be used in performance critical parts.
- * Inlining can give a huge performance and optimization improvement here.
+ * Inlining can give a huge performance and optimisation improvement here.
  * The few functions which are slightly larger are expected to be the less common used ones, so inlining them too shouldn't be a problem either
  */
 
@@ -188,10 +188,10 @@ typedef llist ** LList_ref;
          tail = llist_tail (list))
 
 /**
- * Initialize a new llist.
- * Must not be applied to a list node which is not empty! Lists need to be initialized
+ * Initialise a new llist.
+ * Must not be applied to a list node which is not empty! Lists need to be initialised
  * before any other operation on them is called.
- * @param self node to be initialized
+ * @param self node to be initialised
  */
 LLIST_FUNC (LList llist_init (LList self),
             return self->next = self->prev = self;

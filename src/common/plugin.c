@@ -1,5 +1,5 @@
 /*
-  plugin.c  -  Lumiera Plugin loader
+  Plugin  -  Lumiera Plugin loader implementation
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,8 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
 
 
 /** @file plugin.c 
@@ -250,7 +251,7 @@ lumiera_plugin_load (const char* plugin)
 {
   TRACE (pluginloader_dbg, "plugin=%s", plugin);
 
-  /* dispatch on ext, call the registered function */
+  /* dispatch on extension, call the registered function */
   const char* ext = strrchr (plugin, '.');
 
   LumieraPlugintype itr = lumiera_plugin_types;
@@ -312,7 +313,7 @@ lumiera_plugin_unload (LumieraPlugin self)
   if (self->refcnt)
     return self->refcnt;
 
-  /* dispatch on ext, call the registered function */
+  /* dispatch on extension, call the registered function */
   const char* ext = strrchr (self->name, '.');
 
   LumieraPlugintype itr = lumiera_plugin_types;

@@ -1,7 +1,7 @@
 TESTING "Memory pool tests" ./test-mpool
 
 TEST "init/destroy" basic <<END
-err: initialized
+err: initialised
 err: allocated
 err: DUMP
 err: freed

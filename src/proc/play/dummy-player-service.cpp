@@ -27,7 +27,7 @@
 #include "lib/depend.hpp"
 
 extern "C" {
-#include "common/interfacedescriptor.h"
+#include "common/interface-descriptor.h"
 }
 
 #include <string>

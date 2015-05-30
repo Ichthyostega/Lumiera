@@ -1,5 +1,5 @@
 /*
-  filehandle  -  filehandle management and caching
+  FILEHANDLE  -  filehandle management and caching
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,9 +17,19 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
-#ifndef LUMIERA_FILEHANDLE_H
-#define LUMIERA_FILEHANDLE_H
+
+
+/** @file filehandle.h
+ ** Filehandles manage the underlying POSIX filehandle for a file descriptor.
+ ** Since we want to support handling of more files than POSIX filehandles are available
+ ** on a common system the filehandles are opened, cached and closed on demand, see 'filehandlecache'.
+ ** Access to filehandles is locked from elsewhere (filedescriptor, filehandlecache)
+ */
+
+#ifndef BACKEND_FILEHANDLE_H
+#define BACKEND_FILEHANDLE_H
 
 #include "lib/error.h"
 #include "lib/llist.h"
@@ -31,14 +41,6 @@ typedef lumiera_filehandle* LumieraFilehandle;
 
 //NOBUG_DECLARE_FLAG (filehandle);
 
-/**
- * @file
- * Filehandles.
- * Filehandles manage the underlying POSIX filehandle for a filedescriptor.
- * Since we want to support handling of more files than POSIX filehandles are available on a common system
- * the filehandles are opened, cached and closed on demand, see 'filehandlecache'.
- * Access to filehandles is locked from elsewhere (filedescriptor, filehandlecache)
- */
 
 
 /**
@@ -52,14 +54,16 @@ struct lumiera_filehandle_struct
   LumieraFiledescriptor descriptor;
 };
 
+
 /**
- * Initialize filehandle structure.
- * @param self filehandle sttructure to be initialized
+ * Initialise filehandle structure.
+ * @param self filehandle structure to be initialised
  * @param descriptor on which this filehandle will be attached
  * @return new filehandle structure
  */
 LumieraFilehandle
 lumiera_filehandle_init (LumieraFilehandle self, LumieraFiledescriptor descriptor);
+
 
 /**
  * Allocate a new filehandle structure.
@@ -71,9 +75,9 @@ lumiera_filehandle_new (LumieraFiledescriptor descriptor);
 
 
 /**
- * destroy the resources associated eith a filehandle structure.
- * This function is used by the filehandlecache to recycle filehandle structs.
- * @param node pointer to the cachenode member of a struct filehandle
+ * destroy the resources associated either a filehandle structure.
+ * This function is used by the filehandle cache to recycle filehandle structs.
+ * @param node pointer to the cache node member of a struct filehandle
  * @return pointer to the start of the memory of the destroyed filehandle
  */
 void*
@@ -85,7 +89,7 @@ lumiera_filehandle_handle (LumieraFilehandle self);
 
 
 /**
- * just accessor, no saftey net
+ * just accessor, no safety net
  */
 static inline int
 lumiera_filehandle_get (LumieraFilehandle self)
@@ -94,4 +98,4 @@ lumiera_filehandle_get (LumieraFilehandle self)
   return self->fd;
 }
 
-#endif
+#endif /*BACKEND_FILEHANDLE_H*/

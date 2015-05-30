@@ -1,5 +1,5 @@
 /*
-  threads.c  -  Manage threads
+  Threads  -  Helper for managing threads
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,36 +17,27 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 
-//TODO: Support library includes//
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
+#include "backend/threads.h"
 
-
-//TODO: Lumiera header includes//
-#include "threads.h"
-
-//TODO: internal/static forward declarations//
-
-
-//TODO: System includes//
 #include <pthread.h>
 #include <time.h>
 #include <errno.h>
 
-/**
- * @file threads.c
- *
- */
+
+LUMIERA_ERROR_DEFINE(THREAD, "fatal threads initialisation error");
 
 
 
-//code goes here//
-
+/** Macro for enum string trick: expands as an array of thread class name strings */
 #define LUMIERA_THREAD_CLASS(name) #name,
-// enum string trick: expands as an array of thread class name strings
+
+
 const char* lumiera_threadclass_names[] = {
   LUMIERA_THREAD_CLASSES
 };
@@ -59,11 +50,11 @@ const char* lumiera_threadstate_names[] = {
 };
 #undef LUMIERA_THREAD_STATE
 
-LUMIERA_ERROR_DEFINE(THREAD, "fatal threads initialization error");
 
-/* thread local storage pointing back to the thread structure of each thread */
-static pthread_key_t lumiera_thread_tls;
-static pthread_once_t lumiera_thread_initialized = PTHREAD_ONCE_INIT;
+/** thread local storage pointing back to the thread structure of each thread */
+static pthread_key_t  lumiera_thread_tls;
+static pthread_once_t lumiera_thread_initialised = PTHREAD_ONCE_INIT;
+
 
 static void
 lumiera_thread_tls_init (void)
@@ -124,8 +115,11 @@ thread_loop (void* thread)
   return 0;
 }
 
-// when this is called it should have already been decided that the function
-// shall run in parallel, as a thread
+
+/**
+ * @remarks when this is called it should have already been decided
+ * that the function shall run in parallel, as a thread.
+ */
 LumieraThread
 lumiera_thread_run (int kind,
                     void (*function)(void *),
@@ -165,7 +159,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
                     struct nobug_flag* flag,
                     pthread_attr_t* attrs)
 {
-  pthread_once (&lumiera_thread_initialized, lumiera_thread_tls_init);
+  pthread_once (&lumiera_thread_initialised, lumiera_thread_tls_init);
 
   // TODO: do something with this string:
   (void) purpose;
@@ -188,6 +182,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
     }
   return self;
 }
+
 
 LumieraThread
 lumiera_thread_destroy (LumieraThread self)
@@ -218,6 +213,7 @@ lumiera_thread_destroy (LumieraThread self)
   return self;
 }
 
+
 void
 lumiera_thread_delete (LumieraThread self)
 {
@@ -229,16 +225,12 @@ lumiera_thread_delete (LumieraThread self)
 LumieraThread
 lumiera_thread_self (void)
 {
-  pthread_once (&lumiera_thread_initialized, lumiera_thread_tls_init);
+  pthread_once (&lumiera_thread_initialised, lumiera_thread_tls_init);
   return pthread_getspecific (lumiera_thread_tls);
 }
 
 
-/**
- * Set a threads deadline
- * A thread must finish before its deadline is hit. Otherwise it counts as stalled
- * which is a fatal error which might pull the application down.
- */
+
 LumieraThread
 lumiera_thread_deadline_set (struct timespec deadline)
 {
@@ -250,10 +242,7 @@ lumiera_thread_deadline_set (struct timespec deadline)
 }
 
 
-/**
- * Extend a threads deadline
- * sets the deadline to now+ms in future. This can be used to implement a heartbeat.
- */
+
 LumieraThread
 lumiera_thread_deadline_extend (unsigned ms)
 {
@@ -277,10 +266,7 @@ lumiera_thread_deadline_extend (unsigned ms)
 }
 
 
-/**
- * Clear a threads deadline
- * Threads without deadline will not be checked against deadlocks (this is the default)
- */
+
 LumieraThread
 lumiera_thread_deadline_clear (void)
 {

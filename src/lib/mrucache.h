@@ -35,7 +35,7 @@
  */
 
 /**
- * Callback function used to destruct/cleanup aged elements.
+ * Callback function used to destroy/cleanup aged elements.
  * shall clean the element sufficiently up to be ready for being freed or reused,
  * this callback function must be reentrant and prepared to be called twice.
  * @param node the llist node used to link cache elements (will be empty at call)
@@ -53,9 +53,9 @@ typedef struct lumiera_mrucache_struct lumiera_mrucache;
 typedef lumiera_mrucache* LumieraMruCache;
 
 /**
- * Initialize a cache.
- * @param self cache to be initialized
- * @param destructor_cb function for destructing a cache node, preparing for reuse.
+ * Initialise a cache.
+ * @param self cache to be initialised
+ * @param destructor_cb function for destroying a cache node, preparing for reuse.
  * @return self
  */
 LumieraMruCache
@@ -145,7 +145,7 @@ lumiera_mrucache_checkout (LumieraMruCache self, LList node)
  * This function is used to get a new element by deleting the oldest least used one from the cache.
  * The cache must be locked for this operation.
  * @param self cache
- * @return pointer to the uninitialized memory ready for being reused or NULL when no element was available
+ * @return pointer to the uninitialised memory ready for being reused or NULL when no element was available
  */
 static inline void*
 lumiera_mrucache_pop (LumieraMruCache self)

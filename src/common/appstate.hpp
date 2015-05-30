@@ -23,8 +23,8 @@
 /** @file appstate.hpp
  ** Registering and managing primary application-global services.
  ** This can be considered the "main" object of the Lumiera application
- ** Besides encapsulating the logic for starting up the fundamental parts
- ** of the application, there is a mechanism for registering \em subsystems
+ ** Besides encapsulating the logic to start up the fundamental parts of
+ ** the application, there is a mechanism for registering \em subsystems
  ** to be brought up and shut down in order. AppState will issue the global
  ** application lifecycle events (where other parts may have registered
  ** callbacks) and provides the top-level catch-all error handling.

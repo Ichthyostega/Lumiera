@@ -27,7 +27,7 @@
 #include "common/subsystem-runner.hpp"
 
 extern "C" {
-#include "common/config_interface.h"
+#include "common/config-interface.h"
 
 #include "common/interface.h"
 #include "common/interfaceregistry.h"

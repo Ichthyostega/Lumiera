@@ -1,7 +1,7 @@
-GUI Brainstorming Proposal
-==========================
+GUI Proposal by Richard Spindler
+================================
 :Author: Richard Spindler
-:Date: 2008-30-03
+:Date: 2008-03-30
 
 
 Node Graph proposal

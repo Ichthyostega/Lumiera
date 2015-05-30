@@ -1,5 +1,5 @@
 /*
-  config_interface.h  -  Lumiera configuration interface
+  CONFIG-INTERFACE.h  -  Lumiera configuration interface
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,21 +17,27 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
+
+
+/** @file config-interface.h
+ ** External interface to the lumiera configuration system.
+ ** This file provides an interface descriptor for external entities
+ ** (e.g. plug-ins) to gain access to the configuration system (as
+ ** planned in 2008).
+ ** 
+ ** @note this is unfinished work, development in this area stalled in 2008
+ ** @see config.h
+ */
 
 #ifndef LUMIERA_CONFIG_INTERFACE_H
 #define LUMIERA_CONFIG_INTERFACE_H
 
-//TODO: Support library includes//
 
 #include "common/interface.h"
 
-//TODO: Forward declarations//
 
-/**
- * @file
- * Declares the interface for the lumiera configuration system
- */
 
 void
 lumiera_config_interface_init (void);

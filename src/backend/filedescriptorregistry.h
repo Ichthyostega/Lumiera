@@ -1,5 +1,5 @@
 /*
-  filedescriptorregistry.h  -  register all files in use
+  FILEDESCRIPTORREGISTRY.h  -  registry for tracking all files in use
 
   Copyright (C)                 Lumiera.org
     2008, 2010,                 Christian Thaeter <ct@pipapo.org>
@@ -17,24 +17,33 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_FILEDESCRIPTORREGISTRY_H
-#define LUMIERA_FILEDESCRIPTORREGISTRY_H
+
+/** @file filedescriptorregistry.h
+ ** Registry for used file descriptors.
+ ** This registry stores all acquired file descriptors for lookup,
+ ** they will be freed when not referenced anymore.
+ */
+
+#ifndef BACKEND_FILEDESCRIPTORREGISTRY_H
+#define BACKEND_FILEDESCRIPTORREGISTRY_H
 
 #include "backend/filedescriptor.h"
 
 
 /**
- * Initialize the global filedescriptor registry.
- * Opening hardlinked files will be targeted to the same filedescriptor.
- * This function never fails but dies on error. TODO backend/subsystem failure
+ * Initialise the global file descriptor registry.
+ * Opening hard linked files will be targeted to the same file descriptor.
+ * This function never fails but dies on error.
+ * @todo proper backend/subsystem failure
  */
 void
 lumiera_filedescriptorregistry_init (void);
 
 /**
- * Destroy and free the global filedescriptor registry.
+ * Destroy and free the global file descriptor registry.
  * Never fails.
  */
 void
@@ -48,11 +57,11 @@ lumiera_filedescriptorregistry_destroy (void);
 LumieraFiledescriptor
 lumiera_filedescriptorregistry_ensure (LumieraFiledescriptor template);
 
-/**
- * Removes a Filedescriptor from the registry.
- */
+
+/** Removes a file descriptor from the registry. */
 void
 lumiera_filedescriptorregistry_remove (LumieraFiledescriptor self);
 
 
-#endif
+
+#endif /*BACKEND_FILEDESCRIPTORREGISTRY_H*/

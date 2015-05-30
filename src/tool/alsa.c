@@ -35,7 +35,7 @@ static snd_pcm_sframes_t delay = 0;
 
 static unsigned int rate = 44100;
 
-static int audio_initialized = 0;
+static int audio_initialised = 0;
 
 size_t
 audio_offset()
@@ -52,10 +52,10 @@ audio_init()
   const char* device;
   int err;
 
-  if(audio_initialized)
+  if(audio_initialised)
     return;
 
-  audio_initialized = 1;
+  audio_initialised = 1;
 
   device = getenv("ALSA_DEVICE");
 
@@ -104,7 +104,7 @@ audio_init()
   fprintf(stderr, "Buffer time is %.3f seconds\n", buffer_time / 1.0e6);
 
   if(0 > (err = snd_pcm_sw_params_current(playback_handle, sw_params)))
-    errx(EXIT_FAILURE, "Audio: Could not initialize software parameters: %s",
+    errx(EXIT_FAILURE, "Audio: Could not initialise software parameters: %s",
          snd_strerror(err));
 
   snd_pcm_sw_params_set_start_threshold(playback_handle, sw_params, 0);

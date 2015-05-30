@@ -1,7 +1,7 @@
 TESTING "File mmaping" ./test-filemmap
 
 
-TEST "chunksize not initialized" mmap_missing_chunksize <<END
+TEST "chunksize not initialised" mmap_missing_chunksize <<END
 return: 0
 END
 

@@ -23,8 +23,8 @@
 
 #include <stdio.h>
 
-#include "common/interfacedescriptor.h"
-#include "common/config_interface.h"
+#include "common/interface-descriptor.h"
+#include "common/config-interface.h"
 
 #include "interface/say_hello.h"
 

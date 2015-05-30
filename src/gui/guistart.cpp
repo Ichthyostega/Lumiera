@@ -62,7 +62,7 @@
 
 extern "C" {
 #include "common/interface.h"
-#include "common/interfacedescriptor.h"
+#include "common/interface-descriptor.h"
 }
 
 #include <functional>

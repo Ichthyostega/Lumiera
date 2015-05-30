@@ -1,5 +1,5 @@
 /*
-  configitem.c  -  generalized hierachy of configuration items
+  Configitem  -  generalised hierarchy of configuration items
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -22,8 +22,7 @@
 
 
 /** @file configitem.c
- ** create a configitem out of a single line.
- **
+ ** Implementation: create a configitem from a single line of the config file.
  */
 
 
@@ -32,11 +31,12 @@
 #include "lib/safeclib.h"
 #include "lib/tmpbuf.h"
 
-
-//TODO: Lumiera header includes//
 #include "common/config.h"
 #include "common/configitem.h"
 #include "common/configentry.h"
+
+#include <ctype.h>
+#include <stdint.h>
 
 
 static LumieraConfigitem parse_directive (LumieraConfigitem self, char* itr);
@@ -46,8 +46,6 @@ static LumieraConfigitem parse_section (LumieraConfigitem self, char* itr);
 static LumieraConfigitem parse_configentry (LumieraConfigitem self, char* itr);
 
 
-#include <ctype.h>
-#include <stdint.h>
 
 
 
@@ -59,7 +57,7 @@ lumiera_configitem_init (LumieraConfigitem self)
 
   llist_init (&self->link);
   self->parent = NULL;
-  llist_init (&self->childs);
+  llist_init (&self->children);
 
   llist_init (&self->lookup);
 
@@ -81,10 +79,10 @@ lumiera_configitem_destroy (LumieraConfigitem self, LumieraConfigLookup lookup)
 
   if (self)
     {
-      LLIST_WHILE_HEAD (&self->childs, node)
+      LLIST_WHILE_HEAD (&self->children, node)
         lumiera_configitem_delete ((LumieraConfigitem) node, lookup);
 
-      ENSURE (llist_is_empty (&self->childs), "destructor didn't remove childs");
+      ENSURE (llist_is_empty (&self->children), "destructor didn't remove children");
 
       if (self->vtable && self->vtable->destroy)
         self->vtable->destroy (self);
@@ -151,8 +149,8 @@ lumiera_configitem_move (LumieraConfigitem self, LumieraConfigitem source)
 
   self->parent = source->parent;
 
-  llist_init (&self->childs);
-  llist_insertlist_next (&self->childs, &source->childs);
+  llist_init (&self->children);
+  llist_insertlist_next (&self->children, &source->children);
 
   llist_init (&self->lookup);
   llist_insertlist_next (&self->lookup, &source->lookup);

@@ -101,9 +101,9 @@ typedef lumiera_mutex* LumieraMutex;
 
 
 /**
- * Initialize a mutex variable
- * This initializes a 'fast' default mutex which must not be locked recursively from one thread.
- * @param self is a pointer to the mutex to be initialized
+ * Initialise a mutex variable
+ * This initialises a 'fast' default mutex which must not be locked recursively from one thread.
+ * @param self is a pointer to the mutex to be initialised
  * @param purpose textual hint for the nobug resourcetracker
  * @param flag nobug logging target
  * @return self as given

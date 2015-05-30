@@ -1,5 +1,5 @@
 /*
-  config_typed.c  -  Lumiera configuration highlevel interface
+  Config-typed  -  Lumiera configuration high-level interface
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,27 +17,27 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 
-//TODO: Support library includes//
+* *****************************************************/
+
+
+/** @file config-type.d
+ ** Implementation: high level typed configuration interfaces.
+ ** @note unfinished draft from 2008
+ */
+
 #include "include/logging.h"
 #include "lib/tmpbuf.h"
-
-
-//TODO: Lumiera header includes//
 #include "common/config.h"
 
-//TODO: internal/static forward declarations//
+#include <stdint.h>
+
+
+
 extern LumieraConfig lumiera_global_config;
 
 
-//TODO: System includes//
-#include <stdint.h>
 
-/**
- * @file
- * Here are the high level typed configuration interfaces defined.
- */
 
 const char*
 lumiera_config_link_get (const char* key, const char** value)
@@ -176,7 +176,7 @@ scan_string (const char* in)
           *wpos = '\0';
         }
       else
-        /* quotes doesnt match */
+        /* quotes doesn't match */
         LUMIERA_ERROR_SET (config, CONFIG_SYNTAX_VALUE, "unmatched quotes");
     }
   else
@@ -281,13 +281,10 @@ lumiera_config_wordlist_set (const char* key, const char** value)
 }
 
 
-/**
- * Word
- * A single word, no quotes, chopped
- */
 
 /**
  * helper function, takes a raw input string and give a tmpbuf with the word parsed back.
+ * @remarks 'Word' is a single word, no quotes, chopped
  */
 static char*
 scan_word (const char* in)
