@@ -44,6 +44,16 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
  anchor:Focus[] link:#Focus[->]Focus::
         TBD
 
+ anchor:Fork[] link:#Fork[->]Fork::
+        A grouping device within the HighLevelModel.
+        Used within Lumiera to unify the handling of media bins, tracks
+        in the timeline and tool palettes. Most notably, Lumiera has no
+        distinction between ``audio tracks'' and ``video tracks'' --
+        rather, each Sequence holds a fork, which is a tree like structure
+        of nested scopes. Clips and other media objects are _placed_ into
+        these scopes and the application will derive the output connections
+        automatically.
+
  anchor:HighLevelModel[] link:#HighLevelModel[->]High Level Model::
         All the session content to be edited and manipulated by the user
         through the GUI. The high-level-model will be translated by the
@@ -132,10 +142,10 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
 
  anchor:Sequence[] link:#Sequence[->]Sequence::
         A collection of *Media Objects* (clips, effects, transitions, labels,
-        automation) placed onto a tree of tracks. By means of this placement,
-        the objects could be anchored relative to each other, relative to
-        external objects, absolute in time. A sequence can connect to 
-        global pipes when used as a top-level sequence within a timeline, or
+        automation) placed onto a fork (``tree of tracks''). By means of this
+        placement, the objects could be anchored relative to each other,
+        relative to external objects, absolute in time. A sequence can connect
+        to global pipes when used as a top-level sequence within a timeline, or
         alternatively it can act as a virtual-media when used within a
         meta-clip (nested sequence). A Sequence by default contains just a
         single root track and directly sends to the master bus of the Timeline.

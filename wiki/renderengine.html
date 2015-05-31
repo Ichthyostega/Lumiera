@@ -771,7 +771,7 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" created="200708100337" modified="201112222243" tags="def classes img">
+<div title="Asset" modifier="Ichthyostega" created="200708100337" modified="201505310058" tags="def classes img" changecount="1">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the Objects in the Session relate to the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObject in the Session, while the other purpose is to provide attribute and property information to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -793,7 +793,7 @@ Some software component able to work on media data in the Lumiera Render engine 
 &amp;rarr; ProcAsset
 
 !Structural Asset
-Some of the building blocks providing the framework for the objects placed into the current Session. Notable examples are [[processing pipes|Pipe]] within the high-level-model, Viewer attachment points, Tracks, Sequences, Timelines etc.
+Some of the building blocks providing the framework for the objects placed into the current Session. Notable examples are [[processing pipes|Pipe]] within the high-level-model, Viewer attachment points, Sequences, Timelines etc.
 * __outward interface operations__ include...
 * __inward interface operations__ include...
 &amp;rarr; StructAsset {{red{still a bit vague...}}}
@@ -1262,7 +1262,7 @@ With regard to the build process, the wiring of data connections translates into
 In many cases, the parameter values provided by these connections aren't frame based data, rather, the processing function needs a call interface to get the current value (value for a given time), which is provided by the parameter object. Here, the wiring needs to link to the suitable parameter instance, which is located within the high-level model (!). As an additional complication, calculating the actual parameter value may require a context data frame (typically for caching purposes to speed up the interpolation). While these parameter context data frames are completely opaque for the render node, they have to be passed in and out similar to the state needed by the node itself, and the wiring has to prepare for accessing these frames too.
 </pre>
 </div>
-<div title="Builder" modifier="Ichthyostega" created="200706220317" modified="201004032310" tags="def overview">
+<div title="Builder" modifier="Ichthyostega" created="200706220317" modified="201505310100" tags="def overview" changecount="1">
 <pre>The Builder takes some MObject/[[Placement]] information (called Timeline) and generates out of this a Render Engine configuration able to render this Objects. It does all decisions and retrieves the current configuration of all objects and plugins, so the Render Engine can just process them stright forward.
 
 The Builder is the central part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]
@@ -1274,7 +1274,7 @@ As the builder [[has to create a render node network|BuilderModelRelation]] impl
 * //operating the Builder// can be viewed at from two different angles, either emphasizing the [[basic building operations|BasicBuildingOperations]] employed to assemble the render node network, or focussing rather at the [[mechanics|BuilderMechanics]] of cooperating parts while processing.
 * besides, we can identify a small set of elementary situations we call [[builder primitives|BuilderPrimitives]], to be covered by the mentioned BuilderToolKit; by virtue of [[processing patterns|ProcPatt]] they form an [[interface to the rule based configuration|BuilderRulesInterface]].
 * the actual building (i.e. the application of tools to the timeline) is done by the [[Assembler|BuilderAssembler]], which is basically a collection of functions (but has a small amount of global configuration state)
-* any non-trivial wiring of render nodes, tracks, pipes and [[automation|Automation]] is done by the services of the [[connection manager|ConManager]]
+* any non-trivial wiring of render nodes, forks, pipes and [[automation|Automation]] is done by the services of the [[connection manager|ConManager]]
 </pre>
 </div>
 <div title="BuilderMechanics" modifier="Ichthyostega" created="200805210256" modified="200810170220" tags="Builder design operational">
@@ -1392,8 +1392,8 @@ at the lowest level within the builder there is the step of building a //connect
 &amp;rarr;see also: BuilderPrimitives for the elementary working situations corresponding to each of these [[builder moulds|BuilderMould]]
 </pre>
 </div>
-<div title="BusMO" modifier="Ichthyostega" created="201011210045" modified="201011210111" tags="def Model">
-<pre>''Bus-~MObjects'' create a scope and act as attachment point for building up [[global pipes|GlobalPipe]] within each timeline. While [[Sequence]] is a frontend -- actually implemented by attaching a root-[[Track]] object -- for //each global pipe// a BusMO is attached as child scope of the [[binding object|BindingMO]], which in turn actualy implements either a timeline or a [[meta-clip|VirtualClip]].
+<div title="BusMO" modifier="Ichthyostega" created="201011210045" modified="201505310101" tags="def Model" changecount="1">
+<pre>''Bus-~MObjects'' create a scope and act as attachment point for building up [[global pipes|GlobalPipe]] within each timeline. While [[Sequence]] is a frontend -- actually implemented by attaching a [[Fork]]-root object (»root track«) -- for //each global pipe// a BusMO is attached as child scope of the [[binding object|BindingMO]], which in turn actualy implements either a timeline or a [[meta-clip|VirtualClip]].
 * each global pipe corresponds to a bus object, which thus refers to the respective ~Pipe-ID
 * bus objects may be nested, forming a //subgroup//
 * the placement of a bus holds a WiringClaim, denoting that this bus //claims to be the corresponding pipe.//
@@ -1638,12 +1638,12 @@ For this to work, we need each of the //participating object types// to provide 
 
 @@clear(left):display(block):@@</pre>
 </div>
-<div title="ConfigRules" modifier="Ichthyostega" created="200801171352" modified="201211252131" tags="overview spec Rules">
+<div title="ConfigRules" modifier="Ichthyostega" created="200801171352" modified="201505310102" tags="overview spec Rules" changecount="1">
 <pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Lumiera the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Lumiera's behaviour to great extent.
 
 [[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
 * Creating a [[pipe|PipeHandling]] queries for a default pipe or a pipe with a certain stream type
-* Adding a new [[track|TrackHandling]] queries for some default placement configuration, e.g. the pipe it will be plugged to.
+* Adding a new [[fork (&quot;track&quot;)|TrackHandling]] queries for some default placement configuration, e.g. the pipe it will be plugged to.
 * when processing a [[wiring request|WiringRequest]], connection possibilities have to be evaluated.
 * actually building such a connection may create additional degrees of freedom, like panning for sound or layering for video.
 
@@ -1716,8 +1716,8 @@ Deliberately we avoid relying on any special knowledge regarding such data frame
 <pre>[[ProcLayer and Engine]]
 </pre>
 </div>
-<div title="DefaultsImplementation" modifier="Ichthyostega" created="200802200043" modified="201010250143" tags="spec impl draft">
-<pre>As detailed in the [[definition|DefaultsManagement]], {{{default(Obj)}}} is sort of a Joker along the lines &quot;give me a suitable Object and I don't care for further details&quot;. Actually, default objects are implemented by the {{{mobject::session::DefsManager}}}, which remembers and keeps track of anything labeled as &quot;default&quot;. This defaults manager is a singleton and can be accessed via the [[Session]] interface, meaning that the memory track regarding defaults is part of the session state. Accessing an object via the query for an default actually //tagges// this object (storing a weak ref in the ~DefsManager). Alongside with each object successfully queried via &quot;default&quot;, the degree of constriction is remembered, i.e. the number of additional conditions contained in the query. This enables us to search for default objects starting with the most unspecific.
+<div title="DefaultsImplementation" modifier="Ichthyostega" created="200802200043" modified="201505310104" tags="spec impl draft" changecount="1">
+<pre>As detailed in the [[definition|DefaultsManagement]], {{{default(Obj)}}} is sort of a Joker along the lines &quot;give me a suitable Object and I don't care for further details&quot;. Actually, default objects are implemented by the {{{mobject::session::DefsManager}}}, which remembers and keeps track of anything labeled as &quot;default&quot;. This defaults manager is a singleton and can be accessed via the [[Session]] interface, meaning that the memory trail regarding defaults is part of the session state. Accessing an object via the query for an default actually //tagges// this object (storing a weak ref in the ~DefsManager). Alongside with each object successfully queried via &quot;default&quot;, the degree of constriction is remembered, i.e. the number of additional conditions contained in the query. This enables us to search for default objects starting with the most unspecific.
 
 !Skeleton
 # ''search'': using the predicate {{{default(X)}}} enumerates existing objects of suitable type
@@ -1746,7 +1746,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201505081540" tags="decision design discuss Concepts" changecount="4">
+<div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201505310104" tags="decision design discuss Concepts" changecount="5">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; yes of course, that's a //no-brainer,// todays. Rather, important is to note what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
@@ -1758,7 +1758,7 @@ The high-level view of the tangible entities within the session is unified into 
 We ''separate'' processing (rendering) and configuration (building). The [[Builder]] creates a network of [[render nodes|ProcNode]], to be processed by //pulling data // from some [[Pipe]]
 
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
-An [[Sequence]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
+An [[Sequence]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[&quot;Tracks&quot; (forks)|Fork]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
 
 Actual ''media data and handling'' is abstracted rigorously. Media is conceived as being stream-like data of distinct StreamType. When it comes to more low-level media handling, we build on the DataFrame abstraction. Media processing isn't the focus of Lumiera; we organise the processing but otherwise ''rely on media handling libraries.'' In a similar vein, multiplicity is understood as type variation. Consequently, we don't build an audio and video &quot;section&quot; and we don't even have audio tracks and video tracks. Lumiera uses tracks and clips, and clips build on media, but we're able to deal with [[multichannel|MultichannelMedia]] mixed-typed media natively.
 
@@ -2204,6 +2204,21 @@ The building blocks for such a chain of triggers and reactions are provided by a
 
 __3/2014__: The crucial point seems to be the impedance mismatch between segments and calculation streams. We have a really high number of segments, which change only occasionally. But we have a rather small number of calculation streams, which mutate rapidly. And, over time, any calculation stream might -- occasionally -- touch a large number of segments. Thus, care should be taken not to implement the dependency structure naively. We only need to care about the tainted calculation streams when it comes to discarding a segment.</pre>
 </div>
+<div title="Fork" modifier="Ichthyostega" created="200801062320" modified="201505310126" tags="def design decision" changecount="1">
+<pre>Within Lumiera, tracks are just a structure used to organize the Media Objects within the Sequence. Tracks are associated allways to a specific Sequence and the Tracks of an Sequence form a //tree of tracks.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
+
+To underpin this design decision, Lumiera introduces the more generic concept of a ''Fork'' -- to subsume the &quot;tracks&quot; within the timeline, as well as the &quot;media bins&quot; in the asset management section
+
+The ~Fork-IDs are assets on their own, but they can be found within a given sequence. So, several sequences can share a single track or each sequence can hold tracks with their own, separate identity. (the latter is the default)
+* Like most ~MObjects, tracks have a asset view: you can find a track asset (actually just a fork ID) in the asset manager.
+* and they have an object view: there is an ''Fork'' MObject which can be [[placed|Placement]], thus defining properties of this track within one sequence, e.g. the starting point in time
+Of course, we can place other ~MObjects relative to some fork (that's the main reason why we want to have tracks). In this sense, the [[handling of Tracks|TrackHandling]] is somewhat special: the placements forming the fork (&quot;tree of tracks&quot;) can be accessed directly through the sequence, and a fork acts as container, forming a scope to encompass all the objects &quot;on&quot; this track. Thus, the placement of a fork defines properties of &quot;the track&quot;, which will be inherited (if necessary) by all ~MObjects placed within the scope of this fork. For example, if placing (=plugging) a fork to some global [[Pipe]], and if placing a clip to this fork, without placing the clip directly to another pipe, the associated-to-pipe information of the fork will be fetched by the builder when needed to make the output connection of the clip.
+&amp;rarr; [[Handling of Tracks|TrackHandling]]
+&amp;rarr; [[Handling of Pipes|PipeHandling]]
+
+&amp;rarr; [[Anatomy of the high-level model|HighLevelModel]]
+</pre>
+</div>
 <div title="ForwardIterator" modifier="Ichthyostega" created="200910312114" modified="200912190027" tags="Concepts def spec">
 <pre>The situation focussed by this concept is when an API needs to expose a sequence of results, values or objects, instead of just yielding a function result value. As the naive solution of passing an pointer or array creates coupling to internals, it was superseded by the ~GoF [[Iterator pattern|http://en.wikipedia.org/wiki/Iterator]]. Iteration can be implemented by convention, polymorphically or by generic programming; we use the latter approach.
 
@@ -2301,7 +2316,7 @@ A generic node may //represent any of these kind// -- and it may have ~GenNode c
 When dealing with this external model representation, indeed there are some rather global concerns which lend themselves to a generic programming style. Simply because, otherwise, we'd end up explicating and thereby duplicating the structure of the model all over the code. Frequently, such a situation is quoted as the reason to demand introspection facilities on any data structure. We doubt this is a valid conclusion. Since introspection allows to accept just //any element// -- followed by an open-ended //reaction on the received type// -- we might arrive at the impression that our code reaches a maximum of flexibility and &quot;openness&quot;. Unfortunately, this turns out to be a self-deception, since code to do any meaningful operation needs pre-established knowledge about the meaning of the data to be processed. More so, when, as in any hierarchical data organisation, the relevant meaning is attached to the structure itself, so consequently this pre-established knowledge tends to be scattered over several, superficially &quot;open&quot; handler functions. What looks open and flexible at first sight is in fact littered with obscure and scattered, non obvious additional presumptions.
 This observation from coding practice gets us to the conclusion, that we do not really want to support the full notion of data and type introspection. We //do want// some kind of passive matching on structure, where the receiver explicitly has to supply structural presuppositions. In a fully functional language with a correspondingly rich type system, a partial function (pattern match) would be the solution of choice. Under the given circumstances, we're able to emulate this pattern based on our variant visitor -- which basically calls a different virtual function for each of the types possibly to be encountered &quot;within&quot; a ~GenNode.</pre>
 </div>
-<div title="GlobalPipe" modifier="Ichthyostega" created="201007110200" modified="201202032308" tags="Model spec draft">
+<div title="GlobalPipe" modifier="Ichthyostega" created="201007110200" modified="201505310106" tags="Model spec draft" changecount="1">
 <pre>Each [[Timeline]] has an associated set of global [[pipes|Pipe]] (global busses), similar to the subgroups of a sound mixing desk.
 In the typical standard configuration, there is (at least) a video master and a sound master pipe. Like any pipe, ingoing connections attach to the input side, attached effects form a chain, where the last node acts as exit node. The PipeID of such a global bus can be used to route media streams, allowing the global pipe to act as a summation bus bar.
 &amp;rarr; discussion and design rationale of [[global pipes|GlobalPipeDesign]]
@@ -2312,10 +2327,10 @@ In the typical standard configuration, there is (at least) a video master and a 
 * any global pipe //not// connected to another OutputDesignation automatically creates a ModelPort
 * global pipes //do not appear automagically just by sending output to them// -- they need to be set up explicitly
 * the top-level (BusMO) of the global pipes isn't itself a pipe. Thus the top-level of the pipes forms a list (typically a video and sound master)
-* below, a tree-like structure //may// be created, building upon the same scope based routing technique as used for the tracks
+* below, a tree-like structure //may// be created, building upon the same scope based routing technique as used for the tracks / forks
 </pre>
 </div>
-<div title="GlobalPipeDesign" modifier="Ichthyostega" created="201011202308" modified="201011210016" tags="design decision discuss">
+<div title="GlobalPipeDesign" modifier="Ichthyostega" created="201011202308" modified="201505310107" tags="design decision discuss" changecount="1">
 <pre>//This page serves to shape and document the design of the global pipes//
 Many aspects regarding the global pipes turned out while clarifying other parts of ~Proc-Layer's design. For some time it wasn't even clear if we'd need global pipes -- common video editing applications get on without. Mostly it was due to the usefulness of the layout found on sound mixing desks, and a vague notion to separate time-dependant from global parts, which finally led me to favouring such a global facility. This decision then helped in separating the concerns of timeline and sequence, making the //former// a collection of non-temporal entities, while the latter concentrates on time varying aspects.
 
@@ -2345,8 +2360,8 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :defining the global bus configuration is considered a crucial part of each project setup. Lumiera isn't meant to support fiddling around thoughtlessly. The user should be able to rely on crucial aspects of the global setup never being changed without notice.
 ;isn't wiring and routing going to be painful then?
 :routing is scope based and we employ a hierarchical structure, so subgroups are routed automatically. Moreover, wiring is done based on best match regarding the stream type. We might consider feeding all non-connected output designations to the GUI after the build process, to allow short-cuts for creating further buses.
-;why not making buses just part of the track tree?
-:anything on a track has a temporal extension and may vary -- while it's the very nature of the global pipes to be static anchor points.
+;why not making buses just part of the fork (&quot;track tree&quot;)?
+:anything within the scope of some fork (&quot;track&quot;) has a temporal extension and may vary -- while it's the very nature of the global pipes to be static anchor points.
 ;why not having one grand unified root, including the outputs?
 :you might consider that a matter of taste (or better common-sense). Things different in nature should not be forced into uniformity
 ;should global pipes be arranged as list or tree?
@@ -2500,12 +2515,12 @@ Now, when invoking an operation on some public interface, the code in the lower 
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201410242358" tags="GuiPattern design decision draft" changecount="7">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201505310135" tags="GuiPattern design decision draft" changecount="8">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
 * this binding in turn ties a [[Sequence]]
-* and the sequence provides a [[tree of Tracks|Track]]
+* and the sequence provides a [[Fork (&quot;tree of tracks&quot;)|Fork]]
 * within the scope of these tracks, there is content
 * and this content implies output designations
 * which are resolved to the [[global Pipes|GlobalPipe]] belonging to //this specific Timeline.//
@@ -2564,7 +2579,7 @@ All of the above is a serious concern. There is no easy way out, since, for the 
 * consider the ability to ''integrate regular GTK widgets'' onto our Custom Canvas. Try to figure out the regular event handling and try to forward to the embedded widgets. On success, this would allow to pass back into existing implementation and use standard code for standard stuff, even if we need to do the frame decoration and some event handling ourselves.
 </pre>
 </div>
-<div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201410160108" tags="Model spec design discuss img" changecount="1">
+<div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">
 <pre>While the low-level model holds the data used for carrying out the actual media data processing (=rendering), the high-level model is what the user works upon when performing edit operations through the GUI (or script driven in &amp;raquo;headless mode&amp;laquo;). Its building blocks and combination rules determine largely what structures can be created within the [[Session]].
 On the whole, it is a collection of [[media objects|MObjects]] stuck together and arranged by [[placements|Placement]].
 
@@ -2592,9 +2607,9 @@ Actually a ''clip'' is handled as if it was comprised of local pipe(s). In the e
 !!Example of an complete Session
 [img[draw/high-level3.png]]
 The Session contains several independent [[sequences|Sequence]] plus an output bus section (''global Pipes'') attached to the [[Timeline]]. Each sequence holds a collection of ~MObjects placed within a ''tree of tracks''. 
-Within Lumiera, tracks are a rather passive means for organizing media objects, but aren't involved into the data processing themselves. The possibility of nesting tracks allows for easy grouping. Like the other objects, tracks are connected together by placements: A track holds the list of placements of its child tracks. Each sequence holds a single placement pointing to the root track. 
+Within Lumiera, &quot;tracks&quot; (actually implemented as [[forks|Fork]]) are a rather passive means for organizing media objects, but aren't involved into the data processing themselves. The possibility of nesting tracks allows for easy grouping. Like the other objects, tracks are connected together by placements: A track holds the list of placements of its child tracks. Each sequence holds a single placement pointing to the root track. 
 
-As placements have the ability to cooperate and derive any missing placement specifications, this creates a hierarchical structure throughout the session, where parts on any level behave similar if applicable. For example, when a track is anchored to some external entity (label, sync point in sound, etc), all objects placed relatively to this track will adjust and follow automatically. This relation between the track tree and the individual objects is especially important for the wiring, which, if not defined locally within an ~MObject's placement, is derived by searching up this track tree and utilizing the wiring plug locating pins found there, if applicable. In the default configuration, the placement of an sequence's root track contains a wiring plug for video and another wiring plug for audio. This setup is sufficient for getting every object within this sequence wired up automatically to the correct global output pipe. Moreover, when adding another wiring plug to some sub track, we can intercept and reroute the connections of all objects creating output of this specific stream type within this track and on all child tracks.
+As placements have the ability to cooperate and derive any missing placement specifications, this creates a hierarchical structure throughout the session, where parts on any level behave similar if applicable. For example, when a fork (&quot;track&quot;) is anchored to some external entity (label, sync point in sound, etc), all objects placed relatively to this track will adjust and follow automatically. This relation between the track tree and the individual objects is especially important for the wiring, which, if not defined locally within an ~MObject's placement, is derived by searching up this track tree and utilizing the wiring plug locating pins found there, if applicable. In the default configuration, the placement of an sequence's root track contains a wiring plug for video and another wiring plug for audio. This setup is sufficient for getting every object within this sequence wired up automatically to the correct global output pipe. Moreover, when adding another wiring plug to some sub track, we can intercept and reroute the connections of all objects creating output of this specific stream type within this track and on all child tracks.
 
 Besides routing to a global pipe, wiring plugs can also connect to the source port of an ''meta-clip''. In this example session, the outputs of ~Seq-2 as defined by locating pins in it's root track's placement, are directed to the source ports of a [[meta-cllip|VirtualClip]] placed within ~Seq-1. Thus, within ~Seq-1, the contents of ~Seq-2 appear like a pseudo-media, from which the (meta) clip has been taken. They can be adorned with effects and processed further completely similar to a real clip.
 
@@ -2953,9 +2968,9 @@ The ''shut down'' sequence does exactly that: halt processing and rendering, dis
 &amp;rarr; see &quot;~MediaAccessMock&quot; for a mock/test implementaion
 </pre>
 </div>
-<div title="LocatingPin" modifier="Ichthyostega" created="200710181527">
+<div title="LocatingPin" modifier="Ichthyostega" created="200710181527" modified="201505310110" changecount="1">
 <pre>Used to actually implement the various kinds of [[Placement]] of ~MObjects. ~LocatingPin is the root of a hierarchy of different kinds of placing, constraining and locating a Media Object. Basically, this is an instance of the ''state pattern'': The user sees one Placement object with value semantics, but when the properties of the Placement are changed, actually a ~LocatingPin object (or rather a chain of ~LocatingPins) is changed within the Placement. Subclasses of ~LocatingPin implement different placing/constraining behaviour:
-* {{{FixedLocation}}} places a MObject to a fixed temporal position and track
+* {{{FixedLocation}}} places a MObject to a fixed temporal position and track {{red{wrong! it is supposed to be an output designation}}}
 * {{{RelativeLocation}}} is used to atach the MObject to some other anchor MObject
 * //additional constraints, placement objectives, range restrictions, pattern rules will follow...//</pre>
 </div>
@@ -3017,13 +3032,13 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [img[Classess related to the session|uml/fig128133.png]]
 </pre>
 </div>
-<div title="MagicAttachment" modifier="Ichthyostega" created="201006132135" modified="201010180131" tags="Model spec draft">
+<div title="MagicAttachment" modifier="Ichthyostega" created="201006132135" modified="201505310111" tags="Model spec draft" changecount="1">
 <pre>The HighLevelModel consists of MObjects, which are attached to one another through their [[Placement]]. While this is a generic scheme to arrange objects in a tree of [[scopes|PlacementScope]], some attachments are handled specifically and may trigger side-effects
 
 {{red{drafted feature as of 6/2010}}}
 
 * a [[binding|BindingMO]] attached to root is linked to a [[Timeline]]
-* a [[Track]] attached to root corresponds to a [[Sequence]]
+* a [[Fork]] attached to root corresponds to a [[Sequence]]
 
 &amp;rarr; see ModelDependencies</pre>
 </div>
@@ -3149,12 +3164,12 @@ For each meta asset instance, initially a //builder// is created for setting up 
 <div title="Model" modifier="Ichthyostega" created="201003210020" modified="201003210021" tags="overview">
 <pre>Lumiera's Proc-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" created="201003020150" modified="201011220126" tags="SessionLogic Model operational spec draft img">
+<div title="ModelDependencies" modifier="Ichthyostega" created="201003020150" modified="201505310112" tags="SessionLogic Model operational spec draft img" changecount="1">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assesment is the fact that the session implementation is beeing kept mostly single-threaded. Thus, lacking one central place to handle this issue, care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
 
 !known interdependencies
 [&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
-* the session API relies on two kinds of facade like assets: [[Timeline]] and [[Sequence]], linked to the BindingMO and Track objects within the model respectively.
+* the session API relies on two kinds of facade like assets: [[Timeline]] and [[Sequence]], linked to the BindingMO and [[Fork]] (&quot;track&quot;) objects within the model respectively.
 * conceptually, the DefaultsManagement and the AssetManager count as being part of the [[global model scope|ModelRootMO]], but, due to their importance, these facilities are accessible through an singleton interface.
 * currently as of 2/2010 the exact dependency of the automation calculation during the render process onto the automation definitions within the HighLevelModel remains to be specified.
 
@@ -3178,7 +3193,7 @@ While implemented as StructAsset, additionally we need to assure every instance 
 : __detached__ from root &amp;rArr; will care to destroy the corresponding timeline
 
 ;Sequence
-:is completely dependent on a root-scoped track, can optionally be bound, into one/multiple timelines/VirtualClip, or unbound
+:is completely dependent on a root-scoped &quot;track&quot; (fork root), can optionally be bound, into one/multiple timelines/VirtualClip, or unbound
 : __created__ &amp;rArr; mandates specification of an track-MO, (necessarily) placed into root scope &amp;mdash; {{red{TODO: what to do with non-root tracks?}}}
 : __destroy__ &amp;rArr; destroy any binding using this sequence, purge the corresponding track from model, if applicable, including all contents
 : __querying__ &amp;rArr; forwards to creating a root-placed track, unless the queried sequence exists already
@@ -3192,7 +3207,7 @@ While implemented as StructAsset, additionally we need to assure every instance 
 While generally the HighLevelModel allows all kinds of arrangements and attachments, certain connections are [[detected automatically|ScopeTrigger]] and may trigger special actions, like the creation of Timeline or Sequence façade objects as described above. The implementation of such [[magic attachments|MagicAttachment]] relies on the PlacementIndex.
 </pre>
 </div>
-<div title="ModelObjectIdentity" modifier="Ichthyostega" created="201001070905" modified="201001072246" tags="SessionLogic spec draft">
+<div title="ModelObjectIdentity" modifier="Ichthyostega" created="201001070905" modified="201505310113" tags="SessionLogic spec draft" changecount="1">
 <pre>When it comes to addressing and distinguishing object instances, there are two different models of treatment, and usually any class can be related to one of these: An object with ''value semantics'' is completely defined through this &quot;value&quot;, and not distinguishable beyond that. Usually, value objects can be copied, handled and passed freely, without any ownership. To the contrary, an object with ''reference semantics'' has an unique identity, even if otherwise completely opaque. It is rather like a facility, &quot;living&quot; somewhere, often owned and managed by another object (or behaving special in some other way). Usually, client code deals with such objects through a reference token (which has value semantics). Care has to be taken with //mutable objects,// as any change might influence the object's identity. While this usually is acceptable for value objects, it is prohibited for objects with reference semantics. These are typically created by //factories// &amp;mdash; and this fabrication is the only process to define the identity.
 
 !Assets
@@ -3222,7 +3237,7 @@ The following properties can be considered as settled:
 * thus, because placements act as a subdivision of ~MObject identification, in practice always placements will be compared.
 
 !Placements
-[[Placements|Placement]] are somewhat special, as they mix value and reference semantics. First off, they are configuration values, copyable and smart-pointers, referring to a primary subject (clip, effect, track, label, binding,....). But, //by adding a placement to the session,// we create an unique instance-identity. This is implemented by copying the placement into the internal session store and thereby creating a new hash-ID, which is then registered within the PlacementIndex. Thus, a ''placement into the model'' has a distict identity.
+[[Placements|Placement]] are somewhat special, as they mix value and reference semantics. First off, they are configuration values, copyable and smart-pointers, referring to a primary subject (clip, effect, fork, label, binding,....). But, //by adding a placement to the session,// we create an unique instance-identity. This is implemented by copying the placement into the internal session store and thereby creating a new hash-ID, which is then registered within the PlacementIndex. Thus, a ''placement into the model'' has a distict identity.
 * Placements are ''equality'' comparable, based on this instance identity (hash-ID)
 * besides, there is an equivalence relation regarding the &quot;placement specification&quot; contained in the [[locating pins|LocatingPin]] of the Placement.
 ** they can be compared for ''equivalent definition'': the contained definitions are the same and in the same order
@@ -3277,8 +3292,8 @@ This observation leads to the idea of using //model port references// as fronten
 A model port registry, maintained by the builder, is responsible for storing the discovered model ports within a model port table, which is then swapped in after completing the build process. The {{{builder::ModelPortRegistry}}} acts as management interface, while client code accesses just the {{{ModelPort}}} frontend. A link to the actual registry instance is hooked into that frontend when bringing up the builder subsystem.
 </pre>
 </div>
-<div title="ModelRootMO" modifier="Ichthyostega" created="200912080307" modified="200912110245" tags="def">
-<pre>A special kind of MObject, serving as a marker or entry point at the root of the HighLevelModel. As any ~MObject, it is attached to the model by a [[Placement]]. And in this special case, this placement froms the ''root scope'' of the model, thus containing any other PlacementScope (e.g. tracks, clips with effects,...)
+<div title="ModelRootMO" modifier="Ichthyostega" created="200912080307" modified="201505310113" tags="def" changecount="1">
+<pre>A special kind of MObject, serving as a marker or entry point at the root of the HighLevelModel. As any ~MObject, it is attached to the model by a [[Placement]]. And in this special case, this placement froms the ''root scope'' of the model, thus containing any other PlacementScope (e.g. forks, clips with effects,...)
 
 This special ''session root object'' provides a link between the model part and the &amp;raquo;bookkeeping&amp;laquo; part of the session, i.e. the [[assets|Asset]]. It is created and maintained by the session (implementation level) &amp;mdash; allowing to store and load the asset definitions as contents of the model root element.
 
@@ -3508,7 +3523,7 @@ The operation point is provided by the current BuilderMould and used by the [[pr
 This is possible because the operation point has been provided (by the mould) with information about the media stream type to be wired, which, together with information accessible at the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
 </pre>
 </div>
-<div title="OutputDesignation" modifier="Ichthyostega" created="201006220126" modified="201112222245" tags="Model draft design discuss">
+<div title="OutputDesignation" modifier="Ichthyostega" created="201006220126" modified="201505310114" tags="Model draft design discuss" changecount="1">
 <pre>An ever recurring problem in the design of Luimiera's ~Proc-Layer is how to refer to output destinations, and how to organise them.
 Wiring the flexible interconnections between the [[pipes|Pipe]] should take into account both the StreamType and the specific usage context ([[scope|PlacementScope]]) -- and the challenge is to avoid hard-linking of connections and tangling with the specifics of the target to be addressed and connected. This page, started __6/2010__ by collecting observations to work out the relations, arrives at defining a //key abstraction// of output management.
 
@@ -3524,7 +3539,7 @@ Wiring the flexible interconnections between the [[pipes|Pipe]] should take into
 * expanding on the basic concept of a Placement in N-dimensional configuration space, this //figuring out// would denote the ability to resolve the final output destination
 * this resolution to a final destination is explicitly context dependent. We engage into quite some complexities to make this happen (&amp;rarr; BindingScopeProblem)
 * [[processing patterns|ProcPatt]] are used for creating nodes on the source network of a clip, and similarly for fader, overlay and mixing into a summation pipe
-* in case the track tree of a sequence doesn't contain specific routing advice, connections will be done directly to the global pipes in order and by matching StreamType (i.e. typically video to video master, audio to stereo audio master). When a monitor (viewer window) is attached to a timeline, similar output connections are made from the timeline's global pipes, i.e. the video display will take the contents of the first video (master) bus, and the first stereo audio pipe will be pulled and sent to system audio out.
+* in case the fork (&quot;track tree&quot;) of a sequence doesn't contain specific routing advice, connections will be done directly to the global pipes in order and by matching StreamType (i.e. typically video to video master, audio to stereo audio master). When a monitor (viewer window) is attached to a timeline, similar output connections are made from the timeline's global pipes, i.e. the video display will take the contents of the first video (master) bus, and the first stereo audio pipe will be pulled and sent to system audio out.
 * a mismatch between the system output possibilities and the stream type of a bus to be monitored should result in the same adaptation mechanism to kick in, as is used internally, when connecting an ~MObject to the next bus. Possibly we'll use separate rules in this case (allow 3D to flat, stereo to mono, render 5.1 into Ambisonics...)
 
 !Conclusions
@@ -4541,8 +4556,8 @@ Placement references mimic the behaviour of a real placement, i.e. they proxy th
 
 </pre>
 </div>
-<div title="PlacementScope" modifier="Ichthyostega" created="200905120304" modified="201402162034" tags="SessionLogic spec img" changecount="1">
-<pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the possibility of //grouping or container objects,// e.g. [[sequences|Sequence]] or [[tracks|Track]] or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
+<div title="PlacementScope" modifier="Ichthyostega" created="200905120304" modified="201505310115" tags="SessionLogic spec img" changecount="2">
+<pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the possibility of //grouping or container objects,// e.g. [[sequences|Sequence]] or [[forks (&quot;tracks&quot;)|Fork]] or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
 
 Thus, while the [[sequences|Sequence]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. The latter is called the ''scope top''. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
 
@@ -4562,11 +4577,11 @@ __note__: attaching a Sequence in multiple ways &amp;rarr; [[causes scoping prob
 Similar to the common mechanisms of object visibility in programming languages, placement scopes guide the search for and resolution of properties of placement. Any such property //not defined locally// within the placement is queried ascending through the sequence of nested scopes. Thus, global definitions can be shadowed by local ones.
 </pre>
 </div>
-<div title="PlacementType" modifier="Ichthyostega" created="200911271742" modified="200911271836">
+<div title="PlacementType" modifier="Ichthyostega" created="200911271742" modified="201505310116" changecount="1">
 <pre>Placement is a smart-ptr. As such, usually smart-pointers are templated on the pointee type, but a type relation between different target types doesn't carry over into a type relation on the corresponding smart-pointers. Now, as a [[Placement]] or a PlacementRef often is used to designate a specific &quot;instance&quot; of an MObject placed into the current session, the type parametrisation plays a crucial role when it comes to processing the objects contained within the session. Because the session deliberately has not much additional structure, besides the structure created by [[scopes and aggregations|PlacementScope]] within the session's contents.
 
 To this end, we're using a special definition pattern for Placements, so
-* a placement can refer to a specific sub-Interface like Track, Clip, Effect
+* a placement can refer to a specific sub-Interface like Fork (&quot;track&quot;), Clip, Effect
 * a specialised placement can stand-in for the more generic type.
 
 !generic handling
@@ -5579,7 +5594,7 @@ ScopePath represents an ''effective scoping location'' within the model &amp;mda
 ** clear a path (reset to default)
 </pre>
 </div>
-<div title="ScopeTrigger" modifier="Ichthyostega" created="201006132139" modified="201410190030" tags="SessionLogic impl draft" changecount="1">
+<div title="ScopeTrigger" modifier="Ichthyostega" created="201006132139" modified="201505310117" tags="SessionLogic impl draft" changecount="2">
 <pre>An implementation mechanism used within the PlacementIndex to detect some specific kinds of object connections(&amp;raquo;MagicAttachment&amp;laquo;), which then need to trigger a special handling.
 
 {{red{planned feature as of 6/2010)}}}
@@ -5589,7 +5604,7 @@ ScopePath represents an ''effective scoping location'' within the model &amp;mda
 !preliminary requirements
 We need to detect attaching and detaching of
 * root &amp;harr; BindingMO
-* root &amp;harr; [[Track]]
+* root &amp;harr; [[Fork]]
 </pre>
 </div>
 <div title="Segmentation" modifier="Ichthyostega" created="201012121901" modified="201204150033" tags="def spec Builder">
@@ -5632,8 +5647,8 @@ The Fixture is mostly comprised of the Segementation datastructure, but some oth
 Largely the storage of the render nodes network is hooked up behind the Fixture &amp;rarr; [[storage considerations|FixtureStorage]]
 </pre>
 </div>
-<div title="Sequence" modifier="Ichthyostega" created="201001252327" modified="201010180156" tags="def">
-<pre>A sequence is a collection of media objects, arranged onto a track tree. Sequences are the building blocks within the session. To be visible and editable, a session needs to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.
+<div title="Sequence" modifier="Ichthyostega" created="201001252327" modified="201505310118" tags="def" changecount="2">
+<pre>A sequence is a collection of media objects, arranged onto a fork (&quot;track tree&quot;). Sequences are the building blocks within the session. To be visible and editable, a session needs to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.
 
 The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitute a logical grouping of clips used simultaneously in compositional work etc. The data structure comprising a sequence is always a sub-tree of tracks, attached allways directly below root (Sequences at sub-nodes are deliberately disallowed). Through the sequence as frontend, this track tree might be used at various places in the model simultaneously. Tracks in turn are only an organisational (grouping) device, like folders &amp;mdash; so this structure of sequences and track trees referred through them allows to use the contents of such a track or folder at various places within the model. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
 &amp;rarr; see considerations about [[the role of Tracks and Pipes in conjunction with the sequences|TrackPipeSequence]]
@@ -5691,8 +5706,8 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 <div title="SessionConfigurationAttachment" modifier="Ichthyostega" created="201112222242" tags="SessionLogic draft">
 <pre>While the core of the persistent session state corresponds just to the HighLevelModel, there is additionaly attached state, annotations and specific bindings, which allow to connect the session model to the local application configuration on each system. A typical example would be the actual output channels, connections and drivers to use on a specific system. In a Studio setup, these setup and wiring might be quite complex, it may be specific to just a single project, and the user might want to work on the same project on different systems. This explains why we can't just embody these configuration information right into the actual model.</pre>
 </div>
-<div title="SessionContentsQuery" modifier="Ichthyostega" created="201006190526" modified="201006190547" tags="SessionLogic spec draft">
-<pre>Querying and retrieving objects within the session model is always bound to a [[scope|PlacementScope]]. When using the //dedicated API,// this scope is immediately defined by the object used to issue the query, like e.g. when searching the contents of a track. But when using the //generic API,// this scope is rather implicit, because in this case a (stateful) QueryFocus object is used to invoke the queries. Somewhat in-between, the top-level session API itself exposes dedicated query functions working on the whole-session scope (model root).
+<div title="SessionContentsQuery" modifier="Ichthyostega" created="201006190526" modified="201505310118" tags="SessionLogic spec draft" changecount="3">
+<pre>Querying and retrieving objects within the session model is always bound to a [[scope|PlacementScope]]. When using the //dedicated API,// this scope is immediately defined by the object used to issue the query, like e.g. when searching the contents of a fork (&quot;track&quot; or &quot;media bin&quot;). But when using the //generic API,// this scope is rather implicit, because in this case a (stateful) QueryFocus object is used to invoke the queries. Somewhat in-between, the top-level session API itself exposes dedicated query functions working on the whole-session scope (model root).
 Based on the PlacementIndex, the treelike scope structure can be explored efficiently; each Placement attached to the session knows its parent scope. But any additional filtering currently is implemented on top of this basic scope exploration, which obviously may degenerate when searching large scopes and models. Filtering may happen implicitly; all scope queries are parametrised to a specific kind of MObject, while the PlacementIndex deals with all kinds of {{{Placement&lt;MObject&gt;}}} uniformly. Thus, more specifically typed queries automatically have to apply a type filter based on the RTTI of the discovered placements. The plan is later to add specialised sub-indices and corresponding specific query functions to speed up the most frequently used kinds of queries.
 
 !Ways to query
@@ -5729,7 +5744,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201501081350" tags="SessionLogic GuiIntegration design draft discuss" changecount="2">
+<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201505310142" tags="SessionLogic GuiIntegration design draft discuss" changecount="5">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -5739,7 +5754,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 ** Sequence
 ** Placement
 ** Clip
-** Track
+** Fork
 ** Effect
 ** Automation
 * the [[command|CommandHandling]] interface, including the [[UNDO|UndoManager]] facility
@@ -5748,10 +5763,10 @@ The session and the models rely on dependent objects beeing kept updated and con
 The HighLevelModel exposes two kinds of interfaces (which are interconnected and rely on each other): A generic, but somewhat low-level API, which is good for processing &amp;mdash; like e.g. for the builder or de-serialiser &amp;mdash; and a more explicit API providing access to some meaningful entities within the model. Indeed, the latter (explicit top level entities) can be seen as a ''façade interface'' to the generic structures:
 * the [[Session]] object itself corresponds to the ModelRootMO
 * the one (or multiple) [[Timeline]] objects correspond to the BindingMO instances attached immediately below the model root
-* the [[sequences|Sequence]] bound into these timelines (by the ~BindingMOs) correspond to the top level [[Track]]-~MObjects within each of these sequences.
+* the [[sequences|Sequence]] bound into these timelines (by the ~BindingMOs) correspond to the top level [[Fork]]-~MObjects within each of these sequences.
 [&lt;img[Object relations on the session façade|draw/sessionFacade1.png]]
 
-Thus, there is a convenient and meaningful access path through these façade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
+Thus, there is a convenient and meaningful access path through these façade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, forks)
 
 Following this access path down from the session means using the ''dedicated'' API on the objects retrieved.
 To the contrary, the ''generic'' API is related to a //current location (state),// the QueryFocus.
@@ -5886,7 +5901,7 @@ The answer is simple: the one who needs to know about their existence. Because b
 Interestingly, there seems to be an alternative answer to this question. We could locate the setup and definition of all commands into a central administrative facility. Everyone in need of a command then ought to know the name and retrieve this command. Sounds like bureaucracy.
 </pre>
 </div>
-<div title="SessionOverview" modifier="Ichthyostega" created="200709272105" modified="201112222248" tags="design img">
+<div title="SessionOverview" modifier="Ichthyostega" created="200709272105" modified="201505310137" tags="design img" changecount="1">
 <pre>&lt;&lt;&lt;
 {{red{WARNING: Naming was discussed (11/08) and decided to be changed....}}}
 * the term [[EDL]] was phased out in favour of ''Sequence''
@@ -5901,14 +5916,14 @@ The Session is close to what is visible in the GUI. From a user's perspective, y
 For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather
 * we may have several [[sequences|Sequence]], e.g. one for each scene. These sequences can be even layered or nested (compositional work).
 * within one project, there may be multiple, //independant Timelines// &amp;mdash; each of which may have an associated Viewer or Monitor
-Usually, when working with this stucture, you'll drill down starting from a timeline, trough a (top-level) sequence, down into a track, a clip, maybe even a embedded Sequence (VirtualClip), and from there even more down into a single attached effect. This constitutes a set of [[nested scopes|PlacementScope]]. Operations are to be [[dispatched|ProcDispatcher]] through a [[command system|CommandHandling]], including the target object [[by reference|MObjectRef]]. [[Timelines|Timeline]] on the other hand are always top-level objects and can't be combined further. You can render a single given timeline to output.
+Usually, when working with this stucture, you'll drill down starting from a timeline, trough a (top-level) sequence, down into a fork (&quot;track&quot;), a clip, maybe even a embedded Sequence (VirtualClip), and from there even more down into a single attached effect. This constitutes a set of [[nested scopes|PlacementScope]]. Operations are to be [[dispatched|ProcDispatcher]] through a [[command system|CommandHandling]], including the target object [[by reference|MObjectRef]]. [[Timelines|Timeline]] on the other hand are always top-level objects and can't be combined further. You can render a single given timeline to output.
 &amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 
 !!!the definitive state
 With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages a special consolidated view (object list), called [[the Fixture|Fixture]], which can be seen as all currently active objects placed onto a single timeline.
 
 !!!organisational devices
-The possibility of having multiple Sequences helps organizing larger projects. Each [[Sequence]] is just a logical grouping; because all effective properties of any MObject within this sequence are defined by the ~MObject itself and the [[Placement]], by which the object is anchored to some time point, some track, can be connected to some pipe, or linked to another object. In a similar manner, [[Tracks|Track]] are just another organisational aid for grouping objects, disabling them and defining common output pipes.
+The possibility of having multiple Sequences helps organizing larger projects. Each [[Sequence]] is just a logical grouping; because all effective properties of any MObject within this sequence are defined by the ~MObject itself and the [[Placement]], by which the object is anchored to some time point, some fork, can be connected to some pipe, or linked to another object. In a similar manner, [[Forks (&quot;tracks&quot;)|Fork]] are just another organisational aid for grouping objects, disabling them and defining common output pipes.
 
 !!!global pipes
 [&gt;img[draw/Proc.builder1.png]] Any session should contain a number of global [[(destination) pipes|Pipe]], typically video out and audio out. The goal is, to get any content producing or transforming object in some way connected to one of these outputs, either //by [[placing|Placement]] it directly// to some pipe, or by //placing it to a track// and having the track refer to some pipe. Besides the global destination pipes, we can use internal pipes to form busses or subgroups, either on a global (session) level, or by using the processing pipe within a [[virtual clip|VirtualClip]], which can be placed freely within the sequence(s). Normally, pipes just gather and mix data, but of course any pipe can have an attached effect chain.
@@ -5930,12 +5945,12 @@ It will contain a global video and audio out pipe, just one timeline holding a s
 For each of these services, there is an access interface, usually through an class with only static methods. Basically this means access //by name.//
 On the //implementation side//&amp;nbsp; of this access interface class (i.e. within a {{{*.cpp}}} file separate from the client code), there is a (down-casting) access through the top-level session-~PImpl pointer, allowing to invoke functions on the ~SessionServices instance. Actually, this ~SessionServices instance is configured (statically) to stack up implementations for all the exposed service interfaces on top of the basic ~SessionImpl class. Thus, each of the individual service implementations is able to use the basic ~SessinImpl (becaus it inherits it) and the implementaion of the access functions (to the session service we're discussing here) is able to use this forwarding mechanism to get the actual implementation basically by one-liners. The upside of this (admittedly convoluted) technique is that we've gotten at runtime only a single indirection, which moreover is through the top-level session-~PImpl. The downside is that, due to the separation in {{{*.h}}} and {{{*.c}}} files, we can't use any specifically typed generic operations, which forces us to use type erasure in case we need such (an example being the content discovery queries utilised by all high-level model objects).</pre>
 </div>
-<div title="SessionStructureQuery" modifier="Ichthyostega" created="200910112322" modified="201003160203" tags="SessionLogic design draft">
+<div title="SessionStructureQuery" modifier="Ichthyostega" created="200910112322" modified="201505310119" tags="SessionLogic design draft" changecount="1">
 <pre>The frontside interface of the session allows to query for contained objects; it is used to discover the structure and contents of the currently opened session/project. Access point is the public API of the Session class, which, besides exposing those queries, also provides functionality for adding and removing session contents.
 
 !discovering structure
 The session can be seen as an agglomeration of nested and typed containers.
-Thus, at any point, we can explore the structure by asking for //contained objects of a specific type.// For example, at top level, it may be of interest to enumerate the [[timelines within this session|Timeline]] and to ennumerate the [[sequences|Sequence]]. And in turn, on a given Sequence, it would be of interest to explore the tracks, and also maybe to iterate over all clips within this sequence.
+Thus, at any point, we can explore the structure by asking for //contained objects of a specific type.// For example, at top level, it may be of interest to enumerate the [[timelines within this session|Timeline]] and to ennumerate the [[sequences|Sequence]]. And in turn, on a given Sequence, it would be of interest to explore the forks or tracks, and also maybe to iterate over all clips within this sequence.
 So, clearly, there are two flavours of such an contents exploration query: it could either be issued as an dedicated member function on the public API of the respective container object, e.g. {{{Track::getClips()}}} &amp;mdash; or it could be exposed as generic query function, relying on the implicit knowledge of the //current location//&amp;nbsp; rather.
 
 !problem of context and access path
@@ -6245,10 +6260,10 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StructAsset" modifier="Ichthyostega" created="200709221353" modified="201501091147" tags="def classes img" changecount="4">
+<div title="StructAsset" modifier="Ichthyostega" created="200709221353" modified="201505310120" tags="def classes img" changecount="5">
 <pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; directly, rather they //leap into existence // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to exert control on some aspects of the Proc Layer's (default) behaviour.
 * [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and pre-process the actual media data.
-* [[Tracks|Track]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, a media object inherits placement properties from this track.
+* [[Forks (&quot;tracks&quot;)|Fork]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, a media object inherits placement properties from this track.
 * [[Pipes|Pipe]] form &amp;mdash; at least as visible to the user &amp;mdash; the basic building block of the render network, because the latter appears to be a collection of interconnected processing pipelines. This is the //outward view; // in fact the render network consists of [[nodes|ProcNode]] and is [[built|Builder]] from the Pipes, clips, effects...[&gt;img[Asset Classess|uml/fig131205.png]]&lt;br/&gt;Yet these //inner workings// of the render proces are implementation detail we tend to conceal.
 * [[Sequence]] assets act as a façade to the fundamental compound building blocks within the model, a sequence being a collection of clips placed onto a tree of tracks. Sequences, as well as the top-level tracks enclosed will be created automatically on demand. Of course you may create them deliberately. Without binding it to a timeline or meta-clip, a sequence remains invisible.
 * [[Timeline]] assets are the top level structures to access the model; similar to the sequences, they act as façade to relevant parts of the model (BindingMO) and will be created on demand, alongside with a new session if necessary, bound to the new timeline. Likewise, they can be referred by their name-ID
@@ -7748,14 +7763,14 @@ Currently (1/11), the strategy is implemented according to (1) and (4) above, le
 Implementation of this strategy is still broken: it doesn't work properly when actually the change passing over the zero point happens by propagation from lower digits. Because then -- given the way the mutators are implemented -- the //new value of the wrapping digit hasn't been stored.// It seems the only sensible solution is to change the definition of the functors, so that any value will be changed by side-effect {{red{Question 4/11 -- isn't this done and fixed by now??}}}
 </pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" created="200706250721" modified="201410160111" tags="def" changecount="2">
+<div title="Timeline" modifier="Ichthyostega" created="200706250721" modified="201505310138" tags="def" changecount="3">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a [[timeline view in the GUI|GuiTimelineView]] and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a list of [[global Pipes|GlobalPipe]] representing the possible outputs (master busses)
 * //exactly one// top-level [[Sequence]], which in turn may contain further nested Sequences.
 * when used for Playback, a ViewConnection is necessary, allowing to get or connect to a PlayController
 
-Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual sequences, together with the media objects placed to these tracks. Thus sequences are independent entities which may exist stand-alone within the model, while a timeline is //always bound to hold a sequence.// &amp;rarr; see ModelDependencies
+Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Fork]] and are part of the individual sequences, together with the media objects placed to these tracks. Thus sequences are independent entities which may exist stand-alone within the model, while a timeline is //always bound to hold a sequence.// &amp;rarr; see ModelDependencies
 [&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
 
 Within the Project, there may be ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, multiple timelines may not be combined further. You can always just render (or view) one specific timeline. A given sequence may be referred directly or indirectly from multiple timelines though. A given timeline is represented within the GUI according to [[distinct principles and conventions|GuiTimelineView]]
@@ -7768,11 +7783,11 @@ Actually, Timeline is both an interface and acts as façade. Its an interface, b
 Besides building on the asset management, implementing Timeline (and Sequence) as StructAsset yields another benefit: ~StructAssets can be retrieved by query, allowing to specify more details of the configuration immediately on creation. //But on the short term, this approach causes problems:// there is no real inference engine integrated into Lumiera yet (as of 2/2010 the plan is to get an early alpha working end to end first). For now we're bound to use the {{{fake-configrules}}} and to rely on a hard wired simulation of the intended behaviour of a real query resolution. Just some special magic queries will work for now, but that's enough to get ahead.
 </pre>
 </div>
-<div title="TimelineSequences" modifier="Ichthyostega" created="200811011836" modified="201410160057" tags="design decision img" changecount="2">
-<pre>There is a three-level hierarchy: [[Project|Session]], [[Timeline]], [[Sequence]]. Each project can contain ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, these timelines may not be combined further. You can always just render (or view) one specific timeline. Each of those timelines refers to a Sequence, which is a bunch of [[media objects|MObject]] placed to a tree of [[tracks|Track]]. Of course it is possible to use ~sub-sequences within the top-level sequence within a timeline to organize a movie into several scenes or chapters. 
+<div title="TimelineSequences" modifier="Ichthyostega" created="200811011836" modified="201505310138" tags="design decision img" changecount="4">
+<pre>There is a three-level hierarchy: [[Project|Session]], [[Timeline]], [[Sequence]]. Each project can contain ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, these timelines may not be combined further. You can always just render (or view) one specific timeline. Each of those timelines refers to a Sequence, which is a bunch of [[media objects|MObject]] placed to a [[fork (&quot;tree of tracks&quot;)|Fork]]. Of course it is possible to use ~sub-sequences within the top-level sequence within a timeline to organize a movie into several scenes or chapters. 
 
 [&gt;img[Relation of Timelines, Sequences and MObjects within the Project|uml/fig132741.png]]
-As stated in the [[definition|Timeline]], a timeline refers to exactly one sequence, and the latter defines a tree of [[tracks|Track]] and a bunch of media objects placed to these tracks. A Sequence may optionally also contain nested sequences as [[meta-clips|VirtualClip]]. Moreover, obviously several timelines (top-level entities) may refer to the same Sequence without problems.
+As stated in the [[definition|Timeline]], a timeline refers to exactly one sequence, and the latter defines a [[tree of tracks|Fork]] and a bunch of media objects placed to these tracks. A Sequence may optionally also contain nested sequences as [[meta-clips|VirtualClip]]. Moreover, obviously several timelines (top-level entities) may refer to the same Sequence without problems.
 This is because the top-level entities (Timelines) are not permitted to be combined further. You may play or render a given timeline, you may even play several timelines simultaneously in different monitor windows, and these different timelines may incorporate the same sequence in a different way. The Sequence just defines the relations between some objects and may be placed relatively to another object (clip, label,...) or similar reference point, or even anchored at an absolute time if desired. In a similar open fashion, within the track-tree of a sequence, we may define a specific signal routing, or we may just fall back to automatic output wiring.
 
 !Attaching output
@@ -7805,20 +7820,7 @@ note: still {{red{WIP as of 1/2013}}}
 Timing constraint records are used at various places within the engine. Basically we need such a timings record for starting any kind of playback or render.
 The effective timings are established when //allocating an OutputSlot// -- based on the timings defined for the ModelPort  to be //performed,// i.e. the global bus to render.</pre>
 </div>
-<div title="Track" modifier="Ichthyostega" created="200801062320" modified="200911202133" tags="def design decision">
-<pre>Tracks are just a structure used to organize the Media Objects within the Sequence. Tracks are associated allways to a specific Sequence and the Tracks of an Sequence form a //tree.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
-
-The ~Track-IDs are assets on their own, but they can be found within a given sequence. So, several sequences can share a single track or each sequence can hold tracks with their own, separate identity. (the latter is the default)
-* Like most ~MObjects, tracks have a asset view: you can find a track asset (a track ID) in the asset manager.
-* and they have an object view: there is an track MObject which can be [[placed|Placement]], thus defining properties of this track within one sequence, e.g. the starting point in time
-Of course, we can place other ~MObjects relative to some track (that's the main reason why we want to have tracks). In this sense, the [[handling of Tracks|TrackHandling]] is somewhat special: the placements forming the tree of tracks can be accessed directly through the sequence, and a track acts as container, forming a scope to encompass all the objects &quot;on&quot; this track. Thus, the placement of a track defines properties of the track, which will be inherited (if necessary) by all ~MObjects placed to this track. For example, if placing (=plugging) a track to some global [[Pipe]], and if placing a clip to this track, without placing the clip directly to another pipe, the associated-to-pipe information of the track will be fetched by the builder when needed to make the output connection of the clip.
-&amp;rarr; [[Handling of Tracks|TrackHandling]]
-&amp;rarr; [[Handling of Pipes|PipeHandling]]
-
-&amp;rarr; [[Anatomy of the high-level model|HighLevelModel]]
-</pre>
-</div>
-<div title="TrackHandling" modifier="Ichthyostega" created="200804110013" modified="201003070510" tags="spec">
+<div title="TrackHandling" modifier="Ichthyostega" created="200804110013" modified="201505310134" tags="spec" changecount="1">
 <pre>What //exactly&amp;nbsp;// is denoted by &amp;raquo;Track&amp;laquo; &amp;mdash; //basically&amp;nbsp;// a working area to group media objects placed at this track at various time positions &amp;mdash; varies depending on context:
 * viewed as [[structural asset|StructAsset]], tracks are nothing but global identifiers (possibly with attached tags and description)
 * regarding the structure //within each [[Sequence]],// tracks form a tree-like grid, the individual track being attached to this tree by a [[Placement]], thus setting up properties of placement (time reference origin, output connection, layer, pan) which will be inherited down to any objects located on this track and on child tracks, if not overridden more locally.
@@ -7830,13 +7832,13 @@ Tracks thus represent a blend of several concepts, but depending on the context 
 Under some cincumstances though, especially from within the [[Builder]], we refer to a {{{Placement&lt;Track&gt;}}} rather, denoting a specific instantiation located at a distinct node within the tree of tracks of a given sequence. These latter referrals are always done by direct object reference, e.g. while traversing the track tree (generally there is no way to refer to a placement by name {{red{Note 3/2010 meanwhile we have placementIDs and we have ~MObjectRef. TODO better wording}}}).
 
 !creating tracks
-Similar to [[pipes|Pipe]] and [[processing patterns|ProcPatt]], track-assets need not be created, but rather leap into existence on first referral. On the contrary, you need to explicitly create the {{{Placement&lt;Track&gt;}}} for attaching it to some node within the tree of tracks of an sequence. The public access point for creating such a placement is {{{MObject::create(trackID}}} (i.e. the ~MObjectFactory. Here, the {{{trackID}}} denotes the track-asset. This placement, as returned from the ~MObjectFactory isn't attached to the session yet; {{{Session::current-&gt;attach(trackPlacement)}}} performs this step by creating a copy managed by the PlacementIndex and attaching it at the current QueryFocus, which was assumed to point to a track previously. Usually, client code would use one of the provided convenience shortcuts for this rather involved call sequence:
-* the interface of the track-~MObjects exposes a function for adding new child tracks.
-* the session API contains a function to attach child tracks. In both cases, existing tracks can be referred by plain textual ID.
+Similar to [[pipes|Pipe]] and [[processing patterns|ProcPatt]], track-assets need not be created, but rather leap into existence on first referral. On the contrary, you need to explicitly create the {{{Placement&lt;Fork&gt;}}} for attaching it to some node within the tree of tracks of an sequence. The public access point for creating such a placement is {{{MObject::create(forkID}}} (i.e. the ~MObjectFactory. Here, the {{{forkID}}} denotes the track-asset. This placement, as returned from the ~MObjectFactory isn't attached to the session yet; {{{Session::current-&gt;attach(trackPlacement)}}} performs this step by creating a copy managed by the PlacementIndex and attaching it at the current QueryFocus, which was assumed to point to a track previously. Usually, client code would use one of the provided convenience shortcuts for this rather involved call sequence:
+* the interface of the fork-~MObjects exposes a function for adding new child forks.
+* the session API contains a function to attach child tracks. In both cases, existing forks can be referred by plain textual ID.
 * any MObjectRef to an object within the session allows to attach another placement or ~MObjectRef
 
 !removal
-Deleting a Track is an operation with drastic consequences, as it will cause the removal of all child tracks and the deletion of //all object placements to this track,// which could cause the resepctive objects to go out of scope (being deleted automatically by the placements or other smart pointer classes in charge of them). If the removed track was the root track of a sequence, this sequence and any timeline or VirtualClip binding to it will be killed as well. Deleting of objects can be achieved by {{{MObjectRef::purge()}}} or {{{Session::purge(MObjectRef)}}}
+Deleting a Fork is an operation with drastic consequences, as it will cause the removal of all child forks and the deletion of //all object placements to this fork,// which could cause the resepctive objects to go out of scope (being deleted automatically by the placements or other smart pointer classes in charge of them). If the removed fork was the fork root (&quot;root track&quot;) of a sequence, this sequence and any timeline or VirtualClip binding to it will be killed as well. Deleting of objects can be achieved by {{{MObjectRef::purge()}}} or {{{Session::purge(MObjectRef)}}}
 
 !using Tracks
 The '''Track Asset''' is a rather static object with limited capabilities. It's main purpose is to be a point of referral. Track assets have a description field and you may assign a list of [[tags|Tag]] to them (which could be used for binding ConfigRules).  Note that track assets are globally known within the session, they can't be limited to just one [[Sequence]] (but you are allways free not to refer to some track from a given sequence). By virtue of this global nature, you can utilize the track assets to enable/disable a bunch of objects irrespective of what sequence they are located in, and probably it's a good idea to allow the selection of specific tracks for rendering.
@@ -7844,17 +7846,17 @@ Matters are quite different for the placement of a Track within the tree of trac
 
 !!!!details to note
 * Tracks are global, but the placement of a track is local within one sequence
-* when objects are placed onto a track, this is done by referal to the global track asset ID. But because this placement of some media object is allways inherently contained within one sequence, the //meaning&amp;nbsp;// of such a placement is to connect to the properties of any track-placement of this given track //within this sequence.//
+* when objects are placed onto a track, this is done by referal to the global fork asset ID. But because this placement of some media object is allways inherently contained within one sequence, the //meaning&amp;nbsp;// of such a placement is to connect to the properties of any track-placement of this given track //within this sequence.//
 * thus tracks-as-ID appear as something global, but tracks-as-propperty-carrier appear to the user as something local and object-like.
 * in an extreme case, you'll add two different placements of a track at different points within the track tree of an sequence. And because the objects placed onto a track refer to the global track-ID, every object &quot;on&quot; this track //within this sequence&amp;nbsp;// will show up two times independently and possibly with different inherited properties (output pipe, layering mode, pan, temporal position)
 * an interesting configuration results from the fact that you can use an sequence as a [[&quot;meta clip&quot; or &quot;virtual clip&quot;|VirtualClip]] nested within another sequence. In this case, you'll probably configure the tracks of the &quot;inner&quot; sequence such as to send their output not to a global pipe but rather to the [[source ports|ClipSourcePort]] of the virtual clip (which are effectively local pipes). Thus, within the &quot;outer&quot; sequence, you could attach effects to the virutal clip, combine it with transitions and place it onto another track, and any missing properties of this latter placement are to be resolved within the &quot;outer&quot; sequence &lt;br/&gt;(it would be perfectly legal to construct a contrieved example when using the same track-ID within &quot;inner&quot; and the &quot;outer&quot; sequence. Because the Placement of this track will probably be different in the both sequences, the behaviour of this placement could be quite different in the &quot;inner&quot; and the &quot;outer&quot; sequence. All of this may seem weird when discussed here in a textual and logical manner, but when viewed within the context and meaning of the various entities of the application, it's rather the way you'd expect it to be: you work locally and things behave as defined locally)
-* note further, the root of the tree of tracks within each sequence //is itself again a //{{{Placement&lt;Track&gt;}}}. There is no necessitiy for doing it this way, but it seemed more stright forward and logical to Ichthyo, as it allowes for an easy way of configuring some things (like ouput connections) as a default within one sequence. As every track can have a list of child tracks, you'll get the &quot;list of tracks&quot; you'd expect.
+* note further, the root of the tree of tracks within each sequence //is itself again a //{{{Placement&lt;Fork&gt;}}}. There is no necessitiy for doing it this way, but it seemed more stright forward and logical to Ichthyo, as it allowes for an easy way of configuring some things (like ouput connections) as a default within one sequence. As every track can have a list of child tracks, you'll get the &quot;list of tracks&quot; you'd expect.
 * a nice consequence of the latter is: if you create a new sequence, it automatically gets one top-level track to start with, and this track will get a default configured placement (according to what is defined as [[default|DefaultsManagement]] within the current ConfigRules) &amp;mdash; typically starting at t=0 and being plugged into the master video and master audio pipe
 * nothing prevents us from putting several objects at the same temporal location within one track. If the builder can't derive any additional layering information (which could be provided by some other configuration rules), then //there is no layering precedence// &amp;mdash; simply the object encountered first (or last) wins.
 * obviously, one wants the __edit function__ used to create such an overlapping placement&amp;nbsp; also to create an [[transition|TransitionsHandling]] between the overlapping objects. Meaning this edit function will automatically create an transition processor object and provide it with a placement such as to attach it to the region of overlap.
 </pre>
 </div>
-<div title="TrackPipeSequence" modifier="Ichthyostega" created="200711300405" modified="201003160201" tags="design def decision Builder rewrite">
+<div title="TrackPipeSequence" modifier="Ichthyostega" created="200711300405" modified="201505310138" tags="design def decision Builder rewrite" changecount="2">
 <pre>''towards a definition of »Track«''. We don't want to tie ourself to some naive and overly simplistic definition, just because it is convenient. For classical (analogue) media, tracks are physical entities dictated by the nature of the process by which the media works. Especially, Tape machines have read/writing heads, which creates fixed tracks to which to route the signals. This is a practical geometric necessity. For digital media, there is no such necessity. We are bound primarily by the editor's habits of working.
 
 !!!Assessment of Properties
@@ -7872,13 +7874,13 @@ there seems to be some non time-varying part in each sequence, that doesn't fit 
 [[pipes|Pipe]] for Video and Sound output are obviously a global property of the Session. There can be several global pipes forming a matrix of subgroup busses. We could add ports or pipes to tracks by default as well, but we don't do this, because, again, this would run counter to our attempt of treating tracks as merely organisational entities. We have special [[source ports|ClipSourcePort]] on individual clips though, and we will have ports on [[virtual clips|VirtualClip]] too.
 
 !Design
-[[Tracks|Track]] are just a structure used to organize the Media Objects within the session. They form a grid, and besides that, they have no special meaning. It seems convenient to make the tracks not just a list, but allow grouping (tree structure) right from start. __~MObjects__ are ''placed'' rather than wired. The wiring is derived from the __Placement__. Placing can happen in several dimensions:
+[[Forks (&quot;tracks&quot;)|Fork]] are just a structure used to organize the Media Objects within the session. They form a grid, and besides that, they have no special meaning. It seems convenient to make the tracks not just a list, but allow grouping (tree structure) right from start. __~MObjects__ are ''placed'' rather than wired. The wiring is derived from the __Placement__. Placing can happen in several dimensions:
 * placing in time will define when to activate and show the object.
 * placing onto a track associates the ~MObject with this track; the GUI will show it on this track and the track may be used to resolve other properties of the object.
 * placing to a __Pipe__ brings the object in conjunction with this pipe for the build process. It will be considered when building the render network for this pipe. Source-like objects (clips and exit nodes of effect chains) will be connected to the pipe, while transforming objects (effects) are inserted at the pipe. (you may read &quot;placed to pipe X&quot; as &quot;plug into pipe X&quot;)
 * depending on the nature of the pipe and the source, placing to some pipe may create additional degrees of freedom, demanding the object to be placed in this new, additional dimensions: Connecting to video out e.g. creates an overlay mode and a layer position which need to be specified, while connecting to a spatial sound system creates the necessity of a pan position. On the other hand, placing a mono clip onto a mono Pipe creates no additional degrees of freedom.
 Placements are __resolved__ resulting in an ExplicitPlacement. In most cases this is just a gathering of properties, but as Placements can be incomplete and relative, there is room for real solving. The resolving mechanism tries to __derive missing properties__ from the __context__: When a clip isn't placed to some pipe but to a Track, than the Track and its parents will be inspected. If some of them has been placed to a pipe, the object will be connected to this pipe. Similar for layers and pan position. This is done by [[Placement]] and LocatingPin; as the [[Builder]] uses ~ExplicitPlacements, he isn't concerned with this resolving and uses just the data they deliver to drive the [[basic building operations|BasicBuildingOperations]]
-&amp;rarr; [[Definition|Track]] and [[handling of Tracks|TrackHandling]]
+&amp;rarr; [[Definition|Fork]] and [[handling of Tracks|TrackHandling]]
 &amp;rarr; [[Definition|Pipe]] and [[handling of Pipes|PipeHandling]]
 </pre>
 </div>
@@ -7992,7 +7994,7 @@ Within the context of GuiModelUpdate, we discern two distinct situations necessi
 the second case is what poses the real challenge in terms of writing well organised code. Since in that case, the receiver side has to translate generic diff verbs into operations on hard wired language level data structures -- structures, we can not control, predict or limit beforhand. We deal with this situation by introducing a specific intermediary, the &amp;rarr; TreeMutator.
 </pre>
 </div>
-<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201505081509" tags="Model GuiPattern spec draft" changecount="53">
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201505310130" tags="Model GuiPattern spec draft" changecount="54">
 <pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
 This leads to what could be considered the very opposite of data-centric programming. Instead of embody »the truth« into a central data model with predefined layout, we base our achitecture on a set of actors and their collaboration. In the mentioned example this would be the high-level view in the Session, the Builder, the UI-Bus and the presentation elements within the timeline view. Underlying to each such collaboration is a shared conception of data. There is no need to //actually represent that data// -- it can be conceived to exist in a more descriptive, declarative [[external tree description (ETD)|ExternalTreeDescription]]. In fact, what we //do represent// is a ''diff'' against such an external rendering.
 
@@ -8019,7 +8021,7 @@ Here all the fuzz about our {{{LUID}}} and identity management in the PlacementI
 The consumer -- in our case the GUI widgets -- impose a preconfigured order of things: elements not expected in a given part of the session will not be rendered and exposed. Thus the expectations at the consumer side constitute a typed context. So all we need to do is to intersperse a filter and then let the diffing algorithm work on these views filtered by type. All of this sounds horribly expensive, but it isn't -- functional programming to the rescue! We are dealing with lightweight symbolic value representations; everything can be implemented as a filtering and transforming pipeline. Thus we do not need any memory management, rather we (ab)use the storage of the client pulling the representation.
 
 !structural differences
-The tricky part with changes in a tree like structure is that they might involve rearrangements of whole sub-trees. So the question we need to pose is: to what extend do we need, and want to capture and represent those non local changes? In this respect, our situation here is significantly different than what is relevant for version management systems; we are not interested in //constructing a history of changes.// A widget moved into a completely different part or the model likely needs to be rebuilt from scratch anyway, so it doesn't hurt if we represent this change as deletion and insert of a new sub-tree. But it would be beneficial if we're able to move a sequence of clips in a track, or even a whole track at the current level. As a corner case, we might even consider representing a &amp;raquo;fold-down/up&amp;laquo; operation, where a sequence of elements is wrapped into a new sub-node, or extracted up from there -- but this is likely the most far-reaching structural change still worth to be represented first class.
+The tricky part with changes in a tree like structure is that they might involve rearrangements of whole sub-trees. So the question we need to pose is: to what extend do we need, and want to capture and represent those non local changes? In this respect, our situation here is significantly different than what is relevant for version management systems; we are not interested in //constructing a history of changes.// A widget moved into a completely different part or the model likely needs to be rebuilt from scratch anyway, so it doesn't hurt if we represent this change as deletion and insert of a new sub-tree. But it would be beneficial if we're able to move a sequence of clips in a fork (&quot;track&quot;), or even a whole fork at the current level. As a corner case, we might even consider representing a &amp;raquo;fold-down/up&amp;laquo; operation, where a sequence of elements is wrapped into a new sub-node, or extracted up from there -- but this is likely the most far-reaching structural change still worth to be represented first class.
 
 !diff representation
 Thus, for our specific usage scenario, the foremost relevant question is //how to represent the differences,// since our aim is to propagate complex structural changes through a narrow data mutation API as communication channel. The desired representation -- call it ''linearised diff representation'' -- can be constructed systematically from the predicate like notation used above to show the list differences. The principle is to break the representation down into atomic terms, and then to //push back//  any term repreatedly, until we come accross a term which can be //consumed right-away// at the current top of our &quot;old state&quot; list. This way we consume the incoming change messages and our existing data simultaneously, while dropping off the mutated structure in a single pass. Applying this technique, the above example becomes
@@ -8051,7 +8053,7 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201505080221" tags="Model Concepts GuiPattern design draft" changecount="49">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201505310130" tags="Model Concepts GuiPattern design draft" changecount="50">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 
 !Motivation
@@ -8115,26 +8117,26 @@ All these basic operations are implicitly stateful, i.e. they work against an as
 !!!how to provide the actual operations
 To ease the repetitive part of the wiring, which is necessary for each individual application case, we can allow for some degree of //duck typing,// as far as building the TreeMutator is concerned. If there is a type, which provides the above mentioned functions for child management, these can be hooked up automatically into a suitable adapter. Otherwise, the client may supply closures, using the same definition pattern as shown for the attributes above. Here, the ID argument is optional and denotes a //type filter,// whereas the closure itself must accept a name-ID argument. The purpose of this construction is the ability to manage collections of similar children. For example
 {{{
-       .addChild(&quot;Track&quot;), [&amp;](string type, string id) {
-           TrackType kind = determineTrackType(type);
-           this.tracks_.push_back(MyTrackImpl(kind, id);
+       .addChild(&quot;Fork&quot;), [&amp;](string type, string id) {
+           ForkType kind = determineForkkType(type);
+           this.forks_.push_back(MyForkImpl(kind, id);
          })
-       .mutateChild(&quot;Track&quot;), [&amp;](string id) {
-           MyTrackImpl&amp; track = findTrack(id);
-           return track.getMutator();
+       .mutateChild(&quot;Fork&quot;), [&amp;](string id) {
+           MyForkImpl&amp; fork = findFork(id);
+           return fork.getMutator();
          })
      ...
 }}}
 The contract is as follows:
-* a hander typed as {{{&quot;Track&quot;}}} wil only be invoked, if the type of the child to be handled starts with such a type component, e.g. {{{&quot;Track.ruler&quot;}}}
-* the mutation handler has to return a reference to a suitable TreeMutator object, which is implicitly bound to the denoted track. It can be expected to be used for feeding mutations to this child right away.
+* a hander typed as {{{&quot;Fork&quot;}}} wil only be invoked, if the type of the child to be handled starts with such a type component, e.g. {{{&quot;Fork.ruler&quot;}}}
+* the mutation handler has to return a reference to a suitable TreeMutator object, which is implicitly bound to the denoted fork. It can be expected to be used for feeding mutations to this child right away.
 
 !!!remarks about the chosen syntax
 The setup of these bindings is achieved through some kind of //internal DSL// -- so the actual syntax is limited by the abilities of the host language (C++).
 Indeed, my first choice would have been a yet more evocative syntax
 {{{
-       .addChild(&quot;Track&quot;) = { ...closure...}
-       .mutateChild(&quot;Track&quot;) = { ... another closure }
+       .addChild(&quot;Fork&quot;) = { ...closure...}
+       .mutateChild(&quot;Fork&quot;) = { ... another closure }
 }}}
 Unfortunately, the {{{operator=}}} is right-associative in C++, with no option to change that parsing behaviour. Together with the likewise fixed high precedence of the dot (member call), which also can not be overloaded, we're out of options, even if willing to create a term builder construction. There is simply no way to prevent the parser from invoking the dot operator on the preceding closure. The workarounds would have been to use something other than '{{{=}}}' to create the bindings,  to use a comma instead of a dot, or to disallow chaining altogether. All these choices seem to be rather counter intuitive -- and the most important rule for defining a custom syntax is to stay within the realm of the predictable.
 
@@ -8151,7 +8153,7 @@ So we get to choose between
 
 </pre>
 </div>
-<div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201501181350" tags="Model Types Rules design draft" changecount="10">
+<div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201505310143" tags="Model Types Rules design draft" changecount="12">
 <pre>//drafted service as of 4/10 &amp;mdash; &amp;rarr;[[implementation plans|TypedLookup]]//
 A registration service to associate object identities, symbolic identifiers and types.
 
@@ -8171,7 +8173,7 @@ A registration service backed by an index table can be used to //translate//&amp
 * ability to handle instance registration and de-registration automatically
 
 !!!usage scenarios
-* automatically maintained lists of all clips, labels, tracks and sequences in the &amp;raquo;Asset&amp;laquo; section of the application
+* automatically maintained lists of all clips, labels, forks and sequences in the &amp;raquo;Asset&amp;laquo; section of the application
 * addressing objects in script driven operations, just based on symbolic names, allowing for additional conventions
 * implementing a predicate {{{isTypeXXX(Element)}}}, (a »type guard«) which is crucial for [[rules based configuration|ConfigQuery]].
 
@@ -8182,7 +8184,7 @@ We //already have an registration service,// both for Assets (AssetManager) and 
 As mentioned above, an ID &amp;harr; type association plays a crucial role when it comes to implementing any kind of rules based configuration. It would allow to bridge from our session objects to rules and resolution working entirely symbolic. (&amp;rarr; [[more|ConfigQueryIntegration]]). But, as of 3/2010 this is a //planned feature and not required to get the initial pipeline working.// Thus, according to the YAGNI principle, we shouldn't engage into any implementation details right now and just create the extension points.
 {{red{1/2015 Remark}}}: meanwhile we've come accross several situations calling for //some element// present here in this design draft. So: yes, we //will nedd that lookup system,// but not right now.
 
-The immediate need prompting to start development on this facility, is how to get sub-selections from the objects in the session and for certain kinds of asset &amp;mdash; especially how to deal with retrieving the referred track for the &amp;rarr; [[sequence and timeline handling|ModelDependencies]].
+The immediate need prompting to start development on this facility, is how to get sub-selections from the objects in the session and for certain kinds of asset &amp;mdash; especially how to deal with retrieving the referred fork for the &amp;rarr; [[sequence and timeline handling|ModelDependencies]].
 &lt;&lt;&lt;
 So the plan is to use ''per type'' mapping tables for an association: ''symbolic-ID &amp;rarr; unique-ID''
 There should be a configurable slot to ''attach an object reference'' &amp;mdash; extensions to be defined later
@@ -8200,7 +8202,7 @@ Just an ''registration scheme'' should be implemented right now, working complet
 see [[implementation planning|TypedLookup]]
 </pre>
 </div>
-<div title="TypedLookup" modifier="Ichthyostega" created="201004031607" modified="201501181353" tags="Rules Types spec impl draft" changecount="8">
+<div title="TypedLookup" modifier="Ichthyostega" created="201004031607" modified="201505310127" tags="Rules Types spec impl draft" changecount="9">
 <pre>TypedID is a registration service to associate object identities, symbolic identifiers and types. It acts as frontend to the TypedLookup system within Proc-Layer, at the implementation level. While TypedID works within a strictly typed context, this type information is translated into an internal index on passing over to the implementation, which manages a set of tables holding base entries with a combined symbolic+hash ID, plus an opaque buffer. Thus, the strictly typed context is required to re-access the stored data. But the type information wasn't erased entirely, so this typed context can be re-gained with the help of an internal type index. All of this is considered implementation detail and may be subject to change without further notice; any access is assumed to happen through the TypedID frontend. Besides, there are two more specialised frontends.
 
 !Front-ends
@@ -8225,7 +8227,7 @@ In most cases, the //actually usable instance// of an entity isn't identical to 
 Obviously, the ~TypedLookup system is open for addition of completely separate and different types.
 [&gt;img[TypedLookup implementation sketch|uml/fig140293.png]]
 |&gt;| !Entity |!pattern |
-|1:1| Track|Placement|
+|1:1| Fork|Placement|
 |~| Label|Placement|
 |~| Sequence| Asset|
 |~| StreamType| Asset|
@@ -8283,10 +8285,10 @@ When the GUI is outfitted, based on the current Session or HighLevelModel, it is
 A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes chained up after the global pipes present in the timeline. Connecting a timeline to a viewer creates a ViewConnection, which is a special [[binding|BindingMO]]. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputSlot registered with the OutputManager &amp;mdash; again an output mapping step.
 </pre>
 </div>
-<div title="VirtualClip" modifier="Ichthyostega" created="200804110321" modified="201011220152" tags="def Model">
+<div title="VirtualClip" modifier="Ichthyostega" created="200804110321" modified="201505310128" tags="def Model" changecount="1">
 <pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
 * a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
-* a __nested sequence__ is like the other sequences in the Session, just in this case any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also configures the tracks of the &quot;inner&quot; sequence such as to [[connect any output|OutputMapping]] to the source ports of the Virtual Clip.
+* a __nested sequence__ is like the other sequences in the Session, just in this case any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also configures the fork (&quot;tracks&quot;) of the &quot;inner&quot; sequence such as to [[connect any output|OutputMapping]] to the source ports of the Virtual Clip.
 
 Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded sequence, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
 
