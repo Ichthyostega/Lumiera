@@ -76,9 +76,10 @@ namespace asset {
   using proc::mobject::Session;
   using proc::mobject::MObject;
   using proc::mobject::session::Scope;
-  using proc::mobject::session::match_specificTrack;
+  using proc::mobject::session::match_specificFork;
   using proc::mobject::session::RBinding;
-  using proc::mobject::session::RTrack;
+  using proc::mobject::session::RFork;
+  using proc::mobject::session::Fork;
   
   using idi::StructTraits;
   
@@ -134,22 +135,22 @@ namespace asset {
         }
       
       
-      /** either fetch or build a suitable root track for a new sequence */
-      RTrack
-      getTrack_forSequence (string const& desiredID)
+      /** either fetch or build a suitable fork root for a new sequence */
+      RFork
+      getFork_forSequence (string const& desiredID)
         {
-          RTrack track;
+          RFork fork;
           if (!isnil (desiredID))
-            track = Session::current->elements.pick (match_specificTrack (desiredID));
+            fork = Session::current->elements.pick (match_specificFork (desiredID));
           
-          if (track && !Scope::containing (track.getRef()).isRoot())
+          if (fork && !Scope::containing (fork.getRef()).isRoot())
             {
-              UNIMPLEMENTED ("how to deal with 'stealing' a sub-track tree to a new sequence??");
+              UNIMPLEMENTED ("how to deal with 'stealing' a fork sub-tree to a new sequence??");
             }
-          if (!track)
-            track = Session::current->getRoot().attach (MObject::create (TrackID (desiredID)));
+          if (!fork)
+            fork = Session::current->getRoot().attach (MObject::create (ForkID (desiredID)));
           
-          return track;
+          return fork;
         }
       
       
@@ -230,14 +231,14 @@ namespace asset {
   {
     // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
     TODO ("actually extract properties/capabilities from the query...");
-    string trackID = caps.extractID ("track");
-    Query<Track> desiredTrack (isnil (trackID)? "" : "id("+trackID+")");
-//  PTrack track = Session::current->query (desiredTrack);        ///////////////////////////////////TICKET #639
+    string forkID = caps.extractID ("fork");
+    Query<Fork> desiredFork (isnil (forkID)? "" : "id("+forkID+")");
+//  PFork fork = Session::current->query (desiredFork);        ///////////////////////////////////TICKET #639
     // TODO: handle the following cases
-    // - track doesn't exist --> create and root attach it
-    // - track exists and is root attached, but belongs already to a sequence --> throw
-    // - track exists, but isn't root attached ---> what do do here? steal it??
-    PSequence newSequence = Sequence::create (createIdent (caps));                      ///////////TODO fed track in here
+    // - fork doesn't exist --> create and attach it as root
+    // - fork exists and is root attached, but belongs already to a sequence --> throw
+    // - fork exists, but isn't root attached ---> what do do here? steal it??
+    PSequence newSequence = Sequence::create (createIdent (caps));                      ///////////TODO fed fork in here
     ENSURE (newSequence);                         ///////////////////////TICKET #565  maybe store the capabilities query within the Struct asset somehow?
     return newSequence.get(); 
   }

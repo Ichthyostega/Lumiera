@@ -182,7 +182,7 @@ namespace session {
   /* === Factory functions for adding LocatingPins === */
   
   FixedLocation&    
-  LocatingPin::operator() (Time start, Track track)
+  LocatingPin::operator() (Time start, Fork track)    /////////////TODO "track" should be reworked to be the output designation
   {
     return static_cast<FixedLocation&> 
               (addChain (new FixedLocation (start, track)));

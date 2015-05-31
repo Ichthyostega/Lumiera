@@ -74,7 +74,7 @@ namespace test    {
           
           // using the Placement interface
           // TODO: how to handle insufficiently determinated Placement? Throw?
-          FixedLocation & fixloc = pc.chain (Time(0,1)); // TODO: the track??
+          FixedLocation & fixloc = pc.chain (Time(0,1)); // TODO: the fork??
           ExplicitPlacement expla = pc.resolve();
           CHECK (expla.time == Time(0,1));
           CHECK (!expla.chain.isOverdetermined());

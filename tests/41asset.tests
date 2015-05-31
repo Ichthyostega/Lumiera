@@ -37,10 +37,10 @@ TEST "plain entry-ID" EntryID_test <<END
 out: ID<..proc.asset.+Dummy.>-..proc.asset.+Dummy.\.001
 out: ID<..proc.asset.+Dummy.>-strange
 out: ID<..proc.asset.+Dummy.>-..proc.asset.+Dummy.\.002
-out: ID<track>-track\.001
-out: ID<track>-track\.002
-out: ID<track>-special
-out: sizeof\( ..proc.asset.+EntryID.+mobject.+session.+Track.+ \) =
+out: ID<fork>-fork\.001
+out: ID<fork>-fork\.002
+out: ID<fork>-special
+out: sizeof\( ..proc.asset.+EntryID.+mobject.+session.+Fork.+ \) =
 out: sizeof\( ..proc.asset.+BareEntryID. \) =
 return: 0
 END

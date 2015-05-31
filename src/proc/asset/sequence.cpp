@@ -1,5 +1,5 @@
 /*
-  Sequence  -  Compound of MObjects placed on a track tree. Building block of the Session
+  Sequence  -  Compound of MObjects placed within a tree of tracks. Building block of the Session
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -57,7 +57,7 @@ namespace asset {
   Sequence::unlink ()
   {
     AutoRegistered<Sequence>::detach();
-    TODO ("purge attached track");             //////////////////////////////////////////////TICKET #692
+    TODO ("purge attached fork");             //////////////////////////////////////////////TICKET #692
     Struct::unlink();
   }
   

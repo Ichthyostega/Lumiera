@@ -125,7 +125,7 @@ namespace lumiera {
         typedef lib::IterSource<proc::mobject::OutputDesignation>::iterator Pipes;
         typedef proc::play::POutputManager Output;
         typedef proc::mobject::session::PClipMO Clip;
-        typedef proc::mobject::PTrack  Track;
+        typedef proc::mobject::PFork  Fork;
         typedef proc::asset::PTimeline Timeline;
         typedef proc::asset::PViewer Viewer;
         
@@ -135,7 +135,7 @@ namespace lumiera {
         Controller perform(Pipes, Output);
         Controller perform(Timeline);
         Controller perform(Viewer);
-        Controller perform(Track);
+        Controller perform(Fork);
         Controller perform(Clip);
         
       protected:

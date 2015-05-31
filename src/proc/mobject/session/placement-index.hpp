@@ -57,7 +57,8 @@
  ** another Placement already registered within the index; the new Placement can be thought
  ** of as being located "within" or "below" this scope-defining reference Placement. An
  ** typical example would be the addition of a \c Placement<session::Clip>, specifying 
- ** a \c Placement<session::Track> as scope. Thus, all "object instances" within the 
+ ** a \c Placement<session::Fork> as scope. This would bring the mentioned Clip onto the
+ ** "Track", as implemented by a Fork-MObject. Thus, all "object instances" within the
  ** session are arranged in a tree-like fashion. On creation of the PlacementIndex,
  ** a root element needs to be provided. While this root element has a meaning for
  ** the session, within the index it is just a scope-providing element.

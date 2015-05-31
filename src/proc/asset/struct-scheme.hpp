@@ -53,14 +53,13 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-  class Track;
+  class Fork;
   class Clip;
   
 }}
 
 namespace asset{
   
-  class Track;
   class Pipe;
   class ProcPatt;
   class Timeline;
@@ -88,18 +87,11 @@ namespace asset{
       };
     
     
-  ///////////////////////////////////////////////////////////////////////////////////////////TICKET #581 intending to abandon asset::Track in favour of a plain EntryID 
-    template<> struct StructTraits<asset::Track>
+    template<> struct StructTraits<mobject::session::Fork>
       {
-        static Symbol namePrefix() { return "track"; }
-        static Symbol catFolder()  { return "tracks";}
-        static Symbol idSymbol()   { return "track"; }
-      };
-    template<> struct StructTraits<mobject::session::Track>
-      {
-        static Symbol namePrefix() { return "track"; }
-        static Symbol catFolder()  { return "tracks";}
-        static Symbol idSymbol()   { return "track"; }
+        static Symbol namePrefix() { return "fork"; }
+        static Symbol catFolder()  { return "forks";}
+        static Symbol idSymbol()   { return "fork"; }
       };
     template<> struct StructTraits<mobject::session::Clip>
       {

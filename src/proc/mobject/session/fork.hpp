@@ -37,50 +37,55 @@ namespace session {     //////////////////////////////////////////////////////TI
   using lib::P;
   using lib::time::Time;
   
-  class Track;
+  class Fork;
   
-  typedef P<Track> PTrack;
+  typedef P<Fork> PFork;
   
 }}
 
 namespace asset {       //////////////////////////////////////////////////////TICKET #637
   
-  typedef EntryID<mobject::session::Track> TrackID;
+  typedef EntryID<mobject::session::Fork> ForkID;
 }
 
 
 namespace mobject {
 namespace session {
   
-  using asset::TrackID;
+  using asset::ForkID;
   
   
                         //////////////////////////////////////////////////////TICKET #646
                         //////////////////////////////////////////////////////TICKET #715
     
     /**
-     * A Track is grouping device within the Session.
-     * The corresponding Placement by which this Track object is referred
-     * defines fallback placing properties to be used by all objects placed on this track
-     * in case they don't specify more concrete placements.
-     * Typically, tracks are used do make default processing pipe connections,
-     * define a layer or pan for sound and for for disabling groups
-     * of clips. Note tracks are grouped in a tree like fashion.
+     * A Fork serves as grouping device within the Session.
+     * Within the timeline, forks are used to organise continuous trails of consecutive
+     * clips -- similar to the role of "Tracks" in other editing applications. Just, in
+     * Lumiera a Fork is \em only a grouping device and not limited just to video or audio.
+     * Moreover, Forks are also used to organise and group clips in preparation to editing
+     * (the so called "media bins"). And forks can be used to create assortments of effects
+     * and other editing tools. In all these cases, the Fork creates a \em scope.
+     * 
+     * The corresponding Placement by which this Fork object is attached to the session
+     * defines fallback placing properties to be used by all objects placed within the
+     * scope of this fork, unless individual objects specify more concrete placements.
+     * Typically, the placement within a fork of the timeline is used to derive the
+     * default processing pipe connections, define a layer or pan for sound and also
+     * for for disabling groups of clips. But note that forks are always nested,
+     * forming a tree like grouping device with hierarchically nested scopes.
      * \par
-     * This Media Object (often referred to as "track-MO") is always dealt with
+     * This Fork Media Object (sometimes referred to as "fork-MO") is always dealt with
      * locally within one Sequence. Client code normally doesn't have to care for creating
-     * or retrieving track-MO. Rather, it refers to the global track-asset-ID. The same
-     * holds true when placing some other Media Object onto a track: the corresponding
-     * placement just refers the global trackID, while the builder automatically retrieves the
-     * matching track-MO for the Sequence in question. If the Session contains several instances
-     * (track-MO) referring to the same trackID (asset), then this causes all objects placed
-     * onto this track to be included several times in the resulting render nodes network
-     * (possibly with varying placement properties) //////////////TODO 3/2010 likely *not* implementing this feature, because we have sequences 
+     * or retrieving a fork-MO. Rather, it refers to the global fork-asset-ID. The same
+     * holds true when placing some other Media Object into the scope of a fork:
+     * the corresponding placement just refers the global forkID, while the builder
+     * automatically retrieves the matching fork-MO for the Sequence in question.
      */
-    class Track : public Meta
+    class Fork : public Meta
       {
         Time start_;    /////////////////////////////////TODO: this doesn't belong here. The start position is governed by the Placement!!!
-        TrackID id_;
+        ForkID id_;
         
       
         string
@@ -92,7 +97,7 @@ namespace session {
         bool isValid()  const;
         
       protected:
-        Track (TrackID const&);
+        Fork (ForkID const&);
         friend class MObjectFactory;
         
       public:
@@ -106,7 +111,7 @@ namespace session {
       
     
     inline bool
-    Track::isSameID(string const& refID)
+    Fork::isSameID(string const& refID)
     {
       return refID == id_.getSym();
     }
@@ -114,9 +119,9 @@ namespace session {
     
   } // namespace mobject::session
   
-  /** Placement<Track> defined to be subclass of Placement<Meta> */
-  template class Placement<session::Track, session::Meta>;
-  typedef Placement<session::Track, session::Meta> PTrack;
+  /** Placement<Fork> defined to be subclass of Placement<Meta> */
+  template class Placement<session::Fork, session::Meta>;
+  typedef Placement<session::Fork, session::Meta> PFork;
   
 }} // namespace proc::mobject
 #endif /*MOBJECT_SESSION_FORK_H*/

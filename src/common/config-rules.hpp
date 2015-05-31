@@ -86,13 +86,13 @@ namespace lumiera {
     //  resolve(O, Cap) :- make(O), capabilities(Cap).
     //  capabilities(Q) :- call(Q).
     //  
-    //  stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), placed_to(P, T).
+    //  stream(T, mpeg) :- type(T, fork), type(P, pipe), resolve(P, stream(P,mpeg)), placed_to(P, T).
     //
     // The type guard is inserted automatically, while the predicate implementations for
     // find/1, make/1, stream/2, and placed_to/2 are to be provided by the target types.
     //
-    // As a example, the goal ":-retrieve(T, stream(T,mpeg))." would search a Track object, try to
-    // retrieve a pipe object with stream-type=mpeg and associate the track with this Pipe. The
+    // As a example, the goal ":-retrieve(T, stream(T,mpeg))." would search a Fork object (a "track"), try to
+    // retrieve a pipe object with stream-type=mpeg and associate the Fork with this Pipe. The
     // predicate "stream(P,mpeg)" needs to be implemented (natively) for the pipe object.
     
     class Resolver
@@ -173,7 +173,7 @@ namespace lumiera {
     // TODO: the Idea is to provide specialisations for the concrete types
     //       we want to participate in the ConfigRules system....
     //       Thus we get the possibility to create a specific return type,
-    //       e.g. return a P<Pipe> but a Placement<Track>, using the appropriate factory.
+    //       e.g. return a P<Pipe> but a Placement<Fork>, using the appropriate factory.
     //       Of course then the definitions need to be split up in separate headers.
       
       

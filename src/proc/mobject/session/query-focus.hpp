@@ -72,7 +72,7 @@ namespace session {
    * given scope), or do discover depth-first any content within
    * this scope. The result set of these queries will be filtered
    * to yield only placements compatible to the specified kind of
-   * MObject. E.g, you may query all Clip objects within a given Track.
+   * MObject. E.g, you may query all Clip objects within a given Fork.
    * 
    * The implementation of these query operations is backed by the
    * PlacementIndex in the current session. The link to the session

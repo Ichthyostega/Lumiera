@@ -53,9 +53,9 @@ namespace test    {
    * @test access the current session and verify the correct
    *       structure of the most important components: The session
    *       contains an Sequence, we can get at the Fixture, we have at least
-   *       one Track and the corresponding Track asset is available.
+   *       one Fork and the corresponding Fork-ID (asset) can be retrieved.
    * @todo define further criteria to be checked 
-   * @todo implement Sequence, Fixture, Session#rebuildFixture, asset::Track
+   * @todo implement Sequence, Fixture, Session#rebuildFixture, handling of EntryID<Fork>
    */
   class SessionStructure_test : public Test
     {
@@ -111,24 +111,24 @@ namespace test    {
           //TODO
           
           //verify default sequence
-          RTrack rootTrack = seq->rootTrack();
-          CHECK (rootTrack->isValid());
-          CHECK (Time(0) == rootTrack->length());
-          CHECK (0 == rootTrack->subTracks.size());
-          CHECK (0 == rootTrack->clips.size());
+          RFork rootFork = seq->rootFork();
+          CHECK (rootFork->isValid());
+          CHECK (Time(0) == rootFork->length());
+          CHECK (0 == rootFork->subForks.size());
+          CHECK (0 == rootFork->clips.size());
           //TODO verify the output slots of the sequence
           
           //TODO now use the generic query API to discover the same structure.
           CHECK (til == *(sess->all<Timeline>()));
           CHECK (seq == *(sess->all<Sequence>()));
-          CHECK (rootTrack == *(sess->all<Track>()));
+          CHECK (rootFork == *(sess->all<Fork>()));
           CHECK (! sess->all<Clip>());
           
           QueryFocus& focus = sess->focus();
-          CHECK (rootTrack == focus.getObject());
+          CHECK (rootFork == focus.getObject());
           focus.navigate (til);
           CHECK (til.getBinding() == focus.getObject());
-          CHECK (rootTrack == *(focus.children()));
+          CHECK (rootFork == *(focus.children()));
 #endif //////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
         }
     };

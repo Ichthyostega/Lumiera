@@ -51,8 +51,8 @@ namespace session {
    * 
    * Actually, Scope is implemented through a PlacementRef pointing to
    * the Placement which \em constitutes this Scope. We call this Placement
-   * the "scope top". A track e.g. can \em contain several clips, but also
-   * nested sub tracks, all of which would be within the scope of this track.
+   * the "scope top". A fork e.g. can \em contain several clips, but also
+   * nested sub forks, all of which would be within the scope of this fork.
    * This scoping relation plays an important role when it comes to \em resolving
    * properties of placement, like e.g. the output designation, overlay mode,
    * sound pan position etc -- properties from enclosing scopes will be 

@@ -39,7 +39,7 @@
  ** is controlled and parametrised by a collection (chain) of LocatingPin objects. By adding
  ** to this chain, the position of the MObject is increasingly constrained. The simplest
  ** case of such constraining is to add a FixedLocation, thus placing the MObject at one
- ** absolute position (time, track).
+ ** absolute position (time, output).
  ** 
  ** Together, this yields semantics somewhere in between value semantics and reference semantics.
  ** As any smart-ptr, placements are copyable, but each such copy takes on a <i>distinct identity.</i>

@@ -101,7 +101,7 @@ namespace mobject {
         typedef lib::time::Time Time;
         typedef lib::time::TimeVar TimeVar;
         typedef lib::time::Offset Offset;
-        typedef Time* Track; //TODO dummy declaration; we don't use Tracks as first-class entity any longer
+        typedef Time* Fork; //TODO dummy declaration; we don't use Tracks as first-class entity any longer. This role should be taken by the "Output Designation"
         typedef std::shared_ptr<asset::Pipe> Pipe;
         typedef std::pair<Time,Pipe> SolutionData;  //TICKET #100 (ichthyo considers better passing of solution by subclass)
         struct LocatingSolution;
@@ -122,7 +122,7 @@ namespace mobject {
         
         /* Factory functions for adding LocatingPins */
         
-        FixedLocation&    operator() (Time start, Track track=0);
+        FixedLocation&    operator() (Time start, Fork track=0);                                                 //////////TODO: Tracks are gone, long live the Forks!
         RelativeLocation& operator() (PlacementRef<MObject>& refObj, Offset const& offset=Offset(Time::ZERO));   //////////TODO: warning, just a dummy placeholder for now!!
         
         LocatingPin (const LocatingPin&);
@@ -151,8 +151,8 @@ protected:
           {
             TimeVar minTime;
             TimeVar maxTime;
-            Track minTrack; // TODO don't use Tracks
-            Track maxTrack;
+            Fork minTrack; // TODO don't use Tracks
+            Fork maxTrack;
             bool impo;
             
             LocatingSolution () 

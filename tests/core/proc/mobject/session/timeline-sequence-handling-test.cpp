@@ -278,24 +278,24 @@ namespace test    {
           uint num_sequences = sess->sequences.size();
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
-          RTrack someTrack = sess->sequences[0]->getTracks();
+          RFork someFork = sess->sequences[0]->getForks();
           
           // indirectly cause a new sequence to come to life...
-          RTrack newTrack = sess->getRoot().attach (someTrack);        // attach new Placement<Track> to root scope
-          CHECK (newTrack != someTrack); // it's a new placement
+          RFork newFork = sess->getRoot().attach (someFork);           // attach new Placement<Fork> to root scope
+          CHECK (newFork != someFork); // it's a new placement
           
           CHECK (num_sequences + 1 == sess->sequences.size());         // this root-attachment created a new sequence by sideeffect
           PSequence aSequence = sess->sequences[num_sequences];
-          CHECK (newTrack == aSequence->getTracks());
-          CHECK (newTrack);
-          CHECK (someTrack);
+          CHECK (newFork == aSequence->getForks());
+          CHECK (newFork);
+          CHECK (someFork);
           CHECK (assetM.known (aSequence->getID()));
           
           //TODO maybe even bind it into a new timeline. Then verify this new timeline gets removed alongside with the sequence below!
           
-          // just moving the new track away from root position
+          // just moving the new fork away from root position
           // causes the sequence to disappear
-          newTrack.getPlacement().chain (someTrack, Time(20));                /////////////////TICKET #555   does moving by placement really work this way??
+          newFork.getPlacement().chain (someFork, Time(20));           /////////////////TICKET #555   does moving by placement really work this way??
           
           //TODO 3/2010 not finally decided *if* we want this behaviour
           //TODO how to verify the changed placement??
@@ -304,8 +304,8 @@ namespace test    {
           CHECK (num_sequences == sess->sequences.size());
           CHECK (!contains (sess->sequences, aSequence));
           
-          CHECK (someTrack);
-          CHECK (newTrack);
+          CHECK (someFork);
+          CHECK (newFork);
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
     };

@@ -1,5 +1,5 @@
 /*
-  SEQUENCE.hpp  -  Compound of MObjects placed on a track tree. Building block of the Session
+  SEQUENCE.hpp  -  Compound of MObjects placed within a tree of tracks. Building block of the Session
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -26,18 +26,21 @@
  ** A Sequence is both a structural element of the session and part of the
  ** public session API exposed to clients for discovering the session contents
  ** and structure. Sequences are implemented as structural assets, delegating
- ** the actual implementation to the track-MObjects within the model. 
+ ** the actual implementation to the fork-MObjects within the model, which
+ ** naturally form the necessary recursive and nested structure.
  ** 
  ** Contrary to usual habits in video/sound editing software, in Lumiera the
- ** tracks form a tree and serve as backbone of the individual \em sequence,
+ ** "tracks" form a tree and serve as backbone of the individual \em sequence,
  ** as opposed to the timeline, which manages output and frame quantisation,
- ** but not the track structure.
+ ** but do not hold any contents themselves. Thus, the sequence is really
+ ** a tree of nested scopes (session::mobject::Fork), together with all the
+ ** media elements placed within these scopes.
  ** 
  ** Like every structural asset, the creation of sequences happens automatically
  ** on referral; Sequences can be queried from the StructFactory, providing additional
  ** requested capabilities. Commonly clients will retrieve a given sequence by query
  ** on the name-ID of the sequence: \c Struct::retrieve(Query<Sequence> ("id(theName)."))
- ** Additionally, a specific root track may be requested: \c "id(theName),rootTrack(trackID)." 
+ ** Additionally, a specific fork root may be requested: \c "id(theName),rootFork(trackID)." 
  ** 
  ** @see Session
  ** @see StructFactory
@@ -66,8 +69,8 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-  class Track;
-  typedef MORef<Track> RTrack;
+  class Fork;
+  typedef MORef<Fork> RFork;
 }}
 
 
@@ -86,9 +89,9 @@ namespace asset {
     : public Struct
     , public lib::AutoRegistered<Sequence>
     {
-      typedef mobject::session::RTrack RTrack;
+      typedef mobject::session::RFork RFork;
       
-      Sequence (Ident const&);                //////////////////////////////////////////////TICKET #692  pass in track here
+      Sequence (Ident const&);                //////////////////////////////////////////////TICKET #692  pass in fork here
       
     public:
       /** create and register a new Sequence instance */

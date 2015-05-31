@@ -136,7 +136,7 @@ namespace asset {
    * - asset::Meta representing metadata, parametrisation, customisation.
    *  
    * And of course there are various concrete Asset subclasses, like asset::Clip,
-   * asset::Effect, asset::Codec, asset::Track, asset::Dataset.
+   * asset::Effect, asset::Codec, asset::Dataset.
    * @note Assets objects have a strict unique identity and because of this are non-copyable.
    *       You can not create an Asset derived object without registering it with the AssetManager
    *       automatically. It is possible to copy the PAsset (smart pointer) though. 

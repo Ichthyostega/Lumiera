@@ -58,8 +58,8 @@ namespace test {
     struct Dummy { };
     
     typedef EntryID<Dummy> DummyID;
-    typedef EntryID<mobject::session::Track> TrackID;
-    typedef EntryID<mobject::session::Clip>  ClipID;
+    typedef EntryID<mobject::session::Fork> ForkID;
+    typedef EntryID<mobject::session::Clip> ClipID;
   }
   
   
@@ -105,9 +105,9 @@ namespace test {
           CHECK (dID2 != dID3); CHECK (dID3 != dID2);
           CHECK (dID1 != dID3); CHECK (dID3 != dID1);
           
-          TrackID tID1;
-          TrackID tID2;
-          TrackID tID3("special");
+          ForkID tID1;
+          ForkID tID2;
+          ForkID tID3("special");
           CHECK (tID1.isValid());
           CHECK (tID2.isValid());
           CHECK (tID3.isValid());
@@ -132,14 +132,14 @@ namespace test {
       void
       checkBasicProperties ()
         {
-          TrackID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
-          CHECK (tID.getIdent() == Asset::Ident("test_track", Category(STRUCT,"tracks"), "lumi", 0));
+          ForkID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
+          CHECK (tID.getIdent() == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
           
-          CHECK (tID.getHash() == TrackID("☢ test ☢ track ☢").getHash());
+          CHECK (tID.getHash() == ForkID("☢ test ☢ track ☢").getHash());
           
           CHECK (tID.getSym() == tID.getIdent().name);
-          CHECK (TrackID().getIdent().category == Category (STRUCT,"tracks"));
-          CHECK (ClipID().getIdent().category  == Category (STRUCT,"clips"));
+          CHECK (ForkID().getIdent().category == Category (STRUCT,"forks"));
+          CHECK (ClipID().getIdent().category == Category (STRUCT,"clips"));
           
           ClipID cID2,cID3;
           CHECK (cID2.getSym() < cID3.getSym());
@@ -147,7 +147,7 @@ namespace test {
           
           for (uint i=0; i<10000; ++i)
             {
-              TrackID arbitrary(randStr(30));
+              ForkID arbitrary(randStr(30));
               CHECK (0 < arbitrary.getHash());
               CHECK (tID.getHash() != arbitrary.getHash());
               tID = arbitrary;
@@ -156,20 +156,20 @@ namespace test {
               CHECK (tID.getIdent()== arbitrary.getIdent());
             }
           
-          cout << showSizeof<TrackID>() << endl;
+          cout << showSizeof<ForkID>() << endl;
           cout << showSizeof<BareEntryID>() << endl;
-          CHECK (sizeof(TrackID) == sizeof(BareEntryID));
-          CHECK (sizeof(TrackID) == sizeof(lumiera_uid) + sizeof(void*));
+          CHECK (sizeof(ForkID) == sizeof(BareEntryID));
+          CHECK (sizeof(ForkID) == sizeof(lumiera_uid) + sizeof(void*));
         }
       
       
       void
       checkComparisions ()
         {
-          TrackID tID1("a1");
-          TrackID tID2("a1");
-          TrackID tID3("a2");
-          TrackID tID4("b");
+          ForkID tID1("a1");
+          ForkID tID2("a1");
+          ForkID tID3("a2");
+          ForkID tID4("b");
           CHECK (tID1 == tID2);
           
           CHECK (tID2 < tID3);
@@ -182,7 +182,7 @@ namespace test {
           CHECK (tID4 >= tID3);
           CHECK (tID4 > tID3);
           
-          TrackID trackID1, trackID2;
+          ForkID trackID1, trackID2;
           CHECK (trackID1 < trackID2); // auto generated IDs are prefix + running counter
         }
       
@@ -199,8 +199,8 @@ namespace test {
       void
       checkErasure ()
         {
-          TrackID tID("suspicious");
-          ClipID  cID("suspicious");
+          ForkID tID("suspicious");
+          ClipID cID("suspicious");
           
           CHECK (tID.getHash() != cID.getHash());
           CHECK (tID.getSym()  == cID.getSym());
@@ -213,20 +213,20 @@ namespace test {
           CHECK (bIDt.getSym()  == bIDc.getSym());
           CHECK ("suspicious"  == bIDc.getSym());
           
-          using mobject::session::Track;
+          using mobject::session::Fork;
           using mobject::session::Clip;
-          TrackID tIDnew = bIDt.recast<Track>();
-          ClipID  cIDnew = bIDc.recast<Clip>();
+          ForkID tIDnew = bIDt.recast<Fork>();
+          ClipID cIDnew = bIDc.recast<Clip>();
           CHECK (tIDnew == tID);
           CHECK (cIDnew == cID);
           
           VERIFY_ERROR (WRONG_TYPE, bIDt.recast<Clip>());
-          VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Track>());
+          VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Fork>());
           VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Dummy>());
           VERIFY_ERROR (WRONG_TYPE, bIDt.recast<Dummy>());
           
-          CHECK (tID == TrackID::recast (bIDt));         // equivalent static API on typed subclass
-          VERIFY_ERROR (WRONG_TYPE, TrackID::recast(bIDc));
+          CHECK (tID == ForkID::recast (bIDt));          // equivalent static API on typed subclass
+          VERIFY_ERROR (WRONG_TYPE,  ForkID::recast(bIDc));
           VERIFY_ERROR (WRONG_TYPE,  ClipID::recast(bIDt));
           VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDc));
           VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDt));
@@ -240,10 +240,10 @@ namespace test {
           CHECK (cID != bIDt_copy);
           CHECK (tID == bIDt_copy);
           
-          CHECK (bIDt == TrackID ("suspicious"));
+          CHECK (bIDt == ForkID ("suspicious"));
           CHECK (bIDt != ClipID ("suspicious"));
           CHECK (bIDc == ClipID ("suspicious"));
-          CHECK (TrackID ("suspicious") != ClipID ("suspicious"));
+          CHECK (ForkID ("suspicious") != ClipID ("suspicious"));
         }
       
       

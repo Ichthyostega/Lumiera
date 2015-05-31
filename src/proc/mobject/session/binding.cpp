@@ -44,7 +44,7 @@ namespace session {
     return true;
     // Ideas: - compare the bound sequence's channels with this binding's channel configuration
     //        - verify the virtual media, unless this biding is creating a top-level timeline
-    //        - verify the bound sequence is based on a track within the model
+    //        - verify the bound sequence is based on a fork within the model
   }
 
   

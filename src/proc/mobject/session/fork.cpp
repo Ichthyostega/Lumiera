@@ -28,22 +28,25 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-  /** create a new track-MObject based on the given unique ID.
-   *  Initially, the reference (zero-point) time of this track
-   *  will be set to 0 
+  /** create a new fork-MObject based on the given unique ID.
+   *  While the fork is an MObject attached locally within the
+   *  given Sequence, it referres to a globally known forkID,
+   *  which is an Asset. These fork-IDs might be shared among
+   *  several Sequences and can be used to refer to several
+   *  scopes simultaneously.
    */
-  Track::Track (TrackID const& trackID)
+  Fork::Fork (ForkID const& forkID)
     : start_(Time::ZERO)                     //////////////////////////////////TODO something more inspired please
-    , id_(trackID)
+    , id_(forkID)
   {
     throwIfInvalid();
   }
   
   
   bool 
-  Track::isValid()  const
+  Fork::isValid()  const
   {
-    return bool(id_.isValid());  ////////TODO anything more 'real' to check?
+    return bool(id_.isValid());  ////////TODO anything more to check 'for real'?
   }
   
   

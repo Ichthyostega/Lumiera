@@ -183,7 +183,7 @@ namespace asset {
    * @todo As a temporary workaround, we hash the symbolic ID twice, but we should look
    *       into using a better hash function               ////////////TICKET #865
    * 
-   * @see mobject::session::Track
+   * @see mobject::session::Fork
    */
   template<class TY>
   struct EntryID

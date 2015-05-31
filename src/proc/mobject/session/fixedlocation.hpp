@@ -40,17 +40,17 @@ namespace mobject {
      * in the Session: directly specifying a constant position.
      * @todo use a subclass to represent the LocatingSolution?
      *       would solve the construction of a ExplicitPlacement
-     *       much more natural. (ichthyo: siehe trac #100) 
+     *       much more natural. //////////TICKET #100
      */
     class FixedLocation : public LocatingPin
       {
         Time time_;
-        Track track_;
+        Fork fork_;
         
-        friend class ExplicitPlacement; //TODO trac #100
+        friend class ExplicitPlacement; //////////////////////TICKET #100
         
       protected:
-        FixedLocation (Time ti, Track tra) : time_(ti), track_(tra) {};
+        FixedLocation (Time ti, Fork fo) : time_(ti), fork_(fo) {};
         friend class LocatingPin;
         
         virtual void intersect (LocatingSolution&)  const;
