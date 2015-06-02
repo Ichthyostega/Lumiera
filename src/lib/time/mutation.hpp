@@ -114,7 +114,7 @@ namespace time {
       static EncapsulatedMutation materialise (QuTime const&);
       static EncapsulatedMutation nudge (int adjustment);
       static EncapsulatedMutation nudge (int adjustment, Symbol gridID);      ///<@note defined in common-services.cpp
-#ifdef LIB_TIME_TIMEQUQNT_H
+#ifdef LIB_TIME_TIMEQUANT_H
       static EncapsulatedMutation nudge (int adjustment, PQuant const& grid);
 #endif
       
@@ -131,7 +131,7 @@ namespace time {
   inline void Duration::accept (Mutation const& muta) { muta.change (*this); }
   inline void TimeSpan::accept (Mutation const& muta) { muta.change (*this); }
   
-#ifdef LIB_TIME_TIMEQUQNT_H
+#ifdef LIB_TIME_TIMEQUANT_H
   inline void QuTime::accept   (Mutation const& muta) { muta.change (*this); }
 #endif
   
@@ -165,7 +165,7 @@ namespace time {
     return imposeChange (target, TimeVar(target) += Time(FSecs(steps)));
   }
   
-#ifdef LIB_TIME_TIMEQUQNT_H
+#ifdef LIB_TIME_TIMEQUANT_H
   /** @internal Special treatment for quantised target values:
    *  use the quantised time's own grid; retrieve the corresponding grid point,
    *  offset it by the step-parameter, then retrieve the corresponding time from

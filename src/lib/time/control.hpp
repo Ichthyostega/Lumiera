@@ -77,7 +77,7 @@
  ** both as target and as change/notification value. This ability is compiled in conditionally,
  ** as including mutation.hpp causes several additional includes, which isn't desirable when
  ** it comes just to changing plain time values. Thus, to get these additional specialisations,
- ** the LIB_TIME_TIMEQUQNT_H header guard needs to be defined, which happens automatically
+ ** the LIB_TIME_TIMEQUANT_H header guard needs to be defined, which happens automatically
  ** if lib/time/mutation.hpp is included prior to lib/time/control.hpp.
  ** 
  ** \par implementation notes
