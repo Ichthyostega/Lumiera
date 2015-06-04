@@ -156,7 +156,7 @@ namespace asset{
         static format namePattern ("%s.%03d");
         ////////////////////////////////////////////////////////////////////////////////TICKET #166 : needs to be pushed down into a *.cpp
         
-        return str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );
+        return str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );  //////////TICKET #565 : how to organise access; this ought to be thread safe (-> EntryID )
     }
     
     

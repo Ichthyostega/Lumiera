@@ -55,7 +55,7 @@ namespace test{
   
   
   /***********************************************************************************//**
-   * @test Demonstrate how to build, discover and traverse tree-like data representation.
+   * @test Demonstrate how to build, explore and traverse tree-like data representation.
    *       
    * @see IndexTable
    * @see DiffListApplication_test

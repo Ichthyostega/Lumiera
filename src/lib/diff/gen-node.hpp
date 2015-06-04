@@ -34,7 +34,7 @@
  ** 
  ** \par Anatomy of a GenNode
  ** 
- ** GenNode is a polymorphic value with well defined identity and type-ID.
+ ** GenNode is a polymorphic value with well defined identity and type.
  ** Each element is conceived to be »unique within context« -- as defined
  ** by the immediately visible scope within a tree like structure.
  ** Beyond this identity metadata, each GenNode carries a DataCap, which
@@ -44,7 +44,7 @@
  ** will be referred by a suitable reference representation (PlacementID).
  ** The DataCap is what creates the polymorphic nature, where the common
  ** interface is mostly limited to managemental tasks (copying of values,
- ** external representation). Besides, there is are special flavours of
+ ** external representation). Besides, there are special flavours of
  ** the DataCap to represent \em sub-collections of GenNode elements.
  ** Especially, the \ref Record type is a kind of collection suitable
  ** to represent object-like structures, since it both holds several
@@ -63,7 +63,8 @@
  ** - moreover, the elements need to be values, able to be copied and handled at will
  ** - it will be beneficial for these values to support move semantics explicitly
  ** - in addition, the tree diffing suggests a mechanism to re-gain the fully
- **   typed context, based on some kind of embedded type tag
+ **   typed context, either based on some kind of embedded type tag, or
+ **   alternatively by visitation and matching
  ** - finally, the handling of changes prompts us to support installation
  **   of a specifically typed <i>change handling closure</i>.
  ** 
@@ -78,6 +79,10 @@
  ** element, thereby picking up the element's type. For sake of code organisation and
  ** dependency management, we solve this requirement with the help of a trait type,
  ** expecting the actual usage to supply the necessary specialisations on site.
+ ** 
+ ** @todo the purpose and goal of the monadic approach is not clear yet (5/2015).
+ **       To begin with, for the task of diff detection and application, it is sufficient
+ **       to get the children as traversable collection
  ** 
  ** @see diff-index-table-test.cpp
  ** @see diff-list-generation-test.cpp

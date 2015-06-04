@@ -121,7 +121,7 @@ namespace diff{
       using Handler = HandlerFun<Interpreter,Val>;
     };
   
-  template<class I, typename E>
+  template<class I, typename E>          ///< alternatively derive value and interpreter from a Handler binding
   struct InterpreterScheme<HandlerFun<I,E>>
     {
       using Val = E;
@@ -266,10 +266,10 @@ namespace diff{
   
   
   /**
-   * generic builder to apply a list diff to a given target sequence.
+   * generic builder to apply a diff description to a given target data structure.
    * The usage pattern is as follows
-   * #. construct a DiffApplicator instance, wrapping the target sequence
-   * #. feed the list diff (sequence of diff verbs) to the #consume function
+   * #. construct a DiffApplicator instance, wrapping the target data
+   * #. feed the diff (sequence of diff verbs) to the #consume function
    * #. the wrapped target sequence has been altered, to conform to the given diff
    * @note a suitable DiffApplicationStrategy will be picked, based on the type
    *       of the concrete target sequence given at construction. (Effectively

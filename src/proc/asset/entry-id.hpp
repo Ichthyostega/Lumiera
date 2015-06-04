@@ -193,7 +193,7 @@ namespace asset {
       
       /** case-1: auto generated symbolic ID */
       EntryID()
-        : BareEntryID (idi::generateSymbolID<TY>(), getTypeHash())
+        : BareEntryID (idi::generateSymbolID<TY>(), getTypeHash())        /////////////TICKET #565 : how to organise access; this is not thread safe
         { }
       
       /** case-2: explicitly specify a symbolic ID to use.
