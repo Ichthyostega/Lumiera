@@ -73,6 +73,7 @@
 
 //#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
+#include <boost/noncopyable.hpp>
 
 #include <utility>
 #include <vector>
@@ -182,6 +183,34 @@ namespace diff{
           return "booo"; ////TODO
         }
       
+      /**
+       * While otherwise immutable,
+       * a Record object can be remoulded
+       * with the help of a Mutator object
+       * @remarks a Mutator basically wraps a \em copy
+       *          of the original object. After performing
+       *          the desired changes, the altered copy can either
+       *          be sliced out (by conversion), or moved overwriting
+       *          an existing other Record instance (implemented as swap)
+       */
+      class Mutator;
+      
+      
+      /**
+       * copy-initialise (or convert) from the given Mutator instance.
+       * @remarks need to code this explicitly, otherwise Record's
+       *          build-from sequence templated ctor would kick in.
+       */
+      Record (Mutator const& mut)
+        : Record((Record const&) mut)
+        { }
+      Record (Mutator && mut)
+        : Record(std::move ((Record) mut))
+        { }
+      
+      friend class Mutator;
+      
+      
       
       /* ==== Exposing scope and contents for iteration ====== */
       
@@ -190,16 +219,15 @@ namespace diff{
       using keyIter   = TransformIter<scopeIter, string>;
       using valIter   = TransformIter<scopeIter, VAL>;
       
-      
-      iterator  begin () const { return iterator(this, attribs_.begin()); }
-      iterator  end ()   const { return iterator(); }
-      
+      /** default iteration exposes all data within this "object", starting with the attributes */
+      iterator  begin ()  const { return iterator(this, attribs_.begin()); }
+      iterator  end ()    const { return iterator(); }
       
       scopeIter attribs() const { return iter_stl::eachElm(attribs_); }
-      scopeIter scope()  const { return iter_stl::eachElm(children_); }
+      scopeIter scope()   const { return iter_stl::eachElm(children_); }
       
-      keyIter keys()  const { return transformIterator(attribs(), extractKey); }
-      valIter vals()  const { return transformIterator(attribs(), extractVal); }
+      keyIter   keys()    const { return transformIterator(attribs(), extractKey); }
+      valIter   vals()    const { return transformIterator(attribs(), extractVal); }
       
     protected: /* ==== API for the IterAdapter ==== */
       
@@ -255,6 +283,12 @@ namespace diff{
           return "todo"; ////TODO
         }
       
+      static VAL
+      buildTypeAttribute (string const& typeID)
+        {
+          return VAL(); ///TODO
+        }
+      
       static string
       extractKey (VAL const& v)
         {
@@ -281,6 +315,72 @@ namespace diff{
       }
     };
   
+  
+  
+  template<typename VAL>
+  class Record<VAL>::Mutator
+    : boost::noncopyable
+    {
+      using Rec = Record<VAL>;
+      
+      Rec record_;
+      
+    public:
+      explicit
+      Mutator (Rec const& startingPoint)
+        : record_(startingPoint)
+        { }
+      
+      explicit
+      Mutator (Rec && startingPoint)
+        : record_(std::move (startingPoint))
+        { }
+      
+      operator Rec&()
+        {
+          return record_;
+        }
+      
+      void
+      replace (Rec& existingInstance)  noexcept
+        {
+          std::swap (existingInstance, record_);
+        }
+      
+      
+      /* === functions to alter contents === */
+      
+      void
+      setType (string const& newTypeID)
+        {
+          set ("type", Rec::buildTypeAttribute (newTypeID));
+          record_.type_ = newTypeID;
+        }
+      
+      void
+      set (string const& key, VAL const& newValue)
+        {
+          ///////////TODO;
+        }
+      
+      void
+      appendChild (VAL const& newChild)
+        {
+          record_.children_.push_back (newChild);
+        }
+      
+      void
+      prependChild (VAL const& newChild)
+        {
+          record_.children_.insert (record_.children_.begin(), newChild);
+        }
+      
+      bool
+      empty()  const
+        {
+          return record_.empty();
+        }
+    };
   
   
   
