@@ -48,7 +48,7 @@
 
 
 #include "include/logging.h"
-#include "lib/iter-adapter.hpp"
+#include "lib/iter-adapter-ptr-deref.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
