@@ -1,5 +1,5 @@
 /*
-  ITER-ADAPTER.hpp  -  helpers for building simple forward iterators 
+  ITER-ADAPTER-PTR-DEREF.hpp  -  helpers for building simple forward iterators 
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -91,8 +91,8 @@
  */
 
 
-#ifndef LIB_ITER_ADAPTER_H
-#define LIB_ITER_ADAPTER_H
+#ifndef LIB_ITER-ADAPTER-PTR-DEREF_H
+#define LIB_ITER-ADAPTER-PTR-DEREF_H
 
 
 #include "lib/error.hpp"
@@ -113,12 +113,6 @@ namespace lib {
             lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
     }
   }
-  
-  /** use a given Lumiera Forward Iterator in standard "range for loops" */
-#define ENABLE_USE_IN_STD_RANGE_FOR_LOOPS(ITER)                              \
-      friend ITER   begin (ITER const& it){ return it; }                      \
-      friend ITER&& begin (ITER&& it)     { return static_cast<ITER&&> (it); } \
-      friend ITER   end   (ITER const&)   { return ITER(); }
   
   
 
@@ -250,9 +244,6 @@ namespace lib {
             _throwIterExhausted();
         }
       
-      
-      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterAdapter);
-      
       /// comparison is allowed to access impl iterator
       template<class P1, class P2, class CX>
       friend bool operator== (IterAdapter<P1,CX> const&, IterAdapter<P2,CX> const&);
@@ -366,9 +357,6 @@ namespace lib {
         }
       
       
-      
-      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterStateWrapper);
-      
       /// comparison is allowed to access state implementation core
       template<class T1, class T2, class STX>
       friend bool operator== (IterStateWrapper<T1,STX> const&, IterStateWrapper<T2,STX> const&);
@@ -479,9 +467,6 @@ namespace lib {
       /** access wrapped STL iterator */
       const IT&  getPos()  const { return p_; }
       const IT&  getEnd()  const { return e_; }
-      
-      
-      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (RangeIter);
       
       
     private:
@@ -890,4 +875,4 @@ namespace lib {
   
   
 }// namespace lib
-#endif /*LIB_ITER_ADAPTER_H*/
+#endif /*LIB_ITER-ADAPTER-PTR-DEREF_H*/

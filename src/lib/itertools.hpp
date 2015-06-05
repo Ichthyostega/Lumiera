@@ -281,8 +281,8 @@ namespace lib {
         }
       
       
-      mutable bool isOK_;
       mutable bool cached_;
+      mutable bool isOK_;
       
       bool
       currVal_isOK () const  ///< @return (maybe cached) result of filter predicate
@@ -304,7 +304,8 @@ namespace lib {
       FilterCore (IT const& source, PRED prediDef)
         : Raw(source)
         , predicate_(prediDef) // induces a signature check
-        , cached_(false)
+        , cached_(false)      //  not yet cached
+        , isOK_()            //   some value
         { }
     };
   
@@ -331,6 +332,8 @@ namespace lib {
       FilterIter (IT const& src, PRED filterPredicate)
         : _Impl(_Filter(src,filterPredicate))
         { }
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (FilterIter)
     };
   
   
@@ -471,6 +474,8 @@ namespace lib {
       TransformIter (IT const& src, FUN trafoFunc)
         : _IteratorImpl(_Trafo(src,trafoFunc))
         { }
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (TransformIter)
     };
   
   
