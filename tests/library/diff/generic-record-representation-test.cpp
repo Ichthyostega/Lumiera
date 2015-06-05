@@ -24,15 +24,17 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/record.hpp"
+#include "lib/itertools.hpp"
 #include "lib/util.hpp"       //////TODO necessary?
 
 #include <iostream>
 //#include <utility>
-//#include <string>
+#include <string>
 #include <vector>
 
-//using std::string;
+using std::string;
 using util::isSameObject;
+using util::isnil;
 using std::vector;
 //using std::swap;
 using std::cout;
@@ -44,15 +46,40 @@ namespace diff{
 namespace test{
   
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
+  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   namespace {//Test fixture....
     
+    using Seq  = vector<string>;
+    using RecS = Record<string>;
+    
+    template<class IT>
+    inline Seq
+    contents (IT const& it)
+    {
+      Seq collected;
+      append_all (it, collected);
+      return collected;
+    }
+    
+    inline Seq
+    contents (RecS const& rec_of_strings)
+    {
+      return contents (rec_of_strings.begin());
+    }
+    
+    template<class X>
+    inline Seq
+    strings (std::initializer_list<X> const& con)
+    {
+      Seq collected;
+      for (auto elm : con)
+        collected.push_back(elm);
+      return collected;
+    }
     
     
   }//(End)Test fixture
-  
-  using Seq  = vector<string>;
-  using RecS = Record<String>;
   
   
   
@@ -85,13 +112,13 @@ namespace test{
       simpleUsage()
         {
           RecS enterprise("starship"
-                         , {"Name = USS Enterprise"
-                           ,"Registry = NCC-1701-D"
-                           ,"Class = Galaxy"
-                           ,"Owner = United Federation of Planets"
-                           ,"built=2363"
-                           }
-                         , {"Picard", "Riker", "Data", "Worf", "Troi", "Crusher", "La Forge"}
+                         , strings ({"Name = USS Enterprise"
+                                    ,"Registry = NCC-1701-D"
+                                    ,"Class = Galaxy"
+                                    ,"Owner = United Federation of Planets"
+                                    ,"built=2363"
+                                   })
+                         , strings ({"Picard", "Riker", "Data", "Troi", "Worf", "Crusher", "La Forge"})
                          );
           
           CHECK (enterprise.getType() == "starship");
@@ -102,15 +129,15 @@ namespace test{
           CHECK (!enterprise.hasAttribute("Owner "));
           
           CHECK (enterprise.contains("Data"));
-          CHECK (!contains (enterprise, "Woof"));
+          CHECK (!enterprise.contains("Woof"));
           CHECK (util::contains (enterprise, "Worf"));
           
           VERIFY_ERROR (INVALID, enterprise.get("warp10"));
           
           cout << "enterprise = " << string(enterprise)<<endl;
-          for (string elm : enterprise)             cout << elm<<endl;
-          for (string mbr : enterprise.scope())     cout << mbr<<endl;
-          for (auto attr : enterprise.attributes()) cout << attr<<endl;
+          for (string elm : enterprise)           cout << elm<<endl;
+          for (string mbr : enterprise.scope())   cout << mbr<<endl;
+          for (string att : enterprise.attribs()) cout << att<<endl;
         }
       
       
@@ -130,14 +157,14 @@ namespace test{
           CHECK ("NIL" == untyped.getType());
           CHECK (Seq{"x"} == contents(untyped));
           CHECK (Seq{"x"} == contents(untyped.scope()));
-          CHECK (isnil (untyped.attributes()));
+          CHECK (isnil (untyped.attribs()));
           
           RecS untyped2({"x=y", "z"});
           CHECK (!isnil(untyped2));
           CHECK ("NIL" == untyped2.getType());
           CHECK (Seq({"x=y", "z"}) == contents(untyped2));
           CHECK (Seq{"x"} == contents (untyped2.keys()));
-          CHECK (Seq{"y"} == contents (untyped2.values()));
+          CHECK (Seq{"y"} == contents (untyped2.vals()));
           CHECK (Seq{"z"} == contents (untyped2.scope()));
           
           
@@ -146,7 +173,7 @@ namespace test{
           CHECK ("thing" == something.getType());
           CHECK (Seq({"type=thing", "a=1", "b=2", "c", "d"}) == contents(something));
           CHECK (Seq({"a", "b"}) == contents (something.keys()));
-          CHECK (Seq({"1", "2"}) == contents (something.values()));
+          CHECK (Seq({"1", "2"}) == contents (something.vals()));
           CHECK (Seq({"c", "d"}) == contents (something.scope()));
         }
       
@@ -158,10 +185,10 @@ namespace test{
           RecS b(a);
           CHECK (a.getType() == b.getType());
           CHECK (contents(a) == contents(b));
-          CHECK (contents(a.attributes()) == contents(b.attributes()));
+          CHECK (contents(a.attribs()) == contents(b.attribs()));
           
-          CHECK (!isSameOject (a.get("a"), b.get("a")));
-          CHECK (!isSameOject (*a.scope(), *b.scope()));
+          CHECK (!isSameObject (a.get("a"), b.get("a")));
+          CHECK (!isSameObject (*a.scope(), *b.scope()));
           
           string& c = *b.scope();
           CHECK ("c" == c);
@@ -179,7 +206,7 @@ namespace test{
           CHECK (isnil (b));
           b = bb;
           CHECK (!isnil (b));
-          CHECK (!isSameObject(*b.get("a"), *bb.get("a")));
+          CHECK (!isSameObject(b.get("a"), bb.get("a")));
           CHECK (!isSameObject(*b.scope(), *bb.scope()));
         }
       
@@ -204,7 +231,7 @@ namespace test{
           RecS a2({"a","aa"});
           CHECK (aa == a2);  CHECK (a2 == aa);
           
-          RecS o1("oo", {"a=α", "b=β"}, {"γ", "δ", "ε"});
+          RecS o1("oo", strings({"a=α", "b=β"}), strings({"γ", "δ", "ε"}));
           RecS o2({"type=oo", "a = α", "b = β", "γ", "δ", "ε"});
           RecS o3({"type=oO", "a = α", "b = β", "γ", "δ", "ε"});
           RecS o4({"type=oo", "a = α", "b = β", "c=γ", "δ", "ε"});
@@ -251,7 +278,7 @@ namespace test{
           CHECK ("u" == aa.getType());
           CHECK (Seq({"type=u", "a=1", "a"}) == contents(aa));
           CHECK (Seq({"a"}) == contents (aa.keys()));
-          CHECK (Seq({"1"}) == contents (aa.values()));
+          CHECK (Seq({"1"}) == contents (aa.vals()));
           CHECK (Seq({"a"}) == contents (aa.scope()));
           
           CHECK (mut == aa);

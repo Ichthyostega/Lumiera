@@ -67,10 +67,16 @@
 
 
 #include "lib/error.hpp"
+#include "lib/iter-adapter.hpp"
+#include "lib/iter-adapter-stl.hpp"
+#include "lib/itertools.hpp"
+
 //#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
 
-//#include <vector>
+#include <utility>
+#include <vector>
+#include <string>
 //#include <map>
 
 
@@ -80,6 +86,7 @@ namespace diff{
   namespace error = lumiera::error;
   
 //using util::_Fmt;
+  using std::string;
   
   
   
@@ -87,8 +94,191 @@ namespace diff{
   template<typename VAL>
   class Record
     {
+      using _Vec = std::vector<VAL>;
+      using Attrib = std::pair<Symbol, VAL>;
+      using Attribs = _Vec;
+      using Children = _Vec;
+      
+      string type_;
+      Attribs attribs_;
+      Children children_;
       
     public:
+      Record()
+        : type_("NIL")
+        { }
+      
+      template<typename A, typename C>
+      Record(Symbol typeID, A&& att, C&& chi)
+        : type_(typeID)
+        , attribs_(std::forward<A> (att))
+        , children_(std::forward<C> (chi))
+        { }
+      
+      template<typename A, typename C>
+      Record(Symbol typeID, std::initializer_list<A> const&& att
+                          , std::initializer_list<C> const&& chi)
+        : type_(typeID)
+        , attribs_(att)
+        , children_(chi)
+        { }
+      
+      template<typename SEQ>
+      explicit
+      Record (SEQ const& con)
+        : type_("NIL")
+        {
+          auto p = std::begin(con);
+          auto e = std::end(con);
+          if (p!=e && isTypeID (*p))
+            type_ = extractTypeID(*(p++));
+          for ( ; p!=e && isAttribute(*p); ++p)
+            attribs_.push_back (*p);
+          for ( ; p!=e; ++p)
+            children_.push_back (*p);
+        }
+      
+      Record (std::initializer_list<VAL> const&& ili)
+        : Record(ili)
+        { }
+      
+      // all default copy operations acceptable
+      
+      
+      operator std::string()  const
+        {
+          return "nebbich";  ////TODO
+        }
+      
+      
+      bool
+      empty()  const
+        {
+          return attribs_.empty()
+              && children_.empty();
+        }
+      
+      string
+      getType()  const
+        {
+          return type_;
+        }
+      
+      bool
+      hasAttribute (string key)  const
+        {
+          return false; ////TODO
+        }
+      
+      bool
+      contains (VAL const& ref)  const
+        {
+          return false; ////TODO
+        }
+      
+      VAL const&
+      get (string key)  const
+        {
+          return "booo"; ////TODO
+        }
+      
+      
+      /* ==== Exposing scope and contents for iteration ====== */
+      
+      using iterator  = IterAdapter<typename _Vec::const_iterator, const Record*>;
+      using scopeIter = typename iter_stl::_SeqT<_Vec>::Range;
+      using keyIter   = TransformIter<scopeIter, string>;
+      using valIter   = TransformIter<scopeIter, VAL>;
+      
+      
+      iterator  begin () const { return iterator(this, attribs_.begin()); }
+      iterator  end ()   const { return iterator(); }
+      
+      
+      scopeIter attribs() const { return iter_stl::eachElm(attribs_); }
+      scopeIter scope()  const { return iter_stl::eachElm(children_); }
+      
+      keyIter keys()  const { return transformIterator(attribs(), extractKey); }
+      valIter vals()  const { return transformIterator(attribs(), extractVal); }
+      
+    protected: /* ==== API for the IterAdapter ==== */
+      
+      /** Implementation of Iteration-logic: pull next element. */
+      template<class ITER>
+      friend void
+      iterNext (const Record* src, ITER& pos)
+        {
+          ++pos;
+          checkPoint (src,pos);
+        }
+      
+      /** Implementation of Iteration-logic: detect iteration end.
+       * @remarks seamless continuation of the iteration when reaching
+       *    the end of the attribute collection. In this implementation,
+       *    we use the default constructed \c ITER() to mark iteration end.
+       */
+      template<class ITER>
+      friend bool
+      checkPoint (const Record* src, ITER& pos)
+        {
+          REQUIRE (src);
+          if ((pos != ITER()) && (pos != src->children_.end()))
+            return true;
+          else
+            if (pos != ITER() && (pos == src->attribs_.end()) && !src->children_.empty())
+              {
+                pos = src->children_.begin();
+                return true;
+              }
+            else
+              {
+                pos = ITER();
+                return false;
+        }     }
+      
+    private:
+      static bool
+      isAttribute (VAL const& v)
+        {
+          return false; ////TODO
+        }
+      
+      static bool
+      isTypeID (VAL const& v)
+        {
+          return false; ////TODO
+        }
+      
+      static string
+      extractTypeID (VAL const& v)
+        {
+          return "todo"; ////TODO
+        }
+      
+      static string
+      extractKey (VAL const& v)
+        {
+          return "todo"; ////TODO
+        }
+      
+      static VAL
+      extractVal (VAL const& v)
+        {
+          return VAL(); ///TODO
+        }
+      
+      
+      friend bool
+      operator== (Record const& r1, Record const& r2)
+      {
+        return false; ////TODO
+      }
+      
+      friend bool
+      operator!= (Record const& r1, Record const& r2)
+      {
+        return ! (r1 == r2);
+      }
     };
   
   
