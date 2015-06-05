@@ -186,7 +186,7 @@ namespace diff{
       /* ==== Exposing scope and contents for iteration ====== */
       
       using iterator  = IterAdapter<typename _Vec::const_iterator, const Record*>;
-      using scopeIter = typename iter_stl::_SeqT<_Vec>::Range;
+      using scopeIter = typename iter_stl::_SeqT<const _Vec>::Range;
       using keyIter   = TransformIter<scopeIter, string>;
       using valIter   = TransformIter<scopeIter, VAL>;
       

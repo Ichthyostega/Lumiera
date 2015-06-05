@@ -190,7 +190,7 @@ namespace test{
           CHECK (!isSameObject (a.get("a"), b.get("a")));
           CHECK (!isSameObject (*a.scope(), *b.scope()));
           
-          string& c = *b.scope();
+          string const& c = *b.scope();
           CHECK ("c" == c);
           
           RecS bb;
