@@ -157,6 +157,50 @@ namespace diff{
   
   
   
+  /* === Specialisation for handling of attributes in Record<GenNode> === */
+  
+  template<>
+  inline bool
+  Record<GenNode>::isAttribute (GenNode const& v)
+  {
+    return false; ////TODO
+  }
+  
+  template<>
+  inline bool
+  Record<GenNode>::isTypeID (GenNode const& v)
+  {
+    return false; ////TODO
+  }
+  
+  template<>
+  inline string
+  Record<GenNode>::extractTypeID (GenNode const& v)
+  {
+    return "todo"; ////TODO
+  }
+  
+  template<>
+  inline GenNode
+  Record<GenNode>::buildTypeAttribute (string const& typeID)
+  {
+    return GenNode(); ///TODO
+  }
+  
+  template<>
+  inline string
+  Record<GenNode>::extractKey (GenNode const& v)
+  {
+    return "todo"; ////TODO
+  }
+  
+  template<>
+  inline GenNode
+  Record<GenNode>::extractVal (GenNode const& v)
+  {
+    return GenNode(); ///TODO
+  }
+  
   
 }} // namespace lib::diff
 #endif /*LIB_DIFF_GEN_NODE_H*/

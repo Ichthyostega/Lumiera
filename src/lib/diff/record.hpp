@@ -55,7 +55,25 @@
  ** 
  ** \par rationale
  ** The underlying theme of this design is negative, dialectical: we do not want to
- ** build yet another object system. The object model of C++ is deemed adequate.  
+ ** build yet another object system. The object model of C++ is deemed adequate.
+ ** 
+ ** @remarks
+ **  - the implementation is focused on the intended primary use case,
+ **    which is to exchange diff messages drawn against a symbolic representation
+ **    of a typed object tree. Especially, we assume that there is only a small
+ **    number of attributes (so linear search for access by key is adequate).
+ **  - moreover, we assume that the value type allows to somehow to embed
+ **    the key of each attribute; the implementation needs an explicit
+ **    specialisation of the binding functions for each value type.
+ **  - this header defines a specialisation for VAL = std::string --
+ **    while the most relevant specialisation for GenNode is provided
+ **    alongside with this special, monadic value type.
+ **  - an alternative implementation approach would have been to use a
+ **    dedicated helper type to represent the collection of attributes.
+ **    This type might then be specialised, e.g. to utilise an index table
+ **    for key-value lookup. However, in the light of the intended usage
+ **    of Record entities as tree nodes within a GenNode monad, such a
+ **    more elaborate approach was deemed unnecessary for the time being.
  ** 
  ** @see GenericRecordRepresentation_test
  ** 
@@ -78,7 +96,7 @@
 #include <utility>
 #include <vector>
 #include <string>
-//#include <map>
+
 
 
 namespace lib {
@@ -91,7 +109,24 @@ namespace diff{
   
   
   
-  /** object-like record of data */
+  /**
+   * object-like record of data.
+   * For symbolic representation of "objects".
+   * A Record holds both \em attributes (key-value data)
+   * plus a list of \em enclosed children, which are conceived
+   * to be within the "scope" of this Record. Optionally, a \em typeID
+   * (metadata) may be defined. Otherwise, this typeID defaults to \c "NIL".
+   * The representation of attributes depends on the actual value type, which
+   * somehow need the ability to encode the keys within the value data.
+   * By default, a specialisation is given for string, using the \c "key = val"
+   * syntax. Yet the most relevant use case is \c Record<GenNode> -- using the
+   * embedded name-ID of the GenNode elements as key for attributes.
+   * 
+   * Recode elements meant to be immutable; they can be created from a
+   * defining collection. However, we provide a #Mutator mechanism to allow
+   * for rebuilding and mutating symbolic data structures based on Records
+   * and GenNode. Especially, Lumiera's diff framework relies on this.
+   */
   template<typename VAL>
   class Record
     {
@@ -265,41 +300,13 @@ namespace diff{
         }     }
       
     private:
-      static bool
-      isAttribute (VAL const& v)
-        {
-          return false; ////TODO
-        }
-      
-      static bool
-      isTypeID (VAL const& v)
-        {
-          return false; ////TODO
-        }
-      
-      static string
-      extractTypeID (VAL const& v)
-        {
-          return "todo"; ////TODO
-        }
-      
-      static VAL
-      buildTypeAttribute (string const& typeID)
-        {
-          return VAL(); ///TODO
-        }
-      
-      static string
-      extractKey (VAL const& v)
-        {
-          return "todo"; ////TODO
-        }
-      
-      static VAL
-      extractVal (VAL const& v)
-        {
-          return VAL(); ///TODO
-        }
+      /* === abstract attribute handling : needs specialisation === */
+      static bool   isAttribute (VAL const& v);
+      static bool   isTypeID (VAL const& v);
+      static string extractTypeID (VAL const& v);
+      static VAL    buildTypeAttribute (string const& typeID);
+      static string extractKey (VAL const& v);
+      static VAL    extractVal (VAL const& v);
       
       
       friend bool
@@ -381,6 +388,52 @@ namespace diff{
           return record_.empty();
         }
     };
+  
+  
+  
+  /* === Specialisations to define the handling of attributes === */
+  
+  template<>
+  inline bool
+  Record<string>::isAttribute (string const& v)
+  {
+    return false; ////TODO
+  }
+  
+  template<>
+  inline bool
+  Record<string>::isTypeID (string const& v)
+  {
+    return false; ////TODO
+  }
+  
+  template<>
+  inline string
+  Record<string>::extractTypeID (string const& v)
+  {
+    return "todo"; ////TODO
+  }
+  
+  template<>
+  inline string
+  Record<string>::buildTypeAttribute (string const& typeID)
+  {
+    return string(); ///TODO
+  }
+  
+  template<>
+  inline string
+  Record<string>::extractKey (string const& v)
+  {
+    return "todo"; ////TODO
+  }
+  
+  template<>
+  inline string
+  Record<string>::extractVal (string const& v)
+  {
+    return string(); ///TODO
+  }
   
   
   
