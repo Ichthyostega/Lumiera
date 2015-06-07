@@ -24,12 +24,12 @@
 /** @file gen-node.hpp
  ** Generic building block for tree shaped (meta)data structures.
  ** A representation built from GenNode elements is intended to support
- ** introspection of data structures and exchange of mutations in the
- ** form of \link diff-language.hpp diff messages. \endlink
+ ** (limited) introspection of data structures and exchange of mutations
+ ** in the form of \link diff-language.hpp diff messages. \endlink
  ** 
  ** Despite of the name, GenNode is \em not meant to be an universal
  ** data representation; rather it is limited to embody a fixed hard
- ** wired set of data elements, able to stand-in for attributes
+ ** wired set of data types, able to stand-in for attributes
  ** and sub scope contents of the lumiera high-level data model.
  ** 
  ** \par Anatomy of a GenNode
@@ -44,13 +44,13 @@
  ** will be referred by a suitable reference representation (PlacementID).
  ** The DataCap is what creates the polymorphic nature, where the common
  ** interface is mostly limited to managemental tasks (copying of values,
- ** external representation). Besides, there are special flavours of
- ** the DataCap to represent \em sub-collections of GenNode elements.
- ** Especially, the \ref Record type is a kind of collection suitable
- ** to represent object-like structures, since it both holds several
- ** \am attributes referable by-name, and a (ordered) collection
- ** of elements treated as children within the scope of the
- ** given record.
+ ** external representation).
+ ** 
+ ** To represent object-like structures and for building trees, a special
+ ** kind of data type is placed into the DataCap. This type, Record<GenNode>
+ ** is recursive and has the ability to hold both a a set of attributes
+ ** addressable by-name and an (ordered) collection of elements treated
+ ** as children within the scope of the given record.
  ** 
  ** \par Requirements
  ** 
@@ -122,6 +122,7 @@ namespace diff{
   
   class GenNode;
   
+  using Rec = Record<GenNode>;
   using DataValues = meta::Types<int
                                 ,int64_t
                                 ,short
@@ -130,10 +131,11 @@ namespace diff{
                                 ,double
                                 ,string
                                 ,time::Time
+                                ,time::Offset
                                 ,time::Duration
                                 ,time::TimeSpan
                                 ,hash::LuidH
-                                ,Record<GenNode>
+                                ,Rec
                                 >;
   
   
@@ -161,42 +163,42 @@ namespace diff{
   
   template<>
   inline bool
-  Record<GenNode>::isAttribute (GenNode const& v)
+  Rec::isAttribute (GenNode const& v)
   {
     return false; ////TODO
   }
   
   template<>
   inline bool
-  Record<GenNode>::isTypeID (GenNode const& v)
+  Rec::isTypeID (GenNode const& v)
   {
     return false; ////TODO
   }
   
   template<>
   inline string
-  Record<GenNode>::extractTypeID (GenNode const& v)
+  Rec::extractTypeID (GenNode const& v)
   {
     return "todo"; ////TODO
   }
   
   template<>
   inline GenNode
-  Record<GenNode>::buildTypeAttribute (string const& typeID)
+  Rec::buildTypeAttribute (string const& typeID)
   {
     return GenNode(); ///TODO
   }
   
   template<>
   inline string
-  Record<GenNode>::extractKey (GenNode const& v)
+  Rec::extractKey (GenNode const& v)
   {
     return "todo"; ////TODO
   }
   
   template<>
   inline GenNode
-  Record<GenNode>::extractVal (GenNode const& v)
+  Rec::extractVal (GenNode const& v)
   {
     return GenNode(); ///TODO
   }
