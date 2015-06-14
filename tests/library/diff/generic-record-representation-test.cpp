@@ -275,7 +275,7 @@ namespace test{
           mut.appendChild("a");
           mut.set("a", "1");
           
-          RecS aa(std::move(mut));
+          RecS aa(mut);
           CHECK (a != aa);
           CHECK ("u" == aa.getType());
           CHECK (Seq({"type=u", "a=1", "a"}) == contents(aa));
