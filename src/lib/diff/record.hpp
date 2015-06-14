@@ -397,6 +397,10 @@ namespace diff{
    * RecordRef is copyable and assignable, but like a reference
    * can not be rebound. It can be used to refer to a subtree
    * within the diff representation, without the need to copy.
+   * @remarks this is almost identical to std::ref, with the
+   *          notable difference that it can be default-created
+   *          into "bottom" state; this also implies to have
+   *          a NULL check on dereferentiation.
    */
   template<typename VAL>
   class RecordRef
@@ -406,15 +410,27 @@ namespace diff{
       Target* record_;
 
     public:
+      /** by default create an
+       *  invalid ("bottom") reference */
+      RecordRef()  noexcept
+        : record_(nullptr)
+        { }
+      
+      /** create a reference bound to
+       *  the given target; can not be rebound */
       RecordRef(Target& o)  noexcept
         : record_(&o)
         { }
       
+      /** prevent moving into black hole */
       RecordRef(Target&&) = delete;
       
       // standard copy operations acceptable
       
       
+      /** target is accessed by cast
+       * @throws error::Logic on bottom reference
+       */
       operator Target&()  const
         {
           if (!record_)
