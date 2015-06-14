@@ -42,10 +42,10 @@
 <node CREATED="1434205947841" ID="ID_871233558" MODIFIED="1434205955964" TEXT="oder NULL-Zustand mit Exception"/>
 <node CREATED="1434205957177" ID="ID_499991180" MODIFIED="1434205968740" TEXT="inherente Unsicherheit einer Referenz"/>
 </node>
-<node CREATED="1434129167805" ID="ID_819452470" MODIFIED="1434129251779" TEXT="stand-in">
-<arrowlink COLOR="#00ff33" DESTINATION="ID_654762061" ENDARROW="Default" ENDINCLINATION="457;0;" ID="Arrow_ID_724106052" STARTARROW="Default" STARTINCLINATION="457;0;"/>
+<node CREATED="1434129167805" ID="ID_819452470" MODIFIED="1434239007746" TEXT="stand-in">
+<arrowlink COLOR="#00ff33" DESTINATION="ID_654762061" ENDARROW="Default" ENDINCLINATION="-390;37;" ID="Arrow_ID_724106052" STARTARROW="Default" STARTINCLINATION="-48;187;"/>
 <icon BUILTIN="help"/>
-<node CREATED="1434129196709" ID="ID_1004519740" MODIFIED="1434150973939" TEXT="Subklasse von Rec">
+<node CREATED="1434129196709" ID="ID_1004519740" MODIFIED="1434238947122" TEXT="Subklasse von Rec">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -59,7 +59,8 @@
 </richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1434129204149" ID="ID_1688475597" MODIFIED="1434129212537" TEXT="GenNode">
+<node CREATED="1434129204149" ID="ID_1688475597" MODIFIED="1434236628128" TEXT="GenNode">
+<linktarget COLOR="#66ff66" DESTINATION="ID_1688475597" ENDARROW="Default" ENDINCLINATION="219;91;" ID="Arrow_ID_57985873" SOURCE="ID_60404225" STARTARROW="Default" STARTINCLINATION="23;-52;"/>
 <node CREATED="1434205661969" ID="ID_1484374626" MODIFIED="1434205705054">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -73,8 +74,7 @@
       <font size="1">-- im DataCap</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#ffcccc" COLOR="#990033" CREATED="1434205598709" ID="ID_235720343" MODIFIED="1434205652458" TEXT="stand-in hei&#xdf;t...">
 <icon BUILTIN="messagebox_warning"/>
@@ -111,9 +111,23 @@
 <node CREATED="1434128764893" ID="ID_1430586148" MODIFIED="1434128768689" TEXT="Gefahr von clashes"/>
 <node CREATED="1434128769325" ID="ID_866845827" MODIFIED="1434128777908" TEXT="entscheide">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1434128779661" ID="ID_1739097548" MODIFIED="1434128836241" TEXT="marker-ID + string-Payload"/>
-<node CREATED="1434128917125" ID="ID_392407967" MODIFIED="1434128927937" TEXT="&quot;fehlkonstruierte&quot; ID + pr&#xfc;f-Pr&#xe4;dikat"/>
-<node CREATED="1434128981381" ID="ID_101281763" MODIFIED="1434128988113" TEXT="spezielle Ref-Payload"/>
+<node CREATED="1434128779661" ID="ID_1739097548" MODIFIED="1434236311060" TEXT="marker-ID + string-Payload">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1434128917125" ID="ID_392407967" MODIFIED="1434238970157" TEXT="&quot;fehlkonstruierte&quot; ID + pr&#xfc;f-Pr&#xe4;dikat"/>
+<node CREATED="1434128981381" ID="ID_101281763" MODIFIED="1434236527554" TEXT="spezielle Ref-Payload">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      m.E. die einzig saubere Desgin-Variante!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1434128446029" ID="ID_1779802587" MODIFIED="1434128654842" TEXT="hash-identisch">
@@ -156,10 +170,10 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1434128996949" ID="ID_654762061" MODIFIED="1434129237484" TEXT="k&#xf6;nnte zur Ref ausgebaut werden">
-<linktarget COLOR="#00ff33" DESTINATION="ID_654762061" ENDARROW="Default" ENDINCLINATION="457;0;" ID="Arrow_ID_724106052" SOURCE="ID_819452470" STARTARROW="Default" STARTINCLINATION="457;0;"/>
+<node CREATED="1434128996949" ID="ID_654762061" MODIFIED="1434239007746" TEXT="k&#xf6;nnte zur Ref ausgebaut werden">
+<linktarget COLOR="#00ff33" DESTINATION="ID_654762061" ENDARROW="Default" ENDINCLINATION="-390;37;" ID="Arrow_ID_724106052" SOURCE="ID_819452470" STARTARROW="Default" STARTINCLINATION="-48;187;"/>
 </node>
-<node CREATED="1434130839653" ID="ID_60404225" MODIFIED="1434130915643">
+<node CREATED="1434130839653" HGAP="22" ID="ID_60404225" MODIFIED="1434236628128" VSHIFT="8">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -170,6 +184,7 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#66ff66" DESTINATION="ID_1688475597" ENDARROW="Default" ENDINCLINATION="219;91;" ID="Arrow_ID_57985873" STARTARROW="Default" STARTINCLINATION="23;-52;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1434130866693" ID="ID_1402852366" MODIFIED="1434130886826">
 <richcontent TYPE="NODE"><html>

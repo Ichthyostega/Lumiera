@@ -391,6 +391,49 @@ namespace diff{
   
   
   
+  /**
+   * wrapped record reference.
+   * A helper for lib::GenNode and the diff representation.
+   * RecordRef is copyable and assignable, but like a reference
+   * can not be rebound. It can be used to refer to a subtree
+   * within the diff representation, without the need to copy.
+   */
+  template<typename VAL>
+  class RecordRef
+    {
+      using Target = Record<VAL>;
+      
+      Target* record_;
+
+    public:
+      RecordRef(Target& o)  noexcept
+        : record_(&o)
+        { }
+      
+      RecordRef(Target&&) = delete;
+      
+      // standard copy operations acceptable
+      
+      
+      operator Target&()  const
+        {
+          if (!record_)
+            throw error::Logic("attempt to dereference an unbound record reference"
+                              ,error::LUMIERA_ERROR_BOTTOM_VALUE);
+          return *record_;
+        }
+      
+      Target*
+      get()  const noexcept
+        {
+          return record_;
+        }
+    };
+  
+  
+  
+  
+  
   /* === Specialisations to define the handling of attributes === */
   
   template<>

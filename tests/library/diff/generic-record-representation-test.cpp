@@ -47,6 +47,7 @@ namespace test{
   
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
   using lumiera::error::LUMIERA_ERROR_INVALID;
+  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   namespace {//Test fixture....
     
@@ -105,6 +106,7 @@ namespace test{
           verifyMutations();
           copy_and_move();
           equality();
+          wrapRef();
         }
       
       
@@ -293,6 +295,37 @@ namespace test{
           CHECK (isnil (mut));
           CHECK (Seq({"type=u", "a=α", "a=β", "⟂", "a"}) == contents(a));
           CHECK (Seq({"type=u", "a=1", "a"}) == contents(aa));
+        }
+      
+      
+      void
+      wrapRef()
+        {
+          RecS oo({"type = 🌰", "☿ = mercury", "♀ = venus", "♁ = earth", "♂ = mars", "♃ = jupiter", "♄ = saturn"});
+          
+          RecordRef<string> empty;
+          CHECK (bool(empty) == false);
+          CHECK (nullptr == empty.get());
+          VERIFY_ERROR (BOTTOM_VALUE, RecS& (empty));
+          
+          RecordRef<string> ref(oo);
+          CHECK (ref);
+          CHECK (ref.get() == &oo);
+          
+          RecS& oor = ref;
+          CHECK ("🌰" == oor.getType());
+          CHECK (oor.get("♄") == "saturn");
+          
+          // are copyable and assignable
+          RecordRef<string> r2 = ref;
+          CHECK (r2);
+          CHECK (r2.get() == ref.get());
+          CHECK (!isSameObject (r2, ref));
+          
+          empty = std::move(r2);
+          CHECK (empty);
+          CHECK (!r2);
+          CHECK (nullptr == r2.get());
         }
     };
   
