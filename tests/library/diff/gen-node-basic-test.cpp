@@ -63,6 +63,18 @@ namespace test{
   /*****************************************************************************//**
    * @test Verify properties of a special collection type shaped for
    *       external representation of object-like data.
+   *       - GenNode elements can be created "right away", picking up
+   *         the given type, assumed that the payload is one of the
+   *         supported basic types.
+   *       - optionally, GenNode elements can be named
+   *       - unnamed elements get a marker ID plus unique number extension
+   *       - object-like elements can be represented by using a diff:Record<GenNode>
+   *         as payload. Obviously, the resulting data structure type is recursive.
+   *       - a shortcut is provided to simplify defining empty baseline objects
+   *       - there is a special notation to create "id references", which can
+   *         can be used to stand-in for an "object" (Record). This shortcut
+   *         notation is relevant for the tree diff language -- used within
+   *         Lumiera as "External Tree Description" of object networks.
    *       
    * @see IndexTable
    * @see DiffListApplication_test
@@ -74,7 +86,8 @@ namespace test{
       run (Arg)
         {
           simpleUsage();
-          verifySnapshot();
+          objectShortcut();
+          symbolReference();
           sequenceIteration();
           duplicateDetection();
           copy_and_move();
@@ -115,7 +128,7 @@ namespace test{
           VERIFY_ERROR (WRONG_TYPE, n1 = n2 );
           
           // can build recursive data structures
-          GenNode n3(Rec({"spam", GenNode("ham", "eggs")}));
+          GenNode n3(Rec({GenNode("type", "spam"), GenNode("ham", "eggs")}));
           CHECK ("spam" == n3.data.get<Rec>().getType());
           CHECK ("eggs" == n3.data.get<Rec>().get("ham").data.get<string>());
           CHECK ("ham"  == n3.data.get<Rec>().get("ham").idi.getSym());
@@ -125,7 +138,72 @@ namespace test{
       
       
       void
-      verifySnapshot()
+      objectShortcut()
+        {
+          auto o0 = Rec().genNode();
+          auto o1 = Rec().genNode("νόμος");
+          auto o2 = Rec().type("spam").genNode();
+          auto o3 = Rec().attrib("Ψ", int64_t(42), "π", 3.14159265358979323846264338328).genNode("νόμος");
+          
+          CHECK (!o0.isNamed());
+          CHECK (isnil(o0.data.get<Rec>()));
+          CHECK ("NIL" == o0.data.get<Rec>().getType());
+          
+          CHECK (o1.isNamed());
+          CHECK ("νόμος" == o1.idi.getSym());
+          CHECK (isnil(o1.data.get<Rec>()));
+          
+          CHECK (!o2.isNamed());
+          CHECK ("spam" == o0.data.get<Rec>().getType());
+          CHECK (isnil(o2.data.get<Rec>()));
+          
+          CHECK (o3.isNamed());
+          CHECK ("νόμος" == o3.idi.getSym());
+          CHECK ("NIL" == o3.data.get<Rec>().getType());
+          CHECK (GenNode("Ψ", int64_t(42)) == o3.data.get<Rec>().get("Ψ"));
+          CHECK (42L == o3.data.get<Rec>().get("Ψ").data.get<int64_t>);
+          CHECK (1e-7 > fabs (3.14159265 - o3.data.get<Rec>().get("π").data.get<double>));
+          
+          LuidH luid;
+          auto o4 = Rec::Mutator(o2)                                      // ...use GenNode o2 as starting point
+                       .appendChild(GenNode("τ", Time(1,2,3,4)))          // a named node with Time value
+                       .scope('*'                                         // a char node
+                             ,"★"                                         // a string node
+                             ,luid                                        // a hash value (LUID)
+                             ,TimeSpan(Time::ZERO, FSecs(23,25))          // a time span
+                             ,Rec().type("ham").scope("eggs").genNode())  // a spam object
+                       .genNode("baked beans");                           // ---> finish into named node
+          
+          CHECK (o4.isNamed());
+          CHECK ("baked beans" == o4.idi.getSym());
+          CHECK ("spam" == o4.data.get<Rec>().getType());  // this was "inherited" from o2
+          
+          auto scope = o4.data.get<Rec>().scope();
+          CHECK (!isnil(scope));
+          CHECK (GenNode("τ", Time(1,2,3,4)) == *scope);
+          ++scope;
+          CHECK (GenNode(char('*')) == *scope);
+          ++scope;
+          CHECK ("★" == scope->data.get<string>());
+          ++scope;
+          CHECK (luid == scope->data.get<LuidH>());
+          ++scope;
+          CHECK (Time(0.92,0) == scope->data.get<TimeSpan>().end());
+          ++scope;
+          auto spam = *scope;
+          CHECK (!++scope);
+          CHECK ("ham" == spam.getType());
+          CHECK (spam.contains (GenNode("eggs")));
+          
+          // but while o4 was based on o2,
+          // adding all the additional contents didn't mutate o2
+          CHECK (isnil(o2.data.get<Rec>()));
+        }
+      
+      
+      
+      void
+      symbolReference()
         {
         }
       
