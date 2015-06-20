@@ -25,6 +25,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/record.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 
 //#include <utility>
@@ -33,6 +34,8 @@
 #include <cmath>
 
 using util::contains;
+using lib::time::Time;
+using lib::time::TimeSpan;
 //using std::string;
 //using std::vector;
 //using std::swap;
@@ -45,6 +48,7 @@ namespace test{
   
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
   using error::LUMIERA_ERROR_WRONG_TYPE;
+  using error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   namespace {//Test fixture....
     
@@ -102,12 +106,14 @@ namespace test{
           CHECK (42 == n1.data.get<int>());
           CHECK (!n1.isNamed());
           CHECK (contains (n1.idi.getSym(), "_CHILD_"));
+          CHECK (contains (name(n1), "_CHILD_"));
           
           // can optionally be named
           GenNode n2("π", 3.14159265358979323846264338328);
           CHECK (fabs (3.14159265 - n2.data.get<double>) < 1e-5 );
           CHECK (n2.isNamed());
           CHECK ("π" == n2.idi.getSym());
+          CHECK ("π" == name(n2));
           
           // is a copyable value
           GenNode n11(n1);
@@ -165,6 +171,7 @@ namespace test{
           CHECK (1e-7 > fabs (3.14159265 - o3.data.get<Rec>().get("π").data.get<double>));
           
           LuidH luid;
+          //Demonstration: object builder is based on the mutator mechanism for Records...
           auto o4 = Rec::Mutator(o2)                                      // ...use GenNode o2 as starting point
                        .appendChild(GenNode("τ", Time(1,2,3,4)))          // a named node with Time value
                        .scope('*'                                         // a char node
@@ -205,6 +212,43 @@ namespace test{
       void
       symbolReference()
         {
+          GenNode ham = Rec().type("spam").attrib("τ", Time(23,42)).genNode("egg bacon sausage and spam");
+
+          GenNode::ID hamID(ham);
+          CHECK (hamID == ham.idi);
+          CHECK (hamID.getSym() == ham.idi.getSym());
+          CHECK (hamID.getHash() == ham.idi.getHash());
+          CHECK (contains (string(hamID), "spam")); // Lovely spam!
+          
+          GenNode ref1 = Ref("egg bacon sausage and spam");
+          GenNode ref2 = Ref(ham);
+          
+          CHECK (ref1.idi == ham.idi);
+          CHECK (ref2.idi == ham.idi);
+          
+          // can stand-in for the original Record...
+          CHECK (isSameObject (ham, ref2.data.get<Rec>()));
+          VERIFY_ERROR (BOTTOM_VALUE, ref1.data.get<Rec>());
+          
+          RecordRef rr1 = ref1.data.get<RecordRef>();
+          RecordRef rr2 = ref2.data.get<RecordRef>();
+          
+          CHECK ( isnil(rr1));
+          CHECK (!isnil(rr2));
+          Rec& ham_ref = rr2;
+          CHECK (isSameObject(ham, ham_ref));
+          CHECK (isSameObject(&ham, rr2.get()));
+          
+          // pre-defined special ref-tokens
+          CHECK ("_END_" == name(Ref::END));
+          CHECK ("_THIS_" == name(Ref::THIS));
+          CHECK ("_CHILD_" == name(Ref::CHILD));
+          CHECK ("_ATTRIBS_" == name(Ref::ATTRIBS));
+          
+          CHECK (isnil (Ref::END.data.get<RecordRef>()));
+          CHECK (isnil (Ref::THIS.data.get<RecordRef>()));
+          CHECK (isnil (Ref::CHILD.data.get<RecordRef>()));
+          CHECK (isnil (Ref::ATTRIBS.data.get<RecordRef>()));
         }
       
       
