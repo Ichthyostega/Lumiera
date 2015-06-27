@@ -31,6 +31,14 @@
 <node CREATED="1434128239517" ID="ID_1886740948" MODIFIED="1434128250041" TEXT="Mapping"/>
 <node CREATED="1434128170381" ID="ID_976705384" MODIFIED="1434128380059" TEXT="GenNode">
 <linktarget COLOR="#ff0033" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="2;9;" ID="Arrow_ID_1285375088" SOURCE="ID_553361956" STARTARROW="Default" STARTINCLINATION="26;-13;"/>
+<node CREATED="1435421658394" ID="ID_1938259420" MODIFIED="1435421666963" TEXT="ID">
+<node CREATED="1435421670349" ID="ID_1358247529" MODIFIED="1435421676200" TEXT="verwende EntryID">
+<node CREATED="1435421678004" ID="ID_691179282" MODIFIED="1435421687224" TEXT="Abh&#xe4;ngigkeitsprobleme">
+<node CREATED="1435421693260" ID="ID_1314021887" MODIFIED="1435421708857" TEXT="generische ID-Funktionen"/>
+<node CREATED="1435421739988" ID="ID_405602814" MODIFIED="1435421749352" TEXT="EntryID geh&#xf6;rt in Library"/>
+</node>
+</node>
+</node>
 <node CREATED="1434128174030" ID="ID_1395250463" MODIFIED="1434128176521" TEXT="Variant"/>
 <node CREATED="1434128217645" ID="ID_1790054544" MODIFIED="1434128220257" TEXT="Monade"/>
 <node CREATED="1434128176918" ID="ID_863330674" MODIFIED="1434128195333" TEXT="Record">
@@ -50,8 +58,7 @@
       von literalen Daten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1434128179406" ID="ID_1833179523" MODIFIED="1434129153311" TEXT="Referez">
@@ -74,8 +81,7 @@
       scheidet aus, wegen Wertsemantik
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1434129204149" ID="ID_1688475597" MODIFIED="1434236628128" TEXT="GenNode">
@@ -144,8 +150,7 @@
       m.E. die einzig saubere Desgin-Variante!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>

@@ -62,6 +62,13 @@ namespace asset {
   
   
   
+  /**
+   * Identification Schemes.
+   * Collection of commonly used mechanisms to build identification records,
+   * unique identifiers, registration numbers and hashes. These are used as glue
+   * and thin abstraction to link various subsystems or to allow interoperation
+   * of registration facilities
+   */
   namespace idi {
     
     using lib::hash::LuidH;
