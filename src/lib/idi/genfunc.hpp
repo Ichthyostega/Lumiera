@@ -43,27 +43,93 @@
 #define LIB_IDI_GENFUNC_H
 
 #include "lib/hash-value.h"
+#include "lib/symbol.hpp"
+#include "lib/typed-counter.hpp"
 //#include "lib/hash-standard.hpp"
 
+#include <typeinfo>
 #include <string>
 
 
 namespace lib {
 namespace idi {
   
+  using lib::HashVal;
+  using std::string;
+  
   namespace { // integration helpers...
+    string demangled_innermost_component (const char* rawName);
+    string demangled_sanitised_name      (const char* rawName);
+    
+    string instance_formatter (string const& prefix, long instanceNr);
+    
   } //(End)integration helpers...
   
   
   
-  /********************************************************//**
-   * A Mixin to add a private ID type to the target class,
-   * together with storage to hold an instance of this ID,
-   * getter and setter, and a templated version of the ID type
-   * which can be used to pass specific subclass type info.
+  /** Short readable type identifier, not necessarily unique or complete.
+   * @return the innermost component of the demangled C++ type name.
+   *         Usually, this is the bare name without any namespaces.
    */
+  template<typename TY>
+  inline string
+  typeSymbol()
+  {
+    return demangled_innermost_component (typeid(TY).name());
+  }
+  
+  /** Complete unique type identifier
+   * @return complete demangled C++ type name, additionally
+   *         passed through our ID sanitiser function, i.e.
+   *         one word, no whitespace, only minimal punctuation
+   */
+  template<typename TY>
+  inline string
+  typeFullID()
+  {
+    return demangled_sanitised_name (typeid(TY).name());
+  }
+  
+  template<typename TY>
+  inline string
+  categoryFolder()
+  {
+    return typeSymbol<TY>();
+  }
+  
+  template<typename TY>
+  inline string
+  namePrefix()
+  {
+    return typeSymbol<TY>();
+  }
   
   
+  /** build a per-type unique identifier.
+   * @return a type based prefix, followed by an instance number
+   * @note we use the short prefix without namespace, not necessarily unique
+   * @warning this operation is not exactly cheap; it acquires a lock
+   *          for the counter and, after increasing and dropping the lock,
+   *          it builds and uses a boost::format instance.
+   */
+  template<class TY>
+  inline string
+  generateSymbolicID()
+  {
+    static TypedCounter instanceCounter;
+    return instance_formatter (namePrefix<TY>(), instanceCounter.inc<TY>());
+  }
+  
+  /**
+   * @return a boost hash value, based on the full (mangled) C++ type name
+   */
+  template<typename TY>
+  inline HashVal
+  getTypeHash()
+  {
+    Literal rawTypeName (typeid(TY).name());
+    return hash_value (rawTypeName);
+  }
   
   
   

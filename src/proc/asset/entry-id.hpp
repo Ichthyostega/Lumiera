@@ -46,6 +46,7 @@
 #include "proc/asset.hpp"
 #include "proc/asset/struct-scheme.hpp"
 #include "lib/hash-indexed.hpp"
+#include "lib/idi/genfunc.hpp"
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
