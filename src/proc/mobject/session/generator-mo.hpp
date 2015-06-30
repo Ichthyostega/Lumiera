@@ -83,8 +83,6 @@ namespace session {
       DEFINE_PROCESSABLE_BY (builder::BuilderTool);
       
     };
-    
-  typedef Placement<Clip> PClipMO;
   
   
   

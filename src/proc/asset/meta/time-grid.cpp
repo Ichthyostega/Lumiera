@@ -22,6 +22,7 @@
 
 
 #include "proc/asset/meta/time-grid.hpp"
+#include "proc/asset/struct-scheme.hpp"
 #include "proc/asset/entry-id.hpp"
 #include "proc/assetmanager.hpp"
 #include "lib/time/quantiser.hpp"
@@ -36,7 +37,6 @@
 using util::_Fmt;
 using util::cStr;
 using util::isnil;
-using boost::str;
 using std::string;
 
 
@@ -50,7 +50,7 @@ namespace meta {
  
   /** */
   TimeGrid::TimeGrid (EntryID<TimeGrid> const& nameID)
-    : Meta (nameID.getIdent())
+    : Meta (idi::getAssetIdent (nameID))
     { }
   
   

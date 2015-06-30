@@ -25,6 +25,7 @@
 #include "lib/test/test-helper.hpp"
 
 #include "proc/asset/entry-id.hpp"
+#include "proc/asset/struct-scheme.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/fork.hpp"
 #include "lib/meta/trait-special.hpp"
@@ -133,13 +134,13 @@ namespace test {
       checkBasicProperties ()
         {
           ForkID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
-          CHECK (tID.getIdent() == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
+          CHECK (idi::getAssetIdent(tID) == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
           
           CHECK (tID.getHash() == ForkID("☢ test ☢ track ☢").getHash());
           
-          CHECK (tID.getSym() == tID.getIdent().name);
-          CHECK (ForkID().getIdent().category == Category (STRUCT,"forks"));
-          CHECK (ClipID().getIdent().category == Category (STRUCT,"clips"));
+          CHECK (tID.getSym() == idi::getAssetIdent(tID).name);
+          CHECK (idi::getAssetIdent(ForkID()).category == Category (STRUCT,"forks"));
+          CHECK (idi::getAssetIdent(ClipID()).category == Category (STRUCT,"clips"));
           
           ClipID cID2,cID3;
           CHECK (cID2.getSym() < cID3.getSym());
@@ -153,7 +154,7 @@ namespace test {
               tID = arbitrary;
               CHECK (tID.getHash() == arbitrary.getHash());
               CHECK (tID.getSym()  == arbitrary.getSym());
-              CHECK (tID.getIdent()== arbitrary.getIdent());
+              CHECK (idi::getAssetIdent(tID)== idi::getAssetIdent(arbitrary));
             }
           
           cout << showSizeof<ForkID>() << endl;

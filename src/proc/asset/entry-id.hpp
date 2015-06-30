@@ -43,8 +43,7 @@
 #define ASSET_ENTRY_ID_H
 
 
-#include "proc/asset.hpp"
-#include "proc/asset/struct-scheme.hpp"
+#include "lib/error.hpp"
 #include "lib/hash-indexed.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "lib/util.hpp"
@@ -58,11 +57,14 @@
 namespace proc {
 namespace asset {
   
+  namespace error = lumiera::error;
+  
   using std::string;
   using std::ostream;
   
   using lib::idi::generateSymbolicID;
   using lib::idi::getTypeHash;
+  using lib::idi::typeSymbol;
   
   
   /**
@@ -219,21 +221,6 @@ namespace asset {
         { }
       
       
-      /** generate an Asset identification tuple
-       *  based on this EntryID's symbolic ID and type information.
-       *  The remaining fields are filled in with hardwired defaults.
-       * @note there is a twist, as this asset identity tuple generates
-       *       a different hash as the EntryID. It would be desirable
-       *       to make those two addressing systems interchangeable.      /////////////TICKET #739
-       */
-      Asset::Ident
-      getIdent()  const
-        {
-          Category cat (STRUCT, idi::StructTraits<TY>::catFolder());
-          return Asset::Ident (this->getSym(), cat);
-        }
-      
-      
       /** @return true if the upcast would yield exactly the same
        *  tuple (symbol,type) as was used on original definition
        *  of an ID, based on the given BareEntryID. Implemented
@@ -258,7 +245,7 @@ namespace asset {
       
       operator string ()  const
         {
-          return "ID<"+idi::StructTraits<TY>::idSymbol()+">-"+EntryID::getSym();
+          return "ID<"+typeSymbol<TY>()+">-"+EntryID::getSym();
         }
       
       friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }

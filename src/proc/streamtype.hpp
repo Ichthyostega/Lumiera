@@ -191,4 +191,10 @@ namespace proc {
   
   
 } // namespace proc
-#endif
+
+
+namespace lumiera {
+  using proc::StreamType;
+}
+
+#endif /*PROC_STREAMTYPE_H*/

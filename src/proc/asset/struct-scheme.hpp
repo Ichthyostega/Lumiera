@@ -37,6 +37,8 @@
 
 
 #include "lib/symbol.hpp"
+#include "proc/asset.hpp"
+#include "proc/asset/entry-id.hpp"
 
 #include <cstdlib>
 
@@ -45,11 +47,9 @@
 using boost::format;
 
 
-namespace lumiera {
-  class StreamType;
-}
-
 namespace proc {
+  class StreamType;
+  
 namespace mobject {
 namespace session {
   
@@ -105,7 +105,7 @@ namespace asset{
         static Symbol catFolder()  { return "pipes";}
         static Symbol idSymbol()   { return "pipe"; }
       };
-    template<> struct StructTraits<lumiera::StreamType>
+    template<> struct StructTraits<proc::StreamType>
       {
         static Symbol namePrefix() { return "type"; }
         static Symbol catFolder()  { return "stream-types";}
@@ -147,7 +147,21 @@ namespace asset{
     
     
     
-        
+    /** generate an Asset identification tuple
+     *  based on this EntryID's symbolic ID and type information.
+     *  The remaining fields are filled in with hardwired defaults.
+     * @note there is a twist, as this asset identity tuple generates
+     *       a different hash as the EntryID. It would be desirable
+     *       to make those two addressing systems interchangeable.      /////////////TICKET #739
+     */
+    template<typename TY>
+    inline Asset::Ident
+    getAssetIdent (EntryID<TY> const& entryID)
+    {
+      Category cat (STRUCT, idi::StructTraits<TY>::catFolder());
+      return Asset::Ident (entryID.getSym(), cat);
+    }
+    
     
     
 }}} // namespace asset::idi
