@@ -40,7 +40,7 @@ namespace test{ // see test-helper.cpp
 namespace idi {
   
   
-  namespace { // generic entry points / integration helpers...
+  namespace format { // generic entry points / integration helpers...
     
     using lib::test::demangleCxx;
     

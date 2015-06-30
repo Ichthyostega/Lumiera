@@ -57,7 +57,7 @@ namespace idi {
   using lib::HashVal;
   using std::string;
   
-  namespace { // integration helpers...
+  namespace format { // integration helpers...
     string demangled_innermost_component (const char* rawName);
     string demangled_sanitised_name      (const char* rawName);
     
@@ -75,7 +75,7 @@ namespace idi {
   inline string
   typeSymbol()
   {
-    return demangled_innermost_component (typeid(TY).name());
+    return format::demangled_innermost_component (typeid(TY).name());
   }
   
   /** Complete unique type identifier
@@ -87,7 +87,7 @@ namespace idi {
   inline string
   typeFullID()
   {
-    return demangled_sanitised_name (typeid(TY).name());
+    return format::demangled_sanitised_name (typeid(TY).name());
   }
   
   template<typename TY>
@@ -117,7 +117,7 @@ namespace idi {
   generateSymbolicID()
   {
     static TypedCounter instanceCounter;
-    return instance_formatter (namePrefix<TY>(), instanceCounter.inc<TY>());
+    return format::instance_formatter (namePrefix<TY>(), instanceCounter.inc<TY>());
   }
   
   /**

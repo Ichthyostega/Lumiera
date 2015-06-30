@@ -148,16 +148,6 @@ namespace asset{
     
     
         
-    template<class STRU>
-    inline string
-    generateSymbolID()
-    {
-        static uint i=0;
-        static format namePattern ("%s.%03d");
-        ////////////////////////////////////////////////////////////////////////////////TICKET #166 : needs to be pushed down into a *.cpp
-        
-        return str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );  //////////TICKET #565 : how to organise access; this ought to be thread safe (-> EntryID )
-    }
     
     
 }}} // namespace asset::idi

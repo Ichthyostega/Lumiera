@@ -61,6 +61,8 @@ namespace asset {
   using std::string;
   using std::ostream;
   
+  using lib::idi::generateSymbolicID;
+  using lib::idi::getTypeHash;
   
   
   /**
@@ -72,9 +74,12 @@ namespace asset {
    */
   namespace idi {
     
-    using lib::hash::LuidH;
-    using lib::HashVal;
     
+  }
+  using lib::hash::LuidH;
+  using lib::HashVal;
+  
+  namespace {
     
     /** build up a hash value, packaged as LUID.
      *  @param sym symbolic ID-string to be hashed
@@ -131,9 +136,9 @@ namespace asset {
        * encoded into a hash seed. Thus even the same symbolicID
        * generates differing hash-IDs for different type parameters
        */
-      BareEntryID (string const& symbolID, idi::HashVal seed =0)
+      BareEntryID (string const& symbolID, HashVal seed =0)
         : symbol_(util::sanitise(symbolID))
-        , hash_(idi::buildHash (symbol_, seed))
+        , hash_(buildHash (symbol_, seed))
         { }
       
     public:
@@ -201,7 +206,7 @@ namespace asset {
       
       /** case-1: auto generated symbolic ID */
       EntryID()
-        : BareEntryID (idi::generateSymbolID<TY>(), getTypeHash())        /////////////TICKET #565 : how to organise access; this is not thread safe
+        : BareEntryID (generateSymbolicID<TY>(), getTypeHash<TY>())
         { }
       
       /** case-2: explicitly specify a symbolic ID to use.
@@ -210,7 +215,7 @@ namespace asset {
        */
       explicit
       EntryID (string const& symbolID)
-        : BareEntryID (symbolID, getTypeHash())
+        : BareEntryID (symbolID, getTypeHash<TY>())
         { }
       
       
@@ -228,12 +233,6 @@ namespace asset {
           return Asset::Ident (this->getSym(), cat);
         }
       
-      static idi::HashVal
-      getTypeHash()
-        {
-          return hash_value (Category (STRUCT, idi::StructTraits<TY>::catFolder()));
-        }
-      
       
       /** @return true if the upcast would yield exactly the same
        *  tuple (symbol,type) as was used on original definition
@@ -243,7 +242,7 @@ namespace asset {
       static bool
       canRecast (BareEntryID const& bID)
         {
-          return bID.getHash() == idi::buildHash (bID.getSym(), getTypeHash());
+          return bID.getHash() == buildHash (bID.getSym(), getTypeHash<TY>());
         }
       
       static EntryID
