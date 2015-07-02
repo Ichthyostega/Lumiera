@@ -133,7 +133,7 @@ namespace idi {
        * generates differing hash-IDs for different type parameters
        */
       BareEntryID (string const& symbolID, HashVal seed =0)
-        : symbol_(util::sanitise(symbolID))
+        : symbol_(symbolID)
         , hash_(buildHash (symbol_, seed))
         { }
       
@@ -169,7 +169,7 @@ namespace idi {
       
       
       template<typename TAR>
-      EntryID<TAR> recast()  const;
+      EntryID<TAR> const& recast()  const;
       
     };
   
@@ -211,7 +211,7 @@ namespace idi {
        */
       explicit
       EntryID (string const& symbolID)
-        : BareEntryID (symbolID, getTypeHash<TY>())
+        : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
         { }
       
       
@@ -226,14 +226,14 @@ namespace idi {
           return bID.getHash() == buildHash (bID.getSym(), getTypeHash<TY>());
         }
       
-      static EntryID
+      static EntryID const&
       recast (BareEntryID const& bID)
         {
           if (!canRecast(bID))
             throw error::Logic ("unable to recast EntryID: desired type "
                                 "doesn't match original definition"
                                , error::LUMIERA_ERROR_WRONG_TYPE);
-          return EntryID (bID.getSym());
+          return static_cast<EntryID const&> (bID);
         }
       
       
@@ -268,7 +268,8 @@ namespace idi {
    *          Exception if it doesn't match the stored hash.
    */
   template<typename TAR>
-  EntryID<TAR> BareEntryID::recast()  const
+  EntryID<TAR> const&
+  BareEntryID::recast()  const
   {
     return EntryID<TAR>::recast(*this);
   }
