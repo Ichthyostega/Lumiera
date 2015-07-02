@@ -205,49 +205,49 @@ namespace test{
       void
       checkErasure ()
         {
-          ForkID tID("suspicious");
+          ForkID fID("suspicious");
           ClipID cID("suspicious");
           
-          CHECK (tID.getHash() != cID.getHash());
-          CHECK (tID.getSym()  == cID.getSym());
+          CHECK (fID.getHash() != cID.getHash());
+          CHECK (fID.getSym()  == cID.getSym());
           
-          BareEntryID bIDt (tID);
+          BareEntryID bIDf (fID);
           BareEntryID bIDc (cID);
           
-          CHECK (bIDt != bIDc);
-          CHECK (bIDt.getHash() != bIDc.getHash());
-          CHECK (bIDt.getSym()  == bIDc.getSym());
+          CHECK (bIDf != bIDc);
+          CHECK (bIDf.getHash() != bIDc.getHash());
+          CHECK (bIDf.getSym()  == bIDc.getSym());
           CHECK ("suspicious"  == bIDc.getSym());
           
           using proc::mobject::session::Fork;
           using proc::mobject::session::Clip;
-          ForkID tIDnew = bIDt.recast<Fork>();
+          ForkID tIDnew = bIDf.recast<Fork>();
           ClipID cIDnew = bIDc.recast<Clip>();
-          CHECK (tIDnew == tID);
+          CHECK (tIDnew == fID);
           CHECK (cIDnew == cID);
           
-          VERIFY_ERROR (WRONG_TYPE, bIDt.recast<Clip>());
+          VERIFY_ERROR (WRONG_TYPE, bIDf.recast<Clip>());
           VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Fork>());
           VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Dummy>());
-          VERIFY_ERROR (WRONG_TYPE, bIDt.recast<Dummy>());
+          VERIFY_ERROR (WRONG_TYPE, bIDf.recast<Dummy>());
           
-          CHECK (tID == ForkID::recast (bIDt));          // equivalent static API on typed subclass
+          CHECK (fID == ForkID::recast (bIDf));          // equivalent static API on typed subclass
           VERIFY_ERROR (WRONG_TYPE,  ForkID::recast(bIDc));
-          VERIFY_ERROR (WRONG_TYPE,  ClipID::recast(bIDt));
+          VERIFY_ERROR (WRONG_TYPE,  ClipID::recast(bIDf));
           VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDc));
-          VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDt));
+          VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDf));
           
           // mixed equality comparisons (based on the hash)
-          BareEntryID bIDt_copy (bIDt);
-          CHECK (bIDt == bIDt_copy);
-          CHECK (!isSameObject (bIDt, bIDt_copy));
+          BareEntryID bIDt_copy (bIDf);
+          CHECK (bIDf == bIDt_copy);
+          CHECK (!isSameObject (bIDf, bIDt_copy));
           
-          CHECK (tID != bIDc);
+          CHECK (fID != bIDc);
           CHECK (cID != bIDt_copy);
-          CHECK (tID == bIDt_copy);
+          CHECK (fID == bIDt_copy);
           
-          CHECK (bIDt == ForkID ("suspicious"));
-          CHECK (bIDt != ClipID ("suspicious"));
+          CHECK (bIDf == ForkID ("suspicious"));
+          CHECK (bIDf != ClipID ("suspicious"));
           CHECK (bIDc == ClipID ("suspicious"));
           CHECK (ForkID ("suspicious") != ClipID ("suspicious"));
         }
