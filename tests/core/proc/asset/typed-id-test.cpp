@@ -84,14 +84,14 @@ namespace query  {
 
 
 
-namespace proc {
-namespace asset{
-namespace test {
+namespace lib {
+namespace idi {
+namespace test{
   
-  using mobject::session::test::DummyEntity;
-  using mobject::session::test::PDum;
+  using proc::mobject::session::test::DummyEntity;
+  using proc::mobject::session::test::PDum;
   
-  typedef EntryID<DummyEntity> DummyID;
+  using DummyID = EntryID<DummyEntity>;
   
   namespace { // Test definitions...
     
@@ -244,4 +244,4 @@ namespace test {
   LAUNCHER (TypedID_test, "unit asset");
   
   
-}}} // namespace proc::asset::test
+}}} // namespace lib::idi::test

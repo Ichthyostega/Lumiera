@@ -39,8 +39,8 @@
  */
 
 
-#ifndef ASSET_ENTRY_ID_H
-#define ASSET_ENTRY_ID_H
+#ifndef LIB_IDI_ENTRY_ID_H
+#define LIB_IDI_ENTRY_ID_H
 
 
 #include "lib/error.hpp"
@@ -54,8 +54,16 @@
 #include <string>
 
 
-namespace proc {
-namespace asset {
+namespace lib {
+
+  /**
+   * Identification Schemes.
+   * Collection of commonly used mechanisms to build identification records,
+   * unique identifiers, registration numbers and hashes. These are used as glue
+   * and thin abstraction to link various subsystems or to allow interoperation
+   * of registration facilities
+   */
+namespace idi {
   
   namespace error = lumiera::error;
   
@@ -65,19 +73,6 @@ namespace asset {
   using lib::idi::generateSymbolicID;
   using lib::idi::getTypeHash;
   using lib::idi::typeSymbol;
-  
-  
-  /**
-   * Identification Schemes.
-   * Collection of commonly used mechanisms to build identification records,
-   * unique identifiers, registration numbers and hashes. These are used as glue
-   * and thin abstraction to link various subsystems or to allow interoperation
-   * of registration facilities
-   */
-  namespace idi {
-    
-    
-  }
   using lib::hash::LuidH;
   using lib::HashVal;
   
@@ -126,7 +121,6 @@ namespace asset {
   class BareEntryID
     : public boost::equality_comparable<BareEntryID>
     {
-      typedef lib::hash::LuidH LuidH;
       
       string symbol_;
       LuidH hash_;
@@ -281,5 +275,5 @@ namespace asset {
   
   
   
-}} // namespace proc::asset
-#endif
+}} // namespace lib::idi
+#endif /*LIB_IDI_ENTRY_ID_H*/

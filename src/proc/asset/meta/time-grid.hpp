@@ -48,6 +48,7 @@
 #define ASSET_META_TIME_GRID_H
 
 #include "proc/asset/meta.hpp"
+#include "proc/asset/entry-id.hpp"
 #include "lib/time/grid.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/symbol.hpp"
@@ -67,7 +68,8 @@ namespace meta {
   
   
   class TimeGrid;
-  typedef P<TimeGrid> PGrid;
+  using PGrid = lib::P<TimeGrid>;
+  using GridID = lib::idi::EntryID<TimeGrid>;
   
   
   /**
@@ -91,7 +93,7 @@ namespace meta {
       static PGrid build (Symbol gridID, FrameRate frames_per_second, Time origin);
       
     protected:
-      TimeGrid (EntryID<TimeGrid> const&);
+      TimeGrid (GridID const&);
     };
     
   

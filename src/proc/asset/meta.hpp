@@ -153,10 +153,10 @@ namespace asset {
       typedef P<asset::Meta> PType;
       
       template<class MA>
-      meta::Builder<MA> operator() (EntryID<MA> elementIdentity); 
+      meta::Builder<MA> operator() (lib::idi::EntryID<MA> elementIdentity);
       
       template<class MA>
-      meta::Builder<MA> operator() (meta::Descriptor const& prototype, EntryID<MA> elementIdentity); 
+      meta::Builder<MA> operator() (meta::Descriptor const& prototype, lib::idi::EntryID<MA> elementIdentity);
       
     };
   

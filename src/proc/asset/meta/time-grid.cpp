@@ -23,7 +23,6 @@
 
 #include "proc/asset/meta/time-grid.hpp"
 #include "proc/asset/struct-scheme.hpp"
-#include "proc/asset/entry-id.hpp"
 #include "proc/assetmanager.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
@@ -49,7 +48,7 @@ namespace meta {
   
  
   /** */
-  TimeGrid::TimeGrid (EntryID<TimeGrid> const& nameID)
+  TimeGrid::TimeGrid (GridID const& nameID)
     : Meta (idi::getAssetIdent (nameID))
     { }
   
@@ -108,12 +107,12 @@ namespace meta {
     {
       
     public:
-      SimpleTimeGrid (Time start, Duration frameDuration, EntryID<TimeGrid> const& name)
+      SimpleTimeGrid (Time start, Duration frameDuration, GridID const& name)
         : TimeGrid (name)
         , FixedFrameQuantiser(frameDuration,start)
         { }
       
-      SimpleTimeGrid (Time start, FrameRate frames_per_second, EntryID<TimeGrid> const& name)
+      SimpleTimeGrid (Time start, FrameRate frames_per_second, GridID const& name)
         : TimeGrid (name)
         , FixedFrameQuantiser(frames_per_second,start)
         { }
@@ -149,7 +148,7 @@ namespace meta {
         _Fmt gridIdFormat("grid(%f_%d)");
         id_ = string(gridIdFormat % fps_ % _raw(origin_));
       }
-    EntryID<TimeGrid> nameID (id_);
+    GridID nameID (id_);
     
     return publishWrapped (*new SimpleTimeGrid(origin_, fps_, nameID));
   }

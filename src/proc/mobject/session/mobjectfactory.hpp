@@ -70,7 +70,7 @@ namespace session {
       Placement<Root>   operator() (lumiera::query::DefsManager&);
       Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
       Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
-      Placement<Fork>   operator() (asset::EntryID<Fork> const&);
+      Placement<Fork>   operator() (lib::idi::EntryID<Fork> const&);
       Placement<Effect> operator() (asset::Effect const&);
       Placement<Label>  operator() (lib::Symbol);
       Placement<Binding>operator() (asset::PSequence const&);

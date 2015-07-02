@@ -25,6 +25,7 @@
 #include "proc/asset/meta.hpp"
 #include "lib/util.hpp"
 
+using lib::idi::EntryID;
 
 namespace proc {
 namespace asset {

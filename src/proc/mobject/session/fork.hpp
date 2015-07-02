@@ -34,25 +34,13 @@ namespace proc {
 namespace mobject {
 namespace session {     //////////////////////////////////////////////////////TICKET #637
   
-  using lib::P;
   using lib::time::Time;
   
   class Fork;
   
-  typedef P<Fork> PFork;
+  using ForkID = lib::idi::EntryID<Fork>;
   
-}}
-
-namespace asset {       //////////////////////////////////////////////////////TICKET #637
   
-  typedef EntryID<mobject::session::Fork> ForkID;
-}
-
-
-namespace mobject {
-namespace session {
-  
-  using asset::ForkID;
   
   
                         //////////////////////////////////////////////////////TICKET #646

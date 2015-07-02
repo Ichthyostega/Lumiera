@@ -48,9 +48,9 @@ using std::endl;
 
 
 
-namespace proc {
-namespace asset{
-namespace test {
+namespace lib {
+namespace idi {
+namespace test{
   
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
@@ -58,11 +58,11 @@ namespace test {
     
     struct Dummy { };
     
-    typedef EntryID<Dummy> DummyID;
-    typedef EntryID<mobject::session::Fork> ForkID;
-    typedef EntryID<mobject::session::Clip> ClipID;
   }
   
+  using DummyID = EntryID<Dummy>;
+  using ForkID = EntryID<proc::mobject::session::Fork>;
+  using ClipID = EntryID<proc::mobject::session::Clip>;
   
   
   
@@ -133,14 +133,19 @@ namespace test {
       void
       checkBasicProperties ()
         {
+          using proc::asset::Asset;
+          using proc::asset::STRUCT;
+          using proc::asset::Category;
+          using proc::asset::idi::getAssetIdent;
+          
           ForkID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
-          CHECK (idi::getAssetIdent(tID) == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
+          CHECK (getAssetIdent(tID) == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
           
           CHECK (tID.getHash() == ForkID("☢ test ☢ track ☢").getHash());
           
-          CHECK (tID.getSym() == idi::getAssetIdent(tID).name);
-          CHECK (idi::getAssetIdent(ForkID()).category == Category (STRUCT,"forks"));
-          CHECK (idi::getAssetIdent(ClipID()).category == Category (STRUCT,"clips"));
+          CHECK (tID.getSym() == getAssetIdent(tID).name);
+          CHECK (getAssetIdent(ForkID()).category == Category (STRUCT,"forks"));
+          CHECK (getAssetIdent(ClipID()).category == Category (STRUCT,"clips"));
           
           ClipID cID2,cID3;
           CHECK (cID2.getSym() < cID3.getSym());
@@ -154,7 +159,7 @@ namespace test {
               tID = arbitrary;
               CHECK (tID.getHash() == arbitrary.getHash());
               CHECK (tID.getSym()  == arbitrary.getSym());
-              CHECK (idi::getAssetIdent(tID)== idi::getAssetIdent(arbitrary));
+              CHECK (getAssetIdent(tID)== getAssetIdent(arbitrary));
             }
           
           cout << showSizeof<ForkID>() << endl;
@@ -214,8 +219,8 @@ namespace test {
           CHECK (bIDt.getSym()  == bIDc.getSym());
           CHECK ("suspicious"  == bIDc.getSym());
           
-          using mobject::session::Fork;
-          using mobject::session::Clip;
+          using proc::mobject::session::Fork;
+          using proc::mobject::session::Clip;
           ForkID tIDnew = bIDt.recast<Fork>();
           ClipID cIDnew = bIDc.recast<Clip>();
           CHECK (tIDnew == tID);
@@ -291,4 +296,4 @@ namespace test {
   LAUNCHER (EntryID_test, "unit asset");
   
   
-}}} // namespace proc::asset::test
+}}} // namespace lib::idi::test

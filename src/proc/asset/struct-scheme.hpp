@@ -156,7 +156,7 @@ namespace asset{
      */
     template<typename TY>
     inline Asset::Ident
-    getAssetIdent (EntryID<TY> const& entryID)
+    getAssetIdent (lib::idi::EntryID<TY> const& entryID)
     {
       Category cat (STRUCT, idi::StructTraits<TY>::catFolder());
       return Asset::Ident (entryID.getSym(), cat);

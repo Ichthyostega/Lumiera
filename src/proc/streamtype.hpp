@@ -73,7 +73,7 @@ namespace proc {
       class ImplFacade;
       class ImplConstraint;
       
-      typedef asset::EntryID<StreamType> ID;
+      typedef lib::idi::EntryID<StreamType> ID;
       
       
       Prototype const& prototype;
