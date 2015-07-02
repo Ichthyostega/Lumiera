@@ -38,7 +38,7 @@
 
 #include "lib/symbol.hpp"
 #include "proc/asset.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 
 #include <cstdlib>
 

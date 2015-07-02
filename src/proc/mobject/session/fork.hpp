@@ -25,7 +25,7 @@
 #define MOBJECT_SESSION_FORK_H
 
 #include "proc/mobject/session/meta.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/time/timevalue.hpp"
 
 

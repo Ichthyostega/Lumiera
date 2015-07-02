@@ -25,7 +25,7 @@
 #define PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
 
 #include "proc/mobject/mobject.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/symbol.hpp"
 
 

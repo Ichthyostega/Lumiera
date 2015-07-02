@@ -37,7 +37,7 @@
 
 #include "lib/symbol.hpp"
 //#include "common/query.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 
 #include <boost/noncopyable.hpp>
 

@@ -25,7 +25,7 @@
 #include "lib/test/test-helper.hpp"
 
 #include "proc/asset/typed-id.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/p.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/inventory.hpp"

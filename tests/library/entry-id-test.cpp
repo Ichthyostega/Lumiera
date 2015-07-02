@@ -24,7 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "proc/asset/struct-scheme.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/fork.hpp"
@@ -293,7 +293,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (EntryID_test, "unit asset");
+  LAUNCHER (EntryID_test, "unit common");
   
   
 }}} // namespace lib::idi::test
