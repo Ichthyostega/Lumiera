@@ -107,7 +107,7 @@ namespace asset {
       
     public:
       template<class KIND>
-      P<KIND> 
+      lib::P<KIND> 
       get (ID<KIND> hash)  const
         {
           return dynamic_pointer_cast<KIND,Asset> (find (hash));
@@ -115,7 +115,7 @@ namespace asset {
       
       template<class KIND>
       void
-      put (ID<KIND> hash, P<KIND>& ptr)
+      put (ID<KIND> hash, lib::P<KIND>& ptr)
         {
           table[hash] = static_pointer_cast (ptr);
         }

@@ -135,7 +135,7 @@ namespace meta {
    *       Later on the intention is that in such cases, instead of creating a new grid
    *       we'll silently return the already registered existing and equivalent grid.
    */
-  P<TimeGrid>
+  lib::P<TimeGrid>
   Builder<TimeGrid>::commit()
   {
     if (predecessor_)

@@ -42,7 +42,7 @@ namespace asset {
   class Effect;
   class Sequence;
   
-  typedef P<Sequence> PSequence;
+  typedef lib::P<Sequence> PSequence;
   
   }
 

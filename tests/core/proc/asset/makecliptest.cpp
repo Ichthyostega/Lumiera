@@ -54,8 +54,8 @@ namespace test {
    */
   class MakeClip_test : public Test
     {
-      typedef P<asset::Media> PM;
-      typedef asset::Media::PClipMO PC;
+      typedef lib::P<asset::Media> PM;
+      typedef asset::Media::PClip PC;
           
       virtual void run (Arg) 
         {

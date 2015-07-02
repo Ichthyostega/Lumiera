@@ -68,7 +68,6 @@ namespace mobject {
   
   namespace builder {
   
-    using lib::P;
     
     /** 
      * Policy invoking an catch-all function for processing
@@ -146,10 +145,10 @@ namespace mobject {
           }
         
         template<class TAR>
-        P<TAR>
+        lib::P<TAR>
         getPtr ()
           {
-            P<TAR>* pP = currentWrapper_.get<P<TAR>*>(); 
+            lib::P<TAR>* pP = currentWrapper_.get<lib::P<TAR>*>();
             ENSURE (pP, "wrong target type when invoking %s", __PRETTY_FUNCTION__);
             return *pP;
           }

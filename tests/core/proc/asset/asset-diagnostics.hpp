@@ -76,7 +76,7 @@ namespace asset {
   
   template<class CHI, class PAR>
   inline bool
-  dependencyCheck (P<CHI> child, P<PAR> parent)
+  dependencyCheck (lib::P<CHI> child, lib::P<PAR> parent)
   {
     return (child == parent)
         || (0 < child->getParents().size()

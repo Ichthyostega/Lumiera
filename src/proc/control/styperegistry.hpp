@@ -52,7 +52,6 @@
 namespace proc {
 namespace control {
 
-//  using lib::P;
   
 //  using std::string;
 //  using boost::format;

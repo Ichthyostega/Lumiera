@@ -40,8 +40,8 @@ namespace asset {
   class Proc;
   class ProcPatt;
   class BuildInstruct; 
-  typedef P<const asset::Proc> PProc;
-  typedef P<const asset::ProcPatt> PProcPatt;
+  typedef lib::P<const asset::Proc> PProc;
+  typedef lib::P<const asset::ProcPatt> PProcPatt;
   
   typedef vector<BuildInstruct> InstructionSequence;
   
@@ -64,7 +64,7 @@ namespace asset {
       friend class StructFactoryImpl;
       
     public:
-      P<ProcPatt> newCopy (string newID) const;
+      lib::P<ProcPatt> newCopy (string newID) const;
       
       ProcPatt& attach (Symbol where, PProc& node);
       ProcPatt& operator+= (PProcPatt& toReuse);

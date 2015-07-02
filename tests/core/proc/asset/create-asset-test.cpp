@@ -65,7 +65,7 @@ namespace test {
 
 
                                                           ////////////////////////////////////TICKET #589
-      typedef P<Media> PM;                                                         /////TODO: transition to P<>
+      typedef lib::P<Media> PM;                                                          /////TODO: transition to P<>
 
       /** @test Creating and automatically registering Asset instances.
        *        Re-Retrieving the newly created objects from AssetManager.

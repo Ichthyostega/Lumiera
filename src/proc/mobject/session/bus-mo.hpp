@@ -32,7 +32,7 @@ namespace proc {
 namespace asset { 
   
   class Pipe;
-  typedef P<Pipe> PPipe;
+  typedef lib::P<Pipe> PPipe;
 
 }
 

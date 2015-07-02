@@ -139,7 +139,7 @@ namespace asset {
   inline ID<Meta>::ID(HashVal id)       : ID<Asset> (id)           {};
   inline ID<Meta>::ID(const Meta& meta) : ID<Asset> (meta.getID()) {};
   
-  typedef P<Meta> PMeta;
+  typedef lib::P<Meta> PMeta;
   
   
   
@@ -150,7 +150,7 @@ namespace asset {
     : boost::noncopyable
     {
     public:
-      typedef P<asset::Meta> PType;
+      typedef lib::P<asset::Meta> PType;
       
       template<class MA>
       meta::Builder<MA> operator() (lib::idi::EntryID<MA> elementIdentity);

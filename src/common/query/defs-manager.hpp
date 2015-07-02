@@ -37,7 +37,6 @@ namespace lumiera{
 namespace query  {
   
   
-  using lib::P;
   using lumiera::Query;
   using boost::scoped_ptr;
   
@@ -73,14 +72,14 @@ namespace query  {
        *         is considered \e misconfiguration. 
        */
       template<class TAR>
-      P<TAR> operator() (Query<TAR> const&);
+      lib::P<TAR> operator() (Query<TAR> const&);
       
       
       /** search through the registered defaults, never create anything.
        *  @return object fulfilling the query, \c empty ptr if not found. 
        */
       template<class TAR>
-      P<TAR> search  (Query<TAR> const&);
+      lib::P<TAR> search  (Query<TAR> const&);
       
       /** retrieve an object fulfilling the query and register it as default.
        *  The resolution is delegated to the ConfigQuery system (which may cause
@@ -88,7 +87,7 @@ namespace query  {
        *  @return object fulfilling the query, \c empty ptr if no solution.
        */ 
       template<class TAR>
-      P<TAR> create  (Query<TAR> const&);
+      lib::P<TAR> create  (Query<TAR> const&);
       
       /** register the given object as default, after ensuring it fulfils the
        *  query. The latter may cause some properties of the object to be set,
@@ -97,13 +96,13 @@ namespace query  {
        *  @note only a weak ref to the object is stored
        */ 
       template<class TAR>
-      bool define  (P<TAR> const&, Query<TAR> const&  =Query<TAR>());
+      bool define  (lib::P<TAR> const&, Query<TAR> const&  =Query<TAR>());
       
       /** remove the defaults registration of the given object, if there was such
        *  @return false if nothing has been changed because the object wasn't registered
        */
       template<class TAR>
-      bool forget  (P<TAR> const&);
+      bool forget  (lib::P<TAR> const&);
       
       
       /** @internal for session lifecycle */

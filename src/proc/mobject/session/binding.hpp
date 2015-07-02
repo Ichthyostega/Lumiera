@@ -32,7 +32,7 @@ namespace proc {
 namespace asset { 
   class Sequence;
   
-  typedef P<Sequence> PSequence;
+  typedef lib::P<Sequence> PSequence;
 
 }
 

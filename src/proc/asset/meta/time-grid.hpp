@@ -113,7 +113,7 @@ namespace meta {
        *  the origin of this (local) grid.
        * @todo currently not supported (as of 12/2010)
        */
-      P<TimeGrid> predecessor_;
+      lib::P<TimeGrid> predecessor_;
       
       /** 
        * initialise to blank (zero).
@@ -130,7 +130,7 @@ namespace meta {
       /** create a time grid
        *  based on settings within this builder
        */
-      P<TimeGrid> commit();
+      lib::P<TimeGrid> commit();
       
     };
   

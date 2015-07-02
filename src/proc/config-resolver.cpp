@@ -71,7 +71,7 @@ namespace query  {
   using proc::asset::PSequence;
   
   using proc::mobject::session::Fork;
-  using proc::mobject::session::PFork;
+  using PFork = lib::P<Fork>;
   
   template PPipe       DefsManager::operator() (Query<Pipe>     const&);
   template PProcPatt   DefsManager::operator() (Query<const ProcPatt> const&);
