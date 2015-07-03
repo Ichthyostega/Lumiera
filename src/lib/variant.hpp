@@ -142,9 +142,8 @@ namespace lib {
         = meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
     
     
-    /////TODO: - is it possible directly to forward the constructor invocation to the object within the buffer? Beware of unverifiable generic solutions! 
-    
   }//(End) implementation helpers
+  
   
   
   
@@ -160,6 +159,10 @@ namespace lib {
    * in question, but type mismatch will provoke an exception at runtime.
    * Generic access is possible using a visitor.
    * @warning not threadsafe
+   * @todo we need to define all copy operations explicitly, due to the
+   *       templated one-arg ctor to wrap the actual values.
+   *       There might be a generic solution for that     ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
+   *       But -- Beware of unverifiable generic solutions! 
    */
   template<typename TYPES>
   class Variant

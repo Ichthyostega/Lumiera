@@ -121,6 +121,33 @@ namespace diff{
   
   using std::string;
   
+  namespace {//////TODO this is a prototype, to be factored out
+    
+    template<typename X, class SELF>
+    struct ShaddowCopyCtor
+      {
+        operator bool()  const { return true; }
+      };
+    
+    template<class SELF>
+    struct ShaddowCopyCtor<SELF, SELF>
+      {
+        // no bool conversion -> substitution fails.
+      };
+    template<class SELF>
+    struct ShaddowCopyCtor<SELF&, SELF>
+      {
+        // no bool conversion -> substitution fails.
+      };
+    template<class SELF>
+    struct ShaddowCopyCtor<const SELF, SELF>
+      {
+        // no bool conversion -> substitution fails.
+      };
+    
+  }//(End) copy shaddowing solution
+  
+  
   class GenNode;
   
   using Rec = Record<GenNode>;
@@ -146,15 +173,11 @@ namespace diff{
     {
     public:
       template<typename X>
-      DataCap(X&& x)
+      DataCap(X&& x,   bool = ShaddowCopyCtor<X, DataCap>())
         : Variant<DataValues>(std::forward<X>(x))
         { }
       
-      DataCap(DataCap const& o) =default;
-      DataCap(DataCap&& o)      =default;
-      DataCap(DataCap& o)
-        : DataCap((DataCap const&)o)
-        { }
+                                       ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
     };
   
   
@@ -183,8 +206,9 @@ namespace diff{
       ID      idi;
       DataCap data;
       
+      
       template<typename X>
-      GenNode(X&& val)
+      GenNode(X&& val,   bool = ShaddowCopyCtor<X, GenNode>())
         : idi(&val, buildChildID<X>())
         , data(std::forward<X>(val))
         { }
@@ -201,12 +225,6 @@ namespace diff{
       
       GenNode(const char* text)
         : GenNode(string(text))
-        { }
-      
-      GenNode(GenNode const& o)  =default;
-      GenNode(GenNode&& o)       =default;
-      GenNode(GenNode& o)
-        : GenNode((GenNode const&)o)
         { }
       
       // default copy assignable
