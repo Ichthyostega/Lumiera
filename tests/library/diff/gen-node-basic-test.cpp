@@ -36,6 +36,8 @@
 using util::isnil;
 using util::contains;
 using util::isSameObject;
+using lib::hash::LuidH;
+using lib::time::FSecs;
 using lib::time::Time;
 using lib::time::TimeSpan;
 //using std::string;

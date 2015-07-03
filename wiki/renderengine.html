@@ -2316,12 +2316,16 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="GenNode" creator="Ichthyostega" modifier="Ichthyostega" created="201501171413" modified="201505312131" tags="Model GuiIntegration GuiPattern def draft" changecount="12">
+<div title="GenNode" creator="Ichthyostega" modifier="Ichthyostega" created="201501171413" modified="201507031718" tags="Model GuiIntegration GuiPattern def draft" changecount="13">
 <pre>//Abstract generic node element to build a ~DOM-like rendering of Lumiera's [[session model|HighLevelModel]].//
 GenNode elements are values, yet behave polymorphic. They are rather light-weight, have an well established identity and can be compared. They are //generic// insofar they encompass several heterogeneous ordering systems, which in themselves can not be subsumed into a single ordering hierarchy. The //purpose// of these generic nodes is to build a symbolic representation, known as [[external tree description|ExternalTreeDescription]], existing somewhere &quot;outside&quot;, at a level where the fine points of ordering system relations do not really matter. Largely, this external description is not represented or layed down as a whole. Rather, it is used as a conceptual reference frame to describe //differences and changes.// Obviously, this means that parts of the altered structures have to appear in the description of the modifications. So, practically speaking, the prime purpose of GenNode elements is to appear as bits of information within a ''diff language'' to exchange such information of changes.
 
 To be more specific, within the actual model there are [[Placements|Placement]]. These refer to [[M-Objects|MObject]]. Which in turn rely on [[Assets|Asset]]. Moreover, we have some processing rules, and -- last but not least -- the &quot;objects&quot; encountered in the model have state, visible as attributes of atomic value type (integral, floating point, string, boolean, time, time ranges and [[quantised time entities|TimeQuant]]).
 A generic node may //represent any of these kind// -- and it may have ~GenNode children, forming a tree. Effectively all of this together makes ~GenNode a ''Monad''.
+
+GenNode elements are conceived as values, and can thus be treated as mutable or immutable; it is up to the user to express this intent through const correctness.
+Especially the nested structures, i.e. a GenNode holding an embedded {{{diff::Record}}}, are by default immutable, but expose a object builder API for remoulding. This again places the actual decision about mutations into the usage context, since the remoulded Record has to be assigned explicitly.
+
 
 !to reflect or not reflect
 When dealing with this external model representation, indeed there are some rather global concerns which lend themselves to a generic programming style. Simply because, otherwise, we'd end up explicating and thereby duplicating the structure of the model all over the code. Frequently, such a situation is quoted as the reason to demand introspection facilities on any data structure. We doubt this is a valid conclusion. Since introspection allows to accept just //any element// -- followed by an open-ended //reaction on the received type// -- we might arrive at the impression that our code reaches a maximum of flexibility and &quot;openness&quot;. Unfortunately, this turns out to be a self-deception, since code to do any meaningful operation needs pre-established knowledge about the meaning of the data to be processed. More so, when, as in any hierarchical data organisation, the relevant meaning is attached to the structure itself, so consequently this pre-established knowledge tends to be scattered over several, superficially &quot;open&quot; handler functions. What looks open and flexible at first sight is in fact littered with obscure and scattered, non obvious additional presumptions.
@@ -7943,7 +7947,7 @@ Used this way, diff representation helps to separate structure and raw data in e
 :Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201506040013" tags="Model GuiPattern design draft" changecount="33">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201507031715" tags="Model GuiPattern design draft" changecount="36">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -7999,12 +8003,14 @@ It should be noted, that the purpose of this whole architecture is to deal with 
 {{red{open questions 6/15}}}
 * do we need to //alter// object contents -- or do we just replace?
 * to what degree is the distinction between attributes and children even relevant -- beyond the ability to address attributes by-name?
-* how do we describe an object from scratch?
+* how do we describe an object from scratch? &amp;larr;''object builder''
 * how do we represent the break between attributes and children in this linearised description?
 ** using a separator element?
-** by convention through the element names?
+** by convention through the element names? &amp;larr; ''This''
 ** as additional metadata information sent beforehand?
 * we need an object-reference element, since we do not want to copy whole subtrees while processing a diff
+
+&quot;Objects&quot; can be spelled out literally in code. We care to make the respective ctor syntax expressive enough. For nested objects, i.e. values of type{{{diff::Record}}}, a dedicated object builder notation is provided, (because this is the point, where the syntax gets convoluted
 
 Within this framework, we represent //object-like// entities through a special flavour of the GenNode: Basically, an object is a flat collection of children, yet given in accordance to a distinct protocol. The relevant ''meta'' information is spelled out first, followed by the ''attributes'' and finally the ''children''. The distinction between these lies in the mode of handling. Meta information is something we need to know before we're able to deal with the actual stuff. Prominent example is the type of the object. Attributes are considered unordered, and will typically be addressed by-name. Children are an ordered collection of recursive instances of the same data structure. (Incidentally, we do not rule out the possibility that also an attribute holds a recursive subtree; only the mode of access is what makes the distinction).
 

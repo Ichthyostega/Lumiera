@@ -104,8 +104,7 @@
 #include "lib/idi/entry-id.hpp"
 //#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
-
-#include "lib/format-util.hpp"
+//#include "lib/format-util.hpp"
 #include "lib/variant.hpp"
 #include "lib/util.hpp"
 
@@ -182,6 +181,11 @@ namespace diff{
             { }
           
           // standard copy operations acceptable
+          
+          operator string()  const
+            {
+              return "ID(\""+getSym()+"\")";
+            }
         };
       
       

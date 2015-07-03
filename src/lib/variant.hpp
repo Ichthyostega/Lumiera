@@ -404,6 +404,12 @@ namespace lib {
           return buff<X>().access();
         }
       
+      template<typename X>
+      X const&
+      get()  const
+        {
+          return unConst(this)->get<X>();
+        }
       
       void
       accept (Visitor& visitor)

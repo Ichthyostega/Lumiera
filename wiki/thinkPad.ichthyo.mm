@@ -29,23 +29,86 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1434128243334" ID="ID_1828331212" MODIFIED="1434128248667" TEXT="Typ-Darstellung"/>
 <node CREATED="1434128239517" ID="ID_1886740948" MODIFIED="1434128250041" TEXT="Mapping"/>
-<node CREATED="1434128170381" ID="ID_976705384" MODIFIED="1434128380059" TEXT="GenNode">
-<linktarget COLOR="#ff0033" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="2;9;" ID="Arrow_ID_1285375088" SOURCE="ID_553361956" STARTARROW="Default" STARTINCLINATION="26;-13;"/>
+<node CREATED="1434128170381" ID="ID_976705384" MODIFIED="1435943245803" TEXT="GenNode">
+<linktarget COLOR="#ff0033" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="10;45;" ID="Arrow_ID_1285375088" SOURCE="ID_553361956" STARTARROW="Default" STARTINCLINATION="-13;-67;"/>
 <node CREATED="1435421658394" ID="ID_1938259420" MODIFIED="1435421666963" TEXT="ID">
 <node CREATED="1435421670349" ID="ID_1358247529" MODIFIED="1435421676200" TEXT="verwende EntryID">
 <node CREATED="1435421678004" ID="ID_691179282" MODIFIED="1435421687224" TEXT="Abh&#xe4;ngigkeitsprobleme">
-<node CREATED="1435421693260" ID="ID_1314021887" MODIFIED="1435421708857" TEXT="generische ID-Funktionen"/>
+<node CREATED="1435421693260" ID="ID_1314021887" MODIFIED="1435942753226" TEXT="generische ID-Funktionen">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1435421739988" ID="ID_405602814" MODIFIED="1435885199446" TEXT="EntryID geh&#xf6;rt in Library">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1435885214592" ID="ID_1198930165" MODIFIED="1435885223858" TEXT="sanitise st&#xf6;rt">
-<node CREATED="1435885226222" ID="ID_776697956" MODIFIED="1435885235138" TEXT="verschiebe in EntryID"/>
-<node CREATED="1435885235583" ID="ID_444167455" MODIFIED="1435885247194" TEXT="verwende Subklasse"/>
+<node CREATED="1435885226222" ID="ID_776697956" MODIFIED="1435942745458" TEXT="verschiebe in EntryID">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1435885235583" ID="ID_444167455" MODIFIED="1435942747401" TEXT="verwende Subklasse">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node CREATED="1434128174030" ID="ID_1395250463" MODIFIED="1434128176521" TEXT="Variant"/>
+</node>
+<node CREATED="1434128174030" ID="ID_1395250463" MODIFIED="1434128176521" TEXT="Variant">
+<node CREATED="1435943070542" ID="ID_949070153" MODIFIED="1435943252759" TEXT="Wert-Semantik">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1435943077974" ID="ID_280152814" MODIFIED="1435943080682" TEXT="kopierbar"/>
+<node CREATED="1435943081438" ID="ID_159359464" MODIFIED="1435943083738" TEXT="zuweisbar"/>
+<node CREATED="1435943085206" ID="ID_734188530" MODIFIED="1435943268207" TEXT="const-ness liegt beim User">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. der usage context entscheidet, ob wir einen Wert,
+    </p>
+    <p>
+      eine Referenz oder einen konstanten Wert verwenden
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1435943194398" ID="ID_587131941" MODIFIED="1435943203161" TEXT="GenNode gibt Referenz auf Wert"/>
+<node CREATED="1435943203662" ID="ID_1772960325" MODIFIED="1435943274743" TEXT="const GenNode gibt const&amp;">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1435943214822" ID="ID_723738462" MODIFIED="1435943233983">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Record selber ist immuable
+    </p>
+    <p>
+      aber hat eine Builder-Mechanik
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1435943121046" ID="ID_16399922" MODIFIED="1435943145278" TEXT="brauche const Variante">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eigentlich fehlte nur die get()-Operation
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 <node CREATED="1434128217645" ID="ID_1790054544" MODIFIED="1434128220257" TEXT="Monade">
 <node CREATED="1435932580854" ID="ID_1307223527" MODIFIED="1435932586137" TEXT="Daten einwickeln">
 <node CREATED="1435932589853" ID="ID_180643071" MODIFIED="1435932595665" TEXT="ctor forward"/>
@@ -73,10 +136,45 @@
 </html>
 </richcontent>
 </node>
+<node CREATED="1435942764328" ID="ID_1740355148" MODIFIED="1435942879414">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      generische L&#246;sung verschoben <font color="#990033">#963</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#ff3333" DESTINATION="ID_1935900779" ENDARROW="Default" ENDINCLINATION="188;0;" ID="Arrow_ID_1626382520" STARTARROW="Default" STARTINCLINATION="2;73;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1435942827511" ID="ID_614756812" MODIFIED="1435942844839">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      C++11 erlaubt <b>=default</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1435932611653" ID="ID_1701726752" MODIFIED="1435932628945" TEXT="Ansatz-1 (einfach): explizit"/>
-<node CREATED="1435932629517" ID="ID_1935900779" MODIFIED="1435932661977" TEXT="Ansatz-2: Selbst-Typ ausblenden"/>
+<node CREATED="1435932629517" ID="ID_1935900779" MODIFIED="1435942879415" TEXT="Ansatz-2: Selbst-Typ ausblenden">
+<linktarget COLOR="#ff3333" DESTINATION="ID_1935900779" ENDARROW="Default" ENDINCLINATION="188;0;" ID="Arrow_ID_1626382520" SOURCE="ID_1740355148" STARTARROW="Default" STARTINCLINATION="2;73;"/>
 </node>
+</node>
+</node>
+<node CREATED="1435942891695" ID="ID_947731706" MODIFIED="1435943035295" TEXT="Iteration">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
 </node>
 </node>
 <node CREATED="1434128176918" ID="ID_863330674" MODIFIED="1434128195333" TEXT="Record">
@@ -152,8 +250,8 @@
 </node>
 </node>
 <node CREATED="1434128128869" ID="ID_244966341" MODIFIED="1434128131785" TEXT="Verben">
-<node CREATED="1434128134508" ID="ID_553361956" MODIFIED="1434128380058" TEXT="ID-Repr&#xe4;s">
-<arrowlink COLOR="#ff0033" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="2;9;" ID="Arrow_ID_1285375088" STARTARROW="Default" STARTINCLINATION="26;-13;"/>
+<node CREATED="1434128134508" ID="ID_553361956" MODIFIED="1435943245803" TEXT="ID-Repr&#xe4;s">
+<arrowlink COLOR="#ff0033" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="10;45;" ID="Arrow_ID_1285375088" STARTARROW="Default" STARTINCLINATION="-13;-67;"/>
 <node CREATED="1434128393429" ID="ID_1275202366" MODIFIED="1434128584214" TEXT="mu&#xdf; GenNode sein">
 <icon BUILTIN="idea"/>
 </node>
