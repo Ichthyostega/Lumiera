@@ -46,7 +46,39 @@
 </node>
 </node>
 <node CREATED="1434128174030" ID="ID_1395250463" MODIFIED="1434128176521" TEXT="Variant"/>
-<node CREATED="1434128217645" ID="ID_1790054544" MODIFIED="1434128220257" TEXT="Monade"/>
+<node CREATED="1434128217645" ID="ID_1790054544" MODIFIED="1434128220257" TEXT="Monade">
+<node CREATED="1435932580854" ID="ID_1307223527" MODIFIED="1435932586137" TEXT="Daten einwickeln">
+<node CREATED="1435932589853" ID="ID_180643071" MODIFIED="1435932595665" TEXT="ctor forward"/>
+<node CREATED="1435932598197" ID="ID_951223738" MODIFIED="1435932608318" TEXT="Problem mit copy ctor">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1435932667701" HGAP="22" ID="ID_1069242347" MODIFIED="1435932709198" TEXT="Copy matcht generischen ctor" VSHIFT="-9">
+<icon BUILTIN="idea"/>
+<node CREATED="1435932714261" ID="ID_1395890846" MODIFIED="1435932719281" TEXT="gleiches Problem schon bei Variant"/>
+<node CREATED="1435932719709" ID="ID_188423010" MODIFIED="1435932783846" TEXT="dort explizit gemacht, da komplex">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich hatte damals beim Variant und zugeh&#246;rigen Buffer die Sorge,
+    </p>
+    <p>
+      da&#223; ich die Implikationen einer generischen L&#246;sung nicht durchdringen kann.
+    </p>
+    <p>
+      Und ich wollte keine Zeit auf einen exzessiven Unit-Test verwenden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1435932611653" ID="ID_1701726752" MODIFIED="1435932628945" TEXT="Ansatz-1 (einfach): explizit"/>
+<node CREATED="1435932629517" ID="ID_1935900779" MODIFIED="1435932661977" TEXT="Ansatz-2: Selbst-Typ ausblenden"/>
+</node>
+</node>
+</node>
 <node CREATED="1434128176918" ID="ID_863330674" MODIFIED="1434128195333" TEXT="Record">
 <node CREATED="1434128198957" ID="ID_1224215957" MODIFIED="1434128203817" TEXT="Konstuktor">
 <node CREATED="1434421381345" ID="ID_752165044" MODIFIED="1434421402225" TEXT="DSL zur Daten-Definition"/>

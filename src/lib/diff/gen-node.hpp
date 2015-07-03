@@ -121,33 +121,6 @@ namespace diff{
   
   using std::string;
   
-  namespace {//////TODO this is a prototype, to be factored out
-    
-    template<typename X, class SELF>
-    struct ShaddowCopyCtor
-      {
-        operator bool()  const { return true; }
-      };
-    
-    template<class SELF>
-    struct ShaddowCopyCtor<SELF, SELF>
-      {
-        // no bool conversion -> substitution fails.
-      };
-    template<class SELF>
-    struct ShaddowCopyCtor<SELF&, SELF>
-      {
-        // no bool conversion -> substitution fails.
-      };
-    template<class SELF>
-    struct ShaddowCopyCtor<const SELF, SELF>
-      {
-        // no bool conversion -> substitution fails.
-      };
-    
-  }//(End) copy shaddowing solution
-  
-  
   class GenNode;
   
   using Rec = Record<GenNode>;
@@ -173,11 +146,19 @@ namespace diff{
     {
     public:
       template<typename X>
-      DataCap(X&& x,   bool = ShaddowCopyCtor<X, DataCap>())
+      DataCap(X&& x)
         : Variant<DataValues>(std::forward<X>(x))
         { }
       
                                        ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
+      DataCap(DataCap const&) =default;
+      DataCap(DataCap&&)      =default;
+      DataCap(DataCap& o)
+        : DataCap((DataCap const&)o)
+        { }
+      
+      DataCap& operator= (DataCap const&)  =default;
+      DataCap& operator= (DataCap&&)       =default;
     };
   
   
@@ -208,7 +189,7 @@ namespace diff{
       
       
       template<typename X>
-      GenNode(X&& val,   bool = ShaddowCopyCtor<X, GenNode>())
+      GenNode(X&& val)
         : idi(&val, buildChildID<X>())
         , data(std::forward<X>(val))
         { }
@@ -227,7 +208,16 @@ namespace diff{
         : GenNode(string(text))
         { }
       
-      // default copy assignable
+                                       ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
+      GenNode(GenNode const&)  =default;
+      GenNode(GenNode&&)       =default;
+      GenNode(GenNode& o)
+        : GenNode((GenNode const&)o)
+        { }
+      
+      GenNode& operator= (GenNode const&)  =default;
+      GenNode& operator= (GenNode&&)       =default;
+      
       
       
       bool
