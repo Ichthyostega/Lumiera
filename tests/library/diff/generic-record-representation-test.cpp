@@ -306,7 +306,7 @@ namespace test{
           RecordRef<string> empty;
           CHECK (bool(empty) == false);
           CHECK (nullptr == empty.get());
-          VERIFY_ERROR (BOTTOM_VALUE, RecS& (empty));
+          VERIFY_ERROR (BOTTOM_VALUE, empty.operator RecS&() );
           
           RecordRef<string> ref(oo);
           CHECK (ref);

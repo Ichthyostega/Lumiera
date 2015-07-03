@@ -428,6 +428,12 @@ namespace diff{
       // standard copy operations acceptable
       
       
+      explicit
+      operator bool()  const
+        {
+          return bool(record_);
+        }
+      
       /** target is accessed by cast
        * @throws error::Logic on bottom reference
        */
