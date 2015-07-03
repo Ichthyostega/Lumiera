@@ -142,6 +142,20 @@ namespace util {
   
   
   
+  /** check if string starts with a given prefix */
+  inline bool
+  startsWith (string const& str, string const& prefix)
+  {
+    return 0 == str.rfind(prefix, 0);
+  }
+  
+  inline bool
+  startsWith (string const& str, const char* prefix)
+  {
+    return 0 == str.rfind(prefix, 0);
+  }
+  
+  
   /** shortcut for containment test on a map */
   template <typename MAP>
   inline bool 
