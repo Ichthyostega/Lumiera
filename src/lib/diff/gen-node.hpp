@@ -184,6 +184,9 @@ namespace diff{
           // standard copy operations acceptable
         };
       
+      
+      //------GenNode Data fields---
+      
       ID      idi;
       DataCap data;
       
@@ -231,6 +234,19 @@ namespace diff{
       {
         return node.idi.getSym();
       }
+      
+      friend bool
+      operator== (GenNode const& n1, GenNode const& n2)
+      {
+        return n1.idi == n2.idi;
+      }
+      
+      friend bool
+      operator!= (GenNode const& n1, GenNode const& n2)
+      {
+        return n1.idi != n2.idi;
+      }
+      
       
     private:
       template<typename X>
