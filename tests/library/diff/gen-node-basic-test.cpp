@@ -33,7 +33,9 @@
 //#include <vector>
 #include <cmath>
 
+using util::isnil;
 using util::contains;
+using util::isSameObject;
 using lib::time::Time;
 using lib::time::TimeSpan;
 //using std::string;
@@ -93,7 +95,6 @@ namespace test{
           objectShortcut();
           symbolReference();
           sequenceIteration();
-          duplicateDetection();
           copy_and_move();
         }
       
@@ -110,7 +111,7 @@ namespace test{
           
           // can optionally be named
           GenNode n2("π", 3.14159265358979323846264338328);
-          CHECK (fabs (3.14159265 - n2.data.get<double>) < 1e-5 );
+          CHECK (fabs (3.14159265 - n2.data.get<double>()) < 1e-5 );
           CHECK (n2.isNamed());
           CHECK ("π" == n2.idi.getSym());
           CHECK ("π" == name(n2));
@@ -255,18 +256,14 @@ namespace test{
       void
       sequenceIteration()
         {
-        }
-      
-      
-      void
-      duplicateDetection()
-        {
+          UNIMPLEMENTED ("wtf");
         }
       
       
       void
       copy_and_move()
         {
+          UNIMPLEMENTED ("need to check that?");
         }
     };
   

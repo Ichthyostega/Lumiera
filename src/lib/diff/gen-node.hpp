@@ -101,6 +101,7 @@
 #include "lib/variant.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/diff/record.hpp"
+#include "lib/idi/entry-id.hpp"
 //#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
 
@@ -148,13 +149,88 @@ namespace diff{
       DataCap(X&& x)
         : Variant<DataValues>(std::forward<X>(x))
         { }
+      
+      DataCap(DataCap const& o) =default;
+      DataCap(DataCap&& o)      =default;
+      DataCap(DataCap& o)
+        : DataCap((DataCap const&)o)
+        { }
     };
   
   
   /** generic data element node within a tree */
-  class GenNode
+  struct GenNode
     {
-    public:
+      class ID
+        : public idi::BareEntryID
+        {
+          friend class GenNode;
+          
+          template<typename X>
+          ID (X*, string const& symbolicID)
+            : idi::BareEntryID (symbolicID,
+                                idi::getTypeHash<X>())
+            { }
+          
+        public:
+          ID (GenNode const& node)
+            : ID(node.idi)
+            { }
+          
+          // standard copy operations acceptable
+        };
+      
+      ID      idi;
+      DataCap data;
+      
+      template<typename X>
+      GenNode(X&& val)
+        : idi(&val, buildChildID<X>())
+        , data(std::forward<X>(val))
+        { }
+      
+      template<typename X>
+      GenNode(string const& symbolicID, X&& val)
+        : idi(&val, symbolicID)
+        , data(std::forward<X>(val))
+        { }
+      
+      GenNode(string const& symbolicID, const char* text)
+        : GenNode(symbolicID, string(text))
+        { }
+      
+      GenNode(const char* text)
+        : GenNode(string(text))
+        { }
+      
+      GenNode(GenNode const& o)  =default;
+      GenNode(GenNode&& o)       =default;
+      GenNode(GenNode& o)
+        : GenNode((GenNode const&)o)
+        { }
+      
+      // default copy assignable
+      
+      
+      bool
+      isNamed()  const
+        {
+          return util::startsWith (idi.getSym(), "_CHILD_");
+        }
+      
+      friend string
+      name (GenNode const& node)
+      {
+        return node.idi.getSym();
+      }
+      
+    private:
+      template<typename X>
+      static string
+      buildChildID()
+        {
+          return "_CHILD_" + idi::generateSymbolicID<X>();
+        }
     };
   
   
@@ -186,21 +262,21 @@ namespace diff{
   inline GenNode
   Rec::buildTypeAttribute (string const& typeID)
   {
-    return GenNode(); ///TODO
+    return GenNode("type", typeID);
   }
   
   template<>
   inline string
   Rec::extractKey (GenNode const& v)
   {
-    return "todo"; ////TODO
+    return v.idi.getSym();
   }
   
   template<>
   inline GenNode
   Rec::extractVal (GenNode const& v)
   {
-    return GenNode(); ///TODO
+    return GenNode(v); ///TODO
   }
   
   

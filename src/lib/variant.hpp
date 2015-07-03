@@ -111,6 +111,12 @@ namespace lib {
         using Type = X;
       };
     
+    template<typename X, typename TYPES>
+    struct CanBuildFrom<const X, Node<X, TYPES>>
+      {
+        using Type = X;
+      };
+    
     template<typename X, typename T,typename TYPES>
     struct CanBuildFrom<X, Node<T, TYPES>>
       {
