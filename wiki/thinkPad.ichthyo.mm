@@ -325,8 +325,8 @@
 <node CREATED="1434128393429" ID="ID_1275202366" MODIFIED="1434128584214" TEXT="mu&#xdf; GenNode sein">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1434128412934" ID="ID_1319614474" MODIFIED="1434128461227" TEXT="Repr&#xe4;s entscheiden">
-<icon BUILTIN="pencil"/>
+<node CREATED="1434128412934" ID="ID_1319614474" MODIFIED="1436021920247" TEXT="Repr&#xe4;s entscheiden">
+<icon BUILTIN="go"/>
 <node CREATED="1434128438565" ID="ID_913220298" MODIFIED="1434128678545" TEXT="als ID erkennbar">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -345,8 +345,10 @@
 <node CREATED="1434128779661" ID="ID_1739097548" MODIFIED="1434236311060" TEXT="marker-ID + string-Payload">
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1434128917125" ID="ID_392407967" MODIFIED="1434238970157" TEXT="&quot;fehlkonstruierte&quot; ID + pr&#xfc;f-Pr&#xe4;dikat"/>
-<node CREATED="1434128981381" ID="ID_101281763" MODIFIED="1434236527554" TEXT="spezielle Ref-Payload">
+<node CREATED="1434128917125" ID="ID_392407967" MODIFIED="1436021562160" TEXT="&quot;fehlkonstruierte&quot; ID + pr&#xfc;f-Pr&#xe4;dikat">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1434128981381" ID="ID_101281763" MODIFIED="1436021564745" TEXT="spezielle Ref-Payload">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -357,6 +359,41 @@
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1436021576224" ID="ID_1239136010" MODIFIED="1436021889094" TEXT="Begr&#xfc;ndung">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1436021581655" ID="ID_124352424" MODIFIED="1436021603779" TEXT="hash-identische ID sorgt f&#xfc;r transparente Integration"/>
+<node CREATED="1436021610648" ID="ID_1621632066" MODIFIED="1436021618067" TEXT="das nimmt Komplexit&#xe4;t aus der Anwendung heraus"/>
+<node CREATED="1436021623799" ID="ID_929212705" MODIFIED="1436021637115" TEXT="f&#xfc;r die Dereferenzierung zahlt nur die Referenz"/>
+<node CREATED="1436021694039" ID="ID_1657867881" MODIFIED="1436021817445" TEXT="Nachteil ist Gefahr der Verwirrung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gemeint ist:
+    </p>
+    <ul>
+      <li>
+        man kann alternativ auch eine RecordRef direkt in eine elementare GenNode packen
+      </li>
+      <li>
+        diese verh&#228;lt sich dann nicht transparent, denn sie hat eine andere Identit&#228;t als ihr Ziel
+      </li>
+      <li>
+        das kann aber als spezielles Ausdrucksmittel genutzt werden
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1436021719055" ID="ID_1039111553" MODIFIED="1436021730099" TEXT="ist nur ein halber Nachteil"/>
+<node CREATED="1436021731615" ID="ID_1576857183" MODIFIED="1436021741970" TEXT="kann n&#xe4;mlich auch Ausdrucksmittel sein"/>
+<node CREATED="1436021848790" ID="ID_742066846" MODIFIED="1436021874042" TEXT="problematisch ist die Implementerung des Erkennungs-Pr&#xe4;dikates"/>
 </node>
 </node>
 </node>
@@ -472,6 +509,9 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1436019533354" ID="ID_1500539399" MODIFIED="1436019542698" TEXT="Konzept-Bruch">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>

@@ -223,8 +223,8 @@ namespace test{
           CHECK (hamID.getHash() == ham.idi.getHash());
           CHECK (contains (string(hamID), "spam")); // Lovely spam!
           
-          GenNode ref1 = Ref("egg bacon sausage and spam");
-          GenNode ref2 = Ref(ham);
+          Ref ref1("egg bacon sausage and spam");
+          Ref ref2(ham);
           
           CHECK (ref1.idi == ham.idi);
           CHECK (ref2.idi == ham.idi);
@@ -233,8 +233,8 @@ namespace test{
           CHECK (isSameObject (ham, ref2.data.get<Rec>()));
           VERIFY_ERROR (BOTTOM_VALUE, ref1.data.get<Rec>());
           
-          RecordRef rr1 = ref1.data.get<RecordRef>();
-          RecordRef rr2 = ref2.data.get<RecordRef>();
+          RecRef rr1 = ref1.data.get<RecRef>();
+          RecRef rr2 = ref2.data.get<RecRef>();
           
           CHECK ( isnil(rr1));
           CHECK (!isnil(rr2));
@@ -248,10 +248,10 @@ namespace test{
           CHECK ("_CHILD_" == name(Ref::CHILD));
           CHECK ("_ATTRIBS_" == name(Ref::ATTRIBS));
           
-          CHECK (isnil (Ref::END.data.get<RecordRef>()));
-          CHECK (isnil (Ref::THIS.data.get<RecordRef>()));
-          CHECK (isnil (Ref::CHILD.data.get<RecordRef>()));
-          CHECK (isnil (Ref::ATTRIBS.data.get<RecordRef>()));
+          CHECK (isnil (Ref::END.data.get<RecRef>()));
+          CHECK (isnil (Ref::THIS.data.get<RecRef>()));
+          CHECK (isnil (Ref::CHILD.data.get<RecRef>()));
+          CHECK (isnil (Ref::ATTRIBS.data.get<RecRef>()));
         }
       
       

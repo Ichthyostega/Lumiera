@@ -7947,7 +7947,7 @@ Used this way, diff representation helps to separate structure and raw data in e
 :Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201507031715" tags="Model GuiPattern design draft" changecount="36">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201507041449" tags="Model GuiPattern design draft" changecount="38">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -8010,7 +8010,7 @@ It should be noted, that the purpose of this whole architecture is to deal with 
 ** as additional metadata information sent beforehand?
 * we need an object-reference element, since we do not want to copy whole subtrees while processing a diff
 
-&quot;Objects&quot; can be spelled out literally in code. We care to make the respective ctor syntax expressive enough. For nested objects, i.e. values of type{{{diff::Record}}}, a dedicated object builder notation is provided, (because this is the point, where the syntax gets convoluted
+&quot;Objects&quot; can be spelled out literally in code. We care to make the respective ctor syntax expressive enough. For nested objects, i.e. values of type {{{diff::Record}}}, a dedicated object builder notation is provided, because this is the point, where the syntax gets convoluted
 
 Within this framework, we represent //object-like// entities through a special flavour of the GenNode: Basically, an object is a flat collection of children, yet given in accordance to a distinct protocol. The relevant ''meta'' information is spelled out first, followed by the ''attributes'' and finally the ''children''. The distinction between these lies in the mode of handling. Meta information is something we need to know before we're able to deal with the actual stuff. Prominent example is the type of the object. Attributes are considered unordered, and will typically be addressed by-name. Children are an ordered collection of recursive instances of the same data structure. (Incidentally, we do not rule out the possibility that also an attribute holds a recursive subtree; only the mode of access is what makes the distinction).
 

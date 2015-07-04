@@ -33,6 +33,7 @@
 
 #include "lib/error.hpp"
 #include "lib/diff/diff-language.hpp"
+#include "lib/diff/gen-node.hpp"
 
 
 namespace lib {
@@ -40,5 +41,14 @@ namespace diff{
   
   LUMIERA_ERROR_DEFINE(DIFF_CONFLICT, "Collision in diff application: contents of target not as expected.");
   
+  /* symbolic marker ID references
+   * used the tree diff language
+   * to mark specific scopes
+   */
+  Ref Ref::END    ("_END_");
+  Ref Ref::THIS   ("_THIS_");
+  Ref Ref::CHILD  ("_CHILD_");
+  Ref Ref::ATTRIBS("_ATTRIBS_");
+
   
 }} // namespace lib::diff

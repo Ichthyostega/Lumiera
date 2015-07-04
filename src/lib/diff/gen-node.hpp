@@ -123,6 +123,7 @@ namespace diff{
   class GenNode;
   
   using Rec = Record<GenNode>;
+  using RecRef = RecordRef<GenNode>;
   using MakeRec = Rec::Mutator;
   using DataValues = meta::Types<int
                                 ,int64_t
@@ -136,6 +137,7 @@ namespace diff{
                                 ,time::Duration
                                 ,time::TimeSpan
                                 ,hash::LuidH
+                                ,RecRef
                                 ,Rec
                                 >;
   
@@ -265,6 +267,21 @@ namespace diff{
         return n1.idi != n2.idi;
       }
       
+    
+    protected:
+      /** @internal for dedicated builder subclasses */
+      GenNode (ID&& id, DataCap&& d)
+        : idi(std::move(id))
+        , data(std::move(d))
+        { }
+      
+      template<typename X>
+      static GenNode::ID
+      fabricateRefID (string const& symbolicID)
+        {
+          X* typeID;
+          return ID(typeID, symbolicID);
+        }
       
     private:
       template<typename X>
@@ -273,6 +290,39 @@ namespace diff{
         {
           return "_CHILD_" + idi::generateSymbolicID<X>();
         }
+    };
+  
+  
+  /**
+   * Constructor for a specially crafted 'ref GenNode'.
+   * The identity record of the generated object will be prepared
+   * such as to be identical to a regular GenNode with Record payload.
+   * @note slicing in usage is intentional
+   */
+  struct Ref
+    : GenNode
+    {
+      /** create an empty ID stand-in.
+       * @note the purpose is to create a symbolic reference by name
+       */
+      explicit
+      Ref(string const& symbolicID)
+        : GenNode(fabricateRefID<RecRef> (symbolicID)
+                 , DataCap(RecRef()))     // note: places NIL into the reference part
+        { }
+      
+      /** build reference to a Record, using the original ID
+       * @throw error::Logic when oNode does not hold a Record<GenNode>
+       */
+      Ref(GenNode& oNode)
+        : GenNode(ID(oNode)
+                 , DataCap(RecRef(oNode.data.get<Rec>())))
+        { }
+      
+      static Ref END;     ///< symbolic ID ref "_END_"
+      static Ref THIS;    ///< symbolic ID ref "_THIS_"
+      static Ref CHILD;   ///< symbolic ID ref "_CHILD_"
+      static Ref ATTRIBS; ///< symbolic ID ref "_ATTRIBS_"
     };
   
   

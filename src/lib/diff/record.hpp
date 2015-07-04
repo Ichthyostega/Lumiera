@@ -486,6 +486,12 @@ namespace diff{
       explicit
       operator bool()  const
         {
+          return empty();
+        }
+      
+      bool
+      empty()  const
+        {
           return bool(record_);
         }
       
