@@ -413,11 +413,34 @@ namespace diff{
       VAL&& genNode();
       VAL&& genNode(string const& symbolicID);
       
-      template<typename...ARGS>
-      Mutator& attrib (ARGS&& ...);
+      template<typename X, typename...ARGS>
+      Mutator& attrib (string const& key, X const& initialiser, ARGS&& ...args)
+        {
+          set (key, VAL(initialiser));
+          return attrib (std::forward<ARGS>(args)...);
+        }
+
+      template<typename X>
+      Mutator&
+      attrib (string const& key, X const& initialiser)
+        {
+          set (key, VAL(initialiser));
+          return *this;
+        }
       
-      template<typename...ARGS>
-      Mutator& scope (ARGS&& ...);
+      template<typename X, typename...ARGS>
+      Mutator& scope (X const& initialiser, ARGS&& ...args)
+        {
+          appendChild (VAL(initialiser));
+          return scope (std::forward<ARGS>(args)...);
+        }
+      
+      template<typename X>
+      Mutator& scope (X const& initialiser)
+        {
+          appendChild (VAL(initialiser));
+          return *this;
+        }
       
     };
   
