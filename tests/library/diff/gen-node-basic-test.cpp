@@ -149,10 +149,10 @@ namespace test{
       void
       objectShortcut()
         {
-          auto o0 = Rec().genNode();
-          auto o1 = Rec().genNode("νόμος");
-          auto o2 = Rec().type("spam").genNode();
-          auto o3 = Rec().attrib("Ψ", int64_t(42), "π", 3.14159265358979323846264338328).genNode("νόμος");
+          auto o0 = MakeRec().genNode();
+          auto o1 = MakeRec().genNode("νόμος");
+          auto o2 = MakeRec().type("spam").genNode();
+          auto o3 = MakeRec().attrib("Ψ", int64_t(42), "π", 3.14159265358979323846264338328).genNode("λόγος");
           
           CHECK (!o0.isNamed());
           CHECK (isnil(o0.data.get<Rec>()));
@@ -167,22 +167,22 @@ namespace test{
           CHECK (isnil(o2.data.get<Rec>()));
           
           CHECK (o3.isNamed());
-          CHECK ("νόμος" == o3.idi.getSym());
+          CHECK ("λόγος" == o3.idi.getSym());
           CHECK ("NIL" == o3.data.get<Rec>().getType());
           CHECK (GenNode("Ψ", int64_t(42)) == o3.data.get<Rec>().get("Ψ"));
-          CHECK (42L == o3.data.get<Rec>().get("Ψ").data.get<int64_t>);
-          CHECK (1e-7 > fabs (3.14159265 - o3.data.get<Rec>().get("π").data.get<double>));
+          CHECK (42L == o3.data.get<Rec>().get("Ψ").data.get<int64_t>());
+          CHECK (1e-7 > fabs (3.14159265 - o3.data.get<Rec>().get("π").data.get<double>()));
           
           LuidH luid;
           //Demonstration: object builder is based on the mutator mechanism for Records...
-          auto o4 = Rec::Mutator(o2)                                      // ...use GenNode o2 as starting point
-                       .appendChild(GenNode("τ", Time(1,2,3,4)))          // a named node with Time value
-                       .scope('*'                                         // a char node
-                             ,"★"                                         // a string node
-                             ,luid                                        // a hash value (LUID)
-                             ,TimeSpan(Time::ZERO, FSecs(23,25))          // a time span
-                             ,Rec().type("ham").scope("eggs").genNode())  // a spam object
-                       .genNode("baked beans");                           // ---> finish into named node
+          auto o4 = Rec::Mutator(o2.data.get<Rec>())                         // ...use GenNode o2 as starting point
+                       .appendChild(GenNode("τ", Time(1,2,3,4)))             // a named node with Time value
+                       .scope('*'                                            // a char node
+                             ,"★"                                            // a string node
+                             ,luid                                           // a hash value (LUID)
+                             ,TimeSpan(Time::ZERO, FSecs(23,25))             // a time span
+                             ,MakeRec().type("ham").scope("eggs").genNode()) // a spam object
+                       .genNode("baked beans");                              // ---> finish into named node
           
           CHECK (o4.isNamed());
           CHECK ("baked beans" == o4.idi.getSym());
@@ -202,7 +202,7 @@ namespace test{
           ++scope;
           auto spam = *scope;
           CHECK (!++scope);
-          CHECK ("ham" == spam.getType());
+          CHECK ("ham" == spam.data.get<Rec>().getType());
           CHECK (spam.contains (GenNode("eggs")));
           
           // but while o4 was based on o2,
@@ -215,7 +215,7 @@ namespace test{
       void
       symbolReference()
         {
-          GenNode ham = Rec().type("spam").attrib("τ", Time(23,42)).genNode("egg bacon sausage and spam");
+          GenNode ham = MakeRec().type("spam").attrib("τ", Time(23,42)).genNode("egg bacon sausage and spam");
 
           GenNode::ID hamID(ham);
           CHECK (hamID == ham.idi);

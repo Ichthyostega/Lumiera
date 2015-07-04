@@ -123,6 +123,7 @@ namespace diff{
   class GenNode;
   
   using Rec = Record<GenNode>;
+  using MakeRec = Rec::Mutator;
   using DataValues = meta::Types<int
                                 ,int64_t
                                 ,short
@@ -232,6 +233,19 @@ namespace diff{
         {
           return util::startsWith (idi.getSym(), "_CHILD_");
         }
+      
+      bool
+      contains (GenNode const&)  const
+        {
+          UNIMPLEMENTED("containment check");
+        }
+      
+      bool
+      contains (ID const&)  const
+        {
+          UNIMPLEMENTED("containment check by ID");
+        }
+      
       
       friend string
       name (GenNode const& node)

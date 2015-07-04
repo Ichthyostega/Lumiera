@@ -246,44 +246,6 @@ namespace diff{
       
       
       
-      /* ==== extension point for fluent builder API ====== */
-      
-      // to initiate and open builder chain:
-      Mutator
-      type (string const& typeID)
-        {
-          return Mutator(*this).type(typeID);
-        }
-      
-      template<typename...ARGS>
-      Mutator
-      attrib (ARGS&& ...args)
-        {
-          return Mutator(*this).attrib(std::forward<ARGS>(args)...);
-        }
-      
-      template<typename...ARGS>
-      Mutator
-      scope (ARGS&& ...args)
-        {
-          return Mutator(*this).scope(std::forward<ARGS>(args)...);
-        }
-      
-      // to close and finish builder chain (needs specialisation)
-      VAL&&
-      genNode()
-        {
-          return Mutator(*this).genNode();
-        }
-      
-      VAL&&
-      genNode(string const& symbolicID)
-        {
-          return Mutator(*this).genNode(symbolicID);
-        }
-      
-      
-      
       /* ==== Exposing scope and contents for iteration ====== */
       
       using iterator  = IterAdapter<typename _Vec::const_iterator, const Record*>;
@@ -370,6 +332,10 @@ namespace diff{
       Rec record_;
       
     public:
+      Mutator()
+        : record_()
+        { }
+      
       explicit
       Mutator (Rec const& startingPoint)
         : record_(startingPoint)
