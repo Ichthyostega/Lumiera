@@ -131,7 +131,6 @@ namespace diff{
   class Record
     {
       using _Vec = std::vector<VAL>;
-      using Attrib = std::pair<Symbol, VAL>;
       using Attribs = _Vec;
       using Children = _Vec;
       
@@ -247,6 +246,44 @@ namespace diff{
       
       
       
+      /* ==== extension point for fluent builder API ====== */
+      
+      // to initiate and open builder chain:
+      Mutator
+      type (string const& typeID)
+        {
+          return Mutator(*this).type(typeID);
+        }
+      
+      template<typename...ARGS>
+      Mutator
+      attrib (ARGS&& ...args)
+        {
+          return Mutator(*this).attrib(std::forward<ARGS>(args)...);
+        }
+      
+      template<typename...ARGS>
+      Mutator
+      scope (ARGS&& ...args)
+        {
+          return Mutator(*this).scope(std::forward<ARGS>(args)...);
+        }
+      
+      // to close and finish builder chain (needs specialisation)
+      VAL&&
+      genNode()
+        {
+          return Mutator(*this).genNode();
+        }
+      
+      VAL&&
+      genNode(string const& symbolicID)
+        {
+          return Mutator(*this).genNode(symbolicID);
+        }
+      
+      
+      
       /* ==== Exposing scope and contents for iteration ====== */
       
       using iterator  = IterAdapter<typename _Vec::const_iterator, const Record*>;
@@ -354,6 +391,12 @@ namespace diff{
           std::swap (existingInstance, record_);
         }
       
+      bool
+      empty()  const
+        {
+          return record_.empty();
+        }
+      
       
       /* === functions to alter contents === */
       
@@ -364,29 +407,52 @@ namespace diff{
           record_.type_ = newTypeID;
         }
       
-      void
+      Mutator&
+      type (string const& typeID)
+        {
+          setType (typeID);
+          return *this;
+        }
+      
+      Mutator&
       set (string const& key, VAL const& newValue)
         {
           ///////////TODO;
+          return *this;
         }
       
-      void
+      Mutator&
       appendChild (VAL const& newChild)
         {
           record_.children_.push_back (newChild);
+          return *this;
         }
       
-      void
+      Mutator&
       prependChild (VAL const& newChild)
         {
           record_.children_.insert (record_.children_.begin(), newChild);
+          return *this;
         }
       
-      bool
-      empty()  const
-        {
-          return record_.empty();
-        }
+      
+      /* === extension point for building specific value types === */
+      /*
+       * the following builder functions are to be specialised
+       * to create a Record holding specific value types,
+       * especially for building a tree like structure
+       * with GenNode holding a Record<GenNode>
+       */
+      
+      VAL&& genNode();
+      VAL&& genNode(string const& symbolicID);
+      
+      template<typename...ARGS>
+      Mutator& attrib (ARGS&& ...);
+      
+      template<typename...ARGS>
+      Mutator& scope (ARGS&& ...);
+      
     };
   
   

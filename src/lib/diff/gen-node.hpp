@@ -263,6 +263,39 @@ namespace diff{
   
   
   
+  /* === Specialisation to add fluent GenNode builder API to Record<GenNode> === */
+  
+  template<>
+  inline GenNode&&
+  Rec::Mutator::genNode()
+  {
+    UNIMPLEMENTED("wrap newly built Record into a new GenNode instance");
+  }
+  
+  template<>
+  inline GenNode&&
+  Rec::Mutator::genNode(string const& symbolicID)
+  {
+    UNIMPLEMENTED("wrap newly built Record into a new named GenNode instance");
+  }
+  
+  template<>
+  template<typename...ARGS>
+  inline Rec::Mutator&
+  Rec::Mutator::attrib (ARGS&& ...args)
+  {
+    UNIMPLEMENTED("split sequence of arguments into key-value pairs and use these to populate the attributes collection");
+  }
+  
+  template<>
+  template<typename...ARGS>
+  inline Rec::Mutator&
+  Rec::Mutator::scope (ARGS&& ...args)
+  {
+    UNIMPLEMENTED("split sequence of arguments and build GenNode instances from them, to populate scope collection");
+  }
+  
+  
   /* === Specialisation for handling of attributes in Record<GenNode> === */
   
   template<>

@@ -196,8 +196,78 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1435973418262" ID="ID_1847939996" MODIFIED="1435973701272">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Object <b>builder</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="pencil"/>
+<node CREATED="1435973448902" ID="ID_1729239555" MODIFIED="1435973564507" TEXT="wie definieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem ist, wir definieren den Typ Record generisch,
+    </p>
+    <p>
+      verwenden dann aber nur die spezialisierung Record&lt;GenNode&gt;
+    </p>
+    <p>
+      Und die Builder-Funktionen brauchen eigentlich spezielles Wissen &#252;ber den zu konstruierenden Zieltyp
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
 </node>
-<node CREATED="1434128179406" ID="ID_1833179523" MODIFIED="1434129153311" TEXT="Referez">
+<node CREATED="1435973566277" ID="ID_1320441333" MODIFIED="1435973686783">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ergebnis move
+    </p>
+    <p>
+      <font size="1">pro / contra</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Move ist <b>gef&#228;hrlich </b>
+    </p>
+    <p>
+      aber auch deutlich effizienter,
+    </p>
+    <p>
+      denn wir m&#252;ssen sonst das ganze erzeugte Ergebnis einmal kopieren.
+    </p>
+    <p>
+      Nicht sicher, ob der Optimiser das hinbekommt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1434128179406" HGAP="25" ID="ID_1833179523" MODIFIED="1435973696882" TEXT="Referez" VSHIFT="13">
 <icon BUILTIN="pencil"/>
 <node CREATED="1434129158157" ID="ID_1777328498" MODIFIED="1434129165457" TEXT="sicher dereferenzierbar">
 <node CREATED="1434205928410" ID="ID_733269570" MODIFIED="1434205947253" TEXT="entweder zwangsweise gebunden"/>
