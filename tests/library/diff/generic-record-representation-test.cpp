@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-util.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"       //////TODO necessary?

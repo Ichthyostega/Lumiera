@@ -88,8 +88,8 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/itertools.hpp"
+#include "lib/util.hpp"
 
-//#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
 #include <boost/noncopyable.hpp>
 
@@ -122,10 +122,10 @@ namespace diff{
    * syntax. Yet the most relevant use case is \c Record<GenNode> -- using the
    * embedded name-ID of the GenNode elements as key for attributes.
    * 
-   * Recode elements meant to be immutable; they can be created from a
+   * Record elements are meant to be immutable; they can be created from a
    * defining collection. However, we provide a #Mutator mechanism to allow
    * for rebuilding and mutating symbolic data structures based on Records
-   * and GenNode. Especially, Lumiera's diff framework relies on this.
+   * and GenNode. Essentially, Lumiera's diff framework relies on this.
    */
   template<typename VAL>
   class Record
@@ -180,10 +180,8 @@ namespace diff{
       // all default copy operations acceptable
       
       
-      operator std::string()  const
-        {
-          return "nebbich";  ////TODO
-        }
+      /** for diagnostic purpose, include format-util.hpp */
+      operator std::string()  const;
       
       
       bool
@@ -206,9 +204,9 @@ namespace diff{
         }
       
       bool
-      contains (VAL const& ref)  const
+      contains (VAL const& val)  const
         {
-          return false; ////TODO
+          return util::contains (children_, val);
         }
       
       VAL const&
@@ -304,6 +302,7 @@ namespace diff{
       static bool   isTypeID (VAL const& v);
       static string extractTypeID (VAL const& v);
       static VAL    buildTypeAttribute (string const& typeID);
+      static string renderAttribute (VAL const& a);
       static string extractKey (VAL const& v);
       static VAL    extractVal (VAL const& v);
       
@@ -559,6 +558,37 @@ namespace diff{
   Record<string>::extractVal (string const& v)
   {
     return string(); ///TODO
+  }
+  
+  template<>
+  inline string
+  Record<string>::renderAttribute (string const& attrib)
+  {
+    return extractKey(attrib) + " = " + string(extractVal(attrib));
+  }
+  
+  
+  
+  
+  
+  /* === Diagnostics === */
+  
+  template<typename VAL>
+  Record<VAL>::operator std::string()  const
+  {
+#ifndef LIB_FORMAT_UTIL_H
+    return "Record(...)";
+#else
+    using util::join;
+    using lib::transformIterator;
+    
+    return "Rec("
+         + join (transformIterator (this->attribs(), renderAttribute))
+         + "|{"
+         + join (this->scope())
+         + "})"
+         ;
+#endif
   }
   
   

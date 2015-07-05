@@ -52,7 +52,7 @@
 </node>
 </node>
 <node CREATED="1434128174030" ID="ID_1395250463" MODIFIED="1434128176521" TEXT="Variant">
-<node CREATED="1435943070542" ID="ID_949070153" MODIFIED="1435943252759" TEXT="Wert-Semantik">
+<node CREATED="1435943070542" FOLDED="true" ID="ID_949070153" MODIFIED="1436042653604" TEXT="Wert-Semantik">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1435943077974" ID="ID_280152814" MODIFIED="1435943080682" TEXT="kopierbar"/>
 <node CREATED="1435943081438" ID="ID_159359464" MODIFIED="1435943083738" TEXT="zuweisbar"/>
@@ -112,8 +112,23 @@
 <node CREATED="1434128217645" ID="ID_1790054544" MODIFIED="1434128220257" TEXT="Monade">
 <node CREATED="1435932580854" ID="ID_1307223527" MODIFIED="1435932586137" TEXT="Daten einwickeln">
 <node CREATED="1435932589853" ID="ID_180643071" MODIFIED="1435932595665" TEXT="ctor forward"/>
-<node CREATED="1435932598197" ID="ID_951223738" MODIFIED="1435932608318" TEXT="Problem mit copy ctor">
+<node CREATED="1435932598197" FOLDED="true" ID="ID_951223738" MODIFIED="1436042636423" TEXT="Problem mit copy ctor">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erledigt... &#228;hm vertagt
+    </p>
+    <p>
+      aber nicht wirklich; der workaround k&#246;nnte schon die L&#246;sung sein #963
+    </p>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1435932667701" HGAP="22" ID="ID_1069242347" MODIFIED="1435932709198" TEXT="Copy matcht generischen ctor" VSHIFT="-9">
 <icon BUILTIN="idea"/>
 <node CREATED="1435932714261" ID="ID_1395890846" MODIFIED="1435932719281" TEXT="gleiches Problem schon bei Variant"/>
@@ -178,8 +193,10 @@
 </node>
 </node>
 <node CREATED="1434128176918" ID="ID_863330674" MODIFIED="1434128195333" TEXT="Record">
-<node CREATED="1434128198957" ID="ID_1224215957" MODIFIED="1434128203817" TEXT="Konstuktor">
-<node CREATED="1434421381345" ID="ID_752165044" MODIFIED="1434421402225" TEXT="DSL zur Daten-Definition"/>
+<node CREATED="1434128198957" FOLDED="true" ID="ID_1224215957" MODIFIED="1436042755923" TEXT="Konstuktor">
+<node CREATED="1434421381345" ID="ID_752165044" MODIFIED="1436042396321" TEXT="DSL zur Daten-Definition">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1434421403406" ID="ID_1085825017" MODIFIED="1434421414073" TEXT="Alternative zur Diff-Repr&#xe4;sentation"/>
 <node CREATED="1434421422582" ID="ID_1730569377" MODIFIED="1434421448187">
 <richcontent TYPE="NODE"><html>
@@ -196,7 +213,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1435973418262" ID="ID_1847939996" MODIFIED="1435973701272">
+<node CREATED="1435973418262" FOLDED="true" ID="ID_1847939996" MODIFIED="1436042569752">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -208,7 +225,6 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="pencil"/>
 <node CREATED="1435973448902" ID="ID_1729239555" MODIFIED="1435973564507" TEXT="wie definieren">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -228,6 +244,22 @@
 </html>
 </richcontent>
 <icon BUILTIN="help"/>
+<node CREATED="1436042433806" ID="ID_601307933" MODIFIED="1436042451130" TEXT="Erweiterungspunkt"/>
+<node CREATED="1436042451694" ID="ID_1270184731" MODIFIED="1436042458786" TEXT="durch explizite Spezialiserung"/>
+<node CREATED="1436042460726" ID="ID_818066421" MODIFIED="1436042468802" TEXT="nur f&#xfc;r genNode()"/>
+<node CREATED="1436042480886" ID="ID_1194557524" MODIFIED="1436042502641">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Mutator selber is <i>noncopyable</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1435973566277" ID="ID_1320441333" MODIFIED="1435973686783">
 <richcontent TYPE="NODE"><html>
@@ -264,20 +296,53 @@
   </body>
 </html>
 </richcontent>
+<node CREATED="1436042507254" ID="ID_1832904297" MODIFIED="1436042518877">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>nur</i>&#160;auf dem Mutator
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1436042520942" ID="ID_1700762999" MODIFIED="1436042539843">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dieser ist nicht kopierbar
+    </p>
+    <p>
+      und mu&#223; dediziert erstellt werden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1436042542502" ID="ID_890092502" MODIFIED="1436042552578" TEXT="move passiert immer explizit"/>
 </node>
 </node>
 </node>
-<node CREATED="1434128179406" HGAP="25" ID="ID_1833179523" MODIFIED="1435973696882" TEXT="Referez" VSHIFT="13">
-<icon BUILTIN="pencil"/>
-<node CREATED="1434129158157" ID="ID_1777328498" MODIFIED="1434129165457" TEXT="sicher dereferenzierbar">
+<node CREATED="1436042774669" ID="ID_714336641" MODIFIED="1436042778888" TEXT="Implementierung">
+<node CREATED="1436042783700" ID="ID_381817780" MODIFIED="1436042788584" TEXT="zwei Collections"/>
+<node CREATED="1436042814044" ID="ID_1455779230" MODIFIED="1436042818312" TEXT="aber semantisch eine Liste"/>
+</node>
+<node CREATED="1434128179406" HGAP="25" ID="ID_1833179523" MODIFIED="1436042759827" TEXT="Referez" VSHIFT="13">
+<node CREATED="1434129158157" FOLDED="true" ID="ID_1777328498" MODIFIED="1436042674403" TEXT="sicher dereferenzierbar">
 <node CREATED="1434205928410" ID="ID_733269570" MODIFIED="1434205947253" TEXT="entweder zwangsweise gebunden"/>
 <node CREATED="1434205947841" ID="ID_871233558" MODIFIED="1434205955964" TEXT="oder NULL-Zustand mit Exception"/>
 <node CREATED="1434205957177" ID="ID_499991180" MODIFIED="1434205968740" TEXT="inherente Unsicherheit einer Referenz"/>
 </node>
-<node CREATED="1434129167805" ID="ID_819452470" MODIFIED="1434239007746" TEXT="stand-in">
+<node CREATED="1434129167805" FOLDED="true" ID="ID_819452470" MODIFIED="1436042676724" TEXT="stand-in">
 <arrowlink COLOR="#00ff33" DESTINATION="ID_654762061" ENDARROW="Default" ENDINCLINATION="-390;37;" ID="Arrow_ID_724106052" STARTARROW="Default" STARTINCLINATION="-48;187;"/>
 <icon BUILTIN="help"/>
-<node CREATED="1434129196709" ID="ID_1004519740" MODIFIED="1434238947122" TEXT="Subklasse von Rec">
+<node CREATED="1434129196709" ID="ID_1004519740" MODIFIED="1436042656829" TEXT="Subklasse von Rec">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -287,7 +352,8 @@
       scheidet aus, wegen Wertsemantik
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1434129204149" ID="ID_1688475597" MODIFIED="1434236628128" TEXT="GenNode">
@@ -327,7 +393,7 @@
 </node>
 <node CREATED="1434128412934" ID="ID_1319614474" MODIFIED="1436021920247" TEXT="Repr&#xe4;s entscheiden">
 <icon BUILTIN="go"/>
-<node CREATED="1434128438565" ID="ID_913220298" MODIFIED="1434128678545" TEXT="als ID erkennbar">
+<node CREATED="1434128438565" FOLDED="true" ID="ID_913220298" MODIFIED="1436042700635" TEXT="als ID erkennbar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -337,10 +403,11 @@
       hei&#223;t: in der Diff-Verarbeitung wird dieser spezielle check verwendet
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1434128740117" ID="ID_1537979881" MODIFIED="1434128764209" TEXT="spezielles Baumuster"/>
 <node CREATED="1434128764893" ID="ID_1430586148" MODIFIED="1434128768689" TEXT="Gefahr von clashes"/>
-<node CREATED="1434128769325" ID="ID_866845827" MODIFIED="1434128777908" TEXT="entscheide">
+<node CREATED="1434128769325" FOLDED="true" ID="ID_866845827" MODIFIED="1436042692523" TEXT="entscheide">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1434128779661" ID="ID_1739097548" MODIFIED="1434236311060" TEXT="marker-ID + string-Payload">
 <icon BUILTIN="button_cancel"/>
@@ -348,7 +415,7 @@
 <node CREATED="1434128917125" ID="ID_392407967" MODIFIED="1436021562160" TEXT="&quot;fehlkonstruierte&quot; ID + pr&#xfc;f-Pr&#xe4;dikat">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1434128981381" ID="ID_101281763" MODIFIED="1436021564745" TEXT="spezielle Ref-Payload">
+<node CREATED="1434128981381" ID="ID_101281763" MODIFIED="1436042656881" TEXT="spezielle Ref-Payload">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -358,10 +425,11 @@
       m.E. die einzig saubere Desgin-Variante!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1436021576224" ID="ID_1239136010" MODIFIED="1436021889094" TEXT="Begr&#xfc;ndung">
+<node CREATED="1436021576224" FOLDED="true" ID="ID_1239136010" MODIFIED="1436042687348" TEXT="Begr&#xfc;ndung">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1436021581655" ID="ID_124352424" MODIFIED="1436021603779" TEXT="hash-identische ID sorgt f&#xfc;r transparente Integration"/>
@@ -397,7 +465,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1434128446029" ID="ID_1779802587" MODIFIED="1434128654842" TEXT="hash-identisch">
+<node CREATED="1434128446029" FOLDED="true" ID="ID_1779802587" MODIFIED="1436042699628" TEXT="hash-identisch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -407,7 +475,8 @@
       hei&#223;t: wird direkt von standard-equality so behandelt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1434128685597" ID="ID_690649535" MODIFIED="1434128705631">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -512,6 +581,9 @@
 </node>
 <node CREATED="1436019533354" ID="ID_1500539399" MODIFIED="1436019542698" TEXT="Konzept-Bruch">
 <icon BUILTIN="yes"/>
+</node>
+<node CREATED="1436042718309" ID="ID_109270255" MODIFIED="1436042725210" TEXT="Ja!">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 </node>

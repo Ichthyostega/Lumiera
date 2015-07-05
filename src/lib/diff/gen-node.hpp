@@ -237,9 +237,9 @@ namespace diff{
         }
       
       bool
-      contains (GenNode const&)  const
+      contains (GenNode const& elm)  const
         {
-          UNIMPLEMENTED("containment check");
+          return contains (elm.idi);
         }
       
       bool
@@ -386,6 +386,13 @@ namespace diff{
   Rec::extractVal (GenNode const& v)
   {
     return GenNode(v); ///TODO
+  }
+  
+  template<>
+  inline string
+  Rec::renderAttribute (GenNode const& a)
+  {
+    return "notyet = todo"; ////TODO
   }
   
   
