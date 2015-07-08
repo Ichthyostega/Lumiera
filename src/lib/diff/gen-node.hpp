@@ -279,7 +279,7 @@ namespace diff{
       static GenNode::ID
       fabricateRefID (string const& symbolicID)
         {
-          X* typeID;
+          X* typeID(0);
           return ID(typeID, symbolicID);
         }
       

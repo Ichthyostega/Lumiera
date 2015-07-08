@@ -93,6 +93,7 @@
 //#include "lib/format-string.hpp"
 #include <boost/noncopyable.hpp>
 
+#include <algorithm>
 #include <utility>
 #include <vector>
 #include <string>
@@ -133,6 +134,7 @@ namespace diff{
       using _Vec = std::vector<VAL>;
       using Attribs = _Vec;
       using Children = _Vec;
+      using ElmIter = typename _Vec::const_iterator;
       
       string type_;
       Attribs attribs_;
@@ -180,7 +182,7 @@ namespace diff{
       // all default copy operations acceptable
       
       
-      /** for diagnostic purpose, include format-util.hpp */
+      /** for diagnostic purpose: include format-util.hpp */
       operator std::string()  const;
       
       
@@ -200,7 +202,7 @@ namespace diff{
       bool
       hasAttribute (string key)  const
         {
-          return false; ////TODO
+          return attribs_.end() != findKey(key);
         }
       
       bool
@@ -212,7 +214,11 @@ namespace diff{
       VAL const&
       get (string key)  const
         {
-          return "booo"; ////TODO
+          ElmIter found = findKey (key);
+          if (attribs_.end() == found)
+            throw error::Invalid ("Record has no attribute \""+key+"\"");
+          else
+            return *found;
         }
       
       /**
@@ -282,14 +288,14 @@ namespace diff{
       checkPoint (const Record* src, ITER& pos)
         {
           REQUIRE (src);
-          if ((pos != ITER()) && (pos != src->children_.end()))
-            return true;
+          if ((pos != ITER()) && (pos == src->attribs_.end()) && !src->children_.empty())
+            {
+              pos = src->children_.begin();
+              return true;
+            }
           else
-            if (pos != ITER() && (pos == src->attribs_.end()) && !src->children_.empty())
-              {
-                pos = src->children_.begin();
-                return true;
-              }
+            if (pos != ITER() && (pos != src->children_.end()))
+              return true;
             else
               {
                 pos = ITER();
@@ -307,10 +313,24 @@ namespace diff{
       static VAL    extractVal (VAL const& v);
       
       
+      ElmIter
+      findKey (string key)  const
+        {
+          return std::find_if (attribs_.begin()
+                              ,attribs_.end()
+                              ,[=](VAL const& elm)
+                                   {
+                                     return key == extractKey(elm); 
+                                   });
+        }
+      
+      
       friend bool
       operator== (Record const& r1, Record const& r2)
       {
-        return false; ////TODO
+        return r1.type_ == r2.type_
+            && r1.attribs_ == r2.attribs_
+            && r1.children_ == r2.children_;
       }
       
       friend bool
