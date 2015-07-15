@@ -322,7 +322,7 @@ namespace diff{
                                    {
                                      return key == extractKey(elm); 
                                    });
-        }
+        }                     ///////////////////TODO this lambda triggers a GCC-4.7.2 Bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56402
       
       
       friend bool
