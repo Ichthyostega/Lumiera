@@ -539,52 +539,61 @@ namespace diff{
   /* === Specialisations to define the handling of attributes === */
   
   template<>
-  inline bool
-  Record<string>::isAttribute (string const& v)
-  {
-    return false; ////TODO
-  }
-  
-  template<>
-  inline bool
-  Record<string>::isTypeID (string const& v)
-  {
-    return false; ////TODO
-  }
-  
-  template<>
-  inline string
-  Record<string>::extractTypeID (string const& v)
-  {
-    return "todo"; ////TODO
-  }
-  
-  template<>
-  inline string
-  Record<string>::buildTypeAttribute (string const& typeID)
-  {
-    return string(); ///TODO
-  }
-  
-  template<>
   inline string
   Record<string>::extractKey (string const& v)
   {
-    return "todo"; ////TODO
+    size_t pos = v.find('=');
+    if (string::npos == pos)
+      return "";
+    else
+      return v.substr(0,pos);  //////////////////////////////TODO should trim here
   }
   
   template<>
   inline string
   Record<string>::extractVal (string const& v)
   {
-    return string(); ///TODO
+    size_t pos = v.find('=');
+    if (string::npos == pos)
+      return v;
+    else
+      return v.substr(pos+1, v.length() - pos);  ////////////TODO should trim here
+  }
+  
+  template<>
+  inline bool
+  Record<string>::isAttribute (string const& v)
+  {
+    return string::npos != v.find('=');
+  }
+  
+  template<>
+  inline bool
+  Record<string>::isTypeID (string const& v)
+  {
+    return isAttribute(v)
+        && "type" == extractKey(v);
+  }
+  
+  template<>
+  inline string
+  Record<string>::extractTypeID (string const& v)
+  {
+    return "todo"; //////////////////////////////////////////TODO do we really need this function?
+  }
+  
+  template<>
+  inline string
+  Record<string>::buildTypeAttribute (string const& typeID)
+  {
+    return "type = "+typeID;
   }
   
   template<>
   inline string
   Record<string>::renderAttribute (string const& attrib)
   {
-    return extractKey(attrib) + " = " + string(extractVal(attrib));
+    return extractKey(attrib) + " = " + extractVal(attrib);
   }
   
   

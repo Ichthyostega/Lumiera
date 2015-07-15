@@ -69,8 +69,7 @@
       eine Referenz oder einen konstanten Wert verwenden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1435943194398" ID="ID_587131941" MODIFIED="1435943203161" TEXT="GenNode gibt Referenz auf Wert"/>
 <node CREATED="1435943203662" ID="ID_1772960325" MODIFIED="1435943274743" TEXT="const GenNode gibt const&amp;">
@@ -89,8 +88,7 @@
       aber hat eine Builder-Mechanik
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -104,8 +102,7 @@
       eigentlich fehlte nur die get()-Operation
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -125,8 +122,7 @@
       aber nicht wirklich; der workaround k&#246;nnte schon die L&#246;sung sein #963
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1435932667701" HGAP="22" ID="ID_1069242347" MODIFIED="1435932709198" TEXT="Copy matcht generischen ctor" VSHIFT="-9">
@@ -148,8 +144,7 @@
       Und ich wollte keine Zeit auf einen exzessiven Unit-Test verwenden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1435942764328" ID="ID_1740355148" MODIFIED="1435942879414">
 <richcontent TYPE="NODE"><html>
@@ -161,8 +156,7 @@
       generische L&#246;sung verschoben <font color="#990033">#963</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#ff3333" DESTINATION="ID_1935900779" ENDARROW="Default" ENDINCLINATION="188;0;" ID="Arrow_ID_1626382520" STARTARROW="Default" STARTINCLINATION="2;73;"/>
 <icon BUILTIN="button_cancel"/>
 </node>
@@ -176,8 +170,7 @@
       C++11 erlaubt <b>=default</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -223,8 +216,7 @@
       Object <b>builder</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1435973448902" ID="ID_1729239555" MODIFIED="1435973564507" TEXT="wie definieren">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -241,8 +233,7 @@
       Und die Builder-Funktionen brauchen eigentlich spezielles Wissen &#252;ber den zu konstruierenden Zieltyp
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1436042433806" ID="ID_601307933" MODIFIED="1436042451130" TEXT="Erweiterungspunkt"/>
 <node CREATED="1436042451694" ID="ID_1270184731" MODIFIED="1436042458786" TEXT="durch explizite Spezialiserung"/>
@@ -257,8 +248,7 @@
       Mutator selber is <i>noncopyable</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1435973566277" ID="ID_1320441333" MODIFIED="1435973686783">
@@ -274,8 +264,7 @@
       <font size="1">pro / contra</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -294,8 +283,7 @@
       Nicht sicher, ob der Optimiser das hinbekommt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1436042507254" ID="ID_1832904297" MODIFIED="1436042518877">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -306,8 +294,7 @@
       <i>nur</i>&#160;auf dem Mutator
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1436042520942" ID="ID_1700762999" MODIFIED="1436042539843">
 <richcontent TYPE="NODE"><html>
@@ -322,16 +309,49 @@
       und mu&#223; dediziert erstellt werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1436042542502" ID="ID_890092502" MODIFIED="1436042552578" TEXT="move passiert immer explizit"/>
 </node>
 </node>
 </node>
-<node CREATED="1436042774669" ID="ID_714336641" MODIFIED="1436042778888" TEXT="Implementierung">
+<node CREATED="1436042774669" ID="ID_714336641" MODIFIED="1436924649059" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
 <node CREATED="1436042783700" ID="ID_381817780" MODIFIED="1436042788584" TEXT="zwei Collections"/>
 <node CREATED="1436042814044" ID="ID_1455779230" MODIFIED="1436042818312" TEXT="aber semantisch eine Liste"/>
+<node CREATED="1436924462201" ID="ID_1369837914" MODIFIED="1436924596628" TEXT="Probleme">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1436924502056" ID="ID_1085481788" MODIFIED="1436924641777" TEXT="R&#xfc;ckgabetyp von Attribut-Gettern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      m&#246;glicherweise schon gel&#246;st,
+    </p>
+    <p>
+      denn Record ist insgesamt immutable.
+    </p>
+    <p>
+      Also k&#246;nnen wir einen Find mit einem const_iterator machen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1436924529208" ID="ID_1300693998" MODIFIED="1436924556572" TEXT="Handhabung des Typ-Feldes">
+<node CREATED="1436925315589" ID="ID_327577903" MODIFIED="1436925320193" TEXT="herausfiltern">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1436924568352" ID="ID_1243616839" MODIFIED="1436924578280" TEXT="in Attribut-Iterator">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1436924578936" ID="ID_677097690" MODIFIED="1436924588615" TEXT="in Attribut-Collection ablegen">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1434128179406" HGAP="25" ID="ID_1833179523" MODIFIED="1436042759827" TEXT="Referez" VSHIFT="13">
 <node CREATED="1434129158157" FOLDED="true" ID="ID_1777328498" MODIFIED="1436042674403" TEXT="sicher dereferenzierbar">
@@ -352,8 +372,7 @@
       scheidet aus, wegen Wertsemantik
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1434129204149" ID="ID_1688475597" MODIFIED="1434236628128" TEXT="GenNode">
@@ -403,8 +422,7 @@
       hei&#223;t: in der Diff-Verarbeitung wird dieser spezielle check verwendet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1434128740117" ID="ID_1537979881" MODIFIED="1434128764209" TEXT="spezielles Baumuster"/>
 <node CREATED="1434128764893" ID="ID_1430586148" MODIFIED="1434128768689" TEXT="Gefahr von clashes"/>
 <node CREATED="1434128769325" FOLDED="true" ID="ID_866845827" MODIFIED="1436042692523" TEXT="entscheide">
@@ -425,8 +443,7 @@
       m.E. die einzig saubere Desgin-Variante!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1436021576224" FOLDED="true" ID="ID_1239136010" MODIFIED="1436042687348" TEXT="Begr&#xfc;ndung">
@@ -456,8 +473,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1436021719055" ID="ID_1039111553" MODIFIED="1436021730099" TEXT="ist nur ein halber Nachteil"/>
 <node CREATED="1436021731615" ID="ID_1576857183" MODIFIED="1436021741970" TEXT="kann n&#xe4;mlich auch Ausdrucksmittel sein"/>
@@ -475,8 +491,7 @@
       hei&#223;t: wird direkt von standard-equality so behandelt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1434128685597" ID="ID_690649535" MODIFIED="1434128705631">
 <richcontent TYPE="NODE"><html>
   <head>
