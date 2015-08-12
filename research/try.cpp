@@ -27,71 +27,125 @@
 // 7/14  - c++11 transition: std hash function vs. boost hash
 // 9/14  - variadic templates and perfect forwarding
 // 11/14 - pointer to member functions and name mangling
+// 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
 
 
 /** @file try.cpp
- ** Investigation: member function pointers, types and name mangling.
+ ** Investigation: Segfault when loading into GDB (on Debian/Jessie 64bit)
  **
  */
 
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
+#include "lib/format-util.hpp"
+#include "lib/diff/record.hpp"
+#include "lib/itertools.hpp"
+#include "lib/util.hpp"       //////TODO necessary?
 
-#include <cstddef>
 #include <iostream>
+//#include <utility>
 #include <string>
-
-using lib::test::showType;
-using lib::test::demangleCxx;
+#include <vector>
 
 using std::string;
+using util::isSameObject;
+using util::isnil;
+using std::vector;
+//using std::swap;
 using std::cout;
 using std::endl;
 
-class Interface
-  {
-  public:
-    virtual ~Interface() { } ///< this is an interface
-    
-    virtual string moo()    =0;
-    virtual string boo()    =0;
-  };
 
-class Impl
-  : public Interface
-  {
-    string s_;
+namespace lib {
+namespace diff{
+namespace test{
+  
+//  using lumiera::error::LUMIERA_ERROR_LOGIC;
+  using lumiera::error::LUMIERA_ERROR_INVALID;
+  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
+  
+  namespace {//Test fixture....
     
-    string moo() { return s_ + " Moo"; }
-    string boo() { return s_ + " Boo"; }
+    using Seq  = vector<string>;
+    using RecS = Record<string>;
     
-  public:
-    Impl(string ss ="IMP")
-      : s_(ss)
-      { }
-  };
+    template<class IT>
+    inline Seq
+    contents (IT const& it)
+    {
+      Seq collected;
+      append_all (it, collected);
+      return collected;
+    }
+    
+    inline Seq
+    contents (RecS const& rec_of_strings)
+    {
+      return contents (rec_of_strings.begin());
+    }
+    
+    template<class X>
+    inline Seq
+    strings (std::initializer_list<X> const& con)
+    {
+      Seq collected;
+      for (auto elm : con)
+        collected.push_back(elm);
+      return collected;
+    }
+    
+    
+  }//(End)Test fixture
+  
+  
+  
+  
+  
+  
+  
+  /*************************************************************************************//**
+   * @test Verify properties of a special collection type meant for external representation
+   *       of object-like data.
+   *       
+   * @see IndexTable
+   * @see DiffListApplication_test
+   */
+  class GenericRecordRepresentation_test//  : public Test
+    {
+    public:
+      virtual void
+      run ()
+        {
+          simpleUsage();
+        }
+      
+      
+      void
+      simpleUsage()
+        {
+          RecS enterprise("starship"
+                         , strings ({"Name = USS Enterprise"
+                                    ,"Registry = NCC-1701-D"
+                                    ,"Class = Galaxy"
+                                    ,"Owner = United Federation of Planets"
+                                    ,"built=2363"
+                                   })
+                         , strings ({"Picard", "Riker", "Data", "Troi", "Worf", "Crusher", "La Forge"})
+                         );
+          
+          cout << "enterprise = " << string(enterprise)<<endl;
+        }
+    };
 
+}}}
 
 
 
 int
 main (int, char**)
   {
-    Impl obj;
-    Interface& ref = obj;
-    
-    typedef string (Interface::*Memfun) (void);
-    
-    
-    cout << "before call. Address... "<<&ref<<"\n";
-    
-    cout << ref.moo() << endl;
-    cout << ref.boo() << endl;
-    
-    Memfun memfun = &Interface::moo;
-    cout << demangleCxx (showType (memfun)) << endl;
-    cout << demangleCxx (showType(&Interface::moo)) << endl;
-    cout << (ref.*memfun) () << endl;
+    lib::diff::test::GenericRecordRepresentation_test mist;
+    mist.run();
     
     cout <<  "\n.gulp.\n";
     
