@@ -36,7 +36,10 @@
  */
 
 #include "lib/test/test-helper.hpp"
-#include "lib/format-util.hpp"
+//#include "lib/format-util.hpp"
+#include "lib/meta/trait.hpp"
+#include "lib/itertools.hpp"
+#include "lib/symbol.hpp"
 
 #include <iostream>
 #include <string>
@@ -47,6 +50,46 @@ using std::vector;
 using std::cout;
 using std::endl;
 
+
+  namespace { // helper to build range iterator on demand
+    template<class CON, typename TOGGLE = void>
+    struct _RangeIter
+      {
+        using StlIter = typename CON::const_iterator;
+        
+        lib::RangeIter<StlIter> iter;
+        
+        _RangeIter(CON const& collection)
+          : iter(begin(collection), end(collection))
+          { }
+      };
+    
+  }
+
+
+template<class CON>
+inline string
+join (CON&& coll, string const& delim =", ")
+{
+  using Coll = typename lib::meta::Strip<CON>::Type;
+  using Val =  typename Coll::value_type;
+  
+  std::function<string(Val const&)> toString = [] (Val const& val) { return string(val); };
+  
+  _RangeIter<Coll> range(std::forward<Coll>(coll));
+  auto strings = lib::transformIterator(range.iter, toString);
+  
+  if (!strings) return "";
+  
+  std::ostringstream buffer;
+  for (string const& elm : strings)
+      buffer << elm << delim;
+  
+  // chop off last delimiter
+  size_t len = buffer.str().length();
+  ASSERT (len > delim.length());
+  return buffer.str().substr(0, len - delim.length());
+}
 
 
 
@@ -62,7 +105,7 @@ main (int, char**)
     crew.push_back("Crusher");
     crew.push_back("La Forge");
     
-    cout << "enterprise = " << util::join(crew)<<endl;
+    cout << "enterprise = " << join(crew)<<endl;
     
     cout <<  "\n.gulp.\n";
     
