@@ -36,116 +36,33 @@
  */
 
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
 #include "lib/format-util.hpp"
-#include "lib/diff/record.hpp"
-#include "lib/itertools.hpp"
-#include "lib/util.hpp"       //////TODO necessary?
 
 #include <iostream>
-//#include <utility>
 #include <string>
 #include <vector>
 
 using std::string;
-using util::isSameObject;
-using util::isnil;
 using std::vector;
-//using std::swap;
 using std::cout;
 using std::endl;
 
-
-namespace lib {
-namespace diff{
-namespace test{
-  
-//  using lumiera::error::LUMIERA_ERROR_LOGIC;
-  using lumiera::error::LUMIERA_ERROR_INVALID;
-  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
-  
-  namespace {//Test fixture....
-    
-    using Seq  = vector<string>;
-    using RecS = Record<string>;
-    
-    template<class IT>
-    inline Seq
-    contents (IT const& it)
-    {
-      Seq collected;
-      append_all (it, collected);
-      return collected;
-    }
-    
-    inline Seq
-    contents (RecS const& rec_of_strings)
-    {
-      return contents (rec_of_strings.begin());
-    }
-    
-    template<class X>
-    inline Seq
-    strings (std::initializer_list<X> const& con)
-    {
-      Seq collected;
-      for (auto elm : con)
-        collected.push_back(elm);
-      return collected;
-    }
-    
-    
-  }//(End)Test fixture
-  
-  
-  
-  
-  
-  
-  
-  /*************************************************************************************//**
-   * @test Verify properties of a special collection type meant for external representation
-   *       of object-like data.
-   *       
-   * @see IndexTable
-   * @see DiffListApplication_test
-   */
-  class GenericRecordRepresentation_test//  : public Test
-    {
-    public:
-      virtual void
-      run ()
-        {
-          simpleUsage();
-        }
-      
-      
-      void
-      simpleUsage()
-        {
-          RecS enterprise("starship"
-                         , strings ({"Name = USS Enterprise"
-                                    ,"Registry = NCC-1701-D"
-                                    ,"Class = Galaxy"
-                                    ,"Owner = United Federation of Planets"
-                                    ,"built=2363"
-                                   })
-                         , strings ({"Picard", "Riker", "Data", "Troi", "Worf", "Crusher", "La Forge"})
-                         );
-          
-          cout << "enterprise = " << string(enterprise)<<endl;
-        }
-    };
-
-}}}
 
 
 
 int
 main (int, char**)
   {
-    lib::diff::test::GenericRecordRepresentation_test mist;
-    mist.run();
+    vector<string> crew;
+    crew.push_back("Picard");
+    crew.push_back("Riker");
+    crew.push_back("Data");
+    crew.push_back("Troi");
+    crew.push_back("Worf");
+    crew.push_back("Crusher");
+    crew.push_back("La Forge");
+    
+    cout << "enterprise = " << util::join(crew)<<endl;
     
     cout <<  "\n.gulp.\n";
     
