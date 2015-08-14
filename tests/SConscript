@@ -68,7 +68,7 @@ def testCases(env,dir):
 # force explicit linking against all dependencies to ensure auto-registration of
 # any test-class on startup, even if no code dependency is visible for the linker 
 envSuite = env.Clone()
-envSuite.Append(LINKFLAGS='-Wl,--no-as-needed') 
+envSuite.Append(LINKFLAGS='-Wl,--no-as-needed')
 
 
 # have to treat some subdirs separately.
@@ -93,9 +93,8 @@ Export('testsuite')
 
 
 # for creating a Valgrind-Suppression file
-vgsuppr = env.Program('vgsuppression',['tool/vgsuppression.c']+core_lib)   ## for suppressing false valgrind alarms
-tools  += [vgsuppr]
-Depends(testsuite,vgsuppr)
+vgsuppression = envSuite.Program('vgsuppression',['tool/vgsuppression.c']+testLibs+core_lib)   ## for suppressing false valgrind alarms
+tools  += [vgsuppression]
 
 
 #
@@ -132,6 +131,7 @@ testDir = env.Dir('#$TARGDIR')
 runTest = env.File("test.sh").abspath
 
 runTests = testEnv.Command('#$TARGDIR/,testlog', testsuite, runTest,  chdir=testDir)
+Depends(runTests,vgsuppression)
 
 
 
