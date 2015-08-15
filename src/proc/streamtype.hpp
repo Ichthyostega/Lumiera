@@ -34,7 +34,6 @@
 #ifndef PROC_STREAMTYPE_H
 #define PROC_STREAMTYPE_H
 
-
 #include "lib/symbol.hpp"
 //#include "common/query.hpp"
 #include "proc/asset/entry-id.hpp"
@@ -45,10 +44,12 @@
 namespace proc {
   
   using lib::Symbol;
-  
+
+// "yes mummy, we all know this code is not finished yet..."
+#pragma GCC diagnostic ignored "-Wuninitialized"
   
   /**
-   * TODO write type comment
+   * @todo this is just a draft to show the general idea....
    */
   struct StreamType : boost::noncopyable
     {
@@ -81,7 +82,7 @@ namespace proc {
       Usage intentionTag;
       
     };
-  
+#pragma GCC diagnostic pop
   
   
   /**
