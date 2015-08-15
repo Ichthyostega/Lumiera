@@ -38,7 +38,7 @@
  ** to use this boost-style custom hash function if applicable. To allow for such an automatic bridge,
  ** we have to work around aforementioned problem with the static assertion. Recent discussion threads
  ** indicate that the GCC and Clang developers are aware of those likely unintended side effects of a
- ** well mentioned hint for people to implement their own hash functions. AFAIK, the standard lib shipping
+ ** well meant hint for people to implement their own hash functions. AFAIK, the standard lib shipping
  ** with some GCC 4.8.x doesn't contain the assertion anymore; and there are plans to adopt the boost style
  ** extension mechanism and provide such a bridge in the standard library at some point in the future.
  ** 
@@ -78,13 +78,11 @@
 namespace lib {
 namespace meta {
   
-  namespace {
-    struct NoUsableHashDefinition { size_t more_than_one[2]; };
-    typedef size_t HasUsableHashDefinition;
-    
-    NoUsableHashDefinition hash_value(...);
-    
-  }
+  struct NoUsableHashDefinition { size_t more_than_one[2]; };
+  typedef size_t HasUsableHashDefinition;
+  
+  NoUsableHashDefinition hash_value(...);  ///< declared for metaprogramming only, never defined
+  
   
   /**
    * trait template to detect if some custom type TY
