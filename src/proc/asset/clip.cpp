@@ -49,7 +49,7 @@ namespace asset {
                            mediaref.ident.version );
     }
     
-    Media::PClipMO
+    Media::PClip
     createClipMO (const Clip& thisClipAsset, const Media& mediaChannel)
     {
       return mobject::MObject::create (thisClipAsset,mediaChannel);
@@ -64,9 +64,9 @@ namespace asset {
              mediaref.getLength())
     , source_ (mediaref) 
     , clipMO_ (createClipMO (*this, source_))
-  {
-    this->defineDependency (mediaref);
-  }
+    {
+      this->defineDependency (mediaref);
+    }
   
   
   /** Specialisation of the asset::Media interface method,
@@ -76,7 +76,7 @@ namespace asset {
    *  Placements or no placement at all (meaning it need not
    *  be placed within the session) 
    */
-  Media::PClipMO 
+  Media::PClip
   Clip::createClip ()  const
   {
     return clipMO_;
@@ -87,7 +87,7 @@ namespace asset {
   /** return this wrapped into a shared ptr,
    *   because it's already the desired asset::Clip
    */
-  Media::PClip
+  Media::PClipAsset
   Clip::getClipAsset ()
   {
     return AssetManager::wrap (*this);

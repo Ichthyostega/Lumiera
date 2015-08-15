@@ -78,7 +78,7 @@ namespace asset {
   
   
   class Sequence;
-  typedef P<Sequence> PSequence;
+  typedef lib::P<Sequence> PSequence;
    
   
   
@@ -103,7 +103,6 @@ namespace asset {
     };
     
   
-  typedef P<Sequence> PSequence;
   
 ///////////////////////////TODO currently just fleshing the API
   

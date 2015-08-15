@@ -80,7 +80,7 @@ namespace asset {
   
   
   class Timeline;
-  typedef P<Timeline> PTimeline;
+  typedef lib::P<Timeline> PTimeline;
   
   
   /**

@@ -1970,7 +1970,7 @@ It would thus be desirable to have a fixed-sized allocation, able to hold the pl
 !!!Storage
 Explicit placements are value objects and stored at the respective usage site, most notably the [[Segmentation]]. They are //not// attached to the placement index in the session, nor do they bear any referential or indexing semantics. The only dynamic side effect of an explicit placement is to keep the reference count of the corresponding MObject up and thus keep it alive and  accessible.</pre>
 </div>
-<div title="ExternalTreeDescription" creator="Ichthyostega" modifier="Ichthyostega" created="201505081647" modified="201505090059" tags="Concepts Model design spec draft" changecount="19">
+<div title="ExternalTreeDescription" creator="Ichthyostega" modifier="Ichthyostega" created="201505081647" modified="201506121606" tags="Concepts Model design spec draft" changecount="27">
 <pre>//to symbolically represent hierarchically structured elements, without actually implementing them.//
 The purpose of this »external« description is to remove the need of a central data model to work against. We consider such a foundation data model as a good starting point, yet harmful for the evolution of any larger structure to be built. According to the subsidiarity principle, we prefer to turn the working data representation into a local concern. Which leaves us with the issue of collaboration. Any collaboration requires, as an underlying, some kind of common understanding. And any formalised, mechanical collaboration requires to represent that common point of attachment -- at least as symbolic representation. The ExternalTreeDescription is shaped to fulfil this need: //in theory,// the whole field could be represented, symbolically, as a network of hierarchically structured elements. Yet, //in practice,// all we need is to conceive the presence of such a representation, as a backdrop to work against. And we do so -- we work against that symbolic representation, by describing ''changes'' made to the structure and its elements. Thus, the description of changes, the ''diff language'', refers to and partially embodies such symbolically represented elements and relations.
 &amp;rarr; TreeDiffFundamentals
@@ -1985,9 +1985,9 @@ For practical purposes, we have to introduce some distinctions and limitations.
 * to the contrary, a Record has an associated, symbolic type-ID, plus it can potentially be associated with and thus relate to further elements, with the relation originating at the Record.
 * and we distinguish two different kinds of relations possibly originating from a Record:
 ** ''attributes'' are known by-name; they can be addressed through this name-ID as a key, while the value is again a generic node, possibly even another record.
-** ''children'' to the contrary can only be ennumerated; they are considered to be within (and form) the ''scope'' of the given Record (object).
+** ''children'' to the contrary can only be enumerated; they are considered to be within (and form) the ''scope'' of the given Record (object).
 
-And there is a further limitation: Tthe domain of possible data is fixed, even hard wired. Implementation-wise, this turns the data within the generic node into a »Variant« (typesafe union). Basically, this opens two different ways to //access// the data within a given GenNode: either you know the type to expect beforehand (and the validity of this assumption is checked on each access; please recall, all of this is meant for symbolic representation, not for implementation of high performance computing). Or we offer the ability for //generic access// through a ''variant visitor'' (double dispatch). The latter includes the option not to handle all possible content types (making the variant visitor a //partial function// -- as in any non exhaustive pattern match).
+And there is a further limitation: The domain of possible data is fixed, even hard wired. Implementation-wise, this turns the data within the generic node into a »Variant« (typesafe union). Basically, this opens two different ways to //access// the data within a given GenNode: either you know the type to expect beforehand (and the validity of this assumption is checked on each access; please recall, all of this is meant for symbolic representation, not for implementation of high performance computing). Or we offer the ability for //generic access// through a ''variant visitor'' (double dispatch). The latter includes the option not to handle all possible content types (making the variant visitor a //partial function// -- as in any non exhaustive pattern match).
 
 Basically, you can expect to encounter the following kinds of data
 *{{{int}}}, {{{int64_t}}}, {{{short}}}, {{{char}}}
@@ -2010,16 +2010,16 @@ Operationally, a modad can be constructed to wrap-up and embody a given element.
 Now, the interesting question is: //what does &quot;join&quot; mean?// --
 *will it drill down?
 *will it lift the contents of generated monads into the parent level, or attach them as new subtrees?
-*will the function get to see {{{Record}}} elements, or will it imediately see the &quot;contents&quot;, the attributes or the children?
+*will the function get to see {{{Record}}} elements, or will it immediately see the &quot;contents&quot;, the attributes or the children?
 
 !!!names, identity and typing
-It was a design decision that the GenNode shall not embodiy a readable type field, just a type selector within the variant to hold the actual data elements.
-This decision more or less limits the usefulness of simple values as children to those cases, where all children are of uniform type, or where we agree to deal with all children through variant visitation solely. Of course, we can still use simple values as attributes, since those are known and addressed by name. And we can use filtereing by type to limit access to some children of type record, since every record does indeed embody a symbolic type name. It must be that way, since otherwise, records would be pretty much useless as representation for any object like entity.
+It was a design decision that the GenNode shall not embody a readable type field, just a type selector within the variant to hold the actual data elements.
+This decision more or less limits the usefulness of simple values as children to those cases, where all children are of uniform type, or where we agree to deal with all children through variant visitation solely. Of course, we can still use simple values as //attributes,// since those are known and addressed by name. And we can use filtering by type to limit access to some children of type {{{Record}}}, since every record does indeed embody a symbolic type name, an attribute named {{{&quot;type&quot;}}}. It must be that way, since otherwise, records would be pretty much useless as representation for any object like entity.
 
 The discriminating ID of any GenNode can serve as a name, and indeed will be used as the name of an attribute within a record.
-Now, the interesting question is: what constitues the full identity? Is it the ~ID-string? does it also include some kind of type information, so that two children with the same name, but different types would be considered different? And, moreover, we could even go as far as to make the path part of the identity, so that two otherwise identical elements would be different, when located at different positions within the graph. But since we did not rule out cyclic graphs, the latter idea would necessitate the notion of an //optimal path// --
+Now, the interesting question is: what constitutes the full identity? Is it the ~ID-string? does it also include some kind of type information, so that two children with the same name, but different types would be considered different? And, moreover, we could even go as far as to make the path part of the identity, so that two otherwise identical elements would be different, when located at different positions within the graph. But since we did not rule out cyclic graphs, the latter idea would necessitate the notion of an //optimal path// --
 
-A somewhat similar question is the ordering and uniqueness of children. While attributes -- due to the usage of the attribute node's ID as name-key -- are bound to be unique within a given Record, children within the scope of a record could be required to be unique too, making the scope a set. And, of course, children could be focribly ordered, or just retaining the initial ordering, or even be completely unordered. On a second thought, it seems wise not to impose any guarantees in that regard, beyond the simple notion of retaining an initial sequence order. All these more specific ordering properties can be considered the concern of some specific kinds of objects -- which then just happen to &quot;supply&quot; a list of children for symbolic representation as they see fit.
+A somewhat similar question is the ordering and uniqueness of children. While attributes -- due to the usage of the attribute node's ID as name-key -- are bound to be unique within a given Record, children within the scope of a record could be required to be unique too, making the scope a set. And, of course, children could be forcibly ordered, or just retain the initial ordering, or even be completely unordered. On a second thought, it seems wise not to impose any guarantees in that regard, beyond the simple notion of retaining an initial sequence order, the way a »stable« sorting algorithm does. All these more specific ordering properties can be considered the concern of some specific kinds of objects -- which then just happen to &quot;supply&quot; a list of children for symbolic representation as they see fit.
 </pre>
 </div>
 <div title="Factories" modifier="Ichthyostega" created="200708100401" modified="201310132317" tags="def Concepts" changecount="6">
@@ -2219,7 +2219,7 @@ Of course, we can place other ~MObjects relative to some fork (that's the main r
 &amp;rarr; [[Anatomy of the high-level model|HighLevelModel]]
 </pre>
 </div>
-<div title="ForwardIterator" modifier="Ichthyostega" created="200910312114" modified="200912190027" tags="Concepts def spec">
+<div title="ForwardIterator" modifier="Ichthyostega" created="200910312114" modified="201507042115" tags="Concepts def spec" changecount="1">
 <pre>The situation focussed by this concept is when an API needs to expose a sequence of results, values or objects, instead of just yielding a function result value. As the naive solution of passing an pointer or array creates coupling to internals, it was superseded by the ~GoF [[Iterator pattern|http://en.wikipedia.org/wiki/Iterator]]. Iteration can be implemented by convention, polymorphically or by generic programming; we use the latter approach.
 
 !Lumiera Forward Iterator concept
@@ -2236,6 +2236,17 @@ Of course, we can place other ~MObjects relative to some fork (that's the main r
 The Lumiera Forward Iterator concept is a blend of the STL iterators and iterator concepts found in Java, C#, Python and Ruby. The chosen syntax should look familiar to C++ programmers and indeed is compatible to STL containers and ranges. To the contrary, while a STL iterator can be thought off as being just a disguised pointer, the semantics of Lumiera Forward Iterators is deliberately reduced to a single, one-way-off forward iteration, they can't be reset, manipulated by any arithmetic, and the result of assigning to an dereferenced iterator is unspecified, as is the meaning of post-increment and stored copies in general. You //should not think of an iterator as denoting a position// &amp;mdash; just a one-way off promise to yield data.
 
 Another notable difference to the STL iterators is the default ctor and the {{{bool}}} conversion. The latter allows using iterators painlessly within {{{for}}} and {{{while}}} loops; a default constructed iterator is equivalent to the STL container's {{{end()}}} value &amp;mdash; indeed any //container-like// object exposing Lumiera Forward Iteration is encouraged to provide such an {{{end()}}}-function, additionally enabling iteration by {{{std::for_each}}} (or Lumiera's even more convenient {{{util::for_each()}}}).
+
+!!!interoperation with the C++11 range-for construct
+Lumiera Forward Iterators can be made to work together with the  'range for loop', as introduced with C++11. The preferred solution is to define the necessary free functions {{{begin}}} and {{{end}}} for ADL. This is best done on a per implementation base. We consider a generic solution not worth the effort. See {{{71167be9c9aaa}}}.
+
+This is to say, these two concepts can be made to work together well. While, at a conceptual level, they are not really compatible, and build on a different understanding: The standard for-loop assumes //a container,// while our Forward Iterator Concept deals with //abstract data sources.//. 
+The user needs to understand the fine points of that conceptual difference:
+* if you apply the range-`for` construct on a container, you can iterate as often as you like. Even if the iterators of that container are  implemented in compliance with the Lumiera Forward Iterator concept.
+* but if you apply the range-`for` construct on //a given iterator, //  you can do so only once. There is no way to reset that iterator, other than obtaining a new one.
+ 
+The bridge methods are usually defined so that the {{{end}}}-function just returns a default constructed iterator, which -- by concept -- is the marker for iteration end
+
 
 !!Implementation notes
 ''iter-adapter.hpp'' provides some helper templates for building Lumiera Forward Iterators.
@@ -2305,12 +2316,16 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="GenNode" creator="Ichthyostega" modifier="Ichthyostega" created="201501171413" modified="201505081546" tags="Model GuiIntegration GuiPattern def draft" changecount="11">
+<div title="GenNode" creator="Ichthyostega" modifier="Ichthyostega" created="201501171413" modified="201507031718" tags="Model GuiIntegration GuiPattern def draft" changecount="13">
 <pre>//Abstract generic node element to build a ~DOM-like rendering of Lumiera's [[session model|HighLevelModel]].//
-GenNode elements are values, yet behave polymorphic. They are rather light-weight, have an well established identity and can be compared. They are //generic// insofar they encompass several heterogeneous ordering systems, which in themselves can not be subsumed into a single ordering hierarchy. The //purpose// of these generic nodes is to build a symbolic representation, known as [[external tree description|ExternalTreeDescription]], existing somewhere &quot;outside&quot;, at a level where the fine points of ordering system relations do not really matter. Largely, this external description is not represented or layed down as a whole. Rather, it is used as a conceptual point of reference to describe //differences and changes.// Obviously, this means that parts of the altered structures have to appear in the description of the modifications. So, practically speaking, the prime purpose of GenNode elements is to appear as bits of information within a ''diff language'' to exchange such information of changes.
+GenNode elements are values, yet behave polymorphic. They are rather light-weight, have an well established identity and can be compared. They are //generic// insofar they encompass several heterogeneous ordering systems, which in themselves can not be subsumed into a single ordering hierarchy. The //purpose// of these generic nodes is to build a symbolic representation, known as [[external tree description|ExternalTreeDescription]], existing somewhere &quot;outside&quot;, at a level where the fine points of ordering system relations do not really matter. Largely, this external description is not represented or layed down as a whole. Rather, it is used as a conceptual reference frame to describe //differences and changes.// Obviously, this means that parts of the altered structures have to appear in the description of the modifications. So, practically speaking, the prime purpose of GenNode elements is to appear as bits of information within a ''diff language'' to exchange such information of changes.
 
 To be more specific, within the actual model there are [[Placements|Placement]]. These refer to [[M-Objects|MObject]]. Which in turn rely on [[Assets|Asset]]. Moreover, we have some processing rules, and -- last but not least -- the &quot;objects&quot; encountered in the model have state, visible as attributes of atomic value type (integral, floating point, string, boolean, time, time ranges and [[quantised time entities|TimeQuant]]).
 A generic node may //represent any of these kind// -- and it may have ~GenNode children, forming a tree. Effectively all of this together makes ~GenNode a ''Monad''.
+
+GenNode elements are conceived as values, and can thus be treated as mutable or immutable; it is up to the user to express this intent through const correctness.
+Especially the nested structures, i.e. a GenNode holding an embedded {{{diff::Record}}}, are by default immutable, but expose a object builder API for remoulding. This again places the actual decision about mutations into the usage context, since the remoulded Record has to be assigned explicitly.
+
 
 !to reflect or not reflect
 When dealing with this external model representation, indeed there are some rather global concerns which lend themselves to a generic programming style. Simply because, otherwise, we'd end up explicating and thereby duplicating the structure of the model all over the code. Frequently, such a situation is quoted as the reason to demand introspection facilities on any data structure. We doubt this is a valid conclusion. Since introspection allows to accept just //any element// -- followed by an open-ended //reaction on the received type// -- we might arrive at the impression that our code reaches a maximum of flexibility and &quot;openness&quot;. Unfortunately, this turns out to be a self-deception, since code to do any meaningful operation needs pre-established knowledge about the meaning of the data to be processed. More so, when, as in any hierarchical data organisation, the relevant meaning is attached to the structure itself, so consequently this pre-established knowledge tends to be scattered over several, superficially &quot;open&quot; handler functions. What looks open and flexible at first sight is in fact littered with obscure and scattered, non obvious additional presumptions.
@@ -2433,7 +2448,7 @@ The workspace starts out with a single element, corresponding to the »model roo
 Speaking of implementation, this state and update mechanics relies on two crucial provisions: Lumiera's framework for [[tree diff representation|TreeDiffModel]] and the ExternalTreeDescription, which is an abstracted, ~DOM-like rendering of the relevant parts of the session; this model tree is comprised of [[generic node elements|GenNode]] acting as proxy for [[calls into|SessionInterface]] the [[session model|HighLevelModel]] proper.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201503221633" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="30">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201506040022" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="31">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2467,6 +2482,9 @@ Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispa
 A relevant question to be settled is as to where the core of each change is constituted. This is relevant due to the intricacies of multithreading: Since the change originates in the build process, but the effect of the change is //pulled// later from within the GUI event thread, it might well happen that at this point, meanwhile further changes entered the model. As such, this is not problematic, as long as taking the diff remains atomic. This leads to quite different solution approaches:
 * we might, at the moment of performing the update, acquire a lock from the ProcDispatcher. The update process may then effectively query down into the session datastructure proper, even through the proxy of a diffing process. The obvious downside is that GUI response might block waiting on an extended operation in Proc, especially when a new build process was started meanwhile. A remedy might be to abort the update in such cases, since its effects will be obsoleted by the build process anyway.
 * alternatively, we might incorporate a complete snapshot of all information relevant for the GUI into the GuiModel. Update messages from Proc must be complete and self contained in this case, since our goal is to avoid callbacks. Following this scheme, the first stage of any update would be a push from Proc to the GuiModel, followed by a callback pull from within the individual widgets receiving the notification later. This is the approach we choose for the Lumiera GUI.
+
+!!!information to represent and to derive
+The purpose of the GuiModel is to represent an anchor point for the structures //actually relevant for the UI.// To put that into context, the model in the session is not bound to represent matters exactly in the way to be rendered within the GUI. All we can expect is for the //build process// -- upon completion -- to generate a view of the actually altered parts, detailing the information relevant for presentation. Thus we do retain an ExternalTreeDescription of all the information received this way within the GuiModel. Whenever a completed build process sends an updated state, we use the diff framework to determine the actually relevant differences -- both for triggering the corresponding GUI widgets, and for forwarding this focussed diff information to these widgets when they call back from the UI event thread to pull the actual changes.
 
 !!!switch of typed sub-context
 When dealing with structural (tree) diffing, there is a specific twist regarding child nodes of mixed type: In the general case, we can not assume that all children of a given node are of the same kind. The classical example is (X)HTML, where a node has //attributes,// various //nested tags// and //nested text content.// The //generic node// thus must be modelled as having several collections of children -- both ordered and un-ordered collections are possible -- and the content of each such sub-collection is itself polymorphic. This constitutes a challenge for the representation of data within the tree diff format. These difficulties can be overcome as follows
@@ -7503,7 +7521,7 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeMutation" modifier="Ichthyostega" created="201101231344" modified="201105261700" tags="spec discuss draft">
+<div title="TimeMutation" modifier="Ichthyostega" created="201101231344" modified="201506032222" tags="spec discuss draft" changecount="1">
 <pre>Simple time points are just like values and thus easy to change. The difficulties arise when time values are to be //quantised to an existing time grid.// The first relevant point to note is that for quantised time values, the effect of a change can be disproportional to the cause. Small changes below the threshold might be accumulated, and a tiny change might trigger a jump to the next grid point. While this might be annoying, the yet more complex questions arise when we acknowledge that the amount of the change itself might be related to a time grid.
 
 The problem with modification of quantised values highlights an inner contradiction or conflicting goals within the design
@@ -7579,7 +7597,7 @@ Rationale: allowing mutations for Time bears the danger of making ~TimeVar obsol
 * err, because MObject will include a Duration separate from the start time in the Placement, Duration needs to be mutable too
 
 !!!usage considerations
-{{red{Question 5/11}}} when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
+{{red{Question 5/11}}} when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, even when the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
 
 !!!design draft
 The special focus of this problem seems to lead itself to a __visitor pattern__ based implementation. Because the basic hierarchy of applicable types is fixed, but the behaviour is open ended (and not yet fully determined). A conventional implementation would scatter this behaviour over all the time entities, thus making it hard to understand and reason about. The classical ~GoF cyclic visitor solution to the contrary allows us to arrange closely related behaviour into thematically grouped visitor classes. As a plus, the concrete action can be bound dynamically, allowing for more flexibility when it comes to dealing with the intricate situations when a quantised time span (= a clip) recieves a quantised mutation (= is re-alligend to a possibly different frame grid)
@@ -7929,7 +7947,7 @@ Used this way, diff representation helps to separate structure and raw data in e
 :Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201504290114" tags="Model GuiPattern design draft" changecount="31">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201507041449" tags="Model GuiPattern design draft" changecount="38">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -7982,6 +8000,18 @@ This design prefers the //pull// approach, with a special twist: we provide a co
 !!!representation of objects
 It should be noted, that the purpose of this whole architecture is to deal with »remote« stuff -- things we somehow need to refer and deal with, but nothing we can influence immediately, right here: every actual manipulation has to be turned into a message and sent //elsewhere.// This is the only context, where some, maybe even partial, generic and introspective object representation makes sense.
 
+{{red{open questions 6/15}}}
+* do we need to //alter// object contents -- or do we just replace?
+* to what degree is the distinction between attributes and children even relevant -- beyond the ability to address attributes by-name?
+* how do we describe an object from scratch? &amp;larr;''object builder''
+* how do we represent the break between attributes and children in this linearised description?
+** using a separator element?
+** by convention through the element names? &amp;larr; ''This''
+** as additional metadata information sent beforehand?
+* we need an object-reference element, since we do not want to copy whole subtrees while processing a diff
+
+&quot;Objects&quot; can be spelled out literally in code. We care to make the respective ctor syntax expressive enough. For nested objects, i.e. values of type {{{diff::Record}}}, a dedicated object builder notation is provided, because this is the point, where the syntax gets convoluted
+
 Within this framework, we represent //object-like// entities through a special flavour of the GenNode: Basically, an object is a flat collection of children, yet given in accordance to a distinct protocol. The relevant ''meta'' information is spelled out first, followed by the ''attributes'' and finally the ''children''. The distinction between these lies in the mode of handling. Meta information is something we need to know before we're able to deal with the actual stuff. Prominent example is the type of the object. Attributes are considered unordered, and will typically be addressed by-name. Children are an ordered collection of recursive instances of the same data structure. (Incidentally, we do not rule out the possibility that also an attribute holds a recursive subtree; only the mode of access is what makes the distinction).
 
 !!!handling of actual mutation
@@ -7994,7 +8024,7 @@ Within the context of GuiModelUpdate, we discern two distinct situations necessi
 the second case is what poses the real challenge in terms of writing well organised code. Since in that case, the receiver side has to translate generic diff verbs into operations on hard wired language level data structures -- structures, we can not control, predict or limit beforhand. We deal with this situation by introducing a specific intermediary, the &amp;rarr; TreeMutator.
 </pre>
 </div>
-<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201505310130" tags="Model GuiPattern spec draft" changecount="54">
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201506072246" tags="Model GuiPattern spec draft" changecount="61">
 <pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
 This leads to what could be considered the very opposite of data-centric programming. Instead of embody »the truth« into a central data model with predefined layout, we base our achitecture on a set of actors and their collaboration. In the mentioned example this would be the high-level view in the Session, the Builder, the UI-Bus and the presentation elements within the timeline view. Underlying to each such collaboration is a shared conception of data. There is no need to //actually represent that data// -- it can be conceived to exist in a more descriptive, declarative [[external tree description (ETD)|ExternalTreeDescription]]. In fact, what we //do represent// is a ''diff'' against such an external rendering.
 
@@ -8041,19 +8071,30 @@ Thus, for our specific usage scenario, the foremost relevant question is //how t
 __Implementation note__:The representation chosen here uses terms of constant size for the individual diff steps; in most cases, the argument is redundant and can be used for verification when applying the diff -- with the exception of the {{{ins}}} term, where it actually encodes additional information. Especially the {{{find}}}-representation is a compromise, since we encode as &quot;search for the term a~~5~~ and insert it at curent position&quot;. The more obvious rendering -- &quot;push term a~~4~~ back by +1 steps&quot; -- requires an additional integer argument not neccesary for any of the other diff verbs, defeating a fixed size value implementation.
 
 !!!extension to tree changes
-Basically we could send messages for recursive descent right after each {{{pick}}} token -- yet, while minimal, such a representation would be unreadable, and requires a dedicated stack storage on both sides. Thus we arrange for the //recursive treatment of children// to be sent //postfix,// after the messages for the current node. Recursive descent is indicated by explicit (and slightly redundant) //bracketing tokens://
-*{{{open}}}(node-ID)  : recurse into the designated node, which must be present already as result of the preceding changes
-*{{{close}}}(node-ID)  : close the current node context and return one step up; the node-ID is given for verification, but can be used to restore the working position at parent level
-In addition, we might consider to introduce up/down folding primitives
-*{{{fold}}}(//num//, node-ID) : pick the next //num// elements and fold them down into a new child with given node-ID
+Diff description and diff handling can be applied to tree-like data structures as well. Some usages of textual comparison (e.g. diffing of programming language texts) are effectively working on tree structures -- yet they do not build on the structure of the diffed data explicitly. But if we represent the data structures symbolically, the change form text diffing to data structure diffing is marginal. The only relevant change is to handle embedded recursive diff descriptions of the child nodes. As it stands, each node or &quot;object&quot; can be represented as a list of properties plus the attachment of child nodes. This list can be treated with the methods developed for a stream of text tokes.
+
+Basically the transition from text diffing to changes on data structures is achieved by exchanging the //type of the tokens.// Instead of words, or lines of text, we now use //data elements.// To do so, we introduce a symbolic ExternalTreeDescription of tree-like core data structures. The elementary token element used in this tree diff, the GenNode, embodies either simple plain data elements (numbers, strings, booleans, id-hashes, time values) -- or it describes a //recursive data element,// given as {{{Record&lt;GenNode&gt;}}}. Such a recursive data element describes object-like entities as a sequence of metadata, named attributes and ordered child-nodes -- it is handled in two phases: the first step is to treat the presence and ordering of child data elements, insertions and deletes. The second phase opens for each structurally changed child data element a recursive bracketing construct, as indicated  by explicit (and slightly redundant) //bracketing tokens://
+*{{{mut}}}(node-ID)  : recurse into the designated node, which must be present already as result of the preceding changes. The following diff tokens describe //mutations// of the child
+*{{{emu}}}(node-ID)  : close the current node context and return one step up; the node-ID is given for verification, but can be used to restore the working position at parent level
+In addition, in a future extension, we might consider to introduce up/down folding primitives
+*{{{fold}}}(node-ID) : pick the following elements and fold them down into a new child with given node-ID. The downfolding continues until the next {{{emu}}} token
 *{{{lift}}}(node-ID) : remove the next child node, which must be node-ID, and insert its children at current position
+
+Since the bracketing construct for mutation of child structures bears the ID of the parent, a certain degree of leeway is introduced. In theory, we could always open such a bracketing construct right after the {{{pick}}} token accepting the parent -- yet, while minimal, such a strictly depth-first representation would be hard to read -- so we allow to group the recursive treatement of children //post-fix,// after the messages for the current node. In a similar vein, we introduce another token to describe a //short-cut://
+*{{{after}}}(node-ID) : fast-forward through the sequence of elements at current level until the position after the designated element.
+To complement this language construct, we define some special, magical (meta) element-~IDs
+*{{{_CHILD_}}} : marks an //unnamed// ID. Mostly, the implementation exploits this specific marker to distinguish between nodes which are (named) attributes of an object, and real children
+*{{{_THIS_}}} : can be used to refer to the immediately preceding element without knowing its name. Typically used to open a {{{mut(_THIS_)}}} ... {{{emu(_THIS_)}}} bracket to populate a newly inserted object
+*{{{_ATTRIBS_}}} : can be used to jump {{{after(_ATTRIBS_)}}} when mutating the contents of an object. So the following diff verbs will immediately start working on the children
+*{{{_END_}}} : likewise can be used to jump {{{after(_END_)}}} to start appending new elements without caring for the existing current content.
+All these additional language constructs aren't strictly necessary, but widen the usability of the langauge, also to cover the description of incomplete or fuzzy diffs.
 
 !!!deriving conventional representations
 On receiving the terms of this &quot;diff language&quot;, it is possible to generate the well known and more conventional diff representations,
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201505310130" tags="Model Concepts GuiPattern design draft" changecount="50">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201505312250" tags="Model Concepts GuiPattern design draft" changecount="52">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 
 !Motivation
@@ -8106,7 +8147,7 @@ This construction pattern can be extended to offer several optional extension ho
 * how to integrate typed children
 
 !!!working with children
-Handling tree structured object data imposes some additional constraints, in comparision to generic changes done to a flat list. One notable difference is that there are pre-existing //attributes,// which can not be added and deleted, are known by-name, not by positional order. Another point worth noting is the fact that child objects may be segregated into several collections by type. Since our goal is to provide an intermediary with the ability to map to arbitrary structures, we need to define the primitive operations necessary for implementing the structural operations represented in the form of a diff
+Handling tree structured object data imposes some additional constraints, in comparision to generic changes done to a flat list. One notable difference is that there are pre-existing //attributes,// which can not be added and deleted, are known by-name, not by positional order. Another point worth noting is the fact that child objects may be segregated into several collections by type. Since our goal is to provide an intermediary with the ability to map to arbitrary structures, we need to define the primitive operations necessary for implementing the concrete structural operations represented in the form of a diff
 * add a child
 * remove a child
 * step to the next child
@@ -8118,7 +8159,7 @@ All these basic operations are implicitly stateful, i.e. they work against an as
 To ease the repetitive part of the wiring, which is necessary for each individual application case, we can allow for some degree of //duck typing,// as far as building the TreeMutator is concerned. If there is a type, which provides the above mentioned functions for child management, these can be hooked up automatically into a suitable adapter. Otherwise, the client may supply closures, using the same definition pattern as shown for the attributes above. Here, the ID argument is optional and denotes a //type filter,// whereas the closure itself must accept a name-ID argument. The purpose of this construction is the ability to manage collections of similar children. For example
 {{{
        .addChild(&quot;Fork&quot;), [&amp;](string type, string id) {
-           ForkType kind = determineForkkType(type);
+           ForkType kind = determineForkType(type);
            this.forks_.push_back(MyForkImpl(kind, id);
          })
        .mutateChild(&quot;Fork&quot;), [&amp;](string id) {

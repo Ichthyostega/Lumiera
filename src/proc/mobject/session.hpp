@@ -65,8 +65,8 @@
 
 namespace proc {
 namespace asset {
-  class Timeline;    typedef P<Timeline> PTimeline;
-  class Sequence;    typedef P<Sequence> PSequence;
+  class Timeline;    typedef lib::P<Timeline> PTimeline;
+  class Sequence;    typedef lib::P<Sequence> PSequence;
 }
 
 namespace mobject {

@@ -121,7 +121,7 @@ namespace engine{
       class Quality
         {
           public:
-            virtual ~Quality();  ///< this is an Interface
+            virtual ~Quality() { };  ///< this is an Interface
         };
       
       

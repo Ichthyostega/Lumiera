@@ -23,6 +23,7 @@
 /** @file timeline-widget.hpp
  ** This file defines the core component of the Lumiera GUI
  ** 
+ ** @deprecated broken since transition to GTK-3
  ** @todo needs to be reworked from ground as if 5/2015
  **       GTK-3 uses different event handling callbacks,
  **       so the existing implementation is defunct.
@@ -67,6 +68,7 @@ namespace widget {
    * Core timeline display (custom widget).
    * @remarks This widget is a composite of several widgets contained
    *          within the timeline namespace.
+   * @deprecated dysfunctional and broken by switch to GTK-3. Needs to be rewritten
    */
   class TimelineWidget
     : public Gtk::Table

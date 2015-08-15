@@ -39,13 +39,13 @@
  */
 
 
-#ifndef ASSET_ENTRY_ID_H
-#define ASSET_ENTRY_ID_H
+#ifndef LIB_IDI_ENTRY_ID_H
+#define LIB_IDI_ENTRY_ID_H
 
 
-#include "proc/asset.hpp"
-#include "proc/asset/struct-scheme.hpp"
+#include "lib/error.hpp"
 #include "lib/hash-indexed.hpp"
+#include "lib/idi/genfunc.hpp"
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
@@ -54,18 +54,36 @@
 #include <string>
 
 
-namespace proc {
-namespace asset {
+namespace lib {
+
+  /**
+   * Identification Schemes.
+   * Collection of commonly used mechanisms to build identification records,
+   * unique identifiers, registration numbers and hashes. These are used as glue
+   * and thin abstraction to link various subsystems or to allow interoperation
+   * of registration facilities
+   */
+namespace idi {
+  
+  namespace error = lumiera::error;
   
   using std::string;
   using std::ostream;
   
+  using lib::idi::generateSymbolicID;
+  using lib::idi::getTypeHash;
+  using lib::idi::typeSymbol;
+  using lib::hash::LuidH;
+  using lib::HashVal;
   
-  
-  namespace idi {
-    
-    using lib::hash::LuidH;
-    using lib::HashVal;
+  namespace {
+    /** lousy old tinkerer's trick:
+     *  hash values with poor distribution can be improved
+     *  by spreading the input with something close to the golden ratio.
+     *  Additionally, the scaling factor (for hashing) should be prime.
+     *  2^32 * (√5-1)/2 = 2654435769.49723
+     */
+    const size_t KNUTH_MAGIC = 2654435761;
     
     
     /** build up a hash value, packaged as LUID.
@@ -82,16 +100,22 @@ namespace asset {
      *        conjunction with LUID. How to create a LuidH instance, if not generating
      *        a new random value. How to make EntryID and asset::Ident interchangeable,  /////////TICKET #739
      *        which would require both to yield the same hash values....
-     *  @warning there is a weakness in boost::hash for strings of running numbers, causing
-     *        collisions already for a small set with less than 100000 entries.
-     *        To ameliorate the problem, we hash the symbol twice                        /////////TICKET #865
+     *  @warning there is a weakness in boost::hash for strings of running numbers,
+     *        causing collisions already for a small set with less than 100000 entries.
+     *        To ameliorate the problem, we hash in the trailing digits, and
+     *        spread them by the #KNUTH_MAGIC                                            /////////TICKET #865
      *  @warning this code isn't portable and breaks if sizeof(size_t) < sizeof(void*)
+     *  @see HashGenerator_test#verify_Knuth_workaround
      */
     inline LuidH
     buildHash (string const& sym, HashVal seed =0)
     {
+      size_t l = sym.length();
+      if (l > 1) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-1]);
+      if (l > 2) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-2]);
+      if (l > 3) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-3]);       ////////////////////////TICKET #865
+      
       boost::hash_combine(seed, sym);
-      boost::hash_combine(seed, sym);                                     ////////////////////////TICKET #865
       lumiera_uid tmpLUID;
       lumiera_uid_set_ptr (&tmpLUID, reinterpret_cast<void*> (seed));
       return reinterpret_cast<LuidH&> (tmpLUID);
@@ -111,7 +135,6 @@ namespace asset {
   class BareEntryID
     : public boost::equality_comparable<BareEntryID>
     {
-      typedef lib::hash::LuidH LuidH;
       
       string symbol_;
       LuidH hash_;
@@ -123,9 +146,9 @@ namespace asset {
        * encoded into a hash seed. Thus even the same symbolicID
        * generates differing hash-IDs for different type parameters
        */
-      BareEntryID (string const& symbolID, idi::HashVal seed =0)
-        : symbol_(util::sanitise(symbolID))
-        , hash_(idi::buildHash (symbol_, seed))
+      BareEntryID (string const& symbolID, HashVal seed =0)
+        : symbol_(symbolID)
+        , hash_(buildHash (symbol_, seed))
         { }
       
     public:
@@ -160,7 +183,7 @@ namespace asset {
       
       
       template<typename TAR>
-      EntryID<TAR> recast()  const;
+      EntryID<TAR> const& recast()  const;
       
     };
   
@@ -193,7 +216,7 @@ namespace asset {
       
       /** case-1: auto generated symbolic ID */
       EntryID()
-        : BareEntryID (idi::generateSymbolID<TY>(), getTypeHash())
+        : BareEntryID (generateSymbolicID<TY>(), getTypeHash<TY>())
         { }
       
       /** case-2: explicitly specify a symbolic ID to use.
@@ -202,29 +225,8 @@ namespace asset {
        */
       explicit
       EntryID (string const& symbolID)
-        : BareEntryID (symbolID, getTypeHash())
+        : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
         { }
-      
-      
-      /** generate an Asset identification tuple
-       *  based on this EntryID's symbolic ID and type information.
-       *  The remaining fields are filled in with hardwired defaults.
-       * @note there is a twist, as this asset identity tuple generates
-       *       a different hash as the EntryID. It would be desirable
-       *       to make those two addressing systems interchangeable.      /////////////TICKET #739
-       */
-      Asset::Ident
-      getIdent()  const
-        {
-          Category cat (STRUCT, idi::StructTraits<TY>::catFolder());
-          return Asset::Ident (this->getSym(), cat);
-        }
-      
-      static idi::HashVal
-      getTypeHash()
-        {
-          return hash_value (Category (STRUCT, idi::StructTraits<TY>::catFolder()));
-        }
       
       
       /** @return true if the upcast would yield exactly the same
@@ -235,23 +237,23 @@ namespace asset {
       static bool
       canRecast (BareEntryID const& bID)
         {
-          return bID.getHash() == idi::buildHash (bID.getSym(), getTypeHash());
+          return bID.getHash() == buildHash (bID.getSym(), getTypeHash<TY>());
         }
       
-      static EntryID
+      static EntryID const&
       recast (BareEntryID const& bID)
         {
           if (!canRecast(bID))
             throw error::Logic ("unable to recast EntryID: desired type "
                                 "doesn't match original definition"
                                , error::LUMIERA_ERROR_WRONG_TYPE);
-          return EntryID (bID.getSym());
+          return static_cast<EntryID const&> (bID);
         }
       
       
       operator string ()  const
         {
-          return "ID<"+idi::StructTraits<TY>::idSymbol()+">-"+EntryID::getSym();
+          return "ID<"+typeSymbol<TY>()+">-"+EntryID::getSym();
         }
       
       friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }
@@ -280,12 +282,13 @@ namespace asset {
    *          Exception if it doesn't match the stored hash.
    */
   template<typename TAR>
-  EntryID<TAR> BareEntryID::recast()  const
+  EntryID<TAR> const&
+  BareEntryID::recast()  const
   {
     return EntryID<TAR>::recast(*this);
   }
   
   
   
-}} // namespace proc::asset
-#endif
+}} // namespace lib::idi
+#endif /*LIB_IDI_ENTRY_ID_H*/

@@ -78,6 +78,7 @@ namespace asset {
   using proc::mobject::session::Scope;
   using proc::mobject::session::match_specificFork;
   using proc::mobject::session::RBinding;
+  using proc::mobject::session::ForkID;
   using proc::mobject::session::RFork;
   using proc::mobject::session::Fork;
   

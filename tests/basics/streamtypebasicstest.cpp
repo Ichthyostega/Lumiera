@@ -50,7 +50,7 @@ namespace test_format {
   class StreamTypeBasics_test : public Test
     {
       virtual void
-      run (Arg arg)
+      run (Arg)
         {
           ImplType iType = buildImplType ();
           basicImplTypeProperties (iType);

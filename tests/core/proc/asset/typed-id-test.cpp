@@ -25,7 +25,7 @@
 #include "lib/test/test-helper.hpp"
 
 #include "proc/asset/typed-id.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/p.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/inventory.hpp"
@@ -84,14 +84,14 @@ namespace query  {
 
 
 
-namespace proc {
-namespace asset{
-namespace test {
+namespace lib {
+namespace idi {
+namespace test{
   
-  using mobject::session::test::DummyEntity;
-  using mobject::session::test::PDum;
+  using proc::mobject::session::test::DummyEntity;
+  using proc::mobject::session::test::PDum;
   
-  typedef EntryID<DummyEntity> DummyID;
+  using DummyID = EntryID<DummyEntity>;
   
   namespace { // Test definitions...
     
@@ -244,4 +244,4 @@ namespace test {
   LAUNCHER (TypedID_test, "unit asset");
   
   
-}}} // namespace proc::asset::test
+}}} // namespace lib::idi::test

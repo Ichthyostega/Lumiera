@@ -87,7 +87,6 @@ namespace asset {
   using std::static_pointer_cast;
   
   using lib::HashVal;
-  using lib::P;
   
   
   
@@ -119,8 +118,8 @@ namespace asset {
   class Asset;
   class AssetManager;
   typedef const ID<Asset>& IDA;
-  typedef P<Asset>       PAsset;
-  typedef P<const Asset> PcAsset;
+  typedef lib::P<Asset>       PAsset;
+  typedef lib::P<const Asset> PcAsset;
 
   
   

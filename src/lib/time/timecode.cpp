@@ -48,9 +48,6 @@ namespace lib {
 namespace time {
   
   
-  TCode::~TCode()   { }  // emit VTable here....
-  
-  
   namespace format {  /* ================= Timecode implementation details ======== */ 
     
     LUMIERA_ERROR_DEFINE (INVALID_TIMECODE, "timecode format error, illegal value encountered");

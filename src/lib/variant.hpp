@@ -59,6 +59,14 @@
  ** concrete type does not support assignment or copy construction, the respective access
  ** function is replaced by an implementation raising a runtime error.
  ** 
+ ** @note we use a Visitor interface generated through metaprogramming.
+ **       This may generate a lot of warnings "-Woverloaded-virtual",
+ **       since one \c handle(TX) function may shadow other \c handle(..) functions
+ **       from the inherited (generated) Visitor interface. These warnings are besides
+ **       the point, since not the \em client uses these functions, but the Variant does,
+ **       after upcasting to the interface. Make sure you define your specialisations with
+ **       the override modifier; when done so, it is safe to disable this warning here.
+ ** 
  ** @see Veriant_test
  ** @see lib::diff::GenNode
  ** @see virtual-copy-support.hpp
@@ -111,6 +119,12 @@ namespace lib {
         using Type = X;
       };
     
+    template<typename X, typename TYPES>
+    struct CanBuildFrom<const X, Node<X, TYPES>>
+      {
+        using Type = X;
+      };
+    
     template<typename X, typename T,typename TYPES>
     struct CanBuildFrom<X, Node<T, TYPES>>
       {
@@ -136,9 +150,8 @@ namespace lib {
         = meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
     
     
-    /////TODO: - is it possible directly to forward the constructor invocation to the object within the buffer? Beware of unverifiable generic solutions! 
-    
   }//(End) implementation helpers
+  
   
   
   
@@ -154,6 +167,10 @@ namespace lib {
    * in question, but type mismatch will provoke an exception at runtime.
    * Generic access is possible using a visitor.
    * @warning not threadsafe
+   * @todo we need to define all copy operations explicitly, due to the
+   *       templated one-arg ctor to wrap the actual values.
+   *       There might be a generic solution for that     ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
+   *       But -- Beware of unverifiable generic solutions! 
    */
   template<typename TYPES>
   class Variant
@@ -395,6 +412,12 @@ namespace lib {
           return buff<X>().access();
         }
       
+      template<typename X>
+      X const&
+      get()  const
+        {
+          return unConst(this)->template get<X>();
+        }
       
       void
       accept (Visitor& visitor)

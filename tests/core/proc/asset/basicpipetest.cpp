@@ -153,8 +153,8 @@ namespace test  {
       
       void dependProcPatt(string pID)
         {
-          typedef P<Pipe> PPipe;                                                         /////TODO: transition to P<>
-          typedef P<const ProcPatt> PProcPatt;
+          typedef lib::P<Pipe> PPipe;                                                         /////TODO: transition to P<>
+          typedef lib::P<const ProcPatt> PProcPatt;
           
           PPipe thePipe = Pipe::query ("pipe("+pID+")");
           CHECK (thePipe);

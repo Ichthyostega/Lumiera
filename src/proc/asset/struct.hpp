@@ -151,17 +151,17 @@ namespace asset {
       
     public:
       template<class STRU>
-      P<STRU> operator() (Query<STRU> const& query); 
+      lib::P<STRU> operator() (Query<STRU> const& query);
       
-//    P<Timeline> operator() (MORef<Binding>);  ///////////TODO doesn't this create circular includes?? Any better idea how to refer to an existing binding?
-      
-      template<class STRU>
-      P<STRU> newInstance (Symbol nameID  ="");
+//    lib::P<Timeline> operator() (MORef<Binding>);  ///////////TODO doesn't this create circular includes?? Any better idea how to refer to an existing binding?
       
       template<class STRU>
-      P<STRU> made4fake  (Query<STRU> const& query);  ///< @warning to be removed in Alpha when using a real resolution engine /////TICKET #710
+      lib::P<STRU> newInstance (Symbol nameID  ="");
       
-      P<Pipe> newPipe (string pipeID, string streamID);
+      template<class STRU>
+      lib::P<STRU> made4fake  (Query<STRU> const& query);  ///< @warning to be removed in Alpha when using a real resolution engine /////TICKET #710
+      
+      lib::P<Pipe> newPipe (string pipeID, string streamID);
     };
   
   

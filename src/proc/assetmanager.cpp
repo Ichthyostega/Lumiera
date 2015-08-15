@@ -117,7 +117,7 @@ namespace asset {
     
     DB::Lock guard(&registry);
     //////////////////////////////////////////////////////////TICKET #840 handle duplicate Registrations
-    P<KIND> smart_ptr (obj, &destroy);
+    lib::P<KIND> smart_ptr (obj, &destroy);
     
     registry.put (asset_id, smart_ptr);
     return asset_id;
@@ -129,10 +129,10 @@ namespace asset {
    *         of the stored object differs and can't be casted.  
    */
   template<class KIND>
-  P<KIND>
+  lib::P<KIND>
   AssetManager::getAsset (const ID<KIND>& id)  
   {
-    if (P<KIND> obj = registry.get (id))
+    if (lib::P<KIND> obj = registry.get (id))
       return obj;
     else
       if (known (id))    // provide Ident tuple of existing Asset 
@@ -148,7 +148,7 @@ namespace asset {
    *  is explicitly given by type KIND. 
    */
   template<class KIND>
-  P<KIND>
+  lib::P<KIND>
   AssetManager::wrap (const KIND& asset)
   {
     ENSURE (instance().known(asset.id), 
@@ -250,6 +250,7 @@ namespace asset {
 
 namespace proc {
 namespace asset {
+  using lib::P;
   
   template ID<Asset> AssetManager::reg (Asset* obj, const Asset::Ident& idi);
   

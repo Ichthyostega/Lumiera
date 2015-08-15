@@ -79,9 +79,7 @@ namespace test{
       run (Arg)
         {
           simpleAttributeBinding();
-          verifySnapshot();
           sequenceIteration();
-          duplicateDetection();
           copy_and_move();
         }
       
@@ -114,19 +112,7 @@ namespace test{
       
       
       void
-      verifySnapshot()
-        {
-        }
-      
-      
-      void
       sequenceIteration()
-        {
-        }
-      
-      
-      void
-      duplicateDetection()
         {
         }
       

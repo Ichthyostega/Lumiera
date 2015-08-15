@@ -65,7 +65,7 @@ namespace asset {
    *  some ProcPatt as a template for creating more
    *  specialised patterns. 
    */
-  P<ProcPatt> 
+  lib::P<ProcPatt> 
   ProcPatt::newCopy (string newID)  const
   {
     TODO ("implement the Pattern-ID within the propDescriptor!");

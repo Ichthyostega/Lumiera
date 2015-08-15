@@ -75,7 +75,7 @@ namespace diff{
   
   namespace {
     template<class PAR>
-    class Builder;
+    struct Builder;
     
     using ID        = Literal;
     using Attribute = DataCap;

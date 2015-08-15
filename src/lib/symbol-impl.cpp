@@ -68,7 +68,8 @@ namespace lib {
       and should be usable both with  \c std::tr1 and 
       \c <boost/functional/hash.hpp> . It is implemented
       similar as the boost::hash specialisation for std::string */
-  size_t hash_value (Literal sym)
+  size_t
+  hash_value (Literal sym)
   {
     size_t hash=0;
     if (sym)

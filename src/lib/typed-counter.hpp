@@ -30,7 +30,7 @@
  ** setup allows to bridge between metaprogramming and (runtime) dispatcher tables.
  ** 
  ** Each such series of type-id-slots is associated to a distinct usage context.
- ** Those usage contexts are discerned by the template parameter \c XY. Each of
+ ** Those usage contexts are discerned by the template parameter \c CX. Each of
  ** these usage contexts uses a separate numbering scheme on his own, i.e. every
  ** new type encountered at runtime gets the next higher ID number (slot).
  ** @warning the actual ID numbers depend on the sequence of first encountering

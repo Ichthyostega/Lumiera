@@ -181,8 +181,6 @@ namespace engine{
   /* ===== Quality-of-Service ===== */
   
   
-  EngineService::Quality::~Quality() { } // emit vtables here...
-  
   enum CalcType {
     PLAYBACK,
     RENDER,

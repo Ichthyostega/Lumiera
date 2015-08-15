@@ -125,6 +125,7 @@ protected:
   
   /**
    * The event handler for when the TimelineWidget's state is switched.
+   * @deprecated needs to be rewritten from scratch for GTK-3
    */
   void on_state_changed (shared_ptr<TimelineState> newState);
   

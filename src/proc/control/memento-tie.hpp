@@ -45,7 +45,6 @@
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
 #include "lib/functor-util.hpp"
-#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>
@@ -181,19 +180,8 @@ namespace control {
           return undo_ && capture_ && isCaptured_;
         }
       
-      
-      operator std::string()  const
-        {
-          if (!undo_ || !capture_)
-            return "·noUNDO·";
-          
-          if (!isCaptured_)
-            return "<mem:missing>";
-          
-          return "<" 
-               + util::str(memento_, "mem: ", "·memento·") 
-               + ">";
-        }
+      /** for diagnostics: include format-util.hpp */
+      operator std::string()  const;
       
       
       /// Supporting equality comparisons...
@@ -211,6 +199,24 @@ namespace control {
         }
     };
   
+
+  template<typename SIG, typename MEM>
+  MementoTie<SIG,MEM>::operator std::string()  const
+  {
+    if (!undo_ || !capture_)
+      return "·noUNDO·";
+    
+    if (!isCaptured_)
+      return "<mem:missing>";
+    
+    return "<"
+#ifdef LIB_FORMAT_UTIL_H
+         + util::str(memento_, "mem: ", "·memento·")
+#else
+         + std::string("memento")
+#endif
+         + ">";
+  }
   
   
   

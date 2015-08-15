@@ -121,13 +121,13 @@ namespace lumiera {
           };
         
         
-        typedef lib::IterSource<proc::mobject::ModelPort>::iterator    ModelPorts;
-        typedef lib::IterSource<proc::mobject::OutputDesignation>::iterator Pipes;
-        typedef proc::play::POutputManager Output;
-        typedef proc::mobject::session::PClipMO Clip;
-        typedef proc::mobject::PFork  Fork;
-        typedef proc::asset::PTimeline Timeline;
-        typedef proc::asset::PViewer Viewer;
+        using ModelPorts = lib::IterSource<proc::mobject::ModelPort>::iterator;
+        using Pipes      = lib::IterSource<proc::mobject::OutputDesignation>::iterator;
+        using Output     = proc::play::POutputManager;
+        using Clip       = proc::mobject::session::PClip;
+        using Fork       = proc::mobject::PFork;
+        using Timeline   = proc::asset::PTimeline;
+        using Viewer     = proc::asset::PViewer;
         
         
         /* ==== convenience shortcuts for common use cases ==== */

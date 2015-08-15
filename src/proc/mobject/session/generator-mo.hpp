@@ -40,8 +40,8 @@ namespace session {
   using asset::Media;
   using lib::time::TimeVar;
   
-  typedef P<Media> PMedia;
-  typedef P<asset::Clip> PClipAsset;
+  typedef lib::P<Media> PMedia;
+  typedef lib::P<asset::Clip> PClipAsset;
   
   
   /**
@@ -83,8 +83,6 @@ namespace session {
       DEFINE_PROCESSABLE_BY (builder::BuilderTool);
       
     };
-    
-  typedef Placement<Clip> PClipMO;
   
   
   

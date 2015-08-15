@@ -41,7 +41,7 @@ namespace asset {
     {};
   
   
-  typedef P<Inventory> PInv;
+  typedef lib::P<Inventory> PInv;
   
   
 }} // namespace proc::asset
