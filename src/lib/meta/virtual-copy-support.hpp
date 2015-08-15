@@ -200,9 +200,6 @@ namespace meta{
           D& src = static_cast<D&> (*this);
           new(targetStorage) D(move(src));
         }
-      
-      using I::copyInto;
-      using I::moveInto;
     };
   
   
@@ -216,9 +213,6 @@ namespace meta{
           D const& src = static_cast<D const&> (*this);
           new(targetStorage) D(src);
         }
-      
-      using I::copyInto;
-      using I::moveInto;
     };
   
   
@@ -241,9 +235,6 @@ namespace meta{
           D& s = static_cast<D&> (*this);
           t = move(s);
         }
-      
-      using I::copyInto;
-      using I::moveInto;
     };
   
   
