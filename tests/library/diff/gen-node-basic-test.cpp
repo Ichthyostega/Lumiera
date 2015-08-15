@@ -198,7 +198,7 @@ namespace test{
           ++scope;
           CHECK (luid == scope->data.get<LuidH>());
           ++scope;
-          CHECK (Time(0.92,0) == scope->data.get<TimeSpan>().end());
+          CHECK (Time(920,0) == scope->data.get<TimeSpan>().end());
           ++scope;
           auto spam = *scope;
           CHECK (!++scope);

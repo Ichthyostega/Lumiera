@@ -39,7 +39,7 @@ namespace asset {
   
   class Proc;
   class ProcPatt;
-  class BuildInstruct; 
+  struct BuildInstruct;
   typedef lib::P<const asset::Proc> PProc;
   typedef lib::P<const asset::ProcPatt> PProcPatt;
   

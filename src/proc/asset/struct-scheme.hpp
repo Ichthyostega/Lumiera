@@ -48,7 +48,7 @@ using boost::format;
 
 
 namespace proc {
-  class StreamType;
+  struct StreamType;
   
 namespace mobject {
 namespace session {

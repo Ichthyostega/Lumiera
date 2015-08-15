@@ -117,7 +117,7 @@
 namespace std { // forward declaration to avoid including <iostream>
   
   template<typename C>
-  class char_traits;
+  struct char_traits;
   
   template<typename C, class _TRAITS>
   class basic_ostream;

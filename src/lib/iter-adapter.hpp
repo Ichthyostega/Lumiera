@@ -107,7 +107,7 @@ namespace lib {
   
   
   namespace { // internal helpers
-    void
+    inline void
     _throwIterExhausted()
     {
       throw lumiera::error::Invalid ("Can't iterate further",

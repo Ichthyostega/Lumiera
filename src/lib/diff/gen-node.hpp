@@ -120,7 +120,7 @@ namespace diff{
   
   using std::string;
   
-  class GenNode;
+  struct GenNode;
   
   using Rec = Record<GenNode>;
   using RecRef = RecordRef<GenNode>;
@@ -170,7 +170,7 @@ namespace diff{
       class ID
         : public idi::BareEntryID
         {
-          friend class GenNode;
+          friend struct GenNode;
           
           template<typename X>
           ID (X*, string const& symbolicID)

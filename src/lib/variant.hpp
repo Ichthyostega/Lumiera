@@ -59,6 +59,14 @@
  ** concrete type does not support assignment or copy construction, the respective access
  ** function is replaced by an implementation raising a runtime error.
  ** 
+ ** @note we use a Visitor interface generated through metaprogramming.
+ **       This may generate a lot of warnings "-Woverloaded-virtual",
+ **       since one \c handle(TX) function may shadow other \c handle(..) functions
+ **       from the inherited (generated) Visitor interface. These warnings are besides
+ **       the point, since not the \em client uses these functions, but the Variant does,
+ **       after upcasting to the interface. Make sure you define your specialisations with
+ **       the override modifier; when done so, it is safe to disable this warning here.
+ ** 
  ** @see Veriant_test
  ** @see lib::diff::GenNode
  ** @see virtual-copy-support.hpp

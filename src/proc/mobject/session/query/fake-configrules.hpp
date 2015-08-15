@@ -175,7 +175,7 @@ namespace session {
       {
         typedef typename WrapReturn<TY>::Wrapper Ret;
         
-      public:
+        
         /** (dummy) implementation of the QueryHandler interface */
         virtual bool 
         resolve (Ret& solution, Query<TY> const& q)

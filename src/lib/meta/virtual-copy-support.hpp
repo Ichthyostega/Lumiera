@@ -34,16 +34,16 @@
  ** a virtual function (which requires a VTable): Even if for everyone else any
  ** knowledge regarding the exact implementation type has been discarded ("erased"),
  ** the function pointers in the VTable still implicitly hold onto that precise
- ** implementation type, since they were setup during construction, where the
+ ** implementation type, since they were set up during construction, where the
  ** type was still available. Such a scheme of dealing with "opaque" copy operations
  ** is known as <b>virtual copy</b> -- it can be dangerous and tricky to get right
  ** and is preferably used only in flat class hierarchies.
  ** 
  ** This helper template simplifies the construction of such a scheme.
  ** - a base interface defines the available virtual copy operations
- ** - a set of CRTP-style templates covers all the case of
+ ** - a set of CRTP-style templates covers all the cases of
  **   - full copy support
- **   - copy construction but not assignment
+ **   - copy construction but no assignment
  **   - only move construction allowed
  **   - noncopyable type
  ** - we use type traits and a policy template to pick the correct implementation
@@ -144,6 +144,8 @@ namespace meta{
     : public BASE
     {
     public:
+      virtual ~VirtualCopySupportInterface()  { }
+      
       virtual void  copyInto (void* targetStorage)  const =0;
       virtual void  moveInto (void* targetStorage)        =0;
       virtual void  copyInto (IFA&         target)  const =0;
@@ -198,6 +200,9 @@ namespace meta{
           D& src = static_cast<D&> (*this);
           new(targetStorage) D(move(src));
         }
+      
+      using I::copyInto;
+      using I::moveInto;
     };
   
   
@@ -211,6 +216,9 @@ namespace meta{
           D const& src = static_cast<D const&> (*this);
           new(targetStorage) D(src);
         }
+      
+      using I::copyInto;
+      using I::moveInto;
     };
   
   
@@ -233,6 +241,9 @@ namespace meta{
           D& s = static_cast<D&> (*this);
           t = move(s);
         }
+      
+      using I::copyInto;
+      using I::moveInto;
     };
   
   

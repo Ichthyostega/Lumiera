@@ -47,6 +47,10 @@ namespace proc {
   using lib::Symbol;
   
   
+// "yes mummy, we all know this code is not finished yet..."
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuninitialized"
+  
   /**
    * TODO write type comment
    */
