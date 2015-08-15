@@ -102,7 +102,6 @@ namespace test{
       void
       checkExtension ()
         {
-          typedef SubId<Colour> CID;
           typedef SubId<uint>   UID;
           
           typedef ExtendedSubId<Colour, UID> CUID;

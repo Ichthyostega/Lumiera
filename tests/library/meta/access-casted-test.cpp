@@ -75,7 +75,6 @@ namespace test {
     
     ostream& operator<< (ostream& s, const B& b) { return s << "B{} adr="<<&b<<" type: "<<tyAbbr(b); }
     ostream& operator<< (ostream& s, const D& d) { return s << "D{} adr="<<&d<<" type: "<<tyAbbr(d); }
-    ostream& operator<< (ostream& s, const E& e) { return s << "E{} adr="<<&e<<" type: "<<tyAbbr(e); }
     ostream& operator<< (ostream& s, const F& f) { return s << "F{} adr="<<&f<<" type: "<<tyAbbr(f); }
     
   }//(End)Test fixture

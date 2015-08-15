@@ -248,7 +248,6 @@ namespace session {
   ScopePath
   commonPrefix (ScopePath const& path1, ScopePath const& path2)
   {
-    typedef std::vector<Scope>::iterator VIter;
     ScopePath prefix (ScopePath::INVALID);
     uint len = std::min (path1.length(), path2.length());
     for (uint pos = 0; pos<len; ++pos)

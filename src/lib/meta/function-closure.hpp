@@ -804,8 +804,6 @@ namespace func{
   typename _Clo<SIG,ARG>::Type
   closure (SIG& f, Tuple<ARG>& args)
   {
-    typedef typename _Fun<SIG>::Ret Ret;
-    typedef typename _Sig<Ret,ARG>::Type Signature;
     typedef typename _Clo<SIG,ARG>::Type Closure;
     return Closure (f,args);
   }

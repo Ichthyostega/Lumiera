@@ -114,7 +114,7 @@ namespace test    {
           CHECK (fork3  == focus.getObject());
           
           RFork fork31 = sess->attach(
-              asset::Struct::retrieve (Query<asset::????> ("id(fork31)")));  ////TODO broken: we don't use a dedicated Fork asset anymore. It's just an EntryID<Fork>
+              asset::Struct::retrieve (Query<asset::???? > ("id(fork31)")));  ////TODO broken: we don't use a dedicated Fork asset anymore. It's just an EntryID<Fork>
           
           
           CHECK (fork31 == focus.getObject());
