@@ -29,7 +29,7 @@ There is nothing really fancy with the configuration, things work as you'd expec
       actually enabled. This provider is used by the IDE to retrieve definitions from the compiler for syntax checks
       while you type and for building the search index. Typically, this provider is called ``GCC Builtin Compiler Settings'';
       please ensure in the global (or the project specific) configuration that the invocation command line includes
-      the argument `-std=gnu++11` -- otherwise you'll get a lot of red squiggles on the new language features ;-)
+      the argument `-std=gnu++14` -- otherwise you'll get a lot of red squiggles on the new language features ;-)
 
 Indexer troubleshooting
 ~~~~~~~~~~~~~~~~~~~~~~~

@@ -266,7 +266,6 @@ Proc Layer::
   * expand on the work done for a pooling small objects allocator.
   * develop a backend for our various allocation schemes to use this allocator.
 
-- help with the C++11 transition
 - Command system at the GUI interface
 
   * expand on the work done for generic commands

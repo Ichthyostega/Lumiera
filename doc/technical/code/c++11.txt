@@ -12,7 +12,9 @@ language and compiler support wasn't ready for what we consider _state of the cr
 amended deficiencies by rolling our own helper facilities, with a little help from Boost.
 Thus there was no urge for us to adopt the new language standard; we could simply wait for
 the compiler support to mature. In spring 2014, finally, we were able to switch our codebase
-to C++11 with minimal effort. Following this switch, we're now able to reap the benefits of
+to C++11 with minimal effort.footnote[since 8/2015 -- after the switch to Debian/Jessie
+as a »reference platform«, we even compile with `-std=gnu++14`]
+Following this switch, we're now able to reap the benefits of
 this approach; we may now gradually replace our sometimes clunky helpers and workarounds
 with the smooth syntax of the ``new language'' -- without being forced to learn or adopt
 an entirely new coding style, since that style isn't exactly new for us.

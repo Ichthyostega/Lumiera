@@ -48,9 +48,9 @@ Languages and Tools
 
 * C / C++
 
- - a C99 / C++11 compatible compiler footnote:[in practice, we build using GCC and
+ - a C99 / C++14 compatible compiler footnote:[in practice, we build using GCC and
    occasionally we check using Clang]
- - GCC *4.7* or Clang *3.3* should be fine footnote:[basically we try to use just the stock language.
+ - GCC *4.9* or Clang *3.5* should be fine footnote:[basically we try to use just the stock language.
    On rare occasions in the past, we _did_ use some GCC extensions, like `typeof()`, but we care for
    workarounds, in case this becomes a problem].
  
@@ -62,7 +62,7 @@ Languages and Tools
  - libboost-regex-dev
 
 * Script languages
- - Python (*2.6*) for build scripts
+ - Python (*2.7*) for build scripts
  - bash (some test scripts use bash specific extensions)
 
 Build Tools
@@ -79,10 +79,7 @@ We maintain a link:/documentation/technical/infra/debianDepot.html[Debian/Ubuntu
 Libraries
 ~~~~~~~~~
 
-* BOOST footnote:[as of [yellow-background]#5/2014#, we rely on the quite recent Boost-1.55,
-  which isn't in Debian/stable and not even in Debian/testing. +
-  As always in such cases, we provide backported packages in our
-  link:http://lumiera.org/debian/pool/experimental/b/boost1.55/[Lumiera package repository], until these versions become mainstream.]
+* BOOST
 * link:http://nobug.pipapo.org/[NoBug]
 * http://gmerlin.sourceforge.net/gavl.html[GAVL] (for raw media support)
 * ALSA: libasound2-dev

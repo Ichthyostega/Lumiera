@@ -46,7 +46,7 @@ authoritative information about the build dependencies is encoded into the
 link:{ldoc}/technical/build/SCons.html[build system]. Thus, when the build
 system aborts, indicating that a never version of some library is required,
 then usually the build system is right...]
-More specifically, you'll need the GNU C/C++ compiler with C++11 support (Version >= 4.7)
+More specifically, you'll need the GNU C/C++ compiler with C++14 support (Version >= 4.9)
 in addition to the following tools and libraries:
 
  * link:http://git-scm.com/[Git VCS]
@@ -73,7 +73,7 @@ For Debian based systems, e.g. Mint, Ubuntu..., you can install these packages a
 -------------------------------------------------------------------------------------
 sudo apt-get install build-essential scons git-core valgrind intltool \
 libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
-libgavl-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
+libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
 -------------------------------------------------------------------------------------
 
 Optionally, you may also want to install the `gtk2-engines` package.
@@ -135,6 +135,14 @@ sudo make install
 
 GDL: building and installing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NOTE: 8/2015 the information in this paragraph is outdated!
+      We have switched to GTK-3 recently. Now we're able just to use the
+      official GDL from upstream (or your distribution). But we have also
+      switched to C++ bindings, and thus need a gdlmm installation, which
+      is not yet provided through the offial repositories on most distributions.
+      Thus, instead of shipping our own libGDL, now we're providing a DEB package
+      of gdlmm through our repository...
 
 The *GNOME Docking library* is sometimes available through your package manager,
 but we provide a suitable custom package as well; the following shows how to
