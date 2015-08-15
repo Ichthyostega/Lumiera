@@ -408,7 +408,7 @@ namespace lib {
       X const&
       get()  const
         {
-          return unConst(this)->get<X>();
+          return unConst(this)->template get<X>();
         }
       
       void
