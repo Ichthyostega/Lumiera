@@ -77,6 +77,14 @@ namespace idi {
   using lib::HashVal;
   
   namespace {
+    /** lousy old tinkerer's trick:
+     *  hash values with poor distribution can be improved
+     *  by spreading the input with something close to the golden ratio.
+     *  Additionally, the scaling factor (for hashing) should be prime.
+     *  2^32 * (√5-1)/2 = 2654435769.49723
+     */
+    const size_t KNUTH_MAGIC = 2654435761;
+    
     
     /** build up a hash value, packaged as LUID.
      *  @param sym symbolic ID-string to be hashed
@@ -92,16 +100,22 @@ namespace idi {
      *        conjunction with LUID. How to create a LuidH instance, if not generating
      *        a new random value. How to make EntryID and asset::Ident interchangeable,  /////////TICKET #739
      *        which would require both to yield the same hash values....
-     *  @warning there is a weakness in boost::hash for strings of running numbers, causing
-     *        collisions already for a small set with less than 100000 entries.
-     *        To ameliorate the problem, we hash the symbol twice                        /////////TICKET #865
+     *  @warning there is a weakness in boost::hash for strings of running numbers,
+     *        causing collisions already for a small set with less than 100000 entries.
+     *        To ameliorate the problem, we hash in the trailing digits, and
+     *        spread them by the #KNUTH_MAGIC                                            /////////TICKET #865
      *  @warning this code isn't portable and breaks if sizeof(size_t) < sizeof(void*)
+     *  @see HashGenerator_test#verify_Knuth_workaround
      */
     inline LuidH
     buildHash (string const& sym, HashVal seed =0)
     {
+      size_t l = sym.length();
+      if (l > 1) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-1]);
+      if (l > 2) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-2]);
+      if (l > 3) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-3]);       ////////////////////////TICKET #865
+      
       boost::hash_combine(seed, sym);
-      boost::hash_combine(seed, sym);                                     ////////////////////////TICKET #865
       lumiera_uid tmpLUID;
       lumiera_uid_set_ptr (&tmpLUID, reinterpret_cast<void*> (seed));
       return reinterpret_cast<LuidH&> (tmpLUID);

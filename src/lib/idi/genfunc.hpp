@@ -108,6 +108,8 @@ namespace idi {
   /** build a per-type unique identifier.
    * @return a type based prefix, followed by an instance number
    * @note we use the short prefix without namespace, not necessarily unique
+   * @todo consequently the generated IDs might clash for two distinct types,
+   *          which generate the same \c namePrefix(). Is this a problem?
    * @warning this operation is not exactly cheap; it acquires a lock
    *          for the counter and, after increasing and dropping the lock,
    *          it builds and uses a boost::format instance.

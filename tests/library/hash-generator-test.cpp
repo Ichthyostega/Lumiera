@@ -58,7 +58,12 @@ namespace test{
       run (Arg)
         {
           demonstrate_boost_hash_weakness();
+          verify_Knuth_workaround();
         }
+      
+      
+      typedef boost::hash<string> BoostStringHasher;
+      typedef std::map<size_t, string> StringsTable;
       
       
       /** @test demonstrate a serious weakness of boost::hash for strings.
@@ -73,9 +78,6 @@ namespace test{
       void
       demonstrate_boost_hash_weakness ()
         {
-          typedef boost::hash<string> BoostStringHasher;
-          typedef std::map<size_t, string> StringsTable;
-          
           BoostStringHasher hashFunction;
           StringsTable hashValues;
           string prefix = "Entry.";
@@ -101,6 +103,50 @@ namespace test{
               hashValues[hashVal] = candidate;
             }
           CHECK (0 < collisions, "boost::hash for strings is expected to produce collisions");
+        }
+      
+      
+      
+      /** @test verify a well-known pragmatic trick to help with unevenly spaced hash values.
+       * The boost::hash function is known to perform poorly on strings with common prefix
+       * plus running number. The mentioned trick (attributed to Donald Knuth) is spread the
+       * input numbers by something below the full domain, best close to the golden ratio;
+       * bonus points if this number is also a prime. An additional factor of 2 does not hurt
+       * (so in case of 64bit platform).
+       * 
+       * In our case, it is sufficient to apply this trick to the trailing two digits;
+       * without this trick, we get the first collisions after about 20000 running numbers.
+       * @see BareEntryID
+       */
+      void
+      verify_Knuth_workaround()
+        {
+          StringsTable hashValues;
+          string prefix = "Entry.";
+          const size_t seed = rand();
+          
+          const size_t KNUTH_MAGIC = 2654435761;
+          
+          uint collisions(0);
+          for (uint i=0; i<100000; ++i)
+            {
+              string candidate = prefix + lexical_cast<string> (i);
+              size_t l = candidate.length();
+              size_t hashVal = seed;
+              
+              boost::hash_combine(hashVal, KNUTH_MAGIC * candidate[l-1]);
+              boost::hash_combine(hashVal, KNUTH_MAGIC * candidate[l-2]);
+              boost::hash_combine(hashVal, candidate);
+              
+              if (contains (hashValues, hashVal))
+                {
+                  ++collisions;
+                  string other = hashValues[hashVal];
+                  cout << "Hash collision between " << i << " and " << other <<endl;
+                }
+              hashValues[hashVal] = candidate;
+            }
+          CHECK (!collisions, "the Knuth trick failed to spread our hash values evenly enough, what a shame...");
         }
       
     };

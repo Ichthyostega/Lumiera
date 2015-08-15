@@ -258,20 +258,25 @@ namespace test{
       typedef std::unordered_map<DummyID, string, DummyID::UseEmbeddedHash> Hashtable;
       
       /** @test build a hashtable, using EntryID as key,
-       *        thereby using the embedded hash-ID */
+       *        thereby using the embedded hash-ID
+       *  @note there is a known weakness of the boost::hash
+       *        when used on IDs with a running number suffix. /////TICKET #587
+       *        We use a trick to spread the numbers better.
+       *  @see  HashGenerator_test#verify_Knuth_workaround
+       */
       void
       buildHashtable ()
         {
           Hashtable tab;
           
-          for (uint i=0; i<10000; ++i)         //////////////////TICKET #865 hash collisions for 100000 entries
+          for (uint i=0; i<100000; ++i)
             {
               DummyID dummy;
               tab[dummy] = string(dummy);
             }
           
           CHECK (and_all (tab, verifyEntry));
-          CHECK (10000 == tab.size());
+          CHECK (100000 == tab.size());
         }
       
       
