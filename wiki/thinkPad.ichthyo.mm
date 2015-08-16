@@ -227,7 +227,7 @@
       Problem ist, wir definieren den Typ Record generisch,
     </p>
     <p>
-      verwenden dann aber nur die spezialisierung Record&lt;GenNode&gt;
+      verwenden dann aber nur die Spezialisierung Record&lt;GenNode&gt;
     </p>
     <p>
       Und die Builder-Funktionen brauchen eigentlich spezielles Wissen &#252;ber den zu konstruierenden Zieltyp

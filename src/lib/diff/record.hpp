@@ -90,7 +90,6 @@
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
-//#include "lib/format-string.hpp"
 #include <boost/noncopyable.hpp>
 
 #include <algorithm>
@@ -105,7 +104,6 @@ namespace diff{
   
   namespace error = lumiera::error;
   
-//using util::_Fmt;
   using std::string;
   
   
@@ -218,7 +216,7 @@ namespace diff{
           if (attribs_.end() == found)
             throw error::Invalid ("Record has no attribute \""+key+"\"");
           else
-            return *found;
+            return extractVal (*found);
         }
       
       /**
@@ -280,8 +278,8 @@ namespace diff{
       
       /** Implementation of Iteration-logic: detect iteration end.
        * @remarks seamless continuation of the iteration when reaching
-       *    the end of the attribute collection. In this implementation,
-       *    we use the default constructed \c ITER() to mark iteration end.
+       *     the end of the attribute collection. In this implementation,
+       *     we use the default constructed \c ITER() to mark iteration end.
        */
       template<class ITER>
       friend bool
@@ -322,7 +320,7 @@ namespace diff{
                                    {
                                      return key == extractKey(elm); 
                                    });
-        }                     ///////////////////TODO this lambda triggers a GCC-4.7.2 Bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56402
+        }
       
       
       friend bool
@@ -546,7 +544,7 @@ namespace diff{
     if (string::npos == pos)
       return "";
     else
-      return v.substr(0,pos);  //////////////////////////////TODO should trim here
+      return util::trim (v.substr (0,pos));
   }
   
   template<>
@@ -557,7 +555,7 @@ namespace diff{
     if (string::npos == pos)
       return v;
     else
-      return v.substr(pos+1, v.length() - pos);  ////////////TODO should trim here
+      return util::trim (v.substr (pos+1, v.length() - pos));
   }
   
   template<>

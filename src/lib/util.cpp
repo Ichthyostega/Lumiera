@@ -67,6 +67,18 @@ namespace util {
     return res;
   }
   
+  
+  /**
+   * @remarks this function just forwards to boost::algorithm::trim_copy.
+   *          Use this call when boost header inclusion is an issue, otherwise
+   *          a direct invocation is likely to perform better, due to inlining.  
+   */
+  string
+  trim (string const& org)
+  {
+    return boost::algorithm::trim_copy (org);
+  }
+  
 
   
 } // namespace util

@@ -321,6 +321,12 @@ namespace util {
   string sanitise (string const& org);
   
   
+  /** remove leading and trailing whitespace
+   * @return a trimmed copy (default locale)
+   */
+  string trim (string const& org);
+  
+  
   
   
   /** convenience shortcut: conversion to c-String via string.
