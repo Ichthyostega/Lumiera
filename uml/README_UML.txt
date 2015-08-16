@@ -19,7 +19,7 @@ As a consequence, Bouml was dropped from Debian, since it relies on qt3.
  * we track all these bouml session files in our Git tree
  * but note: the actual format is slightly dependent on the actual bouml version in use footnote:[as of
    1/2015, we still use Version *`4.21`* of bouml, which is the Version found in Debian/Squeeze. It runs
-   without modification on Debian/Wheezy]
+   without modification on Debian/Wheezy, but can no longer be used on Debian/Jessie]
  * and the layout of the rendered diagrams is unfortunatly _highly dependent on the installed fonts_.
  * for that reason, we check in any _relevant_ diagram images also into Git. See `doc/devel/uml`
    Here, ``relevant'' means all diagram images, which are linked into the website or the TiddlyWiki

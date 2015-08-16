@@ -146,7 +146,7 @@ Summer 2014::
   the basic switch to C++11 compilation is done by now, but we have yet to deal with
   some ``ripple effects''.
 September 2014::
-  and those problems turn out to be somewhat insidious: our _reference system_ is still Debian/stable,
+  and those problems turn out to be somewhat insidious: our _reference system_ is still Debian/Wheezy (stable),
   which means we're using *GCC-4.7* and *CLang 3.0*. While these compilers both provide a roughly complete
   C++11 support, a lot of fine points were discovered in the follow-up versions of the compilers and standard
   library -- current versions being GCC-3.9 and CLang 3.4
@@ -157,6 +157,10 @@ September 2014::
     GCC-4.7 doesn't blow up; CLang is even worse, Version 3.0 us unusable after our C++11 transition.
     We're forced to check our builds on Debian/testing, and we should consider to _raise our general
     requirement level_ soon.
+August 2015::
+  our »reference system« (platform) is Debian/Jessie from now on.
+  We have switched to **C++14** and use (even require) GCC-4.9 or CLang 3.5 -- we can expect solid support
+  for all C++11 features and most C++14 features.
 
 Perfect forwarding
 ~~~~~~~~~~~~~~~~~~

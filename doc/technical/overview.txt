@@ -87,6 +87,30 @@ nevertheless we try to stick to it as far as possible
 and maintain fairly complete test coverage.
 
 
+Releases and Development Process
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lumiera is developed in a collaborative style. Releases are done ``when ready''.
+We (the core developers) are always open for comments, new ideas and proposals.
+In fact, there is even a world-pushable ``mob'' Git repository on our server:
+minor contributions can be pushed there right away, we'll notice any changes.
+It might be a good idea to discuss larger changes prior to jumping into the
+code though. Our Mailinglist is the main information hub. Users and developers --
+everyone is welcome.
+
+Lumiera should be usable on any contemporary Linux (or similar *NIX) system.
+Porting to other platforms is OK for us, but requires Someone^TM^ to volunteer.
+For development and dependency management, we try to stick close to what
+Debian/stable provides. Whenever we need special or more recent libraries,
+we care for a backport and publish a DEB package for use on Debian/Stable.
+We also run a series of Debian Repositories, and we try to build a Lumiera
+package for an array of Debian-like distributions (Ubuntu, Mint). Through
+these ongoing efforts, we try to keep up with the evolution of platform,
+compilers, language and libraries, and we maintain our ability to
+release, even while there are no public releases planned
+for the foreseeable future.
+
+
+
 Lumiera Application
 -------------------
 Generally speaking, the Application is comprised of several self contained 
