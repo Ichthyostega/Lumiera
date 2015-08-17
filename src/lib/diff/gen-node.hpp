@@ -383,13 +383,6 @@ namespace diff{
   }
   
   template<>
-  inline GenNode
-  Rec::buildTypeAttribute (string const& typeID)
-  {
-    return GenNode("type", typeID);
-  }
-  
-  template<>
   inline string
   Rec::extractKey (GenNode const& v)
   {

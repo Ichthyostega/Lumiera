@@ -36,6 +36,7 @@
 using std::string;
 using util::isSameObject;
 using util::isnil;
+using util::join;
 using std::vector;
 //using std::swap;
 using std::cout;
@@ -119,6 +120,7 @@ namespace test{
                                     ,"Registry = NCC-1701-D"
                                     ,"Class = Galaxy"
                                     ,"Owner = United Federation of Planets"
+                                    ,"Operator= Starfleet"
                                     ,"built=2363"
                                    })
                          , strings ({"Picard", "Riker", "Data", "Troi", "Worf", "Crusher", "La Forge"})
@@ -139,8 +141,11 @@ namespace test{
           
           cout << "enterprise = " << string(enterprise)<<endl;
           for (string elm : enterprise)           cout << elm<<endl;
-          for (string mbr : enterprise.scope())   cout << mbr<<endl;
+          cout << "--Attributes--"<<endl;
           for (string att : enterprise.attribs()) cout << att<<endl;
+          cout << "--Keys--->" << join (enterprise.keys(), "<->")<<endl;
+          cout << "--Vals--->" << join (enterprise.vals(), "<->")<<endl;
+          cout << "--Crew--->" << join (enterprise.scope()," | ")<<endl;
         }
       
       

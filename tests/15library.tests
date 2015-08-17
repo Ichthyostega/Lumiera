@@ -214,7 +214,31 @@ return: 0
 END
 
 
-PLANNED "GenericRecordRepresentation_test" GenericRecordRepresentation_test <<END
+TEST "Generic Object Record" GenericRecordRepresentation_test <<END
+out-lit: enterprise = Rec(Name = USS Enterprise, Registry = NCC-1701-D, Class = Galaxy, Owner = United Federation of Planets, Operator = Starfleet, built = 2363 |{Picard, Riker, Data, Troi, Worf, Crusher, La Forge})
+out-lit: Name = USS Enterprise
+out-lit: Registry = NCC-1701-D
+out-lit: Class = Galaxy
+out-lit: Owner = United Federation of Planets
+out-lit: Operator= Starfleet
+out-lit: built=2363
+out-lit: Picard
+out-lit: Riker
+out-lit: Data
+out-lit: Troi
+out-lit: Worf
+out-lit: Crusher
+out-lit: La Forge
+out-lit: --Attributes--
+out-lit: Name = USS Enterprise
+out-lit: Registry = NCC-1701-D
+out-lit: Class = Galaxy
+out-lit: Owner = United Federation of Planets
+out-lit: Operator= Starfleet
+out-lit: built=2363
+out-lit: --Keys--->Name<->Registry<->Class<->Owner<->Operator<->built
+out-lit: --Vals--->USS Enterprise<->NCC-1701-D<->Galaxy<->United Federation of Planets<->Starfleet<->2363
+out-lit: --Crew--->Picard | Riker | Data | Troi | Worf | Crusher | La Forge
 return: 0
 END
 

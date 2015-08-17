@@ -167,10 +167,11 @@ namespace diff{
         {
           auto p = std::begin(con);
           auto e = std::end(con);
-          if (p!=e && isTypeID (*p))
-            type_ = extractTypeID(*(p++));
           for ( ; p!=e && isAttribute(*p); ++p)
-            attribs_.push_back (*p);
+            if (isTypeID (*p))
+              type_ = extractTypeID(*p);
+            else
+              attribs_.push_back (*p);
           for ( ; p!=e; ++p)
             children_.push_back (*p);
         }
@@ -307,7 +308,6 @@ namespace diff{
       static bool   isAttribute (VAL const& v);
       static bool   isTypeID (VAL const& v);
       static string extractTypeID (VAL const& v);
-      static VAL    buildTypeAttribute (string const& typeID);
       static string renderAttribute (VAL const& a);
       static string extractKey (VAL const& v);
       static Access extractVal (VAL const& v);
@@ -388,7 +388,6 @@ namespace diff{
       void
       setType (string const& newTypeID)
         {
-          set ("type", Rec::buildTypeAttribute (newTypeID));
           record_.type_ = newTypeID;
         }
       
@@ -595,14 +594,7 @@ namespace diff{
   inline string
   Record<string>::extractTypeID (string const& v)
   {
-    return "todo"; //////////////////////////////////////////TODO do we really need this function?
-  }
-  
-  template<>
-  inline string
-  Record<string>::buildTypeAttribute (string const& typeID)
-  {
-    return "type = "+typeID;
+    return extractVal(v);
   }
   
   template<>
@@ -629,7 +621,7 @@ namespace diff{
     
     return "Rec("
          + join (transformIterator (this->attribs(), renderAttribute))
-         + "|{"
+         + " |{"
          + join (this->scope())
          + "})"
          ;
