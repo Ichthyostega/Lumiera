@@ -139,10 +139,13 @@ namespace test{
           
           VERIFY_ERROR (INVALID, enterprise.get("warp10"));
           
-          cout << "enterprise = " << string(enterprise)<<endl;
-          for (string elm : enterprise)           cout << elm<<endl;
+          cout << "enterprise = "
+               << string(enterprise)<<endl;
+          for (string elm : enterprise)
+            cout << elm<<endl;
           cout << "--Attributes--"<<endl;
-          for (string att : enterprise.attribs()) cout << att<<endl;
+          for (string att : enterprise.attribs())
+            cout << att<<endl;
           cout << "--Keys--->" << join (enterprise.keys(), "<->")<<endl;
           cout << "--Vals--->" << join (enterprise.vals(), "<->")<<endl;
           cout << "--Crew--->" << join (enterprise.scope()," | ")<<endl;
@@ -155,6 +158,7 @@ namespace test{
           RecS nil;
           CHECK (isnil(nil));
           CHECK ("NIL" == nil.getType());
+          CHECK (RecS::TYPE_NIL == nil.getType());
           
           CHECK (!nil.begin());
           CHECK (nil.begin() == nil.end());
@@ -176,10 +180,10 @@ namespace test{
           CHECK (Seq{"z"} == contents (untyped2.scope()));
           
           
-          RecS something({"type=thing", "a=1", "b=2", "c", "d"});
+          RecS something({"a=1", "type=thing", "b=2", "c", "d"});
           CHECK (!isnil(something));
           CHECK ("thing" == something.getType());
-          CHECK (Seq({"type=thing", "a=1", "b=2", "c", "d"}) == contents(something));
+          CHECK (Seq({"a=1", "b=2", "c", "d"}) == contents(something));
           CHECK (Seq({"a", "b"}) == contents (something.keys()));
           CHECK (Seq({"1", "2"}) == contents (something.vals()));
           CHECK (Seq({"c", "d"}) == contents (something.scope()));
@@ -189,7 +193,7 @@ namespace test{
       void
       copy_and_move()
         {
-          RecS a({"type=thing", "a=1", "b=2", "c", "d"});
+          RecS a({"a=1", "b=2", "c", "d"});
           RecS b(a);
           CHECK (a.getType() == b.getType());
           CHECK (contents(a) == contents(b));
@@ -284,7 +288,7 @@ namespace test{
           RecS aa(mut);
           CHECK (a != aa);
           CHECK ("u" == aa.getType());
-          CHECK (Seq({"type=u", "a=1", "a"}) == contents(aa));
+          CHECK (Seq({"a=1", "a"}) == contents(aa));
           CHECK (Seq({"a"}) == contents (aa.keys()));
           CHECK (Seq({"1"}) == contents (aa.vals()));
           CHECK (Seq({"a"}) == contents (aa.scope()));
@@ -299,8 +303,8 @@ namespace test{
           
           mut.replace(a);
           CHECK (isnil (mut));
-          CHECK (Seq({"type=u", "a=α", "a=β", "⟂", "a"}) == contents(a));
-          CHECK (Seq({"type=u", "a=1", "a"}) == contents(aa));
+          CHECK (Seq({"a=α", "a=β", "⟂", "a"}) == contents(a));
+          CHECK (Seq({"a=1", "a"}) == contents(aa));
         }
       
       

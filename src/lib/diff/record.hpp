@@ -104,6 +104,7 @@ namespace diff{
   
   namespace error = lumiera::error;
   
+  using util::isnil;
   using std::string;
   
   template<typename VAL>
@@ -141,13 +142,15 @@ namespace diff{
       Storage children_;
       
     public:
+      static const string TYPE_NIL;
+      
       Record()
-        : type_("NIL")
+        : type_(TYPE_NIL)
         { }
       
       template<typename A, typename C>
       Record(Symbol typeID, A&& att, C&& chi)
-        : type_(typeID)
+        : type_(isnil(typeID)? TYPE_NIL:string(typeID))
         , attribs_(std::forward<A> (att))
         , children_(std::forward<C> (chi))
         { }
@@ -155,7 +158,7 @@ namespace diff{
       template<typename A, typename C>
       Record(Symbol typeID, std::initializer_list<A> const&& att
                           , std::initializer_list<C> const&& chi)
-        : type_(typeID)
+        : type_(isnil(typeID)? TYPE_NIL:string(typeID))
         , attribs_(att)
         , children_(chi)
         { }
@@ -163,7 +166,7 @@ namespace diff{
       template<typename SEQ>
       explicit
       Record (SEQ const& con)
-        : type_("NIL")
+        : type_(TYPE_NIL)
         {
           auto p = std::begin(con);
           auto e = std::end(con);
@@ -259,7 +262,7 @@ namespace diff{
       using valIter   = TransformIter<scopeIter, Access>;
       
       /** default iteration exposes all data within this "object", starting with the attributes */
-      iterator  begin ()  const { return iterator(this, attribs_.begin()); }
+      iterator  begin ()  const { return iterator(this, attribs_.empty()? children_.begin() : attribs_.begin()); }
       iterator  end ()    const { return iterator(); }
       
       scopeIter attribs() const { return iter_stl::eachElm(attribs_); }
@@ -271,9 +274,8 @@ namespace diff{
     protected: /* ==== API for the IterAdapter ==== */
       
       /** Implementation of Iteration-logic: pull next element. */
-      template<class ITER>
       friend void
-      iterNext (const Record* src, ITER& pos)
+      iterNext (const Record* src, ElmIter& pos)
         {
           ++pos;
           checkPoint (src,pos);
@@ -284,22 +286,22 @@ namespace diff{
        *     the end of the attribute collection. In this implementation,
        *     we use the default constructed \c ITER() to mark iteration end.
        */
-      template<class ITER>
       friend bool
-      checkPoint (const Record* src, ITER& pos)
+      checkPoint (const Record* src, ElmIter& pos)
         {
           REQUIRE (src);
-          if ((pos != ITER()) && (pos == src->attribs_.end()) && !src->children_.empty())
+          static const ElmIter END;
+          if (pos != END && pos == src->attribs_.end() && !src->children_.empty())
             {
               pos = src->children_.begin();
               return true;
             }
           else
-            if (pos != ITER() && (pos != src->children_.end()))
+            if (pos != END && (pos != src->children_.end()))
               return true;
             else
               {
-                pos = ITER();
+                pos = END;
                 return false;
         }     }
       
@@ -339,6 +341,9 @@ namespace diff{
         return ! (r1 == r2);
       }
     };
+  
+  template<typename VAL>
+  const string Record<VAL>::TYPE_NIL = "NIL";
   
   
   
@@ -620,6 +625,7 @@ namespace diff{
     using lib::transformIterator;
     
     return "Rec("
+         + (TYPE_NIL==type_? "" : type_+"| ")
          + join (transformIterator (this->attribs(), renderAttribute))
          + " |{"
          + join (this->scope())

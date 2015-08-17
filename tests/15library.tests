@@ -215,7 +215,7 @@ END
 
 
 TEST "Generic Object Record" GenericRecordRepresentation_test <<END
-out-lit: enterprise = Rec(Name = USS Enterprise, Registry = NCC-1701-D, Class = Galaxy, Owner = United Federation of Planets, Operator = Starfleet, built = 2363 |{Picard, Riker, Data, Troi, Worf, Crusher, La Forge})
+out-lit: enterprise = Rec(starship| Name = USS Enterprise, Registry = NCC-1701-D, Class = Galaxy, Owner = United Federation of Planets, Operator = Starfleet, built = 2363 |{Picard, Riker, Data, Troi, Worf, Crusher, La Forge})
 out-lit: Name = USS Enterprise
 out-lit: Registry = NCC-1701-D
 out-lit: Class = Galaxy
