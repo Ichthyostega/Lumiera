@@ -122,6 +122,21 @@ namespace diff{
   
   struct GenNode;
   
+  /** Define actual data storage and access types used */
+  template<>
+  struct RecordSetup<GenNode>
+    {
+      using Storage = std::vector<GenNode>;
+      using ElmIter = typename Storage::const_iterator;
+      
+      /** using const reference data access
+       *  relevant for handling large subtrees */
+      using Access  = GenNode const&;
+    };
+  
+  
+  
+  
   using Rec = Record<GenNode>;
   using RecRef = RecordRef<GenNode>;
   using MakeRec = Rec::Mutator;
@@ -382,7 +397,7 @@ namespace diff{
   }
   
   template<>
-  inline GenNode
+  inline GenNode const&
   Rec::extractVal (GenNode const& v)
   {
     return GenNode(v); ///TODO

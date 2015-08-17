@@ -457,6 +457,8 @@ namespace lib {
   
   /**
    * Iterator tool treating pulled data by a custom transformation (function)
+   * @param IT source iterator
+   * @param VAL result (output) type
    */
   template<class IT, class VAL>
   class TransformIter

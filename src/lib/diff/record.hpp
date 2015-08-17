@@ -106,6 +106,8 @@ namespace diff{
   
   using std::string;
   
+  template<typename VAL>
+  struct RecordSetup;
   
   
   /**
@@ -129,14 +131,14 @@ namespace diff{
   template<typename VAL>
   class Record
     {
-      using _Vec = std::vector<VAL>;
-      using Attribs = _Vec;
-      using Children = _Vec;
-      using ElmIter = typename _Vec::const_iterator;
+      using Storage  = typename RecordSetup<VAL>::Storage;
+      using ElmIter  = typename RecordSetup<VAL>::ElmIter;
+      using Access   = typename RecordSetup<VAL>::Access;
+      
       
       string type_;
-      Attribs attribs_;
-      Children children_;
+      Storage attribs_;
+      Storage children_;
       
     public:
       Record()
@@ -209,7 +211,7 @@ namespace diff{
           return util::contains (children_, val);
         }
       
-      VAL const&
+      Access
       get (string key)  const
         {
           ElmIter found = findKey (key);
@@ -250,10 +252,10 @@ namespace diff{
       
       /* ==== Exposing scope and contents for iteration ====== */
       
-      using iterator  = IterAdapter<typename _Vec::const_iterator, const Record*>;
-      using scopeIter = typename iter_stl::_SeqT<const _Vec>::Range;
+      using iterator  = IterAdapter<ElmIter, const Record*>;
+      using scopeIter = typename iter_stl::_SeqT<const Storage>::Range;
       using keyIter   = TransformIter<scopeIter, string>;
-      using valIter   = TransformIter<scopeIter, VAL>;
+      using valIter   = TransformIter<scopeIter, Access>;
       
       /** default iteration exposes all data within this "object", starting with the attributes */
       iterator  begin ()  const { return iterator(this, attribs_.begin()); }
@@ -308,7 +310,7 @@ namespace diff{
       static VAL    buildTypeAttribute (string const& typeID);
       static string renderAttribute (VAL const& a);
       static string extractKey (VAL const& v);
-      static VAL    extractVal (VAL const& v);
+      static Access extractVal (VAL const& v);
       
       
       ElmIter
@@ -421,7 +423,7 @@ namespace diff{
       
       /* === extension point for building specific value types === */
       /*
-       * the following builder functions are to be specialised
+       * the following builder functions need to be specialised
        * to create a Record holding specific value types,
        * especially for building a tree like structure
        * with GenNode holding a Record<GenNode>
@@ -533,8 +535,24 @@ namespace diff{
   
   
   
+  /* === Extension point: Specialisations for attribute handling === */
   
-  /* === Specialisations to define the handling of attributes === */
+  /**
+   * Type configuration (extension point).
+   * Data storage and access types.
+   */
+  template<>
+  struct RecordSetup<string>
+    {
+      using Storage = std::vector<string>;
+      using ElmIter = typename Storage::const_iterator;
+      using Access  = string;      ///< data access by value copy
+    };
+  
+  
+  
+  
+  /* default handling defined for Record<string> */
   
   template<>
   inline string
