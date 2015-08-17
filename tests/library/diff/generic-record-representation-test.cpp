@@ -26,10 +26,8 @@
 #include "lib/format-util.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/itertools.hpp"
-#include "lib/util.hpp"       //////TODO necessary?
 
 #include <iostream>
-//#include <utility>
 #include <string>
 #include <vector>
 
@@ -38,7 +36,7 @@ using util::isSameObject;
 using util::isnil;
 using util::join;
 using std::vector;
-//using std::swap;
+using std::swap;
 using std::cout;
 using std::endl;
 
@@ -47,7 +45,6 @@ namespace lib {
 namespace diff{
 namespace test{
   
-//  using lumiera::error::LUMIERA_ERROR_LOGIC;
   using lumiera::error::LUMIERA_ERROR_INVALID;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
@@ -92,10 +89,37 @@ namespace test{
   
   /*************************************************************************************//**
    * @test Verify properties of a special collection type meant for external representation
-   *       of object-like data.
+   *       of object-like data, especially for symbolic representation in diff messages.
+   *       - there is a type meta attribute
+   *       - a Record can have attributes (by key) and contents (ordered list of values)
+   *       - various kinds of iterators are provided
+   *       - besides the regular constructor, which explicitly takes a type, a collection
+   *         of attributes, and a collection of contents, there is a convenience constructor
+   *         especially for literal notation and data definition. This one figures out the
+   *         break between attributes and contents automatically; a type meta attribute
+   *         is recognised and the first element without a given key or ID ends the
+   *         attributes and starts the content scope
+   *       - Record elements are conceived as values and equality is defined in terms
+   *         of their contents, including the order (no normalisation, no sorting)
+   *       - they are \em immutable after construction. But we provide a Mutator
+   *         for remoulding a given element, enabling object builder notation.
+   *       - a reference wrapper for handling of large structures is provided.
+   * @remarks this test uses the specialisation \c Record<string> solely, to cover the
+   *       basic properties and behaviour, while leaving out the complexities of specific
+   *       payload data types. For the actual use case, the symbolic description of
+   *       data structure differences, we use a specific "value" within Record,
+   *       the diff::GenNode, which is a limited typesafe Variant element, and in
+   *       turn allows Record<GenNode> as embedded payload. Effectively this creates
+   *       a "recursive data type", which is key to typesafe functional processing of
+   *       unlimited data structures. The design of diff::Record only makes sense with
+   *       this use case in mind; most notably, we have the keys (attribute names)
+   *       embedded within the value payload, which turns attributes into just another
+   *       content scope with special access operations. This also explains, why we
+   *       do not normalise the content in any way; content is meant to reflect
+   *       other data structures, which are normalised and maintained by their owner. 
    *       
-   * @see IndexTable
-   * @see DiffListApplication_test
+   * @see GenNodeBasic_test
+   * @see tree-diff.cpp
    */
   class GenericRecordRepresentation_test : public Test
     {
@@ -131,10 +155,10 @@ namespace test{
           
           CHECK (enterprise.hasAttribute("Owner"));
           CHECK (!enterprise.hasAttribute("owner"));
-          CHECK (!enterprise.hasAttribute("Owner "));
+          CHECK (!enterprise.hasAttribute("Owner ")); // no normalisation
           
           CHECK (enterprise.contains("Data"));
-          CHECK (!enterprise.contains("Woof"));
+          CHECK (!enterprise.contains("Woof"));    // it is /Worf/, madam
           CHECK (util::contains (enterprise, "Worf"));
           
           VERIFY_ERROR (INVALID, enterprise.get("warp10"));
@@ -231,6 +255,7 @@ namespace test{
           RecS aaa({"a","a"});
           RecS ax({"type=a","a"});
           RecS ay({"a=a","a"});
+          RecS az({"a =a","a"});
           
           CHECK (a != aa);   CHECK (aa != a);
           CHECK (aa != aaa); CHECK (aaa != aa);
@@ -239,7 +264,9 @@ namespace test{
           CHECK (a != ay);   CHECK (ay != a);
           CHECK (ax != ay);  CHECK (ay != ax);
           CHECK (aaa != ay); CHECK (ay != aaa);
-          
+          CHECK (ay != az);  CHECK (az != ay);   // NOTE: attributes are *not* normalised,
+                                                //        rather, they are used as-is,
+                                               //         thus "a=a" != "a =a"
           RecS a2({"a","aa"});
           CHECK (aa == a2);  CHECK (a2 == aa);
           

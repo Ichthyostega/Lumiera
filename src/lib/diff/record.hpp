@@ -47,11 +47,13 @@
  ** - the parts or \em realms within this symbolic representation are distinguished
  **   by convention solely
  **   
- **   * metadata is very limited and boils down to magic attributes known by name
+ **   * metadata is very limited and boils down to a type attribute known by name
  **   * children (scope contents) can be recognised by \em not bearing a name
  ** 
  ** Record entities are meant to be immutable. The proper way to alter a Record is
- ** to apply a \link tree-diff.hpp diff \endlink
+ ** to apply a \link tree-diff.hpp diff \endlink. Yet for the \em implementation
+ ** of this diff handling, a Record::Mutator is provided, to allow controlled
+ ** partial re-building of a given data element.
  ** 
  ** \par rationale
  ** The underlying theme of this design is negative, dialectical: we do not want to
@@ -62,7 +64,7 @@
  **    which is to exchange diff messages drawn against a symbolic representation
  **    of a typed object tree. Especially, we assume that there is only a small
  **    number of attributes (so linear search for access by key is adequate).
- **  - moreover, we assume that the value type allows to somehow to embed
+ **  - moreover, we assume that the value type allows for somehow embedding
  **    the key of each attribute; the implementation needs an explicit
  **    specialisation of the binding functions for each value type.
  **  - this header defines a specialisation for VAL = std::string --
@@ -483,7 +485,7 @@ namespace diff{
   /**
    * wrapped record reference.
    * A helper for lib::GenNode and the diff representation.
-   * RecordRef is copyable and assignable, but like a reference
+   * RecordRef is copyable and movable, but like a reference
    * can not be rebound. It can be used to refer to a subtree
    * within the diff representation, without the need to copy.
    * @remarks this is almost identical to std::ref, with the
@@ -497,7 +499,7 @@ namespace diff{
       using Target = Record<VAL>;
       
       Target* record_;
-
+      
     public:
       /** by default create an
        *  invalid ("bottom") reference */
@@ -640,7 +642,7 @@ namespace diff{
   {
     return string(key + " = " + extractVal(payload));
   }
-
+  
   
   
   
