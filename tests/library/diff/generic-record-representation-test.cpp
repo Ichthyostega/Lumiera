@@ -326,12 +326,13 @@ namespace test{
           CHECK ("🌰" == oor.getType());
           CHECK (oor.get("♄") == "saturn");
           
-          // are copyable and assignable
+          // are copyable but not reassignable
           RecordRef<string> r2 = ref;
           CHECK (r2);
           CHECK (r2.get() == ref.get());
           CHECK (!isSameObject (r2, ref));
           
+          // but references are move-assignable
           empty = std::move(r2);
           CHECK (empty);
           CHECK (!r2);

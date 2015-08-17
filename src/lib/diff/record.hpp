@@ -514,7 +514,20 @@ namespace diff{
       /** prevent moving into black hole */
       RecordRef(Target&&) = delete;
       
-      // standard copy operations acceptable
+      RecordRef(RecordRef const&)  = default;
+      RecordRef(RecordRef     &&)  = default;
+      
+      /** references can not be reassigned */
+      RecordRef& operator= (RecordRef const&)  = delete;
+      RecordRef& operator= (RecordRef      &)  = delete;
+      
+      /** assignment is not allowed, but moving is */
+      RecordRef&
+      operator= (RecordRef &&o)
+        {
+          std::swap(record_, o.record_);
+          return *this;
+        }
       
       
       explicit
