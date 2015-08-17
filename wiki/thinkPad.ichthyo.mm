@@ -321,7 +321,7 @@
 <node CREATED="1436042814044" ID="ID_1455779230" MODIFIED="1436042818312" TEXT="aber semantisch eine Liste"/>
 <node CREATED="1436924462201" ID="ID_1369837914" MODIFIED="1436924596628" TEXT="Probleme">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1436924502056" ID="ID_1085481788" MODIFIED="1436924641777" TEXT="R&#xfc;ckgabetyp von Attribut-Gettern">
+<node CREATED="1436924502056" ID="ID_1085481788" MODIFIED="1439826939611" TEXT="R&#xfc;ckgabetyp von Attribut-Gettern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -338,27 +338,141 @@
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1439826834113" ID="ID_1331810475" MODIFIED="1439826858261">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      was sinnvoll ist,
+    </p>
+    <p>
+      h&#228;ngt vom Payload-Typ ab
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1436924529208" ID="ID_1300693998" MODIFIED="1436924556572" TEXT="Handhabung des Typ-Feldes">
+<node CREATED="1439826859630" ID="ID_658403513" MODIFIED="1439826896096">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bei einer 'key = value' -Syntax mit strings
+    </p>
+    <p>
+      ist nur ein Value-R&#252;ckgabewert sinnvoll
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1439826896985" ID="ID_180703618" MODIFIED="1439826904996" TEXT="habe es daher generisch/konfigurierbar gemacht"/>
+<node CREATED="1439826905728" ID="ID_955222288" MODIFIED="1439826937458" TEXT="-&gt; &#xfc;berhaupt eine Typkonfiguration ist sinnvoll">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...auch kann man auf diesem Weg die Storage konfigurierbar machten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1436924529208" ID="ID_1300693998" MODIFIED="1439826819288" TEXT="Handhabung des Typ-Feldes">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1436925315589" ID="ID_327577903" MODIFIED="1436925320193" TEXT="herausfiltern">
 <icon BUILTIN="help"/>
+<node CREATED="1439826509444" ID="ID_333663358" MODIFIED="1439826524386" TEXT="ja">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1439826512572" ID="ID_1522833188" MODIFIED="1439826522070" TEXT="aus beliebigem Attribut"/>
 </node>
 <node CREATED="1436924568352" ID="ID_1243616839" MODIFIED="1436924578280" TEXT="in Attribut-Iterator">
 <icon BUILTIN="help"/>
+<node CREATED="1439826529649" ID="ID_1514781996" MODIFIED="1439826559628" TEXT="w&#xe4;re sch&#xf6;n">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1439826535625" ID="ID_872404626" MODIFIED="1439826563061" TEXT="ist aber aufwendig">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1439826545167" ID="ID_185501908" MODIFIED="1439826726913" TEXT="geht nur mit Metadata-Collection">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da wir einen IterAdapter verwenden, k&#246;nnen wir nur eine 'pos' (einen Quell-Iterator)
+    </p>
+    <p>
+      als Zustands-Markierung verwenden; die gleiche 'pos' wird aber auch inkrementiert und dereferenziert.
+    </p>
+    <p>
+      Daher ist die einzige praktikable L&#246;sung, da&#223; die Typ-ID in einem weiteren Vektor gespeichert wird.
+    </p>
+    <p>
+      Das k&#246;nnte dann ein Metadaten-Vektor sein.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Nat&#252;rlich ist dieser Ansatz nur sinnvoll, <i>wenn wir wirklich Metadaten brauchen.</i>
+    </p>
+    <p>
+      Denn jeder Record zahlt den Preis f&#252;r die komplexere (zus&#228;tzliche) Datenstruktur!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
 </node>
 <node CREATED="1436924578936" ID="ID_677097690" MODIFIED="1436924588615" TEXT="in Attribut-Collection ablegen">
 <icon BUILTIN="help"/>
+<node CREATED="1439826758699" ID="ID_873913305" MODIFIED="1439826761999" TEXT="pfiffige Idee"/>
+<node CREATED="1439826762731" ID="ID_339809602" MODIFIED="1439826766758" TEXT="aber eigentlich ein Pfusch"/>
+<node CREATED="1439826767274" ID="ID_1506445345" MODIFIED="1439826777093" TEXT="man m&#xfc;&#xdf;te jede Eingans-Collection normalisieren"/>
+<node CREATED="1439826782368" ID="ID_386953463" MODIFIED="1439826789763" TEXT="man m&#xfc;&#xdf;te Duplikate filtern"/>
+<node CREATED="1439826792343" ID="ID_775227666" MODIFIED="1439826804002" TEXT="NJET">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+<node CREATED="1439827003483" ID="ID_514691403" MODIFIED="1439827702321" TEXT="&apos;magische&apos; IDs als Attribute">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1439827021297" ID="ID_154339557" MODIFIED="1439827028484" TEXT="brauche ich f&#xfc;r die Diff-Language"/>
+<node CREATED="1439827061051" ID="ID_1563625085" MODIFIED="1439827543682" TEXT="implementiert als spezielle, magische ID-Referenzen">
+<arrowlink COLOR="#5bf0d0" DESTINATION="ID_913220298" ENDARROW="Default" ENDINCLINATION="366;-59;" ID="Arrow_ID_806648905" STARTARROW="None" STARTINCLINATION="347;320;"/>
+</node>
+<node CREATED="1439827599485" ID="ID_426467512" MODIFIED="1439827625675" TEXT="ist es problematisch, wenn solche in die normalen Attribute geraten">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1439827636256" ID="ID_339472941" MODIFIED="1439827645763" TEXT="entscheidet sich im Diff-Algorithmus, sonst wurscht"/>
+<node CREATED="1439827647038" ID="ID_1668349556" MODIFIED="1439827693504" TEXT="also geh&#xf6;rt das in einen h&#xf6;heren Layer">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1439827663860" ID="ID_582619719" MODIFIED="1439827698437" TEXT="Record sollte sich hier neutral verhalten">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
 </node>
 <node CREATED="1434128179406" HGAP="25" ID="ID_1833179523" MODIFIED="1436042759827" TEXT="Referez" VSHIFT="13">
-<node CREATED="1434129158157" FOLDED="true" ID="ID_1777328498" MODIFIED="1436042674403" TEXT="sicher dereferenzierbar">
+<node CREATED="1434129158157" FOLDED="true" ID="ID_1777328498" MODIFIED="1439827103583" TEXT="sicher dereferenzierbar">
 <node CREATED="1434205928410" ID="ID_733269570" MODIFIED="1434205947253" TEXT="entweder zwangsweise gebunden"/>
 <node CREATED="1434205947841" ID="ID_871233558" MODIFIED="1434205955964" TEXT="oder NULL-Zustand mit Exception"/>
 <node CREATED="1434205957177" ID="ID_499991180" MODIFIED="1434205968740" TEXT="inherente Unsicherheit einer Referenz"/>
 </node>
-<node CREATED="1434129167805" FOLDED="true" ID="ID_819452470" MODIFIED="1436042676724" TEXT="stand-in">
+<node CREATED="1434129167805" ID="ID_819452470" MODIFIED="1439827166744" TEXT="stand-in">
 <arrowlink COLOR="#00ff33" DESTINATION="ID_654762061" ENDARROW="Default" ENDINCLINATION="-390;37;" ID="Arrow_ID_724106052" STARTARROW="Default" STARTINCLINATION="-48;187;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1434129196709" ID="ID_1004519740" MODIFIED="1436042656829" TEXT="Subklasse von Rec">
@@ -411,7 +525,7 @@
 </node>
 <node CREATED="1434128412934" ID="ID_1319614474" MODIFIED="1436021920247" TEXT="Repr&#xe4;s entscheiden">
 <icon BUILTIN="go"/>
-<node CREATED="1434128438565" FOLDED="true" ID="ID_913220298" MODIFIED="1436042700635" TEXT="als ID erkennbar">
+<node CREATED="1434128438565" FOLDED="true" ID="ID_913220298" MODIFIED="1439827554217" TEXT="als ID erkennbar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -421,10 +535,12 @@
       hei&#223;t: in der Diff-Verarbeitung wird dieser spezielle check verwendet
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
+<linktarget COLOR="#5bf0d0" DESTINATION="ID_913220298" ENDARROW="Default" ENDINCLINATION="366;-59;" ID="Arrow_ID_806648905" SOURCE="ID_1563625085" STARTARROW="None" STARTINCLINATION="347;320;"/>
 <node CREATED="1434128740117" ID="ID_1537979881" MODIFIED="1434128764209" TEXT="spezielles Baumuster"/>
 <node CREATED="1434128764893" ID="ID_1430586148" MODIFIED="1434128768689" TEXT="Gefahr von clashes"/>
-<node CREATED="1434128769325" FOLDED="true" ID="ID_866845827" MODIFIED="1436042692523" TEXT="entscheide">
+<node CREATED="1434128769325" ID="ID_866845827" MODIFIED="1439827110976" TEXT="entscheide">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1434128779661" ID="ID_1739097548" MODIFIED="1434236311060" TEXT="marker-ID + string-Payload">
 <icon BUILTIN="button_cancel"/>
@@ -445,7 +561,7 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1436021576224" FOLDED="true" ID="ID_1239136010" MODIFIED="1436042687348" TEXT="Begr&#xfc;ndung">
+<node CREATED="1436021576224" FOLDED="true" ID="ID_1239136010" MODIFIED="1439827140114" TEXT="Begr&#xfc;ndung">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1436021581655" ID="ID_124352424" MODIFIED="1436021603779" TEXT="hash-identische ID sorgt f&#xfc;r transparente Integration"/>
@@ -480,7 +596,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1434128446029" FOLDED="true" ID="ID_1779802587" MODIFIED="1436042699628" TEXT="hash-identisch">
+<node CREATED="1434128446029" FOLDED="true" ID="ID_1779802587" MODIFIED="1439827594620" TEXT="hash-identisch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -490,7 +606,8 @@
       hei&#223;t: wird direkt von standard-equality so behandelt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1434128685597" ID="ID_690649535" MODIFIED="1434128705631">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -629,8 +746,7 @@
       <i>saugeil</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -668,8 +784,7 @@
       bekannter Bug <b>binutils</b>&#160;<font color="#c72011">#16936</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439593578558" ID="ID_1155824773" LINK="http://issues.lumiera.org/ticket/965" MODIFIED="1439593639824">
 <richcontent TYPE="NODE"><html>
@@ -681,8 +796,7 @@
       Lumiera-Ticket <font color="#90011d">#965</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439593646645" ID="ID_917747701" MODIFIED="1439593709553">
 <richcontent TYPE="NODE"><html>
@@ -694,8 +808,7 @@
       gel&#246;st in&#160;<font color="#4c1383">4e8e63ebe</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -708,8 +821,7 @@
       &quot;-Wl,-rpath-link=target/modules&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1439176912636" ID="ID_584884488" MODIFIED="1439644270018" TEXT="failed tests">
@@ -722,8 +834,7 @@
       laufen wieder alle
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1439176982698" HGAP="59" ID="ID_1330966528" MODIFIED="1439593733607" TEXT="Beobachtung: Meldungen im journal" VSHIFT="2"/>
 <node CREATED="1439176948063" HGAP="54" ID="ID_1726494484" MODIFIED="1439609524714" TEXT="5 Thread/Parallel" VSHIFT="1">
@@ -740,8 +851,7 @@
       test.sh Zeile 138
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439566868460" ID="ID_620984495" MODIFIED="1439566871311" TEXT="Untersuchung">
 <node CREATED="1439566872203" ID="ID_1734454643" MODIFIED="1439566881758" TEXT="ulimit -T funktioniert nicht">
@@ -756,8 +866,7 @@
       Debian-Bug <font color="#9b0226">#724461</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1439588367804" ID="ID_1494433818" MODIFIED="1439588399376">
@@ -773,8 +882,7 @@
       ulimit -t 1 ist wirkungslos
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1439592731687" ID="ID_715556229" MODIFIED="1439592767460">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -785,8 +893,7 @@
       Christian:&#160;&#160;bash -c &quot;ulimit -t 1; while :; do :; done&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439592774041" ID="ID_1603492676" MODIFIED="1439592810442" TEXT="ist reine CPU-Zeit">
 <richcontent TYPE="NOTE"><html>
@@ -798,8 +905,7 @@
       und wir verbringen unsere Zeit mit contention
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -828,8 +934,7 @@
       siehe Ticket <font color="#991130">#587</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439609055443" ID="ID_325526736" MODIFIED="1439609097840" TEXT="Problem hat sich versch&#xe4;rft">
 <richcontent TYPE="NOTE"><html>
@@ -844,8 +949,7 @@
       Vorher hatte ich erste Kollisionen nach 25000 Nummern
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439609098853" ID="ID_1076015737" MODIFIED="1439609125633">
 <richcontent TYPE="NODE"><html>
@@ -860,8 +964,7 @@
       guten alten &quot;Knuth-Trick&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439609127137" ID="ID_509487220" MODIFIED="1439609175040">
 <richcontent TYPE="NODE"><html>
@@ -879,8 +982,7 @@
       und ich komme locker auf 100000 Nummern ohne Kollision
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -938,8 +1040,7 @@
       Bugreport f&#252;r Debian/Jessie <font color="#e02f0a">#795445</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439492285635" ID="ID_1706807629" MODIFIED="1439492294006" TEXT="gdb-Version untersuchen">
 <node CREATED="1439516472396" ID="ID_1002859575" MODIFIED="1439516476069" TEXT="backports">
@@ -953,8 +1054,7 @@
       Git: debBild/<b>Gdb_DEB.git</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439516477008" ID="ID_1182795741" MODIFIED="1439521716720" TEXT="Ver 7.8.2">
 <icon BUILTIN="button_ok"/>
@@ -968,8 +1068,7 @@
       bison dejagnu flex gobjc libncurses5-dev libreadline-dev liblzma-dev libbabeltrace-dev libbabeltrace-ctf-dev python3-dev
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1439519150614" ID="ID_644868114" MODIFIED="1439519167562">
@@ -982,8 +1081,7 @@
       <i>dutzende</i>&#160;Tests scheitern
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 <node CREATED="1439519171155" ID="ID_509605117" MODIFIED="1439519260555" TEXT="das scheint nicht ungew&#xf6;hnlich zu sein">
@@ -1020,8 +1118,7 @@
       <b>au weia</b>&#160;LEUTE!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#f7f2b7" CREATED="1439521655505" ID="ID_746337758" MODIFIED="1439521712263" TEXT="funktioniert, kein Segfault mehr">
 <icon BUILTIN="button_ok"/>
@@ -1061,8 +1158,7 @@
       und tats&#228;chlich: das <i>ist</i>&#160;daneben, GCC hat Recht!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1439644339480" ID="ID_239239923" MODIFIED="1439644361567" TEXT="Lumiera DEB">
@@ -1075,8 +1171,7 @@
       aktualisieren und neu bauen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="bell"/>
 </node>
 <node CREATED="1439644368572" ID="ID_106785551" MODIFIED="1439644388150" TEXT="Doku: Referenz-System">

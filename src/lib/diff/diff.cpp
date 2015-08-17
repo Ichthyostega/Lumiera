@@ -42,7 +42,7 @@ namespace diff{
   LUMIERA_ERROR_DEFINE(DIFF_CONFLICT, "Collision in diff application: contents of target not as expected.");
   
   /* symbolic marker ID references
-   * used the tree diff language
+   * used within the tree diff language
    * to mark specific scopes
    */
   Ref Ref::END    ("_END_");

@@ -313,6 +313,8 @@ namespace diff{
       static string renderAttribute (VAL const& a);
       static string extractKey (VAL const& v);
       static Access extractVal (VAL const& v);
+      template<typename X>
+      static VAL    buildAttribute (string const& key, X&& payload);
       
       
       ElmIter
@@ -322,7 +324,7 @@ namespace diff{
                               ,attribs_.end()
                               ,[=](VAL const& elm)
                                    {
-                                     return key == extractKey(elm); 
+                                     return key == extractKey(elm);
                                    });
         }
       
@@ -403,10 +405,31 @@ namespace diff{
           return *this;
         }
       
+      template<typename X>
       Mutator&
-      set (string const& key, VAL const& newValue)
+      set (string const& key, X&& content)
         {
-          ///////////TODO;
+          VAL attribute(Rec::buildAttribute (key, std::forward<X>(content)));
+          return set (std::move (attribute));
+        }
+      
+      Mutator&
+      set (VAL&& attribute)
+        {
+          string key = Rec::extractKey(attribute);
+          if (isnil (key))
+            throw error::Invalid ("Attempt to set an attribute with empty key");
+          
+          Rec::Storage& as =record_.attribs_;
+          auto found = std::find_if (as.begin(),as.end()
+                                    ,[=](VAL const& elm)
+                                         {
+                                           return key == extractKey(elm);
+                                         });
+          if (as.end() == found)
+            as.push_back (std::forward<VAL> (attribute));
+          else
+            (*found) = (std::forward<VAL> (attribute));
           return *this;
         }
       
@@ -437,19 +460,13 @@ namespace diff{
       VAL&& genNode(string const& symbolicID);
       
       template<typename X, typename...ARGS>
-      Mutator& attrib (string const& key, X const& initialiser, ARGS&& ...args)
+      Mutator& attrib (string const& key, X&& initialiser, ARGS&& ...args)
         {
-          set (key, VAL(initialiser));
+          set (key, std::forward<X>(initialiser));
           return attrib (std::forward<ARGS>(args)...);
         }
-
-      template<typename X>
-      Mutator&
-      attrib (string const& key, X const& initialiser)
-        {
-          set (key, VAL(initialiser));
-          return *this;
-        }
+      Mutator& attrib () { return *this; } // argument recursion end
+      
       
       template<typename X, typename...ARGS>
       Mutator& scope (X const& initialiser, ARGS&& ...args)
@@ -457,13 +474,7 @@ namespace diff{
           appendChild (VAL(initialiser));
           return scope (std::forward<ARGS>(args)...);
         }
-      
-      template<typename X>
-      Mutator& scope (X const& initialiser)
-        {
-          appendChild (VAL(initialiser));
-          return *this;
-        }
+      Mutator& scope () { return *this; }
       
     };
   
@@ -608,6 +619,15 @@ namespace diff{
   {
     return extractKey(attrib) + " = " + extractVal(attrib);
   }
+  
+  template<>
+  template<typename X>
+  inline string
+  Record<string>::buildAttribute (string const& key, X&& payload)
+  {
+    return string(key + " = " + extractVal(payload));
+  }
+
   
   
   

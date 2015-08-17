@@ -403,6 +403,15 @@ namespace diff{
     return "notyet = todo"; ////TODO
   }
   
+  template<>
+  template<typename X>
+  inline GenNode
+  Rec::buildAttribute (string const& key, X&& payload)
+  {
+    return GenNode(key, payload);
+  }
+  
+  
   
 }} // namespace lib::diff
 #endif /*LIB_DIFF_GEN_NODE_H*/

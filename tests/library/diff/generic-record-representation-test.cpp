@@ -208,7 +208,7 @@ namespace test{
           RecS bb;
           CHECK (isnil(bb));
           bb = move(b);
-          CHECK ("b" == bb.get("b"));
+          CHECK ("2" == bb.get("b"));
           CHECK (isSameObject(c, *bb.scope()));
           
           swap (a, bb);
@@ -244,11 +244,11 @@ namespace test{
           CHECK (aa == a2);  CHECK (a2 == aa);
           
           RecS o1("oo", strings({"a=α", "b=β"}), strings({"γ", "δ", "ε"}));
-          RecS o2({"type=oo", "a = α", "b = β", "γ", "δ", "ε"});
-          RecS o3({"type=oO", "a = α", "b = β", "γ", "δ", "ε"});
-          RecS o4({"type=oo", "a = α", "b = β", "c=γ", "δ", "ε"});
-          RecS o5({"type=oo", "a = α", "b = β", "γ", "ε", "δ"});
-          RecS o6({"type=oo", "a = α", "b = β", "γ", "δ"});
+          RecS o2({"type=oo", "a=α", "b=β", "γ", "δ", "ε"});
+          RecS o3({"type=oO", "a=α", "b=β", "γ", "δ", "ε"});
+          RecS o4({"type=oo", "a=α", "b=β", "c=γ", "δ", "ε"});
+          RecS o5({"type=oo", "a=α", "b=β", "γ", "ε", "δ"});
+          RecS o6({"type=oo", "a=α", "b=β", "γ", "δ"});
           
           CHECK (o1 == o2);  CHECK (o2 == o1);
           CHECK (o2 != o3);  CHECK (o3 != o2);
@@ -288,7 +288,7 @@ namespace test{
           RecS aa(mut);
           CHECK (a != aa);
           CHECK ("u" == aa.getType());
-          CHECK (Seq({"a=1", "a"}) == contents(aa));
+          CHECK (Seq({"a = 1", "a"}) == contents(aa));
           CHECK (Seq({"a"}) == contents (aa.keys()));
           CHECK (Seq({"1"}) == contents (aa.vals()));
           CHECK (Seq({"a"}) == contents (aa.scope()));
@@ -303,8 +303,8 @@ namespace test{
           
           mut.replace(a);
           CHECK (isnil (mut));
-          CHECK (Seq({"a=α", "a=β", "⟂", "a"}) == contents(a));
-          CHECK (Seq({"a=1", "a"}) == contents(aa));
+          CHECK (Seq({"a = α", "b = β", "⟂", "a"}) == contents(a));
+          CHECK (Seq({"a = 1", "a"}) == contents(aa));
         }
       
       
