@@ -88,7 +88,7 @@ namespace test{
         {
           Time someTime;
           TestVariant v0;
-          TestVariant v1(11L);
+          TestVariant v1(int64_t(11));
           TestVariant v2(string("lololo"));
           TestVariant v3(someTime);
           
@@ -210,18 +210,18 @@ namespace test{
       verifyAssignment()
         {
           TestVariant v1(string("boo"));
-          TestVariant v2(23L);
-          TestVariant v3(42L);
+          TestVariant v2(int64_t(23));
+          TestVariant v3(int64_t(42));
           
           v1 = string("booo");
           v2 = v3;
-          v3 = 24L;
+          v3 = int64_t(24);
           CHECK ("booo" == v1.get<string>());
           CHECK (42 == v2.get<int64_t>());
           CHECK (24 == v3.get<int64_t>());
           
           VERIFY_ERROR (WRONG_TYPE, v1 = v2 );
-          VERIFY_ERROR (WRONG_TYPE, v1 = 22L );
+          VERIFY_ERROR (WRONG_TYPE, v1 = int64_t(22));
           VERIFY_ERROR (WRONG_TYPE, v2 = string("2"));
           
           TestVariant v4  = Time();
