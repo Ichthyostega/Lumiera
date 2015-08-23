@@ -53,7 +53,7 @@ namespace test{
   
   
   // Test fixture...
-  typedef Variant<Types<bool,int64_t,string,Time>> TestVariant;
+  typedef Variant<Types<bool,int,string,Time>> TestVariant;
   
   
   
@@ -88,7 +88,7 @@ namespace test{
         {
           Time someTime;
           TestVariant v0;
-          TestVariant v1(int64_t(11));
+          TestVariant v1(11);
           TestVariant v2(string("lololo"));
           TestVariant v3(someTime);
           
@@ -105,7 +105,7 @@ namespace test{
           CHECK (contains (string(v0), "0"));
           
           CHECK (contains (string(v1), "Variant"));
-          CHECK (contains (string(v1), "int64_t") || contains (string(v1), "long") );
+          CHECK (contains (string(v1), "int"));
           CHECK (contains (string(v1), "11"));
           
           CHECK (contains (string(v2), "Variant"));
@@ -127,15 +127,15 @@ namespace test{
           
           TestVariant v3(someTime);
           TestVariant v2(someStr);
-          TestVariant v1 = int64_t(someVal);
+          TestVariant v1 = someVal;
           TestVariant v0; v0 = true;
           
           CHECK (true     == v0.get<bool>()   );
-          CHECK (someVal  == v1.get<int64_t>());
+          CHECK (someVal  == v1.get<int>());
           CHECK (someStr  == v2.get<string>() );
           CHECK (someTime == v3.get<Time>()   );
           
-          VERIFY_ERROR (WRONG_TYPE, v0.get<int64_t>());
+          VERIFY_ERROR (WRONG_TYPE, v0.get<int>()    );
           VERIFY_ERROR (WRONG_TYPE, v0.get<string>() );
           VERIFY_ERROR (WRONG_TYPE, v0.get<Time>()   );
           
@@ -144,11 +144,11 @@ namespace test{
           VERIFY_ERROR (WRONG_TYPE, v1.get<Time>()   );
           
           VERIFY_ERROR (WRONG_TYPE, v2.get<bool>()   );
-          VERIFY_ERROR (WRONG_TYPE, v2.get<int64_t>());
+          VERIFY_ERROR (WRONG_TYPE, v2.get<int>()    );
           VERIFY_ERROR (WRONG_TYPE, v2.get<Time>()   );
           
           VERIFY_ERROR (WRONG_TYPE, v3.get<bool>()   );
-          VERIFY_ERROR (WRONG_TYPE, v3.get<int64_t>());
+          VERIFY_ERROR (WRONG_TYPE, v3.get<int>()    );
           VERIFY_ERROR (WRONG_TYPE, v3.get<string>() );
           
           //// does not compile...
@@ -166,7 +166,7 @@ namespace test{
               void handle (bool& b) { b_ = b; }
               void handle (Time& t) { t_ = t; }
               
-              void handle (int64_t& i6)
+              void handle (int& i6)
                 {
                   i_ = i6;
                   ++i6;
@@ -199,9 +199,9 @@ namespace test{
           CHECK (acs.i_ == someVal);
           
           // side-effect!
-          CHECK (someVal+1 == v1.get<int64_t>());
+          CHECK (someVal+1 == v1.get<int>());
           v1.accept (acs);
-          CHECK (someVal+2 == v1.get<int64_t>());
+          CHECK (someVal+2 == v1.get<int>());
           CHECK (someVal+1 == acs.i_);
         }
       
@@ -210,18 +210,18 @@ namespace test{
       verifyAssignment()
         {
           TestVariant v1(string("boo"));
-          TestVariant v2(int64_t(23));
-          TestVariant v3(int64_t(42));
+          TestVariant v2(23);
+          TestVariant v3(42);
           
           v1 = string("booo");
           v2 = v3;
-          v3 = int64_t(24);
+          v3 = 24;
           CHECK ("booo" == v1.get<string>());
-          CHECK (42 == v2.get<int64_t>());
-          CHECK (24 == v3.get<int64_t>());
+          CHECK (42 == v2.get<int>());
+          CHECK (24 == v3.get<int>());
           
           VERIFY_ERROR (WRONG_TYPE, v1 = v2 );
-          VERIFY_ERROR (WRONG_TYPE, v1 = int64_t(22));
+          VERIFY_ERROR (WRONG_TYPE, v1 = 22);
           VERIFY_ERROR (WRONG_TYPE, v2 = string("2"));
           
           TestVariant v4  = Time();

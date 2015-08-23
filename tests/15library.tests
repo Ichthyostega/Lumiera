@@ -598,7 +598,7 @@ END
 
 TEST "typesafe Variant record" Variant_test <<END
 out: Variant.«bool».0
-out: Variant.«(long|int64_t)».11
+out: Variant.«int».11
 out: Variant.«std::string».lololo
 out: Variant.«lib::time::Time».0:00:00.000
 return: 0
