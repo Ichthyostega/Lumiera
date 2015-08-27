@@ -114,8 +114,10 @@ namespace test{
        * bonus points if this number is also a prime. An additional factor of 2 does not hurt
        * (so in case of 64bit platform).
        * 
-       * In our case, it is sufficient to apply this trick to the trailing two digits;
+       * In our case, it is sufficient to apply this trick to the trailing four digits;
        * without this trick, we get the first collisions after about 20000 running numbers.
+       * @note on x86_64, even just spreading the trailing two digits seem to be sufficient
+       *      to remove any collisions from the first 100000 numbers.
        * @see BareEntryID
        */
       void
@@ -128,7 +130,7 @@ namespace test{
           const size_t KNUTH_MAGIC = 2654435761;
           
           uint collisions(0);
-          for (uint i=0; i<100000; ++i)
+          for (uint i=0; i<20000; ++i)
             {
               string candidate = prefix + lexical_cast<string> (i);
               size_t l = candidate.length();
@@ -136,6 +138,8 @@ namespace test{
               
               boost::hash_combine(hashVal, KNUTH_MAGIC * candidate[l-1]);
               boost::hash_combine(hashVal, KNUTH_MAGIC * candidate[l-2]);
+              boost::hash_combine(hashVal, KNUTH_MAGIC * candidate[l-3]);
+              boost::hash_combine(hashVal, KNUTH_MAGIC * candidate[l-4]);
               boost::hash_combine(hashVal, candidate);
               
               if (contains (hashValues, hashVal))

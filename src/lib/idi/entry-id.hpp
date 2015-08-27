@@ -113,7 +113,8 @@ namespace idi {
       size_t l = sym.length();
       if (l > 1) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-1]);
       if (l > 2) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-2]);
-      if (l > 3) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-3]);       ////////////////////////TICKET #865
+      if (l > 3) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-3]);
+      if (l > 4) boost::hash_combine(seed, KNUTH_MAGIC * sym[l-4]);       ////////////////////////TICKET #865
       
       boost::hash_combine(seed, sym);
       lumiera_uid tmpLUID;
