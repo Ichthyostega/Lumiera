@@ -366,44 +366,46 @@ namespace diff{
   
   template<>
   inline bool
-  Rec::isAttribute (GenNode const& v)
+  Rec::isAttribute (GenNode const& attrib)
   {
-    return false; ////TODO
+    return attrib.isNamed();
   }
   
   template<>
   inline bool
   Rec::isTypeID (GenNode const& v)
   {
-    return false; ////TODO
+    return "type" == v.idi.getSym();
   }
   
   template<>
   inline string
   Rec::extractTypeID (GenNode const& v)
   {
-    return "todo"; ////TODO
+    return isTypeID(v)? v.data.get<string>()
+                      : Rec::TYPE_NIL;
   }
   
   template<>
   inline string
   Rec::extractKey (GenNode const& v)
   {
-    return v.idi.getSym();
+    return isAttribute(v)? v.idi.getSym()
+                         : "";
   }
   
   template<>
   inline GenNode const&
   Rec::extractVal (GenNode const& v)
   {
-    return GenNode(v); ///TODO
+    return v;
   }
   
   template<>
   inline string
   Rec::renderAttribute (GenNode const& a)
   {
-    return "notyet = todo"; ////TODO
+    return a.idi.getSym() +" = "+string(a.data);
   }
   
   template<>
