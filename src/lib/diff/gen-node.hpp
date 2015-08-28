@@ -176,6 +176,8 @@ namespace diff{
       
       DataCap& operator= (DataCap const&)  =default;
       DataCap& operator= (DataCap&&)       =default;
+      
+      bool operator== (DataCap const&)  const;
     };
   
   
@@ -273,13 +275,14 @@ namespace diff{
       friend bool
       operator== (GenNode const& n1, GenNode const& n2)
       {
-        return n1.idi == n2.idi;
+        return n1.idi == n2.idi
+            && n1.data == n2.data;
       }
       
       friend bool
       operator!= (GenNode const& n1, GenNode const& n2)
       {
-        return n1.idi != n2.idi;
+        return ! (n1 == n2);
       }
       
     

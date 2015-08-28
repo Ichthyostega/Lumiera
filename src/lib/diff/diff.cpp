@@ -51,4 +51,46 @@ namespace diff{
   Ref Ref::ATTRIBS("_ATTRIBS_");
 
   
+  /** Implementation of content equality test */
+  bool
+  DataCap::operator== (DataCap const& o)  const
+  {
+    class EqualityTest
+      : public Variant<DataValues>::Visitor
+      {
+        DataCap const& o_;
+        bool isEqual_;
+
+#define DERIVE_EQUALITY(_TY_) \
+        virtual void handle  (_TY_& val) override { isEqual_ = (o_.get<_TY_>() == val); }
+        
+        DERIVE_EQUALITY (int)
+        DERIVE_EQUALITY (int64_t)
+        DERIVE_EQUALITY (short)
+        DERIVE_EQUALITY (char)
+        DERIVE_EQUALITY (bool)
+        DERIVE_EQUALITY (double)
+        DERIVE_EQUALITY (string)
+        DERIVE_EQUALITY (time::Time)
+        DERIVE_EQUALITY (time::Offset)
+        DERIVE_EQUALITY (time::Duration)
+        DERIVE_EQUALITY (time::TimeSpan)
+        DERIVE_EQUALITY (hash::LuidH)
+        DERIVE_EQUALITY (RecRef)
+        DERIVE_EQUALITY (Rec)
+        
+      public:
+        EqualityTest(DataCap const& o)
+          : o_(o)
+          , isEqual_(false)
+          { }
+        
+        operator bool() { return isEqual_; }
+      };
+    
+    EqualityTest visitor(o);
+    unConst(this)->accept(visitor);
+    return visitor;
+  }
+
 }} // namespace lib::diff
