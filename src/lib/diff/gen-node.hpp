@@ -248,7 +248,7 @@ namespace diff{
       bool
       isNamed()  const
         {
-          return util::startsWith (idi.getSym(), "_CHILD_");
+          return !util::startsWith (idi.getSym(), "_CHILD_");
         }
       
       bool
