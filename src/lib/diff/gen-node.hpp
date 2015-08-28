@@ -95,20 +95,18 @@
 #define LIB_DIFF_GEN_NODE_H
 
 
-#include "lib/hash-indexed.hpp"                 ///< @warning needs to be first, see explanation in lib/hash-standard.hpp
-
 #include "lib/error.hpp"
-#include "lib/variant.hpp"
-#include "lib/time/timevalue.hpp"
-#include "lib/diff/record.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-util.hpp"
+#include "lib/diff/record.hpp"
 #include "lib/variant.hpp"
 #include "lib/util.hpp"
 
 //#include <vector>
+#include <utility>
 #include <string>
 //#include <map>
 
@@ -178,6 +176,7 @@ namespace diff{
       DataCap& operator= (DataCap&&)       =default;
       
       bool operator== (DataCap const&)  const;
+      operator string()  const;
     };
   
   
@@ -246,6 +245,12 @@ namespace diff{
       GenNode& operator= (GenNode&&)       =default;
       
       
+      
+      /** @internal diagnostics helper. Need to include format-helper.cpp */
+      operator string()  const
+        {
+          return "GenNode-"+string(idi)+"-"+string(data);
+        }
       
       bool
       isNamed()  const
@@ -405,7 +410,7 @@ namespace diff{
   inline string
   Rec::renderAttribute (GenNode const& a)
   {
-    return a.idi.getSym() +" = "+string(a.data);
+    return a.idi.getSym() +" = "+ string(a.data);
   }
   
   template<>

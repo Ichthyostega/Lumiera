@@ -78,10 +78,12 @@
 #define LIB_VARIANT_H
 
 
+#include "lib/error.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/virtual-copy-support.hpp"
+#include "lib/util.hpp"
 
 #include <type_traits>
 #include <utility>
@@ -434,16 +436,17 @@ namespace lib {
   template<typename TYPES>
   Variant<TYPES>::operator string()  const
   {
-    return string(buffer());
+    return "Variant|" + string(buffer());
   }
   
   template<typename TYPES>
   template<typename TY>
   Variant<TYPES>::Buff<TY>::operator string()  const
   {
-    return "Variant|"
-#ifdef LIB_FORMAT_UTIL_H
-        +  util::str (this->access(),
+#ifndef LIB_FORMAT_UTIL_H
+    return string("-?-")+typeid(TY).name()+"-?-";
+#else
+    return util::str (this->access(),
                      (util::tyStr<TY>()+"|").c_str())
 #endif
                      ;

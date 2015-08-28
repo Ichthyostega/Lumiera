@@ -37,6 +37,7 @@
 #ifndef LIB_FORMAT_UTIL_H
 #define LIB_FORMAT_UTIL_H
 
+#include "lib/hash-standard.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/itertools.hpp"
 #include "lib/symbol.hpp"
@@ -209,4 +210,4 @@ namespace util {
   
   
 } // namespace util
-#endif
+#endif /*LIB_FORMAT_UTIL_H*/

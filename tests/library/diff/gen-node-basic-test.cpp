@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-util.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/time/timevalue.hpp"
@@ -31,6 +32,7 @@
 //#include <utility>
 //#include <string>
 //#include <vector>
+#include <iostream>
 #include <cmath>
 
 using util::isnil;
@@ -44,6 +46,8 @@ using lib::time::TimeSpan;
 //using std::vector;
 //using std::swap;
 using std::fabs;
+using std::cout;
+using std::endl;
 
 
 namespace lib {
@@ -143,6 +147,8 @@ namespace test{
           CHECK ("ham"  == n3.data.get<Rec>().get("ham").idi.getSym());
           CHECK (n3.data.get<Rec>().get("ham").isNamed());
           CHECK (!n3.isNamed());
+          
+          cout << string(n3) <<endl; // diagnostic spam
         }
       
       

@@ -32,8 +32,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/format-util.hpp"
 #include "lib/diff/diff-language.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/variant.hpp"
 
 
 namespace lib {
@@ -49,9 +51,18 @@ namespace diff{
   Ref Ref::THIS   ("_THIS_");
   Ref Ref::CHILD  ("_CHILD_");
   Ref Ref::ATTRIBS("_ATTRIBS_");
-
   
-  /** Implementation of content equality test */
+  
+  
+  
+  /** Implementation of content equality test
+   * @throws error::Logic when the given other DataCap
+   *         does not hold a value of the same type than
+   *         this DataCap.
+   * @remarks since the GenNode::ID is generated including a type hash,
+   *         the equality operator of GenNode ensures this content test
+   *         is only called on a compatible DataCap.
+   */
   bool
   DataCap::operator== (DataCap const& o)  const
   {
@@ -92,5 +103,11 @@ namespace diff{
     unConst(this)->accept(visitor);
     return visitor;
   }
-
+  
+  DataCap::operator string()  const
+  {
+    return "DataCap|"+string(this->buffer());
+  }
+  
+  
 }} // namespace lib::diff

@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-util.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/util.hpp"

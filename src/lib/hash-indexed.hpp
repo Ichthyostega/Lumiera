@@ -56,6 +56,7 @@
 
 #include "lib/hash-value.h"
 #include "lib/hash-standard.hpp"
+#include "lib/error.hpp"
 
 extern "C" {
 #include "lib/luid.h"

@@ -126,7 +126,6 @@ namespace lib {
 namespace meta{
   
   using std::move;
-  using util::unConst;
   
   using std::is_move_constructible;
   using std::is_copy_constructible;
