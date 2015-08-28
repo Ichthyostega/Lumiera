@@ -169,7 +169,7 @@ namespace test{
           CHECK (isnil(o1.data.get<Rec>()));
           
           CHECK (!o2.isNamed());
-          CHECK ("spam" == o0.data.get<Rec>().getType());
+          CHECK ("spam" == o2.data.get<Rec>().getType());
           CHECK (isnil(o2.data.get<Rec>()));
           
           CHECK (o3.isNamed());

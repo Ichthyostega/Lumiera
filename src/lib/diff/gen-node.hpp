@@ -353,17 +353,17 @@ namespace diff{
   /* === Specialisation to add fluent GenNode builder API to Record<GenNode> === */
   
   template<>
-  inline GenNode&&
+  inline GenNode
   MakeRec::genNode()
   {
-    return std::move (GenNode(std::move(record_)));
+    return GenNode(std::move(record_));
   }
   
   template<>
-  inline GenNode&&
+  inline GenNode
   MakeRec::genNode(string const& symbolicID)
   {
-    return std::move (GenNode(symbolicID, std::move(record_)));
+    return GenNode(symbolicID, std::move(record_));
   }
   
   

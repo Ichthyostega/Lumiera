@@ -458,8 +458,8 @@ namespace diff{
        * with GenNode holding a Record<GenNode>
        */
       
-      VAL&& genNode();
-      VAL&& genNode(string const& symbolicID);
+      VAL genNode();
+      VAL genNode(string const& symbolicID);
       
       template<typename X, typename...ARGS>
       Mutator& attrib (string const& key, X&& initialiser, ARGS&& ...args)
