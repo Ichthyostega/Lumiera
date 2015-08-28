@@ -209,6 +209,11 @@ return: 0
 END
 
 
+TEST "Generic ID generation" GenericIdFunction_test <<END
+return: 0
+END
+
+
 PLANNED "GenNodeBasic_test" GenNodeBasic_test <<END
 return: 0
 END

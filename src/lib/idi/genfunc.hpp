@@ -33,6 +33,9 @@
  ** - render an ID in human readable form
  ** - derive a hash function
  ** 
+ ** @todo better unit test coverage
+ ** @todo improve implementation of typeFullID
+ ** @see GenericIdFunction_test
  ** @see EntryID
  **
  */
@@ -105,7 +108,7 @@ namespace idi {
   }
   
   
-  /** build a per-type unique identifier.
+  /** build a per-type identifier, with type prefix and running counter.
    * @return a type based prefix, followed by an instance number
    * @note we use the short prefix without namespace, not necessarily unique
    * @todo consequently the generated IDs might clash for two distinct types,

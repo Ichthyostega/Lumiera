@@ -48,9 +48,11 @@ namespace idi {
     demangled_innermost_component (const char* rawName)
     {
       string typeStr = demangleCxx (rawName);
-      size_t pos = typeStr.rfind("::");
+      size_t end = typeStr.rfind("<");
+      size_t pos = typeStr.rfind("::", end);
       if (pos != string::npos)
-        typeStr = typeStr.substr(pos+2);
+        typeStr = (end==string::npos? typeStr.substr(pos+2)
+                                    : typeStr.substr(pos+2, end-pos-2));
       return typeStr;
     }
     
