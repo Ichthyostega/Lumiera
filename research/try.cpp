@@ -48,12 +48,13 @@ typedef unsigned int uint;
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/format-util.hpp"
+#include "lib/util.hpp"
 
-//#include <functional>
 #include <iostream>
 #include <cstdarg>
 #include <string>
 
+using util::unConst;
 using std::string;
 using std::cout;
 using std::endl;
@@ -75,6 +76,25 @@ struct VFunc
     
   };
 
+using lib::meta::NullType;
+using lib::meta::Node;
+
+template<typename TYPES>
+struct ConstAll;
+
+template<>
+struct ConstAll<NullType>
+  {
+    typedef NullType List;
+  };
+
+template<typename TY, typename TYPES>
+struct ConstAll<Node<TY,TYPES>>
+  {
+    typedef Node<const TY, typename ConstAll<TYPES>::List> List;
+  };
+
+
 
 template<class A, class B>
 struct Var
@@ -85,16 +105,36 @@ struct Var
     using TYPES = lib::meta::Types<A,B>;
     
     template<typename RET>
-    using Visitor = typename VFunc<RET>::template VisitorInterface<TYPES>;
+    using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
+    template<typename RET>
+    using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<ConstAll<typename TYPES::List>>;
+    
+    using Visitor = VisitorFunc<void>;
+    using Predicate = VisitorConstFunc<bool>;
     
     template<typename RET>
     RET
-    accept (Visitor<RET>& visitor)
+    accept (VisitorFunc<RET>& visitor)
       {
         typename VFunc<RET>::template ValueAcceptInterface<A>& visA = visitor;
         typename VFunc<RET>::template ValueAcceptInterface<B>& visB = visitor;
         visA.handle (a);
         return visB.handle (b);
+      }
+    
+    void
+    accept (Visitor& visitor)
+      {
+        accept<void> (visitor);
+      }
+    
+    bool
+    accept (Predicate& visitor)  const
+      {
+        typename VFunc<bool>::template ValueAcceptInterface<const A>& visA = visitor;
+        typename VFunc<bool>::template ValueAcceptInterface<const B>& visB = visitor;
+        return visA.handle (a)
+            && visB.handle (b);
       }
 
     
@@ -109,25 +149,36 @@ struct Var
   };
 
 
+using V = Var<int, string>;
+
 class Visi
-  : public Var<int,string>::Visitor<void>
+  : public V::Visitor
   {
-    
-    virtual void handle(int& i) { ++i; }
-    virtual void handle(string& s) { s += ".."; }
+    virtual void handle(int& i)    { ++i; }
+    virtual void handle(string& s) { s += "."; }
+  };
+
+class Predi
+  : public V::Predicate
+  {
+    virtual bool handle(int const& i)    { return 0 == i % 2; }
+    virtual bool handle(string const& s) { return 0 == s.length() % 2; }
   };
 
 
 int
 main (int, char**)
   {
-    using V = Var<int, string>;
     
-    V var{12, "hui"};
+    V var{12, "huii"};
     cout <<  string(var)<<endl;
     
     Visi visi;
-    var.accept<void>(visi);
+    Predi predi;
+    
+    cout << var.accept(predi) <<endl;
+    var.accept(visi);
+    cout << var.accept(predi) <<endl;
     cout <<  string(var)<<endl;
     
     cout <<  "\n.gulp.\n";
