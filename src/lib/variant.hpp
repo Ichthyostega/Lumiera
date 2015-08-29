@@ -224,8 +224,9 @@ namespace lib {
           
           virtual ~Buffer() {}           ///< this is an ABC with VTable
           
-          virtual void dispatch (Visitor&)  =0;
-          virtual operator string()  const  =0;
+          virtual void dispatch (Visitor&)         =0;
+          virtual bool dispatch (Predicate&) const =0;
+          virtual operator string()          const =0;
         };
       
       
@@ -315,6 +316,15 @@ namespace lib {
               
               Dispatcher& typeDispatcher = visitor;
               typeDispatcher.handle (this->access());
+            }
+          
+          bool
+          dispatch (Predicate& visitor)  const
+            {
+              using Dispatcher = VFunc<bool>::template ValueAcceptInterface<const TY>;
+              
+              Dispatcher& typeDispatcher = visitor;
+              return typeDispatcher.handle (this->access());
             }
           
           /** diagnostic helper */
@@ -451,6 +461,12 @@ namespace lib {
       accept (Visitor& visitor)
         {
           buffer().dispatch (visitor);
+        }
+      
+      bool
+      accept (Predicate& visitor)  const
+        {
+          return buffer().dispatch (visitor);
         }
     };
   
