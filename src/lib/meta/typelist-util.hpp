@@ -121,6 +121,25 @@ namespace meta {
     }
     
     
+    /**
+     * Build a list of const types from a given typelist.
+     */
+    template<typename TYPES>
+    struct ConstAll;
+    
+    template<>
+    struct ConstAll<NullType>
+      {
+        typedef NullType List;
+      };
+    
+    template<typename TY, typename TYPES>
+    struct ConstAll<Node<TY,TYPES>>
+      {
+        typedef Node<const TY, typename ConstAll<TYPES>::List> List;
+      };
+    
+    
     
 }} // namespace lib::meta
 #endif

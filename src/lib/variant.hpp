@@ -141,15 +141,23 @@ namespace lib {
     
     
     
-    template<class VAL>
-    struct ValueAcceptInterface
+    template<typename RET>
+    struct VFunc
       {
-        virtual void handle(VAL&) { /* NOP */ };
+        /** how to treat one single type in visitation */
+        template<class VAL>
+        struct ValueAcceptInterface
+          {
+            virtual RET handle(VAL&) { /* do nothing */ return RET(); };
+          };
+        
+        
+        /** build a generic visitor interface for all types in list */
+        template<typename TYPES>
+        using VisitorInterface
+            = meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
+        
       };
-    
-    template<typename TYPES>
-    using VisitorInterface
-        = meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
     
     
   }//(End) implementation helpers
@@ -180,11 +188,27 @@ namespace lib {
     public:
       enum { SIZ = meta::maxSize<typename TYPES::List>::value };
       
+      template<typename RET>
+      using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
+      template<typename RET>
+      using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
+      
+      /**
+       * to be implemented by the client for visitation
+       * @see #accept(Visitor&)
+       */
       class Visitor
-        : public VisitorInterface<TYPES>
+        : public VisitorFunc<void>
         {
         public:
           virtual ~Visitor() { } ///< this is an interface
+        };
+      
+      class Predicate
+        : public VisitorConstFunc<bool>
+        {
+        public:
+          virtual ~Predicate() { } ///< this is an interface
         };
       
       
@@ -287,7 +311,9 @@ namespace lib {
           void
           dispatch (Visitor& visitor)
             {
-              ValueAcceptInterface<TY>& typeDispatcher = visitor;
+              using Dispatcher = VFunc<void>::template ValueAcceptInterface<TY>;
+              
+              Dispatcher& typeDispatcher = visitor;
               typeDispatcher.handle (this->access());
             }
           
