@@ -175,7 +175,16 @@ namespace diff{
       DataCap& operator= (DataCap const&)  =default;
       DataCap& operator= (DataCap&&)       =default;
       
-      bool operator== (DataCap const&)  const;
+      bool matchData (DataCap const&)  const;
+      bool matchNum  (int64_t)         const;
+      bool matchTxt  (string const&)   const;
+      bool matchTime (time::TimeValue) const;
+      bool matchBool (bool)            const;
+      bool matchDbl  (double)          const;
+      bool matchLuid (hash::LuidH)     const;
+      bool matchRec  (RecRef const&)   const;
+      bool matchRec  (Rec const&)      const;
+      
       operator string()  const;
     };
   
@@ -270,6 +279,20 @@ namespace diff{
           UNIMPLEMENTED("containment check by ID");
         }
       
+      bool matches (GenNode const& o)  const { return o == *this; }
+      bool matches (ID const& id)      const { return idi == id; }
+      bool matches (int     number)    const { return data.matchNum(number);}
+      bool matches (int64_t number)    const { return data.matchNum(number);}
+      bool matches (short   number)    const { return data.matchNum(number);}
+      bool matches (char    number)    const { return data.matchNum(number);}
+      bool matches (string text)       const { return data.matchTxt(text);}
+      bool matches (time::TimeValue t) const { return data.matchTime(t);  }
+      bool matches (bool b)            const { return data.matchBool(b);  }
+      bool matches (double d)          const { return data.matchDbl(d);   }
+      bool matches (hash::LuidH h)     const { return data.matchLuid(h);  }
+      bool matches (RecRef const& ref) const { return data.matchRec(ref); }
+      bool matches (Rec const& rec)    const { return data.matchRec(rec); }
+      
       
       friend string
       name (GenNode const& node)
@@ -281,7 +304,7 @@ namespace diff{
       operator== (GenNode const& n1, GenNode const& n2)
       {
         return n1.idi == n2.idi
-            && n1.data == n2.data;
+            && n1.data.matchData(n2.data);
       }
       
       friend bool

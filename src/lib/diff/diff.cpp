@@ -38,6 +38,8 @@
 #include "lib/variant.hpp"
 
 
+using lib::time::TimeValue;
+
 namespace lib {
 namespace diff{
   
@@ -64,7 +66,7 @@ namespace diff{
    *         is only called on a compatible DataCap.
    */
   bool
-  DataCap::operator== (DataCap const& o)  const
+  DataCap::matchData (DataCap const& o)  const
   {
     class EqualityTest
       : public Variant<DataValues>::Predicate
@@ -98,6 +100,65 @@ namespace diff{
     EqualityTest visitor(o);
     return accept(visitor);
   }
+  
+  
+  bool
+  DataCap::matchNum (int64_t num)  const
+  {
+    UNIMPLEMENTED ("content match numeric");
+  }
+  
+  
+  bool
+  DataCap::matchTxt (string const& text)  const
+  {
+    UNIMPLEMENTED ("content match textual");
+  }
+  
+  
+  bool
+  DataCap::matchTime (TimeValue time)  const
+  {
+    UNIMPLEMENTED ("content match timespec");
+  }
+  
+  
+  bool
+  DataCap::matchBool (bool b)  const
+  {
+    UNIMPLEMENTED ("content match bool");
+  }
+  
+  
+  bool
+  DataCap::matchDbl  (double)  const
+  {
+    UNIMPLEMENTED ("content match double");
+  }
+  
+  
+  bool
+  DataCap::matchLuid (hash::LuidH)  const
+  {
+    UNIMPLEMENTED ("content match LUID");
+  }
+  
+  
+  bool
+  DataCap::matchRec (RecRef const& ref)  const
+  {
+    UNIMPLEMENTED ("content match on reference");
+  }
+  
+  
+  bool
+  DataCap::matchRec (Rec const& rec)  const
+  {
+    UNIMPLEMENTED ("content match on record");
+  }
+  
+  
+  
   
   DataCap::operator string()  const
   {

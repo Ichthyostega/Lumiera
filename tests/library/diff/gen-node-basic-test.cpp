@@ -743,6 +743,88 @@ namespace test{
           CHECK (rec2 != ref2);    CHECK (ref2 != rec2);
           
           CHECK (ref1 != ref2);    CHECK (ref2 != ref1);
+          
+          
+          /* ----- equivalence match ----- */
+          
+          // equivalence on equality     // equivalence on ID match         // contained value equality
+          CHECK (ni1 .matches(ni1 ));    CHECK (ni1 .matches(ni1 .idi));    CHECK (ni1 .matches(i1 ));
+          CHECK (ni2 .matches(ni2 ));    CHECK (ni2 .matches(ni2 .idi));    CHECK (ni2 .matches(i2 ));
+          CHECK (nl1 .matches(nl1 ));    CHECK (nl1 .matches(nl1 .idi));    CHECK (nl1 .matches(l1 ));
+          CHECK (nl2 .matches(nl2 ));    CHECK (nl2 .matches(nl2 .idi));    CHECK (nl2 .matches(l2 ));
+          CHECK (ns1 .matches(ns1 ));    CHECK (ns1 .matches(ns1 .idi));    CHECK (ns1 .matches(s1 ));
+          CHECK (ns2 .matches(ns2 ));    CHECK (ns2 .matches(ns2 .idi));    CHECK (ns2 .matches(s2 ));
+          CHECK (nd1 .matches(nd1 ));    CHECK (nd1 .matches(nd1 .idi));    CHECK (nd1 .matches(d1 ));
+          CHECK (nd2 .matches(nd2 ));    CHECK (nd2 .matches(nd2 .idi));    CHECK (nd2 .matches(d2 ));
+          CHECK (nc1 .matches(nc1 ));    CHECK (nc1 .matches(nc1 .idi));    CHECK (nc1 .matches(c1 ));
+          CHECK (nc2 .matches(nc2 ));    CHECK (nc2 .matches(nc2 .idi));    CHECK (nc2 .matches(c2 ));
+          CHECK (nb1 .matches(nb1 ));    CHECK (nb1 .matches(nb1 .idi));    CHECK (nb1 .matches(b1 ));
+          CHECK (nb2 .matches(nb2 ));    CHECK (nb2 .matches(nb2 .idi));    CHECK (nb2 .matches(b2 ));
+          CHECK (nz1 .matches(nz1 ));    CHECK (nz1 .matches(nz1 .idi));    CHECK (nz1 .matches(z1 ));
+          CHECK (nz2 .matches(nz2 ));    CHECK (nz2 .matches(nz2 .idi));    CHECK (nz2 .matches(z2 ));
+          CHECK (nt1 .matches(nt1 ));    CHECK (nt1 .matches(nt1 .idi));    CHECK (nt1 .matches(t1 ));
+          CHECK (nt2 .matches(nt2 ));    CHECK (nt2 .matches(nt2 .idi));    CHECK (nt2 .matches(t2 ));
+          CHECK (nto1.matches(nto1));    CHECK (nto1.matches(nto1.idi));    CHECK (nto1.matches(to1));
+          CHECK (nto2.matches(nto2));    CHECK (nto2.matches(nto2.idi));    CHECK (nto2.matches(to2));
+          CHECK (ntd1.matches(ntd1));    CHECK (ntd1.matches(ntd1.idi));    CHECK (ntd1.matches(td1));
+          CHECK (ntd2.matches(ntd2));    CHECK (ntd2.matches(ntd2.idi));    CHECK (ntd2.matches(td2));
+          CHECK (nts1.matches(nts1));    CHECK (nts1.matches(nts1.idi));    CHECK (nts1.matches(ts1));
+          CHECK (nts2.matches(nts2));    CHECK (nts2.matches(nts2.idi));    CHECK (nts2.matches(ts2));
+          CHECK (nh1 .matches(nh1 ));    CHECK (nh1 .matches(nh1 .idi));    CHECK (nh1 .matches(h1 ));
+          CHECK (nh2 .matches(nh2 ));    CHECK (nh2 .matches(nh2 .idi));    CHECK (nh2 .matches(h2 ));
+          CHECK (rec1.matches(rec1));    CHECK (rec1.matches(rec1.idi));    CHECK (rec1.matches(spam1));
+          CHECK (rec2.matches(rec2));    CHECK (rec2.matches(rec2.idi));    CHECK (rec2.matches(spam2));
+          CHECK (ref1.matches(ref1));    CHECK (ref1.matches(ref1.idi));    CHECK (ref1.matches(r1));
+          CHECK (ref2.matches(ref2));    CHECK (ref2.matches(ref2.idi));    CHECK (ref2.matches(r2));
+          
+          // cross-match on equivalent payload data --------
+                                     CHECK (nl1.matches(i1));   CHECK (ns1.matches(i1));  CHECK (nd1.matches(i1));  CHECK (nc1.matches(i1));
+          CHECK (ni1.matches(l1));                              CHECK (ns1.matches(l1));  CHECK (nd1.matches(l1));  CHECK (nc1.matches(l1));
+          CHECK (ni1.matches(s1));   CHECK (nl1.matches(s1));                             CHECK (nd1.matches(s1));  CHECK (nc1.matches(s1));
+          CHECK (ni1.matches(d1));   CHECK (nl1.matches(d1));   CHECK (ns1.matches(d1));                            CHECK (nc1.matches(d1));
+          CHECK (ni1.matches(c1));   CHECK (nl1.matches(c1));   CHECK (ns1.matches(c1));  CHECK (nd1.matches(c1));
+          
+                                     CHECK (nl2.matches(i2));   CHECK (ns2.matches(i2));  CHECK (nd2.matches(i2));  CHECK (nc2.matches(i2));
+          CHECK (ni2.matches(l2));                              CHECK (ns2.matches(l2));  CHECK (nd2.matches(l2));  CHECK (nc2.matches(l2));
+          CHECK (ni2.matches(s2));   CHECK (nl2.matches(s2));                             CHECK (nd2.matches(s2));  CHECK (nc2.matches(s2));
+          CHECK (ni2.matches(d2));   CHECK (nl2.matches(d2));   CHECK (ns2.matches(d2));                            CHECK (nc2.matches(d2));
+          CHECK (ni2.matches(c2));   CHECK (nl2.matches(c2));   CHECK (ns2.matches(c2));  CHECK (nd2.matches(c2));
+          
+                                     CHECK (nto1.matches(t1 )); CHECK (nts1.matches(t1 ));
+          CHECK (nt1.matches(to1));                             CHECK (nts1.matches(to1));
+          CHECK (nt1.matches(ts1));  CHECK (nto1.matches(ts1));
+          
+                                     CHECK (nto2.matches(t2 )); CHECK (nts2.matches(t2 ));
+          CHECK (nt2.matches(to2));                             CHECK (nts2.matches(to2));
+          CHECK (nt2.matches(ts2));  CHECK (nto2.matches(ts2));
+          
+          CHECK (nz1.matches(""));
+          CHECK (nz2.matches("↯"));
+          CHECK (nc1.matches("@"));
+          CHECK (nc2.matches("~"));
+          
+          // match due to references sharing the target's ID
+          CHECK (rec1.matches(ref1.idi));
+          CHECK (ref1.matches(rec1.idi));
+          CHECK (rec2.matches(ref2.idi));
+          CHECK (ref2.matches(rec2.idi));
+          
+          // some negative cases...
+          CHECK (!ni1.matches(i2));  CHECK (!ni2.matches(i1));
+          CHECK (!ni1.matches(l2));  CHECK (!ni2.matches(l1));
+          CHECK (!ni1.matches(s2));  CHECK (!ni2.matches(s1));
+          CHECK (!ni1.matches(d2));  CHECK (!ni2.matches(d1));
+          CHECK (!ni1.matches(c2));  CHECK (!ni2.matches(c1));
+          
+          CHECK (!nd1.matches(i2));  CHECK (!nd2.matches(i1));
+          CHECK (!nd1.matches(l2));  CHECK (!nd2.matches(l1));
+          CHECK (!nd1.matches(s2));  CHECK (!nd2.matches(s1));
+          CHECK (!nd1.matches(d2));  CHECK (!nd2.matches(d1));
+          CHECK (!nd1.matches(c2));  CHECK (!nd2.matches(c1));
+          
+          // string match is literal
+          CHECK (!nz1.matches(" "));
+          CHECK (!nz2.matches("↯ "));
         }
       
       
