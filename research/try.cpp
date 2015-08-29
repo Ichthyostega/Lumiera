@@ -28,43 +28,99 @@
 // 9/14  - variadic templates and perfect forwarding
 // 11/14 - pointer to member functions and name mangling
 // 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
+// 8/15  - generalising the Variant::Visitor
 
 
 /** @file try.cpp
- ** Investigation: Segfault when loading into GDB (on Debian/Jessie 64bit).
+ ** Design: how to generalise the Variant::Visitor to arbitrary return values.
  ** 
- ** Problem could be narrowed down to a std::function bound to lambda,
- ** where some argument type is picked up as template parameter
+ ** Our Variant template allows either for access by known type, or through accepting
+ ** a classic GoF visitor. Problem is that in many extended use cases we rather want
+ ** to apply \em functions, e.g. for a monadic flatMap on a data structure built from
+ ** Variant records. (see our \link diff::GenNode external object representation \endlink).
+ ** Since our implementation technique relies on a template generated interface anyway,
+ ** a mere extension to arbitrary return values seems feasible.
  **
  */
 
-#include <functional>
+typedef unsigned int uint;
+
+#include "lib/meta/typelist.hpp"
+#include "lib/meta/generator.hpp"
+#include "lib/format-util.hpp"
+
+//#include <functional>
 #include <iostream>
+#include <cstdarg>
 #include <string>
 
 using std::string;
 using std::cout;
 using std::endl;
 
+    
+    
+    template<class VAL>
+    struct ValueAcceptInterface
+      {
+        virtual void handle(VAL&) { /* NOP */ };
+      };
+    
+    template<typename TYPES>
+    using VisitorInterface
+        = lib::meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
 
 
-template<class ELM>
-inline string
-activate (ELM& something)
+template<class A, class B>
+struct Var
   {
-    std::function<string(ELM const&)> lambda = [] (ELM const& val)
-                                                  {
-                                                    return string(val);
-                                                  };
-    return lambda(something);
-  }
+    A a;
+    B b;
+    
+    using TYPES = lib::meta::Types<A,B>;
+    using Visitor = VisitorInterface<TYPES>;
+    
+    void
+    accept (Visitor& visitor)
+      {
+        ValueAcceptInterface<A>& visA = visitor;
+        ValueAcceptInterface<B>& visB = visitor;
+        visA.handle (a);
+        visB.handle (b);
+      }
 
+    
+    operator string()  const
+      {
+        return "Var("
+             + util::str(a)
+             + "|"
+             + util::str(b)
+             + ")";
+      }
+  };
+
+
+class Visi
+  : public Var<int,string>::Visitor
+  {
+    
+    virtual void handle(int& i) { ++i; }
+    virtual void handle(string& s) { s += ".."; }
+  };
 
 
 int
 main (int, char**)
   {
-    cout << activate("Data") << endl;
+    using V = Var<int, string>;
+    
+    V var{12, "hui"};
+    cout <<  string(var)<<endl;
+    
+    Visi visi;
+    var.accept(visi);
+    cout <<  string(var)<<endl;
     
     cout <<  "\n.gulp.\n";
     
