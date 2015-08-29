@@ -79,6 +79,7 @@ namespace test{
         {
           createVariant();
           accessVariant();
+          acceptPredicate();
           verifyAssignment();
         }
       
@@ -203,6 +204,35 @@ namespace test{
           v1.accept (acs);
           CHECK (someVal+2 == v1.get<int>());
           CHECK (someVal+1 == acs.i_);
+        }
+      
+      
+      void
+      acceptPredicate()
+        {
+          const TestVariant v1(12);
+          const TestVariant v2(string("123"));
+          const TestVariant v3(Time::NEVER);
+          
+          struct Checker
+            : TestVariant::Predicate
+            {
+              bool handle (int const& i)    { return i % 2; }
+              bool handle (string const& s) { return s.length() % 2; }
+            }
+            check;
+          
+          CHECK (12 == v1.get<int>());
+          CHECK ("123" == v2.get<string>());
+          CHECK (Time::NEVER == v3.get<Time>());
+          
+          CHECK (!v1.accept(check));
+          CHECK ( v2.accept(check));
+          CHECK (!v3.accept(check));
+          
+          CHECK (12 == v1.get<int>());
+          CHECK ("123" == v2.get<string>());
+          CHECK (Time::NEVER == v3.get<Time>());
         }
       
       
