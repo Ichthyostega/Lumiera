@@ -58,17 +58,22 @@ using std::string;
 using std::cout;
 using std::endl;
 
-    
-    
+
+template<typename RET>
+struct VFunc
+  {
+
     template<class VAL>
     struct ValueAcceptInterface
       {
-        virtual void handle(VAL&) { /* NOP */ };
+        virtual RET handle(VAL&) { /* do nothing */ return RET(); };
       };
     
     template<typename TYPES>
     using VisitorInterface
         = lib::meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
+    
+  };
 
 
 template<class A, class B>
@@ -78,15 +83,18 @@ struct Var
     B b;
     
     using TYPES = lib::meta::Types<A,B>;
-    using Visitor = VisitorInterface<TYPES>;
     
-    void
-    accept (Visitor& visitor)
+    template<typename RET>
+    using Visitor = typename VFunc<RET>::template VisitorInterface<TYPES>;
+    
+    template<typename RET>
+    RET
+    accept (Visitor<RET>& visitor)
       {
-        ValueAcceptInterface<A>& visA = visitor;
-        ValueAcceptInterface<B>& visB = visitor;
+        typename VFunc<RET>::template ValueAcceptInterface<A>& visA = visitor;
+        typename VFunc<RET>::template ValueAcceptInterface<B>& visB = visitor;
         visA.handle (a);
-        visB.handle (b);
+        return visB.handle (b);
       }
 
     
@@ -102,7 +110,7 @@ struct Var
 
 
 class Visi
-  : public Var<int,string>::Visitor
+  : public Var<int,string>::Visitor<void>
   {
     
     virtual void handle(int& i) { ++i; }
@@ -119,7 +127,7 @@ main (int, char**)
     cout <<  string(var)<<endl;
     
     Visi visi;
-    var.accept(visi);
+    var.accept<void>(visi);
     cout <<  string(var)<<endl;
     
     cout <<  "\n.gulp.\n";
