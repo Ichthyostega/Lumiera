@@ -67,13 +67,12 @@ namespace diff{
   DataCap::operator== (DataCap const& o)  const
   {
     class EqualityTest
-      : public Variant<DataValues>::Visitor
+      : public Variant<DataValues>::Predicate
       {
         DataCap const& o_;
-        bool isEqual_;
 
 #define DERIVE_EQUALITY(_TY_) \
-        virtual void handle  (_TY_& val) override { isEqual_ = (o_.get<_TY_>() == val); }
+        virtual bool handle  (_TY_ const& val) override { return (o_.get<_TY_>() == val); }
         
         DERIVE_EQUALITY (int)
         DERIVE_EQUALITY (int64_t)
@@ -93,15 +92,11 @@ namespace diff{
       public:
         EqualityTest(DataCap const& o)
           : o_(o)
-          , isEqual_(false)
           { }
-        
-        operator bool() { return isEqual_; }
       };
     
     EqualityTest visitor(o);
-    unConst(this)->accept(visitor);
-    return visitor;
+    return accept(visitor);
   }
   
   DataCap::operator string()  const
