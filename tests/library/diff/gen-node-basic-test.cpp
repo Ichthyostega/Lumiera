@@ -42,6 +42,7 @@ using lib::hash::LuidH;
 using lib::time::FSecs;
 using lib::time::Time;
 using lib::time::TimeSpan;
+using lib::test::randTime;
 //using std::string;
 //using std::vector;
 //using std::swap;
@@ -98,10 +99,10 @@ namespace test{
       run (Arg)
         {
           simpleUsage();
+          equalityMatch();
           objectShortcut();
           symbolReference();
           sequenceIteration();
-          copy_and_move();
         }
       
       
@@ -262,16 +263,493 @@ namespace test{
       
       
       void
-      sequenceIteration()
+      equalityMatch()
         {
-          UNIMPLEMENTED ("wtf");
+          int     i1 = 12;                        GenNode ni1(i1);
+          int     i2 = 23;                        GenNode ni2(i2);
+          int64_t l1 = 12;                        GenNode nl1(l1);
+          int64_t l2 = 23;                        GenNode nl2(l2);
+          short   s1 = 12;                        GenNode ns1(s1);
+          short   s2 = 23;                        GenNode ns2(s2);
+          double  d1 = 12;                        GenNode nd1(d1);
+          double  d2 = 23;                        GenNode nd2(d2);
+          char    c1 = '@';                       GenNode nc1(c1);
+          char    c2 = '~';                       GenNode nc2(c2);
+          bool    b1 = true;                      GenNode nb1(b1);
+          bool    b2 = false;                     GenNode nb2(b2);
+          string  z1 = "";                        GenNode nz1(z1);
+          string  z2 = "↯";                       GenNode nz2(z2);
+          
+          time::Time t1 = randTime();             GenNode nt1(t1);
+          time::Time t2(-t1);                     GenNode nt2(t2);
+          time::Offset to1(t1);                   GenNode nto1(to1);
+          time::Offset to2(t2);                   GenNode nto2(to2);
+          time::Duration td1(to2);                GenNode ntd1(td1);
+          time::Duration td2(to2*2);              GenNode ntd2(td2);
+          time::TimeSpan ts1(t1, td1);            GenNode nts1(ts1);
+          time::TimeSpan ts2(t2, td2);            GenNode nts2(ts2);
+          hash::LuidH h1;                         GenNode nh1(h1);
+          hash::LuidH h2;                         GenNode nh2(h2);
+          
+          Rec spam1({GenNode("ham", "eggs")});    GenNode rec1(spam1);
+          Rec spam2(MakeRec(spam1).type("spam")); GenNode rec2(spam2);
+          
+          RecRef r1(spam1);                       GenNode ref1(r1);
+          RecRef r2(spam2);                       GenNode ref2(r2);
+          
+          CHECK (ni1 == ni1);
+          CHECK (ni2 == ni2);
+          CHECK (nl1 == nl1);
+          CHECK (nl2 == nl2);
+          CHECK (ns1 == ns1);
+          CHECK (ns2 == ns2);
+          CHECK (nd1 == nd1);
+          CHECK (nd2 == nd2);
+          CHECK (nc1 == nc1);
+          CHECK (nc2 == nc2);
+          CHECK (nb1 == nb1);
+          CHECK (nb2 == nb2);
+          CHECK (nz1 == nz1);
+          CHECK (nz2 == nz2);
+          CHECK (nt1  == nt1 );
+          CHECK (nt2  == nt2 );
+          CHECK (nto1 == nto1);
+          CHECK (nto2 == nto2);
+          CHECK (ntd1 == ntd1);
+          CHECK (ntd2 == ntd2);
+          CHECK (nts1 == nts1);
+          CHECK (nts2 == nts2);
+          CHECK (nh1  == nh1 );
+          CHECK (nh2  == nh2 );
+          CHECK (rec1 == rec1);
+          CHECK (rec2 == rec2);
+          CHECK (ref1 == ref1);
+          CHECK (ref2 == ref2);
+          
+          CHECK (ni1 != ni2);      CHECK (ni2 != ni1);
+          CHECK (nl1 != nl2);      CHECK (nl2 != nl1);
+          CHECK (ns1 != ns2);      CHECK (ns2 != ns1);
+          CHECK (nd1 != nd2);      CHECK (nd2 != nd1);
+          CHECK (nc1 != nc2);      CHECK (nc2 != nc1);
+          CHECK (nb1 != nb2);      CHECK (nb2 != nb1);
+          CHECK (nz1 != nz2);      CHECK (nz2 != nz1);
+          CHECK (nt1  != nt2 );    CHECK (nt2  != nt1 );
+          CHECK (nto1 != nto2);    CHECK (nto2 != nto1);
+          CHECK (ntd1 != ntd2);    CHECK (ntd2 != ntd1);
+          CHECK (nts1 != nts2);    CHECK (nts2 != nts1);
+          CHECK (nh1  != nh2 );    CHECK (nh2  != nh1 );
+          CHECK (rec1 != rec2);    CHECK (rec2 != rec1);
+          CHECK (ref1 != ref2);    CHECK (ref2 != ref1);
+          
+          CHECK (ni1 != ni2);      CHECK (ni2  != ni1);
+          CHECK (ni1 != nl1);      CHECK (nl1  != ni1);
+          CHECK (ni1 != nl2);      CHECK (nl2  != ni1);
+          CHECK (ni1 != ns1);      CHECK (ns1  != ni1);
+          CHECK (ni1 != ns2);      CHECK (ns2  != ni1);
+          CHECK (ni1 != nd1);      CHECK (nd1  != ni1);
+          CHECK (ni1 != nd2);      CHECK (nd2  != ni1);
+          CHECK (ni1 != nc1);      CHECK (nc1  != ni1);
+          CHECK (ni1 != nc2);      CHECK (nc2  != ni1);
+          CHECK (ni1 != nb1);      CHECK (nb1  != ni1);
+          CHECK (ni1 != nb2);      CHECK (nb2  != ni1);
+          CHECK (ni1 != nz1);      CHECK (nz1  != ni1);
+          CHECK (ni1 != nz2);      CHECK (nz2  != ni1);
+          CHECK (ni1 != nt1 );     CHECK (nt1  != ni1);
+          CHECK (ni1 != nt2 );     CHECK (nt2  != ni1);
+          CHECK (ni1 != nto1);     CHECK (nto1 != ni1);
+          CHECK (ni1 != nto2);     CHECK (nto2 != ni1);
+          CHECK (ni1 != ntd1);     CHECK (ntd1 != ni1);
+          CHECK (ni1 != ntd2);     CHECK (ntd2 != ni1);
+          CHECK (ni1 != nts1);     CHECK (nts1 != ni1);
+          CHECK (ni1 != nts2);     CHECK (nts2 != ni1);
+          CHECK (ni1 != nh1 );     CHECK (nh1  != ni1);
+          CHECK (ni1 != nh2 );     CHECK (nh2  != ni1);
+          CHECK (ni1 != rec1);     CHECK (rec1 != ni1);
+          CHECK (ni1 != rec2);     CHECK (rec2 != ni1);
+          CHECK (ni1 != ref1);     CHECK (ref1 != ni1);
+          CHECK (ni1 != ref2);     CHECK (ref2 != ni1);
+          
+          CHECK (ni2 != nl1);      CHECK (nl1  != ni2);
+          CHECK (ni2 != nl2);      CHECK (nl2  != ni2);
+          CHECK (ni2 != ns1);      CHECK (ns1  != ni2);
+          CHECK (ni2 != ns2);      CHECK (ns2  != ni2);
+          CHECK (ni2 != nd1);      CHECK (nd1  != ni2);
+          CHECK (ni2 != nd2);      CHECK (nd2  != ni2);
+          CHECK (ni2 != nc1);      CHECK (nc1  != ni2);
+          CHECK (ni2 != nc2);      CHECK (nc2  != ni2);
+          CHECK (ni2 != nb1);      CHECK (nb1  != ni2);
+          CHECK (ni2 != nb2);      CHECK (nb2  != ni2);
+          CHECK (ni2 != nz1);      CHECK (nz1  != ni2);
+          CHECK (ni2 != nz2);      CHECK (nz2  != ni2);
+          CHECK (ni2 != nt1 );     CHECK (nt1  != ni2);
+          CHECK (ni2 != nt2 );     CHECK (nt2  != ni2);
+          CHECK (ni2 != nto1);     CHECK (nto1 != ni2);
+          CHECK (ni2 != nto2);     CHECK (nto2 != ni2);
+          CHECK (ni2 != ntd1);     CHECK (ntd1 != ni2);
+          CHECK (ni2 != ntd2);     CHECK (ntd2 != ni2);
+          CHECK (ni2 != nts1);     CHECK (nts1 != ni2);
+          CHECK (ni2 != nts2);     CHECK (nts2 != ni2);
+          CHECK (ni2 != nh1 );     CHECK (nh1  != ni2);
+          CHECK (ni2 != nh2 );     CHECK (nh2  != ni2);
+          CHECK (ni2 != rec1);     CHECK (rec1 != ni2);
+          CHECK (ni2 != rec2);     CHECK (rec2 != ni2);
+          CHECK (ni2 != ref1);     CHECK (ref1 != ni2);
+          CHECK (ni2 != ref2);     CHECK (ref2 != ni2);
+          
+          CHECK (nl1 != nl2);      CHECK (nl2  != nl1);
+          CHECK (nl1 != ns1);      CHECK (ns1  != nl1);
+          CHECK (nl1 != ns2);      CHECK (ns2  != nl1);
+          CHECK (nl1 != nd1);      CHECK (nd1  != nl1);
+          CHECK (nl1 != nd2);      CHECK (nd2  != nl1);
+          CHECK (nl1 != nc1);      CHECK (nc1  != nl1);
+          CHECK (nl1 != nc2);      CHECK (nc2  != nl1);
+          CHECK (nl1 != nb1);      CHECK (nb1  != nl1);
+          CHECK (nl1 != nb2);      CHECK (nb2  != nl1);
+          CHECK (nl1 != nz1);      CHECK (nz1  != nl1);
+          CHECK (nl1 != nz2);      CHECK (nz2  != nl1);
+          CHECK (nl1 != nt1 );     CHECK (nt1  != nl1);
+          CHECK (nl1 != nt2 );     CHECK (nt2  != nl1);
+          CHECK (nl1 != nto1);     CHECK (nto1 != nl1);
+          CHECK (nl1 != nto2);     CHECK (nto2 != nl1);
+          CHECK (nl1 != ntd1);     CHECK (ntd1 != nl1);
+          CHECK (nl1 != ntd2);     CHECK (ntd2 != nl1);
+          CHECK (nl1 != nts1);     CHECK (nts1 != nl1);
+          CHECK (nl1 != nts2);     CHECK (nts2 != nl1);
+          CHECK (nl1 != nh1 );     CHECK (nh1  != nl1);
+          CHECK (nl1 != nh2 );     CHECK (nh2  != nl1);
+          CHECK (nl1 != rec1);     CHECK (rec1 != nl1);
+          CHECK (nl1 != rec2);     CHECK (rec2 != nl1);
+          CHECK (nl1 != ref1);     CHECK (ref1 != nl1);
+          CHECK (nl1 != ref2);     CHECK (ref2 != nl1);
+          
+          CHECK (nl2 != ns1);      CHECK (ns1  != nl2);
+          CHECK (nl2 != ns2);      CHECK (ns2  != nl2);
+          CHECK (nl2 != nd1);      CHECK (nd1  != nl2);
+          CHECK (nl2 != nd2);      CHECK (nd2  != nl2);
+          CHECK (nl2 != nc1);      CHECK (nc1  != nl2);
+          CHECK (nl2 != nc2);      CHECK (nc2  != nl2);
+          CHECK (nl2 != nb1);      CHECK (nb1  != nl2);
+          CHECK (nl2 != nb2);      CHECK (nb2  != nl2);
+          CHECK (nl2 != nz1);      CHECK (nz1  != nl2);
+          CHECK (nl2 != nz2);      CHECK (nz2  != nl2);
+          CHECK (nl2 != nt1 );     CHECK (nt1  != nl2);
+          CHECK (nl2 != nt2 );     CHECK (nt2  != nl2);
+          CHECK (nl2 != nto1);     CHECK (nto1 != nl2);
+          CHECK (nl2 != nto2);     CHECK (nto2 != nl2);
+          CHECK (nl2 != ntd1);     CHECK (ntd1 != nl2);
+          CHECK (nl2 != ntd2);     CHECK (ntd2 != nl2);
+          CHECK (nl2 != nts1);     CHECK (nts1 != nl2);
+          CHECK (nl2 != nts2);     CHECK (nts2 != nl2);
+          CHECK (nl2 != nh1 );     CHECK (nh1  != nl2);
+          CHECK (nl2 != nh2 );     CHECK (nh2  != nl2);
+          CHECK (nl2 != rec1);     CHECK (rec1 != nl2);
+          CHECK (nl2 != rec2);     CHECK (rec2 != nl2);
+          CHECK (nl2 != ref1);     CHECK (ref1 != nl2);
+          CHECK (nl2 != ref2);     CHECK (ref2 != nl2);
+          
+          CHECK (ns1 != ns2);      CHECK (ns2  != ns1);
+          CHECK (ns1 != nd1);      CHECK (nd1  != ns1);
+          CHECK (ns1 != nd2);      CHECK (nd2  != ns1);
+          CHECK (ns1 != nc1);      CHECK (nc1  != ns1);
+          CHECK (ns1 != nc2);      CHECK (nc2  != ns1);
+          CHECK (ns1 != nb1);      CHECK (nb1  != ns1);
+          CHECK (ns1 != nb2);      CHECK (nb2  != ns1);
+          CHECK (ns1 != nz1);      CHECK (nz1  != ns1);
+          CHECK (ns1 != nz2);      CHECK (nz2  != ns1);
+          CHECK (ns1 != nt1 );     CHECK (nt1  != ns1);
+          CHECK (ns1 != nt2 );     CHECK (nt2  != ns1);
+          CHECK (ns1 != nto1);     CHECK (nto1 != ns1);
+          CHECK (ns1 != nto2);     CHECK (nto2 != ns1);
+          CHECK (ns1 != ntd1);     CHECK (ntd1 != ns1);
+          CHECK (ns1 != ntd2);     CHECK (ntd2 != ns1);
+          CHECK (ns1 != nts1);     CHECK (nts1 != ns1);
+          CHECK (ns1 != nts2);     CHECK (nts2 != ns1);
+          CHECK (ns1 != nh1 );     CHECK (nh1  != ns1);
+          CHECK (ns1 != nh2 );     CHECK (nh2  != ns1);
+          CHECK (ns1 != rec1);     CHECK (rec1 != ns1);
+          CHECK (ns1 != rec2);     CHECK (rec2 != ns1);
+          CHECK (ns1 != ref1);     CHECK (ref1 != ns1);
+          CHECK (ns1 != ref2);     CHECK (ref2 != ns1);
+          
+          CHECK (ns2 != nd1);      CHECK (nd1  != ns2);
+          CHECK (ns2 != nd2);      CHECK (nd2  != ns2);
+          CHECK (ns2 != nc1);      CHECK (nc1  != ns2);
+          CHECK (ns2 != nc2);      CHECK (nc2  != ns2);
+          CHECK (ns2 != nb1);      CHECK (nb1  != ns2);
+          CHECK (ns2 != nb2);      CHECK (nb2  != ns2);
+          CHECK (ns2 != nz1);      CHECK (nz1  != ns2);
+          CHECK (ns2 != nz2);      CHECK (nz2  != ns2);
+          CHECK (ns2 != nt1 );     CHECK (nt1  != ns2);
+          CHECK (ns2 != nt2 );     CHECK (nt2  != ns2);
+          CHECK (ns2 != nto1);     CHECK (nto1 != ns2);
+          CHECK (ns2 != nto2);     CHECK (nto2 != ns2);
+          CHECK (ns2 != ntd1);     CHECK (ntd1 != ns2);
+          CHECK (ns2 != ntd2);     CHECK (ntd2 != ns2);
+          CHECK (ns2 != nts1);     CHECK (nts1 != ns2);
+          CHECK (ns2 != nts2);     CHECK (nts2 != ns2);
+          CHECK (ns2 != nh1 );     CHECK (nh1  != ns2);
+          CHECK (ns2 != nh2 );     CHECK (nh2  != ns2);
+          CHECK (ns2 != rec1);     CHECK (rec1 != ns2);
+          CHECK (ns2 != rec2);     CHECK (rec2 != ns2);
+          CHECK (ns2 != ref1);     CHECK (ref1 != ns2);
+          CHECK (ns2 != ref2);     CHECK (ref2 != ns2);
+          
+          CHECK (nd1 != nd2);      CHECK (nd2  != nd1);
+          CHECK (nd1 != nc1);      CHECK (nc1  != nd1);
+          CHECK (nd1 != nc2);      CHECK (nc2  != nd1);
+          CHECK (nd1 != nb1);      CHECK (nb1  != nd1);
+          CHECK (nd1 != nb2);      CHECK (nb2  != nd1);
+          CHECK (nd1 != nz1);      CHECK (nz1  != nd1);
+          CHECK (nd1 != nz2);      CHECK (nz2  != nd1);
+          CHECK (nd1 != nt1 );     CHECK (nt1  != nd1);
+          CHECK (nd1 != nt2 );     CHECK (nt2  != nd1);
+          CHECK (nd1 != nto1);     CHECK (nto1 != nd1);
+          CHECK (nd1 != nto2);     CHECK (nto2 != nd1);
+          CHECK (nd1 != ntd1);     CHECK (ntd1 != nd1);
+          CHECK (nd1 != ntd2);     CHECK (ntd2 != nd1);
+          CHECK (nd1 != nts1);     CHECK (nts1 != nd1);
+          CHECK (nd1 != nts2);     CHECK (nts2 != nd1);
+          CHECK (nd1 != nh1 );     CHECK (nh1  != nd1);
+          CHECK (nd1 != nh2 );     CHECK (nh2  != nd1);
+          CHECK (nd1 != rec1);     CHECK (rec1 != nd1);
+          CHECK (nd1 != rec2);     CHECK (rec2 != nd1);
+          CHECK (nd1 != ref1);     CHECK (ref1 != nd1);
+          CHECK (nd1 != ref2);     CHECK (ref2 != nd1);
+          
+          CHECK (nd2 != nc1);      CHECK (nc1  != nd2);
+          CHECK (nd2 != nc2);      CHECK (nc2  != nd2);
+          CHECK (nd2 != nb1);      CHECK (nb1  != nd2);
+          CHECK (nd2 != nb2);      CHECK (nb2  != nd2);
+          CHECK (nd2 != nz1);      CHECK (nz1  != nd2);
+          CHECK (nd2 != nz2);      CHECK (nz2  != nd2);
+          CHECK (nd2 != nt1 );     CHECK (nt1  != nd2);
+          CHECK (nd2 != nt2 );     CHECK (nt2  != nd2);
+          CHECK (nd2 != nto1);     CHECK (nto1 != nd2);
+          CHECK (nd2 != nto2);     CHECK (nto2 != nd2);
+          CHECK (nd2 != ntd1);     CHECK (ntd1 != nd2);
+          CHECK (nd2 != ntd2);     CHECK (ntd2 != nd2);
+          CHECK (nd2 != nts1);     CHECK (nts1 != nd2);
+          CHECK (nd2 != nts2);     CHECK (nts2 != nd2);
+          CHECK (nd2 != nh1 );     CHECK (nh1  != nd2);
+          CHECK (nd2 != nh2 );     CHECK (nh2  != nd2);
+          CHECK (nd2 != rec1);     CHECK (rec1 != nd2);
+          CHECK (nd2 != rec2);     CHECK (rec2 != nd2);
+          CHECK (nd2 != ref1);     CHECK (ref1 != nd2);
+          CHECK (nd2 != ref2);     CHECK (ref2 != nd2);
+          
+          CHECK (nc1 != nc2);      CHECK (nc2  != nc1);
+          CHECK (nc1 != nb1);      CHECK (nb1  != nc1);
+          CHECK (nc1 != nb2);      CHECK (nb2  != nc1);
+          CHECK (nc1 != nz1);      CHECK (nz1  != nc1);
+          CHECK (nc1 != nz2);      CHECK (nz2  != nc1);
+          CHECK (nc1 != nt1 );     CHECK (nt1  != nc1);
+          CHECK (nc1 != nt2 );     CHECK (nt2  != nc1);
+          CHECK (nc1 != nto1);     CHECK (nto1 != nc1);
+          CHECK (nc1 != nto2);     CHECK (nto2 != nc1);
+          CHECK (nc1 != ntd1);     CHECK (ntd1 != nc1);
+          CHECK (nc1 != ntd2);     CHECK (ntd2 != nc1);
+          CHECK (nc1 != nts1);     CHECK (nts1 != nc1);
+          CHECK (nc1 != nts2);     CHECK (nts2 != nc1);
+          CHECK (nc1 != nh1 );     CHECK (nh1  != nc1);
+          CHECK (nc1 != nh2 );     CHECK (nh2  != nc1);
+          CHECK (nc1 != rec1);     CHECK (rec1 != nc1);
+          CHECK (nc1 != rec2);     CHECK (rec2 != nc1);
+          CHECK (nc1 != ref1);     CHECK (ref1 != nc1);
+          CHECK (nc1 != ref2);     CHECK (ref2 != nc1);
+          
+          CHECK (nc2 != nb1);      CHECK (nb1  != nc2);
+          CHECK (nc2 != nb2);      CHECK (nb2  != nc2);
+          CHECK (nc2 != nz1);      CHECK (nz1  != nc2);
+          CHECK (nc2 != nz2);      CHECK (nz2  != nc2);
+          CHECK (nc2 != nt1 );     CHECK (nt1  != nc2);
+          CHECK (nc2 != nt2 );     CHECK (nt2  != nc2);
+          CHECK (nc2 != nto1);     CHECK (nto1 != nc2);
+          CHECK (nc2 != nto2);     CHECK (nto2 != nc2);
+          CHECK (nc2 != ntd1);     CHECK (ntd1 != nc2);
+          CHECK (nc2 != ntd2);     CHECK (ntd2 != nc2);
+          CHECK (nc2 != nts1);     CHECK (nts1 != nc2);
+          CHECK (nc2 != nts2);     CHECK (nts2 != nc2);
+          CHECK (nc2 != nh1 );     CHECK (nh1  != nc2);
+          CHECK (nc2 != nh2 );     CHECK (nh2  != nc2);
+          CHECK (nc2 != rec1);     CHECK (rec1 != nc2);
+          CHECK (nc2 != rec2);     CHECK (rec2 != nc2);
+          CHECK (nc2 != ref1);     CHECK (ref1 != nc2);
+          CHECK (nc2 != ref2);     CHECK (ref2 != nc2);
+          
+          CHECK (nb1 != nb2);      CHECK (nb2  != nb1);
+          CHECK (nb1 != nz1);      CHECK (nz1  != nb1);
+          CHECK (nb1 != nz2);      CHECK (nz2  != nb1);
+          CHECK (nb1 != nt1 );     CHECK (nt1  != nb1);
+          CHECK (nb1 != nt2 );     CHECK (nt2  != nb1);
+          CHECK (nb1 != nto1);     CHECK (nto1 != nb1);
+          CHECK (nb1 != nto2);     CHECK (nto2 != nb1);
+          CHECK (nb1 != ntd1);     CHECK (ntd1 != nb1);
+          CHECK (nb1 != ntd2);     CHECK (ntd2 != nb1);
+          CHECK (nb1 != nts1);     CHECK (nts1 != nb1);
+          CHECK (nb1 != nts2);     CHECK (nts2 != nb1);
+          CHECK (nb1 != nh1 );     CHECK (nh1  != nb1);
+          CHECK (nb1 != nh2 );     CHECK (nh2  != nb1);
+          CHECK (nb1 != rec1);     CHECK (rec1 != nb1);
+          CHECK (nb1 != rec2);     CHECK (rec2 != nb1);
+          CHECK (nb1 != ref1);     CHECK (ref1 != nb1);
+          CHECK (nb1 != ref2);     CHECK (ref2 != nb1);
+          
+          CHECK (nb2 != nz1);      CHECK (nz1  != nb2);
+          CHECK (nb2 != nz2);      CHECK (nz2  != nb2);
+          CHECK (nb2 != nt1 );     CHECK (nt1  != nb2);
+          CHECK (nb2 != nt2 );     CHECK (nt2  != nb2);
+          CHECK (nb2 != nto1);     CHECK (nto1 != nb2);
+          CHECK (nb2 != nto2);     CHECK (nto2 != nb2);
+          CHECK (nb2 != ntd1);     CHECK (ntd1 != nb2);
+          CHECK (nb2 != ntd2);     CHECK (ntd2 != nb2);
+          CHECK (nb2 != nts1);     CHECK (nts1 != nb2);
+          CHECK (nb2 != nts2);     CHECK (nts2 != nb2);
+          CHECK (nb2 != nh1 );     CHECK (nh1  != nb2);
+          CHECK (nb2 != nh2 );     CHECK (nh2  != nb2);
+          CHECK (nb2 != rec1);     CHECK (rec1 != nb2);
+          CHECK (nb2 != rec2);     CHECK (rec2 != nb2);
+          CHECK (nb2 != ref1);     CHECK (ref1 != nb2);
+          CHECK (nb2 != ref2);     CHECK (ref2 != nb2);
+          
+          CHECK (nz1 != nt2 );     CHECK (nt2  != nz1);
+          CHECK (nz1 != nto1);     CHECK (nto1 != nz1);
+          CHECK (nz1 != nto2);     CHECK (nto2 != nz1);
+          CHECK (nz1 != ntd1);     CHECK (ntd1 != nz1);
+          CHECK (nz1 != ntd2);     CHECK (ntd2 != nz1);
+          CHECK (nz1 != nts1);     CHECK (nts1 != nz1);
+          CHECK (nz1 != nts2);     CHECK (nts2 != nz1);
+          CHECK (nz1 != nh1 );     CHECK (nh1  != nz1);
+          CHECK (nz1 != nh2 );     CHECK (nh2  != nz1);
+          CHECK (nz1 != rec1);     CHECK (rec1 != nz1);
+          CHECK (nz1 != rec2);     CHECK (rec2 != nz1);
+          CHECK (nz1 != ref1);     CHECK (ref1 != nz1);
+          CHECK (nz1 != ref2);     CHECK (ref2 != nz1);
+          
+          CHECK (nz2 != nt1 );     CHECK (nt1  != nz2);
+          CHECK (nz2 != nt2 );     CHECK (nt2  != nz2);
+          CHECK (nz2 != nto1);     CHECK (nto1 != nz2);
+          CHECK (nz2 != nto2);     CHECK (nto2 != nz2);
+          CHECK (nz2 != ntd1);     CHECK (ntd1 != nz2);
+          CHECK (nz2 != ntd2);     CHECK (ntd2 != nz2);
+          CHECK (nz2 != nts1);     CHECK (nts1 != nz2);
+          CHECK (nz2 != nts2);     CHECK (nts2 != nz2);
+          CHECK (nz2 != nh1 );     CHECK (nh1  != nz2);
+          CHECK (nz2 != nh2 );     CHECK (nh2  != nz2);
+          CHECK (nz2 != rec1);     CHECK (rec1 != nz2);
+          CHECK (nz2 != rec2);     CHECK (rec2 != nz2);
+          CHECK (nz2 != ref1);     CHECK (ref1 != nz2);
+          CHECK (nz2 != ref2);     CHECK (ref2 != nz2);
+          
+          CHECK (nt1 != nt2 );     CHECK (nt2  != nt1);
+          CHECK (nt1 != nto1);     CHECK (nto1 != nt1);
+          CHECK (nt1 != nto2);     CHECK (nto2 != nt1);
+          CHECK (nt1 != ntd1);     CHECK (ntd1 != nt1);
+          CHECK (nt1 != ntd2);     CHECK (ntd2 != nt1);
+          CHECK (nt1 != nts1);     CHECK (nts1 != nt1);
+          CHECK (nt1 != nts2);     CHECK (nts2 != nt1);
+          CHECK (nt1 != nh1 );     CHECK (nh1  != nt1);
+          CHECK (nt1 != nh2 );     CHECK (nh2  != nt1);
+          CHECK (nt1 != rec1);     CHECK (rec1 != nt1);
+          CHECK (nt1 != rec2);     CHECK (rec2 != nt1);
+          CHECK (nt1 != ref1);     CHECK (ref1 != nt1);
+          CHECK (nt1 != ref2);     CHECK (ref2 != nt1);
+          
+          CHECK (nt2 != nto1);     CHECK (nto1 != nt2);
+          CHECK (nt2 != nto2);     CHECK (nto2 != nt2);
+          CHECK (nt2 != ntd1);     CHECK (ntd1 != nt2);
+          CHECK (nt2 != ntd2);     CHECK (ntd2 != nt2);
+          CHECK (nt2 != nts1);     CHECK (nts1 != nt2);
+          CHECK (nt2 != nts2);     CHECK (nts2 != nt2);
+          CHECK (nt2 != nh1 );     CHECK (nh1  != nt2);
+          CHECK (nt2 != nh2 );     CHECK (nh2  != nt2);
+          CHECK (nt2 != rec1);     CHECK (rec1 != nt2);
+          CHECK (nt2 != rec2);     CHECK (rec2 != nt2);
+          CHECK (nt2 != ref1);     CHECK (ref1 != nt2);
+          CHECK (nt2 != ref2);     CHECK (ref2 != nt2);
+          
+          CHECK (nto1 != nto2);    CHECK (nto2 != nto1);
+          CHECK (nto1 != ntd1);    CHECK (ntd1 != nto1);
+          CHECK (nto1 != ntd2);    CHECK (ntd2 != nto1);
+          CHECK (nto1 != nts1);    CHECK (nts1 != nto1);
+          CHECK (nto1 != nts2);    CHECK (nts2 != nto1);
+          CHECK (nto1 != nh1 );    CHECK (nh1  != nto1);
+          CHECK (nto1 != nh2 );    CHECK (nh2  != nto1);
+          CHECK (nto1 != rec1);    CHECK (rec1 != nto1);
+          CHECK (nto1 != rec2);    CHECK (rec2 != nto1);
+          CHECK (nto1 != ref1);    CHECK (ref1 != nto1);
+          CHECK (nto1 != ref2);    CHECK (ref2 != nto1);
+          
+          CHECK (nto2 != ntd1);    CHECK (ntd1 != nto2);
+          CHECK (nto2 != ntd2);    CHECK (ntd2 != nto2);
+          CHECK (nto2 != nts1);    CHECK (nts1 != nto2);
+          CHECK (nto2 != nts2);    CHECK (nts2 != nto2);
+          CHECK (nto2 != nh1 );    CHECK (nh1  != nto2);
+          CHECK (nto2 != nh2 );    CHECK (nh2  != nto2);
+          CHECK (nto2 != rec1);    CHECK (rec1 != nto2);
+          CHECK (nto2 != rec2);    CHECK (rec2 != nto2);
+          CHECK (nto2 != ref1);    CHECK (ref1 != nto2);
+          CHECK (nto2 != ref2);    CHECK (ref2 != nto2);
+          
+          CHECK (ntd1 != ntd2);    CHECK (ntd2 != ntd1);
+          CHECK (ntd1 != nts1);    CHECK (nts1 != ntd1);
+          CHECK (ntd1 != nts2);    CHECK (nts2 != ntd1);
+          CHECK (ntd1 != nh1 );    CHECK (nh1  != ntd1);
+          CHECK (ntd1 != nh2 );    CHECK (nh2  != ntd1);
+          CHECK (ntd1 != rec1);    CHECK (rec1 != ntd1);
+          CHECK (ntd1 != rec2);    CHECK (rec2 != ntd1);
+          CHECK (ntd1 != ref1);    CHECK (ref1 != ntd1);
+          CHECK (ntd1 != ref2);    CHECK (ref2 != ntd1);
+          
+          CHECK (ntd2 != nts1);    CHECK (nts1 != ntd2);
+          CHECK (ntd2 != nts2);    CHECK (nts2 != ntd2);
+          CHECK (ntd2 != nh1 );    CHECK (nh1  != ntd2);
+          CHECK (ntd2 != nh2 );    CHECK (nh2  != ntd2);
+          CHECK (ntd2 != rec1);    CHECK (rec1 != ntd2);
+          CHECK (ntd2 != rec2);    CHECK (rec2 != ntd2);
+          CHECK (ntd2 != ref1);    CHECK (ref1 != ntd2);
+          CHECK (ntd2 != ref2);    CHECK (ref2 != ntd2);
+          
+          CHECK (nts1 != nts2);    CHECK (nts2 != nts1);
+          CHECK (nts1 != nh1 );    CHECK (nh1  != nts1);
+          CHECK (nts1 != nh2 );    CHECK (nh2  != nts1);
+          CHECK (nts1 != rec1);    CHECK (rec1 != nts1);
+          CHECK (nts1 != rec2);    CHECK (rec2 != nts1);
+          CHECK (nts1 != ref1);    CHECK (ref1 != nts1);
+          CHECK (nts1 != ref2);    CHECK (ref2 != nts1);
+          
+          CHECK (nts2 != nh1 );    CHECK (nh1  != nts2);
+          CHECK (nts2 != nh2 );    CHECK (nh2  != nts2);
+          CHECK (nts2 != rec1);    CHECK (rec1 != nts2);
+          CHECK (nts2 != rec2);    CHECK (rec2 != nts2);
+          CHECK (nts2 != ref1);    CHECK (ref1 != nts2);
+          CHECK (nts2 != ref2);    CHECK (ref2 != nts2);
+          
+          CHECK (nh1 != nh2 );     CHECK (nh2  != nh1);
+          CHECK (nh1 != rec1);     CHECK (rec1 != nh1);
+          CHECK (nh1 != rec2);     CHECK (rec2 != nh1);
+          CHECK (nh1 != ref1);     CHECK (ref1 != nh1);
+          CHECK (nh1 != ref2);     CHECK (ref2 != nh1);
+                                                       
+          CHECK (nh2 != rec1);     CHECK (rec1 != nh2);
+          CHECK (nh2 != rec2);     CHECK (rec2 != nh2);
+          CHECK (nh2 != ref1);     CHECK (ref1 != nh2);
+          CHECK (nh2 != ref2);     CHECK (ref2 != nh2);
+          
+          CHECK (rec1 != rec2);    CHECK (rec2 != rec1);
+          CHECK (rec1 != ref1);    CHECK (ref1 != rec1);
+          CHECK (rec1 != ref2);    CHECK (ref2 != rec1);
+          
+          CHECK (rec2 != ref1);    CHECK (ref1 != rec2);
+          CHECK (rec2 != ref2);    CHECK (ref2 != rec2);
+          
+          CHECK (ref1 != ref2);    CHECK (ref2 != ref1);
         }
       
       
       void
-      copy_and_move()
+      sequenceIteration()
         {
-          UNIMPLEMENTED ("need to check that?");
+          UNIMPLEMENTED ("wtf");
         }
     };
   

@@ -181,7 +181,7 @@ namespace test{
   inline lib::time::Time
   randTime ()
   {
-    return lib::time::Time (500 * (rand() % 2), (rand() % 600));
+    return lib::time::Time (500 * (rand() % 2), (rand() % 600) + 1);
   }
   
   /** create garbage string of given length

@@ -560,6 +560,18 @@ namespace diff{
         {
           return record_;
         }
+      
+      /** @note equality of references (instance pointers), not targets */
+      friend bool
+      operator== (RecordRef const& r1, RecordRef const& r2)
+      {
+        return r1.record_ == r2.record_;
+      }
+      friend bool
+      operator!= (RecordRef const& r1, RecordRef const& r2)
+      {
+        return r1.record_ != r2.record_;
+      }
     };
   
   
