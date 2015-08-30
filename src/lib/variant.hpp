@@ -362,6 +362,18 @@ namespace lib {
           return Buff<X>::downcast(this->buffer());
         }
       
+      /** @internal for derived classes to implement custom access logic */
+      template<typename X>
+      X*
+      maybeGet()
+        {
+          Buff<X>* buff = dynamic_cast<Buff<X>*> (& this->buffer());
+          if (buff)
+            return & buff->access();
+          else
+            return nullptr;
+        }
+      
       
     public:
      ~Variant()

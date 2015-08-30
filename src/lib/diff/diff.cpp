@@ -35,10 +35,17 @@
 #include "lib/format-util.hpp"
 #include "lib/diff/diff-language.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/util-quant.hpp"
 #include "lib/variant.hpp"
 
+#include <boost/lexical_cast.hpp>
 
+
+using boost::lexical_cast;
 using lib::time::TimeValue;
+using util::almostEqual;
+using lib::hash::LuidH;
+
 
 namespace lib {
 namespace diff{
@@ -105,56 +112,157 @@ namespace diff{
   bool
   DataCap::matchNum (int64_t num)  const
   {
-    UNIMPLEMENTED ("content match numeric");
+    class MatchNumber
+      : public Variant<DataValues>::Predicate
+      {
+        int64_t num_;
+
+#define MATCH_NUMBER(_TY_) \
+        virtual bool handle  (_TY_ const& val) override { return val == num_; }
+        
+        MATCH_NUMBER (int)
+        MATCH_NUMBER (int64_t)
+        MATCH_NUMBER (short)
+        MATCH_NUMBER (char)
+        MATCH_NUMBER (double)
+        
+      public:
+        MatchNumber(int64_t num)
+          : num_(num)
+          { }
+      };
+    
+    MatchNumber visitor(num);
+    return accept(visitor);
+  }
+  
+  
+  bool
+  DataCap::matchDbl (double d)  const
+  {
+    class MatchDouble
+      : public Variant<DataValues>::Predicate
+      {
+        double num_;
+
+#define MATCH_DOUBLE(_TY_) \
+        virtual bool handle  (_TY_ const& val) override { return almostEqual (double(val), num_); }
+        
+        MATCH_DOUBLE (int)
+        MATCH_DOUBLE (int64_t)
+        MATCH_DOUBLE (short)
+        MATCH_DOUBLE (char)
+        MATCH_DOUBLE (double)
+        
+      public:
+        MatchDouble(double d)
+          : num_(d)
+          { }
+      };
+    
+    MatchDouble visitor(d);
+    return accept(visitor);
   }
   
   
   bool
   DataCap::matchTxt (string const& text)  const
   {
-    UNIMPLEMENTED ("content match textual");
+    class MatchString
+      : public Variant<DataValues>::Predicate
+      {
+        string const& txt_;
+
+#define MATCH_STRING(_TY_) \
+        virtual bool handle  (_TY_ const& val) override { return lexical_cast<string>(val) == txt_; }
+        
+        MATCH_STRING (int)
+        MATCH_STRING (int64_t)
+        MATCH_STRING (short)
+        MATCH_STRING (double)
+        MATCH_STRING (bool)
+        
+        virtual bool handle  (string const& str) override { return str == txt_; }
+        virtual bool handle  (char   const& c  ) override { return 1 == txt_.length() && txt_.front() == c; }
+        
+      public:
+        MatchString(string const& text)
+          : txt_(text)
+          { }
+      };
+    
+    MatchString visitor(text);
+    return accept(visitor);
   }
   
   
   bool
   DataCap::matchTime (TimeValue time)  const
   {
-    UNIMPLEMENTED ("content match timespec");
+    class MatchTime
+      : public Variant<DataValues>::Predicate
+      {
+        TimeValue& t_;
+
+#define MATCH_TIME(_TY_) \
+        virtual bool handle  (_TY_ const& val) override { return val == t_; }
+        
+        MATCH_TIME (time::Time)
+        MATCH_TIME (time::Offset)
+        MATCH_TIME (time::Duration)
+        MATCH_TIME (time::TimeSpan)
+        MATCH_TIME (hash::LuidH)
+        
+      public:
+        MatchTime(TimeValue& t)
+          : t_(t)
+          { }
+      };
+    
+    MatchTime visitor(time);
+    return accept(visitor);
   }
   
   
   bool
   DataCap::matchBool (bool b)  const
   {
-    UNIMPLEMENTED ("content match bool");
+    bool* val = unConst(this)->maybeGet<bool>();
+    return val && (b == *val);
   }
   
   
   bool
-  DataCap::matchDbl  (double)  const
+  DataCap::matchLuid (LuidH hash)  const
   {
-    UNIMPLEMENTED ("content match double");
-  }
-  
-  
-  bool
-  DataCap::matchLuid (hash::LuidH)  const
-  {
-    UNIMPLEMENTED ("content match LUID");
+    LuidH* val = unConst(this)->maybeGet<LuidH>();
+    return val && (hash == *val);
   }
   
   
   bool
   DataCap::matchRec (RecRef const& ref)  const
   {
-    UNIMPLEMENTED ("content match on reference");
+    if (ref)
+      return matchRec (*ref.get());
+    else
+      {
+        RecRef* val = unConst(this)->maybeGet<RecRef>();
+        return val && val->empty();
+      }
   }
   
   
   bool
   DataCap::matchRec (Rec const& rec)  const
   {
-    UNIMPLEMENTED ("content match on record");
+    Rec* val = unConst(this)->maybeGet<Rec>();
+    if (!val)
+      {
+        RecRef* r = unConst(this)->maybeGet<RecRef>();
+        if (r) val = r->get();
+      }
+    return val && (rec == *val);
   }
   
   

@@ -285,10 +285,11 @@ namespace diff{
       bool matches (int64_t number)    const { return data.matchNum(number);}
       bool matches (short   number)    const { return data.matchNum(number);}
       bool matches (char    number)    const { return data.matchNum(number);}
+      bool matches (double  number)    const { return data.matchDbl(number);}
       bool matches (string text)       const { return data.matchTxt(text);}
+      bool matches (const char* text)  const { return data.matchTxt(text);}
       bool matches (time::TimeValue t) const { return data.matchTime(t);  }
       bool matches (bool b)            const { return data.matchBool(b);  }
-      bool matches (double d)          const { return data.matchDbl(d);   }
       bool matches (hash::LuidH h)     const { return data.matchLuid(h);  }
       bool matches (RecRef const& ref) const { return data.matchRec(ref); }
       bool matches (Rec const& rec)    const { return data.matchRec(rec); }
