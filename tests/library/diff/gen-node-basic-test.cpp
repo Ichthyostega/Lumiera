@@ -27,17 +27,18 @@
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
 //#include <utility>
 //#include <string>
 //#include <vector>
 #include <iostream>
-#include <cmath>
 
 using util::isnil;
 using util::contains;
 using util::isSameObject;
+using util::almostEqual;
 using lib::hash::LuidH;
 using lib::time::FSecs;
 using lib::time::Time;
@@ -46,7 +47,6 @@ using lib::test::randTime;
 //using std::string;
 //using std::vector;
 //using std::swap;
-using std::fabs;
 using std::cout;
 using std::endl;
 
@@ -61,7 +61,7 @@ namespace test{
   
   namespace {//Test fixture....
     
-    
+    const double PI = 3.14159265358979323846264338328;
     
   }//(End)Test fixture
   
@@ -117,8 +117,8 @@ namespace test{
           CHECK (contains (name(n1), "_CHILD_"));
           
           // can optionally be named
-          GenNode n2("π", 3.14159265358979323846264338328);
-          CHECK (fabs (3.14159265 - n2.data.get<double>()) < 1e-5 );
+          GenNode n2("π", PI);
+          CHECK (almostEqual (PI, n2.data.get<double>()));
           CHECK (n2.isNamed());
           CHECK ("π" == n2.idi.getSym());
           CHECK ("π" == name(n2));
@@ -178,7 +178,7 @@ namespace test{
           CHECK ("NIL" == o3.data.get<Rec>().getType());
           CHECK (GenNode("Ψ", int64_t(42)) == o3.data.get<Rec>().get("Ψ"));
           CHECK (42L == o3.data.get<Rec>().get("Ψ").data.get<int64_t>());
-          CHECK (1e-7 > fabs (3.14159265 - o3.data.get<Rec>().get("π").data.get<double>()));
+          CHECK (almostEqual (PI, o3.data.get<Rec>().get("π").data.get<double>()));
           
           LuidH luid;
           //Demonstration: object builder is based on the mutator mechanism for Records...
