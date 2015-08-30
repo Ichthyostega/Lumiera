@@ -263,6 +263,80 @@ namespace test{
       
       
       void
+      sequenceIteration()
+        {
+          GenNode n = MakeRec()
+                         .scope('*'                                      // a char node
+                               ,"★"                                      // a string node
+                               , PI                                      // a double value
+                               ,MakeRec().type("ham")
+                                         .scope("eggs","spam","spam")
+                                         .genNode("spam")                // a spam object
+                               ,TimeSpan(Time::ZERO, FSecs(23,25))       // a time span
+                               ,int64_t(42))                             // long value
+                         .attrib("hasSpam", true) // boolean Attribute
+                         .genNode("baked beans"); // build Node from named Record
+          
+          
+          cout << "--lovely-spam--"<<endl;
+          for (auto elm : n)
+            cout << string(elm) <<endl;
+          
+          
+          auto iter = n.begin();
+          CHECK (!isnil (iter));                                         // initially the Record itself is exposed
+          CHECK ("baked beans" == iter->idi.getSym());
+          CHECK (Rec::TYPE_NIL == iter->data.get<Rec>().getType());
+          
+              ++iter;
+              CHECK ("hasSpam" == iter->idi.getSym());                   // delve into the contents, starting with the attribute(s)
+              CHECK (true      == iter->data.get<bool>());
+              CHECK ("GenNode-ID(\"hasSpam\")-DataCap|«bool»|true)" == string(*iter));
+              
+              ++iter;
+              CHECK (!iter->isNamed());                                  // contents of the object's scope
+              CHECK ('*' == iter->data.get<char>());
+              
+              ++iter;
+              CHECK (!iter->isNamed());
+              CHECK ("★" == iter->data.get<string>());
+              
+              ++iter;
+              CHECK (!iter->isNamed());
+              CHECK (almostEqual (PI, iter->data.get<double>()));
+              
+              ++iter;
+              CHECK ("spam" == iter->idi.getSym());                      // the nested object is first exposed as a whole
+              CHECK ("ham"  == iter->data.get<Rec>().getType());
+              
+                  ++iter;
+                  CHECK ("eggs" == iter->data.get<string>());            // contents of the nested ("spam") object's scope
+                  
+                  ++iter;
+                  CHECK ("spam" == iter->data.get<string>());
+                  
+                  ++iter;
+                  CHECK ("spam" == iter->data.get<string>());
+              
+              ++iter;
+              CHECK ("_END_spam" == iter->idi.getSym());                 // bracketing construct to close the nested scope
+              
+              ++iter;
+              CHECK (!iter->isNamed());                                  // next item in the enclosing scope
+              CHECK (42 == iter->data.get<int64_t>());
+          
+          ++iter;
+          CHECK ("_END_baked beans" == iter->idi.getSym());              // bracketing returns to top level
+          CHECK (isSameObject(n.data.get<Rec>(), iter->data.get<Rec>()));
+          CHECK (Ref(n) == *iter);                                       // actually this is a RecordRef to the original object
+          
+          ++iter;
+          CHECK (isnil (iter));
+          
+        }
+      
+      
+      void
       equalityMatch()
         {
           int     i1 = 64;                        GenNode ni1(i1);
@@ -825,13 +899,6 @@ namespace test{
           // string match is literal
           CHECK (!nz1.matches(" "));
           CHECK (!nz2.matches("↯ "));
-        }
-      
-      
-      void
-      sequenceIteration()
-        {
-          UNIMPLEMENTED ("wtf");
         }
     };
   
