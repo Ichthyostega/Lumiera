@@ -84,7 +84,7 @@
  **       To begin with, for the task of diff detection and application, it is sufficient
  **       to get the children as traversable collection
  ** 
- ** @see diff-index-table-test.cpp
+ ** @see GenNodeBasic_test
  ** @see diff-list-generation-test.cpp
  ** @see DiffDetector
  ** 
