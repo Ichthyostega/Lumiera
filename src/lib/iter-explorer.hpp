@@ -613,7 +613,7 @@ namespace lib {
     
     /**
      * Strategy building block for recursive exhausting evaluation.
-     * Allows to create depth-fist or breadth-first evaluation patters, just
+     * Allows to create depth-fist or breadth-first evaluation patterns, just
      * by using a suitably intermediary storage container to hold the partially
      * evaluated iterators created at each evaluation step. Using a stack and
      * pushing results will create a depth-first pattern, while using a queue
@@ -788,7 +788,7 @@ namespace lib {
           
           
         private:
-          /** assure the next elements to be processed
+          /** ensure the next elements to be processed
            * will appear at outSeq_ head. When outSeq_
            * is still empty after this function,
            * we're done.

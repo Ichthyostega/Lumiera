@@ -243,8 +243,10 @@ namespace test{
       /** @test all of the following IterExplorer flavours are built on top
        * of a special iterator adapter, centred at the notion of an iterable
        * state element type. The actual iterator just embodies one element
-       * of this state representation, and typically there is not an hidden
-       * back-link to some kind of container in charge of the elements yielded
+       * of this state representation, and typically this element alone holds
+       * all the relevant state and information, without any hidden back-link
+       * to some kind of container in charge of the elements yielded.
+       * Essentially this means the iterator is self contained.
        */
       void
       verifyStateAdapter ()
@@ -325,7 +327,7 @@ namespace test{
       
       /** @test variation of the iterator chaining facility.
        * This is the "raw" version without any convenience shortcuts.
-       * The source iterators are given as iterator yielding other iterators.
+       * The source iterators are provided as iterator yielding other iterators.
        */
       void
       verifyRawChainedIterators ()

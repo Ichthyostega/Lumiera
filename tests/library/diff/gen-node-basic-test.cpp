@@ -278,7 +278,7 @@ namespace test{
                          .genNode("baked beans"); // build Node from named Record
           
           
-          cout << "--lovely-spam--"<<endl;
+          cout << "--spam--"<<endl;
           for (auto elm : n)
             cout << string(elm) <<endl;
           

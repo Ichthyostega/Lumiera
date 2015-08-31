@@ -182,9 +182,158 @@
 </node>
 </node>
 </node>
-<node CREATED="1435942891695" ID="ID_947731706" MODIFIED="1435943035295" TEXT="Iteration">
+<node CREATED="1435942891695" ID="ID_947731706" MODIFIED="1440984455323" TEXT="Iteration">
+<linktarget COLOR="#98e2df" DESTINATION="ID_947731706" ENDARROW="Default" ENDINCLINATION="-78;95;" ID="Arrow_ID_197324270" SOURCE="ID_1665153106" STARTARROW="None" STARTINCLINATION="168;-25;"/>
 <font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1440983732337" HGAP="35" ID="ID_792682966" MODIFIED="1440983809484" TEXT="monadische Iteration" VSHIFT="12">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nicht klar, ob wir das &#252;berhaupt brauchen
+    </p>
+    <ul>
+      <li>
+        entweder nur die unmittelbaren Kinder -&gt; komplexe Logik f&#228;llt auf den Client
+      </li>
+      <li>
+        oder nur die Bl&#228;tter -&gt; man kann die Baum-Struktur nicht wirklich nutzen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
+</node>
+<node CREATED="1440983598369" ID="ID_1025556053" MODIFIED="1440983823376">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Entscheidung
+    </p>
+    <p>
+      <font size="1">was wir brauchen</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1440983617193" ID="ID_532213208" MODIFIED="1440983627459" TEXT="bracketing"/>
+<node CREATED="1440983628399" ID="ID_1711016962" MODIFIED="1440983642457" TEXT="node prefix"/>
+<node CREATED="1440983643445" ID="ID_1023025658" MODIFIED="1440983656648" TEXT="depth-first"/>
+</node>
+<node CREATED="1440983661027" ID="ID_507018481" MODIFIED="1440983667373" TEXT="Impl">
+<node CREATED="1440983668537" ID="ID_1230038295" MODIFIED="1440983680228" TEXT="IterExplorer verwenden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1440984024736" ID="ID_1554494729" MODIFIED="1440984028035" TEXT="Chained Iters">
+<node CREATED="1440984028959" ID="ID_896818992" MODIFIED="1440984040210" TEXT="pfiffig"/>
+<node CREATED="1440984040870" ID="ID_1008957395" MODIFIED="1440984048057" TEXT="m&#xfc;&#xdf;te der IterIter implementieren"/>
+<node CREATED="1440984048380" ID="ID_917358570" MODIFIED="1440984080184">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      geht nicht:
+    </p>
+    <p>
+      rekursiver Abstieg in der Mitte eines Iterators
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1440983855875" ID="ID_1991218497" MODIFIED="1440984101601" TEXT="RecursiveSelfIntegration">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das war die Quintessenz der ganzen Entwicklung zum IterExplorer
+    </p>
+    <p>
+      Nachdem ich die depth-first / breadth-first -Strategien systematisch aufgebaut hatte,
+    </p>
+    <p>
+      habe ich das dann reduziert und kompakt nochmal geschrieben.
+    </p>
+    <p>
+      Sehr sch&#246;n!
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#252;brigens: genau den verwenden wir auch zur Job-Planung
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-1"/>
+<node CREATED="1440983865102" ID="ID_306959180" MODIFIED="1440983871265" TEXT="hoch effizient"/>
+<node CREATED="1440983872517" ID="ID_1633584594" MODIFIED="1440983880175" TEXT="pa&#xdf;t genau"/>
+<node CREATED="1440983880715" ID="ID_617483189" MODIFIED="1440983893678" TEXT="erfordert speziellen ResultIter"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1440984125546" ID="ID_461442477" MODIFIED="1440984672823" TEXT="TODO">
+<node CREATED="1440984130872" ID="ID_579146044" MODIFIED="1440984158289" TEXT="ResultIter">
+<node CREATED="1440984214126" ID="ID_1124020862" MODIFIED="1440984221001" TEXT="GenNode-Zeiger"/>
+<node CREATED="1440984221636" ID="ID_1279195509" MODIFIED="1440984243957" TEXT="Scope-Marker"/>
+</node>
+<node CREATED="1440984158949" ID="ID_1602941967" MODIFIED="1440984165400" TEXT="BuilderTrait"/>
+<node CREATED="1440984166132" ID="ID_761913732" MODIFIED="1440984174167" TEXT="explorer Funktion">
+<node CREATED="1440984256512" ID="ID_1965762804" MODIFIED="1440984265162" TEXT="verwendet Variant::Visitor"/>
+<node CREATED="1440984273357" ID="ID_153302412" MODIFIED="1440984280064" TEXT="steigt in Records ein"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1440984348699" HGAP="64" ID="ID_1327214042" MODIFIED="1440984360810" TEXT="Pr&#xe4;dikate" VSHIFT="-26">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1440984366937" ID="ID_1806640214" MODIFIED="1440984465790">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Gleichheit
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1440984381982" ID="ID_187772178" MODIFIED="1440984463833" TEXT="Wert-Match">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1440984392453" ID="ID_1665153106" MODIFIED="1440984460935" TEXT="Contains">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kombiniert den Wert-Match mit der Iteration
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#98e2df" DESTINATION="ID_947731706" ENDARROW="Default" ENDINCLINATION="-78;95;" ID="Arrow_ID_197324270" STARTARROW="None" STARTINCLINATION="168;-25;"/>
 </node>
 </node>
 <node CREATED="1434128176918" FOLDED="true" ID="ID_863330674" MODIFIED="1439842253318" TEXT="Record">
@@ -356,8 +505,7 @@
       h&#228;ngt vom Payload-Typ ab
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439826859630" ID="ID_658403513" MODIFIED="1439826896096">
 <richcontent TYPE="NODE"><html>
@@ -372,8 +520,7 @@
       ist nur ein Value-R&#252;ckgabewert sinnvoll
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439826896985" ID="ID_180703618" MODIFIED="1439826904996" TEXT="habe es daher generisch/konfigurierbar gemacht"/>
 <node CREATED="1439826905728" ID="ID_955222288" MODIFIED="1439826937458" TEXT="-&gt; &#xfc;berhaupt eine Typkonfiguration ist sinnvoll">
@@ -386,8 +533,7 @@
       ...auch kann man auf diesem Weg die Storage konfigurierbar machten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1436924529208" ID="ID_1300693998" MODIFIED="1439826819288" TEXT="Handhabung des Typ-Feldes">
@@ -435,8 +581,7 @@
       Denn jeder Record zahlt den Preis f&#252;r die komplexere (zus&#228;tzliche) Datenstruktur!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -540,8 +685,7 @@
       hei&#223;t: in der Diff-Verarbeitung wird dieser spezielle check verwendet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#5bf0d0" DESTINATION="ID_913220298" ENDARROW="Default" ENDINCLINATION="366;-59;" ID="Arrow_ID_806648905" SOURCE="ID_1563625085" STARTARROW="None" STARTINCLINATION="347;320;"/>
 <node CREATED="1434128740117" ID="ID_1537979881" MODIFIED="1434128764209" TEXT="spezielles Baumuster"/>
 <node CREATED="1434128764893" ID="ID_1430586148" MODIFIED="1434128768689" TEXT="Gefahr von clashes"/>
@@ -611,8 +755,7 @@
       hei&#223;t: wird direkt von standard-equality so behandelt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1434128685597" ID="ID_690649535" MODIFIED="1434128705631">
 <richcontent TYPE="NODE"><html>
   <head>
