@@ -691,12 +691,12 @@ namespace lib {
      * depth-first exhaustive evaluation 
      */
     template<class SRC, class FUN>
-    struct DepthFirstEvaluationConbinator
+    struct DepthFirstEvaluationCombinator
       : RecursiveExhaustingEvaluation<SRC, FUN, DepthFirstEvaluationBuffer>
       {
-        DepthFirstEvaluationConbinator() { }
+        DepthFirstEvaluationCombinator() { }
         
-        DepthFirstEvaluationConbinator(FUN explorerFunction, SRC const& sourceElements)
+        DepthFirstEvaluationCombinator(FUN explorerFunction, SRC const& sourceElements)
           : RecursiveExhaustingEvaluation<SRC, FUN, DepthFirstEvaluationBuffer> (explorerFunction,sourceElements)
           {  }
       };
@@ -706,12 +706,12 @@ namespace lib {
      * breadth-first exhaustive evaluation 
      */
     template<class SRC, class FUN>
-    struct BreadthFirstEvaluationConbinator
+    struct BreadthFirstEvaluationCombinator
       : RecursiveExhaustingEvaluation<SRC, FUN, BreadthFirstEvaluationBuffer>
       {
-        BreadthFirstEvaluationConbinator() { }
+        BreadthFirstEvaluationCombinator() { }
         
-        BreadthFirstEvaluationConbinator(FUN explorerFunction, SRC const& sourceElements)
+        BreadthFirstEvaluationCombinator(FUN explorerFunction, SRC const& sourceElements)
           : RecursiveExhaustingEvaluation<SRC, FUN, BreadthFirstEvaluationBuffer> (explorerFunction,sourceElements)
           {  }
       };
@@ -889,21 +889,21 @@ namespace lib {
     
     template<class SRC>
     struct DepthFirst
-      : IterExplorer<WrappedSequence<SRC>, DepthFirstEvaluationConbinator>
+      : IterExplorer<WrappedSequence<SRC>, DepthFirstEvaluationCombinator>
       {
         DepthFirst() { };
         DepthFirst(SRC const& srcSeq)
-          : IterExplorer<WrappedSequence<SRC>, DepthFirstEvaluationConbinator> (srcSeq)
+          : IterExplorer<WrappedSequence<SRC>, DepthFirstEvaluationCombinator> (srcSeq)
           { }
       };
     
     template<class SRC>
     struct BreadthFirst
-      : IterExplorer<WrappedSequence<SRC>, BreadthFirstEvaluationConbinator>
+      : IterExplorer<WrappedSequence<SRC>, BreadthFirstEvaluationCombinator>
       {
         BreadthFirst() { };
         BreadthFirst(SRC const& srcSeq)
-          : IterExplorer<WrappedSequence<SRC>, BreadthFirstEvaluationConbinator> (srcSeq)
+          : IterExplorer<WrappedSequence<SRC>, BreadthFirstEvaluationCombinator> (srcSeq)
           { }
       };
     
