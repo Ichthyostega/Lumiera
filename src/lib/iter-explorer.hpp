@@ -73,6 +73,13 @@
  ** All the other preconfigured variants defined here where created as proof-of-concept, to document
  ** and verify this implementation technique as such.
  ** 
+ ** @warning preferably use value semantics for the elements to be processed. Recall, C++ is not
+ **      really a functional programming language, and there is no garbage collector. It might be
+ **      tempting just to pass pointers through a whole evaluation chain. Indeed, you can do so,
+ **      but make sure you understand the precise timing of the evaluation, expansion and
+ **      re-integration steps with regards to memory management; an "explorer function"
+ **      may pass a reference or pointer to some transient source, which is gone after
+ **      incrementing the source iterator.
  ** @see IterExplorer_test
  ** @see iter-adapter.hpp
  ** @see itertools.hpp
@@ -515,6 +522,14 @@ namespace lib {
      *   to pull the next element to be expanded. This function <i>must not</i>
      *   yield an empty sequence, \em unless the overall exploration is exhausted
      * - \c Strategy::feedBack() re-integrates the results of an expansion step
+     * 
+     * @warning beware, when tempted to pass elements by reference (or pointer)
+     *          through the explorer function, make sure you really understand the
+     *          working mode of the #iterate function with regards to memory management.
+     *          When ResultIter attempts just to store a pointer, after incrementing
+     *          \c ++feed(), depending on the internals of the actual src iterator,
+     *          this pointer might end up dangling. Recommendation is to let the
+     *          Explorer either take arguments or return results by value (copy).
      */
     template<class SRC, class FUN
             ,template<class> class _BUF_
@@ -522,8 +537,8 @@ namespace lib {
     class RecursiveExhaustingEvaluation
       {
         typedef typename _Fun<FUN>::Ret   ResultIter;
-        typedef typename SRC::value_type  Val;        // note: deliberately using the value
-        typedef function<ResultIter(Val)> Explorer;
+        typedef typename _Fun<FUN>::Sig   Sig;
+        typedef function<Sig>             Explorer;
         typedef _BUF_<ResultIter>         Buffer;
         
         Buffer  resultBuf_;
@@ -759,13 +774,22 @@ namespace lib {
      * @note the ResultIter type is defined implicitly through the result type
      *            of the Explorer function. Similarly the result value type
      *            is defined through the typedef \c ResultIter::value_type
+     * @warning beware of dangling references; make sure you never pass a
+     *            reference or pointer through the Explorer function unaltered. 
+     *            Because some source iterator might expose a reference to a
+     *            transient object just for the purpose of expanding it.
+     *            The very reason of building iterator pipelines is to
+     *            avoid heap allocation and to produce intermediaries
+     *            on demand. So make sure in such a case that there is
+     *            at least one real copy operation in the pipeline.
      */
     template<class SRC, class FUN>
     class RecursiveSelfIntegration
       {
           typedef typename _Fun<FUN>::Ret   ResultIter;
+          typedef typename _Fun<FUN>::Sig   Sig;
           typedef typename SRC::value_type  Val;
-          typedef function<ResultIter(Val)> Explorer;
+          typedef function<Sig>             Explorer;
           
           SRC        srcSeq_;
           ResultIter outSeq_;
