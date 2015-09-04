@@ -159,7 +159,9 @@ using util::isnil;
       void
       markTreeLocation()
         {
-          UNIMPLEMENTED ("establish tree relation to previous point");
+          orientation_.markRefLevel (toExplore_.size());
+          orientation_.resetToRef();
+          ENSURE (0 == orientation_);
         }
       
       

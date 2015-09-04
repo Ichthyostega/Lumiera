@@ -376,29 +376,39 @@ namespace test {
           CHECK (+1 == orient);
           ----orient;
           CHECK (-1 == orient);
-          
-          orient.markRefLevel (2);
-          CHECK (+2 == orient);
-          
-          orient.markRefLevel (2);
+          orient.markRefLevel();
           CHECK ( 0 == orient);
-          
-          orient.markRefLevel (3);
-          CHECK (+1 == orient);
-          
-          orient.markRefLevel (4);
-          orient.markRefLevel (5);
-          CHECK (+1 == orient);
           
           orient.markRefLevel (2);
           CHECK (-3 == orient);
+          
+          orient.markRefLevel (2);
+          CHECK (-3 == orient);
+          
+          orient -= orient;
+          CHECK ( 0 == orient);
+          
+          ++orient;
+          CHECK (+1 == orient);
+          orient.markRefLevel();
+          
+          orient.markRefLevel (4);
+          orient.markRefLevel (5);
+          CHECK (-2 == orient);
+          
+          orient.markRefLevel (2);
+          CHECK (+1 == orient);
+          orient.resetToRef();
+          ++orient;
+          orient.markRefLevel(); // now at level == 3
+          CHECK ( 0 == orient);
           
           orient += 200;
           orient -= 190;
           CHECK (+7 == orient);
           
           OrientationIndicator o2(orient);
-          o2.markRefLevel(0);
+          o2.markRefLevel(12);
           CHECK (-2 == o2);
           CHECK (+7 == orient);
         }

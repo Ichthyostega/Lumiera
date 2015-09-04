@@ -77,8 +77,24 @@ namespace lib {
         {
           REQUIRE (newRefLevel < size_t(std::numeric_limits<ptrdiff_t>::max()) );
           
-          offset_ = newRefLevel - refLevel_;
+          offset_ -= newRefLevel - refLevel_;
           refLevel_ = newRefLevel;
+        }
+      
+      /** define the current offset as new reference point */
+      OrientationIndicator&
+      markRefLevel ()
+        {
+          markRefLevel (refLevel_ + offset_);
+          ENSURE (offset_ == 0);
+          return *this;
+        }
+      
+      OrientationIndicator&
+      resetToRef ()
+        {
+          offset_ = 0;
+          return *this;
         }
       
       OrientationIndicator&
