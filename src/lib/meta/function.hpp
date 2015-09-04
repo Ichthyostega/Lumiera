@@ -222,6 +222,7 @@ namespace meta{
     {
       typedef typename FunctionSignature<function<SIG> >::Ret Ret;
       typedef typename FunctionSignature<function<SIG> >::Args Args;
+      typedef                                             SIG  Sig;
     };
   /** Specialisation for using a function pointer */
   template<typename SIG>
@@ -229,6 +230,7 @@ namespace meta{
     {
       typedef typename FunctionSignature<function<SIG> >::Ret Ret;
       typedef typename FunctionSignature<function<SIG> >::Args Args;
+      typedef                                             SIG  Sig;
     };
   /** Specialisation when using a function reference */
   template<typename SIG>
@@ -236,6 +238,7 @@ namespace meta{
     {
       typedef typename FunctionSignature<function<SIG> >::Ret Ret;
       typedef typename FunctionSignature<function<SIG> >::Args Args;
+      typedef                                             SIG  Sig;
     };
   /** Specialisation for passing a functor */
   template<typename SIG>
@@ -243,6 +246,7 @@ namespace meta{
     {
       typedef typename FunctionSignature<function<SIG> >::Ret Ret;
       typedef typename FunctionSignature<function<SIG> >::Args Args;
+      typedef                                             SIG  Sig;
     };
   
   /** Specialisations for member function pointers */
@@ -251,6 +255,7 @@ namespace meta{
     {
       typedef RET Ret;
       typedef Types<CLASS* const> Args;
+      typedef RET Sig(CLASS* const);
     };
   
   template< typename RET, class CLASS
@@ -270,6 +275,7 @@ namespace meta{
     {
       typedef RET Ret;
       typedef Types<CLASS* const, A1,A2> Args;
+      typedef RET Sig(CLASS* const, A1,A2);
     };
   
   template< typename RET, class CLASS
@@ -281,6 +287,7 @@ namespace meta{
     {
       typedef RET Ret;
       typedef Types<CLASS* const, A1,A2,A3> Args;
+      typedef RET Sig(CLASS* const, A1,A2,A3);
     };
   
   template< typename RET, class CLASS
@@ -293,6 +300,7 @@ namespace meta{
     {
       typedef RET Ret;
       typedef Types<CLASS* const, A1,A2,A3,A4> Args;
+      typedef RET Sig(CLASS* const, A1,A2,A3,A4);
     };
   
   template< typename RET, class CLASS
@@ -306,6 +314,7 @@ namespace meta{
     {
       typedef RET Ret;
       typedef Types<CLASS* const, A1,A2,A3,A4,A5> Args;
+      typedef RET Sig(CLASS* const, A1,A2,A3,A4,A5);
     };
   
   template< typename RET, class CLASS
@@ -320,6 +329,7 @@ namespace meta{
     {
       typedef RET Ret;
       typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6> Args;
+      typedef RET Sig(CLASS* const, A1,A2,A3,A4,A5,A6);
     };
   
   template< typename RET, class CLASS
@@ -335,6 +345,7 @@ namespace meta{
     {
       typedef RET Ret;
       typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6,A7> Args;
+      typedef RET Sig(CLASS* const, A1,A2,A3,A4,A5,A6,A7);
     };
   
   template< typename RET, class CLASS
@@ -351,6 +362,7 @@ namespace meta{
     {
       typedef RET Ret;
       typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6,A7,A8> Args;
+      typedef RET Sig(CLASS* const, A1,A2,A3,A4,A5,A6,A7,A8);
     };
   
   
