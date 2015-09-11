@@ -269,11 +269,7 @@ namespace diff{
           return !util::startsWith (idi.getSym(), "_CHILD_");
         }
       
-      bool
-      contains (GenNode const& elm)  const
-        {
-          return contains (elm.idi);
-        }
+      bool contains (GenNode const& elm)  const;
       
       bool
       contains (ID const&)  const
@@ -491,6 +487,14 @@ namespace diff{
   inline GenNode::iterator GenNode::end()          { return iterator(); }
   inline GenNode::iterator GenNode::end()   const  { return iterator(); }
   
+  inline bool
+  GenNode::contains (GenNode const& elm)  const
+  {
+    for (auto & n : *this)
+      if (n.matches(elm))
+        return true;
+    return false;
+  }
   
   
   
