@@ -68,21 +68,19 @@
  ** - finally, the handling of changes prompts us to support installation
  **   of a specifically typed <i>change handling closure</i>.
  ** 
- ** \par monadic nature
+ ** \par monadic nature?
  ** 
  ** As suggested by the usage for representation of tree shaped data, we acknowledge
- ** that GenNode is a <b>Monad</b>. We support the basic operations \em construction
- ** and \em flatMap. To fit in with this generic processing pattern, the one element
- ** flavours of GenNode are considered the special case, while the collective flavours
- ** form the base case -- every GenNode can be iterated. The \em construction requirement
- ** suggests that GenNode may be created readily, just by wrapping any given and suitable
- ** element, thereby picking up the element's type. For sake of code organisation and
- ** dependency management, we solve this requirement with the help of a trait type,
- ** expecting the actual usage to supply the necessary specialisations on site.
+ ** that GenNode could be a Monad. We support the basic operation \em construction,
+ ** and the operation \em flatMap would be trivial to add. To fit in with this generic
+ ** processing pattern, the one element flavours of GenNode are considered the special case,
+ ** while the collective flavours form the base case -- every GenNode can be iterated.
+ ** The \em construction requirement suggests that GenNode may be created readily, just
+ ** by wrapping any given and suitable element, thereby picking up the element's type.
  ** 
- ** @todo the purpose and goal of the monadic approach is not clear yet (5/2015).
- **       To begin with, for the task of diff detection and application, it is sufficient
- **       to get the children as traversable collection
+ ** But the purpose and goal of the monadic approach is not clear yet (5/2015).
+ ** To begin with, for the task of diff detection and application, it is sufficient
+ ** to get the children as traversable collection and to offer a depth-first expansion.
  ** 
  ** @see GenNodeBasic_test
  ** @see diff-list-generation-test.cpp
@@ -186,7 +184,10 @@ namespace diff{
       bool matchRec  (RecRef const&)   const;
       bool matchRec  (Rec const&)      const;
       
-      operator string()  const;
+      struct Locator;
+      Locator expand()  const;
+      
+      operator string() const;
     };
   
   
@@ -342,60 +343,82 @@ namespace diff{
     };
   
   
+  
+  /* === iteration / recursive expansion / references === */
+  
+  
   /**
-   * Monad-like depth-first expansion of a GenNode
+   * @internal Helper to refer to any element position,
+   * irrespective if on top level or within a nested scope
+   * @remarks typically used within lib::IterStateWrapper
+   * @see DataCap#expand()
+   */
+  struct DataCap::Locator
+    {
+      const GenNode* node_;
+      Rec::iterator scope_;
+      
+      Locator()
+        : node_(nullptr)
+        { }
+      
+      Locator(GenNode const& n)
+        : node_(&n)
+        { }
+      
+      Locator(Rec const& r)
+        : node_(nullptr)
+        , scope_(r.begin())
+        { }
+      
+      const GenNode *
+      get()  const
+        {
+          return node_? node_
+                      : scope_? scope_.operator->()
+                              : nullptr;
+        }
+      
+      /* === Iteration control API for IterStateWrapper == */
+      
+      friend bool
+      checkPoint (Locator const& loc)
+      {
+        return loc.get();
+      }
+      
+      friend GenNode const&
+      yield (Locator const& loc)
+      {
+        return *loc.get();
+      }
+      
+      friend void
+      iterNext (Locator & loc)
+      {
+        if (loc.node_)
+          loc.node_ = nullptr;
+        else
+          ++loc.scope_;
+      }
+    };
+  
+  
+  /**
+   * Building block for monad-like depth-first expansion of a GenNode.
    */
   class GenNode::ScopeExplorer
     {
-      struct Locator
-        {
-          const GenNode* node_;
-          Rec::iterator scope_;
-          
-          Locator()
-            : node_(nullptr)
-            { }
-          
-          Locator(GenNode const& n)
-            : node_(&n)
-            { }
-          
-          Locator(Rec const& r)
-            : node_(nullptr)
-            , scope_(r.begin())
-            { }
-          
-          friend bool
-          checkPoint (Locator const& loc)
-          {
-            return bool(node_) || bool(scope_);
-          }
-          
-          friend GenNode const&
-          yield (Locator const& loc)
-          {
-            return node_? *node_ : *scope_;
-          }
-          
-          friend void
-          iterNext (Locator & loc)
-          {
-            if (node_)
-              node_ = nullptr;
-            else
-              ++scope_;
-          }
-        };
-      
-      using ScopeIter = IterStateWrapper<Locator>;
+      using ScopeIter = IterStateWrapper<const GenNode, DataCap::Locator>;
       
       std::deque<ScopeIter> scopes_;
       
     public:
       ScopeExplorer() { }
       ScopeExplorer(GenNode const& n)
-        : scopes_({n})
-        { }
+        {
+          scopes_.emplace_back(n);
+        }
       
       /* === Iteration control API for IterStateWrapper == */
       
