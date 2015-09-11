@@ -279,7 +279,7 @@ namespace test{
           
           
           cout << "--spam--"<<endl;
-          for (auto elm : n)
+          for (auto & elm : n)
             cout << string(elm) <<endl;
           
           

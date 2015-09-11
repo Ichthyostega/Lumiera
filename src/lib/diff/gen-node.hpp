@@ -298,6 +298,15 @@ namespace diff{
       
       class ScopeExplorer;
       
+      struct ScopeExplorerIterator;
+      using iterator = ScopeExplorerIterator;
+      
+      iterator begin()      ;
+      iterator begin() const;
+      iterator end()        ;
+      iterator end()   const;
+      
+      
       friend string
       name (GenNode const& node)
       {
@@ -446,11 +455,20 @@ namespace diff{
         while (!explorer.scopes_.empty() && !explorer.scopes_.back())
           explorer.scopes_.pop_back();
       }
+      
+      friend bool
+      operator== (ScopeExplorer const& s1, ScopeExplorer const& s2)
+      {
+        return !s1.scopes_.empty()
+            && !s2.scopes_.empty()
+            && s1.scopes_.size() == s2.scopes_.size()
+            && yield(s1) == yield(s2);
+      }
     };
   
   
   /** @internal Core operation to expand nested scopes recursively */
-  DataCap::Locator
+  inline DataCap::Locator
   DataCap::expand()  const
     {
       Rec* val = unConst(this)->maybeGet<Rec>();
@@ -459,6 +477,19 @@ namespace diff{
       else
         return Locator(*val);
     }
+  
+  
+  struct GenNode::ScopeExplorerIterator
+    : IterStateWrapper<const GenNode, ScopeExplorer>
+    {
+      using IterStateWrapper<const GenNode, ScopeExplorer>::IterStateWrapper;
+    };
+  
+  
+  inline GenNode::iterator GenNode::begin()        { return iterator(*this); }
+  inline GenNode::iterator GenNode::begin() const  { return iterator(*this); }
+  inline GenNode::iterator GenNode::end()          { return iterator(); }
+  inline GenNode::iterator GenNode::end()   const  { return iterator(); }
   
   
   
