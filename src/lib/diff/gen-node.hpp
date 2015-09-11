@@ -257,7 +257,7 @@ namespace diff{
       
       
       
-      /** @internal diagnostics helper. Need to include format-helper.cpp */
+      /** @internal diagnostics helper. Include format-helper.cpp on use */
       operator string()  const
         {
           return "GenNode-"+string(idi)+"-"+string(data);
@@ -406,6 +406,8 @@ namespace diff{
   
   /**
    * Building block for monad-like depth-first expansion of a GenNode.
+   * When used within lib::IterStateWrapper, the result is an Iterator
+   * to visit the contents of a GenNodet tree recursively depth-fist.
    */
   class GenNode::ScopeExplorer
     {
@@ -439,12 +441,26 @@ namespace diff{
       iterNext (ScopeExplorer & explorer)
       {
         ScopeIter& current = explorer.scopes_.back();
-        explorer.scopes_.emplace_back(current->data.expand());
+        explorer.scopes_.emplace_back (current->data.expand());
         ++current;
         while (!explorer.scopes_.empty() && !explorer.scopes_.back())
           explorer.scopes_.pop_back();
       }
     };
+  
+  
+  /** @internal Core operation to expand nested scopes recursively */
+  DataCap::Locator
+  DataCap::expand()  const
+    {
+      Rec* val = unConst(this)->maybeGet<Rec>();
+      if (!val)
+        return Locator();
+      else
+        return Locator(*val);
+    }
+  
+  
   
   
   /**
