@@ -193,7 +193,7 @@ namespace lib {
       operator->() const
         {
           _maybe_throw();
-          return pos_;
+          return & *pos_;
         }
       
       IterAdapter&
