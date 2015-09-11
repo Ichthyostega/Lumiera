@@ -108,6 +108,7 @@
 //#include <vector>
 #include <utility>
 #include <string>
+#include <deque>
 //#include <map>
 
 
@@ -294,6 +295,7 @@ namespace diff{
       bool matches (RecRef const& ref) const { return data.matchRec(ref); }
       bool matches (Rec const& rec)    const { return data.matchRec(rec); }
       
+      class ScopeExplorer;
       
       friend string
       name (GenNode const& node)
@@ -337,6 +339,88 @@ namespace diff{
         {
           return "_CHILD_" + idi::generateSymbolicID<X>();
         }
+    };
+  
+  
+  /**
+   * Monad-like depth-first expansion of a GenNode
+   */
+  class GenNode::ScopeExplorer
+    {
+      struct Locator
+        {
+          const GenNode* node_;
+          Rec::iterator scope_;
+          
+          Locator()
+            : node_(nullptr)
+            { }
+          
+          Locator(GenNode const& n)
+            : node_(&n)
+            { }
+          
+          Locator(Rec const& r)
+            : node_(nullptr)
+            , scope_(r.begin())
+            { }
+          
+          friend bool
+          checkPoint (Locator const& loc)
+          {
+            return bool(node_) || bool(scope_);
+          }
+          
+          friend GenNode const&
+          yield (Locator const& loc)
+          {
+            return node_? *node_ : *scope_;
+          }
+          
+          friend void
+          iterNext (Locator & loc)
+          {
+            if (node_)
+              node_ = nullptr;
+            else
+              ++scope_;
+          }
+        };
+      
+      using ScopeIter = IterStateWrapper<Locator>;
+      
+      std::deque<ScopeIter> scopes_;
+      
+    public:
+      ScopeExplorer() { }
+      ScopeExplorer(GenNode const& n)
+        : scopes_({n})
+        { }
+      
+      /* === Iteration control API for IterStateWrapper == */
+      
+      friend bool
+      checkPoint (ScopeExplorer const& explorer)
+      {
+        return !explorer.scopes_.empty()
+            && bool(explorer.scopes_.back());
+      }
+      
+      friend GenNode const&
+      yield (ScopeExplorer const& explorer)
+      {
+        return * (explorer.scopes_.back());
+      }
+      
+      friend void
+      iterNext (ScopeExplorer & explorer)
+      {
+        ScopeIter& current = explorer.scopes_.back();
+        explorer.scopes_.emplace_back(current->data.expand());
+        ++current;
+        while (!explorer.scopes_.empty() && !explorer.scopes_.back())
+          explorer.scopes_.pop_back();
+      }
     };
   
   

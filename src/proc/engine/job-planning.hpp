@@ -89,7 +89,7 @@ namespace engine {
   /**
    * View on the execution planning for a single calculation step.
    * When this view-frontend becomes accessible, behind the scenes all
-   * the necessary information has be pulled and collected from the
+   * the necessary information has been pulled and collected from the
    * low-level model and the relevant rendering/playback configuration.
    * Typically, clients will materialise this planning into a Job (descriptor)
    * ready to be entered into the scheduler.

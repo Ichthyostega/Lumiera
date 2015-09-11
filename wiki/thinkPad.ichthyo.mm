@@ -229,8 +229,8 @@
 <node CREATED="1440983643445" ID="ID_1023025658" MODIFIED="1440983656648" TEXT="depth-first"/>
 </node>
 <node CREATED="1440983661027" ID="ID_507018481" MODIFIED="1440983667373" TEXT="Impl">
-<node CREATED="1440983668537" ID="ID_1230038295" MODIFIED="1440983680228" TEXT="IterExplorer verwenden">
-<icon BUILTIN="idea"/>
+<node CREATED="1440983668537" ID="ID_1230038295" MODIFIED="1441936954788" TEXT="IterExplorer verwenden">
+<icon BUILTIN="help"/>
 </node>
 <node CREATED="1440984024736" ID="ID_1554494729" MODIFIED="1440984028035" TEXT="Chained Iters">
 <node CREATED="1440984028959" ID="ID_896818992" MODIFIED="1440984040210" TEXT="pfiffig"/>
@@ -253,7 +253,7 @@
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node CREATED="1440983855875" ID="ID_1991218497" MODIFIED="1440984101601" TEXT="RecursiveSelfIntegration">
+<node CREATED="1440983855875" ID="ID_1991218497" MODIFIED="1441936333034" TEXT="RecursiveSelfIntegration">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -284,19 +284,186 @@
 </html>
 </richcontent>
 <icon BUILTIN="full-1"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1440983865102" ID="ID_306959180" MODIFIED="1440983871265" TEXT="hoch effizient"/>
 <node CREATED="1440983872517" ID="ID_1633584594" MODIFIED="1440983880175" TEXT="pa&#xdf;t genau"/>
 <node CREATED="1440983880715" ID="ID_617483189" MODIFIED="1440983893678" TEXT="erfordert speziellen ResultIter"/>
+<node COLOR="#999999" CREATED="1440984125546" ID="ID_461442477" MODIFIED="1441937188109" TEXT="TODO">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1440984130872" ID="ID_579146044" MODIFIED="1441937180496" TEXT="ResultIter">
+<node CREATED="1440984214126" ID="ID_1124020862" MODIFIED="1441937180496" TEXT="GenNode-Zeiger"/>
+<node CREATED="1440984221636" ID="ID_1279195509" MODIFIED="1441937180496" TEXT="Scope-Marker"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1440984125546" ID="ID_461442477" MODIFIED="1440984672823" TEXT="TODO">
-<node CREATED="1440984130872" ID="ID_579146044" MODIFIED="1440984158289" TEXT="ResultIter">
-<node CREATED="1440984214126" ID="ID_1124020862" MODIFIED="1440984221001" TEXT="GenNode-Zeiger"/>
-<node CREATED="1440984221636" ID="ID_1279195509" MODIFIED="1440984243957" TEXT="Scope-Marker"/>
+<node CREATED="1440984158949" ID="ID_1602941967" MODIFIED="1441937180496" TEXT="BuilderTrait"/>
+<node CREATED="1440984166132" ID="ID_761913732" MODIFIED="1441937180496" TEXT="explorer Funktion">
+<node CREATED="1440984256512" ID="ID_1965762804" MODIFIED="1441937180496" TEXT="verwendet Variant::Visitor"/>
+<node CREATED="1440984273357" ID="ID_153302412" MODIFIED="1441937180496" TEXT="steigt in Records ein"/>
 </node>
-<node CREATED="1440984158949" ID="ID_1602941967" MODIFIED="1440984165400" TEXT="BuilderTrait"/>
-<node CREATED="1440984166132" ID="ID_761913732" MODIFIED="1440984174167" TEXT="explorer Funktion">
-<node CREATED="1440984256512" ID="ID_1965762804" MODIFIED="1440984265162" TEXT="verwendet Variant::Visitor"/>
-<node CREATED="1440984273357" ID="ID_153302412" MODIFIED="1440984280064" TEXT="steigt in Records ein"/>
+</node>
+</node>
+<node CREATED="1441935566556" ID="ID_128176235" MODIFIED="1441936330204" TEXT="oder doch depthFirst?">
+<icon BUILTIN="full-2"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1441935596503" ID="ID_119941709" MODIFIED="1441935613232" TEXT="verwendet einen einfacheren Iterator"/>
+<node CREATED="1441935617115" ID="ID_1743908800" MODIFIED="1441935704268" TEXT="hat daf&#xfc;r den Stack (deque) explizit"/>
+<node CREATED="1441935708383" ID="ID_1709495985" MODIFIED="1441936067879" TEXT="Erkenntnis: Stack ist unvermeidbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir m&#252;ssen den Weg zur&#252;ck finden.
+    </p>
+    <p>
+      Wenn also eine Datenstruktur nur einfach verzeigert ist, oder direkt rekursiv (wie bei uns),
+    </p>
+    <p>
+      dann ist es <i>absolut unm&#246;glich,</i>&#160;eine Traversierung mit konstantem Speicher zu machen.
+    </p>
+    <p>
+      Das geht nur bei einer Struktur mit R&#252;ckreferenzen -- diese enthalten dann n&#228;mlich genau den Speicher,
+    </p>
+    <p>
+      der w&#228;hrend dem Einstieg in die einfach verzeigerte Struktur auf dem Stack liegt. Aber letztere
+    </p>
+    <p>
+      braucht nur eine logarithmische Menge an Speicher, und das auch nur w&#228;hrend der Traversierung.
+    </p>
+    <p>
+      Dies ist die Abw&#228;gung, und darunter l&#228;&#223;t sich nichts weghandeln.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Der einzige verbleibende Freiheitsgrad ist, bei einer unmittelbaren rekursiven Programmierung
+    </p>
+    <p>
+      direkt den Prozessor-Stack f&#252;r die Speicherung des R&#252;ckweges mitzuverwenden;
+    </p>
+    <p>
+      in dem Moment, wo ich mich f&#252;r einen Iterator entscheide, ist diese M&#246;glichkeit weg.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1441936092427" ID="ID_199084223" MODIFIED="1441936126886">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann genauso effizient werden
+    </p>
+    <p>
+      aber nur, wenn man die Initialisierung hinbekommt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1441936132022" ID="ID_183615098" MODIFIED="1441936141832" TEXT="trotzdem mu&#xdf; man die Funktion speichern"/>
+<node CREATED="1441936142563" ID="ID_161796731" MODIFIED="1441936150975" TEXT="und wir brauchen gar keine flexible Funktion"/>
+</node>
+<node CREATED="1441936154834" ID="ID_1320687783" MODIFIED="1441936336433">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      oder diese Logik
+    </p>
+    <p>
+      fest verdrahten
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-3"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1441936260132" ID="ID_600953695" MODIFIED="1441936270614" TEXT="der IterExplorer zeigt genau, was zu tun ist"/>
+<node CREATED="1441936271274" ID="ID_567626167" MODIFIED="1441936284756" TEXT="aber das mehrfache Kopieren zur Initialisierung entf&#xe4;llt"/>
+<node CREATED="1441936285368" ID="ID_1119180152" MODIFIED="1441936296746" TEXT="wir brauchen genauso einen ma&#xdf;geschneiderten Scope-Iterator"/>
+<node CREATED="1441936356831" ID="ID_1423049913" MODIFIED="1441936372500" TEXT="aber die Indirektion f&#xfc;r die Funktion f&#xe4;llt weg">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1441936386803" ID="ID_588658088" MODIFIED="1441936407304" TEXT="TODO">
+<node CREATED="1441936422725" ID="ID_1581368426" MODIFIED="1441936433181" TEXT="ScopeExplorer-Mechanismus mit Stack">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1441936434644" ID="ID_455233841" MODIFIED="1441936919837" TEXT="innerer Iterator">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1441936451042" ID="ID_1773948072" MODIFIED="1441936476114" TEXT="disjunktiver Typ"/>
+<node CREATED="1441936869273" ID="ID_864580946" MODIFIED="1441936878867" TEXT="entweder GenNode, oder Rec"/>
+<node CREATED="1441936494164" ID="ID_1837843513" MODIFIED="1441936749098" TEXT="Variant ohne Selector?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da es sich um einen disjunktiven Typ (entweder-oder-Typ) handelt,
+    </p>
+    <p>
+      k&#246;nnte man die Storage mit beiden Bedeutungen &#252;berlagern.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Voraussetzung w&#228;re, da&#223; man anhand der konkreten Daten <b>gefahrlos</b>&#160; jeweils herausfinden kann,
+    </p>
+    <p>
+      welcher Zweig grade gilt. Da wir aber keine Introspektion haben (und auch nicht wollen!),
+    </p>
+    <p>
+      w&#252;rde das auf Taschenspielertricks mit der Implementierung hinauslaufen
+    </p>
+    <ul>
+      <li>
+        GenNode und Record beginnen beide fraktisch mit einem String. Man m&#252;&#223;te diesen interpretieren k&#246;nnen
+      </li>
+      <li>
+        oder man nutzt die letzten Bits des Pointers, um sich dort eine Flag zu speichern...
+      </li>
+    </ul>
+    <p>
+      Damit ist schon klar: <i>sowas macht man nicht ohne Grund</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1441936883063" ID="ID_428834793" MODIFIED="1441936894393" TEXT="GenNode erfordert nur einen Pointer">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1441936900076" ID="ID_1582043438" MODIFIED="1441936929913" TEXT="Explorer-Funktion">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1441936911211" ID="ID_722452490" MODIFIED="1441936917230" TEXT="kommt in DataCap"/>
+<node CREATED="1441936983313" ID="ID_1843183144" MODIFIED="1441936990892" TEXT="mu&#xdf; den inneren Iterator liefern"/>
+<node CREATED="1441937000487" ID="ID_312630797" MODIFIED="1441937028412">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Entscheidung: <i>falls</i>&#160;eingebetteter Record
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1441937037498" ID="ID_1964865459" MODIFIED="1441937043309" TEXT="Initialisierung bedenken"/>
 </node>
 </node>
 </node>
