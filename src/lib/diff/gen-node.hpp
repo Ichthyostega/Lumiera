@@ -269,13 +269,9 @@ namespace diff{
           return !util::startsWith (idi.getSym(), "_CHILD_");
         }
       
-      bool contains (GenNode const& elm)  const;
+      template<typename X>
+      bool contains (X const& elm)  const;
       
-      bool
-      contains (ID const&)  const
-        {
-          UNIMPLEMENTED("containment check by ID");
-        }
       
       bool matches (GenNode const& o)  const { return o == *this; }
       bool matches (ID const& id)      const { return idi == id; }
@@ -487,8 +483,9 @@ namespace diff{
   inline GenNode::iterator GenNode::end()          { return iterator(); }
   inline GenNode::iterator GenNode::end()   const  { return iterator(); }
   
+  template<typename X>
   inline bool
-  GenNode::contains (GenNode const& elm)  const
+  GenNode::contains (X const& elm)  const
   {
     for (auto & n : *this)
       if (n.matches(elm))

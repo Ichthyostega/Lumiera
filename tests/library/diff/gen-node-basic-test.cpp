@@ -210,7 +210,7 @@ namespace test{
           auto spam = *scope;
           CHECK (!++scope);
           CHECK ("ham" == spam.data.get<Rec>().getType());
-          CHECK (spam.contains (GenNode("eggs")));
+          CHECK (spam.contains ("eggs"));
           
           // but while o4 was based on o2,
           // adding all the additional contents didn't mutate o2
