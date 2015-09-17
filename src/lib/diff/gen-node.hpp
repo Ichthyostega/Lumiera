@@ -188,6 +188,11 @@ namespace diff{
       Locator expand()  const;
       
       operator string() const;
+      
+      template<typename X>
+      X& get();
+      template<typename X>
+      X const& get()  const;
     };
   
   
@@ -345,7 +350,7 @@ namespace diff{
   
   
   
-  /* === iteration / recursive expansion / references === */
+  /* === iteration / recursive expansion === */
   
   
   /**
@@ -495,6 +500,58 @@ namespace diff{
   
   
   
+  
+  /* === References : special treatment on element access === */
+  
+  template<typename X>
+  inline X&
+  DataCap::get()
+    {
+      return Variant<DataValues>::get<X>();
+    }
+  
+  template<typename X>
+  inline X const&
+  DataCap::get()  const
+    {
+      return Variant<DataValues>::get<X>();
+    }
+  
+  /** especially when accessing for a Record,
+   * a payload of type \c RecordRef<Record<GenNode>> (aka RecRef)
+   * will be automatically dereferenced. Effectively this allows
+   * a GenNode with a RecRef payload to "stand in" for a node holding
+   * a full Record inline. And it allows the construction of a special
+   * \link #Ref Ref-GenNode \endlink, which even shares the \em identity
+   * (the ID) of the referenced record-GenNode.
+   * @note effectively this opens an indirect loophole to const correctness,
+   *       since it is possible explicitly to retrieve the RecRef from a
+   *       const GenNode and then to access the referred-to Record
+   *       without const. In case this turns out to be problematic,
+   *       we'd have to alter the semantics of RecRef
+   */
+  template<>
+  inline Rec&
+  DataCap::get()
+    {
+      Rec* rec = maybeGet<Rec>();
+      if (rec) return *rec;
+      
+      return Variant<DataValues>::get<RecRef>();
+    }
+  
+  template<>
+  inline Rec const&
+  DataCap::get()  const
+    {
+      Rec* rec = unConst(this)->maybeGet<Rec>();
+      if (rec) return *rec;
+      
+      return Variant<DataValues>::get<RecRef>();
+    }
+
+  
+  
   /**
    * Constructor for a specially crafted 'ref GenNode'.
    * The identity record of the generated object will be prepared
@@ -509,8 +566,8 @@ namespace diff{
        */
       explicit
       Ref(string const& symbolicID)
-        : GenNode(fabricateRefID<RecRef> (symbolicID)
-                 , DataCap(RecRef()))     // note: places NIL into the reference part
+        : GenNode(fabricateRefID<Rec> (symbolicID)//note: seeds the type hash with Rec, not RecRef
+                 , DataCap(RecRef()))            // note: places NIL into the reference part
         { }
       
       /** build reference to a Record, using the original ID
