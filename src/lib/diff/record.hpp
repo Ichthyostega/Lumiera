@@ -535,13 +535,13 @@ namespace diff{
       explicit
       operator bool()  const
         {
-          return empty();
+          return bool(record_);
         }
       
       bool
       empty()  const
         {
-          return bool(record_);
+          return ! bool(record_);
         }
       
       /** target is accessed by cast

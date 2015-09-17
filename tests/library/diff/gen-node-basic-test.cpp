@@ -237,7 +237,8 @@ namespace test{
           CHECK (ref2.idi == ham.idi);
           
           // can stand-in for the original Record...
-          CHECK (isSameObject (ham, ref2.data.get<Rec>()));
+          Rec& hamRef = ham.data.get<Rec>();
+          CHECK (isSameObject (hamRef, ref2.data.get<Rec>()));
           VERIFY_ERROR (BOTTOM_VALUE, ref1.data.get<Rec>());
           
           RecRef rr1 = ref1.data.get<RecRef>();
@@ -246,8 +247,8 @@ namespace test{
           CHECK ( isnil(rr1));
           CHECK (!isnil(rr2));
           Rec& ham_ref = rr2;
-          CHECK (isSameObject(ham, ham_ref));
-          CHECK (isSameObject(&ham, rr2.get()));
+          CHECK (isSameObject(hamRef, ham_ref));
+          CHECK (isSameObject(hamRef, *rr2.get()));
           
           // pre-defined special ref-tokens
           CHECK ("_END_" == name(Ref::END));
@@ -291,7 +292,7 @@ namespace test{
               ++iter;
               CHECK ("hasSpam" == iter->idi.getSym());                   // delve into the contents, starting with the attribute(s)
               CHECK (true      == iter->data.get<bool>());
-              CHECK ("GenNode-ID(\"hasSpam\")-DataCap|«bool»|true)" == string(*iter));
+              CHECK ("GenNode-ID(\"hasSpam\")-DataCap|«bool»|1" == string(*iter));
               
               ++iter;
               CHECK (!iter->isNamed());                                  // contents of the object's scope
