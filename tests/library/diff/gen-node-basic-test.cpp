@@ -285,12 +285,14 @@ namespace test{
           
           
           auto iter = n.begin();
-          CHECK (!isnil (iter));                                         // initially the Record itself is exposed
-          CHECK ("baked beans" == iter->idi.getSym());
+          CHECK (!isnil (iter));
+          CHECK (1 == iter.level());
+          CHECK ("baked beans" == iter->idi.getSym());                   // initially the Record itself is exposed
           CHECK (Rec::TYPE_NIL == iter->data.get<Rec>().getType());
           
               ++iter;
-              CHECK ("hasSpam" == iter->idi.getSym());                   // delve into the contents, starting with the attribute(s)
+              CHECK (2 == iter.level());                                 // delve into the contents,
+              CHECK ("hasSpam" == iter->idi.getSym());                   // ...starting with the attribute(s)
               CHECK (true      == iter->data.get<bool>());
               CHECK ("GenNode-ID(\"hasSpam\")-DataCap|«bool»|1" == string(*iter));
               
@@ -311,6 +313,7 @@ namespace test{
               CHECK ("ham"  == iter->data.get<Rec>().getType());
               
                   ++iter;
+                  CHECK (3 == iter.level());
                   CHECK ("eggs" == iter->data.get<string>());            // contents of the nested ("spam") object's scope
                   
                   ++iter;
@@ -318,20 +321,16 @@ namespace test{
                   
                   ++iter;
                   CHECK ("spam" == iter->data.get<string>());
+                  CHECK (3 == iter.level());
               
               ++iter;
-              CHECK ("_END_spam" == iter->idi.getSym());                 // bracketing construct to close the nested scope
-              
-              ++iter;
+              CHECK (2 == iter.level());                                 // decreasing level indicates we left nested scope
               CHECK (!iter->isNamed());                                  // next item in the enclosing scope
               CHECK (42 == iter->data.get<int64_t>());
+              CHECK (2 == iter.level());
           
-          ++iter;
-          CHECK ("_END_baked beans" == iter->idi.getSym());              // bracketing returns to top level
-          CHECK (isSameObject(n.data.get<Rec>(), iter->data.get<Rec>()));
-          CHECK (Ref(n) == *iter);                                       // actually this is a RecordRef to the original object
-          
-          ++iter;
+          ++iter;                  // nothing more on top level beyond the initial Record
+          CHECK (0 == iter.level());
           CHECK (isnil (iter));
           
         }

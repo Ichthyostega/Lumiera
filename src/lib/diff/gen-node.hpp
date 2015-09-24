@@ -428,6 +428,12 @@ namespace diff{
           scopes_.emplace_back(n);
         }
       
+      size_t
+      depth()  const
+        {
+          return scopes_.size();
+        }
+      
       /* === Iteration control API for IterStateWrapper == */
       
       friend bool
@@ -480,6 +486,8 @@ namespace diff{
     : IterStateWrapper<const GenNode, ScopeExplorer>
     {
       using IterStateWrapper<const GenNode, ScopeExplorer>::IterStateWrapper;
+      
+      size_t level()  const { return unConst(this)->stateCore().depth(); }
     };
   
   
