@@ -214,11 +214,6 @@ return: 0
 END
 
 
-PLANNED "GenNodeBasic_test" GenNodeBasic_test <<END
-return: 0
-END
-
-
 TEST "Generic Object Record" GenericRecordRepresentation_test <<END
 out-lit: enterprise = Rec(starship| Name = USS Enterprise, Registry = NCC-1701-D, Class = Galaxy, Owner = United Federation of Planets, Operator = Starfleet, built = 2363 |{Picard, Riker, Data, Troi, Worf, Crusher, La Forge})
 out-lit: Name = USS Enterprise
@@ -244,6 +239,24 @@ out-lit: built=2363
 out-lit: --Keys--->Name<->Registry<->Class<->Owner<->Operator<->built
 out-lit: --Vals--->USS Enterprise<->NCC-1701-D<->Galaxy<->United Federation of Planets<->Starfleet<->2363
 out-lit: --Crew--->Picard | Riker | Data | Troi | Worf | Crusher | La Forge
+return: 0
+END
+
+
+TEST "GenNodeBasic_test" GenNodeBasic_test <<END
+out-lit: GenNode-ID("_CHILD_Record.001")-DataCap|«lib::diff::Record<lib::diff::GenNode>»|Rec(spam| ham = DataCap|«std::string»|eggs |{})
+out-lit: --spam--
+out-lit: GenNode-ID("baked beans")-DataCap|«lib::diff::Record<lib::diff::GenNode>»|Rec(hasSpam = DataCap|«bool»|1 |{GenNode-ID("_CHILD_char.002")-DataCap|«char»|*, GenNode-ID("_CHILD_string.006")-DataCap|«std::string»|★, GenNode-ID("_CHILD_double.001")-DataCap|«double»|3.1415926535897931, GenNode-ID("spam")-DataCap|«lib::diff::Record<lib::diff::GenNode>»|Rec(ham|  |{GenNode-ID("_CHILD_string.003")-DataCap|«std::string»|eggs, GenNode-ID("_CHILD_string.004")-DataCap|«std::string»|spam, GenNode-ID("_CHILD_string.005")-DataCap|«std::string»|spam}), GenNode-ID("_CHILD_TimeSpan.002")-DataCap|«lib::time::TimeSpan»|0:00:00.000[920ms], GenNode-ID("_CHILD_long.001")-DataCap|«long»|42})
+out-lit: GenNode-ID("hasSpam")-DataCap|«bool»|1
+out-lit: GenNode-ID("_CHILD_char.002")-DataCap|«char»|*
+out-lit: GenNode-ID("_CHILD_string.006")-DataCap|«std::string»|★
+out-lit: GenNode-ID("_CHILD_double.001")-DataCap|«double»|3.1415926535897931
+out-lit: GenNode-ID("spam")-DataCap|«lib::diff::Record<lib::diff::GenNode>»|Rec(ham|  |{GenNode-ID("_CHILD_string.003")-DataCap|«std::string»|eggs, GenNode-ID("_CHILD_string.004")-DataCap|«std::string»|spam, GenNode-ID("_CHILD_string.005")-DataCap|«std::string»|spam})
+out-lit: GenNode-ID("_CHILD_string.003")-DataCap|«std::string»|eggs
+out-lit: GenNode-ID("_CHILD_string.004")-DataCap|«std::string»|spam
+out-lit: GenNode-ID("_CHILD_string.005")-DataCap|«std::string»|spam
+out-lit: GenNode-ID("_CHILD_TimeSpan.002")-DataCap|«lib::time::TimeSpan»|0:00:00.000[920ms]
+out-lit: GenNode-ID("_CHILD_long.001")-DataCap|«long»|42
 return: 0
 END
 

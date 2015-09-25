@@ -326,6 +326,9 @@ namespace test{
               ++iter;
               CHECK (2 == iter.level());                                 // decreasing level indicates we left nested scope
               CHECK (!iter->isNamed());                                  // next item in the enclosing scope
+              CHECK ("0:00:00.000[920ms]" == string(iter->data.get<TimeSpan>()));
+              ++iter;
+              CHECK (!iter->isNamed());
               CHECK (42 == iter->data.get<int64_t>());
               CHECK (2 == iter.level());
           
