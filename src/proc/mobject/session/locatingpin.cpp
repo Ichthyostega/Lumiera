@@ -169,7 +169,7 @@ namespace session {
   bool
   LocatingPin::LocatingSolution::still_to_solve () 
   { 
-    return !(is_definite() || is_impossible()); 
+    return not (is_definite() or is_impossible()); 
   }
   
   

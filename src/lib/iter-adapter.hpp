@@ -213,7 +213,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
       
@@ -247,7 +247,7 @@ namespace lib {
       void
       _maybe_throw()  const
         {
-          if (!isValid())
+          if (not isValid())
             _throwIterExhausted();
         }
       
@@ -346,7 +346,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
     protected:
@@ -362,7 +362,7 @@ namespace lib {
       void
       __throw_if_empty()  const
         {
-          if (!isValid())
+          if (not isValid())
             _throwIterExhausted();
         }
       
@@ -388,7 +388,7 @@ namespace lib {
   template<class T1, class T2, class ST>
   bool operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
   { 
-    return ! (il == ir);
+    return not (il == ir);
   }
   
   
@@ -473,7 +473,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
       
@@ -592,7 +592,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
       
@@ -610,7 +610,7 @@ namespace lib {
   bool operator== (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
     
   template<class I1, class I2>
-  bool operator!= (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return !(il == ir); }
+  bool operator!= (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return not (il == ir); }
   
   
   

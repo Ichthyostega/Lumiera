@@ -326,7 +326,7 @@ namespace wrapper {
   inline bool
   operator!= (ItemWrapper<TY> const& w1, ItemWrapper<TY> const& w2)
   {
-    return !(w1 == w2);
+    return not (w1 == w2);
   }
   
   

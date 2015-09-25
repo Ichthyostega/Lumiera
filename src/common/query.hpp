@@ -212,7 +212,7 @@ namespace lumiera {
   inline bool
   operator!= (Goal::QueryID const& id1, Goal::QueryID const& id2)
   {
-    return ! (id1  == id2);
+    return not (id1  == id2);
   }
   
   

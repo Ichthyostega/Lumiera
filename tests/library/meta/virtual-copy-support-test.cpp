@@ -125,7 +125,7 @@ namespace test {
         virtual bool
         empty()  const
           {
-            return !bool(access());
+            return not access();
           }
         
         

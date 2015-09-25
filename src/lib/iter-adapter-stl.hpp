@@ -495,7 +495,7 @@ namespace iter_stl {
       bool
       empty ()  const
         {
-          return !isValid();
+          return not isValid();
         }
       
       
@@ -511,7 +511,7 @@ namespace iter_stl {
       friend bool
       operator!= (IterSnapshot const& snap1, IterSnapshot const& snap2)
       {
-        return ! (snap1 == snap2);
+        return not (snap1 == snap2);
       }
       
       

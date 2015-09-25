@@ -35,7 +35,7 @@ namespace session {
   bool
   Label::isValid()  const
   {
-    return !isnil (typeID_);
+    return not isnil (typeID_);
   }
   
   

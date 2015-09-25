@@ -133,7 +133,7 @@ namespace panel{
   Panel::is_locked() const
   {
     REQUIRE(dockItem_.gobj() != NULL);
-    return !GDL_DOCK_ITEM_NOT_LOCKED(dockItem_.gobj());
+    return not GDL_DOCK_ITEM_NOT_LOCKED(dockItem_.gobj());
   }
   
   workspace::PanelManager&

@@ -99,7 +99,7 @@ namespace meta{
       friend bool
       operator!= (FunErasure const& fer1, FunErasure const& fer2)
         {
-          return !(fer1==fer2);  // use equality defined by FH       
+          return not (fer1==fer2);  // use equality defined by FH
         }
     };
   

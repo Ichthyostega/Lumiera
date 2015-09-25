@@ -244,7 +244,7 @@ namespace advice {
   inline bool
   operator!= (Binding const& b1, Binding const& b2)
   {
-    return ! (b1 == b2);
+    return not (b1 == b2);
   }
   
   

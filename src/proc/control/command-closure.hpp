@@ -289,7 +289,7 @@ namespace control {
       
       /// Supporting equality comparisons...
       friend bool operator== (Closure const& c1, Closure const& c2)  { return compare (c1.params_, c2.params_); }
-      friend bool operator!= (Closure const& c1, Closure const& c2)  { return ! (c1 == c2); }
+      friend bool operator!= (Closure const& c1, Closure const& c2)  { return not (c1 == c2); }
       
       bool
       equals (CmdClosure const& other)  const

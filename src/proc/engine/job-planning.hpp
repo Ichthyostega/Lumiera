@@ -178,7 +178,7 @@ namespace engine {
       friend bool
       checkPoint (JobPlanning const& plan)
       {
-        return !isnil (plan.plannedOperations_);
+        return not isnil (plan.plannedOperations_);
       }
       
       friend JobPlanning&
@@ -302,8 +302,8 @@ namespace engine {
       
       bool canContinue (FrameCoord const& location)
         {
-          return !isEndOfChunk (location.absoluteFrameNumber,
-                                location.modelPort);
+          return not isEndOfChunk (location.absoluteFrameNumber,
+                                   location.modelPort);
         }
       
     protected:

@@ -271,7 +271,7 @@ namespace diff{
       bool
       isNamed()  const
         {
-          return !util::startsWith (idi.getSym(), "_CHILD_");
+          return not util::startsWith (idi.getSym(), "_CHILD_");
         }
       
       template<typename X>
@@ -320,7 +320,7 @@ namespace diff{
       friend bool
       operator!= (GenNode const& n1, GenNode const& n2)
       {
-        return ! (n1 == n2);
+        return not (n1 == n2);
       }
       
     
@@ -439,7 +439,7 @@ namespace diff{
       friend bool
       checkPoint (ScopeExplorer const& explorer)
       {
-        return !explorer.scopes_.empty()
+        return not  explorer.scopes_.empty()
             && bool(explorer.scopes_.back());
       }
       
@@ -462,8 +462,8 @@ namespace diff{
       friend bool
       operator== (ScopeExplorer const& s1, ScopeExplorer const& s2)
       {
-        return !s1.scopes_.empty()
-            && !s2.scopes_.empty()
+        return not s1.scopes_.empty()
+            && not s2.scopes_.empty()
             && s1.scopes_.size() == s2.scopes_.size()
             && yield(s1) == yield(s2);
       }

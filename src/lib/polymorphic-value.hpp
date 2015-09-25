@@ -556,7 +556,7 @@ namespace lib {
       friend bool
       operator!= (PolymorphicValue const& v1, PolymorphicValue const& v2)
       {
-        return ! (v1 == v2);
+        return not (v1 == v2);
       }
     };
   

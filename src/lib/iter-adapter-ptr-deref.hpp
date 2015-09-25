@@ -196,7 +196,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
       
@@ -214,7 +214,7 @@ namespace lib {
   bool operator== (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
     
   template<class I1, class I2>
-  bool operator!= (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return !(il == ir); }
+  bool operator!= (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return not (il == ir); }
   
   
   
@@ -305,7 +305,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
       
@@ -323,7 +323,7 @@ namespace lib {
   bool operator== (AddressExposingIter<I1> const& il, AddressExposingIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
     
   template<class I1, class I2>
-  bool operator!= (AddressExposingIter<I1> const& il, AddressExposingIter<I2> const& ir)  { return !(il == ir); }
+  bool operator!= (AddressExposingIter<I1> const& il, AddressExposingIter<I2> const& ir)  { return not (il == ir); }
   
   
   

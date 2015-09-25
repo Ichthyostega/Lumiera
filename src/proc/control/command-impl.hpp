@@ -230,7 +230,7 @@ namespace control {
       friend bool
       operator!= (CommandImpl const& ci1, CommandImpl const& ci2)
       {
-        return !(ci1==ci2);
+        return not (ci1==ci2);
       }
     };
   

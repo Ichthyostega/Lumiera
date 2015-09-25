@@ -335,14 +335,14 @@ namespace diff{
       operator== (Record const& r1, Record const& r2)
       {
         return r1.type_ == r2.type_
-            && r1.attribs_ == r2.attribs_
-            && r1.children_ == r2.children_;
+           and r1.attribs_ == r2.attribs_
+           and r1.children_ == r2.children_;
       }
       
       friend bool
       operator!= (Record const& r1, Record const& r2)
       {
-        return ! (r1 == r2);
+        return not (r1 == r2);
       }
     };
   
@@ -541,7 +541,7 @@ namespace diff{
       bool
       empty()  const
         {
-          return ! bool(record_);
+          return not record_;
         }
       
       /** target is accessed by cast

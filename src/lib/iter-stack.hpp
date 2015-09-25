@@ -83,20 +83,20 @@ namespace lib {
         friend bool
         checkPoint (IterDequeStorage const& elements)
         {
-          return !elements.empty();
+          return not elements.empty();
         }
         
         friend TY &
         yield (IterDequeStorage const& elements)
         {
-          REQUIRE (!elements.empty());
+          REQUIRE (not elements.empty());
           return unConst(elements).back();
         }
         
         friend void
         iterNext (IterDequeStorage & elements)
         {
-          REQUIRE (!elements.empty());
+          REQUIRE (not elements.empty());
           elements.pop_back();
         }
       };

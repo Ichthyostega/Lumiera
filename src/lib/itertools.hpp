@@ -226,7 +226,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
     };
@@ -245,7 +245,7 @@ namespace lib {
   inline bool
   operator!= (IterTool<CX> const& ito1, IterTool<CX> const& ito2)
   {
-    return !(ito1 == ito2);
+    return not (ito1 == ito2);
   }
   
   

@@ -124,7 +124,7 @@ namespace play {
       bool
       isActive()  const
         {
-          return ! and_all (processes_, isDead);
+          return not and_all (processes_, isDead);
         }
       
     private:

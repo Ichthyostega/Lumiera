@@ -237,7 +237,7 @@ namespace lumiera {
       operator unspecified_bool_type()  const // never throws
         { return isValid()?  &_ThisType::instance_ : 0; }
       
-      bool operator! ()  const { return !isValid();     }
+      bool operator! ()  const { return not isValid();  }
       
       
     private:

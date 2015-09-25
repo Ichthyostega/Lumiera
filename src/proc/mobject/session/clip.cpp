@@ -55,7 +55,7 @@ namespace session {
   Clip::isValid ()  const
   {
     TODO ("check consistency of clip length def, implies accessing the underlying media def");
-    return !isnil(length_);
+    return not isnil(length_);
   }
   
   

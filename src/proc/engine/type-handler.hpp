@@ -148,7 +148,7 @@ namespace engine {
       isValid()  const
         {
           return bool(createAttached)
-              && bool(destroyAttached);
+             and bool(destroyAttached);
         }
       
       friend HashVal
@@ -166,7 +166,7 @@ namespace engine {
       friend bool
       operator== (TypeHandler const& left, TypeHandler const& right)
       {
-        return (!left.isValid() && !right.isValid())
+        return (not left.isValid() and not right.isValid())
             || (  util::rawComparison(left.createAttached, right.createAttached)
                && util::rawComparison(left.destroyAttached, right.destroyAttached)
                );
@@ -174,7 +174,7 @@ namespace engine {
       friend bool
       operator!= (TypeHandler const& left, TypeHandler const& right)
       {
-        return !(left == right);
+        return not (left == right);
       }
     };
   
