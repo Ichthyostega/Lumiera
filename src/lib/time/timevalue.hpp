@@ -118,6 +118,9 @@ namespace time {
       friend gavl_time_t _raw (TimeValue const& time) { return time.t_; }
       static TimeValue buildRaw_(gavl_time_t);
       
+      /** @internal diagnostics */
+      operator std::string ()  const;
+      
       // Supporting totally_ordered
       friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
       friend bool operator<  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ <  t2   ; }
@@ -160,10 +163,7 @@ namespace time {
           return *this;
         }
       
-      /** @internal diagnostics */
-      operator std::string ()  const;
-      
-      // Supporting mixing with plain long int arithmetics
+      // Support mixing with plain long int arithmetics
       operator gavl_time_t ()  const { return t_; }
       
       // Supporting additive
@@ -515,6 +515,8 @@ namespace time {
       /** may change start / duration */
       void accept (Mutation const&);
       
+      /** @internal diagnostics */
+      operator std::string ()  const;
       
       /// Supporting extended total order, based on start and interval length
       friend bool operator== (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_==t2.t_ && t1.dur_==t2.dur_; }

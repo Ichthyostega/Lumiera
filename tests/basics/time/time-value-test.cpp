@@ -319,7 +319,6 @@ namespace test{
           
           // the time span behaves like a time
           CHECK (org == interval);
-          CHECK (string(Time(org)) == string(interval));
           
           // can get the length by direct conversion
           Duration theLength(interval);
