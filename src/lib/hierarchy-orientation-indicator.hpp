@@ -85,6 +85,8 @@ namespace lib {
       OrientationIndicator&
       markRefLevel ()
         {
+          REQUIRE (0 < ptrdiff_t(refLevel_) + offset_);
+          
           markRefLevel (refLevel_ + offset_);
           ENSURE (offset_ == 0);
           return *this;
