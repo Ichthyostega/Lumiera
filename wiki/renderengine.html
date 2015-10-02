@@ -7947,7 +7947,7 @@ Used this way, diff representation helps to separate structure and raw data in e
 :Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201508281207" tags="Model GuiPattern design draft" changecount="39">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201510020048" tags="Model GuiPattern design draft" changecount="44">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -8000,8 +8000,8 @@ This design prefers the //pull// approach, with a special twist: we provide a co
 !!!representation of objects
 It should be noted, that the purpose of this whole architecture is to deal with »remote« stuff -- things we somehow need to refer and deal with, but nothing we can influence immediately, right here: every actual manipulation has to be turned into a message and sent //elsewhere.// This is the only context, where some, maybe even partial, generic and introspective object representation makes sense.
 
-{{red{open questions 6/15}}}
-* do we need to //alter// object contents -- or do we just replace?
+__Questions for Design (6/15)__
+* do we need to //alter// object contents -- or do we just replace? &amp;larr; provide a ''Mutator''
 * to what degree is the distinction between attributes and children even relevant -- beyond the ability to address attributes by-name?
 * how do we describe an object from scratch? &amp;larr;''object builder''
 * how do we represent the break between attributes and children in this linearised description?
@@ -8010,9 +8010,21 @@ It should be noted, that the purpose of this whole architecture is to deal with 
 ** as additional metadata information sent beforehand?
 * we need an object-reference element, since we do not want to copy whole subtrees while processing a diff
 
-&quot;Objects&quot; can be spelled out literally in code. We care to make the respective ctor syntax expressive enough. For nested objects, i.e. values of type {{{diff::Record}}}, a dedicated object builder notation is provided, because this is the point, where the syntax gets convoluted
+!!!Mapping a Diff Language to Object structures
+&quot;Objects&quot; can be spelled out literally in code. We care to make the respective ctor syntax expressive enough. For nested objects, i.e. values of type {{{diff::Record}}}, a dedicated object builder notation is provided, because this is the point, where the syntax gets convoluted. Yet the interesting questions arise when it comes to spelling out a diff language description against an existing object tree. While a conventional list diff implicitly relies on the structural properties of a list, in our case, the //actual, concrete object// tree serves as structural backdrop and interpretation context of the description in diff language. Effectively this makes the language self contained: it is possible to unfold a new structure from scratch, and use this new structure as implicit context for further manipulations henceforth.
 
-Within this framework, we represent //object-like// entities through a special flavour of the GenNode: Basically, an object is a flat collection of children, yet given in accordance to a distinct protocol. The relevant ''meta'' information is spelled out first, followed by the ''attributes'' and finally the ''children''. The distinction between these lies in the mode of handling. Meta information is something we need to know before we're able to deal with the actual stuff. Prominent example is the type of the object. Attributes are considered unordered, and will typically be addressed by-name. Children are an ordered collection of recursive instances of the same data structure. (Incidentally, we do not rule out the possibility that also an attribute holds a recursive subtree; only the mode of access is what makes the distinction).
+Within this framework, we represent //object-like// entities through a special flavour of the GenNode: Basically, an object is a flat collection of children, yet given in accordance to a distinct ''object protocol''. The relevant ''meta'' information is spelled out first, followed by the ''attributes'' and finally the ''children''. The distinction between these lies in the mode of handling. Meta information is something we need to know before we're able to deal with the actual stuff. Prominent example is the type of the object. Attributes are considered unordered, and will typically be addressed by-name. Children are an ordered collection of recursive instances of the same data structure. (Incidentally, we do not rule out the possibility that also an attribute holds a recursive subtree; only the mode of access is what makes the distinction).
+
+Here the question arises as to what extent the //language// needs to know about these object semantics. While a commitment for precision might lead us towards strict language definition, in fact, languages usable in practice need largely not be defined at all, since they are applied against a context. And since the use of the language itself might guide us from one context to another, the possibility of multiple levels of language arises. We use this observation as guideline and hint to keep our diff language open. Basically, it is just a sequence of verbs, which needs an actual interpreter implementation, which in turn naturally leads itself to attachment to some working context. At this point, we get a //binding// between sequences of language terms and the operational semantics, which in turn defines the limits of legal language constructs. As long as both sides agree upon the same structural conventions, the exchange works without strict codification. We should better strive at defining our object semantics precisely though. Any leeway can be allowed, as long as it conforms with the general layout and as long as it doesn't open the path to later confusion.
+
+Based on these considerations we establish the &quot;two lists&quot; schematics:
+* we make our objects look like lists of attributes and children
+* we define our protocol rules as
+** attributes first
+** metadata given by //magic attributes// (just a {{{&quot;type&quot;}}} attribute for now)
+** occurrence of the first child switches from attribute zone to child scope
+** children are recognisable by the form of their ID
+Relying on these rules, we're able to arrive at a sensible binding systematically, while most of the implementation is just a specialisation of list diffing.
 
 !!!handling of actual mutation
 This question is closely linked to the semantics of equality. In a simple list diff, this matter doesn't pose any problems; when an element is different, it is a different element, and this change can be encoded as a deletion and insertion of a new element. Not so in tree diff handling. We do not want to delete and re-build whole subtrees, because some tiny bit is altered somewhere down. Thus, a recursive sub-structure can be considered //the same entity,// yet still //mutated.// Our diff handling framework deals with the identity first, followed by an recourse into investigating //inner changes.// This recursive investigation is spelled out as a bracketed construct, which can be processed by recursive invocation. In the end, at the level of the tree leaves, handling those inner mutations boils down to invoking the //mutation closure,// as mentioned above. The knowledge of type context is thus confined to the receiving client, as long as every GenNode implementation offers support to detect an inner mutation and allows to install and invoke such a specifically typed closure to deal with the mutation. The twist to note is the point, //where// this closure is installed: it certainly doesn't make sense to install it on the generating side.
@@ -8024,7 +8036,7 @@ Within the context of GuiModelUpdate, we discern two distinct situations necessi
 the second case is what poses the real challenge in terms of writing well organised code. Since in that case, the receiver side has to translate generic diff verbs into operations on hard wired language level data structures -- structures, we can not control, predict or limit beforhand. We deal with this situation by introducing a specific intermediary, the &amp;rarr; TreeMutator.
 </pre>
 </div>
-<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201506072246" tags="Model GuiPattern spec draft" changecount="61">
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201509300045" tags="Model GuiPattern spec draft" changecount="62">
 <pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
 This leads to what could be considered the very opposite of data-centric programming. Instead of embody »the truth« into a central data model with predefined layout, we base our achitecture on a set of actors and their collaboration. In the mentioned example this would be the high-level view in the Session, the Builder, the UI-Bus and the presentation elements within the timeline view. Underlying to each such collaboration is a shared conception of data. There is no need to //actually represent that data// -- it can be conceived to exist in a more descriptive, declarative [[external tree description (ETD)|ExternalTreeDescription]]. In fact, what we //do represent// is a ''diff'' against such an external rendering.
 
@@ -8061,7 +8073,7 @@ Thus, for our specific usage scenario, the foremost relevant question is //how t
 |{{{del}}}(a~~2~~) |!| ()|(a~~3~~, a~~4~~, a~~5~~) |
 |{{{ins}}}(b~~1~~) |!| (b~~1~~)|(a~~3~~, a~~4~~, a~~5~~) |
 |{{{pick}}}(a~~3~~) |!| (b~~1~~, a~~3~~)|(a~~4~~, a~~5~~) |
-|{{{find}}}( a~~5~~) |!| (b~~1~~, a~~3~~)|(a~~5~~, a~~4~~) |
+|{{{find}}}(a~~5~~) |!| (b~~1~~, a~~3~~)|(a~~5~~, a~~4~~) |
 |{{{pick}}}(a~~5~~) |!| (b~~1~~, a~~3~~, a~~5~~)|(a~~4~~) |
 |{{{ins}}}(b~~2~~) |!| (b~~1~~, a~~3~~, a~~5~~, b~~2~~)|(a~~4~~) |
 |{{{ins}}}(b~~3~~) |!| (b~~1~~, a~~3~~, a~~5~~, b~~2~~, b~~3~~)|(a~~4~~) |
@@ -8094,7 +8106,7 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201505312250" tags="Model Concepts GuiPattern design draft" changecount="52">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201509300059" tags="Model Concepts GuiPattern design draft" changecount="53">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 
 !Motivation
@@ -8179,7 +8191,7 @@ Indeed, my first choice would have been a yet more evocative syntax
        .addChild(&quot;Fork&quot;) = { ...closure...}
        .mutateChild(&quot;Fork&quot;) = { ... another closure }
 }}}
-Unfortunately, the {{{operator=}}} is right-associative in C++, with no option to change that parsing behaviour. Together with the likewise fixed high precedence of the dot (member call), which also can not be overloaded, we're out of options, even if willing to create a term builder construction. There is simply no way to prevent the parser from invoking the dot operator on the preceding closure. The workarounds would have been to use something other than '{{{=}}}' to create the bindings,  to use a comma instead of a dot, or to disallow chaining altogether. All these choices seem to be rather counter intuitive -- and the most important rule for defining a custom syntax is to stay within the realm of the predictable.
+Unfortunately, the {{{operator=}}} is right-associative in C++, with no option to change that parsing behaviour. Together with the likewise fixed high precedence of the dot (member call), which also can not be overloaded, we're out of options, even if willing to create a term builder construct. There is simply no way to prevent the parser from invoking the dot operator on the preceding closure. The workarounds would have been to use something other than '{{{=}}}' to create the bindings,  to use a comma instead of a dot, or to disallow chaining altogether. All these choices seem to be rather counter intuitive -- and the most important rule for defining a custom syntax is to stay within the realm of the predictable.
 
 
 !!!Architecture

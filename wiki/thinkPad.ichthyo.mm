@@ -11,7 +11,8 @@
 <node CREATED="1434128332277" ID="ID_33025591" MODIFIED="1434128337777" TEXT="Deregistrierung"/>
 <node CREATED="1434128310005" ID="ID_644247390" MODIFIED="1434128318561" TEXT="Knoten-ID"/>
 </node>
-<node CREATED="1434128074725" ID="ID_933994138" MODIFIED="1434128077625" TEXT="Diff-System">
+<node CREATED="1434128074725" ID="ID_933994138" MODIFIED="1443741968332" TEXT="Diff-System">
+<icon BUILTIN="pencil"/>
 <node CREATED="1434128278990" ID="ID_106354755" MODIFIED="1434128283641" TEXT="Diff-Darstellung"/>
 <node CREATED="1434128267381" ID="ID_823706141" MODIFIED="1434128551925" TEXT="List-diff">
 <icon BUILTIN="go"/>
@@ -29,8 +30,9 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1434128243334" ID="ID_1828331212" MODIFIED="1434128248667" TEXT="Typ-Darstellung"/>
 <node CREATED="1434128239517" ID="ID_1886740948" MODIFIED="1434128250041" TEXT="Mapping"/>
-<node CREATED="1434128170381" ID="ID_976705384" MODIFIED="1435943245803" TEXT="GenNode">
+<node CREATED="1434128170381" FOLDED="true" ID="ID_976705384" MODIFIED="1443147819819" TEXT="GenNode">
 <linktarget COLOR="#ff0033" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="10;45;" ID="Arrow_ID_1285375088" SOURCE="ID_553361956" STARTARROW="Default" STARTINCLINATION="-13;-67;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1435421658394" ID="ID_1938259420" MODIFIED="1435421666963" TEXT="ID">
 <node CREATED="1435421670349" FOLDED="true" ID="ID_1358247529" MODIFIED="1439842301216" TEXT="verwende EntryID">
 <icon BUILTIN="button_ok"/>
@@ -108,8 +110,9 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1434128217645" ID="ID_1790054544" MODIFIED="1434128220257" TEXT="Monade">
-<node CREATED="1435932580854" ID="ID_1307223527" MODIFIED="1435932586137" TEXT="Daten einwickeln">
+<node CREATED="1434128217645" FOLDED="true" ID="ID_1790054544" MODIFIED="1443147799301" TEXT="Monade">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1435932580854" FOLDED="true" ID="ID_1307223527" MODIFIED="1443147726667" TEXT="Daten einwickeln">
 <node CREATED="1435932589853" ID="ID_180643071" MODIFIED="1435932595665" TEXT="ctor forward"/>
 <node CREATED="1435932598197" FOLDED="true" ID="ID_951223738" MODIFIED="1436042636423" TEXT="Problem mit copy ctor">
 <richcontent TYPE="NOTE"><html>
@@ -182,10 +185,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1435942891695" ID="ID_947731706" MODIFIED="1440984455323" TEXT="Iteration">
+<node CREATED="1435942891695" FOLDED="true" ID="ID_947731706" MODIFIED="1443147725256" TEXT="Iteration">
 <linktarget COLOR="#98e2df" DESTINATION="ID_947731706" ENDARROW="Default" ENDINCLINATION="-78;95;" ID="Arrow_ID_197324270" SOURCE="ID_1665153106" STARTARROW="None" STARTINCLINATION="168;-25;"/>
 <font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="pencil"/>
 <node CREATED="1440983732337" HGAP="35" ID="ID_792682966" MODIFIED="1440983809484" TEXT="monadische Iteration" VSHIFT="12">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -204,8 +206,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1440983598369" ID="ID_1025556053" MODIFIED="1440983823376">
@@ -221,8 +222,7 @@
       <font size="1">was wir brauchen</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1440983617193" ID="ID_532213208" MODIFIED="1440983627459" TEXT="bracketing"/>
 <node CREATED="1440983628399" ID="ID_1711016962" MODIFIED="1440983642457" TEXT="node prefix"/>
@@ -232,7 +232,7 @@
 <node CREATED="1440983668537" ID="ID_1230038295" MODIFIED="1441936954788" TEXT="IterExplorer verwenden">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1440984024736" ID="ID_1554494729" MODIFIED="1440984028035" TEXT="Chained Iters">
+<node CREATED="1440984024736" FOLDED="true" ID="ID_1554494729" MODIFIED="1443147557263" TEXT="Chained Iters">
 <node CREATED="1440984028959" ID="ID_896818992" MODIFIED="1440984040210" TEXT="pfiffig"/>
 <node CREATED="1440984040870" ID="ID_1008957395" MODIFIED="1440984048057" TEXT="m&#xfc;&#xdf;te der IterIter implementieren"/>
 <node CREATED="1440984048380" ID="ID_917358570" MODIFIED="1440984080184">
@@ -248,12 +248,11 @@
       rekursiver Abstieg in der Mitte eines Iterators
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node CREATED="1440983855875" ID="ID_1991218497" MODIFIED="1441936333034" TEXT="RecursiveSelfIntegration">
+<node CREATED="1440983855875" FOLDED="true" ID="ID_1991218497" MODIFIED="1443147555436" TEXT="RecursiveSelfIntegration">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -281,8 +280,7 @@
       &#252;brigens: genau den verwenden wir auch zur Job-Planung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-1"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1440983865102" ID="ID_306959180" MODIFIED="1440983871265" TEXT="hoch effizient"/>
@@ -302,7 +300,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1441935566556" ID="ID_128176235" MODIFIED="1441936330204" TEXT="oder doch depthFirst?">
+<node CREATED="1441935566556" FOLDED="true" ID="ID_128176235" MODIFIED="1443147553822" TEXT="oder doch depthFirst?">
 <icon BUILTIN="full-2"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1441935596503" ID="ID_119941709" MODIFIED="1441935613232" TEXT="verwendet einen einfacheren Iterator"/>
@@ -347,8 +345,7 @@
       in dem Moment, wo ich mich f&#252;r einen Iterator entscheide, ist diese M&#246;glichkeit weg.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1441936092427" ID="ID_199084223" MODIFIED="1441936126886">
@@ -364,13 +361,12 @@
       aber nur, wenn man die Initialisierung hinbekommt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1441936132022" ID="ID_183615098" MODIFIED="1441936141832" TEXT="trotzdem mu&#xdf; man die Funktion speichern"/>
 <node CREATED="1441936142563" ID="ID_161796731" MODIFIED="1441936150975" TEXT="und wir brauchen gar keine flexible Funktion"/>
 </node>
-<node CREATED="1441936154834" ID="ID_1320687783" MODIFIED="1441936336433">
+<node CREATED="1441936154834" FOLDED="true" ID="ID_1320687783" MODIFIED="1443147560812">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -383,8 +379,7 @@
       fest verdrahten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-3"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1441936260132" ID="ID_600953695" MODIFIED="1441936270614" TEXT="der IterExplorer zeigt genau, was zu tun ist"/>
@@ -393,7 +388,8 @@
 <node CREATED="1441936356831" ID="ID_1423049913" MODIFIED="1441936372500" TEXT="aber die Indirektion f&#xfc;r die Funktion f&#xe4;llt weg">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1441936386803" ID="ID_588658088" MODIFIED="1441936407304" TEXT="TODO">
+<node COLOR="#338800" CREATED="1441936386803" ID="ID_588658088" MODIFIED="1443147527327" TEXT="TODO">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1441936422725" ID="ID_1581368426" MODIFIED="1441936433181" TEXT="ScopeExplorer-Mechanismus mit Stack">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -437,16 +433,14 @@
       Damit ist schon klar: <i>sowas macht man nicht ohne Grund</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1441936883063" ID="ID_428834793" MODIFIED="1441936894393" TEXT="GenNode erfordert nur einen Pointer">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1441936900076" ID="ID_1582043438" MODIFIED="1441936929913" TEXT="Explorer-Funktion">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1441936900076" ID="ID_1582043438" MODIFIED="1443147534351" TEXT="Explorer-Funktion">
 <node CREATED="1441936911211" ID="ID_722452490" MODIFIED="1441936917230" TEXT="kommt in DataCap"/>
 <node CREATED="1441936983313" ID="ID_1843183144" MODIFIED="1441936990892" TEXT="mu&#xdf; den inneren Iterator liefern"/>
 <node CREATED="1441937000487" ID="ID_312630797" MODIFIED="1441937028412">
@@ -459,14 +453,58 @@
       Entscheidung: <i>falls</i>&#160;eingebetteter Record
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node CREATED="1441937037498" ID="ID_1964865459" MODIFIED="1441937043309" TEXT="Initialisierung bedenken"/>
+<node CREATED="1441937037498" ID="ID_1964865459" MODIFIED="1443147539495" TEXT="Initialisierung bedenken">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
+</node>
+<node CREATED="1443147571765" ID="ID_1651952492" MODIFIED="1443147580223" TEXT="HierarchyOrientation">
+<node CREATED="1443147582018" ID="ID_1791945362" MODIFIED="1443147603945" TEXT="fest einbauen">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1443147586241" ID="ID_904848069" MODIFIED="1443147706043" TEXT="besser: nur level zug&#xe4;nglich machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Begr&#252;ndung: das Durchlaufen und Rekonstruieren eines Baumes
+    </p>
+    <p>
+      ist letztlich doch ein sehr spezieller Fall, und rechtfertigt nicht,
+    </p>
+    <p>
+      den HierarchyOrientationIndicator in jeden Iterator einzubetten.
+    </p>
+    <p>
+      Zumal -- wenn der level zug&#228;nglich ist -- kann man diese Mechanik genauso gut
+    </p>
+    <p>
+      dort direkt ansiedeln, wo sie gebraucht wird.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1443147730941" ID="ID_196989292" MODIFIED="1443147751954">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also <i>keine</i>&#160;Monade
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node CREATED="1440984348699" HGAP="64" ID="ID_1327214042" MODIFIED="1440984360810" TEXT="Pr&#xe4;dikate" VSHIFT="-26">
@@ -481,14 +519,13 @@
       Gleichheit
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1440984381982" ID="ID_187772178" MODIFIED="1440984463833" TEXT="Wert-Match">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1440984392453" ID="ID_1665153106" MODIFIED="1440984460935" TEXT="Contains">
+<node CREATED="1440984392453" ID="ID_1665153106" MODIFIED="1443147806504" TEXT="Contains">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -498,9 +535,9 @@
       kombiniert den Wert-Match mit der Iteration
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#98e2df" DESTINATION="ID_947731706" ENDARROW="Default" ENDINCLINATION="-78;95;" ID="Arrow_ID_197324270" STARTARROW="None" STARTINCLINATION="168;-25;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1434128176918" FOLDED="true" ID="ID_863330674" MODIFIED="1439842253318" TEXT="Record">
@@ -1030,6 +1067,642 @@
 </node>
 <node CREATED="1436042718309" ID="ID_109270255" MODIFIED="1436042725210" TEXT="Ja!">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1443733567706" HGAP="76" ID="ID_143203937" MODIFIED="1443741888841" TEXT="Diff-Language" VSHIFT="15">
+<cloud COLOR="#cfba9d"/>
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="prepare"/>
+<node CREATED="1443733726563" ID="ID_410650103" MODIFIED="1443733731422" TEXT="Grundlagen">
+<node CREATED="1443733732938" ID="ID_73184558" MODIFIED="1443733737277" TEXT="Folge von Verben"/>
+<node CREATED="1443733738296" ID="ID_994909291" MODIFIED="1443733743181" TEXT="konstante Gr&#xf6;&#xdf;e"/>
+<node CREATED="1443733744169" ID="ID_1410679171" MODIFIED="1443733756330" TEXT="ein Argument pro Verb"/>
+<node CREATED="1443733768621" ID="ID_183648684" MODIFIED="1443733796453">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>Interpreter</b>&#160;definiert Sprache
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#56397a" CREATED="1443733800322" ID="ID_1544242343" MODIFIED="1443741833374" TEXT="Nutz-Muster">
+<font NAME="SansSerif" SIZE="13"/>
+<node CREATED="1443733822780" ID="ID_756812969" MODIFIED="1443733830672" TEXT="Basis-F&#xe4;lle">
+<node CREATED="1443733856089" ID="ID_1358940500" MODIFIED="1443735038199">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ROOT
+    </p>
+  </body>
+</html>
+</richcontent>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1443733978248" ID="ID_724172314" MODIFIED="1443733983252" TEXT="Wurzel pflanzen"/>
+<node CREATED="1443733984336" ID="ID_109703386" MODIFIED="1443733993674" TEXT="Au&#xdf;erhalb der Sprache"/>
+<node CREATED="1443733994310" ID="ID_52662692" MODIFIED="1443733998417" TEXT="...oder rekursiv"/>
+</node>
+<node CREATED="1443733868958" ID="ID_676848577" MODIFIED="1443735038198">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      INIT
+    </p>
+  </body>
+</html>
+</richcontent>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1443734005660" ID="ID_1028914628" MODIFIED="1443734025547">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      leeres
+    </p>
+    <p>
+      Objekt
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1443734026466" ID="ID_1051774321" MODIFIED="1443734029453" TEXT="typen">
+<node CREATED="1443735007685" ID="ID_1426207394" MODIFIED="1443735015668" TEXT="&quot;type&quot;-Attribut">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node CREATED="1443734030329" ID="ID_257027438" MODIFIED="1443734033052" TEXT="bef&#xfc;llen"/>
+</node>
+</node>
+<node CREATED="1443733903314" ID="ID_1973278843" MODIFIED="1443735038197" TEXT="NAV">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1443734039776" ID="ID_1572908212" MODIFIED="1443734131094" TEXT="pick">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1443734637416" ID="ID_461220696" MODIFIED="1443734639699" TEXT="after">
+<node CREATED="1443741466072" ID="ID_1108877437" MODIFIED="1443741471390" TEXT="Frage: wrap erlauben">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1443733891492" ID="ID_1727724941" MODIFIED="1443735038197" TEXT="MOD">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1443734646734" ID="ID_841341176" MODIFIED="1443734649058" TEXT="INS">
+<node CREATED="1443734713781" ID="ID_10743682" MODIFIED="1443734720912" TEXT="vorne"/>
+<node CREATED="1443734721692" ID="ID_1206301961" MODIFIED="1443734723047" TEXT="innen"/>
+<node CREATED="1443734723899" ID="ID_614189310" MODIFIED="1443734740809" TEXT="APPEND">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node CREATED="1443734649902" ID="ID_1557261619" MODIFIED="1443734651681" TEXT="DEL">
+<node CREATED="1443734770118" ID="ID_1863350908" MODIFIED="1443734772777" TEXT="n&#xe4;chsten"/>
+<node CREATED="1443734773317" ID="ID_738630660" MODIFIED="1443734775409" TEXT="letzten"/>
+</node>
+<node CREATED="1443734652509" ID="ID_72317753" MODIFIED="1443734657440" TEXT="PERM">
+<node CREATED="1443734781868" ID="ID_868966231" MODIFIED="1443734785215" TEXT="find-fetch"/>
+<node CREATED="1443734785971" ID="ID_1082279397" MODIFIED="1443734790692" TEXT="push">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1443734808360" ID="ID_1918783570" MODIFIED="1443734832562" TEXT="Parameter">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1443734796346" ID="ID_1017278649" MODIFIED="1443734869522" TEXT="&#xfc;berfl&#xfc;ssig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      l&#228;&#223;t sich stets duch eine inverse Folge von <i>find</i>&#160;und <i>pick</i>&#160; emulieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1443733895611" ID="ID_1632274940" MODIFIED="1443735038196" TEXT="MUT">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1443734664572" ID="ID_602667530" MODIFIED="1443734667559" TEXT="by-name">
+<node CREATED="1443734917130" ID="ID_583238947" MODIFIED="1443734923740" TEXT="nur im Scope"/>
+<node CREATED="1443734926912" ID="ID_634765493" MODIFIED="1443734937699" TEXT="er&#xf6;ffnet sub-Scope"/>
+</node>
+<node CREATED="1443734668267" ID="ID_1281243531" MODIFIED="1443734677577" TEXT="_THIS_">
+<font NAME="SansSerif" SIZE="11"/>
+<node CREATED="1443734884526" ID="ID_1720972097" MODIFIED="1443734907375" TEXT="gilt postfix"/>
+<node CREATED="1443734942974" ID="ID_72035627" MODIFIED="1443734946841" TEXT="sonst wie normales MUT"/>
+<node CREATED="1443734955012" ID="ID_132520838" MODIFIED="1443734972286" TEXT="erlaubt Anlegen + Populieren"/>
+</node>
+</node>
+</node>
+<node CREATED="1443735171208" HGAP="46" ID="ID_1757651048" MODIFIED="1443735188828" TEXT="Objekt-Baum-Semantik" VSHIFT="13">
+<node CREATED="1443735379267" ID="ID_628105032" MODIFIED="1443735416018" TEXT="Wurzel">
+<node CREATED="1443735418201" ID="ID_1521312079" MODIFIED="1443735418201" TEXT="wird vorausgesetzt"/>
+<node CREATED="1443735385523" ID="ID_1179435276" MODIFIED="1443735425593" TEXT="ist stets ein Record"/>
+</node>
+<node CREATED="1443735531351" ID="ID_1428234818" MODIFIED="1443735551536" TEXT="Objekt">
+<node CREATED="1443735554379" ID="ID_676366486" MODIFIED="1443735571653" TEXT="Inhalt als Liste"/>
+<node CREATED="1443735572833" ID="ID_343264561" MODIFIED="1443735595610" TEXT="Zonen">
+<node CREATED="1443735596550" ID="ID_236186740" MODIFIED="1443735598258" TEXT="Meta"/>
+<node CREATED="1443735598966" ID="ID_1441633165" MODIFIED="1443735601009" TEXT="Attribute"/>
+<node CREATED="1443735601477" ID="ID_1740180586" MODIFIED="1443735605393" TEXT="Scope"/>
+</node>
+<node CREATED="1443735621027" ID="ID_850995598" MODIFIED="1443735623750" TEXT="Protokoll">
+<node CREATED="1443735625714" ID="ID_1979053137" MODIFIED="1443735638372" TEXT="Reihenfolge erhaltend"/>
+<node CREATED="1443735638840" ID="ID_1930287259" MODIFIED="1443735642020" TEXT="nicht sortiert"/>
+<node CREATED="1443735643536" ID="ID_1397296376" MODIFIED="1443735648747" TEXT="nach Zonen geordnet"/>
+</node>
+<node CREATED="1443735736427" ID="ID_735577464" MODIFIED="1443735739943" TEXT="Konformit&#xe4;t">
+<node CREATED="1443736349465" FOLDED="true" ID="ID_1312270317" MODIFIED="1443739939854" TEXT="strikt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vorerst verworfen, da zus&#228;tzlicher Pr&#252;f-Aufwand
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1443736367255" ID="ID_1634633098" MODIFIED="1443736380225" TEXT="Meta-Attribute zuerst"/>
+<node CREATED="1443736626731" ID="ID_600165347" MODIFIED="1443736652396" TEXT="keine Attribut-Duplikate"/>
+<node CREATED="1443736388180" ID="ID_435516555" MODIFIED="1443736666538" TEXT="Attribute strikt vor Kindern"/>
+</node>
+<node CREATED="1443736354800" ID="ID_1024688383" MODIFIED="1443736761929" TEXT="locker">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1443735740907" ID="ID_1103250008" MODIFIED="1443735747902" TEXT="Meta-Attribute sind magisch"/>
+<node CREATED="1443735750626" ID="ID_1965990187" MODIFIED="1443736021880" TEXT="erstes Kind er&#xf6;ffnet Scope"/>
+<node CREATED="1443736449419" ID="ID_1376225902" MODIFIED="1443736603427" TEXT="danach Attribute wegsortieren"/>
+<node CREATED="1443736688027" ID="ID_1189409086" MODIFIED="1443737477829" TEXT="Attribut-Handhabung">
+<node CREATED="1443737483704" FOLDED="true" ID="ID_1359413673" MODIFIED="1443739954500" TEXT="Modell &quot;Liste&quot;">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1443737510238" ID="ID_1135997794" MODIFIED="1443737510238" TEXT="Duplikate anh&#xe4;ngen"/>
+<node CREATED="1443737516852" ID="ID_636329172" MODIFIED="1443737527750" TEXT="Einf&#xfc;gen erlauben"/>
+<node CREATED="1443737528578" ID="ID_1554159544" MODIFIED="1443737538461" TEXT="Umordnen erlauben"/>
+<node CREATED="1443737570229" ID="ID_28119998" MODIFIED="1443737576392" TEXT="L&#xf6;schen erfordert Ansteuern"/>
+</node>
+<node CREATED="1443737497870" FOLDED="true" ID="ID_113467015" MODIFIED="1443739953318" TEXT="Modell &quot;Map&quot;">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1443737705058" ID="ID_1320189713" MODIFIED="1443737716690" TEXT="Operationen an Storage delegieren"/>
+<node CREATED="1443737578803" ID="ID_1670234515" MODIFIED="1443737602756" TEXT="Duplikate &#xfc;berschreiben"/>
+<node CREATED="1443737605080" ID="ID_609776485" MODIFIED="1443737739674" TEXT="Neue an Standardort anf&#xfc;gen"/>
+<node CREATED="1443737747941" ID="ID_1552219906" MODIFIED="1443737757207" TEXT="Umordnungen verweigern/ignorieren"/>
+<node CREATED="1443737769122" ID="ID_697980786" MODIFIED="1443737777276" TEXT="L&#xf6;schen an beliebiger Stelle wirksam"/>
+</node>
+<node CREATED="1443738082216" FOLDED="true" HGAP="38" ID="ID_870184525" MODIFIED="1443739486557" TEXT="Abw&#xe4;gung" VSHIFT="7">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1443738097022" ID="ID_1609921484" MODIFIED="1443738178020" TEXT="Modelle schlie&#xdf;en sich aus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...Grund: sie werden durch einen jeweils komplett anderen Ansatz implementiert
+    </p>
+    <ul>
+      <li>
+        &quot;Liste&quot; beruht auf dem Attribut-Iterator und dem Aufbauen einer neuen Attribut-Sammlung
+      </li>
+      <li>
+        &quot;Map&quot; beruht darauf, alle Operationen an die Storage zu delegieren
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1443738179947" ID="ID_1249607715" MODIFIED="1443738195397" TEXT="&quot;Liste&quot;">
+<node CREATED="1443738196336" ID="ID_855336404" MODIFIED="1443738198380" TEXT="Vorteile">
+<node CREATED="1443738556296" ID="ID_340267804" MODIFIED="1443738562763" TEXT="verwendet vorhandene Impl"/>
+<node CREATED="1443738563263" ID="ID_583767245" MODIFIED="1443738575817" TEXT="uniforme Semantik der Diff-Sprache"/>
+<node CREATED="1443738577781" ID="ID_1622210655" MODIFIED="1443738793488" TEXT="partielle Ordnung darstellbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, man kann Attribute in einer &quot;sinnvoll lesbaren&quot; Ordnung anschreiben
+    </p>
+    <p>
+      und sp&#228;ter angef&#252;gte Attribute bleiben so erkennbar.
+    </p>
+    <p>
+      Vorteilhaft f&#252;r Version-Management
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1443738653931" ID="ID_604966063" MODIFIED="1443738813866" TEXT="Effizienz des List-Diff">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      profitiert also von allen Verbesserungen des allgemeinen Algorithmus
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1443738592971" ID="ID_790837479" MODIFIED="1443739191673" TEXT="bei uns: hoch effizient">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;hoch effizient&quot;, unter der Annahme, da&#223; fast immer nur konforme &#196;nderungen kommen.
+    </p>
+    <p>
+      Weil dann n&#228;mlich die in unserer Implementierung ggfs. kostspieligen Umordnungen entfallen,
+    </p>
+    <p>
+      kommen wir auf lineare Komplexit&#228;t f&#252;r die Verarbeitung
+    </p>
+    <p>
+      + NlogN f &#252;r den Index zur Diff-Erzeugung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1443738199160" ID="ID_955544777" MODIFIED="1443738201508" TEXT="Nachteile">
+<node CREATED="1443738500000" ID="ID_201650237" MODIFIED="1443738505571" TEXT="Duplikate toleriert"/>
+<node CREATED="1443738929854" ID="ID_852940283" MODIFIED="1443739153420" TEXT="sinnloser Index-Aufbau (Diff-Erzeugung)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      unsere Impl der <i>Diff-Erzeugung&#160;(!)</i>
+    </p>
+    <p>
+      baut einen Index auf (N*logN), um Einf&#252;gungen/Entfernungen zu erkennen und Umordnungs-Suche zu unterst&#252;tzen.
+    </p>
+    <p>
+      Wenn wir aber von ausschlie&#223;lich konformen Operationen ausgehen,
+    </p>
+    <p>
+      wird dieser Index nicht ben&#246;tigt. Leider k&#246;nnen wir das aber nicht garantieren, denn
+    </p>
+    <p>
+      es k&#246;nnte ja zwischenzeitlich ein Attribut gel&#246;scht und dann sp&#228;ter (am Ende) wieder
+    </p>
+    <p>
+      angeh&#228;ngt worden sein, was dann eben doch einen Index erfordert, um einen
+    </p>
+    <p>
+      korrekten Listen-Diff zu erzeugen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1443738179947" ID="ID_1861982554" MODIFIED="1443738215986" TEXT="&quot;Map&quot;">
+<node CREATED="1443738196336" ID="ID_997066012" MODIFIED="1443738198380" TEXT="Vorteile">
+<node CREATED="1443738237731" ID="ID_1438410748" MODIFIED="1443738244389" TEXT="Konformit&#xe4;t garantiert"/>
+</node>
+<node CREATED="1443738199160" ID="ID_571621671" MODIFIED="1443738201508" TEXT="Nachteile">
+<node CREATED="1443738352419" ID="ID_439396381" MODIFIED="1443738730869" TEXT="Effizienz der Storage">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. <i>wenn</i>&#160;die Storage hoch-optimiert ist,
+    </p>
+    <p>
+      dann &#252;bertr&#228;gt sich das auf die Diff-Behandlung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1443738371545" ID="ID_1959160321" MODIFIED="1443738695968" TEXT="bei uns: voll-Quadratisch">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da wir Attribute in einer Liste speichern,
+    </p>
+    <p>
+      m&#252;ssen wir f&#252;r jede Einf&#252;gung eine vollst&#228;ndige Suche machen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1443738416083" ID="ID_793860786" MODIFIED="1443738470421" TEXT="erfordert separate Impl">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...gemeint ist: extra, anders als die normale Listenverarbeitung.
+    </p>
+    <p>
+      Auch wenn diese andere Implementierung nur delegiert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1443738471955" ID="ID_315855253" MODIFIED="1443738478894" TEXT="versteckte 2.Semantik"/>
+</node>
+</node>
+</node>
+<node CREATED="1443739215487" FOLDED="true" HGAP="42" ID="ID_1540836182" MODIFIED="1443739482884" TEXT="Entscheidung">
+<icon BUILTIN="info"/>
+<node CREATED="1443739221631" ID="ID_338047062" MODIFIED="1443739227649" TEXT="&quot;Listen&quot;-Modell"/>
+<node CREATED="1443739228542" ID="ID_773218806" MODIFIED="1443739244615" TEXT="eindeutig vorzuziehen"/>
+<node CREATED="1443739245483" ID="ID_1943112941" MODIFIED="1443739249062" TEXT="zwei Gr&#xfc;nde">
+<node CREATED="1443739308651" ID="ID_1436069181" MODIFIED="1443739311142" TEXT="Performance"/>
+<node CREATED="1443739311562" ID="ID_1848034442" MODIFIED="1443739314222" TEXT="Wartbarkeit"/>
+</node>
+<node CREATED="1443739323033" ID="ID_1428762486" MODIFIED="1443739447213" TEXT="&quot;zwei Listen&quot;-Modell">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1443739335823" ID="ID_860198617" MODIFIED="1443739349777" TEXT="intern f&#xfc;hren wir zwei Listen-Diffs durch"/>
+<node CREATED="1443739350869" ID="ID_464299464" MODIFIED="1443739368974" TEXT="ein Trennkriterium f&#xfc;hrt zum Umschalten"/>
+<node CREATED="1443739399718" ID="ID_686887994" MODIFIED="1443739426315">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      danach noch auftretende Attribute
+    </p>
+    <p>
+      erfordern Sonder-Behandlung,
+    </p>
+    <p>
+      indem sie an die Attributs-Liste angeh&#228;ngt werden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1443733831475" HGAP="1" ID="ID_1421473885" MODIFIED="1443736918147" TEXT="Fehler-F&#xe4;lle" VSHIFT="7">
+<node CREATED="1443736788646" ID="ID_672669721" MODIFIED="1443736790761" TEXT="formal">
+<node CREATED="1443736804803" ID="ID_1706990948" MODIFIED="1443737150597" TEXT="Syntax">
+<node CREATED="1443737154028" ID="ID_143683919" MODIFIED="1443737159781" TEXT="durch Typsystem unterbunden">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1443738002250" ID="ID_1398802900" MODIFIED="1443738006115" TEXT="sicher">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1443736824112" ID="ID_1520561537" MODIFIED="1443736835371" TEXT="unpassende Parameter">
+<node CREATED="1443737180297" ID="ID_1748864612" MODIFIED="1443737193859" TEXT="Laufzeit-Check">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1443738011018" ID="ID_1408814832" MODIFIED="1443738023248" TEXT="ggfs unvollst&#xe4;ndig">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1443736846078" ID="ID_1354240107" MODIFIED="1443737997663" TEXT="Mismatch am Ziel">
+<node CREATED="1443736895663" ID="ID_1436447416" MODIFIED="1443736897539" TEXT="erkennbar"/>
+<node CREATED="1443736897983" ID="ID_636884790" MODIFIED="1443736900051" TEXT="unbemerkt"/>
+</node>
+</node>
+<node CREATED="1443736791421" ID="ID_23907569" MODIFIED="1443736795617" TEXT="semantisch">
+<node CREATED="1443737005833" ID="ID_1457267751" MODIFIED="1443737012187" TEXT="INIT aber nicht leer">
+<node CREATED="1443737222707" ID="ID_1242625886" MODIFIED="1443737241501" TEXT="sehr gef&#xe4;hrlich bei strikter Konformit&#xe4;t"/>
+<node CREATED="1443737242824" ID="ID_461820743" MODIFIED="1443737260482" TEXT="harmlos sonst; wird glattgebogen"/>
+<node CREATED="1443737279172" ID="ID_1485388967" MODIFIED="1443737290806" TEXT="kann dann aber zu undefiniertem Zustand f&#xfc;hren"/>
+</node>
+<node CREATED="1443737017511" ID="ID_744413839" MODIFIED="1443737035328" TEXT="INS Attribut-Duplikat">
+<node CREATED="1443739508920" ID="ID_914206763" MODIFIED="1443739536363" TEXT="wird toleriert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wegen Entscheidung f&#252;r das &quot;Listen&quot;-Modell zur Attribut-Handhabung
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1443737036108" ID="ID_641574289" MODIFIED="1443737046751" TEXT="INS Child in Attribut-Zone">
+<node CREATED="1443739551450" ID="ID_1330800958" MODIFIED="1443739579434" TEXT="f&#xfc;hrt zum Wechsel in den Scope"/>
+</node>
+<node CREATED="1443737051419" ID="ID_364647539" MODIFIED="1443737060541" TEXT="INS Attribut in Scope">
+<node CREATED="1443739774844" ID="ID_821712631" MODIFIED="1443739782423" TEXT="Spezialbehandlung: r&#xfc;berwerfen"/>
+</node>
+<node CREATED="1443737064633" ID="ID_67819372" MODIFIED="1443737088689" TEXT="PERM-fetch Child in Attribut-Zone">
+<node CREATED="1443739787850" ID="ID_31775669" MODIFIED="1443739831711" TEXT="f&#xfc;hrt zum Fehler wg. &quot;zwei Listen&quot;-Modell">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da das Kind in der Liste der Attribute n&#228;mlich garnicht gefunden wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1443739798889" ID="ID_1992435989" MODIFIED="1443739912310" TEXT="Spezialbehandlung am Ende der Attributzone notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wenn wir am Ende der Attribut-Zone stehen,
+    </p>
+    <p>
+      und die n&#228;chste Operation ein fetch eines Kindes ist, m&#252;ssen wir implizit den
+    </p>
+    <p>
+      Wechsel in den Scope vollziehen und die Operation dort ausf&#252;hren.
+    </p>
+    <p>
+      Aber an allen anderen Stellen in der Attribut-Zone ist ein solcher Fetch ein Fehler!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1443735208090" HGAP="99" ID="ID_117472593" MODIFIED="1443740513543" TEXT="Entscheidungen" VSHIFT="8">
+<node CREATED="1443735230768" ID="ID_1544379221" MODIFIED="1443735318881">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      standardm&#228;&#223;ig <b>strikt</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1443735286496" ID="ID_1442661683" MODIFIED="1443735289835" TEXT="fuzzy-mode">
+<node CREATED="1443740092337" ID="ID_563359094" MODIFIED="1443740142638" TEXT="PICK nicht Vorhandenes"/>
+<node CREATED="1443740127021" ID="ID_1839086508" MODIFIED="1443740137239" TEXT="DEL nicht Vorhandenes"/>
+<node CREATED="1443740193692" ID="ID_1962095124" MODIFIED="1443740200542" TEXT="FIND nicht Vorhandenes"/>
+<node CREATED="1443740261859" ID="ID_96033673" MODIFIED="1443740266837" TEXT="MUT nicht Vorhandenes"/>
+<node CREATED="1443740311300" ID="ID_1645049477" MODIFIED="1443740327245" TEXT="PICK wird zu AFTER nicht Folgendes"/>
+<node CREATED="1443740353686" ID="ID_1996517233" MODIFIED="1443740369848" TEXT="Rest-&#xdc;berschu&#xdf; am Ende"/>
+</node>
+<node CREATED="1443735322787" ID="ID_1404399616" MODIFIED="1443735333477" TEXT="Bindung">
+<node CREATED="1443735336009" ID="ID_1123815488" MODIFIED="1443735347412" TEXT="Diff vs. Daten"/>
+<node CREATED="1443735348800" ID="ID_1003830940" MODIFIED="1443735353234" TEXT="erst hier die Semantik"/>
+<node CREATED="1443740402472" ID="ID_341902192" MODIFIED="1443740407355" TEXT="&quot;zwei Listen&quot;-Modell"/>
+</node>
+</node>
+</node>
+<node CREATED="1443741905157" HGAP="364" ID="ID_1960988662" MODIFIED="1443741922385" TEXT="Diff-Erkennung" VSHIFT="17">
+<icon BUILTIN="stop"/>
+<node CREATED="1443741923547" ID="ID_1978439060" MODIFIED="1443741930738" TEXT="Listen-Diff">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1443741931858" ID="ID_484829805" MODIFIED="1443741945481" TEXT="Baum-Diff">
+<icon BUILTIN="flag"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1443740543812" ID="ID_1766169268" MODIFIED="1443741858388" TEXT="Tests">
+<font NAME="SansSerif" SIZE="14"/>
+<node CREATED="1443740549220" ID="ID_167459949" MODIFIED="1443740564198" TEXT="List-Diff">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1443740554315" ID="ID_1970336632" MODIFIED="1443740562083" TEXT="Anwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1443740556587" ID="ID_1725890953" MODIFIED="1443740560218" TEXT="Erzeugen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1443740566042" ID="ID_632827470" MODIFIED="1443740575356" TEXT="Baum-Diff">
+<node CREATED="1443740576744" ID="ID_335386387" MODIFIED="1443741767350" TEXT="Anwenden">
+<icon BUILTIN="pencil"/>
+<node CREATED="1443741563019" HGAP="-20" ID="ID_1944319966" MODIFIED="1443741571881" TEXT="Demo-Beispiel" VSHIFT="8">
+<node CREATED="1443741578993" ID="ID_318844233" MODIFIED="1443741582069" TEXT="INIT"/>
+<node CREATED="1443741591616" ID="ID_1102292452" MODIFIED="1443741607633" TEXT="INS + MUT _THIS_"/>
+<node CREATED="1443741620052" ID="ID_1065499540" MODIFIED="1443741633054" TEXT="MOD"/>
+<node CREATED="1443741736636" ID="ID_1110914687" MODIFIED="1443741738320" TEXT="PERM"/>
+<node CREATED="1443741711120" ID="ID_1289424857" MODIFIED="1443741714651" TEXT="Rekursion"/>
+</node>
+<node CREATED="1443740607172" HGAP="21" ID="ID_1836453078" MODIFIED="1443741576136" TEXT="INIT" VSHIFT="14">
+<node CREATED="1443740625649" ID="ID_1466659920" MODIFIED="1443740670333" TEXT="Attribute + Kinder"/>
+<node CREATED="1443740621098" ID="ID_987166264" MODIFIED="1443740625134" TEXT="nur Kinder"/>
+<node CREATED="1443740615699" ID="ID_93430092" MODIFIED="1443740679948" TEXT="Attribute"/>
+</node>
+<node CREATED="1443741317885" ID="ID_1933201882" MODIFIED="1443741319808" TEXT="NAV">
+<node CREATED="1443741324236" ID="ID_1812765289" MODIFIED="1443741331511" TEXT="PICK">
+<node CREATED="1443741332691" ID="ID_1059350985" MODIFIED="1443741335518" TEXT="Attribut"/>
+<node CREATED="1443741337786" ID="ID_70415473" MODIFIED="1443741342997" TEXT="letztes Attribut"/>
+<node CREATED="1443741507347" ID="ID_1882468426" MODIFIED="1443741513958" TEXT="nicht vorhandenes"/>
+</node>
+<node CREATED="1443741349576" ID="ID_1257145184" MODIFIED="1443741353515" TEXT="AFTER">
+<node CREATED="1443741365526" ID="ID_1412112386" MODIFIED="1443741372089" TEXT="Attribut"/>
+<node CREATED="1443741373013" ID="ID_1922596569" MODIFIED="1443741378936" TEXT="letztes Attribut">
+<node CREATED="1443741379924" ID="ID_1574470178" MODIFIED="1443741382960" TEXT="Attribut anf&#xfc;gen"/>
+<node CREATED="1443741383579" ID="ID_69718214" MODIFIED="1443741387039" TEXT="Kind anf&#xfc;gen"/>
+</node>
+<node CREATED="1443741399145" ID="ID_625711902" MODIFIED="1443741409900" TEXT="Kind"/>
+<node CREATED="1443741519689" ID="ID_1627922512" MODIFIED="1443741523076" TEXT="nicht vorhandenes"/>
+<node CREATED="1443742264333" ID="ID_1331320583" MODIFIED="1443742268596" TEXT="_END_">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1443741448683" ID="ID_1149106472" MODIFIED="1443741456637" TEXT="Frage: wrap erlauben">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1443740818144" ID="ID_1606823522" MODIFIED="1443740821299" TEXT="INS">
+<node CREATED="1443740822151" ID="ID_1509080074" MODIFIED="1443740825211" TEXT="Attribut">
+<node CREATED="1443740849731" ID="ID_1736662710" MODIFIED="1443740851743" TEXT="vorne"/>
+<node CREATED="1443740852219" ID="ID_546949723" MODIFIED="1443740853615" TEXT="hinten"/>
+<node CREATED="1443740854491" ID="ID_730025656" MODIFIED="1443740858070" TEXT="Duplikat"/>
+<node CREATED="1443740862570" ID="ID_899234602" MODIFIED="1443740866621" TEXT="Typ-Attribut"/>
+<node CREATED="1443740918266" ID="ID_1583583367" MODIFIED="1443740923149" TEXT="Attribut in Kind-Zone"/>
+</node>
+<node CREATED="1443740870057" ID="ID_1029684307" MODIFIED="1443740873092" TEXT="Kind">
+<node CREATED="1443740874416" ID="ID_1507242638" MODIFIED="1443740884674" TEXT="nach dem letzten Attribut"/>
+<node CREATED="1443740885287" ID="ID_839165655" MODIFIED="1443740909455" TEXT="im Scope"/>
+<node CREATED="1443740967099" ID="ID_1771095243" MODIFIED="1443740976438" TEXT="noch in der Attribut-Zone"/>
+</node>
+</node>
+<node CREATED="1443740986217" ID="ID_1868954463" MODIFIED="1443740987996" TEXT="DEL">
+<node CREATED="1443740988710" ID="ID_1745624753" MODIFIED="1443740991388" TEXT="Attribut">
+<node CREATED="1443740997760" ID="ID_1984040083" MODIFIED="1443741004867" TEXT="normal"/>
+<node CREATED="1443741005718" ID="ID_1595612872" MODIFIED="1443741014489" TEXT="in falscher Ordnung"/>
+<node CREATED="1443741015221" ID="ID_587604738" MODIFIED="1443741030671" TEXT="Duplikat"/>
+</node>
+<node CREATED="1443741060111" ID="ID_1609626537" MODIFIED="1443741061891" TEXT="Kind">
+<node CREATED="1443741062863" ID="ID_1087964841" MODIFIED="1443741072913" TEXT="normal"/>
+<node CREATED="1443741074333" ID="ID_625561892" MODIFIED="1443741087863" TEXT="noch in der Attribut-Zone"/>
+<node CREATED="1443741088619" ID="ID_290604972" MODIFIED="1443741095374" TEXT="in falscher Ordnung"/>
+</node>
+<node CREATED="1443741637530" ID="ID_397839136" MODIFIED="1443741640949" TEXT="Teilbaum"/>
+</node>
+<node CREATED="1443741106905" ID="ID_1001938821" MODIFIED="1443741108996" TEXT="PERM">
+<node CREATED="1443741110392" ID="ID_513982563" MODIFIED="1443741112764" TEXT="Attribut"/>
+<node CREATED="1443741113584" ID="ID_1631505651" MODIFIED="1443741115819" TEXT="Kind">
+<node CREATED="1443741137141" ID="ID_300777204" MODIFIED="1443741140008" TEXT="normal"/>
+<node CREATED="1443741140596" ID="ID_1663721251" MODIFIED="1443741147135" TEXT="mitten in Attribut-Zone"/>
+<node CREATED="1443741147491" ID="ID_1992350599" MODIFIED="1443741152822" TEXT="am Ende der Attribut-Zone"/>
+</node>
+</node>
+<node CREATED="1443741163385" ID="ID_1770431599" MODIFIED="1443741166117" TEXT="MUT">
+<node CREATED="1443741167465" ID="ID_1585288084" MODIFIED="1443741177891" TEXT="Objekt by-name">
+<node CREATED="1443741182559" ID="ID_1263613083" MODIFIED="1443741185922" TEXT="Attribut"/>
+<node CREATED="1443741186486" ID="ID_1416713573" MODIFIED="1443741188010" TEXT="Kind"/>
+<node CREATED="1443741654263" ID="ID_68796444" MODIFIED="1443741686295" TEXT="Teilbaum umordnen"/>
+</node>
+<node CREATED="1443741189590" ID="ID_407606511" MODIFIED="1443741202528" TEXT="Objekt _THIS_">
+<node CREATED="1443741204516" ID="ID_899173442" MODIFIED="1443741207247" TEXT="nach INS"/>
+<node CREATED="1443741212547" ID="ID_979817893" MODIFIED="1443741225989" TEXT="nach PICK"/>
+<node CREATED="1443741226673" ID="ID_1242761745" MODIFIED="1443741229165" TEXT="nach AFTER"/>
+<node CREATED="1443741229984" ID="ID_926730195" MODIFIED="1443741233636" TEXT="nach FIND"/>
 </node>
 </node>
 </node>
