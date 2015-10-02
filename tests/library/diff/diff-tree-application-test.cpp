@@ -1,8 +1,8 @@
 /*
-  DiffListApplication(Test)  -  demonstrate linearised representation of list diffs
+  DiffTreeApplication(Test)  -  demonstrate the basics of tree diff representation
 
   Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+    2015,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/diff/list-diff-application.hpp"
+#include "lib/diff/tree-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/util.hpp"
 
@@ -41,15 +41,14 @@ namespace test{
   
   namespace {//Test fixture....
     
-    using DataSeq = vector<string>;
     
     #define TOK(id) id(STRINGIFY(id))
     
     string TOK(a1), TOK(a2), TOK(a3), TOK(a4), TOK(a5);
     string TOK(b1), TOK(b2), TOK(b3), TOK(b4);
     
-    using Interpreter = ListDiffInterpreter<string>;
-    using DiffStep = ListDiffLanguage<string>::DiffStep;
+    using Interpreter = TreeDiffInterpreter<Rec>;
+    using DiffStep = TreeDiffLanguage<Rec>::DiffStep;
     using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
     
     DiffStep_CTOR(ins);
@@ -91,11 +90,9 @@ namespace test{
    *       to a given source list, transforming this list to hold the intended
    *       target list contents.
    *       
-   * @see DiffListGeneration_test
-   * @see DiffTreeApplication_test
-   * @see VerbFunctionDispatch_test
+   * @see session-structure-mapping-test.cpp
    */
-  class DiffListApplication_test : public Test
+  class DiffTreeApplication_test : public Test
     {
       
       virtual void
@@ -118,7 +115,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (DiffListApplication_test, "unit common");
+  LAUNCHER (DiffTreeApplication_test, "unit common");
   
   
   

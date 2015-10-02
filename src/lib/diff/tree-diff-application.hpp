@@ -25,7 +25,7 @@
  ** Concrete implementation(s) to apply structural changes to hierarchical
  ** data structures. Together with the generic #DiffApplicator, this allows
  ** to receive linearised structural diff descriptions and apply them to
- ** a given target data structure, to effect the correspoinding changes.
+ ** a given target data structure, to effect the corresponding changes.
  ** 
  ** @see diff-list-application-test.cpp
  ** @see VerbToken
@@ -38,13 +38,21 @@
 
 
 #include "lib/diff/tree-diff.hpp"
+#include "lib/diff/gen-node.hpp"
 
 namespace lib {
 namespace diff{
   
-  template<typename E, typename...ARGS>
-  class DiffApplicationStrategy<wtf<E,ARGS...>>
-    : public ListDiffInterpreter<E>
+  /**
+   * concrete strategy to apply a structural diff to a target data structure
+   * made from #Record<GenNode> elements.
+   * @throws  lumiera::error::State when diff application fails due to the
+   *          target sequence being different than assumed by the given diff.
+   * @see #TreeDiffInterpreter explanation of the verbs
+   */
+  template<>
+  class DiffApplicationStrategy<Rec>
+    : public TreeDiffInterpreter<Rec>
     {
       
     };

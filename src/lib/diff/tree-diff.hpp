@@ -1,8 +1,8 @@
 /*
-  TREE-DIFF.hpp  -  language to describe differences in linearised form
+  TREE-DIFF.hpp  -  language to describe differences in hierarchical data structures
 
   Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+    2015,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,7 +21,7 @@
 */
 
 
-/** @file list-diff.hpp
+/** @file tree-diff.hpp
  ** A token language to represent structural changes in a tree like
  ** hierarchical data structure. In combination with the #DiffLanguage framework,
  ** this building block defines the set of operations to express both content
@@ -30,9 +30,9 @@
  ** @todo UNIMPLEMENTED as of 12/14
  ** 
  ** @see diff-language.cpp
- ** @see diff-list-application-test.cpp
- ** @see list-diff.cpp
- ** @see VerbToken
+ ** @see diff-tree-application-test.cpp
+ ** @see tree-diff.cpp
+ ** @see GenNode
  ** 
  */
 
