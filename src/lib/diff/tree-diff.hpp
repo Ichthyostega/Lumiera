@@ -56,7 +56,6 @@ namespace diff{
    * 
    * @todo to be defined
    */
-  template<typename E>
   class TreeDiffInterpreter
     {
     public:
@@ -64,8 +63,7 @@ namespace diff{
       ///////TODO actual operations go here
     };
   
-  template<typename E>
-  using TreeDiffLanguage = DiffLanguage<TreeDiffInterpreter<E>, E>;
+  using TreeDiffLanguage = DiffLanguage<TreeDiffInterpreter, GenNode>;
   
   
   

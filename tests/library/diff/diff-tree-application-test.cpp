@@ -42,13 +42,9 @@ namespace test{
   namespace {//Test fixture....
     
     
-    #define TOK(id) id(STRINGIFY(id))
     
-    string TOK(a1), TOK(a2), TOK(a3), TOK(a4), TOK(a5);
-    string TOK(b1), TOK(b2), TOK(b3), TOK(b4);
-    
-    using Interpreter = TreeDiffInterpreter<Rec>;
-    using DiffStep = TreeDiffLanguage<Rec>::DiffStep;
+    using Interpreter = TreeDiffInterpreter;
+    using DiffStep = TreeDiffLanguage::DiffStep;
     using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
     
     DiffStep_CTOR(ins);
@@ -59,18 +55,51 @@ namespace test{
     
     
     inline DiffSeq
-    generateTestDiff()
+    populationDiff()
     {
-      return snapshot({del(a1)
-                     , del(a2)
-                     , ins(b1)
-                     , pick(a3)
-                     , find(a5)
-                     , ins(b2)
-                     , ins(b3)
-                     , pick(a4)
-                     , skip(a5)
-                     , ins(b4)
+      return snapshot({ins(typeX)
+                     , ins(attrib1)
+                     , ins(attrib2)
+                     , ins(attrib3)
+                     , ins(childA)
+                     , ins(childT)
+                     , ins(childT)
+                     , ins(node)
+                     , mut(THIS)
+                       , ins(childB)
+                       , ins(childA)
+                     , emu(THIS)
+                     });
+    }
+    
+    
+    inline DiffSeq
+    mutationDiff()
+    {
+      return snapshot({after(ATTRIBS)
+                     , find(childT)
+                     , pick(childA)
+                     , skip(childT)
+                     , del(childT)
+                     , pick(CHILD)
+                     , mut(THIS)
+                       , ins(attrib3)
+                       , ins(node(ID("δ")))
+                       , find(childA)
+                       , del(childB)
+                       , ins(node(CHILD("ω")))
+                       , ins(childT)
+                       , skip(childA)
+                       , mut(CHILD("ω"))
+                         , ins(typeY)
+                         , ins(attrib2)
+                       , emu(CHILD("ω"))
+                       , mut(ID("δ"))
+                         , ins(childA)
+                         , ins(childA)
+                         , ins(childA)
+                       , emu(ID("δ"))
+                     , emu(THIS)
                      });
     }
   }//(End)Test fixture
@@ -98,18 +127,15 @@ namespace test{
       virtual void
       run (Arg)
         {
-          DataSeq src({a1,a2,a3,a4,a5});
-          DiffSeq diff = generateTestDiff();
-          CHECK (!isnil (diff));
+          Rec target;
+          DiffApplicator<Rec> application(target);
+          application.consume(populationDiff());
           
-          DataSeq target = src;
-          DiffApplicator<DataSeq> application(target);
-          application.consume(diff);
+          // TODO Check population
           
-          CHECK (isnil (diff));
-          CHECK (!isnil (target));
-          CHECK (src != target);
-          CHECK (target == DataSeq({b1,a3,a5,b2,b3,a4,b4}));
+          application.consume(mutationDiff());
+          
+          // TODO Check mutation
         }
     };
   
