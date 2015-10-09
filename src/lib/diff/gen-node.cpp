@@ -64,10 +64,10 @@ namespace diff{
    * used within the tree diff language
    * to mark specific scopes
    */
-  Ref Ref::END    ("_END_");
-  Ref Ref::THIS   ("_THIS_");
-  Ref Ref::CHILD  ("_CHILD_");
-  Ref Ref::ATTRIBS("_ATTRIBS_");
+  const Ref Ref::END    ("_END_");
+  const Ref Ref::THIS   ("_THIS_");
+  const Ref Ref::CHILD  ("_CHILD_");
+  const Ref Ref::ATTRIBS("_ATTRIBS_");
   
   
   

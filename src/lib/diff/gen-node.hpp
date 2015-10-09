@@ -586,10 +586,10 @@ namespace diff{
                  , DataCap(RecRef(oNode.data.get<Rec>())))
         { }
       
-      static Ref END;     ///< symbolic ID ref "_END_"
-      static Ref THIS;    ///< symbolic ID ref "_THIS_"
-      static Ref CHILD;   ///< symbolic ID ref "_CHILD_"
-      static Ref ATTRIBS; ///< symbolic ID ref "_ATTRIBS_"
+      static const Ref END;     ///< symbolic ID ref "_END_"
+      static const Ref THIS;    ///< symbolic ID ref "_THIS_"
+      static const Ref CHILD;   ///< symbolic ID ref "_CHILD_"
+      static const Ref ATTRIBS; ///< symbolic ID ref "_ATTRIBS_"
     };
   
   

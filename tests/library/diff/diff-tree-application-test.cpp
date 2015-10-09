@@ -24,15 +24,17 @@
 #include "lib/test/run.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 #include <vector>
 
 using lib::iter_stl::snapshot;
-using util::isnil;
+// using util::isnil;
 using std::string;
 using std::vector;
+using lib::time::Time;
 
 
 namespace lib {
@@ -41,6 +43,20 @@ namespace test{
   
   namespace {//Test fixture....
     
+    // define some GenNode elements
+    // to act as templates within the concrete diff
+    // NOTE: everything in this diff language is by-value
+    const GenNode ATTRIB1("α", 1),                         // attribute α = 1 
+                  ATTRIB2("β", 2L),                        // attribute α = 2L   (int64_t)
+                  ATTRIB3("γ", 3.45),                      // attribute γ = 3.45 (double)
+                  TYPE_X("type", "X"),                     // a "magic" type attribute "X" 
+                  TYPE_Y("type", "Y"),                     // 
+                  CHILD_A("a"),                            // unnamed string child node
+                  CHILD_B('b'),                            // unnamed char child node
+                  CHILD_T(Time(12,34,56,78)),              // unnamed time value child
+                  SUB_NODE = MakeRec().genNode(),          // empty anonymous node used to open a sub scope
+                  ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ 
+                  CHILD_NODE = Ref(SUB_NODE);              // use a Node-Reference as child node (!)
     
     
     using Interpreter = TreeDiffInterpreter;
@@ -52,23 +68,25 @@ namespace test{
     DiffStep_CTOR(pick);
     DiffStep_CTOR(find);
     DiffStep_CTOR(skip);
+    DiffStep_CTOR(mut);
+    DiffStep_CTOR(emu);
     
     
     inline DiffSeq
     populationDiff()
     {
-      return snapshot({ins(typeX)
-                     , ins(attrib1)
-                     , ins(attrib2)
-                     , ins(attrib3)
-                     , ins(childA)
-                     , ins(childT)
-                     , ins(childT)
-                     , ins(node)
-                     , mut(THIS)
-                       , ins(childB)
-                       , ins(childA)
-                     , emu(THIS)
+      return snapshot({ins(TYPE_X)
+                     , ins(ATTRIB1)
+                     , ins(ATTRIB2)
+                     , ins(ATTRIB3)
+                     , ins(CHILD_A)
+                     , ins(CHILD_T)
+                     , ins(CHILD_T)
+                     , ins(SUB_NODE)
+                     , mut(SUB_NODE)
+                       , ins(CHILD_B)
+                       , ins(CHILD_A)
+                     , emu(SUB_NODE)
                      });
     }
     
@@ -76,30 +94,30 @@ namespace test{
     inline DiffSeq
     mutationDiff()
     {
-      return snapshot({after(ATTRIBS)
-                     , find(childT)
-                     , pick(childA)
-                     , skip(childT)
-                     , del(childT)
-                     , pick(CHILD)
-                     , mut(THIS)
-                       , ins(attrib3)
-                       , ins(node(ID("δ")))
-                       , find(childA)
-                       , del(childB)
-                       , ins(node(CHILD("ω")))
-                       , ins(childT)
-                       , skip(childA)
-                       , mut(CHILD("ω"))
-                         , ins(typeY)
-                         , ins(attrib2)
-                       , emu(CHILD("ω"))
-                       , mut(ID("δ"))
-                         , ins(childA)
-                         , ins(childA)
-                         , ins(childA)
-                       , emu(ID("δ"))
-                     , emu(THIS)
+      return snapshot({after(Ref::ATTRIBS)
+                     , find(CHILD_T)
+                     , pick(CHILD_A)
+                     , skip(CHILD_T)
+                     , del(CHILD_T)
+                     , pick(Ref::CHILD)
+                     , mut(Ref::THIS)
+                       , ins(ATTRIB3)
+                       , ins(ATTRIB_NODE)
+                       , find(CHILD_A)
+                       , del(CHILD_B)
+                       , ins(CHILD_NODE)
+                       , ins(CHILD_T)
+                       , skip(CHILD_A)
+                       , mut(CHILD_NODE)
+                         , ins(TYPE_Y)
+                         , ins(ATTRIB2)
+                       , emu(CHILD_NODE)
+                       , mut(ATTRIB_NODE)
+                         , ins(CHILD_A)
+                         , ins(CHILD_A)
+                         , ins(CHILD_A)
+                       , emu(ATTRIB_NODE)
+                     , emu(Ref::THIS)
                      });
     }
   }//(End)Test fixture

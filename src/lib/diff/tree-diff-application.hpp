@@ -52,7 +52,7 @@ namespace diff{
    */
   template<>
   class DiffApplicationStrategy<Rec>
-    : public TreeDiffInterpreter<Rec>
+    : public TreeDiffInterpreter
     {
       
     };

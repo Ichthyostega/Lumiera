@@ -42,6 +42,7 @@
 
 
 #include "lib/diff/diff-language.hpp"
+#include "lib/diff/gen-node.hpp"
 
 
 namespace lib {

@@ -1090,8 +1090,7 @@
       <b>Interpreter</b>&#160;definiert Sprache
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#56397a" CREATED="1443733800322" ID="ID_1544242343" MODIFIED="1443741833374" TEXT="Nutz-Muster">
@@ -1107,8 +1106,7 @@
       ROOT
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1443733978248" ID="ID_724172314" MODIFIED="1443733983252" TEXT="Wurzel pflanzen"/>
 <node CREATED="1443733984336" ID="ID_109703386" MODIFIED="1443733993674" TEXT="Au&#xdf;erhalb der Sprache"/>
@@ -1124,8 +1122,7 @@
       INIT
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1443734005660" ID="ID_1028914628" MODIFIED="1443734025547">
 <richcontent TYPE="NODE"><html>
@@ -1140,8 +1137,7 @@
       Objekt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1443734026466" ID="ID_1051774321" MODIFIED="1443734029453" TEXT="typen">
 <node CREATED="1443735007685" ID="ID_1426207394" MODIFIED="1443735015668" TEXT="&quot;type&quot;-Attribut">
 <font NAME="SansSerif" SIZE="11"/>
@@ -1154,9 +1150,40 @@
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1443734039776" ID="ID_1572908212" MODIFIED="1443734131094" TEXT="pick">
 <font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1444349667741" ID="ID_1407797227" MODIFIED="1444349672062" TEXT="by-name"/>
+<node CREATED="1444349672792" ID="ID_267468753" MODIFIED="1444349690748" TEXT="anonym">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      pick(Ref::CHILD)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1443734637416" ID="ID_461220696" MODIFIED="1443734639699" TEXT="after">
-<node CREATED="1443741466072" ID="ID_1108877437" MODIFIED="1443741471390" TEXT="Frage: wrap erlauben">
+<node CREATED="1443741466072" ID="ID_1108877437" MODIFIED="1444349773888" TEXT="Frage: wrap erlauben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      w&#252;rde sagen: ja, aber auch <i>nur</i>&#160;f&#252;r das after-Verb!
+    </p>
+    <p>
+      allgemein halte ich einen wrap-around f&#252;r keine gute Idee,
+    </p>
+    <p>
+      weil er zu Zweideutigekeigen f&#252;hrt und daher Struktur oder Konsistenzfehler &#252;berspielt
+    </p>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -1191,8 +1218,7 @@
       l&#228;&#223;t sich stets duch eine inverse Folge von <i>find</i>&#160;und <i>pick</i>&#160; emulieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -1239,8 +1265,7 @@
       vorerst verworfen, da zus&#228;tzlicher Pr&#252;f-Aufwand
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1443736367255" ID="ID_1634633098" MODIFIED="1443736380225" TEXT="Meta-Attribute zuerst"/>
 <node CREATED="1443736626731" ID="ID_600165347" MODIFIED="1443736652396" TEXT="keine Attribut-Duplikate"/>
@@ -1287,8 +1312,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1443738179947" ID="ID_1249607715" MODIFIED="1443738195397" TEXT="&quot;Liste&quot;">
 <node CREATED="1443738196336" ID="ID_855336404" MODIFIED="1443738198380" TEXT="Vorteile">
@@ -1310,8 +1334,7 @@
       Vorteilhaft f&#252;r Version-Management
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1443738653931" ID="ID_604966063" MODIFIED="1443738813866" TEXT="Effizienz des List-Diff">
 <richcontent TYPE="NOTE"><html>
@@ -1323,8 +1346,7 @@
       profitiert also von allen Verbesserungen des allgemeinen Algorithmus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1443738592971" ID="ID_790837479" MODIFIED="1443739191673" TEXT="bei uns: hoch effizient">
 <richcontent TYPE="NOTE"><html>
@@ -1345,8 +1367,7 @@
       + NlogN f &#252;r den Index zur Diff-Erzeugung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1443738199160" ID="ID_955544777" MODIFIED="1443738201508" TEXT="Nachteile">
@@ -1379,8 +1400,7 @@
       korrekten Listen-Diff zu erzeugen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -1402,8 +1422,7 @@
       dann &#252;bertr&#228;gt sich das auf die Diff-Behandlung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1443738371545" ID="ID_1959160321" MODIFIED="1443738695968" TEXT="bei uns: voll-Quadratisch">
 <richcontent TYPE="NOTE"><html>
@@ -1418,8 +1437,7 @@
       m&#252;ssen wir f&#252;r jede Einf&#252;gung eine vollst&#228;ndige Suche machen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1443738416083" ID="ID_793860786" MODIFIED="1443738470421" TEXT="erfordert separate Impl">
 <richcontent TYPE="NOTE"><html>
@@ -1434,8 +1452,7 @@
       Auch wenn diese andere Implementierung nur delegiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1443738471955" ID="ID_315855253" MODIFIED="1443738478894" TEXT="versteckte 2.Semantik"/>
 </node>
@@ -1469,8 +1486,7 @@
       indem sie an die Attributs-Liste angeh&#228;ngt werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -1519,8 +1535,7 @@
       wegen Entscheidung f&#252;r das &quot;Listen&quot;-Modell zur Attribut-Handhabung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -1541,8 +1556,7 @@
       ...da das Kind in der Liste der Attribute n&#228;mlich garnicht gefunden wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1443739798889" ID="ID_1992435989" MODIFIED="1443739912310" TEXT="Spezialbehandlung am Ende der Attributzone notwendig">
 <richcontent TYPE="NOTE"><html>
@@ -1563,8 +1577,7 @@
       Aber an allen anderen Stellen in der Attribut-Zone ist ein solcher Fetch ein Fehler!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -1581,8 +1594,7 @@
       standardm&#228;&#223;ig <b>strikt</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 </node>
 <node CREATED="1443735286496" ID="ID_1442661683" MODIFIED="1443735289835" TEXT="fuzzy-mode">
@@ -1640,6 +1652,7 @@
 <node CREATED="1443741332691" ID="ID_1059350985" MODIFIED="1443741335518" TEXT="Attribut"/>
 <node CREATED="1443741337786" ID="ID_70415473" MODIFIED="1443741342997" TEXT="letztes Attribut"/>
 <node CREATED="1443741507347" ID="ID_1882468426" MODIFIED="1443741513958" TEXT="nicht vorhandenes"/>
+<node CREATED="1444349824563" ID="ID_572700596" MODIFIED="1444349836702" TEXT="anonym: Ref::CHILD"/>
 </node>
 <node CREATED="1443741349576" ID="ID_1257145184" MODIFIED="1443741353515" TEXT="AFTER">
 <node CREATED="1443741365526" ID="ID_1412112386" MODIFIED="1443741372089" TEXT="Attribut"/>
