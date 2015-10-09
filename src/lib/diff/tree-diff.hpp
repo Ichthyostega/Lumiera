@@ -42,6 +42,7 @@
 
 
 #include "lib/diff/diff-language.hpp"
+#include "lib/diff/list-diff.hpp"
 #include "lib/diff/gen-node.hpp"
 
 
@@ -60,11 +61,38 @@ namespace diff{
   class TreeDiffInterpreter
     {
     public:
+      using Val = GenNode;
       
-      ///////TODO actual operations go here
+      virtual ~TreeDiffInterpreter() { } ///< this is an interface
+      
+      virtual void ins (GenNode n)   =0;
+      virtual void del (GenNode n)   =0;
+      virtual void pick(GenNode n)   =0;
+      virtual void find(GenNode n)   =0;
+      virtual void skip(GenNode n)   =0;
+      
+      virtual void after(GenNode n)  =0;
+      virtual void mut (GenNode n)   =0;
+      virtual void emu (GenNode n)   =0;
     };
   
-  using TreeDiffLanguage = DiffLanguage<TreeDiffInterpreter, GenNode>;
+  struct TreeDiffLanguage
+    : DiffLanguage<TreeDiffInterpreter, GenNode>
+    {
+      using Interpreter = TreeDiffInterpreter;
+      
+      // List Diff sub language
+      DiffStep_CTOR(ins);
+      DiffStep_CTOR(del);
+      DiffStep_CTOR(pick);
+      DiffStep_CTOR(find);
+      DiffStep_CTOR(skip);
+      
+      // Tree structure verbs
+      DiffStep_CTOR(after);
+      DiffStep_CTOR(mut);
+      DiffStep_CTOR(emu);
+    };
   
   
   

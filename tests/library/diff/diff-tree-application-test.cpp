@@ -68,6 +68,8 @@ namespace test{
     DiffStep_CTOR(pick);
     DiffStep_CTOR(find);
     DiffStep_CTOR(skip);
+    
+    DiffStep_CTOR(after);
     DiffStep_CTOR(mut);
     DiffStep_CTOR(emu);
     

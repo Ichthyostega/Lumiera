@@ -118,6 +118,7 @@ namespace diff{
   using std::string;
   
   struct GenNode;
+  struct Ref;
   
   /** Define actual data storage and access types used */
   template<>
@@ -253,9 +254,10 @@ namespace diff{
                                        ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
       GenNode(GenNode const&)  =default;
       GenNode(GenNode&&)       =default;
-      GenNode(GenNode& o)
-        : GenNode((GenNode const&)o)
-        { }
+      GenNode(GenNode& o)    : GenNode((GenNode const&)o) { }
+      GenNode(Ref const& r)  : GenNode((GenNode const&)r) { }
+      GenNode(Ref &  r)      : GenNode((GenNode const&)r) { }
+      GenNode(Ref && r)      : GenNode((GenNode &&)r)     { }
       
       GenNode& operator= (GenNode const&)  =default;
       GenNode& operator= (GenNode&&)       =default;
