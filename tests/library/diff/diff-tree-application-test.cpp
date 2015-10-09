@@ -58,70 +58,6 @@ namespace test{
                   ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ 
                   CHILD_NODE = Ref(SUB_NODE);              // use a Node-Reference as child node (!)
     
-    
-    using Interpreter = TreeDiffInterpreter;
-    using DiffStep = TreeDiffLanguage::DiffStep;
-    using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
-    
-    DiffStep_CTOR(ins);
-    DiffStep_CTOR(del);
-    DiffStep_CTOR(pick);
-    DiffStep_CTOR(find);
-    DiffStep_CTOR(skip);
-    
-    DiffStep_CTOR(after);
-    DiffStep_CTOR(mut);
-    DiffStep_CTOR(emu);
-    
-    
-    inline DiffSeq
-    populationDiff()
-    {
-      return snapshot({ins(TYPE_X)
-                     , ins(ATTRIB1)
-                     , ins(ATTRIB2)
-                     , ins(ATTRIB3)
-                     , ins(CHILD_A)
-                     , ins(CHILD_T)
-                     , ins(CHILD_T)
-                     , ins(SUB_NODE)
-                     , mut(SUB_NODE)
-                       , ins(CHILD_B)
-                       , ins(CHILD_A)
-                     , emu(SUB_NODE)
-                     });
-    }
-    
-    
-    inline DiffSeq
-    mutationDiff()
-    {
-      return snapshot({after(Ref::ATTRIBS)
-                     , find(CHILD_T)
-                     , pick(CHILD_A)
-                     , skip(CHILD_T)
-                     , del(CHILD_T)
-                     , pick(Ref::CHILD)
-                     , mut(Ref::THIS)
-                       , ins(ATTRIB3)
-                       , ins(ATTRIB_NODE)
-                       , find(CHILD_A)
-                       , del(CHILD_B)
-                       , ins(CHILD_NODE)
-                       , ins(CHILD_T)
-                       , skip(CHILD_A)
-                       , mut(CHILD_NODE)
-                         , ins(TYPE_Y)
-                         , ins(ATTRIB2)
-                       , emu(CHILD_NODE)
-                       , mut(ATTRIB_NODE)
-                         , ins(CHILD_A)
-                         , ins(CHILD_A)
-                         , ins(CHILD_A)
-                       , emu(ATTRIB_NODE)
-                     , emu(Ref::THIS)
-                     });
-    }
   }//(End)Test fixture
   
   
@@ -141,8 +77,61 @@ namespace test{
    *       
    * @see session-structure-mapping-test.cpp
    */
-  class DiffTreeApplication_test : public Test
+  class DiffTreeApplication_test
+    : public Test
+    , TreeDiffLanguage
     {
+      using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
+      
+      DiffSeq
+      populationDiff()
+        {
+          return snapshot({ins(TYPE_X)
+                         , ins(ATTRIB1)
+                         , ins(ATTRIB2)
+                         , ins(ATTRIB3)
+                         , ins(CHILD_A)
+                         , ins(CHILD_T)
+                         , ins(CHILD_T)
+                         , ins(SUB_NODE)
+                         , mut(SUB_NODE)
+                           , ins(CHILD_B)
+                           , ins(CHILD_A)
+                         , emu(SUB_NODE)
+                         });
+        }
+        
+        
+      DiffSeq
+      mutationDiff()
+        {
+          return snapshot({after(Ref::ATTRIBS)
+                         , find(CHILD_T)
+                         , pick(CHILD_A)
+                         , skip(CHILD_T)
+                         , del(CHILD_T)
+                         , pick(Ref::CHILD)
+                         , mut(Ref::THIS)
+                           , ins(ATTRIB3)
+                           , ins(ATTRIB_NODE)
+                           , find(CHILD_A)
+                           , del(CHILD_B)
+                           , ins(CHILD_NODE)
+                           , ins(CHILD_T)
+                           , skip(CHILD_A)
+                           , mut(CHILD_NODE)
+                             , ins(TYPE_Y)
+                             , ins(ATTRIB2)
+                           , emu(CHILD_NODE)
+                           , mut(ATTRIB_NODE)
+                             , ins(CHILD_A)
+                             , ins(CHILD_A)
+                             , ins(CHILD_A)
+                           , emu(ATTRIB_NODE)
+                         , emu(Ref::THIS)
+                         });
+        }
+      
       
       virtual void
       run (Arg)
