@@ -25,13 +25,15 @@
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 #include <vector>
 
 using lib::iter_stl::snapshot;
-// using util::isnil;
+using util::isnil;
+using util::join;
 using std::string;
 using std::vector;
 using lib::time::Time;
@@ -56,7 +58,7 @@ namespace test{
                   CHILD_T(Time(12,34,56,78)),              // unnamed time value child
                   SUB_NODE = MakeRec().genNode(),          // empty anonymous node used to open a sub scope
                   ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ 
-                  CHILD_NODE = Ref(SUB_NODE);              // use a Node-Reference as child node (!)
+                  CHILD_NODE = SUB_NODE;                   // yet another child node, same ID as SUB_NODE (!)
     
   }//(End)Test fixture
   
@@ -140,11 +142,39 @@ namespace test{
           DiffApplicator<Rec> application(target);
           application.consume(populationDiff());
           
-          // TODO Check population
+          CHECK (!isnil (target));                                                     // nonempty -- content has been added
+          CHECK ("X" == target.getType());                                             // type was set to "X"
+          CHECK (1 == target.get("α").data.get<int>());                                // has gotten our int attribute "α"
+          CHECK (2L == target.get("β").data.get<int64_t>());                           // ... the long attribute "β"
+          CHECK (3.45 == target.get("γ").data.get<double>());                          // ... and double attribute "γ"
+          auto scope = target.scope();                                                 // look into the scope contents...
+          CHECK (  *scope == CHILD_A);                                                 //   there is CHILD_A
+          CHECK (*++scope == CHILD_T);                                                 //   followed by a copy of CHILD_T
+          CHECK (*++scope == CHILD_T);                                                 //   and another copy of CHILD_T
+          CHECK (*++scope == MakeRec().appendChild(CHILD_B)                            //   and there is a nested Record 
+                                      .appendChild(CHILD_A)                            //       with CHILD_B
+                              .genNode(SUB_NODE.idi.getSym()));                        //       and CHILD_A
+          CHECK (isnil(++scope));                                                      // thats all -- no more children
           
-          application.consume(mutationDiff());
-          
-          // TODO Check mutation
+          application.consume(mutationDiff()); 
+          CHECK (join (target.keys()) == "α, β, γ");                                   // the attributes weren't altered 
+          scope = target.scope();                                                      // but the scope was reordered
+          CHECK (  *scope == CHILD_T);                                                 //   CHILD_T
+          CHECK (*++scope == CHILD_A);                                                 //   CHILD_A
+          Rec nested = (++scope)->data.get<Rec>();                                     //   and our nested Record, which too has been altered:
+            CHECK (nested.get("γ").data.get<double>() == 3.45);                        //       it carries now an attribute "δ", which is again
+            CHECK (nested.get("δ").data.get<Rec>() == MakeRec().appendChild(CHILD_A)   //           a nested Record with three children CHILD_A
+                                                               .appendChild(CHILD_A)   // 
+                                                               .appendChild(CHILD_A)   // 
+                                                       .genNode("δ"));                 // 
+            auto subScope = nested.scope();                                            //       and within the nested sub-scope we find
+            CHECK (  *subScope == CHILD_A);                                            //           CHILD_A
+            CHECK (*++subScope == MakeRec().type("Y")                                  //           a yet-again nested sub-Record of type "Y"
+                                           .set("β", 2L )                              //               with just an attribute "β" == 2L
+                                   .genNode(CHILD_NODE.idi.getSym()));                 //               (and an empty child scope)
+            CHECK (*++subScope == CHILD_T);                                            //           followed by another copy of CHILD_T
+            CHECK (isnil (++subScope));                                                // 
+          CHECK (isnil (++scope));                                                     // and nothing beyond that.
         }
     };
   
