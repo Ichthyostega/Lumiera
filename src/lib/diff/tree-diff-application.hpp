@@ -40,20 +40,34 @@
 #include "lib/diff/tree-diff.hpp"
 #include "lib/diff/gen-node.hpp"
 
+#include <utility>
+
 namespace lib {
 namespace diff{
   
+  using std::move;
+  using std::swap;
+  
+  
   /**
    * concrete strategy to apply a structural diff to a target data structure
-   * made from #Record<GenNode> elements.
+   * made from #Record<GenNode> elements. This data structure is assumed to be
+   * recursive, tree-like. But because Record elements are conceived as immutable
+   * and value-like, the tree diff application actually works on a Rec::Mutator
+   * wrapping the target record to be altered through consuming the diff.
    * @throws  lumiera::error::State when diff application fails due to the
    *          target sequence being different than assumed by the given diff.
    * @see #TreeDiffInterpreter explanation of the verbs
    */
   template<>
-  class DiffApplicationStrategy<Rec>
+  class DiffApplicationStrategy<Rec::Mutator>
     : public TreeDiffInterpreter
     {
+      using Storage = RecordSetup<GenNode>::Storage;
+      
+      Rec::Mutator& target_;
+      Storage attribs_;
+      Storage children_;
       
       
       /* == Implementation of the list diff application primitives == */
@@ -113,16 +127,17 @@ namespace diff{
       
     public:
       explicit
-      DiffApplicationStrategy(Rec& targetRecord)
+      DiffApplicationStrategy(Rec::Mutator& mutableTargetRecord)
+        : target_(mutableTargetRecord)
+        , attribs_()
+        , children_()
         {
-          UNIMPLEMENTED();
-        }
-      
-      /** clean-up and make changes effective within target */
-      void
-      finalise()
-        {
-          UNIMPLEMENTED("push rebuilt Record into target");
+          swap (attribs_, target_.attribs());
+          swap (children_, target_.children());
+          
+          // heuristics for storage pre-allocation
+          target_.attribs().reserve (attribs_.size() * 120 / 100);
+          target_.children().reserve (children_.size() * 120 / 100);
         }
     };
   

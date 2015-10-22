@@ -1810,7 +1810,27 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1445550873904" ID="ID_1781797833" MODIFIED="1445550888011" TEXT="copy + transaktional als 2.Layer"/>
+<node CREATED="1445555721981" ID="ID_292803227" MODIFIED="1445556598964">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      L&#246;sung: wir arbeiten <i>auf </i>einem Mutator
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1445556525714" ID="ID_1223708278" MODIFIED="1445556595037" TEXT="damit funktioniert es 1:1 wie List-Diff">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1445556567980" ID="ID_783100840" MODIFIED="1445556591370" TEXT="Voraussetzung: der Mutator mu&#xdf; die Attribut/Kinder-Listen exponieren">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1445550873904" ID="ID_1781797833" MODIFIED="1445556509368" TEXT="copy + transaktional als optionaler 2.Layer"/>
 <node CREATED="1445550893222" ID="ID_2118555" MODIFIED="1445550915111" TEXT="Diff-Applikator = destruktiver Mutator"/>
 <node CREATED="1445389311690" ID="ID_1926972913" MODIFIED="1445389323819" TEXT="und dieses rekursiv..."/>
 </node>
@@ -1832,45 +1852,7 @@
 </node>
 <node CREATED="1445392105075" ID="ID_1377567733" MODIFIED="1445392113677" TEXT="zwei neue, lokale Vektoren aufbauen"/>
 <node CREATED="1445392114217" ID="ID_71124283" MODIFIED="1445392120973" TEXT="daraus den neuen Record konstruieren"/>
-<node CREATED="1445392127015" ID="ID_883189076" MODIFIED="1445392201654">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Problem: Konstruktion <i>nach </i>Diff
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1445392161508" ID="ID_425268274" MODIFIED="1445392188383" TEXT="API daf&#xfc;r fehlt">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1445392169019" ID="ID_475848296" MODIFIED="1445392193215" TEXT="doppelte H&#xfc;lle">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1445392174969" ID="ID_387417089" MODIFIED="1445392183796" TEXT="DiffAplicator ist generisch">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1445550928897" ID="ID_911120047" MODIFIED="1445551003670" TEXT="-&gt; mu&#xdf; inneres API erweitern">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      d.h. es gibt eine Methode applyChanges.
-    </p>
-    <p>
-      Die generische Implementierung verwendet diese nach Aufspielen des Diff
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
-</node>
+<node CREATED="1445556634395" ID="ID_1143865339" MODIFIED="1445556649348" TEXT="technische Komplikation: &quot;2 Listen&quot;-Modell"/>
 </node>
 </node>
 </node>

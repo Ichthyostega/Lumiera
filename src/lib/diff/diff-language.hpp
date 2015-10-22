@@ -296,7 +296,6 @@ namespace diff{
         {
           for ( ; diff; ++diff )
             diff->applyTo(target_);
-          target_.finalise();
         }
     };
   

@@ -138,16 +138,17 @@ namespace test{
       virtual void
       run (Arg)
         {
-          Rec target;
-          DiffApplicator<Rec> application(target);
+          Rec::Mutator target;
+          Rec& subject = target;
+          DiffApplicator<Rec::Mutator> application(target);
           application.consume(populationDiff());
           
-          CHECK (!isnil (target));                                                     // nonempty -- content has been added
-          CHECK ("X" == target.getType());                                             // type was set to "X"
-          CHECK (1 == target.get("α").data.get<int>());                                // has gotten our int attribute "α"
-          CHECK (2L == target.get("β").data.get<int64_t>());                           // ... the long attribute "β"
-          CHECK (3.45 == target.get("γ").data.get<double>());                          // ... and double attribute "γ"
-          auto scope = target.scope();                                                 // look into the scope contents...
+          CHECK (!isnil (subject));                                                    // nonempty -- content has been added
+          CHECK ("X" == subject.getType());                                            // type was set to "X"
+          CHECK (1 == subject.get("α").data.get<int>());                               // has gotten our int attribute "α"
+          CHECK (2L == subject.get("β").data.get<int64_t>());                          // ... the long attribute "β"
+          CHECK (3.45 == subject.get("γ").data.get<double>());                         // ... and double attribute "γ"
+          auto scope = subject.scope();                                                // look into the scope contents...
           CHECK (  *scope == CHILD_A);                                                 //   there is CHILD_A
           CHECK (*++scope == CHILD_T);                                                 //   followed by a copy of CHILD_T
           CHECK (*++scope == CHILD_T);                                                 //   and another copy of CHILD_T
@@ -157,8 +158,8 @@ namespace test{
           CHECK (isnil(++scope));                                                      // thats all -- no more children
           
           application.consume(mutationDiff()); 
-          CHECK (join (target.keys()) == "α, β, γ");                                   // the attributes weren't altered 
-          scope = target.scope();                                                      // but the scope was reordered
+          CHECK (join (subject.keys()) == "α, β, γ");                                  // the attributes weren't altered 
+          scope = subject.scope();                                                     // but the scope was reordered
           CHECK (  *scope == CHILD_T);                                                 //   CHILD_T
           CHECK (*++scope == CHILD_A);                                                 //   CHILD_A
           Rec nested = (++scope)->data.get<Rec>();                                     //   and our nested Record, which too has been altered:
