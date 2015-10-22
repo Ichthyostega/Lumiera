@@ -117,6 +117,13 @@ namespace diff{
         {
           UNIMPLEMENTED();
         }
+      
+      /** clean-up and make changes effective within target */
+      void
+      finalise()
+        {
+          UNIMPLEMENTED("push rebuilt Record into target");
+        }
     };
   
   

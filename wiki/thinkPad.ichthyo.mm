@@ -1161,8 +1161,7 @@
       pick(Ref::CHILD)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1443734637416" ID="ID_461220696" MODIFIED="1443734639699" TEXT="after">
@@ -1182,8 +1181,7 @@
       weil er zu Zweideutigekeigen f&#252;hrt und daher Struktur oder Konsistenzfehler &#252;berspielt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -1612,13 +1610,277 @@
 </node>
 </node>
 </node>
-<node CREATED="1443741905157" HGAP="364" ID="ID_1960988662" MODIFIED="1443741922385" TEXT="Diff-Erkennung" VSHIFT="17">
+<node CREATED="1443741905157" HGAP="364" ID="ID_1960988662" MODIFIED="1444522876737" TEXT="Diff-Implementierung" VSHIFT="17">
+<font NAME="SansSerif" SIZE="16"/>
 <icon BUILTIN="stop"/>
+<node CREATED="1444522932841" HGAP="52" ID="ID_48288704" MODIFIED="1444522994078" TEXT="Architektur" VSHIFT="-5">
+<node CREATED="1444522939928" ID="ID_490994681" MODIFIED="1444522986895" TEXT="destruktiv?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1444522961462" ID="ID_1164434859" MODIFIED="1444522984145">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      List-Diff
+    </p>
+    <p>
+      als Spezialfall
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1444523008207" ID="ID_385890020" MODIFIED="1444523017076" TEXT="Sprache: geht nicht">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1444523018726" ID="ID_874967614" MODIFIED="1444523024345" TEXT="Problem DiffStep"/>
+<node CREATED="1444523025148" ID="ID_1403562226" MODIFIED="1444523033774" TEXT="ist eingebettet in die Sprache"/>
+<node CREATED="1444523034795" ID="ID_1203331178" MODIFIED="1444523041573" TEXT="es gibt keinen gemeinsamen Obertyp"/>
+<node CREATED="1444523042138" ID="ID_675305475" MODIFIED="1444523076695">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann auch nicht
+    </p>
+    <p>
+      wegen dem Interpreter
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1444523078581" ID="ID_318811786" MODIFIED="1444523091591" TEXT="liefert Token -&gt; kovariant"/>
+<node CREATED="1444523091939" ID="ID_720826260" MODIFIED="1444523103670" TEXT="akzeptiert Interpreter -&gt; kontravariant"/>
+</node>
+</node>
+<node CREATED="1444523111792" ID="ID_1544468161" MODIFIED="1444523118219" TEXT="denkbar: Implementierung">
+<node CREATED="1444523131486" ID="ID_37078397" MODIFIED="1444523139993" TEXT="Anwendung setzt nur Vector voraus"/>
+<node CREATED="1444523140605" ID="ID_1673268008" MODIFIED="1444523237002">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      leicht auf generischen Container
+    </p>
+    <p>
+      zu verallgemeinern
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1444523168561" ID="ID_1180296210" MODIFIED="1444523205481">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Erkennung hat die Sprache als Parameter,
+    </p>
+    <p>
+      und verwendet sie zur Token-Generierung
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1444523206427" ID="ID_713432486" MODIFIED="1444523230705">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man kann auch dem List-Detector
+    </p>
+    <p>
+      eine Tree-Diff-Language geben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1444522881125" ID="ID_172319057" MODIFIED="1444522895130" TEXT="Anwendung">
 <node CREATED="1443741923547" ID="ID_1978439060" MODIFIED="1443741930738" TEXT="Listen-Diff">
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1443741931858" ID="ID_484829805" MODIFIED="1443741945481" TEXT="Baum-Diff">
 <icon BUILTIN="flag"/>
+<node CREATED="1445295424277" ID="ID_1084177503" MODIFIED="1445295490146">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font size="5" color="#e97664">Frage</font>: <i>in-Place?</i>
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1445295501531" ID="ID_1542006741" MODIFIED="1445295510654" TEXT="Problem: Teilb&#xe4;ume">
+<node CREATED="1445295582392" ID="ID_243770452" MODIFIED="1445295587819" TEXT="Umh&#xe4;ngen von Teilb&#xe4;umen"/>
+<node CREATED="1445295588127" ID="ID_1541079773" MODIFIED="1445295598746" TEXT="Abstieg in Teilb&#xe4;ume"/>
+</node>
+<node CREATED="1445295543653" ID="ID_39528388" MODIFIED="1445295558572" TEXT="wie wird das UI-Model verwendet">
+<icon BUILTIN="help"/>
+<node CREATED="1445295714215" ID="ID_472108592" MODIFIED="1445295722937" TEXT="um Diffs aufzuspielen"/>
+<node CREATED="1445295726940" ID="ID_1067776624" MODIFIED="1445295736327" TEXT="um UI-Elemente anzusprechend"/>
+<node CREATED="1445295737436" ID="ID_1529650757" MODIFIED="1445295751917" TEXT="f&#xfc;r Callbacks vom UI">
+<node CREATED="1445299235061" ID="ID_336159819" MODIFIED="1445299267675">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>entscheidende Frage</b>: wie addressieren?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1445299271761" ID="ID_1895578975" MODIFIED="1445299278275" TEXT="Bus-Term hat eine ID..."/>
+</node>
+</node>
+<node CREATED="1445299292301" HGAP="134" ID="ID_1169271905" MODIFIED="1445389263878" TEXT="pro" VSHIFT="12">
+<node CREATED="1445299310971" ID="ID_1955674144" MODIFIED="1445299339570" TEXT="vermeidet Kopieren"/>
+<node CREATED="1445299340375" ID="ID_485304706" MODIFIED="1445299346562" TEXT="speziell der nicht betroffenen Teile"/>
+<node CREATED="1445299347173" ID="ID_232158633" MODIFIED="1445299356224" TEXT="das ist genau der Sinn des Diff"/>
+</node>
+<node CREATED="1445299298932" HGAP="127" ID="ID_602638586" MODIFIED="1445389260780" TEXT="contra" VSHIFT="-5">
+<node CREATED="1445299306659" ID="ID_1695051638" MODIFIED="1445299308751" TEXT="Locking"/>
+<node CREATED="1445389209031" ID="ID_1394943777" MODIFIED="1445389223268" TEXT="GenNode ist ein value type"/>
+</node>
+<node CREATED="1445389251289" HGAP="39" ID="ID_1700933130" MODIFIED="1445389272470" TEXT="Entscheidung" VSHIFT="28">
+<font NAME="SansSerif" SIZE="15"/>
+<node CREATED="1445389298770" ID="ID_1935262520" MODIFIED="1445550726257" TEXT="Kompromi&#xdf;">
+<icon BUILTIN="help"/>
+<node CREATED="1445389275998" ID="ID_1081466244" MODIFIED="1445389290791" TEXT="intern kopieren">
+<node CREATED="1445389355802" ID="ID_745348631" MODIFIED="1445389365541" TEXT="wir arbeiten auf einer interen Kopie"/>
+<node CREATED="1445389366298" ID="ID_432143676" MODIFIED="1445389372460" TEXT="diese geh&#xf6;rt der Implementierung"/>
+<node CREATED="1445389373168" ID="ID_1925613497" MODIFIED="1445389404465">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und wird durch die Diff-Anwendung <i>konsumiert</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1445389291404" ID="ID_309801260" MODIFIED="1445389297543" TEXT="aber move-ctor anbieten">
+<node CREATED="1445389423050" ID="ID_802906323" MODIFIED="1445389433477" TEXT="zur Initialisierung ein bestehendes Objekt &#xfc;bernehmen"/>
+<node CREATED="1445389434753" ID="ID_532431684" MODIFIED="1445389454234" TEXT="das Ergebnis in ein bestehendes Objekt schieben"/>
+</node>
+</node>
+<node CREATED="1445550734547" ID="ID_960791539" MODIFIED="1445550862728" TEXT="oder doch den Mutator erweitern">
+<icon BUILTIN="yes"/>
+<node CREATED="1445550748169" ID="ID_1764723062" MODIFIED="1445550752365" TEXT="Vorteil: explizit"/>
+<node CREATED="1445550752832" ID="ID_1506018584" MODIFIED="1445550807621" TEXT="Manipulation hat gewisse Vorteile"/>
+<node CREATED="1445550808281" ID="ID_1970167609" MODIFIED="1445550842143">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>Immutablility</i>&#160;erzwingt
+    </p>
+    <ul>
+      <li>
+        persistente Datenstrukturen
+      </li>
+      <li>
+        garbage-collector
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1445550873904" ID="ID_1781797833" MODIFIED="1445550888011" TEXT="copy + transaktional als 2.Layer"/>
+<node CREATED="1445550893222" ID="ID_2118555" MODIFIED="1445550915111" TEXT="Diff-Applikator = destruktiver Mutator"/>
+<node CREATED="1445389311690" ID="ID_1926972913" MODIFIED="1445389323819" TEXT="und dieses rekursiv..."/>
+</node>
+</node>
+<node COLOR="#391f9e" CREATED="1445391990778" HGAP="148" ID="ID_464295846" MODIFIED="1445392206014" TEXT="Implementierung" VSHIFT="4">
+<icon BUILTIN="pencil"/>
+<node CREATED="1445392080175" ID="ID_341024968" MODIFIED="1445392101243">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Innereien des alten Record <i>verbrauchen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1445392105075" ID="ID_1377567733" MODIFIED="1445392113677" TEXT="zwei neue, lokale Vektoren aufbauen"/>
+<node CREATED="1445392114217" ID="ID_71124283" MODIFIED="1445392120973" TEXT="daraus den neuen Record konstruieren"/>
+<node CREATED="1445392127015" ID="ID_883189076" MODIFIED="1445392201654">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem: Konstruktion <i>nach </i>Diff
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1445392161508" ID="ID_425268274" MODIFIED="1445392188383" TEXT="API daf&#xfc;r fehlt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1445392169019" ID="ID_475848296" MODIFIED="1445392193215" TEXT="doppelte H&#xfc;lle">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1445392174969" ID="ID_387417089" MODIFIED="1445392183796" TEXT="DiffAplicator ist generisch">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1445550928897" ID="ID_911120047" MODIFIED="1445551003670" TEXT="-&gt; mu&#xdf; inneres API erweitern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. es gibt eine Methode applyChanges.
+    </p>
+    <p>
+      Die generische Implementierung verwendet diese nach Aufspielen des Diff
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1444522895718" ID="ID_598781690" MODIFIED="1444522897802" TEXT="Generierung">
+<node CREATED="1443741923547" ID="ID_1091408512" MODIFIED="1443741930738" TEXT="Listen-Diff">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1443741931858" ID="ID_826609799" MODIFIED="1443741945481" TEXT="Baum-Diff">
+<icon BUILTIN="flag"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1443740543812" ID="ID_1766169268" MODIFIED="1443741858388" TEXT="Tests">

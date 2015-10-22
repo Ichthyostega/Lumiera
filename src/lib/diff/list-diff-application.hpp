@@ -167,6 +167,9 @@ namespace diff{
           swap (seq_, orig_);  // pos_ still refers to original input sequence, which has been moved to orig_
           seq_.reserve (targetVector.size() * 120 / 100);    // heuristics for storage pre-allocation
         }
+      
+      /** clean-up and make changes effective within target */
+      void finalise() { /* NOP for this implementation */ }
     };
   
   

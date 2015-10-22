@@ -449,6 +449,11 @@ namespace diff{
           return *this;
         }
       
+      /* === low-level access (e.g. for diff application === */
+      
+      Storage& attribs()  { return record_.attribs_; }
+      Storage& children() { return record_.children_; }
+      
       
       /* === extension point for building specific value types === */
       /*
