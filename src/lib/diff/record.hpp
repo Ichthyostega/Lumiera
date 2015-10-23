@@ -92,6 +92,8 @@
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
+#include "lib/diff/record-content-mutator.hpp"
+
 #include <boost/noncopyable.hpp>
 
 #include <algorithm>
@@ -238,6 +240,8 @@ namespace diff{
        *          an existing other Record instance (implemented as swap)
        */
       class Mutator;
+      
+      using ContentMutator = RecordContentMutator<Storage>;
       
       
       /**
@@ -453,7 +457,12 @@ namespace diff{
       
       Storage& attribs()  { return record_.attribs_; }
       Storage& children() { return record_.children_; }
-      
+      void
+      swapContent (ContentMutator& alteredContent)
+        {
+          std::swap (record_.attribs_, alteredContent.attribs);
+          std::swap (record_.children_, alteredContent.children);
+        }
       
       /* === extension point for building specific value types === */
       /*

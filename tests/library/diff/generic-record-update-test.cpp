@@ -107,24 +107,27 @@ namespace test{
           mut.setType("🌰");
           std::cout << string(subject) << std::endl;
           
-          CHECK (!isnil (mut));
-          RecS::ContentMutator content = mut.swapContent();
+          RecS::ContentMutator content;
           
-          CHECK ( isnil (mut));
+          CHECK (!isnil (mut));
+          CHECK ( isnil (content));
+          mut.swapContent(content);
           CHECK (!isnil (content));
+          CHECK ( isnil (mut));
+          
           CHECK (content.pos == content.attribs.begin());
           CHECK (content.currIsAttrib());
           CHECK (!content.currIsChild());
           CHECK ("b = β" == *content.pos);
           
-          void* rawElm = &attribs[0];
+          void* rawElm = &content.attribs[0];
           swap (content.attribs[0], content.attribs[1]);
           CHECK ("a = α" == *content.pos);
-          CHECK (rawElm == content.pos);
+          CHECK (rawElm == & *content.pos);
           
           ++content;
           CHECK ("b = β" == *content.pos);
-          CHECK (rawElm != content.pos);
+          CHECK (rawElm != &*content.pos);
           CHECK (content.currIsAttrib());
           CHECK (!content.currIsChild());
           
@@ -148,18 +151,18 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, ++content);
           
           content.resetPos();
-          CHECK (rawElm == content.pos);
+          CHECK (rawElm == & *content.pos);
           ++content;
           CHECK ("b = β" == *content.pos);
           
           CHECK ( isnil (mut));
           CHECK (!isnil (content));
-          mut.swapContent();
+          mut.swapContent(content);
           CHECK ( isnil (content));
           CHECK (!isnil (mut));
           
           mut.replace(subject);
-          CHECK (Seq({"a = α", "b = β", "γ", "δ", "ε"}) == contents(a));
+          CHECK (Seq({"a = α", "b = β", "γ", "δ", "ε"}) == contents(subject));
           std::cout << string(subject) << std::endl;
         }
     };

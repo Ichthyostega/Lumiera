@@ -57,19 +57,54 @@ namespace diff{
   
   /** @internal helper for DiffApplicationStrategy<Rec::Mutator> */
   template<class STO>
-  class RecordContentMutator
+  struct RecordContentMutator
     : boost::noncopyable
     {
-    public:
-      explicit
+      using Iter = typename STO::iterator;
+      
+      STO attribs;
+      STO children;
+      Iter pos;
+      
       RecordContentMutator()
+        : attribs()
+        , children()
+        , pos(attribs.begin())
+        { }
+      
+      
+      bool
+      empty()  const
         {
-          swap (attribs_, target_.attribs());
-          swap (children_, target_.children());
-          
-          // heuristics for storage pre-allocation
-          target_.attribs().reserve (attribs_.size() * 120 / 100);
-          target_.children().reserve (children_.size() * 120 / 100);
+          return attribs.empty()
+              && children.empty();
+        }
+      
+      bool
+      currIsAttrib()  const
+        {
+          UNIMPLEMENTED ("determine current scope");
+        }
+      
+      bool
+      currIsChild()  const
+        {
+          UNIMPLEMENTED ("determine current scope");
+        }
+      
+      Iter end()        { return children.end(); }
+      Iter end()  const { return children.end(); }
+      
+      RecordContentMutator&
+      operator++()
+        {
+          UNIMPLEMENTED ("iteration");
+        }
+      
+      void
+      resetPos()
+        {
+          pos = attribs.begin();
         }
     };
   
