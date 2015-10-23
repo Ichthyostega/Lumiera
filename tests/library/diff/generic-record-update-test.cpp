@@ -22,21 +22,29 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/diff/record-content-mutator.hpp"
 //#include "lib/iter-adapter-stl.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-util.hpp"
+#include "lib/diff/record.hpp"
+#include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
+#include <algorithm>
 #include <string>
 #include <vector>
+#include <iostream> ///TODO
 
 //using lib::iter_stl::snapshot;
+using lib::append_all;
 using util::isnil;
 //using util::join;
 //using std::string;
 using std::vector;
 //using lib::time::Time;
+
+using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
 
 
 namespace lib {
@@ -44,6 +52,25 @@ namespace diff{
 namespace test{
   
   namespace {//Test fixture....
+    
+    using Seq  = vector<string>;
+    using RecS = Record<string>;
+    
+    template<class IT>
+    inline Seq
+    contents (IT const& it)
+    {
+      Seq collected;
+      append_all (it, collected);
+      return collected;
+    }
+    
+    inline Seq
+    contents (RecS const& rec_of_strings)
+    {
+      return contents (rec_of_strings.begin());
+    }
+    
     
   }//(End)Test fixture
   
@@ -74,6 +101,66 @@ namespace test{
       virtual void
       run (Arg)
         {
+          RecS subject({"b = β", "a = α", "γ", "ε"});
+          RecS::Mutator mut(subject);
+          mut.appendChild("δ");
+          mut.setType("🌰");
+          std::cout << string(subject) << std::endl;
+          
+          CHECK (!isnil (mut));
+          RecS::ContentMutator content = mut.swapContent();
+          
+          CHECK ( isnil (mut));
+          CHECK (!isnil (content));
+          CHECK (content.pos == content.attribs.begin());
+          CHECK (content.currIsAttrib());
+          CHECK (!content.currIsChild());
+          CHECK ("b = β" == *content.pos);
+          
+          void* rawElm = &attribs[0];
+          swap (content.attribs[0], content.attribs[1]);
+          CHECK ("a = α" == *content.pos);
+          CHECK (rawElm == content.pos);
+          
+          ++content;
+          CHECK ("b = β" == *content.pos);
+          CHECK (rawElm != content.pos);
+          CHECK (content.currIsAttrib());
+          CHECK (!content.currIsChild());
+          
+          std::sort (content.children.begin(), content.children.end());
+          
+          ++content;
+          CHECK (!content.currIsAttrib());
+          CHECK (content.currIsChild());
+          CHECK ("γ" == *content.pos);
+          
+          ++content;
+          CHECK ("δ" == *content.pos);
+          ++content;
+          CHECK ("ε" == *content.pos);
+          
+          ++content;
+          CHECK (content.pos == content.end());
+          CHECK (!content.currIsAttrib());
+          CHECK (!content.currIsChild());
+          
+          VERIFY_ERROR (ITER_EXHAUST, ++content);
+          
+          content.resetPos();
+          CHECK (rawElm == content.pos);
+          ++content;
+          CHECK ("b = β" == *content.pos);
+          
+          CHECK ( isnil (mut));
+          CHECK (!isnil (content));
+          mut.swapContent();
+          CHECK ( isnil (content));
+          CHECK (!isnil (mut));
+          
+          mut.replace(subject);
+          CHECK (Seq({"a = α", "b = β", "γ", "δ", "ε"}) == contents(a));
+          std::cout << string(subject) << std::endl;
         }
     };
   
