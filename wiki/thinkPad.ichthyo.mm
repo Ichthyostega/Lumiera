@@ -1852,7 +1852,27 @@
 </node>
 <node CREATED="1445392105075" ID="ID_1377567733" MODIFIED="1445392113677" TEXT="zwei neue, lokale Vektoren aufbauen"/>
 <node CREATED="1445392114217" ID="ID_71124283" MODIFIED="1445392120973" TEXT="daraus den neuen Record konstruieren"/>
-<node CREATED="1445556634395" ID="ID_1143865339" MODIFIED="1445556649348" TEXT="technische Komplikation: &quot;2 Listen&quot;-Modell"/>
+<node CREATED="1445556634395" ID="ID_1143865339" MODIFIED="1445621027321" TEXT="technische Komplikation: &quot;2 Listen&quot;-Modell">
+<icon BUILTIN="pencil"/>
+<node CREATED="1445620914088" ID="ID_1919426539" MODIFIED="1445621018036" TEXT="Verhalten &#xe4;ndert sich je nach Scope">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1445620938421" ID="ID_557124057" MODIFIED="1445621022038" TEXT="Verzweigung in jedem Diff-Fall">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1445620947332" ID="ID_1684844100" MODIFIED="1445621010162" TEXT="Code-Redundanz">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1445620961570" ID="ID_965863635" MODIFIED="1445621006245" TEXT="in Wrapper wegpacken!">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1445620972825" ID="ID_1467461119" MODIFIED="1445621002208" TEXT="schon in den Record::Mutator einbinden">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1445620991326" ID="ID_513677356" MODIFIED="1445620998003" TEXT="eigener Test">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 </node>
 </node>

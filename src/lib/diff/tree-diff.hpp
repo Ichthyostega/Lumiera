@@ -24,8 +24,8 @@
 /** @file tree-diff.hpp
  ** A token language to represent structural changes in a tree like
  ** hierarchical data structure. In combination with the #DiffLanguage framework,
- ** this building block defines the set of operations to express both content
- ** and structural changes in a given data structure.
+ ** this building block defines the set of operations to express both structural
+ ** and content changes in a given data structure.
  ** 
  ** @todo UNIMPLEMENTED as of 12/14
  ** 
