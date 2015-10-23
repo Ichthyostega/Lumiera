@@ -84,11 +84,10 @@ namespace diff{
   class DiffApplicationStrategy<Rec::Mutator>
     : public TreeDiffInterpreter
     {
-      using Storage = RecordSetup<GenNode>::Storage;
+      using Content = Rec::ContentMutator;
       
       Rec::Mutator& target_;
-      Storage attribs_;
-      Storage children_;
+      Content content_;
       
       
       /* == Implementation of the list diff application primitives == */
@@ -150,15 +149,9 @@ namespace diff{
       explicit
       DiffApplicationStrategy(Rec::Mutator& mutableTargetRecord)
         : target_(mutableTargetRecord)
-        , attribs_()
-        , children_()
+        , content_()
         {
-          swap (attribs_, target_.attribs());
-          swap (children_, target_.children());
-          
-          // heuristics for storage pre-allocation
-          target_.attribs().reserve (attribs_.size() * 120 / 100);
-          target_.children().reserve (children_.size() * 120 / 100);
+          target_.swapContent (content_);
         }
     };
   

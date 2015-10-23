@@ -453,13 +453,14 @@ namespace diff{
           return *this;
         }
       
-      /* === low-level access (e.g. for diff application === */
+      /* === low-level access (for diff application === */
       
-      Storage& attribs()  { return record_.attribs_; }
-      Storage& children() { return record_.children_; }
       void
       swapContent (ContentMutator& alteredContent)
         {
+          if (alteredContent.empty())
+            alteredContent.preAllocateStorage(record_.attribs_.size(),
+                                              record_.children_.size());
           std::swap (record_.attribs_, alteredContent.attribs);
           std::swap (record_.children_, alteredContent.children);
         }

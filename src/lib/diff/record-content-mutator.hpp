@@ -106,6 +106,15 @@ namespace diff{
         {
           pos = attribs.begin();
         }
+      
+      void
+      preAllocateStorage(size_t attribCnt, size_t childrenCnt)
+        {
+          // heuristics for storage pre-allocation (for tree diff application)
+          attribs.reserve (attribCnt * 120 / 100);
+          children.reserve (childrenCnt * 120 / 100);
+          ASSERT (this->empty());
+        }
     };
   
   
