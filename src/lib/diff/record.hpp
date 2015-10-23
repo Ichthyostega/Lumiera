@@ -463,6 +463,7 @@ namespace diff{
                                               record_.children_.size());
           std::swap (record_.attribs_, alteredContent.attribs);
           std::swap (record_.children_, alteredContent.children);
+          alteredContent.resetPos();
         }
       
       /* === extension point for building specific value types === */

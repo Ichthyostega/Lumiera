@@ -24,9 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/record-content-mutator.hpp"
-//#include "lib/iter-adapter-stl.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/format-util.hpp"
+#include "lib/format-util.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
@@ -34,15 +32,10 @@
 #include <algorithm>
 #include <string>
 #include <vector>
-#include <iostream> ///TODO
 
-//using lib::iter_stl::snapshot;
 using lib::append_all;
 using util::isnil;
-//using util::join;
-//using std::string;
 using std::vector;
-//using lib::time::Time;
 
 using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
 
@@ -71,7 +64,6 @@ namespace test{
       return contents (rec_of_strings.begin());
     }
     
-    
   }//(End)Test fixture
   
   
@@ -90,7 +82,7 @@ namespace test{
    *       which are by default immutable. Thus, for this specific task, embedded
    *       data is moved into this adapter, which exposes the mutating operation
    *       required to apply such a diff message.
-   *       
+   * 
    * @see generic-record-representation-test.cpp
    * @see tree-diff-application-test.cpp
    */
@@ -105,13 +97,12 @@ namespace test{
           RecS::Mutator mut(subject);
           mut.appendChild("δ");
           mut.setType("🌰");
-          std::cout << string(subject) << std::endl;
           
-          RecS::ContentMutator content;
+          RecS::ContentMutator content; // empty
           
           CHECK (!isnil (mut));
           CHECK ( isnil (content));
-          mut.swapContent(content);
+          mut.swapContent(content); // contents of mutator now moved over
           CHECK (!isnil (content));
           CHECK ( isnil (mut));
           
@@ -133,7 +124,7 @@ namespace test{
           
           std::sort (content.children.begin(), content.children.end());
           
-          ++content;
+          ++content; // now leaving attributes and entering child scope...
           CHECK (!content.currIsAttrib());
           CHECK (content.currIsChild());
           CHECK ("γ" == *content.pos);
@@ -151,6 +142,8 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, ++content);
           
           content.resetPos();
+          CHECK (content.currIsAttrib());
+          CHECK (!content.currIsChild());
           CHECK (rawElm == & *content.pos);
           ++content;
           CHECK ("b = β" == *content.pos);
@@ -163,7 +156,7 @@ namespace test{
           
           mut.replace(subject);
           CHECK (Seq({"a = α", "b = β", "γ", "δ", "ε"}) == contents(subject));
-          std::cout << string(subject) << std::endl;
+          CHECK ("Rec(🌰| a = α, b = β |{γ, δ, ε})" == string(subject));
         }
     };
   

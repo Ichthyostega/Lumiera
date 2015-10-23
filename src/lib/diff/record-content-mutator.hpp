@@ -51,6 +51,7 @@
 namespace lib {
 namespace diff{
   
+  namespace error = lumiera::error;
   using std::move;
   using std::swap;
   
@@ -77,19 +78,21 @@ namespace diff{
       empty()  const
         {
           return attribs.empty()
-              && children.empty();
+             and children.empty();
         }
       
       bool
       currIsAttrib()  const
         {
-          UNIMPLEMENTED ("determine current scope");
+          return & *pos >= & *attribs.begin()
+             and & *pos <  & *attribs.end();
         }
       
       bool
       currIsChild()  const
         {
-          UNIMPLEMENTED ("determine current scope");
+          return & *pos >= & *children.begin()
+             and & *pos <  & *children.end();
         }
       
       Iter end()        { return children.end(); }
@@ -98,7 +101,16 @@ namespace diff{
       RecordContentMutator&
       operator++()
         {
-          UNIMPLEMENTED ("iteration");
+          if (pos == children.end())
+            throw error::State ("attempt to iterate beyond end of scope"
+                               ,error::LUMIERA_ERROR_ITER_EXHAUST);
+          if (pos == attribs.end())
+            pos = children.begin();
+          else
+            ++pos;
+          if (pos == attribs.end())
+            pos = children.begin();
+          return *this;
         }
       
       void
