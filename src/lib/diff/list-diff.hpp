@@ -74,11 +74,11 @@ namespace diff{
     public:
       virtual ~ListDiffInterpreter() { } ///< this is an interface
       
-      virtual void ins(E e)    =0;
-      virtual void del(E e)    =0;
-      virtual void pick(E e)   =0;
-      virtual void find(E e)   =0;
-      virtual void skip(E e)   =0;
+      virtual void ins (E const& e)  =0;
+      virtual void del (E const& e)  =0;
+      virtual void pick(E const& e)  =0;
+      virtual void find(E const& e)  =0;
+      virtual void skip(E const& e)  =0;
     };
   
   template<typename E>

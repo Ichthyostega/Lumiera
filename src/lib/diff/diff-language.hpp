@@ -101,7 +101,7 @@ namespace diff{
   
   
   template<class I, typename E>
-  using HandlerFun = void (I::*) (E);
+  using HandlerFun = void (I::*) (E const&); // NOTE: element value taken by const&
   
   
   /** @internal type rebinding helper */
@@ -150,7 +150,7 @@ namespace diff{
   struct DiffLanguage
     {
       
-      using DiffVerb = VerbToken<I, void(E)>;
+      using DiffVerb = VerbToken<I, void(E const&)>; // NOTE: element value taken by const&
       using DiffToken = std::tuple<DiffVerb, E>;
       using Interpreter = I;
       
@@ -158,7 +158,7 @@ namespace diff{
         : DiffToken
         {
           DiffVerb& verb() { return std::get<0>(*this); }
-          E         elm()  { return std::get<1>(*this); }
+          E const&  elm()  { return std::get<1>(*this); }
           
           DiffStep(DiffVerb verb, E e)
             : DiffToken(verb,e)

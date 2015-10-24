@@ -1610,9 +1610,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1443741905157" HGAP="364" ID="ID_1960988662" MODIFIED="1444522876737" TEXT="Diff-Implementierung" VSHIFT="17">
+<node CREATED="1443741905157" HGAP="364" ID="ID_1960988662" MODIFIED="1445644272260" TEXT="Diff-Implementierung" VSHIFT="17">
 <font NAME="SansSerif" SIZE="16"/>
-<icon BUILTIN="stop"/>
+<icon BUILTIN="prepare"/>
 <node CREATED="1444522932841" HGAP="52" ID="ID_48288704" MODIFIED="1444522994078" TEXT="Architektur" VSHIFT="-5">
 <node CREATED="1444522939928" ID="ID_490994681" MODIFIED="1444522986895" TEXT="destruktiv?">
 <icon BUILTIN="help"/>
@@ -1713,7 +1713,7 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1443741931858" ID="ID_484829805" MODIFIED="1443741945481" TEXT="Baum-Diff">
 <icon BUILTIN="flag"/>
-<node CREATED="1445295424277" ID="ID_1084177503" MODIFIED="1445295490146">
+<node CREATED="1445295424277" ID="ID_1084177503" MODIFIED="1445644243570">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -1725,7 +1725,7 @@
   </body>
 </html></richcontent>
 <font NAME="SansSerif" SIZE="13"/>
-<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1445295501531" ID="ID_1542006741" MODIFIED="1445295510654" TEXT="Problem: Teilb&#xe4;ume">
 <node CREATED="1445295582392" ID="ID_243770452" MODIFIED="1445295587819" TEXT="Umh&#xe4;ngen von Teilb&#xe4;umen"/>
 <node CREATED="1445295588127" ID="ID_1541079773" MODIFIED="1445295598746" TEXT="Abstieg in Teilb&#xe4;ume"/>
@@ -1829,6 +1829,20 @@
 <node CREATED="1445556567980" ID="ID_783100840" MODIFIED="1445556591370" TEXT="Voraussetzung: der Mutator mu&#xdf; die Attribut/Kinder-Listen exponieren">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node CREATED="1445644203808" ID="ID_1105228896" MODIFIED="1445644221661">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auf dem Umweg &#252;ber einen <b>ContentMutator</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1445550873904" ID="ID_1781797833" MODIFIED="1445556509368" TEXT="copy + transaktional als optionaler 2.Layer"/>
 <node CREATED="1445550893222" ID="ID_2118555" MODIFIED="1445550915111" TEXT="Diff-Applikator = destruktiver Mutator"/>
@@ -1852,8 +1866,7 @@
 </node>
 <node CREATED="1445392105075" ID="ID_1377567733" MODIFIED="1445392113677" TEXT="zwei neue, lokale Vektoren aufbauen"/>
 <node CREATED="1445392114217" ID="ID_71124283" MODIFIED="1445392120973" TEXT="daraus den neuen Record konstruieren"/>
-<node CREATED="1445556634395" ID="ID_1143865339" MODIFIED="1445621027321" TEXT="technische Komplikation: &quot;2 Listen&quot;-Modell">
-<icon BUILTIN="pencil"/>
+<node CREATED="1445556634395" FOLDED="true" ID="ID_1143865339" MODIFIED="1445644186279" TEXT="technische Komplikation: &quot;2 Listen&quot;-Modell">
 <node CREATED="1445620914088" ID="ID_1919426539" MODIFIED="1445621018036" TEXT="Verhalten &#xe4;ndert sich je nach Scope">
 <icon BUILTIN="info"/>
 </node>

@@ -65,15 +65,15 @@ namespace diff{
       
       virtual ~TreeDiffInterpreter() { } ///< this is an interface
       
-      virtual void ins (GenNode n)   =0;
-      virtual void del (GenNode n)   =0;
-      virtual void pick(GenNode n)   =0;
-      virtual void find(GenNode n)   =0;
-      virtual void skip(GenNode n)   =0;
+      virtual void ins (GenNode const& n)   =0;
+      virtual void del (GenNode const& n)   =0;
+      virtual void pick(GenNode const& n)   =0;
+      virtual void find(GenNode const& n)   =0;
+      virtual void skip(GenNode const& n)   =0;
       
-      virtual void after(GenNode n)  =0;
-      virtual void mut (GenNode n)   =0;
-      virtual void emu (GenNode n)   =0;
+      virtual void after(GenNode const&n)   =0;
+      virtual void mut (GenNode const& n)   =0;
+      virtual void emu (GenNode const& n)   =0;
     };
   
   struct TreeDiffLanguage

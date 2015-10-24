@@ -121,20 +121,20 @@ namespace diff{
       /* == Implementation of the diff application primitives == */
       
       void
-      ins (E elm)  override
+      ins (E const& elm)  override
         {
           seq_.push_back(elm);
         }
       
       void
-      del (E elm)  override
+      del (E const& elm)  override
         {
           __expect_in_target(elm, "remove");
           ++pos_;
         }
       
       void
-      pick (E elm)  override
+      pick (E const& elm)  override
         {
           __expect_in_target(elm, "pick");
           seq_.push_back (move(*pos_));
@@ -142,14 +142,14 @@ namespace diff{
         }
       
       void
-      skip (E elm)  override
+      skip (E const& elm)  override
         {
           __expect_further_elements (elm);
           ++pos_;
         }      // assume the actual content has been moved away by a previous find()
       
       void
-      find (E elm)  override
+      find (E const& elm)  override
         {
           __expect_further_elements (elm);
           Iter found = std::find(pos_, orig_.end(), elm);

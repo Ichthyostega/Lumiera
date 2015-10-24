@@ -85,7 +85,7 @@ namespace lib {
       
     public:
       RET
-      applyTo (REC& receiver, ARGS&&... args)
+      applyTo (REC& receiver, ARGS&& ...args)
         {
           REQUIRE ("NIL" != token_);
           return (receiver.*handler_)(std::forward<ARGS>(args)...);

@@ -93,31 +93,31 @@ namespace diff{
       /* == Implementation of the list diff application primitives == */
       
       void
-      ins (GenNode n)  override
+      ins (GenNode const& n)  override
         {
           UNIMPLEMENTED("insert node");
         }
       
       void
-      del (GenNode n)  override
+      del (GenNode const& n)  override
         {
           UNIMPLEMENTED("delete next node");
         }
       
       void
-      pick (GenNode n)  override
+      pick (GenNode const& n)  override
         {
           UNIMPLEMENTED("accept next node as-is");
         }
       
       void
-      skip (GenNode n)  override
+      skip (GenNode const& n)  override
         {
           UNIMPLEMENTED("skip void position left by find");
         }      // assume the actual content has been moved away by a previous find()
       
       void
-      find (GenNode n)  override
+      find (GenNode const& n)  override
         {
           UNIMPLEMENTED("search the named node and insert it here");
         }      // consume and leave waste, expected to be cleaned-up by skip() later
@@ -127,19 +127,19 @@ namespace diff{
       /* == Implementation of the tree diff application primitives == */
       
       void
-      after (GenNode n)  override
+      after (GenNode const& n)  override
         {
           UNIMPLEMENTED("cue to a position behind the named node");
         }
       
       void
-      mut (GenNode n)  override
+      mut (GenNode const& n)  override
         {
           UNIMPLEMENTED("open nested context for diff");
         }
       
       void
-      emu (GenNode n)  override
+      emu (GenNode const& n)  override
         {
           UNIMPLEMENTED("finish and leave nested diff context");
         }
