@@ -120,6 +120,12 @@ namespace diff{
         }
       
       void
+      jumpToChildScope()
+        {
+          pos = children.begin();
+        }
+      
+      void
       preAllocateStorage(size_t attribCnt, size_t childrenCnt)
         {
           // heuristics for storage pre-allocation (for tree diff application)

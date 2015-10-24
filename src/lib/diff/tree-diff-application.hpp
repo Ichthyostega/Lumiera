@@ -95,7 +95,14 @@ namespace diff{
       void
       ins (GenNode const& n)  override
         {
-          UNIMPLEMENTED("insert node");
+          if (n.isNamed())
+            target_.appendAttrib(n);
+          else
+            {
+              target_.appendChild(n);
+              if (content_.currIsAttrib())
+                content_.jumpToChildScope();
+            }
         }
       
       void

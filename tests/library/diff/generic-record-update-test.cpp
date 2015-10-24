@@ -147,6 +147,10 @@ namespace test{
           CHECK (rawElm == & *content.pos);
           ++content;
           CHECK ("b = β" == *content.pos);
+          content.jumpToChildScope();
+          CHECK ("γ" == *content.pos);
+          CHECK (!content.currIsAttrib());
+          CHECK (content.currIsChild());
           
           CHECK ( isnil (mut));
           CHECK (!isnil (content));

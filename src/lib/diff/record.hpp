@@ -440,6 +440,14 @@ namespace diff{
         }
       
       Mutator&
+      appendAttrib (VAL const& newAttrib)
+        {
+          REQUIRE (Rec::isAttribute(newAttrib));
+          record_.attribs_.push_back (newAttrib);
+          return *this;
+        }
+      
+      Mutator&
       appendChild (VAL const& newChild)
         {
           record_.children_.push_back (newChild);
