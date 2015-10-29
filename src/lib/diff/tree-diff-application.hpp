@@ -60,12 +60,14 @@
 
 #include "lib/diff/tree-diff.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/format-string.hpp"
 
 #include <utility>
 
 namespace lib {
 namespace diff{
   
+  using util::_Fmt;
   using std::move;
   using std::swap;
   
@@ -85,9 +87,68 @@ namespace diff{
     : public TreeDiffInterpreter
     {
       using Content = Rec::ContentMutator;
+      using Iter    = Content::Iter;
       
       Rec::Mutator& target_;
       Content content_;
+      
+      
+      
+      bool
+      end_of_target()
+        {
+          return content_.pos == content_.end();
+        }
+      
+      void
+      __expect_in_target (GenNode const& elm, Literal oper)
+        {
+          if (end_of_target())
+            throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
+                                    "no (further) elements in target sequence") % oper % elm
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+          if (*content_.pos != elm)
+            throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
+                                    "found element %s on current target position instead")
+                                    % oper % elm % *content_.pos
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+      
+      void
+      __expect_further_elements (GenNode const& elm)
+        {
+          if (end_of_target())
+            throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
+                                    "unable to apply diff further.") % elm
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+      
+      void
+      __expect_found (GenNode const& elm, Iter const& targetPos)
+        {
+          if (targetPos == content_.end())
+            throw error::State(_Fmt("Premature end of sequence; unable to locate "
+                                    "element %s in the remainder of the target.") % elm
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+      
+      Iter
+      find_in_current_scope (GenNode const& elm)
+        {
+          Iter end_of_scope = content_.currIsAttrib()? content_.attribs.end()
+                                                     : content_.children.end();
+          return std::find (content_.pos, end_of_scope, elm);
+        }
+      
+      void
+      move_into_new_sequence (Iter pos)
+        {
+          if (content_.currIsAttrib())
+            target_.appendAttrib (move(*pos));
+          else
+            target_.appendChild (move(*pos));
+        }
+      
       
       
       /* == Implementation of the list diff application primitives == */
@@ -108,25 +169,32 @@ namespace diff{
       void
       del (GenNode const& n)  override
         {
-          UNIMPLEMENTED("delete next node");
+          __expect_in_target(n, "remove");
+          ++content_;
         }
       
       void
       pick (GenNode const& n)  override
         {
-          UNIMPLEMENTED("accept next node as-is");
+          __expect_in_target(n, "pick");
+          move_into_new_sequence (content_.pos);
+          ++content_;
         }
       
       void
       skip (GenNode const& n)  override
         {
-          UNIMPLEMENTED("skip void position left by find");
+          __expect_further_elements (n);
+          ++content_;
         }      // assume the actual content has been moved away by a previous find()
       
       void
       find (GenNode const& n)  override
         {
-          UNIMPLEMENTED("search the named node and insert it here");
+          __expect_further_elements (n);
+          Iter found = find_in_current_scope(n);
+          __expect_found (n, found);
+          move_into_new_sequence (found);
         }      // consume and leave waste, expected to be cleaned-up by skip() later
       
       
