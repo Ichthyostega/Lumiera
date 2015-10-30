@@ -286,7 +286,7 @@ namespace diff{
       bool contains (X const& elm)  const;
       
       
-      bool matches (GenNode const& o)  const { return this->matches(o.idi); }  ///< @note \em not comparing payload data. Use equality for that
+      bool matches (GenNode const& o)  const { return this->matches(o.idi); }  ///< @note \em not comparing payload data. Use equality for that…
       bool matches (ID const& id)      const { return idi == id; }
       bool matches (int     number)    const { return data.matchNum(number);}
       bool matches (int64_t number)    const { return data.matchNum(number);}

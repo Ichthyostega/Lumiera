@@ -103,8 +103,15 @@ namespace diff{
         DERIVE_EQUALITY (time::Duration)
         DERIVE_EQUALITY (time::TimeSpan)
         DERIVE_EQUALITY (hash::LuidH)
-        DERIVE_EQUALITY (RecRef)
         DERIVE_EQUALITY (Rec)
+        
+        /** special treatment to allow matching a RecRef
+         * with an Record or RecRef on the other side */
+        virtual bool
+        handle  (RecRef const& val) override
+          {
+            return o_.matchRec(val);
+          }
         
       public:
         EqualityTest(DataCap const& o)

@@ -199,7 +199,7 @@ namespace test{
           CHECK (!isnil(scope));
           CHECK (GenNode("τ", Time(1,2,3,4)) == *scope);
           ++scope;
-          CHECK (GenNode(char('*')) == *scope);
+          CHECK (char('*') == scope->data.get<char>());
           ++scope;
           CHECK ("★" == scope->data.get<string>());
           ++scope;
@@ -813,18 +813,20 @@ namespace test{
           CHECK (nh2 != ref2);     CHECK (ref2 != nh2);
           
           CHECK (rec1 != rec2);    CHECK (rec2 != rec1);
-//        CHECK (rec1 != ref1);    CHECK (ref1 != rec1);   /////////TODO need special handling for references
-//        CHECK (rec1 != ref2);    CHECK (ref2 != rec1);
-          
-//        CHECK (rec2 != ref1);    CHECK (ref1 != rec2);
-//        CHECK (rec2 != ref2);    CHECK (ref2 != rec2);
-        
           CHECK (ref1 != ref2);    CHECK (ref2 != ref1);
+          
+          // NOTE: special handling for record references…
+          CHECK (rec1 == ref1);    CHECK (ref1 == rec1);
+          CHECK (rec1 != ref2);    CHECK (ref2 != rec1);
+          
+          CHECK (rec2 != ref1);    CHECK (ref1 != rec2);
+          CHECK (rec2 == ref2);    CHECK (ref2 == rec2);
+        
           
           
           /* ----- equivalence match ----- */
           
-          // equivalence on equality     // equivalence on ID match         // contained value equality
+          // equivalence as object       // equivalence on ID match         // contained value equality
           CHECK (ni1 .matches(ni1 ));    CHECK (ni1 .matches(ni1 .idi));    CHECK (ni1 .matches(i1 ));
           CHECK (ni2 .matches(ni2 ));    CHECK (ni2 .matches(ni2 .idi));    CHECK (ni2 .matches(i2 ));
           CHECK (nl1 .matches(nl1 ));    CHECK (nl1 .matches(nl1 .idi));    CHECK (nl1 .matches(l1 ));
