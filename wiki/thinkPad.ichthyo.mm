@@ -1806,8 +1806,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1445555721981" ID="ID_292803227" MODIFIED="1445556598964">
@@ -1820,8 +1819,7 @@
       L&#246;sung: wir arbeiten <i>auf </i>einem Mutator
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1445556525714" ID="ID_1223708278" MODIFIED="1445556595037" TEXT="damit funktioniert es 1:1 wie List-Diff">
 <icon BUILTIN="ksmiletris"/>
@@ -1839,8 +1837,7 @@
       auf dem Umweg &#252;ber einen <b>ContentMutator</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -1861,8 +1858,7 @@
       Innereien des alten Record <i>verbrauchen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1445392105075" ID="ID_1377567733" MODIFIED="1445392113677" TEXT="zwei neue, lokale Vektoren aufbauen"/>
 <node CREATED="1445392114217" ID="ID_71124283" MODIFIED="1445392120973" TEXT="daraus den neuen Record konstruieren"/>
@@ -1883,6 +1879,133 @@
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1445620991326" ID="ID_513677356" MODIFIED="1445620998003" TEXT="eigener Test">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1446159438278" HGAP="29" ID="ID_563496669" MODIFIED="1446159498995" VSHIFT="8">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem: <b><font color="#ed1c02" size="4">Rekursion</font></b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1446159517914" ID="ID_1749096609" MODIFIED="1446159530661" TEXT="wir m&#xfc;ssen rekursiv in Sub-Scope einsteigen"/>
+<node CREATED="1446159531745" ID="ID_1660140345" MODIFIED="1446159550795" TEXT="eingeschachtelt wieder ein Record::Mutator"/>
+<node CREATED="1446159551718" ID="ID_608514705" MODIFIED="1446159563593" TEXT="Wohin mit der Storage?"/>
+<node CREATED="1446159564725" ID="ID_893302390" MODIFIED="1446160764531" TEXT="zwei L&#xf6;sungsans&#xe4;tze">
+<icon BUILTIN="info"/>
+<node CREATED="1446159584034" ID="ID_1845322273" MODIFIED="1446159588733" TEXT="rekursiv konsumieren">
+<node CREATED="1446159632603" ID="ID_1950074103" MODIFIED="1446160677236">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn ein MUT kommt
+    </p>
+    <p>
+      erzeugt man lokal einen DiffApplikator f&#252;r den geschachtelten Kontext
+    </p>
+    <p>
+      und gibt ihm rekursiv den Diff hinein. Wenn dieser Aufruf zur&#252;ckkehrt
+    </p>
+    <p>
+      ist der gesammte Diff f&#252;r den eingeschachtelten Kontext konsumiert
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1446159744053" ID="ID_1735127502" MODIFIED="1446159765190" TEXT="pro">
+<node CREATED="1446159775161" ID="ID_192461503" MODIFIED="1446159832244" TEXT="elegant, selbst&#xe4;hnlich"/>
+<node CREATED="1446159790702" ID="ID_905335387" MODIFIED="1446159823622" TEXT="sauber, state bleibt lokal"/>
+<node CREATED="1446159833753" ID="ID_539121048" MODIFIED="1446159854442" TEXT="kein expliziter Stack, Daten auf dem Callstack"/>
+</node>
+<node CREATED="1446159751068" ID="ID_1466026714" MODIFIED="1446159770069" TEXT="contra">
+<node CREATED="1446159936323" ID="ID_1344861000" MODIFIED="1446159961793" TEXT="keine einfache Iteration mehr"/>
+<node CREATED="1446159910374" ID="ID_1307975840" MODIFIED="1446159998967" TEXT="man mu&#xdf; das Token anschauen"/>
+<node CREATED="1446159999939" ID="ID_1385561919" MODIFIED="1446160014569" TEXT="nicht kompatibel mit userem &quot;Interpreter&quot;-Modell"/>
+<node CREATED="1446159858701" ID="ID_751122481" MODIFIED="1446160039239" TEXT="Applikator mu&#xdf; selber Diff konsumieren"/>
+</node>
+</node>
+<node CREATED="1446159589369" ID="ID_1854873736" MODIFIED="1446159592429" TEXT="internen Stack">
+<node CREATED="1446160049196" ID="ID_893515494" MODIFIED="1446160680983">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn ein MUT kommt,
+    </p>
+    <p>
+      pusht der Applikator seinen privaten Zustand
+    </p>
+    <p>
+      auf einen explizit im Heap verwalteten std::stack
+    </p>
+    <p>
+      und legt einen neuen Mutator an f&#252;r den nested scope
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1446160209758" ID="ID_1949126696" MODIFIED="1446160211514" TEXT="pro">
+<node CREATED="1446160223212" ID="ID_189646771" MODIFIED="1446160248517" TEXT="kompatibel mit unserem &quot;Interpreter&quot;-Modell"/>
+<node CREATED="1446160249609" ID="ID_1437127411" MODIFIED="1446160256555" TEXT="Diff wird einfach weiter iteriert"/>
+</node>
+<node CREATED="1446160212502" ID="ID_572617599" MODIFIED="1446160214449" TEXT="contra">
+<node CREATED="1446160522212" ID="ID_1824677628" MODIFIED="1446160588767" TEXT="wir manipulieren state in einer Komponente"/>
+<node CREATED="1446160621127" ID="ID_391572254" MODIFIED="1446160635561" TEXT="diese Manipulation passiert mitten aus einem Token-Aufruf"/>
+<node CREATED="1446160592347" ID="ID_126615043" MODIFIED="1446160608364" TEXT="Storage-Management ist verwirrend"/>
+</node>
+</node>
+</node>
+<node CREATED="1446168257072" HGAP="81" ID="ID_91568209" MODIFIED="1446168481874" VSHIFT="5">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Entscheidung:
+    </p>
+    <p>
+      interner Stack
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....begr&#252;ndet duch die generische Architektur.
+    </p>
+    <p>
+      Die Trennung von Diff-Iteration und dem Interpreter erm&#246;glicht verschiedene Sprach-Ebenen.
+    </p>
+    <p>
+      Allerdings werde ich f&#252;r die Anwendung auf konkrete Datenstrukturen,
+    </p>
+    <p>
+      also den TreeMutator, vermutlich das andere Modell (rekursiv konsumieren) verwenden.
+    </p>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>

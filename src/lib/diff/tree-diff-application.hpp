@@ -63,6 +63,7 @@
 #include "lib/format-string.hpp"
 
 #include <utility>
+#include <stack>
 
 namespace lib {
 namespace diff{
@@ -73,7 +74,8 @@ namespace diff{
   
   
   /**
-   * concrete strategy to apply a structural diff to a target data structure
+   * Interpreter for the tree-diff-language to work on GenNode elements
+   * A concrete strategy to apply a structural diff to a target data structure
    * made from #Record<GenNode> elements. This data structure is assumed to be
    * recursive, tree-like. But because Record elements are conceived as immutable
    * and value-like, the tree diff application actually works on a Rec::Mutator
@@ -86,38 +88,52 @@ namespace diff{
   class DiffApplicationStrategy<Rec::Mutator>
     : public TreeDiffInterpreter
     {
+      using Mutator = Rec::Mutator;
       using Content = Rec::ContentMutator;
       using Iter    = Content::Iter;
       
-      Rec::Mutator& target_;
-      Content content_;
-      
-      
-      
-      bool
-      end_of_target()
+      struct ScopeFrame
         {
-          return content_.pos == content_.end();
-        }
+          Mutator& target;
+          Content content;
+          
+          ScopeFrame(Mutator& toModify)
+            : target(toModify)
+            , content()
+            {
+              target.swapContent (content);
+            }
+        };
+      
+      /** Storage: a stack of workspaces
+       * used to handle nested child objects */
+      std::stack<ScopeFrame> scopes_;
+      
+      
+      Mutator& out() { return scopes_.top().target; }
+      Content& src() { return scopes_.top().content; }
+      Iter& srcPos() { return scopes_.top().content.pos; }
+      bool endOfData() { return srcPos() == src().end(); }
+      
       
       void
       __expect_in_target (GenNode const& elm, Literal oper)
         {
-          if (end_of_target())
+          if (endOfData())
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "no (further) elements in target sequence") % oper % elm
                               , LUMIERA_ERROR_DIFF_CONFLICT);
-          if (*content_.pos != elm)
+          if (*srcPos() != elm)
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "found element %s on current target position instead")
-                                    % oper % elm % *content_.pos
+                                    % oper % elm % *srcPos()
                               , LUMIERA_ERROR_DIFF_CONFLICT);
         }
       
       void
       __expect_further_elements (GenNode const& elm)
         {
-          if (end_of_target())
+          if (endOfData())
             throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
                                     "unable to apply diff further.") % elm
                               , LUMIERA_ERROR_DIFF_CONFLICT);
@@ -126,7 +142,7 @@ namespace diff{
       void
       __expect_found (GenNode const& elm, Iter const& targetPos)
         {
-          if (targetPos == content_.end())
+          if (targetPos == src().end())
             throw error::State(_Fmt("Premature end of sequence; unable to locate "
                                     "element %s in the remainder of the target.") % elm
                               , LUMIERA_ERROR_DIFF_CONFLICT);
@@ -135,18 +151,18 @@ namespace diff{
       Iter
       find_in_current_scope (GenNode const& elm)
         {
-          Iter end_of_scope = content_.currIsAttrib()? content_.attribs.end()
-                                                     : content_.children.end();
-          return std::find (content_.pos, end_of_scope, elm);
+          Iter end_of_scope = src().currIsAttrib()? src().attribs.end()
+                                                  : src().children.end();
+          return std::find (srcPos(), end_of_scope, elm);
         }
       
       void
       move_into_new_sequence (Iter pos)
         {
-          if (content_.currIsAttrib())
-            target_.appendAttrib (move(*pos));
+          if (src().currIsAttrib())
+            out().appendAttrib (move(*pos));
           else
-            target_.appendChild (move(*pos));
+            out().appendChild (move(*pos));
         }
       
       
@@ -157,12 +173,12 @@ namespace diff{
       ins (GenNode const& n)  override
         {
           if (n.isNamed())
-            target_.appendAttrib(n);
+            out().appendAttrib(n);
           else
             {
-              target_.appendChild(n);
-              if (content_.currIsAttrib())
-                content_.jumpToChildScope();
+              out().appendChild(n);
+              if (src().currIsAttrib())
+                src().jumpToChildScope();
             }
         }
       
@@ -170,22 +186,22 @@ namespace diff{
       del (GenNode const& n)  override
         {
           __expect_in_target(n, "remove");
-          ++content_;
+          ++src();
         }
       
       void
       pick (GenNode const& n)  override
         {
           __expect_in_target(n, "pick");
-          move_into_new_sequence (content_.pos);
-          ++content_;
+          move_into_new_sequence (srcPos());
+          ++src();
         }
       
       void
       skip (GenNode const& n)  override
         {
           __expect_further_elements (n);
-          ++content_;
+          ++src();
         }      // assume the actual content has been moved away by a previous find()
       
       void
@@ -223,10 +239,9 @@ namespace diff{
     public:
       explicit
       DiffApplicationStrategy(Rec::Mutator& mutableTargetRecord)
-        : target_(mutableTargetRecord)
-        , content_()
+        : scopes_()
         {
-          target_.swapContent (content_);
+          scopes_.emplace(mutableTargetRecord);
         }
     };
   
