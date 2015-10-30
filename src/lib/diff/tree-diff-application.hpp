@@ -168,7 +168,7 @@ namespace diff{
       void
       __expect_end_of_scope (GenNode::ID const& idi)
         {
-          if (!endOfData())
+          if (not endOfData())
             throw error::State(_Fmt("Incomplete diff: when about to leave scope %s, "
                                     "not all previously existing elements have been confirmed by the diff. "
                                     "At least one spurious element %s was left over") % idi.getSym() % *srcPos()
@@ -213,7 +213,10 @@ namespace diff{
       ins (GenNode const& n)  override
         {
           if (n.isNamed())
-            out().appendAttrib(n);
+            if (n.isTypeID())
+              out().setType (n.data.get<string>());
+            else
+              out().appendAttrib(n);
           else
             {
               out().appendChild(n);

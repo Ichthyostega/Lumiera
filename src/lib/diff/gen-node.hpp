@@ -276,6 +276,12 @@ namespace diff{
           return not util::startsWith (idi.getSym(), "_CHILD_");
         }
       
+      bool
+      isTypeID()  const
+        {
+          return "type" == idi.getSym();
+        }
+      
       template<typename X>
       bool contains (X const& elm)  const;
       
@@ -624,9 +630,9 @@ namespace diff{
   
   template<>
   inline bool
-  Rec::isTypeID (GenNode const& v)
+  Rec::isTypeID (GenNode const& attrib)
   {
-    return "type" == v.idi.getSym();
+    return attrib.isTypeID();
   }
   
   template<>
