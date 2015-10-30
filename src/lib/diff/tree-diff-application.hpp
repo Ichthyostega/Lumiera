@@ -61,6 +61,7 @@
 #include "lib/diff/tree-diff.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-string.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
 #include <stack>
@@ -68,6 +69,7 @@
 namespace lib {
 namespace diff{
   
+  using util::unConst;
   using util::_Fmt;
   using std::move;
   using std::swap;
@@ -156,6 +158,19 @@ namespace diff{
           return std::find (srcPos(), end_of_scope, elm);
         }
       
+      GenNode const&
+      find_child (GenNode::ID const& idi)
+        {
+          Rec& alteredRec = out();
+          for (auto & child : alteredRec)
+            if (child.idi == idi)
+              return child;
+          
+          throw error::State(_Fmt("Attempt to mutate non existing child record; unable to locate child %s "
+                                  "after applying the diff. Current scope: %s") % idi.getSym() % alteredRec
+                            , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+      
       void
       move_into_new_sequence (Iter pos)
         {
@@ -223,12 +238,16 @@ namespace diff{
           UNIMPLEMENTED("cue to a position behind the named node");
         }
       
+      /** open nested scope to apply diff to child object */
       void
       mut (GenNode const& n)  override
         {
-          UNIMPLEMENTED("open nested context for diff");
+          GenNode const& child = find_child (n.idi);
+          Rec const& childRecord = child.data.get<Rec>();
+          scopes_.emplace (mutateInPlace (unConst(childRecord)));
         }
       
+      /** finish and leave child object scope, return to parent */
       void
       emu (GenNode const& n)  override
         {

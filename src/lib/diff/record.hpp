@@ -505,6 +505,21 @@ namespace diff{
     };
   
   
+  /** open an existing record for modification in-place.
+   * @warning this function undermines the immutability of Record
+   * @remarks exploits the specific and known memory layout of Rec::Mutator.
+   *          This trickery is necessary to avoid copying a large and possibly
+   *          nested object tree; this happens when applying a diff, when
+   *          recursively descending into nested child objects.
+   * @see tree-diff-application.hpp
+   */
+  template<typename VAL>
+  inline typename Record<VAL>::Mutator&
+  mutateInPlace (Record<VAL>& record_to_mutate)
+  {
+    return reinterpret_cast<typename Record<VAL>::Mutator &> (record_to_mutate);
+  }
+  
   
   /**
    * wrapped record reference.
