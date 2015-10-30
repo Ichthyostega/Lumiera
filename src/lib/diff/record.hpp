@@ -511,6 +511,7 @@ namespace diff{
    *          This trickery is necessary to avoid copying a large and possibly
    *          nested object tree; this happens when applying a diff, when
    *          recursively descending into nested child objects.
+   * @todo do we have a design mismatch here??      /////////////////////////////////////////TICKET #970
    * @see tree-diff-application.hpp
    */
   template<typename VAL>
