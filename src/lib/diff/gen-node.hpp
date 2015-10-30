@@ -254,10 +254,10 @@ namespace diff{
                                        ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
       GenNode(GenNode const&)  =default;
       GenNode(GenNode&&)       =default;
-      GenNode(GenNode& o)    : GenNode((GenNode const&)o) { }
-      GenNode(Ref const& r)  : GenNode((GenNode const&)r) { }
-      GenNode(Ref &  r)      : GenNode((GenNode const&)r) { }
-      GenNode(Ref && r)      : GenNode((GenNode &&)r)     { }
+      GenNode(GenNode& o)  : GenNode((GenNode const&)o) { }
+      GenNode(Ref const& r);
+      GenNode(Ref &  r);
+      GenNode(Ref && r);
       
       GenNode& operator= (GenNode const&)  =default;
       GenNode& operator= (GenNode&&)       =default;
@@ -601,6 +601,12 @@ namespace diff{
     };
   
   
+  // slice down on copy construction...
+  inline GenNode::GenNode(Ref const& r)  : idi(r.idi), data(r.data)   { }
+  inline GenNode::GenNode(Ref &  r)      : idi(r.idi), data(r.data)   { }
+  inline GenNode::GenNode(Ref && r)      : idi(std::move(r.idi)),
+                                           data(std::move(r.data))    { }
+
   
   /* === Specialisation to add fluent GenNode builder API to Record<GenNode> === */
   
