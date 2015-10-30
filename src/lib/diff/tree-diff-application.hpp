@@ -116,6 +116,7 @@ namespace diff{
       Content& src() { return scopes_.top().content; }
       Iter& srcPos() { return scopes_.top().content.pos; }
       bool endOfData() { return srcPos() == src().end(); }
+      Rec& alteredRec() { return out(); }
       
       
       void
@@ -150,6 +151,31 @@ namespace diff{
                               , LUMIERA_ERROR_DIFF_CONFLICT);
         }
       
+      void
+      __expect_valid_parent_scope (GenNode::ID const& idi)
+        {
+          if (scopes_.empty())
+            throw error::State(_Fmt("Unbalanced child scope bracketing tokens in diff; "
+                                    "When leaving scope %s, we fell out of root scope.") % idi.getSym()
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+          
+          if (alteredRec().empty())
+            throw error::State(_Fmt("Corrupted state. When leaving scope %s, "
+                                    "we found an empty parent scope.") % idi.getSym()
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+      
+      void
+      __expect_end_of_scope (GenNode::ID const& idi)
+        {
+          if (!endOfData())
+            throw error::State(_Fmt("Incomplete diff: when about to leave scope %s, "
+                                    "not all previously existing elements have been confirmed by the diff. "
+                                    "At least one spurious element %s was left over") % idi.getSym() % *srcPos()
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+      
+      
       Iter
       find_in_current_scope (GenNode const& elm)
         {
@@ -161,13 +187,12 @@ namespace diff{
       GenNode const&
       find_child (GenNode::ID const& idi)
         {
-          Rec& alteredRec = out();
-          for (auto & child : alteredRec)
+          for (auto & child : alteredRec())
             if (child.idi == idi)
               return child;
           
           throw error::State(_Fmt("Attempt to mutate non existing child record; unable to locate child %s "
-                                  "after applying the diff. Current scope: %s") % idi.getSym() % alteredRec
+                                  "after applying the diff. Current scope: %s") % idi.getSym() % alteredRec()
                             , LUMIERA_ERROR_DIFF_CONFLICT);
         }
       
@@ -251,7 +276,9 @@ namespace diff{
       void
       emu (GenNode const& n)  override
         {
-          UNIMPLEMENTED("finish and leave nested diff context");
+          __expect_end_of_scope (n.idi);
+          scopes_.pop();
+          __expect_valid_parent_scope (n.idi);
         }
       
       
