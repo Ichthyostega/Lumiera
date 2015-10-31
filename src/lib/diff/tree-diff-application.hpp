@@ -276,17 +276,30 @@ namespace diff{
       void
       after (GenNode const& n)  override
         {
-          // use an appropriate predicate to know when to stop. Default is to stop on ID match
-          function<bool(GenNode const&)> found = [&](GenNode const& elm) { return elm.matches(n);   };
-          if (n.matches(Ref::ATTRIBS))   found =  [](GenNode const& elm) { return not elm.isNamed();};
-          else if (n.matches(Ref::END))  found =  [](GenNode const&    ) { return false;            };
+          if (n.matches(Ref::ATTRIBS))
+            while (not endOfData() and srcPos()->isNamed())
+              {
+                move_into_new_sequence (srcPos());
+                ++src();
+              }
+          else
+          if (n.matches(Ref::END))
+            while (not endOfData())
+              {
+                move_into_new_sequence (srcPos());
+                ++src();
+              }
+          else
+            while (not (endOfData() or srcPos()->matches(n)))
+              {
+                move_into_new_sequence (srcPos());
+                ++src();
+              }
           
-          while (not endOfData() and not found(*srcPos()))
-            {
-              move_into_new_sequence (srcPos());
-              ++src();
-            }
           __expect_successful_location(n);
+          
+          if (srcPos()->matches(n))
+            ++src(); // get /after/ an explicitly given position
         }
       
       /** open nested scope to apply diff to child object */
