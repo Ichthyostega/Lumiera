@@ -152,6 +152,16 @@ namespace diff{
         }
       
       void
+      __expect_successful_location (GenNode const& elm)
+        {
+          if (endOfData()
+              and not (    elm.matches(Ref::END)                                      // after(_END_)     -> its OK we hit the end
+                       or (elm.matches(Ref::ATTRIBS) and src().children.empty())))    // after(_ATTRIBS_) -> if there are no children, it's OK to hit the end
+            throw error::State(_Fmt("Unable locate position 'after(%s)'") % elm.idi
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+        }
+
+      void
       __expect_valid_parent_scope (GenNode::ID const& idi)
         {
           if (scopes_.empty())
@@ -260,10 +270,23 @@ namespace diff{
       
       /* == Implementation of the tree diff application primitives == */
       
+      /** cue to a position behind the named node,
+       *  thereby picking (accepting) all traversed elements
+       *  into the reshaped new data structure as-is */
       void
       after (GenNode const& n)  override
         {
-          UNIMPLEMENTED("cue to a position behind the named node");
+          // use an appropriate predicate to know when to stop. Default is to stop on ID match
+          function<bool(GenNode const&)> found = [&](GenNode const& elm) { return elm.matches(n);   };
+          if (n.matches(Ref::ATTRIBS))   found =  [](GenNode const& elm) { return not elm.isNamed();};
+          else if (n.matches(Ref::END))  found =  [](GenNode const&    ) { return false;            };
+          
+          while (not endOfData() and not found(*srcPos()))
+            {
+              move_into_new_sequence (srcPos());
+              ++src();
+            }
+          __expect_successful_location(n);
         }
       
       /** open nested scope to apply diff to child object */
