@@ -162,10 +162,14 @@ namespace diff{
       explicit
       DiffApplicationStrategy(vector<E>& targetVector)
         : seq_(targetVector)
-        , pos_(seq_.begin())
+        { }
+      
+      void
+      initDiffApplication()
         {
-          swap (seq_, orig_);  // pos_ still refers to original input sequence, which has been moved to orig_
-          seq_.reserve (targetVector.size() * 120 / 100);    // heuristics for storage pre-allocation
+          swap (seq_, orig_);
+          seq_.reserve (orig_.size() * 120 / 100);    // heuristics for storage pre-allocation
+          pos_ = orig_.begin();
         }
     };
   

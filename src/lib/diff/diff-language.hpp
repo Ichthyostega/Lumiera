@@ -294,6 +294,7 @@ namespace diff{
       void
       consume (DIFF&& diff)
         {
+          target_.initDiffApplication();
           for ( ; diff; ++diff )
             diff->applyTo(target_);
         }

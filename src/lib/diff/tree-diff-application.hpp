@@ -102,6 +102,9 @@ namespace diff{
           ScopeFrame(Mutator& toModify)
             : target(toModify)
             , content()
+            { }
+          
+          void init()
             {
               target.swapContent (content);
             }
@@ -298,7 +301,7 @@ namespace diff{
           
           __expect_successful_location(n);
           
-          if (srcPos()->matches(n))
+          if (not endOfData() and srcPos()->matches(n))
             ++src(); // get /after/ an explicitly given position
         }
       
@@ -327,6 +330,13 @@ namespace diff{
         : scopes_()
         {
           scopes_.emplace(mutableTargetRecord);
+        }
+      
+      void
+      initDiffApplication()
+        {
+          REQUIRE (1 == scopes_.size());
+          scopes_.top().init();
         }
     };
   
