@@ -904,6 +904,17 @@ namespace test{
           // string match is literal
           CHECK (!nz1.matches(" "));
           CHECK (!nz2.matches("↯ "));
+          
+          GenNode copy(ni1);
+          CHECK (copy == ni1);
+          
+          copy.data = 2*i1;
+          CHECK (copy != ni1);
+          CHECK (copy.idi  == ni1.idi);
+          CHECK (not copy.data.matchData(ni1.data));
+          
+          // NOTE: "match" operation is shallow on records
+          CHECK (copy.matches(ni1)); CHECK (ni1.matches(copy));
         }
     };
   
