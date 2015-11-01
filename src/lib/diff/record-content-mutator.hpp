@@ -30,7 +30,10 @@
  ** details of doing so are highly coupled to the actual storage implementation
  ** of #Record, as well as to the actual procedure to apply a diff message, as
  ** implemented in lib::diff::DiffApplicationStrategy.
- ** 
+ ** @warning this struct is marked "internal" for a reason;
+ **          it serves the purpose to remove technicalities from usage site,
+ **          yet it is \em not a proper abstraction. Be sure you understand
+ **          the storage layout, especially when testing for iteration end.
  ** @see generic-record-update-test.cpp
  ** @see tree-diff-application-test.cpp
  ** @see Record::Mutator
@@ -115,6 +118,15 @@ namespace diff{
       
       void
       resetPos()
+        {
+          if (attribs.empty())
+            jumpToChildScope();
+          else
+            jumpToAttribScope();
+        }
+      
+      void
+      jumpToAttribScope()
         {
           pos = attribs.begin();
         }

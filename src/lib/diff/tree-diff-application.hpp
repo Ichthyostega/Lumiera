@@ -108,6 +108,7 @@ namespace diff{
           void init()
             {
               target.swapContent (content);
+              content.resetPos();
             }
         };
       
