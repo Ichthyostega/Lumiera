@@ -129,6 +129,10 @@ namespace diff{
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "no (further) elements in target sequence") % oper % elm
                               , LUMIERA_ERROR_DIFF_CONFLICT);
+          
+          if (elm.matches(Ref::CHILD) and not srcPos()->isNamed())
+            return; // allow for anonymous pick or delete of children
+          
           if (not srcPos()->matches(elm))
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "found element %s on current target position instead")

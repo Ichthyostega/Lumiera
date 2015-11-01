@@ -107,12 +107,12 @@ namespace test{
       DiffSeq
       mutationDiff()
         {
-          return snapshot({after(Ref::ATTRIBS)
+          return snapshot({after(Ref::ATTRIBS)      // fast forward to the first child
                          , find(CHILD_T)
                          , pick(CHILD_A)
                          , skip(CHILD_T)
                          , del(CHILD_T)
-                         , pick(Ref::CHILD)
+                         , pick(Ref::CHILD)         // pick a child anonymously
                          , mut(Ref::THIS)
                            , ins(ATTRIB3)
                            , ins(ATTRIB_NODE)
