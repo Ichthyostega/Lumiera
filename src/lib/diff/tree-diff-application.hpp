@@ -129,7 +129,7 @@ namespace diff{
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "no (further) elements in target sequence") % oper % elm
                               , LUMIERA_ERROR_DIFF_CONFLICT);
-          if (*srcPos() != elm)
+          if (not srcPos()->matches(elm))
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "found element %s on current target position instead")
                                     % oper % elm % *srcPos()
