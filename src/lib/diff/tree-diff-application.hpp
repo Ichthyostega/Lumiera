@@ -233,7 +233,12 @@ namespace diff{
         {
           Iter end_of_scope = src().currIsAttrib()? src().attribs.end()
                                                   : src().children.end();
-          return std::find (srcPos(), end_of_scope, elm);
+          return std::find_if (srcPos()
+                              ,end_of_scope
+                              ,[&](auto& entry)
+                                   {
+                                     return entry.matches(elm);
+                                   });
         }
       
       GenNode const&

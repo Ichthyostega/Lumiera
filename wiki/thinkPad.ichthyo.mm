@@ -2008,9 +2008,6 @@
 </node>
 <node CREATED="1446356556349" ID="ID_1068649765" MODIFIED="1446356607845" TEXT="offen...">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1446356564244" ID="ID_211629813" MODIFIED="1446356584315" TEXT="find nicht per == sondern per match">
-<icon BUILTIN="messagebox_warning"/>
-</node>
 <node CREATED="1446356765393" ID="ID_293921295" MODIFIED="1446356827238" TEXT="IDs in Testdaten f&#xfc;r GenNodeBaisc_test">
 <richcontent TYPE="NOTE"><html>
   <head>
