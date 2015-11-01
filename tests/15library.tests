@@ -254,19 +254,18 @@ END
 
 
 TEST "Generic Record data node" GenNodeBasic_test <<END
-out-lit: GenNode-ID("_CHILD_Record.001")-DataCap|«lib::diff::Record<lib::diff::GenNode>»|Rec(spam| ham = DataCap|«std::string»|eggs |{})
+out: GenNode.+_CHILD_Record.+Rec.spam..ham = DataCap.+eggs
 out-lit: --spam--
-out-lit: GenNode-ID("baked beans")-DataCap|«lib::diff::Record<lib::diff::GenNode>»|Rec(hasSpam = DataCap|«bool»|1 |{GenNode-ID("_CHILD_char.002")-DataCap|«char»|*, GenNode-ID("_CHILD_string.006")-DataCap|«std::string»|★, GenNode-ID("_CHILD_double.001")-DataCap|«double»|3.1415926535897931, GenNode-ID("spam")-DataCap|«lib::diff::Record<lib::diff::GenNode>»|Rec(ham|  |{GenNode-ID("_CHILD_string.003")-DataCap|«std::string»|eggs, GenNode-ID("_CHILD_string.004")-DataCap|«std::string»|spam, GenNode-ID("_CHILD_string.005")-DataCap|«std::string»|spam}), GenNode-ID("_CHILD_TimeSpan.002")-DataCap|«lib::time::TimeSpan»|0:00:00.000[920ms], GenNode-ID("_CHILD_long.001")-DataCap|«long»|42})
-out-lit: GenNode-ID("hasSpam")-DataCap|«bool»|1
-out-lit: GenNode-ID("_CHILD_char.002")-DataCap|«char»|*
-out-lit: GenNode-ID("_CHILD_string.006")-DataCap|«std::string»|★
-out-lit: GenNode-ID("_CHILD_double.001")-DataCap|«double»|3.1415926535897931
-out-lit: GenNode-ID("spam")-DataCap|«lib::diff::Record<lib::diff::GenNode>»|Rec(ham|  |{GenNode-ID("_CHILD_string.003")-DataCap|«std::string»|eggs, GenNode-ID("_CHILD_string.004")-DataCap|«std::string»|spam, GenNode-ID("_CHILD_string.005")-DataCap|«std::string»|spam})
-out-lit: GenNode-ID("_CHILD_string.003")-DataCap|«std::string»|eggs
-out-lit: GenNode-ID("_CHILD_string.004")-DataCap|«std::string»|spam
-out-lit: GenNode-ID("_CHILD_string.005")-DataCap|«std::string»|spam
-out-lit: GenNode-ID("_CHILD_TimeSpan.002")-DataCap|«lib::time::TimeSpan»|0:00:00.000[920ms]
-out-lit: GenNode-ID("_CHILD_long.001")-DataCap|«long»|42
+out: GenNode.+"baked beans".+Rec.hasSpam = DataCap.«bool».+«char».+«std::string».*«double».+GenNode.+"spam".+«lib::diff::Record<lib::diff::GenNode>».+«std::string».eggs.+«std::string».spam.+«std::string».spam
+out: GenNode.+"hasSpam".+«bool».1
+out: GenNode.+_CHILD_char.+«char».\*
+out: GenNode.+_CHILD_string.+«std::string».★
+out: GenNode.+_CHILD_double.+«double».3.1415926535897931
+out: GenNode.+"spam".+«lib::diff::Record<lib::diff::GenNode>».Rec.ham.+eggs.+spam.+spam
+out: GenNode.+_CHILD_string.+«std::string».eggs
+out: GenNode.+_CHILD_string.+«std::string».spam
+out: GenNode.+_CHILD_TimeSpan.+«lib::time::TimeSpan»
+out: GenNode.+_CHILD_long.+«long».42
 return: 0
 END
 
