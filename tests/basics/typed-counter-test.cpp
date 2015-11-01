@@ -326,22 +326,42 @@ namespace test{
           CHECK (0==myCounter.size());
           
           CHECK (0 == myCounter.get<short>());
-          CHECK (1 == myCounter.size());
+          CHECK (0 <  myCounter.size());
+          // probably greater than 1;
+          // other parts of the application allocate type-IDs as well
           
-          CHECK (0 == myCounter.get<long>());
-          CHECK (2 == myCounter.size());
+          // now allocate a counter for a type not seen yet
+          struct X { };
+          struct U { };
           
-          CHECK (-1 == myCounter.dec<short>());
-          CHECK (-2 == myCounter.dec<short>());
-          CHECK (+1 == myCounter.inc<long>());
+          CHECK (0 == myCounter.get<X>());
+          size_t sX = myCounter.size();
           
-          CHECK (-2 == myCounter.get<short>());
-          CHECK (+1 == myCounter.get<long>());
+          CHECK (0 == myCounter.get<U>());
+          CHECK (sX + 1 == myCounter.size());
+          CHECK (0 == myCounter.get<X>());
+          CHECK (sX + 1 == myCounter.size());
           
+          CHECK (-1 == myCounter.dec<X>());
+          CHECK (-2 == myCounter.dec<X>());
+          CHECK (+1 == myCounter.inc<U>());
           
-          CHECK (1 == TypedContext<TypedCounter>::ID<short>::get());
-          CHECK (2 == TypedContext<TypedCounter>::ID<long>::get());
-          CHECK (2 == myCounter.size());
+          CHECK (-2 == myCounter.get<X>());
+          CHECK (+1 == myCounter.get<U>());
+          
+          // each new type has gotten a new "slot" (i.e. a distinct type-ID)
+          IxID typeID_short = TypedContext<TypedCounter>::ID<short>::get();
+          IxID typeID_X     = TypedContext<TypedCounter>::ID<X>::get();
+          IxID typeID_U     = TypedContext<TypedCounter>::ID<U>::get();
+          
+          CHECK (0 < typeID_short);
+          CHECK (0 < typeID_X);
+          CHECK (0 < typeID_U);
+          CHECK (typeID_short < typeID_X);
+          CHECK (typeID_X < typeID_U);
+          // type-IDs are allocated in the order of first usage
+          
+          CHECK (sX + 1 == myCounter.size());
         }
       
       
