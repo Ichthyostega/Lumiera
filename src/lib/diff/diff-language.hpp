@@ -86,6 +86,7 @@
 
 #include "lib/error.hpp"
 #include "lib/verb-token.hpp"
+#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <tuple>
@@ -172,6 +173,8 @@ namespace diff{
           void
           applyTo (Interpreter& interpreter)
             {
+              using util::cStr;
+              TRACE (diff, "verb %4s(%s)", cStr(verb()), cStr(elm()) );
               verb().applyTo (interpreter, elm());
             }
         };
