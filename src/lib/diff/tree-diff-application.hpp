@@ -70,6 +70,7 @@ namespace lib {
 namespace diff{
   
   using util::unConst;
+  using util::cStr;
   using util::_Fmt;
   using std::move;
   using std::swap;
@@ -329,13 +330,18 @@ namespace diff{
         {
           GenNode const& child = find_child (n.idi);
           Rec const& childRecord = child.data.get<Rec>();
+          
+          TRACE (diff, "tree-diff: ENTER scope %s", cStr(childRecord));
           scopes_.emplace (mutateInPlace (unConst(childRecord)));
+          scopes_.top().init();
         }
       
       /** finish and leave child object scope, return to parent */
       void
       emu (GenNode const& n)  override
         {
+          TRACE (diff, "tree-diff: LEAVE scope %s", cStr(alteredRec()));
+          
           __expect_end_of_scope (n.idi);
           scopes_.pop();
           __expect_valid_parent_scope (n.idi);
