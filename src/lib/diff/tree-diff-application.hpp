@@ -204,6 +204,20 @@ namespace diff{
       GenNode const&
       find_child (GenNode::ID const& idi)
         {
+          if (alteredRec().empty())
+            throw error::State(_Fmt("Attempt to mutate element %s, but current target data scope is empty. "
+                                    "Sender and receiver out of sync?") % idi.getSym()
+                              , LUMIERA_ERROR_DIFF_CONFLICT);
+          
+          // Short-cut-mutation: look at the last element.
+          // this should be the one just added. BUT NOTE: this fails
+          // when adding an attribute after entering the child scope.
+          // Since attributes are typically values and not mutated,
+          // this inaccuracy was deemed acceptable
+          auto& current = out().accessLast();
+          if (Ref::THIS.matches(idi) or current.matches(idi))
+            return current;
+          
           for (auto & child : alteredRec())
             if (child.idi == idi)
               return child;
@@ -217,7 +231,7 @@ namespace diff{
       move_into_new_sequence (Iter pos)
         {
           if (src().currIsAttrib())
-            out().appendAttrib (move(*pos));
+            out().appendAttrib (move(*pos));                    //////////////TICKET #969  was it a good idea to allow adding attributes "after the fact"?
           else
             out().appendChild (move(*pos));
         }
@@ -233,7 +247,7 @@ namespace diff{
             if (n.isTypeID())
               out().setType (n.data.get<string>());
             else
-              out().appendAttrib(n);
+              out().appendAttrib(n);                            //////////////TICKET #969  dto.
           else
             {
               out().appendChild(n);

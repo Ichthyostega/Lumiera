@@ -113,7 +113,7 @@ namespace test{
                          , skip(CHILD_T)
                          , del(CHILD_T)
                          , pick(Ref::CHILD)         // pick a child anonymously
-                         , mut(Ref::THIS)
+                         , mut(Ref::THIS)           // mutate the current element (the one just picked)
                            , ins(ATTRIB3)
                            , ins(ATTRIB_NODE)
                            , find(CHILD_A)

@@ -474,6 +474,25 @@ namespace diff{
           alteredContent.resetPos();
         }
       
+      /** get the tail element.
+       * @return either the last child, or the last attribute, when children are empty.
+       * @note typically this might be used to get back at the element "just added",
+       *       as when muting a child node in diff application. But there is a loophole:
+       *       we might have added an attribute even when there are already children.
+       */
+      VAL const&
+      accessLast()
+        {
+          if (record_.empty())
+            throw error::State("Record is empty, unable to access (last) element.");
+          
+          if (record_.children_.empty())
+            return record_.attribs_.back();
+          else
+            return record_.children_.back();
+        }
+      
+      
       /* === extension point for building specific value types === */
       /*
        * the following builder functions need to be specialised
