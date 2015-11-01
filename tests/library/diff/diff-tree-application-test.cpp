@@ -51,13 +51,13 @@ namespace test{
     const GenNode ATTRIB1("α", 1),                         // attribute α = 1 
                   ATTRIB2("β", 2L),                        // attribute α = 2L   (int64_t)
                   ATTRIB3("γ", 3.45),                      // attribute γ = 3.45 (double)
-                  TYPE_X("type", "X"),                     // a "magic" type attribute "X" 
+                  TYPE_X("type", "X"),                     // a "magic" type attribute "X"
                   TYPE_Y("type", "Y"),                     // 
                   CHILD_A("a"),                            // unnamed string child node
                   CHILD_B('b'),                            // unnamed char child node
                   CHILD_T(Time(12,34,56,78)),              // unnamed time value child
                   SUB_NODE = MakeRec().genNode(),          // empty anonymous node used to open a sub scope
-                  ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ 
+                  ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ
                   CHILD_NODE = SUB_NODE;                   // yet another child node, same ID as SUB_NODE (!)
     
   }//(End)Test fixture
@@ -71,13 +71,29 @@ namespace test{
   
   
   /***********************************************************************//**
-   * @test Demonstration/Concept: a description language for list differences.
+   * @test Demonstration/Concept: a description language for tree differences.
    *       The representation is given as a linearised sequence of verb tokens.
-   *       This test demonstrates the application of such a diff representation
-   *       to a given source list, transforming this list to hold the intended
-   *       target list contents.
-   *       
-   * @see session-structure-mapping-test.cpp
+   *       In addition to the verbs used for list diffing, here we additionally
+   *       have to deal with nested scopes, which can be entered thorough a
+   *       bracketing construct \c mut(ID)...emu(ID).
+   *       This test demonstrates the application of such diff sequences
+   *       - in the first step, an empty root #Record<GenNode> is populated
+   *         with a type-ID, three named attribute values, three child values
+   *         and a nested child-Record.
+   *       - the second step demonstrates various diff language constructs
+   *         to alter, reshape and mutate this data structure
+   *       After applying those two diff sequences, we verify the data
+   *       is indeed in the expected shape.
+   * @remarks to follow this test, you should be familiar both with our
+   *      \link diff::Record generic data record \endlink, as well as with
+   *      the \link diff::GenNode variant data node \endlink. The key point
+   *      to note is the usage of Record elements as payload within GenNode,
+   *      which allows to represent tree shaped object like data structures.
+   * @see GenericRecordRepresentation_test
+   * @see GenNodeBasic_test
+   * @see DiffListApplication_test
+   * @see diff-tree-application.hpp
+   * @see tree-diff.hpp
    */
   class DiffTreeApplication_test
     : public Test
@@ -115,7 +131,7 @@ namespace test{
                          , pick(Ref::CHILD)         // pick a child anonymously
                          , mut(Ref::THIS)           // mutate the current element (the one just picked)
                            , ins(ATTRIB3)
-                           , ins(ATTRIB_NODE)
+                           , ins(ATTRIB_NODE)       // attributes can also be nested objects
                            , find(CHILD_A)
                            , del(CHILD_B)
                            , ins(CHILD_NODE)
@@ -125,7 +141,7 @@ namespace test{
                              , ins(TYPE_Y)
                              , ins(ATTRIB2)
                            , emu(CHILD_NODE)
-                           , mut(ATTRIB_NODE)
+                           , mut(ATTRIB_NODE)       // mutation can be out-of order, target found by ID
                              , ins(CHILD_A)
                              , ins(CHILD_A)
                              , ins(CHILD_A)
@@ -141,41 +157,44 @@ namespace test{
           Rec::Mutator target;
           Rec& subject = target;
           DiffApplicator<Rec::Mutator> application(target);
+          
+          // Part I : apply diff to populate
           application.consume(populationDiff());
           
-          CHECK (!isnil (subject));                                                    // nonempty -- content has been added
-          CHECK ("X" == subject.getType());                                            // type was set to "X"
-          CHECK (1 == subject.get("α").data.get<int>());                               // has gotten our int attribute "α"
-          CHECK (2L == subject.get("β").data.get<int64_t>());                          // ... the long attribute "β"
-          CHECK (3.45 == subject.get("γ").data.get<double>());                         // ... and double attribute "γ"
-          auto scope = subject.scope();                                                // look into the scope contents...
-          CHECK (  *scope == CHILD_A);                                                 //   there is CHILD_A
-          CHECK (*++scope == CHILD_T);                                                 //   followed by a copy of CHILD_T
-          CHECK (*++scope == CHILD_T);                                                 //   and another copy of CHILD_T
-          CHECK (*++scope == MakeRec().appendChild(CHILD_B)                            //   and there is a nested Record 
-                                      .appendChild(CHILD_A)                            //       with CHILD_B
-                              .genNode(SUB_NODE.idi.getSym()));                        //       and CHILD_A
-          CHECK (isnil(++scope));                                                      // thats all -- no more children
+          CHECK (!isnil (subject));                                    // nonempty -- content has been added
+          CHECK ("X" == subject.getType());                            // type was set to "X"
+          CHECK (1 == subject.get("α").data.get<int>());               // has gotten our int attribute "α"
+          CHECK (2L == subject.get("β").data.get<int64_t>());          // ... the long attribute "β"
+          CHECK (3.45 == subject.get("γ").data.get<double>());         // ... and double attribute "γ"
+          auto scope = subject.scope();                                // look into the scope contents...
+          CHECK (  *scope == CHILD_A);                                 //   there is CHILD_A
+          CHECK (*++scope == CHILD_T);                                 //   followed by a copy of CHILD_T
+          CHECK (*++scope == CHILD_T);                                 //   and another copy of CHILD_T
+          CHECK (*++scope == MakeRec().appendChild(CHILD_B)            //   and there is a nested Record 
+                                      .appendChild(CHILD_A)            //       with CHILD_B
+                              .genNode(SUB_NODE.idi.getSym()));        //       and CHILD_A
+          CHECK (isnil(++scope));                                      // thats all -- no more children
           
-          application.consume(mutationDiff()); 
-          CHECK (join (subject.keys()) == "α, β, γ");                                  // the attributes weren't altered 
-          scope = subject.scope();                                                     // but the scope was reordered
-          CHECK (  *scope == CHILD_T);                                                 //   CHILD_T
-          CHECK (*++scope == CHILD_A);                                                 //   CHILD_A
-          Rec nested = (++scope)->data.get<Rec>();                                     //   and our nested Record, which too has been altered:
-            CHECK (nested.get("γ").data.get<double>() == 3.45);                        //       it carries now an attribute "δ", which is again
-            CHECK (nested.get("δ").data.get<Rec>() == MakeRec().appendChild(CHILD_A)   //           a nested Record with three children CHILD_A
-                                                               .appendChild(CHILD_A)   // 
-                                                               .appendChild(CHILD_A)   // 
-                                                       .genNode("δ"));                 // 
-            auto subScope = nested.scope();                                            //       and within the nested sub-scope we find
-            CHECK (  *subScope == CHILD_A);                                            //           CHILD_A
-            CHECK (*++subScope == MakeRec().type("Y")                                  //           a yet-again nested sub-Record of type "Y"
-                                           .set("β", 2L )                              //               with just an attribute "β" == 2L
-                                   .genNode(CHILD_NODE.idi.getSym()));                 //               (and an empty child scope)
-            CHECK (*++subScope == CHILD_T);                                            //           followed by another copy of CHILD_T
-            CHECK (isnil (++subScope));                                                // 
-          CHECK (isnil (++scope));                                                     // and nothing beyond that.
+          // Part II : apply the second diff
+          application.consume(mutationDiff());
+          CHECK (join (subject.keys()) == "α, β, γ");                  // the attributes weren't altered 
+          scope = subject.scope();                                     // but the scope was reordered
+          CHECK (  *scope == CHILD_T);                                 //   CHILD_T
+          CHECK (*++scope == CHILD_A);                                 //   CHILD_A
+          Rec nested = (++scope)->data.get<Rec>();                     //   and our nested Record, which too has been altered:
+            CHECK (nested.get("γ").data.get<double>() == 3.45);        //       it carries now an attribute "δ", which is again
+            CHECK (nested.get("δ") == MakeRec().appendChild(CHILD_A)   //           a nested Record with three children CHILD_A
+                                               .appendChild(CHILD_A)   // 
+                                               .appendChild(CHILD_A)   // 
+                                       .genNode("δ"));                 // 
+            auto subScope = nested.scope();                            //       and within the nested sub-scope we find
+            CHECK (  *subScope == CHILD_A);                            //           CHILD_A
+            CHECK (*++subScope == MakeRec().type("Y")                  //           a yet-again nested sub-Record of type "Y"
+                                           .set("β", 2L )              //               with just an attribute "β" == 2L
+                                   .genNode(CHILD_NODE.idi.getSym())); //               (and an empty child scope)
+            CHECK (*++subScope == CHILD_T);                            //           followed by another copy of CHILD_T
+            CHECK (isnil (++subScope));                                // 
+          CHECK (isnil (++scope));                                     // and nothing beyond that.
         }
     };
   

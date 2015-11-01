@@ -27,12 +27,29 @@
  ** this building block defines the set of operations to express both structural
  ** and content changes in a given data structure.
  ** 
- ** @todo UNIMPLEMENTED as of 12/14
+ ** This »tree diff language« does not rely on any concrete data structure or layout,
+ ** just on some general assumptions regarding the ordering and structure of the data.
+ ** - top level is a root record
+ ** - a record has a type, a collection of named attributes, and a collection of children
+ ** - all elements within a record are conceived as elements in ordered sequence, with the
+ **   attributes first, followed by the children. The end of the attribute scope is given
+ **   by the the appearance of the first unnamed entry, i.e the first child.
+ ** - the individual elements in these sequences have a distinguishable identity and
+ **   optionally a name (a named element is an attribute).
+ ** - moreover, the elements carry a typed payload data element, which possibly is
+ **   a \em nested record ("nested child object").
+ ** - the typing of the elements is outside the scope of the diff language; it is
+ **   assumed that the receiver knows what types to expect and how to deal with them.
+ ** - only nested records may be \em mutated by the diff. All other elements can
+ **   only be inserted, moved or deleted (like elements in list diff)
+ ** By implementing the #TreeDiffInterpreter interface (visitor), a concrete usage
+ ** can receive a diff description and possibly apply it to suitable target data.
  ** 
  ** @see diff-language.cpp
- ** @see diff-tree-application-test.cpp
- ** @see tree-diff.cpp
- ** @see GenNode
+ ** @see tree-diff-application.cpp
+ ** @see DiffTreeApplication_test
+ ** @see list-diff.cpp
+ ** @see diff::GenNode
  ** 
  */
 
@@ -54,9 +71,52 @@ namespace diff{
    * Interpreter interface to define the operations ("verbs"),
    * which describe differences or changes in hierarchical data structure.
    * The meaning of the verbs is as follows:
-   * - \c TODO
-   * 
-   * @todo to be defined
+   * - \c ins prompts to insert the given argument element at the \em current
+   *          processing position into the target sequence. This operation
+   *          allows to inject new data
+   * - \c del requires to delete the \em next element at \em current position.
+   *          For sake of verification, the ID of the argument payload is
+   *          required to match the ID of the element about to be discarded.
+   * - \c pick just accepts the \em next element at \em current position into
+   *          the resulting altered sequence. Again, the ID of the argument
+   *          has to match the ID of the element to be picked, for sake
+   *          of verification.
+   * - \c find effect a re-ordering of the target scope contents: it requires
+   *          to \em search for the (next respective single occurrence of the)
+   *          given element further down into the remainder of the current
+   *          record scope (but not into nested child scopes). The designated
+   *          element is to be retrieved and inserted as the next element
+   *          at current position.
+   * - \c skip processing hint, emitted at the position where an element
+   *          previously extracted by a \c find verb happened to sit within
+   *          the old order. This allows an optimising implementation to “fetch”
+   *          a copy and just drop or skip the original, thereby avoiding to
+   *          shift any other elements.
+   * - \c after shortcut to \c pick existing elements up to the designated point.
+   *          As a special notation, \c after(Ref::ATTRIBUTES) allows to fast forward
+   *          to the first child element, while \c after(Ref::END) means to accept
+   *          all of the existing data contents as-is (possibly to append further
+   *          elements after that point.
+   * - \c mut bracketing construct to open a nested sub scope. The element
+   *          designated by the ID of the argument needs to be a #Record
+   *          ("nested child object"). Moreover, this element must have been
+   *          mentioned with the preceding diff verbs at that level, which means
+   *          that the element as such must already be present in the altered
+   *          target structure. The \c mut(ID) verb then opens this nested
+   *          record for diff handling, and all subsequent diff verbs are to be
+   *          interpreted relative to this scope, until the corresponding
+   *          \c emu(ID) verb is encountered. As a special notation, right
+   *          after handling an element with the list diff verbs (i.e. \c ins
+   *          or \c pick or \c find), it is allowed immediately to open the
+   *          nested scope with \c mut(Ref::THIS) -- which circumvents the
+   *          problem that it is sometimes difficult to know the precise ID,
+   *          especially when hand-writing a diff to populate a data structure.
+   * - \c emu bracketing construct and counterpart to \c mut(ID). This verb
+   *          must be given precisely at the end of the nested scope (it is
+   *          not allowed to "return" from the middle of a scope, for sake
+   *          of sanity). At this point, ths child scope is left and the
+   *          parent scope with all existing diff state is popped from an
+   *          internal stack
    */
   class TreeDiffInterpreter
     {

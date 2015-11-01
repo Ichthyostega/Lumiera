@@ -158,6 +158,11 @@ return: 0
 END
 
 
+TEST "Diff: reshape a tree data structure through diff" DiffTreeApplication_test <<END
+return: 0
+END
+
+
 TEST "A Digxel (numeric component)" Digxel_test <<END
 out-lit: empty____## +0.0 ##
 out-lit: value____##-88.8 ##

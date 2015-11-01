@@ -40,16 +40,49 @@
  ** a switch from scope to scope, which adds a lot of complexity. So the list diff
  ** application strategy can be seen as blueprint and demonstration of principles.
  ** 
- ** Another point in question is weather see the diff application as manipulating
- ** a target data structure, or rather building a reshaped copy. The fact that
- ** GenNode and Record are designed as immutable values seems to favour the latter,
- ** yet the very reason to engage into building this diff framework was how to
- ** handle partial updates within a expectedly very large UI model, reflecting
+ ** Another point in question is weather to treat the diff application as
+ ** manipulating a target data structure, or rather building a reshaped copy.
+ ** The fact that GenNode and Record are designed as immutable values seems to favour
+ ** the latter, yet the very reason to engage into building this diff framework was
+ ** how to handle partial updates within a expectedly very large UI model, reflecting
  ** the actual session model in Proc-Layer. So we end up working on a Mutator,
  ** which clearly signals we're going to reshape and re-rig the target data.
  ** 
- ** @see diff-list-application-test.cpp
- ** @see VerbToken
+ ** \par State and nested scopes
+ ** Within the level of a single #Record, our tree diff language works similar to
+ ** the list diff (with the addition of the \c after(ID) verb, which is just a
+ ** shortcut to accept parts of the contents unaltered). But after possibly rearranging
+ ** the contents of an "object" (Record), the diff might open some of its child "objects"
+ ** by entering a nested scope. This is done with the \c mut(ID)....emu(ID) bracketing
+ ** construct. On the implementation side, this means we need to use a stack somehow.
+ ** The decision was to manage this stack explicitly, as a std::stack (heap memory).
+ ** Each entry on this stack is a "context frame" for list diff. Which makes the
+ ** tree diff applicator a highly statefull component.
+ ** 
+ ** Even more so, since -- for \em performance reasons -- we try to alter the
+ ** tree shaped data structure \em in-place. We want to avoid the copy of possibly
+ ** deep sub-trees, when in the end we might be just rearranging their sequence order.
+ ** This design decision comes at a price tag though
+ ** - it subverts the immutable nature of \c Record<GenNode> and leads to
+ **   high dependency on data layout and implementation details of the latter.
+ **   This is at least prominently marked by working on a diff::Record::Mutator,
+ **   so the client has first to "open up" the otherwise immutable tree
+ ** - the actual list diff on each level works by first \em moving the entire
+ **   Record contents away into a temporary buffer and then \em moving them
+ **   back into new shape one by one. In case of a diff conflict  (i.e. a
+ **   mismatch between the actual data structure and the assumptions made
+ **   for the diff message on the sender / generator side), an exception
+ **   is thrown, leaving the client with a possibly corrupted tree, where
+ **   parts might even still be stashed away in the temporary buffer,
+ **   and thus be lost.
+ ** We consider this unfortunate, yet justified  by the very nature of applying a diff.
+ ** When the user needs safety or transactional behaviour, a deep copy should be made
+ ** before attaching the #DiffApplicator
+ ** 
+ ** @see DiffTreeApplication_test
+ ** @see DiffListApplication_test
+ ** @see GenNodeBasic_test
+ ** @see tree-diff.hpp
  ** 
  */
 
@@ -169,7 +202,7 @@ namespace diff{
             throw error::State(_Fmt("Unable locate position 'after(%s)'") % elm.idi
                               , LUMIERA_ERROR_DIFF_CONFLICT);
         }
-
+      
       void
       __expect_valid_parent_scope (GenNode::ID const& idi)
         {

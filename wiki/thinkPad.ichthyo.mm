@@ -1072,10 +1072,10 @@
 </node>
 </node>
 </node>
-<node CREATED="1443733567706" HGAP="76" ID="ID_143203937" MODIFIED="1443741888841" TEXT="Diff-Language" VSHIFT="15">
+<node CREATED="1443733567706" HGAP="76" ID="ID_143203937" MODIFIED="1446356861829" TEXT="Diff-Language" VSHIFT="15">
 <cloud COLOR="#cfba9d"/>
 <font NAME="SansSerif" SIZE="14"/>
-<icon BUILTIN="prepare"/>
+<icon BUILTIN="go"/>
 <node CREATED="1443733726563" ID="ID_410650103" MODIFIED="1443733731422" TEXT="Grundlagen">
 <node CREATED="1443733732938" ID="ID_73184558" MODIFIED="1443733737277" TEXT="Folge von Verben"/>
 <node CREATED="1443733738296" ID="ID_994909291" MODIFIED="1443733743181" TEXT="konstante Gr&#xf6;&#xdf;e"/>
@@ -1711,9 +1711,9 @@
 <node CREATED="1443741923547" ID="ID_1978439060" MODIFIED="1443741930738" TEXT="Listen-Diff">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1443741931858" ID="ID_484829805" MODIFIED="1443741945481" TEXT="Baum-Diff">
-<icon BUILTIN="flag"/>
-<node CREATED="1445295424277" ID="ID_1084177503" MODIFIED="1445644243570">
+<node CREATED="1443741931858" ID="ID_484829805" MODIFIED="1446356837301" TEXT="Baum-Diff">
+<icon BUILTIN="pencil"/>
+<node CREATED="1445295424277" FOLDED="true" ID="ID_1084177503" MODIFIED="1446356540880">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -1846,8 +1846,8 @@
 <node CREATED="1445389311690" ID="ID_1926972913" MODIFIED="1445389323819" TEXT="und dieses rekursiv..."/>
 </node>
 </node>
-<node COLOR="#391f9e" CREATED="1445391990778" HGAP="148" ID="ID_464295846" MODIFIED="1445392206014" TEXT="Implementierung" VSHIFT="4">
-<icon BUILTIN="pencil"/>
+<node COLOR="#391f9e" CREATED="1445391990778" HGAP="148" ID="ID_464295846" MODIFIED="1446356481059" TEXT="Implementierung" VSHIFT="4">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1445392080175" ID="ID_341024968" MODIFIED="1445392101243">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -1882,7 +1882,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1446159438278" HGAP="29" ID="ID_563496669" MODIFIED="1446159498995" VSHIFT="8">
+<node CREATED="1446159438278" FOLDED="true" HGAP="29" ID="ID_563496669" MODIFIED="1446356526122" VSHIFT="8">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -1892,8 +1892,8 @@
       Problem: <b><font color="#ed1c02" size="4">Rekursion</font></b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1446159517914" ID="ID_1749096609" MODIFIED="1446159530661" TEXT="wir m&#xfc;ssen rekursiv in Sub-Scope einsteigen"/>
 <node CREATED="1446159531745" ID="ID_1660140345" MODIFIED="1446159550795" TEXT="eingeschachtelt wieder ein Record::Mutator"/>
@@ -1920,8 +1920,7 @@
       ist der gesammte Diff f&#252;r den eingeschachtelten Kontext konsumiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1446159744053" ID="ID_1735127502" MODIFIED="1446159765190" TEXT="pro">
@@ -1956,8 +1955,7 @@
       und legt einen neuen Mutator an f&#252;r den nested scope
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1446160209758" ID="ID_1949126696" MODIFIED="1446160211514" TEXT="pro">
@@ -1984,8 +1982,7 @@
       interner Stack
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2004,10 +2001,35 @@
       also den TreeMutator, vermutlich das andere Modell (rekursiv konsumieren) verwenden.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
+</node>
+</node>
+<node CREATED="1446356556349" ID="ID_1068649765" MODIFIED="1446356607845" TEXT="offen...">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1446356564244" ID="ID_211629813" MODIFIED="1446356584315" TEXT="find nicht per == sondern per match">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1446356765393" ID="ID_293921295" MODIFIED="1446356827238" TEXT="IDs in Testdaten f&#xfc;r GenNodeBaisc_test">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem sind mal wieder die automatisch generierten IDs.
+    </p>
+    <p>
+      Die sind nat&#252;rlich anders, wenn wir die ganze Testsuite ausf&#252;hren...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag"/>
+</node>
+<node CREATED="1446356588505" ID="ID_895292312" MODIFIED="1446356602250" TEXT="gr&#xfc;ndlicher Test">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -2583,6 +2605,28 @@
 <node CREATED="1439842359711" FOLDED="true" ID="ID_1982964862" MODIFIED="1439842388500" TEXT="Paket">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1439842379420" ID="ID_1336697213" MODIFIED="1439842385655" TEXT="gtk-Abh&#xe4;ngigkeiten"/>
+</node>
+</node>
+<node CREATED="1446356359992" HGAP="9" ID="ID_1850896628" MODIFIED="1446356445623" POSITION="left" TEXT="QA" VSHIFT="69">
+<icon BUILTIN="prepare"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" ID="ID_768449868" MODIFIED="1446356423988" TEXT="ouch">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1446356379653" ID="ID_1354454865" MODIFIED="1446356404198" TEXT="CHECK: typed-counter-test.cpp:329: thread_1: simpleUsageTest: (1 == myCounter.size())">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sporadischer Fehlschlag am 1.11.2015
+    </p>
+    <p>
+      wir kann das passieren?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>
