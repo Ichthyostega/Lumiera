@@ -31,7 +31,7 @@ import Options
 
 #-------------------------------------------------------Configuration
 TARGDIR      = 'target'
-VERSION      = '0.pre.02'
+VERSION      = '0.pre.03'
 TOOLDIR      = './admin/scons'    # SCons plugins
 OPTCACHE     = 'optcache' 
 CUSTOPTFILE  = 'custom-options'
