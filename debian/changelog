@@ -1,3 +1,13 @@
+lumiera (0.pre.02-1+jessie) UNRELEASED; urgency=low
+
+  * adjustments to build Lumiera for Debian/Jessie
+    * use Clang for building, since gcc-48 has a regression
+      in the TR1 implementation of the ref() function
+    * disable the priority queue test, which causes frequent
+      failures in package buidling due to excessive load
+
+ -- Hermann Vosseler <deb@ichthyostega.de>  Fri, 15 Nov 2013 05:43:23 +0100
+
 lumiera (0.pre.02-1) UNRELEASED; urgency=low
 
   * [c848903] new upstream (pre Alpha)release 0.pre.02
