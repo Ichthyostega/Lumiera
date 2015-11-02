@@ -1,5 +1,5 @@
 /*
-  filehandlecache  -  filehandle management and caching
+  FILEHANDLECACHE  -  filehandle management and caching
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,9 +17,20 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
-#ifndef LUMIERA_FILEHANDLECACHE_H
-#define LUMIERA_FILEHANDLECACHE_H
+
+
+/** @file filehandlecache.h
+ ** Caching and management of filehandles.
+ ** The number of filehandles a program can held open is usually limited, since we want to support
+ ** using a less limited number of files and closing/opening for each operation is expensive, we
+ ** provide a cache to keep the most frequent used files open and gracefully close/recycle unused filehandles.
+ ** The filehandle cache defined here protects all operations on the cache with a mutex.
+ */
+
+#ifndef BACKEND_FILEHANDLECACHE_H
+#define BACKEND_FILEHANDLECACHE_H
 
 #include "lib/error.h"
 #include "lib/mrucache.h"
@@ -30,19 +41,9 @@ typedef lumiera_filehandlecache* LumieraFilehandlecache;
 
 #include "backend/filehandle.h"
 
-/**
- * @file
- * Filehandle management and caching
- * The number of filehandles a program can held open is usually limited, since we want to support
- * using a less limited number of files and closing/opening for each operation is expensive, we
- * provide a cache to keep the most frequent used files open and gracefully close/recycle unused filehandles.
- * The filehandlecache defined here protects all operations on the cache with a mutex.
- */
 
 
-/*
-  File handle cache manages file handles
- */
+/**  File handle cache manages file handles */
 struct lumiera_filehandlecache_struct
 {
   lumiera_mrucache cache;
@@ -52,7 +53,7 @@ struct lumiera_filehandlecache_struct
 };
 
 /**
- * Initializes the filehandle cache.
+ * Initialises the filehandle cache.
  * @param max_entries number how much filehandles shall be managed
  * The number of elements the cache can hold is static and should be
  * determined by sysconf (_SC_OPEN_MAX) minus some (big) safety margin.
@@ -94,4 +95,6 @@ lumiera_filehandlecache_checkout (LumieraFilehandle handle);
 void
 lumiera_filehandlecache_checkin (LumieraFilehandle handle);
 
-#endif
+
+
+#endif /*BACKEND_FILEHANDLECACHE_H*/

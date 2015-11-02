@@ -27,7 +27,7 @@
 
 #include "lib/meta/trait.hpp"
 
-#include <tr1/unordered_map>
+#include <unordered_map>
 
 
 namespace lib {
@@ -42,7 +42,7 @@ namespace meta {
    *  Thus we provide fixed diagnostics to bypass the traits check.
    */
   template<typename KEY, typename VAL, typename HASH>
-  struct can_STL_ForEach<std::tr1::unordered_map<KEY,VAL,HASH> >
+  struct can_STL_ForEach<std::unordered_map<KEY,VAL,HASH> >
     {
       enum { value = true };
     };

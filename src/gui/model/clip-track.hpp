@@ -19,11 +19,13 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /**
  * @file model/clip-track.hpp
  * This file contains the definition of timeline track objects which
  * contain clips.
  */
+
 
 #ifndef CLIP_TRACK_HPP
 #define CLIP_TRACK_HPP

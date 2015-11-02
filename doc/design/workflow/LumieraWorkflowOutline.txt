@@ -97,6 +97,28 @@ change the “blend” modes.
 
 Draw-on automation/keyframes & editing for both video & audio tracks.
 
+.comment by Ichthyo [yellow-background]#5/2015#
+[NOTE]
+======================================================
+After careful consideration, we decided for Lumiera to
+abandon the usual metaphor of a ``Track''. One of the benefits
+is that the problems mentioned here become irrelevant
+
+- since we don't have audio vs video tracks, we don't need to
+  ``synchronise'' artificially what is connected by its very nature.
+  If media contains video and audio tracks, all that data can be
+  used within the same context.
+- since we _build_ a node graph automatically, instead of ``pumping''
+  data through tracks, metaphorically speaking, we gain a much more
+  flexible approach to layering. Basically we have a layering rule,
+  which includes an overlayer mode (``blend mode''). This global
+  rule can be modified in any given scope, down to wiring a single
+  element deliberately to another destination.
+- as an extension to the mentioned routing and overlaying rule,
+  we'll allow to set up routing rules triggered by media tags.
+======================================================
+       
+       
 ===== E. Misc
 - We need to have accessible, easily scriptable FX/Filter menus for clips,
   all NLEs throw a tab into the clip selector pain.

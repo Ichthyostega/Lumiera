@@ -10,7 +10,7 @@
 ****************************************************************************
 The Session or Project contains multiple top-level *Timeline* elements.
 These provide an (output)configuration and global busses, while the actual
-content _and the tree of tracks_ is contained in *Sequences*.
+content _and the tree of tracks_ (»fork«) is contained in *Sequences*.
 These can also be used as *meta clips* and thus nested arbitrarily.
 ****************************************************************************
 
@@ -55,17 +55,17 @@ Timeline View:: a view in the GUI featuring a given timeline. There might be
  sub-Sequence contained within the top-level sequence of the underlying
  Timeline. (Intended for editing meta-clips)
 
-Sequence:: A collection of _MObjects_ placed onto a tree of tracks. (this
- entity was former named _EDL_ -- an alternative name would be
+Sequence:: A collection of _MObjects_ placed onto a _Fork_ (tree of tracks).
+ (the ``Sequence'' entity was former named _EDL_ -- an alternative name would be
  _Arrangement_ ). By means of this placement, the objects could be anchored
  relative to each other, relative to external objects, absolute in time.
- Placement and routing information can be inherited down the track tree, and
- missing information is filled in by configuration rules. This way, a sequence
+ Placement and routing information can be inherited down the fork (track tree),
+ and missing information is filled in by configuration rules. This way, a sequence
  can connect to the global pipes when used as top-level sequence within a
  timeline, or alternatively it can act as a virtual-media when used within a
  meta-clip (nested sequence). In the default configuration, a Sequence contains
- just a single root track and sends directly to the master busses of the
- timeline.
+ just a simple fork (root track) without nested sub-forks and sends directly to
+ the master busses of the timeline.
 
 Pipe:: the conceptual building block of the high-level model. It can be
  thought of as simple linear processing chain. A stream can be _sent to_ a
@@ -136,7 +136,7 @@ image:{imgd}/ProjectTimelineSequenceUML.png[UML: Relation of Project, Timeline, 
   reserved for advanced use, e.g. when multiple editors cooperate on a single
   project and a sequence has to be prepared in isolation prior to being
   integrated in the global sequence (featuring the whole movie).
-* one rather unconventional feature to be noted is that the _tracks_ are
+* one rather unconventional feature to be noted is that the _tracks_ (forks) are
   within the _sequences_ and not on the level of the global busses as in most
   other video and audio editors. The rationale is that this allows for fully
   exploiting the tree-structure, even when working with large and compound
@@ -173,8 +173,8 @@ Pros
    case: one timeline, one track, simple video/audio out.
  * but at the same time it allows for bewildering complex setups for advanced
    use
- * separating signal flow and making the track tree local to the sequence
-   solves the problem how to combine independent sub-sequences into a compund
+ * separating signal flow and making the fork (``track tree'') local to the sequence
+   solves the problem how to combine independent sub-sequences into a compound
    session
 
 
@@ -227,7 +227,7 @@ Comments
 GUI handling could make use of expanded view features like ;
 
 * drop down view of track, that just covers over what was shown below. This may
-  be used for quick precis looks, or simple editions, or clicking on a subtrack
+  be used for quick precise looks, or simple editions, or clicking on a subtrack
   to burrow further down.
 
 * show expanded trackview in new tab. This creates another tabbed view which

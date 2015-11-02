@@ -51,9 +51,7 @@ namespace test    {
   
   namespace { // Test helpers...
     
-    _Fmt typePatt ("Dummy<%2i>");
     _Fmt instancePatt ("obj_%s_%i");
-    
     
     
     /** create a random new ID */
@@ -78,7 +76,7 @@ namespace test    {
       };
     
     template<int I>
-    string Dummy<I>::name = (typePatt % I);
+    string Dummy<I>::name = _Fmt("Dummy<%2i>") % I;
     
     template<int I>
     inline P<Dummy<I> >

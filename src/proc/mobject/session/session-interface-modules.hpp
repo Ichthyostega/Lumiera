@@ -38,7 +38,7 @@
  **   managed automatically and kept in sync with the session::Binding elements
  **   located directly below model root.
  ** - likewise there is an table of all Sequence (structural assets), which
- **   correspond to the roots of track trees, attached below model root.
+ **   correspond to the fork roots (roots of "track" trees), attached below model root.
  ** - the ElementQuery interface allows to retrieve specific object 
  **   instances by applying a filter predicate.
  ** 
@@ -50,8 +50,8 @@
  ** sequences is closely connected to some structural changes within the model
  ** - Timeline is related to session::Binding, where the timelines are leading
  **   and the binding elements are dependent on both a timeline and a sequence
- ** - Sequence is related to a Placement<session::Track> -- but only if attached
- **   immediately below model root; here the tracks are leading and the sequences
+ ** - Sequence is related to a Placement<session::Fork> -- but only if attached
+ **   immediately below model root; here the forks are leading and the sequences
  **   are completely dependent.
  ** In any case, ctor and dtor of Timeline and Sequence have to care for proper
  ** registration into the SessionInterfaceModules for timelines and sequences

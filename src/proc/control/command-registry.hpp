@@ -70,8 +70,8 @@
 
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
-#include <tr1/unordered_map>
-#include <tr1/memory>
+#include <unordered_map>
+#include <memory>
 #include <string>
 #include <map>
 
@@ -82,8 +82,8 @@ namespace control {
   
   using boost::hash;
   using boost::noncopyable;
-  using std::tr1::shared_ptr;
-  using std::tr1::unordered_map;
+  using std::shared_ptr;
+  using std::unordered_map;
   using lib::TypedAllocationManager;
   using util::getValue_or_default;
   using util::contains;

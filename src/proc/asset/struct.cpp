@@ -76,7 +76,7 @@ namespace asset {
    *        asset is a code smell ////////////////////////////TICKET #691
    */
   template<class STRU>
-  P<STRU>
+  lib::P<STRU>
   StructFactory::newInstance (Symbol nameID)
   {
     Query<STRU> desired_name (isnil(nameID)? "" : "id("+nameID+")");
@@ -99,14 +99,14 @@ namespace asset {
    *        which is fully integrated into a generic rules driven query subsystem, but
    *        has the additional ability to "translate" capabilities directly into the
    *        respective properties of of asset::Struct subclasses.
-   *  @return an Struct smart ptr linked to the internally registered smart ptr
+   *  @return a Struct smart ptr linked to the internally registered smart ptr
    *        created as a side effect of calling the concrete Struct subclass ctor.
    */
   template<class STRU>
-  P<STRU> 
+  lib::P<STRU>
   StructFactory::operator() (Query<STRU> const& capabilities)
   {
-    P<STRU> res;
+    lib::P<STRU> res;
     QueryHandler<STRU>& typeHandler = ConfigResolver::instance();  
     typeHandler.resolve (res, capabilities);
     
@@ -131,7 +131,7 @@ namespace asset {
    *        re-invoking the ConfigRules....
    */
   template<class STRU>
-  P<STRU>
+  lib::P<STRU>
   StructFactory::made4fake (Query<STRU> const& query)
   {
     STRU* pS = impl_->fabricate(query);
@@ -149,7 +149,7 @@ namespace asset {
    * @see ProcPatt
    * @see DefaultsManager 
    */ 
-  P<Pipe> 
+  lib::P<Pipe> 
   StructFactory::newPipe (string pipeID, string streamID)
   {
     normaliseID (pipeID);
@@ -178,18 +178,19 @@ namespace asset {
 
 namespace proc {
 namespace asset {
+  using PPipe = lib::P<Pipe>;
   
-  template P<Pipe>     StructFactory::operator() (Query<Pipe> const&);
+  template PPipe       StructFactory::operator() (Query<Pipe> const&);
   template PProcPatt   StructFactory::operator() (Query<const ProcPatt> const&);
   template PTimeline   StructFactory::operator() (Query<Timeline> const&);
   template PSequence   StructFactory::operator() (Query<Sequence>const&);
   
-  template P<Pipe>     StructFactory::newInstance (Symbol);
+  template PPipe       StructFactory::newInstance (Symbol);
   template PProcPatt   StructFactory::newInstance (Symbol);
   template PTimeline   StructFactory::newInstance (Symbol);
   template PSequence   StructFactory::newInstance (Symbol);
   
-  template P<Pipe>     StructFactory::made4fake   (Query<Pipe> const&);          
+  template PPipe       StructFactory::made4fake   (Query<Pipe> const&);          
   template PProcPatt   StructFactory::made4fake   (Query<const ProcPatt> const&);
   template PTimeline   StructFactory::made4fake   (Query<Timeline> const&);      
   template PSequence   StructFactory::made4fake   (Query<Sequence>const&);       

@@ -40,7 +40,7 @@ namespace model {
  */
 class ParentTrack :
   public Track,
-  public std::tr1::enable_shared_from_this<ParentTrack>
+  public std::enable_shared_from_this<ParentTrack>
 {
 protected:
   /**

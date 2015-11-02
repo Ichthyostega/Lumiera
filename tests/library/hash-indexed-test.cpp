@@ -26,7 +26,7 @@
 #include "lib/hash-indexed.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/unordered_map>
+#include <unordered_map>
 
 using util::isSameObject;
 
@@ -129,7 +129,7 @@ namespace test{
       void
       buildHashtable ()
         {
-          typedef std::tr1::unordered_map<KEY, VAL, HashFunc> Hashtable;
+          typedef std::unordered_map<KEY, VAL, HashFunc> Hashtable;
           
           Hashtable tab;
           

@@ -46,7 +46,7 @@
 #include "lib/hash-value.h"
 #include "lib/functor-util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/functional/hash.hpp>
 
 
@@ -54,9 +54,9 @@ namespace proc {
 namespace engine {
   
   using lib::HashVal;
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
+  using std::bind;
+  using std::function;
+  using std::placeholders::_1;
   
   namespace error = lumiera::error;
   
@@ -148,7 +148,7 @@ namespace engine {
       isValid()  const
         {
           return bool(createAttached)
-              && bool(destroyAttached);
+             and bool(destroyAttached);
         }
       
       friend HashVal
@@ -166,7 +166,7 @@ namespace engine {
       friend bool
       operator== (TypeHandler const& left, TypeHandler const& right)
       {
-        return (!left.isValid() && !right.isValid())
+        return (not left.isValid() and not right.isValid())
             || (  util::rawComparison(left.createAttached, right.createAttached)
                && util::rawComparison(left.destroyAttached, right.destroyAttached)
                );
@@ -174,7 +174,7 @@ namespace engine {
       friend bool
       operator!= (TypeHandler const& left, TypeHandler const& right)
       {
-        return !(left == right);
+        return not (left == right);
       }
     };
   

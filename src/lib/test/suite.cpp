@@ -23,22 +23,21 @@
 
 
 #include "include/logging.h"
-#include "lib/cmdline.hpp"
+#include "lib/hash-standard.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/suite.hpp"
 #include "lib/test/run.hpp"
+#include "lib/cmdline.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <tr1/memory>
+#include <memory>
 #include <iostream>
 #include <sstream>
 #include <memory>
 #include <vector>
 #include <map>
-#include <cstdlib>
-#include <ctime>
 
 
 namespace test {
@@ -48,13 +47,14 @@ namespace test {
   using std::cerr;
   using std::endl;
   using std::vector;
-  using std::auto_ptr;
-  using std::tr1::shared_ptr;
+  using std::shared_ptr;
   using boost::algorithm::trim;
   
+  using util::cStr;
   using util::isnil;
   using util::contains;
   using lib::test::showType;
+  using lib::test::demangleCxx;
   
   typedef map<string, Launcher*> TestMap;
   typedef shared_ptr<TestMap>  PTestMap;
@@ -62,38 +62,44 @@ namespace test {
   
   
   
-  /** helper to collect and manage the test cases.
-   *  Every testcase class should create a Launch instance
-   *  which causes a call to Suite::enrol(), so we can add a
-   *  pointer to this Launcher into a map indexed by the
-   *  provided testIDs and groupIDs.
-   *  This enables us to build a Suite instance for any 
-   *  requested group and then instantiate and invoke
-   *  individual testcases accordingly.
-   */ 
-  class Registry
-    {
-      auto_ptr<GroupMap> groups;
-    public:
-      Registry() : groups(new GroupMap ) {};
-      PTestMap& getGroup (string grpID) { return (*groups)[grpID]; }; 
-      void add2group (Launcher* test, string testID, string groupID);
-    };
-    
-  void 
-  Registry::add2group (Launcher* test, string testID, string groupID)
-  {
-    REQUIRE( test );
-    REQUIRE( !isnil(testID) );
-    REQUIRE( !isnil(groupID) );
-    
-    PTestMap& group = getGroup(groupID);
-    if (!group)
-      group.reset( new TestMap );
-    (*group)[testID] = test;
+  namespace {
+    /**
+     * helper to collect and manage the test cases.
+     * Every testcase class should create a Launch instance,
+     * which causes a call to Suite::enrol(), so we can add a pointer
+     * to this Launcher into a map indexed by the provided testIDs and groupIDs.
+     * This enables us to build a Suite instance for any requested group
+     * and then instantiate and invoke individual testcases accordingly.
+     */
+    class Registry
+      {
+        GroupMap groups_;
+        
+      public:
+        Registry() { };
+        
+        PTestMap&
+        getGroup (string grpID)
+          {
+            return groups_[grpID];
+          };
+        
+        void
+        add2group (Launcher* test, string testID, string groupID)
+          {
+            REQUIRE( test );
+            REQUIRE( !isnil(testID) );
+            REQUIRE( !isnil(groupID) );
+            
+            PTestMap& group = getGroup(groupID);
+            if (!group)
+              group.reset( new TestMap );
+            (*group)[testID] = test;
+          }
+      };
+      
+    Registry testcases;
   }
-  
-  Registry testcases;
   
   
   
@@ -159,7 +165,7 @@ namespace test {
   
   
     
-#define VALID(test,testID) \
+#define IS_VALID(test,testID) \
   ASSERT ((test), "NULL testcase launcher for test '%s' found in testsuite '%s'", groupID_.c_str(),testID.c_str());
   
   
@@ -170,14 +176,14 @@ namespace test {
     {
       try 
         {
-          INFO (test, "++------------------- invoking TEST: %s", showType(theTest).c());
+          INFO (test, "++------------------- invoking TEST: %s", cStr(demangleCxx(showType(theTest))));
           theTest.run (cmdline);
           return Suite::TEST_OK;
         }
       catch (lumiera::Error& failure)
         {
           lumiera_err errorID = lumiera_error(); // reset error flag
-          cerr << "*** Test Failure " << showType(theTest) << endl;
+          cerr << "*** Test Failure " << demangleCxx(showType(theTest)) << endl;
           cerr << "***            : " << failure.what() << endl;
           ERROR (test,     "Error state %s", errorID);
           WARN  (progress, "Caught exception %s", failure.what());
@@ -195,12 +201,12 @@ namespace test {
    *  in this suite is invoked with a empty cmdline vector.
    *  @param cmdline ref to the vector of commandline tokens  
    */
-  void 
+  bool
   Suite::run (Arg cmdline)
   {
     PTestMap tests = testcases.getGroup(groupID_);
     if (!tests)
-      throw lumiera::error::Invalid ("test group not found"); ///////// TODO: pass error description
+      throw lumiera::error::Invalid ("No tests found for test group \""+groupID_+"\"");
     
     if (0 < cmdline.size())
       {
@@ -211,10 +217,14 @@ namespace test {
             // first cmdline argument denotes a valid testcase registered in 
             // this group: invoke just this test with the remaining cmdline
             Launcher* test = (*tests)[testID];
-            cmdline.erase (cmdline.begin());
-            VALID (test,testID);
-            exitCode_ |= invokeTestCase (*(*test)(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
-            return;
+            IS_VALID (test,testID);
+            
+            // Special contract: in case the cmdline holds no actual arguments
+            // beyond the test name, then it's cleared entirely.
+            if (1 == cmdline.size()) cmdline.clear();                      // TODO this invalidates also testID -- really need to redesign the API ////TICKET #289
+            
+            exitCode_ |= invokeTestCase (*test->makeInstance(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
+            return true;
           }
         else
           throw lumiera::error::Invalid ("unknown test : "+testID);
@@ -226,9 +236,10 @@ namespace test {
       {
         std::cout << "\n  ----------"<< i->first<< "----------\n";
         Launcher* test = (i->second);
-        VALID (test, i->first);
-        exitCode_ |= invokeTestCase (*(*test)(), cmdline); // actually no cmdline arguments
+        IS_VALID (test, i->first);
+        exitCode_ |= invokeTestCase (*test->makeInstance(), cmdline); // actually no cmdline arguments
       }
+    return true;
   }
   
   
@@ -250,10 +261,10 @@ namespace test {
         cout << "\n\n";
         cout << "TEST \""<<key<<"\" "<<key<<" <<END\n";
         Launcher* test = (i->second);
-        VALID (test, i->first);
+        IS_VALID (test, i->first);
         try
           {
-            (*test)()->run(noCmdline); // run it to insert test generated output
+            test->makeInstance()->run(noCmdline); // run it to insert test generated output
           }
         catch (...) 
           {

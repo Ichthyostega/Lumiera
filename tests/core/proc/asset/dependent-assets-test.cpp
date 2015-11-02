@@ -198,8 +198,8 @@ namespace test {
           Depend4Test<backend::test::MediaAccessMock> within_this_scope;
           
           // -----Media and Clip--------------------------------
-          typedef P<Media> PM;
-          typedef P<Clip>  PC;
+          typedef lib::P<Media> PM;
+          typedef lib::P<Clip>  PC;
           PM mm = asset::Media::create("test-1", VIDEO);
           PC cc = mm->createClip()->findClipAsset();
           CHECK (dependencyCheck (cc,mm));

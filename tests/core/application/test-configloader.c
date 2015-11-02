@@ -36,7 +36,7 @@ TEST (init)
 /* Note:  lumiera_config_init and lumiera_config_destroy are
  *        invoked automatically from ConfigFacade
  */
-  printf ("initialized\n");
+  printf ("initialised\n");
   lumiera_config_destroy ();
   printf ("destroyed\n");
   /* there will be a warning about destroying the already 

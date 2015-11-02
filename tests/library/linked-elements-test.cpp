@@ -31,7 +31,7 @@
 #include "lib/test/testdummy.hpp"
 #include "lib/iter-source.hpp"
 
-#include <tr1/memory>
+#include <memory>
 
 
 

@@ -38,14 +38,14 @@
 
 //#include <boost/scoped_ptr.hpp>
 //#include <iostream>
-#include <tr1/functional>
+#include <functional>
 #include <vector>
 
 using test::Test;
 using util::isnil;
 using util::last;
 using std::vector;
-using std::tr1::function;
+using std::function;
 //using std::cout;
 //using std::rand;
 
@@ -80,23 +80,13 @@ namespace test  {
         /* == mock Dispatcher implementation == */
         
         FrameCoord
-        locateFrameNext (uint frameCountOffset, TimeAnchor refPoint)
-          {
-            UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
-          }
-        FrameCoord
-        locateRelative (FrameCoord, uint frameCountOffset)
-          {
-            UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
-          }
-        FrameCoord
-        locateRelative (TimeAnchor, uint frameCountOffset)
+        locateRelative (FrameCoord const&, FrameCnt frameOffset)
           {
             UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
           }
         
         bool
-        seamlessNextFrame (int64_t, ModelPort port)
+        isEndOfChunk (FrameCnt, ModelPort port)
           {
             UNIMPLEMENTED ("determine when to finish a planning chunk");
           }

@@ -44,15 +44,14 @@ using std::string;
 namespace proc {
 namespace asset {
 
-  using lib::P;
   using lib::Symbol;
   using lib::Literal;
   
   class Proc;
   class ProcPatt;
 
-  typedef P<const asset::Proc> PProc;
-  typedef P<const asset::ProcPatt> PProcPatt;
+  using PProc     = lib::P<const asset::Proc>;
+  using PProcPatt = lib::P<const asset::ProcPatt>;
 
   
   static Symbol CURRENT = "current";

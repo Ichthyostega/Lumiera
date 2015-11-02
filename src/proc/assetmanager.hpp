@@ -81,11 +81,11 @@ namespace asset {
       
       /** retrieve the registered smart-ptr for any asset */
       template<class KIND>
-      static P<KIND> wrap (const KIND& asset);
+      static lib::P<KIND> wrap (const KIND& asset);
       
       /** find and return corresponding object */
       template<class KIND>
-      P<KIND>  getAsset (const ID<KIND>& id);
+      lib::P<KIND>  getAsset (const ID<KIND>& id);
       
       
       /** @return true if the given id is registered in the internal asset DB  */

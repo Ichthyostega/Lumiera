@@ -41,10 +41,9 @@ namespace boost{
   template<class X> class reference_wrapper; 
 }
 namespace std {
-namespace tr1 {
   template<class X> class reference_wrapper;
   template<class X> class shared_ptr; 
-}}
+}
 namespace lib{
   template<class X, class B>  class P;
 }
@@ -102,24 +101,24 @@ namespace meta {
     };
   
   template<typename X>
-  struct Unwrap<std::tr1::reference_wrapper<X> >
+  struct Unwrap<std::reference_wrapper<X> >
     {
       typedef X  Type;
       
       static X&
-      extract (std::tr1::reference_wrapper<X> wrapped)
+      extract (std::reference_wrapper<X> wrapped)
         {
           return wrapped;
         }
     };
   
   template<typename X>
-  struct Unwrap<std::tr1::shared_ptr<X> >
+  struct Unwrap<std::shared_ptr<X> >
     {
       typedef X  Type;
       
       static X&
-      extract (std::tr1::shared_ptr<X> ptr)
+      extract (std::shared_ptr<X> ptr)
         {
           ASSERT (ptr);
           return *ptr;

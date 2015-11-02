@@ -26,6 +26,7 @@
 
 #include "proc/mobject/session/abstractmo.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/p.hpp"
 
 
 namespace proc {
@@ -40,8 +41,12 @@ namespace session {
   using asset::Media;
   using lib::time::TimeVar;
   
-  typedef P<Media> PMedia;
-  typedef P<asset::Clip> PClipAsset;
+  class Clip;
+  
+  using PMedia = lib::P<Media>;
+  using PClipAsset = lib::P<asset::Clip>;
+  
+  using PClip = Placement<Clip>;
   
   
   /**
@@ -103,7 +108,6 @@ namespace session {
       
     };
   
-  typedef Placement<Clip> PClipMO;
   
   
   

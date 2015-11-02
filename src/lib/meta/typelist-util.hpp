@@ -79,15 +79,14 @@ namespace meta {
     template<>
     struct maxSize<NullType>
       {
-        enum{ value = 0 };
+        static constexpr int value = 0;
       };
     template<class TY, class TYPES>
     struct maxSize<Node<TY,TYPES> >
       {
-        enum{ thisval = sizeof(TY)
-            , nextval = maxSize<TYPES>::value
-            , value   = nextval > thisval?  nextval:thisval
-            };
+        static constexpr size_t thisval = sizeof(TY);
+        static constexpr size_t nextval = maxSize<TYPES>::value;
+        static constexpr size_t value   = nextval > thisval?  nextval:thisval;
       };
     
     
@@ -115,11 +114,30 @@ namespace meta {
     
     /** convenience shortcut: query function */
     template<typename TY, typename TYPES>
-    bool
+    constexpr bool
     isInList()
     {
       return IsInList<TY,TYPES>::value;
     }
+    
+    
+    /**
+     * Build a list of const types from a given typelist.
+     */
+    template<typename TYPES>
+    struct ConstAll;
+    
+    template<>
+    struct ConstAll<NullType>
+      {
+        typedef NullType List;
+      };
+    
+    template<typename TY, typename TYPES>
+    struct ConstAll<Node<TY,TYPES>>
+      {
+        typedef Node<const TY, typename ConstAll<TYPES>::List> List;
+      };
     
     
     

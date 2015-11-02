@@ -64,7 +64,9 @@ namespace builder {
       NodeCreatorTool &   configureFabrication ();
       
       /** receive the finished product of the build process; effectively
-       *  releases any other builder tool object */
+       *  releases any other builder tool object
+       *                                   //////////////////////////////////////////TODO a better idea than using auto_ptr?
+       */
       std::auto_ptr<engine::RenderGraph> getProduct ();
     };
   

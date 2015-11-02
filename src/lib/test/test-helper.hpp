@@ -28,9 +28,10 @@
 #include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
 
+#include <boost/lexical_cast.hpp>
 #include <typeinfo>
-#include <string>
 #include <cstdlib>
+#include <string>
 
 
 
@@ -71,6 +72,40 @@ namespace test{
   }
   
   
+  /** reverse the effect of C++ name mangling.
+   * @return string in language-level form of a C++ type or object name,
+   *         or a string with the original input if demangling fails.
+   * @warning implementation relies on the cross vendor C++ ABI in use
+   *         by GCC and compatible compilers, so portability is limited.
+   *         The implementation is accessed through libStdC++
+   *         Name representation in emitted object code and type IDs is
+   *         essentially an implementation detail and subject to change.
+   */
+  string
+  demangleCxx (Literal rawName);
+  
+  
+  /** short yet distinct name identifying the given type.
+   * @return demangled type-id without any scopes. */
+  template<typename TY>
+  string
+  tyAbbr()
+  {
+    string typeStr = demangleCxx (showType<TY>());
+    size_t pos = typeStr.rfind("::");
+    if (pos != string::npos)
+      typeStr = typeStr.substr(pos+2);
+    return typeStr;
+  }
+  
+  template<typename TY>
+  string
+  tyAbbr(TY&&)
+  {
+    return tyAbbr<TY>();
+  }
+  
+  
   /** for printing sizeof().
    *  prints the given size and name literally, without any further magic */
   string
@@ -101,12 +136,52 @@ namespace test{
   
   
   
-    
-  /** create a random but not insane Time value */    
+  /** helper to discern the kind of reference of the argument type */
+  template<typename R>
+  string
+  showRefKind()
+  {
+    return std::is_lvalue_reference<R>::value? "REF"
+               : std::is_rvalue_reference<R>::value? "MOV"
+                                                   : "VAL";
+  }
+  
+  /** helper for investigating a variadic argument pack
+   * @warning always spell out the template arguments explicitly
+   *          when invoking this diagnostics, e.g. \c showVariadicTypes<ARGS...>(args...)
+   *          otherwise the template argument matching for functions might mess up the
+   *          kind of reference you'll see in the diagnostics.
+   * @see test-helper-variadic-test.cpp
+   */
+  template<typename... EMPTY>
+  inline string
+  showVariadicTypes ()
+  {
+    return " :.";
+  }
+  
+  template<typename X, typename... XS>
+  inline string
+  showVariadicTypes (X const& x, XS const&... xs)
+  {
+    return " :---#"
+         + boost::lexical_cast<string>(1 + sizeof...(xs))
+         + "  -- Type: " + showType<X>()
+         + "  "          + showRefKind<X>()
+         + "  Address* " + boost::lexical_cast<string>(&x)
+         + "\n"
+         + showVariadicTypes<XS...> (xs...);
+  }
+  
+  
+  
+  
+  
+  /** create a random but not insane Time value */
   inline lib::time::Time
   randTime ()
   {
-    return lib::time::Time (500 * (rand() % 2), (rand() % 600));
+    return lib::time::Time (500 * (rand() % 2), (rand() % 600) + 1);
   }
   
   /** create garbage string of given length

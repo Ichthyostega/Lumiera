@@ -44,7 +44,7 @@
 #include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
-//#include <tr1/memory>
+//#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 
@@ -53,7 +53,7 @@ namespace play {
   
 //using std::string;
 //using std::vector;
-//using std::tr1::shared_ptr;
+//using std::shared_ptr;
   using boost::scoped_ptr;
   
   
@@ -76,6 +76,9 @@ namespace play {
       typedef lumiera::Subsys::SigTerm SigTerm;
       
       scoped_ptr<PlayService> player_;
+      ///////TODO more components and connections to manage here...
+      
+      bool shutdown_initiated_ = false;   /////TODO probably need a way more elaborate lifecylce management
       
     public:
       static lib::Depend<OutputDirector> instance;

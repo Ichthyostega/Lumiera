@@ -6,19 +6,28 @@ Statistics and Reports
 
 ++++++++++++++++++++++++++++++++++++++
 <div style="float:left">
-<script type="text/javascript" src="http://www.ohloh.net/p/13239/widgets/project_basic_stats.js"></script>
+<script type="text/javascript" src="http://www.openhub.net/p/13239/widgets/project_basic_stats.js"></script>
 </div>
 ++++++++++++++++++++++++++++++++++++++
 
 ++++++++++++++++++++++++++++++++++++++
 <div style="float:right; margin-left: 2em;">
-<script type="text/javascript" src="http://www.ohloh.net/p/13239/widgets/project_cocomo.js" ></script>
+<script type="text/javascript" src="http://www.openhub.net/p/13239/widgets/project_cocomo.js"></script>
 </div>
 <p style="clear:both" />
 ++++++++++++++++++++++++++++++++++++++
 
 ''''
-^Statistics generated automatically by *Ohloh* based on Git master.^
+^Statistics generated automatically by *OpenHub* based on Git master footnote:[»http://blog.openhub.net/about/[OpenHub]«,
+formerly known as »Ohloh« is a public directory and networking site for free and open source software (FOSS),
+offering analytics and search services for evaluating and comparing open source projects.]^
+
+
+Mailing List
+------------
+
+image:http://gmane.org/plot-rate.php?group=gmane.comp.video.lumiera.general[Lumiera Mailinglist activity] +
+^activity stats by link:http://dir.gmane.org/gmane.comp.video.lumiera.general[Gmane.org]^
 
 
 Tickets
@@ -31,16 +40,3 @@ Tickets
 
 See the link:http://issues.lumiera.org/report[Trac overview] for more ticket reports.
 
-
-Mailing List
-------------
-
-image:http://gmane.org/plot-rate.php?group=gmane.comp.video.lumiera.general[Lumiera Mailinglist activity] +
-^activity stats by link:http://dir.gmane.org/gmane.comp.video.lumiera.general[Gmane.org]^
-
-....
-    
-    
-    
-....
-    

@@ -12,8 +12,8 @@ packages through our own link:http://Lumiera.org/debian[Debian Apt-Repository] (
 
 TIP: readers new to Debian packages may want to have a look into our
      link:{ldoc}/user/tutorials/DebianBuilding.html[Debian build tutorial],
-     describing the commands for building and the structure of a Debian
-     (source) package in general
+     where we describe the commands for building and explain the structure
+     of a Debian (source) package in general
 
 
 Package build process
@@ -44,7 +44,7 @@ Actually, this lookup process at application startup is performed in two phases
   transitive library dependencies, and finally shared objects, which are loaded at runtime
   through the `dlopen()` call.]
   Especially those libraries belonging first class to the Lumiera application are built
-  with a relative search path ('rpath' with $ORIGIN token). These libraries are placed
+  with a relative search path ('rpath' with `$ORIGIN` token). These libraries are placed
   into the +modules/+ subfolder
 
 - after successfully launching the executable, the second phase performs a lookup programmatically,
@@ -69,7 +69,15 @@ Releases, Branches and Conventions
 Official releases are marked by a tag on the master branch. At that point, master should be
 in good shape, release documentation is polished; experimental features are removed or disabled.
 Usually, we'll also fork a  *release branch* at that point, featuring bugfixes only.
-From here we'll merge to the *debian branch*
+From here we'll merge to the **debian branch**footnote:[the 'release' branch will be merged back at
+times, while the 'debian' branch won't. This 'debian' branch is published through a separate
+link:git://git.lumiera.org/debian/lumiera[debian/lumiera git repository] and not merged back,
+since all tweaks here are strictly for debian packaging. There might be other packaging related
+repositories in the future. Yet still, the 'debian' branch is based on the same common tree
+and can in therory kept in the same git repository. Contrast this to the branch 'depot', which
+is also published through our 'debian/lumiera' git repository. This latter branch corresponds
+to a completely separate tree and holds the administrative part of our
+link:http://Lumiera.org/debian[Debian package depot] (Repository) on Lumiera.org.]
 
 Typically the release will lead to the discovery of more or less serious bugs, which are
 fixed on the release branch and backported to master. The result is a sequence of point
@@ -88,7 +96,7 @@ To (re)build the debian package
 
 -- here _RELEASE-TAG_ denotes the point in the Git history, which should become
 the reference source and be packaged into the *.orig.tar.gz. Usually, it's just
-sufficient to use 'master' for that purpose.
+sufficient to use branch 'release' for that purpose.
 
 
 Debian-Depot for installation via Apt

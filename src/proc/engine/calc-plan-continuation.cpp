@@ -58,9 +58,11 @@ namespace engine {
   bool
   CalcPlanContinuation::verify (Time nominalTime, InvocationInstanceID invoKey)  const
   {
-    UNIMPLEMENTED ("verify the planning coordinates");
-    return false;
+    return timings_.isValid()
+        && Time::MIN < nominalTime && nominalTime < Time::MAX
+        && nominalTime == timings_.getFrameStartAt (invoKey.frameNumber);
   }
+  
   
   size_t
   CalcPlanContinuation::hashOfInstance (InvocationInstanceID invoKey) const
@@ -73,7 +75,7 @@ namespace engine {
   
   
   Job
-  CalcPlanContinuation::prepareRenderPlanningFrom (int64_t startFrame)
+  CalcPlanContinuation::prepareRenderPlanningFrom (FrameCnt startFrame)
   {
     InvocationInstanceID invoKey;
     invoKey.frameNumber = startFrame;
@@ -84,7 +86,7 @@ namespace engine {
   
   
   void
-  CalcPlanContinuation::performJobPlanningChunk(int64_t nextStartFrame)
+  CalcPlanContinuation::performJobPlanningChunk(FrameCnt nextStartFrame)
   {
     TimeAnchor refPoint(timings_, nextStartFrame);
     JobPlanningSequence jobs = dispatcher_.onCalcStream(modelPort_, channel_)

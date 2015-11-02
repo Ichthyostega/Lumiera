@@ -81,9 +81,13 @@ namespace test    {
           PlacementMO& root2 = SessionServiceExploreScope::getScopeRoot();          
           CHECK (isSameObject (root1, root2));
           
-          PlacementMO& elm1 = *ContentsQuery<TestSubMO21>(root1).resolveBy(resolver1);
-          PlacementMO& elm2 = *(index->getReferrers(root1));
-          CHECK (isSameObject (elm1, elm2));
+          PlacementMO& elm1 = *ContentsQuery<TestSubMO2>(root1).resolveBy(resolver1);
+          PlacementMO& elm2 = *ContentsQuery<TestSubMO1>(root1).resolveBy(resolver1);
+          PlacementMO& elm3 = *(index->getReferrers(elm1));
+          CHECK (isSameObject (elm3, elm2));
+          // relying on the specific setup of the test index
+          // MO1 is the sole "referrer" of MO2 (the only content within MO2's scope)
+          // root \ TestSubMO2 \ TestSubMO1
         }
       
       void

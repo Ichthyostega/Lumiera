@@ -53,7 +53,7 @@
 #include "lib/symbol.hpp"
 
 //#include <boost/operators.hpp>
-#include <tr1/memory>
+#include <memory>
 //#include <iostream>
 //#include <string>
 
@@ -125,7 +125,7 @@ namespace asset {
       
     public:
       void
-      registerInstance (std::tr1::weak_ptr<TY> smart_ptr_instance)
+      registerInstance (std::weak_ptr<TY> smart_ptr_instance)
         {
           TODO ("actually attach the smart-ptr to the existing TypedID registration");
         }

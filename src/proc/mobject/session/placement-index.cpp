@@ -28,7 +28,7 @@
  ** considered to be part of the session.
  ** 
  ** Simple hash based implementation. Seems adequate for now (12/09).
- ** A main table associates Placement-ID to an Placement \em instance, which is contained
+ ** A main table associates Placement-ID to a Placement \em instance, which is contained
  ** and managed within this index. A second hashtable allows to reverse lookup the scope
  ** associations, especially for enumerating the contents of a scope. The latter is done
  ** by wrapping up an STL iterator range into a "Lumiera Forward Iterator" (adapter).
@@ -59,12 +59,11 @@
 #include "lib/iter-source.hpp"
 #include "include/logging.h"
 
-#include <boost/lambda/lambda.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
-#include <tr1/unordered_map>
-#include <tr1/functional>
-#include <tr1/memory>
+#include <unordered_map>
+#include <functional>
+#include <memory>
 #include <string>
 
 
@@ -74,16 +73,15 @@ namespace session {
   
   using boost::hash;
   using boost::noncopyable;
-  using boost::lambda::var;
-  using std::tr1::shared_ptr;
-  using std::tr1::unordered_map;
-  using std::tr1::unordered_multimap;
+  using std::shared_ptr;
+  using std::unordered_map;
+  using std::unordered_multimap;
   using lib::TypedAllocationManager;
   using lib::iter_stl::IterSnapshot;
   using lib::iter_stl::eachVal;
-  using std::tr1::placeholders::_1;
-  using std::tr1::function;
-  using std::tr1::bind;
+  using std::placeholders::_1;
+  using std::function;
+  using std::bind;
   using std::make_pair;
   using std::pair;
   
@@ -121,8 +119,8 @@ namespace session {
       
       // using hashtables to implement the index
       typedef PlacementMO::ID PID;
-      typedef unordered_map<PID, PlacementEntry, hash<PID> > IDTable;
-      typedef std::tr1::unordered_multimap<PID,PID, hash<PID> > ScopeTable;
+      typedef unordered_map<PID, PlacementEntry>  IDTable;
+      typedef std::unordered_multimap<PID,PID> ScopeTable;
       
       typedef pair<ScopeIter, ScopeIter> ScopeContents;
       
@@ -486,7 +484,7 @@ namespace session {
   /** Retrieve all the elements attached to the given entry (scope)
    *  Each element (Placement) can act as a scope, containing other Placements,
    *  which will be discovered by this query one level deep (not recursive).
-   *  @return an Lumiera Forward Iterator, yielding the children,
+   *  @return a Lumiera Forward Iterator, yielding the children,
    *          possibly empty if the denoted element is a leaf.
    *  @note results are returned in arbitrary order (hashtable)
    */
@@ -578,8 +576,6 @@ namespace session {
                          ,LUMIERA_ERROR_INDEX_CORRUPTED)
           { }
       };
-    
-    boost::lambda::placeholder1_type _1_;
   }
   
   
@@ -632,7 +628,8 @@ namespace session {
             return;  //  because root is it's own scope
           
           iterator elementsInScope = tab.queryScopeContents(theScope);
-          bool properlyRegistered = has_any (elementsInScope, _1_ == var(theElement));
+          auto equalsTheElement   = [&](PMO& entry) { return entry == theElement; };
+          bool properlyRegistered = has_any (elementsInScope, equalsTheElement);
           
           VERIFY ( properlyRegistered,   "(1.8) Elements", "Element not registered as member of the enclosing scope: "+ theElement);
         }

@@ -75,10 +75,10 @@ namespace asset {
       const Duration len_;
       
     public:
-      typedef P<Media> PMedia;
-      typedef P<proc::asset::Clip> PClip;
-      typedef P<proc::asset::ProcPatt> PProcPatt;
-      typedef proc::mobject::session::PClipMO PClipMO;
+      using PMedia = lib::P<Media>;
+      using PClipAsset  = lib::P<proc::asset::Clip>;
+      using PProcPatt = lib::P<proc::asset::ProcPatt>;
+      using PClip = mobject::Placement<mobject::session::Clip>;
      
       
       static MediaFactory create;
@@ -103,7 +103,7 @@ namespace asset {
        *  it can be regenerated from the corresponding asset::Clip
        *  @return a Placement smart ptr owning the new Clip MObject 
        */
-      PClipMO createClip ();
+      PClip createClip ();
       
       /** @return the overall length of the media represented by this asset */ 
       virtual Duration getLength ()  const;
@@ -116,7 +116,7 @@ namespace asset {
       
       /** get or create the correct asset::Clip 
        *  corresponding to this media */
-      virtual PClip getClipAsset ();
+      virtual PClipAsset getClipAsset ();
       
       /** predicate to decide if this asset::Media
        *  is part of a compound (multichannel) media.
@@ -144,7 +144,7 @@ namespace asset {
     : boost::noncopyable
     {
     public:
-      typedef P<Media> PType;
+      typedef lib::P<Media> PType;
       
       PType operator() (Asset::Ident& key, const string& file="");
       PType operator() (const string& file, const Category& cat);
@@ -154,7 +154,7 @@ namespace asset {
       PType operator() (const char* file, const Category& cat);
       PType operator() (const char* file, asset::Kind);
       
-      P<Clip>
+      lib::P<Clip>
       operator() (Media& mediaref);
 
     };

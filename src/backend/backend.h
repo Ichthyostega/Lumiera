@@ -1,5 +1,5 @@
 /*
-  backend  -  common lumiera backend things
+  BACKEND.h  -  common lumiera backend definitions
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,15 +17,18 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
-#ifndef LUMIERA_BACKEND_H
-#define LUMIERA_BACKEND_H
+
+
+#ifndef BACKEND_BACKEND_H
+#define BACKEND_BACKEND_H
 
 #include "lib/mutex.h"
 
 #include <nobug.h>
 
-//NOBUG_DECLARE_FLAG (backend);
+
 
 extern size_t lumiera_backend_pagesize;
 
@@ -43,4 +46,4 @@ lumiera_backend_init (void);
 void
 lumiera_backend_destroy (void);
 
-#endif
+#endif /*BACKEND_BACKEND_H*/

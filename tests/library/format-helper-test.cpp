@@ -23,10 +23,22 @@
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"
+#include "lib/format-string.hpp"
+#include "lib/iter-adapter-stl.hpp"
 #include "lib/error.hpp"
 
 #include <iostream>
+#include <vector>
+#include <string>
 
+
+using lib::transformIterator;
+using lib::iter_stl::eachElm;
+using util::_Fmt;
+
+using std::vector;
+using std::string;
+using std::to_string;
 using std::cout;
 using std::endl;
 
@@ -46,22 +58,46 @@ namespace test {
   
   
   
+  class AutoCounter
+    {
+      static uint cnt;
+      
+      uint id_;
+      double d_;
+      
+    public:
+      AutoCounter(double d)
+        : id_(++cnt)
+        , d_(d*2)
+        { }
+      
+      operator string()  const
+        {
+          return _Fmt("Nr.%02d(%3.1f)") % id_ % d_;
+        }
+    };
+  uint AutoCounter::cnt = 0;
+  
+  
+  
   /***************************************************************************//**
    * @test verifies the proper working of some string-formatting helper functions.
    *       - util::str() provides a failsafe to-String conversion, preferring
    *         an built-in conversion, falling back to just a mangled type string.
    * @see format-util.hpp
    */
-  class FormatHelper_test : public Test
+  class FormatHelper_test
+    : public Test
     {
       void
       run (Arg)
         {
           check2String();
+          checkStringJoin();
         }
       
       
-      /** @test verify a failasfe to-string conversion. */
+      /** @test verify a failsafe to-string conversion. */
       void
       check2String ()
         {
@@ -82,7 +118,30 @@ namespace test {
         }
       
       
-      
+      /** @test verify delimiter separated joining of arbitrary collections.
+       *        - the first test uses a STL container, which means we need to wrap
+       *          into a lib::RangeIter. Moreover, lexical_cast is used to convert
+       *          the double numbers into strings.
+       *        - the second test uses an inline transforming iterator to build a
+       *          series of AutoCounter objects, which provide a custom string
+       *          conversion function. Moreover, since the transforming iterator
+       *          conforms to the Lumiera Forward Iterator concept, we can just
+       *          move the rvalue into the formatting function without much ado
+       */
+      void
+      checkStringJoin()
+        {
+          vector<double> dubious;
+          for (uint i=0; i<10; ++i)
+            dubious.push_back(1.1*i);
+          
+          std::function<AutoCounter(double)> justCount = [](double d){ return AutoCounter(d); };
+          
+          
+          cout << join(dubious, "--+--") << endl;
+          cout << join(transformIterator(eachElm(dubious)
+                                        ,justCount)) << endl;
+        }
     };
   
   LAUNCHER (FormatHelper_test, "unit common");

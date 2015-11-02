@@ -28,7 +28,7 @@
 #include "lib/meta/tuple.hpp"
 #include "lib/time/diagnostics.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 
 using std::cout;
@@ -43,7 +43,7 @@ namespace test    {
   using lib::test::randTime;
   
   using lib::time::TimeVar;
-  using std::tr1::function;
+  using std::function;
   using lib::meta::FunctionSignature;
   using lib::meta::Tuple;
   

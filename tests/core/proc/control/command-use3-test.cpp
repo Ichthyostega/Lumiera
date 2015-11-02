@@ -28,7 +28,7 @@
 
 #include "proc/control/test-dummy-commands.hpp"
 
-//#include <tr1/functional>
+//#include <functional>
 //#include <boost/ref.hpp>
 //#include <boost/format.hpp>
 //#include <iostream>
@@ -44,8 +44,8 @@ namespace test    {
 //  using boost::format;
 //  using boost::str;
   //using util::contains;
-//  using std::tr1::function;
-//  using std::tr1::bind;
+//  using std::function;
+//  using std::bind;
 //  using std::string;
   //using std::rand;
   //using std::cout;

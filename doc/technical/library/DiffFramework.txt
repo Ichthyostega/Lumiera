@@ -1,0 +1,288 @@
+Diff Handling Framework
+=======================
+:Date: 2015
+:Toc:
+
+Within the support library, in the namespace `lib::diff`, there is a collection of loosely coupled tools
+known as »the diff framework«. It revolves around generic representation and handling of structural differences.
+Beyond some rather general assumptions, to avoid stipulating the usage of specific data elements or containers,
+the framework is kept _generic_, cast in terms of *elements*, *sequences* and *strategies*
+for access, indexing and traversal.
+
+.motivation
+**********************
+Diff handling is multi purpose within Lumiera:
+Diff representation is seen as a meta language and abstraction mechanism;
+it enables tight collaboration without the need to tie and tangle the involved implementation data structures.
+Used this way, diff representation reduces coupling and helps to cut down overall complexity — so to justify
+the considerable amount of complexity seen within the diff framework implementation.
+**********************
+
+Definitions
+-----------
+element::
+  the atomic unit treated in diff detection, representation and application. +
+  Elements are considered to be
+
+  - lightweight copyable values
+  - equality comparable
+  - bearing distinct identity
+  - unique _as far as concerned_
+
+sequence::
+  data is delivered in the form of a sequence, which might or might not be _ordered,_
+  but in any case will be traversed once only.
+
+diff::
+  the changes necessary to transform an input sequence (``old sequence'') into a desired target sequence (``new sequence'')
+
+diff language::
+  differences are spelled out in linearised form: as a sequence of constant-size diff actions, called »diff verbs«
+
+diff verb::
+  a single element within a diff. Diff verbs are conceived as operations, which,
+  when applied consuming the input sequence, will produce the target sequence of the diff.
+
+diff application::
+  the process of consuming a diff (sequence of diff verbs), with the goal to produce some effect at the 
+  _target_ of diff application. Typically we want to apply a diff to a data sequence, to mutate it
+  into a new shape, conforming with the shape of the diff's ``target sequence''
+
+diff generator::
+  a facility producing a diff, which is a sequence of diff verbs.
+  Typically, a diff generator works lazily, demand driven.
+
+diff detector::
+  special kind of diff generator, which takes two data sequences as input:
+  an ``old sequence'' and a ``new sequence''. The diff detector traverses and compares
+  these sequences to produce a diff, which describes the steps necessary to transform
+  the ``old'' shape into the ``new'' shape of the data.
+
+
+List Diff Algorithm
+-------------------
+While in general this is a well studied subject, in Lumiera we'll confine ourselves to a very
+specific flavour of diff handling: we rely on _elementary atomic units_ with well established
+object identity. And in addition, within the scope of one coherent diff handling task,
+we require those elements to be 'unique'. The purpose of this design decision is to segregate
+the notorious matching problem and treat diff handling in isolation.
+
+Effectively this means that, for any given element, there can be at most _one_ matching
+counterpart in the other sequence, and the presence of such can be detected by using an *index*.
+In fact, we retrieve an index for every sequence involved into the diff detection task;
+this is our trade-off for simplicity in the diff detection algorithm.footnote:[traditionally,
+diff detection schemes, especially those geared at text diff detection, engage into great lengths
+of producing an ``optimal'' diff, which effectively means to build specifically tuned pattern
+or decision tables, from which the final diff can then be pulled or interpreted.
+We acknowledge that in our case building a lookup table index with additional annotations can be
+as bad as O(n^2^) and worse; we might well be able to do better, but likely for the price of
+turning the algorithm into some kind of mental challenge.]
+In case this turns out as a performance problem, we might consider integrating the index
+maintenance into the data structure to be diffed, which shifts the additional impact of
+indexing onto the data population phase.footnote:[in the general tree diff case this is far
+from trivial, since we need an self-contained element index for every node, and we need the
+ability to take a snapshot of the ``old'' state before mutating a node into ``new'' shape]
+
+Element classification
+~~~~~~~~~~~~~~~~~~~~~~
+By using the indices of the old and the new sequence, we are able to _classify_ each element:
+
+- elements only present in the new sequence are treated as *inserts*
+- elements only present in the old sequence are treated as *deletes*
+- elements present in both sequences form the *permutation*
+
+Processing pattern
+~~~~~~~~~~~~~~~~~~
+We _consume both the old and the new sequence synchronously, while emitting the diff sequence_.
+
+The diff describes a sequence of operations, which, when applied, consume a sequence congruent
+to the old sequence, while emitting a sequence congruent to the new sequence. We use the
+following *list diff language* here:
+
+verb `ins(elm)`::
+  insert the given argument element `elm` at the _current processing position_
+  into the target sequence. This operation allows to inject new data
+verb `del(elm)`::
+  delete the _next_ element `elm` at _current position._
+  For sake of verification, the element to be deleted is also included as argument (redundancy).
+verb `pick(elm)`::
+  accepts the _next_ element at _current position_ into the resulting altered sequence.
+  The element is given redundantly as argument.
+verb `find(elm)`::
+  effect a re-ordering of the target list contents. This verb requires to search
+  for the (next respective single occurrence of the) given element in the remainder
+  of the datastructure, to bring it forward and insert it as the _next_ element.
+verb `skip(elm)`::
+  processing hint, emitted at the position where an element previously fetched by
+  some `find` verb happened to sit in the old order. This allows an optimising
+  implementation to ``fetch'' a copy and just drop or skip the original,
+  thereby avoiding to shift other elements.
+
+Since _inserts_ and _deletes_ can be detected and emitted right at the processing frontier,
+for the remaining theoretical discussion, we consider the insert / delete part filtered
+away conceptually, and concentrate on generating the permutation part.
+
+Handling sequence permutation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Permutation handling turns out to be the turning point and tricky part of diff generation;
+the handling of new and missing members can be built on top, once we manage to describe a
+permutation diff. If we thus consider -- in theory -- the _inserts_ and _deletes_ to be
+filtered away, what remains is a permutation of index numbers to cause the re-ordering.
+We may describe this re-ordering by the index numbers in the new sequence, given in the order
+of the old sequence. For such a re-ordering permutation, the theoretically optimal result
+can be achieved by http://wikipedia.org/wiki/Cycle_sort[Cycle Sort] in _linear time_.footnote:[
+assuming random access by index is possible, *Cycle Sort* walks the sequence once. Whenever
+encountering an element out-of order, i.e. new postion != current position, we leap to the
+indicated new position, which necessarily will be out-of-order too, so we can leap from there
+to the next indicated position, until we jump back to the original position eventually. Such
+a closed cycle can then just be _rotated_ into proper position. Each permutation can be
+decomposed into a finite number of closed cycles, which means, after rotating all cycles
+out of order, the permutation will be sorted completely.] Starting from such ``cycle rotations'',
+we possibly could work out a minimal set of moving operations.
+
+But there is a twist: Our design avoids using index numbers, since we aim at _stream processing_
+of diffs. We do not want to communicate index numbers to the consumer of the diff; rather we
+want to communicate reference elements with our _diff verbs_. Thus we prefer the most simplistic
+processing mechanism, which happens to be some variation of *Insertion Sort*.footnote:[to support
+this choice, *Insertion Sort* -- in spite of being O(n^2^) -- turns out to be the best choice at
+sorting small data sets for reasons of cache locality; even typical Quicksort implementations
+switch to insertion sorting of small subsets for performance reasons]
+This is the purpose of our `find` verb: to extract some element known to be out of order, and
+insert it at the current position.
+
+
+Implementation and Complexity
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Based on these choices, we're able to consume two permutations of the same sequence simultaneously,
+while emitting `find` and `pick` verbs to describe the re-ordering. Consider the two sequences
+split into an already-processed part, and a part still-to-be-processed.
+
+.Invariant
+Matters are arranged such, that, in the to-be-processed part, each element appearing at the
+front of the ``new'' sequence _can be consumed right away_.
+
+Now, to arrive at that invariant, we use indices to determine
+
+- if the element at head of the old sequence is not present in the new sequence, which means
+  it has to be deleted
+- while an element appearing at head of the new sequence but not present in the old sequence
+  needs to be inserted
+- and especially an element known to be present in both sequences, appearing at the head
+  of the new sequence but non-matching at the old sequence prompts us to fetch the right
+  element from further down in the sequence and insert it a current position
+
+after that, the invariant is (re)established and we can consume the element and move the
+processing point forward.
+
+For generating the diff description, we need index tables of the ``old'' and the ``new'' sequence,
+which causes a O(n log n) complexity and storage in the order of the sequence length. Application
+of the diff is quadratic, due to the find-and-insert passes.footnote:[In the theoretical treatment
+of diff problems it is common to introduce a *distance metric* to describe how _far apart_ the
+two sequences are in terms of atomic changes. This helps to make the quadratic (or worse) complexity
+of such algorithms look better: if we know the sequences are close, the nested sub-scans will be
+shorter than the whole sequence (with n·d < n^2^). +
+However, since our goal is to support permutations and we have to deal with arbitrary sequences, such
+an argument looks somewhat pointless. Let's face it, structural diff computation is expensive; the only
+way to keep matters under control is to keep the local sequences short, which prompts us to exploit
+structural knowledge instead of comparing the entire data as flat sequence]
+
+
+
+Tree structure differences
+--------------------------
+The handling of list differences can be used as prototype to build a description of structural
+changes in hierarchical data: traverse the structure and account for each element and each change.
+Such a description of changes won't be _optimal_ though. What appears as a insertion or deletion locally,
+might indeed be just the result of rearranging subtrees as a whole. The _tree diff problem_ in this general
+form is known to be a rather tough challenge. But our goals are different here. Lumiera relies on a
+link:{ldoc}/design/architecture/ExternalTreeDescription.html[»External Tree Description«] for
+_symbolic representation_ of hierarchically structured elements, without actually implementing them.
+The purpose of this ``external'' description is to largely remove the need for a central data model
+to work against. A _symbolic diff message_ allows to propagate data and structure changes,
+without even using the same data representation at both ends.
+
+Generic Node Record
+~~~~~~~~~~~~~~~~~~~
+For this to work, we need some very generic meta representation. This can be a textual representation
+(e.g. JSON) -- but within the application it seems more appropriate to use an abstracted and unspecific
+typed data representation, akin to ``JSON with typed language data''. It can be considered _symbolic,_
+insofar it isn't the data, it refers to it. For this approach to work, we need the following parts:
+
+- a _generic node_, which has an _identity_ and some payload data. This `GenNode` is treated as elementary value.
+- a _record_ made from a collection of generic nodes, to take on the abstracted role of an object. Such a
+  `Record<GenNode>` is a sequence of nodes, partitioned in two scopes: the (named) attributes and the children.
+- together these elements form an essentially recursive structure: The record is comprised of nodes and the
+  nodes might, besides elementary values, also carry records.
+- and finally we need an _identification scheme_, allowing to produce named and unnamed yet unique identities,
+  also including opaque type information.
+
+Type information is deliberately kept opaque, to prevent switch-on-type.
+We always presume synced (similar) data structures on both ends of the collaboration, where the partners
+share common knowledge about types and structure. Changes are indicated and propagated, not probed.
+
+Nested list differences
+~~~~~~~~~~~~~~~~~~~~~~~
+Exploiting the fact that `Record<GenNode>` is essentially a sequence, we're able to build the description
+of structure changes as an extension layer on top of our _linearised diff language format._ We introduce
+a *bracketing construct* to _open and close sub scopes._ Within each scope, the verbs of our list diff
+language are deployed, just now with a `GenNode` as payload. This yields the following *tree diff language*
+
+verb `ins(GenNode)`::
+         prompts to insert the given argument element at the _current processing position_
+         into the target sequence. This operation allows to inject new data
+verb `del(ID)`::
+         requires to delete the _next_ element at _current_ position.footnote:[The payload of this
+         and all the following verbs is a `GenNode`, but only the ID part matters. This allows to
+         send a special _ref element_ over the wire instead of having to send a full subtree, for
+         obvious performance reasons.]
+         For sake of verification, the ID of the argument payload is
+         required to match the ID of the element about to be discarded.
+verb `pick(ID)`::
+         just accepts the _next_ element at _current_ position into
+         the resulting altered sequence. Again, the ID of the argument
+         has to match the ID of the element to be picked, for sake
+         of verification.
+verb `find(ID)`::
+         change the order of the target scope contents: this verb requires
+         to _search ahead_ for the (next respective single occurrence of the)
+         given element further down into the remainder of the current
+         record scope (but not into nested child scopes). The designated
+         element is to be retrieved and inserted as the next element
+         _at current position._
+verb `skip(ID)`::
+         this is a mere processing hint, emitted at the position where an element
+         previously extracted by a `find(ID)` verb happened to sit within the old order.
+verb `after(ID)`::
+         shortcut to `pick` existing elements up to the designated point. +
+         As a special notation, `after(Ref::ATTRIBUTES)` allows to fast forward
+         to the first child element, while `after(Ref::END)` means to accept
+         all of the existing data contents as-is (possibly to append further
+         elements beyond that point).
+verb `mut(ID)`::
+         *bracketing construct* to open a nested sub scope.
+         The element designated by the ID of the argument needs to be a record
+         (``nested child object''). Moreover, this element must have been
+         mentioned with the preceding diff verbs at that level, which means
+         that the element as such must already be present in the altered
+         target structure. The `mut(ID)` verb then opens the designated nested
+         record for diff handling, and all subsequent diff verbs are to be
+         interpreted relative to this scope, until the corresponding
+         `emu(ID)` verb is encountered. As a special notation, right
+         after handling an element with the list diff verbs (i.e. `ins`
+         or `pick` or `find`), it is allowed immediately to open the
+         nested scope with `mut(Ref::THIS)`footnote:[this shortcut circumvents
+         the problem that it is sometimes difficult to know the precise ID for
+         unnamed children just created at the given scope.
+         We acknowledge that diff messages will sometimes be hand-writtten,
+         especially to populate a target data structure without knowing its
+         implementation. The whole diff language is designed to be human readable.]
+verb `emu(ID)`::
+         closing bracketing construct and counterpart to `mut(ID)`. This verb
+         must be given precisely at the end of the nested scope.footnote:[it is
+         not allowed to ``return'' from the middle of a scope, for sake of sanity.
+         The diff messages transport a certain degree of redundancy to detect when
+         the data structure at target does no longer conform to the assumptions
+         made at the generation side.] At this point, this child scope is left
+         and the parent scope with all existing diff state is _popped from an
+         internal stack._
+

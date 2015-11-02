@@ -51,7 +51,7 @@
 #include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/typeseq-util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 
@@ -59,7 +59,7 @@
 namespace proc {
 namespace control {
   
-  using std::tr1::function;
+  using std::function;
   
   using lib::meta::FunctionSignature;
   using lib::meta::FunctionTypedef;

@@ -25,7 +25,7 @@
 #define PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
 
 #include "proc/mobject/mobject.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/symbol.hpp"
 
 
@@ -42,7 +42,7 @@ namespace asset {
   class Effect;
   class Sequence;
   
-  typedef P<Sequence> PSequence;
+  typedef lib::P<Sequence> PSequence;
   
   }
 
@@ -51,7 +51,7 @@ namespace session {
   
   class Root;
   class Clip;
-  class Track;
+  class Fork;
   class Effect;
   class Label;
   class Binding;
@@ -70,7 +70,7 @@ namespace session {
       Placement<Root>   operator() (lumiera::query::DefsManager&);
       Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
       Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
-      Placement<Track>  operator() (asset::EntryID<Track> const&);
+      Placement<Fork>   operator() (lib::idi::EntryID<Fork> const&);
       Placement<Effect> operator() (asset::Effect const&);
       Placement<Label>  operator() (lib::Symbol);
       Placement<Binding>operator() (asset::PSequence const&);

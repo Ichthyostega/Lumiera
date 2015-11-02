@@ -38,7 +38,7 @@
 #include "proc/mobject/model-port.hpp"
 #include "proc/mobject/output-designation.hpp"
 #include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/track.hpp"
+#include "proc/mobject/session/fork.hpp"
 #include "proc/play/output-manager.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/viewer.hpp"
@@ -56,7 +56,7 @@ namespace lumiera {
   
   namespace time = lib::time;
   
-  using std::tr1::weak_ptr;
+  using std::weak_ptr;
     
     
     /**************************************************************//**
@@ -121,13 +121,13 @@ namespace lumiera {
           };
         
         
-        typedef lib::IterSource<proc::mobject::ModelPort>::iterator    ModelPorts;
-        typedef lib::IterSource<proc::mobject::OutputDesignation>::iterator Pipes;
-        typedef proc::play::POutputManager Output;
-        typedef proc::mobject::session::PClipMO Clip;
-        typedef proc::mobject::PTrack  Track;
-        typedef proc::asset::PTimeline Timeline;
-        typedef proc::asset::PViewer Viewer;
+        using ModelPorts = lib::IterSource<proc::mobject::ModelPort>::iterator;
+        using Pipes      = lib::IterSource<proc::mobject::OutputDesignation>::iterator;
+        using Output     = proc::play::POutputManager;
+        using Clip       = proc::mobject::session::PClip;
+        using Fork       = proc::mobject::PFork;
+        using Timeline   = proc::asset::PTimeline;
+        using Viewer     = proc::asset::PViewer;
         
         
         /* ==== convenience shortcuts for common use cases ==== */
@@ -135,7 +135,7 @@ namespace lumiera {
         Controller perform(Pipes, Output);
         Controller perform(Timeline);
         Controller perform(Viewer);
-        Controller perform(Track);
+        Controller perform(Fork);
         Controller perform(Clip);
         
       protected:

@@ -52,7 +52,7 @@ namespace time {
     {
       
     public:
-      virtual ~TCode();
+      virtual ~TCode() { }
       
       operator string()  const { return show(); }
       string describe()  const { return string(tcID()); }

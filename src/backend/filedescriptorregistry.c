@@ -1,5 +1,5 @@
 /*
-  filedescriptorregistry.c  -  register all files in use
+  FiledescriptorRegistry  -  registry for tracking all files in use
 
   Copyright (C)                 Lumiera.org
     2008, 2010,                 Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
@@ -29,10 +31,8 @@
 #include "backend/filedescriptorregistry.h"
 
 
-/*
-  Filedescriptor registry
-
-  This registry stores all acquired filedescriptors for lookup, they will be freed when not referenced anymore.
+/**
+ * the global registry for file descriptors.
  */
 static PSplay filedescriptorregistry = NULL;
 static lumiera_mutex filedescriptorregistry_mutex;
@@ -110,7 +110,7 @@ lumiera_filedescriptorregistry_destroy (void)
 LumieraFiledescriptor
 lumiera_filedescriptorregistry_ensure (LumieraFiledescriptor template)
 {
-  REQUIRE (filedescriptorregistry, "not initialized");
+  REQUIRE (filedescriptorregistry, "not initialised");
 
   LumieraFiledescriptor ret = NULL;
 
@@ -136,9 +136,6 @@ lumiera_filedescriptorregistry_ensure (LumieraFiledescriptor template)
 }
 
 
-/**
- * Removes a Filedescriptor from the registry.
- */
 void
 lumiera_filedescriptorregistry_remove (LumieraFiledescriptor self)
 {

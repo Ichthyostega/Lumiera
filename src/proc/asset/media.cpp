@@ -46,7 +46,7 @@ using boost::format;
 using boost::regex;
 using boost::smatch;
 using boost::regex_search;
-using std::tr1::dynamic_pointer_cast;
+using std::dynamic_pointer_cast;
 
 namespace error = lumiera::error;
 
@@ -75,11 +75,11 @@ namespace asset {
   
   
   
-  Media::PClipMO
+  Media::PClip
   Media::createClip ()
   {
-    PClip clipAsset (getClipAsset()); 
-    PClipMO clipMO = clipAsset->createClip();
+    PClipAsset clipAsset (getClipAsset());
+    PClip      clipMO = clipAsset->createClip();
     
     ENSURE (clipMO->isValid());
     return clipMO;
@@ -90,7 +90,7 @@ namespace asset {
    *            or to get the right reference to some already existing asset::Clip,
    *            especially when this media is part of a compound (multichannel) media.
    */
-  Media::PClip
+  Media::PClipAsset
   Media::getClipAsset ()
   {
     if (PMedia parent = this->checkCompound())
@@ -228,7 +228,7 @@ namespace asset {
    *  @throw Invalid if the given media asset is not top-level,
    *         but rather part or a multichannel (compound) media
    */
-  P<Clip>
+  lib::P<Clip>
   MediaFactory::operator() (Media& mediaref)
   {
     if (mediaref.checkCompound())

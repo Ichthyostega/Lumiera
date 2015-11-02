@@ -30,7 +30,7 @@
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/placement.hpp"
 
-#include <tr1/memory>
+#include <memory>
 
 
 namespace proc {
@@ -41,7 +41,7 @@ namespace test    {
   using namespace mobject::test;
   typedef TestPlacement<DummyMO> PDum;
   
-  typedef std::tr1::shared_ptr<PlacementIndex> PPIdx;
+  typedef std::shared_ptr<PlacementIndex> PPIdx;
   typedef ScopeQuery<MObject>::iterator _ScopeIterMO;
   
   
@@ -63,6 +63,8 @@ namespace test    {
    *  which is a Placement<> and way down into the hierarchy
    */
   PlacementMO& retrieve_startElm();
+
+  PlacementMO& retrieve_firstTestSubMO21();
   
   
   /** shortcut to explore the contents of a scope within the current index.

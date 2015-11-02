@@ -186,10 +186,10 @@ namespace util {
   
   template void _Fmt::format (const char,    Implementation&);
   template void _Fmt::format (const uchar,   Implementation&);
-  template void _Fmt::format (const int,     Implementation&);
-  template void _Fmt::format (const uint,    Implementation&);
-  template void _Fmt::format (const short,   Implementation&);
-  template void _Fmt::format (const ushort,  Implementation&);
+  template void _Fmt::format (const int16_t, Implementation&);
+  template void _Fmt::format (const uint16_t,Implementation&);
+  template void _Fmt::format (const int32_t, Implementation&);
+  template void _Fmt::format (const uint32_t,Implementation&);
   template void _Fmt::format (const int64_t, Implementation&);
   template void _Fmt::format (const uint64_t,Implementation&);
   template void _Fmt::format (const float,   Implementation&);
@@ -197,6 +197,10 @@ namespace util {
   template void _Fmt::format (const string,  Implementation&);
   template void _Fmt::format (const void *,  Implementation&);
   template void _Fmt::format (const char *,  Implementation&);
+#ifndef __x86_64__
+  template void _Fmt::format (const long,    Implementation&);
+  template void _Fmt::format (const ulong,   Implementation&);
+#endif
   
   
   

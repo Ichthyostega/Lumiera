@@ -91,14 +91,16 @@ enum JobFailureReason
     PREREQUISITE_NOT_AVAILABLE  ///////////////TODO
   };
 
+typedef int64_t FrameCnt;
 
 
-/** 
+
+/**
  * closure representing the execution context of a job.
  * The information reachable through this closure is specific
  * for this kind of job, but static and typically shared among
  * all jobs for a given feed and segment of the timeline
- */ 
+ */
 struct lumiera_jobClosure { /* placeholder */ };
 typedef struct lumiera_jobClosure* LumieraJobClosure;
 
@@ -110,7 +112,7 @@ typedef struct lumiera_jobClosure* LumieraJobClosure;
  */
 union InvocationInstanceID
   {
-    int64_t frameNumber;
+    FrameCnt frameNumber;
     lumiera_uid    luid;
     
     struct {int a,b;}
@@ -277,8 +279,8 @@ namespace engine {
           return this->parameter.invoKey;
         }
       
-      JobKind getKind()  const;
-      bool isValid()  const;
+      JobKind getKind() const;
+      bool isValid()    const;
       
       bool usesClosure (JobClosure const&)  const;
       
@@ -330,4 +332,4 @@ size_t lumiera_job_get_hash (LumieraJobDefinition);
 #ifdef __cplusplus
 }
 #endif
-#endif
+#endif /*BACKEND_ENGINE_JOB_H*/

@@ -31,7 +31,7 @@
 
 #include "proc/control/test-dummy-commands.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/ref.hpp>
 #include <boost/lexical_cast.hpp>
 #include <string>
@@ -44,9 +44,9 @@ namespace test    {
 
   using util::_Fmt;
   using std::string;
-  using std::tr1::function;
-  using std::tr1::bind;
-  using std::tr1::ref;
+  using std::function;
+  using std::bind;
+  using std::ref;
   using boost::lexical_cast;
   using util::contains;
   

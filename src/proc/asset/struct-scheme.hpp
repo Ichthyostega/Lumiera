@@ -37,6 +37,8 @@
 
 
 #include "lib/symbol.hpp"
+#include "proc/asset.hpp"
+#include "lib/idi/entry-id.hpp"
 
 #include <cstdlib>
 
@@ -45,22 +47,19 @@
 using boost::format;
 
 
-namespace lumiera {
-  class StreamType;
-}
-
 namespace proc {
+  struct StreamType;
+  
 namespace mobject {
 namespace session {
   
-  class Track;
+  class Fork;
   class Clip;
   
 }}
 
 namespace asset{
   
-  class Track;
   class Pipe;
   class ProcPatt;
   class Timeline;
@@ -88,18 +87,11 @@ namespace asset{
       };
     
     
-  ///////////////////////////////////////////////////////////////////////////////////////////TICKET #581 intending to abandon asset::Track in favour of a plain EntryID 
-    template<> struct StructTraits<asset::Track>
+    template<> struct StructTraits<mobject::session::Fork>
       {
-        static Symbol namePrefix() { return "track"; }
-        static Symbol catFolder()  { return "tracks";}
-        static Symbol idSymbol()   { return "track"; }
-      };
-    template<> struct StructTraits<mobject::session::Track>
-      {
-        static Symbol namePrefix() { return "track"; }
-        static Symbol catFolder()  { return "tracks";}
-        static Symbol idSymbol()   { return "track"; }
+        static Symbol namePrefix() { return "fork"; }
+        static Symbol catFolder()  { return "forks";}
+        static Symbol idSymbol()   { return "fork"; }
       };
     template<> struct StructTraits<mobject::session::Clip>
       {
@@ -113,7 +105,7 @@ namespace asset{
         static Symbol catFolder()  { return "pipes";}
         static Symbol idSymbol()   { return "pipe"; }
       };
-    template<> struct StructTraits<lumiera::StreamType>
+    template<> struct StructTraits<proc::StreamType>
       {
         static Symbol namePrefix() { return "type"; }
         static Symbol catFolder()  { return "stream-types";}
@@ -155,17 +147,21 @@ namespace asset{
     
     
     
-        
-    template<class STRU>
-    inline string
-    generateSymbolID()
+    /** generate an Asset identification tuple
+     *  based on this EntryID's symbolic ID and type information.
+     *  The remaining fields are filled in with hardwired defaults.
+     * @note there is a twist, as this asset identity tuple generates
+     *       a different hash as the EntryID. It would be desirable
+     *       to make those two addressing systems interchangeable.      /////////////TICKET #739
+     */
+    template<typename TY>
+    inline Asset::Ident
+    getAssetIdent (lib::idi::EntryID<TY> const& entryID)
     {
-        static uint i=0;
-        static format namePattern ("%s.%03d");
-        ////////////////////////////////////////////////////////////////////////////////TICKET #166 : needs to be pushed down into a *.cpp
-        
-        return str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );
+      Category cat (STRUCT, idi::StructTraits<TY>::catFolder());
+      return Asset::Ident (entryID.getSym(), cat);
     }
+    
     
     
 }}} // namespace asset::idi

@@ -24,7 +24,8 @@
 #include "proc/mobject/builder/toolfactory.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/noncopyable.hpp>
+#include <memory>
 
 namespace proc {
 namespace mobject {
@@ -82,6 +83,7 @@ namespace builder {
   }
   
   
+                   //////////////////////////////////////////TODO: a better idea than using auto_ptr?
   auto_ptr<engine::RenderGraph>
   ToolFactory::getProduct ()
   {

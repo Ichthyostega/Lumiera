@@ -59,14 +59,14 @@
 #include "lib/p.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <tr1/memory>
+#include <memory>
 
 
 
 namespace proc {
 namespace asset {
-  class Timeline;    typedef P<Timeline> PTimeline;
-  class Sequence;    typedef P<Sequence> PSequence;
+  class Timeline;    typedef lib::P<Timeline> PTimeline;
+  class Sequence;    typedef lib::P<Sequence> PSequence;
 }
 
 namespace mobject {
@@ -75,7 +75,7 @@ namespace mobject {
     class SessManager;
     class ElementQuery;
     class Fixture;
-    typedef std::tr1::shared_ptr<Fixture> PFix;
+    typedef std::shared_ptr<Fixture> PFix;
   }
   
   typedef session::SessManager& PSess;  ///< acts as a "PImpl" smart ptr
@@ -115,10 +115,10 @@ namespace mobject {
       typedef lib::RefArray<asset::PSequence>& SequenceAccess;
       
       
-      Session (DefaultsAccess
-              ,ElementsAccess
-              ,TimelineAccess
-              ,SequenceAccess)  throw();
+      Session (DefaultsAccess,
+               ElementsAccess,
+               TimelineAccess,
+               SequenceAccess)  throw();
       virtual ~Session ();
       
       

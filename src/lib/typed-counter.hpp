@@ -30,7 +30,7 @@
  ** setup allows to bridge between metaprogramming and (runtime) dispatcher tables.
  ** 
  ** Each such series of type-id-slots is associated to a distinct usage context.
- ** Those usage contexts are discerned by the template parameter \c XY. Each of
+ ** Those usage contexts are discerned by the template parameter \c CX. Each of
  ** these usage contexts uses a separate numbering scheme on his own, i.e. every
  ** new type encountered at runtime gets the next higher ID number (slot).
  ** @warning the actual ID numbers depend on the sequence of first encountering
@@ -71,13 +71,14 @@ namespace lib {
   
   
   /** 
-   * Providing type-IDs for a specific context.
+   * Provide type-IDs for a specific context.
    * This facility allows to access a numeric ID for each
-   * provided distinct type. Type-IDs may be used e.g. for
+   * given distinct type. Type-IDs may be used e.g. for
    * dispatcher tables or for custom allocators. 
    * The type-IDs generated here are not completely global though.
    * Rather, they are tied to a specific type context, e.g. a class
-   * implementing a custom allocator.
+   * implementing a custom allocator. These typed contexts are
+   * considered to be orthogonal and independent of each other.
    */
   template<class CX>
   class TypedContext
@@ -88,7 +89,7 @@ namespace lib {
       static IxID
       newTypeID (IxID& typeID)
         {
-          ClassLock<TypedContext> synchronised();
+          ClassLock<TypedContext> synchronised;
           if (!typeID)
             typeID = ++lastGeneratedTypeID;
           return typeID;

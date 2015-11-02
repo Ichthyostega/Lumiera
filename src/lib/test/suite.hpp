@@ -33,7 +33,7 @@
  ** @see test::Test
  ** @see test::TestOption
  ** @see run.hpp
- ** @see mainsuite.cpp
+ ** @see testrunner.cpp
  */
 
 
@@ -70,7 +70,7 @@ namespace test {
       
     public:
       Suite (string groupID);
-      void run (Arg cmdline);
+      bool run (Arg cmdline);
       void describe ();
       int getExitCode ()  const;
       static void enrol (Launcher *test, string testID, string groups);

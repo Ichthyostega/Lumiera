@@ -118,6 +118,9 @@ namespace time {
       friend gavl_time_t _raw (TimeValue const& time) { return time.t_; }
       static TimeValue buildRaw_(gavl_time_t);
       
+      /** @internal diagnostics */
+      operator std::string ()  const;
+      
       // Supporting totally_ordered
       friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
       friend bool operator<  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ <  t2   ; }
@@ -160,10 +163,7 @@ namespace time {
           return *this;
         }
       
-      /** @internal diagnostics */
-      operator std::string ()  const;
-      
-      // Supporting mixing with plain long int arithmetics
+      // Support mixing with plain long int arithmetics
       operator gavl_time_t ()  const { return t_; }
       
       // Supporting additive
@@ -178,6 +178,95 @@ namespace time {
        
       // baseclass TimeValue is already totally_ordered 
     };
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /* ======= specific Time entities ==================== */
+  
+  /** relative framecount or frame number.
+   *  Used within the engine at places where the underlying
+   *  grid and origin is obvious from the call context.
+   * @warning do not mix up gavl_time_t and FrameCnt.
+   * @warning use 64bit consistently.
+   *          beware: \c long is 32bit on i386
+   * @note any conversion to frame numbers should go through
+   *       time quantisation followed by conversion to FrameNr
+   */
+  typedef int64_t FrameCnt;
+  
+  /** rational representation of fractional seconds
+   * @warning do not mix up gavl_time_t and FSecs */
+  typedef boost::rational<long> FSecs;
+  
+  
+  /**
+   * Lumiera's internal time value datatype.
+   * This is a TimeValue, but now more specifically denoting
+   * a point in time, measured in reference to an internal
+   * (opaque) time scale.
+   * 
+   * Lumiera Time provides some limited capabilities for
+   * direct manipulation; Time values can be created directly
+   * from \c (ms,sec,min,hour) specification and there is an
+   * string representation intended for internal use (reporting
+   * and debugging). Any real output, formatting and persistent
+   * storage should be based on the (quantised) timecode
+   * formats though, which can be generated from time values.
+   * 
+   * Similar to TimeValue, also Time objects are considered
+   * immutable values. As convenience shortcut, some operators
+   * are provided, creating a TimVar for further calculations.
+   */
+  class Time
+    : public TimeValue
+    {
+      /// direct assignment prohibited
+      Time& operator= (Time const);
+      
+      /// suppress possible direct conversions
+      Time(int);
+      
+    public:
+      static const Time MAX ;
+      static const Time MIN ;
+      static const Time ZERO;
+      
+      static const Time ANYTIME;  ///< border condition marker value. #ANYTIME <= any time value
+      static const Time NEVER;   ///<  border condition marker value. #NEVER >= any time value
+      
+      explicit
+      Time (TimeValue const& val =TimeValue(0))
+        : TimeValue(val)
+        { }
+      
+      Time (TimeVar const& calcResult)
+        : TimeValue(calcResult)
+        { }
+      
+      explicit
+      Time (FSecs const& fractionalSeconds);
+      
+      Time ( long millis
+           , uint secs
+           , uint mins =0
+           , uint hours=0
+           );
+      
+      /** @internal diagnostics */
+      operator std::string ()  const;
+      
+      /** convenience start for time calculations */
+      TimeVar operator+ (TimeValue const& tval)  const { return TimeVar(*this) + tval; }
+      TimeVar operator- (TimeValue const& tval)  const { return TimeVar(*this) - tval; }
+      TimeVar operator- ()                       const { return -TimeVar(*this); }
+    };
+  
   
   
   
@@ -215,7 +304,7 @@ namespace time {
         : TimeValue(TimeVar(target) -= origin)
         { }
       
-      Offset (int64_t count, FrameRate const& fps);
+      Offset (FrameCnt count, FrameRate const& fps);
       
       static const Offset ZERO;
       
@@ -277,77 +366,6 @@ namespace time {
   
   
   
-  /* ======= specific Time entities ==================== */
-  
-  /** rational representation of fractional seconds
-   * @warning do not mix up gavl_time_t and FSecs */
-  typedef boost::rational<long> FSecs;
-  
-  
-  /**
-   * Lumiera's internal time value datatype.
-   * This is a TimeValue, but now more specifically denoting
-   * a point in time, measured in reference to an internal
-   * (opaque) time scale.
-   * 
-   * Lumiera Time provides some limited capabilities for
-   * direct manipulation; Time values can be created directly
-   * from \c (ms,sec,min,hour) specification and there is an
-   * string representation intended for internal use (reporting
-   * and debugging). Any real output, formatting and persistent
-   * storage should be based on the (quantised) timecode
-   * formats though, which can be generated from time values.
-   * 
-   * Similar to TimeValue, also Time objects are considered
-   * immutable values. As convenience shortcut, some operators
-   * are provided, creating a TimVar for further calculations.
-   */
-  class Time
-    : public TimeValue
-    {
-      /// direct assignment prohibited
-      Time& operator= (Time const);
-      
-      /// suppress possible direct conversions
-      Time(int);
-      
-    public:
-      static const Time MAX ; 
-      static const Time MIN ;
-      static const Time ZERO;
-      
-      static const Time ANYTIME;  ///< border condition marker value. #ANYTIME <= any time value
-      static const Time NEVER;   ///<  border condition marker value. #NEVER >= any time value
-      
-      explicit 
-      Time (TimeValue const& val =TimeValue(0))
-        : TimeValue(val)
-        { }
-      
-      Time (TimeVar const& calcResult)
-        : TimeValue(calcResult)
-        { }
-      
-      explicit
-      Time (FSecs const& fractionalSeconds);
-      
-      Time ( long millis
-           , uint secs 
-           , uint mins =0
-           , uint hours=0
-           );
-      
-      /** @internal diagnostics */
-      operator std::string ()  const;
-      
-      /** convenience start for time calculations */
-      TimeVar operator+ (TimeValue const& tval)  const { return TimeVar(*this) + tval; }
-      TimeVar operator- (TimeValue const& tval)  const { return TimeVar(*this) - tval; }
-      TimeVar operator- ()                       const { return -TimeVar(*this); }
-    };
-  
-  
-  
   
   /**
    * Duration is the internal Lumiera time metric.
@@ -378,7 +396,7 @@ namespace time {
         { }
       
       Duration (TimeSpan const& interval);
-      Duration (int64_t count, FrameRate const& fps);
+      Duration (FrameCnt count, FrameRate const& fps);
       
       static const Duration NIL;
       
@@ -497,6 +515,8 @@ namespace time {
       /** may change start / duration */
       void accept (Mutation const&);
       
+      /** @internal diagnostics */
+      operator std::string ()  const;
       
       /// Supporting extended total order, based on start and interval length
       friend bool operator== (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_==t2.t_ && t1.dur_==t2.dur_; }

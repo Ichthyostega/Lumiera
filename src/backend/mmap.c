@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
@@ -30,21 +32,13 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-/**
- * @file
- *
- */
-
 
 
 LUMIERA_ERROR_DEFINE (MMAP_NWRITE, "Backing file not writable");
 LUMIERA_ERROR_DEFINE (MMAP_SPACE, "Address space exhausted");
 
 
-/**
- * global mmap registry/cache
- *
- */
+
 
 
 LumieraMMap
@@ -52,7 +46,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
 {
   TRACE (mmap_dbg);
 
-  TODO ("enforce size instead using chunksize (rounded to pagessize) for parsing headers");
+  TODO ("enforce size instead using chunksize (rounded to page size) for parsing headers");
 
   REQUIRE (self);
   REQUIRE (file);
@@ -60,9 +54,19 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
   REQUIRE (size);
 
   /**
-   * default size for the mmapping window
-   * 128MB on 32 bit arch
-   * 2GB on 64 bit arch
+   * default size for the mmapping window.
+   * - 128MB on 32 bit arch
+   * - 2GB on 64 bit arch
+   * 
+   * \par
+   * Maintaining the right[tm] mmapping size is a bit tricky:
+   *  - We have the default mmap_window_size which will be backed off when address space gets exhausted
+   *  - When a bigger size is requested we have to fulfil it
+   *  - The last mmapped chunk of a file can be as small as possible when the file is readonly
+   *  - When the file is writable, the last chunk should be rounded up to chunksize
+   *  - All boundaries will be aligned up/down to chunk boundaries
+   *  - Requests beyond the file end must ftruncate and map additional pages
+   *  - Create the 'refmap' which contains a refcounter per chunk
    */
   TODO("move the setdefaults somewhere else, backend_defaults.c or so");
 #if SIZE_MAX <= 4294967295U
@@ -92,16 +96,6 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
   TODO ("error here? or just map as asked for?");
   ENSURE(chunksize);
 
-  /**
-   * Maintaining the right[tm] mmapping size is a bit tricky:
-   *  - We have the default mmap_window_size which will be backed off when address space gets exhausted
-   *  - When a bigger size is requested we have to fulfil it
-   *  - The last mmapped chunk of a file can be as small as possible when the file is readonly
-   *  - When the file is writable, the last chunk should be rounded up to chunksize
-   *  - All boundaries will be aligned up/down to chunk boundaries
-   *  - Requests beyond the file end must ftruncate and map additional pages
-   *  - Create the 'refmap' which contains a refcounter per chunk
-   **/
 
   /**
    * Recovering address space strategies:
@@ -245,7 +239,7 @@ lumiera_mmap_init_exact (LumieraMMap self, LumieraFile file, off_t start, size_t
         }
     }
 
-  TODO ("use resourcecllector here");
+  /////////////////////////TODO use resourcecllector here
   void* addr = mmap (NULL,
                      size,
                      (descriptor->flags & O_ACCMODE) == O_RDONLY ? PROT_READ : PROT_READ|PROT_WRITE,

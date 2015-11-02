@@ -38,14 +38,14 @@
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 
 using util::contains;
 using util::for_each;
 using util::_Fmt;
-using std::tr1::placeholders::_1;
-using std::tr1::bind;
+using std::placeholders::_1;
+using std::bind;
 using std::string;
 using std::cout;
 
@@ -76,7 +76,7 @@ namespace asset {
   
   template<class CHI, class PAR>
   inline bool
-  dependencyCheck (P<CHI> child, P<PAR> parent)
+  dependencyCheck (lib::P<CHI> child, lib::P<PAR> parent)
   {
     return (child == parent)
         || (0 < child->getParents().size()

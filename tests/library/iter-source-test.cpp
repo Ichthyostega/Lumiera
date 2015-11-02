@@ -31,7 +31,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/noncopyable.hpp>
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -146,6 +146,8 @@ namespace test{
    *        
    * @see IterSource
    * @see PlacementIndex::Table#_eachEntry_4check real world usage example
+   * @todo the output order of the values produced by this test
+   *       is implementation dependent in for the hashmap case
    */
   class IterSource_test : public Test
     {
@@ -156,16 +158,16 @@ namespace test{
       typedef IterSource<TimeVar>::iterator TimeIter;
       
       typedef std::map<string,TimeVar>                TreeMap;
-      typedef std::tr1::unordered_map<string,TimeVar> HashMap;
+      typedef std::unordered_map<string,TimeVar> HashMap;
       
       typedef std::multimap<int,int>               TreeMultimap;
-      typedef std::tr1::unordered_multimap<int,int>HashMultimap;
+      typedef std::unordered_multimap<int,int>HashMultimap;
       
       
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
+          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
           
           verify_simpleIters();
           verify_transformIter();

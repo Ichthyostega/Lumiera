@@ -1,0 +1,90 @@
+Lumiera GUI style and theming
+=============================
+
+
+'this page collects some pieces of information regarding the visual appearance of the Lumiera GTK GUI'
+
+GTK-3 styles
+------------
+Styling of GTK-3 interfaces is based on CSS, with some specific conventions about the selectors
+and some additional makro functions to generate colours and gradients. When GTK actually renders a widget,
+id consults a 'strategy object' known as *Theme Engine*, passing it the region to draw in a abstracted way.
+The Theme Engine in turn uses a '``style provider''' to retrieve the generic style properties it uses for drawing.
+Thus, the Theme Engine defines the actual meaning of any style and is in the position to understand and thus
+introduce additional engine specific styles and settings.
+
+GTK-3 supports the powerful 'cascading' and 'contextual selectors' from CSS. Thus the nesting of elements
+in the GUI forms the base for creating styling rules. Hereby, widget class names translate into ``tag'' names
+in the CSS selectors. Widgets may also expose CSS classes for styling -- the standard widgets define a generic set
+of https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined CSS style classes],
+which can be used to establish the foundation for theming. Obviously it is preferable to keep styling rules as
+concise, generic and systematic as possible; yet we may still refer to individual gui elements by name (`#ID`) though.
+
+Recommended reading
+~~~~~~~~~~~~~~~~~~~
+ * for technically precise coverage, consult the pages
+   https://developer.gnome.org/gtk3/3.4/GtkCssProvider.html[GtkCssProvider]
+   and
+   https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined style classes]
+   in the GTK-3 reference manual.
+ * to start, look at this http://thegnomejournal.wordpress.com/2011/03/15/styling-gtk-with-css/[introductory text],
+   or the more http://worldofgnome.org/making-gtk3-themes-part-1-basics/[hands-on series of articles from world of gnome]
+ * this http://forums.fedoraforum.org/showthread.php?t=281568[post from fedora forum] features a conciese description
+   of the task of theme creation
+ * to understand the old (now obsolete) GTK-2 stylesheets, you might
+   http://orford.org/gtk/[look here]
+
+
+difficulties when learning how to style
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Unfortunately, documentation about creating GTK-3 themes is still fragmentary. Most people seem to learn by
+studying existing themes. To make matters worse, CSS allows to address every widget under various contextual
+constraints -- and people tend to approach such abundant possibilities with a case-by-case attitude, instead
+of a systematic approach, and this leads to incredible large and redundant stylesheets.
+
+Often we'll also face the perils of over-constrained settings. More so, since every system contains several
+style sheets, and settings from those are combined (``cascaded''). When things are specified multiple times
+redundantly at different levels, we can never be sure as to _which_ change actually caused a visible effect.
+A good recommendation is really to ``probe'' settings by changing them temporarily to a really obvious value
+(e.g. `background-color: red`). It is just too easy to learn wrong techniques based on false conclusions.
+
+
+
+binary themes
+~~~~~~~~~~~~~
+GTK-3 supports binary theme bundles, which combine CSS style sheets and accompanying images and vector graphics
+into a single archive file. See http://wibblystuff.blogspot.de/2012/06/building-binary-for-gtk3-theme.html[this blog entry]
+for a tutorial. But when it comes to investigating an existing theme, we need a way to 'extract' the original sources
+from such a distribution bundle. This can be achieved with the help of the `gresource` command. The following bash
+srcipt footnote:[published  by mailto:peter@thecodergeek.com[Peter Gordon] to the Public Domain 
+http://projects.thecodergeek.com/scripts/gresource-extract[at his blog] in 2012] simplifies this process, allowing 
+to extract all resource files in a given GResource file, with the given base URL. For example, if a GResource file
+contained the resource with the URL `/org/foo/bar/baz.txt`, and the base URL defined as `"/org/foo/"`, then the resource
+named `/org/foo/bar/baz.txt` in that file would be extracted and written to `bar/baz.txt` in the current directory.
+
+[source, bash]
+---------------------------------
+#!/bin/bash
+
+# The GResource file name
+GR_FILE="gtk.gresource"
+
+# base URL of  the extracted resources
+GR_BASEDIR="/org/gnome/"
+
+
+which gresource &>/dev/null
+if [ $? -ne 0 ]; then
+	echo "Unable to find gresource program in PATH."
+	exit 1
+fi
+
+for RSRC in $(gresource list $GR_FILE)
+do
+	RSRC_FILE=$(echo "${RSRC#$GR_BASEDIR}")
+	mkdir -p $(dirname "$RSRC_FILE") ||:
+	gresource extract "$GR_FILE" "$RSRC" > "$RSRC_FILE"
+done
+---------------------------------
+
+

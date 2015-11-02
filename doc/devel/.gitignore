@@ -1,3 +1,5 @@
 ,doxylog
 warnings.txt
+doxygen_sqlite3.db
+lumiera.tag
 html/*

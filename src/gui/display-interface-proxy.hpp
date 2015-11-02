@@ -27,9 +27,9 @@
  ** 
  ** The purpose is to define a proxy implementation of lumiera::Display, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_Display"
- **
+ ** 
  ** @see display-facade.hpp
- ** @see display-service.hpp actual implementation within the GUI 
+ ** @see display-service.hpp actual implementation within the GUI
  */
 
 
@@ -37,8 +37,8 @@
 
 
 
-    /* ==================== gui::Display ====================================== */
-    
+/* ==================== gui::Display ====================================== */
+
 #include "include/display-facade.h"
 
 namespace lumiera {
@@ -55,40 +55,38 @@ namespace lumiera {
 
 
 namespace lumiera {
-  namespace facade {
-    
-    typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
-                          , lumiera::Display
-                          > IHandle_Display;
-    
-    
-    template<>
-    class Proxy<IHandle_Display>
-      : public Holder<IHandle_Display>
-      {
-        //----Proxy-Implementation-of-lumiera::Display--------
-        
-        Display::Sink
-        getHandle (LumieraDisplaySlot display)
-          {
-            _i_.allocate (display);
-            Sink sinkHandle;
-            sinkHandle.activate (display, _i_.release);
-            if (lumiera_error_peek() || !sinkHandle)
-              throw lumiera::error::State("failed to allocate output DisplayerSlot",
-                                          lumiera_error());
-            return sinkHandle; 
-          }
-        
-        
-      public:
-        Proxy (IHandle const& iha) : THolder(iha) {} 
-      };
-    
-    
-    template  void openProxy<IHandle_Display>  (IHandle_Display const&);
-    template  void closeProxy<IHandle_Display> (void);
-    
-   } // namespace facade
+namespace facade {
   
-} // namespace lumiera
+  typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
+                        , lumiera::Display
+                        > IHandle_Display;
+  
+  
+  template<>
+  class Proxy<IHandle_Display>
+    : public Holder<IHandle_Display>
+    {
+      //----Proxy-Implementation-of-lumiera::Display--------
+      
+      Display::Sink
+      getHandle (LumieraDisplaySlot display)
+        {
+          _i_.allocate (display);
+          Sink sinkHandle;
+          sinkHandle.activate (display, _i_.release);
+          if (lumiera_error_peek() || !sinkHandle)
+            throw lumiera::error::State("failed to allocate output DisplayerSlot",
+                                        lumiera_error());
+          return sinkHandle;
+        }
+      
+      
+    public:
+      Proxy (IHandle const& iha) : THolder(iha) {}
+    };
+  
+  
+  template  void openProxy<IHandle_Display>  (IHandle_Display const&);
+  template  void closeProxy<IHandle_Display> (void);
+  
+}} // namespace lumiera::facade

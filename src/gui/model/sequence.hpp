@@ -1,5 +1,5 @@
 /*
-  sequence.hpp  -  Definition of the Sequence class
+  SEQUENCE.hpp  -  GUI-model: Sequence
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,40 +19,58 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file sequence.hpp
- ** This file contains the definition of Sequence, a class which
- ** contains a 
+ ** The GUI-Model representation of an editable sequence.
+ ** @todo Currently (1/2014) this is a dummy placeholder, but later on
+ **       the GUI-Model entities will be connected to the Session model
+ **       through the use of PlacementRef
  */
+
+
 
 #ifndef SEQUENCE_HPP
 #define SEQUENCE_HPP
 
 #include "gui/model/parent-track.hpp"
+#include "lib/hash-indexed.hpp"
+
+#include <string>
 
 namespace gui {
 namespace model {
-  
+
 class Track;
 
+
 /**
- * A class representation of a sequence.
+ * GUI-model representation of a sequence.
  * @remarks Sequence objects are also the roots of track trees.
  */
-class Sequence : public ParentTrack
-{
-public:
-  /**
-   * Constructor
-   */
-  Sequence();
+class Sequence
+  : public ParentTrack
+  {
+    lib::hash::LuidH id_;
+    
+  public:
+    Sequence()
+      : id_()
+      { 
+        populateDummySequence();
+      };
+    
+    operator lib::HashVal()  const
+      {
+        return id_;
+      }
+    
+    /** human readable debug string representation of this track. */
+    std::string print_track();
   
-  /**
-   * Produces a human readable debug string representation of this
-   * track.
-   * @return Returns the human readable string.
-   */
-  std::string print_track();
-};
+  private:
+    void populateDummySequence();
+  };
+
 
 }   // namespace model
 }   // namespace gui

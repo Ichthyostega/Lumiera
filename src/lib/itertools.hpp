@@ -75,13 +75,13 @@
 #include "lib/wrapper.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 
 namespace lib {
   
-  using std::tr1::function;
+  using std::function;
   using util::unConst;
   
   using lib::meta::RefTraits;
@@ -226,7 +226,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
     };
@@ -245,7 +245,7 @@ namespace lib {
   inline bool
   operator!= (IterTool<CX> const& ito1, IterTool<CX> const& ito2)
   {
-    return !(ito1 == ito2);
+    return not (ito1 == ito2);
   }
   
   
@@ -281,8 +281,8 @@ namespace lib {
         }
       
       
-      mutable bool isOK_;
       mutable bool cached_;
+      mutable bool isOK_;
       
       bool
       currVal_isOK () const  ///< @return (maybe cached) result of filter predicate
@@ -304,7 +304,8 @@ namespace lib {
       FilterCore (IT const& source, PRED prediDef)
         : Raw(source)
         , predicate_(prediDef) // induces a signature check
-        , cached_(false)
+        , cached_(false)      //  not yet cached
+        , isOK_()            //   some value
         { }
     };
   
@@ -331,6 +332,8 @@ namespace lib {
       FilterIter (IT const& src, PRED filterPredicate)
         : _Impl(_Filter(src,filterPredicate))
         { }
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (FilterIter)
     };
   
   
@@ -454,6 +457,8 @@ namespace lib {
   
   /**
    * Iterator tool treating pulled data by a custom transformation (function)
+   * @param IT source iterator
+   * @param VAL result (output) type
    */
   template<class IT, class VAL>
   class TransformIter
@@ -471,6 +476,8 @@ namespace lib {
       TransformIter (IT const& src, FUN trafoFunc)
         : _IteratorImpl(_Trafo(src,trafoFunc))
         { }
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (TransformIter)
     };
   
   

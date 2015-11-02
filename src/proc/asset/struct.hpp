@@ -22,8 +22,8 @@
 
 
 /** @file struct.hpp
- ** Structural parts of the Session (e.g. Tracks) can be reflected
- ** into the "bookkeeping view" as a specific Kind of Asset.
+ ** Structural parts of the Session (e.g. "tracks", i.e. Fork objects) can be
+ ** reflected into the "bookkeeping view" as a specific Kind of Asset.
  ** For the different \em kinds of Assets, we use sub-interfaces inheriting
  ** from the general Asset interface, each of which expose a distinguishing feature.
  ** In the case of structural assets, the key point is the ability to retrieve an
@@ -31,9 +31,9 @@
  ** on demand, just by referral. Thus, the collection of these assets provides a map
  ** for exploring the current session's structure and allow for tweaking of the
  ** default behaviour.
- ** - Track acts as unique track ID <i>(note: to be removed and replaced by a plain \c entryID )</i>
  ** - Timeline and Sequence are facades, part of the session API
  ** - Pipe is an attachment point for wiring connections and defines a StreamType
+ ** - "tracks" are implemented as Fork represented as \c entryID within the asset view.
  ** - ProcPatt is used as a blueprint in the build process, a standard connection pattern
  ** 
  ** \par access and creation
@@ -44,9 +44,10 @@
  ** aren't deleted. Doing so would require a dedicated function which not only drops
  ** an asset instance from AssetManager, but also ensures removal of all properties
  ** within the model which could cause automatic re-creation of this asset. E.g.
- ** purging a track asset (=unique trackID) requires removing or disconnecting
- ** all placements referring to this track, which could be sub tracks, clips,
- ** effects, automation or labels. 
+ ** purging a track asset (=unique trackID) would necessitate to remove or
+ ** disconnect all placements located within the scope of the referred Fork;
+ ** this could be sub forks, clips, effects, automation or labels.
+ ** Obviously, this is way beyond the realm of asset management.
  ** 
  ** @ingroup asset
  ** @see asset.hpp for explanation regarding asset IDs
@@ -100,7 +101,11 @@ namespace asset {
    * 
    * Examples being tracks, sequences, timelines, pipes, processing patterns
    * @note embedded access point to instance creation or retrieval
-   *       through the static field #retrieve 
+   *       through the static field #retrieve
+   * @todo the actual meaning of a "structural asset" needs to be sharpened and evolved.
+   *       The idea is to have a generic mechanism for attaching properties and relations.
+   *       This will become relevant once we build the real query subsystem.
+   *       Right now (as of 1/2015), asset::Struct is just an ID provider.
    */
   class Struct : public Asset
     {
@@ -146,17 +151,17 @@ namespace asset {
       
     public:
       template<class STRU>
-      P<STRU> operator() (Query<STRU> const& query); 
+      lib::P<STRU> operator() (Query<STRU> const& query);
       
-//    P<Timeline> operator() (MORef<Binding>);  ///////////TODO doesn't this create circular includes?? Any better idea how to refer to an existing binding?
-      
-      template<class STRU>
-      P<STRU> newInstance (Symbol nameID  ="");
+//    lib::P<Timeline> operator() (MORef<Binding>);  ///////////TODO doesn't this create circular includes?? Any better idea how to refer to an existing binding?
       
       template<class STRU>
-      P<STRU> made4fake  (Query<STRU> const& query);  ///< @warning to be removed in Alpha when using a real resolution engine /////TICKET #710
+      lib::P<STRU> newInstance (Symbol nameID  ="");
       
-      P<Pipe> newPipe (string pipeID, string streamID);
+      template<class STRU>
+      lib::P<STRU> made4fake  (Query<STRU> const& query);  ///< @warning to be removed in Alpha when using a real resolution engine /////TICKET #710
+      
+      lib::P<Pipe> newPipe (string pipeID, string streamID);
     };
   
   

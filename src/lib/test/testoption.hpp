@@ -56,7 +56,8 @@ namespace test {
       TestOption (lib::Cmdline& cmdline);
       const string getTestgroup ();
       const string getTestID ();
-      bool getDescribe ();
+      bool handleHelpRequest();
+      bool shouldDescribe ();
       
     private:
       boost::program_options::options_description syntax;

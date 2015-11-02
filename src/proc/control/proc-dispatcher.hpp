@@ -39,7 +39,7 @@
 #include "proc/control/command.hpp"
 #include "lib/depend.hpp"
 
-//#include <tr1/memory>
+//#include <memory>
 
 
 
@@ -47,7 +47,7 @@ namespace proc {
 namespace control {
   
 //  using lib::Symbol;
-//  using std::tr1::shared_ptr;
+//  using std::shared_ptr;
   
   
   /**

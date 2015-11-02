@@ -33,12 +33,12 @@
 #include "proc/mobject/placement.hpp"
 #include "common/query.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 #include <set>
 
-using std::tr1::ref;
-using std::tr1::placeholders::_1;
+using std::ref;
+using std::placeholders::_1;
 using util::isSameObject;
 using util::and_all;
 using std::string;
@@ -68,7 +68,7 @@ namespace test    {
   /***************************************************************************//**
    * @test perform the most important structural modifications on a session and
    *       verify they're carried out properly. 
-   *       - attaching tracks
+   *       - attaching forks ("tracks")
    *       - adding clips
    *       
    *       
@@ -84,7 +84,7 @@ namespace test    {
           Session::current.reset();
           CHECK (Session::current.isUp());
           
-          addTracks();
+          addForks();
           addObjects();
           removeParts();
           
@@ -93,7 +93,7 @@ namespace test    {
       
       
       void
-      addTracks()
+      addForks()
         {
           PSess sess = Session::current;
           CHECK (sess->isValid());
@@ -102,44 +102,44 @@ namespace test    {
           CHECK (seq);
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
-          RTrack track1 = seq->attachTrack();
-          RTrack track2 = seq->attachTrack("track-2");
-          RTrack track21 = seq->attachTrack("track-2.1", track2);
-          RTrack track22 = seq->attachTrack("track-2.2", "track-2");
+          RFork fork1 = seq->attachFork();
+          RFork fork2 = seq->attachFork("fork-2");
+          RFork fork21 = seq->attachFork("fork-2.1", fork2);
+          RFork fork22 = seq->attachFork("fork-2.2", "fork-2");
           
           QueryFocus& focus = sess->focus();
-          CHECK (track22 == focus.getObject());
+          CHECK (fork22 == focus.getObject());
           
-          RTrack track3 = seq->attachTrack("track-3", "root");
-          CHECK (track3  == focus.getObject());
+          RFork fork3 = seq->attachFork("fork-3", "root");
+          CHECK (fork3  == focus.getObject());
           
-          RTrack track31 = sess->attach(
-              asset::Struct::retrieve (Query<asset::Track> ("id(track31)")));
+          RFork fork31 = sess->attach(
+              asset::Struct::retrieve (Query<asset::???? > ("id(fork31)")));  ////TODO broken: we don't use a dedicated Fork asset anymore. It's just an EntryID<Fork>
           
           
-          CHECK (track31 == focus.getObject());
-          RTrack rootTrack = seq->rootTrack();
-          CHECK (3 == rootTrack->subTracks.size());
-          CHECK (track1  == rootTrack->subTracks[0]);
-          CHECK (track2  == rootTrack->subTracks[1]);
-          CHECK (track3  == rootTrack->subTracks[2]);
-          CHECK (0 == track1->subTracks.size());
-          CHECK (2 == track2->subTracks.size());
-          CHECK (track21 == track2->subTracks[0]);
-          CHECK (track22 == track2->subTracks[1]);
-          CHECK (1 == track3->subTracks.size());
-          CHECK (track21 == track3->subTracks[0]);
+          CHECK (fork31 == focus.getObject());
+          RFork rootFork = seq->rootFork();
+          CHECK (3 == rootFork->subForks.size());
+          CHECK (fork1  == rootFork->subForks[0]);
+          CHECK (fork2  == rootFork->subForks[1]);
+          CHECK (fork3  == rootFork->subForks[2]);
+          CHECK (0 == fork1->subForks.size());
+          CHECK (2 == fork2->subForks.size());
+          CHECK (fork21 == fork2->subForks[0]);
+          CHECK (fork22 == fork2->subForks[1]);
+          CHECK (1 == fork3->subForks.size());
+          CHECK (fork21 == fork3->subForks[0]);
           
-          set<RTrack> allTracks;
-          allTracks.insert(track1);
-          allTracks.insert(track2);
-          allTracks.insert(track21);
-          allTracks.insert(track22);
-          allTracks.insert(track3);
-          allTracks.insert(track31);
+          set<RFork> allForks;
+          allForks.insert(fork1);
+          allForks.insert(fork2);
+          allForks.insert(fork21);
+          allForks.insert(fork22);
+          allForks.insert(fork3);
+          allForks.insert(fork31);
           
-          // verify we indeed covered all tracks known to the session....
-          CHECK (and_all (sess->all<Track>(), contains, ref(allTracks), _1 ));
+          // verify we indeed covered all forks known to the session....
+          CHECK (and_all (sess->all<Fork>(), contains, ref(allForks), _1 ));
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
@@ -152,18 +152,18 @@ namespace test    {
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           QueryFocus& focus = sess->focus();
-          CHECK (focus.getObject().isCompatible<session::Track>());
+          CHECK (focus.getObject().isCompatible<session::Fork>());
           RClip clip1 = sess->attach (TestClip::create());
           
-          RTrack track31 = clip.getParent();
-          CHECK (track31);
-          CHECK ("track31" == track31->getNameID());
+          RTrack fork31 = clip.getParent();
+          CHECK (fork31);
+          CHECK ("fork31" == fork31->getNameID());
           
-          CHECK (1 == track31->clips.size());
-          CHECK (clip1 == track31->clips[0]);
+          CHECK (1 == fork31->clips.size());
+          CHECK (clip1 == fork31->clips[0]);
           
-          RClip clip2 = track31.attach (TestClip::create());
-          RClip clip3 = track31.attach (clip1);          // creates a clone instance
+          RClip clip2 = fork31.attach (TestClip::create());
+          RClip clip3 = fork31.attach (clip1);          // creates a clone instance
           
           CHECK (clip1); CHECK (clip2); CHECK (clip3);
           CHECK (clip1 != clip2);
@@ -176,20 +176,20 @@ namespace test    {
           CHECK (isEquivalentPlacement (clip2, clip3));
           CHECK (isEquivalentPlacement (clip1, clip3));
           
-          RTrack track2 = sess->sequences[0]
+          RTrack fork2 = sess->sequences[0]
                               ->rootTrack()
                               ->subTracks[1];
-          RClip clip4 = track2.attach (TestClip::create());
+          RClip clip4 = fork2.attach (TestClip::create());
           
           // now verify structure built up thus far
-          CHECK (focus.getObject() == track2);        // focus follows point-of-mutation
+          CHECK (focus.getObject() == fork2);        // focus follows point-of-mutation
           CHECK (focus.contains (clip4));
           CHECK (!focus.contains (clip1));
           CHECK (!focus.contains (clip2));
           CHECK (!focus.contains (clip3));
           
-          focus.attach (track31);
-          CHECK (focus.getObject() == track31);
+          focus.attach (fork31);
+          CHECK (focus.getObject() == fork31);
           CHECK (focus.contains (clip1));
           CHECK (focus.contains (clip2));
           CHECK (focus.contains (clip3));
@@ -207,12 +207,12 @@ namespace test    {
           CHECK (!focus.hasChild (clip4));
           
           focus.attach (sess->sequences[0]->rootTrack()->subTracks[2]->subTracks[0]);     // train wreck. Don't try it at home!
-          CHECK (focus.getObject() == track31);                                           // (this test is an exception, as we know the structure precisely
+          CHECK (focus.getObject() == fork31);                                           // (this test is an exception, as we know the structure precisely
                                                                                           //  production code should always discover one level a time)
           CHECK ( focus.hasChild (clip1));
           CHECK ( focus.hasChild (clip2));
           CHECK ( focus.hasChild (clip3));
-          CHECK (!focus.hasChild (clip4));            // ...because this one is on track2, not track31
+          CHECK (!focus.hasChild (clip4));            // ...because this one is on fork2, not fork31
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
@@ -224,10 +224,10 @@ namespace test    {
           PSess sess = Session::current;
           CHECK (sess->isValid());
           
-          RTrack track31 = sess->sequences[0]->rootTrack()->subTracks[2]->subTracks[0];
-          CHECK (track31);
-          CHECK (3 == track31->clips.size());
-          RClip clip2 = track31->clips[1];
+          RTrack fork31 = sess->sequences[0]->rootTrack()->subTracks[2]->subTracks[0];
+          CHECK (fork31);
+          CHECK (3 == fork31->clips.size());
+          RClip clip2 = fork31->clips[1];
           
           QueryFocus& focus = sess->focus();
           focus.reset(); // navigate to root
@@ -238,12 +238,12 @@ namespace test    {
           CHECK (!clip2);
           CHECK (!focus.contains (clip2));
           
-          CHECK (2 == track31->clips.size());
-          CHECK (clip2 != track31->clips[1]);
+          CHECK (2 == fork31->clips.size());
+          CHECK (clip2 != fork31->clips[1]);
           
-          CHECK (focus.getObject() == track31);       // focus follows point-of-mutation
+          CHECK (focus.getObject() == fork31);       // focus follows point-of-mutation
           
-          // Using the query-focus to explore the contents of this current object (track31)
+          // Using the query-focus to explore the contents of this current object (fork31)
           ScopeQuery<Clip>::iterator discoverClips = focus.explore<Clip>();
           CHECK (discoverClips);
           RClip clip1 = *discoverClips;
@@ -252,48 +252,48 @@ namespace test    {
           ++discoverClips;
           CHECK (!discoverClips);
           
-          CHECK (track31->clips[0] == clip1);
-          CHECK (track31->clips[1] == clip3);
+          CHECK (fork31->clips[0] == clip1);
+          CHECK (fork31->clips[1] == clip3);
           /* please note: the clips aren't discovered in any defined order (hashtable!)
            *              especially, the order doesn't match the order of addition!
            *              thus, what's called clip1 here may or may not be
            *              what we called clip1 in addObjects()
            */
           
-          RTrack track3 = track31.getParent();
+          RTrack fork3 = fork31.getParent();
           
           focus.reset(); // back to root
           CHECK (focus.contains (clip1));
           CHECK (focus.contains (clip3));
-          CHECK (focus.contains (track3));
-          CHECK (focus.contains (track31));
+          CHECK (focus.contains (fork3));
+          CHECK (focus.contains (fork31));
           CHECK (clip1);
           CHECK (clip3);
-          CHECK (track3);
-          CHECK (track31);
+          CHECK (fork3);
+          CHECK (fork31);
           
-          sess->purge (track31);
+          sess->purge (fork31);
           
-          CHECK (focus.getObject() == track3);
+          CHECK (focus.getObject() == fork3);
           focus.reset();
-          CHECK ( focus.contains (track3));
+          CHECK ( focus.contains (fork3));
               
           CHECK (!focus.contains (clip1));
           CHECK (!focus.contains (clip3));
-          CHECK (!focus.contains (track31));
+          CHECK (!focus.contains (fork31));
           CHECK (!clip1);
           CHECK (!clip3);
-          CHECK (!track31);
-          CHECK (track3);
+          CHECK (!fork31);
+          CHECK (fork3);
           
-          track3.purge();
-          CHECK (!track3);
+          fork3.purge();
+          CHECK (!fork3);
           PSequence aSequence = sess->sequences[0];
           CHECK (focus.getObject() == aSequence->rootTrack());
           CHECK (2 == aSequece->rootTrack()->subTracks.size());
           
           CHECK ( contains (sess->sequences, aSequence));
-          aSequence->rootTrack().purge();                     // automatically kills the sequence as well (sequence == facade to the root track)
+          aSequence->rootFork().purge();                      // automatically kills the sequence as well (sequence == facade to the fork root)
           CHECK (!contains (sess->sequences, aSequence));
           CHECK (0 == sess->sequences.size());
           CHECK (0 == sess->timelines.size());                // killing the sequence also cascaded to the timeline and binding

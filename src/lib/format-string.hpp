@@ -117,7 +117,7 @@
 namespace std { // forward declaration to avoid including <iostream>
   
   template<typename C>
-  class char_traits;
+  struct char_traits;
   
   template<typename C, class _TRAITS>
   class basic_ostream;
@@ -195,9 +195,9 @@ namespace util {
       friend bool operator== (const char * const, _Fmt const&);
       
       template<typename X>
-      friend bool operator != (_Fmt const& fmt, X const& x) { return !(fmt == x); }
+      friend bool operator != (_Fmt const& fmt, X const& x) { return not (fmt == x); }
       template<typename X>
-      friend bool operator != (X const& x, _Fmt const& fmt) { return !(x == fmt); }
+      friend bool operator != (X const& x, _Fmt const& fmt) { return not (x == fmt); }
     };
   
   
@@ -247,14 +247,18 @@ namespace util {
     template<> struct _allow_call<string>  { enum{ value = true }; };
     template<> struct _allow_call<char>    { enum{ value = true }; };
     template<> struct _allow_call<uchar>   { enum{ value = true }; };
-    template<> struct _allow_call<int>     { enum{ value = true }; };
-    template<> struct _allow_call<uint>    { enum{ value = true }; };
-    template<> struct _allow_call<short>   { enum{ value = true }; };
-    template<> struct _allow_call<ushort>  { enum{ value = true }; };
+    template<> struct _allow_call<int16_t> { enum{ value = true }; };
+    template<> struct _allow_call<uint16_t>{ enum{ value = true }; };
+    template<> struct _allow_call<int32_t> { enum{ value = true }; };
+    template<> struct _allow_call<uint32_t>{ enum{ value = true }; };
     template<> struct _allow_call<int64_t> { enum{ value = true }; };
     template<> struct _allow_call<uint64_t>{ enum{ value = true }; };
     template<> struct _allow_call<float>   { enum{ value = true }; };
     template<> struct _allow_call<double>  { enum{ value = true }; };
+#ifndef __x86_64__
+    template<> struct _allow_call<long>    { enum{ value = true }; };
+    template<> struct _allow_call<ulong>   { enum{ value = true }; };
+#endif
     
     template<typename X>
     struct _shall_format_directly

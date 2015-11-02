@@ -1,5 +1,5 @@
 /*
-  workspace-window.cpp  -  Definition of the main workspace window object
+  WorkspaceWindow  -  the main workspace window of the GUI
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,21 +20,17 @@
 
 * *****************************************************/
 
+#include "gui/gtk-lumiera.hpp"
+#include "workspace-window.hpp"
+#include "include/logging.h"
+
 #include <gtkmm/stock.h>
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #endif
 
-#include <gdl/gdl-tools.h>
-#include <gdl/gdl-dock.h>
-#include <gdl/gdl-dock-bar.h>
-#include <gdl/gdl-dock-item.h>
-#include <gdl/gdl-dock-placeholder.h>
 
-#include "gui/gtk-lumiera.hpp"
-#include "workspace-window.hpp"
-#include "include/logging.h"
 
 using namespace Gtk;
 using namespace Glib;
@@ -43,87 +39,91 @@ using namespace gui::controller;
 
 namespace gui {
 namespace workspace {
-	
-WorkspaceWindow::WorkspaceWindow(Project &source_project,
-  gui::controller::Controller &source_controller) :
-  project(source_project),
-  controller(source_controller),
-  panelManager(*this),
-  actions(*this)
-{    
-  create_ui();
-}
-
-WorkspaceWindow::~WorkspaceWindow()
-{
-  INFO (gui_dbg, "closing workspace window...");
-}
-
-Project&
-WorkspaceWindow::get_project()
-{
-  return project;
-}
-
-Controller&
-WorkspaceWindow::get_controller()
-{
-  return controller;
-}
-
-PanelManager&
-WorkspaceWindow::get_panel_manager()
-{
-  return panelManager;
-}
-
-void
-WorkspaceWindow::create_ui()
-{
-  // RTL Test Code
-  //set_default_direction (TEXT_DIR_RTL);
-   
-  //----- Configure the Window -----//
-  set_title(GtkLumiera::getAppTitle());
-  set_default_size(1024, 768);
-
-  //----- Set up the UI Manager -----//
-  // The UI will be nested within a VBox
-  add(baseContainer);
-
-  uiManager = Gtk::UIManager::create();
-  actions.populate_main_actions(uiManager);
-  add_accel_group(uiManager->get_accel_group());
-
-  //----- Set up the Menu Bar -----//
-  Gtk::Widget* menu_bar = uiManager->get_widget("/MenuBar");
-  REQUIRE(menu_bar != NULL);
-  baseContainer.pack_start(*menu_bar, Gtk::PACK_SHRINK);
-
-  //----- Create the Docks -----//
-  panelManager.setup_dock();
   
-  GdlDock const *dock = panelManager.get_dock();
+  WorkspaceWindow::WorkspaceWindow (Project& source_project
+                                   ,gui::controller::Controller& source_controller)
+    : project_(source_project)
+    , controller_(source_controller)
+    , panelManager_(*this)
+    , actions_(*this)
+    {    
+      createUI();
+    }
   
-  gtk_box_pack_start(GTK_BOX(dockContainer.gobj()),
-    GTK_WIDGET(panelManager.get_dock_bar()), FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(dockContainer.gobj()),
-    GTK_WIDGET(dock), TRUE, TRUE, 0);
-  baseContainer.pack_start(dockContainer, PACK_EXPAND_WIDGET);
+  
+  WorkspaceWindow::~WorkspaceWindow()
+  {
+    INFO (gui_dbg, "Closing workspace window...");
+  }
+  
+  
+  
+  Project&
+  WorkspaceWindow::getProject()
+  {
+    return project_;
+  }
+  
+  
+  Controller&
+  WorkspaceWindow::getController()
+  {
+    return controller_;
+  }
+  
+  
+  PanelManager&
+  WorkspaceWindow::getPanelManager()
+  {
+    return panelManager_;
+  }
+  
+  
+  void
+  WorkspaceWindow::createUI()
+  {
+    // RTL Test Code
+    //set_default_direction (TEXT_DIR_RTL);
     
-  //----- Create the status bar -----//
-  statusBar.set_has_resize_grip();
-  baseContainer.pack_start(statusBar, PACK_SHRINK);
- 
-  show_all_children();
-}
-
-void
-WorkspaceWindow::set_close_window_sensitive(bool enable)
-{
-  uiManager->get_action("/MenuBar/WindowMenu/WindowCloseWindow")
-    ->set_sensitive(enable);
-}
-
-}   // namespace workspace
-}   // namespace gui
+    //----- Configure the Window -----//
+    set_title(GtkLumiera::getAppTitle());
+    set_default_size(1024, 768);
+    
+    //----- Set up the UI Manager -----//
+    // The UI will be nested within a VBox
+    add(baseContainer_);
+    
+    uiManager_ = Gtk::UIManager::create();
+    actions_.populateMainActions(uiManager_);
+    add_accel_group(uiManager_->get_accel_group());
+    
+    //----- Set up the Menu Bar -----//
+    Gtk::Widget* menu_bar = uiManager_->get_widget("/MenuBar");
+    REQUIRE(menu_bar != NULL);
+    baseContainer_.pack_start(*menu_bar, Gtk::PACK_SHRINK);
+    
+    //----- Create the Docks -----//
+    panelManager_.setupDock();
+    dockContainer_.pack_start(panelManager_.getDockBar(),false,false,0);
+    dockContainer_.pack_start(panelManager_.getDock(),true,true,0);
+    baseContainer_.pack_start(dockContainer_, PACK_EXPAND_WIDGET);
+    
+    //----- Create the status bar -----//
+    //statusBar.set_has_resize_grip();
+    statusBar_.set_resize_mode(Gtk::RESIZE_PARENT);
+    baseContainer_.pack_start(statusBar_, PACK_SHRINK);
+    
+    show_all_children();
+  }
+  
+  
+  void
+  WorkspaceWindow::set_close_window_sensitive (bool enable)
+  {
+    uiManager_->get_action("/MenuBar/WindowMenu/WindowCloseWindow")
+             ->set_sensitive(enable);
+  }
+  
+  
+  
+}}// namespace gui::workspace

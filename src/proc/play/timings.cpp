@@ -35,6 +35,7 @@ namespace play {
   using lib::time::PQuant;
   using lib::time::Time;
   using lib::time::TimeVar;
+  using lib::time::FrameCnt;
   
   
   namespace { // hidden local details of the service implementation....
@@ -77,6 +78,20 @@ namespace play {
   Timings Timings::DISABLED(FrameRate::HALTED);
   
   
+  
+  /** @internal typically invoked from assertions */
+  bool
+  Timings::isValid()  const
+  {
+    return bool(grid_)
+        && (( (ASAP == playbackUrgency || NICE == playbackUrgency)
+            && Time::NEVER == scheduledDelivery)
+           ||
+            (TIMEBOUND == playbackUrgency
+            && Time::MIN < scheduledDelivery && scheduledDelivery < Time::MAX)
+           );
+  }
+  
   Time
   Timings::getOrigin()  const
   {
@@ -85,7 +100,7 @@ namespace play {
   
   
   Time
-  Timings::getFrameStartAt (int64_t frameNr)  const
+  Timings::getFrameStartAt (FrameCnt frameNr)  const
   {
     return Time(grid_->timeOf(frameNr));
   }
@@ -101,13 +116,13 @@ namespace play {
   Duration
   Timings::getFrameDurationAt (TimeValue refPoint)  const
   {
-    int64_t frameNr = grid_->gridPoint (refPoint);
+    FrameCnt frameNr = grid_->gridPoint (refPoint);
     return getFrameDurationAt(frameNr);
   }
   
   
   Duration
-  Timings::getFrameDurationAt (int64_t refFrameNr)  const
+  Timings::getFrameDurationAt (FrameCnt refFrameNr)  const
   {
     return Offset (grid_->timeOf(refFrameNr), grid_->timeOf(refFrameNr + 1));
   }
@@ -128,7 +143,7 @@ namespace play {
   
   
   Time
-  Timings::getTimeDue(int64_t frameOffset)  const
+  Timings::getTimeDue(FrameCnt frameOffset)  const
   {
     if (TIMEBOUND == playbackUrgency)
       {
@@ -142,7 +157,7 @@ namespace play {
   
   
   Offset
-  Timings::getRealOffset (int64_t frameOffset)  const
+  Timings::getRealOffset (FrameCnt frameOffset)  const
   {
     Offset nominalOffset (grid_->timeOf(0), grid_->timeOf(frameOffset));
     return isOriginalSpeed()? nominalOffset
@@ -158,12 +173,12 @@ namespace play {
   }
   
   
-  int64_t
-  Timings::establishNextPlanningChunkStart(int64_t currentAnchorFrame)  const
+  FrameCnt
+  Timings::establishNextPlanningChunkStart(FrameCnt currentAnchorFrame)  const
   {
     TimeVar breakingPoint = grid_->timeOf(currentAnchorFrame);
     breakingPoint += getPlanningChunkDuration();
-    int64_t nextFrame = grid_->gridPoint (breakingPoint);
+    FrameCnt nextFrame = grid_->gridPoint (breakingPoint);
     
     ASSERT (breakingPoint <= grid_->timeOf(nextFrame));
     ASSERT (breakingPoint >  grid_->timeOf(nextFrame-1));

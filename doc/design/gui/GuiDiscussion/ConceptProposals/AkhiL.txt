@@ -1,0 +1,14 @@
+GUI Proposal by AkhIL
+=====================
+:Author: IL'dar AKHmetgaleev (»AkhIL«)
+:Date: 2008-03-30
+
+
+Wiring nodes within the timeline
+--------------------------------
+
+In fall 2007, rather then using an external node editor, AkhiL proposed to do wiring
+of effect nodes directly within the timeline. He did the following Mockup:
+
+image::{imgg}/AkhiL.proposal.png[]
+

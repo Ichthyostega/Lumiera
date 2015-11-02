@@ -71,9 +71,9 @@ build situations. Especially, a _default_ target may be defined.
 
 Organisation of the Lumiera SCons build
 ---------------------------------------
-Within our build system, we exploit the power of the Python programming language to create abstractions
-tailored to the needs ouf our project. Located in the `admin/scons` subdirectory, you'll find a collection
-of Python modules defining these building blocks.
+Within our build system, we build upon the power of the Python programming language to create abstractions
+tailored to the needs of our project. Located in the `admin/scons` subdirectory, you'll find a collection
+of Python modules to provide these building blocks.
 
 - the *LumieraEnvironment* is created as a subclass of the standard SCons build environment; it is
   outfitted with pre-configured custom builders for executables, libraries, extension module, Lumiera plug-in
@@ -95,25 +95,27 @@ includes -- _all headers should be included relative_ to `src/`.
 .the three layers
 Within this application core tree, there are sub-trees for the main layers comprising the application.
 Each of these sub-trees will be built into a shared library and then linked against the application framework
-and common services residing in `src/common`. Besides, there is a sub-tree for core plug-ins and support tools.
+and common services residing in `src/common`. These common services in turn are also built into a shared
+library `liblumieracommon.so`, as is the collection of helper classes and support facilities, known as
+our 'support library' `liblumierasupport.so`. Besides, there is a sub-tree for core plug-ins and helper tools.
 
 .the GTK Gui
-one of these sub-trees, residing in `src/gui` forms the upper layer or user-interaction layer. Contrary to
+one of the sub-trees, residing in `src/gui` forms the _upper layer_ or _user-interaction layer_. Contrary to
 the lower layers, the GUI is _optional_ and the application is fully operational _without Gui._ Thus, the
 GTK Gui is built and loaded as Lumiera a plug-in.
 
 .unit tests
-Since we're developing test-driven, about half of the overall code can be found in unit- and integration
-tests, residing below `test/`. There is a separate SConscript file, defining the various kinds of test
-artefacts to be created.
+Since our development is test-driven, about half of the overall code can be found in unit- and integration
+tests, residing below `test/`. There is a separate SConscript file, to define the various
+link:{ldoc}/technical/infra/TestSupport.html[kinds of test artefacts] to be created.
 
 - plain-C tests are defined in _test-collections_, grouped thematically into several subdirectories.
   Here, each translation unit provides a separate +main()+ function and is linked into a stand-alone
   executable (yet still linked against the appropriate shared libraries of the main application layers)
 - the tests covering C++ components are organised into test-suites, residing in separate sub-trees.
-  Currently (as of 1/2012), there is the *library suite* and the *proc components suite*. Here
-  individual translation units define individual test case classes, which are linked together with
-  a testrunner +main()+ function.
+  Currently (as of 5/2015), we link each sub-tree into a shared test library. Here
+  individual translation units define individual test case classes. At the end, all these unit tests
+  are linked together with a testrunner `main()` into the `test-suite` executable.
 
 .research
 There is a separate subtree for research and experiments. The rationale being to avoid re-building most
@@ -125,7 +127,7 @@ are defined as SVG graphics. The build process creates a helper executable (+rsv
 these vector graphics with the help of lib Cairo into icon collections of various sizes.
 
 .documentation
-Most of the documentation is written in Asciidoc and provided online at link:{ldoc}[the documentation section]
+Largely, the documentation is written in Asciidoc and provided online at link:{ldoc}[the documentation section]
 of our website. The plain-text sources of this documentation tree is shipped alongside with the code.
 Besides, we build *Doxygen* API documentation there, and we create design and technical specs and drawings
 in SVG and in UML.
@@ -137,8 +139,8 @@ are kept intact, the Application will be able to start up and find all its resou
 there is no need to ``install'' Lumiera (and the ``install'' target just copies this folder structure
 into the standard installation locations of a typical Unix system)
 
-Unfortunately SCons is a bit wired regarding the object files created during the build process.
-So currently, we're just building in-tree. Apologies for that.
+Unfortunately SCons is a bit weird regarding the object files created during the build process.
+So, for the time being, we're just building in-tree. Apologies for that.
 
 
 Invoking the Build
@@ -153,22 +155,22 @@ prints a summary of all custom options, targets and toggles defined for our buil
 Targets
 ^^^^^^^
 - *build* is the default target: it creates the shared libs, the application, core plug-ins and the Gui.
-- *testcode* additionally builds the research and uint test code
-- *check* builds testcode and runs our testsuites
+- *testcode* additionally builds the research and unit test code
+- *check* builds test code and runs our test-suites
 - *research* builds just the research tree
 - *doc* builds documentation (currently just Doxygen)
-- *all* builds the Application, testsuites and documentation
+- *all* builds the Application, test-suites and documentation
 - *install* builds and installs the Lumiera Application
 
-By convention, invoking +scons -c+ <TARGET> will _clean up_ everything the given target _would_ build.
-Thus, invoking ++scons -c /++ is the most global clean operation: it will clean up al build artefacts and
+By convention, invoking `scons -c` <TARGET> will _clean up_ everything the given target _would_ build.
+Thus, invoking `scons -c /` is the most global clean operation: it will clean up al build artefacts and
 will un-install Lumiera (recall: every defined node, or directory is also a target).
 
 Configure checks
 ^^^^^^^^^^^^^^^^
-SCons doesn't know a separate ``configure'' step. The necessary dependency detection is performed
-before each build. Currenntly, we expect _all dependencies to be installed first-class_ into the
-system. Please use your package manager.
+SCons does not support the concept of a separate ``configure'' step. The necessary dependency detection is
+performed before each build. Currently, we expect _all dependencies to be installed first-class_ into
+the system. We do not (yet) support custom libraries in strange locations. Please use your package manager.
 
 Caching and MD5 sums
 ^^^^^^^^^^^^^^^^^^^^
@@ -179,13 +181,13 @@ It also means that changes to some compiler switches will automatically cause al
 of the application to be re-built. And of course it means, that you only ever compile what is
 necessary.
 
-With SCons, there is no need for the usual ``cleaning paranoia''. Similarily, there is no need
-for CCache (but using DistCC rocks !). Unfortunatly, calculating those MD5 sums requires some
+With SCons, there is no need for the usual ``cleaning paranoia''. Similarly, there is no need
+for CCache (but using DistCC rocks !). Unfortunately, calculating those MD5 sums requires some
 time on each build, even if the net result is that nothing will happen at all.
 
 Configuration options
 ^^^^^^^^^^^^^^^^^^^^^
-We provide several custom configuration options (run +scons -h + to get a summary). All of these
+We provide several custom configuration options (run `scons -h` to get a summary). All of these
 options are *sticky*: once set, the build system will recall them in a file '.optcache' and apply
 them the same way in subsequent builds. It is fine to edit '.optcache' with a text editor.
 

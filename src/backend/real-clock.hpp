@@ -52,13 +52,13 @@
 //#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
-//#include <tr1/memory>
+//#include <memory>
 //#include <boost/scoped_ptr.hpp>
 
 //namespace lib {
 //namespace time{
 //  class Quantiser;
-//  typedef std::tr1::shared_ptr<const Quantiser> PQuant;
+//  typedef std::shared_ptr<const Quantiser> PQuant;
 //}}
 
 namespace backend {
@@ -68,7 +68,7 @@ namespace backend {
 //using std::string;
 
 //using std::vector;
-//using std::tr1::shared_ptr;
+//using std::shared_ptr;
 //using boost::scoped_ptr;
   
   

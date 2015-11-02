@@ -27,6 +27,7 @@
 #include "lib/util-foreach.hpp"
 
 #include "lib/iter-adapter.hpp"
+#include "lib/iter-adapter-ptr-deref.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
@@ -139,10 +140,12 @@ namespace test{
           }
         
         /** Implementation of Iteration-logic: detect iteration end.
-         *  @note the problem here is that this implementation chooses
-         *        to use two representations of "bottom" (end, invalid).
-         *        The reason is, we want the default-constructed IterAdapter
-         *        also be the "bottom" value. Thus, when we detect the
+         *  @note the problem here is that this implementation chooses to use
+         *        two representations of ⟂ ("bottom", end, invalid). The reason is,
+         *        we want the default-constructed IterAdapter also be the ⟂ value.
+         *        This is in accordance with the »Lumiera Forward Iterator« concept,
+         *        which requires the default constructed iterator to mark the iteration
+         *        end and to evaluate to \c bool(false). Thus, when we detect the
          *        iteration end by internal logic (\c numberz_.end() ), we
          *        immediately transform this into the official "bottom"
          */
@@ -151,11 +154,11 @@ namespace test{
         checkPoint (const TestContainer* src, ITER& pos)
           {
             REQUIRE (src);
-            if ((pos != ITER(0)) && (pos != src->numberz_.end()))
+            if ((pos != ITER()) && (pos != src->numberz_.end()))
               return true;
             else
               {
-                pos = ITER(0);
+                pos = ITER();
                 return false;
           }   }
       };
@@ -184,7 +187,7 @@ namespace test{
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
+          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
           
           useSimpleWrappedContainer ();
           

@@ -87,7 +87,7 @@ namespace lib {
           ValidityCheck isValid (&T::isValid);
           T const& obj = static_cast<T const&> (*this);
           
-          return !(obj.*isValid)();
+          return not (obj.*isValid)();
         }
       
       

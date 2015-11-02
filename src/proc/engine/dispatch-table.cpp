@@ -31,6 +31,23 @@ namespace proc {
 namespace engine {
   
   /** */
+  FrameCoord
+  DispatchTable::locateRelative (FrameCoord const&, FrameCnt frameOffset)
+  {
+    UNIMPLEMENTED ("real implementation of the core dispatch operation");
+  }
+  
+  bool
+  DispatchTable::isEndOfChunk (FrameCnt, ModelPort port)
+  {
+    UNIMPLEMENTED ("determine when to finish a planning chunk");
+  }
+
+  JobTicket&
+  DispatchTable::accessJobTicket (ModelPort, TimeValue nominalTime)
+  {
+    UNIMPLEMENTED ("hook into the real implementation of the model backbone / segmentation");
+  }
   
   
   

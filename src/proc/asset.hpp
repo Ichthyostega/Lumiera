@@ -83,11 +83,10 @@ namespace asset {
   namespace error = lumiera::error;
   
   using std::size_t;
-  using std::tr1::shared_ptr;
-  using std::tr1::static_pointer_cast;
+  using std::shared_ptr;
+  using std::static_pointer_cast;
   
   using lib::HashVal;
-  using lib::P;
   
   
   
@@ -119,8 +118,8 @@ namespace asset {
   class Asset;
   class AssetManager;
   typedef const ID<Asset>& IDA;
-  typedef P<Asset>       PAsset;
-  typedef P<const Asset> PcAsset;
+  typedef lib::P<Asset>       PAsset;
+  typedef lib::P<const Asset> PcAsset;
 
   
   
@@ -136,7 +135,7 @@ namespace asset {
    * - asset::Meta representing metadata, parametrisation, customisation.
    *  
    * And of course there are various concrete Asset subclasses, like asset::Clip,
-   * asset::Effect, asset::Codec, asset::Track, asset::Dataset.
+   * asset::Effect, asset::Codec, asset::Dataset.
    * @note Assets objects have a strict unique identity and because of this are non-copyable.
    *       You can not create an Asset derived object without registering it with the AssetManager
    *       automatically. It is possible to copy the PAsset (smart pointer) though. 

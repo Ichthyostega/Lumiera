@@ -47,14 +47,14 @@
 #ifndef LIB_ALLOCATION_CLUSTER_H
 #define LIB_ALLOCATION_CLUSTER_H
 
-#include <vector>
-#include <boost/scoped_ptr.hpp>
-#include <boost/noncopyable.hpp>
-
 #include "lib/error.hpp"
 #include "lib/sync-classlock.hpp"
 #include "lib/scoped-holder.hpp"
 #include "lib/scoped-holder-transfer.hpp"
+
+#include <boost/scoped_ptr.hpp>
+#include <boost/noncopyable.hpp>
+#include <vector>
 
 
 
@@ -254,7 +254,7 @@ namespace lib {
       static TypeInfo
       setup()
         {
-          ClassLock<AllocationCluster> guard();
+          ClassLock<AllocationCluster> guard;
           if (!id_)
             id_= ++maxTypeIDs;
           

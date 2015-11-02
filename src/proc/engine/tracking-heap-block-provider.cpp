@@ -194,11 +194,9 @@ namespace engine {
           static bool
           is_in_sane_state (Block const& block)
             {
-              return !block.was_used()
-                  ||  block.was_closed();
+              return not block.was_used() or block.was_closed();
             }
       };
-
   }
   
     

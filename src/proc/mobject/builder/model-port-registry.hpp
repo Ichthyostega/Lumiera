@@ -87,7 +87,7 @@ namespace builder {
     public:
       
       /** @internal record to describe a model port */
-      struct ModelPortDescriptor;
+      class ModelPortDescriptor;
       
       
       static void shutdown ();

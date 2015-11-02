@@ -37,6 +37,9 @@
  **   element right into the iterator instance.
  ** - the RangeIter allows just to expose a range of elements defined
  **   by a STL-like pair of "start" and "end" iterators
+ ** 
+ ** Some more specific use cases are provided in the extension header
+ ** iter-adapter-ptr-deref.hpp
  ** - often, objects are managed internally by pointers, while allowing
  **   the clients to use direct references; to support this usage scenario,
  **   PtrDerefIter wraps an existing iterator, while dereferencing any value
@@ -99,14 +102,12 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/iter-type-binding.hpp"
 
-#include <boost/type_traits/remove_const.hpp>
-
 
 namespace lib {
   
   
   namespace { // internal helpers
-    void
+    inline void
     _throwIterExhausted()
     {
       throw lumiera::error::Invalid ("Can't iterate further",
@@ -114,12 +115,18 @@ namespace lib {
     }
   }
   
+  /** use a given Lumiera Forward Iterator in standard "range for loops" */
+#define ENABLE_USE_IN_STD_RANGE_FOR_LOOPS(ITER)                              \
+      friend ITER   begin (ITER const& it){ return it; }                      \
+      friend ITER&& begin (ITER&& it)     { return static_cast<ITER&&> (it); } \
+      friend ITER   end   (ITER const&)   { return ITER(); }
+  
   
 
   /**
    * Adapter for building an implementation of the lumiera forward iterator concept.
-   * The "current position" is represented as an opaque element (usually an nested iterator),
-   * with callbacks to the controlling container instance for managing this position.
+   * The "current position" is represented as an opaque element (usually a nested iterator),
+   * with callbacks into the controlling container instance to manage this position.
    * This allows to influence and customise the iteration process to a large extent.
    * Basically such an IterAdapter behaves like the similar concept from STL, but
    * - it is not just a disguised pointer (meaning, it's more expensive)
@@ -186,7 +193,7 @@ namespace lib {
       operator->() const
         {
           _maybe_throw();
-          return pos_;
+          return & *pos_;
         }
       
       IterAdapter&
@@ -206,7 +213,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
       
@@ -240,9 +247,12 @@ namespace lib {
       void
       _maybe_throw()  const
         {
-          if (!isValid())
+          if (not isValid())
             _throwIterExhausted();
         }
+      
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterAdapter);
       
       /// comparison is allowed to access impl iterator
       template<class P1, class P2, class CX>
@@ -262,10 +272,10 @@ namespace lib {
 
   /**
    * Another Lumiera Forward Iterator building block, based on incorporating a state type 
-   * right into the iterator. Contrast this to IterAdapter referring to an controlling
+   * right into the iterator. Contrast this to IterAdapter, which refers to a managing
    * container behind the scenes. Here, all of the state is assumed to live in the
    * custom type embedded into this iterator, accessed and manipulated through
-   * a set of free function to be resolved by ADL.
+   * a set of free functions, picked up through ADL.
    * 
    * \par Assumptions when building iterators based on IterStateWrapper
    * There is a custom state representation type ST.
@@ -273,7 +283,7 @@ namespace lib {
    * - this default state represents the \em bottom (invalid) state.
    * - copyable, because iterators are passed by value
    * - this type needs to provide an <b>iteration control API</b> through free functions
-   *   -# \c checkPoint establishes, if the given state element represents a valid state
+   *   -# \c checkPoint establishes if the given state element represents a valid state
    *   -# \c iterNext evolves this state by one step (sideeffect)
    *   -# \c yield realises the given state, yielding an element of result type T
    * 
@@ -336,7 +346,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
     protected:
@@ -352,10 +362,13 @@ namespace lib {
       void
       __throw_if_empty()  const
         {
-          if (!isValid())
+          if (not isValid())
             _throwIterExhausted();
         }
       
+      
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterStateWrapper);
       
       /// comparison is allowed to access state implementation core
       template<class T1, class T2, class STX>
@@ -375,7 +388,7 @@ namespace lib {
   template<class T1, class T2, class ST>
   bool operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
   { 
-    return ! (il == ir);
+    return not (il == ir);
   }
   
   
@@ -460,13 +473,16 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
       
       /** access wrapped STL iterator */
       const IT&  getPos()  const { return p_; }
       const IT&  getEnd()  const { return e_; }
+      
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (RangeIter);
       
       
     private:
@@ -490,28 +506,6 @@ namespace lib {
   
   
   
-  
-  
-  namespace {
-    
-    /** helper to remove pointer,
-     *  while retaining const */
-    template<typename T>
-    struct RemovePtr  { typedef T Type; };
-    
-    template<typename T>
-    struct RemovePtr<T*> { typedef T Type; };
-    
-    template<typename T>
-    struct RemovePtr<const T*> { typedef const T Type; };
-    
-    template<typename T>
-    struct RemovePtr<T* const> { typedef const T Type; };
-    
-    template<typename T>
-    struct RemovePtr<const T* const> { typedef const T Type; };
-    
-  }
   
   
   /** 
@@ -545,260 +539,6 @@ namespace lib {
           typedef RangeIter<WrappedIter> Type;
         };
     };
-  
-  
-  
-  /** 
-   * wrapper for an existing Iterator type,
-   * automatically dereferencing the output of the former.
-   * For this to work, the "source" iterator is expected
-   * to be declared on \em pointers rather than on values.
-   * @note bool checkable if and only if source is...
-   */
-  template<class IT>
-  class PtrDerefIter
-    : public lib::BoolCheckable<PtrDerefIter<IT> >
-    {
-      IT i_;  ///< nested source iterator
-      
-      
-    public:
-      typedef typename IT::value_type           pointer;
-      typedef typename RemovePtr<pointer>::Type value_type;
-      typedef value_type&                       reference;
-      
-      // for use with STL algorithms
-      typedef void difference_type;
-      typedef std::forward_iterator_tag iterator_category;
-      
-      
-      // the purpose of the following typedefs is to ease building a correct "const iterator"
-      
-      typedef typename boost::remove_const<value_type>::type ValueTypeBase; // value_type without const
-      
-      typedef typename IterType<IT>::template SimilarIter<      ValueTypeBase* * >::Type WrappedIterType;
-      typedef typename IterType<IT>::template SimilarIter<const ValueTypeBase* * >::Type WrappedConstIterType;
-      
-      typedef PtrDerefIter<WrappedIterType>      IterType;
-      typedef PtrDerefIter<WrappedConstIterType> ConstIterType;
-      
-      
-      
-      /** PtrDerefIter is always created 
-       *  by wrapping an existing iterator.
-       */
-      explicit
-      PtrDerefIter (IT srcIter)
-        : i_(srcIter)
-        { }
-      
-      
-      /** allow copy initialisation also when
-       *  the wrapped iterator is based on some variation of a pointer.
-       *  Especially, this includes initialisation of the "const variant"
-       *  from the "normal variant" of PtrDerefIter. Actually, we need to convert
-       *  in this case by brute force, because indeed (const TY *)* is not assignable
-       *  from (TY *)* -- just we know that our intention is to dereference both levels
-       *  of pointers, and then the resulting conversion is correct.
-       *  @note in case IT == WrappedIterType, this is just a redefinition of the
-       *        default copy ctor. In all other cases, this is an <i>additional
-       *        ctor besides the default copy ctor</i> */
-      PtrDerefIter (PtrDerefIter<WrappedIterType> const& oIter)
-        : i_(reinterpret_cast<IT const&> (oIter.getBase()))
-        { }
-      
-      PtrDerefIter&
-      operator= (PtrDerefIter<WrappedIterType> const& ref)
-        {
-          i_ = reinterpret_cast<IT const&> (ref.getBase());
-          return *this;
-        }
-      
-      
-      /** explicit builder to allow creating a const variant from the basic srcIter type. 
-       *  Again, the reason necessitating this "backdoor" is that we want to swallow one level
-       *  of indirection. Generally speaking `const T **` is not the same as `T * const *`,
-       *  but in our specific case the API ensures that a `PtrDerefIter<WrappedConstIterType>`
-       *  only exposes const elements. 
-       */
-      static PtrDerefIter
-      build_by_cast (WrappedIterType const& srcIter)
-        {
-          return PtrDerefIter (reinterpret_cast<IT const&> (srcIter));
-        }
-      
-      static PtrDerefIter
-      nil()
-        {
-          return PtrDerefIter (IT());
-        }
-      
-      
-      
-      
-      
-      
-      /* === lumiera forward iterator concept === */
-      
-      reference
-      operator*() const
-        {
-          return *(*i_);
-        }
-      
-      pointer
-      operator->() const
-        {
-          return *i_;
-        }
-      
-      PtrDerefIter&
-      operator++()
-        {
-          ++i_;
-          return *this;
-        }
-      
-      bool
-      isValid ()  const
-        {
-          return bool(i_);
-        }
-      
-      bool
-      empty ()    const
-        {
-          return !isValid();
-        }
-      
-      
-      /** access the wrapped implementation iterator */
-      IT const&
-      getBase()  const
-        {
-          return i_;
-        }
-    };
-  
-  
-  /// Supporting equality comparisons...
-  template<class I1, class I2>
-  bool operator== (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
-    
-  template<class I1, class I2>
-  bool operator!= (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return !(il == ir); }
-  
-  
-  
-  
-  
-  /** 
-   * wrapper for an existing Iterator type to expose the address of each value yielded.
-   * Typically this can be used to build visitation sequences based on values living
-   * within a stable data structure (e.g. unmodifiable STL vector)
-   * @warning use of this wrapper might lead to taking the address of temporaries.
-   *          The continued existence of the exposed storage locations must be guaranteed.
-   * @note bool checkable if and only if source is...
-   */
-  template<class IT>
-  class AddressExposingIter
-    : public lib::BoolCheckable<AddressExposingIter<IT> >
-    {
-      typedef typename IT::pointer _Ptr;
-      
-      IT i_;  ///< nested source iterator
-      
-      mutable _Ptr currPtr_;
-      
-      
-      void
-      takeAddress()
-        {
-          if (i_.isValid())
-            currPtr_ = & (*i_);
-          else
-            currPtr_ = 0;
-        }
-      
-      
-    public:
-      typedef typename IT::pointer const* pointer;
-      typedef typename IT::pointer const& reference;
-      typedef typename IT::pointer const  value_type;
-      
-      
-      /** AddressExposingIter is always created 
-       *  by wrapping an existing iterator.
-       */
-      explicit
-      AddressExposingIter (IT srcIter)
-        : i_(srcIter)
-        {
-          takeAddress();
-        }
-      
-      
-      
-      
-      
-      /* === lumiera forward iterator concept === */
-      
-      /** @return address of the source iteraor's current result
-       * @warning exposing a reference to an internal pointer for sake of compatibility.
-       *          Clients must not store that reference, but rather use it to initialise
-       *          a copy. The internal pointer exposed here will be changed on increment.  
-       */
-      reference
-      operator*() const
-        {
-          return currPtr_;
-        }
-      
-      _Ptr
-      operator->() const
-        {
-          return currPtr_;
-        }
-      
-      AddressExposingIter&
-      operator++()
-        {
-          ++i_;
-          takeAddress();
-          return *this;
-        }
-      
-      bool
-      isValid ()  const
-        {
-          return bool(i_);
-        }
-      
-      bool
-      empty ()    const
-        {
-          return !isValid();
-        }
-      
-      
-      /** access the wrapped implementation iterator */
-      IT const&
-      getBase()  const
-        {
-          return i_;
-        }
-    };
-  
-  
-  /// Supporting equality comparisons...
-  template<class I1, class I2>
-  bool operator== (AddressExposingIter<I1> const& il, AddressExposingIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
-    
-  template<class I1, class I2>
-  bool operator!= (AddressExposingIter<I1> const& il, AddressExposingIter<I2> const& ir)  { return !(il == ir); }
-  
-  
-  
   
   
   
@@ -852,7 +592,7 @@ namespace lib {
       bool
       empty ()    const
         {
-          return !isValid();
+          return not isValid();
         }
       
       
@@ -870,9 +610,9 @@ namespace lib {
   bool operator== (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
     
   template<class I1, class I2>
-  bool operator!= (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return !(il == ir); }
+  bool operator!= (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return not (il == ir); }
   
   
   
-} // namespace lib
-#endif
+}// namespace lib
+#endif /*LIB_ITER_ADAPTER_H*/

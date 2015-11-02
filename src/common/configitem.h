@@ -1,5 +1,5 @@
 /*
-  configitem.h  -  generalized hierarchy of configuration items
+  CONFIGITEM.h  -  generalised hierarchy of configuration items
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,76 +17,53 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_CONFIGITEM_H
-#define LUMIERA_CONFIGITEM_H
 
-//TODO: Support library includes//
+/** @file configitem.h
+ ** Hierarchy of configuration items.
+ ** configitems form a 3 level hierarchy:
+ ** 
+ ** \verbatim
+ ** 1. file:
+ **      contain sections
+ **
+ ** 2.   section:
+ **        [prefix suffix]
+ **        contain lines
+ **
+ ** 3.     lines are
+ **        comment:
+ **          empty line or line only containing spaces and tabs
+ **          line starting with spaces and tabs followed by a #
+ **        directive:
+ **          '@include name' or '@readonly'
+ **          directives are only valid at the toplevel section []
+ **        configurationentry:
+ **          'key = value' or 'key < redirect'
+ **        erroneous:
+ **          any line which can't be parsed
+ ** \endverbatim
+ */
+
+#ifndef COMMON_CONFIGITEM_H
+#define COMMON_CONFIGITEM_H
+
+
 #include "lib/llist.h"
 
-
-//TODO: Forward declarations//
+/* Forward declarations */
 typedef struct lumiera_configitem_struct lumiera_configitem;
 typedef lumiera_configitem* LumieraConfigitem;
 
 struct lumiera_configitem_vtable;
 
-//TODO: Lumiera header includes//
 #include "common/config-lookup.h"
 
-
-//TODO: System includes//
 #include <nobug.h>
 
 
-/**
- * @file
- * configitems build a 3 level hierarchy:
- *
- * 1. file:
- *      contain sections
- *
- * 2.   section:
- *        [prefix suffix]
- *        contain lines
- *
- * 3.     lines are
- *        comment:
- *          empty line or line only containing spaces and tabs
- *          line starting with spaces and tabs followed by a #
- *        directive:
- *          '@include name' or '@readonly'
- *          directives are only valid at the toplevel section []
- *        configurationentry:
- *          'key = value' or 'key < redirect'
- */
-
-
-//TODO: declarations go here//
-/**
- * @file
- * configitems build a 3 level hierarchy:
- *
- * 1. file:
- *      contain sections
- *
- * 2.   section:
- *        [prefix suffix]
- *        contain lines
- *
- * 3.     lines are
- *        comment:
- *          empty line or line only containing spaces and tabs
- *          line starting with spaces and tabs followed by a #
- *        directive:
- *          '@include name' or '@readonly'
- *          directives are only valid at the toplevel section []
- *        configurationentry:
- *          'key = value' or 'key < redirect'
- *        erroneous:
- *          any line which cant be parsed
- */
 
 struct lumiera_configitem_vtable
 {
@@ -96,9 +73,9 @@ struct lumiera_configitem_vtable
 
 struct lumiera_configitem_struct
 {
-  llist link;                                   // all lines on the same hierarchy level are linked here (see childs)
+  llist link;                                   // all lines on the same hierarchy level are linked here (see children)
   LumieraConfigitem parent;                     // parent section
-  llist childs;                                 // root node for all lines below this hierarchy
+  llist children;                               // root node for all lines below this hierarchy
 
   llist lookup;                                 // all lines with the same key are stacked up on the lookup
 
@@ -108,6 +85,7 @@ struct lumiera_configitem_struct
   char* delim;                                  // delimiter, value starts at delim+1
   struct lumiera_configitem_vtable* vtable;     // functiontable for subclassing
 };
+
 
 LumieraConfigitem
 lumiera_configitem_init (LumieraConfigitem self);
@@ -130,7 +108,8 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line);
 LumieraConfigitem
 lumiera_configitem_move (LumieraConfigitem self, LumieraConfigitem dest);
 
-#endif
+
+#endif /*COMMON_CONFIGITEM_H*/
 /*
 // Local Variables:
 // mode: C

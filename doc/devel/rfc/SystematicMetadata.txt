@@ -33,11 +33,13 @@ to span the whole virtual model, and thus there never needs to be an universal
 model data structure definition. Data structure becomes implementation detail.
 
 Parts of the system talk to each other by _describing_ some subtree of metadata.
-This description is _always pushed:_ the receiver implements an API allowing the
-sender to navigate to some path-like scope and populate it with values, similar
-to populating a filesystem. It is up to the receiver to assemble these information
-into a suitable representation. Some receiver might invoke an object factory, while
-another serialises data into an external textual or binary representation.
+This description is transferred _in the form of a tree diff:_ the receiver pulls
+a sequence of diff verbs from a diff iterator, and interpreting these verbs will
+walk him down and expand the tree in question. Sub-scopes are ``opened'' and
+populated, similar to populating a filesystem. It is up to the receiver to
+assemble these information into a suitable representation. Some receiver
+might invoke an object factory, while another serialises data into an
+external textual or binary representation.
 
 
 Abstract Metadata Model

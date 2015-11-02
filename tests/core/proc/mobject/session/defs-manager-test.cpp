@@ -65,7 +65,7 @@ namespace test    {
   bool
   find (Query<Pipe>& q)
   {
-    return Session::current->defaults.search (q);
+    return bool(Session::current->defaults.search (q));
   }
   
   

@@ -1,7 +1,7 @@
 Lumiera Authors and Credits
 ===========================
-Version: 0.pre.02
-:Date: 10/2013
+Version: 0.pre.03
+:Date: 11/2015
 
 
 |==========================================
@@ -19,6 +19,7 @@ Version: 0.pre.02
 |concept           | BRIAN RYTEL
 |                  | MIKE PROVOST
 |                  | NIKOLA DUPER
+|                  | CHRISTOPH VARGA
 
 |                  |
 |                  |
@@ -75,7 +76,7 @@ The Lumiera project feels especially obliged to::
 
 Further Credits
 ---------------
-- inspirations and some GUI components were taken from http://Ardour.org[Ardour]
+- inspirations and some UI components were taken from http://Ardour.org[Ardour]
 
 - Parts of the Implementation are heavily inspired by +
   *The Loki Library*  (c) 2001 by *Andrei Alexandrescu*

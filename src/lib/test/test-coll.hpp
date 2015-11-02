@@ -29,7 +29,7 @@
 
 //#include <typeinfo>
 //#include <cstdlib>
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <iostream>
 #include <vector>
 #include <map>
@@ -60,8 +60,8 @@ namespace test{
   typedef std::map<int,int> MapII;
   typedef std::multimap<int,int> MMapII;
   
-  typedef std::tr1::unordered_map<int,int> HMapII;
-  typedef std::tr1::unordered_multimap<int,int> HMMapII;
+  typedef std::unordered_map<int,int> HMapII;
+  typedef std::unordered_multimap<int,int> HMMapII;
   
   
   template<class MAP>

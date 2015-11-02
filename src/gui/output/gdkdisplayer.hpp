@@ -1,5 +1,5 @@
 /*
-  gdkdisplayer.hpp  -  Defines the class for displaying video via GDK
+  GDKDISPLAYER.hpp  -  displaying video via GDK
 
   Copyright (C)         Lumiera.org
     2000,               Arne Schirmacher <arne@schirmacher.de>
@@ -24,16 +24,17 @@
 
 
 /** @file gdkdisplayer.hpp
- ** This file contains the definition of XvDisplayer, the XVideo
- ** video output implementation
- ** @see gdkdisplayer.cpp
+ ** Display video via GDK
+ ** 
+ ** @deprecated obsolete since GTK-3
  ** @see displayer.hpp
  */
 
 #ifndef GUI_OUTPUT_GDKDISPLAYER_H
 #define GUI_OUTPUT_GDKDISPLAYER_H
 
-#include "displayer.hpp"
+#include "gui/gtk-base.hpp"
+#include "gui/output/displayer.hpp"
 
 namespace Gtk {
   class Widget;
@@ -45,6 +46,10 @@ namespace output {
 /**
  * GdkDisplayer is a class which is responsible for rendering a video
  * image via GDK.
+ *
+ * @todo the GdkDisplayer class is not supported anymore in Gtk3.
+ *       This is due to Gtk3 only supporting drawing with Cairo
+ *       /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
  */
 class GdkDisplayer
   : public Displayer
@@ -67,7 +72,7 @@ class GdkDisplayer
      * format (as indicated by the format method).
      * @param[in] image The video image array to draw.
      */
-    void put( const void* image );
+    void put (void* const image);
     
   protected:
     
@@ -89,4 +94,4 @@ class GdkDisplayer
   
   
 }}   // namespace gui::output
-#endif // GDKDISPLAYER_HPP
+#endif /*GUI_OUTPUT_GDKDISPLAYER_H*/

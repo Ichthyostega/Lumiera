@@ -1,5 +1,5 @@
 /*
-  safe_clib.h  -  Portable and safe wrapers around some clib functions and some tools
+  safe_clib.h  -  Portable and safe wrappers around some clib functions and some tools
 
   Copyright (C)         CinelerraCV
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -32,10 +32,10 @@ LUMIERA_ERROR_DECLARE(NO_MEMORY);
 /**
  * Install the resourcecollector run hook.
  * The resourcecollectr must be hooked into the safeclib at bootup after it got
- * initialized and removed from it before shut down. Without resourcecollector
+ * initialised and removed from it before shut down. Without resourcecollector
  * failed allocations will abort().
  * @param hook pointer to the resourcecollector_run function, must be of type
- *        lumiera_resourcecollector_run_fn but we dont want a dependency on backend in this header
+ *        lumiera_resourcecollector_run_fn but we don't want a dependency on backend in this header
  */
 void
 lumiera_safeclib_set_resourcecollector (void* hook);

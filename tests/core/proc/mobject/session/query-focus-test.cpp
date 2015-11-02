@@ -109,13 +109,13 @@ namespace test    {
                          // we know this object is root -> ps2 -> ps3
           
           CHECK (Scope(focus).isRoot());
-          focus.attach (someObj);
+          focus.shift (someObj);
           CHECK (!Scope(focus).isRoot());
           ScopePath path = focus.currentPath();
           CHECK (someObj == path.getLeaf());
           CHECK (Scope(focus).getParent().getParent().isRoot());
           
-          focus.attach (path.getLeaf().getParent());
+          focus.shift (path.getLeaf().getParent());
           CHECK (Scope(focus) == path.getLeaf().getParent());
           CHECK (someObj != Scope(focus));
           CHECK (path.contains (focus.currentPath()));
@@ -153,7 +153,7 @@ namespace test    {
             ScopeQuery<TestSubMO21>::iterator ii = subF2.explore<TestSubMO21>();
             while (ii) // drill down depth first
               {
-                subF2.attach(*ii);
+                subF2.shift(*ii);
                 cout << string(subF2) << endl;
                 ii = subF2.explore<TestSubMO21>();
               }

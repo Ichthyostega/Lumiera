@@ -273,7 +273,7 @@ namespace control {
       friend bool
       operator!= (ArgumentHolder const& a1, ArgumentHolder const& a2)
         {
-          return ! (a1 == a2);
+          return not (a1 == a2);
         }
     };
     

@@ -29,11 +29,11 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <tr1/functional>
-#include <tr1/memory>
+#include <functional>
+#include <memory>
 #include <string>
 
-using std::tr1::function;
+using std::function;
 
 namespace lumiera {
   
@@ -46,8 +46,8 @@ namespace lumiera {
   class QueryResolver;
   class QueryDispatcher;
   
-  /** Allow for taking ownership of a result set */
-  typedef std::tr1::shared_ptr<Resolution> PReso;
+  /** Allow to take and transfer ownership of a result set */
+  typedef std::shared_ptr<Resolution> PReso;
   
   
   /** 
@@ -62,7 +62,7 @@ namespace lumiera {
       
       virtual ~Resolution();
       
-      
+      /** IterAdapter attached here */
       friend bool
       checkPoint (PReso const&, Result const& pos)
         {
@@ -90,7 +90,7 @@ namespace lumiera {
    * in response to specific queries of some kind, \link #canHandle if applicable \endlink.
    * Every resolution mechanism is expected to enrol by calling #installResolutionCase.
    * Such a registration is considered permanent; a factory function gets stored,
-   * assuming that the entity implementing this function remains available
+   * assuming that the entity to implement this function remains available
    * up to the end of Lumiera main(). The kind of query and a suitable
    * resolver is determined by the QueryID, which includes a type-ID.
    * Thus the implementation might downcast query and resultset.
@@ -125,8 +125,10 @@ namespace lumiera {
       
       virtual bool canHandleQuery (Goal::QueryID const&)  const =0;
       
+      using ResolutionMechanism = function<Resolution*(Goal const&)>;
+      
       void installResolutionCase (Goal::QueryID const&,
-                                  function<Resolution*(Goal const&)>);
+                                  ResolutionMechanism);
       
       QueryResolver();
     };

@@ -1,0 +1,540 @@
+Linking and Application Structure
+=================================
+:Date: Autumn 2014
+:Author: Ichthyostega
+:toc:
+:toclevels: 3
+
+This page focusses on some rather intricate aspects of the code structure,
+the build system organisation and the interplay of application parts on
+a technical level.
+
+Arrangement of code
+-------------------
+Since the term ``code'' may denote several different kinds of entities, the place
+_where_ some piece of code is located differs according to the context in question.
+
+Visibility vs Timing: the translation unit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To start with, when it comes to building code in C/C++, the fundamental entity
+is _a single translation unit_. Assembler code is emitted while the compiler
+progresses through a translation unit. Each translation unit is self contained
+and represents a path of definition and understanding. Each translation unit
+starts out anew at a state of complete ignorance, at the end leading to a fully
+specified, coherent operational structure.
+
+Within this _definition of a coded structure_, there is an inherent tension
+between the _absoluteness_ of a definition (a definition in mathematical sense
+can not be changed, once given) and the _order of spelling out_ this definition.
+When described in such an abstract way, this kind of observation might be deemed
+self evident and trivial, but let's just consider the following complications in practice...
+
+- Headers are included into multiple translation units. Which means, they appear
+  in several disjoint contexts, and must be written in a way independent of the
+  specific context.
+- Macros, from the point of their definition onwards, change the way the compiler
+  ``sees'' the actual code.
+- Namespaces are ``open'' -- meaning they can be re-opened several times and
+  populated with further definitions. The actual contents of any given namespace
+  will be slightly different in each and every translation unit.
+- a Template is not in itself code, but a constructor function for actual code.
+  It needs to be instantiated with concrete type arguments to produce code.
+  And when this happens, the template instantiation picks up definitions
+  _as visible at that specific point_ in the path through the translation unit.
+  A template instantiation might even pick up specific definitions depending
+  on the actual parameters, and the current content of the namespace these
+  parameter types are defined in. So it very much matters at which point a
+  specific template instantiation is first mentioned.
+- it is possible to generate globally visible (or statically visible) code
+  from a template instantiation. This may even happen several times when
+  compiling multiple translation units; the final linking stage will
+  silently remove such duplicate instantiations stemming from templates --
+  and this resolution step just assumes that these duplicate code entities
+  are actually equivalent. Mind me, this is an assumption and can not be
+  easily verified by the compiler. With a bit of criminal energy (think
+  namespaces), it is very much possible to produce several instantiations
+  of, say, a static initialiser within a template class, which are in
+  fact different operations. Such a setup puts us at the mercy of the
+  random way in which the linker sees these instances.
+
+Now the quest is to make _good use_ of these various ways of defining things.
+We want to write code which clearly conveys its meaning, without boring the
+reader with tedious details not necessary to understand the main point in
+question. And at the same time, we want to write code which is easy to
+understand, easy to write and can be altered, extended and maintained.footnote:[to put
+it blatantly, a ``simple clean language'' without any means of expression
+would not be of much help. All the complexities of reality would creep into the usage
+of our »ideal« language, and, even worse, be mixed up there with the all the entropy
+produced by doing the same things several times a different way.]
+
+Since it is really hard to reconcile all these conflicting goals, we are bound
+to rely on *patterns of construction*, which are known to work out well in
+this regard.
+
+Imports and import order
+^^^^^^^^^^^^^^^^^^^^^^^^
+When we refer to other definitions by importing headers, these imports should be
+spelled out precisely to the point. Every relevant facility used in a piece of code
+must be reflected by the corresponding `#import` statement, yet there should not be any
+spurious imports. Ideally, just by reading the prologue of a source file, the reader should
+gain a clear understanding about the dependencies of this code. The standards are somewhat
+different for header files, since every user of this header gets these imports too. Each
+import incurs cost for the user -- so the _header_ should mention only those imports
+
+- which are really necessary to spell out our definition
+- which are likely to be useful for the _typical standard use_ of our definition
+
+Imports are to be listed in a strict order: *always start with our own references*,
+preferably starting with the facility most ``on topic''. Besides, for rather fundamental
+library headers, it is a good idea to start with a very fundamental header, like e.g. 'lib/error.hpp'.
+Of course, these widely used fundamental headers need to be carefully crafted, since the leverage
+of any other include pulled in through these headers is high.
+
+Any imports regarding *external or system libraries are given in a second block*, after our
+own headers. This discipline opens the possibility for our own headers to configure or modify
+some system facilities, in case the need arises. It is desirable for headers to be written
+in a way independent of the include order. But in some, rare cases we need to rely on a
+specific order of include. In such cases, it is a good idea to encode this specific order
+right into some very fundamental header, so it gets fixed and settled early in the include
+processing chain. Our 'gui/gtk-base.hpp', as used by 'gui/gtk-lumiera.hpp' is a good example.
+
+Forward declarations
+^^^^^^^^^^^^^^^^^^^^
+We need the full definition of an entity whenever we need to know its precise memory layout,
+be it to allocate space, to pass an argument by-value, or to point into some filed within
+a struct, array or object. The full definition may be preceded by an arbitrary number of
+redundant, equivalent declarations. We _do not actually need_ a full definition for any
+use _not dealing with the space or memory layout_ of an entity. Especially, handling
+some element by pointer or reference, or spelling out a function signature to take
+this entity other than by-value, does _not require a full definition_.
+
+Exploiting this fact allows us largely to reduce the load of dependencies, especially
+when it comes to ``subsystem'' or ``package'' headers, which define the access
+point to some central facility. Such headers should start with a list of the relevant
+core entities of this subsystem, but only in the form of ``lightweight'' forward declarations.
+Because, anyone actually to use _one of these_ participants, is bound to include the specific
+header of this element anyway; all other users may safely skip the efforts and transitive
+dependencies necessary to spell out the full definition of stuff not actually used and needed.
+
+In a similar vein, a façade interface does not actually need to pull in definitions for all
+the entities it is able to orchestrate. In most cases, it is sufficient to supply suitable
+and compatible `typedef`s in the public part of the interface, just to the point that we're
+able to spell out the bare API function signatures without compilation error.
+
+Placement of constructors
+^^^^^^^^^^^^^^^^^^^^^^^^^
+At the point, where a ctor is actually invoked, we require the full definition of the element
+about to be created. Consequently, at the place, where the ctor itself is _defined_ (not just
+declared), the full definition of _all the members_ of a class plus the full definition of
+all base classes is required. The impact of moving this point down into a single implementation
+translation unit can be huge, compared to incurring the same cost in each and every other
+translation unit just _using_ an entity.
+
+Yet there is a flip side of the coin: Whenever the compiler sees the full definition of an
+entity, it is able to inline operations. And the C\++ compiler uses elaborate metrics
+to judge the feasibility of inlining. Especially when almost all ctor implementations are
+trivial (which is the case when writing good C++ style code), the runtime impact can be
+huge, basically boiling down a whole pile of calls and recursive invocations into precisely
+zero assembler code to be generated. This way, abstraction barriers can evaporate
+to nothingness. So we're really dealing with a run time vs. development time
+and code size tradeoff here.
+
+On a related note: care has to be taken whenever a templated class defines virtual methods.
+Each instantiation of the template will cause the compiler to emit a function which generates
+the VTable, together with code for each of the virtual functions. This effect is known as
+``template code bloat''.
+
+The PImpl pattern
+^^^^^^^^^^^^^^^^^
+It is is the very nature of a good design pattern, the reason why it is remembered and applied
+over and over again: to allow otherwise destructive forces to move past each other in a
+seemingly ``friction-less'' way. In our case, there is a design pattern known to resolve
+the high tension and potential conflict inherent to the situations and issues described above.
+And, in addition, it circumvents the lack of a real interface definition construct in C++ elegantly:
+
+Whenever a facility has to offer an outward façade for the client, while at the same time engaging
+into heavy weight implementation activities, then you may split this entity into an interface shell
+and a private implementation delegate.footnote:[the common name for this pattern, »PImpl« means
+``point-to-implementation''] The interface part is defined in the header, fully eligible
+for inlining. It might even be generic -- templated to adapt to a wide array of parameter types.
+The implementation of the API functions is also given inline, and just performs the necessary
+administrative steps to accept the given parameters, before passing on the calls to the
+private implementation delegate. This implementation object is managed by (smart) pointer,
+so all of the dependencies and complexities of the implementation is moved into a single
+dedicated translation unit, which may even be reshaped and reworked without the need to
+recompile the usage site.
+
+Wrappers and opaque holders
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+These constructs serve a similar purpose: To segregate concerns, together with the related
+dependencies and overhead. They, too, represent some trade-off: a typically very intricate
+library construct is traded for a lean and flexible construction at usage site.
+
+A wrapper (smart-pointer or smart handle), based on the ability of C++ to invoke ctors and
+dtors of stack-allocated values and object members automatically, can be used so push some
+cross-cutting concern into a separate code location, together with all the accompanying
+management facilities and dependencies, so the actual ``business code'' remains untainted.
+
+In a related, but somewhat different style, an opaque holder allows to ``piggyback'' a value
+without revealing the actual implementation type. When hooked this way behind a strategy interface,
+extended compounds of implementation facilities can be secluded into a dedicated facility, without
+incurring dependency overhead or tight coupling or even in-depth knowledge onto the client, yet
+typesafe and with automatic tracking for clean-up and failure management.
+
+
+Code size and Code Bloat
+~~~~~~~~~~~~~~~~~~~~~~~~
+Each piece of code incurs cost of various kinds
+
+- it needs to be understood by the reader. Otherwise it will die
+  sooner or later and from then on haunt the code base as a zombie.
+- writing code produces bugs and defects at a largely constant rate.
+  The best code, the perfect code is code you _do not write_.
+- actual implementation produces machine code, which occupies
+  space, needs to be loaded into memory (think caching) and performed.
+- to the contrary, mere definitions are for free, _but_ --
+- even definitions consume compiler time (read: development cycle turnaround)
+- and since we're developing with debug builds, each and every definition
+  produces debug information in each and every translation unit referring it.
+
+Thus, for every piece of code we must ask ourselves how much _visible_ this
+code is, need to be. And we must consider the dependencies the code incurs.
+It pays off to turn something into a detail and ``push it into the backyard''.
+This explains why we're using the frontend - backend split so frequently.
+
+
+Source and binary dependencies
+------------------------------
+To _use_ stuff while writing code, a definition or at least a declaration needs to
+be brought into scope. This is fine as long as definitions are rather cheap,
+omitting and hiding the details of implementation. The user does not need to understand
+these details, and the compiler does not need to parse them.
+
+The situation is somewhat different when it comes to _binary dependencies_ though.
+At execution time, all we get is pieces of data, and functions able to process specific
+data. Thus, whenever some piece of data is to be used, the corresponding functions need
+to be loaded and made available. Most of the time we're linking dynamically,
+and thus the above means that a _dynamic library_ providing those functions needs to be loaded.
+This other dynamic library becomes a dependency of our executable or library; it is recorded
+in the 'dynamic' section of the headers of our ELF binary (executable or library). Such a
+'needed' dependency is recorded there in the form of a ``SONAME'': this is an unique, symbolic
+ID denoting the library we're depending on. At runtime, it is the responsibility of the system's
+dynamic linker to translate these SONAMEs into actual libraries installed somewhere on the system,
+to load those libraries and to map the respective memory pages into our current process' address
+space, and finally to _relocate_ the references in our assembly code to point properly to the
+functions of this library we're depending on.
+
+Application Layer structure and dependency structure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Lumiera application uses a layered architecture, where upper layers may depend on the services
+of lower layers, but not vice versa. The top layer, the GUI is defined to be _strictly optional_.
+As long as all we had to deal with was code in upper layers using and invoking services in lower
+layers, there would not be much to worry. Yet to produce any tangible value, software has to
+collaborate on shared data. So the naive ``natural'' form of architecture would be to build
+everything around shared knowledge about the layout of this data. Unfortunately such an approach
+endangers the most central property of software, namely to be ``soft'', to adapt to change.
+Inevitably, data centric architectures either grow into a rigid immobile structure,
+or they breed an intangible insider culture with esoteric knowledge and obscure conventions
+and incantations. The only known solution to this problem (incidentally a solution known
+since millennia), is to rely on subsidiarity. ``Tell, don't ask''
+
+This gets us into a tricky situation regarding binary dependencies. Subsidiarity leads to an
+interaction pattern based on handshakes and exchanges, which leads to mutual dependency. One
+side places a contract for offering some service, the other side reshapes its internal entities
+to comply to that contract superficially. Dealing with the entities involved in such a handshake
+effectively involves the internal functions of both sides. Which is in contradiction to a
+``clean'' layer hierarchy.
+
+For a more tangible example, lets assume our backend has to do some work on behalf of the GUI;
+so the backend offers a contract to outline the properties of stuff it can work on. In compliance
+with this contract, the GUI hands over some data entities to the backend to work on -- but by their
+very nature, these data entities are and always remain GUI entities. When the backend invokes compliant
+operations on these entities, it effectively invokes functionality implemented in the GUI. Which
+makes the backend _binary dependent on the GUI_.
+
+While this problem can not be resolved in principle, there are ways to work around it, to the degree
+necessary to get hierarchically ordered binary dependencies -- which is what we need to make a lower
+layer operative, standalone, without the upper layer(s). The key is to introduce an _abstraction_,
+and then to _segregate_ along the realm of this abstraction, which needs to be chosen large enough
+in scope to cast the service and its contract entirely in terms of this abstraction, but at the same
+time it needs to be kept tight enough to prevent details of the client to leak into the abstraction.
+When this is achieved (which is the hard part), then any operations dealing with the abstraction _solely_
+can be migrated into the entity offering the service, while the client hides the extended knowledge about
+the nature of the manipulated data behind a builder function.footnote:[frequently this leads to the
+``type erasure'' pattern, where specific knowledge about the nature of the fabricated entities -- thus
+a specific type -- is relinquished and dropped once fabrication is complete] This way, the client retains
+ownership on these entities, passing just a reference to the service implementation. This move ties the binary
+dependency on the client implementation to this factory function -- as long as _this factory_ remains
+within the client, the decoupling works and eliminates binary cross dependencies.
+
+This solution pattern can be found at various places within the code base; in support we link with
+strict dependency checking (Link flag `--no-undefined`), so every violation of the predefined
+hierarchical dependency order of our shared modules is spotted immediately during build.
+
+
+Locating dependencies at start-up
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+We hope for Lumiera to be not only installed on desktop systems, but also used in a studio
+or production context, where you'll use a given system just for the duration of one project.
+This might even be specific hardware booted with a Live-System, or it might be a ``headless''
+render-farm node. For this reason, we impose the explicit requirement that Lumiera must be
+fully *usable without installation*. Unzip the application into some folder, launch,
+start working. There might be some problems with required media handling libraries,
+but the basic idea is to use a self-contained bundle or sub-tree, and the application
+needs to locate all the further required resources actively on start-up.
+
+On the other hand, we want Lumiera to be a good citizen, packaged in the usual way,
+compliant to the Unix **F**ile**S**ystem **H**ierarchy standard. It turns out these two
+rather conflicting goals can be reconciled by leveraging some of the advanced features
+of the GNU dynamic linker: The application will figure out the whereabouts relatively,
+starting from the location of the executable, and with the help of some search paths
+and symlinks, the same mechanism can be made to work in the usual FSH compliant
+installation into `/usr/lib/lumiera` and `/usr/share/lumiera`
+
+This way, we end up with a rather elaborate start-up sequence, where the application
+works out it's own installation location and establishes all the further resources
+actively step by step
+
+. the first challenge is posed by the parts of the application built as dynamic libraries;
+  effectively most of the application code resides in some shared modules. Since we
+  most definitively want one global link step in the build process, where unresolved
+  symbols will be spotted, and we do want a coherent application core, so we use
+  dynamic linking right at start-up and thus need a way to make the linker locate
+  our further modules and components relative to the executable. Fortunately, the
+  GNU linker supports some extended attributes in the `.dynamic` section of ELF
+  executables, known as the ``new style d-tags'' -- see the extensive description
+  in the next section below
+
+  * any executable may define an extended search path through the `RUNPATH` tag,
+    which is searched to locate dynamic libraries and modules before looking
+    into the standard directories
+    footnote:[the linker also supports the old-style `RPATH` tag, which is deprecated.
+    In the age of multi-arch installation and virtual machines, the practice of baking
+    in the installation location of each library into the `RPATH` is no longer adequate.
+    For the time being, our build system sets both `RPATH` and the new-style, more
+    secure `RUNPATH` to the same value relative to the executable. We will cease
+    using `RPATH` at some point in the future]
+  * and this search patch may contain _relative_ entries, using the special
+    magic token `$ORIGIN` to point at the directory holding the executable
+    +
+    By convention, the Lumiera buildsystem bakes in the search location `$ORIGIN/modules`
+    -- so this subdirectory below the location of the executable is where all the dynamic
+    modules of the application will be placed by default
+
+. after the core application has been loaded and all direct dependencies are resolved,
+  but still before entering `main()`, the class `lumiera::AppState` will be initialised,
+  which in turn holds a member of type `lumiera::BasicSetup`. The latter will figure out
+  the location of the executable footnote:[this is a Linux-only trick, using `/proc/self/exe`]
+  and require a 'setup.ini' file in the same directory. This setup file is mandatory.
+
+. from there, the _search paths_ are retrieved to locate the extended resources of the
+  application. All these search paths are a colon separated list; the entries may
+  optionally also use the token `$ORIGIN` to refer to the location of the main executable.
+  The default version of 'setup.ini' is outfitted with search paths to cover both the
+  situation of a self-contained bundle, but also the situation of a FSH compliant
+  installation.
+
+  Lumiera.modulepath:: this is where the plugin loader looks for additional extensions and
+    plug-ins, most notably the *GUI plugin*
+
+  Lumiera.gui:: defines the name of this GUI plugin, which is loaded and activated from
+    `main()` -- unless Lumiera starts in ``headless'' mode
+
+  Lumiera.configpath:: all the extended application configuration will be picked up from
+    these directories (_not yet implemented as of 2015_)
+
+  Gui.iconpath:: root of the folder structure used to load icons and similar graphical
+    elements for the GTK-UI. Below, several subdirectories for various icon sizes are
+    recognised. Actually, most of our icons are defined as SVG and rendered using
+    libCairo during the build process.
+
+  Gui.resourcepath:: the place where the GTK-UI looks for further resources, most notably...
+
+  Gui.stylesheet:: the name of the CSS-stylesheet for GTK-3, which defines the
+    application specific look, link:{ldoc}/technical/gui/guiTheme.html[skinning and theme].
+
+While the first two steps, the relative locations `$ORIGIN/modules` and `$ORIGIN/setup.ini`
+are hard-wired, the further resolution steps rely on the contents of 'setup.ini' and are
+open for adjustments and reconfiguration, both for the packager or the advanced user.
+Any failure or mismatch during this start-up sequence will be considered fatal and abort
+the application execution.
+
+About RPATH, RUNPATH
+^^^^^^^^^^^^^^^^^^^^
+Management of library dependencies can be a tricky subject, both obscure and contentious.
+There is a natural tension between the application developers (»upstream«), the packagers
+and distributors. Developers have a natural tendency to cut short on ``secondary'' concerns
+in order to keep matters simple. As a developer, you always try to stretch to the limit,
+and this very tendency _limits your ability_ to care for intricate issues faced by just a
+few users, or to care for compatibility or even for extended tutorial documentation. So,
+as an upstream developer, if you know that the stuff you've built works just fine with
+a specific library version -- be it bleeding edge or be it outdated and obsoleted since
+years -- the most pragmatic and adequate answer is to demand from your users just to
+``come along with you'' -- frankly, the active developer has zero inclination to look
+back to past issues already overcome in the course of development, nor has he much interest
+to engage in other fields of ongoing debate not conductive to his own concerns right now.
+So the best solution for the developer would be just to wrap-up his own system and ship
+it as a huge bundle to the users. Every other solution seems inferior, just adding weight,
+efforts and pain without tangible benefit.
+
+Obviously, a distributor can not agree to that stance. To create a coherent and reliable whole
+out of the thousand individual variations the upstream developers breed, is in itself a
+herculean task and would simply be impossible without forcing some degree of standardisation
+onto the developers. In fact, the distributor's task becomes feasible _only_ by offloading some
+efforts for compatibility in small portions onto the shoulders of the individual upstream
+projects. A preference for using a common set of shared libraries is even built into
+the toolchain, and there is a distinct tendency to discourage and even hide away the
+mechanisms otherwise available to deal with a self contained bundle of libraries.
+
+Speaking in terms of history, explicit mechanisms to support packaging and distribution management
+are a rather new phenomenon and tend to conflict with the _glorious »Unix Way«_ of doing things,
+they are cross-cutting, global and invasive. On Unix systems, traditionally there used to be two
+_overriding mechanisms_ for library resolution, one for the user, one for the developer:
+
+- the `LD_LIBRARY_PATH` environment variable allows the _user_ on invocation to manipulate
+  the search location for loading dynamic libraries; it takes precedence over all default
+  configured system wide installation locations and over the contents of the linker cache.
+  In the past, astute users frequently configured an elaborate `LD_LIBRARY_PATH` into their
+  login profile and managed an extended set of private installation locations with custom
+  compiled libraries. Obviously this caused an avalanche of problems at the point where
+  significant functionality of a system started to be just ``provided'' and no single
+  person was able to manage all of the everyday functionality alone on their own.
+  Basically, the advent of graphical desktop systems marked this breaking point.
+
+- the `RPATH` tag, which is the other override mechanism available for _the builder of software_,
+  was made to defeat and overrule the effect of `LD_LIBRARY_PATH`. Search locations baked
+  in as `DT_RPATH` take absolute precedence and can not be altered with any other means besides
+  recompiling the executable (or at least rewriting the `.dynamic` section in the ELF binary).
+  Over time, it became »best practice« to bake in the installation location into each and
+  every binary, which kind-of helped the upstream developers to re-gain control over the
+  libraries actually being used to execute their code. But unfortunately, the distributors
+  were left with zero options to manage large-scale library dependency transitions, beyond
+  patching the build system of each and every package.
+
+Based on this situation, the _new-style d-tags_ were designed to implement a different
+precedence hierarchy. Whenever the new d-tags are enabled,footnote:[the `--enable-new-dtags`
+linker flag is default in many current distributions, and especially with the »gold« linker.]
+the presence of a `DT_RUNPATH` tag in the `.dynamic` section of an ELF binary completely disables
+the effect of any `DT_RPATH`. Moreover, the `LD_LIBRARY_PATH` is automatically disabled, whenever
+a binary is installed as _set-user-ID_ or _set-group-ID_ -- which closes a blatant security loophole.
+
+The use of both `RPATH` and `LD_LIBRARY_PATH` is strongly discouraged. Debian policy for example
+does not explicitly rule out the use of `RPATH` / `RUNPATH`, but it is considered bad practice
+footnote:[a good summary of the situation can be found on
+https://wiki.debian.org/RpathIssue[this Debian page] ] -- with the exception of using a _relative_
+`RUNPATH` with `$ORIGIN` to add non-standard library search locations to libraries that are only
+intended for usage by the given executable or other libraries within the same source package.
+
+In the new system, the precedence order is as follows footnote:[see
+http://linux.die.net/man/8/ld.so[ld.so manpage on die.net] or
+http://manpages.ubuntu.com/manpages/lucid/man8/ld.so.8.html[ld.so manpage ubuntu.com (more recent)] ]
+
+. `LD_LIBRARY_PATH` entries, unless the executable is `setuid`/`setgid`
+. `DT_RUNPATH` from the `.dynamic` section of that ELF binary, library or executable
+  _causing_ the actual library lookup.
+. '/etc/ld.so.cache' entries, unless the `-z nodeflib` linker flaw was given at link time
+. '/lib', '/usr/lib' (and the platform-decorated variants) unless `-z nodeflib` was given at link time
+. otherwise linking fails (``not found'').
+
+All the ``search paths'' mentioned here are colon separated lists of directories.
+
+NOTE: The new-style `DT_RUNPATH` is not extended recursively when resolving transitive dependencies,
+      as was the case with `RPATH`. That is, if we `dlopen()` 'libA.so', which in turn marks 'libB.so'
+      as `DT_NEEDED`, which in turn requires a 'libC.so' -- then the resolution for 'libC.so' will
+      visit _only_ the `RUNPATH` given in 'libB.so', but _not_ the `RUNPATH` given in 'libA.so'
+      (to the contrary, the old `RPATH` used to visit all these locations). +
+      This behaviour was chosen deliberately, in compliance with the ELF spec, as can be seen in this
+      link:https://sourceware.org/bugzilla/show_bug.cgi?id=13945[glibc bug #13945] and the
+      developer comment by
+      link:https://sourceware.org/ml/libc-hacker/2002-11/msg00011.html[Roland McGrath from 2002]
+      mentioned therein.
+
+
+the $ORIGIN token
+^^^^^^^^^^^^^^^^^
+To support flexible `RUNPATH` (and `RPATH`) settings, the GNU `ld.so` (also the SUN and Irix linkers)
+allow the usage of some ``magic'' tokens in the `.dynamic` section of ELF binaries (both libraries
+and executables):
+
+$ORIGIN:: the directory containing the executable or library _actually triggering_
+          the current (innermost) resolution step. Not to be confused with the entity
+          causing the whole linking procedure (an executable to be executed or a `dlopen()` call)
+$PLATFORM:: expands to the architecture/platform tag as provided by the OS kernel
+$LIB:: the system libraries directory, which is /lib for the native architecture
+       on FHS compliant GNU/Linux systems.
+
+Since the new-style `RUNPATH` is not extended for resolving transitive dependencies, each library,
+when relying on relative locations, must provide _its own_ `RUNPATH` to point at the direct
+dependencies at a relative location. This solution is a bit more tricky to set up, but in fact
+more logical and scalable on the long run. Incidentally, it can be quite a challenge to escape
+the `$ORIGIN` properly from any shell script or even build system -- it is crucial that the
+linker itself, not the compiler driver, actually gets to ``see'' the dollar sign, plain,
+without spurious escapes.
+
+
+Transitive binary dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Binary dependencies can be recursive:
+When our code depends on some library, this library might in turn depend on other libraries.
+At runtime, the dynamic linker/loader will detect all these transitive dependencies and try to load
+all the required shared libraries; thus our binary is unable to start, unless all these dependencies
+are already present on the target system. It is the job of the packager to declare all necessary dependencies
+in the software package definition, so users can install them through the package manager of the distribution.
+
+There is a natural tendency to define those installation requirements too wide. For one, it is better
+to be on the safe side, otherwise users won't be able to run the executable at all. And on top of that,
+there is the general tendency towards frameworks, toolkit sets and library collections -- basically
+a setup which is known to work under a wide range of conditions. Using any of these frameworks typically
+means to add a _standard set of dependencies_, which is often way more than actually required to load and
+execute our code. One way to fight this kind of ``distribution dependency bloat'' is to link `--as-needed`.
+In this mode, the linker silently drops any binary dependency not necessary for _this concrete piece
+of code_ to work. This is just awesome, and indeed we set this toggle by default in our build process.
+But there are some issues to be aware of.
+
+Static registration magic
+^^^^^^^^^^^^^^^^^^^^^^^^^
+The linker _actually needs to see the dependency._ Indirect, conceptual dependencies, where the client
+takes initiative and enrols itself actively with the server, will slip through unnoticed. Under some
+additional conditions, especially with self-configuring systems, this omission might even cause a whole
+dependency and subsystem to be disabled.
+
+As a practical example, our C\++ unit-tests are organised into test-suites, where the individual test uses
+a registration mechanism, providing the name of the suite and category tags. This way, the test runner
+may be started to execute just some category of tests. Now, switching tests to dynamic linking causes
+an insidious side effect: The registration mechanism uses static initialisation -- which is the commonly
+used mechanism for this kind of tasks in C++. Place a static variable into an anonymous namespace -- it
+will be initialised by the runtime system _on start-up_, causing any constructor code to run right when
+it is needed to enrol itself with the global (test) service. Unfortunately, static initialisation of
+shared objects is performed at load time of the library -- which never happens unless the linker has
+figured out the dependency and added the library to the required set. But the linker won't be able
+to see this dependency when building the test-runner, since the client, the individual test-case in
+the shared library is the one to call into the test-runner, not the other way round. The registration
+function resides in a common support library, picked as dependency both by the test-runner and the
+individual test case, but this won't help us either. So, in this case (and similar cases), we need
+either to fabricate a ``dummy'' call into the library holding the clients (tests), or we need to
+link the test-runner with `--no-as-needed` -- which is the preferred solution, and in fact is
+what we do.footnote:[see 'tests/SConscript']
+
+Relative dependency location
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Locating binary dependencies relative to the executable (as described above) gets complicated when several
+of _our own dynamically linked modules_ depend on each other transitively. For example, a plug-in might
+depend on `liblumierabackend.so`, which in turn depends on `liblumierasupport.so`. Now, when we link
+`--as-needed`, the linker will add the direct dependency, but omit the transitive dependency on the
+support library. Which means, at runtime, that we'd need to find the support library _when we are
+about to load the backend library_. With the typical, external libraries already installed to the
+system this works, since the linker has built-in ``magic'' knowledge about the standard installation
+locations of system libraries. Not so for our own loadable components -- recall, the idea was to provide
+a self-contained directory tree, which can be relocated in the file system as appropriate, without the
+need to ``install'' the package officially. The GNU dynamic linker can handle this requirement, though,
+if we supply an additional, relative search information _with the library pulling in the transitive
+dependency_. In our example, `liblumierabackend.so` needs an additional search path to locate
+`liblumierasupport.so` _relative_ to the backend lib (and not relative to the executable). For this
+reason, our build system by default supplies such a search hint with every Lumiera lib or dynamic
+module -- assuming that our own shared libraries are installed into a subdirectory `modules` below
+the location of the executable; other dynamic modules (plug-ins) may be placed in sibling directories.
+So, to summarise, our build defines the following `RPATH` and `RUNPATH` specs:
+
+for executables::      `$ORIGIN/modules`
+for libs and modules:: `$ORIGIN/../modules`
+

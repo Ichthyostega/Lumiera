@@ -76,7 +76,7 @@ everyday usage
 ~~~~~~~~~~~~~~
 
 import a package::
-  +reprepro -V -C experimental include squeeze lumiera_0.pre.01-1+squeeze_i386.changes+
+  +reprepro -V -C experimental include squeeze lumiera_0.pre.03-1+jessie_i386.changes+
 +
 this adds the given binary lumiera package, together with all sources and the original
 tarball to the 'squeeze' repository, into the 'experimental' section
@@ -103,7 +103,7 @@ want to create _yet another not so useful Git repository..._)
 [NOTE]
 .some special details to note in our setup
 =======================================================================================================================
-- each block in the 'distributions' file defines a repository for a ``distribution'' (e.g. Squeeze, Lucid, Maverick).
+- each block in the 'distributions' file defines a repository for a ``distribution'' (e.g. Jessie, Trusty, Rafaela).
   Within such a repo, there are sections named 'Components'. 
 - The _override_ files mentioned in the configuration allow to overwrite / replace arbitrary fields in the metadata of
   all packages added to that distribution.

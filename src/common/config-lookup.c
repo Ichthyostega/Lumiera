@@ -1,5 +1,5 @@
 /*
-  config_lookup.c  -  Lookup functions for the config subsystem
+  Config-lookup  -  Lookup functions for the config subsystem
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,14 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
+
+/** @file config-lookup.c
+ ** Implementation of the lookup of configuration keys
+ */
+
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
@@ -29,9 +36,10 @@
 /* we only use one fatal error for now, when allocation in the config system fail, something else is pretty wrong */
 LUMIERA_ERROR_DEFINE (CONFIG_LOOKUP, "config lookup failure");
 
-/*
-  support functions for the splay tree
-*/
+
+
+/* === support functions for the splay tree === */
+
 static int
 cmp_fn (const void* a, const void* b);
 
@@ -42,10 +50,6 @@ static const void*
 key_fn (const PSplaynode node);
 
 
-/**
- * @file
- * Implementation of the lookup of configuration keys
- */
 
 
 LumieraConfigLookup
@@ -173,9 +177,7 @@ lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
 
 
 
-/*
-  Lookup entries
-*/
+/* === Lookup of entries === */
 
 LumieraConfigLookupentry
 lumiera_config_lookupentry_init (LumieraConfigLookupentry self, const char* key)

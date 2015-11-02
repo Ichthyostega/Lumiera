@@ -61,14 +61,14 @@
 
 #include "common/query.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 namespace proc {
 namespace mobject {
 namespace session {
  
-  using std::tr1::function;
+  using std::function;
   using lumiera::Goal;
   
   typedef PlacementIndex& IndexLink(void);
@@ -94,9 +94,9 @@ namespace session {
       function<IndexLink> _getIndex;
       
       
-      virtual bool canHandleQuery(Goal::QueryID const&)  const;
+      virtual bool canHandleQuery(Goal::QueryID const&)  const override;
       
-      virtual operator string()  const { return "PlacementIndex"; }
+      virtual operator string()  const override { return "PlacementIndex"; }
       
       
       Explorer* setupExploration (PlacementIndex::ID startID, ScopeQueryKind direction);

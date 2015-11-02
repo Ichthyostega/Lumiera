@@ -30,13 +30,13 @@
  *
  * List node is a structure, which consists only of a forward pointer. This is
  * much easier and makes code much cleaner, than to have forward pointer as is.
- * In a empty initialized node, this pointer points to the node itself. Note
+ * In a empty initialised node, this pointer points to the node itself. Note
  * that this pointer can never ever become NULL.
  *
  * This lists are used by using one node as 'root' node where it's pointer is
  * the head pointer to the actual list. Care needs to be taken to ensure not to
  * apply any operations meant to be applied to data nodes to the root node.
- * This way is the prefered way to use this lists.
+ * This way is the preferred way to use this lists.
  *
  * Alternatively one can store only a chain of data nodes and use a SList
  * pointer to point to the first item (which might be NULL in case no data is
@@ -52,7 +52,7 @@
  * 1 <= C <= N-1 nodes, and, thus, speed up search.
  *
  * This header can be used in 2 different ways:
- * 1) (prerefered) just including it provides all functions as static inlined
+ * 1) (preferred) just including it provides all functions as static inlined
  *    functions. This is the default
  * 2) #define LLIST_INTERFACE before including this header gives only the declarations
  *    #define LLIST_IMPLEMENTATION before including this header yields in definitions
@@ -60,7 +60,7 @@
  *    recommended.
  * The rationale for using inlined functions is that most functions are very
  * small and likely to be used in performance critical parts. Inlining can give
- * a hughe performance and optimization improvement here. The few functions
+ * a huge performance and optimisation improvement here. The few functions
  * which are slightly larger are expected to be the less common used ones, so
  * inlining them too shouldn't be a problem either.
  */
@@ -184,11 +184,11 @@ typedef slist** SList_ref;
     for ( SList head = slist_head( list ); ! slist_is_empty( list ); head = slist_head( list ) )
 
 /**
- * Initialize a new llist.
- * Must not be applied to a list node which is not empty! Lists need to be initialized
+ * Initialise a new llist.
+ * Must not be applied to a list node which is not empty! Lists need to be initialised
  * before any other operation on them is called.
  *
- * @param list node to be initialized
+ * @param list node to be initialised
  */
 
 SLIST_FUNC (

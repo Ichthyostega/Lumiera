@@ -25,7 +25,7 @@ There are two distinct methods to build:
 - use Git to retrieve all source code and build the »classical way«
 
 
-NOTE: just compiling Lumieara on a _Debian-based_ system (e.g. Mint, Ubuntu...)
+NOTE: just compiling Lumiera on a _Debian-based_ system (e.g. Mint, Ubuntu...)
       is much simpler when using the Debian source package. See the separate
       link:DebianBuilding.html[tutorial page] for this footnote:[besides, there
       is a separate page with general
@@ -46,10 +46,10 @@ authoritative information about the build dependencies is encoded into the
 link:{ldoc}/technical/build/SCons.html[build system]. Thus, when the build
 system aborts, indicating that a never version of some library is required,
 then usually the build system is right...]
-More specifically, you'll need the GNU C/C++ compiler (Version 4.X)
+More specifically, you'll need the GNU C/C\++ compiler with C++14 support (Version >= 4.9)
 in addition to the following tools and libraries:
 
- * link:http://git-scm.com/[Git VCS]
+ * link:http://git-scm.com/[Git] (version management system)
  * link:http://www.scons.org/[SCons build system]
  * link:http://www.boost.org/[Boost libraries]
  * link:http://gmerlin.sourceforge.net/[GAVL library]
@@ -60,7 +60,7 @@ The GUI depends on the following:
 
  * link:http://www.gtkmm.org/en/[gtkmm]
  * link:http://cgit.freedesktop.org/xorg/lib/libXv[libXv]
- * link:https://wiki.gnome.org/LibRsvg[lib R SVG]
+ * link:https://wiki.gnome.org/LibRsvg[lib rSVG]
  * link:https://git.gnome.org/browse/gdl[lib GDL]
  
 
@@ -73,10 +73,12 @@ For Debian based systems, e.g. Mint, Ubuntu..., you can install these packages a
 -------------------------------------------------------------------------------------
 sudo apt-get install build-essential scons git-core valgrind intltool \
 libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
-libgavl-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
+libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
 -------------------------------------------------------------------------------------
 
-Optionally, you may also want to install the `gtk2-engines` package.
+Ubuntu note::
+  some people reported you need to install the `intltool` package from the standard
+  Ubuntu repository (for this reason it is included in the above collection)
 
 
 Build Directory
@@ -121,8 +123,6 @@ git clone git://git.lumiera.org/debian/nobug
 
 This will create a (sub)directory called nobug that contains source code. +
 Compile and install NoBug with the following commands:
-footnote:[this will try to install the NoBug library in `/usr/lib`,
-so you will require root privileges to do so!]
 ------------------------------------------------------------
 cd nobug
 autoreconf -i
@@ -133,27 +133,21 @@ make
 sudo make install
 ------------------------------------------------------------
 
-GDL: building and installing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+GDL-mm: building and installing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The *GNOME Docking library* is sometimes available through your package manager,
-but we provide a suitable custom package as well; the following shows how to
-build the latter
+The *GNOME Docking library* is available through your your package manager,
+but we additionally need the C++ bindings. Since these haven't made it into the
+standard repositories yet, we provide a suitable custom package here;
+the following shows how to build the latter
 
 Version limitation::
-  we contributed some improvements to GDL, which are only available in upstream
-  versions since 2.27. Moreover, the GDL development switched meanwhile to GNOME-3
-  and GTK-3. Since we haven't upgraded GTK yet, we need to stick to a version prior
-  to this switch. If your distribution provides a 2.27 =< GDL =< 2.30, you're fine.
-  Otherwise we've created a special package, which doesn't interfere
-  with an existing (older) installation of GDL.
+  we rely on GTK-3 and thus need a compatible GDL-3.
 
-Ubuntu note::
-  you need to install the `intltool` package from the standard Ubuntu repository
 
 ------------------------------------------------------------
-git clone git://git.lumiera.org/debian/gdl
-cd gdl
+git clone git://git.lumiera.org/debian/gdlmm
+cd gdlmm
 ./configure
 make
 sudo make install
@@ -185,7 +179,7 @@ and you should get a list of the libraries, part of which should look like this:
         libgdl-lum.so.0 -> /usr/local/lib/libgdl-lum.so.0.0.0
 ------------------------------------------------------------
 
-or similar. The same applies to 'libgdl-lum.so.0' if you needed to build it
+or similar. The same applies to other custom libraries you needed to build
 explicitly for your system. If any of these libraries are not listed, you'll
 have to see why before you can continue.
 
@@ -196,7 +190,7 @@ Building Lumiera
 Next, after having built and installed the external libraries, go into the
 _workspace directory_ and retrieve the Lumiera source code. Thereafter, build
 Lumiera by invoking the *scons* build
-footnote:[more options for building with scons can be found via:`scons -h` ]
+footnote:[more options for building with scons can be found via: `scons -h` ]
 -----------------
 git clone git://git.lumiera.org/LUMIERA
 cd LUMIERA
@@ -213,7 +207,7 @@ as a whole. Just invoke the +target/lumiera+ executable. The current
 working directory is not particularly relevant.
 
 After the build has finished successfully, you should be able to start Lumiera.
-Currently, this will bring up the GUI, without any further functionality
+Currently, this will bring up the GUI, _without any further functionality_ (!)
 
 You should see something like this:
 
@@ -222,7 +216,7 @@ image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 
 What's next?
 ------------
-If you're a coder, maybe you've found something to improve...? +
+If you're a coder, maybe you have found something to improve...? +
 Contributing to Lumiera is easy, thanks to *Git*
 
 -> Tutorial link:contributing.html[Contributing to Lumiera coding]

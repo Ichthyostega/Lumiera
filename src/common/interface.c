@@ -1,5 +1,5 @@
 /*
-  interface.c  -  Lumiera interface api
+  Interface  -  Lumiera interface handling
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,18 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
+
+/** @file interface.c
+ ** Implementation: handling of interfaces (extension points).
+ ** From a programmers perspective interfaces only need to be opened when needed and closed
+ ** when finished with them. There is no difference if the interface is internally provided
+ ** by the core or provided by an external plugin.
+ ** Interfaces can be opened multiple times and cross reference each other.
+ */
+
 
 #include "include/logging.h"
 
@@ -31,15 +42,9 @@
 
 #include <nobug.h>
 
-/**
- * @file
- * From a programmers perspective interfaces only need to be opened when needed and closed
- * when finished with them. There is no difference if the interface is internally provided
- * by the core or provided by an external plugin.
- * Interfaces can be opened multiple times and cross reference each other.
- */
 
-/* the mother of all interfaces */
+
+/** the mother of all interfaces */
 LumieraInterface lumiera_interface_interface;
 
 static LumieraInterfacenode
@@ -85,10 +90,10 @@ lumiera_interface_open (const char* interface, unsigned version, size_t minminor
 static void
 push_dependency (LumieraInterfacenode parent, LumieraInterfacenode child)
 {
-  /* push a dependency on the dependency array, allcoate or resize it on demand */
+  /* push a dependency on the dependency array, allocate or resize it on demand */
   TRACE (interface_dbg, "%s %s", parent->interface->name, child->interface->name);
 
-  /* no dependencies recorded yet, alloc a first block for 4 pointers */
+  /* no dependencies recorded yet, allocate a first block for 4 pointers */
   if (!parent->deps_size)
     parent->deps = lumiera_calloc (parent->deps_size = 4, sizeof (LumieraInterfacenode));
 
@@ -161,7 +166,7 @@ lumiera_interface_open_interfacenode (LumieraInterfacenode self)
   static LumieraInterfacenode stack = NULL;
 
   /*
-    Ok, this got little more complicated than it should be,
+    OK, this got little more complicated than it should be,
     but finally it handles any kind of cross dependencies between interfaces gracefully
    */
 
@@ -306,7 +311,7 @@ lumiera_interfacenode_close (LumieraInterfacenode self)
 }
 
 /**
- * Definitinon of 'the mother of all interfaces'
+ * Definition of 'the mother of all interfaces'
  * since this interface is singleton and required for any component to open any other
  * interface this should get a very stable interface and likely never change.
  */
@@ -316,11 +321,11 @@ LUMIERA_EXPORT(
                                          NULL,
                                          NULL,
                                          NULL,
-                                         LUMIERA_INTERFACE_MAP (open, "\322\165\227\133\252\355\125\104\157\167\253\267\117\273\174\022",
+                                         LUMIERA_INTERFACE_MAP (open,
                                                                 lumiera_interface_open),
-                                         LUMIERA_INTERFACE_MAP (close, "\264\037\253\243\312\273\024\104\030\007\076\006\154\071\340\102",
+                                         LUMIERA_INTERFACE_MAP (close,
                                                                 lumiera_interface_close),
-                                         LUMIERA_INTERFACE_MAP (version, "\004\272\070\214\006\235\047\212\007\165\115\221\146\274\217\324",
+                                         LUMIERA_INTERFACE_MAP (version,
                                                                 lumiera_interface_version),
                                          )
                )

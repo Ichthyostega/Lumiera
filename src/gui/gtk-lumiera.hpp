@@ -55,52 +55,53 @@
 #include "gui/window-manager.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <tr1/memory>
+#include <memory>
 #include <vector>
 
 
 namespace gui {
-
-using std::tr1::shared_ptr;
-
-
-
-/* ====== The Application Class ====== */
-
-/**
- *  The main application class.
- */
-class GtkLumiera
-  : boost::noncopyable
-  {
-    /** Central application window manager instance */
-    WindowManager windowManagerInstance_;
-    
-    
-  public:
-    /** access the the global application object */
-    static GtkLumiera& application();
-    
-    
-    
-    void main(int argc, char *argv[]);
-    
-    WindowManager& windowManager();
-    
-    
-    /** the name of the application */
-    static cuString getAppTitle();
-    
-    static cuString getAppVersion();
-    
-    static cuString getCopyright();
-    
-    static cuString getLumieraWebsite();
-    
-    /** alphabetical list of the application's authors */
-    static const std::vector<uString> getLumieraAuthors();
-    
-  };
-
+  
+  using std::shared_ptr;
+  
+  
+  
+  /* ====== The Application Class ====== */
+  
+  /**
+   *  Top level entry point: The Lumiera GTK UI.
+   */
+  class GtkLumiera
+    : boost::noncopyable
+    {
+      /** Central application window manager instance */
+      WindowManager windowManagerInstance_;
+      
+      
+    public:
+      /** access the the global application object */
+      static GtkLumiera& application();
+      
+      
+      
+      /** start up the GUI and run the event thread */
+      void main(int argc, char *argv[]);
+      
+      WindowManager& windowManager();
+      
+      
+      /** the name of the application */
+      static cuString getAppTitle();
+      
+      static cuString getAppVersion();
+      
+      static cuString getCopyright();
+      
+      static cuString getLumieraWebsite();
+      
+      /** alphabetical list of the application's authors */
+      static const std::vector<uString> getLumieraAuthors();
+      
+    };
+  
 }// namespace gui
 #endif

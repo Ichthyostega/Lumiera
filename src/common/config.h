@@ -1,5 +1,5 @@
 /*
-  config.h  -  Lumiera configuration system
+  CONFIG.h  -  Lumiera configuration system
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,31 +17,36 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_CONFIG_H
-#define LUMIERA_CONFIG_H
 
-//TODO: Support library includes//
+/** @file config.h
+ ** Interface for a lumiera configuration system (draft).
+ ** This configuration uses ini-style configuration files and supports some
+ ** simple types. A mechanism for overlay / cascading was planned. After some
+ ** debate it turned out that we had no clear vision regarding the scope of
+ ** that effort: should this system also manage (layered) defaults? should
+ ** it also be able to save user preferences? Anyway, development in that
+ ** area stalled and never reached the level of just loading and parsing
+ ** a simple file -- yet this was not considered a roadblock and we agreed
+ ** to revisit the topic when we've gained a better understanding of
+ ** session storage and management of default values and user preferences.
+ ** 
+ ** @see lumiera::BasicSetup simple start-up configuration
+ ** @see http://lumiera.org/documentation/technical/backend/ConfigLoader.html ConfigLoader draft from 2008
+ */
+
+#ifndef COMMON_CONFIG_H
+#define COMMON_CONFIG_H
+
 #include "lib/error.h"
 #include "lib/mutex.h"
+#include "common/config-lookup.h"
+#include "common/configitem.h"
 
-//TODO: Forward declarations//
-struct lumiera_config_struct;
-
-
-/* master config subsystem debug flag */
-//NOBUG_DECLARE_FLAG (config_all);
-/* config subsystem internals */
-//NOBUG_DECLARE_FLAG (configsys);
-/* high level typed interface operations */
-//NOBUG_DECLARE_FLAG (config_typed);
-/* file operations */
-//NOBUG_DECLARE_FLAG (config_file);
-/* single config items */
-//NOBUG_DECLARE_FLAG (config_item);
-/* lookup config keys */
-//NOBUG_DECLARE_FLAG (config_lookup);
+#include <nobug.h>
+#include <stdio.h>
 
 
 LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX);
@@ -49,22 +54,10 @@ LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX_KEY);
 LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX_VALUE);
 LUMIERA_ERROR_DECLARE (CONFIG_NO_ENTRY);
 
-
-//TODO: Lumiera header includes//
-#include "common/config-lookup.h"
-#include "common/configitem.h"
-
-//TODO: System includes//
-#include <nobug.h>
-#include <stdio.h>
-
-/**
- * @file
- * TODO documentation, http://www.pipapo.org/pipawiki/Lumiera/ConfigLoader
- */
-
 #define LUMIERA_CONFIG_KEY_CHARS "abcdefghijklmnopqrstuvwxyz0123456789_."
 #define LUMIERA_CONFIG_ENV_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789__"
+
+
 
 struct lumiera_config_struct
 {
@@ -198,12 +191,12 @@ lumiera_config_setdefault (const char* line);
 
 //  * {{{int lumiera_config_TYPE_get(const char* key, TYPE* value, const char* default) }}}
 //    High level config interface for different types.
-//    if default is given (!NULL) then value is set to default in case key was not found or any other error occured.
+//    if default is given (!NULL) then value is set to default in case key was not found or any other error occurred.
 //    error code is still set and -1 (fail) is returned in case of an error, but it might be cleared with no ill effects.
 //    NOTE: errors are persistent in our error handler, they must still be cleared, even when ignored.
 //          if default is given then 'KEY_NOT_FOUND' is not a error here, if default is NULL then it is
 //    NOTE2: default values are given as strings, the config loader remembers a given default value and checks if it got changed
-//           when it is _set(). Thus a default value can be supressed when set/written
+//           when it is _set(). Thus a default value can be suppressed when set/written
 /**
  *
  */
@@ -260,7 +253,7 @@ lumiera_config_wordlist_replace (const char* key, const char* value, const char*
 
 
 /**
- * Add a word to the end of a wordlist if it doesnt exist already
+ * Add a word to the end of a wordlist if it doesn't exist already
  * @param key key under which this wordlist is stored
  * @param value new word to add
  * @param delims a string literal listing all characters which are treated as delimiters
@@ -298,7 +291,7 @@ lumiera_config_reset (const char* key);
 int
 lumiera_config_info (const char* key, const char** filename, unsigned* line);
 
-#endif
+#endif /*COMMON_CONFIG_H*/
 /*
 // Local Variables:
 // mode: C

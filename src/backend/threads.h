@@ -1,5 +1,5 @@
 /*
-  threads.h  -  Manage threads
+  THREADS.h  -  Helper for managing threads
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,36 +17,23 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_THREADS_H
-#define LUMIERA_THREADS_H
 
-//TODO: Support library includes//
+#ifndef BACKEND_THREADS_H
+#define BACKEND_THREADS_H
+
 #include "lib/condition.h"
 
-
-//TODO: Forward declarations//
-
-
-//TODO: Lumiera header includes//
-
-
-//TODO: System includes//
 #include <nobug.h>
 
 
-/**
- * @file threads.h
- *
- */
-
-//TODO: declarations go here//
 
 typedef struct lumiera_thread_struct lumiera_thread;
 typedef lumiera_thread* LumieraThread;
 
-// this is used for an enum string trick
+/** Helper macro used for an enum string trick */
 #define LUMIERA_THREAD_CLASSES                  \
   /** mostly idle, low latency **/              \
   LUMIERA_THREAD_CLASS(INTERACTIVE)             \
@@ -59,8 +46,10 @@ typedef lumiera_thread* LumieraThread;
   /** Something to do when there is really nothing else to do **/       \
   LUMIERA_THREAD_CLASS(IDLE)
 
-// enum string trick: expands as an enum of thread classes
+/** Macro for enum string trick: expands as an enum of thread classes */
 #define LUMIERA_THREAD_CLASS(name) LUMIERA_THREADCLASS_##name,
+
+
 
 /**
  * Thread classes.
@@ -79,8 +68,8 @@ enum lumiera_thread_class
      * flag to let the decision to run the function in a thread open to the backend.
      * depending on load it might decide to run it sequentially.
      * This has some constraints:
-     *  The Thread must be very careful with locking, better don't.
-     *  TODO explain syncronization issues
+     * The Thread must be very careful with locking, better don't.
+     * @todo explain synchronisation issues
      **/
     LUMIERA_THREAD_OR_NOT = 1<<8,
 
@@ -94,6 +83,7 @@ enum lumiera_thread_class
 
 // defined in threads.c
 extern const char* lumiera_threadclass_names[];
+
 
 // there is some confusion between the meaning of this
 // on one hand it could be used to tell the current state of the thread
@@ -128,6 +118,8 @@ extern const char* lumiera_threadstate_names[];
 
 #include "threadpool.h"
 
+
+
 /**
  * The actual thread data
  */
@@ -136,6 +128,7 @@ struct lumiera_thread_struct
   llist node; // this should be first for easy casting
 
   pthread_t id;
+
   // TODO: maybe this condition variable should be renamed when we have a better understanding of how it will be used
   lumiera_condition signal; // control signal, state change signal
 
@@ -154,6 +147,7 @@ struct lumiera_thread_struct
   void * arguments;
 };
 
+
 /**
  * Create a thread structure.
  */
@@ -164,7 +158,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
                     pthread_attr_t* attrs);
 
 /**
- * Destroy and de-initialize a thread structure.
+ * Destroy and de-initialise a thread structure.
  * Memory is not freed by this function.
  */
 LumieraThread
@@ -179,12 +173,12 @@ lumiera_thread_delete (LumieraThread self);
 
 /**
  * Start a thread.
- * Threads are implemented as procedures which take a void* and dont return anything.
+ * Threads are implemented as procedures which take a void* and don't return anything.
  * When a thread wants to pass something back to the application it should use the void* it got for
  * constructing the return.
  *  * Threads must complete (return from their thread function)
  *  * They must not call any exit() function.
- *  * Threads are not cancelable
+ *  * Threads can not be cancelled
  *  * Threads shall not handle signals (all signals will be disabled for them) unless explicitly acknowledged
  *
  * @param kind class of the thread to start
@@ -209,66 +203,62 @@ lumiera_thread_run (int kind,
 LumieraThread
 lumiera_thread_self (void);
 
+
+
 /**
- * Heartbeat and Deadlines
+ * Set a thread deadline.
+ * A thread must finish before its deadline is hit. Otherwise it counts as stalled
+ * which is a fatal error which might pull the application down.
+ *
+ * \par Heartbeat and Deadlines.
  *
  * Any thread can have an optional 'deadline' which must never be hit.
  * This deadlines are lazily checked and if hit this is a fatal error which triggers
  * an emergency shutdown. Thus threads are obliged to set and extend their deadlines
  * accordingly.
- *
- */
-
-/**
- * Set a threads deadline
- * A thread must finish before its deadline is hit. Otherwise it counts as stalled
- * which is a fatal error which might pull the application down.
  */
 LumieraThread
 lumiera_thread_deadline_set (struct timespec deadline);
 
 
 /**
- * Extend a threads deadline
- * sets the deadline to now+ms in future. This can be used to implement a heartbeat.
+ * Extend the deadline of a thread
+ * sets the deadline to \c NOW+ms in future. This can be used to implement a heartbeat.
  */
 LumieraThread
 lumiera_thread_deadline_extend (unsigned ms);
 
 
 /**
- * Clear a threads deadline
+ * Clear a thread's deadline
  * Threads without deadline will not be checked against deadlocks (this is the default)
  */
 LumieraThread
 lumiera_thread_deadline_clear (void);
 
 
-/**
- * Thread syncronization
- * The syncronization primitives act as barrier over 2 threads, any thread reaching a syncronization
- * point first is blocked until the other one reaches it too.
- */
-
 
 /**
- * Syncronize with another threads state
- *
- * this blocks until/unless the other thread reaches a syncronization point
+ * Synchronise with another threads state.
+ * This blocks until/unless the other thread reaches a synchronisation point.
+ * 
+ * \par Thread synchronisation
+ * The synchronisation primitives act as barrier over 2 threads, any thread reaching
+ * a synchronisation point first is blocked until the other one reaches it too.
  */
 LumieraThread
 lumiera_thread_sync_other (LumieraThread other);
 
 /**
- * Syncronize current thread
+ * Synchronise current thread
  *
- * this blocks until/unless the other thread reaches a syncronization point
+ * this blocks until/unless the other thread reaches a synchronisation point
  * @return on success pointer to self (opaque), or NULL on error
  */
 LumieraThread
 lumiera_thread_sync (void);
 
-// TODO implement timedsync, this is bit tricky because after a timeout, syncronization points are desynced
+// TODO implement timedsync, this is bit tricky because after a timeout, synchronisation points are desynched
 // we possibly need some way to reset/resync this
 //LumieraThread
 //lumiera_thread_timedsync (struct timespec timeout);
@@ -284,7 +274,7 @@ lumiera_thread_sync (void);
 lumiera_err
 lumiera_thread_join (LumieraThread thread);
 
-#endif
+#endif /*BACKEND_THREADS_H*/
 /*
 // Local Variables:
 // mode: C

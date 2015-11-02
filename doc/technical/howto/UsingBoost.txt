@@ -1,7 +1,7 @@
 Using Boost Libraries
 =====================
 
-//Menu: label using boost
+//Menu: label using Boost
 
 _some arbitrary hints and notes regarding the use of link::http://www.boost.org[Boost Libraries] in Lumiera_
 
@@ -12,11 +12,19 @@ those features, as we're using them heavily throughout our code base. As it stan
 are quite lacking and outdated, compared with today's programming standards. To fill some of these gaps
 and to compensate for compiler deficiencies, some members of the C\++ committee and generally very
 knowledgeable programmers created a set of C\++ libraries generally known as *Boost*. Some of these
-especially worthy additions are also proposed for inclusion into the C++ standard library.
+especially worthy additions were proposed and subsequently included into the new C++11 standard.
+
+C++11 Features
+~~~~~~~~~~~~~~
+In Lumiera, we heavily rely on some features proposed and matured in the Boost libraries,
+and meanwhile included in the current language standard. These features are thus now provided
+through the standard library accompanying the compiler. For sake of completeness, we'll mention
+them here. In the past _we used the Boost-Implementation_ of these facilities, but we don't need
+Boost for this purpose anymore.
 
 .memory
-The `<boost/memory.hpp>` rsp. `<tr1/memory>` libraries define a family of smart-pointers to serve
-several needs of basic memory management. In almost all cases, they're superior to using `std::auto_ptr`. +
+The `<memory>` libraries (formerly `<boost/memory.hpp>` rsp. `<tr1/memory>`) define a family of smart-pointers
+to serve several needs of basic memory management. In almost all cases, they're superior to using `std::auto_ptr`. +
 When carefully combining these nifty templates with the RAII pattern, most concerns for memory
 management, clean-up and error handling simply go away. (but please understand how to avoid
 circular references and care for the implications of parallelism though)
@@ -30,11 +38,22 @@ concepts might be mind bending at start, but it's certainly worth the effort (in
 productivity)
 
 .hashtables and hash functions
-The `unordered_*` collection types amend a painful omission in the STL. The `functional_hash` library
-supplements hash function for the primitive types and a lot of standard constructs using the STL; moreover
-there is an extension point for using custom types in those hashtables 
+The `unordered_*` collection types amend a painful omission in the STL. To work properly, these collection
+implementations need a way to calculate a _hash value_ for every key (rsp. entry in case of the Set-container).
+The hash function to use can be defined as additional parameter; there are also some conventions to pick a
+hash function automatically. Currently (2014), we have two options for the hash function implementation:
+The `std::hash` or the `boost::hash` implementation.
 (-> read more link:HashFunctions.html[here...])
 
+.STATIC_ASSERT
+a helper to check and enforce some conditions regarding types _at compile time_.
+In case of assertion failure a compilation error is provoked, which should at least give a clue
+towards the real problem guarded by the static assertion. It is good practice to place an extended
+source code comment near the static assertion statement to help solving the actual issue.
+
+
+Relevant Bosst extensions
+~~~~~~~~~~~~~~~~~~~~~~~~~
 .noncopyable
 Inheriting from `boost::noncoypable` inhibits any copy, assignment and copy construction. It's a highly
 recommended practice _by default to use that for every new class you create_ -- unless you know for sure
@@ -53,12 +72,6 @@ shall pick a specific class or function template specialisation. Basically this 
 code generation, based on some type traits or other (metaprogramming) predicates you provide. Again,
 since C++ is lacking introspection features, we're frequently forced to resort to metaprogramming
 techniques, i.e to influence the way the compiler translates our code from within that very code.
-
-.STATIC_ASSERT
-a helper to check and enforce some conditions regarding types _at compile time_.
-Because there is no support for this feature by the compiler, in case of assertion failure
-a compilation error is provoked, trying to give at least a clue to the real problem by
-creative use of variable names printed in the compiler's error message.
 
 .metaprogramming library
 A very elaborate, and sometimes mind-bending library and framework. While heavily used within

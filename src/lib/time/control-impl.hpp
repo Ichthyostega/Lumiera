@@ -57,7 +57,7 @@
 #include "lib/time/mutation.hpp"
 #include "lib/time/timevalue.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <vector>
 
 
@@ -65,7 +65,7 @@ namespace lib {
 namespace time {
 namespace mutation {
   
-  using std::tr1::function;
+  using std::function;
   
   
   
@@ -145,7 +145,7 @@ namespace mutation {
       void
       attach (SIG const& toNotify)
         {
-          ChangeSignal newListener (std::tr1::ref(toNotify));
+          ChangeSignal newListener (std::ref(toNotify));
           listeners_.push_back (newListener);
         }
       

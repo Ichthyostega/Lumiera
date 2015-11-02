@@ -1,5 +1,5 @@
 /*
-  rectangle.hpp  -  Declares utility functions for GDK rects
+  RECTANGLE.hpp  -  utility functions for GDK rectangles
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,36 +19,23 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
-/** @file rectangle.hpp
- ** This file contains the declaration of the utility functions for
- ** GDK rects
- */
 
-#ifndef RECTANGLE_HPP
-#define RECTANGLE_HPP
+
+#ifndef GUI_UTIL_RECTANGLE_H
+#define GUI_UTIL_RECTANGLE_H
 
 #include "gui/gtk-lumiera.hpp"
 
 namespace gui {
 namespace util {
-
-/**
- * Tests whether point is within the bounding box of a rectangle.
- * @param point The point to test.
- * @param rect The rect to test.
- * @return Returns true if the point is within the rectangle, false if
- * not.
- */
-bool pt_in_rect(const Gdk::Point &point, const Gdk::Rectangle &rect);
-
-/**
- * Tests whether two rectangles overlap.
- * @param a The first rectangle.
- * @param b The second rectangle.
- */
-bool rects_overlap(const Gdk::Rectangle &a, const Gdk::Rectangle &b);
-
-}   // util
-}   // gui
-
+  
+  /** determine whether point is within the bounding box of a rectangle */
+  bool pt_in_rect(Gdk::Point const& point, Gdk::Rectangle const& rect);
+  
+  
+  /** determine whether two rectangles overlap */
+  bool rects_overlap(Gdk::Rectangle const& a, Gdk::Rectangle const& b);
+  
+  
+}}// namespace gui::util
 #endif // RECTANGLE_HPP

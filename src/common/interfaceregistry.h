@@ -1,5 +1,5 @@
 /*
-  interfaceregistry.h  -  Lumiera interface registry
+  INTERFACEREGISTRY.h  -  Lumiera interface registry
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,17 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
+
+
+/** @file interfaceregistry.h
+ ** Global registry for interfaces (extension points).
+ ** Interface instances are published and activated by registering them
+ ** into a global registry, which is defined here. This instances are identified
+ ** by their name and major version.
+ */
+
 #ifndef LUMIERA_INTERFACEREGISTRY_H
 #define LUMIERA_INTERFACEREGISTRY_H
 
@@ -30,17 +40,6 @@
 
 #include <nobug.h>
 
-
-/**
- * @file
- * Interface instances are published and activated by registering them
- * into a global registry, which is defined here. This instances are identified
- * by their name and major version.
- */
-
-//NOBUG_DECLARE_FLAG (interface_all);
-//NOBUG_DECLARE_FLAG (interfaceregistry);
-//NOBUG_DECLARE_FLAG (interface);
 
 extern PSplay lumiera_interfaceregistry;
 extern lumiera_recmutex lumiera_interface_mutex;
@@ -70,15 +69,17 @@ struct lumiera_interfacenode_struct
 
   /** temporary used to stack interfaces when recursively opening/closing them */
   LumieraInterfacenode lnk;
-  /** allocated size of the following deps table */
+
+  /** allocated size of the following dependency table */
   size_t deps_size;
-  /** NULL terminated table of all dependencies (interfaces opened on initialization) */
+
+  /** NULL terminated table of all dependencies (interfaces opened on initialisation) */
   LumieraInterfacenode* deps;
 };
 
 
 /**
- * Initialize the interface registry
+ * Initialise the interface registry
  */
 void
 lumiera_interfaceregistry_init (void);

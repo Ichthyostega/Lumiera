@@ -37,16 +37,24 @@
 #ifndef LIB_FORMAT_UTIL_H
 #define LIB_FORMAT_UTIL_H
 
+#include "lib/hash-standard.hpp"
 #include "lib/meta/trait.hpp"
+#include "lib/itertools.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <string>
+#include <sstream>
 #include <cstring>
 #include <typeinfo>
 #include <boost/lexical_cast.hpp>
 #include <boost/utility/enable_if.hpp>
 
+
+namespace lib {
+namespace test{ // see test-helper.cpp
+    std::string demangleCxx (lib::Literal rawName);
+}}
 
 
 namespace util {
@@ -54,6 +62,7 @@ namespace util {
   using boost::enable_if;
   using lib::meta::can_ToString;
   using lib::meta::can_lexical2string;
+  using lib::meta::can_IterForEach;
   using lib::Symbol;
   using util::isnil;
   using std::string;
@@ -107,7 +116,7 @@ namespace util {
   inline string
   tyStr (const TY* =0)
   {
-    return string("«")+typeid(TY).name()+"»";
+    return "«"+ lib::test::demangleCxx (typeid(TY).name())+"»";
   }
   
   template<typename TY>
@@ -138,5 +147,67 @@ namespace util {
                      : tyStr(val);
   }
   
+  namespace { // helper to build range iterator on demand
+    template<class CON, typename TOGGLE = void>
+    struct _RangeIter
+      {
+        using StlIter = typename CON::const_iterator;
+        
+        lib::RangeIter<StlIter> iter;
+        
+        _RangeIter(CON const& collection)
+          : iter(begin(collection), end(collection))
+          { }
+      };
+    
+    template<class IT>
+    struct _RangeIter<IT,   typename enable_if< can_IterForEach<IT> >::type>
+      {
+        IT iter;
+        
+        _RangeIter(IT&& srcIter)
+          : iter(std::forward<IT>(srcIter))
+          { }
+        
+      };
+  }
+  
+  /**
+   * enumerate a collection's contents, separated by delimiter.
+   * @param coll something that is standard-iterable
+   * @return all contents converted to string and joined into
+   *         a single string, with separators interspersed.
+   * @remarks based on the \c boost::join library function,
+   *          which in turn is based on
+   *          additionally, we use our
+   *          \link #str failsafe string conversion \endlink
+   *          which in turn invokes custom string conversion,
+   *          or lexical_cast as appropriate.
+   */
+  template<class CON>
+  inline string
+  join (CON&& coll, string const& delim =", ")
+  {
+    using Coll = typename lib::meta::Strip<CON>::Type;
+    using Val =  typename Coll::value_type;
+    
+    std::function<string(Val const&)> toString = [] (Val const& val) { return str(val); };
+    
+    _RangeIter<Coll> range(std::forward<Coll>(coll));
+    auto strings = lib::transformIterator(range.iter, toString);
+    
+    if (!strings) return "";
+    
+    std::ostringstream buffer;
+    for (string const& elm : strings)
+        buffer << elm << delim;
+    
+    // chop off last delimiter
+    size_t len = buffer.str().length();
+    ASSERT (len > delim.length());
+    return buffer.str().substr(0, len - delim.length());
+  }
+  
+  
 } // namespace util
-#endif
+#endif /*LIB_FORMAT_UTIL_H*/

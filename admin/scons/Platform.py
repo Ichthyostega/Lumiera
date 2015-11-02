@@ -56,6 +56,10 @@ def configure(env):
         conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
         conf.env.Append(CCFLAGS = ' -pthread')
     
+    if not conf.CheckLib(symbol='clock_gettime', library='rt'):
+        problems.append('We expect the POSIX realtime extensions to be available through librt. ' +
+                        'Unable to use clock_gettime()')
+    
     if conf.CheckCHeader('execinfo.h'):
         conf.env.Append(CPPFLAGS = ' -DHAVE_EXECINFO_H')
     
@@ -69,12 +73,19 @@ def configure(env):
     else:
         conf.env.mergeConf('nobugmt')
     
-    if not conf.CheckCXXHeader('tr1/memory'):
-        problems.append('We rely on the std::tr1 standard C++ extension for shared_ptr.')
+    if not conf.CheckCXXHeader('memory'):
+        problems.append('We rely on the C++11 smart-pointers.')
+    
+    if not conf.CheckCXXHeader('functional'):
+        problems.append('We rely on the C++11 functor objects.')
     
     if not conf.CheckCXXHeader('boost/config.hpp'):
         problems.append('We need the C++ boost-libraries.')
     else:
+        if not conf.CheckCXXHeader('boost/noncopyable.hpp'):
+            problems.append('We need boost::noncopyable')
+        if not conf.CheckCXXHeader('boost/lexical_cast.hpp'):
+            problems.append('We need boost::lexical_cast')
         if not conf.CheckCXXHeader('boost/scoped_ptr.hpp'):
             problems.append('We need boost::scoped_ptr (scoped_ptr.hpp).')
         if not conf.CheckCXXHeader('boost/format.hpp'):
@@ -89,12 +100,6 @@ def configure(env):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
     
-    if conf.CheckLib(symbol='clock_gettime'):
-        print 'Using function clock_gettime() as defined in the C-lib...'
-    else:
-        if not conf.CheckLib(symbol='clock_gettime', library='rt'):
-            problems.append('No library known to provide the clock_gettime() function.')
-    
     if not conf.CheckPkgConfig('gavl', 1.0):
         problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
     else:
@@ -103,7 +108,7 @@ def configure(env):
     if not conf.CheckPkgConfig('alsa', '1.0.23'):
         problems.append('Support for ALSA sound output is required')
     
-    if not conf.CheckPkgConfig('gtkmm-2.4', 2.8):
+    if not conf.CheckPkgConfig('gtkmm-3.0', 3.0):
         problems.append('Unable to configure GTK--')
         
     if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
@@ -115,12 +120,17 @@ def configure(env):
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
         problems.append('Unable to configure Cairo--')
     
-    verGDL = '2.27.1'
-    if not conf.CheckPkgConfig('gdl-1.0', verGDL, alias='gdl'):
-        print 'No sufficiently recent (>=%s) version of GDL found. Maybe use custom package gdl-lum?' % verGDL
-        if not conf.CheckPkgConfig('gdl-lum', verGDL, alias='gdl'):
-            problems.append('GNOME Docking Library not found. We either need a sufficiently recent GDL '
-                            'version (>=%s), or the custom package "gdl-lum" from Lumiera.org.' % verGDL)
+    verGDL   = '3.12'
+    verGDLmm = '3.7.3'
+    urlGDLmm = 'http://ftp.gnome.org/pub/GNOME/sources/gdlmm/'
+    urlGDLmmDEB = 'http://lumiera.org/debian/'
+    if not conf.CheckPkgConfig('gdl-3.0', verGDL):
+        problems.append('GNOME Docking Library not found. We need at least GDL %s '
+                        'and suitable C++ ("mm")-bindings (GDLmm >=%s)' % (verGDL, verGDLmm))
+    if not conf.CheckPkgConfig('gdlmm-3.0', verGDLmm, alias='gdl'):
+        problems.append('We need the C++ bindings for GDL by Fabien Parent: GDLmm >=%s '
+                        '(either from GNOME %s or use the debian package from %s)' % 
+                        (verGDLmm, urlGDLmm, urlGDLmmDEB))
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
         problems.append('Need rsvg Library for rendering icons.')
@@ -129,6 +139,7 @@ def configure(env):
         problems.append('Xlib.h and Xutil.h required. Please install libx11-dev.')
     
     if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
+    if not conf.CheckPkgConfig('x11') : problems.append('Need X-lib...')   # for the xvdisplayer widget
     if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')
     
     

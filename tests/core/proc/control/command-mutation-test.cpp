@@ -29,12 +29,12 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/tuple.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 #include <cstdlib>
 #include <string>
 
-using std::tr1::function;
+using std::function;
 using std::string;
 using std::rand;
 using std::cout;

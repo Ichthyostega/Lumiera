@@ -106,6 +106,13 @@ namespace session {
         return querySpec.usesPredicate ("default");
       }
       
+      template<typename WRA>
+      inline bool
+      exists(WRA const& solution)
+      {
+        return bool(solution);
+      }
+      
     } // details (end)
     
     
@@ -168,7 +175,7 @@ namespace session {
       {
         typedef typename WrapReturn<TY>::Wrapper Ret;
         
-      public:
+        
         /** (dummy) implementation of the QueryHandler interface */
         virtual bool 
         resolve (Ret& solution, Query<TY> const& q)
@@ -180,7 +187,7 @@ namespace session {
                 if (! solution
                    ||(solution &&  solution == candidate)      // simulates a real unification
                    )
-                  return solution = candidate;
+                  return exists (solution = candidate);
               }
             return try_special_case(solution, q);
           }
@@ -190,18 +197,18 @@ namespace session {
         try_special_case (Ret& solution, Query<TY> const& q)
           {
             if (solution && isFakeBypass(q))        // backdoor for tests
-              return solution;
+              return exists (solution);
             
             if (is_defaults_query (q))
               {
                 Query<TY> defaultsQuery = q.rebuild().removeTerm("default");
-                return solution = Session::current->defaults (defaultsQuery);
+                return exists (solution = Session::current->defaults (defaultsQuery));
               }                             //  may lead to recursion
                                             
             if (this->detect_case (solution, q))
               return resolve (solution, q);
             
-            return solution = Ret();  // fail: return default-constructed empty smart ptr
+            return exists (solution = Ret());  // fail: return default-constructed empty smart ptr
           }
       };
     

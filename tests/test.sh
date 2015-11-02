@@ -61,32 +61,6 @@ LC_ALL=C
 #config
 LOGSUPPRESS='^\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}[:!] \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):'
 
-#config PARA Resource Limits; ulimit; constrain resource limits
-#config It is possible to set some limits for tests to protect the system against really broken cases.
-#config Since running under valgrind takes consinderable more resources there are separate variants for
-#config limits when running under valgrind.
-#config
-#config  LIMIT_CPU=5
-#config Maximal CPU time the test may take after it will be killed with SIGXCPU. This protects agaist Lifelocks.
-#config
-#config  LIMIT_TIME=10
-#config Maximal wall-time a test may take after this it will be killed with SIGKILL. Protects against Deadlocks.
-#config
-#config  LIMIT_VSZ=524288
-#config Maximal virtual memory size the process may map, allocations/mappings will fail when this limit is reached.
-#config Protects against memory leaks.
-#config
-#config  LIMIT_VG_CPU=20
-#config  LIMIT_VG_TIME=30
-#config  LIMIT_VG_VSZ=524288
-#config Same variables again with limits when running under valgrind.
-#config
-LIMIT_CPU=5
-LIMIT_TIME=10
-LIMIT_VSZ=1048576
-LIMIT_VG_CPU=20
-LIMIT_VG_TIME=30
-LIMIT_VG_VSZ=1048576
 
 
 #configf HEAD~ Configuration Files; configuration files; define variables to configure the test
@@ -101,6 +75,36 @@ test -f 'test.conf' && source test.conf
 test -n "$srcdir" -a -e "$srcdir/test.conf" && source "$srcdir/test.conf"
 test -n "$srcdir" -a -e "$srcdir/tests/test.conf" && source "$srcdir/tests/test.conf"
 test -n "$TEST_CONF" -a -e "$TEST_CONF" && source "$TEST_CONF"
+
+
+
+#config PARA Resource Limits; ulimit; constrain resource limits
+#config It is possible to set some limits for tests to protect the system against really broken cases.
+#config Since running under valgrind takes consinderable more resources there are separate variants for
+#config limits when running under valgrind.
+#config
+#config  LIMIT_CPU=5
+#config Maximal CPU time in seconds the test may take after it will be killed with SIGXCPU. This protects agaist Lifelocks.
+#config
+#config  LIMIT_TIME=10
+#config Maximal wall-time a test may take after this it will be killed with SIGKILL. Protects against Deadlocks.
+#config
+#config  LIMIT_VSZ=$((512*1024))
+#config Maximal virtual memory size the process may map, allocations/mappings will fail when this limit is reached.
+#config Protects against memory leaks. The value is given in KiB.
+#config
+#config  LIMIT_VG_CPU=20
+#config  LIMIT_VG_TIME=30
+#config  LIMIT_VG_VSZ=$LIMIT_VSZ
+#config Same variables again with limits when running under valgrind.
+#config
+LIMIT_CPU="${LIMIT_CPU:-5}"
+LIMIT_VSZ="${LIMIT_VSZ:-$((512*1024))}"
+LIMIT_TIME="${LIMIT_TIME:-$((2 * ${LIMIT_CPU}))}"
+
+LIMIT_VG_VSZ="${LIMIT_VG_VSZ:-$LIMIT_VSZ}"
+LIMIT_VG_CPU="${LIMIT_VG_CPU:-$((4 * LIMIT_CPU))}"
+LIMIT_VG_TIME="${LIMIT_VG_TIME:-$((3 * ${LIMIT_TIME}))}"
 
 
 
@@ -134,16 +138,14 @@ fi
 #valgrind false positives in 'vgsuppression'. Care must be taken that this file is simple and does
 #valgrind not generate true positives.
 #valgrind
-echo "NOTE: CPU time limit: $LIMIT_CPU sec"
-ulimit -S -t ${LIMIT_CPU:-5} -v ${LIMIT_VSZ:-524288}
 valgrind=""
-LIMIT_TIME_REAL="$LIMIT_TIME"
 if [ "$VALGRINDFLAGS" = 'DISABLE' ]; then
-    echo "valgrind explicit disabled"
+    echo "valgrind explicitly disabled"
 else
     if [ "$(which valgrind)" ]; then
-	ulimit -S -t ${LIMIT_VG_CPU:-20} -v ${LIMIT_VG_VSZ:-524288}
-        LIMIT_TIME_REAL="$LIMIT_VG_TIME"
+    LIMIT_CPU="$LIMIT_VG_CPU"
+    LIMIT_VSZ="$LIMIT_VG_VSZ"
+    LIMIT_TIME="$LIMIT_VG_TIME"
         if [[ -x 'vgsuppression' ]]; then
             if [[ 'vgsuppression' -nt 'vgsuppression.supp' ]]; then
                 echo 'generating valgrind supression file'
@@ -159,6 +161,12 @@ else
         echo "no valgrind found, go without it"
     fi
 fi
+# set up the final resource limits...
+echo "NOTE: CPU  time limit: $LIMIT_CPU sec"
+echo "    : real time limit: $LIMIT_TIME sec"
+echo "    : VMem size limit: $(( $LIMIT_VSZ / 1024)) MiB"
+ulimit -S -t ${LIMIT_CPU:-5} -v ${LIMIT_VSZ:-524288}
+
 
 echo
 echo "================ ${0##*/} ================"
@@ -510,7 +518,7 @@ function TEST()
             pid=$!
 
             # watchdog
-            ( sleep $LIMIT_TIME_REAL && kill -KILL $pid ) &>/dev/null &
+            ( sleep $LIMIT_TIME && kill -KILL $pid ) &>/dev/null &
             wpid=$!
             wait $pid
             return=$(<,return)

@@ -31,7 +31,7 @@ import Options
 
 #-------------------------------------------------------Configuration
 TARGDIR      = 'target'
-VERSION      = '0.pre.02'
+VERSION      = '0.pre.03'
 TOOLDIR      = './admin/scons'    # SCons plugins
 OPTCACHE     = 'optcache' 
 CUSTOPTFILE  = 'custom-options'
@@ -74,9 +74,11 @@ def defineBuildEnvironment():
     env.Replace( CPPPATH   =["#src"]    # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['LUMIERA_VERSION='+VERSION ]    # note: it's a list to append further defines
                , CCFLAGS='-Wall -Wextra'
-               , CXXFLAGS='-Wno-enum-compare'
+               , CXXFLAGS='-std=gnu++14 -Wno-enum-compare'
                , CFLAGS='-std=gnu99' 
                )
+    env.Append(LINKFLAGS='-Wl,--no-undefined')  # require every dependency is given on link, in the right order
+    env.Append(LINKFLAGS='-Wl,--as-needed')     # by default only link against dependencies actually needed to resolve symbols 
     handleVerboseMessages(env)
     handleNoBugSwitches(env)
     

@@ -78,7 +78,7 @@ namespace test {
           
           // within the frame-calculation "loop"
           // we perform a data exchange cycle
-          int64_t frameNr = 123;
+          FrameCnt frameNr = 123;
           BuffHandle buff00 = sink1.lockBufferFor (frameNr);
           BuffHandle buff10 = sink2.lockBufferFor (frameNr);
           

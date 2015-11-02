@@ -28,11 +28,11 @@
 #include "test-target-obj.hpp"
 #include "lib/depend.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 
-using std::tr1::function;
+using std::function;
 using boost::lexical_cast;
 using util::isSameObject;
 using util::_Fmt;

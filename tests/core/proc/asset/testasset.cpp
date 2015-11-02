@@ -24,7 +24,7 @@
 #include "proc/asset/testasset.hpp"
 #include "proc/assetmanager.hpp"
 
-using std::tr1::static_pointer_cast;
+using std::static_pointer_cast;
 
 
 namespace proc {
@@ -79,7 +79,7 @@ namespace test {
    *  within AssetManager by the Asset base class ctor
    */
   template<class A>
-  P<TestAsset<A> >
+  lib::P<TestAsset<A> >
   TestAsset<A>::ptrFromThis ()
   {
     return static_pointer_cast<TestAsset<A>,Asset>
@@ -111,8 +111,8 @@ namespace test {
   template TestAsset<Asset>::TestAsset (PAsset& pRef);
   template TestAsset<Unknown>::TestAsset (PAsset& pRef);
   
-  template P<TestAsset<Asset> >   TestAsset<Asset>::ptrFromThis ();
-  template P<TestAsset<Unknown> > TestAsset<Unknown>::ptrFromThis ();
+  template lib::P<TestAsset<Asset> >   TestAsset<Asset>::ptrFromThis ();
+  template lib::P<TestAsset<Unknown> > TestAsset<Unknown>::ptrFromThis ();
   
   
   

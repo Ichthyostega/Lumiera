@@ -27,12 +27,12 @@
 #include "lib/depend.hpp"
 
 extern "C" {
-#include "common/interfacedescriptor.h"
+#include "common/interface-descriptor.h"
 }
 
 #include <string>
 #include <memory>
-#include <tr1/functional>
+#include <functional>
 #include <boost/scoped_ptr.hpp>
 
 
@@ -44,7 +44,7 @@ namespace proc  {
     using lumiera::Subsys;
     using std::auto_ptr;
     using boost::scoped_ptr;
-    using std::tr1::bind;
+    using std::bind;
     
     
     
@@ -88,7 +88,7 @@ namespace proc  {
           bool 
           checkRunningState ()  throw()
             {
-              return (thePlayer_);
+              return bool(thePlayer_);
             }
         };
       
@@ -103,31 +103,31 @@ namespace proc  {
       LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0
                                  ,lumieraorg_DummyPlayerFacade_descriptor
                                  , NULL, NULL, NULL
-                                 , LUMIERA_INTERFACE_INLINE (name, "\305\162\202\240\075\316\146\100\314\152\075\343\372\065\226\307",
+                                 , LUMIERA_INTERFACE_INLINE (name,
                                                              const char*, (LumieraInterface ifa),
                                                                { (void)ifa;  return "DummyPlayer"; }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (brief, "\317\045\366\076\064\072\156\274\220\346\262\207\062\367\057\232",
+                                 , LUMIERA_INTERFACE_INLINE (brief,
                                                              const char*, (LumieraInterface ifa),
                                                                { (void)ifa;  return "Proc Interface: dummy player to test integration with the GUI"; }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (homepage, "\136\225\033\362\161\251\300\256\117\072\171\102\235\004\235\200",
+                                 , LUMIERA_INTERFACE_INLINE (homepage,
                                                              const char*, (LumieraInterface ifa),
                                                                { (void)ifa;  return "http://www.lumiera.org/develompent.html" ;}
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (version, "\212\146\344\127\124\116\101\205\211\174\322\241\162\122\023\165",
+                                 , LUMIERA_INTERFACE_INLINE (version,
                                                              const char*, (LumieraInterface ifa),
                                                                { (void)ifa;  return "0.1~pre"; }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (author, "\064\226\072\300\054\345\042\357\337\226\155\025\306\051\117\105",
+                                 , LUMIERA_INTERFACE_INLINE (author,
                                                              const char*, (LumieraInterface ifa),
                                                                { (void)ifa;  return "Hermann Vosseler"; }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (email, "\041\075\220\112\246\304\261\135\003\135\060\202\230\327\303\206",
+                                 , LUMIERA_INTERFACE_INLINE (email,
                                                              const char*, (LumieraInterface ifa),
                                                                { (void)ifa;  return "Ichthyostega@web.de"; }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (copyright, "\232\305\163\271\174\025\270\075\012\201\331\256\327\375\066\210",
+                                 , LUMIERA_INTERFACE_INLINE (copyright,
                                                              const char*, (LumieraInterface ifa),
                                                                {
                                                                  (void)ifa;
@@ -136,7 +136,7 @@ namespace proc  {
                                                                    "  2009               Hermann Vosseler <Ichthyostega@web.de>";
                                                                }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (license, "\136\136\073\173\145\357\151\062\040\013\323\272\051\352\305\060",
+                                 , LUMIERA_INTERFACE_INLINE (license,
                                                              const char*, (LumieraInterface ifa),
                                                                {
                                                                  (void)ifa;
@@ -156,11 +156,11 @@ namespace proc  {
                                                                    "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA";
                                                                }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (state, "\224\251\004\001\165\140\116\246\126\311\115\234\023\026\331\350",
+                                 , LUMIERA_INTERFACE_INLINE (state,
                                                              int, (LumieraInterface ifa),
                                                                {(void)ifa;  return LUMIERA_INTERFACE_EXPERIMENTAL; }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (versioncmp, "\267\155\303\046\353\222\323\014\145\027\043\100\370\311\257\126",
+                                 , LUMIERA_INTERFACE_INLINE (versioncmp,
                                                              int, (const char* a, const char* b),
                                                                {return 0;}  ////////////////////////////////////////////TODO define version ordering
                                                             )
@@ -183,7 +183,7 @@ namespace proc  {
                                  , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_DummyPlayerFacade_descriptor)
                                  , NULL /* on  open  */
                                  , NULL /* on  close */
-                                 , LUMIERA_INTERFACE_INLINE (startPlay, "\143\323\102\155\051\006\235\004\037\310\354\121\176\142\342\210",
+                                 , LUMIERA_INTERFACE_INLINE (startPlay,
                                                              LumieraPlayProcess, (LumieraDisplaySlot viewerHandle),
                                                                { 
                                                                  if (!_instance)
@@ -195,7 +195,7 @@ namespace proc  {
                                                                  return static_cast<LumieraPlayProcess> (_instance->start(viewerHandle)); 
                                                                }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (togglePlay, "\275\157\316\220\210\053\226\134\057\016\273\265\240\053\112\307",
+                                 , LUMIERA_INTERFACE_INLINE (togglePlay,
                                                              void, (LumieraPlayProcess handle, bool doPlay),
                                                                { 
                                                                  if (!_instance)
@@ -210,7 +210,7 @@ namespace proc  {
                                                                  proc->doPlay(doPlay);
                                                                }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (terminate, "\005\265\115\021\076\143\010\215\373\252\370\174\235\136\340\004",
+                                 , LUMIERA_INTERFACE_INLINE (terminate,
                                                              void, (LumieraPlayProcess handle),
                                                                { 
                                                                  if (!_instance)

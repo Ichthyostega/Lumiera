@@ -38,6 +38,7 @@ namespace engine {
   using backend::RealClock;
   using lib::time::Offset;
   using lib::time::Duration;
+  using lib::time::FrameCnt;
   using lib::time::TimeVar;
   using lib::time::Time;
   
@@ -84,11 +85,11 @@ namespace engine {
   class TimeAnchor
     {
       play::Timings timings_;
-      int64_t anchorPoint_;
+      FrameCnt anchorPoint_;
       Time relatedRealTime_;
       
       static Time
-      expectedTimeofArival (play::Timings const& timings, int64_t startFrame, Offset startDelay)
+      expectedTimeofArival (play::Timings const& timings, FrameCnt startFrame, Offset startDelay)
         {
           Duration totalLatency = startDelay
                                 + timings.currentEngineLatency()
@@ -110,7 +111,7 @@ namespace engine {
       
       
     public:
-      TimeAnchor (play::Timings timings, int64_t startFrame, Offset startDelay =Offset::ZERO)
+      TimeAnchor (play::Timings timings, FrameCnt startFrame, Offset startDelay =Offset::ZERO)
         : timings_(timings)
         , anchorPoint_(startFrame)
         , relatedRealTime_(expectedTimeofArival(timings,startFrame,startDelay))
@@ -131,7 +132,7 @@ namespace engine {
        *       the previous planning chunk, resulting in a seamless
        *       coverage of the timeline 
        */
-      int64_t
+      FrameCnt
       getNextAnchorPoint()  const
         {
           return timings_.establishNextPlanningChunkStart (this->anchorPoint_);
@@ -150,20 +151,38 @@ namespace engine {
       
       /** @return the frame at which any job planning
        *          for this planning chunk will start */
-      int64_t getStartFrame()  const
+      FrameCnt getStartFrame()  const
         {
           return anchorPoint_;
         }
       
       
+      /** define the deadline for a grid point relative to this reference point.
+       *  Since a TimeAnchor represents the definitive link between nominal time
+       *  and ongoing wall clock time, and since all of the current output stream
+       *  related timing information is available -- including the engine and the
+       *  output latency -- this is the place to do the final decision.
+       * @param frameOffset frame count offset relative to this TimeAnchor point
+       * @return the latest real absolute wall clock time at which this frame
+       *         has to be delivered to the OutputSlot. This deadline is exclusive,
+       *         i.e. time < deadline is required.
+       */
+      Time
+      establishDeadlineFor (FrameCnt frameOffset)
+        {
+          return this->relatedRealTime_
+               + timings_.getRealOffset(frameOffset);
+        }
+      
+      
+      /** convenience shortcut, employing the deadline calculation in relation
+       *  to current wall clock time */
       Offset
       remainingRealTimeFor (FrameCoord plannedFrame)
-      //////////////////////////////////////////////////TODO break this into two sensible operations, using the deadline from the FrameCoord
         {
-          int64_t frameOffset = plannedFrame.absoluteFrameNumber - anchorPoint_;
-          return Offset(this->relatedRealTime_
-                      + timings_.getRealOffset(frameOffset)
-                      - RealClock::now());
+          FrameCnt frameOffset = plannedFrame.absoluteFrameNumber - anchorPoint_;
+          return Offset(RealClock::now()
+                       ,establishDeadlineFor(frameOffset));
         }
     };
   

@@ -62,7 +62,7 @@
 #include "proc/engine/type-handler.hpp"
 #include "proc/engine/buffer-local-key.hpp"
 
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <boost/noncopyable.hpp>
 
 
@@ -443,7 +443,7 @@ namespace engine {
      */
     class Table
       {
-        typedef std::tr1::unordered_map<HashVal,Entry> MetadataStore;
+        typedef std::unordered_map<HashVal,Entry> MetadataStore;
         
         MetadataStore entries_;
 

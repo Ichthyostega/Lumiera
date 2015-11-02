@@ -61,13 +61,13 @@
 #include "lib/opaque-holder.hpp"
 #include "lib/functor-util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 namespace lib {
 namespace meta{
   
-  using std::tr1::function;
+  using std::function;
   using util::unConst;
   
   
@@ -99,7 +99,7 @@ namespace meta{
       friend bool
       operator!= (FunErasure const& fer1, FunErasure const& fer2)
         {
-          return !(fer1==fer2);  // use equality defined by FH       
+          return not (fer1==fer2);  // use equality defined by FH
         }
     };
   
@@ -116,7 +116,7 @@ namespace meta{
   
                                
   /**
-   * Policy for FunErasure: store an embedded tr1::function
+   * Policy for FunErasure: store an embedded std::function
    * Using this policy allows to store arbitrary complex functor objects
    * embedded within a neutral container and retrieving them later type-safe.
    * The price to pay is vtable access and heap storage of function arguments.

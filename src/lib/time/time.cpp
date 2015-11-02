@@ -121,7 +121,7 @@ namespace time {
     { }
   
   
-  /** displaying an internal Lumiera Time value
+  /** display an internal Lumiera Time value
    *  for diagnostic purposes or internal reporting.
    * @warning internal Lumiera time values refer to an
    *         implementation dependent time origin/scale.
@@ -133,9 +133,28 @@ namespace time {
     return string (lumiera_tmpbuf_print_time (t_));
   }
   
-  TimeVar::operator string()  const
+  /** @note recommendation to use TCode for external representation */
+  TimeValue::operator string()  const
   {
-    return string (lumiera_tmpbuf_print_time (t_));
+    gavl_time_t time = t_;
+    int millis, seconds;
+    bool negative = (time < 0);
+    
+    if (negative) time = -time;
+    time /= GAVL_TIME_SCALE_MS;
+    millis = time % 1000;
+    seconds = time / 1000;
+    
+    return string (negative ? "-" : "")
+         + (seconds>0 or time==0? lexical_cast<string> (seconds)+"s" : "")
+         + (millis>0? lexical_cast<string> (millis)+"ms" : "")
+         ;
+  }
+  
+  TimeSpan::operator string()  const
+  {
+    return string (lumiera_tmpbuf_print_time (t_))
+                + "["+string(dur_)+"]";
   }
   
   
@@ -192,14 +211,14 @@ namespace time {
   
   
   /** offset by the given number of frames. */
-  Offset::Offset (int64_t count, FrameRate const& fps)
+  Offset::Offset (FrameCnt count, FrameRate const& fps)
     : TimeValue (count?  (count<0? -1:+1) * lumiera_framecount_to_time (::abs(count), fps)
                       : _raw(Duration::NIL))
     { }
   
   /** duration of the given number of frames.
    * @note always positive; count used absolute */
-  Duration::Duration (int64_t count, FrameRate const& fps)
+  Duration::Duration (FrameCnt count, FrameRate const& fps)
     : TimeValue (count? lumiera_framecount_to_time (abs(count), fps) : _raw(Duration::NIL))
     { }
   
@@ -224,14 +243,10 @@ char*
 lumiera_tmpbuf_print_time (gavl_time_t time)
 {
   int milliseconds, seconds, minutes, hours;
-  int negative;
+  bool negative = (time < 0);
   
-  if(time < 0)
-    {
-      negative = 1;
+  if (negative)
       time = -time;
-    }
-  else negative = 0;
   
   time /= GAVL_TIME_SCALE_MS;
   milliseconds = time % 1000;

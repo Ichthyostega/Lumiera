@@ -33,7 +33,7 @@
 
 
 LUMIERA_ERROR_DEFINE (FILE_CHANGED, "File changed unexpected");
-LUMIERA_ERROR_DEFINE (FILE_NOMMAPINGS, "MMapings (chunksize/bias) not initialized");
+LUMIERA_ERROR_DEFINE (FILE_NOMMAPINGS, "MMapings (chunksize/bias) not initialised");
 
 
 

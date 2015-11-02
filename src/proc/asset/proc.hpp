@@ -50,7 +50,7 @@ namespace asset {
   class Proc;
   class ProcFactory;
   
-  typedef P<const Proc> PProc;
+  typedef lib::P<const Proc> PProc;
   
   
   
@@ -121,7 +121,7 @@ namespace asset {
     : boost::noncopyable
     {
     public:
-      typedef P<asset::Proc> PType;
+      typedef lib::P<asset::Proc> PType;
        
       PType operator() (Asset::Ident& key);      ////////////TODO define actual operation 
       

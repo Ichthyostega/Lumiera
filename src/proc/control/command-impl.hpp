@@ -51,15 +51,15 @@
 #include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
 
-#include <tr1/memory>
-#include <tr1/functional>
+#include <memory>
+#include <functional>
 
 
 namespace proc {
 namespace control {
   
-  using std::tr1::function;
-  using std::tr1::shared_ptr;
+  using std::function;
+  using std::shared_ptr;
   
   
   
@@ -230,7 +230,7 @@ namespace control {
       friend bool
       operator!= (CommandImpl const& ci1, CommandImpl const& ci2)
       {
-        return !(ci1==ci2);
+        return not (ci1==ci2);
       }
     };
   

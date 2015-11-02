@@ -161,6 +161,7 @@ namespace test  {
           CHECK (mp1);
           CHECK (mp2);
           CHECK (mp1x);
+          CHECK (mp2x);
           CHECK (!mpNull);                       // bool check verifies setup and connected state
           
           CHECK ( ModelPort::exists (pipeA));    // this is the same check, but invoked just with an pipe-ID

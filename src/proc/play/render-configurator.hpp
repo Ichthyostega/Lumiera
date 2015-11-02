@@ -50,7 +50,7 @@
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
-#include <tr1/functional>
+#include <functional>
 #include <vector>
 
 
@@ -62,7 +62,7 @@ namespace play {
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
 //  using util::isnil;
-  using std::tr1::function;
+  using std::function;
   using proc::mobject::ModelPort;
   
 //  typedef proc::play::POutputManager POutputManager;

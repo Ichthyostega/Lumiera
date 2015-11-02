@@ -24,7 +24,7 @@
 #include "proc/mobject/session/mobjectfactory.hpp"
 #include "proc/mobject/session/root.hpp"
 #include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/track.hpp"
+#include "proc/mobject/session/fork.hpp"
 #include "proc/mobject/session/effect.hpp"
 #include "proc/mobject/session/label.hpp"
 #include "proc/mobject/session/binding.hpp"
@@ -64,7 +64,7 @@ namespace session {
    *  internally and wrapped into a Placement, which takes ownership.
    *  So, when the render engine gets across this Clip-MO, it is able
    *  to obtain the media information contained in the corresponding
-   *  media asset. Note this will create a single track clip. 
+   *  media asset.
    *  @param mediaDef the actual asset::Media to be used 
    *  created Clip could be a compound (multichannel) clip 
    *  comprised of several SimpleClip sub-objects.
@@ -85,13 +85,13 @@ namespace session {
     UNIMPLEMENTED ("build multichannel compound clip-MO");
   }
   
-  /** fabricate a new track-MObject, using the given unique ID */ 
-  Placement<Track>
-  MObjectFactory::operator() (TrackID const& id)
+  /** fabricate a new fork-MObject, using the given unique ID */
+  Placement<Fork>
+  MObjectFactory::operator() (ForkID const& id)
   {
-    TODO ("what needs to be registered when creating an Track-MO?");
-    TODO ("assure the ID is indeed unique and not already used for another track");  //////////TICKET #638
-    return Placement<Track> (*new Track (id), &deleterFunc);
+    TODO ("what needs to be registered when creating an Fork-MO?");
+    TODO ("assure the ID is indeed unique and not already used for another fork??");  //////////TICKET #638
+    return Placement<Fork> (*new Fork (id), &deleterFunc);
   }
   
   /** */ 

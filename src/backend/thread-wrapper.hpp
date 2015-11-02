@@ -36,14 +36,14 @@ extern "C" {
 }
 #include "backend/threadpool-init.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/noncopyable.hpp>
 
 
 namespace backend {
   
-  using std::tr1::bind;
-  using std::tr1::function;
+  using std::bind;
+  using std::function;
   using lib::Literal;
   namespace error = lumiera::error;
   using error::LUMIERA_ERROR_STATE;

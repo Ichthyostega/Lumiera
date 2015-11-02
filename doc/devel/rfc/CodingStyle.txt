@@ -20,7 +20,7 @@ Define coding style standard which we will use.
 
 Description
 ~~~~~~~~~~~
-We need to agree on some coding style, imo constistency is the most important
+We need to agree on some coding style, IMHO consistency is the most important
 part with this, no matter which style we use.
 
 See http://en.wikipedia.org/wiki/Indent_style[]
@@ -29,19 +29,18 @@ See http://en.wikipedia.org/wiki/Indent_style[]
 * no tabs, use spaces!
 
 .Proposed:
-* K&R by ichthyo
+* K&R by _ichthyo_
 * compact and well known
-* GNU by cehteh
+* GNU by _cehteh_
 * imo the best readability (albeit little strange)
-* cinelerra might apply as official GNU project someday
+* Lumiera might apply as official GNU project someday
 
 
 Another question: __how to write identifiers?__
 
 .Proposed:
-* ichthyo: use link:CamelCase[], start ClassNames upper case and variableNames
-  in lower case. Make all namespaces and package (dir) names completely
-  lowercase
+* ichthyo: use CamelCase, start ClassNames upper case and variableNames
+  in lower case. Make all namespaces and package (dir) names completely lowercase
 
 
 
@@ -76,11 +75,11 @@ MichaelPloujnikov:: '2007-06-27 17:17'
 
 
 I just proposed K&R because it is widely accepted. Personally, I was never very
-fond of K&R style, I always prefered putting opening braces to the left. I
-never used GNU style until now, but it looks somewhat apealing to me. (btw,
+fond of K&R style, I always preferred putting opening braces to the left. I
+never used GNU style until now, but it looks somewhat appealing to me. (btw,
 ECLIPSE comes with presets for all this styles :-P ). Anyhow, I can adapt to
 most any style. The only thing I really dislike is using tabs (with the
-exeption of database DDLs and CSound files, where tab are actually helpful) :)
+exception of database DDLs and CSound files, where tab are actually helpful) :)
 
 Ichthyo:: '2007-06-27 20:55'
 
