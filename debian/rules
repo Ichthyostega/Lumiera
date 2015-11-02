@@ -11,7 +11,7 @@ DEB_SCONS_OPTIONS = \
     OPTIMIZE=False   \
     VALGRIND=False   \
     PREFIX=usr       \
-    ARCHFLAGS=" -fstack-protector --param=ssp-buffer-size=4"
+    ARCHFLAGS=" -fstack-protector-strong"
     
 DEB_SCONS_INSTALL_OPTIONS = \
     INSTALLDIR=debian/lumiera
