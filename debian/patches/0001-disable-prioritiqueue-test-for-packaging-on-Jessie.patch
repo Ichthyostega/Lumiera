@@ -6,15 +6,14 @@ This test caused frequent failures in packaging due to excessive
 load. Moreover there seems to be some problem with logging in the
 testrunner, which is triggered by this test. The test as such
 works just fine.
-
 ---
- tests/15priqueue.tests |    3 ++-
+ tests/11priqueue.tests | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tests/15priqueue.tests b/tests/15priqueue.tests
+diff --git a/tests/11priqueue.tests b/tests/11priqueue.tests
 index 0e8710e..05a55c5 100644
---- a/tests/15priqueue.tests
-+++ b/tests/15priqueue.tests
+--- a/tests/11priqueue.tests
++++ b/tests/11priqueue.tests
 @@ -1,6 +1,7 @@
  TESTING "Priority Queue" ./test-priqueue
  
