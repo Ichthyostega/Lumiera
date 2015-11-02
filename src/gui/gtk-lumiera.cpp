@@ -131,7 +131,8 @@ namespace gui {
   GtkLumiera::getCopyright()
   {
     return string (
-      _Fmt(_("© %s The Lumiera Team\n"
+      _Fmt(_("© %s the original Authors\n"
+             "-- Lumiera Team --\n"
              "Lumiera is Free Software (GPL)"))
             % Config::get (KEY_COPYRIGHT));
   }

@@ -2600,7 +2600,7 @@
 </node>
 </node>
 <node CREATED="1446480582168" HGAP="46" ID="ID_554745278" MODIFIED="1446481388737" TEXT="Release" VSHIFT="-5">
-<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1446480871057" TEXT="release prep: clean-up obsolete information">
+<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1446494976104" TEXT="release prep: clean-up obsolete information">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2614,6 +2614,7 @@
 </richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1446482192807" ID="ID_852733328" MODIFIED="1446489451006" TEXT="Debian">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -2658,7 +2659,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446480725508" ID="ID_789754974" MODIFIED="1446480874617" TEXT="release prep: bump version number">
+<node CREATED="1446480725508" ID="ID_789754974" MODIFIED="1446496359777" TEXT="release prep: bump version number">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2671,6 +2672,7 @@
 </html>
 </richcontent>
 <icon BUILTIN="full-2"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1446480798862" TEXT="admin/scons/Setup.py"/>
 <node CREATED="1446480787392" ID="ID_1638555946" MODIFIED="1446480803790" TEXT="data/config/setup.ini"/>
 <node CREATED="1446480787392" ID="ID_619067196" MODIFIED="1446480810516" TEXT="doc/devel/Doxyfile"/>
@@ -2702,7 +2704,7 @@
 <node CREATED="1446481305102" ID="ID_1191774545" MODIFIED="1446481312561" TEXT="lfd Fixes von den DEBs"/>
 <node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1446481329223" TEXT="Plattform-Abh&#xe4;ngigkeiten checken"/>
 </node>
-<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1446481179537" TEXT="Release-commit: Pre-release 0.pre.02">
+<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1446497660446" TEXT="Release-commit: Pre-release 0.pre.02">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2718,6 +2720,7 @@
 </html>
 </richcontent>
 <icon BUILTIN="full-4"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1446481126435" TEXT="README"/>
 <node CREATED="1446481126974" ID="ID_537666758" MODIFIED="1446481128522" TEXT="AUTHORS">
 <node CREATED="1446481146548" ID="ID_1310945179" MODIFIED="1446481154546" TEXT="GTK-UI">

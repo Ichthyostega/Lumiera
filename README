@@ -1,7 +1,7 @@
 Lumiera -- the video NLE for Linux
 ====================================
-Version: 0.pre.02
-:Date: 4/2014
+Version: 0.pre.03
+:Date: 11/2015
 
 *************************************************************
 Lumiera is a non-linear video editing and compositing tool.
@@ -19,9 +19,9 @@ with lots of material, several scenes, nested sequences,
 colour grading, 3D support, full fledged sound montage
 and multiple edit versions prepared in parallel.
 
-NOTE: as of 10/2013, Lumiera is in early development stage;
+NOTE: as of 11/2015, Lumiera is in early development stage;
 it is not usable yet. The above describes the Lumiera project
-vision, which will need years to implement. This Debian package
+vision, which will need years to implement. This preview Release
 installs a current development snapshot in pre-alpha stage.
 
 Visit http://Lumiera.org and join the mailing list
@@ -37,6 +37,15 @@ Rather, it contains the framework and technology core
 of the envisioned Application ``Lumiera''.
 
 See http://issues.lumiera.org/roadmap[Project roadmap]
+
+As of _11/2015_ (0.pre.03)::
+a lot of long standing maintennance work has been done. The Project switched
+to C++11 and in the end even to C++14 and Debian/Jessie as reference platform,
+followed by clean-up of now obsolete workarounds. On the GUI side, we largely
+made the transition to GTK-3, which lead to rework of our timeline widget, not
+finished yet. This work also spured an effort the connection and communication
+between Proc and the UI, which is expected to be asynchroneous. Due to the
+limited developer resources, work on the Engine and Player part is stalled.
 
 As of _10/2013_ (0.pre.02)::
 the data models have been elaborated and some significant parts of the session
@@ -73,15 +82,16 @@ Build Requirements
 
 For building Lumiera, you'll need:
 
- * C99 / C++11 compiler GCC `>=4.7` or Clang `>=3.0`
+ * C99 / C++14 compiler GCC `>=4.9` or Clang `>=3.5`
  * Git Version management system
  * http://www.scons.org/[SCons build system]
  * http://www.boost.org/[Boost libraries]
  * http://gmerlin.sourceforge.net/[GAVL library]
  * http://nobug.pipapo.org/[NoBug library]
  * http://www.gtkmm.org/en/[GTKmm]
+ * http://alsa-project.org[ALSA libasound2-dev]
  * http://cgit.freedesktop.org/xorg/lib/libXv[libXv]
- * https://wiki.gnome.org/LibRsvg[lib R SVG]
+ * https://wiki.gnome.org/LibRsvg[lib rSVG]
  * https://git.gnome.org/browse/gdl[lib GDL]
 
 See the online documentation at http://Lumiera.org/download.html
