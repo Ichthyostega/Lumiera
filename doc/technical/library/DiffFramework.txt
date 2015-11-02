@@ -1,5 +1,7 @@
 Diff Handling Framework
 =======================
+:Date: 2015
+:Toc:
 
 Within the support library, in the namespace `lib::diff`, there is a collection of loosely coupled tools
 known as »the diff framework«. It revolves around generic representation and handling of structural differences.
@@ -193,10 +195,11 @@ changes in hierarchical data: traverse the structure and account for each elemen
 Such a description of changes won't be _optimal_ though. What appears as a insertion or deletion locally,
 might indeed be just the result of rearranging subtrees as a whole. The _tree diff problem_ in this general
 form is known to be a rather tough challenge. But our goals are different here. Lumiera relies on a
-»**External Tree Description**« for _symbolic representation_ of hierarchically structured elements,
-without actually implementing them. The purpose of this ``external'' description is to largely remove
-the need for a central data model to work against. A _symbolic diff message_ allows to propagate data
-and structure changes, without even using the same data representation at both ends.
+link:{ldoc}/design/architecture/ExternalTreeDescription.html[»External Tree Description«] for
+_symbolic representation_ of hierarchically structured elements, without actually implementing them.
+The purpose of this ``external'' description is to largely remove the need for a central data model
+to work against. A _symbolic diff message_ allows to propagate data and structure changes,
+without even using the same data representation at both ends.
 
 Generic Node Record
 ~~~~~~~~~~~~~~~~~~~

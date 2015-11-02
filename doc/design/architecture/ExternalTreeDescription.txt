@@ -1,0 +1,102 @@
+External Tree Description
+=========================
+:Author: Ichthyostega
+:Date:      Fall 2015
+
+//Menu: label ETD
+
+****************
+_to symbolically represent hierarchically structured elements, without actually implementing them._
+****************
+
+The purpose of this ``external'' description is to remove the need of a central data model to work against.
+We consider such a foundation data model as a good starting point, yet harmful for the evolution of any
+larger structure to be built. According to the *subsidiarity principle*, we prefer to turn the working
+data representation into a local concern. Which leaves us with the issue of collaboration.
+Any collaboration requires, as an underlying, some kind of common understanding.
+And any formalised, mechanical collaboration requires to represent that common point of attachment --
+at least as _symbolic representation._ The »External Tree Description« is shaped to fulfil this need:
+_in theory,_ the whole field could be represented, symbolically, as a network of hierarchically
+structured elements. Yet, _in practice,_ all we need is to conceive the presence of such a representation,
+as a backdrop to work against. And we do so -- we work against that symbolic representation,
+by describing *changes* made to the structure and its elements. Thus, the description of changes,
+the link:{ldoc}/technical/library/DiffFramework.html[diff language], refers to and partially embodies
+such symbolically represented elements and relations.
+
+Elements, Nodes and Records
+---------------------------
+We have to deal with _entities and relationships._
+Entities are considered the building blocks, the elements, which are related by directional links.
+Within the symbolic representation, elements are conceived as *generic nodes* (`GenNode`),
+while the directed relations are impersonated as being attached or rooted at the originating side,
+so the target of a relation has no traces or knowledge of being part of that relation. Moreover, each
+of our nodes bears a _relatively clear-cut identity._ That is to say, within the relevant scope in question,
+this identity is unique. Together, these are the building blocks to represent any *graph*.
+
+For practical purposes, we have to introduce some distinctions and limitations.
+
+- we have to differentiate the generic node to be either a mere data element, or an *object-like record*
+- the former, a mere data element, is considered to be ``just data'', to be ``right here'' and without
+  further meta information. You need to know what it is to deal with it.
+- to the contrary, a Record has an associated, symbolic and typed ID, plus it can potentially be associated with
+  and thus relate to further elements, with the relation originating at the Record.
+- and indeed we distinguish two different kinds of relations possibly originating from a Record:
+
+  * *attributes* are known by-name; they can be addressed through this name-ID as a key,
+    while the value is again a generic node, possibly even another record.
+  * *children* to the contrary can only be enumerated; they are considered to be within (and form)
+    the *scope* of the given record (``object'').
+
+And there is a further limitation: The domain of possible data is fixed, even hard wired.footnote:[
+Implementation-wise, this turns the data within the generic node into a »Variant« (typesafe union).]
+Basically, this opens two different ways to _access_ the data within a given GenNode:
+either you know the type to expect beforehand.footnote:[and the validity of this assumption
+is checked on each access; please recall, all of this is meant for symbolic representation,
+not for implementation of high performance computing]
+Or we offer the ability for _generic access_ through a *double dispatch* (»Visitor«).
+The latter includes the option to handle just some of the possible content types and
+to ignore the other.footnote:[making the variant visitor a _partial function_ --
+as in any non exhaustive pattern match]
+
+data elements
+~~~~~~~~~~~~~
+Basically, we can expect to encounter the following kinds of fundamental data elements
+
+- `int`, `int64_t`, `short`, `char`
+- `bool`
+- `double`
+- `std::string`
+- `time::Time`, `time::Offset`, `time::Duration`, `time::TimeSpan`
+- `hash::LuidH` (to address and refer to elements known by ID)
+- `diff::Record<GenNode>`
+
+The last option is what makes our representation recursive.footnote:[Regarding the implementation,
+all these data elements are embedded _inline,_ as values. 
+With the exception of the record, which, like any `std::vector` implicitly uses heap allocations
+for the members of the collection.]
+
+names, identity and typing
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+It was a design decision that the generic node shall not embody a readable type field,
+just a type selector within the variant to hold the actual data elements.
+This decision more or less limits the usefulness of simple values as children to those cases,
+where all children are of uniform type, or where we agree to deal with all children through variant visitation solely.
+Of course, we can still use simple values as _attributes,_ since those are known and addressed by name.footnote:[As
+an extension, we could use filtering by type to limit access to some children of type `Record`, since every record
+does indeed embody a _symbolic_ type name, an attribute named `"type"`. It must be that way, since otherwise,
+records would be pretty much useless as representation for any object like entity.]
+
+The discriminating ID of any `GenNode` can serve as a name, and indeed will be used as the name of an attribute within a record.
+This *entry-ID* of the node is comprised of a human readable symbolic part, and a hash ID (`LUID`). The calculation of the latter,
+the hash, includes the symbolic ID _and_ a type information. This is what constitutes the full identity -- so two nodes with the
+same name but different payload type are treated as different elements.
+
+A somewhat related design question is that of ordering and uniqueness of children.
+While attributes -- due to the usage of the attribute node's ID as name-key -- are bound to be unique within a given Record,
+children within the scope of a record could be required to be unique too, making the scope a set. And, of course,
+children could be forcibly ordered, or just retain the initial ordering, or even be completely unordered.
+On a second thought, it seems wise not to impose any guarantees in that regard, beyond the simple notion of retaining
+an initial sequence order, the way a ``stable'' sorting algorithm does. All these more specific ordering properties
+can be considered the concern of some specific kinds of objects -- which then just happen to ``supply'' a list of children
+for symbolic representation as they see fit.
+
