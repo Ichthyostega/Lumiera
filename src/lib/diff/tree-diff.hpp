@@ -96,7 +96,7 @@ namespace diff{
    *          As a special notation, \c after(Ref::ATTRIBUTES) allows to fast forward
    *          to the first child element, while \c after(Ref::END) means to accept
    *          all of the existing data contents as-is (possibly to append further
-   *          elements after that point.
+   *          elements beyond that point).
    * - \c mut bracketing construct to open a nested sub scope. The element
    *          designated by the ID of the argument needs to be a #Record
    *          ("nested child object"). Moreover, this element must have been
