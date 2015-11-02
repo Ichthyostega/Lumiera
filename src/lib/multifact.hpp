@@ -41,15 +41,21 @@
  ** \par Singleton generation
  ** For the very common situation of building a family of singleton objects, accessible by ID,
  ** there is a convenience shortcut: The nested MultiFact::Singleton template can be instantiated
- ** within the context providing the objects (usually a static context). In itself a lib::Singleton
- ** factory, it automatically registers the singleton access function as "fabrication" function
- ** into a suitable MultiFact instance passed in as ctor parameter.
+ ** within the context providing the objects (usually a static context). In itself a lib::Depend
+ ** singleton factory, it automatically registers the singleton access function as "fabrication"
+ ** function into a suitable MultiFact instance passed in as ctor parameter.
  ** 
- ** @note there is an extension header, multifact-arg.hpp, which provides template specialisations
- **       for the special case when the fabrication functions need additional invocation arguments.
+ ** @remarks this is the second attempt at building a skeleton of the core factory mechanics.
+ **       The first attempt was pre-C++11, relied on partial specialisations and was hard to
+ **       understand and maintain. In theory, with C++11 the task should be quite simple now,
+ **       relying on rvalue references and variadic templates. Unfortunately, as of 9/2014,
+ **       the compiler support is not yet robust enough on Debian/stable really to deal with
+ **       \em all the conceivable cases when forwarding arbitrary factory products. Thus
+ **       for now we choose to avoid the "perfect forwarding" problem and rather let the
+ **       wrapper invoke the fabrication function and handle the result properly.
  ** 
  ** @see multifact-test.cpp
- ** @see multifact-argument-test.cpp
+ ** @see multifact-singleton-test.cpp
  ** @see SingletonFactory
  */
 
@@ -62,8 +68,9 @@
 #include "lib/depend.hpp"
 #include "util.hpp"
 
-#include <tr1/functional>
-#include <tr1/memory>
+#include <functional>
+#include <utility>
+#include <memory>
 #include <map>
 
 
@@ -75,15 +82,23 @@ namespace lib {
     
     /**
      * Dummy "wrapper",
-     * just returning a target-ref
+     * to perform the fabrication and return the unaltered product.
+     * @remarks this is a "perfect forwarding" implementation,
+     *          similar to std::forward, used as policy template
      */
     template<typename TAR>
-    struct PassReference
+    struct PassAsIs
       {
-        typedef TAR& RType;
-        typedef TAR& PType;
+        typedef TAR RawType;
+        typedef TAR BareType;
+        typedef TAR ResultType;
         
-        PType wrap (RType object) { return object; }
+        template<class FUN, typename... ARGS>
+        ResultType
+        wrap (FUN create, ARGS&&... args)  noexcept
+          {
+            return create(std::forward<ARGS>(args)...);
+          }
       };
     
     
@@ -91,13 +106,61 @@ namespace lib {
      * Wrapper taking ownership,
      * by wrapping into smart-ptr
      */
-    template<typename TAR>
+    template<typename RAW>
     struct BuildRefcountPtr
       {
-        typedef TAR*                      RType;
-        typedef std::tr1::shared_ptr<TAR> PType;
+        using RawType    = typename std::remove_pointer<RAW>::type;
+        using BareType   = RawType *;
+        using ResultType = std::shared_ptr<RawType>;
         
-        PType wrap (RType ptr) { return PType (ptr); }
+        template<class FUN, typename... ARGS>
+        ResultType
+        wrap (FUN create, ARGS&&... args)
+          {
+            return ResultType (create(std::forward<ARGS>(args)...));
+          }
+      };
+    
+    
+    /**
+     * Policy: use a custom functor
+     * to finish the generated product
+     * @remarks the nested structure allows to define
+     *          both the raw type and the wrapped type.
+     *          On instantiation of the MultiFact, pass
+     *          the nested Wrapper struct template param.
+     * @warning the RAW type must match the result type
+     *          of the MultiFac SIG. Beware of passing
+     *          references or pointers to local data.
+     */
+    template<typename TAR>
+    struct Build
+      {
+        template<typename RAW>
+        struct Wrapper
+          {
+            using RawType    = RAW;
+            using BareType   = RAW;
+            using ResultType = TAR;
+            
+            using WrapFunc = std::function<ResultType(BareType)>;
+            
+            void
+            defineFinalWrapper (WrapFunc&& fun)
+              {
+                this->wrapper_ = fun;
+              }
+            
+            template<class FUN, typename... ARGS>
+            ResultType
+            wrap (FUN create, ARGS&&... args)
+              {
+                return wrapper_(std::forward<BareType> (create(std::forward<ARGS>(args)...)));
+              }
+            
+          private:
+            WrapFunc wrapper_;
+          };
       };
     
     
@@ -113,7 +176,7 @@ namespace lib {
     template<typename SIG, typename ID>
     struct Fab
       {
-        typedef std::tr1::function<SIG> FactoryFunc;
+        typedef std::function<SIG> FactoryFunc;
         
         
         FactoryFunc&
@@ -150,15 +213,39 @@ namespace lib {
     template< typename TY
             , template<class> class Wrapper
             >
-    struct FabWiring
-      : Wrapper<TY>
+    struct FabConfig
       {
-        typedef typename Wrapper<TY>::PType WrappedProduct;
-        typedef typename Wrapper<TY>::RType FabProduct;
-        typedef FabProduct SIG_Fab(void);
+        using WrapFunctor    = Wrapper<TY>;
+        using BareProduct    = typename WrapFunctor::BareType;
+        using WrappedProduct = typename WrapFunctor::ResultType;
+        
+        typedef BareProduct SIG_Fab(void);
+        
+        enum{ ARGUMENT_CNT = 0 };
+      };
+    /**
+     * @internal specialisation to deal with the generic case:
+     * using an arbitrary fabrication function with multiple arguments
+     */
+    template< typename RET
+            , typename... ARGS
+            , template<class> class Wrapper
+            >
+    struct FabConfig<RET(ARGS...), Wrapper>
+      {
+        using WrapFunctor    = Wrapper<RET>;
+        using BareProduct    = typename WrapFunctor::BareType;
+        using WrappedProduct = typename WrapFunctor::ResultType;
+        
+        typedef BareProduct SIG_Fab(ARGS...);
+        
+        enum{ ARGUMENT_CNT = sizeof...(ARGS)};
       };
     
     
+    
+    
+    /* === Main type === */
     
     /**
      * Factory for creating a family of objects by ID.
@@ -170,22 +257,22 @@ namespace lib {
      * to be instantiated at the call site and acts as singleton factory,
      * accessible through a MultiFact instance as frontend.
      */
-    template< typename TY
+    template< typename SIG
             , typename ID
-            , template<class> class Wrapper
+            , template<class> class Wrapper = PassAsIs
             >
     class MultiFact
-      : public FabWiring<TY,Wrapper>
+      : public FabConfig<SIG,Wrapper>::WrapFunctor
       {
-        typedef FabWiring<TY,Wrapper> _Conf;
-        typedef typename _Conf::SIG_Fab SIG_Fab;
-        typedef Fab<SIG_Fab,ID> _Fab;
+        using   _Conf = FabConfig<SIG,Wrapper>;
+        using SIG_Fab = typename _Conf::SIG_Fab;
+        using    _Fab = Fab<SIG_Fab,ID>;
         
         _Fab funcTable_;
         
         
       protected:
-        typedef typename _Fab::FactoryFunc Creator;
+        using Creator = typename _Fab::FactoryFunc;
         
         Creator&
         selectProducer (ID const& id)
@@ -195,13 +282,35 @@ namespace lib {
         
         
       public:
-        typedef typename _Conf::WrappedProduct Product;
+        using Product = typename _Conf::WrappedProduct;
         
+        /**
+         * Core operation of the factory:
+         * Select a production line and invoke the fabrication function.
+         * @param id select the actual pre installed fabrication function to use
+         * @param args additional arguments to pass to the fabrication.
+         * @note the template parameter #SIG defines the raw or nominal signature
+         *       of the fabrication, and especially the number of arguments
+         * @return the created product, after passing through the #Wrapper functor
+         */
+        template<typename... ARGS>
         Product
-        operator() (ID const& id)
+        operator() (ID const& id, ARGS&& ...args)
           {
-            Creator& func = this->selectProducer (id);
-            return this->wrap (func());
+            static_assert (sizeof...(ARGS) == _Conf::ARGUMENT_CNT,
+                           "MultiFac instance invoked with the wrong number "
+                           "of fabrication arguments. See template parameter SIG");
+            
+            Creator& creator = selectProducer (id);
+            return this->wrap (creator, std::forward<ARGS>(args)...);
+          }
+        
+        /** more legible alias for the function operator */
+        template<typename... ARGS>
+        Product
+        invokeFactory (ID const& id, ARGS&& ...args)
+          {
+            return this->operator() (id, std::forward<ARGS>(args)...);
           }
         
         
@@ -210,7 +319,7 @@ namespace lib {
          */
         template<typename FUNC>
         void
-        defineProduction (ID id, FUNC fun)
+        defineProduction (ID id, FUNC&& fun)
           {
             funcTable_.defineProduction (id, fun);
           }
@@ -218,20 +327,20 @@ namespace lib {
         
         /**
          * Convenience shortcut for automatically setting up
-         * a production line, fabricating a singleton instance
+         * a production line, to fabricate a singleton instance
          * of the given implementation target type (IMP)
          */
         template<class IMP>
         class Singleton
           : lib::Depend<IMP>
           {
-            typedef lib::Depend<IMP> SingFac;
+            typedef lib::Depend<IMP> SingleFact;
             
             Creator
             createSingleton_accessFunction()
               {
-                return std::tr1::bind (&SingFac::operator()
-                                      , static_cast<SingFac*>(this));
+                return std::bind (&SingleFact::operator()
+                                 , static_cast<SingleFact*>(this));
               }
             
           public:
@@ -250,21 +359,5 @@ namespace lib {
     
     
     
-  } // namespace factory
-  
-  
-  
-  /** 
-   * Standard configuration of the family-of-object factory
-   * @todo this is rather guesswork... find out what the best and most used configuration could be....
-   */
-  template< typename TY
-          , typename ID
-          >
-  class MultiFact
-    : public factory::MultiFact<TY,ID, factory::PassReference>
-    { };
-  
-  
-} // namespace lib
+}} // namespace lib::factory
 #endif

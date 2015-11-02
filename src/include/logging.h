@@ -153,6 +153,9 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (   common,                     progress);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    configsys,                 common);        //TODO: here seems to be an ambiguity weather "config" should denote the global config channel or the config-loder internals
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     configfiles,              configsys);     //reading, writing, lookup configfiles
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     configtyped,              configsys);     //values queried, errors
+/** progress log, "External Tree Description" data exchange */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    etd,                       common);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (     diff,                     etd);
 /** progress log, interfaces */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    interface,                 common);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     interfaceregistry,        common);        //interfaces which get registered/removed

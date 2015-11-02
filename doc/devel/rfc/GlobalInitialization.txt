@@ -1,0 +1,282 @@
+GlobalInitialization
+====================
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Dropped_
+*Date*          _2008-04-05_
+*Proposed by*   CT <ct@pipapo.org>
+-------------------------------------
+
+********************************************************************************
+.Abstract
+Use a simple Init-function as a central initialization facility.
+********************************************************************************
+
+Description
+-----------
+//description: add a detailed description:
+Setup a `src/common/lumiera_init.c` file which contains following functions:
+
+ * `int lumiera_init(s.b.)` initializes the subsystems, global registries,
+    link:NoBug[] and other things. Must be called once at startup.
+ * `void lumiera_destroy(void)` shuts down, frees resources, cleans up.
+
+Calling 'lumiera_init()' twice or more should be a fatal abort, calling
+lumiera_destroy() twice or more should be a non-op.
+
+`lumiera_init()` returns 'int' to indicate errors, it may take argc/argv for
+ parsing options, this is to be decided.
+
+`lumiera_destroy()` is suitable for being called in an 'atexit()' handler.
+
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+// * first step ([green]#✔ done#)
+// * second step [yellow-background]#WIP#
+// * third step [red yellow-background]#TBD#
+Implement this. [red yellow-background]#it was never implemented this way#
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+// add a fact list/enumeration which make this suitable:
+ * straight forward
+ * easy to understand and debug...
+
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+- breaks modularisation
+- implementation details of the subsystems tend to leak into initialisation.
+- defeats flexibility:
+
+  * either the init sequence is hard wired
+  * or the init function becomes spaghetti code with ad hoc decision logic
+  * or the actual initialisation logic is hidden away and done _elsewhere_,
+    turning the seemingly simple init function into a ``potemkin village''.
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+
+Some things could be initialized with a
+`if (!initialized) {initialize(); initialized = 1;}` idiom.
+Parts of the C++ code could use different kinds of
+singleton implementations.
+Parts of the Application could operate independent of each other
+and would be responsible for their own initialisation. Parts of
+the Application could be brought up on demand only.
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+
+We have some global things to initialize and prepare. It is just convenient and
+easy to do it from a central facility.
+Having a global initialization handler gives precise control over the initialization
+order and makes debugging easier since it is a serial, well defined sequence.
+
+
+Conclusion
+----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+_This RfC was the plan_. We agreed on it, and then we forgot about it.
+In the following years, practical demands lead to implementing quite another
+scheme:
+
+- we use a global Lifecycle manager now
+- individual components enrol themselves and get their lifecycle hooks invoked
+- the Application is structured into _Subsystems_. These can depend on each other
+  and are started and stopped explicitly.
+- by policy, clean-up and unwinding is always considered _optional_ -- but we
+  care to implement a complete shutdown and memory unwinding for sake of sanity.
+
+This RfC is marked as *dropped*, since it doesn't reflect what the implementation does. +
+Ichthyostega:: 'Mo 08 Sep 2014 01:44:49 CEST' ~<prg@ichthyostega.de>~
+
+
+
+Comments
+--------
+//comments: append below
+
+* You may have noted that I implemented an Appconfig class (for some very
+  elementary static configuration constants.
+See `common/appconfig.hpp` I choose to implement it as Meyers Singleton, so it
+isn't dependent on global static initialisation, and I put the NOBUG_INIT call
+there too, so it gets issued automatically.
+* Generally speaking, I can't stress enough to be reluctant with static init,
+  so count me to be much in support for this design draft. While some resources
+  can be pulled up on demand (and thus be a candidate for some of the many
+  singleton flavours), some things simply need to be set up once, and its
+  always better to do it explicitly and in a defined manner.
+* For the proc layer, I plan to concentrate much of the setup and
+  (re)configuration within the loading of a session, and I intend to make the
+  session manager create an empty default session at a well defined point,
+  probably after parsing the commandline in main (and either this or the
+  loading of a existing session will bring the proc layer up into fully
+  operational state +
+  Ichthyo:: 'DateTime(2008-04-09T02:13:02Z'
+* About link:NoBug[] initialization: I've seen that you made a `nobugcfg` where
+  you centralized all nobug setup. Problem here is that a change in that file
+  forces a whole application rebuild. I'd like to factor that out that each
+  subsystem and subsubsystem does its own `NOBUG_FLAG_INIT()` initializations,
+  the global `NOBUG_INIT` should be done in main() (of testsuites, tools, app)
+  and not even in the global initialization handler. Note that I use this
+  global initialization in a nested way
++
+[source,C]
+------------------------------------------------------------
+lumiera_init ()
+{
+  lumiera_backend_init();
+  ...
+}
+
+lumiera_backend_init()
+{
+  ...backend-global nobug flags ..
+  ...backend subsystems _init() ..
+  ...
+}
+------------------------------------------------------------
++
+Backend tests then only call `lumiera_backend_init()` and don't need to do the
+whole initialization, same could be done for `lumiera_proc_init()` and
+`lumiera_gui_init()`. Note about the library: I think the lib shall not depend
+on such an init, but I would add one if really needed.
++
+CT:: '2008-04-09T19:19:17Z'
+
+
+After reconsidering I think we have several different problems intermixed here.
+
+ - Regarding organisation of includes: I agree that my initial approach ties
+   things too much together. This is also true for the global "lumiera.h" which
+   proved to be of rather limited use. Probably we'll be better of if every
+   layer has a separate set of basic or global definition headers. I think the
+   usage pattern of the flags (btw. the idea of making a flag hierarchy is very
+   good!) will be much different in the backend, the proc layer and the gui.
+ - Initialisation of the very basic services is tricky, as always. Seemingly
+   this includes link:NoBug[]. Of course one wants to use assertions and some
+   diagnostics logging already in constructor code, and, sadly enough it can't
+   be avoided completely to run such already in the static initialisation phase
+   before entering main(). My current solution (putting `NOBUG_INIT` it in the
+   Appconfig ctor) is not airtight, I think we can't avoid going for something
+   like a Schwartz counter here.
+ - Then there is the initialisation of common services. For these, it's just
+   fine to do a dedicated call from main (e.g. to init the backend services and
+   for creating the basic empty session for proc and firing off the event loop
+   for the GUI). I think it's no problem to ''disallow'' any IO, any accessing
+   of services in the other layers prior to this point.
+ - What is with shutdown? personally, I'd like to call a explicit shutdown hook
+   at the end of main and to disallow any IO and usage of services outside each
+   subsystem after this point. Currently, I have the policy for the proc layer
+   to require every destructor to be called and everything to be deallocated,
+   meaning that quite a lot of code is running after the end of main() -- most
+   of which is library generated. +
+   Ichthyo:: '2008-04-12T04:56:49Z
+
+Some comments...
+
+- Regarding organisation of includes:... agreed
+- Initialisation of the very...
+
+  * I won't hesitate to add some C\++ functionality to give *NoBug* an
+    singleton initialization in C++
+    
+- Then there is the initialisation of common services... _agreed_
+- What is with shutdown?...
+
+  * Mostly agreed, I suggest to make all initialization code once-only, a
+    second call shall bail out (under link:NoBug[]), all shutdown code shall be
+    callable multiple times where subsequent calls are no-ops, this allows us
+    to register at least some things in atexit() handlers, while we should add
+    an explicit clean shutdown too, whenever that (or the atexit) handlers get
+    really called is another thing, shutting down costs time and in emergency
+    cases we first and foremost only want to shutdown things which fix some
+    state for the next easier startup, clearing memory and process resources is
+    only useful and has to be done when things run under a leak checker or as
+    library. +
+    CT:: '2008-04-12T08:49:55Z'
+
+
+OK. So now I've done the following:
+
+  - Moved lumiera.h and nobugcfg.h to proc/lumiera.hpp and nobugcfg.hpp (i.e.
+    consider them now as Proc-Layer only)
+  - Changed Appconfig to support simple lifecycle hooks, especially a
+    `ON_BASIC_INIT`. Rationale is that I don't have a lot of "magic" code in the
+    Appconfig ctor, rather each subsystem in need of a basic initialisation can
+    install a small callback. It can do so for other lifecycle events too.
+  - Added the usual magic static ctor to install those callbacks in case they
+    really need an early init. Thus now nobugcfg.hpp can install a callback to
+    issue `NOBUG_INIT`, error.hpp does the same for the unknown-exception
+    handler. I'll expect the config query system to need something similar soon.
+  - For all remaining initialisation (in case it can't be done on demand, which
+    of course is always preferable) now main() issues and explicit call
+    `Appconfig::lifecycle (ON_GLOBAL_INIT)` and similar fire off
+    `ON_GLOBAL_SHUTDOWN` at end. Similar for the tests. We could add an init-call
+    for the backend there too, either directly or by registering an callback,
+    just as it fits in better.
+  - This system is extensible: for example I plan to let the
+    link:SessionManager[] issue `ON_SESSION_INIT` and `ON_SESSION_CLOSE` events.
+    E.g. AssetManager could now just install his callbacks to clean up the
+    internal Asset registry +
+    Ichthyo:: '2008-04-14T03:40:54Z'
+
+Regarding shutdown my understanding is that `ON_GLOBAL_SHUTDOWN` does what is
+absolutely necessary (like flushing the session file, closing display and
+network connections, writing a backup or committing to a database). I see no
+problem with bypassing the standard dtor calls in a release build (they add
+no value besides diagnostics and even may cause a lot of pages to be swapped
+in). We could even make this a policy ("don't rely on destructors or
+automatic shutdown code to do any cleanup of permanent importance")
+
+.State -> Final
+I made this final now, details are still in progress to be worked out, but we
+basically agreed on it iirc
+
+CT:: '2008-07-26T09:08:11Z'
+
+
+.State -> Dropped
+//add reason
+Years later, I'm just stumbling accross this RfC, and it looks somewhat
+outdated and ``misaligned'' IMHO.
+
+* this RfC proposes only one tiny and lightweight feature.
+* Startup and Shutdown of an application like Lumiera requires way more
+  than this. More specifically, we have to consider modularisation.
+* in hindsight, I was naiive to agree with this proposal.
+  It can not be that easy.
+* my comments do indeed indicate the direction the further development
+  did take: today, Lumiera does the _exact opposite_ of this proposal,
+  there is *no central init call* -- we use *modularised hooks* instead
+  and each subsystem is self contained. We even have a subsystem manager
+  to handle dependencies in startup and shtudown.
+
+For this reason, I mark this RfC as *dropped* now. +
+In case there is further need of discussion regarding this topic,
+we should preferably start a new RfC.
+  
+Ichthyostega:: 'Mo 08 Sep 2014 01:44:49 CEST' ~<prg@ichthyostega.de>~
+
+
+//endof_comments:
+
+''''
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

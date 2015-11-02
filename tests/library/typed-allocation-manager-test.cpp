@@ -26,7 +26,7 @@
 #include "lib/util.hpp"
 
 
-#include <tr1/memory>
+#include <memory>
 #include <cstdlib>
 
 
@@ -35,7 +35,7 @@ namespace test{
   
   
   using util::isSameObject;
-  using std::tr1::shared_ptr;
+  using std::shared_ptr;
   using std::rand;
   
   

@@ -142,7 +142,7 @@ typedef lumiera_rwlock* LumieraRWLock;
 
 /**
  * Initialize a rwlock
- * @param self is a pointer to the rwlock to be initialized
+ * @param self is a pointer to the rwlock to be initialised
  * @return self as given
  */
 LumieraRWLock
@@ -153,7 +153,7 @@ lumiera_rwlock_init (LumieraRWLock self,
 
 /**
  * destroy a rwlock
- * @param self is a pointer to the rwlock to be initialized
+ * @param self is a pointer to the rwlock to be initialised
  * @return self on success or NULL at error
  */
 LumieraRWLock

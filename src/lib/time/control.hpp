@@ -50,14 +50,14 @@
  ** Thus an interface might accept a time::Control element \em reference (e.g. the
  ** lumiera::Play::Controller uses this pattern) -- meaning that the client owns the
  ** Control element and might attach listeners, while the implementation (server side)
- ** will attach the Control to mutate an time value entity otherwise not disclosed
+ ** will attach the Control to mutate a time value entity otherwise not disclosed
  ** (e.g. the playhead position of the playback process). Of course, in this case
  ** the client is responsible for keeping the Control element and all listeners
  ** alive, and to invoke Control#disconnect prior to destroying the element.
  ** 
  ** Of course, the reversed usage situation would be possible as well: an interface
- ** exposing a time::Control, thus allowing to attach target and listeners, while the
- ** actual changes will originate somewhere within the service implementation.
+ ** may expose a time::Control, thus allowing to attach target and listeners, while the
+ ** actual changes will originate somewhere within the opaque service implementation.
  ** 
  ** Another usage pattern would be to expose a time::Control \c const&, allowing only to
  ** impose changes, but not to change the target or listener attachments. To the contrary,
@@ -77,7 +77,7 @@
  ** both as target and as change/notification value. This ability is compiled in conditionally,
  ** as including mutation.hpp causes several additional includes, which isn't desirable when
  ** it comes just to changing plain time values. Thus, to get these additional specialisations,
- ** the LIB_TIME_TIMEQUQNT_H header guard needs to be defined, which happens automatically
+ ** the LIB_TIME_TIMEQUANT_H header guard needs to be defined, which happens automatically
  ** if lib/time/mutation.hpp is included prior to lib/time/control.hpp.
  ** 
  ** \par implementation notes

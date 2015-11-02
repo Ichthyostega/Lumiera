@@ -28,7 +28,7 @@
 
 //#include <string>
 //#include <memory>
-//#include <tr1/functional>
+//#include <functional>
 //#include <boost/scoped_ptr.hpp>
 
 

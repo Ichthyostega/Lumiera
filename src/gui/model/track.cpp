@@ -20,17 +20,24 @@
 
 * *****************************************************/
 
-#include "track.hpp"
-#include "parent-track.hpp"
-#include <boost/foreach.hpp>
 
-using namespace std::tr1;
-using namespace std;
+#include "gui/model/track.hpp"
+#include "gui/model/parent-track.hpp"
+
+#include <boost/foreach.hpp>
+#include <memory>
+#include <string>
+#include <list>
 
 namespace gui {
 namespace model {
   
+using std::list;
+using std::string;
+using std::shared_ptr;
+
 const list< shared_ptr<Track> > Track::NoChildren;
+
 
 Track::Track()
   : enabled(true),
@@ -40,7 +47,7 @@ Track::Track()
 Track::~Track() { }
 
 
-const std::list< shared_ptr<Track> >&
+const list< shared_ptr<Track> >&
 Track::get_child_tracks() const
 {
   return Track::NoChildren;
@@ -98,8 +105,7 @@ Track::print_branch()
 }
 
 shared_ptr<ParentTrack>
-Track::find_descendant_track_parent(
-  shared_ptr<Track> /*child*/)
+Track::find_descendant_track_parent (shared_ptr<Track>)
 { 
   return shared_ptr<ParentTrack>();
 }
@@ -123,7 +129,7 @@ Track::signalNameChanged() const
 }
 
 string
-Track::print_branch_recursive(const unsigned int indentation)
+Track::print_branch_recursive (const unsigned int indentation)
 {
   string str;
   

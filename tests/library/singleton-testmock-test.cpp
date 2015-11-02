@@ -119,7 +119,7 @@ namespace test{
     {
       
       void
-      run (Arg arg)
+      run (Arg)
         {
           Depend<TestSingletonO> sing;
           

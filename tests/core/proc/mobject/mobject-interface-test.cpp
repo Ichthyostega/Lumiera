@@ -111,6 +111,9 @@ namespace test    {
           Duration lenC1 = testClip1->getLength();
           Duration lenC2 = testClip2->getLength();
           Duration lenL1 = testLabel1->getLength();
+          CHECK (lenC1 > Time::ZERO);
+          CHECK (lenC2 > Time::ZERO);
+          CHECK (lenL1 ==Time::ZERO);
           
           cout << testClip1->shortID() << endl;
           cout << testClip2->shortID() << endl;

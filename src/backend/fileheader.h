@@ -1,5 +1,5 @@
 /*
-  fileheader.h  -  Definitions of generic lumiera fileheaders and identification
+  FILEHEADER.h  -  Definitions of generic lumiera file headers and identification
 
   Copyright (C)         Lumiera.org
     2010,               Christian Thaeter <ct@pipapo.org>
@@ -17,12 +17,27 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_FILEHEADER_H
-#define LUMIERA_FILEHEADER_H
+
+/** @file fileheader.h
+ ** Common header format to identify various kinds of files.
+ ** Lumiera creates some files on itself, caches, indexes and so on.
+ ** Here we define a unified header format for identifying and handling these files.
+ **
+ ** Most of this files store binary data in host order for performance reasons and are not yet
+ ** intended to be transfered between computers. While the transferability depends on the
+ ** concrete implementation later and is not constrained here.
+ **
+ */
+
+#ifndef BACKEND_FILEHEADER_H
+#define BACKEND_FILEHEADER_H
 
 #include "lib/error.h"
+
+
 
 LUMIERA_ERROR_DECLARE (FILEHEADER_NOWRITE);
 LUMIERA_ERROR_DECLARE (FILEHEADER_HEADER);
@@ -46,17 +61,6 @@ typedef lumiera_fileheader_raw* LumieraFileheaderRaw;
 #include <semaphore.h>
 
 
-/**
- * @file
- *
- * Lumiera creates some files on itself, caches, indexes and so on.
- * Here we define a unified header format for identifying and handling these files.
- *
- * Most of this files store binary data in host order for performance reasons an are not yet
- * intended to be transfered between computers. While the transferability depends on the
- * concrete implementation later and is not contstrained here.
- *
- */
 
 
 #ifndef LUMIERA_PACKED
@@ -64,7 +68,7 @@ typedef lumiera_fileheader_raw* LumieraFileheaderRaw;
 #endif
 
 /**
- * A basic fileheader
+ * A basic file header
  * On-Disk representation starts with 32 bytes identifying the file.
  * The first 32 bytes are human readable text.
  */
@@ -76,12 +80,12 @@ struct LUMIERA_PACKED lumiera_fileheader_raw_struct
   char version[3];
   /** always '\n' */
   char newline1;
-  /** freeform string, comment or so on, initialized to spaces */
+  /** free form string, comment or so on, initialised to spaces */
   char meta[15];
   /** always '\n' */
   char newline2;
 
-  /** initialized to spaces, flags are single chars, unsorted */
+  /** Initialised to spaces, flags are single chars, unsorted */
   char flags[6];
   /** always '\n' */
   char newline3;
@@ -93,7 +97,8 @@ struct LUMIERA_PACKED lumiera_fileheader_raw_struct
 };
 
 /**
- * Fileheader flags are chars to make this easily inspectable, these add another human readable line to the header
+ * File header flags are chars to support debugging and inspection,
+ * these add another human readable line to the header.
  */
 
 /** file is clean */
@@ -107,7 +112,7 @@ struct LUMIERA_PACKED lumiera_fileheader_raw_struct
 
 
 /**
- * A fileheader object encapsulates the underlying mmap object which keeps the
+ * A file header object encapsulates the underlying mmap object which keeps the
  * raw header data in memory and and the dereferenced thereof.
  */
 struct lumiera_fileheader_struct
@@ -118,15 +123,15 @@ struct lumiera_fileheader_struct
 
 
 /**
- * Create a fileheader on a file open for writing.
- * This overwrites any existing date, take care. The created fileheader is mmaped into memory
- * and must be closed after use. The File should be locked for operations on the fileheader.
+ * Create a file header on a file open for writing.
+ * This overwrites any existing date, take care. The created file header is mmaped into memory
+ * and must be closed after use. The File should be locked for operations on the file header.
  * @param file The file on which to create the header.
  * @param fourcc pointer to a string of length 4
  * @param version version number for the header (should be incremented after changes)
  *                the value '0' is reserved for experimental versions.
  * @param size The actual size of all header data, including following format specific data.
- * @param flags initial flags which should be set (dont include CLEAN here, should be set on close)
+ * @param flags initial flags which should be set (don't include CLEAN here, should be set on close)
  * @return A lumiera_fileheader object by value, .header and .map are set to NULL on error.
  */
 lumiera_fileheader
@@ -134,9 +139,9 @@ lumiera_fileheader_create (LumieraFile file, char* fourcc, int version, size_t s
 
 
 /**
- * Open an existing fileheader.
- * The underlying file might be readonly. The opened fileheader is mmaped into memory
- * and must be closed after use. The File should be locked for operations on the fileheader.
+ * Open an existing file header.
+ * The underlying file might be readonly. The opened file header is mmaped into memory
+ * and must be closed after use. The File should be locked for operations on the file header.
  * @param file The file on which to open the header.
  * @param fourcc pointer to a string of length 4 with the expected identifier for the file
  * @param size The actual size of all header data, including following format specific data
@@ -149,8 +154,8 @@ lumiera_fileheader_open (LumieraFile file, char* fourcc, size_t size, const char
 
 
 /**
- * Closes a previously created or opened fileheader.
- * @param self the fileheader to close.
+ * Closes a previously created or opened file header.
+ * @param self the file header to close.
  * @param flags_add set this flags if not already set
  * no errors, no nothing returned (yet)
  */
@@ -159,9 +164,9 @@ lumiera_fileheader_close (LumieraFileheader self, const char* flags_add);
 
 
 /**
- * Queries the version of a fileheader.
- * @param self the fileheader to query
- * @return the version stored in the fileheader or -1 on error.
+ * Queries the version of a file header.
+ * @param self the file header to query
+ * @return the version stored in the file header or -1 on error.
  */
 int
 lumiera_fileheader_version (LumieraFileheader self);
@@ -187,7 +192,7 @@ LumieraFileheader
 lumiera_fileheader_flags_clear (LumieraFileheader self, const char* flags);
 
 
-#endif
+#endif /*BACKEND_FILEHEADER_H*/
 /*
 // Local Variables:
 // mode: C

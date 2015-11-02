@@ -1,0 +1,194 @@
+TESTING "Core Component Test Suite: fundamental concepts and frameworks" ./test-suite --group=common
+
+
+
+TEST "basic application state" Appconfig_test <<END
+return: 0
+END
+
+
+TEST "Advice collaboration (basics)" AdviceBasics_test <<END
+return: 0
+END
+
+
+PLANNED "Advice constellations" AdviceSituations_test <<END
+return: 0
+END
+
+
+PLANNED "Advice variants and configurations" AdviceConfiguration_test <<END
+return: 0
+END
+
+
+PLANNED "Advice multiplicity and concurrency" AdviceMultiplicity_test <<END
+return: 0
+END
+
+
+TEST "Advice binding patterns" AdviceBindingPattern_test <<END
+out-lit: 	--->Binding[]
+out-lit: aSymbol	--->Binding[aSymbol/0()]
+out-lit: a.compound_Symbol-with-various.parts	--->Binding[a.compound_Symbol-with-various.parts/0()]
+out-lit: trailing Garbage allowed. ☢☢ eat ☠☠☠ atomic ☠☠☠ waste ☢☢	--->Binding[Garbage/0(), allowed/0(), trailing/0()]
+out-lit: a, list , of ,symbols.	--->Binding[a/0(), list/0(), of/0(), symbols/0()]
+out-lit: nullary().	--->Binding[nullary/0()]
+out-lit: nullary( )	--->Binding[nullary/0()]
+out-lit: nullary  .	--->Binding[nullary/0()]
+out-lit: predicate( with-argument )	--->Binding[predicate/1(with-argument)]
+out-lit: Binding[advice.type.n7lumiera6advice4test12_GLOBAL__N_111DummyAdviceE/0(), one/0(), three/1(four), two/0()]
+out-lit: b0==Binding[]
+out-lit: b1==Binding[cat1/0(), cat2/0()]
+out-lit: b2==Binding[cat1/0(), cat2/0()]
+out-lit: b2==Binding[advice.type.n3lib4time4TimeE/0(), cat1/0(), cat2/0(), cat3/1(zzz)]
+return: 0
+END
+
+
+TEST "Advice index implementation" AdviceIndex_test <<END
+return: 0
+END
+
+
+TEST "LifeCycle_test" LifeCycle_test  <<END
+return: 0
+END
+
+
+TEST "Multithread Locking by Monitor" SyncLocking_test  <<END
+return: 0
+END
+
+
+TEST "Multithread Locking whole class" SyncClasslock_test  <<END
+return: 0
+END
+
+
+TEST "Wrapper thread-local pointers" ThreadLocal_test  <<END
+return: 0
+END
+
+
+TEST "Thread-local diagnostic context" DiagnosticContext_test  <<END
+return: 0
+END
+
+
+TEST "Wait/Notify on Object Monitor" SyncWaiting_test  <<END
+return: 0
+END
+
+
+TEST "Create 20 Threads passing context" ThreadWrapper_test  <<END
+return: 0
+END
+
+
+TEST "Waiting on Thread termination" ThreadWrapperJoin_test  <<END
+return: 0
+END
+
+
+TEST "Starting and stopping subsystems" SubsystemRunner_test  <<END
+out: -----singleSubsys_complete_cycle-----
+out: -----singleSubsys_start_failure-----
+out: -----singleSubsys_emegency_exit-----
+out: -----dependentSubsys_complete_cycle-----
+out: -----dependentSubsys_start_failure-----
+return: 0
+END
+
+
+TEST "Lumiera Time Wrapper" TimeBasics_test  <<END
+out: .?.:..:..\....
+return: 0
+END
+
+
+TEST "Times and time intervals" TimeValue_test  <<END
+return: 0
+END
+
+
+PLANNED "Time Quantisation" TimeQuantisation_test  <<END
+return: 0
+END
+
+
+TEST "Changing time specifications" TimeMutation_test  <<END
+return: 0
+END
+
+
+TEST "Life changing time specifications with feedback" TimeControl_test  <<END
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.TimeValue.$
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.Time.$
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.Duration.$
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.TimeSpan.$
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.QuTime.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.TimeValue.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.Time.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.Duration.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.TimeSpan.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.QuTime.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.TimeValue.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.Time.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.Duration.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.TimeSpan.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.QuTime.$
+return: 0
+END
+
+
+TEST "Quantiser API basics" QuantiserBasics_test  <<END
+return: 0
+END
+
+
+TEST "Defining Suppport for specific timecode formats" FormatSupport_test  <<END
+return: 0
+END
+
+
+TEST "Time formats and timecodes" TimeFormats_test  <<END
+out: Framecount=".+#" time = .+:..:..
+out: SMPTE=".+:..:..:.." time = .+:..:..
+out-lit: ----SMPTE-----
+out-lit: SMPTE="  5:42:23:13" time = 5:42:23.520
+return: 0
+END
+
+
+TEST "Parsing time values" TimeParsing_test  <<END
+END
+
+
+TEST "VisitingTool_test" VisitingTool_test <<END
+out: === Babbler meets Boss and BigBoss ===
+out: Hello Boss, nice to meet you...
+out: Hello Big Boss, nice to meet you...
+out: === Babbler meets HomoSapiens and Leader ===
+out: Hello Boss, nice to meet you...
+return: 0
+END
+
+
+TEST "VisitingToolExtended_test" VisitingToolExtended_test <<END
+out: === Babbler meets Boss and BigBoss ===
+out: Hello Boss, nice to meet you...
+out: Hello Big Boss, nice to meet you...
+out: === Babbler meets HomoSapiens and Leader ===
+out: Hello Boss, nice to meet you...
+out: === Blatherer meets Leader and Visionary masqueraded as Chief ===
+out: we-do-everything-for-YOU!
+out: Hello Mr.Future, nice to meet you...
+out: === Babbler masqueraded as Tool meets Leader and Visionary masqueraded as HomoSapiens ===
+out: Hello Boss, nice to meet you...
+out: === Babbler masqueraded as Tool meets Leader and Visionary masqueraded as Leader ===
+out: Hello Boss, nice to meet you...
+return: 0
+END
+
+

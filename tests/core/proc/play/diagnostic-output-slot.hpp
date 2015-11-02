@@ -50,8 +50,8 @@
 #include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
-#include <tr1/unordered_set>
-#include <tr1/memory>
+#include <unordered_set>
+#include <memory>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -71,7 +71,7 @@ namespace play {
   namespace diagn = proc::engine::diagn;
 
 //using std::vector;
-  using std::tr1::shared_ptr;
+  using std::shared_ptr;
 //using boost::scoped_ptr;
   
   namespace { // diagnostics & internals....
@@ -102,7 +102,7 @@ namespace play {
     , boost::noncopyable
     {
       
-      typedef std::tr1::unordered_set<FrameID> FrameTrackingInfo;
+      typedef std::unordered_set<FrameID> FrameTrackingInfo;
       
       
       TrackingHeapBlockProvider buffProvider_;

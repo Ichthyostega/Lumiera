@@ -130,7 +130,7 @@ namespace session {
    *  @note this yields the \em raw path (basic containment hierarchy),
    *        as opposed to an effective or virtual path, which should reflect
    *        the attachment of Sequences to Timelines or meta-clips. That is,
-   *        you'll always get the top-level track of any sequence as direct
+   *        you'll always get the top-level fork root of any sequence as direct
    *        child of the root node and timelines (BindingMO) just appear
    *        to be "dead ends"
    */

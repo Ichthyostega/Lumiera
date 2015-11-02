@@ -48,7 +48,6 @@ namespace test {
   using namespace lib::time;
   
   typedef Builder<TimeGrid> GridBuilder;
-  typedef EntryID<TimeGrid> GridID;
   
   namespace { // Test definitions...
     

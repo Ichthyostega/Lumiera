@@ -82,6 +82,10 @@ namespace test{
    * @see RangeIter
    * @see iter-adapter.hpp
    * @see iter-adapter-stl.hpp
+   * @todo this test just pulls all the values from the iterator
+   *       and the testsuite verifies the retrieved values.
+   *       But for the hash-map, the order of the results
+   *       is not guaranteed, and implementation dependent.
    */
   class IterAdapterSTL_test : public Test
     {
@@ -89,7 +93,7 @@ namespace test{
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
+          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
           
           checkDistinctValIter();
           

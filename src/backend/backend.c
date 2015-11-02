@@ -1,5 +1,5 @@
 /*
-  backend  -  common lumiera backend things
+  Backend  -  common lumiera backend facilities
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
@@ -84,7 +86,7 @@ lumiera_backend_init (void)
 
   const char* filehandles = lumiera_tmpbuf_snprintf (SIZE_MAX,
                                                      "backend.file.max_handles = %d",
-                                                     /* roughly 2/3 of all availables filehandles are managed by the backend */
+                                                     /* roughly 2/3 of all available filehandles are managed by the backend */
                                                      (sysconf (_SC_OPEN_MAX)-10)*2/3);
 
   lumiera_config_setdefault (filehandles);
@@ -116,6 +118,7 @@ lumiera_backend_init (void)
 
   return 0;
 }
+
 
 void
 lumiera_backend_destroy (void)

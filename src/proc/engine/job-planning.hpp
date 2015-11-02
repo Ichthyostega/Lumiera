@@ -22,7 +22,7 @@
 
 /** @file job-planning.hpp
  ** The "mechanics" of discovering and planning frame calculation jobs.
- ** This is a rather abstract chunk of code, dealing especially with the technicalities
+ ** This is a rather abstract chunk of code, to deal especially with the technicalities
  ** of \em organising the discovery of prerequisites and of joining all the discovered operations
  ** into a sequence of planning steps. The net result is to present a <i>sequence of job planing</i>
  ** to the user, while actually encapsulating a depth-first tree exploration, which proceeds on demand.
@@ -34,11 +34,11 @@
  ** - JobPlanningSequence is the entry point for client code: it allows to generate a sequence of jobs
  ** - JobPlanning is a view on top of all the collected planning information for a single job
  ** - PlanningState is an iterator, successively exposing a sequence of JobPlanning views
- ** - #expandPrerequisites(JobPlanning cons&) is the operation to explore further prerequisite Jobs
+ ** - #expandPrerequisites(JobPlanning const&) is the operation to explore further prerequisite Jobs recursively
  ** - PlanningStepGenerator yields the underlying "master beat": a sequence of frame locations to be planned
  ** 
  ** \par how the PlanningState (sequence) is advanced
- ** PlanningState is an iterator, exposing a sequence of JobPlanning elements. On the implementation level,
+ ** PlanningState is an iterator to expose a sequence of JobPlanning elements. On the implementation level,
  ** there is always just a single JobPlanning element, which represents the \em current element; this element
  ** lives as "state core" within the PlanningState object. Advancing to the next JobPlanning element (i.e. to
  ** consider the next job or prerequisite job to be planned for scheduling) is performed through the iteration
@@ -89,7 +89,7 @@ namespace engine {
   /**
    * View on the execution planning for a single calculation step.
    * When this view-frontend becomes accessible, behind the scenes all
-   * the necessary information has be pulled and collected from the
+   * the necessary information has been pulled and collected from the
    * low-level model and the relevant rendering/playback configuration.
    * Typically, clients will materialise this planning into a Job (descriptor)
    * ready to be entered into the scheduler.
@@ -178,7 +178,7 @@ namespace engine {
       friend bool
       checkPoint (JobPlanning const& plan)
       {
-        return !isnil (plan.plannedOperations_);
+        return not isnil (plan.plannedOperations_);
       }
       
       friend JobPlanning&
@@ -302,13 +302,13 @@ namespace engine {
       
       bool canContinue (FrameCoord const& location)
         {
-          return seamlessNextFrame (location.absoluteFrameNumber,
-                                    location.modelPort);
+          return not isEndOfChunk (location.absoluteFrameNumber,
+                                   location.modelPort);
         }
       
     protected:
       virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)  =0;
-      virtual bool       seamlessNextFrame (int64_t, ModelPort port)         =0;
+      virtual bool       isEndOfChunk    (FrameCnt, ModelPort port)          =0;
     };
   
   

@@ -252,7 +252,7 @@ namespace test   {
   {
     PseudoRandom gen(distinction_);
     for (uint i=0; i<BUFFSIZ; ++i)
-      if (data_[i] != (gen() % CHAR_MAX))
+      if (data_[i] != char(gen() % CHAR_MAX))
         return false;
     return true;
   }
@@ -262,7 +262,7 @@ namespace test   {
   {
     PseudoRandom gen(distinction_);
     for (uint i=0; i<BUFFSIZ; ++i)
-      data_[i] = (gen() % CHAR_MAX);
+      data_[i] = char(gen() % CHAR_MAX);
   }
   
   

@@ -1,0 +1,62 @@
+Backporting to older platforms
+==============================
+:Date: 8/2015
+
+GCC-4.9
+-------
+Currently (as of 8/2015), we require a quite recent compiler and likewise a suitable
+C++ standard library for the build. The reason is that we set the language compatibility
+level to `-std=gnu++14`. If you're on a platform with an older compiler and standard library,
+you need a way to install a recent toolchain in a way, that the standard library includes
+like e.g. `#include <functional>` will indeed pick up a suitably modern standard library,
+in addition to being compiled with a recent compiler (GCC-4.9 or CLang 3.5). The way to
+achieve this is different for every distribution; we'll show the solution for
+»Ubuntu Trusty 14.04 LTS« here as an example
+
+GCC and Libstdc++ 4.9 on Ubuntu Trusty
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+While the standard compiler for Unbutu in 2014 was GCC-4.8, the _Ubuntu Toolchain Project_
+provides builds and packages for more recent toolchains through an _PPA_. So we'll add that
+PPA as an additional package source, install a GCC-4.9 with the accompanying standard
+library, and finally switch the system standard for C/C++ compiler to this new version.
+All these steps are reversible and can be deactivated when causing problems elsewhere...
+
+* add the https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/test[Ubuntu Toolchain PPA]:
++
+----
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+----
+
+ * get the compiler and standard library
++
+----
+sudo apt-get install gcc-4.9 g++-4.9
+----
+
+* switch the system standard for ``C compilation'' -- make sure to tie the switch for
+  C and C++ compiler, to avoid mixing generated code for incompatible library versions.
++
+----
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 \
+                         --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
+----
+
+Assuming you've also installed the standard gcc`(4.8)` package, you can arrange matters
+such as to be able to switch back and forth between both compilers. For this to work,
+we need also to make the (default) gcc-4.8 an option in the choice
+
+----
+sudo apt-get install gcc-4.8 g++-4.8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 \
+                         --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
+----
+
+From this point on, we can switch configuration by
+
+----
+sudo update-alternatives --config gcc
+---- 
+
+
+

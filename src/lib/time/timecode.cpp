@@ -29,7 +29,7 @@
 #include "lib/util.hpp"
 #include "lib/util-quant.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/regex.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -46,9 +46,6 @@ namespace error = lumiera::error;
 
 namespace lib {
 namespace time {
-  
-  
-  TCode::~TCode()   { }  // emit VTable here....
   
   
   namespace format {  /* ================= Timecode implementation details ======== */ 
@@ -70,7 +67,7 @@ namespace time {
       static regex frameNr_parser  ("(?<![\\.\\-\\d])(-?\\d+)#");   // no leading [.-\d],  number+'#'
       smatch match;
       if (regex_search (frameNumber, match, frameNr_parser))
-        return frameGrid.timeOf (lexical_cast<int64_t> (match[1]));
+        return frameGrid.timeOf (lexical_cast<FrameCnt> (match[1]));
       else
         throw error::Invalid ("unable to parse framecount \""+frameNumber+"\""
                              , LUMIERA_ERROR_INVALID_TIMECODE);
@@ -205,9 +202,9 @@ namespace time {
     uint
     Smpte::getFramerate (QuantR quantiser_, TimeValue const& rawTime)
     {
-      int64_t refCnt = quantiser_.gridPoint(rawTime);
-      int64_t newCnt = quantiser_.gridPoint(Time(0,1) + rawTime);
-      int64_t effectiveFrames = newCnt - refCnt;
+      FrameCnt refCnt = quantiser_.gridPoint(rawTime);
+      FrameCnt newCnt = quantiser_.gridPoint(Time(0,1) + rawTime);
+      FrameCnt effectiveFrames = newCnt - refCnt;
       ENSURE (1000 > effectiveFrames);
       ENSURE (0 < effectiveFrames);
       return uint(effectiveFrames);
@@ -277,8 +274,8 @@ namespace time {
     }
     
     
-    using std::tr1::bind;
-    using std::tr1::placeholders::_1;
+    using std::bind;
+    using std::placeholders::_1;
     
     /** bind the individual Digxel mutation functors
      *  to normalise raw component values */

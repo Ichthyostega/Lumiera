@@ -80,7 +80,7 @@
  ** both as target and as change/notification value. This ability is compiled in conditionally,
  ** as including mutation.hpp causes several additional includes, which isn't desirable when
  ** it comes just to changing plain time values. Thus, to get these additional specialisations,
- ** the LIB_TIME_TIMEQUQNT_H header guard needs to be defined, which happens automatically
+ ** the LIB_TIME_TIMEQUANT_H header guard needs to be defined, which happens automatically
  ** if lib/time/mutation.hpp is included prior to lib/time/control.hpp.
  ** 
  ** As a special convention, any \em quantised (grid aligned) types involved in these
@@ -106,7 +106,7 @@
 #include "lib/time/timevalue.hpp"
 
 #include <boost/utility/enable_if.hpp>
-#include <tr1/functional>
+#include <functional>
 
 
 namespace lib {
@@ -116,10 +116,10 @@ namespace mutation {
   
   using boost::disable_if;
   using lib::meta::is_sameType;
-  using std::tr1::placeholders::_1;
-  using std::tr1::function;
-  using std::tr1::bind;
-  using std::tr1::ref;
+  using std::placeholders::_1;
+  using std::function;
+  using std::bind;
+  using std::ref;
   
   
   
@@ -146,7 +146,7 @@ namespace mutation {
       return non_grid_aligned_TimeValue;
     }
     
-#ifdef LIB_TIME_TIMEQUQNT_H
+#ifdef LIB_TIME_TIMEQUANT_H
     inline QuTime
     maybeMaterialise (QuTime const& alignedTime)
     {
@@ -198,7 +198,7 @@ namespace mutation {
           return target;
         }
     };
-#ifdef LIB_TIME_TIMEQUQNT_H
+#ifdef LIB_TIME_TIMEQUANT_H
   template<class TAR>
   struct Builder<QuTime, TAR>
     {

@@ -55,6 +55,8 @@
 #define LIB_HASH_INDEXED_H
 
 #include "lib/hash-value.h"
+#include "lib/hash-standard.hpp"
+#include "lib/error.hpp"
 
 extern "C" {
 #include "lib/luid.h"
@@ -108,7 +110,7 @@ namespace lib {
         
         operator HashVal()                const { return lumiera_uid_hash (get()); }
         bool operator== (LuidH const& o)  const { return lumiera_uid_eq (get(), o.get()); }
-        bool operator!= (LuidH const& o)  const { return !operator== (o); }
+        bool operator!= (LuidH const& o)  const { return not operator== (o); }
         
         /** for passing to C APIs */
         LUID get()                        const { return const_cast<LUID> (&luid_);}

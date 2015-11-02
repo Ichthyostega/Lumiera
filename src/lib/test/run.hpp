@@ -28,7 +28,7 @@
  ** 
  ** @see HelloWorld_test
  ** @see test::Suite
- ** @see mainsuite.cpp
+ ** @see testrunner.cpp
  ** @see main.cpp
  */
 
@@ -42,13 +42,14 @@
 #include "lib/test/suite.hpp"
 #include "lib/util.hpp"
 
+#include <memory>
 #include <string>
 
 
 namespace test {
   
   using std::string;
-  using std::auto_ptr;
+  using std::shared_ptr;
   
   typedef std::vector<string> & Arg; 
   
@@ -72,7 +73,7 @@ namespace test {
     {
     public:
       virtual ~Launcher() {}
-      virtual auto_ptr<Test> operator() () = 0;
+      virtual shared_ptr<Test> makeInstance()  =0;
     };
     
   
@@ -91,8 +92,16 @@ namespace test {
   class Launch : public Launcher
     {
     public:
-      Launch (string testID, string groups)  { Suite::enrol (this,testID,groups); };
-      virtual auto_ptr<Test> operator() ()   { return auto_ptr<Test> (new TEST ); };
+      Launch (string testID, string groups)
+        {
+          Suite::enrol (this,testID,groups);
+        }
+      
+      virtual shared_ptr<Test>
+      makeInstance ()  override
+        {
+          return shared_ptr<Test> (new TEST );
+        }
     };
     
 } // namespace test

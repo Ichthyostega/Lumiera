@@ -216,7 +216,7 @@ namespace session {
   inline bool
   operator!= (ScopePath const& path1, ScopePath const& path2)
   {
-    return !(path1 == path2);
+    return not (path1 == path2);
   }
   
   

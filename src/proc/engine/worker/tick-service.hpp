@@ -41,15 +41,15 @@
 #include "lib/error.hpp"
 #include "backend/thread-wrapper.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <limits>
 
 
 namespace proc {
 namespace node {
 
-  using std::tr1::function;
-  using std::tr1::bind;
+  using std::function;
+  using std::bind;
   
   
   

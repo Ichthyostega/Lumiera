@@ -104,7 +104,7 @@ namespace control {
       friend bool
       operator!= (Mutation const& m1, Mutation const& m2)
         {
-          return !(m1==m2);
+          return not (m1==m2);
         }
     };
   

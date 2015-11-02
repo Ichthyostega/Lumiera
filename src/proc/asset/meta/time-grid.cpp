@@ -22,7 +22,7 @@
 
 
 #include "proc/asset/meta/time-grid.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "proc/asset/struct-scheme.hpp"
 #include "proc/assetmanager.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
@@ -36,7 +36,6 @@
 using util::_Fmt;
 using util::cStr;
 using util::isnil;
-using boost::str;
 using std::string;
 
 
@@ -49,8 +48,8 @@ namespace meta {
   
  
   /** */
-  TimeGrid::TimeGrid (EntryID<TimeGrid> const& nameID)
-    : Meta (nameID.getIdent())
+  TimeGrid::TimeGrid (GridID const& nameID)
+    : Meta (idi::getAssetIdent (nameID))
     { }
   
   
@@ -64,7 +63,7 @@ namespace meta {
   using lib::time::PQuant;
   using lib::time::Quantiser;
   using lib::time::FixedFrameQuantiser;
-  using std::tr1::dynamic_pointer_cast;
+  using std::dynamic_pointer_cast;
   
   namespace advice = lumiera::advice;
   
@@ -108,12 +107,12 @@ namespace meta {
     {
       
     public:
-      SimpleTimeGrid (Time start, Duration frameDuration, EntryID<TimeGrid> const& name)
+      SimpleTimeGrid (Time start, Duration frameDuration, GridID const& name)
         : TimeGrid (name)
         , FixedFrameQuantiser(frameDuration,start)
         { }
       
-      SimpleTimeGrid (Time start, FrameRate frames_per_second, EntryID<TimeGrid> const& name)
+      SimpleTimeGrid (Time start, FrameRate frames_per_second, GridID const& name)
         : TimeGrid (name)
         , FixedFrameQuantiser(frames_per_second,start)
         { }
@@ -136,7 +135,7 @@ namespace meta {
    *       Later on the intention is that in such cases, instead of creating a new grid
    *       we'll silently return the already registered existing and equivalent grid.
    */
-  P<TimeGrid>
+  lib::P<TimeGrid>
   Builder<TimeGrid>::commit()
   {
     if (predecessor_)
@@ -149,7 +148,7 @@ namespace meta {
         _Fmt gridIdFormat("grid(%f_%d)");
         id_ = string(gridIdFormat % fps_ % _raw(origin_));
       }
-    EntryID<TimeGrid> nameID (id_);
+    GridID nameID (id_);
     
     return publishWrapped (*new SimpleTimeGrid(origin_, fps_, nameID));
   }

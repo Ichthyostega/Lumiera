@@ -402,9 +402,7 @@ TESTS_END
 
 
 
-/*
-  cuckoo support functions
-*/
+/* === PSplay support functions === */
 
 static int
 cmp_fn (const void* a, const void* b)
@@ -431,10 +429,6 @@ delete_fn (PSplaynode node)
 }
 
 
-//static psplay_delete_fn
-//action_fn (PSplaynode node, const enum psplay_order_e which, int level, void* data)
-//{
-//}
 
 
 static int
@@ -455,10 +449,6 @@ fdelete_fn (PSplaynode node)
   testitem_delete ((TestItem) node);
 }
 
-//static psplay_delete_fn
-//action_fn (PSplaynode node, const enum psplay_order_e which, int level, void* data)
-//{
-//}
 
 
 

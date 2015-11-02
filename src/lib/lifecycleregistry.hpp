@@ -41,7 +41,7 @@
 #include <map>
 #include <set>
 #include <string>
-#include <tr1/functional>
+#include <functional>
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -52,7 +52,7 @@ namespace lumiera {
   
   using boost::scoped_ptr;
   using boost::noncopyable;
-  using std::tr1::function;
+  using std::function;
   using util::contains;
   using std::string;
 

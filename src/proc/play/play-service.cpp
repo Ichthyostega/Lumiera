@@ -32,8 +32,8 @@
 
 #include <string>
 //#include <memory>
-////#include <tr1/functional>
-#include <tr1/memory>
+////#include <functional>
+#include <memory>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -63,13 +63,13 @@ namespace play {
 //using lumiera::Subsys;
 //using std::auto_ptr;
 //using boost::scoped_ptr;
-//using std::tr1::bind;
+//using std::bind;
   using lib::Sync;
   using lib::RecursiveLock_NoWait;
-  using std::tr1::weak_ptr;
-  using std::tr1::bind;
-//using std::tr1::function;
-  using std::tr1::placeholders::_1;
+  using std::weak_ptr;
+  using std::bind;
+//using std::function;
+  using std::placeholders::_1;
   using util::remove_if;
   using util::and_all;
 
@@ -124,7 +124,7 @@ namespace play {
       bool
       isActive()  const
         {
-          return ! and_all (processes_, isDead);
+          return not and_all (processes_, isDead);
         }
       
     private:
@@ -260,9 +260,9 @@ namespace lumiera {
    * 
    */
   Play::Controller
-  Play::perform (Track)
+  Play::perform (Fork)
   {
-    UNIMPLEMENTED ("build PlayProcess for a single Track");
+    UNIMPLEMENTED ("build PlayProcess for a single Fork");
   }
   
   

@@ -117,7 +117,7 @@
 namespace std { // forward declaration to avoid including <iostream>
   
   template<typename C>
-  class char_traits;
+  struct char_traits;
   
   template<typename C, class _TRAITS>
   class basic_ostream;
@@ -195,9 +195,9 @@ namespace util {
       friend bool operator== (const char * const, _Fmt const&);
       
       template<typename X>
-      friend bool operator != (_Fmt const& fmt, X const& x) { return !(fmt == x); }
+      friend bool operator != (_Fmt const& fmt, X const& x) { return not (fmt == x); }
       template<typename X>
-      friend bool operator != (X const& x, _Fmt const& fmt) { return !(x == fmt); }
+      friend bool operator != (X const& x, _Fmt const& fmt) { return not (x == fmt); }
     };
   
   

@@ -26,7 +26,7 @@
 
 //#include <string>
 //#include <memory>
-//#include <tr1/functional>
+//#include <functional>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -36,9 +36,8 @@ namespace engine{
   
 //    using std::string;
 //    using lumiera::Subsys;
-//    using std::auto_ptr;
 //    using boost::scoped_ptr;
-//    using std::tr1::bind;
+//    using std::bind;
   
   
   namespace { // hidden local details of the service implementation....

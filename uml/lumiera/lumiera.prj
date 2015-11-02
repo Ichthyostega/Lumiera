@@ -1,6 +1,6 @@
 format 74
 "lumiera"
-  revision 74
+  revision 75
   modified_by 5 "hiv"
   cpp_root_dir "../../src/"
 
@@ -57,7 +57,7 @@ format 74
     2008,               Hermann Vosseler <Ichthyostega@web.de>
 
 "
-  key "html dir" value "/mnt/Lager/heim/devel/lumi/doc/devel/uml/"
+  key "html dir" value "/Werk/devel/lumi/doc/devel/uml/"
   key "" value ""
   package_ref 128005 // design
 

@@ -1,0 +1,17 @@
+GUI backbone tests
+
+The tests in this subtree are a bit special: they cover the generic and
+backbone internals of the Lumiera GTK GUI. They are linked against the
+complete GUI-module (gui plugin), and thus may use all related ABIs.
+
+Yet these tests are *deliberately* compiled without any GTK, GTKmm or SigC
+includes. This effectively rules out the use, even indirectly, of any GTK
+widgets and APIs -- forcing the covered GUI backbone entities to stay
+clean and generic at API level.
+
+This is a decision done on purpose. The concrete GUI framework technology
+shall be treated as an implementation detail. There is no point in writing
+tests which click buttons in the GUI -- better delegate any significant
+logic or functionality to GUI agnostic components. GUI is meant to be
+a presentation layer and must not develop intelligence on its own.
+

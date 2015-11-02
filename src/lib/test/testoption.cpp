@@ -21,10 +21,10 @@
 * *****************************************************/
 
 
+#include "lib/error.hpp"
 #include "lib/test/testoption.hpp"
 #include "lib/test/suite.hpp"
 
-#include "lib/error.hpp"
 
 
 
@@ -76,9 +76,6 @@ namespace test {
       
       // remove all recognised options from original cmdline vector
       cmdline = op::collect_unrecognized(parsed.options, op::include_positional);
-      
-      if (parameters.count("help"))
-        std::cerr << *this;
     }
   
   
@@ -107,11 +104,25 @@ namespace test {
   
   /** @return \c true if --describe switch was given */
   bool 
-  TestOption::getDescribe ()
+  TestOption::shouldDescribe ()
   {
     return parameters["describe"].as<bool>();
   }
   
+  /** handles the --help switch by printing a syntax description
+   * @return \c false if there was no help request and the
+   *         Suite should indeed be executed.
+   */
+  bool
+  TestOption::handleHelpRequest()
+  {
+    if (parameters.count("help"))
+      {
+        std::cerr << *this;
+        return true;
+      }
+    return false;
+  }
   
 
   ostream& 

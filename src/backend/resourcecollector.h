@@ -1,5 +1,5 @@
 /*
-  resourcecollector.h  -  manage/collect resources when they get short
+  RESOURCECOLLECTOR.h  -  manage/collect resources when they get short
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,13 +17,16 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
-#ifndef LUMIERA_RESOURCECOLLECTOR_H
-#define LUMIERA_RESOURCECOLLECTOR_H
+
+
+#ifndef BACKEND_RESOURCECOLLECTOR_H
+#define BACKEND_RESOURCECOLLECTOR_H
 
 #include <nobug.h>
 
-//NOBUG_DECLARE_FLAG (resourcecollector);
+
 
 /**
  * Resources known to the resource collector
@@ -72,13 +75,13 @@ enum lumiera_resource_try
     LUMIERA_RESOURCE_ONE,
     /** try to free a small reasonable implementation defined amount of resources **/
     LUMIERA_RESOURCE_SOME,
-    /** try to free a biggier implementation defined amount of resources **/
+    /** try to free a bigger implementation defined amount of resources **/
     LUMIERA_RESOURCE_MANY,
     /** free as much as possible **/
     LUMIERA_RESOURCE_ALL,
     /** die! **/
     LUMIERA_RESOURCE_PANIC,
-    /** When a handler gets unregistered it wull be called with this value to give it a chance to clean up the user 'data' **/
+    /** When a handler gets unregistered it will be called with this value to give it a chance to clean up the user 'data' **/
     LUMIERA_RESOURCE_UNREGISTER
   };
 
@@ -86,7 +89,7 @@ enum lumiera_resource_try
 /**
  * The type for the resource collector handler functions.
  * Handlers are always run with a global resourcecollector mutex locked, the user does not need to
- * care about syncronization.
+ * care about synchronisation.
  * @param itr the current iteration try in freeing resources
  * @param data user supplied data at registration time for the handler
  * @param context context pointer for this collection run, might be NULL (at least for UNREGISTER and PANIC)
@@ -100,8 +103,8 @@ typedef lumiera_resourcehandler* LumieraResourcehandler;
 
 
 /**
- * Initialize the Resourcecollector.
- * The resourcecollector is singleton and can be used after initialized once.
+ * Initialise the Resourcecollector.
+ * The Resourcecollector is singleton and can be used after initialised once.
  */
 void
 lumiera_resourcecollector_init (void);
@@ -119,7 +122,7 @@ lumiera_resourcecollector_destroy (void);
  * Try to free resources.
  *
  * @param which The kind of resource to be acquired
- * @param iteration a pointer to a local iterator, initialized with the start
+ * @param iteration a pointer to a local iterator, initialised with the start
  *                  value for the loop
  * @param context NULL or some context dependent data for the needed resource
  *                this is a pointer to a size_t for MEMORY and a pointer to a filename
@@ -161,7 +164,7 @@ lumiera_resourcehandler_unregister (LumieraResourcehandler self);
 
 /**
  * Looks up a handler.
- * Used to find a registered handler when the return value of register_handler() was unpractical to store.
+ * Used to find a registered handler when the return value of register_handler() was not practical to store.
  * @param resource resource for which this handler was registered
  * @param handler pointer to the handler function, same as used for registering
  * @param data opaque user-data pointer, same as used for registering
@@ -170,7 +173,9 @@ lumiera_resourcehandler_unregister (LumieraResourcehandler self);
 LumieraResourcehandler
 lumiera_resourcecollector_handler_find (enum lumiera_resource resource, lumiera_resource_handler_fn handler, void* data);
 
-#endif
+
+
+#endif /*BACKEND_RESOURCECOLLECTOR_H*/
 /*
 // Local Variables:
 // mode: C

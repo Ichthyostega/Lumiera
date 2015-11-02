@@ -5,9 +5,7 @@ Contributing to Lumiera
 :toc:
 
 
-This document is aimed at helping newcomers to contribute quickly to the
-project.
-
+This document is aimed at helping newcomers to contribute. +
 There are two major obstacles faced by people new to Lumiera:
 
  - _how_ can I contribute to Lumiera
@@ -90,11 +88,11 @@ Packages normally available with your distribution::
   for a Debian based system (including Mint, Ubuntu and similar flavours),
   you should be able to install the necessary dependencies with the command
 +
-------------------------------------------------------------
+-------------------------------------------------------------------------------------
 sudo apt-get install build-essential scons git-core valgrind intltool \
 libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
-libgavl-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
-------------------------------------------------------------
+libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
+-------------------------------------------------------------------------------------
 Packages not normally part of your distribution::
   there are two packages most likely not available with your operating system
   distribution, so you'll need to obtain the source code for these packages
@@ -111,14 +109,13 @@ mkdir build && cd build
 make
 sudo make install
 ------------------------------------------------------------
-  - *GDL* -- a window docking library footnote:[GDL _is_ usually available
-    through the standard package manager, albeit in a GTK-3 based version;
-    since we haven't managed to port our GUI to GTK-3, we're sticking to a
-    rather ancient version of the Gnome Docking Library for now]
+  - **mm**-bindings for *GDL* -- a window docking library footnote:[GDL itself _is_
+    available through the standard package manager, in a version compatible to GTK-3.
+    What is not yet available are the corresponding C++ bindings `gdlmm-3`]
 +
 ------------------------------------------------------------
-git clone git://git.lumiera.org/debian/gdl
-cd gdl
+git clone git://git.lumiera.org/debian/gdlmm
+cd gdlmm
 ./configure
 make
 sudo make install
@@ -239,11 +236,9 @@ fact, many user interfaces should be possible.
 - The initial GUI on which considerable work has already been done has been
   implemented using the GTK toolkit.  However, considerable more work needs to be
   done on this present GUI.
-- One immediate task that needs attention is to port the current GUI from
-  GTK2 to GTK 3. Especially, our custom style sheet needs to be ported
 - we urgently need conceptual (non-coding) contributions
 
-  * work out a coherent handling concept, in accordance with model and core
+  * work out a coherent UI handling concept, in accordance with model and core
   * we need a concept for key bindings and focus
   * we need a concept for integration with control surfaces
   * we need a concept for pen based handling
@@ -266,7 +261,6 @@ Proc Layer::
   * expand on the work done for a pooling small objects allocator.
   * develop a backend for our various allocation schemes to use this allocator.
 
-- help with the C++11 transition
 - Command system at the GUI interface
 
   * expand on the work done for generic commands

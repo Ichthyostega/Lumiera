@@ -39,16 +39,16 @@
 
 #include "lib/hash-value.h"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/functional/hash.hpp>
 
 
 
 namespace util { ////////////TODO: refactor namespace. But probably not directly into namespace lib. Needs some more consideration though
   
-  using std::tr1::function;
-  using std::tr1::bind;
-  using std::tr1::placeholders::_1;
+  using std::function;
+  using std::bind;
+  using std::placeholders::_1;
   
   
   /** "Combiner" which calls two functions one after another
@@ -125,7 +125,7 @@ namespace util { ////////////TODO: refactor namespace. But probably not directly
      * to be the same. 
      */
     class HijackedFunction 
-      : std::tr1::_Function_base
+      : std::_Function_base
       {
         typedef void (*DummyInvoker) (void);
         DummyInvoker invoker_;
@@ -220,7 +220,6 @@ namespace util { ////////////TODO: refactor namespace. But probably not directly
 } // namespace util
 
 namespace std {
-namespace tr1 {
   
   /** inject into std::tr1 to be picked up by ADL:
    * @return hash value of given functor
@@ -234,6 +233,6 @@ namespace tr1 {
     return util::rawHashValue (fun);
   }
   
-}}
+}
 
 #endif /*UTIL_HPP_*/

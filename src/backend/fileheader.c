@@ -1,5 +1,5 @@
 /*
-  fileheader.c  -  Definitions of generic lumiera fileheaders and identification
+  Fileheader  -  Definitions of generic lumiera file headers and identification
 
   Copyright (C)         Lumiera.org
     2010,               Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "lib/tmpbuf.h"
 
@@ -25,22 +27,17 @@
 #include "backend/file.h"
 #include "include/logging.h"
 
-//TODO: internal/static forward declarations//
-
-
 #include <errno.h>
 
-/**
- * @file
- *
- */
 
 
-LUMIERA_ERROR_DEFINE (FILEHEADER_NOWRITE, "File is not writeable");
+
+LUMIERA_ERROR_DEFINE (FILEHEADER_NOWRITE, "File is not writable");
 LUMIERA_ERROR_DEFINE (FILEHEADER_HEADER, "Error in header");
 LUMIERA_ERROR_DEFINE (FILEHEADER_FLAGS, "Inconsistent Flags");
 LUMIERA_ERROR_DEFINE (FILEHEADER_FLAGSPACE, "No more space for flags left");
 LUMIERA_ERROR_DEFINE (FILEHEADER_ENDIANESS, "Unsupported Endianess");
+
 
 
 lumiera_fileheader
@@ -109,7 +106,7 @@ lumiera_fileheader_open (LumieraFile file, char* fourcc, size_t size, const char
               goto err;
             }
 
-          TODO("only clear flags when file is writeable");
+          ////////////////////TODO only clear flags when file is writable!
           lumiera_fileheader_flags_clear (&self, flags_remove);
 
           static uint64_t endianess_mark = LUMIERA_FILEHEADER_ENDIANMAGIC;
@@ -203,6 +200,7 @@ lumiera_fileheader_flags_set (LumieraFileheader self, const char* flags)
 
   return self;
 }
+
 
 /**
  * Clear flags if present

@@ -26,6 +26,7 @@
 
 //#include "proc/engine/procnode.hpp"         /////TODO can we get rid of this header here?
 //#include "common/query.hpp"
+#include "lib/hash-standard.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>

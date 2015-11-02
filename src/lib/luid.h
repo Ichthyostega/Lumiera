@@ -60,9 +60,10 @@
 
 
 /*
- C++ can't initialize arrays from string literals with the trailing \0 cropped
- C can't initialize non constant members,
+ C++ can't initialise arrays from string literals with the trailing \0 cropped
+ C can't initialise non constant members,
  there we go
+ ////////////////////////////////TODO 3/2014 possibly not used anymore, after removing LUIDs from the Interface descriptors (see #925)
 */
 #ifdef __cplusplus
 #define LUMIERA_UID_INITIALIZER(l)                              \

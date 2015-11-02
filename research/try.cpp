@@ -1,7 +1,7 @@
 /* try.cpp  -  for trying out some language features....
  *             scons will create the binary bin/try
  *
- */ 
+ */
 
 // 8/07  - how to control NOBUG??
 //         execute with   NOBUG_LOG='ttt:TRACE' bin/try
@@ -23,141 +23,163 @@
 // 11/11 - using the boost random number generator(s)
 // 12/11 - how to detect if string conversion is possible?
 // 1/12  - is partial application of member functions possible?
+// 5/14  - c++11 transition: detect empty function object
+// 7/14  - c++11 transition: std hash function vs. boost hash
+// 9/14  - variadic templates and perfect forwarding
+// 11/14 - pointer to member functions and name mangling
+// 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
+// 8/15  - generalising the Variant::Visitor
 
 
 /** @file try.cpp
- ** Research: perform a partial application of a member function.
- ** The result of this partial application should be a functor expecting the remaining arguments.
- ** The idea was to use this at various library functions expecting a functor or callback, so to
- ** improve readability of the client code: clients could then just pass a member pointer, without
- ** the need to use any tr1::bind expression.
+ ** Design: how to generalise the Variant::Visitor to arbitrary return values.
  ** 
- ** \par Costs in code size
- ** While this turned out to be possible, even without much work, just based on the existing
- ** templates for partial functor application (function-closure.hpp), the resulting code size
- ** is rather sobering. Especially in debug mode, quite some overhead is created, which makes
- ** usage of this convenience feature in general purpose library code rather questionable.
- ** When compiling with -O3 though, most of the overhead will be removed
- ** 
- ** The following numbers could be observed:
- ** \code
- **                                  debug / stripped   // debug-O3 / stripped
- ** just using a member pointer:     39013 /  7048            42061 /  7056
- ** using tr1::bind and function:    90375 / 15416            65415 /  9376
- ** partial apply, passing functor: 158727 / 23576            97479 / 11296
- ** partial apply with mem pointer: 119495 / 17816            78031 /  9440
- ** \endcode
+ ** Our Variant template allows either for access by known type, or through accepting
+ ** a classic GoF visitor. Problem is that in many extended use cases we rather want
+ ** to apply \em functions, e.g. for a monadic flatMap on a data structure built from
+ ** Variant records. (see our \link diff::GenNode external object representation \endlink).
+ ** Since our implementation technique relies on a template generated interface anyway,
+ ** a mere extension to arbitrary return values seems feasible.
+ **
  */
 
+typedef unsigned int uint;
 
-#include "lib/meta/tuple.hpp"
-#include "lib/meta/function-closure.hpp"
+#include "lib/meta/typelist.hpp"
+#include "lib/meta/generator.hpp"
+#include "lib/format-util.hpp"
+#include "lib/util.hpp"
 
-//#include <tr1/functional>
 #include <iostream>
+#include <cstdarg>
+#include <string>
 
-using lib::meta::Types;
-using lib::meta::Tuple;
-//using std::tr1::placeholders::_1;
-//using std::tr1::placeholders::_2;
-using std::tr1::function;
-using std::tr1::bind;
-
+using util::unConst;
 using std::string;
 using std::cout;
 using std::endl;
 
 
-namespace lib {
-namespace meta{
-namespace func{
-
-
-template<typename SIG, uint num>
-struct _PupS
+template<typename RET>
+struct VFunc
   {
-    typedef typename _Fun<SIG>::Ret Ret;
-    typedef typename _Fun<SIG>::Args::List Args;
-    typedef typename Splice<Args,NullType,num>::Front ArgsFront;
-    typedef typename Splice<Args,NullType,num>::Back  ArgsBack;
-    typedef typename Types<ArgsFront>::Seq            ArgsToClose;
-    typedef typename Types<ArgsBack>::Seq             ArgsRemaining;
-    typedef typename _Sig<Ret,ArgsRemaining>::Type    ReducedSignature;
+
+    template<class VAL>
+    struct ValueAcceptInterface
+      {
+        virtual RET handle(VAL&) { /* do nothing */ return RET(); };
+      };
     
-    typedef function<ReducedSignature>                Function;
+    template<typename TYPES>
+    using VisitorInterface
+        = lib::meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
+    
   };
 
-template<typename SIG, typename A1>
-inline 
-typename _PupS<SIG,1>::Function
-papply (SIG f, A1 a1)
-{
-  typedef typename _PupS<SIG,1>::ArgsToClose ArgsToClose;
-  typedef Tuple<ArgsToClose>        ArgTuple;
-  ArgTuple val(a1);
-  return PApply<SIG,ArgsToClose>::bindFront (f, val);
-}
+using lib::meta::NullType;
+using lib::meta::Node;
 
-template<typename SIG, typename A1, typename A2>
-inline 
-typename _PupS<SIG,2>::Function
-papply (SIG f, A1 a1, A2 a2)
-{
-  typedef typename _PupS<SIG,2>::ArgPrefix ArgsToClose;
-  typedef Tuple<ArgsToClose>        ArgTuple;
-  ArgTuple val(a1,a2);
-  return PApply<SIG,ArgsToClose>::bindFront (f, val);
-}
+template<typename TYPES>
+struct ConstAll;
 
-
-}}} // namespace lib::meta::func
-
-class Something
+template<>
+struct ConstAll<NullType>
   {
-    int i_;
+    typedef NullType List;
+  };
+
+template<typename TY, typename TYPES>
+struct ConstAll<Node<TY,TYPES>>
+  {
+    typedef Node<const TY, typename ConstAll<TYPES>::List> List;
+  };
+
+
+
+template<class A, class B>
+struct Var
+  {
+    A a;
+    B b;
+    
+    using TYPES = lib::meta::Types<A,B>;
+    
+    template<typename RET>
+    using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
+    template<typename RET>
+    using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<ConstAll<typename TYPES::List>>;
+    
+    using Visitor = VisitorFunc<void>;
+    using Predicate = VisitorConstFunc<bool>;
+    
+    template<typename RET>
+    RET
+    accept (VisitorFunc<RET>& visitor)
+      {
+        typename VFunc<RET>::template ValueAcceptInterface<A>& visA = visitor;
+        typename VFunc<RET>::template ValueAcceptInterface<B>& visB = visitor;
+        visA.handle (a);
+        return visB.handle (b);
+      }
     
     void
-    privateFun(char a)
+    accept (Visitor& visitor)
       {
-        char aa(a + i_);
-        cout << "Char-->" << aa <<endl;
+        accept<void> (visitor);
       }
     
-  public:
-    Something(int ii=0)
-      : i_(ii)
-      { }
-    
-    typedef function<void(char)> FunP;
-    
-    FunP
-    getBinding()
+    bool
+    accept (Predicate& visitor)  const
       {
-//        function<void(Something*,char)> memf = bind (&Something::privateFun, _1, _2);
-//        return lib::meta::func::papply (memf, this);
-        return lib::meta::func::papply (&Something::privateFun, this);
+        typename VFunc<bool>::template ValueAcceptInterface<const A>& visA = visitor;
+        typename VFunc<bool>::template ValueAcceptInterface<const B>& visB = visitor;
+        return visA.handle (a)
+            && visB.handle (b);
       }
+
     
-//    typedef void (Something::*FunP) (char);
-//    
-//    FunP
-//    getBinding()
-//      {
-//        return &Something::privateFun;
-//      }
+    operator string()  const
+      {
+        return "Var("
+             + util::str(a)
+             + "|"
+             + util::str(b)
+             + ")";
+      }
   };
 
 
+using V = Var<int, string>;
+
+class Visi
+  : public V::Visitor
+  {
+    virtual void handle(int& i)    { ++i; }
+    virtual void handle(string& s) { s += "."; }
+  };
+
+class Predi
+  : public V::Predicate
+  {
+    virtual bool handle(int const& i)    { return 0 == i % 2; }
+    virtual bool handle(string const& s) { return 0 == s.length() % 2; }
+  };
 
 
-
-int 
+int
 main (int, char**)
   {
-    Something some(23);
-    Something::FunP fup = some.getBinding();
     
-    fup ('a');
+    V var{12, "huii"};
+    cout <<  string(var)<<endl;
+    
+    Visi visi;
+    Predi predi;
+    
+    cout << var.accept(predi) <<endl;
+    var.accept(visi);
+    cout << var.accept(predi) <<endl;
+    cout <<  string(var)<<endl;
     
     cout <<  "\n.gulp.\n";
     

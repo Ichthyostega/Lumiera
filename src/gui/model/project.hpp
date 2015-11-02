@@ -19,13 +19,18 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file project.hpp
  ** This file contains the definition of Project, a class which
- ** stores project data, and wraps proc layer data
+ ** stores project data, and wraps proc layer data.
+ ** 
+ ** @todo this solution was used to build the first outline of the UI.
+ **       It needs to be reshaped into a connector to Proc-Layer  ///////////////TICKET #959
  */
 
 #ifndef PROJECT_HPP
 #define PROJECT_HPP
+
 
 #include "gui/model/sequence.hpp"
 #include "lib/observable-list.hpp"
@@ -33,6 +38,9 @@
 namespace gui {
 namespace model {
   
+/**
+ * @deprecated 1/2015 see TICKET #959
+ */
 class Project
 {
 public:

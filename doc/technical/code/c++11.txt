@@ -1,0 +1,189 @@
+Transition to C++11
+===================
+:Author: Ichthyo
+:Date: 2014
+:toc:
+
+_this page is a notepad for topics and issues related to the new C++ standard_
+
+.the state of affairs
+In Lumiera, we used a contemporary coding style right from start -- whenever the actual
+language and compiler support wasn't ready for what we consider _state of the craft_, we
+amended deficiencies by rolling our own helper facilities, with a little help from Boost.
+Thus there was no urge for us to adopt the new language standard; we could simply wait for
+the compiler support to mature. In spring 2014, finally, we were able to switch our codebase
+to C++11 with minimal effort.footnote[since 8/2015 -- after the switch to Debian/Jessie
+as a »reference platform«, we even compile with `-std=gnu++14`]
+Following this switch, we're now able to reap the benefits of
+this approach; we may now gradually replace our sometimes clunky helpers and workarounds
+with the smooth syntax of the ``new language'' -- without being forced to learn or adopt
+an entirely new coding style, since that style isn't exactly new for us.
+
+Conceptual Changes
+------------------
+At some places we'll have to face modest conceptual changes though.
+
+Automatic Type Conversions
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+The notion of a type conversion is more precise and streamlined now. With the new standard,
+we have to distinguish between
+
+. type relations, like being the same type (e.g. in case of a template instantiation) or a subtype.
+. the ability to convert to a target type
+. the ability to construct an instance of the target type
+
+The conversion really requires help from the source type to be performed automatically: it needs
+to expose an explicit conversion operator. This is now clearly distinguished from the construction
+of a new value, instance or copy with the target type. This _ability to construct_ is a way weaker
+condition than the _ability to convert_, since construction never happens out of the blue. Rather
+it happens in a situation, where the _usage context_ prompts to create a new value with the target
+type. For example, we invoke a function with value arguments of the new type, but provide a value
+or reference of the source type.
+
+Please recall, C++ always had, and still has that characteristic ``fixation'' on the act
+of copying things. Maybe, 20 years ago that was an oddity -- yet today this approach is highly
+adequate, given the increasing parallelism of modern hardware. If in doubt, we should always
+prefer to work on a private copy. Pointers aren't as ``inherently efficient'' as they were
+20 years ago.
+
+[source,c]
+--------------------------------------------------------------------------
+#include <type_traits>
+#include <functional>
+#include <iostream>
+
+using std::function;
+
+using std::string;
+using std::cout;
+using std::endl;
+
+
+uint
+funny (char c)
+{
+  return c;
+}
+
+using Funky = function<uint(char)>;      // <1>
+
+int 
+main (int, char**)
+  {
+    Funky fun(funny);                    // <2>
+    Funky empty;                         // <3>
+    
+    cout << "ASCII 'A' = " << fun('A');
+    cout << " defined: " << bool(fun)    // <4>
+         << " undefd; " << bool(empty)
+         << " bool-convertible: " << std::is_convertible<Funky, bool>::value     // <5>
+         << " can build bool: "   << std::is_constructible<bool,Funky>::value    // <6>
+         << " bool from string: " << std::is_constructible<bool,string>::value;  // <7>
+--------------------------------------------------------------------------
+<1> a new-style type definition (type alias)
+<2> a function object can be _constructed_ from `funny`, which is a reference
+    to the C++ language function entity
+<3> a default constructed function object is in unbound (invalid) state
+<4> we can explicitly _convert_ any function object to `bool` by _constructing_ a Bool value.
+    This is idiomatic C usage to check for the validity of an object. In this case, the _bound_
+    function object yields `true`, while the _unbound_ function object yields `false`
+<5> but the function object is _not automatically convertible_ to bool
+<6> yet it is possible to _construct_ a `bool` from a funktor (we just did that)
+<7> while it is not possible to _construct_ a bool from a string (we'd need to interpret and
+    parse the string, which mustn't be confused with a conversion)
+
+This example prints the following output: +
+----
+ASCII 'A' = 65 defined: 1 undefd; 0 bool-convertible: 0 can build bool: 1 bool from string: 0
+----
+
+Moving values
+~~~~~~~~~~~~~
+Amongst the most prominent improvements brought with C\+\+11 is the addition of *move semantics*. +
+This isn't a fundamental change, though. It doesn't change the fundamental approach like -- say,
+the introduction of function abstraction and lambdas. It is well along the lines C++ developers
+were thinking since ages; it is more like an official affirmation of that style of thinking.
+
+.recommended reading
+********************************************************************************************
+- http://thbecker.net/articles/rvalue_references/section_01.html[Thomas Becker's Overview] of moving and forwarding
+- http://web.archive.org/web/20121221100831/http://cpp-next.com/archive/2009/08/want-speed-pass-by-value[Dave Abrahams: Want Speed? Pass by Value]
+  and http://web.archive.org/web/20121221100546/http://cpp-next.com/archive/2009/09/move-it-with-rvalue-references[Move It with RValue References]
+********************************************************************************************
+The core idea is that at times you need to 'move' a value due to a change of ownership. Now,
+the explicit support for 'move semantics' allows to decouple this 'conceptual move' from actually
+moving memory contents on the raw implementation level. The whole idea behind C++ seems to be
+allowing people to think on a conceptual level, while 'retaining' awareness of the gory details
+below the hood. Such is achieved by 'removing' the need to worry about details, confident that
+there is a way to deal with those concerns in an orthogonal fashion.
+
+Guidlines
+^^^^^^^^^
+ * embrace value semantics. Copies are 'good' not 'evil'
+ * embrace fine grained abstractions. Make objects part of your everyday thinking style.
+ * embrace `swap` operations to decouple the moving of data from the moving of ownership
+ * embrace the abilities of the compiler, abandon the attempt to write ``smart'' implementations
+
+Thus, in everyday practice, we do not often use rvalue references explicitly. And when we do,
+it is by writing a 'move constructor.' In most cases, we try to cast our objects in such a way
+as to rely on the automatically generated default move and copy operations. The 'only exception
+to this rule' is when such operations necessitate some non trivial administrative concern.
+
+- when a copy on the conceptual level translates into 'registering' a new record in the back-end
+- when a move on the conceptual level translates into 'removing' a link within the originating entity.
+
+CAUTION: as soon as there is an explicitly defined copy operation, or even just an explicitly defined
+         destructor, the compiler 'ceases to auto define' move operations! This is a rather unfortunate
+         compromise decision of the C++ committee -- instead of either breaking no code at all or
+         boldly breaking code, they settled upon ``somewhat'' breaking existing code...
+
+
+
+
+Known bugs and tricky situations
+--------------------------------
+Summer 2014::
+  the basic switch to C++11 compilation is done by now, but we have yet to deal with
+  some ``ripple effects''.
+September 2014::
+  and those problems turn out to be somewhat insidious: our _reference system_ is still Debian/Wheezy (stable),
+  which means we're using *GCC-4.7* and *CLang 3.0*. While these compilers both provide a roughly complete
+  C++11 support, a lot of fine points were discovered in the follow-up versions of the compilers and standard
+  library -- current versions being GCC-3.9 and CLang 3.4
+  
+  * GCC-4.7 was too liberal and sloppy at some points, where 4.8 rightfully spotted conceptual problems
+  * CLang 3.0 turns out to be really immature and even segfaults on some combinations of new language features
+  * Thus we've got some kind of a _situation:_ We need to hold back further modernisation and just hope that
+    GCC-4.7 doesn't blow up; CLang is even worse, Version 3.0 us unusable after our C++11 transition.
+    We're forced to check our builds on Debian/testing, and we should consider to _raise our general
+    requirement level_ soon.
+August 2015::
+  our »reference system« (platform) is Debian/Jessie from now on.
+  We have switched to **C++14** and use (even require) GCC-4.9 or CLang 3.5 -- we can expect solid support
+  for all C++11 features and most C++14 features.
+
+Perfect forwarding
+~~~~~~~~~~~~~~~~~~
+The ``perfect forwarding'' technique in conjunction with variadic templates promises to obsolete a lot of
+template trickery when it comes to implementing custom containers, allocators or similar kinds of managing wrappers.
+Unfortunately, we ran into nasty problems with both GCC-4.7 and CLang 3.0 here, when chaining several forwarding calls.
+
+- the new _reference collapsing rules_ seem to be unreliably still. Note that even the standard library uses an
+  overload to implement `std::forward`, while in theory, a single definition should work for every case.
+- in one case, the executable generated by GCC passed a reference to an temporary, where it should have
+  passed a rvalue reference (i.e. it should have _moved_ the temporary, instead of referring to the
+  location on stack)
+- CLang is unable to pass a plain-flat rvalue through a chain of templated functions with rvalue references.
+  We get the inspiring error message ``binding of reference to type `std::basic_string<char>` to a value of
+  type `std::basic_string<char>` drops qualifiers''
+
+Thus -- as of 9/2014 -- the _rules of the game_ are as folows
+
+- it is OK to take arguments by rvalue reference, when the type is explicit
+- it is OK to use std::forward _once_ to pass-trough a templated argument
+- but the _time is not yet ready_ to get rid of intermediary copies
+- we still prefer returning by value (eligible for RVO) and copy-initialisation
+- we refrain from switching our metaprogramming code from Loki-Typelists and hand-written specialisations
+  to variadic templates and `std::tuple`
+
+

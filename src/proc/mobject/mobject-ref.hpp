@@ -311,8 +311,8 @@ namespace mobject {
       bool
       operator!= (MORef<MOX> const& oRef)  const
         {
-          return !isValid()
-              || oRef != this->pRef_;
+          return not isValid()
+              or oRef != this->pRef_;
         }
       
       template<class MOX>
@@ -320,15 +320,15 @@ namespace mobject {
       operator== (MORef const& oRef, PlacementRef<MOX> const& pRef)
         {
           return oRef.isValid()
-              && oRef.pRef_ == pRef;
+             and oRef.pRef_ == pRef;
         }
       
       template<class MOX>
       friend bool
       operator!= (MORef const& oRef, PlacementRef<MOX> const& pRef)
         {
-          return !oRef.isValid()
-              ||  oRef.pRef_ != pRef;
+          return not oRef.isValid()
+              or oRef.pRef_ != pRef;
         }
       
       template<class MOX>
@@ -336,29 +336,29 @@ namespace mobject {
       operator== (PlacementRef<MOX> const& pRef, MORef const& oRef)
         {
           return oRef.isValid()
-              && pRef == oRef.pRef_;
+             and pRef == oRef.pRef_;
         }
       
       template<class MOX>
       friend bool
       operator!= (PlacementRef<MOX> const& pRef, MORef const& oRef)
         {
-          return !oRef.isValid()
-              ||  pRef != oRef.pRef_;
+          return not oRef.isValid()
+              or pRef != oRef.pRef_;
         }
       
       bool
       operator== (PlacementMO::ID const& pID)  const
         {
           return isValid()
-              && PlacementMO::ID (pRef_) == pID;
+             and PlacementMO::ID (pRef_) == pID;
         }
       
       bool
       operator!= (PlacementMO::ID const& pID)  const
         {
-          return !isValid()
-              || PlacementMO::ID (pRef_) != pID;
+          return not isValid()
+              or PlacementMO::ID (pRef_) != pID;
         }
       
     };

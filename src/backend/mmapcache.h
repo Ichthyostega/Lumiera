@@ -1,5 +1,5 @@
 /*
-  mmapcache.h  -  handle aging of mmap objects
+  MMAPCACHE.h  -  handle aging of mmap objects
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,10 +17,17 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_MMAPCACHE_H
-#define LUMIERA_MMAPCACHE_H
+
+/** @file mmapcache.h
+ ** Lumiera's Mmapcache stores a MRU cache of all established mmaped memory regions which are currently not in use.
+ ** The mmapcache also manages the upper limit about how much memory can be mmaped.
+ */
+
+#ifndef BACKEND_MMAPCACHE_H
+#define BACKEND_MMAPCACHE_H
 
 #include "lib/error.h"
 #include "lib/mrucache.h"
@@ -34,11 +41,8 @@ typedef lumiera_mmapcache* LumieraMMapcache;
 
 #include <nobug.h>
 
-/**
- * @file
- * Mmapcache stores a MRU cache of all established mmaped memory regions which are currently not in use.
- * The mmapcache also manages the upper limit about how much memory can be mmaped.
- */
+
+
 
 struct lumiera_mmapcache_struct
 {
@@ -51,8 +55,8 @@ struct lumiera_mmapcache_struct
 
 
 /**
- * Initializes the mmapcache.
- * @param limit the mmapcache will drop elements when the sum of all mmapings gives over limit
+ * Initialises the mmapcache.
+ * @param limit the mmapcache will drop elements when the sum of all mmappings gives over limit
  */
 void
 lumiera_mmapcache_new (size_t limit);
@@ -67,9 +71,9 @@ lumiera_mmapcache_delete (void);
 
 /**
  * Get a fresh mmap object.
- * when mmaped_limit is reached, the oldest mmap object gets dropped else a new allocated object
- * is returned
- * @return the new uninitialized mmap (void* because this is uninitialized)
+ * when mmaped_limit is reached, the oldest mmap object gets dropped else
+ * a new allocated object is returned
+ * @return the new uninitialised mmap (void* because this is uninitialised)
  */
 void*
 lumiera_mmapcache_mmap_acquire (void);
@@ -95,7 +99,7 @@ lumiera_mmapcache_forget (LumieraMMap map);
 /**
  * Destroy and free the nelem oldest elements.
  * Used to free up resources and memory.
- * @return nelem-(numer of elements which got freed), that is 0 if all requested elements got freed
+ * @return nelem-(number of elements which got freed), that is 0 if all requested elements got freed
  */
 int
 lumiera_mmapcache_age (void);
@@ -116,7 +120,8 @@ lumiera_mmapcache_checkout (LumieraMMap handle);
 void
 lumiera_mmapcache_checkin (LumieraMMap handle);
 
-#endif
+
+#endif /*BACKEND_MMAPCACHE_H*/
 /*
 // Local Variables:
 // mode: C

@@ -86,13 +86,13 @@ namespace lumiera {
     //  resolve(O, Cap) :- make(O), capabilities(Cap).
     //  capabilities(Q) :- call(Q).
     //  
-    //  stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), placed_to(P, T).
+    //  stream(T, mpeg) :- type(T, fork), type(P, pipe), resolve(P, stream(P,mpeg)), placed_to(P, T).
     //
     // The type guard is inserted automatically, while the predicate implementations for
     // find/1, make/1, stream/2, and placed_to/2 are to be provided by the target types.
     //
-    // As a example, the goal ":-retrieve(T, stream(T,mpeg))." would search a Track object, try to
-    // retrieve a pipe object with stream-type=mpeg and associate the track with this Pipe. The
+    // As a example, the goal ":-retrieve(T, stream(T,mpeg))." would search a Fork object (a "track"), try to
+    // retrieve a pipe object with stream-type=mpeg and associate the Fork with this Pipe. The
     // predicate "stream(P,mpeg)" needs to be implemented (natively) for the pipe object.
     
     class Resolver
@@ -128,8 +128,9 @@ namespace lumiera {
      * type of object. Registering  such a TypeHandler should create
      * the necessary handler functions to be installed into 
      * the Prolog system.
-     * @todo it can't be done exactly this way, but I leave it in
-     *       as a reminder for later, to show the intention
+     * @deprecated it can't be done exactly this way, but I leave it in the
+     *       current shape as a reminder for later, to show the intention...
+     * @todo 6/2010 unify this with the TypeHandler in typed-id.hpp
      */  
     template<class TY>
     class TypeHandler
@@ -172,7 +173,7 @@ namespace lumiera {
     // TODO: the Idea is to provide specialisations for the concrete types
     //       we want to participate in the ConfigRules system....
     //       Thus we get the possibility to create a specific return type,
-    //       e.g. return a P<Pipe> but a Placement<Track>, using the appropriate factory.
+    //       e.g. return a P<Pipe> but a Placement<Fork>, using the appropriate factory.
     //       Of course then the definitions need to be split up in separate headers.
       
       

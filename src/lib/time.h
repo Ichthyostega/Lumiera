@@ -96,13 +96,6 @@ extern "C" {    /* ===================== C interface ======================== */
 
 
 /**
- * Formats a time value in H:MM:SS.mmm format into a temporary buffer.
- * @return safeclib temporary buffer containing formatted time string
- */
-char*
-lumiera_tmpbuf_print_time (gavl_time_t time);
-
-/**
  * Quantise the given time into a fixed grid, relative to the origin.
  * The time grid used for quantisation is comprised of equally spaced intervals,
  * rooted at the given origin. The interval starting with the origin is numbered
@@ -217,6 +210,16 @@ lumiera_time_ntsc_drop_minutes (gavl_time_t time);
  */
 int
 lumiera_time_ntsc_drop_hours (gavl_time_t time);
+
+
+/**
+ * @internal Diagnostics helper: render time value in H:MM:SS.mmm format.
+ * @return `safeclib` temporary buffer containing formatted time string
+ * @note any time output for real should go through quantisation followed
+ *       by rendering into a suitable timecode format.
+ */
+char*
+lumiera_tmpbuf_print_time (gavl_time_t time);
 
 
 

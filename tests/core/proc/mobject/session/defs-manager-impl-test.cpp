@@ -65,7 +65,7 @@ namespace test    {
   bool
   find (const string& pID)
   {
-    return Session::current->defaults.search (Query<Pipe> ("pipe("+pID+")"));
+    return bool(Session::current->defaults.search (Query<Pipe> ("pipe("+pID+")")));
   }
   
   

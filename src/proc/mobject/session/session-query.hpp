@@ -42,9 +42,9 @@
 
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/placement.hpp"
-#include "proc/mobject/session/track.hpp"
+#include "proc/mobject/session/fork.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 
 
@@ -52,32 +52,20 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
-  
-  ////////////TODO: shall we use a sub-namespace "query" ??
-  
-  namespace { // query function implementations....
-    
-    inline bool
-    _compareTrackID (Placement<Track> const& trackMO, string refTrackID)
-    {
-      return trackMO->isSameID (refTrackID);
-    }
-    
-  }//(End) query functions
-  
+  using std::function;
   
   
   
   /* ====== Predicates for picking objects ====== */
   
-  /** yield a query predicate to pick a specific track */
-  inline function<bool(Placement<Track> const&)>
-  match_specificTrack (string const& trackID)
+  /** yield a query predicate to pick a specific fork */
+  inline function<bool(Placement<Fork> const&)>
+  match_specificFork (string const& forkID)
   {
-    return bind (_compareTrackID, _1, trackID);
+    return [=](Placement<Fork> const& forkMO)
+                {
+                  return forkMO->isSameID (forkID);
+                };
   }
   
 }}} // namespace proc::mobject::session

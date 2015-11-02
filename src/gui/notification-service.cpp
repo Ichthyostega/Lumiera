@@ -27,7 +27,7 @@
 #include "lib/util.hpp"
 
 extern "C" {
-#include "common/interfacedescriptor.h"
+#include "common/interface-descriptor.h"
 }
 
 #include <string>
@@ -65,31 +65,31 @@ namespace gui {
     LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0
                                ,lumieraorg_GuiNotificationFacade_descriptor
                                , NULL, NULL, NULL
-                               , LUMIERA_INTERFACE_INLINE (name, "\044\117\156\365\344\056\362\220\166\350\320\214\115\221\302\177",
+                               , LUMIERA_INTERFACE_INLINE (name,
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "GuiNotification"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (brief, "\160\240\102\325\175\145\270\140\350\241\163\303\331\343\253\142",
+                               , LUMIERA_INTERFACE_INLINE (brief,
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "GUI Interface: push state update and notification of events into the GUI"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (homepage, "\217\232\066\101\042\116\054\217\070\233\253\241\166\145\234\133",
+                               , LUMIERA_INTERFACE_INLINE (homepage,
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "http://www.lumiera.org/develompent.html" ;}
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (version, "\350\365\121\052\037\022\300\021\171\357\017\367\270\071\266\376",
+                               , LUMIERA_INTERFACE_INLINE (version,
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "0.1~pre"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (author, "\117\007\006\234\153\206\000\344\303\043\027\261\045\320\166\133",
+                               , LUMIERA_INTERFACE_INLINE (author,
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "Hermann Vosseler"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (email, "\356\243\022\137\345\275\016\034\337\144\031\260\303\050\140\327",
+                               , LUMIERA_INTERFACE_INLINE (email,
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "Ichthyostega@web.de"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (copyright, "\365\220\260\051\267\345\330\046\145\134\331\320\115\157\332\356",
+                               , LUMIERA_INTERFACE_INLINE (copyright,
                                                            const char*, (LumieraInterface ifa),
                                                              {
                                                                (void)ifa;
@@ -98,7 +98,7 @@ namespace gui {
                                                                  "  2008               Hermann Vosseler <Ichthyostega@web.de>";
                                                              }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (license, "\155\335\361\364\221\012\115\325\306\046\153\152\002\117\075\077",
+                               , LUMIERA_INTERFACE_INLINE (license,
                                                            const char*, (LumieraInterface ifa),
                                                              {
                                                                (void)ifa;
@@ -118,11 +118,11 @@ namespace gui {
                                                                  "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA";
                                                              }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (state, "\227\170\230\144\310\330\131\175\367\152\327\324\113\275\223\245",
+                               , LUMIERA_INTERFACE_INLINE (state,
                                                            int, (LumieraInterface ifa),
                                                              {(void)ifa;  return LUMIERA_INTERFACE_EXPERIMENTAL; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (versioncmp, "\253\066\335\233\025\161\135\347\377\156\121\135\347\313\130\014",
+                               , LUMIERA_INTERFACE_INLINE (versioncmp,
                                                            int, (const char* a, const char* b),
                                                              {return 0;}  ////////////////////////////////////////////TODO define version ordering
                                                           )
@@ -144,7 +144,7 @@ namespace gui {
                                , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_GuiNotificationFacade_descriptor)
                                , NULL /* on  open  */
                                , NULL /* on  close */
-                               , LUMIERA_INTERFACE_INLINE (displayInfo, "\366\075\213\163\207\040\221\233\010\366\174\374\317\126\331\205",
+                               , LUMIERA_INTERFACE_INLINE (displayInfo,
                                                            void, (const char* text),
                                                              { 
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
@@ -152,7 +152,7 @@ namespace gui {
                                                                  _instance->displayInfo(text); 
                                                              }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown, "\267\043\244\065\107\314\370\175\063\330\264\257\302\146\326\303",
+                               , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown,
                                                            void, (const char* cause),
                                                              { 
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cause);

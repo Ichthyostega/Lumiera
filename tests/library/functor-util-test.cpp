@@ -25,13 +25,13 @@
 #include "lib/test/run.hpp"
 #include "lib/functor-util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <boost/functional/hash.hpp>
 #include <iostream>
 
 using lib::HashVal;
 using std::cout;
-using std::tr1::function;
+using std::function;
 using boost::hash;         // note: only boost::hash allows for easy defining of custom hash functions 
 
 

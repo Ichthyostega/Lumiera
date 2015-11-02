@@ -28,8 +28,8 @@
 #include "lib/sub-id.hpp"
 
 #include <boost/functional/hash.hpp>
-#include <tr1/unordered_map>
-#include <tr1/functional>
+#include <unordered_map>
+#include <functional>
 #include <vector>
 #include <string>
 
@@ -40,8 +40,8 @@ namespace test{
   
   using util::cStr;
   using util::for_each;
-  using std::tr1::bind;
-  using std::tr1::placeholders::_1;
+  using std::bind;
+  using std::placeholders::_1;
   using boost::hash;
   using std::vector;
   using std::string;
@@ -102,7 +102,6 @@ namespace test{
       void
       checkExtension ()
         {
-          typedef SubId<Colour> CID;
           typedef SubId<uint>   UID;
           
           typedef ExtendedSubId<Colour, UID> CUID;
@@ -144,7 +143,7 @@ namespace test{
       
       template<class KEY>
       struct HashTable
-        : std::tr1::unordered_map<KEY, string, hash<KEY> >
+        : std::unordered_map<KEY, string, hash<KEY> >
         {
           void
           add (KEY key)

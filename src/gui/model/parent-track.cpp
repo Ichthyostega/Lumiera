@@ -23,7 +23,7 @@
 #include "parent-track.hpp"
 #include <boost/foreach.hpp>
 
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 
 namespace gui {
 namespace model {
@@ -73,18 +73,18 @@ ParentTrack::find_descendant_track_parent(shared_ptr<Track> child)
   using namespace boost;
 
   REQUIRE(child != NULL);
-  BOOST_FOREACH(std::tr1::shared_ptr<Track> track, tracks)
+  BOOST_FOREACH(std::shared_ptr<Track> track, tracks)
     {
       if(track == child)
         return shared_from_this();
 
-      std::tr1::shared_ptr<ParentTrack> result =
+      std::shared_ptr<ParentTrack> result =
         track->find_descendant_track_parent(child);
       if(result)
         return result;
     }
   
-  return std::tr1::shared_ptr<ParentTrack>();
+  return std::shared_ptr<ParentTrack>();
 }
 
 }   // namespace model

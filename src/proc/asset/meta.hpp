@@ -60,7 +60,7 @@
 #define ASSET_META_H
 
 #include "proc/asset.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -139,7 +139,7 @@ namespace asset {
   inline ID<Meta>::ID(HashVal id)       : ID<Asset> (id)           {};
   inline ID<Meta>::ID(const Meta& meta) : ID<Asset> (meta.getID()) {};
   
-  typedef P<Meta> PMeta;
+  typedef lib::P<Meta> PMeta;
   
   
   
@@ -150,13 +150,13 @@ namespace asset {
     : boost::noncopyable
     {
     public:
-      typedef P<asset::Meta> PType;
+      typedef lib::P<asset::Meta> PType;
       
       template<class MA>
-      meta::Builder<MA> operator() (EntryID<MA> elementIdentity); 
+      meta::Builder<MA> operator() (lib::idi::EntryID<MA> elementIdentity);
       
       template<class MA>
-      meta::Builder<MA> operator() (meta::Descriptor const& prototype, EntryID<MA> elementIdentity); 
+      meta::Builder<MA> operator() (meta::Descriptor const& prototype, lib::idi::EntryID<MA> elementIdentity);
       
     };
   

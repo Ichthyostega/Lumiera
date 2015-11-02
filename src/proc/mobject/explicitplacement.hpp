@@ -1,5 +1,5 @@
 /*
-  EXPLICITPLACEMENT.hpp  -  special Placement yielding an absolute location (Time,Track) for a MObject
+  EXPLICITPLACEMENT.hpp  -  special Placement yielding an absolute location (Time,Output) for a MObject
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

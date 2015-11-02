@@ -244,8 +244,10 @@ namespace test    {
           CHECK (!isSameObject (path2,path3));
           CHECK (!isSameObject (path1,path3));
           
-          Scope parent = path3.moveUp();
-          CHECK (path1 == path2);
+          Scope parent = path3.moveUp(); // mutation
+          CHECK (parent == path2.getLeaf().getParent());
+          
+          CHECK (path1 == path2); // the others are not affected
           CHECK (path2 != path3);
           CHECK (path1 != path3);
           
@@ -370,8 +372,7 @@ namespace test    {
           // now explore a completely separate branch....
           PMO& separatePlacement = *explore_testScope (
                                      *explore_testScope (
-                                       *explore_testScope (
-                                         root.getTop())));
+                                       retrieve_firstTestSubMO21()));
           path.navigate (separatePlacement);
           CHECK (path);
           CHECK (disjoint (path,refPath));

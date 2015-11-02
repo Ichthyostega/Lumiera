@@ -28,7 +28,7 @@
 #include "lib/cmdline.hpp"
 #include "lib/query-diagnostics.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 
 using lib::Cmdline;
@@ -36,8 +36,8 @@ using util::isnil;
 using util::contains;
 using util::for_each;
 
-using std::tr1::placeholders::_1;
-using std::tr1::bind;
+using std::placeholders::_1;
+using std::bind;
 using std::string;
 using std::cout;
 using std::endl;

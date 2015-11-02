@@ -46,7 +46,7 @@
 
 #include "proc/mobject/session/placement-index.hpp"
 
-#include <tr1/memory>
+#include <memory>
 
 
 
@@ -55,7 +55,7 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-  typedef std::tr1::shared_ptr<PlacementIndex> PPIdx;
+  typedef std::shared_ptr<PlacementIndex> PPIdx;
   
 
   /** there is an implicit PlacementIndex available on a global level,

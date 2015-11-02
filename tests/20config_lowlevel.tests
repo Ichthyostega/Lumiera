@@ -1,7 +1,7 @@
 TESTING "test configuration system" ./test-configloader
 
-TEST "initializing config system" init <<END
-out: initialized
+TEST "initialising config system" init <<END
+out: initialised
 out: destroyed
 END
 

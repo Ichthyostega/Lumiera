@@ -72,30 +72,34 @@
 #include "lib/access-casted.hpp"
 #include "lib/util.hpp"
 
+#include <type_traits>
 #include <boost/noncopyable.hpp>
-#include <boost/static_assert.hpp>
 
 
 namespace lib {
   
-  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+  namespace error = lumiera::error;
+  
   using util::isSameObject;
   using util::unConst;
   
   
   namespace { // implementation helpers...
     
+    using boost::enable_if;
     using boost::disable_if;
-    using boost::is_convertible;
+    using std::is_constructible;
     
-    bool
-    validitySelfCheck (bool boolConvertible)
+    template<typename X>
+         typename enable_if< is_constructible<bool,X>,
+    bool >::type
+    validitySelfCheck (X const& boolConvertible)
       {
-        return boolConvertible;
+        return bool(boolConvertible);
       }
     
     template<typename X>
-        typename disable_if< is_convertible<X,bool>, 
+         typename disable_if< is_constructible<bool,X>,
     bool >::type
     validitySelfCheck (X const&)
       {
@@ -128,26 +132,9 @@ namespace lib {
           if (asBase) 
             return asBase;
           
-          throw lumiera::error::Logic ("Unable to convert concrete object to Base interface"
-                                      , LUMIERA_ERROR_WRONG_TYPE
-                                      );
-        }
-      
-      template<class SUB>
-      static SUB*
-      access (Base* asBase)
-        {
-          // Because we don't know anything about the involved types,
-          // we need to exclude a brute force static cast
-          // (which might slice or reinterpret or even cause SEGV)
-          if (!util::use_static_downcast<Base*,SUB*>::value)
-            {
-              SUB* content = util::AccessCasted<SUB*>::access (asBase);
-              return content;
-              // might be NULL
-            }
-          else
-            return 0;
+          throw error::Logic ("Unable to convert concrete object to Base interface"
+                             , error::LUMIERA_ERROR_WRONG_TYPE
+                             );
         }
     };
   
@@ -172,13 +159,6 @@ namespace lib {
         {
           return static_cast<void*> (&obj);
         }
-      
-      template<class SUB>
-      static SUB*
-      access (Base*)
-        {
-          return 0;
-        }
     };
   
   
@@ -188,7 +168,7 @@ namespace lib {
   
   
   /**
-   * Inline buffer holding and owning an object while concealing the
+   * Inline buffer to hold and own an object while concealing the
    * concrete type. The object is given either as ctor parameter or
    * by direct assignment; it is copy-constructed into the buffer.
    * It is necessary to specify the required buffer storage space
@@ -203,6 +183,7 @@ namespace lib {
    * @note assertion failure when trying to place an instance not
    *       fitting into given size.
    * @note \em not threadsafe!
+   * @todo add support for moving of rvalue refs
    */
   template
     < size_t siz           ///< maximum storage required for the targets to be held inline
@@ -237,7 +218,8 @@ namespace lib {
           BaseP
           getBase()  const
             {
-              throw lumiera::error::Invalid("accessing empty holder");
+              throw error::Invalid("accessing empty holder"
+                                  , error::LUMIERA_ERROR_BOTTOM_VALUE);
             }
           
           virtual void
@@ -248,12 +230,12 @@ namespace lib {
         };
       
       
-      /** concrete subclass managing a specific kind of contained object.
+      /** concrete subclass to manage a specific kind of contained object.
        *  @note invariant: #content_ always contains a valid SUB object */
       template<typename SUB>
       struct Buff : Buffer
         {
-          BOOST_STATIC_ASSERT (siz >= sizeof(SUB));
+          static_assert (siz >= sizeof(SUB), "InPlaceAnyHolder: insufficient Buffer size");
           
           SUB&
           get()  const  ///< core operation: target is contained within the inline buffer
@@ -451,19 +433,12 @@ namespace lib {
       
       
       /** re-accessing the concrete contained object.
-       *  When the specified type is exactly the same
-       *  as used when storing the object, we can directly
-       *  re-access the buffer. Otherwise, a conversion might
-       *  be possible going through the Base type, depending
-       *  on the actual types involved and the AccessPolicy.
-       *  But, as we don't "know" the actual type of the object
-       *  in storage, a \em static upcast to any type \em between
-       *  the concrete object type and the base type has to be
-       *  ruled out for safety reasons. When the contained object
-       *  has RTTI, a \em dynamic cast can be performed in this
-       *  situation. You might consider using visitor.hpp instead
-       *  if this imposes a serious limitation.
-       *  @throws lumiera::error::Logic when conversion/access fails
+       *  This requires exact knowledge of the actual type
+       *  of the element currently in storage. OpaqueHolder
+       *  does not provide any "probing" or visitation mechanism.
+       * @remarks You might consider lib::Variant or some visitor instead.
+       * @throws lumiera::error::Logic when conversion/access fails
+       * @throws lumiera::error::Invalid when accessing an empty holder
        */
       template<class SUB>
       SUB& get()  const
@@ -475,16 +450,14 @@ namespace lib {
           if (actual)
             return actual->get();
           
-          // second try: maybe we can perform a dynamic downcast
-          // or direct conversion to the actual target type.
-          SUB* content = AccessPolicy::template access<SUB> (asBase());
-          if (content) 
-            return *content;
-          
-          throw lumiera::error::Logic ("Attempt to access OpaqueHolder's contents "
-                                       "specifying incompatible target type"
-                                      , LUMIERA_ERROR_WRONG_TYPE
-                                      );
+          if (this->empty())
+            throw error::Invalid("accessing empty holder"
+                                , error::LUMIERA_ERROR_BOTTOM_VALUE);
+          else
+            throw error::Logic ("Attempt to access OpaqueHolder's contents "
+                                "specifying incompatible target type"
+                               , error::LUMIERA_ERROR_WRONG_TYPE
+                               );
         }
       
       
@@ -509,7 +482,7 @@ namespace lib {
   
   
   /**
-   * Inline buffer holding and owning an object while concealing the
+   * Inline buffer to hold and own an object while concealing the
    * concrete type. Access to the contained object is similar to a
    * smart-pointer, but the object isn't heap allocated. OpaqueHolder
    * may be created empty, which can be checked by a bool test.
@@ -616,7 +589,7 @@ namespace lib {
       void
       placeDefault()
         {
-          BOOST_STATIC_ASSERT (siz >= sizeof(DEFAULT));
+          static_assert (siz >= sizeof(DEFAULT), "InPlaceBuffer to small");
           
           new(&buf_) DEFAULT();
         }
@@ -645,7 +618,7 @@ namespace lib {
           destroy();                         \
           try                                 \
             {                                  \
-              BOOST_STATIC_ASSERT (siz >= sizeof(TY));\
+              static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");\
                                                  \
               return *new(&buf_) _CTOR_CALL_;     \
             }                                      \

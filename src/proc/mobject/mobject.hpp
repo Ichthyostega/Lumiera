@@ -46,7 +46,6 @@ namespace proc {
 namespace mobject {
   
   using std::string;
-  using lib::P;
   
   //NOBUG_DECLARE_FLAG (mobjectmem);
   

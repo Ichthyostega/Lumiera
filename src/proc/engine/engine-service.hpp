@@ -76,7 +76,7 @@ namespace engine{
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
-//  using std::tr1::function;
+//  using std::function;
   using mobject::ModelPort;
   using proc::play::Timings;
   
@@ -121,7 +121,7 @@ namespace engine{
       class Quality
         {
           public:
-            virtual ~Quality();  ///< this is an Interface
+            virtual ~Quality() { };  ///< this is an Interface
         };
       
       

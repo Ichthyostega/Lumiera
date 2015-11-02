@@ -1,5 +1,5 @@
 /*
-  configentry.c  -  single entries from configfiles
+  Configentry  -  single entries from configfiles
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,26 +17,15 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 
-//TODO: Support library includes//
+* *****************************************************/
+
+
 #include "lib/safeclib.h"
-
-//TODO: Lumiera header includes//
 #include "common/configentry.h"
 
-//TODO: internal/static forward declarations//
 
 
-//TODO: System includes//
-
-
-/**
- * @file
- *
- */
-
-//code goes here//
 LumieraConfigitem
 lumiera_configentry_new (LumieraConfigitem tmp)
 {
@@ -65,10 +54,3 @@ struct lumiera_configitem_vtable lumiera_configentry_funcs =
 
 
 
-/*
-// Local Variables:
-// mode: C
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/

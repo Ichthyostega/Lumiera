@@ -46,13 +46,13 @@
 #include "lib/nobug-init.hpp"
 #include "lib/bool-checkable.hpp"
 
-#include <tr1/memory>
+#include <memory>
 
 
 namespace lib {
   
-  using std::tr1::shared_ptr;
-  using std::tr1::weak_ptr;
+  using std::shared_ptr;
+  using std::weak_ptr;
   
   
   
@@ -71,7 +71,7 @@ namespace lib {
     : public lib::BoolCheckable<Handle<IMP> >
     {
     protected:
-      typedef std::tr1::shared_ptr<IMP> SmPtr;
+      typedef std::shared_ptr<IMP> SmPtr;
       
       SmPtr smPtr_;
       

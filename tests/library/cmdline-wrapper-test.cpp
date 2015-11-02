@@ -29,8 +29,6 @@
 #include <sstream>
 #include <string>
 
-#include <boost/lambda/lambda.hpp>
-
 using util::for_each;
 using std::string;
 using std::cout;
@@ -40,9 +38,6 @@ using std::endl;
 
 namespace lib {
 namespace test{
-  
-  using boost::lambda::_1;
-  using boost::lambda::var;
   
   
   
@@ -57,7 +52,7 @@ namespace test{
           testLine("spam");
           testLine("\nspam");
           testLine("eat more spam");
-          testLine(" oo _O()O_  ä + €");
+          testLine(" oo _O()O_  ☭ + €");
           testLine("Ω\tooΩ\toΩo\tΩoo");
           
           testStandardCmdlineformat();
@@ -70,7 +65,7 @@ namespace test{
           
           int i=0;
           Cmdline theCmdline (cmdline);
-          for_each(theCmdline, (cout << var(i)++ << "|" <<  _1 << "|\n"));
+          for_each(theCmdline, [&](string const& arg) { cout << i++ << "|" <<  arg << "|\n";});
           cout << "-->" << theCmdline << endl;
           
           // consistency checks

@@ -116,7 +116,7 @@ namespace session {
                                , LUMIERA_ERROR_INVALID_SCOPE);
         
         QueryFocus currentFocus;
-        currentFocus.attach (Scope(placement).getParent());
+        currentFocus.shift (Scope(placement).getParent());
         contents_.clear (placement);
       }
     ENSURE (!contents_.contains (placement));

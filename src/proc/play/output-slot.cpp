@@ -56,7 +56,7 @@ namespace play {
   bool
   OutputSlot::isFree()  const
   {
-    return ! this->state_;
+    return not this->state_;
   }
   
   
@@ -77,7 +77,7 @@ namespace play {
   OutputSlot::Allocation&
   OutputSlot::allocate()
   {
-    if (!isFree())
+    if (not isFree())
       throw error::Logic ("Attempt to open/allocate an OutputSlot already in use.");
     
     state_.reset (this->buildState());
@@ -88,7 +88,7 @@ namespace play {
   void
   OutputSlot::disconnect()
   {
-    if (!isFree())
+    if (not isFree())
       state_.reset(0);    
   }
   

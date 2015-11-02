@@ -37,13 +37,14 @@
 namespace proc {
 namespace engine {
   
-//  using std::tr1::function;
+//  using std::function;
   using backend::engine::JobParameter;
   using backend::engine::JobClosure;
   using mobject::ModelPort;
 //  using lib::time::TimeSpan;
 //  using lib::time::FSecs;
 //  using lib::time::Time;
+  using lib::time::FrameCnt;
   
   
   /**
@@ -58,7 +59,6 @@ namespace engine {
    */
   class CalcPlanContinuation
     : public JobClosure
-    , boost::noncopyable
     {
       
       play::Timings const& timings_;
@@ -105,13 +105,13 @@ namespace engine {
        *  to real (wall clock) time will be established when the returned job
        *  is actually invoked
        * @param startFrame where to begin rendering, relative to the nominal
-       *        time grid implicitly related to the ModelPort to be pulled
+       *        time grid implicitly given by the ModelPort to be pulled
        */
-      Job prepareRenderPlanningFrom (int64_t startFrame);
+      Job prepareRenderPlanningFrom (FrameCnt startFrame);
       
       
     private:
-      void performJobPlanningChunk(int64_t nextStartFrame);
+      void performJobPlanningChunk(FrameCnt nextStartFrame);
       Job buildFollowUpJobFrom (TimeAnchor const& refPoint);
     };
   

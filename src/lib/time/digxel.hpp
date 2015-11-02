@@ -1,5 +1,5 @@
 /*
-  TIMECODE.hpp  -  grid aligned and fixed format time specifications
+  DIGXEL.hpp  -  grid aligned and fixed format time specifications
 
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
@@ -70,7 +70,7 @@
 
 #include <boost/operators.hpp>
 #include <boost/lexical_cast.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <string>
 #include <cstdio>
 #include <cmath>
@@ -196,9 +196,9 @@ namespace time {
   
   
   
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
+  using std::bind;
+  using std::function;
+  using std::placeholders::_1;
   
   
   /**
@@ -317,7 +317,9 @@ namespace time {
   typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
   typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
   typedef Digxel< int, digxel::HourFormatter> HourDigit;  ///< for displaying hours in H:M.S
-  typedef Digxel<int64_t, digxel::CountFormatter> CountVal;  ///< for displaying a counter      ///////////TICKET #882 : should better use a typedef for frame counts
+  
+  typedef int64_t FrameCnt;
+  typedef Digxel<FrameCnt, digxel::CountFormatter> CountVal;  ///< for displaying a counter
   
   
   /** special Digxel to show a sign.

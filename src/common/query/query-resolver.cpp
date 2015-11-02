@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "lib/multifact-arg.hpp"
+#include "lib/multifact.hpp"
 #include "common/query/query-resolver.hpp"
 
 namespace lumiera {
@@ -53,14 +53,16 @@ namespace lumiera {
   
   /** factory used as dispatcher table
    *  for resolving typed queries  */
-  typedef MultiFact< Resolution(Goal const&) // nominal signature of fabrication
-                   , Goal::QueryID          //  select resolution function by kind-of-Query
-                   , BuildRefcountPtr      //   wrapper: manage result set by smart-ptr
-                   > DispatcherTable;     //
+  typedef MultiFact< Resolution*(Goal const&) // raw signature of fabrication
+                   , Goal::QueryID           //  select resolution function by kind-of-Query
+                   , BuildRefcountPtr       //   wrapper: manage result set by smart-ptr
+                   > DispatcherTable;      //
   
-  struct QueryDispatcher
-    : DispatcherTable
+  /** PImpl of the generic QueryResolver */
+  class QueryDispatcher
+    : public DispatcherTable
     {
+    public:
       
       PReso
       handle (Goal const& query)
@@ -68,8 +70,8 @@ namespace lumiera {
           QID qID = query.getQID();
           ENSURE (contains (qID));
           
-          return (*this) (qID, query); 
-        }               //qID picks the resolution function
+          return this->invokeFactory (qID, query);
+        }                    // qID picks the resolution function
     };
   
   
@@ -102,7 +104,7 @@ namespace lumiera {
   
   
   void
-  QueryResolver::installResolutionCase (QID qID, function<Resolution*(Goal const&)> resolutionFun)
+  QueryResolver::installResolutionCase (QID qID, ResolutionMechanism resolutionFun)
   {
     ENSURE (!dispatcher_->contains (qID),
             "duplicate registration of query resolution function");

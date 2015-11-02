@@ -25,6 +25,7 @@
 #define LIB_UTIL_H
 
 #include "include/limits.h"
+#include "lib/hash-standard.hpp"
 
 #include <set>
 #include <string>
@@ -139,6 +140,20 @@ namespace util {
     return !pCStr || !(*pCStr);
   }
   
+  
+  
+  /** check if string starts with a given prefix */
+  inline bool
+  startsWith (string const& str, string const& prefix)
+  {
+    return 0 == str.rfind(prefix, 0);
+  }
+  
+  inline bool
+  startsWith (string const& str, const char* prefix)
+  {
+    return 0 == str.rfind(prefix, 0);
+  }
   
   
   /** shortcut for containment test on a map */
@@ -304,6 +319,12 @@ namespace util {
    * @see sanitised-identifier-test.cpp
    */
   string sanitise (string const& org);
+  
+  
+  /** remove leading and trailing whitespace
+   * @return a trimmed copy (default locale)
+   */
+  string trim (string const& org);
   
   
   

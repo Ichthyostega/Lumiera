@@ -155,6 +155,29 @@ would require a ``deep copy'' of any underlying data structures.
 
 Ichthyostega:: 'Sa 07 Jan 2012 21:49:09 CET' ~<prg@ichthyostega.de>~ 
 
+NOTE: Lumiera Forward Iterators can be made to work together with the
+      'range for loop', as introduced with C++11. The preferred solution
+      is to define the necessary free functions `begin` and `end` for ADL.
+      This is best done on a per implementation base. We consider a generic
+      solution not worth the effort
+
+This is to say, these two concepts can be made to work together well. While,
+at a conceptual level, they are not really compatible, and build on a
+different understanding: The standard for-loop assumes ``a container'',
+while our Forward Iterator Concept deals with ``abstract data sources''.
+The user needs to understand the fine points of that conceptual difference:
+
+- if you apply the range-`for` construct on a container, you can iterate
+  as often as you like. Even if the iterators of that container are
+  implemented in compliance with the Lumiera Forward Iterator concept.
+- but if you apply the range-`for` construct on _a given iterator_,
+  you can do so only once. There is no way to reset that iterator,
+  other than obtaining a new one.
+
+See `71167be9c9aaa` for the typical bridge implementation
+
+Ichthyostega:: 'Sa 04 Jul 2015 22:57:51 CEST' ~<prg@ichthyostega.de>~
+
 
 //endof_comments:
 

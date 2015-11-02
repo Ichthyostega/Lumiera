@@ -40,7 +40,7 @@ namespace test    {
   
   
   using lib::Symbol;
-  using std::tr1::function;
+  using std::function;
   using std::rand;
   
   

@@ -25,17 +25,17 @@
 #include "lib/test/test-helper.hpp"
 
 #include "proc/asset/typed-id.hpp"
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/p.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/inventory.hpp"
 //#include "proc/mobject/session/clip.hpp"
-//#include "proc/mobject/session/track.hpp"
+//#include "proc/mobject/session/fork.hpp"
 //#include "lib/meta/trait-special.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/symbol.hpp"
 
-//#include <tr1/unordered_map>
+//#include <unordered_map>
 #include <iostream>
 //#include <string>
 
@@ -84,14 +84,14 @@ namespace query  {
 
 
 
-namespace proc {
-namespace asset{
-namespace test {
+namespace lib {
+namespace idi {
+namespace test{
   
-  using mobject::session::test::DummyEntity;
-  using mobject::session::test::PDum;
+  using proc::mobject::session::test::DummyEntity;
+  using proc::mobject::session::test::PDum;
   
-  typedef EntryID<DummyEntity> DummyID;
+  using DummyID = EntryID<DummyEntity>;
   
   namespace { // Test definitions...
     
@@ -244,4 +244,4 @@ namespace test {
   LAUNCHER (TypedID_test, "unit asset");
   
   
-}}} // namespace proc::asset::test
+}}} // namespace lib::idi::test

@@ -63,7 +63,7 @@
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
-#include <tr1/functional>
+#include <functional>
 //#include <string>
 #include <vector>
 
@@ -77,7 +77,7 @@ namespace play {
 //    using lumiera::DummyPlayer;
   using util::isnil;
   using proc::mobject::ModelPort;
-  using std::tr1::function;
+  using std::function;
   
   typedef lib::IterSource<ModelPort>::iterator ModelPorts;
   

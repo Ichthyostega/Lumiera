@@ -28,13 +28,13 @@
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <string>
 
 
-using std::tr1::function;
-using std::tr1::placeholders::_1;
-using std::tr1::bind;
+using std::function;
+using std::placeholders::_1;
+using std::bind;
 using util::contains;
 using util::removeall;
 using util::for_each;
@@ -97,9 +97,9 @@ namespace asset {
   bool
   Asset::Ident::isValid()  const
   {
-    return !isnil (name)
-        && !isnil (org)
-        && version <= 1000000;
+    return not isnil (name)
+       and not isnil (org)
+       and version <= 1000000;
   }
 
 
@@ -124,7 +124,7 @@ namespace asset {
   Asset::isActive ()  const
   {
     return this->enabled
-        && all_parents_enabled (parents);
+       and all_parents_enabled (parents);
   }
   
   
@@ -140,7 +140,7 @@ namespace asset {
   {
     if (on == this->enabled)
       return true;
-    if (on && !all_parents_enabled (parents))
+    if (on and not all_parents_enabled (parents))
       return false;
     
     // can indeed to do the toggle...

@@ -29,7 +29,7 @@
 #include "lib/symbol.hpp"
 
 #include <boost/functional/hash.hpp>
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <cstring>
 #include <string>
 
@@ -54,7 +54,7 @@ namespace test{
     
   }
   
-  typedef std::tr1::unordered_map< Symbol, string, hash<Symbol> > HTable;
+  typedef std::unordered_map< Symbol, string, hash<Symbol> > HTable;
   
   
   /*********************************************************//**

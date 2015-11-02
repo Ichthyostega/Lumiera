@@ -60,13 +60,23 @@ namespace test    {
     ID i2 = index->insert (p2,  i1 );
     ID i3 = index->insert (p3,  i2 );
     ID i4 = index->insert (p4,  i3 );
-    ID i5 = index->insert (p5,  i4 );
+            index->insert (p5,  i4 );
     
-    ID is1 = index->insert (ps1,root);
-    ID is2 = index->insert (ps2,root);
-    ID is3 = index->insert (ps3, is2);
+            index->insert (ps1,root);
+    ID is2 =index->insert (ps2,root);
+            index->insert (ps3, is2);
     
     return index;
+  }
+  
+  namespace {
+    template<class MO>
+    PlacementMO&
+    retrieve_firstElmOfType()
+    {
+      return *ContentsQuery<MO>(SessionServiceExploreScope::getScopeRoot())
+                     .resolveBy(SessionServiceExploreScope::getResolver());
+    }
   }
   
   
@@ -79,8 +89,13 @@ namespace test    {
   PlacementMO&
   retrieve_startElm()
   {
-    return *ContentsQuery<TestSubMO1>(SessionServiceExploreScope::getScopeRoot())
-                           .resolveBy(SessionServiceExploreScope::getResolver());
+    return retrieve_firstElmOfType<TestSubMO1>();
+  }
+  
+  PlacementMO&
+  retrieve_firstTestSubMO21()
+  {
+    return retrieve_firstElmOfType<TestSubMO21>();
   }
   
   

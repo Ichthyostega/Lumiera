@@ -29,7 +29,7 @@
  ** capturing specific types to use as template parameter.
  ** 
  ** Additionally, this header augments the Tuple template into a simple Tuple
- ** (run time) datatype. This isn't meant as competing with std::tr1::tuple, which is
+ ** (run time) datatype. This isn't meant as competing with std::tuple, which is
  ** much more capable, but also has the downside of pulling in a lot of other headers.
  ** But when all we need is to define a generic typed record of N data elements and
  ** later re-accessing them (but no further advanced processing), the Tuple template

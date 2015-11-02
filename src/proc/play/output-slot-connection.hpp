@@ -53,9 +53,9 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 //#include <string>
-#include <tr1/functional>
+#include <functional>
 #include <vector>
-//#include <tr1/memory>
+//#include <memory>
 
 
 namespace proc {
@@ -68,10 +68,10 @@ namespace play {
   using lib::transform;
   using lib::iter_stl::eachElm;
   
-//using std::tr1::placeholders::_1;
-//using std::tr1::bind;
+//using std::placeholders::_1;
+//using std::bind;
   using std::vector;
-//using std::tr1::shared_ptr;
+//using std::shared_ptr;
   using boost::scoped_ptr;
   
   

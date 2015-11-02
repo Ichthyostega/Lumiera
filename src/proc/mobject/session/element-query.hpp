@@ -31,7 +31,7 @@
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <tr1/functional>
+#include <functional>
 
 
 
@@ -40,7 +40,7 @@ namespace mobject {
 namespace session {
   
   
-  using std::tr1::function;
+  using std::function;
   
   
   namespace { // type matching helper

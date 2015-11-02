@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LIB_TIME_TIMEQUQNT_H
-#define LIB_TIME_TIMEQUQNT_H
+#ifndef LIB_TIME_TIMEQUANT_H
+#define LIB_TIME_TIMEQUANT_H
 
 #include "lib/time/timevalue.hpp"
 #include "lib/time/quantiser.hpp"

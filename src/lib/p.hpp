@@ -22,7 +22,7 @@
 
 /** @file p.hpp
  ** Customised refcounting smart pointer.
- ** Template derived from std::tr1::shared_ptr adding total ordering and 
+ ** Template derived from std::shared_ptr adding total ordering and
  ** type relationships implemented by forwarding to the pointees. In all other
  ** respects, it should behave exactly as shared_ptr and is able to cooperate
  ** and share ownership with other shared_ptr instantiations.
@@ -51,17 +51,17 @@
 
 
 #include "lib/error.hpp"
-#include <tr1/memory>
+#include <memory>
 
 
 namespace lib {
   
-  using std::tr1::shared_ptr;
-  using std::tr1::weak_ptr;
+  using std::shared_ptr;
+  using std::weak_ptr;
   
   /**
    * Customised refcounting smart pointer template, built upon
-   * std::tr1::shared_ptr, but forwarding type relationships and
+   * std::shared_ptr, but forwarding type relationships and
    * ordering operators to the pointee objects.
    * @param TAR the visible pointee type
    * @param BASE the shared-ptr type used as implementation
@@ -81,14 +81,16 @@ namespace lib {
       template<class Y, class D> P (Y* p, D d)              : BASE(p,d){}
       
                                  P (P const& r)             : BASE(r)  {}
+                                 P (P const&& rr)           : BASE(rr) {}
       template<class Y>          P (shared_ptr<Y> const& r) : BASE(r)  {}
       template<class Y> explicit P (weak_ptr<Y> const& wr)  : BASE(wr) {}
-      template<class Y> explicit P (std::auto_ptr<Y> & ar)  : BASE(ar) {}
+      template<class Y> explicit P (std::auto_ptr<Y> && ar) : BASE(std::move(ar)) {}
       
       
       P& operator= (P const& r)                               { BASE::operator= (r);  return *this; }
+      P& operator= (P const&& rr)                             { BASE::operator= (rr); return *this; }
       template<class Y> P& operator=(shared_ptr<Y> const& sr) { BASE::operator= (sr); return *this; }
-      template<class Y> P& operator=(std::auto_ptr<Y> & ar)   { BASE::operator= (ar); return *this; }
+      template<class Y> P& operator=(std::auto_ptr<Y> && ar)  { BASE::operator= (std::move(ar)); return *this; }
       
       TAR* get() const        { return dynamic_cast<TAR*> (BASE::get()); }
       TAR& operator*() const  { return *get(); }

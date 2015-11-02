@@ -55,9 +55,10 @@
  ** \par placement scopes
  ** When adding a Placement to the index, it is mandatory to specify a Scope: this is
  ** another Placement already registered within the index; the new Placement can be thought
- ** off as being located "within" or "below" this scope-defining reference Placement. An
+ ** of as being located "within" or "below" this scope-defining reference Placement. An
  ** typical example would be the addition of a \c Placement<session::Clip>, specifying 
- ** a \c Placement<session::Track> as scope. Thus, all "object instances" within the 
+ ** a \c Placement<session::Fork> as scope. This would bring the mentioned Clip onto the
+ ** "Track", as implemented by a Fork-MObject. Thus, all "object instances" within the
  ** session are arranged in a tree-like fashion. On creation of the PlacementIndex,
  ** a root element needs to be provided. While this root element has a meaning for
  ** the session, within the index it is just a scope-providing element.
@@ -112,10 +113,24 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
+
+namespace std {
+  
+  /////////////////////////////////////////////////////////////////////////TICKET #722 : should provide a generic bridge to use hash_value
+  template<>
+  struct hash<proc::mobject::PlacementMO::ID>
+  {
+    size_t
+    operator() (proc::mobject::PlacementMO::ID const& val)  const noexcept
+      {
+        return hash_value(val);
+      }
+  };
+}
 
 
 namespace proc {
@@ -171,7 +186,7 @@ namespace session {
       
       
       typedef PlacementMO::ID _PID;
-      typedef std::tr1::unordered_multimap<_PID,_PID>::const_iterator  ScopeIter;
+      typedef std::unordered_multimap<_PID,_PID>::const_iterator  ScopeIter;
       typedef lib::RangeIter<ScopeIter>                           ScopeRangeIter;
       typedef lib::TransformIter<ScopeRangeIter, PlacementMO&> _ID_TableIterator;
       

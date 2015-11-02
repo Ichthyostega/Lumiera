@@ -73,7 +73,7 @@ namespace control {
   
   using std::string;
   using lib::Symbol;
-  using std::tr1::shared_ptr;
+  using std::shared_ptr;
   using lib::meta::Tuple;
   
   
@@ -261,7 +261,7 @@ namespace control {
   inline bool
   operator!= (Command const& c1, Command const& c2)
   {
-    return ! (c1 == c2); 
+    return not (c1 == c2);
   }
   
   /** allow for sets and associative containers */

@@ -27,7 +27,7 @@
 #include "lib/util-foreach.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 #include <string>
 
@@ -38,7 +38,7 @@ using lumiera::error::LUMIERA_ERROR_ASSERTION;
 
 using boost::algorithm::is_lower;
 using boost::algorithm::is_digit;
-using std::tr1::function;
+using std::function;
 using std::string;
 using std::cout;
 using std::endl;

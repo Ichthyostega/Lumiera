@@ -25,14 +25,14 @@
 #include "lib/util-foreach.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
+#include <functional>
 #include <iostream>
 #include <string>
 #include <set>
 
 using std::cout;
 using std::string;
+using std::function;
 
 
 
@@ -40,25 +40,26 @@ namespace util {
 namespace test {
   
   using util::for_each;
-  using boost::lambda::_1;
-  using boost::lambda::bind;
   using boost::lexical_cast;
   
   
+  using IntSet = std::set<uint>;
   
-  template<class COLL>
   void 
-  show (COLL const& coll)
+  show (IntSet const& coll)
   {
     cout << "[ ";
-    for_each (coll, cout << _1 << ", ");
+    for_each (coll, [](uint elm) { cout << elm << ", "; });
     cout << "]\n";
   }
   
-  bool
-  killerselector (string description, uint candidate)
+  function<bool(uint)>
+  select_match (string description) 
   {
-    return string::npos != description.find( lexical_cast<string> (candidate));
+    return [&](uint candidate) 
+            {
+              return string::npos != description.find( lexical_cast<string> (candidate));
+            };
   }
   
   
@@ -87,11 +88,11 @@ namespace test {
       void
       test_remove (string elems_to_remove)
         {
-          std::set<uint> theSet;
+          IntSet theSet;
           for (int i=0; i<10; ++i)
             theSet.insert (i);
           
-          util::remove_if (theSet, bind( killerselector, elems_to_remove, _1));
+          util::remove_if (theSet, select_match(elems_to_remove));
           
           cout << "removed " << elems_to_remove << " ---> ";
           show (theSet);

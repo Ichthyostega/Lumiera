@@ -1,5 +1,5 @@
 /*
-  resourcecollector.c  -  manage/collect resources when they get short
+  ResourceCollector  -  manage/collect resources when they get short
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,18 +17,21 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
 
 #include "include/logging.h"
 #include "lib/llist.h"
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
-#include "resourcecollector.h"
+#include "backend/resourcecollector.h"
 
 #include <unistd.h>
 
-//NOBUG_DEFINE_FLAG (resourcecollector); /* TODO: make this a hierachy, derrive from PARENT (library) ? */
+
+
 
 llist lumiera_resourcecollector_registry[LUMIERA_RESOURCE_END];
 lumiera_mutex lumiera_resourcecollector_lock;

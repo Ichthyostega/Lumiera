@@ -40,7 +40,7 @@ namespace asset {
   using std::string;
   
   class Pipe;
-  typedef P<Pipe> PPipe;
+  typedef lib::P<Pipe> PPipe;
   
   
   template<>

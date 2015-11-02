@@ -5,7 +5,7 @@ building from source -- the »Debian Way«
 :toc:
 
 In case you're using a Debian-based system (e.g. Mint, Ubuntu...), there
-is a simple alternative to the manaual compiling and installing of library
+is a simple alternative to the manual compiling and installing of library
 dependencies. Instead of building Lumiera from source in the classical (hard)
 way, you might prefer *building from the Debian source packages*.
 
@@ -14,7 +14,7 @@ Why -- what are the benefits?
  * rely on the Debian/Ubuntu package manager for sorting out the library
    and build dependencies
  * install Lumiera as a first-class package, like all the other software
-   you're using regularily. This way, the package manager ``knows'' about
+   you're using regularly. This way, the package manager ``knows'' about
    the library dependencies and can't mix up things due to a system upgrade.
 
 Under some circumstances, these very benefits might be a drawback, though.
@@ -37,13 +37,13 @@ should _not_ be done as root.
 . add a suitable source line to your *Apt configuration* ('/etc/apt/sources.lst')
 +
 ----
-deb-src http://lumiera.org/debian/ wheezy experimental
+deb-src http://lumiera.org/debian/ jessie experimental
 ----
 . get all the *build dependencies*
 +
 ----
 sudo apt-get build-dep nobug-dev
-sudo apt-get build-dep libgdl-lum-dev
+sudo apt-get build-dep gdlmm-3
 sudo apt-get build-dep lumiera
 ----
 . *build* using the source package.
@@ -56,10 +56,10 @@ apt-get source --compile nobug-dev
     prompted for signing with your GPG key. But because you're not going to upload
     the created binary packages anywhere, this step can be considered optional.
 
-  * installing the created package.
+  * install the created package.
 +
 Finally, you'll find several new +*.deb+ packages in the directory where you started
-the build. You need to _install_ these packages then using the basic debian package
+the build. You need to _install_ these packages then using the basic Debian package
 manager `dpkg`
 +
 ----
@@ -70,7 +70,7 @@ of course, the package names, versions and architecture will vary, depending on 
 situation.
 
   * repeat those steps to work your way up to the +lumiera+ package; build and install
-    Nobug, maybe build and install libgdl-lum and finally build and install Lumiera
+    Nobug, maybe build and install the GDL mm-bindings and finally build and install Lumiera
 
 . clean up.
 +
@@ -78,17 +78,17 @@ You can delete the source tree used for compiling. If you never intend to
 re-install the package, you could also delete the created package and source package
 components after installing it. But especially when trying out development versions
 it might be a good idea to stash those packages somewhere, as we're not keeping _every_
-package in the online Lumiera debian depot. While any package could be reproduced
+package in the online Lumiera Debian depot. While any package could be reproduced
 exactly with a bit of Git knowledge, just keeping the `*.deb` might be more convenient.
 
 *That's it* -- you're done! Debian building is convenient, isn't it?
 
-NOTE: What follows is a background information and configuration for advanced users. +
+NOTE: What follows is a background information and configuration for advanced users.
       You can safely skip and ignore the remainder of this page if in doubt.
+
 
 Required and recommended Debian packages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The Debian package manager stores for each package not only the required prerequisites,
 but also some additional _recommended_ packages: Software likely to make using the given
 package more convenient or improve the usage in some way. In addition, it also stores
@@ -110,11 +110,22 @@ APT::Install-Recommends "false";
 ^_Disclaimer:_ please be sure you understand the consequences...^
 
 
+Building packages from git
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+This tutorial describes the classic way of building a Debian package, which also is the
+foundation for any shortcuts and convenience scripts. In practice, people maintaining
+Debian packages happen to use various shortcuts and helper scripts to automate repetitive
+tasks. One such helper especially worth mentioning is **git-buildpackage**. With a little bit
+of configuration, this nifty script is able to create a full Debian package just form a
+git checkout in a single shot. At Lumiera.org, we maintain all our Debian packages this
+way, so the necessary configuration +debian/gbp.conf* is already in place.
+
+
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 The rest of this tutorial contains some more in-depth explanations for the curious
 
 
-anatomy of a debian source package
+anatomy of a Debian source package
 ----------------------------------
 
 Debian source packages provide a standardised way of compiling software. These
@@ -171,7 +182,7 @@ It is recommended to build with normal user permissions (not as root).
   Note, if several packages depend on each other, you need to give them all as list 
   in a single command invocation.
 
-After having prepared the sources thusly, you need to step into the root of the
+After having prepared the sources this way, you need to step into the root of the
 source tree, if you want to build the whole package, or even want to tweak and
 modify parts.
 

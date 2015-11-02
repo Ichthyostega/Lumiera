@@ -17,10 +17,12 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_CONFIG_LOOKUP_H
-#define LUMIERA_CONFIG_LOOKUP_H
+
+#ifndef COMMON_CONFIG_LOOKUP_H
+#define COMMON_CONFIG_LOOKUP_H
 
 #include "lib/psplay.h"
 #include "lib/llist.h"
@@ -44,7 +46,7 @@ typedef lumiera_config_lookupentry* LumieraConfigLookupentry;
  * Lookup of configuration keys. Configuration keys are dynamically stored in a splay tree.
  * This happens for defaults, loaded config files and entries which are set explicitly.
  * The system maintains no central registry of all possible keys.
- * We store here the full keys of configentries as well as the keys of section prefixes.
+ * We store here the full keys of config entries as well as the keys of section prefixes.
  * Section prefixes are stored with a trailing dot to disambiguate them from entry keys.
  */
 
@@ -52,7 +54,7 @@ typedef lumiera_config_lookupentry* LumieraConfigLookupentry;
 LUMIERA_ERROR_DECLARE (CONFIG_LOOKUP);
 
 /**
- * Just contains a hashtable to give sufficent abstraction.
+ * Just contains a hashtable to give sufficient abstraction.
  */
 struct lumiera_config_lookup_struct
 {
@@ -60,16 +62,16 @@ struct lumiera_config_lookup_struct
 };
 
 /**
- * Initialize a lookup structure.
- * @param self lookup structure to be initialized
+ * Initialise a lookup structure.
+ * @param self lookup structure to be initialised
  * @return self on success else NULL
  */
 LumieraConfigLookup
 lumiera_config_lookup_init (LumieraConfigLookup self);
 
 /**
- * Destruct a lookup structure.
- * @param self lookup structure to be destructed
+ * Destroy a lookup structure.
+ * @param self lookup structure to be destroyed
  * @return self
  */
 LumieraConfigLookup
@@ -87,9 +89,7 @@ lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item);
 
 
 /**
- * Add a default config item to a lookup structure.
- * @internal
- * This function is used internal.
+ * @internal Add a default config item to a lookup structure.
  * The item must contain a full key and not part of any 'section'
  * and is inserted as tail of the lookup list.
  * @param self lookup structure where the item shall be added
@@ -132,37 +132,33 @@ LumieraConfigitem
 lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key);
 
 /**
- * Find a the bottommost config item stored to a given key.
+ * Find a the bottom most config item stored to a given key.
  * defaults sits at the bottom if exists
  * @param self lookup structure where the key shall be searched
  * @param key string to be looked up
- * @return TODO
  */
 LumieraConfigitem
 lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key);
 
 
 
-/*
-  Lookup hash entries for the cuckoo hash
-*/
+/* == lookup hash entries using the PSplay tree */
 
-/**
- * Structure defining single hash table entries.
- * @internal
- */
+
+/** @internal Structure defining single hash table entries.*/
 struct lumiera_config_lookupentry_struct
 {
   psplaynode node;
-  /* stack of all configitems stored under this key */
+
+  /** stack of all configitems stored under this key */
   llist configitems;
 
-  /*
-    we store a copy of the full key here
-    configentry keys are complete as expected
-    section keys are the prefix stored with a trailing dot,
-    suffixes will be found by iterative search
-  */
+  /**
+   * we store a copy of the full key here
+   * configentry keys are complete as expected
+   * section keys are the prefix stored with a trailing dot,
+   * suffixes will be found by iterative search
+   */
   char* full_key;
 };
 
@@ -182,7 +178,8 @@ lumiera_config_lookupentry_destroy (LumieraConfigLookupentry self);
 void
 lumiera_config_lookupentry_delete (LumieraConfigLookupentry self);
 
-#endif
+
+#endif /*COMMON_CONFIG_LOOKUP_H*/
 /*
 // Local Variables:
 // mode: C

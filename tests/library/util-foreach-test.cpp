@@ -1,5 +1,5 @@
 /*
-  UtilForeach(Test)  -  helpers for doing something for each element
+  UtilForeach(Test)  -  helpers to perform something for each element
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -27,8 +27,7 @@
 
 
 #include <boost/lexical_cast.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 #include <vector>
 
@@ -40,12 +39,10 @@ using util::has_any;
 using util::and_all;
 
 using boost::lexical_cast;
-using std::tr1::function;
-using std::tr1::ref;
+using std::function;
+using std::ref;
 using std::cout;
 using std::endl;
-
-using namespace boost::lambda;
 
 
 namespace util {
@@ -60,11 +57,8 @@ namespace test {
     
     uint NUM_ELMS = 10;
     
-    
-    // need explicit definitions here, because we use
-    // tr1/functional and boost::lambda at the same time
-    std::tr1::_Placeholder<1>        _1;
-    boost::lambda::placeholder1_type _1_;
+    // Placeholder for argument in bind-expressions
+    std::_Placeholder<1> _1;
     
     
     VecI
@@ -128,7 +122,7 @@ namespace test {
       void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
+          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
           
           VecI container = buildTestNumberz (NUM_ELMS);
           RangeI iterator(container.begin(), container.end());
@@ -156,7 +150,7 @@ namespace test {
           CHECK (int(NUM_ELMS) ==container[0]);
           
           check_ref_argument_bind (iterator);
-          CHECK (60+int(NUM_ELMS) ==container[0]);
+          CHECK (90+int(NUM_ELMS) ==container[0]);
           // changes got propagated through the iterator
           
           check_wrapped_container_passing(container);
@@ -233,7 +227,11 @@ namespace test {
       
       /** @test under some circumstances, it is even possible
        *        to take a ref to the data in the input sequence,
-       *        or to a summation variable.
+       *        or to a summation variable. In the example performed here,
+       *        the function to be applied takes the 3rd argument by reference
+       *        and assigns the sum of first and second argument to this parameter.
+       *        If we us a bind variable at that position, we end up assigning
+       *        by reference to the values contained in the collection.
        *  @note in case of invoking this test with a Lumiera Forward Iterator,
        *        the changes go through to the original container, in spite of
        *        passing the iterator by value. This behaviour is correct, as
@@ -245,7 +243,7 @@ namespace test {
       check_ref_argument_bind (CO coll)
         {
           ANNOUNCE (assign_to_input);
-          function<bool(int,int,int)> fun2(function2);
+          function<bool(int,int,int&)> fun2(function2);
           
           for_each (coll, function2, 5, 5, _1 );             _NL_
           for_each (coll, &function2,5, 5, _1 );             _NL_
@@ -256,13 +254,16 @@ namespace test {
           has_any (coll, function2,  5, 5, _1 );             _NL_
           has_any (coll, &function2, 5, 5, _1 );             _NL_
           
-          // note: when using a function object, 
-          // instead of directly using a binder,
-          // the pass-by reference doesn't work
+          // note: in C++11, the reference parameters are passed through
+          // even when wrapping the function or function pointer into a function object,
           for_each (coll,fun2,       5, 5, _1 );             _NL_
           and_all (coll, fun2,       5, 5, _1 );             _NL_
           has_any (coll, fun2,       5, 5, _1 );             _NL_
+          // at that point we have added 9 * (5+5) to the value at position zero.
+          // (note that the has_any only evaluates the function once)
           
+          
+          // the following test assigns the sum via the ref argument to a local variable.
           int sum=0;
           ANNOUNCE (assign_to_var);
           for_each (coll, function2, -10, _1, ref(sum) );    _NL_
@@ -344,7 +345,7 @@ namespace test {
         }
       
       
-      /** @test use a lambda-expression, to be invoked for each element */
+      /** @test use lambda-expressions, to be invoked for each element */
       template<typename CO>
       void
       check_foreach_lambda (CO coll)
@@ -352,29 +353,29 @@ namespace test {
           ANNOUNCE (check_foreach_lambda);
           uint sum(0);
           
-          for_each (coll, var(sum) += _1_ );
+          for_each (coll, [&sum] (uint entry) { sum += entry; });
           
           CHECK (sum == (NUM_ELMS+1) * NUM_ELMS/2);
           
-          CHECK (!and_all  (coll, _1_ - 1 ));
-          CHECK ( has_any  (coll, _1_ + 1 ));
+          CHECK (!and_all  (coll, [] (uint elm) { return elm - 1; }));
+          CHECK ( has_any  (coll, [] (uint elm) { return elm + 1; }));
         }
       
       
       /** @test verify the logic of universal and existential quantisation.
-       *        We use a predicate generated on-the-fly as lambda expression */
+       *        Using lambda expressions as predicates */
       template<typename CO>
       void
       check_existence_quant (CO coll)
         {
           ANNOUNCE (check_existence_quant);
           
-          CHECK ( and_all (coll, 0 < _1_ ));
-          CHECK (!and_all (coll, 1 < _1_ ));
+          CHECK ( and_all (coll, [] (uint elm) { return 0 < elm; }));
+          CHECK (!and_all (coll, [] (uint elm) { return 1 < elm; }));
           
-          CHECK ( has_any (coll, 0 < _1_ ));
-          CHECK ( has_any (coll, _1_ >= NUM_ELMS ));
-          CHECK (!has_any (coll, _1_ >  NUM_ELMS ));
+          CHECK ( has_any (coll, [] (uint elm) { return 0 < elm; }));
+          CHECK ( has_any (coll, [] (uint elm) { return elm >= NUM_ELMS; }));
+          CHECK (!has_any (coll, [] (uint elm) { return elm >  NUM_ELMS; }));
         }
       
       
@@ -417,7 +418,7 @@ namespace test {
         }
       
       
-      /** @test passing the collection to be iterated in various ways
+      /** @test pass the collection to be iterated in various ways
        *        - anonymous temporary
        *        - smart pointer
        *        - pointer
@@ -435,35 +436,40 @@ namespace test {
           
 #define SHOW_CONTAINER for_each (coll, plainFunc);           _NL_
           
+          int counter = NUM_ELMS;
+          auto assign_and_decrement = [&] (int& entry)
+                                          {
+                                            entry = counter--;
+                                          };
+          
           // use a const reference to pass the container...
           VecI const& passByConstRef (coll);
           
-          int counter = NUM_ELMS;
-          for_each (passByConstRef,             _1_ = var(counter)-- );
+          for_each (passByConstRef,             assign_and_decrement );
           
           SHOW_CONTAINER
           // indeed got modifications into the original container!
           CHECK (0 == counter);
           
           // passing anonymous temporary
-          for_each (buildTestNumberz(NUM_ELMS), _1_ = var(counter)-- );
+          for_each (buildTestNumberz(NUM_ELMS), assign_and_decrement );
           
           // passing a smart-ptr managed copy
-          std::tr1::shared_ptr<VecI> bySmartPtr (new VecI (coll));
+          std::shared_ptr<VecI> bySmartPtr (new VecI (coll));
           
-          for_each (bySmartPtr,                 _1_ = var(counter)-- );
+          for_each (bySmartPtr,                 assign_and_decrement );
           
           // both didn't influence the original container
           SHOW_CONTAINER
           CHECK (-2*int(NUM_ELMS)   == counter);
           CHECK (bySmartPtr->back() == counter+1);
           
-          // passing by pointer is also possible
+          // passing the container by pointer is also possible
           const VecI * const passByConstPointer (&coll);
           
-          for_each (passByConstPointer,         _1_ = var(counter)-- );
+          for_each (passByConstPointer,         assign_and_decrement );
           SHOW_CONTAINER
-          // ...and influences the original container
+          // ...and does indeed influence the original container
         }
       
     };

@@ -30,7 +30,7 @@
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <string>
 #include <vector>
 #include <cstdlib>
@@ -42,7 +42,7 @@ namespace test {
   namespace { // test fixture: a random Tree to navigate...
     
     using std::rand;
-    using std::tr1::function;
+    using std::function;
     using lib::transformIterator;
     using lib::iter_stl::eachAddress;
     using util::contains;
@@ -372,25 +372,26 @@ namespace test {
           OrientationIndicator orient;
           
           CHECK (0 == orient);
-          ++orient;
-          CHECK (+1 == orient);
-          ----orient;
+          ++++orient;
+          CHECK (+2 == orient);
+          orient.markRefLevel();
+          CHECK ( 0 == orient);
+          --orient;
           CHECK (-1 == orient);
           
-          orient.markRefLevel (2);
-          CHECK (+2 == orient);
-          
-          orient.markRefLevel (2);
-          CHECK ( 0 == orient);
-          
-          orient.markRefLevel (3);
-          CHECK (+1 == orient);
+          orient.markRefLevel (4);
+          CHECK (-3 == orient);
           
           orient.markRefLevel (4);
-          orient.markRefLevel (5);
-          CHECK (+1 == orient);
+          CHECK (-3 == orient);
           
-          orient.markRefLevel (2);
+          orient -= orient;
+          CHECK ( 0 == orient);
+          
+          ++orient;
+          CHECK (+1 == orient);
+          orient.resetToRef();    // now at level == 4
+          orient.markRefLevel (7);
           CHECK (-3 == orient);
           
           orient += 200;
@@ -398,7 +399,7 @@ namespace test {
           CHECK (+7 == orient);
           
           OrientationIndicator o2(orient);
-          o2.markRefLevel(0);
+          o2.markRefLevel(16);
           CHECK (-2 == o2);
           CHECK (+7 == orient);
         }

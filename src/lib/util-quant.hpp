@@ -1,5 +1,5 @@
 /*
-  UTIL-QUANT.hpp  -  helper functions to deal with division and quantisation
+  UTIL-QUANT.hpp  -  helper functions to deal with quantisation and comparison
 
   Copyright (C)         Lumiera.org
     2011,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,6 +25,8 @@
 #define LIB_UTIL_QUANT_H
 
 #include <cstdlib>
+#include <cfloat>
+#include <cmath>
 
 
 
@@ -114,6 +116,32 @@ namespace util {
       }
     return res;
   }
+  
+  
+  
+  /**
+   * epsilon comparison of doubles.
+   * @remarks Floating point calculations are only accurate up to a certain degree,
+   *          and we need to adjust for the magnitude of the involved numbers, since
+   *          floating point numbers are scaled by the exponent. Moreover, we need
+   *          to be careful with very small numbers (close to zero), where calculating
+   *          the difference could yield coarse grained 'subnormal' values.
+   * @param ulp number of grid steps to allow for difference (default = 2).
+   *          Here, a 'grid step' is the smallest difference to 1.0 which can be
+   *          represented in floating point ('units in the last place')
+   * @warning don't use this for comparison against zero, rather use an absolute epsilon then.
+   * @see https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
+   * @see http://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
+   * @see https://en.wikipedia.org/wiki/Unit_in_the_last_place
+   */
+  inline bool
+  almostEqual (double d1, double d2, unsigned int ulp =2)
+  {
+    using std::fabs;
+    return fabs (d1-d2) < DBL_EPSILON * fabs (d1+d2) * ulp
+        || fabs (d1-d2) < DBL_MIN; // special treatment for subnormal results
+  }
+  
   
 } // namespace util
 #endif /*UTIL_QUANT_H*/

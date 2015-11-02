@@ -28,7 +28,7 @@
 
 #include "lib/wrapper.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -45,8 +45,8 @@ namespace test{
   using lib::test::showSizeof;
   using util::isSameObject;
   
-  using std::tr1::placeholders::_1;
-  using std::tr1::ref;
+  using std::placeholders::_1;
+  using std::ref;
   using std::vector;
   using std::string;
   using std::rand;
@@ -82,7 +82,7 @@ namespace test{
     function<int&(size_t)>
     pickElement_ofVector (vector<int>& vec)
     {
-      return std::tr1::bind (pickElement, ref(vec), _1 );
+      return std::bind (pickElement, ref(vec), _1 );
     }
   } // (END) Test helpers
   

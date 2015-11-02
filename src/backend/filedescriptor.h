@@ -1,5 +1,5 @@
 /*
-  filedescriptor.h  -  file handling
+  FILEDESCRIPTOR.h  -  file handling
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -19,8 +19,14 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_FILEDESCRIPTOR_H
-#define LUMIERA_FILEDESCRIPTOR_H
+
+/** @file filedescriptor.h
+ ** File descriptors are the underlying working horse in accessing files.
+ ** All information associated with managing a file is kept here.
+ */
+
+#ifndef BACKEND_FILEDESCRIPTOR_H
+#define BACKEND_FILEDESCRIPTOR_H
 
 #include "lib/mutex.h"
 #include "lib/rwlock.h"
@@ -40,12 +46,7 @@ typedef lumiera_filedescriptor* LumieraFiledescriptor;
 #include "backend/file.h"
 #include "backend/mmapings.h"
 
-/**
- * @file
- * Filedescriptors.
- * Filedescriptors are the underlying working horse in accessing files.
- * All information associated with managing a file is kept here.
- */
+
 struct lumiera_filedescriptor_struct
 {
   /** node for the lookup tree */
@@ -77,6 +78,7 @@ struct lumiera_filedescriptor_struct
 
   /** file locking, a rwlock for thread locking */
   lumiera_rwlock filelock;
+
   /** readlock counter for releasing the file lock, -1 for write lock, 0 = unlocked */
   int lock_cnt;
   RESOURCE_USER (filelock_rh);
@@ -119,7 +121,7 @@ lumiera_filedescriptor_samestat (LumieraFiledescriptor self, struct stat* stat);
 /**
  * Allocate a new filedescriptor cloned from a template
  * @param template the source filedescriptor
- * @return the constrccted filedescriptor
+ * @return the constructed filedescriptor
  */
 LumieraFiledescriptor
 lumiera_filedescriptor_new (LumieraFiledescriptor template);
@@ -148,11 +150,4 @@ lumiera_filedescriptor_unlock (LumieraFiledescriptor self);
 
 
 
-#endif
-/*
-// Local Variables:
-// mode: C
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/
+#endif /*BACKEND_FILEDESCRIPTOR_H*/

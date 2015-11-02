@@ -290,11 +290,12 @@ output configuration. A timeline does not temporally arrange material, this is
 performed by a sequence, which can be connected (snapped) to a timeline.
 
 A typical film will define many sequences, but will only have a few timelines. A
-sequence contains a number of tracks which are ordered in a hierarchy. Tracks do
-not have any format associated with them and more or less anything can be put
-into a track. Consequently, audio and video material can equally be assigned to
-a track, there is no discrimination between audio and video in the Lumiera
-concept of a track.
+sequence contains a number of ``tracks'' which are ordered in a hierarchy, which
+we call ``a fork''. Within Lumiera ``tracks'' do not have any format associated
+with them and more or less anything can be put into a ``track'' (fork).
+Consequently, audio and video material can equally be assigned to such a fork,
+there is no discrimination between audio and video in the Lumiera
+concept of a ``track''.
 
 A timeline must be assigned to viewer and transport control if playback viewing is desired.
 In most cases, these connections are created automatically, on demand: Just playing some
@@ -314,8 +315,8 @@ can be applied within each pipe.
 
 Most pipes are managed automatically, e.g. the pipes corresponding to
 individual clips, or the pipes collecting output from transitions, from nested
-sequences and from groups of tracks. At some point, at the timeline level, all 
-processed data is collected within the aforementioned global pipes to form the
+sequences and from groups of forks (``tracks''). At some point, at the timeline level,
+all processed data is collected within the aforementioned global pipes to form the
 small number of output streams produced by rendering and playback. Each timeline
 uses a separate set of global pipes. 
 
@@ -336,7 +337,7 @@ There are various kinds of assets available in any project:
   * internal artefacts like sequences and automation data sets
   * markers, labels, tags and similar kinds of meta data
 
-Actually, the same underlying data structure is used to implement the
+Actually, the same underlying _fork_ data structure is used to implement the
 asset view with folders, clip bins and effect palettes, and the timeline
 view with tracks, clips and attached effects. Technically, there is no
 difference between a track or a clip bin -- just the presentation appears

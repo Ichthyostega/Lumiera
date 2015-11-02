@@ -270,6 +270,7 @@ class LumieraExeBuilder(WrappedStandardExeBuilder):
         """
         custEnv = lumiEnv.Clone()
         custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/modules,--enable-new-dtags" )
+        custEnv.Append( LINKFLAGS = "-Wl,-rpath-link=target/modules" ) ### Workaround for bug in binutils > 2.23   /////TICKET #965
         if 'addLibs' in kw:
             custEnv.Append(LIBS = kw['addLibs'])
         return custEnv
@@ -284,10 +285,13 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
     
     def getCustomEnvironment(self, lumiEnv, target, **kw):
         """ augments the built-in SharedLibrary() builder to add  some tweaks missing in SCons 1.0,
-            like setting a SONAME proper instead of just passing the relative pathname to the linker
+            like setting a SONAME proper instead of just passing the relative pathname to the linker.
+            Besides, we override the library search path to allow for transitive dependencies between
+            Lumiera modules; modules are assumed to reside in a subdirectory below the executable. 
         """
         custEnv = lumiEnv.Clone()
         custEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))
+        custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/../modules,--enable-new-dtags" )
         if 'addLibs' in kw:
             custEnv.Append(LIBS = kw['addLibs'])
         return custEnv

@@ -178,14 +178,14 @@ namespace test {
           
           // Version1: do a direct argument binding----------------- //
           
-          typedef std::tr1::_Placeholder<1> PH1;                     // tr1::function argument placeholders
-          typedef std::tr1::_Placeholder<2> PH2;
+          typedef std::_Placeholder<1> PH1;                     // tr1::function argument placeholders
+          typedef std::_Placeholder<2> PH2;
           
           PH1 ph1;                                                   // these empty structs are used to mark the arguments to be kept "open"
           PH2 ph2;
           Num<1> num18 (18);                                         // ...and this value is for closing the first function argument
           
-          F23 fun_23 = std::tr1::bind (f, num18                      // do the actual binding (i.e. close the first argument with a constant value)
+          F23 fun_23 = std::bind (f, num18                      // do the actual binding (i.e. close the first argument with a constant value)
                                         , ph1
                                         , ph2
                                       );
@@ -201,7 +201,7 @@ namespace test {
           typedef Tuple<Types<Num<1>, PH1, PH2> > PartialArg;        // Tuple type to hold the binding values. Note the placeholder types
           PartialArg arg(num18);                                     // Value for partial application (the placeholders are default constructed)
           
-          fun_23 = std::tr1::bind (f, tuple::element<0>(arg)         // now extract the values to bind from this tuple
+          fun_23 = std::bind (f, tuple::element<0>(arg)         // now extract the values to bind from this tuple
                                     , tuple::element<1>(arg)
                                     , tuple::element<2>(arg)
                                   );
@@ -363,7 +363,7 @@ namespace test {
           
           /* check the convenient function-style API */
           
-          using std::tr1::bind;
+          using std::bind;
           
           f_bound_5 = bindLast (f, bind(f5, Num<5>(99)));
           CHECK (1+2+3+4+99 == f_bound_5 (_1_,_2_,_3_,_4_   ) );

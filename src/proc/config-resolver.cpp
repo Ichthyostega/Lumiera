@@ -56,7 +56,7 @@ namespace proc {
 #include "proc/asset/pipe.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
-#include "proc/mobject/session/track.hpp"
+#include "proc/mobject/session/fork.hpp"
 
 namespace lumiera{
 namespace query  {
@@ -70,12 +70,12 @@ namespace query  {
   using proc::asset::Sequence;
   using proc::asset::PSequence;
   
-  using proc::mobject::session::Track;
-  using proc::mobject::session::PTrack;
+  using proc::mobject::session::Fork;
+  using PFork = lib::P<Fork>;
   
   template PPipe       DefsManager::operator() (Query<Pipe>     const&);
   template PProcPatt   DefsManager::operator() (Query<const ProcPatt> const&);
-  template PTrack      DefsManager::operator() (Query<Track>    const&);
+  template PFork       DefsManager::operator() (Query<Fork>     const&);
   template PTimeline   DefsManager::operator() (Query<Timeline> const&);
   template PSequence   DefsManager::operator() (Query<Sequence> const&);
   

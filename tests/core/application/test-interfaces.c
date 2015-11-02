@@ -23,9 +23,9 @@
 
 #include "common/interface.h"
 #include "common/interfaceregistry.h"
-#include "common/interfacedescriptor.h"
+#include "common/interface-descriptor.h"
 #include "common/config.h"
-#include "common/config_interface.h"
+#include "common/config-interface.h"
 
 #include "lib/test/test.h"
 #include "interface/say_hello.h"
@@ -85,31 +85,31 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_tests_descriptor),
                             testacquire,
                             testrelease,
-                            LUMIERA_INTERFACE_INLINE (name, "\073\003\054\127\344\046\324\321\221\262\232\026\376\123\125\243",
+                            LUMIERA_INTERFACE_INLINE (name,
                                                       const char*, (LumieraInterface iface),
                                                       {return "LumieraTest";}
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (brief, "\241\337\035\172\323\377\355\036\171\326\323\163\177\242\364\172",
+                            LUMIERA_INTERFACE_INLINE (brief,
                                                       const char*, (LumieraInterface iface),
                                                       {return "Lumiera Test suite examples";}
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (homepage, "\030\374\031\152\024\167\154\346\303\372\177\353\304\306\275\247",
+                            LUMIERA_INTERFACE_INLINE (homepage,
                                                       const char*, (LumieraInterface iface),
                                                       {return "http://www.lumiera.org/develompent.html";}
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (version, "\271\330\345\066\304\217\211\065\157\120\031\365\304\363\364\074",
+                            LUMIERA_INTERFACE_INLINE (version,
                                                       const char*, (LumieraInterface iface),
                                                       {return "No Version";}
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (author, "\367\160\342\065\147\007\237\371\141\335\371\131\025\030\257\232",
+                            LUMIERA_INTERFACE_INLINE (author,
                                                       const char*, (LumieraInterface iface),
                                                       {return "Christian Thaeter";}
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (email, "\334\272\125\312\140\347\121\020\155\047\226\352\244\141\107\363",
+                            LUMIERA_INTERFACE_INLINE (email,
                                                       const char*, (LumieraInterface iface),
                                                       {return "ct@pipapo.org";}
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (copyright, "\163\106\344\014\251\125\111\252\236\322\174\120\335\225\333\245",
+                            LUMIERA_INTERFACE_INLINE (copyright,
                                                       const char*, (LumieraInterface iface),
                                                       {
                                                         return
@@ -117,7 +117,7 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                           "  2008               Christian Thaeter <ct@pipapo.org>";
                                                       }
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (license, "\343\031\207\122\225\217\014\163\015\023\243\101\165\377\222\350",
+                            LUMIERA_INTERFACE_INLINE (license,
                                                       const char*, (LumieraInterface iface),
                                                       {
                                                         return
@@ -137,12 +137,12 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                       }
                                                       ),
 
-                            LUMIERA_INTERFACE_INLINE (state, "\364\002\115\170\361\321\301\244\350\322\270\362\010\231\207\334",
+                            LUMIERA_INTERFACE_INLINE (state,
                                                       int, (LumieraInterface iface),
                                                       {return LUMIERA_INTERFACE_EXPERIMENTAL;}
                                                       ),
 
-                            LUMIERA_INTERFACE_INLINE (versioncmp, "\136\037\234\304\100\247\244\342\324\353\072\060\161\053\077\263",
+                            LUMIERA_INTERFACE_INLINE (versioncmp,
                                                       int, (const char* a, const char* b),
                                                       {return 0;}
                                                       )
@@ -259,9 +259,9 @@ LUMIERA_EXPORT (
                                           LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_tests_descriptor),
                                           testacquire,
                                           testrelease,
-                                          LUMIERA_INTERFACE_MAP (foo1, "\214\310\136\372\003\344\163\377\075\100\070\200\375\221\227\324",
+                                          LUMIERA_INTERFACE_MAP (foo1,
                                                                  testfunc),
-                                          LUMIERA_INTERFACE_MAP (bar1, "\262\253\067\211\157\052\212\140\114\334\231\250\340\075\214\030",
+                                          LUMIERA_INTERFACE_MAP (bar1,
                                                                  testfunc)
                                           ),
                 LUMIERA_INTERFACE_DEFINE (lumieraorg_testexample_two, 0,
@@ -269,9 +269,9 @@ LUMIERA_EXPORT (
                                           LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_tests_descriptor),
                                           testacquire,
                                           testrelease,
-                                          LUMIERA_INTERFACE_MAP (foo2, "\110\152\002\271\363\052\324\272\373\045\132\270\277\000\271\217",
+                                          LUMIERA_INTERFACE_MAP (foo2,
                                                                  testfunc),
-                                          LUMIERA_INTERFACE_MAP (bar2, "\376\042\027\336\355\113\132\233\350\312\170\077\377\370\356\167",
+                                          LUMIERA_INTERFACE_MAP (bar2,
                                                                  testfunc)
                                           ),
                 LUMIERA_INTERFACE_DEFINE (lumieraorg_testexample_void, 0,

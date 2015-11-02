@@ -25,7 +25,7 @@
 #define MOBJECT_SESSION_FIXTURE_H
 
 #include "proc/mobject/session/segmentation.hpp"
-#include "proc/mobject/session/track.hpp"
+#include "proc/mobject/session/fork.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/session/auto.hpp"
 
@@ -35,7 +35,7 @@
 
 
 using std::list;
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 
 
 

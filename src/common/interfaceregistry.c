@@ -1,5 +1,5 @@
 /*
-  interfaceregistry.c  -  Lumiera interface registry
+  InterfaceRegistry  -  registry for extension points
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,27 +17,26 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
+
+/** @file interfaceregistry.c
+ ** Interface instances are published and activated by registering them
+ ** into a global registry, which is defined here. This instances are identified
+ ** by their name and major version.
+ */
 
 #include "include/logging.h"
 #include "lib/error.h"
 #include "lib/psplay.h"
 #include "lib/safeclib.h"
 
-
 #include <nobug.h>
-
-
 
 #include "common/plugin.h"
 #include "common/interfaceregistry.h"
 
-/**
- * @file
- * Interface instances are published and activated by registering them
- * into a global registry, which is defined here. This instances are identified
- * by their name and major version.
- */
 
 
 PSplay lumiera_interfaceregistry;
@@ -81,9 +80,7 @@ lumiera_interfacenode_delete (LumieraInterfacenode self)
 }
 
 
-/**
- * Initialize the interface registry
- */
+/** Initialise the interface registry */
 void
 lumiera_interfaceregistry_init (void)
 {
@@ -189,9 +186,20 @@ lumiera_interfaceregistry_bulkremove_interfaces (LumieraInterface* self)
           TRACE (interfaceregistry, "interface %s, version %d, instance %s", (*self)->interface, (*self)->version, (*self)->name);
 
           LumieraInterfacenode node = (LumieraInterfacenode) psplay_find (lumiera_interfaceregistry, *self, 0);
-          REQUIRE (node->refcnt == 0, "but is %d", node->refcnt);
-
-          lumiera_interfacenode_delete ((LumieraInterfacenode) psplay_remove (lumiera_interfaceregistry, &node->node));
+          if (node)
+            {
+              REQUIRE (node->refcnt == 0, "but is %d", node->refcnt);
+              lumiera_interfacenode_delete ((LumieraInterfacenode) psplay_remove (lumiera_interfaceregistry, &node->node));
+            }
+          else
+            {
+              ///////////TICKET #864 : should not happen but does happen in practice, e.g. when there is a copy or another library linked against that module
+              ///////////              Guess the pluginloader should not have added the duplicate into the interfaceregistry on discovery.
+              
+              WARN (interfaceregistry, "ENTRY NOT FOUND in interfaceregistry at clean-up of interface %s, instance %s"
+                                     , (*self)->interface
+                                     , (*self)->name);
+            }
 
           ++self;
         }

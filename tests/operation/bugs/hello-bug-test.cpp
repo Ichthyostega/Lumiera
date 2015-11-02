@@ -1,5 +1,5 @@
 /*
-  errortest.c  -  executable for running bug regression tests
+  HelloBug(test)  -  placeholder for running bug regression tests
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

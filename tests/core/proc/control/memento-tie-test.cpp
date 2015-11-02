@@ -25,11 +25,11 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/control/memento-tie.hpp"
 
-#include <tr1/functional>
+#include <functional>
 #include <cstdlib>
 
-using std::tr1::function;
-using std::tr1::bind;
+using std::function;
+using std::bind;
 using std::rand;
 
 

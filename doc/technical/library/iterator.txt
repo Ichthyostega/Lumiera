@@ -11,7 +11,7 @@ Lumiera Forward Iterator
 While most modern languages provide some kind of _Iterator,_ the actual semantics
 and the fine points of the implementation vary greatly from language to language.
 Unfortunately the C++ standard library uses a very elaborate and rather low-level
-notion of iterators, which doesn't mix well with the task of building clean interfaces.
+notion of iterators, which does not mix well with the task of building clean interfaces.
 
 Thus, within the Lumiera core application, we're using our own Iterator concept,
 initially defined as link:{ldoc}/devel/rfc/LumieraForwardIterator.html[RfC],
@@ -22,13 +22,13 @@ readability and simplicity for (lesser) performance.
 An Iterator is a self-contained token value,
 representing the promise to pull a sequence of data
 
- - rather then deriving from an specific interface, anything behaving
-   appropriately _is a Lumiera Forward Iterator._ (``duck typing'')
+ - rather then deriving from an specific interface, anything which behaves
+   appropriately _is a Lumiera Forward Iterator._ (``duck typing'' or ``a Concept'')
  - the client finds a typedef at a suitable, nearby location. Objects of this
    type can be created, copied and compared.
  - any Lumiera forward iterator can be in _exhausted_ (invalid) state, which
-   can be checked by +bool+ conversion.
- - especially, default constructed iterators are fixed to that state.
+   can be checked through +bool+ conversion.
+ - notably, any default constructed iterator is fixed to that exhausted state.
    Non-exhausted iterators may only be obtained by API call.
  - the exhausted state is final and can't be reset, meaning that any iterator
    is a disposable one-way-off object.
@@ -41,34 +41,35 @@ Motivation
 ~~~~~~~~~~
 The Lumiera Forward Iterator concept is a blend of the STL iterators and
 iterator concepts found in Java, C#, Python and Ruby. The chosen syntax should
-look familiar to C++ programmers and indeed is compatible to STL containers and
-ranges. To the contrary, while a STL iterator can be thought of as being just
-a disguised pointer, the semantics of Lumiera Forward Iterators is deliberately
-reduced to a single, one-way-off forward iteration, they can't be reset,
-manipulated by any arithmetic, and the result of assigning to an dereferenced
-iterator is unspecified, as is the meaning of post-increment and stored copies
-in general. You _should not think of an iterator as denoting a position_ --
-just a one-way off promise to yield data.
+look fairly familiar to C++ programmers and indeed is compatible to STL containers
+and ranges. Yet while a STL iterator can be thought of as being just a pointer
+in disguise, the semantics of Lumiera Forward Iterators is deliberately more
+high-level, reduced to a single, one-way-off forward iteration. Lumiera Forward
+Iterators can't be reset, they can not be manipulated by any arithmetic, and the
+result of assigning to an dereferenced iterator is unspecified, as is the meaning
+of post-increment and stored copies in general.
+You _should not think of an iterator as denoting a position_ --
+just treat it as an one-way off promise to yield data.
 
 Another notable difference to the STL iterators is the default ctor and the
 +bool+ conversion. The latter allows using iterators painlessly within +for+
 and +while+ loops; a default constructed iterator is equivalent to the STL
 container's +end()+ value -- indeed any _container-like_ object exposing
 Lumiera Forward Iteration is encouraged to provide such an `end()`-function,
-additionally enabling iteration by `std::for_each` (or Lumiera's even more
-convenient `util::for_each()`).
+which additionally enables iteration by `std::for_each` (or Lumiera's even more
+convenient `util::for_each()`), and use in ``range for''-loops.
 
 Implementation
 ~~~~~~~~~~~~~~
 As pointed out above, within Lumiera the notion of ``Iterator'' is a concept
-(generic programming) and doesn't mean a supertype (object orientation). Any
+(generic programming) and does not mean a supertype (object orientation). Any
 object providing a suitable set of operations can be used for iteration.
 
 - must be default constructible to _exhausted state_
 - must be a copyable value object
 - must provide a `bool` conversion to detect _exhausted state_
 - must provide a pre-increment operator (`++i`)
-- must allow dreferentiation (`*i`) to yield the current object
+- must allow dereferentiation (`*i`) to yield the current object
 - must throw on any usage in _exhausted state_.
 
 But, typically you wouldn't write all those operations again and again.

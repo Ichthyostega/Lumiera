@@ -24,14 +24,15 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include "proc/asset/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
+#include "proc/asset/struct-scheme.hpp"
 #include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/track.hpp"
+#include "proc/mobject/session/fork.hpp"
 #include "lib/meta/trait-special.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/symbol.hpp"
 
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <iostream>
 #include <string>
 
@@ -47,9 +48,9 @@ using std::endl;
 
 
 
-namespace proc {
-namespace asset{
-namespace test {
+namespace lib {
+namespace idi {
+namespace test{
   
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
@@ -57,11 +58,11 @@ namespace test {
     
     struct Dummy { };
     
-    typedef EntryID<Dummy> DummyID;
-    typedef EntryID<mobject::session::Track> TrackID;
-    typedef EntryID<mobject::session::Clip>  ClipID;
   }
   
+  using DummyID = EntryID<Dummy>;
+  using ForkID = EntryID<proc::mobject::session::Fork>;
+  using ClipID = EntryID<proc::mobject::session::Clip>;
   
   
   
@@ -105,9 +106,9 @@ namespace test {
           CHECK (dID2 != dID3); CHECK (dID3 != dID2);
           CHECK (dID1 != dID3); CHECK (dID3 != dID1);
           
-          TrackID tID1;
-          TrackID tID2;
-          TrackID tID3("special");
+          ForkID tID1;
+          ForkID tID2;
+          ForkID tID3("special");
           CHECK (tID1.isValid());
           CHECK (tID2.isValid());
           CHECK (tID3.isValid());
@@ -132,14 +133,19 @@ namespace test {
       void
       checkBasicProperties ()
         {
-          TrackID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
-          CHECK (tID.getIdent() == Asset::Ident("test_track", Category(STRUCT,"tracks"), "lumi", 0));
+          using proc::asset::Asset;
+          using proc::asset::STRUCT;
+          using proc::asset::Category;
+          using proc::asset::idi::getAssetIdent;
           
-          CHECK (tID.getHash() == TrackID("☢ test ☢ track ☢").getHash());
+          ForkID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
+          CHECK (getAssetIdent(tID) == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
           
-          CHECK (tID.getSym() == tID.getIdent().name);
-          CHECK (TrackID().getIdent().category == Category (STRUCT,"tracks"));
-          CHECK (ClipID().getIdent().category  == Category (STRUCT,"clips"));
+          CHECK (tID.getHash() == ForkID("☢ test ☢ track ☢").getHash());
+          
+          CHECK (tID.getSym() == getAssetIdent(tID).name);
+          CHECK (getAssetIdent(ForkID()).category == Category (STRUCT,"forks"));
+          CHECK (getAssetIdent(ClipID()).category == Category (STRUCT,"clips"));
           
           ClipID cID2,cID3;
           CHECK (cID2.getSym() < cID3.getSym());
@@ -147,29 +153,29 @@ namespace test {
           
           for (uint i=0; i<10000; ++i)
             {
-              TrackID arbitrary(randStr(30));
+              ForkID arbitrary(randStr(30));
               CHECK (0 < arbitrary.getHash());
               CHECK (tID.getHash() != arbitrary.getHash());
               tID = arbitrary;
               CHECK (tID.getHash() == arbitrary.getHash());
               CHECK (tID.getSym()  == arbitrary.getSym());
-              CHECK (tID.getIdent()== arbitrary.getIdent());
+              CHECK (getAssetIdent(tID)== getAssetIdent(arbitrary));
             }
           
-          cout << showSizeof<TrackID>() << endl;
+          cout << showSizeof<ForkID>() << endl;
           cout << showSizeof<BareEntryID>() << endl;
-          CHECK (sizeof(TrackID) == sizeof(BareEntryID));
-          CHECK (sizeof(TrackID) == sizeof(lumiera_uid) + sizeof(void*));
+          CHECK (sizeof(ForkID) == sizeof(BareEntryID));
+          CHECK (sizeof(ForkID) == sizeof(lumiera_uid) + sizeof(void*));
         }
       
       
       void
       checkComparisions ()
         {
-          TrackID tID1("a1");
-          TrackID tID2("a1");
-          TrackID tID3("a2");
-          TrackID tID4("b");
+          ForkID tID1("a1");
+          ForkID tID2("a1");
+          ForkID tID3("a2");
+          ForkID tID4("b");
           CHECK (tID1 == tID2);
           
           CHECK (tID2 < tID3);
@@ -182,7 +188,7 @@ namespace test {
           CHECK (tID4 >= tID3);
           CHECK (tID4 > tID3);
           
-          TrackID trackID1, trackID2;
+          ForkID trackID1, trackID2;
           CHECK (trackID1 < trackID2); // auto generated IDs are prefix + running counter
         }
       
@@ -199,73 +205,78 @@ namespace test {
       void
       checkErasure ()
         {
-          TrackID tID("suspicious");
-          ClipID  cID("suspicious");
+          ForkID fID("suspicious");
+          ClipID cID("suspicious");
           
-          CHECK (tID.getHash() != cID.getHash());
-          CHECK (tID.getSym()  == cID.getSym());
+          CHECK (fID.getHash() != cID.getHash());
+          CHECK (fID.getSym()  == cID.getSym());
           
-          BareEntryID bIDt (tID);
+          BareEntryID bIDf (fID);
           BareEntryID bIDc (cID);
           
-          CHECK (bIDt != bIDc);
-          CHECK (bIDt.getHash() != bIDc.getHash());
-          CHECK (bIDt.getSym()  == bIDc.getSym());
+          CHECK (bIDf != bIDc);
+          CHECK (bIDf.getHash() != bIDc.getHash());
+          CHECK (bIDf.getSym()  == bIDc.getSym());
           CHECK ("suspicious"  == bIDc.getSym());
           
-          using mobject::session::Track;
-          using mobject::session::Clip;
-          TrackID tIDnew = bIDt.recast<Track>();
-          ClipID  cIDnew = bIDc.recast<Clip>();
-          CHECK (tIDnew == tID);
+          using proc::mobject::session::Fork;
+          using proc::mobject::session::Clip;
+          ForkID tIDnew = bIDf.recast<Fork>();
+          ClipID cIDnew = bIDc.recast<Clip>();
+          CHECK (tIDnew == fID);
           CHECK (cIDnew == cID);
           
-          VERIFY_ERROR (WRONG_TYPE, bIDt.recast<Clip>());
-          VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Track>());
+          VERIFY_ERROR (WRONG_TYPE, bIDf.recast<Clip>());
+          VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Fork>());
           VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Dummy>());
-          VERIFY_ERROR (WRONG_TYPE, bIDt.recast<Dummy>());
+          VERIFY_ERROR (WRONG_TYPE, bIDf.recast<Dummy>());
           
-          CHECK (tID == TrackID::recast (bIDt));         // equivalent static API on typed subclass
-          VERIFY_ERROR (WRONG_TYPE, TrackID::recast(bIDc));
-          VERIFY_ERROR (WRONG_TYPE,  ClipID::recast(bIDt));
+          CHECK (fID == ForkID::recast (bIDf));          // equivalent static API on typed subclass
+          VERIFY_ERROR (WRONG_TYPE,  ForkID::recast(bIDc));
+          VERIFY_ERROR (WRONG_TYPE,  ClipID::recast(bIDf));
           VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDc));
-          VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDt));
+          VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDf));
           
           // mixed equality comparisons (based on the hash)
-          BareEntryID bIDt_copy (bIDt);
-          CHECK (bIDt == bIDt_copy);
-          CHECK (!isSameObject (bIDt, bIDt_copy));
+          BareEntryID bIDt_copy (bIDf);
+          CHECK (bIDf == bIDt_copy);
+          CHECK (!isSameObject (bIDf, bIDt_copy));
           
-          CHECK (tID != bIDc);
+          CHECK (fID != bIDc);
           CHECK (cID != bIDt_copy);
-          CHECK (tID == bIDt_copy);
+          CHECK (fID == bIDt_copy);
           
-          CHECK (bIDt == TrackID ("suspicious"));
-          CHECK (bIDt != ClipID ("suspicious"));
+          CHECK (bIDf == ForkID ("suspicious"));
+          CHECK (bIDf != ClipID ("suspicious"));
           CHECK (bIDc == ClipID ("suspicious"));
-          CHECK (TrackID ("suspicious") != ClipID ("suspicious"));
+          CHECK (ForkID ("suspicious") != ClipID ("suspicious"));
         }
       
       
       
-                                   //---key--+-value-+-hash-function--- 
-      typedef std::tr1::unordered_map<DummyID, string, DummyID::UseEmbeddedHash> Hashtable;
+                              //---key--+-value-+-hash-function--- 
+      typedef std::unordered_map<DummyID, string, DummyID::UseEmbeddedHash> Hashtable;
       
       /** @test build a hashtable, using EntryID as key,
-       *        thereby using the embedded hash-ID */
+       *        thereby using the embedded hash-ID
+       *  @note there is a known weakness of the boost::hash
+       *        when used on IDs with a running number suffix. /////TICKET #587
+       *        We use a trick to spread the numbers better.
+       *  @see  HashGenerator_test#verify_Knuth_workaround
+       */
       void
       buildHashtable ()
         {
           Hashtable tab;
           
-          for (uint i=0; i<10000; ++i)         //////////////////TICKET #865 hash collisions for 100000 entries
+          for (uint i=0; i<100000; ++i)
             {
               DummyID dummy;
               tab[dummy] = string(dummy);
             }
           
           CHECK (and_all (tab, verifyEntry));
-          CHECK (10000 == tab.size());
+          CHECK (100000 == tab.size());
         }
       
       
@@ -287,7 +298,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (EntryID_test, "unit asset");
+  LAUNCHER (EntryID_test, "unit common");
   
   
-}}} // namespace proc::asset::test
+}}} // namespace lib::idi::test

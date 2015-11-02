@@ -1,5 +1,5 @@
 /*
-  threadpool.h  -  Manage pools of threads
+  THREADPOOL.h  -  Manage pools of threads
 
   Copyright (C)         Lumiera.org
     2009,               Michael Ploujnikov <ploujj@gmail.com>
@@ -17,31 +17,21 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef LUMIERA_THREADPOOL_H
-#define LUMIERA_THREADPOOL_H
 
-//TODO: Support library includes//
+#ifndef BACKEND_THREADPOOL_H
+#define BACKEND_THREADPOOL_H
+
 #include "lib/condition.h"
 #include "lib/llist.h"
-
-//TODO: Forward declarations//
-
-
-//TODO: Lumiera header includes//
 #include "threads.h"
 
-//TODO: System includes//
 #include <nobug.h>
 
 
-/**
- * @file
- *
- */
 
-//TODO: declarations go here//
 
 /**
  * Acquire a thread from a threadpool.
@@ -81,16 +71,16 @@ struct lumiera_threadpool_struct
   } pool[LUMIERA_THREADCLASS_COUNT];
 };
 
-/**
- * Initialize the thread pool.
- */
+
+/** Initialise the thread pool. */
 void
 lumiera_threadpool_init(void);
 
 void
 lumiera_threadpool_destroy(void);
 
-#endif
+
+#endif /*BACKEND_THREADPOOL_H*/
 /*
 // Local Variables:
 // mode: C

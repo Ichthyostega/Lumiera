@@ -111,7 +111,7 @@ TESTS_BEGIN
 
 
 
-  for (int i = 0; i < 1000000; ++i)
+  for (int i = 0; i < 100000; ++i)
     {
       data = i;
       r = lumiera_priqueue_insert (&pq, &data);
@@ -120,7 +120,7 @@ TESTS_BEGIN
     }
 
 
-  for (int i = 0; i < 1000000; ++i)
+  for (int i = 0; i < 100000; ++i)
     {
       data = rand()%1000000;
       r = lumiera_priqueue_insert (&pq, &data);

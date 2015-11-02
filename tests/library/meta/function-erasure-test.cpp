@@ -27,7 +27,7 @@
 #include "lib/error.hpp"
 #include "meta/dummy-functions.hpp"
 
-#include <tr1/functional>
+#include <functional>
 
 using ::test::Test;
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
@@ -38,10 +38,10 @@ namespace lib  {
 namespace meta {
 namespace test {
   
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
-  using std::tr1::placeholders::_2;
-  using std::tr1::bind;
+  using std::function;
+  using std::placeholders::_1;
+  using std::placeholders::_2;
+  using std::bind;
   
   
   typedef FunErasure<StoreFunction> Efun;
@@ -252,13 +252,17 @@ namespace test {
       void
       detect_unboundFunctor (HOL h1, HOL h2, HOL h3)
         {
-          // fabricate an unbound functor...
-          
+          // fabricate a suitable, unbound functor to wrap...
           typedef typename BuildEmptyFunctor<HOL>::Type NoFunc;
           NoFunc noFunction = NoFunc();
+          
+          // wrap this (actually empty) functor into the holder type
           HOL emptyHolder (noFunction);
+          
+          // verify the older detects that the wrapped functor is empty
           CHECK (!emptyHolder);
           
+          // cross-verify that non-empty functors are not flagged as empty
           CHECK ( h1 );
           CHECK ( h2 );
           CHECK ( h3 );

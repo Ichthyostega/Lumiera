@@ -1,8 +1,8 @@
 /*
-  VARIANT.hpp  -  simple variant wrapper (typesafe union)
+  VARIANT.hpp  -  lightweight typesafe union record
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2015,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -22,22 +22,55 @@
 
 
 /** @file variant.hpp
- ** This file defines a simple alternative to boost::variant.
- ** It pulls in fewer headers and has a shorter code path, but also
- ** doesn't deal with alignment issues and is <b>not threadsafe</b>. 
+ ** A typesafe union record to carry embedded values of unrelated type.
+ ** This file defines a simple alternative to boost::variant. It pulls in
+ ** fewer headers, has a shorter code path and is hopefully more readable,
+ ** but also doesn't deal with alignment issues and is <b>not threadsafe</b>.
  ** 
- ** Values can be stored using \c operator= . In order to access the value
- ** stored in lib::Variant, you additionally need to define a "functor" 
- ** - with a typedef "Ret" for the return type
- ** - providing a `static Ret access(ELM&)` function
- **   for each of the types used in the Variant</li>
+ ** Deliberately, the design rules out re-binding of the contained type. Thus,
+ ** once created, a variant \em must hold a valid element and always an element
+ ** of the same type. Beyond that, variant elements are copyable and mutable.
+ ** Direct access requires knowledge of the embedded type (no switch-on type).
+ ** Type mismatch is checked at runtime. As a fallback, we provide a visitor
+ ** scheme for generic access.
  ** 
- ** @todo the instance handling for the accessor seems somewhat
- **       misaligned: why do we create another accessor as static var
- **       within the access() function?? Why not putting that into the
- **       Holder::Storage instance created by the client code?
- ** @todo write an unit test   ///////////////////////////////////////TICKET #141
- ** @see wrapperptr.hpp usage example
+ ** The design restrictions were chosen deliberately, since a variant type might
+ ** promote "probe and switch on type" style programming, which is known to be fragile.
+ ** Likewise, we do not want to support mutations of the variant type at runtime. Basically,
+ ** using a variant record is recommended only if either the receiving context has structural
+ ** knowledge about the type to expect, or when a visitor implementation can supply a sensible
+ ** handling for \em all the possible types. As an alternative, you might consider the
+ ** lib::PolymorphicValue to hold types implementing a common interface.
+ ** 
+ ** \par implementation notes
+ ** We use a "double capsule" implementation technique similar to lib::OpaqueHolder.
+ ** In fact, Variant is almost identical to the latter, just omitting unnecessary flexibility.
+ ** The outer capsule exposes the public handling interface, while the inner, private capsule
+ ** is a polymorphic value holder. Since C++ as such does not support polymorphic values,
+ ** the inner capsule is placed "piggyback" into a char buffer. The actual value is carried
+ ** within yet another, nested char buffer. Thus, effectively the first "slot" of the storage
+ ** will hold the VTable pointer, thereby encoding the actual type information -- leading to
+ ** a storage requirement of MAX<TYPES...> plus one "slot" for the VTable. (with "slot" we
+ ** denote the smallest disposable storage size for the given platform after alignment,
+ ** typically the size of a size_t).
+ ** 
+ ** To support copying and assignment of variant instances, but limit these operations
+ ** to variants holding the same type, we use a virtual assignment function. In case the
+ ** concrete type does not support assignment or copy construction, the respective access
+ ** function is replaced by an implementation raising a runtime error.
+ ** 
+ ** @note we use a Visitor interface generated through metaprogramming.
+ **       This may generate a lot of warnings "-Woverloaded-virtual",
+ **       since one \c handle(TX) function may shadow other \c handle(..) functions
+ **       from the inherited (generated) Visitor interface. These warnings are besides
+ **       the point, since not the \em client uses these functions, but the Variant does,
+ **       after upcasting to the interface. Make sure you define your specialisations with
+ **       the override modifier; when done so, it is safe to disable this warning here.
+ ** 
+ ** @see Veriant_test
+ ** @see lib::diff::GenNode
+ ** @see virtual-copy-support.hpp
+ ** 
  */
 
 
@@ -45,249 +78,435 @@
 #define LIB_VARIANT_H
 
 
+#include "lib/error.hpp"
+#include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/meta/virtual-copy-support.hpp"
+#include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
-
+#include <type_traits>
+#include <utility>
+#include <string>
 
 
 namespace lib {
   
-  namespace variant {
+  using std::string;
+  
+  using std::move;
+  using std::forward;
+  using util::unConst;
+  
+  namespace error = lumiera::error;
+  
+  
+  namespace { // implementation helpers
     
-    using lib::meta::count;
-    using lib::meta::maxSize;
-    using lib::meta::InstantiateWithIndex;
+    using std::remove_reference;
+    using meta::NullType;
+    using meta::Node;
     
-    /**
-     * internal helper used to build a variant storage wrapper.
-     * Parametrised with a collection of types, it provides functionality
-     * to copy a value of one of these types into an internal buffer, while
-     * remembering which of these types was used to place this copy.
-     * The value can be later on extracted using a visitation like mechanism,
-     * which takes a functor class and invokes a function \c access(T&) with
-     * the type matching the current value in storage
-     */
-    template<typename TYPES>
-    struct Holder
+    
+    template<typename X, typename TYPES>
+    struct CanBuildFrom
+      : CanBuildFrom<typename remove_reference<X>::type
+                    ,typename TYPES::List
+                    >
+      { };
+    
+    template<typename X, typename TYPES>
+    struct CanBuildFrom<X, Node<X, TYPES>>
       {
-        
-        enum { TYPECNT = count<TYPES>::value
-             , SIZE  = maxSize<TYPES>::value
-             };
-        
-        
-        /** Storage to hold the actual value */
-        struct Buffer
-          {
-            char buffer_[SIZE];
-            uint which_;
-            
-            Buffer() : which_(TYPECNT) {}
-            
-            void* 
-            put (void)
-              {
-                deleteCurrent();
-                return 0;
-              }
-            
-            void
-            deleteCurrent ();  // depends on the Deleter, see below
-          };
-        
-        template<typename T, class BASE, uint idx>
-        struct PlacementAdapter : BASE
-          {
-            T& 
-            put (T const& toStore)
-              {
-                BASE::deleteCurrent(); // remove old content, if any
-                                      //
-                T& storedObj = *new(BASE::buffer_) T (toStore);
-                BASE::which_ = idx; //    remember the actual type selected
-                return storedObj;
-              }
-            
-            using BASE::put;    //        inherited alternate put() for other types T
-          };
-        
-        typedef InstantiateWithIndex< TYPES
-                                    , PlacementAdapter
-                                    , Buffer
-                                    > 
-                                    Storage;
-        
-        
-        
-        /** provide a dispatcher table based visitation mechanism */
-        template<class FUNCTOR>
-        struct CaseSelect
-          {
-            typedef typename FUNCTOR::Ret Ret;
-            typedef Ret (Func)(Buffer&);
-            
-            Func* table_[TYPECNT];
-            
-            CaseSelect ()
-              {
-                for (uint i=0; i<TYPECNT; ++i)
-                  table_[i] = 0;
-              }
-            
-            template<typename T>
-            static Ret
-            trampoline (Buffer& storage)
-              {
-                T& content = reinterpret_cast<T&> (storage.buffer_);
-                return FUNCTOR::access (content);
-              }
-            
-            Ret
-            invoke (Buffer& storage)
-              {
-                if (TYPECNT <= storage.which_)
-                  return FUNCTOR::ifEmpty ();
-                else
-                  {
-                    Func& access = *table_[storage.which_];
-                    return access (storage);
-                  }
-              }
-          };
-        
-        
-        /** initialise the dispatcher (trampoline)
-         *  for the case of accessing type T */
-        template< class T, class BASE, uint i >
-        struct CasePrepare
-          : BASE
-          {
-            CasePrepare () : BASE()
-              {
-                BASE::table_[i] = &BASE::template trampoline<T>;
-              }
-          };
-        
-        
-        /** access the variant's inline buffer,
-         *  using the configured access functor.
-         * @note the actual accessor instance
-         *       is created on demand (static)
-         * @todo shouldn't this rather be located within
-         *       the Holder::Storage created by clients??
-         */
-        template<class FUNCTOR>
-        static typename FUNCTOR::Ret
-        access (Buffer& buf)
-        {
-          typedef InstantiateWithIndex< TYPES
-                                      , CasePrepare
-                                      , CaseSelect<FUNCTOR>
-                                      > 
-                                      Accessor;
-          static Accessor select_case;
-          return select_case.invoke(buf);
-        }
-        
-        
-        struct Deleter
-          {
-            typedef void Ret;
-            
-            template<typename T>
-            static void access (T& elem) { elem.~T(); }
-            
-            static void ifEmpty () { }
-          };
+        using Type = X;
       };
-      
-      
-      template<typename TYPES>
-      inline void
-      Holder<TYPES>::Buffer::deleteCurrent ()
+    
+    template<typename X, typename TYPES>
+    struct CanBuildFrom<const X, Node<X, TYPES>>
       {
-        access<Deleter>(*this); // remove old content, if any
-        which_ = TYPECNT;      //  mark as empty
-      }
-      
-  } // namespace variant
-  
-  
-  
-  
+        using Type = X;
+      };
+    
+    template<typename X, typename T,typename TYPES>
+    struct CanBuildFrom<X, Node<T, TYPES>>
+      {
+        using Type = typename CanBuildFrom<X,TYPES>::Type;
+      };
+    
+    template<typename X>
+    struct CanBuildFrom<X, NullType>
+      {
+        static_assert (0 > sizeof(X), "No type in Typelist can be built from the given argument");
+      };
+    
+    
+    
+    template<typename RET>
+    struct VFunc
+      {
+        /** how to treat one single type in visitation */
+        template<class VAL>
+        struct ValueAcceptInterface
+          {
+            virtual RET handle(VAL&) { /* do nothing */ return RET(); };
+          };
+        
+        
+        /** build a generic visitor interface for all types in list */
+        template<typename TYPES>
+        using VisitorInterface
+            = meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
+        
+      };
+    
+    
+  }//(End) implementation helpers
   
   
   
   
   /**
-   * A variant wrapper (typesafe union) capable of holding a value of any
-   * of a bounded collection of types. The value is stored in a local buffer
-   * directly within the object and may be accessed by a typesafe visitation.
-   * 
-   * \par
-   * This utility class is similar to boost::variant and indeed was implemented
-   * (5/08) in an effort to replace the latter in a draft solution for the problem
-   * of typesafe access to the correct wrapper class from within some builder tool.
-   * Well -- after finishing this "exercise" I must admit that it is not really
-   * much more simple than what boost::variant does internally. At least we are
-   * pulling in fewer headers and the actual code path is shorter compared with
-   * boost::variant, at the price of being not so generic, not caring for
-   * alignment issues within the buffer and being <b>not threadsafe</b>
-   * 
-   * @param TYPES   collection of possible types to be stored in this variant object
-   * @param Access  policy how to access the stored value
+   * Typesafe union record.
+   * A Variant element may carry an embedded value of any of the predefined types.
+   * The type may not be rebound: It must be created holding some value and each
+   * instance is fixed to the specific type used at construction time.
+   * Yet within the same type, variant elements are copyable and assignable.
+   * The embedded type is erased on the signature, but knowledge about the
+   * actual type is retained, encoded into the embedded VTable. Thus,
+   * any access to the variant's value requires knowledge of the type
+   * in question, but type mismatch will provoke an exception at runtime.
+   * Generic access is possible using a visitor.
+   * @warning not threadsafe
+   * @todo we need to define all copy operations explicitly, due to the
+   *       templated one-arg ctor to wrap the actual values.
+   *       There might be a generic solution for that     ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
+   *       But -- Beware of unverifiable generic solutions! 
    */
-  template< typename TYPES
-          , template<typename> class Access  
-          >
-  class Variant 
-    : boost::noncopyable
+  template<typename TYPES>
+  class Variant
     {
+    public:
+      enum { SIZ = meta::maxSize<typename TYPES::List>::value };
       
-      typedef variant::Holder<TYPES> Holder;
-      typedef typename Holder::Deleter Deleter;
+      template<typename RET>
+      using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
+      template<typename RET>
+      using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
+      
+      /**
+       * to be implemented by the client for visitation
+       * @see #accept(Visitor&)
+       */
+      class Visitor
+        : public VisitorFunc<void>
+        {
+        public:
+          virtual ~Visitor() { } ///< this is an interface
+        };
+      
+      class Predicate
+        : public VisitorConstFunc<bool>
+        {
+        public:
+          virtual ~Predicate() { } ///< this is an interface
+        };
       
       
-      /** storage: buffer holding either an "empty" marker,
-       *  or an instance of one of the configured payload types */ 
-      typename Holder::Storage holder_;
+    private:
+      /** Inner capsule managing the contained object (interface) */
+      struct Buffer
+        : meta::VirtualCopySupportInterface<Buffer>
+        {
+          char content_[SIZ];
+          
+          void* ptr() { return &content_; }
+          
+          
+          virtual ~Buffer() {}           ///< this is an ABC with VTable
+          
+          virtual void dispatch (Visitor&)         =0;
+          virtual bool dispatch (Predicate&) const =0;
+          virtual operator string()          const =0;
+        };
+      
+      
+      /** concrete inner capsule specialised for a given type */
+      template<typename TY>
+      struct Buff
+        : meta::CopySupport<TY>::template Policy<Buffer,Buff<TY>>
+        {
+          static_assert (SIZ >= sizeof(TY), "Variant record: insufficient embedded Buffer size");
+          
+          TY&
+          access()  const  ///< core operation: target is contained within the inline buffer
+            {
+              return *reinterpret_cast<TY*> (unConst(this)->ptr());
+            }
+          
+         ~Buff()
+            {
+              access().~TY();
+            }
+          
+          Buff (TY const& obj)
+            {
+              new(Buffer::ptr()) TY(obj);
+            }
+          
+          Buff (TY && robj)
+            {
+              new(Buffer::ptr()) TY(move(robj));
+            }
+          
+          Buff (Buff const& oBuff)
+            {
+              new(Buffer::ptr()) TY(oBuff.access());
+            }
+          
+          Buff (Buff && rBuff)
+            {
+              new(Buffer::ptr()) TY(move (rBuff.access()));
+            }
+          
+          void
+          operator= (Buff const& buff)
+            {
+              *this = buff.access();
+            }
+          
+          void
+          operator= (Buff&& rref)
+            {
+              *this = move (rref.access());
+            }
+          
+          void
+          operator= (TY const& ob)
+            {
+              if (&ob != Buffer::ptr())
+                this->access() = ob;
+            }
+          
+          void
+          operator= (TY && rob)
+            {
+              this->access() = move(rob);
+            }
+          
+          
+          
+          static Buff&
+          downcast (Buffer& b)
+            {
+              Buff* buff = dynamic_cast<Buff*> (&b);
+              
+              if (!buff)
+                throw error::Logic("Variant type mismatch: "
+                                   "the given variant record does not hold "
+                                   "a value of the type requested here"
+                                  ,error::LUMIERA_ERROR_WRONG_TYPE);
+              else
+               return *buff;
+            }
+          
+          void
+          dispatch (Visitor& visitor)
+            {
+              using Dispatcher = VFunc<void>::template ValueAcceptInterface<TY>;
+              
+              Dispatcher& typeDispatcher = visitor;
+              typeDispatcher.handle (this->access());
+            }
+          
+          bool
+          dispatch (Predicate& visitor)  const
+            {
+              using Dispatcher = VFunc<bool>::template ValueAcceptInterface<const TY>;
+              
+              Dispatcher& typeDispatcher = visitor;
+              return typeDispatcher.handle (this->access());
+            }
+          
+          /** diagnostic helper */
+          operator string()  const;
+        };
+      
+      enum{ BUFFSIZE = sizeof(Buffer) };
+      
+      /** embedded buffer actually holding the concrete Buff object,
+       *  which in turn holds and manages the target object.
+       *  @note Invariant: always contains a valid Buffer subclass */
+      char storage_[BUFFSIZE];
+      
+      
+      
+      
+      
+    protected: /* === internal interface for managing the storage === */
+      
+      Buffer&
+      buffer()
+        {
+          return *reinterpret_cast<Buffer*> (&storage_);
+        }
+      Buffer const&
+      buffer()  const
+        {
+          return *reinterpret_cast<const Buffer*> (&storage_);
+        }
+      
+      template<typename X>
+      Buff<X>&
+      buff()
+        {
+          return Buff<X>::downcast(this->buffer());
+        }
+      
+      /** @internal for derived classes to implement custom access logic */
+      template<typename X>
+      X*
+      maybeGet()
+        {
+          Buff<X>* buff = dynamic_cast<Buff<X>*> (& this->buffer());
+          if (buff)
+            return & buff->access();
+          else
+            return nullptr;
+        }
       
       
     public:
-      void reset () { holder_.deleteCurrent();}
-      
-      /** store a copy of the given argument within the
-       *  variant holder buffer, thereby typically casting 
-       *  or converting the given source type to the best 
-       *  suited (base) type (out of the collection of possible
-       *  types for this Variant instance)
-       */ 
-      template<typename SRC>
-      Variant&
-      operator= (SRC src)
+     ~Variant()
         {
-          if (src) holder_.put (src);  // see Holder::PlacementAdaptor::put
-          else     reset();
+          buffer().~Buffer();
+        }
+      
+      Variant()
+        {
+          using DefaultType = typename TYPES::List::Head;
+          
+          new(storage_) Buff<DefaultType> (DefaultType());
+        }
+      
+      template<typename X>
+      Variant(X&& x)
+        {
+          using StorageType = typename CanBuildFrom<X, TYPES>::Type;
+          
+          new(storage_) Buff<StorageType> (forward<X>(x));
+        }
+      
+      Variant (Variant& ref)
+        {
+          ref.buffer().copyInto (&storage_);
+        }
+      
+      Variant (Variant const& ref)
+        {
+          ref.buffer().copyInto (&storage_);
+        }
+      
+      Variant (Variant&& rref)
+        {
+          rref.buffer().moveInto (&storage_);
+        }
+      
+      template<typename X>
+      Variant&
+      operator= (X x)
+        {
+          using RawType = typename remove_reference<X>::type;
+          static_assert (meta::isInList<RawType, typename TYPES::List>(),
+                         "Type error: the given variant could never hold the required type");
+          static_assert (meta::can_use_assignment<RawType>::value, "target type does not support assignment");
+          
+          buff<RawType>() = forward<X>(x);
           return *this;
         }
       
-      /** retrieve current content of the variant,
-       *  trying to cast or convert it to the given type.
-       *  Actually, the function \c access(T&) on the 
-       *  Access-policy (template param) is invoked with the
-       *  type currently stored in the holder buffer.
-       *  May return NULL if conversion fails.
-       */
-      template<typename TAR>
-      TAR
-      get ()
+      Variant&
+      operator= (Variant& ovar)
         {
-          typedef Access<TAR> Extractor;
-          return Holder::template access<Extractor> (this->holder_);
+          ovar.buffer().copyInto (this->buffer());
+          return *this;
+        }
+      
+      Variant&
+      operator= (Variant const& ovar)
+        {
+          ovar.buffer().copyInto (this->buffer());
+          return *this;
+        }
+      
+      Variant&
+      operator= (Variant&& rvar)
+        {
+          rvar.buffer().moveInto (this->buffer());
+          return *this;
+        }
+      
+      
+      /** diagnostic helper */
+      operator string()  const;
+      
+      
+      /* === Access === */
+      
+      template<typename X>
+      X&
+      get()
+        {
+          static_assert (meta::isInList<X, typename TYPES::List>(),
+                         "Type error: the given variant could never hold the required type");
+          
+          return buff<X>().access();
+        }
+      
+      template<typename X>
+      X const&
+      get()  const
+        {
+          return unConst(this)->template get<X>();
+        }
+      
+      void
+      accept (Visitor& visitor)
+        {
+          buffer().dispatch (visitor);
+        }
+      
+      bool
+      accept (Predicate& visitor)  const
+        {
+          return buffer().dispatch (visitor);
         }
     };
   
-} // namespace lib 
+  
+  
+  /* == diagnostic helper == */
+
+  
+  template<typename TYPES>
+  Variant<TYPES>::operator string()  const
+  {
+    return "Variant|" + string(buffer());
+  }
+  
+  template<typename TYPES>
+  template<typename TY>
+  Variant<TYPES>::Buff<TY>::operator string()  const
+  {
+#ifndef LIB_FORMAT_UTIL_H
+    return string("-?-")+typeid(TY).name()+"-?-";
+#else
+    return util::str (this->access(),
+                     (util::tyStr<TY>()+"|").c_str())
 #endif
+                     ;
+  }
+  
+  
+  
+}// namespace lib
+#endif /*LIB_VARIANT_H*/

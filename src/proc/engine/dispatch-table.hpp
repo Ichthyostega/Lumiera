@@ -44,6 +44,14 @@ namespace engine {
   class DispatchTable
     : public Dispatcher
     {
+      
+      /* ==== Dispatcher interface ==== */
+      
+      FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset);
+      bool       isEndOfChunk    (FrameCnt, ModelPort port);
+      JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime);
+      
+      
     protected:
       /** timerange covered by this RenderGraph */
       TimeSpan segment_;

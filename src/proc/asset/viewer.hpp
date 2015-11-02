@@ -75,7 +75,7 @@ namespace asset {
   
   
   class Viewer;
-  typedef P<Viewer> PViewer;
+  typedef lib::P<Viewer> PViewer;
   
   
   /**

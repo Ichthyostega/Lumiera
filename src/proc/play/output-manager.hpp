@@ -38,7 +38,7 @@
 #include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
-#include <tr1/memory>
+#include <memory>
 
 
 namespace proc {
@@ -46,7 +46,7 @@ namespace play {
   
 //using std::string;
 //using std::vector;
-  using std::tr1::shared_ptr;
+  using std::shared_ptr;
   
   
   LUMIERA_ERROR_DECLARE(CANT_PLAY); ///< unable to build playback or render process for this configuration

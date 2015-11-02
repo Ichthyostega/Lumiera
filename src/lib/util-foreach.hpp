@@ -55,7 +55,7 @@
 #include "lib/meta/trait.hpp"
 
 #include <boost/utility/enable_if.hpp>
-#include <tr1/functional>
+#include <functional>
 #include <algorithm>
 
 
@@ -104,9 +104,13 @@ namespace util {
   
   /* === specialisations for STL containers and Lumiera Forward Iterators === */
   
-  /** operating on all elements of a STL container.
+  /** operate on all elements of a STL container.
    *  @note the container is taken by \c const& and
    *        the \c const is \em stripped before iteration.
+   *  @todo reconsider if using rvalue references covers
+   *        the "inline iteration" use case sufficiently,
+   *        so that we can get rid of the unwrapping and
+   *        thus get back to strict const correctness.
    *  @note this case is the default and kicks in
    *        \em unless we detect a Lumiera iterator.
    *        The handling is different for \c and_all
@@ -126,7 +130,7 @@ namespace util {
   }
   
   
-  /** operating on a Lumiera Forward Iterator until exhaustion. */
+  /** operate on a Lumiera Forward Iterator until exhaustion. */
   template <typename IT
            ,typename FUN
            >
@@ -204,7 +208,7 @@ namespace util {
   inline void                                                                            //________________________________
   for_each (CON const& elements, FUN function, P1 bind1)                                ///< Accept binding for 1 Argument 
   {
-    for_each (elements, std::tr1::bind (function, bind1));
+    for_each (elements, std::bind (function, bind1));
   }
   
   
@@ -215,7 +219,7 @@ namespace util {
   inline void                                                                            //________________________________
   for_each (CON const& elements, FUN function, P1 bind1, P2 bind2)                      ///< Accept binding for 2 Arguments
   {
-    for_each (elements, std::tr1::bind (function, bind1, bind2));
+    for_each (elements, std::bind (function, bind1, bind2));
   }
   
   
@@ -227,7 +231,7 @@ namespace util {
   inline void                                                                            //________________________________
   for_each (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)            ///< Accept binding for 3 Arguments
   {
-    for_each (elements, std::tr1::bind (function, bind1, bind2, bind3));
+    for_each (elements, std::bind (function, bind1, bind2, bind3));
   }
   
   
@@ -240,7 +244,7 @@ namespace util {
   inline void                                                                            //________________________________
   for_each (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3, P4 bind4)  ///< Accept binding for 4 Arguments
   {
-    for_each (elements, std::tr1::bind (function, bind1, bind2, bind3, bind4));
+    for_each (elements, std::bind (function, bind1, bind2, bind3, bind4));
   }
   
   
@@ -253,7 +257,7 @@ namespace util {
   inline bool                                                                            //________________________________
   and_all (CON const& elements, FUN function, P1 bind1)                                 ///< Accept binding for 1 Argument 
   {
-    return and_all (elements, std::tr1::bind<bool> (function, bind1));
+    return and_all (elements, std::bind<bool> (function, bind1));
   }
   
   
@@ -264,7 +268,7 @@ namespace util {
   inline bool                                                                            //________________________________
   and_all (CON const& elements, FUN function, P1 bind1, P2 bind2)                       ///< Accept binding for 2 Arguments
   {
-    return and_all (elements, std::tr1::bind<bool> (function, bind1, bind2));
+    return and_all (elements, std::bind<bool> (function, bind1, bind2));
   }
   
   
@@ -276,7 +280,7 @@ namespace util {
   inline bool                                                                            //________________________________
   and_all (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)             ///< Accept binding for 3 Arguments
   {
-    return and_all (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3));
+    return and_all (elements, std::bind<bool> (function, bind1, bind2, bind3));
   }
   
   
@@ -289,7 +293,7 @@ namespace util {
   inline bool                                                                            //________________________________
   and_all (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3, P4 bind4)   ///< Accept binding for 4 Arguments
   {
-    return and_all (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3, bind4));
+    return and_all (elements, std::bind<bool> (function, bind1, bind2, bind3, bind4));
   }
   
   
@@ -302,7 +306,7 @@ namespace util {
   inline bool                                                                            //________________________________
   has_any (CON const& elements, FUN function, P1 bind1)                                 ///< Accept binding for 1 Argument 
   {
-    return has_any (elements, std::tr1::bind<bool> (function, bind1));
+    return has_any (elements, std::bind<bool> (function, bind1));
   }
   
   
@@ -313,7 +317,7 @@ namespace util {
   inline bool                                                                            //________________________________
   has_any (CON const& elements, FUN function, P1 bind1, P2 bind2)                       ///< Accept binding for 2 Arguments
   {
-    return has_any (elements, std::tr1::bind<bool> (function, bind1, bind2));
+    return has_any (elements, std::bind<bool> (function, bind1, bind2));
   }
   
   
@@ -325,7 +329,7 @@ namespace util {
   inline bool                                                                            //________________________________
   has_any (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)             ///< Accept binding for 3 Arguments
   {
-    return has_any (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3));
+    return has_any (elements, std::bind<bool> (function, bind1, bind2, bind3));
   }
   
   
@@ -338,7 +342,7 @@ namespace util {
   inline bool                                                                            //________________________________
   has_any (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3, P4 bind4)   ///< Accept binding for 4 Arguments
   {
-    return has_any (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3, bind4));
+    return has_any (elements, std::bind<bool> (function, bind1, bind2, bind3, bind4));
   }
   
   

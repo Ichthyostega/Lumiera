@@ -210,7 +210,7 @@ namespace control {
     
     /* ======== Handling Pattern Table ========== */
     
-    typedef lib::MultiFact<HandlingPattern, HandlingPattern::ID> HandlingPatternFactory;
+    typedef lib::factory::MultiFact<HandlingPattern&, HandlingPattern::ID> HandlingPatternFactory;
     
     /** holds singleton pattern instances by ID */
     HandlingPatternFactory patternTable;

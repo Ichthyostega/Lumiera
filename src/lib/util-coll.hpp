@@ -163,5 +163,19 @@ namespace util {
   
   
   
+  /* === generic container helpers === */
+  
+  struct WeakPtrComparator
+    {
+      template<typename T>
+      bool
+      operator() (std::weak_ptr<T> const& l, std::weak_ptr<T> const& r) const
+        {
+          return l.lock().get() < r.lock().get();
+        }
+    };
+  
+  
+  
 } // namespace util
 #endif /*UTIL_COLL_H*/

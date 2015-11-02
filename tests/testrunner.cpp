@@ -1,5 +1,5 @@
 /*
-  mainsuite.cpp  -  execute a suite of test objects, possibly filtered by category
+  Testrunner  -  execute a suite of test objects, possibly filtered by category
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,12 +18,12 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 
+* *****************************************************/
 
-#include "lib/test/suite.hpp"
-#include "lib/test/testoption.hpp"
 #include "include/lifecycle.h"
+#include "lib/test/testoption.hpp"
+#include "lib/test/suite.hpp"
 
 using lumiera::LifecycleHook;
 using lumiera::ON_GLOBAL_INIT;
@@ -44,10 +44,10 @@ int main (int argc, const char* argv[])
   test::Suite suite (optparser.getTestgroup());
   LifecycleHook::trigger (ON_GLOBAL_INIT);
   
-  if (optparser.getDescribe())
+  if (optparser.shouldDescribe())
     suite.describe();
   else
-    suite.run (args);
+    optparser.handleHelpRequest() || suite.run (args);
 
   LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
   return suite.getExitCode();

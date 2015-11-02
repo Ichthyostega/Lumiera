@@ -1,0 +1,9 @@
+TESTING "Hello World: self test of the test suite framework" ./test-suite --group=common
+
+
+
+TEST "Hello test world" HelloWorld_test 3 <<END
+out-lit: This is how the world ends...
+return: 0
+END
+

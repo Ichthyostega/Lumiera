@@ -1,5 +1,5 @@
 /*
-  sequence.hpp  -  Implementation of the Sequence class
+  Sequence  -  GUI-model: Sequence
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,25 +20,28 @@
 
 * *****************************************************/
 
-#include "sequence.hpp"
+#include "gui/model/sequence.hpp"
 #include "include/logging.h"
 
-// TEST CODE
-#include "group-track.hpp"
-#include "clip-track.hpp"
+#include <memory>
 
-using namespace std::tr1;
+// TEST CODE
+#include "gui/model/group-track.hpp"
+#include "gui/model/clip-track.hpp"
+
 
 namespace gui {
 namespace model {
 
-Sequence::Sequence()
+
+void
+Sequence::populateDummySequence()
 {
   // TEST CODE
   static bool first = true;
   
-  shared_ptr<GroupTrack> group_track, group_track2;
-  shared_ptr<ClipTrack> clip_track;
+  std::shared_ptr<GroupTrack> group_track, group_track2;
+  std::shared_ptr<ClipTrack> clip_track;
   tracks.push_back(group_track = shared_ptr<GroupTrack>(new GroupTrack()));
   group_track->set_name("Group Track");
     
@@ -67,14 +70,11 @@ Sequence::Sequence()
   INFO(gui, "\n%s", print_branch().c_str());
 }
 
+
 std::string
 Sequence::print_track()
 {
-  std::ostringstream os;
-  
-  os << "Sequence\t\"" << get_name() << "\"";
-  
-  return os.str();
+  return "Sequence\t\"" + get_name() + "\"";
 }
 
 }   // namespace model

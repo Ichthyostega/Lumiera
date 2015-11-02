@@ -36,6 +36,7 @@ namespace proc {
 namespace engine {
   
   using mobject::ModelPort;
+  using lib::time::FrameCnt;
   using lib::time::TimeVar;
   using lib::time::Time;
   
@@ -59,8 +60,8 @@ namespace engine {
   struct FrameCoord
     {
       
-      TimeVar absoluteNominalTime;
-      int64_t absoluteFrameNumber;
+      TimeVar  absoluteNominalTime;
+      FrameCnt absoluteFrameNumber;
       
       TimeVar absoluteRealDeadline;
       
@@ -71,7 +72,8 @@ namespace engine {
       /** build an \em undefined frame location */
       FrameCoord()
         : absoluteNominalTime(Time::NEVER)
-        , absoluteFrameNumber(std::numeric_limits<int64_t>::max())
+        , absoluteFrameNumber(std::numeric_limits<FrameCnt>::max())
+        , absoluteRealDeadline(Time::NEVER)
         , modelPort() // unconnected
         , channelNr(0)
         { }
@@ -112,7 +114,7 @@ namespace engine {
         }
       
     protected:
-      virtual FrameCoord locateRelative (FrameCoord, uint frameCountOffset)   =0;
+      virtual FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset)   =0;
     };
   
   

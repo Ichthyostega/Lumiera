@@ -10,32 +10,32 @@ Placement Metaphor used within the high-level view of Proc-Layer
 ----------------------------------------------------------------
 besides the [wiki:self:../ProcBuilder Builder], one of the core ideas of the
 Proc-Layer (as being currently implemented by Ichthyo) is to utilize
-''Placement'' as a single central metaphor for object association, location and
-configuration within the high-level model. The intention is to prefer ''rules''
-over fixed ''values.'' Instead of "having" a property for this and that, we
+_Placement_ as a single central metaphor for object association, location and
+configuration within the high-level model. The intention is to prefer _rules_
+over fixed _values._ Instead of ``having'' a property for this and that, we
 query for information when it is needed.
 
-The proposed use of '''Placement''' within the proc layer spans several,
+The proposed use of *Placement* within the proc layer spans several,
 closely related ideas:
 
  * use the placement as a universal means to stick the "media objects" together
    and put them on some location in the timeline, with the consequence of a
    unified and simplified processing.
- * recognize that various ''location-like'' degrees of freedom actually form a
-   single ''"configuration space"'' with multiple (more than 3) dimensions.
- * distinguish between ''properties'' of an object and qualities, which are
-   caused by "placing" or "locating" the object in ''configuration space''
-   - ''propetries'' belong to the object, like the blur value, the media source
+ * recognize that various _location-like_ degrees of freedom actually form a
+   single _``configuration space''_ with multiple (more than 3) dimensions.
+ * distinguish between _properties_ of an object and qualities, which are
+   caused by ``placing'' or ``locating'' the object in _configuration space_
+   - _propetries_ belong to the object, like the blur value, the media source
        file, the sampling/frame rate of a source
-   - ''location qualities'' exist only because the object is "at" a given
+   - _location qualities_ exist only because the object is ``at'' a given
        location in the graph or space, most notably the start time, the output
        connection, the layering order, the stereoscopic window depth, the sound
        pan position, the MIDI instrument
- * introduce a ''way of placement'' independent of properties and location
-   qualities, describing if the placement ''itself'' is ''absolute, relative or
-   even derived''
- * open especially the possibility to ''derive'' parts of the placement from
-   the context by searching over connected objects and then up the track tree;
+ * introduce a _way of placement_ independent of properties and location
+   qualities, describing if the placement _itself_ is _absolute, relative or
+   even derived_
+ * open especially the possibility to _derive_ parts of the placement from
+   the context by searching over connected objects and then up the fork (``tree of tracks'');
    this includes the possibility of having rules for resolving unspecified
    qualities.
 
@@ -43,22 +43,22 @@ closely related ideas:
 
 Description
 ~~~~~~~~~~~
-The basic idea is to locate ''Media Objects'' of various kinds within a
-''configuration space''. Any object can have a lot of different qualities,
+The basic idea is to locate _Media Objects_ of various kinds within a
+_configuration space_. Any object can have a lot of different qualities,
 which may partially depend on one another, and partially may be chosen freely.
-All these various choices are considered as ''degrees of freedom'' -- and
-defining a property can be seen as ''placing'' the object to a specific
+All these various choices are considered as _degrees of freedom_ -- and
+defining a property can be seen as _placing_ the object to a specific
 parameter value on one of these dimensions. While this view may be bewildering
 at first sight, the important observation is that in many cases we don't want
 to lock down any of those parameters completely to one fixed value. Rather, we
-just want to ''limit'' some parameters.
+just want to _limit_ some parameters.
 
 To give an example, most editing applications let the user place a video clip
 at a fixed time and track. They do so by just assigning fixed values, where the
 track number determines the output and the layering order. While this may seem
 simple, sound and pragmatic, indeed this puts down way to much information in a
 much to rigid manner for many common use cases of editing media. More often
-than not it's not necessary to "nail down" a video clip -- rather, the user
+than not it's not necessary to ``nail down'' a video clip -- rather, the user
 wants it to start immediately after the end of another clip, it should be sent
 to some generic output and it should stay in the layering order above some
 other clip. But, as the editing system fails to provide the means for
@@ -67,11 +67,11 @@ to a bunch of macro features or even compensate for this lack by investing
 additional resources in production organisation (the latter is especially true
 for building up a movie sound track).
 
-On the contrary, using the '''Placement''' metaphor has the implication of
+On the contrary, using the *Placement* metaphor has the implication of
 switching to a query-driven approach.
 
  * it gives us one single instrument to express the various kinds of relations
- * the ''kind of placement'' becomes an internal value of the ''placement'' (as
+ * the _kind of placement_ becomes an internal value of the _placement_ (as
    opposed to the object)
  * some kinds of placement can express rule-like relations in a natural fashion
  * while there remains only one single mechanism for treating a bunch of
@@ -80,9 +80,9 @@ switching to a query-driven approach.
    need of massively reworking the core.
 
 When interpreting the high-level model and creating the low-level model,
-Placements need to be ''resolved'', resulting in a simplified and completely
+Placements need to be _resolved_, resulting in a simplified and completely
 nailed-down copy of the session contents, which this design calls »the
-'''Fixture'''«
+_Fixture_«
 
 Media Objects can be placed
 
@@ -154,8 +154,8 @@ Use the conventional approach
  * implement a splicing/sliding/shuffling mode in the gui
  * provide a output wiring tool in the GUI
  * provide macro features for this and that....
- . (hopefully I made clear by now ''why'' I don't want to take the conventional
-    approach)
+
+^hopefully I made clear by now _why_ I don't want to take the conventional approach^
 
 
 
@@ -189,7 +189,7 @@ abstract and unified concept is always better then having a bunch of seemingly
 unrelated features, even if they may be more easy to grasp for beginners.
 Moreover, the Placement concept deliberately brings in an rule based approach,
 which well fits into the problem domain. Finally, there is sort-of a visionary
-aspect involved here: Ichthyo thinks that nowadays, after image and sound are
+aspect involved here: _Ichthyo_ thinks that nowadays, after image and sound are
 no longer bound to physical media, there is potential for new workflows to be
 discovered, and the Placement concept could be an extension point for such
 undertakings.
@@ -206,21 +206,21 @@ Comments
 Placement Metaphor
 ~~~~~~~~~~~~~~~~~~
 Re:
-"Finally, there is sort-of a visionary aspect involved here: 
+``Finally, there is sort-of a visionary aspect involved here:
 Ichthyo thinks that nowadays, after image and sound are no longer bound to
-physical media, there is potential for '''new workflows''' to be
-'''discovered''',  and the '''Placement concept''' '''''could be''''' an
-'''extension point''' for such undertakings."
+physical media, there is potential for _new workflows_ to be
+_discovered_,  and the _Placement concept_ could be an
+extension point for such undertakings.''
 
-New workflows will not just be '''discovered''', but they will be able to be
-'''recorded, analysed, templated, automated, and integrated''' into the full
+New workflows will not just be _discovered_, but they will be able to be
+_recorded, analysed, templated, automated, and integrated_ into the full
 workflow process. This will free up a greater proportion of time for the
-"finishing" processes of projects.
+»finishing« processes of projects.
 
-"The Placement concept 'could be' an extension for such undertakings" is very
- likely to be an understatement as it is this which '''''will be''''' what
- makes these undertakings possible, because it enables the gathering, use, and
- decision rules based on these parameters. 
+``The Placement concept _could be_ an extension for such undertakings'' is very
+likely to be an understatement as it is this which *will be* what
+makes these undertakings possible, because it enables the gathering,
+use, and decision rules based on these parameters.
 
 This feature/capability is likely to stamp the Lumiera project as a flagship
 benchmark in more ways than one, for some time.

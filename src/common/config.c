@@ -1,5 +1,5 @@
 /*
-  config.c  -  Lumiera configuration system
+  Config  -  Lumiera configuration system
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -17,29 +17,18 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 
-//TODO: Support library includes//
+* *****************************************************/
+
+
 #include "include/logging.h"
 #include "lib/safeclib.h"
 #include "lib/tmpbuf.h"
 #include "common/config.h"
 
-
-//TODO: Lumiera header includes//
-
-//TODO: internal/static forward declarations//
-
-
-//TODO: System includes//
 #include <stdint.h>
 #include <stdlib.h>
 #include <ctype.h>
-
-/**
- * @file
- *
- */
 
 
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "syntax error in configfile");
@@ -90,7 +79,7 @@ int
 lumiera_config_init (const char* path)
 {
   TRACE (config_dbg);
-  REQUIRE (!lumiera_global_config, "Configuration subsystem already initialized");
+  REQUIRE (!lumiera_global_config, "Configuration subsystem already initialised");
   REQUIRE (path);
 
 
@@ -240,7 +229,7 @@ lumiera_config_set (const char* key, const char* delim_value)
   LumieraConfigitem item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key);
   if (item && item->parent != &lumiera_global_config->defaults)
     {
-      TODO ("is a user writeable file?");
+      TODO ("is a user writable file?");
       TODO ("       replace delim_value");
       lumiera_configitem_set_value (item, delim_value);
     }
@@ -262,7 +251,7 @@ lumiera_config_set (const char* key, const char* delim_value)
           ENSURE (*item->delim == '=' || *item->delim == '<', "syntax error,");
 
           TODO ("insert in proper parent (file)");
-          llist_insert_tail (&lumiera_global_config->TODO_unknown.childs, &item->link);
+          llist_insert_tail (&lumiera_global_config->TODO_unknown.children, &item->link);
           item->parent = &lumiera_global_config->TODO_unknown;
           lumiera_config_lookup_insert (&lumiera_global_config->keys, item);
 
@@ -300,7 +289,7 @@ lumiera_config_setdefault (const char* line)
               ENSURE (*item->delim == '=' || *item->delim == '<', "default must be a configentry with key=value or key<delegate syntax");
               TRACE (config_dbg, "registering default: '%s'", item->line);
 
-              llist_insert_head (&lumiera_global_config->defaults.childs, &item->link);
+              llist_insert_head (&lumiera_global_config->defaults.children, &item->link);
               item->parent = &lumiera_global_config->defaults;
 
               lumiera_config_lookup_insert (&lumiera_global_config->keys, item);
@@ -317,7 +306,7 @@ lumiera_config_dump (FILE* out)
 {
   fprintf (out, "# registered defaults:\n");
 
-  LLIST_FOREACH (&lumiera_global_config->defaults.childs, node)
+  LLIST_FOREACH (&lumiera_global_config->defaults.children, node)
     fprintf (out, "%s\n", ((LumieraConfigitem) node)->line);
 
   fprintf (out, "# end of defaults\n\n");
