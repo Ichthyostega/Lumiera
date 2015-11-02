@@ -1,7 +1,7 @@
 Dependencies
 ============
 :Author: core-devs
-:Date: 5/2015
+:Date: 11/2015
 :toc:
 
 
@@ -12,7 +12,7 @@ Lumiera shall scale with the provided Hardware,
 the more RAM and the more/faster CPU's you have the better.
 Nevertheless lower end 32bit machines are supported too.
 
-Secondary targets will be other free operating systems which offer a decent Posix API. +
+Secondary targets will be other free operating systems which offer a decent Posix API.
 Porting to other more or less similar platforms will be possible, if -- by coincidence -- 
 Someone(TM) helps with porting.
 
@@ -90,9 +90,11 @@ Libraries
  - libxv-dev footnote:[for the XV viewer widget `gui/output/xvdisplayer.cpp`
      -- currently obsolete as of [yellow-background]#5/2015#][yellow-background]#TODO 5/2015# and X-lib
  - librsvg-2.0 and librsvg2-dev for rendering Icons
- - libgdl-3-0 or better through libgdlmm-3.0-2 -- the »Gnome Docking Library«footnote:[GDL isn't directly related to GNOME any more.
+ - libgdl-3 (3.12 or better) through libgdlmm-3 -- the »Gnome Docking Library«footnote:[GDL isn't directly related to GNOME any more.
    We contributed to the improvement of this library in the past. These improvements went upstream
    with GDL-2.27. At times, we used to ship our own GDL package. Right now, a recent upstream version
-   together with the corresponding *mm-bindings will do]
+   together with the corresponding *mm-bindings will do. We provide a debian package for the latter,
+   until they will be available in the official Debian/Ubuntu/Mint repos. But we don't have any
+   special requirements on these `gdlmm` bindings.]
 
 
