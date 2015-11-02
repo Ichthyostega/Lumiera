@@ -2172,7 +2172,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1437693678626" FOLDED="true" ID="ID_1536988357" MODIFIED="1439842398635" POSITION="left" TEXT="Doku">
+<node CREATED="1437693678626" FOLDED="true" ID="ID_1536988357" MODIFIED="1446480525549" POSITION="left" TEXT="Doku">
 <node CREATED="1437693687650" ID="ID_1484874437" MODIFIED="1437693692821" TEXT="Sound-Systeme">
 <node CREATED="1437693693617" ID="ID_955932218" LINK="https://wiki.debian.org/Sound" MODIFIED="1437693739404" TEXT="siehe die Debian-&#xdc;bersichtsseite">
 <richcontent TYPE="NOTE"><html>
@@ -2188,9 +2188,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1439176872457" FOLDED="true" HGAP="15" ID="ID_355008543" MODIFIED="1439842393308" POSITION="left" TEXT="Plattform" VSHIFT="41">
+<node CREATED="1439176872457" HGAP="15" ID="ID_355008543" MODIFIED="1446480448914" POSITION="left" TEXT="Plattform" VSHIFT="41">
 <icon BUILTIN="go"/>
-<node CREATED="1439176875682" HGAP="36" ID="ID_1487331591" MODIFIED="1439176889180" TEXT="Debian/Jessie" VSHIFT="42">
+<node CREATED="1439176875682" HGAP="47" ID="ID_1487331591" MODIFIED="1446481367404" TEXT="Debian/Jessie" VSHIFT="60">
 <node CREATED="1439176890840" FOLDED="true" ID="ID_170863947" MODIFIED="1439644328498" TEXT="Probleme">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1439176900293" ID="ID_949460307" MODIFIED="1439176911529" TEXT="Linker rpath $ORIGIN">
@@ -2599,32 +2599,252 @@
 <icon BUILTIN="bell"/>
 </node>
 </node>
-<node CREATED="1439842359711" FOLDED="true" ID="ID_1982964862" MODIFIED="1439842388500" TEXT="Paket">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1439842379420" ID="ID_1336697213" MODIFIED="1439842385655" TEXT="gtk-Abh&#xe4;ngigkeiten"/>
-</node>
-</node>
-<node CREATED="1446356359992" HGAP="9" ID="ID_1850896628" MODIFIED="1446356445623" POSITION="left" TEXT="QA" VSHIFT="69">
-<icon BUILTIN="prepare"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" ID="ID_768449868" MODIFIED="1446356423988" TEXT="ouch">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1446356379653" ID="ID_1354454865" MODIFIED="1446356404198" TEXT="CHECK: typed-counter-test.cpp:329: thread_1: simpleUsageTest: (1 == myCounter.size())">
+<node CREATED="1446480582168" HGAP="46" ID="ID_554745278" MODIFIED="1446481388737" TEXT="Release" VSHIFT="-5">
+<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1446480871057" TEXT="release prep: clean-up obsolete information">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      sporadischer Fehlschlag am 1.11.2015
+      Doku durchk&#228;mmen nach M&#252;ll
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-1"/>
+<node CREATED="1446482192807" ID="ID_852733328" MODIFIED="1446489451006" TEXT="Debian">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier nach offensichtlich obsoleter Info checken
     </p>
     <p>
-      wir kann das passieren?
+      <font color="#d40222">WICHTIG</font>: keine vorgreifende Infor publizieren!!!!!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446482445325" ID="ID_1134936512" MODIFIED="1446489442748" TEXT="Build-Tutorial">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die explizit angegebenen Paketnamen schon mal vorchecken
+    </p>
+    <p>
+      die Abschnitte zu den LIbraries pr&#252;fen / umschreiben
+    </p>
+    <p>
+      insgesamt sorgf&#228;ltig durchlesen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1446489425420" ID="ID_1155768637" MODIFIED="1446489430943" TEXT="building from source"/>
+<node CREATED="1446489431443" ID="ID_1672115205" MODIFIED="1446489435759" TEXT="building the debian way"/>
+<node CREATED="1446489436395" ID="ID_52990160" MODIFIED="1446489439070" TEXT="contributing"/>
+</node>
+<node CREATED="1446482485648" ID="ID_718218074" MODIFIED="1446483382066" TEXT="technical/build/Dependencies">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1446480725508" ID="ID_789754974" MODIFIED="1446480874617" TEXT="release prep: bump version number">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      knappe Kennzeichnung des Releases in den Kommentar
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-2"/>
+<node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1446480798862" TEXT="admin/scons/Setup.py"/>
+<node CREATED="1446480787392" ID="ID_1638555946" MODIFIED="1446480803790" TEXT="data/config/setup.ini"/>
+<node CREATED="1446480787392" ID="ID_619067196" MODIFIED="1446480810516" TEXT="doc/devel/Doxyfile"/>
+<node CREATED="1446480787392" ID="ID_193733835" MODIFIED="1446480819004" TEXT="doc/devel/Doxyfile.browse"/>
+</node>
+<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1446481331784" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier geht es darum, Konsistenz im Git herzustellen.
+    </p>
+    <p>
+      Wenn alles korrekt gemacht wurde, d&#252;rfte es hier keinen R&#252;ckflu&#223; von &#196;nderungen geben.
+    </p>
+    <p>
+      Bitte auch daran denken, zuerst den DEB-Zweig zu pr&#252;fen. Diesen aber nicht zur&#252;ckmergen,
+    </p>
+    <p>
+      denn wir wollen keine DEB-Info im Master haben!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-3"/>
+<node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1446481304650" TEXT="Release-Zweig"/>
+<node CREATED="1446481305102" ID="ID_1191774545" MODIFIED="1446481312561" TEXT="lfd Fixes von den DEBs"/>
+<node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1446481329223" TEXT="Plattform-Abh&#xe4;ngigkeiten checken"/>
+</node>
+<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1446481179537" TEXT="Release-commit: Pre-release 0.pre.02">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      einzeilige Kennzeichnung wiederholen
+    </p>
+    <p>
+      die unmittelbaren Release-Dokumente durchgehen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-4"/>
+<node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1446481126435" TEXT="README"/>
+<node CREATED="1446481126974" ID="ID_537666758" MODIFIED="1446481128522" TEXT="AUTHORS">
+<node CREATED="1446481146548" ID="ID_1310945179" MODIFIED="1446481154546" TEXT="GTK-UI">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1446481155762" ID="ID_290411770" MODIFIED="1446481160406" TEXT="setup.ini">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1446481129206" ID="ID_799927356" MODIFIED="1446481131809" TEXT="LICENSE"/>
+</node>
+<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1446481560325" TEXT="Release-Zweig: upgrade current release to 0.pre.02">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Merge-commit auf den Release-Zweig.
+    </p>
+    <p>
+      Sollte konfliktfrei sein
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-5"/>
+</node>
+<node CREATED="1446481591568" ID="ID_1120064498" MODIFIED="1446481599057" TEXT="Paketieren">
+<icon BUILTIN="full-6"/>
+<node CREATED="1446481606134" ID="ID_212330450" MODIFIED="1446481617041" TEXT="Merge release -&gt; deb"/>
+<node CREATED="1446481618196" ID="ID_1882691551" MODIFIED="1446481637270" TEXT="Paket-Beschreibung"/>
+<node CREATED="1446481637738" ID="ID_1002196753" MODIFIED="1446481639997" TEXT="Manpages"/>
+<node CREATED="1446481646057" ID="ID_262549512" MODIFIED="1446481655180" TEXT="control"/>
+<node CREATED="1446481655743" ID="ID_269337100" MODIFIED="1446481657219" TEXT="rules"/>
+</node>
+<node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1446481736903" TEXT="ausliefern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t bauen und hochladen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-7"/>
+<node CREATED="1446482059173" ID="ID_101470007" MODIFIED="1446482153165">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#d1013e">totmachen</font>: Debian/Wheezy (stable) : i386 and x86_64 deprecated: to be discontinued
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1446482059174" ID="ID_1294670881" MODIFIED="1446482105272">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>Referenz</b>: Debian/Jessie (stable) : i386 and x86_64 (currently broken)
     </p>
   </body>
 </html>
 </richcontent>
 </node>
+<node CREATED="1446482059174" ID="ID_1693967692" MODIFIED="1446482059174" TEXT="Ubuntu/Trusty (14.LTS) : i386 and x86_64 (currently broken)"/>
+<node CREATED="1446482059174" ID="ID_1906801117" MODIFIED="1446482059174" TEXT="Ubuntu/Vivid (15.04) : i386 (planned)"/>
+<node CREATED="1446482059175" ID="ID_1107419581" MODIFIED="1446482059175" TEXT="Ubuntu/Wily (15.10) : x86_64 (planned)"/>
+<node CREATED="1446482059175" ID="ID_904094860" MODIFIED="1446482059175" TEXT="Mint/Rafaela (17.2.LTS) : x86_64 (planned)"/>
+<node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1446482274886" TEXT="Web/Doku aktualisieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wichtig: hier nur was wirklich gebaut ist und funktioniert!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
+<node CREATED="1446481892624" ID="ID_1020531472" MODIFIED="1446482073185" TEXT="Ticket schlie&#xdf;en">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node CREATED="1439842359711" ID="ID_1982964862" MODIFIED="1446480466245" TEXT="Paket">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1439842379420" ID="ID_1336697213" MODIFIED="1439842385655" TEXT="gtk-Abh&#xe4;ngigkeiten"/>
+<node CREATED="1446486970358" ID="ID_1758732894" MODIFIED="1446487031892" TEXT="was ist mit libXV">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eigentlich war die nur notwendig f&#252;r das Video-Viewer Widget,
+    </p>
+    <p>
+      was nun leider tot ist. Wir haben noch keinen Ersatz. Deshalb lasse ich die Abh&#228;ngigkeit
+    </p>
+    <p>
+      bestehen, aber irgendwann m&#252;ssen wir das schon glattziehen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1446356359992" HGAP="9" ID="ID_1850896628" MODIFIED="1446480440058" POSITION="left" TEXT="QA" VSHIFT="69">
+<icon BUILTIN="go"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" ID="ID_768449868" MODIFIED="1446480432831" TEXT="ouch"/>
 </node>
 </node>
 </map>

@@ -3,7 +3,7 @@ External Tree Description
 :Author: Ichthyostega
 :Date:      Fall 2015
 
-//Menu: label ETD
+
 
 ****************
 _to symbolically represent hierarchically structured elements, without actually implementing them._
