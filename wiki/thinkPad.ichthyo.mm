@@ -2170,6 +2170,9 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
+<node CREATED="1446515847047" ID="ID_290915762" MODIFIED="1446515861953" TEXT="GtkCssProvider">
+<node CREATED="1446515865029" ID="ID_1503616150" MODIFIED="1446515869624" TEXT="parsing errors"/>
+</node>
 </node>
 </node>
 <node CREATED="1437693678626" FOLDED="true" ID="ID_1536988357" MODIFIED="1446480525549" POSITION="left" TEXT="Doku">
@@ -2599,6 +2602,63 @@
 <icon BUILTIN="bell"/>
 </node>
 </node>
+<node CREATED="1446505444775" HGAP="106" ID="ID_721807850" MODIFIED="1446505465178" TEXT="Buildsystem" VSHIFT="-5">
+<node CREATED="1446505367113" ID="ID_335245102" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1446505490390">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      standard hardening-flags setzen <font color="#ba015b">#971</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1446509415481" ID="ID_180589749" MODIFIED="1446509643475" TEXT="Versionen hochsetzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      w&#228;hle Kompatibilt&#228;t genau so, da&#223; Ubuntu-Trusty noch unterst&#252;tzt wird.
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1446516746079" TEXT="gtkmm-3.0 3.10">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446509430758" ID="ID_371171235" MODIFIED="1446516743246" TEXT="glibmm-2.4 2.39">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446509601271" ID="ID_1477664506" MODIFIED="1446517191405" TEXT="libglib2.0 2.40">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1446510347931" ID="ID_559552800" MODIFIED="1446510354349" TEXT="direkten Check hierf&#xfc;r"/>
+<node CREATED="1446510354914" ID="ID_1787485177" MODIFIED="1446510366196" TEXT="check f&#xfc;r gthread fraglich"/>
+</node>
+<node CREATED="1446509752707" ID="ID_1392554051" MODIFIED="1446509764365" TEXT="libgdl-3-dev 3.12">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446509983556" ID="ID_366391443" MODIFIED="1446516706132" TEXT="libcairomm-1.0-dev 1.10">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446510475202" ID="ID_514495017" MODIFIED="1446516657520" TEXT="librsvg2-dev 2.30">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446511275302" ID="ID_359693763" MODIFIED="1446516636391" TEXT="libgavl-dev 1.4">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446510776857" ID="ID_674774779" MODIFIED="1446516531133" TEXT="Kommentar: librt geh&#xf6;rt zu libc 6">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446511125266" ID="ID_1198662071" MODIFIED="1446516619027" TEXT="Kommentar zu xv, x11 und xext : TODO videodisplayer obsolet?">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
 <node CREATED="1446480582168" HGAP="46" ID="ID_554745278" MODIFIED="1446481388737" TEXT="Release" VSHIFT="-5">
 <node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1446494976104" TEXT="release prep: clean-up obsolete information">
 <richcontent TYPE="NOTE"><html>
@@ -2704,7 +2764,7 @@
 <node CREATED="1446481305102" ID="ID_1191774545" MODIFIED="1446481312561" TEXT="lfd Fixes von den DEBs"/>
 <node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1446481329223" TEXT="Plattform-Abh&#xe4;ngigkeiten checken"/>
 </node>
-<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1446497660446" TEXT="Release-commit: Pre-release 0.pre.02">
+<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1446499218296" TEXT="Release-commit: Pre-release 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2732,7 +2792,7 @@
 </node>
 <node CREATED="1446481129206" ID="ID_799927356" MODIFIED="1446481131809" TEXT="LICENSE"/>
 </node>
-<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1446481560325" TEXT="Release-Zweig: upgrade current release to 0.pre.02">
+<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1446499604358" TEXT="Release-Zweig: upgrade current release to 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2748,14 +2808,26 @@
 </html>
 </richcontent>
 <icon BUILTIN="full-5"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446481591568" ID="ID_1120064498" MODIFIED="1446481599057" TEXT="Paketieren">
+<node CREATED="1446481591568" ID="ID_1120064498" MODIFIED="1446515980127" TEXT="Paketieren">
 <icon BUILTIN="full-6"/>
-<node CREATED="1446481606134" ID="ID_212330450" MODIFIED="1446481617041" TEXT="Merge release -&gt; deb"/>
-<node CREATED="1446481618196" ID="ID_1882691551" MODIFIED="1446481637270" TEXT="Paket-Beschreibung"/>
-<node CREATED="1446481637738" ID="ID_1002196753" MODIFIED="1446481639997" TEXT="Manpages"/>
-<node CREATED="1446481646057" ID="ID_262549512" MODIFIED="1446481655180" TEXT="control"/>
-<node CREATED="1446481655743" ID="ID_269337100" MODIFIED="1446481657219" TEXT="rules"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1446481606134" ID="ID_212330450" MODIFIED="1446515946971" TEXT="Merge release -&gt; deb">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446481618196" ID="ID_1882691551" MODIFIED="1446515950202" TEXT="Paket-Beschreibung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446481637738" ID="ID_1002196753" MODIFIED="1446515972779" TEXT="Manpages">
+<icon BUILTIN="bell"/>
+</node>
+<node CREATED="1446481646057" ID="ID_262549512" MODIFIED="1446515957896" TEXT="control">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446481655743" ID="ID_269337100" MODIFIED="1446515960028" TEXT="rules">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1446481736903" TEXT="ausliefern">
 <richcontent TYPE="NOTE"><html>
@@ -2797,7 +2869,9 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1446482059174" ID="ID_1693967692" MODIFIED="1446482059174" TEXT="Ubuntu/Trusty (14.LTS) : i386 and x86_64 (currently broken)"/>
+<node CREATED="1446482059174" ID="ID_1693967692" MODIFIED="1446482059174" TEXT="Ubuntu/Trusty (14.LTS) : i386 and x86_64 (currently broken)">
+<node CREATED="1446509774664" ID="ID_458867123" MODIFIED="1446509787931" TEXT="Ausnahmen f&#xfc;r libgdl-3-dev 3.8"/>
+</node>
 <node CREATED="1446482059174" ID="ID_1906801117" MODIFIED="1446482059174" TEXT="Ubuntu/Vivid (15.04) : i386 (planned)"/>
 <node CREATED="1446482059175" ID="ID_1107419581" MODIFIED="1446482059175" TEXT="Ubuntu/Wily (15.10) : x86_64 (planned)"/>
 <node CREATED="1446482059175" ID="ID_904094860" MODIFIED="1446482059175" TEXT="Mint/Rafaela (17.2.LTS) : x86_64 (planned)"/>
@@ -2842,6 +2916,19 @@
 </html>
 </richcontent>
 <icon BUILTIN="help"/>
+</node>
+<node CREATED="1446505367113" ID="ID_1119934206" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1446505429946">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hardening-flags! <font color="#ba015b">#971</font>
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>

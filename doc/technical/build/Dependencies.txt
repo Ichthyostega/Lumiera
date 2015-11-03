@@ -21,7 +21,7 @@ Having said that -- for the time being, the core team won't spend much effort on
 Platform
 --------
 We develop and test on standard PC hardware, 32 and 64 bit.
-It is intended to target other platforms running run GNU/Linux eventually.
+It is intended to target other platforms running GNU/Linux eventually.
 Lumiera expects a `standard' desktop installation running a XServer.
 
 Graphics::
@@ -42,6 +42,12 @@ Special Hardware::
 * Specs and APIs must be open.
 * someone to do the actual interfacing and support needs to join the team
 
+Compatibility
+~~~~~~~~~~~~~
+We try to keep our depdendencies close to Debian/stable and the most recent Ubuntu LTS.
+Whenever we need more recent libraries or other dependencies not available for our reference platform,
+we care to provide custom Debian / Ubuntu packages as reference. This does not mean Lumiera is
+limited to Devian flavours, it should work on any current Linux distribution.
 
 Languages and Tools
 -------------------
@@ -86,7 +92,7 @@ Libraries
 * for the GUI: (*GTK-3*) gtkmm-3.0 gdlmm-3.0 glibmm-2.4 cairomm-1.0 xv
  - libgtkmm-3.0-dev
  - libcairomm-1.0-dev
- - libglibmm-2.4-dev, requiring at least glib2.0 and gthread-2.0
+ - libglibmm-2.4-dev, requiring at least glib2.0 (2.40 or better) and gthread-2.0
  - libxv-dev footnote:[for the XV viewer widget `gui/output/xvdisplayer.cpp`
      -- currently obsolete as of [yellow-background]#5/2015#][yellow-background]#TODO 5/2015# and X-lib
  - librsvg-2.0 and librsvg2-dev for rendering Icons

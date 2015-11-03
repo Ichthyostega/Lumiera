@@ -56,7 +56,7 @@ def configure(env):
         conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
         conf.env.Append(CCFLAGS = ' -pthread')
     
-    if not conf.CheckLib(symbol='clock_gettime', library='rt'):
+    if not conf.CheckLib(symbol='clock_gettime', library='rt'):  # note librt is usually installed with libc6
         problems.append('We expect the POSIX realtime extensions to be available through librt. ' +
                         'Unable to use clock_gettime()')
     
@@ -100,7 +100,7 @@ def configure(env):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
     
-    if not conf.CheckPkgConfig('gavl', 1.0):
+    if not conf.CheckPkgConfig('gavl', '1.4'):
         problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
     else:
         conf.env.mergeConf('gavl')
@@ -108,16 +108,19 @@ def configure(env):
     if not conf.CheckPkgConfig('alsa', '1.0.23'):
         problems.append('Support for ALSA sound output is required')
     
-    if not conf.CheckPkgConfig('gtkmm-3.0', 3.0):
-        problems.append('Unable to configure GTK--')
+    if not conf.CheckPkgConfig('gtkmm-3.0', '3.10'):
+        problems.append('Unable to configure the mm-bindings for GTK-3')
         
-    if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
-        problems.append('Unable to configure Lib glib--')
+    if not conf.CheckPkgConfig('glibmm-2.4', '2.39'):
+        problems.append('Unable to configure the mm-bindings for Glib')
     
-    if not conf.CheckPkgConfig('gthread-2.0', '2.12.4'):
-        problems.append('Need gthread support lib for glib-- based thread handling.')
+    if not conf.CheckPkgConfig('glib-2.0', '2.40'):
+        problems.append('Need a suitable Glib version.')
     
-    if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
+    if not conf.CheckPkgConfig('gthread-2.0', '2.40'):
+        problems.append('Need gthread support lib for Glib based thread handling.')
+    
+    if not conf.CheckPkgConfig('cairomm-1.0', '1.10'):
         problems.append('Unable to configure Cairo--')
     
     verGDL   = '3.12'
@@ -132,12 +135,14 @@ def configure(env):
                         '(either from GNOME %s or use the debian package from %s)' % 
                         (verGDLmm, urlGDLmm, urlGDLmmDEB))
     
-    if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
+    if not conf.CheckPkgConfig('librsvg-2.0', '2.30'):
         problems.append('Need rsvg Library for rendering icons.')
         
     if not conf.CheckCHeader(['X11/Xutil.h', 'X11/Xlib.h'],'<>'):
         problems.append('Xlib.h and Xutil.h required. Please install libx11-dev.')
     
+    # NOTE the following dependencies where for the video displayer widget.
+    # As of 11/2015 this is broken and disabled. Might be obsolete.... 
     if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
     if not conf.CheckPkgConfig('x11') : problems.append('Need X-lib...')   # for the xvdisplayer widget
     if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')
