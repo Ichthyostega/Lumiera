@@ -23,7 +23,7 @@ Build-Depends: debhelper (>= 7),
                libxv-dev (>= 2:1.0),
                libxext-dev,
                libx11-dev
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Vcs-Git: git://git.lumiera.org/debian/lumiera -b deb
 Vcs-Browser: http://git.lumiera.org/gitweb?p=debian/lumiera;a=shortlog;h=refs/heads/deb
 Homepage: http://Lumiera.org
