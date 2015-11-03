@@ -1,3 +1,12 @@
+lumiera (0.pre.03-1) Lumiera-jessie; urgency=low
+
+  * [91ea1cb] new upstream (pre Alpha)release 0.pre.03
+  * all compatibility and other fixes are in master now
+  * Debian/Jessie is reference system for Lumiera
+  * adjust package to reflect updated GTK-3 dependency
+
+ -- Hermann Vosseler <deb@ichthyostega.de>  Mon, 02 Nov 2015 23:11:07 +0100
+
 lumiera (0.pre.02-1+jessie) UNRELEASED; urgency=low
 
   * adjustments to build Lumiera for Debian/Jessie
@@ -8,7 +17,7 @@ lumiera (0.pre.02-1+jessie) UNRELEASED; urgency=low
 
  -- Hermann Vosseler <deb@ichthyostega.de>  Fri, 15 Nov 2013 05:43:23 +0100
 
-lumiera (0.pre.02-1) UNRELEASED; urgency=low
+lumiera (0.pre.02-1) Lumiera-wheezy; urgency=low
 
   * [c848903] new upstream (pre Alpha)release 0.pre.02
   * all gcc-4.7 and clang-3 compatibility fixes are on master now
@@ -22,7 +31,7 @@ lumiera (0.pre.02-1) UNRELEASED; urgency=low
 
  -- Hermann Vosseler <deb@ichthyostega.de>  Sun, 10 Nov 2013 23:03:23 +0100
 
-lumiera (0.pre.01-3+precise) precise; urgency=low
+lumiera (0.pre.01-3+precise) Lumiera-precise; urgency=low
 
   * packaged for Ubuntu Precise (LTS)
 
@@ -36,25 +45,25 @@ lumiera (0.pre.01-3+wheezy) UNRELEASED; urgency=low
 
  -- Hermann Vosseler <deb@ichthyostega.de>  Sat, 13 Oct 2012 03:10:10 +0200
 
-lumiera (0.pre.01-3+natty) natty; urgency=low
+lumiera (0.pre.01-3+natty) Lumiera-natty; urgency=low
 
   * package for Ubuntu Natty (11.04)
 
  -- Hermann Vosseler <deb@ichthyostega.de>  Mon, 19 Dec 2011 00:58:09 +0100
 
-lumiera (0.pre.01-3+maverick) maverick; urgency=low
+lumiera (0.pre.01-3+maverick) Lumiera-maverick; urgency=low
 
   * package for Ubuntu Maverick (10.10)
 
  -- Hermann Vosseler <deb@ichthyostega.de>  Mon, 28 Mar 2011 02:18:44 +0200
 
-lumiera (0.pre.01-3+lucid) lucid; urgency=low
+lumiera (0.pre.01-3+lucid) Lumiera-lucid; urgency=low
 
   * packaged for Ubuntu Lucid (LTS)
 
  -- Hermann Vosseler <deb@ichthyostega.de>  Sat, 27 Mar 2011 20:04:04 +0100
 
-lumiera (0.pre.01-3+squeeze) squeeze; urgency=low
+lumiera (0.pre.01-3+squeeze) Lumiera-squeeze; urgency=low
 
   * packaged for Debian Squeeze (stable)
   * fix an long standing error in buildsystem
@@ -64,7 +73,7 @@ lumiera (0.pre.01-3+squeeze) squeeze; urgency=low
 
  -- Hermann Vosseler <deb@ichthyostega.de>  Sat, 27 Mar 2011 20:19:19 +0100
 
-lumiera (0.pre.01-3) Lenny; urgency=low
+lumiera (0.pre.01-3) Lumiera-lenny; urgency=low
 
   [ Ichthyostega ]
   * [1b50665] Build/testsuite adjustments
@@ -72,14 +81,14 @@ lumiera (0.pre.01-3) Lenny; urgency=low
 
  -- Hermann Vosseler <deb@ichthyostega.de>  Fri, 25 Mar 2011 19:56:04 +0100
 
-lumiera (0.pre.01-2) Lenny; urgency=low
+lumiera (0.pre.01-2) Lumiera-lenny; urgency=low
 
   * [4369790] Bugfix: compilation problems on 32bit
   * [c354c66] enable the use of pristine-tar
 
  -- Hermann Vosseler <deb@ichthyostega.de>  Wed, 16 Mar 2011 03:53:12 +0100
 
-lumiera (0.pre.01-1) Lenny; urgency=low
+lumiera (0.pre.01-1) Lumiera-lenny; urgency=low
 
   * Initial Debian packaging of an pre Alpha internal development version
 
