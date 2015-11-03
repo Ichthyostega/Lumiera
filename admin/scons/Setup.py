@@ -73,7 +73,7 @@ def defineBuildEnvironment():
     
     env.Replace( CPPPATH   =["#src"]    # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['LUMIERA_VERSION='+VERSION ]    # note: it's a list to append further defines
-               , CCFLAGS='-Wall -Wextra'
+               , CCFLAGS='-Wall -Wextra -Wformat-security'
                , CXXFLAGS='-std=gnu++14 -Wno-enum-compare'
                , CFLAGS='-std=gnu99' 
                )
