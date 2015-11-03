@@ -64,8 +64,16 @@ namespace gui {
   {
     auto screen = Gdk::Screen::get_default();
     auto css_provider = CssProvider::create();
-    css_provider->load_from_path (lib::resolveModulePath (stylesheetName, resourceSerachPath_));
+    try
+      {
+        css_provider->load_from_path (lib::resolveModulePath (stylesheetName, resourceSerachPath_));
                                                                  /////////////////////////////////TICKET #953 should detect and notify CSS parsing errors. CssProvider offers a signal for this purpose
+                                                                 /////////////////////////////////TICKET #953 ...seems to be supported properly starting with gtkmm 3.18 (Debian/Jessie has 3.14)
+      }
+    catch(Glib::Error const& failure)
+      {
+        WARN(gui, "Failure while loading stylesheet '%s': %s", cStr(stylesheetName), cStr(failure.what()));
+      }
     
     StyleContext::add_provider_for_screen (screen, css_provider,
                                            GTK_STYLE_PROVIDER_PRIORITY_USER);
