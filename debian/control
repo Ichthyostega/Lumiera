@@ -4,22 +4,23 @@ Priority: extra
 Maintainer: Hermann Vosseler <deb@ichthyostega.de>
 Build-Depends: debhelper (>= 7),
                cdbs (>= 0.4.73),
-               scons (>= 1),
+               scons (>= 2),
                pkg-config,
                asciidoc,
-               libboost-dev (>= 1.42),
-               libboost-program-options-dev (>= 1.42),
-               libboost-filesystem-dev (>= 1.42),
-               libboost-regex-dev (>= 1.42),
+               libboost-dev (>= 1.55)                | libboost1.55-dev,
+               libboost-program-options-dev (>= 1.55)| libboost-program-options1.55-dev,
+               libboost-filesystem-dev (>= 1.55)     | libboost-filesystem1.55-dev,
+               libboost-regex-dev (>= 1.55)          | libboost-regex1.55-dev,
                nobug-dev (>= 201008.1),
-               libgavl-dev (>= 1),
+               libgavl-dev (>= 1.4),
                libasound2-dev,
-               libgtkmm-2.4-dev (>= 1:2.8),
-               libglibmm-2.4-dev (>= 2.16),
-               libglib2.0-dev (>= 2.16),
-               libgdl-1-dev (>= 2.27.1) | libgdl-lum-dev (>= 2.27.1),
-               libcairomm-1.0-dev (>= 1.6),
-               librsvg2-dev (>=2.18.1),
+               libgtkmm-3.0-dev (>= 3.10),
+               libglibmm-2.4-dev (>= 2.39),
+               libglib2.0-dev (>= 2.40),
+               libgdl-3-dev (>= 3.12),
+               libgdlmm-3-dev (>= 3.7.3~),
+               libcairomm-1.0-dev (>= 1.10),
+               librsvg2-dev (>=2.40),
                libxv-dev (>= 2:1.0),
                libxext-dev,
                libx11-dev
@@ -47,7 +48,7 @@ Description: nonlinear video editing and compositing tool.
  colour grading, 3D support, full fledged sound montage
  and multiple edit versions prepared in parallel.
  .
- NOTE: as of 10/2013, Lumiera is in early development stage;
+ NOTE: as of 11/2015, Lumiera is in early development stage;
  it is not usable yet. The above describes the Lumiera project
  vision, which will need years to implement. This Debian package
  installs a current development snapshot in pre-alpha stage.
