@@ -236,6 +236,7 @@ fact, many user interfaces should be possible.
 - The initial GUI on which considerable work has already been done has been
   implemented using the GTK toolkit.  However, considerable more work needs to be
   done on this present GUI.
+- the stylesheet has been roughly ported to GTK-3, but needs a lot more polishing
 - we urgently need conceptual (non-coding) contributions
 
   * work out a coherent UI handling concept, in accordance with model and core
