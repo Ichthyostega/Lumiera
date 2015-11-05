@@ -2842,20 +2842,6 @@
 </html>
 </richcontent>
 <icon BUILTIN="full-7"/>
-<node CREATED="1446482059173" ID="ID_101470007" MODIFIED="1446482153165">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <font color="#d1013e">totmachen</font>: Debian/Wheezy (stable) : i386 and x86_64 deprecated: to be discontinued
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
 <node CREATED="1446482059174" ID="ID_1294670881" MODIFIED="1446482105272">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -2874,7 +2860,9 @@
 </node>
 <node CREATED="1446482059174" ID="ID_1906801117" MODIFIED="1446482059174" TEXT="Ubuntu/Vivid (15.04) : i386 (planned)"/>
 <node CREATED="1446482059175" ID="ID_1107419581" MODIFIED="1446482059175" TEXT="Ubuntu/Wily (15.10) : x86_64 (planned)"/>
-<node CREATED="1446482059175" ID="ID_904094860" MODIFIED="1446482059175" TEXT="Mint/Rafaela (17.2.LTS) : x86_64 (planned)"/>
+<node CREATED="1446482059175" ID="ID_904094860" MODIFIED="1446686512777" TEXT="Mint/Rafaela (17.2.LTS) : x86_64 (planned)">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1446482274886" TEXT="Web/Doku aktualisieren">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -2888,6 +2876,25 @@
 </html>
 </richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1446589479832" ID="ID_1851762530" MODIFIED="1446589486970" TEXT="alte Repos wegwerfen">
+<node CREATED="1446589487798" ID="ID_1080472422" MODIFIED="1446589494881" TEXT="Lumi-Depot: Wheezy"/>
+<node CREATED="1446589495445" ID="ID_1083044545" MODIFIED="1446589501064" TEXT="VBox Wheezy">
+<node CREATED="1446482059173" ID="ID_101470007" MODIFIED="1446482153165">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#d1013e">totmachen</font>: Debian/Wheezy (stable) : i386 and x86_64 deprecated: to be discontinued
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1446589502132" ID="ID_271504207" MODIFIED="1446589507863" TEXT="VBox Mint Quiana"/>
 </node>
 <node CREATED="1446481892624" ID="ID_1020531472" MODIFIED="1446482073185" TEXT="Ticket schlie&#xdf;en">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
