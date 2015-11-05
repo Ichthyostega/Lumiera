@@ -1,2 +1,3 @@
 0001-disable-prioritiqueue-test-for-packaging-on-Jessie.patch
 0002-swallow-errors-on-CSS-loading.patch
+0003-lower-GDL-dependency-to-3.8-on-Mint-17.2.patch

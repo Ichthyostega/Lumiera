@@ -1,0 +1,34 @@
+From: Hermann Vosseler <deb@ichthyostega.de>
+Date: Thu, 5 Nov 2015 02:20:08 +0100
+Subject: lower GDL dependency to 3.8 on Mint 17.2
+
+For Lumiera, what we actually need is a GTK-3 compliant libGDL.
+Since Mint Rafaela (17.2) has only the rather old version 3.8, we lower
+the dependency requirements. Not sure if this causes any problems...
+
+lumiera (0.pre.03-1~rafaela) Lumiera-rafaela; urgency=low
+
+   * Rebuild for Mint 17.2 (Rafaela)
+   * lower requirements on libGDL to 3.8 (a bit outdated, but should do)
+   * use custom installed gcc-4.9 and libstdc++ 4.9 for building,
+     since Mint 17.2 has only gcc-4.8 and we need full c++14 compliance
+     Hint: use add-apt-repository ppa:ubuntu-toolchain-r/test
+
+Author: Hermann Vosseler <deb@ichthyostega.de>
+---
+ admin/scons/Platform.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/admin/scons/Platform.py b/admin/scons/Platform.py
+index 81bf1d4..adb2ac7 100644
+--- a/admin/scons/Platform.py
++++ b/admin/scons/Platform.py
+@@ -120,7 +120,7 @@ def configure(env):
+     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
+         problems.append('Unable to configure Cairo--')
+     
+-    verGDL   = '3.12'
++    verGDL   = '3.8' # NOTE: lowered requriements here (was originally '3.12')
+     verGDLmm = '3.7.3'
+     urlGDLmm = 'http://ftp.gnome.org/pub/GNOME/sources/gdlmm/'
+     urlGDLmmDEB = 'http://lumiera.org/debian/'
