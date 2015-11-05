@@ -79,6 +79,11 @@ libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
 Ubuntu note::
   some people reported you need to install the `intltool` package from the standard
   Ubuntu repository (for this reason it is included in the above collection)
+Mint-17.2 (Rafaela) and Ubuntu 12.LTS note::
+  We really need the gcc-4.9, so building on these platforms is a bit tricky. See our
+  link:{ldoc}/technical/howto/backporting.html#_building_on_mint_17_2_rafaela_8201_8212_8201_gcc_and_libstdc_4_9[»Backporting«]
+  page for detailed info...
+  
 
 
 Build Directory
