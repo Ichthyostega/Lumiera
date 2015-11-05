@@ -1,3 +1,13 @@
+lumiera (0.pre.03-1~rafaela) Lumiera-rafaela; urgency=low
+
+  * Rebuild for Mint 17.2 (Rafaela)
+  * lower requirements on libGDL to 3.8 (a bit outdated, but should do)
+  * use custom installed gcc-4.9 and libstdc++ 4.9 for building,
+    since Mint 17.2 has only gcc-4.8 and we need full c++14 compliance
+    Hint: use add-apt-repository ppa:ubuntu-toolchain-r/test
+
+ -- Hermann Vosseler <deb@ichthyostega.de>  Thu, 05 Nov 2015 01:12:57 +0100
+
 lumiera (0.pre.03-1) Lumiera-jessie; urgency=low
 
   * [91ea1cb] new upstream (pre Alpha)release 0.pre.03

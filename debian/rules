@@ -2,6 +2,12 @@
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/scons.mk
+ 
+# Workaround on Mint/Rafaela:
+# use a custom installed gcc-4.9 with libstdc++4.9 for building (we need full C++14 support)
+CC = gcc-4.9
+CXX = g++-4.9
+
 
 # Core build options for Lumiera
 #
