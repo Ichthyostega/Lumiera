@@ -49,7 +49,7 @@ namespace test{
     // to act as templates within the concrete diff
     // NOTE: everything in this diff language is by-value
     const GenNode ATTRIB1("α", 1),                         // attribute α = 1 
-                  ATTRIB2("β", 2L),                        // attribute α = 2L   (int64_t)
+                  ATTRIB2("β", int64_t(2)),                // attribute α = 2L   (int64_t)
                   ATTRIB3("γ", 3.45),                      // attribute γ = 3.45 (double)
                   TYPE_X("type", "X"),                     // a "magic" type attribute "X"
                   TYPE_Y("type", "Y"),                     // 
@@ -190,7 +190,7 @@ namespace test{
             auto subScope = nested.scope();                            //       and within the nested sub-scope we find
             CHECK (  *subScope == CHILD_A);                            //           CHILD_A
             CHECK (*++subScope == MakeRec().type("Y")                  //           a yet-again nested sub-Record of type "Y"
-                                           .set("β", 2L )              //               with just an attribute "β" == 2L
+                                           .set("β", int64_t(2))       //               with just an attribute "β" == 2L
                                    .genNode(CHILD_NODE.idi.getSym())); //               (and an empty child scope)
             CHECK (*++subScope == CHILD_T);                            //           followed by another copy of CHILD_T
             CHECK (isnil (++subScope));                                // 
