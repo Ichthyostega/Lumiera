@@ -1,0 +1,47 @@
+From: Hermann Vosseler <deb@ichthyostega.de>
+Date: Sat, 14 Nov 2015 21:20:32 +0100
+Subject: fix 32 vs 64bit problem in test
+
+yet another instance of that obnoxious problem that "long"
+is just 32bit on i386 platforms. Why the hell does such
+a broken type get the preference of convenient notation??
+---
+ tests/15library.tests                             | 2 +-
+ tests/library/diff/diff-tree-application-test.cpp | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tests/15library.tests b/tests/15library.tests
+index c451a05..612eaca 100644
+--- a/tests/15library.tests
++++ b/tests/15library.tests
+@@ -265,7 +265,7 @@ out: GenNode.+"spam".+«lib::diff::Record<lib::diff::GenNode>».Rec.ham.+eggs.+s
+ out: GenNode.+_CHILD_string.+«std::string».eggs
+ out: GenNode.+_CHILD_string.+«std::string».spam
+ out: GenNode.+_CHILD_TimeSpan.+«lib::time::TimeSpan»
+-out: GenNode.+_CHILD_long.+«long».42
++out: GenNode.+_CHILD_long.+«long.+42
+ return: 0
+ END
+ 
+diff --git a/tests/library/diff/diff-tree-application-test.cpp b/tests/library/diff/diff-tree-application-test.cpp
+index 2f37f39..4d112f2 100644
+--- a/tests/library/diff/diff-tree-application-test.cpp
++++ b/tests/library/diff/diff-tree-application-test.cpp
+@@ -49,7 +49,7 @@ namespace test{
+     // to act as templates within the concrete diff
+     // NOTE: everything in this diff language is by-value
+     const GenNode ATTRIB1("α", 1),                         // attribute α = 1 
+-                  ATTRIB2("β", 2L),                        // attribute α = 2L   (int64_t)
++                  ATTRIB2("β", int64_t(2)),                // attribute α = 2L   (int64_t)
+                   ATTRIB3("γ", 3.45),                      // attribute γ = 3.45 (double)
+                   TYPE_X("type", "X"),                     // a "magic" type attribute "X"
+                   TYPE_Y("type", "Y"),                     // 
+@@ -190,7 +190,7 @@ namespace test{
+             auto subScope = nested.scope();                            //       and within the nested sub-scope we find
+             CHECK (  *subScope == CHILD_A);                            //           CHILD_A
+             CHECK (*++subScope == MakeRec().type("Y")                  //           a yet-again nested sub-Record of type "Y"
+-                                           .set("β", 2L )              //               with just an attribute "β" == 2L
++                                           .set("β", int64_t(2))       //               with just an attribute "β" == 2L
+                                    .genNode(CHILD_NODE.idi.getSym())); //               (and an empty child scope)
+             CHECK (*++subScope == CHILD_T);                            //           followed by another copy of CHILD_T
+             CHECK (isnil (++subScope));                                // 
