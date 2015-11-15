@@ -1,3 +1,12 @@
+lumiera (0.pre.03-2) Lumiera-jessie; urgency=low
+
+  * fix a 32bit vs 64bit problem in testsuite
+  * lower requirements on libGDL to 3.8 (a bit outdated, but should do)
+  * explicitly require a libstdc++ 4.9 or better
+  * this supports also building on Mint 17.2 (with ppa:ubuntu-toolchain-r/test)
+
+ -- Hermann Vosseler <deb@ichthyostega.de>  Sat, 14 Nov 2015 21:11:30 +0100
+
 lumiera (0.pre.03-1) Lumiera-jessie; urgency=low
 
   * [91ea1cb] new upstream (pre Alpha)release 0.pre.03
