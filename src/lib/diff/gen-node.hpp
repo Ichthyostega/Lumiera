@@ -96,9 +96,7 @@
 #include "lib/error.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/util.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/format-util.hpp"
+//#include "lib/format-util.hpp"        ///////////////////////////////TICKET #973 : investigate the impact of this inclusion on code size
 #include "lib/diff/record.hpp"
 #include "lib/variant.hpp"
 #include "lib/util.hpp"

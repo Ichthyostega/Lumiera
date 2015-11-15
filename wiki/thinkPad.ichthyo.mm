@@ -2021,8 +2021,7 @@
       Die sind nat&#252;rlich anders, wenn wir die ganze Testsuite ausf&#252;hren...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="flag"/>
 </node>
 <node CREATED="1446356588505" ID="ID_895292312" MODIFIED="1446356602250" TEXT="gr&#xfc;ndlicher Test">
@@ -2613,8 +2612,7 @@
       standard hardening-flags setzen <font color="#ba015b">#971</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1446509415481" ID="ID_180589749" MODIFIED="1446509643475" TEXT="Versionen hochsetzen">
 <richcontent TYPE="NOTE"><html>
@@ -2626,8 +2624,7 @@
       w&#228;hle Kompatibilt&#228;t genau so, da&#223; Ubuntu-Trusty noch unterst&#252;tzt wird.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1446516746079" TEXT="gtkmm-3.0 3.10">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -2658,9 +2655,60 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node CREATED="1447567085815" HGAP="69" ID="ID_1166446956" MODIFIED="1447567092388" TEXT="Nachtrag">
+<node CREATED="1446481314669" ID="ID_1936079858" MODIFIED="1447567118879">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Plattform-Abh&#228;ngigkeiten
+    </p>
+    <p>
+      nochmal gegenchecken
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1447566875500" HGAP="35" ID="ID_773580451" MODIFIED="1447566997560" TEXT="w&#xfc;nschenswert..." VSHIFT="16">
+<icon BUILTIN="bell"/>
+<node CREATED="1447566892252" ID="ID_649638170" MODIFIED="1447566949332" TEXT="generische Compiler-Schalter zur Diagnose loggen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...damit man auch im Paketbau-Build-Output wenigstens einmal <i>alle</i>&#160; generischen Platform-Schalter sieht
+    </p>
+    <p>
+      Ich meine also: zu Beginn vom Build sollte das Buildsystem einmal eine Infozeile ausgeben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1447566892253" ID="ID_64485556" MODIFIED="1447566985705" TEXT="clean soll .sconf_temp und *.pyc mit wegr&#xe4;umen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn die st&#246;ren jeweils beim erzeugen eines Hotfix/Patch im Paketbau per dpkg --commit
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 <node CREATED="1446480582168" HGAP="46" ID="ID_554745278" MODIFIED="1446481388737" TEXT="Release" VSHIFT="-5">
-<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1446494976104" TEXT="release prep: clean-up obsolete information">
+<node CREATED="1446480601381" FOLDED="true" ID="ID_1870415321" MODIFIED="1447567011047" TEXT="release prep: clean-up obsolete information">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2670,8 +2718,7 @@
       Doku durchk&#228;mmen nach M&#252;ll
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
 <icon BUILTIN="button_ok"/>
@@ -2688,8 +2735,7 @@
       <font color="#d40222">WICHTIG</font>: keine vorgreifende Infor publizieren!!!!!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1446482445325" ID="ID_1134936512" MODIFIED="1446489442748" TEXT="Build-Tutorial">
@@ -2708,8 +2754,7 @@
       insgesamt sorgf&#228;ltig durchlesen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446489425420" ID="ID_1155768637" MODIFIED="1446489430943" TEXT="building from source"/>
 <node CREATED="1446489431443" ID="ID_1672115205" MODIFIED="1446489435759" TEXT="building the debian way"/>
@@ -2719,7 +2764,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446480725508" ID="ID_789754974" MODIFIED="1446496359777" TEXT="release prep: bump version number">
+<node CREATED="1446480725508" FOLDED="true" ID="ID_789754974" MODIFIED="1447567015294" TEXT="release prep: bump version number">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2729,8 +2774,7 @@
       knappe Kennzeichnung des Releases in den Kommentar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-2"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1446480798862" TEXT="admin/scons/Setup.py"/>
@@ -2738,7 +2782,7 @@
 <node CREATED="1446480787392" ID="ID_619067196" MODIFIED="1446480810516" TEXT="doc/devel/Doxyfile"/>
 <node CREATED="1446480787392" ID="ID_193733835" MODIFIED="1446480819004" TEXT="doc/devel/Doxyfile.browse"/>
 </node>
-<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1446481331784" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
+<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1447567054832" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2757,14 +2801,18 @@
       denn wir wollen keine DEB-Info im Master haben!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-3"/>
-<node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1446481304650" TEXT="Release-Zweig"/>
-<node CREATED="1446481305102" ID="ID_1191774545" MODIFIED="1446481312561" TEXT="lfd Fixes von den DEBs"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1447567060657" TEXT="Release-Zweig">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446481305102" ID="ID_1191774545" MODIFIED="1447567063510" TEXT="lfd Fixes von den DEBs">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1446481329223" TEXT="Plattform-Abh&#xe4;ngigkeiten checken"/>
 </node>
-<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1446499218296" TEXT="Release-commit: Pre-release 0.pre.03">
+<node CREATED="1446480963028" FOLDED="true" ID="ID_83763074" MODIFIED="1447567047753" TEXT="Release-commit: Pre-release 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2777,8 +2825,7 @@
       die unmittelbaren Release-Dokumente durchgehen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-4"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1446481126435" TEXT="README"/>
@@ -2805,8 +2852,7 @@
       Sollte konfliktfrei sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-5"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -2839,24 +2885,49 @@
       ...das hei&#223;t bauen und hochladen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-7"/>
-<node CREATED="1446482059174" ID="ID_1294670881" MODIFIED="1446482105272">
+<node CREATED="1447566826434" HGAP="37" ID="ID_808634666" MODIFIED="1447566853950" TEXT="Bugfix-Release 0.pre.03-2" VSHIFT="1">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1446482059174" ID="ID_1294670881" MODIFIED="1447566857622">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      <b>Referenz</b>: Debian/Jessie (stable) : i386 and x86_64 (currently broken)
+      <b>Referenz</b>: Debian/Jessie (stable) : i386 and x86_64
     </p>
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1447566711958" ID="ID_450859594" MODIFIED="1447567131949" TEXT="alte version war broken"/>
+<node CREATED="1447566721616" ID="ID_520179523" MODIFIED="1447566730787" TEXT="32 / 64bit Probleme"/>
+<node CREATED="1447566743461" ID="ID_1754275668" LINK="http://issues.lumiera.org/ticket/973" MODIFIED="1447566802450">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Probleme mit der Compile-Reihenfolge&#160; <font color="#d41807">#973</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1446482059174" ID="ID_1693967692" MODIFIED="1446482059174" TEXT="Ubuntu/Trusty (14.LTS) : i386 and x86_64 (currently broken)">
+<node CREATED="1447566806556" ID="ID_708047854" MODIFIED="1447566823633" TEXT="neues Bugfix-Release">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1446482059174" ID="ID_1693967692" MODIFIED="1447567253329" TEXT="Ubuntu/Trusty (14.LTS) : i386 and x86_64 (currently broken)">
 <node CREATED="1446509774664" ID="ID_458867123" MODIFIED="1446509787931" TEXT="Ausnahmen f&#xfc;r libgdl-3-dev 3.8"/>
+<node CREATED="1447567139480" ID="ID_183954019" MODIFIED="1447567151655" TEXT="-&gt; diese Ausnahmen in Paketdefinition &#xfc;bernommen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1446482059174" ID="ID_1906801117" MODIFIED="1446482059174" TEXT="Ubuntu/Vivid (15.04) : i386 (planned)"/>
 <node CREATED="1446482059175" ID="ID_1107419581" MODIFIED="1446482059175" TEXT="Ubuntu/Wily (15.10) : x86_64 (planned)"/>
@@ -2873,8 +2944,7 @@
       Wichtig: hier nur was wirklich gebaut ist und funktioniert!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1446589479832" ID="ID_1851762530" MODIFIED="1446589486970" TEXT="alte Repos wegwerfen">
@@ -2920,8 +2990,7 @@
       bestehen, aber irgendwann m&#252;ssen wir das schon glattziehen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1446505367113" ID="ID_1119934206" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1446505429946">
@@ -2934,13 +3003,31 @@
       hardening-flags! <font color="#ba015b">#971</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
 <node CREATED="1446356359992" HGAP="9" ID="ID_1850896628" MODIFIED="1446480440058" POSITION="left" TEXT="QA" VSHIFT="69">
 <icon BUILTIN="go"/>
+<node CREATED="1447567187010" ID="ID_1008538054" MODIFIED="1447567220394" TEXT="sp&#xe4;ter...">
+<icon BUILTIN="bell"/>
+<node CREATED="1447567193361" FOLDED="true" ID="ID_661445245" MODIFIED="1447567225282" TEXT="preliminary optimization">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1447566743461" ID="ID_1971297499" LINK="http://issues.lumiera.org/ticket/973" MODIFIED="1447566802450">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Probleme mit der Compile-Reihenfolge&#160; <font color="#d41807">#973</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" ID="ID_768449868" MODIFIED="1446480432831" TEXT="ouch"/>
 </node>
 </node>

@@ -265,7 +265,7 @@ out: GenNode.+"spam".+«lib::diff::Record<lib::diff::GenNode>».Rec.ham.+eggs.+s
 out: GenNode.+_CHILD_string.+«std::string».eggs
 out: GenNode.+_CHILD_string.+«std::string».spam
 out: GenNode.+_CHILD_TimeSpan.+«lib::time::TimeSpan»
-out: GenNode.+_CHILD_long.+«long».42
+out: GenNode.+_CHILD_long.+«long.+42
 return: 0
 END
 

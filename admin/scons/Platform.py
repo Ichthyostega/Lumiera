@@ -123,7 +123,7 @@ def configure(env):
     if not conf.CheckPkgConfig('cairomm-1.0', '1.10'):
         problems.append('Unable to configure Cairo--')
     
-    verGDL   = '3.12'
+    verGDL   = '3.8'    # lowered requirements to allow building on Ubuntu/Trusty & Mint (was originally '3.12')
     verGDLmm = '3.7.3'
     urlGDLmm = 'http://ftp.gnome.org/pub/GNOME/sources/gdlmm/'
     urlGDLmmDEB = 'http://lumiera.org/debian/'
