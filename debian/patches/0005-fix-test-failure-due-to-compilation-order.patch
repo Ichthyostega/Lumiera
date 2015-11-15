@@ -1,0 +1,57 @@
+From: Ichthyostega <prg@ichthyostega.de>
+Date: Sun, 15 Nov 2015 01:30:08 +0100
+Subject: fix test failure due to compilation order
+
+some tests rely on additional diagnostics code being linked in,
+which happens, when lib/format-util.hpp is included prior to
+the instantiation of lib::diff::Record rsp. lib::Variant.
+
+The reason why i opended this can of worms was to avoid includion
+of this formatting and diagnostics code into such basic headers
+as lib/variant.hpp or lib/diff/gen-node.hpp
+
+Now it turns out, that on some platforms the linker will use
+a later instantiation of lib::Variant::Buff<GenNode>::operator string
+in spite of a complete instantiation of this virtual function
+being available already in liblumierasupport.so
+
+But the real reason is that -- with this trickery -- we're violating
+the single definition rule, so we get what we deserved.
+
+TODO (Ticket #973): at a later point in development we have to re-assess,
+the precise impact of including lib/format-util.hpp into
+lib/diff/gen-node.hpp
+Right now I expect GenNode to be used pervasively, so I am
+reluctant to make that header too heavyweight.
+---
+ src/lib/diff/gen-node.hpp                         | 4 +---
+ tests/library/diff/diff-tree-application-test.cpp | 1 +
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/lib/diff/gen-node.hpp b/src/lib/diff/gen-node.hpp
+index 16411af..cfccf8a 100644
+--- a/src/lib/diff/gen-node.hpp
++++ b/src/lib/diff/gen-node.hpp
+@@ -96,9 +96,7 @@
+ #include "lib/error.hpp"
+ #include "lib/idi/entry-id.hpp"
+ #include "lib/time/timevalue.hpp"
+-//#include "lib/util.hpp"
+-//#include "lib/format-string.hpp"
+-//#include "lib/format-util.hpp"
++//#include "lib/format-util.hpp"        ///////////////////////////////TICKET #973 : investigate the impact of this inclusion on code size
+ #include "lib/diff/record.hpp"
+ #include "lib/variant.hpp"
+ #include "lib/util.hpp"
+diff --git a/tests/library/diff/diff-tree-application-test.cpp b/tests/library/diff/diff-tree-application-test.cpp
+index 4d112f2..2b2d77c 100644
+--- a/tests/library/diff/diff-tree-application-test.cpp
++++ b/tests/library/diff/diff-tree-application-test.cpp
+@@ -22,6 +22,7 @@
+ 
+ 
+ #include "lib/test/run.hpp"
++#include "lib/format-util.hpp"
+ #include "lib/diff/tree-diff-application.hpp"
+ #include "lib/iter-adapter-stl.hpp"
+ #include "lib/time/timevalue.hpp"
