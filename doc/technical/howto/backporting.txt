@@ -1,6 +1,7 @@
 Backporting to older platforms
 ==============================
-:Date: 8/2015
+:Date: 11/2015
+:toc:
 
 GCC-4.9
 -------
@@ -59,4 +60,69 @@ sudo update-alternatives --config gcc
 ---- 
 
 
+Building on Mint 17.2 (Rafaela) -- gcc and Libstdc++ 4.9
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Since Mint is based on Ubuntu LTS, we're facing pretty much the same situation here.
+But what makes matters yet more confusing is the fact, that Mint offers even a Clang-3.6
+package, which is _unfortunately_ built to rely on the gcc-4.8 libraries; there is a known
+header inclusion bug in these libraries, which kicks in as soon as we switch to C++14.
+
+Thus it is _mandatory_ to install the gcc-4.9 from above mentioned Ubuntu-Toolchain PPA,
+which is indeed linked against the 4.9 libraries. Stay away from Clang on Mint for now!
+
+Transcript from a build session on a ``pristine'' Mint 17.2 installation:
+
+ * add the following to your `/etc/apt/sources.list`
++   
+----
+deb http://lumiera.org/debian/ rafaela experimental
+deb-src http://lumiera.org/debian/ rafaela experimental
+----
+
+ * install _Ichthyo's_ DEB signing key
++
+----
+gpg --keyserver keyserver.ubuntu.com --recv A1DE94B2
+gpg --export -a A1DE94B2 | sudo apt-key add -
+----
+
+ * prepare build environment
++
+----
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install build-essential gcc-4.9 g++-4.9 git-core
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 \
+                         --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
+
+sudo apt-get build-dep lumiera
+----
++
+after that, your system is prepared for building Lumiera
+
+ * now build
+
+   * either by (re)compiling the debian package
++
+----
+apt-get source lumiera
+cd lumiera
+dpkg-buildpackage
+----
+
+   * or check out the source and hack away...
++
+----
+git clone git://git.lumiera.org/LUMIERA
+cd LUMIERA
+
+scons CC=gcc-4.9 CXX=g++-4.9
+----
++
+...as usual, from this point on, the compiler setting will be remembered in the file
+`optcache`, so no need to repeat it for subsequent `scons` invocations.
+
+TIP: Just run `scons` for standard build or run the testsuite with `scons check`.
+     Use the switch `-j#` with # corresponding to the number of your cores.
+     Probably you'll need at least 2GB of memory on AMD64, to build with `-j6`
 
