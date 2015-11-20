@@ -2190,9 +2190,10 @@
 </node>
 </node>
 </node>
-<node CREATED="1439176872457" HGAP="15" ID="ID_355008543" MODIFIED="1446480448914" POSITION="left" TEXT="Plattform" VSHIFT="41">
+<node CREATED="1439176872457" FOLDED="true" HGAP="15" ID="ID_355008543" MODIFIED="1447996324072" POSITION="left" TEXT="Plattform" VSHIFT="41">
 <icon BUILTIN="go"/>
-<node CREATED="1439176875682" HGAP="47" ID="ID_1487331591" MODIFIED="1446481367404" TEXT="Debian/Jessie" VSHIFT="60">
+<node CREATED="1439176875682" FOLDED="true" HGAP="47" ID="ID_1487331591" MODIFIED="1447996295453" TEXT="Debian/Jessie" VSHIFT="60">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1439176890840" FOLDED="true" ID="ID_170863947" MODIFIED="1439644328498" TEXT="Probleme">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1439176900293" ID="ID_949460307" MODIFIED="1439176911529" TEXT="Linker rpath $ORIGIN">
@@ -2584,7 +2585,7 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1439644339480" ID="ID_239239923" MODIFIED="1439644361567" TEXT="Lumiera DEB">
+<node CREATED="1439644339480" ID="ID_239239923" MODIFIED="1447996283705" TEXT="Lumiera DEB">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2595,10 +2596,10 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="bell"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1439644368572" ID="ID_106785551" MODIFIED="1439644388150" TEXT="Doku: Referenz-System">
-<icon BUILTIN="bell"/>
+<node CREATED="1439644368572" ID="ID_106785551" MODIFIED="1447996291004" TEXT="Doku: Referenz-System">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1446505444775" HGAP="106" ID="ID_721807850" MODIFIED="1446505465178" TEXT="Buildsystem" VSHIFT="-5">
@@ -2614,7 +2615,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1446509415481" ID="ID_180589749" MODIFIED="1446509643475" TEXT="Versionen hochsetzen">
+<node CREATED="1446509415481" FOLDED="true" ID="ID_180589749" MODIFIED="1447996260657" TEXT="Versionen hochsetzen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2625,13 +2626,14 @@
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1446516746079" TEXT="gtkmm-3.0 3.10">
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1446509430758" ID="ID_371171235" MODIFIED="1446516743246" TEXT="glibmm-2.4 2.39">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446509601271" ID="ID_1477664506" MODIFIED="1446517191405" TEXT="libglib2.0 2.40">
+<node CREATED="1446509601271" ID="ID_1477664506" MODIFIED="1447996256363" TEXT="libglib2.0 2.40">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446510347931" ID="ID_559552800" MODIFIED="1446510354349" TEXT="direkten Check hierf&#xfc;r"/>
 <node CREATED="1446510354914" ID="ID_1787485177" MODIFIED="1446510366196" TEXT="check f&#xfc;r gthread fraglich"/>
@@ -2655,25 +2657,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1447567085815" HGAP="69" ID="ID_1166446956" MODIFIED="1447567092388" TEXT="Nachtrag">
-<node CREATED="1446481314669" ID="ID_1936079858" MODIFIED="1447567118879">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Plattform-Abh&#228;ngigkeiten
-    </p>
-    <p>
-      nochmal gegenchecken
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="flag-yellow"/>
-</node>
-</node>
-<node CREATED="1447566875500" HGAP="35" ID="ID_773580451" MODIFIED="1447566997560" TEXT="w&#xfc;nschenswert..." VSHIFT="16">
+<node CREATED="1447566875500" FOLDED="true" HGAP="35" ID="ID_773580451" MODIFIED="1447996269720" TEXT="w&#xfc;nschenswert..." VSHIFT="16">
 <icon BUILTIN="bell"/>
 <node CREATED="1447566892252" ID="ID_649638170" MODIFIED="1447566949332" TEXT="generische Compiler-Schalter zur Diagnose loggen">
 <richcontent TYPE="NOTE"><html>
@@ -2704,7 +2688,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1447978451833" TEXT="Compiler" VSHIFT="-10">
+<node CREATED="1447978374453" FOLDED="true" HGAP="140" ID="ID_156552320" MODIFIED="1447996274527" TEXT="Compiler" VSHIFT="-10">
 <icon BUILTIN="prepare"/>
 <node CREATED="1447978472591" ID="ID_281213456" MODIFIED="1447978479035" TEXT="GCC-4.9">
 <icon BUILTIN="button_ok"/>
@@ -2746,8 +2730,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446480582168" HGAP="46" ID="ID_554745278" MODIFIED="1447990926408" TEXT="Release" VSHIFT="-5">
-<icon BUILTIN="prepare"/>
+<node CREATED="1446480582168" FOLDED="true" HGAP="46" ID="ID_554745278" MODIFIED="1447996243666" TEXT="Release" VSHIFT="-5">
+<icon BUILTIN="go"/>
 <node CREATED="1446480601381" FOLDED="true" ID="ID_1870415321" MODIFIED="1447992311210" TEXT="release prep: clean-up obsolete information">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -2824,7 +2808,7 @@
 <node CREATED="1446480787392" ID="ID_619067196" MODIFIED="1446480810516" TEXT="doc/devel/Doxyfile"/>
 <node CREATED="1446480787392" ID="ID_193733835" MODIFIED="1446480819004" TEXT="doc/devel/Doxyfile.browse"/>
 </node>
-<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1447992311224" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
+<node CREATED="1446481181543" FOLDED="true" ID="ID_1995398229" MODIFIED="1447996224134" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2853,9 +2837,11 @@
 <node CREATED="1446481305102" ID="ID_1191774545" MODIFIED="1447567063510" TEXT="lfd Fixes von den DEBs">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1446481329223" TEXT="Plattform-Abh&#xe4;ngigkeiten checken"/>
+<node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1447996222578" TEXT="Plattform-Abh&#xe4;ngigkeiten checken">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1447992715630" TEXT="Release-commit: Pre-release 0.pre.03">
+</node>
+<node CREATED="1446480963028" FOLDED="true" ID="ID_83763074" MODIFIED="1447996218495" TEXT="Release-commit: Pre-release 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2901,7 +2887,7 @@
 <icon BUILTIN="full-5"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446481591568" ID="ID_1120064498" MODIFIED="1446515980127" TEXT="Paketieren">
+<node CREATED="1446481591568" FOLDED="true" ID="ID_1120064498" MODIFIED="1447996214095" TEXT="Paketieren">
 <icon BUILTIN="full-6"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481606134" ID="ID_212330450" MODIFIED="1446515946971" TEXT="Merge release -&gt; deb">
@@ -2920,7 +2906,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1447992311240" TEXT="ausliefern">
+<node CREATED="1446481713984" FOLDED="true" ID="ID_1112453089" MODIFIED="1447996211744" TEXT="ausliefern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -3121,8 +3107,11 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446589479832" ID="ID_1851762530" MODIFIED="1446589486970" TEXT="alte Repos wegwerfen">
-<node CREATED="1446589487798" ID="ID_1080472422" MODIFIED="1446589494881" TEXT="Lumi-Depot: Wheezy"/>
+<node CREATED="1446589479832" FOLDED="true" ID="ID_1851762530" MODIFIED="1447995237001" TEXT="alte Repos wegwerfen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1446589487798" ID="ID_1080472422" MODIFIED="1447995228489" TEXT="Lumi-Depot: Wheezy">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1446589495445" ID="ID_1083044545" MODIFIED="1447990889351" TEXT="VBox Wheezy">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -3130,8 +3119,9 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446481892624" ID="ID_1020531472" MODIFIED="1446482073185" TEXT="Ticket schlie&#xdf;en">
+<node CREATED="1446481892624" ID="ID_1020531472" MODIFIED="1447996207720" TEXT="Ticket schlie&#xdf;en">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -3222,7 +3212,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" ID="ID_768449868" MODIFIED="1446480432831" TEXT="ouch"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" ID="ID_768449868" MODIFIED="1447996318860" TEXT="Au Au"/>
 </node>
 </node>
 </map>

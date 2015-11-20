@@ -1,0 +1,75 @@
+Release preparation
+===================
+:Author: Ichthyo
+:Date: Nov 2015
+
+we have nothing to show and don't provide public releases yet --
+but we ought to rehearse and practice the release process.
+This document contains some hints and a checklist of steps
+to perform for a proper release.
+
+Steps to perform for a release
+------------------------------
+
+ . release prep: clean-up obsolete information
+
+   - Debian package descriptions
+   - Build-Tutorial
+
+     * building from source
+     * building the debian way
+     * contributing
+
+   - technical/build/Dependencies
+
+ . release prep: bump version number
+
+   - `admin/scons/Setup.py`
+   - `data/config/setup.ini`
+   - `doc/devel/Doxyfile`
+   - `doc/devel/Doxyfile.browse`
+
+ . perform a back-merge from the release branch. +
+   It is relevant not to loose any bugfixes. Especially verify
+
+   - that all ongoing fixes from DEBs and other build activities
+     are properly represented as patches and committed to the release branch
+   - that adjustments to platform dependencies are picked up adequately
+
+ . perform the *Release-commit*:
+   it should mention the kind of the release and the version number.
+   Typically, with this commit, you'll update some top level stuff in the
+   source tree, like
+
+   - `README`
+   - `AUTHORS`
+     
+     * also in the ``about'' box in the GTK-UI
+     * see `setup.ini`
+
+   - check the `LICENSE` file and add new license
+     declarations and notes, clean obsolete info here.
+
+ . update the *release branch*: ``upgrade current release to ##.##'' +
+   Make sure the release branch now really reflects current master, maybe
+   with the omission of some stuff to be kept out of the packages.
+   Set the *release tag*
+
+ . packaging...
+
+   - merge release -> deb
+   - verify the package description
+   - have a look at manpages and similar packaging documents
+   - update `debian/control` to reflect current version dependencies
+   - have a look into `debian/rules` (e.g. build flags and similar)
+
+ . delivery
+
+   - use whatever infrastructure is available to build packages.
+   - verify packages can be installed on a pristine VM
+   - upload packages to debian depot or commit them to PPAs
+   - clean-up and discard obsoleted old distributions and packages
+
+ . close the **release ticket**
+
+
