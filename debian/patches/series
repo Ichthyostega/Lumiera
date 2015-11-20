@@ -3,3 +3,4 @@
 0003-lower-GDL-dependency-to-3.8-to-support-Trusty-and-Mi.patch
 0004-fix-32-vs-64bit-problem-in-test.patch
 0005-fix-test-failure-due-to-compilation-order.patch
+0006-fix-compilation-problem-with-gcc-5.patch

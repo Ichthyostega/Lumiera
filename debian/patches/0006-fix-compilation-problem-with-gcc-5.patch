@@ -1,0 +1,23 @@
+From: Ichthyostega <prg@ichthyostega.de>
+Date: Fri, 20 Nov 2015 02:36:34 +0100
+Subject: fix compilation problem with gcc-5
+
+..while we should note at this point that the whole techique
+of hijacking std::hash is superfluous now, since the standard libray
+does no longer define a static assertion which defeats SFINAE
+---
+ src/lib/hash-standard.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lib/hash-standard.hpp b/src/lib/hash-standard.hpp
+index af022da..bb307ae 100644
+--- a/src/lib/hash-standard.hpp
++++ b/src/lib/hash-standard.hpp
+@@ -72,6 +72,7 @@
+ 
+ 
+ #include <cstddef>
++#include <utility>
+ #include <boost/utility/enable_if.hpp>
+ 
+ 
