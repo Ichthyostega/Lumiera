@@ -25,6 +25,7 @@
 #include "lib/test/test-helper.hpp"
 
 #include <string>
+#include <iostream>
 
 using std::string;
 using std::cout;
