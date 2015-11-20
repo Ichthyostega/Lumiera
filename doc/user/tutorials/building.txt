@@ -62,7 +62,12 @@ The GUI depends on the following:
  * link:http://cgit.freedesktop.org/xorg/lib/libXv[libXv]
  * link:https://wiki.gnome.org/LibRsvg[lib rSVG]
  * link:https://git.gnome.org/browse/gdl[lib GDL]
- 
+
+CAUTION: there are known problems with *GCC-5.x* as of 11/2015 +
+         on recent distributions (Ubuntu/wily, Debian/stretch) you might
+         encounter failing tests.footnote:[these problems aren't really serious;
+         basically we're sometimes checking mangled class/type names, and seemingly
+         the mangling behaviour of GCC has changed slightly. We're working on that...]
 
 TIP: Generally speaking, when you want to build software, you'll need the
 _development_ version of the packages that contain the headers and pre-built
@@ -79,11 +84,14 @@ libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
 Ubuntu note::
   some people reported you need to install the `intltool` package from the standard
   Ubuntu repository (for this reason it is included in the above collection)
-Mint-17.2 (Rafaela) and Ubuntu 12.LTS note::
-  We really need the gcc-4.9, so building on these platforms is a bit tricky. See our
+Mint-17.2 (Rafaela) and Ubuntu 12.LTS::
+  we really need the gcc-4.9, so building on these platforms is a bit tricky. See our
   link:{ldoc}/technical/howto/backporting.html#_building_on_mint_17_2_rafaela_8201_8212_8201_gcc_and_libstdc_4_9[»Backporting«]
   page for detailed info...
-  
+GCC-5.0::
+  we're aware of some changes in mangled names (or type-IDs), which cause some tests to fail.
+  Other than that, compilation worked for us.
+
 
 
 Build Directory

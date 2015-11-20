@@ -2669,8 +2669,7 @@
       nochmal gegenchecken
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -2689,8 +2688,7 @@
       Ich meine also: zu Beginn vom Build sollte das Buildsystem einmal eine Infozeile ausgeben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1447566892253" ID="ID_64485556" MODIFIED="1447566985705" TEXT="clean soll .sconf_temp und *.pyc mit wegr&#xe4;umen">
 <richcontent TYPE="NOTE"><html>
@@ -2702,13 +2700,55 @@
       ...denn die st&#246;ren jeweils beim erzeugen eines Hotfix/Patch im Paketbau per dpkg --commit
     </p>
   </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1447978451833" TEXT="Compiler" VSHIFT="-10">
+<icon BUILTIN="prepare"/>
+<node CREATED="1447978472591" ID="ID_281213456" MODIFIED="1447978479035" TEXT="GCC-4.9">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1447978381986" ID="ID_378439500" MODIFIED="1447991011184" TEXT="GCC-5">
+<icon BUILTIN="flag"/>
+<node CREATED="1447983098958" ID="ID_291439119" MODIFIED="1447983115489">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      deprecated: <b>auto_ptr</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1447990971420" ID="ID_1499023407" MODIFIED="1447991003636">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Tests mit TypeIDs <font color="#ed0b08">scheitern</font>
+    </p>
+  </body>
 </html>
 </richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1447983008594" ID="ID_8361302" MODIFIED="1447990965857" TEXT="L&#xf6;sung f&#xfc;r std::hash finden">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+<node CREATED="1447978388930" ID="ID_78828927" MODIFIED="1447978395115" TEXT="Clang 3.5">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446480582168" HGAP="46" ID="ID_554745278" MODIFIED="1446481388737" TEXT="Release" VSHIFT="-5">
-<node CREATED="1446480601381" FOLDED="true" ID="ID_1870415321" MODIFIED="1447567011047" TEXT="release prep: clean-up obsolete information">
+</node>
+<node CREATED="1446480582168" HGAP="46" ID="ID_554745278" MODIFIED="1447990926408" TEXT="Release" VSHIFT="-5">
+<icon BUILTIN="prepare"/>
+<node CREATED="1446480601381" FOLDED="true" ID="ID_1870415321" MODIFIED="1447992311210" TEXT="release prep: clean-up obsolete information">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2718,7 +2758,8 @@
       Doku durchk&#228;mmen nach M&#252;ll
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
 <icon BUILTIN="button_ok"/>
@@ -2764,7 +2805,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446480725508" FOLDED="true" ID="ID_789754974" MODIFIED="1447567015294" TEXT="release prep: bump version number">
+<node CREATED="1446480725508" FOLDED="true" ID="ID_789754974" MODIFIED="1447992311218" TEXT="release prep: bump version number">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2774,7 +2815,8 @@
       knappe Kennzeichnung des Releases in den Kommentar
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-2"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1446480798862" TEXT="admin/scons/Setup.py"/>
@@ -2782,7 +2824,7 @@
 <node CREATED="1446480787392" ID="ID_619067196" MODIFIED="1446480810516" TEXT="doc/devel/Doxyfile"/>
 <node CREATED="1446480787392" ID="ID_193733835" MODIFIED="1446480819004" TEXT="doc/devel/Doxyfile.browse"/>
 </node>
-<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1447567054832" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
+<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1447992311224" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2801,7 +2843,8 @@
       denn wir wollen keine DEB-Info im Master haben!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-3"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1447567060657" TEXT="Release-Zweig">
@@ -2812,7 +2855,7 @@
 </node>
 <node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1446481329223" TEXT="Plattform-Abh&#xe4;ngigkeiten checken"/>
 </node>
-<node CREATED="1446480963028" FOLDED="true" ID="ID_83763074" MODIFIED="1447567047753" TEXT="Release-commit: Pre-release 0.pre.03">
+<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1447992715630" TEXT="Release-commit: Pre-release 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2825,7 +2868,8 @@
       die unmittelbaren Release-Dokumente durchgehen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-4"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1446481126435" TEXT="README"/>
@@ -2839,7 +2883,7 @@
 </node>
 <node CREATED="1446481129206" ID="ID_799927356" MODIFIED="1446481131809" TEXT="LICENSE"/>
 </node>
-<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1446499604358" TEXT="Release-Zweig: upgrade current release to 0.pre.03">
+<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1447992311234" TEXT="Release-Zweig: upgrade current release to 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2852,7 +2896,8 @@
       Sollte konfliktfrei sein
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-5"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -2875,7 +2920,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1446481736903" TEXT="ausliefern">
+<node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1447992311240" TEXT="ausliefern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2885,12 +2930,16 @@
       ...das hei&#223;t bauen und hochladen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-7"/>
-<node CREATED="1447566826434" HGAP="37" ID="ID_808634666" MODIFIED="1447566853950" TEXT="Bugfix-Release 0.pre.03-2" VSHIFT="1">
+<node CREATED="1447566826434" HGAP="0" ID="ID_808634666" MODIFIED="1447990847522" TEXT="Bugfix-Release 0.pre.03-2" VSHIFT="-1">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1446482059174" ID="ID_1294670881" MODIFIED="1447566857622">
+<node CREATED="1447566826434" HGAP="4" ID="ID_1582615496" MODIFIED="1447990857409" TEXT="Bugfix-Release 0.pre.03-3" VSHIFT="-14">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1446482059174" FOLDED="true" ID="ID_1294670881" MODIFIED="1447990837401">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -2900,8 +2949,7 @@
       <b>Referenz</b>: Debian/Jessie (stable) : i386 and x86_64
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1447566711958" ID="ID_450859594" MODIFIED="1447567131949" TEXT="alte version war broken"/>
 <node CREATED="1447566721616" ID="ID_520179523" MODIFIED="1447566730787" TEXT="32 / 64bit Probleme"/>
@@ -2915,26 +2963,152 @@
       Probleme mit der Compile-Reihenfolge&#160; <font color="#d41807">#973</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1447566806556" ID="ID_708047854" MODIFIED="1447566823633" TEXT="neues Bugfix-Release">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446482059174" ID="ID_1693967692" MODIFIED="1447567253329" TEXT="Ubuntu/Trusty (14.LTS) : i386 and x86_64 (currently broken)">
+<node CREATED="1446482059174" FOLDED="true" ID="ID_1693967692" MODIFIED="1447990832186" TEXT="Ubuntu/Trusty (14.LTS) : i386 and x86_64">
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="flag-yellow"/>
 <node CREATED="1446509774664" ID="ID_458867123" MODIFIED="1446509787931" TEXT="Ausnahmen f&#xfc;r libgdl-3-dev 3.8"/>
 <node CREATED="1447567139480" ID="ID_183954019" MODIFIED="1447567151655" TEXT="-&gt; diese Ausnahmen in Paketdefinition &#xfc;bernommen">
 <icon BUILTIN="button_ok"/>
 </node>
+<node CREATED="1447971961407" ID="ID_1876285814" MODIFIED="1447971977858" TEXT="habe dann aber doch gdl 3.16 gebackported">
+<icon BUILTIN="idea"/>
 </node>
-<node CREATED="1446482059174" ID="ID_1906801117" MODIFIED="1446482059174" TEXT="Ubuntu/Vivid (15.04) : i386 (planned)"/>
-<node CREATED="1446482059175" ID="ID_1107419581" MODIFIED="1446482059175" TEXT="Ubuntu/Wily (15.10) : x86_64 (planned)"/>
-<node CREATED="1446482059175" ID="ID_904094860" MODIFIED="1446686512777" TEXT="Mint/Rafaela (17.2.LTS) : x86_64 (planned)">
+<node CREATED="1447971982360" ID="ID_1118580069" MODIFIED="1447972076993" TEXT="Beobachtung: Paket l&#xe4;&#xdf;t sich nicht installieren">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1447971995582" ID="ID_1170070076" MODIFIED="1447972670793" TEXT="Doku-Registrierung scheitert">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1447972005940" ID="ID_876035298" MODIFIED="1447972073780" TEXT="doc-base Definition">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...f&#252;hrt sowohl eine README, alsauch ein Verzeichnis /usr/share/doc/lumiera/html auf, das (noch) nicht existiert
+    </p>
+    <p>
+      unter Debian/Jessie wird das ignoriert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1447972547396" ID="ID_1950291699" MODIFIED="1447972685007">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      stelle fest: Fehler auf Trusty,
+    </p>
+    <p>
+      nur Warnung auf Mint
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, da&#223; ich versuchen kann, das Problem erst mal &quot;unter den Teppich zu kehren&quot;
+    </p>
+    <p>
+      Die Wahrscheinlichkeit, da&#223; <i>irgend jemand</i>&#160;Lumiera unter Ubuntu/Trusty <i>installieren </i>m&#246;chte, erscheint mir akademisch
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="bell"/>
+</node>
+</node>
+</node>
+<node CREATED="1446482059174" ID="ID_1906801117" MODIFIED="1447978241196" TEXT="Ubuntu/Vivid (15.04) : i386">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1446482274886" TEXT="Web/Doku aktualisieren">
+<node CREATED="1446482059175" FOLDED="true" ID="ID_1107419581" MODIFIED="1447990818315" TEXT="Ubuntu/Wily (15.10) : x86_64">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1447978249148" ID="ID_218315533" MODIFIED="1447978290271">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bauen mit gcc-5 <b><font color="#d90d06">scheitert</font></b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1447978292199" ID="ID_1160042901" MODIFIED="1447978513225" TEXT="ein Problem mit std::hash - Spezialisierung">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1447983052852" ID="ID_1130315053" MODIFIED="1447983076603" TEXT="liegt nur an fehlendem #include &lt;utility&gt;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in lib/hash-standard.hpp
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1447990722939" ID="ID_1163368707" MODIFIED="1447990755430">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mit gcc-5 gebaute Tests <b><font color="#d40262">scheitern</font></b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1447990760017" ID="ID_413820913" MODIFIED="1447990801156">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bauen mit gcc-4.9 <i>nicht m&#246;glich</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es gibt Probleme beim Linken mit den Boost-Libraries, die auf Ubuntu/wily mit gcc-5 gebaut sind.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1447990802803" ID="ID_1667893677" MODIFIED="1447990809916" TEXT="ABBRUCH"/>
+</node>
+<node CREATED="1446482059175" ID="ID_904094860" MODIFIED="1447978537433" TEXT="Mint/Rafaela (17.2.LTS) : x86_64">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1447990825514" TEXT="Web/Doku aktualisieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2945,26 +3119,16 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1446589479832" ID="ID_1851762530" MODIFIED="1446589486970" TEXT="alte Repos wegwerfen">
 <node CREATED="1446589487798" ID="ID_1080472422" MODIFIED="1446589494881" TEXT="Lumi-Depot: Wheezy"/>
-<node CREATED="1446589495445" ID="ID_1083044545" MODIFIED="1446589501064" TEXT="VBox Wheezy">
-<node CREATED="1446482059173" ID="ID_101470007" MODIFIED="1446482153165">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <font color="#d1013e">totmachen</font>: Debian/Wheezy (stable) : i386 and x86_64 deprecated: to be discontinued
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1446589495445" ID="ID_1083044545" MODIFIED="1447990889351" TEXT="VBox Wheezy">
+<icon BUILTIN="button_ok"/>
 </node>
+<node CREATED="1446589502132" ID="ID_271504207" MODIFIED="1447990893689" TEXT="VBox Mint Quiana">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446589502132" ID="ID_271504207" MODIFIED="1446589507863" TEXT="VBox Mint Quiana"/>
 </node>
 <node CREATED="1446481892624" ID="ID_1020531472" MODIFIED="1446482073185" TEXT="Ticket schlie&#xdf;en">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -3009,6 +3173,36 @@
 </node>
 <node CREATED="1446356359992" HGAP="9" ID="ID_1850896628" MODIFIED="1446480440058" POSITION="left" TEXT="QA" VSHIFT="69">
 <icon BUILTIN="go"/>
+<node CREATED="1447985496639" ID="ID_1191711297" MODIFIED="1447985500927" TEXT="untersuchen">
+<node CREATED="1447985501798" FOLDED="true" ID="ID_732609615" MODIFIED="1447985657788" TEXT="std::hash-Spezialisierung">
+<node CREATED="1447985531602" ID="ID_515281257" LINK="http://issues.lumiera.org/ticket/722" MODIFIED="1447985548240">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ticket <font color="#d40230">#722</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1447985552663" ID="ID_1932953869" MODIFIED="1447985590246" TEXT="Hack ist inzwischen obsolet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      seit gcc-4.8 ist kein static_assert mehr in der STDlib
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1447985591922" ID="ID_800130211" MODIFIED="1447985636328" TEXT="Frage: wie kann ich ein SFINAE-Br&#xfc;cke bauen"/>
+<node CREATED="1447985637132" ID="ID_1680970111" MODIFIED="1447985646206" TEXT="Problem: wir haben nur einen Typparameter"/>
+</node>
+</node>
 <node CREATED="1447567187010" ID="ID_1008538054" MODIFIED="1447567220394" TEXT="sp&#xe4;ter...">
 <icon BUILTIN="bell"/>
 <node CREATED="1447567193361" FOLDED="true" ID="ID_661445245" MODIFIED="1447567225282" TEXT="preliminary optimization">
