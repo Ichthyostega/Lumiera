@@ -23,16 +23,16 @@
 
 /** @file duck-detector.hpp
  ** Metaprogramming helpers to check for specific properties of a type in question.
- ** Building upon the "SFINE" principle, it is possible to create \em metafunction templates,
- ** which answer some questions about a given type at compile time. A lot of generic flavours of
- ** this kind can be found in the boost-type-trait library (part of std::tr1). At times though,
- ** you want to ask more specific questions, like e.g. "does this type provide an operation \c quack() "?
+ ** Building upon the "SFINAE" principle, it is possible to create \em metafunction templates,
+ ** which answer some questions about a given type at compile time. A lot of generic predicates of
+ ** this kind can be found in the \c <type_traits> library (standard since C++11). At times though,
+ ** you want to ask more specific questions, like e.g. "does this type provide an operation quack() "?
  ** Because, if we can get a \c bool answer to such a question <i>at compile time,</i> we can use
  ** \c boost::enable_if to pick a special implementation based on the test result. Together, these
  ** techniques allow to adopt a duck-typed programming style, where an arbitrary object is allowed
  ** to enter a given API function, provided this object supports some specific operations.
  ** 
- ** While C++ certainly isn't a dynamic language and doesn't provide any kind of run time introspection,
+ ** While C++ certainly isn't a dynamic language and does not provide any kind of run time introspection,
  ** doing such check-and branch at compile time allows even to combine such a flexible approach with
  ** static type safety, which is compelling. (The downside is the danger of code bloat, as is with all
  ** template based techniques).
@@ -42,16 +42,16 @@
  ** Most of these trait templates rely on a creative use of function overloading. The C++ standard
  ** requires the compiler <i>silently to drop</i> any candidate of overload resolution which has
  ** gotten an invalid function signature as a result of instantiating a template (type). This allows
- ** us to set up kind of a "trap" for the compiler: we present two overloaded candidate functions
+ ** us to set up kind of a "honey pot" for the compiler: we present two overloaded candidate functions
  ** with a different return type; by investigating the resulting return type we're able to figure
  ** out the overload actually picked by the compiler.
  ** 
  ** This header provides some pre-configured tests, available as macros. Each of them contains
  ** a template based on the described setup, containing a \em probe type expression at some point.
- ** The key is to build this probe expression in a way that it's valid only if the type in question
- ** has a specific property
+ ** The key is to build this probe expression in a way that it is valid if and only if the
+ ** type in question exhibits a specific property.
  ** 
- ** - if the type should contain a nested type of typedef with a specific name, we simply use
+ ** - if the type should contain a nested type or typedef with a specific name, we simply use
  **   this nested type in the signature of the overloaded function
  ** - if the type should contain a \em member with a specific name, we initialise a member pointer
  **   within a probe template with this member (if there isn't such a member, the probe template
@@ -75,8 +75,8 @@
  ** - function signatures need to match precisely, including const modifiers
  ** - the generated metafunction (template) uses a type parameter 'TY', which could
  **   shadow or conflict with an type parameter in the enclosing scope
- ** - the member and function checks rely on member pointers, which generally rely on
- **   the explicit static type. These checks don't see any inherited members / functions.
+ ** - the member and function checks rely on member pointers, which generally refer to
+ **   the explicit static type. These checks won't see any inherited members / functions.
  ** - obviously, all those checks are never able to detect anything depending on runtime
  **   types or RTTI
  ** 

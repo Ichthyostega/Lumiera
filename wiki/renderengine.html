@@ -2403,11 +2403,11 @@ Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to u
 
 Probably the most important aspect regarding the GUI integration is how to get [[access to and operate on the Session|SessionInterface]]. More specifically, this includes [[referring to individual objects|MObjectRef]]. On top of these generic access mechanisms, we create a [[proxy GUI model|GuiModel]] for binding. The interface of this GUI model is tailored for display and translation into UI entities.</pre>
 </div>
-<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201501061108" tags="GuiIntegration design draft" changecount="9">
+<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201511202206" tags="GuiIntegration design draft" changecount="11">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
-Within the Lumiera GTK GUI, we use a proxying model as a mediating entity. It is based upon the ''generic aspect'' of the SessionInterface, but packaged and conditioned in a way to allow a direct mapping of GUI entities on top. The widgets in the GUI can be conceived as decorating this model. Callbacks can be wired back, allowing to transform UI events into a stream of commands for the Proc-Layer sitting below.
+Within the Lumiera GTK UI, we use a proxying model as a mediating entity. It is based upon the ''generic aspect'' of the SessionInterface, but packaged and conditioned in a way to allow a direct mapping of GUI entities on top. The widgets in the UI can be conceived as decorating this model. Callbacks can be wired back, so to transform user interface events into a stream of commands for the Proc-Layer sitting below.
 
 The GUI model is largely comprised of immutable ID elements, which can be treated as values. A mutated model configuration in Proc-Layer is pushed upwards as a new structure and translated into a ''diff'' against the previous structure -- ready to be consumed by the GUI widgets; this diff can be broken down into parts and consumed recursively -- leaving it to the leaf widgets to adapt themselves to reflect the new situation.
 &amp;rarr; [[Building blocks of the GUI model|GuiModelElements]]
@@ -2419,7 +2419,7 @@ We acknowledge that the gui model is typically used from within the GUI event di
 The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. This callback will be scheduled by the  widgets to perform in the GUI event  thread.
 </pre>
 </div>
-<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201505081459" tags="GuiIntegration design draft img" changecount="40">
+<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201511202314" tags="GuiIntegration design draft img" changecount="44">
 <pre>''Building Blocks for the User Interface Model and Control structure''
 The fundamental pattern for building graphical user interfaces is to segregate into the roles of __M__odel, __V__iew and __C__controler ([[MVC|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]). This approach is so succesful, that it turned into a de-facto standard in commen UI toolkit sets. But larger, more elaborate and specialised applications introduce several cross cutting concerns, which create a tension within this MVC solution pattern.
 [&lt;img[UI-Bus and GUI model elements|uml/fig158213.png]]
@@ -2438,7 +2438,7 @@ While GTK -- especially in the object oriented incantation given by Gtkmm -- hoo
 ;local state
 :recommendation is to have widget local state represented //within the UI toolkit (GTK).// On loosing bus connection, any element should disable itself or maybe even shut down.
 ;updates
-:tangible UI elements are //passive.// Any update and mutation, on notification from the bus, is [[pulled from the model|GuiModelUpdate]]. The individual element is thus required to update itself (and its children recursively) into compliance with the provided state.
+:tangible UI elements are //passive.// User interaction just results in messages sent to the bus. Any update and mutation, on notification from the bus, is [[pulled from the model|GuiModelUpdate]]. The individual element is thus required to update itself (and its children recursively) into compliance with the provided state.
 
 
 
@@ -2448,7 +2448,7 @@ The workspace starts out with a single element, corresponding to the »model roo
 Speaking of implementation, this state and update mechanics relies on two crucial provisions: Lumiera's framework for [[tree diff representation|TreeDiffModel]] and the ExternalTreeDescription, which is an abstracted, ~DOM-like rendering of the relevant parts of the session; this model tree is comprised of [[generic node elements|GenNode]] acting as proxy for [[calls into|SessionInterface]] the [[session model|HighLevelModel]] proper.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201506040022" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="31">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201511210142" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="38">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2484,7 +2484,7 @@ A relevant question to be settled is as to where the core of each change is cons
 * alternatively, we might incorporate a complete snapshot of all information relevant for the GUI into the GuiModel. Update messages from Proc must be complete and self contained in this case, since our goal is to avoid callbacks. Following this scheme, the first stage of any update would be a push from Proc to the GuiModel, followed by a callback pull from within the individual widgets receiving the notification later. This is the approach we choose for the Lumiera GUI.
 
 !!!information to represent and to derive
-The purpose of the GuiModel is to represent an anchor point for the structures //actually relevant for the UI.// To put that into context, the model in the session is not bound to represent matters exactly in the way to be rendered within the GUI. All we can expect is for the //build process// -- upon completion -- to generate a view of the actually altered parts, detailing the information relevant for presentation. Thus we do retain an ExternalTreeDescription of all the information received this way within the GuiModel. Whenever a completed build process sends an updated state, we use the diff framework to determine the actually relevant differences -- both for triggering the corresponding GUI widgets, and for forwarding this focussed diff information to these widgets when they call back from the UI event thread to pull the actual changes.
+The purpose of the GuiModel is to represent an anchor point for the structures //actually relevant for the UI.// To put that into context, the model in the session is not bound to represent matters exactly the way they are rendered within the GUI. All we can expect is for the //build process// -- upon completion -- to generate a view of the actually altered parts, detailing the information relevant for presentation. Thus we do retain an ExternalTreeDescription, holding all the information received this way within the GuiModel. Whenever a completed build process sends an updated state, we use the diff framework to determine the actually relevant differences -- both for triggering the corresponding UI widgets, and for forwarding focussed diff information to these widgets when they call back later from the UI event thread to pull actual changes.
 
 !!!switch of typed sub-context
 When dealing with structural (tree) diffing, there is a specific twist regarding child nodes of mixed type: In the general case, we can not assume that all children of a given node are of the same kind. The classical example is (X)HTML, where a node has //attributes,// various //nested tags// and //nested text content.// The //generic node// thus must be modelled as having several collections of children -- both ordered and un-ordered collections are possible -- and the content of each such sub-collection is itself polymorphic. This constitutes a challenge for the representation of data within the tree diff format. These difficulties can be overcome as follows
@@ -2494,7 +2494,7 @@ When dealing with structural (tree) diffing, there is a specific twist regarding
 #we introduce a //bracing construct// into the diff language, to enter a subnode within the diff representation
 #the diff is produced and consumed //demand-driven (by pull)//
 #whenever a node sees this bracing construct, in invokes the respective child //recursively//
-This approach ensures each nested diff is consumed within a properly typed context, without any need of switching types from the outside: the actual consumer of each part of the whole diff description just happens to know the actual meaning of those elements he processes itself, and passes control to others with adequate knowledge for the rest. Changes are broken down and transformed into //atomic changes.// For an internal data exchange, this is sufficient: in the end we're dealing with references to binary data anyway. But when it comes to an external, self-contained representation of diffs, we additionally need a way to attach raw chunks of data corresponding to the description of those atomic changes.
+This treatment ensures each nested diff is consumed within a properly typed context, and without any need of switching types from the outside: the actual consumer of each part of the whole diff description just happens to know the actual meaning of those elements he processes itself, and passes control to others with adequate knowledge for the rest. Changes are broken down and transformed into //atomic changes.// For an internal data exchange, this is sufficient: in the end we're dealing with references to binary data anyway. But when it comes to an external, self-contained representation of diffs, we additionally need a way to attach raw chunks of data corresponding to the description of those atomic changes.
 &amp;rarr; this is the purpose of the {{{DataCap}}} within our [[generic node element|GenNode]]
 </pre>
 </div>

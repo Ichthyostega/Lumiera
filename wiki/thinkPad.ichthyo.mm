@@ -4,14 +4,45 @@
 <font NAME="SansSerif" SIZE="18"/>
 <node CREATED="1434128046296" ID="ID_1900827283" MODIFIED="1434128053553" POSITION="right" TEXT="GUI">
 <node CREATED="1434128054470" ID="ID_1166611516" MODIFIED="1434128059666" TEXT="Workflow"/>
+<node CREATED="1448070434915" HGAP="64" ID="ID_257833497" MODIFIED="1448070642269" VSHIFT="7">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      innere
+    </p>
+    <p>
+      Struktur
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-19;-25;" ID="Arrow_ID_539627804" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
+<node CREATED="1448070545132" HGAP="31" ID="ID_1410368513" MODIFIED="1448070598035" TEXT="Element" VSHIFT="-7">
+<node CREATED="1448070580927" ID="ID_467382299" MODIFIED="1448070583371" TEXT="Auspr&#xe4;gungen">
+<node CREATED="1448070554963" ID="ID_579919554" MODIFIED="1448070559134" TEXT="Widget"/>
+<node CREATED="1448070559466" ID="ID_182430638" MODIFIED="1448070560909" TEXT="Controller"/>
+</node>
+<node CREATED="1448070583679" ID="ID_1248152908" MODIFIED="1448070586147" TEXT="Protokoll"/>
+</node>
+<node CREATED="1448070547667" ID="ID_669457401" MODIFIED="1448070553662" TEXT="Bus-Terminal">
+<node CREATED="1448070601165" ID="ID_1711137699" MODIFIED="1448070603296" TEXT="Methoden"/>
+<node CREATED="1448070605948" ID="ID_1779744719" MODIFIED="1448070608272" TEXT="Verhalten"/>
+<node CREATED="1448070618434" ID="ID_1925738380" MODIFIED="1448070621878" TEXT="Zuordnung"/>
+</node>
+</node>
 <node CREATED="1434128059966" ID="ID_823283341" MODIFIED="1434128067529" TEXT="Connect">
-<node CREATED="1434128071126" ID="ID_1618124128" MODIFIED="1434128074137" TEXT="UI-Bus">
+<node CREATED="1434128071126" ID="ID_1618124128" MODIFIED="1448070642269" TEXT="UI-Bus">
+<linktarget COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-19;-25;" ID="Arrow_ID_539627804" SOURCE="ID_257833497" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
 <node CREATED="1434128297445" ID="ID_1971555917" MODIFIED="1434128300889" TEXT="Nachrichtenformat"/>
 <node CREATED="1434128301525" ID="ID_187622243" MODIFIED="1434128303993" TEXT="Parallelit&#xe4;t"/>
 <node CREATED="1434128332277" ID="ID_33025591" MODIFIED="1434128337777" TEXT="Deregistrierung"/>
 <node CREATED="1434128310005" ID="ID_644247390" MODIFIED="1434128318561" TEXT="Knoten-ID"/>
 </node>
-<node CREATED="1434128074725" ID="ID_933994138" MODIFIED="1443741968332" TEXT="Diff-System">
+<node CREATED="1448063874479" ID="ID_739054690" MODIFIED="1448063878154" TEXT="UI-Modell"/>
+<node CREATED="1434128074725" FOLDED="true" ID="ID_933994138" MODIFIED="1448063763273" TEXT="Diff-System">
 <icon BUILTIN="pencil"/>
 <node CREATED="1434128278990" ID="ID_106354755" MODIFIED="1434128283641" TEXT="Diff-Darstellung"/>
 <node CREATED="1434128267381" ID="ID_823706141" MODIFIED="1434128551925" TEXT="List-diff">
@@ -2140,6 +2171,13 @@
 </node>
 </node>
 </node>
+<node CREATED="1448063880238" ID="ID_159570161" MODIFIED="1448063892056" TEXT="Zyklus">
+<node CREATED="1448063893293" ID="ID_1135705575" MODIFIED="1448063895640" TEXT="initial"/>
+<node CREATED="1448063896300" ID="ID_1403759288" MODIFIED="1448063901895" TEXT="Zuordnung"/>
+<node CREATED="1448063902387" ID="ID_1822852634" MODIFIED="1448063907367" TEXT="Aktion"/>
+<node CREATED="1448063908243" ID="ID_474614648" MODIFIED="1448063912622" TEXT="Update"/>
+<node CREATED="1448063913618" ID="ID_1967302094" MODIFIED="1448063944777" TEXT="Ende"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#c9d1da" COLOR="#2d2198" CREATED="1439664045448" HGAP="240" ID="ID_21531707" MODIFIED="1439664212589" POSITION="left" TEXT="Info" VSHIFT="-500">
@@ -2718,8 +2756,7 @@
       Tests mit TypeIDs <font color="#ed0b08">scheitern</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="clanbomber"/>
 </node>
 <node CREATED="1447983008594" ID="ID_8361302" MODIFIED="1447990965857" TEXT="L&#xf6;sung f&#xfc;r std::hash finden">
@@ -2742,8 +2779,7 @@
       Doku durchk&#228;mmen nach M&#252;ll
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
 <icon BUILTIN="button_ok"/>
@@ -2799,8 +2835,7 @@
       knappe Kennzeichnung des Releases in den Kommentar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-2"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1446480798862" TEXT="admin/scons/Setup.py"/>
@@ -2827,8 +2862,7 @@
       denn wir wollen keine DEB-Info im Master haben!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-3"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1447567060657" TEXT="Release-Zweig">
@@ -2854,8 +2888,7 @@
       die unmittelbaren Release-Dokumente durchgehen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-4"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1446481126435" TEXT="README"/>
@@ -2882,8 +2915,7 @@
       Sollte konfliktfrei sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-5"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -2916,8 +2948,7 @@
       ...das hei&#223;t bauen und hochladen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-7"/>
 <node CREATED="1447566826434" HGAP="0" ID="ID_808634666" MODIFIED="1447990847522" TEXT="Bugfix-Release 0.pre.03-2" VSHIFT="-1">
 <icon BUILTIN="idea"/>
@@ -3060,8 +3091,7 @@
       mit gcc-5 gebaute Tests <b><font color="#d40262">scheitern</font></b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1447990760017" ID="ID_413820913" MODIFIED="1447990801156">
@@ -3074,8 +3104,7 @@
       bauen mit gcc-4.9 <i>nicht m&#246;glich</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -3085,8 +3114,7 @@
       es gibt Probleme beim Linken mit den Boost-Libraries, die auf Ubuntu/wily mit gcc-5 gebaut sind.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1447990802803" ID="ID_1667893677" MODIFIED="1447990809916" TEXT="ABBRUCH"/>
