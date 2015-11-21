@@ -2419,7 +2419,7 @@ We acknowledge that the gui model is typically used from within the GUI event di
 The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. This callback will be scheduled by the  widgets to perform in the GUI event  thread.
 </pre>
 </div>
-<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201511202314" tags="GuiIntegration design draft img" changecount="44">
+<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201511210301" tags="GuiIntegration design draft img" changecount="46">
 <pre>''Building Blocks for the User Interface Model and Control structure''
 The fundamental pattern for building graphical user interfaces is to segregate into the roles of __M__odel, __V__iew and __C__controler ([[MVC|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]). This approach is so succesful, that it turned into a de-facto standard in commen UI toolkit sets. But larger, more elaborate and specialised applications introduce several cross cutting concerns, which create a tension within this MVC solution pattern.
 [&lt;img[UI-Bus and GUI model elements|uml/fig158213.png]]
@@ -2443,12 +2443,12 @@ While GTK -- especially in the object oriented incantation given by Gtkmm -- hoo
 
 
 !building and updating the tree
-The workspace starts out with a single element, corresponding to the »model root« in the ~Proc-Layer HighLevelModel. Initially, or on notification, an element requests a //status update// -- which conceptually implies there is some kind of conversation state. The backbone, as represented by the UI-Bus, might be aware of the knowledge state of its clients and just send an incremental update. Yet the authority or the backbone is absolute. It might, at its own discretion, send a full state update, to which the client elements are expected to comply. The status and update information is exposed in the form of a diff iterator. The client element, which can be a widget or a controller within the workspace, is expected to pull and extract this diff information, adjusting itself and destroying or creating children as applicable. This implies a recursive tree visitation, passing down the diff iterator alongside.
+The workspace starts out with a single element, corresponding to the »model root« in the ~Proc-Layer HighLevelModel. Initially, or on notification, an [[interface element|UI-Element]] requests a //status update// -- which conceptually implies there is some kind of conversation state. The backbone, as represented by the UI-Bus, might be aware of the knowledge state of its clients and just send an incremental update. Yet the authority or the backbone is absolute. It might, at its own discretion, send a full state update, to which the client elements are expected to comply. The status and update information is exposed in the form of a diff iterator. The client element, which can be a widget or a controller within the workspace, is expected to pull and extract this diff information, adjusting itself and destroying or creating children as applicable. This implies a recursive tree visitation, passing down the diff iterator alongside.
 
 Speaking of implementation, this state and update mechanics relies on two crucial provisions: Lumiera's framework for [[tree diff representation|TreeDiffModel]] and the ExternalTreeDescription, which is an abstracted, ~DOM-like rendering of the relevant parts of the session; this model tree is comprised of [[generic node elements|GenNode]] acting as proxy for [[calls into|SessionInterface]] the [[session model|HighLevelModel]] proper.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201511210142" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="38">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201511210302" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="39">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2477,6 +2477,7 @@ Hereby we introduce a new in-layer abstraction: The UI-Bus.
 !initiating model updates
 Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispatcher. A model update can be requested by the GUI -- but the actual update will arrive asynchronously. The update information originate from within the [[build process|BuildFixture]]. {{red{TODO 10/2014 clarify the specifics}}}. When updates arrive, a ''diff is generated'' against the current GuiModel contents. The GuiModel is updated to reflect the differences and the Receivers or Listeners are signalled. It is their responsibility in turn to schedule an update operation into the GUI event thread. When performing this update, the Listener thus actively retrieves and pulls the diffed information from within the GUI event thread. The GuiModel's object monitor is sufficient to coordinate this handover.
 &amp;rarr; representation of changes as a [[tree of diffs|TreeDiffModel]]
+&amp;rarr; properties and behaviour of [[generic interface elements|UI-Element]]
 
 !!!timing and layering intricacies
 A relevant question to be settled is as to where the core of each change is constituted. This is relevant due to the intricacies of multithreading: Since the change originates in the build process, but the effect of the change is //pulled// later from within the GUI event thread, it might well happen that at this point, meanwhile further changes entered the model. As such, this is not problematic, as long as taking the diff remains atomic. This leads to quite different solution approaches:
@@ -8312,6 +8313,33 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the //Controler// in the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]] in common UI architecture.
 
 The ~MVC-Pattern as such is fine, and probably the best we know for construction of user interfaces. But it doesn't scale well towards the integration into a larger and more structured system. There is a tension between the Controller in the UI and other parts of an application, which as well need to be //in control.// And, even more important, there is a tension between the demands of UI elements for support by a model, and the demands to be placed on a core domain model of a large scale application. This tension is resolved by enacting these roles while transforming the requests and demands into //Messages.//</pre>
+</div>
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201511210357" tags="GuiPattern design draft decision" changecount="8">
+<pre>While our UI widgets are implemented the standard way as proposed by GTKmm, some key elements -- which are especially relevant for the anatomy and mechanics of the interface -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out what this protocol is all about}}}. #975
+As a starting point, we know
+* there is a backbone structure known as the UI-Bus
+* the latter is somehow related to the [[UI-model|GuiModel]] (one impersonates or represents the other)
+* each {{{gui::model::Tangible}}} has a ''bus-terminal'', which is linked to the former's identity
+* it is possible to wire ~SigC signals so to send messages via this terminal into the UI-Bus
+* these messages translate into command invocations towards the Proc-Layer
+* Proc-Layer responds asynchroneously with a diff message
+* the GuiModel translates this into notifications of the top level changed elements
+* these in turn request a diff and then update themselves into compliance.
+
+!Behaviours
+For some reason, any element in the UI can appear and go away. This corresponds to attachment and deregistration at the UI-Bus
+
+In regular, operative state, an interface element may initiate //actions.// Even more: for //any conceivable, user visible, tangible action,// there is an interface element, which acts as point-of-service. //This is a decision.// There might be higher-level, cooperative [[gestures|Gesture]] within the interface, and actions might be formed like sentences, with the help of a FocusConcept -- however, in the end, there is a ''subject'' and a ''predicate''. And the interface element takes on the role of the underlying, the subject, the ''tangible''.
+
+Some actions are very common and can be represented by a shorthand. An example would be to tweak some property, which means to mutate the attribute of a model element known beforehand. Such tweaks are often caused by direct interaction, and thus have the tendency to appear in flushes, which might be batched to take some load from the lower layers.
+
+And then there are manipulations that alter the presentation state: Scrolling, canvas dragging, expanding and collapsing, moving by focus or manipulation of a similar presentation control.
+These manipulations in itself do not constitute an action. But there typically is some widget or controller, which is responsible for the touched presentation state. If this entity judges the state change to be relevant and persistent, it may send a ''state mark'' into the UI-Bus -- expecting this marked state to be remembered. In turn this means the bus terminal might feed a state mark back into the tangible element, expecting this state to be restored.
+
+A special case of state marking is the presentation of transient feedback. Such feedback is pushed from &quot;somewhere&quot; towards given elements, which react through an implementation dependent visual state change (flushing, colour change, marker icon). If such state marking is to be persistent, the interface element has in turn to send a specific state mark. An example would be a permanent error flag with a explanatory text showed in mouse over. Which in turn means there can also be sweeping state reset messages, which are to be broadcasted: A general &quot;reset&quot;, an indication to collapse everything, or to clear pending error flags.
+
+And finally, there are the //essential updates// -- any changes in the model //for real.// These are sent as notifications just to some top level element, expecting this element to request a diff and to recursively mutate contents into shape.
+</pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">
 <pre>For any kind of playback to happen, timeline elements (or similar model objects) need to be attached to a Viewer element through a special kind of [[binding|BindingMO]], called a ''view connection''. In the most general case, this creates an additional OutputMapping (and in the typical standard case, this boils down to a 1:1 association, sending the master bus of each media kind to the standard OutputDesignation for that kind).

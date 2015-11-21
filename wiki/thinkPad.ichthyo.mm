@@ -20,12 +20,132 @@
 </html>
 </richcontent>
 <arrowlink COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-19;-25;" ID="Arrow_ID_539627804" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
-<node CREATED="1448070545132" HGAP="31" ID="ID_1410368513" MODIFIED="1448070598035" TEXT="Element" VSHIFT="-7">
+<node CREATED="1448070545132" HGAP="31" ID="ID_1410368513" MODIFIED="1448078995370" TEXT="Element" VSHIFT="-7">
+<icon BUILTIN="pencil"/>
 <node CREATED="1448070580927" ID="ID_467382299" MODIFIED="1448070583371" TEXT="Auspr&#xe4;gungen">
 <node CREATED="1448070554963" ID="ID_579919554" MODIFIED="1448070559134" TEXT="Widget"/>
 <node CREATED="1448070559466" ID="ID_182430638" MODIFIED="1448070560909" TEXT="Controller"/>
 </node>
-<node CREATED="1448070583679" ID="ID_1248152908" MODIFIED="1448070586147" TEXT="Protokoll"/>
+<node CREATED="1448070583679" ID="ID_1248152908" MODIFIED="1448070586147" TEXT="Protokoll">
+<node CREATED="1448078263344" ID="ID_1136748666" MODIFIED="1448078979113" TEXT="Verhaltensweisen">
+<cloud COLOR="#e0d6ba"/>
+<icon BUILTIN="info"/>
+<node CREATED="1448078268223" ID="ID_1027574047" MODIFIED="1448078308246" TEXT="Lebenszyklus">
+<node CREATED="1448078450375" ID="ID_459686936" MODIFIED="1448078873571" TEXT="zeugen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hei&#223;t: Element registriert sich am UI-Bus
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448078473068" ID="ID_510866826" MODIFIED="1448078879162" TEXT="zerst&#xf6;ren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hei&#223;t: Element deregistriert sich am UI-Bus
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1448078308690" ID="ID_185716114" MODIFIED="1448078316540" TEXT="Aktionen">
+<node CREATED="1448078344541" ID="ID_1781183546" MODIFIED="1448078907863" TEXT="Subjekt einer Aktion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ist <i>immer</i>&#160;ein <b>tangible</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448078516094" ID="ID_201691188" MODIFIED="1448078519937" TEXT="Commands"/>
+<node CREATED="1448078325679" ID="ID_946047770" MODIFIED="1448078510722" TEXT="tweaks"/>
+</node>
+<node CREATED="1448078330703" ID="ID_1955501343" MODIFIED="1448078379545">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      presentation
+    </p>
+    <p>
+      state
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1448078381288" ID="ID_1570425925" MODIFIED="1448078383420" TEXT="state mark">
+<node CREATED="1448078528725" ID="ID_1776152068" MODIFIED="1448078551096">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vom <i>tangible </i>initiiert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448078554385" ID="ID_181795198" MODIFIED="1448078560332" TEXT="wird zur&#xfc;ckgespielt"/>
+<node CREATED="1448078678961" ID="ID_1905336344" MODIFIED="1448078681261" TEXT="Arten">
+<node CREATED="1448078682840" ID="ID_1545251839" MODIFIED="1448078686876" TEXT="zoom"/>
+<node CREATED="1448078687176" ID="ID_357365613" MODIFIED="1448078689411" TEXT="scroll"/>
+<node CREATED="1448078691727" ID="ID_1874307716" MODIFIED="1448078696019" TEXT="expand"/>
+<node CREATED="1448078703294" ID="ID_784991533" MODIFIED="1448078705449" TEXT="Form"/>
+</node>
+</node>
+<node CREATED="1448078385504" ID="ID_584410725" MODIFIED="1448078399890" TEXT="feedback">
+<node CREATED="1448078569263" ID="ID_906985390" MODIFIED="1448078589473" TEXT="in Fokus bringen"/>
+<node CREATED="1448078589997" ID="ID_1779705374" MODIFIED="1448078603503" TEXT="aufblitzen"/>
+<node CREATED="1448078604115" ID="ID_666512041" MODIFIED="1448078621580" TEXT="Warn-Nachricht"/>
+<node CREATED="1448078622048" ID="ID_1858518915" MODIFIED="1448078624939" TEXT="Fehler"/>
+</node>
+<node CREATED="1448078416612" ID="ID_1392022084" MODIFIED="1448078421567" TEXT="state reset">
+<node CREATED="1448078722483" ID="ID_1661890520" MODIFIED="1448078729854" TEXT="auf default!"/>
+<node CREATED="1448078731130" ID="ID_1682515267" MODIFIED="1448078743500" TEXT="collapse / expand"/>
+<node CREATED="1448078748448" ID="ID_1000763850" MODIFIED="1448078778159" TEXT="Nachrichten l&#xf6;schen"/>
+<node CREATED="1448078778916" ID="ID_1657108949" MODIFIED="1448078782327" TEXT="Fehler l&#xf6;schen"/>
+<node CREATED="1448078798369" ID="ID_819750758" MODIFIED="1448078802612" TEXT="komplett-Reset"/>
+</node>
+</node>
+<node CREATED="1448078425594" ID="ID_686619553" MODIFIED="1448078444404" TEXT="Mutation">
+<node CREATED="1448078811895" ID="ID_1266803050" MODIFIED="1448078833749">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Nachricht an <i>irgend ein</i>&#160;Wurzel-Element
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448078835044" ID="ID_358413966" MODIFIED="1448078844783" TEXT="bezieht daraufhin einen Diff"/>
+<node CREATED="1448078845419" ID="ID_189415188" MODIFIED="1448078851438" TEXT="wendet diesen rekursiv an"/>
+<node CREATED="1448078856722" ID="ID_1770248185" MODIFIED="1448078867148" TEXT="Hiweis: kann Kinder zeugen und zerst&#xf6;ren"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1448070547667" ID="ID_669457401" MODIFIED="1448070553662" TEXT="Bus-Terminal">
 <node CREATED="1448070601165" ID="ID_1711137699" MODIFIED="1448070603296" TEXT="Methoden"/>
