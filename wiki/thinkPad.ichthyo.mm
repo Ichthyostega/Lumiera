@@ -2142,6 +2142,211 @@
 </node>
 </node>
 </node>
+<node CREATED="1448314834155" ID="ID_1725514536" MODIFIED="1448314977228" POSITION="right" TEXT="Integrate">
+<node CREATED="1448315011484" ID="ID_867104544" MODIFIED="1448315014471" TEXT="generic">
+<node CREATED="1448315015107" ID="ID_1900900399" MODIFIED="1448315016511" TEXT="JSON">
+<node CREATED="1448315031553" ID="ID_1177387568" MODIFIED="1448321655258" TEXT="parser">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1448315067524" FOLDED="true" ID="ID_430746611" MODIFIED="1448321609599" TEXT="Libs">
+<icon BUILTIN="info"/>
+<node CREATED="1448315070908" ID="ID_1328571674" MODIFIED="1448315073327" TEXT="JSON-C">
+<node CREATED="1448318526124" ID="ID_737325795" MODIFIED="1448318530232" TEXT="einfach"/>
+<node CREATED="1448318531644" ID="ID_745699377" MODIFIED="1448318533543" TEXT="robust"/>
+<node CREATED="1448318534203" ID="ID_1415146809" MODIFIED="1448318535863" TEXT="grottig"/>
+</node>
+<node CREATED="1448316910322" ID="ID_677006595" MODIFIED="1448316913669" TEXT="JsonCpp">
+<node CREATED="1448318540363" ID="ID_269049852" MODIFIED="1448318568235" TEXT="sehr weit verbreitet"/>
+<node CREATED="1448318569151" ID="ID_239373731" MODIFIED="1448318601522">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>schmerzloses </i>C++ API
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448318701621" ID="ID_1339095142" MODIFIED="1448318719135" TEXT="unterst&#xfc;tzt Builder f&#xfc;r Integration in den Parse-Vorgang"/>
+<node CREATED="1448318726098" ID="ID_1386753436" MODIFIED="1448318736621" TEXT="unterst&#xfc;tzt Kommentarte (non-Standard)"/>
+<node CREATED="1448318671009" ID="ID_1620559470" MODIFIED="1448318691459" TEXT="kann als eine gro&#xdf;e CPP-Datei eingebunden werden"/>
+<node CREATED="1448319454226" ID="ID_108762123" MODIFIED="1448319476071">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Performance: guter Schnitt (etw. besser als boost spirit)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448320352804" ID="ID_1738484079" MODIFIED="1448320354088" TEXT="MIT"/>
+</node>
+<node CREATED="1448316923520" ID="ID_1207744350" MODIFIED="1448316938354" TEXT="rapidjson">
+<node CREATED="1448320356547" ID="ID_18433884" MODIFIED="1448320362967" TEXT="MIT / teils BSD"/>
+<node CREATED="1448320418619" ID="ID_972456274" MODIFIED="1448320428198" TEXT="gilt als schnell und effizient"/>
+<node CREATED="1448320428906" ID="ID_279600641" MODIFIED="1448321207817">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hat ein DOM-API <i>und</i>&#160;ein SAX-artiges API
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1448320473828" ID="ID_681519615" MODIFIED="1448320508422" TEXT="header-only, self-contained, keine Abh&#xe4;ngigkeiten!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t: <b>nicht einmal</b>&#160;abh&#228;ngig von der STL
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448320555049" ID="ID_1836540415" MODIFIED="1448321597617" TEXT="erweiterter Unicode-Support, incl. recoding beim Parsen"/>
+<node CREATED="1448321567452" ID="ID_933252727" MODIFIED="1448321582600" TEXT="kann auch in-situ parsen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wie gson
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448320545523" ID="ID_298176210" MODIFIED="1448320554597" TEXT="vollst&#xe4;ndig, incl Ersetzungen"/>
+<node CREATED="1448321598848" ID="ID_1151875949" MODIFIED="1448321606499" TEXT="eigener Block-Allokator, ersetzbar"/>
+</node>
+<node CREATED="1448318965627" ID="ID_453761706" MODIFIED="1448319657430" TEXT="vjson / gason">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vjson war Google Code;
+    </p>
+    <p>
+      nach dem Umzug auf Github hei&#223;t es gason
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1448319925356" ID="ID_1589130421" MODIFIED="1448320242925" TEXT="angeblich ziemlich schnell">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      lt. eigenen Benchmakrs deutlich schneller als rapitjson, welches eigentlich immer als der &quot;schnelle&quot; JSON-Parser gilt.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448319936915" ID="ID_1093677957" MODIFIED="1448319953316" TEXT="C++, aber ehr C-artiges API"/>
+<node CREATED="1448319955328" ID="ID_534293846" MODIFIED="1448319962555" TEXT="type-tag, switch-on-type"/>
+<node CREATED="1448319963711" ID="ID_1858072437" MODIFIED="1448320100768" TEXT="Parser ist destruktiv">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. das Parsen schreibt den Eingabepuffer um, und Strings bleiben einfach liegen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448319973830" ID="ID_1495739376" MODIFIED="1448320003901" TEXT="Werte werden in IEEE double NaN geboxt"/>
+<node CREATED="1448320035173" ID="ID_226864203" MODIFIED="1448320053255" TEXT="eigener Block-Allokator"/>
+<node CREATED="1448320365290" ID="ID_1044522194" MODIFIED="1448320366526" TEXT="MIT"/>
+</node>
+<node CREATED="1448315073819" ID="ID_280907535" MODIFIED="1448315076975" TEXT="boost spirit">
+<node CREATED="1448316823037" ID="ID_726858418" MODIFIED="1448316825976" TEXT="reiner parser"/>
+<node CREATED="1448321185310" ID="ID_180554028" MODIFIED="1448321192489" TEXT="kann direkt in Vector parsen"/>
+<node CREATED="1448316826444" ID="ID_263014084" MODIFIED="1448316840095" TEXT="grammatik via metaprogrmming"/>
+<node CREATED="1448316840474" ID="ID_1878535070" MODIFIED="1448321141123" TEXT="code bloat, vor allem in Debug-builds">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1448321146283" ID="ID_1257942632" MODIFIED="1448321166341" TEXT="Ver&#xf6;ffentlichung undurchsichtig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kein Repo auffindbar
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1448315077731" ID="ID_439331220" MODIFIED="1448315088637" TEXT="boost property-tree">
+<node CREATED="1448316790553" ID="ID_1199102717" MODIFIED="1448316795764" TEXT="einfaches API"/>
+<node CREATED="1448316796240" ID="ID_1402766358" MODIFIED="1448316803299" TEXT="parst in einen boost::property_tree"/>
+<node CREATED="1448316803799" ID="ID_534763461" MODIFIED="1448321138090" TEXT="keine Typisierung">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+</node>
+<node CREATED="1448320959060" ID="ID_937046843" MODIFIED="1448321217315" TEXT="Entscheidung">
+<icon BUILTIN="yes"/>
+<node CREATED="1448320963067" ID="ID_824752283" MODIFIED="1448321223059" TEXT="rapidjson">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1448320987776" ID="ID_545245790" MODIFIED="1448321000435" TEXT="Begr&#xfc;ndung...">
+<node CREATED="1448321001518" ID="ID_671858484" MODIFIED="1448321049432">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich will nicht <i>noch ein</i>&#160;Objekt-System
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448321022444" ID="ID_658035448" MODIFIED="1448321032302" TEXT="das SAX-API ist genau, was ich brauche"/>
+<node CREATED="1448321063078" ID="ID_923664235" MODIFIED="1448321070185" TEXT="au&#xdf;erdem klein und schmerzlos"/>
+<node CREATED="1448321614174" ID="ID_1319618589" MODIFIED="1448321630999" TEXT="sch&#xf6;nes API, und ist schnell"/>
+</node>
+</node>
+</node>
+<node CREATED="1448315063541" ID="ID_430049414" MODIFIED="1448315065344" TEXT="framework">
+<node CREATED="1448321310054" ID="ID_180974747" MODIFIED="1448321312681" TEXT="Forderungen">
+<node CREATED="1448321258189" ID="ID_1374008180" MODIFIED="1448321323703" TEXT="diff::Record als Container"/>
+<node CREATED="1448321329691" ID="ID_982254628" MODIFIED="1448321335478" TEXT="Validierung beim Parsen"/>
+<node CREATED="1448321280178" ID="ID_1241470226" MODIFIED="1448321328887" TEXT="Erweiterbarkeit auf Objekt-Serialisieierung"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1448314890907" ID="ID_411012156" MODIFIED="1448314929930" POSITION="right" TEXT="Session"/>
+<node CREATED="1448314932726" ID="ID_669869188" MODIFIED="1448314941137" POSITION="right" TEXT="Render"/>
 <node BACKGROUND_COLOR="#c9d1da" COLOR="#2d2198" CREATED="1439664045448" HGAP="240" ID="ID_21531707" MODIFIED="1439664212589" POSITION="left" TEXT="Info" VSHIFT="-500">
 <edge COLOR="#b4a9e3"/>
 <font NAME="SansSerif" SIZE="16"/>
