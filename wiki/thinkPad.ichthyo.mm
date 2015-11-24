@@ -17,8 +17,7 @@
       Struktur
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-19;-25;" ID="Arrow_ID_539627804" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
 <node CREATED="1448070545132" HGAP="31" ID="ID_1410368513" MODIFIED="1448078995370" TEXT="Element" VSHIFT="-7">
 <icon BUILTIN="pencil"/>
@@ -41,8 +40,7 @@
       hei&#223;t: Element registriert sich am UI-Bus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078473068" ID="ID_510866826" MODIFIED="1448078879162" TEXT="zerst&#xf6;ren">
 <richcontent TYPE="NOTE"><html>
@@ -54,8 +52,7 @@
       hei&#223;t: Element deregistriert sich am UI-Bus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1448078308690" ID="ID_185716114" MODIFIED="1448078316540" TEXT="Aktionen">
@@ -69,8 +66,7 @@
       ...ist <i>immer</i>&#160;ein <b>tangible</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078516094" ID="ID_201691188" MODIFIED="1448078519937" TEXT="Commands"/>
 <node CREATED="1448078325679" ID="ID_946047770" MODIFIED="1448078510722" TEXT="tweaks"/>
@@ -88,8 +84,7 @@
       state
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1448078381288" ID="ID_1570425925" MODIFIED="1448078383420" TEXT="state mark">
 <node CREATED="1448078528725" ID="ID_1776152068" MODIFIED="1448078551096">
 <richcontent TYPE="NODE"><html>
@@ -101,8 +96,7 @@
       vom <i>tangible </i>initiiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078554385" ID="ID_181795198" MODIFIED="1448078560332" TEXT="wird zur&#xfc;ckgespielt"/>
 <node CREATED="1448078678961" ID="ID_1905336344" MODIFIED="1448078681261" TEXT="Arten">
@@ -137,8 +131,7 @@
       Nachricht an <i>irgend ein</i>&#160;Wurzel-Element
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078835044" ID="ID_358413966" MODIFIED="1448078844783" TEXT="bezieht daraufhin einen Diff"/>
 <node CREATED="1448078845419" ID="ID_189415188" MODIFIED="1448078851438" TEXT="wendet diesen rekursiv an"/>
@@ -148,9 +141,68 @@
 </node>
 </node>
 <node CREATED="1448070547667" ID="ID_669457401" MODIFIED="1448070553662" TEXT="Bus-Terminal">
-<node CREATED="1448070601165" ID="ID_1711137699" MODIFIED="1448070603296" TEXT="Methoden"/>
-<node CREATED="1448070605948" ID="ID_1779744719" MODIFIED="1448070608272" TEXT="Verhalten"/>
-<node CREATED="1448070618434" ID="ID_1925738380" MODIFIED="1448070621878" TEXT="Zuordnung"/>
+<node CREATED="1448070601165" ID="ID_1711137699" MODIFIED="1448070603296" TEXT="Methoden">
+<node CREATED="1448407030239" ID="ID_619913132" MODIFIED="1448407053748">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mark: Nachricht <i>upstream</i>&#160;bzw <i>broadcast</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448407054900" ID="ID_1277028437" MODIFIED="1448407096966">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      note: Nachricht <i>downstream</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1448070605948" ID="ID_1779744719" MODIFIED="1448070608272" TEXT="Verhalten">
+<node CREATED="1448407128826" ID="ID_1974801494" MODIFIED="1448407138941" TEXT="Bus-Master ist ein speziell implementiertes BusTerm"/>
+<node CREATED="1448407139441" ID="ID_392543622" MODIFIED="1448407152451" TEXT="das gew&#xf6;hnliche BusTerm ist an ein Tangible angeschlossen"/>
+<node CREATED="1448407187035" ID="ID_1622894914" MODIFIED="1448407197917" TEXT="sowie bus-seitig an ein &quot;upstream&quot; BusTerm"/>
+</node>
+<node CREATED="1448070618434" ID="ID_1925738380" MODIFIED="1448070621878" TEXT="Zuordnung">
+<node CREATED="1448406963801" ID="ID_1506114314" MODIFIED="1448406975982">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Bus-Design is <b>selbst&#228;hnlich</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448406977350" ID="ID_1450959387" MODIFIED="1448406993656" TEXT="jedes BusTerm ist lediglich eine personalisierte Bus-Anbindung"/>
+<node CREATED="1448406994860" ID="ID_846198635" MODIFIED="1448407022869">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Kennzeichen ist die <b>EntryID</b>&#160;des zugeh&#246;rigen Elements
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1434128059966" ID="ID_823283341" MODIFIED="1434128067529" TEXT="Connect">
