@@ -22,11 +22,22 @@
 
 
 /** @file bus-term.hpp
- ** Attachment point to the UI-Bos.
+ ** Attachment point to the UI-Bus.
  ** Every gui::model::Tangible holds a BusTerm, which is linked
  ** to the Tangible's identity, and serves to relay interface actions
- ** towards the Proc-Layer. Moreover, the BusTerm is the service point
+ ** towards the Proc-Layer, to remember state changes and to broadcast
+ ** notifications. Moreover, the BusTerm is the service point
  ** to receive structural change messages.
+ ** 
+ ** \par Lifecycle and identity
+ ** An BusTerm is always created starting from another BusTerm, to
+ ** which it will be wired. Moreover, each BusTerm bears a distinct
+ ** [identity][::endpointID_], which is used as _implicit subject_
+ ** for emanating messages, or as explicit destination for routing.
+ ** The whole [UI-Bus][BusController] is built to perform within the
+ ** UI event thread and thus is _not threadsafe_. For that reason,
+ ** the automatic detachment built into each BusTerm's dtor is
+ ** sufficient to ensure sane connectivity.
  ** 
  ** @todo as of 11/2015 this is complete WIP-WIP-WIP
  ** 
@@ -42,6 +53,8 @@
 #include "lib/error.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
+#include "lib/idi/entry-id.hpp"
+#include "lib/diff/gen-node.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <string>
@@ -52,23 +65,54 @@ namespace ctrl{
   
 //  using lib::HashVal;
 //  using util::isnil;
+  using lib::idi::EntryID;
+  using lib::diff::GenNode;
   using std::string;
   
   
   /**
-   * @todo write type comment...
+   * connection point at the UI-Bus.
+   * The UI-Bus is a star shaped network of terminal points,
+   * where each \link Tangible tangible UI element \endlink
+   * holds a BusTerm serving access point. The BusTerm interface
+   * exposes the basic "verbs" available for communication within
+   * the UI
+   * - to _act_ on an element means to issue a command
+   * - to _note_ some state or information for later replay
+   * - to _mark_ as erroneous, send an information message,
+   *   replay remembered presentation state or effect structural change
+   * There are \em indirect variants of the message verbs, which are
+   * intended for routing, broadcasting or forwarding. Effectively,
+   * routing is determined from the context and meaning of a message,
+   * where the _act_ and _note_ messages have an implicit receiver
+   * (either the Proc-Layer or the UI state manager), while the
+   * _mark_ messages are always directed _downstream_ towards
+   * some element.
    */
   class BusTerm
     : boost::noncopyable
     {
-      string nothing_;
+      EntryID endpointID_;
+      BusTerm& theBus_;
       
     public:
-      BusTerm();
-     ~BusTerm();
+      virtual ~BusTerm();  ///< this is an interface
+      
+      virtual void act (GenNode command)   =0;
+      virtual void note (GenNode mark)     =0;
+      virtual void mark (GenNode mark)     =0;
+      
+      virtual void act  (EntryID subject, GenNode command)  =0;
+      virtual void note (EntryID subject, GenNode mark)     =0;
+      virtual void mark (EntryID subject, GenNode mark)     =0;
+      
+      BusTerm attach (EntryID newAddress);
       
     protected:
-      string mayday ()  const;
+      BusTerm(EntryID identity, BusTerm& attached_to =*this)
+        : endpointID_(identity)
+        , theBus_(attached_to)
+        { }
     };
   
   

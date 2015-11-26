@@ -2448,7 +2448,7 @@ The workspace starts out with a single element, corresponding to the »model roo
 Speaking of implementation, this state and update mechanics relies on two crucial provisions: Lumiera's framework for [[tree diff representation|TreeDiffModel]] and the ExternalTreeDescription, which is an abstracted, ~DOM-like rendering of the relevant parts of the session; this model tree is comprised of [[generic node elements|GenNode]] acting as proxy for [[calls into|SessionInterface]] the [[session model|HighLevelModel]] proper.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201511210302" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="39">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201511261846" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="40">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2475,7 +2475,7 @@ Hereby we introduce a new in-layer abstraction: The UI-Bus.
 
 
 !initiating model updates
-Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispatcher. A model update can be requested by the GUI -- but the actual update will arrive asynchronously. The update information originate from within the [[build process|BuildFixture]]. {{red{TODO 10/2014 clarify the specifics}}}. When updates arrive, a ''diff is generated'' against the current GuiModel contents. The GuiModel is updated to reflect the differences and the Receivers or Listeners are signalled. It is their responsibility in turn to schedule an update operation into the GUI event thread. When performing this update, the Listener thus actively retrieves and pulls the diffed information from within the GUI event thread. The GuiModel's object monitor is sufficient to coordinate this handover.
+Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispatcher. A model update can be requested by the GUI -- but the actual update will arrive asynchronously. The update information originate from within the [[build process|BuildFixture]]. {{red{TODO 10/2014 clarify the specifics}}}. When updates arrive, a ''diff is generated'' against the current GuiModel contents. The GuiModel is updated to reflect the differences and then notifications for any Receivers or Listeners are scheduled into the GUI event thread. On reception, it is their responsibility in turn to pull the targeted diff. When performing this update, the Listener thus actively retrieves and pulls the diffed information from within the GUI event thread. The GuiModel's object monitor is sufficient to coordinate this handover.
 &amp;rarr; representation of changes as a [[tree of diffs|TreeDiffModel]]
 &amp;rarr; properties and behaviour of [[generic interface elements|UI-Element]]
 
@@ -8314,7 +8314,7 @@ The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the 
 
 The ~MVC-Pattern as such is fine, and probably the best we know for construction of user interfaces. But it doesn't scale well towards the integration into a larger and more structured system. There is a tension between the Controller in the UI and other parts of an application, which as well need to be //in control.// And, even more important, there is a tension between the demands of UI elements for support by a model, and the demands to be placed on a core domain model of a large scale application. This tension is resolved by enacting these roles while transforming the requests and demands into //Messages.//</pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201511242314" tags="GuiPattern design draft decision" changecount="10">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201511261841" tags="GuiPattern design draft decision" changecount="12">
 <pre>While our UI widgets are implemented the standard way as proposed by GTKmm, some key elements -- which are especially relevant for the anatomy and mechanics of the interface -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -8346,10 +8346,10 @@ And finally, there are the //essential updates// -- any changes in the model //f
 :connect to an existing term, supply the {{{EntryID}}} of the new element
 ;act
 :send a GenNode representing the action
-;mark
-:send a GenNode representing the //state mark//
 ;note
-:receive a GenNode representing the //feedback//
+:send a GenNode representing the //state mark//
+;mark
+:receive a GenNode representing the //feedback// or replayed //state mark//
 ;signals
 :the individual element exposes some generic signal slots
 :* sigMut prompts the element to draw a diff to alter its configuration
@@ -8360,7 +8360,7 @@ And finally, there are the //essential updates// -- any changes in the model //f
 :* either is an incremental status update
 :* or is a from-scratch reconfiguration
 
-We should note that these conventions of interchange lead to a ''self similar design'' of the UI-Bus: Each {{{BusTerm}}} is a personalised connection to yet another {{{BusTerm}}}. Even the ''bus master'' appears as just another {{{BusTerm}}} to all the communication partners. The overall topology of the bus might be reshaped without the participating elements being aware of such a change.
+We should note that these conventions of interchange lead to a recursive or ''self similar design'' of the UI-Bus: Each {{{BusTerm}}} is a personalised connection to yet another {{{BusTerm}}}. Even the ''bus master'' appears as just another {{{BusTerm}}} to all the communication partners. The overall topology of the bus might be reshaped without the participating elements being aware of such a change.
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">
