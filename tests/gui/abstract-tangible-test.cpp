@@ -46,6 +46,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 //#include "gui/model/session-facade.hpp"
 //#include "gui/model/diagnostics.hpp"
 //#include "lib/util.hpp"
@@ -61,6 +62,8 @@
 //using std::string;
 //using std::cout;
 //using std::endl;
+
+using lib::error::LUMIERA_ERROR_ASSERTION;
 
 
 namespace gui  {
@@ -110,8 +113,75 @@ namespace test {
       void
       verify_mockManipulation ()
         {
-          UNIMPLEMENTED ("setup and usage of an UI-Element mock");
+          MockElm mock("dummy");
+          mock.verify("ctor");
+          mock.verifyEvent("ctor");
+          mock.verify("ctor").arg("dummy");
+          
+          CHECK ("dummy" == mock.getID().getSym());
+          CHECK ("ID<gui::model::test::MockElm>-dummy" = string(mock.getID()));
+          
+          VERIFY_ERROR (ASSERTION, mock.verifyCall("reset"));
+          
+          mock.reset();
+          mock.verify("reset");
+          mock.verifyCall("reset");
+          mock.verifyEvent("reset");
+          mock.verify("reset").after("ctor");
+          mock.verify("ctor").before("reset");
+          VERIFY_ERROR (ASSERTION, mock.verify("reset").before("ctor"));
+          VERIFY_ERROR (ASSERTION, mock.verify("ctor").after("reset"));
+          
+          mock.verify("reset").before("reset");
+          mock.verify("reset").beforeEvent("reset");
+          mock.verifyCall("reset").before("reset");
+          mock.verifyCall("reset").beforeEvent("reset");
+          VERIFY_ERROR (ASSERTION, mock.verifyCall("reset").afterCall("reset"));
+          VERIFY_ERROR (ASSERTION, mock.verifyCall("reset").afterEvent("reset"));
+          VERIFY_ERROR (ASSERTION, mock.verifyEvent("reset").afterEvent("reset"));
+          
+          CHECK (!mock.isTouched());
+          CHECK (!mock.isExpanded());
+          
+          mock.noteMsg("dolorem ipsum quia dolor sit amet consectetur adipisci velit.");
+          mock.verifyNote("Msg");
+          mock.verifyCall("noteMsg");
+          mock.verifyCall("noteMsg").arg("lorem ipsum");
+          mock.verifyCall("noteMsg").argMatch("dolor.+dolor\\s+");
+          mock.verifyMatch("Rec\\(note.+kind = Msg.+msg = dolorem ipsum");
+          
+          EventLog log = mock.getLog();
+          log.verify("ctor")
+             .before("reset")
+             .before("lorem ipsum");
+          
+          MockElm foo("foo"), bar;
+          foo.verify("ctor").arg("foo");
+          bar.verify("ctor").arg();
+          
+          bar.ensureNot("foo");
+          log.ensureNot("foo");
+          mock.ensureNot("foo");
+          VERIFY_ERROR (ASSERTION, foo.ensureNot("foo"));
+          
+          log.join(bar).join(foo);
+          log.verifyEvent("logJoin").arg(bar.getID())
+             .beforeEvent("logJoin").arg("foo");
+          
+          mock.verifyEvent("logJoin").arg(bar.getID())
+              .beforeEvent("logJoin").arg("foo");
+          mock.verify("ctor").arg("foo");
+          log.verify("ctor").arg("foo");
+          log.verify("ctor").arg("dummy")
+             .before("ctor").arg(bar.getID())
+             .before("ctor").arg("foo");
+          
+          mock.kill();
+          foo.noteMsg("dummy killed");
+          log.verifyEvent("dtor").on("dummy")
+             .beforeCall("noteMsg").on("foo");
         }
+      
       
       void
       invokeCommand ()
@@ -124,6 +194,8 @@ namespace test {
       markState ()
         {
           UNIMPLEMENTED ("mark interface state");
+          
+          TODO ("be sure also to cover signal diagnostics here");
         }
       
       
