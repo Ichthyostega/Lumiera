@@ -21,23 +21,8 @@
 */
 
 
-/** @file test-helper.hpp
- ** A collection of frequently used helper functions to support unit testing.
- ** Mostly, these are diagnostics helpers to produce readable output, especially
- ** for types. Some of these support meta programming to figure out the \em actual
- ** reference kind (value, lvalue, rvalue) of a template parameter instantiation.
- ** For GNU compatible compilers, we define here also an interface to the internal
- ** ABI for [demangling type names][demangleCxx].
- ** 
- ** @note this header is included into a large number of tests.
- ** @see TestHelper_test
- ** @see TestHelperDemangling_test
- ** 
- */
-
-
-#ifndef LIB_TEST_TEST_HELPER_H_
-#define LIB_TEST_TEST_HELPER_H_
+#ifndef LIB_TEST_TEST_HELPER_H
+#define LIB_TEST_TEST_HELPER_H
 
 
 #include "lib/symbol.hpp"
@@ -59,7 +44,7 @@ namespace test{
   
   
   
-  /** get a sensible display for a type or object
+  /** get a sensible display for a type or object 
    *  @param obj object of the type in question
    *  @param name optional name to be used literally
    *  @return either the literal name without any further magic,
@@ -73,7 +58,7 @@ namespace test{
     return name? name : Literal(typeid(obj).name());
   }
   
-  /** get a sensible display for a type
+  /** get a sensible display for a type 
    *  @param name optional name to be used literally
    *  @return either the literal name without any further magic,
    *          or the result of compile-time or run time 
@@ -230,4 +215,4 @@ namespace test{
               CHECK (lumiera_error_expect (LUMIERA_ERROR_##ERROR_ID));\
             }
 
-#endif /*LIB_TEST_TEST_HELPER_H_*/
+#endif

@@ -37,6 +37,8 @@
 
 
 #include "lib/error.hpp"
+#include "gui/ctrl/bus-term.hpp"
+#include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -53,18 +55,28 @@ namespace model {
   
   
   /**
+   * Interface common to all UI elements of relevance for the Lumiera application.
+   * Any non-local and tangible interface interaction will at some point pass through
+   * this foundation element, which forms the joint and attachment to the UI backbone,
+   * which is the [UI-Bus][ui-bus.hpp]. Any tangible element acquires a distinct identity
+   * and has to be formed starting from an already existing bus nexus.
+   * 
    * @todo write type comment...
    */
   class Tangible
     : boost::noncopyable
     {
-      string nothing_;
+    protected:
+      ctrl::BusTerm uiBus_;
+      
+      Tangible(EntryID identity, ctrl::BusTerm nexus)
+        : uiBus_(nexus.attach(identity))
+        { }
       
     public:
-      Tangible();
-     ~Tangible();
+      virtual ~Tangible();  ///< this is an interface
       
-    protected:
+    private:
       string maybe ()  const;
     };
   

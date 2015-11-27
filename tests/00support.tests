@@ -14,6 +14,11 @@ out: sizeof.+lib.+test.+test.+Wrmrmpft.+Murpf.+ =   1
 END
 
 
+TEST "Helper for event registration and verification" TestEventLog_test <<END
+return: 0
+END
+
+
 TEST "Helper to show demangled C++ names" TestHelperDemangling_test <<END
 out: .+lib.test.test.Space.+Outer.+Inner
 out-lit: lib::test::test::Space const* (*)(lib::test::test::Outer<lib::test::test::Space>::Inner const&&)

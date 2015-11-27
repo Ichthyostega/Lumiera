@@ -21,15 +21,6 @@
 * *****************************************************/
 
 
-/** @file test-helper.cpp
- ** definition of some widely used test helper functions.
- ** 
- ** @see TestHelper_test
- ** @see TestHelperDemangling_test
- ** 
- */
-
-
 #include "lib/test/test-helper.hpp"
 #include "lib/test/testdummy.hpp"
 #include "lib/format-string.hpp"
@@ -62,7 +53,7 @@ namespace test{
    * because it happens to be the native ABI for that platform. It is summarised at
    * \link http://www.codesourcery.com/cxx-abi/ mentor-embedded \endlink
    * along with the current specification. For users of GCC greater than or equal to 3.x,
-   * entry points are exposed through the standard library in `<cxxabi.h>`
+   * entry points are exposed through the standard library in \c <cxxabi.h>
    * 
    * This implementation relies on a vendor neutral ABI for C++ compiled programs
    * 
@@ -132,6 +123,7 @@ namespace test{
   
   
   /** storage for test-dummy flags */
+    
   long Dummy::_local_checksum = 0;
   bool Dummy::_throw_in_ctor = false;
   

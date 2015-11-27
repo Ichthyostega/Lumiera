@@ -1,5 +1,5 @@
 /*
-  gui::model::Element  -  a generic element in the UI-Model
+  Tangible  -  common implementation base of all relevant interface elements
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file element.cpp
- ** Service for element.
+/** @file tangible.hpp
+ ** Abstraction: a tangible element of the User Interface.
  ** This header defines the basics of...
  ** 
  ** @note as of X/2015 this is complete bs
@@ -34,10 +34,10 @@
  */
 
 
-#include "lib/util.hpp"
+//#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "gui/model/element.hpp"
+#include "gui/model/tangible.hpp"
 
 //#include <boost/noncopyable.hpp>
 #include <string>

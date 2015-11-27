@@ -106,7 +106,7 @@ namespace ctrl{
       virtual void note (EntryID subject, GenNode mark)     =0;
       virtual void mark (EntryID subject, GenNode mark)     =0;
       
-      BusTerm attach (EntryID newAddress);
+      BusTerm&& attach (EntryID newAddress);
       
     protected:
       BusTerm(EntryID identity, BusTerm& attached_to =*this)
