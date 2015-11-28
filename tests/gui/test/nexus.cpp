@@ -22,14 +22,12 @@
 
 
 /** @file test/nexus.cpp
- ** Abstraction: a tangible element of the User Interface.
- ** This header defines the basics of...
+ ** Implementation of a fake UI backbone for testing.
+ ** This compilation unit provides the actual setup for running a faked interface from tests.
  ** 
- ** @note as of X/2015 this is complete bs
- ** @todo WIP  ///////////////////////TICKET #
+ ** @todo initial draft and WIP-WIP-WIP as of 11/2015
  ** 
- ** @see ////TODO_test usage example
- ** @see element.cpp implementation
+ ** @see abstract-tangible-test.cpp
  ** 
  */
 
@@ -40,17 +38,17 @@
 #include "gui/test/nexus.hpp"
 
 //#include <boost/noncopyable.hpp>
-#include <string>
-#include <map>
+//#include <string>
+//#include <map>
 
-using std::map;
-using std::string;
+//using std::map;
+//using std::string;
 
-using util::contains;
-using util::isnil;
+//using util::contains;
+//using util::isnil;
 
 namespace gui {
-namespace model {
+namespace test{
   
   namespace { // internal details
     
@@ -64,14 +62,13 @@ namespace model {
   
   
   /**
-   * 
-   * @param id
-   * @return
+   * @return reference to a node of the test UI bus,
+   *         which allows to hook up new nodes for test
    */
-  string
-  fun (string& id)
+  ctrl::BusTerm&
+  testUI()
   {
-    return "x"+id;
+    UNIMPLEMENTED("test nexus");
   }
 
-}} // namespace gui::model
+}} // namespace gui::test

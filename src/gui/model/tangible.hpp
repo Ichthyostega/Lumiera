@@ -76,8 +76,20 @@ namespace model {
     public:
       virtual ~Tangible();  ///< this is an interface
       
+      void reset();
+      
+      void slotExpand();
+      void slotReveal();
+      
+      void noteMsg();
+      void noteErr();
+      void noteFlash();
+      void noteMark();
+      
+    protected:
+      virtual void doExpand()  =0;
+      virtual void doReveal()  =0;
     private:
-      string maybe ()  const;
     };
   
   

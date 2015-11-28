@@ -2,7 +2,8 @@
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1434128038348" TEXT="Lumi">
 <font NAME="SansSerif" SIZE="18"/>
-<node CREATED="1434128046296" ID="ID_1900827283" MODIFIED="1434128053553" POSITION="right" TEXT="GUI">
+<node CREATED="1434128046296" ID="ID_1900827283" MODIFIED="1448669775410" POSITION="right" TEXT="GUI">
+<font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1434128054470" ID="ID_1166611516" MODIFIED="1434128059666" TEXT="Workflow"/>
 <node CREATED="1448070434915" HGAP="64" ID="ID_257833497" MODIFIED="1448070642269" VSHIFT="7">
 <richcontent TYPE="NODE"><html>
@@ -19,13 +20,13 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-19;-25;" ID="Arrow_ID_539627804" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
-<node CREATED="1448070545132" HGAP="31" ID="ID_1410368513" MODIFIED="1448078995370" TEXT="Element" VSHIFT="-7">
+<node CREATED="1448070545132" HGAP="31" ID="ID_1410368513" MODIFIED="1448669353294" TEXT="Element" VSHIFT="-7">
 <icon BUILTIN="pencil"/>
 <node CREATED="1448070580927" ID="ID_467382299" MODIFIED="1448070583371" TEXT="Auspr&#xe4;gungen">
 <node CREATED="1448070554963" ID="ID_579919554" MODIFIED="1448070559134" TEXT="Widget"/>
 <node CREATED="1448070559466" ID="ID_182430638" MODIFIED="1448070560909" TEXT="Controller"/>
 </node>
-<node CREATED="1448070583679" ID="ID_1248152908" MODIFIED="1448070586147" TEXT="Protokoll">
+<node CREATED="1448070583679" HGAP="30" ID="ID_1248152908" MODIFIED="1448658666391" TEXT="Protokoll">
 <node CREATED="1448078263344" ID="ID_1136748666" MODIFIED="1448078979113" TEXT="Verhaltensweisen">
 <cloud COLOR="#e0d6ba"/>
 <icon BUILTIN="info"/>
@@ -139,8 +140,165 @@
 </node>
 </node>
 </node>
+<node CREATED="1448658633478" HGAP="99" ID="ID_314439240" MODIFIED="1448658665728" TEXT="Design" VSHIFT="13">
+<node CREATED="1448658692023" ID="ID_339186676" MODIFIED="1448659597414">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      generisch
+    </p>
+    <p>
+      sinnvoll?
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      was haben alle UI-Elemente wirklich gemeinsam?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1448658692023" ID="ID_888978058" MODIFIED="1448659524029" TEXT="generische Commands">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Frage ist, wie generisch ist eigentlich ein Command-Aufruf selber?
+    </p>
+    <p>
+      Macht es daher Sinn, ein generisches API allgemein sichtbar zu machen,
+    </p>
+    <p>
+      oder handelt es sich nur um ein Implementierungsdetail der UI-Bus-Anbindung?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1448659456882" ID="ID_946761955" MODIFIED="1448659469420" TEXT="Notwendig: Command-Name + Varargs"/>
 </node>
-<node CREATED="1448070547667" ID="ID_669457401" MODIFIED="1448070553662" TEXT="Bus-Terminal">
+<node CREATED="1448659723879" ID="ID_197701429" MODIFIED="1448659728002" TEXT="UI-Grundverhalten">
+<node CREATED="1448659735557" ID="ID_1553949303" MODIFIED="1448659741744" TEXT="Falten / Expandieren"/>
+<node CREATED="1448659747476" ID="ID_1549415142" MODIFIED="1448659756582" TEXT="Grad der Explizitheit"/>
+<node CREATED="1448659757378" ID="ID_1164836827" MODIFIED="1448659767668" TEXT="in Sicht bringen"/>
+<node CREATED="1448659780743" ID="ID_1787132400" MODIFIED="1448659785106" TEXT="Fokus-Management"/>
+<node CREATED="1448659792782" ID="ID_1547056651" MODIFIED="1448659801312" TEXT="r&#xe4;umliche Navigation"/>
+<node CREATED="1448659824337" ID="ID_1734858009" MODIFIED="1448659829865" TEXT="Markierungen"/>
+</node>
+</node>
+<node CREATED="1448658696638" ID="ID_1235910089" MODIFIED="1448658704649" TEXT="slots"/>
+<node CREATED="1448658726090" ID="ID_37610818" MODIFIED="1448658733301" TEXT="Commands">
+<node CREATED="1448658755071" ID="ID_1033500384" MODIFIED="1448658767933" TEXT="wie definieren">
+<icon BUILTIN="help"/>
+<node CREATED="1448658974985" ID="ID_974207484" MODIFIED="1448658989011" TEXT="Definition braucht Session-Modell"/>
+<node CREATED="1448659018412" ID="ID_1988707066" MODIFIED="1448659020791" TEXT="zentral">
+<node CREATED="1448659021803" ID="ID_1800666256" MODIFIED="1448659025502" TEXT="nah an der Session"/>
+<node CREATED="1448659026042" ID="ID_831434285" MODIFIED="1448659032566" TEXT="ein Schnittstellen-Paket"/>
+<node CREATED="1448669306480" ID="ID_1009169288" MODIFIED="1448669482182">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem: <b><font color="#8d02e1">InteractionControl</font></b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#5f0ac8" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="219;-148;" ID="Arrow_ID_1101633958" STARTARROW="None" STARTINCLINATION="-205;4;"/>
+</node>
+</node>
+<node CREATED="1448659051823" ID="ID_1995941804" MODIFIED="1448659054738" TEXT="dezentral">
+<node CREATED="1448659059734" ID="ID_1682547207" MODIFIED="1448659065617" TEXT="im GUI-Kontext"/>
+<node CREATED="1448659079044" ID="ID_508900352" MODIFIED="1448659121799" TEXT="mu&#xdf; Session referenzieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was andernfalles komplett vermeidbar w&#228;re,
+    </p>
+    <p>
+      da im &#220;brigen das UI-Modell nur mit LUIDs und generischen Namen arbeitet
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1448658773972" ID="ID_1826752340" MODIFIED="1448658776367" TEXT="referenzieren">
+<node CREATED="1448659283641" ID="ID_209203268" MODIFIED="1448659290276" TEXT="letztlich ein String"/>
+<node CREATED="1448659347728" ID="ID_508578010" MODIFIED="1448659355835" TEXT="Konstante bei der Command-Funktion"/>
+<node CREATED="1448659334058" ID="ID_683316035" MODIFIED="1448659340357" TEXT="Makro + Namenskonvention"/>
+</node>
+<node CREATED="1448658819990" ID="ID_405705528" MODIFIED="1448658836635" TEXT="API explizit">
+<icon BUILTIN="help"/>
+<node CREATED="1448658861760" ID="ID_1373851015" MODIFIED="1448658866947" TEXT="pro">
+<node CREATED="1448658867680" ID="ID_766147415" MODIFIED="1448658870931" TEXT="sauber"/>
+<node CREATED="1448659206251" ID="ID_1542057563" MODIFIED="1448659212278" TEXT="nah am konkreten Widget"/>
+<node CREATED="1448659217489" ID="ID_214385592" MODIFIED="1448659227396" TEXT="integriert in sonstiges UI-Verhalten"/>
+<node CREATED="1448658947429" ID="ID_302940509" MODIFIED="1448659157613" TEXT="Fehlaufrufe ausgeschlossen"/>
+</node>
+<node CREATED="1448658873767" ID="ID_1028163948" MODIFIED="1448658875498" TEXT="con">
+<node CREATED="1448658883341" ID="ID_543652783" MODIFIED="1448658885457" TEXT="Aufwand"/>
+<node CREATED="1448658885973" ID="ID_1734626095" MODIFIED="1448658940946" TEXT="ctxt-Men&#xfc; aufbauen"/>
+<node CREATED="1448659158177" ID="ID_1496901578" MODIFIED="1448659162165" TEXT="Namen m&#xfc;ssen matchen"/>
+<node CREATED="1448659163089" ID="ID_431765107" MODIFIED="1448659252553" TEXT="man mu&#xdf; Korrektheit pr&#xfc;fen"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1448669332204" HGAP="76" ID="ID_329609486" MODIFIED="1448669770746" TEXT="InteractionControl">
+<linktarget COLOR="#5f0ac8" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="219;-148;" ID="Arrow_ID_1101633958" SOURCE="ID_1009169288" STARTARROW="None" STARTINCLINATION="-205;4;"/>
+<font NAME="SansSerif" SIZE="15"/>
+<node CREATED="1448669439582" HGAP="41" ID="ID_307071507" MODIFIED="1448669726965" TEXT="ad-hoc oder systematisch" VSHIFT="-2">
+<icon BUILTIN="help"/>
+<node CREATED="1448669512988" ID="ID_1184892495" MODIFIED="1448669517328" TEXT="fundamentale Frage"/>
+<node CREATED="1448669517796" ID="ID_1165902172" MODIFIED="1448669526326" TEXT="f&#xfc;r mich eigentlich sofort klar"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1448669527274" ID="ID_129855368" MODIFIED="1448669537302" TEXT="aber Vorsicht">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1448669556607" ID="ID_493021007" MODIFIED="1448669561914" TEXT="wird nie fertig"/>
+<node CREATED="1448669562478" ID="ID_869338862" MODIFIED="1448669600653" TEXT="niemand wird es verstehen"/>
+<node CREATED="1448669567765" ID="ID_1254931544" MODIFIED="1448669587150" TEXT="b&#xfc;rstet die UI-Toolkits &#xbb;gegen den Strich&#xab;"/>
+</node>
+</node>
+<node CREATED="1448669636900" ID="ID_1111001545" MODIFIED="1448669645343" TEXT="Einf&#xfc;hren einer Zwischenebene">
+<node CREATED="1448669646474" ID="ID_1590745326" MODIFIED="1448669657189" TEXT="hyper-r&#xe4;umliche Anordnung"/>
+<node CREATED="1448669657633" ID="ID_1054403772" MODIFIED="1448669661661" TEXT="Focus-Bewegung"/>
+<node CREATED="1448669662417" ID="ID_828883183" MODIFIED="1448669674907" TEXT="Einteilung in Arbeits-R&#xe4;ume"/>
+<node CREATED="1448669679694" ID="ID_729190965" MODIFIED="1448669698124" TEXT="Konfigurierbarkeit"/>
+<node CREATED="1448669675495" ID="ID_1257367197" MODIFIED="1448669679146" TEXT="Perspektiven"/>
+<node CREATED="1448669699148" ID="ID_1264820517" MODIFIED="1448669700591" TEXT="Gesten"/>
+</node>
+<node CREATED="1448669742334" ID="ID_1679641405" MODIFIED="1448669755652" TEXT="InteractionStateManager">
+<font BOLD="true" NAME="SansSerif" SIZE="13"/>
+<node CREATED="1448669816476" ID="ID_1895677880" MODIFIED="1448669822183" TEXT="lauscht als Observer mit"/>
+<node CREATED="1448669824243" ID="ID_1225519733" MODIFIED="1448669832398" TEXT="h&#xe4;ngt sich in diverse Punkte ein"/>
+<node CREATED="1448669838745" ID="ID_1663939304" MODIFIED="1448669848204" TEXT="h&#xe4;llt ein lokales Zustansmodell"/>
+<node CREATED="1448669854119" ID="ID_874080079" MODIFIED="1448669857794" TEXT="wertet Regeln aus"/>
+<node CREATED="1448669869973" ID="ID_1259588429" MODIFIED="1448669888646" TEXT="sendet Enablement">
+<node CREATED="1448669889514" ID="ID_1191247113" MODIFIED="1448669898645" TEXT="an die konkreten Trigger-Orte"/>
+<node CREATED="1448669899113" ID="ID_990871123" MODIFIED="1448669910611" TEXT="er sendet jeweils einen CommandInvocationPath"/>
+</node>
+</node>
+</node>
+<node CREATED="1448070547667" HGAP="16" ID="ID_669457401" MODIFIED="1448669501619" TEXT="Bus-Terminal" VSHIFT="6">
 <node CREATED="1448070601165" ID="ID_1711137699" MODIFIED="1448070603296" TEXT="Methoden">
 <node CREATED="1448407030239" ID="ID_619913132" MODIFIED="1448560681641">
 <richcontent TYPE="NODE"><html>
@@ -152,8 +310,7 @@
       act, note: Nachricht <i>upstream</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448407054900" ID="ID_1277028437" MODIFIED="1448560688352">
 <richcontent TYPE="NODE"><html>
@@ -165,8 +322,7 @@
       mark: Nachricht <i>downstream</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448560729734" ID="ID_431928237" MODIFIED="1448560743272" TEXT="Nachricht mit Subjekt == indirekt, zur Weiterleitung"/>
 <node CREATED="1448560744380" ID="ID_310914031" MODIFIED="1448560762557" TEXT="Nachricht ohne Subjekt == direkt, Subjekt implizit"/>
@@ -188,8 +344,7 @@
       Bus-Design is <b>selbst&#228;hnlich</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448406977350" ID="ID_1450959387" MODIFIED="1448406993656" TEXT="jedes BusTerm ist lediglich eine personalisierte Bus-Anbindung"/>
 <node CREATED="1448406994860" ID="ID_846198635" MODIFIED="1448407022869">
@@ -202,8 +357,7 @@
       Kennzeichen ist die <b>EntryID</b>&#160;des zugeh&#246;rigen Elements
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>

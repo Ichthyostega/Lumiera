@@ -21,15 +21,10 @@
 * *****************************************************/
 
 
-/** @file tangible.hpp
- ** Abstraction: a tangible element of the User Interface.
- ** This header defines the basics of...
+/** @file tangible.cpp
+ ** Common base implementation of all tangible and connected interface elements.
  ** 
- ** @note as of X/2015 this is complete bs
- ** @todo WIP  ///////////////////////TICKET #
- ** 
- ** @see ////TODO_test usage example
- ** @see element.cpp implementation
+ ** @see abstract-tangible-test.cpp
  ** 
  */
 
@@ -40,14 +35,14 @@
 #include "gui/model/tangible.hpp"
 
 //#include <boost/noncopyable.hpp>
-#include <string>
-#include <map>
+//#include <string>
+//#include <map>
 
-using std::map;
-using std::string;
+//using std::map;
+//using std::string;
 
-using util::contains;
-using util::isnil;
+//using util::contains;
+//using util::isnil;
 
 namespace gui {
 namespace model {
@@ -58,7 +53,7 @@ namespace model {
   
   
   
-  //NA::~NA() { }
+  Tangible::~Tangible() { }  // Emit VTables here...
   
   
   

@@ -2383,6 +2383,42 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201511280006" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="3">
+<pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
+
+!prerequisites for issuing a command
+Within the Lumiera architecture, with the very distinct separation between [[Session]] and interface view, several steps have to be met before we're able to operate on the model.
+* we need a pre-written script, which directly works on the entities reachable through the session interface
+* we need to complement this script with a state capturing script and a script to undo the given action
+* we need to combine these fixed snippets into a //command prototype.//
+* we need to care for the supply of parameters
+** indirectly this defines and limits how this command can be issues
+** which in fact embeds the raw command into a context or a gesture of invocation
+** and this is the first instance where the command-as-seen-from-session translates into something tangible within the UI
+* next we have to consider conditions and circumstances. Not every command can be invoked any given time
+** the focus and current selection is relevant
+** the user interaction might supply context by pointing at something
+** the proximity of tangible interface elements might be sufficient to figure out missing parts
+** in fact it might be necessary to prepend the invocation of a detail parameter dialog to the command execution
+* and finally, after considering all these concerns, it is possible to wire a connection into the actual invocation point in UI
+This observation might be surprising; even while a given command is well defined, we can not just invoke it right away. The prevalence of all these intermediary complexities is what opens the necessity and the room for InteractionControl, which is a concern specific to human-computer interfaces. Faced with such a necessity, there are two fundamentally different approaches.
+!!!Binding close to the widget
+This approach concentrates knowledge about the operation at that location, where it is conceived &quot;to happen&quot; -- that is, close to the concrete UI widget.
+So the actual widget type implies knowledge about the contents and the meaning of the command scripts. At the point when the widget is actually triggered, it starts to collect the necessary parameters and to this end needs to acquire connections to other facilities within the UI. In fact, even //before// anything can be triggered, the widget has to administer the activation state and show some controls as enabled or disabled, and needs to observe ongoing state changes to be able to do so.
+
+The consequence of this approach is that the relations and whereabouts of entities involved into this decision tend to be explicated right into the widget code. Any overarching concerns end up being scattered over various implementation sites, need to be dealt with by convention, or rely on all invocation sites to use some helper facilities voluntarily.
+
+!!!Abstracted binding definitions
+This approach attempts to keep knowledge and definition clustered according to the commands and actions to be performed, even for the price of some abstractions and indirections. There is no clear and obvious place where to collect those information, and thus we need to create such a location deliberately. This location serves to link interface and session entities, and tends to rely on definitions from both realms.
+* in addition to the script, here we build a parameter accessor, which is some kind of functor or closure.
+* we need to introduce a new abstraction, termed InteractionStateManager. This is deliberately not a single entity, rather some distinct facility in charge for one specific kind of interaction, like gestures being formed by mouse, touch or pen input.
+* from the command definition site, we need to send a combination of //rules// and parameter accessors, which together define an invocation path for one specific flavour of a command
+* the InteractionStateManager, driven by the state changes he observes, will evaluate those rules and determine the feasibility of specific command invocation paths
+* he sends the //enablement of a command invocation path// as a preconfigured binding to the actual //trigger sites,// which in turn allows them to install actual reaction patterns
+* if finally some button is hit, the local event binding can issue the command right away, as preconfigured in this //enablement binding,// by accessiny just any UI-Bus terminal available within that context
+
+The consequence of this approach is a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.</pre>
+</div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201501052157" tags="GuiIntegration overview" changecount="1">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on the well known solution of using a __business facade__ and delegation proxies.
 Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to use it's functionality, and similarily the GUI provides a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
@@ -2863,6 +2899,21 @@ The InstanceHandle is created by the service implementation and will automatical
 
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
+</div>
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201511272320" tags="design decision Concepts GuiPattern draft discuss" changecount="2">
+<pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
+The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Obviously, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. But, in any more than trivial UI application, there is an intermediate level, where things go on, which can not fully be just derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could strive at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
+
+;interface has a spatial quality
+:the elements within an user interface are arranged in a way that parallels our experience when working in real world space. With the addition of a //&quot;hyper component&quot;// -- allowing for cross connections and shortcuts beyond spatial logic
+;locality of work spaces
+:but the arrangement of the interface interactions is not amorphous, rather it is segregated into cohesive clusters of closely interrelated actions. We move between these clusters of activity the same way as we move between several well confined rooms within a building.
+;context and focus of activity
+:most of what we could do //in therory,// is not relevant most of the time. But when the inner logic of what we're about to do coincides with the things at hand, then we feel enabled.
+;shift of perspective
+:and while we work, the focus moves along. Some things are closer, other things are remote and require us to move and re-orient and reshape our perspective, should we choose to turn towards them.
+;the ability to arrange what is relevant
+:we do the same stuff again and again, and this makes us observe and understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.</pre>
 </div>
 <div title="InterfaceNamespaces" modifier="Ichthyostega" created="200708080338" modified="201003160209" tags="impl decision draft">
 <pre>Because we rely on strong decoupling and separation into self contained components, there is not much need for a common quasi-global namespace. Operations needing the cooperation of another subsystem will be delegated or even dispatched, consequently implementation code needs only the service acces points from &quot;direct cooperation partner&quot; subsystems. Hierarchical scopes besides classes are needed only when multiple subsystems share a set of common abstractions. Interface and Implementation use separate namespaces.
@@ -8314,7 +8365,7 @@ The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the 
 
 The ~MVC-Pattern as such is fine, and probably the best we know for construction of user interfaces. But it doesn't scale well towards the integration into a larger and more structured system. There is a tension between the Controller in the UI and other parts of an application, which as well need to be //in control.// And, even more important, there is a tension between the demands of UI elements for support by a model, and the demands to be placed on a core domain model of a large scale application. This tension is resolved by enacting these roles while transforming the requests and demands into //Messages.//</pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201511270107" tags="GuiPattern design draft decision" changecount="15">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201511272242" tags="GuiPattern design draft decision" changecount="16">
 <pre>While our UI widgets are implemented the standard way as proposed by GTKmm, some key elements -- which are especially relevant for the anatomy and mechanics of the interface -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -8361,6 +8412,11 @@ And finally, there are the //essential updates// -- any changes in the model //f
 :* or is a from-scratch reconfiguration
 
 We should note that these conventions of interchange lead to a recursive or ''self similar design'' of the UI-Bus: Each {{{BusTerm}}} is a personalised connection to yet another {{{BusTerm}}}. Even the ''bus master'' appears as just another {{{BusTerm}}} to all the communication partners. The overall topology of the bus might be reshaped without the participating elements being aware of such a change.
+
+!Command activation
+While the above definitions might seem more or less obvious and reasonable, there is one tiny detail, which -- on second thought -- unfolds into a fundamental decision to be taken. The point in question is //how we refer to a command.// More specifically: is referring to a command something generic, or is it rather something left to the actual implementing widget? In the first case, a generic foundation element has to provide some framework to deal with command definitions, whereas in the second case just a protected slot to pass on invocations from derived classes would be sufficient. This is a question of fundamental importance; subsidiarity has its merits, so once we forgo the opportunity to build from a generic pattern, local patterns will take over, while similarities and symmetries have to grow and wait to be discovered sometimes, if at all. This might actually not be a problem -- yet if you know Lumiera, you know that we tend to look at existing practice and draw fundamental conclusions, prior to acting.
+&amp;rarr; InteractionControl
+&amp;rarr; GuiCommandBinding
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">
