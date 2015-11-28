@@ -46,8 +46,8 @@
  */
 
 
-#ifndef GUI_CTRL_BUS_TERM_H_
-#define GUI_CTRL_BUS_TERM_H_
+#ifndef GUI_CTRL_BUS_TERM_H
+#define GUI_CTRL_BUS_TERM_H
 
 
 #include "lib/error.hpp"
@@ -118,4 +118,4 @@ namespace ctrl{
   
   
 }} // namespace gui::ctrl
-#endif /*GUI_CTRL_BUS_TERM_H_*/
+#endif /*GUI_CTRL_BUS_TERM_H*/

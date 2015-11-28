@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_MODEL_TANGIBLE_H_
-#define GUI_MODEL_TANGIBLE_H_
+#ifndef GUI_MODEL_TANGIBLE_H
+#define GUI_MODEL_TANGIBLE_H
 
 
 #include "lib/error.hpp"
@@ -104,4 +104,4 @@ namespace model {
   
   
 }} // namespace gui::model
-#endif /*GUI_MODEL_TANGIBLE_H_*/
+#endif /*GUI_MODEL_TANGIBLE_H*/

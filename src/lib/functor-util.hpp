@@ -34,8 +34,8 @@
 
 
 
-#ifndef FUNCTOR_UTIL_H_
-#define FUNCTOR_UTIL_H_
+#ifndef FUNCTOR_UTIL_H
+#define FUNCTOR_UTIL_H
 
 #include "lib/hash-value.h"
 
@@ -235,4 +235,4 @@ namespace std {
   
 }
 
-#endif /*UTIL_HPP_*/
+#endif /*FUNCTOR_UTIL_H*/

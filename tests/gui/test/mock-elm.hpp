@@ -38,8 +38,8 @@
  */
 
 
-#ifndef GUI_TEST_MOCK_ELM_H_
-#define GUI_TEST_MOCK_ELM_H_
+#ifndef GUI_TEST_MOCK_ELM_H
+#define GUI_TEST_MOCK_ELM_H
 
 
 #include "lib/error.hpp"
@@ -107,4 +107,4 @@ namespace test{
   
   
 }} // namespace gui::test
-#endif /*GUI_TEST_MOCK_ELM_H_*/
+#endif /*GUI_TEST_MOCK_ELM_H*/

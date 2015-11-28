@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LIB_TEST_TEST_HELPER_H
-#define LIB_TEST_TEST_HELPER_H
+#ifndef LIB_TEST_EVENT_LOG_H
+#define LIB_TEST_EVENT_LOG_H
 
 
 #include "lib/symbol.hpp"

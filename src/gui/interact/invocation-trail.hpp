@@ -40,8 +40,8 @@
  */
 
 
-#ifndef GUI_INTERACT_INVOCATION_TRAIL_H_
-#define GUI_INTERACT_INVOCATION_TRAIL_H_
+#ifndef GUI_INTERACT_INVOCATION_TRAIL_H
+#define GUI_INTERACT_INVOCATION_TRAIL_H
 
 
 #include "proc/control/command.hpp"
@@ -104,4 +104,4 @@ namespace interact {
   
   
 }} // namespace gui::interact
-#endif /*GUI_INTERACT_INVOCATION_TRAIL_H_*/
+#endif /*GUI_INTERACT_INVOCATION_TRAIL_H*/

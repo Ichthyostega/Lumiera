@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_INTERACT_INTERACTION_STATE_MANAGER_H_
-#define GUI_INTERACT_INTERACTION_STATE_MANAGER_H_
+#ifndef GUI_INTERACT_INTERACTION_STATE_MANAGER_H
+#define GUI_INTERACT_INTERACTION_STATE_MANAGER_H
 
 
 #include "lib/error.hpp"
@@ -73,4 +73,4 @@ namespace interact {
   
   
 }} // namespace gui::interact
-#endif /*GUI_INTERACT_INTERACTION_STATE_MANAGER_H_*/
+#endif /*GUI_INTERACT_INTERACTION_STATE_MANAGER_H*/

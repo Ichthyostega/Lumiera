@@ -36,8 +36,8 @@
  */
 
 
-#ifndef LIB_TEST_TEST_HELPER_H_
-#define LIB_TEST_TEST_HELPER_H_
+#ifndef LIB_TEST_TEST_HELPER_H
+#define LIB_TEST_TEST_HELPER_H
 
 
 #include "lib/symbol.hpp"
@@ -230,4 +230,4 @@ namespace test{
               CHECK (lumiera_error_expect (LUMIERA_ERROR_##ERROR_ID));\
             }
 
-#endif /*LIB_TEST_TEST_HELPER_H_*/
+#endif /*LIB_TEST_TEST_HELPER_H*/
