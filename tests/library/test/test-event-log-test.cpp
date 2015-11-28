@@ -23,22 +23,15 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-util.hpp"
 #include "lib/error.hpp"
-#include "lib/util-foreach.hpp"
 
-#include <boost/algorithm/string.hpp>
-#include <functional>
 #include <iostream>
 #include <string>
 
-using util::for_each;
-using lumiera::Error;
-using lumiera::LUMIERA_ERROR_EXCEPTION;
+using util::join;
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
 
-using boost::algorithm::is_lower;
-using boost::algorithm::is_digit;
-using std::function;
 using std::string;
 using std::cout;
 using std::endl;
@@ -61,88 +54,117 @@ namespace test{
   int dontThrow() { return 2+2; }
   
   
-  /*********************************************//**
-   * verifies the proper working of helper functions
-   * frequently used within the Lumiera testsuite.
-   * @see test-helper.hpp
+  /***********************************************************//**
+   * @test verify a logging facility, which can be used to ensure
+   *       some events happened while running test code.
+   *       
+   * @see event-log.hpp
    */
   class TestEventLog_test : public Test
     {
       void
       run (Arg)
         {
-          checkGarbageStr();
-          checkTypeDisplay();
-          checkThrowChecker();
+          verify_simpleUsage();
         }
-      
-      
-      /** @test prints "sizeof()" including some type name. */
-      void
-      checkTypeDisplay ()
-        {
-          std::cout << "Displaying types and sizes....\n";
-          
-          typedef Wrmrmpft<Murpf>   Wrmpf1;
-          typedef Wrmrmpft<char[2]> Wrmpf2;
-          typedef Wrmrmpft<char[3]> Wrmpf3;
-          
-          Wrmpf1 rmpf1;
-          Wrmpf2 rmpf2;
-          Wrmpf3 rmpf3;
-          Murpf murpf;
-          
-          CHECK (1 == sizeof (rmpf1));
-          CHECK (2 == sizeof (rmpf2));
-          CHECK (3 == sizeof (rmpf3));
-          
-          cout << showSizeof((size_t)42, "theUniverse") << endl;
-          cout << showSizeof<char>("just a char")       << endl;
-          cout << showSizeof(murpf)                     << endl;
-          cout << showSizeof(rmpf1)                     << endl;
-          cout << showSizeof(rmpf2)                     << endl;
-          cout << showSizeof<Wrmpf3>()                  << endl;
-          
-          Wrmpf1 *p1 = &rmpf1;
-          Wrmpf1 *p2 = 0;
-          cout << showSizeof(p1)  << endl;
-          cout << showSizeof(p2)  << endl;
-        }
-      
-      
       
       
       void
-      checkGarbageStr()
+      verify_simpleUsage ()
         {
-          string garN = randStr(0);
-          CHECK (0 == garN.size());
+          EventLog log(this);
+          CHECK (isnil (log));
           
-          typedef function<bool(string::value_type)> ChPredicate;
-          ChPredicate is_OK (is_lower() || is_digit());
+          log.event("α");
+          log.event("β");
+          CHECK (!isnil(log));
           
-          string garM = randStr(1000000);
-          for_each (garM, is_OK);
+          log.verify("α");
+          log.verify("β");
+          VERIFY_ERROR (ASSERTION, log.verify("γ"));
           
-          cout << randStr(80) << endl;
+          log.verify("α").before("β");
+          VERIFY_ERROR (ASSERTION, verify("β").before("α"));
+          
+          CHECK (join(log) == "LOG::TestEventLog_test"+Log::instanceHash(this)
+                           +  ", Rec(event|  |{α}), Rec(event|  |{β})");
         }
       
       
-      /** @test check the VERIFY_ERROR macro, 
-       *        which ensures a given error is raised.
-       */
+      /** @test prints TODO */
       void
-      checkThrowChecker()
+      checkTODO ()
         {
-          // verify the exception is indeed raised
-          VERIFY_ERROR (EXCEPTION, doThrow() );
+#if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #975
+          log.verifyEvent("ctor");
+          log.verify("ctor").arg("dummy");
           
-#if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
-          // and when actually no exception is raised, this is an ASSERTION failure
-          VERIFY_ERROR (ASSERTION, VERIFY_ERROR (EXCEPTION, dontThrow() ));
-#endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
+          CHECK ("dummy" == log.getID().getSym());
+          CHECK ("ID<gui::model::test::MockElm>-dummy" = string(log.getID()));
+          
+          VERIFY_ERROR (ASSERTION, log.verifyCall("reset"));
+          
+          log.reset();
+          log.verify("reset");
+          log.verifyCall("reset");
+          log.verifyEvent("reset");
+          log.verify("reset").after("ctor");
+          log.verify("ctor").before("reset");
+          VERIFY_ERROR (ASSERTION, log.verify("reset").before("ctor"));
+          VERIFY_ERROR (ASSERTION, log.verify("ctor").after("reset"));
+          
+          log.verify("reset").before("reset");
+          log.verify("reset").beforeEvent("reset");
+          log.verifyCall("reset").before("reset");
+          log.verifyCall("reset").beforeEvent("reset");
+          VERIFY_ERROR (ASSERTION, log.verifyCall("reset").afterCall("reset"));
+          VERIFY_ERROR (ASSERTION, log.verifyCall("reset").afterEvent("reset"));
+          VERIFY_ERROR (ASSERTION, log.verifyEvent("reset").afterEvent("reset"));
+          
+          CHECK (!log.isTouched());
+          CHECK (!log.isExpanded());
+          
+          log.noteMsg("dolorem ipsum quia dolor sit amet consectetur adipisci velit.");
+          log.verifyNote("Msg");
+          log.verifyCall("noteMsg");
+          log.verifyCall("noteMsg").arg("lorem ipsum");
+          log.verifyCall("noteMsg").argMatch("dolor.+dolor\\s+");
+          log.verifyMatch("Rec\\(note.+kind = Msg.+msg = dolorem ipsum");
+          
+          EventLog log = log.getLog();
+          log.verify("ctor")
+             .before("reset")
+             .before("lorem ipsum");
+          
+          MockElm foo("foo"), bar;
+          foo.verify("ctor").arg("foo");
+          bar.verify("ctor").arg();
+          
+          bar.ensureNot("foo");
+          log.ensureNot("foo");
+          log.ensureNot("foo");
+          VERIFY_ERROR (ASSERTION, foo.ensureNot("foo"));
+          
+          log.join(bar).join(foo);
+          log.verifyEvent("logJoin").arg(bar.getID())
+             .beforeEvent("logJoin").arg("foo");
+          
+          log.verifyEvent("logJoin").arg(bar.getID())
+              .beforeEvent("logJoin").arg("foo");
+          log.verify("ctor").arg("foo");
+          log.verify("ctor").arg("foo");
+          log.verify("ctor").arg("dummy")
+             .before("ctor").arg(bar.getID())
+             .before("ctor").arg("foo");
+          
+          log.kill();
+          foo.noteMsg("dummy killed");
+          log.verifyEvent("dtor").on("dummy")
+             .beforeCall("noteMsg").on("foo");
+           // and when actually no exception is raised, this is an ASSERTION failure
+           VERIFY_ERROR (ASSERTION, VERIFY_ERROR (EXCEPTION, dontThrow() ));
+#endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #975
         }
-      
     };
   
   LAUNCHER (TestEventLog_test, "unit common");
