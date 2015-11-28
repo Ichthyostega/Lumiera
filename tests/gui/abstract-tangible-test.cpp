@@ -47,6 +47,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/error.hpp"
 //#include "gui/model/session-facade.hpp"
 //#include "gui/model/diagnostics.hpp"
 //#include "lib/util.hpp"

@@ -57,6 +57,7 @@
 #include "lib/diff/gen-node.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <utility>
 #include <string>
 
 
@@ -90,26 +91,30 @@ namespace ctrl{
    * some element.
    */
   class BusTerm
-    : boost::noncopyable
     {
-      EntryID endpointID_;
+      using ID = lib::idi::BareEntryID;
+      
+      ID   endpointID_;
       BusTerm& theBus_;
       
     public:
       virtual ~BusTerm();  ///< this is an interface
       
-      virtual void act (GenNode command)   =0;
-      virtual void note (GenNode mark)     =0;
-      virtual void mark (GenNode mark)     =0;
+      virtual void act (GenNode command);
+      virtual void note (GenNode mark);
+      virtual void mark (GenNode mark);
       
-      virtual void act  (EntryID subject, GenNode command)  =0;
-      virtual void note (EntryID subject, GenNode mark)     =0;
-      virtual void mark (EntryID subject, GenNode mark)     =0;
+      virtual void note (ID subject, GenNode mark);
+      virtual void mark (ID subject, GenNode mark);
       
-      BusTerm&& attach (EntryID newAddress);
+      BusTerm&& attach (ID newAddress);
+      
+      /** may be moved, but not copied,
+       *  due to the embedded identity */
+      BusTerm(BusTerm&&) = default;
       
     protected:
-      BusTerm(EntryID identity, BusTerm& attached_to =*this)
+      BusTerm(ID identity, BusTerm& attached_to)
         : endpointID_(identity)
         , theBus_(attached_to)
         { }

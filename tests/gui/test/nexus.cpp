@@ -35,7 +35,7 @@
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "gui/test/nexus.hpp"
+#include "test/nexus.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>

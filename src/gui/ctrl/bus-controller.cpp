@@ -22,11 +22,15 @@
 
 
 /** @file bus-controller.cpp
- ** Service for bus-controller.
- ** This header defines the basics of...
+ ** Implementation of the UI backbone service for messaging.
+ ** Any globally relevant widget or controller within the Lumiera UI
+ ** is connected to the [UI-Bus][ui-bus.hpp], which is largely implemented
+ ** within this compilation unit. [Clients][gui::model::Tangible] typically
+ ** use the [BusTerm-Interface][bus-term.hpp] to route generic actions and
+ ** receive notifications, state changes and mutations.
  ** 
- ** @note as of X/2015 this is complete bs
- ** @todo WIP  ///////////////////////TICKET #
+ ** @note as of 11/2015 this is complete WIP_WIP
+ ** @todo WIP  ///////////////////////TICKET #975
  ** 
  ** @see ////TODO_test usage example
  ** @see bus-controller.cpp implementation
@@ -37,6 +41,7 @@
 #include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
+#include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/bus-controller.hpp"
 
 //#include <boost/noncopyable.hpp>
@@ -51,7 +56,7 @@ using util::isnil;
 
 
 namespace gui {
-namespace controller { 
+namespace ctrl { 
 
   namespace { // internal details
     
@@ -59,21 +64,60 @@ namespace controller {
   
   
   
-  //NA::~NA() { }
+  BusTerm::~BusTerm() { }  // emit VTables here... 
   
   
   
   
-  /**
-   * 
-   * @param id
-   * @return
-   */
-  string
-  fun (string& id)
+  /** Builder function: establish and wire
+   *  a new BusTerm as connected to this one */
+  BusTerm&&
+  BusTerm::attach (ID newAddress)
   {
-    return "x"+id;
+    return std::move( BusTerm(newAddress, *this));
   }
+  
+  
+  /* ==== standard implementation of the BusTerm interface ==== */
+  
+  void
+  BusTerm::act (GenNode command)
+  {
+    UNIMPLEMENTED("issue command");
+  }
+  
+  
+  /** */
+  void
+  BusTerm::note (GenNode mark)
+  {
+    UNIMPLEMENTED("send notification downstream");
+  }
+  
+  
+  /** */
+  void
+  BusTerm::note (ID subject, GenNode mark)
+  {
+    UNIMPLEMENTED("send notification to subject");
+  }
+  
+  
+  /** */
+  void
+  BusTerm::mark (GenNode mark)
+  {
+    UNIMPLEMENTED("record state mark");
+  }
+  
+  
+  /** */
+  void
+  BusTerm::mark (ID subject, GenNode mark)
+  {
+    UNIMPLEMENTED("forward state mark from subject");
+  }
+  
   
 }} // namespace gui::ctrl
 
