@@ -59,7 +59,65 @@
 #include <vector>
 
 
+
+
+/* ======= Namespace Definitions ======= */
+
+/** Lumiera GTK UI implementation root. */
 namespace gui {
+  
+
+  /** Backbone of the Lumiera GTK UI.
+   *  All interface elements and controllers of global relevance
+   *  are connected to a communication structure known as UI-Bus.
+   *  This structure allows to address interface elements by ID
+   *  and to process command invocations with asynchronous feedback
+   *  in a uniform way.
+   */
+  namespace ctrl {}
+  
+  /** UI interaction control.
+   *  Any overarching concerns of interaction patterns,
+   *  selecting the subject, forming and binding of commands,
+   *  management of focus and perspective, keybindings and gestures.
+   */
+  namespace interact {}
+  
+  /** The Lumiera GTK-GUI uses a thin proxy layer data model
+   *  on top of the actual "high-level-model", which lives in the
+   *  Proc-Layer below. GUI operations interact with these proxy model
+   *  entities, which in turn forward the calls to the actual objects
+   *  in the Proc-Layer, through the Command system (which enables UNDO).
+   *  
+   *  @todo: as of 1/2011 this connection between the GUI proxy model and
+   *         the Proc-Layer model needs to be set up. Currently, the GUI model
+   *         entities are just created standalone and thus dysfunctional.
+   *  @todo: as of 11/2015 this connection between UI and Proc-Layer is actually
+   *         in the works, and it is clear by now that we won't use proxy objects,
+   *         but rather a generic bus-like connection and symbolic IDs to designate
+   *         the model elements
+   */
+  namespace model {}
+  
+  /** The namespace of all video output implementations. */
+  namespace output {}
+
+  /** Dialog box classes. */
+  namespace dialog {}
+  
+  /** Docking panel classes. */
+  namespace panel {}
+  
+  /** Lumiera custom widgets. */
+  namespace widget {}
+  
+  /** The workspace window and it's helper classes. */
+  namespace workspace {}
+  
+  /** GUI helpers, utility functions and classes. */
+  namespace util {}
+  
+  
   
   using std::shared_ptr;
   

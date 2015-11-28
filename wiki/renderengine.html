@@ -2383,7 +2383,7 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
-<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201511280006" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="3">
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201511280316" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="4">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 
 !prerequisites for issuing a command
@@ -2414,7 +2414,7 @@ This approach attempts to keep knowledge and definition clustered according to t
 * we need to introduce a new abstraction, termed InteractionStateManager. This is deliberately not a single entity, rather some distinct facility in charge for one specific kind of interaction, like gestures being formed by mouse, touch or pen input.
 * from the command definition site, we need to send a combination of //rules// and parameter accessors, which together define an invocation path for one specific flavour of a command
 * the InteractionStateManager, driven by the state changes he observes, will evaluate those rules and determine the feasibility of specific command invocation paths
-* he sends the //enablement of a command invocation path// as a preconfigured binding to the actual //trigger sites,// which in turn allows them to install actual reaction patterns
+* he sends the //enablement of a command invocation trail// as a preconfigured binding to the actual //trigger sites,// which in turn allows them to install actual reaction patterns
 * if finally some button is hit, the local event binding can issue the command right away, as preconfigured in this //enablement binding,// by accessiny just any UI-Bus terminal available within that context
 
 The consequence of this approach is a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.</pre>
@@ -2914,6 +2914,12 @@ The interface programming allows us to react on events and trigger behaviour, an
 :and while we work, the focus moves along. Some things are closer, other things are remote and require us to move and re-orient and reshape our perspective, should we choose to turn towards them.
 ;the ability to arrange what is relevant
 :we do the same stuff again and again, and this makes us observe and understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.</pre>
+</div>
+<div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" tags="def design GuiIntegration draft" changecount="1">
+<pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
+In a more elaborate UI, as can be expected for a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
+
+An InteractionStateManager is a global component, but rarely addressed directly. Rather this tracking component attaches and taps into various information sources to observe some aspects of global state. Moreover, it is outfitted with a set of rules, leading to enablement of some //command invocation trail.// These enablements or disablements are forwarded to the actual trigger points, which are those UI elements to witness the completion of a gesture.</pre>
 </div>
 <div title="InterfaceNamespaces" modifier="Ichthyostega" created="200708080338" modified="201003160209" tags="impl decision draft">
 <pre>Because we rely on strong decoupling and separation into self contained components, there is not much need for a common quasi-global namespace. Operations needing the cooperation of another subsystem will be delegated or even dispatched, consequently implementation code needs only the service acces points from &quot;direct cooperation partner&quot; subsystems. Hierarchical scopes besides classes are needed only when multiple subsystems share a set of common abstractions. Interface and Implementation use separate namespaces.
