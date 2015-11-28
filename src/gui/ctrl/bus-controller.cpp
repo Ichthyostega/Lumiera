@@ -77,6 +77,13 @@ namespace ctrl {
     return std::move( BusTerm(newAddress, *this));
   }
   
+  BusTerm::ID
+  BusTerm::getID()  const
+  {
+    return endpointID_;
+  }
+  
+  
   
   /* ==== standard implementation of the BusTerm interface ==== */
   

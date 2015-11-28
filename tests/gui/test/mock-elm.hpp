@@ -43,8 +43,9 @@
 
 
 #include "lib/error.hpp"
-#include "lib/idi/entry-id.hpp"
+//#include "lib/idi/entry-id.hpp"
 //#include "lib/util.hpp"
+#include "lib/test/event-log.hpp"
 #include "gui/model/tangible.hpp"
 #include "lib/diff/record.hpp"
 #include "test/nexus.hpp"
@@ -56,14 +57,16 @@
 namespace gui {
   namespace error = lumiera::error;
   using error::LUMIERA_ERROR_ASSERTION;
+  using lib::test::EventLog;
+  using lib::test::EventMatch;
   
 namespace test{
   
   
 //  using lib::HashVal;
 //  using util::isnil;
-  using lib::idi::EntryID;
-  using lib::diff::Record;
+//  using lib::idi::EntryID;
+//  using lib::diff::Record;
   using std::string;
   
   
@@ -81,40 +84,41 @@ namespace test{
   class MockElm
     : public gui::model::Tangible
     {
+      EventLog log_{this};
       
       /* ==== Tangible interface ==== */
       
-      virtual void doReset()
+      virtual void doReset()  override
         {
           UNIMPLEMENTED ("mock doReset");
         }
       
-      virtual void doExpand()
+      virtual void doExpand()  override
         {
           UNIMPLEMENTED ("mock doExpand");
         }
       
-      virtual void doReveal()
+      virtual void doReveal()  override
         {
           UNIMPLEMENTED ("mock doReveal");
         }
       
-      virtual void doMsg()
+      virtual void doMsg (string text)  override
         {
           UNIMPLEMENTED ("mock doMsg");
         }
       
-      virtual void doErr()
+      virtual void doErr (string text)  override
         {
           UNIMPLEMENTED ("mock doErr");
         }
       
-      virtual void doFlash()
+      virtual void doFlash()  override
         {
           UNIMPLEMENTED ("mock doFlash");
         }
       
-      virtual void doMark()
+      virtual void doMark (GenNode const& mark)  override
         {
           UNIMPLEMENTED ("mock doMark");
         }
@@ -124,13 +128,87 @@ namespace test{
     public:
       explicit
       MockElm(string id)
-        : MockElm(EntryID<MockElm>(id))
+        : MockElm(lib::idi::EntryID<MockElm>(id))
         { }
       
       explicit
       MockElm(ID identity, ctrl::BusTerm& nexus  =Nexus::testUI())
         : gui::model::Tangible(identity, nexus)
         { }
+      
+      
+      /* ==== special operations API ==== */
+      
+      void
+      kill()
+        {
+          UNIMPLEMENTED ("suicide");
+        }
+      
+      
+      /* ==== Query/Verification API ==== */
+      
+      ID getID()  const
+        {
+          return uiBus_.getID();
+        }
+      
+      EventLog&
+      getLog()
+        {
+          return log_;
+        }
+      
+      
+      bool
+      isTouched()  const
+        {
+          UNIMPLEMENTED ("pristine status");
+        }
+      
+      bool
+      isExpanded()  const
+        {
+          UNIMPLEMENTED ("UI element expansion status");
+        }
+      
+      
+      EventMatch
+      verify (string match)
+        {
+          return getLog().verify(match);
+        }
+      
+      EventMatch
+      verifyMatch (string regExp)
+        {
+          return getLog().verifyMatch(regExp);
+        }
+      
+      EventMatch
+      verifyEvent (string match)
+        {
+          return getLog().verifyEvent(match);
+        }
+      
+      EventMatch
+      verifyCall (string match)
+        {
+          return getLog().verifyCall(match);
+        }
+      
+      EventMatch
+      ensureNot (string match)
+        {
+          return getLog().ensureNot(match);
+        }
+      
+      /** special verification match on a "note" message to this element */
+      EventMatch
+      verifyNote (string msgContentMatch)
+        {
+          UNIMPLEMENTED ("generic match");
+        }
     };
   
   

@@ -58,15 +58,6 @@ namespace interact {
   
   
   
-  /**
-   * 
-   * @param id
-   * @return
-   */
-  string
-  fun (string& id)
-  {
-    return "x"+id;
-  }
+  /** nonsense */
 
 }} // namespace gui::interact

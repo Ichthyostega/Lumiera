@@ -59,6 +59,14 @@ namespace model {
   
   
   
+  /** */
+  void
+  Tangible::reset()
+    {
+      this->doReset();
+    }
+  
+  
   /**
    * Prepare a command or action for actual invocation, once the execution context
    * has been established. The action is not executed right away, but it is now ready

@@ -24,12 +24,15 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/format-util.hpp"
+#include "lib/test/event-log.hpp"
 #include "lib/error.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
 #include <string>
 
 using util::join;
+using util::isnil;
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
 
 using std::string;
@@ -50,8 +53,6 @@ namespace test{
   struct Murpf { };
   
   
-  void doThrow() { throw Error("because I feel like it"); }
-  int dontThrow() { return 2+2; }
   
   
   /***********************************************************//**
@@ -84,9 +85,9 @@ namespace test{
           VERIFY_ERROR (ASSERTION, log.verify("γ"));
           
           log.verify("α").before("β");
-          VERIFY_ERROR (ASSERTION, verify("β").before("α"));
+          VERIFY_ERROR (ASSERTION, log.verify("β").before("α"));
           
-          CHECK (join(log) == "LOG::TestEventLog_test"+Log::instanceHash(this)
+          CHECK (join(log) == "LOG::TestEventLog_test"+EventLog::instanceHash(this)
                            +  ", Rec(event|  |{α}), Rec(event|  |{β})");
         }
       

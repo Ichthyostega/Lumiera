@@ -51,6 +51,13 @@
 #include <string>
 
 
+/** @todo unused as of 11/2015
+ * some additional instantiation metadata
+ * could be passed alongside with the invocation.
+ */
+#define RESERVED_FOR_FUTURE_USE_ 42
+
+
 namespace gui {
 namespace interact {
 
@@ -84,7 +91,7 @@ namespace interact {
       
       GenNode bang()  const
         {
-          return GenNode(cmdID_, FLAGS);
+          return GenNode(cmdID_, RESERVED_FOR_FUTURE_USE_);
         }
       
       operator string()  const
@@ -93,12 +100,6 @@ namespace interact {
         }
       
     private:
-      
-      /** @todo unused as of 11/2015
-       * some additional instantiation metadata
-       * could be passed alongside with the invocation. 
-       */
-      static const int FLAGS = 42;
     };
   
   

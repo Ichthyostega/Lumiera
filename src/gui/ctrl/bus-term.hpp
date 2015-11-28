@@ -109,6 +109,8 @@ namespace ctrl{
       
       BusTerm&& attach (ID newAddress);
       
+      ID getID()  const;
+      
       /** may be moved, but not copied,
        *  due to the embedded identity */
       BusTerm(BusTerm&&) = default;

@@ -88,23 +88,23 @@ namespace model {
       void prepareCommand (Cmd const& prototype, Rec&& arguments);
       void issueCommand (Cmd const& preparedAction);
       
-      void slotExpand();
-      void slotReveal();
+      void slotExpand()               { this->doExpand(); }
+      void slotReveal()               { this->doReveal(); }
       
-      void noteMsg();
-      void noteErr();
-      void noteFlash();
-      void noteMark();
+      void noteMsg (string m)         { this->doMsg(m); }
+      void noteErr (string e)         { this->doErr(e); }
+      void noteFlash()                { this->doFlash();}
+      void noteMark(GenNode const& n) { this->doMark(n);}
       
     protected:
       virtual void doReset()  =0;
       virtual void doExpand() =0;
       virtual void doReveal() =0;
       
-      virtual void doMsg()   =0;
-      virtual void doErr()   =0;
-      virtual void doFlash() =0;
-      virtual void doMark()  =0;
+      virtual void doMsg (string)          =0;
+      virtual void doErr (string)          =0;
+      virtual void doFlash()               =0;
+      virtual void doMark(GenNode const&)  =0;
     private:
     };
   

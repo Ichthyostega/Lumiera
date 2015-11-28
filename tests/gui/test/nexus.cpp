@@ -66,7 +66,7 @@ namespace test{
    *         which allows to hook up new nodes for test
    */
   ctrl::BusTerm&
-  testUI()
+  Nexus::testUI()
   {
     UNIMPLEMENTED("test nexus");
   }

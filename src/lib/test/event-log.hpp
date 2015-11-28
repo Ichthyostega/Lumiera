@@ -44,10 +44,14 @@
 
 
 #include "lib/error.hpp"
+#include "lib/idi/entry-id.hpp"
+#include "lib/iter-adapter-stl.hpp"
+#include "lib/diff/record.hpp"
 //#include "lib/time/timevalue.hpp"
 
 //#include <boost/lexical_cast.hpp>
-//#include <string>
+#include <vector>
+#include <string>
 
 
 
@@ -55,8 +59,93 @@ namespace lib {
 namespace test{
   
 //  using lib::Literal;
-//  using std::string;
+  using std::string;
 //  using std::rand;
+  
+  /**
+   * @internal ongoing evaluation and match within an [EventLog].
+   * @throws error::Fatal when the expected match fails (error::LUMIERA_ERROR_ASSERTION)
+   */
+  class EventMatch
+    {
+      friend class EventLog;
+      
+    public:
+      
+      EventMatch&
+      before (string match)
+        {
+          UNIMPLEMENTED("process combined relational match");
+        }
+      
+      EventMatch&
+      beforeMatch (string regExp)
+        {
+          UNIMPLEMENTED("process combined relational regular expression match");
+        }
+      
+      EventMatch&
+      beforeEvent (string match)
+        {
+          UNIMPLEMENTED("process combined relational match");
+        }
+      
+      EventMatch&
+      beforeCall (string match)
+        {
+          UNIMPLEMENTED("process combined relational match");
+        }
+      
+      EventMatch&
+      after (string match)
+        {
+          UNIMPLEMENTED("process combined relational match backwards");
+        }
+      
+      EventMatch&
+      afterMatch (string regExp)
+        {
+          UNIMPLEMENTED("process combined relational regular expression match backwards");
+        }
+      
+      EventMatch&
+      afterEvent (string match)
+        {
+          UNIMPLEMENTED("process combined relational match backwards");
+        }
+      
+      EventMatch&
+      afterCall (string match)
+        {
+          UNIMPLEMENTED("process combined relational match backwards");
+        }
+      
+      EventMatch&
+      arg ()
+        {
+          UNIMPLEMENTED("process match on no-arg call argument list");
+        }
+      
+      template<typename... MORE>
+      EventMatch&
+      arg (string match, MORE...args)
+        {
+          UNIMPLEMENTED("process match on call argument list");
+        }
+      
+      template<typename... MORE>
+      EventMatch&
+      argMatch (string regExp, MORE...args)
+        {
+          UNIMPLEMENTED("process regular expression match on call argument list");
+        }
+      
+      EventMatch&
+      on (string sourceID)
+        {
+          UNIMPLEMENTED("process additional filter on source of log entry");
+        }
+    };
   
   
   /**
@@ -64,7 +153,110 @@ namespace test{
    */
   class EventLog
     {
+      using Entry = lib::diff::Record<string>;
+      using Log   = std::vector<Entry>;
+      using Iter = Log::const_iterator;
       
+      string logID_;
+      Log log_;
+      
+    public:
+      explicit
+      EventLog (string logID)
+        : logID_(logID)
+        {
+          UNIMPLEMENTED("initial log entry");
+        }
+      
+      template<class X>
+      explicit
+      EventLog (const X *const)
+        : EventLog(idi::typeSymbol<X>())
+        { }
+      
+      
+      // standard copy operations acceptable
+      
+      
+      EventLog&
+      join (EventLog& otherLog)
+        {
+          UNIMPLEMENTED("log join");
+          return *this;
+        }
+      
+      
+      
+      /* ==== Logging API ==== */
+      
+      EventLog&
+      event (string text)
+        {
+          return *this;
+        }
+      
+      
+      template<class X>
+      static string
+      instanceHash(const X *const)
+        {
+          UNIMPLEMENTED ("generate an object instance hash");
+        }
+      
+      
+      
+      /* ==== Iteration ==== */
+      
+      bool
+      empty()  const
+        {
+          UNIMPLEMENTED ("collection behaviour");
+        }
+      
+      
+      typedef Iter const_iterator;
+      typedef const Entry value_type;
+      
+      const_iterator begin() const { return log_.begin(); }
+      const_iterator end()   const { return log_.end(); }
+      
+      friend const_iterator begin (EventLog const& log) { return log.begin(); }
+      friend const_iterator end   (EventLog const& log) { return log.end(); }
+      
+      
+      
+      
+      /* ==== Query/Verification API ==== */
+      
+      EventMatch
+      verify (string match)
+        {
+          UNIMPLEMENTED("start matching sequence");
+        }
+      
+      EventMatch
+      verifyMatch (string regExp)
+        {
+          UNIMPLEMENTED("start matching sequence for regular expression match");
+        }
+      
+      EventMatch
+      verifyEvent (string match)
+        {
+          UNIMPLEMENTED("start matching sequence");
+        }
+      
+      EventMatch
+      verifyCall (string match)
+        {
+          UNIMPLEMENTED("start matching sequence");
+        }
+      
+      EventMatch
+      ensureNot (string match)
+        {
+          UNIMPLEMENTED("start matching sequence");
+        }
     };
   
   

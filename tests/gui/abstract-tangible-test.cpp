@@ -47,7 +47,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/test/event-log.hpp"
 #include "test/mock-elm.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/error.hpp"
 //#include "gui/model/session-facade.hpp"
 //#include "gui/model/diagnostics.hpp"
@@ -59,6 +61,9 @@
 //#include <string>
 //#include <map>
 
+using gui::test::MockElm;
+using lib::test::EventLog;
+using lib::idi::EntryID;
 //using boost::lexical_cast;
 //using util::contains;
 //using std::string;
@@ -115,12 +120,13 @@ namespace test {
       verify_mockManipulation ()
         {
           MockElm mock("dummy");
+          
           mock.verify("ctor");
           mock.verifyEvent("ctor");
           mock.verify("ctor").arg("dummy");
           
           CHECK ("dummy" == mock.getID().getSym());
-          CHECK ("ID<gui::model::test::MockElm>-dummy" = string(mock.getID()));
+          CHECK (EntryID<MockElm>("dummy") == mock.getID());
           
           VERIFY_ERROR (ASSERTION, mock.verifyCall("reset"));
           
@@ -156,7 +162,7 @@ namespace test {
              .before("reset")
              .before("lorem ipsum");
           
-          MockElm foo("foo"), bar;
+          MockElm foo("foo"), bar("bar");
           foo.verify("ctor").arg("foo");
           bar.verify("ctor").arg();
           
@@ -165,16 +171,16 @@ namespace test {
           mock.ensureNot("foo");
           VERIFY_ERROR (ASSERTION, foo.ensureNot("foo"));
           
-          log.join(bar).join(foo);
-          log.verifyEvent("logJoin").arg(bar.getID())
+          log.join(bar.getLog()).join(foo.getLog());
+          log.verifyEvent("logJoin").arg(bar.getID().getSym())
              .beforeEvent("logJoin").arg("foo");
           
-          mock.verifyEvent("logJoin").arg(bar.getID())
+          mock.verifyEvent("logJoin").arg(bar.getID().getSym())
               .beforeEvent("logJoin").arg("foo");
           mock.verify("ctor").arg("foo");
           log.verify("ctor").arg("foo");
           log.verify("ctor").arg("dummy")
-             .before("ctor").arg(bar.getID())
+             .before("ctor").arg(bar.getID().getSym())
              .before("ctor").arg("foo");
           
           mock.kill();
