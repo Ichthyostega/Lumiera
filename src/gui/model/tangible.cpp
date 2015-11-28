@@ -33,6 +33,8 @@
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
 #include "gui/model/tangible.hpp"
+#include "gui/model/widget.hpp"
+#include "gui/model/controller.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
@@ -65,9 +67,8 @@ namespace model {
    * @param arguments suitable tuple of values, to be used to outfit the prototype
    */
   void
-  Tangible::prepareCommand (InvocationTrail const& prototype, Rec&& arguments)
+  Tangible::prepareCommand (Cmd const& prototype, Rec&& arguments)
   {
-    TODO ("invoke some hook for instrumentation?");
     uiBus_.act (prototype.bind(std::forward<Rec>(arguments)));
   }
   
@@ -78,10 +79,9 @@ namespace model {
    *        which needs to be outfitted with arguments and ready for invocation.
    */
   void
-  Tangible::issueCommand (InvocationTrail const& preparedAction)
+  Tangible::issueCommand (Cmd const& preparedAction)
   {
-    TODO ("invoke some hook for instrumentation?");
-    uiBus_.act (prototype.bang());
+    uiBus_.act (preparedAction.bang());
   }
   
   

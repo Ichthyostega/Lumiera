@@ -47,6 +47,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "test/mock-elm.hpp"
 #include "lib/error.hpp"
 //#include "gui/model/session-facade.hpp"
 //#include "gui/model/diagnostics.hpp"
@@ -64,7 +65,6 @@
 //using std::cout;
 //using std::endl;
 
-using lib::error::LUMIERA_ERROR_ASSERTION;
 
 
 namespace gui  {

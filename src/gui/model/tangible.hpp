@@ -68,14 +68,15 @@ namespace model {
     : boost::noncopyable
     {
     protected:
-      using interact::InvocationTrail;
-      using lib::diff::GenNode;
-      using lib::diff::Rec;
+      using GenNode = lib::diff::GenNode;
+      using Cmd = interact::InvocationTrail;
+      using Rec = lib::diff::Rec;
+      using ID = lib::idi::BareEntryID;
       
       ctrl::BusTerm uiBus_;
       
       
-      Tangible(EntryID identity, ctrl::BusTerm nexus)
+      Tangible(ID identity, ctrl::BusTerm& nexus)
         : uiBus_(nexus.attach(identity))
         { }
       
@@ -84,8 +85,8 @@ namespace model {
       
       void reset();
       
-      void prepareCommand (InvocationTrail const& prototype, Rec&& arguments);
-      void issueCommand (InvocationTrail const& preparedAction);
+      void prepareCommand (Cmd const& prototype, Rec&& arguments);
+      void issueCommand (Cmd const& preparedAction);
       
       void slotExpand();
       void slotReveal();
@@ -96,8 +97,14 @@ namespace model {
       void noteMark();
       
     protected:
-      virtual void doExpand()  =0;
-      virtual void doReveal()  =0;
+      virtual void doReset()  =0;
+      virtual void doExpand() =0;
+      virtual void doReveal() =0;
+      
+      virtual void doMsg()   =0;
+      virtual void doErr()   =0;
+      virtual void doFlash() =0;
+      virtual void doMark()  =0;
     private:
     };
   

@@ -47,13 +47,18 @@
 //#include "lib/util.hpp"
 #include "gui/model/tangible.hpp"
 #include "lib/diff/record.hpp"
+#include "test/nexus.hpp"
 
 //#include <boost/noncopyable.hpp>
 #include <string>
 
 
 namespace gui {
+  namespace error = lumiera::error;
+  using error::LUMIERA_ERROR_ASSERTION;
+  
 namespace test{
+  
   
 //  using lib::HashVal;
 //  using util::isnil;
@@ -79,28 +84,52 @@ namespace test{
       
       /* ==== Tangible interface ==== */
       
-      virtual void
-      act (GenNode command)  override
+      virtual void doReset()
         {
-          UNIMPLEMENTED ("");
+          UNIMPLEMENTED ("mock doReset");
         }
-      virtual void note (GenNode mark)     =0;
-      virtual void mark (GenNode mark)     =0;
       
-      virtual void act  (EntryID subject, GenNode command)  =0;
-      virtual void note (EntryID subject, GenNode mark)     =0;
-      virtual void mark (EntryID subject, GenNode mark)     =0;
+      virtual void doExpand()
+        {
+          UNIMPLEMENTED ("mock doExpand");
+        }
+      
+      virtual void doReveal()
+        {
+          UNIMPLEMENTED ("mock doReveal");
+        }
+      
+      virtual void doMsg()
+        {
+          UNIMPLEMENTED ("mock doMsg");
+        }
+      
+      virtual void doErr()
+        {
+          UNIMPLEMENTED ("mock doErr");
+        }
+      
+      virtual void doFlash()
+        {
+          UNIMPLEMENTED ("mock doFlash");
+        }
+      
+      virtual void doMark()
+        {
+          UNIMPLEMENTED ("mock doMark");
+        }
       
       
     protected:
     public:
       explicit
       MockElm(string id)
-        : gui::model::Tangible(TODO_generate_identity, TestNexus::hook())
+        : MockElm(EntryID<MockElm>(id))
         { }
       
       explicit
-      MockElm(EntryID identity, ctrl::BusTerm&& nexus =TestNexus::hook())
+      MockElm(ID identity, ctrl::BusTerm& nexus  =Nexus::testUI())
+        : gui::model::Tangible(identity, nexus)
         { }
     };
   
