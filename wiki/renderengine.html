@@ -8371,7 +8371,7 @@ The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the 
 
 The ~MVC-Pattern as such is fine, and probably the best we know for construction of user interfaces. But it doesn't scale well towards the integration into a larger and more structured system. There is a tension between the Controller in the UI and other parts of an application, which as well need to be //in control.// And, even more important, there is a tension between the demands of UI elements for support by a model, and the demands to be placed on a core domain model of a large scale application. This tension is resolved by enacting these roles while transforming the requests and demands into //Messages.//</pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201511272242" tags="GuiPattern design draft decision" changecount="16">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201511280638" tags="GuiPattern design draft decision" changecount="17">
 <pre>While our UI widgets are implemented the standard way as proposed by GTKmm, some key elements -- which are especially relevant for the anatomy and mechanics of the interface -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -8423,6 +8423,9 @@ We should note that these conventions of interchange lead to a recursive or ''se
 While the above definitions might seem more or less obvious and reasonable, there is one tiny detail, which -- on second thought -- unfolds into a fundamental decision to be taken. The point in question is //how we refer to a command.// More specifically: is referring to a command something generic, or is it rather something left to the actual implementing widget? In the first case, a generic foundation element has to provide some framework to deal with command definitions, whereas in the second case just a protected slot to pass on invocations from derived classes would be sufficient. This is a question of fundamental importance; subsidiarity has its merits, so once we forgo the opportunity to build from a generic pattern, local patterns will take over, while similarities and symmetries have to grow and wait to be discovered sometimes, if at all. This might actually not be a problem -- yet if you know Lumiera, you know that we tend to look at existing practice and draw fundamental conclusions, prior to acting.
 &amp;rarr; InteractionControl
 &amp;rarr; GuiCommandBinding
+
+!!!actual implementation of command invocation
+The {{{InvocationTrail}}} of an command is actually just a tag object, wrapping the command definition ID. In a first step, when the arguments can be closed, a {{{Record}}} with suitable bindings is created and wrapped into a {{{GenNode}}} corresponding to the command. This compound is sent over the UI-Bus, marking the command ready for execution. From this point on, just the {{{InvocationTrail}}} is passed to enable the trigger sites. When it is triggered, just a &quot;bang!&quot; message with the command ID is sent over the bus. An command instance can be re-used, as long as it is structurally the same as before, and as log as there is no possible collision with a similar, but differently parametrised instantiation process.
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">

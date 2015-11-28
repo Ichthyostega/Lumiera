@@ -22,10 +22,18 @@
 
 
 /** @file invocation-trail.hpp
- ** Abstraction: a tangible element of the User Interface.
- ** Any such element is connected to the UIBus...
+ ** A command in preparation of being issued from the UI.
+ ** The actual persistent operations on the session model are defined
+ ** as DSL scripts acting on the session interface, and configured as a
+ ** _command prototype_. Typically these need to be enriched with at least
+ ** the actual subject to invoke this command on; many commands require
+ ** additional parameters, e.g. some time or colour value. These actual
+ ** invocation parameters need to be picked up from UI elements, and the
+ ** process of preparing and outfitting a generic command with these
+ ** actual values is tracked by an [InvocationTrail] handle. When
+ ** ready, finally this handle can be issued on any [BusTerm].
  ** 
- ** @todo as of 1/2015 this is complete WIP-WIP-WIP
+ ** @todo as of 11/2015 this is complete WIP-WIP-WIP
  ** 
  ** @see ////TODO_test usage example
  ** 
@@ -36,59 +44,61 @@
 #define GUI_INTERACT_INVOCATION_TRAIL_H_
 
 
-#include "lib/error.hpp"
-#include "gui/ctrl/bus-term.hpp"
-#include "lib/idi/entry-id.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
+#include "proc/control/command.hpp"
+#include "lib/diff/gen-node.hpp"
 
-#include <boost/noncopyable.hpp>
+#include <utility>
 #include <string>
 
 
 namespace gui {
 namespace interact {
-  
-//  using lib::HashVal;
-//  using util::isnil;
+
+  using lib::diff::GenNode;
+  using lib::diff::Rec;
   using std::string;
   
   
   /**
-   * Interface common to all UI elements of relevance for the Lumiera application.
-   * Any non-local and tangible interface interaction will at some point pass through
-   * this foundation element, which forms the joint and attachment to the UI backbone,
-   * which is the [UI-Bus][ui-bus.hpp]. Any tangible element acquires a distinct identity
-   * and has to be formed starting from an already existing bus nexus.
-   * 
-   * @todo write type comment...
+   * A concrete command invocation in the state of preparation and argument binding.
+   * This value object is a tracking handle used within the UI to deal with establishing
+   * a command context, maybe to present the command within a menu or to picking up
+   * actual invocation parameters from the context.
+   * @remarks typically you don't create an InvocationTrail from scratch; rather
+   *          you'll find it embedded into rules placed into a [InteractionStateManager].
+   *          The intention is to define it alongside with the command prototype.
    */
   class InvocationTrail
-    : boost::noncopyable
     {
-    protected:
-      
-      Tangible(EntryID identity, ctrl::BusTerm nexus)
-        : uiBus_(nexus.attach(identity))
-        { }
+      string cmdID_;
       
     public:
-      virtual ~Tangible();  ///< this is an interface
+      InvocationTrail(proc::control::Command prototype)
+        : cmdID_(prototype.getID())
+        { }
       
-      void reset();
+      GenNode bind (Rec&& cmdArgs)  const
+        {
+          return GenNode(cmdID_, std::forward<Rec>(cmdArgs));
+        }
       
-      void slotExpand();
-      void slotReveal();
+      GenNode bang()  const
+        {
+          return GenNode(cmdID_, FLAGS);
+        }
       
-      void noteMsg();
-      void noteErr();
-      void noteFlash();
-      void noteMark();
+      operator string()  const
+        {
+          return "InvocationTrail cmd(\""+cmdID_+"\"";
+        }
       
-    protected:
-      virtual void doExpand()  =0;
-      virtual void doReveal()  =0;
     private:
+      
+      /** @todo unused as of 11/2015
+       * some additional instantiation metadata
+       * could be passed alongside with the invocation. 
+       */
+      static const int FLAGS = 42;
     };
   
   

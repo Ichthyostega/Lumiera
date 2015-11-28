@@ -178,6 +178,8 @@ namespace control {
       
       ////////////////////TODO the real access operations (e.g. for serialising) go here
       
+      /////////////////////////////////////////////////////////////TICKET #798 : we need to pick up arguments from a lib::diff::Record.
+      
       
       ostream&
       dump (ostream& output)  const

@@ -247,7 +247,7 @@
 <node CREATED="1448659283641" ID="ID_209203268" MODIFIED="1448659290276" TEXT="letztlich ein String"/>
 <node CREATED="1448659347728" ID="ID_508578010" MODIFIED="1448659355835" TEXT="Konstante bei der Command-Funktion"/>
 <node CREATED="1448659334058" ID="ID_683316035" MODIFIED="1448659340357" TEXT="Makro + Namenskonvention"/>
-<node CREATED="1448683561882" ID="ID_839961131" MODIFIED="1448683880173">
+<node CREATED="1448683561882" ID="ID_839961131" MODIFIED="1448691299107">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -260,6 +260,7 @@
 </html>
 </richcontent>
 <arrowlink COLOR="#81759f" DESTINATION="ID_1679641405" ENDARROW="Default" ENDINCLINATION="604;-108;" ID="Arrow_ID_1210299906" STARTARROW="None" STARTINCLINATION="702;0;"/>
+<arrowlink COLOR="#aaa9c1" DESTINATION="ID_1193936433" ENDARROW="Default" ENDINCLINATION="392;0;" ID="Arrow_ID_1338946264" STARTARROW="Default" STARTINCLINATION="392;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -279,7 +280,7 @@
 <node CREATED="1448683674443" ID="ID_1931753413" MODIFIED="1448683684206" TEXT="Einheitlichkeit gef&#xe4;hrdet"/>
 </node>
 </node>
-<node CREATED="1448683454504" HGAP="26" ID="ID_510876193" MODIFIED="1448683468155" TEXT="API generisch">
+<node CREATED="1448683454504" HGAP="42" ID="ID_510876193" MODIFIED="1448691201766" TEXT="API generisch" VSHIFT="-1">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1448683636672" ID="ID_1485949406" MODIFIED="1448683647815" TEXT="verhindert Wildwuchs"/>
 <node CREATED="1448683475853" ID="ID_24599710" MODIFIED="1448683492586">
@@ -302,6 +303,90 @@
 <node CREATED="1448683518496" ID="ID_1987782234" MODIFIED="1448683521843" TEXT="Perspektiven"/>
 <node CREATED="1448683522359" ID="ID_723377610" MODIFIED="1448683525346" TEXT="Fokus-Konzept"/>
 <node CREATED="1448683525822" ID="ID_1395068730" MODIFIED="1448683529258" TEXT="Gesten"/>
+</node>
+</node>
+<node CREATED="1448691191042" HGAP="35" ID="ID_1710578352" MODIFIED="1448691205990" TEXT="Lebenszyklus" VSHIFT="-1">
+<font NAME="SansSerif" SIZE="13"/>
+<node CREATED="1448691210544" ID="ID_242337741" MODIFIED="1448691218906" TEXT="Command-Skript: im Code"/>
+<node CREATED="1448691219614" ID="ID_992447056" MODIFIED="1448691241647" TEXT="Bildungs-Regeln: ebenda">
+<node CREATED="1448691243259" ID="ID_692910736" MODIFIED="1448691256433" TEXT="Frage: wie injizieren">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1448691264512" ID="ID_1193936433" MODIFIED="1448691288828" TEXT="InvocationTrail erstellen">
+<linktarget COLOR="#aaa9c1" DESTINATION="ID_1193936433" ENDARROW="Default" ENDINCLINATION="392;0;" ID="Arrow_ID_1338946264" SOURCE="ID_839961131" STARTARROW="Default" STARTINCLINATION="392;0;"/>
+</node>
+<node CREATED="1448691315849" ID="ID_1198560195" MODIFIED="1448691320189" TEXT="Bindugs-Regel">
+<node CREATED="1448691343406" ID="ID_642235825" MODIFIED="1448691350558" TEXT="funktor"/>
+<node CREATED="1448691324304" ID="ID_1103199702" MODIFIED="1448691338522" TEXT="definiert Bezugs-Quellen"/>
+<node CREATED="1448691355340" ID="ID_724965495" MODIFIED="1448691465633" TEXT="liefert Record&lt;GenNode&gt;"/>
+</node>
+<node CREATED="1448691865257" ID="ID_1343859473" MODIFIED="1448691874244" TEXT="Command-Binding wird gesendet">
+<node CREATED="1448691954533" ID="ID_966334383" MODIFIED="1448691960295" TEXT="Performance">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1448691962068" ID="ID_1045203424" MODIFIED="1448691974575" TEXT="nicht &quot;auf Verdacht&quot; senden">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1448692020868" ID="ID_705436290" MODIFIED="1448692192462" TEXT="Begr&#xfc;ndung: kein Kopieren der Argumente">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Alternative w&#228;re, den Record mit allen Argumenten in den InvocationTrail zu packen.
+    </p>
+    <p>
+      Dann w&#252;rden wir diesen aber weiter versenden, um Aktivierungen zuzustellen.
+    </p>
+    <p>
+      Das w&#252;rde bedeuten, die Argumente x-fach zu kopieren (oder mich zu einem ref-counting-Mechanismus zwingen)
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Daher ist es besser, <i>einmal</i>, wenn die Argumente bekannt werden, diese zum Prototypen zu schicken
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1448691875184" ID="ID_642935499" MODIFIED="1448691904352" TEXT="f&#xfc;r die Invocation gen&#xfc;gt dann die reine ID"/>
+<node CREATED="1448692196213" ID="ID_727542699" MODIFIED="1448692339433">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wichtig <font color="#e10409">(offen)</font>: Instanz-Management
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1448692240015" ID="ID_58254695" MODIFIED="1448692245826" TEXT="es geht um Allokationen in Proc"/>
+<node CREATED="1448692247478" ID="ID_1199512787" MODIFIED="1448692258689" TEXT="jede Instanz == Eintrag in der Command-Registry"/>
+<node CREATED="1448692287329" ID="ID_1099768193" MODIFIED="1448692317249">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Regel: nur was sich parallel entwickeln kann,
+    </p>
+    <p>
+      mu&#223; auch geforkt werden
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

@@ -38,6 +38,7 @@
 
 #include "lib/error.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "gui/interact/invocation-trail.hpp"
 #include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
@@ -67,7 +68,12 @@ namespace model {
     : boost::noncopyable
     {
     protected:
+      using interact::InvocationTrail;
+      using lib::diff::GenNode;
+      using lib::diff::Rec;
+      
       ctrl::BusTerm uiBus_;
+      
       
       Tangible(EntryID identity, ctrl::BusTerm nexus)
         : uiBus_(nexus.attach(identity))
@@ -77,6 +83,9 @@ namespace model {
       virtual ~Tangible();  ///< this is an interface
       
       void reset();
+      
+      void prepareCommand (InvocationTrail const& prototype, Rec&& arguments);
+      void issueCommand (InvocationTrail const& preparedAction);
       
       void slotExpand();
       void slotReveal();

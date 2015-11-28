@@ -57,16 +57,33 @@ namespace model {
   
   
   
+  /**
+   * Prepare a command or action for actual invocation, once the execution context
+   * has been established. The action is not executed right away, but it is now ready
+   * and bound to the concrete arguments supplied with the [record][lib::diff::Rec].
+   * @param prototype handle to a command instantiation, to be readied for invocation
+   * @param arguments suitable tuple of values, to be used to outfit the prototype
+   */
+  void
+  Tangible::prepareCommand (InvocationTrail const& prototype, Rec&& arguments)
+  {
+    TODO ("invoke some hook for instrumentation?");
+    uiBus_.act (prototype.bind(std::forward<Rec>(arguments)));
+  }
+  
   
   /**
-   * 
-   * @param id
-   * @return
+   * Actually trigger execution of an action or command.
+   * @param preparedAction handle pointing to a command definition,
+   *        which needs to be outfitted with arguments and ready for invocation.
    */
-  string
-  fun (string& id)
+  void
+  Tangible::issueCommand (InvocationTrail const& preparedAction)
   {
-    return "x"+id;
+    TODO ("invoke some hook for instrumentation?");
+    uiBus_.act (prototype.bang());
   }
-
+  
+  
+  
 }} // namespace gui::model

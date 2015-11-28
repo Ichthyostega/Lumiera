@@ -326,6 +326,17 @@ namespace control {
   }
   
   
+  Symbol
+  Command::getID()  const
+  {
+    Symbol id = CommandRegistry::instance().findDefinition (*this);
+    if (!id)
+      throw error::State("Encountered a NIL command handle while expecting a bound one."
+                        ,error::LUMIERA_ERROR_BOTTOM_VALUE);
+    return id;
+  }
+  
+  
   
   
   /** diagnostics: shows the commandID, if any,

@@ -133,6 +133,9 @@ namespace control {
       template<typename TYPES>
       Command& bindArg (Tuple<TYPES> const&);
       
+      /////////////////////////////////////////////////////////////TICKET #798 : we need a second overload to take the arguments as lib::diff::Record.
+      /////////////////////////////////////////////////////////////            : this needs to be built into the ParamAccessor within Closure (command-closure.hpp)
+      
       
       ExecResult operator() () ;
       ExecResult undo () ;
@@ -170,6 +173,8 @@ namespace control {
       static bool canUndo (Symbol cmdID);
       
       void duplicate_detected (Symbol)  const;
+      
+      Symbol getID() const;
       
       operator string() const;
       friend bool operator== (Command const&, Command const&);
