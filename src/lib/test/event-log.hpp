@@ -48,6 +48,7 @@
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/diff/record.hpp"
 //#include "lib/time/timevalue.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/lexical_cast.hpp>
 #include <vector>
@@ -57,9 +58,11 @@
 
 namespace lib {
 namespace test{
+  namespace error = lumiera::error;
   
 //  using lib::Literal;
   using std::string;
+  using util::isnil;
 //  using std::rand;
   
   /**
@@ -69,6 +72,21 @@ namespace test{
   class EventMatch
     {
       friend class EventLog;
+      
+      MegaPlonk solution_;
+      
+      bool
+      eval()
+        {
+          return !isnil (solution_);
+        }
+      
+      void
+      enforce()
+        {
+          if (!eval())
+            throw error::State("jaleck", error::LUMIERA_ERROR_ASSERTION)
+        }
       
     public:
       
@@ -99,7 +117,8 @@ namespace test{
       EventMatch&
       after (string match)
         {
-          UNIMPLEMENTED("process combined relational match backwards");
+          solution_ = solution_ >>= find(match);
+          enforce();
         }
       
       EventMatch&
