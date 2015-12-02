@@ -64,10 +64,17 @@ namespace idi {
     
     
     string
-    instance_formatter (string const& prefix, long instanceNr)
+    instance_format (string const& prefix, size_t instanceNr)
     {
       return _Fmt("%s.%03d")
                 % prefix % instanceNr; 
+    }
+    
+    string
+    instance_hex_format (string const& prefix, size_t instanceNr)
+    {
+      return _Fmt("%s.%04X")
+                % prefix % instanceNr;
     }
     
   } //(End)integration helpers...

@@ -64,7 +64,8 @@ namespace idi {
     string demangled_innermost_component (const char* rawName);
     string demangled_sanitised_name      (const char* rawName);
     
-    string instance_formatter (string const& prefix, long instanceNr);
+    string instance_format (string const& prefix, size_t instanceNr);
+    string instance_hex_format (string const& prefix, size_t instanceNr);
     
   } //(End)integration helpers...
   
@@ -107,6 +108,18 @@ namespace idi {
     return typeSymbol<TY>();
   }
   
+  /** designation of an distinct object instance
+   * @par obj pointer to the memory location of the object
+   * @return a notation "typename.hash", where the hash is given
+   *         as 4 hex digits derived from the memory location
+   */
+  template<typename TY>
+  inline string
+  instanceTypeID(const TY *const obj)
+  {
+    return format::instance_hex_format (namePrefix<TY>(), (size_t(obj) / alignof(TY)) % (1<<16));
+  }
+  
   
   /** build a per-type identifier, with type prefix and running counter.
    * @return a type based prefix, followed by an instance number
@@ -122,7 +135,7 @@ namespace idi {
   generateSymbolicID()
   {
     static TypedCounter instanceCounter;
-    return format::instance_formatter (namePrefix<TY>(), instanceCounter.inc<TY>());
+    return format::instance_format (namePrefix<TY>(), instanceCounter.inc<TY>());
   }
   
   /**

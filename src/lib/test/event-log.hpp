@@ -160,18 +160,24 @@ namespace test{
       string logID_;
       Log log_;
       
+      void
+      log (std::initializer_list<string> const&& ili)
+        {
+          log_.emplace_back(ili);
+        }
+      
     public:
       explicit
       EventLog (string logID)
         : logID_(logID)
         {
-          UNIMPLEMENTED("initial log entry");
+          log({"type=EventLogHeader", "ID="+logID_});
         }
       
       template<class X>
       explicit
-      EventLog (const X *const)
-        : EventLog(idi::typeSymbol<X>())
+      EventLog (const X *const obj)
+        : EventLog(idi::instanceTypeID (obj))
         { }
       
       
@@ -192,15 +198,8 @@ namespace test{
       EventLog&
       event (string text)
         {
+          log({"type=event", text});
           return *this;
-        }
-      
-      
-      template<class X>
-      static string
-      instanceHash(const X *const)
-        {
-          UNIMPLEMENTED ("generate an object instance hash");
         }
       
       
@@ -210,7 +209,7 @@ namespace test{
       bool
       empty()  const
         {
-          UNIMPLEMENTED ("collection behaviour");
+          return 1 >= log_.size();
         }
       
       

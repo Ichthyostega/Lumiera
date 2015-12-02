@@ -87,8 +87,9 @@ namespace test{
           log.verify("α").before("β");
           VERIFY_ERROR (ASSERTION, log.verify("β").before("α"));
           
-          CHECK (join(log) == "LOG::TestEventLog_test"+EventLog::instanceHash(this)
-                           +  ", Rec(event|  |{α}), Rec(event|  |{β})");
+          CHECK (join(log) == "Rec(EventLogHeader| ID = TestEventLog_test."+idi::instanceTypeID(this)+" |), "
+                           +  "Rec(event|  |{α}), "
+                           +  "Rec(event|  |{β})");
         }
       
       
