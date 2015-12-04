@@ -367,6 +367,13 @@ namespace lib {
       typedef typename _Filter::Val Val;
       
     public:
+      ExtensibleFilterIter() { }
+      
+      template<typename PRED>
+      ExtensibleFilterIter (IT const& src, PRED initialFilterPredicate)
+        : FilterIter<IT>(src, initialFilterPredicate)
+        { }
+      
       template<typename COND>
       ExtensibleFilterIter&
       andFilter (COND conjunctiveClause)

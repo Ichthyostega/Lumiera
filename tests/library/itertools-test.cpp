@@ -110,6 +110,7 @@ namespace test{
           Iter ii (source.begin());
           ++++++ii;
           buildFilterIterator (ii);
+          verify_filterExtension();
           verify_filterRepetitions();
           
           buildTransformingIterator (source.begin());
@@ -133,6 +134,7 @@ namespace test{
       static bool takeAll (int)   { return true; }
       static bool takeOdd (int i) { return 0 != i % 2; }
       static bool takeEve (int i) { return 0 == i % 2; }
+      static bool takeTrd (int i) { return 0 == i % 3; }
       
       void
       buildFilterIterator (Iter const& ii)
@@ -152,6 +154,49 @@ namespace test{
           while (++all) { }
           CHECK (isnil (odd));
           CHECK (all == odd);
+        }
+      
+      
+      /** @test verify the ability to extend a filter condition
+       *        while in the middle of an ongoing iteration.
+       * Typically this means sharpening the filter condition
+       * and thus making the filter more restrictive, filtering
+       * away more elements of the source stream.
+       */
+      void
+      verify_filterExtension ()
+        {
+          typedef vector<uint64_t> Src;
+          typedef Src::iterator SrcIter;
+          typedef RangeIter<SrcIter> SeqIter;
+          typedef ExtensibleFilterIter<SeqIter> FilteredSeq;
+          
+          Src src;
+          for (uint i=0; i < 3*NUM_ELMS; ++i)
+            src.push_back(i);
+          
+          SeqIter completeSequence (src.begin(), src.end());
+          FilteredSeq filterIter (completeSequence, takeAll);
+          
+          CHECK (!isnil (filterIter));
+          CHECK (0 == *filterIter);
+          ++filterIter;
+          CHECK (1 == *filterIter);
+          
+          filterIter.andFilter(takeEve);
+          CHECK (!isnil (filterIter));
+          CHECK (2 == *filterIter);
+          ++filterIter;
+          CHECK (4 == *filterIter);
+          
+          filterIter.andFilter(takeTrd);
+          CHECK (!isnil (filterIter));
+          CHECK (6 == *filterIter);
+          ++filterIter;
+          CHECK (12 == *filterIter);
+          
+          verifyComparisons (filterIter);
+          pullOut (filterIter);
         }
       
       
