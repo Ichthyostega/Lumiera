@@ -29,8 +29,8 @@
  ** based on the Lumiera Forward Iterator concept. They build on generic
  ** programming techniques, thus are intended to be combined at compile time
  ** using definitive type information. Contrast this to an iterator model
- ** as in Java's Commons-Collections, where Iterator is an Interface based
- ** on virtual functions. Thus, the basic problem to overcome is the lack
+ ** as in Java's Collections, where Iterator is an Interface based on
+ ** virtual functions. Thus, the basic problem to overcome is the lack
  ** of a single common interface, which could serve as foundation for
  ** type inference. As a solution, we use a "onion" approach, where a
  ** generic base gets configured with an active core, implementing
@@ -55,10 +55,9 @@
  ** source iterator. The signature of the functor must match the
  ** desired value (output) type. 
  ** 
- ** @todo WIP WIP WIP
- ** @todo see Ticket #347
+ ** @todo some more building blocks are planned, see Ticket #347
  ** 
- ** @see IterAdapter
+ ** @see iter-adapter.hpp
  ** @see itertools-test.cpp
  ** @see contents-query.hpp
  */
@@ -142,15 +141,16 @@ namespace lib {
    * Standard functionality to build up any iterator tool.
    * IterTool exposes the frontend functions necessary to
    * comply to the Lumiera Forward Iterator concept.
-   * The protected part provides the building blocks
-   * to implement the actual processing/filter logic.
+   * The protected part provides the _iteration control_
+   * building blocks to drive the processing/filter logic,
+   * which is implemented in the specific core for each tool.
    */
   template<class CORE>
   class IterTool
     : public lib::BoolCheckable<IterTool<CORE> >
     {
       
-    protected: /* iteration control */
+    protected: /* == iteration control == */
       CORE core_;
       
       bool
@@ -158,7 +158,7 @@ namespace lib {
         {
           return core_.evaluate()
               || unConst(this)->iterate();
-        }        // skipping irrelevant results doesn't count as "mutation"
+        }     // to skip irrelevant results doesn't count as "mutation"
       
       bool
       iterate ()
@@ -351,7 +351,41 @@ namespace lib {
   
   
   /** 
-   * Helper: predicate returning \c true
+   * Additional capabilities for FilterIter,
+   * allowing to extend the filter condition underway.
+   * This wrapper enables remoulding of the filer functor
+   * while in the middle of iteration. When the filter is
+   * modified, current head of iteration gets re-evaluated
+   * and possible fast-forwarded to the next element
+   * satisfying the now extended filter condition.
+   */
+  template<class IT>
+  class ExtensibleFilterIter
+    : public FilterIter<IT>
+    {
+      typedef FilterCore<IT> _Filter;
+      typedef typename _Filter::Val Val;
+      
+    public:
+      template<typename COND>
+      ExtensibleFilterIter&
+      andFilter (COND conjunctiveClause)
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return filter(val)
+                           and conjunctiveClause(val);
+                      };
+          return *this;
+        }
+    };
+  
+  
+  
+  /**
+   * Helper: predicate returning `true`
    * whenever the argument value changes
    * during a sequence of invocations. 
    */ 

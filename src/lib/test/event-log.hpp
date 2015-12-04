@@ -73,19 +73,20 @@ namespace test{
     {
       friend class EventLog;
       
-      MegaPlonk solution_;
+//    MegaPlonk solution_;
       
       bool
       eval()
         {
-          return !isnil (solution_);
+          UNIMPLEMENTED ("evaluate current filter condition");
+//        return !isnil (solution_);
         }
       
       void
       enforce()
         {
           if (!eval())
-            throw error::State("jaleck", error::LUMIERA_ERROR_ASSERTION)
+            throw error::State("jaleck", error::LUMIERA_ERROR_ASSERTION);
         }
       
     public:
@@ -117,7 +118,7 @@ namespace test{
       EventMatch&
       after (string match)
         {
-          solution_ = solution_ >>= find(match);
+//        solution_ = solution_ >>= find(match);
           enforce();
         }
       
