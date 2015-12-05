@@ -366,6 +366,13 @@ namespace lib {
       typedef FilterCore<IT> _Filter;
       typedef typename _Filter::Val Val;
       
+      void
+      reEvaluate()
+        {
+          this->core_.cached_ = false;
+          this->hasData(); // re-evaluate head element
+        }
+      
     public:
       ExtensibleFilterIter() { }
       
@@ -373,6 +380,7 @@ namespace lib {
       ExtensibleFilterIter (IT const& src, PRED initialFilterPredicate)
         : FilterIter<IT>(src, initialFilterPredicate)
         { }
+      
       
       template<typename COND>
       ExtensibleFilterIter&
@@ -385,6 +393,7 @@ namespace lib {
                         return filter(val)
                            and conjunctiveClause(val);
                       };
+          reEvaluate();
           return *this;
         }
     };
