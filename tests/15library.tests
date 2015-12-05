@@ -256,7 +256,7 @@ END
 TEST "Generic Record data node" GenNodeBasic_test <<END
 out: GenNode.+_CHILD_Record.+Rec.spam..ham = DataCap.+eggs
 out-lit: --spam--
-out: GenNode.+"baked beans".+Rec.hasSpam = DataCap.«bool».+«char».+«std::string».*«double».+GenNode.+"spam".+«lib::diff::Record<lib::diff::GenNode>».+«std::string».eggs.+«std::string».spam.+«std::string».spam
+out: GenNode.+"baked beans".+Rec...hasSpam = DataCap.«bool».+«char».+«std::string».*«double».+GenNode.+"spam".+«lib::diff::Record<lib::diff::GenNode>».+«std::string».eggs.+«std::string».spam.+«std::string».spam
 out: GenNode.+"hasSpam".+«bool».1
 out: GenNode.+_CHILD_char.+«char».\*
 out: GenNode.+_CHILD_string.+«std::string».★

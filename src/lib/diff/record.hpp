@@ -731,11 +731,10 @@ namespace diff{
     using lib::transformIterator;
     
     return "Rec("
-         + (TYPE_NIL==type_? "" : type_+"| ")
-         + join (transformIterator (this->attribs(), renderAttribute))
-         + " |{"
-         + join (this->scope())
-         + "})"
+         + (TYPE_NIL==type_? "" : type_)
+         + (isnil(this->attribs())? "" : "| "+join (transformIterator (this->attribs(), renderAttribute))+" ")
+         + (isnil(this->scope())?   "" : "|{"+join (this->scope())+"}")
+         + ")"
          ;
 #endif
   }
