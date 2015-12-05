@@ -73,13 +73,17 @@ namespace test{
     {
       friend class EventLog;
       
-//    MegaPlonk solution_;
+      using Entry = lib::diff::Record<string>;
+      using Log   = std::vector<Entry>;
+      using Iter = lib::RangeIter<Log::const_iterator>;
+      using Filter = ExtensibleFilterIter<Iter>;
+      
+      Filter solution_;
       
       bool
       eval()
         {
-          UNIMPLEMENTED ("evaluate current filter condition");
-//        return !isnil (solution_);
+          return !isnil (solution_);
         }
       
       void
