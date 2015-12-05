@@ -462,6 +462,16 @@ namespace lib {
           return *this;
         }
       
+      
+      template<typename COND>
+      ExtensibleFilterIter&
+      setNewFilter (COND entirelyDifferentPredicate)
+        {
+          this->core_.predicate_ = entirelyDifferentPredicate;
+          reEvaluate();
+          return *this;
+        }
+      
       ExtensibleFilterIter&
       flipFilter ()
         {

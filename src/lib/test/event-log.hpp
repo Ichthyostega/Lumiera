@@ -140,10 +140,20 @@ namespace test{
         }
       
     public:
+      /**
+       * find a match (substring match) of the given text
+       * in an EventLog entry after the current position
+       * @remarks the name of this junctor might seem counter intuitive;
+       *          it was chosen due to expected DSL usage: `log.verify("α").before("β")`.
+       *          Operationally this means first to find a Record matching the substring "α"
+       *          and then to forward from this point until hitting a record to match "β". 
+       */
       EventMatch&
       before (string match)
         {
-          UNIMPLEMENTED("process combined relational match");
+          solution_.setNewFilter(find(match));
+          enforce ("match(\""+match+"\")");
+          return *this;
         }
       
       EventMatch&
@@ -167,9 +177,7 @@ namespace test{
       EventMatch&
       after (string match)
         {
-          solution_.andFilter(find(match));
-          enforce ("match(\""+match+"\")");
-          return *this;
+          UNIMPLEMENTED("process combined relational match backwards");
         }
       
       EventMatch&
@@ -301,7 +309,7 @@ namespace test{
       verify (string match)
         {
           EventMatch matcher(this->begin());
-          matcher.after (match);
+          matcher.before (match);
           return matcher;
         }
       
