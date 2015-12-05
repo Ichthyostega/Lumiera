@@ -320,10 +320,10 @@ namespace lib {
       typedef FilterCore<IT> _Filter;
       typedef IterTool<_Filter> _Impl;
       
+    public:
       static bool acceptAll(typename _Filter::Val) { return true; }
       
       
-    public:
       FilterIter ()
         : _Impl(FilterCore<IT>(IT(), acceptAll))
         { }
@@ -394,6 +394,12 @@ namespace lib {
       ExtensibleFilterIter (IT const& src, PRED initialFilterPredicate)
         : FilterIter<IT>(src, initialFilterPredicate)
         { }
+      
+      ExtensibleFilterIter (IT const& src)
+        : ExtensibleFilterIter(src, FilterIter<IT>::acceptAll)
+        { }
+      
+      // standard copy operations acceptable
       
       
       template<typename COND>

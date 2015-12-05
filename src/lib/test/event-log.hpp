@@ -62,6 +62,7 @@ namespace test{
   
 //  using lib::Literal;
   using std::string;
+  using util::contains;
   using util::isnil;
 //  using std::rand;
   
@@ -71,11 +72,9 @@ namespace test{
    */
   class EventMatch
     {
-      friend class EventLog;
-      
       using Entry = lib::diff::Record<string>;
       using Log   = std::vector<Entry>;
-      using Iter = lib::RangeIter<Log::const_iterator>;
+      using Iter  = lib::RangeIter<Log::const_iterator>;
       using Filter = ExtensibleFilterIter<Iter>;
       
       Filter solution_;
@@ -93,8 +92,26 @@ namespace test{
             throw error::State("jaleck", error::LUMIERA_ERROR_ASSERTION);
         }
       
-    public:
+      /** @internal for creating EventLog matchers */
+      EventMatch(Iter&& srcSeq)
+        : solution_(srcSeq)
+        { }
       
+      friend class EventLog;
+      
+      
+      /* == elementary matchers == */
+      
+      auto
+      find (string match)
+        {
+          return [=](Entry entry)
+                    {
+                      return contains (string(entry), match);
+                    };
+        }
+      
+    public:
       EventMatch&
       before (string match)
         {
@@ -122,8 +139,9 @@ namespace test{
       EventMatch&
       after (string match)
         {
-//        solution_ = solution_ >>= find(match);
+          solution_.andFilter(find(match));
           enforce();
+          return *this;
         }
       
       EventMatch&
@@ -179,7 +197,7 @@ namespace test{
     {
       using Entry = lib::diff::Record<string>;
       using Log   = std::vector<Entry>;
-      using Iter = Log::const_iterator;
+      using Iter  = lib::RangeIter<Log::const_iterator>;
       
       string logID_;
       Log log_;
@@ -240,8 +258,8 @@ namespace test{
       typedef Iter const_iterator;
       typedef const Entry value_type;
       
-      const_iterator begin() const { return log_.begin(); }
-      const_iterator end()   const { return log_.end(); }
+      const_iterator begin() const { return Iter(log_.begin(), log_.end()); }
+      const_iterator end()   const { return Iter(); }
       
       friend const_iterator begin (EventLog const& log) { return log.begin(); }
       friend const_iterator end   (EventLog const& log) { return log.end(); }
@@ -254,7 +272,9 @@ namespace test{
       EventMatch
       verify (string match)
         {
-          UNIMPLEMENTED("start matching sequence");
+          EventMatch matcher(this->begin());
+          matcher.after (match);
+          return matcher;
         }
       
       EventMatch
