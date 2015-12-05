@@ -46,8 +46,10 @@
 #include "lib/error.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/iter-adapter-stl.hpp"
-#include "lib/diff/record.hpp"
 //#include "lib/time/timevalue.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-util.hpp"
+#include "lib/diff/record.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/lexical_cast.hpp>
@@ -64,6 +66,7 @@ namespace test{
   using std::string;
   using util::contains;
   using util::isnil;
+  using util::_Fmt;
 //  using std::rand;
   
   /**
@@ -77,24 +80,49 @@ namespace test{
       using Iter  = lib::RangeIter<Log::const_iterator>;
       using Filter = ExtensibleFilterIter<Iter>;
       
+      /** match predicate evaluator */
       Filter solution_;
       
+      /** record last match for diagnostics */
+      string lastMatch_;
+      
+      /** core of the evaluation machinery:
+       * apply a filter predicate and then pull
+       * through the log to find a acceptable entry
+       */
       bool
       eval()
         {
           return !isnil (solution_);
         }
       
+      /** this is actually called after each refinement
+       * of the filter and matching conditions. The effect is
+       * to search for an (intermediary) solution right away
+       * and to throw an assertion failure as soon as some
+       * condition can not be satisfied. Rationale is to
+       * indicate the point where a chained match fails
+       * @par matchSpec diagnostics description of the predicate just being added
+       * @par rel indication of the searching relation / direction
+       * @throws error::Fatal ([assertion failure][error::LUMIERA_ERROR_ASSERTION]
+       *         when the filtering condition built up thus far can not be
+       *         satisfied at all on the current event log contents
+       */
       void
-      enforce()
+      enforce (string matchSpec, Literal rel = "after")
         {
           if (!eval())
-            throw error::State("jaleck", error::LUMIERA_ERROR_ASSERTION);
+            throw error::Fatal(_Fmt("Failed to %s %s %s")
+                                   % matchSpec % rel % lastMatch_
+                              , error::LUMIERA_ERROR_ASSERTION);
+          
+          lastMatch_ = matchSpec+" @ "+string(*solution_);
         }
       
       /** @internal for creating EventLog matchers */
       EventMatch(Iter&& srcSeq)
         : solution_(srcSeq)
+        , lastMatch_("HEAD "+ solution_->get("ID"))
         { }
       
       friend class EventLog;
@@ -105,7 +133,7 @@ namespace test{
       auto
       find (string match)
         {
-          return [=](Entry entry)
+          return [=](Entry const& entry)
                     {
                       return contains (string(entry), match);
                     };
@@ -140,7 +168,7 @@ namespace test{
       after (string match)
         {
           solution_.andFilter(find(match));
-          enforce();
+          enforce ("match(\""+match+"\")");
           return *this;
         }
       
