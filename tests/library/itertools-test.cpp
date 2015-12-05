@@ -161,7 +161,12 @@ namespace test{
        *        while in the middle of an ongoing iteration.
        * Typically this means sharpening the filter condition
        * and thus making the filter more restrictive, filtering
-       * away more elements of the source stream.
+       * away more elements of the source stream. But through
+       * the ability to add disjunctive and negated clauses,
+       * it is also possible to weaken the filter condition
+       * @note in case of a weakened filter condition, there is
+       *       \em no reset of the source iterator, i.e. we don't
+       *       re-evaluate from start, but just from current head.
        */
       void
       verify_filterExtension ()
@@ -189,11 +194,38 @@ namespace test{
           ++filterIter;
           CHECK (4 == *filterIter);
           
+          // sharpen the condition...
           filterIter.andFilter(takeTrd);
           CHECK (!isnil (filterIter));
-          CHECK (6 == *filterIter);
+          CHECK (6 == *filterIter);   // divisible by two and by three
           ++filterIter;
           CHECK (12 == *filterIter);
+          
+          verifyComparisons (filterIter);
+          pullOut (filterIter);
+          
+          // adding a disjunctive clause actually weakens the filter...
+          filterIter = {completeSequence, takeTrd};
+          CHECK (!isnil (filterIter));
+          CHECK (0 == *filterIter);
+          ++filterIter;
+          CHECK (3 == *filterIter);
+          
+          filterIter.orFilter(takeEve);
+          CHECK (3 == *filterIter);
+          ++filterIter;
+          CHECK (4 == *filterIter);
+          ++filterIter;
+          CHECK (6 == *filterIter);
+          verifyComparisons (filterIter);
+          
+          // flip filter logic
+          filterIter.flipFilter();
+          CHECK (7 == *filterIter);   // not even and not divisible by three
+          ++filterIter;
+          CHECK (11 == *filterIter);
+          ++filterIter;
+          CHECK (13 == *filterIter);
           
           verifyComparisons (filterIter);
           pullOut (filterIter);

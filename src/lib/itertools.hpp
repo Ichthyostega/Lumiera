@@ -358,6 +358,20 @@ namespace lib {
    * modified, current head of iteration gets re-evaluated
    * and possible fast-forwarded to the next element
    * satisfying the now extended filter condition.
+   * @note changing the condition modifies a given iterator in place.
+   *       Superficially this might look as if the storage remains
+   *       the same, but in fact we're adding a lambda closure,
+   *       which the runtime usually allocates on the heap,
+   *       holding the previous functor and a second functor
+   *       for the added clause.
+   * @warning the addition of disjunctive and negated clauses might
+   *       actually weaken the filter condition. Yet still there is
+   *       \em no reset of the source iterator, i.e. we don't
+   *       re-evaluate from start, but just from current head.
+   *       Which means we might miss elements in the already consumed
+   *       part of the source sequence, which theoretically would
+   *       pass the now altered filter condition.
+   * @see IterTools_test::verify_filterExtension
    */
   template<class IT>
   class ExtensibleFilterIter
@@ -392,6 +406,64 @@ namespace lib {
                       {
                         return filter(val)
                            and conjunctiveClause(val);
+                      };
+          reEvaluate();
+          return *this;
+        }
+      
+      template<typename COND>
+      ExtensibleFilterIter&
+      andNotFilter (COND conjunctiveClause)
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return filter(val)
+                           and not conjunctiveClause(val);
+                      };
+          reEvaluate();
+          return *this;
+        }
+      
+      template<typename COND>
+      ExtensibleFilterIter&
+      orFilter (COND disjunctiveClause)
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return filter(val)
+                            or disjunctiveClause(val);
+                      };
+          reEvaluate();
+          return *this;
+        }
+      
+      template<typename COND>
+      ExtensibleFilterIter&
+      orNotFilter (COND disjunctiveClause)
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return filter(val)
+                            or not disjunctiveClause(val);
+                      };
+          reEvaluate();
+          return *this;
+        }
+      
+      ExtensibleFilterIter&
+      flipFilter ()
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return not filter(val);
                       };
           reEvaluate();
           return *this;
