@@ -45,8 +45,8 @@
 
 #include "lib/error.hpp"
 #include "lib/idi/entry-id.hpp"
-#include "lib/iter-adapter-stl.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "lib/iter-adapter.hpp"
+#include "lib/iter-cursor.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
 #include "lib/diff/record.hpp"
@@ -77,7 +77,7 @@ namespace test{
     {
       using Entry = lib::diff::Record<string>;
       using Log   = std::vector<Entry>;
-      using Iter  = lib::RangeIter<Log::const_iterator>;
+      using Iter  = lib::IterCursor<Log::const_iterator>;
       using Filter = ExtensibleFilterIter<Iter>;
       
       /** match predicate evaluator */
@@ -120,8 +120,8 @@ namespace test{
         }
       
       /** @internal for creating EventLog matchers */
-      EventMatch(Iter&& srcSeq)
-        : solution_(srcSeq)
+      EventMatch(Log const& srcSeq)
+        : solution_(Iter(srcSeq))
         , lastMatch_("HEAD "+ solution_->get("ID"))
         { }
       
@@ -151,6 +151,7 @@ namespace test{
       EventMatch&
       before (string match)
         {
+          solution_.underlying().switchForwards();
           solution_.setNewFilter(find(match));
           enforce ("match(\""+match+"\")");
           return *this;
@@ -177,7 +178,10 @@ namespace test{
       EventMatch&
       after (string match)
         {
-          UNIMPLEMENTED("process combined relational match backwards");
+          solution_.underlying().switchBackwards();
+          solution_.setNewFilter(find(match));
+          enforce ("match(\""+match+"\")", "before");
+          return *this;
         }
       
       EventMatch&
@@ -252,6 +256,11 @@ namespace test{
           log({"type=EventLogHeader", "ID="+logID_});
         }
       
+      explicit
+      EventLog (const char* logID)
+        : EventLog(string(logID))
+        { }
+      
       template<class X>
       explicit
       EventLog (const X *const obj)
@@ -308,7 +317,7 @@ namespace test{
       EventMatch
       verify (string match)
         {
-          EventMatch matcher(this->begin());
+          EventMatch matcher(log_);
           matcher.before (match);
           return matcher;
         }

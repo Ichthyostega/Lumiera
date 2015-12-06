@@ -402,6 +402,15 @@ namespace lib {
       // standard copy operations acceptable
       
       
+      /** access the unfiltered source iterator
+       *  in current state */
+      IT&
+      underlying()
+        {
+          return this->core_.source_;
+        }
+      
+      
       template<typename COND>
       ExtensibleFilterIter&
       andFilter (COND conjunctiveClause)

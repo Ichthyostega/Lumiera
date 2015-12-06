@@ -86,7 +86,13 @@ namespace lib {
         
         
         void
-        toggle()
+        reverse(bool backwards)
+          {
+            if (backwards != backwards_) reverse();
+          }
+        
+        void
+        reverse()
           {
             if (start_ == end_) return;
             if (backwards_)
@@ -187,7 +193,21 @@ namespace lib {
       IterCursor&
       switchDir()
         {
-          this->stateCore().toggle();
+          this->stateCore().reverse();
+          return *this;
+        }
+      
+      IterCursor&
+      switchForwards()
+        {
+          this->stateCore().reverse(false);
+          return *this;
+        }
+      
+      IterCursor&
+      switchBackwards()
+        {
+          this->stateCore().reverse(true);
           return *this;
         }
     };

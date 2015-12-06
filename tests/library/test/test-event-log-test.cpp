@@ -67,6 +67,7 @@ namespace test{
       run (Arg)
         {
           verify_simpleUsage();
+          verify_backwardMatch();
         }
       
       
@@ -90,6 +91,19 @@ namespace test{
           CHECK (join(log) == "Rec(EventLogHeader| ID = "+idi::instanceTypeID(this)+" ), "
                            +  "Rec(event|{α}), "
                            +  "Rec(event|{β})");
+        }
+      
+      
+      void
+      verify_backwardMatch ()
+        {
+          EventLog log("baked beans");
+          log.event("spam");
+          log.event("ham");
+          
+          log.verify("ham").after("spam").after("beans");
+          log.verify("ham").after("beans").before("spam").before("ham");
+          VERIFY_ERROR (ASSERTION, log.verify("spam").after("beans").after("ham"));
         }
       
       
