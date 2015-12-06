@@ -159,6 +159,13 @@ namespace test{
           return log_;
         }
       
+      EventLog&
+      joinLog (MockElm& otherMock)
+        {
+          log_.join(otherMock.getLog());
+          return log_;
+        }
+      
       
       bool
       isTouched()  const

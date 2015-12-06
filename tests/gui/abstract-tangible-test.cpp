@@ -171,16 +171,17 @@ namespace test {
           mock.ensureNot("foo");
           VERIFY_ERROR (ASSERTION, foo.ensureNot("foo"));
           
-          log.join(bar.getLog()).join(foo.getLog());
-          log.verifyEvent("logJoin").arg(bar.getID().getSym())
+          bar.joinLog(mock);
+          foo.joinLog(mock);
+          log.verifyEvent("logJoin").arg("bar")
              .beforeEvent("logJoin").arg("foo");
           
-          mock.verifyEvent("logJoin").arg(bar.getID().getSym())
+          mock.verifyEvent("logJoin").arg("bar")
               .beforeEvent("logJoin").arg("foo");
           mock.verify("ctor").arg("foo");
           log.verify("ctor").arg("foo");
           log.verify("ctor").arg("dummy")
-             .before("ctor").arg(bar.getID().getSym())
+             .before("ctor").arg("bar")
              .before("ctor").arg("foo");
           
           mock.kill();
