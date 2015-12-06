@@ -345,6 +345,19 @@ namespace test{
         {
           UNIMPLEMENTED("start matching sequence");
         }
+      
+      
+      /** equality comparison is based on the actual log contents */
+      friend bool
+      operator== (EventLog const& l1, EventLog const& l2)
+      {
+        return l1.log_ == l2.log_;
+      }
+      friend bool
+      operator!= (EventLog const& l1, EventLog const& l2)
+      {
+        return not (l1 == l2);
+      }
     };
   
   

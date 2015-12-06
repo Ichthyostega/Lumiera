@@ -68,6 +68,7 @@ namespace test{
         {
           verify_simpleUsage();
           verify_backwardMatch();
+          verify_logJoining();
         }
       
       
@@ -104,6 +105,69 @@ namespace test{
           log.verify("ham").after("spam").after("beans");
           log.verify("ham").after("beans").before("spam").before("ham");
           VERIFY_ERROR (ASSERTION, log.verify("spam").after("beans").after("ham"));
+        }
+      
+      
+      void
+      verify_logJoining ()
+        {
+          EventLog log1("spam");
+          EventLog log2("ham");
+          
+          log1.event("baked beans");
+          log2.event("eggs");
+          
+          log1.verify("spam").before("baked beans");
+          log2.verify("ham").before("eggs");
+          
+          log1.ensureNot("ham");
+          log1.ensureNot("eggs");
+          log2.ensureNot("spam");
+          log2.ensureNot("baked beans");
+          
+          EventLog copy(log2);
+          copy.event("bacon");
+          copy.verify("ham").before("eggs").before("bacon");
+          log2.verify("ham").before("eggs").before("bacon");
+          log1.ensureNot("bacon");
+          
+          CHECK(log1 != log2);
+          CHECK(copy == log2);
+          
+          log2.join(log1);
+          
+          CHECK(log1 == log2);
+          CHECK(copy != log2);
+          
+          log1.verify("logJoin|{ham}").after("baked beans");
+          log1.verify("logJoin|{ham}").after("ham").before("eggs").before("logJoin");
+          
+          log2.event("sausage");
+          log1.verify("sausage").after("logJoin").after("spam");
+          
+          copy.ensureNot("logJoin");
+          copy.ensureNot("sausage");
+          copy.verify("joined|{spam}").after("EventLogHeader");
+          
+          copy.event("spam tomato");
+          log1.ensureNot("spam tomato");
+          log2.ensureNot("spam tomato");
+          copy.verify("joined|{spam}").before("spam tomato");
+          
+          
+          CHECK (join(log1) == string(
+                               "Rec(EventLogHeader| ID = spam ), "
+                               "Rec(event|{baked beans}), "
+                               "Rec(EventLogHeader| ID = ham ), "
+                               "Rec(event|{eggs}), "
+                               "Rec(event|{bacon}), "
+                               "Rec(logJoin|{ham}), "
+                               "Rec(event|{sausage})"));
+          
+          CHECK (join(copy) == string(
+                               "Rec(EventLogHeader| ID = ham ), "
+                               "Rec(joined|{spam}), "
+                               "Rec(event|{spam tomato})"));
         }
       
       
