@@ -99,14 +99,14 @@ namespace test{
           CHECK (0 == *i1);
           ++++++i1;
           CHECK (3 == *i1);
-          for (uint i=*i1 ; i1; ++i1)
+          for (uint i=*i1 ; i1; ++i1, ++i)
             CHECK (i == *i1);
           
           CHECK (isnil(i1));
           
           Iter i2{numz};
           uint sum =0;
-          while (i2)
+          while (++i2)
             sum += *i2;
           uint n = numz.size() - 1;
           CHECK (sum == n*(n+1) / 2);
@@ -134,7 +134,7 @@ namespace test{
         {
           Numz numz{makeNumz()};
           Iter iter{numz};
-
+          
           CHECK (0 == *iter);
           ++++++++iter;
           CHECK (4 == *iter);
@@ -162,7 +162,7 @@ namespace test{
           CHECK (!isnil(iter));
           ++iter;
           CHECK (1 == *iter);
-
+          
           iter.switchDir();
           ++iter;
           CHECK (0 == *iter);
@@ -205,7 +205,7 @@ namespace test{
           Numz numz{makeNumz()};
           Numz const& const_numz{numz};
           
-          int i = 0;
+          uint i = 0;
           for (Iter iter{numz};
                iter; ++iter, ++i
               )
@@ -227,7 +227,7 @@ namespace test{
               CHECK (*iter == i-1);
               
               // note: the previous run indeed modified
-              // the element within the container.
+              // the elements within the container.
               
             // ++(*iter);   // doesn't compile, because it yields a "* const"
             }
