@@ -153,20 +153,6 @@ namespace test{
           return uiBus_.getID();
         }
       
-      EventLog&
-      getLog()
-        {
-          return log_;
-        }
-      
-      EventLog&
-      joinLog (MockElm& otherMock)
-        {
-          log_.join(otherMock.getLog());
-          return log_;
-        }
-      
-      
       bool
       isTouched()  const
         {
@@ -181,40 +167,54 @@ namespace test{
       
       
       EventMatch
-      verify (string match)
+      verify (string match)  const
         {
           return getLog().verify(match);
         }
       
       EventMatch
-      verifyMatch (string regExp)
+      verifyMatch (string regExp)  const
         {
           return getLog().verifyMatch(regExp);
         }
       
       EventMatch
-      verifyEvent (string match)
+      verifyEvent (string match)  const
         {
           return getLog().verifyEvent(match);
         }
       
       EventMatch
-      verifyCall (string match)
+      verifyCall (string match)  const
         {
           return getLog().verifyCall(match);
         }
       
       EventMatch
-      ensureNot (string match)
+      ensureNot (string match)  const
         {
           return getLog().ensureNot(match);
         }
       
       /** special verification match on a "note" message to this element */
       EventMatch
-      verifyNote (string msgContentMatch)
+      verifyNote (string msgContentMatch)  const
         {
           UNIMPLEMENTED ("generic match");
+        }
+      
+      
+      EventLog const&
+      getLog()  const
+        {
+          return log_;
+        }
+      
+      EventLog&
+      joinLog (MockElm& otherMock)
+        {
+          log_.join (otherMock.log_);
+          return log_;
         }
     };
   

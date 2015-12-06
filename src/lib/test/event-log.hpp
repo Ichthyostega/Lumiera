@@ -315,7 +315,7 @@ namespace test{
       /* ==== Query/Verification API ==== */
       
       EventMatch
-      verify (string match)
+      verify (string match)  const
         {
           EventMatch matcher(log_);
           matcher.before (match);
@@ -323,25 +323,25 @@ namespace test{
         }
       
       EventMatch
-      verifyMatch (string regExp)
+      verifyMatch (string regExp)  const
         {
           UNIMPLEMENTED("start matching sequence for regular expression match");
         }
       
       EventMatch
-      verifyEvent (string match)
+      verifyEvent (string match)  const
         {
           UNIMPLEMENTED("start matching sequence");
         }
       
       EventMatch
-      verifyCall (string match)
+      verifyCall (string match)  const
         {
           UNIMPLEMENTED("start matching sequence");
         }
       
       EventMatch
-      ensureNot (string match)
+      ensureNot (string match)  const
         {
           UNIMPLEMENTED("start matching sequence");
         }
