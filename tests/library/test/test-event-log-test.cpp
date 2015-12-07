@@ -68,6 +68,7 @@ namespace test{
         {
           verify_simpleUsage();
           verify_backwardMatch();
+          verify_negatedMatch();
           verify_logJoining();
         }
       
@@ -105,6 +106,21 @@ namespace test{
           log.verify("ham").after("spam").after("beans");
           log.verify("ham").after("beans").before("spam").before("ham");
           VERIFY_ERROR (ASSERTION, log.verify("spam").after("beans").after("ham"));
+        }
+      
+      
+      void
+      verify_negatedMatch ()
+        {
+          EventLog log("eggs");
+          log.event("spam");
+          log.event("ham");
+          log.event("spam");
+          
+          log.ensureNot("baked beans");
+          log.ensureNot("ham").before("eggs");
+          log.ensureNot("spam").after("spam").before("eggs");
+          VERIFY_ERROR (ASSERTION, log.ensureNot("spam").before("spam").after("eggs").before("ham"));
         }
       
       
