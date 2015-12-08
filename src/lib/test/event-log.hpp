@@ -86,12 +86,16 @@ namespace test{
       /** record last match for diagnostics */
       string lastMatch_;
       
+      /** support for positive and negative queries.
+       * @note negative queries enforced in dtor */
+      bool requireMatch_;
+      
       /** core of the evaluation machinery:
        * apply a filter predicate and then pull
        * through the log to find a acceptable entry
        */
       bool
-      eval()
+      foundSolution()
         {
           return !isnil (solution_);
         }
@@ -111,18 +115,20 @@ namespace test{
       void
       enforce (string matchSpec, Literal rel = "after")
         {
-          if (!eval())
-            throw error::Fatal(_Fmt("Failed to %s %s %s")
-                                   % matchSpec % rel % lastMatch_
-                              , error::LUMIERA_ERROR_ASSERTION);
-          
-          lastMatch_ = matchSpec+" @ "+string(*solution_);
+          if (foundSolution())
+            lastMatch_ = matchSpec+" @ "+string(*solution_);
+          else
+            if (requireMatch_)
+              throw error::Fatal(_Fmt("Failed to %s %s %s")
+                                     % matchSpec % rel % lastMatch_
+                                , error::LUMIERA_ERROR_ASSERTION);
         }
       
-      /** @internal for creating EventLog matchers */
+       /** @internal for creating EventLog matchers */
       EventMatch(Log const& srcSeq)
         : solution_(Iter(srcSeq))
         , lastMatch_("HEAD "+ solution_->get("ID"))
+        , requireMatch_(true)
         { }
       
       friend class EventLog;
@@ -140,6 +146,18 @@ namespace test{
         }
       
     public:
+       /** magic destructor to figure out and enforce negative match
+        * @throws error::Fatal ([assertion failure][error::LUMIERA_ERROR_ASSERTION]
+        *         when matcher was outfitted to ensure that _no match exists._
+        */
+     ~EventMatch()
+        {
+          if (!requireMatch_ and foundSolution())
+            throw error::Fatal("Negative match failed. Found at least "+lastMatch_
+                              , error::LUMIERA_ERROR_ASSERTION);
+        }
+      
+      
       /**
        * find a match (substring match) of the given text
        * in an EventLog entry after the current position
@@ -343,7 +361,10 @@ namespace test{
       EventMatch
       ensureNot (string match)  const
         {
-          UNIMPLEMENTED("start matching sequence");
+          EventMatch matcher(log_);
+          matcher.requireMatch_ = false; // makes dtor throw when any match was found
+          matcher.before (match);
+          return matcher;
         }
       
       
