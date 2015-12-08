@@ -54,6 +54,7 @@
 
 //#include <boost/lexical_cast.hpp>
 #include <iostream>
+#include <memory>
 #include <vector>
 #include <string>
 
@@ -275,21 +276,26 @@ namespace test{
       using Log   = std::vector<Entry>;
       using Iter  = lib::RangeIter<Log::const_iterator>;
       
-      string logID_;
-      Log log_;
+      std::shared_ptr<Log> log_;
       
       void
       log (std::initializer_list<string> const&& ili)
         {
-          log_.emplace_back(ili);
+          log_->emplace_back(ili);
+        }
+      
+      string
+      getID()  const
+        {
+          log_->front().get("ID");
         }
       
     public:
       explicit
       EventLog (string logID)
-        : logID_(logID)
+        : log_(new Log)
         {
-          log({"type=EventLogHeader", "ID="+logID_});
+          log({"type=EventLogHeader", "ID="+logID});
         }
       
       explicit
@@ -332,14 +338,14 @@ namespace test{
       bool
       empty()  const
         {
-          return 1 >= log_.size();
+          return 1 >= log_->size();
         }
       
       
       typedef Iter const_iterator;
       typedef const Entry value_type;
       
-      const_iterator begin() const { return Iter(log_.begin(), log_.end()); }
+      const_iterator begin() const { return Iter(log_->begin(), log_->end()); }
       const_iterator end()   const { return Iter(); }
       
       friend const_iterator begin (EventLog const& log) { return log.begin(); }
@@ -353,7 +359,7 @@ namespace test{
       EventMatch
       verify (string match)  const
         {
-          EventMatch matcher(log_);
+          EventMatch matcher(*log_);
           matcher.before (match);
           return matcher;
         }
@@ -379,7 +385,7 @@ namespace test{
       EventMatch
       ensureNot (string match)  const
         {
-          EventMatch matcher(log_);
+          EventMatch matcher(*log_);
           matcher.look_for_match_ = false; // flip logic; fail if match succeeds
           matcher.before (match);
           return matcher;
@@ -390,7 +396,9 @@ namespace test{
       friend bool
       operator== (EventLog const& l1, EventLog const& l2)
       {
-        return l1.log_ == l2.log_;
+        return l1.log_ == l2.log_
+            or (l1.log_ and l2.log_
+                and *l1.log_ == *l2.log_);
       }
       friend bool
       operator!= (EventLog const& l1, EventLog const& l2)
