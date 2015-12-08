@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+//#include "lib/test/test-helper.hpp"
 #include "lib/format-util.hpp"
 #include "lib/test/event-log.hpp"
 #include "lib/error.hpp"
@@ -83,12 +83,12 @@ namespace test{
           log.event("β");
           CHECK (!isnil(log));
           
-          log.verify("α");
-          log.verify("β");
-          VERIFY_ERROR (ASSERTION, log.verify("γ"));
+          CHECK (log.verify("α"));
+          CHECK (log.verify("β"));
+          CHECK (not log.verify("γ"));
           
-          log.verify("α").before("β");
-          VERIFY_ERROR (ASSERTION, log.verify("β").before("α"));
+          CHECK (log.verify("α").before("β"));
+          CHECK (not log.verify("β").before("α"));
           
           CHECK (join(log) == "Rec(EventLogHeader| ID = "+idi::instanceTypeID(this)+" ), "
                            +  "Rec(event|{α}), "
@@ -103,9 +103,9 @@ namespace test{
           log.event("spam");
           log.event("ham");
           
-          log.verify("ham").after("spam").after("beans");
-          log.verify("ham").after("beans").before("spam").before("ham");
-          VERIFY_ERROR (ASSERTION, log.verify("spam").after("beans").after("ham"));
+          CHECK (log.verify("ham").after("spam").after("beans"));
+          CHECK (log.verify("ham").after("beans").before("spam").before("ham"));
+          CHECK (not log.verify("spam").after("beans").after("ham"));
         }
       
       
@@ -117,10 +117,10 @@ namespace test{
           log.event("ham");
           log.event("spam");
           
-          log.ensureNot("baked beans");
-          log.ensureNot("ham").before("eggs");
-          log.ensureNot("spam").after("spam").before("eggs");
-          VERIFY_ERROR (ASSERTION, log.ensureNot("spam").before("spam").after("eggs").before("ham"));
+          CHECK (log.ensureNot("baked beans"));
+          CHECK (log.ensureNot("ham").before("eggs"));
+          CHECK (log.ensureNot("spam").after("spam").before("eggs"));
+          CHECK (not log.ensureNot("spam").before("spam").after("eggs").before("ham"));
         }
       
       
@@ -133,42 +133,42 @@ namespace test{
           log1.event("baked beans");
           log2.event("eggs");
           
-          log1.verify("spam").before("baked beans");
-          log2.verify("ham").before("eggs");
+          CHECK (log1.verify("spam").before("baked beans"));
+          CHECK (log2.verify("ham").before("eggs"));
           
-          log1.ensureNot("ham");
-          log1.ensureNot("eggs");
-          log2.ensureNot("spam");
-          log2.ensureNot("baked beans");
+          CHECK (log1.ensureNot("ham"));
+          CHECK (log1.ensureNot("eggs"));
+          CHECK (log2.ensureNot("spam"));
+          CHECK (log2.ensureNot("baked beans"));
           
           EventLog copy(log2);
           copy.event("bacon");
-          copy.verify("ham").before("eggs").before("bacon");
-          log2.verify("ham").before("eggs").before("bacon");
-          log1.ensureNot("bacon");
+          CHECK (copy.verify("ham").before("eggs").before("bacon"));
+          CHECK (log2.verify("ham").before("eggs").before("bacon"));
+          CHECK (log1.ensureNot("bacon"));
           
-          CHECK(log1 != log2);
-          CHECK(copy == log2);
+          CHECK (log1 != log2);
+          CHECK (copy == log2);
           
           log2.join(log1);
           
-          CHECK(log1 == log2);
-          CHECK(copy != log2);
+          CHECK (log1 == log2);
+          CHECK (copy != log2);
           
-          log1.verify("logJoin|{ham}").after("baked beans");
-          log1.verify("logJoin|{ham}").after("ham").before("eggs").before("logJoin");
+          CHECK (log1.verify("logJoin|{ham}").after("baked beans"));
+          CHECK (log1.verify("logJoin|{ham}").after("ham").before("eggs").before("logJoin"));
           
           log2.event("sausage");
-          log1.verify("sausage").after("logJoin").after("spam");
+          CHECK (log1.verify("sausage").after("logJoin").after("spam"));
           
-          copy.ensureNot("logJoin");
-          copy.ensureNot("sausage");
-          copy.verify("joined|{spam}").after("EventLogHeader");
+          CHECK (copy.ensureNot("logJoin"));
+          CHECK (copy.ensureNot("sausage"));
+          CHECK (copy.verify("joined|{spam}").after("EventLogHeader"));
           
           copy.event("spam tomato");
-          log1.ensureNot("spam tomato");
-          log2.ensureNot("spam tomato");
-          copy.verify("joined|{spam}").before("spam tomato");
+          CHECK (log1.ensureNot("spam tomato"));
+          CHECK (log2.ensureNot("spam tomato"));
+          CHECK (copy.verify("joined|{spam}").before("spam tomato"));
           
           
           CHECK (join(log1) == string(

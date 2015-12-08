@@ -53,6 +53,7 @@
 #include "lib/util.hpp"
 
 //#include <boost/lexical_cast.hpp>
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -88,7 +89,9 @@ namespace test{
       
       /** support for positive and negative queries.
        * @note negative queries enforced in dtor */
-      bool requireMatch_;
+      bool look_for_match_;
+      
+      string violation_;
       
       /** core of the evaluation machinery:
        * apply a filter predicate and then pull
@@ -101,34 +104,46 @@ namespace test{
         }
       
       /** this is actually called after each refinement
-       * of the filter and matching conditions. The effect is
-       * to search for an (intermediary) solution right away
-       * and to throw an assertion failure as soon as some
-       * condition can not be satisfied. Rationale is to
+       * of the filter and matching conditions. The effect is to search
+       * for an (intermediary) solution right away and to mark failure
+       * as soon as some condition can not be satisfied. Rationale is to
        * indicate the point where a chained match fails
+       * @see ::operator bool() for extracting the result
        * @par matchSpec diagnostics description of the predicate just being added
        * @par rel indication of the searching relation / direction
-       * @throws error::Fatal ([assertion failure][error::LUMIERA_ERROR_ASSERTION]
-       *         when the filtering condition built up thus far can not be
-       *         satisfied at all on the current event log contents
        */
       void
-      enforce (string matchSpec, Literal rel = "after")
+      evaluateQuery (string matchSpec, Literal rel = "after")
         {
+          if (look_for_match_ and not isnil (violation_)) return;
+             // already failed, no further check necessary
+          
           if (foundSolution())
-            lastMatch_ = matchSpec+" @ "+string(*solution_);
+            {
+              lastMatch_ = matchSpec+" @ "+string(*solution_)
+                         + (isnil(lastMatch_)? ""
+                                             : "\n.."+rel+" "+lastMatch_);
+              if (not look_for_match_)
+                violation_ = "FOUND at least "+lastMatch_;
+            }
           else
-            if (requireMatch_)
-              throw error::Fatal(_Fmt("Failed to %s %s %s")
-                                     % matchSpec % rel % lastMatch_
-                                , error::LUMIERA_ERROR_ASSERTION);
+            {
+              if (look_for_match_)
+                violation_ = "FAILED to "+matchSpec
+                           + "\n.."+rel
+                           + " "+lastMatch_;
+              else
+                violation_ = "";
+            }
         }
       
-       /** @internal for creating EventLog matchers */
+      
+      /** @internal for creating EventLog matchers */
       EventMatch(Log const& srcSeq)
         : solution_(Iter(srcSeq))
         , lastMatch_("HEAD "+ solution_->get("ID"))
-        , requireMatch_(true)
+        , look_for_match_(true)
+        , violation_()
         { }
       
       friend class EventLog;
@@ -146,15 +161,18 @@ namespace test{
         }
       
     public:
-       /** magic destructor to figure out and enforce negative match
-        * @throws error::Fatal ([assertion failure][error::LUMIERA_ERROR_ASSERTION]
-        *         when matcher was outfitted to ensure that _no match exists._
-        */
-     ~EventMatch()
+      /** final evaluation of the match query,
+       *  usually triggered from the unit test `CHECK()`.
+       * @note failure cause is printed to STDERR.
+       */
+      operator bool()  const
         {
-          if (!requireMatch_ and foundSolution())
-            throw error::Fatal("Negative match failed. Found at least "+lastMatch_
-                              , error::LUMIERA_ERROR_ASSERTION);
+          if (!isnil (violation_))
+            {
+              std::cerr << "__Log_condition_violated__\n"+violation_ <<"\n";
+              return false;
+            }
+          return true;
         }
       
       
@@ -171,7 +189,7 @@ namespace test{
         {
           solution_.underlying().switchForwards();
           solution_.setNewFilter(find(match));
-          enforce ("match(\""+match+"\")");
+          evaluateQuery ("match(\""+match+"\")");
           return *this;
         }
       
@@ -198,7 +216,7 @@ namespace test{
         {
           solution_.underlying().switchBackwards();
           solution_.setNewFilter(find(match));
-          enforce ("match(\""+match+"\")", "before");
+          evaluateQuery ("match(\""+match+"\")", "before");
           return *this;
         }
       
@@ -362,7 +380,7 @@ namespace test{
       ensureNot (string match)  const
         {
           EventMatch matcher(log_);
-          matcher.requireMatch_ = false; // makes dtor throw when any match was found
+          matcher.look_for_match_ = false; // flip logic; fail if match succeeds
           matcher.before (match);
           return matcher;
         }
