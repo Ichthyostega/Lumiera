@@ -150,13 +150,13 @@ namespace test{
           CHECK (log1 != log2);
           CHECK (copy == log2);
           
-          log2.join(log1);
+          log2.joinInto(log1);
           
           CHECK (log1 == log2);
           CHECK (copy != log2);
           
           CHECK (log1.verify("logJoin|{ham}").after("baked beans"));
-          CHECK (log1.verify("logJoin|{ham}").after("ham").before("eggs").before("logJoin"));
+          CHECK (log1.verify("logJoin|{ham}").after("EventLogHeader| ID = ham").before("eggs").before("bacon").before("logJoin"));
           
           log2.event("sausage");
           CHECK (log1.verify("sausage").after("logJoin").after("spam"));
@@ -241,7 +241,7 @@ namespace test{
           log.ensureNot("foo");
           VERIFY_ERROR (ASSERTION, foo.ensureNot("foo"));
           
-          log.join(bar).join(foo);
+          log.joinInto(bar).joinInto(foo);
           log.verifyEvent("logJoin").arg(bar.getID())
              .beforeEvent("logJoin").arg("foo");
           

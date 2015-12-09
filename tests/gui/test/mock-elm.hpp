@@ -213,7 +213,7 @@ namespace test{
       EventLog&
       joinLog (MockElm& otherMock)
         {
-          log_.join (otherMock.log_);
+          log_.joinInto (otherMock.log_);
           return log_;
         }
     };

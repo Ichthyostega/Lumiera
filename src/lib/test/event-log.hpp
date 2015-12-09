@@ -25,11 +25,12 @@
  ** Support for verifying the occurrence of events from unit tests.
  ** Typically used within special rigging and instrumentation for tests,
  ** the [EventLog] allows to record invocations and similar events. It is
- ** implemented as a "PImpl" to allow sharing of logs. The front-end used
- ** for access offers a query facility, so the test code may express some
+ ** implemented as a "PImpl" to allow sharing of logs, which helps to trace
+ ** events from transient UI elements and from destructor code. The front-end
+ ** used for access offers a query facility, so the test code may express some
  ** expected patterns of incidence and verify match or non-match.
  ** 
- ** Failure of match deliberately throws an assertion failure, in order to
+ ** Failure of match prints a detailed trace message to `STDERR`, in order to
  ** deliver a precise indication what part of the condition failed.
  ** 
  ** @todo as of 11/2015 this is complete WIP-WIP-WIP
@@ -267,8 +268,14 @@ namespace test{
     };
   
   
+  
   /**
    * Helper to log and verify the occurrence of events.
+   * The EventLog object is a front-end handle, logging flexible
+   * [information records][lib::Record] into a possibly shared (vector)
+   * buffer in heap storage. An extended query DSL allows to write
+   * assertions to cover the occurrence of events in unit tests.
+   * @see TestEventLog_test
    */
   class EventLog
     {
@@ -279,7 +286,7 @@ namespace test{
       std::shared_ptr<Log> log_;
       
       void
-      log (std::initializer_list<string> const&& ili)
+      log (std::initializer_list<string> const& ili)
         {
           log_->emplace_back(ili);
         }
@@ -287,7 +294,7 @@ namespace test{
       string
       getID()  const
         {
-          log_->front().get("ID");
+          return log_->front().get("ID");
         }
       
     public:
@@ -313,10 +320,35 @@ namespace test{
       // standard copy operations acceptable
       
       
+      /** Merge this log into another log, forming a combined log
+       * @param otherLog target to integrate this log's contents into.
+       * @return reference to the merged new log instance
+       * @remarks EventLog uses a heap based, sharable log storage,
+       *          where the EventLog object is just a front-end (shared ptr).
+       *          The `joinInto` operation both integrates this logs contents
+       *          into the other log, and then disconnects from the old storage
+       *          and connects to the storage of the combined log.
+       * @warning beware of clone copies. Since copying EventLog is always a
+       *          shallow copy, all copied handles actually refer to the same
+       *          log storage. If you invoke `joinInto` in such a situation,
+       *          only the current EventLog front-end handle will be rewritten
+       *          to point to the combined log, while any other clone will
+       *          continue to point to the original log storage.
+       * @see TestEventLog_test::verify_logJoining()
+       */
       EventLog&
-      join (EventLog& otherLog)
+      joinInto (EventLog& otherLog)
         {
-          UNIMPLEMENTED("log join");
+          Log& target = *otherLog.log_;
+          target.reserve (target.size() + log_->size() + 1);
+          target.emplace_back (log_->front());
+          auto p = log_->begin();
+          while (++p != log_->end()) // move our log's content into the other log
+            target.emplace_back(std::move(*p));
+          this->log_->resize(1);
+          this->log({"type=joined", otherLog.getID()});   // leave a tag to indicate
+          otherLog.log({"type=logJoin", this->getID()}); //  where the `joinInto` took place,
+          this->log_ = otherLog.log_;                   //   connect this to the other storage
           return *this;
         }
       
