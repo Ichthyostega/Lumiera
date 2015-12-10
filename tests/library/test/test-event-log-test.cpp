@@ -187,6 +187,53 @@ namespace test{
         }
       
       
+      void
+      verify_callLogging ()
+        {
+          EventLog log("funCall");
+          log.call (this, "fun1");
+          log.call ("some", "fun2");
+          log.call ("more", "fun3", "facts", 3.2,1);
+          log.verfiy("fun1").before("fun2").before("fun3");
+          
+          CHECK (join(log1) == string(
+                               "Rec(EventLogHeader| ID = funCall ), "
+                               "Rec(call| fun = fun1, this = "+idi::instanceTypeID(this)+" |{}), "
+                               "Rec(call| fun = fun2, this = some |{}), "
+                               "Rec(call| fun = fun3, this = more |{facts, 3.2, 1})"));
+          
+          log.verifyCall("fun1");
+          log.verifyCall("fun2");
+          log.verifyCall("fun3");
+          
+          log.verifyCall("fun");
+          log.verifyCall("fun").after("fun").after("fun");
+          log.ensureNot("fun").after("fun").after("fun2");
+          
+          log.verifyCall("fun3").arg("facts", 3.2, 1);
+          log.verifyCall("fun3").arg(string("facts"), 3.2f, int64_t(1));
+          log.verifyCall("fun3").arg("facts", "3.2", "1");
+          
+          log.ensureNot("fun").arg(" facts ", "3.20", "1L");
+          
+          log.verifyCall("fun1").arg();
+          log.verifyCall("fun2").arg();
+          
+          log.verify("fun").args().before("fun").args("facts", 3.2, 1);
+          
+          log.verify("fun").on(this);
+          log.verify("fun").on("some");
+          log.verify("fun").on("more");
+          log.verify("fun").on("more").on("more");
+          log.ensureNot("fun").on("some").on("more");
+          
+          log.verify("fun").on("some").arg();
+          log.ensureNot("fun").arg().on("more");
+          log.ensureNot("fun").on("some").arg("facts", "3.2", "1");
+          log.verifyCall("fun").arg("facts", "3.2", "1").on("more");
+        }
+      
+      
       /** @test prints TODO */
       void
       checkTODO ()
