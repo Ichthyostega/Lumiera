@@ -70,6 +70,8 @@ namespace test{
           verify_backwardMatch();
           verify_negatedMatch();
           verify_logJoining();
+          verify_callLogging();
+          verify_eventLogging();
         }
       
       
@@ -194,7 +196,8 @@ namespace test{
           log.call (this, "fun1");
           log.call ("some", "fun2");
           log.call ("more", "fun3", "facts", 3.2,1);
-          log.verfiy("fun1").before("fun2").before("fun3");
+          
+          CHECK(log.verfiy("fun1").before("fun2").before("fun3"));
           
           CHECK (join(log1) == string(
                                "Rec(EventLogHeader| ID = funCall ), "
@@ -202,35 +205,108 @@ namespace test{
                                "Rec(call| fun = fun2, this = some |{}), "
                                "Rec(call| fun = fun3, this = more |{facts, 3.2, 1})"));
           
-          log.verifyCall("fun1");
-          log.verifyCall("fun2");
-          log.verifyCall("fun3");
+          CHECK (log.verifyCall("fun1"));
+          CHECK (log.verifyCall("fun2"));
+          CHECK (log.verifyCall("fun3"));
           
-          log.verifyCall("fun");
-          log.verifyCall("fun").after("fun").after("fun");
-          log.ensureNot("fun").after("fun").after("fun2");
+          CHECK (log.verifyCall("fun"));
+          CHECK (log.verifyCall("fun").after("fun").after("fun"));
+          CHECK (log.ensureNot("fun").after("fun").after("fun2"));
           
-          log.verifyCall("fun3").arg("facts", 3.2, 1);
-          log.verifyCall("fun3").arg(string("facts"), 3.2f, int64_t(1));
-          log.verifyCall("fun3").arg("facts", "3.2", "1");
+          CHECK (log.verifyCall("fun3").arg("facts", 3.2, 1));
+          CHECK (log.verifyCall("fun3").arg(string("facts"), 3.2f, int64_t(1)));
+          CHECK (log.verifyCall("fun3").arg("facts", "3.2", "1"));
           
-          log.ensureNot("fun").arg(" facts ", "3.20", "1L");
+          CHECK (log.ensureNot("fun").arg(" facts ", "3.20", "1L"));
           
-          log.verifyCall("fun1").arg();
-          log.verifyCall("fun2").arg();
+          CHECK (log.verifyCall("fun1").arg());
+          CHECK (log.verifyCall("fun2").arg());
           
-          log.verify("fun").args().before("fun").args("facts", 3.2, 1);
+          CHECK (log.verify("fun").args().before("fun").args("facts", 3.2, 1));
           
-          log.verify("fun").on(this);
-          log.verify("fun").on("some");
-          log.verify("fun").on("more");
-          log.verify("fun").on("more").on("more");
-          log.ensureNot("fun").on("some").on("more");
+          CHECK (log.verify("fun").on(this));
+          CHECK (log.verify("fun").on("some"));
+          CHECK (log.verify("fun").on("more"));
+          CHECK (log.verify("fun").on("more").on("more"));
+          CHECK (log.ensureNot("fun").on("some").on("more"));
           
-          log.verify("fun").on("some").arg();
-          log.ensureNot("fun").arg().on("more");
-          log.ensureNot("fun").on("some").arg("facts", "3.2", "1");
-          log.verifyCall("fun").arg("facts", "3.2", "1").on("more");
+          CHECK (log.verify("fun").on("some").arg());
+          CHECK (log.ensureNot("fun").arg().on("more"));
+          CHECK (log.ensureNot("fun").on("some").arg("facts", "3.2", "1"));
+          CHECK (log.verifyCall("fun").arg("facts", "3.2", "1").on("more"));
+        }
+      
+      
+      void
+      verify_eventLogging ()
+        {
+          EventLog log("event trace");
+          log.event("no","fun");
+          log.call("some","fun");
+          
+          CHECK (log.verify("fun").before("fun"));
+          CHECK (log.verify("no").before("some"));
+          
+          CHECK (log.verifyEvent("fun").beforeCall("fun").on("some"));
+          CHECK (!log.verifyEvent("fun").after("some"));
+          
+          CHECK (log.verifyEvent("no","fun"));
+          CHECK (log.verifyEvent("fun").id("no"));
+          CHECK (log.verify("no").arg("fun"));
+          
+          CHECK (join(log1) == string(
+                               "Rec(EventLogHeader| ID = event trace ), "
+                               "Rec(event| ID = no |{fun}), "
+                               "Rec(call| fun = fun, this = some |{})"));
+        }
+      
+      
+      void
+      verify_genericLogging ()
+        {
+          EventLog log("theHog");
+          log.note ("type=some","ID=weird","stuff");
+          log.warn ("danger");
+          log.error ("horrible");
+          log.fatal ("destiny");
+          log.create ("something");
+          log.destroy ("everything");
+          
+          CHECK (log.verify("theHog")
+                    .before("stuff")
+                    .before("danger")
+                    .before("horrible")
+                    .before("destiny")
+                    .before("something")
+                    .before("everything"));
+          CHECK (log.verify("ID").type("EventLogHeader")
+                    .before("weird").type("some")
+                    .before("danger").type("warn")
+                    .before("horrible").type("error")
+                    .before("destiny").type("fatal")
+                    .before("something").type("create")
+                    .before("everything").type("destroy"));
+          
+          CHECK (log.verify(some).key("ID","weird").arg("stuff"));
+          
+          // NOTE: there is some built-in leeway in event-matching...
+          CHECK (log.verifyEvent("horrible").beforeEvent("something").beforeEvent("everything"));
+          CHECK (!log.verifyEvent("stuff"));       // not every entry type is an event by default
+          CHECK (!log.verifyEvent("danger"));      // warning is not an event by default
+          CHECK (log.verifyEvent("some","stuff")); // but the classifier-param matches on the type
+          CHECK (log.verifyEvent("weird","stuff"));
+          CHECK (log.verifyEvent("warn","danger"));
+          CHECK (log.verifyEvent("fatal","destiny"));
+          CHECK (log.verifyEvent("destroy","everything"));
+          
+          CHECK (join(log1) == string(
+                               "Rec(EventLogHeader| ID = theHog ), "
+                               "Rec(some| ID = weird |{struff}), "
+                               "Rec(warn|{danger}), "
+                               "Rec(error|{horrible}), "
+                               "Rec(fatal|{destiny}), "
+                               "Rec(create|{something}), "
+                               "Rec(destroy|{everything})"));
         }
       
       
