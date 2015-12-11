@@ -71,6 +71,9 @@ namespace util {
   namespace { // we need to guard the string conversion
              //  to avoid a compiler error in case the type isn't convertible....
     
+    // precision for rendering of double values
+    const auto DIAGNOSTICS_DOUBLE_PRECISION = 8;
+    
     
     template<typename X>
     struct use_StringConversion : can_ToString<X> { };
@@ -106,6 +109,26 @@ namespace util {
         static string
         toString (X const& val)
           try        { return boost::lexical_cast<string> (val); }
+          catch(...) { return ""; }
+      };
+    
+    /** explicit specialisation to control precision of double values.
+     * @note we set an explicit precision, since this is a diagnostic facility
+     *       and we typically do not want to see all digits, but, for test code,
+     *       we do want a predictable string representation of simple fractional
+     *       values like `0.1` (which can not be represented as binary floats)
+     */
+    template<>
+    struct _InvokeFailsafe<double>
+      {
+        static string
+        toString (double const& val)
+          try {
+              std::ostringstream buffer;
+              buffer.precision(DIAGNOSTICS_DOUBLE_PRECISION);
+              buffer << val;
+              return buffer.str();
+            }
           catch(...) { return ""; }
       };
   }//(End) guards/helpers
