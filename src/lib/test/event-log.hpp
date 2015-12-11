@@ -208,6 +208,12 @@ namespace test{
         }
       
       EventMatch&
+      beforeEvent (string classifier, string match)
+        {
+          UNIMPLEMENTED("process combined relational match");
+        }
+      
+      EventMatch&
       beforeCall (string match)
         {
           UNIMPLEMENTED("process combined relational match");
@@ -230,6 +236,12 @@ namespace test{
       
       EventMatch&
       afterEvent (string match)
+        {
+          UNIMPLEMENTED("process combined relational match backwards");
+        }
+      
+      EventMatch&
+      afterEvent (string classifier, string match)
         {
           UNIMPLEMENTED("process combined relational match backwards");
         }
@@ -261,7 +273,38 @@ namespace test{
         }
       
       EventMatch&
-      on (string sourceID)
+      type (string typeID)
+        {
+          UNIMPLEMENTED("process additional filter on type of the log entry");
+        }
+      
+      EventMatch&
+      key (string key)
+        {
+          UNIMPLEMENTED("process additional filter on the presence of a specific key");
+        }
+      
+      EventMatch&
+      attrib (string key, string valueMatch)
+        {
+          UNIMPLEMENTED("process additional filter on a specific attribute of the log entry");
+        }
+      
+      EventMatch&
+      id (string classifier)
+        {
+          UNIMPLEMENTED("process additional filter on ID classifier of log entry");
+        }
+      
+      EventMatch&
+      on (string targetID)
+        {
+          UNIMPLEMENTED("process additional filter on source of log entry");
+        }
+      
+      template<typename X>
+      EventMatch&
+      on (const X *const targetObj)
         {
           UNIMPLEMENTED("process additional filter on source of log entry");
         }
@@ -356,11 +399,87 @@ namespace test{
       
       /* ==== Logging API ==== */
       
+      using ArgSeq = lib::diff::RecordSetup<string>::Storage;
+      
       EventLog&
       event (string text)
         {
           log({"type=event", text});
           return *this;
+        }
+      
+      EventLog&
+      event (string classifier, string text)
+        {
+          UNIMPLEMENTED ("Log event with additional classifier");
+        }
+      
+      EventLog&
+      call (string target, string function)
+        {
+          UNIMPLEMENTED ("Log function call with no arguments");
+        }
+      
+      EventLog&
+      call (string target, string function, ArgSeq&& argSeq)
+        {
+          UNIMPLEMENTED ("Log function call with a sequence of stringified arguments");
+        }
+      
+      template<typename...ARGS>
+      EventLog&
+      call (string target, string function, ARGS&& ...args)
+        {
+          UNIMPLEMENTED ("Log function call with arbitrary arguments");
+        }
+      
+      template<class X, typename...ARGS>
+      EventLog&
+      call (const X *const targetObj, string function, ARGS&& ...args)
+        {
+          UNIMPLEMENTED ("Log function call on given object with arguments");
+        }
+      
+      template<typename...ELMS>
+      EventLog&
+      note (ELMS&& ...initialiser)
+        {
+          UNIMPLEMENTED ("Log generic entry with arbritrary attributes and values");
+        }
+
+      
+      EventLog&
+      warn (string text)
+        {
+          UNIMPLEMENTED ("Log a warning entry");
+        }
+
+      
+      EventLog&
+      error (string text)
+        {
+          UNIMPLEMENTED ("Log an error note");
+        }
+
+      
+      EventLog&
+      fatal (string text)
+        {
+          UNIMPLEMENTED ("Log a fatal failure");
+        }
+
+      
+      EventLog&
+      create (string text)
+        {
+          UNIMPLEMENTED ("Log the creation of an object");
+        }
+
+      
+      EventLog&
+      destroy (string text)
+        {
+          UNIMPLEMENTED ("Log the destruction of an object");
         }
       
       
@@ -404,6 +523,12 @@ namespace test{
       
       EventMatch
       verifyEvent (string match)  const
+        {
+          UNIMPLEMENTED("start matching sequence");
+        }
+      
+      EventMatch
+      verifyEvent (string classifier, string match)  const
         {
           UNIMPLEMENTED("start matching sequence");
         }

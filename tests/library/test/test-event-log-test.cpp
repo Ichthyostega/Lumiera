@@ -197,13 +197,13 @@ namespace test{
           log.call ("some", "fun2");
           log.call ("more", "fun3", "facts", 3.2,1);
           
-          CHECK(log.verfiy("fun1").before("fun2").before("fun3"));
+          CHECK(log.verify("fun1").before("fun2").before("fun3"));
           
-          CHECK (join(log1) == string(
-                               "Rec(EventLogHeader| ID = funCall ), "
-                               "Rec(call| fun = fun1, this = "+idi::instanceTypeID(this)+" |{}), "
-                               "Rec(call| fun = fun2, this = some |{}), "
-                               "Rec(call| fun = fun3, this = more |{facts, 3.2, 1})"));
+          CHECK (join(log) == string(
+                              "Rec(EventLogHeader| ID = funCall ), "
+                              "Rec(call| fun = fun1, this = "+idi::instanceTypeID(this)+" |{}), "
+                              "Rec(call| fun = fun2, this = some |{}), "
+                              "Rec(call| fun = fun3, this = more |{facts, 3.2, 1})"));
           
           CHECK (log.verifyCall("fun1"));
           CHECK (log.verifyCall("fun2"));
@@ -222,7 +222,7 @@ namespace test{
           CHECK (log.verifyCall("fun1").arg());
           CHECK (log.verifyCall("fun2").arg());
           
-          CHECK (log.verify("fun").args().before("fun").args("facts", 3.2, 1));
+          CHECK (log.verify("fun").arg().before("fun").arg("facts", 3.2, 1));
           
           CHECK (log.verify("fun").on(this));
           CHECK (log.verify("fun").on("some"));
@@ -254,10 +254,10 @@ namespace test{
           CHECK (log.verifyEvent("fun").id("no"));
           CHECK (log.verify("no").arg("fun"));
           
-          CHECK (join(log1) == string(
-                               "Rec(EventLogHeader| ID = event trace ), "
-                               "Rec(event| ID = no |{fun}), "
-                               "Rec(call| fun = fun, this = some |{})"));
+          CHECK (join(log) == string(
+                              "Rec(EventLogHeader| ID = event trace ), "
+                              "Rec(event| ID = no |{fun}), "
+                              "Rec(call| fun = fun, this = some |{})"));
         }
       
       
@@ -287,7 +287,7 @@ namespace test{
                     .before("something").type("create")
                     .before("everything").type("destroy"));
           
-          CHECK (log.verify(some).key("ID","weird").arg("stuff"));
+          CHECK (log.verify("some").attrib("ID","weird").arg("stuff"));
           
           // NOTE: there is some built-in leeway in event-matching...
           CHECK (log.verifyEvent("horrible").beforeEvent("something").beforeEvent("everything"));
@@ -299,14 +299,14 @@ namespace test{
           CHECK (log.verifyEvent("fatal","destiny"));
           CHECK (log.verifyEvent("destroy","everything"));
           
-          CHECK (join(log1) == string(
-                               "Rec(EventLogHeader| ID = theHog ), "
-                               "Rec(some| ID = weird |{struff}), "
-                               "Rec(warn|{danger}), "
-                               "Rec(error|{horrible}), "
-                               "Rec(fatal|{destiny}), "
-                               "Rec(create|{something}), "
-                               "Rec(destroy|{everything})"));
+          CHECK (join(log) == string(
+                              "Rec(EventLogHeader| ID = theHog ), "
+                              "Rec(some| ID = weird |{struff}), "
+                              "Rec(warn|{danger}), "
+                              "Rec(error|{horrible}), "
+                              "Rec(fatal|{destiny}), "
+                              "Rec(create|{something}), "
+                              "Rec(destroy|{everything})"));
         }
       
       
