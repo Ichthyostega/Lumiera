@@ -183,6 +183,48 @@ namespace test{
                     };
         }
       
+      auto
+      findEvent (string match)
+        {
+          return [=](Entry const& entry)
+                    {
+                      return (  entry.getType() == "event"
+                             or entry.getType() == "error"
+                             or entry.getType() == "create"
+                             or entry.getType() == "destroy"
+                             or entry.getType() == "logJoin"
+                             )
+                         and contains (*entry.scope(), match);
+                    };
+        }
+      
+      auto
+      findEvent (string classifier, string match)
+        {
+          return [=](Entry const& entry)
+                    {
+                      return (  entry.getType() == "event"
+                             or entry.getType() == "error"
+                             or entry.getType() == "create"
+                             or entry.getType() == "destroy"
+                             or entry.getType() == "logJoin"
+                             or entry.getType() == classifier
+                             or (entry.hasAttribute("ID") and contains (entry.get("ID"), classifier))
+                             )
+                         and contains (*entry.scope(), match);
+                    };
+        }
+      
+      auto
+      findCall (string match)
+        {
+          return [=](Entry const& entry)
+                    {
+                      return entry.getType() == "call"
+                         and contains (entry.get("fun"), match);
+                    };
+        }
+      
     public:
       /** final evaluation of the match query,
        *  usually triggered from the unit test `CHECK()`.
@@ -222,22 +264,48 @@ namespace test{
           UNIMPLEMENTED("process combined relational regular expression match");
         }
       
+      /** find a match for an "event" _after_ the current point of reference
+       * @remarks the term "event" designates several types of entries, which
+       *          typically capture something happening within the observed entity.
+       *          Especially, the following [record types][lib::Record::getType()]
+       *          qualify as event:
+       *          - `event`
+       *          - `error`
+       *          - `create`
+       *          - `destroy`
+       *          - `logJoin`
+       * @param match perform a substring match against the arguments of the event
+       * @see ::findEvent
+       */
       EventMatch&
       beforeEvent (string match)
         {
-          UNIMPLEMENTED("process combined relational match");
+          solution_.underlying().switchForwards();
+          solution_.setNewFilter(findEvent(match));
+          evaluateQuery ("match-event(\""+match+"\")");
+          return *this;
         }
       
       EventMatch&
       beforeEvent (string classifier, string match)
         {
-          UNIMPLEMENTED("process combined relational match");
+          solution_.underlying().switchForwards();
+          solution_.setNewFilter(findEvent(classifier,match));
+          evaluateQuery ("match-event(ID=\""+classifier+"\", \""+match+"\")");
+          return *this;
         }
       
+      /** find a match for some function invocation _after_ the current point of reference
+       * @param match perform a substring match against the name of the function invoked
+       * @see ::findCall
+       */
       EventMatch&
       beforeCall (string match)
         {
-          UNIMPLEMENTED("process combined relational match");
+          solution_.underlying().switchForwards();
+          solution_.setNewFilter(findCall(match));
+          evaluateQuery ("match-call(\""+match+"\")");
+          return *this;
         }
       
       EventMatch&
@@ -258,19 +326,29 @@ namespace test{
       EventMatch&
       afterEvent (string match)
         {
-          UNIMPLEMENTED("process combined relational match backwards");
+          solution_.underlying().switchBackwards();
+          solution_.setNewFilter(findEvent(match));
+          evaluateQuery ("match-event(\""+match+"\")", "before");
+          return *this;
         }
       
       EventMatch&
       afterEvent (string classifier, string match)
         {
-          UNIMPLEMENTED("process combined relational match backwards");
+          solution_.underlying().switchBackwards();
+          solution_.setNewFilter(findEvent(classifier,match));
+          evaluateQuery ("match-event(ID=\""+classifier+"\", \""+match+"\")", "before");
+          return *this;
         }
       
+      /** find a function invocation backwards, before the current point of reference */
       EventMatch&
       afterCall (string match)
         {
-          UNIMPLEMENTED("process combined relational match backwards");
+          solution_.underlying().switchBackwards();
+          solution_.setNewFilter(findCall(match));
+          evaluateQuery ("match-call(\""+match+"\")", "before");
+          return *this;
         }
       
       EventMatch&
@@ -575,11 +653,18 @@ namespace test{
       
       /* ==== Query/Verification API ==== */
       
+      /** start a query to match for some substring.
+       *  The resulting matcher object will qualify on any log entry
+       *  containing the given string. By adding subsequent further
+       *  query expressions on the returned [matcher object][EventMatch],
+       *  the query can be refined. Refining a query might induce backtracking.
+       *  The final result can be retrieved by `bool` conversion
+       */
       EventMatch
       verify (string match)  const
         {
           EventMatch matcher(*log_);
-          matcher.before (match);
+          matcher.before (match);   // "the start of the log is before the match"
           return matcher;
         }
       
@@ -589,24 +674,45 @@ namespace test{
           UNIMPLEMENTED("start matching sequence for regular expression match");
         }
       
+      /** start a query to match for some event.
+       * @remarks only a subset of all log entries is treated as "event",
+       *          any other log entry will not be considered for this query.
+       *          Besides the regular [events][::event()], also errors,
+       *          creation and destruction of objects count as "event".
+       * @param match text to (substring)match against the argument logged as event
+       */
       EventMatch
       verifyEvent (string match)  const
         {
-          UNIMPLEMENTED("start matching sequence");
+          EventMatch matcher(*log_);
+          matcher.beforeEvent (match);
+          return matcher;
         }
       
       EventMatch
       verifyEvent (string classifier, string match)  const
         {
-          UNIMPLEMENTED("start matching sequence");
+          EventMatch matcher(*log_);
+          matcher.beforeEvent (classifier, match);
+          return matcher;
         }
       
+      /** start a query to match especially a function call
+       * @param match text to match against the function name
+       */
       EventMatch
       verifyCall (string match)  const
         {
-          UNIMPLEMENTED("start matching sequence");
+          EventMatch matcher(*log_);
+          matcher.beforeCall (match);
+          return matcher;
         }
       
+      /** start a query to ensure the given expression does \em not match.
+       * @remarks the query expression is built similar to the other queries,
+       *          but the logic of evaluation is flipped: whenever we find any match
+       *          the overall result (when evaluating to `bool`) will be `false`.
+       */
       EventMatch
       ensureNot (string match)  const
         {
