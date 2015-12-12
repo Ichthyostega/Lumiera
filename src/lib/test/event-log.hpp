@@ -468,7 +468,7 @@ namespace test{
         {
           ArgSeq argSeq;
           argSeq.reserve(sizeof...(ARGS));
-          stringify(argSeq, args...);
+          stringify (argSeq, args...);
           return call (target, function, std::move(argSeq));
         }
       
@@ -489,9 +489,13 @@ namespace test{
       
       template<typename...ELMS>
       EventLog&
-      note (ELMS&& ...initialiser)
+      note (ELMS const& ...initialiser)
         {
-          UNIMPLEMENTED ("Log generic entry with arbritrary attributes and values");
+          ArgSeq args;
+          args.reserve(sizeof...(ELMS));
+          stringify (args, initialiser...);
+          log_->emplace_back(args);
+          return *this;
         }
 
       
