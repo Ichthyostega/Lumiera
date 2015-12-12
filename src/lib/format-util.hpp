@@ -73,6 +73,7 @@ namespace util {
     
     // precision for rendering of double values
     const auto DIAGNOSTICS_DOUBLE_PRECISION = 8;
+    const auto DIAGNOSTICS_FLOAT_PRECISION  = 5;
     
     
     template<typename X>
@@ -126,6 +127,19 @@ namespace util {
           try {
               std::ostringstream buffer;
               buffer.precision(DIAGNOSTICS_DOUBLE_PRECISION);
+              buffer << val;
+              return buffer.str();
+            }
+          catch(...) { return ""; }
+      };
+    template<>
+    struct _InvokeFailsafe<float>
+      {
+        static string
+        toString (float const& val)
+          try {
+              std::ostringstream buffer;
+              buffer.precision(DIAGNOSTICS_FLOAT_PRECISION);
               buffer << val;
               return buffer.str();
             }

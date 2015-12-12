@@ -217,7 +217,9 @@ namespace test{
           CHECK (log.verifyCall("fun3").arg(string("facts"), 3.2f, int64_t(1)));
           CHECK (log.verifyCall("fun3").arg("facts", "3.2", "1"));
           
-          CHECK (log.ensureNot("fun").arg(" facts ", "3.20", "1L"));
+          CHECK (log.ensureNot("fun").arg(" facts ","3.2", "1"));
+          CHECK (log.ensureNot("fun").arg("facts",  "3.20","1"));
+          CHECK (log.ensureNot("fun").arg("facts",  "3.2", "1L"));
           
           CHECK (log.verifyCall("fun1").arg());
           CHECK (log.verifyCall("fun2").arg());

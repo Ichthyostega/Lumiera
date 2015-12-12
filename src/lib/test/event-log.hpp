@@ -104,6 +104,9 @@ namespace test{
       using Iter  = lib::IterCursor<Log::const_iterator>;
       using Filter = ExtensibleFilterIter<Iter>;
       
+      using ArgSeq = lib::diff::RecordSetup<string>::Storage;
+      
+      
       /** match predicate evaluator */
       Filter solution_;
       
@@ -224,6 +227,32 @@ namespace test{
                          and contains (entry.get("fun"), match);
                     };
         }
+      
+      
+      /** this filter functor is for refinement of an existing filter
+       * @param argSeq perform a substring match consecutively
+       *        for each of the log entry's arguments
+       * @note the match also fails, when the given log entry
+       *       has more or less arguments, than the number of
+       *       given match expressions in `argSeq`
+       * @see ExtensibleFilterIter::andFilter()
+       */
+      auto
+      matchArguments(ArgSeq&& argSeq)
+        {
+          return [=](Entry const& entry)
+                    {
+                      auto scope = entry.scope();
+                      for (auto const& match : argSeq)
+                        if (isnil (scope) or not contains(*scope, match))
+                          return false;
+                        else
+                          ++scope;
+                      
+                      return isnil(scope);  // must be exhausted by now
+                    };                     //  otherwise the sizes do not match...
+        }
+      
       
     public:
       /** final evaluation of the match query,
@@ -351,17 +380,23 @@ namespace test{
           return *this;
         }
       
+      /** refine filter to additionally require specific arguments
+       * @remarks the refined filter works on each record qualified by the
+       *          query expression established thus far; it additionally
+       *          looks into the arguments (children list) of the log entry.
+       * @warning match is processed by comparision of string representation.
+       */
+      template<typename...ARGS>
       EventMatch&
-      arg ()
+      arg (ARGS const& ...args)
         {
-          UNIMPLEMENTED("process match on no-arg call argument list");
-        }
-      
-      template<typename... MORE>
-      EventMatch&
-      arg (string match, MORE...args)
-        {
-          UNIMPLEMENTED("process match on call argument list");
+          ArgSeq argSeq;
+          argSeq.reserve(sizeof...(ARGS));
+          stringify (argSeq, args...);
+          
+          solution_.andFilter (matchArguments(std::move(argSeq)));
+          evaluateQuery ("match-arguments("+util::join(argSeq)+")");
+          return *this;
         }
       
       template<typename... MORE>
