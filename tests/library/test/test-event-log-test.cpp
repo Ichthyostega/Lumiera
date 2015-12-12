@@ -259,7 +259,7 @@ namespace test{
           CHECK (join(log) == string(
                               "Rec(EventLogHeader| ID = event trace ), "
                               "Rec(event| ID = no |{fun}), "
-                              "Rec(call| fun = fun, this = some |{})"));
+                              "Rec(call| fun = fun, this = some )"));
         }
       
       

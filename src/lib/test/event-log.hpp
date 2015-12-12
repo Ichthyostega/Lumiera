@@ -238,6 +238,39 @@ namespace test{
         }
       
       
+      /** refinement filter to match on the given typeID */
+      auto
+      matchType (string typeID)
+        {
+          return [=](Entry const& entry)
+                    {
+                      return contains (entry.getType(), typeID);
+                    };
+        }
+      
+      
+      /** refinement filter to ensure a specific attribute is present on the log entry */
+      auto
+      ensureAttribute (string key)
+        {
+          return [=](Entry const& entry)
+                    {
+                      return entry.hasAttribute(key);
+                    };
+        }
+      
+      
+      /** refinement filter to ensure a specific attribute is present on the log entry */
+      auto
+      matchAttribute (string key, string valueMatch)
+        {
+          return [=](Entry const& entry)
+                    {
+                      return entry.hasAttribute(key)
+                         and contains (entry.get(key), valueMatch);
+                    };
+        }
+      
     public:
       /** final evaluation of the match query,
        *  usually triggered from the unit test `CHECK()`.
@@ -391,41 +424,67 @@ namespace test{
           UNIMPLEMENTED("process regular expression match on call argument list");
         }
       
+      /** refine filter to additionally require a matching log entry type */
       EventMatch&
       type (string typeID)
         {
-          UNIMPLEMENTED("process additional filter on type of the log entry");
+          solution_.andFilter (matchType(typeID));
+          evaluateQuery ("match-type("+typeID+")");
+          return *this;
         }
       
+      /** refine filter to additionally require the presence an attribute */
       EventMatch&
       key (string key)
         {
-          UNIMPLEMENTED("process additional filter on the presence of a specific key");
+          solution_.andFilter (ensureAttribute(key));
+          evaluateQuery ("ensure-attribute("+key+")");
+          return *this;
         }
       
+      /** refine filter to additionally match on a specific attribute */
       EventMatch&
       attrib (string key, string valueMatch)
         {
-          UNIMPLEMENTED("process additional filter on a specific attribute of the log entry");
+          solution_.andFilter (matchAttribute(key,valueMatch));
+          evaluateQuery ("match-attribute("+key+"=\""+valueMatch+"\")");
+          return *this;
         }
       
+      /** refine filter to additionally match on the ID attribute */
       EventMatch&
       id (string classifier)
         {
-          UNIMPLEMENTED("process additional filter on ID classifier of log entry");
+          solution_.andFilter (matchAttribute("ID",classifier));
+          evaluateQuery ("match-ID(\""+classifier+"\")");
+          return *this;
         }
       
+      /** refine filter to additionally match the `'this'` attribute */
       EventMatch&
       on (string targetID)
         {
-          UNIMPLEMENTED("process additional filter on source of log entry");
+          solution_.andFilter (matchAttribute("this",targetID));
+          evaluateQuery ("match-this(\""+targetID+"\")");
+          return *this;
+        }
+      
+      EventMatch&
+      on (const char* targetID)
+        {
+          solution_.andFilter (matchAttribute("this",targetID));
+          evaluateQuery ("match-this(\""+string(targetID)+"\")");
+          return *this;
         }
       
       template<typename X>
       EventMatch&
       on (const X *const targetObj)
         {
-          UNIMPLEMENTED("process additional filter on source of log entry");
+          string targetID = idi::instanceTypeID (targetObj);
+          solution_.andFilter (matchAttribute("this",targetID));
+          evaluateQuery ("match-this(\""+targetID+"\")");
+          return *this;
         }
     };
   
