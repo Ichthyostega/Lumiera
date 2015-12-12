@@ -504,38 +504,50 @@ namespace test{
         }
 
       
+      /** Log a warning entry */
       EventLog&
       warn (string text)
         {
-          UNIMPLEMENTED ("Log a warning entry");
+          log({"type=warn", text});
+          return *this;
         }
 
       
+      /** Log an error note */
       EventLog&
       error (string text)
         {
-          UNIMPLEMENTED ("Log an error note");
+          log({"type=error", text});
+          return *this;
         }
 
       
+      /** Log a fatal failure */
       EventLog&
       fatal (string text)
         {
-          UNIMPLEMENTED ("Log a fatal failure");
+          log({"type=fatal", text});
+          return *this;
         }
 
       
+      /** Log the creation of an object.
+       *  Such an entry can be [matched as event][::verifyEvent] */
       EventLog&
       create (string text)
         {
-          UNIMPLEMENTED ("Log the creation of an object");
+          log({"type=create", text});
+          return *this;
         }
 
       
+      /** Log the destruction of an object.
+       *  Can be matched as event. */
       EventLog&
       destroy (string text)
         {
-          UNIMPLEMENTED ("Log the destruction of an object");
+          log({"type=destroy", text});
+          return *this;
         }
       
       
