@@ -437,10 +437,15 @@ namespace test{
           return *this;
         }
       
+      /** log some event, with additional ID or classifier
+       * @param classifier info to be saved into the `ID` attribute
+       * @param text actual payload info, to be logged as argument
+       */
       EventLog&
       event (string classifier, string text)
         {
-          UNIMPLEMENTED ("Log event with additional classifier");
+          log({"type=event", "ID="+classifier, text});
+          return *this;
         }
       
       /** Log occurrence of a function call with no arguments.
