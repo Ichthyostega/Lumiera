@@ -51,6 +51,7 @@
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
 #include "lib/diff/record.hpp"
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/lexical_cast.hpp>
@@ -70,7 +71,27 @@ namespace test{
   using util::contains;
   using util::isnil;
   using util::_Fmt;
+  using lib::Symbol;
 //  using std::rand;
+  
+  namespace {
+    
+    template<class CON>
+    inline void
+    stringify(CON&)
+    {
+      /* NOP */
+    }
+    
+    template<class CON, typename X, typename...ARGS>
+    inline void
+    stringify(CON& container, X const& elm, ARGS const& ...args)
+    {
+      container.emplace_back (util::str(elm));
+      stringify (container, args...);
+    }
+  }
+  
   
   /**
    * @internal ongoing evaluation and match within an [EventLog].
@@ -334,6 +355,14 @@ namespace test{
           log_->emplace_back(ili);
         }
       
+      template<typename ATTR, typename ARGS>
+      void
+      log (Symbol typeID, ATTR&& attribs, ARGS&& args)
+        {
+          log_->emplace_back(typeID, std::forward<ATTR>(attribs)
+                                   , std::forward<ARGS>(args));
+        }
+      
       string
       getID()  const
         {
@@ -414,30 +443,48 @@ namespace test{
           UNIMPLEMENTED ("Log event with additional classifier");
         }
       
+      /** Log occurrence of a function call with no arguments.
+       * @param target the object or scope on which the function is invoked
+       * @param function name of the function being invoked
+       */
       EventLog&
       call (string target, string function)
         {
-          UNIMPLEMENTED ("Log function call with no arguments");
+          return call(target, function, ArgSeq());
         }
       
+      /** Log a function call with a sequence of stringified arguments */
       EventLog&
-      call (string target, string function, ArgSeq&& argSeq)
+      call (string target, string function, ArgSeq&& args)
         {
-          UNIMPLEMENTED ("Log function call with a sequence of stringified arguments");
+          log ("call", ArgSeq{"fun="+function, "this="+target}, std::forward<ArgSeq>(args));
+          return *this;
+        }
+      
+      /** Log a function call with arbitrary arguments */
+      template<typename...ARGS>
+      EventLog&
+      call (string target, string function, ARGS const& ...args)
+        {
+          ArgSeq argSeq;
+          argSeq.reserve(sizeof...(ARGS));
+          stringify(argSeq, args...);
+          return call (target, function, std::move(argSeq));
+        }
+      
+      /** Log a function call on given object ("`this`")... */
+      template<class X, typename...ARGS>
+      EventLog&
+      call (const X *const targetObj, string function, ARGS const& ...args)
+        {
+          return call (idi::instanceTypeID (targetObj), function, args...);
         }
       
       template<typename...ARGS>
       EventLog&
-      call (string target, string function, ARGS&& ...args)
+      call (const char* target, string function, ARGS const& ...args)
         {
-          UNIMPLEMENTED ("Log function call with arbitrary arguments");
-        }
-      
-      template<class X, typename...ARGS>
-      EventLog&
-      call (const X *const targetObj, string function, ARGS&& ...args)
-        {
-          UNIMPLEMENTED ("Log function call on given object with arguments");
+          return call (string(target), function, args...);
         }
       
       template<typename...ELMS>

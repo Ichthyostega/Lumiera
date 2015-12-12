@@ -201,8 +201,8 @@ namespace test{
           
           CHECK (join(log) == string(
                               "Rec(EventLogHeader| ID = funCall ), "
-                              "Rec(call| fun = fun1, this = "+idi::instanceTypeID(this)+" |{}), "
-                              "Rec(call| fun = fun2, this = some |{}), "
+                              "Rec(call| fun = fun1, this = "+idi::instanceTypeID(this)+" ), "
+                              "Rec(call| fun = fun2, this = some ), "
                               "Rec(call| fun = fun3, this = more |{facts, 3.2, 1})"));
           
           CHECK (log.verifyCall("fun1"));
