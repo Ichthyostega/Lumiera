@@ -46,6 +46,7 @@
 #include <string>
 #include <sstream>
 #include <cstring>
+#include <utility>
 #include <typeinfo>
 #include <boost/lexical_cast.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -66,6 +67,7 @@ namespace util {
   using lib::Symbol;
   using util::isnil;
   using std::string;
+  using std::move;
   
   
   namespace { // we need to guard the string conversion
@@ -183,6 +185,72 @@ namespace util {
       return fallback? string(fallback)
                      : tyStr(val);
   }
+  
+  
+  
+  namespace { // helper to convert arbitrary elements toString
+    
+    template<class CON>
+    inline void
+    do_stringify(CON&)
+    { /* do nothing */ }
+    
+    template<class CON, typename X, typename...ELMS>
+    inline void
+    do_stringify(CON& container, X const& elm, ELMS const& ...args)
+    {
+      container += util::str(elm);
+      do_stringify (container, args...);
+    }
+    
+    
+    template<class CON, typename...ELMS>
+    struct SeqContainer
+      : CON
+      {
+        void
+        operator+= (string&& s)
+          {
+            CON::push_back (move(s));
+          }
+      };
+    
+    // most common case: use a vector container...
+    using std::vector;
+    
+    template<typename X, typename...ELMS>
+    struct SeqContainer<vector<X>, ELMS...>
+      :vector<X>
+      {
+        SeqContainer()
+          {
+            this->reserve(sizeof...(ELMS));
+          }
+        
+        void
+        operator+= (string&& s)
+          {
+            this->emplace_back (move(s));
+          }
+      };
+  }
+  
+  
+  /** convert a sequence of elements to string
+   * @param elms sequence of arbitrary elements
+   * @return a collection of type CON, initialised by the
+   *         string representation of the given elements
+   */
+  template<class CON, typename...ELMS>
+  inline CON
+  stringify(ELMS const& ...elms)
+  {
+    SeqContainer<CON,ELMS...> storage;
+    do_stringify (storage, elms...);
+    return CON {move(storage)};
+  }
+  
+  
   
   namespace { // helper to build range iterator on demand
     template<class CON, typename TOGGLE = void>

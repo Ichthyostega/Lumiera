@@ -68,29 +68,13 @@ namespace test{
   
 //  using lib::Literal;
   using std::string;
+  using util::stringify;
   using util::contains;
   using util::isnil;
   using util::_Fmt;
   using lib::Symbol;
 //  using std::rand;
   
-  namespace {
-    
-    template<class CON>
-    inline void
-    stringify(CON&)
-    {
-      /* NOP */
-    }
-    
-    template<class CON, typename X, typename...ARGS>
-    inline void
-    stringify(CON& container, X const& elm, ARGS const& ...args)
-    {
-      container.emplace_back (util::str(elm));
-      stringify (container, args...);
-    }
-  }
   
   
   /**
@@ -390,19 +374,20 @@ namespace test{
       EventMatch&
       arg (ARGS const& ...args)
         {
-          ArgSeq argSeq;
-          argSeq.reserve(sizeof...(ARGS));
-          stringify (argSeq, args...);
+          ArgSeq argSeq(stringify<ArgSeq> (args...));
+          string argList(util::join(argSeq));
           
-          solution_.andFilter (matchArguments(std::move(argSeq)));
-          evaluateQuery ("match-arguments("+util::join(argSeq)+")");
+          solution_.andFilter (matchArguments(move(argSeq)));
+          evaluateQuery ("match-arguments("+argList+")");
           return *this;
         }
       
-      template<typename... MORE>
+      template<typename...ARGS>
       EventMatch&
-      argMatch (string regExp, MORE...args)
+      argMatch (ARGS const& ...regExps)
         {
+          stringify<ArgSeq> (regExps...);
+          
           UNIMPLEMENTED("process regular expression match on call argument list");
         }
       
@@ -584,10 +569,7 @@ namespace test{
       EventLog&
       call (string target, string function, ARGS const& ...args)
         {
-          ArgSeq argSeq;
-          argSeq.reserve(sizeof...(ARGS));
-          stringify (argSeq, args...);
-          return call (target, function, std::move(argSeq));
+          return call (target, function, stringify<ArgSeq>(args...));
         }
       
       /** Log a function call on given object ("`this`")... */
@@ -609,10 +591,7 @@ namespace test{
       EventLog&
       note (ELMS const& ...initialiser)
         {
-          ArgSeq args;
-          args.reserve(sizeof...(ELMS));
-          stringify (args, initialiser...);
-          log_->emplace_back(args);
+          log_->emplace_back(stringify<ArgSeq> (initialiser...));
           return *this;
         }
 
