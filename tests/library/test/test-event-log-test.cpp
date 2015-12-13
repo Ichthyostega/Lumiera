@@ -72,6 +72,7 @@ namespace test{
           verify_logJoining();
           verify_callLogging();
           verify_eventLogging();
+          verify_genericLogging();
         }
       
       
@@ -303,7 +304,7 @@ namespace test{
           
           CHECK (join(log) == string(
                               "Rec(EventLogHeader| ID = theHog ), "
-                              "Rec(some| ID = weird |{struff}), "
+                              "Rec(some| ID = weird |{stuff}), "
                               "Rec(warn|{danger}), "
                               "Rec(error|{horrible}), "
                               "Rec(fatal|{destiny}), "
