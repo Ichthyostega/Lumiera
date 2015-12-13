@@ -15,6 +15,34 @@ END
 
 
 TEST "Helper for event registration and verification" TestEventLog_test <<END
+err-lit: __Log_condition_violated__
+err-lit: FAILED to match("γ")
+err: ..after HEAD TestEventLog_test.+
+err-lit: __Log_condition_violated__
+err-lit: FAILED to match("α")
+err-lit: ..after match("β") @ Rec(event|{β})
+err: ..after HEAD TestEventLog_test.+
+err-lit: __Log_condition_violated__
+err-lit: FAILED to match("ham")
+err-lit: ..before match("beans") @ Rec(EventLogHeader| ID = baked beans )
+err-lit: ..before match("spam") @ Rec(event|{spam})
+err-lit: ..after HEAD baked beans
+err-lit: __Log_condition_violated__
+err-lit: FOUND at least match("ham") @ Rec(event|{ham})
+err-lit: ..after match("eggs") @ Rec(EventLogHeader| ID = eggs )
+err-lit: ..before match("spam") @ Rec(event|{spam})
+err-lit: ..after match("spam") @ Rec(event|{spam})
+err-lit: ..after HEAD eggs
+err-lit: __Log_condition_violated__
+err-lit: FAILED to match("some")
+err-lit: ..before match-event("fun") @ Rec(event| ID = no |{fun})
+err-lit: ..after HEAD event trace
+err-lit: __Log_condition_violated__
+err-lit: FAILED to match-event("stuff")
+err-lit: ..after HEAD theHog
+err-lit: __Log_condition_violated__
+err-lit: FAILED to match-event("danger")
+err-lit: ..after HEAD theHog
 return: 0
 END
 

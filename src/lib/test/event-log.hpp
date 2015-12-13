@@ -30,12 +30,11 @@
  ** used for access offers a query facility, so the test code may express some
  ** expected patterns of incidence and verify match or non-match.
  ** 
- ** Failure of match prints a detailed trace message to `STDERR`, in order to
- ** deliver a precise indication what part of the condition failed.
+ ** Failure of match prints a detailed trace message to `STDERR`, in order
+ ** to deliver a precise indication what part of the condition failed.
  ** 
- ** @todo as of 11/2015 this is complete WIP-WIP-WIP
- ** 
- ** @see ////TODO_test usage example
+ ** @see TestEventLog_test
+ ** @see [usage example][AbstractTangible_test]
  ** 
  */
 
@@ -48,13 +47,11 @@
 #include "lib/idi/entry-id.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-cursor.hpp"
-#include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -67,20 +64,22 @@ namespace lib {
 namespace test{
   namespace error = lumiera::error;
   
-//  using lib::Literal;
-  using std::string;
   using util::stringify;
   using util::contains;
   using util::isnil;
-  using util::_Fmt;
   using lib::Symbol;
-//  using std::rand;
+  using std::string;
   
   
   
   /**
    * @internal ongoing evaluation and match within an [EventLog].
-   * @throws error::Fatal when the expected match fails (error::LUMIERA_ERROR_ASSERTION)
+   * @remarks an EventMatch object is returned when building query expression
+   *          to verify the occurrence of some events within the EventLog.
+   *          This "matcher" object implements the query logic with backtracking.
+   *          The query expressions are added as filter functors to a filtering
+   *          iterator; when all of the log's contents are filtered away,
+   *          the evaluation counts as failed.
    */
   class EventMatch
     {
@@ -90,6 +89,7 @@ namespace test{
       using Filter = ExtensibleFilterIter<Iter>;
       
       using ArgSeq = lib::diff::RecordSetup<string>::Storage;
+      using RExSeq = std::vector<std::regex>;
       
       
       /** match predicate evaluator */
@@ -98,10 +98,10 @@ namespace test{
       /** record last match for diagnostics */
       string lastMatch_;
       
-      /** support for positive and negative queries.
-       * @note negative queries enforced in dtor */
+      /** support for positive and negative queries. */
       bool look_for_match_;
       
+      /** record when the underlying query has failed */
       string violation_;
       
       /** core of the evaluation machinery:
@@ -114,14 +114,14 @@ namespace test{
           return !isnil (solution_);
         }
       
-      /** this is actually called after each refinement
-       * of the filter and matching conditions. The effect is to search
+      /** this is actually called after each refinement of
+       * the filter and matching conditions. The effect is to search
        * for an (intermediary) solution right away and to mark failure
        * as soon as some condition can not be satisfied. Rationale is to
        * indicate the point where a chained match fails
        * @see ::operator bool() for extracting the result
-       * @par matchSpec diagnostics description of the predicate just being added
-       * @par rel indication of the searching relation / direction
+       * @param matchSpec diagnostics description of the predicate just being added
+       * @param rel indication of the searching relation / direction
        */
       void
       evaluateQuery (string matchSpec, Literal rel = "after")
@@ -158,6 +158,7 @@ namespace test{
         { }
       
       friend class EventLog;
+      
       
       
       /* == elementary matchers == */
@@ -233,7 +234,7 @@ namespace test{
        * @see ExtensibleFilterIter::andFilter()
        */
       auto
-      matchArguments(ArgSeq&& argSeq)
+      matchArguments (ArgSeq&& argSeq)
         {
           return [=](Entry const& entry)
                     {
@@ -246,6 +247,33 @@ namespace test{
                       
                       return isnil(scope);  // must be exhausted by now
                     };                     //  otherwise the sizes do not match...
+        }
+      
+      
+      /** refinement filter, to cover all arguments by regular expression(s)
+       * @param regExpSeq several regular expressions, which, when applied
+       *        consecutively until exhaustion, must cover and verify _all_
+       *        arguments of the log entry.
+       * @remarks to explain, we "consume" arguments with a regExp from the list,
+       *        and when this one doesn't match anymore, we try the next one.
+       *        When we'ver tried all regular expressions, we must have also
+       *        consumed all arguments, otherwise we fail.
+       */
+      auto
+      matchArgsRegExp (RExSeq&& regExpSeq)
+        {
+          return [=](Entry const& entry)
+                    {
+                      auto scope = entry.scope();
+                      for (auto const& rex : regExpSeq)
+                        {
+                          if (isnil (scope)) return false;
+                          while (scope and std::regex_search(*scope, rex))
+                            ++scope;
+                        }
+                      
+                      return isnil(scope);  // must be exhausted by now
+                    };                     //  otherwise we didn't get full coverage...
         }
       
       
@@ -281,6 +309,7 @@ namespace test{
                          and contains (entry.get(key), valueMatch);
                     };
         }
+      
       
     public:
       /** final evaluation of the match query,
@@ -433,13 +462,23 @@ namespace test{
           return *this;
         }
       
+      /** refine filter to additionally cover all arguments
+       *  with a series of regular expressions.
+       * @note For this match to succeed, any arguments of the log entry
+       *       must be covered by applying the given regular expressions
+       *       consecutively. Each regular expression is applied to further
+       *       arguments, as long as it matches. It is possible to have
+       *       just one RegExp to "rule them all", but as soon as there
+       *       is one argument, that can not be covered by the next
+       *       RegExp, the whole match counts as failed.
+       */
       template<typename...ARGS>
       EventMatch&
       argMatch (ARGS const& ...regExps)
         {
-          stringify<ArgSeq> (regExps...);
-          
-          UNIMPLEMENTED("process regular expression match on call argument list");
+          solution_.andFilter (matchArgsRegExp (stringify<RExSeq> (regExps...)));
+          evaluateQuery ("match-args-RegExp("+util::join(stringify<ArgSeq>(regExps...))+")");
+          return *this;
         }
       
       /** refine filter to additionally require a matching log entry type */
@@ -508,7 +547,9 @@ namespace test{
   
   
   
-  /**
+  
+  
+  /****************************************************************//**
    * Helper to log and verify the occurrence of events.
    * The EventLog object is a front-end handle, logging flexible
    * [information records][lib::Record] into a possibly shared (vector)
@@ -523,6 +564,7 @@ namespace test{
       using Iter  = lib::RangeIter<Log::const_iterator>;
       
       std::shared_ptr<Log> log_;
+      
       
       void
       log (std::initializer_list<string> const& ili)
@@ -543,6 +585,7 @@ namespace test{
         {
           return log_->front().get("ID");
         }
+      
       
     public:
       explicit
@@ -726,7 +769,7 @@ namespace test{
       bool
       empty()  const
         {
-          return 1 >= log_->size();
+          return 1 >= log_->size();  // do not count the log header
         }
       
       

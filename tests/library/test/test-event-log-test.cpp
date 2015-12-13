@@ -22,35 +22,22 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
 #include "lib/format-util.hpp"
 #include "lib/test/event-log.hpp"
-#include "lib/error.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 #include <string>
 
 using util::join;
 using util::isnil;
-using lumiera::error::LUMIERA_ERROR_ASSERTION;
 
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib {
 namespace test{
 namespace test{
   
-  template<class T>
-  class Wrmrmpft 
-    {
-      T tt_;
-    };
-  
-  struct Murpf { };
   
   
   
@@ -58,7 +45,13 @@ namespace test{
   /***********************************************************//**
    * @test verify a logging facility, which can be used to ensure
    *       some events happened while running test code.
-   *       
+   *       - various kinds of events or function calls
+   *         are logged via the logging API.
+   *       - within the test code, a match is performed against
+   *         the contents of the log, using a DSL to represent
+   *         matches relative to other matches
+   *       - when a match fails, additional diagnostics are
+   *         printed to STDERR
    * @see event-log.hpp
    */
   class TestEventLog_test : public Test
@@ -128,6 +121,17 @@ namespace test{
         }
       
       
+      /** @test combining several logs
+       * The EventLog objects are actually just lightweight front-end handles,
+       * while the actual log lives on the Heap. This allows to have several handles
+       * hold onto the same actual log; this way, we can access and verify logs
+       * even after the managing object is destroyed.
+       * 
+       * The "log joining" functionality covered here is just an obvious extension
+       * to this setup: it allows to attach one log to another log after the fact;
+       * the contents of the joined log are integrated into the target log.
+       * @remarks this functionality is "low hanging fruit" -- not sure if it's useful.
+       */
       void
       verify_logJoining ()
         {
@@ -342,10 +346,10 @@ namespace test{
           
           // Cover all arguments with sequence of regular expressions
           CHECK (log.verify("spam").argMatch("^egg ", "^spam .+spam$"));
-          CHECK (log.verifyMatch("Rec.+fatal").afterMatch("{.+}").argMatch("bacon$","and spam$"));
+          CHECK (log.verifyMatch("Rec.+fatal").afterMatch("\\{.+\\}").argMatch("bacon$","and spam$"));
           
           // argument match must cover all arguments...
-          CHECK (log.ensureNot("spam").arg("sausage|egg"));
+          CHECK (log.ensureNot("spam").argMatch("bacon|^spam"));
         }
     };
   
