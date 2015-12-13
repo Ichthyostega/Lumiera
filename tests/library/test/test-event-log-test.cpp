@@ -73,6 +73,7 @@ namespace test{
           verify_callLogging();
           verify_eventLogging();
           verify_genericLogging();
+          verify_regExpMatch();
         }
       
       
@@ -313,79 +314,38 @@ namespace test{
         }
       
       
-      /** @test prints TODO */
       void
-      checkTODO ()
+      verify_regExpMatch ()
         {
-#if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #975
-          log.verifyEvent("ctor");
-          log.verify("ctor").arg("dummy");
+          EventLog log("Lovely spam!");
+          log.note ("type=spam", "egg and bacon"
+                               , "egg sausage and bacon"
+                               , "egg and spam"
+                               , "egg bacon and spam"
+                               , "egg bacon sausage and spam"
+                               , "spam bacon sausage and spam"
+                               , "spam egg spam spam bacon and spam"
+                               , "spam sausage spam spam bacon spam tomato and spam");
+          log.fatal("Lobster Thermidor a Crevette with a mornay sauce served in a Provencale manner "
+                    "with shallots and aubergines garnished with truffle pate, brandy and with a fried egg on top and spam");
           
-          CHECK ("dummy" == log.getID().getSym());
-          CHECK ("ID<gui::model::test::MockElm>-dummy" = string(log.getID()));
+          CHECK (log.verify("spam").before("(spam|").before("egg on top and spam"));
+          CHECK (log.ensureNot("and spam").after("(spam|").after("spam!").after("bacon"));
           
-          VERIFY_ERROR (ASSERTION, log.verifyCall("reset"));
+          // note: each consecutive match starts with the same element, on which the previous one succeeded
+          CHECK (log.verify("spam").before("spam").before("spam").before("spam").before("spam").before("bacon"));
           
-          log.reset();
-          log.verify("reset");
-          log.verifyCall("reset");
-          log.verifyEvent("reset");
-          log.verify("reset").after("ctor");
-          log.verify("ctor").before("reset");
-          VERIFY_ERROR (ASSERTION, log.verify("reset").before("ctor"));
-          VERIFY_ERROR (ASSERTION, log.verify("ctor").after("reset"));
+          // RegExp on full String representation
+          CHECK (log.verifyMatch("spam.+spam"));
+          CHECK (log.verifyMatch("spam.+spam").beforeMatch("spam(?!spam)"));
+          CHECK (log.verifyEvent("fatal","spam").afterMatch("(spam.*){15}"));
           
-          log.verify("reset").before("reset");
-          log.verify("reset").beforeEvent("reset");
-          log.verifyCall("reset").before("reset");
-          log.verifyCall("reset").beforeEvent("reset");
-          VERIFY_ERROR (ASSERTION, log.verifyCall("reset").afterCall("reset"));
-          VERIFY_ERROR (ASSERTION, log.verifyCall("reset").afterEvent("reset"));
-          VERIFY_ERROR (ASSERTION, log.verifyEvent("reset").afterEvent("reset"));
+          // Cover all arguments with sequence of regular expressions
+          CHECK (log.verify("spam").argMatch("^egg ", "^spam .+spam$"));
+          CHECK (log.verifyMatch("Rec.+fatal").afterMatch("{.+}").argMatch("bacon$","and spam$"));
           
-          CHECK (!log.isTouched());
-          CHECK (!log.isExpanded());
-          
-          log.noteMsg("dolorem ipsum quia dolor sit amet consectetur adipisci velit.");
-          log.verifyNote("Msg");
-          log.verifyCall("noteMsg");
-          log.verifyCall("noteMsg").arg("lorem ipsum");
-          log.verifyCall("noteMsg").argMatch("dolor.+dolor\\s+");
-          log.verifyMatch("Rec\\(note.+kind = Msg.+msg = dolorem ipsum");
-          
-          EventLog log = log.getLog();
-          log.verify("ctor")
-             .before("reset")
-             .before("lorem ipsum");
-          
-          MockElm foo("foo"), bar;
-          foo.verify("ctor").arg("foo");
-          bar.verify("ctor").arg();
-          
-          bar.ensureNot("foo");
-          log.ensureNot("foo");
-          log.ensureNot("foo");
-          VERIFY_ERROR (ASSERTION, foo.ensureNot("foo"));
-          
-          log.joinInto(bar).joinInto(foo);
-          log.verifyEvent("logJoin").arg(bar.getID())
-             .beforeEvent("logJoin").arg("foo");
-          
-          log.verifyEvent("logJoin").arg(bar.getID())
-              .beforeEvent("logJoin").arg("foo");
-          log.verify("ctor").arg("foo");
-          log.verify("ctor").arg("foo");
-          log.verify("ctor").arg("dummy")
-             .before("ctor").arg(bar.getID())
-             .before("ctor").arg("foo");
-          
-          log.kill();
-          foo.noteMsg("dummy killed");
-          log.verifyEvent("dtor").on("dummy")
-             .beforeCall("noteMsg").on("foo");
-           // and when actually no exception is raised, this is an ASSERTION failure
-           VERIFY_ERROR (ASSERTION, VERIFY_ERROR (EXCEPTION, dontThrow() ));
-#endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #975
+          // argument match must cover all arguments...
+          CHECK (log.ensureNot("spam").arg("sausage|egg"));
         }
     };
   

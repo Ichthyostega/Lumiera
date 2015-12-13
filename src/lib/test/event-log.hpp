@@ -59,6 +59,7 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <regex>
 
 
 
@@ -167,6 +168,16 @@ namespace test{
           return [=](Entry const& entry)
                     {
                       return contains (string(entry), match);
+                    };
+        }
+      
+      auto
+      findRegExp (string regExpDef)
+        {
+          std::regex regExp(regExpDef);
+          return [=](Entry const& entry)
+                    {
+                      return std::regex_search(string(entry), regExp);
                     };
         }
       
@@ -304,10 +315,14 @@ namespace test{
           return *this;
         }
       
+      /** find a match with the given regular expression */
       EventMatch&
       beforeMatch (string regExp)
         {
-          UNIMPLEMENTED("process combined relational regular expression match");
+          solution_.underlying().switchForwards();
+          solution_.setNewFilter(findRegExp(regExp));
+          evaluateQuery ("find-RegExp(\""+regExp+"\")");
+          return *this;
         }
       
       /** find a match for an "event" _after_ the current point of reference
@@ -366,7 +381,10 @@ namespace test{
       EventMatch&
       afterMatch (string regExp)
         {
-          UNIMPLEMENTED("process combined relational regular expression match backwards");
+          solution_.underlying().switchBackwards();
+          solution_.setNewFilter(findRegExp(regExp));
+          evaluateQuery ("find-RegExp(\""+regExp+"\")", "before");
+          return *this;
         }
       
       EventMatch&
@@ -741,10 +759,18 @@ namespace test{
           return matcher;
         }
       
+      /** start a query to match with a regular expression
+       * @param regExp definition
+       * @remarks the expression will work against the full
+       *          `string` representation of the log entries.
+       *          Meaning, it can also match type and attributes
+       */
       EventMatch
       verifyMatch (string regExp)  const
         {
-          UNIMPLEMENTED("start matching sequence for regular expression match");
+          EventMatch matcher(*log_);
+          matcher.beforeMatch (regExp);
+          return matcher;
         }
       
       /** start a query to match for some event.
