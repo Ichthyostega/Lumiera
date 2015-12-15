@@ -87,7 +87,7 @@ namespace test{
           CHECK (log.verify("α").before("β"));
           CHECK (not log.verify("β").before("α"));
           
-          CHECK (join(log) == "Rec(EventLogHeader| ID = "+idi::instanceTypeID(this)+" ), "
+          CHECK (join(log) == "Rec(EventLogHeader| this = "+idi::instanceTypeID(this)+" ), "
                            +  "Rec(event|{α}), "
                            +  "Rec(event|{β})");
         }
@@ -164,7 +164,7 @@ namespace test{
           CHECK (copy != log2);
           
           CHECK (log1.verify("logJoin|{ham}").after("baked beans"));
-          CHECK (log1.verify("logJoin|{ham}").after("EventLogHeader| ID = ham").before("eggs").before("bacon").before("logJoin"));
+          CHECK (log1.verify("logJoin|{ham}").after("EventLogHeader| this = ham").before("eggs").before("bacon").before("logJoin"));
           
           log2.event("sausage");
           CHECK (log1.verify("sausage").after("logJoin").after("spam"));
@@ -180,16 +180,16 @@ namespace test{
           
           
           CHECK (join(log1) == string(
-                               "Rec(EventLogHeader| ID = spam ), "
+                               "Rec(EventLogHeader| this = spam ), "
                                "Rec(event|{baked beans}), "
-                               "Rec(EventLogHeader| ID = ham ), "
+                               "Rec(EventLogHeader| this = ham ), "
                                "Rec(event|{eggs}), "
                                "Rec(event|{bacon}), "
                                "Rec(logJoin|{ham}), "
                                "Rec(event|{sausage})"));
           
           CHECK (join(copy) == string(
-                               "Rec(EventLogHeader| ID = ham ), "
+                               "Rec(EventLogHeader| this = ham ), "
                                "Rec(joined|{spam}), "
                                "Rec(event|{spam tomato})"));
         }
@@ -206,7 +206,7 @@ namespace test{
           CHECK(log.verify("fun1").before("fun2").before("fun3"));
           
           CHECK (join(log) == string(
-                              "Rec(EventLogHeader| ID = funCall ), "
+                              "Rec(EventLogHeader| this = funCall ), "
                               "Rec(call| fun = fun1, this = "+idi::instanceTypeID(this)+" ), "
                               "Rec(call| fun = fun2, this = some ), "
                               "Rec(call| fun = fun3, this = more |{facts, 3.2, 1})"));
@@ -263,7 +263,7 @@ namespace test{
           CHECK (log.verify("no").arg("fun"));
           
           CHECK (join(log) == string(
-                              "Rec(EventLogHeader| ID = event trace ), "
+                              "Rec(EventLogHeader| this = event trace ), "
                               "Rec(event| ID = no |{fun}), "
                               "Rec(call| fun = fun, this = some )"));
         }
@@ -287,7 +287,7 @@ namespace test{
                     .before("destiny")
                     .before("something")
                     .before("everything"));
-          CHECK (log.verify("ID").type("EventLogHeader")
+          CHECK (log.verify("this").type("EventLogHeader")
                     .before("weird").type("some")
                     .before("danger").type("warn")
                     .before("horrible").type("error")
@@ -308,7 +308,7 @@ namespace test{
           CHECK (log.verifyEvent("destroy","everything"));
           
           CHECK (join(log) == string(
-                              "Rec(EventLogHeader| ID = theHog ), "
+                              "Rec(EventLogHeader| this = theHog ), "
                               "Rec(some| ID = weird |{stuff}), "
                               "Rec(warn|{danger}), "
                               "Rec(error|{horrible}), "

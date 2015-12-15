@@ -152,7 +152,7 @@ namespace test{
       /** @internal for creating EventLog matchers */
       EventMatch(Log const& srcSeq)
         : solution_(Iter(srcSeq))
-        , lastMatch_("HEAD "+ solution_->get("ID"))
+        , lastMatch_("HEAD "+ solution_->get("this"))
         , look_for_match_(true)
         , violation_()
         { }
@@ -583,7 +583,7 @@ namespace test{
       string
       getID()  const
         {
-          return log_->front().get("ID");
+          return log_->front().get("this");
         }
       
       
@@ -592,7 +592,7 @@ namespace test{
       EventLog (string logID)
         : log_(new Log)
         {
-          log({"type=EventLogHeader", "ID="+logID});
+          log({"type=EventLogHeader", "this="+logID});
         }
       
       explicit
