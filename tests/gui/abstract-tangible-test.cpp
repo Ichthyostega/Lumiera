@@ -113,49 +113,55 @@ namespace test {
         }
       
       
-      /** @test how to retrieve and enumerate session contents
-       *        as operation initiated from GUI display code
+      /** @test verify the UI widget unit test support framework.
+       * The generic backbone of the Lumiera UI offers a mock UI element,
+       * with the ability to stand-in for actual elements present in the real GUI.
+       * This allows us to rig a emulated test user interface to cover interactions
+       * involving some communication from or to interface elements. After setting up
+       * a [MockElm] with a suitable name / ID, we're able to operate this element
+       * programmatically and to send messages and responses from the core "up"
+       * to this mocked interface. And since this mock element embodies an
+       * [event log][EventLog], the unit test code can verify the occurrence
+       * of expected events, invocations and responses.
        */
       void
       verify_mockManipulation ()
         {
           MockElm mock("dummy");
           
-          mock.verify("ctor");
-          mock.verifyEvent("ctor");
-          mock.verify("ctor").arg("dummy");
+          CHECK (mock.verify("ctor"));
+          CHECK (mock.verifyEvent("ctor"));
+          CHECK (mock.verify("ctor").arg("dummy"));
           
           CHECK ("dummy" == mock.getID().getSym());
           CHECK (EntryID<MockElm>("dummy") == mock.getID());
           
-          VERIFY_ERROR (ASSERTION, mock.verifyCall("reset"));
+          CHECK (!mock.verifyCall("reset"));
           
           mock.reset();
-          mock.verify("reset");
-          mock.verifyCall("reset");
-          mock.verifyEvent("reset");
-          mock.verify("reset").after("ctor");
-          mock.verify("ctor").before("reset");
-          VERIFY_ERROR (ASSERTION, mock.verify("reset").before("ctor"));
-          VERIFY_ERROR (ASSERTION, mock.verify("ctor").after("reset"));
+          CHECK (mock.verify("reset"));
+          CHECK (mock.verifyCall("reset"));
+          CHECK (mock.verifyCall("reset").on("dummy"));
+          CHECK (mock.verifyEvent("reset"));
+          CHECK (mock.verify("reset").after("ctor"));
+          CHECK (mock.verify("ctor").before("reset"));
+          CHECK (mock.ensureNot("reset").before("ctor"));
+          CHECK (mock.ensureNot("ctor").after("reset"));
           
-          mock.verify("reset").before("reset");
-          mock.verify("reset").beforeEvent("reset");
-          mock.verifyCall("reset").before("reset");
-          mock.verifyCall("reset").beforeEvent("reset");
-          VERIFY_ERROR (ASSERTION, mock.verifyCall("reset").afterCall("reset"));
-          VERIFY_ERROR (ASSERTION, mock.verifyCall("reset").afterEvent("reset"));
-          VERIFY_ERROR (ASSERTION, mock.verifyEvent("reset").afterEvent("reset"));
+          CHECK (mock.verify("reset").before("reset"));
+          CHECK (mock.verify("reset").beforeEvent("reset"));
+          CHECK (mock.verifyCall("reset").beforeEvent("reset"));
+          CHECK (!mock.verifyCall("reset").afterEvent("reset"));
           
           CHECK (!mock.isTouched());
           CHECK (!mock.isExpanded());
           
-          mock.noteMsg("dolorem ipsum quia dolor sit amet consectetur adipisci velit.");
-          mock.verifyNote("Msg");
-          mock.verifyCall("noteMsg");
-          mock.verifyCall("noteMsg").arg("lorem ipsum");
-          mock.verifyCall("noteMsg").argMatch("dolor.+dolor\\s+");
-          mock.verifyMatch("Rec\\(note.+kind = Msg.+msg = dolorem ipsum");
+          mock.markMsg("dolorem ipsum quia dolor sit amet consectetur adipisci velit.");
+          CHECK (mock.verifyNote("Msg"));
+          CHECK (mock.verifyCall("noteMsg"));
+          CHECK (mock.verifyCall("noteMsg").arg("lorem ipsum"));
+          CHECK (mock.verifyCall("noteMsg").argMatch("dolor.+dolor\\s+"));
+          CHECK (mock.verifyMatch("Rec\\(note.+kind = Msg.+msg = dolorem ipsum"));
           
           EventLog log = mock.getLog();
           log.verify("ctor")
@@ -164,30 +170,30 @@ namespace test {
           
           MockElm foo("foo"), bar("bar");
           foo.verify("ctor").arg("foo");
-          bar.verify("ctor").arg();
+          bar.verify("ctor").arg("bar");
           
           bar.ensureNot("foo");
           log.ensureNot("foo");
           mock.ensureNot("foo");
-          VERIFY_ERROR (ASSERTION, foo.ensureNot("foo"));
+          CHECK (!foo.ensureNot("foo"));
           
           bar.joinLog(mock);
           foo.joinLog(mock);
-          log.verifyEvent("logJoin").arg("bar")
-             .beforeEvent("logJoin").arg("foo");
+          CHECK (log.verifyEvent("logJoin").arg("bar")
+                    .beforeEvent("logJoin").arg("foo"));
           
-          mock.verifyEvent("logJoin").arg("bar")
-              .beforeEvent("logJoin").arg("foo");
-          mock.verify("ctor").arg("foo");
-          log.verify("ctor").arg("foo");
-          log.verify("ctor").arg("dummy")
-             .before("ctor").arg("bar")
-             .before("ctor").arg("foo");
+          CHECK (mock.verifyEvent("logJoin").arg("bar")
+                     .beforeEvent("logJoin").arg("foo"));
+          CHECK (mock.verify("ctor").arg("foo"));
+          CHECK (log.verify("ctor").arg("foo"));
+          CHECK (log.verify("ctor").arg("dummy")
+                    .before("ctor").arg("bar")
+                    .before("ctor").arg("foo"));
           
           mock.kill();
-          foo.noteMsg("dummy killed");
-          log.verifyEvent("dtor").on("dummy")
-             .beforeCall("noteMsg").on("foo");
+          foo.markMsg("dummy killed");
+          CHECK (log.verifyEvent("dtor").on("dummy")
+                    .beforeCall("noteMsg").on("foo"));
         }
       
       

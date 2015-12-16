@@ -2900,7 +2900,7 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201511272320" tags="design decision Concepts GuiPattern draft discuss" changecount="2">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201512160022" tags="design decision Concepts GuiPattern draft discuss" changecount="3">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
 The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Obviously, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. But, in any more than trivial UI application, there is an intermediate level, where things go on, which can not fully be just derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could strive at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
@@ -2913,7 +2913,7 @@ The interface programming allows us to react on events and trigger behaviour, an
 ;shift of perspective
 :and while we work, the focus moves along. Some things are closer, other things are remote and require us to move and re-orient and reshape our perspective, should we choose to turn towards them.
 ;the ability to arrange what is relevant
-:we do the same stuff again and again, and this makes us observe and understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.</pre>
+:we do the same stuff again and again, and this makes us observe and gradually understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.</pre>
 </div>
 <div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" tags="def design GuiIntegration draft" changecount="1">
 <pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
@@ -8371,7 +8371,7 @@ The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the 
 
 The ~MVC-Pattern as such is fine, and probably the best we know for construction of user interfaces. But it doesn't scale well towards the integration into a larger and more structured system. There is a tension between the Controller in the UI and other parts of an application, which as well need to be //in control.// And, even more important, there is a tension between the demands of UI elements for support by a model, and the demands to be placed on a core domain model of a large scale application. This tension is resolved by enacting these roles while transforming the requests and demands into //Messages.//</pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201511280638" tags="GuiPattern design draft decision" changecount="17">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201512160029" tags="GuiPattern design draft decision" changecount="18">
 <pre>While our UI widgets are implemented the standard way as proposed by GTKmm, some key elements -- which are especially relevant for the anatomy and mechanics of the interface -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -8384,7 +8384,7 @@ As a starting point, we know
 * these in turn request a diff and then update themselves into compliance.
 
 !Behaviours
-For some reason, any element in the UI can appear and go away. This corresponds to attachment and deregistration at the UI-Bus
+For some arbitrary reason, any element in the UI can appear and go away. This corresponds to attachment and deregistration at the UI-Bus
 
 In regular, operative state, an interface element may initiate //actions.// Even more: for //any conceivable, user visible, tangible action,// there is an interface element, which acts as point-of-service. //This is a decision.// There might be higher-level, cooperative [[gestures|Gesture]] within the interface, and actions might be formed like sentences, with the help of a FocusConcept -- however, in the end, there is a ''subject'' and a ''predicate''. And the interface element takes on the role of the underlying, the subject, the ''tangible''.
 

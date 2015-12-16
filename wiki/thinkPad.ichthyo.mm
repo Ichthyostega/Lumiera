@@ -154,8 +154,7 @@
       sinnvoll?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -165,8 +164,7 @@
       was haben alle UI-Elemente wirklich gemeinsam?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1448658692023" ID="ID_888978058" MODIFIED="1448659524029" TEXT="generische Commands">
 <richcontent TYPE="NOTE"><html>
@@ -184,8 +182,7 @@
       oder handelt es sich nur um ein Implementierungsdetail der UI-Bus-Anbindung?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1448659456882" ID="ID_946761955" MODIFIED="1448659469420" TEXT="Notwendig: Command-Name + Varargs"/>
 </node>
@@ -217,8 +214,7 @@
       Problem: <b><font color="#8d02e1">InteractionControl</font></b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#5f0ac8" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="219;-148;" ID="Arrow_ID_1101633958" STARTARROW="None" STARTINCLINATION="-205;4;"/>
 </node>
 </node>
@@ -238,8 +234,7 @@
       da im &#220;brigen das UI-Modell nur mit LUIDs und generischen Namen arbeitet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -257,8 +252,7 @@
       besser: <b>InvocationTrail</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#81759f" DESTINATION="ID_1679641405" ENDARROW="Default" ENDINCLINATION="604;-108;" ID="Arrow_ID_1210299906" STARTARROW="None" STARTINCLINATION="702;0;"/>
 <arrowlink COLOR="#aaa9c1" DESTINATION="ID_1193936433" ENDARROW="Default" ENDINCLINATION="392;0;" ID="Arrow_ID_1338946264" STARTARROW="Default" STARTINCLINATION="392;0;"/>
 <icon BUILTIN="button_ok"/>
@@ -296,8 +290,7 @@
       bleiben zusammen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448683496794" ID="ID_821199097" MODIFIED="1448683517556" TEXT="unterst&#xfc;tzt weiterreichende Konzepte">
 <node CREATED="1448683518496" ID="ID_1987782234" MODIFIED="1448683521843" TEXT="Perspektiven"/>
@@ -350,8 +343,7 @@
       Daher ist es besser, <i>einmal</i>, wenn die Argumente bekannt werden, diese zum Prototypen zu schicken
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1448691875184" ID="ID_642935499" MODIFIED="1448691904352" TEXT="f&#xfc;r die Invocation gen&#xfc;gt dann die reine ID"/>
@@ -365,8 +357,7 @@
       Wichtig <font color="#e10409">(offen)</font>: Instanz-Management
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1448692240015" ID="ID_58254695" MODIFIED="1448692245826" TEXT="es geht um Allokationen in Proc"/>
 <node CREATED="1448692247478" ID="ID_1199512787" MODIFIED="1448692258689" TEXT="jede Instanz == Eintrag in der Command-Registry"/>
@@ -383,8 +374,7 @@
       mu&#223; auch geforkt werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -427,7 +417,7 @@
 <node CREATED="1448669854119" ID="ID_874080079" MODIFIED="1448669857794" TEXT="wertet Regeln aus"/>
 <node CREATED="1448669869973" ID="ID_1259588429" MODIFIED="1448669888646" TEXT="sendet Enablement">
 <node CREATED="1448669889514" ID="ID_1191247113" MODIFIED="1448669898645" TEXT="an die konkreten Trigger-Orte"/>
-<node CREATED="1448669899113" ID="ID_990871123" MODIFIED="1448669910611" TEXT="er sendet jeweils einen CommandInvocationPath"/>
+<node CREATED="1448669899113" ID="ID_990871123" MODIFIED="1450228230836" TEXT="er sendet jeweils einen CommandInvocationTrail"/>
 </node>
 </node>
 </node>

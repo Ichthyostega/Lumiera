@@ -91,10 +91,10 @@ namespace model {
       void slotExpand()               { this->doExpand(); }
       void slotReveal()               { this->doReveal(); }
       
-      void noteMsg (string m)         { this->doMsg(m); }
-      void noteErr (string e)         { this->doErr(e); }
-      void noteFlash()                { this->doFlash();}
-      void noteMark(GenNode const& n) { this->doMark(n);}
+      void markMsg (string m)         { this->doMsg(m); }
+      void markErr (string e)         { this->doErr(e); }
+      void markFlash()                { this->doFlash();}
+      void mark(GenNode const& n)     { this->doMark(n);}
       
     protected:
       virtual void doReset()  =0;
