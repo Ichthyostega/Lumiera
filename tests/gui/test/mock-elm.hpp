@@ -84,13 +84,18 @@ namespace test{
   class MockElm
     : public gui::model::Tangible
     {
+      using _Par = gui::model::Tangible;
+      
       EventLog log_{this};
+      
       
       /* ==== Tangible interface ==== */
       
       virtual void doReset()  override
         {
-          UNIMPLEMENTED ("mock doReset");
+          log_.call(this, "reset");
+          // _Par::doReset();
+          log_.event("reset");
         }
       
       virtual void doExpand()  override
@@ -134,7 +139,10 @@ namespace test{
       explicit
       MockElm(ID identity, ctrl::BusTerm& nexus  =Nexus::testUI())
         : gui::model::Tangible(identity, nexus)
-        { }
+        {
+          log_.call(this, "ctor", identity, nexus);
+          log_.create(getID().getSym());
+        }
       
       
       /* ==== special operations API ==== */
@@ -182,6 +190,12 @@ namespace test{
       verifyEvent (string match)  const
         {
           return getLog().verifyEvent(match);
+        }
+      
+      EventMatch
+      verifyEvent (string classifier, string match)  const
+        {
+          return getLog().verifyEvent (classifier,match);
         }
       
       EventMatch

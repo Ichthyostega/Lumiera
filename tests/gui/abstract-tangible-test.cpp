@@ -130,8 +130,8 @@ namespace test {
           MockElm mock("dummy");
           
           CHECK (mock.verify("ctor"));
-          CHECK (mock.verifyEvent("ctor"));
-          CHECK (mock.verify("ctor").arg("dummy"));
+          CHECK (mock.verifyEvent("create","dummy"));
+          CHECK (mock.verify("ctor").arg("dummy").on(&mock));
           
           CHECK ("dummy" == mock.getID().getSym());
           CHECK (EntryID<MockElm>("dummy") == mock.getID());
@@ -148,7 +148,6 @@ namespace test {
           CHECK (mock.ensureNot("reset").before("ctor"));
           CHECK (mock.ensureNot("ctor").after("reset"));
           
-          CHECK (mock.verify("reset").before("reset"));
           CHECK (mock.verify("reset").beforeEvent("reset"));
           CHECK (mock.verifyCall("reset").beforeEvent("reset"));
           CHECK (!mock.verifyCall("reset").afterEvent("reset"));
