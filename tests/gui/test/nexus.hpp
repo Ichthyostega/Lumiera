@@ -28,7 +28,10 @@
  ** backbone to run any test probes against. The test::Nexus allows to [hook up][::testUI]
  ** a generic interface element, to participate in a simulated interface interaction.
  ** 
- ** @todo initial draft and WIP-WIP-WIP as of 11/2015
+ ** This class test::Nexus acts as front-end for unit tests, while the actual implementation
+ ** of a test rigged mock interface backbone remains an implementation detail.
+ ** 
+ ** @todo initial draft and WIP-WIP-WIP as of 12/2015
  ** 
  ** @see abstract-tangible-test.cpp
  ** 

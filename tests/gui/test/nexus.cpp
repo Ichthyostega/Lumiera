@@ -37,6 +37,8 @@
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
 #include "test/nexus.hpp"
+#include "gui/ctrl/nexus.hpp"
+#include "lib/depend.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
@@ -52,6 +54,8 @@ namespace gui {
 namespace test{
   
   namespace { // internal details
+    
+    lib::Depend<gui::ctrl::Nexus> testNexus;
     
   } // internal details
   
@@ -69,7 +73,7 @@ namespace test{
   ctrl::BusTerm&
   Nexus::testUI()
   {
-    UNIMPLEMENTED("test nexus");
+    return testNexus();
   }
 
 }} // namespace gui::test

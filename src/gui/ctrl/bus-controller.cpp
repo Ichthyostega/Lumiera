@@ -43,6 +43,7 @@
 //#include "include/logging.h"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/bus-controller.hpp"
+#include "gui/ctrl/nexus.hpp"
 
 //#include <boost/noncopyable.hpp>
 #include <string>
