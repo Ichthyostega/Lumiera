@@ -71,17 +71,19 @@ namespace model {
       using GenNode = lib::diff::GenNode;
       using Cmd = interact::InvocationTrail;
       using Rec = lib::diff::Rec;
-      using ID = lib::idi::BareEntryID;
+      using ID = lib::idi::BareEntryID const&;
       
       ctrl::BusTerm uiBus_;
       
       
       Tangible(ID identity, ctrl::BusTerm& nexus)
-        : uiBus_(nexus.attach(identity))
+        : uiBus_(nexus.attach(identity, *this))
         { }
       
     public:
       virtual ~Tangible();  ///< this is an interface
+      
+      operator ID()  const { return uiBus_.getID();}
       
       void reset();
       

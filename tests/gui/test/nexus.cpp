@@ -23,7 +23,8 @@
 
 /** @file test/nexus.cpp
  ** Implementation of a fake UI backbone for testing.
- ** This compilation unit provides the actual setup for running a faked interface from tests.
+ ** This compilation unit provides the actual setup for running a faked
+ ** user interface from unit tests.
  ** 
  ** @todo initial draft and WIP-WIP-WIP as of 11/2015
  ** 

@@ -22,7 +22,7 @@
 
 
 /** @file abstract-tangible-test.cpp
- *  Verify the common base shared by all interface elements of relevance.
+ ** Verify the common base shared by all interface elements of relevance.
  ** This test is not so much a test, than a test of the test support for testing
  ** [primary elements][gui::model::Tangible] of the Lumiera GTK UI. Any such element
  ** is connected to the [UI-Bus][gui::UiBus] and responds to some generic actions and

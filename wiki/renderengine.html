@@ -8365,11 +8365,28 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201501061128" tags="GuiPattern Concepts def design draft" changecount="6">
+<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201512180001" tags="GuiPattern Concepts def design draft" changecount="10">
 <pre>Abstraction used in the Backbone of Lumiera's GTK User Interface
 The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the //Controler// in the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]] in common UI architecture.
 
-The ~MVC-Pattern as such is fine, and probably the best we know for construction of user interfaces. But it doesn't scale well towards the integration into a larger and more structured system. There is a tension between the Controller in the UI and other parts of an application, which as well need to be //in control.// And, even more important, there is a tension between the demands of UI elements for support by a model, and the demands to be placed on a core domain model of a large scale application. This tension is resolved by enacting these roles while transforming the requests and demands into //Messages.//</pre>
+The ~MVC-Pattern as such is fine, and probably the best we know for construction of user interfaces. But it doesn't scale well towards the integration into a larger and more structured system. There is a tension between the Controller in the UI and other parts of an application, which as well need to be //in control.// And, even more important, there is a tension between the demands of UI elements for support by a model, and the demands to be placed on a core domain model of a large scale application. This tension is resolved by enacting these roles while transforming the requests and demands into //Messages.//
+
+!!!rationale
+This way, we separate between immediate local control of UI state and the more global, generic [[interaction control|InteractionControl]] and [[command binding|GuiCommandBinding]].
+And we arrive at a backbone like structure, which can be wired, programmed and reasoned about while abstracting from the local concerns of UI toolkit set internal state management. Any element of more than local relevance -- be it a controller or be it a widget representing some entity from the model -- will be attached to the UI-Bus by virtue of a ''bus terminal'', establishing a bi-directional connection. This enables any UI element so invoke commands and persist presentation state (by sending //&quot;state mark&quot; mesages//), and in turn this allows the session and engine core to &quot;cast&quot; state updates towards the UI, without precisely knowing where and how to reach the relevant presentation entities.
+
+!Bus interactions
+The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub, which maintains a routing table. Attachment and detachment of elements can be managed automatically, since all of the UI-Bus operations perform within the GUI event thread. We distinguish between up-link messages, directed towards some central service (presentation state management or command invocation) and down-link messages, directed towards individual elements. The interactions at the bus are closely interrelated with the elementary UI-Element operations.
+;act
+:send a GenNode representing the action
+:* in a first step, a command prototype is outfitted with actual parameter values
+:* the actual command invocation is triggered by a &quot;bang&quot; message
+;note
+:send a GenNode representing the //state mark//
+:some (abstracted) presentation state manager is expected to listen to these messages, possibly recording state to be restored later
+;mark
+:down-link communication to //feed back// state updates or to replay previously recorded  //state marks//
+</pre>
 </div>
 <div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201512160029" tags="GuiPattern design draft decision" changecount="18">
 <pre>While our UI widgets are implemented the standard way as proposed by GTKmm, some key elements -- which are especially relevant for the anatomy and mechanics of the interface -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out what this protocol is all about}}}. #975

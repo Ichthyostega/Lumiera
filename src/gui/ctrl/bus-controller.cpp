@@ -69,18 +69,19 @@ namespace ctrl {
   
   
   
-  /** Builder function: establish and wire
-   *  a new BusTerm as connected to this one */
-  BusTerm&&
-  BusTerm::attach (ID newAddress)
+  /** Builder function: establish and wire a new BusTerm.
+   * @param newNode the UI-Element corresponding to and using the new BusTerm
+   * @remarks automatically establishes a down-link connection to the given
+   *        [Tangible]; the UI-Bus will use this node as target to dispatch
+   *        `mark` messages addressed to the new node's ID. It is expected
+   *        that the Tangible in turn will use the returned BusTerm for
+   *        any up-link communication. Thus, on destruction, the new
+   *        BusTerm will detach this UI-Bus connection alltogether.
+   */
+  BusTerm
+  BusTerm::attach (ID identity, Tangible newNode)
   {
-    return std::move( BusTerm(newAddress, *this));
-  }
-  
-  BusTerm::ID
-  BusTerm::getID()  const
-  {
-    return endpointID_;
+    return BusTerm(identity, theBus_.routeAdd(newNode));
   }
   
   
@@ -88,42 +89,58 @@ namespace ctrl {
   /* ==== standard implementation of the BusTerm interface ==== */
   
   void
-  BusTerm::act (GenNode command)
+  BusTerm::act (GenNode const& command)
   {
     UNIMPLEMENTED("issue command");
   }
   
   
-  /** */
+  /** record state mark from this subject */
   void
-  BusTerm::note (GenNode mark)
+  BusTerm::note (GenNode const& mark)
   {
-    UNIMPLEMENTED("send notification downstream");
+    theBus_.note(this->endpointID_, mark);
   }
   
   
   /** */
   void
-  BusTerm::note (ID subject, GenNode mark)
-  {
-    UNIMPLEMENTED("send notification to subject");
-  }
-  
-  
-  /** */
-  void
-  BusTerm::mark (GenNode mark)
-  {
-    UNIMPLEMENTED("record state mark");
-  }
-  
-  
-  /** */
-  void
-  BusTerm::mark (ID subject, GenNode mark)
+  BusTerm::note (ID subject, GenNode const& mark)
   {
     UNIMPLEMENTED("forward state mark from subject");
   }
+  
+  
+  /** */
+  void
+  BusTerm::mark (ID subject, GenNode const& mark)
+  {
+    UNIMPLEMENTED("send notification or state mark to subject");
+  }
+  
+  
+  /**
+   * @internal establish new down-link connection form UI-Bus
+   * @param node reference to the [Tangible] to be connected.
+   * @return corresponding up-link for the initiating node to use
+   */
+  BusTerm&
+  BusTerm::routeAdd (Tangible node)
+  {
+    return theBus_.routeAdd(node);
+  }
+  
+  
+  /**
+   * @internal disable down-link connection
+   * @remarks corresponding node is about to go away.
+   */
+  void
+  BusTerm::routeDetach(ID node)  noexcept
+  {
+    theBus_.routeDetach (node);
+  }
+
   
   
 }} // namespace gui::ctrl

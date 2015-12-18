@@ -62,6 +62,9 @@
 
 
 namespace gui {
+namespace model {
+  class Tangible;
+}
 namespace ctrl{
   
 //  using lib::HashVal;
@@ -92,24 +95,26 @@ namespace ctrl{
    */
   class BusTerm
     {
-      using ID = lib::idi::BareEntryID;
+      using EntryID = lib::idi::BareEntryID;
+      using ID = EntryID const&;
+      using Tangible = gui::model::Tangible const&;
       
-      ID   endpointID_;
+      EntryID endpointID_;
       BusTerm& theBus_;
       
     public:
       virtual ~BusTerm();  ///< this is an interface
       
-      virtual void act (GenNode command);
-      virtual void note (GenNode mark);
-      virtual void mark (GenNode mark);
+      virtual void act (GenNode const& command);
+      virtual void note (GenNode const& mark);
       
-      virtual void note (ID subject, GenNode mark);
-      virtual void mark (ID subject, GenNode mark);
+      virtual void note (ID subject, GenNode const& mark);
+      virtual void mark (ID subject, GenNode const& mark);
       
-      BusTerm&& attach (ID newAddress);
+      ID getID()  const { return endpointID_; }
       
-      ID getID()  const;
+      
+      BusTerm attach (ID, Tangible newNode);
       
       /** may be moved, but not copied,
        *  due to the embedded identity */
@@ -120,6 +125,9 @@ namespace ctrl{
         : endpointID_(identity)
         , theBus_(attached_to)
         { }
+      
+      virtual BusTerm& routeAdd(Tangible);
+      virtual void routeDetach(ID)  noexcept;
     };
   
   
