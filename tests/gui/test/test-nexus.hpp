@@ -1,5 +1,5 @@
 /*
-  test/NEXUS.hpp  -  fake user interface backbone for test support
+  TEST-NEXUS.hpp  -  fake user interface backbone for test support
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file test/nexus.hpp
+/** @file test/test-nexus.hpp
  ** A fake UI backbone for investigations and unit testing.
  ** Any relevant element within the Lumiera GTK UI is connected to the [UI-Bus][ui-bus.hpp]
  ** So for testing and investigation we need a white room setup to provide an instrumented
@@ -38,8 +38,8 @@
  */
 
 
-#ifndef GUI_TEST_NEXUS_H
-#define GUI_TEST_NEXUS_H
+#ifndef GUI_TEST_TEST_NEXUS_H
+#define GUI_TEST_TEST_NEXUS_H
 
 
 #include "lib/error.hpp"
@@ -83,4 +83,4 @@ namespace test{
   
   
 }} // namespace gui::test
-#endif /*GUI_TEST_NEXUS_H*/
+#endif /*GUI_TEST_TEST_NEXUS_H*/

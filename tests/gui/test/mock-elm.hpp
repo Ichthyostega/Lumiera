@@ -48,9 +48,7 @@
 #include "lib/test/event-log.hpp"
 #include "gui/model/tangible.hpp"
 #include "lib/diff/record.hpp"
-#include "test/nexus.hpp"
-
-//#include <boost/noncopyable.hpp>
+#include "test/test-nexus.hpp"
 #include <string>
 
 

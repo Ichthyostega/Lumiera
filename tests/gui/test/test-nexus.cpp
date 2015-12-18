@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file test/nexus.cpp
+/** @file test/test-nexus.cpp
  ** Implementation of a fake UI backbone for testing.
  ** This compilation unit provides the actual setup for running a faked
  ** user interface from unit tests.
@@ -36,7 +36,7 @@
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "test/nexus.hpp"
+#include "test/test-nexus.hpp"
 #include "gui/ctrl/nexus.hpp"
 #include "lib/depend.hpp"
 
