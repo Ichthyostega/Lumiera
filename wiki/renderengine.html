@@ -2383,7 +2383,7 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
-<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201511280316" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="4">
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201512181820" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="16">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 
 !prerequisites for issuing a command
@@ -2392,7 +2392,7 @@ Within the Lumiera architecture, with the very distinct separation between [[Ses
 * we need to complement this script with a state capturing script and a script to undo the given action
 * we need to combine these fixed snippets into a //command prototype.//
 * we need to care for the supply of parameters
-** indirectly this defines and limits how this command can be issues
+** indirectly this defines and limits how this command can be issued
 ** which in fact embeds the raw command into a context or a gesture of invocation
 ** and this is the first instance where the command-as-seen-from-session translates into something tangible within the UI
 * next we have to consider conditions and circumstances. Not every command can be invoked any given time
@@ -2404,20 +2404,21 @@ Within the Lumiera architecture, with the very distinct separation between [[Ses
 This observation might be surprising; even while a given command is well defined, we can not just invoke it right away. The prevalence of all these intermediary complexities is what opens the necessity and the room for InteractionControl, which is a concern specific to human-computer interfaces. Faced with such a necessity, there are two fundamentally different approaches.
 !!!Binding close to the widget
 This approach concentrates knowledge about the operation at that location, where it is conceived &quot;to happen&quot; -- that is, close to the concrete UI widget.
-So the actual widget type implies knowledge about the contents and the meaning of the command scripts. At the point when the widget is actually triggered, it starts to collect the necessary parameters and to this end needs to acquire connections to other facilities within the UI. In fact, even //before// anything can be triggered, the widget has to administer the activation state and show some controls as enabled or disabled, and needs to observe ongoing state changes to be able to do so.
+So the actual widget type implies knowledge about the contents and the meaning of the command scripts. At the point when the widget is actually triggered, it starts to collect the necessary parameters and to this end needs to acquire connections to other facilities within the UI. In fact, even //before// anything can be triggered, the widget has to administer the activation state and show some controls as enabled or disabled, and it needs to observe ongoing state changes to be able to do so.
 
 The consequence of this approach is that the relations and whereabouts of entities involved into this decision tend to be explicated right into the widget code. Any overarching concerns end up being scattered over various implementation sites, need to be dealt with by convention, or rely on all invocation sites to use some helper facilities voluntarily.
 
 !!!Abstracted binding definitions
-This approach attempts to keep knowledge and definition clustered according to the commands and actions to be performed, even for the price of some abstractions and indirections. There is no clear and obvious place where to collect those information, and thus we need to create such a location deliberately. This location serves to link interface and session entities, and tends to rely on definitions from both realms.
+This contrastive approach attempts to keep knowledge and definition clustered in a way according to the commands and actions to be performed -- even for the price of some abstractions and indirections. There is no natural and obvious place where to collect those information, and thus we need to create such a location deliberately. This new entity or location to be conceived serves to link user interface and session elements, and it tends to rely on definitions from both realms.
 * in addition to the script, here we build a parameter accessor, which is some kind of functor or closure.
 * we need to introduce a new abstraction, termed InteractionStateManager. This is deliberately not a single entity, rather some distinct facility in charge for one specific kind of interaction, like gestures being formed by mouse, touch or pen input.
 * from the command definition site, we need to send a combination of //rules// and parameter accessors, which together define an invocation path for one specific flavour of a command
 * the InteractionStateManager, driven by the state changes he observes, will evaluate those rules and determine the feasibility of specific command invocation paths
 * he sends the //enablement of a command invocation trail// as a preconfigured binding to the actual //trigger sites,// which in turn allows them to install actual reaction patterns
-* if finally some button is hit, the local event binding can issue the command right away, as preconfigured in this //enablement binding,// by accessiny just any UI-Bus terminal available within that context
+* if finally some button is hit, the local event binding can issue the command right away, as preconfigured in this //enablement binding,// by accessing just any UI-Bus terminal at reach within that context
 
-The consequence of this approach is a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.</pre>
+''Lumera decides to take the latter apptoch'' -- resulting in a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code embodies the low-level UI element reactions and as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.
+</pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201501052157" tags="GuiIntegration overview" changecount="1">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on the well known solution of using a __business facade__ and delegation proxies.
@@ -8388,7 +8389,7 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :down-link communication to //feed back// state updates or to replay previously recorded  //state marks//
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201512160029" tags="GuiPattern design draft decision" changecount="18">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201512181755" tags="GuiPattern design draft decision" changecount="19">
 <pre>While our UI widgets are implemented the standard way as proposed by GTKmm, some key elements -- which are especially relevant for the anatomy and mechanics of the interface -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus

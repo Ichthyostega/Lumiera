@@ -39,6 +39,7 @@
 #include "test/test-nexus.hpp"
 #include "gui/ctrl/nexus.hpp"
 #include "lib/depend.hpp"
+#include "lib/idi/entry-id.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
@@ -47,6 +48,7 @@
 //using std::map;
 //using std::string;
 
+//using lib::idi::EntryID;
 //using util::contains;
 //using util::isnil;
 
@@ -55,7 +57,17 @@ namespace test{
   
   namespace { // internal details
     
-    lib::Depend<gui::ctrl::Nexus> testNexus;
+    class TestNexus
+      : public gui::ctrl::Nexus
+      {
+        
+      public:
+        TestNexus()
+          : Nexus(*this, lib::idi::EntryID<TestNexus>("mock-UI"))
+          { }
+      };
+    
+    lib::Depend<TestNexus> testNexus;
     
   } // internal details
   

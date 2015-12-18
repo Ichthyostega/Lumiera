@@ -95,6 +95,7 @@ namespace ctrl{
    */
   class BusTerm
     {
+    protected:
       using EntryID = lib::idi::BareEntryID;
       using ID = EntryID const&;
       using Tangible = gui::model::Tangible const&;

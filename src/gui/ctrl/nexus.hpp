@@ -71,8 +71,6 @@ namespace ctrl{
     : public BusTerm
     , boost::noncopyable
     {
-      using ID = lib::idi::BareEntryID const&;
-      using Tangible = gui::model::Tangible const&;
       
       
       virtual void
@@ -104,8 +102,8 @@ namespace ctrl{
       
     public:
       explicit
-      Nexus (BusTerm& coreService)
-        : BusTerm(lib::idi::EntryID<Nexus>(), coreService)
+      Nexus (BusTerm& uplink_to_CoreService, ID identity =lib::idi::EntryID<Nexus>())
+        : BusTerm(identity, uplink_to_CoreService)
       { }
     };
   
