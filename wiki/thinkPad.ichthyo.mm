@@ -306,8 +306,24 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1448691264512" ID="ID_1193936433" MODIFIED="1448691288828" TEXT="InvocationTrail erstellen">
+<node CREATED="1448691264512" ID="ID_1193936433" MODIFIED="1450490511835" TEXT="InvocationTrail erstellen">
 <linktarget COLOR="#aaa9c1" DESTINATION="ID_1193936433" ENDARROW="Default" ENDINCLINATION="392;0;" ID="Arrow_ID_1338946264" SOURCE="ID_839961131" STARTARROW="Default" STARTINCLINATION="392;0;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1450490467952" ID="ID_1453525628" MODIFIED="1450490480705" TEXT="verwendet zwei GenNode-bindings"/>
+<node CREATED="1450490481270" ID="ID_1603770702" MODIFIED="1450490504407" TEXT="fertig implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was ich einen Monat sp&#228;ter schon wieder vergessen hatte...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1448691315849" ID="ID_1198560195" MODIFIED="1448691320189" TEXT="Bindugs-Regel">
 <node CREATED="1448691343406" ID="ID_642235825" MODIFIED="1448691350558" TEXT="funktor"/>
@@ -344,6 +360,12 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+<node CREATED="1450490565739" ID="ID_849102091" MODIFIED="1450490602009" TEXT="implementiert ist: erstellen im InvocationTrail">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1450490580473" ID="ID_925248058" MODIFIED="1450490599519" TEXT="nicht implementiert: Empfangen und Binden">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node CREATED="1448691875184" ID="ID_642935499" MODIFIED="1448691904352" TEXT="f&#xfc;r die Invocation gen&#xfc;gt dann die reine ID"/>
@@ -2689,6 +2711,19 @@
 </node>
 <node CREATED="1446515847047" ID="ID_290915762" MODIFIED="1446515861953" TEXT="GtkCssProvider">
 <node CREATED="1446515865029" ID="ID_1503616150" MODIFIED="1446515869624" TEXT="parsing errors"/>
+</node>
+</node>
+<node CREATED="1450488895106" FOLDED="true" ID="ID_1586185818" MODIFIED="1450490146636" TEXT="Threading">
+<node CREATED="1450488902049" ID="ID_1126260262" MODIFIED="1450488906100" TEXT="static init">
+<node CREATED="1450489361187" ID="ID_1013681859" LINK="http://stackoverflow.com/a/17803616/444796" MODIFIED="1450489380816" TEXT="gute Zusammenfassung (SO)">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1450489388912" ID="ID_1935538293" MODIFIED="1450489435398" TEXT="function-static">
+<icon BUILTIN="info"/>
+<node CREATED="1450489395711" ID="ID_1661542298" MODIFIED="1450489410592" TEXT="when ctrl flow enters first"/>
+<node CREATED="1450489412364" ID="ID_965405072" LINK="http://stackoverflow.com/a/8102145/444796" MODIFIED="1450489553742" TEXT="threadsafe since C++11"/>
+<node CREATED="1450489421795" ID="ID_12247357" MODIFIED="1450489566108" TEXT="lives until the end of the program"/>
+</node>
 </node>
 </node>
 </node>

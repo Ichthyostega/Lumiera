@@ -106,11 +106,11 @@ namespace ctrl{
     public:
       virtual ~BusTerm();  ///< this is an interface
       
-      virtual void act (GenNode const& command);
-      virtual void note (GenNode const& mark);
-      
+      virtual void act  (GenNode const& command);
       virtual void note (ID subject, GenNode const& mark);
       virtual void mark (ID subject, GenNode const& mark);
+      
+      void note (GenNode const& mark);
       
       ID getID()  const { return endpointID_; }
       
@@ -131,6 +131,15 @@ namespace ctrl{
       virtual void routeDetach(ID)  noexcept;
     };
   
+  
+    
+  
+  /** record state mark from this subject */
+  void
+  BusTerm::note (GenNode const& mark)
+  {
+    theBus_.note (this->endpointID_, mark);
+  }
   
   
 }} // namespace gui::ctrl

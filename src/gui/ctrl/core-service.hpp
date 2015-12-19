@@ -1,5 +1,5 @@
 /*
-  NEXUS.hpp  -  UI-Bus central hub and routing table
+  CORE-SERVICE.hpp  -  fake user interface backbone for test support
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_CTRL_NEXUS_H
-#define GUI_CTRL_NEXUS_H
+#ifndef GUI_CTRL_CORE_SERVICE_H
+#define GUI_CTRL_CORE_SERVICE_H
 
 
 #include "lib/error.hpp"
@@ -69,7 +69,7 @@ namespace ctrl{
    * 
    * @todo write type comment
    */
-  class Nexus
+  class CoreService
     : public BusTerm
     , boost::noncopyable
     {
@@ -104,7 +104,7 @@ namespace ctrl{
       
     public:
       explicit
-      Nexus (BusTerm& uplink_to_CoreService, ID identity =lib::idi::EntryID<Nexus>())
+      CoreService (BusTerm& uplink_to_CoreService, ID identity =lib::idi::EntryID<Nexus>())
         : BusTerm(identity, uplink_to_CoreService)
       { }
     };
@@ -112,4 +112,4 @@ namespace ctrl{
   
   
 }} // namespace gui::ctrl
-#endif /*GUI_CTRL_NEXUS_H*/
+#endif /*GUI_CTRL_CORE_SERVICE_H*/

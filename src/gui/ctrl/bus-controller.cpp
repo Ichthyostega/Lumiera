@@ -89,18 +89,27 @@ namespace ctrl {
   
   /* ==== standard implementation of the BusTerm interface ==== */
   
+  /** prepare or trigger invocation of a command.
+   * @param command a GenNode holding parameters invocation trigger
+   * @remarks some commands can simply be invoked right away, but
+   *          in the general case, command preparation and invocation
+   *          is a multi-step process. The gui::interact::InvocationTrail
+   *          is used to conduct this argument binding process from within
+   *          the UI. Here, at the UI-Bus interface, we're just interested
+   *          in the fact _that_ some command is to be bound or invoked.
+   *          This information is forwarded to the command receiver service,
+   *          which in turn talks to the proc dispatcher.
+   * @note no information regarding the _origin_ of this command invocation
+   *          is captured. If a command needs a _subject_, this has to be
+   *          bound as an command argument beforehand.
+   * @see gui::interact::InvocationTrail
+   * @see gui::model::Tangible::prepareCommand()
+   * @see gui::model::Tangible::issueCommand()
+   */
   void
   BusTerm::act (GenNode const& command)
   {
     UNIMPLEMENTED("issue command");
-  }
-  
-  
-  /** record state mark from this subject */
-  void
-  BusTerm::note (GenNode const& mark)
-  {
-    theBus_.note(this->endpointID_, mark);
   }
   
   

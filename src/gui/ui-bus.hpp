@@ -22,7 +22,20 @@
 */
 
 /** @file ui-bus.hpp
- ** The top level UI controller.
+ ** Under construction: the top level UI controller.
+ ** The Lumiera GTK GUI is built around a generic backbone structure known as **UI-Bus**.
+ ** This is a messaging system and taps into any widget of more than local relevance.
+ ** To that end, any globally relevant (custom) widget, and all secondary controllers
+ ** inherit from the gui::model::Tangible base. The top-level gui::UiBus element is
+ ** a front-end and framework component managed by the [GTK-main][GtkLumiera::main].
+ ** 
+ ** @warning as of 12/2015, this is still totally a mess. This \em will remain
+ **          the one-and-only master controller of the UI, but I am determined
+ **          to change the architecture and implementation technique altogether.
+ **          For the time being, we keep the controller::Controller in place, as
+ **          written by Joel Holdsworth, while building the new UI-Bus frontend
+ **          to take on this central role eventually.
+ ** 
  ** 
  ** @todo as of 1/2015, this needs to be reshaped ////////////////////TICKET #959
  */
@@ -35,8 +48,11 @@
 #include "gui/gtk-lumiera.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
 #include "gui/ctrl/playback-controller.hpp"
 
+#include <boost/noncopyable.hpp>
+
 
 namespace gui {
+  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
   namespace model {
     class Project;
   } // namespace model
@@ -57,6 +73,29 @@ namespace gui {
         PlaybackController& get_playback_controller();
       };
   
-}}// namespace gui::controller
+}// namespace gui::controller
+  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
+  
+  
+  /**
+   * Backbone of the Lumiera GTK GUI.
+   * This is the Interface and Lifecycle front-end.
+   * When an instance of this class is created, the backbone becomes operative
+   * and is linked to the active gui::WindowManager. When it goes away, the
+   * backbone service switches into disabled mode, awaiting disconnection
+   * of all remaining clients. After that, it dissolves into nothingness.
+   */
+  class UiBus
+    : boost::noncopyable
+    {
+    public:
+      UiBus();
+     ~UiBus();
+     
+    };
+  
+  
+  
+}// namespace gui
 #endif /*GUI_UI_BUS_H*/
 

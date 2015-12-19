@@ -25,6 +25,7 @@
 #include "gui/ui-bus.hpp"
 
 namespace gui {
+  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
 namespace controller {
     
   Controller::Controller (model::Project& modelProject)
@@ -39,5 +40,19 @@ namespace controller {
     return playback_;
   }
   
-}}// namespace gui::controller
-
+}// namespace gui::controller
+  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
+  
+  
+  UiBus::UiBus()
+    { }
+  
+  
+  UiBus::~UiBus()
+    { 
+      TODO ("UI-Bus Lifecycle");
+    }
+  
+  
+  
+}// namespace gui
