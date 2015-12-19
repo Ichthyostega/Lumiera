@@ -38,8 +38,9 @@
 //#include "include/logging.h"
 #include "test/test-nexus.hpp"
 #include "gui/ctrl/nexus.hpp"
-#include "lib/depend.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "lib/depend.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
@@ -49,6 +50,7 @@
 //using std::string;
 
 //using lib::idi::EntryID;
+using lib::diff::GenNode;
 //using util::contains;
 //using util::isnil;
 
@@ -57,9 +59,32 @@ namespace test{
   
   namespace { // internal details
     
+    /**
+     * @internal fake interface backbone and unit test rig
+     * for simulated command and presentation state handling.
+     * This implementation embodies the routing functionality
+     * as found in the [real nexus][gui::ctrl::Nexus], and additionally
+     * also implements the handler functions of the [gui::ctrl::CoreService].
+     * The latter allows us to intercept command invocations and presentation
+     * state messages
+     */
     class TestNexus
       : public gui::ctrl::Nexus
       {
+        
+        
+        virtual void
+        act (GenNode const& command)
+          {
+            UNIMPLEMENTED("receive and handle command invocation");
+          }
+        
+        
+        virtual void
+        note (ID subject, GenNode const& mark)  override
+          {
+            UNIMPLEMENTED ("receive and handle presentation state note messages.");
+          }
         
       public:
         TestNexus()

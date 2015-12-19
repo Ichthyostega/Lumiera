@@ -21,7 +21,7 @@
 */
 
 
-/** @file test/nexus.hpp
+/** @file nexus.hpp
  ** Core hub and routing table of the UI-Bus.
  ** Any relevant element within the Lumiera GTK UI is connected to the [UI-Bus][ui-bus.hpp]
  ** through some [bus terminal][bus-term.hpp]. Actually, there is one special BustTerm
@@ -29,7 +29,7 @@
  ** 
  ** @todo initial draft and WIP-WIP-WIP as of 11/2015
  ** 
- ** @see abstract-tangible-test.cpp
+ ** @see TODO_abstract-tangible-test.cpp
  ** 
  */
 
@@ -65,7 +65,10 @@ namespace ctrl{
    * This special implementation of the [BusTerm] interface maintains
    * a routing table and manages the connections to individual UI-Elements.
    * The nexus relies on a dedicated (up)link to the [CoreService] to handle
-   * command invocation and presentation state.
+   * command invocation and presentation state. This is implemented by wiring
+   * the aforementioned CoreService terminal as "up-link", while actually
+   * defining special handling overrides for _all other kinds of messages_.
+   * The purpose of the Nexus is to route all these _other kinds of messages._
    * 
    * @todo write type comment
    */

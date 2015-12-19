@@ -21,15 +21,19 @@
 */
 
 
-/** @file test/nexus.hpp
- ** Core hub and routing table of the UI-Bus.
- ** Any relevant element within the Lumiera GTK UI is connected to the [UI-Bus][ui-bus.hpp]
- ** through some [bus terminal][bus-term.hpp]. Actually, there is one special BustTerm
- ** implementation, which acts as router and messaging hub.
+/** @file core-service.hpp
+ ** Dedicated service node within the UI-Bus to handle command invocation
+ ** and presentation state. Mostly, the UI-Bus is just a star shaped network
+ ** with one central [routing hub][ctrl::Nexus], and serves to distribute
+ ** generic state and update messages. But there are some special messages
+ ** which need central processing: The command preparation and invocation
+ ** messages and the presentation state tracking messages (state marks).
+ ** The Nexus is configured such as to forward these special messages
+ ** to the [CoreService] terminal, which invokes the dedicated services.
  ** 
- ** @todo initial draft and WIP-WIP-WIP as of 11/2015
+ ** @todo initial draft and WIP-WIP-WIP as of 12/2015
  ** 
- ** @see abstract-tangible-test.cpp
+ ** @see TODO_abstract-tangible-test.cpp
  ** 
  */
 
@@ -61,11 +65,11 @@ namespace ctrl{
   
   
   /**
-   * Central hub of the UI-Bus.
-   * This special implementation of the [BusTerm] interface maintains
-   * a routing table and manages the connections to individual UI-Elements.
-   * The nexus relies on a dedicated (up)link to the [CoreService] to handle
-   * command invocation and presentation state.
+   * Attachment point to "central services" within the UI-Bus.
+   * This special implementation of the [BusTerm] interface receives and
+   * handles those messages to be processed by centralised services:
+   * - commands need to be sent down to Proc-Layer
+   * - presentation state messages need to be recorded and acted upon.
    * 
    * @todo write type comment
    */
@@ -76,36 +80,23 @@ namespace ctrl{
       
       
       virtual void
+      act (GenNode const& command)
+        {
+          UNIMPLEMENTED("receive and handle command invocation");
+        }
+      
+      
+      virtual void
       note (ID subject, GenNode const& mark)  override
         {
-          UNIMPLEMENTED ("forward note messages to the presentation state manager");
+          UNIMPLEMENTED ("receive and handle presentation state note messages.");
         }
       
-      
-      virtual void
-      mark (ID subject, GenNode const& mark)  override
-        {
-          UNIMPLEMENTED ("route mark messages down to the individual Tangible");
-        }
-      
-      
-      virtual BusTerm&
-      routeAdd(Tangible newNode)  override
-        {
-          UNIMPLEMENTED ("add a new down-link connection to the routing table");
-        }
-      
-      
-      virtual void
-      routeDetach(ID node)  noexcept override
-        {
-          UNIMPLEMENTED ("deactivate and remove a down-link route");
-        }
       
     public:
       explicit
-      CoreService (BusTerm& uplink_to_CoreService, ID identity =lib::idi::EntryID<Nexus>())
-        : BusTerm(identity, uplink_to_CoreService)
+      CoreService (BusTerm& backlink_to_Nexus, ID identity =lib::idi::EntryID<CoreService>())
+        : BusTerm(identity, backlink_to_Nexus)
       { }
     };
   

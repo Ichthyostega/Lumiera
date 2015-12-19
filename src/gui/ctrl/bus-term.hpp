@@ -135,7 +135,7 @@ namespace ctrl{
     
   
   /** record state mark from this subject */
-  void
+  inline void
   BusTerm::note (GenNode const& mark)
   {
     theBus_.note (this->endpointID_, mark);
