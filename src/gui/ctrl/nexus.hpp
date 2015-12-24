@@ -99,13 +99,15 @@ namespace ctrl{
         }
       
       /** add a new down-link connection to the routing table
+       * @param identity the [endpoint-ID][BusTerm::endpointID_] used
+       *         to address the new element to be connected to the bus.
        * @return backlink for the new Tangible's BusTerm to
        *         attach itself to the Nexus.
        */
       virtual BusTerm&
-      routeAdd (Tangible& newNode)  override
+      routeAdd (ID identity, Tangible& newNode)  override
         {
-          routingTable_[newNode] = &newNode;
+          routingTable_[identity] = &newNode;
           return *this;
         }
       

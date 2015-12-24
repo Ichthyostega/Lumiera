@@ -127,7 +127,7 @@ namespace ctrl{
         , theBus_(attached_to)
         { }
       
-      virtual BusTerm& routeAdd(Tangible&);
+      virtual BusTerm& routeAdd(ID,Tangible&);
       virtual void routeDetach(ID)  noexcept;
     };
   

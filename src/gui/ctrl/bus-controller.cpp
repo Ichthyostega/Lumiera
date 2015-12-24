@@ -87,7 +87,7 @@ namespace ctrl {
   BusTerm
   BusTerm::attach (ID identity, Tangible& newNode)
   {
-    return BusTerm(identity, theBus_.routeAdd(newNode));
+    return BusTerm(identity, theBus_.routeAdd (identity,newNode));
   }
   
   
@@ -161,9 +161,9 @@ namespace ctrl {
    * @return corresponding up-link for the initiating node to use
    */
   BusTerm&
-  BusTerm::routeAdd (Tangible& node)
+  BusTerm::routeAdd (ID identity, Tangible& node)
   {
-    return theBus_.routeAdd(node);
+    return theBus_.routeAdd (identity, node);
   }
   
   
