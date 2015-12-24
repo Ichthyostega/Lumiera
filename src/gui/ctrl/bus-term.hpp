@@ -98,7 +98,7 @@ namespace ctrl{
     protected:
       using EntryID = lib::idi::BareEntryID;
       using ID = EntryID const&;
-      using Tangible = gui::model::Tangible const&;
+      using Tangible = gui::model::Tangible;
       
       EntryID endpointID_;
       BusTerm& theBus_;
@@ -115,7 +115,7 @@ namespace ctrl{
       ID getID()  const { return endpointID_; }
       
       
-      BusTerm attach (ID, Tangible newNode);
+      BusTerm attach (ID, Tangible& newNode);
       
       /** may be moved, but not copied,
        *  due to the embedded identity */
@@ -127,7 +127,7 @@ namespace ctrl{
         , theBus_(attached_to)
         { }
       
-      virtual BusTerm& routeAdd(Tangible);
+      virtual BusTerm& routeAdd(Tangible&);
       virtual void routeDetach(ID)  noexcept;
     };
   

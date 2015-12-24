@@ -41,6 +41,7 @@
 #include "lib/error.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "gui/model/tangible.hpp"
 //#include "lib/util.hpp"
 //#include "gui/model/tangible.hpp"
 //#include "lib/diff/record.hpp"
@@ -48,6 +49,7 @@
 
 #include <boost/noncopyable.hpp>
 //#include <string>
+#include <unordered_map>
 
 
 namespace gui {
@@ -76,33 +78,45 @@ namespace ctrl{
     : public BusTerm
     , boost::noncopyable
     {
+      typedef std::unordered_map<EntryID, Tangible*, EntryID::UseEmbeddedHash> RoutingTable;
+      
+      RoutingTable routingTable_;
       
       
-      virtual void
-      note (ID subject, GenNode const& mark)  override
-        {
-          UNIMPLEMENTED ("forward note messages to the presentation state manager");
-        }
-      
-      
+      /** route mark messages down to the individual Tangible.
+       * @note only messages to elements currently registered
+       *       in the routing table are dispatched. All other
+       *       messages are dropped silently.
+       */
       virtual void
       mark (ID subject, GenNode const& mark)  override
         {
-          UNIMPLEMENTED ("route mark messages down to the individual Tangible");
+          auto entry = routingTable_.find (subject);
+          if (entry == routingTable_.end())
+            return;
+          else
+            entry->second->mark (mark);
         }
       
-      
+      /** add a new down-link connection to the routing table
+       * @return backlink for the new Tangible's BusTerm to
+       *         attach itself to the Nexus.
+       */
       virtual BusTerm&
-      routeAdd(Tangible newNode)  override
+      routeAdd (Tangible& newNode)  override
         {
-          UNIMPLEMENTED ("add a new down-link connection to the routing table");
+          routingTable_[newNode] = &newNode;
+          return *this;
         }
       
       
+      /** deactivate and remove a down-link route.
+       * @note will be invoked by the dtor of the node's BusTerm.
+       */
       virtual void
-      routeDetach(ID node)  noexcept override
+      routeDetach (ID node)  noexcept override
         {
-          UNIMPLEMENTED ("deactivate and remove a down-link route");
+          routingTable_.erase (node);
         }
       
     public:
