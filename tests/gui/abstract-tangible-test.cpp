@@ -131,7 +131,7 @@ namespace test {
           
           CHECK (mock.verify("ctor"));
           CHECK (mock.verifyEvent("create","dummy"));
-          CHECK (mock.verify("ctor").arg("dummy").on(&mock));
+          CHECK (mock.verify("ctor").arg("dummy","TestNexus").on(&mock));
           
           CHECK ("dummy" == mock.getID().getSym());
           CHECK (EntryID<MockElm>("dummy") == mock.getID());
@@ -141,6 +141,7 @@ namespace test {
           mock.reset();
           CHECK (mock.verify("reset"));
           CHECK (mock.verifyCall("reset"));
+          CHECK (mock.verifyCall("reset").on(&mock));
           CHECK (mock.verifyCall("reset").on("dummy"));
           CHECK (mock.verifyEvent("reset"));
           CHECK (mock.verify("reset").after("ctor"));

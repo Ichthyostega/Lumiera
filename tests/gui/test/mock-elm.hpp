@@ -48,6 +48,7 @@
 #include "lib/test/event-log.hpp"
 #include "gui/model/tangible.hpp"
 #include "lib/diff/record.hpp"
+#include "lib/idi/genfunc.hpp"
 #include "test/test-nexus.hpp"
 #include <string>
 
@@ -86,13 +87,15 @@ namespace test{
       
       EventLog log_{this};
       
+      bool virgin_{true};
+      
       
       /* ==== Tangible interface ==== */
       
       virtual void doReset()  override
         {
-          log_.call(this, "reset");
-          // _Par::doReset();
+          log_.call(this->identify(), "reset");
+          virgin_ = true;
           log_.event("reset");
         }
       
@@ -128,6 +131,13 @@ namespace test{
       
       
     protected:
+      string
+      identify() const
+        {
+          return lib::idi::instanceTypeID(this) +"-"+getID().getSym();
+        }
+      
+      
     public:
       explicit
       MockElm(string id)
@@ -138,7 +148,7 @@ namespace test{
       MockElm(ID identity, ctrl::BusTerm& nexus  =Nexus::testUI())
         : gui::model::Tangible(identity, nexus)
         {
-          log_.call(this, "ctor", identity, nexus);
+          log_.call(this->identify(), "ctor", identity, string(nexus));
           log_.create(getID().getSym());
         }
       

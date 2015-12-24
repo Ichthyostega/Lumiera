@@ -40,14 +40,15 @@
 #include "gui/ctrl/nexus.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "lib/idi/genfunc.hpp"
 #include "lib/depend.hpp"
 
 //#include <boost/noncopyable.hpp>
-//#include <string>
+#include <string>
 //#include <map>
 
 //using std::map;
-//using std::string;
+using std::string;
 
 //using lib::idi::EntryID;
 using lib::diff::GenNode;
@@ -84,6 +85,12 @@ namespace test{
         note (ID subject, GenNode const& mark)  override
           {
             UNIMPLEMENTED ("receive and handle presentation state note messages.");
+          }
+      
+      
+        virtual operator string()  const
+          {
+            return lib::idi::instanceTypeID(this);
           }
         
       public:

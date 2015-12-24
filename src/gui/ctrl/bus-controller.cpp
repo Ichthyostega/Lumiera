@@ -176,7 +176,13 @@ namespace ctrl {
   {
     theBus_.routeDetach (node);
   }
-
+  
+  
+  BusTerm::operator string()  const
+  {
+    return "BusTerm-" + string(endpointID_);
+  }
+  
   
   
 }} // namespace gui::ctrl

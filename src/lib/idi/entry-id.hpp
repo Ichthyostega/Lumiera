@@ -174,6 +174,8 @@ namespace idi {
           return hash_;
         }
       
+      operator string()  const;
+      
       
       /** using BareEntryID derived objects as keys within tr1::unordered_map */
       struct UseEmbeddedHash
@@ -252,10 +254,7 @@ namespace idi {
         }
       
       
-      operator string ()  const
-        {
-          return "ID<"+typeSymbol<TY>()+">-"+EntryID::getSym();
-        }
+      operator string()  const;
       
       friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }
       friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  < i2.getSym(); }
@@ -287,6 +286,20 @@ namespace idi {
   BareEntryID::recast()  const
   {
     return EntryID<TAR>::recast(*this);
+  }
+  
+  
+  inline
+  BareEntryID::operator string()  const
+  {
+    return "bID-"+lib::idi::format::instance_hex_format(symbol_, hash_);
+  }
+  
+  template<class TY>
+  inline
+  EntryID<TY>::operator string()  const
+  {
+    return "ID<"+typeSymbol<TY>()+">-"+EntryID::getSym();
   }
   
   

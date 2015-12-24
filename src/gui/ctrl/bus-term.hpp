@@ -110,6 +110,8 @@ namespace ctrl{
       virtual void note (ID subject, GenNode const& mark);
       virtual void mark (ID subject, GenNode const& mark);
       
+      virtual operator string()  const;
+      
       void note (GenNode const& mark);
       
       ID getID()  const { return endpointID_; }

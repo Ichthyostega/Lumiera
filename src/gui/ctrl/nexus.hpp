@@ -40,6 +40,7 @@
 
 #include "lib/error.hpp"
 //#include "lib/idi/entry-id.hpp"
+#include "lib/idi/genfunc.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/model/tangible.hpp"
 //#include "lib/util.hpp"
@@ -120,6 +121,13 @@ namespace ctrl{
         {
           routingTable_.erase (node);
         }
+      
+      
+      virtual operator string()  const
+        {
+          return lib::idi::instanceTypeID(this);
+        }
+      
       
     public:
       explicit
