@@ -104,7 +104,7 @@ namespace model {
       
     protected:
       virtual void doReset()  =0;
-      virtual void doExpand (bool yes) =0;
+      virtual bool doExpand (bool yes) =0;
       virtual void doReveal (ID child) =0;
       virtual void doRevealYourself () =0;
       

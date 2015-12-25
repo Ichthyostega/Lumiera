@@ -67,7 +67,7 @@ namespace model {
           UNIMPLEMENTED ("reset");
         }
       
-      virtual void
+      virtual bool
       doExpand (bool yes)  override
         {
           UNIMPLEMENTED ("mock doExpand");

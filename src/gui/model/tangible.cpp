@@ -96,12 +96,17 @@ namespace model {
   /**
    * Expand this element and remember the expanded state.
    * This is a generic Slot to connect UI signals against.
+   * @note The concrete Widget or Controller has to override the
+   *       ::doExpand() extension point to provide the actual UI
+   *       behaviour. If this virtual method returns `true`, the
+   *       state change is deemed relevant and persistent, and
+   *       thus a "state mark" is sent on the UI-Bus.
    */
   void
   Tangible::slotExpand()
   {
-    this->doExpand(true);
-    uiBus_.note (GenNode("expand", true));
+    if (this->doExpand(true))
+      uiBus_.note (GenNode("expand", true));
   }
   
   
@@ -112,8 +117,8 @@ namespace model {
   void
   Tangible::slotCollapse()
   {
-    this->doExpand(false);
-    uiBus_.note (GenNode("expand", false));
+    if (this->doExpand(false))
+      uiBus_.note (GenNode("expand", false));
   }
   
   

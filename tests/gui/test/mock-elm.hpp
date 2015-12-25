@@ -102,13 +102,14 @@ namespace test{
           log_.event("reset");
         }
       
-      virtual void
+      virtual bool
       doExpand (bool yes)  override
         {
           log_.call(this->identify(), "expand", yes);
           virgin_ = false;
           expanded_ = yes;
           log_.event(expanded_? "expanded" : "collapsed");
+          return true;
         }
       
       virtual void

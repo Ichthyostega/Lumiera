@@ -8370,7 +8370,7 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201512190213" tags="GuiPattern Concepts def design draft" changecount="11">
+<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201512252325" tags="GuiPattern Concepts def design draft" changecount="14">
 <pre>Abstraction used in the Backbone of Lumiera's GTK User Interface
 The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the //Controler// in the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]] in common UI architecture.
 
@@ -8378,10 +8378,10 @@ The ~MVC-Pattern as such is fine, and probably the best we know for construction
 
 !!!rationale
 This way, we separate between immediate local control of UI state and the more global, generic [[interaction control|InteractionControl]] and [[command binding|GuiCommandBinding]].
-And we arrive at a backbone like structure, which can be wired, programmed and reasoned about while abstracting from the local concerns of UI toolkit set internal state management. Any element of more than local relevance -- be it a controller or be it a widget representing some entity from the model -- will be attached to the UI-Bus by virtue of a ''bus terminal'', establishing a bi-directional connection. This enables any UI element so invoke commands and persist presentation state (by sending //&quot;state mark&quot; mesages//), and in turn this allows the session and engine core to &quot;cast&quot; state updates towards the UI, without precisely knowing where and how to reach the relevant presentation entities.
+And we arrive at a backbone like structure, which can be wired, programmed and reasoned about while abstracting from the local concerns and the state management related to the UI toolkit set in use. Any element //of more than local relevance// -- be it a controller or be it a widget, representing some entity from the model -- will be attached to the UI-Bus by virtue of a ''bus terminal'', establishing a bi-directional connection. This enables any UI element so invoke commands and persist presentation state (by sending //&quot;state mark&quot; mesages//), and in turn this allows the session and engine core to &quot;cast&quot; state updates towards the UI, without precisely knowing where and how to reach the relevant presentation entities.
 
 !Bus interactions
-The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub, which maintains a routing table. Attachment and detachment of elements can be managed automatically, since all of the UI-Bus operations perform within the GUI event thread. We distinguish between up-link messages, directed towards some central service (presentation state management or command invocation) and down-link messages, directed towards individual elements. The interactions at the bus are closely interrelated with the elementary UI-Element operations.
+The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub, which maintains a routing table. Attachment and detachment of elements can be managed automatically, since all of the UI-Bus operations perform within the UI event thread. We distinguish between up-link messages, directed towards some central service (presentation state management or command invocation) and down-link messages, directed towards individual elements. The interactions at the bus are closely interrelated with the elementary UI-Element operations.
 ;act
 :send a GenNode representing the action
 :* in a first step, a command prototype is outfitted with actual parameter values &amp;rarr; InvocationTrail
@@ -8393,8 +8393,8 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :down-link communication to //feed back// state updates or to replay previously recorded  //state marks//
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201512190213" tags="GuiPattern design draft decision" changecount="20">
-<pre>While our UI widgets are implemented the standard way as proposed by GTKmm, some key elements -- which are especially relevant for the anatomy and mechanics of the interface -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out what this protocol is all about}}}. #975
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201512252349" tags="GuiPattern design draft decision" changecount="28">
+<pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
 * the latter is somehow related to the [[UI-model|GuiModel]] (one impersonates or represents the other)
@@ -8408,11 +8408,11 @@ As a starting point, we know
 !Behaviours
 For some arbitrary reason, any element in the UI can appear and go away. This corresponds to attachment and deregistration at the UI-Bus
 
-In regular, operative state, an interface element may initiate //actions.// Even more: for //any conceivable, user visible, tangible action,// there is an interface element, which acts as point-of-service. //This is a decision.// There might be higher-level, cooperative [[gestures|Gesture]] within the interface, and actions might be formed like sentences, with the help of a FocusConcept -- however, in the end, there is a ''subject'' and a ''predicate''. And the interface element takes on the role of the underlying, the subject, the ''tangible''.
+In regular, operative state, an interface element may initiate //actions.// Even more: for //any conceivable, user visible, tangible action,// there is an interface element, which acts as point-of-service {{red{as of 12/15, this decision seems questionable}}}. There might be higher-level, cooperative [[gestures|Gesture]] within the interface, and actions might be formed like sentences, with the help of a FocusConcept -- however, in the end, there is a ''subject'' and a ''predicate''. And the interface element takes on the role of the underlying, the subject, the ''tangible''.
 
-Some actions are very common and can be represented by a shorthand. An example would be to tweak some property, which means to mutate the attribute of a model element known beforehand. Such tweaks are often caused by direct interaction, and thus have the tendency to appear in flushes, which might be batched to take some load from the lower layers.
+Some actions are very common and can be represented by a shorthand. An example would be to tweak some property, which means to mutate the attribute of a model element known beforehand. Such tweaks are often caused by direct interaction, and thus have the tendency to appear in flushes, which might be batched to remove some load from the lower layers.
 
-And then there are manipulations that alter the presentation state: Scrolling, canvas dragging, expanding and collapsing, moving by focus or manipulation of a similar presentation control.
+And then there are manipulations that //alter presentation state:// Scrolling, canvas dragging, expanding and collapsing, moving by focus or manipulation of a similar presentation control.
 These manipulations in itself do not constitute an action. But there typically is some widget or controller, which is responsible for the touched presentation state. If this entity judges the state change to be relevant and persistent, it may send a ''state mark'' into the UI-Bus -- expecting this marked state to be remembered. In turn this means the bus terminal might feed a state mark back into the tangible element, expecting this state to be restored.
 
 A special case of state marking is the presentation of transient feedback. Such feedback is pushed from &quot;somewhere&quot; towards given elements, which react through an implementation dependent visual state change (flushing, colour change, marker icon). If such state marking is to be persistent, the interface element has in turn to send a specific state mark. An example would be a permanent error flag with a explanatory text showed in mouse over. Which in turn means there can also be sweeping state reset messages, which are to be broadcasted: A general &quot;reset&quot;, an indication to collapse everything, or to clear pending error flags.
