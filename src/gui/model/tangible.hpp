@@ -92,8 +92,10 @@ namespace model {
       void prepareCommand (Cmd const& prototype, Rec&& arguments);
       void issueCommand (Cmd const& preparedAction);
       
-      void slotExpand()               { this->doExpand(); }
-      void slotReveal()               { this->doReveal(); }
+      void slotExpand();
+      void slotCollapse();
+      
+      void slotReveal(ID child);
       
       void markMsg (string m)         { this->doMsg(m); }
       void markErr (string e)         { this->doErr(e); }
@@ -102,8 +104,9 @@ namespace model {
       
     protected:
       virtual void doReset()  =0;
-      virtual void doExpand() =0;
-      virtual void doReveal() =0;
+      virtual void doExpand (bool yes) =0;
+      virtual void doReveal (ID child) =0;
+      virtual void doRevealYourself () =0;
       
       virtual void doMsg (string)          =0;
       virtual void doErr (string)          =0;

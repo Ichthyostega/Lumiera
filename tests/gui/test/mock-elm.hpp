@@ -88,43 +88,61 @@ namespace test{
       EventLog log_{this};
       
       bool virgin_{true};
+      bool expanded_{false};
       
       
       /* ==== Tangible interface ==== */
       
-      virtual void doReset()  override
+      virtual void
+      doReset()  override
         {
           log_.call(this->identify(), "reset");
+          expanded_ = false;
           virgin_ = true;
           log_.event("reset");
         }
       
-      virtual void doExpand()  override
+      virtual void
+      doExpand (bool yes)  override
         {
-          UNIMPLEMENTED ("mock doExpand");
+          log_.call(this->identify(), "expand", yes);
+          virgin_ = false;
+          expanded_ = yes;
+          log_.event(expanded_? "expanded" : "collapsed");
         }
       
-      virtual void doReveal()  override
+      virtual void
+      doReveal (ID child)  override
         {
           UNIMPLEMENTED ("mock doReveal");
         }
       
-      virtual void doMsg (string text)  override
+      virtual void
+      doRevealYourself()  override
+        {
+          UNIMPLEMENTED ("mock doRevealYourself");
+        }
+      
+      virtual void
+      doMsg (string text)  override
         {
           UNIMPLEMENTED ("mock doMsg");
         }
       
-      virtual void doErr (string text)  override
+      virtual void
+      doErr (string text)  override
         {
           UNIMPLEMENTED ("mock doErr");
         }
       
-      virtual void doFlash()  override
+      virtual void
+      doFlash()  override
         {
           UNIMPLEMENTED ("mock doFlash");
         }
       
-      virtual void doMark (GenNode const& mark)  override
+      virtual void
+      doMark (GenNode const& mark)  override
         {
           UNIMPLEMENTED ("mock doMark");
         }
@@ -172,13 +190,13 @@ namespace test{
       bool
       isTouched()  const
         {
-          UNIMPLEMENTED ("pristine status");
+          return not virgin_;
         }
       
       bool
       isExpanded()  const
         {
-          UNIMPLEMENTED ("UI element expansion status");
+          return expanded_;
         }
       
       

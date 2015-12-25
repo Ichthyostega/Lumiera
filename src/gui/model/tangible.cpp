@@ -93,5 +93,40 @@ namespace model {
   }
   
   
+  /**
+   * Expand this element and remember the expanded state.
+   * This is a generic Slot to connect UI signals against.
+   */
+  void
+  Tangible::slotExpand()
+  {
+    this->doExpand(true);
+    uiBus_.note (GenNode("expand", true));
+  }
+  
+  
+  /**
+   * Collapse or minimise this element and remember the collapsed state.
+   * This is a generic Slot to connect UI signals against.
+   */
+  void
+  Tangible::slotCollapse()
+  {
+    this->doExpand(false);
+    uiBus_.note (GenNode("expand", false));
+  }
+  
+  
+  /**
+   * @todo not clear yet what needs to be done
+   */
+  void
+  Tangible::slotReveal(ID child)
+  {
+    this->doReveal(child);
+    this->doRevealYourself();
+  }
+  
+  
   
 }} // namespace gui::model
