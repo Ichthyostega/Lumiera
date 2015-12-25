@@ -59,9 +59,59 @@ namespace model {
     : public Tangible
     {
       
+      /* ==== Tangible interface ==== */
+      
+      virtual void
+      doReset()  override
+        {
+          UNIMPLEMENTED ("reset");
+        }
+      
+      virtual void
+      doExpand (bool yes)  override
+        {
+          UNIMPLEMENTED ("mock doExpand");
+        }
+      
+      virtual void
+      doReveal (ID child)  override
+        {
+          UNIMPLEMENTED ("mock doReveal");
+        }
+      
+      virtual void
+      doRevealYourself()  override
+        {
+          UNIMPLEMENTED ("mock doRevealYourself");
+        }
+      
+      virtual void
+      doMsg (string text)  override
+        {
+          UNIMPLEMENTED ("mock doMsg");
+        }
+      
+      virtual void
+      doErr (string text)  override
+        {
+          UNIMPLEMENTED ("mock doErr");
+        }
+      
+      virtual void
+      doFlash()  override
+        {
+          UNIMPLEMENTED ("mock doFlash");
+        }
+      
+      virtual void
+      doMark (GenNode const& mark)  override
+        {
+          UNIMPLEMENTED ("mock doMark");
+        }
+      
+      
     public:
-      Widget();
-     ~Widget();
+      using Tangible::Tangible;
       
     protected:
       string maybe ()  const;
