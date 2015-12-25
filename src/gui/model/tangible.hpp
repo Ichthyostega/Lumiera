@@ -44,6 +44,7 @@
 //#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <sigc++/trackable.h>
 #include <string>
 
 
@@ -65,7 +66,8 @@ namespace model {
    * @todo write type comment...
    */
   class Tangible
-    : boost::noncopyable
+    : public sigc::trackable
+    , boost::noncopyable
     {
     protected:
       using GenNode = lib::diff::GenNode;

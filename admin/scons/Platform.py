@@ -114,6 +114,9 @@ def configure(env):
     if not conf.CheckPkgConfig('glibmm-2.4', '2.39'):
         problems.append('Unable to configure the mm-bindings for Glib')
     
+    if not conf.CheckPkgConfig('sigc++-2.0', '2.2.10'):
+        problems.append('Need the signal-slot-binding library SigC++2')
+    
     if not conf.CheckPkgConfig('glib-2.0', '2.40'):
         problems.append('Need a suitable Glib version.')
     
