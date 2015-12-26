@@ -195,8 +195,8 @@ namespace test {
           
           mock.kill();
           foo.markMsg("dummy killed");
-          CHECK (log.verifyEvent("dtor").on("dummy")
-                    .beforeCall("noteMsg").on("foo"));
+          CHECK (log.verifyEvent("destroy","dummy")
+                    .beforeCall("doMsg").on("foo"));
         }
       
       

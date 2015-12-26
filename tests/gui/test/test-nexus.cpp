@@ -52,6 +52,7 @@ using std::string;
 
 //using lib::idi::EntryID;
 using lib::diff::GenNode;
+using gui::ctrl::BusTerm;
 //using util::contains;
 //using util::isnil;
 
@@ -86,8 +87,8 @@ namespace test{
           {
             UNIMPLEMENTED ("receive and handle presentation state note messages.");
           }
-      
-      
+        
+        
         virtual operator string()  const
           {
             return lib::idi::instanceTypeID(this);
@@ -96,6 +97,69 @@ namespace test{
       public:
         TestNexus()
           : Nexus(*this, lib::idi::EntryID<TestNexus>("mock-UI"))
+          { }
+      };
+    
+    
+    /**
+     * @internal a defunct interface backbone.
+     * All UI-Bus operations are implemented NOP, but warning on STDRR
+     * and logging the invocation to the internal log of [TestNexus].
+     * This allows to set up deceased entities within a test rigged UI.
+     */
+    class ZombieNexus
+      : public BusTerm
+      {
+        
+        /* ==== defunct re-implementation of the BusTerm interface ==== */
+        
+        virtual void
+        act (GenNode const& command)
+          {
+            UNIMPLEMENTED("act");
+          }
+        
+        
+        virtual void
+        note (ID subject, GenNode const& mark)  override
+          {
+            UNIMPLEMENTED ("note.");
+          }
+        
+        
+        virtual void
+        mark (ID subject, GenNode const& mark)  override
+          {
+            UNIMPLEMENTED ("mark.");
+          }
+        
+        
+        virtual operator string()  const
+          {
+            return lib::idi::instanceTypeID(this);
+          }
+        
+        
+        virtual BusTerm&
+        routeAdd (ID identity, Tangible& newNode)  override
+          {
+            UNIMPLEMENTED ("routeAdd.");
+          }
+        
+        
+        virtual void
+        routeDetach (ID node)  noexcept override
+          {
+            UNIMPLEMENTED ("routeDetach.");
+          }
+        
+      public:
+        /** fabricate a "dead terminal", marked as deceased.
+         * @note intentionally to be sliced right after generation.
+         *       All operations on this object are defunct.
+         */
+        ZombieNexus(string formerID)
+          : BusTerm(lib::idi::EntryID<ZombieNexus>("defunct-"+formerID), *this)
           { }
       };
     
@@ -118,6 +182,21 @@ namespace test{
   Nexus::testUI()
   {
     return testNexus();
+  }
+  
+  
+  /**
+   * @return a defunct BusTerm with up-link to [ZombieNexus]
+   * @remarks useful to create zombie mock UI-Elements for testing.
+   */
+  void
+  Nexus::zombificate (BusTerm& doomed)
+  {
+    string lateName = doomed.getID().getSym();
+    doomed.~BusTerm();
+//  log_.destroy (lateName);
+    
+    new(&doomed) ZombieNexus{lateName};
   }
 
 }} // namespace gui::test

@@ -182,18 +182,52 @@ namespace test{
       MockElm(ID identity, ctrl::BusTerm& nexus  =Nexus::testUI())
         : gui::model::Tangible(identity, nexus)
         {
-          log_.call(this->identify(), "ctor", identity, string(nexus));
-          log_.create(getID().getSym());
+          log_.call (this->identify(), "ctor", identity, string(nexus));
+          log_.create (getID().getSym());
         }
+      
+      
+      /** document our death in the diagnostic log. */
+     ~MockElm()
+        {
+          try {
+            log_.call (this->identify(), "dtor");
+            log_.destroy (getID().getSym());
+            }
+          catch(...)
+            {
+              const char* errID = lumiera_error();
+              if (errID)
+                cerr << "Error while logging shutdown of Mock-UI-Element: " << errID <<endl;
+              else
+                cerr << "Unknown Error while logging shutdown of Mock-UI-Element." <<endl;
+            }
+        }
+      
+      
       
       
       /* ==== special operations API ==== */
       
+      /** commit suicide.
+       * @warning admittedly a wonky operation
+       * @remarks here the mock emulates the act of dying,
+       *          by snuffing the UI-Bus connection sneakily.
+       *          We leave the dead corpse hanging around,
+       *          just for sake of further investigation,
+       *          of course.
+       */
       void
       kill()
         {
-          UNIMPLEMENTED ("suicide");
+          log_.call (this->identify(), "kill");
+          log_.destroy (getID().getSym());
+          
+          Nexus::zombificate (this->uiBus_);
+          log_.event ("successfully connected to zombie bus");
         }
+      
+      
       
       
       /* ==== Query/Verification API ==== */

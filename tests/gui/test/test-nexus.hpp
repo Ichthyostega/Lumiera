@@ -50,7 +50,7 @@
 //#include "lib/diff/record.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <string>
+#include <string>
 
 
 namespace gui {
@@ -78,6 +78,9 @@ namespace test{
     public:
       /** get a connection point to a UI backbone faked for test */
       static ctrl::BusTerm& testUI();
+      
+      /** kill the given [BusTerm] and implant a dead terminal in place */
+      static void zombificate(ctrl::BusTerm&);
     };
   
   
