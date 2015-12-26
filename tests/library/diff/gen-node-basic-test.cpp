@@ -346,16 +346,16 @@ namespace test{
           int     i2 = 126;                       GenNode ni2(i2);
           int64_t l1 = 64;                        GenNode nl1(l1);
           int64_t l2 = 126;                       GenNode nl2(l2);
-          short   s1 = 64;                        GenNode ns1(s1);
-          short   s2 = 126;                       GenNode ns2(s2);
+          short   r1 = 64;                        GenNode nr1(r1);
+          short   r2 = 126;                       GenNode nr2(r2);
           double  d1 = 64;                        GenNode nd1(d1);
           double  d2 = 126;                       GenNode nd2(d2);
           char    c1 = '@';                       GenNode nc1(c1);
           char    c2 = '~';                       GenNode nc2(c2);
           bool    b1 = true;                      GenNode nb1(b1);
           bool    b2 = false;                     GenNode nb2(b2);
-          string  z1 = "";                        GenNode nz1(z1);
-          string  z2 = "↯";                       GenNode nz2(z2);
+          string  s1 = "";                        GenNode ns1(s1);
+          string  s2 = "↯";                       GenNode ns2(s2);
           
           time::Time t1 = randTime();             GenNode nt1(t1);
           time::Time t2(-t1);                     GenNode nt2(t2);
@@ -371,23 +371,23 @@ namespace test{
           Rec spam1({GenNode("ham", "eggs")});    GenNode rec1(spam1);
           Rec spam2(MakeRec(spam1).type("spam")); GenNode rec2(spam2);
           
-          RecRef r1(spam1);                       Ref ref1(rec1);
-          RecRef r2(spam2);                       Ref ref2(rec2);
-                                                      // NOTE: same ID as referee
+          RecRef recRef1(spam1);                  Ref ref1(rec1);
+          RecRef recRef2(spam2);                  Ref ref2(rec2);
+                                                   // NOTE: same ID as referee
           CHECK (ni1 == ni1);
           CHECK (ni2 == ni2);
           CHECK (nl1 == nl1);
           CHECK (nl2 == nl2);
-          CHECK (ns1 == ns1);
-          CHECK (ns2 == ns2);
+          CHECK (nr1 == nr1);
+          CHECK (nr2 == nr2);
           CHECK (nd1 == nd1);
           CHECK (nd2 == nd2);
           CHECK (nc1 == nc1);
           CHECK (nc2 == nc2);
           CHECK (nb1 == nb1);
           CHECK (nb2 == nb2);
-          CHECK (nz1 == nz1);
-          CHECK (nz2 == nz2);
+          CHECK (ns1 == ns1);
+          CHECK (ns2 == ns2);
           CHECK (nt1  == nt1 );
           CHECK (nt2  == nt2 );
           CHECK (nto1 == nto1);
@@ -405,11 +405,11 @@ namespace test{
           
           CHECK (ni1 != ni2);      CHECK (ni2 != ni1);
           CHECK (nl1 != nl2);      CHECK (nl2 != nl1);
-          CHECK (ns1 != ns2);      CHECK (ns2 != ns1);
+          CHECK (nr1 != nr2);      CHECK (nr2 != nr1);
           CHECK (nd1 != nd2);      CHECK (nd2 != nd1);
           CHECK (nc1 != nc2);      CHECK (nc2 != nc1);
           CHECK (nb1 != nb2);      CHECK (nb2 != nb1);
-          CHECK (nz1 != nz2);      CHECK (nz2 != nz1);
+          CHECK (ns1 != ns2);      CHECK (ns2 != ns1);
           CHECK (nt1  != nt2 );    CHECK (nt2  != nt1 );
           CHECK (nto1 != nto2);    CHECK (nto2 != nto1);
           CHECK (ntd1 != ntd2);    CHECK (ntd2 != ntd1);
@@ -421,16 +421,16 @@ namespace test{
           CHECK (ni1 != ni2);      CHECK (ni2  != ni1);
           CHECK (ni1 != nl1);      CHECK (nl1  != ni1);
           CHECK (ni1 != nl2);      CHECK (nl2  != ni1);
-          CHECK (ni1 != ns1);      CHECK (ns1  != ni1);
-          CHECK (ni1 != ns2);      CHECK (ns2  != ni1);
+          CHECK (ni1 != nr1);      CHECK (nr1  != ni1);
+          CHECK (ni1 != nr2);      CHECK (nr2  != ni1);
           CHECK (ni1 != nd1);      CHECK (nd1  != ni1);
           CHECK (ni1 != nd2);      CHECK (nd2  != ni1);
           CHECK (ni1 != nc1);      CHECK (nc1  != ni1);
           CHECK (ni1 != nc2);      CHECK (nc2  != ni1);
           CHECK (ni1 != nb1);      CHECK (nb1  != ni1);
           CHECK (ni1 != nb2);      CHECK (nb2  != ni1);
-          CHECK (ni1 != nz1);      CHECK (nz1  != ni1);
-          CHECK (ni1 != nz2);      CHECK (nz2  != ni1);
+          CHECK (ni1 != ns1);      CHECK (ns1  != ni1);
+          CHECK (ni1 != ns2);      CHECK (ns2  != ni1);
           CHECK (ni1 != nt1 );     CHECK (nt1  != ni1);
           CHECK (ni1 != nt2 );     CHECK (nt2  != ni1);
           CHECK (ni1 != nto1);     CHECK (nto1 != ni1);
@@ -448,16 +448,16 @@ namespace test{
           
           CHECK (ni2 != nl1);      CHECK (nl1  != ni2);
           CHECK (ni2 != nl2);      CHECK (nl2  != ni2);
-          CHECK (ni2 != ns1);      CHECK (ns1  != ni2);
-          CHECK (ni2 != ns2);      CHECK (ns2  != ni2);
+          CHECK (ni2 != nr1);      CHECK (nr1  != ni2);
+          CHECK (ni2 != nr2);      CHECK (nr2  != ni2);
           CHECK (ni2 != nd1);      CHECK (nd1  != ni2);
           CHECK (ni2 != nd2);      CHECK (nd2  != ni2);
           CHECK (ni2 != nc1);      CHECK (nc1  != ni2);
           CHECK (ni2 != nc2);      CHECK (nc2  != ni2);
           CHECK (ni2 != nb1);      CHECK (nb1  != ni2);
           CHECK (ni2 != nb2);      CHECK (nb2  != ni2);
-          CHECK (ni2 != nz1);      CHECK (nz1  != ni2);
-          CHECK (ni2 != nz2);      CHECK (nz2  != ni2);
+          CHECK (ni2 != ns1);      CHECK (ns1  != ni2);
+          CHECK (ni2 != ns2);      CHECK (ns2  != ni2);
           CHECK (ni2 != nt1 );     CHECK (nt1  != ni2);
           CHECK (ni2 != nt2 );     CHECK (nt2  != ni2);
           CHECK (ni2 != nto1);     CHECK (nto1 != ni2);
@@ -474,16 +474,16 @@ namespace test{
           CHECK (ni2 != ref2);     CHECK (ref2 != ni2);
           
           CHECK (nl1 != nl2);      CHECK (nl2  != nl1);
-          CHECK (nl1 != ns1);      CHECK (ns1  != nl1);
-          CHECK (nl1 != ns2);      CHECK (ns2  != nl1);
+          CHECK (nl1 != nr1);      CHECK (nr1  != nl1);
+          CHECK (nl1 != nr2);      CHECK (nr2  != nl1);
           CHECK (nl1 != nd1);      CHECK (nd1  != nl1);
           CHECK (nl1 != nd2);      CHECK (nd2  != nl1);
           CHECK (nl1 != nc1);      CHECK (nc1  != nl1);
           CHECK (nl1 != nc2);      CHECK (nc2  != nl1);
           CHECK (nl1 != nb1);      CHECK (nb1  != nl1);
           CHECK (nl1 != nb2);      CHECK (nb2  != nl1);
-          CHECK (nl1 != nz1);      CHECK (nz1  != nl1);
-          CHECK (nl1 != nz2);      CHECK (nz2  != nl1);
+          CHECK (nl1 != ns1);      CHECK (ns1  != nl1);
+          CHECK (nl1 != ns2);      CHECK (ns2  != nl1);
           CHECK (nl1 != nt1 );     CHECK (nt1  != nl1);
           CHECK (nl1 != nt2 );     CHECK (nt2  != nl1);
           CHECK (nl1 != nto1);     CHECK (nto1 != nl1);
@@ -499,16 +499,16 @@ namespace test{
           CHECK (nl1 != ref1);     CHECK (ref1 != nl1);
           CHECK (nl1 != ref2);     CHECK (ref2 != nl1);
           
-          CHECK (nl2 != ns1);      CHECK (ns1  != nl2);
-          CHECK (nl2 != ns2);      CHECK (ns2  != nl2);
+          CHECK (nl2 != nr1);      CHECK (nr1  != nl2);
+          CHECK (nl2 != nr2);      CHECK (nr2  != nl2);
           CHECK (nl2 != nd1);      CHECK (nd1  != nl2);
           CHECK (nl2 != nd2);      CHECK (nd2  != nl2);
           CHECK (nl2 != nc1);      CHECK (nc1  != nl2);
           CHECK (nl2 != nc2);      CHECK (nc2  != nl2);
           CHECK (nl2 != nb1);      CHECK (nb1  != nl2);
           CHECK (nl2 != nb2);      CHECK (nb2  != nl2);
-          CHECK (nl2 != nz1);      CHECK (nz1  != nl2);
-          CHECK (nl2 != nz2);      CHECK (nz2  != nl2);
+          CHECK (nl2 != ns1);      CHECK (ns1  != nl2);
+          CHECK (nl2 != ns2);      CHECK (ns2  != nl2);
           CHECK (nl2 != nt1 );     CHECK (nt1  != nl2);
           CHECK (nl2 != nt2 );     CHECK (nt2  != nl2);
           CHECK (nl2 != nto1);     CHECK (nto1 != nl2);
@@ -524,60 +524,60 @@ namespace test{
           CHECK (nl2 != ref1);     CHECK (ref1 != nl2);
           CHECK (nl2 != ref2);     CHECK (ref2 != nl2);
           
-          CHECK (ns1 != ns2);      CHECK (ns2  != ns1);
-          CHECK (ns1 != nd1);      CHECK (nd1  != ns1);
-          CHECK (ns1 != nd2);      CHECK (nd2  != ns1);
-          CHECK (ns1 != nc1);      CHECK (nc1  != ns1);
-          CHECK (ns1 != nc2);      CHECK (nc2  != ns1);
-          CHECK (ns1 != nb1);      CHECK (nb1  != ns1);
-          CHECK (ns1 != nb2);      CHECK (nb2  != ns1);
-          CHECK (ns1 != nz1);      CHECK (nz1  != ns1);
-          CHECK (ns1 != nz2);      CHECK (nz2  != ns1);
-          CHECK (ns1 != nt1 );     CHECK (nt1  != ns1);
-          CHECK (ns1 != nt2 );     CHECK (nt2  != ns1);
-          CHECK (ns1 != nto1);     CHECK (nto1 != ns1);
-          CHECK (ns1 != nto2);     CHECK (nto2 != ns1);
-          CHECK (ns1 != ntd1);     CHECK (ntd1 != ns1);
-          CHECK (ns1 != ntd2);     CHECK (ntd2 != ns1);
-          CHECK (ns1 != nts1);     CHECK (nts1 != ns1);
-          CHECK (ns1 != nts2);     CHECK (nts2 != ns1);
-          CHECK (ns1 != nh1 );     CHECK (nh1  != ns1);
-          CHECK (ns1 != nh2 );     CHECK (nh2  != ns1);
-          CHECK (ns1 != rec1);     CHECK (rec1 != ns1);
-          CHECK (ns1 != rec2);     CHECK (rec2 != ns1);
-          CHECK (ns1 != ref1);     CHECK (ref1 != ns1);
-          CHECK (ns1 != ref2);     CHECK (ref2 != ns1);
+          CHECK (nr1 != nr2);      CHECK (nr2  != nr1);
+          CHECK (nr1 != nd1);      CHECK (nd1  != nr1);
+          CHECK (nr1 != nd2);      CHECK (nd2  != nr1);
+          CHECK (nr1 != nc1);      CHECK (nc1  != nr1);
+          CHECK (nr1 != nc2);      CHECK (nc2  != nr1);
+          CHECK (nr1 != nb1);      CHECK (nb1  != nr1);
+          CHECK (nr1 != nb2);      CHECK (nb2  != nr1);
+          CHECK (nr1 != ns1);      CHECK (ns1  != nr1);
+          CHECK (nr1 != ns2);      CHECK (ns2  != nr1);
+          CHECK (nr1 != nt1 );     CHECK (nt1  != nr1);
+          CHECK (nr1 != nt2 );     CHECK (nt2  != nr1);
+          CHECK (nr1 != nto1);     CHECK (nto1 != nr1);
+          CHECK (nr1 != nto2);     CHECK (nto2 != nr1);
+          CHECK (nr1 != ntd1);     CHECK (ntd1 != nr1);
+          CHECK (nr1 != ntd2);     CHECK (ntd2 != nr1);
+          CHECK (nr1 != nts1);     CHECK (nts1 != nr1);
+          CHECK (nr1 != nts2);     CHECK (nts2 != nr1);
+          CHECK (nr1 != nh1 );     CHECK (nh1  != nr1);
+          CHECK (nr1 != nh2 );     CHECK (nh2  != nr1);
+          CHECK (nr1 != rec1);     CHECK (rec1 != nr1);
+          CHECK (nr1 != rec2);     CHECK (rec2 != nr1);
+          CHECK (nr1 != ref1);     CHECK (ref1 != nr1);
+          CHECK (nr1 != ref2);     CHECK (ref2 != nr1);
           
-          CHECK (ns2 != nd1);      CHECK (nd1  != ns2);
-          CHECK (ns2 != nd2);      CHECK (nd2  != ns2);
-          CHECK (ns2 != nc1);      CHECK (nc1  != ns2);
-          CHECK (ns2 != nc2);      CHECK (nc2  != ns2);
-          CHECK (ns2 != nb1);      CHECK (nb1  != ns2);
-          CHECK (ns2 != nb2);      CHECK (nb2  != ns2);
-          CHECK (ns2 != nz1);      CHECK (nz1  != ns2);
-          CHECK (ns2 != nz2);      CHECK (nz2  != ns2);
-          CHECK (ns2 != nt1 );     CHECK (nt1  != ns2);
-          CHECK (ns2 != nt2 );     CHECK (nt2  != ns2);
-          CHECK (ns2 != nto1);     CHECK (nto1 != ns2);
-          CHECK (ns2 != nto2);     CHECK (nto2 != ns2);
-          CHECK (ns2 != ntd1);     CHECK (ntd1 != ns2);
-          CHECK (ns2 != ntd2);     CHECK (ntd2 != ns2);
-          CHECK (ns2 != nts1);     CHECK (nts1 != ns2);
-          CHECK (ns2 != nts2);     CHECK (nts2 != ns2);
-          CHECK (ns2 != nh1 );     CHECK (nh1  != ns2);
-          CHECK (ns2 != nh2 );     CHECK (nh2  != ns2);
-          CHECK (ns2 != rec1);     CHECK (rec1 != ns2);
-          CHECK (ns2 != rec2);     CHECK (rec2 != ns2);
-          CHECK (ns2 != ref1);     CHECK (ref1 != ns2);
-          CHECK (ns2 != ref2);     CHECK (ref2 != ns2);
+          CHECK (nr2 != nd1);      CHECK (nd1  != nr2);
+          CHECK (nr2 != nd2);      CHECK (nd2  != nr2);
+          CHECK (nr2 != nc1);      CHECK (nc1  != nr2);
+          CHECK (nr2 != nc2);      CHECK (nc2  != nr2);
+          CHECK (nr2 != nb1);      CHECK (nb1  != nr2);
+          CHECK (nr2 != nb2);      CHECK (nb2  != nr2);
+          CHECK (nr2 != ns1);      CHECK (ns1  != nr2);
+          CHECK (nr2 != ns2);      CHECK (ns2  != nr2);
+          CHECK (nr2 != nt1 );     CHECK (nt1  != nr2);
+          CHECK (nr2 != nt2 );     CHECK (nt2  != nr2);
+          CHECK (nr2 != nto1);     CHECK (nto1 != nr2);
+          CHECK (nr2 != nto2);     CHECK (nto2 != nr2);
+          CHECK (nr2 != ntd1);     CHECK (ntd1 != nr2);
+          CHECK (nr2 != ntd2);     CHECK (ntd2 != nr2);
+          CHECK (nr2 != nts1);     CHECK (nts1 != nr2);
+          CHECK (nr2 != nts2);     CHECK (nts2 != nr2);
+          CHECK (nr2 != nh1 );     CHECK (nh1  != nr2);
+          CHECK (nr2 != nh2 );     CHECK (nh2  != nr2);
+          CHECK (nr2 != rec1);     CHECK (rec1 != nr2);
+          CHECK (nr2 != rec2);     CHECK (rec2 != nr2);
+          CHECK (nr2 != ref1);     CHECK (ref1 != nr2);
+          CHECK (nr2 != ref2);     CHECK (ref2 != nr2);
           
           CHECK (nd1 != nd2);      CHECK (nd2  != nd1);
           CHECK (nd1 != nc1);      CHECK (nc1  != nd1);
           CHECK (nd1 != nc2);      CHECK (nc2  != nd1);
           CHECK (nd1 != nb1);      CHECK (nb1  != nd1);
           CHECK (nd1 != nb2);      CHECK (nb2  != nd1);
-          CHECK (nd1 != nz1);      CHECK (nz1  != nd1);
-          CHECK (nd1 != nz2);      CHECK (nz2  != nd1);
+          CHECK (nd1 != ns1);      CHECK (ns1  != nd1);
+          CHECK (nd1 != ns2);      CHECK (ns2  != nd1);
           CHECK (nd1 != nt1 );     CHECK (nt1  != nd1);
           CHECK (nd1 != nt2 );     CHECK (nt2  != nd1);
           CHECK (nd1 != nto1);     CHECK (nto1 != nd1);
@@ -597,8 +597,8 @@ namespace test{
           CHECK (nd2 != nc2);      CHECK (nc2  != nd2);
           CHECK (nd2 != nb1);      CHECK (nb1  != nd2);
           CHECK (nd2 != nb2);      CHECK (nb2  != nd2);
-          CHECK (nd2 != nz1);      CHECK (nz1  != nd2);
-          CHECK (nd2 != nz2);      CHECK (nz2  != nd2);
+          CHECK (nd2 != ns1);      CHECK (ns1  != nd2);
+          CHECK (nd2 != ns2);      CHECK (ns2  != nd2);
           CHECK (nd2 != nt1 );     CHECK (nt1  != nd2);
           CHECK (nd2 != nt2 );     CHECK (nt2  != nd2);
           CHECK (nd2 != nto1);     CHECK (nto1 != nd2);
@@ -617,8 +617,8 @@ namespace test{
           CHECK (nc1 != nc2);      CHECK (nc2  != nc1);
           CHECK (nc1 != nb1);      CHECK (nb1  != nc1);
           CHECK (nc1 != nb2);      CHECK (nb2  != nc1);
-          CHECK (nc1 != nz1);      CHECK (nz1  != nc1);
-          CHECK (nc1 != nz2);      CHECK (nz2  != nc1);
+          CHECK (nc1 != ns1);      CHECK (ns1  != nc1);
+          CHECK (nc1 != ns2);      CHECK (ns2  != nc1);
           CHECK (nc1 != nt1 );     CHECK (nt1  != nc1);
           CHECK (nc1 != nt2 );     CHECK (nt2  != nc1);
           CHECK (nc1 != nto1);     CHECK (nto1 != nc1);
@@ -636,8 +636,8 @@ namespace test{
           
           CHECK (nc2 != nb1);      CHECK (nb1  != nc2);
           CHECK (nc2 != nb2);      CHECK (nb2  != nc2);
-          CHECK (nc2 != nz1);      CHECK (nz1  != nc2);
-          CHECK (nc2 != nz2);      CHECK (nz2  != nc2);
+          CHECK (nc2 != ns1);      CHECK (ns1  != nc2);
+          CHECK (nc2 != ns2);      CHECK (ns2  != nc2);
           CHECK (nc2 != nt1 );     CHECK (nt1  != nc2);
           CHECK (nc2 != nt2 );     CHECK (nt2  != nc2);
           CHECK (nc2 != nto1);     CHECK (nto1 != nc2);
@@ -654,8 +654,8 @@ namespace test{
           CHECK (nc2 != ref2);     CHECK (ref2 != nc2);
           
           CHECK (nb1 != nb2);      CHECK (nb2  != nb1);
-          CHECK (nb1 != nz1);      CHECK (nz1  != nb1);
-          CHECK (nb1 != nz2);      CHECK (nz2  != nb1);
+          CHECK (nb1 != ns1);      CHECK (ns1  != nb1);
+          CHECK (nb1 != ns2);      CHECK (ns2  != nb1);
           CHECK (nb1 != nt1 );     CHECK (nt1  != nb1);
           CHECK (nb1 != nt2 );     CHECK (nt2  != nb1);
           CHECK (nb1 != nto1);     CHECK (nto1 != nb1);
@@ -671,8 +671,8 @@ namespace test{
           CHECK (nb1 != ref1);     CHECK (ref1 != nb1);
           CHECK (nb1 != ref2);     CHECK (ref2 != nb1);
           
-          CHECK (nb2 != nz1);      CHECK (nz1  != nb2);
-          CHECK (nb2 != nz2);      CHECK (nz2  != nb2);
+          CHECK (nb2 != ns1);      CHECK (ns1  != nb2);
+          CHECK (nb2 != ns2);      CHECK (ns2  != nb2);
           CHECK (nb2 != nt1 );     CHECK (nt1  != nb2);
           CHECK (nb2 != nt2 );     CHECK (nt2  != nb2);
           CHECK (nb2 != nto1);     CHECK (nto1 != nb2);
@@ -688,34 +688,34 @@ namespace test{
           CHECK (nb2 != ref1);     CHECK (ref1 != nb2);
           CHECK (nb2 != ref2);     CHECK (ref2 != nb2);
           
-          CHECK (nz1 != nt2 );     CHECK (nt2  != nz1);
-          CHECK (nz1 != nto1);     CHECK (nto1 != nz1);
-          CHECK (nz1 != nto2);     CHECK (nto2 != nz1);
-          CHECK (nz1 != ntd1);     CHECK (ntd1 != nz1);
-          CHECK (nz1 != ntd2);     CHECK (ntd2 != nz1);
-          CHECK (nz1 != nts1);     CHECK (nts1 != nz1);
-          CHECK (nz1 != nts2);     CHECK (nts2 != nz1);
-          CHECK (nz1 != nh1 );     CHECK (nh1  != nz1);
-          CHECK (nz1 != nh2 );     CHECK (nh2  != nz1);
-          CHECK (nz1 != rec1);     CHECK (rec1 != nz1);
-          CHECK (nz1 != rec2);     CHECK (rec2 != nz1);
-          CHECK (nz1 != ref1);     CHECK (ref1 != nz1);
-          CHECK (nz1 != ref2);     CHECK (ref2 != nz1);
+          CHECK (ns1 != nt2 );     CHECK (nt2  != ns1);
+          CHECK (ns1 != nto1);     CHECK (nto1 != ns1);
+          CHECK (ns1 != nto2);     CHECK (nto2 != ns1);
+          CHECK (ns1 != ntd1);     CHECK (ntd1 != ns1);
+          CHECK (ns1 != ntd2);     CHECK (ntd2 != ns1);
+          CHECK (ns1 != nts1);     CHECK (nts1 != ns1);
+          CHECK (ns1 != nts2);     CHECK (nts2 != ns1);
+          CHECK (ns1 != nh1 );     CHECK (nh1  != ns1);
+          CHECK (ns1 != nh2 );     CHECK (nh2  != ns1);
+          CHECK (ns1 != rec1);     CHECK (rec1 != ns1);
+          CHECK (ns1 != rec2);     CHECK (rec2 != ns1);
+          CHECK (ns1 != ref1);     CHECK (ref1 != ns1);
+          CHECK (ns1 != ref2);     CHECK (ref2 != ns1);
           
-          CHECK (nz2 != nt1 );     CHECK (nt1  != nz2);
-          CHECK (nz2 != nt2 );     CHECK (nt2  != nz2);
-          CHECK (nz2 != nto1);     CHECK (nto1 != nz2);
-          CHECK (nz2 != nto2);     CHECK (nto2 != nz2);
-          CHECK (nz2 != ntd1);     CHECK (ntd1 != nz2);
-          CHECK (nz2 != ntd2);     CHECK (ntd2 != nz2);
-          CHECK (nz2 != nts1);     CHECK (nts1 != nz2);
-          CHECK (nz2 != nts2);     CHECK (nts2 != nz2);
-          CHECK (nz2 != nh1 );     CHECK (nh1  != nz2);
-          CHECK (nz2 != nh2 );     CHECK (nh2  != nz2);
-          CHECK (nz2 != rec1);     CHECK (rec1 != nz2);
-          CHECK (nz2 != rec2);     CHECK (rec2 != nz2);
-          CHECK (nz2 != ref1);     CHECK (ref1 != nz2);
-          CHECK (nz2 != ref2);     CHECK (ref2 != nz2);
+          CHECK (ns2 != nt1 );     CHECK (nt1  != ns2);
+          CHECK (ns2 != nt2 );     CHECK (nt2  != ns2);
+          CHECK (ns2 != nto1);     CHECK (nto1 != ns2);
+          CHECK (ns2 != nto2);     CHECK (nto2 != ns2);
+          CHECK (ns2 != ntd1);     CHECK (ntd1 != ns2);
+          CHECK (ns2 != ntd2);     CHECK (ntd2 != ns2);
+          CHECK (ns2 != nts1);     CHECK (nts1 != ns2);
+          CHECK (ns2 != nts2);     CHECK (nts2 != ns2);
+          CHECK (ns2 != nh1 );     CHECK (nh1  != ns2);
+          CHECK (ns2 != nh2 );     CHECK (nh2  != ns2);
+          CHECK (ns2 != rec1);     CHECK (rec1 != ns2);
+          CHECK (ns2 != rec2);     CHECK (rec2 != ns2);
+          CHECK (ns2 != ref1);     CHECK (ref1 != ns2);
+          CHECK (ns2 != ref2);     CHECK (ref2 != ns2);
           
           CHECK (nt1 != nt2 );     CHECK (nt2  != nt1);
           CHECK (nt1 != nto1);     CHECK (nto1 != nt1);
@@ -831,16 +831,16 @@ namespace test{
           CHECK (ni2 .matches(ni2 ));    CHECK (ni2 .matches(ni2 .idi));    CHECK (ni2 .matches(i2 ));
           CHECK (nl1 .matches(nl1 ));    CHECK (nl1 .matches(nl1 .idi));    CHECK (nl1 .matches(l1 ));
           CHECK (nl2 .matches(nl2 ));    CHECK (nl2 .matches(nl2 .idi));    CHECK (nl2 .matches(l2 ));
-          CHECK (ns1 .matches(ns1 ));    CHECK (ns1 .matches(ns1 .idi));    CHECK (ns1 .matches(s1 ));
-          CHECK (ns2 .matches(ns2 ));    CHECK (ns2 .matches(ns2 .idi));    CHECK (ns2 .matches(s2 ));
+          CHECK (nr1 .matches(nr1 ));    CHECK (nr1 .matches(nr1 .idi));    CHECK (nr1 .matches(r1 ));
+          CHECK (nr2 .matches(nr2 ));    CHECK (nr2 .matches(nr2 .idi));    CHECK (nr2 .matches(r2 ));
           CHECK (nd1 .matches(nd1 ));    CHECK (nd1 .matches(nd1 .idi));    CHECK (nd1 .matches(d1 ));
           CHECK (nd2 .matches(nd2 ));    CHECK (nd2 .matches(nd2 .idi));    CHECK (nd2 .matches(d2 ));
           CHECK (nc1 .matches(nc1 ));    CHECK (nc1 .matches(nc1 .idi));    CHECK (nc1 .matches(c1 ));
           CHECK (nc2 .matches(nc2 ));    CHECK (nc2 .matches(nc2 .idi));    CHECK (nc2 .matches(c2 ));
           CHECK (nb1 .matches(nb1 ));    CHECK (nb1 .matches(nb1 .idi));    CHECK (nb1 .matches(b1 ));
           CHECK (nb2 .matches(nb2 ));    CHECK (nb2 .matches(nb2 .idi));    CHECK (nb2 .matches(b2 ));
-          CHECK (nz1 .matches(nz1 ));    CHECK (nz1 .matches(nz1 .idi));    CHECK (nz1 .matches(z1 ));
-          CHECK (nz2 .matches(nz2 ));    CHECK (nz2 .matches(nz2 .idi));    CHECK (nz2 .matches(z2 ));
+          CHECK (ns1 .matches(ns1 ));    CHECK (ns1 .matches(ns1 .idi));    CHECK (ns1 .matches(s1 ));
+          CHECK (ns2 .matches(ns2 ));    CHECK (ns2 .matches(ns2 .idi));    CHECK (ns2 .matches(s2 ));
           CHECK (nt1 .matches(nt1 ));    CHECK (nt1 .matches(nt1 .idi));    CHECK (nt1 .matches(t1 ));
           CHECK (nt2 .matches(nt2 ));    CHECK (nt2 .matches(nt2 .idi));    CHECK (nt2 .matches(t2 ));
           CHECK (nto1.matches(nto1));    CHECK (nto1.matches(nto1.idi));    CHECK (nto1.matches(to1));
@@ -853,21 +853,21 @@ namespace test{
           CHECK (nh2 .matches(nh2 ));    CHECK (nh2 .matches(nh2 .idi));    CHECK (nh2 .matches(h2 ));
           CHECK (rec1.matches(rec1));    CHECK (rec1.matches(rec1.idi));    CHECK (rec1.matches(spam1));
           CHECK (rec2.matches(rec2));    CHECK (rec2.matches(rec2.idi));    CHECK (rec2.matches(spam2));
-          CHECK (ref1.matches(ref1));    CHECK (ref1.matches(ref1.idi));    CHECK (ref1.matches(r1));
-          CHECK (ref2.matches(ref2));    CHECK (ref2.matches(ref2.idi));    CHECK (ref2.matches(r2));
+          CHECK (ref1.matches(ref1));    CHECK (ref1.matches(ref1.idi));    CHECK (ref1.matches(recRef1));
+          CHECK (ref2.matches(ref2));    CHECK (ref2.matches(ref2.idi));    CHECK (ref2.matches(recRef2));
           
           // cross-match on equivalent payload data --------
-                                     CHECK (nl1.matches(i1));   CHECK (ns1.matches(i1));  CHECK (nd1.matches(i1));  CHECK (nc1.matches(i1));
-          CHECK (ni1.matches(l1));                              CHECK (ns1.matches(l1));  CHECK (nd1.matches(l1));  CHECK (nc1.matches(l1));
-          CHECK (ni1.matches(s1));   CHECK (nl1.matches(s1));                             CHECK (nd1.matches(s1));  CHECK (nc1.matches(s1));
-          CHECK (ni1.matches(d1));   CHECK (nl1.matches(d1));   CHECK (ns1.matches(d1));                            CHECK (nc1.matches(d1));
-          CHECK (ni1.matches(c1));   CHECK (nl1.matches(c1));   CHECK (ns1.matches(c1));  CHECK (nd1.matches(c1));
+                                     CHECK (nl1.matches(i1));   CHECK (nr1.matches(i1));  CHECK (nd1.matches(i1));  CHECK (nc1.matches(i1));
+          CHECK (ni1.matches(l1));                              CHECK (nr1.matches(l1));  CHECK (nd1.matches(l1));  CHECK (nc1.matches(l1));
+          CHECK (ni1.matches(r1));   CHECK (nl1.matches(r1));                             CHECK (nd1.matches(r1));  CHECK (nc1.matches(r1));
+          CHECK (ni1.matches(d1));   CHECK (nl1.matches(d1));   CHECK (nr1.matches(d1));                            CHECK (nc1.matches(d1));
+          CHECK (ni1.matches(c1));   CHECK (nl1.matches(c1));   CHECK (nr1.matches(c1));  CHECK (nd1.matches(c1));
           
-                                     CHECK (nl2.matches(i2));   CHECK (ns2.matches(i2));  CHECK (nd2.matches(i2));  CHECK (nc2.matches(i2));
-          CHECK (ni2.matches(l2));                              CHECK (ns2.matches(l2));  CHECK (nd2.matches(l2));  CHECK (nc2.matches(l2));
-          CHECK (ni2.matches(s2));   CHECK (nl2.matches(s2));                             CHECK (nd2.matches(s2));  CHECK (nc2.matches(s2));
-          CHECK (ni2.matches(d2));   CHECK (nl2.matches(d2));   CHECK (ns2.matches(d2));                            CHECK (nc2.matches(d2));
-          CHECK (ni2.matches(c2));   CHECK (nl2.matches(c2));   CHECK (ns2.matches(c2));  CHECK (nd2.matches(c2));
+                                     CHECK (nl2.matches(i2));   CHECK (nr2.matches(i2));  CHECK (nd2.matches(i2));  CHECK (nc2.matches(i2));
+          CHECK (ni2.matches(l2));                              CHECK (nr2.matches(l2));  CHECK (nd2.matches(l2));  CHECK (nc2.matches(l2));
+          CHECK (ni2.matches(r2));   CHECK (nl2.matches(r2));                             CHECK (nd2.matches(r2));  CHECK (nc2.matches(r2));
+          CHECK (ni2.matches(d2));   CHECK (nl2.matches(d2));   CHECK (nr2.matches(d2));                            CHECK (nc2.matches(d2));
+          CHECK (ni2.matches(c2));   CHECK (nl2.matches(c2));   CHECK (nr2.matches(c2));  CHECK (nd2.matches(c2));
           
                                      CHECK (nto1.matches(t1 )); CHECK (nts1.matches(t1 ));
           CHECK (nt1.matches(to1));                             CHECK (nts1.matches(to1));
@@ -877,8 +877,8 @@ namespace test{
           CHECK (nt2.matches(to2));                             CHECK (nts2.matches(to2));
           CHECK (nt2.matches(ts2));  CHECK (nto2.matches(ts2));
           
-          CHECK (nz1.matches(""));
-          CHECK (nz2.matches("↯"));
+          CHECK (ns1.matches(""));
+          CHECK (ns2.matches("↯"));
           CHECK (nc1.matches("@"));
           CHECK (nc2.matches("~"));
           
@@ -891,19 +891,19 @@ namespace test{
           // some negative cases...
           CHECK (!ni1.matches(i2));  CHECK (!ni2.matches(i1));
           CHECK (!ni1.matches(l2));  CHECK (!ni2.matches(l1));
-          CHECK (!ni1.matches(s2));  CHECK (!ni2.matches(s1));
+          CHECK (!ni1.matches(r2));  CHECK (!ni2.matches(r1));
           CHECK (!ni1.matches(d2));  CHECK (!ni2.matches(d1));
           CHECK (!ni1.matches(c2));  CHECK (!ni2.matches(c1));
           
           CHECK (!nd1.matches(i2));  CHECK (!nd2.matches(i1));
           CHECK (!nd1.matches(l2));  CHECK (!nd2.matches(l1));
-          CHECK (!nd1.matches(s2));  CHECK (!nd2.matches(s1));
+          CHECK (!nd1.matches(r2));  CHECK (!nd2.matches(r1));
           CHECK (!nd1.matches(d2));  CHECK (!nd2.matches(d1));
           CHECK (!nd1.matches(c2));  CHECK (!nd2.matches(c1));
           
           // string match is literal
-          CHECK (!nz1.matches(" "));
-          CHECK (!nz2.matches("↯ "));
+          CHECK (!ns1.matches(" "));
+          CHECK (!ns2.matches("↯ "));
           
           GenNode copy(ni1);
           CHECK (copy == ni1);
