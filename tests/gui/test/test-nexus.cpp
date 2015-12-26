@@ -37,6 +37,7 @@
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
 #include "test/test-nexus.hpp"
+#include "lib/test/event-log.hpp"
 #include "gui/ctrl/nexus.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
@@ -54,6 +55,7 @@ using std::endl;
 using std::string;
 
 //using lib::idi::EntryID;
+using lib::test::EventLog;
 using lib::diff::GenNode;
 using gui::ctrl::BusTerm;
 //using util::contains;
@@ -76,6 +78,7 @@ namespace test{
     class TestNexus
       : public gui::ctrl::Nexus
       {
+        EventLog log_{this};
         
         
         virtual void
@@ -94,14 +97,28 @@ namespace test{
         
         virtual operator string()  const
           {
-            return lib::idi::instanceTypeID(this);
+            return getID().getSym()+"."+lib::idi::instanceTypeID(this);
           }
         
       public:
         TestNexus()
           : Nexus(*this, lib::idi::EntryID<TestNexus>("mock-UI"))
           { }
+        
+        // standard copy operations
+        
+        
+        EventLog&
+        getLog()
+          {
+            return log_;
+          }
       };
+
+    /** singleton instance of the [TestNexus]
+     *  used for rigging unit tests */
+    lib::Depend<TestNexus> testNexus;
+    
     
     
     /**
@@ -114,48 +131,64 @@ namespace test{
       : public BusTerm
       {
         
+        EventLog&
+        log()
+          {
+            return testNexus().getLog();
+          }
+        
+        
+        
         /* ==== defunct re-implementation of the BusTerm interface ==== */
         
         virtual void
         act (GenNode const& command)
           {
-            UNIMPLEMENTED("zombie act");
+            log().call(this, "act", command);
+            log().error ("sent command invocation to ZombieNexus");
+            cerr << "Command " << string(command) << " -> ZombieNexus" <<endl;
           }
-        
         
         virtual void
         note (ID subject, GenNode const& mark)  override
           {
-            UNIMPLEMENTED ("zombie note.");
+            log().call(this, "note", subject, mark);
+            log().error ("sent note message to ZombieNexus");
+            cerr << "note message "<< string(mark)
+                 << " FROM:" << string(subject)
+                 << " -> ZombieNexus" <<endl;
           }
-        
         
         virtual void
         mark (ID subject, GenNode const& mark)  override
           {
-            UNIMPLEMENTED ("zombie mark.");
+            log().call(this, "mark", subject, mark);
+            log().error ("request to deliver mark message via ZombieNexus");
+            cerr << "mark message -> ZombieNexus" <<endl;
           }
-        
         
         virtual operator string()  const
           {
-            return lib::idi::instanceTypeID(this);
+            return getID().getSym()+"."+lib::idi::instanceTypeID(this);
           }
-        
         
         virtual BusTerm&
         routeAdd (ID identity, Tangible& newNode)  override
           {
-            UNIMPLEMENTED ("zombie routeAdd.");
+            log().call(this, "routeAdd", identity, newNode);
+            log().error ("attempt to connect against ZombieNexus");
+            cerr << "connect("<<string(identity)<<" -> ZombieNexus" <<endl;
           }
-        
         
         virtual void
         routeDetach (ID node)  noexcept override
           {
-            UNIMPLEMENTED ("zombie routeDetach.");
+            log().call(this, "routeDetach", node);
+            log().error ("disconnect from ZombieNexus");
+            cerr << "disconnect("<<string(node)<<" -> ZombieNexus" <<endl;
           }
-      
+        
+        
       public:
         /** fabricate a "dead terminal", marked as deceased, viciously connected to itself.
          * @note intentionally to be sliced right after generation.
@@ -178,14 +211,9 @@ namespace test{
     
     
     
-    lib::Depend<TestNexus> testNexus;
     lib::Depend<ZombieNexus> zombieNexus;
     
   } // internal details
-  
-  
-  
-  //NA::~NA() { }
   
   
   
@@ -200,6 +228,13 @@ namespace test{
     return testNexus();
   }
   
+  lib::test::EventLog const&
+  Nexus::getLog()
+  {
+    return testNexus().getLog();
+  }
+  
+  
   
   /**
    * @return a defunct BusTerm with up-link to [ZombieNexus]
@@ -210,10 +245,11 @@ namespace test{
   {
     string lateName = doomed.getID().getSym();
     doomed.~BusTerm();
-//  log_.destroy (lateName);
+    testNexus().getLog().destroy (lateName);
     
     static_assert (sizeof(BusTerm) >= sizeof(ZombieNexus), "Zombie overflow");
     new(&doomed) ZombieNexus{lateName, zombieNexus()};
+    testNexus().getLog().event(lateName + " successfully zombificated.");
   }
 
 }} // namespace gui::test

@@ -45,6 +45,7 @@
 #include "lib/error.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "lib/test/event-log.hpp"
 //#include "lib/util.hpp"
 //#include "gui/model/tangible.hpp"
 //#include "lib/diff/record.hpp"
@@ -81,6 +82,8 @@ namespace test{
       
       /** kill the given [BusTerm] and implant a dead terminal in place */
       static void zombificate(ctrl::BusTerm&);
+      
+      static lib::test::EventLog const& getLog();
     };
   
   

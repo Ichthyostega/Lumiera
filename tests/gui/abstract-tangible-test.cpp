@@ -49,6 +49,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/test/event-log.hpp"
 #include "test/mock-elm.hpp"
+#include "test/test-nexus.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/error.hpp"
 //#include "gui/model/session-facade.hpp"
@@ -195,9 +196,21 @@ namespace test {
           CHECK (log.verifyEvent("destroy","dummy")
                     .beforeCall("doMsg").on("foo"));
           
+          EventLog nexusLog = gui::test::Nexus::getLog();
+          CHECK (nexusLog.verifyEvent("destroy","dummy")
+                         .beforeEvent("dummy successfully zombificated"));
+          
           mock.slotExpand();
-          cout << "____Event-Log________________\n"
+          CHECK (nexusLog.verifyEvent("dummy successfully zombificated")
+                         .beforeCall("note").on("ZombieNexus").arg("defunct-dummy", "expand"));
+          
+          
+          cout << "____Event-Log_________________\n"
                << util::join(mock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(gui::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       

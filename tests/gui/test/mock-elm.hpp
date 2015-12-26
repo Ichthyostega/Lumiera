@@ -158,7 +158,7 @@ namespace test{
       virtual void
       doMark (GenNode const& mark)  override
         {
-          log_.call (this->identify(), "doMark");
+          log_.call (this->identify(), "doMark", mark);
           cout << this->identify() << " <-- state-mark = "<< string(mark) <<endl;
           log_.note ("type=mark", "ID="+mark.idi.getSym(), mark);
         }
