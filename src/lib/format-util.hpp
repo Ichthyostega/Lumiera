@@ -273,6 +273,9 @@ namespace util {
         _RangeIter(IT&& srcIter)
           : iter(std::forward<IT>(srcIter))
           { }
+        _RangeIter(IT const& srcIter)
+          : iter(srcIter)
+          { }
         
       };
   }
@@ -298,7 +301,7 @@ namespace util {
     
     std::function<string(Val const&)> toString = [] (Val const& val) { return str(val); };
     
-    _RangeIter<Coll> range(std::forward<Coll>(coll));
+    _RangeIter<Coll> range(std::forward<CON>(coll));
     auto strings = lib::transformIterator(range.iter, toString);
     
     if (!strings) return "";

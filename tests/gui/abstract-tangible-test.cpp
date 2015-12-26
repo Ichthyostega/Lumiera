@@ -57,7 +57,7 @@
 
 
 //#include <boost/lexical_cast.hpp>
-//#include <iostream>
+#include <iostream>
 //#include <string>
 //#include <map>
 
@@ -67,8 +67,8 @@ using lib::idi::EntryID;
 //using boost::lexical_cast;
 //using util::contains;
 //using std::string;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
 
 
 
@@ -156,12 +156,12 @@ namespace test {
           CHECK (!mock.isTouched());
           CHECK (!mock.isExpanded());
           
-          mock.markMsg("dolorem ipsum quia dolor sit amet consectetur adipisci velit.");
-          CHECK (mock.verifyNote("Msg"));
-          CHECK (mock.verifyCall("noteMsg"));
-          CHECK (mock.verifyCall("noteMsg").arg("lorem ipsum"));
-          CHECK (mock.verifyCall("noteMsg").argMatch("dolor.+dolor\\s+"));
-          CHECK (mock.verifyMatch("Rec\\(note.+kind = Msg.+msg = dolorem ipsum"));
+          mock.markMsg("qui dolorem ipsum quia dolor sit amet consectetur adipisci velit.");
+          CHECK (mock.verifyMark("Message", "dolor"));
+          CHECK (mock.verifyCall("doMsg"));
+          CHECK (mock.verifyCall("doMsg").arg("lorem ipsum"));
+          CHECK (mock.verifyCall("doMsg").argMatch("dolor.+dolor\\s+"));
+          CHECK (mock.verifyMatch("Rec\\(mark.+ID = Message.+\\{.+lorem ipsum"));
           
           EventLog log = mock.getLog();
           log.verify("ctor")
@@ -179,6 +179,9 @@ namespace test {
           
           bar.joinLog(mock);
           foo.joinLog(mock);
+          cout << "____Event-Log________________\n"
+               << util::join(mock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           CHECK (log.verifyEvent("logJoin").arg("bar")
                     .beforeEvent("logJoin").arg("foo"));
           

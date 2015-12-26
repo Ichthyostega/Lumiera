@@ -50,6 +50,9 @@
 #include "lib/diff/record.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "test/test-nexus.hpp"
+#include "lib/symbol.hpp"
+
+#include <iostream>
 #include <string>
 
 
@@ -66,7 +69,11 @@ namespace test{
 //  using util::isnil;
 //  using lib::idi::EntryID;
 //  using lib::diff::Record;
+  using lib::Symbol;
   using std::string;
+  using std::cout;
+  using std::cerr;
+  using std::endl;
   
   
   /**
@@ -108,7 +115,7 @@ namespace test{
           log_.call(this->identify(), "expand", yes);
           virgin_ = false;
           expanded_ = yes;
-          log_.event(expanded_? "expanded" : "collapsed");
+          log_.event (expanded_? "expanded" : "collapsed");
           return true;
         }
       
@@ -127,25 +134,33 @@ namespace test{
       virtual void
       doMsg (string text)  override
         {
-          UNIMPLEMENTED ("mock doMsg");
+          log_.call (this->identify(), "doMsg", text);
+          cout << this->identify() << " <-- Message(\""<<text<<"\")" <<endl;
+          log_.note ("type=mark", "ID=Message", text);
         }
       
       virtual void
       doErr (string text)  override
         {
-          UNIMPLEMENTED ("mock doErr");
+          log_.call (this->identify(), "doErr", text);
+          cerr << this->identify() << " <-- Error(\""<<text<<"\")" <<endl;
+          log_.note ("type=mark", "ID=Error", text);
         }
       
       virtual void
       doFlash()  override
         {
-          UNIMPLEMENTED ("mock doFlash");
+          log_.call (this->identify(), "doFlash");
+          cout << this->identify() << " <-- Flash!" <<endl;
+          log_.note ("type=mark", "ID=Flash");
         }
       
       virtual void
       doMark (GenNode const& mark)  override
         {
-          UNIMPLEMENTED ("mock doMark");
+          log_.call (this->identify(), "doMark");
+          cout << this->identify() << " <-- state-mark = "<< string(mark) <<endl;
+          log_.note ("type=mark", "ID="+mark.idi.getSym(), mark);
         }
       
       
@@ -153,7 +168,7 @@ namespace test{
       string
       identify() const
         {
-          return lib::idi::instanceTypeID(this) +"-"+getID().getSym();
+          return getID().getSym() +"."+ lib::idi::instanceTypeID(this);
         }
       
       
@@ -237,11 +252,21 @@ namespace test{
           return getLog().ensureNot(match);
         }
       
-      /** special verification match on a "note" message to this element */
+      /** special verification match on a "state mark" message to this element */
       EventMatch
-      verifyNote (string msgContentMatch)  const
+      verifyMark (string msgContentMatch)  const
         {
-          UNIMPLEMENTED ("generic match");
+          return getLog().verifyEvent("mark", msgContentMatch);
+        }
+      
+      /** verification match on a specific "state mark" message
+       * @param id the ID-symbol used, identifying the kind of notification message
+       * @param payloadMatch to be applied to the payload of the message solely
+       */
+      EventMatch
+      verifyMark (string id, string payloadMatch)  const
+        {
+          return getLog().verifyEvent("mark", payloadMatch).type("mark").id(id);
         }
       
       
