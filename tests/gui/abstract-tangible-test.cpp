@@ -189,14 +189,16 @@ namespace test {
           CHECK (log.verifyEvent("create","dummy")
                     .beforeEvent("create","bar")
                     .beforeEvent("create","foo"));
-          cout << "____Event-Log________________\n"
-               << util::join(mock.getLog(), "\n")
-               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           
           mock.kill();
           foo.markMsg("dummy killed");
           CHECK (log.verifyEvent("destroy","dummy")
                     .beforeCall("doMsg").on("foo"));
+          
+          mock.slotExpand();
+          cout << "____Event-Log________________\n"
+               << util::join(mock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
       

@@ -44,10 +44,13 @@
 #include "lib/depend.hpp"
 
 //#include <boost/noncopyable.hpp>
+#include <iostream>
 #include <string>
 //#include <map>
 
 //using std::map;
+using std::cerr;
+using std::endl;
 using std::string;
 
 //using lib::idi::EntryID;
@@ -116,21 +119,21 @@ namespace test{
         virtual void
         act (GenNode const& command)
           {
-            UNIMPLEMENTED("act");
+            UNIMPLEMENTED("zombie act");
           }
         
         
         virtual void
         note (ID subject, GenNode const& mark)  override
           {
-            UNIMPLEMENTED ("note.");
+            UNIMPLEMENTED ("zombie note.");
           }
         
         
         virtual void
         mark (ID subject, GenNode const& mark)  override
           {
-            UNIMPLEMENTED ("mark.");
+            UNIMPLEMENTED ("zombie mark.");
           }
         
         
@@ -143,27 +146,40 @@ namespace test{
         virtual BusTerm&
         routeAdd (ID identity, Tangible& newNode)  override
           {
-            UNIMPLEMENTED ("routeAdd.");
+            UNIMPLEMENTED ("zombie routeAdd.");
           }
         
         
         virtual void
         routeDetach (ID node)  noexcept override
           {
-            UNIMPLEMENTED ("routeDetach.");
+            UNIMPLEMENTED ("zombie routeDetach.");
           }
-        
+      
       public:
-        /** fabricate a "dead terminal", marked as deceased.
+        /** fabricate a "dead terminal", marked as deceased, viciously connected to itself.
          * @note intentionally to be sliced right after generation.
          *       All operations on this object are defunct.
          */
-        ZombieNexus(string formerID)
-          : BusTerm(lib::idi::EntryID<ZombieNexus>("defunct-"+formerID), *this)
+        ZombieNexus(string formerID, BusTerm& homeland)
+          : BusTerm(lib::idi::EntryID<ZombieNexus>("defunct-"+formerID), homeland)
           { }
+        
+        explicit
+        ZombieNexus()
+          : ZombieNexus{"zombieland", *this}
+          { }
+        
+       ~ZombieNexus()
+          {
+            cerr << this->getID().getSym() << ": Zombies never die" << endl;
+          }
       };
     
+    
+    
     lib::Depend<TestNexus> testNexus;
+    lib::Depend<ZombieNexus> zombieNexus;
     
   } // internal details
   
@@ -196,7 +212,8 @@ namespace test{
     doomed.~BusTerm();
 //  log_.destroy (lateName);
     
-    new(&doomed) ZombieNexus{lateName};
+    static_assert (sizeof(BusTerm) >= sizeof(ZombieNexus), "Zombie overflow");
+    new(&doomed) ZombieNexus{lateName, zombieNexus()};
   }
 
 }} // namespace gui::test
