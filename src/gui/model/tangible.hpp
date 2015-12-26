@@ -100,7 +100,7 @@ namespace model {
       void markMsg (string m)         { this->doMsg(m); }
       void markErr (string e)         { this->doErr(e); }
       void markFlash()                { this->doFlash();}
-      void mark(GenNode const& n)     { this->doMark(n);}
+      void mark(GenNode const&);
       
     protected:
       virtual void doReset()  =0;
@@ -114,6 +114,24 @@ namespace model {
       virtual void doMark(GenNode const&)  =0;
     private:
     };
+  
+
+  
+  /** generic handler for all incoming "state mark" messages */
+  inline void
+  Tangible::mark (GenNode const& stateMark)
+  {
+    if (stateMark.idi.getSym() == "Flash")
+      this->doFlash();
+    else
+    if (stateMark.idi.getSym() == "Error")
+      this->doErr (stateMark.data.get<string>());
+    else
+    if (stateMark.idi.getSym() == "Message")
+      this->doMsg (stateMark.data.get<string>());
+    else
+      this->doMark(stateMark);
+  }
   
   
   
