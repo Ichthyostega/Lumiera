@@ -92,7 +92,7 @@ namespace test{
     {
       using _Par = gui::model::Tangible;
       
-      EventLog log_{this};
+      EventLog log_{this->identify()};
       
       bool virgin_{true};
       bool expanded_{false};

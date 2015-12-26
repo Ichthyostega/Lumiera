@@ -179,19 +179,19 @@ namespace test {
           
           bar.joinLog(mock);
           foo.joinLog(mock);
+          CHECK (log.verifyEvent("logJoin","bar")
+                    .beforeEvent("logJoin","foo"));
+          
+          CHECK (mock.verifyEvent("logJoin","bar")
+                     .beforeEvent("logJoin","foo"));
+          CHECK (mock.verifyEvent("create","foo"));
+          CHECK (log.verifyEvent("create","foo"));
+          CHECK (log.verifyEvent("create","dummy")
+                    .beforeEvent("create","bar")
+                    .beforeEvent("create","foo"));
           cout << "____Event-Log________________\n"
                << util::join(mock.getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          CHECK (log.verifyEvent("logJoin").arg("bar")
-                    .beforeEvent("logJoin").arg("foo"));
-          
-          CHECK (mock.verifyEvent("logJoin").arg("bar")
-                     .beforeEvent("logJoin").arg("foo"));
-          CHECK (mock.verify("ctor").arg("foo"));
-          CHECK (log.verify("ctor").arg("foo"));
-          CHECK (log.verify("ctor").arg("dummy")
-                    .before("ctor").arg("bar")
-                    .before("ctor").arg("foo"));
           
           mock.kill();
           foo.markMsg("dummy killed");
