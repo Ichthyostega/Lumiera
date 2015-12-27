@@ -48,7 +48,7 @@
  ** built with a distinct core, the UI should not contain anything not tangible enough
  ** as just to be verified by watching it in action. The push of a button should just
  ** invoke an action, and the action itself should be self contained enough to be
- ** tested in isolation. The UI-Bus and the [generic widget base][gui::model::Tangible]
+ ** tested in isolation. The UI-Bus and the [generic widget base](\ref gui::model::Tangible)
  ** was built to serve as a foundation to achieve that goal.
  ** 
  ** @see abstract-tangible-test.cpp
@@ -92,9 +92,9 @@ namespace test{
    * Mock UI element or controller.
    * Within Lumiera, all interface components of relevance are based
    * on the [Tangible] interface, which we mock here for unit testing.
-   * This special implementation is instrumented to [log][lib::test::EventLog]
+   * This special implementation is instrumented to [log](\ref lib::test::EventLog)
    * any invocation and any messages sent or received through the UI Backbone,
-   * which is formed by the [UI-Bus][ui-bus.hpp].
+   * which is formed by the [UI-Bus](ui-bus.hpp).
    * 
    * @todo some usage details
    * @see abstract-tangible-test.cpp

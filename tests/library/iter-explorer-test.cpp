@@ -192,12 +192,12 @@ namespace test{
    * @test use a simple source iterator yielding numbers
    *       to build various functional evaluation structures,
    *       based on the IterExplorer template.
-   *       - the [state adapter][verifyStateAdapter] iterator
+   *       - the [state adapter](\ref verifyStateAdapter) iterator
    *         construction pattern
-   *       - helper to [chain iterators][verifyChainedIterators]
-   *       - building [tree exploring structures][verifyDepthFirstExploration]
-   *       - the [monadic nature][verifyMonadOperator] of IterExplorer
-   *       - a [recursively self-integrating][verifyRecrusiveSelfIntegration]
+   *       - helper to [chain iterators](\ref verifyChainedIterators)
+   *       - building [tree exploring structures](\ref verifyDepthFirstExploration)
+   *       - the [monadic nature](\ref verifyMonadOperator) of IterExplorer
+   *       - a [recursively self-integrating](\ref verifyRecrusiveSelfIntegration)
    *         evaluation pattern
    * 
    * \par Explanation

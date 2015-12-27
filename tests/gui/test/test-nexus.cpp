@@ -25,8 +25,8 @@
  ** Implementation of a fake UI backbone for testing.
  ** This compilation unit provides the actual setup for running a faked
  ** user interface from unit tests. Test code is assumed to access those
- ** features through the [front-end][gui::test::TestNexus], while the
- ** actual implementation instances are placed [as singletons][depend.hpp]
+ ** features through the [front-end](\ref gui::test::TestNexus), while the
+ ** actual implementation instances are placed [as singletons](depend.hpp)
  ** 
  ** @todo initial draft and WIP-WIP-WIP as of 11/2015
  ** 
@@ -69,7 +69,7 @@ namespace test{
      * @internal fake interface backbone and unit test rig
      * for simulated command and presentation state handling.
      * This implementation embodies the routing functionality
-     * as found in the [real nexus][gui::ctrl::Nexus], and additionally
+     * as found in the [real nexus](\ref gui::ctrl::Nexus), and additionally
      * also implements the handler functions of the [gui::ctrl::CoreService].
      * The latter allows us to intercept command invocations and presentation
      * state messages

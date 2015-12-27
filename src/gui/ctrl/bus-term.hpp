@@ -32,9 +32,9 @@
  ** \par Lifecycle and identity
  ** An BusTerm is always created starting from another BusTerm, to
  ** which it will be wired. Moreover, each BusTerm bears a distinct
- ** [identity][::endpointID_], which is used as _implicit subject_
+ ** [identity](\ref ::endpointID_), which is used as _implicit subject_
  ** for emanating messages, or as explicit destination for routing.
- ** The whole [UI-Bus][BusController] is built to perform within the
+ ** The whole [UI-Bus](\ref BusController) is built to perform within the
  ** UI event thread and thus is _not threadsafe_. For that reason,
  ** the automatic detachment built into each BusTerm's dtor is
  ** sufficient to ensure sane connectivity.
@@ -77,7 +77,7 @@ namespace ctrl{
   /**
    * connection point at the UI-Bus.
    * The UI-Bus is a star shaped network of terminal points,
-   * where each \link Tangible tangible UI element \endlink
+   * where each \ref model::Tangible "tangible UI element"
    * holds a BusTerm serving access point. The BusTerm interface
    * exposes the basic "verbs" available for communication within
    * the UI

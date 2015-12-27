@@ -25,7 +25,7 @@
  ** Common base implementation of all tangible and connected interface elements.
  ** 
  ** @see abstract-tangible-test.cpp
- ** @see [explanation of the fundamental interactions][tangible.hpp]
+ ** @see [explanation of the fundamental interactions](tangible.hpp)
  ** 
  */
 
@@ -60,7 +60,7 @@ namespace model {
   /**
    * Prepare a command or action for actual invocation, once the execution context
    * has been established. The action is not executed right away, but it is now ready
-   * and bound to the concrete arguments supplied with the [record][lib::diff::Rec].
+   * and bound to the concrete arguments supplied with the [record](\ref lib::diff::Rec).
    * @param prototype handle to a command instantiation, to be readied for invocation
    * @param arguments suitable tuple of values, to be used to outfit the prototype
    */

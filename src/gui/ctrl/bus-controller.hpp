@@ -22,10 +22,10 @@
 
 
 /** @file bus-controller.hpp
- ** The service actually operating the [UI-Bus][ui-bus.hpp].
+ ** The service actually operating the [UI-Bus](ui-bus.hpp).
  ** This service includes state management for the bus operations
- ** as a whole, it includes the setup of a [routing table][ctrl::Nexus]
- ** and it includes the management of connection to the [core service][core-service.hpp]
+ ** as a whole, it includes the setup of a [routing table](\ref ctrl::Nexus)
+ ** and it includes the management of connection to the [core service](core-service.hpp)
  ** Service for bus-controller.
  ** This header defines the basics of...
  ** 
@@ -37,8 +37,8 @@
  ** @todo WIP  ///////////////////////TICKET #959
  ** 
  ** @see ////TODO_test usage example
- ** @see [implementation][bus-controller.cpp]
- ** @see [front-end and lifecycle][UiBus]
+ ** @see [implementation](bus-controller.cpp)
+ ** @see [front-end and lifecycle](UiBus)
  ** 
  */
 

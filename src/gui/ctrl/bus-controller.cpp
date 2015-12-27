@@ -24,9 +24,9 @@
 /** @file bus-controller.cpp
  ** Implementation of the UI backbone service for messaging.
  ** Any globally relevant widget or controller within the Lumiera UI
- ** is connected to the [UI-Bus][ui-bus.hpp], which is largely implemented
- ** within this compilation unit. [Clients][gui::model::Tangible] typically
- ** use the [BusTerm-Interface][bus-term.hpp] to route generic actions and
+ ** is connected to the [UI-Bus](ui-bus.hpp), which is largely implemented
+ ** within this compilation unit. [Clients](\ref gui::model::Tangible) typically
+ ** use the [BusTerm-Interface](bus-term.hpp) to route generic actions and
  ** receive notifications, state changes and mutations.
  ** 
  ** @note as of 11/2015 this is complete WIP_WIP
@@ -119,7 +119,7 @@ namespace ctrl {
   
   
   /** capture and record a "state mark" for later replay for restoring UI state.
-   * @param subject the [endpoint-ID][BusTerm::endpointID_] of the emitting element
+   * @param subject the [endpoint-ID](BusTerm::endpointID_) of the emitting element
    * @param mark the actual state update or notification message to be remembered
    * @remarks relevant changes to presentation state, which are to be recalled and
    *          restored later, are emitted from the place they occur, packaged as
@@ -138,11 +138,11 @@ namespace ctrl {
   
   
   /** route a state update or notification to the given subject.
-   * @param subject the [endpoint-ID][BusTerm::endpointID_] of the element to address
+   * @param subject the [endpoint-ID](BusTerm::endpointID_) of the element to address
    * @param mark the actual state update or notification message to be delivered
    * @remarks each "subject" to be addressed is a gui::model::Tangible, and as such
    *          holds a BusTerm of its own, which in turn ensures a registration and
-   *          connection from the [central routing hub][gui::ctrl::Nexus] down to
+   *          connection from the [central routing hub](gui::ctrl::Nexus) down to
    *          the element. Thus, the default implementation is just to pass the
    *          given state mark "up", assuming that it will reach the hub
    *          eventually, which in turn knows hot to reach the element.

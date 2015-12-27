@@ -27,7 +27,7 @@
  ** for types. Some of these support meta programming to figure out the \em actual
  ** reference kind (value, lvalue, rvalue) of a template parameter instantiation.
  ** For GNU compatible compilers, we define here also an interface to the internal
- ** ABI for [demangling type names][demangleCxx].
+ ** ABI for [demangling type names](\ref demangleCxx).
  ** 
  ** @note this header is included into a large number of tests.
  ** @see TestHelper_test

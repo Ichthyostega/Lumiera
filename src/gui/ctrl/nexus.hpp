@@ -23,8 +23,8 @@
 
 /** @file nexus.hpp
  ** Core hub and routing table of the UI-Bus.
- ** Any relevant element within the Lumiera GTK UI is connected to the [UI-Bus][ui-bus.hpp]
- ** through some [bus terminal][bus-term.hpp]. Actually, there is one special BustTerm
+ ** Any relevant element within the Lumiera GTK UI is connected to the [UI-Bus](ui-bus.hpp)
+ ** through some [bus terminal](bus-term.hpp). Actually, there is one special BustTerm
  ** implementation, which acts as router and messaging hub.
  ** 
  ** @todo initial draft and WIP-WIP-WIP as of 11/2015
@@ -100,7 +100,7 @@ namespace ctrl{
         }
       
       /** add a new down-link connection to the routing table
-       * @param identity the [endpoint-ID][BusTerm::endpointID_] used
+       * @param identity the [endpoint-ID](\ref BusTerm::endpointID_) used
        *         to address the new element to be connected to the bus.
        * @return backlink for the new Tangible's BusTerm to
        *         attach itself to the Nexus.

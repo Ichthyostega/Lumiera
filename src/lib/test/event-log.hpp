@@ -34,7 +34,7 @@
  ** to deliver a precise indication what part of the condition failed.
  ** 
  ** @see TestEventLog_test
- ** @see [usage example][AbstractTangible_test]
+ ** @see [usage example](\ref AbstractTangible_test)
  ** 
  */
 
@@ -357,7 +357,7 @@ namespace test{
       /** find a match for an "event" _after_ the current point of reference
        * @remarks the term "event" designates several types of entries, which
        *          typically capture something happening within the observed entity.
-       *          Especially, the following [record types][lib::Record::getType()]
+       *          Especially, the following [record types](\ref lib::Record::getType())
        *          qualify as event:
        *          - `event`
        *          - `error`
@@ -552,7 +552,7 @@ namespace test{
   /****************************************************************//**
    * Helper to log and verify the occurrence of events.
    * The EventLog object is a front-end handle, logging flexible
-   * [information records][lib::Record] into a possibly shared (vector)
+   * [information records](\ref lib::Record) into a possibly shared (vector)
    * buffer in heap storage. An extended query DSL allows to write
    * assertions to cover the occurrence of events in unit tests.
    * @see TestEventLog_test
@@ -744,7 +744,7 @@ namespace test{
 
       
       /** Log the creation of an object.
-       *  Such an entry can be [matched as event][::verifyEvent] */
+       *  Such an entry can be [matched as event](\ref ::verifyEvent) */
       EventLog&
       create (string text)
         {
@@ -790,7 +790,7 @@ namespace test{
       /** start a query to match for some substring.
        *  The resulting matcher object will qualify on any log entry
        *  containing the given string. By adding subsequent further
-       *  query expressions on the returned [matcher object][EventMatch],
+       *  query expressions on the returned [matcher object](\ref EventMatch),
        *  the query can be refined. Refining a query might induce backtracking.
        *  The final result can be retrieved by `bool` conversion
        */
@@ -819,7 +819,7 @@ namespace test{
       /** start a query to match for some event.
        * @remarks only a subset of all log entries is treated as "event",
        *          any other log entry will not be considered for this query.
-       *          Besides the regular [events][::event()], also errors,
+       *          Besides the regular [events](\ref ::event()), also errors,
        *          creation and destruction of objects count as "event".
        * @param match text to (substring)match against the argument logged as event
        */

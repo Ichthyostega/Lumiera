@@ -27,7 +27,7 @@
  ** This is a messaging system and taps into any widget of more than local relevance.
  ** To that end, any globally relevant (custom) widget, and all secondary controllers
  ** inherit from the gui::model::Tangible base. The top-level gui::UiBus element is
- ** a front-end and framework component managed by the [GTK-main][GtkLumiera::main].
+ ** a front-end and framework component managed by the [GTK-main](\ref GtkLumiera::main).
  ** 
  ** @warning as of 12/2015, this is still totally a mess. This \em will remain
  **          the one-and-only master controller of the UI, but I am determined
@@ -38,9 +38,7 @@
  ** 
  ** \par rationale
  ** The UI-Bus acts as a **mediating backbone**, impersonating the role
- ** of the _Model_ and the _Controler_ in the
- ** [MVC-Pattern][http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]
- ** in common UI architecture.
+ ** of the _Model_ and the _Controler_ in the [MVC-Pattern]in common UI architecture.
  ** 
  ** The MVC-Pattern as such is fine, and probably the best we know for construction of
  ** user interfaces. But it doesn't scale well towards the integration into a larger and
@@ -59,19 +57,19 @@
  ** these core services will receive the messages, act on them and _respond asynchronously_.
  ** 
  ** \par Bus interactions
- ** The UI-Bus has a star shaped topology, with a central "bus master" hub, the ["Nexus"][Nexus],
+ ** The UI-Bus has a star shaped topology, with a central "bus master" hub, the ["Nexus"](\ref Nexus),
  ** which maintains a routing table. Attachment and detachment of elements can be managed automatically,
  ** since all of the UI-Bus operations _perform within the UI event thread._
  ** 
  ** We distinguish between _up-link messages,_ directed towards some central service
  ** (presentation state management or command invocation) and _down-link messages,_
  ** directed towards individual elements. The interactions at the bus are closely interrelated
- ** with the [elementary UI-Element operations][tangible.hpp].
+ ** with the [elementary UI-Element operations](tangible.hpp).
  ** 
  ** - **act**: send a [GenNode] representing the action
- **   - in a first step, a command prototype is [outfitted][InvocationTrail::bind()] with actual
+ **   - in a first step, a command prototype is [outfitted](\ref InvocationTrail::bind()) with actual
  **     parameter values. -> see [InvocationTrail]
- **   - the actual command invocation is triggered by a ["bang" message][InvocationTrail::bang()]
+ **   - the actual command invocation is triggered by a ["bang" message](\ref InvocationTrail::bang())
  ** - **note**: send a [GenNode] representing the _state mark;_
  **   some (abstracted) presentation state manager is expected to listen to these messages,
  **   possibly recording state to be restored later. The contents of the _state mark_ message
@@ -87,6 +85,8 @@
  ** @see bus-term.hpp
  ** @see ctrl/nexus.hpp
  ** @see ctrl/core-service.hpp
+ ** 
+ ** [MVC-Pattern]: http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
  ** 
  ** @todo as of 1/2015, this header needs to be reshaped ////////////////////TICKET #959
  ** 
