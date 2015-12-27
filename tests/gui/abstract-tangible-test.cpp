@@ -52,22 +52,14 @@
 #include "test/test-nexus.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/error.hpp"
-//#include "gui/model/session-facade.hpp"
-//#include "gui/model/diagnostics.hpp"
 //#include "lib/util.hpp"
 
 
-//#include <boost/lexical_cast.hpp>
 #include <iostream>
-//#include <string>
-//#include <map>
 
 using gui::test::MockElm;
 using lib::test::EventLog;
 using lib::idi::EntryID;
-//using boost::lexical_cast;
-//using util::contains;
-//using std::string;
 using std::cout;
 using std::endl;
 
@@ -124,6 +116,17 @@ namespace test {
        * to this mocked interface. And since this mock element embodies an
        * [event log][EventLog], the unit test code can verify the occurrence
        * of expected events, invocations and responses.
+       * 
+       * \par connectivity
+       * Any mock element will automatically connect against the [Test-Nexus][test/test-nexus.hpp],
+       * so to be suitably rigged for unit testing. This means, there is no _live connection_
+       * to the session, but any command- or other messages will be captured and can be
+       * retrieved or verified from the test code. Since lifecycle and robustness in
+       * "post mortem" situations tend to be tricky for UI code, we provide a dedicated
+       * ["zombification"][gui::test::TestNexus::zombificate()] feature: a [MockElm] can be turned
+       * into an _almost dead_ state, while still hanging around. It will be detached from the
+       * "living" Test-Nexus and re-wired to some special, hidden "Zombie Nexus", causing any
+       * further messaging activity to be logged and ignored.
        */
       void
       verify_mockManipulation ()
@@ -169,6 +172,7 @@ namespace test {
              .before("reset")
              .before("lorem ipsum");
           
+          // create further mock elements...
           MockElm foo("foo"), bar("bar");
           foo.verify("ctor").arg("foo");
           bar.verify("ctor").arg("bar");
@@ -178,6 +182,8 @@ namespace test {
           mock.ensureNot("foo");
           CHECK (!foo.ensureNot("foo"));
           
+          // now join the logs together,
+          // allowing to watch the combined events
           bar.joinLog(mock);
           foo.joinLog(mock);
           CHECK (log.verifyEvent("logJoin","bar")
@@ -191,18 +197,21 @@ namespace test {
                     .beforeEvent("create","bar")
                     .beforeEvent("create","foo"));
           
+          
           mock.kill();
           foo.markMsg("dummy killed");
           CHECK (log.verifyEvent("destroy","dummy")
                     .beforeCall("doMsg").on("foo"));
           
+          // Access the log on the Test-Nexus hub
           EventLog nexusLog = gui::test::Nexus::getLog();
           CHECK (nexusLog.verifyEvent("destroy","dummy")
                          .beforeEvent("dummy successfully zombificated"));
           
-          mock.slotExpand();
+          mock.slotExpand(); // attempt to operate the zombie
           CHECK (nexusLog.verifyEvent("dummy successfully zombificated")
-                         .beforeCall("note").on("ZombieNexus").arg("defunct-dummy", "expand"));
+                         .beforeCall("note").on("ZombieNexus").arg("defunct-dummy", "expand")
+                         .beforeEvent("error","sent note message to ZombieNexus"));
           
           
           cout << "____Event-Log_________________\n"

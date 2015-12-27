@@ -24,7 +24,9 @@
 /** @file test/test-nexus.cpp
  ** Implementation of a fake UI backbone for testing.
  ** This compilation unit provides the actual setup for running a faked
- ** user interface from unit tests.
+ ** user interface from unit tests. Test code is assumed to access those
+ ** features through the [front-end][gui::test::TestNexus], while the
+ ** actual implementation instances are placed [as singletons][depend.hpp]
  ** 
  ** @todo initial draft and WIP-WIP-WIP as of 11/2015
  ** 
@@ -33,9 +35,7 @@
  */
 
 
-//#include "lib/util.hpp"
-//#include "lib/symbol.hpp"
-//#include "include/logging.h"
+#include "lib/error.hpp"
 #include "test/test-nexus.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/ctrl/nexus.hpp"
@@ -43,8 +43,8 @@
 #include "lib/idi/entry-id.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "lib/depend.hpp"
+//#include "lib/util.hpp"
 
-//#include <boost/noncopyable.hpp>
 #include <iostream>
 #include <string>
 //#include <map>
@@ -54,7 +54,6 @@ using std::cerr;
 using std::endl;
 using std::string;
 
-//using lib::idi::EntryID;
 using lib::test::EventLog;
 using lib::diff::GenNode;
 using gui::ctrl::BusTerm;

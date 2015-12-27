@@ -212,7 +212,80 @@
 <node CREATED="1448659824337" ID="ID_1734858009" MODIFIED="1448659829865" TEXT="Markierungen"/>
 </node>
 </node>
-<node CREATED="1448658696638" ID="ID_1235910089" MODIFIED="1448658704649" TEXT="slots"/>
+<node CREATED="1448658696638" ID="ID_1235910089" MODIFIED="1448658704649" TEXT="slots">
+<node CREATED="1451177440022" ID="ID_1603816152" MODIFIED="1451177686811" TEXT="expand">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1451177449405" ID="ID_215708646" MODIFIED="1451177458839" TEXT="zun&#xe4;chst einfach auf/zu"/>
+<node CREATED="1451177459667" ID="ID_1151970636" MODIFIED="1451177529588" TEXT="wird m&#xf6;glicherweise eine Enum">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gemeint, eine ENUM von verschiedenen Graden der Aufgeklappt-heit
+    </p>
+    <p>
+      Dann mu&#223;te das allerdigns jeweils f&#252;r alle Elemente sinnvoll sein
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1451177534345" ID="ID_524388510" MODIFIED="1451177541380" TEXT="impl">
+<node CREATED="1451177542256" ID="ID_980888532" MODIFIED="1451177573115" TEXT="ruft einen konkreten hook doExpand() auf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und der mu&#223; vom konkreten Widget implementiert werden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1451177573108" ID="ID_1154342108" MODIFIED="1451177583935" TEXT="wenn dieser true zur&#xfc;ckgibt, ist der Zustand persistent"/>
+<node CREATED="1451177584435" ID="ID_1792154974" MODIFIED="1451177606906">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dann wird eine <i>state mark</i>&#160;ausgesendet
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1451177442861" ID="ID_1257047796" MODIFIED="1451177732372" TEXT="reveal">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1451177636388" ID="ID_507693817" MODIFIED="1451177655664" TEXT="&quot;bringe dies Element in Sicht&quot;">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1451177626773" ID="ID_612921051" MODIFIED="1451177634927" TEXT="ist das eine gute Idee">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1451177659369" ID="ID_928484705" MODIFIED="1451177677957">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      need to <i>bubble up</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1451177719577" ID="ID_1175980404" MODIFIED="1451177726636" TEXT="wie finde ich den Vater..."/>
+</node>
+</node>
 <node CREATED="1448658726090" ID="ID_37610818" MODIFIED="1448658733301" TEXT="Commands">
 <node CREATED="1448658755071" ID="ID_1033500384" MODIFIED="1448658767933" TEXT="wie definieren">
 <icon BUILTIN="help"/>

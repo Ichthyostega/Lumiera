@@ -31,7 +31,25 @@
  ** of a specially prepared Tangible instance. This gui::test::MockElm provides the
  ** necessary instrumentation to observe what has been invoked and received.
  ** 
- ** @todo initial draft and WIP-WIP-WIP as of 11/2015
+ ** Since the purpose of a mock interface element is to test interactions and responses
+ ** targeted at a generic interface element, the MockElm incorporates an implementation
+ ** independent from the real gui::model::Widget or gui::model::Controller. This
+ ** mock implementation is basically NOP, while logging any invocation. Matters get
+ ** a bit fuzzy, when it comes to the distinction between _widget_ and _controller_.
+ ** Yet we should note that the purpose of this setup is to cover the connectivity
+ ** and integration with the UI, not the tangible "mechanics" of the UI itself.
+ ** It can be argued that covering the latter with unit tests is pretty much
+ ** moot and will result just in a huge pile of code duplication and
+ ** maintenance burden.
+ ** 
+ ** People typically start to look into unit testing of user interfaces
+ ** when faced with a largely dysfunctional architecture, where core functionality
+ ** is littered and tangled into the presentation code. While in a system knowingly
+ ** built with a distinct core, the UI should not contain anything not tangible enough
+ ** as just to be verified by watching it in action. The push of a button should just
+ ** invoke an action, and the action itself should be self contained enough to be
+ ** tested in isolation. The UI-Bus and the [generic widget base][gui::model::Tangible]
+ ** was built to serve as a foundation to achieve that goal.
  ** 
  ** @see abstract-tangible-test.cpp
  ** 
@@ -43,8 +61,6 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/idi/entry-id.hpp"
-//#include "lib/util.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/model/tangible.hpp"
 #include "lib/diff/record.hpp"
@@ -65,10 +81,6 @@ namespace gui {
 namespace test{
   
   
-//  using lib::HashVal;
-//  using util::isnil;
-//  using lib::idi::EntryID;
-//  using lib::diff::Record;
   using lib::Symbol;
   using std::string;
   using std::cout;
@@ -82,7 +94,7 @@ namespace test{
    * on the [Tangible] interface, which we mock here for unit testing.
    * This special implementation is instrumented to [log][lib::test::EventLog]
    * any invocation and any messages sent or received through the UI Backbone,
-   * which is formed by the [UiBus].
+   * which is formed by the [UI-Bus][ui-bus.hpp].
    * 
    * @todo some usage details
    * @see abstract-tangible-test.cpp

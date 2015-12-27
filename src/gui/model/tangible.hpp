@@ -23,11 +23,100 @@
 
 /** @file tangible.hpp
  ** Abstraction: a tangible element of the User Interface.
- ** Any such element is connected to the UIBus...
+ ** This is a generic foundation for any elements of more than local relevance
+ ** within the Lumiera UI. Any such element is connected to the [UI-Bus][ui-bus.hpp].
  ** 
- ** @todo as of 1/2015 this is complete WIP-WIP-WIP
+ ** \par rationale
+ ** Simple user interfaces can be built by wiring up the actions right within the
+ ** code processing the trigger of actions. This leads to core functionality littered
+ ** and tangled with presentation code. The next step towards a more sane architecture
+ ** would be to code a forwarding call into every UI action, invoking some core facade
+ ** in turn. This approach works, but is repetitive and thus lures the lazy programmer
+ ** into taking shortcuts. Since we can foresee the Lumiera UI to become quite challenging
+ ** in itself, we prefer to introduce a **mediating backbone**, impersonating the role
+ ** of the _Model_ and the _Controler_ in the
+ ** [MVC-Pattern][http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]
+ ** in common UI architecture.
  ** 
- ** @see ////TODO_test usage example
+ ** The MVC-Pattern as such is fine, and probably the best we know for construction of
+ ** user interfaces. But it doesn't scale well towards the integration into a larger and
+ ** more structured system. There is a tension between the Controller in the UI and other
+ ** parts of an application, which as well need to be _in control._ And, even more important,
+ ** there is a tension between the demands of UI elements for support by a model, and the
+ ** demands to be placed on a core domain model of a large scale application. This tension is
+ ** resolved by enacting these roles while transforming the requests and demands into _Messages._
+ ** 
+ ** This way, we separate between immediate local control of UI state and the more global,
+ ** generic concerns of interaction control and command binding. The immediately tangible
+ ** "mechanics" of the UI shall be implemented in a conventional way, right within the
+ ** concrete widget (or controller) code. But, since any widget concerned with more than
+ ** local behaviour will inherit from [Tangible], the embedded [UI-Bus terminal][Tangible::uiBus_]
+ ** can be used for interaction with core services.
+ ** 
+ ** \par the generic interface element API
+ ** The _generic interface element_ based on [Tangible] covers a set of behaviour common to
+ ** all elements of the interface. This behaviour is targeted towards the _integration_ with the
+ ** core application. Beyond that, there are still several concerns regarding presentation, like
+ ** a common styling. These are addressed the conventional way, through a common [WindowManager].
+ ** The following discussion focuses on the aspects of integration with the core.
+ ** 
+ ** For one reason ore another, any element in the UI can appear and go away.
+ ** This lifecycle behaviour corresponds to attachment and deregistration at the UI-Bus
+ ** 
+ ** In regular, operative state, an interface element may initiate _actions_, which translate
+ ** into _commands_ at the session interface. To complicate matters, there might be higher-level,
+ ** cooperative _gestures_ implemented within the interface, leading to actions being formed
+ ** similar to sentences of spoken language, with the help of a FocusConcept -- this means,
+ ** in the end, there is a _subject_ and a _predicate_. These need to be bound in order to
+ ** form an _action_. And some interface element takes on or relates to the role of the
+ ** underlying, the subject, the **tangible element**.
+ ** Some actions are very common and can be represented by a shorthand.
+ ** An example would be to tweak some property, which means to mutate the attribute of a
+ ** model element known beforehand. Such tweaks are often caused by direct interaction,
+ ** and thus have the tendency to appear in flushes, which we want to batch in order to
+ ** remove some load from the lower layers.
+ ** 
+ ** And then there are manipulations that _alter presentation state:_ Scrolling, canvas dragging,
+ ** expanding and collapsing, moving by focus or manipulation of a similar presentation control.
+ ** These manipulations in itself do not constitute an action. But there typically is some widget
+ ** or controller, which is responsible for the touched presentation state. If this entity judges
+ ** the state change to be relevant and persistent, it may [send][BusTerm::note()] a **state mark**
+ ** into the UI-Bus -- expecting this marked state to be remembered.
+ ** In turn this means the bus terminal might feed a state mark back into the tangible element,
+ ** expecting this state to be restored.
+ ** 
+ ** A special case of state marking is the presentation of _transient feedback._
+ ** Such feedback is pushed from "somewhere" towards given elements, which react through an
+ ** implementation dependent visual state change (flushing, colour change, marker icon).
+ ** If such state marking is to be persistent, the interface element has in turn to send
+ ** a specific state mark. An example would be a permanent error flag with an explanatory
+ ** text showed in mouse over.
+ ** 
+ ** And finally, there are the _essential updates_ -- any changes in the model _for real._
+ ** These are sent as notifications just to some relevant top level element, expecting this element
+ ** to request a [diff][tree-diff.hpp] and to mutate contents into shape recursively.
+ ** 
+ ** \par Interactions
+ ** - **lifecycle**: connect to an existing term, supply the [EntryID][Tangible::ID] of the new element.
+ **   This interaction also implies, that the element automatically detaches itself at end of life.
+ ** - **act**: send a [GenNode] representing the action
+ ** - **note**: _send_ a GenNode representing the _state mark_
+ ** - **mark**: _receive_ a [GenNode] representing the _feedback_ or a replayed _state mark_
+ ** - **diff**: ask to retrieve a diff, which
+ **   - either is an incremental status update
+ **   - or is a from-scratch reconfiguration
+ ** 
+ ** Beside these basic interactions, the generic element also exposes some common signal slots
+ ** - slotExpand() prompts the element to transition into expanded / unfolded state.
+ **   If this state is to be sticky, the element answers with a _state mark_
+ ** - slotReveal() prompts the element to bring the indicated child into sight.
+ **   Typically, this request will "bubble up" recursively.
+ ** These slots are defined to be `sigc::trackable` for automated disconnection
+ ** see [Ticket #940][http://issues.lumiera.org/ticket/940#comment:3] for an explanation.
+ ** 
+ ** 
+ ** @see [AbstractTangible_test]
+ ** @see [BusTerm_test]
  ** 
  */
 
@@ -40,8 +129,6 @@
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/interact/invocation-trail.hpp"
 #include "lib/idi/entry-id.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <sigc++/trackable.h>
@@ -51,8 +138,6 @@
 namespace gui {
 namespace model {
   
-//  using lib::HashVal;
-//  using util::isnil;
   using std::string;
   
   
@@ -62,8 +147,7 @@ namespace model {
    * this foundation element, which forms the joint and attachment to the UI backbone,
    * which is the [UI-Bus][ui-bus.hpp]. Any tangible element acquires a distinct identity
    * and has to be formed starting from an already existing bus nexus.
-   * 
-   * @todo write type comment...
+   * @see [explanation of the basic interactions][tangible.hpp]
    */
   class Tangible
     : public sigc::trackable
@@ -115,7 +199,7 @@ namespace model {
     private:
     };
   
-
+  
   
   /** generic handler for all incoming "state mark" messages */
   inline void

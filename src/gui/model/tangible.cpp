@@ -25,33 +25,18 @@
  ** Common base implementation of all tangible and connected interface elements.
  ** 
  ** @see abstract-tangible-test.cpp
+ ** @see [explanation of the fundamental interactions][tangible.hpp]
  ** 
  */
 
 
-//#include "lib/util.hpp"
-//#include "lib/symbol.hpp"
-//#include "include/logging.h"
 #include "gui/model/tangible.hpp"
 #include "gui/model/widget.hpp"
 #include "gui/model/controller.hpp"
 
-//#include <boost/noncopyable.hpp>
-//#include <string>
-//#include <map>
-
-//using std::map;
-//using std::string;
-
-//using util::contains;
-//using util::isnil;
 
 namespace gui {
 namespace model {
-  
-  namespace { // internal details
-    
-  } // internal details
   
   
   
@@ -59,7 +44,12 @@ namespace model {
   
   
   
-  /** */
+  /** invoke the generic reset hook
+   * @note the actual subclass has to override the doReset() hook
+   *       to perform the actual clean-up work.
+   * @remarks the intention is that, after invoking reset(), the
+   *       interface element or controller is in pristine (presentation) state
+   */
   void
   Tangible::reset()
     {
@@ -123,7 +113,13 @@ namespace model {
   
   
   /**
-   * @todo not clear yet what needs to be done
+   * @todo 12/2015 not clear yet what needs to be done
+   * @remarks the intention is to request the given child
+   *          to be brought into sight. We need to set up some kind
+   *          of children registration, but better not do this in
+   *          a completely generic fashion, for danger of overengineering.
+   *          Moreover, it is not clear yet, who will issue this request
+   *          and at which element the initial request can/will be targeted.
    */
   void
   Tangible::slotReveal(ID child)
