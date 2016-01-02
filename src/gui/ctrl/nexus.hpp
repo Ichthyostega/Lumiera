@@ -84,6 +84,7 @@ namespace ctrl{
       RoutingTable routingTable_;
       
       
+    protected:
       /** route mark messages down to the individual Tangible.
        * @note only messages to elements currently registered
        *       in the routing table are dispatched. All other
@@ -128,6 +129,12 @@ namespace ctrl{
           return lib::idi::instanceTypeID(this);
         }
       
+      
+      size_t
+      size()  const
+        {
+          return routingTable_.size();
+        }
       
     public:
       explicit

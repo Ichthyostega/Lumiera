@@ -2383,7 +2383,7 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
-<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201512190214" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="18">
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201601021718" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="21">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 
 !prerequisites for issuing a command
@@ -2399,7 +2399,7 @@ Within the Lumiera architecture, with the very distinct separation between [[Ses
 ** the focus and current selection is relevant
 ** the user interaction might supply context by pointing at something
 ** the proximity of tangible interface elements might be sufficient to figure out missing parts
-** in fact it might be necessary to prepend the invocation of a detail parameter dialog to the command execution
+** in fact it might be necessary to intersperse the invocation of a detail parameter dialogue prior to command execution
 * and finally, after considering all these concerns, it is possible to wire a connection into the actual invocation point in UI
 This observation might be surprising; even while a given command is well defined, we can not just invoke it right away. The prevalence of all these intermediary complexities is what opens the necessity and the room for InteractionControl, which is a concern specific to human-computer interfaces. Faced with such a necessity, there are two fundamentally different approaches.
 !!!Binding close to the widget
@@ -2954,9 +2954,9 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" tags="def GuiIntegration draft" changecount="1">
+<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201601021714" tags="def GuiIntegration draft" changecount="2">
 <pre>//A command in preparation of being issued from the UI.//
-The actual persistent operations on the session model are defined as DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].</pre>
+The actual persistent operations on the session model are defined through a DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].</pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="201208311625" tags="spec Rendering draft">
 <pre>The actual media data is rendered by [[individually scheduled render jobs|RenderJob]]. All these calculations together implement a [[stream of calculations|CalcStream]], as demanded and directed by the PlayProcess. During the preparation of playback, a ''node planning phase'' is performed, to arrange for [[dispatching|FrameDispatcher]] the individual calculations per frame.  The goal of these //preparations//&amp;nbsp; is to find out

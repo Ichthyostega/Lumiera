@@ -119,7 +119,7 @@ namespace test {
           
           MockElm mock(elmID);
           CHECK (nexusLog.verifyCall("routeAdd").on("TestNexus").arg(elmID,"MockElm")
-                         .beforeEvent("TestNexus", "add route to bID-zeitgeist"));
+                         .beforeEvent("TestNexus", "added route to bID-zeitgeist"));
           
           EventLog elmLog = mock.getLog();
           CHECK (elmLog.verifyCall("ctor").on(&mock)
@@ -137,10 +137,10 @@ namespace test {
           CHECK (elmLog.verifyEvent("collapsed"));
           CHECK (nexusLog.verifyCall("note").on("TestNexus").arg("zeitgeist", "collapse"));
           
-          // send a note down to the mock element
-          gui::test::Nexus::testUI().note (elmID, GenNode("Flash", 23));
+          // send a state mark down to the mock element
+          gui::test::Nexus::testUI().mark (elmID, GenNode("Flash", 23));
           CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "Flash")
-                         .beforeEvent("TestNexus", "note to bID-zeitgeist"));
+                         .beforeEvent("TestNexus", "mark to bID-zeitgeist"));
           CHECK (elmLog.verifyCall("doFlash").on("zeitgeist"));
           
           
@@ -148,7 +148,7 @@ namespace test {
           mock.kill();
           CHECK (elmLog.verifyEvent("destroy","zeitgeist"));
           CHECK (nexusLog.verifyCall("routeDetach").on("TestNexus").arg(elmID)
-                         .beforeEvent("TestNexus", "remove route to bID-zeitgeist"));
+                         .beforeEvent("TestNexus", "removed route to bID-zeitgeist"));
           
           gui::test::Nexus::testUI().note (elmID, GenNode("Flash", 88));
           CHECK (nexusLog.verify("remove route to bID-zeitgeist")

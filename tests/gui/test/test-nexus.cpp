@@ -43,6 +43,7 @@
 #include "lib/idi/entry-id.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "lib/depend.hpp"
+#include "lib/format-string.hpp"
 //#include "lib/util.hpp"
 
 #include <iostream>
@@ -57,6 +58,7 @@ using std::string;
 using lib::test::EventLog;
 using lib::diff::GenNode;
 using gui::ctrl::BusTerm;
+using util::_Fmt;
 //using util::contains;
 //using util::isnil;
 
@@ -64,6 +66,48 @@ namespace gui {
 namespace test{
   
   namespace { // internal details
+    
+    using lib::Variant;
+    using lib::diff::Rec;
+    using lib::diff::DataValues;
+    
+    using BusHub = gui::ctrl::Nexus;
+    
+    
+    /** helper to figure out if a command message
+     *  is a binding or invocation message.
+     * @remarks from a design standpoint, this is ugly,
+     *          since we're basically switching on type.
+     *          Well -- we do it just for diagnostics here,
+     *          so _look away please..._
+     */
+    inline bool
+    isCommandBinding (GenNode const& msg)
+    {
+      class CommandBindingDetector
+        : public Variant<DataValues>::Predicate
+        {
+          bool handle  (Rec const&) override { return true; }
+        }
+        detector;
+      
+      return msg.data.accept (detector);
+    }
+    
+    inline string
+    invocationStage (GenNode const& msg)
+    {
+      return isCommandBinding(msg)? string("binding for")
+                                  : string("invoke");
+    }
+    
+    inline string
+    renderBindingArgs (GenNode const& msg)
+    {
+      return isCommandBinding(msg)? "| " + string(msg.data.get<Rec>())
+                                  : "";
+    }
+    
     
     /**
      * @internal fake interface backbone and unit test rig
@@ -75,7 +119,7 @@ namespace test{
      * state messages
      */
     class TestNexus
-      : public gui::ctrl::Nexus
+      : public BusHub
       {
         EventLog log_{this};
         
@@ -83,25 +127,59 @@ namespace test{
         virtual void
         act (GenNode const& command)
           {
-            UNIMPLEMENTED("receive and handle command invocation");
+            log_.call(this, "act", command);
+            BusHub::act (command);
+            log_.event("TestNexus", _Fmt("%s command \"%s\"%s")
+                                        % invocationStage(command)
+                                        % command.idi.getSym()
+                                        % renderBindingArgs(command));
           }
-        
         
         virtual void
         note (ID subject, GenNode const& mark)  override
           {
-            UNIMPLEMENTED ("receive and handle presentation state note messages.");
+            log_.call(this, "note", subject, mark);
+            BusHub::note (subject, mark);
+            log_.event("TestNexus", _Fmt("processed note from %s |%s") % subject % mark);
           }
         
+        virtual void
+        mark (ID subject, GenNode const& mark)  override
+          {
+            log_.call(this, "mark", subject, mark);
+            BusHub::mark (subject, mark);
+            log_.event("TestNexus", _Fmt("delivered mark to %s |%s") % subject % mark);
+          }
         
         virtual operator string()  const
           {
             return getID().getSym()+"."+lib::idi::instanceTypeID(this);
           }
         
+        virtual BusTerm&
+        routeAdd (ID identity, Tangible& newNode)  override
+          {
+            log_.call(this, "routeAdd", identity, newNode);
+            BusHub::routeAdd (identity, newNode);
+            log_.event("TestNexus", _Fmt("added route to %s |%s| table-size=%2d")
+                                        % identity
+                                        % lib::idi::instanceTypeID(&newNode)
+                                        % BusHub::size());
+            return *this;
+          }
+        
+        virtual void
+        routeDetach (ID node)  noexcept override
+          {
+            log_.call(this, "routeDetach", node);
+            BusHub::routeDetach (node);
+            log_.event("TestNexus", _Fmt("removed route to %s | table-size=%2d") % node % BusHub::size());
+          }
+        
+        
       public:
         TestNexus()
-          : Nexus(*this, lib::idi::EntryID<TestNexus>("mock-UI"))
+          : BusHub(*this, lib::idi::EntryID<TestNexus>("mock-UI"))
           { }
         
         // standard copy operations
