@@ -89,8 +89,10 @@ namespace test {
    *       - message casting
    *       - error state indication
    *       
+   * @see BusTerm_test
    * @see SessionElementQuery_test
-   * @see gui::model::SessionFacade
+   * @see tangible.hpp
+   * @see ui-bus.hpp
    */
   class AbstractTangible_test : public Test
     {
@@ -111,19 +113,19 @@ namespace test {
        * with the ability to stand-in for actual elements present in the real GUI.
        * This allows us to rig a emulated test user interface to cover interactions
        * involving some communication from or to interface elements. After setting up
-       * a [MockElm] with a suitable name / ID, we're able to operate this element
-       * programmatically and to send messages and responses from the core "up"
-       * to this mocked interface. And since this mock element embodies an
-       * [event log](\ref EventLog), the unit test code can verify the occurrence
-       * of expected events, invocations and responses.
+       * a [mock UI-element](\ref MockElm) with a suitable name / ID, we're able to
+       * operate this element programmatically and to send messages and responses
+       * from the core "up" to this mocked interface. And since this mock element
+       * embodies an [event log](\ref EventLog), the unit test code can verify
+       * the occurrence of expected events, invocations and responses.
        * 
-       * \par connectivity
+       * ### connectivity
        * Any mock element will automatically connect against the [Test-Nexus](test/test-nexus.hpp),
        * so to be suitably rigged for unit testing. This means, there is no _live connection_
        * to the session, but any command- or other messages will be captured and can be
        * retrieved or verified from the test code. Since lifecycle and robustness in
        * "post mortem" situations tend to be tricky for UI code, we provide a dedicated
-       * ["zombification"](\ref gui::test::TestNexus::zombificate()) feature: a \ref MockElm can be
+       * ["zombification" feature](\ref gui::test::TestNexus::zombificate): a \ref MockElm can be
        * turned into an _almost dead_ state, while still hanging around. It will be detached from the
        * "living" Test-Nexus and re-wired to some special, hidden "Zombie Nexus", causing any
        * further messaging activity to be logged and ignored.

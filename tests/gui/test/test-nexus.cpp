@@ -177,6 +177,7 @@ namespace test{
             log().call(this, "routeAdd", identity, newNode);
             log().error ("attempt to connect against ZombieNexus");
             cerr << "connect("<<string(identity)<<" -> ZombieNexus" <<endl;
+            return *this;
           }
         
         virtual void

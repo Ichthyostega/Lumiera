@@ -22,7 +22,10 @@
 
 
 #include "lib/test/run.hpp"
-//#include "gui/model/session-facade.hpp"
+#include "test/test-nexus.hpp"
+#include "test/mock-elm.hpp"
+#include "lib/idi/entry-id.hpp"
+#include "lib/diff/gen-node.hpp"
 //#include "gui/model/diagnostics.hpp"
 //#include "lib/util.hpp"
 
@@ -32,6 +35,9 @@
 //#include <string>
 //#include <map>
 
+using lib::idi::EntryID;
+using gui::test::MockElm;
+using lib::diff::GenNode;
 //using boost::lexical_cast;
 //using util::contains;
 //using std::string;
@@ -54,18 +60,20 @@ namespace test {
   
   /**************************************************************************//**
    * @test cover the standard node element (terminal element) within the UI-Bus,
-   *       with the help of an attached mock UI element.
-   *       
-   *       This test enacts the fundamental generic communication patterns
-   *       to verify the messaging behaviour
-   *       - attaching a [BusTerm]
-   *       - generating a command invocation
-   *       - argument passing
-   *       - capture a _state mark_
-   *       - replay a _state mark_
-   *       - cast messages and error states downstream
-   *       - generic operating of interface states
-   *       - detaching on element destruction
+   * with the help of an attached mock UI element. Contrary to the related
+   * [ui-element test](AbstractTangible_test), here we focus on the bus side
+   * of the standard interactions.
+   * 
+   * This test enacts the fundamental generic communication patterns
+   * to verify the messaging behaviour
+   * - attaching a \ref BusTerm
+   * - generating a command invocation
+   * - argument passing
+   * - capture a _state mark_
+   * - replay a _state mark_
+   * - cast messages and error states downstream
+   * - generic operating of interface states
+   * - detaching on element destruction
    *       
    * @see AbstractTangible_test
    * @see gui::model::Tangible
@@ -88,10 +96,66 @@ namespace test {
         }
       
       
+      /** @test build a new BusTerm and verify connectivity.
+       * Every [tangible UI-element](\ref Tangible) bears an embedded BusTerm
+       * member. Since the latter _requires another, up-link BusTerm_ on construction,
+       * connection to the [UI-Bus](ui-bus.hpp) is structurally ensured. Moreover,
+       * when hooking up a new UI-element, the initialisation of the embedded BusTerm
+       * will cause a down-link connection to be installed into the central routing
+       * table within the \ref Nexus, the hub of the UI-Bus. Routing and addressing
+       * is based on the UI-element's unique EntryID, destruction of the element,
+       * through invocation of BusTerm's dtor, will ensure deregistration
+       * from the Hub.
+       */
       void
       attachNewBusTerm ()
         {
-          UNIMPLEMENTED ("build a new BusTerm and verify connectivity");
+          // our dummy will be linked with this identity
+          EntryID<MockElm> elmID{"zeitgeist"};
+          
+          // Access the log on the Test-Nexus hub
+          EventLog nexusLog = gui::test::Nexus::getLog();
+          CHECK (nexusLog.ensureNot("zeitgeist"));
+          
+          MockElm mock(elmID);
+          CHECK (nexusLog.verifyCall("routeAdd").on("TestNexus").arg(elmID,"MockElm")
+                         .beforeEvent("TestNexus", "add route to bID-zeitgeist"));
+          
+          EventLog elmLog = mock.getLog();
+          CHECK (elmLog.verifyCall("ctor").on(&mock)
+                       .beforeEvent("create", "zeitgeist"));
+          
+          
+          // now verify there is indeed bidirectional connectivity...
+          CHECK (elmLog.ensureNot("collapsed"));
+          CHECK (elmLog.ensureNot("doFlash"));
+          CHECK (nexusLog.ensureNot("zeitgeist").arg("collapse"));
+          CHECK (nexusLog.ensureNot("zeitgeist").arg("Flash"));
+          
+          // invoke action on element to cause upstream message (with a "state mark")
+          mock.slotCollapse();
+          CHECK (elmLog.verifyEvent("collapsed"));
+          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg("zeitgeist", "collapse"));
+          
+          // send a note down to the mock element
+          gui::test::Nexus::testUI().note (elmID, GenNode("Flash", 23));
+          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "Flash")
+                         .beforeEvent("TestNexus", "note to bID-zeitgeist"));
+          CHECK (elmLog.verifyCall("doFlash").on("zeitgeist"));
+          
+          
+          // kill the zeitgeist and verify disconnection
+          mock.kill();
+          CHECK (elmLog.verifyEvent("destroy","zeitgeist"));
+          CHECK (nexusLog.verifyCall("routeDetach").on("TestNexus").arg(elmID)
+                         .beforeEvent("TestNexus", "remove route to bID-zeitgeist"));
+          
+          gui::test::Nexus::testUI().note (elmID, GenNode("Flash", 88));
+          CHECK (nexusLog.verify("remove route to bID-zeitgeist")
+                         .beforeCall("note").on("TestNexus").arg(elmID, "Flash")
+                         .beforeEvent("warn","discarding note to unknown bID-zeitgeist"));
+          CHECK (elmLog.ensureNot("Flash")
+                       .afterEvent("destroy","zeitgeist"));
         }
       
       
