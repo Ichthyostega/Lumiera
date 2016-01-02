@@ -643,18 +643,21 @@ namespace test{
         }
       
       
-      /** */
+      /** purge log contents while retaining just the original Header-ID */
       EventLog&
       clear()
         {
-          UNIMPLEMENTED ("clear log contents while retaining just the original Header-ID");
+          string originalLogID = this->getID();
+          return this->clear (originalLogID);
         }
       
-      /** */
+      /** purge log contents and also reset Header-ID */
       EventLog&
       clear (string alteredLogID)
         {
-          UNIMPLEMENTED ("clear log contents and reset Header-ID");
+          log_->clear();
+          log({"type=EventLogHeader", "this="+alteredLogID});
+          return *this;
         }
       
       EventLog&
@@ -667,7 +670,7 @@ namespace test{
       EventLog&
       clear (const X *const obj)
         {
-          UNIMPLEMENTED ("clear log contents and reset Header-ID");
+          return clear (idi::instanceTypeID (obj));
         }
       
       

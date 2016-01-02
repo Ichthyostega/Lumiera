@@ -234,6 +234,12 @@ namespace test{
     return testNexus().getLog();
   }
   
+  lib::test::EventLog const&
+  Nexus::startNewLog()
+  {
+    return testNexus().getLog().clear();
+  }
+  
   
   
   /**

@@ -31,7 +31,7 @@
 
 
 //#include <boost/lexical_cast.hpp>
-//#include <iostream>
+#include <iostream>
 //#include <string>
 //#include <map>
 
@@ -41,8 +41,8 @@ using lib::diff::GenNode;
 //using boost::lexical_cast;
 //using util::contains;
 //using std::string;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
 
 
 namespace gui  {
@@ -114,7 +114,7 @@ namespace test {
           EntryID<MockElm> elmID{"zeitgeist"};
           
           // Access the log on the Test-Nexus hub
-          EventLog nexusLog = gui::test::Nexus::getLog();
+          EventLog nexusLog = gui::test::Nexus::startNewLog();
           CHECK (nexusLog.ensureNot("zeitgeist"));
           
           MockElm mock(elmID);
@@ -156,6 +156,15 @@ namespace test {
                          .beforeEvent("warn","discarding note to unknown bID-zeitgeist"));
           CHECK (elmLog.ensureNot("Flash")
                        .afterEvent("destroy","zeitgeist"));
+          
+          
+          cout << "____Probe-Log_________________\n"
+               << util::join(mock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(gui::test::Nexus::getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
       

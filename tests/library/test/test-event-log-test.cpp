@@ -369,7 +369,7 @@ namespace test{
           log.clear("unbearable");
           CHECK (log.ensureNot("eggs"));
           CHECK (log.ensureNot("obnoxious"));
-          CHECK (log.verify("unbearable").type("EventLogHeader").on(&log));
+          CHECK (log.verify("unbearable").type("EventLogHeader").on("unbearable"));
         }
     };
   

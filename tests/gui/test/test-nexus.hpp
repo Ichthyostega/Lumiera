@@ -80,6 +80,7 @@ namespace test{
       static void zombificate(ctrl::BusTerm&);
       
       static lib::test::EventLog const& getLog();
+      static lib::test::EventLog const& startNewLog();
     };
   
   
