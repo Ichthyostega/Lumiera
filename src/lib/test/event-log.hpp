@@ -643,6 +643,34 @@ namespace test{
         }
       
       
+      /** */
+      EventLog&
+      clear()
+        {
+          UNIMPLEMENTED ("clear log contents while retaining just the original Header-ID");
+        }
+      
+      /** */
+      EventLog&
+      clear (string alteredLogID)
+        {
+          UNIMPLEMENTED ("clear log contents and reset Header-ID");
+        }
+      
+      EventLog&
+      clear (const char* alteredLogID)
+        {
+          return clear (string{alteredLogID});
+        }
+      
+      template<class X>
+      EventLog&
+      clear (const X *const obj)
+        {
+          UNIMPLEMENTED ("clear log contents and reset Header-ID");
+        }
+      
+      
       
       /* ==== Logging API ==== */
       

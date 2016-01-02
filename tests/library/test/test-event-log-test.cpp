@@ -67,6 +67,7 @@ namespace test{
           verify_eventLogging();
           verify_genericLogging();
           verify_regExpMatch();
+          verify_logPurging();
         }
       
       
@@ -350,6 +351,25 @@ namespace test{
           
           // argument match must cover all arguments...
           CHECK (log.ensureNot("spam").argMatch("bacon|^spam"));
+        }
+      
+      
+      void
+      verify_logPurging ()
+        {
+          EventLog log("obnoxious");
+          log.create("spam").create("spam").create("spam");
+          CHECK (log.verify("spam").after("obnoxious"));
+          
+          log.clear();
+          CHECK (log.ensureNot("spam"));
+          CHECK (log.verify("obnoxious").type("EventLogHeader").on("obnoxious"));
+          
+          log.warn("eggs");
+          log.clear("unbearable");
+          CHECK (log.ensureNot("eggs"));
+          CHECK (log.ensureNot("obnoxious"));
+          CHECK (log.verify("unbearable").type("EventLogHeader").on(&log));
         }
     };
   
