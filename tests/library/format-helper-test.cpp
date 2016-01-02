@@ -94,6 +94,7 @@ namespace test {
         {
           check2String();
           checkStringJoin();
+          checkPrefixSuffix();
         }
       
       
@@ -141,6 +142,52 @@ namespace test {
           cout << join(dubious, "--+--") << endl;
           cout << join(transformIterator(eachElm(dubious)
                                         ,justCount)) << endl;
+        }
+      
+      
+      /** @test convenience helpers to deal with prefixes and suffixes */
+      void
+      checkPrefixSuffix()
+        {
+          CHECK (startsWith ("abcdef", "abcdef"));
+          CHECK (startsWith ("abcdef", "abcde"));
+          CHECK (startsWith ("abcdef", "abcd"));
+          CHECK (startsWith ("abcdef", "abc"));
+          CHECK (startsWith ("abcdef", "ab"));
+          CHECK (startsWith ("abcdef", "a"));
+          CHECK (startsWith ("abcdef", ""));
+          CHECK (startsWith ("", ""));
+          
+          CHECK (not startsWith ("abc", "abcd"));
+          CHECK (not startsWith ("a", "ä"));
+          CHECK (not startsWith ("ä", "a"));
+          
+          CHECK (endsWith ("abcdef", "abcdef"));
+          CHECK (endsWith ("abcdef", "bcdef"));
+          CHECK (endsWith ("abcdef", "cdef"));
+          CHECK (endsWith ("abcdef", "def"));
+          CHECK (endsWith ("abcdef", "ef"));
+          CHECK (endsWith ("abcdef", "f"));
+          CHECK (endsWith ("abcdef", ""));
+          CHECK (endsWith ("", ""));
+          
+          CHECK (not endsWith ("abc", " abc"));
+          CHECK (not endsWith ("a", "ä"));
+          CHECK (not endsWith ("ä", "a"));
+          
+          string abc{"abcdef"};
+          removePrefix(abc, "ab");
+          CHECK ("cdef" == abc);
+          removeSuffix(abc, "ef");
+          CHECK ("cd" == abc);
+          
+          abc = "bcdef";
+          removePrefix(abc, "ab");
+          CHECK ("bcdef" == abc);
+          removeSuffix(abc, "abcdef");
+          CHECK ("bcdef" == abc);
+          removeSuffix(abc, "bcdef");
+          CHECK (isnil (abc));
         }
     };
   
