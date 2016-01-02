@@ -65,6 +65,8 @@ namespace util {
   using lib::meta::can_lexical2string;
   using lib::meta::can_IterForEach;
   using lib::Symbol;
+  using util::removePrefix;
+  using util::removeSuffix;
   using util::isnil;
   using std::string;
   using std::move;
@@ -153,9 +155,14 @@ namespace util {
   /** @return a string denoting the type. */
   template<typename TY>
   inline string
-  tyStr (const TY* =0)
+  tyStr (const TY* obj=0)
   {
-    return "«"+ lib::test::demangleCxx (typeid(TY).name())+"»";
+    auto mangledType = obj? typeid(obj).name()
+                          : typeid(TY).name();
+    string typeName = lib::test::demangleCxx (mangledType);
+    removePrefix (typeName, "const ");
+    removeSuffix (typeName, " const*");
+    return "«"+ typeName +"»";
   }
   
   template<typename TY>
