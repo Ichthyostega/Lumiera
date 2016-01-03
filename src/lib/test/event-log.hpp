@@ -203,12 +203,7 @@ namespace test{
         {
           return [=](Entry const& entry)
                     {
-                      return (  entry.getType() == "event"
-                             or entry.getType() == "error"
-                             or entry.getType() == "create"
-                             or entry.getType() == "destroy"
-                             or entry.getType() == "logJoin"
-                             or entry.getType() == classifier
+                      return (  entry.getType() == classifier
                              or (entry.hasAttribute("ID") and contains (entry.get("ID"), classifier))
                              )
                          and !isnil(entry.scope())
