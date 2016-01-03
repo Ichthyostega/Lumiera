@@ -108,7 +108,7 @@ namespace ctrl{
       
       virtual void act  (GenNode const& command);
       virtual void note (ID subject, GenNode const& mark);
-      virtual void mark (ID subject, GenNode const& mark);
+      virtual bool mark (ID subject, GenNode const& mark);
       
       virtual operator string()  const;
       

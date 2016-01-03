@@ -134,7 +134,7 @@ namespace test{
         virtual void
         act (GenNode const& command)
           {
-            log_.call(this, "act", command);
+            log_.call (this, "act", command);
             commandHandler_(command);
             log_.event("TestNexus", _Fmt("%s command \"%s\"%s")
                                         % invocationStage(command)
@@ -145,23 +145,25 @@ namespace test{
         virtual void
         note (ID subject, GenNode const& mark)  override
           {
-            log_.call(this, "note", subject, mark);
+            log_.call (this, "note", subject, mark);
             stateMarkHandler_(subject, mark);
             log_.event("TestNexus", _Fmt("processed note from %s |%s") % subject % mark);
           }
         
-        virtual void
+        virtual bool
         mark (ID subject, GenNode const& mark)  override
           {
             log_.call(this, "mark", subject, mark);
-            BusHub::mark (subject, mark);
-            log_.event("TestNexus", _Fmt("delivered mark to %s |%s") % subject % mark);
+            if (BusHub::mark (subject, mark))
+              log_.event ("TestNexus", _Fmt("delivered mark to %s |%s") % subject % mark);
+            else
+              log_.warn (_Fmt("discarding mark to unknown %s |%s") % subject % mark);
           }
         
         virtual BusTerm&
         routeAdd (ID identity, Tangible& newNode)  override
           {
-            log_.call(this, "routeAdd", identity, instanceTypeID(&newNode));
+            log_.call (this, "routeAdd", identity, instanceTypeID(&newNode));
             BusHub::routeAdd (identity, newNode);
             log_.event("TestNexus", _Fmt("added route to %s |%s| table-size=%2d")
                                         % identity
@@ -173,7 +175,7 @@ namespace test{
         virtual void
         routeDetach (ID node)  noexcept override
           {
-            log_.call(this, "routeDetach", node);
+            log_.call (this, "routeDetach", node);
             BusHub::routeDetach (node);
             log_.event("TestNexus", _Fmt("removed route to %s | table-size=%2d") % node % BusHub::size());
           }
@@ -274,12 +276,13 @@ namespace test{
                  << " -> ZombieNexus" <<endl;
           }
         
-        virtual void
+        virtual bool
         mark (ID subject, GenNode const& mark)  override
           {
             log().call(this, "mark", subject, mark);
             log().error ("request to deliver mark message via ZombieNexus");
             cerr << "mark message -> ZombieNexus" <<endl;
+            return false;
           }
         
         virtual BusTerm&

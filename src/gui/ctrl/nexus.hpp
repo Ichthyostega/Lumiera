@@ -90,14 +90,17 @@ namespace ctrl{
        *       in the routing table are dispatched. All other
        *       messages are dropped silently.
        */
-      virtual void
+      virtual bool
       mark (ID subject, GenNode const& mark)  override
         {
           auto entry = routingTable_.find (subject);
           if (entry == routingTable_.end())
-            return;
+            return false;
           else
-            entry->second->mark (mark);
+            {
+              entry->second->mark (mark);
+              return true;
+            }
         }
       
       /** add a new down-link connection to the routing table

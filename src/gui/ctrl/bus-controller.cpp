@@ -148,10 +148,10 @@ namespace ctrl {
    *          eventually, which in turn knows hot to reach the element.
    * @note messages to unreachable elements will be dropped silently.
    */
-  void
+  bool
   BusTerm::mark (ID subject, GenNode const& mark)
   {
-    theBus_.mark (subject,mark);
+    return theBus_.mark (subject,mark);
   }
   
   

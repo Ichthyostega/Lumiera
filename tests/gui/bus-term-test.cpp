@@ -136,11 +136,11 @@ namespace test {
           // invoke action on element to cause upstream message (with a "state mark")
           mock.slotCollapse();
           CHECK (elmLog.verifyEvent("collapsed"));
-          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "collapse"));
+          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "GenNode-ID(\"expand\")-DataCap|«bool»|0"));
           
           // send a state mark down to the mock element
           gui::test::Nexus::testUI().mark (elmID, GenNode("Flash", 23));
-          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "Flash")
+          CHECK (nexusLog.verifyCall("mark").on("TestNexus").arg(elmID, "Flash")
                          .beforeEvent("TestNexus", "mark to bID-zeitgeist"));
           CHECK (elmLog.verifyCall("doFlash").on("zeitgeist"));
           
@@ -151,10 +151,10 @@ namespace test {
           CHECK (nexusLog.verifyCall("routeDetach").on("TestNexus").arg(elmID)
                          .beforeEvent("TestNexus", "removed route to bID-zeitgeist"));
           
-          gui::test::Nexus::testUI().note (elmID, GenNode("Flash", 88));
+          gui::test::Nexus::testUI().mark (elmID, GenNode("Flash", 88));
           CHECK (nexusLog.verify("remove route to bID-zeitgeist")
-                         .beforeCall("note").on("TestNexus").arg(elmID, "Flash")
-                         .beforeEvent("warn","discarding note to unknown bID-zeitgeist"));
+                         .beforeCall("mark").on("TestNexus").arg(elmID, "Flash")
+                         .beforeEvent("warn","discarding mark to unknown bID-zeitgeist"));
           CHECK (elmLog.ensureNot("Flash")
                        .afterEvent("destroy","zeitgeist"));
           
