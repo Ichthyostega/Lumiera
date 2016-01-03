@@ -236,7 +236,7 @@ namespace test{
           log_.destroy (getID().getSym());
           
           Nexus::zombificate (this->uiBus_);
-          log_.event ("successfully connected to zombie bus");
+          log_.event (string(getID()) + " successfully connected to zombie bus");
         }
       
       

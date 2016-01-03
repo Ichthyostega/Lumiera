@@ -28,9 +28,17 @@
  ** features through the [front-end](\ref gui::test::TestNexus), while the
  ** actual implementation instances are placed [as singletons](depend.hpp)
  ** 
- ** @todo initial draft and WIP-WIP-WIP as of 11/2015
+ ** This test setup will mostly treat messages similar to the [real UI-Bus hub](nexus.hpp),
+ ** with additional [logging](\ref event-log.hpp). Since the TestNexus runs as singleton,
+ ** there is a single shared "nexus-log", which can be [accessed](test::Nexus::getLog) or
+ ** even [cleared](test::Nexus::startNewLog) through the [static front-end](test::Nexus).
+ ** But there is no connection to any [core services](\ref core-service.hpp), so neither
+ ** commands nor state marks will be processed in any way. In case the unit tests need to
+ ** integrate with or verify these handling operations, we provide the ability to install
+ ** custom handler functions.
  ** 
  ** @see abstract-tangible-test.cpp
+ ** @see BusTerm_test
  ** 
  */
 
@@ -48,9 +56,7 @@
 
 #include <iostream>
 #include <string>
-//#include <map>
 
-//using std::map;
 using std::cerr;
 using std::endl;
 using std::string;
@@ -230,7 +236,7 @@ namespace test{
                   };
           }
       };
-
+    
     /** singleton instance of the [TestNexus]
      *  used for rigging unit tests */
     lib::Depend<TestNexus> testNexus;

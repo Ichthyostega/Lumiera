@@ -26,22 +26,16 @@
 #include "test/mock-elm.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
-//#include "gui/model/diagnostics.hpp"
 //#include "lib/util.hpp"
 
 
-//#include <boost/lexical_cast.hpp>
 #include <iostream>
-//#include <string>
-//#include <map>
 
 using lib::idi::EntryID;
 using lib::idi::BareEntryID;
 using gui::test::MockElm;
 using lib::diff::GenNode;
-//using boost::lexical_cast;
 //using util::contains;
-//using std::string;
 using std::cout;
 using std::endl;
 
@@ -75,7 +69,7 @@ namespace test {
    * - cast messages and error states downstream
    * - generic operating of interface states
    * - detaching on element destruction
-   *       
+   * 
    * @see AbstractTangible_test
    * @see gui::model::Tangible
    * @see gui::ctrl::BusTerm
@@ -145,14 +139,14 @@ namespace test {
           CHECK (elmLog.verifyCall("doFlash").on("zeitgeist"));
           
           
-          // kill the zeitgeist and verify disconnection
+          // kill the zeitgeist and verify disconnectedness
           mock.kill();
           CHECK (elmLog.verifyEvent("destroy","zeitgeist"));
           CHECK (nexusLog.verifyCall("routeDetach").on("TestNexus").arg(elmID)
                          .beforeEvent("TestNexus", "removed route to bID-zeitgeist"));
           
           gui::test::Nexus::testUI().mark (elmID, GenNode("Flash", 88));
-          CHECK (nexusLog.verify("remove route to bID-zeitgeist")
+          CHECK (nexusLog.verify("removed route to bID-zeitgeist")
                          .beforeCall("mark").on("TestNexus").arg(elmID, "Flash")
                          .beforeEvent("warn","discarding mark to unknown bID-zeitgeist"));
           CHECK (elmLog.ensureNot("Flash")
