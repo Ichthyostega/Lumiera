@@ -103,8 +103,12 @@ namespace ctrl{
       /** add a new down-link connection to the routing table
        * @param identity the [endpoint-ID](\ref BusTerm::endpointID_) used
        *         to address the new element to be connected to the bus.
+       * @param newNode to add the address (!) into the routing table
        * @return backlink for the new Tangible's BusTerm to
        *         attach itself to the Nexus.
+       * @note at call time, the second param, the newNode will typically
+       *         be just a Tangible (and not a subclass yet),
+       *         since this function is invoked from ctor.
        */
       virtual BusTerm&
       routeAdd (ID identity, Tangible& newNode)  override

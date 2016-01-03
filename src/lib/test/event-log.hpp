@@ -193,6 +193,7 @@ namespace test{
                              or entry.getType() == "destroy"
                              or entry.getType() == "logJoin"
                              )
+                         and !isnil(entry.scope())
                          and contains (*entry.scope(), match);
                     };
         }
@@ -210,6 +211,7 @@ namespace test{
                              or entry.getType() == classifier
                              or (entry.hasAttribute("ID") and contains (entry.get("ID"), classifier))
                              )
+                         and !isnil(entry.scope())
                          and contains (*entry.scope(), match);
                     };
         }
@@ -682,9 +684,9 @@ namespace test{
       EventLog&
       event (string text)
         {
-          log({"type=event", text});
-          return *this;
-        }
+          log ("event", ArgSeq{}, ArgSeq{text});  // we use this ctor variant to ensure
+          return *this;                          //  that text is not misinterpreted as attribute,
+        }                                       //   which might happen when text contains a '='
       
       /** log some event, with additional ID or classifier
        * @param classifier info to be saved into the `ID` attribute
@@ -693,7 +695,7 @@ namespace test{
       EventLog&
       event (string classifier, string text)
         {
-          log({"type=event", "ID="+classifier, text});
+          log ("event", ArgSeq{"ID="+classifier}, ArgSeq{text});
           return *this;
         }
       

@@ -55,8 +55,12 @@ using std::cerr;
 using std::endl;
 using std::string;
 
-using lib::test::EventLog;
+using lib::Variant;
+using lib::diff::Rec;
 using lib::diff::GenNode;
+using lib::diff::DataValues;
+using lib::idi::instanceTypeID;
+using lib::test::EventLog;
 using gui::ctrl::BusTerm;
 using util::_Fmt;
 //using util::contains;
@@ -66,10 +70,6 @@ namespace gui {
 namespace test{
   
   namespace { // internal details
-    
-    using lib::Variant;
-    using lib::diff::Rec;
-    using lib::diff::DataValues;
     
     using BusHub = gui::ctrl::Nexus;
     
@@ -123,12 +123,19 @@ namespace test{
       {
         EventLog log_{this};
         
+        using CommandHandler = test::Nexus::CommandHandler;
+        using StateMarkHandler = test::Nexus::StateMarkHandler;
+        
+        CommandHandler commandHandler_;
+        StateMarkHandler stateMarkHandler_;
+        
+        
         
         virtual void
         act (GenNode const& command)
           {
             log_.call(this, "act", command);
-            BusHub::act (command);
+            commandHandler_(command);
             log_.event("TestNexus", _Fmt("%s command \"%s\"%s")
                                         % invocationStage(command)
                                         % command.idi.getSym()
@@ -139,7 +146,7 @@ namespace test{
         note (ID subject, GenNode const& mark)  override
           {
             log_.call(this, "note", subject, mark);
-            BusHub::note (subject, mark);
+            stateMarkHandler_(subject, mark);
             log_.event("TestNexus", _Fmt("processed note from %s |%s") % subject % mark);
           }
         
@@ -151,19 +158,14 @@ namespace test{
             log_.event("TestNexus", _Fmt("delivered mark to %s |%s") % subject % mark);
           }
         
-        virtual operator string()  const
-          {
-            return getID().getSym()+"."+lib::idi::instanceTypeID(this);
-          }
-        
         virtual BusTerm&
         routeAdd (ID identity, Tangible& newNode)  override
           {
-            log_.call(this, "routeAdd", identity, newNode);
+            log_.call(this, "routeAdd", identity, instanceTypeID(&newNode));
             BusHub::routeAdd (identity, newNode);
             log_.event("TestNexus", _Fmt("added route to %s |%s| table-size=%2d")
                                         % identity
-                                        % lib::idi::instanceTypeID(&newNode)
+                                        % instanceTypeID(&newNode)
                                         % BusHub::size());
             return *this;
           }
@@ -176,11 +178,19 @@ namespace test{
             log_.event("TestNexus", _Fmt("removed route to %s | table-size=%2d") % node % BusHub::size());
           }
         
+        virtual operator string()  const
+          {
+            return getID().getSym()+"."+instanceTypeID(this);
+          }
+        
         
       public:
         TestNexus()
           : BusHub(*this, lib::idi::EntryID<TestNexus>("mock-UI"))
-          { }
+          {
+            installCommandHandler();
+            installStateMarkHandler();
+          }
         
         // standard copy operations
         
@@ -190,11 +200,39 @@ namespace test{
           {
             return log_;
           }
+        
+        void
+        installCommandHandler (CommandHandler newHandler =CommandHandler())
+          {
+            if (newHandler)
+              commandHandler_ = newHandler;
+            else
+              commandHandler_ =
+                [=](GenNode const& cmd)
+                  {
+                    log_.warn(_Fmt("NOT handling command-message %s in test-mode") % cmd);
+                  };
+          }
+        
+        void
+        installStateMarkHandler (StateMarkHandler newHandler =StateMarkHandler())
+          {
+            if (newHandler)
+              stateMarkHandler_ = newHandler;
+            else
+              stateMarkHandler_ =
+                [=](ID subject, GenNode const& mark)
+                  {
+                    log_.warn(_Fmt("NOT handling state-mark %s passed from %s in test-mode")
+                                                            % mark         % subject);
+                  };
+          }
       };
 
     /** singleton instance of the [TestNexus]
      *  used for rigging unit tests */
     lib::Depend<TestNexus> testNexus;
+    
     
     
     
@@ -244,11 +282,6 @@ namespace test{
             cerr << "mark message -> ZombieNexus" <<endl;
           }
         
-        virtual operator string()  const
-          {
-            return getID().getSym()+"."+lib::idi::instanceTypeID(this);
-          }
-        
         virtual BusTerm&
         routeAdd (ID identity, Tangible& newNode)  override
           {
@@ -264,6 +297,11 @@ namespace test{
             log().call(this, "routeDetach", node);
             log().error ("disconnect from ZombieNexus");
             cerr << "disconnect("<<string(node)<<" -> ZombieNexus" <<endl;
+          }
+        
+        virtual operator string()  const
+          {
+            return getID().getSym()+"."+instanceTypeID(this);
           }
         
         
@@ -317,6 +355,42 @@ namespace test{
   {
     return testNexus().getLog().clear();
   }
+  
+  
+  /**
+   * install a closure (custom handler function)
+   * to deal with any command invocations encountered
+   * in the test-UI-Bus. In the real Lumiera-UI, the UI-Bus
+   * is wired with a [core service handler](\ref core-service.hpp),
+   * which processes command messages by actually triggering
+   * command invocation on the Session within Proc-Layer
+   * @note when called without arguments, a default handler
+   *       will be installed, which just logs and discards
+   *       any command invocation message.
+   * @warning when you install a closure from within unit test code,
+   *       be sure to re-install the default handler prior to leaving
+   *       the definition scope; since the "test nexus" is actually
+   *       implemented as singleton, an installed custom handler
+   *       will outlive the immediate usage scope, possibly
+   *       leading to segfault
+   */
+  void
+  Nexus::setCommandHandler (CommandHandler newHandler)
+  {
+    testNexus().installCommandHandler (newHandler);
+  }
+  
+  /**
+   * similar to the [custom command handler](::setCommandHandler)
+   * this hook allows to install a closure to intercept any
+   * "state mark" messages passed over the test-UI-Bus
+   */
+  void
+  Nexus::setStateMarkHandler(StateMarkHandler newHandler)
+  {
+    testNexus().installStateMarkHandler (newHandler);
+  }
+  
   
   
   

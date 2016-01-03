@@ -47,9 +47,12 @@
 
 #include "lib/error.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "gui/model/tangible.hpp"
 #include "lib/test/event-log.hpp"
+#include "lib/diff/gen-node.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <functional>
 #include <string>
 
 
@@ -81,6 +84,15 @@ namespace test{
       
       static lib::test::EventLog const& getLog();
       static lib::test::EventLog const& startNewLog();
+      
+      
+      /* == allow to set custom handlers for commands and state changes == */
+      
+      using CommandHandler   = std::function<void(lib::diff::GenNode const&)>;
+      using StateMarkHandler = std::function<void(lib::idi::BareEntryID, lib::diff::GenNode const&)>;
+      
+      static void setCommandHandler (CommandHandler  =CommandHandler());
+      static void setStateMarkHandler (StateMarkHandler  =StateMarkHandler());
     };
   
   

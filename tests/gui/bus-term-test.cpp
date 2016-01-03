@@ -36,6 +36,7 @@
 //#include <map>
 
 using lib::idi::EntryID;
+using lib::idi::BareEntryID;
 using gui::test::MockElm;
 using lib::diff::GenNode;
 //using boost::lexical_cast;
@@ -111,14 +112,14 @@ namespace test {
       attachNewBusTerm ()
         {
           // our dummy will be linked with this identity
-          EntryID<MockElm> elmID{"zeitgeist"};
+          BareEntryID elmID = EntryID<MockElm>{"zeitgeist"};
           
           // Access the log on the Test-Nexus hub
           EventLog nexusLog = gui::test::Nexus::startNewLog();
           CHECK (nexusLog.ensureNot("zeitgeist"));
           
           MockElm mock(elmID);
-          CHECK (nexusLog.verifyCall("routeAdd").on("TestNexus").arg(elmID,"MockElm")
+          CHECK (nexusLog.verifyCall("routeAdd").on("TestNexus").arg(elmID,"Tangible")       // Note: invoked from ctor, so it is just a tangible at the moment
                          .beforeEvent("TestNexus", "added route to bID-zeitgeist"));
           
           EventLog elmLog = mock.getLog();
@@ -135,7 +136,7 @@ namespace test {
           // invoke action on element to cause upstream message (with a "state mark")
           mock.slotCollapse();
           CHECK (elmLog.verifyEvent("collapsed"));
-          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg("zeitgeist", "collapse"));
+          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "collapse"));
           
           // send a state mark down to the mock element
           gui::test::Nexus::testUI().mark (elmID, GenNode("Flash", 23));
@@ -159,7 +160,7 @@ namespace test {
           
           
           cout << "____Probe-Log_________________\n"
-               << util::join(mock.getLog(), "\n")
+               << util::join(elmLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           
           cout << "____Nexus-Log_________________\n"
