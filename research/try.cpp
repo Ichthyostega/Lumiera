@@ -40,9 +40,9 @@
 typedef unsigned int uint;
 
 #include "lib/p.hpp"
-#include "lib/format-util.hpp"
+//#include "lib/format-util.hpp"
 #include "lib/diff/gen-node.hpp"
-#include "lib/util.hpp"
+//#include "lib/util.hpp"
 
 #include "lib/meta/util.hpp"
 
@@ -50,7 +50,7 @@ typedef unsigned int uint;
 //#include <cstdarg>
 #include <utility>
 #include <string>
-#include <typeinfo>
+//#include <typeinfo>
 
 using lib::diff::GenNode;
 using lib::P;
