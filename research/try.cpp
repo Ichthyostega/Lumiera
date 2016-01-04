@@ -44,13 +44,17 @@ typedef unsigned int uint;
 #include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
 
+#include "lib/meta/util.hpp"
+
 #include <iostream>
 //#include <cstdarg>
-#include <string>
 #include <utility>
+#include <string>
+#include <typeinfo>
 
 using lib::diff::GenNode;
 using lib::P;
+using lib::meta::can_convertToString;
 
 //using util::unConst;
 using std::string;
@@ -69,6 +73,68 @@ newP (ARGS&&... ctorArgs)
   return P<X>{new X {std::forward<ARGS>(ctorArgs)...}};
 }
 
+/////////////////////////////////////////planned for meta/util.hpp
+  template <bool B, class T = void>
+  struct enable_if_c {
+    typedef T type;
+  };
+
+  template <class T>
+  struct enable_if_c<false, T> {};
+  
+  template <class Cond, class T = void>
+  using enable_if = typename enable_if_c<Cond::value, T>::type;
+  
+  template <class Cond, class T = void>
+  using disable_if = typename enable_if_c<not Cond::value, T>::type;
+  
+/////////////////////////////////////////planned for meta/util.hpp
+
+
+///////////////////////////////copied from format-util.hpp
+  template<typename TY>
+  inline string
+  typeStr (const TY* obj=0)
+  {
+    auto mangledType = obj? typeid(obj).name()
+                          : typeid(TY).name();
+    return string("«")+ mangledType +"»";
+  }
+  
+  template<typename TY>
+  inline string
+  typeStr (TY const& ref)
+  { return typeStr(&ref); }
+  
+  
+  template<typename X, typename COND =void>
+  struct CustomStringConv
+    {
+      static string invoke (X const& x) { return typeStr(x); }
+    };
+  
+  template<typename X>
+  struct CustomStringConv<X,     enable_if<can_convertToString<X>> >
+    {
+      static string
+      invoke (X const& val)
+        try        { return string(val); }
+        catch(...) { return ""; }
+    };
+  
+///////////////////////////////copied from format-util.hpp
+
+
+template<typename X>
+inline string
+stringz (P<X> ptr)
+{
+  if (not ptr)
+    return "P"+typeStr(ptr.get())+"{ null }";
+  else
+    return CustomStringConv<X>::invoke (*ptr);
+}
+
 
 int
 main (int, char**)
@@ -76,8 +142,8 @@ main (int, char**)
     auto psss = newP<Reticent>();
     auto gnng = newP<GenNode>("Hui", "Buh");
     
-    cout << "uiii..." << psss <<endl;
-    cout << "maui..." << gnng <<endl;
+    cout << "uiii..." << stringz(psss) <<endl;
+    cout << "maui..." << stringz(gnng) <<endl;
     
     cout <<  "\n.gulp.\n";
     
