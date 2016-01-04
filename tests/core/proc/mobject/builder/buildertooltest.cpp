@@ -73,7 +73,7 @@ namespace test    {
           void treat (Clip& c)    
             { 
               Placement<Clip>& pC = getPlacement<Clip>();
-              cout << "Clip on media : "<< str(pC->getMedia()) <<"\n";
+              cout << "Clip on media : "<< str(pC->getMedia()) <<"\n";                            //////////////////TICKET #985 : make str obsolete!
               CHECK (pC->operator==(c));
               log_ = string (pC);
             }

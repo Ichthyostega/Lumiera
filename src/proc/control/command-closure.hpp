@@ -184,7 +184,7 @@ namespace control {
       ostream&
       dump (ostream& output)  const
         {
-          return BASE::dump (output << util::str (element()) << ',');
+          return BASE::dump (output << util::str (element()) << ',');                            //////////////////TICKET #985 : make str obsolete!
         }
       
       friend bool

@@ -45,9 +45,11 @@ typedef unsigned int uint;
 //#include "lib/util.hpp"
 
 #include "lib/meta/util.hpp"
+#include "lib/meta/trait.hpp"
 
 #include <iostream>
 //#include <cstdarg>
+#include <type_traits>
 #include <utility>
 #include <string>
 //#include <typeinfo>
@@ -136,14 +138,102 @@ stringz (P<X> ptr)
 }
 
 
+
+/////////////////////////////////////////reworked traits
+  namespace {
+    
+    using lib::meta::Strip;
+    using std::__or_;
+    using std::__and_;
+    using std::__not_;
+    
+    template<typename T, typename U>
+    struct is_basically
+      : std::is_same <typename Strip<T>::TypePlain
+                     ,typename Strip<U>::TypePlain>
+      { };
+    
+    template<typename X>
+    struct can_lexical2string
+      : __or_< std::is_arithmetic<X>
+             , is_basically<X, string>
+             , is_basically<typename std::remove_all_extents<X>::type, char>
+             >
+      { };
+  }
+/////////////////////////////////////////reworked traits
+  
+  
+  
+/////////////////////////////////////////planned new ostream inclusion
+  namespace {
+    
+    template<typename X>
+    struct use_StringConversion
+      {
+        enum { value = can_convertToString<X>::value
+                  &&   !can_lexical2string<X>::value
+             };
+      };
+    
+    template<typename X>
+    struct use_ObjectTypeIndicator
+      : __and_<__not_<can_convertToString<X>>
+              ,__not_<can_lexical2string<X>>
+              ,std::is_object<X>
+              >
+      { };
+  }
+  
+  template<typename X, typename =  enable_if<use_StringConversion<X>>>
+  std::ostream&
+  operator<< (std::ostream& os, X const& obj)
+  {
+    return os << CustomStringConv<X>::invoke (obj);
+  }
+//
+//  template<typename X, typename =  enable_if<use_ObjectTypeIndicator<X>>>
+//  std::ostream&
+//  operator<< (std::ostream& os, X const& obj)
+//  {
+//    return os << CustomStringConv<X>::invoke (obj);
+//  }
+
+  template<typename X>
+  std::ostream&
+  operator<< (std::ostream& os, P<X> const& ptr)
+  {
+    return os << stringz (ptr);
+  }
+
+/////////////////////////////////////////planned new ostream inclusion
+
+
 int
 main (int, char**)
   {
     auto psss = newP<Reticent>();
     auto gnng = newP<GenNode>("Hui", "Buh");
     
-    cout << "uiii..." << stringz(psss) <<endl;
-    cout << "maui..." << stringz(gnng) <<endl;
+#define SHOW_CHECK(_EXPR_) cout << STRINGIFY(_EXPR_) << "\t : " << (_EXPR_::value? "Yes":"No") << endl;
+    
+    using CharLit = typeof("bla");
+    
+    using BasicallyString = is_basically<CharLit, string>;
+    using BasicallyChar = is_basically<std::remove_all_extents<CharLit>::type, char>;
+    
+    SHOW_CHECK (BasicallyChar);
+    SHOW_CHECK (BasicallyString);
+    SHOW_CHECK (std::is_arithmetic<CharLit>);
+    SHOW_CHECK (can_lexical2string<CharLit>);
+    SHOW_CHECK (can_convertToString<CharLit>);
+    SHOW_CHECK (use_StringConversion<CharLit>);
+    
+    cout << "mauu..." << psss <<endl;
+    cout << "wauu..." << gnng <<endl;
+    
+//  cout << "mauuu.." << *psss <<endl;   ///////////does not compile (but error message is misleading)
+    cout << "wauuu.." << *gnng <<endl;
     
     cout <<  "\n.gulp.\n";
     

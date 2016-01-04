@@ -122,7 +122,7 @@ namespace test    {
           CHECK (com);
           CHECK (com == Command::get("test.command1.2"));
           CHECK (contains (str(com), "test.command1.2"));
-          CHECK (contains (str(com), "{def}"));
+          CHECK (contains (str(com), "{def}"));                               //////////////////TICKET #985  : make str obsolete!
           CHECK (!com.canExec());
           VERIFY_ERROR (UNBOUND_ARGUMENTS, com() );
           CHECK ( 0 == command1::check_);

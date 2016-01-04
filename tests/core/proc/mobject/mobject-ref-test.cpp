@@ -199,7 +199,7 @@ namespace test    {
           // access MObject (Clip API)
 //        cout << rMO->operator string() << endl;          /////////////////////TICKET #428
           PMedia media = rMO->getMedia();
-          cout << str(media) << endl;                      /////////////////////TICKET #520
+          cout << str(media) << endl;                      /////////////////////TICKET #520  ///////TICKET #985 : make str obsolete!
           Duration mediaLength = media->getLength();
           CHECK (!isnil (mediaLength));
           CHECK (rMO->isValid());

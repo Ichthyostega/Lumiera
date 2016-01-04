@@ -348,7 +348,10 @@ namespace asset {
   ID<KIND> ID<KIND>::INVALID = ID(0);
   
   
-  /** convenient for debugging */
+  /** convenient for debugging 
+   * @deprecated to be obsoleted by automatically using
+   *             custom string conversion in ostreams
+   */
   inline string str (PcAsset const& a) 
   {
     if (a)

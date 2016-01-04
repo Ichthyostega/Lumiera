@@ -61,7 +61,7 @@ namespace asset {
     else
       {
         _Fmt fmt("%s %|50T.| id=%s  adr=%p smart-ptr=%p use-count=%u");
-        cout << fmt % str(aa) % aa->getID() % aa.get() % &aa % (aa.use_count() - 1) << "\n";
+        cout << fmt % str(aa) % aa->getID() % aa.get() % &aa % (aa.use_count() - 1) << "\n";        ////////////TICKET #985 : make str obsolete
   }   }
   
   
