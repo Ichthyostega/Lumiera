@@ -53,8 +53,8 @@ namespace mobject {
     return _Fmt{"Placement<%s> %|50T.| use-cnt=%u ID(%x) adr=%p pointee=%p"}
              % typeid(*get()).name() % use_count()
                                      % (size_t)getID()
-                                     % this
-                                     % get()
+                                     % (void*)this
+                                     % (void*)get()
                                      ;
   }
   
