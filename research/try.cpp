@@ -29,157 +29,55 @@
 // 11/14 - pointer to member functions and name mangling
 // 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
 // 8/15  - generalising the Variant::Visitor
+// 1/16  - generic to-string conversion for ostream
 
 
 /** @file try.cpp
- ** Design: how to generalise the Variant::Visitor to arbitrary return values.
- ** 
- ** Our Variant template allows either for access by known type, or through accepting
- ** a classic GoF visitor. Problem is that in many extended use cases we rather want
- ** to apply \em functions, e.g. for a monadic flatMap on a data structure built from
- ** Variant records. (see our \link diff::GenNode external object representation \endlink).
- ** Since our implementation technique relies on a template generated interface anyway,
- ** a mere extension to arbitrary return values seems feasible.
+ ** How to build generic string conversion into `ostream::operator<< `.
  **
  */
 
 typedef unsigned int uint;
 
-#include "lib/meta/typelist.hpp"
-#include "lib/meta/generator.hpp"
+#include "lib/p.hpp"
 #include "lib/format-util.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
-#include <cstdarg>
+//#include <cstdarg>
 #include <string>
+#include <utility>
 
-using util::unConst;
+using lib::diff::GenNode;
+using lib::P;
+
+//using util::unConst;
 using std::string;
 using std::cout;
 using std::endl;
 
-
-template<typename RET>
-struct VFunc
+class Reticent
   {
-
-    template<class VAL>
-    struct ValueAcceptInterface
-      {
-        virtual RET handle(VAL&) { /* do nothing */ return RET(); };
-      };
-    
-    template<typename TYPES>
-    using VisitorInterface
-        = lib::meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
-    
+    uint neigh_ = 42;
   };
 
-using lib::meta::NullType;
-using lib::meta::Node;
-
-template<typename TYPES>
-struct ConstAll;
-
-template<>
-struct ConstAll<NullType>
-  {
-    typedef NullType List;
-  };
-
-template<typename TY, typename TYPES>
-struct ConstAll<Node<TY,TYPES>>
-  {
-    typedef Node<const TY, typename ConstAll<TYPES>::List> List;
-  };
-
-
-
-template<class A, class B>
-struct Var
-  {
-    A a;
-    B b;
-    
-    using TYPES = lib::meta::Types<A,B>;
-    
-    template<typename RET>
-    using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
-    template<typename RET>
-    using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<ConstAll<typename TYPES::List>>;
-    
-    using Visitor = VisitorFunc<void>;
-    using Predicate = VisitorConstFunc<bool>;
-    
-    template<typename RET>
-    RET
-    accept (VisitorFunc<RET>& visitor)
-      {
-        typename VFunc<RET>::template ValueAcceptInterface<A>& visA = visitor;
-        typename VFunc<RET>::template ValueAcceptInterface<B>& visB = visitor;
-        visA.handle (a);
-        return visB.handle (b);
-      }
-    
-    void
-    accept (Visitor& visitor)
-      {
-        accept<void> (visitor);
-      }
-    
-    bool
-    accept (Predicate& visitor)  const
-      {
-        typename VFunc<bool>::template ValueAcceptInterface<const A>& visA = visitor;
-        typename VFunc<bool>::template ValueAcceptInterface<const B>& visB = visitor;
-        return visA.handle (a)
-            && visB.handle (b);
-      }
-
-    
-    operator string()  const
-      {
-        return "Var("
-             + util::str(a)
-             + "|"
-             + util::str(b)
-             + ")";
-      }
-  };
-
-
-using V = Var<int, string>;
-
-class Visi
-  : public V::Visitor
-  {
-    virtual void handle(int& i)    { ++i; }
-    virtual void handle(string& s) { s += "."; }
-  };
-
-class Predi
-  : public V::Predicate
-  {
-    virtual bool handle(int const& i)    { return 0 == i % 2; }
-    virtual bool handle(string const& s) { return 0 == s.length() % 2; }
-  };
+template<typename X, typename...ARGS>
+inline P<X>
+newP (ARGS&&... ctorArgs)
+{
+  return P<X>{new X {std::forward<ARGS>(ctorArgs)...}};
+}
 
 
 int
 main (int, char**)
   {
+    auto psss = newP<Reticent>();
+    auto gnng = newP<GenNode>("Hui", "Buh");
     
-    V var{12, "huii"};
-    cout <<  string(var)<<endl;
-    
-    Visi visi;
-    Predi predi;
-    
-    cout << var.accept(predi) <<endl;
-    var.accept(visi);
-    cout << var.accept(predi) <<endl;
-    cout <<  string(var)<<endl;
+    cout << "uiii..." << psss <<endl;
+    cout << "maui..." << gnng <<endl;
     
     cout <<  "\n.gulp.\n";
     
