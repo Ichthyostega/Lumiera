@@ -26,15 +26,15 @@
 
 #include "lib/sync.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-string.hpp"
 
 #include <functional>
-#include <boost/format.hpp>
 
 using std::static_pointer_cast;
 using std::function;
 using std::placeholders::_1;
-using boost::format;
 using util::for_each;
+using util::_Fmt;
 
 using lib::Depend;
 using lib::Sync;
@@ -42,16 +42,16 @@ using lib::Sync;
 
 namespace proc {
 namespace asset {
+  namespace error = lumiera::error;
   
   /** 
    * AssetManager error responses, caused by querying
    * invalid Asset IDs from the internal DB.
    */ 
-  class IDErr : public lumiera::error::Invalid 
+  struct IDErr
+    : error::Invalid
     {
-    public:
-      IDErr (const char* eID, format fmt) 
-        : lumiera::error::Invalid(fmt.str(),eID) {}
+      using error::Invalid::Invalid;
     };
   
   
@@ -60,21 +60,23 @@ namespace asset {
   LUMIERA_ERROR_DEFINE (UNKNOWN_ASSET_ID, "non-registered Asset ID");
   LUMIERA_ERROR_DEFINE (WRONG_ASSET_KIND, "wrong Asset kind, unable to cast");
   
-  class UnknownID : public IDErr
+  struct UnknownID : IDErr
     {
-    public:
-      UnknownID (ID<Asset> aID) : IDErr (LUMIERA_ERROR_UNKNOWN_ASSET_ID, 
-                                         format("Query for Asset with ID=%d, which up to now "
-                                                "hasn't been created or encountered.") % aID) {}
+      UnknownID (ID<Asset> aID)
+        : IDErr(_Fmt("Query for Asset with ID=%d, which up to now "
+                     "hasn't been created or encountered.") % aID
+               ,LUMIERA_ERROR_UNKNOWN_ASSET_ID)
+        { }
     };
   
-  class WrongKind : public IDErr
+  struct WrongKind : IDErr
     {
-    public:
-      WrongKind (Asset::Ident idi) : IDErr (LUMIERA_ERROR_WRONG_ASSET_KIND,
-                                            format("Request for Asset(%s), specifying an Asset kind, "
-                                                   "that doesn't match the actual type (and can't be "
-                                                   "casted either).") % string(idi)) {}
+      WrongKind (Asset::Ident idi)
+        : IDErr (_Fmt("Request for Asset(%s), specifying an Asset kind, "
+                      "that doesn't match the actual type (and can't be "
+                      "casted either).") % idi
+                ,LUMIERA_ERROR_WRONG_ASSET_KIND)
+        { }
     };
   
   

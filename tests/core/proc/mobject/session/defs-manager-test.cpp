@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
+#include "lib/format-string.hpp"
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
 
@@ -34,9 +35,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/streamtype.hpp"
 
-#include <boost/format.hpp>
-
-using boost::format;
+using util::_Fmt;
 using util::isnil;
 using std::string;
 
@@ -145,10 +144,10 @@ namespace test    {
         {
           PPipe pipe1 = Session::current->defaults(Query<Pipe> ("")); // "the default pipe"
           
-          string new_pID (str (format ("dummy_%s_%i")
+          string new_pID = _Fmt{"dummy_%s_%i"}
                                % pipe1->getPipeID()
                                % std::rand()
-                              ));     // make random new pipeID
+                               ;  // make random new pipeID
           Query<Pipe> query_for_new ("pipe("+new_pID+")");
           
           CHECK (!find (query_for_new));                              // check it doesn't exist

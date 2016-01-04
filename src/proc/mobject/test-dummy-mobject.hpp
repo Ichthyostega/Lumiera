@@ -45,14 +45,14 @@
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/session/abstractmo.hpp"
 #include "proc/mobject/placement.hpp"
+#include "lib/format-string.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
 #include <iostream>
 #include <cstdlib>
 
-using boost::format;
+using util::_Fmt;
 using util::cStr;
 using std::string;
 using std::rand;
@@ -91,8 +91,8 @@ namespace test    {
       string
       display(Symbol name)  const
         {
-          static format fmt("%s(ID=%03d)");
-          return boost::str(fmt % name % this->id_);
+          static _Fmt fmt{"%s(ID=%03d)"};
+          return fmt % name % this->id_;
         }
     };
   

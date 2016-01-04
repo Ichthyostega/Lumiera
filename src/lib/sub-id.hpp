@@ -36,6 +36,14 @@
  ** The first attempt to build such an entity is based on standard techniques,
  ** disregarding performance and memory footprint considerations.
  ** 
+ ** @todo 1/2016 this idea seems very reasonable, and we should just make it
+ **       robust and usable, along the lines pointed out by that draft
+ **       - remove the `<iostream>` and `format-util` dependency (!)
+ **       - provide a hash implementation for real
+ **       - extend to arbitrary number of sub-dimensions (variadic)
+ **       - implement comparisons as you'd do for any algebraic type
+ **       - provide a metaprogramming facility to get an id tuple
+ ** 
  ** @see SubID_test
  ** @see MultiFact
  **

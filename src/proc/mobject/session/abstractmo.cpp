@@ -22,12 +22,11 @@
 
 
 #include "proc/mobject/session/abstractmo.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
-
+using util::_Fmt;
 using util::isnil;
-using boost::format;
 
 namespace proc {
 namespace mobject {
@@ -48,14 +47,13 @@ namespace session {
   string
   AbstractMO::buildShortID (lib::Literal typeID, string suffix)  const
   {
-    static uint i=0;
-    static format namePattern ("%s.%03d");
+    static size_t i=0;
     
     REQUIRE (!isnil (typeID));
     if (!isnil (suffix))
       return typeID+"."+suffix;
     else
-      return str(namePattern % typeID % (++i) );
+      return _Fmt{"%s.%03d"} % typeID % (++i);
   }
   
   

@@ -29,7 +29,7 @@
  **         Currently just implemented through the mangled RTTI type string  
  ** 
  ** @see FormatHelper_test
- ** @see format-string.hpp frontend for boost::format, printf-style
+ ** @see [frontend for boost::format, printf-style](format-string.hpp)
  ** 
  */
 
@@ -240,7 +240,7 @@ namespace util {
             this->emplace_back (move(s));
           }
       };
-  }
+  }//(end) stringify helper
   
   
   /** convert a sequence of elements to string
@@ -285,19 +285,26 @@ namespace util {
           { }
         
       };
-  }
+  }//(end) join helper
+  
   
   /**
    * enumerate a collection's contents, separated by delimiter.
    * @param coll something that is standard-iterable
    * @return all contents converted to string and joined into
    *         a single string, with separators interspersed.
-   * @remarks based on the \c boost::join library function,
-   *          which in turn is based on
-   *          additionally, we use our
-   *          \link #str failsafe string conversion \endlink
+   * @remarks based `ostringstream`; additionally, we use our
+   *          [failsafe string conversion](\ref util::str),
    *          which in turn invokes custom string conversion,
    *          or lexical_cast as appropriate.
+   * @remarks alternatively, the `boost::join` library function
+   *          could be used, which works on _arbitrary sequences_,
+   *          which incurs some additional weight (both in terms
+   *          of header include and debug code size). And failures
+   *          on template substitution tend to be hard to understand,
+   *          since this _generic sequence_ concept is just so danm
+   *          absolutely generic (In fact that was the reason why I
+   *          gave up and just rolled our own `join` utility)
    */
   template<class CON>
   inline string

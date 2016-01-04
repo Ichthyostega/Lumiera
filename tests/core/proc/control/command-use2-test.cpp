@@ -89,7 +89,7 @@ namespace test    {
           _Fmt fmt ("invoked( %2d )");
           
           randVal_ = rand() % 100;
-          return str (fmt % randVal_);
+          return fmt % randVal_;
         }
       
       bool blowUp_;

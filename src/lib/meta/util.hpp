@@ -75,7 +75,7 @@ namespace meta {
    *  Naive implementation just trying the direct conversion.
    *  The embedded constant #value will be true in case this succeeds.
    *  Might fail in more tricky situations (references, const, volatile)
-   * @see string-util.hpp more elaborate solution including lexical_cast
+   * @see \ref format-conv.hpp more elaborate solution including lexical_cast
    */
   template<typename T>
   struct can_convertToString
@@ -125,7 +125,7 @@ namespace meta {
    *  a typedef member \c is_defined. The embedded metafunction Test can be used
    *  as a predicate for filtering types which may yield a valid instantiation
    *  of the candidate template in question.
-   *  \par
+   * @remarks
    *  A fully automated solution for this problem is impossible by theoretic reasons.
    *  Any non trivial use of such a \c is_defined trait would break the "One Definition Rule",
    *  as the state of any type can change from "partially defined" to "fully defined" over

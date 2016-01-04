@@ -33,7 +33,7 @@
  ** than the (small) performance gain of directly invoking boost::format (which is
  ** known to be 10 times slower than printf anyway).
  ** 
- ** \par Implementation notes
+ ** ## Implementation notes
  ** To perform the formatting, usually a \c _Fmt object is created as an anonymous
  ** temporary, but it may as well be stored into a variable. Copying is not permitted.
  ** Individual parameters are then fed for formatting through the \c '%' operator.
@@ -53,20 +53,21 @@
  ** to be negligible, in comparison to using boost::format. When compiling a demo example
  ** on x86_64, the following executable sizes could be observed:
  ** 
- **                                          debug  stripped
- ** just string concatenation ...............  42k  8.8k
- ** including and using format-string.hpp ...  50k  9.4k
- ** including and using boost::format ....... 420k  140k
+ **                                          |debug | stripped
+ ** ----------------------------------------:|----: | ---:
+ ** just string concatenation ...            |  42k | 8.8k
+ ** including and using format-string.hpp ...|  50k | 9.4k
+ ** including and using boost::format ...    | 420k | 140k
  ** 
  ** In addition, we need to take the implementation translation unit (format-string.cpp)
  ** into account, which is required once per application and contains the specialisations
  ** for all primitive types. In the test showed above, the corresponding object file
  ** had a size of 1300k (with debug information) resp. 290k (stripped).
  ** 
- ** \par Usage
+ ** ## Usage
  ** The syntax of the format string is defined by boost::format and closely mimics
  ** the printf formatting directives. The notable difference is that boost::format
- ** uses the C++ stream output framework, and thus avoiding the perils of printf.
+ ** uses the C++ stream output framework, and thus avoids the perils of printf.
  ** The individual formatting placeholders just set the corresponding flags on
  ** an embedded string stream, thus the actual parameter types cause the
  ** selection of a suitable format, not the definitions within the
@@ -90,12 +91,13 @@
  ** \endcode
  ** 
  ** @remarks See the unit-test for extensive usage examples and corner cases.
- **          The header format-util.hpp provides an alternative string conversion,
+ **          The header format-conv.hpp provides an alternative string conversion,
  **          using a bit of boost type traits and lexical_cast, but no boost::format.
  ** @warning not suited for performance critical code. About 10 times slower than printf.
- **  
+ ** 
  ** @see FormatString_test
  ** @see format-util.hpp
+ ** @see format-conv.hpp
  ** 
  */
 
@@ -165,6 +167,7 @@ namespace util {
       mutable Implementation formatter_;
       
       
+      /** call into the opaque implementation */
       template<typename VAL>
       static void format (const VAL, Implementation&);
       

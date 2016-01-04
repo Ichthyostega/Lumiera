@@ -42,7 +42,7 @@
 #include "lib/util.hpp"
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "include/logging.h"
+#include "lib/format-string.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
 #include "proc/control/command-impl.hpp"
@@ -50,15 +50,13 @@
 #include "proc/control/command-impl-clone-builder.hpp"
 #include "proc/control/handling-pattern.hpp"
 
-#include <boost/format.hpp>
 #include <sstream>
 #include <string>
 
 using std::ostringstream;
 using std::string;
-using boost::format;
-using boost::str;
 using util::cStr;
+using util::_Fmt;
 
 
 namespace proc {
@@ -113,9 +111,9 @@ namespace control {
   Command::get (Symbol cmdID)
   {
     Command cmd = CommandRegistry::instance().queryIndex (cmdID);
-    static format fmt("Command \"%s\" not found");
     if (!cmd)
-      throw error::Invalid(str(fmt % cmdID), LUMIERA_ERROR_INVALID_COMMAND);
+      throw error::Invalid(_Fmt("Command \"%s\" not found") % cmdID
+                          , LUMIERA_ERROR_INVALID_COMMAND);
     
     ENSURE (cmdID == CommandRegistry::instance().findDefinition(cmd));
     return cmd;
@@ -152,7 +150,6 @@ namespace control {
   Command::activate (shared_ptr<CommandImpl> const& implFrame, Symbol cmdID)
   {
     REQUIRE (implFrame);
-    static format fmt("Command \"%s\" already defined");
     
     if (this->isValid())
       duplicate_detected (cmdID);
@@ -217,8 +214,11 @@ namespace control {
   void
   Command::duplicate_detected (Symbol newCmdID)  const
   {
-    static format fmt("Unable to store %s as new command. ID \"%s\" is already in use");
-    throw error::Logic (str (fmt % *this % newCmdID), LUMIERA_ERROR_DUPLICATE_COMMAND);
+    throw error::Logic (_Fmt("Unable to store %s as new command. "
+                             "ID \"%s\" is already in use")
+                            % *this
+                            % newCmdID
+                       , LUMIERA_ERROR_DUPLICATE_COMMAND);
   }
   
   

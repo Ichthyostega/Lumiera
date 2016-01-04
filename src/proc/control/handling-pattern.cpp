@@ -22,19 +22,16 @@
 
 
 
+#include "lib/error.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/handling-patterns.hpp"
-
-#include "include/logging.h"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
 
-
-using boost::str;
-using boost::format;
 using util::isnil;
 using util::cStr;
+using util::_Fmt;
 
 
 namespace proc {
@@ -56,21 +53,21 @@ namespace control {
   HandlingPattern::invoke (CommandImpl& command, Symbol name)  const
   {
     TRACE (proc_dbg, "invoking %s...", name.c());
-    static format err_pre ("Error state detected, %s *NOT* invoked.");
-    static format err_post ("Error state after %s invocation.");
-    static format err_fatal ("Execution of %s raised unknown error.");
+    static _Fmt err_pre ("Error state detected, %s *NOT* invoked.");
+    static _Fmt err_post ("Error state after %s invocation.");
+    static _Fmt err_fatal ("Execution of %s raised unknown error.");
     try
       {
         Symbol errID_pre = lumiera_error();
         if (errID_pre)
-          return ExecResult (error::Logic (str (err_pre % command), errID_pre));
+          return ExecResult (error::Logic (err_pre % command, errID_pre));
         
         // execute or undo it...
         perform (command);
         
         Symbol errID = lumiera_error();
         if (errID)
-          return ExecResult (error::State (str (err_post % command),errID));
+          return ExecResult (error::State (err_post % command, errID));
         else
           return ExecResult();
       }
@@ -94,7 +91,7 @@ namespace control {
       {
         Symbol errID = lumiera_error();
         ERROR (command, "Invocation of %s failed with unknown exception; error flag is: %s", name.c(), errID.c());
-        throw error::Fatal (str (err_fatal % command), errID);
+        throw error::Fatal (err_fatal % command, errID);
       }
   }
   

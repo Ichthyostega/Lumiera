@@ -22,10 +22,9 @@
 
 
 #include "proc/asset/unknown.hpp"
-#include <boost/format.hpp>
+#include "lib/format-string.hpp"
 
-
-using boost::format;
+using util::_Fmt;
 
 namespace proc {
 namespace asset {
@@ -54,12 +53,11 @@ namespace asset {
   {
     UNIMPLEMENTED ("how to get at the original media from a »Unknown« placeholder");
     if (1==0)
-      throw lumiera::error::Invalid (str(format("Unable to locate original media "
-                                                "for ID=%s, filename=\"%s\".") 
-                                                % string(this->ident) 
-                                                % string(this->getFilename()))
-                                    ,LUMIERA_ERROR_ORIG_NOT_FOUND
-                                    );
+      throw lumiera::error::Invalid (_Fmt("Unable to locate original media "
+                                          "for ID=%s, filename=\"%s\".")
+                                         % this->ident
+                                         % this->getFilename()
+                                    ,LUMIERA_ERROR_ORIG_NOT_FOUND);
   }
   
   
