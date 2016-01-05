@@ -58,7 +58,7 @@
  ** between values, references and pointers, which also means, we do
  ** not want to indicate pointers explicitly (just signal NULL, when
  ** encountered). The situation is slightly different for the `ostream`
- ** inserter; in a moder GUI application, there isn't much use for
+ ** inserter; in a modern GUI application, there isn't much use for
  ** STDOUT and STDERR, beyond error messages and unit testing.
  ** Thus, we can strive at building a more convenient flavour
  ** here, which does indeed even shows the address of pointers.
@@ -83,6 +83,7 @@ using lib::P;
 using lib::meta::enable_if;
 using lib::meta::typeStr;
 using lib::meta::can_convertToString;
+using lib::meta::CustomStringConv;
 
 using std::string;
 using std::cout;
@@ -92,24 +93,6 @@ using std::endl;
 
 
 
-
-
-///////////////////////////////planned minimal conversion, maybe in meta/util.hpp ?
-  template<typename X, typename COND =void>
-  struct CustomStringConv
-    {
-      static string invoke (X const& x) { return "«"+typeStr(x)+"»"; }
-    };
-  
-  template<typename X>
-  struct CustomStringConv<X,     enable_if<can_convertToString<X>> >
-    {
-      static string
-      invoke (X const& val)
-        try        { return string(val); }
-        catch(...) { return "↯"; }
-    };
-///////////////////////////////planned minimal conversion, maybe in meta/util.hpp ?
 
 
 ///////////////////////////////shall go into the implementation of lib::P

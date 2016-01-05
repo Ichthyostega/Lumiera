@@ -220,5 +220,34 @@ namespace meta {
   
   
   
+  /** failsafe invocation of custom string conversion.
+   * @return string to represent the object, by default a [type display](\ref typeStr)
+   * @remarks this is a lightweight solution to at least _get any human readable string
+   *    representation for pretty much every language object._ This minimal solution
+   *    is defined here, to allow for built-in diagnostics for custom types without
+   *    the danger of creating much header inclusion and code size bloat. A more
+   *    elaborate, [extended solution](lib::toString), including _lexical conversions
+   *    for numbers,_ is defined in format-obj.hpp
+   * @note any exceptions during string conversion are caught and silently ignored;
+   *    the returned string indicates "↯" in this case.
+   */
+  template<typename X, typename COND =void>
+  struct CustomStringConv
+    {
+      static std::string invoke (X const& x) { return "«"+typeStr(x)+"»"; }
+    };
+  
+  template<typename X>
+  struct CustomStringConv<X,     enable_if<can_convertToString<X>> >
+    {
+      static std::string
+      invoke (X const& val)
+        try        { return std::string(val); }
+        catch(...) { return "↯"; }
+    };
+
+  
+  
+  
 }} // namespace lib::meta
 #endif
