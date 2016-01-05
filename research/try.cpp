@@ -34,46 +34,61 @@
 
 /** @file try.cpp
  ** How to build generic string conversion into `ostream::operator<< `.
+ ** 
+ ** This task is actually a conglomerate of several chores:
+ ** - sanitise and segregate the type-traits usage
+ ** - disentangle the existing toString conversion helper
+ ** - extract a basic form from this helper, which can be placed
+ **   into a header with minimal dependencies. After some consideration,
+ **   I decided to allow `<typeinfo>` in this category, which allows us
+ **   at least to show a type name as fallback
+ ** - distill an essential version of `enable_if`, which can be inlined.
+ **   This allows us to get rid of `boost::enable_if` finally.
+ ** - build a sensible `operator string()` for our `lib::P` based on this
+ ** - and _finally_, to come up with a templated version of the `ostream`
+ **   inserter `operator<<`, which does not cause too much havoc when
+ **   used by default. The greatest challenge here is to avoid ambiguous
+ **   overloads, yet also to deal with references, `void` and arrays.
  **
+ ** \par policy
+ ** What shall be expected from such a generic toString conversion?
+ ** It should be _minimal_, it should be _transparent_ and it should
+ ** always work and deliver a string, irrespective of the circumstances.
+ ** By extension, this means that we do not want to differentiate much
+ ** between values, references and pointers, which also means, we do
+ ** not want to indicate pointers explicitly (just signal NULL, when
+ ** encountered). The situation is slightly different for the `ostream`
+ ** inserter; in a moder GUI application, there isn't much use for
+ ** STDOUT and STDERR, beyond error messages and unit testing.
+ ** Thus, we can strive at building a more convenient flavour
+ ** here, which does indeed even shows the address of pointers.
+ ** 
  */
 
 typedef unsigned int uint;
 
 #include "lib/p.hpp"
-//#include "lib/format-util.hpp"
 #include "lib/diff/gen-node.hpp"
-//#include "lib/util.hpp"
 
 #include "lib/meta/util.hpp"
 #include "lib/meta/trait.hpp"
 
 #include <iostream>
-//#include <cstdarg>
 #include <type_traits>
 #include <utility>
 #include <string>
-//#include <typeinfo>
 
 using lib::diff::GenNode;
 using lib::P;
 using lib::meta::can_convertToString;
 
-//using util::unConst;
 using std::string;
 using std::cout;
 using std::endl;
 
-class Reticent
-  {
-    uint neigh_ = 42;
-  };
 
-template<typename X, typename...ARGS>
-inline P<X>
-newP (ARGS&&... ctorArgs)
-{
-  return P<X>{new X {std::forward<ARGS>(ctorArgs)...}};
-}
+
+
 
 /////////////////////////////////////////planned for meta/util.hpp
   template <bool B, class T = void>
@@ -107,8 +122,10 @@ newP (ARGS&&... ctorArgs)
   inline string
   typeStr (TY const& ref)
   { return typeStr(&ref); }
+///////////////////////////////copied from format-util.hpp
   
   
+///////////////////////////////planned minimal conversion, maybe in meta/util.hpp ?
   template<typename X, typename COND =void>
   struct CustomStringConv
     {
@@ -121,18 +138,18 @@ newP (ARGS&&... ctorArgs)
       static string
       invoke (X const& val)
         try        { return string(val); }
-        catch(...) { return ""; }
+        catch(...) { return "↯"; }
     };
-  
-///////////////////////////////copied from format-util.hpp
+///////////////////////////////planned minimal conversion, maybe in meta/util.hpp ?
 
 
+///////////////////////////////shall go into the implementation of lib::P
 template<typename X>
 inline string
 stringz (P<X> ptr)
 {
   if (not ptr)
-    return "P"+typeStr(ptr.get())+"{ null }";
+    return "⟂ P"+typeStr(ptr.get());
   else
     return CustomStringConv<X>::invoke (*ptr);
 }
@@ -149,8 +166,8 @@ stringz (P<X> ptr)
     
     template<typename T, typename U>
     struct is_basically
-      : std::is_same <typename Strip<T>::TypePlain
-                     ,typename Strip<U>::TypePlain>
+      : std::is_same <typename Strip<T>::TypeReferred
+                     ,typename Strip<U>::TypeReferred>
       { };
     
     template<typename X>
@@ -161,79 +178,132 @@ stringz (P<X> ptr)
              >
       { };
   }
+  
+namespace lib {
+namespace meta {
+  template<>
+  struct Unwrap<void>
+    {
+      typedef void Type;
+    };
+}}
 /////////////////////////////////////////reworked traits
-  
-  
-  
+
+
+
 /////////////////////////////////////////planned new ostream inclusion
   namespace {
     
     template<typename X>
-    struct use_StringConversion
-      {
-        enum { value = can_convertToString<X>::value
-                  &&   !can_lexical2string<X>::value
-             };
-      };
-    
-    template<typename X>
-    struct use_ObjectTypeIndicator
-      : __and_<__not_<can_convertToString<X>>
+    struct use_StringConversion4Stream
+      : __and_< std::is_class<typename Strip<X>::TypePlain>
+              ,__not_<std::is_pointer<X>>
               ,__not_<can_lexical2string<X>>
-              ,std::is_object<X>
               >
       { };
   }
   
-  template<typename X, typename =  enable_if<use_StringConversion<X>>>
+  template<typename X, typename =  enable_if <use_StringConversion4Stream<X>>>
   std::ostream&
   operator<< (std::ostream& os, X const& obj)
   {
     return os << CustomStringConv<X>::invoke (obj);
   }
-//
-//  template<typename X, typename =  enable_if<use_ObjectTypeIndicator<X>>>
-//  std::ostream&
-//  operator<< (std::ostream& os, X const& obj)
-//  {
-//    return os << CustomStringConv<X>::invoke (obj);
-//  }
-
+  
+  template<typename X, typename =  enable_if <use_StringConversion4Stream<X>>>
+  std::ostream&
+  operator<< (std::ostream& os, X* ptr)
+  {
+    if (ptr)
+      return os << (void*)ptr << " ↗" << *ptr;
+    else
+      return os << "⟂ " << typeStr<X>();
+  }
+  
   template<typename X>
   std::ostream&
   operator<< (std::ostream& os, P<X> const& ptr)
   {
     return os << stringz (ptr);
   }
-
+  
 /////////////////////////////////////////planned new ostream inclusion
+
+
+
+class Reticent
+  {
+    uint neigh_ = 42;
+  };
+
+
+template<typename X, typename...ARGS>
+inline P<X>
+newP (ARGS&&... ctorArgs)
+{
+  return P<X>{new X {std::forward<ARGS>(ctorArgs)...}};
+}
+
+
+
+template<typename T>
+using BasicallyString = is_basically<T, string>;
+template<typename T>
+using BasicallyChar = is_basically<typename std::remove_all_extents<T>::type, char>;
+
+
+void
+showTypes()
+  {
+    
+#define SHOW_CHECK(_EXPR_) cout << STRINGIFY(_EXPR_) << "\t : " << (_EXPR_::value? "Yes":"No") << endl;
+#define ANALYSE(_TYPE_)                 \
+    cout << "Type: " STRINGIFY(_TYPE_) " ......"<<endl;   \
+    SHOW_CHECK (BasicallyChar<_TYPE_>);   \
+    SHOW_CHECK (BasicallyString<_TYPE_>);  \
+    SHOW_CHECK (std::is_arithmetic<_TYPE_>);\
+    SHOW_CHECK (can_lexical2string<_TYPE_>); \
+    SHOW_CHECK (can_convertToString<_TYPE_>); \
+    SHOW_CHECK (use_StringConversion4Stream<_TYPE_>);
+    
+    
+    using CharLit = typeof("bla");
+    using CharPtr = typeof(const char*);
+    using GenNodePtr = typeof(GenNode*);
+    using GenNodeRef = typeof(GenNode&);
+    
+    ANALYSE (string);
+    ANALYSE (CharLit);
+    ANALYSE (CharPtr)
+    ANALYSE (Reticent)
+    ANALYSE (P<Reticent>)
+    ANALYSE (GenNode)
+    ANALYSE (GenNodePtr)
+    ANALYSE (GenNodeRef)
+    ANALYSE (P<GenNode>)
+    cout << endl;
+  }
+
 
 
 int
 main (int, char**)
   {
+    showTypes();
+    
     auto psss = newP<Reticent>();
     auto gnng = newP<GenNode>("Hui", "Buh");
-    
-#define SHOW_CHECK(_EXPR_) cout << STRINGIFY(_EXPR_) << "\t : " << (_EXPR_::value? "Yes":"No") << endl;
-    
-    using CharLit = typeof("bla");
-    
-    using BasicallyString = is_basically<CharLit, string>;
-    using BasicallyChar = is_basically<std::remove_all_extents<CharLit>::type, char>;
-    
-    SHOW_CHECK (BasicallyChar);
-    SHOW_CHECK (BasicallyString);
-    SHOW_CHECK (std::is_arithmetic<CharLit>);
-    SHOW_CHECK (can_lexical2string<CharLit>);
-    SHOW_CHECK (can_convertToString<CharLit>);
-    SHOW_CHECK (use_StringConversion<CharLit>);
     
     cout << "mauu..." << psss <<endl;
     cout << "wauu..." << gnng <<endl;
     
-//  cout << "mauuu.." << *psss <<endl;   ///////////does not compile (but error message is misleading)
+    cout << "mauuu.." << *psss <<endl;
     cout << "wauuu.." << *gnng <<endl;
+    cout << "wauuup." << gnng.get() <<endl;
+    
+    gnng.reset();
+    cout << "aauu..." << gnng       <<endl;
+    cout << "aauu..." << gnng.get() <<endl;
     
     cout <<  "\n.gulp.\n";
     
