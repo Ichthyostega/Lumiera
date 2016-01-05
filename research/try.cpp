@@ -80,6 +80,7 @@ typedef unsigned int uint;
 
 using lib::diff::GenNode;
 using lib::P;
+using lib::meta::enable_if;
 using lib::meta::can_convertToString;
 
 using std::string;
@@ -90,22 +91,6 @@ using std::endl;
 
 
 
-/////////////////////////////////////////planned for meta/util.hpp
-  template <bool B, class T = void>
-  struct enable_if_c {
-    typedef T type;
-  };
-
-  template <class T>
-  struct enable_if_c<false, T> {};
-  
-  template <class Cond, class T = void>
-  using enable_if = typename enable_if_c<Cond::value, T>::type;
-  
-  template <class Cond, class T = void>
-  using disable_if = typename enable_if_c<not Cond::value, T>::type;
-  
-/////////////////////////////////////////planned for meta/util.hpp
 
 
 ///////////////////////////////copied from format-util.hpp

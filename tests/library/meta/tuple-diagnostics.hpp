@@ -139,8 +139,8 @@ namespace test {
   /* ===== printing Tuple types and contents ===== */ 
     
   template<typename TYPES>
-  typename enable_if< is_TuplePlain<Tuple<TYPES> >,
-    string          >::type
+  enable_if< is_TuplePlain<Tuple<TYPES>>,
+    string >
   showDump (Tuple<TYPES> const& tuple)
   {
     typedef BuildTupleAccessor<TYPES,TupleElementDisplayer> BuildAccessor;
@@ -150,8 +150,8 @@ namespace test {
   }
   
   template<typename TYPES>
-  typename enable_if< is_TupleListType<Tuple<TYPES> >,
-    string          >::type
+  enable_if< is_TupleListType<Tuple<TYPES>>,
+    string >
   showDump (Tuple<TYPES> const& tuple)
   {
     typedef typename Tuple<TYPES>::Type TypeSeq;
@@ -164,8 +164,8 @@ namespace test {
   }
   
   template<typename TUP>
-  typename enable_if< is_TuplePlain<TUP>,
-    string          >::type
+  enable_if< is_TuplePlain<TUP>,
+    string >
   showType ()
   {
     typedef InstantiateChained<typename TUP::ArgList, Printer, NullP>  DumpPrinter;
@@ -174,8 +174,8 @@ namespace test {
   }
   
   template<typename TUP>
-  typename enable_if< is_TupleListType<TUP>,
-    string          >::type
+  enable_if< is_TupleListType<TUP>,
+    string >
   showType ()
   {
     typedef InstantiateChained<typename TUP::ArgList, Printer, NullP>  DumpPrinter;

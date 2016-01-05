@@ -44,12 +44,10 @@
 #include "lib/format-string.hpp"
 #include "lib/meta/util.hpp"
 
-#include <boost/utility/enable_if.hpp>
 #include <string>
 
 
 using std::string;
-using boost::enable_if;
 
 
 namespace lib  {
@@ -187,8 +185,8 @@ namespace meta {
     /* ===== printing types and contents ===== */ 
     
     template<typename TYPES>
-    typename enable_if< is_Typelist<TYPES>,
-      string          >::type
+    enable_if< is_Typelist<TYPES>,
+      string >
     showType ()
     {
       typedef InstantiateChained<typename TYPES::List, Printer, NullP>  DumpPrinter;

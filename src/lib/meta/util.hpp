@@ -59,12 +59,48 @@ namespace std { // forward declaration for std::string...
 namespace lib {
 namespace meta {
   
+  /* === conditional definition selector === */
+  
+  template <bool B, class T = void>
+  struct enable_if_c {
+    typedef T type;
+  };
+
+  template <class T>
+  struct enable_if_c<false, T> {};
+  
+  
+  /** SFINAE helper to control the visibility of specialisations and overloads.
+   * \par explanation
+   * This template needs to be interspersed somehow into a type expression, which
+   * is driven by an external, primary type parameter. Thus, it is possible to use
+   * it on an extraneous, possibly default template parameter, or when forming the
+   * return type of a function. The purpose is to remove a given definition from
+   * sight, unless a boolean condition `Cond::value` holds true. In the typical
+   * usage, this condition is suppled by a _metafunction_, i.e. a template, which
+   * detects some feature or other circumstantial condition with the types involved.
+   * @remarks this is a widely used facility, available both from boost and from
+   *          the standard library. For the most common case, we roll our own
+   *          variant here, which is slightly stripped down and a tiny bit
+   *          more concise than the boost variant. This way, we can avoid
+   *          a lot of boost inclusions, which always bear some weight.
+   * @see [std::enable_if](http://en.cppreference.com/w/cpp/types/enable_if)
+   */
+  template <class Cond, class T = void>
+  using enable_if = typename enable_if_c<Cond::value, T>::type;
+  
+  template <class Cond, class T = void>
+  using disable_if = typename enable_if_c<not Cond::value, T>::type;
+  
+  
+  
+  
+  /* === building metafunctions === */
   
   /** helper types to detect the overload resolution chosen by the compiler */
   
   typedef char Yes_t;
   struct No_t { char more_than_one[4]; };
-  
   
   
   
