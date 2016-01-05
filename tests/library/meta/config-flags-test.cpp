@@ -38,7 +38,6 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/meta/util.hpp"
 #include "lib/format-string.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-manip.hpp"
@@ -60,6 +59,7 @@ namespace lib  {
 namespace meta {
 namespace test {
   
+  using proc::engine::config::Instantiation;
   
   namespace { // internal definitions
   

@@ -53,6 +53,7 @@
 
 
 #include "lib/meta/configflags.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
@@ -180,6 +181,51 @@ namespace config {
             throw lumiera::error::Invalid("ConfigSelector: No preconfigured factory for config-bits="
                                          +std::bitset<CONFIG_FLAGS_MAX>(configFlags).to_string());
         }
+    };
+  
+  
+  
+  
+  using lib::meta::Yes_t;
+  using lib::meta::No_t;
+  
+  /**
+   * Helper template for semi-automatic detection if instantiation is possible.
+   * Requires help by the template to be tested, which needs to define a type member
+   * `is_defined`. The embedded metafunction Test can be used as a predicate for
+   * filtering types which may yield a valid instantiation of the candidate template
+   * in question.
+   * @todo 1/2016  is there no better way to achieve this, based on new language features    /////////////TICKET #986
+   *       Basically we want a SFINAE helper not only to check if a specific instantiation
+   *       can be formed (which would be trivial), but rather, if a specific instantiation
+   *       has _already been defined_. An automated solution for this problem seems questionable
+   *       by theoretic reasons; such would endanger the "One Definition Rule", since the state
+   *       of definedness of any type may change during the course of a translation unit from
+   *       "unknown" to "declared", "partially defined" to "fully defined". To hinge the existence
+   *       of another type on this transitory state would introduce a dangerous statefulness into
+   *       the meta-language, which is assumed to be stateless.
+   * @todo what _could_ be done though is to detect if a given template can be _default constructed_,
+   *       which, by logical weakening, implies it has be defined at all. Would that satisfy our
+   *       purpose here?
+   * @todo 1/2016 also I'm not happy with the name "Instantiation". It should be something like `is_XYZ`
+   */
+  template<template<class> class _CandidateTemplate_>
+  struct Instantiation
+    {
+      
+      template<class X>
+      class Test
+        {
+          typedef _CandidateTemplate_<X> Instance;
+          
+          template<class U>
+          static Yes_t check(typename U::is_defined *);
+          template<class U>
+          static No_t  check(...);
+          
+        public:
+          static const bool value = (sizeof(Yes_t)==sizeof(check<Instance>(0)));
+        };
     };
   
   

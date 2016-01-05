@@ -38,14 +38,29 @@
 #define LIB_META_UTIL_H
 
 
-#include <string>
+#include <typeinfo>
+
+namespace std { // forward declaration for std::string...
+  
+  template<typename C>
+  struct char_traits;
+  
+  template<typename T>
+  class allocator;
+
+  template<typename c, class TRAIT, class _ALLO>
+  class basic_string;
+  
+  using string = basic_string<char, char_traits<char>, allocator<char>>;
+}
+
 
 
 namespace lib {
 namespace meta {
   
   
-  /* types for figuring out the overload resolution chosen by the compiler */
+  /** helper types to detect the overload resolution chosen by the compiler */
   
   typedef char Yes_t;
   struct No_t { char more_than_one[4]; };
@@ -53,29 +68,12 @@ namespace meta {
   
   
   
-  /** Compile-time Type equality:
-   *  Simple Trait template to pick up types considered
-   *  \em identical by the compiler.
-   * @warning identical, not sub-type!
-   */
-  template<typename T1, typename T2>
-  struct is_sameType
-    {
-      static const bool value = false;
-    };
-  
-  template<typename T>
-  struct is_sameType<T,T>
-    {
-      static const bool value = true;
-    };
-  
   
   /** detect possibility of a conversion to string.
    *  Naive implementation just trying the direct conversion.
    *  The embedded constant #value will be true in case this succeeds.
    *  Might fail in more tricky situations (references, const, volatile)
-   * @see \ref format-conv.hpp more elaborate solution including lexical_cast
+   * @see \ref format-obj.hpp more elaborate solution including lexical_cast
    */
   template<typename T>
   struct can_convertToString
@@ -119,37 +117,6 @@ namespace meta {
     };
   
   
-  
-  /** semi-automatic detection if an instantiation is possible.
-   *  Requires help by the template to be tested, which needs to define
-   *  a typedef member \c is_defined. The embedded metafunction Test can be used
-   *  as a predicate for filtering types which may yield a valid instantiation
-   *  of the candidate template in question.
-   * @remarks
-   *  A fully automated solution for this problem is impossible by theoretic reasons.
-   *  Any non trivial use of such a \c is_defined trait would break the "One Definition Rule",
-   *  as the state of any type can change from "partially defined" to "fully defined" over
-   *  the course of any translation unit. Thus, even if there may be a \em solution out there,
-   *  we can expect it to break at some point by improvements/fixes to the C++ Language.
-   */
-  template<template<class> class _CandidateTemplate_>
-  struct Instantiation
-    {
-      
-      template<class X>
-      class Test
-        {
-          typedef _CandidateTemplate_<X> Instance;
-          
-          template<class U>
-          static Yes_t check(typename U::is_defined *);
-          template<class U>
-          static No_t  check(...);
-          
-        public:
-          static const bool value = (sizeof(Yes_t)==sizeof(check<Instance>(0)));
-        };
-    };
   
   
   /** Trait template for detecting a typelist type.

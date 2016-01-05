@@ -30,7 +30,6 @@
 #include "lib/meta/generator-combinations.hpp"
 #include "proc/asset/meta/time-grid.hpp"
 #include "lib/scoped-holder.hpp"
-#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -195,20 +194,19 @@ namespace test{
   
   namespace { // Implementation: Matrix of individual test combinations
     
-    using lib::meta::is_sameType;
     
     template<class T>
     inline bool
     isDuration()
       {
-        return is_sameType<T,Duration>::value;
+        return std::is_same<T,Duration>::value;
       }
     
     template<class T>
     inline bool
     isQuTime()
       {
-        return is_sameType<T,QuTime>::value;
+        return std::is_same<T,QuTime>::value;
       }
     
     template<class T>
