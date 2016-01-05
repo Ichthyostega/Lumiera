@@ -418,7 +418,7 @@ namespace lib {
           using RawType = typename remove_reference<X>::type;
           static_assert (meta::isInList<RawType, typename TYPES::List>(),
                          "Type error: the given variant could never hold the required type");
-          static_assert (meta::can_use_assignment<RawType>::value, "target type does not support assignment");
+          static_assert (std::is_copy_assignable<RawType>::value, "target type does not support assignment");
           
           buff<RawType>() = forward<X>(x);
           return *this;

@@ -241,17 +241,6 @@ namespace test {
   }//(End)Test fixture
   
   
-// GCC 4.7 workaround
-// SFINAE does not work properly on private functions
-// instead of dropping the template instance, it causes compilation failure
-
-}//now in namespace meta
-  
-  template<char c>
-  struct can_use_assignment<test::UnAssignable<c>>
-    { static constexpr bool value = false; };
-  
-namespace test {
   
   
   

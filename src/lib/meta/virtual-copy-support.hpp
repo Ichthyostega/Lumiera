@@ -117,10 +117,6 @@
 #include <type_traits>
 #include <utility>
 
-namespace lib {
-namespace time{
-  class Time;   // forward declaration for GCC 4.7 workaround
-}}
 
 namespace lib {
 namespace meta{
@@ -242,26 +238,11 @@ namespace meta{
   
   namespace { // helpers to select suitable variant of copy support...
     
-    /** workaround for GCC 4.7: need to exclude some types,
-     *  since they raise private access violation during probing.
-     *  Actually, in C++11 such a case should trigger substitution
-     *  failure, not an compilation error */
-    template<class X>
-    struct can_use_assignment
-      : is_copy_assignable<X>
-      { };
-    
-    template<>
-    struct can_use_assignment<lib::time::Time>
-      { static constexpr bool value = false; };
-    
-    
-    
     template<class X>
     struct supports_only_move
       : __and_<is_move_constructible<X>
               ,__not_<is_copy_constructible<X>>
-              ,__not_<can_use_assignment<X>>
+              ,__not_<is_copy_assignable<X>>
               >
       { };
     
@@ -269,7 +250,7 @@ namespace meta{
     struct supports_cloning
       : __and_<is_move_constructible<X>
               ,is_copy_constructible<X>
-              ,__not_<can_use_assignment<X>>
+              ,__not_<is_copy_assignable<X>>
               >
       { };
     
@@ -277,7 +258,7 @@ namespace meta{
     struct supports_copy_and_assignment
       : __and_<is_move_constructible<X>
               ,is_copy_constructible<X>
-              ,can_use_assignment<X>
+              ,is_copy_assignable<X>
               >
       { };
   }
