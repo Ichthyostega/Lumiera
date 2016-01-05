@@ -54,7 +54,7 @@ namespace test {
   using util::isnil;
   using util::contains;
   using lib::test::showType;
-  using lib::test::demangleCxx;
+  using lib::meta::demangleCxx;
   
   typedef map<string, Launcher*> TestMap;
   typedef shared_ptr<TestMap>  PTestMap;

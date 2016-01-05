@@ -39,6 +39,7 @@
 
 #include "lib/hash-standard.hpp"
 #include "lib/meta/trait.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/itertools.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
@@ -51,11 +52,6 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/utility/enable_if.hpp>
 
-
-namespace lib {
-namespace test{ // see test-helper.cpp
-    std::string demangleCxx (lib::Literal rawName);
-}}
 
 
 namespace util {
@@ -159,7 +155,7 @@ namespace util {
   {
     auto mangledType = obj? typeid(obj).name()
                           : typeid(TY).name();
-    string typeName = lib::test::demangleCxx (mangledType);
+    string typeName = lib::meta::demangleCxx (mangledType);
     removePrefix (typeName, "const ");
     removeSuffix (typeName, " const*");
     return "«"+ typeName +"»";

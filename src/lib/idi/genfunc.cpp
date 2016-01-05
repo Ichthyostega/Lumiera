@@ -23,6 +23,7 @@
 
 #include "lib/idi/genfunc.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
 #include <string>
@@ -34,15 +35,12 @@ using std::string;
 
 
 namespace lib {
-namespace test{ // see test-helper.cpp
-    std::string demangleCxx (lib::Literal rawName);
-}
 namespace idi {
   
   
   namespace format { // generic entry points / integration helpers...
     
-    using lib::test::demangleCxx;
+    using lib::meta::demangleCxx;
     
     string
     demangled_innermost_component (const char* rawName)
@@ -59,7 +57,7 @@ namespace idi {
     string
     demangled_sanitised_name (const char* rawName)
     {
-      return util::sanitise (test::demangleCxx (rawName));
+      return util::sanitise (demangleCxx (rawName));
     }
     
     
@@ -82,4 +80,4 @@ namespace idi {
   
   
   
-}} // namespace lib::test
+}} // namespace lib::idi

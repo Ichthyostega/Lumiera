@@ -26,7 +26,7 @@
  ** Mostly, these are diagnostics helpers to produce readable output, especially
  ** for types. Some of these support meta programming to figure out the \em actual
  ** reference kind (value, lvalue, rvalue) of a template parameter instantiation.
- ** For GNU compatible compilers, we define here also an interface to the internal
+ ** For GNU compatible compilers, we provide here also an interface to the internal
  ** ABI for [demangling type names](\ref demangleCxx).
  ** 
  ** @note this header is included into a large number of tests.
@@ -42,6 +42,7 @@
 
 #include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-obj.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <typeinfo>
@@ -56,6 +57,7 @@ namespace test{
   using lib::Literal;
   using std::string;
   using std::rand;
+  using lib::meta::demangleCxx;
   
   
   
@@ -65,6 +67,7 @@ namespace test{
    *  @return either the literal name without any further magic,
    *          or the result of compile-time or run time 
    *          type identification as implemented by the compiler.
+   *  @deprecated 1/2016 to be replaced by lib::typeString (from \ref format-obj.hpp=
    */
   template<typename T>
   inline Literal
@@ -78,6 +81,7 @@ namespace test{
    *  @return either the literal name without any further magic,
    *          or the result of compile-time or run time 
    *          type identification as implemented by the compiler.
+   *  @deprecated 1/2016 to be replaced by lib::typeString (from \ref format-obj.hpp=
    */
   template<typename T>
   inline Literal
@@ -86,18 +90,6 @@ namespace test{
     return name? name : Literal(typeid(T).name());
   }
   
-  
-  /** reverse the effect of C++ name mangling.
-   * @return string in language-level form of a C++ type or object name,
-   *         or a string with the original input if demangling fails.
-   * @warning implementation relies on the cross vendor C++ ABI in use
-   *         by GCC and compatible compilers, so portability is limited.
-   *         The implementation is accessed through libStdC++
-   *         Name representation in emitted object code and type IDs is
-   *         essentially an implementation detail and subject to change.
-   */
-  string
-  demangleCxx (Literal rawName);
   
   
   /** short yet distinct name identifying the given type.

@@ -40,7 +40,7 @@ using std::cout;
 using std::endl;
 
 using lib::test::showType;
-using lib::test::demangleCxx;
+using lib::meta::demangleCxx;
 
 
 namespace lib {

@@ -68,7 +68,7 @@ namespace test{
    *       and the ownership token should be empty.
    *       
    * @see lib::UniqueMallocOwner
-   * @see lib::test::demangleCxx
+   * @see lib::meta::demangleCxx
    */
   class UniqueMallocOwner_test : public Test
     {

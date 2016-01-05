@@ -27,7 +27,7 @@
  ** mostly for the purpose of documenting the issue at the
  ** usage site.
  ** 
- ** @see lib::test::demangleCxx
+ ** @see lib::meta::demangleCxx
  ** @see UniqueMallocOwner_test
  ** 
  */

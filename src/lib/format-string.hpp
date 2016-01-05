@@ -91,13 +91,13 @@
  ** \endcode
  ** 
  ** @remarks See the unit-test for extensive usage examples and corner cases.
- **          The header format-conv.hpp provides an alternative string conversion,
- **          using a bit of boost type traits and lexical_cast, but no boost::format.
+ **          The header format-obj.hpp provides an alternative string conversion,
+ **          using a bit of type traits and boost lexical_cast, but no boost::format.
  ** @warning not suited for performance critical code. About 10 times slower than printf.
  ** 
  ** @see FormatString_test
  ** @see format-util.hpp
- ** @see format-conv.hpp
+ ** @see format-obj.hpp
  ** 
  */
 

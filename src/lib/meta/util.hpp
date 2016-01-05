@@ -57,6 +57,9 @@ namespace std { // forward declaration for std::string...
 
 
 namespace lib {
+  class Literal;
+  class Symbol;
+  
 namespace meta {
   
   /* === conditional definition selector === */
@@ -154,7 +157,6 @@ namespace meta {
   
   
   
-  
   /** Trait template for detecting a typelist type.
    *  For example, this allows to write specialisations with the help of
    *  boost::enable_if
@@ -170,6 +172,51 @@ namespace meta {
     public: 
       static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
     };
+  
+  
+  
+  
+  
+  
+  /* ==== generic string representation ==== */
+  
+  /** pretty-print an internal C++ type representation
+   * @see \ref format-obj.cpp implementation
+   */
+  std::string humanReadableTypeID (lib::Literal);
+  
+  std::string demangleCxx (lib::Literal rawName);
+  
+  
+  
+  /** failsafe human readable type display
+   * @return string representing the C++ type.
+   * @remarks the purpose of this function is diagnostics
+   *    and unit-testing. When possible, RTTI is exposed, otherwise
+   *    the implementation falls back on the static type as seen by
+   *    the compiler on usage site. An attempt is made to de-mangle
+   *    and further simplify the type string, leaving out some common
+   *    (hard wired) namespace prefixes, and stripping typical adornments
+   *    like `const`, `*` and `&`
+   * @warning this function does string transformations behind the scenes,
+   *    and thus should not be used in performance critical context. Moreover,
+   *    the returned type string is not necessarily exact and re-parsable.
+   */
+  template<typename TY>
+  inline std::string
+  typeStr (const TY* obj=nullptr)
+  {
+    auto mangledType = obj? typeid(obj).name()
+                          : typeid(TY).name();
+    return humanReadableTypeID (mangledType);
+  }
+  
+  template<typename TY>
+  inline std::string
+  typeStr (TY const& ref)
+  {
+    return typeStr (&ref);
+  }
   
   
   

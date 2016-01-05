@@ -81,6 +81,7 @@ typedef unsigned int uint;
 using lib::diff::GenNode;
 using lib::P;
 using lib::meta::enable_if;
+using lib::meta::typeStr;
 using lib::meta::can_convertToString;
 
 using std::string;
@@ -93,28 +94,11 @@ using std::endl;
 
 
 
-///////////////////////////////copied from format-util.hpp
-  template<typename TY>
-  inline string
-  typeStr (const TY* obj=0)
-  {
-    auto mangledType = obj? typeid(obj).name()
-                          : typeid(TY).name();
-    return string("«")+ mangledType +"»";
-  }
-  
-  template<typename TY>
-  inline string
-  typeStr (TY const& ref)
-  { return typeStr(&ref); }
-///////////////////////////////copied from format-util.hpp
-  
-  
 ///////////////////////////////planned minimal conversion, maybe in meta/util.hpp ?
   template<typename X, typename COND =void>
   struct CustomStringConv
     {
-      static string invoke (X const& x) { return typeStr(x); }
+      static string invoke (X const& x) { return "«"+typeStr(x)+"»"; }
     };
   
   template<typename X>
@@ -134,7 +118,7 @@ inline string
 stringz (P<X> ptr)
 {
   if (not ptr)
-    return "⟂ P"+typeStr(ptr.get());
+    return "⟂ P<"+typeStr(ptr.get())+">";
   else
     return CustomStringConv<X>::invoke (*ptr);
 }
@@ -202,7 +186,7 @@ namespace meta {
     if (ptr)
       return os << (void*)ptr << " ↗" << *ptr;
     else
-      return os << "⟂ " << typeStr<X>();
+      return os << "⟂ «" << typeStr<X>() << "»";
   }
   
   template<typename X>
