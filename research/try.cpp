@@ -112,21 +112,30 @@ stringz (P<X> ptr)
   namespace {
     
     using lib::meta::Strip;
-    using std::__or_;
-    using std::__and_;
+    using std::is_convertible;
+    using std::is_arithmetic;
+    using std::is_same;
     using std::__not_;
+    using std::__and_;
+    using std::__or_;
     
     template<typename T, typename U>
     struct is_basically
-      : std::is_same <typename Strip<T>::TypeReferred
-                     ,typename Strip<U>::TypeReferred>
+      : is_same <typename Strip<T>::TypeReferred
+                ,typename Strip<U>::TypeReferred>
+      { };
+    
+    template<typename X>
+    struct is_StringLike
+      : __or_< is_basically<X, string>
+             , is_convertible<X, const char*>
+             >
       { };
     
     template<typename X>
     struct can_lexical2string
-      : __or_< std::is_arithmetic<X>
-             , is_basically<X, string>
-             , is_basically<typename std::remove_all_extents<X>::type, char>
+      : __or_< is_arithmetic<X>
+             , is_StringLike<X>
              >
       { };
   }
