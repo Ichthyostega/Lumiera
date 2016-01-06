@@ -51,6 +51,8 @@
 
 
 #include "lib/error.hpp"
+#include "lib/meta/util.hpp"
+
 #include <memory>
 
 
@@ -98,6 +100,8 @@ namespace lib {
       
       void swap(P& b)         { BASE::swap (b);}
       
+      operator std::string()  const noexcept;
+      
       
     private: /* === friend operators injected into enclosing namespace for ADL === */
                                                                                           //////////////////TICKET #932 Clang is unable to fill in the default template argument. Resolved in newer versions of Clang. Temporary workaround: add second parameter B
@@ -126,6 +130,25 @@ namespace lib {
       operator>= (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *p >= *q;}
       
     };
+  
+  
+  
+  /**
+   * use custom string conversion on pointee, if applicable,
+   * otherwise fall back to a human readable type string.S
+   */
+  template<class TAR, class BASE>
+  inline
+  P<TAR,BASE>::operator std::string()  const noexcept
+  try {
+    if (this->get())
+      return meta::CustomStringConv<TAR>::invoke (this->operator*());
+    else
+      return "⟂ P<"+meta::typeStr(this->get())+">";
+  }
+  catch(...)
+  { return "↯"; }
+  
   
   
 } // namespace lib

@@ -79,50 +79,21 @@ typedef unsigned int uint;
 #include <utility>
 #include <string>
 
-using lib::diff::GenNode;
 using lib::P;
-using lib::meta::enable_if;
-using lib::meta::typeStr;
+using lib::diff::GenNode;
 using lib::meta::is_basically;
+using lib::meta::is_StringLike;
 using lib::meta::can_lexical2string;
 using lib::meta::can_convertToString;
 using lib::meta::use_StringConversion4Stream;
 using lib::meta::CustomStringConv;
 using lib::meta::Strip;
 
-using std::__and_;
-using std::__not_;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 
 
-
-
-
-///////////////////////////////shall go into the implementation of lib::P
-template<typename X>
-inline string
-stringz (P<X> ptr)
-{
-  if (not ptr)
-    return "⟂ P<"+typeStr(ptr.get())+">";
-  else
-    return CustomStringConv<X>::invoke (*ptr);
-}
-
-
-namespace std {
-  
-  template<typename X>
-  std::ostream&
-  operator<< (std::ostream& os, P<X> const& ptr)
-  {
-    return os << stringz (ptr);
-  }
-}
 
 
 
@@ -144,7 +115,7 @@ newP (ARGS&&... ctorArgs)
 template<typename T>
 using BasicallyString = is_basically<T, string>;
 template<typename T>
-using BasicallyChar = is_basically<typename std::remove_all_extents<T>::type, char>;
+using BasicallyChar = std::is_convertible<T, const char*>;
 
 
 void
@@ -154,11 +125,12 @@ showTypes()
 #define SHOW_CHECK(_EXPR_) cout << STRINGIFY(_EXPR_) << "\t : " << (_EXPR_::value? "Yes":"No") << endl;
 #define ANALYSE(_TYPE_)                 \
     cout << "Type: " STRINGIFY(_TYPE_) " ......"<<endl;   \
-    SHOW_CHECK (BasicallyChar<_TYPE_>);   \
-    SHOW_CHECK (BasicallyString<_TYPE_>);  \
-    SHOW_CHECK (std::is_arithmetic<_TYPE_>);\
-    SHOW_CHECK (can_lexical2string<_TYPE_>); \
-    SHOW_CHECK (can_convertToString<_TYPE_>); \
+    SHOW_CHECK (is_StringLike<_TYPE_>);   \
+    SHOW_CHECK (BasicallyChar<_TYPE_>);    \
+    SHOW_CHECK (BasicallyString<_TYPE_>);   \
+    SHOW_CHECK (std::is_arithmetic<_TYPE_>); \
+    SHOW_CHECK (can_lexical2string<_TYPE_>);  \
+    SHOW_CHECK (can_convertToString<_TYPE_>);  \
     SHOW_CHECK (use_StringConversion4Stream<_TYPE_>);
     
     
