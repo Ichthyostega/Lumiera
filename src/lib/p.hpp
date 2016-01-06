@@ -133,6 +133,22 @@ namespace lib {
   
   
   
+  
+  /** Helper to create and manage by lib::P
+   * @tparam X the type of the new object to create on the heap
+   * @param ctorArgs arbitrary arguments to pass to ctor of `X`
+   * @return managing smart-ptr of type P<X>, holding onto the
+   *    object just created on the heap.
+   */
+  template<typename X, typename...ARGS>
+  inline P<X>
+  newP (ARGS&&... ctorArgs)
+  {
+    return P<X>{new X {std::forward<ARGS>(ctorArgs)...}};
+  }
+  
+  
+  
   /**
    * use custom string conversion on pointee, if applicable,
    * otherwise fall back to a human readable type string.S
@@ -141,7 +157,7 @@ namespace lib {
   inline
   P<TAR,BASE>::operator std::string()  const noexcept
   try {
-    if (this->get())
+    if (BASE::get())
       return meta::CustomStringConv<TAR>::invoke (this->operator*());
     else
       return "⟂ P<"+meta::typeStr(this->get())+">";

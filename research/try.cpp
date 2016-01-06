@@ -80,6 +80,7 @@ typedef unsigned int uint;
 #include <string>
 
 using lib::P;
+using lib::newP;
 using lib::diff::GenNode;
 using lib::meta::is_basically;
 using lib::meta::is_StringLike;
@@ -101,14 +102,6 @@ class Reticent
   {
     uint neigh_ = 42;
   };
-
-
-template<typename X, typename...ARGS>
-inline P<X>
-newP (ARGS&&... ctorArgs)
-{
-  return P<X>{new X {std::forward<ARGS>(ctorArgs)...}};
-}
 
 
 
