@@ -264,7 +264,7 @@ namespace util {
   std::string showDouble (double) noexcept;
   std::string showFloat (float)   noexcept;
   
-  /** pretty-print an address as hex-string */
+  /** pretty-print an address as hex-suffix */
   std::string showAddr (void *addr) noexcept;
   
   template<typename X>

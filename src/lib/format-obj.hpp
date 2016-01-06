@@ -49,6 +49,18 @@
 #include <boost/lexical_cast.hpp>
 
 
+namespace std { // forward declaration to avoid including <iostream>
+  
+  template<typename C>
+  struct char_traits;
+  
+  template<typename C, class _TRAITS>
+  class basic_ostream;
+  
+  using ostream = basic_ostream<char, char_traits<char>>;
+}
+
+
 namespace lib  {
   class Literal;
   
@@ -76,6 +88,9 @@ namespace util {
   std::string showDouble (double) noexcept;
   std::string showFloat (float)    noexcept;
   std::string showAddr (void *addr) noexcept;
+  
+  /** preconfigured format for pretty-printing of addresses */
+  std::ostream& showAddr (std::ostream&, void* addr);
   
   
   

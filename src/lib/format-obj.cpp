@@ -64,8 +64,8 @@ namespace { // hard-wired configuration for debugging output....
   const auto DIAGNOSTICS_DOUBLE_PRECISION = 8;
   const auto DIAGNOSTICS_FLOAT_PRECISION  = 5;
   
-  /** amount of hex digits required to represent an address on this plattform */
-  const auto PLATFORM_ADDRESS_HEX_DIGITS = sizeof(size_t) * 2;
+  /** show only this amount of trailing bytes from an address */
+  const size_t DIAGNOSTICS_ADDRESS_SUFFIX_LEN = 4;
 }
 
 
@@ -162,12 +162,13 @@ namespace util {
     
   }//(End) implementation details
   
-  using std::ostringstream;
   using std::hex;
   using std::setw;
   using std::right;
   using std::setfill;
   using std::noshowbase;
+  using std::ostringstream;
+  using std::ostream;
   
   
   /**
@@ -192,7 +193,7 @@ namespace util {
   string
   showFloat (float val)  noexcept
     try {
-      std::ostringstream buffer;
+      ostringstream buffer;
       buffer.precision (DIAGNOSTICS_FLOAT_PRECISION);
       buffer << val;
       return buffer.str();
@@ -201,16 +202,26 @@ namespace util {
     { return "↯"; }
   
   
+  /** @note show only the trailing X bytes of any address */
+  ostream&
+  showAddr (ostream& stream, void* addr)
+  {
+    size_t suffix_modulus = size_t(1) << DIAGNOSTICS_ADDRESS_SUFFIX_LEN * 8;
+    return stream << "╲"
+                  << hex
+                  << noshowbase
+                  << setw (DIAGNOSTICS_ADDRESS_SUFFIX_LEN * 2)  // need 2 hex digits per byte
+                  << setfill('_')
+                  << right
+                  << size_t(addr) % suffix_modulus;
+  }
+  
+  
   string
   showAddr (void *addr)  noexcept
     try {
-      std::ostringstream buffer;
-      buffer << hex
-             << noshowbase
-             << setw (PLATFORM_ADDRESS_HEX_DIGITS)
-             << setfill('_')
-             << right
-             << addr;
+      ostringstream buffer;
+      showAddr (buffer, addr);
       return buffer.str();
     }
     catch(...)

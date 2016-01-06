@@ -124,9 +124,9 @@ namespace std { // forward declaration to avoid including <iostream>
   template<typename C, class _TRAITS>
   class basic_ostream;
   
-  typedef basic_ostream<char, char_traits<char> > ostream;
-
+  using ostream = basic_ostream<char, char_traits<char>>;
 }
+
 
 namespace lib {
   class Literal; 

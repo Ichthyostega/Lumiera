@@ -93,7 +93,7 @@ namespace std {
   operator<< (ostream& os, X* ptr)
   {
     if (ptr)
-      return os << (void*)ptr << " ↗" << *ptr;
+      return util::showAddr(os, ptr) << " ↗" << *ptr;
     else
       return os << "⟂ «" << lib::meta::typeStr<X>() << "»";
   }
