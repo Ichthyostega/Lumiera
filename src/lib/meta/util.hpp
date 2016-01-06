@@ -204,16 +204,18 @@ namespace meta {
    */
   template<typename TY>
   inline std::string
-  typeStr (const TY* obj=nullptr)
-  {
-    auto mangledType = obj? typeid(obj).name()
-                          : typeid(TY).name();
-    return humanReadableTypeID (mangledType);
-  }
+  typeStr (const TY* obj =nullptr)  noexcept
+    try {
+      auto mangledType = obj? typeid(obj).name()
+                            : typeid(TY).name();
+      return humanReadableTypeID (mangledType);
+    }
+    catch(...)
+    { return "↯"; }
   
   template<typename TY>
   inline std::string
-  typeStr (TY const& ref)
+  typeStr (TY const& ref)  noexcept
   {
     return typeStr (&ref);
   }
@@ -234,20 +236,55 @@ namespace meta {
   template<typename X, typename COND =void>
   struct CustomStringConv
     {
-      static std::string invoke (X const& x) { return "«"+typeStr(x)+"»"; }
+      static std::string
+      invoke (X const& x)  noexcept
+        try        { return "«"+typeStr(x)+"»"; }
+        catch(...) { return "↯"; }
     };
   
   template<typename X>
   struct CustomStringConv<X,     enable_if<can_convertToString<X>> >
     {
       static std::string
-      invoke (X const& val)
+      invoke (X const& val) noexcept
         try        { return std::string(val); }
         catch(...) { return "↯"; }
     };
+  
+  // NOTE: this is meant to be extensible;
+  //       more specialisations are e.g. in format-obj.hpp
+  
+}}// namespace lib::meta
 
+
+
+namespace util {
+  
+  /** pretty-print a double in fixed-point format */
+  std::string showDouble (double) noexcept;
+  std::string showFloat (float)   noexcept;
+  
+  /** pretty-print an address as hex-string */
+  std::string showAddr (void *addr) noexcept;
+  
+  template<typename X>
+  inline std::string
+  showAddr (const X& elm)  noexcept
+  {
+    return showAddr(&elm);
+  }
+  
+  
+  /** diagnostics helper for explicitly indicating pointers */
+  template<typename X>
+  inline std::string
+  showPtr (X* ptr =nullptr)
+  {
+    return ptr? showAddr(ptr) + " ↗" + lib::meta::CustomStringConv<X>::invoke(*ptr)
+              : "⟂ «" + typeStr(ptr) + "»";
+  }
   
   
   
-}} // namespace lib::meta
-#endif
+}// namespace util
+#endif /*LIB_META_UTIL_H*/

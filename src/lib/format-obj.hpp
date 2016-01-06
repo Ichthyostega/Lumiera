@@ -68,10 +68,14 @@ namespace meta {
   
   std::string humanReadableTypeID (lib::Literal);
   
-}} // namespace lib::meta
+}}// namespace lib::meta
 
 
 namespace util {
+  
+  std::string showDouble (double) noexcept;
+  std::string showFloat (float)    noexcept;
+  std::string showAddr (void *addr) noexcept;
   
   
   

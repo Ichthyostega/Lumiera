@@ -42,6 +42,7 @@
 
 #include "lib/error.hpp"
 #include "lib/format-obj.hpp"
+//#include "lib/format-string.hpp"
 #include "lib/unique-malloc-owner.hpp"
 #include "lib/symbol.hpp"
 
@@ -49,10 +50,25 @@
 #include <cxxabi.h>
 #endif
 
+#include <iomanip>
+#include <sstream>
 #include <string>
 
-
+//using util::_Fmt;
 using std::string;
+
+
+namespace { // hard-wired configuration for debugging output....
+  
+  // precision for rendering of double values
+  const auto DIAGNOSTICS_DOUBLE_PRECISION = 8;
+  const auto DIAGNOSTICS_FLOAT_PRECISION  = 5;
+  
+  /** amount of hex digits required to represent an address on this plattform */
+  const auto PLATFORM_ADDRESS_HEX_DIGITS = sizeof(size_t) * 2;
+}
+
+
 
 namespace lib  {
 namespace meta {
@@ -132,7 +148,12 @@ apologies for that."
     return typeName;
   }
   
-}}
+}}// namespace lib::meta
+
+
+
+
+/* === formatting and pretty printing support uitls === */
 
 namespace util {
   
@@ -141,11 +162,59 @@ namespace util {
     
   }//(End) implementation details
   
-  
+  using std::ostringstream;
+  using std::hex;
+  using std::setw;
+  using std::right;
+  using std::setfill;
+  using std::noshowbase;
   
   
   /**
+   * @return fixed point string representation, never empty
+   * @note we set an explicit precision, since this is a diagnostic facility
+   * @remarks typically do not want to see all digits, but, for test code,
+   *       we do want a predictable string representation of simple fractional
+   *       values like `0.1` (which can not be represented as binary floats)
    */
+  string
+  showDouble (double val)  noexcept
+    try {
+      ostringstream buffer;
+      buffer.precision (DIAGNOSTICS_DOUBLE_PRECISION);
+      buffer << val;
+      return buffer.str();
+    }
+    catch(...)
+    { return "↯"; }
+  
+  
+  string
+  showFloat (float val)  noexcept
+    try {
+      std::ostringstream buffer;
+      buffer.precision (DIAGNOSTICS_FLOAT_PRECISION);
+      buffer << val;
+      return buffer.str();
+    }
+    catch(...)
+    { return "↯"; }
+  
+  
+  string
+  showAddr (void *addr)  noexcept
+    try {
+      std::ostringstream buffer;
+      buffer << hex
+             << noshowbase
+             << setw (PLATFORM_ADDRESS_HEX_DIGITS)
+             << setfill('_')
+             << right
+             << addr;
+      return buffer.str();
+    }
+    catch(...)
+    { return "↯"; }
   
   
   
