@@ -72,6 +72,7 @@ typedef unsigned int uint;
 
 #include "lib/meta/util.hpp"
 #include "lib/meta/trait.hpp"
+#include "lib/format-cout.hpp"
 
 #include <iostream>
 #include <type_traits>
@@ -85,6 +86,7 @@ using lib::meta::typeStr;
 using lib::meta::is_basically;
 using lib::meta::can_lexical2string;
 using lib::meta::can_convertToString;
+using lib::meta::use_StringConversion4Stream;
 using lib::meta::CustomStringConv;
 using lib::meta::Strip;
 
@@ -112,35 +114,7 @@ stringz (P<X> ptr)
 }
 
 
-
-/////////////////////////////////////////planned new ostream inclusion
-  namespace {
-    
-    template<typename X>
-    struct use_StringConversion4Stream
-      : __and_< std::is_class<typename Strip<X>::TypePlain>
-              ,__not_<std::is_pointer<X>>
-              ,__not_<can_lexical2string<X>>
-              >
-      { };
-  }
-  
-  template<typename X, typename =  enable_if <use_StringConversion4Stream<X>>>
-  std::ostream&
-  operator<< (std::ostream& os, X const& obj)
-  {
-    return os << CustomStringConv<X>::invoke (obj);
-  }
-  
-  template<typename X, typename =  enable_if <use_StringConversion4Stream<X>>>
-  std::ostream&
-  operator<< (std::ostream& os, X* ptr)
-  {
-    if (ptr)
-      return os << (void*)ptr << " ↗" << *ptr;
-    else
-      return os << "⟂ «" << typeStr<X>() << "»";
-  }
+namespace std {
   
   template<typename X>
   std::ostream&
@@ -148,8 +122,7 @@ stringz (P<X> ptr)
   {
     return os << stringz (ptr);
   }
-  
-/////////////////////////////////////////planned new ostream inclusion
+}
 
 
 
