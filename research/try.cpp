@@ -82,9 +82,14 @@ using lib::diff::GenNode;
 using lib::P;
 using lib::meta::enable_if;
 using lib::meta::typeStr;
+using lib::meta::is_basically;
+using lib::meta::can_lexical2string;
 using lib::meta::can_convertToString;
 using lib::meta::CustomStringConv;
+using lib::meta::Strip;
 
+using std::__and_;
+using std::__not_;
 using std::string;
 using std::cout;
 using std::endl;
@@ -105,50 +110,6 @@ stringz (P<X> ptr)
   else
     return CustomStringConv<X>::invoke (*ptr);
 }
-
-
-
-/////////////////////////////////////////reworked traits
-  namespace {
-    
-    using lib::meta::Strip;
-    using std::is_convertible;
-    using std::is_arithmetic;
-    using std::is_same;
-    using std::__not_;
-    using std::__and_;
-    using std::__or_;
-    
-    template<typename T, typename U>
-    struct is_basically
-      : is_same <typename Strip<T>::TypeReferred
-                ,typename Strip<U>::TypeReferred>
-      { };
-    
-    template<typename X>
-    struct is_StringLike
-      : __or_< is_basically<X, string>
-             , is_convertible<X, const char*>
-             >
-      { };
-    
-    template<typename X>
-    struct can_lexical2string
-      : __or_< is_arithmetic<X>
-             , is_StringLike<X>
-             >
-      { };
-  }
-  
-namespace lib {
-namespace meta {
-  template<>
-  struct Unwrap<void>
-    {
-      typedef void Type;
-    };
-}}
-/////////////////////////////////////////reworked traits
 
 
 

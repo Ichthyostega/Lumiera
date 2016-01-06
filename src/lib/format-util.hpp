@@ -57,7 +57,7 @@
 namespace util {
   
   using boost::enable_if;
-  using lib::meta::can_ToString;
+  using lib::meta::can_convertToString;
   using lib::meta::can_lexical2string;
   using lib::meta::can_IterForEach;
   using lib::Symbol;
@@ -77,13 +77,13 @@ namespace util {
     
     
     template<typename X>
-    struct use_StringConversion : can_ToString<X> { };
+    struct use_StringConversion : can_convertToString<X> { };
     
     template<typename X>
     struct use_LexicalConversion
       {
         enum { value = can_lexical2string<X>::value
-                  &&  !can_ToString<X>::value
+                  &&  !can_convertToString<X>::value
              };
       };
     

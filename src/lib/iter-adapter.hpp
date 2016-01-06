@@ -61,7 +61,7 @@
  ** can be used as a building block within this framework.
  ** 
  ** 
- ** \par Lumiera forward iterator concept
+ ** # Lumiera forward iterator concept
  ** 
  ** Similar to the STL, instead of using a common "Iterator" base class,
  ** we rather define a common set of functions and behaviour which can
