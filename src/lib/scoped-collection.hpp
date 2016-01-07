@@ -360,6 +360,7 @@ namespace lib {
       
       
       
+                                                 ///////////////////////////////////////////////////////TICKET #967 : the following can be written better now. Also should be named 'emplace'
       /** push a new element of default type
        *  to the end of this container
        * @note EX_STRONG */
@@ -551,7 +552,7 @@ namespace lib {
   /** \par usage
    * Pass an instance of this builder functor as 2nd parameter
    * to ScopedCollections's ctor. (an anonymous instance is OK).
-   * Using this variant of the compiler switches the collection to RAII-style:
+   * Using this variant of the ctor switches the collection to RAII-style:
    * It will immediately try to create all the embedded objects, invoking this
    * builder functor for each "slot" to hold such an embedded object. Actually,
    * this "slot" is an ElementHolder instance, which provides functions for

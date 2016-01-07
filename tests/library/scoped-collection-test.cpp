@@ -65,7 +65,7 @@ namespace test{
           , trigger_(trigger)
           {
             if (trigger == getVal())
-              throw new error::Fatal ("Subversive Bomb", LUMIERA_ERROR_SUBVERSIVE);
+              throw error::Fatal ("Subversive Bomb", LUMIERA_ERROR_SUBVERSIVE);
           }
         
         SubDummy()
@@ -290,7 +290,7 @@ namespace test{
           CHECK (0 == Dummy::checksum());
           {
             int rr = rand() % 100;
-            int trigger = 101;
+            int trigger = 100 + 5 + 1;   // prevents the bomb from exploding (since rr < 100) 
             
             CollD coll (6, Populator(rr, trigger));
             
@@ -304,6 +304,13 @@ namespace test{
             CHECK (coll[3].acc(0) == 3 + rr + trigger);
             CHECK (coll[4].acc(0) == 4 + rr);
             CHECK (coll[5].acc(0) == 5 + rr + trigger);
+            // what does this check prove?
+            // - the container was indeed populated with DubDummy objects
+            //   since the overridden version of Dummy::acc() did run and
+            //   reveal the trigger value
+            // - the population was indeed done with the anonymous Populator
+            //   instance fed to the ctor, since this object was "marked" with
+            //   the random value rr, and adds this mark to the built values.
             
             coll.clear();
             CHECK (0 == Dummy::checksum());
