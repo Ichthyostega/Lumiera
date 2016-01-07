@@ -74,7 +74,6 @@ typedef unsigned int uint;
 #include "lib/meta/trait.hpp"
 #include "lib/format-cout.hpp"
 
-#include <iostream>
 #include <type_traits>
 #include <utility>
 #include <string>

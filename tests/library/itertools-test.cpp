@@ -24,13 +24,13 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/util.hpp"
 
 #include "lib/itertools.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <cstdlib>
 #include <vector>
 
@@ -44,8 +44,6 @@ namespace test{
   using util::for_each;
   using util::isnil;
   using std::vector;
-  using std::cout;
-  using std::endl;
   using std::rand;
   
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;

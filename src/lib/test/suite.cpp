@@ -234,7 +234,7 @@ namespace test {
     // Instantiate all tests cases and execute them.
     for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
       {
-        std::cout << "\n  ----------"<< i->first<< "----------\n";
+        cout << "\n  ----------"<< i->first<< "----------\n";
         Launcher* test = (i->second);
         IS_VALID (test, i->first);
         exitCode_ |= invokeTestCase (*test->makeInstance(), cmdline); // actually no cmdline arguments

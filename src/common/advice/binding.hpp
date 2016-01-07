@@ -80,9 +80,9 @@
 #include "lib/hash-value.h"
 #include "lib/query-util.hpp"
 
-#include <iostream>
 #include <string>
 #include <set>
+
 
 namespace lumiera{
 namespace advice {
@@ -220,12 +220,6 @@ namespace advice {
       void parse_and_append (Literal def);
     };
   
-  
-  inline std::ostream&
-  operator<< (std::ostream& os, Binding const& bi)
-  {
-    return os << string(bi);
-  }
   
   template<typename TY>
   inline Binding const&

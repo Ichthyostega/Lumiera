@@ -25,9 +25,9 @@
 #define LUMIERA_OPTION_H
 
 #include "lib/cmdline.hpp"
+#include "lib/format-cout.hpp"
 
 #include <string>
-#include <iostream>
 #include <boost/program_options.hpp>
 #include <boost/utility.hpp>
 

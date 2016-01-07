@@ -26,7 +26,6 @@
 
 #include <vector>
 #include <string>
-#include <iostream>
 
 
 
@@ -60,9 +59,6 @@ namespace lib {
       Cmdline () : VectS () {} 
       
     };
-   
-   /** for outputting Cmdline objects */
-   inline ostream& operator<< (ostream& os, const Cmdline& cmdL) { return os << (string (cmdL)); }
    
    
    

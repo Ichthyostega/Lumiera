@@ -48,11 +48,11 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-cursor.hpp"
 #include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 #include <memory>
 #include <vector>
 #include <string>
@@ -317,7 +317,7 @@ namespace test{
         {
           if (!isnil (violation_))
             {
-              std::cerr << "__Log_condition_violated__\n"+violation_ <<"\n";
+              cerr << "__Log_condition_violated__\n"+violation_ <<"\n";
               return false;
             }
           return true;

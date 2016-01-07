@@ -27,13 +27,10 @@
 #include "proc/assetmanager.hpp"          //////??
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
+//#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
-
 using util::isSameObject;
-using std::string;
-using std::cout;
 
 
 namespace proc    {

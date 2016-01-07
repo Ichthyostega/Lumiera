@@ -35,11 +35,11 @@
 
 #include "proc/assetmanager.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
-#include <iostream>
 
 using util::contains;
 using util::for_each;
@@ -61,7 +61,7 @@ namespace asset {
     else
       {
         _Fmt fmt("%s %|50T.| id=%s  adr=%p smart-ptr=%p use-count=%u");
-        cout << fmt % str(aa) % aa->getID() % aa.get() % &aa % (aa.use_count() - 1) << "\n";        ////////////TICKET #985 : make str obsolete
+        cout << fmt % aa % aa->getID() % aa.get() % &aa % (aa.use_count() - 1) << "\n";
   }   }
   
   

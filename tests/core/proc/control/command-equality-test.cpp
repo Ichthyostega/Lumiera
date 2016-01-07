@@ -28,12 +28,12 @@
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/command-argument-holder.hpp"
 #include "proc/control/memento-tie.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/meta/tuple.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
-#include <iostream>
 #include <string>
 
 namespace proc {
@@ -50,8 +50,6 @@ namespace test    {
   using std::function;
   using std::bind;
   using std::string;
-  using std::cout;
-  using std::endl;
   
   
   

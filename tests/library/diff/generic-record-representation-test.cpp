@@ -23,11 +23,11 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/itertools.hpp"
 
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -37,8 +37,6 @@ using util::isnil;
 using util::join;
 using std::vector;
 using std::swap;
-using std::cout;
-using std::endl;
 
 
 namespace lib {
@@ -164,12 +162,12 @@ namespace test{
           VERIFY_ERROR (INVALID, enterprise.get("warp10"));
           
           cout << "enterprise = "
-               << string(enterprise)<<endl;
+               << enterprise <<endl;
           for (string elm : enterprise)
-            cout << elm<<endl;
+            cout << elm <<endl;
           cout << "--Attributes--"<<endl;
           for (string att : enterprise.attribs())
-            cout << att<<endl;
+            cout << att <<endl;
           cout << "--Keys--->" << join (enterprise.keys(), "<->")<<endl;
           cout << "--Vals--->" << join (enterprise.vals(), "<->")<<endl;
           cout << "--Crew--->" << join (enterprise.scope()," | ")<<endl;

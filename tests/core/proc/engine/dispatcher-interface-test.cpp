@@ -31,13 +31,13 @@
 #include "proc/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
+//#include "lib/format-cout.hpp"
 #include "lib/depend.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util-coll.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/scoped_ptr.hpp>
-//#include <iostream>
 #include <functional>
 #include <vector>
 
@@ -46,7 +46,6 @@ using util::isnil;
 using util::last;
 using std::vector;
 using std::function;
-//using std::cout;
 //using std::rand;
 
 

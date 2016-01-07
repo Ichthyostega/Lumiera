@@ -27,19 +27,17 @@
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset/media.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/session/testroot.hpp"
 
-#include <boost/format.hpp>
-#include <iostream>
 
-using boost::format;
+using util::_Fmt;
 using util::isSameObject;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace proc    {
@@ -296,7 +294,7 @@ namespace test    {
           uint count (0);
           for ( ; iter; ++iter )
             {
-              cout << indent(level) << "::" << string(*iter) << endl;
+              cout << indent(level) << "::" << *iter << endl;
               
               ++count;
               Iter scopeContents = index.getReferrers (iter->getID());
@@ -304,7 +302,7 @@ namespace test    {
                 discover (index, scopeContents, level+1);
             }
           
-          static format summary ("...%i elements at Level %i");
+          static _Fmt summary{"...%i elements at Level %i"};
           cout << indent(level) << summary % count % level << endl;
           
           CHECK (!iter);

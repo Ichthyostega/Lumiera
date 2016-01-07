@@ -24,17 +24,16 @@
 #include "backend/media-access-facade.hpp"
 #include "backend/media-access-mock.hpp"
 #include "lib/test/depend-4test.hpp"
+#include "lib/format-cout.hpp"
 
 #include "lib/test/run.hpp"
-#include "lib/time/diagnostics.hpp"
 #include "lib/symbol.hpp"
 
-#include <iostream>
+#include <string>
 
 using lib::test::Depend4Test;
 using lib::Literal;
 using std::string;
-using std::cout;
 
 
 namespace backend {

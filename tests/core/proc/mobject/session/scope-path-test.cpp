@@ -27,9 +27,9 @@
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/scope-path.hpp"
 #include "proc/mobject/session/test-scope-invalid.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 #include <string>
 
 
@@ -38,8 +38,6 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using std::cout;
-  using std::endl;
   using std::string;
   using util::isnil;
   using util::isSameObject;
@@ -312,7 +310,7 @@ namespace test    {
       void
       navigate (const ScopePath refPath, PPIdx index)
         {
-          #define __SHOWPATH(N) cout << "Step("<<N<<"): "<< string(path) << endl;
+          #define __SHOWPATH(N) cout << "Step("<<N<<"): "<< path << endl;
           
           ScopePath path (refPath);               __SHOWPATH(1)
           CHECK (path == refPath);

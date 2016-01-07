@@ -25,12 +25,12 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/test-coll.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-adapter-stl.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <vector>
 
 
@@ -41,8 +41,6 @@ namespace test{
   using ::Test;
   using boost::lexical_cast;
   using util::isnil;
-  using std::cout;
-  using std::endl;
   
   namespace iter = lib::iter_stl;
   

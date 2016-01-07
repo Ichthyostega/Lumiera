@@ -22,18 +22,16 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
 #include "proc/asset/category.hpp"
-#include "proc/asset/asset-format.hpp"
 
-#include <iostream>
 
 using util::_Fmt;
 using util::isnil;
 using std::string;
-using std::cout;
 
 
 namespace proc {

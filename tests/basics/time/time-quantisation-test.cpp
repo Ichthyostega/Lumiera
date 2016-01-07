@@ -25,22 +25,16 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/asset/meta/time-grid.hpp"
 #include "lib/time/timequant.hpp"
-#include "lib/time/display.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string/join.hpp>
-#include <iostream>
 #include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
 using util::contains;
 using std::rand;
-using std::cout;
-using std::endl;
-
-using boost::algorithm::join;
 
 
 namespace lib {

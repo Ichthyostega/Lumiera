@@ -66,9 +66,9 @@
 #include "lib/diff/record.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "test/test-nexus.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
 
-#include <iostream>
 #include <string>
 
 
@@ -83,9 +83,6 @@ namespace test{
   
   using lib::Symbol;
   using std::string;
-  using std::cout;
-  using std::cerr;
-  using std::endl;
   
   
   /**
@@ -171,7 +168,7 @@ namespace test{
       doMark (GenNode const& mark)  override
         {
           log_.call (this->identify(), "doMark", mark);
-          cout << this->identify() << " <-- state-mark = "<< string(mark) <<endl;
+          cout << this->identify() << " <-- state-mark = "<< mark <<endl;
           log_.note ("type=mark", "ID="+mark.idi.getSym(), mark);
         }
       

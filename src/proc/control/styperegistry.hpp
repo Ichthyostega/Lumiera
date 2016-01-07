@@ -45,7 +45,6 @@
 //#include <set>
 //#include <vector>
 //#include <memory>
-//#include <boost/format.hpp>
 #include <boost/noncopyable.hpp>
 
 
@@ -54,7 +53,6 @@ namespace control {
 
   
 //  using std::string;
-//  using boost::format;
   
   namespace impl {
   } // (End) impl namespace

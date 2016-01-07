@@ -24,14 +24,13 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-def.hpp"
-#include "lib/util.hpp"
+//#include "lib/format-cout.hpp"
+//#include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
 
 //#include <functional>
 //#include <boost/ref.hpp>
-//#include <boost/format.hpp>
-//#include <iostream>
 //#include <cstdlib>
 //#include <string>
 
@@ -41,15 +40,11 @@ namespace control {
 namespace test    {
 
 
-//  using boost::format;
-//  using boost::str;
   //using util::contains;
 //  using std::function;
 //  using std::bind;
 //  using std::string;
   //using std::rand;
-  //using std::cout;
-  //using std::endl;
 //  using lib::test::showSizeof;
 //  using util::isSameObject;
 //  using util::contains;

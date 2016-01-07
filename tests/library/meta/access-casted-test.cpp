@@ -25,17 +25,15 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/access-casted.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 #include <utility>
 #include <string>
 
 using std::move;
 using std::string;
 using std::ostream;
-using std::cout;
-using std::endl;
 
 using util::isSameObject;
 

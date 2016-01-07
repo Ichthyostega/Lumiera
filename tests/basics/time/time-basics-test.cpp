@@ -22,22 +22,17 @@
 
 
 #include "lib/test/run.hpp"
-
+#include "lib/time/timevalue.hpp"
+#include "lib/time/diagnostics.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
+
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
 using std::rand;
-using std::cout;
-using std::endl;
-
-
-#include "lib/time/timevalue.hpp"
-#include "lib/time/diagnostics.hpp"
-
 
 
 namespace lib {

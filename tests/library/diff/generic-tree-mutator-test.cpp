@@ -25,19 +25,17 @@
 #include "lib/format-util.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 //#include <utility>
 #include <string>
 //#include <vector>
-#include <iostream>
 
 using util::isnil;
 using std::string;
 //using std::vector;
 //using std::swap;
-using std::cout;
-using std::endl;
 
 using lib::test::showType;
 using lib::meta::demangleCxx;

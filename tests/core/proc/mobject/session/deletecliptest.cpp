@@ -26,14 +26,11 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/testsession1.hpp"
 #include "proc/mobject/session/clip.hpp"              // TODO: really neded?
+#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
-//#include <boost/format.hpp>
-#include <iostream>
 
-//using boost::format;
-using std::string;
-using std::cout;
+//using std::string;
 
 using proc_interface::AssetManager;
 using proc_interface::PAsset;

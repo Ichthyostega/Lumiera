@@ -30,14 +30,13 @@
 #include "lib/symbol.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/query-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "lib/sync.hpp"
 
 #include <functional>
-#include <iostream>
 
-using std::cout;
 using std::bind;
 using util::isnil;
 using util::cStr;
@@ -230,9 +229,6 @@ namespace test  {
           ~MockSys() { }
           
           operator string ()  const { return "MockSys(\""+id_+"\")"; }
-          
-          friend inline ostream&
-          operator<< (ostream& os, MockSys const& subsys) { return os << string(subsys); }
           
           bool didRun ()  const { return didRun_; }
         };

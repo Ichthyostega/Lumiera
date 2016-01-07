@@ -30,18 +30,16 @@
 #include "lib/meta/generator-combinations.hpp"
 #include "proc/asset/meta/time-grid.hpp"
 #include "lib/scoped-holder.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 #include <limits>
 
 using lib::test::showType;
 using boost::lexical_cast;
 using util::isnil;
-using std::cout;
-using std::endl;
 using std::string;
 
 

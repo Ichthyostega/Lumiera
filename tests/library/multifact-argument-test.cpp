@@ -23,9 +23,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/multifact.hpp"
 
-#include <iostream>
 #include <functional>
 
 
@@ -33,8 +33,6 @@
 namespace lib {
 namespace test{
   
-  using std::cout;
-  using std::endl;
   using std::bind;
   using std::function;
   using std::placeholders::_1;

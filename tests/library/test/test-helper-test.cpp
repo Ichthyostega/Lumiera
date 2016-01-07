@@ -25,10 +25,10 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/error.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <functional>
-#include <iostream>
 #include <string>
 
 using util::for_each;
@@ -40,8 +40,6 @@ using boost::algorithm::is_lower;
 using boost::algorithm::is_digit;
 using std::function;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib {

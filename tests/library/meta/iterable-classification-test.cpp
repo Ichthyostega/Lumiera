@@ -30,9 +30,6 @@
 #include "lib/util-foreach.hpp"
 #include "lib/itertools.hpp"
 
-/////////////////////////////////////////////////////////////TODO draft
-#include <boost/type_traits/is_convertible.hpp>
-/////////////////////////////////////////////////////////////TODO draft
 #include <iostream>
 #include <vector>
 #include <deque>

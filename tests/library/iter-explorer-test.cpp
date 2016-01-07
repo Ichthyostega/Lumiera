@@ -25,12 +25,12 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-explorer.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <sstream>
 #include <vector>
 #include <string>
@@ -44,8 +44,6 @@ namespace test{
   using ::Test;
   using util::isnil;
   using util::isSameObject;
-  using std::cout;
-  using std::endl;
   using std::string;
   using lib::iter_stl::eachElm;
   using lib::iter_explorer::ChainedIters;

@@ -23,13 +23,10 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 
 #include "lib/searchpath.hpp"
 
-#include <iostream>
-
-using std::cout;
-using std::endl;
 
 
 

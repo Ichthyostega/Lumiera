@@ -23,17 +23,14 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
-//#include <utility>
-//#include <string>
-//#include <vector>
-#include <iostream>
+#include <string>
 
 using util::isnil;
 using util::contains;
@@ -44,18 +41,13 @@ using lib::time::FSecs;
 using lib::time::Time;
 using lib::time::TimeSpan;
 using lib::test::randTime;
-//using std::string;
-//using std::vector;
-//using std::swap;
-using std::cout;
-using std::endl;
+using std::string;
 
 
 namespace lib {
 namespace diff{
 namespace test{
   
-//  using lumiera::error::LUMIERA_ERROR_LOGIC;
   using error::LUMIERA_ERROR_WRONG_TYPE;
   using error::LUMIERA_ERROR_BOTTOM_VALUE;
   
@@ -149,7 +141,7 @@ namespace test{
           CHECK (n3.data.get<Rec>().get("ham").isNamed());
           CHECK (!n3.isNamed());
           
-          cout << string(n3) <<endl; // diagnostic spam
+          cout << n3 <<endl; // diagnostic spam
         }
       
       
@@ -281,7 +273,7 @@ namespace test{
           
           cout << "--spam--"<<endl;
           for (auto & elm : n)
-            cout << string(elm) <<endl;
+            cout << elm <<endl;
           
           
           auto iter = n.begin();

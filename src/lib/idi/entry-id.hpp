@@ -50,7 +50,6 @@
 
 #include <boost/functional/hash.hpp>
 #include <boost/operators.hpp>
-#include <iostream>
 #include <string>
 
 
@@ -256,7 +255,6 @@ namespace idi {
       
       operator string()  const;
       
-      friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }
       friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  < i2.getSym(); }
     };
     

@@ -26,18 +26,16 @@
 #include "test/mock-elm.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
 
-#include <iostream>
 
 using lib::idi::EntryID;
 using lib::idi::BareEntryID;
 using gui::test::MockElm;
 using lib::diff::GenNode;
 //using util::contains;
-using std::cout;
-using std::endl;
 
 
 namespace gui  {

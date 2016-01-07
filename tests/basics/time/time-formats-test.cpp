@@ -27,11 +27,10 @@
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/time/mutation.hpp"
-#include "lib/time/display.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 #include <cstdlib>
 
@@ -39,8 +38,6 @@ using boost::lexical_cast;
 using util::isnil;
 using std::rand;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib {

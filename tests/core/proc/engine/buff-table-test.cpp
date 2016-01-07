@@ -27,13 +27,11 @@
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/bufftable-obsolete.hpp"
 #include "lib/ref-array.hpp"
+#include "lib/format-cout.hpp"
 
 #include <boost/scoped_ptr.hpp>
-#include <iostream>
 
 using test::Test;
-using std::cout;
-using std::rand;
 
 
 namespace proc {

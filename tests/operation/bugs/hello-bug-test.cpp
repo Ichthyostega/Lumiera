@@ -41,10 +41,10 @@ namespace test   {
     : public Test
     {
       virtual void
-      run(Arg) 
-      {
-        std::cerr << "hello sunshine, no bugs whatsoever" <<endl;
-      } 
+      run (Arg)
+        {
+          cerr << "hello sunshine, no bugs whatsoever" <<endl;
+        }
     };
   
   

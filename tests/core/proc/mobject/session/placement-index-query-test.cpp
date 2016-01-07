@@ -27,10 +27,8 @@
 #include "proc/mobject/session/placement-index-query-resolver.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 #include "common/query/query-resolver.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
-
-#include <iostream>
-#include <string>
 
 
 
@@ -43,9 +41,6 @@ namespace test    {
   using session::PathQuery;
   using session::ContentsQuery;
   using util::isSameObject;
-  using std::string;
-  using std::cout;
-  using std::endl;
   
   
   /************************************************************************//**
@@ -103,7 +98,7 @@ namespace test    {
           
           PlacementMO& elm = *ContentsQuery<TestSubMO1>(root).resolveBy(resolver);                  ////////////////////// TICKET #532
           
-          cout << "path to root starting at " << string(elm) << endl;
+          cout << "path to root starting at " << elm << endl;
           discover (PathQuery<MObject> (elm).resolveBy(resolver));
         }
       
@@ -113,7 +108,7 @@ namespace test    {
       discover (IT result)
         {
           for ( ; result; ++result)
-            cout << string(*result) << endl;
+            cout << *result << endl;
         }
       
     };

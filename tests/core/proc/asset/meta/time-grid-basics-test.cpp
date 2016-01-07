@@ -26,17 +26,14 @@
 
 #include "proc/asset/meta.hpp"
 #include "proc/asset/meta/time-grid.hpp"
-#include "proc/asset/asset-format.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/rational.hpp>
-#include <iostream>
 
 using boost::rational_cast;
 using lib::test::randStr;
-using std::cout;
-using std::endl;
 
 
 

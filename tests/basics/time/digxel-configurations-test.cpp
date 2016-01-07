@@ -23,20 +23,17 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/time/display.hpp"
 #include "lib/time/digxel.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 #include <cstdlib>
 
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
 using util::isSameObject;
 using lib::test::showType;
 using std::rand;
-using std::cout;
-using std::endl;
 
 
 namespace lib {

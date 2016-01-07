@@ -29,19 +29,13 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset/media.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-#include <memory>
-#include <iostream>
 
 using lib::HashIndexed;
 using lib::test::Depend4Test;
-
-using std::shared_ptr;
-using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace proc    {
@@ -114,14 +108,11 @@ namespace test    {
           CHECK (sizeof(pSub1) == sizeof(pSub3));
           CHECK (sizeof(pClip) == sizeof(pSub3));
           
-          cout << string(pSub1) << endl;
-          cout << string(pSub2) << endl;
-          cout << string(pSub3) << endl;
-          cout << string(pSubM) << endl;
-          cout << string(pClip) << endl;
-          cout << pSub1->operator string() << endl;
-          cout << pSub2->operator string() << endl;
-          cout << pSubM->operator string() << endl;
+          cout << pSub1 << endl;
+          cout << pSub2 << endl;
+          cout << pSub3 << endl;
+          cout << pSubM << endl;
+          cout << pClip << endl;
           
           pSub3->specialAPI();
           

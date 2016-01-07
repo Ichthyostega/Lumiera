@@ -78,10 +78,10 @@ namespace test {
           void
           run (Arg) 
             {
-              AssembledClass wow_me_has_numbers;
+              AssembledClass wow_me_haz_numbers;
               
               cout << "\n..Size of = " 
-                   << sizeof(wow_me_has_numbers) <<"\n";
+                   << sizeof(wow_me_haz_numbers) <<"\n";
             } 
         };
       

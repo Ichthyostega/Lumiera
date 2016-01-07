@@ -35,7 +35,6 @@
 //#include "lib/util-foreach.hpp"
 //#include "lib/symbol.hpp"
 
-//#include <iostream>
 //#include <string>
 
 //using lib::test::showSizeof;
@@ -48,8 +47,6 @@
 //using lib::Symbol;
 //using liab::P;
 //using std::string;
-//using std::cout;
-//using std::endl;
 
 
 

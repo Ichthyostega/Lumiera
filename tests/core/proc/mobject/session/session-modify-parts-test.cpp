@@ -27,6 +27,7 @@
 //#include "proc/assetmanager.hpp"          //////??
 //#include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util-foreach.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/mobject-ref.hpp"
@@ -34,15 +35,12 @@
 #include "common/query.hpp"
 
 #include <functional>
-#include <iostream>
 #include <set>
 
 using std::ref;
 using std::placeholders::_1;
 using util::isSameObject;
 using util::and_all;
-using std::string;
-using std::cout;
 using std::set;
 
 

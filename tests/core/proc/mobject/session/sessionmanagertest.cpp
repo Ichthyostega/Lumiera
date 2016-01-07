@@ -25,12 +25,8 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/testsession1.hpp"
 //#include "lib/util.hpp"
-//#include <boost/format.hpp>
-#include <iostream>
 
-//using boost::format;
-using std::string;
-using std::cout;
+//using std::string;
 
 
 namespace proc    {

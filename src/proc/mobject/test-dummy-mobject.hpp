@@ -46,17 +46,16 @@
 #include "proc/mobject/session/abstractmo.hpp"
 #include "proc/mobject/placement.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 #include <cstdlib>
 
 using util::_Fmt;
 using util::cStr;
 using std::string;
 using std::rand;
-using std::cout;
 
 
 

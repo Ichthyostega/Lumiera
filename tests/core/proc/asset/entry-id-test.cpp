@@ -30,10 +30,10 @@
 #include "proc/mobject/session/fork.hpp"
 #include "lib/meta/trait-special.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
 
 #include <unordered_map>
-#include <iostream>
 #include <string>
 
 using lib::test::showSizeof;
@@ -43,8 +43,6 @@ using util::contains;
 using util::and_all;
 using lib::Literal;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 

@@ -25,12 +25,11 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/variant.hpp"
 #include "lib/util.hpp"
 
 
-#include <iostream>
 #include <string>
 
 
@@ -45,8 +44,6 @@ namespace test{
   
   using util::contains;
   using std::string;
-  using std::cout;
-  using std::endl;
   
   using error::LUMIERA_ERROR_WRONG_TYPE;
   using error::LUMIERA_ERROR_LOGIC;
@@ -96,10 +93,10 @@ namespace test{
           //// does not compile....
           // TestVariant evil(3.1415);
           
-          cout << string(v0) <<endl
-               << string(v1) <<endl
-               << string(v2) <<endl
-               << string(v3) <<endl;
+          cout << v0 <<endl
+               << v1 <<endl
+               << v2 <<endl
+               << v3 <<endl;
           
           CHECK (contains (string(v0), "Variant"));
           CHECK (contains (string(v0), "bool"));

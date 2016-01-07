@@ -27,9 +27,9 @@
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 
 using util::isSameObject;
 
@@ -102,8 +102,8 @@ namespace test    {
               PlacementMO& elm = *ii;
               CHECK (elm.isValid());
               Scope const& scope1 = Scope::containing(elm);
-              std::cout << "Scope: " << string(scope1) << std::endl;
-              std::cout << string(elm) << std::endl;
+              cout << "Scope: " << scope1 << endl;
+              cout << elm << endl;
               
               RefPlacement ref (elm);
               Scope const& scope2 = Scope::containing(ref);

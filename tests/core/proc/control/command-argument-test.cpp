@@ -25,14 +25,13 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-argument-holder.hpp"
 #include "lib/scoped-ptrvect.hpp"
-#include "lib/time/diagnostics.hpp"
 #include "lib/meta/tuple.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
-#include <iostream>
 #include <sstream>
 #include <cstdlib>
 #include <string>
@@ -44,11 +43,8 @@ using lib::time::Time;
 using lib::time::TimeVar;
 using lib::time::TimeValue;
 using std::string;
-using std::ostream;
 using std::ostringstream;
 using std::rand;
-using std::cout;
-using std::endl;
 
 
 namespace proc {
@@ -90,11 +86,6 @@ namespace test    {
         
         operator string()  const { return element_; }
         
-        friend ostream&
-        operator<< (ostream& out, const Tracker& tra)
-          {
-            return out << tra.element_;
-          }
         
         friend bool
         operator== (Tracker const& tra1, Tracker const& tra2)

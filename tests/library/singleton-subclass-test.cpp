@@ -24,20 +24,19 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include "test-target-obj.hpp"
 #include "lib/depend.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 
 using boost::lexical_cast;
 using util::isSameObject;
 using util::_Fmt;
 using util::isnil;
 using std::string;
-using std::cout;
 
 
 namespace lib {
@@ -118,8 +117,8 @@ namespace test{
           CHECK (isSameObject (t1, t2), "not a Singleton, got two different instances." );
           
           cout << "calling a non-static method on the Singleton-"
-               << t1.identify() << "\n"
-               << string (t1)   << "\n";
+               << t1.identify() << endl
+               << t1            << endl;
           
           verify_error_detection ();
         }

@@ -52,13 +52,11 @@
 #include "lib/idi/genfunc.hpp"
 #include "lib/depend.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
-#include <iostream>
 #include <string>
 
-using std::cerr;
-using std::endl;
 using std::string;
 
 using lib::Variant;
@@ -269,7 +267,7 @@ namespace test{
           {
             log().call(this, "act", command);
             log().error ("sent command invocation to ZombieNexus");
-            cerr << "Command " << string(command) << " -> ZombieNexus" <<endl;
+            cerr << "Command " << command << " -> ZombieNexus" <<endl;
           }
         
         virtual void
@@ -277,8 +275,8 @@ namespace test{
           {
             log().call(this, "note", subject, mark);
             log().error ("sent note message to ZombieNexus");
-            cerr << "note message "<< string(mark)
-                 << " FROM:" << string(subject)
+            cerr << "note message "<< mark
+                 << " FROM:"       << subject
                  << " -> ZombieNexus" <<endl;
           }
         
@@ -296,7 +294,7 @@ namespace test{
           {
             log().call(this, "routeAdd", identity, newNode);
             log().error ("attempt to connect against ZombieNexus");
-            cerr << "connect("<<string(identity)<<" -> ZombieNexus" <<endl;
+            cerr << "connect("<< identity <<" -> ZombieNexus" <<endl;
             return *this;
           }
         
@@ -305,7 +303,7 @@ namespace test{
           {
             log().call(this, "routeDetach", node);
             log().error ("disconnect from ZombieNexus");
-            cerr << "disconnect("<<string(node)<<" -> ZombieNexus" <<endl;
+            cerr << "disconnect("<< node <<" -> ZombieNexus" <<endl;
           }
         
         virtual operator string()  const

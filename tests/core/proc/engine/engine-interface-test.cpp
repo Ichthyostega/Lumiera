@@ -34,11 +34,9 @@
 #include "lib/time/timevalue.hpp"
 
 //#include <boost/scoped_ptr.hpp>
-//#include <iostream>
 //#include <ctime>
 
 using test::Test;
-//using std::cout;
 //using std::rand;
 
 

@@ -24,17 +24,14 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/time/display.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 
 using boost::lexical_cast;
 using util::isnil;
-using std::cout;
-using std::endl;
 using std::string;
 
 using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;

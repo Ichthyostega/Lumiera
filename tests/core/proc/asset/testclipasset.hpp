@@ -28,10 +28,8 @@
 #include "lib/test/run.hpp"
 //#include "lib/util.hpp"
 
-#include <iostream>
 
 using std::string;
-using std::cout;
 
 
 namespace proc {

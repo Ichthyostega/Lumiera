@@ -33,12 +33,10 @@
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
 
-#include <iostream>
 
 using util::contains;
 using util::isnil;
 using std::string;
-using std::cout;
 
 
 namespace proc  {

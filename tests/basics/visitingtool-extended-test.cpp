@@ -23,11 +23,11 @@
 
 #include "lib/test/run.hpp"
 #include "lib/visitor.hpp"
+#include "lib/format-string.hpp"
 
-#include <boost/format.hpp>
 #include <iostream>
 
-using boost::format;
+using util::_Fmt;
 using std::string;
 using std::cout;
 
@@ -64,7 +64,7 @@ namespace test2  {
     protected:
       void talk_to (string guy)
         {
-          cout << format ("Hello %s, nice to meet you...\n") % guy;
+          cout << _Fmt{"Hello %s, nice to meet you...\n"} % guy;
         }
     };
     

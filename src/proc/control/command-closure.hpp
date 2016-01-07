@@ -74,14 +74,13 @@
 #include "lib/meta/function-erasure.hpp"
 #include "lib/meta/tuple.hpp"
 #include "lib/meta/maybe-compare.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "lib/typed-allocation-manager.hpp"
 
 #include <memory>
 #include <functional>
-#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -184,7 +183,7 @@ namespace control {
       ostream&
       dump (ostream& output)  const
         {
-          return BASE::dump (output << util::str (element()) << ',');                            //////////////////TICKET #985 : make str obsolete!
+          return BASE::dump (output << element() << ',');
         }
       
       friend bool

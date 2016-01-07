@@ -86,7 +86,7 @@ namespace lumiera {
       
       if (isHelp())
         {
-          std::cerr << *this;
+          cerr << *this;
           exit(-1);
         }
       if (isConfigDefs())

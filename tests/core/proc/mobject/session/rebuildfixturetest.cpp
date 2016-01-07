@@ -24,17 +24,10 @@
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/testsession1.hpp"
-#include "lib/util-foreach.hpp"
-#include "lib/util.hpp"
+//#include "lib/format-cout.hpp"
+//#include "lib/util.hpp"
 
-#include <functional>
-#include <iostream>
-
-using std::bind;
-using util::contains; 
-using util::for_each; 
-using std::string;
-using std::cout;
+//using util::contains; 
 
 
 namespace proc    {

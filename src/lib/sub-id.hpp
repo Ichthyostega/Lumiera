@@ -38,7 +38,7 @@
  ** 
  ** @todo 1/2016 this idea seems very reasonable, and we should just make it
  **       robust and usable, along the lines pointed out by that draft
- **       - remove the `<iostream>` and `format-util` dependency (!)
+ **       - remove the `format-util` dependency (!)           ////////////////////////////////TICKET #985
  **       - provide a hash implementation for real
  **       - extend to arbitrary number of sub-dimensions (variadic)
  **       - implement comparisons as you'd do for any algebraic type
@@ -59,17 +59,13 @@
 //#include <functional>
 #include <boost/functional/hash.hpp>      /////TODO better push the hash implementation into a cpp file (and btw, do it more seriously!)
 
-#include <iostream>
 #include <string>
 
 
 namespace lib {
 
   using boost::hash_value;
-  
-  using std::ostream;
   using std::string;
-  using std::cout;
   
   
   
@@ -87,12 +83,6 @@ namespace lib {
       virtual operator string()  const =0;
     };
   
-  
-  inline ostream&
-  operator<< (ostream& os, SubID const& sID)
-  {
-    return os << string(sID);
-  }
   
   inline size_t
   hash_value (SubID const& sID)

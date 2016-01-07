@@ -28,17 +28,15 @@
 #include "proc/control/memento-tie.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/tuple.hpp"
+#include "lib/format-cout.hpp"
 
 #include <functional>
-#include <iostream>
 #include <cstdlib>
 #include <string>
 
 using std::function;
 using std::string;
 using std::rand;
-using std::cout;
-using std::endl;
 
 
 namespace proc {

@@ -26,13 +26,9 @@
 #include "proc/control/argument-tuple-accept.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple.hpp"
-#include "lib/time/diagnostics.hpp"
+#include "lib/format-cout.hpp"
 
 #include <functional>
-#include <iostream>
-
-using std::cout;
-using std::endl;
 
 
 namespace proc {

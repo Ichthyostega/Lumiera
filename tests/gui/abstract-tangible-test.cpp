@@ -51,17 +51,15 @@
 #include "test/mock-elm.hpp"
 #include "test/test-nexus.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/error.hpp"
 //#include "lib/util.hpp"
 
 
-#include <iostream>
 
 using gui::test::MockElm;
 using lib::test::EventLog;
 using lib::idi::EntryID;
-using std::cout;
-using std::endl;
 
 
 

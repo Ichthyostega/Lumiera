@@ -23,11 +23,11 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/depend.hpp"
 
 #include "common/query/query-resolver.hpp"
 
-#include <iostream>
 #include <string>
 
 
@@ -37,8 +37,6 @@ namespace test{
   
   using lib::test::showSizeof;
   using std::string;
-  using std::cout;
-  using std::endl;
   
   
   

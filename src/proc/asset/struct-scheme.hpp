@@ -39,12 +39,10 @@
 #include "lib/symbol.hpp"
 #include "proc/asset.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "lib/format-string.hpp"
 
 #include <cstdlib>
 
-/////////////////////////////////////////////////////////TICKET #166 : needs to be pushed down into a *.cpp
-#include <boost/format.hpp>
-using boost::format;
 
 
 namespace proc {

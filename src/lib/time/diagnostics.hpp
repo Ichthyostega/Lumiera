@@ -47,21 +47,12 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time.h"
 
-#include <iostream>
 #include <string>
 
 
 namespace lib {
 namespace time {
   
-  
-  /** writes time value, formatted as HH:MM:SS:mmm
-   *  @see lumiera_tmpbuf_print_time  */
-  inline std::ostream&
-  operator<< (std::ostream& os, TimeValue const& t)
-  {
-    return os << std::string(Time(t));
-  }
   
   
   /* === H:M:S:mm component diagnostics === */

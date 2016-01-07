@@ -24,15 +24,14 @@
 #include "lib/test/run.hpp"
 #include "lib/verb-token.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 
-#include <iostream>
 #include <string>
 #include <vector>
 
 using std::string;
 using util::_Fmt;
 using std::vector;
-using std::cout;
 
 
 namespace lib {
@@ -159,7 +158,7 @@ namespace test{
         {
           VerboseRenderer receiver;
           for (Verb verb : tokens)
-              cout << "consuming " << string(verb)
+              cout << "consuming " << verb
                    << " ->  '"
                    << verb.applyTo(receiver)
                    << "'\n";

@@ -25,15 +25,12 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
+//#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/format.hpp>
-#include <iostream>
 
-//using boost::format;
 using util::contains;
-using std::string;
-using std::cout;
+//using std::string;
 
 
 namespace proc {

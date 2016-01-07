@@ -35,11 +35,6 @@
 //#include "proc/mobject/test-dummy-mobject.hpp"
 //#include "lib/test/test-helper.hpp"
 
-//#include <iostream>
-//
-//using std::string;
-//using std::cout;
-//using std::endl;
 
 
 namespace proc    {
