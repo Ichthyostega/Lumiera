@@ -315,6 +315,9 @@ namespace time {
           return TimeValue(std::llabs (t_));
         }
       
+      /** @internal diagnostics, indicating ∆ */
+      operator std::string ()  const;
+      
       // Supporting sign flip
       Offset operator- ()  const;
     };
@@ -402,6 +405,10 @@ namespace time {
       
       void accept (Mutation const&);
       
+      
+      /** @internal diagnostics */
+      operator std::string ()  const;
+
       /// Supporting backwards use as offset
       Offset operator- ()  const;
       
