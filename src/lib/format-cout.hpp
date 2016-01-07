@@ -90,7 +90,7 @@ namespace std {
    */
   template<typename X, typename =    enable_StringConversion<X>>
   ostream&
-  operator<< (ostream& os, X* ptr)
+  operator<< (ostream& os, X const* ptr)
   {
     if (ptr)
       return util::showAddr(os, ptr) << " ↗" << *ptr;

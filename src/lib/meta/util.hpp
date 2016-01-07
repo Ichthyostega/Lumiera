@@ -204,7 +204,7 @@ namespace meta {
    */
   template<typename TY>
   inline std::string
-  typeStr (const TY* obj =nullptr)  noexcept
+  typeStr (TY const* obj =nullptr)  noexcept
     try {
       auto mangledType = obj? typeid(obj).name()
                             : typeid(TY).name();
@@ -265,11 +265,11 @@ namespace util {
   std::string showFloat (float)   noexcept;
   
   /** pretty-print an address as hex-suffix */
-  std::string showAddr (void *addr) noexcept;
+  std::string showAddr (void const* addr) noexcept;
   
   template<typename X>
   inline std::string
-  showAddr (const X& elm)  noexcept
+  showAddr (X const& elm)  noexcept
   {
     return showAddr(&elm);
   }

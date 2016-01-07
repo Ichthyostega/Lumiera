@@ -204,7 +204,7 @@ namespace util {
   
   /** @note show only the trailing X bytes of any address */
   ostream&
-  showAddr (ostream& stream, void* addr)
+  showAddr (ostream& stream, void const* addr)
   {
     size_t suffix_modulus = size_t(1) << DIAGNOSTICS_ADDRESS_SUFFIX_LEN * 8;
     return stream << "╲"
@@ -218,7 +218,7 @@ namespace util {
   
   
   string
-  showAddr (void *addr)  noexcept
+  showAddr (void const* addr)  noexcept
     try {
       ostringstream buffer;
       showAddr (buffer, addr);

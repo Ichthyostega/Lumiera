@@ -87,10 +87,10 @@ namespace util {
   
   std::string showDouble (double) noexcept;
   std::string showFloat (float)    noexcept;
-  std::string showAddr (void *addr) noexcept;
+  std::string showAddr (void const* addr) noexcept;
   
   /** preconfigured format for pretty-printing of addresses */
-  std::ostream& showAddr (std::ostream&, void* addr);
+  std::ostream& showAddr (std::ostream&, void const* addr);
   
   
   
