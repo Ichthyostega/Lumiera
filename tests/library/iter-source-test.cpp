@@ -154,10 +154,10 @@ namespace test{
       typedef IterSource<string>::iterator StringIter;
       typedef IterSource<TimeVar>::iterator TimeIter;
       
-      typedef std::map<string,TimeVar>                TreeMap;
+      typedef std::map<string,TimeVar>           TreeMap;
       typedef std::unordered_map<string,TimeVar> HashMap;
       
-      typedef std::multimap<int,int>               TreeMultimap;
+      typedef std::multimap<int,int>          TreeMultimap;
       typedef std::unordered_multimap<int,int>HashMultimap;
       
       

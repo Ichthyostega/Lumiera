@@ -93,7 +93,7 @@ namespace std {
   operator<< (ostream& os, X const* ptr)
   {
     if (ptr)
-      return util::showAddr(os, ptr) << " ↗" << *ptr;
+      return util::showAddr(os, ptr) << " ↗" << lib::meta::CustomStringConv<X>::invoke (*ptr);
     else
       return os << "⟂ «" << lib::meta::typeStr<X>() << "»";
   }

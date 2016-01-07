@@ -71,9 +71,9 @@ namespace test {
     
     using lib::test::tyAbbr;
     
-    ostream& operator<< (ostream& s, const B& b) { return s << "B{} adr="<<&b<<" type: "<<tyAbbr(b); }
-    ostream& operator<< (ostream& s, const D& d) { return s << "D{} adr="<<&d<<" type: "<<tyAbbr(d); }
-    ostream& operator<< (ostream& s, const F& f) { return s << "F{} adr="<<&f<<" type: "<<tyAbbr(f); }
+    ostream& operator<< (ostream& s, const B& b) { return s << "B{} adr="<<&b; }
+    ostream& operator<< (ostream& s, const D& d) { return s << "D{} adr="<<&d; }
+    ostream& operator<< (ostream& s, const F& f) { return s << "F{} adr="<<&f; }
     
   }//(End)Test fixture
   

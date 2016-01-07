@@ -51,7 +51,7 @@ namespace test {
   {
     cout << "[ "
          << join (coll)
-         << "]" <<endl;
+         << " ]" <<endl;
   }
   
   function<bool(uint)>
