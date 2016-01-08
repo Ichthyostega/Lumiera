@@ -25,7 +25,6 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-invocation.hpp"
 #include "proc/control/command-def.hpp"
-#include "lib/format-util.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
@@ -38,7 +37,6 @@ namespace test    {
   
   using util::isSameObject;
   using util::contains;
-  using util::str;
   
   
   

@@ -161,21 +161,21 @@ namespace util {
   catch (boost::io::too_many_args& argErr)
     {
       WARN (progress, "Format: excess argument '%s' of type «%s» ignored."
-                    , cStr(str(val))
+                    , cStr(toString(val))
                     , cStr(typeStr(val)));
     }
   catch (std::exception& failure)
     {
       _clear_errorflag();
       WARN (progress, "Format: Parameter '%s' causes problems: %s"
-                    , cStr(str(val))
+                    , cStr(toString(val))
                     , failure.what());
       pushFailsafeReplacement (formatter, failure.what());
     }
   catch (...)
     {
       _clear_errorflag();
-      WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(str(val)));
+      WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(toString(val)));
       pushFailsafeReplacement (formatter);
     }
   

@@ -112,7 +112,6 @@
 #include <string>
 #include <typeinfo>
 #include <boost/noncopyable.hpp>
-#include <boost/utility/enable_if.hpp>
 
 
 
@@ -137,7 +136,6 @@ namespace lib {
 namespace util {
   
   using std::string;
-  using boost::enable_if;
   
   typedef unsigned char uchar;
 
@@ -380,7 +378,7 @@ namespace util {
   
   /** some custom types explicitly provide a string representation */
   template<typename VAL>
-  struct _Fmt::Converter<VAL,      typename enable_if< _shall_convert_toString<VAL> >::type>
+  struct _Fmt::Converter<VAL,      lib::meta::enable_if<_shall_convert_toString<VAL>> >
     {
       static void
       dump (VAL const& val, Implementation& impl)
@@ -400,7 +398,7 @@ namespace util {
   /** some basic types are directly forwarded down to the implementation;
    * @note this requires explicit specialisations in format-string.cpp */
   template<typename VAL>
-  struct _Fmt::Converter<VAL,      typename enable_if< _shall_format_directly<VAL> >::type>
+  struct _Fmt::Converter<VAL,      lib::meta::enable_if<_shall_format_directly<VAL>> >
     {
       static void
       dump (const VAL val, Implementation& impl)

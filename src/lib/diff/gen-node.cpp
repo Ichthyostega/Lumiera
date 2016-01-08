@@ -42,7 +42,6 @@
 
 
 #include "lib/error.hpp"
-#include "lib/format-util.hpp"
 #include "lib/diff/diff-language.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/util-quant.hpp"

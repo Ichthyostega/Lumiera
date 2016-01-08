@@ -90,6 +90,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/itertools.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 #include "lib/diff/record-content-mutator.hpp"
@@ -724,9 +725,6 @@ namespace diff{
   template<typename VAL>
   Record<VAL>::operator std::string()  const
   {
-#ifndef LIB_FORMAT_UTIL_H
-    return "Record(...)";
-#else
     using util::join;
     using lib::transformIterator;
     
@@ -736,7 +734,6 @@ namespace diff{
          + (isnil(this->scope())?   "" : "|{"+join (this->scope())+"}")
          + ")"
          ;
-#endif
   }
   
   

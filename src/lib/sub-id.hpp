@@ -116,8 +116,8 @@ namespace lib {
       
       operator string()  const
         {
-          using util::str;
-          return str (baseID_);  // note: extension point   
+          using util::toString;
+          return toString (baseID_);  // note: extension point
         }
     };
   

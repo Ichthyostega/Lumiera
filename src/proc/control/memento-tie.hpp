@@ -45,6 +45,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
 #include "lib/functor-util.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>
@@ -209,12 +210,8 @@ namespace control {
     if (!isCaptured_)
       return "<mem:missing>";
     
-    return "<"
-#ifdef LIB_FORMAT_UTIL_H
-         + util::str(memento_, "mem: ", "·memento·")
-#else
-         + std::string("memento")
-#endif
+    return "<mem: "
+         + util::toString (memento_)
          + ">";
   }
   

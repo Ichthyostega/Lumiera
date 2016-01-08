@@ -55,7 +55,7 @@ namespace test{
     
     
     inline string
-    str (Colour c) ///< make the enum printable
+    toString (Colour c) ///< make the enum printable
     {
       static string sym("RGB");
       return sym.substr(c,1);

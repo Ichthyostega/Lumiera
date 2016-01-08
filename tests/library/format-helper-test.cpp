@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/format-string.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/error.hpp"
@@ -82,8 +83,10 @@ namespace test {
   
   /***************************************************************************//**
    * @test verifies the proper working of some string-formatting helper functions.
-   *       - util::str() provides a failsafe to-String conversion, preferring
-   *         an built-in conversion, falling back to just a mangled type string.
+   *       - util::toString() provides a failsafe to-String conversion, preferring
+   *         an built-in conversion, falling back to just a type string.
+   *       - util::join() combines elements from arbitrary containers or iterators
+   *         into a string, relyint on aforementioned generic string conversion
    * @see format-util.hpp
    */
   class FormatHelper_test
@@ -107,15 +110,15 @@ namespace test {
           Reticent closeLipped;
           UnReticent chatterer;
           
-          cout << str (closeLipped) << endl;
-          cout << str (closeLipped, "he says: ", "<no comment>") << endl;
+          cout << toString (closeLipped) << endl;
+          cout << toString (chatterer) << endl;
           
-          cout << str (chatterer) << endl;
-          cout << str (chatterer, "he says: ", "<no comment>") << endl;
-          
-          cout << str (false, "the truth: ") << endl;
-          cout << str (12.34e55, "just a number: ") << endl;
-          cout << str (short(12)) << str (345L) << str ('X') << endl;
+          cout << toString (false) << endl;
+          cout << toString (12.34e55) << endl;
+          cout << toString (short(12))
+               << toString (345L)
+               << toString ('X')
+               << endl;
         }
       
       

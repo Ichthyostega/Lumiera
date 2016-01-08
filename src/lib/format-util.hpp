@@ -47,129 +47,16 @@
 
 #include <string>
 #include <sstream>
-#include <cstring>
 #include <utility>
 #include <typeinfo>
-#include <boost/lexical_cast.hpp>
-#include <boost/utility/enable_if.hpp>
 
 
 
 namespace util {
   
-  using boost::enable_if;
-  using lib::meta::can_convertToString;
-  using lib::meta::can_lexical2string;
   using lib::meta::can_IterForEach;
-  using lib::Symbol;
-  using util::removePrefix;
-  using util::removeSuffix;
-  using util::isnil;
   using std::string;
   using std::move;
-  
-  
-  namespace { // we need to guard the string conversion
-             //  to avoid a compiler error in case the type isn't convertible....
-    
-    // precision for rendering of double values
-    const auto DIAGNOSTICS_DOUBLE_PRECISION = 8;
-    const auto DIAGNOSTICS_FLOAT_PRECISION  = 5;
-    
-    
-    template<typename X>
-    struct use_StringConversion : can_convertToString<X> { };
-    
-    template<typename X>
-    struct use_LexicalConversion
-      {
-        enum { value = can_lexical2string<X>::value
-                  &&  !can_convertToString<X>::value
-             };
-      };
-    
-    
-    /** helper: reliably get some string representation for type X */
-    template<typename X, typename COND =void>
-    struct _InvokeFailsafe
-      {
-        static string toString (X const&) { return ""; }
-      };
-    
-    template<typename X>
-    struct _InvokeFailsafe<X,     typename enable_if< use_StringConversion<X> >::type>
-      {
-        static string
-        toString (X const& val)
-          try        { return string(val); }
-          catch(...) { return ""; }
-      };
-    
-    template<typename X>
-    struct _InvokeFailsafe<X,     typename enable_if< use_LexicalConversion<X> >::type>
-      {
-        static string
-        toString (X const& val)
-          try        { return boost::lexical_cast<string> (val); }
-          catch(...) { return ""; }
-      };
-    
-    /** explicit specialisation to control precision of double values.
-     * @note we set an explicit precision, since this is a diagnostic facility
-     *       and we typically do not want to see all digits, but, for test code,
-     *       we do want a predictable string representation of simple fractional
-     *       values like `0.1` (which can not be represented as binary floats)
-     */
-    template<>
-    struct _InvokeFailsafe<double>
-      {
-        static string
-        toString (double const& val)
-          try {
-              std::ostringstream buffer;
-              buffer.precision(DIAGNOSTICS_DOUBLE_PRECISION);
-              buffer << val;
-              return buffer.str();
-            }
-          catch(...) { return ""; }
-      };
-    template<>
-    struct _InvokeFailsafe<float>
-      {
-        static string
-        toString (float const& val)
-          try {
-              std::ostringstream buffer;
-              buffer.precision(DIAGNOSTICS_FLOAT_PRECISION);
-              buffer << val;
-              return buffer.str();
-            }
-          catch(...) { return ""; }
-      };
-  }//(End) guards/helpers
-  
-
-  /** try to get an object converted to string.
-   *  A custom/standard conversion to string is used,
-   *  if applicable; otherwise, some standard types can be
-   *  converted by a lexical_cast (based on operator<< ).
-   *  Otherwise, either the fallback string is used, or just
-   *  a string based on the (mangled) type.
-   */
-  template<typename TY>
-  inline string
-  str ( TY const& val
-      , Symbol prefix=""      ///< prefix to prepend in case conversion is possible
-      , Symbol fallback =0   /// < replacement text to show if string conversion fails
-      )
-  {
-    string res = _InvokeFailsafe<TY>::toString(val);
-    if (!isnil (res))
-      return string(prefix) + res;
-    else
-      return fallback? string(fallback)
-                     : "«"+typeStr(val)+"»";
-  }
   
   
   
@@ -184,7 +71,7 @@ namespace util {
     inline void
     do_stringify(CON& container, X const& elm, ELMS const& ...args)
     {
-      container += util::str(elm);
+      container += util::toString (elm);
       do_stringify (container, args...);
     }
     
@@ -251,7 +138,7 @@ namespace util {
       };
     
     template<class IT>
-    struct _RangeIter<IT,   typename enable_if< can_IterForEach<IT> >::type>
+    struct _RangeIter<IT,   lib::meta::enable_if< can_IterForEach<IT>> >
       {
         IT iter;
         
@@ -291,7 +178,7 @@ namespace util {
     using Coll = typename lib::meta::Strip<CON>::Type;
     using Val =  typename Coll::value_type;
     
-    std::function<string(Val const&)> toString = [] (Val const& val) { return str(val); };
+    std::function<string(Val const&)> toString = [] (Val const& val) { return util::toString(val); };
     
     _RangeIter<Coll> range(std::forward<CON>(coll));
     auto strings = lib::transformIterator(range.iter, toString);

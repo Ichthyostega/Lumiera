@@ -91,7 +91,7 @@
 #include "lib/symbol.hpp"
 #include "include/logging.h"
 #include "lib/iter-adapter-stl.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 #include "common/advice/binding.hpp"
@@ -109,7 +109,7 @@ namespace advice {
   using std::unordered_map;
   using lib::iter_stl::eachVal;
   using lib::iter_stl::eachElm;
-  using util::str;
+  using util::toString;
   using util::for_each;
   using util::contains;
   using util::unConst;
@@ -241,7 +241,7 @@ namespace advice {
            
            operator string()  const  ///< debugging helper: show Cluster contents
              {
-               string dump{"elmList("+str(elms_.size())+")\n"};
+               string dump{"elmList("+toString(elms_.size())+")\n"};
                for (auto const& entry : elms_)
                  dump += "E...:"+entry+"\n";
                return dump;
