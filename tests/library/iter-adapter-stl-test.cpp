@@ -23,7 +23,6 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
 #include "lib/test/test-coll.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
@@ -54,7 +53,7 @@ namespace test{
   
   /** print descriptive separator to STDOUT */
 #define PRINT_FUNC(_F_NAME_, _F_TYPE_) \
-      cout << "-----"<<STRINGIFY(_F_NAME_)<<"---" << showType<_F_TYPE_>() << endl;
+      cout << "-----"<<STRINGIFY(_F_NAME_)<<"---" << util::typeStr<_F_TYPE_>() << endl;
   
   
   namespace {

@@ -25,8 +25,9 @@
  ** Collection of small helpers and convenience shortcuts for diagnostics & formatting.
  ** - util::str() performs a failsafe to-String conversion, thereby preferring a
  **         built-in conversion operator, falling back to just a mangled type string.
- ** - util::tyStr() generates a string corresponding to the type of the given object.
- **         Currently just implemented through the mangled RTTI type string  
+ ** - util::join() generates an enumerating string from elements
+ **         of an arbitrary sequence or iterable. Elements will be passed
+ **         through our [generic string conversion](\ref util::toString)
  ** 
  ** @see FormatHelper_test
  ** @see [frontend for boost::format, printf-style](format-string.hpp)
@@ -147,25 +148,6 @@ namespace util {
       };
   }//(End) guards/helpers
   
-  
-  /** @return a string denoting the type. */
-  template<typename TY>
-  inline string
-  tyStr (const TY* obj=0)
-  {
-    auto mangledType = obj? typeid(obj).name()
-                          : typeid(TY).name();
-    string typeName = lib::meta::demangleCxx (mangledType);
-    removePrefix (typeName, "const ");
-    removeSuffix (typeName, " const*");
-    return "«"+ typeName +"»";
-  }
-  
-  template<typename TY>
-  inline string
-  tyStr (TY const& ref)
-  { return tyStr(&ref); }
-  
 
   /** try to get an object converted to string.
    *  A custom/standard conversion to string is used,
@@ -186,7 +168,7 @@ namespace util {
       return string(prefix) + res;
     else
       return fallback? string(fallback)
-                     : tyStr(val);
+                     : "«"+typeStr(val)+"»";
   }
   
   

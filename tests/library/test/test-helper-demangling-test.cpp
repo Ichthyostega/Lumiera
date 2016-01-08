@@ -69,9 +69,10 @@ namespace test{
         {
           Outer<Space> ship;
           auto magic = &ship.phantom;
+          auto rawType = typeid(magic).name();
           
-          cout << showType(magic) << endl;
-          cout << demangleCxx(showType(magic)) << endl;
+          cout << rawType << endl;
+          cout << demangleCxx(rawType) << endl;
         }
     };
   

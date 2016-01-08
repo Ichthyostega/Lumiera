@@ -190,7 +190,29 @@ namespace meta {
    */
   std::string humanReadableTypeID (lib::Literal);
   
+  /** extract core name component from a raw type spec
+   * @return simple identifier possibly "the" type
+   * @warning implemented lexically, not necessarily correct!
+   */
+  std::string primaryTypeComponent (lib::Literal);
+  
+  /** build a sanitised ID from full type name */
+  std::string sanitisedFullTypeName(lib::Literal);
+  
+  /** reverse the effect of C++ name mangling.
+   * @return string in language-level form of a C++ type or object name,
+   *         or a string with the original input if demangling fails.
+   * @warning implementation relies on the cross vendor C++ ABI in use
+   *         by GCC and compatible compilers, so portability is limited.
+   *         The implementation is accessed through libStdC++
+   *         Name representation in emitted object code and type IDs is
+   *         essentially an implementation detail and subject to change.
+   */
   std::string demangleCxx (lib::Literal rawName);
+  
+  
+  extern const std::string FAILURE_INDICATOR;
+  extern const std::string VOID_INDICATOR;
   
   
   
@@ -211,12 +233,12 @@ namespace meta {
   inline std::string
   typeStr (TY const* obj =nullptr)  noexcept
     try {
-      auto mangledType = obj? typeid(obj).name()
+      auto mangledType = obj? typeid(*obj).name()
                             : typeid(TY).name();
       return humanReadableTypeID (mangledType);
     }
     catch(...)
-    { return "↯"; }
+    { return FAILURE_INDICATOR; }
   
   template<typename TY>
   inline std::string
@@ -225,13 +247,44 @@ namespace meta {
     return typeStr (&ref);
   }
   
+  inline std::string
+  typeStr (void const*)  noexcept
+  {
+    return VOID_INDICATOR;
+  }
+  
+  
+  
+  
+  /** simple expressive symbol to designate a type
+   * @return single word identifier, derived from the
+   *    full type name, not necessarily correct or unique
+   */
+  template<typename TY>
+  inline std::string
+  typeSymbol (TY const* obj =nullptr)
+  {
+    auto mangledType = obj? typeid(*obj).name()
+                          : typeid(TY).name();
+    return primaryTypeComponent (mangledType);
+  }
+  
+  template<typename TY>
+  inline std::string
+  typeSymbol (TY const& ref)
+  {
+    return typeSymbol (&ref);
+  }
+  
 }}// namespace lib::meta
+
 
 
 
 namespace util {
   
   using lib::meta::typeStr;
+  using lib::meta::FAILURE_INDICATOR;
   
   
   /** failsafe invocation of custom string conversion.
@@ -251,7 +304,7 @@ namespace util {
       static std::string
       invoke (X const& x)  noexcept
         try        { return "«"+typeStr(x)+"»"; }
-        catch(...) { return "↯"; }
+        catch(...) { return FAILURE_INDICATOR; }
     };
   
   template<typename X>
@@ -260,7 +313,7 @@ namespace util {
       static std::string
       invoke (X const& val) noexcept
         try        { return std::string(val); }
-        catch(...) { return "↯"; }
+        catch(...) { return FAILURE_INDICATOR; }
     };
   
   // NOTE: this is meant to be extensible;

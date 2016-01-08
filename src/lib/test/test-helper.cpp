@@ -37,6 +37,7 @@
 
 #include <string>
 
+using util::_Fmt;
 using std::string;
 
 namespace lib {
@@ -44,10 +45,10 @@ namespace test{
   
   
   string
-  showSizeof (size_t siz, const char* name)
+  showSizeof (size_t siz, string name)
   {
-    static util::_Fmt fmt ("sizeof( %s ) %|30t|= %3d");
-    return string (fmt % (name? name:"?") % siz);
+    static _Fmt fmt{"sizeof( %s ) %|30t|= %3d"};
+    return fmt % name % siz;
   }
   
   

@@ -40,27 +40,6 @@ namespace idi {
   
   namespace format { // generic entry points / integration helpers...
     
-    using lib::meta::demangleCxx;
-    
-    string
-    demangled_innermost_component (const char* rawName)
-    {
-      string typeStr = demangleCxx (rawName);
-      size_t end = typeStr.rfind("<");
-      size_t pos = typeStr.rfind("::", end);
-      if (pos != string::npos)
-        typeStr = (end==string::npos? typeStr.substr(pos+2)
-                                    : typeStr.substr(pos+2, end-pos-2));
-      return typeStr;
-    }
-    
-    string
-    demangled_sanitised_name (const char* rawName)
-    {
-      return util::sanitise (demangleCxx (rawName));
-    }
-    
-    
     string
     instance_format (string const& prefix, size_t instanceNr)
     {
@@ -76,7 +55,6 @@ namespace idi {
     }
     
   } //(End)integration helpers...
-  
   
   
   

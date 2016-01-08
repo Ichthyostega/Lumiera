@@ -83,6 +83,7 @@
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/virtual-copy-support.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
 #include <type_traits>
@@ -497,13 +498,7 @@ namespace lib {
   template<typename TY>
   Variant<TYPES>::Buff<TY>::operator string()  const
   {
-#ifndef LIB_FORMAT_UTIL_H
-    return string("-?-")+typeid(TY).name()+"-?-";
-#else
-    return util::str (this->access(),
-                     (util::tyStr<TY>()+"|").c_str())
-#endif
-                     ;
+    return util::typedString (this->access());
   }
   
   

@@ -22,18 +22,18 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/util.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/util.hpp"
 
 #include "lib/symbol.hpp"
 
+#include <string>
 
-#include <iostream>
-
-using std::cout;
-using std::endl;
-using util::isnil;
+using util::typeStr;
 using util::isSameObject;
+using util::isnil;
+using std::string;
 
 
 
@@ -76,8 +76,8 @@ namespace test{
           CHECK (li2 != li3);
           CHECK (li3 != li2);
           
-          cout << showType(li1 + string("ce"))         << endl;
-          cout << showType(string("minus " +li1))      << endl;
+          cout << typeStr (li1 + string("ce"))         << endl;
+          cout << typeStr (string("minus " +li1))      << endl;
           cout << li2+string("..") << string("..")+li2 << endl;
           
           CHECK (hash_value(li1) == hash_value(li2));

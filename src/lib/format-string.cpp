@@ -160,9 +160,9 @@ namespace util {
   
   catch (boost::io::too_many_args& argErr)
     {
-      WARN (progress, "Format: excess argument '%s' of type %s ignored."
+      WARN (progress, "Format: excess argument '%s' of type «%s» ignored."
                     , cStr(str(val))
-                    , cStr(tyStr(val)));
+                    , cStr(typeStr(val)));
     }
   catch (std::exception& failure)
     {

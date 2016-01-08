@@ -47,16 +47,9 @@ namespace test {
   
   namespace { // Test fixture...
     
-    class Interface;
-    
-    /** helper: shortened type display */
-    string
-    typeID(Interface const& obj)
-    {
-      return lib::test::tyAbbr(obj);
-    }
-    
     int _CheckSum_ = 0;
+    
+    class Interface;
     
     
     /** Interface for the Virtual copy operations.
@@ -116,7 +109,7 @@ namespace test {
         virtual operator string()  const override
           {
             return _Fmt("Sub|%s|%d|-%s")
-                      % typeID(*this)
+                      % util::typeStr(this)
                       % i
                       % access();
           }

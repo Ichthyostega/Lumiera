@@ -32,7 +32,7 @@
 
 using ::Test;
 using boost::lexical_cast;
-using lib::test::showType;
+using util::typeStr;
 using util::floorwrap;
 
 
@@ -74,7 +74,7 @@ namespace test {
       void
       checkWrap (I range, I scale)
         {
-          cout << "--------"<< showType<I>()
+          cout << "--------"<< typeStr<I>()
                << "--------"<< range<<"/"<<scale<<endl;
           for (I i=range; i >=-range; --i)
             showWrap (i, scale);

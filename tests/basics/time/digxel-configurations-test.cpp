@@ -32,7 +32,7 @@
 
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
 using util::isSameObject;
-using lib::test::showType;
+using util::typeStr;
 using std::rand;
 
 
@@ -96,7 +96,7 @@ namespace test{
         {
           DIX digxel;
           CHECK (0 == digxel);
-          cout << showType(digxel) << "--empty--"<<digxel;
+          cout << typeStr(digxel) << "--empty--"<<digxel;
           
           digxel = testval;
           cout << "--(val="<<testval<<")--"<<digxel;

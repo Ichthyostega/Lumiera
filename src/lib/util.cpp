@@ -46,7 +46,7 @@ namespace util {
 
   
   string
-  sanitise (const string& org)
+  sanitise (string const& org)
   {
     string res (trim_right_copy_if(org, !isValid ));
     string::iterator       j = res.begin();

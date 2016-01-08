@@ -37,8 +37,8 @@
 #include <string>
 #include <limits>
 
-using lib::test::showType;
 using boost::lexical_cast;
+using util::typeStr;
 using util::isnil;
 using std::string;
 
@@ -414,8 +414,8 @@ namespace test{
         void
         performTestSequence(TimeValue const& org, TimeValue const& c)
           {
-            cout << "Test-Case. Target=" << showType<TAR>() 
-                 << "\t <--feed--- "     << showType<SRC>() 
+            cout << "Test-Case. Target=" << typeStr<TAR>()
+                 << "\t <--feed--- "     << typeStr<SRC>()
                  << endl;
             
             // test subject

@@ -42,10 +42,10 @@
 #ifndef LIB_FORMAT_OBJ_H
 #define LIB_FORMAT_OBJ_H
 
+#include <string>
 #include "lib/meta/trait.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <string>
 
 
 namespace std { // forward declaration to avoid including <iostream>
@@ -65,19 +65,10 @@ namespace lib  {
   
 namespace meta {
   
-  /** reverse the effect of C++ name mangling.
-   * @return string in language-level form of a C++ type or object name,
-   *         or a string with the original input if demangling fails.
-   * @warning implementation relies on the cross vendor C++ ABI in use
-   *         by GCC and compatible compilers, so portability is limited.
-   *         The implementation is accessed through libStdC++
-   *         Name representation in emitted object code and type IDs is
-   *         essentially an implementation detail and subject to change.
-   */
   std::string demangleCxx (lib::Literal rawName);
-  
-  
   std::string humanReadableTypeID (lib::Literal);
+  std::string primaryTypeComponent (lib::Literal);
+  std::string sanitisedFullTypeName(lib::Literal);
   
 }}// namespace lib::meta
 
@@ -113,7 +104,7 @@ namespace util {
       static std::string
       invoke (X const& val) noexcept
         try        { return boost::lexical_cast<std::string> (val); }
-        catch(...) { return "↯"; }
+        catch(...) { return FAILURE_INDICATOR; }
     };
   
   /** explicit specialisation to control precision of double values.
@@ -158,6 +149,23 @@ namespace util {
   {
     return StringConv<TY>::invoke (val);
   }
+  
+  
+  /**
+   * indicate type and possibly a (custom) conversion to string
+   * @return human readable type name '|' string representation.
+   *    or just the type, when no string representation available
+   */
+  template<typename TY>
+  inline std::string
+  typedString (TY const& val)  noexcept
+    try {
+      std::string repr = StringConv<TY>::invoke (val);
+      return 0 == repr.rfind("«", 0)? repr
+                                    : "«"+typeStr(val)+"»|"+repr;
+    }
+    catch(...)
+    { return FAILURE_INDICATOR; }
   
   
   

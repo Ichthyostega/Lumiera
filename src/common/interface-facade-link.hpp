@@ -51,7 +51,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/test/test-helper.hpp"
+#include "lib/meta/util.hpp"
 #include "include/interfaceproxy.hpp"
 #include "lib/symbol.hpp"
 
@@ -85,7 +85,7 @@ namespace facade {
     : protected Accessor<FA>
     , boost::noncopyable
     {
-      Literal displayName_;
+      string displayName_;
       
       void
       __checkLifecycle ()
@@ -97,16 +97,17 @@ namespace facade {
       
     public:
       InterfaceFacadeLink(FA& serviceImpl, Literal interfaceName_for_Log=0)
-        : displayName_(lib::test::showType<FA>(interfaceName_for_Log))
+        : displayName_(interfaceName_for_Log? string(interfaceName_for_Log)
+                                            : util::typeStr<FA>())
         {
           __checkLifecycle();
           Accessor<FA>::implProxy_ = &serviceImpl;
-          INFO (interface, "interface %s opened", displayName_.c());
+          INFO (interface, "interface %s opened", displayName_.c_str());
         }
       
      ~InterfaceFacadeLink()
         {
-          INFO (interface, "closing interface %s...", displayName_.c());
+          INFO (interface, "closing interface %s...", displayName_.c_str());
           Accessor<FA>::implProxy_ = 0;
         }
     };

@@ -23,10 +23,10 @@
 
 /** @file test-helper.hpp
  ** A collection of frequently used helper functions to support unit testing.
- ** Mostly, these are diagnostics helpers to produce readable output, especially
- ** for types. Some of these support meta programming to figure out the \em actual
+ ** Some are test data generators, some are diagnostics helpers to produce readable
+ ** output. Some of these support meta programming to figure out the \em actual
  ** reference kind (value, lvalue, rvalue) of a template parameter instantiation.
- ** For GNU compatible compilers, we provide here also an interface to the internal
+ ** For GNU compatible compilers, we expose also the interface to the internal
  ** ABI for [demangling type names](\ref demangleCxx).
  ** 
  ** @note this header is included into a large number of tests.
@@ -61,84 +61,36 @@ namespace test{
   
   
   
-  /** get a sensible display for a type or object
-   *  @param obj object of the type in question
-   *  @param name optional name to be used literally
-   *  @return either the literal name without any further magic,
-   *          or the result of compile-time or run time 
-   *          type identification as implemented by the compiler.
-   *  @deprecated 1/2016 to be replaced by lib::typeString (from \ref format-obj.hpp=
-   */
-  template<typename T>
-  inline Literal
-  showType (T const& obj, Literal name=0)
-  {
-    return name? name : Literal(typeid(obj).name());
-  }
-  
-  /** get a sensible display for a type
-   *  @param name optional name to be used literally
-   *  @return either the literal name without any further magic,
-   *          or the result of compile-time or run time 
-   *          type identification as implemented by the compiler.
-   *  @deprecated 1/2016 to be replaced by lib::typeString (from \ref format-obj.hpp=
-   */
-  template<typename T>
-  inline Literal
-  showType (Literal name=0)
-  {
-    return name? name : Literal(typeid(T).name());
-  }
-  
-  
-  
-  /** short yet distinct name identifying the given type.
-   * @return demangled type-id without any scopes. */
-  template<typename TY>
-  string
-  tyAbbr()
-  {
-    string typeStr = demangleCxx (showType<TY>());
-    size_t pos = typeStr.rfind("::");
-    if (pos != string::npos)
-      typeStr = typeStr.substr(pos+2);
-    return typeStr;
-  }
-  
-  template<typename TY>
-  string
-  tyAbbr(TY&&)
-  {
-    return tyAbbr<TY>();
-  }
-  
   
   /** for printing sizeof().
    *  prints the given size and name literally, without any further magic */
   string
-  showSizeof (size_t siz, const char* name);
+  showSizeof (size_t siz, string name);
   
-  /** for printing sizeof(), trying to figure out the type name automatically */
+  /** for printing sizeof(), possibly figuring out the type name automatically
+   * @param name when given, this name will be used for display,
+   *    instead of auto detecting the type
+   */
   template<typename T>
   inline string
-  showSizeof(const char* name=0)
+  showSizeof (T const* obj =0, const char* name =0)
   {
-    return showSizeof (sizeof (T), showType<T> (name));
+    return showSizeof (obj?  sizeof(*obj) : sizeof(T),
+                       name? name : util::typeStr(obj));
   }
   
   template<typename T>
   inline string
-  showSizeof(T const& obj, const char* name=0)
+  showSizeof (T const& obj, const char* name=0)
   {
-    return showSizeof (sizeof (obj), showType (obj,name));
+    return showSizeof (&obj, name);
   }
   
   template<typename T>
   inline string
-  showSizeof(T *obj, const char* name=0)
+  showSizeof (const char* name)
   {
-    return obj? showSizeof (*obj, name)
-              : showSizeof<T> (name);
+    return showSizeof<T> (nullptr, name);
   }
   
   
@@ -173,7 +125,7 @@ namespace test{
   {
     return " :---#"
          + boost::lexical_cast<string>(1 + sizeof...(xs))
-         + "  -- Type: " + showType<X>()
+         + "  -- Type: " + util::typeStr(x)
          + "  "          + showRefKind<X>()
          + "  Address* " + boost::lexical_cast<string>(&x)
          + "\n"

@@ -29,6 +29,7 @@
 #include <typeinfo>
 
 using util::_Fmt;
+using lib::meta::typeStr;
 
 namespace proc {
 namespace mobject {
@@ -51,7 +52,7 @@ namespace mobject {
   Placement<MObject>::operator string ()  const 
   {
     return _Fmt{"Placement<%s> %|50T.| use-cnt=%u ID(%x) adr=%p pointee=%p"}
-             % typeid(*get()).name() % use_count()
+              % typeStr(this->get()) % use_count()
                                      % (size_t)getID()
                                      % (void*)this
                                      % (void*)get()

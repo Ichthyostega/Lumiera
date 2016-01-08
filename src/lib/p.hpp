@@ -160,10 +160,10 @@ namespace lib {
     if (BASE::get())
       return util::StringConv<TAR>::invoke (this->operator*());
     else
-      return "⟂ P<"+meta::typeStr(this->get())+">";
+      return "⟂ P<"+meta::typeStr<TAR>()+">";
   }
   catch(...)
-  { return "↯"; }
+  { return meta::FAILURE_INDICATOR; }
   
   
   

@@ -23,7 +23,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
 #include "lib/depend.hpp"
@@ -57,7 +57,7 @@ namespace test{
         
         virtual operator string()  const
           {
-            return showType(*this)
+            return util::typeStr(this)
                  + TestTargetObj::operator string();
           }
       };

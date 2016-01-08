@@ -359,7 +359,7 @@ namespace util {
       static void
       dump (const char* cString, Implementation& impl)
         {
-          format (cString? cString : "↯", impl);
+          format (cString? cString : FAILURE_INDICATOR, impl);
         }
     };
   

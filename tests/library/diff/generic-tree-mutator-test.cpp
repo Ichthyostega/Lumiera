@@ -37,8 +37,7 @@ using std::string;
 //using std::vector;
 //using std::swap;
 
-using lib::test::showType;
-using lib::meta::demangleCxx;
+using util::typeStr;
 
 
 namespace lib {
@@ -96,7 +95,7 @@ namespace test{
               });
           
           cout << "concrete TreeMutator size=" << sizeof(mutator)
-               << " type="<< demangleCxx (showType (mutator))
+               << " type="<< typeStr(mutator)
                << endl;
           
           CHECK (isnil (localData));

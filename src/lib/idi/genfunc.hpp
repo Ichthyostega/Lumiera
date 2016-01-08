@@ -55,14 +55,19 @@
 
 
 namespace lib {
+namespace meta{
+  std::string demangleCxx (lib::Literal rawName);
+  std::string humanReadableTypeID (lib::Literal);
+  std::string primaryTypeComponent (lib::Literal);
+  std::string sanitisedFullTypeName(lib::Literal);
+}// implemented in format-obj.cpp
+
 namespace idi {
   
   using lib::HashVal;
   using std::string;
   
   namespace format { // integration helpers...
-    string demangled_innermost_component (const char* rawName);
-    string demangled_sanitised_name      (const char* rawName);
     
     string instance_format (string const& prefix, size_t instanceNr);
     string instance_hex_format (string const& prefix, size_t instanceNr);
@@ -74,12 +79,14 @@ namespace idi {
   /** Short readable type identifier, not necessarily unique or complete.
    * @return the innermost component of the demangled C++ type name.
    *         Usually, this is the bare name without any namespaces.
+   * @note this function is also defined in lib/meta/util.hpp,
+   *       both delegating to the same implementation
    */
   template<typename TY>
   inline string
   typeSymbol()
   {
-    return format::demangled_innermost_component (typeid(TY).name());
+    return lib::meta::primaryTypeComponent (typeid(TY).name());
   }
   
   /** Complete unique type identifier
@@ -91,7 +98,7 @@ namespace idi {
   inline string
   typeFullID()
   {
-    return format::demangled_sanitised_name (typeid(TY).name());
+    return lib::meta::sanitisedFullTypeName (typeid(TY).name());
   }
   
   template<typename TY>
@@ -139,14 +146,13 @@ namespace idi {
   }
   
   /**
-   * @return a boost hash value, based on the full (mangled) C++ type name
+   * @return a standard hash value, based on the full (mangled) C++ type name
    */
   template<typename TY>
   inline HashVal
   getTypeHash()
   {
-    Literal rawTypeName (typeid(TY).name());
-    return hash_value (rawTypeName);
+    return typeid(TY).hash_code();
   }
   
   

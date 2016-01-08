@@ -69,7 +69,6 @@ namespace test {
       , E
       { };
     
-    using lib::test::tyAbbr;
     
     ostream& operator<< (ostream& s, const B& b) { return s << "B{} adr="<<&b; }
     ostream& operator<< (ostream& s, const D& d) { return s << "D{} adr="<<&d; }

@@ -67,7 +67,7 @@
 #define LIB_TYPED_ALLOCATION_MANAGER_H
 
 #include "lib/error.hpp"
-#include "lib/format-util.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/typed-counter.hpp"
 #include "include/logging.h"
 
@@ -265,7 +265,7 @@ namespace lib {
       allocateSlot ()
         {
           ////////////////////////////////////////////////TICKET #231 :redirect to the corresponding pool allocator
-          TRACE (memory, "allocate %s", util::tyStr<XX>().c_str());
+          TRACE (memory, "allocate «%s»", util::typeStr<XX>().c_str());
           void* space = new char[sizeof(XX)];
           allocCnt_.inc<XX>();
           return Slot<XX> (this, space);
@@ -276,7 +276,7 @@ namespace lib {
       releaseSlot (void* entry)
         {
           ////////////////////////////////////////////////TICKET #231 :redirect to the corresponding pool allocator
-          TRACE (memory, "release %s", util::tyStr<XX>().c_str());
+          TRACE (memory, "release «%s»", util::typeStr<XX>().c_str());
           typedef char Storage[sizeof(XX)];
           delete[] reinterpret_cast<Storage*> (entry);
           allocCnt_.dec<XX>();
@@ -296,8 +296,8 @@ namespace lib {
           catch(...)
             {
               lumiera_err errorID = lumiera_error();
-              WARN (command_dbg, "dtor of %s failed: %s", util::tyStr(entry).c_str()
-                                                        , errorID );
+              WARN (command_dbg, "dtor of «%s» failed: %s", util::typeStr(entry).c_str()
+                                                          , errorID );
             }
           releaseSlot<XX> (entry);
         }

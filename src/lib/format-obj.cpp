@@ -45,6 +45,7 @@
 //#include "lib/format-string.hpp"
 #include "lib/unique-malloc-owner.hpp"
 #include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #ifdef __GNUG__
 #include <cxxabi.h>
@@ -55,6 +56,8 @@
 #include <string>
 
 //using util::_Fmt;
+using util::removePrefix;
+using util::removeSuffix;
 using std::string;
 
 
@@ -72,6 +75,13 @@ namespace { // hard-wired configuration for debugging output....
 
 namespace lib  {
 namespace meta {
+  
+  // pre-allocated failure indicators, which can be returned failsafe.
+  
+  extern const std::string FAILURE_INDICATOR = "↯";
+  extern const std::string VOID_INDICATOR    = "void";
+  
+  
   
 #ifdef __GNUG__
   /**
@@ -141,12 +151,37 @@ apologies for that."
   
   
   
+  
   string
   humanReadableTypeID (Literal rawType)
   {
     string typeName = demangleCxx (rawType);
+    removePrefix (typeName, "const ");
+    removeSuffix (typeName, " const*");
     return typeName;
   }
+  
+  
+  string
+  primaryTypeComponent (Literal rawType)
+  {
+    string typeStr = demangleCxx (rawType);
+    size_t end = typeStr.rfind("<");
+    size_t pos = typeStr.rfind("::", end);
+    if (pos != string::npos)
+      typeStr = (end==string::npos? typeStr.substr(pos+2)
+                                  : typeStr.substr(pos+2, end-pos-2));
+    return typeStr;
+  }
+  
+  
+  string
+  sanitisedFullTypeName(lib::Literal rawName)
+  {
+    return util::sanitise (demangleCxx (rawName));
+  }
+  
+  
   
 }}// namespace lib::meta
 
@@ -187,7 +222,7 @@ namespace util {
       return buffer.str();
     }
     catch(...)
-    { return "↯"; }
+    { return FAILURE_INDICATOR; }
   
   
   string
@@ -199,7 +234,7 @@ namespace util {
       return buffer.str();
     }
     catch(...)
-    { return "↯"; }
+    { return FAILURE_INDICATOR; }
   
   
   /** @note show only the trailing X bytes of any address */
@@ -225,7 +260,7 @@ namespace util {
       return buffer.str();
     }
     catch(...)
-    { return "↯"; }
+    { return FAILURE_INDICATOR; }
   
   
   
