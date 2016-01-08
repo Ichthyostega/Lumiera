@@ -302,6 +302,22 @@ namespace meta {
            >
     { };
   
+  template<typename X>
+  struct use_LexicalConversion
+    : __and_<can_lexical2string<X>
+            ,__not_<can_convertToString<X>>
+            >
+    { };
+  
+  /** when to use custom string conversions for output streams */
+  template<typename X>
+  struct use_StringConversion4Stream
+    : __and_<std::is_class<typename Strip<X>::TypePlain>
+            ,__not_<std::is_pointer<X>>
+            ,__not_<can_lexical2string<X>>
+            >
+    { };
+  
   
   
   

@@ -158,7 +158,7 @@ namespace lib {
   P<TAR,BASE>::operator std::string()  const noexcept
   try {
     if (BASE::get())
-      return meta::CustomStringConv<TAR>::invoke (this->operator*());
+      return util::StringConv<TAR>::invoke (this->operator*());
     else
       return "⟂ P<"+meta::typeStr(this->get())+">";
   }

@@ -30,8 +30,8 @@
  ** tasks commonly used from debugging and diagnostics code, both to
  ** investigate object contents and show types and addresses. They
  ** are referred from our [lightweight string converter](\ref
- ** lib::meta::CustomStringConv), but also from the util::toString()
- ** function and more common [formatting utils](format-util.hpp).
+ ** util::StringConv), but also from the util::toString() function
+ ** and more common [formatting utils](format-util.hpp).
  ** 
  ** @see FormatHelper_test
  ** @see FormatString_test

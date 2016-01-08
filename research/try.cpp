@@ -86,7 +86,6 @@ using lib::meta::is_StringLike;
 using lib::meta::can_lexical2string;
 using lib::meta::can_convertToString;
 using lib::meta::use_StringConversion4Stream;
-using lib::meta::CustomStringConv;
 using lib::meta::Strip;
 
 using std::string;

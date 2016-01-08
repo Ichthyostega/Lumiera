@@ -114,10 +114,10 @@ namespace meta {
    *  Might fail in more tricky situations (references, const, volatile)
    * @see \ref format-obj.hpp more elaborate solution including lexical_cast
    */
-  template<typename T>
+  template<typename X>
   struct can_convertToString
     {
-      static T & probe();
+      static X & probe();
       
       static Yes_t check(std::string);
       static No_t  check(...);
@@ -125,6 +125,11 @@ namespace meta {
     public:
       static const bool value = (sizeof(Yes_t)==sizeof(check(probe())));
     };
+  
+  /** toggle for explicit specialisations */
+  template<typename X>
+  using enable_CustomStringConversion = enable_if<can_convertToString<X>>;
+  
   
   
   /** strip const from type: naive implementation */
@@ -220,6 +225,13 @@ namespace meta {
     return typeStr (&ref);
   }
   
+}}// namespace lib::meta
+
+
+
+namespace util {
+  
+  using lib::meta::typeStr;
   
   
   /** failsafe invocation of custom string conversion.
@@ -234,7 +246,7 @@ namespace meta {
    *    the returned string indicates "↯" in this case.
    */
   template<typename X, typename COND =void>
-  struct CustomStringConv
+  struct StringConv
     {
       static std::string
       invoke (X const& x)  noexcept
@@ -243,7 +255,7 @@ namespace meta {
     };
   
   template<typename X>
-  struct CustomStringConv<X,     enable_if<can_convertToString<X>> >
+  struct StringConv<X,     lib::meta::enable_CustomStringConversion<X>>
     {
       static std::string
       invoke (X const& val) noexcept
@@ -254,11 +266,8 @@ namespace meta {
   // NOTE: this is meant to be extensible;
   //       more specialisations are e.g. in format-obj.hpp
   
-}}// namespace lib::meta
-
-
-
-namespace util {
+  
+  
   
   /** pretty-print a double in fixed-point format */
   std::string showDouble (double) noexcept;
@@ -280,7 +289,7 @@ namespace util {
   inline std::string
   showPtr (X* ptr =nullptr)
   {
-    return ptr? showAddr(ptr) + " ↗" + lib::meta::CustomStringConv<X>::invoke(*ptr)
+    return ptr? showAddr(ptr) + " ↗" + StringConv<X>::invoke(*ptr)
               : "⟂ «" + typeStr(ptr) + "»";
   }
   

@@ -43,10 +43,9 @@
 #define LIB_FORMAT_OBJ_H
 
 #include "lib/meta/trait.hpp"
-//#include "lib/util.hpp"
 
-#include <string>
 #include <boost/lexical_cast.hpp>
+#include <string>
 
 
 namespace std { // forward declaration to avoid including <iostream>
@@ -83,6 +82,10 @@ namespace meta {
 }}// namespace lib::meta
 
 
+
+
+
+
 namespace util {
   
   std::string showDouble (double) noexcept;
@@ -91,6 +94,70 @@ namespace util {
   
   /** preconfigured format for pretty-printing of addresses */
   std::ostream& showAddr (std::ostream&, void const* addr);
+  
+  
+  namespace {
+    /** toggle to prefer specialisation with direct lexical conversion */
+    template<typename X>
+    using enable_LexicalConversion = lib::meta::enable_if< lib::meta::use_LexicalConversion<X>>;
+  }
+  
+  
+  
+  /* === generalise the failsafe string conversion === */
+  
+  /** @note base case is defined in meta/util.hpp */
+  template<typename X>
+  struct StringConv<X,     enable_LexicalConversion<X>>
+    {
+      static std::string
+      invoke (X const& val) noexcept
+        try        { return boost::lexical_cast<std::string> (val); }
+        catch(...) { return "↯"; }
+    };
+  
+  /** explicit specialisation to control precision of double values.
+   * @note we set an explicit precision, since this is a diagnostic facility
+   *       and we typically do not want to see all digits, but, for test code,
+   *       we do want a predictable string representation of simple fractional
+   *       values like `0.1` (which can not be represented as binary floats)
+   */
+  template<>
+  struct StringConv<double>
+    {
+      static std::string
+      invoke (double val) noexcept
+      {
+        return util::showDouble (val);
+      }
+    };
+  template<>
+  struct StringConv<float>
+    {
+      static std::string
+      invoke (float val) noexcept
+      {
+        return util::showFloat (val);
+      }
+    };
+  
+  
+  
+  
+  /**
+   * get some string representation of any object, reliably.
+   * A custom string conversion operator is invoked, if applicable,
+   * while all lexically convertible types (numbers etc) are treated
+   * by boost::lexical_cast. For double or float values, hard wired
+   * rounding to a fixed number of digits will be performed, to yield
+   * a predictable display of printed unit-test results.
+   */
+  template<typename TY>
+  inline std::string
+  toString (TY const& val)  noexcept
+  {
+    return StringConv<TY>::invoke (val);
+  }
   
   
   

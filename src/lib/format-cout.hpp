@@ -39,7 +39,6 @@
 #define LIB_FORMAT_COUT_H
 
 #include "lib/format-obj.hpp"
-//#include "lib/util.hpp"
 
 #include <string>
 #include <iostream>
@@ -49,20 +48,6 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-
-  
-namespace lib  {
-namespace meta {
-  
-  /** when to use custom string conversions for output streams */
-  template<typename X>
-  struct use_StringConversion4Stream
-    : __and_<std::is_class<typename Strip<X>::TypePlain>
-            ,__not_<std::is_pointer<X>>
-            ,__not_<can_lexical2string<X>>
-            >
-    { };
-}}
 
 
 
@@ -80,7 +65,7 @@ namespace std {
   ostream&
   operator<< (ostream& os, X const& obj)
   {
-    return os << lib::meta::CustomStringConv<X>::invoke (obj);
+    return os << util::StringConv<X>::invoke (obj);
   }
   
   
@@ -93,7 +78,7 @@ namespace std {
   operator<< (ostream& os, X const* ptr)
   {
     if (ptr)
-      return util::showAddr(os, ptr) << " ↗" << lib::meta::CustomStringConv<X>::invoke (*ptr);
+      return util::showAddr(os, ptr) << " ↗" << util::StringConv<X>::invoke (*ptr);
     else
       return os << "⟂ «" << lib::meta::typeStr<X>() << "»";
   }
