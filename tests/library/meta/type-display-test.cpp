@@ -61,7 +61,7 @@ namespace test{
     struct Space { };
     
     auto CHALLENGE_1 = "some::arbitrary::BullShit<oh::RLY>";
-    auto CHALLENGE_2 = "lib::BullShit<const std::string& (const std::vector<proc::mobject::oh::RLY* const>)>";
+    auto CHALLENGE_2 = "lib::Contrived<lib::meta::Barely,true>::ClusterFuck<const std::string& (const std::vector<proc::mobject::oh::RLY* const>)>";
     auto CHALLENGE_3 = "std::function<special::(anonymous namespace)::Shit(lib::P<asset::Clip, std::shared_ptr<asset::Clip>>)>";
     
   }//(end)fixture

@@ -94,18 +94,26 @@ namespace test{
           CHECK (2 == sizeof (rmpf2));
           CHECK (3 == sizeof (rmpf3));
           
-          cout << showSizeof<char>("just a char")  << endl;
-          cout << showSizeof(murpf)                << endl;
-          cout << showSizeof(rmpf1)                << endl;
-          cout << showSizeof(rmpf2)                << endl;
-          cout << showSizeof<Wrmpf3>()             << endl;
-          cout << showSizeof(size_t(24),
-                             string{"everything"}) << endl;
+          cout << showSizeof<char>("just a char") << endl;
+          cout << showSizeof(murpf)               << endl;
+          cout << showSizeof(rmpf1)               << endl;
+          cout << showSizeof(rmpf2)               << endl;
+          cout << showSizeof<Wrmpf3>()            << endl;
+          cout << showSizeof(size_t(42),
+                             string{"Universe"})  << endl;
           
           Wrmpf1 *p1 = &rmpf1;
           Wrmpf1 *p2 = 0;
           cout << showSizeof(p1)  << endl;
           cout << showSizeof(p2)  << endl;
+          
+          Wrmpf1 & r = rmpf1;
+          Wrmpf1 const& cr = r;
+          Wrmpf1 const* cp = &r;
+          
+          cout << showSizeof(r)  << endl;
+          cout << showSizeof(cr)  << endl;
+          cout << showSizeof(cp)  << endl;
         }
       
       

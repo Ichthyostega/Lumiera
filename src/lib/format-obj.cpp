@@ -54,11 +54,15 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <regex>
 
 //using util::_Fmt;
 using util::removePrefix;
 using util::removeSuffix;
 using std::string;
+
+using std::regex;
+using std::regex_replace;
 
 
 namespace { // hard-wired configuration for debugging output....
@@ -152,12 +156,58 @@ apologies for that."
   
   
   
+  
+  /** \par implementation notes
+   * - we do not strip type adornments like `const`, `&` or `*`,
+   *   however, the typical usage from within util::typeStr()
+   *   is arranged in a way to absorb these adornments by the way
+   *   the template signatures are defined
+   * - we _do_ simplify the type display and strip some obnoxious
+   *   namespace prefixes with the help of `std::regex_replace`
+   * - we perform those simplifying rewrites _in place_ thus _overwriting_
+   *   the result string. This exploits the fact that the replacements are
+   *   _always shorter_ than what is being replaced (**beware**).
+   * - standard regular expressions can be [assumed][stdRegEx-threadsafe]
+   *   to be threadsafe. Thus, we're able to build an embedded shared
+   *   static variable _on demand_ and use the performance optimisation
+   *   offered by the standard library
+   * - performance wise we'll assume the transformation happens within
+   *   the cache, so it doesn't make much of a difference if we scan
+   *   the same comparatively short string multiple times
+   * 
+   * [stdRegEx-threadsafe]: http://stackoverflow.com/questions/15752910/is-stdregex-thread-safe 
+   */
   string
   humanReadableTypeID (Literal rawType)
   {
+    static regex commonPrefixes {"std::"
+                                "|lib::meta::"
+                                "|lib::time::"
+                                "|lib::test::"
+                                "|lib::diff::"
+                                "|lib::"
+                                "|util::"
+                                "|proc::"
+                                "|proc::asset::"
+                                "|proc::mobject::"
+                                "|proc::mobject::session::"
+                                "|proc::play::"
+                                "|gui::model"
+                                "|gui::ctrl"
+                                , regex::ECMAScript | regex::optimize};
+    
+    static regex stdAllocator {"(\\w+<(\\w+)), allocator<\\2>\\s*"
+                                , regex::ECMAScript | regex::optimize};
+    
+    
     string typeName = demangleCxx (rawType);
-    removePrefix (typeName, "const ");
-    removeSuffix (typeName, " const*");
+    auto pos = typeName.begin();
+    auto end = typeName.end();
+    
+    end = regex_replace(pos, pos, end, commonPrefixes, "");
+    end = regex_replace(pos, pos, end, stdAllocator, "$1");
+
+    typeName.resize(end - typeName.begin());
     return typeName;
   }
   

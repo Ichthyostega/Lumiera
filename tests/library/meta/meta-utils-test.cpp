@@ -26,6 +26,9 @@
 #include "lib/meta/typelist.hpp"
 
 #include <string>
+#include <iostream>
+using std::cout;
+using std::endl;/////////////////////////TODO
 
 
 namespace lib  {
@@ -51,6 +54,7 @@ namespace test {
       run (Arg) 
         {
           verify_basicAssumptions();
+          verify_genericTypeDisplay();
           
           detect_stringConversion();
           detect_typeList();
@@ -75,6 +79,26 @@ namespace test {
       
       static Yes_t probe (int);
       static No_t  probe (...);
+      
+      
+      
+      void
+      verify_genericTypeDisplay()
+        {
+          cout << typeStr<SubString>() <<endl;
+          
+          struct Lunatic
+            : Test
+            {
+              virtual void run (Arg) {}
+            }
+          lunatic;
+          cout << typeStr(lunatic)     << endl;
+          cout << typeStr(&lunatic)      << endl;
+          cout << typeStr((Test &)lunatic) << endl;
+          cout << typeStr((Test *) &lunatic) << endl;
+          cout << typeStr(&Lunatic::run)       << endl;
+        }
       
       
       
