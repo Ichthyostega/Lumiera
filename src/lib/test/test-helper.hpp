@@ -80,7 +80,8 @@ namespace test{
   }
   
   template<typename T>
-  inline string
+  inline                                      meta::disable_if<std::is_pointer<T>,
+  string                                      >                                 // note:: force invocations with pointer to the first overload
   showSizeof (T const& obj, const char* name=0)
   {
     return showSizeof (&obj, name);
@@ -100,7 +101,7 @@ namespace test{
   string
   showRefKind()
   {
-    return std::is_lvalue_reference<R>::value? "REF"
+    return std::is_lvalue_reference<R>::value?       "REF"
                : std::is_rvalue_reference<R>::value? "MOV"
                                                    : "VAL";
   }

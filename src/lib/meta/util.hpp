@@ -225,6 +225,12 @@ namespace meta {
    *    and further simplify the type string, leaving out some common
    *    (hard wired) namespace prefixes, and stripping typical adornments
    *    like `const`, `*` and `&`
+   * @remarks almost all calls will enter through the `const&` variant of this
+   *    function, since C++ considers this best match in template substitution.
+   *    Thus, we deliberately force calls with pointer to enter here, since we
+   *    do want the pointer itself (and not a pointer to the pointer). We then
+   *    pass the "object" as so called "glvalue" to the `typeid()` function,
+   *    so to get the evaluation of RTTI, when applicable.
    * @warning this function does string transformations behind the scenes,
    *    and thus should not be used in performance critical context. Moreover,
    *    the returned type string is not necessarily exact and re-parsable.
@@ -241,7 +247,8 @@ namespace meta {
     { return FAILURE_INDICATOR; }
   
   template<typename TY>
-  inline std::string
+  inline                   disable_if<std::is_pointer<TY>,
+  std::string              >
   typeStr (TY const& ref)  noexcept
   {
     return typeStr (&ref);
@@ -270,7 +277,8 @@ namespace meta {
   }
   
   template<typename TY>
-  inline std::string
+  inline                   disable_if<std::is_pointer<TY>,
+  std::string              >
   typeSymbol (TY const& ref)
   {
     return typeSymbol (&ref);
@@ -331,7 +339,7 @@ namespace util {
   
   template<typename X>
   inline std::string
-  showAddr (X const& elm)  noexcept
+  showAddr (X& elm)  noexcept
   {
     return showAddr(&elm);
   }
