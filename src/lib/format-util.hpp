@@ -175,7 +175,7 @@ namespace util {
   inline string
   join (CON&& coll, string const& delim =", ")
   {
-    using Coll = typename lib::meta::Strip<CON>::Type;
+    using Coll = typename lib::meta::Strip<CON>::TypePlain;
     using Val =  typename Coll::value_type;
     
     std::function<string(Val const&)> toString = [] (Val const& val) { return util::toString(val); };

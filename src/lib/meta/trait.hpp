@@ -182,19 +182,6 @@ namespace meta {
         }
     };
   
-  template<typename X, class B>
-  struct Unwrap<mobject::Placement<X, B> >
-    {
-      typedef X  Type;
-      
-      static X&
-      extract (mobject::Placement<X,B> placement)
-        {
-          ASSERT (placement.isValid());
-          return *placement;
-        }
-    };
-  
   
   /** convenience shortcut: unwrapping free function.
    *  @return reference to the bare element.
