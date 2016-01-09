@@ -254,8 +254,8 @@ namespace meta {
   /** compare unadorned types, disregarding const and references */
   template<typename T, typename U>
   struct is_basically
-    : is_same <typename Strip<T>::TypeReferred
-              ,typename Strip<U>::TypeReferred>
+    : is_same <typename Strip<T>::TypePlain
+              ,typename Strip<U>::TypePlain>
     { };
   
   /** detect various flavours of string / text data */

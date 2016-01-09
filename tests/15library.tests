@@ -183,6 +183,10 @@ return: 0
 END
 
 
+TEST "formatting/string conversion in output" FormatCOUT_test <<END
+END
+
+
 TEST "formatting/diagnostics helpers" FormatHelper_test <<END
 out: Displaying some types....
 out: «util::test::Reticent»

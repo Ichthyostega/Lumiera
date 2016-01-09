@@ -320,6 +320,16 @@ out-lit:  :.
 END
 
 
+TEST "Helper to show demangled C++ names" TypeDemangling_test <<END
+out: .+lib.test.test.Space.+Outer.+Inner
+out-lit: lib::test::test::Space const* (*)(lib::test::test::Outer<lib::test::test::Space>::Inner const&&)
+END
+
+
+TEST "Helper for human readable type display" TypeDisplay_test <<END
+END
+
+
 TEST "TypeList_test" TypeList_test <<END
 out: - 1 -- 2 -- 3 -- 5 -- 8 -- 13 -- The End -
 out: ..Size of = 1

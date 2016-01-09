@@ -1,5 +1,5 @@
 /*
-  TestHelperDemangling(Test)  -  ensure a helper for C++ demangling works as expected
+  TypeDemangling(Test)  -  ensure a helper for C++ demangling works as expected
 
   Copyright (C)         Lumiera.org
     2014,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "lib/meta/util.hpp"
 
 #include <string>
 #include <iostream>
@@ -33,7 +33,7 @@ using std::endl;
 
 
 namespace lib {
-namespace test{
+namespace meta{
 namespace test{
   
   template<class T>
@@ -42,7 +42,7 @@ namespace test{
       struct Inner { };
       
       static const T*
-      phantom (Inner const&&)
+      cloak (Inner const&&)
         {
           return nullptr;
         }
@@ -62,13 +62,13 @@ namespace test{
    *       
    * @see test-helper.hpp
    */
-  class TestHelperDemangling_test : public Test
+  class TypeDemangling_test : public Test
     {
       void
       run (Arg)
         {
           Outer<Space> ship;
-          auto magic = &ship.phantom;
+          auto magic = &ship.cloak;
           auto rawType = typeid(magic).name();
           
           cout << rawType << endl;
@@ -76,7 +76,7 @@ namespace test{
         }
     };
   
-  LAUNCHER (TestHelperDemangling_test, "unit common");
+  LAUNCHER (TypeDemangling_test, "unit common");
   
   
-}}} // namespace lib::test::test
+}}} // namespace lib::meta::test

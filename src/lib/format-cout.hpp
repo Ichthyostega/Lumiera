@@ -28,8 +28,23 @@
  ** by the representation of the pointee. When the displayed entity defines an
  ** `operator string()`, this custom string conversion will be used (suppressing
  ** any exceptions, of course). As fallback, a simplified type string is printed.
+ **
+ ** \par policy
+ ** What shall be expected from a generic toString conversion?
+ ** It should be _minimal_, it should be _transparent_ and it should
+ ** always work and deliver a string, irrespective of the circumstances.
+ ** By extension, this means that we do not want to differentiate much
+ ** between values, references and pointers, which also means, we do
+ ** not want to indicate pointers explicitly (just signal NULL, when
+ ** encountered). The situation is slightly different for the `ostream`
+ ** inserter; in a modern GUI application, there isn't much use for
+ ** STDOUT and STDERR, beyond error messages and unit testing.
+ ** Thus, we can strive at building a more convenient flavour
+ ** here, which does indeed even show the address of pointers.
  ** 
+ ** @see FormatCOUT_test
  ** @see FormatHelper_test
+ ** @see [generic string conversion helper](\ref util::toString)
  ** @see [frontend for boost::format, printf-style](format-string.hpp)
  ** 
  */
