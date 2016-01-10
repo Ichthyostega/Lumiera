@@ -59,6 +59,7 @@
 //using util::_Fmt;
 using util::removePrefix;
 using util::removeSuffix;
+using util::isnil;
 using std::string;
 
 using std::regex;
@@ -180,7 +181,11 @@ apologies for that."
   string
   humanReadableTypeID (Literal rawType)
   {
+    string typeName = demangleCxx (rawType);
+    
+    
     static regex commonPrefixes {"std::"
+                                "|(\\w+::)+\\(anonymous namespace\\)::"
                                 "|lib::meta::"
                                 "|lib::time::"
                                 "|lib::test::"
@@ -199,28 +204,74 @@ apologies for that."
     static regex stdAllocator {"(\\w+<(\\w+)), allocator<\\2>\\s*"
                                 , regex::ECMAScript | regex::optimize};
     
+    static regex lumieraP {"P<(\\w+), shared_ptr<\\1>\\s*"
+                                , regex::ECMAScript | regex::optimize};
     
-    string typeName = demangleCxx (rawType);
+    
     auto pos = typeName.begin();
     auto end = typeName.end();
     
     end = regex_replace(pos, pos, end, commonPrefixes, "");
     end = regex_replace(pos, pos, end, stdAllocator, "$1");
+    end = regex_replace(pos, pos, end, lumieraP, "P<$1");
 
     typeName.resize(end - typeName.begin());
     return typeName;
   }
   
   
+  
+  /** \par implementation notes
+   * We want to get at the name of the _most relevant_ type entity.
+   * This in itself is a heuristic. But we can work on the assumption,
+   * that we get a sequence of nested namespaces and type names, and
+   * we'll be interested in the last, the innermost of these types.
+   * In the most general case, each type could be templated, and
+   * thus will be followed by parameter specs enclosed in angle
+   * braces. Behind this spec, only type adornments will follow.
+   * Thus we'll inspect the string _from the back side_, skipping
+   * over all type parameter contents, until we reach brace
+   * level zero again. From this point, we have to search
+   * backwards to the first namespace separator `::`
+   * @warning we acknowledge this function can fail in various ways,
+   *    some of which will be indicated by returning the string "void".
+   *    But it may well happen that the returned string contains
+   *    whitespace, superfluous punctuation or even the whole
+   *    demangled type specification as is.
+   */
   string
   primaryTypeComponent (Literal rawType)
   {
     string typeStr = demangleCxx (rawType);
-    size_t end = typeStr.rfind("<");
-    size_t pos = typeStr.rfind("::", end);
-    if (pos != string::npos)
-      typeStr = (end==string::npos? typeStr.substr(pos+2)
-                                  : typeStr.substr(pos+2, end-pos-2));
+    
+    removeSuffix (typeStr, " const");
+    removeSuffix (typeStr, " const *");
+    removeSuffix (typeStr, "*");
+    removeSuffix (typeStr, "&");
+    
+    if (isnil (typeStr)) return VOID_INDICATOR;
+    
+    auto end = typeStr.end();
+    auto beg = typeStr.begin();
+    int level=0;
+    while (--end != beg)
+      {
+        if ('>' == *end)
+          ++level;
+        else if ('<' == *end and level>0)
+          --level;
+        else
+          if (level==0)
+          {
+            ++end;
+            break;
+          }
+      }
+    if (end == beg) return VOID_INDICATOR;
+    
+    auto pos = typeStr.rfind("::", end-beg);
+    typeStr = (pos==string::npos? typeStr.substr(end-beg)
+                                : typeStr.substr(pos+2, (end-beg)-pos-2));
     return typeStr;
   }
   
@@ -228,9 +279,8 @@ apologies for that."
   string
   sanitisedFullTypeName(lib::Literal rawName)
   {
-    return util::sanitise (demangleCxx (rawName));
+    return util::sanitise (humanReadableTypeID (rawName));
   }
-  
   
   
 }}// namespace lib::meta
@@ -238,14 +288,10 @@ apologies for that."
 
 
 
+
 /* === formatting and pretty printing support uitls === */
 
 namespace util {
-  
-  
-  namespace { // implementation details...
-    
-  }//(End) implementation details
   
   using std::hex;
   using std::setw;

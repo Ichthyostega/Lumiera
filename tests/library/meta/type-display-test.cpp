@@ -52,7 +52,7 @@ namespace test{
         struct Inner { };
         
         static const T*
-        cloak (Inner const&&)
+        cloak (Inner&&)
           {
             return nullptr;
           }
@@ -60,9 +60,9 @@ namespace test{
     
     struct Space { };
     
-    auto CHALLENGE_1 = "some::arbitrary::BullShit<oh::RLY>";
+    auto CHALLENGE_1 = "some::arbitrary::BullShit<oh::RLY>*";
     auto CHALLENGE_2 = "lib::Contrived<lib::meta::Barely,true>::ClusterFuck<const std::string& (const std::vector<proc::mobject::oh::RLY* const>)>";
-    auto CHALLENGE_3 = "std::function<special::(anonymous namespace)::Shit(lib::P<asset::Clip, std::shared_ptr<asset::Clip>>)>";
+    auto CHALLENGE_3 = "std::function<special::(anonymous namespace)::Shit(lib::P<proc::asset::Clip, std::shared_ptr<proc::asset::Clip>>)>";
     
   }//(end)fixture
   
@@ -85,6 +85,11 @@ namespace test{
       void
       run (Arg)
         {
+          cout << "-----input----------------------"<<endl;
+          cout << CHALLENGE_1                       <<endl;
+          cout << CHALLENGE_2                       <<endl;
+          cout << CHALLENGE_3                       <<endl;
+          
           cout << "-----human-readable-------------"<<endl;
           cout << humanReadableTypeID (CHALLENGE_1) <<endl;
           cout << humanReadableTypeID (CHALLENGE_2) <<endl;
@@ -99,6 +104,14 @@ namespace test{
           cout << sanitisedFullTypeName (CHALLENGE_1) <<endl;
           cout << sanitisedFullTypeName (CHALLENGE_2) <<endl;
           cout << sanitisedFullTypeName (CHALLENGE_3) <<endl;
+          
+          
+          Outer<Space> ship;
+          auto magic = ship.cloak;
+          cout << typeStr(&magic) <<endl;
+          cout << typeSymbol(&magic) <<endl;
+          
+          cout << typeStr<Outer<typeof(this)>::Inner>() <<endl;
         }
     };
   
