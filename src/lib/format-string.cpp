@@ -115,11 +115,16 @@ namespace util {
    *  The actual implementation is delegated to an boost::format object,
    *  which is placement-constructed into an opaque buffer embedded into
    *  this object. Defining the necessary size for this buffer relies
-   *  on a implementation details of boost::format (and might break)
+   *  on implementation details of boost::format (and might break)
+   * @see lib::meta::SizeTrait::BOOST_FORMAT
    */
   _Fmt::_Fmt (string formatString)
   try {
-      BOOST_STATIC_ASSERT (sizeof(boost::format) <= FORMATTER_SIZE);
+      static_assert (sizeof(boost::format) <= FORMATTER_SIZE,
+                     "opaque working buffer insufficient "
+                     "to hold a boost::format instance. "
+                     "Maybe boost implementation change. "
+                     "Please verify lib/meta/size-trait.hpp");
       
       new(formatter_) boost::format(formatString);
       suppressInsufficientArgumentErrors (formatter_);

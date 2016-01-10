@@ -250,11 +250,11 @@ namespace test {
           
           Verbose& rv = x;
           
-          string mangledType = _Fmt("%s") % s;
-          cout << mangledType << endl;
-          CHECK (contains (mangledType, "util"));
-          CHECK (contains (mangledType, "test"));
-          CHECK (contains (mangledType, "Silent"));
+          string typeDisplay = _Fmt("%s") % s;
+          cout << typeDisplay << endl;
+          CHECK (contains (typeDisplay, "test"));
+          CHECK (contains (typeDisplay, "FormatString_test"));
+          CHECK (contains (typeDisplay, "Silent"));
           
           CHECK (_Fmt("!!%s!!") % v  == "!!Number-013!!");
           CHECK (_Fmt("!!%s!!") % x  == "!!<string conversion failed: LUMIERA_ERROR_STATE:unforeseen state (encountered Fantomas).>!!");
@@ -336,7 +336,7 @@ namespace test {
           
           pv = NULL;
           vv = NULL;
-          CHECK (_Fmt("__%s__") % pv == "__<null>__");
+          CHECK (_Fmt("__%s__") % pv == "__"+BOTTOM_INDICATOR+"__");
           CHECK (_Fmt("__%s__") % vv == "__0__");
         }
     };

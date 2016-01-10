@@ -73,10 +73,26 @@ namespace test{
    * @test verify post processing of demangled C++ type names.
    *  The purpose of those pretty printing functions is to support diagnostics
    *  and unit testing by making type names easier to digest. But of course
-   *  we do not want to pick the right primary type for shortened display
+   *  we do not want to pick the wrong primary type for shortened display
    *  and we do not want mess up the semantic structure.
+   *  - the first example should be passed through unaltered
+   *  - the second example demonstrates various simplifications
+   *    * strip some frequent namespace prefixes
+   *      ** `std::`
+   *      ** `lib::meta::`
+   *      ** `proc::mobject::`
+   *    * omit the standard allocator from STL containers
+   *  - the third example demonstrates an embedded function signature
+   *    * the primary type component is "`function`"
+   *    * anything leading up to anonymous namespaces will be stripped
+   *    * our special smart-ptr lib::P will be simplified
+   * 
+   * The remainder of the test concentrates on the corner cases of
+   * lib::meta::primaryTypeComponent -- especially when the solution
+   * approach breaks down, e.g. on pure function types.
    * 
    * @see format-cout.hpp
+   * @see FormatCOUT_test
    * @see FormatHelper_test
    */
   class TypeDisplay_test
@@ -108,12 +124,29 @@ namespace test{
           
           Outer<Space> ship;
           auto magic = ship.cloak;
-          cout << typeStr(&magic) <<endl;
-          cout << typeSymbol(&magic) <<endl;
+          CHECK (typeStr(&magic)    == "Space const* (*)(Outer<Space>::Inner&&)");
+          CHECK (typeSymbol(&magic) == "Function");
           
-          cout << typeStr<Outer<typeof(this)>::Inner>() <<endl;
-          cout << sanitisedSymbol("") <<endl;
-          cout << sanitisedSymbol("bääähla7/(6sf*z") <<endl;
+          CHECK (typeStr   <Outer<typeof(this)>::Inner>()    == "Outer<test::TypeDisplay_test*>::Inner");
+          CHECK (typeSymbol<Outer<typeof(this)>::Inner>()    == "Inner"      );
+          
+          CHECK (primaryTypeComponent("")                    == "void"       );
+          CHECK (primaryTypeComponent("Sym&")                == "Sym"        );
+          CHECK (primaryTypeComponent("Sym const *")         == "Sym"        );
+          CHECK (primaryTypeComponent("Sym const * const")   == "Sym"        );
+          CHECK (primaryTypeComponent("Sym§$<>%&/'* const")  == "Sym§$<>%&/'"); // adornments stripped, but rest retained as-is
+          CHECK (primaryTypeComponent("Sym§$<>%&/)&* const") == "Function"   ); // types ending with braces are classified as "Function"
+          CHECK (primaryTypeComponent("Sym <§$&ää>")         == "Sym "       ); // note the trailing whitespace
+          CHECK (primaryTypeComponent("One<§$&ää>::Two")     == "Two"        );
+          CHECK (primaryTypeComponent("One::Two<§$&ää>")     == "Two"        );
+          CHECK (primaryTypeComponent("One::Two<§$&ää>")     == "Two"        );
+          CHECK (primaryTypeComponent("Sym<<xx>")            == "Sym<"       ); // unbalanced braces
+          CHECK (primaryTypeComponent("Sym<>xx>")            == "void"       ); // opening brace never found
+          CHECK (primaryTypeComponent("<x>xx>*")             == "void"       );
+          CHECK (primaryTypeComponent("<x<xx>*")             == "<x"         );
+          
+          CHECK (sanitisedSymbol("bäälü9a/(6f*a☹☢☀s☭el_88☠") == "blafasel_88"); // note: picking up only valid identifier fragments
+          
         }
     };
   

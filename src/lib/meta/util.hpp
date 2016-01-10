@@ -219,6 +219,7 @@ namespace meta {
   
   extern const std::string FUNCTION_INDICATOR;
   extern const std::string FAILURE_INDICATOR;
+  extern const std::string BOTTOM_INDICATOR;
   extern const std::string VOID_INDICATOR;
   
   extern const std::string BOOL_FALSE_STR;
@@ -302,6 +303,7 @@ namespace util {
   
   using lib::meta::typeStr;
   using lib::meta::FAILURE_INDICATOR;
+  using lib::meta::BOTTOM_INDICATOR;
   
   
   /** failsafe invocation of custom string conversion.
@@ -360,7 +362,7 @@ namespace util {
   showPtr (X* ptr =nullptr)
   {
     return ptr? showAddr(ptr) + " ↗" + StringConv<X>::invoke(*ptr)
-              : "⟂ «" + typeStr(ptr) + "»";
+              : BOTTOM_INDICATOR + " «" + typeStr(ptr) + "»";
   }
   
   /** human readable display of boolean values

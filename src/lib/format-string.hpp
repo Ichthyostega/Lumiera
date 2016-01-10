@@ -109,9 +109,8 @@
 #include "lib/meta/util.hpp"
 #include "lib/meta/size-trait.hpp"
 
-#include <string>
-#include <typeinfo>
 #include <boost/noncopyable.hpp>
+#include <string>
 
 
 
@@ -324,7 +323,7 @@ namespace util {
       static void
       dump (VAL const&, Implementation& impl)
         {
-          format (string("«")+typeid(VAL).name()+"»", impl);
+          format ("«"+typeStr<VAL>()+"»", impl);
         }
     };
   
@@ -337,7 +336,7 @@ namespace util {
           if (pVal)
             Converter<VAL>::dump(*pVal, impl);
           else
-            format ("<null>", impl);
+            format (BOTTOM_INDICATOR, impl);
         }
     };
   
@@ -357,7 +356,7 @@ namespace util {
       static void
       dump (const char* cString, Implementation& impl)
         {
-          format (cString? cString : FAILURE_INDICATOR, impl);
+          format (cString? cString : BOTTOM_INDICATOR, impl);
         }
     };
   

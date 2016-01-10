@@ -83,6 +83,7 @@ namespace meta {
   
   // pre-allocated failure indicators, which can be returned failsafe.
   
+  extern const string BOTTOM_INDICATOR  = "⟂";
   extern const string FAILURE_INDICATOR = "↯";
   extern const string VOID_INDICATOR    = "void";
   extern const string FUNCTION_INDICATOR= "Function";
@@ -187,6 +188,7 @@ apologies for that."
   {
     string typeName = demangleCxx (rawType);
     
+    #define TYP_EXP "[\\w<>\\(\\):,\\s]+"
     
     static regex commonPrefixes {"std::"
                                 "|(\\w+::)+\\(anonymous namespace\\)::"
@@ -206,7 +208,10 @@ apologies for that."
                                 "|lumiera::"
                                 , regex::ECMAScript | regex::optimize};
     
-    static regex stdAllocator {"(\\w+<(\\w+)), allocator<\\2>\\s*"
+    static regex stdAllocator {"(\\w+<(" TYP_EXP ")), allocator<\\2>\\s*"
+                                , regex::ECMAScript | regex::optimize};
+    
+    static regex mapAllocator {"(map<(" TYP_EXP "), (" TYP_EXP ")),.+allocator<pair<\\2 const, \\3>\\s*>\\s*"
                                 , regex::ECMAScript | regex::optimize};
     
     static regex lumieraP {"P<(\\w+), shared_ptr<\\1>\\s*"
@@ -218,6 +223,7 @@ apologies for that."
     
     end = regex_replace(pos, pos, end, commonPrefixes, "");
     end = regex_replace(pos, pos, end, stdAllocator, "$1");
+    end = regex_replace(pos, pos, end, mapAllocator, "$1");
     end = regex_replace(pos, pos, end, lumieraP, "P<$1");
 
     typeName.resize(end - typeName.begin());
@@ -276,7 +282,7 @@ apologies for that."
     if (end == beg) return VOID_INDICATOR;
     
     auto pos = typeStr.rfind("::", end-beg);
-    typeStr = (pos==string::npos? typeStr.substr(end-beg)
+    typeStr = (pos==string::npos? typeStr.substr(0, end-beg)
                                 : typeStr.substr(pos+2, (end-beg)-pos-2));
     return typeStr;
   }

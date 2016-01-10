@@ -53,7 +53,7 @@ namespace test {
       void
       run (Arg) 
         {
-          verify_basicAssumptions();
+          verify_basicTypeProbing();
           verify_genericTypeDisplay();
           
           detect_stringConversion();
@@ -61,13 +61,14 @@ namespace test {
         }
       
       
-      /** @test demonstrate / verify the
-       * basic type trait detection technique:
-       * By investigating the return type, we can
-       * figure out which overload the compiler picks..
+      /** @test demonstrate the basic type trait detection technique:
+       *  - we have two overloads with differing return type
+       *  - we form a function call expression
+       *  - by investigating the return type,
+       *    we can figure out which overload the compiler picks.
        */
       void
-      verify_basicAssumptions()
+      verify_basicTypeProbing()
         {
           CHECK (sizeof(Yes_t) != sizeof (No_t));
           

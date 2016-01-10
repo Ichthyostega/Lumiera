@@ -23,12 +23,10 @@
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"
-#include "lib/format-cout.hpp"
 #include "lib/format-string.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/error.hpp"
 
-#include <iostream>
 #include <vector>
 #include <string>
 
@@ -40,44 +38,45 @@ using util::_Fmt;
 using std::vector;
 using std::string;
 using std::to_string;
-using std::cout;
-using std::endl;
 
 
 namespace util {
 namespace test {
   
-  class Reticent 
-    { };
-  
-  class UnReticent
-    : public Reticent 
-    {
-    public:
-      operator string()  const { return "hey Joe!"; }
-    };
-  
-  
-  
-  class AutoCounter
-    {
-      static uint cnt;
-      
-      uint id_;
-      double d_;
-      
-    public:
-      AutoCounter(double d)
-        : id_(++cnt)
-        , d_(d*2)
-        { }
-      
-      operator string()  const
-        {
-          return _Fmt("Nr.%02d(%3.1f)") % id_ % d_;
-        }
-    };
-  uint AutoCounter::cnt = 0;
+  namespace { // test fixture...
+    
+    class Reticent
+      { };
+    
+    class UnReticent
+      : public Reticent
+      {
+      public:
+        operator string()  const { return "hey Joe!"; }
+      };
+    
+    
+    
+    class AutoCounter
+      {
+        static uint cnt;
+        
+        uint id_;
+        double d_;
+        
+      public:
+        AutoCounter(double d)
+          : id_(++cnt)
+          , d_(d*2)
+          { }
+        
+        operator string()  const
+          {
+            return _Fmt("Nr.%02d(%3.1f)") % id_ % d_;
+          }
+      };
+    uint AutoCounter::cnt = 0;
+  }
   
   
   
@@ -86,7 +85,7 @@ namespace test {
    *       - util::toString() provides a failsafe to-String conversion, preferring
    *         an built-in conversion, falling back to just a type string.
    *       - util::join() combines elements from arbitrary containers or iterators
-   *         into a string, relyint on aforementioned generic string conversion
+   *         into a string, relying on aforementioned generic string conversion
    * @see format-util.hpp
    */
   class FormatHelper_test
@@ -105,20 +104,23 @@ namespace test {
       void
       check2String ()
         {
-          std::cout << "Displaying some types....\n";
-          
           Reticent closeLipped;
           UnReticent chatterer;
           
-          cout << toString (closeLipped) << endl;
-          cout << toString (chatterer) << endl;
+          CHECK (toString (closeLipped) == "«Reticent»"  );
+          CHECK (toString (chatterer)   == "hey Joe!"    );
           
-          cout << toString (false) << endl;
-          cout << toString (12.34e55) << endl;
-          cout << toString (short(12))
-               << toString (345L)
-               << toString ('X')
-               << endl;
+          CHECK (toString (&chatterer)  == "«UnReticent»"); // string convertible => type display
+          CHECK (toString (nullptr)     == "↯"           ); // runtime exception, caught
+          
+          CHECK (toString (true)        == "true"        ); // special handling for bool
+          CHECK (toString (2+2 == 5)    == "false"       );
+          CHECK (toString (12.34e55)    == "1.234e+56"   );
+          
+          CHECK (toString (short(12))
+                +toString (345L)
+                +toString ("67")
+                +toString ('8')         == "12345678"    ); // these go through lexical_cast<string>
         }
       
       
@@ -142,9 +144,28 @@ namespace test {
           std::function<AutoCounter(double)> justCount = [](double d){ return AutoCounter(d); };
           
           
-          cout << join(dubious, "--+--") << endl;
-          cout << join(transformIterator(eachElm(dubious)
-                                        ,justCount)) << endl;
+          CHECK (join (dubious, "--+--")
+                 == "0--+--"
+                    "1.1--+--"
+                    "2.2--+--"
+                    "3.3--+--"
+                    "4.4--+--"
+                    "5.5--+--"
+                    "6.6--+--"
+                    "7.7--+--"
+                    "8.8--+--"
+                    "9.9");
+          CHECK (join (transformIterator(eachElm(dubious), justCount))
+                 == "Nr.01(0.0), "
+                    "Nr.02(2.2), "
+                    "Nr.03(4.4), "
+                    "Nr.04(6.6), "
+                    "Nr.05(8.8), "
+                    "Nr.06(11.0), "
+                    "Nr.07(13.2), "
+                    "Nr.08(15.4), "
+                    "Nr.09(17.6), "
+                    "Nr.10(19.8)" );
         }
       
       
