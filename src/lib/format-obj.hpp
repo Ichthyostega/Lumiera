@@ -84,7 +84,7 @@ namespace meta {
 namespace util {
   
   std::string showDouble (double) noexcept;
-  std::string showFloat (float)    noexcept;
+  std::string showFloat (float)   noexcept;
   std::string showAddr (void const* addr) noexcept;
   
   /** preconfigured format for pretty-printing of addresses */
@@ -133,6 +133,15 @@ namespace util {
       invoke (float val) noexcept
       {
         return util::showFloat (val);
+      }
+    };
+  template<>
+  struct StringConv<bool>
+    {
+      static std::string
+      invoke (bool val) noexcept
+      {
+        return util::showBool (val);
       }
     };
   

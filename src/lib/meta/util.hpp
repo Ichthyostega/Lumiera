@@ -199,6 +199,12 @@ namespace meta {
   /** build a sanitised ID from full type name */
   std::string sanitisedFullTypeName(lib::Literal);
   
+  /** condense a string and retain only valid identifiers
+   * @return string starting with letter, followed by
+   *         letters, digits and underscore
+   */
+  std::string sanitisedSymbol(std::string const&);
+  
   /** reverse the effect of C++ name mangling.
    * @return string in language-level form of a C++ type or object name,
    *         or a string with the original input if demangling fails.
@@ -211,9 +217,12 @@ namespace meta {
   std::string demangleCxx (lib::Literal rawName);
   
   
+  extern const std::string FUNCTION_INDICATOR;
   extern const std::string FAILURE_INDICATOR;
   extern const std::string VOID_INDICATOR;
   
+  extern const std::string BOOL_FALSE_STR;
+  extern const std::string BOOL_TRUE_STR;
   
   
   /** failsafe human readable type display
@@ -352,6 +361,16 @@ namespace util {
   {
     return ptr? showAddr(ptr) + " ↗" + StringConv<X>::invoke(*ptr)
               : "⟂ «" + typeStr(ptr) + "»";
+  }
+  
+  /** human readable display of boolean values
+   * @return "`true`" or "`false`"
+   */
+  inline std::string
+  showBool (bool yes)  noexcept
+  {
+    return yes? lib::meta::BOOL_TRUE_STR
+              : lib::meta::BOOL_FALSE_STR;
   }
   
   

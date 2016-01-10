@@ -347,6 +347,7 @@ namespace util {
    "Bääääh!!"                         --> 'Bh'
 \endverbatim
    * @see sanitised-identifier-test.cpp
+   * @see lib::meta::sanitisedSymbol()
    */
   string sanitise (string const& org);
   

@@ -112,6 +112,8 @@ namespace test{
           cout << typeSymbol(&magic) <<endl;
           
           cout << typeStr<Outer<typeof(this)>::Inner>() <<endl;
+          cout << sanitisedSymbol("") <<endl;
+          cout << sanitisedSymbol("bääähla7/(6sf*z") <<endl;
         }
     };
   

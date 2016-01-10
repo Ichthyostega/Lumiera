@@ -83,8 +83,12 @@ namespace meta {
   
   // pre-allocated failure indicators, which can be returned failsafe.
   
-  extern const std::string FAILURE_INDICATOR = "↯";
-  extern const std::string VOID_INDICATOR    = "void";
+  extern const string FAILURE_INDICATOR = "↯";
+  extern const string VOID_INDICATOR    = "void";
+  extern const string FUNCTION_INDICATOR= "Function";
+  
+  extern const string BOOL_FALSE_STR = "false";
+  extern const string BOOL_TRUE_STR = "true";
   
   
   
@@ -199,6 +203,7 @@ apologies for that."
                                 "|proc::play::"
                                 "|gui::model"
                                 "|gui::ctrl"
+                                "|lumiera::"
                                 , regex::ECMAScript | regex::optimize};
     
     static regex stdAllocator {"(\\w+<(\\w+)), allocator<\\2>\\s*"
@@ -250,6 +255,7 @@ apologies for that."
     removeSuffix (typeStr, "&");
     
     if (isnil (typeStr)) return VOID_INDICATOR;
+    if (')' == typeStr.back()) return FUNCTION_INDICATOR;
     
     auto end = typeStr.end();
     auto beg = typeStr.begin();
@@ -277,10 +283,20 @@ apologies for that."
   
   
   string
-  sanitisedFullTypeName(lib::Literal rawName)
+  sanitisedFullTypeName (lib::Literal rawName)
   {
     return util::sanitise (humanReadableTypeID (rawName));
   }
+  
+  
+  string
+  sanitisedSymbol (string const& text)
+  {
+    static regex identifierChars {"[A-Za-z]\\w*", regex::ECMAScript | regex::optimize};
+    
+    return regex_replace (text, identifierChars, "$&", std::regex_constants::format_no_copy);
+  }
+  
   
   
 }}// namespace lib::meta
@@ -289,7 +305,7 @@ apologies for that."
 
 
 
-/* === formatting and pretty printing support uitls === */
+/* === formatting and pretty printing support utils === */
 
 namespace util {
   
