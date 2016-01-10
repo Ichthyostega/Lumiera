@@ -43,42 +43,43 @@ END
 
 TEST "external MObject references" MObjectRef_test <<END
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: sizeof\( MORef<Clip> \)                   =  (32|24)
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: Asset\(VIDEO:lumi.test-1 v1\)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: sizeof\( MORef<Clip> \)                   =  (32|24)
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: Asset\(VIDEO:lumi.test-2 v1\)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: sizeof\( MORef<Clip> \)                   =  (32|24)
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: Asset\(VIDEO:lumi.test-1 v1\)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: sizeof\( MORef<Clip> \)                   =  (32|24)
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: Asset\(VIDEO:lumi.test-2 v1\)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.>.+ use-cnt=4
+out: sizeof\( MORef<Clip> \)                   =  (32|24)
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: Asset\(VIDEO:lumi.test-1 v1\)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: sizeof\( MORef<Clip> \)                   =  (32|24)
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: Asset\(VIDEO:lumi.test-1 v1\)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> .......... use-cnt=4
+out: sizeof\( MORef<Clip> \)                   =  (32|24)
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
 out: Asset\(VIDEO:lumi.test-2 v1\)
-out: Placement<.+Clip.> .......... use-cnt=4
-out: Placement<.+Clip.> .......... use-cnt=5
+out: Placement<Clip> .................................. use-cnt=4 ID.\w{16}
+out: Placement<Clip> .................................. use-cnt=5 ID.\w{16}
 out: \(VIDEO:lumi.test-1 v1\)
+
 END
 
 
@@ -91,35 +92,36 @@ END
 
 
 TEST "hierarchical placement types" PlacementHierarchy_test <<END
-out: sizeof\( .+ \) =  [0-9]{2}
-out: Placement.+mobject.+test.+TestSubMO1.+. use-cnt=1 .*
-out: Placement.+mobject.+test.+TestSubMO2.+. use-cnt=1 .*
-out: Placement.+mobject.+test.+TestSubMO21.+ use-cnt=2 .*
-out: Placement.+mobject.+session.+Clip.+.... use-cnt=2 .*
-out: TestSubMO1\(ID=[0-9]{3}\)
-out: TestSubMO2\(ID=[0-9]{3}\)
-out: TestSubMO21\(ID=[0-9]{3}\)
+out: sizeof\( test::TestPlacement<test::TestSubMO1, test::DummyMO> \) =  [0-9]{2}
+out: sizeof\( test::TestPlacement<test::TestSubMO2, test::DummyMO> \) =  [0-9]{2}
+out: sizeof\( test::TestPlacement<test::TestSubMO21, test::TestSubMO2> \) =  [0-9]{2}
+out: sizeof\( test::TestPlacement<test::DummyMO, test::DummyMO> \) =  [0-9]{2}
+out: sizeof\( Placement<MObject, MObject> \)   =  [0-9]{2}
+out: Placement<test::TestSubMO1> ...................... use-cnt=1 ID.\w{16}
+out: Placement<test::TestSubMO2> ...................... use-cnt=1 ID.\w{16}
+out: Placement<test::TestSubMO21> ..................... use-cnt=2 ID.\w{16}
+out: Placement<Clip> .................................. use-cnt=2 ID.\w{16}
 out: specialAPI()
 out: pID\(\w{6,16}\)
 END
 
 
 TEST "PlacementRef_test" PlacementRef_test <<END
-out: Placement<.+TestSubMO21.> ..... use-cnt=2
+out: Placement<test::TestSubMO21> ..................... use-cnt=2 ID.\w{16}
 out: specialAPI()
 END
 
 
 TEST "Placement Index" PlacementIndex_test <<END
-out: ^::Placement<.+session.test.TestClip.+ use-cnt=2
-out: ^::Placement<.+session.test.TestClip.+ use-cnt=6
-out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=6
-out: ^  ::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^::Placement<test::TestClip> ........................ use-cnt=2
+out: ^::Placement<test::TestClip> ........................ use-cnt=6
+out: ^ ::Placement<test::TestClip> ........................ use-cnt=6
+out: ^  ::Placement<test::TestClip> ........................ use-cnt=6
 out: ^  ...2 elements at Level 2
-out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^ ::Placement<test::TestClip> ........................ use-cnt=6
 out: ^ ...3 elements at Level 1
-out: ^::Placement<.+session.test.TestClip.+ use-cnt=2
-out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=1
+out: ^::Placement<test::TestClip> ........................ use-cnt=2
+out: ^ ::Placement<test::TestClip> ........................ use-cnt=1
 out: ^ ...1 elements at Level 1
 out: ^...3 elements at Level 0
 END
@@ -127,69 +129,69 @@ END
 
 TEST "Querying the index" PlacementIndexQuery_test <<END
 out: explore contents depth-first...
-out: Placement<.+TestSubMO2.> ...... use-cnt=1
-out: Placement<.+TestSubMO1.> ...... use-cnt=1
-out: Placement<.+DummyMO.> .......... use-cnt=1
-out: Placement<.+TestSubMO21.> ..... use-cnt=1
-out: path to root starting at Placement<.+TestSubMO1
-out: Placement<.+TestSubMO2.> ...... use-cnt=1
-out: Placement<.+session.Label.> ......... use-cnt=1
+out: Placement<test::TestSubMO2> ...................... use-cnt=1
+out: Placement<test::TestSubMO1> ...................... use-cnt=1
+out: Placement<test::DummyMO> ......................... use-cnt=1
+out: Placement<test::TestSubMO21> ..................... use-cnt=1
+out: path to root starting at Placement<test::TestSubMO1> ...................... use-cnt=1
+out: Placement<test::TestSubMO2> ...................... use-cnt=1
+out: Placement<Label> ................................. use-cnt=1
 END
 
 
 TEST "discovering scopes" ScopeQuery_test <<END
 out: --------------------------------Test-1: contents depth-first
-out: Placement<.+TestSubMO2.>
-out: Placement<.+TestSubMO1.>
-out: Placement<.+DummyMO.>
-out: Placement<.+TestSubMO21.>
+out: Placement<test::TestSubMO2>
+out: Placement<test::TestSubMO1>
+out: Placement<test::DummyMO>
+out: Placement<test::TestSubMO21>
 out: --------------------------------Test-2: contents depth-first, filtered to Clip
 out: --------------------------------Test-3: contents depth-first, filtered to DummyMO
-out: Placement<.+TestSubMO2.>
-out: Placement<.+TestSubMO1.>
-out: Placement<.+DummyMO.>
-out: Placement<.+TestSubMO21.>
+out: Placement<test::TestSubMO2>
+out: Placement<test::TestSubMO1>
+out: Placement<test::DummyMO>
+out: Placement<test::TestSubMO21>
 out: --------------------------------Test-4: contents depth-first, filtered to TestSubMO1
-out: Placement<.+TestSubMO1.>
+out: Placement<test::TestSubMO1>
 out: --------------------------------Test-5: contents depth-first, filtered to TestSubMO2
-out: Placement<.+TestSubMO2.>
-out: Placement<.+TestSubMO21.>
+out: Placement<test::TestSubMO2>
+out: Placement<test::TestSubMO21>
 out: --------------------------------Test-6: contents depth-first, custom filtered DummyMO
-out: Placement<.+TestSubMO2.>
-out: Placement<.+TestSubMO21.>
+out: Placement<test::TestSubMO2>
+out: Placement<test::TestSubMO21>
 out: --------------------------------Test-7: parents of the second TestSubMO2 element found
-out: Placement<.+TestSubMO21.>
-out: Placement<.+mobject.session.Label.>
+out: Placement<test::TestSubMO21>
+out: Placement<Label>
 out: --------------------------------Test-8: children of the this TestSubMO2 element
-out: Placement<.+TestSubMO21.>
+out: Placement<test::TestSubMO21>
 out: --------------------------------Test-9: path from there to root
-out: Placement<.+TestSubMO21.>
-out: Placement<.+mobject.session.Label.>
+out: Placement<test::TestSubMO21>
+out: Placement<Label>
 out: --------------------------------Test-10: same path, but filtered to TestSubMO2
-out: Placement<.+TestSubMO21.>
+out: Placement<test::TestSubMO21>
 out: --------------------------------Test-11: continue exploring partially used TestSubMO2 iterator
-out: Placement<.+TestSubMO21.>
+out: Placement<test::TestSubMO21>
 return: 0
 END
 
 
 TEST "Placement search scope" PlacementScope_test <<END
-out: Scope: \[Label\.[0-9]{3}\]
-out: Placement<.+TestSubMO2.>
-out: Scope: \[DummyMO\.[0-9]{3}\]
-out: Placement<.+TestSubMO1.>
-out: Scope: \[Label\.[0-9]{3}\]
-out: Placement<.+DummyMO.>
-out: Scope: \[Label\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
-out: Scope: \[DummyMO\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
-out: Scope: \[DummyMO\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
-out: Scope: \[DummyMO\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
-out: Scope: \[DummyMO\.[0-9]{3}\]
-out: Placement<.+TestSubMO21.>
+out: Scope: \[Label.[0-9]{3}\]
+out: Placement<test::TestSubMO2>
+out: Scope: \[DummyMO.[0-9]{3}\]
+out: Placement<test::TestSubMO1>
+out: Scope: \[Label.[0-9]{3}\]
+out: Placement<test::DummyMO>
+out: Scope: \[Label.[0-9]{3}\]
+out: Placement<test::TestSubMO21>
+out: Scope: \[DummyMO.[0-9]{3}\]
+out: Placement<test::TestSubMO21>
+out: Scope: \[DummyMO.[0-9]{3}\]
+out: Placement<test::TestSubMO21>
+out: Scope: \[DummyMO.[0-9]{3}\]
+out: Placement<test::TestSubMO21>
+out: Scope: \[DummyMO.[0-9]{3}\]
+out: Placement<test::TestSubMO21>
 return: 0
 END
 
@@ -206,7 +208,7 @@ END
 
 
 TEST "issuing typed queries" QueryResolver_test <<END
-out: Query-Results: sizeof\( .+IterAdapter.+Cursor.+shared_ptr.+Resolution
+out: Query-Results: sizeof\( IterAdapter<Query<int>::Cursor, shared_ptr<Resolution> >
 out: ^6
 out: ^5
 out: ^4
@@ -214,7 +216,7 @@ out: ^3
 out: ^2
 out: ^1
 out: ^0
-out: Query-Results: sizeof\( .+IterAdapter.+Cursor.+shared_ptr.+Resolution
+out: Query-Results: sizeof\( IterAdapter<Query<string>::Cursor, shared_ptr<Resolution> >
 out: ^a
 out: ^ra
 out: ^era

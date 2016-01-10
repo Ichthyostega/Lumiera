@@ -4,13 +4,18 @@ TESTING "Test support and helpers" ./test-suite --group=common
 
 TEST "Test support functions" TestHelper_test <<END
 out: [a-z0-9]{80}$
-out: Displaying types and sizes....
-out: sizeof..just a char.+ =   1
-out: sizeof.+lib.+test.+test.+Murpf.+ =   1
-out: sizeof.+lib.+test.+test.+Wrmrmpft.+ =   2
-out: sizeof.+lib.+test.+test.+Wrmrmpft.+ =   3
-out: sizeof.+lib.+test.+test.+Wrmrmpft.+Murpf.+ =   1
-out: sizeof..everything.+ =  42
+out-lit: Displaying types and sizes....
+out-lit: sizeof( just a char )                   =   1
+out-lit: sizeof( test::Murpf )                   =   1
+out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
+out-lit: sizeof( test::Wrmrmpft<char [2]> )      =   2
+out-lit: sizeof( test::Wrmrmpft<char [3]> )      =   3
+out-lit: sizeof( Universe )                      =  42
+out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
+out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
+out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
+out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
+out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
 END
 
 

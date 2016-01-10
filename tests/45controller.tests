@@ -18,7 +18,7 @@ out: would be serialised.....Command-State. arguments=Closure\(\), ·noUNDO·.
 out: would be serialised.....Command-State. arguments=Closure\(.\), ·noUNDO·.
 out: would be serialised.....Command-State. arguments=Closure\(.,.+s.*\), ·noUNDO·.
 out: would be serialised.....Command-State. arguments=Closure\(.+s.*,glorious,..\), <mem: destruction>.
-out: sizeof\( .+control1.ArgumentHolder.+ \) = .+
+out: sizeof\( control::ArgumentHolder<void \(Tracker<TimeVar>, Tracker<string>, int\), Tracker<string> > \) = [0-9]{2,3}
 out: Command-State. arguments=Closure\(.+s.*,Lumiera rocks,..\), ·noUNDO·.
 out: capture state...
 out: captured state: START...Lumiera rocks
@@ -36,8 +36,8 @@ END
 
 
 TEST "build argument accepting function" ArgumentTupleAccept_test <<END
-out: sizeof\( .+control.+TestClass.+ \) =   1
-out: sizeof\( .+control.+TestClass.+lib.time.TimeVar.+ \) =  (12|16)
+out: sizeof\( TestClass<void \(\)> \)            =   1
+out: sizeof\( TestClass<int \(TimeVar, int\)> \) =  (12|16)
 out: .+s
 return: 0
 END

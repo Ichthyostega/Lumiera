@@ -104,8 +104,7 @@ namespace test{
       void
       verify_fullTypeID()
         {
-          //////TODO this should be a identifier with only letters, numbers and underscores. Need to extend the util::sanitise
-          CHECK("lib::idi::test::(anonymous_namespace)::Somelib::idi::test::(anonymous_namespace)::Thing" == typeFullID<SomeThing>());
+          CHECK("Some_Thing" == typeFullID<SomeThing>());
         }
       
       

@@ -215,7 +215,7 @@ namespace test{
       symbolReference()
         {
           GenNode ham = MakeRec().type("spam").attrib("τ", Time(23,42)).genNode("egg bacon sausage and spam");
-
+          
           GenNode::ID hamID(ham);
           CHECK (hamID == ham.idi);
           CHECK (hamID.getSym() == ham.idi.getSym());
@@ -286,7 +286,7 @@ namespace test{
               CHECK (2 == iter.level());                                 // delve into the contents,
               CHECK ("hasSpam" == iter->idi.getSym());                   // ...starting with the attribute(s)
               CHECK (true      == iter->data.get<bool>());
-              CHECK ("GenNode-ID(\"hasSpam\")-DataCap|«bool»|1" == string(*iter));
+              CHECK ("GenNode-ID(\"hasSpam\")-DataCap|«bool»|true" == string(*iter));
               
               ++iter;
               CHECK (!iter->isNamed());                                  // contents of the object's scope
@@ -318,7 +318,7 @@ namespace test{
               ++iter;
               CHECK (2 == iter.level());                                 // decreasing level indicates we left nested scope
               CHECK (!iter->isNamed());                                  // next item in the enclosing scope
-              CHECK ("0:00:00.000[920ms]" == string(iter->data.get<TimeSpan>()));
+              CHECK ("0:00:00.000≺920ms≻" == string(iter->data.get<TimeSpan>()));
               ++iter;
               CHECK (!iter->isNamed());
               CHECK (42 == iter->data.get<int64_t>());

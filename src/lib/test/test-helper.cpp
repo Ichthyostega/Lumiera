@@ -47,7 +47,7 @@ namespace test{
   string
   showSizeof (size_t siz, string name)
   {
-    static _Fmt fmt{"sizeof( %s ) %|30t|= %3d"};
+    static _Fmt fmt{"sizeof( %s ) %|40t|= %3d"};
     return fmt % name % siz;
   }
   

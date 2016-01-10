@@ -288,7 +288,7 @@ namespace mobject {
               && (*pRef_).template isCompatible<MOX>();
         }
       
-      operator string()   const                      ///////////////////////TICKET #527   should be better integrated with the other object types
+      operator string()   const                      ///////////////////////TICKET #527 #528 should be better integrated with the other object types
         {
           return isValid()? string(getPlacement())
                           : "MRef-NIL";

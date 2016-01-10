@@ -51,7 +51,7 @@ namespace mobject {
   
   Placement<MObject>::operator string ()  const 
   {
-    return _Fmt{"Placement<%s> %|50T.| use-cnt=%u ID(%x) adr=%p pointee=%p"}
+    return _Fmt{"Placement<%s> %|50T.| use-cnt=%u ID(%016x) adr=%p pointee=%p"}
               % typeStr(this->get()) % use_count()
                                      % (size_t)getID()
                                      % (void*)this
@@ -64,7 +64,7 @@ namespace mobject {
   format_PlacementID (Placement<MObject> const& pla)
   {
     size_t hashVal = pla.getID();
-    return _Fmt{"pID(%x)"} % hashVal;
+    return _Fmt{"pID(%016x)"} % hashVal;
   }
   
   

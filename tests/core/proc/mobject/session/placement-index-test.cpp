@@ -262,8 +262,15 @@ namespace test    {
           index.clear (e1321);
           CHECK (!index.contains (e1321));
           CHECK (!index.contains (e13211));
+          CHECK (!index.contains (e13212));
           CHECK (!index.contains (e13213));
           CHECK (!index.contains (e132131));
+          CHECK (!index.contains (e132132));
+          CHECK (!index.contains (e132133));
+          CHECK (!index.contains (e132134));
+          CHECK (!index.contains (e132141));
+          CHECK (!index.contains (e132142));
+          CHECK (!index.contains (e132143));
           CHECK (!index.contains (e132144));
           CHECK (siz == index.size());
           CHECK (index.isValid());
@@ -275,6 +282,14 @@ namespace test    {
       
       /** @test drill down into the tree-like structure
        *        and enumerate the contents of each element, if any
+       *  @note at this point, our test index holds 9 Placements,
+       *        which actually refer to 3 distinct TestClip objects
+       *        - two where installed into root scope in `checkSimpleAccess()`
+       *        - one was installed below one of the above in `checkTypedAccess()`
+       *        - `checkScopeHandling()` left back 6 instances, all pointing
+       *          to the same TestClip.
+       *        This can be verified in the test output (look at the
+       *        `use-cnt` and the actual address of the pointee
        */
       void
       checkContentsEnumeration (Idx index)

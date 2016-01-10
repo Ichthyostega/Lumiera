@@ -100,7 +100,7 @@ namespace test{
           
           CHECK (contains (string(v0), "Variant"));
           CHECK (contains (string(v0), "bool"));
-          CHECK (contains (string(v0), "0"));
+          CHECK (contains (string(v0), "false"));
           
           CHECK (contains (string(v1), "Variant"));
           CHECK (contains (string(v1), "int"));
@@ -111,7 +111,7 @@ namespace test{
           CHECK (contains (string(v2), "lololo"));
           
           CHECK (contains (string(v3), "Variant"));
-          CHECK (contains (string(v3), "lib::time::Time"));
+          CHECK (contains (string(v3), "Time"));
           CHECK (contains (string(v3), "0:00:00.000"));
         }
       

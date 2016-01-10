@@ -102,6 +102,7 @@ namespace test{
           cout << showSizeof(size_t(42),
                              string{"Universe"})  << endl;
           
+          // all the following ways to refer to an object are equivalent...
           Wrmpf1 *p1 = &rmpf1;
           Wrmpf1 *p2 = 0;
           cout << showSizeof(p1)  << endl;

@@ -18,7 +18,7 @@ out: doIt
 out: 13
 out: 14
 out: doIt
-out: sizeof.+lib.+test.+ExampleCustomType123.+ =   [248]
+out: sizeof. ExampleCustomType123 .          =   [248]
 return: 0
 END
 
@@ -176,32 +176,38 @@ END
 
 
 TEST "Lumiera Iterator Adapter for STL" IterAdapterSTL_test <<END
-out: -----filter-distinct-values---.+vector
-out: iter::eachDistinct$
-out: iter::eachDistinct::1$
-out: iter::eachDistinct::1::2::3::1
-out: -----iterateMapKeyVal---.+map
-out: iter::eachKey::0::1::2::3::4::5::6::7::8::9
-out: iter::eachVal::0::2::4::6::8::10::12::14::16::18
-out: iter::eachDistinctKey::0::1::2::3::4::5::6::7::8::9
-out: -----iterateMapKeyVal---.+unordered_map
+out-lit: -----filter-distinct-values---vector<int>
+out-lit: iter::eachDistinct
+out-lit: iter::eachDistinct::1
+out-lit: iter::eachDistinct::1::2::3::1
+out-lit: iter::eachDistinct::1::2::3::1
+out-lit: -----iterateMapKeyVal---map<int, int>
+out-lit: iter::eachKey::0::1::2::3::4::5::6::7::8::9
+out-lit: iter::eachKey::0::1::2::3::4::5::6::7::8::9
+out-lit: iter::eachVal::0::2::4::6::8::10::12::14::16::18
+out-lit: iter::eachVal::0::2::4::6::8::10::12::14::16::18
+out-lit: iter::eachDistinctKey::0::1::2::3::4::5::6::7::8::9
+out-lit: -----iterateMapKeyVal---unordered_map<int, int>
 out: iter::eachKey::.::.::.::.::.::.::.::.::.::.
-out: iter::eachVal::.+
+out: iter::eachVal::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+
 out: iter::eachDistinctKey::.::.::.::.::.::.::.::.::.::.
-out: -----iterateMapKeyVal---.+multimap
-out: iter::eachKey::0::0::0::0::0::0::0::0::0::0::1::1::1::1::1::1::1::1::1::2::2::2::2::2::2::2::2::3::3::3::3::3::3::3::4::4::4::4::4::4::5::5::5::5::5::6::6::6::6::7::7::7::8::8::9
-out: iter::eachVal::10::9::8::7::6::5::4::3::2::1::9::8::7::6::5::4::3::2::1::8::7::6::5::4::3::2::1::7::6::5::4::3::2::1::6::5::4::3::2::1::5::4::3::2::1::4::3::2::1::3::2::1::2::1::1
-out: iter::eachDistinctKey::0::1::2::3::4::5::6::7::8::9
-out: -----iterateMapKeyVal---.+unordered_multimap
+out-lit: -----iterateMapKeyVal---multimap<int, int>
+out-lit: iter::eachKey::0::0::0::0::0::0::0::0::0::0::1::1::1::1::1::1::1::1::1::2::2::2::2::2::2::2::2::3::3::3::3::3::3::3::4::4::4::4::4::4::5::5::5::5::5::6::6::6::6::7::7::7::8::8::9
+out-lit: iter::eachKey::0::0::0::0::0::0::0::0::0::0::1::1::1::1::1::1::1::1::1::2::2::2::2::2::2::2::2::3::3::3::3::3::3::3::4::4::4::4::4::4::5::5::5::5::5::6::6::6::6::7::7::7::8::8::9
+out-lit: iter::eachVal::10::9::8::7::6::5::4::3::2::1::9::8::7::6::5::4::3::2::1::8::7::6::5::4::3::2::1::7::6::5::4::3::2::1::6::5::4::3::2::1::5::4::3::2::1::4::3::2::1::3::2::1::2::1::1
+out-lit: iter::eachVal::10::9::8::7::6::5::4::3::2::1::9::8::7::6::5::4::3::2::1::8::7::6::5::4::3::2::1::7::6::5::4::3::2::1::6::5::4::3::2::1::5::4::3::2::1::4::3::2::1::3::2::1::2::1::1
+out-lit: iter::eachDistinctKey::0::1::2::3::4::5::6::7::8::9
+out-lit: -----iterateMapKeyVal---unordered_multimap<int, int>
 out: iter::eachKey::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.
-out: iter::eachVal::.+
+out: iter::eachVal::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+
 out: iter::eachDistinctKey::.::.::.::.::.::.::.::.::.::.
-out: -----iterateValues4Key---.+multimap
-out: iter::eachValForKey::10::9::8::7::6::5::4::3::2::1
-out: -----iterateValues4Key---.+unordered_multimap
-out: iter::eachValForKey::.+
-out: snapshot-0-1-2-3-4-5-6-7-8-9
-out: snapshot-22-44
+out-lit: -----iterateValues4Key---multimap<int, int>
+out-lit: iter::eachValForKey::10::9::8::7::6::5::4::3::2::1
+out-lit: -----iterateValues4Key---unordered_multimap<int, int>
+out: iter::eachValForKey::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+
+out-lit: snapshot-0-1-2-3-4-5-6-7-8-9
+out-lit: snapshot-0-1-2-3-4-5-6-7-8-9
+out-lit: snapshot-22-44
 END
 
 
@@ -297,32 +303,32 @@ TEST "Variadic template diagnostics" TestHelperVariadic_test <<END
 out-lit: --no-arg--
 out-lit:  :.
 out-lit: --value--
-out: .+#1.+ Type: d  VAL  Address. 0x.+
+out: .+#1.+ Type: double  VAL  Address. 0x.+
 out-lit:  :.
 out-lit: --reference--
-out: .+#1.+ Type: d  REF  Address. 0x.+
+out: .+#1.+ Type: double  REF  Address. 0x.+
 out-lit:  :.
 out-lit: --move--
-out: .+#1.+ Type: d  MOV  Address. 0x.+
+out: .+#1.+ Type: double  MOV  Address. 0x.+
 out-lit:  :.
 out-lit: --two values--
-out: .+#2.+ Type: A4_c  REF  Address. 0x.+
-out: .+#1.+ Type: l  MOV  Address. 0x.+
+out: .+#2.+ Type: char  REF  Address. 0x.+
+out: .+#1.+ Type: long  MOV  Address. 0x.+
 out-lit:  :.
 out-lit: --matched--
-out: .+#3.+ Type: d  REF  Address. 0x.+
-out: .+#2.+ Type: d  REF  Address. 0x.+
-out: .+#1.+ Type: d  MOV  Address. 0x.+
+out: .+#3.+ Type: double  REF  Address. 0x.+
+out: .+#2.+ Type: double  REF  Address. 0x.+
+out: .+#1.+ Type: double  MOV  Address. 0x.+
 out-lit:  :.
 out-lit: --baseclass--
-out: .+#1.+ Type: .+lib.test.test.+Interface.  REF  Address. 0x.+
+out: .+#1.+ Type: Impl  REF  Address. 0x.+
 out-lit:  :.
 END
 
 
 TEST "Helper to show demangled C++ names" TypeDemangling_test <<END
-out: .+lib.test.test.Space.+Outer.+Inner
-out-lit: lib::test::test::Space const* (*)(lib::test::test::Outer<lib::test::test::Space>::Inner const&&)
+out: .+lib.meta.test.Space.+Outer.+Inner
+out-lit: lib::meta::test::Space const* (*)(lib::meta::test::Outer<lib::meta::test::Space>::Inner const&&)
 END
 
 

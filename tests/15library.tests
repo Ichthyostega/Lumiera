@@ -25,59 +25,62 @@ out-lit: can_use_dynamic_downcast<D*&,D*&> = 0
 out-lit: can_use_conversion<D*&,D*&>       = 1
 out-lit: can_use_conversion<D*,E*>         = 0
 out-lit: can_use_dynamic_downcast<D*&,E*>  = 0
+out-lit: can_use_conversion<E*,F*>         = 0
+out-lit: can_use_dynamic_downcast<E*,F*>   = 1
 out-lit: === standard case: References ===
-out: Access\(D  as D&\)    .+D.. adr=0x.+ type: D
-out: Access\(D& as D&\)    .+D.. adr=0x.+ type: D
+out: Access\(D  as D&\) .+D.. adr=╲\w{8} ↗«D»
+out: Access\(D& as D&\) .+D.. adr=╲\w{8} ↗«D»
 out-lit: === build a value object ===
-out: Access.D  as D.     .+D.. adr=0x.+ type: D
-out: Access.D& as D.     .+D.. adr=0x.+ type: D
-out: Access.D&& as D.    .+D.. adr=0x.+ type: D
+out: Access.D  as D.    .+D.. adr=╲\w{8} ↗«D»
+out: Access.D& as D.    .+D.. adr=╲\w{8} ↗«D»
+out: Access.D&& as D.   .+D.. adr=╲\w{8} ↗«D»
 out-lit: === take a pointer ===
-out: Access.D  as D\*.    .+0x.+
-out: Access.D& as D\*.    .+0x.+
+out: Access.D  as D\*.  .+╲\w{8}
+out: Access.D& as D\*.  .+╲\w{8}
 out-lit: === dereference a pointer ===
-out: Access.D\* as D&.    .+D.. adr=0x.+ type: D
-out: Access.D\* as D.     .+D.. adr=0x.+ type: D
-out: Access.D\*&& as D.   .+D.. adr=0x.+ type: D
+out: Access.D\* as D&.  .+D.. adr=╲\w{8} ↗«D»
+out: Access.D\* as D.   .+D.. adr=╲\w{8} ↗«D»
+out: Access.D\*&& as D. .+D.. adr=╲\w{8} ↗«D»
 out-lit: === const correctness ===
-out: Access.D  as D const&. .+D.. adr=0x.+ type: D
-out: Access.D& as D const&. .+D.. adr=0x.+ type: D
-out: Access.D  as const D.  .+D.. adr=0x.+ type: D
-out: Access.D& as const D.  .+D.. adr=0x.+ type: D
-out: Access.D  as const D\*. .+0x.+
-out: Access.D& as const D\*. .+0x.+
-out: Access.D\* as D const&. .+D.. adr=0x.+ type: D
-out: Access.D\* as const D.  .+D.. adr=0x.+ type: D
-out: Access.const D  as D const&. .+D.. adr=0x.+ type: D
-out: Access.D const& as D const&. .+D.. adr=0x.+ type: D
-out: Access.const D  as const D.  .+D.. adr=0x.+ type: D
-out: Access.D const& as const D.  .+D.. adr=0x.+ type: D
-out: Access.const D  as const D\*. .+0x.+
-out: Access.D const& as const D\*. .+0x.+
-out: Access.const D\* as D const&. .+D.. adr=0x.+ type: D
-out: Access.const D\* as const D.  .+D.. adr=0x.+ type: D
-out: Access.D const& as D.        .+D.. adr=0x.+ type: D
-out: Access.D const&& as D.       .+D.. adr=0x.+ type: D
+out: Access.D  as D const&.       .+D.. adr=╲\w{8} ↗«D»
+out: Access.D& as D const&.       .+D.. adr=╲\w{8} ↗«D»
+out: Access.D  as const D.        .+D.. adr=╲\w{8} ↗«D»
+out: Access.D& as const D.        .+D.. adr=╲\w{8} ↗«D»
+out: Access.D  as const D\*.      .+╲\w{8}
+out: Access.D& as const D\*.      .+╲\w{8}
+out: Access.D\* as D const&.      .+D.. adr=╲\w{8} ↗«D»
+out: Access.D\* as const D.       .+D.. adr=╲\w{8} ↗«D»
+out: Access.const D  as D const&. .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const& as D const&. .+D.. adr=╲\w{8} ↗«D»
+out: Access.const D  as const D.  .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const& as const D.  .+D.. adr=╲\w{8} ↗«D»
+out: Access.const D  as const D\*..+╲\w{8}
+out: Access.D const& as const D\*..+╲\w{8}
+out: Access.const D\* as D const&..+D.. adr=╲\w{8} ↗«D»
+out: Access.const D\* as const D. .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const& as D.        .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const&& as D.       .+D.. adr=╲\w{8} ↗«D»
 out-lit: === work cases: actual conversions ===
-out: Access.B& as B&.    .+B.. adr=0x.+ type: B
-out: Access.D& as B&.    .+B.. adr=0x.+ type: B
-out: Access.B\* as B\*.    .+0x.+
-out: Access.D\* as B\*.    .+0x.+
-out: Access.D& as B\*.    .+0x.+
-out: Access.D\* as B&.    .+B.. adr=0x.+ type: B
-out: Access.B\*& as B\*&.  .+0x.+
-out: Access.D\*& as D\*&.  .+0x.+
-out: Access.D& as const B\*.       .+0x.+
-out: Access.D\* as B const&.       .+B.. adr=0x.+ type: B
-out: Access.D const& as const B\*. .+0x.+
-out: Access.const D\* as B const&. .+B.. adr=0x.+ type: B
-out: Access.E\(F\)& as F&. .+F.. adr=0x.+ type: F
-out: Access.E\(F\)\* as F\*. .+0x.+
-out: Access.E\(F\)\* as F&. .+F.. adr=0x.+ type: F
-out: Access.E\(F\)& as F\*. .+0x.+
-out: Access.F\\* as X\*.    .+0x.+
-out: Access.X\(F\)\* as X\*. .+0x.+
-out: Access.F\* as B\*.    .+0x.+
+out: Access.B& as B&.             .+B.. adr=╲\w{8} ↗«B»
+out: Access.D& as B&.             .+B.. adr=╲\w{8} ↗«B»
+out: Access.B\* as B\*.           .+╲\w{8}
+out: Access.D\* as B\*.           .+╲\w{8}
+out: Access.D& as B\*.            .+╲\w{8}
+out: Access.D\* as B&.            .+B.. adr=╲\w{8} ↗«B»
+out: Access.B\*& as B\*&.         .+╲\w{8}
+out: Access.D\*& as D\*&.         .+╲\w{8}
+out: Access.D& as const B\*.      .+╲\w{8}
+out: Access.D\* as B const&.      .+B.. adr=╲\w{8} ↗«B»
+out: Access.D const& as const B\*..+╲\w{8}
+out: Access.const D\* as B const&..+B.. adr=╲\w{8} ↗«B»
+out: Access.E\(F\)& as F&.        .+F.. adr=╲\w{8} ↗«F»
+out: Access.E\(F\)\* as F\*.      .+╲\w{8}
+out: Access.E\(F\)\* as F&.       .+F.. adr=╲\w{8} ↗«F»
+out: Access.E\(F\)& as F\*.       .+╲\w{8}
+out: Access.F\\* as X\*.          .+╲\w{8}
+out: Access.X\(F\)\* as X\*.      .+╲\w{8}
+out: Access.F\* as B&.            .+B.. adr=╲\w{8} ↗«B»
+out: Access.F\* as E&*.           .+E.. adr=╲\w{8} ↗«F»
 out-lit: Access(int as double) --->2
 out-lit: Access(float as long) --->3
 END
@@ -172,14 +175,25 @@ END
 
 
 TEST "Digxel standard configurations" DigxelConfigurations_test <<END
-out: .+Digxel.+Formatter.+--empty--  0--\(val=123\)--123\|
-out: .+Digxel.+Formatter.+--empty--00.000--\(val=123.457\)--123.457
-out: .+Digxel.+SexaFormatter.+--empty--00--\(val=42\)--42
-out: .+Digxel.+SexaFormatter.+--empty--00--\(val=-5\)---5
-out: .+Digxel.+HexaFormatter.+--empty--00--\(val=12\)--0C
-out: .+Digxel.+HexaFormatter.+--empty--00--\(val=111\)--6F
-out: .+Digxel.+CountFormatter.+--empty--0000--\(val=-1234567890\)---1234567890
+out-lit: Digxel<int, digxel::Formatter<int> >--empty--  0--(val=123)--123|
+out-lit: Digxel<double, digxel::Formatter<double> >--empty--00.000--(val=123.457)--123.457|
+out-lit: Digxel<int, digxel::SexaFormatter>--empty--00--(val=42)--42|
+out-lit: Digxel<int, digxel::SexaFormatter>--empty--00--(val=-5)---5|
+out-lit: Digxel<unsigned int, digxel::HexaFormatter>--empty--00--(val=12)--0C|
+out-lit: Digxel<unsigned int, digxel::HexaFormatter>--empty--00--(val=111)--6F|
+out-lit: Digxel<long, digxel::CountFormatter>--empty--0000--(val=-1234567890)---1234567890|
 return: 0
+END
+
+
+TEST "plain entry-ID" EntryID_test <<END
+out: ID<Dummy>-Dummy.0..
+out: ID<Dummy>-strange
+out: ID<Dummy>-Dummy.0..
+out: ID<Fork>-Fork.0..
+out: ID<Fork>-special
+out: sizeof\( idi::EntryID<Fork> \) .+ =
+out: sizeof\( idi::BareEntryID \)   .+ =
 END
 
 
@@ -188,16 +202,6 @@ END
 
 
 TEST "formatting/diagnostics helpers" FormatHelper_test <<END
-out: Displaying some types....
-out: «util::test::Reticent»
-out: <no comment>
-out: ^hey Joe!
-out: ^he says: hey Joe!
-out: ^the truth: 0
-out: ^just a number: 1.234.*e\+56
-out: ^12345X
-out-lit: 0--+--1.1--+--2.2--+--3.3--+--4.4--+--5.5--+--6.6--+--7.7--+--8.8--+--9.9
-out-lit: Nr.01(0.0), Nr.02(2.2), Nr.03(4.4), Nr.04(6.6), Nr.05(8.8), Nr.06(11.0), Nr.07(13.2), Nr.08(15.4), Nr.09(17.6), Nr.10(19.8)
 return: 0
 END
 
@@ -205,12 +209,12 @@ END
 TEST "formatting by string template" FormatString_test <<END
 out-lit: --format-template--int=0012--double=+1.23--string=Lumiera  --
 out: 0x....+ _____+ .
-out: «.+util.+test.+Silent.»
+out-lit: «test::FormatString_test::Silent»
 out-lit: __nix_
 out-lit: ____
 out-lit: __1__
 out-lit: __1__
-out-lit: __↯__
+out-lit: __⟂__
 out-lit: __dirt__
 out-lit: __1234__
 out-lit: __0xff__
@@ -260,15 +264,15 @@ END
 TEST "Generic Record data node" GenNodeBasic_test <<END
 out: GenNode.+_CHILD_Record.+Rec.spam..ham = DataCap.+eggs
 out-lit: --spam--
-out: GenNode.+"baked beans".+Rec...hasSpam = DataCap.«bool».+«char».+«std::string».*«double».+GenNode.+"spam".+«lib::diff::Record<lib::diff::GenNode>».+«std::string».eggs.+«std::string».spam.+«std::string».spam
-out: GenNode.+"hasSpam".+«bool».1
+out: GenNode.+"baked beans".+Rec...hasSpam = DataCap.«bool».true.+«char».+«string».*«double».+GenNode.+"spam".+«Record<GenNode>».+«string».eggs.+«string».spam.+«string».spam
+out: GenNode.+"hasSpam".+«bool».true
 out: GenNode.+_CHILD_char.+«char».\*
-out: GenNode.+_CHILD_string.+«std::string».★
+out: GenNode.+_CHILD_string.+«string».★
 out: GenNode.+_CHILD_double.+«double».3.1415927
-out: GenNode.+"spam".+«lib::diff::Record<lib::diff::GenNode>».Rec.ham.+eggs.+spam.+spam
-out: GenNode.+_CHILD_string.+«std::string».eggs
-out: GenNode.+_CHILD_string.+«std::string».spam
-out: GenNode.+_CHILD_TimeSpan.+«lib::time::TimeSpan»
+out: GenNode.+"spam".+«Record<GenNode>».Rec.ham.+eggs.+spam.+spam
+out: GenNode.+_CHILD_string.+«string».eggs
+out: GenNode.+_CHILD_string.+«string».spam
+out: GenNode.+_CHILD_TimeSpan.+«TimeSpan»|0:00:00.000≺920ms≻
 out: GenNode.+_CHILD_long.+«long.+42
 return: 0
 END
@@ -280,7 +284,7 @@ END
 
 
 TEST "Generic recursive mutation with closure binding" GenericTreeMutator_test <<END
-out: concrete TreeMutator .+Builder<.+ChangeOperation<.+TreeMutator, .+string
+out: concrete TreeMutator .+Builder<ChangeOperation<TreeMutator, test::GenericTreeMutator_test::simpleAttributeBinding().+lambda\(string\).+> >
 out-lit: "data" closure received something that would be acceptable
 out-lit: localData changed to: that would be acceptable
 return: 0
@@ -339,7 +343,9 @@ out: 1
 out: 3
 out: 5
 out: 7
-out: sizeof\( .+ \) = .*[12468]{1,2}
+out: sizeof\( Base .                          =.+[12468]{1,2}
+out: sizeof\( Special .                       =.+[12468]{1,2}
+out: sizeof\( OpaqueHolder<Base, ........     =.+[12468]{1,2}
 return: 0
 END
 
@@ -354,7 +360,7 @@ END
 
 
 TEST "inline val/ref wrapper" ItemWrapper_test <<END
-out: ItemWrapper: sizeof\( .+ItemWrapper.+ ) =
+out: ItemWrapper: sizeof\( wrapper::ItemWrapper<.+ =   .
 END
 
 
@@ -479,9 +485,10 @@ END
 
 TEST "Symbol_test" Symbol_test  <<END
 out: one
-out: sizeof.+lib.Literal.+  =   (4|8)
-out: Ss
-out: one\.\.\.\.one
+out: sizeof. Literal.+  =   (4|8)
+out-lit: string
+out-lit: string
+out-lit: one....one
 return: 0
 END
 
@@ -509,7 +516,7 @@ END
 
 
 TEST "integer scale wrapping utility" UtilFloorwrap_test <<END
-out-lit: --------i--------12/4
+out-lit: --------int--------12/4
 out-lit:  12 / 4 = 3  % = 0     floor= 3.0  wrap = ( 3, 0)
 out-lit:  11 / 4 = 2  % = 3     floor= 2.0  wrap = ( 2, 3)
 out-lit:  10 / 4 = 2  % = 2     floor= 2.0  wrap = ( 2, 2)
@@ -535,7 +542,7 @@ out-lit:  -9 / 4 =-2  % =-1     floor=-3.0  wrap = (-3, 3)
 out-lit: -10 / 4 =-2  % =-2     floor=-3.0  wrap = (-3, 2)
 out-lit: -11 / 4 =-2  % =-3     floor=-3.0  wrap = (-3, 1)
 out-lit: -12 / 4 =-3  % = 0     floor=-3.0  wrap = (-3, 0)
-out-lit: --------i--------12/-4
+out-lit: --------int--------12/-4
 out-lit:  12 /-4 =-3  % = 0     floor=-3.0  wrap = (-3, 0)
 out-lit:  11 /-4 =-2  % = 3     floor=-3.0  wrap = (-3,-1)
 out-lit:  10 /-4 =-2  % = 2     floor=-3.0  wrap = (-3,-2)
@@ -561,7 +568,7 @@ out-lit:  -9 /-4 = 2  % =-1     floor= 2.0  wrap = ( 2,-1)
 out-lit: -10 /-4 = 2  % =-2     floor= 2.0  wrap = ( 2,-2)
 out-lit: -11 /-4 = 2  % =-3     floor= 2.0  wrap = ( 2,-3)
 out-lit: -12 /-4 = 3  % = 0     floor= 3.0  wrap = ( 3, 0)
-out-lit: --------l--------12/4
+out-lit: --------long--------12/4
 out-lit:  12 / 4 = 3  % = 0     floor= 3.0  wrap = ( 3, 0)
 out-lit:  11 / 4 = 2  % = 3     floor= 2.0  wrap = ( 2, 3)
 out-lit:  10 / 4 = 2  % = 2     floor= 2.0  wrap = ( 2, 2)
@@ -587,7 +594,7 @@ out-lit:  -9 / 4 =-2  % =-1     floor=-3.0  wrap = (-3, 3)
 out-lit: -10 / 4 =-2  % =-2     floor=-3.0  wrap = (-3, 2)
 out-lit: -11 / 4 =-2  % =-3     floor=-3.0  wrap = (-3, 1)
 out-lit: -12 / 4 =-3  % = 0     floor=-3.0  wrap = (-3, 0)
-out-lit: --------l--------12/-4
+out-lit: --------long--------12/-4
 out-lit:  12 /-4 =-3  % = 0     floor=-3.0  wrap = (-3, 0)
 out-lit:  11 /-4 =-2  % = 3     floor=-3.0  wrap = (-3,-1)
 out-lit:  10 /-4 =-2  % = 2     floor=-3.0  wrap = (-3,-2)
@@ -628,10 +635,10 @@ END
 
 
 TEST "typesafe Variant record" Variant_test <<END
-out: Variant.«bool».0
+out: Variant.«bool».false
 out: Variant.«int».11
-out: Variant.«std::string».lololo
-out: Variant.«lib::time::Time».0:00:00.000
+out: Variant.«string».lololo
+out: Variant.«Time».0:00:00.000
 return: 0
 END
 
