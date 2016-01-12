@@ -51,15 +51,21 @@
 #include "test/mock-elm.hpp"
 #include "test/test-nexus.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "proc/control/command-def.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/symbol.hpp"
 #include "lib/error.hpp"
 //#include "lib/util.hpp"
 
 
 
+using lib::Symbol;
 using gui::test::MockElm;
 using lib::test::EventLog;
 using lib::idi::EntryID;
+using proc::control::Command;
+using proc::control::CommandDef;
+using gui::interact::InvocationTrail;
 
 
 
@@ -68,6 +74,29 @@ namespace model{
 namespace test {
   
   namespace { // test fixture...
+    
+    // dummy operation to be invoked through the command system
+    int dummyState = 0;
+    
+    void
+    operate (int val)
+    {
+      dummyState = val;
+    }
+    
+    int
+    capture (int)
+    {
+      return dummyState;
+    }
+    
+    void
+    undoIt (int, int oldState)
+    {
+      dummyState = oldState;
+    }
+    
+    const Symbol DUMMY_CMD_ID{"test.AbstractTangibleTest_dummy_command"};
     
   }//(End) test fixture
   
@@ -224,10 +253,48 @@ namespace test {
         }
       
       
+      
       void
       invokeCommand ()
         {
-          UNIMPLEMENTED ("invoke an action, pass arguments");
+          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          
+          // Setup test stage: define an command/action "in Proc"
+          CommandDef (DUMMY_CMD_ID)
+              .operation (operate)
+              .captureUndo (capture)
+              .undoOperation (undoIt);
+          
+          // Usually it's the InvocationStateManager's job to
+          // prepare an "InvocationTrail", which is a prospective
+          // Command invocation about to happen soon.
+          InvocationTrail invTrail (Command::get (DUMMY_CMD_ID));
+          
+          // the UI element relevant for this command invocation
+          MockElm mock("uiElm");
+          
+          int prevState = dummyState;
+          int concreteParam = 1 +rand() % 100;
+          
+          // now the ongoing interaction picks up parameter data
+          mock.prepareCommand (invTrail, lib::diff::Rec({concreteParam}));
+          
+          CHECK (dummyState == prevState);  // command was not yet invoked
+          
+          // finally the command gets triggered
+          mock.issueCommand (invTrail);
+          
+          CHECK (dummyState == concreteParam);  // command was indeed invoked
+          
+          
+          // verify proper binding, including UNDO state capture
+          Command::get (DUMMY_CMD_ID).undo();
+          CHECK (dummyState == prevState);
+          
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(nexusLog, "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
       

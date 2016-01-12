@@ -416,10 +416,40 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1448691315849" ID="ID_1198560195" MODIFIED="1448691320189" TEXT="Bindugs-Regel">
+<node CREATED="1448691315849" ID="ID_1198560195" MODIFIED="1452561018347" TEXT="Bindugs-Regel">
+<icon BUILTIN="hourglass"/>
 <node CREATED="1448691343406" ID="ID_642235825" MODIFIED="1448691350558" TEXT="funktor"/>
 <node CREATED="1448691324304" ID="ID_1103199702" MODIFIED="1448691338522" TEXT="definiert Bezugs-Quellen"/>
 <node CREATED="1448691355340" ID="ID_724965495" MODIFIED="1448691465633" TEXT="liefert Record&lt;GenNode&gt;"/>
+<node CREATED="1452560897720" ID="ID_1869468443" MODIFIED="1452561022338" TEXT="vorerst noch nicht impl...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier geht es darum, eine Regel zu generieren,
+    </p>
+    <p>
+      die dann den zugrundeliegenden Command-Prototyp automatisch mit konkreten Aufrufparametern binden kann,
+    </p>
+    <p>
+      sobald bestimmte Umst&#228;nde im UI einschl&#228;gig werden
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Das kann ich f&#252;r die ersten Tests auslassen, und stattdessen einfach
+    </p>
+    <p>
+      den InvocationTrail manuell im Testcode binden
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
 </node>
 <node CREATED="1448691865257" ID="ID_1343859473" MODIFIED="1448691874244" TEXT="Command-Binding wird gesendet">
 <node CREATED="1448691954533" ID="ID_966334383" MODIFIED="1448691960295" TEXT="Performance">
@@ -452,8 +482,25 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1450490565739" ID="ID_849102091" MODIFIED="1450490602009" TEXT="implementiert ist: erstellen im InvocationTrail">
+<node CREATED="1450490565739" ID="ID_849102091" MODIFIED="1452557610273" TEXT="implementiert ist: Erstellen im InvocationTrail">
 <icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1452561062226" ID="ID_444925471" MODIFIED="1452561136752" TEXT="convenience overload f&#xfc;r mehrere Argumente">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gemeint, das Model-Element (Tangible) sollte einen solchen Overload anbieten,
+    </p>
+    <p>
+      der unimttelbar Datenwerte nimmt und sie in einen Argument-Record packt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="pencil"/>
 </node>
 <node CREATED="1450490580473" ID="ID_925248058" MODIFIED="1450490599519" TEXT="nicht implementiert: Empfangen und Binden">
 <icon BUILTIN="flag-yellow"/>
