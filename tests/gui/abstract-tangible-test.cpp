@@ -63,6 +63,9 @@ using lib::Symbol;
 using gui::test::MockElm;
 using lib::test::EventLog;
 using lib::idi::EntryID;
+using lib::diff::Rec;
+using lib::diff::GenNode;
+using lib::diff::DataCap;
 using proc::control::Command;
 using proc::control::CommandDef;
 using gui::interact::InvocationTrail;
@@ -96,7 +99,50 @@ namespace test {
       dummyState = oldState;
     }
     
+    
+    
     const Symbol DUMMY_CMD_ID{"test.AbstractTangibleTest_dummy_command"};
+    
+    
+    /**
+     * dummy Command handler,
+     * which can be hooked up to the TestNexus
+     * and causes a real command invocation
+     * when receiving invocation messages
+     * @warning all hard wired -- works only for this command
+     */
+    void
+    processCommandInvocation (GenNode const& commandMsg)
+    {
+      REQUIRE (string(DUMMY_CMD_ID) == commandMsg.idi.getSym());
+      
+      class CommandBindingDetector
+        : public DataCap::Predicate
+        {
+          bool
+          handle (Rec const& binding) override
+            {
+              auto cmd = Command::get(DUMMY_CMD_ID);
+              auto arg = binding.scope()->data.get<int>();
+              
+              cmd.bind (arg);
+              return true;
+            }
+          
+          bool
+          handle (int const&) override
+            {
+              auto cmd = Command::get(DUMMY_CMD_ID);
+              
+              cmd();
+              return true;
+            }
+        }
+        commandInvoker;
+      
+      commandMsg.data.accept (commandInvoker);
+    }
+    
     
   }//(End) test fixture
   
@@ -265,6 +311,8 @@ namespace test {
               .captureUndo (capture)
               .undoOperation (undoIt);
           
+          gui::test::Nexus::setCommandHandler (&processCommandInvocation);
+          
           // Usually it's the InvocationStateManager's job to
           // prepare an "InvocationTrail", which is a prospective
           // Command invocation about to happen soon.
@@ -295,6 +343,10 @@ namespace test {
           cout << "____Nexus-Log_________________\n"
                << util::join(nexusLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          
+          // reset to default (NOP) handler
+          gui::test::Nexus::setCommandHandler();
         }
       
       
