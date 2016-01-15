@@ -400,6 +400,20 @@ namespace test{
   
   
   
+  bool
+  Nexus::canInvoke(Cmd cmd)
+  {
+    UNIMPLEMENTED ("verify the given command is already bound and ready for invocation");
+  }
+  
+  bool
+  Nexus::wasInvoked (Cmd cmd)
+  {
+    UNIMPLEMENTED ("verify the given command was indeed invoked at least once");
+  }
+  
+  
+  
   
   /**
    * @return a defunct BusTerm with up-link to [ZombieNexus]

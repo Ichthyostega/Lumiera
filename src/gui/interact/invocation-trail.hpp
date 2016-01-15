@@ -104,6 +104,12 @@ namespace interact {
           return GenNode(cmdID_, RESERVED_FOR_FUTURE_USE_);
         }
       
+      string
+      getID()  const
+        {
+          return cmdID_;
+        }
+      
       operator string()  const
         {
           return "InvocationTrail cmd(\""+cmdID_+"\"";

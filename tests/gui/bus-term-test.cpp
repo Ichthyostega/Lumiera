@@ -39,8 +39,10 @@ using lib::idi::BareEntryID;
 using gui::test::MockElm;
 using lib::diff::GenNode;
 using lib::diff::Rec;
+using lib::time::Time;
 using lib::time::TimeSpan;
 using lib::hash::LuidH;
+using lib::HashVal;
 //using util::contains;
 
 
@@ -175,7 +177,7 @@ namespace test {
       commandInvocation ()
         {
           MARK_TEST_FUN
-          auto cmd = gui::test::Nexus::prepareMockCmd<string, TimeSpan, LUID>();
+          auto cmd = gui::test::Nexus::prepareMockCmd<string, TimeSpan, HashVal>();
           
           MockElm mock("uiElm");
           

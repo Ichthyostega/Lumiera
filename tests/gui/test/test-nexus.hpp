@@ -93,7 +93,45 @@ namespace test{
       
       static void setCommandHandler (CommandHandler  =CommandHandler());
       static void setStateMarkHandler (StateMarkHandler  =StateMarkHandler());
+      
+      
+      using Cmd = interact::InvocationTrail;
+      
+      template<typename...ARGS>
+      static Cmd prepareMockCmd();
+      
+      static bool canInvoke(Cmd);
+      static bool wasInvoked (Cmd);
+      
+      template<typename...ARGS>
+      static bool wasBound (Cmd, ARGS const& ...args);
+      
+      template<typename...ARGS>
+      static bool wasInvoked (Cmd, ARGS const& ...args);
     };
+  
+  
+  
+  template<typename...ARGS>
+  inline interact::InvocationTrail
+  Nexus::prepareMockCmd()
+  {
+    UNIMPLEMENTED("pick up arbitrary types and fabricate a mock command accepting those types");
+  }
+  
+  template<typename...ARGS>
+  inline bool
+  Nexus::wasBound (Cmd cmd, ARGS const& ...args)
+  {
+    UNIMPLEMENTED("verify the denoted command was actually bound against the given concrete Arguments (String-match)");
+  }
+  
+  template<typename...ARGS>
+  inline bool
+  Nexus::wasInvoked (Cmd cmd, ARGS const& ...args)
+  {
+    UNIMPLEMENTED("verify the denoted command was indeed invoked and received the given concrete Arguments (String-match)");
+  }
   
   
   
