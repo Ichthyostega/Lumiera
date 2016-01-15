@@ -38,7 +38,6 @@
 #ifndef LIB_FORMAT_UTIL_H
 #define LIB_FORMAT_UTIL_H
 
-#include "lib/hash-standard.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/itertools.hpp"

@@ -46,7 +46,7 @@
 #ifndef LIB_FORMAT_OBJ_H
 #define LIB_FORMAT_OBJ_H
 
-#include <string>
+#include "lib/symbol.hpp"
 #include "lib/meta/trait.hpp"
 
 #include <boost/lexical_cast.hpp>
