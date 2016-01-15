@@ -47,6 +47,7 @@ typedef unsigned int uint;
 //#include "lib/diff/gen-node.hpp"
 
 #include "lib/time/timevalue.hpp"
+#include "proc/control/command-def.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 
@@ -55,6 +56,8 @@ typedef unsigned int uint;
 #include <string>
 
 //using lib::diff::GenNode;
+using proc::control::CommandSignature;
+using proc::control::CommandDef;
 using lib::time::Time;
 using util::stringify;
 using util::join;
@@ -67,27 +70,67 @@ using VecS = vector<string>;
 
 
 template<typename...ARGS>
-string
+void
 operate (ARGS const& ...args)
+  {
+    VecS strs = stringify<VecS> (args...);
+    cout << join (strs);
+  }
+
+template<typename...ARGS>
+string
+capture (ARGS const& ...args)
   {
     VecS strs = stringify<VecS> (args...);
     return join (strs);
   }
 
+template<typename...ARGS>
+void
+undo (ARGS const& ...args)
+  {
+    VecS strs = stringify<VecS> (args...);
+    cout << "UNDO..." << join (strs);
+  }
+
+
+
+
+
+#define SHOW_TYPE(_TY_) \
+    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 
 
 int
 main (int, char**)
   {
-    cout << operate ("lalü", string("lala"), 12, 34L, 56.78) <<endl;
+    cout << capture ("lalü", string("lala"), 12, 34L, 56.78) <<endl;
     
-    function<string(double, Time)> funny;
+
+    auto ops = operate<double,Time>;
+    
+    using FunnySIG = lib::meta::_Fun<typeof(ops)>::Sig;
+    
+    using SIG_Opr = CommandSignature<FunnySIG, string>::OperateSig;
+    using SIG_Cap = CommandSignature<FunnySIG, string>::CaptureSig;
+    using SIG_Udo = CommandSignature<FunnySIG, string>::UndoOp_Sig;
+    
+    SHOW_TYPE (SIG_Opr);
+    SHOW_TYPE (SIG_Cap);
+    SHOW_TYPE (SIG_Udo);
+    
+    function<SIG_Opr> funny;
+    function<SIG_Cap> capy;
+    function<SIG_Udo> undy;
+    
     cout << "funny? " << bool(funny) <<endl;
     
     funny = operate<double,Time>;
+    capy = capture<double,Time>;
+    undy = undo<double,Time,string>;
     cout << "funny? " << bool(funny) <<endl;
     
-    cout << funny(98.7654321987654321987654321, Time(1,2,3,4)) <<endl;
+    cout << capy (98.7654321987654321987654321, Time(1,2,3,4)) <<endl;
     
     cout <<  "\n.gulp.\n";
     
