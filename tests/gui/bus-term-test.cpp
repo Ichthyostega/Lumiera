@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "test/test-nexus.hpp"
 #include "test/mock-elm.hpp"
 #include "lib/idi/entry-id.hpp"
@@ -103,6 +104,7 @@ namespace test {
       void
       attachNewBusTerm ()
         {
+          MARK_TEST_FUN;
           // our dummy will be linked with this identity
           BareEntryID elmID = EntryID<MockElm>{"zeitgeist"};
           
@@ -128,7 +130,7 @@ namespace test {
           // invoke action on element to cause upstream message (with a "state mark")
           mock.slotCollapse();
           CHECK (elmLog.verifyEvent("collapsed"));
-          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "GenNode-ID(\"expand\")-DataCap|«bool»|0"));
+          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "GenNode-ID(\"expand\")-DataCap|«bool»|false"));
           
           // send a state mark down to the mock element
           gui::test::Nexus::testUI().mark (elmID, GenNode("Flash", 23));

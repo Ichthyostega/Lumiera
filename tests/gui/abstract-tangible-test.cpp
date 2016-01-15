@@ -60,6 +60,7 @@
 
 
 using lib::Symbol;
+using util::toString;
 using gui::test::MockElm;
 using lib::test::EventLog;
 using lib::idi::EntryID;
@@ -325,15 +326,27 @@ namespace test {
           int prevState = dummyState;
           int concreteParam = 1 +rand() % 100;
           
+          // on bus no traces from this command yet...
+          CHECK (nexusLog.ensureNot(string(DUMMY_CMD_ID)));
+          
+          
           // now the ongoing interaction picks up parameter data
           mock.prepareCommand (invTrail, lib::diff::Rec({concreteParam}));
+          CHECK (nexusLog.verifyCall("act").arg("«int»|" +toString(concreteParam))
+                         .beforeEvent("binding for command \""+DUMMY_CMD_ID));
           
           CHECK (dummyState == prevState);  // command was not yet invoked
+          CHECK (nexusLog.ensureNot("invoke command \""+DUMMY_CMD_ID));
+          
           
           // finally the command gets triggered
           mock.issueCommand (invTrail);
           
           CHECK (dummyState == concreteParam);  // command was indeed invoked
+          CHECK (nexusLog.verifyCall("act").arg("«int»|" +toString(concreteParam))
+                         .beforeCall("act").arg("DataCap|«int»|"));
+          CHECK (nexusLog.verifyEvent("binding for command \""+DUMMY_CMD_ID)
+                         .beforeEvent("invoke command \""+DUMMY_CMD_ID));
           
           
           // verify proper binding, including UNDO state capture
