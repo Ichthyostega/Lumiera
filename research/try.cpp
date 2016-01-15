@@ -56,6 +56,8 @@ typedef unsigned int uint;
 #include <string>
 
 //using lib::diff::GenNode;
+using lib::meta::Types;
+using lib::meta::NullType;
 using proc::control::CommandSignature;
 using proc::control::CommandDef;
 using lib::time::Time;
@@ -68,30 +70,53 @@ using std::string;
 
 using VecS = vector<string>;
 
+template<typename...TYPES>
+struct TyS
+  {
+    using Seq = TyS;
+  };
+
+template<typename X>
+struct ArgSeq;
+
+template<typename RET, typename...TYPES>
+struct ArgSeq<RET(TYPES...)>
+  {
+    using Seq = TyS<TYPES...>;
+  };
+
+
 
 template<typename...ARGS>
-void
-operate (ARGS const& ...args)
+struct Funny
   {
-    VecS strs = stringify<VecS> (args...);
-    cout << join (strs);
-  }
+    static void
+    operate (ARGS const& ...args)
+      {
+        VecS strs = stringify<VecS> (args...);
+        cout << join (strs);
+      }
+    
+    static string
+    capture (ARGS const& ...args)
+      {
+        VecS strs = stringify<VecS> (args...);
+        return join (strs);
+      }
+    
+    static void
+    undo (ARGS const& ...args, string plonk)
+      {
+        VecS strs = stringify<VecS> (args...);
+        cout << "UNDO..." << plonk << "args=" << join (strs);
+      }
+  };
 
 template<typename...ARGS>
-string
-capture (ARGS const& ...args)
-  {
-    VecS strs = stringify<VecS> (args...);
-    return join (strs);
-  }
+struct Funny<TyS<ARGS...>>
+  : Funny<ARGS...>
+  { };
 
-template<typename...ARGS>
-void
-undo (ARGS const& ...args)
-  {
-    VecS strs = stringify<VecS> (args...);
-    cout << "UNDO..." << join (strs);
-  }
 
 
 
@@ -104,10 +129,10 @@ undo (ARGS const& ...args)
 int
 main (int, char**)
   {
-    cout << capture ("lalü", string("lala"), 12, 34L, 56.78) <<endl;
+    cout << Funny<const char*, string, int, long, double>::capture ("lalü", string("lala"), 12, 34L, 56.78) <<endl;
     
 
-    auto ops = operate<double,Time>;
+    auto ops = Funny<double,Time>::operate;
     
     using FunnySIG = lib::meta::_Fun<typeof(ops)>::Sig;
     
@@ -119,15 +144,18 @@ main (int, char**)
     SHOW_TYPE (SIG_Cap);
     SHOW_TYPE (SIG_Udo);
     
+    using ArgS = ArgSeq<SIG_Opr>::Seq;
+    SHOW_TYPE (ArgS);
+    
     function<SIG_Opr> funny;
     function<SIG_Cap> capy;
     function<SIG_Udo> undy;
     
     cout << "funny? " << bool(funny) <<endl;
     
-    funny = operate<double,Time>;
-    capy = capture<double,Time>;
-    undy = undo<double,Time,string>;
+    funny = Funny<ArgS>::operate;
+    capy  = Funny<ArgS>::capture;
+    undy  = Funny<ArgS>::undo;
     cout << "funny? " << bool(funny) <<endl;
     
     cout << capy (98.7654321987654321987654321, Time(1,2,3,4)) <<endl;
