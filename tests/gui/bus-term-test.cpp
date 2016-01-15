@@ -28,6 +28,8 @@
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/luid.h"
 //#include "lib/util.hpp"
 
 
@@ -36,12 +38,18 @@ using lib::idi::EntryID;
 using lib::idi::BareEntryID;
 using gui::test::MockElm;
 using lib::diff::GenNode;
+using lib::diff::Rec;
+using lib::time::TimeSpan;
+using lib::hash::LuidH;
 //using util::contains;
 
 
 namespace gui  {
 namespace model{
 namespace test {
+  
+  using proc::control::LUMIERA_ERROR_INVALID_ARGUMENTS;
+  using proc::control::LUMIERA_ERROR_UNBOUND_ARGUMENTS;
   
   namespace { // test fixture...
     
@@ -166,7 +174,50 @@ namespace test {
       void
       commandInvocation ()
         {
-          UNIMPLEMENTED ("pass a message to invoke an action");
+          MARK_TEST_FUN
+          auto cmd = gui::test::Nexus::prepareMockCmd<string, TimeSpan, LUID>();
+          
+          MockElm mock("uiElm");
+          
+          // random command arguments...
+          string text {lib::test::randStr(12)};
+          TimeSpan clip (Time(1,2,3), lib::test::randTime());
+          LuidH luid;
+          
+          // we cannot invoke commands prior to binding arguments
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, mock.issueCommand(cmd) );
+          
+          // proper argument typing is ensured while dispatching the bind message. 
+          VERIFY_ERROR (INVALID_ARGUMENTS, mock.prepareCommand(cmd, Rec({"lalala"})) );
+          
+          // command can't be issued, since it's still unbound
+          CHECK (not gui::test::Nexus::canInvoke(cmd));
+          
+          
+          mock.prepareCommand(cmd, Rec({text, clip, luid}));
+          
+          CHECK (gui::test::Nexus::canInvoke(cmd));
+          CHECK (gui::test::Nexus::wasBound(cmd, text, clip, luid));
+          CHECK (not gui::test::Nexus::wasInvoked(cmd));
+          CHECK (not gui::test::Nexus::wasInvoked(cmd, text, clip, luid));
+          CHECK (not gui::test::Nexus::wasBound(cmd, "lololo"));
+          
+          
+          mock.issueCommand(cmd);
+          
+          CHECK (gui::test::Nexus::wasInvoked(cmd));
+          CHECK (gui::test::Nexus::wasInvoked(cmd, text, clip, luid));
+          CHECK (not gui::test::Nexus::wasInvoked(cmd, " huh ", clip, luid));
+          CHECK (not gui::test::Nexus::wasInvoked(cmd, text, clip));
+          
+          // Mock commands are automatically unique
+          auto cmdX = gui::test::Nexus::prepareMockCmd<>();
+          auto cmdY = gui::test::Nexus::prepareMockCmd<>();
+          CHECK (cmd.getID() != cmdX.getID());
+          CHECK (cmd.getID() != cmdY.getID());
+          
+          CHECK (not gui::test::Nexus::wasInvoked(cmdX));
+          CHECK (not gui::test::Nexus::wasInvoked(cmdY));
         }
       
       

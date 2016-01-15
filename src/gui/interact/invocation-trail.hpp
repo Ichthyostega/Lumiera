@@ -80,6 +80,16 @@ namespace interact {
       string cmdID_;
       
     public:
+      /**
+       * Build a "command-as-prepared-for-UI".
+       * @param prototype an _already existing_ command prototype definition within Proc-Layer
+       * @remarks we deliberately link InvocationTrail to the existence of an actual prototype.
+       *    Invocation trails will be created in advance for various scenarios to invoke commands,
+       *    and are in fact lightweight placeholder handles -- so we do not want placeholders to
+       *    exist somewhere in the system and IDs to be sent over the bus, without the certainty
+       *    of a real invocation site and a matching command operation to exist somewhere else
+       *    within the system.
+       */
       InvocationTrail(proc::control::Command prototype)
         : cmdID_(prototype.getID())
         { }
