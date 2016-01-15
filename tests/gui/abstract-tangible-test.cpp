@@ -303,6 +303,7 @@ namespace test {
       void
       invokeCommand ()
         {
+          MARK_TEST_FUN
           EventLog nexusLog = gui::test::Nexus::startNewLog();
           
           // Setup test stage: define an command/action "in Proc"
@@ -338,7 +339,6 @@ namespace test {
           // verify proper binding, including UNDO state capture
           Command::get (DUMMY_CMD_ID).undo();
           CHECK (dummyState == prevState);
-          
           
           cout << "____Nexus-Log_________________\n"
                << util::join(nexusLog, "\n")

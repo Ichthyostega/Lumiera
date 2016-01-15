@@ -175,4 +175,12 @@ namespace test{
               CHECK (lumiera_error_expect (LUMIERA_ERROR_##ERROR_ID));\
             }
 
+
+/**
+ * Macro to mark the current test function in STDOUT.
+ * This can be helpful to digest a long test output dump
+ */
+#define MARK_TEST_FUN \
+          cout << "|" << endl << "|  »"<<__FUNCTION__<<"«" <<endl;
+
 #endif /*LIB_TEST_TEST_HELPER_H*/
