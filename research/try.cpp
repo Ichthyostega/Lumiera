@@ -30,113 +30,48 @@
 // 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
 // 8/15  - generalising the Variant::Visitor
 // 1/16  - generic to-string conversion for ostream
+// 1/16  - generate receiver function with arbitrary arguments
 
 
 /** @file try.cpp
- ** How to build generic string conversion into `ostream::operator<< `.
- ** 
- ** This task is actually a conglomerate of several chores:
- ** - sanitise and segregate the type-traits usage
- ** - disentangle the existing toString conversion helper
- ** - extract a basic form from this helper, which can be placed
- **   into a header with minimal dependencies. After some consideration,
- **   I decided to allow `<typeinfo>` in this category, which allows us
- **   at least to show a type name as fallback
- ** - distill an essential version of `enable_if`, which can be inlined.
- **   This allows us to get rid of `boost::enable_if` finally.
- ** - build a sensible `operator string()` for our `lib::P` based on this
- ** - and _finally_, to come up with a templated version of the `ostream`
- **   inserter `operator<<`, which does not cause too much havoc when
- **   used by default. The greatest challenge here is to avoid ambiguous
- **   overloads, yet also to deal with references, `void` and arrays.
- **
- ** \par policy
- ** What shall be expected from such a generic toString conversion?
- ** It should be _minimal_, it should be _transparent_ and it should
- ** always work and deliver a string, irrespective of the circumstances.
- ** By extension, this means that we do not want to differentiate much
- ** between values, references and pointers, which also means, we do
- ** not want to indicate pointers explicitly (just signal NULL, when
- ** encountered). The situation is slightly different for the `ostream`
- ** inserter; in a modern GUI application, there isn't much use for
- ** STDOUT and STDERR, beyond error messages and unit testing.
- ** Thus, we can strive at building a more convenient flavour
- ** here, which does indeed even shows the address of pointers.
+ ** Metaprogramming: how to generate a function to accept a fixed set
+ ** of typed arguments, where the sequence of arguments is given as type sequence
+ ** or as variadic parameter pack. Also how to bind concrete argument values to
+ ** such a function, where the concrete arguments come as runtime collection
+ ** of variant holders.
  ** 
  */
 
 typedef unsigned int uint;
 
-#include "lib/p.hpp"
-#include "lib/diff/gen-node.hpp"
+//#include "lib/diff/gen-node.hpp"
 
-#include "lib/meta/util.hpp"
-#include "lib/meta/trait.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
 
+#include <functional>
+#include <vector>
 #include <string>
 
-using lib::P;
-using lib::newP;
-using lib::diff::GenNode;
-using lib::meta::is_basically;
-using lib::meta::is_StringLike;
-using lib::meta::can_lexical2string;
-using lib::meta::can_convertToString;
-using lib::meta::use_StringConversion4Stream;
+//using lib::diff::GenNode;
+using lib::time::Time;
+using util::stringify;
+using util::join;
 
+using std::function;
+using std::vector;
 using std::string;
 
+using VecS = vector<string>;
 
 
-
-
-
-
-class Reticent
+template<typename...ARGS>
+string
+operate (ARGS const& ...args)
   {
-    uint neigh_ = 42;
-  };
-
-
-
-template<typename T>
-using BasicallyString = is_basically<T, string>;
-template<typename T>
-using BasicallyChar = std::is_convertible<T, const char*>;
-
-
-void
-showTypes()
-  {
-    
-#define SHOW_CHECK(_EXPR_) cout << STRINGIFY(_EXPR_) << "\t : " << (_EXPR_::value? "Yes":"No") << endl;
-#define ANALYSE(_TYPE_)                 \
-    cout << "Type: " STRINGIFY(_TYPE_) " ......"<<endl;   \
-    SHOW_CHECK (is_StringLike<_TYPE_>);   \
-    SHOW_CHECK (BasicallyChar<_TYPE_>);    \
-    SHOW_CHECK (BasicallyString<_TYPE_>);   \
-    SHOW_CHECK (std::is_arithmetic<_TYPE_>); \
-    SHOW_CHECK (can_lexical2string<_TYPE_>);  \
-    SHOW_CHECK (can_convertToString<_TYPE_>);  \
-    SHOW_CHECK (use_StringConversion4Stream<_TYPE_>);
-    
-    
-    using CharLit = typeof("bla");
-    using CharPtr = typeof(const char*);
-    using GenNodePtr = typeof(GenNode*);
-    using GenNodeRef = typeof(GenNode&);
-    
-    ANALYSE (string);
-    ANALYSE (CharLit);
-    ANALYSE (CharPtr)
-    ANALYSE (Reticent)
-    ANALYSE (P<Reticent>)
-    ANALYSE (GenNode)
-    ANALYSE (GenNodePtr)
-    ANALYSE (GenNodeRef)
-    ANALYSE (P<GenNode>)
-    cout << endl;
+    VecS strs = stringify<VecS> (args...);
+    return join (strs);
   }
 
 
@@ -144,21 +79,15 @@ showTypes()
 int
 main (int, char**)
   {
-    showTypes();
+    cout << operate ("lalü", string("lala"), 12, 34L, 56.78) <<endl;
     
-    auto psss = newP<Reticent>();
-    auto gnng = newP<GenNode>("Hui", "Buh");
+    function<string(double, Time)> funny;
+    cout << "funny? " << bool(funny) <<endl;
     
-    cout << "mauu..." << psss <<endl;
-    cout << "wauu..." << gnng <<endl;
+    funny = operate<double,Time>;
+    cout << "funny? " << bool(funny) <<endl;
     
-    cout << "mauuu.." << *psss <<endl;
-    cout << "wauuu.." << *gnng <<endl;
-    cout << "wauuup." << gnng.get() <<endl;
-    
-    gnng.reset();
-    cout << "aauu..." << gnng       <<endl;
-    cout << "aauu..." << gnng.get() <<endl;
+    cout << funny(98.7654321987654321987654321, Time(1,2,3,4)) <<endl;
     
     cout <<  "\n.gulp.\n";
     
