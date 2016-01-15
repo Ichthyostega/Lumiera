@@ -60,6 +60,8 @@ using lib::meta::Types;
 using lib::meta::NullType;
 using proc::control::CommandSignature;
 using proc::control::CommandDef;
+using proc::control::Command;
+using lib::time::TimeVar;
 using lib::time::Time;
 using util::stringify;
 using util::join;
@@ -91,24 +93,24 @@ template<typename...ARGS>
 struct Funny
   {
     static void
-    operate (ARGS const& ...args)
+    operate (ARGS ...args)
       {
         VecS strs = stringify<VecS> (args...);
-        cout << join (strs);
+        cout << join (strs) <<endl;
       }
     
     static string
-    capture (ARGS const& ...args)
+    capture (ARGS ...args)
       {
         VecS strs = stringify<VecS> (args...);
         return join (strs);
       }
     
     static void
-    undo (ARGS const& ...args, string plonk)
+    undo (ARGS ...args, string plonk)
       {
         VecS strs = stringify<VecS> (args...);
-        cout << "UNDO..." << plonk << "args=" << join (strs);
+        cout << "UNDO..." << plonk << "| args=" << join (strs) <<endl;
       }
   };
 
@@ -132,7 +134,7 @@ main (int, char**)
     cout << Funny<const char*, string, int, long, double>::capture ("lalü", string("lala"), 12, 34L, 56.78) <<endl;
     
 
-    auto ops = Funny<double,Time>::operate;
+    auto ops = Funny<double,TimeVar>::operate;
     
     using FunnySIG = lib::meta::_Fun<typeof(ops)>::Sig;
     
@@ -159,6 +161,21 @@ main (int, char**)
     cout << "funny? " << bool(funny) <<endl;
     
     cout << capy (98.7654321987654321987654321, Time(1,2,3,4)) <<endl;
+    
+    
+    CommandDef("lalü")
+      .operation(Funny<ArgS>::operate)
+      .captureUndo(Funny<ArgS>::capture)
+      .undoOperation(Funny<ArgS>::undo);
+    
+    cout << Command("lalü") << endl;
+    
+    Command com = Command("lalü");
+    
+    com.bind(12.33445566778899, TimeVar(Time(4,3,2,1)));
+    
+    com();
+    com.undo();
     
     cout <<  "\n.gulp.\n";
     
