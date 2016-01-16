@@ -486,6 +486,10 @@ namespace func{
       typedef typename Splice<ArgsList, ValList>::Back           LeftReduced;
       typedef typename Splice<ArgsList, ValList, ROFFSET>::Front RightReduced;
       
+      typedef typename Types<LeftReduced>::Seq  ArgsL;
+      typedef typename Types<RightReduced>::Seq ArgsR;
+      
+      
       // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
       typedef typename func::PlaceholderTuple<LeftReduced>::List  LeftPlaceholders;
       typedef typename func::PlaceholderTuple<RightReduced>::List RightPlaceholders;
@@ -495,8 +499,8 @@ namespace func{
       typedef typename Splice<ArgsList, LeftPlaceholders, VAL_CNT>::List LeftReplaced;
       typedef typename Splice<ArgsList, RightPlaceholders, 0     >::List RightReplaced;
       
-      typedef typename Tuple<LeftReduced>::Type  ArgsL;
-      typedef typename Tuple<RightReduced>::Type ArgsR;
+      typedef typename Types<LeftReplaced>::Seq  LeftReplacedTypes;
+      typedef typename Types<RightReplaced>::Seq RightReplacedTypes;
       
       // create a "builder" helper, which accepts exactly the value tuple elements
       // and puts them at the right location, while default-constructing the remaining
@@ -507,11 +511,11 @@ namespace func{
       
       /** Contains the argument values, starting from left.
        *  Any remaining positions are occupied by binding placeholders */
-      typedef typename Tuple<LeftReplaced>::TupleType  LeftReplacedArgs;
+      using LeftReplacedArgs  = Tuple<LeftReplacedTypes>;
       
       /** Contains the argument values, aligned to the end of the function argument list.
        *  Any remaining positions before are occupied by binding placeholders */
-      typedef typename Tuple<RightReplaced>::TupleType RightReplacedArgs;
+      using RightReplacedArgs = Tuple<RightReplacedTypes>;
       
       
     public:
@@ -692,11 +696,14 @@ namespace func{
                              , PlaceholdersBehind >::List          PreparedArgs;
       typedef typename Append<RemainingFront, RemainingBack>::List ReducedArgs;
       
-      typedef tuple::BuildTuple<PreparedArgs, ValList, n> BuildPreparedArgs;
-      typedef typename Tuple<PreparedArgs>::TupleType  PreparedArgTuple;
-      typedef typename Types<ReducedArgs>::Seq RemainingArgs;
+      using PreparedArgTypes = typename Types<PreparedArgs>::Seq;
+      using RemainingArgs    = typename Types<ReducedArgs>::Seq;
       
-      typedef typename FunctionTypedef<Ret,RemainingArgs>::Sig ReducedSig;
+      using ReducedSig = typename FunctionTypedef<Ret,RemainingArgs>::Sig;
+      
+      using BuildPreparedArgs = tuple::BuildTuple<PreparedArgs, ValList, n>;
+      typedef Tuple<PreparedArgTypes> PreparedArgTuple;
+      
       
     public:
       typedef function<ReducedSig> ReducedFunc;

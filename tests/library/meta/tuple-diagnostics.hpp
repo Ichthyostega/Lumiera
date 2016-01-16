@@ -154,7 +154,7 @@ namespace test {
     string >
   showDump (Tuple<TYPES> const& tuple)
   {
-    typedef typename Tuple<TYPES>::Type TypeSeq;
+    typedef typename Types<TYPES>::Seq TypeSeq;
     Tuple<TypeSeq> plainTuple (tuple);
     
     typedef BuildTupleAccessor<TypeSeq, TupleElementDisplayer> BuildAccessor;
