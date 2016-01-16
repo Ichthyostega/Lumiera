@@ -364,32 +364,29 @@ namespace func{
     
     
     /**
-     *  Build a sequence of tr1 function argument placeholder types.
-     *  For each of the elements of the provided reference sequence,
+     *  Build a list of tr1 function argument placeholder types.
+     *  For each of the elements of the provided reference list,
      *  a Placeholder is added, numbers counting up starting with 1 (!)
      */
-    template<typename TYPES, uint i=0>
-    class PlaceholderTuple
-      {
-        typedef typename Tuple<TYPES>::Type     TypeSeq;
-        typedef typename Tuple<TYPES>::TailType TailSeq;
-        
-        typedef typename PlaceholderTuple<TailSeq, i+1>::PlaceholderSeq  TailPlaceholderSeq;
-        
-      public:
-        typedef typename Prepend<_Placeholder<i+1>, TailPlaceholderSeq>::Seq PlaceholderSeq;
-        typedef Tuple<PlaceholderSeq> Type;
-        
-      };
+    template<typename TYPES, uint i=1>
+    struct PlaceholderTuple
+      : PlaceholderTuple<typename TYPES::List>
+      { };
     
-    template<uint i>
-    struct PlaceholderTuple<Types<>, i> : PlaceholderTuple<NullType, i> {};
+    template<typename X, typename TAIL, uint i>
+    struct PlaceholderTuple<Node<X,TAIL>, i>
+      {
+        using TailPlaceholders = typename PlaceholderTuple<TAIL,i+1>::List;
+        
+        using List = Node<_Placeholder<i>, TailPlaceholders>;
+        using Type = Tuple<typename Types<List>::Seq>;
+      };
     
     template<uint i>
     struct PlaceholderTuple<NullType, i>
       {
-        typedef Types<> PlaceholderSeq;
-        typedef Tuple<Types<> > Type;
+        using List = NullType;
+        using Type = Tuple<Types<>>;
       };
     
     
@@ -490,8 +487,8 @@ namespace func{
       typedef typename Splice<ArgsList, ValList, ROFFSET>::Front RightReduced;
       
       // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
-      typedef typename func::PlaceholderTuple<LeftReduced>::PlaceholderSeq::List  LeftPlaceholders;
-      typedef typename func::PlaceholderTuple<RightReduced>::PlaceholderSeq::List RightPlaceholders;
+      typedef typename func::PlaceholderTuple<LeftReduced>::List  LeftPlaceholders;
+      typedef typename func::PlaceholderTuple<RightReduced>::List RightPlaceholders;
       
       // ... and splice these placeholders on top of the original argument type list,
       // thus retaining the types to be closed, but setting a placeholder for each remaining argument
@@ -688,8 +685,8 @@ namespace func{
 
       typedef typename Splice<ArgsList, ValList, n>::Front RemainingFront;
       typedef typename Splice<ArgsList, ValList, n>::Back  RemainingBack;
-      typedef typename func::PlaceholderTuple<RemainingFront>::PlaceholderSeq::List PlaceholdersBefore;
-      typedef typename func::PlaceholderTuple<RemainingBack,n>::PlaceholderSeq::List PlaceholdersBehind;
+      typedef typename func::PlaceholderTuple<RemainingFront>::List PlaceholdersBefore;
+      typedef typename func::PlaceholderTuple<RemainingBack,n+1>::List PlaceholdersBehind;
       typedef typename Append< typename Append< PlaceholdersBefore
                                               , ValList >::List
                              , PlaceholdersBehind >::List          PreparedArgs;
