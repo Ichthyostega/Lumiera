@@ -26,7 +26,7 @@
 #include "proc/control/command-registry.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/handling-pattern.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 #include "lib/p.hpp"
@@ -116,7 +116,7 @@ namespace test    {
       bindRandArgument (CommandImpl& cmd)
         {
           typedef Types<int> ArgType;
-          TypedArguments<Tuple<ArgType> > arg (tuple::make (rand() % 10000));
+          TypedArguments<Tuple<ArgType>> arg (std::make_tuple (rand() % 10000));
           cmd.setArguments (arg);
           CHECK (cmd.canExec());
         }

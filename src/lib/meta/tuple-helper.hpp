@@ -47,6 +47,14 @@
 #include <tuple>
 
 
+namespace util { // forward declaration
+  
+  template<typename TY>
+  std::string
+  toString (TY const& val)  noexcept;
+}
+
+
 namespace lib {
 namespace meta {
   
@@ -162,6 +170,18 @@ namespace meta {
       using Seq  = typename Types<TYPES...>::Seq;
       using List = typename Seq::List;
     };
+  
+  
+  /** trait to detect tuple types */
+  template<typename T>
+  struct is_Tuple
+    : std::false_type
+    { };
+  
+  template<typename...TYPES>
+  struct is_Tuple<std::tuple<TYPES...>>
+    : std::true_type
+    { };
   
   
   
@@ -866,7 +886,89 @@ namespace meta {
   
   
   
+  /**
+   * Helper to dump tuple contents.
+   * Defined to act as "Accessor" for BuildTupleAccessor, this helper template
+   * allows to create a recursive operation to invoke string conversion on
+   * all elements within any given tuple.
+   */
+  template
+    < typename TY
+    , class BASE
+    , class TUP
+    , uint idx
+    >
+  struct TupleElementDisplayer
+    : BASE
+    {
+      using BASE::BASE;
+      
+      std::string
+      dump (std::string const& prefix ="(")  const
+        {
+          return BASE::dump (prefix + util::toString(std::get<idx>(*this))+",");
+        }
+    };
+  
+  template<class TUP, uint n>
+  struct TupleElementDisplayer<NullType, TUP, TUP, n>
+    : TUP
+    {
+      TupleElementDisplayer (TUP const& tup)
+        : TUP(tup)
+        { }
+      
+      std::string
+      dump (std::string const& prefix ="(")  const
+        {
+          if (1 < prefix.length())
+            // remove the trailing comma
+            return prefix.substr (0, prefix.length()-1) +")";
+          else
+            return prefix+")";
+        }
+    };
+  
+  
+  /**
+   * convenience function to dump a given tuple's contents.
+   * Using the BuildTupleAccessor, we layer a stack of Instantiations of
+   * the TupleElementDisplayer temporarily on top of the given tuple,
+   * just to invoke a recursive call chain through this layers
+   * and get a string representation of each element in the
+   * tuple.
+   */
+  template<typename...TYPES>
+  inline std::string
+  dump (std::tuple<TYPES...> const& tuple)
+  {
+    using BuildAccessor = BuildTupleAccessor<TupleElementDisplayer, Types<TYPES...>>;
+    using Displayer     = typename BuildAccessor::Product ;
+    
+    return static_cast<Displayer const&> (tuple)
+          .dump();
+  }
+  
   
   
 }} // namespace lib::meta
+
+
+// add a specialisation to enable tuple string conversion
+namespace util {
+  
+  template<typename...TYPES>
+  struct StringConv<std::tuple<TYPES...>>
+    {
+      static std::string
+      invoke (std::tuple<TYPES...> const& tuple) noexcept
+        try {
+          return "«"+typeStr(tuple)
+               + "»──" + lib::meta::dump (tuple);
+        }
+        catch(...) { return FAILURE_INDICATOR; }
+    };
+  
+  
+} // namespace util
 #endif /*LIB_META_TUPLE_HELPER_H*/

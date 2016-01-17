@@ -28,6 +28,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "meta/typelist-diagnostics.hpp"
 
+#include <tuple>
 
 namespace lib  {
 namespace meta {
@@ -39,6 +40,8 @@ namespace test {
   using func::bindLast;
   using func::PApply;
   using func::BindToArgument;
+  using std::make_tuple;
+  using std::get;
   
   
   namespace { // test functions
@@ -178,17 +181,17 @@ namespace test {
           
           // Version1: do a direct argument binding----------------- //
           
-          typedef std::_Placeholder<1> PH1;                     // tr1::function argument placeholders
-          typedef std::_Placeholder<2> PH2;
+          using PH1 = std::_Placeholder<1>;                          // tr1::function argument placeholders
+          using PH2 = std::_Placeholder<2>;
           
           PH1 ph1;                                                   // these empty structs are used to mark the arguments to be kept "open"
           PH2 ph2;
           Num<1> num18 (18);                                         // ...and this value is for closing the first function argument
           
-          F23 fun_23 = std::bind (f, num18                      // do the actual binding (i.e. close the first argument with a constant value)
-                                        , ph1
-                                        , ph2
-                                      );
+          F23 fun_23 = std::bind (f, num18                           // do the actual binding (i.e. close the first argument with a constant value)
+                                   , ph1
+                                   , ph2
+                                 );
           
           int res = 0;
           res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor ("closure"), providing the remaining arguments
@@ -198,13 +201,13 @@ namespace test {
           
           // Version2: extract the binding arguments from a tuple--- //
           
-          typedef Tuple<Types<Num<1>, PH1, PH2> > PartialArg;        // Tuple type to hold the binding values. Note the placeholder types
-          PartialArg arg(num18);                                     // Value for partial application (the placeholders are default constructed)
+          using PartialArg =  Tuple<Types<Num<1>, PH1, PH2>>;        // Tuple type to hold the binding values. Note the placeholder types
+          PartialArg arg(num18, PH1(), PH2());                       // Value for partial application (the placeholders are default constructed)
           
-          fun_23 = std::bind (f, tuple::element<0>(arg)         // now extract the values to bind from this tuple
-                                    , tuple::element<1>(arg)
-                                    , tuple::element<2>(arg)
-                                  );
+          fun_23 = std::bind (f, get<0>(arg)                         // now extract the values to bind from this tuple
+                               , get<1>(arg)
+                               , get<2>(arg)
+                             );
           res = 0;
           res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor....
           CHECK (23 == res);
@@ -281,7 +284,7 @@ namespace test {
           
           // Close the trailing 3 arguments of the 5-argument function...
           function<Sig54> fun_54 = PApply<Sig54321, Args2Close>::bindBack(fun15<5,4,3,2,1>,
-                                                                          tuple::make(_3_,_2_,_1_)
+                                                                          make_tuple(_3_,_2_,_1_)
                                                                          );
           
           // apply the remaining argument values

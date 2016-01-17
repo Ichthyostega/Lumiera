@@ -28,13 +28,14 @@
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/command-argument-holder.hpp"
 #include "proc/control/memento-tie.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/meta/tuple.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
 #include <string>
+#include <tuple>
 
 namespace proc {
 namespace control {
@@ -50,6 +51,7 @@ namespace test    {
   using std::function;
   using std::bind;
   using std::string;
+  using std::make_tuple;
   
   
   
@@ -81,9 +83,9 @@ namespace test    {
     typedef function<Sig_capt> Fun_c;
     typedef function<Sig_undo> Fun_u;
     
-    typedef Tuple<Types<char> > ArgTuple;
-    typedef Closure<Sig_oper> ArgHolder;
-    typedef MementoTie<Sig_oper, string> MemHolder;
+    using ArgTuple  = Tuple<Types<char>>;
+    using ArgHolder = Closure<Sig_oper>;
+    using MemHolder = MementoTie<Sig_oper, string>;
   }
   
   
@@ -168,13 +170,13 @@ namespace test    {
       void
       verifyClosureEquality()
         {
-          ArgHolder a1 (tuple::make ('a'));
-          ArgHolder a2 (tuple::make ('z'));
+          ArgHolder a1 (make_tuple ('a'));
+          ArgHolder a2 (make_tuple ('z'));
           CHECK (a1 == a1);
           CHECK (a1 != a2);
           CHECK (a2 != a1);
           
-          TypedArguments<ArgTuple> newArgs (tuple::make ('z'));
+          TypedArguments<ArgTuple> newArgs (make_tuple ('z'));
           a1.bindArguments(newArgs);
           CHECK (a1 == a2);
           CHECK (a2 == a1);

@@ -537,7 +537,7 @@ return: 0
 END
 
 
-TEST "TypeTuple_test" TypeTuple_test <<END
+TEST "tuple metaprogramming helpers" TupleHelper_test <<END
 out-lit: L1	:-<1>-<3>-<5>-
 out-lit: L2	:-<2>-<4>-
 out-lit: L3	:-<7>-

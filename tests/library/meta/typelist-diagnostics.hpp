@@ -185,8 +185,8 @@ namespace meta {
     /* ===== printing types and contents ===== */ 
     
     template<typename TYPES>
-    enable_if< is_Typelist<TYPES>,
-      string >
+    inline                  enable_if< is_Typelist<TYPES>,
+    string                  >
     showType ()
     {
       typedef InstantiateChained<typename TYPES::List, Printer, NullP>  DumpPrinter;
@@ -196,11 +196,11 @@ namespace meta {
     //  Note: we define overloads of this function for other types, especially Tuples
     
     
-#define DISPLAY(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showType<NAME>() << endl;
+#define DISPLAY(_IT_)  \
+        cout << STRINGIFY(_IT_) << "\t:" << showType<_IT_>() << endl;
     
-#define DUMPVAL(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showDump (NAME) << endl;
+#define DUMPVAL(_IT_)  \
+        cout << STRINGIFY(_IT_) << "\t:" << util::toString(_IT_) << endl;
     
     
     

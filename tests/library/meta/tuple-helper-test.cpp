@@ -1,5 +1,5 @@
 /*
-  TypeTuple(Test)  -  checking type tuples and records based on them
+  TupleHelper(Test)  -  verify helpers for working with tuples and type sequences
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,12 +21,10 @@
 * *****************************************************/
 
 
-/** @file type-tuple-test.cpp
- ** Interplay of typelists, type tuples and simple record
- ** data types build on top of them.
+/** @file tuple-helpers-test.cpp
+ ** Interplay of typelists, type tuples and std::tuple.
  ** 
- ** @see lib::meta::Tuple
- ** @see tuple.hpp
+ ** @see tuple-helper.hpp
  ** @see function-closure.hpp
  ** @see control::CmdClosure real world usage example
  **
@@ -34,7 +32,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "meta/typelist-diagnostics.hpp"
 #include "meta/tuple-diagnostics.hpp"
 
@@ -71,33 +69,25 @@ namespace test {
   
   
   /*********************************************************************//**
-   * @test Cover various aspects of the type tuple.
-   *       Check the metaprogramming behaviour...
-   *       - build a tuple type from an existing typelist
-   *       - create sub tuple types and types with shifted parameters
-   *       Additionally, check the behaviour when creating tuple instances
-   *       at runtime. Effectively, these are simple record types, which
-   *       are synthesised by recursion over the related typelist.
-   *       - diagnostics through TupleAccessor retrieving stored values
-   *       - creating tuples by direct function call, providing values
-   *       - creating tuples partially from an existing sub-argument tuple
-   *       - copy and copy construct
-   *       - access the "head" and access values by numeric index
-   *       - create a tuple with shifted values
+   * @test Cover various aspects of the integration of our type sequences
+   *       with the tuple type from the standard library
+   *       - verify our generic tuple access decorator
+   *       - TODO
+   * @todo to be written
    */
-  class TypeTuple_test : public Test
+  class TupleHelper_test : public Test
     {
       virtual void
       run (Arg)
         {
           check_diagnostics();
-          check_tuple_from_Typelist();
-          check_sub_tuple_types();
-          check_shiftedTuple();
-          check_tuple_creation();
-          check_build_from_subTuple();
-          check_tuple_copy();
-          check_value_access();
+//        check_tuple_from_Typelist();
+//        check_sub_tuple_types();
+//        check_shiftedTuple();
+//        check_tuple_creation();
+//        check_build_from_subTuple();
+//        check_tuple_copy();
+//        check_value_access();
         }
       
       
@@ -117,7 +107,7 @@ namespace test {
           DISPLAY (L3);
           
           typedef Tuple<Types1> Tup1;
-          Tup1 tup1x (Num<1>(11));
+          Tup1 tup1x (Num<1>(11), Num<3>(), Num<5>());
           
           DISPLAY (Tup1);     // prints the type
           DUMPVAL (Tup1());   // prints the contents
@@ -125,6 +115,7 @@ namespace test {
         }
       
       
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////OBSOLETE :: TICKET #988
       void
       check_tuple_from_Typelist()
         {
@@ -446,12 +437,13 @@ namespace test {
           TupT& tupXcast (tupX.tupleCast());   // (down)cast list-style to plain tuple
           DUMPVAL (tupXcast);
         }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////OBSOLETE :: TICKET #988
       
     };
   
   
   /** Register this test class... */
-  LAUNCHER (TypeTuple_test, "unit meta");
+  LAUNCHER (TupleHelper_test, "unit meta");
   
   
   

@@ -25,7 +25,6 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-argument-holder.hpp"
 #include "lib/scoped-ptrvect.hpp"
-#include "lib/meta/tuple.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util-foreach.hpp"
@@ -35,6 +34,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
+#include <tuple>
 
 using util::_Fmt;
 using util::isnil;
@@ -44,6 +44,7 @@ using lib::time::TimeVar;
 using lib::time::TimeValue;
 using std::string;
 using std::ostringstream;
+using std::make_tuple;
 using std::rand;
 
 
@@ -238,12 +239,12 @@ namespace test    {
           
           for_each (tup, showIt);
           
-          arg1->storeTuple (tuple::makeNullTuple());
-          arg2->storeTuple (tuple::make (rand() % 10));
-          arg3->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
-          arg4->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
+          arg1->storeTuple (std::tuple<>());
+          arg2->storeTuple (make_tuple (rand() % 10));
+          arg3->storeTuple (make_tuple (rand() % 10, TimeVar(randTime())));
+          arg4->storeTuple (make_tuple (rand() % 10, TimeVar(randTime())));
           
-          arg5->storeTuple (tuple::make (TTime (randTime()), Tstr("glorious"), twoRandomDigits() ));
+          arg5->storeTuple (make_tuple (TTime (randTime()), Tstr("glorious"), twoRandomDigits() ));
           
           CHECK (!arg5->canUndo());
           
@@ -288,23 +289,23 @@ namespace test    {
           two.memento() = one.memento();     // put the same UNDO state in both
           CHECK (one == two);               // ...makes them equal again
           
-          one.storeTuple (tuple::make (1,2));
+          one.storeTuple (make_tuple (1,2));
           CHECK (one != two);               // verify argument tuple comparison
           CHECK (two != one);
           CHECK (!isnil (one));
           CHECK ( isnil (two));
           
-          two.storeTuple (tuple::make (3,4));
+          two.storeTuple (make_tuple (3,4));
           CHECK (!isnil (two));
           CHECK (one != two);
           CHECK (two != one);
           
-          one.storeTuple (tuple::make (1,4));
+          one.storeTuple (make_tuple (1,4));
           CHECK (!isnil (one));
           CHECK (one != two);
           CHECK (two != one);
           
-          one.storeTuple (tuple::make (3,4));
+          one.storeTuple (make_tuple (3,4));
           CHECK (!isnil (one));
           CHECK (one == two);
           CHECK (two == one);
@@ -332,7 +333,7 @@ namespace test    {
           
           // store a set of parameter values, later to be used on invocation
           args.storeTuple (
-            tuple::make (TTime(randTime()), Tstr("Lumiera rocks"), twoRandomDigits() ));
+            make_tuple (TTime(randTime()), Tstr("Lumiera rocks"), twoRandomDigits() ));
           CHECK (!isnil (args));
           cout << args << endl;
           
@@ -376,7 +377,7 @@ namespace test    {
           protocol << "RESET...";
           
           args.storeTuple (
-            tuple::make (TTime(TimeValue(123456)), Tstr("unbelievable"), twoRandomDigits() ));
+            make_tuple (TTime(TimeValue(123456)), Tstr("unbelievable"), twoRandomDigits() ));
           cout << "modified: " << args     << endl;
           cout << "copied  : " << argsCopy << endl;    // holds still the old params & memento
           
