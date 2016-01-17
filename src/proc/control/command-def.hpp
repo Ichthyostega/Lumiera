@@ -67,7 +67,7 @@
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-manip.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/util.hpp"
 
 #include <memory>
@@ -83,15 +83,16 @@ namespace control {
   using std::function;
   using std::bind;
   using std::placeholders::_1;
+  using std::tuple_size;
   using lib::Symbol;
   using util::cStr;
   
   using lib::meta::FunctionSignature;
   using lib::meta::FunctionTypedef;
-  using lib::meta::Types;
   using lib::meta::NullType;
+  using lib::meta::Types;
+  using lib::meta::TySeq;
   using lib::meta::Tuple;
-  using lib::meta::tuple::makeNullTuple;
   
   
   
@@ -161,8 +162,8 @@ namespace control {
         void
         maybeArm_if_zero_parameters()
           {
-            if (0 == Tuple<CmdArgs>::SIZE )
-              prototype_.bindArg (makeNullTuple());
+            if (0 == tuple_size<Tuple<CmdArgs>>::value )
+              prototype_.bindArg<> (std::tuple<>());
           }
       };
     

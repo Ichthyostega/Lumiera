@@ -28,7 +28,7 @@
  ** with the Tuples provided by the standard library.
  ** 
  ** @see control::CommandDef usage example
- ** @see tuple-test.cpp
+ ** @see TupleHelper_test
  ** @see typelist.hpp
  ** @see function.hpp
  ** @see generator.hpp
@@ -50,7 +50,68 @@
 namespace lib {
 namespace meta {
   
-  namespace {
+  /**
+   * temporary workaround:
+   * alternative definition of "type sequence",
+   * already using variadic template parameters.
+   * @remarks the problem with our existing type sequence type
+   *    is that it fills the end of each sequence with NullType,
+   *    which was the only way to get a flexible type sequence
+   *    prior to C++11. Unfortunately these trailing NullType
+   *    entries do not play well with other variadic defs.
+   * @deprecated when we switch our primary type sequence type
+   *    to variadic parameters, this type will be superfluous.
+   */
+  template<typename...TYPES>
+  struct TySeq
+    {
+      using Seq = TySeq;
+      using List = typename Types<TYPES...>::List;
+    };
+  
+  
+  /**
+   * temporary workaround: additional specialisation for the template
+   * `Prepend` to work also with the (alternative) variadic TySeq.
+   * @see typeseq-util.hpp
+   */
+  template<typename T, typename...TYPES>
+  struct Prepend<T, TySeq<TYPES...>>
+  {
+    using Seq  = TySeq<T, TYPES...>;
+    using List = typename Types<T, TYPES...>::List;
+  };
+  
+  
+  /**
+   * temporary workaround: strip trailing NullType entries from a
+   * type sequence, to make it compatible with new-style variadic
+   * template definitions.
+   * @note the result type is a TySec, to keep it apart from our
+   *    legacy (non-variadic) lib::meta::Types
+   * @deprecated necessary for the transition to variadic sequences
+   */
+  template<typename SEQ>
+  struct StripNullType;
+  
+  template<typename T, typename...TYPES>
+  struct StripNullType<Types<T,TYPES...>>
+    {
+      using TailSeq = typename StripNullType<Types<TYPES...>>::Seq;
+      
+      using Seq = typename Prepend<T, TailSeq>::Seq;
+    };
+  
+  template<typename...TYPES>
+  struct StripNullType<Types<NullType, TYPES...>>
+    {
+      using Seq = TySeq<>;  // NOTE: this causes the result to be a TySeq
+    };
+  
+  
+  
+  
+  namespace { // rebinding helper to create std::tuple from a type sequence
     
     template<typename SEQ>
     struct BuildTupleType
@@ -58,38 +119,74 @@ namespace meta {
       { };
     
     template<typename...TYPES>
-    struct BuildTupleType<Types<TYPES...>>
+    struct BuildTupleType<TySeq<TYPES...>>
       {
         using Type = std::tuple<TYPES...>;
+      };
+    
+    /**
+     * temporary workaround: strip trailing NullType entries
+     * prior to rebinding to the `std::tuple` type.
+     */
+    template<typename...TYPES>
+    struct BuildTupleType<Types<TYPES...>>
+      {
+        using VariadicSeq = typename StripNullType<Types<TYPES...>>::Seq;
+        
+        using Type = typename BuildTupleType<VariadicSeq>::Type;
       };
   }
   
   
-  template<typename...TYPES>
+  /** Build a `std::tuple` from types given as type sequence
+   * @remarks for Lumiera, we deliberately use a dedicated template `Types`
+   *    to mark a type sequence of types as such. This allows to pass such a
+   *    sequence as first-class citizen. The standard library often (ab)uses
+   *    the std::tuple for this purpose, which is an understandable, yet
+   *    inferior design choice. We should always favour dedicated types
+   *    over clever re-use of existing types.
+   */
+  template<typename TYPES>
   using Tuple = typename BuildTupleType<TYPES>::Type;
+  
+  
+  using std::tuple_size;
+  using std::tuple_element;
+  
+  
+  
+  /** match and rebind the type sequence from a tuple */
+  template<typename...TYPES>
+  struct Types<std::tuple<TYPES...>>
+    {
+      using Seq  = typename Types<TYPES...>::Seq;
+      using List = typename Seq::List;
+    };
+  
+  
   
   
   
   /** Hold a sequence of index numbers as template parameters */
   template<size_t...idx>
-    struct IndexSeq
+  struct IndexSeq
     {
       template<size_t i>
       using AppendElm = IndexSeq<idx..., i>;
     };
-
+  
   /** build an `IndexSeq<0, 1, 2, ..., n-1>` */
   template<size_t n>
-    struct BuildIndexSeq
+  struct BuildIndexSeq
     {
-      using Ascending = typename BuildIndexSeq<n-1>::Ascending::AppendElm<n>;
+      using Ascending = typename BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
       
       template<size_t i>
-      using FilledWith = typename BuildIndexSeq<n-1>::FilledWith<i>::AppendElm<i>;
+      using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<i>::template AppendElm<i>;
     };
-
+  
   template<>
-    struct BuildIndexSeq<0>
+  struct BuildIndexSeq<0>
     {
       using Ascending = IndexSeq<>;
       
@@ -709,60 +806,49 @@ namespace meta {
     public: 
       static const bool value = (sizeof(Yes_t)== Check<TUP>::result);
     };
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////OBSOLETE :: TICKET #988
   
   
   /**
    * Decorating a tuple type with auxiliary data access operations.
    * This helper template builds up a subclass of the given TUP (base) type
    * (which is assumed to be a Tuple or at least need to be copy constructible
-   * from \c Tuple<TYPES> ). The purpose is to use the Tuple as storage, but
+   * from `Tuple<TYPES>` ). The purpose is to use the Tuple as storage record, but
    * to add a layer of access functions, which in turn might rely on the exact
    * type of the individual elements within the Tuple. To achieve this, for each
    * type within the Tuple, the TUP type is decorated with an instance of the
    * template passed in as template template parameter _X_. Each of these
-   * decorating instances is provided with a index allowing to access "his"
-   * specific element within the underlying tuple.
+   * decorating instances is provided with an index number, allowing to
+   * access "his" specific element within the underlying tuple.
    * 
    * The decorating template _X_ need to take its own base class as template
    * parameter. Typically, operations on _X_ will be defined in a recursive fashion,
    * calling down into this templated base class. To support this, an instantiation
    * of _X_ with the empty type sequence is generated for detecting recursion end
-   * (built as innermost decorator, i.e. immediate subclass of TUP) 
+   * (built as innermost decorator, i.e. the immediate subclass of TUP)
    */
   template
-    < typename TYPES                                ///< Type sequence to use within the Accessor (usually the Tuple Types)
-    , template<class,class,class, uint> class _X_   ///< user provided template<Type, Base, TupleType, arg-No>
+    < template<class,class,class, uint> class _X_   ///< user provided template<Type, Base, TupleType, arg-idx>
+    , typename TYPES                                ///< Sequence of types to use within the Accessor
     , class TUP =Tuple<TYPES>                       ///< the tuple type to build on
     , uint i = 0                                    ///< tuple element index counter
     >
   class BuildTupleAccessor
     {
-      typedef Tuple<TYPES> ArgTuple;
-      typedef typename ArgTuple::HeadType Head;
-      typedef typename ArgTuple::TailType Tail;
-      typedef BuildTupleAccessor<Tail,_X_,TUP, i+1> NextBuilder;
-      typedef typename NextBuilder::Accessor NextAccessor;
-      
-      ArgTuple const& argData_;
-      
+      // prepare recursion...
+      using Head         = typename Split<TYPES>::Head;
+      using Tail         = typename Split<TYPES>::Tail;
+      using NextBuilder  = BuildTupleAccessor<_X_, Tail,TUP, i+1>;
+      using NextAccessor = typename NextBuilder::Product;
     public:
       
       /** type of the product created by this template.
        *  Will be a subclass of TUP */
-      typedef _X_< Head            // the type to use for this accessor
-                 , NextAccessor    // the base type to inherit from
-                 , TUP             // the tuple type we build upon
-                 , i               // current element index
-                 >    Accessor;
-      
-      
-      BuildTupleAccessor (ArgTuple const& tup)
-        : argData_(tup)
-        { }
-      
-      /** used to get the product of this builder template... */
-      operator Accessor() { return Accessor(argData_); }
-      
+      using Product = _X_< Head            // the type to use for this accessor
+                         , NextAccessor    // the base type to inherit from
+                         , TUP             // the tuple type we build upon
+                         , i               // current element index
+                         >;
     };
   
   
@@ -771,24 +857,13 @@ namespace meta {
     , class TUP
     , uint i
     >
-  class BuildTupleAccessor<Types<>, _X_, TUP, i>
+  class BuildTupleAccessor< _X_, Types<>, TUP, i>
     {
-      typedef Tuple<Types<> > ArgTuple;
-      ArgTuple const& argData_;
-      
     public:
-      typedef _X_<NullType, TUP, TUP, 0> Accessor;
-      
-      BuildTupleAccessor (ArgTuple const& tup)
-        : argData_(tup)
-        { }
-      
-      /** used to get the product of this builder template... */
-      operator Accessor() { return Accessor(argData_); }
+      using Product = _X_<NullType, TUP, TUP, i>;   // Note: i == tuple size
       
     };
   
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////OBSOLETE :: TICKET #988
   
   
   

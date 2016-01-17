@@ -72,7 +72,7 @@
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/function-erasure.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/maybe-compare.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
@@ -165,14 +165,11 @@ namespace control {
   class ParamAccessor
     : public BASE
     {
-      TY      & element()        { return          BASE::template getAt<idx>(); }
-      TY const& element()  const { return unConst(this)->template getAt<idx>(); }
+      TY      & element()        { return std::get<idx> (*this); }
+      TY const& element()  const { return std::get<idx> (*this); }
       
     public:
-        
-      ParamAccessor(TUP const& tuple)
-        : BASE(tuple)
-        { }
+      using BASE::BASE;
       
       
       ////////////////////TODO the real access operations (e.g. for serialising) go here
@@ -195,13 +192,13 @@ namespace control {
         }
     };
     
-  template<class TUP>
-  class ParamAccessor<NullType, TUP, TUP, 0>   ///< used for recursion end of implementation functions
+  template<class TUP, uint n>
+  class ParamAccessor<NullType, TUP, TUP, n>   ///< used for recursion end of implementation functions
     : public TUP
     {
     public:
-      ParamAccessor(TUP const& tuple)
-        : TUP(tuple)
+      ParamAccessor (TUP const& tup)
+        : TUP(tup)
         { }
       
       ////////////////////TODO the recursion-end of the access operations goes here
@@ -225,11 +222,10 @@ namespace control {
   class Closure
     : public AbstractClosure
     {
-      typedef typename FunctionSignature< function<SIG> >::Args Args;
+      using Args = typename FunctionSignature< function<SIG> >::Args;
+      using Builder = BuildTupleAccessor<ParamAccessor, Args>;
       
-      
-      typedef BuildTupleAccessor<Args,ParamAccessor> Builder;
-      typedef typename Builder::Accessor ParamStorageTuple;
+      using ParamStorageTuple =typename Builder::Product;
       
       ParamStorageTuple params_;
       
@@ -237,7 +233,7 @@ namespace control {
       typedef Tuple<Args> ArgTuple;
       
       Closure (ArgTuple const& args)
-        : params_(Builder (args))
+        : params_(args)
         { }
       
       /** create a clone copy of this, without disclosing the exact type */

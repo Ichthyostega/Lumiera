@@ -59,7 +59,9 @@
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/function.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/tuple-helper.hpp"
+
+#include <tuple>
 
 
 
@@ -624,8 +626,7 @@ namespace control {
   class AcceptArgumentTuple
     : public bind_arg::AcceptArgs<TAR,BASE, typename bind_arg::_Type<SIG>::Ret
                                           , typename bind_arg::_Type<SIG>::Args>
-    {
-    };
+    { };
   
   
   /** Helper Template for Proc-Layer control::Command : mix in a \c bind(...) function
@@ -637,8 +638,7 @@ namespace control {
   class AcceptArgumentBinding
     : public bind_arg::AcceptBind<TAR,BASE, typename bind_arg::_Type<SIG>::Ret
                                           , typename bind_arg::_Type<SIG>::Args>   
-    {
-    };
+    { };
   
     
   /** Variation of AcceptArgumentBinding, allowing to control the return type 
@@ -648,8 +648,7 @@ namespace control {
   class AcceptArgumentBindingRet
     : public bind_arg::AcceptBind<TAR,BASE, RET
                                           , typename bind_arg::_Type<SIG>::Args>
-    {
-    };
+    { };
   
   
   /** Helper Template for control::Command, mix-in complete set of \c bind(...) functions
@@ -663,8 +662,7 @@ namespace control {
           >
   class AcceptAnyBinding
     : public bind_arg::AcceptAnyBind<TAR,BASE,RET>
-    {
-    };
+    { };
   
   
   
