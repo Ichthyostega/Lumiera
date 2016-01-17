@@ -1,8 +1,8 @@
 /*
-  TUPLE.hpp  -  metaprogramming utilities for type tuples and data tuples
+  TUPLE-HELPER.hpp  -  metaprogramming utilities for type and data tuples
 
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -22,20 +22,10 @@
 
 
 /** @file tuple.hpp
- ** Metaprogramming with tuples-of-types and a simple Tuple (record) datatype.
+ ** Metaprogramming with tuples-of-types and the `std::tuple` record.
  ** The metaprogramming part of this header complements typelist.hpp and allows
- ** some additional manipulations on type sequences. Such a finite sequence or
- ** tuple of types can at times be more handy than a typelist, especially when
- ** capturing specific types to use as template parameter.
- ** 
- ** Additionally, this header augments the Tuple template into a simple Tuple
- ** (run time) datatype. This isn't meant as competing with std::tuple, which is
- ** much more capable, but also has the downside of pulling in a lot of other headers.
- ** But when all we need is to define a generic typed record of N data elements and
- ** later re-accessing them (but no further advanced processing), the Tuple template
- ** might come in handy.
- ** 
- ** @deprecated obsoleted by `std::tuple` -- to be removed soon /////////////////////TICKET #988
+ ** some additional manipulations on type sequences, especially to integrate
+ ** with the Tuples provided by the standard library.
  ** 
  ** @see control::CommandDef usage example
  ** @see tuple-test.cpp
@@ -46,19 +36,69 @@
  */
 
 
-#ifndef LIB_META_TUPLE_H
-#define LIB_META_TUPLE_H
+#ifndef LIB_META_TUPLE_HELPER_H
+#define LIB_META_TUPLE_HELPER_H
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/util.hpp"
 
+#include <tuple>
 
 
 namespace lib {
 namespace meta {
   
+  namespace {
+    
+    template<typename SEQ>
+    struct BuildTupleType
+      : std::false_type
+      { };
+    
+    template<typename...TYPES>
+    struct BuildTupleType<Types<TYPES...>>
+      {
+        using Type = std::tuple<TYPES...>;
+      };
+  }
+  
+  
+  template<typename...TYPES>
+  using Tuple = typename BuildTupleType<TYPES>::Type;
+  
+  
+  
+  /** Hold a sequence of index numbers as template parameters */
+  template<size_t...idx>
+    struct IndexSeq
+    {
+      template<size_t i>
+      using AppendElm = IndexSeq<idx..., i>;
+    };
+
+  /** build an `IndexSeq<0, 1, 2, ..., n-1>` */
+  template<size_t n>
+    struct BuildIndexSeq
+    {
+      using Ascending = typename BuildIndexSeq<n-1>::Ascending::AppendElm<n>;
+      
+      template<size_t i>
+      using FilledWith = typename BuildIndexSeq<n-1>::FilledWith<i>::AppendElm<i>;
+    };
+
+  template<>
+    struct BuildIndexSeq<0>
+    {
+      using Ascending = IndexSeq<>;
+      
+      template<size_t>
+      using FilledWith = IndexSeq<>;;
+    };
+
+
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////OBSOLETE :: TICKET #988
   
   
   /** 
@@ -76,8 +116,6 @@ namespace meta {
    * - get the types of head and tail, and a list version of the types
    * - access the head element and the tail tuple
    * - access the Nth element and a shifted-b-N sub (tail) tuple
-   * 
-   * @deprecated will be replaced by `std::tuple`
    */
   template<class TYPES>
   struct Tuple;
@@ -750,9 +788,10 @@ namespace meta {
       
     };
   
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////OBSOLETE :: TICKET #988
   
   
   
   
 }} // namespace lib::meta
-#endif
+#endif /*LIB_META_TUPLE_HELPER_H*/
