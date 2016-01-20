@@ -95,8 +95,8 @@ namespace meta {
   
   
   
-  namespace test { //  unit tests covering typelist manipulating templates
-    namespace {   // hidden internals for diagnostics....
+  namespace test{ //  unit tests covering typelist manipulating templates
+    namespace  { // internals to support diagnostics in unit tests....
       
       
       using util::_Fmt;
@@ -109,8 +109,12 @@ namespace meta {
       /** debugging template, 
        *  printing the "number" used for instantiation on ctor call
        */
-      template<class NUM=NullType, class BASE=NullP>
-      struct Printer;
+      template<class T=NullType, class BASE=NullP>
+      struct Printer
+        : BASE
+        {
+          static string print () { return _Fmt("-<%s>%s") % typeStr<T>() % BASE::print(); }
+        };
       
       template<class BASE>
       struct Printer<NullType, BASE>
@@ -176,7 +180,6 @@ namespace meta {
                    + BASE::print(); 
             }
         };
-      
       
     } // (End) internal defs
     

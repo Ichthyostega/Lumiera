@@ -144,10 +144,10 @@ out-lit: Args	:-<5>-<9>-
 out-lit: NewArgs	:-<1>-<5>-<9>-
 out-lit: 	:
 out-lit: 	: ---Apply---
-out-lit: tup0	:...Tuple()
-out-lit: tup1	:...Tuple(11)
-out-lit: tup2	:...Tuple(11,12)
-out-lit: tup3	:...Tuple(11,12,13)
+out-lit: tup0	:«tuple<>»──()
+out-lit: tup1	:«tuple<int>»──(11)
+out-lit: tup2	:«tuple<int, int>»──(11,12)
+out-lit: tup3	:«tuple<int, int, int>»──(11,12,13)
 out-lit: 	:
 out-lit: 	: ---Bind----
 return: 0
@@ -541,134 +541,21 @@ TEST "tuple metaprogramming helpers" TupleHelper_test <<END
 out-lit: L1	:-<1>-<3>-<5>-
 out-lit: L2	:-<2>-<4>-
 out-lit: L3	:-<7>-
-out-lit: Tup1	:TYPES-<>-<1>-<3>-<5>-
-out-lit: Tup1()	:...Tuple((1),(3),(5))
-out-lit: tup1x	:...Tuple({11},(3),(5))
-out-lit: Type1	:-<1>-<3>-<5>-
-out-lit: T_L1	:TYPES-[]-<1>-<3>-<5>-
-out-lit: T1	:TYPES-<>-<1>-<3>-<5>-
-out-lit: tup1	:...Tuple({8},(3),(5))
-out-lit: tup2	:...Tuple({9},(3),(5))
-out-lit: Prepend	:TYPES-[]-<i>-<1>-<3>-<5>-
-out-lit: prepend	:...Tuple(22,{9},(3),(5))
-out-lit: 	:
-out-lit: 	: ---Sub-Tuple-Types----
-out-lit: T_L2	:TYPES-[]-<2>-<4>-<1>-<3>-<5>-
-out-lit: Head	:-<2>-
-out-lit: Tail	:-<4>-<1>-<3>-<5>-
-out-lit: T2	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out-lit: Head2	:-<2>-
-out-lit: Tail2	:-<4>-<1>-<3>-<5>-
-out-lit: T2::Type	:-<2>-<4>-<1>-<3>-<5>-
-out-lit: T2::TailType	:-<4>-<1>-<3>-<5>-
-out-lit: T2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out-lit: T2::ThisType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out-lit: T2::Tail	:TYPES-<>-<4>-<1>-<3>-<5>-
-out-lit: T2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
-out-lit: T_L2::Type	:-<2>-<4>-<1>-<3>-<5>-
-out-lit: T_L2::TailType	:-<4>-<1>-<3>-<5>-
-out-lit: T_L2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out-lit: T_L2::ThisType	:TYPES-[]-<2>-<4>-<1>-<3>-<5>-
-out-lit: T_L2::Tail	:TYPES-[]-<4>-<1>-<3>-<5>-
-out-lit: T_L2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
-out-lit: NulT::Type	:-
-out-lit: NulT::TailType	:-
-out-lit: NulT::TupleType	:TYPES-<>-
-out-lit: NulT::ThisType	:TYPES-<>-
-out-lit: NulT::Tail	:TYPES-<>-
-out-lit: NulT::ArgList	:-
-out-lit: NulL::Type	:-
-out-lit: NulL::TailType	:-
-out-lit: NulL::TupleType	:TYPES-<>-
-out-lit: NulL::ThisType	:TYPES-[]-
-out-lit: NulL::Tail	:TYPES-[]-
-out-lit: NulL::ArgList	:-
-out-lit: 	:
-out-lit: 	: ---Shifted-Tuple---
-out-lit: Ty_0	:-<2>-<4>-<7>-
-out-lit: Ty_1	:-<4>-<7>-
-out-lit: Ty_2	:-<7>-
-out-lit: Ty_3	:-
-out-lit: Ty_4	:-
-out-lit: T_0	:TYPES-[]-<2>-<4>-<7>-
-out-lit: T_1	:TYPES-[]-<4>-<7>-
-out-lit: T_2	:TYPES-[]-<7>-
-out-lit: T_3	:TYPES-[]-
-out-lit: T_4	:TYPES-[]-
-out-lit: tu3	:...Tuple((2),(4),(7))
-out-lit: tu3_0	:...Tuple((2),(4),(7))
-out-lit: tu3_1	:...Tuple((4),(7))
-out-lit: tu3_2	:...Tuple((7))
-out-lit: tu3_3	:...Tuple()
-out-lit: tu3_4	:...Tuple()
-out-lit: 	:
-out-lit: 	: ---creating-Tuples---
-out-lit: tup1	:...Tuple((1),(3),(5))
-out-lit: tup11	:...Tuple({11},(3),(5))
-out-lit: tup12	:...Tuple((1),{33},(5))
-out-lit: tup13	:...Tuple({11},{33},(5))
-out-lit: Tup2	:TYPES-<>-<i>-<i>-<11>-
-out-lit: tup2	:...Tuple(41,42,{43})
-out-lit: Tup22	:TYPES-<>-<i>-<11>-
-out-lit: tup22	:...Tuple(42,{43})
-out-lit: Tup222	:TYPES-<>-<11>-
-out-lit: tup222	:...Tuple({43})
-out-lit: T0T	:TYPES-<>-
-out-lit: T0L	:TYPES-[]-
-out-lit: nullT	:...Tuple()
-out-lit: nullL	:...Tuple()
-out-lit: nulTcpy	:...Tuple()
-out-lit: nulTref	:...Tuple()
-out-lit: 	:
-out-lit: 	: ---build-from-sub-Tuples---
-out-lit: T1357L	:TYPES-[]-<1>-<3>-<5>-<7>-
-out-lit: T1357T	:TYPES-<>-<1>-<3>-<5>-<7>-
-out-lit: T135L	:TYPES-[]-<1>-<3>-<5>-
-out-lit: T57T	:TYPES-<>-<5>-<7>-
-out-lit: T35T	:TYPES-<>-<3>-<5>-
-out-lit: sub135	:...Tuple((1),(3),(5))
-out-lit: b_135	:...Tuple((1),(3),(5),(7))
-out-lit: b_135	:...Tuple((1),(3),(5),(7))
-out-lit: b_135	:...Tuple((1),(3),(5),(7))
-out-lit: b_135	:...Tuple((1),(3),(5),(7))
-out-lit: sub57	:...Tuple((5),(7))
-out-lit: b_57	:...Tuple((1),(3),(5),(7))
-out-lit: sub35	:...Tuple({8},{8})
-out-lit: b_35	:...Tuple((1),{8},{8},(7))
-out-lit: b_35	:...Tuple((1),(3),(5),(7))
-out-lit: b_35	:...Tuple((1),(3),(5),(7))
-out-lit: sub78	:...Tuple({77},{88})
-out-lit: b_78	:...Tuple((1),(3),(5),{77})
-out-lit: b_nul	:...Tuple((1),(3),(5),(7))
-out-lit: b_nul	:...Tuple((1),(3),(5),(7))
-out-lit: b_nul2	:...Tuple()
-out-lit: b_nul2	:...Tuple()
-out-lit: 	:
-out-lit: 	: ---copy-operations---
-out-lit: tup1	:...Tuple({11},{33},(5))
-out-lit: tup11	:...Tuple({11},{33},{44})
-out-lit: tup1	:...Tuple({11},{33},{44})
-out-lit: tupL	:...Tuple({11},{33},{44})
-out-lit: tup1L	:...Tuple({11},{33},{44})
-out-lit: 	:
-out-lit: 	: ---value-access---
-out-lit: TupX	:TYPES-[]-<2>-<4>-<2>-<4>-
-out-lit: tupX	:...Tuple((2),(4),(2),(4))
-out-lit: tu2	:...Tuple((2),(4))
-out-lit: tu2	:...Tuple({5},{5})
-out-lit: tupX	:...Tuple((2),(4),{5},{5})
-out-lit: T4	:TYPES-<>-<2>-<4>-
-out-lit: t4	:...Tuple({5},{5})
-out-lit: TupX::Type	:-<2>-<4>-<2>-<4>-
-out-lit: TupX::TailType	:-<4>-<2>-<4>-
-out-lit: TupX::ThisType	:TYPES-[]-<2>-<4>-<2>-<4>-
-out-lit: TupX::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
-out-lit: TupT::Type	:-<2>-<4>-<2>-<4>-
-out-lit: TupT::TailType	:-<4>-<2>-<4>-
-out-lit: TupT::ThisType	:TYPES-<>-<2>-<4>-<2>-<4>-
-out-lit: TupT::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
-out-lit: tupXcopy	:...Tuple((2),(4),{5},{5})
-out-lit: tupXcast	:...Tuple((2),(4),{5},{5})
+out-lit: Tup1	:TUPLE-<1>-<3>-<5>-
+out-lit: Tup1()	:«tuple<Num<1>, Num<3>, Num<5> >»──((1),(3),(5))
+out-lit: tup1x	:«tuple<Num<1>, Num<3>, Num<5> >»──({11},(3),{55})
+out-lit: T_L1	:TUPLE-<1>-<3>-<5>-
+out-lit: Seq1	:-<1>-<3>-<5>-
+out-lit: tup1	:«tuple<Num<1>, Num<3>, Num<5> >»──((1),(3),(5))
+out-lit: Prepend	:TUPLE-<i>-<1>-<3>-<5>-
+out-lit: prep	:«tuple<int, Num<1>, Num<3>, Num<5> >»──(22,{11},{33},(5))
+out-lit: «tuple<Num<1>, Num<3>, Num<5> >»──((1),(3),(5))
+out-lit: «tuple<int, Num<1>, Num<3>, Num<5> >»──(22,{11},{33},(5))
+out-lit: «tuple<>»──()
+out: sizeof. tuple<Num<1>, Num<3>, Num<5> > . =  12
+out: sizeof. tuple<int, Num<1>, Num<3>, Num<5> > . =  16
+out-lit: sizeof( tuple<> )                       =   1
+out-lit: sizeof( tuple<> )                       =   1
 return: 0
 END
 
