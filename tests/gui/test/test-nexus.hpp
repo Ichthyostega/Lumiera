@@ -109,6 +109,9 @@ namespace test{
       
       template<typename...ARGS>
       static bool wasInvoked (Cmd, ARGS const& ...args);
+      
+    private:
+      static void prepareDiagnosticCommandHandler();
     };
   
   
@@ -117,6 +120,7 @@ namespace test{
   inline interact::InvocationTrail
   Nexus::prepareMockCmd()
   {
+    prepareDiagnosticCommandHandler();
     return Cmd {PlaceholderCommand<ARGS...>::fabricateNewInstance(getLog())};
   }
   

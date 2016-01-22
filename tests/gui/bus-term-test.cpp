@@ -186,14 +186,13 @@ namespace test {
           TimeSpan clip (Time(1,2,3), lib::test::randTime());
           LuidH luid;
           
+          // we cannot invoke commands prior to binding arguments
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, mock.issueCommand(cmd) );
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
-          mock.issueCommand(cmd);
           cout << "____Nexus-Log_________________\n"
                << util::join(gui::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
-          // we cannot invoke commands prior to binding arguments
-          VERIFY_ERROR (UNBOUND_ARGUMENTS, mock.issueCommand(cmd) );
           
           // proper argument typing is ensured while dispatching the bind message. 
           VERIFY_ERROR (INVALID_ARGUMENTS, mock.prepareCommand(cmd, Rec({"lalala"})) );

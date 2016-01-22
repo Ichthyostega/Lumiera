@@ -116,7 +116,7 @@ namespace control {
    *  @throw error::Invalid if command not 
    *         registered or incompletely defined.
    */
-  Command 
+  Command
   Command::get (Symbol cmdID)
   {
     Command cmd = CommandRegistry::instance().queryIndex (cmdID);

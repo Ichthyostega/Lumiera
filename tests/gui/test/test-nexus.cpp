@@ -48,6 +48,7 @@
 #include "test/test-nexus.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/ctrl/nexus.hpp"
+#include "proc/control/command.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/idi/genfunc.hpp"
@@ -69,6 +70,9 @@ using lib::diff::DataValues;
 using lib::idi::instanceTypeID;
 using lib::test::EventLog;
 using gui::ctrl::BusTerm;
+using proc::control::Command;
+using proc::control::CommandImpl;
+using proc::control::HandlingPattern;
 using util::_Fmt;
 //using util::contains;
 //using util::isnil;
@@ -76,7 +80,7 @@ using util::_Fmt;
 namespace gui {
 namespace test{
   
-  namespace { // quick-n-dirty string table implementation
+  namespace { // quick-n-dirty symbol table implementation
     
     /** @warning grows eternally, never shrinks */
     std::deque<string> idStringBuffer;                  ////////////////////////////////TICKET #158 replace by symbol table
@@ -88,6 +92,9 @@ namespace test{
     idStringBuffer.emplace_back (std::forward<string> (idString));
     return Symbol (idStringBuffer.back().c_str());
   }
+  ////////////////////////(End)symbol-table hack
+  
+  
   
   
   namespace { // internal details
@@ -419,6 +426,103 @@ namespace test{
   Nexus::setStateMarkHandler(StateMarkHandler newHandler)
   {
     testNexus().installStateMarkHandler (newHandler);
+  }
+  
+  
+  namespace { // install a diagnostic dummy-command-handler
+    
+    class SimulatedCommandHandler
+      : public Variant<DataValues>::Predicate
+      , public HandlingPattern
+      {
+        mutable EventLog log_;
+        Command command_;
+        
+        
+        
+        /* ==== HandlingPattern - Interface ==== */
+        
+        void
+        performExec (CommandImpl& command)  const override
+          {
+            log_.call ("TestNexus", "exec");
+            command.invokeCapture();
+            command.invokeOperation();
+          }
+        
+        void
+        performUndo (CommandImpl& command)  const override
+          {
+            log_.call ("TestNexus", "undo");
+            command.invokeUndo();
+          }
+        
+        bool
+        isValid()  const override
+          {
+            return true;
+          }
+        
+        
+        /* ==== CommandHandler ==== */
+        
+        bool
+        handle (Rec const& argBinding) override
+          {
+            log_.event("TestNexus", "bound command arguments "+string(argBinding));
+          }
+        
+        bool
+        handle (int const&) override
+          {
+            log_.event("TestNexus", "trigger "+string(command_));
+            return command_.exec (*this);
+          }
+        
+        
+        
+        static Command
+        retrieveCommand (GenNode const& cmdMsg)
+          {
+            Symbol cmdID {cmdMsg.idi.getSym().c_str()};
+            return Command::get (cmdID);
+          }
+        
+      public:
+        SimulatedCommandHandler (GenNode const& cmdMsg)
+          : log_(Nexus::getLog())
+          , command_(retrieveCommand(cmdMsg))
+          {
+            log_.event("TestNexus", "HANDLING Command-Message for "+string(command_));
+            
+            if (not cmdMsg.data.accept (*this))
+              log_.warn(_Fmt("FAILED to handle command-message %s in test-mode") % cmdMsg);
+          }
+        
+        bool
+        invokedExec()
+          {
+            return log_.verifyCall("exec").on(this);
+          }
+        
+        bool
+        invokedUndo()
+          {
+            return log_.verifyCall("undo").on(this)
+                       .afterCall("exec");
+          }
+      };
+
+  }//(End)diagnostic dummy-command-handler
+  
+  void
+  Nexus::prepareDiagnosticCommandHandler()
+  {
+    testNexus().installCommandHandler(
+                [](GenNode const& cmdMsg)
+                  {
+                    SimulatedCommandHandler{cmdMsg};
+                  });
   }
   
   
