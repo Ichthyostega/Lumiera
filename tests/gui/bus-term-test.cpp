@@ -177,7 +177,7 @@ namespace test {
       commandInvocation ()
         {
           MARK_TEST_FUN
-          auto cmd = gui::test::Nexus::prepareMockCmd<string, TimeSpan, HashVal>();
+          auto cmd = gui::test::Nexus::prepareMockCmd<string, HashVal>(); //TimeSpan  /////////////TODO
           
           MockElm mock("uiElm");
           
@@ -186,6 +186,12 @@ namespace test {
           TimeSpan clip (Time(1,2,3), lib::test::randTime());
           LuidH luid;
           
+          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
+          mock.issueCommand(cmd);
+          cout << "____Nexus-Log_________________\n"
+               << util::join(gui::test::Nexus::getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           // we cannot invoke commands prior to binding arguments
           VERIFY_ERROR (UNBOUND_ARGUMENTS, mock.issueCommand(cmd) );
           
@@ -196,19 +202,19 @@ namespace test {
           CHECK (not gui::test::Nexus::canInvoke(cmd));
           
           
-          mock.prepareCommand(cmd, Rec({text, clip, luid}));
+          mock.prepareCommand(cmd, Rec({text, luid})); ////////TODO clip,
           
           CHECK (gui::test::Nexus::canInvoke(cmd));
-          CHECK (gui::test::Nexus::wasBound(cmd, text, clip, luid));
+          CHECK (gui::test::Nexus::wasBound(cmd, text, luid)); ////////TODO clip,
           CHECK (not gui::test::Nexus::wasInvoked(cmd));
-          CHECK (not gui::test::Nexus::wasInvoked(cmd, text, clip, luid));
+          CHECK (not gui::test::Nexus::wasInvoked(cmd, text, luid)); ////////TODO clip,
           CHECK (not gui::test::Nexus::wasBound(cmd, "lololo"));
           
           
           mock.issueCommand(cmd);
           
           CHECK (gui::test::Nexus::wasInvoked(cmd));
-          CHECK (gui::test::Nexus::wasInvoked(cmd, text, clip, luid));
+          CHECK (gui::test::Nexus::wasInvoked(cmd, text, luid)); ////////TODO clip,
           CHECK (not gui::test::Nexus::wasInvoked(cmd, " huh ", clip, luid));
           CHECK (not gui::test::Nexus::wasInvoked(cmd, text, clip));
           

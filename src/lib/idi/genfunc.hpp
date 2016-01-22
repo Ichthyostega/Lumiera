@@ -145,6 +145,21 @@ namespace idi {
     return format::instance_format (namePrefix<TY>(), instanceCounter.inc<TY>());
   }
   
+  /** build a long type based identifier, with running counter and custom prefix.
+   * @param prefix optional prefix to prepend to the generated ID
+   * @return a ID string based on the full type, followed by an instance number
+   * @warning for one, like \ref generateSymbolicID(), this operation is not really
+   *          cheap. And then, since the type ID is slightly abbreviated and then
+   *          mangled, there is still the possibility of occasional clashes.
+   */
+  template<class TY>
+  inline string
+  generateExtendedID(string prefix ="")
+  {
+    static TypedCounter instanceCounter;
+    return format::instance_format (prefix + typeFullID<TY>(), instanceCounter.inc<TY>());
+  }
+  
   /**
    * @return a standard hash value, based on the full (mangled) C++ type name
    */

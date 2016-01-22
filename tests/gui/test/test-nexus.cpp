@@ -44,6 +44,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "test/test-nexus.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/ctrl/nexus.hpp"
@@ -56,9 +57,11 @@
 //#include "lib/util.hpp"
 
 #include <string>
+#include <deque>
 
 using std::string;
 
+using lib::Symbol;
 using lib::Variant;
 using lib::diff::Rec;
 using lib::diff::GenNode;
@@ -72,6 +75,20 @@ using util::_Fmt;
 
 namespace gui {
 namespace test{
+  
+  namespace { // quick-n-dirty string table implementation
+    
+    /** @warning grows eternally, never shrinks */
+    std::deque<string> idStringBuffer;                  ////////////////////////////////TICKET #158 replace by symbol table
+  }
+  
+  Symbol
+  internedString (string&& idString)
+  {
+    idStringBuffer.emplace_back (std::forward<string> (idString));
+    return Symbol (idStringBuffer.back().c_str());
+  }
+  
   
   namespace { // internal details
     
@@ -159,9 +176,15 @@ namespace test{
           {
             log_.call(this, "mark", subject, mark);
             if (BusHub::mark (subject, mark))
-              log_.event ("TestNexus", _Fmt("delivered mark to %s |%s") % subject % mark);
+              {
+                log_.event ("TestNexus", _Fmt("delivered mark to %s |%s") % subject % mark);
+                return true;
+              }
             else
-              log_.warn (_Fmt("discarding mark to unknown %s |%s") % subject % mark);
+              {
+                log_.warn (_Fmt("discarding mark to unknown %s |%s") % subject % mark);
+                return false;
+              }
           }
         
         virtual BusTerm&
@@ -336,7 +359,7 @@ namespace test{
     
     lib::Depend<ZombieNexus> zombieNexus;
     
-  } // internal details
+  }//(End) internal details
   
   
   

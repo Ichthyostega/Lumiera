@@ -146,7 +146,8 @@ namespace ctrl {
    *          the element. Thus, the default implementation is just to pass the
    *          given state mark "up", assuming that it will reach the hub
    *          eventually, which in turn knows hot to reach the element.
-   * @note messages to unreachable elements will be dropped silently.
+   * @return if the target was known and the mark operation dispatched.
+   * @note messages to unreachable elements will be dropped.
    */
   bool
   BusTerm::mark (ID subject, GenNode const& mark)

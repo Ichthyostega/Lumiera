@@ -88,7 +88,7 @@ namespace ctrl{
       /** route mark messages down to the individual Tangible.
        * @note only messages to elements currently registered
        *       in the routing table are dispatched. All other
-       *       messages are dropped silently.
+       *       messages are dropped without further effect.
        */
       virtual bool
       mark (ID subject, GenNode const& mark)  override
