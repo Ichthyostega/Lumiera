@@ -138,30 +138,29 @@ namespace test    {
           
           // prepare for command invocation on implementation level....
           HandlingPattern const& testExec = HandlingPattern::get(TEST_HANDLING_PATTERN);
-          HandlingPattern const& testUndo = testExec.howtoUNDO();
           command1::check_ = 0;
           
           bindRandArgument (*orig);
           CHECK ( orig->canExec());
           CHECK (!orig->canUndo());
-          testExec.invoke (*orig, "Execute original");     // EXEC 1
+          testExec.exec (*orig, "Execute original");     // EXEC 1
           long state_after_exec1 = command1::check_;
           CHECK (command1::check_ > 0);
           CHECK (orig->canUndo());
           CHECK (orig != copy);
           
           CHECK (!copy->canUndo());
-          testExec.invoke (*copy, "Execute clone");        // EXEC 2
+          testExec.exec (*copy, "Execute clone");        // EXEC 2
           CHECK (command1::check_ != state_after_exec1);
           CHECK (copy->canUndo());
           CHECK (copy != orig);
           
           // invoke UNDO on the clone
-          testUndo.invoke (*copy, "Undo clone");           // UNDO 2
+          testExec.undo (*copy, "Undo clone");           // UNDO 2
           CHECK (command1::check_ == state_after_exec1);
           
           // invoke UNDO on original
-          testUndo.invoke (*orig, "Undo original");        // UNDO 1
+          testExec.undo (*orig, "Undo original");        // UNDO 1
           CHECK (command1::check_ ==0);
           
           CHECK (copy != orig);

@@ -90,6 +90,15 @@ namespace control {
                            , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
     }
     
+    void
+    ___check_canUndo (const Command *handle)
+    {
+      REQUIRE (handle);
+      if (!handle->canUndo())
+        throw error::State ("Lifecycle error: command has not yet captured UNDO information"
+                           , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+    }
+    
   }
   
   
@@ -369,25 +378,26 @@ namespace control {
   
   
   ExecResult
-  Command::undo ()
-  {
-    ___check_notBottom (this,"Un-doing");
-    
-    HandlingPattern const& defaultPattern
-      = HandlingPattern::get (getDefaultHandlingPattern());
-    
-    return exec (defaultPattern.howtoUNDO());
-  }
-  
-  
-  ExecResult
   Command::exec (HandlingPattern const& execPattern)
   {
     ___check_notBottom (this,"Invoking");
     ___check_isBound   (this);
     
+    string cmdName{*this};
     CommandImpl& thisCommand (_Handle::impl());
-    return execPattern.invoke (thisCommand, cStr(*this));
+    return execPattern.exec (thisCommand, cmdName);
+  }
+  
+  
+  ExecResult
+  Command::undo (HandlingPattern const& execPattern)
+  {
+    ___check_notBottom (this,"UNDOing");
+    ___check_canUndo   (this);
+    
+    string cmdName{*this};
+    CommandImpl& thisCommand (_Handle::impl());
+    return execPattern.undo (thisCommand, cmdName);
   }
   
   
@@ -395,6 +405,13 @@ namespace control {
   Command::exec (HandlingPattern::ID pattID)
   {
     return exec (HandlingPattern::get(pattID));
+  }
+  
+  
+  ExecResult
+  Command::undo (HandlingPattern::ID pattID)
+  {
+    return undo (HandlingPattern::get(pattID));
   }
   
   

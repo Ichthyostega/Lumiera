@@ -135,7 +135,7 @@ namespace test    {
           command1::check_ = 0;
           
           HaPatt patt = HandlingPattern::get(TEST_PATTERN);
-          ExecResult res = patt.invoke(*com, TEST_CMD);
+          ExecResult res = patt.exec (*com, string(TEST_CMD));
           
           CHECK (res);
           CHECK (ARGU == command1::check_);
@@ -153,8 +153,7 @@ namespace test    {
           CHECK (command1::check_ > 0);
           
           HaPatt ePatt = HandlingPattern::get(TEST_PATTERN);
-          HaPatt uPatt = ePatt.howtoUNDO();
-          ExecResult res = uPatt.invoke(*com, TEST_CMD);
+          ExecResult res = ePatt.undo (*com, string(TEST_CMD));
           
           CHECK (res);
           CHECK (command1::check_ == 0);

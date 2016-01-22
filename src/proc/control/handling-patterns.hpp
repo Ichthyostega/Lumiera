@@ -68,7 +68,7 @@ namespace control {
         bool isValid()  const { return true; }
         
         void
-        exec (CommandImpl& command)  const
+        performExec (CommandImpl& command)  const override
           {
             REQUIRE (command.canExec());
             command.invokeCapture();
@@ -76,42 +76,11 @@ namespace control {
           }
         
         void
-        undo (CommandImpl& command)  const
+        performUndo (CommandImpl& command)  const override
           {
             REQUIRE (command.canUndo());
             command.invokeUndo();
           }
-        
-        /* == invoking operation or undo == */
-        
-        void perform (CommandImpl& command)  const { return exec(command); }
-        
-        class UndoProxyPattern     ///< standard UNDO implementation by reconfiguring a base Pattern
-          : public HandlingPattern
-          {
-            BasicHandlingPattern& basePatt_;
-            
-            bool isValid()                       const { return basePatt_.isValid();     }
-            void exec (CommandImpl& command)     const { return basePatt_.exec(command); }
-            void undo (CommandImpl& command)     const { return basePatt_.undo(command); }
-            
-            void perform (CommandImpl& command)  const { return undo(command); }
-            HandlingPattern const& getUndoPatt() const { return basePatt_; }
-            
-          public:
-            UndoProxyPattern (BasicHandlingPattern& refPattern)
-              : basePatt_(refPattern)
-              { }
-          };
-        
-        HandlingPattern const& getUndoPatt() const { return standardUndoPattern_; }
-        UndoProxyPattern standardUndoPattern_;
-        friend class UndoProxyPattern;
-        
-      public:
-        BasicHandlingPattern()
-          : standardUndoPattern_(*this)
-          { }
       };
     
     
@@ -119,25 +88,25 @@ namespace control {
     /**
      * Handling Pattern: invoke blocking, translate exceptions into an error state
      * @todo describe this pattern in more detail....
-     * @todo unimplemented...
+     * @todo unimplemented...               //////////////////////////////////////////////////////////TICKET #210
      */
     class InvokeSyncNoThrow
       : public BasicHandlingPattern
       {
         void
-        exec (CommandImpl& command)  const
+        performExec (CommandImpl& command)  const override
           {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
         
         void
-        undo (CommandImpl& command)  const
+        performUndo (CommandImpl& command)  const override
           {
             UNIMPLEMENTED ("actually undo the effect of a command, according to this pattern");
           }
         
         bool
-        isValid()  const
+        isValid()  const override
           {
             UNIMPLEMENTED ("is this pattern currently able to handle commands?");
           }
@@ -149,25 +118,25 @@ namespace control {
      * Handling Pattern: invoke blocking, propagating any exceptions immediately
      * @todo is throwing here helpful, and how to integrate it into ExecResult...?
      * @todo describe this pattern in more detail....
-     * @todo unimplemented...
+     * @todo unimplemented...               //////////////////////////////////////////////////////////TICKET #210
      */
     class InvokeSyncThrow
       : public BasicHandlingPattern
       {
         void
-        exec (CommandImpl& command)  const
+        performExec (CommandImpl& command)  const override
           {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
         
         void
-        undo (CommandImpl& command)  const
+        performUndo (CommandImpl& command)  const override
           {
             UNIMPLEMENTED ("actually undo the effect of a command, according to this pattern");
           }
         
         bool
-        isValid()  const
+        isValid()  const override
           {
             UNIMPLEMENTED ("is this pattern currently able to handle commands?");
           }
@@ -179,25 +148,25 @@ namespace control {
      * Handling Pattern: just schedule command to be invoked asynchronously
      * @todo clarify what "async" means and if we need it.....
      * @todo describe this pattern in more detail....
-     * @todo unimplemented...
+     * @todo unimplemented...               //////////////////////////////////////////////////////////TICKET #210
      */
     class InvokeAsync
       : public BasicHandlingPattern
       {
         void
-        exec (CommandImpl& command)  const
+        performExec (CommandImpl& command)  const override
           {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
         
         void
-        undo (CommandImpl& command)  const
+        performUndo (CommandImpl& command)  const override
           {
             UNIMPLEMENTED ("actually undo the effect of a command, according to this pattern");
           }
         
         bool
-        isValid()  const
+        isValid()  const override
           {
             UNIMPLEMENTED ("is this pattern currently able to handle commands?");
           }

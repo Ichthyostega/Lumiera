@@ -99,7 +99,7 @@ return: 0
 END
 
 
-PLANNED "Command usage aspects II" CommandUse2_test <<END
+TEST "Command usage aspects II" CommandUse2_test <<END
 return: 0
 END
 

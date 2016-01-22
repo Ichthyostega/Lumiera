@@ -38,7 +38,6 @@ namespace proc {
 namespace control {
   namespace error = lumiera::error;
   
-  /** retrieve pre-configured pattern */
   HandlingPattern const&
   HandlingPattern::get (ID id)
   {
@@ -46,13 +45,12 @@ namespace control {
   }
   
   
-  /** @param name to use in log and error messages
-   *  @note  does error handling, but delegates the actual
-   *         execution to the protected (subclass) member */
+  /** @internal dispatch to the desired operation, with error handling */
   ExecResult
-  HandlingPattern::invoke (CommandImpl& command, Symbol name)  const
+  HandlingPattern::invoke (CommandImpl& command, string id, Action action)  const
   {
-    TRACE (proc_dbg, "invoking %s...", name.c());
+    const char* cmdName = cStr(id);
+    TRACE (proc_dbg, "invoking %s...", cmdName);
     static _Fmt err_pre ("Error state detected, %s *NOT* invoked.");
     static _Fmt err_post ("Error state after %s invocation.");
     static _Fmt err_fatal ("Execution of %s raised unknown error.");
@@ -63,7 +61,7 @@ namespace control {
           return ExecResult (error::Logic (err_pre % command, errID_pre));
         
         // execute or undo it...
-        perform (command);
+        (this->*action) (command);
         
         Symbol errID = lumiera_error();
         if (errID)
@@ -76,21 +74,21 @@ namespace control {
     catch (lumiera::Error& problem)
       {
         Symbol errID = lumiera_error();
-        WARN (command, "Invocation of %s failed: %s", name.c(), problem.what());
+        WARN (command, "Invocation of %s failed: %s", cmdName, problem.what());
         TRACE (proc_dbg, "Error flag was: %s", errID.c());
         return ExecResult (problem);
       }
     catch (std::exception& library_problem)
       {
         Symbol errID = lumiera_error();
-        WARN (command, "Invocation of %s failed: %s", name.c(), library_problem.what());
+        WARN (command, "Invocation of %s failed: %s", cmdName, library_problem.what());
         TRACE (proc_dbg, "Error flag was: %s", errID.c());
         return ExecResult (error::External (library_problem));
       }
     catch (...)
       {
         Symbol errID = lumiera_error();
-        ERROR (command, "Invocation of %s failed with unknown exception; error flag is: %s", name.c(), errID.c());
+        ERROR (command, "Invocation of %s failed with unknown exception; error flag is: %s", cmdName, errID.c());
         throw error::Fatal (err_fatal % command, errID);
       }
   }
@@ -100,8 +98,7 @@ namespace control {
   /* ====== execution result state object ======= */
   
   
-  /** @note we just grab and retain the error message.
-   *  @todo rather keep the exception object around. */
+  /** @note we just grab and retain the error message. */
   ExecResult::ExecResult (lumiera::Error const& problem)
     : log_(problem.what())
   { }

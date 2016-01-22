@@ -139,6 +139,7 @@ namespace control {
       
       
       ExecResult operator() () ;
+      ExecResult exec () ;
       ExecResult undo () ;
       
       
@@ -148,6 +149,9 @@ namespace control {
        */
       ExecResult exec (HandlingPattern const& execPattern);
       ExecResult exec (HandlingPattern::ID);
+      
+      ExecResult undo (HandlingPattern const& execPattern);
+      ExecResult undo (HandlingPattern::ID);
       
       /** invoke using a default "synchronous" execution pattern */
       ExecResult execSync ();
@@ -202,6 +206,18 @@ namespace control {
   Command::operator() ()
   {
     return exec (getDefaultHandlingPattern());
+  }
+  
+  inline ExecResult
+  Command::exec ()
+  {
+    return exec (getDefaultHandlingPattern());
+  }
+  
+  inline ExecResult
+  Command::undo ()
+  {
+    return undo (getDefaultHandlingPattern());
   }
   
   
