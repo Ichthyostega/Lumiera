@@ -466,12 +466,16 @@ namespace test{
         
         /* ==== CommandHandler ==== */
         
+        /** Case-1: the message provides parameter data to bind to the command */
         bool
-        handle (Rec const& argBinding) override
+        handle (Rec const& argData) override
           {
-            log_.event("TestNexus", "bound command arguments "+string(argBinding));
+            command_.bindArg (argData);
+            log_.event("TestNexus", "bound command arguments "+string(argData));
+            return true;
           }
         
+        /** Case-2: the message triggers execution of a prepared command */
         bool
         handle (int const&) override
           {

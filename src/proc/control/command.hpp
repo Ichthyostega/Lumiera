@@ -60,6 +60,7 @@
 #include "proc/control/handling-pattern.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/bool-checkable.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/handle.hpp"
 
 #include <string>
@@ -134,8 +135,7 @@ namespace control {
       template<typename...TYPES>
       Command& bindArg (std::tuple<TYPES...> const&);
       
-      /////////////////////////////////////////////////////////////TICKET #798 : we need a second overload to take the arguments as lib::diff::Record.
-      /////////////////////////////////////////////////////////////            : this needs to be built into the ParamAccessor within Closure (command-closure.hpp)
+      Command& bindArg (lib::diff::Rec const&);
       
       
       ExecResult operator() () ;
@@ -229,6 +229,14 @@ namespace control {
     this->setArguments (args);
     return *this;
   }
+  
+  
+  inline Command&
+  Command::bindArg (lib::diff::Rec const& paramData)
+  {
+    UNIMPLEMENTED ("how to accept a GenNode-Rec and unpack it into our argument holder...");
+  }
+
   
   
   
