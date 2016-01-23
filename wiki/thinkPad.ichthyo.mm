@@ -20,7 +20,8 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-25;-262;" ID="Arrow_ID_539627804" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
-<node CREATED="1448070545132" HGAP="31" ID="ID_1410368513" MODIFIED="1448669353294" TEXT="Element" VSHIFT="-7">
+<node CREATED="1448070545132" HGAP="31" ID="ID_1410368513" MODIFIED="1453545844231" TEXT="Element" VSHIFT="-7">
+<font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1448070580927" ID="ID_467382299" MODIFIED="1448070583371" TEXT="Auspr&#xe4;gungen">
 <node CREATED="1448070554963" ID="ID_579919554" MODIFIED="1448070559134" TEXT="Widget"/>
@@ -198,8 +199,7 @@
       ...wird sinnvoll im Rahmen von <font color="#8e11a1">InteractionControl</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#b567c4" DESTINATION="ID_1009169288" ENDARROW="Default" ENDINCLINATION="254;0;" ID="Arrow_ID_200182911" STARTARROW="None" STARTINCLINATION="162;0;"/>
 </node>
 </node>
@@ -229,8 +229,7 @@
       Dann mu&#223;te das allerdigns jeweils f&#252;r alle Elemente sinnvoll sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1451177534345" ID="ID_524388510" MODIFIED="1451177541380" TEXT="impl">
 <node CREATED="1451177542256" ID="ID_980888532" MODIFIED="1451177573115" TEXT="ruft einen konkreten hook doExpand() auf">
@@ -243,8 +242,7 @@
       und der mu&#223; vom konkreten Widget implementiert werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1451177573108" ID="ID_1154342108" MODIFIED="1451177583935" TEXT="wenn dieser true zur&#xfc;ckgibt, ist der Zustand persistent"/>
 <node CREATED="1451177584435" ID="ID_1792154974" MODIFIED="1451177606906">
@@ -257,8 +255,7 @@
       dann wird eine <i>state mark</i>&#160;ausgesendet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -280,8 +277,7 @@
       need to <i>bubble up</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1451177719577" ID="ID_1175980404" MODIFIED="1451177726636" TEXT="wie finde ich den Vater..."/>
 </node>
@@ -411,8 +407,7 @@
       ...was ich einen Monat sp&#228;ter schon wieder vergessen hatte...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -446,8 +441,7 @@
       den InvocationTrail manuell im Testcode binden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -498,8 +492,7 @@
       der unimttelbar Datenwerte nimmt und sie in einen Argument-Record packt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="pencil"/>
 </node>
 <node CREATED="1450490580473" ID="ID_925248058" MODIFIED="1450490599519" TEXT="nicht implementiert: Empfangen und Binden">
@@ -647,8 +640,9 @@
 </node>
 </node>
 <node CREATED="1434128059966" ID="ID_823283341" MODIFIED="1434128067529" TEXT="Connect">
-<node CREATED="1434128071126" ID="ID_1618124128" MODIFIED="1450390417230" TEXT="UI-Bus">
+<node CREATED="1434128071126" ID="ID_1618124128" MODIFIED="1453545826393" TEXT="UI-Bus">
 <linktarget COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-25;-262;" ID="Arrow_ID_539627804" SOURCE="ID_257833497" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
+<font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1448548216556" ID="ID_1971609445" MODIFIED="1448548224236" TEXT="Topologie">
 <node CREATED="1448548225659" ID="ID_807917172" MODIFIED="1448548309275" TEXT="upstream = zum Verteiler"/>
 <node CREATED="1448548310247" ID="ID_993096699" MODIFIED="1448548316619" TEXT="downstream = zum Empf&#xe4;nger"/>
@@ -680,9 +674,96 @@
 <node CREATED="1450390501876" ID="ID_1750345192" MODIFIED="1450390509511" TEXT="ist die EntryID des Tangible"/>
 <node CREATED="1450390512635" ID="ID_43739373" MODIFIED="1450390519885" TEXT="dient auch zum Routing"/>
 </node>
+<node CREATED="1453546261390" HGAP="25" ID="ID_1996322416" MODIFIED="1453546322869" TEXT="Test" VSHIFT="12">
+<node CREATED="1453546264638" ID="ID_975821244" MODIFIED="1453546267978" TEXT="Test-Nexus"/>
+<node CREATED="1453546268998" ID="ID_1692848170" MODIFIED="1453546311693" TEXT="Event-Log">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Mechanismus, der es erlaubt
+    </p>
+    <ul>
+      <li>
+        log-Nachrichten aus Mocks zu hinterlassen
+      </li>
+      <li>
+        in der Test-Fixture auf diese zu matchen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1448063874479" ID="ID_739054690" MODIFIED="1448063878154" TEXT="UI-Modell"/>
-<node CREATED="1434128074725" FOLDED="true" ID="ID_933994138" MODIFIED="1448063763273" TEXT="Diff-System">
+</node>
+</node>
+<node CREATED="1453545812389" HGAP="43" ID="ID_202253849" MODIFIED="1453546337707" TEXT="Core-Services" VSHIFT="2">
+<font NAME="SansSerif" SIZE="13"/>
+<node CREATED="1453545875627" ID="ID_1411740156" MODIFIED="1453545951737" TEXT="Definition &#xbb;Zentral-Dienste&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Dienste im UI, erreichbar &#252;ber den Bus.
+    </p>
+    <p>
+      Sie stellen die Verbindung zu zentralen Belangen her
+    </p>
+    <p>
+      wie Session- und State-Managment, Commands etc.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1453545968166" ID="ID_399884859" MODIFIED="1453546095559" TEXT="Command-Handler">
+<icon BUILTIN="pencil"/>
+<node CREATED="1453546129537" ID="ID_1926242869" MODIFIED="1453546137220" TEXT="empf&#xe4;ngt &quot;act&quot;-Nachrichten">
+<node CREATED="1453546367201" ID="ID_1473684366" MODIFIED="1453546575633" TEXT="&quot;bang&quot; -&gt; HandlingPattern">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1453546381255" ID="ID_1252400934" MODIFIED="1453546392585" TEXT="&quot;bind&quot; -&gt; Bindung">
+<node CREATED="1453546393573" ID="ID_857178151" MODIFIED="1453546568844" TEXT="Paradigmen-Mismatch">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1453546417098" ID="ID_676713402" MODIFIED="1453546563455" TEXT="DOM vs. compiletime typing">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1453546436455" ID="ID_129001401" MODIFIED="1453546551564" TEXT="double-dispatch">
+<icon BUILTIN="idea"/>
+<node CREATED="1453546450317" ID="ID_1899026394" MODIFIED="1453546454089" TEXT="Variant-Visitor">
+<node CREATED="1453546485737" ID="ID_491338311" MODIFIED="1453546493300" TEXT="Gen-Node-Typen"/>
+<node CREATED="1453546493719" ID="ID_834270776" MODIFIED="1453546496947" TEXT="fest vorgegeben"/>
+</node>
+<node CREATED="1453546454484" ID="ID_1643300093" MODIFIED="1453546597358" TEXT="Trampolin">
+<icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1453546467707" ID="ID_1543497504" MODIFIED="1453546472446" TEXT="Problem: template bloat"/>
+<node CREATED="1453546512277" ID="ID_968193365" MODIFIED="1453546526943" TEXT="Aufruf: generische Iteration"/>
+</node>
+</node>
+</node>
+<node CREATED="1453546138215" ID="ID_621186206" MODIFIED="1453546582649" TEXT="Verbindung zum ProcDispatcher">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1453546183561" ID="ID_1080090125" MODIFIED="1453546187900" TEXT="Mock-Variante">
+<node CREATED="1453546195240" ID="ID_1905175534" MODIFIED="1453546196971" TEXT="loggen"/>
+<node CREATED="1453546197727" ID="ID_606855270" MODIFIED="1453546207402" TEXT="verifizierbar machen"/>
+<node CREATED="1453546215117" ID="ID_31965862" MODIFIED="1453546220236" TEXT="pseudo-Command">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1453546083296" ID="ID_1154674875" MODIFIED="1453546089361" TEXT="Presentation-State-Manager"/>
+</node>
+<node CREATED="1448063874479" HGAP="43" ID="ID_739054690" MODIFIED="1453546352792" TEXT="UI-Modell" VSHIFT="1"/>
+<node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1453546344857" TEXT="Diff-System" VSHIFT="1">
+<font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1434128278990" ID="ID_106354755" MODIFIED="1434128283641" TEXT="Diff-Darstellung"/>
 <node CREATED="1434128267381" ID="ID_823706141" MODIFIED="1434128551925" TEXT="List-diff">

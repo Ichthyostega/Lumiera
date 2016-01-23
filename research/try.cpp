@@ -30,94 +30,46 @@
 // 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
 // 8/15  - generalising the Variant::Visitor
 // 1/16  - generic to-string conversion for ostream
-// 1/16  - generate receiver function with arbitrary arguments
+// 1/16  - build tuple from runtime-typed variant container
 
 
 /** @file try.cpp
- ** Metaprogramming: how to generate a function to accept a fixed set
- ** of typed arguments, where the sequence of arguments is given as type sequence
- ** or as variadic parameter pack. Also how to bind concrete argument values to
- ** such a function, where the concrete arguments come as runtime collection
- ** of variant holders.
+ ** Metaprogramming: how to unload the contents of a runtime typed variant sequence
+ ** into ctor arguments of a (compile time typed) tuple. This involves two problems
+ ** - how to combine iteration, compile-time indexing and run-time access.
+ ** - how to overcome the runtime-to-compiletime barrier, using a pre-generated
+ **   double-dispatch (visitor).
+ ** 
+ ** The concrete problem prompting this research is the necessity to receive
+ ** a command invocation parameter tuple from a Record<GenNode>
  ** 
  */
 
 typedef unsigned int uint;
 
-//#include "lib/diff/gen-node.hpp"
-
+#include "lib/symbol.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/time/timevalue.hpp"
-#include "proc/control/command-def.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 
 #include <functional>
-#include <vector>
 #include <string>
 
-//using lib::diff::GenNode;
+using lib::Literal;
+using lib::diff::GenNode;
 using lib::meta::Types;
-using lib::meta::NullType;
-using proc::control::CommandSignature;
-using proc::control::CommandDef;
-using proc::control::Command;
+//using lib::meta::NullType;
+using lib::meta::Tuple;
 using lib::time::TimeVar;
 using lib::time::Time;
 using util::stringify;
 using util::join;
 
 using std::function;
-using std::vector;
 using std::string;
-
-using VecS = vector<string>;
-
-template<typename...TYPES>
-struct TyS
-  {
-    using Seq = TyS;
-  };
-
-template<typename X>
-struct ArgSeq;
-
-template<typename RET, typename...TYPES>
-struct ArgSeq<RET(TYPES...)>
-  {
-    using Seq = TyS<TYPES...>;
-  };
-
-
-
-template<typename...ARGS>
-struct Funny
-  {
-    static void
-    operate (ARGS ...args)
-      {
-        VecS strs = stringify<VecS> (args...);
-        cout << join (strs) <<endl;
-      }
-    
-    static string
-    capture (ARGS ...args)
-      {
-        VecS strs = stringify<VecS> (args...);
-        return join (strs);
-      }
-    
-    static void
-    undo (ARGS ...args, string plonk)
-      {
-        VecS strs = stringify<VecS> (args...);
-        cout << "UNDO..." << plonk << "| args=" << join (strs) <<endl;
-      }
-  };
-
-template<typename...ARGS>
-struct Funny<TyS<ARGS...>>
-  : Funny<ARGS...>
-  { };
+using std::tuple;
 
 
 
@@ -131,51 +83,12 @@ struct Funny<TyS<ARGS...>>
 int
 main (int, char**)
   {
-    cout << Funny<const char*, string, int, long, double>::capture ("lalü", string("lala"), 12, 34L, 56.78) <<endl;
+    using NiceTypes = Types<string, int>;
+    using UgglyTypes = Types<Literal, string, short, long, float, Time>;
     
+    Tuple<UgglyTypes> uggs("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
 
-    auto ops = Funny<double,TimeVar>::operate;
-    
-    using FunnySIG = lib::meta::_Fun<typeof(ops)>::Sig;
-    
-    using SIG_Opr = CommandSignature<FunnySIG, string>::OperateSig;
-    using SIG_Cap = CommandSignature<FunnySIG, string>::CaptureSig;
-    using SIG_Udo = CommandSignature<FunnySIG, string>::UndoOp_Sig;
-    
-    SHOW_TYPE (SIG_Opr);
-    SHOW_TYPE (SIG_Cap);
-    SHOW_TYPE (SIG_Udo);
-    
-    using ArgS = ArgSeq<SIG_Opr>::Seq;
-    SHOW_TYPE (ArgS);
-    
-    function<SIG_Opr> funny;
-    function<SIG_Cap> capy;
-    function<SIG_Udo> undy;
-    
-    cout << "funny? " << bool(funny) <<endl;
-    
-    funny = Funny<ArgS>::operate;
-    capy  = Funny<ArgS>::capture;
-    undy  = Funny<ArgS>::undo;
-    cout << "funny? " << bool(funny) <<endl;
-    
-    cout << capy (98.7654321987654321987654321, Time(1,2,3,4)) <<endl;
-    
-    
-    CommandDef("lalü")
-      .operation(Funny<ArgS>::operate)
-      .captureUndo(Funny<ArgS>::capture)
-      .undoOperation(Funny<ArgS>::undo);
-    
-    cout << Command("lalü") << endl;
-    
-    Command com = Command("lalü");
-    
-    com.bind(12.33445566778899, TimeVar(Time(4,3,2,1)));
-    
-    com();
-    com.undo();
+    cout << uggs <<endl;
     
     cout <<  "\n.gulp.\n";
     
