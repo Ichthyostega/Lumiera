@@ -50,25 +50,88 @@ typedef unsigned int uint;
 #include "lib/symbol.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/meta/generator.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <string>
 
 using lib::Literal;
+using lib::Variant;
+using lib::idi::EntryID;
 using lib::diff::Rec;
 using lib::diff::MakeRec;
 using lib::diff::GenNode;
+using lib::diff::DataValues;
 using lib::meta::Types;
 using lib::meta::Tuple;
 using lib::meta::IndexSeq;
 using lib::meta::BuildIndexSeq;
+using lib::meta::InstantiateChained;
+using lib::meta::Filter;
 using lib::time::TimeVar;
 using lib::time::Time;
 
 using std::string;
 using std::tuple;
+
+namespace error = lumiera::error;
+
+
+using DataCapPredicate = Variant<DataValues>::Predicate;
+
+
+template<typename TAR>
+class GenNodeAccessor
+  : boost::noncopyable
+  {
+    struct ConverterBase
+      : DataCapPredicate
+      {
+        char buffer[sizeof(TAR)];
+      };
+    
+    template<typename TY, class BA>
+    class Converter
+      : public BA
+      {
+        virtual bool
+        handle(TY const& srcElm)
+          {
+            new(&(BA::buffer)) TAR{srcElm};
+            return true;
+          };
+      };
+    
+    template<typename TY>
+    using can_Convert = std::is_constructible<TAR, TY const&>;
+    
+    using PossibleSourceTypes = typename Filter<DataValues::List, can_Convert>::List; 
+    
+    using ConversionBuffer = InstantiateChained< PossibleSourceTypes
+                                               , Converter
+                                               , ConverterBase
+                                               >;
+    
+    ConversionBuffer converter_;
+    
+  public:
+    GenNodeAccessor (GenNode const& node)
+      : converter_()
+      {
+        if (not node.data.accept (converter_))
+            throw error::Invalid ("Unable to build «" + util::typeStr<TAR>()
+                                 +"» element from " + string(node));
+      }
+    
+    operator TAR ()
+      {
+        return *reinterpret_cast<TAR*> (&converter_.buffer);
+      }
+  };
 
 
 template<class, size_t>
@@ -99,8 +162,7 @@ struct ElementMapper<Rec, Types<TYPES...>>
         
         operator TargetType<i> ()
           {
-            GenNode const& elm = values.child(i);
-            return elm.data.get<TargetType<i>>();
+            return GenNodeAccessor<TargetType<i>>(values.child(i));
           }
 
       };
@@ -164,17 +226,17 @@ int
 main (int, char**)
   {
     using NiceTypes = Types<string, int>;
-    using UgglyTypes = Types<Literal, string, short, long, float, TimeVar>;
+    using UgglyTypes = Types<EntryID<long>, string, short, long, float, TimeVar>;
     
-    using Uggs = Tuple<UgglyTypes>;
     
-//  Rec args = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
     Rec args = MakeRec().scope("lalü", 42);
+    Rec urgs = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
 
     cout << args <<endl;
+    cout << urgs <<endl;
     
-    auto uggs = buildTuple<NiceTypes> (args);
-    cout << uggs <<endl;
+    cout << buildTuple<NiceTypes> (args) <<endl;
+    cout << buildTuple<UgglyTypes> (urgs) <<endl;
     
     cout <<  "\n.gulp.\n";
     

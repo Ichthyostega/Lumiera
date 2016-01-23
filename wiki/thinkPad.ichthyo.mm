@@ -736,15 +736,67 @@
 </node>
 <node CREATED="1453546436455" ID="ID_129001401" MODIFIED="1453546551564" TEXT="double-dispatch">
 <icon BUILTIN="idea"/>
-<node CREATED="1453546450317" ID="ID_1899026394" MODIFIED="1453546454089" TEXT="Variant-Visitor">
+<node CREATED="1453546450317" ID="ID_1899026394" MODIFIED="1453590519383" TEXT="Variant-Visitor">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1453546485737" ID="ID_491338311" MODIFIED="1453546493300" TEXT="Gen-Node-Typen"/>
 <node CREATED="1453546493719" ID="ID_834270776" MODIFIED="1453546496947" TEXT="fest vorgegeben"/>
 </node>
-<node CREATED="1453546454484" ID="ID_1643300093" MODIFIED="1453546597358" TEXT="Trampolin">
-<icon BUILTIN="pencil"/>
+<node CREATED="1453546454484" ID="ID_1643300093" MODIFIED="1453590507167" TEXT="Trampolin">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1453546467707" ID="ID_1543497504" MODIFIED="1453546472446" TEXT="Problem: template bloat"/>
-<node CREATED="1453546512277" ID="ID_968193365" MODIFIED="1453546526943" TEXT="Aufruf: generische Iteration"/>
+<node CREATED="1453546512277" ID="ID_968193365" MODIFIED="1453590559627" TEXT="Aufruf: generische Iteration">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1453590522161" ID="ID_1369411965" MODIFIED="1453590545513" TEXT="Problem: narrowing conversions">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1453590566651" ID="ID_1367428687" MODIFIED="1453590610375" TEXT="TODO">
+<icon BUILTIN="flag"/>
+</node>
+<node CREATED="1453590585865" ID="ID_350595711" MODIFIED="1453590606670" TEXT="explizit gef&#xe4;hrliche ausschlie&#xdf;en">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1453546467707" ID="ID_1543497504" MODIFIED="1453546472446" TEXT="Problem: template bloat">
+<node CREATED="1453590622236" ID="ID_1084684065" MODIFIED="1453590761460" TEXT="h&#xe4;lt sich in Grenzen">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1453590828976" ID="ID_659078492" MODIFIED="1453590855465" TEXT="eine VTable pro Zieltyp"/>
+<node CREATED="1453590856220" ID="ID_376478329" MODIFIED="1453590879683">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eine virtuelle Funktion
+    </p>
+    <p>
+      pro m&#246;glichem Umwandlungs-Pfad
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1453590628419" ID="ID_1314031268" MODIFIED="1453590885601">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir verwenden die Basis-VTable
+    </p>
+    <p>
+      und layern nur die tats&#228;chlich m&#246;glichen Umwandlungen dr&#252;ber
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1453590667630" ID="ID_792450888" MODIFIED="1453590699782" TEXT="&#xfc;berpr&#xfc;ft: mit -O3 und strip bleibt erstaunlich wenig &#xfc;brig"/>
+<node CREATED="1453590741428" ID="ID_1733557933" MODIFIED="1453590749327" TEXT="1.6MiB -&gt; 100k"/>
+</node>
 </node>
 </node>
 </node>
