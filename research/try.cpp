@@ -54,23 +54,103 @@ typedef unsigned int uint;
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 
-#include <functional>
 #include <string>
 
 using lib::Literal;
+using lib::diff::Rec;
+using lib::diff::MakeRec;
 using lib::diff::GenNode;
 using lib::meta::Types;
-//using lib::meta::NullType;
 using lib::meta::Tuple;
+using lib::meta::IndexSeq;
+using lib::meta::BuildIndexSeq;
 using lib::time::TimeVar;
 using lib::time::Time;
-using util::stringify;
-using util::join;
 
-using std::function;
 using std::string;
 using std::tuple;
 
+
+template<class, size_t>
+struct Pick;
+
+template<typename...TYPES, size_t i>
+struct Pick<Types<TYPES...>, i>
+  {
+    using Type = typename lib::meta::Shifted<Types<TYPES...>, i>::Head;
+  };
+
+
+
+template<class SRC, class TAR>
+struct ElementMapper;
+
+template<typename...TYPES>
+struct ElementMapper<Rec, Types<TYPES...>>
+  {
+    template<size_t i>
+    using TargetType = typename Pick<Types<TYPES...>, i>::Type;
+    
+    
+    template<size_t i>
+    struct Access
+      {
+        Rec const& values;
+        
+        operator TargetType<i> ()
+          {
+            GenNode const& elm = values.child(i);
+            return elm.data.get<TargetType<i>>();
+          }
+
+      };
+    
+  };
+
+
+
+template<class REF>
+struct IdxIter;
+
+template<typename...TYPES>
+struct IdxIter<Types<TYPES...>>
+  {
+    /////TODO as long as Types is not variadic (#987), we need to strip NullType here (instead of just using sizeof...(TYPES)
+    enum {SIZ = lib::meta::count<typename Types<TYPES...>::List>::value };
+    
+    using Seq = typename BuildIndexSeq<SIZ>::Ascending;
+  };
+
+
+
+template<typename TYPES, class SEQ>
+class TupleBuilder;
+
+template<typename TYPES, size_t...idx>
+class TupleBuilder<TYPES, IndexSeq<idx...>>
+  : public Tuple<TYPES>
+  {
+    template<class SRC, size_t i>
+    using PickArg = typename ElementMapper<SRC, TYPES>::template Access<i>;
+    
+    
+  public:
+    template<class SRC>
+    TupleBuilder (SRC values)
+      : Tuple<TYPES> (PickArg<SRC, idx>{values}...)
+      { }
+  };
+  
+
+
+template<typename TYPES, class SRC>
+Tuple<TYPES>
+buildTuple (SRC values)
+{
+  using IndexSeq = typename IdxIter<TYPES>::Seq;
+  
+  return TupleBuilder<TYPES, IndexSeq> (values);
+}
 
 
 
@@ -84,10 +164,16 @@ int
 main (int, char**)
   {
     using NiceTypes = Types<string, int>;
-    using UgglyTypes = Types<Literal, string, short, long, float, Time>;
+    using UgglyTypes = Types<Literal, string, short, long, float, TimeVar>;
     
-    Tuple<UgglyTypes> uggs("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
+    using Uggs = Tuple<UgglyTypes>;
+    
+//  Rec args = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
+    Rec args = MakeRec().scope("lalü", 42);
 
+    cout << args <<endl;
+    
+    auto uggs = buildTuple<NiceTypes> (args);
     cout << uggs <<endl;
     
     cout <<  "\n.gulp.\n";
