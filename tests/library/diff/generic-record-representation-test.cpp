@@ -150,6 +150,8 @@ namespace test{
           
           CHECK (enterprise.getType() == "starship");
           CHECK (enterprise.get("Registry") == "NCC-1701-D");
+          CHECK (enterprise.child(0) == "Picard");
+          CHECK (enterprise.child(2) == "Data");
           
           CHECK (enterprise.hasAttribute("Owner"));
           CHECK (!enterprise.hasAttribute("owner"));
@@ -160,6 +162,7 @@ namespace test{
           CHECK (util::contains (enterprise, "Worf"));
           
           VERIFY_ERROR (INVALID, enterprise.get("warp10"));
+          VERIFY_ERROR (INVALID, enterprise.child(12));
           
           cout << "enterprise = "
                << enterprise <<endl;

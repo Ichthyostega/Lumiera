@@ -230,6 +230,17 @@ namespace diff{
             return extractVal (*found);
         }
       
+      Access
+      child (size_t idx)  const
+        {
+          if (children_.size() <= idx)
+            throw error::Invalid ("Child index "       +util::toString(idx)
+                                 +" out of bounds [0.."+util::toString(children_.size())
+                                 +"[");
+          return children_[idx];
+        }
+      
+      
       /**
        * While otherwise immutable,
        * a Record object can be remoulded
