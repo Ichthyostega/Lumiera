@@ -734,7 +734,7 @@
 <node CREATED="1453546417098" ID="ID_676713402" MODIFIED="1453546563455" TEXT="DOM vs. compiletime typing">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1453546436455" ID="ID_129001401" MODIFIED="1453546551564" TEXT="double-dispatch">
+<node CREATED="1453546436455" FOLDED="true" ID="ID_129001401" MODIFIED="1453639145606" TEXT="double-dispatch">
 <icon BUILTIN="idea"/>
 <node CREATED="1453546450317" ID="ID_1899026394" MODIFIED="1453590519383" TEXT="Variant-Visitor">
 <icon BUILTIN="button_ok"/>
@@ -749,11 +749,38 @@
 </node>
 <node CREATED="1453590522161" ID="ID_1369411965" MODIFIED="1453590545513" TEXT="Problem: narrowing conversions">
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1453590566651" ID="ID_1367428687" MODIFIED="1453590610375" TEXT="TODO">
-<icon BUILTIN="flag"/>
-</node>
 <node CREATED="1453590585865" ID="ID_350595711" MODIFIED="1453590606670" TEXT="explizit gef&#xe4;hrliche ausschlie&#xdf;en">
 <icon BUILTIN="yes"/>
+</node>
+<node CREATED="1453638973049" ID="ID_1350801390" LINK="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63723" MODIFIED="1453639023645">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Compiler-Bug <font color="#c80219">Gcc-#63723</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1453639033250" ID="ID_1669831951" LINK="http://stackoverflow.com/questions/26705199/how-can-i-write-a-type-trait-to-check-if-a-type-is-convertible-to-another-by-a-n" MODIFIED="1453639049952" TEXT="s.a. Stackoverflow"/>
+<node CREATED="1453639055478" ID="ID_1560466275" MODIFIED="1453639078468">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gel&#246;st in GCC-5 --&#160;<i>backport unwahrscheinlich</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1453639119142" ID="ID_1472487058" MODIFIED="1453639126177" TEXT="inzwischen hartgecodet">
+<icon BUILTIN="clanbomber"/>
 </node>
 </node>
 <node CREATED="1453546467707" ID="ID_1543497504" MODIFIED="1453546472446" TEXT="Problem: template bloat">

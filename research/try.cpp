@@ -80,12 +80,99 @@ using std::tuple;
 
 namespace error = lumiera::error;
 
+         //////////////////////////////////////TODO traits
+namespace lib {
+namespace meta {
+  using std::is_constructible;
+  using std::is_unsigned;
+  using std::is_signed;
+  using std::is_floating_point;
+
+
+  template<typename NUM>
+  struct is_nonFloat
+    : __and_<is_arithmetic<NUM>
+            ,__not_<is_floating_point<NUM>>
+            >
+    { };
+  
+  /** temporary workaround for GCC [Bug-63723], necessary until CGG-5
+   * @remarks The problem is that GCC emits a warning on narrowing conversion,
+   *  instead of letting the SFINAE substitution fail. This can be considered
+   *  questionable behaviour, since the usual implementation of a `is_convertible`
+   *  trait uses initialisation from a brace enclosed list, where C++11 prohibits
+   *  narrowing conversions. Now the problem is, that we'll use such traits checks
+   *  to remove such  _impossble_ cases from generated trampoline tables or visitor
+   *  double dispatch implementations. Thus, for one we get lots of warnings at that
+   *  point when generating those trampoline tables (at initialisation), while it
+   *  is not clear we'll trigger those cases, and, when we do, we'll get narrowing
+   *  conversions in a context where we're unable to cope with them or protect
+   *  ourselves against spurious conversions.
+   *  What follows is a quick-n-dirty hack to remove such unwanted conversions. 
+   * 
+   * [Bug-63723]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63723
+   */
+  template<typename SRC, typename TAR>
+  struct is_narrowingInit
+    : __or_<__and_<is_unsigned<SRC>, is_signed<TAR>>
+           ,__and_<is_signed<SRC>, is_unsigned<TAR>>
+           ,__and_<is_nonFloat<SRC>, is_floating_point<TAR>>
+           ,__and_<is_floating_point<SRC>, is_nonFloat<TAR>>
+           ,__not_<is_constructible<TAR, SRC>>
+           >
+    { };
+  
+#define TRAIT_IS_NARROWING(_SRC_, _TAR_) \
+  template<>                              \
+  struct is_narrowingInit<_SRC_, _TAR_>    \
+    : std::true_type                        \
+    { };
+  
+  TRAIT_IS_NARROWING (int64_t, int32_t)
+  TRAIT_IS_NARROWING (int64_t, int16_t)
+  TRAIT_IS_NARROWING (int64_t, int8_t)
+  TRAIT_IS_NARROWING (int32_t, int16_t)
+  TRAIT_IS_NARROWING (int32_t, int8_t)
+  TRAIT_IS_NARROWING (int16_t, int8_t)
+  TRAIT_IS_NARROWING (int16_t, short)
+  TRAIT_IS_NARROWING (int16_t, char)
+  
+  TRAIT_IS_NARROWING (uint64_t, uint32_t)
+  TRAIT_IS_NARROWING (uint64_t, uint16_t)
+  TRAIT_IS_NARROWING (uint64_t, uint8_t)
+  TRAIT_IS_NARROWING (uint32_t, uint16_t)
+  TRAIT_IS_NARROWING (uint32_t, uint8_t)
+  TRAIT_IS_NARROWING (uint16_t, uint8_t)
+  TRAIT_IS_NARROWING (uint16_t, ushort)
+  
+  TRAIT_IS_NARROWING (double, float)
+  
+  TRAIT_IS_NARROWING (lib::hash::LuidH, int64_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, int32_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, int16_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, int8_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, char)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, uint16_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, uint8_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, double)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, float)
+  
+#undef TRAIT_IS_NARROWING
+  
+}} //////////////////////////////////////TODO traits
+using std::__not_;
+using std::__and_;
+using std::__or_;
+using std::is_constructible;
+using lib::meta::is_narrowingInit;
+using lib::meta::Strip;
+
 
 using DataCapPredicate = Variant<DataValues>::Predicate;
 
 
 template<typename TAR>
-class GenNodeAccessor
+struct GenNodeAccessor
   : boost::noncopyable
   {
     struct ConverterBase
@@ -107,11 +194,16 @@ class GenNodeAccessor
       };
     
     template<typename TY>
-    using can_Convert = std::is_constructible<TAR, TY const&>;
+    struct allow_Conversion
+      : __and_<is_constructible<TAR, TY const&>
+              ,__not_<is_narrowingInit<typename Strip<TY>::TypePlain
+                                      ,typename Strip<TAR>::TypePlain>>
+              >
+      { };
     
-    using PossibleSourceTypes = typename Filter<DataValues::List, can_Convert>::List; 
+    using SupportedSourceTypes = typename Filter<DataValues::List, allow_Conversion>::List; 
     
-    using ConversionBuffer = InstantiateChained< PossibleSourceTypes
+    using ConversionBuffer = InstantiateChained< SupportedSourceTypes
                                                , Converter
                                                , ConverterBase
                                                >;
@@ -133,7 +225,7 @@ class GenNodeAccessor
       }
   };
 
-
+//////////TODO this goes into typeseq-util.hpp
 template<class, size_t>
 struct Pick;
 
@@ -221,13 +313,47 @@ buildTuple (SRC values)
 #define SHOW_TYPE(_TY_) \
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 
+#define EVAL_PREDICATE(_PRED_) \
+    cout << STRINGIFY(_PRED_) << "\t : " << _PRED_ <<endl;
+
+void
+verifyConversions()
+  {
+    using std::is_arithmetic;
+    using std::is_floating_point;
+    using lib::meta::is_nonFloat;
+    using lib::hash::LuidH;
+
+    
+    EVAL_PREDICATE(is_arithmetic<int>       ::value)
+    EVAL_PREDICATE(is_arithmetic<size_t>    ::value)
+    EVAL_PREDICATE(is_floating_point<size_t>::value)
+    EVAL_PREDICATE(is_nonFloat<size_t>      ::value)
+    
+    EVAL_PREDICATE(GenNodeAccessor<int>  ::allow_Conversion<size_t>    ::value)
+    EVAL_PREDICATE(GenNodeAccessor<int64_t>::allow_Conversion<long int>::value)
+    EVAL_PREDICATE(GenNodeAccessor<double>::allow_Conversion<int64_t>::value)
+    EVAL_PREDICATE(GenNodeAccessor<LuidH>::allow_Conversion<int64_t> ::value)
+    EVAL_PREDICATE(GenNodeAccessor<LuidH>::allow_Conversion<int16_t> ::value)
+    EVAL_PREDICATE(GenNodeAccessor<LuidH>::allow_Conversion<uint16_t>::value)
+    EVAL_PREDICATE(GenNodeAccessor<LuidH> ::allow_Conversion<LuidH>  ::value)
+    EVAL_PREDICATE(GenNodeAccessor<int64_t> ::allow_Conversion<LuidH>::value)
+    EVAL_PREDICATE(GenNodeAccessor<uint64_t>::allow_Conversion<LuidH>::value)
+    EVAL_PREDICATE(GenNodeAccessor<uint32_t>::allow_Conversion<LuidH>::value)
+    EVAL_PREDICATE(GenNodeAccessor<int32_t> ::allow_Conversion<LuidH>::value)
+    
+    cout <<endl<<endl;
+  }
+
+
 
 int
 main (int, char**)
   {
-    using NiceTypes = Types<string, int>;
-    using UgglyTypes = Types<EntryID<long>, string, short, long, float, TimeVar>;
+    verifyConversions();
     
+    using NiceTypes = Types<string, int>;
+    using UgglyTypes = Types<EntryID<long>, string, int, int64_t, double, TimeVar>;
     
     Rec args = MakeRec().scope("lalü", 42);
     Rec urgs = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
