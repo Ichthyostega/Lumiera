@@ -228,6 +228,22 @@ namespace meta {
     };
   
   
+  
+  /** build an index number sequence from a structured reference type */
+  template<class REF>
+  struct IndexIter;
+  
+  /** build an index number sequence from a type sequence */
+  template<typename...TYPES>
+  struct IndexIter<Types<TYPES...>>
+    {
+      /////TODO as long as Types is not variadic (#987), we need to strip NullType here (instead of just using sizeof...(TYPES)
+      enum {SIZ = lib::meta::count<typename Types<TYPES...>::List>::value };
+      
+      using Seq = typename BuildIndexSeq<SIZ>::Ascending;
+    };
+  
+  
 
   
   

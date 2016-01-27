@@ -68,7 +68,9 @@ using lib::diff::GenNode;
 using lib::diff::DataValues;
 using lib::meta::Types;
 using lib::meta::Tuple;
+using lib::meta::Pick;
 using lib::meta::IndexSeq;
+using lib::meta::IndexIter;
 using lib::meta::BuildIndexSeq;
 using lib::meta::InstantiateChained;
 using lib::meta::Filter;
@@ -80,86 +82,6 @@ using std::tuple;
 
 namespace error = lumiera::error;
 
-         //////////////////////////////////////TODO traits
-namespace lib {
-namespace meta {
-  using std::is_constructible;
-  using std::is_unsigned;
-  using std::is_signed;
-  using std::is_floating_point;
-
-
-  template<typename NUM>
-  struct is_nonFloat
-    : __and_<is_arithmetic<NUM>
-            ,__not_<is_floating_point<NUM>>
-            >
-    { };
-  
-  /** temporary workaround for GCC [Bug-63723], necessary until CGG-5
-   * @remarks The problem is that GCC emits a warning on narrowing conversion,
-   *  instead of letting the SFINAE substitution fail. This can be considered
-   *  questionable behaviour, since the usual implementation of a `is_convertible`
-   *  trait uses initialisation from a brace enclosed list, where C++11 prohibits
-   *  narrowing conversions. Now the problem is, that we'll use such traits checks
-   *  to remove such  _impossble_ cases from generated trampoline tables or visitor
-   *  double dispatch implementations. Thus, for one we get lots of warnings at that
-   *  point when generating those trampoline tables (at initialisation), while it
-   *  is not clear we'll trigger those cases, and, when we do, we'll get narrowing
-   *  conversions in a context where we're unable to cope with them or protect
-   *  ourselves against spurious conversions.
-   *  What follows is a quick-n-dirty hack to remove such unwanted conversions. 
-   * 
-   * [Bug-63723]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63723
-   */
-  template<typename SRC, typename TAR>
-  struct is_narrowingInit
-    : __or_<__and_<is_unsigned<SRC>, is_signed<TAR>>
-           ,__and_<is_signed<SRC>, is_unsigned<TAR>>
-           ,__and_<is_nonFloat<SRC>, is_floating_point<TAR>>
-           ,__and_<is_floating_point<SRC>, is_nonFloat<TAR>>
-           ,__not_<is_constructible<TAR, SRC>>
-           >
-    { };
-  
-#define TRAIT_IS_NARROWING(_SRC_, _TAR_) \
-  template<>                              \
-  struct is_narrowingInit<_SRC_, _TAR_>    \
-    : std::true_type                        \
-    { };
-  
-  TRAIT_IS_NARROWING (int64_t, int32_t)
-  TRAIT_IS_NARROWING (int64_t, int16_t)
-  TRAIT_IS_NARROWING (int64_t, int8_t)
-  TRAIT_IS_NARROWING (int32_t, int16_t)
-  TRAIT_IS_NARROWING (int32_t, int8_t)
-  TRAIT_IS_NARROWING (int16_t, int8_t)
-  TRAIT_IS_NARROWING (int16_t, short)
-  TRAIT_IS_NARROWING (int16_t, char)
-  
-  TRAIT_IS_NARROWING (uint64_t, uint32_t)
-  TRAIT_IS_NARROWING (uint64_t, uint16_t)
-  TRAIT_IS_NARROWING (uint64_t, uint8_t)
-  TRAIT_IS_NARROWING (uint32_t, uint16_t)
-  TRAIT_IS_NARROWING (uint32_t, uint8_t)
-  TRAIT_IS_NARROWING (uint16_t, uint8_t)
-  TRAIT_IS_NARROWING (uint16_t, ushort)
-  
-  TRAIT_IS_NARROWING (double, float)
-  
-  TRAIT_IS_NARROWING (lib::hash::LuidH, int64_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, int32_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, int16_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, int8_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, char)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, uint16_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, uint8_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, double)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, float)
-  
-#undef TRAIT_IS_NARROWING
-  
-}} //////////////////////////////////////TODO traits
 using std::__not_;
 using std::__and_;
 using std::__or_;
@@ -175,6 +97,19 @@ template<typename TAR>
 struct GenNodeAccessor
   : boost::noncopyable
   {
+    
+    template<typename TY>
+    struct allow_Conversion
+      : __and_<is_constructible<TAR, TY const&>
+              ,__not_<is_narrowingInit<typename Strip<TY>::TypePlain
+                                      ,typename Strip<TAR>::TypePlain>>
+              >
+      { };
+    
+    using SupportedSourceTypes = typename Filter<DataValues::List, allow_Conversion>::List; 
+    
+    
+    
     struct ConverterBase
       : DataCapPredicate
       {
@@ -193,15 +128,6 @@ struct GenNodeAccessor
           };
       };
     
-    template<typename TY>
-    struct allow_Conversion
-      : __and_<is_constructible<TAR, TY const&>
-              ,__not_<is_narrowingInit<typename Strip<TY>::TypePlain
-                                      ,typename Strip<TAR>::TypePlain>>
-              >
-      { };
-    
-    using SupportedSourceTypes = typename Filter<DataValues::List, allow_Conversion>::List; 
     
     using ConversionBuffer = InstantiateChained< SupportedSourceTypes
                                                , Converter
@@ -225,23 +151,14 @@ struct GenNodeAccessor
       }
   };
 
-//////////TODO this goes into typeseq-util.hpp
-template<class, size_t>
-struct Pick;
-
-template<typename...TYPES, size_t i>
-struct Pick<Types<TYPES...>, i>
-  {
-    using Type = typename lib::meta::Shifted<Types<TYPES...>, i>::Head;
-  };
 
 
 
 template<class SRC, class TAR>
-struct ElementMapper;
+struct ElementExtractor;
 
 template<typename...TYPES>
-struct ElementMapper<Rec, Types<TYPES...>>
+struct ElementExtractor<Rec, tuple<TYPES...>>
   {
     template<size_t i>
     using TargetType = typename Pick<Types<TYPES...>, i>::Type;
@@ -263,47 +180,42 @@ struct ElementMapper<Rec, Types<TYPES...>>
 
 
 
-template<class REF>
-struct IdxIter;
 
-template<typename...TYPES>
-struct IdxIter<Types<TYPES...>>
+
+
+template< typename TYPES
+        , template<class,class, size_t> class _ElmMapper_
+        , class SEQ
+        >
+struct TupleConstructor;
+
+template< typename TYPES
+        , template<class,class, size_t> class _ElmMapper_
+        , size_t...idx
+        >
+struct TupleConstructor<TYPES, _ElmMapper_, IndexSeq<idx...>>
+  : Tuple<TYPES>
   {
-    /////TODO as long as Types is not variadic (#987), we need to strip NullType here (instead of just using sizeof...(TYPES)
-    enum {SIZ = lib::meta::count<typename Types<TYPES...>::List>::value };
-    
-    using Seq = typename BuildIndexSeq<SIZ>::Ascending;
-  };
-
-
-
-template<typename TYPES, class SEQ>
-class TupleBuilder;
-
-template<typename TYPES, size_t...idx>
-class TupleBuilder<TYPES, IndexSeq<idx...>>
-  : public Tuple<TYPES>
-  {
-    template<class SRC, size_t i>
-    using PickArg = typename ElementMapper<SRC, TYPES>::template Access<i>;
-    
     
   public:
     template<class SRC>
-    TupleBuilder (SRC values)
-      : Tuple<TYPES> (PickArg<SRC, idx>{values}...)
+    TupleConstructor (SRC values)
+      : Tuple<TYPES> (_ElmMapper_<SRC, Tuple<TYPES>, idx>{values}...)
       { }
   };
-  
+
+
+template<class SRC, class TAR, size_t i>
+using PickArg = typename ElementExtractor<SRC, TAR>::template Access<i>;
 
 
 template<typename TYPES, class SRC>
 Tuple<TYPES>
 buildTuple (SRC values)
 {
-  using IndexSeq = typename IdxIter<TYPES>::Seq;
+  using IndexSeq = typename IndexIter<TYPES>::Seq;
   
-  return TupleBuilder<TYPES, IndexSeq> (values);
+  return TupleConstructor<TYPES, PickArg, IndexSeq> (values);
 }
 
 

@@ -74,10 +74,14 @@ namespace std {
 }
 namespace lib{
   template<class X, class B>  class P;
-}
+  
+  namespace hash {
+    class LuidH;
+}}
+namespace proc {
 namespace mobject{
   template<class X, class B>  class Placement;
-}
+}}
 
 
 namespace lib {
@@ -87,7 +91,11 @@ namespace meta {
   using std::remove_pointer;
   using std::remove_reference;
   using std::is_convertible;
+  using std::is_constructible;
+  using std::is_floating_point;
   using std::is_arithmetic;
+  using std::is_unsigned;
+  using std::is_signed;
   using std::is_same;
   using std::__not_;
   using std::__and_;
@@ -304,6 +312,82 @@ namespace meta {
             ,__not_<can_lexical2string<X>>
             >
     { };
+  
+  
+  
+  
+  
+  
+  template<typename NUM>
+  struct is_nonFloat
+    : __and_<is_arithmetic<NUM>
+            ,__not_<is_floating_point<NUM>>
+            >
+    { };
+  
+  /** temporary workaround for GCC [Bug-63723], necessary until CGG-5
+   * @remarks The problem is that GCC emits a warning on narrowing conversion,
+   *  instead of letting the SFINAE substitution fail. This can be considered
+   *  questionable behaviour, since the usual implementation of a `is_convertible`
+   *  trait uses initialisation from a brace enclosed list, where C++11 prohibits
+   *  narrowing conversions. Now the problem is, that we'll use such traits checks
+   *  to remove such  _impossble_ cases from generated trampoline tables or visitor
+   *  double dispatch implementations. Thus, for one we get lots of warnings at that
+   *  point when generating those trampoline tables (at initialisation), while it
+   *  is not clear we'll trigger those cases, and, when we do, we'll get narrowing
+   *  conversions in a context where we're unable to cope with them or protect
+   *  ourselves against spurious conversions.
+   *  What follows is a quick-n-dirty hack to remove such unwanted conversions. 
+   * 
+   * [Bug-63723]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63723
+   */
+  template<typename SRC, typename TAR>
+  struct is_narrowingInit
+    : __or_<__and_<is_unsigned<SRC>, is_signed<TAR>>
+           ,__and_<is_signed<SRC>, is_unsigned<TAR>>
+           ,__and_<is_nonFloat<SRC>, is_floating_point<TAR>>
+           ,__and_<is_floating_point<SRC>, is_nonFloat<TAR>>
+           ,__not_<is_constructible<TAR, SRC>>
+           >
+    { };
+  
+#define TRAIT_IS_NARROWING(_SRC_, _TAR_) \
+  template<>                              \
+  struct is_narrowingInit<_SRC_, _TAR_>    \
+    : std::true_type                        \
+    { };
+  
+  TRAIT_IS_NARROWING (int64_t, int32_t)
+  TRAIT_IS_NARROWING (int64_t, int16_t)
+  TRAIT_IS_NARROWING (int64_t, int8_t)
+  TRAIT_IS_NARROWING (int32_t, int16_t)
+  TRAIT_IS_NARROWING (int32_t, int8_t)
+  TRAIT_IS_NARROWING (int16_t, int8_t)
+  TRAIT_IS_NARROWING (int16_t, short)
+  TRAIT_IS_NARROWING (int16_t, char)
+  
+  TRAIT_IS_NARROWING (uint64_t, uint32_t)
+  TRAIT_IS_NARROWING (uint64_t, uint16_t)
+  TRAIT_IS_NARROWING (uint64_t, uint8_t)
+  TRAIT_IS_NARROWING (uint32_t, uint16_t)
+  TRAIT_IS_NARROWING (uint32_t, uint8_t)
+  TRAIT_IS_NARROWING (uint16_t, uint8_t)
+  TRAIT_IS_NARROWING (uint16_t, ushort)
+  
+  TRAIT_IS_NARROWING (double, float)
+  
+  TRAIT_IS_NARROWING (lib::hash::LuidH, int64_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, int32_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, int16_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, int8_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, char)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, uint16_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, uint8_t)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, double)
+  TRAIT_IS_NARROWING (lib::hash::LuidH, float)
+  
+#undef TRAIT_IS_NARROWING
+  
   
   
   
