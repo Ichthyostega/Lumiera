@@ -219,6 +219,70 @@ buildTuple (SRC values)
 }
 
 
+////////////////////////TODO reworked for function-closure.hpp
+
+    template<typename SRC, typename TAR, size_t start>
+    struct PartiallyInitTuple
+      {
+        template<size_t i>
+        using DestType = typename std::tuple_element<i, TAR>::type;
+        
+        
+        /**
+         * define those index positions in the target tuple,
+         * where init arguments shall be used on construction.
+         * All other arguments will just be default initialised.
+         */
+        static constexpr bool
+        useArg (size_t idx)
+          {
+            return (start <= idx)
+               and (idx < start + std::tuple_size<SRC>());
+          }
+        
+        
+        
+        template<size_t idx,   bool doPick = PartiallyInitTuple::useArg(idx)>
+        struct IndexMapper
+          {
+            SRC const& initArgs;
+            
+            operator DestType<idx>()
+              {
+                return std::get<idx-start> (initArgs);
+              }
+          };
+        
+        template<size_t idx>
+        struct IndexMapper<idx, false>
+          {
+            SRC const& initArgs;
+            
+            operator DestType<idx>()
+              {
+                return DestType<idx>();
+              }
+          };
+      };
+
+
+template<typename TYPES, typename ARGS, size_t start>
+struct SomeArgs
+  {
+    
+    template<class SRC, class TAR, size_t i>
+    using IdxSelector = typename PartiallyInitTuple<SRC, TAR, start>::template IndexMapper<i>;
+    
+    static Tuple<TYPES>
+    doIt (Tuple<ARGS> const& args)
+    {
+       using IndexSeq = typename IndexIter<TYPES>::Seq;
+       
+       return TupleConstructor<TYPES, IdxSelector, IndexSeq> (args);
+    }
+  };
+////////////////////////TODO reworked for function-closure.hpp
+
 
 
 
@@ -275,6 +339,8 @@ main (int, char**)
     
     cout << buildTuple<NiceTypes> (args) <<endl;
     cout << buildTuple<UgglyTypes> (urgs) <<endl;
+    
+    cout << SomeArgs<UgglyTypes,NiceTypes,1>::doIt(std::make_tuple("hui", 88)) <<endl;
     
     cout <<  "\n.gulp.\n";
     
