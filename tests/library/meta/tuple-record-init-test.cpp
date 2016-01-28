@@ -44,6 +44,7 @@ using lib::meta::Tuple;
 using lib::meta::buildTuple;
 using lib::time::TimeVar;
 using lib::time::Time;
+using lib::hash::LuidH;
 
 using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
 using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
@@ -121,14 +122,40 @@ namespace test {
           VERIFY_ERROR (WRONG_TYPE, buildTuple<Narrowing> (args));    // narrowing conversion from int to short is prohibited
           
           // yet other (non-numeric) conversions are still possible
-          Rec arg1 = MakeRec().scope(Time(1,2,3,4));
+          Rec timeArg = MakeRec().scope(Time(1,2,3,4));
           using TupStr = Types<string>;
-          Tuple<TupStr> tup = buildTuple<TupStr> (arg1);
+          Tuple<TupStr> tup = buildTuple<TupStr> (timeArg);
           
           CHECK (std::get<string> (tup) == "4:03:02.001");
           CHECK (string(Time(1,2,3,4))  == "4:03:02.001");
+          
+          
+          // conversions from LUID elements are handled restrictively
+          Rec hashArg = MakeRec().scope("random", LuidH());
+          VERIFY_ERROR (WRONG_TYPE, buildTuple<Unsigned> (args));
+          VERIFY_ERROR (WRONG_TYPE, buildTuple<Floating> (args));
+          VERIFY_ERROR (WRONG_TYPE, buildTuple<Narrowing> (args));
+          
+          using ToSizeT = Types<string, size_t>;
+          VERIFY_ERROR (WRONG_TYPE, (buildTuple<ToSizeT> (args)));    // not even conversion to size_t is allowed
+          
+          struct Dummy
+            {
+              HashVal hash;
+              
+              Dummy (LuidH const& luid)
+                : hash(luid)
+                { }
+            };
+          
+          using WithDummy = Types<string, Dummy>;
+          
+          Tuple<WithDummy> tup2 = buildTuple<WithDummy> (hashArg);    // while any type explicitly constructible from LUID are permitted.
+          VERIFY_ERROR (WRONG_TYPE, buildTuple<WithDummy> (args));    // building a Dummy from int(42) is disallowed, of course
+          
+          HashVal h = get<Dummy>(tup2).hash;
+          CHECK (h == hashArg.child(1).data.get<LuidH>());            // note: the narrowing conversion happens within LuidH::operator HashVal()
         }
-      
     };
   
   
