@@ -73,6 +73,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/function-erasure.hpp"
 #include "lib/meta/tuple-helper.hpp"
+#include "lib/meta/tuple-record-init.hpp"
 #include "lib/meta/maybe-compare.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
@@ -97,6 +98,7 @@ namespace control {
   using lib::meta::FunErasure;
   using lib::meta::StoreFunction;
   using lib::meta::NullType;
+  using lib::meta::buildTuple;
   
   using lib::meta::equals_safeInvoke;
   using lib::TypedAllocationManager;
@@ -136,6 +138,7 @@ namespace control {
       virtual bool isCaptured () const                     =0;    ///< does this closure hold captured UNDO state?
       virtual bool equals (CmdClosure const&)  const       =0;    ///< is equivalent to the given other closure?
       virtual void bindArguments (Arguments&)              =0;    ///< store a set of parameter values within this closure
+      virtual void bindArguments (lib::diff::Rec const&)   =0;    ///< store a set of parameter values, passed as GenNode sequence
       virtual void invoke (CmdFunctor const&)              =0;    ///< invoke functor using the stored parameter values
       virtual void accept (CommandImplCloneBuilder&) const =0;    ///< assist with creating clone closure without disclosing concrete type
     };
@@ -146,9 +149,9 @@ namespace control {
   class AbstractClosure
     : public CmdClosure
     {
-      bool isValid()    const { return false; }
-      bool isCaptured() const { return false; }
-      void accept (CommandImplCloneBuilder&) const {}
+      bool isValid()    const override { return false; }
+      bool isCaptured() const override { return false; }
+      void accept (CommandImplCloneBuilder&) const override {}
     };
   
   
@@ -245,9 +248,20 @@ namespace control {
       
       /** assign a new parameter tuple to this */
       void
-      bindArguments (Arguments& args)
+      bindArguments (Arguments& args)  override
       {
         params_ = args.get<ArgTuple>();
+      }
+      
+      /** assign a new set of parameter values to this.
+       * @note the values are passed packaged into a sequence
+       *       of GenNode elements. This is the usual way
+       *       arguments are passed from the UI-Bus
+       */
+      void
+      bindArguments (lib::diff::Rec const&  paramData)  override
+      {
+        params_ = buildTuple<Args> (paramData);
       }
       
       
@@ -260,7 +274,7 @@ namespace control {
        *         Thus this function can't be const.
        */
       void
-      invoke (CmdFunctor const& unboundFunctor)
+      invoke (CmdFunctor const& unboundFunctor)  override
         {
           TupleApplicator<SIG> apply_this_arguments(params_);
           apply_this_arguments (unboundFunctor.getFun<SIG>());
@@ -268,7 +282,7 @@ namespace control {
       
       
       
-      operator string()  const
+      operator string()  const override
         {
           std::ostringstream buff;
           params_.dump (buff << "Closure(" );
@@ -282,14 +296,14 @@ namespace control {
         }
       
       
-      bool isValid ()   const { return true; }
+      bool isValid ()   const override { return true; }
       
       /// Supporting equality comparisons...
       friend bool operator== (Closure const& c1, Closure const& c2)  { return compare (c1.params_, c2.params_); }
       friend bool operator!= (Closure const& c1, Closure const& c2)  { return not (c1 == c2); }
       
       bool
-      equals (CmdClosure const& other)  const
+      equals (CmdClosure const& other)  const override
         {
           const Closure* toCompare = dynamic_cast<const Closure*> (&other);
           return (toCompare)

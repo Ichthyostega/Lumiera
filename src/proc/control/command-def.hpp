@@ -61,7 +61,6 @@
 #include "proc/control/command-registry.hpp"
 #include "proc/control/command-signature.hpp"
 #include "proc/control/command-mutation.hpp"
-#include "proc/control/command-closure.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"

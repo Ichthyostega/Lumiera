@@ -53,6 +53,9 @@ namespace test {
   using proc::control::LUMIERA_ERROR_INVALID_ARGUMENTS;
   using proc::control::LUMIERA_ERROR_UNBOUND_ARGUMENTS;
   
+  using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;        ////////TODO
+  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;          ////////TODO
+  
   namespace { // test fixture...
     
   }//(End) test fixture
@@ -188,14 +191,14 @@ namespace test {
           
           // we cannot invoke commands prior to binding arguments
           VERIFY_ERROR (UNBOUND_ARGUMENTS, mock.issueCommand(cmd) );
+          
+          // proper argument typing is ensured while dispatching the bind message. 
+          VERIFY_ERROR (INDEX_BOUNDS, mock.prepareCommand(cmd, Rec({"lalala"})) );   ////////////TODO : shall we care to get INVALID_ARGUMENTS here??
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           cout << "____Nexus-Log_________________\n"
                << util::join(gui::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
-          
-          // proper argument typing is ensured while dispatching the bind message. 
-          VERIFY_ERROR (INVALID_ARGUMENTS, mock.prepareCommand(cmd, Rec({"lalala"})) );
           
           // command can't be issued, since it's still unbound
           CHECK (not gui::test::Nexus::canInvoke(cmd));

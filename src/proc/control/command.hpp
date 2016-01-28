@@ -195,6 +195,7 @@ namespace control {
       
     private:
       void setArguments (Arguments&);
+      void setArguments (lib::diff::Rec const&);
       static bool equivalentImpl (Command const&, Command const&);
     };
   
@@ -234,7 +235,8 @@ namespace control {
   inline Command&
   Command::bindArg (lib::diff::Rec const& paramData)
   {
-    UNIMPLEMENTED ("how to accept a GenNode-Rec and unpack it into our argument holder...");
+    this->setArguments (paramData);
+    return *this;
   }
 
   

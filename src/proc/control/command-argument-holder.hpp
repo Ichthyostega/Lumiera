@@ -72,7 +72,7 @@ namespace control {
           { }
         
       private:
-        virtual bool isValid ()  const { return false; }
+        virtual bool isValid ()  const override { return false; }
       };
     
     
@@ -111,13 +111,14 @@ namespace control {
       ArgumentHolder& operator= (ArgumentHolder const&);
       
       
-      typedef Closure<SIG>        ArgHolder;
-      typedef MementoTie<SIG,MEM> MemHolder;
+      using ArgHolder = Closure<SIG>;
+      using MemHolder = MementoTie<SIG,MEM>;
       
-      typedef InPlaceBuffer<ArgHolder, sizeof(ArgHolder), MissingArguments<SIG> > ArgumentBuff;
-      typedef InPlaceBuffer<MemHolder, sizeof(MemHolder), UntiedMemento<SIG,MEM> > MementoBuff;
+      using ArgumentBuff = InPlaceBuffer<ArgHolder, sizeof(ArgHolder), MissingArguments<SIG>>;
+      using  MementoBuff = InPlaceBuffer<MemHolder, sizeof(MemHolder), UntiedMemento<SIG,MEM>>;
       
-      typedef typename ArgHolder::ArgTuple ArgTuple;
+      using ArgTuple = typename ArgHolder::ArgTuple;
+      using Args     = typename Types<ArgTuple>::Seq;
       
       
       /* ====== in-place storage buffers ====== */
@@ -130,12 +131,14 @@ namespace control {
       /* ==== proxied CmdClosure interface ==== */
       
     public:
-      virtual bool isValid ()  const
+      virtual bool
+      isValid ()  const override
         {
           return arguments_->isValid();
         }
       
-      virtual bool isCaptured() const
+      virtual bool
+      isCaptured() const override
         {
           return memento_->isValid();
         }
@@ -143,16 +146,32 @@ namespace control {
       
       
       /** assign a new parameter tuple to this */
-      virtual void bindArguments (Arguments& args)
-      {
-        if (!arguments_->isValid())
-          storeTuple (args.get<ArgTuple>());
-        else
-          arguments_->bindArguments(args);
-      }
+      virtual void
+      bindArguments (Arguments& args)  override
+        {
+          if (!arguments_->isValid())
+            storeTuple (args.get<ArgTuple>());
+          else
+            arguments_->bindArguments (args);
+        }
+      
+      /** assign a new set of parameter values to this.
+       * @note the values are passed packaged into a sequence
+       *       of GenNode elements. This is the usual way
+       *       arguments are passed from the UI-Bus
+       */
+      virtual void
+      bindArguments (lib::diff::Rec const&  paramData)  override
+        {
+          if (!arguments_->isValid())
+            storeTuple (buildTuple<Args> (paramData));
+          else
+            arguments_->bindArguments (paramData);
+        }
       
       
-      virtual void invoke (CmdFunctor const& func)
+      virtual void
+      invoke (CmdFunctor const& func)  override
         {
           if (!isValid())
             throw lumiera::error::State ("Lifecycle error: can't bind functor, "
@@ -163,7 +182,8 @@ namespace control {
         }
       
       
-      virtual operator string()  const
+      virtual
+      operator string()  const override
         {
           return "Command-State{ arguments="
                + (*arguments_? string(*arguments_) : "unbound")
@@ -198,7 +218,7 @@ namespace control {
       /** assist with creating a clone copy;
        *  this results in invocation of the copy ctor */
       void
-      accept (CommandImplCloneBuilder& visitor)  const
+      accept (CommandImplCloneBuilder& visitor)  const override
         {
           visitor.buildCloneContext (*this);
         }

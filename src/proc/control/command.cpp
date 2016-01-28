@@ -249,6 +249,18 @@ namespace control {
   }
   
   
+  /** @internal forward a `Record<GenNode>`, which was
+   *  typically received via UI-Bus, down to the CommandImpl.
+   *  @remarks this is how command arguments are actually
+   *           passed from UI to the Session core
+   */
+  void
+  Command::setArguments (lib::diff::Rec const& paramData)
+  {
+    ___check_notBottom (this, "Binding arguments of");
+    _Handle::impl().setArguments(paramData);
+  }
+  
   
   /** @return the number of command \em definitions currently registered */
   size_t

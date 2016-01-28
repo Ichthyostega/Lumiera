@@ -162,7 +162,13 @@ namespace control {
       void
       setArguments (Arguments& args)
         {
-          pClo_->bindArguments(args);
+          pClo_->bindArguments (args);
+        }
+      
+      void
+      setArguments (lib::diff::Rec const& paramData)
+        {
+          pClo_->bindArguments (paramData);
         }
       
       void invokeOperation() { do_(*pClo_); }
