@@ -102,7 +102,7 @@ namespace lib {
   namespace error = lumiera::error;
   
   
-  namespace { // implementation helpers
+  namespace variant { // implementation helpers
     
     using std::remove_reference;
     using meta::NullType;
@@ -190,9 +190,9 @@ namespace lib {
       enum { SIZ = meta::maxSize<typename TYPES::List>::value };
       
       template<typename RET>
-      using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
+      using VisitorFunc      = typename variant::VFunc<RET>::template VisitorInterface<TYPES>;
       template<typename RET>
-      using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
+      using VisitorConstFunc = typename variant::VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
       
       /**
        * to be implemented by the client for visitation
@@ -313,7 +313,7 @@ namespace lib {
           void
           dispatch (Visitor& visitor)
             {
-              using Dispatcher = VFunc<void>::template ValueAcceptInterface<TY>;
+              using Dispatcher = variant::VFunc<void>::template ValueAcceptInterface<TY>;
               
               Dispatcher& typeDispatcher = visitor;
               typeDispatcher.handle (this->access());
@@ -322,7 +322,7 @@ namespace lib {
           bool
           dispatch (Predicate& visitor)  const
             {
-              using Dispatcher = VFunc<bool>::template ValueAcceptInterface<const TY>;
+              using Dispatcher = variant::VFunc<bool>::template ValueAcceptInterface<const TY>;
               
               Dispatcher& typeDispatcher = visitor;
               return typeDispatcher.handle (this->access());
@@ -392,7 +392,7 @@ namespace lib {
       template<typename X>
       Variant(X&& x)
         {
-          using StorageType = typename CanBuildFrom<X, TYPES>::Type;
+          using StorageType = typename variant::CanBuildFrom<X, TYPES>::Type;
           
           new(storage_) Buff<StorageType> (forward<X>(x));
         }
@@ -416,7 +416,7 @@ namespace lib {
       Variant&
       operator= (X x)
         {
-          using RawType = typename remove_reference<X>::type;
+          using RawType = typename std::remove_reference<X>::type;
           static_assert (meta::isInList<RawType, typename TYPES::List>(),
                          "Type error: the given variant could never hold the required type");
           static_assert (std::is_copy_assignable<RawType>::value, "target type does not support assignment");
