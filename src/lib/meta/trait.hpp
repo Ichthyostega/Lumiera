@@ -351,6 +351,13 @@ namespace meta {
            >
     { };
   
+  template<typename TAR>
+  struct is_narrowingInit<lib::hash::LuidH, TAR>
+    : __or_<is_arithmetic<TAR>
+           ,is_floating_point<TAR>
+           >
+    { };
+  
 #define TRAIT_IS_NARROWING(_SRC_, _TAR_) \
   template<>                              \
   struct is_narrowingInit<_SRC_, _TAR_>    \
@@ -375,16 +382,6 @@ namespace meta {
   TRAIT_IS_NARROWING (uint16_t, ushort)
   
   TRAIT_IS_NARROWING (double, float)
-  
-  TRAIT_IS_NARROWING (lib::hash::LuidH, int64_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, int32_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, int16_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, int8_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, char)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, uint16_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, uint8_t)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, double)
-  TRAIT_IS_NARROWING (lib::hash::LuidH, float)
   
 #undef TRAIT_IS_NARROWING
   
