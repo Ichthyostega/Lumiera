@@ -162,6 +162,7 @@ END
 
 
 TEST "Parsing time values" TimeParsing_test  <<END
+return: 0
 END
 
 

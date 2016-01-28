@@ -4,8 +4,10 @@ TESTING "Regression Tests: Known bugs" ./test-suite --group=regressiongui
 
 TEST "Smile test" HelloBug_test <<END
 err: hello sunshine
+return: 0
 END
 
 
 PLANNED "Suicide test" ElectricSuicide_test <<END
+return: 42
 END

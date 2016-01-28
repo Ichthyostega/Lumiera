@@ -4,6 +4,7 @@ TESTING "Component Test Suite: Proc-Layer controller" ./test-suite --group=contr
 
 
 TEST "CommandBasic_test" CommandBasic_test <<END
+return: 0
 END
 
 
@@ -32,6 +33,7 @@ out: modified: Command-State. arguments=Closure\(123ms,unbelievable,..\), <mem: 
 out: copied  : Command-State. arguments=Closure\(.+s.*,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
 out: undo... memento=START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=.+s\)----memento-:START...Lumiera rocksLumiera rocks
 out: RESET...undoIt\(time=.+s\)----memento-:START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=.+s\)----memento-:START...Lumiera rocksLumiera rocks
+return: 0
 END
 
 
@@ -47,6 +49,7 @@ TEST "Command functor and UNDO functor" CommandMutation_test <<END
 out: empty placeholder closure: Closure\(0\)
 out: param values: Closure\(23\)
 out: saved state: 11
+return: 0
 END
 
 
