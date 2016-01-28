@@ -236,7 +236,8 @@ namespace diff{
           if (children_.size() <= idx)
             throw error::Invalid ("Child index "       +util::toString(idx)
                                  +" out of bounds [0.."+util::toString(children_.size())
-                                 +"[");
+                                 +"["
+                                 ,error::LUMIERA_ERROR_INDEX_BOUNDS);
           return children_[idx];
         }
       

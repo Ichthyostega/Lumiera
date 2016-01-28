@@ -21,7 +21,7 @@
 */
 
 
-/** @file tuple.hpp
+/** @file tuple-helper.hpp
  ** Metaprogramming with tuples-of-types and the `std::tuple` record.
  ** The metaprogramming part of this header complements typelist.hpp and allows
  ** some additional manipulations on type sequences, especially to integrate
@@ -244,6 +244,87 @@ namespace meta {
     };
   
   
+  
+  
+  
+  
+  /**
+   * Extensible Adapter to construct a distinct tuple
+   * from some arbitrary source type. This includes the
+   * possibility to re-map elements or element positions.
+   * @tparam TYPES sequence of types to use for the tuple
+   * @tparam _ElmMapper_ a _template_ to extract each
+   *         constructor argument from the source value.
+   *         On invocation, we'll pick up the source type from the
+   *         actual ctor argument, and then invoke this helper template
+   *         iteratively for each component of the tuple, with arguments
+   *         - the source type, as picked up from the constructor
+   *         - the target tuple type, i.e. `Tuple<TYPES>`
+   *         - the actual index position of the tuple element
+   *           to be initialised through this concrete instantiation.
+   * @remarks this design has several extension points. Pretty much
+   *    any conceivable initialisation logic can be embodied in the
+   *    `_ElmMapper_` template. The sole requirement is that the
+   *    concrete instance is _assignable_ by the source type and
+   *    _convertible_ to the individual member type of the target
+   *    tuple it is invoked for. Moreover, it is possible to build
+   *    a generic _element extractor_, which will be specialised
+   *    on base of the source type accepted. See \ref ExtractArg
+   */
+  template< typename TYPES
+          , template<class,class, size_t> class _ElmMapper_
+          >
+  struct TupleConstructor
+    : Tuple<TYPES>
+    {
+      using TypeIdxIterator = typename IndexIter<TYPES>::Seq;
+      
+    protected:
+      template<class SRC, size_t...idx>
+      TupleConstructor (SRC values, IndexSeq<idx...>*)
+        : Tuple<TYPES> (_ElmMapper_<SRC, Tuple<TYPES>, idx>{values}...)
+        { }
+      
+      
+    public:
+      template<class SRC>
+      TupleConstructor (SRC values)
+        : TupleConstructor (values, (TypeIdxIterator*)nullptr)
+        { }
+    };
+  
+  
+  /**
+   * Generic converter to somehow extract values from the "source"
+   * type to fill and initialise a tuple of given target type.
+   * @note to be specialised. The concrete specialisation is
+   *       assumed to provide a _member template_ `Access<size_t>`,
+   *       which in turn picks and converts the value for the n-th
+   *       tuple element.
+   */
+  template<class SRC, class TAR>
+  struct ElementExtractor;
+  
+
+  template<class SRC, class TAR, size_t i>
+  using ExtractArg = typename ElementExtractor<SRC, TAR>::template Access<i>;
+  
+  
+  /**
+   * convenience shortcut to build a tuple from some suitable source data.
+   * For this to work, there needs to be a partial specialisation for
+   * (\ref ElementExtractor) to deal with the concrete source type given.
+   * @note we provide such a specialisation for `Record<GenNode>`, which
+   *       allows us to fill an (argument) tuple from a sequence of generic
+   *       data values, with run-time type compatibility check.
+   */
+  template<typename TYPES, class SRC>
+  Tuple<TYPES>
+  buildTuple (SRC values)
+  {
+    return TupleConstructor<TYPES, ExtractArg> (values);
+  }
+
 
   
   

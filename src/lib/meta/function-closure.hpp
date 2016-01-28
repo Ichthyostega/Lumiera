@@ -398,94 +398,69 @@ namespace func{
     
     
     /**
-     * Builder for a tuple instance, where only some ctor parameters
-     * are supplied, while the remaining arguments will be default constructed.
-     * The use case for this is creating of a binder, where some arguments
-     * shall be passed through (and thus be stored in the resulting closure),
-     * while other arguments are just marked as "Placeholder" with `std::_Placeholder<i>`.
+     * Builder for a tuple instance, where only some ctor parameters are supplied,
+     * while the remaining arguments will be default constructed. The use case is
+     * creating of a function binder, where some arguments shall be passed through
+     * (and thus be stored in the resulting closure), while other arguments are just
+     * marked as "Placeholder" with `std::_Placeholder<i>`.
      * These placeholder marker terms just need to be default constructed, and will
      * then be stored into the desired positions. Later on, when actually invoking
      * such a partially closed function, only the arguments marked with placeholders
-     * need to be supplied, while the other arguments will use the values "baked"
-     * into the closure.
-     * @tparam TYPES sequence of the types in the full target tuple. Some oft these
-     *               will be default constructed, some will be initialised from the ARGS
-     * @tparam ARGS sequence of the argument types, which will actually be initialised
+     * need to be supplied, while the other arguments will use the values hereby
+     * "baked" into the closure.
+     * @tparam TAR full target tuple type. Some oft the elements within this tuple will
+     *             be default constructed, some will be initialised from the SRC tuple
+     * @tparam SRC argument tuple type, for the values _actually to be initialised_ here.
      * @tparam start position within TYPES, at which the sequence of init-arguments starts;
-     *               all other positions will just be default initialised
+     *             all other positions will just be default initialised
+     * @see lib::meta::TupleConstructor
      */
-    template<typename TYPES, typename ARGS, size_t start>
-    struct PartInitTuple;
-    
-    template<typename...TYPES, typename...ARGS, size_t start>
-    struct PartInitTuple<Types<TYPES...>, Types<ARGS...>, start>
+    template<typename SRC, typename TAR, size_t start>
+    struct PartiallyInitTuple
       {
-        using TargetTuple = Tuple<Types<TYPES...>>;
-        using ArgTuple    = Tuple<Types<ARGS...>>;
+        template<size_t i>
+        using DestType = typename std::tuple_element<i, TAR>::type;
         
-        using TupleIdx = typename BuildIndexSeq<tuple_size<TargetTuple>::value>::Ascending;
         
-        static constexpr size_t len = tuple_size<ArgTuple>();
-
-        template<size_t idx>
-        using DestType = typename tuple_element<idx, TargetTuple>::type;
-        
-            
-        template<size_t idx>
+        /**
+         * define those index positions in the target tuple,
+         * where init arguments shall be used on construction.
+         * All other arguments will just be default initialised.
+         */
         static constexpr bool
-        shall_pick ()
+        useArg (size_t idx)
           {
-            return (start <= idx) and (idx < start+len); 
+            return (start <= idx)
+               and (idx < start + std::tuple_size<SRC>());
           }
-            
         
         
-        template<size_t idx, bool doPick>
-        struct IndexMapper;
         
-        template<size_t idx>
-        struct IndexMapper<idx, true>
+        template<size_t idx,   bool doPick = PartiallyInitTuple::useArg(idx)>
+        struct IndexMapper
           {
-            DestType<idx>
-            operator() (ArgTuple initArgs)
+            SRC const& initArgs;
+            
+            operator DestType<idx>()
               {
-                return get<idx-start> (initArgs);
+                return std::get<idx-start> (initArgs);
               }
           };
         
         template<size_t idx>
         struct IndexMapper<idx, false>
           {
-            DestType<idx>
-            operator() (ArgTuple)
+            SRC const& initArgs;
+            
+            operator DestType<idx>()
               {
                 return DestType<idx>();
               }
           };
-        
-        
-        template<class>
-        struct TupleBuilder;
-        
-        template<size_t...i>
-        struct TupleBuilder<IndexSeq<i...>>
-          {
-            static TargetTuple
-            unpackIntoCtor (ArgTuple initArgs)
-              {
-                return TargetTuple ((IndexMapper<i, shall_pick<i>()>()(initArgs))...);
-              }
-          };
-        
-        
-        static TargetTuple
-        create (ArgTuple initArgs)
-          {
-            return TupleBuilder<TupleIdx>::unpackIntoCtor (initArgs);
-          }
       };
     
   } // (END) impl-namespace
+  
   
   
   
@@ -609,16 +584,23 @@ namespace func{
       // and puts them at the right location, while default-constructing the remaining
       // (=placeholder)-arguments. Using this builder helper, we can finally set up
       // the argument tuples (Left/RightReplacedArgs) used for the std::bind call
-      using BuildL = PartInitTuple<LeftReplacedTypes,  ValTypes, 0      >;
-      using BuildR = PartInitTuple<RightReplacedTypes, ValTypes, ROFFSET>;
+      template<class SRC, class TAR, size_t i>
+      using IdxSelectorL = typename PartiallyInitTuple<SRC, TAR, 0>::template IndexMapper<i>;
+      
+      template<class SRC, class TAR, size_t i>
+      using IdxSelectorR = typename PartiallyInitTuple<SRC, TAR, ROFFSET>::template IndexMapper<i>;
+      
+      using BuildL = TupleConstructor<LeftReplacedTypes, IdxSelectorL>;
+      using BuildR = TupleConstructor<RightReplacedTypes, IdxSelectorR>;
+      
       
       /** Tuple to hold all argument values, starting from left.
        *  Any remaining positions behind the substitute values are occupied by binding placeholders */
-      using LeftReplacedArgs  = typename BuildL::TargetTuple;
+      using LeftReplacedArgs  = Tuple<LeftReplacedTypes>;
       
       /** Tuple to hold all argument values, aligned to the end of the function argument list.
        *  Any remaining positions before the substitute values are occupied by binding placeholders */
-      using RightReplacedArgs = typename BuildR::TargetTuple;
+      using RightReplacedArgs = Tuple<RightReplacedTypes>;
       
       
     public:
@@ -637,7 +619,7 @@ namespace func{
       static LeftReducedFunc
       bindFront (SIG& f, Tuple<ValTypes> const& arg)
         {
-          LeftReplacedArgs params (BuildL::create(arg));
+          LeftReplacedArgs params {BuildL(arg)};
           return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params);
         }
       
@@ -652,7 +634,7 @@ namespace func{
       static RightReducedFunc
       bindBack (SIG& f, Tuple<ValTypes> const& arg)
         {
-          RightReplacedArgs params (BuildR::create(arg));
+          RightReplacedArgs params {BuildR(arg)};
           return func::Apply<ARG_CNT>::template bind<RightReducedFunc> (f, params);
         }
     };
@@ -804,9 +786,11 @@ namespace func{
       
       using ReducedSig = typename FunctionTypedef<Ret,RemainingArgs>::Sig;
       
-      using BuildPreparedArgs = func::PartInitTuple<PreparedArgTypes, Types<X>, pos>;
+      template<class SRC, class TAR, size_t i>
+      using IdxSelector = typename PartiallyInitTuple<SRC, TAR, pos>::template IndexMapper<i>;
       
-      using PreparedArgTuple = typename BuildPreparedArgs::TargetTuple;
+      using BuildPreparedArgs = TupleConstructor<PreparedArgTypes, IdxSelector>;
+      
       
       
     public:
@@ -815,7 +799,7 @@ namespace func{
       static ReducedFunc
       reduced (SIG& f, Tuple<Types<X>> const& val)
         {
-          PreparedArgTuple params (BuildPreparedArgs::create(val));
+          Tuple<PreparedArgTypes> params {BuildPreparedArgs(val)};
           return func::Apply<ARG_CNT>::template bind<ReducedFunc> (f, params);
         }
     };

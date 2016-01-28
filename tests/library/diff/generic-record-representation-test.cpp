@@ -44,6 +44,7 @@ namespace diff{
 namespace test{
   
   using lumiera::error::LUMIERA_ERROR_INVALID;
+  using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   namespace {//Test fixture....
@@ -162,7 +163,7 @@ namespace test{
           CHECK (util::contains (enterprise, "Worf"));
           
           VERIFY_ERROR (INVALID, enterprise.get("warp10"));
-          VERIFY_ERROR (INVALID, enterprise.child(12));
+          VERIFY_ERROR (INDEX_BOUNDS, enterprise.child(12));
           
           cout << "enterprise = "
                << enterprise <<endl;

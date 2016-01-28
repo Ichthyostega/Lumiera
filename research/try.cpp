@@ -48,11 +48,8 @@
 typedef unsigned int uint;
 
 #include "lib/symbol.hpp"
-#include "lib/diff/gen-node.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/meta/generator.hpp"
-#include "lib/meta/typelist-manip.hpp"
-#include "lib/meta/tuple-helper.hpp"
+#include "lib/meta/tuple-record-init.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 
@@ -65,220 +62,27 @@ using lib::idi::EntryID;
 using lib::diff::Rec;
 using lib::diff::MakeRec;
 using lib::diff::GenNode;
-using lib::diff::DataValues;
 using lib::meta::Types;
 using lib::meta::Tuple;
-using lib::meta::Pick;
-using lib::meta::IndexSeq;
-using lib::meta::IndexIter;
-using lib::meta::BuildIndexSeq;
-using lib::meta::InstantiateChained;
-using lib::meta::Filter;
+using lib::meta::buildTuple;
 using lib::time::TimeVar;
 using lib::time::Time;
 
 using std::string;
 using std::tuple;
 
-namespace error = lumiera::error;
-
-using std::__not_;
-using std::__and_;
-using std::__or_;
-using std::is_constructible;
-using lib::meta::is_narrowingInit;
-using lib::meta::Strip;
-
-
-using DataCapPredicate = Variant<DataValues>::Predicate;
-
-
-template<typename TAR>
-struct GenNodeAccessor
-  : boost::noncopyable
-  {
-    
-    template<typename TY>
-    struct allow_Conversion
-      : __and_<is_constructible<TAR, TY const&>
-              ,__not_<is_narrowingInit<typename Strip<TY>::TypePlain
-                                      ,typename Strip<TAR>::TypePlain>>
-              >
-      { };
-    
-    using SupportedSourceTypes = typename Filter<DataValues::List, allow_Conversion>::List; 
-    
-    
-    
-    struct ConverterBase
-      : DataCapPredicate
-      {
-        char buffer[sizeof(TAR)];
-      };
-    
-    template<typename TY, class BA>
-    class Converter
-      : public BA
-      {
-        virtual bool
-        handle(TY const& srcElm)
-          {
-            new(&(BA::buffer)) TAR{srcElm};
-            return true;
-          };
-      };
-    
-    
-    using ConversionBuffer = InstantiateChained< SupportedSourceTypes
-                                               , Converter
-                                               , ConverterBase
-                                               >;
-    
-    ConversionBuffer converter_;
-    
-  public:
-    GenNodeAccessor (GenNode const& node)
-      : converter_()
-      {
-        if (not node.data.accept (converter_))
-            throw error::Invalid ("Unable to build «" + util::typeStr<TAR>()
-                                 +"» element from " + string(node));
-      }
-    
-    operator TAR ()
-      {
-        return *reinterpret_cast<TAR*> (&converter_.buffer);
-      }
-  };
-
-
-
-
-template<class SRC, class TAR>
-struct ElementExtractor;
-
-template<typename...TYPES>
-struct ElementExtractor<Rec, tuple<TYPES...>>
-  {
-    template<size_t i>
-    using TargetType = typename Pick<Types<TYPES...>, i>::Type;
-    
-    
-    template<size_t i>
-    struct Access
-      {
-        Rec const& values;
-        
-        operator TargetType<i> ()
-          {
-            return GenNodeAccessor<TargetType<i>>(values.child(i));
-          }
-
-      };
-    
-  };
-
-
-
-
-
-
-template< typename TYPES
-        , template<class,class, size_t> class _ElmMapper_
-        , class SEQ
-        >
-struct TupleConstructor;
-
-template< typename TYPES
-        , template<class,class, size_t> class _ElmMapper_
-        , size_t...idx
-        >
-struct TupleConstructor<TYPES, _ElmMapper_, IndexSeq<idx...>>
-  : Tuple<TYPES>
-  {
-    
-  public:
-    template<class SRC>
-    TupleConstructor (SRC values)
-      : Tuple<TYPES> (_ElmMapper_<SRC, Tuple<TYPES>, idx>{values}...)
-      { }
-  };
-
-
-template<class SRC, class TAR, size_t i>
-using PickArg = typename ElementExtractor<SRC, TAR>::template Access<i>;
-
-
-template<typename TYPES, class SRC>
-Tuple<TYPES>
-buildTuple (SRC values)
-{
-  using IndexSeq = typename IndexIter<TYPES>::Seq;
-  
-  return TupleConstructor<TYPES, PickArg, IndexSeq> (values);
-}
-
-
 ////////////////////////TODO reworked for function-closure.hpp
-
-    template<typename SRC, typename TAR, size_t start>
-    struct PartiallyInitTuple
-      {
-        template<size_t i>
-        using DestType = typename std::tuple_element<i, TAR>::type;
-        
-        
-        /**
-         * define those index positions in the target tuple,
-         * where init arguments shall be used on construction.
-         * All other arguments will just be default initialised.
-         */
-        static constexpr bool
-        useArg (size_t idx)
-          {
-            return (start <= idx)
-               and (idx < start + std::tuple_size<SRC>());
-          }
-        
-        
-        
-        template<size_t idx,   bool doPick = PartiallyInitTuple::useArg(idx)>
-        struct IndexMapper
-          {
-            SRC const& initArgs;
-            
-            operator DestType<idx>()
-              {
-                return std::get<idx-start> (initArgs);
-              }
-          };
-        
-        template<size_t idx>
-        struct IndexMapper<idx, false>
-          {
-            SRC const& initArgs;
-            
-            operator DestType<idx>()
-              {
-                return DestType<idx>();
-              }
-          };
-      };
-
-
 template<typename TYPES, typename ARGS, size_t start>
 struct SomeArgs
   {
     
     template<class SRC, class TAR, size_t i>
-    using IdxSelector = typename PartiallyInitTuple<SRC, TAR, start>::template IndexMapper<i>;
+    using IdxSelector = typename lib::meta::func::PartiallyInitTuple<SRC, TAR, start>::template IndexMapper<i>;
     
     static Tuple<TYPES>
     doIt (Tuple<ARGS> const& args)
     {
-       using IndexSeq = typename IndexIter<TYPES>::Seq;
-       
-       return TupleConstructor<TYPES, IdxSelector, IndexSeq> (args);
+       return lib::meta::TupleConstructor<TYPES, IdxSelector> (args);
     }
   };
 ////////////////////////TODO reworked for function-closure.hpp
@@ -295,11 +99,12 @@ struct SomeArgs
 void
 verifyConversions()
   {
+    using lib::meta::GenNodeAccessor;
     using std::is_arithmetic;
     using std::is_floating_point;
     using lib::meta::is_nonFloat;
     using lib::hash::LuidH;
-
+    
     
     EVAL_PREDICATE(is_arithmetic<int>       ::value)
     EVAL_PREDICATE(is_arithmetic<size_t>    ::value)
@@ -333,7 +138,7 @@ main (int, char**)
     
     Rec args = MakeRec().scope("lalü", 42);
     Rec urgs = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
-
+    
     cout << args <<endl;
     cout << urgs <<endl;
     
