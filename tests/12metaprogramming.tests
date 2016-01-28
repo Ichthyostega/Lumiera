@@ -560,6 +560,11 @@ return: 0
 END
 
 
+PLANNED "tuple initialisation from GenNode" TupleRecordInit_test <<END
+return: 0
+END
+
+
 TEST "Typelist combinations generator" GeneratorCombinations_test <<END
 out-lit: Cartesian	:
 out-lit: 	+---<1>-<2>-+

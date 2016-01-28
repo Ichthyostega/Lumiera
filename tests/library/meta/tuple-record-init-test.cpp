@@ -1,39 +1,27 @@
-/* try.cpp  -  for trying out some language features....
- *             scons will create the binary bin/try
- *
- */
+/*
+  TupleRecordInit(Test)  -  to build a tuple from a GenNode sequence
 
-// 8/07  - how to control NOBUG??
-//         execute with   NOBUG_LOG='ttt:TRACE' bin/try
-// 1/08  - working out a static initialisation problem for Visitor (Tag creation)
-// 1/08  - check 64bit longs
-// 4/08  - comparison operators on shared_ptr<Asset>
-// 4/08  - conversions on the value_type used for boost::any
-// 5/08  - how to guard a downcasting access, so it is compiled in only if the involved types are convertible
-// 7/08  - combining partial specialisation and subclasses 
-// 10/8  - abusing the STL containers to hold noncopyable values
-// 6/09  - investigating how to build a mixin template providing an operator bool()
-// 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
-// 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
-// 4/10  - pretty printing STL containers with python enabled GDB?
-// 1/11  - exploring numeric limits
-// 1/11  - integer floor and wrap operation(s)
-// 1/11  - how to fetch the path of the own executable -- at least under Linux?
-// 10/11 - simple demo using a pointer and a struct
-// 11/11 - using the boost random number generator(s)
-// 12/11 - how to detect if string conversion is possible?
-// 1/12  - is partial application of member functions possible?
-// 5/14  - c++11 transition: detect empty function object
-// 7/14  - c++11 transition: std hash function vs. boost hash
-// 9/14  - variadic templates and perfect forwarding
-// 11/14 - pointer to member functions and name mangling
-// 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
-// 8/15  - generalising the Variant::Visitor
-// 1/16  - generic to-string conversion for ostream
-// 1/16  - build tuple from runtime-typed variant container
+  Copyright (C)         Lumiera.org
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+* *****************************************************/
 
 
-/** @file try.cpp
+/** @file tuple-record-init-test.cpp
  ** Metaprogramming: how to unload the contents of a runtime typed variant sequence
  ** into ctor arguments of a (compile time typed) tuple. This involves two problems
  ** - how to combine iteration, compile-time indexing and run-time access.
@@ -47,6 +35,7 @@
 
 typedef unsigned int uint;
 
+#include "lib/test/run.hpp"
 #include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/meta/tuple-record-init.hpp"
@@ -71,6 +60,25 @@ using lib::time::Time;
 using std::string;
 using std::tuple;
 
+namespace lib  {
+namespace meta {
+namespace test {
+
+////////////////////////TODO reworked for function-closure.hpp
+template<typename TYPES, typename ARGS, size_t start>
+struct SomeArgs
+  {
+    
+    template<class SRC, class TAR, size_t i>
+    using IdxSelector = typename lib::meta::func::PartiallyInitTuple<SRC, TAR, start>::template IndexMapper<i>;
+    
+    static Tuple<TYPES>
+    doIt (Tuple<ARGS> const& args)
+    {
+       return lib::meta::TupleConstructor<TYPES, IdxSelector> (args);
+    }
+  };
+////////////////////////TODO reworked for function-closure.hpp
 
 
 
@@ -113,8 +121,10 @@ verifyConversions()
 
 
 
-int
-main (int, char**)
+  class TupleRecordInit_test : public Test
+    {
+      virtual void
+      run (Arg)
   {
     verifyConversions();
     
@@ -130,8 +140,17 @@ main (int, char**)
     cout << buildTuple<NiceTypes> (args) <<endl;
     cout << buildTuple<UgglyTypes> (urgs) <<endl;
     
+    cout << SomeArgs<UgglyTypes,NiceTypes,1>::doIt(std::make_tuple("hui", 88)) <<endl;
     
     cout <<  "\n.gulp.\n";
     
-    return 0;
   }
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (TupleRecordInit_test, "unit meta");
+  
+  
+  
+}}} // namespace lib::meta::test
