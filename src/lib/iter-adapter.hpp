@@ -519,6 +519,125 @@ namespace lib {
   
   
   
+  /**
+   * Enumerate all "numbers" within a range.
+   * This allows to build pipelines based on all
+   * numbers "for `i` from `1...N`". This range is _half open_,
+   * i.e. the start is inclusive and the end point is exclusive.
+   * @remarks basically this is `boost::irange` without any boost `#include`
+   * @tparam INT a number like type, which can be incremented and compared.
+   */
+  template<typename INT>
+  class NumIter
+    : public lib::BoolCheckable<NumIter<INT>>
+    {
+      INT i_;
+      INT e_;
+      
+    public:
+      typedef const INT* pointer;
+      typedef const INT& reference;
+      typedef const INT  value_type;
+      
+      NumIter (INT start, INT end)
+        : i_(start)
+        , e_(end)
+        { }
+      
+      template<typename X>
+      NumIter (X&& start, X&& end)
+        : i_(std::forward<X>(start))
+        , e_(std::forward<X>(end))
+        { }
+      
+      NumIter ()
+        : i_()
+        , e_()
+        { }
+      
+      // standard copy operations acceptable
+      
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      reference
+      operator*() const
+        {
+          _maybe_throw();
+          return i_;
+        }
+      
+      pointer
+      operator->() const
+        {
+          _maybe_throw();
+          return &i_;
+        }
+      
+      NumIter&
+      operator++()
+        {
+          _maybe_throw();
+          ++i_;
+          return *this;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return (i_!= INT()) && (i_ != e_);
+        }
+      
+      bool
+      empty ()    const
+        {
+          return not isValid();
+        }
+      
+      
+      /** access wrapped index elements */
+      const INT&  getPos()  const { return i_; }
+      const INT&  getEnd()  const { return e_; }
+      
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (NumIter);
+      
+      
+    private:
+      void
+      _maybe_throw()  const
+        {
+          if (!isValid())
+            _throwIterExhausted();
+        }
+    };
+  
+  
+  
+  /// Supporting equality comparisons...
+  template<class I1, class I2>
+  bool operator== (NumIter<I1> const& il, NumIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
+    
+  template<class I1, class I2>
+  bool operator!= (NumIter<I1> const& il, NumIter<I2> const& ir)  { return !(il == ir); }
+  
+  
+  
+  /** convenience function to iterate "each number" */
+  template<typename INT>
+  inline NumIter<INT>
+  eachNum (INT start, INT end)
+  {
+    return NumIter<INT> (start, end);
+  }
+  
+  
+  
+  
+  
+  
+  
   /** 
    * Helper for type rewritings:
    * get the element type for an iterator like entity

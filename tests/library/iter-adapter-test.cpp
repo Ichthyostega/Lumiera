@@ -23,6 +23,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/format-cout.hpp"
@@ -39,6 +40,7 @@ namespace lib {
 namespace test{
   
   using ::Test;
+  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   using boost::lexical_cast;
   using util::for_each;
   using util::isnil;
@@ -189,13 +191,46 @@ namespace test{
           
           useSimpleWrappedContainer ();
           
-          wrapIterRange ();
+          enumerate();
+          wrapIterRange();
           TestContainer testElms (NUM_ELMS);
           simpleUsage (testElms);
           
           iterTypeVariations (testElms);
           verifyComparisons (testElms);
           exposeDataAddresses();
+        }
+      
+      
+      /** @test enumerate all number within a range */
+      void
+      enumerate()
+        {
+          long sum=0;
+          const int N = NUM_ELMS;
+          auto i = eachNum(1, N);
+          while (i)
+            {
+              sum += *i;
+              ++i;
+            }
+          
+          CHECK (sum == (N-1)*N / 2);
+          
+          CHECK (!i);
+          VERIFY_ERROR (ITER_EXHAUST, *i );
+          VERIFY_ERROR (ITER_EXHAUST, ++i );
+          
+          i = eachNum (N, 2*N);
+          CHECK (i);
+          CHECK (N == *i);
+          ++i;
+          CHECK (N+1 == *i);
+          for ( ; i; ++i)
+            cout << "++" << *i;
+          cout << endl;
+          
+          CHECK (!i);
         }
       
       
