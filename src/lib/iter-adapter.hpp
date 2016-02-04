@@ -262,10 +262,10 @@ namespace lib {
   
   /// Supporting equality comparisons...
   template<class P1, class P2, class CON>
-  bool operator== (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return il.pos_ == ir.pos_; }
+  inline bool operator== (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return il.pos_ == ir.pos_; }
   
   template<class P1, class P2, class CON>
-  bool operator!= (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return !(il == ir); }
+  inline bool operator!= (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return !(il == ir); }
   
   
   
@@ -390,14 +390,16 @@ namespace lib {
   
   /// Supporting equality comparisons of equivalent iterators (same state type)...
   template<class T1, class T2, class ST>
-  bool operator== (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  inline bool
+  operator== (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
   {
     return (il.empty() && ir.empty())
         || (il.isValid() && ir.isValid() && il.core_ == ir.core_);
   }
   
   template<class T1, class T2, class ST>
-  bool operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  inline bool
+  operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
   { 
     return not (il == ir);
   }
@@ -510,10 +512,10 @@ namespace lib {
   
   /// Supporting equality comparisons...
   template<class I1, class I2>
-  bool operator== (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
+  inline bool operator== (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
     
   template<class I1, class I2>
-  bool operator!= (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return !(il == ir); }
+  inline bool operator!= (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return !(il == ir); }
   
   
   
@@ -617,10 +619,10 @@ namespace lib {
   
   /// Supporting equality comparisons...
   template<class I1, class I2>
-  bool operator== (NumIter<I1> const& il, NumIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
+  inline bool operator== (NumIter<I1> const& il, NumIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
     
   template<class I1, class I2>
-  bool operator!= (NumIter<I1> const& il, NumIter<I2> const& ir)  { return !(il == ir); }
+  inline bool operator!= (NumIter<I1> const& il, NumIter<I2> const& ir)  { return !(il == ir); }
   
   
   
@@ -737,10 +739,10 @@ namespace lib {
   
   /// Supporting equality comparisons...
   template<class I1, class I2>
-  bool operator== (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
+  inline bool operator== (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
     
   template<class I1, class I2>
-  bool operator!= (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return not (il == ir); }
+  inline bool operator!= (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return not (il == ir); }
   
   
   
