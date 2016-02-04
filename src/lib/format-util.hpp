@@ -121,6 +121,20 @@ namespace util {
     return CON {move(storage)};
   }
   
+  /** convert to string as transforming step in a pipeline
+   * @param src a "Lumiera Forward Iterator" with arbitrary result type
+   * @return a "Lumiera Forward Iterator" with string elements
+   * @see FormatHelper_test::checkStringify()
+   */
+  template<class IT>
+  inline lib::TransformIter<IT, string>
+  stringify (IT const& src)
+  {
+    using Val =  typename IT::value_type;
+    
+    return lib::transformIterator(src, util::toString<Val>);
+  }
+  
   
   
   namespace { // helper to build range iterator on demand
@@ -175,13 +189,9 @@ namespace util {
   join (CON&& coll, string const& delim =", ")
   {
     using Coll = typename lib::meta::Strip<CON>::TypePlain;
-    using Val =  typename Coll::value_type;
-    
-    std::function<string(Val const&)> toString = [] (Val const& val) { return util::toString(val); };
-    
     _RangeIter<Coll> range(std::forward<CON>(coll));
-    auto strings = lib::transformIterator(range.iter, toString);
     
+    auto strings = stringify (range.iter);
     if (!strings) return "";
     
     std::ostringstream buffer;

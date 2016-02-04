@@ -42,14 +42,6 @@ using std::to_string;
 
 
 namespace util {
-  template<class IT>
-  inline lib::TransformIter<IT, string>
-  stringify (IT const& src)
-  {
-    using Val =  typename IT::value_type;
-    
-    return transformIterator(src, util::toString<Val>);
-  }
 namespace test {
   
   namespace { // test fixture...
@@ -141,6 +133,7 @@ namespace test {
       void
       checkStringify()
         {
+          // use as transformer within an (iterator) pipeline
           auto ss = stringify (eachNum (1.11, 10.2));
           
           CHECK (ss);
@@ -153,6 +146,13 @@ namespace test {
             res += s;
           
           CHECK (res == "..2.113.114.115.116.117.118.119.1110.11");
+          
+          
+          using VecS = vector<string>;
+          
+          // another variant: collect arbitrary number of arguments
+          VecS vals = stringify<VecS> (short(12), 345L, "67", '8');
+          CHECK (vals == VecS({"12", "345", "67", "8"}));
         }
       
       
