@@ -33,6 +33,7 @@
 
 using lib::transformIterator;
 using lib::iter_stl::eachElm;
+using lib::eachNum;
 using util::_Fmt;
 
 using std::vector;
@@ -41,6 +42,14 @@ using std::to_string;
 
 
 namespace util {
+  template<class IT>
+  inline lib::TransformIter<IT, string>
+  stringify (IT const& src)
+  {
+    using Val =  typename IT::value_type;
+    
+    return transformIterator(src, util::toString<Val>);
+  }
 namespace test {
   
   namespace { // test fixture...
@@ -95,6 +104,7 @@ namespace test {
       run (Arg)
         {
           check2String();
+          checkStringify();
           checkStringJoin();
           checkPrefixSuffix();
         }
@@ -121,6 +131,28 @@ namespace test {
                 +toString (345L)
                 +toString ("67")
                 +toString ('8')         == "12345678"    ); // these go through lexical_cast<string>
+        }
+      
+      
+      /** @test inline to-string converter function
+       *        - can be used as transforming iterator
+       *        - alternatively accept arbitrary arguments
+       */
+      void
+      checkStringify()
+        {
+          auto ss = stringify (eachNum (1.11, 10.2));
+          
+          CHECK (ss);
+          CHECK ("1.11" == *ss);
+          ++ss;
+          CHECK ("2.11" == *ss);
+          
+          string res{".."};
+          for (auto s : ss)
+            res += s;
+          
+          CHECK (res == "..2.113.114.115.116.117.118.119.1110.11");
         }
       
       
