@@ -539,7 +539,7 @@ namespace lib {
     public:
       typedef const INT* pointer;
       typedef const INT& reference;
-      typedef const INT  value_type;
+      typedef       INT  value_type;
       
       NumIter (INT start, INT end)
         : i_(start)
