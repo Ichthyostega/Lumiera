@@ -273,8 +273,8 @@ namespace util {
     template<typename X>
     struct _shall_convert_toString
       {
-        enum{ value = ! _shall_format_directly<X>::value
-                   && lib::meta::can_convertToString<X>::value
+        enum{ value = not _shall_format_directly<X>::value
+                      and lib::meta::can_convertToString<X>::value
             };
       };
     
@@ -357,6 +357,16 @@ namespace util {
       dump (const char* cString, Implementation& impl)
         {
           format (cString? cString : BOTTOM_INDICATOR, impl);
+        }
+    };
+  
+  template<>
+  struct _Fmt::Converter<bool>
+    {
+      static void
+      dump (bool yes, Implementation& impl)
+        {
+          format (yes? "true":"false", impl);
         }
     };
   
