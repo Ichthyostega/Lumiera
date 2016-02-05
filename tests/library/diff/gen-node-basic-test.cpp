@@ -76,7 +76,7 @@ namespace test{
    *       - object-like elements can be represented by using a diff:Record<GenNode>
    *         as payload. Obviously, the resulting data structure type is recursive.
    *       - a shortcut is provided to simplify defining empty baseline objects
-   *       - there is a special notation to create "id references", which can
+   *       - a special notation is provided to create "id references", which
    *         can be used to stand-in for an "object" (Record). This shortcut
    *         notation is relevant for the tree diff language -- used within
    *         Lumiera as "External Tree Description" of object networks.
@@ -222,7 +222,7 @@ namespace test{
           CHECK (hamID.getHash() == ham.idi.getHash());
           CHECK (contains (string(hamID), "spam")); // Lovely spam!
           
-          Ref ref1("egg bacon sausage and spam");
+          Ref ref1("egg bacon sausage and spam"); // empty placeholder
           Ref ref2(ham);
           
           CHECK (ref1.idi == ham.idi);
@@ -328,6 +328,32 @@ namespace test{
           CHECK (0 == iter.level());
           CHECK (isnil (iter));
           
+          
+          
+          // another kind of iteration: shallow child data sequence
+          // note: exposing the DataCap of each child
+          auto child = childData(n);
+          CHECK (!isnil (child));
+          CHECK ('*' == child->get<char>());
+          
+          ++child;
+          CHECK ("★" == child->get<string>());
+          
+          ++child;
+          CHECK (almostEqual (PI, child->get<double>()));
+          
+          ++child;
+          CHECK ("ham"  == child->get<Rec>().getType());
+          CHECK ("eggs" == child->get<Rec>().child(0).data.get<string>());
+          
+          ++child;
+          CHECK (TimeSpan(Time::ZERO, FSecs(23,25)) == child->get<TimeSpan>());
+          
+          ++child;
+          CHECK (42 == child->get<int64_t>());
+          
+          ++child;
+          CHECK (isnil (child));
         }
       
       

@@ -192,6 +192,18 @@ namespace diff{
       X& get();
       template<typename X>
       X const& get()  const;
+      
+      
+      /** visit _children_ of a nested `Record<GenNode>` */
+      Rec::scopeIter
+      childIter()  const
+        {
+          const Rec* rec = unConst(this)->maybeGet<Rec>();
+          if (!rec)
+            return Rec::scopeIter();
+          else
+            return rec->scope();
+        }
     };
   
   
@@ -262,7 +274,7 @@ namespace diff{
       
       
       
-      /** @internal diagnostics helper. Include format-helper.cpp on use */
+      /** @internal diagnostics helper */
       operator string()  const
         {
           return "GenNode-"+string(idi)+"-"+string(data);
@@ -308,6 +320,27 @@ namespace diff{
       iterator begin() const;
       iterator end()        ;
       iterator end()   const;
+      
+      
+      using ChildDataIter = TransformIter<Rec::scopeIter, DataCap const&>;
+      
+      /** visit the _data_ of nested child elements
+       * @return an iterator over the DataCap elements of all children,
+       *         in case this GenNode actually holds a Record.
+       *         Otherwise an empty iterator.
+       * @note this iterator visits _only_ the children, which are
+       *         by definition unnamed. It does _not_ visit attributes.
+       */
+      friend ChildDataIter
+      childData (GenNode const& n)
+      {
+        return ChildDataIter{ n.data.childIter()
+                            , [](GenNode const& child) ->DataCap const&
+                                {
+                                  return child.data;
+                                }
+                            };
+      }
       
       
       friend string
