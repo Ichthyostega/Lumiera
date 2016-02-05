@@ -191,9 +191,21 @@ namespace diff{
       // all default copy operations acceptable
       
       
-      /** for diagnostic purpose: include format-util.hpp */
+      /** for diagnostic purpose */
       operator std::string()  const;
       
+      
+      size_t
+      attribSize()  const
+        {
+          return attribs_.size();
+        }
+      
+      size_t
+      childSize()  const
+        {
+          return children_.size();
+        }
       
       bool
       empty()  const
@@ -201,6 +213,7 @@ namespace diff{
           return attribs_.empty()
               && children_.empty();
         }
+      
       
       string
       getType()  const

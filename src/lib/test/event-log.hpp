@@ -712,6 +712,12 @@ namespace test{
           return *this;
         }
       
+      EventLog&
+      call (const char* target, const char* function, ArgSeq&& args)
+        {
+          return call (string(target), string(function), std::forward<ArgSeq>(args));
+        }
+      
       /** Log a function call with arbitrary arguments */
       template<typename...ARGS>
       EventLog&

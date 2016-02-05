@@ -46,6 +46,7 @@
 
 #include "proc/control/command.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/symbol.hpp"
 
 #include <utility>
 #include <string>
@@ -63,6 +64,7 @@ namespace interact {
 
   using lib::diff::GenNode;
   using lib::diff::Rec;
+  using lib::Symbol;
   using std::string;
   
   
@@ -108,6 +110,12 @@ namespace interact {
       getID()  const
         {
           return cmdID_;
+        }
+      
+      bool
+      canExec()  const
+        {
+          return proc::control::Command::canExec (Symbol(cmdID_.c_str()));
         }
       
       operator string()  const

@@ -342,6 +342,17 @@ namespace diff{
                             };
       }
       
+      friend ChildDataIter
+      childData (Rec::scopeIter const& scopeIter)
+      {
+        return ChildDataIter{ scopeIter
+                            , [](GenNode const& child) ->DataCap const&
+                                {
+                                  return child.data;
+                                }
+                            };
+      }
+      
       
       friend string
       name (GenNode const& node)

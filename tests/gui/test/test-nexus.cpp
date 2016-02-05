@@ -45,6 +45,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/itertools.hpp"
 #include "test/test-nexus.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/ctrl/nexus.hpp"
@@ -64,8 +65,11 @@ using std::string;
 
 using lib::Symbol;
 using lib::Variant;
+using lib::append_all;
+using lib::transformIterator;
 using lib::diff::Rec;
 using lib::diff::GenNode;
+using lib::diff::DataCap;
 using lib::diff::DataValues;
 using lib::idi::instanceTypeID;
 using lib::test::EventLog;
@@ -471,7 +475,7 @@ namespace test{
         handle (Rec const& argData) override
           {
             command_.bindArg (argData);
-            log_.event("TestNexus", "bound command arguments "+string(argData));
+            log_.call ("TestNexus", "bind-command", enumerate(argData));
             return true;
           }
         
@@ -484,6 +488,17 @@ namespace test{
           }
         
         
+        
+        EventLog::ArgSeq
+        enumerate (Rec const& argData)
+          {
+            EventLog::ArgSeq strings;
+            strings.reserve (argData.childSize());
+            append_all (transformIterator (childData (argData.scope())
+                                          , util::toString<DataCap>)
+                       ,strings);
+            return strings;
+          }
         
         static Command
         retrieveCommand (GenNode const& cmdMsg)
