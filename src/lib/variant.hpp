@@ -128,6 +128,12 @@ namespace lib {
         using Type = X;
       };
     
+    template<typename TYPES, size_t len>
+    struct CanBuildFrom<const char [len], Node<string, TYPES>> ///< esp. allow to build string from char literal
+      {
+        using Type = string;
+      };
+    
     template<typename X, typename T,typename TYPES>
     struct CanBuildFrom<X, Node<T, TYPES>>
       {
