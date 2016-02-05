@@ -546,11 +546,6 @@ namespace test{
   
   
   
-  bool
-  Nexus::canInvoke(Cmd cmd)
-  {
-    UNIMPLEMENTED ("verify the given command is already bound and ready for invocation");
-  }
   
   bool
   Nexus::wasInvoked (Cmd cmd)

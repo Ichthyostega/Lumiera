@@ -101,7 +101,6 @@ namespace test{
       template<typename...ARGS>
       static Cmd prepareMockCmd();
       
-      static bool canInvoke(Cmd);
       static bool wasInvoked (Cmd);
       
       template<typename...ARGS>
@@ -116,6 +115,18 @@ namespace test{
   
   
   
+  /**
+   * Setup of test fixture: prepare a mocked Proc-Layer command,
+   * which accepts arguments with the denoted types.
+   * @note this call installs the command mock into the Proc-Layer
+   *       command registry, where it remains in place until shutdown.
+   *       The command uses a synthetic command ID, which is available
+   *       through the returned InvocationTrail. Besides, this call
+   *       also installs a command handler into the Test-Nexus,
+   *       causing "`act`" messages to be processed and logged.
+   * @return InvocationTrail, the UI-representation of a Proc-Layer command.
+   *         This can be used to trigger command actions on any model::Tangible.
+   */
   template<typename...ARGS>
   inline interact::InvocationTrail
   Nexus::prepareMockCmd()
@@ -124,11 +135,30 @@ namespace test{
     return Cmd {PlaceholderCommand<ARGS...>::fabricateNewInstance(getLog())};
   }
   
+  
+  /**
+   * Test predicate: verify by string match
+   * that the denoted command was actually bound against the given concrete arguments.
+   * Actually, we'll match against the Test-Nexus log, where the processing of the
+   * corresponding "bind" message should have logged all parameter values
+   * @remarks The difficulty here is that the whole command machinery
+   *    was made to work opaque (type-erased), and that the bind message
+   *    is also opaque, to allow to send arbitrary binding data. The remedy
+   *    is to rely on diff::DataCap's `operator string()`, so we can at least
+   *    match with the transport format of the Data. A precise and complete
+   *    matching is only possible after our probe-command was actually invoked,
+   *    since we're controlling the implementation of that probe-command and
+   *    can thus record arbitrary data embedded therein.
+   */
   template<typename...ARGS>
   inline bool
   Nexus::wasBound (Cmd cmd, ARGS const& ...args)
   {
-    UNIMPLEMENTED("verify the denoted command was actually bound against the given concrete Arguments (String-match)");
+    using lib::diff::DataCap;
+    
+    return getLog()
+            .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd.getID())
+            .beforeCall("bind-command").on("TestNexus").arg(string(DataCap(args))...);
   }
   
   template<typename...ARGS>

@@ -202,15 +202,15 @@ namespace test {
           mock.prepareCommand(cmd, Rec({text, luid})); ////////TODO clip,
           
           CHECK (cmd.canExec());
+          CHECK (gui::test::Nexus::wasBound(cmd, text, luid)); ////////TODO clip,
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           cout << "____Nexus-Log_________________\n"
                << util::join(gui::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
-          CHECK (gui::test::Nexus::wasBound(cmd, text, luid)); ////////TODO clip,
           CHECK (not gui::test::Nexus::wasInvoked(cmd));
           CHECK (not gui::test::Nexus::wasInvoked(cmd, text, luid)); ////////TODO clip,
-          CHECK (not gui::test::Nexus::wasBound(cmd, "lololo"));
+          CHECK (not gui::test::Nexus::wasBound(cmd, string("lololo")));
           
           
           mock.issueCommand(cmd);
