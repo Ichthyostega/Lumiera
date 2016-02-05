@@ -449,7 +449,7 @@ namespace test{
         void
         performExec (CommandImpl& command)  const override
           {
-            log_.call ("TestNexus", "exec");
+            log_.call ("MockHandlingPattern", "exec", command);
             command.invokeCapture();
             command.invokeOperation();
           }
@@ -457,7 +457,7 @@ namespace test{
         void
         performUndo (CommandImpl& command)  const override
           {
-            log_.call ("TestNexus", "undo");
+            log_.call ("MockHandlingPattern", "undo", command);
             command.invokeUndo();
           }
         

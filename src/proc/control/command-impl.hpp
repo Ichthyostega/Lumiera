@@ -47,6 +47,7 @@
 #include "proc/control/command-mutation.hpp"
 #include "lib/typed-allocation-manager.hpp"
 #include "lib/bool-checkable.hpp"
+#include "lib/format-string.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
@@ -58,6 +59,7 @@
 namespace proc {
 namespace control {
   
+  using util::_Fmt;
   using std::function;
   using std::shared_ptr;
   
@@ -217,6 +219,15 @@ namespace control {
       canUndo()  const    ///< state check: has undo state been captured? 
         {
           return isValid() && pClo_->isCaptured();
+        }
+      
+      operator string()  const
+        {
+          return _Fmt("Cmd|valid:%s, exec:%s, undo:%s |%s")
+                     % isValid()
+                     % canExec()
+                     % canUndo()
+                     % (pClo_? string(*pClo_) : util::FAILURE_INDICATOR);
         }
       
       
