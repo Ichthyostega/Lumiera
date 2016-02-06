@@ -1,5 +1,5 @@
 /*
-  COMMAND-CLOSURE.hpp  -  defining execution targets and parameters for commands
+  COMMAND-OP-CLOSURE.hpp  -  implementation the closure for a command operation
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,52 +21,20 @@
 */
 
 
-/** @file command-closure.hpp
- ** A closure enabling self-contained execution of commands within the ProcDispatcher.
- ** After defining a proc-layer command, at some point the function arguments
- ** of the contained operation are "closed" by storing concrete argument values.
- ** These values will be fed later on to the operation when the command is invoked.
- ** 
- ** Most of the command machinery accesses this function closure through the generic
- ** interface CmdClosure, while, when defining a command, subclasses typed to the specific
- ** function arguments are created. Especially, there is an StorageHolder template,
- ** which is used to define the storage for the concrete arguments. This StorageHolder
- ** internally contains an OpClosure<SIG> instance (where SIG is the signature of the
- ** actual command operation function), which implements the invocation of the
- ** operation function with the stored argument tuple.
- ** 
- ** \par Command Closure and Lifecycle
- ** When defining a command, Mutation objects are to be created based on a concrete function.
- ** These are stored embedded into a type erasure container, thus disposing the specific type
- ** information of the function and function arguments. Each command needs an Mutation object
- ** holding the command operation and an UndoMutation holding the undo functor. 
- ** 
- ** Later on, any command needs to be made ready for execution by binding it to a specific
- ** execution environment, which especially includes the target objects to be mutated by the
- ** command. Effectively, this means "closing" the Mutation (and UNDO) functor(s)) with the
- ** actual function arguments. These arguments are stored embedded within an StorageHolder,
- ** which thereby acts as closure. Besides, the StorageHolder also has to accommodate for
- ** storage holding the captured UNDO state (memento). Internally the StorageHolder
- ** has to keep track of the actual types, thus allowing to re-construct the concrete
- ** function signature when closing the Mutation.
- ** 
- ** Finally, when invoking the command, it passes a \c CmdClosure& to the Mutation object,
- ** which allows the embedded function to be called with the concrete arguments. Besides
- ** just invoking it, a command can also be used like a prototype object. To support this
- ** use case it is possible to re-bind to a new set of command arguments, and to create
- ** a clone copy of the argument (holder) without disclosing the actual types involved. 
+/** @file command-op-closure.hpp
+ ** Implementation of the concrete (sub)-closure of a command, responsible for
+ ** invoking the actual command operation with the concrete (binding) arguments. 
  ** 
  ** @see Command
- ** @see ProcDispatcher
+ ** @see command-closure.hpp
  ** @see command-storage-holder.hpp
- ** @see command-op-closure.hpp
  **
  */
 
 
 
-#ifndef CONTROL_COMMAND_CLOSURE_H
-#define CONTROL_COMMAND_CLOSURE_H
+#ifndef CONTROL_COMMAND_OP_CLOSURE_H
+#define CONTROL_COMMAND_OP_CLOSURE_H
 
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/typelist.hpp"
@@ -230,7 +198,7 @@ namespace control {
    * This includes holding the invocation parameter tuple
    */
   template<typename SIG>
-  class OpClosureCmdClosure
+  class OpClosure
     : public AbstractClosure
     {
       using Args = typename FunctionSignature< function<SIG> >::Args;
@@ -329,4 +297,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif /*CONTROL_COMMAND_CLOSURE_H*/
+#endif /*CONTROL_COMMAND_OP_CLOSURE_H*/
