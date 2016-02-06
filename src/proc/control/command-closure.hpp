@@ -146,6 +146,9 @@ namespace control {
   
   inline ostream& operator<< (ostream& os, const CmdClosure& clo) { return os << string(clo); }
   
+  
+  
+  
   class AbstractClosure
     : public CmdClosure
     {
@@ -221,6 +224,10 @@ namespace control {
   
   
   
+  /**
+   * closure to deal with the actual command operation.
+   * This includes holding the invocation parameter tuple
+   */
   template<typename SIG>
   class OpClosure
     : public AbstractClosure
@@ -232,9 +239,15 @@ namespace control {
       
       ParamStorageTuple params_;
       
-    public:
-      typedef Tuple<Args> ArgTuple;
+    protected:
+      OpClosure()
+        : params_(Tuple<Args>())
+        { }
       
+    public:
+      using ArgTuple = Tuple<Args>;
+      
+      explicit
       OpClosure (ArgTuple const& args)
         : params_(args)
         { }

@@ -67,13 +67,6 @@ namespace control {
     struct MissingArguments
       : OpClosure<SIG>
       {
-        typedef typename OpClosure<SIG>::ArgTuple ArgTuple;
-        
-        MissingArguments ()
-          : OpClosure<SIG> (ArgTuple ())
-          { }
-        
-      private:
         virtual bool isValid ()  const override { return false; }
       };
     
@@ -81,14 +74,7 @@ namespace control {
     template<typename SIG, typename MEM>
     struct UntiedMemento
       : MementoTie<SIG,MEM>
-      {
-        typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
-        typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
-        
-        UntiedMemento()
-          : MementoTie<SIG,MEM> (function<SIG_undo>(), function<SIG_cap>() )
-          { }
-      };
+      { };
   
   } // (END) impl details / empty state marker objects
   

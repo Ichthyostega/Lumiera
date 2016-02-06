@@ -110,6 +110,11 @@ namespace control {
         }
       
       
+    protected:
+      MementoTie()
+        : MementoTie (function<SIG_undo>(), function<SIG_cap>())
+        { }
+      
     public:
       
       /** creates an execution context tying together the provided functions.
