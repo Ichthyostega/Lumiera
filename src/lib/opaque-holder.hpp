@@ -72,6 +72,7 @@
 #include "lib/access-casted.hpp"
 #include "lib/util.hpp"
 
+#include <utility>
 #include <type_traits>
 #include <boost/noncopyable.hpp>
 
@@ -614,85 +615,23 @@ namespace lib {
       
       
       /** Abbreviation for placement new */ 
-#define LIB_InPlaceBuffer_CTOR(_CTOR_CALL_) \
-          destroy();                         \
-          try                                 \
-            {                                  \
-              static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");\
-                                                 \
-              return *new(&buf_) _CTOR_CALL_;     \
-            }                                      \
-          catch (...)                               \
-            {                                        \
-              placeDefault();                         \
-              throw;                                   \
-            }
-      
-      
-      template<class TY>
+      template<class TY, typename...ARGS>
       TY&
-      create ()
+      create (ARGS&& ...args)
         {
-          LIB_InPlaceBuffer_CTOR ( TY() )
+          static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");
+          
+          destroy();
+          try {
+              return *new(&buf_) TY (std::forward<ARGS> (args)...);
+            }
+          catch (...)
+            {
+              placeDefault();
+              throw;
+            }
         }
       
-      
-      template<class TY, typename A1>
-      TY&                                               //___________________________________________
-      create (A1& a1)                                  ///< place object of type TY, using 1-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2)                          ///< place object of type TY, using 2-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2, A3& a3)                  ///< place object of type TY, using 3-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2, A3& a3, A4& a4)          ///< place object of type TY, using 4-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3,a4) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              , typename A5
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2, A3& a3, A4& a4, A5& a5)  ///< place object of type TY, using 5-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3,a4,a5) )
-        }
       
       
       
