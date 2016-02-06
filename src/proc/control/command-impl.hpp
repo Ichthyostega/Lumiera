@@ -45,12 +45,10 @@
 #include "proc/control/command.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/command-mutation.hpp"
-#include "lib/typed-allocation-manager.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/format-string.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/operators.hpp>
 #include <memory>
 #include <functional>
 

@@ -37,17 +37,15 @@
 #define CONTROL_COMMAND_OP_CLOSURE_H
 
 #include "lib/bool-checkable.hpp"
-#include "lib/meta/typelist.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
-#include "lib/meta/function-erasure.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/tuple-record-init.hpp"
 #include "lib/meta/maybe-compare.hpp"
-#include "lib/format-cout.hpp"
-#include "lib/util.hpp"
+#include "proc/control/command-closure.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "lib/typed-allocation-manager.hpp"
+#include "lib/format-cout.hpp"
 
 #include <memory>
 #include <functional>
@@ -64,67 +62,15 @@ namespace control {
   using lib::meta::Tuple;
   using lib::meta::BuildTupleAccessor;
   using lib::meta::func::TupleApplicator;
-  using lib::meta::FunErasure;
-  using lib::meta::StoreFunction;
   using lib::meta::NullType;
   using lib::meta::buildTuple;
   
   using lib::meta::equals_safeInvoke;
   using lib::TypedAllocationManager;
-  using util::unConst;
   using std::function;
   using std::ostream;
   using std::string;
   
-  
-  
-  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
-  
-  
-  /** 
-   * A neutral container internally holding 
-   * the functor used to implement the Command
-   */
-  typedef FunErasure<StoreFunction> CmdFunctor;
-  
-  class CommandImplCloneBuilder;
-  
-  
-  class CmdClosure;
-  typedef std::shared_ptr<CmdClosure> PClo;
-  
-  
-  
-  /** Interface */
-  class CmdClosure
-    : public lib::BoolCheckable<CmdClosure>
-    {
-    public:
-      virtual ~CmdClosure() {}
-      
-      virtual operator string() const                      =0;
-      virtual bool isValid ()   const                      =0;    ///< does this closure hold a valid argument tuple?
-      virtual bool isCaptured () const                     =0;    ///< does this closure hold captured UNDO state?
-      virtual bool equals (CmdClosure const&)  const       =0;    ///< is equivalent to the given other closure?
-      virtual void bindArguments (Arguments&)              =0;    ///< store a set of parameter values within this closure
-      virtual void bindArguments (lib::diff::Rec const&)   =0;    ///< store a set of parameter values, passed as GenNode sequence
-      virtual void invoke (CmdFunctor const&)              =0;    ///< invoke functor using the stored parameter values
-      virtual void accept (CommandImplCloneBuilder&) const =0;    ///< assist with creating clone closure without disclosing concrete type
-    };
-  
-  
-  inline ostream& operator<< (ostream& os, const CmdClosure& clo) { return os << string(clo); }
-  
-  
-  
-  
-  class AbstractClosure
-    : public CmdClosure
-    {
-      bool isValid()    const override { return false; }
-      bool isCaptured() const override { return false; }
-      void accept (CommandImplCloneBuilder&) const override {}
-    };
   
   
   

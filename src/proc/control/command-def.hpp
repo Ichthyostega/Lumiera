@@ -57,7 +57,7 @@
 #include "include/logging.h"
 #include "lib/symbol.hpp"
 #include "proc/control/command.hpp"
-#include "proc/control/command-impl.hpp"                   /////TODO: any chance to get rid of this import here??
+#include "proc/control/command-impl.hpp"                // note: at command definition site we need to know the full type
 #include "proc/control/command-registry.hpp"
 #include "proc/control/command-signature.hpp"
 #include "proc/control/command-mutation.hpp"
