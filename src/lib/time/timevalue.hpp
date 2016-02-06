@@ -487,6 +487,10 @@ namespace time {
         , dur_(duration_in_secs)
         { }
       
+      TimeSpan()
+        : TimeSpan(Time::ZERO, Time::ZERO)
+        { }
+      
       
       Duration&
       duration() 
