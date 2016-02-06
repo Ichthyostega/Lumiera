@@ -1,5 +1,5 @@
 /*
-  COMMAND-ARGUMENT-HOLDER.hpp  -  specifically typed container for storage of command arguments
+  COMMAND-STORAGE-HOLDER.hpp  -  specifically typed container for storage of command arguments
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,10 @@
 */
 
 
-/** @file command-argument-holder.hpp
+/** @file command-storage-holder.hpp
  ** A passive container record holding the actual command arguments & UNDO state.
+ ** Effectively, this is the top level CmdClosure Implementation, which in turn
+ ** delegates to sub-closures for the operation arguments and for UNDO management.
  ** While all command objects themselves have a common type (type erasure),
  ** the actual argument tuple and the state memento for UNDO can't. Especially,
  ** the size of arguments and memento will depend on their respective types.
@@ -39,8 +41,8 @@
 
 
 
-#ifndef CONTROL_COMMAND_ARGUMENT_HOLDER_H
-#define CONTROL_COMMAND_ARGUMENT_HOLDER_H
+#ifndef CONTROL_COMMAND_STORAGE_HOLDER_H
+#define CONTROL_COMMAND_STORAGE_HOLDER_H
 
 #include "lib/typed-allocation-manager.hpp"
 #include "proc/control/command-closure.hpp"
@@ -59,16 +61,16 @@ namespace control {
   using std::string;
   
   
-  namespace { // empty state marker objects for ArgumentHolder
+  namespace { // empty state marker objects for StorageHolder
     
     template<typename SIG>
     struct MissingArguments
-      : Closure<SIG>
+      : OpClosure<SIG>
       {
-        typedef typename Closure<SIG>::ArgTuple ArgTuple;
+        typedef typename OpClosure<SIG>::ArgTuple ArgTuple;
         
         MissingArguments ()
-          : Closure<SIG> (ArgTuple ())
+          : OpClosure<SIG> (ArgTuple ())
           { }
         
       private:
@@ -94,24 +96,25 @@ namespace control {
   
   
   /**
-   * Specifically typed CmdClosure, which serves for
+   * This is "the" top level CmdClosure implementation.
+   * It is a specifically typed CmdClosure, which serves for
    * actually allocating storage to hold the command arguments
    * and the UNDO state (memento) for Proc-Layer commands.
-   * Both the contained components within ArgumentHolder
+   * Both the contained components within StorageHolder
    * can be in \em empty state; there are no distinct
-   * lifecycle limitations. ArgumentHolder is part
+   * lifecycle limitations. StorageHolder is part
    * of Proc-Layer command's implementation
    * and should not be used standalone.
    */
   template<typename SIG, typename MEM>
-  class ArgumentHolder
+  class StorageHolder
     : public AbstractClosure
     {
       /** copy construction allowed(but no assignment)*/
-      ArgumentHolder& operator= (ArgumentHolder const&);
+      StorageHolder& operator= (StorageHolder const&);
       
       
-      using ArgHolder = Closure<SIG>;
+      using ArgHolder = OpClosure<SIG>;
       using MemHolder = MementoTie<SIG,MEM>;
       
       using ArgumentBuff = InPlaceBuffer<ArgHolder, sizeof(ArgHolder), MissingArguments<SIG>>;
@@ -193,18 +196,18 @@ namespace control {
       
       
       
-      /** per default, all data within ArgumentHolder
+      /** per default, all data within StorageHolder
        *  is set up in \em empty state. Later on, the
        *  command arguments are to be provided by #bind ,
        *  whereas the undo functions will be wired by #tie
        */
-      ArgumentHolder ()
+      StorageHolder ()
         : arguments_()
         , memento_()
         { }
       
       /** copy construction allowed(but no assignment) */
-      ArgumentHolder (ArgumentHolder const& oAh)
+      StorageHolder (StorageHolder const& oAh)
         : arguments_()
         , memento_()
         {
@@ -229,7 +232,7 @@ namespace control {
       bool empty ()   const { return !arguments_->isValid(); }
       
       
-      /** store a new argument tuple within this ArgumentHolder,
+      /** store a new argument tuple within this StorageHolder,
        *  discarding any previously stored arguments */
       void
       storeTuple (ArgTuple const& argTup)
@@ -274,14 +277,14 @@ namespace control {
       bool
       equals (CmdClosure const& other)  const
         {
-          const ArgumentHolder* toCompare = dynamic_cast<const ArgumentHolder*> (&other);
+          const StorageHolder* toCompare = dynamic_cast<const StorageHolder*> (&other);
           return (toCompare)
               && (*this == *toCompare);
         }
       
       /// Supporting equality comparisons...
       friend bool
-      operator== (ArgumentHolder const& a1, ArgumentHolder const& a2)
+      operator== (StorageHolder const& a1, StorageHolder const& a2)
         {
           return (a1.arguments_->isValid() == a2.arguments_->isValid())
               && (*a1.arguments_ == *a2.arguments_)
@@ -291,7 +294,7 @@ namespace control {
         }
       
       friend bool
-      operator!= (ArgumentHolder const& a1, ArgumentHolder const& a2)
+      operator!= (StorageHolder const& a1, StorageHolder const& a2)
         {
           return not (a1 == a2);
         }
@@ -300,4 +303,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif
+#endif /*CONTROL_COMMAND_STORAGE_HOLDER_H*/

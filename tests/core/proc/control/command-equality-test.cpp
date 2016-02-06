@@ -26,7 +26,7 @@
 #include "proc/control/command-def.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/argument-erasure.hpp"
-#include "proc/control/command-argument-holder.hpp"
+#include "proc/control/command-storage-holder.hpp"
 #include "proc/control/memento-tie.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/format-cout.hpp"
@@ -84,7 +84,7 @@ namespace test    {
     typedef function<Sig_undo> Fun_u;
     
     using ArgTuple  = Tuple<Types<char>>;
-    using ArgHolder = Closure<Sig_oper>;
+    using ArgHolder = OpClosure<Sig_oper>;
     using MemHolder = MementoTie<Sig_oper, string>;
   }
   
@@ -181,9 +181,9 @@ namespace test    {
           CHECK (a1 == a2);
           CHECK (a2 == a1);
           
-          typedef ArgumentHolder<Sig_oper,string> AHImpl;
-          AHImpl abuff1;
-          AHImpl abuff2;
+          typedef StorageHolder<Sig_oper,string> Storage;
+          Storage abuff1;
+          Storage abuff2;
           CHECK (abuff1 == abuff2);
           abuff1.bindArguments(newArgs);
           CHECK (abuff1 != abuff2);

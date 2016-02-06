@@ -29,9 +29,9 @@
  ** 
  ** Most of the command machinery accesses this function closure through the generic
  ** interface CmdClosure, while, when defining a command, subclasses typed to the specific
- ** function arguments are created. Especially, there is an ArgumentHolder template,
- ** which is used to define the storage for the concrete arguments. This ArgumentHolder
- ** internally contains an Closure<SIG> instance (where SIG is the signature of the
+ ** function arguments are created. Especially, there is an StorageHolder template,
+ ** which is used to define the storage for the concrete arguments. This StorageHolder
+ ** internally contains an OpClosure<SIG> instance (where SIG is the signature of the
  ** actual command operation function), which implements the invocation of the
  ** operation function with the stored argument tuple.
  ** 
@@ -44,9 +44,9 @@
  ** Later on, any command needs to be made ready for execution by binding it to a specific
  ** execution environment, which especially includes the target objects to be mutated by the
  ** command. Effectively, this means "closing" the Mutation (and UNDO) functor(s)) with the
- ** actual function arguments. These arguments are stored embedded within an ArgumentHolder,
- ** which thereby acts as closure. Besides, the ArgumentHolder also has to accommodate for
- ** storage holding the captured UNDO state (memento). Internally the ArgumentHolder
+ ** actual function arguments. These arguments are stored embedded within an StorageHolder,
+ ** which thereby acts as closure. Besides, the StorageHolder also has to accommodate for
+ ** storage holding the captured UNDO state (memento). Internally the StorageHolder
  ** has to keep track of the actual types, thus allowing to re-construct the concrete
  ** function signature when closing the Mutation.
  ** 
@@ -222,7 +222,7 @@ namespace control {
   
   
   template<typename SIG>
-  class Closure
+  class OpClosure
     : public AbstractClosure
     {
       using Args = typename FunctionSignature< function<SIG> >::Args;
@@ -235,7 +235,7 @@ namespace control {
     public:
       typedef Tuple<Args> ArgTuple;
       
-      Closure (ArgTuple const& args)
+      OpClosure (ArgTuple const& args)
         : params_(args)
         { }
       
@@ -243,7 +243,7 @@ namespace control {
       PClo
       createClone (TypedAllocationManager& storageManager)
         {
-          return storageManager.create<Closure> (*this);
+          return storageManager.create<OpClosure> (*this);
         }
       
       /** assign a new parameter tuple to this */
@@ -285,10 +285,10 @@ namespace control {
       operator string()  const override
         {
           std::ostringstream buff;
-          params_.dump (buff << "Closure(" );
+          params_.dump (buff << "OpClosure(" );
           
           string dumped (buff.str());
-          if (8 < dumped.length())
+          if (10 < dumped.length())
             // remove trailing comma...
             return dumped.substr (0, dumped.length()-1) +")";
           else
@@ -299,13 +299,13 @@ namespace control {
       bool isValid ()   const override { return true; }
       
       /// Supporting equality comparisons...
-      friend bool operator== (Closure const& c1, Closure const& c2)  { return compare (c1.params_, c2.params_); }
-      friend bool operator!= (Closure const& c1, Closure const& c2)  { return not (c1 == c2); }
+      friend bool operator== (OpClosure const& c1, OpClosure const& c2)  { return compare (c1.params_, c2.params_); }
+      friend bool operator!= (OpClosure const& c1, OpClosure const& c2)  { return not (c1 == c2); }
       
       bool
       equals (CmdClosure const& other)  const override
         {
-          const Closure* toCompare = dynamic_cast<const Closure*> (&other);
+          const OpClosure* toCompare = dynamic_cast<const OpClosure*> (&other);
           return (toCompare)
               && (*this == *toCompare);
         }

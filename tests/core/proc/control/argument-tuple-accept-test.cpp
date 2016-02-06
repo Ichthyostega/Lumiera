@@ -92,7 +92,7 @@ namespace test    {
    * @test Build a test object, which accepts a bind(...) call
    *       with specifically typed arguments.
    *       
-   * @see  control::CommandArgumentHolder
+   * @see  control::CommandStorageHolder
    */
   class ArgumentTupleAccept_test : public Test
     {

@@ -58,7 +58,7 @@ namespace test    {
    *       This includes verifying sane allocation management.
    * @note this test covers a very specific low-level perspective, but on an
    *       integration level, involving TypedAllocationManager, CommandRegistry,
-   *       CommandImpl, CmdClosure, ArgumentHolder, UndoMutation, MementoTie.
+   *       CommandImpl, CmdClosure, StorageHolder, UndoMutation, MementoTie.
    *       Closes: Ticket #298
    * 
    * @see Command

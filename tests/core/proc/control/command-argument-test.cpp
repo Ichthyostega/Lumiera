@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/control/command-argument-holder.hpp"
+#include "proc/control/command-storage-holder.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
@@ -181,7 +181,7 @@ namespace test    {
   /***********************************************************************//**
    * @test Check storage handling of the command parameters and state memento.
    *
-   * @see  control::CommandArgumentHolder
+   * @see  control::CommandStorageHolder
    * @see  command-basic-test.hpp
    */
   class CommandArgument_test : public Test
@@ -217,12 +217,12 @@ namespace test    {
       void
       createTuples (ArgTuples& tup)
         {
-          typedef ArgumentHolder<void(),            bool>  A1;
-          typedef ArgumentHolder<void(int),         void*> A2;
-          typedef ArgumentHolder<void(int,TimeVar), int>   A3;
-          typedef ArgumentHolder<void(int,TimeVar), Sint5> A4;
+          typedef StorageHolder<void(),            bool>  A1;
+          typedef StorageHolder<void(int),         void*> A2;
+          typedef StorageHolder<void(int,TimeVar), int>   A3;
+          typedef StorageHolder<void(int,TimeVar), Sint5> A4;
           
-          typedef ArgumentHolder<void(TTime,Tstr,int), Tstr>  A5;
+          typedef StorageHolder<void(TTime,Tstr,int), Tstr>  A5;
           
           
           A1* arg1 = new A1(); tup.manage (arg1);
@@ -277,7 +277,7 @@ namespace test    {
       void
       checkArgumentComparison ()
         {
-          ArgumentHolder<void(int,int), int> one, two;
+          StorageHolder<void(int,int), int> one, two;
           CHECK (one == two);               // empty, identically typed argument holders -->equal
           
           one.tie(dummyU,dummyC)
@@ -324,8 +324,8 @@ namespace test    {
       simulateCmdLifecycle()
         {
           typedef void SIG_do(Tracker<TimeVar>, Tracker<string>, int);
-          typedef ArgumentHolder<SIG_do, Tracker<string> >   Args;
-          typedef MementoTie<SIG_do, Tracker<string> >  MemHolder;
+          using Args      = StorageHolder<SIG_do, Tracker<string>>;
+          using MemHolder = MementoTie<SIG_do, Tracker<string>>;
           
           Args args;
           CHECK (isnil (args));

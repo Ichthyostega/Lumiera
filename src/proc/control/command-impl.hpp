@@ -51,7 +51,6 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
-
 #include <memory>
 #include <functional>
 
@@ -71,6 +70,14 @@ namespace control {
    * - command operation functor
    * - a functor to UNDO the command effect
    * - closure holding actual parameters and UNDO state
+   * @remarks the ctor is templated on the concrete type of operation arguments.
+   *    This information is erased (discarded) immediately after construction.
+   *    Usually, CommandImpl instances are created
+   *    [within the registry](\ref CommandRegistry::newCommandImpl()).
+   *    The implementation type of the closure is `StorageHolder<SIG_OPER,Mem>`
+   * @see CmdClosure Closure interface
+   * @see StorageHolder
+   * @see Mutation
    */
   class CommandImpl
     : public lib::BoolCheckable<CommandImpl
@@ -205,20 +212,20 @@ namespace control {
       isValid()  const    ///< validity self-check: is basically usable.
         {
           return bool(pClo_) 
-              && HandlingPattern::get(defaultPatt_).isValid();
+             and HandlingPattern::get(defaultPatt_).isValid();
         }
       
       bool
       canExec()  const    ///< state check: sufficiently defined to be invoked 
         {
           return isValid()
-              && pClo_->isValid();
+             and pClo_->isValid();
         }
       
       bool
       canUndo()  const    ///< state check: has undo state been captured? 
         {
-          return isValid() && pClo_->isCaptured();
+          return isValid() and pClo_->isCaptured();
         }
       
       operator string()  const
@@ -236,11 +243,11 @@ namespace control {
       operator== (CommandImpl const& ci1, CommandImpl const& ci2)
       {
         return (ci1.do_ == ci2.do_)
-//          && (ci1.undo_ == ci2.undo_)                     // causes failure regularly, due to the missing equality on boost::function. See Ticket #294
-            && (ci1.defaultPatt_ == ci2.defaultPatt_)
-            && (ci1.canExec() == ci2.canExec())
-            && (ci1.canUndo() == ci2.canUndo())
-            && (ci1.pClo_->equals(*ci2.pClo_))
+//         and (ci1.undo_ == ci2.undo_)                     // causes failure regularly, due to the missing equality on boost::function. See Ticket #294
+           and (ci1.defaultPatt_ == ci2.defaultPatt_)
+           and (ci1.canExec() == ci2.canExec())
+           and (ci1.canUndo() == ci2.canUndo())
+           and (ci1.pClo_->equals(*ci2.pClo_))
              ;
       }
       

@@ -36,7 +36,7 @@
  ** 
  ** @see CommandRegistry#createCloneImpl
  ** @see CommandImpl
- ** @see ArgumentHolder#createClone
+ ** @see StorageHolder#createClone
  ** @see command-clone-builder-test.cpp
  **
  */
@@ -145,7 +145,7 @@ namespace control {
       
       
       /** to be executed from within the specifically typed context
-       *  of a concrete command ArgumentHolder; allocate a clone copy
+       *  of a concrete command StorageHolder; allocate a clone copy
        *  and then prepare a new UNDO-Functor, which is correctly wired
        *  with the memento holder within this new \em clone closure.
        *  After that point, these prepared parts can be retrieved
@@ -173,7 +173,7 @@ namespace control {
         }
       
       
-      /** after visitation: provide cloned ArgumentHolder,
+      /** after visitation: provide cloned StorageHolder,
        *  but already stripped down to the generic usage type */
       PClo const&
       clonedClosuere ()

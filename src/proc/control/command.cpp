@@ -109,6 +109,8 @@ namespace control {
   
   
   Command::~Command() { }
+  CommandImpl::~CommandImpl() { }
+  
   
   
   
@@ -206,7 +208,7 @@ namespace control {
   
   /** @note this bit of implementation from CommandRegistry rather
    *  heavily relies on implementation details from CommandImpl and
-   *  the help of CommandImplCloneBuilder and ArgumentHolder. It's
+   *  the help of CommandImplCloneBuilder and StorageHolder. It's
    *  implemented within command.cpp to keep the includes of
    *  the handling patterns clean. */
   shared_ptr<CommandImpl>
