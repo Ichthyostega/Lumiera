@@ -122,6 +122,12 @@ namespace control {
         : TUP(tup)
         { }
       
+      /** we deliberately support immutable types as command arguments */
+      ParamAccessor& operator= (ParamAccessor const&)  =delete;
+      ParamAccessor& operator= (ParamAccessor&&)       =delete;
+      ParamAccessor (ParamAccessor const&)             =default;
+      
+      
       ////////////////////TODO the recursion-end of the access operations goes here
       
       ostream&
@@ -178,7 +184,7 @@ namespace control {
       void
       bindArguments (Arguments& args)  override
       {
-        params_ = args.get<ArgTuple>();
+        //params_ = args.get<ArgTuple>();
       }
       
       /** assign a new set of parameter values to this.
@@ -189,7 +195,7 @@ namespace control {
       void
       bindArguments (lib::diff::Rec const&  paramData)  override
       {
-        params_ = buildTuple<Args> (paramData);
+        //params_ = buildTuple<Args> (paramData);
       }
       
       

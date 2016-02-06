@@ -182,7 +182,7 @@ namespace test {
         {
           MARK_TEST_FUN
           gui::test::Nexus::startNewLog();
-          auto cmd = gui::test::Nexus::prepareMockCmd<string, LuidH>(); //TimeSpan  /////////////TODO
+          auto cmd = gui::test::Nexus::prepareMockCmd<string, TimeSpan, LuidH>();
           
           MockElm mock("uiElm");
           
@@ -201,19 +201,19 @@ namespace test {
           CHECK (not cmd.canExec());
           
           
-          mock.prepareCommand(cmd, Rec({text, luid})); ////////TODO clip,
+          mock.prepareCommand(cmd, Rec({text, clip, luid}));
           
           CHECK (cmd.canExec());
-          CHECK (gui::test::Nexus::wasBound(cmd, text, luid)); ////////TODO clip,
+          CHECK (gui::test::Nexus::wasBound(cmd, text, clip, luid));
           CHECK (not gui::test::Nexus::wasInvoked(cmd));
-          CHECK (not gui::test::Nexus::wasInvoked(cmd, text, luid)); ////////TODO clip,
+          CHECK (not gui::test::Nexus::wasInvoked(cmd, text, clip, luid));
           CHECK (not gui::test::Nexus::wasBound(cmd, "lololo"));
           
           
           mock.issueCommand(cmd);
           
           CHECK (gui::test::Nexus::wasInvoked(cmd));
-          CHECK (gui::test::Nexus::wasInvoked(cmd, text, luid)); ////////TODO clip,
+          CHECK (gui::test::Nexus::wasInvoked(cmd, text, clip, luid));
           CHECK (not gui::test::Nexus::wasInvoked(cmd, " huh ", clip, luid));
           CHECK (not gui::test::Nexus::wasInvoked(cmd, text, clip));
           

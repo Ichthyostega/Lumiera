@@ -138,10 +138,7 @@ namespace control {
       virtual void
       bindArguments (Arguments& args)  override
         {
-          if (!arguments_->isValid())
-            storeTuple (args.get<ArgTuple>());
-          else
-            arguments_->bindArguments (args);
+          storeTuple (args.get<ArgTuple>());
         }
       
       /** assign a new set of parameter values to this.
@@ -152,10 +149,7 @@ namespace control {
       virtual void
       bindArguments (lib::diff::Rec const&  paramData)  override
         {
-          if (!arguments_->isValid())
-            storeTuple (buildTuple<Args> (paramData));
-          else
-            arguments_->bindArguments (paramData);
+          storeTuple (buildTuple<Args> (paramData));
         }
       
       
