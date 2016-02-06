@@ -694,8 +694,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -718,16 +717,15 @@
       wie Session- und State-Managment, Commands etc.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1453545968166" ID="ID_399884859" MODIFIED="1453546095559" TEXT="Command-Handler">
-<icon BUILTIN="pencil"/>
+<node CREATED="1453545968166" ID="ID_399884859" MODIFIED="1454718147309" TEXT="Command-Handler">
 <node CREATED="1453546129537" ID="ID_1926242869" MODIFIED="1453546137220" TEXT="empf&#xe4;ngt &quot;act&quot;-Nachrichten">
 <node CREATED="1453546367201" ID="ID_1473684366" MODIFIED="1453546575633" TEXT="&quot;bang&quot; -&gt; HandlingPattern">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1453546381255" ID="ID_1252400934" MODIFIED="1453546392585" TEXT="&quot;bind&quot; -&gt; Bindung">
+<node CREATED="1453546381255" ID="ID_1252400934" MODIFIED="1454711253322" TEXT="&quot;bind&quot; -&gt; Bindung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1453546393573" ID="ID_857178151" MODIFIED="1453546568844" TEXT="Paradigmen-Mismatch">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -762,8 +760,7 @@
       Compiler-Bug <font color="#c80219">Gcc-#63723</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1453639033250" ID="ID_1669831951" LINK="http://stackoverflow.com/questions/26705199/how-can-i-write-a-type-trait-to-check-if-a-type-is-convertible-to-another-by-a-n" MODIFIED="1453639049952" TEXT="s.a. Stackoverflow"/>
 <node CREATED="1453639055478" ID="ID_1560466275" MODIFIED="1453639078468">
@@ -776,8 +773,7 @@
       gel&#246;st in GCC-5 --&#160;<i>backport unwahrscheinlich</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1453639119142" ID="ID_1472487058" MODIFIED="1453639126177" TEXT="inzwischen hartgecodet">
 <icon BUILTIN="clanbomber"/>
@@ -800,8 +796,7 @@
       pro m&#246;glichem Umwandlungs-Pfad
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1453590628419" ID="ID_1314031268" MODIFIED="1453590885601">
@@ -817,8 +812,7 @@
       und layern nur die tats&#228;chlich m&#246;glichen Umwandlungen dr&#252;ber
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1453590667630" ID="ID_792450888" MODIFIED="1453590699782" TEXT="&#xfc;berpr&#xfc;ft: mit -O3 und strip bleibt erstaunlich wenig &#xfc;brig"/>
@@ -831,8 +825,12 @@
 <icon BUILTIN="hourglass"/>
 </node>
 <node CREATED="1453546183561" ID="ID_1080090125" MODIFIED="1453546187900" TEXT="Mock-Variante">
-<node CREATED="1453546195240" ID="ID_1905175534" MODIFIED="1453546196971" TEXT="loggen"/>
-<node CREATED="1453546197727" ID="ID_606855270" MODIFIED="1453546207402" TEXT="verifizierbar machen"/>
+<node CREATED="1453546195240" ID="ID_1905175534" MODIFIED="1454711242234" TEXT="loggen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1453546197727" ID="ID_606855270" MODIFIED="1454711245274" TEXT="verifizierbar machen">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1453546215117" ID="ID_31965862" MODIFIED="1453546220236" TEXT="pseudo-Command">
 <icon BUILTIN="button_ok"/>
 </node>

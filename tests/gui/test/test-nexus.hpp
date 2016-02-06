@@ -146,9 +146,9 @@ namespace test{
    *    is also opaque, to allow to send arbitrary binding data. The remedy
    *    is to rely on diff::DataCap's `operator string()`, so we can at least
    *    match with the transport format of the Data. A precise and complete
-   *    matching is only possible after our probe-command was actually invoked,
-   *    since we're controlling the implementation of that probe-command and
-   *    can thus record arbitrary data embedded therein.
+   *    matching would only possible after actually invoking our probe-command,
+   *    since we're controlling the implementation of that probe-command.
+   *    Right now (2016) this implementation was deemed adequate
    */
   template<typename...ARGS>
   inline bool
@@ -158,14 +158,45 @@ namespace test{
     
     return getLog()
             .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd.getID())
-            .beforeCall("bind-command").on("TestNexus").arg(string(DataCap(args))...);
+            .beforeCall("bind-command").on("TestNexus")
+                                       .arg(string(DataCap(args))...);
   }
   
+  /**
+   * Test predicate: verify actual command invocation by string match on test log.
+   * This match ensures that
+   * - first the installed command handler processed the '`act`' message
+   * - then the installed (mock) command handling pattern triggered invocation
+   * - and finally our installed mock command function received the call
+   * @remarks again arguments are verified by string match; but now we're looking
+   *    on the concrete arguments as seen from within the command `operate` function.
+   *    These may differ from the transport values, which are used to initialise
+   *    the concrete arguments.
+   */
   template<typename...ARGS>
   inline bool
   Nexus::wasInvoked (Cmd cmd, ARGS const& ...args)
   {
-    UNIMPLEMENTED("verify the denoted command was indeed invoked and received the given concrete Arguments (String-match)");
+    return getLog()
+            .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd.getID())
+            .beforeCall("exec-command").on("TestNexus").arg(cmd.getID())
+            .beforeCall("exec").on("MockHandlingPattern")
+            .beforeCall("operate").arg(util::toString(args)...)
+            .beforeEvent("TestNexus", "SUCCESS handling "+cmd.getID());
+  }
+  
+  /**
+   * Test predicate: verify at least one actual invocation happened for the given commend,
+   * without matching any concrete arguments
+   */
+  inline bool
+  Nexus::wasInvoked (Cmd cmd)
+  {
+    return getLog()
+            .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd.getID())
+            .beforeCall("exec-command").on("TestNexus").arg(cmd.getID())
+            .beforeCall("operate")
+            .beforeEvent("TestNexus", "SUCCESS handling "+cmd.getID());
   }
   
   

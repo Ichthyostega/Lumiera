@@ -435,6 +435,14 @@ namespace test{
   
   namespace { // install a diagnostic dummy-command-handler
     
+    /**
+     * Compact diagnostic dummy command handler.
+     * Used as disposable one-way off object.
+     * Is both a lib::Variant visitor (to receive the
+     * contents of the "`act`" message, and implements
+     * the HandlingPattern interface to receive and
+     * invoke the prepared command closure.
+     */
     class SimulatedCommandHandler
       : public Variant<DataValues>::Predicate
       , public HandlingPattern
@@ -468,7 +476,7 @@ namespace test{
           }
         
         
-        /* ==== CommandHandler ==== */
+        /* ==== CommandHandler / Visitor ==== */
         
         /** Case-1: the message provides parameter data to bind to the command */
         bool
@@ -483,7 +491,7 @@ namespace test{
         bool
         handle (int const&) override
           {
-            log_.event("TestNexus", "trigger "+string(command_));
+            log_.call ("TestNexus", "exec-command", command_);
             return command_.exec (*this);
           }
         
@@ -514,21 +522,10 @@ namespace test{
           {
             log_.event("TestNexus", "HANDLING Command-Message for "+string(command_));
             
-            if (not cmdMsg.data.accept (*this))
+            if (cmdMsg.data.accept (*this))
+              log_.event("TestNexus", "SUCCESS handling "+command_.getID());
+            else
               log_.warn(_Fmt("FAILED to handle command-message %s in test-mode") % cmdMsg);
-          }
-        
-        bool
-        invokedExec()
-          {
-            return log_.verifyCall("exec").on(this);
-          }
-        
-        bool
-        invokedUndo()
-          {
-            return log_.verifyCall("undo").on(this)
-                       .afterCall("exec");
           }
       };
 
@@ -545,13 +542,6 @@ namespace test{
   }
   
   
-  
-  
-  bool
-  Nexus::wasInvoked (Cmd cmd)
-  {
-    UNIMPLEMENTED ("verify the given command was indeed invoked at least once");
-  }
   
   
   

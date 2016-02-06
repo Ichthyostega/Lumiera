@@ -176,10 +176,12 @@ namespace test {
         }
       
       
+      /** @test perform the full command binding and invocation protocol */
       void
       commandInvocation ()
         {
           MARK_TEST_FUN
+          gui::test::Nexus::startNewLog();
           auto cmd = gui::test::Nexus::prepareMockCmd<string, LuidH>(); //TimeSpan  /////////////TODO
           
           MockElm mock("uiElm");
@@ -203,14 +205,9 @@ namespace test {
           
           CHECK (cmd.canExec());
           CHECK (gui::test::Nexus::wasBound(cmd, text, luid)); ////////TODO clip,
-          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
-          cout << "____Nexus-Log_________________\n"
-               << util::join(gui::test::Nexus::getLog(), "\n")
-               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           CHECK (not gui::test::Nexus::wasInvoked(cmd));
           CHECK (not gui::test::Nexus::wasInvoked(cmd, text, luid)); ////////TODO clip,
-          CHECK (not gui::test::Nexus::wasBound(cmd, string("lololo")));
+          CHECK (not gui::test::Nexus::wasBound(cmd, "lololo"));
           
           
           mock.issueCommand(cmd);
@@ -228,6 +225,10 @@ namespace test {
           
           CHECK (not gui::test::Nexus::wasInvoked(cmdX));
           CHECK (not gui::test::Nexus::wasInvoked(cmdY));
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(gui::test::Nexus::getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
       
@@ -235,6 +236,11 @@ namespace test {
       captureStateMark ()
         {
           UNIMPLEMENTED ("message to capture interface state");
+          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
+          cout << "____Nexus-Log_________________\n"
+               << util::join(gui::test::Nexus::getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
         }
       
       

@@ -79,17 +79,28 @@ namespace test{
    * suitably to be bound into a Proc-Layer command. The actual
    * command "operation" just logs invocation into a statically
    * obtained \ref EventLog Event-Log instance. 
+   * @note by design, in Lumiera the actual command functions are stateless.
+   *       For this reason, the command framework provides no way to associate
+   *       an _instance_ of some kind of "command object" with the (conceptual)
+   *       command binding or prototype, thus we're unable to log anything
+   *       beyond the concrete argument types and values on invocation.
    */
   template<typename...ARGS>
   class PlaceholderCommand
     {
       static lib::test::EventLog log_;
       
-      /** @internal ID-string specific for the instance `ARGS` */
+      /** @internal unique ID-string specific for the instance `ARGS` */
       static string
-      thisTypeInstance()
+      uniqueTypeInstance()
         {
           return lib::idi::generateExtendedID<PlaceholderCommand>();
+        }
+      
+      static string
+      fullTypeID()
+        {
+          return lib::idi::typeFullID<PlaceholderCommand>();
         }
       
       
@@ -97,7 +108,7 @@ namespace test{
       static void
       operate (ARGS ...args)
         {
-          log_.call(thisTypeInstance(), "operate", std::forward<ARGS>(args)...);
+          log_.call(fullTypeID(), "operate", std::forward<ARGS>(args)...);
         }
       
       static string
@@ -110,7 +121,7 @@ namespace test{
       static void
       undo (ARGS ..., string memento)
         {
-          log_.call(thisTypeInstance(), "undo", memento);
+          log_.call(fullTypeID(), "undo", memento);
         }
       
       
@@ -119,7 +130,7 @@ namespace test{
       fabricateNewInstance (lib::test::EventLog const& invocationLog)
         {
           log_ = invocationLog;
-          return proc::control::CommandDef(internedString (thisTypeInstance()))
+          return proc::control::CommandDef(internedString (uniqueTypeInstance()))
                                  .operation(PlaceholderCommand::operate)
                                  .captureUndo(PlaceholderCommand::capture)
                                  .undoOperation(PlaceholderCommand::undo);
@@ -129,7 +140,7 @@ namespace test{
   
   
   template<typename...ARGS>
-  lib::test::EventLog  PlaceholderCommand<ARGS...>::log_{"test-dummy-"+thisTypeInstance()};
+  lib::test::EventLog  PlaceholderCommand<ARGS...>::log_{"test-dummy-"+fullTypeID()};
 
   
   
