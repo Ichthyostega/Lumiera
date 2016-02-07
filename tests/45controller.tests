@@ -46,9 +46,9 @@ END
 
 
 TEST "Command functor and UNDO functor" CommandMutation_test <<END
-out: empty placeholder closure: OpClosure\(0\)
-out: param values: OpClosure\(23\)
-out: saved state: 11
+out-lit: empty placeholder closure: Command-Closure{ arguments=unbound }
+out-lit: param values: Command-Closure{ arguments=OpClosure(23) }
+out-lit: saved state: 11
 return: 0
 END
 

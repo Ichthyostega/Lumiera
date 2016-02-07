@@ -468,7 +468,10 @@ namespace func{
   
   /**
    * Closure-creating template.
-   * @note we take functor objects \em and parameters by reference
+   * The instance is linked (reference) to a given concrete argument tuple.
+   * A functor with a matching signature may then either be _closed_ over
+   * this argument values, or even be invoked right away with theses arguments.
+   * @warning we take functor objects _and parameters_ by reference
    */
   template<typename SIG>
   class TupleApplicator

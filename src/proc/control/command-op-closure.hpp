@@ -126,6 +126,7 @@ namespace control {
       ParamAccessor& operator= (ParamAccessor const&)  =delete;
       ParamAccessor& operator= (ParamAccessor&&)       =delete;
       ParamAccessor (ParamAccessor const&)             =default;
+      ParamAccessor (ParamAccessor&&)                  =default;
       
       
       ////////////////////TODO the recursion-end of the access operations goes here
@@ -151,7 +152,6 @@ namespace control {
    */
   template<typename SIG>
   class OpClosure
-    : public AbstractClosure
     {
       using Args = typename FunctionSignature< function<SIG> >::Args;
       using Builder = BuildTupleAccessor<ParamAccessor, Args>;
@@ -159,44 +159,35 @@ namespace control {
       using ParamStorageTuple =typename Builder::Product;
       
       ParamStorageTuple params_;
-      
-    protected:
-      OpClosure()
-        : params_(Tuple<Args>())
-        { }
+      bool activated_;
       
     public:
       using ArgTuple = Tuple<Args>;
       
+      
+      OpClosure()
+        : params_(Tuple<Args>())
+        , activated_(false)
+        { }
+      
       explicit
       OpClosure (ArgTuple const& args)
         : params_(args)
+        , activated_(true)
         { }
       
-      /** create a clone copy of this, without disclosing the exact type */
-      PClo
-      createClone (TypedAllocationManager& storageManager)
+      /** we deliberately support immutable types as command arguments */
+      OpClosure& operator= (OpClosure const&)  =delete;
+      OpClosure& operator= (OpClosure&&)       =delete;
+      OpClosure (OpClosure const&)             =default;
+      OpClosure (OpClosure&&)                  =default;
+      
+      
+      bool
+      isValid ()  const
         {
-          return storageManager.create<OpClosure> (*this);
+          return activated_;
         }
-      
-      /** assign a new parameter tuple to this */
-      void
-      bindArguments (Arguments& args)  override
-      {
-        //params_ = args.get<ArgTuple>();
-      }
-      
-      /** assign a new set of parameter values to this.
-       * @note the values are passed packaged into a sequence
-       *       of GenNode elements. This is the usual way
-       *       arguments are passed from the UI-Bus
-       */
-      void
-      bindArguments (lib::diff::Rec const&  paramData)  override
-      {
-        //params_ = buildTuple<Args> (paramData);
-      }
       
       
       /** Core operation: use the embedded argument tuple for invoking a functor
@@ -208,7 +199,7 @@ namespace control {
        *         Thus this function can't be const.
        */
       void
-      invoke (CmdFunctor const& unboundFunctor)  override
+      invoke (CmdFunctor const& unboundFunctor)
         {
           TupleApplicator<SIG> apply_this_arguments(params_);
           apply_this_arguments (unboundFunctor.getFun<SIG>());
@@ -216,7 +207,7 @@ namespace control {
       
       
       
-      operator string()  const override
+      operator string()  const
         {
           std::ostringstream buff;
           params_.dump (buff << "OpClosure(" );
@@ -230,19 +221,9 @@ namespace control {
         }
       
       
-      bool isValid ()   const override { return true; }
-      
       /// Supporting equality comparisons...
       friend bool operator== (OpClosure const& c1, OpClosure const& c2)  { return compare (c1.params_, c2.params_); }
       friend bool operator!= (OpClosure const& c1, OpClosure const& c2)  { return not (c1 == c2); }
-      
-      bool
-      equals (CmdClosure const& other)  const override
-        {
-          const OpClosure* toCompare = dynamic_cast<const OpClosure*> (&other);
-          return (toCompare)
-              && (*this == *toCompare);
-        }
     };
   
   

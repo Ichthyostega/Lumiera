@@ -110,14 +110,14 @@ namespace control {
        *  of the embedded FunErasure objects holding the command operation
        *  and undo functors, and the vtable of the embedded CmdClosure */
       template<typename ARG>
-      CommandImpl (shared_ptr<ARG> pArgHolder
+      CommandImpl (shared_ptr<ARG> pStorageHolder
                   ,_TY (Func_op) const& operFunctor
                   ,_TY (Func_cap) const& captFunctor
                   ,_TY (Func_undo) const& undoFunctor
                   )
         : do_(operFunctor)
-        , undo_(pArgHolder->tie (undoFunctor, captFunctor))
-        , pClo_(pArgHolder)
+        , undo_(pStorageHolder->tie (undoFunctor, captFunctor))
+        , pClo_(pStorageHolder)
         , defaultPatt_(HandlingPattern::defaultID())
         { }
       

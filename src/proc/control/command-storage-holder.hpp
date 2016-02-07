@@ -61,23 +61,6 @@ namespace control {
   using std::string;
   
   
-  namespace { // empty state marker objects for StorageHolder
-    
-    template<typename SIG>
-    struct MissingArguments
-      : OpClosure<SIG>
-      {
-        virtual bool isValid ()  const override { return false; }
-      };
-    
-    
-    template<typename SIG, typename MEM>
-    struct UntiedMemento
-      : MementoTie<SIG,MEM>
-      { };
-  
-  } // (END) impl details / empty state marker objects
-  
   
   
   
@@ -94,17 +77,13 @@ namespace control {
    */
   template<typename SIG, typename MEM>
   class StorageHolder
-    : public AbstractClosure
+    : public CmdClosure
     {
-      /** copy construction allowed(but no assignment)*/
-      StorageHolder& operator= (StorageHolder const&);
-      
-      
       using ArgHolder = OpClosure<SIG>;
       using MemHolder = MementoTie<SIG,MEM>;
       
-      using ArgumentBuff = InPlaceBuffer<ArgHolder, sizeof(ArgHolder), MissingArguments<SIG>>;
-      using  MementoBuff = InPlaceBuffer<MemHolder, sizeof(MemHolder), UntiedMemento<SIG,MEM>>;
+      using ArgumentBuff = InPlaceBuffer<ArgHolder>;
+      using  MementoBuff = InPlaceBuffer<MemHolder>;
       
       using ArgTuple = typename ArgHolder::ArgTuple;
       using Args     = typename Types<ArgTuple>::Seq;
@@ -169,7 +148,7 @@ namespace control {
       operator string()  const override
         {
           return "Command-State{ arguments="
-               + (*arguments_? string(*arguments_) : "unbound")
+               + (arguments_->isValid()? string(*arguments_) : "unbound")
                + ", "+string(*memento_)+"}"
                ;
         }
@@ -186,7 +165,10 @@ namespace control {
         , memento_()
         { }
       
-      /** copy construction allowed(but no assignment) */
+      /** copy construction allowed(but no assignment).
+       * @remarks rationale is to support immutable argument values,
+       *          which means default/copy construction is OK
+       */
       StorageHolder (StorageHolder const& oAh)
         : arguments_()
         , memento_()
@@ -197,6 +179,12 @@ namespace control {
           // memento can be cloned as-is, irrespective of activation state 
           memento_.template  create<MemHolder> (*oAh.memento_);
         }
+      
+      
+      /** copy construction allowed(but no assignment)*/
+      StorageHolder& operator= (StorageHolder const&)  = delete;
+      
+      
       
       /** assist with creating a clone copy;
        *  this results in invocation of the copy ctor */
@@ -259,7 +247,7 @@ namespace control {
         {
           const StorageHolder* toCompare = dynamic_cast<const StorageHolder*> (&other);
           return (toCompare)
-              && (*this == *toCompare);
+             and (*this == *toCompare);
         }
       
       /// Supporting equality comparisons...

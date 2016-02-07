@@ -101,9 +101,6 @@ namespace control {
   class CommandImplCloneBuilder;
   
   
-  class CmdClosure;
-  typedef std::shared_ptr<CmdClosure> PClo;
-  
   
   
   /** Interface */
@@ -124,17 +121,7 @@ namespace control {
     };
   
   
-  
-  
-  
-  class AbstractClosure
-    : public CmdClosure
-    {
-      bool isValid()    const override { return false; }
-      bool isCaptured() const override { return false; }
-      void accept (CommandImplCloneBuilder&) const override {}
-    };
-  
+  using PClo = std::shared_ptr<CmdClosure>;
   
   
   
