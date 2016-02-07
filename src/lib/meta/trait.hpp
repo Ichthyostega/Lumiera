@@ -77,6 +77,10 @@ namespace lib{
   
   namespace hash {
     class LuidH;
+  }
+  namespace time {
+    class TimeValue;
+    class Duration;
 }}
 namespace proc {
 namespace mobject{
@@ -384,6 +388,9 @@ namespace meta {
   TRAIT_IS_NARROWING (uint16_t, ushort)
   
   TRAIT_IS_NARROWING (double, float)
+  
+  TRAIT_IS_NARROWING (double, lib::time::TimeValue)
+  TRAIT_IS_NARROWING (double, lib::time::Duration)
   
 #undef TRAIT_IS_NARROWING
   

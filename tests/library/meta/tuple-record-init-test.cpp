@@ -42,7 +42,7 @@ using lib::diff::GenNode;
 using lib::meta::Types;
 using lib::meta::Tuple;
 using lib::meta::buildTuple;
-using lib::time::TimeVar;
+using lib::time::Duration;
 using lib::time::Time;
 using lib::hash::LuidH;
 
@@ -93,7 +93,7 @@ namespace test {
       show_simpleUsage()
         {
           using NiceTypes = Types<string, int>;
-          using UgglyTypes = Types<EntryID<long>, string, int, int64_t, double, TimeVar>;
+          using UgglyTypes = Types<EntryID<long>, string, int, int64_t, double, Duration>; // various conversions and an immutable type (Duration)
           
           Rec args = MakeRec().scope("lalü", 42);
           Rec urgs = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
