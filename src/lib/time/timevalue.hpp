@@ -384,6 +384,10 @@ namespace time {
       Duration& operator= (Duration const&);
       
     public:
+      Duration()
+        : Duration(Time::ZERO)
+        { }
+      
       Duration (Offset const& distance)
         : TimeValue(distance.abs())
         { }
