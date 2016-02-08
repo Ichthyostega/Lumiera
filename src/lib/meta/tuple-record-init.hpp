@@ -69,6 +69,7 @@
 
 namespace lib {
 namespace meta {
+  namespace error = lumiera::error;
   
   namespace { // implementation details...
     
@@ -77,7 +78,6 @@ namespace meta {
     using lib::diff::GenNode;
     using lib::diff::DataValues;
     
-    namespace error = lumiera::error;
     
     /** the visitor type our converter is based on */
     using DataCapPredicate = Variant<DataValues>::Predicate;
@@ -205,6 +205,15 @@ namespace meta {
           
           operator TargetType<i> ()
             {
+              using util::toString;
+              
+              if (values.childSize() <= i)
+                throw error::Logic ("Attempt to init the " + toString(sizeof...(TYPES))
+                                   +" element " + util::typeStr<std::tuple<TYPES...>>()
+                                   +" from an Rec<GenNode> with only " + toString(values.childSize())
+                                   +" child elements: " + toString(values)
+                                   ,error::LUMIERA_ERROR_WRONG_TYPE);
+              
               return GenNodeAccessor<TargetType<i>> (values.child(i));
             }
         };

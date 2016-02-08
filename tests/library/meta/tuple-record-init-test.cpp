@@ -46,7 +46,6 @@ using lib::time::Duration;
 using lib::time::Time;
 using lib::hash::LuidH;
 
-using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
 using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
 
 using std::string;
@@ -112,7 +111,7 @@ namespace test {
           Rec args = MakeRec().scope("surprise", 42);
           
           using TooMany = Types<string, int, long>;
-          VERIFY_ERROR (INDEX_BOUNDS, buildTuple<TooMany> (args));    // number of types in tuple exceeds capacity of the supplied argument record
+          VERIFY_ERROR (WRONG_TYPE, buildTuple<TooMany> (args));      // number of types in tuple exceeds capacity of the supplied argument record
           
           using Unsigned = Types<string, uint>;
           using Floating = Types<string, float>;
