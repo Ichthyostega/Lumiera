@@ -367,6 +367,14 @@ namespace test {
       markState ()
         {
           UNIMPLEMENTED ("mark interface state");
+          // verify both directions of state marking
+          // expand and collapse the mock
+          // and verify that the corresponding state marks appear at the bus
+          // then replay those state marks
+          // at least the doMark should be invoked
+          // TODO maybe we'll even provide a default implementation for expand/collapse
+          // which then means that, by replaying the mentioned state marks, the
+          // doExpand() or doCollapse should be re-invoked
           
           TODO ("be sure also to cover signal diagnostics here");
         }
@@ -376,6 +384,8 @@ namespace test {
       notify ()
         {
           UNIMPLEMENTED ("receive various kinds of notifications");
+          // send msg, error and flash messages via Bus to the element
+          // verify the doMsg, doErr or doFlash get invoked
         }
       
       

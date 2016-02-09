@@ -59,7 +59,7 @@
  ** like a common styling. These are addressed the conventional way, through a common \ref WindowManager.
  ** The following discussion focuses on the aspects of integration with the core.
  ** 
- ** For one reason ore another, any element in the UI can appear and go away.
+ ** For one reason or another, any element in the UI can appear and go away.
  ** This lifecycle behaviour corresponds to attachment and deregistration at the UI-Bus
  ** 
  ** In regular, operative state, an interface element may initiate _actions_, which translate
