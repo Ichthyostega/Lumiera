@@ -137,7 +137,7 @@
 </node>
 <node CREATED="1448078835044" ID="ID_358413966" MODIFIED="1448078844783" TEXT="bezieht daraufhin einen Diff"/>
 <node CREATED="1448078845419" ID="ID_189415188" MODIFIED="1448078851438" TEXT="wendet diesen rekursiv an"/>
-<node CREATED="1448078856722" ID="ID_1770248185" MODIFIED="1448078867148" TEXT="Hiweis: kann Kinder zeugen und zerst&#xf6;ren"/>
+<node CREATED="1448078856722" ID="ID_1770248185" MODIFIED="1454975518746" TEXT="Hinweis: kann Kinder zeugen und zerst&#xf6;ren"/>
 </node>
 </node>
 </node>
@@ -167,7 +167,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="help"/>
-<node CREATED="1448658692023" ID="ID_888978058" MODIFIED="1448659524029" TEXT="generische Commands">
+<node CREATED="1448658692023" FOLDED="true" ID="ID_888978058" MODIFIED="1454975599341" TEXT="generische Commands">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -282,7 +282,7 @@
 <node CREATED="1451177719577" ID="ID_1175980404" MODIFIED="1451177726636" TEXT="wie finde ich den Vater..."/>
 </node>
 </node>
-<node CREATED="1448658726090" ID="ID_37610818" MODIFIED="1448658733301" TEXT="Commands">
+<node CREATED="1448658726090" FOLDED="true" ID="ID_37610818" MODIFIED="1454978057481" TEXT="Commands">
 <node CREATED="1448658755071" ID="ID_1033500384" MODIFIED="1448658767933" TEXT="wie definieren">
 <icon BUILTIN="help"/>
 <node CREATED="1448658974985" ID="ID_974207484" MODIFIED="1448658989011" TEXT="Definition braucht Session-Modell"/>
@@ -479,7 +479,7 @@
 <node CREATED="1450490565739" ID="ID_849102091" MODIFIED="1452557610273" TEXT="implementiert ist: Erstellen im InvocationTrail">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1452561062226" ID="ID_444925471" MODIFIED="1452561136752" TEXT="convenience overload f&#xfc;r mehrere Argumente">
+<node CREATED="1452561062226" ID="ID_444925471" MODIFIED="1454978022494" TEXT="convenience overload f&#xfc;r mehrere Argumente">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -493,10 +493,10 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1450490580473" ID="ID_925248058" MODIFIED="1450490599519" TEXT="nicht implementiert: Empfangen und Binden">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1450490580473" ID="ID_925248058" MODIFIED="1454975395091" TEXT="Empfangen und Binden">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1448691875184" ID="ID_642935499" MODIFIED="1448691904352" TEXT="f&#xfc;r die Invocation gen&#xfc;gt dann die reine ID"/>

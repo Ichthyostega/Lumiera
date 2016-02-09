@@ -148,6 +148,7 @@ namespace diff{
       
     public:
       static const string TYPE_NIL;
+      static const Symbol TYPE_NIL_SYM;
       
       Record()
         : type_(TYPE_NIL)
@@ -377,7 +378,10 @@ namespace diff{
     };
   
   template<typename VAL>
-  const string Record<VAL>::TYPE_NIL = "NIL";
+  const Symbol Record<VAL>::TYPE_NIL_SYM = "NIL";
+  
+  template<typename VAL>
+  const string Record<VAL>::TYPE_NIL = string(TYPE_NIL_SYM);
   
   
   

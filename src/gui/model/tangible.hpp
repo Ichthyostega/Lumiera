@@ -133,6 +133,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <sigc++/trackable.h>
+#include <utility>
 #include <string>
 
 
@@ -174,6 +175,8 @@ namespace model {
       
       void reset();
       
+      template<typename...ARGS>
+      void prepareCommand (Cmd const& prototype, ARGS&&...);
       void prepareCommand (Cmd const& prototype, Rec&& arguments);
       void issueCommand (Cmd const& preparedAction);
       
@@ -199,6 +202,20 @@ namespace model {
       virtual void doMark(GenNode const&)  =0;
     private:
     };
+  
+  
+  
+  /** convenience shortcut to issue a command with several arguments */
+  template<typename...ARGS>
+  inline void
+  Tangible::prepareCommand (Cmd const& prototype, ARGS&&... args)
+  {
+    using GenNodeIL = std::initializer_list<GenNode>;
+    
+    prepareCommand (prototype,
+                    Rec (Rec::TYPE_NIL_SYM, GenNodeIL{}
+                        ,GenNodeIL {std::forward<ARGS> (args)...}));
+  }                   // not typed, no attributes, all arguments as children
   
   
   

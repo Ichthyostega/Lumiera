@@ -198,7 +198,7 @@ namespace test {
           CHECK (not cmd.canExec());
           
           
-          mock.prepareCommand(cmd, Rec({text, clip, luid}));
+          mock.prepareCommand (cmd, text, clip, luid);
           
           CHECK (cmd.canExec());
           CHECK (gui::test::Nexus::wasBound(cmd, text, clip, luid));
