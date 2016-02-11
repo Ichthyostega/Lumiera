@@ -213,6 +213,7 @@ namespace test {
       void
       verify_mockManipulation ()
         {
+          MARK_TEST_FUN
           MockElm mock("dummy");
           
           CHECK (mock.verify("ctor"));
@@ -418,6 +419,28 @@ namespace test {
           CHECK (nexusLog.verifyCall("note").arg(targetID, GenNode{"expand", true})
                          .before("handling state-mark"));
           
+          
+          trigger_collapse(); // emit other signal
+          CHECK (not mock.isExpanded());
+          CHECK (mock.isTouched());
+          
+          CHECK (nexusLog.verifyCall("note").arg(targetID, GenNode{"expand", true})
+                         .before("handling state-mark")
+                         .beforeCall("note").arg(targetID, GenNode{"expand", false})
+                         .before("handling state-mark"));
+          
+          trigger_collapse();
+          CHECK (not mock.isExpanded());
+          CHECK (mock.verifyEvent("create", "target")
+                     .beforeEvent("expanded")
+                     .beforeEvent("collapsed"));
+          CHECK (nexusLog.verifyCall("note").arg(targetID, GenNode{"expand", true})
+                         .before("handling state-mark")
+                         .beforeCall("note").arg(targetID, GenNode{"expand", false})
+                         .before("handling state-mark")
+                         .beforeCall("note").arg(targetID, GenNode{"expand", false})
+                         .before("handling state-mark"));
+          
           ////////////////////////////////////////////////////////////TODO: WIP
           cout << "____Event-Log_________________\n"
                << util::join(mock.getLog(), "\n")
@@ -427,8 +450,6 @@ namespace test {
                << util::join(nexusLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           ////////////////////////////////////////////////////////////TODO: WIP
-          
-          TODO ("be sure also to cover signal diagnostics here");
         }
       
       
