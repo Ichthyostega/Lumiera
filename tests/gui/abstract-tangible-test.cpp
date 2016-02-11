@@ -58,6 +58,7 @@
 #include "lib/error.hpp"
 //#include "lib/util.hpp"
 
+#include <sigc++/signal.h>
 
 
 using lib::Symbol;
@@ -181,7 +182,7 @@ namespace test {
         {
           verify_mockManipulation();
           invokeCommand();
-//        markState();          ////////////////////////////////////////////////////////////TODO: WIP
+          markState();
           notify();
           mutate();
         }
@@ -368,23 +369,56 @@ namespace test {
         }
       
       
+      /** @test mark interface state.
+       * This test case performs an elementary UI operation, namely to
+       * expand / collapse an element, to verify both directions of state marking.
+       * Here »state marking« is a mechanism, where UI state changes get recorded
+       * at some central StateManager, to be able to restore interface state later.
+       * Thus, when we'll expand and collapse the mock, we expect the corresponding
+       * "state mark" notifications to appear at the UI-Bus.
+       * 
+       * The second part of this test _replays_ such a state mark, which causes
+       * the`doMark()` operation on the UI element to be invoked.
+       * @todo maybe we'll even provide a default implementation for expand/collapse
+       *       which then means that, by replaying the mentioned state marks, the
+       *       `doExpand()` or `doCollapse()` should be re-invoked, of course
+       *       without issuing a further notification
+       * @note this test does not cover or even emulate the operation of the
+       *       "state manager", since the goal is to cover the _UI element_
+       *       protocol. We'll just listen at the bus and replay messages.
+       */
       void
       markState ()
         {
-          UNIMPLEMENTED ("mark interface state");
-          // verify both directions of state marking
-          // expand and collapse the mock
-          // and verify that the corresponding state marks appear at the bus
-          // then replay those state marks
-          // at least the doMark should be invoked
-          // TODO maybe we'll even provide a default implementation for expand/collapse
-          // which then means that, by replaying the mentioned state marks, the
-          // doExpand() or doCollapse should be re-invoked
-          ////////////////////////////////////////////////////////////TODO: WIP
           MARK_TEST_FUN
           EventLog nexusLog = gui::test::Nexus::startNewLog();
-          MockElm mock("target");
           
+          sigc::signal<void> trigger_expand;
+          sigc::signal<void> trigger_collapse;
+          
+          MockElm mock("target");
+          ID targetID = mock.getID();
+          
+          trigger_expand.connect   (sigc::mem_fun(mock, &Tangible::slotExpand));
+          trigger_collapse.connect (sigc::mem_fun(mock, &Tangible::slotCollapse));
+          
+          CHECK (not mock.isTouched());
+          CHECK (not mock.isExpanded());
+          CHECK (mock.ensureNot("expanded"));
+          CHECK (nexusLog.ensureNot("state-mark"));
+          
+          trigger_expand(); // emit signal
+          
+          CHECK (mock.isTouched());
+          CHECK (mock.isExpanded());
+          CHECK (mock.verifyCall("expand").arg(true)
+                     .beforeEvent("expanded"));
+          
+          // and now the important part: state mark notification was sent over the bus...
+          CHECK (nexusLog.verifyCall("note").arg(targetID, GenNode{"expand", true})
+                         .before("handling state-mark"));
+          
+          ////////////////////////////////////////////////////////////TODO: WIP
           cout << "____Event-Log_________________\n"
                << util::join(mock.getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
@@ -426,7 +460,7 @@ namespace test {
           uiBus.mark(targetID, GenNode{"Error", "getting serious"});
           CHECK (mock.verifyMark("Error", "serious"));
           
-          uiBus.mark(targetID, GenNode{"Message", "mistake"});
+          uiBus.mark(targetID, GenNode{"Message", "by mistake"});
           CHECK (mock.verifyMark("Message", "mistake"));
           
           CHECK (mock.verify("target")
