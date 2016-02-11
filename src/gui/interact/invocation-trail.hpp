@@ -52,11 +52,6 @@
 #include <string>
 
 
-/** @todo unused as of 11/2015
- * some additional instantiation metadata
- * could be passed alongside with the invocation.
- */
-#define RESERVED_FOR_FUTURE_USE_ 42
 
 
 namespace gui {
@@ -103,8 +98,16 @@ namespace interact {
       
       GenNode bang()  const
         {
-          return GenNode(cmdID_, RESERVED_FOR_FUTURE_USE_);
+          return GenNode(cmdID_, int(DO_IT));
         }
+      
+      
+      /** @todo unused as of 11/2015
+       * some additional instantiation metadata
+       * could be passed alongside with the invocation. */
+      enum { DO_IT = 42 };
+      
+      
       
       string
       getID()  const

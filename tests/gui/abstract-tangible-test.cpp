@@ -344,7 +344,7 @@ namespace test {
           
           CHECK (dummyState == concreteParam);  // command was indeed invoked
           CHECK (nexusLog.verifyCall("act").arg("«int»|" +toString(concreteParam))
-                         .beforeCall("act").arg("DataCap|«int»|"));
+                         .beforeCall("act").arg("DataCap|«int»|" +toString(int(InvocationTrail::DO_IT))));
           CHECK (nexusLog.verifyEvent("binding for command \""+DUMMY_CMD_ID)
                          .beforeEvent("invoke command \""+DUMMY_CMD_ID));
           
