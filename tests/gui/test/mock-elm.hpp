@@ -297,9 +297,9 @@ namespace test{
       
       /** special verification match on a "state mark" message to this element */
       EventMatch
-      verifyMark (string msgContentMatch)  const
+      verifyMark (string id)  const
         {
-          return getLog().verifyEvent("mark", msgContentMatch);
+          return getLog().verify(id).type("mark").id(id);
         }
       
       /** verification match on a specific "state mark" message

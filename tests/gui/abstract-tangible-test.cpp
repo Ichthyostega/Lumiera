@@ -52,6 +52,7 @@
 #include "test/test-nexus.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "proc/control/command-def.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
@@ -61,6 +62,7 @@
 
 using lib::Symbol;
 using util::toString;
+using lib::time::Time;
 using gui::test::MockElm;
 using lib::test::EventLog;
 using lib::idi::EntryID;
@@ -378,6 +380,19 @@ namespace test {
           // TODO maybe we'll even provide a default implementation for expand/collapse
           // which then means that, by replaying the mentioned state marks, the
           // doExpand() or doCollapse should be re-invoked
+          ////////////////////////////////////////////////////////////TODO: WIP
+          MARK_TEST_FUN
+          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          MockElm mock("target");
+          
+          cout << "____Event-Log_________________\n"
+               << util::join(mock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(nexusLog, "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          ////////////////////////////////////////////////////////////TODO: WIP
           
           TODO ("be sure also to cover signal diagnostics here");
         }
@@ -401,35 +416,41 @@ namespace test {
           CHECK (mock.ensureNot("Error"));
           CHECK (mock.ensureNot("Message"));
           
-          
+          // now send a "Flash" mark via UI-Bus....
           uiBus.mark(targetID, GenNode{"Flash", true });
-          ////////////////////////////////////////////////////////////TODO: WIP
-          cout << "____Event-Log_________________\n"
-               << util::join(mock.getLog(), "\n")
-               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          
-          cout << "____Nexus-Log_________________\n"
-               << util::join(gui::test::Nexus::getLog(), "\n")
-               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          ////////////////////////////////////////////////////////////TODO: WIP
-          CHECK (mock.verifyMark("Message", true ));
+          CHECK (mock.verifyMark("Flash"));
           
           CHECK (mock.ensureNot("Error"));
           CHECK (mock.ensureNot("Message"));
           
           uiBus.mark(targetID, GenNode{"Error", "getting serious"});
-          CHECK (mock.verifyMark("Message", "serious"));
+          CHECK (mock.verifyMark("Error", "serious"));
           
           uiBus.mark(targetID, GenNode{"Message", "mistake"});
           CHECK (mock.verifyMark("Message", "mistake"));
           
           CHECK (mock.verify("target")
-                     .before("true")
+                     .before("Flash")
                      .before("serious")
                      .before("mistake"));
           
-          VERIFY_ERROR(WRONG_TYPE, uiBus.mark(targetID, GenNode{"Message", false }))
+          // type mismatch: when receiving a "Message" mark, we expect a string payload
+          VERIFY_ERROR(WRONG_TYPE, uiBus.mark(targetID, GenNode{"Message", Time::NEVER }))
           
+          // the type error happens while resolving the payload,
+          // and thus the actual "doMsg()" function on the target was not invoked
+          CHECK (mock.ensureNot(string(Time::NEVER)));
+          CHECK (nexusLog.verifyCall("mark").arg(targetID, Time::NEVER));
+          CHECK (nexusLog.ensureNot("delivered mark").arg(Time::NEVER));
+          
+          
+          cout << "____Event-Log_________________\n"
+               << util::join(mock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(nexusLog, "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
       
