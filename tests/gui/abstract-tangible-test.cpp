@@ -77,6 +77,9 @@ namespace gui  {
 namespace model{
 namespace test {
   
+  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+  using ID = lib::idi::BareEntryID const&;
+  
   namespace { // test fixture...
     
     // dummy operation to be invoked through the command system
@@ -176,7 +179,7 @@ namespace test {
         {
           verify_mockManipulation();
           invokeCommand();
-          markState();
+//        markState();          ////////////////////////////////////////////////////////////TODO: WIP
           notify();
           mutate();
         }
@@ -380,12 +383,53 @@ namespace test {
         }
       
       
+      /** @test receive various kinds of notifications
+       * Send message, error and flash messages via Bus to the element
+       * and verify the doMsg, doErr or doFlash handlers were invoked.
+       */
       void
       notify ()
         {
-          UNIMPLEMENTED ("receive various kinds of notifications");
-          // send msg, error and flash messages via Bus to the element
-          // verify the doMsg, doErr or doFlash get invoked
+          MARK_TEST_FUN
+          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          
+          MockElm mock("target");
+          ID targetID = mock.getID();
+          auto& uiBus = gui::test::Nexus::testUI();
+          
+          CHECK (mock.ensureNot("Flash"));
+          CHECK (mock.ensureNot("Error"));
+          CHECK (mock.ensureNot("Message"));
+          
+          
+          uiBus.mark(targetID, GenNode{"Flash", true });
+          ////////////////////////////////////////////////////////////TODO: WIP
+          cout << "____Event-Log_________________\n"
+               << util::join(mock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(gui::test::Nexus::getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          ////////////////////////////////////////////////////////////TODO: WIP
+          CHECK (mock.verifyMark("Message", true ));
+          
+          CHECK (mock.ensureNot("Error"));
+          CHECK (mock.ensureNot("Message"));
+          
+          uiBus.mark(targetID, GenNode{"Error", "getting serious"});
+          CHECK (mock.verifyMark("Message", "serious"));
+          
+          uiBus.mark(targetID, GenNode{"Message", "mistake"});
+          CHECK (mock.verifyMark("Message", "mistake"));
+          
+          CHECK (mock.verify("target")
+                     .before("true")
+                     .before("serious")
+                     .before("mistake"));
+          
+          VERIFY_ERROR(WRONG_TYPE, uiBus.mark(targetID, GenNode{"Message", false }))
+          
         }
       
       

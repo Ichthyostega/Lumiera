@@ -873,6 +873,13 @@ namespace test{
           return matcher;
         }
       
+      template<typename X>
+      EventMatch
+      verifyEvent (string classifier, X const& something)  const
+        {
+          return verifyEvent (classifier, util::toString (something));
+        }
+      
       /** start a query to match especially a function call
        * @param match text to match against the function name
        */

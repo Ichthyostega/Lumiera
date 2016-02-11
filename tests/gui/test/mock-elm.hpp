@@ -312,6 +312,13 @@ namespace test{
           return getLog().verifyEvent("mark", payloadMatch).type("mark").id(id);
         }
       
+      template<typename X>
+      EventMatch
+      verifyMark (string id, X const& something)  const
+        {
+          return getLog().verifyEvent("mark", something).type("mark").id(id);
+        }
+      
       
       EventLog const&
       getLog()  const
