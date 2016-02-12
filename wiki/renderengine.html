@@ -4868,7 +4868,31 @@ There can be multiple viewer widgets, to be connected dynamically to multiple pl
 //Note, we have yet to specify how exactly the building and rendering will work together with the backend. There are several possibilities how to structure the Playlist//
 </pre>
 </div>
-<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201505081535" tags="design discuss" changecount="2">
+<div title="PresentationState" creator="Ichthyostega" modifier="Ichthyostega" created="201602121500" modified="201602121511" tags="GuiPattern Concepts def design draft" changecount="3">
+<pre>Within Lumiera, we distinguish between //model state// and //presentation state.// Any conceivable UI is stateful and reshapes itself through interaction -- but the common UI toolkits just give us this state as //transient state,// maybe with some means to restore state. For simple CRUD applications this might be sufficient, as long as the data is self contained and the meaning of data is self evident. But a work environment, like the NLE we're building here, layers additional requirements on top of mere data access. To be able to work, not only you need tools, you need //enablement.// Which, in a nutshell, means that things-at-hand need to be at hand. Sounds simple, yet is a challenge still not adequately fulfilled by contemporary computer based interfaces and  environments.
+
+A fundamental design decision in Lumiera is to distinguish between engine, model and working environment. The //model// is oriented towards the practicalities of film making, not towards the practicalities of implementing video processing. Also, the model needs to be self contained to the degree that //anything with a tangible influence on the final rendered result// needs to be represented within the model. So the task of editing a film is the task of building such a model. This is an ongoing effort over an extended period of time, which in fact turns this effort into a project. Yet, as such, any project also pertains to the way you are working within that project. These might be fundamental decisions about what material to use, about formats and technologies, but also some set of conventions emerging under way. Beyond that, any project develops habits of handling matters, which, over time, turn into rules. And even beyond that, over time, you expect to find common things at common places. The latter is what presentation state is all about.
+
+!dealing with presentation state
+The backbone of the Lumiera UI is arranged such as to produce a data feed with state transition notifications relevant for presentation state. This is not the raw data feed of UI signals, like a click on this or that button (such is kept confined within the realm of the UI toolkit, here GTK). Rather, it is a custom made, pre-filtered stream of messages on the UI-Bus, organised and structured and outfitted with meaning by the [[tangible interfeace elements|UI-Element]]. Technically speaking, these messages are known as ''state mark messages'', and they are handled through a specific set of API functions on the bus interface. It is a bidirectional data exchange protocol, encompassed by
+;state notifications
+:whenever an UI-Element deems a state transition ''relevant for persistent presentation state'', a state mark message will be emitted
+:* the originating element, as designated by its ID, is evident from the API call
+:* the message itself is a GenNode
+:** the ~ID-symbol of this message element was chosen by the emitting entity; it has distinctive meaning for this entity, e.g. »expand«, »reOrder«,...
+:** the payload of the message is a data element, sufficient for the originator to restore itself to precisely the state as represented through this state mark.
+;state marking
+:whenever the [[state manager|PresentationStateManager]] deems some state eligible to be restored, it casts the relevant state mark back at its originator
+:* so the originator needs to be discernibly by its ID, and this ID needs to be fabricated in a way such as to be reproducible within a later editing session
+:* the UI-Bus allows just to cast some state mark message at &quot;someone&quot; -- this is also used by the lower layers for notifications and error results
+:* the receiver is assumed to &quot;understand&quot; the actual meaning of that message and reshape itself to comply</pre>
+</div>
+<div title="PresentationStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201602121520" modified="201602121524" tags="GuiPattern spec draft" changecount="3">
+<pre>//The PresentationStateManager creates the ability to build persistent PresentationState//
+Run as part of the UiCoreServices, it is attached to the UI-Bus and listens to all ''state mark messages'' to distil the notion of relevant current state.
+On a basic level, the task is to group and store those messages in a way as to overwrite previous messages with new updates on the level of individual properties. Beyond that, there is the sensitivity to context, presentation perspective and work site, which means to impose an additional structure on this basic ''state snapshot'', to extract and replicate structured sets of state information.</pre>
+</div>
+<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201602121354" tags="design discuss" changecount="3">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
 !!Parameter Handling
@@ -4907,7 +4931,7 @@ We need to work out guidelines for dealing with operations going on simultaneous
 In software development, there is a natural inclination to cast &quot;reality&quot; into data, the structure of which has to be nailed down first. Then, everyone might &quot;access reality&quot; and work on it. Such sounds natural, self-evident and sound, yet to the same extent this approach is fundamentally flawed. It is known to work well for small, &quot;handsome&quot; projects, where you clearly know up-front what you're up to: namely to get away, after being paid, before anyone realises the fact you've built something that looks nice but does not fit.
 So the challenge of any major undertaking in software construction is //not to build a model.// Rather, we want to arrive at something that can be made to fit. Over and over again.
 
-More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something different. But we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, to support us with its firmness, but also to offer joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of subsidiarity. The links and joints between such autonomous centres can be shaped as exchange based on a common understanding of the specific matters to deal with, at that given joint.
+More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something different. But we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, to support us with its firmness, but also to offer joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of subsidiarity. The links and joints between such autonomous centres can be shaped to be in fact an exchange, based on common understanding of the //specific matters to deal with,// at that given joint.
 </pre>
 </div>
 <div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" tags="def">
@@ -8370,7 +8394,7 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201512252325" tags="GuiPattern Concepts def design draft" changecount="14">
+<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201602121429" tags="GuiPattern Concepts def design draft" changecount="15">
 <pre>Abstraction used in the Backbone of Lumiera's GTK User Interface
 The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the //Controler// in the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]] in common UI architecture.
 
@@ -8388,12 +8412,12 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :* the actual command invocation is triggered by a &quot;bang&quot; message
 ;note
 :send a GenNode representing the //state mark//
-:some (abstracted) presentation state manager is expected to listen to these messages, possibly recording state to be restored later
+:some (abstracted) [[presentation state|PresentationState]] manager is expected to listen to these messages, possibly recording state to be restored later
 ;mark
 :down-link communication to //feed back// state updates or to replay previously recorded  //state marks//
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201512260017" tags="GuiPattern design draft decision" changecount="40">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201602121458" tags="GuiPattern design draft decision" changecount="43">
 <pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -8442,6 +8466,14 @@ These are sent as notifications just to some top level element, expecting this e
 :* or is a from-scratch reconfiguration
 
 We should note that these conventions of interchange lead to a recursive or ''self similar design'' of the UI-Bus: Each {{{BusTerm}}} is a personalised connection to yet another {{{BusTerm}}}. Even the ''bus master'' appears as just another {{{BusTerm}}} to all the communication partners. The overall topology of the bus might be reshaped without the participating elements being aware of such a change.
+
+!Persistent presentation state
+There is the distinction between //model state// and //presentation state,// the latter being confined to the //way you work with the model.// Every UI is stateful and reshapes itself through interaction -- but the common UI toolkits just give us this state as //transient state,// maybe with some means to restore state. The overall topic of PresentationState in an elaborate work environment like a NLE can be quite complex -- in Lumiera we try to separate the persistent part from the transient state, and we do so by exploiting the loose coupling achieved through the UI-Bus. For this to work we need the individual //tangible elements// to announce any presentation state transition deemed ''relevant persistent presentation state'' by them. To stress this last point: it is a decision //local// to the UI-Element, what to consider //relevant// and //what meaning// to give to this state.
+
+Anyway, whenever such a relevant change happens -- consider e.g. the presentation of a clip has been switched into //expanded display,// detailing all attached effects -- then the UI-Element responsible for that state shall emit a ''state mark'', which essentially appears as message on the UI-Bus. We expect a PresentationStateManager to listen somewhere on the bus, to note and to categorise these messages and to provide the actual mechanism for persistent state. Any such //state mark// message is implicitly associated with the ID of the originating entity (just through the way the UI-Bus works), and its payload is a GenNode. The symbolic ID of this state mark element can be chosen freely, as it lives within a distinct namespace. Obviously, some kind of protocol emerges here, where commonly used state transitions acquire a generic meaning. Terms like &quot;{{{expand}}}&quot;, &quot;{{{reset}}}&quot; or &quot;{{{revealYourself}}}&quot; are so common as to warrant a handler within the {{{model::Tangible}}} base class, delegating to virtual implementation functions, like {{{virtual void doExpand(bool)}}}. This is to say that the individual UI-Element is expected to be able to //receive// state mark messages, because those messages might be ''re-played'' by the state manager, in a consecutive session, attempting to restore previously recorded UI state. Consequently, each concrete element is expeted
+* to organise the relevant state transitions, so they can be represented with a (basically private) vocabulary
+* to provide and implement a data representation of the state, using the data types available as payload within GenNode
+* to create the ability to restore presentation state to the degree deemed adequate, on reception of such a message
 
 !Command activation
 While the above definitions might seem more or less obvious and reasonable, there is one tiny detail, which -- on second thought -- unfolds into a fundamental decision to be taken. The point in question is //how we refer to a command.// More specifically: is referring to a command something generic, or is it rather something left to the actual implementing widget? In the first case, a generic foundation element has to provide some framework to deal with command definitions, whereas in the second case just a protected slot to pass on invocations from derived classes would be sufficient. This is a question of fundamental importance; subsidiarity has its merits, so once we forgo the opportunity to build from a generic pattern, local patterns will take over, while similarities and symmetries have to grow and wait to be discovered sometimes, if at all. This might actually not be a problem -- yet if you know Lumiera, you know that we tend to look at existing practice and draw fundamental conclusions, prior to acting.

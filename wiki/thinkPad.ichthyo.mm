@@ -4,7 +4,10 @@
 <font NAME="SansSerif" SIZE="18"/>
 <node CREATED="1434128046296" ID="ID_1900827283" MODIFIED="1448669775410" POSITION="right" TEXT="GUI">
 <font NAME="SansSerif" SIZE="14"/>
-<node CREATED="1434128054470" ID="ID_1166611516" MODIFIED="1434128059666" TEXT="Workflow"/>
+<node CREATED="1434128054470" ID="ID_1166611516" MODIFIED="1434128059666" TEXT="Workflow">
+<node CREATED="1455289597596" ID="ID_970065036" MODIFIED="1455289601196" TEXT="work site"/>
+<node CREATED="1455289466261" ID="ID_273679080" MODIFIED="1455289469961" TEXT="PresentationState"/>
+</node>
 <node CREATED="1448070434915" HGAP="64" ID="ID_257833497" MODIFIED="1450390417230" VSHIFT="7">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -897,7 +900,64 @@
 </node>
 </node>
 </node>
-<node CREATED="1453546083296" ID="ID_1154674875" MODIFIED="1453546089361" TEXT="Presentation-State-Manager"/>
+<node CREATED="1453546083296" ID="ID_1154674875" MODIFIED="1453546089361" TEXT="Presentation-State-Manager">
+<node CREATED="1455290707481" ID="ID_551153117" MODIFIED="1455290724712">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      empf&#228;ngt alle <b>state mark notificatons</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1455290726358" ID="ID_386120755" MODIFIED="1455290731577" TEXT="mu&#xdf; gruppieren">
+<node CREATED="1455290732805" ID="ID_1731455164" MODIFIED="1455290737616" TEXT="nach Ui-Element"/>
+<node CREATED="1455290738044" ID="ID_1309710182" MODIFIED="1455290745959" TEXT="nach property innerhalb"/>
+</node>
+<node CREATED="1455290748539" ID="ID_504317246" MODIFIED="1455290870527" TEXT="zeichnet jeweils den letzten aktuellen Zustand auf">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1455290768888" ID="ID_1779151953" MODIFIED="1455290865016" TEXT="Wechselwirkungen">
+<icon BUILTIN="info"/>
+<node CREATED="1455290773936" ID="ID_533210684" MODIFIED="1455290798348" TEXT="geplant, absehbar">
+<icon BUILTIN="bell"/>
+</node>
+<node CREATED="1455290807459" ID="ID_1222290895" MODIFIED="1455290825988" TEXT="mu&#xdf; Ausz&#xfc;ge aus dieser Info schaffen"/>
+<node CREATED="1455290827193" ID="ID_1429808095" MODIFIED="1455290846062">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nach <b>Perspektive</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1455290833048" ID="ID_1650274766" MODIFIED="1455290841159">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nach <b>work site</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1455290849374" ID="ID_906623432" MODIFIED="1455290855766" TEXT="future work">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1448063874479" HGAP="43" ID="ID_739054690" MODIFIED="1453546352792" TEXT="UI-Modell" VSHIFT="1"/>
 <node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1453546344857" TEXT="Diff-System" VSHIFT="1">
