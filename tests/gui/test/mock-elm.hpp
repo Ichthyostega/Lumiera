@@ -170,6 +170,9 @@ namespace test{
           log_.call (this->identify(), "doMark", mark);
           cout << this->identify() << " <-- state-mark = "<< mark <<endl;
           log_.note ("type=mark", "ID="+mark.idi.getSym(), mark);
+          
+          // forward to default handler
+          Tangible::doMark (mark);
         }
       
       

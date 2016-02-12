@@ -441,7 +441,43 @@ namespace test {
                          .beforeCall("note").arg(targetID, GenNode{"expand", false})
                          .before("handling state-mark"));
           
-          ////////////////////////////////////////////////////////////TODO: WIP
+          
+          
+          // Second part: replay of a state mark via UI-Bus....
+          auto stateMark = GenNode{"expand", true};
+          auto& uiBus = gui::test::Nexus::testUI();
+          
+          CHECK (not mock.isExpanded());
+          CHECK (mock.ensureNot("mark"));
+          
+          uiBus.mark (targetID, stateMark);
+          
+          CHECK (nexusLog.verifyCall("mark").arg(targetID, stateMark)
+                         .before("delivered mark to "+string(targetID)).arg(stateMark));
+          
+          CHECK (mock.verifyMark("expand", "true")
+                     .beforeCall("expand").arg(true)
+                     .beforeEvent("expanded"));
+          CHECK (mock.isExpanded());
+          CHECK (mock.isTouched());
+          
+          // the default handler defined in model::Tangible
+          // already supports some rather generic state changes,
+          // like e.g. a reset to the element's default state.
+          // Note that the actual implementation doReset()
+          // is a virtual function, here implemented in MockElm.
+          uiBus.mark (targetID, GenNode{"reset", true});
+                                              // note: payload is irrelevant for "reset" mark
+          
+          // and we're back to pristine state...
+          CHECK (not mock.isTouched());
+          CHECK (not mock.isExpanded());
+          CHECK (mock.verifyMark("reset", "true")
+                     .afterEvent("expanded")
+                     .beforeCall("reset")
+                     .beforeEvent("reset"));
+          
+          
           cout << "____Event-Log_________________\n"
                << util::join(mock.getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
@@ -449,7 +485,6 @@ namespace test {
           cout << "____Nexus-Log_________________\n"
                << util::join(nexusLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          ////////////////////////////////////////////////////////////TODO: WIP
         }
       
       
@@ -472,16 +507,16 @@ namespace test {
           CHECK (mock.ensureNot("Message"));
           
           // now send a "Flash" mark via UI-Bus....
-          uiBus.mark(targetID, GenNode{"Flash", true });
+          uiBus.mark (targetID, GenNode{"Flash", true });
           CHECK (mock.verifyMark("Flash"));
           
           CHECK (mock.ensureNot("Error"));
           CHECK (mock.ensureNot("Message"));
           
-          uiBus.mark(targetID, GenNode{"Error", "getting serious"});
+          uiBus.mark (targetID, GenNode{"Error", "getting serious"});
           CHECK (mock.verifyMark("Error", "serious"));
           
-          uiBus.mark(targetID, GenNode{"Message", "by mistake"});
+          uiBus.mark (targetID, GenNode{"Message", "by mistake"});
           CHECK (mock.verifyMark("Message", "mistake"));
           
           CHECK (mock.verify("target")

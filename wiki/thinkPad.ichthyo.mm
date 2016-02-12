@@ -211,6 +211,49 @@
 <node CREATED="1448659792782" ID="ID_1547056651" MODIFIED="1448659801312" TEXT="r&#xe4;umliche Navigation"/>
 <node CREATED="1448659824337" ID="ID_1734858009" MODIFIED="1448659829865" TEXT="Markierungen"/>
 </node>
+<node CREATED="1455236472002" FOLDED="true" HGAP="49" ID="ID_952544600" MODIFIED="1455236890661" TEXT="generische Eigenschaften" VSHIFT="15">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1455236491432" ID="ID_1268644179" MODIFIED="1455236569787" TEXT="Idee">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1455236501719" HGAP="35" ID="ID_540888754" MODIFIED="1455236634083" TEXT="man k&#xf6;nnte Eigenschaften konfigurieren" VSHIFT="2"/>
+<node CREATED="1455236512373" ID="ID_211355731" MODIFIED="1455236518680" TEXT="jede Eigenschaft h&#xe4;tte">
+<node CREATED="1455236519677" ID="ID_1698754255" MODIFIED="1455236521384" TEXT="Namen"/>
+<node CREATED="1455236522020" ID="ID_404018073" MODIFIED="1455236526855" TEXT="slot"/>
+<node CREATED="1455236527443" ID="ID_45035009" MODIFIED="1455236537118" TEXT="passende &#xbb;state mark&#xab;"/>
+<node CREATED="1455236537802" ID="ID_1419063243" MODIFIED="1455236554532" TEXT="handler-funktor"/>
+<node CREATED="1455236554927" ID="ID_772542993" MODIFIED="1455236563746" TEXT="installiert sich in generischen handler"/>
+</node>
+<node CREATED="1455236573173" HGAP="72" ID="ID_466911779" MODIFIED="1455236591000" TEXT="Bewertung" VSHIFT="16">
+<icon BUILTIN="yes"/>
+<node CREATED="1455236781242" ID="ID_674694140" MODIFIED="1455236787861" TEXT="k&#xf6;nnte interessant sein f&#xfc;r Diff"/>
+<node CREATED="1455236788424" ID="ID_1507269502" MODIFIED="1455236848778" TEXT="aber gegen das Grundkonzept">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich wollte explizit kein generisch-introspektives UI,
+    </p>
+    <p>
+      weil das die Tendenz hat, sich zu einem Framework auszuwachsen.
+    </p>
+    <p>
+      F&#252;r die UI-Programmierung mu&#223; man Spaghetticode akzeptieren.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1455236851592" ID="ID_1599276883" MODIFIED="1455236859119" TEXT="YAGNI">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1455236869405" ID="ID_1141383110" MODIFIED="1455236874756" TEXT="sp&#xe4;ter">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1448658696638" ID="ID_1235910089" MODIFIED="1448658704649" TEXT="slots">
 <node CREATED="1451177440022" ID="ID_1603816152" MODIFIED="1451177686811" TEXT="expand">
@@ -280,6 +323,24 @@
 </html></richcontent>
 </node>
 <node CREATED="1451177719577" ID="ID_1175980404" MODIFIED="1451177726636" TEXT="wie finde ich den Vater..."/>
+<node CREATED="1455236368345" ID="ID_1490676072" MODIFIED="1455236414978" TEXT="besser">
+<icon BUILTIN="yes"/>
+<node CREATED="1455236382183" ID="ID_983670310" MODIFIED="1455236392849" TEXT="Einstiegspunkt: revealYourself"/>
+<node CREATED="1455236393861" ID="ID_1638665625" MODIFIED="1455236410123">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      support ist <i>optional</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1455236418290" ID="ID_1765760054" MODIFIED="1455236435380" TEXT="dieses ruft parent.reveal(myID)"/>
+</node>
 </node>
 </node>
 <node CREATED="1448658726090" FOLDED="true" ID="ID_37610818" MODIFIED="1454978057481" TEXT="Commands">
