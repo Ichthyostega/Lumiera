@@ -61,8 +61,10 @@ namespace diff{
   
   /* symbolic marker ID references
    * used within the tree diff language
-   * to mark specific scopes
+   * to mark specific scopes and situations
    */
+  const Ref Ref::I      ("_I_");
+  const Ref Ref::NO     ("_NO_");
   const Ref Ref::END    ("_END_");
   const Ref Ref::THIS   ("_THIS_");
   const Ref Ref::CHILD  ("_CHILD_");

@@ -39,6 +39,7 @@ using lib::idi::BareEntryID;
 using gui::test::MockElm;
 using lib::diff::GenNode;
 using lib::diff::Rec;
+using lib::diff::Ref;
 using lib::time::Time;
 using lib::time::TimeSpan;
 using lib::hash::LuidH;
@@ -229,10 +230,38 @@ namespace test {
         }
       
       
+      /** @test collect state mark notifications from bus
+       * We use a test version of the PresentationStateManager,
+       * based on the same building blocks as _the real thing_ */
       void
       captureStateMark ()
         {
-          UNIMPLEMENTED ("message to capture interface state");
+          MARK_TEST_FUN
+          gui::test::Nexus::startNewLog();
+          PresentationStateManager stateManager = gui::test::Nexus::useMockStateManager();
+          
+          MockElm mockA("alpha");
+          MockElm mockB("bravo");
+          MockElm mockC("charly");
+          
+          mockA.slotExpand();
+          
+          mockB.slotExpand();
+          mockB.slotCollapse();
+          
+          CHECK (stateManager.currentState("alpha", "expand") == GenNode("expand", true ));
+          CHECK (stateManager.currentState("bravo", "expand") == GenNode("expand", false ));
+          
+          CHECK (stateManager.currentState("charly", "expand") == Ref::NO); // no data recorded yet
+          CHECK (stateManager.currentState("bravo", "extinct") == Ref::NO); // unknown property
+          CHECK (stateManager.currentState("bruno", "expand")  == Ref::NO); // bruno unbeknown
+          
+          mockC.slotExpand();
+          CHECK (stateManager.currentState("charly", "expand") == GenNode("expand", true ));
+          
+          mockC.reset();
+          CHECK (stateManager.currentState("charly", "expand") == Ref::NO); // back to void
+          
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           cout << "____Nexus-Log_________________\n"
                << util::join(gui::test::Nexus::getLog(), "\n")
@@ -241,10 +270,40 @@ namespace test {
         }
       
       
+      /** @test replay previously captured state information" */
       void
       replayStateMark ()
         {
-          UNIMPLEMENTED ("replay previously captured state information");
+          MARK_TEST_FUN
+          PresentationStateManager stateManager = gui::test::Nexus::getMockStateManager();
+          
+          MockElm mockA("alpha");
+          // no "bravo" this time
+          MockElm mockC("charly");
+          
+          CHECK (not mockA.isExpanded());
+          CHECK (not mockC.isTouched());
+          
+          stateManager.replay("alpha", "expand");
+          CHECK (mockA.isExpanded);
+          
+          auto& uiBus = gui::test::Nexus::testUI();
+          uiBus.mark (mockA.getID(), GenNode{"expand", false});
+          
+          CHECK (not mockA.isExpanded());
+          CHECK (mockA.isTouched());
+          
+          stateManager.replayAllState("expand");
+          
+          CHECK (mockA.isExpanded);
+          CHECK (not mockC.isExpanded);
+          CHECK (not mockC.isTouched());
+          
+          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
+          cout << "____Nexus-Log_________________\n"
+               << util::join(gui::test::Nexus::getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
         }
       
       
