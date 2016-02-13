@@ -48,6 +48,7 @@
 #include "lib/error.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/model/tangible.hpp"
+#include "gui/interact/presentation-state-manager.hpp"
 #include "test/placeholder-command.hpp"
 #include "lib/test/event-log.hpp"
 #include "lib/diff/gen-node.hpp"
@@ -94,6 +95,10 @@ namespace test{
       
       static void setCommandHandler (CommandHandler  =CommandHandler());
       static void setStateMarkHandler (StateMarkHandler  =StateMarkHandler());
+      
+      
+      static interact::PresentationStateManager& useMockStateManager();
+      static interact::PresentationStateManager& getMockStateManager();
       
       
       using Cmd = interact::InvocationTrail;

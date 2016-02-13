@@ -23,6 +23,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "gui/ctrl/bus-term.hpp"
+#include "gui/interact/presentation-state-manager.hpp"
 #include "test/test-nexus.hpp"
 #include "test/mock-elm.hpp"
 #include "lib/idi/entry-id.hpp"
@@ -36,6 +38,8 @@
 
 using lib::idi::EntryID;
 using lib::idi::BareEntryID;
+using gui::interact::PresentationStateManager;
+using gui::ctrl::BusTerm;
 using gui::test::MockElm;
 using lib::diff::GenNode;
 using lib::diff::Rec;
@@ -238,7 +242,7 @@ namespace test {
         {
           MARK_TEST_FUN
           gui::test::Nexus::startNewLog();
-          PresentationStateManager stateManager = gui::test::Nexus::useMockStateManager();
+          PresentationStateManager& stateManager = gui::test::Nexus::useMockStateManager();
           
           MockElm mockA("alpha");
           MockElm mockB("bravo");
@@ -275,7 +279,7 @@ namespace test {
       replayStateMark ()
         {
           MARK_TEST_FUN
-          PresentationStateManager stateManager = gui::test::Nexus::getMockStateManager();
+          PresentationStateManager& stateManager = gui::test::Nexus::getMockStateManager();
           
           MockElm mockA("alpha");
           // no "bravo" this time
@@ -284,8 +288,8 @@ namespace test {
           CHECK (not mockA.isExpanded());
           CHECK (not mockC.isTouched());
           
-          stateManager.replay("alpha", "expand");
-          CHECK (mockA.isExpanded);
+          stateManager.replayState ("alpha", "expand");
+          CHECK (mockA.isExpanded());
           
           auto& uiBus = gui::test::Nexus::testUI();
           uiBus.mark (mockA.getID(), GenNode{"expand", false});
@@ -293,10 +297,10 @@ namespace test {
           CHECK (not mockA.isExpanded());
           CHECK (mockA.isTouched());
           
-          stateManager.replayAllState("expand");
+          stateManager.replayAllState ("expand");
           
-          CHECK (mockA.isExpanded);
-          CHECK (not mockC.isExpanded);
+          CHECK (mockA.isExpanded());
+          CHECK (not mockC.isExpanded());
           CHECK (not mockC.isTouched());
           
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP

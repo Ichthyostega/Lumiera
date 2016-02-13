@@ -546,6 +546,21 @@ namespace test{
   
   
   
+  
+  interact::PresentationStateManager&
+  Nexus::useMockStateManager()
+  {
+    UNIMPLEMENTED("install a presentation manager mock and state mark handler");
+  }
+  
+  interact::PresentationStateManager&
+  Nexus::getMockStateManager()
+  {
+    UNIMPLEMENTED("access installed Mock presentation manager");
+  }
+  
+  
+  
   /**
    * @return a defunct BusTerm with up-link to [ZombieNexus]
    * @remarks useful to create zombie mock UI-Elements for testing.
