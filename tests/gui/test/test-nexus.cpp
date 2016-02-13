@@ -590,7 +590,7 @@ namespace test{
     testNexus().installStateMarkHandler(
                 [&](ID const& elementID, lib::diff::GenNode const& stateMark)
                   {
-                    stateManager().record (elementID, stateMark);
+                    stateManager().recordState (elementID, stateMark);
                   });
     
     return getMockStateManager();

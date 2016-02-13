@@ -39,9 +39,12 @@
  ** remembers those messages, always retaining the latest state information observed for any
  ** property of any [tangible interface element](\ref tangible.hpp) encountered thus far.
  ** 
- ** @todo as of 2/2016 this is complete WIP-WIP-WIP
+ ** @todo as of 2/2016 this is still preliminary.
+ **       In the end, we want to capture and restore presentation state
+ **       in dependency to the current perspective and work site
  ** 
- ** @see ////TODO_test usage example
+ ** @see BusTerm_test::captureStateMark() usage example
+ ** @see BusTerm_test::replayStateMark()  usage example
  ** 
  */
 
@@ -50,12 +53,8 @@
 #define GUI_INTERACT_PRESENTATION_STATE_MANAGER_H
 
 
-#include "lib/error.hpp"
-//#include "gui/ctrl/bus-term.hpp"
-//#include "lib/idi/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <string>
@@ -64,20 +63,24 @@
 namespace gui {
 namespace interact {
   
-//  using lib::HashVal;
-//  using util::isnil;
   using std::string;
   
   
   /**
    * Interface: handling of persistent interface state.
-   * @todo write type comment...
+   * Operations to retrieve previously captured state and
+   * to re-play this state towards the originating UI-elements.
+   * It is assumed that the actual implementation is connected
+   * to the UI-Bus and captures *state mark notifications*.
+   * State is first grouped by ID of the originating interface
+   * element, and recorded per distinct property within each
+   * element.
    */
   class PresentationStateManager
     : boost::noncopyable
     {
     protected:
-      virtual ~PresentationStateManager(); ///< this is an interface
+      virtual ~PresentationStateManager();    ///< this is an interface
       
       using ID = lib::idi::BareEntryID const&;
       using StateMark = lib::diff::GenNode const&;

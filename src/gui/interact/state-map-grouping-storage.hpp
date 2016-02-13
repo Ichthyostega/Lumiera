@@ -74,9 +74,11 @@ namespace interact {
   struct StateMapGroupingStorage
     : boost::noncopyable
     {
-      using Record = std::set<GenNode, GenNodeComparator>;
+      using StateData = std::set<GenNode, GenNodeComparator>;
       
-      using Storage = std::unordered_map<BareEntryID, Record, BareEntryID::UseEmbeddedHash>; 
+      using Storage = std::unordered_map<BareEntryID, StateData, BareEntryID::UseEmbeddedHash>;
+      
+      using Record = Storage::value_type;
       
       
       Storage elmTable_;
@@ -116,19 +118,19 @@ namespace interact {
         }
       
       static BareEntryID const&
-      getID (iterator entry)
+      getID (Record entry)
         {
-          return entry->first;
+          return entry.first;
         }
       
-      static Record const&
-      getState (iterator entry)
+      static StateData const&
+      getState (Record entry)
         {
-          return entry->second;
+          return entry.second;
         }
       
       static GenNode const&
-      getState (iterator entry, string propertyKey)
+      getState (Record entry, string propertyKey)
         {
           UNIMPLEMENTED ("fetch property data from given element record");
         }

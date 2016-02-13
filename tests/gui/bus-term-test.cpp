@@ -117,7 +117,7 @@ namespace test {
        * from the Hub.
        */
       void
-      attachNewBusTerm ()
+      attachNewBusTerm()
         {
           MARK_TEST_FUN;
           // our dummy will be linked with this identity
@@ -180,7 +180,7 @@ namespace test {
       
       /** @test perform the full command binding and invocation protocol */
       void
-      commandInvocation ()
+      commandInvocation()
         {
           MARK_TEST_FUN
           gui::test::Nexus::startNewLog();
@@ -238,7 +238,7 @@ namespace test {
        * We use a test version of the PresentationStateManager,
        * based on the same building blocks as _the real thing_ */
       void
-      captureStateMark ()
+      captureStateMark()
         {
           MARK_TEST_FUN
           gui::test::Nexus::startNewLog();
@@ -279,7 +279,7 @@ namespace test {
       
       /** @test replay previously captured state information" */
       void
-      replayStateMark ()
+      replayStateMark()
         {
           MARK_TEST_FUN
           PresentationStateManager& stateManager = gui::test::Nexus::getMockStateManager();
@@ -316,28 +316,28 @@ namespace test {
       
       
       void
-      verifyNotifications ()
+      verifyNotifications()
         {
           UNIMPLEMENTED ("send notifications to a distinct element");
         }
       
       
       void
-      clearStates ()
+      clearStates()
         {
           UNIMPLEMENTED ("broadcast state reset");
         }
       
       
       void
-      pushDiff ()
+      pushDiff()
         {
           UNIMPLEMENTED ("push a mutation diff towards an interface element");
         }
       
       
       void
-      destroy ()
+      destroy()
         {
           UNIMPLEMENTED ("detach and destroy the test BusTerm");
         }
