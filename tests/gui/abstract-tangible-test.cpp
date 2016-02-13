@@ -56,12 +56,13 @@
 #include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 #include <sigc++/signal.h>
 
 
 using lib::Symbol;
+using util::isnil;
 using util::toString;
 using lib::time::Time;
 using gui::test::MockElm;
@@ -512,6 +513,9 @@ namespace test {
           CHECK (mock.ensureNot("Flash"));
           CHECK (mock.ensureNot("Error"));
           CHECK (mock.ensureNot("Message"));
+          CHECK (isnil(mock.getMessage()));
+          CHECK (isnil(mock.getError()));
+          CHECK (not mock.isError());
           
           // now send a "Flash" mark via UI-Bus....
           uiBus.mark (targetID, GenNode{"Flash", true });
@@ -519,12 +523,19 @@ namespace test {
           
           CHECK (mock.ensureNot("Error"));
           CHECK (mock.ensureNot("Message"));
+          CHECK (isnil(mock.getMessage()));
+          CHECK (isnil(mock.getError()));
           
           uiBus.mark (targetID, GenNode{"Error", "getting serious"});
           CHECK (mock.verifyMark("Error", "serious"));
+          CHECK (mock.isError());
+          CHECK ("getting serious" == mock.getError());
+          CHECK (isnil(mock.getMessage()));
           
           uiBus.mark (targetID, GenNode{"Message", "by mistake"});
           CHECK (mock.verifyMark("Message", "mistake"));
+          CHECK ("by mistake" == mock.getMessage());
+          CHECK ("getting serious" == mock.getError());
           
           CHECK (mock.verify("target")
                      .before("Flash")
@@ -539,6 +550,12 @@ namespace test {
           CHECK (mock.ensureNot(string(Time::NEVER)));
           CHECK (nexusLog.verifyCall("mark").arg(targetID, Time::NEVER));
           CHECK (nexusLog.ensureNot("delivered mark").arg(Time::NEVER));
+          CHECK ("getting serious" == mock.getError());
+          
+          mock.reset();
+          CHECK (isnil(mock.getMessage()));
+          CHECK (isnil(mock.getError()));
+          CHECK (not mock.isError());
           
           
           cout << "____Event-Log_________________\n"

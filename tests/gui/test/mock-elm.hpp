@@ -284,7 +284,7 @@ namespace test{
       bool
       isError()  const
         {
-          return isnil (error_);
+          return not isnil(error_);
         }
       
       string
