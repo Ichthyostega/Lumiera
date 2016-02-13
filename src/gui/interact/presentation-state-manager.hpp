@@ -79,25 +79,27 @@ namespace interact {
     protected:
       virtual ~PresentationStateManager(); ///< this is an interface
       
+      using ID = lib::idi::BareEntryID;
+      using StateMark = lib::diff::GenNode const&;
     public:
       
-      virtual lib::diff::GenNode const&
-      currentState (string elementSymbol, string propertyID) const =0;
+      virtual StateMark
+      currentState (ID uiElm, string propertyKey) const =0;
       
       virtual void
-      replayState (string elementSymbol, string propertyID)        =0;
+      replayState (ID uiElm, string propertyKey)        =0;
       
       virtual void
-      replayAllState()                                             =0;
+      replayAllState()                                  =0;
       
       virtual void
-      replayAllState (string propertyID)                           =0;
+      replayAllState (string propertyKey)               =0;
       
       virtual void
-      replayAllProperties (string elementSymbol)                   =0;
+      replayAllProperties (ID uiElm)                    =0;
       
       virtual void
-      clearState()                                                 =0;
+      clearState()                                      =0;
       
     private:
     };

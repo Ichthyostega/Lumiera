@@ -65,6 +65,15 @@ namespace interact {
     protected:
       
     public:
+      /** retrieve captured state
+       * @return reference to the state mark last seen for the denoted property
+       *         or reference to a generic "no" marker (Ref::NO)
+       */
+      lib::diff::GenNode const&
+      retrieve (string elementSymbol, string propertyID)  const
+        {
+          UNIMPLEMENTED("retrieve captured state");
+        }
       
     private:
     };

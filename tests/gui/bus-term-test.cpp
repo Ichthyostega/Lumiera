@@ -244,27 +244,30 @@ namespace test {
           gui::test::Nexus::startNewLog();
           PresentationStateManager& stateManager = gui::test::Nexus::useMockStateManager();
           
-          MockElm mockA("alpha");
-          MockElm mockB("bravo");
-          MockElm mockC("charly");
+          MockElm mockA("alpha");   BareEntryID alpha = mockA.getID();
+          MockElm mockB("bravo");   BareEntryID bravo = mockB.getID();
+          MockElm mockC("charly");  BareEntryID charly = mockC.getID();
           
           mockA.slotExpand();
           
           mockB.slotExpand();
           mockB.slotCollapse();
           
-          CHECK (stateManager.currentState("alpha", "expand") == GenNode("expand", true ));
-          CHECK (stateManager.currentState("bravo", "expand") == GenNode("expand", false ));
+          CHECK (stateManager.currentState(alpha, "expand") == GenNode("expand", true ));
+          CHECK (stateManager.currentState(bravo, "expand") == GenNode("expand", false ));
           
-          CHECK (stateManager.currentState("charly", "expand") == Ref::NO); // no data recorded yet
-          CHECK (stateManager.currentState("bravo", "extinct") == Ref::NO); // unknown property
-          CHECK (stateManager.currentState("bruno", "expand")  == Ref::NO); // bruno unbeknown
+          // handling of missing information
+          CHECK (stateManager.currentState(charly, "expand") == Ref::NO); // no data recorded yet
+          CHECK (stateManager.currentState(bravo, "extinct") == Ref::NO); // unknown property
+          
+          EntryID<MockElm> bruno("bruno");
+          CHECK (stateManager.currentState(bruno, "expand")  == Ref::NO); // who knows bruno?
           
           mockC.slotExpand();
-          CHECK (stateManager.currentState("charly", "expand") == GenNode("expand", true ));
+          CHECK (stateManager.currentState(charly, "expand") == GenNode("expand", true ));
           
           mockC.reset();
-          CHECK (stateManager.currentState("charly", "expand") == Ref::NO); // back to void
+          CHECK (stateManager.currentState(charly, "expand") == Ref::NO); // back to void
           
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           cout << "____Nexus-Log_________________\n"
@@ -288,7 +291,8 @@ namespace test {
           CHECK (not mockA.isExpanded());
           CHECK (not mockC.isTouched());
           
-          stateManager.replayState ("alpha", "expand");
+          BareEntryID alpha = mockA.getID();
+          stateManager.replayState (alpha, "expand");
           CHECK (mockA.isExpanded());
           
           auto& uiBus = gui::test::Nexus::testUI();

@@ -59,10 +59,10 @@ namespace interact {
 //  using util::isnil;
   using gui::ctrl::BusTerm;
   using lib::diff::GenNode;
+  using lib::diff::Ref;
   using std::string;
   
   
-  using ID = lib::idi::BareEntryID;
   
   
   /**
@@ -75,23 +75,25 @@ namespace interact {
     : public PresentationStateManager
     {
       
-      StateMapGroupingStorage storage_;
       BusTerm&        uiBusConnection_;
+      StateMapGroupingStorage storage_;
       
       
       /* === PresentationStateManager interface === */
       
-      virtual lib::diff::GenNode const&
-      currentState (string elementSymbol, string propertyID)  const override
+      virtual StateMark
+      currentState (ID uiElm, string propertyKey)  const override
         {
-          UNIMPLEMENTED ("retrieve captured state");
+          return storage_.retrieve (uiElm, propertyKey);
         }
       
       
       virtual void
-      replayState (string elementSymbol, string propertyID)  override
+      replayState (ID uiElm, string propertyKey)  override
         {
-          UNIMPLEMENTED ("retrieve captured state");
+          StateMark state = storage_.retrieve (uiElm, propertyKey);
+          if (state != Ref::NO)
+            uiBusConnection_.mark (uiElm, state);
         }
       
       
@@ -103,14 +105,14 @@ namespace interact {
       
       
       virtual void
-      replayAllState (string propertyID)  override
+      replayAllState (string propertyKey)  override
         {
           UNIMPLEMENTED ("retrieve captured state");
         }
       
       
       virtual void
-      replayAllProperties (string elementSymbol)  override
+      replayAllProperties (ID uiElm)  override
         {
           UNIMPLEMENTED ("retrieve captured state");
         }
