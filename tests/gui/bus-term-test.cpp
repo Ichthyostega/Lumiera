@@ -231,6 +231,8 @@ namespace test {
           cout << "____Nexus-Log_________________\n"
                << util::join(gui::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          gui::test::Nexus::setCommandHandler(); // deinstall custom command handler
         }
       
       
@@ -307,6 +309,16 @@ namespace test {
           CHECK (not mockC.isExpanded());
           CHECK (not mockC.isTouched());
           
+          cout << "____Nexus-Log_________________\n"
+               << util::join(gui::test::Nexus::getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+        }
+      
+      
+      void
+      verifyNotifications()
+        {
+          UNIMPLEMENTED ("send notifications to a distinct element");
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           cout << "____Nexus-Log_________________\n"
                << util::join(gui::test::Nexus::getLog(), "\n")
@@ -316,16 +328,10 @@ namespace test {
       
       
       void
-      verifyNotifications()
-        {
-          UNIMPLEMENTED ("send notifications to a distinct element");
-        }
-      
-      
-      void
       clearStates()
         {
           UNIMPLEMENTED ("broadcast state reset");
+          gui::test::Nexus::setStateMarkHandler(); // deinstall custom command handler
         }
       
       
