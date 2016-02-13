@@ -77,10 +77,9 @@ namespace interact {
     : boost::noncopyable
     {
     protected:
-      
-    public:
       virtual ~PresentationStateManager(); ///< this is an interface
       
+    public:
       
       virtual lib::diff::GenNode const&
       currentState (string elementSymbol, string propertyID) const =0;
