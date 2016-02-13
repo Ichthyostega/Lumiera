@@ -23,16 +23,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "gui/ctrl/bus-term.hpp"
-//#include "gui/interact/presentation-state-manager.hpp"
 #include "gui/interact/state-map-grouping-storage.hpp"
-//#include "test/test-nexus.hpp"
-//#include "test/mock-elm.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
-#include "lib/format-cout.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/luid.h"
 #include "lib/util.hpp"
 
 #include <string>
@@ -40,17 +33,7 @@
 
 using std::string;
 using lib::idi::EntryID;
-//using lib::idi::BareEntryID;
-//using gui::interact::PresentationStateManager;
-//using gui::ctrl::BusTerm;
-//using gui::test::MockElm;
 using lib::diff::GenNode; 
-//using lib::diff::Rec;
-//using lib::diff::Ref;
-//using lib::time::Time;
-//using lib::time::TimeSpan;
-//using lib::hash::LuidH;
-//using lib::HashVal;
 using util::isSameObject;
 using util::isnil;
 
@@ -59,16 +42,7 @@ namespace gui  {
 namespace interact{
 namespace test {
   
-//  using proc::control::LUMIERA_ERROR_UNBOUND_ARGUMENTS;
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-  
-  namespace { // test fixture...
-    
-  }//(End) test fixture
-  
-  
-  
-  
   
   
   /**************************************************************************//**
@@ -84,16 +58,17 @@ namespace test {
       run (Arg)
         {
           EntryID<char> woof ("wau");
-          EntryID<int> wooof ("wau");
+          EntryID<int> wooof ("wau");                // different (type) hash
           
           EntryID<int> miaow ("miau");
           EntryID<int> quack ("quack");
           
           GenNode poodle{"poodle", "Pudel"};
           GenNode toyPoodle{"poodle", "Zwergpudel"};
-          GenNode pseudoPoodle {"poodle", false};
+          GenNode labradoodle {"poodle", false };    // different payload type
           GenNode mastiff{"mastiff", "Dogge"};
           GenNode duck{"duck", "Ente"};
+          
           
           StateMapGroupingStorage storage;
           
@@ -123,17 +98,39 @@ namespace test {
           
           // since properties are keyed just by ID-string,
           // we might attempt sneak in a fake poodle
-          // fortunately GenNode disallows cross-type assignments
-          VERIFY_ERROR (WRONG_TYPE, storage.record (woof, pseudoPoodle) );
+          // fortunately GenNode disallows cross-type abominations
+          VERIFY_ERROR (WRONG_TYPE, storage.record (woof, labradoodle) );
           
           CHECK (2 == storage.size());
-          cout << toyPoodle <<endl;
-          cout << storage.retrieve(woof, "poodle") <<endl;
-          cout << size_t(toyPoodle.idi.getHash()) <<endl;
-          cout << size_t(storage.retrieve(woof, "poodle").idi.getHash()) <<endl;
-          cout << size_t(pseudoPoodle.idi.getHash()) <<endl;
           CHECK (toyPoodle == storage.retrieve(woof, "poodle"));
           CHECK (mastiff == storage.retrieve(woof, "mastiff"));
+          
+          
+          storage.record (quack, duck);
+          CHECK (3 == storage.size());
+          CHECK (toyPoodle == storage.retrieve(woof, "poodle"));
+          CHECK (mastiff == storage.retrieve(woof, "mastiff"));
+          CHECK (duck  == storage.retrieve(quack, "duck"));
+          
+          CHECK (Ref::NO == storage.retrieve(miaow, "meow"));
+          
+          auto elm = storage.find(miaow);
+          CHECK (elm == storage.end());
+          
+          elm = storage.find(woof);
+          CHECK (elm != storage.end());
+          CHECK (woof == StateMapGroupingStorage::getID(*elm));
+          CHECK (2    == StateMapGroupingStorage::getState(*elm).size());
+          CHECK (Ref::NO   == StateMapGroupingStorage::getState(*elm, "doodle"));
+          CHECK (toyPoodle == StateMapGroupingStorage::getState(*elm, "poodle"));
+          CHECK (mastiff   == StateMapGroupingStorage::getState(*elm, "mastiff"));
+          
+          storage.clear();
+          CHECK (isnil (storage));
+          CHECK (0 == storage.size());
+          CHECK (Ref::NO == storage.retrieve(woof, "poodle"));
+          CHECK (Ref::NO == storage.retrieve(woof, "mastiff"));
+          CHECK (Ref::NO == storage.retrieve(quack, "duck"));
         }
     };
   

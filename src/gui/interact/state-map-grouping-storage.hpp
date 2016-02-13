@@ -25,6 +25,7 @@
  ** Implementation of storage for captured presentation state.
  ** This is a associative storage, grouped by element ID.
  ** 
+ ** @see StateMapGroupingStorage_test
  ** @see StateRecorder
  ** @see BusTerm_test::captureStateMark()
  ** @see BusTerm_test::replayStateMark()
@@ -67,6 +68,8 @@ namespace interact {
    * seen represents the current state of this property, so previous
    * records are overwritten. Access to unknown data is marked by
    * returning diff::Ref::NO rsp. `Storage::end()` (when searching)
+   * @todo reinvestigate with GCC-5                                //////////////////////////////////TICKET #991
+   * @see StateMapGroupingStorage_test
    */
   class StateMapGroupingStorage
     : boost::noncopyable
@@ -116,6 +119,11 @@ namespace interact {
             return getState (*entry, propertyKey);
         }
       
+      /** remember the state mark for the denoted element
+       * @note stateMark value is assigned to a previously existing
+       *       entry with the same ID-symbol. If no such entry exists,
+       *       a (heap allocated) copy of the state mark is stored.
+       */
       void
       record (BareEntryID const& elementID, GenNode const& stateMark)
         {
@@ -152,15 +160,14 @@ namespace interact {
       /**
        * Access the recorded state mark, if any.
        * @warning we can't search logarithmically,
-       *    since this would require to construct another GenNode
-       *    to represent the key.
+       *    since this would require to construct another GenNode to represent the key.
        * @todo seemingly GCC-4.9 doesn't yet support the "transparent search" feature
        *    of C++14, where std::set would support an additional overload of the `find()` function,
        *    templated to accept a value _convertible_ to some key equivalent, which needs to be
        *    understood by the comparator of the set. To trigger using this overload, the
        *    comparator has to define a suitable `operator()` and in addition a marker type
        *    `is_transparent`. See [transparent-cmp] and the [reference][cind-cpp14] for explanation.
-       * 
+       *                                                                            //////////////////////////////////TICKET #991
        * [find-cpp14]: http://en.cppreference.com/w/cpp/container/set/find
        * [transparent-cmp]: http://stackoverflow.com/questions/20317413/what-are-transparent-comparators
        */

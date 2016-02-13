@@ -17,6 +17,11 @@ return: 0
 END
 
 
+TEST "storage record for captured UI state" StateMapGroupingStorage_test <<END
+return: 0
+END
+
+
 PLANNED "Concept demonstration: retrieve session contents" SessionStructureMapping_test <<END
 return: 0
 END
