@@ -44,6 +44,7 @@
 //#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <unordered_map>
 #include <string>
 
 
@@ -52,27 +53,84 @@ namespace interact {
   
 //  using lib::HashVal;
 //  using util::isnil;
+  using lib::idi::BareEntryID;
+  using lib::diff::GenNode;
   using std::string;
+  
+  struct GenNodeComparator
+    {
+      bool
+      operator() (GenNode const& left, GenNode const& right)  const
+        {
+          return left.idi.getSym() < right.idi.getSym();
+        }
+    };
   
   
   /**
    * Map storage for captured presentation state information.
    * @todo write type comment...
    */
-  class StateMapGroupingStorage
+  struct StateMapGroupingStorage
     : boost::noncopyable
     {
-    protected:
+      using Record = std::set<GenNode, GenNodeComparator>;
       
-    public:
+      using Storage = std::unordered_map<BareEntryID, Record, BareEntryID::UseEmbeddedHash>; 
+      
+      
+      Storage elmTable_;
+      
+      
       /** retrieve captured state
        * @return reference to the state mark last seen for the denoted property
        *         or reference to a generic "no" marker (Ref::NO)
        */
-      lib::diff::GenNode const&
-      retrieve (string elementSymbol, string propertyID)  const
+      GenNode const&
+      retrieve (BareEntryID const& elementID, string propertyKey)  const
         {
-          UNIMPLEMENTED("retrieve captured state");
+          UNIMPLEMENTED ("retrieve captured state");
+        }
+      
+      void
+      record (BareEntryID const& elementID, GenNode const& stateMark)
+        {
+          UNIMPLEMENTED ("store state record");
+        }
+
+      void
+      clear()
+        {
+          UNIMPLEMENTED ("discard all stored state information");
+        }
+      
+      using iterator = Storage::const_iterator;
+      
+      iterator begin() const { return elmTable_.begin(); }
+      iterator end()   const { return elmTable_.end(); }
+      
+      iterator
+      find (BareEntryID const& elementID)
+        {
+          UNIMPLEMENTED ("search for element record");
+        }
+      
+      static BareEntryID const&
+      getID (iterator entry)
+        {
+          return entry->first;
+        }
+      
+      static Record const&
+      getState (iterator entry)
+        {
+          return entry->second;
+        }
+      
+      static GenNode const&
+      getState (iterator entry, string propertyKey)
+        {
+          UNIMPLEMENTED ("fetch property data from given element record");
         }
       
     private:

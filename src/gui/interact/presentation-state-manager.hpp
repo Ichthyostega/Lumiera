@@ -79,7 +79,7 @@ namespace interact {
     protected:
       virtual ~PresentationStateManager(); ///< this is an interface
       
-      using ID = lib::idi::BareEntryID;
+      using ID = lib::idi::BareEntryID const&;
       using StateMark = lib::diff::GenNode const&;
     public:
       

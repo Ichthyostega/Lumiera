@@ -74,9 +74,12 @@ namespace interact {
   class StateRecorder
     : public PresentationStateManager
     {
+      using Storage = StateMapGroupingStorage;
+      using Iter    = Storage::iterator;
       
-      BusTerm&        uiBusConnection_;
-      StateMapGroupingStorage storage_;
+      BusTerm& uiBus_;
+      Storage  storage_;
+      
       
       
       /* === PresentationStateManager interface === */
@@ -93,47 +96,64 @@ namespace interact {
         {
           StateMark state = storage_.retrieve (uiElm, propertyKey);
           if (state != Ref::NO)
-            uiBusConnection_.mark (uiElm, state);
+            uiBus_.mark (uiElm, state);
         }
       
       
       virtual void
       replayAllState()  override
         {
-          UNIMPLEMENTED ("retrieve captured state");
+          for (Iter entry = storage_.begin(); entry!=storage_.end(); ++entry)
+            replayPropertiesOf (entry);
         }
       
       
       virtual void
       replayAllState (string propertyKey)  override
         {
-          UNIMPLEMENTED ("retrieve captured state");
+          for (Iter entry = storage_.begin(); entry!=storage_.end(); ++entry)
+            {
+              StateMark state = Storage::getState (entry, propertyKey);
+              if (state != Ref::NO)
+                uiBus_.mark (Storage::getID (entry), state);
+            }
         }
       
       
       virtual void
       replayAllProperties (ID uiElm)  override
         {
-          UNIMPLEMENTED ("retrieve captured state");
+          Iter entry = storage_.find (uiElm);
+          if (entry != storage_.end())
+            replayPropertiesOf (entry);
         }
       
       virtual void
       clearState()  override
         {
-          UNIMPLEMENTED ("discard all stored state information");
+          storage_.clear();
         }
       
     public:
       StateRecorder (BusTerm& busConnection)
-        : uiBusConnection_(busConnection)
+        : uiBus_(busConnection)
         , storage_()
         { }
       
       
       void
-      record (ID const& elementID, lib::diff::GenNode const& stateMark)
+      record (ID uiElm, StateMark stateMark)
         {
-          UNIMPLEMENTED ("handle and record a state mark message");
+          storage_.record (uiElm, stateMark);
+        }
+      
+    private:
+      void
+      replayPropertiesOf (Iter entry)
+        {
+          ID uiElm = Storage::getID (entry);
+          for (auto& stateMark : Storage::getState (entry))
+            uiBus_.mark (uiElm, stateMark);
         }
     };
   
