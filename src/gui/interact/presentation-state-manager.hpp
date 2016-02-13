@@ -83,19 +83,22 @@ namespace interact {
       
       
       virtual lib::diff::GenNode const&
-      currentState (string elementSymbol, string propertyID)    =0;
+      currentState (string elementSymbol, string propertyID) const =0;
       
       virtual void
-      replayState (string elementSymbol, string propertyID)     =0;
+      replayState (string elementSymbol, string propertyID)        =0;
       
       virtual void
-      replayAllState ()                                         =0;
+      replayAllState()                                             =0;
       
       virtual void
-      replayAllState (string propertyID)                        =0;
+      replayAllState (string propertyID)                           =0;
       
       virtual void
-      replayAllProperties (string elementSymbol)                =0;
+      replayAllProperties (string elementSymbol)                   =0;
+      
+      virtual void
+      clearState()                                                 =0;
       
     private:
     };

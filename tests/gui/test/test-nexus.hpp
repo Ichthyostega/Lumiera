@@ -91,7 +91,7 @@ namespace test{
       /* == allow to set custom handlers for commands and state changes == */
       
       using CommandHandler   = std::function<void(lib::diff::GenNode const&)>;
-      using StateMarkHandler = std::function<void(lib::idi::BareEntryID, lib::diff::GenNode const&)>;
+      using StateMarkHandler = std::function<void(lib::idi::BareEntryID const&, lib::diff::GenNode const&)>;
       
       static void setCommandHandler (CommandHandler  =CommandHandler());
       static void setStateMarkHandler (StateMarkHandler  =StateMarkHandler());

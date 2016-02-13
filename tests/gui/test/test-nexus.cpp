@@ -74,6 +74,7 @@ using lib::diff::DataValues;
 using lib::idi::instanceTypeID;
 using lib::test::EventLog;
 using gui::ctrl::BusTerm;
+using gui::interact::PresentationStateManager;
 using proc::control::Command;
 using proc::control::CommandImpl;
 using proc::control::HandlingPattern;
@@ -547,17 +548,104 @@ namespace test{
   
   
   
+  namespace { // install a diagnostic dummy-command-handler
+    
+    using ID = lib::idi::BareEntryID;
+    
+    class SimulatedStateManager
+      : public PresentationStateManager
+      {
+        
+        /* === PresentationStateManager interface === */
+        
+        virtual lib::diff::GenNode const&
+        currentState (string elementSymbol, string propertyID)  const override
+          {
+            UNIMPLEMENTED ("retrieve captured state");
+          }
+        
+        
+        virtual void
+        replayState (string elementSymbol, string propertyID)  override
+          {
+            UNIMPLEMENTED ("retrieve captured state");
+          }
+        
+        
+        virtual void
+        replayAllState()  override
+          {
+            UNIMPLEMENTED ("retrieve captured state");
+          }
+        
+        
+        virtual void
+        replayAllState (string propertyID)  override
+          {
+            UNIMPLEMENTED ("retrieve captured state");
+          }
+        
+        
+        virtual void
+        replayAllProperties (string elementSymbol)  override
+          {
+            UNIMPLEMENTED ("retrieve captured state");
+          }
+        
+        
+      public:
+        
+        virtual void
+        clearState()  override
+          {
+            UNIMPLEMENTED ("discard all stored state information");
+          }
+        
+        void
+        record (ID const& elementID, lib::diff::GenNode const& stateMark)
+          {
+            UNIMPLEMENTED ("handle and record a state mark message");
+          }
+      };
+    
+    lib::Depend<SimulatedStateManager> stateManager;
+    
+  }//(End)diagnostic mock-state-manager
+  
+  
+  /**
+   * install a standard handler for state mark messages,
+   * which is actually backed by a mock implementation of the
+   * PresentationStateManager interface. This mock is based on
+   * the same implementation techniques as the full fledged
+   * state manager in the Lumiera GTK UI; any state mark
+   * notification messages appearing after that point
+   * at the test-UI-Bus will be accounted for.
+   */
   interact::PresentationStateManager&
   Nexus::useMockStateManager()
   {
-    UNIMPLEMENTED("install a presentation manager mock and state mark handler");
+    // discard possible leftover
+    // from previous test installations
+    stateManager().clearState();
+    
+    testNexus().installStateMarkHandler(
+                [&](ID const& elementID, lib::diff::GenNode const& stateMark)
+                  {
+                    stateManager().record (elementID, stateMark);
+                  });
+    
+    return getMockStateManager();
   }
   
   interact::PresentationStateManager&
   Nexus::getMockStateManager()
   {
-    UNIMPLEMENTED("access installed Mock presentation manager");
+    return stateManager();
   }
+  
+  
+  
   
   
   
