@@ -25,9 +25,9 @@
  ** Implementation of storage for captured presentation state.
  ** This is a associative storage, grouped by element ID.
  ** 
- ** @todo as of 2/2016 this is complete WIP-WIP-WIP
- ** 
- ** @see ////TODO_test usage example
+ ** @see StateRecorder
+ ** @see BusTerm_test::captureStateMark()
+ ** @see BusTerm_test::replayStateMark()
  ** 
  */
 
@@ -37,51 +37,65 @@
 
 
 #include "lib/error.hpp"
-//#include "gui/ctrl/bus-term.hpp"
-//#include "lib/idi/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <unordered_map>
-#include <string>
+#include <set>
 
 
 namespace gui {
 namespace interact {
   
-//  using lib::HashVal;
-//  using util::isnil;
   using lib::idi::BareEntryID;
   using lib::diff::GenNode;
-  using std::string;
+  using lib::diff::Ref;
   
-  struct GenNodeComparator
-    {
-      bool
-      operator() (GenNode const& left, GenNode const& right)  const
-        {
-          return left.idi.getSym() < right.idi.getSym();
-        }
-    };
   
   
   /**
    * Map storage for captured presentation state information.
-   * @todo write type comment...
+   * The master table is an association of model::Tangible element IDs
+   * to StateData records, which are a set of property data elements.
+   * The key of the stored elements acts as propertyKey and was chosen
+   * by the originating UI element. It is assumed that the entry last
+   * seen represents the current state of this property, so previous
+   * records are overwritten. Access to unknown data is marked by
+   * returning diff::Ref::NO rsp. `Storage::end()` (when searching)
    */
-  struct StateMapGroupingStorage
+  class StateMapGroupingStorage
     : boost::noncopyable
     {
-      using StateData = std::set<GenNode, GenNodeComparator>;
-      
-      using Storage = std::unordered_map<BareEntryID, StateData, BareEntryID::UseEmbeddedHash>;
-      
-      using Record = Storage::value_type;
+      using StateData = std::set<GenNode,  GenNode::IDComparator>;
+      using Storage = std::unordered_map<BareEntryID, StateData,  BareEntryID::UseEmbeddedHash>;
       
       
       Storage elmTable_;
+      
+    public:
+      using Record = Storage::value_type;
+      
+      bool
+      empty()  const
+        {
+          return elmTable_.empty();
+        }
+      
+      size_t
+      size()  const
+        {
+          size_t siz{0};
+          for (Record const& entry : elmTable_)
+            siz += entry.second.size();
+          return siz;
+        }
+      
+      void
+      clear()
+        {
+          elmTable_.clear();
+        }
       
       
       /** retrieve captured state
@@ -91,20 +105,19 @@ namespace interact {
       GenNode const&
       retrieve (BareEntryID const& elementID, string propertyKey)  const
         {
-          UNIMPLEMENTED ("retrieve captured state");
+          iterator entry = find (elementID);
+          if (entry == elmTable_.end())
+            return Ref::NO;
+          else
+            return getState (*entry, propertyKey);
         }
       
       void
       record (BareEntryID const& elementID, GenNode const& stateMark)
         {
-          UNIMPLEMENTED ("store state record");
+          elmTable_[elementID].emplace (stateMark);
         }
-
-      void
-      clear()
-        {
-          UNIMPLEMENTED ("discard all stored state information");
-        }
+      
       
       using iterator = Storage::const_iterator;
       
@@ -112,30 +125,33 @@ namespace interact {
       iterator end()   const { return elmTable_.end(); }
       
       iterator
-      find (BareEntryID const& elementID)
+      find (BareEntryID const& elementID)  const
         {
-          UNIMPLEMENTED ("search for element record");
+          return elmTable_.find (elementID);
         }
       
       static BareEntryID const&
-      getID (Record entry)
+      getID (Record const& entry)
         {
           return entry.first;
         }
       
       static StateData const&
-      getState (Record entry)
+      getState (Record const& entry)
         {
           return entry.second;
         }
       
       static GenNode const&
-      getState (Record entry, string propertyKey)
+      getState (Record const& entry, string propertyKey)
         {
-          UNIMPLEMENTED ("fetch property data from given element record");
+          StateData const& stateSet = entry.second;
+          StateData::const_iterator propertyRecord = stateSet.find (propertyKey);
+          if (propertyRecord == stateSet.end())
+            return Ref::NO;
+          else
+            return *propertyRecord;
         }
-      
-    private:
     };
   
   

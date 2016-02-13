@@ -26,6 +26,7 @@
  ** through associative (key-value) store. This implementation
  ** groups recorded message by elementID and simply overwrites
  ** previous state info for a given attribute with later one.
+ ** Referral to unknown elements and properties is ignored.
  ** 
  ** \par performance
  ** The storage layout was chosen under the assumption that we'll get
