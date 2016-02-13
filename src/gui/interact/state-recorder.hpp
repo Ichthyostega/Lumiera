@@ -40,10 +40,11 @@
 
 #include "lib/error.hpp"
 //#include "gui/ctrl/bus-term.hpp"
-//#include "lib/idi/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "gui/interact/presentation-state-manager.hpp"
 #include "gui/interact/state-map-grouping-storage.hpp"
+#include "gui/ctrl/bus-term.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -56,21 +57,82 @@ namespace interact {
   
 //  using lib::HashVal;
 //  using util::isnil;
+  using gui::ctrl::BusTerm;
+  using lib::diff::GenNode;
   using std::string;
   
   
+  using ID = lib::idi::BareEntryID;
+  
+  
   /**
-   * Map storage for captured presentation state information.
+   * Simple map based implementation of the
+   * PresentationStateManager interface.
+   * 
    * @todo write type comment...
    */
   class StateRecorder
-    : boost::noncopyable
+    : public PresentationStateManager
     {
-    protected:
+      
+      StateMapGroupingStorage storage_;
+      BusTerm&        uiBusConnection_;
+      
+      
+      /* === PresentationStateManager interface === */
+      
+      virtual lib::diff::GenNode const&
+      currentState (string elementSymbol, string propertyID)  const override
+        {
+          UNIMPLEMENTED ("retrieve captured state");
+        }
+      
+      
+      virtual void
+      replayState (string elementSymbol, string propertyID)  override
+        {
+          UNIMPLEMENTED ("retrieve captured state");
+        }
+      
+      
+      virtual void
+      replayAllState()  override
+        {
+          UNIMPLEMENTED ("retrieve captured state");
+        }
+      
+      
+      virtual void
+      replayAllState (string propertyID)  override
+        {
+          UNIMPLEMENTED ("retrieve captured state");
+        }
+      
+      
+      virtual void
+      replayAllProperties (string elementSymbol)  override
+        {
+          UNIMPLEMENTED ("retrieve captured state");
+        }
+      
+      virtual void
+      clearState()  override
+        {
+          UNIMPLEMENTED ("discard all stored state information");
+        }
       
     public:
+      StateRecorder (BusTerm& busConnection)
+        : uiBusConnection_(busConnection)
+        , storage_()
+        { }
       
-    private:
+      
+      void
+      record (ID const& elementID, lib::diff::GenNode const& stateMark)
+        {
+          UNIMPLEMENTED ("handle and record a state mark message");
+        }
     };
   
   

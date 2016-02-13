@@ -49,7 +49,7 @@
 #include "test/test-nexus.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/ctrl/nexus.hpp"
-#include "gui/interact/state-map-grouping-storage.hpp"
+#include "gui/interact/state-recorder.hpp"
 #include "proc/control/command.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
@@ -76,7 +76,7 @@ using lib::idi::instanceTypeID;
 using lib::test::EventLog;
 using gui::ctrl::BusTerm;
 using gui::interact::PresentationStateManager;
-using gui::interact::StateMapGroupingStorage;
+using gui::interact::StateRecorder;
 using proc::control::Command;
 using proc::control::CommandImpl;
 using proc::control::HandlingPattern;
@@ -555,68 +555,15 @@ namespace test{
     using ID = lib::idi::BareEntryID;
     
     class SimulatedStateManager
-      : public PresentationStateManager
+      : public StateRecorder
       {
-        
-        StateMapGroupingStorage state_;
-        BusTerm&      uiBus_;
-        
-        
-        /* === PresentationStateManager interface === */
-        
-        virtual lib::diff::GenNode const&
-        currentState (string elementSymbol, string propertyID)  const override
-          {
-            UNIMPLEMENTED ("retrieve captured state");
-          }
-        
-        
-        virtual void
-        replayState (string elementSymbol, string propertyID)  override
-          {
-            UNIMPLEMENTED ("retrieve captured state");
-          }
-        
-        
-        virtual void
-        replayAllState()  override
-          {
-            UNIMPLEMENTED ("retrieve captured state");
-          }
-        
-        
-        virtual void
-        replayAllState (string propertyID)  override
-          {
-            UNIMPLEMENTED ("retrieve captured state");
-          }
-        
-        
-        virtual void
-        replayAllProperties (string elementSymbol)  override
-          {
-            UNIMPLEMENTED ("retrieve captured state");
-          }
-        
         
       public:
         SimulatedStateManager()
-          : state_()
-          , uiBus_(testNexus())
+          : StateRecorder{testNexus()}
           { }
         
-        
-        virtual void
-        clearState()  override
-          {
-            UNIMPLEMENTED ("discard all stored state information");
-          }
-        
-        void
-        record (ID const& elementID, lib::diff::GenNode const& stateMark)
-          {
-            UNIMPLEMENTED ("handle and record a state mark message");
-          }
+        using PresentationStateManager::clearState;
       };
     
     lib::Depend<SimulatedStateManager> stateManager;
