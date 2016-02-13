@@ -49,7 +49,7 @@
 #include "test/test-nexus.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/ctrl/nexus.hpp"
-#include "gui/interact/state-recorder.hpp"
+#include "gui/interact/state-map-grouping-storage.hpp"
 #include "proc/control/command.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
@@ -76,7 +76,7 @@ using lib::idi::instanceTypeID;
 using lib::test::EventLog;
 using gui::ctrl::BusTerm;
 using gui::interact::PresentationStateManager;
-using gui::interact::StateRecorder;
+using gui::interact::StateMapGroupingStorage;
 using proc::control::Command;
 using proc::control::CommandImpl;
 using proc::control::HandlingPattern;
@@ -558,7 +558,7 @@ namespace test{
       : public PresentationStateManager
       {
         
-        StateRecorder state_;
+        StateMapGroupingStorage state_;
         BusTerm&      uiBus_;
         
         

@@ -1,5 +1,5 @@
 /*
-  STATE-RECORDER.hpp  -  map based recording of presentation state
+  STATE-MAP-GROUPING-STORAGE.hpp  -  grouping storage to track presentation state
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,11 +21,9 @@
 */
 
 
-/** @file state-recorder.hpp
- ** Implementation of the PresentationStateManager interface
- ** through associative (key-value) store. This implementation
- ** groups recorded message by elementID and simply overwrites
- ** previous state info for a given attribute with later one.
+/** @file state-map-grouping-storage.hpp
+ ** Implementation of storage for captured presentation state.
+ ** This is a associative storage, grouped by element ID.
  ** 
  ** @todo as of 2/2016 this is complete WIP-WIP-WIP
  ** 
@@ -34,16 +32,14 @@
  */
 
 
-#ifndef GUI_INTERACT_STATE_RECORDER_H
-#define GUI_INTERACT_STATE_RECORDER_H
+#ifndef GUI_INTERACT_STATE_MAP_GROUPING_STORAGE_H
+#define GUI_INTERACT_STATE_MAP_GROUPING_STORAGE_H
 
 
 #include "lib/error.hpp"
 //#include "gui/ctrl/bus-term.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
-#include "gui/interact/presentation-state-manager.hpp"
-#include "gui/interact/state-map-grouping-storage.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -63,7 +59,7 @@ namespace interact {
    * Map storage for captured presentation state information.
    * @todo write type comment...
    */
-  class StateRecorder
+  class StateMapGroupingStorage
     : boost::noncopyable
     {
     protected:
@@ -76,4 +72,4 @@ namespace interact {
   
   
 }} // namespace gui::interact
-#endif /*GUI_INTERACT_STATE_RECORDER_H*/
+#endif /*GUI_INTERACT_STATE_MAP_GROUPING_STORAGE_H*/
