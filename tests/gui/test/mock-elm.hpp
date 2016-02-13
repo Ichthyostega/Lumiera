@@ -68,6 +68,7 @@
 #include "test/test-nexus.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <string>
 
@@ -81,6 +82,7 @@ namespace gui {
 namespace test{
   
   
+  using util::isnil;
   using lib::Symbol;
   using std::string;
   
@@ -106,6 +108,9 @@ namespace test{
       bool virgin_{true};
       bool expanded_{false};
       
+      string message_;
+      string error_;
+      
       
       /* ==== Tangible interface ==== */
       
@@ -116,6 +121,8 @@ namespace test{
           if (virgin_)
             return false; // there was nothing to reset
           
+          error_ = "";
+          message_ = "";
           expanded_ = false;
           virgin_ = true;
           log_.event("reset");
@@ -152,6 +159,8 @@ namespace test{
         {
           log_.call (this->identify(), "doMsg", text);
           cout << this->identify() << " <-- Message(\""<<text<<"\")" <<endl;
+          message_ = text;
+          virgin_ = false;
           log_.note ("type=mark", "ID=Message", text);
         }
       
@@ -160,6 +169,8 @@ namespace test{
         {
           log_.call (this->identify(), "doErr", text);
           cerr << this->identify() << " <-- Error(\""<<text<<"\")" <<endl;
+          error_ = text;
+          virgin_ = false;
           log_.note ("type=mark", "ID=Error", text);
         }
       
@@ -270,6 +281,25 @@ namespace test{
           return expanded_;
         }
       
+      bool
+      isError()  const
+        {
+          return isnil (error_);
+        }
+      
+      string
+      getMessage()  const
+        {
+          return message_;
+        }
+      
+      string
+      getError()  const
+        {
+          return error_;
+        }
+      
+
       
       EventMatch
       verify (string match)  const
