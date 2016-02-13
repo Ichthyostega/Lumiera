@@ -384,10 +384,6 @@ namespace diff{
        *       ID symbol will not be equal, but be deemed equivalent
        *       by this IDComparator. This can be dangerous when building
        *       a set or map based on this comparator.
-       * @note we "partially" support _transparent comparisons_,
-       *       which means that we allow to search in a container of
-       *       GenNodes, without having to construct another GenNode
-       *       as comparison key.
        */
       struct IDComparator
         {
@@ -396,24 +392,6 @@ namespace diff{
             {
               return left.idi.getSym() < right.idi.getSym();
             }
-          
-          /** support _transparent comparisons_ */
-          typedef std::true_type is_transparent;
-          
-          template<typename S>
-          bool
-          operator() (GenNode const& left, S const& s)  const
-            {
-              return left.idi.getSym() < s;
-            }
-          
-          template<typename S>
-          bool
-          operator() (S const& s, GenNode const& right)  const
-            {
-              return s < right.idi.getSym();
-            }
-          
         };
       
     

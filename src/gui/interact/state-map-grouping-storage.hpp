@@ -42,6 +42,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <unordered_map>
+#include <algorithm>
 #include <set>
 
 
@@ -51,6 +52,7 @@ namespace interact {
   using lib::idi::BareEntryID;
   using lib::diff::GenNode;
   using lib::diff::Ref;
+  using std::string;
   
   
   
@@ -142,11 +144,34 @@ namespace interact {
           return entry.second;
         }
       
+      
+      /**
+       * Access the recorded state mark, if any.
+       * @warning we can't search logarithmically,
+       *    since this would require to construct another GenNode
+       *    to represent the key.
+       * @todo seemingly GCC-4.9 doesn't yet support the "transparent search" feature
+       *    of C++14, where std::set would support an additional overload of the `find()` function,
+       *    templated to accept a value _convertible_ to some key equivalent, which needs to be
+       *    understood by the comparator of the set. To trigger using this overload, the
+       *    comparator has to define a suitable `operator()` and in addition a marker type
+       *    `is_transparent`. See [transparent-cmp] and the [reference][cind-cpp14] for explanation.
+       * 
+       * [find-cpp14]: http://en.cppreference.com/w/cpp/container/set/find
+       * [transparent-cmp]: http://stackoverflow.com/questions/20317413/what-are-transparent-comparators
+       */
       static GenNode const&
       getState (Record const& entry, string propertyKey)
         {
           StateData const& stateSet = entry.second;
-          StateData::const_iterator propertyRecord = stateSet.find (propertyKey);
+          StateData::const_iterator propertyRecord
+               = std::find_if (stateSet.begin()
+                              ,stateSet.end()
+                              ,[=](GenNode const& stateMark)
+                                   {
+                                     return propertyKey == stateMark.idi.getSym();
+                                   });
+          
           if (propertyRecord == stateSet.end())
             return Ref::NO;
           else
