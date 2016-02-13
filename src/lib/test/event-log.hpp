@@ -648,11 +648,18 @@ namespace test{
           return this->clear (originalLogID);
         }
       
-      /** purge log contents and also reset Header-ID */
+      /** purge log contents and also reset Header-ID
+       * @note actually we're starting a new log
+       *       and let the previous one go away.
+       * @warning while this also unties any joined logs,
+       *       other log front-ends might still hold onto
+       *       the existing, combined log. Just we are
+       *       detached and writing to a pristine log.
+       */
       EventLog&
       clear (string alteredLogID)
         {
-          log_->clear();
+          log_.reset (new Log);
           log({"type=EventLogHeader", "this="+alteredLogID});
           return *this;
         }
