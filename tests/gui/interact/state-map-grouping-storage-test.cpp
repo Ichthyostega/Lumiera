@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
+#include "lib/test/test-helper.hpp"
 //#include "gui/ctrl/bus-term.hpp"
 //#include "gui/interact/presentation-state-manager.hpp"
 #include "gui/interact/state-map-grouping-storage.hpp"
@@ -60,7 +60,7 @@ namespace interact{
 namespace test {
   
 //  using proc::control::LUMIERA_ERROR_UNBOUND_ARGUMENTS;
-//  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
   namespace { // test fixture...
     
@@ -90,9 +90,10 @@ namespace test {
           EntryID<int> quack ("quack");
           
           GenNode poodle{"poodle", "Pudel"};
+          GenNode toyPoodle{"poodle", "Zwergpudel"};
           GenNode pseudoPoodle {"poodle", false};
-          
           GenNode mastiff{"mastiff", "Dogge"};
+          GenNode duck{"duck", "Ente"};
           
           StateMapGroupingStorage storage;
           
@@ -103,10 +104,36 @@ namespace test {
           CHECK (not isnil(storage));
           CHECK (1 == storage.size());
           
-          cout << poodle <<endl;
-          cout << storage.retrieve(woof, "poodle") <<endl;
           CHECK (poodle == storage.retrieve(woof, "poodle"));
           CHECK (not isSameObject (poodle, storage.retrieve(woof, "poodle")));
+          
+          CHECK (Ref::NO == storage.retrieve(wooof, "poodle"));
+          CHECK (Ref::NO == storage.retrieve(woof, "pooodle"));
+          
+          storage.record (woof, mastiff);
+          CHECK (2 == storage.size());
+          CHECK (poodle == storage.retrieve(woof, "poodle"));
+          CHECK (mastiff == storage.retrieve(woof, "mastiff"));
+          
+          // upgrade the poodle
+          storage.record (woof, toyPoodle);
+          CHECK (2 == storage.size());
+          CHECK (poodle    != storage.retrieve(woof, "poodle"));
+          CHECK (toyPoodle == storage.retrieve(woof, "poodle"));
+          
+          // since properties are keyed just by ID-string,
+          // we might attempt sneak in a fake poodle
+          // fortunately GenNode disallows cross-type assignments
+          VERIFY_ERROR (WRONG_TYPE, storage.record (woof, pseudoPoodle) );
+          
+          CHECK (2 == storage.size());
+          cout << toyPoodle <<endl;
+          cout << storage.retrieve(woof, "poodle") <<endl;
+          cout << size_t(toyPoodle.idi.getHash()) <<endl;
+          cout << size_t(storage.retrieve(woof, "poodle").idi.getHash()) <<endl;
+          cout << size_t(pseudoPoodle.idi.getHash()) <<endl;
+          CHECK (toyPoodle == storage.retrieve(woof, "poodle"));
+          CHECK (mastiff == storage.retrieve(woof, "mastiff"));
         }
     };
   

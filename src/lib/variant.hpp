@@ -452,6 +452,8 @@ namespace lib {
           return *this;
         }
       
+      //note: NOT defining a swap operation, because swapping inline storage is pointless!
+      
       
       /** diagnostic helper */
       operator string()  const;

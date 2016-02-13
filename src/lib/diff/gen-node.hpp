@@ -269,8 +269,44 @@ namespace diff{
       GenNode(Ref &  r);
       GenNode(Ref && r);
       
-      GenNode& operator= (GenNode const&)  =default;
-      GenNode& operator= (GenNode&&)       =default;
+      /** copy assignment
+       * @remarks we need to define our own version here for sake of sanity.
+       *    The reason is that we use inline storage (embedded within lib::Variant)
+       *    and that we deliberately _erase_ the actual type of data stored inline.
+       *    Because we still do want copy assignment, in case the payload data
+       *    supports this, we use a "virtual copy operator", where in the end
+       *    the storage buffer within lib::Variant has to decide if assignment
+       *    is possible. Only data with the same type may be assigned and we
+       *    prevent change of the (implicit) data type through assignment.
+       *    This check might throw, and for that reason we're better off
+       *    to perform the _data assignment_ first. The probability for
+       *    EntryID assignment to fail is low (but it may happen!).
+       * @note the use of inline storage turns swapping of data
+       *    into an expensive operation, involving a temporary.
+       *    This rules out the copy-and-swap idiom.
+       */
+      GenNode&
+      operator= (GenNode const& o)
+        {
+          if (&o != this)
+            {
+              data = o.data;
+              idi = o.idi;
+            }
+          return *this;
+        }
+      
+      GenNode&
+      operator= (GenNode&& o)
+        {
+          ASSERT (&o != this);
+          data = std::forward<DataCap>(o.data);
+          idi  = std::forward<ID>(o.idi);
+          return *this;
+        }
+      
+      //note: NOT defining a swap operation, because swapping inline storage is pointless!
+      
       
       
       

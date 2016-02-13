@@ -39,6 +39,7 @@
 #include "lib/error.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <unordered_map>
@@ -52,6 +53,7 @@ namespace interact {
   using lib::idi::BareEntryID;
   using lib::diff::GenNode;
   using lib::diff::Ref;
+  using util::unConst;
   using std::string;
   
   
@@ -117,7 +119,9 @@ namespace interact {
       void
       record (BareEntryID const& elementID, GenNode const& stateMark)
         {
-          elmTable_[elementID].emplace (stateMark);
+          auto res = elmTable_[elementID].emplace (stateMark);
+          if (not res.second)
+            unConst(*res.first) = stateMark; // update existing contents
         }
       
       
