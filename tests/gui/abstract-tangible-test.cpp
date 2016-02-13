@@ -225,6 +225,10 @@ namespace test {
           
           CHECK (!mock.verifyCall("reset"));
           
+          // start manipulating state....
+          mock.slotExpand();
+          CHECK (mock.isExpanded());
+          
           mock.reset();
           CHECK (mock.verify("reset"));
           CHECK (mock.verifyCall("reset"));
@@ -424,6 +428,9 @@ namespace test {
           CHECK (not mock.isExpanded());
           CHECK (mock.isTouched());
           
+          CHECK (mock.verifyEvent("create", "target")
+                     .beforeEvent("expanded")
+                     .beforeEvent("collapsed"));
           CHECK (nexusLog.verifyCall("note").arg(targetID, GenNode{"expand", true})
                          .before("handling state-mark")
                          .beforeCall("note").arg(targetID, GenNode{"expand", false})
@@ -431,15 +438,15 @@ namespace test {
           
           trigger_collapse();
           CHECK (not mock.isExpanded());
-          CHECK (mock.verifyEvent("create", "target")
-                     .beforeEvent("expanded")
+          
+          // but note: redundant state changes do not cause sending of further state marks
+          CHECK (mock.ensureNot("collapsed")
+                     .beforeCall("expand")
                      .beforeEvent("collapsed"));
-          CHECK (nexusLog.verifyCall("note").arg(targetID, GenNode{"expand", true})
-                         .before("handling state-mark")
+          CHECK (nexusLog.ensureNot("handling state-mark")
                          .beforeCall("note").arg(targetID, GenNode{"expand", false})
                          .before("handling state-mark")
-                         .beforeCall("note").arg(targetID, GenNode{"expand", false})
-                         .before("handling state-mark"));
+                         .beforeCall("note").arg(targetID, GenNode{"expand", false}));
           
           
           

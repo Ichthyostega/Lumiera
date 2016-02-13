@@ -109,23 +109,30 @@ namespace test{
       
       /* ==== Tangible interface ==== */
       
-      virtual void
+      virtual bool
       doReset()  override
         {
           log_.call(this->identify(), "reset");
+          if (virgin_)
+            return false; // there was nothing to reset
+          
           expanded_ = false;
           virgin_ = true;
           log_.event("reset");
-        }
+          return true; // we did indeed reset something
+        }             //  and thus a state mark should be captured
       
       virtual bool
       doExpand (bool yes)  override
         {
           log_.call(this->identify(), "expand", yes);
+          if (expanded_ == yes)
+            return false; // nothing to change
+          
           virgin_ = false;
           expanded_ = yes;
           log_.event (expanded_? "expanded" : "collapsed");
-          return true;
+          return true; // record a state change
         }
       
       virtual void
@@ -170,6 +177,8 @@ namespace test{
           log_.call (this->identify(), "doMark", mark);
           cout << this->identify() << " <-- state-mark = "<< mark <<endl;
           log_.note ("type=mark", "ID="+mark.idi.getSym(), mark);
+          
+          this->virgin_ = false; // assume state change....
           
           // forward to default handler
           Tangible::doMark (mark);

@@ -167,11 +167,17 @@ namespace interact {
        *  to feed state mark messages to be remembered.
        * @param uiElm originator of the state notification
        * @param stateMark state information to record
+       * @note special handling of a "reset" state mark:
+       *       in that case, discard any captured state for
+       *       this element, since it goes back to default.
        */
       void
       recordState (ID uiElm, StateMark stateMark)
         {
-          storage_.record (uiElm, stateMark);
+          if ("reset" == stateMark.idi.getSym())
+            storage_.clearState (uiElm);
+          else
+            storage_.record (uiElm, stateMark);
         }
       
     private:

@@ -137,15 +137,15 @@ namespace test {
           
           
           // now verify there is indeed bidirectional connectivity...
-          CHECK (elmLog.ensureNot("collapsed"));
+          CHECK (elmLog.ensureNot("expanded"));
           CHECK (elmLog.ensureNot("doFlash"));
-          CHECK (nexusLog.ensureNot("zeitgeist").arg("collapse"));
+          CHECK (nexusLog.ensureNot("zeitgeist").arg("expand"));
           CHECK (nexusLog.ensureNot("zeitgeist").arg("Flash"));
           
           // invoke action on element to cause upstream message (with a "state mark")
-          mock.slotCollapse();
-          CHECK (elmLog.verifyEvent("collapsed"));
-          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "GenNode-ID(\"expand\")-DataCap|«bool»|false"));
+          mock.slotExpand();
+          CHECK (elmLog.verifyEvent("expanded"));
+          CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "GenNode-ID(\"expand\")-DataCap|«bool»|true"));
           
           // send a state mark down to the mock element
           gui::test::Nexus::testUI().mark (elmID, GenNode("Flash", 23));

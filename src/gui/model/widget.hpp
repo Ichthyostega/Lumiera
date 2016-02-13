@@ -61,7 +61,7 @@ namespace model {
       
       /* ==== Tangible interface ==== */
       
-      virtual void
+      virtual bool
       doReset()  override
         {
           UNIMPLEMENTED ("reset");

@@ -132,6 +132,15 @@ namespace interact {
             unConst(*res.first) = stateMark; // update existing contents
         }
       
+      /** clear any previously recorded state for a given element */
+      void
+      clearState (BareEntryID const& elementID)
+        {
+          iterator entry = find (elementID);
+          if (entry != elmTable_.end())
+            elmTable_.erase (entry);
+        }
+      
       
       using iterator = Storage::const_iterator;
       

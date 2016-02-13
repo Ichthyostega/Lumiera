@@ -191,7 +191,7 @@ namespace model {
       void mark(GenNode const&);
       
     protected:
-      virtual void doReset()  =0;
+      virtual bool doReset()           =0;
       virtual bool doExpand (bool yes) =0;
       virtual void doReveal (ID child) =0;
       virtual void doRevealYourself () =0;

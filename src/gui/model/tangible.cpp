@@ -55,6 +55,7 @@ namespace model {
   Tangible::reset()
     {
       this->doReset();
+      uiBus_.note (GenNode("reset", true));
     }
   
   
