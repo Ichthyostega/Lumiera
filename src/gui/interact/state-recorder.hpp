@@ -177,6 +177,12 @@ namespace interact {
           if ("reset" == stateMark.idi.getSym())
             storage_.clearState (uiElm);
           else
+          if ("clearErr" == stateMark.idi.getSym())
+            storage_.clearProperty (uiElm, "Error");
+          else
+          if ("clearMsg" == stateMark.idi.getSym())
+            storage_.clearProperty (uiElm, "Message");
+          else
             storage_.record (uiElm, stateMark);
         }
       

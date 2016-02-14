@@ -118,14 +118,66 @@
 <node CREATED="1448078622048" ID="ID_1858518915" MODIFIED="1448078624939" TEXT="Fehler"/>
 </node>
 <node CREATED="1448078416612" ID="ID_1392022084" MODIFIED="1448078421567" TEXT="state reset">
-<node CREATED="1448078722483" ID="ID_1661890520" MODIFIED="1448078729854" TEXT="auf default!"/>
-<node CREATED="1448078731130" ID="ID_1682515267" MODIFIED="1448078743500" TEXT="collapse / expand"/>
-<node CREATED="1448078748448" ID="ID_1000763850" MODIFIED="1448078778159" TEXT="Nachrichten l&#xf6;schen"/>
-<node CREATED="1448078778916" ID="ID_1657108949" MODIFIED="1448078782327" TEXT="Fehler l&#xf6;schen"/>
-<node CREATED="1448078798369" ID="ID_819750758" MODIFIED="1448078802612" TEXT="komplett-Reset"/>
+<node CREATED="1448078722483" ID="ID_1661890520" MODIFIED="1455421132762" TEXT="auf default!">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1448078731130" ID="ID_1682515267" MODIFIED="1455421211815" TEXT="collapse / expand">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      daf&#252;r gen&#252;gt der normale Reset
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1448078748448" ID="ID_1000763850" MODIFIED="1455421181855" TEXT="Nachrichten l&#xf6;schen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mark &quot;clearMsg&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448078778916" ID="ID_1657108949" MODIFIED="1455421169152" TEXT="Fehler l&#xf6;schen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mark &quot;clearErr&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1448078798369" ID="ID_819750758" MODIFIED="1455421160554" TEXT="komplett-Reset">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mark &quot;reset&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
-<node CREATED="1448078425594" ID="ID_686619553" MODIFIED="1448078444404" TEXT="Mutation">
+</node>
+<node CREATED="1448078425594" ID="ID_686619553" MODIFIED="1455421973237" TEXT="Mutation">
+<icon BUILTIN="pencil"/>
 <node CREATED="1448078811895" ID="ID_1266803050" MODIFIED="1448078833749">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -346,7 +398,74 @@
 </node>
 </node>
 </node>
-<node CREATED="1448658726090" FOLDED="true" ID="ID_37610818" MODIFIED="1454978057481" TEXT="Commands">
+<node CREATED="1455421282030" FOLDED="true" HGAP="54" ID="ID_1448430954" MODIFIED="1455422045063" TEXT="state mark" VSHIFT="12">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1455421310603" ID="ID_1677758546" MODIFIED="1455421335388" TEXT="slots und markXX sind aufgedoppelt"/>
+<node CREATED="1455421372274" ID="ID_956411027" MODIFIED="1455421665513" TEXT="Implementierung mu&#xdf; emittieren">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1455421336808" ID="ID_520325590" MODIFIED="1455421370759" TEXT="wenn eine &#xc4;nderung relevant f&#xfc;r Persistenz"/>
+<node CREATED="1455421392032" ID="ID_969248847" MODIFIED="1455421405946" TEXT="die doXXX() - Funktion gibt true zur&#xfc;ck"/>
+<node CREATED="1455421407646" ID="ID_480078096" MODIFIED="1455421421439" TEXT="dann erledigt die slot / mark-Funktion das"/>
+</node>
+<node CREATED="1455421435698" ID="ID_799737882" MODIFIED="1455421669639" TEXT="PresentationStateManager sammelt einfach">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1455421453040" ID="ID_1195489674" MODIFIED="1455421460035" TEXT="pro Element (=ID)"/>
+<node CREATED="1455421460671" ID="ID_1160333722" MODIFIED="1455421483559" TEXT="pro &quot;property&quot; == ID-sym der state mark - Nachricht"/>
+</node>
+<node CREATED="1455421490643" ID="ID_256291546" MODIFIED="1455421681106" TEXT="L&#xf6;sch / Reset-Nachrichten">
+<icon BUILTIN="idea"/>
+<node CREATED="1455421507505" ID="ID_1382752422" MODIFIED="1455421676233" TEXT="sind auszusenden, wenn tats&#xe4;chlich gel&#xf6;scht wurde">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1455421520087" ID="ID_1219279890" MODIFIED="1455421531914" TEXT="werden vom PresentationStateManager speziell behandelt"/>
+</node>
+<node CREATED="1455421537717" ID="ID_562890111" MODIFIED="1455421548639" TEXT="k&#xf6;nnen per Broadcast verbreitet werden">
+<node CREATED="1455421549347" ID="ID_744479545" MODIFIED="1455421556318" TEXT="separates UI-Bus API"/>
+<node CREATED="1455421557026" ID="ID_655863988" MODIFIED="1455421654735">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nach Broadcast von &quot;reset&quot;
+    </p>
+    <p>
+      sollte logischerweise der PresentationStateManager leer sein
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ist er aber nicht notwendig,
+    </p>
+    <p>
+      denn er kann Zustand von nicht mehr existierenden Elementen aufgezeichnet haben.
+    </p>
+    <p>
+      Nur Elemente, die im Moment angeschlossen sind, bekommen die &quot;reset&quot;-Nachricht mit;
+    </p>
+    <p>
+      sofern sie tats&#228;chlich abweichenden Zustand haben, sollten sie sich resetten
+    </p>
+    <p>
+      und eine state mark &quot;reset&quot; zur&#252;ckschicken...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1455422030995" HGAP="35" ID="ID_1455265273" MODIFIED="1455422052648" TEXT="mutation" VSHIFT="7">
+<icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1448658726090" FOLDED="true" ID="ID_37610818" MODIFIED="1455421704674" TEXT="Commands" VSHIFT="4">
 <node CREATED="1448658755071" ID="ID_1033500384" MODIFIED="1448658767933" TEXT="wie definieren">
 <icon BUILTIN="help"/>
 <node CREATED="1448658974985" ID="ID_974207484" MODIFIED="1448658989011" TEXT="Definition braucht Session-Modell"/>
@@ -599,10 +718,10 @@
 </node>
 </node>
 </node>
-<node CREATED="1448669332204" HGAP="76" ID="ID_329609486" MODIFIED="1451094122356" TEXT="InteractionControl">
+<node CREATED="1448669332204" FOLDED="true" HGAP="76" ID="ID_329609486" MODIFIED="1455421724973" TEXT="InteractionControl">
 <linktarget COLOR="#5f0ac8" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="219;-148;" ID="Arrow_ID_1101633958" SOURCE="ID_1009169288" STARTARROW="None" STARTINCLINATION="-315;0;"/>
 <font NAME="SansSerif" SIZE="15"/>
-<node CREATED="1448669439582" HGAP="41" ID="ID_307071507" MODIFIED="1448669726965" TEXT="ad-hoc oder systematisch" VSHIFT="-2">
+<node CREATED="1448669439582" FOLDED="true" HGAP="41" ID="ID_307071507" MODIFIED="1455421718766" TEXT="ad-hoc oder systematisch" VSHIFT="-2">
 <icon BUILTIN="help"/>
 <node CREATED="1448669512988" ID="ID_1184892495" MODIFIED="1448669517328" TEXT="fundamentale Frage"/>
 <node CREATED="1448669517796" ID="ID_1165902172" MODIFIED="1448669526326" TEXT="f&#xfc;r mich eigentlich sofort klar"/>
@@ -638,7 +757,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1448070547667" HGAP="16" ID="ID_669457401" MODIFIED="1448669501619" TEXT="Bus-Terminal" VSHIFT="6">
+<node CREATED="1448070547667" FOLDED="true" HGAP="16" ID="ID_669457401" MODIFIED="1455422001808" TEXT="Bus-Terminal" VSHIFT="6">
+<icon BUILTIN="prepare"/>
 <node CREATED="1448070601165" ID="ID_1711137699" MODIFIED="1448070603296" TEXT="Methoden">
 <node CREATED="1448407030239" ID="ID_619913132" MODIFIED="1448560681641">
 <richcontent TYPE="NODE"><html>
@@ -704,9 +824,10 @@
 </node>
 </node>
 <node CREATED="1434128059966" ID="ID_823283341" MODIFIED="1434128067529" TEXT="Connect">
-<node CREATED="1434128071126" ID="ID_1618124128" MODIFIED="1453545826393" TEXT="UI-Bus">
+<node CREATED="1434128071126" FOLDED="true" ID="ID_1618124128" MODIFIED="1455421996569" TEXT="UI-Bus">
 <linktarget COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-25;-262;" ID="Arrow_ID_539627804" SOURCE="ID_257833497" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
 <font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="prepare"/>
 <node CREATED="1448548216556" ID="ID_1971609445" MODIFIED="1448548224236" TEXT="Topologie">
 <node CREATED="1448548225659" ID="ID_807917172" MODIFIED="1448548309275" TEXT="upstream = zum Verteiler"/>
 <node CREATED="1448548310247" ID="ID_993096699" MODIFIED="1448548316619" TEXT="downstream = zum Empf&#xe4;nger"/>
@@ -739,7 +860,9 @@
 <node CREATED="1450390512635" ID="ID_43739373" MODIFIED="1450390519885" TEXT="dient auch zum Routing"/>
 </node>
 <node CREATED="1453546261390" HGAP="25" ID="ID_1996322416" MODIFIED="1453546322869" TEXT="Test" VSHIFT="12">
-<node CREATED="1453546264638" ID="ID_975821244" MODIFIED="1453546267978" TEXT="Test-Nexus"/>
+<node CREATED="1453546264638" ID="ID_975821244" MODIFIED="1455421865474" TEXT="Test-Nexus">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1453546268998" ID="ID_1692848170" MODIFIED="1453546311693" TEXT="Event-Log">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -763,8 +886,23 @@
 </node>
 </node>
 </node>
-<node CREATED="1453545812389" HGAP="43" ID="ID_202253849" MODIFIED="1453546337707" TEXT="Core-Services" VSHIFT="2">
+<node CREATED="1453545812389" FOLDED="true" HGAP="43" ID="ID_202253849" MODIFIED="1455421851821" TEXT="Core-Services" VSHIFT="2">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      konzeptionell: fertig
+    </p>
+    <p>
+      Implementierung der real-world-Variante fehlt!
+    </p>
+  </body>
+</html>
+</richcontent>
 <font NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="prepare"/>
 <node CREATED="1453545875627" ID="ID_1411740156" MODIFIED="1453545951737" TEXT="Definition &#xbb;Zentral-Dienste&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -900,7 +1038,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1453546083296" ID="ID_1154674875" MODIFIED="1453546089361" TEXT="Presentation-State-Manager">
+<node CREATED="1453546083296" ID="ID_1154674875" MODIFIED="1455421793848" TEXT="Presentation-State-Manager">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1455290707481" ID="ID_551153117" MODIFIED="1455290724712">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -960,7 +1099,7 @@
 </node>
 </node>
 <node CREATED="1448063874479" HGAP="43" ID="ID_739054690" MODIFIED="1453546352792" TEXT="UI-Modell" VSHIFT="1"/>
-<node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1453546344857" TEXT="Diff-System" VSHIFT="1">
+<node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1455421918775" TEXT="Diff-System" VSHIFT="1">
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1434128278990" ID="ID_106354755" MODIFIED="1434128283641" TEXT="Diff-Darstellung"/>

@@ -8417,7 +8417,7 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :down-link communication to //feed back// state updates or to replay previously recorded  //state marks//
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201602121458" tags="GuiPattern design draft decision" changecount="43">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201602140400" tags="GuiPattern design draft decision" changecount="45">
 <pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -8432,7 +8432,7 @@ As a starting point, we know
 !Behaviours
 For some arbitrary reason, any element in the UI can appear and go away. This corresponds to attachment and deregistration at the UI-Bus
 
-In regular, operative state, an interface element may initiate //actions.// Even more: for //any conceivable, user visible, tangible action,// there is an interface element, which acts as point-of-service {{red{as of 12/15, this decision seems questionable}}}. There might be higher-level, cooperative [[gestures|Gesture]] within the interface, and actions might be formed like sentences, with the help of a FocusConcept -- however, in the end, there is a ''subject'' and a ''predicate''. And the interface element takes on the role of the underlying, the subject, the ''tangible''.
+In regular, operative state, an interface element may initiate //actions.// These correspond to invocation of [[Proc-Layer commands|CommandHandling]], after having supplied the necessary arguments. Commands are referred and called //by name// (~command-ID) and they are thus not bound to a specific UI-Element. Rather, it is the job of the UI to provide sensible command arguments, based on the context of the operation. There might be higher-level, cooperative [[gestures|Gesture]] within the interface, and actions might be formed like sentences, with the help of a FocusConcept -- however, in the end, there is a ''subject'' and a ''predicate''. And the interface element takes on the role of the underlying, the subject, the ''tangible''.
 
 Some actions are very common and can be represented by a shorthand. An example would be to tweak some property, which means to mutate the attribute of a model element known beforehand. Such tweaks are often caused by direct interaction, and thus have the tendency to appear in flushes, which might be batched to remove some load from the lower layers.
 

@@ -175,6 +175,7 @@ namespace test{
           
           message_ = "";
           log_.note ("type=mark", "ID=Message", "Message notification cleared");
+          return true;
         }
       
       virtual bool
@@ -198,6 +199,7 @@ namespace test{
           
           error_ = "";
           log_.note ("type=mark", "ID=Error", "Error state cleared");
+          return true;
         }
       
       virtual void

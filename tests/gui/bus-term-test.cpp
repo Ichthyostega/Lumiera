@@ -268,14 +268,17 @@ namespace test {
           mockC.slotExpand();
           CHECK (stateManager.currentState(charly, "expand") == GenNode("expand", true ));
           
+          // error states can be sticky
+          mockC.markErr("overinflated");
+          CHECK (stateManager.currentState(charly, "Error")  == GenNode("Error", "overinflated"));
+          
           mockC.reset();
           CHECK (stateManager.currentState(charly, "expand") == Ref::NO); // back to void
           
-          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
+          
           cout << "____Nexus-Log_________________\n"
                << util::join(gui::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
         }
       
       
@@ -440,7 +443,7 @@ namespace test {
           
           CHECK (mockB.isExpanded());
           CHECK (mockC.isError());
-          CHECK ("Delta" == mockC.getMessage());
+          CHECK ("Delta"    == mockC.getMessage());
           CHECK ("Centauri" == mockA.getMessage());
           
           // reset all notification messages
@@ -449,22 +452,30 @@ namespace test {
           CHECK (mockC.isError());
           CHECK (isnil (mockA.getMessage()));
           CHECK (isnil (mockC.getMessage()));
+          CHECK ("Echo" == mockC.getError());
           
           uiBus.mark (bravo, GenNode{"Message", "miss"});
           mockA.slotExpand();
           mockA.slotCollapse();
           
-          // reset error state(s)
-          uiBus.markAll (GenNode{"clearErr", true});
-          CHECK (not mockB.isExpanded());
-          CHECK (mockB.isExpanded());
-          CHECK ("miss" == mockB.getMessage());
-          CHECK (not mockC.isError());
-          
           auto& stateManager = gui::test::Nexus::getMockStateManager();
           CHECK (stateManager.currentState(alpha, "expand") == GenNode("expand", false ));
           CHECK (stateManager.currentState(bravo, "expand") == GenNode("expand", true ));
           CHECK (stateManager.currentState(charly, "expand") == Ref::NO);
+          CHECK (stateManager.currentState(charly, "Error")  == GenNode("Error", "Echo"));  // sticky error state was recorded
+          
+          // reset error state(s)
+          uiBus.markAll (GenNode{"clearErr", true});
+          CHECK (not mockA.isExpanded());
+          CHECK (mockB.isExpanded());
+          CHECK ("miss" == mockB.getMessage());
+          CHECK (not mockC.isError());
+          
+          CHECK (stateManager.currentState(alpha, "expand") == GenNode("expand", false ));
+          CHECK (stateManager.currentState(bravo, "expand") == GenNode("expand", true ));
+          CHECK (stateManager.currentState(charly, "expand") == Ref::NO);
+          CHECK (stateManager.currentState(charly, "Error")  == Ref::NO); // sticky error state was cleared,
+                                                                         //  because charly sent a clearErr state mark notification back
           
           // send global sweeping reset
           uiBus.markAll (GenNode{"reset", true});
@@ -483,14 +494,14 @@ namespace test {
           CHECK (stateManager.currentState(alpha,  "expand") == Ref::NO);
           CHECK (stateManager.currentState(bravo,  "expand") == Ref::NO);
           CHECK (stateManager.currentState(charly, "expand") == Ref::NO);
+          CHECK (stateManager.currentState(charly, "Error" ) == Ref::NO);
           
           
-          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           cout << "____Nexus-Log_________________\n"
                << util::join(nexusLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
-          gui::test::Nexus::setStateMarkHandler(); // deinstall custom command handler
+          
+          gui::test::Nexus::setStateMarkHandler(); // deinstall custom state mark handler
         }
       
       
