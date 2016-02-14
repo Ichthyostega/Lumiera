@@ -201,6 +201,16 @@ namespace test{
               }
           }
         
+        virtual size_t
+        markAll (GenNode const& mark)  override
+          {
+            log_.call(this, "markAll", mark);
+            log_.event("Broadcast", _Fmt("Broadcast mark(\"%s\"): %s") % mark.idi.getSym() % mark.data);
+            size_t cnt = BusHub::markAll (mark);
+            log_.event("TestNexus", _Fmt("successfully broadcasted mark to %d terminals") % cnt);
+            return cnt;
+          }
+        
         virtual BusTerm&
         routeAdd (ID identity, Tangible& newNode)  override
           {
@@ -324,6 +334,15 @@ namespace test{
             log().error ("request to deliver mark message via ZombieNexus");
             cerr << "mark message -> ZombieNexus" <<endl;
             return false;
+          }
+        
+        virtual size_t
+        markAll (GenNode const& mark)  override
+          {
+            log().call(this, "markAll", mark);
+            log().error ("request to broadcast to all Zombies");
+            cerr << "broadcast message -> ZombieNexus" <<endl;
+            return 0;
           }
         
         virtual BusTerm&

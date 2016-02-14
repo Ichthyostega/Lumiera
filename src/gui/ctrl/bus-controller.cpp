@@ -156,6 +156,21 @@ namespace ctrl {
   }
   
   
+  /** broadcast a notification message to all currently connected bus terminals.
+   * @param mark the actual state update or notification message to be delivered
+   * @return number of notified terminals.
+   * @remarks this call assumes that "somewhere" within the UI-Bus
+   *          a distribution node or hub is installed, with the ability
+   *          to find all currently connected terminals. In the standard
+   *          configuration this is implemented by the ctrl::Nexus
+   */
+  size_t
+  BusTerm::markAll (GenNode const& mark)
+  {
+    return theBus_.markAll (mark);
+  }
+  
+  
   /**
    * @internal establish new down-link connection form UI-Bus
    * @param node reference to the [Tangible] to be connected.

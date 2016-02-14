@@ -103,6 +103,17 @@ namespace ctrl{
             }
         }
       
+      /** broadcast a notification to all connected terminal nodes.
+       * @note just uses the contents of the current routing table in arbitrary order.
+       */
+      virtual size_t
+      markAll (GenNode const& mark)  override
+        {
+          for (auto& entry : routingTable_)
+            this->mark (entry.first, mark);
+          return routingTable_.size();
+        }
+      
       /** add a new down-link connection to the routing table
        * @param identity the [endpoint-ID](\ref BusTerm::endpointID_) used
        *         to address the new element to be connected to the bus.

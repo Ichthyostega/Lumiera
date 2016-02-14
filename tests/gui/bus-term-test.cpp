@@ -308,10 +308,6 @@ namespace test {
           CHECK (mockA.isExpanded());
           CHECK (not mockC.isExpanded());
           CHECK (not mockC.isTouched());
-          
-          cout << "____Nexus-Log_________________\n"
-               << util::join(gui::test::Nexus::getLog(), "\n")
-               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
       
@@ -391,16 +387,32 @@ namespace test {
           
           CHECK (nexusLog.verifyEvent("mark", "Echo").id("Error")
                          .beforeCall("markAll").on("TestNexus").arg("Foxtrot")
-                         .beforeEvent("broadcast", "Foxtrot")
+                         .beforeEvent("Broadcast", "Foxtrot")
                          .beforeCall("mark").on("TestNexus").arg("bravo", "GenNode-ID(\"Message\")-DataCap|«string»|Foxtrot")
                          .beforeCall("doMsg").on("bravo").arg("Foxtrot")
                          .beforeEvent("TestNexus", "broadcasted mark to 3 terminals"));
           
-          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
+          // the order of dispatch is unspecified,
+          // but we know a regular mark call sequence happens for each connected terminal
+          CHECK (nexusLog.verifyCall("markAll").on("TestNexus").arg("Foxtrot")
+                         .beforeCall("mark").on("TestNexus").arg("alpha", "Foxtrot")
+                         .beforeCall("doMsg").on("alpha").arg("Foxtrot")
+                         .beforeEvent("TestNexus", "successfully broadcasted"));
+          
+          CHECK (nexusLog.verifyCall("markAll").on("TestNexus").arg("Foxtrot")
+                         .beforeCall("mark").on("TestNexus").arg("bravo", "Foxtrot")
+                         .beforeCall("doMsg").on("bravo").arg("Foxtrot")
+                         .beforeEvent("TestNexus", "successfully broadcasted"));
+          
+          CHECK (nexusLog.verifyCall("markAll").on("TestNexus").arg("Foxtrot")
+                         .beforeCall("mark").on("TestNexus").arg("charly", "Foxtrot")
+                         .beforeCall("doMsg").on("charly").arg("Foxtrot")
+                         .beforeEvent("TestNexus", "successfully broadcasted"));
+          
+          
           cout << "____Nexus-Log_________________\n"
                << util::join(nexusLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
         }
       
       
@@ -408,6 +420,12 @@ namespace test {
       clearStates()
         {
           UNIMPLEMENTED ("broadcast state reset");
+          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
+          cout << "____Nexus-Log_________________\n"
+               << util::join(nexusLog, "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           gui::test::Nexus::setStateMarkHandler(); // deinstall custom command handler
         }
       

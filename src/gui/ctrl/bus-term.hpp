@@ -110,6 +110,8 @@ namespace ctrl{
       virtual void note (ID subject, GenNode const& mark);
       virtual bool mark (ID subject, GenNode const& mark);
       
+      virtual size_t markAll (GenNode const& mark);
+      
       virtual operator string()  const;
       
       void note (GenNode const& mark);
