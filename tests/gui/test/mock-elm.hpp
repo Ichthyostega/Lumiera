@@ -374,6 +374,13 @@ namespace test{
           log_.joinInto (otherMock.log_);
           return log_;
         }
+      
+      EventLog&
+      joinLog (EventLog& otherLog)
+        {
+          log_.joinInto (otherLog);
+          return log_;
+        }
     };
   
   

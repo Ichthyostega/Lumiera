@@ -315,13 +315,68 @@ namespace test {
         }
       
       
+      /** @test send notifications to a distinct element, or as broadcast. */
       void
       verifyNotifications()
         {
-          UNIMPLEMENTED ("send notifications to a distinct element");
+          MARK_TEST_FUN
+          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          
+          MockElm mockA("alpha");   BareEntryID alpha = mockA.getID();   mockA.joinLog (nexusLog);
+          MockElm mockB("bravo");   BareEntryID bravo = mockB.getID();   mockB.joinLog (nexusLog);
+          MockElm mockC("charly");  BareEntryID charly = mockC.getID();  mockC.joinLog (nexusLog);
+          
+          auto& uiBus = gui::test::Nexus::testUI();
+          
+          CHECK (not mockA.isTouched());
+          CHECK (not mockB.isTouched());
+          CHECK (not mockC.isTouched());
+          
+          uiBus.mark (alpha, GenNode{"Message", "Centauri"});
+          uiBus.mark (bravo, GenNode{"Flash", true});
+          uiBus.mark (charly, GenNode{"Message", "Delta"});
+          uiBus.mark (charly, GenNode{"Error", "Echo"});
+          
+          CHECK (    mockA.isTouched());
+          CHECK (not mockB.isTouched());
+          CHECK (    mockC.isTouched());
+          
+          CHECK (not mockA.isError());
+          CHECK (not mockB.isError());
+          CHECK (    mockC.isError());
+          
+          CHECK ("Centauri" == mockA.getMessage());
+          CHECK ("Delta"    == mockC.getMessage());
+          
+          CHECK ("Echo"     == mockC.getError());
+          
+          // verify the message passing in the combined log...
+          CHECK (nexusLog.verifyEvent("create", "alpha")
+                         .beforeCall("mark").on("TestNexus").arg("alpha", "Centauri")  // bus API invoked
+                         .beforeCall("doMsg").on("alpha").arg("Centauri")              // handler on target invoked
+                         .beforeEvent("mark", "Centauri")                              // target action activated 
+                         .beforeEvent("TestNexus","delivered mark to bID-alpha"));     // dispatch done within UI-Bus
+          
+          CHECK (nexusLog.verifyEvent("TestNexus","delivered mark to bID-alpha")
+                         .beforeCall("mark").on("TestNexus").arg("bravo", "GenNode-ID(\"Flash\")-DataCap|«bool»|true")
+                         .beforeCall("doFlash").on("bravo")
+                         .beforeEvent("TestNexus","delivered mark to bID-bravo"));
+          
+          // NOTE: calls are passed down synchronously, in one hop, and in sequence
+          CHECK (nexusLog.verifyEvent("TestNexus","delivered mark to bID-bravo")
+                         .beforeCall("mark").on("TestNexus").arg("charly", "GenNode-ID(\"Message\")-DataCap|«string»|Delta")
+                         .beforeCall("doMsg").on("charly").arg("Delta")
+                         .beforeEvent("mark", "Delta").id("Message")
+                         .beforeEvent("TestNexus","delivered mark to bID-charly")
+                         .beforeCall("mark").on("TestNexus").arg("charly", "GenNode-ID(\"Error\")-DataCap|«string»|Echo")
+                         .beforeCall("doErr").on("charly").arg("Echo")
+                         .beforeEvent("mark", "Echo").id("Error")
+                         .beforeEvent("TestNexus","delivered mark to bID-charly"));
+          
+          
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           cout << "____Nexus-Log_________________\n"
-               << util::join(gui::test::Nexus::getLog(), "\n")
+               << util::join(nexusLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
         }
