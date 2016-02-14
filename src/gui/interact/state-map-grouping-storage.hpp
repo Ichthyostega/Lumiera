@@ -132,6 +132,21 @@ namespace interact {
             unConst(*res.first) = stateMark; // update existing contents
         }
       
+      /** clear previously recorded state for a given element and specific property */
+      void
+      clearProperty (BareEntryID const& elementID, string propertyKey)
+        {
+          iterator entry = find (elementID);
+          if (entry != elmTable_.end())
+            {
+              StateData const& stateSet = entry->second;
+              auto propertyRecord = findProperty(stateSet, propertyKey);
+              
+              if (propertyRecord != stateSet.end())
+                unConst(stateSet).erase (propertyRecord);
+            }
+        }
+      
       /** clear any previously recorded state for a given element */
       void
       clearState (BareEntryID const& elementID)
@@ -184,18 +199,24 @@ namespace interact {
       getState (Record const& entry, string propertyKey)
         {
           StateData const& stateSet = entry.second;
-          StateData::const_iterator propertyRecord
-               = std::find_if (stateSet.begin()
-                              ,stateSet.end()
-                              ,[=](GenNode const& stateMark)
-                                   {
-                                     return propertyKey == stateMark.idi.getSym();
-                                   });
+          StateData::const_iterator propertyRecord = findProperty (stateSet, propertyKey);
           
           if (propertyRecord == stateSet.end())
             return Ref::NO;
           else
             return *propertyRecord;
+        }
+      
+    private:
+      static StateData::const_iterator
+      findProperty (StateData const& stateSet, string propertyKey)
+        {
+          return std::find_if (stateSet.begin()
+                              ,stateSet.end()
+                              ,[=](GenNode const& stateMark)
+                                   {
+                                     return propertyKey == stateMark.idi.getSym();
+                                   });
         }
     };
   

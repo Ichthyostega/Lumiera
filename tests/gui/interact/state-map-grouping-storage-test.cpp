@@ -111,19 +111,38 @@ namespace test {
           CHECK (toyPoodle == storage.retrieve(woof, "poodle"));
           CHECK (mastiff == storage.retrieve(woof, "mastiff"));
           CHECK (duck  == storage.retrieve(quack, "duck"));
-          
-          CHECK (Ref::NO == storage.retrieve(miaow, "meow"));
-          
-          auto elm = storage.find(miaow);
-          CHECK (elm == storage.end());
-          
-          elm = storage.find(woof);
+
+          auto elm = storage.find(woof);
           CHECK (elm != storage.end());
           CHECK (woof == StateMapGroupingStorage::getID(*elm));
           CHECK (2    == StateMapGroupingStorage::getState(*elm).size());
           CHECK (Ref::NO   == StateMapGroupingStorage::getState(*elm, "doodle"));
           CHECK (toyPoodle == StateMapGroupingStorage::getState(*elm, "poodle"));
           CHECK (mastiff   == StateMapGroupingStorage::getState(*elm, "mastiff"));
+          
+          elm = storage.find(miaow);
+          CHECK (elm == storage.end());
+          
+          CHECK (Ref::NO == storage.retrieve(miaow, "meow"));
+          storage.record (miaow, labradoodle);
+          CHECK (labradoodle == storage.retrieve(miaow, "poodle"));
+          CHECK (4 == storage.size());
+          
+          storage.clearProperty(miaow, "meow");
+          CHECK (4 == storage.size());
+          CHECK (labradoodle == storage.retrieve(miaow, "poodle"));
+          // clearing non existent property has no effect
+          
+          storage.clearProperty(miaow, "poodle");
+          CHECK (3 == storage.size());
+          CHECK (Ref::NO == storage.retrieve(miaow, "poodle"));
+          
+          // but note, an empty element record has been left back (this is harmless)
+          elm = storage.find(miaow);
+          CHECK (elm != storage.end());
+          CHECK (miaow == StateMapGroupingStorage::getID(*elm));
+          CHECK (0     == StateMapGroupingStorage::getState(*elm).size());
+          
           
           storage.clear();
           CHECK (isnil (storage));
