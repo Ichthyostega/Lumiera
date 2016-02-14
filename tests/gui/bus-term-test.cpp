@@ -374,6 +374,28 @@ namespace test {
                          .beforeEvent("TestNexus","delivered mark to bID-charly"));
           
           
+          // broadcast message
+          uiBus.markAll (GenNode{"Message", "Foxtrot"});
+          CHECK (not mockA.isError());
+          CHECK (not mockB.isError());
+          CHECK (    mockC.isError());
+          CHECK (    mockA.isTouched());
+          CHECK (    mockB.isTouched());
+          CHECK (    mockC.isTouched());
+          CHECK ("Foxtrot" == mockA.getMessage());
+          CHECK ("Foxtrot" == mockB.getMessage());
+          CHECK ("Foxtrot" == mockC.getMessage());
+          CHECK (       "" == mockA.getError());
+          CHECK (       "" == mockB.getError());
+          CHECK (   "Echo" == mockC.getError());
+          
+          CHECK (nexusLog.verifyEvent("mark", "Echo").id("Error")
+                         .beforeCall("markAll").on("TestNexus").arg("Foxtrot")
+                         .beforeEvent("broadcast", "Foxtrot")
+                         .beforeCall("mark").on("TestNexus").arg("bravo", "GenNode-ID(\"Message\")-DataCap|«string»|Foxtrot")
+                         .beforeCall("doMsg").on("bravo").arg("Foxtrot")
+                         .beforeEvent("TestNexus", "broadcasted mark to 3 terminals"));
+          
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           cout << "____Nexus-Log_________________\n"
                << util::join(nexusLog, "\n")
