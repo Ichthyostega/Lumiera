@@ -32,7 +32,7 @@
 #include "lib/format-cout.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/luid.h"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 
 
@@ -48,7 +48,7 @@ using lib::time::Time;
 using lib::time::TimeSpan;
 using lib::hash::LuidH;
 using lib::HashVal;
-//using util::contains;
+using util::isnil;
 
 
 namespace gui  {
@@ -416,11 +416,75 @@ namespace test {
         }
       
       
+      /** @test broadcast various degrees of state reset */
       void
       clearStates()
         {
-          UNIMPLEMENTED ("broadcast state reset");
+          MARK_TEST_FUN
           EventLog nexusLog = gui::test::Nexus::startNewLog();
+          
+          MockElm mockA("alpha");   BareEntryID alpha = mockA.getID();   mockA.joinLog (nexusLog);
+          MockElm mockB("bravo");   BareEntryID bravo = mockB.getID();   mockB.joinLog (nexusLog);
+          MockElm mockC("charly");  BareEntryID charly = mockC.getID();  mockC.joinLog (nexusLog);
+          
+          auto& uiBus = gui::test::Nexus::testUI();
+          
+          CHECK (not mockA.isTouched());
+          CHECK (not mockB.isTouched());
+          CHECK (not mockC.isTouched());
+          
+          mockB.slotExpand();
+          uiBus.mark (alpha,  GenNode{"Message", "Centauri"});
+          uiBus.mark (charly, GenNode{"Message", "Delta"});
+          uiBus.mark (charly, GenNode{"Error",   "Echo"});
+          
+          CHECK (mockB.isExpanded());
+          CHECK (mockC.isError());
+          CHECK ("Delta" == mockC.getMessage());
+          CHECK ("Centauri" == mockA.getMessage());
+          
+          // reset all notification messages
+          uiBus.markAll (GenNode{"resetMsg", true});
+          CHECK (mockB.isExpanded());
+          CHECK (mockC.isError());
+          CHECK (isnil (mockA.getMessage()));
+          CHECK (isnil (mockC.getMessage()));
+          
+          uiBus.mark (bravo, GenNode{"Message", "miss"});
+          mockA.slotExpand();
+          mockA.slotCollapse();
+          
+          // reset error state(s)
+          uiBus.markAll (GenNode{"resetErr", true});
+          CHECK (not mockB.isExpanded());
+          CHECK (mockB.isExpanded());
+          CHECK ("miss" == mockB.getMessage());
+          CHECK (not mockC.isError());
+          
+          auto& stateManager = gui::test::Nexus::getMockStateManager();
+          CHECK (stateManager.currentState(alpha, "expand") == GenNode("expand", false ));
+          CHECK (stateManager.currentState(bravo, "expand") == GenNode("expand", true ));
+          CHECK (stateManager.currentState(charly, "expand") == Ref::NO);
+          
+          // send global sweeping reset
+          uiBus.markAll (GenNode{"reset", true});
+          
+          CHECK (not mockA.isTouched());
+          CHECK (not mockB.isTouched());
+          CHECK (not mockC.isTouched());
+          
+          CHECK (not mockA.isExpanded());
+          CHECK (not mockB.isExpanded());
+          
+          CHECK (isnil (mockA.getMessage()));
+          CHECK (isnil (mockB.getMessage()));
+          CHECK (isnil (mockC.getMessage()));
+          
+          CHECK (stateManager.currentState(alpha,  "expand") == Ref::NO);
+          CHECK (stateManager.currentState(bravo,  "expand") == Ref::NO);
+          CHECK (stateManager.currentState(charly, "expand") == Ref::NO);
+          
+          
           ////////////////////////////////////////////////////////////////////////////////////////////////////TODO WIP
           cout << "____Nexus-Log_________________\n"
                << util::join(nexusLog, "\n")
