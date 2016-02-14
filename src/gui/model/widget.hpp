@@ -64,57 +64,67 @@ namespace model {
       virtual bool
       doReset()  override
         {
-          UNIMPLEMENTED ("reset");
+          UNIMPLEMENTED ("Widget reset");
         }
       
       virtual bool
       doExpand (bool yes)  override
         {
-          UNIMPLEMENTED ("mock doExpand");
+          UNIMPLEMENTED ("Widget doExpand");
         }
       
       virtual void
       doReveal (ID child)  override
         {
-          UNIMPLEMENTED ("mock doReveal");
+          UNIMPLEMENTED ("Widget doReveal");
         }
       
       virtual void
       doRevealYourself()  override
         {
-          UNIMPLEMENTED ("mock doRevealYourself");
+          UNIMPLEMENTED ("Widget doRevealYourself");
         }
       
-      virtual void
+      virtual bool
       doMsg (string text)  override
         {
-          UNIMPLEMENTED ("mock doMsg");
+          UNIMPLEMENTED ("Widget doMsg");
         }
       
-      virtual void
+      virtual bool
+      doClearMsg ()  override
+        {
+          UNIMPLEMENTED ("Widget doClearMsg");
+        }
+      
+      virtual bool
       doErr (string text)  override
         {
-          UNIMPLEMENTED ("mock doErr");
+          UNIMPLEMENTED ("Widget doErr");
+        }
+      
+      virtual bool
+      doClearErr ()  override
+        {
+          UNIMPLEMENTED ("Widget doClearErr");
         }
       
       virtual void
       doFlash()  override
         {
-          UNIMPLEMENTED ("mock doFlash");
+          UNIMPLEMENTED ("Widget doFlash");
         }
       
       virtual void
       doMark (GenNode const& mark)  override
         {
-          UNIMPLEMENTED ("mock doMark");
+          UNIMPLEMENTED ("Widget doMark");
         }
       
       
     public:
       using Tangible::Tangible;
       
-    protected:
-      string maybe ()  const;
     };
   
   

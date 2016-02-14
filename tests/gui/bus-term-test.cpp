@@ -444,7 +444,7 @@ namespace test {
           CHECK ("Centauri" == mockA.getMessage());
           
           // reset all notification messages
-          uiBus.markAll (GenNode{"resetMsg", true});
+          uiBus.markAll (GenNode{"clearMsg", true});
           CHECK (mockB.isExpanded());
           CHECK (mockC.isError());
           CHECK (isnil (mockA.getMessage()));
@@ -455,7 +455,7 @@ namespace test {
           mockA.slotCollapse();
           
           // reset error state(s)
-          uiBus.markAll (GenNode{"resetErr", true});
+          uiBus.markAll (GenNode{"clearErr", true});
           CHECK (not mockB.isExpanded());
           CHECK (mockB.isExpanded());
           CHECK ("miss" == mockB.getMessage());

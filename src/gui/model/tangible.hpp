@@ -174,6 +174,8 @@ namespace model {
       operator ID()  const { return uiBus_.getID();}
       
       void reset();
+      void clearMsg();
+      void clearErr();
       
       template<typename...ARGS>
       void prepareCommand (Cmd const& prototype, ARGS&&...);
@@ -185,19 +187,21 @@ namespace model {
       
       void slotReveal(ID child);
       
-      void markMsg (string m)         { this->doMsg(m); }
-      void markErr (string e)         { this->doErr(e); }
-      void markFlash()                { this->doFlash();}
+      void markFlash();
+      void markMsg (string message);
+      void markErr (string error);
       void mark(GenNode const&);
       
     protected:
       virtual bool doReset()           =0;
+      virtual bool doClearMsg()        =0;
+      virtual bool doClearErr()        =0;
       virtual bool doExpand (bool yes) =0;
       virtual void doReveal (ID child) =0;
       virtual void doRevealYourself () =0;
       
-      virtual void doMsg (string)          =0;
-      virtual void doErr (string)          =0;
+      virtual bool doMsg (string)          =0;
+      virtual bool doErr (string)          =0;
       virtual void doFlash()               =0;
       virtual void doMark(GenNode const&)  =0;
     private:
@@ -217,23 +221,6 @@ namespace model {
                         ,GenNodeIL {std::forward<ARGS> (args)...}));
   }                   // not typed, no attributes, all arguments as children
   
-  
-  
-  /** generic handler for all incoming "state mark" messages */
-  inline void
-  Tangible::mark (GenNode const& stateMark)
-  {
-    if (stateMark.idi.getSym() == "Flash")
-      this->doFlash();
-    else
-    if (stateMark.idi.getSym() == "Error")
-      this->doErr (stateMark.data.get<string>());
-    else
-    if (stateMark.idi.getSym() == "Message")
-      this->doMsg (stateMark.data.get<string>());
-    else
-      this->doMark(stateMark);
-  }
   
   
   

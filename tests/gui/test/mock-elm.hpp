@@ -154,7 +154,7 @@ namespace test{
           UNIMPLEMENTED ("mock doRevealYourself");
         }
       
-      virtual void
+      virtual bool
       doMsg (string text)  override
         {
           log_.call (this->identify(), "doMsg", text);
@@ -162,9 +162,22 @@ namespace test{
           message_ = text;
           virgin_ = false;
           log_.note ("type=mark", "ID=Message", text);
+          
+          return false; // messages not sticky for this mock implementation
         }
       
-      virtual void
+      virtual bool
+      doClearMsg ()  override
+        {
+          log_.call (this->identify(), "doClearMsg");
+          if (isnil (message_))
+            return false;
+          
+          message_ = "";
+          log_.note ("type=mark", "ID=Message", "Message notification cleared");
+        }
+      
+      virtual bool
       doErr (string text)  override
         {
           log_.call (this->identify(), "doErr", text);
@@ -172,6 +185,19 @@ namespace test{
           error_ = text;
           virgin_ = false;
           log_.note ("type=mark", "ID=Error", text);
+          
+          return true; // error states are sticky for this mock implementation
+        }
+      
+      virtual bool
+      doClearErr ()  override
+        {
+          log_.call (this->identify(), "doClearErr");
+          if (not isError())
+            return false;
+          
+          error_ = "";
+          log_.note ("type=mark", "ID=Error", "Error state cleared");
         }
       
       virtual void
