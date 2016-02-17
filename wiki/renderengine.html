@@ -4892,7 +4892,7 @@ The backbone of the Lumiera UI is arranged such as to produce a data feed with s
 Run as part of the UiCoreServices, it is attached to the UI-Bus and listens to all ''state mark messages'' to distil the notion of relevant current state.
 On a basic level, the task is to group and store those messages in a way as to overwrite previous messages with new updates on the level of individual properties. Beyond that, there is the sensitivity to context, presentation perspective and work site, which means to impose an additional structure on this basic ''state snapshot'', to extract and replicate structured sets of state information.</pre>
 </div>
-<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201602121354" tags="design discuss" changecount="3">
+<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201602162247" tags="design discuss" changecount="7">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
 !!Parameter Handling
@@ -4928,10 +4928,10 @@ We need to work out guidelines for dealing with operations going on simultaneous
 * all EditingOperations are not threadsafe intentionally, because they are [[scheduled|ProcLayerScheduler]]
 
 !!the perils of data representation
-In software development, there is a natural inclination to cast &quot;reality&quot; into data, the structure of which has to be nailed down first. Then, everyone might &quot;access reality&quot; and work on it. Such sounds natural, self-evident and sound, yet to the same extent this approach is fundamentally flawed. It is known to work well for small, &quot;handsome&quot; projects, where you clearly know up-front what you're up to: namely to get away, after being paid, before anyone realises the fact you've built something that looks nice but does not fit.
-So the challenge of any major undertaking in software construction is //not to build a model.// Rather, we want to arrive at something that can be made to fit. Over and over again.
+In software development, there is a natural inclination to cast &quot;reality&quot; into data, the structure of which has to be nailed down first. Then, everyone might &quot;access reality&quot; and work on it. Doing so might sounds rational, natural, even self-evident and sound, yet as compelling as it might be, this approach is fundamentally flawed. It is known to work well only for small, &quot;handsome&quot; projects, where you clearly know up-front what you're up to: namely to get away, after being paid, before anyone realises the fact you've built something that looks nice but does not fit.
+So the challenge of any major undertaking in software construction is //not to build an universal model.// Rather, we want to arrive at something that can be made to fit. Over and over again.
 
-More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something different. But we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, to support us with its firmness, but also to offer joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of subsidiarity. The links and joints between such autonomous centres can be shaped to be in fact an exchange, based on common understanding of the //specific matters to deal with,// at that given joint.
+More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something entirely different. Yet still we know what we need and  we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, a skeleton to support us with its firmness, while also offering joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of subsidiarity. The links and joints between autonomous centres can be shaped to be in fact an exchange, a handover based on common understanding of the //specific matters to deal with,// at that given joint.
 </pre>
 </div>
 <div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" tags="def">

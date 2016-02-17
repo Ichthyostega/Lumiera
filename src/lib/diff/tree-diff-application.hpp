@@ -40,7 +40,7 @@
  ** a switch from scope to scope, which adds a lot of complexity. So the list diff
  ** application strategy can be seen as blueprint and demonstration of principles.
  ** 
- ** Another point in question is weather to treat the diff application as
+ ** Another point in question is whether to treat the diff application as
  ** manipulating a target data structure, or rather building a reshaped copy.
  ** The fact that GenNode and Record are designed as immutable values seems to favour
  ** the latter, yet the very reason to engage into building this diff framework was
@@ -280,7 +280,7 @@ namespace diff{
       
       /* == Implementation of the list diff application primitives == */
       
-      void
+      virtual void
       ins (GenNode const& n)  override
         {
           if (n.isNamed())
@@ -296,14 +296,14 @@ namespace diff{
             }
         }
       
-      void
+      virtual void
       del (GenNode const& n)  override
         {
           __expect_in_target(n, "remove");
           ++src();
         }
       
-      void
+      virtual void
       pick (GenNode const& n)  override
         {
           __expect_in_target(n, "pick");
@@ -311,14 +311,14 @@ namespace diff{
           ++src();
         }
       
-      void
+      virtual void
       skip (GenNode const& n)  override
         {
           __expect_further_elements (n);
           ++src();
         }      // assume the actual content has been moved away by a previous find()
       
-      void
+      virtual void
       find (GenNode const& n)  override
         {
           __expect_further_elements (n);
@@ -334,7 +334,7 @@ namespace diff{
       /** cue to a position behind the named node,
        *  thereby picking (accepting) all traversed elements
        *  into the reshaped new data structure as-is */
-      void
+      virtual void
       after (GenNode const& n)  override
         {
           if (n.matches(Ref::ATTRIBS))
@@ -364,7 +364,7 @@ namespace diff{
         }
       
       /** open nested scope to apply diff to child object */
-      void
+      virtual void
       mut (GenNode const& n)  override
         {
           GenNode const& child = find_child (n.idi);
@@ -376,7 +376,7 @@ namespace diff{
         }
       
       /** finish and leave child object scope, return to parent */
-      void
+      virtual void
       emu (GenNode const& n)  override
         {
           TRACE (diff, "tree-diff: LEAVE scope %s", cStr(alteredRec()));

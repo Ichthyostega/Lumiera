@@ -131,8 +131,7 @@
       daf&#252;r gen&#252;gt der normale Reset
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1448078748448" ID="ID_1000763850" MODIFIED="1455421181855" TEXT="Nachrichten l&#xf6;schen">
@@ -145,8 +144,7 @@
       mark &quot;clearMsg&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078778916" ID="ID_1657108949" MODIFIED="1455421169152" TEXT="Fehler l&#xf6;schen">
 <richcontent TYPE="NOTE"><html>
@@ -158,8 +156,7 @@
       mark &quot;clearErr&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078798369" ID="ID_819750758" MODIFIED="1455421160554" TEXT="komplett-Reset">
 <richcontent TYPE="NOTE"><html>
@@ -171,8 +168,7 @@
       mark &quot;reset&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -298,8 +294,7 @@
       F&#252;r die UI-Programmierung mu&#223; man Spaghetticode akzeptieren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1455236851592" ID="ID_1599276883" MODIFIED="1455236859119" TEXT="YAGNI">
 <icon BUILTIN="messagebox_warning"/>
@@ -391,8 +386,7 @@
       support ist <i>optional</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1455236418290" ID="ID_1765760054" MODIFIED="1455236435380" TEXT="dieses ruft parent.reveal(myID)"/>
 </node>
@@ -434,8 +428,7 @@
       sollte logischerweise der PresentationStateManager leer sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -457,13 +450,117 @@
       und eine state mark &quot;reset&quot; zur&#252;ckschicken...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1455422030995" HGAP="35" ID="ID_1455265273" MODIFIED="1455422052648" TEXT="mutation" VSHIFT="7">
 <icon BUILTIN="pencil"/>
+<node CREATED="1455666294927" ID="ID_373207685" MODIFIED="1455666299380" TEXT="Ausgangspunkt">
+<node CREATED="1455666301630" ID="ID_933452284" MODIFIED="1455666310209" TEXT="Element-Protokoll steht"/>
+<node CREATED="1455666310701" ID="ID_571166725" MODIFIED="1455666314472" TEXT="Bus-Semantik steht"/>
+<node CREATED="1455666315061" ID="ID_1650938256" MODIFIED="1455666328663" TEXT="Konzept f&#xfc;r Tree-Mutator steht"/>
+<node CREATED="1455666330652" ID="ID_654052510" MODIFIED="1455668788278" TEXT="Tree-Diff-Applikator ist implementiert"/>
+<node CREATED="1455666351784" ID="ID_1889806972" MODIFIED="1455666364225" TEXT="Entscheidung f&#xfc;r 2-Phasiges Diff-Update ist gefallen"/>
+</node>
+<node CREATED="1455668350028" HGAP="43" ID="ID_1853535891" MODIFIED="1455668374071" TEXT="Ablauf" VSHIFT="5">
+<node CREATED="1455668396398" ID="ID_1627727409" MODIFIED="1455668828239" TEXT="Diff-Nachricht kommt via UI-Bus">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1455668411867" ID="ID_1932196729" MODIFIED="1455668830612" TEXT="UI-Element baut Tree-Mutator &quot;auf sich selbst&quot;">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1455668689495" ID="ID_1046261411" MODIFIED="1455668833289" TEXT="UI-Element setzt Tree-Diff-Applikator auf diesen an">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node CREATED="1455668897947" HGAP="80" ID="ID_1897861223" MODIFIED="1455668911660" TEXT="Konseuenzen" VSHIFT="24">
+<node CREATED="1455668923175" ID="ID_1183550957" MODIFIED="1455668933577" TEXT="brauche passendes UI-Bus API"/>
+<node CREATED="1455668935142" ID="ID_1274632216" MODIFIED="1455669141158">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mu&#223; DiffApplicationStrategy
+    </p>
+    <p>
+      <i>noch einmal</i>&#160;implementieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das mag &#252;berraschen --
+    </p>
+    <p>
+      ist aber im Sinne des Erfinders
+    </p>
+    <ul>
+      <li>
+        DiffApplicationStrategy war von Anfang an als technisches Binding konzipiert
+      </li>
+      <li>
+        es ist besser, die gleiche Semantik der Sprache X-mal herunterzucoden
+      </li>
+      <li>
+        cleverer Code-re-Use zahlt sich i.d.R. nicht aus
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1455669004941" ID="ID_853385575" MODIFIED="1455669197237">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dies setzt volle Implementierung
+    </p>
+    <p>
+      des Tree-Mutators voraus
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der schwierigste Teil, das Mutieren von Attributen,
+    </p>
+    <p>
+      ist jedoch schon prototypisch implementiert
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1455669266289" ID="ID_476883926" MODIFIED="1455669272315" TEXT="hier kein expliziter Stack"/>
+<node CREATED="1455669272760" ID="ID_837691598" MODIFIED="1455669282883" TEXT="sondern der Call-Stack ist der Stack (Rekursion)"/>
+<node CREATED="1455669313986" ID="ID_1730130372" MODIFIED="1455669321877" TEXT="brauche generiischen Rahmen">
+<node CREATED="1455669322561" ID="ID_1968219875" MODIFIED="1455669325957" TEXT="f&#xfc;r skip"/>
+<node CREATED="1455669326400" ID="ID_646237490" MODIFIED="1455669330996" TEXT="f&#xfc;r ins / del"/>
+<node CREATED="1455669331448" ID="ID_1852578403" MODIFIED="1455669333036" TEXT="f&#xfc;r find"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1455669200945" ID="ID_880765624" MODIFIED="1455669216233" TEXT="offen">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455669221255" ID="ID_1712552545" MODIFIED="1455669237745" TEXT="Repr&#xe4;sentation der &quot;aktuellen Position&quot;"/>
+<node CREATED="1455669345167" ID="ID_310849010" MODIFIED="1455669353721" TEXT="generischen Rahmen f&#xfc;r Mut-Operationen"/>
+<node CREATED="1455669238213" ID="ID_731780565" MODIFIED="1455669252935" TEXT="Einleiten der Rekursion"/>
+</node>
+</node>
 </node>
 <node CREATED="1448658726090" FOLDED="true" ID="ID_37610818" MODIFIED="1455421704674" TEXT="Commands" VSHIFT="4">
 <node CREATED="1448658755071" ID="ID_1033500384" MODIFIED="1448658767933" TEXT="wie definieren">
@@ -899,8 +996,7 @@
       Implementierung der real-world-Variante fehlt!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="13"/>
 <icon BUILTIN="prepare"/>
 <node CREATED="1453545875627" ID="ID_1411740156" MODIFIED="1453545951737" TEXT="Definition &#xbb;Zentral-Dienste&#xab;">
@@ -1050,8 +1146,7 @@
       empf&#228;ngt alle <b>state mark notificatons</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1455290726358" ID="ID_386120755" MODIFIED="1455290731577" TEXT="mu&#xdf; gruppieren">
 <node CREATED="1455290732805" ID="ID_1731455164" MODIFIED="1455290737616" TEXT="nach Ui-Element"/>
@@ -1076,8 +1171,7 @@
       nach <b>Perspektive</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1455290833048" ID="ID_1650274766" MODIFIED="1455290841159">
 <richcontent TYPE="NODE"><html>
@@ -1089,8 +1183,7 @@
       nach <b>work site</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1455290849374" ID="ID_906623432" MODIFIED="1455290855766" TEXT="future work">
 <icon BUILTIN="yes"/>
