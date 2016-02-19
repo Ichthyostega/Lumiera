@@ -514,6 +514,31 @@
     </ul>
   </body>
 </html></richcontent>
+<node CREATED="1455669272760" ID="ID_837691598" MODIFIED="1455899105816" TEXT="Call-Stack ist der Prozessor-Stack (Rekursion)">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1455899000582" ID="ID_1404453203" MODIFIED="1455899086452" TEXT="sorry, geht nicht">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1455899005885" ID="ID_1920318464" MODIFIED="1455899091761" TEXT="denn sonst mu&#xdf; ich">
+<icon BUILTIN="idea"/>
+<node CREATED="1455899015220" ID="ID_1476900463" MODIFIED="1455899023991" TEXT="entweder die Anwendung komplett neu schreiben"/>
+<node CREATED="1455899024459" ID="ID_1562031965" MODIFIED="1455899033805" TEXT="oder den DiffApplicator umbauen"/>
+<node CREATED="1455899034129" ID="ID_1505454112" MODIFIED="1455899053610" TEXT="und das reicht bis in die Diff-Verben..."/>
+<node CREATED="1455899054575" ID="ID_1973501142" MODIFIED="1455899068441" TEXT="die dann rekursiv vom Diff-Typ abh&#xe4;ngig werden"/>
+<node CREATED="1455899068941" ID="ID_604248716" MODIFIED="1455899072752" TEXT="NEE DANKE"/>
+</node>
+</node>
+<node CREATED="1455669266289" ID="ID_476883926" MODIFIED="1455899233976" TEXT="mu&#xdf; ebenfalls expliziten Stack verwenden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1455899121277" ID="ID_1897194874" MODIFIED="1455899222200" TEXT="eigentlich ist das ganze Copy-n-Paste">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1455899176175" ID="ID_589009361" MODIFIED="1455899183929" TEXT="gef&#xfc;hlsm&#xe4;&#xdf;ig: hier kein Problem"/>
+<node CREATED="1455899184397" ID="ID_933775328" MODIFIED="1455899191320" TEXT="denn die Implementierung ist gekoppelt"/>
+<node CREATED="1455899191836" ID="ID_1325546784" MODIFIED="1455899200983" TEXT="mu&#xdf; gekoppelt sein, wg. Effizienz"/>
+<node CREATED="1455899201435" ID="ID_1353317149" MODIFIED="1455899210798" TEXT="eine Abstraktion hat hier keinen Mehrwert"/>
+<node CREATED="1455899211338" ID="ID_1152596163" MODIFIED="1455899216645" TEXT="und ist &#xfc;berall sonst eine B&#xfc;rde"/>
+</node>
 </node>
 <node CREATED="1455669004941" ID="ID_853385575" MODIFIED="1455669197237">
 <richcontent TYPE="NODE"><html>
@@ -542,8 +567,18 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1455669266289" ID="ID_476883926" MODIFIED="1455669272315" TEXT="hier kein expliziter Stack"/>
-<node CREATED="1455669272760" ID="ID_837691598" MODIFIED="1455669282883" TEXT="sondern der Call-Stack ist der Stack (Rekursion)"/>
+<node CREATED="1455899288247" ID="ID_635341866" MODIFIED="1455899347843" TEXT="Tree-Mutator hat echte (Assignment)-Mutation">
+<icon BUILTIN="info"/>
+<node CREATED="1455899303981" ID="ID_1584621992" MODIFIED="1455899333910" TEXT="pa&#xdf;t nicht auf die Semantik vom Diff">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1455899315092" ID="ID_1911158046" MODIFIED="1455899330748" TEXT="dann eben passend machen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1455899321418" ID="ID_802682081" MODIFIED="1455899337153" TEXT="Diff bekommt ein SET verb">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 <node CREATED="1455669313986" ID="ID_1730130372" MODIFIED="1455669321877" TEXT="brauche generiischen Rahmen">
 <node CREATED="1455669322561" ID="ID_1968219875" MODIFIED="1455669325957" TEXT="f&#xfc;r skip"/>
 <node CREATED="1455669326400" ID="ID_646237490" MODIFIED="1455669330996" TEXT="f&#xfc;r ins / del"/>

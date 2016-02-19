@@ -1,8 +1,8 @@
 /*
-  TREE-DIFF-APPLICATION.hpp  -  consume and apply a tree diff
+  TREE-DIFF-MUTATOR-BINDING.hpp  -  consume a tree diff, but target arbitrary private data
 
   Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,11 +21,16 @@
 */
 
 
-/** @file tree-diff-application.hpp
- ** Concrete implementation to apply structural changes to hierarchical
- ** data structures. Together with the generic #DiffApplicator, this allows
- ** to receive linearised structural diff descriptions and apply them to
- ** a given target data structure, to effect the corresponding changes.
+/** @file tree-diff-mutator-binding.hpp
+ ** Concrete implementation to apply structural changes to unspecific
+ ** private datea structures with hierarchical nature. This is a variation
+ ** of the generic [tree diff applicator](\ref tree-diff-application.hpp),
+ ** using the same implementation concept, while relying on an abstract
+ ** adapter type, the \ref TreeMutator. Similar to the generic case, when
+ ** combined with the generic #DiffApplicator, this allows to receive
+ ** linearised structural diff descriptions and apply them to a given
+ ** target data structure, which in this case is even a decoupled
+ ** private data structure.
  ** 
  ** ## Design considerations
  ** While -- conceptually -- our tree diff handling can be seen as an extension
@@ -95,8 +100,8 @@
  */
 
 
-#ifndef LIB_DIFF_TREE_DIFF_APPLICATION_H
-#define LIB_DIFF_TREE_DIFF_APPLICATION_H
+#ifndef LIB_DIFF_TREE_DIFF_MUTATOR_BINDING_H
+#define LIB_DIFF_TREE_DIFF_MUTATOR_BINDING_H
 
 
 #include "lib/diff/tree-diff.hpp"
@@ -117,6 +122,7 @@ namespace diff{
   using std::swap;
   
   
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
   /**
    * Interpreter for the tree-diff-language to work on GenNode elements
    * A concrete strategy to apply a structural diff to a target data structure
@@ -418,7 +424,8 @@ namespace diff{
           scopes_.top().init();
         }
     };
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
   
   
 }} // namespace lib::diff
-#endif /*LIB_DIFF_TREE_DIFF_APPLICATION_H*/
+#endif /*LIB_DIFF_TREE_DIFF_MUTATOR_BINDING_H*/

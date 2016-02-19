@@ -1,8 +1,8 @@
 /*
-  DiffTreeApplication(Test)  -  demonstrate the basics of tree diff representation
+  DiffVirtualisedApplication(Test)  -  apply structural changes to unspecific private data structures
 
   Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -90,14 +90,13 @@ namespace test{
    *      the \link diff::GenNode variant data node \endlink. The key point
    *      to note is the usage of Record elements as payload within GenNode,
    *      which allows to represent tree shaped object like data structures.
-   * @see DiffVirtualisedApplication_test handling arbitrary data structures
    * @see GenericRecordRepresentation_test
    * @see GenNodeBasic_test
    * @see DiffListApplication_test
    * @see diff-tree-application.hpp
    * @see tree-diff.hpp
    */
-  class DiffTreeApplication_test
+  class DiffVirtualisedApplication_test
     : public Test
     , TreeDiffLanguage
     {
@@ -209,7 +208,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (DiffTreeApplication_test, "unit common");
+  LAUNCHER (DiffVirtualisedApplication_test, "unit common");
   
   
   
