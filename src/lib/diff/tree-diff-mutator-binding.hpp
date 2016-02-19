@@ -33,65 +33,25 @@
  ** private data structure.
  ** 
  ** ## Design considerations
- ** While -- conceptually -- our tree diff handling can be seen as an extension
- ** and generalisation of list diffing, the decision was \em not to embody this
- ** extension into the implementation technically, for sake of clarity. More so,
- ** since the Record, which serves as foundation for our »External Tree Description«,
- ** was made to look and behave like a list-like entity, but built with two distinct
- ** scopes at implementation level: the attribute scope and the contents scope. This
- ** carries over to the fine points of the list diff language semantics, especially
- ** when it comes to fault tolerance and strictness vs fuzziness in diff application.
- ** The implementation is thus faced with having to deal with an internal focus and
- ** a switch from scope to scope, which adds a lot of complexity. So the list diff
- ** application strategy can be seen as blueprint and demonstration of principles.
+ ** So this use case is implemented on the same conceptual framework used for
+ ** the generic tree diff application, which in turn is -- conceptually -- an
+ ** extension of applying a list diff. But, again, we follow the route _not_ to
+ ** explicate those conceptual relations in the form of inheritance. This would
+ ** be implementation re-use, as opposed to building a new viable abstraction.
+ ** No one outside the implementation realm would benefit from such an abstraction,
+ ** so we prefer to understand the tree diff language as the abstraction, which
+ ** needs to embodied into two distinct contexts of implementation.
  ** 
- ** Another point in question is whether to treat the diff application as
- ** manipulating a target data structure, or rather building a reshaped copy.
- ** The fact that GenNode and Record are designed as immutable values seems to favour
- ** the latter, yet the very reason to engage into building this diff framework was
- ** how to handle partial updates within a expectedly very large UI model, reflecting
- ** the actual session model in Proc-Layer. So we end up working on a Mutator,
- ** which clearly signals we're going to reshape and re-rig the target data.
+ ** ### Yet another indirection
+ ** Unfortunately this leads to yet another indirection layer: Implementing a
+ ** language in itself is necessarily a double dispatch (we have to abstract the
+ ** verbs and we have to abstract the implementation side). And now we're decoupling
+ ** the implementation side from a concrete data structure. Which means, that the
+ ** use will have to provide a set of closures (which might even partially generated
+ ** functors) to translate the _implementation actions_ underlying the language into
+ ** _concrete actions_ on local data.
  ** 
- ** \par related
- ** Closely related to this generic application of tree changes is the situation,
- ** where we want to apply structural changes to some non-generic and private data
- ** structure. In fact, it is possible to _use the same tree diff language_ for
- ** this specific case, with the help of an _adapter_. Thus, within our diff
- ** framework, we provide a _similar binding_ for the DiffApplicator, but
- ** then targetted towards such an [structure adapter](\ref TreeMutator)
- ** 
- ** ## State and nested scopes
- ** Within the level of a single #Record, our tree diff language works similar to
- ** the list diff (with the addition of the \c after(ID) verb, which is just a
- ** shortcut to accept parts of the contents unaltered). But after possibly rearranging
- ** the contents of an "object" (Record), the diff might open some of its child "objects"
- ** by entering a nested scope. This is done with the \c mut(ID)....emu(ID) bracketing
- ** construct. On the implementation side, this means we need to use a stack somehow.
- ** The decision was to manage this stack explicitly, as a std::stack (heap memory).
- ** Each entry on this stack is a "context frame" for list diff. Which makes the
- ** tree diff applicator a highly statefull component.
- ** 
- ** Even more so, since -- for \em performance reasons -- we try to alter the
- ** tree shaped data structure \em in-place. We want to avoid the copy of possibly
- ** deep sub-trees, when in the end we might be just rearranging their sequence order.
- ** This design decision comes at a price tag though
- ** - it subverts the immutable nature of \c Record<GenNode> and leads to
- **   high dependency on data layout and implementation details of the latter.
- **   This is at least prominently marked by working on a diff::Record::Mutator,
- **   so the client has first to "open up" the otherwise immutable tree
- ** - the actual list diff on each level works by first \em moving the entire
- **   Record contents away into a temporary buffer and then \em moving them
- **   back into new shape one by one. In case of a diff conflict  (i.e. a
- **   mismatch between the actual data structure and the assumptions made
- **   for the diff message on the sender / generator side), an exception
- **   is thrown, leaving the client with a possibly corrupted tree, where
- **   parts might even still be stashed away in the temporary buffer,
- **   and thus be lost.
- ** We consider this unfortunate, yet justified  by the very nature of applying a diff.
- ** When the user needs safety or transactional behaviour, a deep copy should be made
- ** before attaching the #DiffApplicator
- ** 
+ ** @see DiffVirtualisedApplication_test
  ** @see DiffTreeApplication_test
  ** @see DiffListApplication_test
  ** @see GenNodeBasic_test
@@ -124,15 +84,15 @@ namespace diff{
   
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
   /**
-   * Interpreter for the tree-diff-language to work on GenNode elements
-   * A concrete strategy to apply a structural diff to a target data structure
-   * made from #Record<GenNode> elements. This data structure is assumed to be
-   * recursive, tree-like. But because Record elements are conceived as immutable
-   * and value-like, the tree diff application actually works on a Rec::Mutator
-   * wrapping the target record to be altered through consuming the diff.
-   * @throws  lumiera::error::State when diff application fails due to the
-   *          target sequence being different than assumed by the given diff.
-   * @see #TreeDiffInterpreter explanation of the verbs
+   * Interpreter for the tree-diff-language to work on arbitrary, undiclosed
+   * local data structures. The key point to note is that this local data is
+   * not required to implement any specific interface. The only requirement is
+   * the ability somehow to support the basic operations of applying a structural
+   * diff. This is ensured with the help of a _customisable adapter_ the TreeMutator.
+   * @throws  lumiera::error::State when diff application fails structurally.
+   * @throws  _unspecified errors_ when delegated operations fail.
+   * @see TreeDiffInterpreter explanation of the verbs
+   * @see DiffVirtualisedApplication_test demonstration of usage
    */
   template<>
   class DiffApplicationStrategy<Rec::Mutator>

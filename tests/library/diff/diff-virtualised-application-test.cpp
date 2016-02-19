@@ -72,27 +72,17 @@ namespace test{
   
   
   /***********************************************************************//**
-   * @test Demonstration/Concept: a description language for tree differences.
-   *       The representation is given as a linearised sequence of verb tokens.
-   *       In addition to the verbs used for list diffing, here we additionally
-   *       have to deal with nested scopes, which can be entered thorough a
-   *       bracketing construct \c mut(ID)...emu(ID).
-   *       This test demonstrates the application of such diff sequences
-   *       - in the first step, an empty root #Record<GenNode> is populated
-   *         with a type-ID, three named attribute values, three child values
-   *         and a nested child-Record.
-   *       - the second step demonstrates various diff language constructs
-   *         to alter, reshape and mutate this data structure
-   *       After applying those two diff sequences, we verify the data
-   *       is indeed in the expected shape.
-   * @remarks to follow this test, you should be familiar both with our
-   *      \link diff::Record generic data record \endlink, as well as with
-   *      the \link diff::GenNode variant data node \endlink. The key point
-   *      to note is the usage of Record elements as payload within GenNode,
-   *      which allows to represent tree shaped object like data structures.
-   * @see GenericRecordRepresentation_test
-   * @see GenNodeBasic_test
-   * @see DiffListApplication_test
+   * @test Demonstration: apply a stuctural change to unspecified private
+   *       data structures, with the help of an [dynamic adapter](\ref TreeMutator)
+   *       - we use private data classes, defined here in the test fixture
+   *         to represent "just some" pre-existing data structure.
+   *       - we re-assign some attribute values
+   *       - we add, re-order and delete child "elements", without knowing
+   *         what these elements actually are and how they are to be handled.
+   *       - we recurse into mutating such an _"unspecified"_ child element.
+   * @see DiffTreeApplication_test generic variant of tree diff application
+   * @see GenericTreeMutator_test base operations of the adapter
+   * @see tree-diff-mutator-binding.hpp
    * @see diff-tree-application.hpp
    * @see tree-diff.hpp
    */
@@ -103,20 +93,27 @@ namespace test{
       using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
       
       DiffSeq
+      attributeDiff()
+        {
+          // prepare for direkt attribute assignement
+          GenNode attrib1_mut(ATTRIB1.idi.getSym(), 11);
+          
+          return snapshot({ins(TYPE_X)
+                         , pick(ATTRIB1)
+                         , del(ATTRIB2)
+                         , ins(ATTRIB3)
+                         , set(attrib1_mut)
+                         });
+        }
+      
+      DiffSeq
       populationDiff()
         {
-          return snapshot({ins(TYPE_X)
-                         , ins(ATTRIB1)
-                         , ins(ATTRIB2)
-                         , ins(ATTRIB3)
+          return snapshot({ins(ATTRIB2)
+                         , ins(CHILD_A)
                          , ins(CHILD_A)
                          , ins(CHILD_T)
                          , ins(CHILD_T)
-                         , ins(SUB_NODE)
-                         , mut(SUB_NODE)
-                           , ins(CHILD_B)
-                           , ins(CHILD_A)
-                         , emu(SUB_NODE)
                          });
         }
         
@@ -125,34 +122,21 @@ namespace test{
       mutationDiff()
         {
           // prepare for direkt assignement of new value
-          // NOTE: the target ID will be reconstructed, including hash
-          GenNode childA_upper(CHILD_A.idi.getSym(), "A");
+          GenNode childT_later(CHILD_T.idi.getSym()
+                              ,Time(CHILD_T.data.get<Time>() +  Time(0,1)));
           
           return snapshot({after(Ref::ATTRIBS)      // fast forward to the first child
+                         , pick(CHILD_A)            // rearrange childern of mixed types...
                          , find(CHILD_T)
-                         , pick(CHILD_A)
+                         , set(childT_later)        // immediately assign to the child just picked
+                         , find(CHILD_T)            // fetch the other Time child
+                         , del(CHILD_A)             // delete a child of type Y
                          , skip(CHILD_T)
-                         , del(CHILD_T)
-                         , pick(Ref::CHILD)         // pick a child anonymously
-                         , mut(Ref::THIS)           // mutate the current element (the one just picked)
+                         , skip(CHILD_T)
+                         , mut(CHILD_A)             // mutate a child of type Y referred by ID
                            , ins(ATTRIB3)
-                           , ins(ATTRIB_NODE)       // attributes can also be nested objects
-                           , find(CHILD_A)
-                           , del(CHILD_B)
-                           , ins(CHILD_NODE)
                            , ins(CHILD_T)
-                           , skip(CHILD_A)
-                           , mut(CHILD_NODE)
-                             , ins(TYPE_Y)
-                             , ins(ATTRIB2)
-                           , emu(CHILD_NODE)
-                           , set(childA_upper)      // direct assignment, target found by ID (out of order)
-                           , mut(ATTRIB_NODE)       // mutation can be out-of order, target found by ID
-                             , ins(CHILD_A)
-                             , ins(CHILD_A)
-                             , ins(CHILD_A)
-                           , emu(ATTRIB_NODE)
-                         , emu(Ref::THIS)
+                         , emu(CHILD_A)
                          });
         }
       
@@ -164,45 +148,14 @@ namespace test{
           Rec& subject = target;
           DiffApplicator<Rec::Mutator> application(target);
           
-          // Part I : apply diff to populate
+          // Part I : apply attribute changes
           application.consume(populationDiff());
           
-          CHECK (!isnil (subject));                                    // nonempty -- content has been added
-          CHECK ("X" == subject.getType());                            // type was set to "X"
-          CHECK (1 == subject.get("α").data.get<int>());               // has gotten our int attribute "α"
-          CHECK (2L == subject.get("β").data.get<int64_t>());          // ... the long attribute "β"
-          CHECK (3.45 == subject.get("γ").data.get<double>());         // ... and double attribute "γ"
-          auto scope = subject.scope();                                // look into the scope contents...
-          CHECK (  *scope == CHILD_A);                                 //   there is CHILD_A
-          CHECK (*++scope == CHILD_T);                                 //   followed by a copy of CHILD_T
-          CHECK (*++scope == CHILD_T);                                 //   and another copy of CHILD_T
-          CHECK (*++scope == MakeRec().appendChild(CHILD_B)            //   and there is a nested Record 
-                                      .appendChild(CHILD_A)            //       with CHILD_B
-                              .genNode(SUB_NODE.idi.getSym()));        //       and CHILD_A
-          CHECK (isnil(++scope));                                      // thats all -- no more children
-          
-          // Part II : apply the second diff
+          // Part II : apply child population
           application.consume(mutationDiff());
-          CHECK (join (subject.keys()) == "α, β, γ");                  // the attributes weren't altered 
-          scope = subject.scope();                                     // but the scope was reordered
-          CHECK (  *scope == CHILD_T);                                 //   CHILD_T
-          CHECK (*++scope == CHILD_A);                                 //   CHILD_A
-          Rec nested = (++scope)->data.get<Rec>();                     //   and our nested Record, which too has been altered:
-            CHECK (nested.get("γ").data.get<double>() == 3.45);        //       it carries now an attribute "δ", which is again
-            CHECK (nested.get("δ") == MakeRec().appendChild(CHILD_A)   //           a nested Record with three children CHILD_A
-                                               .appendChild(CHILD_A)   // 
-                                               .appendChild(CHILD_A)   // 
-                                       .genNode("δ"));                 // 
-            auto subScope = nested.scope();                            //       and within the nested sub-scope we find
-            CHECK (  *subScope != CHILD_A);                            //           CHILD_A has been altered by assigment
-            CHECK (CHILD_A.idi == subScope->idi);                      //           ...: same ID as CHILD_A
-            CHECK ("A" == subScope->data.get<string>());               //           ...: but mutated payload
-            CHECK (*++subScope == MakeRec().type("Y")                  //           a yet-again nested sub-Record of type "Y"
-                                           .set("β", int64_t(2))       //               with just an attribute "β" == 2L
-                                   .genNode(CHILD_NODE.idi.getSym())); //               (and an empty child scope)
-            CHECK (*++subScope == CHILD_T);                            //           followed by another copy of CHILD_T
-            CHECK (isnil (++subScope));                                // 
-          CHECK (isnil (++scope));                                     // and nothing beyond that.
+          
+          // Part II : apply child mutations
+          application.consume(mutationDiff());
         }
     };
   
