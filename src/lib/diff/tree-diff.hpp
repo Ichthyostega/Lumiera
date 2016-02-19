@@ -40,8 +40,13 @@
  **   a \em nested record ("nested child object").
  ** - the typing of the elements is outside the scope of the diff language; it is
  **   assumed that the receiver knows what types to expect and how to deal with them.
- ** - only nested records may be \em mutated by the diff. All other elements can
- **   only be inserted, moved or deleted (like elements in list diff)
+ ** - there is a notion of changing or mutating the data content, while retaining
+ **   the identity of the element. Of course this requires the data content to be
+ **   assignalbe, which makes content mutation an optional feature.
+ ** - beyond that, like in list diff, elements might be changed through a sequence of
+ **   deletion and insertion of a changed element with the same identity.
+ ** - since the tree like data structure is _recursive_, mutation of nested records
+ **   os represented by "opening" the nested record, followed by a recursive diff.
  ** By implementing the #TreeDiffInterpreter interface (visitor), a concrete usage
  ** can receive a diff description and possibly apply it to suitable target data.
  ** 
@@ -97,6 +102,12 @@ namespace diff{
    *          to the first child element, while \c after(Ref::END) means to accept
    *          all of the existing data contents as-is (presumably to append further
    *          elements beyond that point).
+   * - \c set assign a new value to the element designated element.
+   *          This is primarily intended for primitive data values and requires
+   *          the payload type to be assignable, without changing the element's
+   *          identity. The element is identified by the payload's ID and needs
+   *          to be present already, i.e. it has to be mentioned by preceding
+   *          order defining verbs (the list diff verbs, `pick`, or `find`).
    * - \c mut bracketing construct to open a nested sub scope, for mutation.
    *          The element designated by the ID of the argument needs to be a
    *          ["nested child object"](\ref Record). Moreover, this element must
@@ -132,6 +143,7 @@ namespace diff{
       virtual void skip(GenNode const& n)   =0;
       
       virtual void after(GenNode const&n)   =0;
+      virtual void set (GenNode const&n)   =0;
       virtual void mut (GenNode const& n)   =0;
       virtual void emu (GenNode const& n)   =0;
     };
@@ -150,6 +162,7 @@ namespace diff{
       
       // Tree structure verbs
       DiffStep_CTOR(after);
+      DiffStep_CTOR(set);
       DiffStep_CTOR(mut);
       DiffStep_CTOR(emu);
     };

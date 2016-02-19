@@ -124,6 +124,10 @@ namespace test{
       DiffSeq
       mutationDiff()
         {
+          // prepare for direkt assignement of new value
+          // NOTE: the target ID will be reconstructed, including hash
+          GenNode childA_upper(CHILD_A.idi.getSym(), "A");
+          
           return snapshot({after(Ref::ATTRIBS)      // fast forward to the first child
                          , find(CHILD_T)
                          , pick(CHILD_A)
@@ -142,6 +146,7 @@ namespace test{
                              , ins(TYPE_Y)
                              , ins(ATTRIB2)
                            , emu(CHILD_NODE)
+                           , set(childA_upper)      // direct assignment, target found by ID (out of order)
                            , mut(ATTRIB_NODE)       // mutation can be out-of order, target found by ID
                              , ins(CHILD_A)
                              , ins(CHILD_A)
@@ -189,7 +194,9 @@ namespace test{
                                                .appendChild(CHILD_A)   // 
                                        .genNode("δ"));                 // 
             auto subScope = nested.scope();                            //       and within the nested sub-scope we find
-            CHECK (  *subScope == CHILD_A);                            //           CHILD_A
+            CHECK (  *subScope != CHILD_A);                            //           CHILD_A has been altered by assigment
+            CHECK (CHILD_A.idi == subScope->idi);                      //           ...: same ID as CHILD_A
+            CHECK ("A" == subScope->data.get<string>());               //           ...: but mutated payload
             CHECK (*++subScope == MakeRec().type("Y")                  //           a yet-again nested sub-Record of type "Y"
                                            .set("β", int64_t(2))       //               with just an attribute "β" == 2L
                                    .genNode(CHILD_NODE.idi.getSym())); //               (and an empty child scope)

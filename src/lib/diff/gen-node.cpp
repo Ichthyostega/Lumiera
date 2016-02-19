@@ -73,7 +73,7 @@ namespace diff{
   
   
   
-  /** Implementation of content equality test
+  /** Implementation of content equality test, delgating to content
    * @throws error::Logic when the given other DataCap
    *         does not hold a value of the same type than
    *         this DataCap.

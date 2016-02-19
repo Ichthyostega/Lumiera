@@ -363,6 +363,14 @@ namespace diff{
             ++src(); // get /after/ an explicitly given position
         }
       
+      /** assignement of changed value in one step */
+      virtual void
+      set (GenNode const& n)  override
+        {
+          GenNode const& elm = find_child (n.idi);
+          unConst(elm).data = n.data;
+        }
+      
       /** open nested scope to apply diff to child object */
       virtual void
       mut (GenNode const& n)  override
