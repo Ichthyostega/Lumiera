@@ -489,8 +489,7 @@
       <i>noch einmal</i>&#160;implementieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -514,8 +513,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1455669004941" ID="ID_853385575" MODIFIED="1455669197237">
 <richcontent TYPE="NODE"><html>
@@ -530,8 +528,7 @@
       des Tree-Mutators voraus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -544,8 +541,7 @@
       ist jedoch schon prototypisch implementiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1455669266289" ID="ID_476883926" MODIFIED="1455669272315" TEXT="hier kein expliziter Stack"/>
 <node CREATED="1455669272760" ID="ID_837691598" MODIFIED="1455669282883" TEXT="sondern der Call-Stack ist der Stack (Rekursion)"/>
 <node CREATED="1455669313986" ID="ID_1730130372" MODIFIED="1455669321877" TEXT="brauche generiischen Rahmen">
@@ -558,7 +554,65 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455669221255" ID="ID_1712552545" MODIFIED="1455669237745" TEXT="Repr&#xe4;sentation der &quot;aktuellen Position&quot;"/>
 <node CREATED="1455669345167" ID="ID_310849010" MODIFIED="1455669353721" TEXT="generischen Rahmen f&#xfc;r Mut-Operationen"/>
-<node CREATED="1455669238213" ID="ID_731780565" MODIFIED="1455669252935" TEXT="Einleiten der Rekursion"/>
+<node CREATED="1455669238213" ID="ID_731780565" MODIFIED="1455669252935" TEXT="Einleiten der Rekursion">
+<node CREATED="1455842313629" ID="ID_179960248" MODIFIED="1455842321264" TEXT="ich h&#xe4;tte es gern echt-rekursiv"/>
+<node CREATED="1455842321828" ID="ID_1622068738" MODIFIED="1455842336974" TEXT="widerspricht aber unserem DiffApplicator"/>
+</node>
+<node CREATED="1455833678448" HGAP="35" ID="ID_1439118587" MODIFIED="1455833692637" TEXT="Probleme" VSHIFT="6">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1455833736586" ID="ID_1233162987" MODIFIED="1455833741893" TEXT="Feld vs Attribut">
+<node CREATED="1455834007278" ID="ID_196347476" MODIFIED="1455834009696" TEXT="Feld">
+<node CREATED="1455834060110" ID="ID_1872959165" MODIFIED="1455834067177" TEXT="ist da per Struktur"/>
+<node CREATED="1455834067837" ID="ID_944456076" MODIFIED="1455834075400" TEXT="hat immer einen Wert"/>
+</node>
+<node CREATED="1455834010264" ID="ID_1604005834" MODIFIED="1455834012705" TEXT="Attribut">
+<node CREATED="1455834109112" ID="ID_879864381" MODIFIED="1455834119178" TEXT="wird per Key angesprochen"/>
+<node CREATED="1455834121926" ID="ID_504132661" MODIFIED="1455834189337" TEXT="kann abwesend sein"/>
+</node>
+<node CREATED="1455834013389" ID="ID_133168935" MODIFIED="1455834058219" TEXT="Widerspr&#xfc;che">
+<node CREATED="1455834227528" ID="ID_1606302361" MODIFIED="1455834231179" TEXT="Feld hinzuf&#xfc;gen"/>
+<node CREATED="1455834231647" ID="ID_1275813367" MODIFIED="1455834236914" TEXT="Feld l&#xf6;schen"/>
+<node CREATED="1455834237999" ID="ID_254859574" MODIFIED="1455834251313" TEXT="Feld suchen"/>
+<node CREATED="1455834400273" ID="ID_54362263" MODIFIED="1455834403925" TEXT="Zuweisung"/>
+<node CREATED="1455834252068" ID="ID_1918373755" MODIFIED="1455834285644" TEXT="Ordnung"/>
+</node>
+</node>
+<node CREATED="1455833774965" ID="ID_677756898" MODIFIED="1455833794349" TEXT="&#xc4;ndern wider die Natur"/>
+<node CREATED="1455833858794" ID="ID_483179827" MODIFIED="1455833863844" TEXT="zus&#xe4;tzliche Ordnungsstruktur"/>
+<node CREATED="1455842653928" ID="ID_1996966445" MODIFIED="1455842665480">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Diff kennt keine <i>Zuweisung</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1455842674973" ID="ID_1910702757" MODIFIED="1455842682008" TEXT="L&#xf6;schen + Neueinf&#xfc;gen"/>
+<node CREATED="1455842682524" ID="ID_1597781391" MODIFIED="1455842710444" TEXT="unn&#xf6;tiger Aufwand (Allokation)"/>
+<node CREATED="1455842711008" ID="ID_1470911011" MODIFIED="1455842721083" TEXT="f&#xfc;hrt zu &quot;Flackern&quot; im UI"/>
+<node CREATED="1455843001833" HGAP="46" ID="ID_617738816" MODIFIED="1455843009974" TEXT="L&#xf6;sungen" VSHIFT="16">
+<node CREATED="1455843011048" ID="ID_1280199494" MODIFIED="1455843047471" TEXT="Spezialvereinbarung">
+<node CREATED="1455843048699" ID="ID_1949875245" MODIFIED="1455843054766" TEXT="Einf&#xfc;gen des gleichen Attributes"/>
+<node CREATED="1455843055122" ID="ID_880285017" MODIFIED="1455843061285" TEXT="geht nur unmittelbar danach"/>
+<node CREATED="1455843061633" ID="ID_1466937234" MODIFIED="1455843065597" TEXT="geht nur mit Attributen"/>
+</node>
+<node CREATED="1455843068672" ID="ID_695348733" MODIFIED="1455843072795" TEXT="neues Verb">
+<node CREATED="1455843074288" ID="ID_251586851" MODIFIED="1455843077987" TEXT="SET"/>
+<node CREATED="1455843120961" ID="ID_1340712241" MODIFIED="1455843131556" TEXT="setzt Element-Identit&#xe4;t voraus"/>
+<node CREATED="1455843134111" ID="ID_1830155209" MODIFIED="1455843174534" TEXT="funkioniert (theoretisch) auch bei Kindern"/>
+<node CREATED="1455843262862" ID="ID_779223103" MODIFIED="1455843311047" TEXT="Frage: Auto-PICK">
+<icon BUILTIN="help"/>
+<node CREATED="1455843317119" ID="ID_755404987" MODIFIED="1455843331097" TEXT="Ja: aber was dann mit Umordnungen"/>
+<node CREATED="1455843336405" ID="ID_1210482014" MODIFIED="1455843358109" TEXT="Nein: aber was dann wenn out-of-order"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -1192,7 +1246,7 @@
 </node>
 </node>
 <node CREATED="1448063874479" HGAP="43" ID="ID_739054690" MODIFIED="1453546352792" TEXT="UI-Modell" VSHIFT="1"/>
-<node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1455421918775" TEXT="Diff-System" VSHIFT="1">
+<node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1455842048164" TEXT="Diff-System" VSHIFT="1">
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1434128278990" ID="ID_106354755" MODIFIED="1434128283641" TEXT="Diff-Darstellung"/>
@@ -2435,7 +2489,7 @@
 <node CREATED="1443735643536" ID="ID_1397296376" MODIFIED="1443735648747" TEXT="nach Zonen geordnet"/>
 </node>
 <node CREATED="1443735736427" ID="ID_735577464" MODIFIED="1443735739943" TEXT="Konformit&#xe4;t">
-<node CREATED="1443736349465" FOLDED="true" ID="ID_1312270317" MODIFIED="1443739939854" TEXT="strikt">
+<node CREATED="1443736349465" FOLDED="true" ID="ID_1312270317" MODIFIED="1455841580926" TEXT="strikt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2457,14 +2511,14 @@
 <node CREATED="1443735750626" ID="ID_1965990187" MODIFIED="1443736021880" TEXT="erstes Kind er&#xf6;ffnet Scope"/>
 <node CREATED="1443736449419" ID="ID_1376225902" MODIFIED="1443736603427" TEXT="danach Attribute wegsortieren"/>
 <node CREATED="1443736688027" ID="ID_1189409086" MODIFIED="1443737477829" TEXT="Attribut-Handhabung">
-<node CREATED="1443737483704" FOLDED="true" ID="ID_1359413673" MODIFIED="1443739954500" TEXT="Modell &quot;Liste&quot;">
+<node CREATED="1443737483704" FOLDED="true" ID="ID_1359413673" MODIFIED="1455841883232" TEXT="Modell &quot;Liste&quot;">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1443737510238" ID="ID_1135997794" MODIFIED="1443737510238" TEXT="Duplikate anh&#xe4;ngen"/>
 <node CREATED="1443737516852" ID="ID_636329172" MODIFIED="1443737527750" TEXT="Einf&#xfc;gen erlauben"/>
 <node CREATED="1443737528578" ID="ID_1554159544" MODIFIED="1443737538461" TEXT="Umordnen erlauben"/>
 <node CREATED="1443737570229" ID="ID_28119998" MODIFIED="1443737576392" TEXT="L&#xf6;schen erfordert Ansteuern"/>
 </node>
-<node CREATED="1443737497870" FOLDED="true" ID="ID_113467015" MODIFIED="1443739953318" TEXT="Modell &quot;Map&quot;">
+<node CREATED="1443737497870" FOLDED="true" ID="ID_113467015" MODIFIED="1455841885008" TEXT="Modell &quot;Map&quot;">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1443737705058" ID="ID_1320189713" MODIFIED="1443737716690" TEXT="Operationen an Storage delegieren"/>
 <node CREATED="1443737578803" ID="ID_1670234515" MODIFIED="1443737602756" TEXT="Duplikate &#xfc;berschreiben"/>
@@ -2472,7 +2526,7 @@
 <node CREATED="1443737747941" ID="ID_1552219906" MODIFIED="1443737757207" TEXT="Umordnungen verweigern/ignorieren"/>
 <node CREATED="1443737769122" ID="ID_697980786" MODIFIED="1443737777276" TEXT="L&#xf6;schen an beliebiger Stelle wirksam"/>
 </node>
-<node CREATED="1443738082216" FOLDED="true" HGAP="38" ID="ID_870184525" MODIFIED="1443739486557" TEXT="Abw&#xe4;gung" VSHIFT="7">
+<node CREATED="1443738082216" FOLDED="true" HGAP="38" ID="ID_870184525" MODIFIED="1455841845325" TEXT="Abw&#xe4;gung" VSHIFT="7">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1443738097022" ID="ID_1609921484" MODIFIED="1443738178020" TEXT="Modelle schlie&#xdf;en sich aus">
 <richcontent TYPE="NOTE"><html>
@@ -2528,7 +2582,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1443738592971" ID="ID_790837479" MODIFIED="1443739191673" TEXT="bei uns: hoch effizient">
+<node CREATED="1443738592971" ID="ID_790837479" MODIFIED="1455841731908" TEXT="bei uns: hoch effizient">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2544,10 +2598,11 @@
       kommen wir auf lineare Komplexit&#228;t f&#252;r die Verarbeitung
     </p>
     <p>
-      + NlogN f &#252;r den Index zur Diff-Erzeugung
+      + NlogN f&#252;r den Index zur Diff-Erzeugung
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1443738199160" ID="ID_955544777" MODIFIED="1443738201508" TEXT="Nachteile">
@@ -2638,7 +2693,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1443739215487" FOLDED="true" HGAP="42" ID="ID_1540836182" MODIFIED="1443739482884" TEXT="Entscheidung">
+<node CREATED="1443739215487" FOLDED="true" HGAP="42" ID="ID_1540836182" MODIFIED="1455841419071" TEXT="Entscheidung">
 <icon BUILTIN="info"/>
 <node CREATED="1443739221631" ID="ID_338047062" MODIFIED="1443739227649" TEXT="&quot;Listen&quot;-Modell"/>
 <node CREATED="1443739228542" ID="ID_773218806" MODIFIED="1443739244615" TEXT="eindeutig vorzuziehen"/>
@@ -3064,7 +3119,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1446159438278" FOLDED="true" HGAP="29" ID="ID_563496669" MODIFIED="1446356526122" VSHIFT="8">
+<node CREATED="1446159438278" FOLDED="true" HGAP="29" ID="ID_563496669" MODIFIED="1455841217005" VSHIFT="8">
 <richcontent TYPE="NODE"><html>
   <head>
     

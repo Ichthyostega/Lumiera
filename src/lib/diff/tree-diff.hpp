@@ -95,14 +95,14 @@ namespace diff{
    * - \c after shortcut to \c pick existing elements up to the designated point.
    *          As a special notation, \c after(Ref::ATTRIBUTES) allows to fast forward
    *          to the first child element, while \c after(Ref::END) means to accept
-   *          all of the existing data contents as-is (possibly to append further
+   *          all of the existing data contents as-is (presumably to append further
    *          elements beyond that point).
-   * - \c mut bracketing construct to open a nested sub scope. The element
-   *          designated by the ID of the argument needs to be a #Record
-   *          ("nested child object"). Moreover, this element must have been
-   *          mentioned with the preceding diff verbs at that level, which means
-   *          that the element as such must already be present in the altered
-   *          target structure. The \c mut(ID) verb then opens this nested
+   * - \c mut bracketing construct to open a nested sub scope, for mutation.
+   *          The element designated by the ID of the argument needs to be a
+   *          ["nested child object"](\ref Record). Moreover, this element must
+   *          have been mentioned with the preceding diff verbs at that level,
+   *          which means that the element as such must already be present in the
+   *          altered target structure. The `mut(ID)` verb then opens this nested
    *          record for diff handling, and all subsequent diff verbs are to be
    *          interpreted relative to this scope, until the corresponding
    *          \c emu(ID) verb is encountered. As a special notation, right
@@ -114,7 +114,7 @@ namespace diff{
    * - \c emu bracketing construct and counterpart to \c mut(ID). This verb
    *          must be given precisely at the end of the nested scope (it is
    *          not allowed to "return" from the middle of a scope, for sake
-   *          of sanity). At this point, ths child scope is left and the
+   *          of sanity). At this point, this child scope is left and the
    *          parent scope with all existing diff state is popped from an
    *          internal stack
    */
