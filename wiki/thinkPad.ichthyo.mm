@@ -585,7 +585,7 @@
 <node CREATED="1455669331448" ID="ID_1852578403" MODIFIED="1455669333036" TEXT="f&#xfc;r find"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1455669200945" ID="ID_880765624" MODIFIED="1455669216233" TEXT="offen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1455669200945" HGAP="85" ID="ID_880765624" MODIFIED="1455927027968" TEXT="offen" VSHIFT="-14">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455669221255" ID="ID_1712552545" MODIFIED="1455669237745" TEXT="Repr&#xe4;sentation der &quot;aktuellen Position&quot;"/>
 <node CREATED="1455669345167" ID="ID_310849010" MODIFIED="1455669353721" TEXT="generischen Rahmen f&#xfc;r Mut-Operationen"/>
@@ -699,20 +699,79 @@
 <icon BUILTIN="help"/>
 <node CREATED="1455913726963" ID="ID_514338534" MODIFIED="1455913730857" TEXT="kommt es vor">
 <icon BUILTIN="help"/>
+<node CREATED="1455926476893" ID="ID_1938999393" MODIFIED="1455926499782" TEXT="ja"/>
+<node CREATED="1455926509185" ID="ID_784567614" MODIFIED="1455926521747" TEXT="in der Filter-Pipe"/>
+<node CREATED="1455926675370" ID="ID_572508223" MODIFIED="1455926707930" TEXT="&#xbb;Zwei-Listen-Modell&#xab;">
+<node CREATED="1455926709229" ID="ID_272389445" MODIFIED="1455926710513" TEXT="f&#xfc;r generischen Diff"/>
+<node CREATED="1455926710981" ID="ID_1449723679" MODIFIED="1455926717032" TEXT="m&#xf6;gliche Vereinheitlichung"/>
+<node CREATED="1455926717452" ID="ID_1884046427" MODIFIED="1455926728191" TEXT="generisch, nicht polymorph"/>
+</node>
 </node>
 <node CREATED="1455913731723" ID="ID_1269232747" MODIFIED="1455913750301" TEXT="Problem umgehen">
 <icon BUILTIN="help"/>
+<node CREATED="1455926525990" ID="ID_1102781575" MODIFIED="1455926538168" TEXT="w&#xe4;re m&#xf6;glich"/>
+<node CREATED="1455926539204" ID="ID_650449853" MODIFIED="1455926543144" TEXT="Polymorphismus"/>
 </node>
 <node CREATED="1455913800081" ID="ID_552808081" MODIFIED="1455913813985" TEXT="Typ-Info transportieren">
 <icon BUILTIN="help"/>
+<node CREATED="1455926589909" ID="ID_1341677743" MODIFIED="1455926610247" TEXT="Form der ID"/>
+<node CREATED="1455926610931" ID="ID_1390833573" MODIFIED="1455926615310" TEXT="Pr&#xe4;fix in der ID"/>
+<node CREATED="1455926617866" ID="ID_1667737141" MODIFIED="1455926631308" TEXT="Typ-Feld in geschachteltem Record"/>
+<node CREATED="1455926632320" ID="ID_1323008809" MODIFIED="1455926641491" TEXT="Typ der Payload -&gt; Visitor"/>
 </node>
-<node CREATED="1455913759727" ID="ID_1318158783" MODIFIED="1455913777192" TEXT="Modell">
-<node CREATED="1455913778429" ID="ID_884750408" MODIFIED="1455913785088" TEXT="sub-Collections">
+<node CREATED="1455913759727" HGAP="43" ID="ID_1318158783" MODIFIED="1455926954626" TEXT="Modell">
+<node CREATED="1455913778429" ID="ID_884750408" MODIFIED="1455926815241" TEXT="sub-Collections">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eindeutig &#252;berlegen
+    </p>
+    <ul>
+      <li>
+        faktorisiert sauber
+      </li>
+      <li>
+        Zustand delegiert auf die jeweilige Kinder-Sammlung
+      </li>
+      <li>
+        diese wird damit auch zum generischen Element
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1455913847683" ID="ID_1829117976" MODIFIED="1455913860029" TEXT="es gibt effektiv mehrere Kinder-Sammlungen"/>
 <node CREATED="1455913860594" ID="ID_631826706" MODIFIED="1455913869013" TEXT="wir verwalten intern f&#xfc;r jede eine Position"/>
 <node CREATED="1455913877183" ID="ID_1295733719" MODIFIED="1455913906711" TEXT="forwarding by type"/>
 </node>
-<node CREATED="1455913785555" ID="ID_1777441123" MODIFIED="1455913793358" TEXT="transparenter Filter">
+<node CREATED="1455913785555" ID="ID_1777441123" MODIFIED="1455926930605" TEXT="transparenter Filter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      schlechter....
+    </p>
+    <ul>
+      <li>
+        sammelt viel technische Komplexit&#228;t auf top-level
+      </li>
+      <li>
+        wir m&#252;ssen eine meta-Repr&#228;sentation aufbauen
+      </li>
+      <li>
+        wir m&#252;ssen Adapter zentral generieren, anstatt uns vom Installieren von Closures treiben zu lassen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1455913912323" ID="ID_1775410993" MODIFIED="1455913922605" TEXT="es gibt nominell nur eine Kinder-Folge"/>
 <node CREATED="1455913924857" ID="ID_505406246" MODIFIED="1455913935019" TEXT="wir m&#xfc;ssen die intern repr&#xe4;sentieren"/>
 <node CREATED="1455913938287" ID="ID_749740013" MODIFIED="1455913957888" TEXT="passenden Adapter">
@@ -720,6 +779,287 @@
 <node CREATED="1455913970443" ID="ID_164083502" MODIFIED="1455913995371" TEXT="jeweils Typ feststellen"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#3a3785" CREATED="1455927009621" HGAP="-30" ID="ID_153254427" MODIFIED="1455981592504" STYLE="fork" TEXT="&#xbb;generic tree diff&#xab;" VSHIFT="-10">
+<cloud COLOR="#edd8ba"/>
+<font NAME="SansSerif" SIZE="15"/>
+<node CREATED="1455927154554" ID="ID_1055035778" MODIFIED="1455927158037" TEXT="Prinzip">
+<node CREATED="1455927162321" ID="ID_285833614" MODIFIED="1455927166972" TEXT="chained adapters"/>
+<node CREATED="1455927169432" ID="ID_1685554012" MODIFIED="1455927207911" TEXT="inline closures"/>
+<node CREATED="1455927216698" ID="ID_817434960" MODIFIED="1455927225756" TEXT="selector predicate"/>
+</node>
+<node CREATED="1455927270458" ID="ID_1471647972" MODIFIED="1455927274061" TEXT="Struktur">
+<node CREATED="1455927276314" ID="ID_1425598677" MODIFIED="1455928005000" TEXT="primitives">
+<cloud COLOR="#fce9c0"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node CREATED="1455927329507" ID="ID_949976479" MODIFIED="1455928710075" TEXT="pick">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927396505" ID="ID_54934717" MODIFIED="1455927399733" TEXT="verify"/>
+<node CREATED="1455927413191" ID="ID_1313233235" MODIFIED="1455982912941" TEXT="accept_src"/>
+<node CREATED="1455927425726" ID="ID_1010708624" MODIFIED="1455982690058" TEXT="next_src"/>
+</node>
+<node CREATED="1455927334882" ID="ID_724923414" MODIFIED="1455928708626" TEXT="ins">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927474671" ID="ID_739710454" MODIFIED="1455982918963" TEXT="inject"/>
+</node>
+<node CREATED="1455927341473" ID="ID_573257215" MODIFIED="1455928707275" TEXT="del">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927479054" ID="ID_93562485" MODIFIED="1455927482234" TEXT="verify"/>
+<node CREATED="1455927483301" ID="ID_1149563805" MODIFIED="1455982697209" TEXT="next_src"/>
+</node>
+<node CREATED="1455927346728" ID="ID_1236186762" MODIFIED="1455928705947" TEXT="find">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927510666" ID="ID_968873842" MODIFIED="1455927514101" TEXT="locate_src"/>
+<node CREATED="1455927522081" ID="ID_476699106" MODIFIED="1455982923915" TEXT="accept_src"/>
+</node>
+<node CREATED="1455927354239" ID="ID_501366037" MODIFIED="1455928704596" TEXT="skip">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927543126" ID="ID_740178322" MODIFIED="1455927547345" TEXT="if verify">
+<node CREATED="1455927548125" ID="ID_1645901473" MODIFIED="1455927549457" TEXT="skip"/>
+</node>
+</node>
+<node CREATED="1455927357415" ID="ID_1730455685" MODIFIED="1455928703412" TEXT="after">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927556300" ID="ID_476640075" MODIFIED="1455927577245" TEXT="while not">
+<node CREATED="1455927560940" ID="ID_1275606051" MODIFIED="1455982930194" TEXT="accept_src"/>
+<node CREATED="1455982708749" ID="ID_355029700" MODIFIED="1455982708749" TEXT="next_src"/>
+</node>
+<node CREATED="1455927589560" ID="ID_1967720214" MODIFIED="1455927594443" TEXT="_ATTRIB_">
+<node CREATED="1455927596055" ID="ID_829661861" MODIFIED="1455927600866" TEXT="attrib -&gt; end"/>
+</node>
+<node CREATED="1455927603566" ID="ID_604132662" MODIFIED="1455927606769" TEXT="_END_">
+<node CREATED="1455927607621" ID="ID_948240245" MODIFIED="1455927610465" TEXT="all -&gt; end"/>
+</node>
+</node>
+<node CREATED="1455927360398" ID="ID_1123321103" MODIFIED="1455928702179" TEXT="set">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927661046" ID="ID_608131093" MODIFIED="1455927667065" TEXT="if not verify">
+<node CREATED="1455927681491" ID="ID_1621577646" MODIFIED="1455927694621" TEXT="locate_target"/>
+</node>
+<node CREATED="1455927697105" ID="ID_1909489348" MODIFIED="1455927701684" TEXT="verify"/>
+<node CREATED="1455927702465" ID="ID_321172748" MODIFIED="1455927704244" TEXT="assign"/>
+</node>
+<node CREATED="1455927363102" ID="ID_1117221392" MODIFIED="1455928700692" TEXT="mut">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927714615" ID="ID_958571239" MODIFIED="1455927717794" TEXT="if not verify">
+<node CREATED="1455927718574" ID="ID_1870238884" MODIFIED="1455927721586" TEXT="locate_target"/>
+</node>
+<node CREATED="1455927724238" ID="ID_664459993" MODIFIED="1455927734345" TEXT="verify"/>
+<node CREATED="1455927736084" ID="ID_1788904482" MODIFIED="1455927738696" TEXT="push">
+<node CREATED="1455927739355" ID="ID_1160724761" MODIFIED="1455927741512" TEXT="mutator"/>
+</node>
+</node>
+<node CREATED="1455927365094" ID="ID_1567754459" MODIFIED="1455928699244" TEXT="emu">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927745131" ID="ID_1000032658" MODIFIED="1455927749590" TEXT="verify_end"/>
+<node CREATED="1455927750490" ID="ID_1746587224" MODIFIED="1455927752838" TEXT="pop"/>
+</node>
+<node CREATED="1455927337321" ID="ID_1622487857" MODIFIED="1455928697652" TEXT="CTOR">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455927444275" ID="ID_643592318" MODIFIED="1455927462068" TEXT="push">
+<node CREATED="1455927462641" ID="ID_14883638" MODIFIED="1455927465084" TEXT="mutator"/>
+</node>
+</node>
+</node>
+<node CREATED="1455927276314" HGAP="91" ID="ID_1209647803" MODIFIED="1455928456617" TEXT="impl-ops" VSHIFT="-3">
+<cloud COLOR="#fce9c0"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node CREATED="1455927425726" ID="ID_1839176066" MODIFIED="1455982729501" TEXT="next_src">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928216420" ID="ID_785633975" MODIFIED="1455928325793" TEXT="advance source position"/>
+</node>
+<node CREATED="1455927396505" ID="ID_1396125246" MODIFIED="1455928694245" TEXT="verify">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928268589" ID="ID_1984962841" MODIFIED="1455928318898" TEXT="ID comparison">
+<node CREATED="1455928524530" ID="ID_1653324911" MODIFIED="1455928530214" TEXT="pos ref"/>
+<node CREATED="1455928530738" ID="ID_1877703411" MODIFIED="1455928533677" TEXT="ID"/>
+</node>
+</node>
+<node CREATED="1455982947867" ID="ID_1962877965" MODIFIED="1455982951700" TEXT="inject">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455982969073" ID="ID_454996122" MODIFIED="1455982974332" TEXT="inject new content"/>
+</node>
+<node CREATED="1455927413191" ID="ID_236092406" MODIFIED="1455982946160" TEXT="accept_src">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928275316" ID="ID_39117519" MODIFIED="1455928304302">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>move</i>&#160;into target
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1455928537273" ID="ID_1430110878" MODIFIED="1455928541660" TEXT="pos ref"/>
+</node>
+</node>
+<node CREATED="1455928166683" ID="ID_1779120290" MODIFIED="1455928691589" TEXT="accept_until">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928383765" ID="ID_1859031782" MODIFIED="1455928389737" TEXT="accept until condition is met"/>
+</node>
+<node CREATED="1455927510666" ID="ID_14225718" MODIFIED="1455928690029" TEXT="locate">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928393788" ID="ID_1084411962" MODIFIED="1455928398936" TEXT="locate by ID comparison">
+<node CREATED="1455928565869" ID="ID_197213145" MODIFIED="1455928572200" TEXT="incremental pos ref"/>
+<node CREATED="1455928573028" ID="ID_1321605846" MODIFIED="1455928576391" TEXT="ID"/>
+</node>
+</node>
+<node CREATED="1455928184504" ID="ID_1474129407" MODIFIED="1455928687942" TEXT="assign">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928403931" ID="ID_1442292399" MODIFIED="1455928412462" TEXT="assign payload">
+<node CREATED="1455928583523" ID="ID_1874089052" MODIFIED="1455928585686" TEXT="pos ref"/>
+<node CREATED="1455928586506" ID="ID_567539648" MODIFIED="1455928611275" TEXT="Type context"/>
+<node CREATED="1455928612239" ID="ID_1377931073" MODIFIED="1455928619186" TEXT="embedded target data"/>
+</node>
+</node>
+<node CREATED="1455928189695" ID="ID_1518531652" MODIFIED="1455928686421" TEXT="mutator">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928415161" ID="ID_316051704" MODIFIED="1455928425468" TEXT="build mutator for target">
+<node CREATED="1455928625269" ID="ID_1510952440" MODIFIED="1455928628073" TEXT="pos ref"/>
+</node>
+</node>
+<node CREATED="1455928193863" ID="ID_879541123" MODIFIED="1455928685054" TEXT="push">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928427432" ID="ID_1222674854" MODIFIED="1455928435275" TEXT="push mutator on stack">
+<node CREATED="1455928632684" ID="ID_1171317180" MODIFIED="1455928651005" TEXT="mutator or mutator ref"/>
+<node CREATED="1455928657257" ID="ID_914429679" MODIFIED="1455928668323" TEXT="Type context for stack frame"/>
+</node>
+</node>
+<node CREATED="1455928198718" ID="ID_593000833" MODIFIED="1455928683343" TEXT="pop">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928440366" ID="ID_1859099649" MODIFIED="1455928446696" TEXT="pop previous mutator from stack"/>
+</node>
+</node>
+</node>
+<node CREATED="1455928782528" HGAP="-22" ID="ID_1300146872" MODIFIED="1455928821082" TEXT="Probleme" VSHIFT="30">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1455928917782" HGAP="40" ID="ID_812598653" MODIFIED="1455981604995" TEXT="failure Policy" VSHIFT="-11">
+<font NAME="SansSerif" SIZE="15"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1455928937683" ID="ID_784708305" MODIFIED="1455928953041" TEXT="ignorieren">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1455928949346" ID="ID_1044467237" MODIFIED="1455928955415" TEXT="scheitern">
+<icon BUILTIN="full-2"/>
+</node>
+</node>
+<node CREATED="1455928800670" HGAP="83" ID="ID_1116973935" MODIFIED="1456011767103" TEXT="selector predicate" VSHIFT="-5">
+<node CREATED="1455928838865" ID="ID_1505861137" MODIFIED="1455928845027" TEXT="konfigurierbarer Typ-Check"/>
+<node CREATED="1455928846048" ID="ID_1278060510" MODIFIED="1455928856146" TEXT="TypCheck nur einmal"/>
+<node CREATED="1455928856870" ID="ID_806857541" MODIFIED="1455928878335" TEXT="ggfs Sequenz von ID-Checks"/>
+</node>
+<node CREATED="1455928805717" ID="ID_496821508" MODIFIED="1455928814919" TEXT="mutator allocation">
+<node CREATED="1455930962188" ID="ID_1435085503" MODIFIED="1455930970295" TEXT="konkreter Mutator-Typ"/>
+<node CREATED="1455930971027" ID="ID_1070880241" MODIFIED="1455930980789" TEXT="ist in jedem Einzelfall anders"/>
+<node CREATED="1455931008750" ID="ID_643730154" MODIFIED="1455931124521" TEXT="Mutator enth&#xe4;lt Closures">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Mutator enth&#228;lt die Bindung auf die konkreten Daten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1455930997303" ID="ID_1710972681" MODIFIED="1455931003962" TEXT="kann erhebliche Gr&#xf6;&#xdf;e haben"/>
+<node CREATED="1455931025595" ID="ID_1695885971" MODIFIED="1455931100164" TEXT="ist a priori nicht bekannt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      stellt sich u.U erst w&#228;hrend der Verarbeitung heraus:
+    </p>
+    <p>
+      bei &quot;offenen Datenstrukturen&quot; entscheided jeder Typ selber,
+    </p>
+    <p>
+      welchen Mutator er erzeugt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1456011474920" HGAP="-25" ID="ID_1292432889" MODIFIED="1456011487748" TEXT="L&#xf6;sungsans&#xe4;tze" VSHIFT="28">
+<icon BUILTIN="idea"/>
+<node CREATED="1456011490414" ID="ID_215912114" MODIFIED="1456011747957" TEXT="doch rekursiv">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1456011497525" ID="ID_165091928" MODIFIED="1456011507880" TEXT="elegant"/>
+<node CREATED="1456011508731" ID="ID_1951843758" MODIFIED="1456011513711" TEXT="Allokation nebenbei"/>
+<node CREATED="1456011591427" ID="ID_167337651" MODIFIED="1456011591427">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber:&#160;Aufrufprinzip
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1456011595024" ID="ID_1268079925" MODIFIED="1456011598819" TEXT="mu&#xdf; konsumieren"/>
+<node CREATED="1456011599455" ID="ID_862262812" MODIFIED="1456011634435">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Verb mu&#223; den
+    </p>
+    <p>
+      Diff bekommen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1456011647057" ID="ID_905672765" MODIFIED="1456011652964" TEXT="verwirrendes API"/>
+<node CREATED="1456011653904" ID="ID_1199841076" MODIFIED="1456011656396" TEXT="komplexe Typen"/>
+<node CREATED="1456011660495" ID="ID_118747856" MODIFIED="1456011661939" TEXT="njet"/>
+</node>
+</node>
+<node CREATED="1456011666486" ID="ID_1076199754" MODIFIED="1456011751179" TEXT="Interpreter konsumiert">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1456011676086" ID="ID_1849622483" MODIFIED="1456011688340">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und delegiert iterativ
+    </p>
+    <p>
+      an die Verben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1456011689043" ID="ID_1674393396" MODIFIED="1456011698214" TEXT="mu&#xdf; Verben untersuchen"/>
+<node CREATED="1456011698970" ID="ID_845834851" MODIFIED="1456011717387" TEXT="aktiv in Rekursion einsteigen"/>
+<node CREATED="1456011717951" ID="ID_1167483025" MODIFIED="1456011722666" TEXT="auch verwirrend"/>
+</node>
+<node CREATED="1456011734253" ID="ID_478177524" MODIFIED="1456011740696" TEXT="doch beim Stack bleiben">
+<icon BUILTIN="help"/>
+<node CREATED="1456011910869" ID="ID_182841484" MODIFIED="1456011915041" TEXT="kleineres &#xdc;bel"/>
+<node CREATED="1456011918381" ID="ID_54237513" MODIFIED="1456011991777" TEXT="Rolle des Mutators">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1456011994442" HGAP="-13" ID="ID_343687995" MODIFIED="1456012004663" TEXT="Knackpunkt: was ist der Mutator" VSHIFT="10"/>
 </node>
 </node>
 </node>

@@ -65,6 +65,7 @@
 
 
 #include "lib/diff/tree-diff.hpp"
+#include "lib/diff/tree-mutator.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
@@ -82,7 +83,6 @@ namespace diff{
   using std::swap;
   
   
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
   /**
    * Interpreter for the tree-diff-language to work on arbitrary, undiclosed
    * local data structures. The key point to note is that this local data is
@@ -95,9 +95,10 @@ namespace diff{
    * @see DiffVirtualisedApplication_test demonstration of usage
    */
   template<>
-  class DiffApplicationStrategy<Rec::Mutator>
+  class DiffApplicationStrategy<TreeMutator>
     : public TreeDiffInterpreter
     {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
       using Mutator = Rec::Mutator;
       using Content = Rec::ContentMutator;
       using Iter    = Content::Iter;
@@ -249,7 +250,7 @@ namespace diff{
           else
             out().appendChild (move(*pos));
         }
-      
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992      
       
       
       /* == Implementation of the list diff application primitives == */
@@ -257,50 +258,39 @@ namespace diff{
       virtual void
       ins (GenNode const& n)  override
         {
-          if (n.isNamed())
-            if (n.isTypeID())
-              out().setType (n.data.get<string>());
-            else
-              out().appendAttrib(n);                            //////////////TICKET #969  dto.
-          else
-            {
-              out().appendChild(n);
-              if (src().currIsAttrib())
-                src().jumpToChildScope();
-            }
+          inject (n);
         }
       
       virtual void
       del (GenNode const& n)  override
         {
           __expect_in_target(n, "remove");
-          ++src();
+          next_src();
         }
       
       virtual void
       pick (GenNode const& n)  override
         {
           __expect_in_target(n, "pick");
-          move_into_new_sequence (srcPos());
-          ++src();
+          accept_src();
+          next_src();
         }
       
       virtual void
       skip (GenNode const& n)  override
         {
           __expect_further_elements (n);
-          ++src();
+          next_src();
         }      // assume the actual content has been moved away by a previous find()
       
       virtual void
       find (GenNode const& n)  override
         {
           __expect_further_elements (n);
-          Iter found = find_in_current_scope(n);
-          __expect_found (n, found);
-          move_into_new_sequence (found);
-        }      // consume and leave waste, expected to be cleaned-up by skip() later
-      
+               // consume and leave waste, expected to be cleaned-up by skip() later
+          if (not find_and_accept(n));
+            __fail_not_found (n);
+        }
       
       
       /* == Implementation of the tree diff application primitives == */
@@ -311,38 +301,15 @@ namespace diff{
       virtual void
       after (GenNode const& n)  override
         {
-          if (n.matches(Ref::ATTRIBS))
-            while (not endOfData() and srcPos()->isNamed())
-              {
-                move_into_new_sequence (srcPos());
-                ++src();
-              }
-          else
-          if (n.matches(Ref::END))
-            while (not endOfData())
-              {
-                move_into_new_sequence (srcPos());
-                ++src();
-              }
-          else
-            while (not (endOfData() or srcPos()->matches(n)))
-              {
-                move_into_new_sequence (srcPos());
-                ++src();
-              }
-          
-          __expect_successful_location(n);
-          
-          if (not endOfData() and srcPos()->matches(n))
-            ++src(); // get /after/ an explicitly given position
+          if (not accept_until(n))
+            __fail_not_found (n);
         }
       
       /** assignement of changed value in one step */
       virtual void
       set (GenNode const& n)  override
         {
-          GenNode const& elm = find_child (n.idi);
-          unConst(elm).data = n.data;
+          locate_and_assign (n);
         }
       
       /** open nested scope to apply diff to child object */
@@ -370,6 +337,7 @@ namespace diff{
       
       
     public:
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
       explicit
       DiffApplicationStrategy(Rec::Mutator& mutableTargetRecord)
         : scopes_()
@@ -383,8 +351,8 @@ namespace diff{
           REQUIRE (1 == scopes_.size());
           scopes_.top().init();
         }
-    };
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+    };
   
   
 }} // namespace lib::diff
