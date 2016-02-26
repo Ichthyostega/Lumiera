@@ -87,6 +87,9 @@
  ** When the user needs safety or transactional behaviour, a deep copy should be made
  ** before attaching the #DiffApplicator
  ** 
+ ** @note as of 2/2016, there is the possibility this solution will become part
+ **       of a more generic solution, currently being worked out in tree-diff-mutator-binding.hpp
+ ** 
  ** @see DiffTreeApplication_test
  ** @see DiffListApplication_test
  ** @see GenNodeBasic_test

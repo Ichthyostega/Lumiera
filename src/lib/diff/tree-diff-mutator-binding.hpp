@@ -51,6 +51,9 @@
  ** functors) to translate the _implementation actions_ underlying the language into
  ** _concrete actions_ on local data.
  ** 
+ ** @todo this is WIP as of 2/2016 -- in the end it might be merged back or even
+ **       replace the tree-diff-application.hpp
+ ** 
  ** @see DiffVirtualisedApplication_test
  ** @see DiffTreeApplication_test
  ** @see DiffListApplication_test
@@ -250,7 +253,19 @@ namespace diff{
           else
             out().appendChild (move(*pos));
         }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992      
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+      void
+      locate_and_assign (GenNode const& n)
+        {
+          
+        }
+      
+      void
+      locate_and_open_for_mutation (GenNode const& n)
+        {
+          
+        }
+      
       
       
       /* == Implementation of the list diff application primitives == */
@@ -316,22 +331,20 @@ namespace diff{
       virtual void
       mut (GenNode const& n)  override
         {
-          GenNode const& child = find_child (n.idi);
-          Rec const& childRecord = child.data.get<Rec>();
+          locate_and_open_for_mutation (n);
           
+          Rec const& childRecord = child.data.get<Rec>();
           TRACE (diff, "tree-diff: ENTER scope %s", cStr(childRecord));
-          scopes_.emplace (mutateInPlace (unConst(childRecord)));
-          scopes_.top().init();
         }
       
       /** finish and leave child object scope, return to parent */
       virtual void
       emu (GenNode const& n)  override
         {
-          TRACE (diff, "tree-diff: LEAVE scope %s", cStr(alteredRec()));
+          TRACE (diff, "tree-diff: LEAVE scope %s", cStr(describeScope()));
           
           __expect_end_of_scope (n.idi);
-          scopes_.pop();
+          close_subScope();
           __expect_valid_parent_scope (n.idi);
         }
       

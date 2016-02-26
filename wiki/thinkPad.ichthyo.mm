@@ -474,7 +474,7 @@
 <icon BUILTIN="full-3"/>
 </node>
 </node>
-<node CREATED="1455668897947" HGAP="80" ID="ID_1897861223" MODIFIED="1455898587145" TEXT="Konsequenzen" VSHIFT="24">
+<node CREATED="1455668897947" HGAP="211" ID="ID_1897861223" MODIFIED="1456437625224" TEXT="Konsequenzen" VSHIFT="23">
 <node CREATED="1455668923175" ID="ID_1183550957" MODIFIED="1455668933577" TEXT="brauche passendes UI-Bus API"/>
 <node CREATED="1455668935142" ID="ID_1274632216" MODIFIED="1455669141158">
 <richcontent TYPE="NODE"><html>
@@ -585,17 +585,19 @@
 <node CREATED="1455669331448" ID="ID_1852578403" MODIFIED="1455669333036" TEXT="f&#xfc;r find"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1455669200945" HGAP="85" ID="ID_880765624" MODIFIED="1455927027968" TEXT="offen" VSHIFT="-14">
+<node COLOR="#ad014c" CREATED="1455669200945" FOLDED="true" HGAP="85" ID="ID_880765624" MODIFIED="1456437736541" TEXT="Design-Fragen" VSHIFT="-14">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1455669221255" ID="ID_1712552545" MODIFIED="1455669237745" TEXT="Repr&#xe4;sentation der &quot;aktuellen Position&quot;"/>
 <node CREATED="1455669345167" ID="ID_310849010" MODIFIED="1455669353721" TEXT="generischen Rahmen f&#xfc;r Mut-Operationen"/>
 <node CREATED="1455669238213" ID="ID_731780565" MODIFIED="1455669252935" TEXT="Einleiten der Rekursion">
 <node CREATED="1455842313629" ID="ID_179960248" MODIFIED="1455842321264" TEXT="ich h&#xe4;tte es gern echt-rekursiv"/>
 <node CREATED="1455842321828" ID="ID_1622068738" MODIFIED="1455842336974" TEXT="widerspricht aber unserem DiffApplicator"/>
 </node>
-<node CREATED="1455833678448" HGAP="35" ID="ID_1439118587" MODIFIED="1455833692637" TEXT="Probleme" VSHIFT="6">
-<icon BUILTIN="flag-pink"/>
-<node CREATED="1455833736586" ID="ID_1233162987" MODIFIED="1455898562792" TEXT="Feld vs Attribut">
+<node CREATED="1455833678448" HGAP="47" ID="ID_1439118587" MODIFIED="1456437707421" TEXT="Probleme" VSHIFT="16">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1455833736586" FOLDED="true" ID="ID_1233162987" MODIFIED="1456437719887" TEXT="Analyse: Feld vs Attribut">
 <icon BUILTIN="info"/>
 <node CREATED="1455834007278" ID="ID_196347476" MODIFIED="1455834009696" TEXT="Feld">
 <node CREATED="1455834060110" ID="ID_1872959165" MODIFIED="1455834067177" TEXT="ist da per Struktur"/>
@@ -783,7 +785,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#3a3785" CREATED="1455927009621" HGAP="36" ID="ID_153254427" MODIFIED="1456013000025" STYLE="fork" TEXT="&#xbb;generic tree diff&#xab;" VSHIFT="16">
+<node COLOR="#3a3785" CREATED="1455927009621" HGAP="148" ID="ID_153254427" MODIFIED="1456437838083" STYLE="fork" TEXT="&#xbb;generic tree diff&#xab;" VSHIFT="22">
 <cloud COLOR="#edd8ba"/>
 <font NAME="SansSerif" SIZE="15"/>
 <node CREATED="1455927154554" ID="ID_1055035778" MODIFIED="1455927158037" TEXT="Prinzip">
@@ -938,7 +940,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1455928782528" HGAP="-171" ID="ID_1300146872" MODIFIED="1456012994098" TEXT="Probleme" VSHIFT="-207">
+<node COLOR="#85212c" CREATED="1455928782528" HGAP="-171" ID="ID_1300146872" MODIFIED="1456437862944" TEXT="kritische Aufgaben" VSHIFT="-207">
+<font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1455928917782" HGAP="40" ID="ID_812598653" MODIFIED="1455981604995" TEXT="failure Policy" VSHIFT="-11">
 <font NAME="SansSerif" SIZE="15"/>
@@ -955,7 +958,9 @@
 <node CREATED="1455928846048" ID="ID_1278060510" MODIFIED="1455928856146" TEXT="TypCheck nur einmal"/>
 <node CREATED="1455928856870" ID="ID_806857541" MODIFIED="1455928878335" TEXT="ggfs Sequenz von ID-Checks"/>
 </node>
-<node CREATED="1455928805717" ID="ID_496821508" MODIFIED="1455928814919" TEXT="mutator allocation">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1455928805717" ID="ID_496821508" MODIFIED="1456437767460" TEXT="mutator allocation">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1455930962188" ID="ID_1435085503" MODIFIED="1455930970295" TEXT="konkreter Mutator-Typ"/>
 <node CREATED="1455930971027" ID="ID_1070880241" MODIFIED="1455930980789" TEXT="ist in jedem Einzelfall anders"/>
 <node CREATED="1455931008750" ID="ID_643730154" MODIFIED="1455931124521" TEXT="Mutator enth&#xe4;lt Closures">
@@ -1078,7 +1083,10 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1456011994442" HGAP="-13" ID="ID_343687995" MODIFIED="1456430567025" TEXT="zur Entscheidung..." VSHIFT="10">
+<node CREATED="1456011994442" FOLDED="true" HGAP="-30" ID="ID_343687995" MODIFIED="1456437823573" TEXT="zur Entscheidung..." VSHIFT="28">
+<arrowlink COLOR="#b10046" DESTINATION="ID_820279076" ENDARROW="Default" ENDINCLINATION="-2;-51;" ID="Arrow_ID_103087571" STARTARROW="None" STARTINCLINATION="-340;-23;"/>
+<font NAME="SansSerif" SIZE="15"/>
+<icon BUILTIN="idea"/>
 <node CREATED="1456012846185" ID="ID_714953132" MODIFIED="1456012855451" TEXT="was ist der Mutator">
 <icon BUILTIN="help"/>
 <node CREATED="1456012035837" ID="ID_180428099" MODIFIED="1456012039389" TEXT="Container"/>
@@ -1179,9 +1187,12 @@
 </node>
 </node>
 </node>
-<node CREATED="1456187434491" ID="ID_860365577" MODIFIED="1456187445454" TEXT="alles ekelhaft">
+<node CREATED="1456437116514" ID="ID_1766577674" MODIFIED="1456437488978" TEXT="Reflexion">
+<cloud COLOR="#d2c2d9"/>
+<node CREATED="1456187434491" ID="ID_860365577" MODIFIED="1456437137837" TEXT="alles ekelhaft">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smily_bad"/>
+</node>
 <node CREATED="1456187447618" ID="ID_1318283286" MODIFIED="1456187459568" TEXT="Sackgasse">
 <icon BUILTIN="help"/>
 </node>
@@ -1212,8 +1223,7 @@
       der &quot;vern&#252;nftigen&quot; (=pragmatischen) L&#246;sung.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456424257381" ID="ID_740973686" MODIFIED="1456424577215" TEXT="introspektive Datenstruktur">
 <richcontent TYPE="NOTE"><html>
@@ -1237,8 +1247,7 @@
       da&#223; es vergeblich ist. Einen Kampf gegen das Menschliche, Allzumenschliche kann man nicht gewinnen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456424962239" ID="ID_933613304" MODIFIED="1456425635725" TEXT="einseitige Fernsteuerung">
 <richcontent TYPE="NOTE"><html>
@@ -1268,21 +1277,24 @@
       Steuerung stattfindet, entfernt ist, entfernt in einen anderen Kontext.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1456425646332" ID="ID_897964875" MODIFIED="1456425651999" TEXT="oberfl&#xe4;chengetrieben"/>
 <node CREATED="1456425652683" ID="ID_437402611" MODIFIED="1456425656575" TEXT="zentralgesteuert"/>
 </node>
-<node CREATED="1456424295296" ID="ID_791299475" MODIFIED="1456424299179" TEXT="DOM + Attribution">
+<node CREATED="1456424295296" ID="ID_791299475" MODIFIED="1456437539876" TEXT="DOM + Attribution">
+<icon BUILTIN="idea"/>
 <node CREATED="1456424627860" ID="ID_1294496825" MODIFIED="1456424632247" TEXT="keine Alternative"/>
 <node CREATED="1456424632907" ID="ID_1566098600" MODIFIED="1456424642598" TEXT="denn genau das machen wir hier"/>
-<node CREATED="1456424664015" ID="ID_1032924247" MODIFIED="1456424674489" TEXT="Problem: Zusatz-Kosten">
-<node CREATED="1456424675173" ID="ID_1585536570" MODIFIED="1456424694463" TEXT="...f&#xfc;r das &quot;+&quot;"/>
-<node CREATED="1456424695123" ID="ID_331589423" MODIFIED="1456424700982" TEXT="also die Bindung"/>
-<node CREATED="1456424722039" ID="ID_1926017913" MODIFIED="1456424725195" TEXT="notwendige Kosten">
-<node CREATED="1456424725927" ID="ID_1322872728" MODIFIED="1456424729650" TEXT="denn das DOM ist rein"/>
-<node CREATED="1456424730022" ID="ID_282791744" MODIFIED="1456424763222" TEXT="hat also keinen Platz f&#xfc;r explizite Eigenschaften"/>
-<node CREATED="1456424765113" ID="ID_1716539711" MODIFIED="1456424777375">
+<node CREATED="1456437181070" FOLDED="true" HGAP="23" ID="ID_1066542027" MODIFIED="1456437536212" STYLE="bubble" TEXT="Analyse" VSHIFT="44">
+<font BOLD="true" NAME="SansSerif" SIZE="15"/>
+<icon BUILTIN="info"/>
+<node CREATED="1456424664015" ID="ID_1032924247" MODIFIED="1456437520768" TEXT="Problem: Zusatz-Kosten">
+<node CREATED="1456424675173" ID="ID_1585536570" MODIFIED="1456437520768" TEXT="...f&#xfc;r das &quot;+&quot;"/>
+<node CREATED="1456424695123" ID="ID_331589423" MODIFIED="1456437520769" TEXT="also die Bindung"/>
+<node CREATED="1456424722039" ID="ID_1926017913" MODIFIED="1456437520769" TEXT="notwendige Kosten">
+<node CREATED="1456424725927" ID="ID_1322872728" MODIFIED="1456437520769" TEXT="denn das DOM ist rein"/>
+<node CREATED="1456424730022" ID="ID_282791744" MODIFIED="1456437520769" TEXT="hat also keinen Platz f&#xfc;r explizite Eigenschaften"/>
+<node CREATED="1456424765113" ID="ID_1716539711" MODIFIED="1456437520770">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -1292,14 +1304,13 @@
       und nur letztere sind <i>tangibel</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
-<node CREATED="1456425913664" HGAP="28" ID="ID_1929919601" MODIFIED="1456429000690" TEXT="notwendig" VSHIFT="-1">
-<node CREATED="1456426041626" ID="ID_101262346" MODIFIED="1456426041626" TEXT="Duplikation">
-<node CREATED="1456425918071" ID="ID_18884187" MODIFIED="1456426112976" TEXT="DOM-IDs am Binde-Punkt">
+<node CREATED="1456425913664" HGAP="28" ID="ID_1929919601" MODIFIED="1456437520771" TEXT="notwendig" VSHIFT="-1">
+<node CREATED="1456426041626" ID="ID_101262346" MODIFIED="1456437520772" TEXT="Duplikation">
+<node CREATED="1456425918071" ID="ID_18884187" MODIFIED="1456437520772" TEXT="DOM-IDs am Binde-Punkt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1312,10 +1323,9 @@
       m&#252;ssen IDs aus dem DOM innerhalb der real-Daten nochmal wiederholt, also redundant vorliegen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1456425930718" ID="ID_1301765327" MODIFIED="1456426195189" TEXT="real-Daten im DOM">
+<node CREATED="1456425930718" ID="ID_1301765327" MODIFIED="1456437520772" TEXT="real-Daten im DOM">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1328,11 +1338,10 @@
       um sie in einem abstrahierten Kontext zug&#228;nglich zu machen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node CREATED="1456426052973" ID="ID_239653128" MODIFIED="1456426781856" TEXT="Binde-Daten">
+<node CREATED="1456426052973" ID="ID_239653128" MODIFIED="1456437520772" TEXT="Binde-Daten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1348,10 +1357,9 @@
       an irgend einer Stelle repr&#228;sentiert werden.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1456426322482" ID="ID_1330880148" MODIFIED="1456426753527" TEXT="irreduzibel">
+<node CREATED="1456426322482" ID="ID_1330880148" MODIFIED="1456437520773" TEXT="irreduzibel">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1390,27 +1398,27 @@
       an eine selbst&#228;ndig bestehende Datenstruktur; dann enden wir bei klassischer Introspektion.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node CREATED="1456428989206" HGAP="28" ID="ID_1999101531" MODIFIED="1456428996810" TEXT="Ma&#xdf;stab" VSHIFT="17">
-<node CREATED="1456429002332" ID="ID_294696563" MODIFIED="1456429012431" TEXT="Trennung">
-<node CREATED="1456429013283" ID="ID_462304497" MODIFIED="1456429027757" TEXT="abstrakt"/>
-<node CREATED="1456429016050" ID="ID_403266218" MODIFIED="1456429032900" TEXT="tangibel"/>
+<node CREATED="1456428989206" HGAP="28" ID="ID_1999101531" MODIFIED="1456437520773" TEXT="Ma&#xdf;stab" VSHIFT="17">
+<node CREATED="1456429002332" ID="ID_294696563" MODIFIED="1456437520773" TEXT="Trennung">
+<node CREATED="1456429013283" ID="ID_462304497" MODIFIED="1456437520773" TEXT="abstrakt"/>
+<node CREATED="1456429016050" ID="ID_403266218" MODIFIED="1456437520774" TEXT="tangibel"/>
 </node>
-<node CREATED="1456429046358" ID="ID_327619080" MODIFIED="1456429052681" TEXT="Fokussierung innerhalb">
-<node CREATED="1456429106894" ID="ID_345392088" MODIFIED="1456429110018" TEXT="Belange des UI"/>
-<node CREATED="1456429110702" ID="ID_1531485619" MODIFIED="1456429127671" TEXT="Notwendigkeiten des Edit-Vorganges"/>
-<node CREATED="1456429159559" ID="ID_4036488" MODIFIED="1456429165274" TEXT="nach der inh&#xe4;renten Form suchen"/>
+<node CREATED="1456429046358" ID="ID_327619080" MODIFIED="1456437520774" TEXT="Fokussierung innerhalb">
+<node CREATED="1456429106894" ID="ID_345392088" MODIFIED="1456437520774" TEXT="Belange des UI"/>
+<node CREATED="1456429110702" ID="ID_1531485619" MODIFIED="1456437520774" TEXT="Notwendigkeiten des Edit-Vorganges"/>
+<node CREATED="1456429159559" ID="ID_4036488" MODIFIED="1456437520774" TEXT="nach der inh&#xe4;renten Form suchen"/>
 </node>
-<node CREATED="1456429053206" ID="ID_643637016" MODIFIED="1456429062544" TEXT="wenig &#xdc;berlapp"/>
-</node>
-</node>
+<node CREATED="1456429053206" ID="ID_643637016" MODIFIED="1456437520774" TEXT="wenig &#xdc;berlapp"/>
 </node>
 </node>
 </node>
-<node CREATED="1456423477045" HGAP="185" ID="ID_1294023197" MODIFIED="1456423511946" TEXT="Stand der &#xdc;berlegungen" VSHIFT="30">
+</node>
+</node>
+</node>
+<node CREATED="1456423477045" HGAP="146" ID="ID_1294023197" MODIFIED="1456437553857" TEXT="Stand der &#xdc;berlegungen" VSHIFT="11">
 <icon BUILTIN="forward"/>
 <node CREATED="1456423615274" ID="ID_40789197" MODIFIED="1456423617054" TEXT="Performance">
 <node CREATED="1456423617763" ID="ID_524247634" MODIFIED="1456423622197" TEXT="wird von der Allokation bestimmt"/>
@@ -1499,7 +1507,8 @@
 </node>
 <node CREATED="1456430088803" ID="ID_481518617" MODIFIED="1456430557120" TEXT="L&#xf6;sung">
 <icon BUILTIN="idea"/>
-<node CREATED="1456430099658" ID="ID_820279076" MODIFIED="1456430107097" TEXT="Entscheidung">
+<node CREATED="1456430099658" ID="ID_820279076" MODIFIED="1456437823573" TEXT="Entscheidung">
+<linktarget COLOR="#b10046" DESTINATION="ID_820279076" ENDARROW="Default" ENDINCLINATION="-2;-51;" ID="Arrow_ID_103087571" SOURCE="ID_343687995" STARTARROW="None" STARTINCLINATION="-340;-23;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1456430153555" ID="ID_1609974475" MODIFIED="1456430170074" TEXT="es ist wesentlich"/>
 <node CREATED="1456430115696" ID="ID_546849410" MODIFIED="1456430120227" TEXT="es ist notwendig"/>
