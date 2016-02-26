@@ -1,8 +1,8 @@
 /*
-  GenericTreeMutator(Test)  -  customisable intermediary to abstract tree changing operations
+  TreeManipulationBinding(Test)  -  techniques to map generic changes to concrete tree shaped data
 
   Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -60,70 +60,62 @@ namespace test{
   
   
   
-  /*****************************************************************************//**
-   * @test Demonstrate a customisable component for flexible bindings
-   *       to enable generic tree changing and mutating operations to
-   *       arbitrary hierarchical data structures.
-   *       
+  /********************************************************************************//**
+   * @test Building blocks to map generic changes to arbitrary private data structures.
+   *       - use a dummy diagnostic implementation to verify the interface
+   *       - integrate the standard case of tree diff application to `Rec<GenNode>`
+   *       - verify an adapter to apply structure modification to a generic collection
+   *       - use closures to translate mutation into manipulation of private attribues
+   * 
    * @see TreeMutator
+   * @see TreeMutator_test
+   * @see DiffTreeApplication_test
    * @see GenNodeBasic_test
-   * @see GenNodeBasic_test
-   * @see GenericTreeRepresentation_test
+   * @see AbstractTangible_test::mutate()
    */
-  class GenericTreeMutator_test : public Test
+  class TreeManipulationBinding_test : public Test
     {
       
       virtual void
       run (Arg)
         {
-          simpleAttributeBinding();
-          sequenceIteration();
-          copy_and_move();
+          mutateDummy();
+          mutateGenNode();
+          mutateCollection();
+          mutateAttributeMap();
         }
       
       
       void
-      simpleAttributeBinding()
-        {
-          string localData;
-          auto mutator =
-          TreeMutator::build()
-            .change("data", [&](string val)
-              {
-                cout << "\"data\" closure received something "<<val<<endl;
-                localData = val;
-              });
-          
-          cout << "concrete TreeMutator size=" << sizeof(mutator)
-               << " type="<< typeStr(mutator)
-               << endl;
-          
-          CHECK (isnil (localData));
-          Attribute testAttribute(string ("that would be acceptable"));
-          mutator.setAttribute ("lore", testAttribute);
-          CHECK ( isnil (localData)); // nothing happens, nothing changed
-          mutator.setAttribute ("data", testAttribute);
-          CHECK (!isnil (localData));
-          cout << "localData changed to: "<<localData<<endl;
-          CHECK (localData == "that would be acceptable");
-        }
-      
-      
-      void
-      sequenceIteration()
+      mutateDummy()
         {
         }
       
       
       void
-      copy_and_move()
+      mutateGenNode()
         {
+          TODO ("define how to fit GenNode tree mutation into the framework");
+        }
+      
+      
+      void
+      mutateCollection()
+        {
+          TODO ("define how to map the mutation primitives on a generic collection");
+        }
+      
+      
+      void
+      mutateAttributeMap ()
+        {
+          TODO ("define how to translate generic mutation into attribute manipulation");
         }
     };
   
   
   /** Register this test class... */
-  LAUNCHER (GenericTreeMutator_test, "unit common");
+  LAUNCHER (TreeManipulationBinding_test, "unit common");
   
   
   

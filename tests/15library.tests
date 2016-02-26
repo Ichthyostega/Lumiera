@@ -287,8 +287,13 @@ return: 0
 END
 
 
-TEST "Generic recursive mutation with closure binding" GenericTreeMutator_test <<END
-out: concrete TreeMutator .+Builder<ChangeOperation<TreeMutator, test::GenericTreeMutator_test::simpleAttributeBinding().+lambda\(string\).+> >
+PLANNED "Generic mapping of changes to tree data" TreeManipulationBinding_test <<END
+return: 0
+END
+
+
+TEST "Generic recursive mutation with closure binding" TreeMutator_test <<END
+out: concrete TreeMutator .+Builder<ChangeOperation<TreeMutator, test::TreeMutator_test::simpleAttributeBinding().+lambda\(string\).+> >
 out-lit: "data" closure received something that would be acceptable
 out-lit: localData changed to: that would be acceptable
 return: 0

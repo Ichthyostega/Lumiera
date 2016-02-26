@@ -66,7 +66,7 @@ namespace test{
    * @see lib::Variant
    * @see util::AccessCasted
    * @see lib::OpaqueHolder
-   * @see GenericTreeMutator_test
+   * @see TreeMutator_test
    */
   class Variant_test : public Test
     {

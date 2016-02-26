@@ -81,7 +81,7 @@ namespace test{
    *         what these elements actually are and how they are to be handled.
    *       - we recurse into mutating such an _"unspecified"_ child element.
    * @see DiffTreeApplication_test generic variant of tree diff application
-   * @see GenericTreeMutator_test base operations of the adapter
+   * @see TreeMutator_test base operations of the adapter
    * @see tree-diff-mutator-binding.hpp
    * @see diff-tree-application.hpp
    * @see tree-diff.hpp

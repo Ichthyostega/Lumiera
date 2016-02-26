@@ -41,7 +41,7 @@
  ** can be replaced by a binding closure, which allows to invoke arbitrary code in the
  ** context of the given object's implementation internals.
  ** 
- ** @see generic-tree-mutator-test.cpp
+ ** @see tree-mutator-test.cpp
  ** @see DiffDetector
  ** 
  */
