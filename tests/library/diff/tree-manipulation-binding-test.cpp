@@ -25,6 +25,7 @@
 #include "lib/format-util.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
@@ -46,9 +47,23 @@ namespace test{
   
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
+  
   namespace {//Test fixture....
     
-    
+    // define some GenNode elements
+    // to act as templates within the concrete diff
+    // NOTE: everything in this diff language is by-value
+    const GenNode ATTRIB1("α", 1),                         // attribute α = 1
+                  ATTRIB2("β", int64_t(2)),                // attribute α = 2L   (int64_t)
+                  ATTRIB3("γ", 3.45),                      // attribute γ = 3.45 (double)
+                  TYPE_X("type", "ξ"),                     // a "magic" type attribute "Xi"
+                  TYPE_Z("type", "ζ"),                     // 
+                  CHILD_A("a"),                            // unnamed string child node
+                  CHILD_B('b'),                            // unnamed char child node
+                  CHILD_T(Time(12,34,56,78)),              // unnamed time value child
+                  SUB_NODE = MakeRec().genNode(),          // empty anonymous node used to open a sub scope
+                  ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ
+                  CHILD_NODE = SUB_NODE;                   // yet another child node, same ID as SUB_NODE (!)
     
   }//(End)Test fixture
   
@@ -89,6 +104,18 @@ namespace test{
       void
       mutateDummy()
         {
+          TestMutationTarget target;
+          auto mutator =
+          TreeMutator::build()
+            .attachDummy(target);
+          
+          CHECK (isnil (target));
+          
+          mutator.insertChild (ATTRIB1);
+          CHECK (!isnil (target));
+          CHECK (target.contains("α = 1"));
+          CHECK (target.verifyEvent("insert","α = 1")
+                       .after("attachMutator"));
         }
       
       

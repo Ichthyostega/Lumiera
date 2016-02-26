@@ -633,8 +633,7 @@
       Diff kennt keine <i>Zuweisung</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1455842674973" ID="ID_1910702757" MODIFIED="1455842682008" TEXT="L&#xf6;schen + Neueinf&#xfc;gen"/>
 <node CREATED="1455842682524" ID="ID_1597781391" MODIFIED="1455842710444" TEXT="unn&#xf6;tiger Aufwand (Allokation)"/>
@@ -667,8 +666,7 @@
       Nein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1455895664140" ID="ID_639070488" MODIFIED="1455895669295">
 <richcontent TYPE="NODE"><html>
@@ -680,8 +678,7 @@
       aber was dann wenn out-of-order
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1455895670603" ID="ID_1629566976" MODIFIED="1455895735146" TEXT="out-of-order">
@@ -743,8 +740,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1455913847683" ID="ID_1829117976" MODIFIED="1455913860029" TEXT="es gibt effektiv mehrere Kinder-Sammlungen"/>
 <node CREATED="1455913860594" ID="ID_631826706" MODIFIED="1455913869013" TEXT="wir verwalten intern f&#xfc;r jede eine Position"/>
@@ -771,8 +767,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1455913912323" ID="ID_1775410993" MODIFIED="1455913922605" TEXT="es gibt nominell nur eine Kinder-Folge"/>
 <node CREATED="1455913924857" ID="ID_505406246" MODIFIED="1455913935019" TEXT="wir m&#xfc;ssen die intern repr&#xe4;sentieren"/>
@@ -896,8 +891,7 @@
       <i>move</i>&#160;into target
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1455928537273" ID="ID_1430110878" MODIFIED="1455928541660" TEXT="pos ref"/>
 </node>
 </node>
@@ -1085,7 +1079,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d8bba4" CREATED="1456011994442" FOLDED="true" HGAP="68" ID="ID_343687995" MODIFIED="1456505912442" STYLE="bubble" TEXT="zur Entscheidung..." VSHIFT="37">
+<node BACKGROUND_COLOR="#d8bba4" CREATED="1456011994442" FOLDED="true" HGAP="68" ID="ID_343687995" MODIFIED="1456527098963" TEXT="zur Entscheidung..." VSHIFT="37">
+<edge COLOR="#93766f"/>
 <arrowlink COLOR="#b10046" DESTINATION="ID_820279076" ENDARROW="Default" ENDINCLINATION="14;-46;" ID="Arrow_ID_103087571" STARTARROW="None" STARTINCLINATION="-137;-20;"/>
 <font NAME="SansSerif" SIZE="15"/>
 <icon BUILTIN="idea"/>
@@ -1546,8 +1541,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456506151065" ID="ID_496007561" MODIFIED="1456512714026" TEXT="bisher nur drei">
 <richcontent TYPE="NOTE"><html>
@@ -1571,8 +1565,7 @@
       &#160;-- das gibt einen wichtigen Hinweis --
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456506160472" ID="ID_1269579163" MODIFIED="1456512733212" TEXT="zwei sind das Minimum">
 <richcontent TYPE="NOTE"><html>
@@ -1587,8 +1580,7 @@
       also einen double-dispatch haben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456506385130" ID="ID_660502308" MODIFIED="1456506445246" TEXT="f&#xfc;r generische Zieldaten">
 <node CREATED="1456506446002" ID="ID_485732185" MODIFIED="1456506470075" TEXT="kommt eine Indirektion hinzu"/>
@@ -1612,8 +1604,7 @@
       das Diff-System noch einmal reimplementieren, dann mit einem vorgegebenen Diff-Typ
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1456506607428" HGAP="31" ID="ID_448113584" MODIFIED="1456506627511" VSHIFT="8">
@@ -1626,8 +1617,7 @@
       Beschlu&#223;: <i>akzeptiert</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -1643,8 +1633,7 @@
       im Sinn von &quot;polymorpic value&quot; ist <b>das Backend virtuell</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456506719949" ID="ID_326439598" MODIFIED="1456506725568" TEXT="keine virtuellen Iteratoren"/>
 <node CREATED="1456506726060" ID="ID_999652076" MODIFIED="1456506738455" TEXT="Front-End mu&#xdf; Typedefs bereitstellen"/>
@@ -1662,8 +1651,7 @@
       (will sagen, es ist nicht sofort offensichtlich, da&#223; wir jeweils einen Interpreter generieren)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -1681,10 +1669,48 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1456523569111" ID="ID_1173914226" MODIFIED="1456523580721" TEXT="...als eine Spezialisierung des Adapters"/>
-<node CREATED="1456523581669" ID="ID_1214835553" MODIFIED="1456523590488" TEXT="hat ein EventLog eingebaut"/>
-<node CREATED="1456523593731" ID="ID_126624039" MODIFIED="1456523610509" TEXT="Interface ohne reale Daten"/>
+<node CREATED="1456523593731" ID="ID_126624039" MODIFIED="1456528188767" TEXT="Interface ohne reale Daten"/>
+<node CREATED="1456528076005" ID="ID_1973839094" MODIFIED="1456528078968" TEXT="Diagnose">
+<node CREATED="1456528119297" ID="ID_37448528" MODIFIED="1456528119297" TEXT="hat ein EventLog eingebaut"/>
+<node CREATED="1456528148107" ID="ID_626507029" MODIFIED="1456528165925" TEXT="protokolliert Schatten-Kinder-Liste"/>
+<node CREATED="1456528167440" ID="ID_1984138384" MODIFIED="1456528245160" TEXT="transparenter Dekorator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h,
+    </p>
+    <p>
+      kann zus&#228;tzlich zu einem anderen Adaptor
+    </p>
+    <p>
+      in die Mutator-Dekorator-Kette geh&#228;ngt werden
+    </p>
+    <p>
+      und protokolliert somit &quot;nebenbei&quot; was an Anforderungen an ihm vorbeigeht
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 <node CREATED="1456523612849" ID="ID_729852941" MODIFIED="1456523625883" TEXT="Test zum Aufbau des Interfaces"/>
 </node>
+</node>
+<node CREATED="1456528418823" ID="ID_1372068793" MODIFIED="1456528421522" TEXT="Bestandteile">
+<node CREATED="1456528424246" ID="ID_472044094" MODIFIED="1456528428306" TEXT="Selektor"/>
+</node>
+</node>
+<node CREATED="1456528462585" ID="ID_1770521063" MODIFIED="1456528465332" TEXT="Elemente">
+<node CREATED="1456528472016" ID="ID_315938795" MODIFIED="1456528476211" TEXT="bleiben abstrakt"/>
+<node CREATED="1456528477415" ID="ID_1931717091" MODIFIED="1456528481850" TEXT="abstrakte &quot;Position&quot;"/>
+<node CREATED="1456528485326" ID="ID_1764970284" MODIFIED="1456528489737" TEXT="getypte Kinder">
+<node CREATED="1456528491109" ID="ID_1550088866" MODIFIED="1456528504567" TEXT="auf Einzelfall-Basis"/>
+<node CREATED="1456528505395" ID="ID_1091163328" MODIFIED="1456528519117" TEXT="wer per Selektor zust&#xe4;ndig ist"/>
+<node CREATED="1456528539799" ID="ID_1658968937" MODIFIED="1456528550465" TEXT="Typisierung ergibt sich als Effekt"/>
+<node CREATED="1456528551029" ID="ID_193586898" MODIFIED="1456528557664" TEXT="Typisierung wird nicht eigens repr&#xe4;sentiert"/>
 </node>
 </node>
 </node>
@@ -3674,8 +3700,7 @@
       + NlogN f&#252;r den Index zur Diff-Erzeugung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1443738199160" ID="ID_955544777" MODIFIED="1443738201508" TEXT="Nachteile">
