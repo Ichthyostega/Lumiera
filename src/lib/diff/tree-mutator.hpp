@@ -41,6 +41,24 @@
  ** can be replaced by a binding closure, which allows to invoke arbitrary code in the
  ** context of the given object's implementation internals.
  ** 
+ ** ## Builder/Adapter concept
+ ** TreeMutator is both an interface and a set of building blocks.
+ ** On concrete usage, the (private, non disclosed) target data structure is assumed
+ ** to _build a subclass of TreeMutator._ To this end, the TreeMutator is complemented
+ ** by a builder API. Each call on this builder -- typically providing some closure --
+ ** will add yet another decorating layer on top of the basic TreeMutator (recall all
+ ** the "mutation primitives" are implemented NOP within the base class). So the actual
+ ** TreeMutator will be structured like an onion, where each layer cares for the sole
+ ** concrete aspect it was tied for by the supplied closure. For example, there might
+ ** be a decorator to handle setting of a "foobar" attribute. Thus, when the diff
+ ** dictates to mutate "foobar", the corresponding closure will be invoked.
+ ** 
+ ** \par test dummy target
+ ** There is a special adapter binding to support writing unit tests. The corresponding
+ ** API is only declared (forward) by default. The TestMutationTarget is a helper class,
+ ** which can be attached through this binding and allows a unit test fixture to record
+ ** and verify all the mutation operations encountered.
+ ** 
  ** @see tree-mutator-test.cpp
  ** @see DiffDetector
  ** 
@@ -73,6 +91,10 @@ namespace diff{
   using std::function;
   using std::string;
   
+  
+  class TestMutationTarget; // for unit testing
+  
+  
   namespace {
     template<class PAR>
     struct Builder;
@@ -100,7 +122,7 @@ namespace diff{
       /* ==== operation API ==== */
       
       virtual void
-      insertChild (ID id)
+      insertChild (GenNode const& n)
         {
           UNIMPLEMENTED("establish new child node at current position");
         }
@@ -133,7 +155,7 @@ namespace diff{
       static Builder<TreeMutator> build();
     };
   
-  namespace {
+  namespace { // Mutator-Builder decorator components...
     
     /**
      * Type rebinding helper to pick up the actual argument type.
@@ -181,6 +203,11 @@ namespace diff{
           { }
       };
     
+    
+    template<class PAR>
+    struct TestWireTap;
+    
+    
     template<class PAR>
     struct Builder
       : PAR
@@ -192,6 +219,8 @@ namespace diff{
         template<class CLO>
         using Change = ChangeOperation<PAR,CLO>;
         
+        using WireTap = TestWireTap<PAR>;
+        
         
         /* ==== binding API ==== */
         
@@ -201,9 +230,14 @@ namespace diff{
           {
             return Change<CLO> (attributeID, closure, *this);
           }
+        
+        Builder<WireTap>
+        attachDummy (TestMutationTarget& dummy);
+        
       };
-
-  }
+    
+  }//(END) Mutator-Builder decorator components...
+  
   
   Builder<TreeMutator>
   TreeMutator::build ()

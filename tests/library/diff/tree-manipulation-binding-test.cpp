@@ -25,6 +25,7 @@
 #include "lib/format-util.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/diff/test-mutation-target.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
@@ -34,6 +35,7 @@
 //#include <vector>
 
 using util::isnil;
+using lib::time::Time;
 using std::string;
 //using std::vector;
 //using std::swap;
@@ -107,7 +109,7 @@ namespace test{
           TestMutationTarget target;
           auto mutator =
           TreeMutator::build()
-            .attachDummy(target);
+            .attachDummy (target);
           
           CHECK (isnil (target));
           

@@ -254,16 +254,88 @@ namespace diff{
             out().appendChild (move(*pos));
         }
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+      
+      /* == Forwarding: error handling == */
+      
       void
-      locate_and_assign (GenNode const& n)
+      __expect_in_target  (GenNode const& elm, Literal oper)
         {
           
         }
       
       void
-      locate_and_open_for_mutation (GenNode const& n)
+      __expect_further_elements (GenNode const& elm)
         {
           
+        }
+      
+      void
+      __fail_not_found (GenNode const& elm)
+        {
+          
+        }
+      
+      void
+      __expect_end_of_scope (GenNode::ID const& idi)
+        {
+          
+        }
+      
+      void
+      __expect_valid_parent_scope (GenNode::ID const& idi)
+        {
+          
+        }
+      
+      
+      /* == Forwarding: mutation primitives == */
+      
+      void
+      skip_src (GenNode const& n)
+        {
+          UNIMPLEMENTED("skip matching src element and advance abstract source position");
+        }
+      
+      void
+      accept_src (GenNode const& n)
+        {
+          UNIMPLEMENTED("accept existing element");
+        }
+      
+      void
+      inject (GenNode const& n)
+        {
+          UNIMPLEMENTED("inject a new element at current abstract position");
+        }
+      
+      bool
+      find_and_accept (GenNode const& n)
+        {
+          UNIMPLEMENTED("locate designated element and accept it at current position");
+        }
+      
+      bool
+      accept_until (GenNode const& refMark)
+        {
+          UNIMPLEMENTED("repeatedly accept until encountering the mark");
+        }
+      
+      void
+      locate_and_assign (GenNode const& n)
+        {
+          UNIMPLEMENTED("locate allready accepted element and assign given new payload");
+        }
+      
+      void
+      locate_and_open_for_mutation (GenNode const& n)
+        {
+          UNIMPLEMENTED("locate allready accepted element and open recursive sub-scope for mutation");
+        }
+      
+      void
+      close_subScope()
+        {
+          UNIMPLEMENTED("finish and leave sub scope and return to invoking parent scope");
         }
       
       
@@ -280,22 +352,21 @@ namespace diff{
       del (GenNode const& n)  override
         {
           __expect_in_target(n, "remove");
-          next_src();
+          skip_src (n);
         }
       
       virtual void
       pick (GenNode const& n)  override
         {
           __expect_in_target(n, "pick");
-          accept_src();
-          next_src();
+          accept_src (n);
         }
       
       virtual void
       skip (GenNode const& n)  override
         {
           __expect_further_elements (n);
-          next_src();
+          skip_src (n);
         }      // assume the actual content has been moved away by a previous find()
       
       virtual void
