@@ -122,7 +122,7 @@ namespace diff{
       /* ==== operation API ==== */
       
       virtual void
-      insertChild (GenNode const& n)
+      injectNew (GenNode const& n)
         {
           UNIMPLEMENTED("establish new child node at current position");
         }

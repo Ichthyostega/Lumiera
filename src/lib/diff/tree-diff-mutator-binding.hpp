@@ -291,19 +291,19 @@ namespace diff{
       /* == Forwarding: mutation primitives == */
       
       void
-      skip_src (GenNode const& n)
+      skipSrc (GenNode const& n)
         {
           UNIMPLEMENTED("skip matching src element and advance abstract source position");
         }
       
       void
-      accept_src (GenNode const& n)
+      acceptSrc (GenNode const& n)
         {
           UNIMPLEMENTED("accept existing element");
         }
       
       void
-      inject (GenNode const& n)
+      injectNew (GenNode const& n)
         {
           UNIMPLEMENTED("inject a new element at current abstract position");
         }
@@ -327,13 +327,13 @@ namespace diff{
         }
       
       void
-      locate_and_open_for_mutation (GenNode const& n)
+      locate_and_openSubScope (GenNode const& n)
         {
           UNIMPLEMENTED("locate allready accepted element and open recursive sub-scope for mutation");
         }
       
       void
-      close_subScope()
+      closeSubScope()
         {
           UNIMPLEMENTED("finish and leave sub scope and return to invoking parent scope");
         }
@@ -345,28 +345,28 @@ namespace diff{
       virtual void
       ins (GenNode const& n)  override
         {
-          inject (n);
+          injectNew (n);
         }
       
       virtual void
       del (GenNode const& n)  override
         {
           __expect_in_target(n, "remove");
-          skip_src (n);
+          skipSrc (n);
         }
       
       virtual void
       pick (GenNode const& n)  override
         {
           __expect_in_target(n, "pick");
-          accept_src (n);
+          acceptSrc (n);
         }
       
       virtual void
       skip (GenNode const& n)  override
         {
           __expect_further_elements (n);
-          skip_src (n);
+          skipSrc (n);
         }      // assume the actual content has been moved away by a previous find()
       
       virtual void
@@ -402,7 +402,7 @@ namespace diff{
       virtual void
       mut (GenNode const& n)  override
         {
-          locate_and_open_for_mutation (n);
+          locate_and_openSubScope (n);
           
           Rec const& childRecord = child.data.get<Rec>();
           TRACE (diff, "tree-diff: ENTER scope %s", cStr(childRecord));
@@ -415,7 +415,7 @@ namespace diff{
           TRACE (diff, "tree-diff: LEAVE scope %s", cStr(describeScope()));
           
           __expect_end_of_scope (n.idi);
-          close_subScope();
+          closeSubScope();
           __expect_valid_parent_scope (n.idi);
         }
       
