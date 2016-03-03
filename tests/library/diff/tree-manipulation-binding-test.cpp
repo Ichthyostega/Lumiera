@@ -117,7 +117,7 @@ namespace test{
           mutator.injectNew (ATTRIB1);
           CHECK (!isnil (target));
           CHECK (target.contains("α = 1"));
-          CHECK (target.verifyEvent("insert","α = 1")
+          CHECK (target.verifyEvent("injectNew","α = 1")
                        .after("attachMutator"));
         }
       

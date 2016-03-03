@@ -50,6 +50,7 @@
 #include "lib/diff/record.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/idi/genfunc.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/test/event-log.hpp"
 #include "lib/util.hpp"
 //#include "lib/format-string.hpp"
@@ -57,7 +58,7 @@
 #include <boost/noncopyable.hpp>
 //#include <functional>
 #include <string>
-//#include <vector>
+#include <vector>
 //#include <map>
 
 
@@ -72,15 +73,103 @@ namespace diff{
   using lib::Literal;
 //  using std::function;
   using std::string;
+  using util::unConst;
+  using util::isnil;
   
-  using RecS = lib::diff::Record<string>;
+  using VecS = std::vector<string>;
   
   namespace {
     template<typename T>
-    string
+    inline string
     identify (const T* const entity)
       {
         return lib::idi::instanceTypeID(entity);
+      }
+    
+    
+    string render (DataCap const&);
+    
+    
+    inline string
+    renderAttribute (GenNode const& elm)
+    {
+      return elm.idi.getSym()
+           + " = "
+           + render (elm.data);
+    }
+    
+    inline string
+    renderChild (GenNode const& elm)
+    {
+      return render (elm.data);
+    }
+    
+    
+    inline string
+    renderRecord (Rec const& record)
+      {
+        using util::join;
+        using lib::transformIterator;
+        
+        return "Rec("
+             + (Rec::TYPE_NIL==record.getType()? "" : record.getType())
+             + (isnil(record.attribs())? "" : "| "+join (transformIterator (record.attribs(), renderAttribute))+" ")
+             + (isnil(record.scope())?   "" : "|{"+join (transformIterator (record.scope(), renderChild))+"}")
+             + ")"
+             ;
+      }
+    
+    
+    inline string
+    render (DataCap const& content)
+      {
+        class StringRenderer
+          : public string
+          , public Variant<DataValues>::Visitor
+          {
+            void
+            renderAs (string const& representation)
+              {
+                string::operator= (representation);
+              }
+            
+#define STRINGIFY_CONTENT(_TY_) \
+            virtual void handle  (_TY_& val) override { renderAs (util::toString (val)); }
+            
+            STRINGIFY_CONTENT (int)
+            STRINGIFY_CONTENT (int64_t)
+            STRINGIFY_CONTENT (short)
+            STRINGIFY_CONTENT (char)
+            STRINGIFY_CONTENT (bool)
+            STRINGIFY_CONTENT (double)
+            STRINGIFY_CONTENT (string)
+            STRINGIFY_CONTENT (time::Time)
+            STRINGIFY_CONTENT (time::Offset)
+            STRINGIFY_CONTENT (time::Duration)
+            STRINGIFY_CONTENT (time::TimeSpan)
+            STRINGIFY_CONTENT (hash::LuidH)
+            
+            /** recursive simplified content-only rendering
+             *  of an embedded Record<GenNode> */
+            virtual void
+            handle  (Rec & rec) override
+              {
+                renderAs (renderRecord (rec));
+              }
+            
+            virtual void
+            handle  (RecRef & ref) override
+              {
+                if (ref)
+                  renderAs (renderRecord (ref));
+                else
+                  renderAs (util::BOTTOM_INDICATOR);
+              }
+          };
+        
+        StringRenderer visitor;
+        unConst(content).accept (visitor);
+        return string(visitor);
       }
 
   }
@@ -97,8 +186,8 @@ namespace diff{
       
       EventLog log_{identify (this)};
       
-      RecS::Mutator content_{};
-      RecS     prev_content_{};
+      VecS      content_{};
+      VecS prev_content_{};
       
     public:
       
@@ -107,8 +196,15 @@ namespace diff{
       void
       initMutation (string mutatorID)
         {
-          content_.swap (prev_content_);
+          swap (content_, prev_content_);
           log_.event ("attachMutator "+mutatorID);
+        }
+      
+      void
+      injectNew (string elm)
+        {
+          content_.push_back (elm);
+          log_.event ("injectNew", elm);
         }
       
       
@@ -124,7 +220,7 @@ namespace diff{
       bool
       contains (string spec)  const
         {
-          RecS const& currentValidContent{content_};
+          VecS const& currentValidContent{content_};
           return util::contains (currentValidContent, spec);
         }
       
@@ -180,18 +276,20 @@ namespace diff{
     
     template<class PAR>
     struct TestWireTap
-      : PAR
+      : public PAR
       {
-        TestMutationTarget& target_;
         
         /* ==== re-Implementation of the operation API ==== */
         
+        /** record in the test taget
+         *  that a new child element is
+         *  being insertet at current position */
         virtual void
         injectNew (GenNode const& n)  override
           {
-            UNIMPLEMENTED("establish new child node at current position");
+            target_.injectNew (n.isNamed()? renderAttribute(n)
+                                          : renderChild(n));
           }
-        
         
         TestWireTap(TestMutationTarget& dummy, PAR const& chain)
           : PAR(chain)
@@ -199,7 +297,11 @@ namespace diff{
           {
             target_.initMutation (identify(this));
           }
+        
+      private:
+        TestMutationTarget& target_;
       };
+    
     
     template<class PAR>
     Builder<TestWireTap<PAR>>
