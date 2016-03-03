@@ -51,9 +51,10 @@
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "lib/test/event-log.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
 
+#include <boost/noncopyable.hpp>
 //#include <functional>
 #include <string>
 //#include <vector>
@@ -72,7 +73,16 @@ namespace diff{
 //  using std::function;
   using std::string;
   
+  using RecS = lib::diff::Record<string>;
+  
   namespace {
+    template<typename T>
+    string
+    identify (const T* const entity)
+      {
+        return lib::idi::instanceTypeID(entity);
+      }
+
   }
   
   
@@ -82,24 +92,40 @@ namespace diff{
    * @todo WIP 2/2016
    */
   class TestMutationTarget
+    : boost::noncopyable
     {
       
-      EventLog log_{this->identify()};
+      EventLog log_{identify (this)};
+      
+      RecS::Mutator content_{};
+      RecS     prev_content_{};
       
     public:
+      
+      /* === Operation / Mutation API === */
+      
+      void
+      initMutation (string mutatorID)
+        {
+          content_.swap (prev_content_);
+          log_.event ("attachMutator "+mutatorID);
+        }
+      
       
       /* === Diagnostic / Verification === */
       
       bool
       empty()  const
         {
-          UNIMPLEMENTED ("NIL check");
+          return content_.empty();
         }
       
+      /** check for recorded element */
       bool
       contains (string spec)  const
         {
-          UNIMPLEMENTED ("check for recorded element");
+          RecS const& currentValidContent{content_};
+          return util::contains (currentValidContent, spec);
         }
       
       EventMatch
@@ -146,11 +172,6 @@ namespace diff{
       
       
     private:
-      string
-      identify() const
-        {
-          return lib::idi::instanceTypeID(this);
-        }
     };
   
   
@@ -163,10 +184,21 @@ namespace diff{
       {
         TestMutationTarget& target_;
         
+        /* ==== re-Implementation of the operation API ==== */
+        
+        virtual void
+        injectNew (GenNode const& n)  override
+          {
+            UNIMPLEMENTED("establish new child node at current position");
+          }
+        
+        
         TestWireTap(TestMutationTarget& dummy, PAR const& chain)
           : PAR(chain)
           , target_(dummy)
-          { }
+          {
+            target_.initMutation (identify(this));
+          }
       };
     
     template<class PAR>

@@ -103,6 +103,7 @@ namespace test{
         }
       
       
+      /** @test diagnostic binding: how to monitor and verify the mutations applied */
       void
       mutateDummy()
         {
@@ -131,7 +132,7 @@ namespace test{
       void
       mutateCollection()
         {
-          TODO ("define how to map the mutation primitives on a generic collection");
+          TODO ("define how to map the mutation primitives onto a generic collection");
         }
       
       

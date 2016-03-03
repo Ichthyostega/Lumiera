@@ -105,8 +105,8 @@ namespace diff{
   
   
   /**
-   * Customisable intermediary to abstract
-   * mutating operations on arbitrary, hierarchical object-like data.
+   * Customisable intermediary to abstract mutating operations
+   * on arbitrary, hierarchical object-like data.
    * The TreeMutator exposes two distinct interfaces
    * - the \em operation API -- similar to what a container exposes --
    *   is the entirety of abstract operations that can be done to the
@@ -154,6 +154,7 @@ namespace diff{
        */
       static Builder<TreeMutator> build();
     };
+  
   
   namespace { // Mutator-Builder decorator components...
     
