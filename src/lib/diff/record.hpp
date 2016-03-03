@@ -414,7 +414,7 @@ namespace diff{
         }
       
       void
-      replace (Rec& existingInstance)  noexcept
+      swap (Rec& existingInstance)  noexcept
         {
           std::swap (existingInstance, record_);
         }

@@ -158,7 +158,7 @@ namespace test{
           CHECK ( isnil (content));
           CHECK (!isnil (mut));
           
-          mut.replace(subject);
+          mut.swap (subject);
           CHECK (Seq({"a = α", "b = β", "γ", "δ", "ε"}) == contents(subject));
           CHECK ("Rec(🌰| a = α, b = β |{γ, δ, ε})" == string(subject));
         }

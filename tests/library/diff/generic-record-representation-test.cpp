@@ -330,7 +330,7 @@ namespace test{
           
           CHECK (mut != aa);
           
-          mut.replace(a);
+          mut.swap (a);
           CHECK (isnil (mut));
           CHECK (Seq({"a = α", "b = β", "⟂", "a"}) == contents(a));
           CHECK (Seq({"a = 1", "a"}) == contents(aa));
