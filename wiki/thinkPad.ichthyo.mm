@@ -864,14 +864,14 @@
 <node CREATED="1455927276314" HGAP="91" ID="ID_1209647803" MODIFIED="1455928456617" TEXT="impl-ops" VSHIFT="-3">
 <cloud COLOR="#fce9c0"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node CREATED="1455927425726" ID="ID_1839176066" MODIFIED="1455982729501" TEXT="next_src">
+<node CREATED="1455927425726" ID="ID_1839176066" MODIFIED="1457120215833" TEXT="skipSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928216420" ID="ID_785633975" MODIFIED="1455928325793" TEXT="advance source position"/>
 </node>
-<node CREATED="1455927396505" ID="ID_1396125246" MODIFIED="1455928694245" TEXT="verify">
+<node CREATED="1455927396505" ID="ID_1396125246" MODIFIED="1457120240382" TEXT="matchSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928268589" ID="ID_1984962841" MODIFIED="1455928318898" TEXT="ID comparison">
-<node CREATED="1455928524530" ID="ID_1653324911" MODIFIED="1455928530214" TEXT="pos ref"/>
+<node CREATED="1455928524530" ID="ID_1653324911" MODIFIED="1457120284424" TEXT="implicit next pos"/>
 <node CREATED="1455928530738" ID="ID_1877703411" MODIFIED="1455928533677" TEXT="ID"/>
 </node>
 </node>
@@ -880,7 +880,7 @@
 <node CREATED="1455982969073" ID="ID_454996122" MODIFIED="1455982974332" TEXT="inject new content"/>
 <node CREATED="1457047512175" ID="ID_1088988734" MODIFIED="1457047519426" TEXT="at implicit &quot;current&quot; position"/>
 </node>
-<node CREATED="1455927413191" ID="ID_236092406" MODIFIED="1455982946160" TEXT="accept_src">
+<node CREATED="1455927413191" ID="ID_236092406" MODIFIED="1457120269834" TEXT="acceptSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928275316" ID="ID_39117519" MODIFIED="1455928304302">
 <richcontent TYPE="NODE"><html>
@@ -893,12 +893,13 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1455928537273" ID="ID_1430110878" MODIFIED="1455928541660" TEXT="pos ref"/>
+<node CREATED="1455928537273" ID="ID_1430110878" MODIFIED="1457120296935" TEXT="implicit next pos"/>
 </node>
 </node>
 <node CREATED="1455928166683" ID="ID_1779120290" MODIFIED="1455928691589" TEXT="accept_until">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928383765" ID="ID_1859031782" MODIFIED="1455928389737" TEXT="accept until condition is met"/>
+<node CREATED="1457120353283" ID="ID_997608114" MODIFIED="1457120364470" TEXT="meta operation"/>
 </node>
 <node CREATED="1455927510666" ID="ID_14225718" MODIFIED="1455928690029" TEXT="locate">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -1515,6 +1516,22 @@
 <node CREATED="1456430440196" ID="ID_1922438930" MODIFIED="1456430445551" TEXT="Attribut-Map als Getter/Setter"/>
 <node CREATED="1456430515186" ID="ID_831818012" MODIFIED="1456430519166" TEXT="Rec&lt;GenNode&gt;"/>
 </node>
+<node CREATED="1457120439360" ID="ID_1972741688" MODIFIED="1457120480052" TEXT="ID match ist Aufgabe der Implementierung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist der wesentliche Kniff,
+    </p>
+    <p>
+      durch den das Problem mit der &quot;absrakten, opaquen&quot; Position entsch&#228;rft wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
 </node>
@@ -1657,7 +1674,47 @@
 </node>
 </node>
 </node>
-<node CREATED="1457038737878" HGAP="44" ID="ID_643190842" MODIFIED="1457038749290" TEXT="Abstraktions-Grad"/>
+<node CREATED="1457038737878" HGAP="44" ID="ID_643190842" MODIFIED="1457038749290" TEXT="Abstraktions-Grad">
+<node CREATED="1457119812475" ID="ID_1862440484" MODIFIED="1457119817575" TEXT="Elemente bleiben opaque"/>
+<node CREATED="1457119818091" ID="ID_1097779694" MODIFIED="1457119984643">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir <i>verzichten</i>&#160;auf Introspektion der Elemente
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1457119990420" ID="ID_1521035606" MODIFIED="1457120011276" TEXT="...denn die m&#xfc;&#xdf;te die jeweilige Implementierung erbringen"/>
+<node CREATED="1457120011721" ID="ID_23476594" MODIFIED="1457120024027" TEXT="und das w&#xfc;rde das &#xdc;bel der Introspektion &#xfc;berall hineindr&#xfc;cken"/>
+<node CREATED="1457120026343" ID="ID_156752160" MODIFIED="1457120043288" TEXT="Nachteil: keine klare Fehlerdiagnose m&#xf6;glich"/>
+<node CREATED="1457120043925" ID="ID_1878678132" MODIFIED="1457120055703" TEXT="ist akzeptierbar...">
+<node CREATED="1457120079542" ID="ID_1809509099" MODIFIED="1457120079542">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn genau zu diesem Zweck haben wir die &quot;External Tree Description&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1457120084135" ID="ID_633070963" MODIFIED="1457120093706" TEXT="auf diese sollte ein Diff zuerst angewendet werden"/>
+<node CREATED="1457120094302" ID="ID_1409151619" MODIFIED="1457120105488" TEXT="und diese bietet Introspektion und klare Diagnose"/>
+<node CREATED="1457120105908" ID="ID_1245554045" MODIFIED="1457120131741" TEXT="Annahme ist also, da&#xdf; ein Diff auf real-Datenstrukturen per Konstruktion erfolgreich ist"/>
+<node CREATED="1457120134297" ID="ID_1098514912" MODIFIED="1457120154250" TEXT="und ein Fehler dabei ist zwingenderweise ein Fehler in der Programmlogik"/>
+</node>
+</node>
+<node CREATED="1457119844767" ID="ID_1648334868" MODIFIED="1457119861265" TEXT="wir bieten nur einen Match auf die Diff-Spec"/>
+<node CREATED="1457119876899" ID="ID_362462955" MODIFIED="1457119902755" TEXT="Mutations-Primitive bieten bool Erfolgs-Check"/>
+<node CREATED="1457119903391" ID="ID_1244810870" MODIFIED="1457119909602" TEXT="aber keine Exceptions"/>
+</node>
 </node>
 <node CREATED="1456506821808" ID="ID_1852134358" MODIFIED="1456506824771" TEXT="Typ-Konstrukt"/>
 <node CREATED="1456523437616" HGAP="27" ID="ID_410606899" MODIFIED="1457038546189" TEXT="Manipulations-Interface" VSHIFT="6">
@@ -1709,6 +1766,11 @@
 <node CREATED="1457038527402" HGAP="16" ID="ID_1909805079" MODIFIED="1457038617372" TEXT="Mutations-Primitive" VSHIFT="7">
 <node CREATED="1457038788583" ID="ID_131880970" MODIFIED="1457038801193" TEXT="einheitlich benannt"/>
 <node CREATED="1457038801733" ID="ID_428479460" MODIFIED="1457038805816" TEXT="auf mehreren Ebenen"/>
+<node CREATED="1457119943698" ID="ID_370768211" MODIFIED="1457119948909" TEXT="Fehlerbehandlung">
+<node CREATED="1457119949785" ID="ID_658419110" MODIFIED="1457119953012" TEXT="Match-Check"/>
+<node CREATED="1457119953384" ID="ID_1688941824" MODIFIED="1457119957324" TEXT="aber keine Exception"/>
+<node CREATED="1457119959408" ID="ID_275413703" MODIFIED="1457119961803" TEXT="sondern NOP"/>
+</node>
 </node>
 </node>
 <node CREATED="1456528462585" HGAP="27" ID="ID_1770521063" MODIFIED="1457038563027" TEXT="Elemente" VSHIFT="12">

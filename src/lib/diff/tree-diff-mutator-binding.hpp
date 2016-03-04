@@ -309,7 +309,7 @@ namespace diff{
         }
       
       bool
-      find_and_accept (GenNode const& n)
+      findSrc (GenNode const& n)
         {
           UNIMPLEMENTED("locate designated element and accept it at current position");
         }
@@ -374,7 +374,7 @@ namespace diff{
         {
           __expect_further_elements (n);
                // consume and leave waste, expected to be cleaned-up by skip() later
-          if (not find_and_accept(n));
+          if (not findSrc(n));
             __fail_not_found (n);
         }
       

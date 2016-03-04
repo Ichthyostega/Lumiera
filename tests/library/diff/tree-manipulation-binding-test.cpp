@@ -35,6 +35,7 @@
 #include <string>
 //#include <vector>
 
+using util::join;
 using util::isnil;
 using lib::time::Time;
 using std::string;
@@ -115,6 +116,7 @@ namespace test{
             .attachDummy (target);
           
           CHECK (isnil (target));
+          CHECK (target.emptySrc());
           
           mutator.injectNew (ATTRIB1);
           CHECK (!isnil (target));
@@ -135,10 +137,62 @@ namespace test{
                        .beforeEvent("injectNew","b")
                        .beforeEvent("injectNew","78:56:34.012")
                        );
+          CHECK (join(target) == "α = 1, γ = 3.45, γ = 3.45, b, b, 78:56:34.012");
           cout << "Content after population; "
-               << util::join(target) <<endl;
+               << join(target) <<endl;
+          
+          // now attach new mutator for second round...
+          mutator =
+          TreeMutator::build()
+            .attachDummy (target);
+          
+          CHECK (isnil (target));                  // the "visible" new content is still void
+          CHECK (not target.emptySrc());           // content was moved into hiden "src" buffer
+          CHECK (mutator.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
+          
+          CHECK (isnil (target));                  // the match didn't change anything
+          CHECK (mutator.findSrc (ATTRIB3));       // serach for an element further down into src...
+          CHECK (!isnil (target));                 // ...pick and accept it into the "visible" part of target
+          CHECK (join(target) == "γ = 3.45");
+          
+          CHECK (mutator.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
+          CHECK (mutator.acceptSrc (ATTRIB1));     // now pick and accept this src element
+          CHECK (join(target) == "γ = 3.45, α = 1");
+          
+          CHECK (not target.emptySrc());           // next we have to clean up waste 
+          CHECK (mutator.skipSrc());               // left behind by the findSrc() operation
+          CHECK (join(target) == "γ = 3.45, α = 1");
+          
+          mutator.injectNew (ATTRIB2);
+          CHECK (not target.emptySrc());
+          CHECK (mutator.matchSrc (ATTRIB3));
+          CHECK (mutator.acceptSrc (ATTRIB3));
+          CHECK (join(target) == "γ = 3.45, α = 1, β = 2, γ = 3.45");
+          
+          // now proceding with the children.
+          // NOTE: the TestWireTap / TestMutationTarget does not enforce the attribute / children distinction!
+          CHECK (not target.emptySrc());
+          CHECK (mutator.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
+          CHECK (not mutator.skipSrc (ATTRIB1));   // refusing to skip a non matching element
+          CHECK (mutator.skipSrc (CHILD_B));       // but a matching element will be skipt (and thus discarded)
+          mutator.injectNew (SUB_NODE);            // inject a new nested sub-structure here
+          CHECK (mutator.matchSrc (CHILD_B));      // yet another B-child is waiting
+          CHECK (not mutator.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
+          CHECK (not target.emptySrc());
+          CHECK (mutator.matchSrc (CHILD_B));      // child B still waiting, unaffected
+          CHECK (not mutator.acceptSrc (CHILD_T)); // refusing to accept/pick a non matching element
+          CHECK (mutator.matchSrc (CHILD_B));      // child B still patiently waiting, unaffected
+          CHECK (mutator.acceptSrc (CHILD_B));
+          CHECK (mutator.matchSrc (CHILD_T));
+          CHECK (mutator.acceptSrc (CHILD_T));
+          CHECK (target.emptySrc());               // source contents exhausted
+          CHECK (not mutator.acceptSrc (CHILD_T));
+          cout << "Content after reordering; "
+               << join(target) <<endl;
+          
+          
           cout << "____Mutation-Log______________\n"
-               << util::join(target.getLog(), "\n")
+               << join(target.getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
