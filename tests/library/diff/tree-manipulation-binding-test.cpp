@@ -146,52 +146,68 @@ namespace test{
           auto mutator2 =
           TreeMutator::build()
             .attachDummy (target);
-
-          cout << "src contents before reordering; "
-               << join(target.srcIter()) <<endl;
-
+          
+          CHECK (target.verify("attachMutator")
+                       .beforeEvent("injectNew","78:56:34.012")
+                       .before("attachMutator"));
+          
           CHECK (isnil (target));                   // the "visible" new content is still void
           CHECK (not mutator2.emptySrc());          // content was moved into hiden "src" buffer
-          CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
+          CHECK (join(target.srcIter()) == "α = 1, γ = 3.45, γ = 3.45, b, b, 78:56:34.012");
           
+          CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
           CHECK (isnil (target));                   // the match didn't change anything
-          CHECK (mutator2.findSrc (ATTRIB3));       // serach for an element further down into src...
+          
+          CHECK (mutator2.findSrc (ATTRIB3));       // serach for an element further down into src...              // findSrc
           CHECK (!isnil (target));                  // ...pick and accept it into the "visible" part of target
           CHECK (join(target) == "γ = 3.45");
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
-          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element
+          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element                        // acceptSrc
           CHECK (join(target) == "γ = 3.45, α = 1");
           
           CHECK (not mutator2.emptySrc());          // next we have to clean up waste 
-          mutator2.skipSrc();                       // left behind by the findSrc() operation
+          mutator2.skipSrc();                       // left behind by the findSrc() operation                      // skipSrc
           CHECK (join(target) == "γ = 3.45, α = 1");
           
-          mutator2.injectNew (ATTRIB2);
+          mutator2.injectNew (ATTRIB2);                                                                            // injectNew
           CHECK (not mutator2.emptySrc());
           CHECK (mutator2.matchSrc (ATTRIB3));
-          CHECK (mutator2.acceptSrc (ATTRIB3));
+          CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
           CHECK (join(target) == "γ = 3.45, α = 1, β = 2, γ = 3.45");
           
           // now proceding with the children.
           // NOTE: the TestWireTap / TestMutationTarget does not enforce the attribute / children distinction!
           CHECK (not mutator2.emptySrc());
           CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
-          mutator2.skipSrc();                       // ...which will be skipt (and thus discarded)
-          mutator2.injectNew (SUB_NODE);            // inject a new nested sub-structure here
+          mutator2.skipSrc();                       // ...which will be skipt (and thus discarded)                 // skipSrc
+          mutator2.injectNew (SUB_NODE);            // inject a new nested sub-structure here                      // injectNew
           CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
           CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
           CHECK (not mutator2.emptySrc());
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still waiting, unaffected
           CHECK (not mutator2.acceptSrc (CHILD_T)); // refusing to accept/pick a non matching element
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still patiently waiting, unaffected
-          CHECK (mutator2.acceptSrc (CHILD_B));
+          CHECK (mutator2.acceptSrc (CHILD_B));                                                                    // acceptSrc
           CHECK (mutator2.matchSrc (CHILD_T));
-          CHECK (mutator2.acceptSrc (CHILD_T));
-          cout << "src contents after reordering; "
-               << join(target.srcIter()) <<endl;
+          CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
           CHECK (mutator2.emptySrc());              // source contents exhausted
           CHECK (not mutator2.acceptSrc (CHILD_T));
+          CHECK (target.verify("attachMutator")
+                       .beforeEvent("injectNew","78:56:34.012")
+                       .before("attachMutator")
+                       .beforeEvent("findSrc","γ = 3.45")
+                       .beforeEvent("acceptSrc","α = 1")
+                       .beforeEvent("skipSrc","⟂")
+                       .beforeEvent("injectNew","β = 2")
+                       .beforeEvent("acceptSrc","γ = 3.45")
+                       .beforeEvent("skipSrc","b")
+                       .beforeEvent("injectNew","Rec()")
+                       .beforeEvent("acceptSrc","b")
+                       .beforeEvent("acceptSrc","78:56:34.012")
+                       );
+          CHECK (join(target.srcIter(), "#") == "###b##"); // we've left back lots of waste, and one abandoned Child "b" (isn't that horrifying?)
+          CHECK (join(target) == "γ = 3.45, α = 1, β = 2, γ = 3.45, Rec(), b, 78:56:34.012");
           cout << "Content after reordering; "
                << join(target) <<endl;
           
