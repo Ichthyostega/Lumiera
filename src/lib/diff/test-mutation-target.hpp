@@ -47,6 +47,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/iter-adapter-stl.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/idi/genfunc.hpp"
@@ -265,6 +266,15 @@ namespace diff{
         {
           return log_;
         }
+      
+      
+      using const_iterator = typename iter_stl::_SeqT<const VecS>::Range;
+      
+      const_iterator begin() const { return iter_stl::eachElm(content_); }
+      const_iterator end()   const { return const_iterator(); }
+      
+      friend const_iterator begin (TestMutationTarget const& target) { return target.begin(); }
+      friend const_iterator end   (TestMutationTarget const& target) { return target.end(); }
       
       
     private:

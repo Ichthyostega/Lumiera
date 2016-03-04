@@ -28,6 +28,7 @@
 #include "lib/diff/test-mutation-target.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 //#include <utility>
@@ -107,6 +108,7 @@ namespace test{
       void
       mutateDummy()
         {
+          MARK_TEST_FUN;
           TestMutationTarget target;
           auto mutator =
           TreeMutator::build()
@@ -119,6 +121,25 @@ namespace test{
           CHECK (target.contains("α = 1"));
           CHECK (target.verifyEvent("injectNew","α = 1")
                        .after("attachMutator"));
+          
+          mutator.injectNew (ATTRIB3);
+          mutator.injectNew (ATTRIB3);
+          mutator.injectNew (CHILD_B);
+          mutator.injectNew (CHILD_B);
+          mutator.injectNew (CHILD_T);
+          CHECK (target.verify("attachMutator")
+                       .beforeEvent("injectNew","α = 1")
+                       .beforeEvent("injectNew","γ = 3.45")
+                       .beforeEvent("injectNew","γ = 3.45")
+                       .beforeEvent("injectNew","b")
+                       .beforeEvent("injectNew","b")
+                       .beforeEvent("injectNew","78:56:34.012")
+                       );
+          cout << "Content after population; "
+               << util::join(target) <<endl;
+          cout << "____Mutation-Log______________\n"
+               << util::join(target.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
       
