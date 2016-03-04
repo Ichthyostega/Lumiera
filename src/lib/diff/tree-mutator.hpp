@@ -121,6 +121,13 @@ namespace diff{
       
       /* ==== operation API ==== */
       
+      virtual bool
+      emptySrc ()
+        {
+          return true;
+          // do nothing by default
+        }
+      
       /** skip next src element and advance abstract source position */
       virtual void
       skipSrc ()

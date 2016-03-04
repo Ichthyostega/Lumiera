@@ -243,6 +243,12 @@ namespace diff{
           return pos;
         }
       
+      void
+      logSkip (string contentLog)
+        {
+          log_.event ("skipSrc", isnil(contentLog)? util::BOTTOM_INDICATOR : contentLog);
+        }
+      
       
       /* === Diagnostic / Verification === */
       
@@ -250,12 +256,6 @@ namespace diff{
       empty()  const
         {
           return content_.empty();
-        }
-      
-      bool
-      emptySrc()  const
-        {
-          return prev_content_.empty();
         }
       
       /** check for recorded element */
@@ -332,10 +332,14 @@ namespace diff{
          *      against this internal copy. This allows to verify what's going on
          */
         virtual void
-        skipSrc ()
+        skipSrc ()  override
           {
             if (pos_)
-              ++pos_;
+              {
+                string posSpec = *pos_;
+                ++pos_;
+                target_.logSkip (posSpec);
+              }
           }
         
         /** record in the test taget
@@ -348,12 +352,18 @@ namespace diff{
             target_.inject (renderNode (n), "injectNew");
           }
         
+        virtual bool
+        emptySrc ()  override
+          {
+            return !pos_;
+          }
+        
         /** ensure the next recorded source element
          *  matches on a formal level with given spec */
         virtual bool
-        matchSrc (GenNode const& n)
+        matchSrc (GenNode const& n)  override
           {
-            if (target_.emptySrc())
+            if (!pos_)
               return false;
             string spec{renderNode (n)};
             return spec == *pos_;
@@ -361,20 +371,20 @@ namespace diff{
         
         /** accept existing element, when matching the given spec */
         virtual bool
-        acceptSrc (GenNode const& n)
+        acceptSrc (GenNode const& n)  override
           {
-            if (not matchSrc(n))
+            if (not TestWireTap::matchSrc(n))       // NOTE: important to call our own method here, not the virtual function
               return false;
             target_.inject (move(*pos_), "acceptSrc");
-            skipSrc();
+            ++pos_;
             return true;
           }
         
         /** locate designated element and accept it at current position */
         virtual bool
-        findSrc (GenNode const& n)
+        findSrc (GenNode const& n)  override
           {
-            if (target_.emptySrc())
+            if (!pos_)
               return false;
             Iter found = target_.findSrc (renderNode (n), pos_);
             if (not found) return false;
