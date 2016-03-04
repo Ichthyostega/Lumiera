@@ -296,6 +296,13 @@ namespace diff{
       {
         
         /* ==== re-Implementation of the operation API ==== */
+      
+        /** skip next src element and advance abstract source position */
+        virtual void
+        skipSrc ()
+          {
+            UNIMPLEMENTED();
+          }
         
         /** record in the test taget
          *  that a new child element is
@@ -306,6 +313,31 @@ namespace diff{
             target_.injectNew (n.isNamed()? renderAttribute(n)
                                           : renderChild(n));
           }
+        
+        /** ensure the next source element matches with given spec */
+        virtual bool
+        matchSrc (GenNode const&)
+          {
+            UNIMPLEMENTED();
+            return false;
+          }
+        
+        /** accept existing element, when matching the given spec */
+        virtual bool
+        acceptSrc (GenNode const&)
+          {
+            UNIMPLEMENTED();
+            return false;
+          }
+        
+        /** locate designated element and accept it at current position */
+        virtual bool
+        findSrc (GenNode const&)
+          {
+            UNIMPLEMENTED();
+            return false;
+          }
+        
         
         TestWireTap(TestMutationTarget& dummy, PAR const& chain)
           : PAR(chain)

@@ -121,34 +121,42 @@ namespace diff{
       
       /* ==== operation API ==== */
       
+      /** skip next src element and advance abstract source position */
       virtual void
       skipSrc ()
         {
-          UNIMPLEMENTED("skip next src element and advance abstract source position");
+          // do nothing by default
         }
       
+      /** establish new element at current position */
       virtual void
-      injectNew (GenNode const& n)
+      injectNew (GenNode const&)
         {
-          UNIMPLEMENTED("establish new child node at current position");
+          // do nothing by default
         }
       
+      /** ensure the next source element matches with given spec */
       virtual bool
-      matchSrc (GenNode const& n)
+      matchSrc (GenNode const&)
         {
-          UNIMPLEMENTED("ensure the next source element matches with given spec");
+          // do nothing by default
+          return false;
         }
       
+      /** accept existing element, when matching the given spec */
       virtual bool
-      acceptSrc (GenNode const& n)
+      acceptSrc (GenNode const&)
         {
-          UNIMPLEMENTED("accept existing element, when matching the given spec");
+          // do nothing by default
+          return false;
         }
       
+      /** locate designated element and accept it at current position */
       virtual bool
-      findSrc (GenNode const& n)
+      findSrc (GenNode const&)
         {
-          UNIMPLEMENTED("locate designated element and accept it at current position");
+          // do nothing by default
+          return false;
         }
       
       virtual TreeMutator&
