@@ -291,21 +291,27 @@ namespace diff{
       /* == Forwarding: mutation primitives == */
       
       void
-      skipSrc (GenNode const& n)
+      skipSrc()
         {
-          UNIMPLEMENTED("skip matching src element and advance abstract source position");
-        }
-      
-      void
-      acceptSrc (GenNode const& n)
-        {
-          UNIMPLEMENTED("accept existing element");
+          UNIMPLEMENTED("skip next src element and advance abstract source position");
         }
       
       void
       injectNew (GenNode const& n)
         {
           UNIMPLEMENTED("inject a new element at current abstract position");
+        }
+      
+      bool
+      matchSrc (GenNode const& n)
+        {
+          UNIMPLEMENTED("ensure the next source element matches with given spec");
+        }
+      
+      bool
+      acceptSrc (GenNode const& n)
+        {
+          UNIMPLEMENTED("accept existing element, when matching the given spec");
         }
       
       bool
@@ -352,7 +358,7 @@ namespace diff{
       del (GenNode const& n)  override
         {
           __expect_in_target(n, "remove");
-          skipSrc (n);
+          skipSrc();
         }
       
       virtual void
@@ -366,7 +372,7 @@ namespace diff{
       skip (GenNode const& n)  override
         {
           __expect_further_elements (n);
-          skipSrc (n);
+          skipSrc();
         }      // assume the actual content has been moved away by a previous find()
       
       virtual void

@@ -217,6 +217,12 @@ namespace diff{
           return content_.empty();
         }
       
+      bool
+      emptySrc()  const
+        {
+          return prev_content_.empty();
+        }
+      
       /** check for recorded element */
       bool
       contains (string spec)  const
