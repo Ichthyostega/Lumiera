@@ -274,13 +274,18 @@ namespace diff{
         }
       
       
+      using iterator       = typename iter_stl::_SeqT<VecS>::Range;
       using const_iterator = typename iter_stl::_SeqT<const VecS>::Range;
       
       const_iterator begin() const { return iter_stl::eachElm(content_); }
       const_iterator end()   const { return const_iterator(); }
       
+      iterator srcIter()           {return iter_stl::eachElm(prev_content_); }
+      
+      
       friend const_iterator begin (TestMutationTarget const& target) { return target.begin(); }
       friend const_iterator end   (TestMutationTarget const& target) { return target.end(); }
+      
       
       
     private:
@@ -314,12 +319,16 @@ namespace diff{
                                           : renderChild(n));
           }
         
-        /** ensure the next source element matches with given spec */
+        /** ensure the next recorded source element
+         *  matches on a formal level with given spec */
         virtual bool
-        matchSrc (GenNode const&)
+        matchSrc (GenNode const& n)
           {
-            UNIMPLEMENTED();
-            return false;
+            if (target_.emptySrc())
+              return false;
+            string spec{n.isNamed()? renderAttribute(n)
+                                   : renderChild(n) };
+            return spec == *pos_;
           }
         
         /** accept existing element, when matching the given spec */
@@ -342,12 +351,15 @@ namespace diff{
         TestWireTap(TestMutationTarget& dummy, PAR const& chain)
           : PAR(chain)
           , target_(dummy)
+          , pos_()
           {
             target_.initMutation (identify(this));
+            pos_ = target_.srcIter();
           }
         
       private:
         TestMutationTarget& target_;
+        TestMutationTarget::iterator pos_;
       };
     
     
