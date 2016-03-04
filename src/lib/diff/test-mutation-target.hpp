@@ -58,6 +58,7 @@
 
 #include <boost/noncopyable.hpp>
 //#include <functional>
+#include <utility>
 #include <string>
 #include <vector>
 //#include <map>
@@ -72,14 +73,18 @@ namespace diff{
   using lib::test::EventLog;
   using lib::test::EventMatch;
   using lib::Literal;
-//  using std::function;
-  using std::string;
   using util::unConst;
   using util::isnil;
+//  using std::function;
+  using std::string;
+  using std::forward;
+  using std::move;
   
   using VecS = std::vector<string>;
   
-  namespace {
+  
+  namespace { // diagnostic helpers: render diff spec....
+    
     template<typename T>
     inline string
     identify (const T* const entity)
@@ -105,75 +110,85 @@ namespace diff{
       return render (elm.data);
     }
     
+    inline string
+    renderNode (GenNode const& n)
+    {
+      return n.isNamed()? renderAttribute(n)
+                        : renderChild(n);
+    }
+    
     
     inline string
     renderRecord (Rec const& record)
-      {
-        using util::join;
-        using lib::transformIterator;
-        
-        return "Rec("
-             + (Rec::TYPE_NIL==record.getType()? "" : record.getType())
-             + (isnil(record.attribs())? "" : "| "+join (transformIterator (record.attribs(), renderAttribute))+" ")
-             + (isnil(record.scope())?   "" : "|{"+join (transformIterator (record.scope(), renderChild))+"}")
-             + ")"
-             ;
-      }
+    {
+      using util::join;
+      using lib::transformIterator;
+      
+      return "Rec("
+           + (Rec::TYPE_NIL==record.getType()? "" : record.getType())
+           + (isnil(record.attribs())? "" : "| "+join (transformIterator (record.attribs(), renderAttribute))+" ")
+           + (isnil(record.scope())?   "" : "|{"+join (transformIterator (record.scope(), renderChild))+"}")
+           + ")"
+           ;
+    }
     
     
     inline string
     render (DataCap const& content)
-      {
-        class StringRenderer
-          : public string
-          , public Variant<DataValues>::Visitor
-          {
-            void
-            renderAs (string const& representation)
-              {
-                string::operator= (representation);
-              }
-            
+    {
+      class StringRenderer
+        : public string
+        , public Variant<DataValues>::Visitor
+        {
+          void
+          renderAs (string const& representation)
+            {
+              string::operator= (representation);
+            }
+          
 #define STRINGIFY_CONTENT(_TY_) \
-            virtual void handle  (_TY_& val) override { renderAs (util::toString (val)); }
-            
-            STRINGIFY_CONTENT (int)
-            STRINGIFY_CONTENT (int64_t)
-            STRINGIFY_CONTENT (short)
-            STRINGIFY_CONTENT (char)
-            STRINGIFY_CONTENT (bool)
-            STRINGIFY_CONTENT (double)
-            STRINGIFY_CONTENT (string)
-            STRINGIFY_CONTENT (time::Time)
-            STRINGIFY_CONTENT (time::Offset)
-            STRINGIFY_CONTENT (time::Duration)
-            STRINGIFY_CONTENT (time::TimeSpan)
-            STRINGIFY_CONTENT (hash::LuidH)
-            
-            /** recursive simplified content-only rendering
-             *  of an embedded Record<GenNode> */
-            virtual void
-            handle  (Rec & rec) override
-              {
-                renderAs (renderRecord (rec));
-              }
-            
-            virtual void
-            handle  (RecRef & ref) override
-              {
-                if (ref)
-                  renderAs (renderRecord (ref));
-                else
-                  renderAs (util::BOTTOM_INDICATOR);
-              }
-          };
-        
-        StringRenderer visitor;
-        unConst(content).accept (visitor);
-        return string(visitor);
-      }
-
-  }
+          virtual void handle  (_TY_& val) override { renderAs (util::toString (val)); }
+          
+          STRINGIFY_CONTENT (int)
+          STRINGIFY_CONTENT (int64_t)
+          STRINGIFY_CONTENT (short)
+          STRINGIFY_CONTENT (char)
+          STRINGIFY_CONTENT (bool)
+          STRINGIFY_CONTENT (double)
+          STRINGIFY_CONTENT (string)
+          STRINGIFY_CONTENT (time::Time)
+          STRINGIFY_CONTENT (time::Offset)
+          STRINGIFY_CONTENT (time::Duration)
+          STRINGIFY_CONTENT (time::TimeSpan)
+          STRINGIFY_CONTENT (hash::LuidH)
+          
+          /** recursive simplified content-only rendering
+           *  of an embedded Record<GenNode> */
+          virtual void
+          handle  (Rec & rec) override
+            {
+              renderAs (renderRecord (rec));
+            }
+          
+          virtual void
+          handle  (RecRef & ref) override
+            {
+              if (ref)
+                renderAs (renderRecord (ref));
+              else
+                renderAs (util::BOTTOM_INDICATOR);
+            }
+        };
+      
+      StringRenderer visitor;
+      unConst(content).accept (visitor);
+      return string(visitor);
+    }
+    
+  }//(End)diagnostic helpers
+  
+  
+  
   
   
   /**
@@ -184,13 +199,26 @@ namespace diff{
   class TestMutationTarget
     : boost::noncopyable
     {
-      
       EventLog log_{identify (this)};
       
       VecS      content_{};
       VecS prev_content_{};
       
+      
     public:
+      using iterator       = typename iter_stl::_SeqT<VecS>::Range;
+      using const_iterator = typename iter_stl::_SeqT<const VecS>::Range;
+      
+      const_iterator begin() const { return iter_stl::eachElm(content_); }
+      const_iterator end()   const { return const_iterator(); }
+      
+      iterator srcIter()           {return iter_stl::eachElm(prev_content_); }
+      
+      
+      friend const_iterator begin (TestMutationTarget const& target) { return target.begin(); }
+      friend const_iterator end   (TestMutationTarget const& target) { return target.end(); }
+      
+      
       
       /* === Operation / Mutation API === */
       
@@ -202,10 +230,17 @@ namespace diff{
         }
       
       void
-      injectNew (string elm)
+      inject (string&& elm, string operationID)
         {
-          content_.push_back (elm);
-          log_.event ("injectNew", elm);
+          content_.emplace_back (forward<string>(elm));
+          log_.event (operationID, content_.back());
+        }
+      
+      iterator
+      findSrc (string const& spec, iterator pos)
+        {
+          while (pos and *pos != spec) ++pos;
+          return pos;
         }
       
       
@@ -274,20 +309,6 @@ namespace diff{
         }
       
       
-      using iterator       = typename iter_stl::_SeqT<VecS>::Range;
-      using const_iterator = typename iter_stl::_SeqT<const VecS>::Range;
-      
-      const_iterator begin() const { return iter_stl::eachElm(content_); }
-      const_iterator end()   const { return const_iterator(); }
-      
-      iterator srcIter()           {return iter_stl::eachElm(prev_content_); }
-      
-      
-      friend const_iterator begin (TestMutationTarget const& target) { return target.begin(); }
-      friend const_iterator end   (TestMutationTarget const& target) { return target.end(); }
-      
-      
-      
     private:
     };
   
@@ -299,24 +320,32 @@ namespace diff{
     struct TestWireTap
       : public PAR
       {
+        using Target = TestMutationTarget;
+        using Iter = TestMutationTarget::iterator;
+        
         
         /* ==== re-Implementation of the operation API ==== */
       
-        /** skip next src element and advance abstract source position */
+        /** skip next recorded src element
+         * @remarks TestWireTap adapter together with TestMutationTarget
+         *      maintain a "shaddow copy" of the data and apply the detected diff
+         *      against this internal copy. This allows to verify what's going on
+         */
         virtual void
         skipSrc ()
           {
-            UNIMPLEMENTED();
+            if (pos_)
+              ++pos_;
           }
         
         /** record in the test taget
          *  that a new child element is
-         *  being insertet at current position */
+         *  being insertet at current position
+         */
         virtual void
         injectNew (GenNode const& n)  override
           {
-            target_.injectNew (n.isNamed()? renderAttribute(n)
-                                          : renderChild(n));
+            target_.inject (renderNode (n), "injectNew");
           }
         
         /** ensure the next recorded source element
@@ -326,29 +355,38 @@ namespace diff{
           {
             if (target_.emptySrc())
               return false;
-            string spec{n.isNamed()? renderAttribute(n)
-                                   : renderChild(n) };
+            string spec{renderNode (n)};
             return spec == *pos_;
           }
         
         /** accept existing element, when matching the given spec */
         virtual bool
-        acceptSrc (GenNode const&)
+        acceptSrc (GenNode const& n)
           {
-            UNIMPLEMENTED();
-            return false;
+            if (not matchSrc(n))
+              return false;
+            target_.inject (move(*pos_), "acceptSrc");
+            skipSrc();
+            return true;
           }
         
         /** locate designated element and accept it at current position */
         virtual bool
-        findSrc (GenNode const&)
+        findSrc (GenNode const& n)
           {
-            UNIMPLEMENTED();
-            return false;
+            if (target_.emptySrc())
+              return false;
+            Iter found = target_.findSrc (renderNode (n), pos_);
+            if (not found) return false;
+            else
+              {
+                target_.inject (move(*found), "findSrc");
+                return true;
+              }
           }
         
         
-        TestWireTap(TestMutationTarget& dummy, PAR const& chain)
+        TestWireTap(Target& dummy, PAR const& chain)
           : PAR(chain)
           , target_(dummy)
           , pos_()
@@ -358,8 +396,9 @@ namespace diff{
           }
         
       private:
-        TestMutationTarget& target_;
-        TestMutationTarget::iterator pos_;
+        Target& target_;
+        Iter    pos_;
+        
       };
     
     
