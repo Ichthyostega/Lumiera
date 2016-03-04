@@ -200,7 +200,7 @@ namespace util {
     
     // chop off last delimiter
     size_t len = buffer.str().length();
-    ASSERT (len > delim.length());
+    ASSERT (len >= delim.length());
     return buffer.str().substr(0, len - delim.length());
   }
   
