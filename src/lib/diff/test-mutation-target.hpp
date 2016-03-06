@@ -225,6 +225,7 @@ namespace diff{
       void
       initMutation (string mutatorID)
         {
+          prev_content_.clear();
           swap (content_, prev_content_);
           log_.event ("attachMutator "+mutatorID);
         }
@@ -393,6 +394,14 @@ namespace diff{
                 target_.inject (move(*found), "findSrc");
                 return true;
               }
+          }
+        
+        /** repeatedly accept, until after the designated location */
+        virtual bool
+        accept_until (GenNode const& spec)
+          {
+            UNIMPLEMENTED ("accept until meeting spec");
+            return false;
           }
         
         /** locate element already accepted into the taget sequence

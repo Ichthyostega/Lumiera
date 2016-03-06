@@ -104,7 +104,7 @@ namespace lib {
       ///////TODO static assert to virtual dtor??
     public:
       template<size_t maxSiz>
-      PlantingHandle (OpaqueHolder<BA, maxSiz>& targetBuffer)
+      PlantingHandle (InPlaceBuffer<BA, maxSiz>& targetBuffer)
         : buffer_(&targetBuffer)
         , maxSiz_(maxSiz_)
         { }
@@ -119,7 +119,7 @@ namespace lib {
                                "exceeding the pre-established storage buffer capacity."
                               ,error::LUMIERA_ERROR_CAPACITY);
           
-          using Holder = OpaqueHolder<BA, sizeof(SUB)>;
+          using Holder = InPlaceBuffer<BA, sizeof(SUB)>;
           Holder& holder = *static_cast<Holder*> (buffer_);
           
           return holder.create<SUB> (std::forward<ARGS> (args)...);
@@ -206,6 +206,14 @@ namespace diff{
       /** accept existing element, when matching the given spec */
       virtual bool
       acceptSrc (GenNode const&)
+        {
+          // do nothing by default
+          return false;
+        }
+      
+      /** repeatedly accept, until after the designated location */
+      virtual bool
+      accept_until (GenNode const&)
         {
           // do nothing by default
           return false;

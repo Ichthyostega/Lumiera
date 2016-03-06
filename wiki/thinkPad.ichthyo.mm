@@ -899,8 +899,63 @@
 <node CREATED="1455928166683" ID="ID_1779120290" MODIFIED="1455928691589" TEXT="accept_until">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928383765" ID="ID_1859031782" MODIFIED="1455928389737" TEXT="accept until condition is met"/>
-<node COLOR="#e5500c" CREATED="1457120353283" ID="ID_997608114" MODIFIED="1457190890254" TEXT="meta operation">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1457231714541" ID="ID_1147973129" MODIFIED="1457231725704" TEXT="ID spec"/>
+<node CREATED="1457231524839" ID="ID_1984334307" MODIFIED="1457231712460" TEXT="has to establish responsible target">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      since, on interface level, we're pretending that this mutator <i>is a single collection like thing,</i>
+    </p>
+    <p>
+      in fact the implementation might bind to several opaque target structures.
+    </p>
+    <p>
+      Thus, internally we'll have a <b>selector</b>&#160;to determine which onion layer is responsible for
+    </p>
+    <p>
+      handling an element as designated by the argument. It is then the responsibility
+    </p>
+    <p>
+      of this specific onion layer to accept forward until meeting this element.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1457231727259" ID="ID_209470453" MODIFIED="1457231849261">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#e72d0e">warning:</font>&#160;messed-up state in case of failure
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      this is (probably) the only operation which entirely messes up the mutator state
+    </p>
+    <p>
+      when the designated target does not exist. The assumption is that a diff application front-end
+    </p>
+    <p>
+      will check the bool return value and throw an exception in that case
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1455928184504" ID="ID_1474129407" MODIFIED="1457190163357" TEXT="assignElm">
@@ -1780,13 +1835,14 @@
 </node>
 </node>
 <node CREATED="1456506821808" ID="ID_1852134358" MODIFIED="1456506824771" TEXT="Typ-Konstrukt"/>
-<node CREATED="1456523437616" HGAP="27" ID="ID_410606899" MODIFIED="1457038546189" TEXT="Manipulations-Interface" VSHIFT="6">
+<node CREATED="1456523437616" HGAP="34" ID="ID_410606899" MODIFIED="1457232353605" TEXT="Manipulations-Interface" VSHIFT="6">
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1456523455997" ID="ID_1416114013" MODIFIED="1456523464201" TEXT="Deadlock!">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1456523507910" ID="ID_429333479" MODIFIED="1456523518005" TEXT="Henne oder Ei?"/>
 <node CREATED="1456523471851" ID="ID_1273540009" MODIFIED="1456523485597" TEXT="komm nicht vom Fleck"/>
 <node CREATED="1456523487089" ID="ID_1139978684" MODIFIED="1456523501995" TEXT="zirkul&#xe4;re Bez&#xfc;ge im Design"/>
-<node CREATED="1456523522693" ID="ID_625051251" MODIFIED="1456523630599" TEXT="abstrakter Entwurf">
+<node CREATED="1456523522693" ID="ID_625051251" MODIFIED="1457232567024" TEXT="abstrakter Entwurf">
+<arrowlink COLOR="#6b77a6" DESTINATION="ID_728198359" ENDARROW="Default" ENDINCLINATION="-116;0;" ID="Arrow_ID_340427685" STARTARROW="None" STARTINCLINATION="-819;487;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1456523558304" ID="ID_1843819253" MODIFIED="1456523564050" TEXT="baue einen Dummy">
 <icon BUILTIN="idea"/>
@@ -1843,7 +1899,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1456528462585" HGAP="27" ID="ID_1770521063" MODIFIED="1457038563027" TEXT="Elemente" VSHIFT="12">
+<node CREATED="1456528462585" HGAP="34" ID="ID_1770521063" MODIFIED="1457232357988" TEXT="Elemente" VSHIFT="12">
 <node CREATED="1456528472016" ID="ID_315938795" MODIFIED="1456528476211" TEXT="bleiben abstrakt"/>
 <node CREATED="1456528477415" ID="ID_1931717091" MODIFIED="1456528481850" TEXT="abstrakte &quot;Position&quot;">
 <node CREATED="1456533135345" ID="ID_1775378899" MODIFIED="1456533178551" TEXT="Problem: wem geh&#xf6;rt diese Position">
@@ -1861,6 +1917,79 @@
 <node CREATED="1456528505395" ID="ID_1091163328" MODIFIED="1456528519117" TEXT="wer per Selektor zust&#xe4;ndig ist"/>
 <node CREATED="1456528539799" ID="ID_1658968937" MODIFIED="1456528550465" TEXT="Typisierung ergibt sich als Effekt"/>
 <node CREATED="1456528551029" ID="ID_193586898" MODIFIED="1456528557664" TEXT="Typisierung wird nicht eigens repr&#xe4;sentiert"/>
+</node>
+</node>
+<node CREATED="1457232376244" HGAP="11" ID="ID_1914581822" MODIFIED="1457232406962" TEXT="onion layer" VSHIFT="9">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das sind die konkreten Implementierungen
+    </p>
+    <p>
+      f&#252;r spezifische Arten von Bindings
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1457232408368" HGAP="29" ID="ID_1068782263" MODIFIED="1457232766908" TEXT="TestWireTap / TestMutationTarget" VSHIFT="-6">
+<icon BUILTIN="full-1"/>
+<node CREATED="1457232426238" ID="ID_728198359" MODIFIED="1457232567024" TEXT="brauche ich, um das API zu entwickeln">
+<linktarget COLOR="#6b77a6" DESTINATION="ID_728198359" ENDARROW="Default" ENDINCLINATION="-116;0;" ID="Arrow_ID_340427685" SOURCE="ID_625051251" STARTARROW="None" STARTINCLINATION="-819;487;"/>
+</node>
+<node CREATED="1457232433157" ID="ID_1606470322" MODIFIED="1457232443415" TEXT="ggfs sp&#xe4;ter n&#xfc;tzlich zur Diagnose"/>
+<node CREATED="1457232444075" ID="ID_442780922" MODIFIED="1457232459765" TEXT="soll stets &#xfc;ber andere, konkrete Mutation-Layer gelegt werden"/>
+<node CREATED="1457232579073" ID="ID_280491578" MODIFIED="1457232581877" TEXT="Grenzen">
+<node CREATED="1457232582704" ID="ID_1594229064" MODIFIED="1457232590595" TEXT="protokolliert nur String-Repr&#xe4;sentation"/>
+<node CREATED="1457232591087" ID="ID_119032593" MODIFIED="1457232723280">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann <i>niemals </i>geschachtelte sub-Mutatoren modellieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ja wirklich, das w&#228;re nicht sinnvoll!!!!!
+    </p>
+    <p>
+      auch wenn man meinen k&#246;nnte, es geht.
+    </p>
+    <p>
+      Grund ist n&#228;mlich, es kann jeweils nur ein Onion-Layer f&#252;r ein gegebenes Element &quot;zust&#228;ndig&quot; sein.
+    </p>
+    <p>
+      Und aus Gr&#252;nden der logischen Konsistenz darf dieser Diagnose-Layer niemals f&#252;r ein Element zust&#228;ndig sein,
+    </p>
+    <p>
+      denn sonst w&#252;rde er es f&#252;r darunter liegende Layer verschatten.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="closed"/>
+</node>
+</node>
+</node>
+<node CREATED="1457232734636" ID="ID_1873945047" MODIFIED="1457232769888" TEXT="STL Collection">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1457232746179" ID="ID_1793680066" MODIFIED="1457232776598" TEXT="Rec&lt;GenNode&gt;">
+<icon BUILTIN="full-4"/>
+</node>
+<node CREATED="1457232752458" ID="ID_1490646673" MODIFIED="1457232773416" TEXT="Attribute">
+<icon BUILTIN="full-3"/>
 </node>
 </node>
 </node>

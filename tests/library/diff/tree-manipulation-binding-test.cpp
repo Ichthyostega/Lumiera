@@ -29,6 +29,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
+#include "lib/error.hpp"
 #include "lib/util.hpp"
 
 //#include <utility>
@@ -49,7 +50,7 @@ namespace lib {
 namespace diff{
 namespace test{
   
-//  using lumiera::error::LUMIERA_ERROR_LOGIC;
+  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
   
   namespace {//Test fixture....
@@ -67,7 +68,8 @@ namespace test{
                   CHILD_T(Time(12,34,56,78)),              // unnamed time value child
                   SUB_NODE = MakeRec().genNode(),          // empty anonymous node used to open a sub scope
                   ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ
-                  CHILD_NODE = SUB_NODE;                   // yet another child node, same ID as SUB_NODE (!)
+                  CHILD_NODE = SUB_NODE,                   // yet another child node, same ID as SUB_NODE (!)
+                  GAMMA_PI("γ", 3.14159265);               // happens to have the same identity (ID) as ATTRIB3AS
     
   }//(End)Test fixture
   
@@ -212,6 +214,46 @@ namespace test{
                << join(target) <<endl;
           
           
+          
+          // the third round will cover tree mutation primitives...
+          auto mutator3 =
+          TreeMutator::build()
+            .attachDummy (target);
+          
+          CHECK (isnil (target));
+          CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
+          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β
+          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ
+          CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
+          
+          CHECK (not target.contains("γ = 3.14159265"));
+          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first
+          CHECK (    target.contains("γ = 3.14159265"));
+          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything
+          
+          // for mutation of an enclosed scope, in real usage the managing TreeDiffInterpreter
+          // would maintain a stack of "mutation frames", where each one provides an OpaqueHolder
+          // to place a suitable sub-mutator for this nested scope. At this point, we can't get any further
+          // with this TestWireTap / TestMutationTarget approach, since the latter just records strings and
+          // thus will never be able to simulate mutation of a nested scope. In case there is no /real/ mutator
+          // in any "onion layer" below the TestWireTap within this TreeMutator, we'll just get a default (NOP)
+          // implementation of TreeMutator without any further functionality.
+          
+          InPlaceBuffer<TreeMutator, sizeof(mutator3)> subMutatorBuffer;
+          TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
+          
+          CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));
+          CHECK (subMutatorBuffer->emptySrc());     // ...this is all we can do here
+                                                    // the real implementation would instead find a suitable
+                                                    // sub-mutator within this buffer and recurse into that.
+          
+          // error handling: assignment might throw
+          GenNode differentTime{CHILD_T.idi.getSym(), Time(11,22)};
+          VERIFY_ERROR (LOGIC, mutator3.assignElm (differentTime));
+          
+          cout << "Content after mutation; "
+               << join(target) <<endl;
+
           cout << "____Mutation-Log______________\n"
                << join(target.getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
