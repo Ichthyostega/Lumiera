@@ -327,19 +327,19 @@ namespace diff{
         }
       
       void
-      locate_and_assign (GenNode const& n)
+      assignElm (GenNode const& n)
         {
           UNIMPLEMENTED("locate allready accepted element and assign given new payload");
         }
       
       void
-      locate_and_openSubScope (GenNode const& n)
+      open_subScope (GenNode const& n)
         {
           UNIMPLEMENTED("locate allready accepted element and open recursive sub-scope for mutation");
         }
       
       void
-      closeSubScope()
+      close_subScope()
         {
           UNIMPLEMENTED("finish and leave sub scope and return to invoking parent scope");
         }
@@ -401,14 +401,14 @@ namespace diff{
       virtual void
       set (GenNode const& n)  override
         {
-          locate_and_assign (n);
+          assignElm (n);
         }
       
       /** open nested scope to apply diff to child object */
       virtual void
       mut (GenNode const& n)  override
         {
-          locate_and_openSubScope (n);
+          open_subScope (n);
           
           Rec const& childRecord = child.data.get<Rec>();
           TRACE (diff, "tree-diff: ENTER scope %s", cStr(childRecord));
@@ -421,7 +421,7 @@ namespace diff{
           TRACE (diff, "tree-diff: LEAVE scope %s", cStr(describeScope()));
           
           __expect_end_of_scope (n.idi);
-          closeSubScope();
+          close_subScope();
           __expect_valid_parent_scope (n.idi);
         }
       

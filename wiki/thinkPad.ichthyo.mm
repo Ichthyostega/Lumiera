@@ -899,39 +899,102 @@
 <node CREATED="1455928166683" ID="ID_1779120290" MODIFIED="1455928691589" TEXT="accept_until">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928383765" ID="ID_1859031782" MODIFIED="1455928389737" TEXT="accept until condition is met"/>
-<node CREATED="1457120353283" ID="ID_997608114" MODIFIED="1457120364470" TEXT="meta operation"/>
+<node COLOR="#e5500c" CREATED="1457120353283" ID="ID_997608114" MODIFIED="1457190890254" TEXT="meta operation">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1455927510666" ID="ID_14225718" MODIFIED="1455928690029" TEXT="locate">
+</node>
+<node CREATED="1455928184504" ID="ID_1474129407" MODIFIED="1457190163357" TEXT="assignElm">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928393788" ID="ID_1084411962" MODIFIED="1455928398936" TEXT="locate by ID comparison">
-<node CREATED="1455928565869" ID="ID_197213145" MODIFIED="1455928572200" TEXT="incremental pos ref"/>
-<node CREATED="1455928573028" ID="ID_1321605846" MODIFIED="1455928576391" TEXT="ID"/>
+<node CREATED="1455928393788" ID="ID_1084411962" MODIFIED="1457190205367" TEXT="locate target">
+<node CREATED="1457190206827" ID="ID_897956826" MODIFIED="1457190220485" TEXT="allready accepted element"/>
+<node CREATED="1457190227089" ID="ID_265366260" MODIFIED="1457190234435" TEXT="find by ID comparison"/>
+<node CREATED="1457190235191" ID="ID_1385656813" MODIFIED="1457190240027" TEXT="try current element first"/>
 </node>
-</node>
-<node CREATED="1455928184504" ID="ID_1474129407" MODIFIED="1455928687942" TEXT="assign">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928403931" ID="ID_1442292399" MODIFIED="1455928412462" TEXT="assign payload">
-<node CREATED="1455928583523" ID="ID_1874089052" MODIFIED="1455928585686" TEXT="pos ref"/>
-<node CREATED="1455928586506" ID="ID_567539648" MODIFIED="1455928611275" TEXT="Type context"/>
+<node CREATED="1455928586506" ID="ID_567539648" MODIFIED="1457190259104" TEXT="implicit Type context"/>
 <node CREATED="1455928612239" ID="ID_1377931073" MODIFIED="1455928619186" TEXT="embedded target data"/>
 </node>
 </node>
-<node CREATED="1455928189695" ID="ID_1518531652" MODIFIED="1455928686421" TEXT="mutator">
+<node CREATED="1455928189695" ID="ID_1518531652" MODIFIED="1457190272990" TEXT="buildMutator">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928415161" ID="ID_316051704" MODIFIED="1455928425468" TEXT="build mutator for target">
-<node CREATED="1455928625269" ID="ID_1510952440" MODIFIED="1455928628073" TEXT="pos ref"/>
+<node CREATED="1457190279001" ID="ID_555722741" MODIFIED="1457190300305" TEXT="locate target">
+<node CREATED="1457190288624" ID="ID_688053219" MODIFIED="1457190296115" TEXT="same as in &apos;assignElm&apos;"/>
+</node>
+<node CREATED="1455928415161" ID="ID_316051704" MODIFIED="1457190369739" TEXT="fabricate mutator">
+<node CREATED="1457190370846" ID="ID_914587366" MODIFIED="1457190374749" TEXT="suitable for target"/>
+<node CREATED="1455928625269" ID="ID_1510952440" MODIFIED="1457190388167" TEXT="open / init mutator"/>
+</node>
+<node CREATED="1457190320444" ID="ID_1175346415" MODIFIED="1457190328199" TEXT="place into provided buffer">
+<node CREATED="1457190396170" ID="ID_1295881596" MODIFIED="1457190419158">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>throw </i>when
+    </p>
+    <p>
+      insufficent space
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
-<node CREATED="1455928193863" ID="ID_879541123" MODIFIED="1455928685054" TEXT="push">
+</node>
+<node CREATED="1455928193863" ID="ID_879541123" MODIFIED="1457190610865" TEXT="open_subScope">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928427432" ID="ID_1222674854" MODIFIED="1455928435275" TEXT="push mutator on stack">
-<node CREATED="1455928632684" ID="ID_1171317180" MODIFIED="1455928651005" TEXT="mutator or mutator ref"/>
-<node CREATED="1455928657257" ID="ID_914429679" MODIFIED="1455928668323" TEXT="Type context for stack frame"/>
+<node CREATED="1455928427432" ID="ID_1222674854" MODIFIED="1455928435275" TEXT="push mutator on stack"/>
+<node CREATED="1457190622236" ID="ID_589756146" MODIFIED="1457190641456">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      invoke <b>buildMutator</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#e5500c" CREATED="1457190642993" ID="ID_1140350120" MODIFIED="1457190901922" STYLE="fork" TEXT="meta operation">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
-<node CREATED="1455928198718" ID="ID_593000833" MODIFIED="1455928683343" TEXT="pop">
+<node CREATED="1455928198718" ID="ID_593000833" MODIFIED="1457190657851" TEXT="close_subScope">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928440366" ID="ID_1859099649" MODIFIED="1455928446696" TEXT="pop previous mutator from stack"/>
+<node CREATED="1455928440366" ID="ID_1859099649" MODIFIED="1457190669578" TEXT="just pop mutator"/>
+<node CREATED="1457190670069" ID="ID_331099500" MODIFIED="1457190818805" TEXT="abandon mutator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>NOTE</b>: mutator need to be written in such a way
+    </p>
+    <p>
+      to be just discarded when done with the alterations.
+    </p>
+    <p>
+      That is, the mutator<i>&#160;must not</i>&#160;incorporate the target data, rather it is expected
+    </p>
+    <p>
+      to construct the new target data efficiently in place.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1457190826145" ID="ID_1231904441" MODIFIED="1457190834604" TEXT="return to previous mutator"/>
+<node COLOR="#e5500c" CREATED="1457190844318" ID="ID_614952113" MODIFIED="1457190936915" STYLE="fork" TEXT="meta operation">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
 </node>
 </node>
 </node>
@@ -1770,6 +1833,13 @@
 <node CREATED="1457119953384" ID="ID_1688941824" MODIFIED="1457119957324" TEXT="aber keine Exception"/>
 <node CREATED="1457119959408" ID="ID_275413703" MODIFIED="1457119961803" TEXT="sondern NOP"/>
 </node>
+</node>
+<node CREATED="1457227228502" ID="ID_845299775" MODIFIED="1457227233433" TEXT="sub-Mutator">
+<node CREATED="1457227237269" ID="ID_1175871622" MODIFIED="1457227296340" TEXT="wird &#xfc;ber ein Handle implantiert">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1457227248779" ID="ID_1765753442" MODIFIED="1457227279155" TEXT="Implementierungs-Schicht kennt Typ"/>
+<node CREATED="1457227279703" ID="ID_347493370" MODIFIED="1457227288610" TEXT="aber Tree-Mutator &#xfc;bernimmt ownership"/>
 </node>
 </node>
 </node>

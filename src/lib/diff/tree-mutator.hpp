@@ -72,16 +72,67 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/opaque-holder.hpp"
 //#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
 
 #include <functional>
+#include <utility> ////TODO
 #include <string>
 //#include <vector>
 //#include <map>
 
 
 namespace lib {
+  /////////////////////////////TODO move over into opaque-holder.hpp
+  /**
+   * handle to allow for safe _»remote implantation«_
+   * of an unknown subclass into a given OpaqueHolder buffer,
+   * without having to disclose the concrete buffer type or size.
+   * @remarks this is especially geared towards use in APIs, allowing
+   *    a not yet known implementation to implant an agent or collaboration
+   *    partner into the likewise undisclosed innards of the exposed service.
+   * @warning the type BA must expose a virtual dtor, since the targetted
+   *    OpaqueHolder has to take ownership of the implanted object.
+   */
+  template<class BA>
+  class PlantingHandle
+    {
+      void* buffer_;
+      size_t maxSiz_;
+      
+      ///////TODO static assert to virtual dtor??
+    public:
+      template<size_t maxSiz>
+      PlantingHandle (OpaqueHolder<BA, maxSiz>& targetBuffer)
+        : buffer_(&targetBuffer)
+        , maxSiz_(maxSiz_)
+        { }
+      
+      
+      template<class SUB, typename...ARGS>
+      BA&
+      create (ARGS&& ...args)
+        {
+          if (sizeof(SUB) > maxSiz_)
+            throw error::Fatal("Unable to implant implementation object of size "
+                               "exceeding the pre-established storage buffer capacity."
+                              ,error::LUMIERA_ERROR_CAPACITY);
+          
+          using Holder = OpaqueHolder<BA, sizeof(SUB)>;
+          Holder& holder = *static_cast<Holder*> (buffer_);
+          
+          return holder.create<SUB> (std::forward<ARGS> (args)...);
+        }
+      
+      template<class SUB>
+      bool
+      canCreate()  const
+        {
+          return sizeof(SUB) <= maxSiz_;
+        }
+    };
+  /////////////////////////////TODO move over into opaque-holder.hpp
 namespace diff{
   
   namespace error = lumiera::error;
@@ -90,6 +141,8 @@ namespace diff{
   using lib::Literal;
   using std::function;
   using std::string;
+  
+  
   
   
   class TestMutationTarget; // for unit testing
@@ -166,10 +219,31 @@ namespace diff{
           return false;
         }
       
-      virtual TreeMutator&
-      mutateChild (ID id)
+      /** locate the designated target element
+       *  (must be already accepted into the target sequence).
+       *  Perform an assignement with the given payload value
+       * @throw when assignement fails (typically error::Logic)
+       * @return false when unable to locate the target */
+      virtual bool
+      assignElm (GenNode const&)
         {
-          UNIMPLEMENTED("expose a recursive TreeMutator to transform the denoted child");
+          // do nothing by default
+          return false;
+        }
+      
+      
+      using MutatorBuffer = PlantingHandle<TreeMutator>;
+      
+      /** locate the designated target element
+       *  and build a suittable sub-mutator for this element
+       *  into the provided target buffer
+       * @throw error::Fatal when buffer is insufficient
+       * @return false when unable to locate the target */
+      virtual bool
+      mutateChild (GenNode const&, MutatorBuffer)
+        {
+          // do nothing by default
+          return false;
         }
       
       virtual void setAttribute (ID, Attribute&) { /* do nothing by default */ }

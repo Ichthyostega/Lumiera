@@ -490,7 +490,7 @@ namespace lib {
    * The whole compound is copyable if and only if the contained
    * object is copyable.
    *
-   * \par using OpaqueHolder
+   * ## using OpaqueHolder
    * OpaqueHolder instances are copyable value objects. They are created
    * either empty, by copy from an existing OpaqueHolder, or by directly
    * specifying the concrete object to embed. This target object will be
@@ -500,16 +500,19 @@ namespace lib {
    * Later on, the embedded value might be accessed
    * - using the smart-ptr-like access through the common base interface BA
    * - when knowing the exact type to access, the templated #get might be an option
-   * - the empty state of the container and a \c isValid() on the target may be checked
-   * - a combination of both is available as a \c bool check on the OpaqueHolder instance.
+   * - the empty state of the container and a `isValid()` on the target may be checked
+   * - a combination of both is available as a `bool` check on the OpaqueHolder instance.
    *  
-   * For using OpaqueHolder, several \b assumptions need to be fulfilled
+   * For using OpaqueHolder, several *assumptions* need to be fulfilled
    * - any instance placed into OpaqueHolder is below the specified maximum size
    * - the caller cares for thread safety. No concurrent get calls while in mutation!
+   * 
+   * @tparam BA  the nominal Base/Interface class for a family of types
+   * @tparam siz maximum storage required for the targets to be held inline
    */
   template
-    < class BA                   ///< the nominal Base/Interface class for a family of types
-    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
+    < class BA
+    , size_t siz = sizeof(BA)
     >
   class OpaqueHolder
     : public InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA> >
@@ -568,11 +571,15 @@ namespace lib {
    * and especially it is mandatory for the base class to provide a 
    * virtual dtor. On the other hand, just the (alignment rounded)
    * storage for the object(s) placed into the buffer is required.
+   * 
+   * @tparam BA the nominal Base/Interface class for a family of types
+   * @tparam siz maximum storage required for the targets to be held inline
+   * @tparam DEFAULT the default instance to place initially
    */
   template
-    < class BA                   ///< the nominal Base/Interface class for a family of types
-    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
-    , class DEFAULT = BA         ///< the default instance to place initially
+    < class BA
+    , size_t siz = sizeof(BA)
+    , class DEFAULT = BA
     >
   class InPlaceBuffer
     : boost::noncopyable

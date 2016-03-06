@@ -395,6 +395,24 @@ namespace diff{
               }
           }
         
+        /** locate element already accepted into the taget sequence
+         *  and assigne the designated payload value to it. */
+        virtual bool
+        assignElm (GenNode const& spec)
+          {
+            UNIMPLEMENTED("locate and assign");
+            return false;
+          }
+        
+        /** locate the designated target element and build a suittable
+         *  sub-mutator for this element into the provided target buffer */
+        virtual bool
+        mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
+          {
+            UNIMPLEMENTED("locate and open sub mutator");
+            return false;
+          }
+        
         
         TestWireTap(Target& dummy, PAR const& chain)
           : PAR(chain)

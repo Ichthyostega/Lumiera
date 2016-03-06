@@ -44,7 +44,9 @@
  ** supporting dynamic growth (like in std::vector#resize() ) additionally
  ** requires a facility to transfer the lifecycle management control between
  ** holder instances. This is the purpose of the \c transfer_control
- ** friend function.  
+ ** friend function.
+ ** 
+ ** @deprecated this is a pre C++11 concept and superseded by rvalue references 
  ** 
  ** @see scoped-holder-test.cpp
  ** @see scoped-holder-transfer.hpp use in std::vector
