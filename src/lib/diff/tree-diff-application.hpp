@@ -371,7 +371,10 @@ namespace diff{
           __expect_successful_location(n);
           
           if (not endOfData() and srcPos()->matches(n))
-            ++src(); // get /after/ an explicitly given position
+            {
+              move_into_new_sequence (srcPos());
+              ++src(); // get /after/ an explicitly given position
+            }
         }
       
       /** assignement of changed value in one step */
