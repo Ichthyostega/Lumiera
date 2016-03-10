@@ -400,8 +400,29 @@ namespace diff{
         virtual bool
         accept_until (GenNode const& spec)
           {
-            UNIMPLEMENTED ("accept until meeting spec");
-            return false;
+            if (spec.matches (Ref::END))
+              {
+                for ( ; pos_; ++pos_)
+                  target_.inject (move(*pos_), "accept_until END");
+                return true;
+              }
+            else
+              {
+                string logMsg{"accept_until "+spec.idi.getSym()};
+                while (pos_ and not TestWireTap::matchSrc(spec))
+                  {
+                    target_.inject (move(*pos_), logMsg);
+                    ++pos_;
+                  }
+                if (TestWireTap::matchSrc(spec))
+                  {
+                    target_.inject (move(*pos_), logMsg);
+                    ++pos_;
+                    return true;
+                  }
+                else
+                  return false;
+              }
           }
         
         /** locate element already accepted into the taget sequence
