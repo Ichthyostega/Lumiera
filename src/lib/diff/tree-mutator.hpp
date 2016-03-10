@@ -106,7 +106,7 @@ namespace lib {
       template<size_t maxSiz>
       PlantingHandle (InPlaceBuffer<BA, maxSiz>& targetBuffer)
         : buffer_(&targetBuffer)
-        , maxSiz_(maxSiz_)
+        , maxSiz_(maxSiz)
         { }
       
       
