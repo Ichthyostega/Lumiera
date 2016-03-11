@@ -38,6 +38,7 @@
 
 using util::join;
 using util::isnil;
+using util::contains;
 using lib::time::Time;
 using std::string;
 //using std::vector;
@@ -122,7 +123,7 @@ namespace test{
           
           mutator.injectNew (ATTRIB1);
           CHECK (!isnil (target));
-          CHECK (target.contains("α = 1"));
+          CHECK (contains(target.showContent(), "α = 1"));
           CHECK (target.verifyEvent("injectNew","α = 1")
                        .after("attachMutator"));
           
@@ -139,9 +140,9 @@ namespace test{
                        .beforeEvent("injectNew","b")
                        .beforeEvent("injectNew","78:56:34.012")
                        );
-          CHECK (join(target) == "α = 1, γ = 3.45, γ = 3.45, b, b, 78:56:34.012");
+          CHECK (target.showContent() == "α = 1, γ = 3.45, γ = 3.45, b, b, 78:56:34.012");
           cout << "Content after population; "
-               << join(target) <<endl;
+               << target.showContent() <<endl;
           
           
           // now attach new mutator for second round...
@@ -155,28 +156,28 @@ namespace test{
           
           CHECK (isnil (target));                   // the "visible" new content is still void
           CHECK (not mutator2.emptySrc());          // content was moved into hiden "src" buffer
-          CHECK (join(target.srcIter()) == "α = 1, γ = 3.45, γ = 3.45, b, b, 78:56:34.012");
+          CHECK (target.showSrcBuffer() == "α = 1, γ = 3.45, γ = 3.45, b, b, 78:56:34.012");
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
           CHECK (isnil (target));                   // the match didn't change anything
           
           CHECK (mutator2.findSrc (ATTRIB3));       // serach for an element further down into src...              // findSrc
           CHECK (!isnil (target));                  // ...pick and accept it into the "visible" part of target
-          CHECK (join(target) == "γ = 3.45");
+          CHECK (target.showContent() == "γ = 3.45");
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
           CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element                        // acceptSrc
-          CHECK (join(target) == "γ = 3.45, α = 1");
+          CHECK (target.showContent() == "γ = 3.45, α = 1");
           
           CHECK (not mutator2.emptySrc());          // next we have to clean up waste 
           mutator2.skipSrc();                       // left behind by the findSrc() operation                      // skipSrc
-          CHECK (join(target) == "γ = 3.45, α = 1");
+          CHECK (target.showContent() == "γ = 3.45, α = 1");
           
           mutator2.injectNew (ATTRIB2);                                                                            // injectNew
           CHECK (not mutator2.emptySrc());
           CHECK (mutator2.matchSrc (ATTRIB3));
           CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
-          CHECK (join(target) == "γ = 3.45, α = 1, β = 2, γ = 3.45");
+          CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.45");
           
           // now proceding with the children.
           // NOTE: the TestWireTap / TestMutationTarget does not enforce the attribute / children distinction!
@@ -208,10 +209,9 @@ namespace test{
                        .beforeEvent("acceptSrc","b")
                        .beforeEvent("acceptSrc","78:56:34.012")
                        );
-          CHECK (join(target.srcIter(), "#") == "###b##"); // we've left back lots of waste, and one abandoned Child "b" (isn't that horrifying?)
-          CHECK (join(target) == "γ = 3.45, α = 1, β = 2, γ = 3.45, Rec(), b, 78:56:34.012");
+          CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.45, Rec(), b, 78:56:34.012");
           cout << "Content after reordering; "
-               << join(target) <<endl;
+               << target.showContent() <<endl;
           
           
           
@@ -226,9 +226,9 @@ namespace test{
           CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ
           CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
           
-          CHECK (not target.contains("γ = 3.14159265"));
+          CHECK (not contains(target.showContent(), "γ = 3.14159265"));
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first
-          CHECK (    target.contains("γ = 3.14159265"));
+          CHECK (    contains(target.showContent(), "γ = 3.14159265"));
           CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything
           
           // for mutation of an enclosed scope, in real usage the managing TreeDiffInterpreter
@@ -252,7 +252,7 @@ namespace test{
           VERIFY_ERROR (LOGIC, mutator3.assignElm (differentTime));
           
           cout << "Content after mutation; "
-               << join(target) <<endl;
+               << target.showContent() <<endl;
 
           cout << "____Mutation-Log______________\n"
                << join(target.getLog(), "\n")

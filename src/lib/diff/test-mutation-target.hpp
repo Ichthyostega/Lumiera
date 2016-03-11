@@ -51,7 +51,7 @@
 #include "lib/diff/record.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/idi/genfunc.hpp"
-#include "lib/format-obj.hpp"
+#include "lib/format-util.hpp"
 #include "lib/test/event-log.hpp"
 #include "lib/util.hpp"
 //#include "lib/format-string.hpp"
@@ -73,14 +73,14 @@ namespace diff{
   using lib::test::EventLog;
   using lib::test::EventMatch;
   using lib::Literal;
+  using iter_stl::eachElm;
   using util::unConst;
   using util::isnil;
+  using util::join;
 //  using std::function;
   using std::string;
   using std::forward;
   using std::move;
-  
-  using VecS = std::vector<string>;
   
   
   namespace { // diagnostic helpers: render diff spec....
@@ -199,20 +199,23 @@ namespace diff{
   class TestMutationTarget
     : boost::noncopyable
     {
+      using VecG = std::vector<GenNode>;
+      
       EventLog log_{identify (this)};
       
-      VecS      content_{};
-      VecS prev_content_{};
+      VecG      content_{};
+      VecG prev_content_{};
       
       
     public:
-      using iterator       = typename iter_stl::_SeqT<VecS>::Range;
-      using const_iterator = typename iter_stl::_SeqT<const VecS>::Range;
+      using iterator       = typename iter_stl::_SeqT<VecG>::Range;
+      using const_iterator = typename iter_stl::_SeqT<const VecG>::Range;
       
-      const_iterator begin() const { return iter_stl::eachElm(content_); }
+      const_iterator begin() const { return eachElm(content_); }
       const_iterator end()   const { return const_iterator(); }
       
-      iterator srcIter()           {return iter_stl::eachElm(prev_content_); }
+      iterator srcIter()           { return eachElm(prev_content_); }
+      iterator lastElm()           { return iterator(VecG::iterator(&content_.back()), content_.end());}
       
       
       friend const_iterator begin (TestMutationTarget const& target) { return target.begin(); }
@@ -231,23 +234,33 @@ namespace diff{
         }
       
       void
-      inject (string&& elm, string operationID)
+      inject (GenNode&& elm, string operationID)
         {
-          content_.emplace_back (forward<string>(elm));
-          log_.event (operationID, content_.back());
+          content_.emplace_back (forward<GenNode>(elm));
+          log_.event (operationID, renderNode (content_.back()));
         }
       
-      iterator
-      findSrc (string const& spec, iterator pos)
+      static iterator
+      search (GenNode::ID const& targetID, iterator pos)
         {
-          while (pos and *pos != spec) ++pos;
+          while (pos and not pos->matches(targetID))
+            ++pos;
           return pos;
         }
       
-      void
-      logSkip (string contentLog)
+      iterator
+      locate (GenNode::ID const& targetID)
         {
-          log_.event ("skipSrc", isnil(contentLog)? util::BOTTOM_INDICATOR : contentLog);
+          if (!empty() and content_.back().matches(targetID))
+            return lastElm();
+          else
+            return search (targetID, eachElm(content_));
+        }
+      
+      void
+      logSkip (GenNode const& content)
+        {
+          log_.event ("skipSrc", isnil(content.idi.getSym())? util::BOTTOM_INDICATOR : renderNode(content));
         }
       
       
@@ -259,12 +272,18 @@ namespace diff{
           return content_.empty();
         }
       
-      /** check for recorded element */
-      bool
-      contains (string spec)  const
+      /** render payload content for diagnostics */
+      string
+      showContent ()  const
         {
-          VecS const& currentValidContent{content_};
-          return util::contains (currentValidContent, spec);
+          return join (transformIterator (begin(), renderNode));
+        }
+      
+      /** render elements waiting in source buffer to be accepted */
+      string
+      showSrcBuffer ()  const
+        {
+          return join (transformIterator (eachElm(prev_content_), renderNode));
         }
       
       EventMatch
@@ -337,9 +356,9 @@ namespace diff{
           {
             if (pos_)
               {
-                string posSpec = *pos_;
+                GenNode const& skippedElm = *pos_;
                 ++pos_;
-                target_.logSkip (posSpec);
+                target_.logSkip (skippedElm);
               }
           }
         
@@ -350,7 +369,7 @@ namespace diff{
         virtual void
         injectNew (GenNode const& n)  override
           {
-            target_.inject (renderNode (n), "injectNew");
+            target_.inject (GenNode{n}, "injectNew");
           }
         
         virtual bool
@@ -364,10 +383,8 @@ namespace diff{
         virtual bool
         matchSrc (GenNode const& n)  override
           {
-            if (!pos_)
-              return false;
-            string spec{renderNode (n)};
-            return spec == *pos_;
+            return pos_? n.matches(*pos_)
+                       : false;
           }
         
         /** accept existing element, when matching the given spec */
@@ -383,11 +400,11 @@ namespace diff{
         
         /** locate designated element and accept it at current position */
         virtual bool
-        findSrc (GenNode const& n)  override
+        findSrc (GenNode const& ref)  override
           {
             if (!pos_)
               return false;
-            Iter found = target_.findSrc (renderNode (n), pos_);
+            Iter found = TestMutationTarget::search (ref.idi, pos_);
             if (not found) return false;
             else
               {
@@ -430,8 +447,10 @@ namespace diff{
         virtual bool
         assignElm (GenNode const& spec)
           {
-            UNIMPLEMENTED("locate and assign");
-            return false;
+            Iter targetElm = target_.locate (spec.idi);
+            if (not targetElm) return false;
+            *targetElm = spec;
+            return true;
           }
         
         /** locate the designated target element and build a suittable
