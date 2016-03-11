@@ -226,16 +226,18 @@ namespace test{
           CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ
           CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
           
-          CHECK (not contains(target.showContent(), "γ = 3.14159265"));
+          CHECK (not contains(target.showContent(), "γ = 3.1415927"));
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first
-          CHECK (    contains(target.showContent(), "γ = 3.14159265"));
+          CHECK (    contains(target.showContent(), "γ = 3.1415927"));
           CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything
+          cout << "Content after assignment; "
+               << target.showContent() <<endl;
           
           // for mutation of an enclosed scope, in real usage the managing TreeDiffInterpreter
           // would maintain a stack of "mutation frames", where each one provides an OpaqueHolder
           // to place a suitable sub-mutator for this nested scope. At this point, we can't get any further
-          // with this TestWireTap / TestMutationTarget approach, since the latter just records strings and
-          // thus will never be able to simulate mutation of a nested scope. In case there is no /real/ mutator
+          // with this TestWireTap / TestMutationTarget approach, since the latter just records actions and
+          // otherwise forwards operation to the rest of the TreeMutator. In case there is no /real/ mutator
           // in any "onion layer" below the TestWireTap within this TreeMutator, we'll just get a default (NOP)
           // implementation of TreeMutator without any further functionality.
           
@@ -251,9 +253,20 @@ namespace test{
           GenNode differentTime{CHILD_T.idi.getSym(), Time(11,22)};
           VERIFY_ERROR (LOGIC, mutator3.assignElm (differentTime));
           
-          cout << "Content after mutation; "
-               << target.showContent() <<endl;
-
+          CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.1415927, Rec(), b, 78:56:34.012");
+          CHECK (target.verifyEvent("acceptSrc","78:56:34.012")
+                       .before("attachMutator TestWireTap")
+                       .beforeEvent("accept_until β","γ = 3.45")
+                       .beforeEvent("accept_until β","α = 1")
+                       .beforeEvent("accept_until β","β = 2")
+                       .beforeEvent("acceptSrc","γ = 3.45")
+                       .beforeEvent("assignElm","γ: 3.45 ⤅ 3.1415927")
+                       .beforeEvent("accept_until END","Rec()")
+                       .beforeEvent("accept_until END","b")
+                       .beforeEvent("accept_until END","78:56:34.012")
+                       .beforeEvent("mutateChild","_CHILD_Record.001: start mutation...Rec()")
+                       );
+          
           cout << "____Mutation-Log______________\n"
                << join(target.getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;

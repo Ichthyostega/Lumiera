@@ -110,9 +110,9 @@ namespace lib {
         { }
       
       
-      template<class SUB, typename...ARGS>
+      template<class SUB>
       BA&
-      create (ARGS&& ...args)
+      create (SUB&& subMutator)
         {
           if (sizeof(SUB) > maxSiz_)
             throw error::Fatal("Unable to implant implementation object of size "
@@ -122,7 +122,7 @@ namespace lib {
           using Holder = InPlaceBuffer<BA, sizeof(SUB)>;
           Holder& holder = *static_cast<Holder*> (buffer_);
           
-          return holder.create<SUB> (std::forward<ARGS> (args)...);
+          return holder.create<SUB> (std::forward<SUB> (subMutator));
         }
       
       template<class SUB>

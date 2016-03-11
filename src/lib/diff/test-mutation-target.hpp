@@ -51,17 +51,15 @@
 #include "lib/diff/record.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/idi/genfunc.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
 #include "lib/test/event-log.hpp"
 #include "lib/util.hpp"
-//#include "lib/format-string.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <functional>
 #include <utility>
 #include <string>
 #include <vector>
-//#include <map>
 
 
 namespace lib {
@@ -69,15 +67,15 @@ namespace diff{
   
   namespace error = lumiera::error;
   
-//using util::_Fmt;
+  using lib::Literal;
   using lib::test::EventLog;
   using lib::test::EventMatch;
-  using lib::Literal;
   using iter_stl::eachElm;
   using util::unConst;
   using util::isnil;
   using util::join;
-//  using std::function;
+  using util::_Fmt;
+  
   using std::string;
   using std::forward;
   using std::move;
@@ -194,7 +192,11 @@ namespace diff{
   /**
    * Test adapter to watch and verify how the
    * TreeMutator binds to custom tree data structures.
-   * @todo WIP 2/2016
+   * As a data structure, the TestMutationTarget builds an
+   * »External Tree Description« reflecting the actual data structure,
+   * as can be inferred through listening to all handled diff mutation primitives.
+   * Besides, each of these primitives is recorded in the embedded \ref EventLog.
+   * @see TreeManipulationBinding_test::mutateDummy()
    */
   class TestMutationTarget
     : boost::noncopyable
@@ -263,6 +265,23 @@ namespace diff{
           log_.event ("skipSrc", isnil(content.idi.getSym())? util::BOTTOM_INDICATOR : renderNode(content));
         }
       
+      void
+      logAssignment (GenNode const& target, string oldPayload)
+        {
+          log_.event ("assignElm", _Fmt{"%s: %s ⤅ %s"}
+                                       % target.idi.getSym()
+                                       % oldPayload
+                                       % render(target.data));
+        }
+      
+      void
+      logMutation (GenNode const& target)
+        {
+          log_.event ("mutateChild", _Fmt{"%s: start mutation...%s"}
+                                       % target.idi.getSym()
+                                       % render(target.data));
+        }
+      
       
       /* === Diagnostic / Verification === */
       
@@ -327,9 +346,6 @@ namespace diff{
         {
           return log_;
         }
-      
-      
-    private:
     };
   
   
@@ -443,13 +459,15 @@ namespace diff{
           }
         
         /** locate element already accepted into the taget sequence
-         *  and assigne the designated payload value to it. */
+         *  and assign the designated payload value to it. */
         virtual bool
         assignElm (GenNode const& spec)
           {
             Iter targetElm = target_.locate (spec.idi);
             if (not targetElm) return false;
+            string logOldPayload{render(targetElm->data)};
             *targetElm = spec;
+            target_.logAssignment (*targetElm, logOldPayload);
             return true;
           }
         
@@ -458,8 +476,13 @@ namespace diff{
         virtual bool
         mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
           {
-            UNIMPLEMENTED("locate and open sub mutator");
-            return false;
+            Iter targetElm = target_.locate (spec.idi);
+            if (not targetElm) return false;
+            bool otherSuccessfulMutation = PAR::mutateChild (spec, targetBuff);
+            if (not otherSuccessfulMutation) // Test mode only --
+              targetBuff.create (TreeMutator::build()); // no other layer was able to provide a mutator
+            target_.logMutation (*targetElm);
+            return true;
           }
         
         
