@@ -376,6 +376,7 @@ namespace diff{
                 ++pos_;
                 target_.logSkip (skippedElm);
               }
+            PAR::skipSrc();
           }
         
         /** record in the test taget
@@ -386,12 +387,14 @@ namespace diff{
         injectNew (GenNode const& n)  override
           {
             target_.inject (GenNode{n}, "injectNew");
+            PAR::injectNew (n);
           }
         
         virtual bool
         emptySrc ()  override
           {
-            return !pos_;
+            return !pos_
+               and PAR::emptySrc();
           }
         
         /** ensure the next recorded source element
@@ -399,7 +402,8 @@ namespace diff{
         virtual bool
         matchSrc (GenNode const& n)  override
           {
-            return pos_? n.matches(*pos_)
+            return PAR::matchSrc(n)
+                or pos_? n.matches(*pos_)
                        : false;
           }
         
@@ -407,38 +411,38 @@ namespace diff{
         virtual bool
         acceptSrc (GenNode const& n)  override
           {
-            if (not TestWireTap::matchSrc(n))       // NOTE: important to call our own method here, not the virtual function
-              return false;
-            target_.inject (move(*pos_), "acceptSrc");
-            ++pos_;
-            return true;
+            bool isSrcMatch = TestWireTap::matchSrc(n);
+            if (isSrcMatch)             // NOTE: important to call our own method here, not the virtual function
+              {
+                target_.inject (move(*pos_), "acceptSrc");
+                ++pos_;
+              }
+            return PAR::acceptSrc(n)
+                or isSrcMatch;
           }
         
         /** locate designated element and accept it at current position */
         virtual bool
         findSrc (GenNode const& ref)  override
           {
-            if (!pos_)
-              return false;
             Iter found = TestMutationTarget::search (ref.idi, pos_);
-            if (not found) return false;
-            else
+            if (found)
               {
                 target_.inject (move(*found), "findSrc");
-                return true;
               }
+            return PAR::findSrc(ref)
+                or found;
           }
         
         /** repeatedly accept, until after the designated location */
         virtual bool
         accept_until (GenNode const& spec)
           {
+            bool foundTarget = true;
+            
             if (spec.matches (Ref::END))
-              {
-                for ( ; pos_; ++pos_)
-                  target_.inject (move(*pos_), "accept_until END");
-                return true;
-              }
+              for ( ; pos_; ++pos_)
+                target_.inject (move(*pos_), "accept_until END");
             else
               {
                 string logMsg{"accept_until "+spec.idi.getSym()};
@@ -451,11 +455,12 @@ namespace diff{
                   {
                     target_.inject (move(*pos_), logMsg);
                     ++pos_;
-                    return true;
                   }
                 else
-                  return false;
+                  foundTarget = false;
               }
+            return PAR::accept_until(spec)
+                or foundTarget;
           }
         
         /** locate element already accepted into the taget sequence
@@ -464,11 +469,14 @@ namespace diff{
         assignElm (GenNode const& spec)
           {
             Iter targetElm = target_.locate (spec.idi);
-            if (not targetElm) return false;
-            string logOldPayload{render(targetElm->data)};
-            *targetElm = spec;
-            target_.logAssignment (*targetElm, logOldPayload);
-            return true;
+            if (targetElm)
+              {
+                string logOldPayload{render(targetElm->data)};
+                *targetElm = spec;
+                target_.logAssignment (*targetElm, logOldPayload);
+              }
+            return PAR::assignElm(spec)
+                or targetElm;
           }
         
         /** locate the designated target element and build a suittable
@@ -476,13 +484,19 @@ namespace diff{
         virtual bool
         mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
           {
-            Iter targetElm = target_.locate (spec.idi);
-            if (not targetElm) return false;
-            bool otherSuccessfulMutation = PAR::mutateChild (spec, targetBuff);
-            if (not otherSuccessfulMutation) // Test mode only --
-              targetBuff.create (TreeMutator::build()); // no other layer was able to provide a mutator
-            target_.logMutation (*targetElm);
-            return true;
+            if (PAR::mutateChild (spec, targetBuff))
+              return true;
+            else // Test mode only --
+              { //  no other layer was able to provide a mutator
+                Iter targetElm = target_.locate (spec.idi);
+                if (targetElm)
+                  {
+                    targetBuff.create (TreeMutator::build());
+                    target_.logMutation (*targetElm);
+                    return true;
+                  }
+                return false;
+              }
           }
         
         
