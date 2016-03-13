@@ -922,8 +922,7 @@
       of this specific onion layer to accept forward until meeting this element.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1457231727259" ID="ID_209470453" MODIFIED="1457231849261">
@@ -936,8 +935,7 @@
       <font color="#e72d0e">warning:</font>&#160;messed-up state in case of failure
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -953,8 +951,7 @@
       will check the bool return value and throw an exception in that case
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -993,8 +990,7 @@
       insufficent space
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -1011,8 +1007,7 @@
       invoke <b>buildMutator</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#e5500c" CREATED="1457190642993" ID="ID_1140350120" MODIFIED="1457190901922" STYLE="fork" TEXT="meta operation">
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
@@ -1041,8 +1036,7 @@
       to construct the new target data efficiently in place.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1457190826145" ID="ID_1231904441" MODIFIED="1457190834604" TEXT="return to previous mutator"/>
@@ -1647,8 +1641,7 @@
       durch den das Problem mit der &quot;absrakten, opaquen&quot; Position entsch&#228;rft wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
@@ -1804,8 +1797,7 @@
       wir <i>verzichten</i>&#160;auf Introspektion der Elemente
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1457119990420" ID="ID_1521035606" MODIFIED="1457120011276" TEXT="...denn die m&#xfc;&#xdf;te die jeweilige Implementierung erbringen"/>
 <node CREATED="1457120011721" ID="ID_23476594" MODIFIED="1457120024027" TEXT="und das w&#xfc;rde das &#xdc;bel der Introspektion &#xfc;berall hineindr&#xfc;cken"/>
 <node CREATED="1457120026343" ID="ID_156752160" MODIFIED="1457120043288" TEXT="Nachteil: keine klare Fehlerdiagnose m&#xf6;glich"/>
@@ -1820,8 +1812,7 @@
       denn genau zu diesem Zweck haben wir die &quot;External Tree Description&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1457120084135" ID="ID_633070963" MODIFIED="1457120093706" TEXT="auf diese sollte ein Diff zuerst angewendet werden"/>
 <node CREATED="1457120094302" ID="ID_1409151619" MODIFIED="1457120105488" TEXT="und diese bietet Introspektion und klare Diagnose"/>
@@ -1836,14 +1827,14 @@
 </node>
 <node CREATED="1456506821808" ID="ID_1852134358" MODIFIED="1456506824771" TEXT="Typ-Konstrukt"/>
 <node CREATED="1456523437616" HGAP="34" ID="ID_410606899" MODIFIED="1457232353605" TEXT="Manipulations-Interface" VSHIFT="6">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1456523455997" ID="ID_1416114013" MODIFIED="1456523464201" TEXT="Deadlock!">
-<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#338800" CREATED="1456523455997" ID="ID_1416114013" MODIFIED="1457741328003" TEXT="Design l&#xf6;sen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1456523507910" ID="ID_429333479" MODIFIED="1456523518005" TEXT="Henne oder Ei?"/>
 <node CREATED="1456523471851" ID="ID_1273540009" MODIFIED="1456523485597" TEXT="komm nicht vom Fleck"/>
 <node CREATED="1456523487089" ID="ID_1139978684" MODIFIED="1456523501995" TEXT="zirkul&#xe4;re Bez&#xfc;ge im Design"/>
-<node CREATED="1456523522693" ID="ID_625051251" MODIFIED="1457232567024" TEXT="abstrakter Entwurf">
+<node CREATED="1456523522693" ID="ID_625051251" MODIFIED="1457741384332" TEXT="abstrakter Entwurf">
 <arrowlink COLOR="#6b77a6" DESTINATION="ID_728198359" ENDARROW="Default" ENDINCLINATION="-116;0;" ID="Arrow_ID_340427685" STARTARROW="None" STARTINCLINATION="-819;487;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1456523558304" ID="ID_1843819253" MODIFIED="1456523564050" TEXT="baue einen Dummy">
 <icon BUILTIN="idea"/>
 </node>
@@ -1871,15 +1862,19 @@
       und protokolliert somit &quot;nebenbei&quot; was an Anforderungen an ihm vorbeigeht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1456523612849" ID="ID_729852941" MODIFIED="1456523625883" TEXT="Test zum Aufbau des Interfaces"/>
 </node>
 </node>
 <node CREATED="1456528418823" HGAP="30" ID="ID_1372068793" MODIFIED="1457038621939" TEXT="Bestandteile" VSHIFT="-1">
-<node CREATED="1456528424246" ID="ID_472044094" MODIFIED="1456528428306" TEXT="Selektor"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1456528424246" ID="ID_472044094" MODIFIED="1457742573583" STYLE="fork" TEXT="Selektor">
+<linktarget COLOR="#7caed5" DESTINATION="ID_472044094" ENDARROW="Default" ENDINCLINATION="466;133;" ID="Arrow_ID_1253352795" SOURCE="ID_1406395599" STARTARROW="None" STARTINCLINATION="681;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1457741609884" ID="ID_1827838196" MODIFIED="1457741617108" TEXT="bin ich zust&#xe4;ndig?"/>
+<node CREATED="1457741617655" ID="ID_1664250793" MODIFIED="1457741623179" TEXT="was ist ein &quot;match&quot;?"/>
+</node>
 <node CREATED="1457038643034" ID="ID_1057400532" MODIFIED="1457038646822" TEXT="abstrakte Position"/>
 <node CREATED="1457038527402" HGAP="16" ID="ID_1909805079" MODIFIED="1457038617372" TEXT="Mutations-Primitive" VSHIFT="7">
 <node CREATED="1457038788583" ID="ID_131880970" MODIFIED="1457038801193" TEXT="einheitlich benannt"/>
@@ -1932,8 +1927,7 @@
       f&#252;r spezifische Arten von Bindings
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1457232408368" HGAP="29" ID="ID_1068782263" MODIFIED="1457232766908" TEXT="TestWireTap / TestMutationTarget" VSHIFT="-6">
 <icon BUILTIN="full-1"/>
 <node CREATED="1457232426238" ID="ID_728198359" MODIFIED="1457232567024" TEXT="brauche ich, um das API zu entwickeln">
@@ -1953,8 +1947,7 @@
       kann <i>niemals </i>geschachtelte sub-Mutatoren modellieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1976,17 +1969,52 @@
       denn sonst w&#252;rde er es f&#252;r darunter liegende Layer verschatten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="closed"/>
 </node>
 </node>
 </node>
 <node CREATED="1457232734636" ID="ID_1873945047" MODIFIED="1457232769888" TEXT="STL Collection">
 <icon BUILTIN="full-2"/>
+<node CREATED="1457741673001" ID="ID_1873415490" MODIFIED="1457742700335" TEXT="konkrete Beispiele">
+<icon BUILTIN="info"/>
+<node CREATED="1457741683687" ID="ID_1222762304" MODIFIED="1457741691409" TEXT="Timelines"/>
+<node CREATED="1457741691837" ID="ID_1487568890" MODIFIED="1457741697832" TEXT="Tracks"/>
+<node CREATED="1457741753006" ID="ID_303387812" MODIFIED="1457742102003" TEXT="Clips / Effekte / Marken"/>
+<node CREATED="1457741809422" ID="ID_1428407098" MODIFIED="1457741815657" TEXT="Effekte / Transitions"/>
+</node>
+<node CREATED="1457742434714" ID="ID_587627505" MODIFIED="1457742717208">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; <i>immer</i>&#160;Mitwirkung des Elements
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1457742547067" HGAP="33" ID="ID_410938096" MODIFIED="1457742727257" TEXT="Selector explizit bauen" VSHIFT="7">
+<icon BUILTIN="yes"/>
+<node CREATED="1457742554722" ID="ID_1406395599" MODIFIED="1457742582535" TEXT="Selector-Interface">
+<arrowlink COLOR="#7caed5" DESTINATION="ID_472044094" ENDARROW="Default" ENDINCLINATION="466;133;" ID="Arrow_ID_1253352795" STARTARROW="None" STARTINCLINATION="681;0;"/>
+</node>
+<node CREATED="1457742626368" ID="ID_1910692241" MODIFIED="1457742639067" TEXT="2.Ausdrucks-Ebene">
+<node CREATED="1457742639703" ID="ID_1065867780" MODIFIED="1457742645826" TEXT="neben der Identit&#xe4;t"/>
+<node CREATED="1457742646366" ID="ID_1533568989" MODIFIED="1457742656152" TEXT="logische Typisierung">
+<node CREATED="1457742667947" ID="ID_1640657752" MODIFIED="1457742677734" TEXT="entweder anhand Payload-Typ"/>
+<node CREATED="1457742678185" ID="ID_1211029199" MODIFIED="1457742684533" TEXT="oder versteckt in der ID"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1457232746179" ID="ID_1793680066" MODIFIED="1457232776598" TEXT="Rec&lt;GenNode&gt;">
 <icon BUILTIN="full-4"/>
+<node CREATED="1457742036967" ID="ID_980619979" MODIFIED="1457742040187" TEXT="Attribute"/>
+<node CREATED="1457742040782" ID="ID_613087606" MODIFIED="1457742042442" TEXT="Kinder"/>
 </node>
 <node CREATED="1457232752458" ID="ID_1490646673" MODIFIED="1457232773416" TEXT="Attribute">
 <icon BUILTIN="full-3"/>
