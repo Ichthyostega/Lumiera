@@ -1872,8 +1872,164 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1456528424246" ID="ID_472044094" MODIFIED="1457742573583" STYLE="fork" TEXT="Selektor">
 <linktarget COLOR="#7caed5" DESTINATION="ID_472044094" ENDARROW="Default" ENDINCLINATION="466;133;" ID="Arrow_ID_1253352795" SOURCE="ID_1406395599" STARTARROW="None" STARTINCLINATION="681;0;"/>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1457741609884" ID="ID_1827838196" MODIFIED="1457741617108" TEXT="bin ich zust&#xe4;ndig?"/>
-<node CREATED="1457741617655" ID="ID_1664250793" MODIFIED="1457741623179" TEXT="was ist ein &quot;match&quot;?"/>
+<node CREATED="1457741609884" ID="ID_1827838196" MODIFIED="1457741617108" TEXT="bin ich zust&#xe4;ndig?">
+<node CREATED="1458094312266" ID="ID_233521483" MODIFIED="1458094316157" TEXT="isApplicable"/>
+<node CREATED="1458094316697" ID="ID_839136400" MODIFIED="1458094326204" TEXT="Festlegung:">
+<node CREATED="1458094327095" ID="ID_306307671" MODIFIED="1458094334354" TEXT="nur auf Basis der spec"/>
+<node CREATED="1458094334991" ID="ID_903070750" MODIFIED="1458094343401" TEXT="ohne Daten-Introspektion"/>
+</node>
+<node CREATED="1458094507048" ID="ID_1012976053" MODIFIED="1458094509755" TEXT="Problem">
+<node CREATED="1458094510463" ID="ID_812427058" MODIFIED="1458094548146" TEXT="Spec bietet wenig Anhaltspunkte">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      streng genommen ist es nur erlaubt, das ID-Symbol auszuwerten
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1458094562800" ID="ID_184244927" MODIFIED="1458094568467" TEXT="ID-Symbol"/>
+<node CREATED="1458094569128" ID="ID_743935773" MODIFIED="1458094579369" TEXT="attribute / child"/>
+</node>
+<node CREATED="1458094599835" HGAP="24" ID="ID_1161622136" MODIFIED="1458095474973" TEXT="Zugang zum Payload-Typ" VSHIFT="10">
+<icon BUILTIN="help"/>
+<node CREATED="1458094616417" ID="ID_1013344827" MODIFIED="1458094632012" TEXT="Introspection / Switch-on-Type">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1458094634167" ID="ID_1794163270" MODIFIED="1458094672710">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Visitor bedeutet <b>zwei</b>&#160;Indirektionen
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das ist nicht akzeptabel f&#252;r ein reines Selektor-Pr&#228;dikat!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1458094716364" ID="ID_1749838430" MODIFIED="1458094731150" TEXT="eingeschr&#xe4;nkt auf Objekt-Typ">
+<icon BUILTIN="help"/>
+<node CREATED="1458094735673" ID="ID_1089998465" MODIFIED="1458094743492" TEXT="Semantischer Typ"/>
+<node CREATED="1458094743960" ID="ID_1642238646" MODIFIED="1458094767704" TEXT="vs. Typisierung in der Sprache"/>
+<node CREATED="1458094769365" ID="ID_855557799" MODIFIED="1458094773848" TEXT="pattern match"/>
+<node CREATED="1458094823973" ID="ID_726480550" MODIFIED="1458094841971">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denkbar nur bei Sub-<i>Objekten</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1458094850490" ID="ID_39407126" MODIFIED="1458094856797" TEXT="d.h. bei Record-Daten"/>
+<node CREATED="1458094864424" ID="ID_746601299" MODIFIED="1458094872787" TEXT="Record hat ein (semantisches) Typfeld"/>
+<node CREATED="1458094922024" ID="ID_1616971769" MODIFIED="1458094954604">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gilt f&#252;r <i>alle</i>&#160;praktischen Anwendungen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1458094956636" ID="ID_1820565901" MODIFIED="1458095165033" TEXT="denn nur Objekt-Kinder machen Sinn">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....auch wenn man zehnmal meinen k&#246;nnte,
+    </p>
+    <p>
+      Kinder eines reinen Wert-Typs w&#228;ren sinnvoll --
+    </p>
+    <p>
+      sie sind es nicht!
+    </p>
+    <p>
+      Jede sinnvolle <i>Entit&#228;t</i>&#160;hat mehr als ein Attribut<i>! </i>
+    </p>
+    <p>
+      denn es macht keinen Sinn, Entit&#228;ten und reine Wert-Elemente
+    </p>
+    <p>
+      auf der gleichen Ebene in der gleichen Sammlung zu mischen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      D.h., entweder man hat ein Objekt, das als Kinder z.B. eine Liste von Strings hat,
+    </p>
+    <p>
+      oder man hat eine Entit&#228;t, die z.b. zwei getypte Objekt-Kinder-Sammlungen hat,
+    </p>
+    <p>
+      wie z.B: eine Spur mit Labels und Clips
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1458095217737" ID="ID_824115387" MODIFIED="1458095461060" TEXT="um das zu unterst&#xfc;tzen...">
+<icon BUILTIN="idea"/>
+<node CREATED="1458095230175" ID="ID_995706334" MODIFIED="1458095239258" TEXT="m&#xfc;&#xdf;te DataCap helfen"/>
+<node CREATED="1458095367701" ID="ID_1549321280" MODIFIED="1458095376400" TEXT="es g&#xe4;be dann einen Bottom-Wert"/>
+<node CREATED="1458095240158" ID="ID_1884817792" MODIFIED="1458095284084" TEXT="Introspektions-Verbot etwas aufgeweicht"/>
+<node CREATED="1458095304886" ID="ID_395248655" MODIFIED="1458095318800" TEXT="dieser Gebrauch ist aber mit dem Objekt-Typfeld schon angelegt"/>
+<node CREATED="1458095320692" ID="ID_1203007776" MODIFIED="1458095332942" TEXT="die Bedeutung wird vom Client privat definiert"/>
+<node CREATED="1458095409800" ID="ID_227738227" MODIFIED="1458095442503" TEXT="ebenso wird aber auch die Bedeutung der ETD lokal definiert"/>
+<node CREATED="1458095443115" ID="ID_586715428" MODIFIED="1458095455459" TEXT="erscheint mir plausibel und vertretbar">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1458095528224" ID="ID_109058224" MODIFIED="1458095539458" TEXT="falls nein...">
+<node CREATED="1458095540807" ID="ID_225712554" MODIFIED="1458095553929" TEXT="&#xfc;bernimmt der n&#xe4;chste Onion-Layer"/>
+<node CREATED="1458095554548" ID="ID_1745271000" MODIFIED="1458095566303" TEXT="scheitert am Ende die Diff-Anwendung"/>
+<node CREATED="1458095567123" ID="ID_1135449086" MODIFIED="1458095593246" TEXT="das kann nicht sein">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1458095599015" ID="ID_1548761670" MODIFIED="1458095611129" TEXT="denn Struktur wird per Diff aufgebaut"/>
+<node CREATED="1458095611645" ID="ID_1917053068" MODIFIED="1458095623023" TEXT="und Diff wird von einer konsistenten Struktur generiert"/>
+<node CREATED="1458095623563" ID="ID_1563236319" MODIFIED="1458095636789" TEXT="wenngleich es sich auch um eine funktionale Struktur handeln kann..."/>
+<node CREATED="1458095660150" ID="ID_329824783" MODIFIED="1458095668777" TEXT="wir sind nicht tolerant bei der Diff-Anwendung"/>
+<node CREATED="1458095669437" ID="ID_650500191" MODIFIED="1458095672801" TEXT="und das ist gut so."/>
+</node>
+</node>
+</node>
+<node CREATED="1457741617655" ID="ID_1664250793" MODIFIED="1457741623179" TEXT="was ist ein &quot;match&quot;?">
+<node CREATED="1458094392679" ID="ID_238187527" MODIFIED="1458094396098" TEXT="matches"/>
+<node CREATED="1458094428506" ID="ID_1753032814" MODIFIED="1458094435693" TEXT="darf Annahmen &#xfc;ber den Typ der Spec machen"/>
+<node CREATED="1458094397350" ID="ID_1185807177" MODIFIED="1458094427326" TEXT="darf in die Payload der Spec schauen"/>
+<node CREATED="1458094437249" ID="ID_1125952135" MODIFIED="1458094463529" TEXT="darf Methoden des Datenobjekts aufrufen"/>
+</node>
 </node>
 <node CREATED="1457038643034" ID="ID_1057400532" MODIFIED="1457038646822" TEXT="abstrakte Position"/>
 <node CREATED="1457038527402" HGAP="16" ID="ID_1909805079" MODIFIED="1457038617372" TEXT="Mutations-Primitive" VSHIFT="7">
@@ -1993,8 +2149,7 @@
       &#10233; <i>immer</i>&#160;Mitwirkung des Elements
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1457742547067" HGAP="33" ID="ID_410938096" MODIFIED="1457742727257" TEXT="Selector explizit bauen" VSHIFT="7">
