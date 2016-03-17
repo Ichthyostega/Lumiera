@@ -353,11 +353,25 @@ namespace diff{
   namespace { // supply a suitable decorator for the TreeMutator
     
     template<class PAR>
-    struct TestWireTap
+    class TestWireTap
       : public PAR
       {
         using Target = TestMutationTarget;
         using Iter = TestMutationTarget::iterator;
+
+        Target& target_;
+        Iter    pos_;
+
+      public:
+        TestWireTap(Target& dummy, PAR const& chain)
+          : PAR(chain)
+          , target_(dummy)
+          , pos_()
+          {
+            target_.initMutation (identify(this));
+            pos_ = target_.srcIter();
+          }
+        
         
         
         /* ==== re-Implementation of the operation API ==== */
@@ -463,7 +477,7 @@ namespace diff{
                 or foundTarget;
           }
         
-        /** locate element already accepted into the taget sequence
+        /** locate element already accepted into the target sequence
          *  and assign the designated payload value to it. */
         virtual bool
         assignElm (GenNode const& spec)
@@ -479,7 +493,7 @@ namespace diff{
                 or targetElm;
           }
         
-        /** locate the designated target element and build a suittable
+        /** locate the designated target element and build a suitable
          *  sub-mutator for this element into the provided target buffer */
         virtual bool
         mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
@@ -498,20 +512,6 @@ namespace diff{
                 return false;
               }
           }
-        
-        
-        TestWireTap(Target& dummy, PAR const& chain)
-          : PAR(chain)
-          , target_(dummy)
-          , pos_()
-          {
-            target_.initMutation (identify(this));
-            pos_ = target_.srcIter();
-          }
-        
-      private:
-        Target& target_;
-        Iter    pos_;
         
       };
     

@@ -1889,8 +1889,7 @@
       streng genommen ist es nur erlaubt, das ID-Symbol auszuwerten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1458094562800" ID="ID_184244927" MODIFIED="1458094568467" TEXT="ID-Symbol"/>
 <node CREATED="1458094569128" ID="ID_743935773" MODIFIED="1458094579369" TEXT="attribute / child"/>
 </node>
@@ -1909,8 +1908,7 @@
       Visitor bedeutet <b>zwei</b>&#160;Indirektionen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1920,8 +1918,7 @@
       ...und das ist nicht akzeptabel f&#252;r ein reines Selektor-Pr&#228;dikat!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1458094716364" ID="ID_1749838430" MODIFIED="1458094731150" TEXT="eingeschr&#xe4;nkt auf Objekt-Typ">
 <icon BUILTIN="help"/>
@@ -1938,8 +1935,7 @@
       denkbar nur bei Sub-<i>Objekten</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1458094850490" ID="ID_39407126" MODIFIED="1458094856797" TEXT="d.h. bei Record-Daten"/>
 <node CREATED="1458094864424" ID="ID_746601299" MODIFIED="1458094872787" TEXT="Record hat ein (semantisches) Typfeld"/>
@@ -1953,8 +1949,7 @@
       gilt f&#252;r <i>alle</i>&#160;praktischen Anwendungen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1458094956636" ID="ID_1820565901" MODIFIED="1458095165033" TEXT="denn nur Objekt-Kinder machen Sinn">
 <richcontent TYPE="NOTE"><html>
@@ -1993,8 +1988,7 @@
       wie z.B: eine Spur mit Labels und Clips
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1458095217737" ID="ID_824115387" MODIFIED="1458095461060" TEXT="um das zu unterst&#xfc;tzen...">
 <icon BUILTIN="idea"/>
@@ -2132,6 +2126,7 @@
 </node>
 <node CREATED="1457232734636" ID="ID_1873945047" MODIFIED="1457232769888" TEXT="STL Collection">
 <icon BUILTIN="full-2"/>
+<node CREATED="1458175823858" ID="ID_438044714" MODIFIED="1458175828956" TEXT="Design-Grundlagen">
 <node CREATED="1457741673001" ID="ID_1873415490" MODIFIED="1457742700335" TEXT="konkrete Beispiele">
 <icon BUILTIN="info"/>
 <node CREATED="1457741683687" ID="ID_1222762304" MODIFIED="1457741691409" TEXT="Timelines"/>
@@ -2164,6 +2159,188 @@
 <node CREATED="1457742678185" ID="ID_1211029199" MODIFIED="1457742684533" TEXT="oder versteckt in der ID"/>
 </node>
 </node>
+</node>
+</node>
+<node CREATED="1458175861176" ID="ID_44294405" MODIFIED="1458175867224" TEXT="Design-Anforderungen">
+<node CREATED="1458175880034" ID="ID_995745627" MODIFIED="1458175889588" TEXT="gegeben ist eine STL-Collection">
+<node CREATED="1458175892400" ID="ID_1308086929" MODIFIED="1458175904674" TEXT="allgemeinstes STL-Container-Interface"/>
+<node CREATED="1458175905766" ID="ID_446727516" MODIFIED="1458175919817" TEXT="Wert-Typ per typedef abgreifen"/>
+</node>
+<node CREATED="1455927276314" HGAP="91" ID="ID_1959700641" MODIFIED="1458178012106" TEXT="brauche zus&#xe4;tzliche Operationen" VSHIFT="-3">
+<cloud COLOR="#fce9c0"/>
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458175942866" ID="ID_181058597" MODIFIED="1458177953093" TEXT="match">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177113846" ID="ID_320488998" MODIFIED="1458177953094" TEXT="stellt fest, ob das Ziel pa&#xdf;t"/>
+<node CREATED="1458177136475" ID="ID_1352800435" MODIFIED="1458177953094" TEXT="greift auf eine ID des Zieles zur&#xfc;ck"/>
+<node CREATED="1458177147897" ID="ID_1632332105" MODIFIED="1458177953094" TEXT="mu&#xdf; daher in der Regel bereitgestellt werden"/>
+<node CREATED="1458177166543" ID="ID_1266232529" MODIFIED="1458177953094" TEXT="Ersatz">
+<icon BUILTIN="idea"/>
+<node CREATED="1458177169406" ID="ID_1194870730" MODIFIED="1458177953094" TEXT="content-Match"/>
+<node CREATED="1458177173574" ID="ID_1636541063" MODIFIED="1458177953094" TEXT="Konsequenz: man kann keine Assignements machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil beim Assignment die Spec (=GenNode) eben
+    </p>
+    <p>
+      zwar die ID des Zieles, aber den neu zuzuweisenden Wert enth&#228;lt.
+    </p>
+    <p>
+      Also wird sich das Ziel nicht anhand des neuen Wertes finden lassen,
+    </p>
+    <p>
+      weil es eben grade noch nicht diesen neuen Wert tr&#228;gt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1458177198643" ID="ID_1228381833" MODIFIED="1458177953094" TEXT="Konsequenz: Suche kann das falsche Resultat erwischen"/>
+</node>
+</node>
+<node CREATED="1458175960615" ID="ID_499742122" MODIFIED="1458177953094" TEXT="ctor">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177315803" ID="ID_1282762906" MODIFIED="1458177953094" TEXT="konstruiert aus der Spec ein neues Element"/>
+<node CREATED="1458177335632" ID="ID_430010657" MODIFIED="1458177953094" TEXT="mu&#xdf; typischerweise die Interna des Zieles kennen"/>
+<node CREATED="1458177347622" ID="ID_1041373197" MODIFIED="1458177953094" TEXT="Ersatz">
+<icon BUILTIN="idea"/>
+<node CREATED="1458177489444" ID="ID_1024908643" MODIFIED="1458177953094" TEXT="unterstelle Payload == Zieltyp"/>
+<node CREATED="1458177572865" ID="ID_1483034601" MODIFIED="1458177953094" TEXT="Konstruktor auf dem Ziel, der eine GenNode nimmt"/>
+</node>
+</node>
+<node CREATED="1458175991795" ID="ID_437650849" MODIFIED="1458178035823" TEXT="optional...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458176002762" ID="ID_442473703" MODIFIED="1458177953094" TEXT="selector">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177605869" ID="ID_262186866" MODIFIED="1458177953094" TEXT="bestimmt ob die Spec f&#xfc;r diesen Binding-Layer &#xfc;berhaupt relevant ist"/>
+<node CREATED="1458177631409" ID="ID_1877742460" MODIFIED="1458177953094" TEXT="erlaubt das Filtern mit mehreren Bindings"/>
+<node CREATED="1458177642144" ID="ID_310751196" MODIFIED="1458177953094" TEXT="Ersatz">
+<icon BUILTIN="idea"/>
+<node CREATED="1458177646671" ID="ID_1707674287" MODIFIED="1458177953094" TEXT="kein Selector"/>
+<node CREATED="1458177652662" ID="ID_1067744704" MODIFIED="1458177953094" TEXT="es kann dann also nur ein Binding geben"/>
+<node CREATED="1458177664868" ID="ID_935075867" MODIFIED="1458177953094" TEXT="das ist aber auch der h&#xe4;ufigste Fall"/>
+</node>
+</node>
+<node CREATED="1458176008025" ID="ID_1099350141" MODIFIED="1458177953095" TEXT="setter">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177697657" ID="ID_1388855448" MODIFIED="1458177953095" TEXT="erlaubt Zuweisung"/>
+<node CREATED="1458177712798" ID="ID_1708999099" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
+<node CREATED="1458177735635" ID="ID_197038069" MODIFIED="1458177953095" TEXT="Ersatz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1458177738499" ID="ID_1474971428" MODIFIED="1458177953095" TEXT="keiner"/>
+<node CREATED="1458177741155" ID="ID_1784046352" MODIFIED="1458177953095" TEXT="dann gibt&apos;s eben keine Zuweisung"/>
+<node CREATED="1458177749233" ID="ID_873905001" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei sub-Scopes"/>
+<node CREATED="1458177803730" ID="ID_674080114" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei immutable values"/>
+</node>
+</node>
+<node CREATED="1458176018087" ID="ID_1978664300" MODIFIED="1458177953095" TEXT="mutator">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177821712" ID="ID_152424824" MODIFIED="1458177953095" TEXT="baut einen sub-Mutator f&#xfc;r einen nested scope"/>
+<node CREATED="1458177851988" ID="ID_307170712" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
+<node CREATED="1458177857939" ID="ID_233644864" MODIFIED="1458177953095" TEXT="Ersatz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1458177861162" ID="ID_240936470" MODIFIED="1458177953095" TEXT="keiner"/>
+<node CREATED="1458177863506" ID="ID_1403138553" MODIFIED="1458177953095" TEXT="dann gibts eben keine Behandlung von nested scopse"/>
+<node CREATED="1458177874760" ID="ID_1050027667" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei primitive values"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1458176048564" ID="ID_173428941" MODIFIED="1458176053039" TEXT="Flexibilit&#xe4;t">
+<node CREATED="1458176054154" ID="ID_1379937028" MODIFIED="1458176076851" TEXT="so wenig typ-Feslegung wie m&#xf6;glich"/>
+<node CREATED="1458176077368" ID="ID_1730540256" MODIFIED="1458176092658" TEXT="fallback bei fehlendern Operationen"/>
+<node CREATED="1458176093958" ID="ID_801042454" MODIFIED="1458176105000" TEXT="Argument: &quot;dann halt nicht&quot;">
+<node CREATED="1458176117266" ID="ID_1479654896" MODIFIED="1458176127813" TEXT="es ist so wie es ist"/>
+<node CREATED="1458176128352" ID="ID_1366947640" MODIFIED="1458176139563" TEXT="die Gegenseite wei&#xdf; schon was sie will"/>
+<node CREATED="1458176252336" ID="ID_1554344013" MODIFIED="1458176266178" TEXT="ich bin, also bin ich konsistent">
+<node CREATED="1458176267382" ID="ID_427126071" MODIFIED="1458176296319" TEXT="konsistent ist, was der diff erzeugt"/>
+<node CREATED="1458176297282" ID="ID_336107495" MODIFIED="1458176305981" TEXT="alles wird per diff erzeugt"/>
+<node CREATED="1458176306593" ID="ID_666376142" MODIFIED="1458176314868" TEXT="also ist alles, was existiert, auch konsistent"/>
+</node>
+<node CREATED="1458176787953" ID="ID_1610561572" MODIFIED="1458176793885" TEXT="sinnvoll gew&#xe4;hlt">
+<node CREATED="1458176794848" ID="ID_1399218405" MODIFIED="1458176810370" TEXT="native datenstruktur ist so gew&#xe4;hlt, da&#xdf; sie ihren Zweck erf&#xfc;llt"/>
+<node CREATED="1458176883836" ID="ID_1357445271" MODIFIED="1458176899324">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      generische Repr&#228;sentaton ist so gew&#228;hlt,
+    </p>
+    <p>
+      da&#223; sich alle relevanten Eigenschaften darstellen lassen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1458176911161" ID="ID_1565618197" MODIFIED="1458176946748">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn also ein Teil der diff-Funkttionalit&#228;t nicht verf&#252;gbar ist,
+    </p>
+    <p>
+      dann wird es wohl so sein, da&#223; sie auch nicht gebraucht wird
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1458176947972" ID="ID_1901451299" MODIFIED="1458176965869" TEXT="Beispiel: primitive Werte sind eben kein sub-Scope"/>
+<node CREATED="1458176966665" ID="ID_1292201640" MODIFIED="1458176981459" TEXT="Beispiel: immutable elements sind eben nicht zuweisbar"/>
+</node>
+</node>
+</node>
+<node CREATED="1458176998437" ID="ID_425451497" MODIFIED="1458177089666" TEXT="keine unn&#xf6;tigen Einschr&#xe4;nkungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zwar erscheint es nicht sonderlich sinnvoll,
+    </p>
+    <p>
+      als target auch eine Menge von primitiven Werten zuzulassen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Es gibt aber auch keinen wirklichen Grund, dies zu verbieten,
+    </p>
+    <p>
+      sofern es gelingt, die funktionalit&#228;t gutm&#252;tig zu degradieren.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1458178113697" HGAP="46" ID="ID_186668887" MODIFIED="1458178286448" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="-5">
+<node CREATED="1458178126159" ID="ID_1322433318" MODIFIED="1458178131587" TEXT="Rahmenklasse + Closures"/>
+<node CREATED="1458178133078" ID="ID_278002579" MODIFIED="1458178148384" TEXT="Closures mit der Ersatz-Impl vorbelegen"/>
+<node CREATED="1458178150916" ID="ID_1020570949" MODIFIED="1458178174848" TEXT="Problem: komplexe Konstruktion">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1458178165322" ID="ID_963054881" MODIFIED="1458178178916" TEXT="L&#xf6;sung: nested DSL">
+<icon BUILTIN="idea"/>
+<node CREATED="1458178203821" ID="ID_785912532" MODIFIED="1458178222190" TEXT="die Top-Level Builder-Funktion erwartet das volle Binding"/>
+<node CREATED="1458178223723" ID="ID_798018180" MODIFIED="1458178247755" TEXT="es gibt eine freie Funktion, die einen nested Builder f&#xfc;r das Binding liefert"/>
+</node>
+</node>
+<node CREATED="1458178288690" ID="ID_562189277" MODIFIED="1458178295494" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
+<node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1458178300324" TEXT="Builder"/>
+<node CREATED="1458178300984" ID="ID_1152672899" MODIFIED="1458178309971" TEXT="Binding-Layer"/>
 </node>
 </node>
 <node CREATED="1457232746179" ID="ID_1793680066" MODIFIED="1457232776598" TEXT="Rec&lt;GenNode&gt;">

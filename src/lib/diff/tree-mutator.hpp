@@ -71,6 +71,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/opaque-holder.hpp"
 //#include "lib/util.hpp"
@@ -267,6 +268,8 @@ namespace diff{
   
   namespace { // Mutator-Builder decorator components...
     
+    using lib::meta::Strip;
+    
     /**
      * Type rebinding helper to pick up the actual argument type.
      * Works both for functors and for lambda expressions
@@ -311,6 +314,244 @@ namespace diff{
           , attribID_(id)
           , change_(clo)
           { }
+      };
+    
+    
+    /**
+     * Attach to collection: Concrete binding setup.
+     * This record holds all the actual binding and closures
+     * used to attach the tree mutator to an external pre-existing
+     * STL container with child elements/objects. It serves as flexible
+     * connection, configuration and adaptation element, and will be embedded
+     * as a whole into the (\ref ChildCollectionMutator), which in turn implements
+     * the `TreeMutator` interface. The resulting compound is able to consume
+     * tree diff messages and apply the respective changes and mutations to
+     * an otherwise opaque implementation data structure.
+     * 
+     * @tparam COLL a STL compliant collection type holding "child elements"
+     * @tparam MAT a closure to determine if a child matches a diff spec (GenNode)
+     * @tparam CTR a closure to construct a new child element from a given diff spec
+     * @tparam SEL predicate to determine if this binding layer has to process a diff message
+     * @tparam ASS a closure to assign / set a new value from a given diff spec
+     * @tparam MUT a closure to construct a nested mutator for some child element
+     */
+    template<class COLL, class MAT, class CTR, class SEL, class ASS, class MUT>
+    struct CollectionBinding
+      {
+        using Coll = typename Strip<COLL>::TypeReferred;
+        using Elm  = typename Coll::value_type;
+        
+        Coll& collection;
+        
+        SEL isApplicable;
+        MAT matches;
+        CTR construct;
+        ASS assign;
+        MUT openSub;
+        
+        
+        /* === content manipulation API === */
+        
+        Coll contentBuffer;
+        
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+        void
+        initMutation (string mutatorID)
+          {
+            prev_content_.clear();
+            swap (content_, prev_content_);
+            log_.event ("attachMutator "+mutatorID);
+          }
+        
+        void
+        inject (GenNode&& elm, string operationID)
+          {
+            content_.emplace_back (forward<GenNode>(elm));
+            log_.event (operationID, renderNode (content_.back()));
+          }
+        
+        static iterator
+        search (GenNode::ID const& targetID, iterator pos)
+          {
+            while (pos and not pos->matches(targetID))
+              ++pos;
+            return pos;
+          }
+        
+        iterator
+        locate (GenNode::ID const& targetID)
+          {
+            if (!empty() and content_.back().matches(targetID))
+              return lastElm();
+            else
+              return search (targetID, eachElm(content_));
+          }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+      };
+    
+    
+    /**
+     * Attach to collection: Building block for a concrete `TreeMutator`.
+     * This decorator will be outfitted with actual binding and closures
+     * and then layered on top of the (\ref TreeMutaor) base. The resulting
+     * compound is able to consume tree diff messages and apply the respective
+     * changes and mutations to an otherwise opaque implementation data structure.
+     * @remarks in practice, this is the most relevant and typical `TreeMutator` setup.
+     */
+    template<class PAR, class BIN>
+    class ChildCollectionMutator
+      : public PAR
+      {
+        BIN binding_;
+        
+      public:
+        ChildCollectionMutator(BIN wiringClosures, PAR const& chain)
+          : PAR(chain)
+          , binding_(wiringClosures)
+          { }
+        
+        
+        
+        /* ==== re-Implementation of the operation API ==== */
+      
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+        /** skip next recorded src element
+         * @remarks TestWireTap adapter together with TestMutationTarget
+         *      maintain a "shaddow copy" of the data and apply the detected diff
+         *      against this internal copy. This allows to verify what's going on
+         */
+        virtual void
+        skipSrc ()  override
+          {
+            if (pos_)
+              {
+                GenNode const& skippedElm = *pos_;
+                ++pos_;
+                target_.logSkip (skippedElm);
+              }
+            PAR::skipSrc();
+          }
+        
+        /** record in the test taget
+         *  that a new child element is
+         *  being insertet at current position
+         */
+        virtual void
+        injectNew (GenNode const& n)  override
+          {
+            target_.inject (GenNode{n}, "injectNew");
+            PAR::injectNew (n);
+          }
+        
+        virtual bool
+        emptySrc ()  override
+          {
+            return !pos_
+               and PAR::emptySrc();
+          }
+        
+        /** ensure the next recorded source element
+         *  matches on a formal level with given spec */
+        virtual bool
+        matchSrc (GenNode const& n)  override
+          {
+            return PAR::matchSrc(n)
+                or pos_? n.matches(*pos_)
+                       : false;
+          }
+        
+        /** accept existing element, when matching the given spec */
+        virtual bool
+        acceptSrc (GenNode const& n)  override
+          {
+            bool isSrcMatch = TestWireTap::matchSrc(n);
+            if (isSrcMatch)             // NOTE: important to call our own method here, not the virtual function
+              {
+                target_.inject (move(*pos_), "acceptSrc");
+                ++pos_;
+              }
+            return PAR::acceptSrc(n)
+                or isSrcMatch;
+          }
+        
+        /** locate designated element and accept it at current position */
+        virtual bool
+        findSrc (GenNode const& ref)  override
+          {
+            Iter found = TestMutationTarget::search (ref.idi, pos_);
+            if (found)
+              {
+                target_.inject (move(*found), "findSrc");
+              }
+            return PAR::findSrc(ref)
+                or found;
+          }
+        
+        /** repeatedly accept, until after the designated location */
+        virtual bool
+        accept_until (GenNode const& spec)
+          {
+            bool foundTarget = true;
+            
+            if (spec.matches (Ref::END))
+              for ( ; pos_; ++pos_)
+                target_.inject (move(*pos_), "accept_until END");
+            else
+              {
+                string logMsg{"accept_until "+spec.idi.getSym()};
+                while (pos_ and not TestWireTap::matchSrc(spec))
+                  {
+                    target_.inject (move(*pos_), logMsg);
+                    ++pos_;
+                  }
+                if (TestWireTap::matchSrc(spec))
+                  {
+                    target_.inject (move(*pos_), logMsg);
+                    ++pos_;
+                  }
+                else
+                  foundTarget = false;
+              }
+            return PAR::accept_until(spec)
+                or foundTarget;
+          }
+        
+        /** locate element already accepted into the target sequence
+         *  and assign the designated payload value to it. */
+        virtual bool
+        assignElm (GenNode const& spec)
+          {
+            Iter targetElm = target_.locate (spec.idi);
+            if (targetElm)
+              {
+                string logOldPayload{render(targetElm->data)};
+                *targetElm = spec;
+                target_.logAssignment (*targetElm, logOldPayload);
+              }
+            return PAR::assignElm(spec)
+                or targetElm;
+          }
+        
+        /** locate the designated target element and build a suitable
+         *  sub-mutator for this element into the provided target buffer */
+        virtual bool
+        mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
+          {
+            if (PAR::mutateChild (spec, targetBuff))
+              return true;
+            else // Test mode only --
+              { //  no other layer was able to provide a mutator
+                Iter targetElm = target_.locate (spec.idi);
+                if (targetElm)
+                  {
+                    targetBuff.create (TreeMutator::build());
+                    target_.logMutation (*targetElm);
+                    return true;
+                  }
+                return false;
+              }
+          }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
       };
     
     
