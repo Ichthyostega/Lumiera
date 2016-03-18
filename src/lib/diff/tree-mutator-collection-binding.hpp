@@ -52,253 +52,12 @@
 #endif
 
 
-#include "lib/error.hpp"
-#include "lib/symbol.hpp"
-#include "lib/meta/trait.hpp"
-#include "lib/diff/gen-node.hpp"
-#include "lib/opaque-holder.hpp"
-//#include "lib/util.hpp"
-//#include "lib/format-string.hpp"
-
-#include <functional>
-#include <utility> ////TODO
-#include <string>
-//#include <vector>
-//#include <map>
-
-
-namespace lib {
-  /////////////////////////////TODO move over into opaque-holder.hpp
-  /**
-   * handle to allow for safe _»remote implantation«_
-   * of an unknown subclass into a given OpaqueHolder buffer,
-   * without having to disclose the concrete buffer type or size.
-   * @remarks this is especially geared towards use in APIs, allowing
-   *    a not yet known implementation to implant an agent or collaboration
-   *    partner into the likewise undisclosed innards of the exposed service.
-   * @warning the type BA must expose a virtual dtor, since the targetted
-   *    OpaqueHolder has to take ownership of the implanted object.
-   */
-  template<class BA>
-  class PlantingHandle
-    {
-      void* buffer_;
-      size_t maxSiz_;
-      
-      ///////TODO static assert to virtual dtor??
-    public:
-      template<size_t maxSiz>
-      PlantingHandle (InPlaceBuffer<BA, maxSiz>& targetBuffer)
-        : buffer_(&targetBuffer)
-        , maxSiz_(maxSiz)
-        { }
-      
-      
-      template<class SUB>
-      BA&
-      create (SUB&& subMutator)
-        {
-          if (sizeof(SUB) > maxSiz_)
-            throw error::Fatal("Unable to implant implementation object of size "
-                               "exceeding the pre-established storage buffer capacity."
-                              ,error::LUMIERA_ERROR_CAPACITY);
-          
-          using Holder = InPlaceBuffer<BA, sizeof(SUB)>;
-          Holder& holder = *static_cast<Holder*> (buffer_);
-          
-          return holder.create<SUB> (std::forward<SUB> (subMutator));
-        }
-      
-      template<class SUB>
-      bool
-      canCreate()  const
-        {
-          return sizeof(SUB) <= maxSiz_;
-        }
-    };
-  /////////////////////////////TODO move over into opaque-holder.hpp
-namespace diff{
   
-  namespace error = lumiera::error;
-  
-//using util::_Fmt;
-  using lib::Literal;
-  using std::function;
-  using std::string;
-  
-  
-  
-  
-  class TestMutationTarget; // for unit testing
-  
-  
-  namespace {
-    template<class PAR>
-    struct Builder;
+//== anonymous namespace...
     
-    using ID        = Literal;
-    using Attribute = DataCap;
-  }
-  
-  
-  /**
-   * Customisable intermediary to abstract mutating operations
-   * on arbitrary, hierarchical object-like data.
-   * The TreeMutator exposes two distinct interfaces
-   * - the \em operation API -- similar to what a container exposes --
-   *   is the entirety of abstract operations that can be done to the
-   *   subsumed, tree like target structure
-   * - the \em binding API allows to link some or all of these generic
-   *   activities to concrete manipulations known within target scope.
-   */
-  class TreeMutator
-    {
-      
-    public:
-      
-      /* ==== operation API ==== */
-      
-      virtual bool
-      emptySrc ()
-        {
-          return true;
-          // do nothing by default
-        }
-      
-      /** skip next src element and advance abstract source position */
-      virtual void
-      skipSrc ()
-        {
-          // do nothing by default
-        }
-      
-      /** establish new element at current position */
-      virtual void
-      injectNew (GenNode const&)
-        {
-          // do nothing by default
-        }
-      
-      /** ensure the next source element matches with given spec */
-      virtual bool
-      matchSrc (GenNode const&)
-        {
-          // do nothing by default
-          return false;
-        }
-      
-      /** accept existing element, when matching the given spec */
-      virtual bool
-      acceptSrc (GenNode const&)
-        {
-          // do nothing by default
-          return false;
-        }
-      
-      /** repeatedly accept, until after the designated location */
-      virtual bool
-      accept_until (GenNode const&)
-        {
-          // do nothing by default
-          return false;
-        }
-      
-      /** locate designated element and accept it at current position */
-      virtual bool
-      findSrc (GenNode const&)
-        {
-          // do nothing by default
-          return false;
-        }
-      
-      /** locate the designated target element
-       *  (must be already accepted into the target sequence).
-       *  Perform an assignement with the given payload value
-       * @throw when assignement fails (typically error::Logic)
-       * @return false when unable to locate the target */
-      virtual bool
-      assignElm (GenNode const&)
-        {
-          // do nothing by default
-          return false;
-        }
-      
-      
-      using MutatorBuffer = PlantingHandle<TreeMutator>;
-      
-      /** locate the designated target element
-       *  and build a suittable sub-mutator for this element
-       *  into the provided target buffer
-       * @throw error::Fatal when buffer is insufficient
-       * @return false when unable to locate the target */
-      virtual bool
-      mutateChild (GenNode const&, MutatorBuffer)
-        {
-          // do nothing by default
-          return false;
-        }
-      
-      virtual void setAttribute (ID, Attribute&) { /* do nothing by default */ }
-      
-      /**
-       * start building a custom adapted tree mutator,
-       * where the operations are tied by closures or
-       * wrappers into the current implementation context.
-       */
-      static Builder<TreeMutator> build();
-    };
-  
-  
-  namespace { // Mutator-Builder decorator components...
+    
     
     using lib::meta::Strip;
-    
-    /**
-     * Type rebinding helper to pick up the actual argument type.
-     * Works both for functors and for lambda expressions
-     * @remarks Solution proposed 10/2011 by \link http://stackoverflow.com/users/224671/kennytm user "kennytm" \endlink
-     *          in this \link http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765
-     *          answer on stackoverflow \endlink
-     */
-    template<typename FUN>
-    struct _ClosureType
-      : _ClosureType<decltype(&FUN::operator())>
-      { };
-
-    template<class C, class RET, class ARG>
-    struct _ClosureType<RET (C::*)(ARG)  const>
-      {
-        typedef ARG ArgType;
-        typedef RET ReturnType;
-      };
-    
-    
-    template<class PAR, class CLO>
-    struct ChangeOperation
-      : PAR
-      {
-        ID attribID_;
-        CLO change_;
-        
-        virtual void
-        setAttribute (ID id, Attribute& newValue)
-          {
-            using ValueType = typename _ClosureType<CLO>::ArgType;
-            
-            if (id == attribID_)
-              change_(newValue.get<ValueType>());
-            
-            else // delegate to other closures (Decorator-style)
-              PAR::setAttribute(id, newValue);
-          }
-        
-        ChangeOperation(ID id, CLO clo, PAR const& chain)
-          : PAR(chain)
-          , attribID_(id)
-          , change_(clo)
-          { }
-      };
-    
     
     /**
      * Attach to collection: Concrete binding setup.
@@ -672,6 +431,15 @@ namespace diff{
       };
     
     
+    /**
+     * Entry point to a nested DSL
+     * for setup and configuration of a collection binding.
+     * This function shall be used right within Builder::attach()
+     * and wrap a language reference to the concrete collection
+     * implementing the "object children". The result is a default configured
+     * binding, which should be further adapted with the builder functions,
+     * using lambdas as callback into the otherwise opaque implementation code. 
+     */
     template<class COLL>
     auto
     collection (COLL& coll) -> decltype(_DefaultBinding<COLL>::attachTo(coll))
@@ -681,58 +449,4 @@ namespace diff{
     
     
     
-    
-    template<class PAR>
-    struct TestWireTap;
-    
-    
-    template<class PAR>
-    struct Builder
-      : PAR
-      {
-        Builder(PAR par)
-          : PAR(par)
-          { }
-        
-        template<class CLO>
-        using Change = ChangeOperation<PAR,CLO>;
-        
-        template<class BIN>
-        using Collection = ChildCollectionMutator<PAR,BIN>;
-        
-        using WireTap = TestWireTap<PAR>;
-        
-        
-        /* ==== binding API ==== */
-        
-        template<typename CLO>
-        Builder<Change<CLO>>
-        change (Literal attributeID, CLO closure)
-          {
-            return Change<CLO> (attributeID, closure, *this);
-          }
-        
-        template<typename BIN>
-        Builder<Collection<BIN>>
-        attach (BIN&& collectionBindingSetup)
-          {
-            return Collection<BIN> (std::forward<BIN>(collectionBindingSetup));
-          }
-        
-        Builder<WireTap>
-        attachDummy (TestMutationTarget& dummy);
-        
-      };
-    
-  }//(END) Mutator-Builder decorator components...
-  
-  
-  Builder<TreeMutator>
-  TreeMutator::build ()
-  {
-    return TreeMutator();
-  }
-  
-  
-}} // namespace lib::diff
 #endif /*LIB_DIFF_TREE_MUTATOR_COLLECTION_BINDING_H*/
