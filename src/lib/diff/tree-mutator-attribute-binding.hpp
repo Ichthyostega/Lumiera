@@ -1,8 +1,8 @@
 /*
-  TREE-MUTATOR.hpp  -  flexible binding to map generic tree changing operations
+  TREE-MUTATOR-ATTRIBUTE-BINDING.hpp  -  diff::TreeMutator implementation building block
 
   Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,55 +21,35 @@
 */
 
 
-/** @file tree-mutator.hpp
- ** Customisable intermediary to abstract generic tree mutation operations.
- ** This is the foundation for generic treatment of tree altering operations,
- ** and especially the handling of changes (diff) to hierarchical data structures.
- ** The goal is to represent a standard set of conceptual operations working on
- ** arbitrary data structures, without the need for these data structures to
- ** comply to any interface or base type. Rather, we allow each instance to
- ** define binding closures, which allows to tap into arbitrary internal data
- ** representation, without any need of disclosure. The only assumption is
- ** that the data to be treated is \em hierarchical and \em object-like,
- ** i.e. it has (named) attributes and it may have a collection of children.
- ** If necessary, typing constraints can be integrated through symbolic
- ** representation of types as chained identifiers. (path dependent types).
+/** @file tree-mutator-attribute-binding.hpp
+ ** Special binding implementation for TreeMutator, allowing to map
+ ** tree diff operations onto native object attributes. TreeMutator is a
+ ** customisable intermediary, which enables otherwise opaque implementation
+ ** data structures to receive and respond to generic structural change messages
+ ** ("tree diff").
  ** 
- ** The interface implemented by the TreeMutator is shaped such as to support
- ** the primitives of Lumiera's tree \link diff-language.hpp diff handling language. \endlink
- ** By default, each of these primitives is implemented as a \c NOP -- but each operation
- ** can be replaced by a binding closure, which allows to invoke arbitrary code in the
- ** context of the given object's implementation internals.
- ** 
- ** ## Builder/Adapter concept
- ** TreeMutator is both an interface and a set of building blocks.
- ** On concrete usage, the (private, non disclosed) target data structure is assumed
- ** to _build a subclass of TreeMutator._ To this end, the TreeMutator is complemented
- ** by a builder API. Each call on this builder -- typically providing some closure --
- ** will add yet another decorating layer on top of the basic TreeMutator (recall all
- ** the "mutation primitives" are implemented NOP within the base class). So the actual
- ** TreeMutator will be structured like an onion, where each layer cares for the sole
- ** concrete aspect it was tied for by the supplied closure. For example, there might
- ** be a decorator to handle setting of a "foobar" attribute. Thus, when the diff
- ** dictates to mutate "foobar", the corresponding closure will be invoked.
- ** 
- ** \par test dummy target
- ** There is a special adapter binding to support writing unit tests. The corresponding
- ** API is only declared (forward) by default. The TestMutationTarget is a helper class,
- ** which can be attached through this binding and allows a unit test fixture to record
- ** and verify all the mutation operations encountered.
+ ** Each concrete TreeMutator instance will be configured differently, and this
+ ** adaptation is done by implementing binding templates, in the way of building
+ ** blocks, attached and customised through lambdas. It is possible to layer
+ ** several bindings on top of a single TreeMutator -- and this header defines
+ ** a building block for one such layer, especially for binding to object fields
+ ** through getter / setter lambdas.
  **  
- ** @note to improve readability, the actual implementation of the "binding layers"
- **       is defined in separate headers and included towards the bottom of this header.
+ ** @note the header tree-mutator-attribute-binding.hpp with specific builder templates
+ **       is included way down, after the class definitions. This is done so for sake
+ **       of readability.
  ** 
  ** @see tree-mutator-test.cpp
- ** @see DiffDetector
+ ** @see TreeMutator::build()
  ** 
  */
 
 
+#ifndef LIB_DIFF_TREE_MUTATOR_ATTRIBUTE_BINDING_H
+#define LIB_DIFF_TREE_MUTATOR_ATTRIBUTE_BINDING_H
 #ifndef LIB_DIFF_TREE_MUTATOR_H
-#define LIB_DIFF_TREE_MUTATOR_H
+  #error "this header shall not be used standalone (see tree-mutator.hpp)"
+#endif
 
 
 #include "lib/error.hpp"
@@ -755,10 +735,4 @@ namespace diff{
   
   
 }} // namespace lib::diff
-
- //   NOTE: including implementation details...
-//
-#include "lib/diff/tree-mutator-attribute-binding.hpp"
-#include "lib/diff/tree-mutator-collection-binding.hpp"
-
-#endif /*LIB_DIFF_TREE_MUTATOR_H*/
+#endif /*LIB_DIFF_TREE_MUTATOR_ATTRIBUTE_BINDING_H*/
