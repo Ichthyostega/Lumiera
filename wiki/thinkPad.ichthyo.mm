@@ -2339,7 +2339,34 @@
 </node>
 <node CREATED="1458178288690" ID="ID_562189277" MODIFIED="1458178295494" TEXT="Implementierung">
 <icon BUILTIN="pencil"/>
-<node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1458178300324" TEXT="Builder"/>
+<node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1458178300324" TEXT="Builder">
+<node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1458325972586" TEXT="Typ definitionen schwierig anzuschreiben"/>
+<node CREATED="1458325973486" ID="ID_1711903796" MODIFIED="1458325992405" TEXT="Code ziemlich redundant und undurchsichtig">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1458326045724" ID="ID_338749301" MODIFIED="1458326138100" TEXT="Typ-Check erst sehr sp&#xe4;t">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...will sagen,
+    </p>
+    <p>
+      da sind mehrere Layer an praktisch ungebundenem Template-Code dazwischen,
+    </p>
+    <p>
+      so da&#223; zu bef&#252;rchten steht, da&#223; ein unpassendes Lambda erst weit entfernt
+    </p>
+    <p>
+      eine wom&#246;glich irref&#252;hrende Meldung generiert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 <node CREATED="1458178300984" ID="ID_1152672899" MODIFIED="1458178309971" TEXT="Binding-Layer"/>
 </node>
 </node>

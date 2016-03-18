@@ -555,6 +555,150 @@ namespace diff{
       };
     
     
+    /**
+     * Nested DSL to define the specifics of a collection binding.
+     */
+    template<class COLL, class MAT, class CTR, class SEL, class ASS, class MUT>
+    struct CollectionBindingBuilder
+      : CollectionBinding<COLL,MAT,CTR,SEL,ASS,MUT>
+      {
+        
+        template<class FUN>
+        CollectionBindingBuilder<COLL, FUN ,CTR,SEL,ASS,MUT>
+        matchElement(FUN matcher)
+          {
+            return { this->collection
+                   , matcher
+                   , this->construct
+                   , this->isApplicable
+                   , this->assign
+                   , this->openSub
+                   };
+          }
+        
+        template<class FUN>
+        CollectionBindingBuilder<COLL,MAT, FUN ,SEL,ASS,MUT>
+        constructFrom(FUN constructor)
+          {
+            return { this->collection
+                   , this->matches
+                   , constructor
+                   , this->isApplicable
+                   , this->assign
+                   , this->openSub
+                   };
+          }
+        
+        template<class FUN>
+        CollectionBindingBuilder<COLL,MAT,CTR, FUN ,ASS,MUT>
+        isApplicableIf(FUN selector)
+          {
+            return { this->collection
+                   , this->matches
+                   , this->construct
+                   , selector
+                   , this->assign
+                   , this->openSub
+                   };
+          }
+        
+        template<class FUN>
+        CollectionBindingBuilder<COLL,MAT,CTR,SEL, FUN ,MUT>
+        assignElement(FUN setter)
+          {
+            return { this->collection
+                   , this->matches
+                   , this->construct
+                   , this->isApplicable
+                   , setter
+                   , this->openSub
+                   };
+          }
+        
+        template<class FUN>
+        CollectionBindingBuilder<COLL,MAT,CTR,SEL,ASS, FUN >
+        buildChildMutator(FUN childMutationBuilder)
+          {
+            return { this->collection
+                   , this->matches
+                   , this->construct
+                   , this->isApplicable
+                   , this->assign
+                   , childMutationBuilder
+                   };
+          }
+      };
+    
+    template<class COLL>
+    struct _DefaultBinding
+      {
+        using Coll = typename Strip<COLL>::TypeReferred;
+        using Elm  = typename Coll::value_type;
+        
+        static bool
+        disable_selector (GenNode const& spec)
+          {
+            UNIMPLEMENTED ("dont discriminate by default");
+          }
+        
+        static bool
+        default_contantMatch (Elm const& elm)
+          {
+            UNIMPLEMENTED ("fallback matcher");
+          }
+        
+        static Elm
+        default_construct_from_payload (GenNode const& spec)
+          {
+            UNIMPLEMENTED ("default construct from spec payload");
+          }
+        
+        static bool
+        disable_assignment (GenNode const& spec)
+          {
+            UNIMPLEMENTED ("disabled assignment");
+          }
+        
+        static bool
+        disable_childMutation (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
+          {
+            UNIMPLEMENTED ("inactive mutator builder");
+          }
+        
+        
+        using FallbackBindingConfiguration
+            = CollectionBindingBuilder<Coll
+                                      ,decltype(disable_selector)
+                                      ,decltype(default_contantMatch)
+                                      ,decltype(default_construct_from_payload)
+                                      ,decltype(disable_assignment)
+                                      ,decltype(disable_childMutation)
+                                      >;
+        
+        static FallbackBindingConfiguration
+        attachTo (Coll& coll)
+          {
+            return { coll
+                   , disable_selector
+                   , default_contantMatch
+                   , default_construct_from_payload
+                   , disable_assignment
+                   , disable_childMutation
+                   };
+          }
+      };
+    
+    
+    template<class COLL>
+    auto
+    collection (COLL& coll) -> decltype(_DefaultBinding<COLL>::attachTo(coll))
+    {
+      return _DefaultBinding<COLL>::attachTo(coll);
+    }
+    
+    
+    
+    
     template<class PAR>
     struct TestWireTap;
     
@@ -570,6 +714,9 @@ namespace diff{
         template<class CLO>
         using Change = ChangeOperation<PAR,CLO>;
         
+        template<class BIN>
+        using Collection = ChildCollectionMutator<PAR,BIN>;
+        
         using WireTap = TestWireTap<PAR>;
         
         
@@ -580,6 +727,13 @@ namespace diff{
         change (Literal attributeID, CLO closure)
           {
             return Change<CLO> (attributeID, closure, *this);
+          }
+        
+        template<typename BIN>
+        Builder<Collection<BIN>>
+        attach (BIN&& collectionBindingSetup)
+          {
+            return Collection<BIN> (std::forward<BIN>(collectionBindingSetup));
           }
         
         Builder<WireTap>
