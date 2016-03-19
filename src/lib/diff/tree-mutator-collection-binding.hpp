@@ -58,6 +58,7 @@
     
     
     using lib::meta::Strip;
+    using lib::diff::GenNode;
     
     /**
      * Attach to collection: Concrete binding setup.
@@ -371,6 +372,18 @@
           }
       };
     
+    
+    /**
+     * starting point for configuration of a binding to STL container.
+     * When using the "nested DSL" to setup a binding to child elements
+     * managed within a STL collection, all the variable and flexible
+     * aspects of the binding are preconfigured to a more or less
+     * disabled and inactive state. The resulting binding layer
+     * offers just minimal functionality. Typically you'd use
+     * the created (\ref CollectionBindingBuilder) to replace
+     * those defaults with lambdas tied into the actual
+     * implementation of the target data structure.
+     */
     template<class COLL>
     struct _DefaultBinding
       {
@@ -378,41 +391,41 @@
         using Elm  = typename Coll::value_type;
         
         static bool
-        disable_selector (GenNode const& spec)
+        default_contentMatch (GenNode const& spec, Elm const& elm)
           {
-            UNIMPLEMENTED ("dont discriminate by default");
-          }
-        
-        static bool
-        default_contantMatch (Elm const& elm)
-          {
-            UNIMPLEMENTED ("fallback matcher");
+            return spec.matches(elm);
           }
         
         static Elm
         default_construct_from_payload (GenNode const& spec)
           {
-            UNIMPLEMENTED ("default construct from spec payload");
+            return spec.data.get<Elm>();
           }
         
         static bool
-        disable_assignment (GenNode const& spec)
+        disable_selector (GenNode const&)
           {
-            UNIMPLEMENTED ("disabled assignment");
+            return false;
           }
         
         static bool
-        disable_childMutation (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
+        disable_assignment (GenNode const&)
           {
-            UNIMPLEMENTED ("inactive mutator builder");
+            return false;
+          }
+        
+        static bool
+        disable_childMutation (GenNode const&, TreeMutator::MutatorBuffer)
+          {
+            return false;
           }
         
         
         using FallbackBindingConfiguration
             = CollectionBindingBuilder<Coll
-                                      ,decltype(disable_selector)
-                                      ,decltype(default_contantMatch)
+                                      ,decltype(default_contentMatch)
                                       ,decltype(default_construct_from_payload)
+                                      ,decltype(disable_selector)
                                       ,decltype(disable_assignment)
                                       ,decltype(disable_childMutation)
                                       >;
@@ -422,7 +435,7 @@
           {
             return { coll
                    , disable_selector
-                   , default_contantMatch
+                   , default_contentMatch
                    , default_construct_from_payload
                    , disable_assignment
                    , disable_childMutation
