@@ -585,9 +585,81 @@
 <node CREATED="1455669331448" ID="ID_1852578403" MODIFIED="1455669333036" TEXT="f&#xfc;r find"/>
 </node>
 </node>
-<node COLOR="#ad014c" CREATED="1455669200945" FOLDED="true" HGAP="85" ID="ID_880765624" MODIFIED="1456437736541" TEXT="Design-Fragen" VSHIFT="-14">
+<node COLOR="#ad014c" CREATED="1455669200945" FOLDED="true" HGAP="85" ID="ID_880765624" MODIFIED="1458409895855" TEXT="Design-Fragen" VSHIFT="-14">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
+<node COLOR="#4e1527" CREATED="1458408700205" ID="ID_685778920" MODIFIED="1458409890048" TEXT="Grundansatz">
+<font NAME="SansSerif" SIZE="15"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1458408708004" ID="ID_239878029" MODIFIED="1458408717247" TEXT="Abstraktion / Adapter"/>
+<node CREATED="1458408717739" ID="ID_579166238" MODIFIED="1458408726086" TEXT="(virtuelles) Interface"/>
+<node CREATED="1458408730841" ID="ID_356597537" MODIFIED="1458408739164" TEXT="konkretes Binding"/>
+<node CREATED="1458408742408" ID="ID_1733136177" MODIFIED="1458408752570" TEXT="Binding-Technik">
+<node CREATED="1458408757478" ID="ID_1718466382" MODIFIED="1458408786501" TEXT="Mutator wird in jeweiliger Impl erzeugt"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#221c4f" CREATED="1458408790457" FOLDED="true" ID="ID_1892865523" MODIFIED="1458409883066" STYLE="fork" TEXT="Polymorphie vs. Funktoren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1458408878574" ID="ID_1190262572" MODIFIED="1458409828754" TEXT="Abw&#xe4;gung">
+<icon BUILTIN="info"/>
+<node CREATED="1458408895756" ID="ID_1422093195" MODIFIED="1458409828754" TEXT="polymorph">
+<node CREATED="1458408909594" ID="ID_447360746" MODIFIED="1458409828754">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Mutator verwendet einen <i>Binder</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1458408965770" ID="ID_1892856741" MODIFIED="1458409828754" TEXT="jeweiliger Client implementiert den Binder"/>
+<node CREATED="1458409675740" ID="ID_1319191337" MODIFIED="1458409828754" TEXT="Implementierung direkt durch Typsystem geleitet">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1458408946813" ID="ID_86057383" MODIFIED="1458409828754" TEXT="Indirektion, virtuelle Funktionen">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1458409155585" ID="ID_1985086830" MODIFIED="1458409828754" TEXT="Client mu&#xdf; explizit instantiieren und verbinden">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1458409202946" ID="ID_162172192" MODIFIED="1458409828754" TEXT="f&#xfc;r jede Anwendungssituation eine neue Binder-Klasse"/>
+<node CREATED="1458409270353" ID="ID_114384372" MODIFIED="1458409828754" TEXT="plus f&#xfc;r jedes Anwendungs-Grundmuster eine Mutator-Implementierung"/>
+</node>
+<node CREATED="1458408904802" ID="ID_1569962545" MODIFIED="1458409828754" TEXT="generisch">
+<node CREATED="1458409289263" ID="ID_1520752432" MODIFIED="1458409828754" TEXT="konkreter Mutator wird aus Bausteinen zusammengestellt"/>
+<node CREATED="1458409313524" ID="ID_90057804" MODIFIED="1458409828754" TEXT="diese Bausteine verwenden Funktoren und Lambdas"/>
+<node CREATED="1458409343504" ID="ID_1243373098" MODIFIED="1458409828754" TEXT="Mutator-Instantiierung und Lamdas im gleichen Scope"/>
+<node CREATED="1458409357886" ID="ID_102579030" MODIFIED="1458409828754" TEXT="Bindung implizit, Inlining f&#xfc;r Lambdas"/>
+<node CREATED="1458409636857" ID="ID_410838714" MODIFIED="1458409828754" TEXT="Typ/Signaturfehler werden (erst) im generischen Code bemerkt">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1458409384661" ID="ID_599058435" MODIFIED="1458409828754" TEXT="f&#xfc;r jede Anwendungssituation eine neue Mutator-Implementierung"/>
+<node CREATED="1458409554491" ID="ID_1516498705" MODIFIED="1458409828754" TEXT="aber auch Builder-Zwischenstufen m&#xfc;sen als Funktionen instantiiert werden">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+</node>
+<node CREATED="1458408881773" ID="ID_649871974" MODIFIED="1458409828754" TEXT="Entscheidung">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#010101" CREATED="1458409428796" ID="ID_1590872717" MODIFIED="1458409828754" TEXT="generisch">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1458409480646" ID="ID_239846348" MODIFIED="1458409828754" TEXT="weniger Indirektion"/>
+<node CREATED="1458409499547" ID="ID_734782069" MODIFIED="1458409828755" TEXT="geringf&#xfc;gig weniger Code-bloat"/>
+<node CREATED="1458409506778" ID="ID_1696279423" MODIFIED="1458409828755" TEXT="bessere Chancen auf Inlining"/>
+<node CREATED="1458409586672" ID="ID_902822558" MODIFIED="1458409828755" TEXT="Client-Code">
+<node CREATED="1458409608924" ID="ID_1425639317" MODIFIED="1458409828755" TEXT="kompakter"/>
+<node CREATED="1458409611484" ID="ID_1386932549" MODIFIED="1458409828755" TEXT="expliziter"/>
+<node CREATED="1458409616980" ID="ID_1067167042" MODIFIED="1458409828755" TEXT="weniger technisch"/>
+<node CREATED="1458409622475" ID="ID_858066487" MODIFIED="1458409828755" TEXT="lesbarer"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1455669221255" ID="ID_1712552545" MODIFIED="1455669237745" TEXT="Repr&#xe4;sentation der &quot;aktuellen Position&quot;"/>
 <node CREATED="1455669345167" ID="ID_310849010" MODIFIED="1455669353721" TEXT="generischen Rahmen f&#xfc;r Mut-Operationen"/>
 <node CREATED="1455669238213" ID="ID_731780565" MODIFIED="1455669252935" TEXT="Einleiten der Rekursion">
@@ -1193,7 +1265,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d8bba4" CREATED="1456011994442" FOLDED="true" HGAP="68" ID="ID_343687995" MODIFIED="1456527098963" TEXT="zur Entscheidung..." VSHIFT="37">
+<node BACKGROUND_COLOR="#d8bba4" CREATED="1456011994442" FOLDED="true" HGAP="68" ID="ID_343687995" MODIFIED="1458408638864" TEXT="zur Entscheidung..." VSHIFT="37">
 <edge COLOR="#93766f"/>
 <arrowlink COLOR="#b10046" DESTINATION="ID_820279076" ENDARROW="Default" ENDINCLINATION="14;-46;" ID="Arrow_ID_103087571" STARTARROW="None" STARTINCLINATION="-137;-20;"/>
 <font NAME="SansSerif" SIZE="15"/>
