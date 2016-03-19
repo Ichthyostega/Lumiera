@@ -298,7 +298,19 @@ namespace test{
           // now set up a binding to these opaque private structures...
           auto mutator =
           TreeMutator::build()
-            .attach (collection(target));
+            .attach (collection(target)
+                       .constructFrom ([&](GenNode const& spec) -> Data
+                          {
+                            cout << "constructor invoked on "<<spec<<endl;
+                            return {spec.idi.getSym(), render(spec.data)};
+                          })
+                       .matchElement ([&](GenNode const& spec, Data const& elm)
+                          {
+                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
+                            return spec.idi.getSym() == elm.key;
+                          }
+                       )
+                       );
 
         }
       

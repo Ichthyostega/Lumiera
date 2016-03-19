@@ -403,13 +403,13 @@
         static bool
         default_contentMatch (GenNode const& spec, Elm const& elm)
           {
-            //return spec.matches(elm);
+            return spec.matches(elm);
           }
         
         static Elm
         default_construct_from_payload (GenNode const& spec)
           {
-            //return spec.data.get<Elm>();
+            return spec.data.get<Elm>();
           }
         
         static bool
