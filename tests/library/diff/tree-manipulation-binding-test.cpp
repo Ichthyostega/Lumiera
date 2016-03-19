@@ -155,7 +155,7 @@ namespace test{
                        .before("attachMutator"));
           
           CHECK (isnil (target));                   // the "visible" new content is still void
-          CHECK (not mutator2.emptySrc());          // content was moved into hiden "src" buffer
+          CHECK (not mutator2.emptySrc());          // content was moved into hidden "src" buffer
           CHECK (target.showSrcBuffer() == "α = 1, γ = 3.45, γ = 3.45, b, b, 78:56:34.012");
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
@@ -179,11 +179,11 @@ namespace test{
           CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
           CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.45");
           
-          // now proceding with the children.
+          // now proceeding with the children.
           // NOTE: the TestWireTap / TestMutationTarget does not enforce the attribute / children distinction!
           CHECK (not mutator2.emptySrc());
           CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
-          mutator2.skipSrc();                       // ...which will be skipt (and thus discarded)                 // skipSrc
+          mutator2.skipSrc();                       // ...which will be skipped (and thus discarded                // skipSrc
           mutator2.injectNew (SUB_NODE);            // inject a new nested sub-structure here                      // injectNew
           CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
           CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
@@ -274,13 +274,6 @@ namespace test{
       
       
       void
-      mutateGenNode()
-        {
-          TODO ("define how to fit GenNode tree mutation into the framework");
-        }
-      
-      
-      void
       mutateCollection()
         {
           TODO ("define how to map the mutation primitives onto a generic collection");
@@ -291,6 +284,13 @@ namespace test{
       mutateAttributeMap ()
         {
           TODO ("define how to translate generic mutation into attribute manipulation");
+        }
+      
+      
+      void
+      mutateGenNode()
+        {
+          TODO ("define how to fit GenNode tree mutation into the framework");
         }
     };
   

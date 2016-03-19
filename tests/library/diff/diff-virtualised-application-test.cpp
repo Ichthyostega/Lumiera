@@ -72,7 +72,7 @@ namespace test{
   
   
   /***********************************************************************//**
-   * @test Demonstration: apply a stuctural change to unspecified private
+   * @test Demonstration: apply a structural change to unspecified private
    *       data structures, with the help of an [dynamic adapter](\ref TreeMutator)
    *       - we use private data classes, defined here in the test fixture
    *         to represent "just some" pre-existing data structure.
@@ -126,7 +126,7 @@ namespace test{
                               ,Time(CHILD_T.data.get<Time>() +  Time(0,1)));
           
           return snapshot({after(Ref::ATTRIBS)      // fast forward to the first child
-                         , pick(CHILD_A)            // rearrange childern of mixed types...
+                         , pick(CHILD_A)            // rearrange children of mixed types...
                          , find(CHILD_T)
                          , set(childT_later)        // immediately assign to the child just picked
                          , find(CHILD_T)            // fetch the other Time child
