@@ -273,10 +273,33 @@ namespace test{
         }
       
       
+      /** @test map mutation primitives onto a STL collection managed locally. */
       void
       mutateCollection()
         {
-          TODO ("define how to map the mutation primitives onto a generic collection");
+          MARK_TEST_FUN;
+          
+          // some private data structures
+          struct Data
+            {
+              string key;
+              string val;
+              
+              operator string()                const { return _Fmt{"≺%s∫%s≻"} % key % val; }
+              bool operator== (Data const& o)  const { return key==o.key and val==o.val; }
+              bool operator!= (Data const& o)  const { return not (*this == o); }
+            };
+          
+          using VecD = std::vector<Data>;
+          using MapD = std::map<string, VecD>;
+          
+          VecD target;
+          
+          // now set up a binding to these opaque private structures...
+          auto mutator =
+          TreeMutator::build()
+            .attach (collection(target));
+
         }
       
       

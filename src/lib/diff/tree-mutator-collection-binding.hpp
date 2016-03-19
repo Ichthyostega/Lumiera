@@ -86,11 +86,20 @@
         
         Coll& collection;
         
-        SEL isApplicable;
         MAT matches;
         CTR construct;
+        SEL isApplicable;
         ASS assign;
         MUT openSub;
+        
+        CollectionBinding(Coll& coll, MAT m, CTR c, SEL s, ASS a, MUT u)
+          : collection(coll)
+          , matches(m)
+          , construct(c)
+          , isApplicable(s)
+          , assign(a)
+          , openSub(u)
+          { }
         
         
         /* === content manipulation API === */
@@ -305,6 +314,7 @@
     struct CollectionBindingBuilder
       : CollectionBinding<COLL,MAT,CTR,SEL,ASS,MUT>
       {
+        using CollectionBinding<COLL,MAT,CTR,SEL,ASS,MUT>::CollectionBinding;
         
         template<class FUN>
         CollectionBindingBuilder<COLL, FUN ,CTR,SEL,ASS,MUT>
@@ -393,13 +403,13 @@
         static bool
         default_contentMatch (GenNode const& spec, Elm const& elm)
           {
-            return spec.matches(elm);
+            //return spec.matches(elm);
           }
         
         static Elm
         default_construct_from_payload (GenNode const& spec)
           {
-            return spec.data.get<Elm>();
+            //return spec.data.get<Elm>();
           }
         
         static bool
@@ -423,23 +433,23 @@
         
         using FallbackBindingConfiguration
             = CollectionBindingBuilder<Coll
-                                      ,decltype(default_contentMatch)
-                                      ,decltype(default_construct_from_payload)
-                                      ,decltype(disable_selector)
-                                      ,decltype(disable_assignment)
-                                      ,decltype(disable_childMutation)
+                                      ,decltype(&default_contentMatch)
+                                      ,decltype(&default_construct_from_payload)
+                                      ,decltype(&disable_selector)
+                                      ,decltype(&disable_assignment)
+                                      ,decltype(&disable_childMutation)
                                       >;
         
         static FallbackBindingConfiguration
         attachTo (Coll& coll)
           {
-            return { coll
-                   , disable_selector
-                   , default_contentMatch
-                   , default_construct_from_payload
-                   , disable_assignment
-                   , disable_childMutation
-                   };
+            return FallbackBindingConfiguration{ coll
+                                               , default_contentMatch
+                                               , default_construct_from_payload
+                                               , disable_selector
+                                               , disable_assignment
+                                               , disable_childMutation
+                                               };
           }
       };
     

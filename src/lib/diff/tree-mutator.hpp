@@ -351,7 +351,7 @@ namespace diff{
         Builder<Collection<BIN>>
         attach (BIN&& collectionBindingSetup)
           {
-            return Collection<BIN> (std::forward<BIN>(collectionBindingSetup));
+            return Collection<BIN> (std::forward<BIN>(collectionBindingSetup), *this);
           }
         
         /** set up a diagnostic layer, binding to TestMutationTarget.
