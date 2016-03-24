@@ -404,15 +404,15 @@
     struct _DefaultPayload
       {
         static bool
-        match (GenNode const& spec, ELM const& elm)
+        match (GenNode const&, ELM const&)
           {
-            UNIMPLEMENTED("lalü");
+            throw error::Logic ("unable to build a sensible default matching predicate");
           }
         
         static ELM
-        construct (GenNode const& spec)
+        construct (GenNode const&)
           {
-            UNIMPLEMENTED("lalü");
+            throw error::Logic ("unable to build a sensible default for creating new elements");
           }
       };
     
