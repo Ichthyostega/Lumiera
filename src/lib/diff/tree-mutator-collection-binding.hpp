@@ -383,6 +383,55 @@
       };
     
     
+    using lib::meta::Yes_t;
+    using lib::meta::No_t;
+    using lib::meta::enable_if;
+    
+    template<typename ELM>
+    struct can_wrap_in_GenNode
+      {
+        template<class X>
+        static Yes_t check(typename lib::variant::CanBuildFrom<X, lib::diff::DataValues>::Type*);
+        template<class X>
+        static No_t  check(...);
+        
+      public:
+        static const bool value = (sizeof(Yes_t)==sizeof(check<ELM>(0)));
+      };
+    
+    
+    template<typename ELM, typename SEL =void>
+    struct _DefaultPayload
+      {
+        static bool
+        match (GenNode const& spec, ELM const& elm)
+          {
+            UNIMPLEMENTED("lalü");
+          }
+        
+        static ELM
+        construct (GenNode const& spec)
+          {
+            UNIMPLEMENTED("lalü");
+          }
+      };
+    
+    template<typename ELM>
+    struct _DefaultPayload<ELM, enable_if<can_wrap_in_GenNode<ELM>>>
+      {
+        static bool
+        match (GenNode const& spec, ELM const& elm)
+          {
+            return spec.matches(elm);
+          }
+        
+        static ELM
+        construct (GenNode const& spec)
+          {
+            return spec.data.get<ELM>();
+          }
+      };
+    
     /**
      * starting point for configuration of a binding to STL container.
      * When using the "nested DSL" to setup a binding to child elements
@@ -400,17 +449,7 @@
         using Coll = typename Strip<COLL>::TypeReferred;
         using Elm  = typename Coll::value_type;
         
-        static bool
-        default_contentMatch (GenNode const& spec, Elm const& elm)
-          {
-            return spec.matches(elm);
-          }
-        
-        static Elm
-        default_construct_from_payload (GenNode const& spec)
-          {
-            return spec.data.get<Elm>();
-          }
+        using Payload = _DefaultPayload<Elm>;
         
         static bool
         disable_selector (GenNode const&)
@@ -433,8 +472,8 @@
         
         using FallbackBindingConfiguration
             = CollectionBindingBuilder<Coll
-                                      ,decltype(&default_contentMatch)
-                                      ,decltype(&default_construct_from_payload)
+                                      ,decltype(&Payload::match)
+                                      ,decltype(&Payload::construct)
                                       ,decltype(&disable_selector)
                                       ,decltype(&disable_assignment)
                                       ,decltype(&disable_childMutation)
@@ -444,8 +483,8 @@
         attachTo (Coll& coll)
           {
             return FallbackBindingConfiguration{ coll
-                                               , default_contentMatch
-                                               , default_construct_from_payload
+                                               , Payload::match
+                                               , Payload::construct
                                                , disable_selector
                                                , disable_assignment
                                                , disable_childMutation
