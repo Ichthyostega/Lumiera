@@ -611,8 +611,7 @@
       Mutator verwendet einen <i>Binder</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1458408965770" ID="ID_1892856741" MODIFIED="1458409828754" TEXT="jeweiliger Client implementiert den Binder"/>
 <node CREATED="1458409675740" ID="ID_1319191337" MODIFIED="1458409828754" TEXT="Implementierung direkt durch Typsystem geleitet">
@@ -2347,8 +2346,7 @@
       da&#223; sich alle relevanten Eigenschaften darstellen lassen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1458176911161" ID="ID_1565618197" MODIFIED="1458176946748">
 <richcontent TYPE="NODE"><html>
@@ -2363,8 +2361,7 @@
       dann wird es wohl so sein, da&#223; sie auch nicht gebraucht wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1458176947972" ID="ID_1901451299" MODIFIED="1458176965869" TEXT="Beispiel: primitive Werte sind eben kein sub-Scope"/>
 <node CREATED="1458176966665" ID="ID_1292201640" MODIFIED="1458176981459" TEXT="Beispiel: immutable elements sind eben nicht zuweisbar"/>
 </node>
@@ -2392,8 +2389,7 @@
       sofern es gelingt, die funktionalit&#228;t gutm&#252;tig zu degradieren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -2412,11 +2408,11 @@
 <node CREATED="1458178288690" ID="ID_562189277" MODIFIED="1458178295494" TEXT="Implementierung">
 <icon BUILTIN="pencil"/>
 <node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1458178300324" TEXT="Builder">
-<node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1458325972586" TEXT="Typ definitionen schwierig anzuschreiben"/>
+<node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1458850234904" TEXT="Typ-Definitionen schwierig anzuschreiben"/>
 <node CREATED="1458325973486" ID="ID_1711903796" MODIFIED="1458325992405" TEXT="Code ziemlich redundant und undurchsichtig">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1458326045724" ID="ID_338749301" MODIFIED="1458326138100" TEXT="Typ-Check erst sehr sp&#xe4;t">
+<node CREATED="1458326045724" ID="ID_338749301" MODIFIED="1458850242859" TEXT="Typ-Check erst sehr sp&#xe4;t">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2435,11 +2431,28 @@
       eine wom&#246;glich irref&#252;hrende Meldung generiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<arrowlink DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" STARTARROW="None" STARTINCLINATION="176;0;"/>
 </node>
 </node>
-<node CREATED="1458178300984" ID="ID_1152672899" MODIFIED="1458178309971" TEXT="Binding-Layer"/>
+<node CREATED="1458178300984" ID="ID_1152672899" MODIFIED="1458178309971" TEXT="Binding-Layer">
+<node CREATED="1458850722203" ID="ID_1565475995" MODIFIED="1458850731470" TEXT="Fehler bei fehlender Funktionalit&#xe4;t">
+<node CREATED="1458850733769" ID="ID_764229197" MODIFIED="1458850744620" TEXT="kein Setter"/>
+<node CREATED="1458850746184" ID="ID_105803291" MODIFIED="1458850752370" TEXT="kein Mutator"/>
+</node>
+<node CREATED="1458850782747" ID="ID_1019140953" MODIFIED="1458850793430" TEXT="Umgang mit fehlendem Selector"/>
+</node>
+<node CREATED="1458850516270" ID="ID_263851499" MODIFIED="1458850519025" TEXT="Test">
+<node CREATED="1458850521270" ID="ID_534213210" MODIFIED="1458850525041" TEXT="F&#xe4;lle">
+<node CREATED="1458850526133" ID="ID_55717538" MODIFIED="1458850550109" TEXT="Binden an Sammlung aus Primitiven"/>
+<node CREATED="1458850550705" ID="ID_1923906009" MODIFIED="1458850572315" TEXT="Binden an Sammlung aus Spezialtypen"/>
+</node>
+<node CREATED="1458850656668" ID="ID_307163685" MODIFIED="1458850658799" TEXT="Defaults">
+<node CREATED="1458850660523" ID="ID_326530451" MODIFIED="1458850670269" TEXT="GenNode-Payload-Typ"/>
+<node CREATED="1458850672705" ID="ID_1240263288" MODIFIED="1458850675197" TEXT="kein Setter"/>
+<node CREATED="1458850675641" ID="ID_736176562" MODIFIED="1458850678564" TEXT="kein Mutator"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1457232746179" ID="ID_1793680066" MODIFIED="1457232776598" TEXT="Rec&lt;GenNode&gt;">
@@ -2449,6 +2462,60 @@
 </node>
 <node CREATED="1457232752458" ID="ID_1490646673" MODIFIED="1457232773416" TEXT="Attribute">
 <icon BUILTIN="full-3"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850101524" HGAP="-3" ID="ID_780586600" MODIFIED="1458850119531" TEXT="TODO" VSHIFT="23">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1458850122091" ID="ID_15024219" MODIFIED="1458850140244" TEXT="Collection-Binding: bessere Fehlermeldungen">
+<node CREATED="1458850141920" ID="ID_428365633" MODIFIED="1458850242859" TEXT="bei Signatur-Mismatch">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es ist sehr verwirrend, welche Signatur denn nun die Lambdas haben m&#252;ssen
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" SOURCE="ID_338749301" STARTARROW="None" STARTINCLINATION="176;0;"/>
+</node>
+<node CREATED="1458850154575" ID="ID_725958518" MODIFIED="1458850180914" TEXT="wenn der Default-Mater greift">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es kann keinen Default-Matcher geben....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1458850212503" ID="ID_321552356" MODIFIED="1458850218977" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren"/>
+<node CREATED="1458850263688" ID="ID_555018476" MODIFIED="1458850272315" TEXT="Zusammenf&#xfc;hren">
+<node CREATED="1458850294083" ID="ID_393704697" MODIFIED="1458850302901" TEXT="der normale GenNode-Applikator"/>
+<node CREATED="1458850282285" ID="ID_435722140" MODIFIED="1458850293735" TEXT="Pr&#xfc;fen ob sinnvoll">
+<node CREATED="1458850328775" ID="ID_1736970011" MODIFIED="1458850333475" TEXT="Indirektionen"/>
+<node CREATED="1458850334110" ID="ID_1313695007" MODIFIED="1458850338898" TEXT="Speicherbedarf"/>
+<node CREATED="1458850339413" ID="ID_476682196" MODIFIED="1458850359702" TEXT="Aufwand bei der Verwendung"/>
+</node>
+<node CREATED="1458850306506" ID="ID_425272158" MODIFIED="1458850323212" TEXT="durch Binding f&#xfc;r Tree-Applikator ersetzen"/>
+</node>
+<node CREATED="1458850387823" ID="ID_415691337" MODIFIED="1458850394506" TEXT="allgemein">
+<node CREATED="1458850397158" ID="ID_1336568549" MODIFIED="1458850405665" TEXT="GenNode">
+<node CREATED="1458850406396" ID="ID_1837583550" MODIFIED="1458850420054" TEXT="string-Repr&#xe4;sentation der Payload"/>
+<node CREATED="1458850422587" ID="ID_1552868803" MODIFIED="1458850433820" TEXT="Metafunktion f&#xfc;r m&#xf6;gliche Payload"/>
+</node>
+<node CREATED="1458850437017" ID="ID_592865755" MODIFIED="1458850455074" TEXT="Planting-Handle">
+<node CREATED="1458850456134" ID="ID_1020391699" MODIFIED="1458850463009" TEXT="Zwischenschicht einziehen im TreeMutator"/>
+<node CREATED="1458850463389" ID="ID_769403943" MODIFIED="1458850470192" TEXT="Generische Impl herausl&#xf6;sen"/>
+<node CREATED="1458850471228" ID="ID_167381938" MODIFIED="1458850476631" TEXT="Unit-Test hierf&#xfc;r"/>
+</node>
 </node>
 </node>
 </node>

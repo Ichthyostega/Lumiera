@@ -383,21 +383,8 @@
       };
     
     
-    using lib::meta::Yes_t;
-    using lib::meta::No_t;
     using lib::meta::enable_if;
-    
-    template<typename ELM>
-    struct can_wrap_in_GenNode
-      {
-        template<class X>
-        static Yes_t check(typename lib::variant::CanBuildFrom<X, lib::diff::DataValues>::Type*);
-        template<class X>
-        static No_t  check(...);
-        
-      public:
-        static const bool value = (sizeof(Yes_t)==sizeof(check<ELM>(0)));
-      };
+    using lib::diff::can_wrap_in_GenNode;
     
     
     template<typename ELM, typename SEL =void>

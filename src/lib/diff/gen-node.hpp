@@ -457,6 +457,31 @@ namespace diff{
   
   
   
+  /**
+   * metafunction to detect types able to be wrapped into a GenNode.
+   * Only a limited and fixed set of types may be placed within a GenNode,
+   * as defined through the typelist `lib::diff::DataValues`. This metafunction
+   * allows to enable or disable specialisations and definitions based on the
+   * fact if a type in question can live within a GenNode.
+   */
+  template<typename ELM>
+  struct can_wrap_in_GenNode
+    {
+      using Yes = lib::meta::Yes_t;
+      using No  = lib::meta::No_t;
+      
+      template<class X>
+      static Yes check(typename variant::CanBuildFrom<X, DataValues>::Type*);
+      template<class X>
+      static No  check(...);
+      
+    public:
+      static const bool value = (sizeof(Yes)==sizeof(check<ELM>(0)));
+    };
+  
+  
+  
+  
   /* === iteration / recursive expansion === */
   
   
