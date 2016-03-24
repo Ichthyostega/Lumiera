@@ -118,33 +118,34 @@ namespace lib {
     
     template<typename X, typename TYPES>
     struct CanBuildFrom<X, Node<X, TYPES>>
+      : std::true_type
       {
         using Type = X;
       };
     
     template<typename X, typename TYPES>
     struct CanBuildFrom<const X, Node<X, TYPES>>
+      : std::true_type
       {
         using Type = X;
       };
     
     template<typename TYPES, size_t len>
     struct CanBuildFrom<const char [len], Node<string, TYPES>> ///< esp. allow to build string from char literal
+      : std::true_type
       {
         using Type = string;
       };
     
     template<typename X, typename T,typename TYPES>
     struct CanBuildFrom<X, Node<T, TYPES>>
-      {
-        using Type = typename CanBuildFrom<X,TYPES>::Type;
-      };
+      : CanBuildFrom<X,TYPES>
+      { };
     
     template<typename X>
     struct CanBuildFrom<X, NullType>
-      {
-        static_assert (0 > sizeof(X), "No type in Typelist can be built from the given argument");
-      };
+      : std::false_type
+      { };
     
     
     
@@ -398,6 +399,8 @@ namespace lib {
       template<typename X>
       Variant(X&& x)
         {
+          static_assert (variant::CanBuildFrom<X, TYPES>(), "No type in Typelist can be built from the given argument");
+          
           using StorageType = typename variant::CanBuildFrom<X, TYPES>::Type;
           
           new(storage_) Buff<StorageType> (forward<X>(x));
