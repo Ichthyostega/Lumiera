@@ -2395,7 +2395,9 @@
 </node>
 <node CREATED="1458178113697" HGAP="46" ID="ID_186668887" MODIFIED="1458178286448" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="-5">
 <node CREATED="1458178126159" ID="ID_1322433318" MODIFIED="1458178131587" TEXT="Rahmenklasse + Closures"/>
-<node CREATED="1458178133078" ID="ID_278002579" MODIFIED="1458178148384" TEXT="Closures mit der Ersatz-Impl vorbelegen"/>
+<node CREATED="1458178133078" ID="ID_278002579" MODIFIED="1458851636692" TEXT="Closures mit der Ersatz-Impl vorbelegen">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1458178150916" ID="ID_1020570949" MODIFIED="1458178174848" TEXT="Problem: komplexe Konstruktion">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -2441,6 +2443,54 @@
 <node CREATED="1458850746184" ID="ID_105803291" MODIFIED="1458850752370" TEXT="kein Mutator"/>
 </node>
 <node CREATED="1458850782747" ID="ID_1019140953" MODIFIED="1458850793430" TEXT="Umgang mit fehlendem Selector"/>
+</node>
+<node CREATED="1458868836883" ID="ID_717368167" MODIFIED="1458868851053" TEXT="Beobachtungen">
+<node CREATED="1458868852849" ID="ID_1641586585" MODIFIED="1458869076689" TEXT="Sonderbarer &quot;this&quot;-Typ">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Builder in der nested DSL generiert einen sonderbar falschen &quot;this&quot;-Typ,
+    </p>
+    <p>
+      genauer gesagt, eine TYPID die falsch ist.
+    </p>
+    <p>
+      Und zwar kommt es da zum &quot;&#220;bersprechen&quot; von einem Typ-Parameter in den anderen.
+    </p>
+    <p>
+      Im Besonderen hab ich beobachtet, da&#223;, wenn man auf den 3.Typparameter ein Lambda gibt,
+    </p>
+    <p>
+      dann auf dem 4. oder 5. Typparameter der bisherige /alte Typ des 3.Typparameters auftaucht,
+    </p>
+    <p>
+      u.U auch eingeschachtelt als ein Argument.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Habe mich aber davon &#252;berzeugt, da&#223; die eigentlichen Typ-Parameter in Ordnung sind.
+    </p>
+    <p>
+      Und zwar habe ich das verifiziert
+    </p>
+    <ul>
+      <li>
+        durch Ausgeben der Typen im Konstruktor (mithilfe meiner typeStr&lt;TY&gt;()
+      </li>
+      <li>
+        durch Einbauen einer Static-Assertion mit Signatur-Match
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node CREATED="1458850516270" ID="ID_263851499" MODIFIED="1458850519025" TEXT="Test">
 <node CREATED="1458850521270" ID="ID_534213210" MODIFIED="1458850525041" TEXT="F&#xe4;lle">
@@ -2509,7 +2559,9 @@
 <node CREATED="1458850387823" ID="ID_415691337" MODIFIED="1458850394506" TEXT="allgemein">
 <node CREATED="1458850397158" ID="ID_1336568549" MODIFIED="1458850405665" TEXT="GenNode">
 <node CREATED="1458850406396" ID="ID_1837583550" MODIFIED="1458850420054" TEXT="string-Repr&#xe4;sentation der Payload"/>
-<node CREATED="1458850422587" ID="ID_1552868803" MODIFIED="1458850433820" TEXT="Metafunktion f&#xfc;r m&#xf6;gliche Payload"/>
+<node COLOR="#338800" CREATED="1458850422587" ID="ID_1552868803" MODIFIED="1458851592866" TEXT="Metafunktion f&#xfc;r m&#xf6;gliche Payload">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1458850437017" ID="ID_592865755" MODIFIED="1458850455074" TEXT="Planting-Handle">
 <node CREATED="1458850456134" ID="ID_1020391699" MODIFIED="1458850463009" TEXT="Zwischenschicht einziehen im TreeMutator"/>

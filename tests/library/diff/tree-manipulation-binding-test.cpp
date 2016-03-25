@@ -308,10 +308,10 @@ namespace test{
                           {
                             cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
                             return spec.idi.getSym() == elm.key;
-                          }
-                       )
+                          })
                        );
-
+          
+          cout << lib::test::showSizeof(mutator) <<endl;
         }
       
       

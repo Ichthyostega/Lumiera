@@ -60,6 +60,9 @@
     using lib::meta::Strip;
     using lib::diff::GenNode;
     
+#define ASSERT_VALID_SIGNATURE(_FUN_, _SIG_) \
+        static_assert (has_Sig<_FUN_, _SIG_>::value, "Function " STRINGIFY(_FUN_) " unsuitable, expected signature: " STRINGIFY(_SIG_));
+        
     /**
      * Attach to collection: Concrete binding setup.
      * This record holds all the actual binding and closures
@@ -83,6 +86,12 @@
       {
         using Coll = typename Strip<COLL>::TypeReferred;
         using Elm  = typename Coll::value_type;
+
+        ASSERT_VALID_SIGNATURE (MAT, bool(GenNode const& spec, Elm const& elm))
+        ASSERT_VALID_SIGNATURE (CTR, Elm (GenNode const&))
+        ASSERT_VALID_SIGNATURE (SEL, bool(GenNode const&))
+        ASSERT_VALID_SIGNATURE (ASS, bool(Elm&, GenNode const&))
+        ASSERT_VALID_SIGNATURE (MUT, bool(Elm&, TreeMutator::MutatorBuffer))
         
         Coll& collection;
         
@@ -445,13 +454,13 @@
           }
         
         static bool
-        disable_assignment (GenNode const&)
+        disable_assignment (Elm&, GenNode const&)
           {
             return false;
           }
         
         static bool
-        disable_childMutation (GenNode const&, TreeMutator::MutatorBuffer)
+        disable_childMutation (Elm&, TreeMutator::MutatorBuffer)
           {
             return false;
           }
