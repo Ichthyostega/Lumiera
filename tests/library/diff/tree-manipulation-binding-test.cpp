@@ -330,6 +330,10 @@ namespace test{
           mutator.injectNew (CHILD_B);
           mutator.injectNew (CHILD_T);
           cout << "inject......" << join(target) <<endl;
+          CHECK (contains(join(target), "≺α∣1≻"));
+          CHECK (contains(join(target), "≺γ∣3.45≻"));
+          CHECK (contains(join(target), "∣b≻"));
+          CHECK (contains(join(target), "∣78:56:34.012≻"));
           
         }
       

@@ -132,14 +132,13 @@
             return eachElm (contentBuffer);
           }
         
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         void
-        inject (GenNode&& elm, string operationID)
+        inject (Elm&& elm)
           {
-            content_.emplace_back (forward<GenNode>(elm));
-            log_.event (operationID, renderNode (content_.back()));
+            collection.emplace_back (forward<Elm>(elm));
           }
         
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         static iterator
         search (GenNode::ID const& targetID, iterator pos)
           {
@@ -189,42 +188,34 @@
         
         /* ==== re-Implementation of the operation API ==== */
       
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-        /** skip next recorded src element
-         * @remarks TestWireTap adapter together with TestMutationTarget
-         *      maintain a "shadow copy" of the data and apply the detected diff
-         *      against this internal copy. This allows to verify what's going on
+        /** skip next pending src element,
+         *  causing this element to be discarded
          */
         virtual void
         skipSrc ()  override
           {
             if (pos_)
-              {
-                GenNode const& skippedElm = *pos_;
-                ++pos_;
-                target_.logSkip (skippedElm);
-              }
-            PAR::skipSrc();
+              ++pos_;
           }
         
-        /** record in the test target
-         *  that a new child element is
-         *  being inserted at current position
+        /** fabricate a new element, based on
+         *  the given specification (GenNode),
+         *  and insert it at current position
+         *  into the target sequence.
          */
         virtual void
         injectNew (GenNode const& n)  override
           {
-            target_.inject (GenNode{n}, "injectNew");
-            PAR::injectNew (n);
+            binding_.inject (binding_.construct(n));
           }
         
         virtual bool
         emptySrc ()  override
           {
-            return !pos_
-               and PAR::emptySrc();
+            return !pos_;
           }
         
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         /** ensure the next recorded source element
          *  matches on a formal level with given spec */
         virtual bool
