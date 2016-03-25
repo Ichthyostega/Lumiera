@@ -66,7 +66,8 @@
         virtual void
         setAttribute (ID id, Attribute& newValue)
           {
-            using ValueType = typename _ClosureType<CLO>::ArgType;
+            using Args = typename _ClosureType<CLO>::Args;
+            using ValueType = typename lib::meta::Pick<Args, 0>::Type;
             
             if (id == attribID_)
               change_(newValue.get<ValueType>());

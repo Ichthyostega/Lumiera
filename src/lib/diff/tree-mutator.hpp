@@ -272,6 +272,7 @@ namespace diff{
   namespace { // Mutator-Builder decorator components...
     
     using lib::meta::Strip;
+    using lib::meta::Types;
     
     /**
      * Type rebinding helper to pick up the actual argument type.
@@ -285,12 +286,27 @@ namespace diff{
       : _ClosureType<decltype(&FUN::operator())>
       { };
 
-    template<class C, class RET, class ARG>
-    struct _ClosureType<RET (C::*)(ARG)  const>
+    template<class C, class RET, typename...ARGS>
+    struct _ClosureType<RET (C::*)(ARGS...)  const>
       {
-        typedef ARG ArgType;
-        typedef RET ReturnType;
+        using Args = typename Types<ARGS...>::Seq;
+        using Ret  = RET;
+        using Sig  = RET(ARGS...);
       };
+
+    template<class RET, typename...ARGS>
+    struct _ClosureType<RET (*)(ARGS...)>
+      {
+        using Args = typename Types<ARGS...>::Seq;
+        using Ret  = RET;
+        using Sig  = RET(ARGS...);
+      };
+    
+    
+    template<typename FUN, typename SIG>
+    struct has_Sig
+      : std::is_same<SIG, typename _ClosureType<FUN>::Sig>
+      { };
     
     
 
