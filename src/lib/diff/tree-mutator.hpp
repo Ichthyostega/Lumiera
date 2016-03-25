@@ -333,8 +333,8 @@ namespace diff{
     struct Builder
       : PAR
       {
-        Builder(PAR par)
-          : PAR(par)
+        Builder(PAR&& par)
+          : PAR(std::forward<PAR>(par))
           { }
         
         template<class CLO>

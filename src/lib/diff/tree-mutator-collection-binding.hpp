@@ -174,6 +174,7 @@
         using Iter = typename BIN::iterator;
         
         BIN binding_;
+      public: ///////////////TODO: diagnostics
         Iter pos_;
         
         
@@ -184,7 +185,18 @@
           , pos_(binding_.initMutation())
           { }
         
+        ChildCollectionMutator (ChildCollectionMutator&&)       =default;
+        ChildCollectionMutator (ChildCollectionMutator const&)  =delete;
+        ChildCollectionMutator& operator= (ChildCollectionMutator const&) =delete;
         
+        
+        /////////////////TODO : diagnostics
+        typename BIN::const_iterator
+        exposeSrcBuffer()  const
+          {
+            return eachElm (binding_.contentBuffer);
+          }
+        /////////////////TODO : diagnostics
         
         /* ==== re-Implementation of the operation API ==== */
         

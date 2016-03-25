@@ -354,6 +354,7 @@ namespace test{
           CHECK (isnil (contents));
           
           cout << "injected......" << join(target) <<endl;
+          cout << "exhausted....." << join(mutator.exposeSrcBuffer()) <<endl;;
           
           
           // --- second round: reorder the collection ---
@@ -376,6 +377,9 @@ namespace test{
                           }));
           
           CHECK (isnil (target));                   // the "visible" new content is still void
+          cout << "target......" << join(target) <<endl;;
+          cout << "srcBuff....." << join(mutator2.exposeSrcBuffer()) <<endl;;
+          cout << "pos_........" << *mutator2.pos_ <<endl;;
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
           CHECK (isnil (target));                   // the match didn't change anything
