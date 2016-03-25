@@ -2443,6 +2443,14 @@
 <node CREATED="1458850746184" ID="ID_105803291" MODIFIED="1458850752370" TEXT="kein Mutator"/>
 </node>
 <node CREATED="1458850782747" ID="ID_1019140953" MODIFIED="1458850793430" TEXT="Umgang mit fehlendem Selector"/>
+<node CREATED="1458934854051" ID="ID_898160956" MODIFIED="1458934860213" TEXT="Binding st&#xe4;rker abschlie&#xdf;en">
+<node CREATED="1458934863225" ID="ID_843139682" MODIFIED="1458934897237" TEXT="contentBuffer k&#xf6;nnte privat sein">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1458934878911" ID="ID_986928457" MODIFIED="1458934893132" TEXT="welche Iteratoren m&#xfc;ssen exponiert werden">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 <node CREATED="1458868836883" ID="ID_717368167" MODIFIED="1458868851053" TEXT="Beobachtungen">
 <node CREATED="1458868852849" ID="ID_1641586585" MODIFIED="1458869076689" TEXT="Sonderbarer &quot;this&quot;-Typ">

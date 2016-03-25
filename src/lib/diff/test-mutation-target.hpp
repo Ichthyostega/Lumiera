@@ -47,7 +47,6 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "lib/iter-adapter-stl.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/idi/genfunc.hpp"
@@ -227,12 +226,13 @@ namespace diff{
       
       /* === Operation / Mutation API === */
       
-      void
+      iterator
       initMutation (string mutatorID)
         {
           prev_content_.clear();
           swap (content_, prev_content_);
           log_.event ("attachMutator "+mutatorID);
+          return srcIter();
         }
       
       void
@@ -366,11 +366,8 @@ namespace diff{
         TestWireTap(Target& dummy, PAR const& chain)
           : PAR(chain)
           , target_(dummy)
-          , pos_()
-          {
-            target_.initMutation (identify(this));
-            pos_ = target_.srcIter();
-          }
+          , pos_(target_.initMutation (identify(this)))
+          { }
         
         
         

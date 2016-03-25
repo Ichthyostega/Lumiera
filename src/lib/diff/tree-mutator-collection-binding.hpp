@@ -59,6 +59,8 @@
     
     using lib::meta::Strip;
     using lib::diff::GenNode;
+    using lib::iter_stl::eachElm;
+    
     
     
     /** verify the installed functors or lambdas expose the expected signature */
@@ -88,12 +90,17 @@
       {
         using Coll = typename Strip<COLL>::TypeReferred;
         using Elm  = typename Coll::value_type;
-
+        
+        using iterator       = typename lib::iter_stl::_SeqT<Coll>::Range;
+        using const_iterator = typename lib::iter_stl::_SeqT<const Coll>::Range;
+        
+        
         ASSERT_VALID_SIGNATURE (MAT, bool(GenNode const& spec, Elm const& elm))
         ASSERT_VALID_SIGNATURE (CTR, Elm (GenNode const&))
         ASSERT_VALID_SIGNATURE (SEL, bool(GenNode const&))
         ASSERT_VALID_SIGNATURE (ASS, bool(Elm&, GenNode const&))
         ASSERT_VALID_SIGNATURE (MUT, bool(Elm&, TreeMutator::MutatorBuffer))
+        
         
         Coll& collection;
         
@@ -117,15 +124,15 @@
         
         Coll contentBuffer;
         
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-        void
-        initMutation (string mutatorID)
+        iterator
+        initMutation ()
           {
-            prev_content_.clear();
-            swap (content_, prev_content_);
-            log_.event ("attachMutator "+mutatorID);
+            contentBuffer.clear();
+            swap (collection, contentBuffer);
+            return eachElm (contentBuffer);
           }
         
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         void
         inject (GenNode&& elm, string operationID)
           {
@@ -165,12 +172,17 @@
     class ChildCollectionMutator
       : public PAR
       {
+        using Iter = typename BIN::iterator;
+        
         BIN binding_;
+        Iter pos_;
+        
         
       public:
         ChildCollectionMutator(BIN wiringClosures, PAR const& chain)
           : PAR(chain)
           , binding_(wiringClosures)
+          , pos_(binding_.initMutation())
           { }
         
         

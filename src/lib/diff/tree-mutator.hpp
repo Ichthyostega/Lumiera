@@ -77,6 +77,7 @@
 #include "lib/meta/trait.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/opaque-holder.hpp"
+#include "lib/iter-adapter-stl.hpp"
 //#include "lib/util.hpp"
 //#include "lib/format-string.hpp"
 
