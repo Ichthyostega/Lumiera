@@ -165,7 +165,7 @@ namespace test{
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
           CHECK (isnil (target));                   // the match didn't change anything
           
-          CHECK (mutator2.findSrc (ATTRIB3));       // serach for an element further down into src...              // findSrc
+          CHECK (mutator2.findSrc (ATTRIB3));       // search for an element further down into src...              // findSrc
           CHECK (!isnil (target));                  // ...pick and accept it into the "visible" part of target
           CHECK (target.showContent() == "γ = 3.45");
           
@@ -187,7 +187,7 @@ namespace test{
           // NOTE: the TestWireTap / TestMutationTarget does not enforce the attribute / children distinction!
           CHECK (not mutator2.emptySrc());
           CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
-          mutator2.skipSrc();                       // ...which will be skipped (and thus discarded                // skipSrc
+          mutator2.skipSrc();                       // ...which will be skipped (and thus discarded)               // skipSrc
           mutator2.injectNew (SUB_NODE);            // inject a new nested sub-structure here                      // injectNew
           CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
           CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
@@ -354,6 +354,63 @@ namespace test{
           CHECK (isnil (contents));
           
           cout << "injected......" << join(target) <<endl;
+          
+          
+          // --- second round: reorder the collection ---
+          
+          
+          // Mutators are one-time disposable objects,
+          // thus we'll have to build a new one for the second round...
+          auto mutator2 =
+          TreeMutator::build()
+            .attach (collection(target)
+                       .constructFrom ([&](GenNode const& spec) -> Data
+                          {
+                            cout << "constructor invoked on "<<spec<<endl;
+                            return {spec.idi.getSym(), render(spec.data)};
+                          })
+                       .matchElement ([&](GenNode const& spec, Data const& elm)
+                          {
+                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
+                            return spec.idi.getSym() == elm.key;
+                          }));
+          
+          CHECK (isnil (target));                   // the "visible" new content is still void
+          
+          CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
+          CHECK (isnil (target));                   // the match didn't change anything
+          
+          CHECK (mutator2.findSrc (ATTRIB3));       // search for an element further down into src...              // findSrc
+          CHECK (!isnil (target));                  // ...pick and accept it into the "visible" part of target
+          CHECK (join(target) == "≺γ∣3.45≻");
+          
+          CHECK (mutator2.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
+          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element                        // acceptSrc
+          
+          mutator2.skipSrc();                       // next we have to clean up waste left over by findSrc()       // skipSrc
+          
+          mutator2.injectNew (ATTRIB2);                                                                            // injectNew
+          CHECK (mutator2.matchSrc (ATTRIB3));
+          CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
+          
+          CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
+          mutator2.skipSrc();                       // ...which will be skipped (and thus discarded)               // skipSrc
+          mutator2.injectNew (SUB_NODE);            // inject a new nested sub-structure here                      // injectNew
+          CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
+          CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
+          CHECK (not mutator2.emptySrc());
+          CHECK (mutator2.matchSrc (CHILD_B));      // child B still waiting, unaffected
+          CHECK (not mutator2.acceptSrc (CHILD_T)); // refusing to accept/pick a non matching element
+          CHECK (mutator2.matchSrc (CHILD_B));      // child B still patiently waiting, unaffected
+          CHECK (mutator2.acceptSrc (CHILD_B));                                                                    // acceptSrc
+          CHECK (mutator2.matchSrc (CHILD_T));
+          CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
+          CHECK (mutator2.emptySrc());              // source contents exhausted
+          CHECK (not mutator2.acceptSrc (CHILD_T)); // ...anything beyond is NOP
+
+          cout << "Content after reordering...."
+               << join(target) <<endl;
+//          CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.45, Rec(), b, 78:56:34.012");
         }
       
       
