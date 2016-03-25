@@ -34,7 +34,10 @@
  ** specifically tailored bindings.
  ** 
  ** If the following code makes you feel like vomiting, please look away,
- ** and rest assured: you aren't alone. 
+ ** and rest assured: you aren't alone.
+ ** 
+ ** @todo rework to use variadic templates and integrage support for lambdas   //////////////////////////////////////TICKET #994
+ ** 
  ** 
  ** @see control::CommandDef usage example
  ** @see function-closure.hpp generic function application
@@ -216,6 +219,9 @@ namespace meta{
    * irrespective if the parameter is given as function reference,
    * function pointer, member function pointer or functor object.
    * The base case assumes a (language) function reference.
+   * @todo the base case should be a _generic functor_ where we
+   *       pick up the signature through `decltype`, which also
+   *       works with lambdas. See (\ref _ClosureType)                  //////////////////////////////////////TICKET #994
    */
   template<typename SIG>
   struct _Fun

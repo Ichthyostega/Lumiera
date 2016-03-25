@@ -280,6 +280,7 @@ namespace diff{
      * @remarks Solution proposed 10/2011 by \link http://stackoverflow.com/users/224671/kennytm user "kennytm" \endlink
      *          in this \link http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765
      *          answer on stackoverflow \endlink
+     * @todo this should be integrated into (\ref _Fun)                  //////////////////////////////////////TICKET #994
      */
     template<typename FUN>
     struct _ClosureType
