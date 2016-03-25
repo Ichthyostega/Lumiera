@@ -26,6 +26,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/diff/test-mutation-target.hpp"
+#include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
@@ -39,8 +40,11 @@
 using util::join;
 using util::isnil;
 using util::contains;
+using util::stringify;
+using lib::iter_stl::eachElm;
 using lib::time::Time;
 using std::string;
+
 //using std::vector;
 //using std::swap;
 
@@ -311,7 +315,12 @@ namespace test{
                           })
                        );
           
-          cout << lib::test::showSizeof(mutator) <<endl;
+          CHECK (sizeof(mutator) <= sizeof(VecD)                // the buffer for pending elements
+                                  + sizeof(VecD*)               // the reference to the original collection
+                                  + sizeof(void*)               // the reference from the ChildCollectionMutator to the CollectionBinding
+                                  + 2 * sizeof(VecD::iterator)  // one Lumiera RangeIter (comprised of pos and end iterators)
+                                  + 3 * sizeof(void*)           // the three unused default configured binding functions
+                                  + 1 * sizeof(void*));         // one back reference from the closures to this scope
           
           
           // --- first round: populate the collection ---
@@ -321,7 +330,6 @@ namespace test{
           
           mutator.injectNew (ATTRIB1);
           CHECK (!isnil (target));
-          cout << "inject..." << join(target) <<endl;
           CHECK (contains(join(target), "≺α∣1≻"));
           
           mutator.injectNew (ATTRIB3);
@@ -329,12 +337,23 @@ namespace test{
           mutator.injectNew (CHILD_B);
           mutator.injectNew (CHILD_B);
           mutator.injectNew (CHILD_T);
-          cout << "inject......" << join(target) <<endl;
-          CHECK (contains(join(target), "≺α∣1≻"));
-          CHECK (contains(join(target), "≺γ∣3.45≻"));
-          CHECK (contains(join(target), "∣b≻"));
-          CHECK (contains(join(target), "∣78:56:34.012≻"));
           
+          auto contents = stringify(eachElm(target));
+          CHECK ("≺α∣1≻" == *contents);
+          ++contents;
+          CHECK ("≺γ∣3.45≻" == *contents);
+          ++contents;
+          CHECK ("≺γ∣3.45≻" == *contents);
+          ++contents;
+          CHECK (contains(*contents, "∣b≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣b≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣78:56:34.012≻"));
+          ++contents;
+          CHECK (isnil (contents));
+          
+          cout << "injected......" << join(target) <<endl;
         }
       
       

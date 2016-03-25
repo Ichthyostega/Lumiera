@@ -34,7 +34,7 @@
  ** several bindings on top of a single TreeMutator -- and this header defines
  ** a building block for one such layer, especially for binding to a representation
  ** of "child objects" managed within a typical STL container.
- **  
+ ** 
  ** @note the header tree-mutator-collection-binding.hpp with specific builder templates
  **       is included way down, after the class definitions. This is done so for sake
  **       of readability.
@@ -52,7 +52,7 @@
 #endif
 
 
-  
+
 //== anonymous namespace...
     
     
@@ -187,7 +187,7 @@
         
         
         /* ==== re-Implementation of the operation API ==== */
-      
+        
         /** skip next pending src element,
          *  causing this element to be discarded
          */
@@ -319,6 +319,8 @@
           }
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
       };
+    
+    
     
     
     /**
@@ -501,7 +503,7 @@
      * and wrap a language reference to the concrete collection
      * implementing the "object children". The result is a default configured
      * binding, which should be further adapted with the builder functions,
-     * using lambdas as callback into the otherwise opaque implementation code. 
+     * using lambdas as callback into the otherwise opaque implementation code.
      */
     template<class COLL>
     auto
