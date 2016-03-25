@@ -285,7 +285,7 @@ namespace test{
               string key;
               string val;
               
-              operator string()                const { return _Fmt{"≺%s∫%s≻"} % key % val; }
+              operator string()                const { return _Fmt{"≺%s∣%s≻"} % key % val; }
               bool operator== (Data const& o)  const { return key==o.key and val==o.val; }
               bool operator!= (Data const& o)  const { return not (*this == o); }
             };
@@ -312,6 +312,25 @@ namespace test{
                        );
           
           cout << lib::test::showSizeof(mutator) <<endl;
+          
+          
+          // --- first round: populate the collection ---
+          
+          CHECK (isnil (target));
+          CHECK (mutator.emptySrc());
+          
+          mutator.injectNew (ATTRIB1);
+          CHECK (!isnil (target));
+          cout << "inject..." << join(target) <<endl;
+          CHECK (contains(join(target), "≺α∣1≻"));
+          
+          mutator.injectNew (ATTRIB3);
+          mutator.injectNew (ATTRIB3);
+          mutator.injectNew (CHILD_B);
+          mutator.injectNew (CHILD_B);
+          mutator.injectNew (CHILD_T);
+          cout << "inject......" << join(target) <<endl;
+          
         }
       
       
