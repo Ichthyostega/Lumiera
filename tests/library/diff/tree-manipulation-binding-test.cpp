@@ -87,7 +87,7 @@ namespace test{
    *       - use a dummy diagnostic implementation to verify the interface
    *       - integrate the standard case of tree diff application to `Rec<GenNode>`
    *       - verify an adapter to apply structure modification to a generic collection
-   *       - use closures to translate mutation into manipulation of private attribues
+   *       - use closures to translate mutation into manipulation of private attributes
    * 
    * @see TreeMutator
    * @see TreeMutator_test

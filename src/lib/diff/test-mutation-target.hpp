@@ -375,7 +375,7 @@ namespace diff{
       
         /** skip next recorded src element
          * @remarks TestWireTap adapter together with TestMutationTarget
-         *      maintain a "shaddow copy" of the data and apply the detected diff
+         *      maintain a "shadow copy" of the data and apply the detected diff
          *      against this internal copy. This allows to verify what's going on
          */
         virtual void
@@ -390,9 +390,9 @@ namespace diff{
             PAR::skipSrc();
           }
         
-        /** record in the test taget
+        /** record in the test target
          *  that a new child element is
-         *  being insertet at current position
+         *  being inserted at current position
          */
         virtual void
         injectNew (GenNode const& n)  override

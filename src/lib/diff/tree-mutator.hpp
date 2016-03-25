@@ -97,7 +97,7 @@ namespace lib {
    * @remarks this is especially geared towards use in APIs, allowing
    *    a not yet known implementation to implant an agent or collaboration
    *    partner into the likewise undisclosed innards of the exposed service.
-   * @warning the type BA must expose a virtual dtor, since the targetted
+   * @warning the type BA must expose a virtual dtor, since the targeted
    *    OpaqueHolder has to take ownership of the implanted object.
    */
   template<class BA>
@@ -234,8 +234,8 @@ namespace diff{
       
       /** locate the designated target element
        *  (must be already accepted into the target sequence).
-       *  Perform an assignement with the given payload value
-       * @throw when assignement fails (typically error::Logic)
+       *  Perform an assignment with the given payload value
+       * @throw when assignment fails (typically error::Logic)
        * @return false when unable to locate the target */
       virtual bool
       assignElm (GenNode const&)
@@ -248,7 +248,7 @@ namespace diff{
       using MutatorBuffer = PlantingHandle<TreeMutator>;
       
       /** locate the designated target element
-       *  and build a suittable sub-mutator for this element
+       *  and build a suitable sub-mutator for this element
        *  into the provided target buffer
        * @throw error::Fatal when buffer is insufficient
        * @return false when unable to locate the target */
@@ -362,7 +362,7 @@ namespace diff{
          *   is a (language) reference to a STL compliant container existing somewhere
          *   within the otherwise opaque implementation. The type of the container and
          *   thus the type of the elements will be picked up, and the returned builder
-         *   can be further outfitted with the builder methods, which take labmdas as
+         *   can be further outfitted with the builder methods, which take lambdas as
          *   callback into the implementation.
          */
         template<typename BIN>
