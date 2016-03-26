@@ -76,8 +76,8 @@
               PAR::setAttribute(id, newValue);
           }
         
-        ChangeOperation(ID id, CLO clo, PAR const& chain)
-          : PAR(chain)
+        ChangeOperation(ID id, CLO clo, PAR&& chain)
+          : PAR(std::forward<PAR>(chain))
           , attribID_(id)
           , change_(clo)
           { }

@@ -363,8 +363,8 @@ namespace diff{
         Iter    pos_;
 
       public:
-        TestWireTap(Target& dummy, PAR const& chain)
-          : PAR(chain)
+        TestWireTap(Target& dummy, PAR&& chain)
+          : PAR{forward<PAR> (chain)}
           , target_(dummy)
           , pos_(target_.initMutation (identify(this)))
           { }
@@ -517,7 +517,7 @@ namespace diff{
     Builder<TestWireTap<PAR>>
     Builder<PAR>::attachDummy (TestMutationTarget& dummy)
     {
-      return WireTap (dummy, *this);
+      return WireTap (dummy, move(*this));
     }
 
   }

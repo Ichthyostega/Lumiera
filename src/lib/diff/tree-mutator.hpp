@@ -45,8 +45,8 @@
  ** TreeMutator is both an interface and a set of building blocks.
  ** On concrete usage, the (private, non disclosed) target data structure is assumed
  ** to _build a subclass of TreeMutator._ To this end, the TreeMutator is complemented
- ** by a builder API. Each call on this builder -- typically providing some closure --
- ** will add yet another decorating layer on top of the basic TreeMutator (recall all
+ ** by a **builder DSL**. Each call on this builder -- typically providing some closure --
+ ** will add yet another _decorating layer_ on top of the basic TreeMutator (recall all
  ** the "mutation primitives" are implemented NOP within the base class). So the actual
  ** TreeMutator will be structured like an onion, where each layer cares for the sole
  ** concrete aspect it was tied for by the supplied closure. For example, there might
@@ -58,6 +58,25 @@
  ** API is only declared (forward) by default. The TestMutationTarget is a helper class,
  ** which can be attached through this binding and allows a unit test fixture to record
  ** and verify all the mutation operations encountered.
+ ** 
+ ** ## Lifecycle
+ ** The TreeMutator is conceived as a disposable, one-way-off object. On initialisation,
+ ** it will _"grab" the contents of its target_ and push them back into place one by one
+ ** while consuming a mutation diff. For this reason, TreeMutator is made **non-copyable**,
+ ** just supporting move construction, as will happen when using the DSL functions on
+ ** the builder. This is also the only supported usage pattern: you create an anonymous
+ ** TreeMutator sub type by using the Builder functions right within the scope about to
+ ** consume one strike of diff messages. These messages should cover anything to confirm
+ ** or reshape _all of the target's contents_. After that, you must not refer to the
+ ** exhausted TreeMutator anymore, just let it fall out of scope. Incidentally, this
+ ** also means that _any failure or exception encountered_ while applying a diff will
+ ** **corrupt the target data structure**. The basic assumption is that
+ ** - the target data structure will actually be built through diff messages solely
+ ** - and that all received diff messages are sane, as being drawn from a
+ **   semantically and structurally equivalent source structure
+ ** If unable to uphold this consistency assumption, it is the client's responsibility
+ ** to care for _transactional behaviour,_ i.e. create a clone copy of the data structure
+ ** beforehand, and "commit" or "roll back" the result atomically.
  **  
  ** @note to improve readability, the actual implementation of the "binding layers"
  **       is defined in separate headers and included towards the bottom of this header.
@@ -78,14 +97,9 @@
 #include "lib/diff/gen-node.hpp"
 #include "lib/opaque-holder.hpp"
 #include "lib/iter-adapter-stl.hpp"
-//#include "lib/util.hpp"
-//#include "lib/format-string.hpp"
 
-#include <functional>
-#include <utility> ////TODO
+#include <utility>
 #include <string>
-//#include <vector>
-//#include <map>
 
 
 namespace lib {
@@ -142,9 +156,7 @@ namespace diff{
   
   namespace error = lumiera::error;
   
-//using util::_Fmt;
-  using lib::Literal;
-  using std::function;
+  using lib::Literal; /////TODO placeholder
   using std::string;
   
   
@@ -157,7 +169,7 @@ namespace diff{
     template<class PAR>
     struct Builder;
     
-    using ID        = Literal;
+    using ID        = Literal; /////TODO placeholder
     using Attribute = DataCap;
   }
   
@@ -176,6 +188,15 @@ namespace diff{
     {
       
     public:
+      /** only allow default and move construction */
+      TreeMutator ()                    =default;
+      TreeMutator (TreeMutator&&)       =default;
+      TreeMutator (TreeMutator const&)  =delete;
+      
+      TreeMutator& operator= (TreeMutator const&) =delete;
+      TreeMutator& operator= (TreeMutator&&)      =delete;
+      
+      
       
       /* ==== operation API ==== */
       
@@ -274,6 +295,8 @@ namespace diff{
     
     using lib::meta::Strip;
     using lib::meta::Types;
+    using std::forward;
+    using std::move;
     
     /**
      * Type rebinding helper to pick up the actual argument type.
@@ -328,13 +351,15 @@ namespace diff{
      * @remarks all generated follow-up builders are chained and
      *          derive from the implementation of the preceding
      *          "binding layer" and the TreeMutator interface.
+     * @note on each chained builder call, the compound is
+     *          moved "inside out" into the next builder.
      */
     template<class PAR>
     struct Builder
       : PAR
       {
         Builder(PAR&& par)
-          : PAR(std::forward<PAR>(par))
+          : PAR{forward<PAR> (par)}
           { }
         
         template<class CLO>
@@ -352,7 +377,7 @@ namespace diff{
         Builder<Change<CLO>>
         change (Literal attributeID, CLO closure)
           {
-            return Change<CLO> (attributeID, closure, *this);
+            return Change<CLO> (attributeID, closure, move(*this));
           }
         
         /** set up a binding to a structure of "child objects",
@@ -369,7 +394,7 @@ namespace diff{
         Builder<Collection<BIN>>
         attach (BIN&& collectionBindingSetup)
           {
-            return Collection<BIN> (std::forward<BIN>(collectionBindingSetup), *this);
+            return Collection<BIN> {forward<BIN>(collectionBindingSetup), move(*this)};
           }
         
         /** set up a diagnostic layer, binding to TestMutationTarget.

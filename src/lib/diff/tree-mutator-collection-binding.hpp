@@ -178,15 +178,12 @@
         
         
       public:
-        ChildCollectionMutator(BIN wiringClosures, PAR const& chain)
-          : PAR(chain)
+        ChildCollectionMutator(BIN wiringClosures, PAR&& chain)
+          : PAR(std::forward<PAR>(chain))
           , binding_(wiringClosures)
           , pos_(binding_.initMutation())
           { }
         
-        ChildCollectionMutator (ChildCollectionMutator&&)       =default;
-        ChildCollectionMutator (ChildCollectionMutator const&)  =delete;
-        ChildCollectionMutator& operator= (ChildCollectionMutator const&) =delete;
         
         
         
