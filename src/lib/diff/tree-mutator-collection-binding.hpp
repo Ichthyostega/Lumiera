@@ -138,15 +138,15 @@
             collection.emplace_back (forward<Elm>(elm));
           }
         
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-        static iterator
-        search (GenNode::ID const& targetID, iterator pos)
+        iterator
+        search (GenNode const& targetSpec, iterator pos)
           {
-            while (pos and not pos->matches(targetID))
+            while (pos and not matches(targetSpec, *pos))
               ++pos;
             return pos;
           }
         
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         iterator
         locate (GenNode::ID const& targetID)
           {
@@ -174,7 +174,6 @@
         using Iter = typename BIN::iterator;
         
         BIN binding_;
-      public: ///////////////TODO: diagnostics
         Iter pos_;
         
         
@@ -190,13 +189,6 @@
         ChildCollectionMutator& operator= (ChildCollectionMutator const&) =delete;
         
         
-        /////////////////TODO : diagnostics
-        typename BIN::const_iterator
-        exposeSrcBuffer()  const
-          {
-            return eachElm (binding_.contentBuffer);
-          }
-        /////////////////TODO : diagnostics
         
         /* ==== re-Implementation of the operation API ==== */
         
@@ -227,14 +219,12 @@
             return !pos_;
           }
         
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         /** ensure the next recorded source element
          *  matches on a formal level with given spec */
         virtual bool
-        matchSrc (GenNode const& n)  override
+        matchSrc (GenNode const& spec)  override
           {
-            return PAR::matchSrc(n)
-                or pos_? n.matches(*pos_)
+            return pos_? binding_.matches (spec, *pos_)
                        : false;
           }
         
@@ -242,29 +232,28 @@
         virtual bool
         acceptSrc (GenNode const& n)  override
           {
-            bool isSrcMatch = TestWireTap::matchSrc(n);
-            if (isSrcMatch)             // NOTE: important to call our own method here, not the virtual function
+            bool isSrcMatch = ChildCollectionMutator::matchSrc(n);
+            if (isSrcMatch)                  // NOTE: crucial to call our own method here, not the virtual function
               {
-                target_.inject (move(*pos_), "acceptSrc");
+                binding_.inject (move(*pos_));
                 ++pos_;
               }
-            return PAR::acceptSrc(n)
-                or isSrcMatch;
+            return isSrcMatch;
           }
         
         /** locate designated element and accept it at current position */
         virtual bool
-        findSrc (GenNode const& ref)  override
+        findSrc (GenNode const& refSpec)  override
           {
-            Iter found = TestMutationTarget::search (ref.idi, pos_);
+            Iter found = binding_.search (refSpec, pos_);
             if (found)
               {
-                target_.inject (move(*found), "findSrc");
+                binding_.inject (move(*found));
               }
-            return PAR::findSrc(ref)
-                or found;
+            return found;
           }
         
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         /** repeatedly accept, until after the designated location */
         virtual bool
         accept_until (GenNode const& spec)

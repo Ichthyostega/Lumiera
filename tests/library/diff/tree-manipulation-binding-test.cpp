@@ -277,13 +277,28 @@ namespace test{
         }
       
       
-      /** @test map mutation primitives onto a STL collection managed locally. */
+      
+      
+      
+      /** @test map mutation primitives onto a STL collection managed locally.
+       *        - we perform _literally_ the same diff steps as in mutateDummy()
+       *        - but now we have a completely opaque implementation data structure,
+       *          where even the data type is unknown beyond this functions's scope.
+       *        - thus we build a custom mutator, installing lambdas to tie into this
+       *          local data structure, without disclosing any details. In fact we even
+       *          install different lambdas on each usage cycle, according to the specific
+       *          mutation operations to perform. Of course, it would be pointless to do so
+       *          in real world usage, yet nicely demonstrates the point that the implementation
+       *          really remains in control about anything regarding its private data structure.
+       *        - and still, by exposing such a custom configured mutator, this private structure
+       *          can be populated, reordered and even altered recursively, by generic instructions.
+       */
       void
       mutateCollection()
         {
           MARK_TEST_FUN;
           
-          // some private data structures
+          // private data structures to be mutated
           struct Data
             {
               string key;
@@ -307,20 +322,14 @@ namespace test{
                           {
                             cout << "constructor invoked on "<<spec<<endl;
                             return {spec.idi.getSym(), render(spec.data)};
-                          })
-                       .matchElement ([&](GenNode const& spec, Data const& elm)
-                          {
-                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
-                            return spec.idi.getSym() == elm.key;
-                          })
-                       );
+                          }));
           
           CHECK (sizeof(mutator) <= sizeof(VecD)                // the buffer for pending elements
                                   + sizeof(VecD*)               // the reference to the original collection
                                   + sizeof(void*)               // the reference from the ChildCollectionMutator to the CollectionBinding
                                   + 2 * sizeof(VecD::iterator)  // one Lumiera RangeIter (comprised of pos and end iterators)
-                                  + 3 * sizeof(void*)           // the three unused default configured binding functions
-                                  + 1 * sizeof(void*));         // one back reference from the closures to this scope
+                                  + 4 * sizeof(void*)           // the four unused default configured binding functions
+                                  + 1 * sizeof(void*));         // one back reference from the closure to this scope
           
           
           // --- first round: populate the collection ---
@@ -354,7 +363,6 @@ namespace test{
           CHECK (isnil (contents));
           
           cout << "injected......" << join(target) <<endl;
-          cout << "exhausted....." << join(mutator.exposeSrcBuffer()) <<endl;;
           
           
           // --- second round: reorder the collection ---
@@ -376,10 +384,11 @@ namespace test{
                             return spec.idi.getSym() == elm.key;
                           }));
           
+          // we have two lambdas now and thus can save on the size of one function pointer....
+          CHECK (sizeof(mutator) - sizeof(mutator2) == sizeof(void*));
+          
+          
           CHECK (isnil (target));                   // the "visible" new content is still void
-          cout << "target......" << join(target) <<endl;;
-          cout << "srcBuff....." << join(mutator2.exposeSrcBuffer()) <<endl;;
-          cout << "pos_........" << *mutator2.pos_ <<endl;;
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
           CHECK (isnil (target));                   // the match didn't change anything
@@ -399,7 +408,7 @@ namespace test{
           
           CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
           mutator2.skipSrc();                       // ...which will be skipped (and thus discarded)               // skipSrc
-          mutator2.injectNew (SUB_NODE);            // inject a new nested sub-structure here                      // injectNew
+          mutator2.injectNew (SUB_NODE);            // inject a nested sub-structure (implementation defined)      // injectNew
           CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
           CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
           CHECK (not mutator2.emptySrc());
@@ -411,10 +420,27 @@ namespace test{
           CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
           CHECK (mutator2.emptySrc());              // source contents exhausted
           CHECK (not mutator2.acceptSrc (CHILD_T)); // ...anything beyond is NOP
-
+          
+          // verify reordered shape
+          contents = stringify(eachElm(target));
+          CHECK ("≺γ∣3.45≻" == *contents);
+          ++contents;
+          CHECK ("≺α∣1≻" == *contents);
+          ++contents;
+          CHECK ("≺β∣2≻" == *contents);
+          ++contents;
+          CHECK ("≺γ∣3.45≻" == *contents);
+          ++contents;
+          CHECK (contains(*contents, "∣Rec()≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣b≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣78:56:34.012≻"));
+          ++contents;
+          CHECK (isnil (contents));
+          
           cout << "Content after reordering...."
                << join(target) <<endl;
-//          CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.45, Rec(), b, 78:56:34.012");
         }
       
       
