@@ -193,6 +193,9 @@ namespace diff{
       template<typename X>
       X const& get()  const;
       
+      /** peek into the type field of a nested `Record<GenNode>` */
+      string
+      recordType()  const;
       
       /** visit _children_ of a nested `Record<GenNode>` */
       Rec::scopeIter
@@ -689,7 +692,30 @@ namespace diff{
       
       return Variant<DataValues>::get<RecRef>();
     }
-
+  
+  /**
+   * @return either the contents of a nested record's type field
+   *         or the Rec::TYPE_NIL marker.
+   * @remarks this function never raises an error, even if the element
+   *         in fact doesn't constitute a nested scope. Effectively this
+   *         allows to "peek" into the contents to some degree.
+   */
+  inline string
+  DataCap::recordType()  const
+    {
+      Rec* nested = unConst(this)->maybeGet<Rec>();
+      if (!nested)
+        {
+          RecRef* ref = unConst(this)->maybeGet<RecRef>();
+          if (ref and not ref->empty())
+            nested = ref->get();
+        }
+      
+      return nested? nested->getType()
+                   : Rec::TYPE_NIL;
+    }
+  
+  
   
   
   /**

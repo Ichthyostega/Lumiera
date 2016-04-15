@@ -2316,7 +2316,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="GenNode" creator="Ichthyostega" modifier="Ichthyostega" created="201501171413" modified="201507031718" tags="Model GuiIntegration GuiPattern def draft" changecount="13">
+<div title="GenNode" creator="Ichthyostega" modifier="Ichthyostega" created="201501171413" modified="201604152207" tags="Model GuiIntegration GuiPattern def draft" changecount="17">
 <pre>//Abstract generic node element to build a ~DOM-like rendering of Lumiera's [[session model|HighLevelModel]].//
 GenNode elements are values, yet behave polymorphic. They are rather light-weight, have an well established identity and can be compared. They are //generic// insofar they encompass several heterogeneous ordering systems, which in themselves can not be subsumed into a single ordering hierarchy. The //purpose// of these generic nodes is to build a symbolic representation, known as [[external tree description|ExternalTreeDescription]], existing somewhere &quot;outside&quot;, at a level where the fine points of ordering system relations do not really matter. Largely, this external description is not represented or layed down as a whole. Rather, it is used as a conceptual reference frame to describe //differences and changes.// Obviously, this means that parts of the altered structures have to appear in the description of the modifications. So, practically speaking, the prime purpose of GenNode elements is to appear as bits of information within a ''diff language'' to exchange such information of changes.
 
@@ -2324,12 +2324,27 @@ To be more specific, within the actual model there are [[Placements|Placement]].
 A generic node may //represent any of these kind// -- and it may have ~GenNode children, forming a tree. Effectively all of this together makes ~GenNode a ''Monad''.
 
 GenNode elements are conceived as values, and can thus be treated as mutable or immutable; it is up to the user to express this intent through const correctness.
-Especially the nested structures, i.e. a GenNode holding an embedded {{{diff::Record}}}, are by default immutable, but expose a object builder API for remoulding. This again places the actual decision about mutations into the usage context, since the remoulded Record has to be assigned explicitly.
+Especially the nested structures, i.e. a GenNode holding an embedded {{{diff::Record}}}, are by default immutable, but expose a object builder API for remoulding. This again places the actual decision about mutations into the usage context, since the remoulded Record has to be assigned explicitly. In fact, this is an underlying theme of the whole design laid out here: Data represented as GenNode graph is //structured, yet opaque.// It is always tied into an usage context, that &quot;happens to know&quot; what to expect. Moreover, the values to be integrated into such a structure are of limited type -- covering just the basic kinds of data plus a recursive structuring device:
+* integral values: {{{int}}}, {{{int64_t}}}, {{{short}}}, {{{char}}}
+* logic values: {{{bool}}}
+* measurement data: {{{double}}}
+* textual data: {{{std::string}}}
+* time representation: {{{time::Time}}}, {{{time::Duration}}}, {{{time::TimeSpan}}}
+* identity and reference: {{{hash::LuidH}}}
+* object-like structure:  {{{diff::Record&lt;GenNode&gt;}}}
+* for cross-links and performance considerations, we also provide a {{{Record}}}-//reference element.//
+
 
 
 !to reflect or not reflect
 When dealing with this external model representation, indeed there are some rather global concerns which lend themselves to a generic programming style. Simply because, otherwise, we'd end up explicating and thereby duplicating the structure of the model all over the code. Frequently, such a situation is quoted as the reason to demand introspection facilities on any data structure. We doubt this is a valid conclusion. Since introspection allows to accept just //any element// -- followed by an open-ended //reaction on the received type// -- we might arrive at the impression that our code reaches a maximum of flexibility and &quot;openness&quot;. Unfortunately, this turns out to be a self-deception, since code to do any meaningful operation needs pre-established knowledge about the meaning of the data to be processed. More so, when, as in any hierarchical data organisation, the relevant meaning is attached to the structure itself, so consequently this pre-established knowledge tends to be scattered over several, superficially &quot;open&quot; handler functions. What looks open and flexible at first sight is in fact littered with obscure and scattered, non obvious additional presumptions.
-This observation from coding practice gets us to the conclusion, that we do not really want to support the full notion of data and type introspection. We //do want// some kind of passive matching on structure, where the receiver explicitly has to supply structural presuppositions. In a fully functional language with a correspondingly rich type system, a partial function (pattern match) would be the solution of choice. Under the given circumstances, we're able to emulate this pattern based on our variant visitor -- which basically calls a different virtual function for each of the types possibly to be encountered &quot;within&quot; a ~GenNode.</pre>
+This observation from coding practice gets us to the conclusion, that we do not really want to support the full notion of data and type introspection. We //do want// some kind of passive matching on structure, where the receiver explicitly has to supply structural presuppositions. In a fully functional language with a correspondingly rich type system, a partial function (pattern match) would be the solution of choice. Under the given circumstances, we're able to emulate this pattern based on our variant visitor -- which basically calls a different virtual function for each of the types possibly to be encountered &quot;within&quot; a ~GenNode.
+
+This is a rather challenging attitude, and in practice we're bound to allow for a bit of leeway, leave some loopholes to at least &quot;peek&quot; into data about to be handled:
+* based on the form of a given node's ID element, we allow to distinguish //attributes and children.//
+* the {{{Record&lt;GenNode&gt;}}}, which is used to represent object-like entities, exposes a //semantic type filed// to be used at the local scope's discretion.
+* we explicitly enable receiving or handling code to &quot;peek&quot; into that type field, thereby silently absorbing the case when the GenNode in question in fact does not hold a Record.
+</pre>
 </div>
 <div title="GlobalPipe" modifier="Ichthyostega" created="201007110200" modified="201505310106" tags="Model spec draft" changecount="1">
 <pre>Each [[Timeline]] has an associated set of global [[pipes|Pipe]] (global busses), similar to the subgroups of a sound mixing desk.
@@ -8200,8 +8215,7 @@ i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the
 </pre>
 </div>
 <div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201603160345" tags="Model Concepts GuiPattern design draft" changecount="63">
-<pre>
-The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
+<pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 within the [[diff framework|TreeDiffModel]], this is a crucial joint, since here the abstract, generic, ~DOM-like ExternalTreeDescription meeds opaque, local and undisclosed data structures.
 
 &amp;rarr; see TreeMutatorEvolution for an extensive discussion about the principles and architecture, which gradually leads to the final design of the ~TreeMutator, as realised now in code.
