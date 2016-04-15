@@ -474,8 +474,33 @@
 <icon BUILTIN="full-3"/>
 </node>
 </node>
-<node CREATED="1455668897947" HGAP="211" ID="ID_1897861223" MODIFIED="1456505993674" TEXT="Konsequenzen" VSHIFT="23">
-<node CREATED="1455668923175" ID="ID_1183550957" MODIFIED="1455668933577" TEXT="brauche passendes UI-Bus API"/>
+<node CREATED="1455668897947" HGAP="211" ID="ID_1897861223" MODIFIED="1460754924649" TEXT="Konsequenzen" VSHIFT="23">
+<node CREATED="1455668923175" ID="ID_1183550957" MODIFIED="1460754820234" TEXT="brauche passendes UI-Bus API">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....so harmlos hat alles angefangen
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Denn das hei&#223;t, ich mu&#223; konkret ausarbeiten,
+    </p>
+    <p>
+      <i>wie</i>&#160;man einen Diff gegen eine opaque Implementierungs-Datenstruktur aufspielt.
+    </p>
+    <p>
+      Und ich mu&#223; das in einem Test zumindest emulieren k&#246;nnen!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1455668935142" ID="ID_1274632216" MODIFIED="1455669141158">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -585,7 +610,7 @@
 <node CREATED="1455669331448" ID="ID_1852578403" MODIFIED="1455669333036" TEXT="f&#xfc;r find"/>
 </node>
 </node>
-<node COLOR="#ad014c" CREATED="1455669200945" FOLDED="true" HGAP="85" ID="ID_880765624" MODIFIED="1458409895855" TEXT="Design-Fragen" VSHIFT="-14">
+<node COLOR="#ad014c" CREATED="1455669200945" FOLDED="true" HGAP="85" ID="ID_880765624" MODIFIED="1460754727352" TEXT="Design-Fragen" VSHIFT="-14">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#4e1527" CREATED="1458408700205" ID="ID_685778920" MODIFIED="1458409890048" TEXT="Grundansatz">
@@ -596,7 +621,7 @@
 <node CREATED="1458408730841" ID="ID_356597537" MODIFIED="1458408739164" TEXT="konkretes Binding"/>
 <node CREATED="1458408742408" ID="ID_1733136177" MODIFIED="1458408752570" TEXT="Binding-Technik">
 <node CREATED="1458408757478" ID="ID_1718466382" MODIFIED="1458408786501" TEXT="Mutator wird in jeweiliger Impl erzeugt"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#221c4f" CREATED="1458408790457" FOLDED="true" ID="ID_1892865523" MODIFIED="1458409883066" STYLE="fork" TEXT="Polymorphie vs. Funktoren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#221c4f" CREATED="1458408790457" FOLDED="true" ID="ID_1892865523" MODIFIED="1460754430015" STYLE="fork" TEXT="Polymorphie vs. Funktoren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1458408878574" ID="ID_1190262572" MODIFIED="1458409828754" TEXT="Abw&#xe4;gung">
 <icon BUILTIN="info"/>
@@ -1264,7 +1289,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d8bba4" CREATED="1456011994442" FOLDED="true" HGAP="68" ID="ID_343687995" MODIFIED="1458408638864" TEXT="zur Entscheidung..." VSHIFT="37">
+<node BACKGROUND_COLOR="#d8bba4" CREATED="1456011994442" FOLDED="true" HGAP="68" ID="ID_343687995" MODIFIED="1460754347976" TEXT="zur Entscheidung..." VSHIFT="37">
 <edge COLOR="#93766f"/>
 <arrowlink COLOR="#b10046" DESTINATION="ID_820279076" ENDARROW="Default" ENDINCLINATION="14;-46;" ID="Arrow_ID_103087571" STARTARROW="None" STARTINCLINATION="-137;-20;"/>
 <font NAME="SansSerif" SIZE="15"/>
@@ -1719,7 +1744,7 @@
 </node>
 <node CREATED="1456506101544" HGAP="4" ID="ID_133511037" MODIFIED="1456533241759" TEXT="Implementierung" VSHIFT="16">
 <icon BUILTIN="pencil"/>
-<node CREATED="1456506128581" ID="ID_322289358" MODIFIED="1456506131544" TEXT="Abw&#xe4;gungen">
+<node CREATED="1456506128581" HGAP="-2" ID="ID_322289358" MODIFIED="1460753355452" TEXT="Abw&#xe4;gungen" VSHIFT="549">
 <node CREATED="1456506135028" HGAP="29" ID="ID_470489868" MODIFIED="1456506141640" TEXT="Indirektionen" VSHIFT="-5">
 <node CREATED="1456506145826" ID="ID_759825167" MODIFIED="1456506372089" TEXT="kosten">
 <richcontent TYPE="NOTE"><html>
@@ -2090,13 +2115,44 @@
 </node>
 </node>
 <node CREATED="1457741617655" ID="ID_1664250793" MODIFIED="1457741623179" TEXT="was ist ein &quot;match&quot;?">
-<node CREATED="1458094392679" ID="ID_238187527" MODIFIED="1458094396098" TEXT="matches"/>
+<node CREATED="1458094392679" ID="ID_238187527" MODIFIED="1460755241888">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;target <i>matches</i>&#160;spec&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+</node>
 <node CREATED="1458094428506" ID="ID_1753032814" MODIFIED="1458094435693" TEXT="darf Annahmen &#xfc;ber den Typ der Spec machen"/>
 <node CREATED="1458094397350" ID="ID_1185807177" MODIFIED="1458094427326" TEXT="darf in die Payload der Spec schauen"/>
 <node CREATED="1458094437249" ID="ID_1125952135" MODIFIED="1458094463529" TEXT="darf Methoden des Datenobjekts aufrufen"/>
 </node>
 </node>
-<node CREATED="1457038643034" ID="ID_1057400532" MODIFIED="1457038646822" TEXT="abstrakte Position"/>
+<node CREATED="1457038643034" ID="ID_1057400532" MODIFIED="1457038646822" TEXT="abstrakte Position">
+<node CREATED="1460755065016" ID="ID_935271147" MODIFIED="1460755138704" TEXT="wird niemals direkt repr&#xe4;sentiert">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1460755072903" ID="ID_1650064575" MODIFIED="1460755130181">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber existiert <i>nominell </i>und kontext-abh&#228;ngig
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1460755080894" ID="ID_107894920" MODIFIED="1460755106150" TEXT="und faktisch unabh&#xe4;ngig in jedem &#xbb;onion layer&#xab;"/>
+</node>
 <node CREATED="1457038527402" HGAP="16" ID="ID_1909805079" MODIFIED="1457038617372" TEXT="Mutations-Primitive" VSHIFT="7">
 <node CREATED="1457038788583" ID="ID_131880970" MODIFIED="1457038801193" TEXT="einheitlich benannt"/>
 <node CREATED="1457038801733" ID="ID_428479460" MODIFIED="1457038805816" TEXT="auf mehreren Ebenen"/>
@@ -2367,7 +2423,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1458176998437" ID="ID_425451497" MODIFIED="1458177089666" TEXT="keine unn&#xf6;tigen Einschr&#xe4;nkungen">
+<node CREATED="1458176998437" ID="ID_425451497" MODIFIED="1460752973198" TEXT="keine unn&#xf6;tigen Einschr&#xe4;nkungen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2386,10 +2442,11 @@
       Es gibt aber auch keinen wirklichen Grund, dies zu verbieten,
     </p>
     <p>
-      sofern es gelingt, die funktionalit&#228;t gutm&#252;tig zu degradieren.
+      sofern es gelingt, die Funktionalit&#228;t gutm&#252;tig zu degradieren.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -2410,7 +2467,9 @@
 <node CREATED="1458178288690" ID="ID_562189277" MODIFIED="1458178295494" TEXT="Implementierung">
 <icon BUILTIN="pencil"/>
 <node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1458178300324" TEXT="Builder">
-<node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1458850234904" TEXT="Typ-Definitionen schwierig anzuschreiben"/>
+<node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1460753004725" TEXT="Typ-Definitionen schwierig anzuschreiben">
+<icon BUILTIN="smiley-neutral"/>
+</node>
 <node CREATED="1458325973486" ID="ID_1711903796" MODIFIED="1458325992405" TEXT="Code ziemlich redundant und undurchsichtig">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -2495,18 +2554,46 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1458850516270" ID="ID_263851499" MODIFIED="1458850519025" TEXT="Test">
-<node CREATED="1458850521270" ID="ID_534213210" MODIFIED="1458850525041" TEXT="F&#xe4;lle">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850521270" ID="ID_534213210" MODIFIED="1460753617594" TEXT="F&#xe4;lle">
+<arrowlink COLOR="#639ad5" DESTINATION="ID_1333254858" ENDARROW="Default" ENDINCLINATION="1091;0;" ID="Arrow_ID_709688381" STARTARROW="None" STARTINCLINATION="1150;185;"/>
+<icon BUILTIN="flag-yellow"/>
 <node CREATED="1458850526133" ID="ID_55717538" MODIFIED="1458850550109" TEXT="Binden an Sammlung aus Primitiven"/>
 <node CREATED="1458850550705" ID="ID_1923906009" MODIFIED="1458850572315" TEXT="Binden an Sammlung aus Spezialtypen"/>
 </node>
 <node CREATED="1458850656668" ID="ID_307163685" MODIFIED="1458850658799" TEXT="Defaults">
-<node CREATED="1458850660523" ID="ID_326530451" MODIFIED="1458850670269" TEXT="GenNode-Payload-Typ"/>
+<node CREATED="1458850660523" ID="ID_326530451" MODIFIED="1460753283653" TEXT="GenNode-vertr&#xe4;glicher Payload-Typ">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gemeint ist:
+    </p>
+    <p>
+      die native Datenstruktur ist eine Collection von Elementen,
+    </p>
+    <p>
+      welche ohne Weiteres direkt in eine GenNode gepackt werden k&#246;nnten. Denn dann l&#228;&#223;t
+    </p>
+    <p>
+      sich eine einfache Default-Implementierung des Matchers angeben
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Typisches Beispiel: eine STL-Collection von Strings.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node CREATED="1458850672705" ID="ID_1240263288" MODIFIED="1458850675197" TEXT="kein Setter"/>
 <node CREATED="1458850675641" ID="ID_736176562" MODIFIED="1458850678564" TEXT="kein Mutator"/>
 </node>
@@ -2536,11 +2623,10 @@
       ...denn es ist sehr verwirrend, welche Signatur denn nun die Lambdas haben m&#252;ssen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" SOURCE="ID_338749301" STARTARROW="None" STARTINCLINATION="176;0;"/>
 </node>
-<node CREATED="1458850154575" ID="ID_725958518" MODIFIED="1458850180914" TEXT="wenn der Default-Mater greift">
+<node CREATED="1458850154575" ID="ID_725958518" MODIFIED="1460752754158" TEXT="wenn der Default-Matcher greift">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2550,8 +2636,7 @@
       ...denn es kann keinen Default-Matcher geben....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1458850212503" ID="ID_321552356" MODIFIED="1458850218977" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren"/>
@@ -3210,7 +3295,7 @@
 </node>
 </node>
 <node CREATED="1448063874479" HGAP="43" ID="ID_739054690" MODIFIED="1453546352792" TEXT="UI-Modell" VSHIFT="1"/>
-<node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1455842048164" TEXT="Diff-System" VSHIFT="1">
+<node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1460753607324" TEXT="Diff-System" VSHIFT="1">
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1434128278990" ID="ID_106354755" MODIFIED="1434128283641" TEXT="Diff-Darstellung"/>
@@ -5334,6 +5419,14 @@
 <node CREATED="1443741212547" ID="ID_979817893" MODIFIED="1443741225989" TEXT="nach PICK"/>
 <node CREATED="1443741226673" ID="ID_1242761745" MODIFIED="1443741229165" TEXT="nach AFTER"/>
 <node CREATED="1443741229984" ID="ID_926730195" MODIFIED="1443741233636" TEXT="nach FIND"/>
+</node>
+</node>
+<node CREATED="1460753406868" HGAP="-18" ID="ID_289459316" MODIFIED="1460753416200" TEXT="Spezialf&#xe4;lle" VSHIFT="25">
+<node CREATED="1460753417178" ID="ID_1333254858" MODIFIED="1460753585145" TEXT="native bindings">
+<linktarget COLOR="#639ad5" DESTINATION="ID_1333254858" ENDARROW="Default" ENDINCLINATION="1091;0;" ID="Arrow_ID_709688381" SOURCE="ID_534213210" STARTARROW="None" STARTINCLINATION="1150;185;"/>
+<node CREATED="1460753433312" ID="ID_94456036" MODIFIED="1460753443667" TEXT="Binden an Collection von Primitiven"/>
+<node CREATED="1460753444735" ID="ID_1100731476" MODIFIED="1460753459897" TEXT="Binden an Collection von intelligenten Spezialtypen"/>
+<node CREATED="1460753460940" ID="ID_677690723" MODIFIED="1460753484941" TEXT="Komposit aus Attribut-Bindung und Kinder-Collection-Bindung"/>
 </node>
 </node>
 </node>
