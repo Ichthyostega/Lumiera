@@ -497,8 +497,7 @@
       Und ich mu&#223; das in einem Test zumindest emulieren k&#246;nnen!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1455668935142" ID="ID_1274632216" MODIFIED="1455669141158">
@@ -2126,8 +2125,7 @@
       &quot;target <i>matches</i>&#160;spec&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 </node>
 <node CREATED="1458094428506" ID="ID_1753032814" MODIFIED="1458094435693" TEXT="darf Annahmen &#xfc;ber den Typ der Spec machen"/>
@@ -2149,8 +2147,7 @@
       aber existiert <i>nominell </i>und kontext-abh&#228;ngig
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1460755080894" ID="ID_107894920" MODIFIED="1460755106150" TEXT="und faktisch unabh&#xe4;ngig in jedem &#xbb;onion layer&#xab;"/>
 </node>
@@ -2446,8 +2443,7 @@
       sofern es gelingt, die Funktionalit&#228;t gutm&#252;tig zu degradieren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -2522,8 +2518,7 @@
       erfordert <i>wirklich</i>&#160;Kooperation
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1460762025520" ID="ID_955853878" MODIFIED="1460762032675" TEXT="zwischen dem gesendeten Diff"/>
 <node CREATED="1460762033119" ID="ID_863964003" MODIFIED="1460762045704" TEXT="und der empfangenden Implementierungs-Datenstruktur"/>
@@ -2569,8 +2564,7 @@
       daneben auf die gr&#252;ne Wiese stellen. Ist ja nur ein Test :-D
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1460762330487" ID="ID_914518092" MODIFIED="1460762395843" TEXT="Nein! Schwein gehabt">
@@ -2589,8 +2583,7 @@
       dessen payload per default-konstruktor zu erzeugen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -2675,8 +2668,7 @@
       Typisches Beispiel: eine STL-Collection von Strings.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1458850672705" ID="ID_1240263288" MODIFIED="1458850675197" TEXT="kein Setter"/>
 <node CREATED="1458850675641" ID="ID_736176562" MODIFIED="1458850678564" TEXT="kein Mutator"/>
@@ -2724,6 +2716,25 @@
 </node>
 </node>
 <node CREATED="1458850212503" ID="ID_321552356" MODIFIED="1458850218977" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren"/>
+<node CREATED="1460847222865" ID="ID_362820787" MODIFIED="1460847316734" TEXT="abstrakte operationale Semantik der Diff-Anwendung dokumentieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sonst wird niemand Lambdas bereitstellen k&#246;nnen, oder gar Diff-Nachrichten erzeugen.
+    </p>
+    <p>
+      Das ist nun kein spezielles Problem der gew&#228;hlten Implementierungs-Technik, sondern r&#252;hrt daher,
+    </p>
+    <p>
+      da&#223; der Client hier eigentlich ein Protokoll implementieren mu&#223;.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node CREATED="1458850263688" ID="ID_555018476" MODIFIED="1458850272315" TEXT="Zusammenf&#xfc;hren">
 <node CREATED="1458850294083" ID="ID_393704697" MODIFIED="1458850302901" TEXT="der normale GenNode-Applikator"/>
 <node CREATED="1458850282285" ID="ID_435722140" MODIFIED="1458850293735" TEXT="Pr&#xfc;fen ob sinnvoll">

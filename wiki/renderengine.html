@@ -8214,7 +8214,7 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201603160345" tags="Model Concepts GuiPattern design draft" changecount="63">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201604162306" tags="Model Concepts GuiPattern design draft" changecount="65">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 within the [[diff framework|TreeDiffModel]], this is a crucial joint, since here the abstract, generic, ~DOM-like ExternalTreeDescription meeds opaque, local and undisclosed data structures.
 
@@ -8238,10 +8238,12 @@ This means, we do not share a data model -- rather we exchange ''diff messages''
 
 So, from the usage side, some kind of implementation data structure will build a TreeMutator and tie itself into its binding Then, by exposing this {{{TreeMutator}}} implementation, this client data structure gets the ability to receive diff messages, which means this local and undisclosed data structure can be attached to and  collaborate with some other subsystem; it can be altered, extended and reshaped remotely, without the need to share implementation details.
 
-Incidentally, the ''diff language'' itself is meant to be readable and expressive. On the //sending side,// typically diff messages will be constructed direcly in code. To this end, the GenNode offers a constructor and mutator syntax specifically crafted to allow writing clear and compact diff messages. Since the tree diff language embedds a simple list diff language as a subset, it is possible to generate structural changes by observing changes on data collections. Such //detected diffs// may be embedded within explicitly written diff message sequences.
+Incidentally, the ''diff language'' itself is meant to be readable and expressive. On the //sending side,// typically diff messages will be constructed directly in code. To this end, the GenNode offers a constructor and mutator syntax specifically crafted to allow writing clear and compact diff messages. Since the tree diff language embeds a simple list diff language as a subset, it is possible to generate structural changes by observing changes on data collections. Such //detected diffs// may be embedded within explicitly written diff message sequences.
 
-The cannonical example are changes to the editing session. After maybe running some resolution steps, an actual effective change is determined within the session. At this point, a minimal diff message to describe this effective change will be created. This diff message can be logged, to make the change persistent. And then this message will be &quot;cast towards the UI&quot;. There is a communication structure, the UI-Bus, which allows to &quot;cast&quot; such a message towards an element only known and designated by its ID. In fact, this receiver element will be a widget within the UI, and this widget exposes a custom configured TreeMutator to consume this message and effect the corresponding changes within the widget structure of the UI.
-</pre>
+The canonical example are changes to the editing session. After maybe running some resolution steps, an actual effective change is determined within the session. At this point, a minimal diff message to describe this effective change will be created. This diff message can be logged, to make the change persistent. And then this message will be &quot;cast towards the UI&quot;. There is a communication structure, the UI-Bus, which allows to &quot;direct&quot; such a message towards an element only known and designated by its ID. In fact, this receiver element will be a widget within the UI, and this widget exposes a custom configured TreeMutator to consume this message and effect the corresponding changes within the widget structure of the UI.
+
+!Semantics
+The TreeMutator is an //adapter,// allowing the diff language to perform some abstracted generic operations, and at the same time enabling access to an (not further disclosed) implementation data structure in a standardised way.</pre>
 </div>
 <div title="TreeMutatorEvolution" creator="Ichthyostega" modifier="Ichthyostega" created="201603160255" modified="201603160313" tags="Model Concepts design draft" changecount="5">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.

@@ -467,8 +467,10 @@ namespace test{
                           })
                        .assignElement ([&](Data& target, GenNode const& spec) -> bool
                           {
-                            UNIMPLEMENTED ("binding for assignment");
-                            return false;
+                            cout << "assign "<<target<<" <- "<<spec<<endl;
+                            CHECK (target.key == spec.idi.getSym(), "assignment to target with wrong identity");
+                            target.val = render(spec.data);
+                            return true;
                           })
                        .buildChildMutator ([&](Data& target, GenNode::ID const& subID, TreeMutator::MutatorBuffer buff) -> bool
                           {
@@ -482,9 +484,9 @@ namespace test{
           CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ
           CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
           
-          CHECK (not contains(join(target), "γ = 3.1415927"));
+          CHECK (not contains(join(target), "≺γ∣3.1415927≻"));
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first
-          CHECK (    contains(join(target), "γ = 3.1415927"));
+          CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
           CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything
           cout << "Content after assignment; "
                << join(target) <<endl;

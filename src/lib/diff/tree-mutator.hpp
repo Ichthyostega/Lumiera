@@ -106,13 +106,13 @@ namespace lib {
   /////////////////////////////TODO move over into opaque-holder.hpp
   /**
    * handle to allow for safe _»remote implantation«_
-   * of an unknown subclass into a given OpaqueHolder buffer,
+   * of an unknown subclass into a given opaque InPlaceBuffer,
    * without having to disclose the concrete buffer type or size.
    * @remarks this is especially geared towards use in APIs, allowing
    *    a not yet known implementation to implant an agent or collaboration
    *    partner into the likewise undisclosed innards of the exposed service.
    * @warning the type BA must expose a virtual dtor, since the targeted
-   *    OpaqueHolder has to take ownership of the implanted object.
+   *    InPlaceBuffer has to take ownership of the implanted object.
    */
   template<class BA>
   class PlantingHandle

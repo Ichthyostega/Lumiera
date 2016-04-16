@@ -146,17 +146,29 @@
             return pos;
           }
         
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         iterator
-        locate (GenNode::ID const& targetID)
+        locate (GenNode const& targetSpec)
           {
-            if (!empty() and content_.back().matches(targetID))
+            if (not collection.empty() and matches (targetSpec, collection.back()))
               return lastElm();
             else
-              return search (targetID, eachElm(content_));
+              return search (targetSpec, eachElm(collection));
           }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+        
+      private:
+        /** @internal technicality
+         * Our iterator is actually a Lumiera RangeIter, and thus we need
+         * to construct a raw collection iterator pointing to the aftmost element
+         * and then create a range from this iterator and the `end()` iterator.
+         */
+        iterator
+        lastElm()
+          {
+            using raw_iter = typename CollectionBinding::Coll::iterator;
+            return iterator (raw_iter(&collection.back()), collection.end());
+          }
       };
+    
     
     
     /**
@@ -250,7 +262,6 @@
             return found;
           }
         
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         /** repeatedly accept, until after the designated location */
         virtual bool
         accept_until (GenNode const& spec)
@@ -259,25 +270,23 @@
             
             if (spec.matches (Ref::END))
               for ( ; pos_; ++pos_)
-                target_.inject (move(*pos_), "accept_until END");
+                binding_.inject (move(*pos_));
             else
               {
-                string logMsg{"accept_until "+spec.idi.getSym()};
-                while (pos_ and not TestWireTap::matchSrc(spec))
+                while (pos_ and not ChildCollectionMutator::matchSrc(spec))
                   {
-                    target_.inject (move(*pos_), logMsg);
+                    binding_.inject (move(*pos_));
                     ++pos_;
                   }
-                if (TestWireTap::matchSrc(spec))
+                if (ChildCollectionMutator::matchSrc(spec))
                   {
-                    target_.inject (move(*pos_), logMsg);
+                    binding_.inject (move(*pos_));
                     ++pos_;
                   }
                 else
                   foundTarget = false;
               }
-            return PAR::accept_until(spec)
-                or foundTarget;
+            return foundTarget;
           }
         
         /** locate element already accepted into the target sequence
@@ -285,17 +294,12 @@
         virtual bool
         assignElm (GenNode const& spec)
           {
-            Iter targetElm = target_.locate (spec.idi);
-            if (targetElm)
-              {
-                string logOldPayload{render(targetElm->data)};
-                *targetElm = spec;
-                target_.logAssignment (*targetElm, logOldPayload);
-              }
-            return PAR::assignElm(spec)
-                or targetElm;
+            Iter target_found = binding_.locate (spec);
+            return target_found? binding_.assign (*target_found, spec)
+                               : false;
           }
         
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         /** locate the designated target element and build a suitable
          *  sub-mutator for this element into the provided target buffer */
         virtual bool
