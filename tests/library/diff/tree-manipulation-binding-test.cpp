@@ -71,7 +71,7 @@ namespace test{
                   CHILD_A("a"),                            // unnamed string child node
                   CHILD_B('b'),                            // unnamed char child node
                   CHILD_T(Time(12,34,56,78)),              // unnamed time value child
-                  SUB_NODE = MakeRec().type("ω").genNode(),// empty anonymous node used to open a sub scope
+                  SUB_NODE = MakeRec().genNode(),          // empty anonymous node used to open a sub scope
                   ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ
                   CHILD_NODE = SUB_NODE,                   // yet another child node, same ID as SUB_NODE (!)
                   GAMMA_PI("γ", 3.14159265);               // happens to have the same identity (ID) as ATTRIB3AS
@@ -313,6 +313,7 @@ namespace test{
           using MapD = std::map<string, VecD>;
           
           VecD target;
+          MapD subScopes;
           
           // now set up a binding to these opaque private structures...
           auto mutator =
@@ -441,6 +442,90 @@ namespace test{
           
           cout << "Content after reordering...."
                << join(target) <<endl;
+          
+          
+          // --- third round: mutate data and sub-scopes ---
+          
+          
+          // This time we build the Mutator bindings in a way to allow mutation
+          // For one, "mutation" means to assign a changed value to a simple node / attribute.
+          // And beyond that, mutation entails to open a nested scope and delve into that recursively.
+          // Here, as this is really just a test and demonstration, we implement those nested scopes aside
+          // managed within a map and keyed by the sub node's ID.
+          auto mutator3 =
+          TreeMutator::build()
+            .attach (collection(target)
+                       .constructFrom ([&](GenNode const& spec) -> Data
+                          {
+                            cout << "constructor invoked on "<<spec<<endl;
+                            return {spec.idi.getSym(), render(spec.data)};
+                          })
+                       .matchElement ([&](GenNode const& spec, Data const& elm) -> bool
+                          {
+                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
+                            return spec.idi.getSym() == elm.key;
+                          })
+                       .assignElement ([&](Data& target, GenNode const& spec) -> bool
+                          {
+                            UNIMPLEMENTED ("binding for assignment");
+                            return false;
+                          })
+                       .buildChildMutator ([&](Data& target, GenNode::ID const& subID, TreeMutator::MutatorBuffer buff) -> bool
+                          {
+                            UNIMPLEMENTED ("binding for sub-scope mutation");
+                            return false;
+                          }));
+          
+          CHECK (isnil (target));
+          CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
+          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β
+          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ
+          CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
+          
+          CHECK (not contains(join(target), "γ = 3.1415927"));
+          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first
+          CHECK (    contains(join(target), "γ = 3.1415927"));
+          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything
+          cout << "Content after assignment; "
+               << join(target) <<endl;
+          
+          
+          // prepare for recursion into sub scope..
+          // Since this is a demonstration, we do not actually recurse into anything,
+          // rather we invoke the operations on a nested mutator right from here.
+          
+          InPlaceBuffer<TreeMutator, sizeof(mutator3)> subMutatorBuffer;
+          TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
+          
+          CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));
+          
+          CHECK (isnil (subScopes[SUB_NODE]));      // ...this is where the nested mutator is expected to work on
+          CHECK (subMutatorBuffer->emptySrc());
+          
+          // now use the Mutator *interface* to talk to the nested mutator...
+          // This code might be confusing, because in fact we're playing two roles here!
+          // For one, above, in the definition of mutator3 and in the declaration of MapD subScopes,
+          // the test code represents what a private data structure and binding would do.
+          // But below we enact the TreeDiffAplicattor, which *would* use the Mutator interface
+          // to talk to an otherwise opaque nested mutator implementation. Actually, here this
+          // nested opaque mutator is created on-the-fly, embedded within the .buildChildMutator(..lambda...) 
+          
+          subMutatorBuffer->injectNew (TYPE_X);
+          subMutatorBuffer->injectNew (ATTRIB3);
+          subMutatorBuffer->injectNew (CHILD_B);
+          subMutatorBuffer->injectNew (CHILD_A);
+          
+          CHECK (not subMutatorBuffer->emptySrc());
+          CHECK (not isnil (subScopes[SUB_NODE]));              // ...and "magically" these instructions happened to insert
+          CHECK (join(subScopes[SUB_NODE]) == "β = 2, b, a");  //  some new content into our implementation defined sub scope!
+          
+          // now back to parent scope....
+          
+          // error handling: assignment might throw
+          GenNode differentTime{CHILD_T.idi.getSym(), Time(11,22)};
+          VERIFY_ERROR (LOGIC, mutator3.assignElm (differentTime));
+          
+          CHECK (join(target) == "γ = 3.45, α = 1, β = 2, γ = 3.1415927, Rec(ξ| β = 2 |{b, a}), b, 78:56:34.012");
         }
       
       

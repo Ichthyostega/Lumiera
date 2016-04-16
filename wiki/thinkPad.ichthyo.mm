@@ -1970,7 +1970,8 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1457741609884" ID="ID_1827838196" MODIFIED="1457741617108" TEXT="bin ich zust&#xe4;ndig?">
 <node CREATED="1458094312266" ID="ID_233521483" MODIFIED="1458094316157" TEXT="isApplicable"/>
-<node CREATED="1458094316697" ID="ID_839136400" MODIFIED="1458094326204" TEXT="Festlegung:">
+<node CREATED="1458094316697" ID="ID_839136400" MODIFIED="1460755327191" TEXT="Festlegung:">
+<icon BUILTIN="yes"/>
 <node CREATED="1458094327095" ID="ID_306307671" MODIFIED="1458094334354" TEXT="nur auf Basis der spec"/>
 <node CREATED="1458094334991" ID="ID_903070750" MODIFIED="1458094343401" TEXT="ohne Daten-Introspektion"/>
 </node>
@@ -2508,6 +2509,89 @@
 </node>
 <node CREATED="1458934878911" ID="ID_986928457" MODIFIED="1458934893132" TEXT="welche Iteratoren m&#xfc;ssen exponiert werden">
 <icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1460762013033" ID="ID_758721262" MODIFIED="1460762015093" TEXT="Mutation">
+<node CREATED="1460762015777" ID="ID_59179895" MODIFIED="1460762061424">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erfordert <i>wirklich</i>&#160;Kooperation
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1460762025520" ID="ID_955853878" MODIFIED="1460762032675" TEXT="zwischen dem gesendeten Diff"/>
+<node CREATED="1460762033119" ID="ID_863964003" MODIFIED="1460762045704" TEXT="und der empfangenden Implementierungs-Datenstruktur"/>
+</node>
+<node CREATED="1460762065371" ID="ID_698989532" MODIFIED="1460762096048" TEXT="brauche wohl &quot;Introspection light&quot;">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1460762101046" ID="ID_1593562435" MODIFIED="1460762111448" TEXT="damit ich einen Sub-Scope vorbereiten kann"/>
+<node CREATED="1460762111924" ID="ID_125430023" MODIFIED="1460762120759" TEXT="in separater privater Datenstrukcur"/>
+<node CREATED="1460762121259" ID="ID_1558869553" MODIFIED="1460762308964" TEXT="ist aber nur rein hier im Test ein Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir verwenden hier als &quot;private&quot; Datenstruktur
+    </p>
+    <p>
+      eine etwas komische Collection von Strings,
+    </p>
+    <p>
+      in die wir die String-Repr&#228;sentation der Spec-Payload schreiben.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      In der Praxis dagegen w&#252;rde man wirklich einen privaten Datentyp verwenden,
+    </p>
+    <p>
+      und dann auch voraussetzen, da&#223; man <i>nur</i>&#160;Kinder dieses Typs (oder zuweisungskompatibel) bekommt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Mein Poblem hier ist, da&#223; ich in dieser Demonstrations-Datenstruktur keine nested scopes repr&#228;sentieren kann.
+    </p>
+    <p>
+      Aber hey!, es ist meine private Datenstruktur -- also kann ich einfach eine Map von nested scopes
+    </p>
+    <p>
+      daneben auf die gr&#252;ne Wiese stellen. Ist ja nur ein Test :-D
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1460762330487" ID="ID_914518092" MODIFIED="1460762395843" TEXT="Nein! Schwein gehabt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dankenswerterweise hat der subscript-Operator von std::Map
+    </p>
+    <p>
+      die nette Eigenschaft, beim ersten Zugriff auf einen neuen Key
+    </p>
+    <p>
+      dessen payload per default-konstruktor zu erzeugen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
 </node>
 </node>
 </node>

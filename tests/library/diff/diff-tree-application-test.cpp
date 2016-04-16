@@ -125,7 +125,7 @@ namespace test{
       DiffSeq
       mutationDiff()
         {
-          // prepare for direkt assignement of new value
+          // prepare for direct assignment of new value
           // NOTE: the target ID will be reconstructed, including hash
           GenNode childA_upper(CHILD_A.idi.getSym(), "A");
           

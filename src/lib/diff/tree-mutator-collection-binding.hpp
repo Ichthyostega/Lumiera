@@ -99,7 +99,7 @@
         ASSERT_VALID_SIGNATURE (CTR, Elm (GenNode const&))
         ASSERT_VALID_SIGNATURE (SEL, bool(GenNode const&))
         ASSERT_VALID_SIGNATURE (ASS, bool(Elm&, GenNode const&))
-        ASSERT_VALID_SIGNATURE (MUT, bool(Elm&, TreeMutator::MutatorBuffer))
+        ASSERT_VALID_SIGNATURE (MUT, bool(Elm&, GenNode::ID const&, TreeMutator::MutatorBuffer))
         
         
         Coll& collection;
@@ -332,7 +332,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL, FUN ,CTR,SEL,ASS,MUT>
-        matchElement(FUN matcher)
+        matchElement (FUN matcher)
           {
             return { this->collection
                    , matcher
@@ -345,7 +345,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL,MAT, FUN ,SEL,ASS,MUT>
-        constructFrom(FUN constructor)
+        constructFrom (FUN constructor)
           {
             return { this->collection
                    , this->matches
@@ -358,7 +358,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL,MAT,CTR, FUN ,ASS,MUT>
-        isApplicableIf(FUN selector)
+        isApplicableIf (FUN selector)
           {
             return { this->collection
                    , this->matches
@@ -371,7 +371,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL,MAT,CTR,SEL, FUN ,MUT>
-        assignElement(FUN setter)
+        assignElement (FUN setter)
           {
             return { this->collection
                    , this->matches
@@ -384,7 +384,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL,MAT,CTR,SEL,ASS, FUN >
-        buildChildMutator(FUN childMutationBuilder)
+        buildChildMutator (FUN childMutationBuilder)
           {
             return { this->collection
                    , this->matches
@@ -465,7 +465,7 @@
           }
         
         static bool
-        disable_childMutation (Elm&, TreeMutator::MutatorBuffer)
+        disable_childMutation (Elm&, GenNode::ID const&, TreeMutator::MutatorBuffer)
           {
             return false;
           }
