@@ -457,9 +457,9 @@
         using Payload = _DefaultPayload<Elm>;
         
         static bool
-        disable_selector (GenNode const&)
+        ignore_selector (GenNode const&)
           {
-            return false;
+            return true; // by default apply diff unconditionally
           }
         
         static bool
@@ -479,7 +479,7 @@
             = CollectionBindingBuilder<Coll
                                       ,decltype(&Payload::match)
                                       ,decltype(&Payload::construct)
-                                      ,decltype(&disable_selector)
+                                      ,decltype(&ignore_selector)
                                       ,decltype(&disable_assignment)
                                       ,decltype(&disable_childMutation)
                                       >;
@@ -490,7 +490,7 @@
             return FallbackBindingConfiguration{ coll
                                                , Payload::match
                                                , Payload::construct
-                                               , disable_selector
+                                               , ignore_selector
                                                , disable_assignment
                                                , disable_childMutation
                                                };
