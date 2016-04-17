@@ -551,7 +551,35 @@ namespace test{
           
           
           // now back to parent scope....
-         
+          // ...add a new attribute and immediately recurse into it
+          mutator1.injectNew (ATTRIB_NODE);
+          CHECK (mutator3.mutateChild (ATTRIB_NODE, placementHandle));  // NOTE: we're just recycling the buffer. InPlaceHolder handles lifecycle properly
+          subMutatorBuffer->injectNew (TYPE_Z);
+          subMutatorBuffer->injectNew (CHILD_A);
+          subMutatorBuffer->injectNew (CHILD_A);
+          subMutatorBuffer->injectNew (CHILD_A);
+          
+          // and thus we've gotten a second nested scope, populated with new values
+          cout << "Sub|" << join(subScopes[ATTRIB_NODE.idi]) <<endl;
+          
+          // verify contents of this second nested scope
+          contents = stringify(eachElm(subScopes[ATTRIB_NODE.idi]));
+          CHECK ("≺type∣ζ≻" == *contents);
+          ++contents;
+          CHECK (contains(*contents, "∣a≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣a≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣a≻"));
+          ++contents;
+          CHECK (isnil (contents));
+          
+          
+          // back to parent scope....
+          // verify the marker left by our "nested sub-scope lambda"
+          CHECK (contains (join(target), "Rec(--"+SUB_NODE.idi.getSym()+"--)"));
+          CHECK (contains (join(target), "Rec(--"+ATTRIB_NODE.idi.getSym()+"--)"));
+          
           cout << "Content after nested mutation; "
                << join(target) <<endl;
         }

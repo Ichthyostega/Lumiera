@@ -2286,7 +2286,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1458175861176" ID="ID_44294405" MODIFIED="1458175867224" TEXT="Design-Anforderungen">
+<node CREATED="1458175861176" FOLDED="true" ID="ID_44294405" MODIFIED="1460936470490" TEXT="Design-Anforderungen">
 <node CREATED="1458175880034" ID="ID_995745627" MODIFIED="1458175889588" TEXT="gegeben ist eine STL-Collection">
 <node CREATED="1458175892400" ID="ID_1308086929" MODIFIED="1458175904674" TEXT="allgemeinstes STL-Container-Interface"/>
 <node CREATED="1458175905766" ID="ID_446727516" MODIFIED="1458175919817" TEXT="Wert-Typ per typedef abgreifen"/>
@@ -2461,8 +2461,8 @@
 <node CREATED="1458178223723" ID="ID_798018180" MODIFIED="1458178247755" TEXT="es gibt eine freie Funktion, die einen nested Builder f&#xfc;r das Binding liefert"/>
 </node>
 </node>
-<node CREATED="1458178288690" ID="ID_562189277" MODIFIED="1458178295494" TEXT="Implementierung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1458178288690" FOLDED="true" ID="ID_562189277" MODIFIED="1460936473653" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1458178300324" TEXT="Builder">
 <node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1460753004725" TEXT="Typ-Definitionen schwierig anzuschreiben">
 <icon BUILTIN="smiley-neutral"/>
