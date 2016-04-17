@@ -299,27 +299,15 @@
                                : false;
           }
         
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         /** locate the designated target element and build a suitable
          *  sub-mutator for this element into the provided target buffer */
         virtual bool
         mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
           {
-            if (PAR::mutateChild (spec, targetBuff))
-              return true;
-            else // Test mode only --
-              { //  no other layer was able to provide a mutator
-                Iter targetElm = target_.locate (spec.idi);
-                if (targetElm)
-                  {
-                    targetBuff.create (TreeMutator::build());
-                    target_.logMutation (*targetElm);
-                    return true;
-                  }
-                return false;
-              }
+            Iter target_found = binding_.locate (spec);
+            return target_found? binding_.openSub (*target_found, spec.idi, targetBuff)
+                               : false;
           }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
       };
     
     

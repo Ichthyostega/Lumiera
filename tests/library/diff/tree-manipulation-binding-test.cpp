@@ -316,7 +316,7 @@ namespace test{
           MapD subScopes;
           
           // now set up a binding to these opaque private structures...
-          auto mutator =
+          auto mutator1 =
           TreeMutator::build()
             .attach (collection(target)
                        .constructFrom ([&](GenNode const& spec) -> Data
@@ -325,28 +325,28 @@ namespace test{
                             return {spec.idi.getSym(), render(spec.data)};
                           }));
           
-          CHECK (sizeof(mutator) <= sizeof(VecD)                // the buffer for pending elements
-                                  + sizeof(VecD*)               // the reference to the original collection
-                                  + sizeof(void*)               // the reference from the ChildCollectionMutator to the CollectionBinding
-                                  + 2 * sizeof(VecD::iterator)  // one Lumiera RangeIter (comprised of pos and end iterators)
-                                  + 4 * sizeof(void*)           // the four unused default configured binding functions
-                                  + 1 * sizeof(void*));         // one back reference from the closure to this scope
+          CHECK (sizeof(mutator1) <= sizeof(VecD)                // the buffer for pending elements
+                                   + sizeof(VecD*)               // the reference to the original collection
+                                   + sizeof(void*)               // the reference from the ChildCollectionMutator to the CollectionBinding
+                                   + 2 * sizeof(VecD::iterator)  // one Lumiera RangeIter (comprised of pos and end iterators)
+                                   + 4 * sizeof(void*)           // the four unused default configured binding functions
+                                   + 1 * sizeof(void*));         // one back reference from the closure to this scope
           
           
           // --- first round: populate the collection ---
           
           CHECK (isnil (target));
-          CHECK (mutator.emptySrc());
+          CHECK (mutator1.emptySrc());
           
-          mutator.injectNew (ATTRIB1);
+          mutator1.injectNew (ATTRIB1);
           CHECK (!isnil (target));
           CHECK (contains(join(target), "≺α∣1≻"));
           
-          mutator.injectNew (ATTRIB3);
-          mutator.injectNew (ATTRIB3);
-          mutator.injectNew (CHILD_B);
-          mutator.injectNew (CHILD_B);
-          mutator.injectNew (CHILD_T);
+          mutator1.injectNew (ATTRIB3);
+          mutator1.injectNew (ATTRIB3);
+          mutator1.injectNew (CHILD_B);
+          mutator1.injectNew (CHILD_B);
+          mutator1.injectNew (CHILD_T);
           
           auto contents = stringify(eachElm(target));
           CHECK ("≺α∣1≻" == *contents);
@@ -386,7 +386,7 @@ namespace test{
                           }));
           
           // we have two lambdas now and thus can save on the size of one function pointer....
-          CHECK (sizeof(mutator) - sizeof(mutator2) == sizeof(void*));
+          CHECK (sizeof(mutator1) - sizeof(mutator2) == sizeof(void*));
           
           
           CHECK (isnil (target));                   // the "visible" new content is still void
@@ -474,8 +474,22 @@ namespace test{
                           })
                        .buildChildMutator ([&](Data& target, GenNode::ID const& subID, TreeMutator::MutatorBuffer buff) -> bool
                           {
-                            UNIMPLEMENTED ("binding for sub-scope mutation");
-                            return false;
+                            // use our "inside knowledge" to get at the nested scope implementation
+                            VecD& subScope = subScopes[subID];
+                            buff.create (
+                              TreeMutator::build()
+                                .attach (collection(subScope)
+                                           .constructFrom ([&](GenNode const& spec) -> Data
+                                              {
+                                                cout << "SubScope| constructor invoked on "<<spec<<endl;
+                                                return {spec.idi.getSym(), render(spec.data)};
+                                              })));
+                            
+                            // NOTE: mutation of sub scope has not happened yet
+                            //       we can only document the sub scope to be opened now
+                            cout << "openSub("<<subID.getSym()<<") ⟻ "<<target<<endl;
+                            target.val = "Rec(--"+subID.getSym()+"--)";
+                            return true;
                           }));
           
           CHECK (isnil (target));
@@ -496,12 +510,12 @@ namespace test{
           // Since this is a demonstration, we do not actually recurse into anything,
           // rather we invoke the operations on a nested mutator right from here.
           
-          InPlaceBuffer<TreeMutator, sizeof(mutator3)> subMutatorBuffer;
+          InPlaceBuffer<TreeMutator, sizeof(mutator1)> subMutatorBuffer;
           TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
           
           CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));
           
-          CHECK (isnil (subScopes[SUB_NODE]));      // ...this is where the nested mutator is expected to work on
+          CHECK (isnil (subScopes[SUB_NODE.idi]));  // ...this is where the nested mutator is expected to work on
           CHECK (subMutatorBuffer->emptySrc());
           
           // now use the Mutator *interface* to talk to the nested mutator...
@@ -510,24 +524,36 @@ namespace test{
           // the test code represents what a private data structure and binding would do.
           // But below we enact the TreeDiffAplicattor, which *would* use the Mutator interface
           // to talk to an otherwise opaque nested mutator implementation. Actually, here this
-          // nested opaque mutator is created on-the-fly, embedded within the .buildChildMutator(..lambda...) 
+          // nested opaque mutator is created on-the-fly, embedded within the .buildChildMutator(..lambda...)
+          // Incidentally, we "just happen to know" how large the buffer needs to be to hold that mutator,
+          // since this is a topic beyond the scope of this test. In real usage, the DiffApplicator cares
+          // to provide a stack of suitably sized buffers for the nested mutators.
           
           subMutatorBuffer->injectNew (TYPE_X);
-          subMutatorBuffer->injectNew (ATTRIB3);
+          subMutatorBuffer->injectNew (ATTRIB2);
           subMutatorBuffer->injectNew (CHILD_B);
           subMutatorBuffer->injectNew (CHILD_A);
           
-          CHECK (not subMutatorBuffer->emptySrc());
-          CHECK (not isnil (subScopes[SUB_NODE]));              // ...and "magically" these instructions happened to insert
-          CHECK (join(subScopes[SUB_NODE]) == "β = 2, b, a");  //  some new content into our implementation defined sub scope!
+          CHECK (not isnil (subScopes[SUB_NODE.idi]));              // ...and "magically" these instructions happened to insert
+          cout << "Sub|" << join(subScopes[SUB_NODE.idi]) <<endl;  //  some new content into our implementation defined sub scope!
+          
+          // verify contents of nested scope after mutation
+          contents = stringify(eachElm(subScopes[SUB_NODE.idi]));
+          CHECK ("≺type∣ξ≻" == *contents);
+          ++contents;
+          CHECK ("≺β∣2≻" == *contents);
+          ++contents;
+          CHECK (contains(*contents, "∣b≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣a≻"));
+          ++contents;
+          CHECK (isnil (contents));
+          
           
           // now back to parent scope....
-          
-          // error handling: assignment might throw
-          GenNode differentTime{CHILD_T.idi.getSym(), Time(11,22)};
-          VERIFY_ERROR (LOGIC, mutator3.assignElm (differentTime));
-          
-          CHECK (join(target) == "γ = 3.45, α = 1, β = 2, γ = 3.1415927, Rec(ξ| β = 2 |{b, a}), b, 78:56:34.012");
+         
+          cout << "Content after nested mutation; "
+               << join(target) <<endl;
         }
       
       
