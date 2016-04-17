@@ -121,7 +121,7 @@ namespace diff{
    *          or \c pick or \c find), it is allowed immediately to open the
    *          nested scope with \c mut(Ref::THIS) -- which circumvents the
    *          problem that it is sometimes difficult to know the precise ID,
-   *          especially when hand-writing a diff to populate a data structure.
+   *          especially when hand-writing a diff to populate a data structure.                   ////////TICKET #996 : `Ref::THIS` is a questionable feature
    * - \c emu bracketing construct and counterpart to \c mut(ID). This verb
    *          must be given precisely at the end of the nested scope (it is
    *          not allowed to "return" from the middle of a scope, for sake

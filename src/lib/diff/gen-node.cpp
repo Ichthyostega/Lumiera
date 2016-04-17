@@ -66,7 +66,7 @@ namespace diff{
   const Ref Ref::I      ("_I_");
   const Ref Ref::NO     ("_NO_");
   const Ref Ref::END    ("_END_");
-  const Ref Ref::THIS   ("_THIS_");
+  const Ref Ref::THIS   ("_THIS_");     ////////TICKET #996 : Feature of questionable usefulness. Maybe dispensable?
   const Ref Ref::CHILD  ("_CHILD_");
   const Ref Ref::ATTRIBS("_ATTRIBS_");
   
