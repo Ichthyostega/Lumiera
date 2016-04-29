@@ -80,6 +80,10 @@ namespace test{
    *       - we add, re-order and delete child "elements", without knowing
    *         what these elements actually are and how they are to be handled.
    *       - we recurse into mutating such an _"unspecified"_ child element.
+   * 
+   * @todo this test defines a goal!! What has to be done, is to invent some test data structure and then run the exiting diffs against it. This requires the TreeMutator implementation to be finished!!! 
+   * 
+   * @see TreeManipulationBinding_test coverage of the "building blocks"
    * @see DiffTreeApplication_test generic variant of tree diff application
    * @see TreeMutator_test base operations of the adapter
    * @see tree-diff-mutator-binding.hpp
@@ -95,7 +99,7 @@ namespace test{
       DiffSeq
       attributeDiff()
         {
-          // prepare for direkt attribute assignement
+          // prepare for direct attribute assignment
           GenNode attrib1_mut(ATTRIB1.idi.getSym(), 11);
           
           return snapshot({ins(TYPE_X)
@@ -121,7 +125,7 @@ namespace test{
       DiffSeq
       mutationDiff()
         {
-          // prepare for direkt assignement of new value
+          // prepare for direct assignment of new value
           GenNode childT_later(CHILD_T.idi.getSym()
                               ,Time(CHILD_T.data.get<Time>() +  Time(0,1)));
           
@@ -144,6 +148,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          /////////////////////////////TODO we need a suitable test datastructure. What follows is just placeholder code. As of 4/2016, this test waits for the completion of the TreeMutator
           Rec::Mutator target;
           Rec& subject = target;
           DiffApplicator<Rec::Mutator> application(target);

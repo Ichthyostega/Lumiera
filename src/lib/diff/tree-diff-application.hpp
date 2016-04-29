@@ -54,7 +54,7 @@
  ** structure. In fact, it is possible to _use the same tree diff language_ for
  ** this specific case, with the help of an _adapter_. Thus, within our diff
  ** framework, we provide a _similar binding_ for the DiffApplicator, but
- ** then targetted towards such an [structure adapter](\ref TreeMutator)
+ ** then targeted towards such an [structure adapter](\ref TreeMutator)
  ** 
  ** ## State and nested scopes
  ** Within the level of a single #Record, our tree diff language works similar to
