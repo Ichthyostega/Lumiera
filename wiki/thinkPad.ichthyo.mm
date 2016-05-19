@@ -45,8 +45,7 @@
       hei&#223;t: Element registriert sich am UI-Bus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078473068" ID="ID_510866826" MODIFIED="1461888853783" TEXT="zerst&#xf6;ren">
 <richcontent TYPE="NOTE"><html>
@@ -58,8 +57,7 @@
       hei&#223;t: Element deregistriert sich am UI-Bus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1448078308690" ID="ID_185716114" MODIFIED="1448078316540" TEXT="Aktionen">
@@ -73,8 +71,7 @@
       ...ist <i>immer</i>&#160;ein <b>tangible</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078516094" ID="ID_201691188" MODIFIED="1448078519937" TEXT="Commands"/>
 <node CREATED="1448078325679" ID="ID_946047770" MODIFIED="1448078510722" TEXT="tweaks"/>
@@ -134,8 +131,7 @@
       daf&#252;r gen&#252;gt der normale Reset
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1448078748448" ID="ID_1000763850" MODIFIED="1461888853799" TEXT="Nachrichten l&#xf6;schen">
@@ -148,8 +144,7 @@
       mark &quot;clearMsg&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078778916" ID="ID_1657108949" MODIFIED="1461888853817" TEXT="Fehler l&#xf6;schen">
 <richcontent TYPE="NOTE"><html>
@@ -161,8 +156,7 @@
       mark &quot;clearErr&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078798369" ID="ID_819750758" MODIFIED="1461888853822" TEXT="komplett-Reset">
 <richcontent TYPE="NOTE"><html>
@@ -174,8 +168,7 @@
       mark &quot;reset&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -223,8 +216,7 @@
       was haben alle UI-Elemente wirklich gemeinsam?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1448658692023" FOLDED="true" ID="ID_888978058" MODIFIED="1461888853833" TEXT="generische Commands">
 <richcontent TYPE="NOTE"><html>
@@ -242,8 +234,7 @@
       oder handelt es sich nur um ein Implementierungsdetail der UI-Bus-Anbindung?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1448659456882" ID="ID_946761955" MODIFIED="1448659469420" TEXT="Notwendig: Command-Name + Varargs"/>
 <node CREATED="1451093919426" ID="ID_56876272" MODIFIED="1451093932614" TEXT="generisch impliziert auch zentrale Definition">
@@ -331,8 +322,7 @@
       Dann mu&#223;te das allerdigns jeweils f&#252;r alle Elemente sinnvoll sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1451177534345" ID="ID_524388510" MODIFIED="1451177541380" TEXT="impl">
 <node CREATED="1451177542256" ID="ID_980888532" MODIFIED="1461888853846" TEXT="ruft einen konkreten hook doExpand() auf">
@@ -345,8 +335,7 @@
       und der mu&#223; vom konkreten Widget implementiert werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1451177573108" ID="ID_1154342108" MODIFIED="1451177583935" TEXT="wenn dieser true zur&#xfc;ckgibt, ist der Zustand persistent"/>
 <node CREATED="1451177584435" ID="ID_1792154974" MODIFIED="1451177606906">
@@ -508,8 +497,7 @@
       Und ich mu&#223; das in einem Test zumindest emulieren k&#246;nnen!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1455668935142" ID="ID_1274632216" MODIFIED="1461888853903">
@@ -549,8 +537,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1455669272760" ID="ID_837691598" MODIFIED="1455899105816" TEXT="Call-Stack ist der Prozessor-Stack (Rekursion)">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1455899000582" ID="ID_1404453203" MODIFIED="1455899086452" TEXT="sorry, geht nicht">
@@ -603,8 +590,7 @@
       ist jedoch schon prototypisch implementiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1455899288247" ID="ID_635341866" MODIFIED="1455899347843" TEXT="Tree-Mutator hat echte (Assignment)-Mutation">
 <icon BUILTIN="info"/>
 <node CREATED="1455899303981" ID="ID_1584621992" MODIFIED="1455899333910" TEXT="pa&#xdf;t nicht auf die Semantik vom Diff">
@@ -983,8 +969,7 @@
       <font size="2">(impl-ops)</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <cloud COLOR="#fce9c0"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node CREATED="1455927425726" ID="ID_1776437339" MODIFIED="1461946503410" TEXT="emptySrc">
@@ -1049,8 +1034,7 @@
       of this specific onion layer to accept forward until meeting this element.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1457231727259" ID="ID_1318527107" MODIFIED="1461965031156">
@@ -1079,8 +1063,7 @@
       will check the bool return value and throw an exception in that case
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -1789,8 +1772,7 @@
       durch den das Problem mit der &quot;absrakten, opaquen&quot; Position entsch&#228;rft wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
@@ -1820,8 +1802,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456506151065" ID="ID_496007561" MODIFIED="1461888854085" TEXT="bisher nur drei">
 <richcontent TYPE="NOTE"><html>
@@ -1845,8 +1826,7 @@
       &#160;-- das gibt einen wichtigen Hinweis --
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456506160472" ID="ID_1269579163" MODIFIED="1461888854089" TEXT="zwei sind das Minimum">
 <richcontent TYPE="NOTE"><html>
@@ -1861,8 +1841,7 @@
       also einen double-dispatch haben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456506385130" ID="ID_660502308" MODIFIED="1456506445246" TEXT="f&#xfc;r generische Zieldaten">
 <node CREATED="1456506446002" ID="ID_485732185" MODIFIED="1456506470075" TEXT="kommt eine Indirektion hinzu"/>
@@ -1886,8 +1865,7 @@
       das Diff-System noch einmal reimplementieren, dann mit einem vorgegebenen Diff-Typ
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1456506607428" HGAP="31" ID="ID_448113584" MODIFIED="1456506627511" VSHIFT="8">
@@ -1934,8 +1912,7 @@
       (will sagen, es ist nicht sofort offensichtlich, da&#223; wir jeweils einen Interpreter generieren)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -2023,8 +2000,7 @@
       und protokolliert somit &quot;nebenbei&quot; was an Anforderungen an ihm vorbeigeht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1456523612849" ID="ID_729852941" MODIFIED="1456523625883" TEXT="Test zum Aufbau des Interfaces"/>
@@ -2272,8 +2248,7 @@
       f&#252;r spezifische Arten von Bindings
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1457232408368" HGAP="29" ID="ID_1068782263" MODIFIED="1457232766908" TEXT="TestWireTap / TestMutationTarget" VSHIFT="-6">
 <icon BUILTIN="full-1"/>
 <node CREATED="1457232426238" ID="ID_728198359" MODIFIED="1457232567024" TEXT="brauche ich, um das API zu entwickeln">
@@ -2315,8 +2290,7 @@
       denn sonst w&#252;rde er es f&#252;r darunter liegende Layer verschatten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="closed"/>
 </node>
 </node>
@@ -2358,7 +2332,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1458175861176" FOLDED="true" HGAP="33" ID="ID_44294405" MODIFIED="1461946758456" TEXT="Design-Anforderungen">
+<node CREATED="1458175861176" FOLDED="true" HGAP="33" ID="ID_44294405" MODIFIED="1463674673803" TEXT="Design-Anforderungen">
 <node CREATED="1458175880034" ID="ID_995745627" MODIFIED="1458175889588" TEXT="gegeben ist eine STL-Collection">
 <node CREATED="1458175892400" ID="ID_1308086929" MODIFIED="1458175904674" TEXT="allgemeinstes STL-Container-Interface"/>
 <node CREATED="1458175905766" ID="ID_446727516" MODIFIED="1458175919817" TEXT="Wert-Typ per typedef abgreifen"/>
@@ -2770,8 +2744,7 @@
       dann <i>m&#252;ssen</i>&#160;Attribute irgendwie sinnvoll integriert sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1457741673001" ID="ID_1826667029" MODIFIED="1457742700335" TEXT="konkrete Beispiele">
@@ -2791,8 +2764,7 @@
       &#10233; <i>immer</i>&#160;in der Klasse verankert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1457742434714" ID="ID_261686106" MODIFIED="1461888407600">
@@ -2805,8 +2777,7 @@
       &#10233; es geht eigentlich <i>nur</i>&#160;um den Wert des Attributes
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -2824,8 +2795,7 @@
       manche Felder sind <i>optional</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1461888779999" ID="ID_1274350149" MODIFIED="1461888829427" TEXT="innerer Widerspruch">
@@ -2870,13 +2840,27 @@
       wie ETD ein Objekt rep&#228;sentiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 <node CREATED="1461889470866" ID="ID_404525574" MODIFIED="1461889627791" TEXT="operational">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1461889474402" ID="ID_1211544465" MODIFIED="1461889489140" TEXT="alle Informationen, die die Anwendung nicht nutzt"/>
+<node CREATED="1461889474402" ID="ID_1211544465" MODIFIED="1463672686487" TEXT="alle Informationen, die die Anwendung nicht nutzt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;Anwendung&quot; : meint das Anwenden eines Diffs auf ein Ziel-Objekt
+    </p>
+    <p>
+      &quot;nicht nutzen&quot; : meint ignorieren und verwerfen der Information
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node CREATED="1461889550072" ID="ID_48030760" MODIFIED="1461889558442" TEXT="d&#xfc;rfen nur Zustands-&#xc4;nderungen bewirken"/>
 <node CREATED="1461889558983" ID="ID_1489246908" MODIFIED="1461889796278" TEXT="welche keinen Einflu&#xdf; auf nachfolgende Diffs haben">
 <arrowlink COLOR="#be5b66" DESTINATION="ID_781150142" ENDARROW="Default" ENDINCLINATION="28;-28;" ID="Arrow_ID_30022331" STARTARROW="None" STARTINCLINATION="13;20;"/>
@@ -2911,8 +2895,7 @@
       zwingend die gleiche Reihenfolge erfordert!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461890009355" ID="ID_1808149320" MODIFIED="1461890064730" TEXT="aber ETD als Zwischenstufe ist m&#xf6;glich">
 <richcontent TYPE="NOTE"><html>
@@ -2936,8 +2919,7 @@
       der sich letztlich nicht auf das Zielobjekt aufspielen l&#228;&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461890240148" ID="ID_1409253452" MODIFIED="1461890244887" TEXT="Schutzmechanismen">
 <node CREATED="1461890266377" ID="ID_513997188" MODIFIED="1461890283701">
@@ -2950,8 +2932,7 @@
       abweisen, was das Kriterium <i>sicher verletzt</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461890289662" ID="ID_1663916739" MODIFIED="1461890307247" TEXT="Einf&#xfc;gen eines Feldes, das die Klasse nicht kennt"/>
 <node CREATED="1461891798533" ID="ID_748156171" MODIFIED="1461891807616" TEXT="explizites Umordnen (per seek)"/>
@@ -2973,8 +2954,7 @@
       <b>default</b>&#160;: es gibt einen ausgezeichneten Standardwert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1461892285965" ID="ID_440312526" MODIFIED="1461892302478" TEXT="mandatory ">
 <node CREATED="1461892303666" ID="ID_1486672593" MODIFIED="1461892312404" TEXT="Problem der Konstruktor-Repr&#xe4;sentation"/>
 <node CREATED="1461892313049" ID="ID_683528850" MODIFIED="1461892394247" TEXT="einziger Ausweg: komplette ETD-Repr&#xe4;sentation als Wert senden">
@@ -2990,8 +2970,7 @@
       nicht nur eine leere Record-H&#252;lle, die nachfolgend populiert werden kann (aber nicht mu&#223;)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461892430466" ID="ID_1727811732" MODIFIED="1461892440092" TEXT="ein mandatory-Feld darf nicht gel&#xf6;scht werden"/>
 </node>
@@ -3010,8 +2989,7 @@
       Ab dem Punkt verh&#228;lt es sich aber wie ein normales (mandatory) Feld
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461892554377" ID="ID_1564116180" MODIFIED="1461892615511" TEXT="vollwertig">
 <richcontent TYPE="NOTE"><html>
@@ -3023,8 +3001,7 @@
       das Objekt selber kann erkennen, ob das Feld sich im &quot;default-Zustand&quot; befindet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1461892641949" ID="ID_600125030" MODIFIED="1461892653415" TEXT="Einf&#xfc;gen == vom Default-Wert abweichen"/>
@@ -3055,8 +3032,7 @@
       ohne Pr&#252;fen ist <b>emptySrc</b>&#160;nicht implementierbar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -3075,8 +3051,7 @@
       alsauch der Check, da&#223; &#252;berhaupt noch Quellelemente anstehen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461967247093" ID="ID_366726823" MODIFIED="1461967294701">
 <richcontent TYPE="NODE"><html>
@@ -3088,8 +3063,7 @@
       d.h., man kann nur <i>global auf Pr&#252;fung verzichten&#160;</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461967274577" ID="ID_1824726078" MODIFIED="1461967310565">
 <richcontent TYPE="NODE"><html>
@@ -3101,8 +3075,7 @@
       und da habe ich mich bereits <i><font color="#d3204b">dagegen entschieden</font></i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461967364397" ID="ID_381561226" MODIFIED="1461967379991" TEXT="Pr&#xfc;fung erfordert eine Flag f&#xfc;r jedes bekannte Feld"/>
 <node CREATED="1461967384579" ID="ID_1805227176" MODIFIED="1461967401644" TEXT="diese Flag wird gesetzt, sobald der Diff das Feld &quot;ber&#xfc;hrt&quot;"/>
@@ -3118,8 +3091,7 @@
       Feld unterst&#252;tzt <b>default</b>-Wert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -3142,8 +3114,7 @@
       <font size="5">Primitiven</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1455927425726" ID="ID_1774195026" MODIFIED="1461946503410" TEXT="emptySrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928216420" ID="ID_259184763" MODIFIED="1461964761834" TEXT="all known fields where mentioned in diff"/>
@@ -3151,7 +3122,9 @@
 <node CREATED="1455927425726" ID="ID_950488526" MODIFIED="1457120215833" TEXT="skipSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928216420" ID="ID_1837102790" MODIFIED="1461964713432" TEXT="reset to default"/>
-<node CREATED="1461964714068" ID="ID_1261372831" MODIFIED="1461964841751" TEXT="mandatory fields raise error"/>
+<node CREATED="1461964714068" ID="ID_1261372831" MODIFIED="1463690748989" TEXT="mandatory fields raise error">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1455927396505" ID="ID_1033919055" MODIFIED="1457120240382" TEXT="matchSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -3159,7 +3132,7 @@
 </node>
 <node CREATED="1455982947867" ID="ID_348226285" MODIFIED="1457047494973" TEXT="injectNew">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455982969073" ID="ID_1599013380" MODIFIED="1461964802492" TEXT="set known field contents"/>
+<node CREATED="1455982969073" ID="ID_1599013380" MODIFIED="1463675987940" TEXT="set known field&apos;s contents"/>
 <node CREATED="1457047512175" ID="ID_45133594" MODIFIED="1461964833720" TEXT="mandatory fields raise error"/>
 <node CREATED="1461964818054" ID="ID_1444647202" MODIFIED="1461964825281" TEXT="unknown fields raise error"/>
 </node>
@@ -3177,6 +3150,36 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1457231714541" ID="ID_1922580473" MODIFIED="1461968405259" TEXT="mu&#xdf; wohl aus der Sprache entfernt werden">
 <arrowlink COLOR="#592379" DESTINATION="ID_693317592" ENDARROW="Default" ENDINCLINATION="577;0;" ID="Arrow_ID_1115282938" STARTARROW="Default" STARTINCLINATION="1205;231;"/>
 <icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1463675830732" ID="ID_1893171223" MODIFIED="1463675855368">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Einschr&#228;nkung:&#160;<b>accept_until END</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1463675866200" ID="ID_410463345" MODIFIED="1463675944546" TEXT="ist implementierbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...n&#228;mlich indem alle Attribute als &quot;ber&#252;hrt&quot; und akzeptiert markiert werden.
+    </p>
+    <p>
+      Somit k&#246;nnten sofort Zuweisungen als N&#228;chstes passieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1463675872239" ID="ID_467354174" MODIFIED="1463675882809" TEXT="ist sehr sinnvoll"/>
+<node CREATED="1463675883853" ID="ID_178701147" MODIFIED="1463675901055" TEXT="k&#xf6;nnte sogar Standardfall sein"/>
 </node>
 <node CREATED="1461965829041" ID="ID_1866325894" MODIFIED="1461965840371" TEXT="erst feststellen, ob ein Attribut gesucht wird"/>
 <node CREATED="1461965841431" ID="ID_863778784" MODIFIED="1461965852505" TEXT="falls ja, Zugriff auf bekanntes Feld"/>
@@ -3204,8 +3207,7 @@
       analog wie&#160;<b>assignElm</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461963748604" ID="ID_465316362" MODIFIED="1461963753895" TEXT="namentlich bekanntes Feld"/>
 <node CREATED="1461963777440" ID="ID_207528376" MODIFIED="1461963787443" TEXT="aber nicht Setter, sondern Mutator bauen"/>
@@ -3232,8 +3234,7 @@
       <font size="4">Operationen</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1458175991795" ID="ID_1544297658" MODIFIED="1461966322936" TEXT="fest eingebaut...">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1458175942866" ID="ID_321386709" MODIFIED="1458177953093" TEXT="match">
@@ -3260,8 +3261,38 @@
 <node CREATED="1458177803730" ID="ID_1570261235" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei immutable values"/>
 </node>
 </node>
-<node CREATED="1458175960615" ID="ID_806805692" MODIFIED="1461966356086" TEXT="ctor">
+<node CREATED="1463687547746" ID="ID_241762171" MODIFIED="1463687748036" TEXT="defaulter">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1463687553569" ID="ID_695577132" MODIFIED="1463687602782" TEXT="veranla&#xdf;t R&#xfc;ckkehr zum default-Zustand"/>
+<node CREATED="1463687629319" ID="ID_613393149" MODIFIED="1463687644409" TEXT="erfordert explizite Unterst&#xfc;tzung durch das Zielobjekt"/>
+<node CREATED="1463687644973" ID="ID_1677329552" MODIFIED="1463687741843" TEXT="fragw&#xfc;rdig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sieht nach Ober-engineering aus,
+    </p>
+    <p>
+      zumal das erhebliche Statefulness bewirkt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1463687649812" ID="ID_450096384" MODIFIED="1463687655942" TEXT="Ersatz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1463687668218" ID="ID_205365114" MODIFIED="1463687670469" TEXT="keiner"/>
+<node CREATED="1463687672649" ID="ID_244442064" MODIFIED="1463687689779" TEXT="dann kann eben nur gebunden werden"/>
+<node CREATED="1463687865175" ID="ID_1290398590" MODIFIED="1463687869987" TEXT="normalerweise verzichtbar"/>
+</node>
+</node>
+<node CREATED="1458175960615" ID="ID_806805692" MODIFIED="1463691187577" TEXT="ctor">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1461966391478" ID="ID_110542982" MODIFIED="1461966404134" TEXT="wird dem Setter vorgeschaltet"/>
 <node CREATED="1458177315803" ID="ID_1572942300" MODIFIED="1458177953094" TEXT="konstruiert aus der Spec ein neues Element"/>
 <node CREATED="1461966815950" ID="ID_156023396" MODIFIED="1461966831208" TEXT="notwendig bei Attribut-Werten, die tats&#xe4;chlich Objekte sind"/>
@@ -3278,9 +3309,25 @@
       unterstelle Ziel als <i>konstruierbar</i>&#160;aus Payload
     </p>
   </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1463691200369" ID="ID_542600281" MODIFIED="1463691259602" TEXT="&#xfc;berfl&#xfc;ssiges Konzept">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da effektiv bereits der Setter diese Funktionalit&#228;t enthalten kann und mu&#223;,
+    </p>
+    <p>
+      denn der Setter nimmt eine GenNode
+    </p>
+  </body>
 </html>
 </richcontent>
-</node>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1458176018087" ID="ID_280816523" MODIFIED="1458177953095" TEXT="mutator">
@@ -3290,7 +3337,7 @@
 <node CREATED="1458177857939" ID="ID_1231660130" MODIFIED="1458177953095" TEXT="Ersatz">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1458177861162" ID="ID_1234972537" MODIFIED="1458177953095" TEXT="keiner"/>
-<node CREATED="1458177863506" ID="ID_668640033" MODIFIED="1458177953095" TEXT="dann gibts eben keine Behandlung von nested scopse"/>
+<node CREATED="1458177863506" ID="ID_668640033" MODIFIED="1463690716478" TEXT="dann gibts eben keine Behandlung von nested scopes"/>
 <node CREATED="1458177874760" ID="ID_98241568" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei primitive values"/>
 </node>
 </node>
@@ -3300,6 +3347,202 @@
 <node CREATED="1458176048564" ID="ID_1811113811" MODIFIED="1461888530348" TEXT="Variationen"/>
 </node>
 <node CREATED="1458178113697" HGAP="26" ID="ID_38103760" MODIFIED="1461882659663" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="-7">
+<node CREATED="1463687362843" HGAP="116" ID="ID_775516687" MODIFIED="1463687372655" TEXT="Eingrenzung" VSHIFT="-28">
+<node CREATED="1463687373889" ID="ID_155516876" MODIFIED="1463687400026" TEXT="Art von Attributen">
+<node CREATED="1463687402462" ID="ID_1119981147" MODIFIED="1463687407577" TEXT="Objekt-Feld">
+<node CREATED="1463689795357" ID="ID_1774256004" MODIFIED="1463689801592" TEXT="kann nur zugewiesen werden"/>
+<node CREATED="1463689912853" ID="ID_592726515" MODIFIED="1463689945817">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>injectNew</b>&#160;tolerieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1463690238314" ID="ID_1366435072" MODIFIED="1463690270664" TEXT="eigentlich redundant">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....man k&#246;nnte genausogut auch beim ersten Mal zuweisen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1463690487032" ID="ID_1618528789" MODIFIED="1463690595034" TEXT="Aber: isomorph zu GenNode">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn die Diff-Anwendung auf GenNode unterst&#252;tzt Zuweisung
+    </p>
+    <p>
+      ausschlie&#223;lich bei schon existierenden Elementen. Demnach mu&#223; dort auch jedes Attribut
+    </p>
+    <ul>
+      <li>
+        entweder schon mit dem Konstruktor mit gegeben worden sein
+      </li>
+      <li>
+        oder vorher einmal explizit eingef&#252;gt
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1463687408597" ID="ID_783243290" MODIFIED="1463689788310" TEXT="optional Property">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1463688083594" ID="ID_1885891636" MODIFIED="1463688087910" TEXT="fragw&#xfc;rdiger Nutzen"/>
+<node CREATED="1463688088457" ID="ID_1722180442" MODIFIED="1463688100116" TEXT="mutet &quot;theoretisch&quot; an"/>
+<node CREATED="1463688147802" ID="ID_1259353240" MODIFIED="1463688156500" TEXT="Alternative">
+<node CREATED="1463688157472" ID="ID_1130562584" MODIFIED="1463688173746" TEXT="auf &quot;mindere defaults&quot; setzen"/>
+<node CREATED="1463688215752" ID="ID_1340272500" MODIFIED="1463688230896" TEXT="kann man einfach mitlaufen lassen"/>
+<node CREATED="1463688184269" ID="ID_1652024004" MODIFIED="1463688193863" TEXT="immer m&#xf6;gliche Degradierung des Konzepts"/>
+<node CREATED="1463688232550" ID="ID_1079102386" MODIFIED="1463688268288" TEXT="fehlende Funktionalit&#xe4;t ersetzbar">
+<icon BUILTIN="idea"/>
+<node CREATED="1463688247980" ID="ID_720310622" MODIFIED="1463688253639" TEXT="durch komplettes Neukonstruieren"/>
+<node CREATED="1463688254251" ID="ID_1166606306" MODIFIED="1463688262902" TEXT="durch eine explizite Reset-Methode"/>
+</node>
+</node>
+</node>
+<node CREATED="1463687451791" ID="ID_682582613" MODIFIED="1463687457052" TEXT="Attribut-Map">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1463687461925" ID="ID_39763189" MODIFIED="1463687496231" TEXT="hier ausgeschlossen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1463687466573" ID="ID_1853473792" MODIFIED="1463687482279" TEXT="implementierbar auf Basis des Collection-Binding"/>
+<node CREATED="1463687484338" ID="ID_1009085517" MODIFIED="1463687491613" TEXT="k&#xf6;nnte f&#xfc;r GenNode relevant sein"/>
+</node>
+</node>
+<node CREATED="1463691267608" ID="ID_1554269824" MODIFIED="1463691272203" TEXT="Typisierung">
+<node CREATED="1463691273431" ID="ID_1711015726" MODIFIED="1463691276947" TEXT="pro Attribut"/>
+<node CREATED="1463691277726" ID="ID_716698874" MODIFIED="1463691280146" TEXT="implizit">
+<node CREATED="1463691290845" ID="ID_1981578828" MODIFIED="1463691359416" TEXT="der Setter bekommt eine GenNode"/>
+<node CREATED="1463691359988" ID="ID_139397516" MODIFIED="1463691370270" TEXT="der Setter holt sich aus dieser die Payload"/>
+<node CREATED="1463691372258" ID="ID_1648677750" MODIFIED="1463691550094" TEXT="alle Typkonvertierungs-Fragen auf client abgew&#xe4;lzt"/>
+<node CREATED="1463691552514" ID="ID_1882798051" MODIFIED="1463691645252" TEXT="das ist gut so">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir vermeiden dadurch Komplexit&#228;t.
+    </p>
+    <p>
+      Der gesendete Diff mu&#223; einfach passen!
+    </p>
+    <p>
+      Genau deshalb haben wir auch in GenNode verschiedene Varianten des gleichen Grundtyps,
+    </p>
+    <p>
+      damit wir nicht in die ganzen Ungewissheiten der widening conversions laufen!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node CREATED="1463691680849" ID="ID_909001007" MODIFIED="1463691721556" TEXT="Striktheit">
+<node CREATED="1463691716821" ID="ID_414439233" MODIFIED="1463691724243" TEXT="soweit einfach zu gew&#xe4;hrleisten">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1463691725515" ID="ID_947499289" MODIFIED="1463691741484" TEXT="d.h. soweit nicht zus&#xe4;tzlicher State notwendig ist"/>
+<node CREATED="1463691767421" ID="ID_993508973" MODIFIED="1463691780901" TEXT="Flexibilit&#xe4;t mu&#xdf; stets praktisch gerechtfertigt sein">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1463691793010" ID="ID_1079571503" MODIFIED="1463691795837" TEXT="F&#xe4;lle">
+<node CREATED="1463691796825" ID="ID_1459507376" MODIFIED="1463691928935" TEXT="Setter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. der Attributwert hat Wertsemantik und wird einfach zugewiesen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1463691804696" ID="ID_1039735883" MODIFIED="1463692035179" TEXT="Mutator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. der Attributwert ist ein Objekt und damit ein nested Scope
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1463691807824" ID="ID_175488317" MODIFIED="1463691814860" TEXT="keine Mischformen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1463692054415" ID="ID_1755055624" MODIFIED="1463692088865">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem: <i>immutable values</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1463692505987" ID="ID_113919280" MODIFIED="1463692515040" TEXT="wirklich ein Problem?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1463692519993" ID="ID_1177616097" MODIFIED="1463692550512" TEXT="Diff handelt ohnehin nur von ver&#xe4;nderbaren Dingen"/>
+<node CREATED="1463692663853" ID="ID_953408463" MODIFIED="1463692675304" TEXT="Aber: wie &#xe4;ndert man die L&#xe4;nge eins Clips im UI?">
+<node CREATED="1463695438538" ID="ID_744412186" MODIFIED="1463695450620" TEXT="indem man sich auf ein Pr&#xe4;sentations-Grid bezieht"/>
+<node CREATED="1463695454504" ID="ID_945765975" MODIFIED="1463695469602" TEXT="und folglich nur Grid-Punkt-Koordinaten &#xe4;ndert"/>
+<node CREATED="1463695472134" ID="ID_852324151" MODIFIED="1463695494714" TEXT="die eigentlichen Time-Entit&#xe4;ten leben in der Session, nicht im UI">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1463695573392" ID="ID_1066626880" MODIFIED="1463695587634" TEXT="im &#xdc;brigen: Problem des client-Codes">
+<node CREATED="1463695588814" ID="ID_1661716485" MODIFIED="1463695605096" TEXT="man kann einen time::Mutator erzeugen"/>
+<node CREATED="1463695605708" ID="ID_480704465" MODIFIED="1463695620401" TEXT="es gibt vorgefertigte EmbeddedMutators">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1463695633144" ID="ID_1677066412" MODIFIED="1463695657196">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das alles passiert dann <i>im</i>&#160;Lambda
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1463695640231" ID="ID_176647136" MODIFIED="1463695645090" TEXT="und ist somit nicht unser Problem"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1461894614295" ID="ID_1919790561" MODIFIED="1461894618130" TEXT="Bindeglieder">
 <node CREATED="1461894619054" ID="ID_1860006379" MODIFIED="1461894633513" TEXT="implementieren die API-Primitive">
 <node CREATED="1461894676063" ID="ID_1773874682" MODIFIED="1461894678714" TEXT="durch Aktion"/>
@@ -3309,7 +3552,14 @@
 <node CREATED="1461894634029" ID="ID_1447610701" MODIFIED="1461894660404" TEXT="werden automatisch zusammengestellt"/>
 <node CREATED="1461894666248" ID="ID_1972218753" MODIFIED="1461894674331" TEXT="auf Baiss einer Situations-Kennzeichnung"/>
 </node>
-<node CREATED="1461897111747" ID="ID_1690728106" MODIFIED="1461897118502" TEXT="Ein Attribut oder viele Attribute"/>
+<node CREATED="1461897111747" ID="ID_1690728106" MODIFIED="1461897118502" TEXT="Ein Attribut oder viele Attribute">
+<node CREATED="1463695795083" ID="ID_216074650" MODIFIED="1463695808780" TEXT="Zweifel, ob isoliertes Attribut korrekt implementierbar"/>
+<node CREATED="1463695809296" ID="ID_780490723" MODIFIED="1463695851374" TEXT="problematisch sind Selektor und (ignorierte) Reihenfolge"/>
+<node CREATED="1463696031715" ID="ID_1300041378" MODIFIED="1463696046717" TEXT="denkbar, &quot;ein Attribut&quot; als Basis-Element zu implementieren"/>
+<node CREATED="1463696053440" ID="ID_564525411" MODIFIED="1463696064488" TEXT="aber: viele Attribute sind der Standardfall">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1457232746179" ID="ID_1793680066" MODIFIED="1457232776598" TEXT="Rec&lt;GenNode&gt;">
@@ -3333,8 +3583,7 @@
       <b>Problem</b><font color="#4e094b">: partielle Ordnung</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1461967744747" ID="ID_1012577830" MODIFIED="1461967750654" TEXT="Diff setzt totale Ordnung voraus"/>
 <node CREATED="1461967765080" ID="ID_1011855147" MODIFIED="1461967787729" TEXT="verletzt durch &#xbb;onion-layer&#xab;"/>
@@ -3364,8 +3613,7 @@
       In jedem Fall ger&#228;t dadurch die relative Verzahnung der Elemente untereinander aus dem Takt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461967992042" ID="ID_9552950" MODIFIED="1461968004228" TEXT="nur ein Ausweg..."/>
 <node CREATED="1461968004720" ID="ID_1333404241" MODIFIED="1461968229550" TEXT="Ordnung der onion-layer verbindlich machen">
@@ -3393,8 +3641,7 @@
       und diese Elemente m&#252;ssen geschlossen hintereinander in der Reihenfolge liegen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -3414,8 +3661,7 @@
       ...denn es ist sehr verwirrend, welche Signatur denn nun die Lambdas haben m&#252;ssen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" SOURCE="ID_338749301" STARTARROW="None" STARTINCLINATION="176;0;"/>
 </node>
 <node CREATED="1458850154575" ID="ID_725958518" MODIFIED="1461888854407" TEXT="wenn der Default-Matcher greift">
@@ -3428,8 +3674,7 @@
       ...denn es kann keinen Default-Matcher geben....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1458850212503" ID="ID_321552356" MODIFIED="1458850218977" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren"/>
@@ -3449,8 +3694,7 @@
       da&#223; der Client hier eigentlich ein Protokoll implementieren mu&#223;.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1458850263688" ID="ID_555018476" MODIFIED="1458850272315" TEXT="Zusammenf&#xfc;hren">
 <node CREATED="1458850294083" ID="ID_393704697" MODIFIED="1458850302901" TEXT="der normale GenNode-Applikator"/>
@@ -3918,8 +4162,7 @@
       Implementierung der real-world-Variante fehlt!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="13"/>
 <icon BUILTIN="prepare"/>
 <node CREATED="1453545875627" ID="ID_1411740156" MODIFIED="1453545951737" TEXT="Definition &#xbb;Zentral-Dienste&#xab;">

@@ -47,8 +47,8 @@
  ** the message into the target object's own time grid.
  ** 
  ** @note this header is defined such as to be used with or without including the time quantisation
- **      facility, which is a more heavyweight regarding code size and compilation times. For this
- **      toggle to work, the header \c timequant.hpp needs to be included \em prior to \c mutation.hpp
+ **      facility, which is a more heavyweight inclusion regarding code size and compilation times. For
+ **      this toggle to work, the header `timequant.hpp` needs to be included \em prior to `mutation.hpp`
  **      Obviously, you can't define any mutation involving quantised (grid aligned) values without this.
  ** @warning when defining more fancy kinds of concrete mutations using the technique with
  **      the EncapsulatedMutation to hide the implementation, then please be sure to understand
