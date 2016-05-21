@@ -3541,6 +3541,109 @@
 <node CREATED="1463695640231" ID="ID_176647136" MODIFIED="1463695645090" TEXT="und ist somit nicht unser Problem"/>
 </node>
 </node>
+<node CREATED="1463849505993" HGAP="42" ID="ID_493843802" MODIFIED="1463849535030" VSHIFT="25">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Dilemma:&#160;<i>defaultable fields</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1463849536789" ID="ID_864537854" MODIFIED="1463849542928" TEXT="ich m&#xf6;chte sie unterst&#xfc;tzen">
+<node CREATED="1463849545196" ID="ID_1187170275" MODIFIED="1463849547316" TEXT="warum">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1463849556474" ID="ID_73579891" MODIFIED="1463849682530" TEXT="Unterst&#xfc;tzung mu&#xdf; konsistent sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....mit der ETD,
+    </p>
+    <p>
+      bzw der Anwendung des selben Diffs auf eine GenNode-Struktur.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Konsequenz: wenn ein feld <i>defaulted</i>&#160;war, und nun explizit gesetzt wird,
+    </p>
+    <p>
+      mu&#223; dies als INS geschehen, denn eine Zuweisung an nicht aufgef&#252;hrtes Element ist verboten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1463849716869" ID="ID_712482848" MODIFIED="1463849742347" TEXT="in der Bindung auf ein Objekt habe ich aber keine Attribut-Menge">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1463849761127" ID="ID_865585394" MODIFIED="1463849778956">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      folglich ein Problem,
+    </p>
+    <p>
+      zu erkennen, wenn wir fertig sind
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1463849986345" ID="ID_1305704801" MODIFIED="1463849990636" TEXT="genauer...">
+<node CREATED="1463850017285" ID="ID_656883117" MODIFIED="1463850033879" TEXT="wenn ein feld zwar gebunden ist"/>
+<node CREATED="1463850034699" ID="ID_1531134347" MODIFIED="1463850053756" TEXT="aber bisher keinen Wert bekommen hat"/>
+<node CREATED="1463850060359" ID="ID_1083372309" MODIFIED="1463850081800" TEXT="dann darf der Diff es auch nicht per pick auff&#xfc;hren"/>
+<node CREATED="1463850086044" ID="ID_1096436471" MODIFIED="1463850099574" TEXT="wenn dann alle mandatory fields behandelt sind"/>
+<node CREATED="1463850100634" ID="ID_1329120598" MODIFIED="1463850243005" TEXT="glauben wir, wir sind noch nicht fertig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....weil das defaultable field noch nicht vom Diff ber&#252;hrt wurde.
+    </p>
+    <p>
+      Aber es ist kein optional field, d.h. wir haben keine Flag, die es als &quot;defaulted&quot; kennzeichnet
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1463850138853" ID="ID_1262990387" MODIFIED="1463850143312" TEXT="also ist das Grundproblem">
+<node CREATED="1463850144180" ID="ID_103581818" MODIFIED="1463850157454" TEXT="da&#xdf; der TreeMutator global stateless ist"/>
+<node CREATED="1463850163257" ID="ID_1219321798" MODIFIED="1463850171716" TEXT="denn er wird immer wieder neu konstruiert"/>
+<node CREATED="1463850280082" ID="ID_1381914386" MODIFIED="1463850294324">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      L&#246;sung: <b>alles immer explizit</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1461894614295" ID="ID_1919790561" MODIFIED="1461894618130" TEXT="Bindeglieder">
