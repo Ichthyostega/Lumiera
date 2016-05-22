@@ -1123,6 +1123,31 @@
 </node>
 </node>
 </node>
+<node CREATED="1464113688645" ID="ID_954516697" MODIFIED="1464113858632" STYLE="fork" TEXT="completeScope">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1464113727192" ID="ID_357369611" MODIFIED="1464113739514" TEXT="pr&#xfc;ft, ob alles eingel&#xf6;st wurde"/>
+<node CREATED="1464113740005" ID="ID_1649881726" MODIFIED="1464113748425" TEXT="em&#xf6;glicht Aufr&#xe4;um-Arbeiten"/>
+<node CREATED="1464113754412" ID="ID_1095488369" MODIFIED="1464113869945" TEXT="kann NOP implementiert werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...in F&#228;llen, in denen der konkrete onion-layer
+    </p>
+    <p>
+      &#252;berhaupt nicht im Stande ist, das zu beurteilen.
+    </p>
+    <p>
+      Wichtigster solcher Fall ist die <b>Bindung auf Objekt-Felder</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 <node COLOR="#e5500c" CREATED="1461946693701" ID="ID_36720859" MODIFIED="1461946713634" STYLE="fork" TEXT="meta-Operationen">
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -2332,7 +2357,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1458175861176" FOLDED="true" HGAP="33" ID="ID_44294405" MODIFIED="1463674673803" TEXT="Design-Anforderungen">
+<node CREATED="1458175861176" FOLDED="true" HGAP="33" ID="ID_44294405" MODIFIED="1464113901987" TEXT="Design-Anforderungen">
 <node CREATED="1458175880034" ID="ID_995745627" MODIFIED="1458175889588" TEXT="gegeben ist eine STL-Collection">
 <node CREATED="1458175892400" ID="ID_1308086929" MODIFIED="1458175904674" TEXT="allgemeinstes STL-Container-Interface"/>
 <node CREATED="1458175905766" ID="ID_446727516" MODIFIED="1458175919817" TEXT="Wert-Typ per typedef abgreifen"/>
@@ -2507,7 +2532,7 @@
 <node CREATED="1458178223723" ID="ID_798018180" MODIFIED="1458178247755" TEXT="es gibt eine freie Funktion, die einen nested Builder f&#xfc;r das Binding liefert"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1458178288690" FOLDED="true" ID="ID_562189277" MODIFIED="1461946522726" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1458178288690" FOLDED="true" ID="ID_562189277" MODIFIED="1464113898035" TEXT="Implementierung">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1458178300324" TEXT="Builder">
 <node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1460753004725" TEXT="Typ-Definitionen schwierig anzuschreiben">
@@ -3212,6 +3237,24 @@
 <node CREATED="1461963748604" ID="ID_465316362" MODIFIED="1461963753895" TEXT="namentlich bekanntes Feld"/>
 <node CREATED="1461963777440" ID="ID_207528376" MODIFIED="1461963787443" TEXT="aber nicht Setter, sondern Mutator bauen"/>
 </node>
+<node CREATED="1464113688645" ID="ID_1227423402" MODIFIED="1464113716466" STYLE="fork" TEXT="completeScope">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1464113727192" ID="ID_656884609" MODIFIED="1464113954773" TEXT="hier NOP implementiert"/>
+<node CREATED="1464113740005" ID="ID_1570177974" MODIFIED="1464114004153">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, es findet <b>keine Verifikation</b>&#160;statt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 <node CREATED="1455928193863" ID="ID_579601999" MODIFIED="1461946829159" TEXT="CTOR">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1461946885292" ID="ID_319452226" MODIFIED="1461965407132" TEXT="mark all known fields as not yet mentioned"/>
@@ -3349,7 +3392,8 @@
 <node CREATED="1458178113697" HGAP="26" ID="ID_38103760" MODIFIED="1461882659663" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="-7">
 <node CREATED="1463687362843" HGAP="116" ID="ID_775516687" MODIFIED="1463687372655" TEXT="Eingrenzung" VSHIFT="-28">
 <node CREATED="1463687373889" ID="ID_155516876" MODIFIED="1463687400026" TEXT="Art von Attributen">
-<node CREATED="1463687402462" ID="ID_1119981147" MODIFIED="1463687407577" TEXT="Objekt-Feld">
+<node CREATED="1463687402462" ID="ID_1119981147" MODIFIED="1464114029013" TEXT="Objekt-Feld">
+<icon BUILTIN="forward"/>
 <node CREATED="1463689795357" ID="ID_1774256004" MODIFIED="1463689801592" TEXT="kann nur zugewiesen werden"/>
 <node CREATED="1463689912853" ID="ID_592726515" MODIFIED="1463689945817">
 <richcontent TYPE="NODE"><html>
@@ -3625,7 +3669,8 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1463850138853" ID="ID_1262990387" MODIFIED="1463850143312" TEXT="also ist das Grundproblem">
+<node CREATED="1463850138853" ID="ID_1262990387" MODIFIED="1463931531545" TEXT="also ist das Grundproblem">
+<icon BUILTIN="idea"/>
 <node CREATED="1463850144180" ID="ID_103581818" MODIFIED="1463850157454" TEXT="da&#xdf; der TreeMutator global stateless ist"/>
 <node CREATED="1463850163257" ID="ID_1219321798" MODIFIED="1463850171716" TEXT="denn er wird immer wieder neu konstruiert"/>
 <node CREATED="1463850280082" ID="ID_1381914386" MODIFIED="1463850294324">
@@ -3642,6 +3687,148 @@
 </richcontent>
 <icon BUILTIN="help"/>
 </node>
+</node>
+<node CREATED="1463934907474" ID="ID_761652333" MODIFIED="1463934913045" TEXT="Auswege">
+<node CREATED="1463934969522" ID="ID_960243774" MODIFIED="1463934979812" TEXT="keine optional fields">
+<node COLOR="#a0345c" CREATED="1463937048979" ID="ID_861548194" MODIFIED="1463937120794" TEXT="widerspricht den Anforderungen">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1463935105351" ID="ID_1357485921" MODIFIED="1463935110490" TEXT="Protokoll-Auflagen">
+<node CREATED="1463935116670" ID="ID_1375491306" MODIFIED="1463935125304" TEXT="nach dem ersten Durchgang mu&#xdf; alles gebunden sein"/>
+<node CREATED="1463935126461" ID="ID_774412987" MODIFIED="1463935247552" TEXT="wenn ungebundene optionals, stets Abschlie&#xdf;en mit &quot;after END&quot;"/>
+<node COLOR="#a0345c" CREATED="1463937146214" ID="ID_1154054760" MODIFIED="1463937452255" TEXT="attraktiv, aber unehrlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      diese L&#246;sung war zun&#228;chst mein Favorit.
+    </p>
+    <p>
+      Sie erscheint sehr elegant, weil man im TreeMutator <i>&#252;berhaupt nichts</i>&#160;daf&#252;r tun mu&#223;.
+    </p>
+    <p>
+      Und die Zusatz-Forderung, da&#223; dann eben das Diff richtig gesendet werden mu&#223;,
+    </p>
+    <p>
+      erscheint &quot;geschenkt&quot;, da wir ohnehin zun&#228;chst einmal die Diffs explizit im Code erzeugen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Aber, nach l&#228;ngerer &#220;berlegung wurde mir der Ansatz mehr und mehr zweifelhaft.
+    </p>
+    <p>
+      Das ist die Art von Verkoppelungen, hier die implizite Annahme einer bestimmten Implementierung,
+    </p>
+    <p>
+      die ein System unerkl&#228;rbar und schwer wartbar machen. Das ist die Art von &quot;Features&quot;,
+    </p>
+    <p>
+      f&#252;r die man sich nach einiger Zeit entschuldigen mu&#223;.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und noch schlimmer: eigentlich l&#228;uft dieser Ansatz darauf hinaus, die Konsistenzpr&#252;fung
+    </p>
+    <p>
+      am Ende zu deaktivieren. Nur wir machen das nicht explizit, sondern durch die Hintert&#252;r.
+    </p>
+    <p>
+      Also dann besser klar und ehrlich!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1463934995110" ID="ID_1084188576" MODIFIED="1463935004449" TEXT="dem Mutator sagen, was optional ist">
+<node CREATED="1463935368308" ID="ID_1008223435" MODIFIED="1463935375919" TEXT="was grunds&#xe4;tzlich optional sein kann"/>
+<node CREATED="1463935377123" ID="ID_970486772" MODIFIED="1463935387005" TEXT="was aktuell nicht gebunden ist"/>
+<node COLOR="#a0345c" CREATED="1463937178689" ID="ID_1161021042" MODIFIED="1463937550363" TEXT="Over-Engineering / L&#xf6;sung eines nicht vorhandenen Problems">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn unter dem Strich w&#252;rden wir hiermit volle Unterst&#252;tzung f&#252;r opitonale Attribute einf&#252;hren,
+    </p>
+    <p>
+      also eine Attribut-Semantik auf eine Feld-Semantik draufpflanzen.
+    </p>
+    <p>
+      Aber in der vorausgegangenen Analyse habe ich mich schon davon &#252;berzeugt,
+    </p>
+    <p>
+      da&#223; wir keine Attribut-Semantik brauchen. Und wenn doch, dann bietet das Diff-System
+    </p>
+    <p>
+      immer noch die M&#246;glichkeit, die Attribute explizit als Sammlung darzustellen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1463935030953" ID="ID_540672245" MODIFIED="1463938073583">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auf die <i>empty</i>-Pr&#252;fung am Ende verzichten
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#f36478" DESTINATION="ID_1554206938" ENDARROW="Default" ENDINCLINATION="181;0;" ID="Arrow_ID_389060908" STARTARROW="None" STARTINCLINATION="181;0;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1463937883299" HGAP="85" ID="ID_271104970" MODIFIED="1463937913132" TEXT="Konsequenzen" VSHIFT="26">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1463937922318" ID="ID_74130402" MODIFIED="1463937971266" TEXT="isEmpty">
+<node CREATED="1463937972255" ID="ID_1554206938" MODIFIED="1463938146376" TEXT="mu&#xdf; umdefiniert werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn in den meisten, wichtigsten F&#228;llen get es um einen non-empty-check,
+    </p>
+    <p>
+      bevor ein anderes Verifikations-Pr&#228;dikat angewendet wird.
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#f36478" DESTINATION="ID_1554206938" ENDARROW="Default" ENDINCLINATION="181;0;" ID="Arrow_ID_389060908" SOURCE="ID_540672245" STARTARROW="None" STARTINCLINATION="181;0;"/>
+</node>
+<node CREATED="1463937980222" ID="ID_1669470430" MODIFIED="1463937986216" TEXT="kann nicht mehr negativ gepr&#xfc;ft werden"/>
+<node CREATED="1463937988180" ID="ID_1353983852" MODIFIED="1463938000454" TEXT="das gilt leider f&#xfc;r alle Bindings"/>
+<node CREATED="1463938033527" ID="ID_165279544" MODIFIED="1463938053463" TEXT="neue Primitive: completeScope">
+<icon BUILTIN="help"/>
+<node CREATED="1464113590258" ID="ID_1613216716" MODIFIED="1464113600260" TEXT="auch ein hook f&#xfc;r Aufr&#xe4;um-Arbeiten"/>
+<node CREATED="1464113600897" ID="ID_1783943539" MODIFIED="1464113642335" TEXT="return true -- wenn alles sauber ist"/>
+<node CREATED="1464113642899" ID="ID_468050192" MODIFIED="1464113648966" TEXT="kann NOP implementiert werden"/>
+</node>
+</node>
+<node CREATED="1464114047781" ID="ID_669832549" MODIFIED="1464114221022" TEXT="reduzierte Verifikation">
+<icon BUILTIN="yes"/>
+<node CREATED="1464114078672" ID="ID_72653804" MODIFIED="1464114085171" TEXT="nicht bekannte Felder werden erkannt"/>
+<node CREATED="1464114086111" ID="ID_518116356" MODIFIED="1464114139188" TEXT="der Versuch von Umordnungen wird erkannt"/>
+<node COLOR="#990000" CREATED="1464114156574" ID="ID_408810628" MODIFIED="1464114190655" TEXT="fehlende Angaben werden nicht bemerkt"/>
 </node>
 </node>
 </node>
