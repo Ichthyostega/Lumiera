@@ -8214,7 +8214,7 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201605241828" tags="Model Concepts GuiPattern design draft" changecount="80">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201605241907" tags="Model Concepts GuiPattern design draft" changecount="81">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 within the [[diff framework|TreeDiffModel]], this is a crucial joint, since here the abstract, generic, ~DOM-like ExternalTreeDescription meeds opaque, local and undisclosed data structures.
 
@@ -8275,8 +8275,8 @@ the building blocks, from which such a diff application can be combined, are emb
 :''none'' given. If diff application fails, data is possibly partially transformed, partially in the old state buffer. Thus data is //corrupted.//
 ;old sequence position
 :during diff application, the old state sequence is traversed once. There is an implicit position.
-;operation {{{emptySrc}}}
-:determine if the old state sequence is empty, i.e. there are no further elements waiting from the old state sequence
+;operation {{{hasSrc}}}
+:determine if there are further elements waiting from the old state sequence (to be either picked in the new sequence or discarded)
 ;operation {{{skipSrc}}}
 :skip the next element in the old state sequence, effectively dropping it into obsolescence
 ;operation {{{injectNew}}}

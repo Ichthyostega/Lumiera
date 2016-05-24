@@ -201,9 +201,9 @@ namespace diff{
       /* ==== operation API ==== */
       
       virtual bool
-      emptySrc ()
+      hasSrc ()
         {
-          return true;
+          return false;
           // do nothing by default
         }
       

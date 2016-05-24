@@ -123,7 +123,7 @@ namespace test{
             .attachDummy (target);
           
           CHECK (isnil (target));
-          CHECK (mutator.emptySrc());
+          CHECK (not mutator.hasSrc());
           
           mutator.injectNew (ATTRIB1);
           CHECK (!isnil (target));
@@ -159,7 +159,7 @@ namespace test{
                        .before("attachMutator"));
           
           CHECK (isnil (target));                   // the "visible" new content is still void
-          CHECK (not mutator2.emptySrc());          // content was moved into hidden "src" buffer
+          CHECK (mutator2.hasSrc());                // content was moved into hidden "src" buffer
           CHECK (target.showSrcBuffer() == "α = 1, γ = 3.45, γ = 3.45, b, b, 78:56:34.012");
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
@@ -173,32 +173,32 @@ namespace test{
           CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element                        // acceptSrc
           CHECK (target.showContent() == "γ = 3.45, α = 1");
           
-          CHECK (not mutator2.emptySrc());          // next we have to clean up waste 
+          CHECK (mutator2.hasSrc());                // next we have to clean up waste 
           mutator2.skipSrc();                       // left behind by the findSrc() operation                      // skipSrc
           CHECK (target.showContent() == "γ = 3.45, α = 1");
           
           mutator2.injectNew (ATTRIB2);                                                                            // injectNew
-          CHECK (not mutator2.emptySrc());
+          CHECK (mutator2.hasSrc());
           CHECK (mutator2.matchSrc (ATTRIB3));
           CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
           CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.45");
           
           // now proceeding with the children.
           // NOTE: the TestWireTap / TestMutationTarget does not enforce the attribute / children distinction!
-          CHECK (not mutator2.emptySrc());
+          CHECK (mutator2.hasSrc());
           CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
           mutator2.skipSrc();                       // ...which will be skipped (and thus discarded)               // skipSrc
           mutator2.injectNew (SUB_NODE);            // inject a new nested sub-structure here                      // injectNew
           CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
           CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
-          CHECK (not mutator2.emptySrc());
+          CHECK (mutator2.hasSrc());
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still waiting, unaffected
           CHECK (not mutator2.acceptSrc (CHILD_T)); // refusing to accept/pick a non matching element
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still patiently waiting, unaffected
           CHECK (mutator2.acceptSrc (CHILD_B));                                                                    // acceptSrc
           CHECK (mutator2.matchSrc (CHILD_T));
           CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
-          CHECK (mutator2.emptySrc());              // source contents exhausted
+          CHECK (not mutator2.hasSrc());            // source contents exhausted
           CHECK (not mutator2.acceptSrc (CHILD_T));
           CHECK (target.verify("attachMutator")
                        .beforeEvent("injectNew","78:56:34.012")
@@ -249,7 +249,7 @@ namespace test{
           TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
           
           CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));
-          CHECK (subMutatorBuffer->emptySrc());     // ...this is all we can do here
+          CHECK (not subMutatorBuffer->hasSrc());   // ...this is all we can do here
                                                     // the real implementation would instead find a suitable
                                                     // sub-mutator within this buffer and recurse into that.
           
@@ -336,7 +336,7 @@ namespace test{
           // --- first round: populate the collection ---
           
           CHECK (isnil (target));
-          CHECK (mutator1.emptySrc());
+          CHECK (not mutator1.hasSrc());
           
           mutator1.injectNew (ATTRIB1);
           CHECK (!isnil (target));
@@ -412,14 +412,14 @@ namespace test{
           mutator2.injectNew (SUB_NODE);            // inject a nested sub-structure (implementation defined)      // injectNew
           CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
           CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
-          CHECK (not mutator2.emptySrc());
+          CHECK (mutator2.hasSrc());
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still waiting, unaffected
           CHECK (not mutator2.acceptSrc (CHILD_T)); // refusing to accept/pick a non matching element
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still patiently waiting, unaffected
           CHECK (mutator2.acceptSrc (CHILD_B));                                                                    // acceptSrc
           CHECK (mutator2.matchSrc (CHILD_T));
           CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
-          CHECK (mutator2.emptySrc());              // source contents exhausted
+          CHECK (not mutator2.hasSrc());            // source contents exhausted
           CHECK (not mutator2.acceptSrc (CHILD_T)); // ...anything beyond is NOP
           
           // verify reordered shape
@@ -516,7 +516,7 @@ namespace test{
           CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));
           
           CHECK (isnil (subScopes[SUB_NODE.idi]));  // ...this is where the nested mutator is expected to work on
-          CHECK (subMutatorBuffer->emptySrc());
+          CHECK (not subMutatorBuffer->hasSrc());
           
           // now use the Mutator *interface* to talk to the nested mutator...
           // This code might be confusing, because in fact we're playing two roles here!

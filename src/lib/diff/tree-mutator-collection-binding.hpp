@@ -225,9 +225,9 @@
           }
         
         virtual bool
-        emptySrc ()  override
+        hasSrc ()  override
           {
-            return !pos_;
+            return pos_;
           }
         
         /** ensure the next recorded source element

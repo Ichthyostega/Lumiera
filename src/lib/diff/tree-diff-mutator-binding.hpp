@@ -131,7 +131,7 @@ namespace diff{
       Mutator& out() { return scopes_.top().target; }
       Content& src() { return scopes_.top().content; }
       Iter& srcPos() { return scopes_.top().content.pos; }
-      bool endOfData() { return srcPos() == src().end(); }
+      bool endOfData() { return srcPos() == src().end(); }   /////TODO split into an actual scope end check and an non-null check
       Rec& alteredRec() { return out(); }
       
       

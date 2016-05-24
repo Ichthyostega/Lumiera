@@ -402,10 +402,10 @@ namespace diff{
           }
         
         virtual bool
-        emptySrc ()  override
+        hasSrc ()  override
           {
-            return !pos_
-               and PAR::emptySrc();
+            return pos_
+                or PAR::hasSrc();
           }
         
         /** ensure the next recorded source element

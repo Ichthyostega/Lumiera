@@ -609,7 +609,7 @@
 <node CREATED="1455669331448" ID="ID_1852578403" MODIFIED="1455669333036" TEXT="f&#xfc;r find"/>
 </node>
 </node>
-<node COLOR="#ad014c" CREATED="1455669200945" FOLDED="true" HGAP="85" ID="ID_880765624" MODIFIED="1461880936015" TEXT="Design-Fragen" VSHIFT="-14">
+<node COLOR="#ad014c" CREATED="1455669200945" HGAP="85" ID="ID_880765624" MODIFIED="1464117168136" TEXT="Design-Fragen" VSHIFT="-14">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#4e1527" CREATED="1458408700205" ID="ID_685778920" MODIFIED="1458409890048" TEXT="Grundansatz">
@@ -972,9 +972,9 @@
 </html></richcontent>
 <cloud COLOR="#fce9c0"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node CREATED="1455927425726" ID="ID_1776437339" MODIFIED="1461946503410" TEXT="emptySrc">
+<node CREATED="1455927425726" ID="ID_1776437339" MODIFIED="1464117059267" TEXT="hasSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928216420" ID="ID_662720483" MODIFIED="1461946588807" TEXT="no further src elements available"/>
+<node CREATED="1455928216420" ID="ID_662720483" MODIFIED="1464117064570" TEXT="further src elements available"/>
 </node>
 <node CREATED="1455927425726" ID="ID_1759686725" MODIFIED="1457120215833" TEXT="skipSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -3140,9 +3140,30 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1455927425726" ID="ID_1774195026" MODIFIED="1461946503410" TEXT="emptySrc">
+<node CREATED="1455927425726" ID="ID_1774195026" MODIFIED="1464116919014" TEXT="hasSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928216420" ID="ID_259184763" MODIFIED="1461964761834" TEXT="all known fields where mentioned in diff"/>
+<node CREATED="1455928216420" ID="ID_259184763" MODIFIED="1464116966043" TEXT="can not sensibly be implemented">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1464116995888" ID="ID_892348638" MODIFIED="1464117033135" TEXT="always returns true">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1464116967676" ID="ID_1396378266" MODIFIED="1464117025435">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      rationale: object fields are hard wired,
+    </p>
+    <p>
+      thus always available
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1455927425726" ID="ID_950488526" MODIFIED="1457120215833" TEXT="skipSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -3387,9 +3408,22 @@
 </node>
 </node>
 </node>
-<node CREATED="1458176048564" ID="ID_1811113811" MODIFIED="1461888530348" TEXT="Variationen"/>
+<node CREATED="1458176048564" HGAP="-11" ID="ID_1811113811" MODIFIED="1464117584510" TEXT="Variationen" VSHIFT="4">
+<node CREATED="1464117242535" ID="ID_1487426510" MODIFIED="1464117249074" TEXT="Binden auf eine klassische struct">
+<node CREATED="1464117391859" ID="ID_1783492476" MODIFIED="1464117396430" TEXT="Setter weisen einfach zu"/>
+<node CREATED="1464117397026" ID="ID_1635700062" MODIFIED="1464117404773" TEXT="bereits die Neuanlage mu&#xdf; alles populieren"/>
 </node>
-<node CREATED="1458178113697" HGAP="26" ID="ID_38103760" MODIFIED="1461882659663" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="-7">
+<node CREATED="1464117250262" ID="ID_1846973342" MODIFIED="1464117275374" TEXT="Binden auf ein Objekt mit Initialisierungs-Semantik">
+<node CREATED="1464117412896" ID="ID_1405299167" MODIFIED="1464117450662" TEXT="Erzeugungs-Diff mu&#xdf; mit den Anforderungen des Konstruktors harmonieren"/>
+<node CREATED="1464117487974" ID="ID_1923901911" MODIFIED="1464117499776" TEXT="R&#xfc;ckkehr zum Default wird nicht unterst&#xfc;tzt / abgebildet"/>
+</node>
+<node CREATED="1464117317517" ID="ID_1395959611" MODIFIED="1464117326335" TEXT="Binden auf &quot;konzeptionelle&quot; Properties">
+<node CREATED="1464117513722" ID="ID_101207705" MODIFIED="1464117537611" TEXT="der &quot;Key&quot; ist nur eine ID, um speziellen Zugriffsmechanismus auszul&#xf6;sen"/>
+<node CREATED="1464117553885" ID="ID_1617675711" MODIFIED="1464117567271" TEXT="u.U ist man &#xfc;berhaupt nur an sub-Mutation interessiert"/>
+</node>
+</node>
+</node>
+<node CREATED="1458178113697" HGAP="39" ID="ID_38103760" MODIFIED="1464117607939" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="42">
 <node CREATED="1463687362843" HGAP="116" ID="ID_775516687" MODIFIED="1463687372655" TEXT="Eingrenzung" VSHIFT="-28">
 <node CREATED="1463687373889" ID="ID_155516876" MODIFIED="1463687400026" TEXT="Art von Attributen">
 <node CREATED="1463687402462" ID="ID_1119981147" MODIFIED="1464114029013" TEXT="Objekt-Feld">
