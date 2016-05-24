@@ -136,6 +136,7 @@ namespace test{
           mutator.injectNew (CHILD_B);
           mutator.injectNew (CHILD_B);
           mutator.injectNew (CHILD_T);
+          CHECK (mutator.completeScope());
           CHECK (target.verify("attachMutator")
                        .beforeEvent("injectNew","α = 1")
                        .beforeEvent("injectNew","γ = 3.45")
@@ -143,6 +144,7 @@ namespace test{
                        .beforeEvent("injectNew","b")
                        .beforeEvent("injectNew","b")
                        .beforeEvent("injectNew","78:56:34.012")
+                       .beforeEvent("completeScope","scope completed")
                        );
           CHECK (target.showContent() == "α = 1, γ = 3.45, γ = 3.45, b, b, 78:56:34.012");
           cout << "Content after population; "
@@ -200,6 +202,7 @@ namespace test{
           CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
           CHECK (not mutator2.hasSrc());            // source contents exhausted
           CHECK (not mutator2.acceptSrc (CHILD_T));
+          CHECK (mutator2.completeScope());         // no pending elements left, everything resolved
           CHECK (target.verify("attachMutator")
                        .beforeEvent("injectNew","78:56:34.012")
                        .before("attachMutator")
@@ -212,6 +215,7 @@ namespace test{
                        .beforeEvent("injectNew","Rec()")
                        .beforeEvent("acceptSrc","b")
                        .beforeEvent("acceptSrc","78:56:34.012")
+                       .beforeEvent("completeScope","scope completed")
                        );
           CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.45, Rec(), b, 78:56:34.012");
           cout << "Content after reordering; "
@@ -233,7 +237,9 @@ namespace test{
           CHECK (not contains(target.showContent(), "γ = 3.1415927"));
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first
           CHECK (    contains(target.showContent(), "γ = 3.1415927"));
+          CHECK (not mutator3.completeScope());     // not done yet...
           CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything
+          CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           cout << "Content after assignment; "
                << target.showContent() <<endl;
           
@@ -265,9 +271,11 @@ namespace test{
                        .beforeEvent("accept_until β","β = 2")
                        .beforeEvent("acceptSrc","γ = 3.45")
                        .beforeEvent("assignElm","γ: 3.45 ⤅ 3.1415927")
+                       .beforeEvent("completeScope","scope NOT completed")
                        .beforeEvent("accept_until END","Rec()")
                        .beforeEvent("accept_until END","b")
                        .beforeEvent("accept_until END","78:56:34.012")
+                       .beforeEvent("completeScope","scope completed")
                        .beforeEvent("mutateChild","_CHILD_Record.001: start mutation...Rec()")
                        );
           
@@ -347,6 +355,7 @@ namespace test{
           mutator1.injectNew (CHILD_B);
           mutator1.injectNew (CHILD_B);
           mutator1.injectNew (CHILD_T);
+          CHECK (mutator1.completeScope());
           
           auto contents = stringify(eachElm(target));
           CHECK ("≺α∣1≻" == *contents);
@@ -421,6 +430,7 @@ namespace test{
           CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
           CHECK (not mutator2.hasSrc());            // source contents exhausted
           CHECK (not mutator2.acceptSrc (CHILD_T)); // ...anything beyond is NOP
+          CHECK (mutator2.completeScope());         // no pending elements left, everything resolved
           
           // verify reordered shape
           contents = stringify(eachElm(target));
@@ -501,7 +511,9 @@ namespace test{
           CHECK (not contains(join(target), "≺γ∣3.1415927≻"));
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first
           CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
+          CHECK (not mutator3.completeScope());
           CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything
+          CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           cout << "Content after assignment; "
                << join(target) <<endl;
           
@@ -558,6 +570,8 @@ namespace test{
           subMutatorBuffer->injectNew (CHILD_A);
           subMutatorBuffer->injectNew (CHILD_A);
           subMutatorBuffer->injectNew (CHILD_A);
+          CHECK (subMutatorBuffer->completeScope());  // no pending "open ends" left in sub-scope
+          CHECK (mutator3.completeScope());           // and likewise in the enclosing main scope
           
           // and thus we've gotten a second nested scope, populated with new values
           cout << "Sub|" << join(subScopes[ATTRIB_NODE.idi]) <<endl;

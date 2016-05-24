@@ -310,6 +310,15 @@
             return target_found? binding_.openSub (*target_found, spec.idi, targetBuff)
                                : false;
           }
+        
+        /** verify all our pending (old) source elements where mentioned.
+         * @note allows chained "onion-layers" to clean-up and verify.*/
+        virtual bool
+        completeScope()
+          {
+            return PAR::completeScope()
+               and isnil(this->pos_);
+          }
       };
     
     

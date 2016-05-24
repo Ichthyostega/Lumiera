@@ -282,6 +282,14 @@ namespace diff{
                                        % render(target.data));
         }
       
+      void
+      logScopeCompletion (iterator processingPos)
+        {
+          log_.event ("completeScope", _Fmt{"⤴ scope%s completed / %d waste elm(s) dropped"}
+                                       % (processingPos? " NOT":"")
+                                       % prev_content_.size());
+        }
+      
       
       /* === Diagnostic / Verification === */
       
@@ -510,6 +518,15 @@ namespace diff{
               }
           }
         
+        /** verify all our pending (old) source elements where mentioned.
+         * @note allows chained "onion-layers" to clean-up and verify.*/
+        virtual bool
+        completeScope()
+          {
+            target_.logScopeCompletion (pos_);
+            return PAR::completeScope()
+               and isnil(this->pos_);
+          }
       };
     
     

@@ -280,6 +280,17 @@ namespace diff{
           return false;
         }
       
+      /** ensure the scope addressed by this TreeMutator
+       *  was processed and exhausted without mismatch
+       * @return `true` when all "open ends" are closed
+       *  and no pending work remains to be done. */
+      virtual bool
+      completeScope()
+        {
+          // nothing to clean-up or verify by default
+          return true;
+        }
+      
       virtual void setAttribute (ID, Attribute&) { /* do nothing by default */ }
       
       /**
