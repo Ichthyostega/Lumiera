@@ -81,7 +81,8 @@ namespace test{
    *         what these elements actually are and how they are to be handled.
    *       - we recurse into mutating such an _"unspecified"_ child element.
    * 
-   * @todo this test defines a goal!! What has to be done, is to invent some test data structure and then run the exiting diffs against it. This requires the TreeMutator implementation to be finished!!! 
+   * @todo this test defines a goal!! What has to be done, is to invent some test data structure and then run the exiting diffs against it. This requires the TreeMutator implementation to be finished!!!
+   * @todo 5/16 adjust the diff applied here to conform precisely to the diff used in TreeMutatorBinding_test !!!!! 
    * 
    * @see TreeManipulationBinding_test coverage of the "building blocks"
    * @see DiffTreeApplication_test generic variant of tree diff application
@@ -97,7 +98,7 @@ namespace test{
       using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
       
       DiffSeq
-      attributeDiff()
+      attributeDiff()          ///////////////////////////////TODO use the same diff as in TreeMutatorBinding_test
         {
           // prepare for direct attribute assignment
           GenNode attrib1_mut(ATTRIB1.idi.getSym(), 11);

@@ -89,9 +89,65 @@ namespace test{
   /********************************************************************************//**
    * @test Building blocks to map generic changes to arbitrary private data structures.
    *       - use a dummy diagnostic implementation to verify the interface
-   *       - integrate the standard case of tree diff application to `Rec<GenNode>`
    *       - verify an adapter to apply structure modification to a generic collection
    *       - use closures to translate mutation into manipulation of private attributes
+   *       - integrate the standard case of tree diff application to `Rec<GenNode>`
+   * 
+   * @remark even while this is a very long and detail oriented test, it barely
+   *      scratches the surface of what is possible with _layering multiple bindings_
+   *      on top of each other. In fact, what follows are several self contained tests,
+   *      each performing roughly the same scenario, yet targeted at different local
+   *      data structures through appropriate special bindings given as lambda.
+   * @remark _you should note_ that the scenario executed in each of these tests
+   *      precisely corresponds to the application of the test diff used in
+   *      (\ref DiffVirtualisedApplication_test)
+   * @remark _to help with understanding this,_ please consider how diff application is
+   *      actually implemented on top of a set of "primitives". The TreeMutator interface
+   *      on the other hand offers precisely these building blocks necessary to implement
+   *      diff application to an arbitrary hierarchical data structure. In this way, the
+   *      following test cases demonstrate the intermediary steps executed when applying
+   *      this test diff through the concrete binding exemplified in each case
+   * @remark the **test diff** referred here reads as follows
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   * ins(ATTRIB1)
+   * ins(ATTRIB3)
+   * ins(ATTRIB3)
+   * ins(CHILD_B)
+   * ins(CHILD_B)
+   * ins(CHILD_T)
+   *                          // ==> ATTRIB1, ATTRIB3, ATTRIB3, CHILD_B, CHILD_B, CHILD_T
+   * find(ATTRIB3)
+   * pick(ATTRIB1)
+   * skip(ATTRIB3)
+   * ins(ATTRIB2)
+   * pick(ATTRIB3)
+   * del(CHILD_B)
+   * ins(SUB_NODE)
+   * pick(CHILD_B)
+   * pick(CHILD_T)
+   *                          // ==> ATTRIB3, ATTRIB1, ATTRIB2, ATTRIB3, SUB_NODE, CHILD_B, CHILD_T
+   * after(ATTRIB2)
+   * pick(ATTRIB3)
+   * set(GAMMA_PI)
+   * after(Ref::END)
+   * mut(SUB_NODE)
+   *   ins(TYPE_X)
+   *   ins(ATTRIB2)
+   *   ins(CHILD_B)
+   *   ins(CHILD_A)
+   * emu(SUB_NODE)
+   * ins(ATTRIB_NODE)
+   * mut(ATTRIB_NODE)
+   *   ins(TYPE_Z)
+   *   ins(CHILD_A)
+   *   ins(CHILD_A)
+   *   ins(CHILD_A)
+   * emu(ATTRIB_NODE)
+   *                          // ==> ATTRIB3, ATTRIB1, ATTRIB2, ATTRIB3 := π,
+   *                          //     SUB_NODE{ type ξ, ATTRIB2, CHILD_B, CHILD_A },
+   *                          //     CHILD_B, CHILD_T,
+   *                          //     ATTRIB_NODE{ type ζ, CHILD_A, CHILD_A, CHILD_A }
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    * 
    * @see TreeMutator
    * @see TreeMutator_test
@@ -106,9 +162,9 @@ namespace test{
       run (Arg)
         {
           mutateDummy();
-          mutateGenNode();
           mutateCollection();
-          mutateAttributeMap();
+          mutateAttribute();
+          mutateGenNode();
         }
       
       
@@ -230,15 +286,15 @@ namespace test{
           
           CHECK (isnil (target));
           CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
-          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β
-          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ
+          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β                             // accept_until
+          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ                   // acceptSrc
           CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
           
           CHECK (not contains(target.showContent(), "γ = 3.1415927"));
-          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first
+          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
           CHECK (    contains(target.showContent(), "γ = 3.1415927"));
           CHECK (not mutator3.completeScope());     // not done yet...
-          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything
+          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
           CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           cout << "Content after assignment; "
                << target.showContent() <<endl;
@@ -254,7 +310,7 @@ namespace test{
           InPlaceBuffer<TreeMutator, sizeof(mutator3)> subMutatorBuffer;
           TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
           
-          CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));
+          CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));                                                // mutateChild
           CHECK (not subMutatorBuffer->hasSrc());   // ...this is all we can do here
                                                     // the real implementation would instead find a suitable
                                                     // sub-mutator within this buffer and recurse into that.
@@ -504,15 +560,15 @@ namespace test{
           
           CHECK (isnil (target));
           CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
-          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β
-          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ
+          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β                             // accept_until
+          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ                   // acceptSrc
           CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
           
           CHECK (not contains(join(target), "≺γ∣3.1415927≻"));
-          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first
+          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
           CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
           CHECK (not mutator3.completeScope());
-          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything
+          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
           CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           cout << "Content after assignment; "
                << join(target) <<endl;
@@ -525,7 +581,7 @@ namespace test{
           InPlaceBuffer<TreeMutator, sizeof(mutator1)> subMutatorBuffer;
           TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
           
-          CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));
+          CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));                                                // mutateChild
           
           CHECK (isnil (subScopes[SUB_NODE.idi]));  // ...this is where the nested mutator is expected to work on
           CHECK (not subMutatorBuffer->hasSrc());
@@ -541,10 +597,10 @@ namespace test{
           // since this is a topic beyond the scope of this test. In real usage, the DiffApplicator cares
           // to provide a stack of suitably sized buffers for the nested mutators.
           
-          subMutatorBuffer->injectNew (TYPE_X);
-          subMutatorBuffer->injectNew (ATTRIB2);
-          subMutatorBuffer->injectNew (CHILD_B);
-          subMutatorBuffer->injectNew (CHILD_A);
+          subMutatorBuffer->injectNew (TYPE_X);                                                                    // >> // injectNew
+          subMutatorBuffer->injectNew (ATTRIB2);                                                                   // >> // injectNew
+          subMutatorBuffer->injectNew (CHILD_B);                                                                   // >> // injectNew
+          subMutatorBuffer->injectNew (CHILD_A);                                                                   // >> // injectNew
           
           CHECK (not isnil (subScopes[SUB_NODE.idi]));              // ...and "magically" these instructions happened to insert
           cout << "Sub|" << join(subScopes[SUB_NODE.idi]) <<endl;  //  some new content into our implementation defined sub scope!
@@ -600,7 +656,7 @@ namespace test{
       
       
       void
-      mutateAttributeMap ()
+      mutateAttribute ()
         {
           TODO ("define how to translate generic mutation into attribute manipulation");
         }

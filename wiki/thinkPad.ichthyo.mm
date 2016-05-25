@@ -3165,9 +3165,13 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1455927425726" ID="ID_950488526" MODIFIED="1457120215833" TEXT="skipSrc">
+<node CREATED="1455927425726" ID="ID_950488526" MODIFIED="1464212647870" TEXT="skipSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928216420" ID="ID_1837102790" MODIFIED="1461964713432" TEXT="reset to default"/>
+<icon BUILTIN="closed"/>
+<node CREATED="1464212421708" ID="ID_260959353" MODIFIED="1464212429644" TEXT="prohibited, raise error"/>
+<node CREATED="1455928216420" ID="ID_1837102790" MODIFIED="1464212390729" TEXT="reset to default">
+<icon BUILTIN="button_cancel"/>
+</node>
 <node CREATED="1461964714068" ID="ID_1261372831" MODIFIED="1463690748989" TEXT="mandatory fields raise error">
 <icon BUILTIN="yes"/>
 </node>
@@ -3179,12 +3183,17 @@
 <node CREATED="1455982947867" ID="ID_348226285" MODIFIED="1457047494973" TEXT="injectNew">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455982969073" ID="ID_1599013380" MODIFIED="1463675987940" TEXT="set known field&apos;s contents"/>
-<node CREATED="1457047512175" ID="ID_45133594" MODIFIED="1461964833720" TEXT="mandatory fields raise error"/>
+<node CREATED="1457047512175" ID="ID_45133594" MODIFIED="1464212464658" TEXT="mandatory fields raise error">
+<icon BUILTIN="button_cancel"/>
+</node>
 <node CREATED="1461964818054" ID="ID_1444647202" MODIFIED="1461964825281" TEXT="unknown fields raise error"/>
 </node>
 <node CREATED="1455927413191" ID="ID_131020445" MODIFIED="1457120269834" TEXT="acceptSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1461964863217" ID="ID_274118585" MODIFIED="1461964870755" TEXT="mark known field as mentioned"/>
+<node CREATED="1464212476461" ID="ID_503509206" MODIFIED="1464212481606" TEXT="NOP"/>
+<node CREATED="1461964863217" ID="ID_274118585" MODIFIED="1464212474879" TEXT="mark known field as mentioned">
+<icon BUILTIN="button_cancel"/>
+</node>
 </node>
 <node CREATED="1455928166683" ID="ID_1715452226" MODIFIED="1461965313359" TEXT="accept_until">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -3225,13 +3234,17 @@
 </richcontent>
 </node>
 <node CREATED="1463675872239" ID="ID_467354174" MODIFIED="1463675882809" TEXT="ist sehr sinnvoll"/>
-<node CREATED="1463675883853" ID="ID_178701147" MODIFIED="1463675901055" TEXT="k&#xf6;nnte sogar Standardfall sein"/>
+<node CREATED="1463675883853" ID="ID_178701147" MODIFIED="1464212598924" TEXT="k&#xf6;nnte sogar Standardfall sein">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1461965829041" ID="ID_1866325894" MODIFIED="1461965840371" TEXT="erst feststellen, ob ein Attribut gesucht wird"/>
-<node CREATED="1461965841431" ID="ID_863778784" MODIFIED="1461965852505" TEXT="falls ja, Zugriff auf bekanntes Feld"/>
+<node CREATED="1464212588886" ID="ID_1883145154" MODIFIED="1464212594754" TEXT="ist effektiv NOP">
+<icon BUILTIN="yes"/>
 </node>
-<node CREATED="1455927413191" ID="ID_216877268" MODIFIED="1461946942304" TEXT="findSrc">
+</node>
+</node>
+<node CREATED="1455927413191" ID="ID_216877268" MODIFIED="1464212636431" TEXT="findSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="closed"/>
 <node CREATED="1461946965569" ID="ID_229931358" MODIFIED="1461963646230" TEXT="Umordnen wird nicht unterst&#xfc;tzt"/>
 <node CREATED="1461963648481" ID="ID_1893776707" MODIFIED="1461963654996" TEXT="l&#xf6;st einen Logik-Fehler aus"/>
 </node>
@@ -3851,8 +3864,11 @@
 </node>
 <node CREATED="1463937980222" ID="ID_1669470430" MODIFIED="1463937986216" TEXT="kann nicht mehr negativ gepr&#xfc;ft werden"/>
 <node CREATED="1463937988180" ID="ID_1353983852" MODIFIED="1463938000454" TEXT="das gilt leider f&#xfc;r alle Bindings"/>
-<node CREATED="1463938033527" ID="ID_165279544" MODIFIED="1463938053463" TEXT="neue Primitive: completeScope">
-<icon BUILTIN="help"/>
+<node CREATED="1464212233893" ID="ID_1520677416" MODIFIED="1464212254420" TEXT="umdrehen in: hasSrc">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1463938033527" ID="ID_165279544" MODIFIED="1464212191502" TEXT="neue Primitive: completeScope">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1464113590258" ID="ID_1613216716" MODIFIED="1464113600260" TEXT="auch ein hook f&#xfc;r Aufr&#xe4;um-Arbeiten"/>
 <node CREATED="1464113600897" ID="ID_1783943539" MODIFIED="1464113642335" TEXT="return true -- wenn alles sauber ist"/>
 <node CREATED="1464113642899" ID="ID_468050192" MODIFIED="1464113648966" TEXT="kann NOP implementiert werden"/>
