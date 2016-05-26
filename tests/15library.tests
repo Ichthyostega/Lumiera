@@ -168,6 +168,19 @@ return: 0
 END
 
 
+TEST "Diff: Generic recursive mutation with closure binding" TreeMutator_test <<END
+out: concrete TreeMutator .+Builder<ChangeOperation<TreeMutator, test::TreeMutator_test::simpleAttributeBinding().+lambda\(string\).+> >
+out-lit: "data" closure received something that would be acceptable
+out-lit: localData changed to: that would be acceptable
+return: 0
+END
+
+
+TEST "Diff: mapping of changes onto opaque tree data" TreeMutatorBinding_test <<END
+return: 0
+END
+
+
 TEST "A Digxel (numeric component)" Digxel_test <<END
 out-lit: empty____## +0.0 ##
 out-lit: value____##-88.8 ##
@@ -283,19 +296,6 @@ END
 
 
 PLANNED "GenericTreeRepresentation_test" GenericTreeRepresentation_test <<END
-return: 0
-END
-
-
-PLANNED "Generic mapping of changes to tree data" TreeManipulationBinding_test <<END
-return: 0
-END
-
-
-TEST "Generic recursive mutation with closure binding" TreeMutator_test <<END
-out: concrete TreeMutator .+Builder<ChangeOperation<TreeMutator, test::TreeMutator_test::simpleAttributeBinding().+lambda\(string\).+> >
-out-lit: "data" closure received something that would be acceptable
-out-lit: localData changed to: that would be acceptable
 return: 0
 END
 

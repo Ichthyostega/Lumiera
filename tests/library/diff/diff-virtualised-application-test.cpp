@@ -84,7 +84,7 @@ namespace test{
    * @todo this test defines a goal!! What has to be done, is to invent some test data structure and then run the exiting diffs against it. This requires the TreeMutator implementation to be finished!!!
    * @todo 5/16 adjust the diff applied here to conform precisely to the diff used in TreeMutatorBinding_test !!!!! 
    * 
-   * @see TreeManipulationBinding_test coverage of the "building blocks"
+   * @see TreeMutatorBinding_test coverage of the "building blocks"
    * @see DiffTreeApplication_test generic variant of tree diff application
    * @see TreeMutator_test base operations of the adapter
    * @see tree-diff-mutator-binding.hpp

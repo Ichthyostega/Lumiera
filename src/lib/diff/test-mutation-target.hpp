@@ -35,7 +35,7 @@
  ** 
  ** @todo WIP 2/2016
  ** 
- ** @see TreeManipulationBinding_test
+ ** @see TreeMutatorBinding_test
  ** @see TreeMutator
  ** 
  */
@@ -195,7 +195,7 @@ namespace diff{
    * »External Tree Description« reflecting the actual data structure,
    * as can be inferred through listening to all handled diff mutation primitives.
    * Besides, each of these primitives is recorded in the embedded \ref EventLog.
-   * @see TreeManipulationBinding_test::mutateDummy()
+   * @see TreeMutatorBinding_test::mutateDummy()
    */
   class TestMutationTarget
     : boost::noncopyable

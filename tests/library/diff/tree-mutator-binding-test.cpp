@@ -1,5 +1,5 @@
 /*
-  TreeManipulationBinding(Test)  -  techniques to map generic changes to concrete tree shaped data
+  TreeMutatorBinding(Test)  -  techniques to map generic changes onto concrete tree shaped data
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -155,7 +155,7 @@ namespace test{
    * @see GenNodeBasic_test
    * @see AbstractTangible_test::mutate()
    */
-  class TreeManipulationBinding_test : public Test
+  class TreeMutatorBinding_test : public Test
     {
       
       virtual void
@@ -671,7 +671,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (TreeManipulationBinding_test, "unit common");
+  LAUNCHER (TreeMutatorBinding_test, "unit common");
   
   
   
