@@ -3436,7 +3436,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1458178113697" HGAP="39" ID="ID_38103760" MODIFIED="1464117607939" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="42">
+<node CREATED="1458178113697" HGAP="61" ID="ID_38103760" MODIFIED="1464227320251" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="48">
 <node CREATED="1463687362843" HGAP="116" ID="ID_775516687" MODIFIED="1463687372655" TEXT="Eingrenzung" VSHIFT="-28">
 <node CREATED="1463687373889" ID="ID_155516876" MODIFIED="1463687400026" TEXT="Art von Attributen">
 <node CREATED="1463687402462" ID="ID_1119981147" MODIFIED="1464114029013" TEXT="Objekt-Feld">
@@ -3521,8 +3521,14 @@
 <node CREATED="1463691267608" ID="ID_1554269824" MODIFIED="1463691272203" TEXT="Typisierung">
 <node CREATED="1463691273431" ID="ID_1711015726" MODIFIED="1463691276947" TEXT="pro Attribut"/>
 <node CREATED="1463691277726" ID="ID_716698874" MODIFIED="1463691280146" TEXT="implizit">
-<node CREATED="1463691290845" ID="ID_1981578828" MODIFIED="1463691359416" TEXT="der Setter bekommt eine GenNode"/>
-<node CREATED="1463691359988" ID="ID_139397516" MODIFIED="1463691370270" TEXT="der Setter holt sich aus dieser die Payload"/>
+<node CREATED="1463691290845" ID="ID_1981578828" MODIFIED="1464226408020" TEXT="das Setter-lambda nimmt einen Wert"/>
+<node CREATED="1464226412567" ID="ID_1195950141" MODIFIED="1464226429345" TEXT="der Wert-Typ mu&#xdf; einer der GenNode-Payload-Typen sein">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464227158027" ID="ID_262712037" MODIFIED="1464227176058" TEXT="TODO: dies zur compile-Zeit pr&#xfc;fen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1463691359988" ID="ID_139397516" MODIFIED="1464226506135" TEXT="der Setter mu&#xdf; jedwede weitere Konvertierung in andere Typen selber machen"/>
+<node CREATED="1464226461041" ID="ID_401616087" MODIFIED="1464226487843" TEXT="die Implementierung greift auf den passenden GenNode-Payload zu"/>
 <node CREATED="1463691372258" ID="ID_1648677750" MODIFIED="1463691550094" TEXT="alle Typkonvertierungs-Fragen auf client abgew&#xe4;lzt"/>
 <node CREATED="1463691552514" ID="ID_1882798051" MODIFIED="1463691645252" TEXT="das ist gut so">
 <richcontent TYPE="NOTE"><html>
@@ -3588,7 +3594,7 @@
 <node CREATED="1463691807824" ID="ID_175488317" MODIFIED="1463691814860" TEXT="keine Mischformen">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1463692054415" ID="ID_1755055624" MODIFIED="1463692088865">
+<node CREATED="1463692054415" FOLDED="true" ID="ID_1755055624" MODIFIED="1464226580283">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -3632,7 +3638,7 @@
 <node CREATED="1463695640231" ID="ID_176647136" MODIFIED="1463695645090" TEXT="und ist somit nicht unser Problem"/>
 </node>
 </node>
-<node CREATED="1463849505993" HGAP="42" ID="ID_493843802" MODIFIED="1463849535030" VSHIFT="25">
+<node CREATED="1463849505993" FOLDED="true" HGAP="42" ID="ID_493843802" MODIFIED="1464226577515" VSHIFT="25">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -3883,26 +3889,87 @@
 </node>
 </node>
 </node>
-<node CREATED="1461894614295" ID="ID_1919790561" MODIFIED="1461894618130" TEXT="Bindeglieder">
-<node CREATED="1461894619054" ID="ID_1860006379" MODIFIED="1461894633513" TEXT="implementieren die API-Primitive">
+<node CREATED="1461897111747" HGAP="51" ID="ID_1690728106" MODIFIED="1464226908162" TEXT="Ein Attribut oder viele Attribute" VSHIFT="15">
+<icon BUILTIN="help"/>
+<node CREATED="1463696053440" ID="ID_564525411" MODIFIED="1464226693401" TEXT="Standardfall: eine kleine Zahl von Attributen ">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1463696031715" ID="ID_1300041378" MODIFIED="1464226781810" TEXT="&quot;ein Attribut&quot; ist aber der nat&#xfc;rliche Basisfall f&#xfc;r die Implementierung"/>
+<node CREATED="1463695809296" ID="ID_780490723" MODIFIED="1464226736308" TEXT="problematisch sind Selektor und (ignorierte) Reihenfolge">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1464226806914" HGAP="25" ID="ID_1103913128" MODIFIED="1464226906099" TEXT="Selector" VSHIFT="5">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1464226813953" ID="ID_29622528" MODIFIED="1464226834307" TEXT="fest verdrahtet: istAttribut"/>
+<node CREATED="1464226834831" ID="ID_585845912" MODIFIED="1464226848617" TEXT="Verzicht auf einen konfigurierbaren Selector"/>
+<node CREATED="1464226849277" ID="ID_449408444" MODIFIED="1464226870862" TEXT="im Zweifelsfall: anderen &#xbb;onion-Layer&#xab; verwenden"/>
+<node CREATED="1464226871930" ID="ID_569490118" MODIFIED="1464226897116" TEXT="gut zur Reduktion der Komplexit&#xe4;t">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1461894614295" ID="ID_1919790561" MODIFIED="1464226915640" TEXT="Attribut-Glieder">
+<node CREATED="1461894619054" ID="ID_1860006379" MODIFIED="1464227126828" TEXT="implementieren die API-Primitive">
 <node CREATED="1461894676063" ID="ID_1773874682" MODIFIED="1461894678714" TEXT="durch Aktion"/>
 <node CREATED="1461894679190" ID="ID_1990110249" MODIFIED="1461894683857" TEXT="durch Ignorieren"/>
 <node CREATED="1461894684326" ID="ID_744174163" MODIFIED="1461894692888" TEXT="als Fehler"/>
 </node>
-<node CREATED="1461894634029" ID="ID_1447610701" MODIFIED="1461894660404" TEXT="werden automatisch zusammengestellt"/>
-<node CREATED="1461894666248" ID="ID_1972218753" MODIFIED="1461894674331" TEXT="auf Baiss einer Situations-Kennzeichnung"/>
+<node CREATED="1461894634029" ID="ID_1447610701" MODIFIED="1464226938524" TEXT="f&#xfc;gen sich nat&#xfc;rlich durch Layering zusammen"/>
+<node CREATED="1461894666248" ID="ID_1972218753" MODIFIED="1464226987286" TEXT="Setter / Mutator durch Template-Spezialisierung"/>
+<node CREATED="1464226992090" ID="ID_632987149" MODIFIED="1464227117241" TEXT="lineare Suche">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1464227021205" ID="ID_1138709182" MODIFIED="1464227032960" TEXT="akzeptabel f&#xfc;r &lt; 30 Attribute"/>
+<node CREATED="1464227042771" ID="ID_1594139733" MODIFIED="1464227114093" TEXT="vermeidet heap-basierte Collection">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      jedwede &quot;bessere&quot; Implementierung mu&#223; zwingend einen Container verwenden,
+    </p>
+    <p>
+      der dann die Lambdas f&#252;r die einzelnen Setter auf den Heap legt.
+    </p>
+    <p>
+      Das ist hier tats&#228;chlich viel schlechter, als das bischen lineare Suche
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1461897111747" ID="ID_1690728106" MODIFIED="1461897118502" TEXT="Ein Attribut oder viele Attribute">
-<node CREATED="1463695795083" ID="ID_216074650" MODIFIED="1463695808780" TEXT="Zweifel, ob isoliertes Attribut korrekt implementierbar"/>
-<node CREATED="1463695809296" ID="ID_780490723" MODIFIED="1463695851374" TEXT="problematisch sind Selektor und (ignorierte) Reihenfolge"/>
-<node CREATED="1463696031715" ID="ID_1300041378" MODIFIED="1463696046717" TEXT="denkbar, &quot;ein Attribut&quot; als Basis-Element zu implementieren"/>
-<node CREATED="1463696053440" ID="ID_564525411" MODIFIED="1463696064488" TEXT="aber: viele Attribute sind der Standardfall">
-<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464227213180" HGAP="29" ID="ID_691018374" MODIFIED="1464227324395" TEXT="Implementierung" VSHIFT="66">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1464227218795" ID="ID_1100206442" MODIFIED="1464227263894" TEXT="ist grunds&#xe4;tzlich &quot;schon da&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....durch meinen allerersten Draft,
+    </p>
+    <p>
+      f&#252;r den ich damals gezwungen war, die GenNode zu erfinden :)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464227273572" ID="ID_1669070695" MODIFIED="1464227305281" TEXT="TODO: alten Testfall anpassen">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1457232746179" ID="ID_1793680066" MODIFIED="1457232776598" TEXT="Rec&lt;GenNode&gt;">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464227285562" ID="ID_908196685" MODIFIED="1464227304657" TEXT="TODO: Setter aus erstem Entwurf vom TreeMutator-API entfernen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1464227227610" ID="ID_392179794" MODIFIED="1464227235981" TEXT="aber: alle Primitive durchimplementieren"/>
+</node>
+</node>
+<node CREATED="1457232746179" ID="ID_1793680066" MODIFIED="1464227326650" TEXT="Rec&lt;GenNode&gt;" VSHIFT="11">
 <icon BUILTIN="full-4"/>
 <node CREATED="1457742036967" ID="ID_980619979" MODIFIED="1457742040187" TEXT="Attribute"/>
 <node CREATED="1457742040782" ID="ID_613087606" MODIFIED="1457742042442" TEXT="Kinder"/>

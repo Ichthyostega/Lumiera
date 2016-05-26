@@ -8214,7 +8214,7 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201605241907" tags="Model Concepts GuiPattern design draft" changecount="81">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201605260202" tags="Model Concepts GuiPattern design draft" changecount="82">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 within the [[diff framework|TreeDiffModel]], this is a crucial joint, since here the abstract, generic, ~DOM-like ExternalTreeDescription meeds opaque, local and undisclosed data structures.
 
@@ -8339,6 +8339,19 @@ attached to a clip, or the mixture of clips, effects and labels found within a [
 ;object field binding
 :this maps the concept of &quot;Attribute&quot; onto concrete, mutable data fields
 :any re-ordering, inserting and deleting of fields is ''prohibited'', while defaultable optional fields are tolerated
+:there is only one common »binding layer« for object fields (i.e. we don't offer a customisable selector)
+:binding is created ''alternatively'' through the following closures
+:* &quot;key&quot;, lambda {{{change: void(T val)}}}
+:** binding for a regular setter to assign a new value
+:** the value type is picked up from the provided lambda
+:** possible value types are restricted to the selection of GenNode payload types
+:** any further type conversions are to be handled by the closure and thus the client code
+:* &quot;key&quot;, lambda {{{mutateAttrib: void(TreeMutator::MutatorBuffer)}}}
+:** fabricate a recursive sub-TreeMutator to handle an &quot;object valued&quot; attribute
+:* lambda {{{buildAttribMutator: void(GenNode::ID const&amp;, TreeMutator::MutatorBuffer)}}}
+:** alternative version with a single //catch all// mutator builder
+:** will be invoked for any attribute sub-mutation, unless there is a more specific dedicated mutator builder defined on top
+
 
 You should note that this entire design is recursive: only after understanding the part, where, for handling a sub-structure, a nested mutator is fabricated and placed into a given buffer, it becomes clear to what effect we're creating a customised mutator: we always need some (relative) parent scope, which happens to know more about the actual data to be treated with a TreeMutator. This scope assists with creating a suitable binding. Obviously, from within that binding, it is known what the sub-structures and children of that local data are all about and what semantics to give to the fundamental operations.
 </pre>

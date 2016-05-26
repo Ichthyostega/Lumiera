@@ -56,6 +56,7 @@ namespace diff{
 namespace test{
   
   using lumiera::error::LUMIERA_ERROR_LOGIC;
+  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   
   namespace {//Test fixture....
@@ -655,11 +656,320 @@ namespace test{
         }
       
       
+      
+      
+      
+      /** @test translate generic mutation into attribute manipulation */
       void
       mutateAttribute ()
         {
-          TODO ("define how to translate generic mutation into attribute manipulation");
+          MARK_TEST_FUN;
+          
+          // local data fields to be handled as "attributes"
+          int alpha    = -1;
+          int64_t beta = -1;
+          double gamma = -1;
+          
+          // we'll use this as an attribute with nested scope ("object valued attribute")
+          TestMutationTarget delta;
+          
+          
+          #define LOG_SETTER(KEY)  cout << STRINGIFY(KEY) " := "<<val<<endl;
+          
+          
+          // set up a binding to these opaque private structures...
+          auto mutator1 =
+          TreeMutator::build()
+            .change("alpha", [&](int val)
+              {
+                LOG_SETTER ("alpha")
+                alpha = val;
+              })
+            .change("gamma", [&](double val)
+              {
+                LOG_SETTER ("gamma")
+                gamma = val;
+              });
+          
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          CHECK (sizeof(mutator1) <= sizeof(VecD)                // the buffer for pending elements
+                                   + sizeof(VecD*)               // the reference to the original collection
+                                   + sizeof(void*)               // the reference from the ChildCollectionMutator to the CollectionBinding
+                                   + 2 * sizeof(VecD::iterator)  // one Lumiera RangeIter (comprised of pos and end iterators)
+                                   + 4 * sizeof(void*)           // the four unused default configured binding functions
+                                   + 1 * sizeof(void*));         // one back reference from the closure to this scope
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          
+          
+          // --- first round: introduce new "attributes" ---
+          
+          CHECK (-1 == alpha);
+          CHECK (-1 == beta);
+          CHECK (-1 == gamma);
+          
+          CHECK (mutator1.hasSrc());                // NOTE: the attribute binding always has an implicit "source sequence"
+                                                    //       (which is in fact fixed, because it relies on a likewise fixed class definition)
+          CHECK (mutator1.completeScope());         // NOTE: this is always true and NOP, for the same reason: the structure of the binding is fixed
+          
+          mutator1.injectNew (ATTRIB1);
+          CHECK ( 1 == alpha);
+          CHECK (-1 == beta);
+          CHECK (-1 == gamma);
+          
+          mutator1.injectNew (ATTRIB3);
+          CHECK ( 1 == alpha);
+          CHECK (-1 == beta);
+          CHECK (3.45 == gamma);
+          
+          mutator1.injectNew (ATTRIB3);
+          CHECK ( 1 == alpha);
+          CHECK (-1 == beta);
+          CHECK (3.45 == gamma);
+          
+          VERIFY_ERROR (INVALID, mutator1.injectNew (ATTRIB2));    // ...because we didn't define a binding for ATTRIB2 (aka "beta")
+          
+          // any changes to something other than attributes are just delegated to the next "onion layer"
+          // since in this case here, there is only one layer (our attribute binding), these other changes will be silently ignored
+          mutator1.injectNew (CHILD_B);
+          mutator1.injectNew (CHILD_B);
+          mutator1.injectNew (CHILD_T);
+          CHECK (mutator1.completeScope());         // this invocation typically happens at this point, but is NOP (see above)
+          
+          CHECK ( 1 == alpha);
+          CHECK (-1 == beta);
+          CHECK (3.45 == gamma);
+          cout << "successfully 'injected' new attributes." <<endl;
+          
+          
+          // --- second round: reordering ---
+          
+          
+          // in fact any re-ordering of "attributes" is prohibited,
+          // because "attributes" are mapped to object or data fields,
+          // which are fixed by definition and don't expose any ordering.
+          // While any mutations beyond attributes are passed on / ignored
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          auto mutator2 =
+          TreeMutator::build()
+            .attach (collection(target)
+                       .constructFrom ([&](GenNode const& spec) -> Data
+                          {
+                            cout << "constructor invoked on "<<spec<<endl;
+                            return {spec.idi.getSym(), render(spec.data)};
+                          })
+                       .matchElement ([&](GenNode const& spec, Data const& elm)
+                          {
+                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
+                            return spec.idi.getSym() == elm.key;
+                          }));
+          
+          // we have two lambdas now and thus can save on the size of one function pointer....
+          CHECK (sizeof(mutator1) - sizeof(mutator2) == sizeof(void*));
+          
+          
+          CHECK (isnil (target));                   // the "visible" new content is still void
+          
+          CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
+          CHECK (isnil (target));                   // the match didn't change anything
+          
+          CHECK (mutator2.findSrc (ATTRIB3));       // search for an element further down into src...              // findSrc
+          CHECK (!isnil (target));                  // ...pick and accept it into the "visible" part of target
+          CHECK (join(target) == "≺γ∣3.45≻");
+          
+          CHECK (mutator2.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
+          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element                        // acceptSrc
+          
+          mutator2.skipSrc();                       // next we have to clean up waste left over by findSrc()       // skipSrc
+          
+          mutator2.injectNew (ATTRIB2);                                                                            // injectNew
+          CHECK (mutator2.matchSrc (ATTRIB3));
+          CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
+          
+          CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
+          mutator2.skipSrc();                       // ...which will be skipped (and thus discarded)               // skipSrc
+          mutator2.injectNew (SUB_NODE);            // inject a nested sub-structure (implementation defined)      // injectNew
+          CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
+          CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
+          CHECK (mutator2.hasSrc());
+          CHECK (mutator2.matchSrc (CHILD_B));      // child B still waiting, unaffected
+          CHECK (not mutator2.acceptSrc (CHILD_T)); // refusing to accept/pick a non matching element
+          CHECK (mutator2.matchSrc (CHILD_B));      // child B still patiently waiting, unaffected
+          CHECK (mutator2.acceptSrc (CHILD_B));                                                                    // acceptSrc
+          CHECK (mutator2.matchSrc (CHILD_T));
+          CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
+          CHECK (not mutator2.hasSrc());            // source contents exhausted
+          CHECK (not mutator2.acceptSrc (CHILD_T)); // ...anything beyond is NOP
+          CHECK (mutator2.completeScope());         // no pending elements left, everything resolved
+          
+          // verify reordered shape
+          contents = stringify(eachElm(target));
+          CHECK ("≺γ∣3.45≻" == *contents);
+          ++contents;
+          CHECK ("≺α∣1≻" == *contents);
+          ++contents;
+          CHECK ("≺β∣2≻" == *contents);
+          ++contents;
+          CHECK ("≺γ∣3.45≻" == *contents);
+          ++contents;
+          CHECK (contains(*contents, "∣Rec()≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣b≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣78:56:34.012≻"));
+          ++contents;
+          CHECK (isnil (contents));
+          
+          cout << "Content after reordering...."
+               << join(target) <<endl;
+          
+          
+          // --- third round: mutate data and sub-scopes ---
+          
+          
+          // This time we build the Mutator bindings in a way to allow mutation
+          // For one, "mutation" means to assign a changed value to a simple node / attribute.
+          // And beyond that, mutation entails to open a nested scope and delve into that recursively.
+          // Here, as this is really just a test and demonstration, we implement those nested scopes aside
+          // managed within a map and keyed by the sub node's ID.
+          auto mutator3 =
+          TreeMutator::build()
+            .attach (collection(target)
+                       .constructFrom ([&](GenNode const& spec) -> Data
+                          {
+                            cout << "constructor invoked on "<<spec<<endl;
+                            return {spec.idi.getSym(), render(spec.data)};
+                          })
+                       .matchElement ([&](GenNode const& spec, Data const& elm) -> bool
+                          {
+                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
+                            return spec.idi.getSym() == elm.key;
+                          })
+                       .assignElement ([&](Data& target, GenNode const& spec) -> bool
+                          {
+                            cout << "assign "<<target<<" <- "<<spec<<endl;
+                            CHECK (target.key == spec.idi.getSym(), "assignment to target with wrong identity");
+                            target.val = render(spec.data);
+                            return true;
+                          })
+                       .buildChildMutator ([&](Data& target, GenNode::ID const& subID, TreeMutator::MutatorBuffer buff) -> bool
+                          {
+                            // use our "inside knowledge" to get at the nested scope implementation
+                            VecD& subScope = subScopes[subID];
+                            buff.create (
+                              TreeMutator::build()
+                                .attach (collection(subScope)
+                                           .constructFrom ([&](GenNode const& spec) -> Data
+                                              {
+                                                cout << "SubScope| constructor invoked on "<<spec<<endl;
+                                                return {spec.idi.getSym(), render(spec.data)};
+                                              })));
+                            
+                            // NOTE: mutation of sub scope has not happened yet
+                            //       we can only document the sub scope to be opened now
+                            cout << "openSub("<<subID.getSym()<<") ⟻ "<<target<<endl;
+                            target.val = "Rec(--"+subID.getSym()+"--)";
+                            return true;
+                          }));
+          
+          CHECK (isnil (target));
+          CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
+          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β                             // accept_until
+          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ                   // acceptSrc
+          CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
+          
+          CHECK (not contains(join(target), "≺γ∣3.1415927≻"));
+          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
+          CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
+          CHECK (not mutator3.completeScope());
+          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
+          CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
+          cout << "Content after assignment; "
+               << join(target) <<endl;
+          
+          
+          // prepare for recursion into sub scope..
+          // Since this is a demonstration, we do not actually recurse into anything,
+          // rather we invoke the operations on a nested mutator right from here.
+          
+          InPlaceBuffer<TreeMutator, sizeof(mutator1)> subMutatorBuffer;
+          TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
+          
+          CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));                                                // mutateChild
+          
+          CHECK (isnil (subScopes[SUB_NODE.idi]));  // ...this is where the nested mutator is expected to work on
+          CHECK (not subMutatorBuffer->hasSrc());
+          
+          // now use the Mutator *interface* to talk to the nested mutator...
+          // This code might be confusing, because in fact we're playing two roles here!
+          // For one, above, in the definition of mutator3 and in the declaration of MapD subScopes,
+          // the test code represents what a private data structure and binding would do.
+          // But below we enact the TreeDiffAplicattor, which *would* use the Mutator interface
+          // to talk to an otherwise opaque nested mutator implementation. Actually, here this
+          // nested opaque mutator is created on-the-fly, embedded within the .buildChildMutator(..lambda...)
+          // Incidentally, we "just happen to know" how large the buffer needs to be to hold that mutator,
+          // since this is a topic beyond the scope of this test. In real usage, the DiffApplicator cares
+          // to provide a stack of suitably sized buffers for the nested mutators.
+          
+          subMutatorBuffer->injectNew (TYPE_X);                                                                    // >> // injectNew
+          subMutatorBuffer->injectNew (ATTRIB2);                                                                   // >> // injectNew
+          subMutatorBuffer->injectNew (CHILD_B);                                                                   // >> // injectNew
+          subMutatorBuffer->injectNew (CHILD_A);                                                                   // >> // injectNew
+          
+          CHECK (not isnil (subScopes[SUB_NODE.idi]));              // ...and "magically" these instructions happened to insert
+          cout << "Sub|" << join(subScopes[SUB_NODE.idi]) <<endl;  //  some new content into our implementation defined sub scope!
+          
+          // verify contents of nested scope after mutation
+          contents = stringify(eachElm(subScopes[SUB_NODE.idi]));
+          CHECK ("≺type∣ξ≻" == *contents);
+          ++contents;
+          CHECK ("≺β∣2≻" == *contents);
+          ++contents;
+          CHECK (contains(*contents, "∣b≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣a≻"));
+          ++contents;
+          CHECK (isnil (contents));
+          
+          
+          // now back to parent scope....
+          // ...add a new attribute and immediately recurse into it
+          mutator1.injectNew (ATTRIB_NODE);
+          CHECK (mutator3.mutateChild (ATTRIB_NODE, placementHandle));  // NOTE: we're just recycling the buffer. InPlaceHolder handles lifecycle properly
+          subMutatorBuffer->injectNew (TYPE_Z);
+          subMutatorBuffer->injectNew (CHILD_A);
+          subMutatorBuffer->injectNew (CHILD_A);
+          subMutatorBuffer->injectNew (CHILD_A);
+          CHECK (subMutatorBuffer->completeScope());  // no pending "open ends" left in sub-scope
+          CHECK (mutator3.completeScope());           // and likewise in the enclosing main scope
+          
+          // and thus we've gotten a second nested scope, populated with new values
+          cout << "Sub|" << join(subScopes[ATTRIB_NODE.idi]) <<endl;
+          
+          // verify contents of this second nested scope
+          contents = stringify(eachElm(subScopes[ATTRIB_NODE.idi]));
+          CHECK ("≺type∣ζ≻" == *contents);
+          ++contents;
+          CHECK (contains(*contents, "∣a≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣a≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣a≻"));
+          ++contents;
+          CHECK (isnil (contents));
+          
+          
+          // back to parent scope....
+          // verify the marker left by our "nested sub-scope lambda"
+          CHECK (contains (join(target), "Rec(--"+SUB_NODE.idi.getSym()+"--)"));
+          CHECK (contains (join(target), "Rec(--"+ATTRIB_NODE.idi.getSym()+"--)"));
+          
+          cout << "Content after nested mutation; "
+               << join(target) <<endl;
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         }
+      
+      
+      
       
       
       void
