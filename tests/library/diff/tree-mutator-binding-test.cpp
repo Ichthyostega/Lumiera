@@ -680,12 +680,12 @@ namespace test{
           // set up a binding to these opaque private structures...
           auto mutator1 =
           TreeMutator::build()
-            .change("alpha", [&](int val)
+            .change("α", [&](int val)
               {
                 LOG_SETTER ("alpha")
                 alpha = val;
               })
-            .change("gamma", [&](double val)
+            .change("γ", [&](double val)
               {
                 LOG_SETTER ("gamma")
                 gamma = val;
