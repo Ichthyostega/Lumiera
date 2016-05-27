@@ -97,6 +97,7 @@
 #include "lib/diff/gen-node.hpp"
 #include "lib/opaque-holder.hpp"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/format-string.hpp"
 
 #include <utility>
 #include <string>
@@ -158,6 +159,7 @@ namespace diff{
   
   using lib::Literal; /////TODO placeholder ....consider to build an EntryID
   using std::string;
+  using util::_Fmt;
   
   
   

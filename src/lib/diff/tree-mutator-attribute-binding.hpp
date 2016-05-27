@@ -174,7 +174,10 @@
         findSrc (GenNode const& refSpec)  override
           {
             if (isApplicable(refSpec))
-              throw error::Logic ("attempt to re-order attributes bound to object fields");  //////TODO can we include _Fmt and give a precise message including the key?
+              throw error::Logic (_Fmt{"attempt to re-order attribute '%s', "
+                                       "which is bound to an object field and "
+                                       "thus does not respond to ordering."}
+                                      % refSpec.idi.getSym());
             else
               return PAR::findSrc (refSpec);
           }

@@ -90,7 +90,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/itertools.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-util.hpp"        ///////////////////////////////TICKET #973 : investigate the impact of this inclusion on code size
 #include "lib/util.hpp"
 
 #include "lib/diff/record-content-mutator.hpp"
