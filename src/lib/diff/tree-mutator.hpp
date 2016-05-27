@@ -156,7 +156,7 @@ namespace diff{
   
   namespace error = lumiera::error;
   
-  using lib::Literal; /////TODO placeholder
+  using lib::Literal; /////TODO placeholder ....consider to build an EntryID
   using std::string;
   
   
@@ -169,7 +169,7 @@ namespace diff{
     template<class PAR>
     struct Builder;
     
-    using ID        = Literal; /////TODO placeholder
+    using ID        = Literal; /////TODO placeholder ....consider to build an EntryID
     using Attribute = DataCap;
   }
   

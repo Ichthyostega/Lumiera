@@ -243,7 +243,7 @@
         virtual bool
         acceptSrc (GenNode const& n)  override
           {
-            bool isSrcMatch = ChildCollectionMutator::matchSrc(n);
+            bool isSrcMatch = ChildCollectionMutator::matchSrc(n);          //////TODO this is wrong: we must invoke *only* our own match, but no chained match of lower layers
             if (isSrcMatch)                  // NOTE: crucial to call our own method here, not the virtual function
               {
                 binding_.inject (move(*pos_));

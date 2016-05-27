@@ -430,7 +430,7 @@ namespace diff{
         virtual bool
         acceptSrc (GenNode const& n)  override
           {
-            bool isSrcMatch = TestWireTap::matchSrc(n);
+            bool isSrcMatch = TestWireTap::matchSrc(n);          //////TODO this is wrong: we must invoke *only* our own match, but no chained match of lower layers
             if (isSrcMatch)             // NOTE: important to call our own method here, not the virtual function
               {
                 target_.inject (move(*pos_), "acceptSrc");

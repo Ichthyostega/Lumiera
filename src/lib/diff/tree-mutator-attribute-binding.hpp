@@ -57,18 +57,35 @@
     
     
     template<class PAR, class CLO>
-    struct ChangeOperation
-      : PAR
+    class ChangeOperation
+      : public PAR
       {
-        ID attribID_;
+        using CloArgs = typename _ClosureType<CLO>::Args;
+        using ValueType = typename lib::meta::Pick<CloArgs, 0>::Type;
+        
+        ID attribID_;      //////////////////////TODO  ....consider to build and store a BareEntryID, to include nominal target type into the match
         CLO change_;
         
-        virtual void
-        setAttribute (ID id, Attribute& newValue)
+        
+        
+        /** hard wired "selector predicate" for this binding layer.
+         *  We do only handle mutation operations pertaining attributes
+         *  which additionally match the key defined at binding time.
+         *  Any other operations are passed down the chain.
+         * @param spec target specification given within the diff verb
+         * @return if this binding is in charge for handling the spec
+         */
+        bool
+        isApplicable (GenNode const& spec)
           {
-            using Args = typename _ClosureType<CLO>::Args;
-            using ValueType = typename lib::meta::Pick<Args, 0>::Type;
-            
+            return spec.isNamed()
+               and string(attribID_) == spec.idi.getSym();  /////TODO  ....consider to build and store a BareEntryID
+          }
+        
+      public:
+        virtual void
+        setAttribute (ID id, Attribute& newValue)    ///< @deprecated about to be dropped in favour of a full binding layer
+          {
             if (id == attribID_)
               change_(newValue.get<ValueType>());
             
@@ -99,46 +116,70 @@
             return true;
           }
         
-        /** ensure the next recorded source element
-         *  matches on a formal level with given spec */
+        /** ensure the given spec is deemed appropriate at that point.
+         *  Due to the hard wired nature of an object field binding, this can
+         *  only be verified passively: a spec targeted at an unknown attribute
+         *  will be rejected. But since there is no notion of "ordering" for
+         *  (object) data fields, we can not verify the diff's completeness. */
         virtual bool
         matchSrc (GenNode const& spec)  override
           {
-            UNIMPLEMENTED("check applicability");
+            return isApplicable (spec)
+                or PAR::matchSrc (spec);
           }
         
-        /** accept existing element, when matching the given spec */
+        /** accept status quo, after verifying the spec from the diff verb */
         virtual bool
-        acceptSrc (GenNode const& n)  override
+        acceptSrc (GenNode const& spec)  override
           {
-            UNIMPLEMENTED("check applicability, then NOP");
+            return isApplicable (spec);
           }
         
-        /** fabricate a new element, based on
-         *  the given specification (GenNode),
-         *  and insert it at current position
-         *  into the target sequence.
+        /** while, strictly speaking, one can not "insert" fields into a
+         *  given class definition, this binding can tolerate an `INS` verb
+         *  whenever this means to touch a field which is actually known and
+         *  present in the class definition underlying this binding. In such
+         *  a case, we just assign the given value. This implementation leeway
+         *  is deliberate to support classes with optional / defaultable properties.
+         * @throw error::Invalid on attempt to insert an unknown attribute / field.
          */
         virtual void
-        injectNew (GenNode const& n)  override
+        injectNew (GenNode const& spec)  override
           {
-            UNIMPLEMENTED("accept, then assignElm");
+            if (not isApplicable(spec))
+              PAR::injectNew(spec);   ////////////////////////////////////////TODO change interface, so we can find out if anyone was able to handle this request. This allows us then to throw otherwise
+            else
+              {
+                change_(spec.data.get<ValueType>());
+                // return true;
+              }
           }
         
-        /** skip next pending src element,
-         *  causing this element to be discarded
+        /** has no meaning, since object fields have no notion of "order".
+         * @note it would be desirable to throw, but due to other restrictions
+         *  in the "diff protocol" this operation does not get any arguments.
+         *  Thus we're not able to determine, if this layer is in charge, so
+         *  we need just to pass on the invocation.
          */
         virtual void
         skipSrc ()  override
           {
-            UNIMPLEMENTED("prohibited /raise error");
+            PAR::skipSrc();
           }
         
-        /** locate designated element and accept it at current position */
+        /** any reordering or deletion of object fields is prohibited
+         * @throw error::Logic when this binding layer becomes responsible for
+         *  handling the given diff spec, because a proper diff must be arranged
+         *  in a way not to ask this binding to "reorder" a field from an
+         *  existing class definition.
+         */
         virtual bool
         findSrc (GenNode const& refSpec)  override
           {
-            UNIMPLEMENTED("prohibited / raise error");
+            if (isApplicable(refSpec))
+              throw error::Logic ("attempt to re-order attributes bound to object fields");  //////TODO can we include _Fmt and give a precise message including the key?
+            else
+              return PAR::findSrc (refSpec);
           }
         
         /** repeatedly accept, until after the designated location */
@@ -148,12 +189,17 @@
             UNIMPLEMENTED("only support UNTIL END");
           }
         
-        /** locate element already accepted into the target sequence
-         *  and assign the designated payload value to it. */
+        /** invoke the setter lambda, in case this binding layer is in charge */
         virtual bool
         assignElm (GenNode const& spec)
           {
-            UNIMPLEMENTED("invoke setter");
+            if (not isApplicable(spec))
+              return PAR::assignElm(spec);
+            else
+              {
+                change_(spec.data.get<ValueType>());
+                return true;
+              }
           }
         
         /** locate the designated target element and build a suitable
@@ -169,7 +215,7 @@
         virtual bool
         completeScope()
           {
-            UNIMPLEMENTED("NOP and succeed");
+            return PAR::completeScope();
           }
       };
     
