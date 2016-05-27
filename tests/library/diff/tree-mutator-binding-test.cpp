@@ -56,7 +56,6 @@ namespace diff{
 namespace test{
   
   using lumiera::error::LUMIERA_ERROR_LOGIC;
-  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   
   namespace {//Test fixture....
@@ -726,7 +725,7 @@ namespace test{
           CHECK (-1 == beta);
           CHECK (3.45 == gamma);
           
-          VERIFY_ERROR (INVALID, mutator1.injectNew (ATTRIB2));    // ...because we didn't define a binding for ATTRIB2 (aka "beta")
+          CHECK (not mutator1.injectNew (ATTRIB2)); // ...because we didn't define a binding for ATTRIB2 (aka "beta")
           
           // any changes to something other than attributes are just delegated to the next "onion layer"
           // since in this case here, there is only one layer (our attribute binding), these other changes will be silently ignored

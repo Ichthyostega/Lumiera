@@ -402,11 +402,11 @@ namespace diff{
          *  that a new child element is
          *  being inserted at current position
          */
-        virtual void
+        virtual bool
         injectNew (GenNode const& n)  override
           {
             target_.inject (GenNode{n}, "injectNew");
-            PAR::injectNew (n);
+            return PAR::injectNew (n);
           }
         
         virtual bool

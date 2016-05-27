@@ -141,18 +141,15 @@
          *  present in the class definition underlying this binding. In such
          *  a case, we just assign the given value. This implementation leeway
          *  is deliberate to support classes with optional / defaultable properties.
-         * @throw error::Invalid on attempt to insert an unknown attribute / field.
          */
-        virtual void
+        virtual bool
         injectNew (GenNode const& spec)  override
           {
             if (not isApplicable(spec))
-              PAR::injectNew(spec);   ////////////////////////////////////////TODO change interface, so we can find out if anyone was able to handle this request. This allows us then to throw otherwise
-            else
-              {
-                change_(spec.data.get<ValueType>());
-                // return true;
-              }
+              return PAR::injectNew(spec);
+            
+            change_(spec.data.get<ValueType>());
+            return true;
           }
         
         /** has no meaning, since object fields have no notion of "order".
@@ -195,11 +192,9 @@
           {
             if (not isApplicable(spec))
               return PAR::assignElm(spec);
-            else
-              {
-                change_(spec.data.get<ValueType>());
-                return true;
-              }
+            
+            change_(spec.data.get<ValueType>());
+            return true;
           }
         
         /** locate the designated target element and build a suitable

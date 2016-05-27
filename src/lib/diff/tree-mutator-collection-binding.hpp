@@ -218,10 +218,11 @@
          *  and insert it at current position
          *  into the target sequence.
          */
-        virtual void
+        virtual bool
         injectNew (GenNode const& n)  override
           {
             binding_.inject (binding_.construct(n));
+            return true; /////////////////////////////////////////////////////////TODO with all these operations: need to invoke selector and possibly delegate to parent....
           }
         
         virtual bool

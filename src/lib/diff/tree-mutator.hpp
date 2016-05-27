@@ -214,11 +214,13 @@ namespace diff{
           // do nothing by default
         }
       
-      /** establish new element at current position */
-      virtual void
+      /** establish new element at current position
+       * @return `true` when successfully inserted something */
+      virtual bool
       injectNew (GenNode const&)
         {
           // do nothing by default
+          return false;
         }
       
       /** ensure the next source element matches with given spec */
