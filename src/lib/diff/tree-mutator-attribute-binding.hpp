@@ -81,6 +81,96 @@
           , attribID_(id)
           , change_(clo)
           { }
+        
+        
+        
+        /* ==== re-Implementation of the operation API ==== */
+        
+        /** this binding to an object field can not support any reordering,
+         *  inserting or deletion of "Elements", since the structure of an object
+         *  is fixed through the underlying class definition. For this reason,
+         *  we do not keep track of an "old" and "new" order; rather there
+         *  is always one single fixed element present to work on.
+         * @return `true` always
+         */
+        virtual bool
+        hasSrc ()  override
+          {
+            return true;
+          }
+        
+        /** ensure the next recorded source element
+         *  matches on a formal level with given spec */
+        virtual bool
+        matchSrc (GenNode const& spec)  override
+          {
+            UNIMPLEMENTED("check applicability");
+          }
+        
+        /** accept existing element, when matching the given spec */
+        virtual bool
+        acceptSrc (GenNode const& n)  override
+          {
+            UNIMPLEMENTED("check applicability, then NOP");
+          }
+        
+        /** fabricate a new element, based on
+         *  the given specification (GenNode),
+         *  and insert it at current position
+         *  into the target sequence.
+         */
+        virtual void
+        injectNew (GenNode const& n)  override
+          {
+            UNIMPLEMENTED("accept, then assignElm");
+          }
+        
+        /** skip next pending src element,
+         *  causing this element to be discarded
+         */
+        virtual void
+        skipSrc ()  override
+          {
+            UNIMPLEMENTED("prohibited /raise error");
+          }
+        
+        /** locate designated element and accept it at current position */
+        virtual bool
+        findSrc (GenNode const& refSpec)  override
+          {
+            UNIMPLEMENTED("prohibited / raise error");
+          }
+        
+        /** repeatedly accept, until after the designated location */
+        virtual bool
+        accept_until (GenNode const& spec)
+          {
+            UNIMPLEMENTED("only support UNTIL END");
+          }
+        
+        /** locate element already accepted into the target sequence
+         *  and assign the designated payload value to it. */
+        virtual bool
+        assignElm (GenNode const& spec)
+          {
+            UNIMPLEMENTED("invoke setter");
+          }
+        
+        /** locate the designated target element and build a suitable
+         *  sub-mutator for this element into the provided target buffer */
+        virtual bool
+        mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
+          {
+            UNIMPLEMENTED("invoke mutator builder");
+          }
+        
+        /** verify all our pending (old) source elements where mentioned.
+         * @note allows chained "onion-layers" to clean-up and verify.*/
+        virtual bool
+        completeScope()
+          {
+            UNIMPLEMENTED("NOP and succeed");
+          }
       };
     
     
