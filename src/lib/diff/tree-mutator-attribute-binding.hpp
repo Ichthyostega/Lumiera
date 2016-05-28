@@ -62,8 +62,9 @@
       {
         using CloArgs = typename _ClosureType<CLO>::Args;
         using ValueType = typename lib::meta::Pick<CloArgs, 0>::Type;
+        using ID = idi::EntryID<ValueType>;
         
-        ID attribID_;      //////////////////////TODO  ....consider to build and store a BareEntryID, to include nominal target type into the match
+        ID attribID_;
         CLO change_;
         
         
@@ -79,23 +80,13 @@
         isApplicable (GenNode const& spec)
           {
             return spec.isNamed()
-               and string(attribID_) == spec.idi.getSym();  /////TODO  ....consider to build and store a BareEntryID
+               and attribID_ == spec.idi;
           }
         
       public:
-        virtual void
-        setAttribute (ID id, Attribute& newValue)    ///< @deprecated about to be dropped in favour of a full binding layer
-          {
-            if (id == attribID_)
-              change_(newValue.get<ValueType>());
-            
-            else // delegate to other closures (Decorator-style)
-              PAR::setAttribute(id, newValue);
-          }
-        
-        ChangeOperation(ID id, CLO clo, PAR&& chain)
+        ChangeOperation (Symbol attribKey, CLO clo, PAR&& chain)
           : PAR(std::forward<PAR>(chain))
-          , attribID_(id)
+          , attribID_(attribKey)
           , change_(clo)
           { }
         
@@ -111,7 +102,7 @@
          * @return `true` always
          */
         virtual bool
-        hasSrc ()  override
+        hasSrc()  override
           {
             return true;
           }

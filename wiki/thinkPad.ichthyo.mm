@@ -3967,9 +3967,74 @@
 </node>
 </node>
 <node CREATED="1464227227610" ID="ID_392179794" MODIFIED="1464227235981" TEXT="aber: alle Primitive durchimplementieren"/>
-<node CREATED="1464386998240" ID="ID_1575821815" MODIFIED="1464387002771" TEXT="key: EntryID"/>
+<node COLOR="#338800" CREATED="1464386998240" FOLDED="true" ID="ID_1575821815" MODIFIED="1464399411734" TEXT="key: EntryID">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1464396284551" ID="ID_608089097" MODIFIED="1464397153781" TEXT="Problem: sanitise">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1464396756424" ID="ID_1262469672" MODIFIED="1464397132659" TEXT="nur US-ASCII">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1464396761967" ID="ID_290057129" MODIFIED="1464397146966" TEXT="erweiterte Zeichen bedingen Locale">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1464396769974" ID="ID_1758045716" MODIFIED="1464396779385" TEXT="und welche dann??">
+<node CREATED="1464396835581" ID="ID_1451158687" MODIFIED="1464396859658" TEXT="System-Locale: Recipe for Desaster"/>
+<node CREATED="1464396793123" ID="ID_1031603106" MODIFIED="1464396815972" TEXT="en_US.UTF-8"/>
+<node CREATED="1464396816696" ID="ID_75103205" MODIFIED="1464396866584" TEXT="Einschr&#xe4;nkung nicht sinnvoll zu begr&#xfc;nden">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1464396320922" ID="ID_1981813349" MODIFIED="1464396333388" TEXT="GenNode umgeht das (bewu&#xdf;t)">
+<node CREATED="1464396885391" ID="ID_1510453315" MODIFIED="1464397164031" TEXT="Begr&#xfc;ndung: interne Schnittstelle">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1464396899252" ID="ID_1555498938" MODIFIED="1464396964843" TEXT="verwendet bereits valide Symbole">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1464396908371" ID="ID_487257918" MODIFIED="1464397170109" TEXT="vermeidet den Performance overhead">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1464397008078" ID="ID_1403561457" MODIFIED="1464397019505" TEXT="soll sich symmetrisch verhalten">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1464397020996" ID="ID_1333087135" MODIFIED="1464397118556" TEXT="L&#xf6;sung: Variante f&#xfc;r EntryID">
+<icon BUILTIN="idea"/>
+<node CREATED="1464397032747" ID="ID_1595458691" MODIFIED="1464397057946" TEXT="f&#xfc;r interne Schnittstellen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gleiches Argument...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1464397039834" ID="ID_1349501863" MODIFIED="1464397115277" TEXT="verwendet Symbol-Datentyp">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...damit unterstellen wir, da&#223; sp&#228;ter eine Symbol-Tabelle aufgebaut wird.
+    </p>
+    <p>
+      Dann kann man sich immer noch &#252;berlegen, ob man dann <i>an dieser Stelle</i>&#160;bereinigt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
 <node CREATED="1464387004423" ID="ID_1076928743" MODIFIED="1464387014329" TEXT="Fehlerbehandlung">
-<node CREATED="1464387034539" ID="ID_1580200225" MODIFIED="1464387037718" TEXT="injectNew">
+<node CREATED="1464387034539" ID="ID_1580200225" MODIFIED="1464399398050" TEXT="injectNew">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1464387043146" ID="ID_1075443725" MODIFIED="1464387046181" TEXT="API erweitern"/>
 <node CREATED="1464387046769" ID="ID_1282279036" MODIFIED="1464387053620" TEXT="R&#xfc;ckgabewert"/>
 <node CREATED="1464387055632" ID="ID_381742708" MODIFIED="1464387058851" TEXT="andere Layer fragen"/>

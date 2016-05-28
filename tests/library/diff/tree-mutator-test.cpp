@@ -99,10 +99,10 @@ namespace test{
                << endl;
           
           CHECK (isnil (localData));
-          Attribute testAttribute(string ("that would be acceptable"));
-          mutator.setAttribute ("lore", testAttribute);
+          string testValue{"that would be acceptable"};
+          mutator.assignElm ({"lore", testValue});
           CHECK ( isnil (localData)); // nothing happens, nothing changed
-          mutator.setAttribute ("data", testAttribute);
+          mutator.assignElm ({"data", testValue});
           CHECK (!isnil (localData));
           cout << "localData changed to: "<<localData<<endl;
           CHECK (localData == "that would be acceptable");

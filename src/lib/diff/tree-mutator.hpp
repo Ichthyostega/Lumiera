@@ -98,6 +98,7 @@
 #include "lib/opaque-holder.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/format-string.hpp"
+#include "lib/idi/entry-id.hpp"
 
 #include <utility>
 #include <string>
@@ -157,7 +158,7 @@ namespace diff{
   
   namespace error = lumiera::error;
   
-  using lib::Literal; /////TODO placeholder ....consider to build an EntryID
+  using lib::Symbol;
   using std::string;
   using util::_Fmt;
   
@@ -170,9 +171,6 @@ namespace diff{
   namespace {
     template<class PAR>
     struct Builder;
-    
-    using ID        = Literal; /////TODO placeholder ....consider to build an EntryID
-    using Attribute = DataCap;
   }
   
   
@@ -295,10 +293,10 @@ namespace diff{
           return true;
         }
       
-      virtual void setAttribute (ID, Attribute&) { /* do nothing by default */ }
+      
       
       /**
-       * start building a custom adapted tree mutator,
+       * DSL: start building a custom adapted tree mutator,
        * where the operations are tied by closures or
        * wrappers into the current implementation context.
        */
@@ -388,11 +386,30 @@ namespace diff{
         
         /* ==== binding API ==== */
         
+        /** set up a binding to represent an "attribute"
+         *  through a data or object field. This binding will allow
+         *  to apply basic diff operations, _but no re-ordering or deletion._
+         *  Rationale is the fixed nature of a class definition, which does not
+         *  support any notion of ordering, or adding and removal of members.
+         * @param attributeID symbolic key to denote this "attribute"
+         * @param setterClosure functor or lambda to apply a new value
+         * @note the nominal value type of the "attribute" is picked up from
+         *       the setterClosure's (single) argument. It must be one of the
+         *       types supported as payload for GenNode. In case the target
+         *       data field needs any other value type, it is the closure's
+         *       responsibility to convert appropriately.
+         * @note the combination of attributeID and nominal value type is used
+         *       to build an (\ref EntryID). The hash of this EntryID needs to
+         *       match the GenNode::ID in any diff verb considered to be
+         *       "applicable" to this attribute and binding. Similar to
+         *       GenNode, the provided attributeID is used as-is,
+         *       without further sanitising.
+         */
         template<typename CLO>
         Builder<Change<CLO>>
-        change (Literal attributeID, CLO closure)
+        change (Symbol attributeID, CLO setterClosure)
           {
-            return Change<CLO> (attributeID, closure, move(*this));
+            return Change<CLO> (attributeID, setterClosure, move(*this));
           }
         
         /** set up a binding to a structure of "child objects",
