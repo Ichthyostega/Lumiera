@@ -137,9 +137,18 @@ namespace test{
           using proc::asset::idi::getAssetIdent;
           
           ForkID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
-          CHECK (getAssetIdent(tID) == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
+          
+          // Symbol-ID will be "sanitised"
+          CHECK ("test_track" == tID.getSym());
+          CHECK (tID == ForkID("☢ test ☢ track ☢"));
+          CHECK (tID == ForkID(string{"☢ test ☢ track ☢"}));
+          
+          // but: there is a pass-through for internal symbols
+          CHECK (tID != ForkID(Symbol{"☢ test ☢ track ☢"}));
           
           CHECK (tID.getHash() == ForkID("☢ test ☢ track ☢").getHash());
+          
+          CHECK (getAssetIdent(tID) == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
           
           CHECK (tID.getSym() == getAssetIdent(tID).name);
           CHECK (getAssetIdent(ForkID()).category == Category (STRUCT,"forks"));

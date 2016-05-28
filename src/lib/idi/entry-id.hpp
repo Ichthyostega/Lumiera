@@ -229,6 +229,19 @@ namespace idi {
       EntryID (string const& symbolID)
         : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
         { }
+      explicit
+      EntryID (const char* symbolID)
+        : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
+        { }
+      
+      /** case-2b: rely on an internal, already sanitised symbol.
+       *  The symbol string will be passed through as-is, while
+       *  the type information from TY will be hashed in.
+       */
+      explicit
+      EntryID (Symbol const& internalSymbol)
+        : BareEntryID (string(internalSymbol), getTypeHash<TY>())
+        { }
       
       
       /** @return true if the upcast would yield exactly the same
