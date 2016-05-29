@@ -56,18 +56,18 @@
 //== anonymous namespace...
     
     
-    template<class PAR, class CLO>
-    class ChangeOperation
+    template<class PAR, class IDI>
+    class AttributeBindingBase
       : public PAR
       {
-        using CloArgs = typename _ClosureType<CLO>::Args;
-        using ValueType = typename lib::meta::Pick<CloArgs, 0>::Type;
-        using ID = idi::EntryID<ValueType>;
         
-        ID attribID_;
-        CLO change_;
+        IDI attribID_;
         
-        
+      protected:
+        AttributeBindingBase (IDI attribID, PAR&& chain)
+          : PAR(std::forward<PAR>(chain))
+          , attribID_(attribID)
+          { }
         
         /** hard wired "selector predicate" for this binding layer.
          *  We do only handle mutation operations pertaining attributes
@@ -83,17 +83,9 @@
                and attribID_ == spec.idi;
           }
         
-      public:
-        ChangeOperation (Symbol attribKey, CLO clo, PAR&& chain)
-          : PAR(std::forward<PAR>(chain))
-          , attribID_(attribKey)
-          , change_(clo)
-          { }
-        
-        
         
         /* ==== re-Implementation of the operation API ==== */
-        
+      public:
         /** this binding to an object field can not support any reordering,
          *  inserting or deletion of "Elements", since the structure of an object
          *  is fixed through the underlying class definition. For this reason,
@@ -126,35 +118,6 @@
             return isApplicable (spec);
           }
         
-        /** while, strictly speaking, one can not "insert" fields into a
-         *  given class definition, this binding can tolerate an `INS` verb
-         *  whenever this means to touch a field which is actually known and
-         *  present in the class definition underlying this binding. In such
-         *  a case, we just assign the given value. This implementation leeway
-         *  is deliberate to support classes with optional / defaultable properties.
-         */
-        virtual bool
-        injectNew (GenNode const& spec)  override
-          {
-            if (not isApplicable(spec))
-              return PAR::injectNew(spec);
-            
-            change_(spec.data.get<ValueType>());
-            return true;
-          }
-        
-        /** has no meaning, since object fields have no notion of "order".
-         * @note it would be desirable to throw, but due to other restrictions
-         *  in the "diff protocol" this operation does not get any arguments.
-         *  Thus we're not able to determine, if this layer is in charge, so
-         *  we need just to pass on the invocation.
-         */
-        virtual void
-        skipSrc ()  override
-          {
-            PAR::skipSrc();
-          }
-        
         /** any reordering or deletion of object fields is prohibited
          * @throw error::Logic when this binding layer becomes responsible for
          *  handling the given diff spec, because a proper diff must be arranged
@@ -175,36 +138,92 @@
         
         /** repeatedly accept, until after the designated location */
         virtual bool
-        accept_until (GenNode const& spec)
+        accept_until (GenNode const& spec)  override
           {
             UNIMPLEMENTED("only support UNTIL END");
           }
+      };
+    
+    
+    template<typename CLO>
+    struct AttribType
+      {
+        using CloArgs = typename _ClosureType<CLO>::Args;
+        using ValueType = typename lib::meta::Pick<CloArgs, 0>::Type;
+        using ID = idi::EntryID<ValueType>;
+      };
+    
+    
+    template<class PAR, class CLO>
+    class ChangeOperation
+      : public AttributeBindingBase<PAR, typename AttribType<CLO>::ID>
+      {
+        using ID        = typename AttribType<CLO>::ID;
+        using ValueType = typename AttribType<CLO>::ValueType;
         
-        /** invoke the setter lambda, in case this binding layer is in charge */
+        CLO change_;
+        
+        
+      public:
+        ChangeOperation (Symbol attribKey, CLO clo, PAR&& chain)
+          : AttributeBindingBase<PAR, ID>(ID{attribKey}, std::forward<PAR>(chain))
+          , change_(clo)
+          { }
+        
+        
+        /* ==== Implementation of value assignment operation ==== */
+        
+        /** while, strictly speaking, one can not "insert" fields into a
+         *  given class definition, this binding can tolerate an `INS` verb
+         *  whenever this means to touch a field which is actually known and
+         *  present in the class definition underlying this binding. In such
+         *  a case, we just assign the given value. This implementation leeway
+         *  is deliberate to support classes with optional / defaultable properties.
+         */
         virtual bool
-        assignElm (GenNode const& spec)
+        injectNew (GenNode const& spec)  override
           {
-            if (not isApplicable(spec))
-              return PAR::assignElm(spec);
+            if (not this->isApplicable(spec))
+              return PAR::injectNew(spec);
             
             change_(spec.data.get<ValueType>());
             return true;
           }
         
+        /** invoke the setter lambda, in case this binding layer is in charge */
+        virtual bool
+        assignElm (GenNode const& spec)  override
+          {
+            if (not this->isApplicable(spec))
+              return PAR::assignElm(spec);
+            
+            change_(spec.data.get<ValueType>());
+            return true;
+          }
+      };
+    
+    
+    template<class PAR, class IDI, class MUT>
+    class MutationOperation
+      : public AttributeBindingBase<PAR, IDI>
+      {
+        
+        MUT mutatorBuilder_;
+        
+        
+      public:
+        MutationOperation (IDI attribID, MUT clo, PAR&& chain)
+          : AttributeBindingBase<PAR, IDI>(attribID, std::forward<PAR>(chain))
+          , mutatorBuilder_(clo)
+          { }
+        
+        
         /** locate the designated target element and build a suitable
          *  sub-mutator for this element into the provided target buffer */
         virtual bool
-        mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
+        mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)  override
           {
             UNIMPLEMENTED("invoke mutator builder");
-          }
-        
-        /** verify all our pending (old) source elements where mentioned.
-         * @note allows chained "onion-layers" to clean-up and verify.*/
-        virtual bool
-        completeScope()
-          {
-            return PAR::completeScope();
           }
       };
     

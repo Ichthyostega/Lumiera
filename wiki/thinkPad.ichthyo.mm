@@ -4050,13 +4050,46 @@
 </node>
 </node>
 </node>
-<node CREATED="1464386771270" ID="ID_1279882649" MODIFIED="1464386811412" TEXT="setter vs mutator">
+<node CREATED="1464386771270" ID="ID_1279882649" MODIFIED="1464483680342" TEXT="setter vs mutator">
+<icon BUILTIN="pencil"/>
 <node CREATED="1464386870265" ID="ID_1326576761" MODIFIED="1464387168773" TEXT="Metaprogrammierung"/>
 <node CREATED="1464386878983" ID="ID_19052291" MODIFIED="1464386887354" TEXT="Code selber mu&#xdf; es implizit wissen"/>
 <node CREATED="1464386904676" ID="ID_1844234642" MODIFIED="1464386908705" TEXT="entweder-oder">
 <icon BUILTIN="help"/>
 <node CREATED="1464386910099" ID="ID_127180278" MODIFIED="1464386913750" TEXT="nicht notwendig"/>
 <node CREATED="1464386929745" ID="ID_1833671444" MODIFIED="1464386936708" TEXT="es greift der Layer, der es kann"/>
+</node>
+<node CREATED="1464483482949" HGAP="32" ID="ID_597384200" MODIFIED="1464483496618" TEXT="Code-Struktur" VSHIFT="15">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1464483497524" ID="ID_206433048" MODIFIED="1464483503639" TEXT="Basisklasse + Overlay"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464483504155" ID="ID_565058375" MODIFIED="1464483671480" TEXT="unsch&#xf6;n und verwirrend">
+<node CREATED="1464483533863" ID="ID_1813082482" MODIFIED="1464483617082" TEXT="mehrfach geschachtelte Typdefinitionen">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1464483544429" ID="ID_467553331" MODIFIED="1464483659487" TEXT="Problem mit der EntryID">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in einem Fall kann man sie aus der Closure abgreifen
+    </p>
+    <p>
+      im anderen Fall mu&#223; es doch der Client leisten.
+    </p>
+    <p>
+      Keine klare Linie
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1464483601318" ID="ID_1275035047" MODIFIED="1464483610226" TEXT="gibt es &#xfc;berhaupt eine Alternative">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 </node>
 </node>
