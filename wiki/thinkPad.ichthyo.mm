@@ -4088,6 +4088,40 @@
 </node>
 <node CREATED="1464483601318" ID="ID_1275035047" MODIFIED="1464483610226" TEXT="gibt es &#xfc;berhaupt eine Alternative">
 <icon BUILTIN="help"/>
+<node CREATED="1465040677452" ID="ID_1313751992" MODIFIED="1465040776226" TEXT="OK: Klassen sind geschnitten nach Belang">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t, es gibt nur minimale, themantische &#220;berlappung.
+    </p>
+    <p>
+      Also ist die Verwendung von Vererbung hier sogar die <i>beste</i>&#160;L&#246;sung
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1465040780654" ID="ID_73964489" MODIFIED="1465040812722">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Geschachtelte Typdefs lassen sich vermeiden:
+    </p>
+    <p>
+      BareEntryID speichern!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>

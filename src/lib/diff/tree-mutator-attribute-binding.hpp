@@ -56,21 +56,21 @@
 //== anonymous namespace...
     
     
-    template<class PAR, class IDI>
+    template<class PAR>
     class AttributeBindingBase
       : public PAR
       {
         
-        IDI attribID_;
+        BareEntryID attribID_;
         
       protected:
-        AttributeBindingBase (IDI attribID, PAR&& chain)
+        AttributeBindingBase (BareEntryID attribID, PAR&& chain)
           : PAR(std::forward<PAR>(chain))
           , attribID_(attribID)
           { }
         
         /** hard wired "selector predicate" for this binding layer.
-         *  We do only handle mutation operations pertaining attributes
+         *  We handle only mutation operations pertaining attributes
          *  which additionally match the key defined at binding time.
          *  Any other operations are passed down the chain.
          * @param spec target specification given within the diff verb
@@ -145,29 +145,23 @@
       };
     
     
-    template<typename CLO>
-    struct AttribType
-      {
-        using CloArgs = typename _ClosureType<CLO>::Args;
-        using ValueType = typename lib::meta::Pick<CloArgs, 0>::Type;
-        using ID = idi::EntryID<ValueType>;
-      };
     
     
     template<class PAR, class CLO>
     class ChangeOperation
-      : public AttributeBindingBase<PAR, typename AttribType<CLO>::ID>
+      : public AttributeBindingBase<PAR>
       {
-        using ID        = typename AttribType<CLO>::ID;
-        using ValueType = typename AttribType<CLO>::ValueType;
+        using CloArgs = typename _ClosureType<CLO>::Args;
+        using ValueType = typename lib::meta::Pick<CloArgs, 0>::Type;
+        using ID = idi::EntryID<ValueType>;
         
-        CLO change_;
         
+        CLO setter_;
         
       public:
         ChangeOperation (Symbol attribKey, CLO clo, PAR&& chain)
-          : AttributeBindingBase<PAR, ID>(ID{attribKey}, std::forward<PAR>(chain))
-          , change_(clo)
+          : AttributeBindingBase<PAR>(ID{attribKey}, std::forward<PAR>(chain))
+          , setter_(clo)
           { }
         
         
@@ -186,7 +180,7 @@
             if (not this->isApplicable(spec))
               return PAR::injectNew(spec);
             
-            change_(spec.data.get<ValueType>());
+            setter_(spec.data.get<ValueType>());
             return true;
           }
         
@@ -197,33 +191,41 @@
             if (not this->isApplicable(spec))
               return PAR::assignElm(spec);
             
-            change_(spec.data.get<ValueType>());
+            setter_(spec.data.get<ValueType>());
             return true;
           }
       };
     
     
-    template<class PAR, class IDI, class MUT>
+    
+    template<class PAR, class MUT>
     class MutationOperation
-      : public AttributeBindingBase<PAR, IDI>
+      : public AttributeBindingBase<PAR>
       {
         
+        ASSERT_VALID_SIGNATURE (MUT, void(TreeMutator::MutatorBuffer));
+
         MUT mutatorBuilder_;
         
         
       public:
-        MutationOperation (IDI attribID, MUT clo, PAR&& chain)
-          : AttributeBindingBase<PAR, IDI>(attribID, std::forward<PAR>(chain))
+        MutationOperation (BareEntryID const& attribID, MUT clo, PAR&& chain)
+          : AttributeBindingBase<PAR>(attribID, std::forward<PAR>(chain))
           , mutatorBuilder_(clo)
           { }
         
         
-        /** locate the designated target element and build a suitable
-         *  sub-mutator for this element into the provided target buffer */
+        /** if this binding layer is in charge, then invoke the closure,
+         *  which is assumed to construct a nested TreeMutator into the provided Buffer,
+         *  able to deal with the nested attribute object referred by this binding */
         virtual bool
         mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)  override
           {
-            UNIMPLEMENTED("invoke mutator builder");
+            if (not this->isApplicable(spec))
+              return PAR::mutateChild(spec, targetBuff);
+            
+            mutatorBuilder_(targetBuff);
+            return true;
           }
       };
     

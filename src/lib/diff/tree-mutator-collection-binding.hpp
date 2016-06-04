@@ -63,9 +63,6 @@
     
     
     
-    /** verify the installed functors or lambdas expose the expected signature */
-#define ASSERT_VALID_SIGNATURE(_FUN_, _SIG_) \
-        static_assert (has_Sig<_FUN_, _SIG_>::value, "Function " STRINGIFY(_FUN_) " unsuitable, expected signature: " STRINGIFY(_SIG_));
         
     /**
      * Attach to collection: Concrete binding setup.

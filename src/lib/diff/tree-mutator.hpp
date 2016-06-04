@@ -161,6 +161,7 @@ namespace diff{
   using lib::Symbol;
   using std::string;
   using util::_Fmt;
+  using lib::idi::BareEntryID;
   
   
   
@@ -323,7 +324,7 @@ namespace diff{
     struct _ClosureType
       : _ClosureType<decltype(&FUN::operator())>
       { };
-
+    
     template<class C, class RET, typename...ARGS>
     struct _ClosureType<RET (C::*)(ARGS...)  const>
       {
@@ -331,7 +332,7 @@ namespace diff{
         using Ret  = RET;
         using Sig  = RET(ARGS...);
       };
-
+    
     template<class RET, typename...ARGS>
     struct _ClosureType<RET (*)(ARGS...)>
       {
@@ -346,8 +347,14 @@ namespace diff{
       : std::is_same<SIG, typename _ClosureType<FUN>::Sig>
       { };
     
+    /** verify the installed functors or lambdas expose the expected signature */
+#define ASSERT_VALID_SIGNATURE(_FUN_, _SIG_) \
+        static_assert (has_Sig<_FUN_, _SIG_>::value, "Function " STRINGIFY(_FUN_) " unsuitable, expected signature: " STRINGIFY(_SIG_));
     
-
+    
+    
+    
+    
     /* == implementation detail headers == */
     
 #include "lib/diff/tree-mutator-attribute-binding.hpp"
