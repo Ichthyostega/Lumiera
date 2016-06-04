@@ -115,7 +115,8 @@
         virtual bool
         acceptSrc (GenNode const& spec)  override
           {
-            return isApplicable (spec);
+            return isApplicable (spec)
+                or PAR::acceptSrc (spec);
           }
         
         /** any reordering or deletion of object fields is prohibited

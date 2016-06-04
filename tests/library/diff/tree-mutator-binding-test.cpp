@@ -747,84 +747,84 @@ namespace test{
           // because "attributes" are mapped to object or data fields,
           // which are fixed by definition and don't expose any ordering.
           // While any mutations beyond attributes are passed on / ignored
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           auto mutator2 =
           TreeMutator::build()
-            .attach (collection(target)
-                       .constructFrom ([&](GenNode const& spec) -> Data
-                          {
-                            cout << "constructor invoked on "<<spec<<endl;
-                            return {spec.idi.getSym(), render(spec.data)};
-                          })
-                       .matchElement ([&](GenNode const& spec, Data const& elm)
-                          {
-                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
-                            return spec.idi.getSym() == elm.key;
-                          }));
+            .change("α", [&](int val)
+              {
+                LOG_SETTER ("alpha")
+                alpha = val;
+              })
+            .change("β", [&](int64_t val)
+              {
+                LOG_SETTER ("beta")
+                beta = val;
+              })
+            .change("γ", [&](double val)
+              {
+                LOG_SETTER ("gamma")
+                gamma = val;
+              });
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           // we have two lambdas now and thus can save on the size of one function pointer....
           CHECK (sizeof(mutator1) - sizeof(mutator2) == sizeof(void*));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           
           
-          CHECK (isnil (target));                   // the "visible" new content is still void
+          CHECK ( 1 == alpha);
+          CHECK (-1 == beta);
+          CHECK (3.45 == gamma);                    // values not affected by attaching a new mutator
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
-          CHECK (isnil (target));                   // the match didn't change anything
+          CHECK ( 1 == alpha);                      // the match didn't change anything...
+          CHECK (-1 == beta);
+          CHECK (3.45 == gamma);
           
-          CHECK (mutator2.findSrc (ATTRIB3));       // search for an element further down into src...              // findSrc
-          CHECK (!isnil (target));                  // ...pick and accept it into the "visible" part of target
-          CHECK (join(target) == "≺γ∣3.45≻");
+          VERIFY_ERROR (LOGIC, mutator2.findSrc (ATTRIB3));
+                                                    // search for an element and thus reordering is explicitly rejected...
+                                                    // If we hadn't defined a binding for "γ", then the same operation
+                                                    // would have been passed on silently to other binding layers.
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
-          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element                        // acceptSrc
+          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element (also a NOP)           // acceptSrc
           
-          mutator2.skipSrc();                       // next we have to clean up waste left over by findSrc()       // skipSrc
+          mutator2.skipSrc();                       // and 'skip' likewise is just not implemented for attributes  // skipSrc
+          CHECK ( 1 == alpha);
+          CHECK (-1 == beta);
+          CHECK (3.45 == gamma);                    // all these non-operations actually didn't change anything...
           
           mutator2.injectNew (ATTRIB2);                                                                            // injectNew
+          
+          CHECK ( 1 == alpha);
+          CHECK ( 2 == beta);                       // the first operation actually causing a tangible effect
+          CHECK (3.45 == gamma);
+          
           CHECK (mutator2.matchSrc (ATTRIB3));
           CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
           
-          CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
-          mutator2.skipSrc();                       // ...which will be skipped (and thus discarded)               // skipSrc
-          mutator2.injectNew (SUB_NODE);            // inject a nested sub-structure (implementation defined)      // injectNew
-          CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
-          CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
-          CHECK (mutator2.hasSrc());
-          CHECK (mutator2.matchSrc (CHILD_B));      // child B still waiting, unaffected
-          CHECK (not mutator2.acceptSrc (CHILD_T)); // refusing to accept/pick a non matching element
-          CHECK (mutator2.matchSrc (CHILD_B));      // child B still patiently waiting, unaffected
-          CHECK (mutator2.acceptSrc (CHILD_B));                                                                    // acceptSrc
-          CHECK (mutator2.matchSrc (CHILD_T));
-          CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
-          CHECK (not mutator2.hasSrc());            // source contents exhausted
-          CHECK (not mutator2.acceptSrc (CHILD_T)); // ...anything beyond is NOP
-          CHECK (mutator2.completeScope());         // no pending elements left, everything resolved
+          // for sake of completeness, we'll be applying the same sequence of operations as in the other tests
+          // but since all those operations are not relevant for our attribute binding, they will be passed on
+          // to lower binding layers. And since, moreover, there /are no lower binding layers/ in our setup,
+          // they will just do nothing and return false
+          mutator2.skipSrc();                                                                                      // skipSrc
+          CHECK (not mutator2.injectNew (SUB_NODE));// ...no setter binding, thus no effect                        // injectNew
+          CHECK (not mutator2.matchSrc (CHILD_B));
+          CHECK (not mutator2.acceptSrc (CHILD_B));                                                                // acceptSrc
+          CHECK (not mutator2.matchSrc (CHILD_T));
+          CHECK (not mutator2.acceptSrc (CHILD_T));                                                                // acceptSrc
           
-          // verify reordered shape
-          contents = stringify(eachElm(target));
-          CHECK ("≺γ∣3.45≻" == *contents);
-          ++contents;
-          CHECK ("≺α∣1≻" == *contents);
-          ++contents;
-          CHECK ("≺β∣2≻" == *contents);
-          ++contents;
-          CHECK ("≺γ∣3.45≻" == *contents);
-          ++contents;
-          CHECK (contains(*contents, "∣Rec()≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣b≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣78:56:34.012≻"));
-          ++contents;
-          CHECK (isnil (contents));
+          CHECK ( 1 == alpha);
+          CHECK ( 2 == beta);
+          CHECK (3.45 == gamma);                    // no further effect on our attribute fields
           
-          cout << "Content after reordering...."
-               << join(target) <<endl;
+          cout << "all 'reordering' operations ignored as expected..." <<endl;
+          
           
           
           // --- third round: mutate data and sub-scopes ---
           
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           // This time we build the Mutator bindings in a way to allow mutation
           // For one, "mutation" means to assign a changed value to a simple node / attribute.
           // And beyond that, mutation entails to open a nested scope and delve into that recursively.

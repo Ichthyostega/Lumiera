@@ -3941,8 +3941,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464227213180" HGAP="29" ID="ID_691018374" MODIFIED="1464227324395" TEXT="Implementierung" VSHIFT="66">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1464227213180" HGAP="29" ID="ID_691018374" MODIFIED="1465045630450" TEXT="Implementierung" VSHIFT="66">
+<icon BUILTIN="pencil"/>
 <node CREATED="1464227218795" ID="ID_1100206442" MODIFIED="1464227263894" TEXT="ist grunds&#xe4;tzlich &quot;schon da&quot;">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -3967,7 +3967,7 @@
 </node>
 </node>
 <node CREATED="1464227227610" ID="ID_392179794" MODIFIED="1464227235981" TEXT="aber: alle Primitive durchimplementieren"/>
-<node COLOR="#338800" CREATED="1464386998240" FOLDED="true" ID="ID_1575821815" MODIFIED="1464399411734" TEXT="key: EntryID">
+<node COLOR="#338800" CREATED="1464386998240" FOLDED="true" ID="ID_1575821815" MODIFIED="1465045678296" TEXT="key: EntryID">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1464396284551" ID="ID_608089097" MODIFIED="1464397153781" TEXT="Problem: sanitise">
 <icon BUILTIN="messagebox_warning"/>
@@ -4035,9 +4035,15 @@
 <node CREATED="1464387004423" ID="ID_1076928743" MODIFIED="1464387014329" TEXT="Fehlerbehandlung">
 <node CREATED="1464387034539" ID="ID_1580200225" MODIFIED="1464399398050" TEXT="injectNew">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1464387043146" ID="ID_1075443725" MODIFIED="1464387046181" TEXT="API erweitern"/>
-<node CREATED="1464387046769" ID="ID_1282279036" MODIFIED="1464387053620" TEXT="R&#xfc;ckgabewert"/>
-<node CREATED="1464387055632" ID="ID_381742708" MODIFIED="1464387058851" TEXT="andere Layer fragen"/>
+<node CREATED="1464387043146" ID="ID_1075443725" MODIFIED="1465045655821" TEXT="API erweitern">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1464387046769" ID="ID_1282279036" MODIFIED="1465045658691" TEXT="R&#xfc;ckgabewert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1464387055632" ID="ID_381742708" MODIFIED="1465045661504" TEXT="andere Layer fragen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1464387071669" ID="ID_1152000090" MODIFIED="1464387151131" TEXT="skip">
 <icon BUILTIN="button_cancel"/>
@@ -4050,8 +4056,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1464386771270" ID="ID_1279882649" MODIFIED="1464483680342" TEXT="setter vs mutator">
-<icon BUILTIN="pencil"/>
+<node CREATED="1464386771270" ID="ID_1279882649" MODIFIED="1465045637692" TEXT="setter vs mutator">
 <node CREATED="1464386870265" ID="ID_1326576761" MODIFIED="1464387168773" TEXT="Metaprogrammierung"/>
 <node CREATED="1464386878983" ID="ID_19052291" MODIFIED="1464386887354" TEXT="Code selber mu&#xdf; es implizit wissen"/>
 <node CREATED="1464386904676" ID="ID_1844234642" MODIFIED="1464386908705" TEXT="entweder-oder">
@@ -4088,6 +4093,8 @@
 </node>
 <node CREATED="1464483601318" ID="ID_1275035047" MODIFIED="1464483610226" TEXT="gibt es &#xfc;berhaupt eine Alternative">
 <icon BUILTIN="help"/>
+</node>
+<node CREATED="1465041597680" ID="ID_31475692" MODIFIED="1465041604083" TEXT="Abw&#xe4;gung">
 <node CREATED="1465040677452" ID="ID_1313751992" MODIFIED="1465040776226" TEXT="OK: Klassen sind geschnitten nach Belang">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -4101,8 +4108,7 @@
       Also ist die Verwendung von Vererbung hier sogar die <i>beste</i>&#160;L&#246;sung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1465040780654" ID="ID_73964489" MODIFIED="1465040812722">
@@ -4118,9 +4124,54 @@
       BareEntryID speichern!
     </p>
   </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1465040890735" ID="ID_19731522" MODIFIED="1465041541616" TEXT="API f&#xfc;r die ID ist ein Dilemma">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t, wie rum man es auch aufl&#246;st, wird die L&#246;sung auf einer Seite schlechter
+    </p>
+    <ul>
+      <li>
+        wenn wir f&#252;r den Payload-Typ einen Typ-Parameter nehmen, bl&#228;hen wir den Standard-Fall (Setter) auf
+      </li>
+      <li>
+        andererseits <i>ist es unbstreitbar einfach so,</i>&#160;da&#223; f&#252;r den Mutator-Builder die Typisierung komplett implizit ist, das mu&#223; die Closure mit sich&#160;selbst ausmachen, einfach indem in der Closure ein geschachtelter TreeMutator konstruiert wird, der eben mit diesem impliziten Kind-Typ umgehen kann.
+      </li>
+      <li>
+        wenn wir stattdessen nur einen Key-String speichern, wird zum Einen die Match-Pr&#252;fung aufwendiger (Stringvergleich statt Vergleich von Hashes), und au&#223;erdem wird ein Typ-Mismatch nicht mehr auf der Ebene der Verb-Anwendung entdeckt und entsprechend gekennzeichnet, sondern wir hoffen, da&#223; es dann innerhalb der Closure zu einem Fehlzugriff auf die Payload der GenNode kommt. Noch schlimmer im Mutator-Fall, da sind wir dann schon im geschachtelten Scope und hoffen, da&#223; dann der eingeschachtelte Mutator irgendwo auf Widerspruch l&#228;uft.
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1465041611663" ID="ID_1925576169" MODIFIED="1465041702243" TEXT="man kann auf DSL-Ebene mehrere Alternativen anbieten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...gedacht f&#252;r verschiedene UseCases.
+    </p>
+    <ul>
+      <li>
+        Fall 1: String-Key und der Typ mu&#223; irgendwie implizit/explizit gegeben sein
+      </li>
+      <li>
+        Fall2: GenNodeID
+      </li>
+    </ul>
+  </body>
 </html>
 </richcontent>
-<icon BUILTIN="button_ok"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
