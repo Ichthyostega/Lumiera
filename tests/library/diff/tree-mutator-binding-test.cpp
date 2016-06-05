@@ -833,6 +833,19 @@ namespace test{
               {
                 LOG_SETTER ("gamma")
                 gamma = val;
+              })
+            .mutateAttrib("δ", [&](TreeMutator::MutatorBuffer buff)
+              {
+                // NOTE: we use "implementation inside knowledge" regarding the nested scope,
+                //       which is here represented as TestMutationTarget
+                buff.create (
+                  TreeMutator::build()
+                    .attachDummy (delta));
+                
+                // NOTE: when this closure is invoked, we're about to open the sub scope,
+                //       while mutation has not happened yet
+                cout << "openSub()...\n"
+                     << join(delta.getLog(), "\n") <<endl;
               });
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
@@ -871,6 +884,7 @@ namespace test{
           // It is implemented as `TestMutationTarget delta`, which allows us to verify a fully operational nested mutator.
           
           const size_t BUFF_SIZ = sizeof(TreeMutator::build().attachDummy (delta));
+          // just use some suitable size, not the point in focus for this test
           
           InPlaceBuffer<TreeMutator, BUFF_SIZ> subMutatorBuffer;
           TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
@@ -889,7 +903,9 @@ namespace test{
           
           CHECK (not isnil (delta));                      // ...and "magically" these instructions happened to insert
           cout << "Sub|" << delta.showContent() <<endl;  //  some new content into our implementation defined sub scope!
-          cout << delta <<endl;
+          cout << "____Mutation-Log(nested)______\n"
+               << join(delta.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           
           // verify contents of nested scope after mutation
           CHECK (delta.showContent() == "type = ξ, β = 2, b, a");

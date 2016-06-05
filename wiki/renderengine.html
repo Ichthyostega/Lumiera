@@ -8214,7 +8214,7 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201606041215" tags="Model Concepts GuiPattern design draft" changecount="86">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201606051455" tags="Model Concepts GuiPattern design draft" changecount="87">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 within the [[diff framework|TreeDiffModel]], this is a crucial joint, since here the abstract, generic, ~DOM-like ExternalTreeDescription meeds opaque, local and undisclosed data structures.
 
@@ -8341,13 +8341,13 @@ attached to a clip, or the mixture of clips, effects and labels found within a [
 :any re-ordering, inserting and deleting of fields is ''prohibited'', while defaultable optional fields are tolerated
 :there is only one common »binding layer« for object fields (i.e. we don't offer a customisable selector)
 :binding is created ''alternatively'' through the following closures
-:* &quot;key&quot;, lambda {{{change: void(T val)}}}
+:* ''change'': &quot;key&quot;, setter lambda {{{void(T val)}}}
 :** binding for a regular setter to assign a new value
 :** the value type is picked up from the provided lambda
 :** possible value types are restricted to the selection of GenNode payload types
 :** any further type conversions are to be handled by the closure and thus the client code
-:* &quot;key&quot;, lambda {{{mutateAttrib: void(TreeMutator::MutatorBuffer)}}}
-:** fabricate a recursive sub-TreeMutator to handle an &quot;object valued&quot; attribute
+:* ''mutateAttrib'': &quot;key&quot;, mutator-builder lambda {{{void(TreeMutator::MutatorBuffer)}}}
+:** fabricate a recursive sub-TreeMutator to handle an //object valued// attribute
 :** implicit typing -- the fabricated sub-TreeMutator just needs to be able to deal with the bound attribute
 
 

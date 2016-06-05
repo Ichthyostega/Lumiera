@@ -4173,6 +4173,26 @@
 </richcontent>
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1465139405203" ID="ID_103737978" MODIFIED="1465139492329" TEXT="...hey, der Typ ist implizit klar! es ist immer Rec">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...die offensichtlichsten Dinge &#252;bersieht man nur zu leicht!!!!!
+    </p>
+    <p>
+      Da es ein nested scope ist, ist es immer ein Objekt,
+    </p>
+    <p>
+      also repr&#228;sentiert als Rec&lt;GenNode&gt;
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

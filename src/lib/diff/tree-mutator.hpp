@@ -385,6 +385,9 @@ namespace diff{
         template<class CLO>
         using Change = ChangeOperation<PAR,CLO>;
         
+        template<class CLO>
+        using MutateAttrib = MutationOperation<PAR,CLO>;
+        
         template<class BIN>
         using Collection = ChildCollectionMutator<PAR,BIN>;
         
@@ -418,6 +421,17 @@ namespace diff{
           {
             return Change<CLO> (attributeID, setterClosure, move(*this));
           }
+        
+        ///////////////////////////////////////TODO documentation
+        template<typename CLO>
+        Builder<MutateAttrib<CLO>>
+        mutateAttrib (Symbol attributeID, CLO mutatorBuilderClosure)
+          {
+            idi::EntryID<Rec> key{attributeID};
+            return MutateAttrib<CLO> (key, mutatorBuilderClosure, move(*this));
+          }
+        
+        ///////////////////////////////////////TODO define variant taking a GenNode::ID
         
         /** set up a binding to a structure of "child objects",
          *  implemented through a typical STL container
