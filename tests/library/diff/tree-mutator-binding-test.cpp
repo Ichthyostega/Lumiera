@@ -590,7 +590,7 @@ namespace test{
           // This code might be confusing, because in fact we're playing two roles here!
           // For one, above, in the definition of mutator3 and in the declaration of MapD subScopes,
           // the test code represents what a private data structure and binding would do.
-          // But below we enact the TreeDiffAplicattor, which *would* use the Mutator interface
+          // But below we enact the TreeDiffAplicator, which *would* use the Mutator interface
           // to talk to an otherwise opaque nested mutator implementation. Actually, here this
           // nested opaque mutator is created on-the-fly, embedded within the .buildChildMutator(..lambda...)
           // Incidentally, we "just happen to know" how large the buffer needs to be to hold that mutator,
@@ -824,68 +824,40 @@ namespace test{
           // --- third round: mutate data and sub-scopes ---
           
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-          // This time we build the Mutator bindings in a way to allow mutation
-          // For one, "mutation" means to assign a changed value to a simple node / attribute.
-          // And beyond that, mutation entails to open a nested scope and delve into that recursively.
-          // Here, as this is really just a test and demonstration, we implement those nested scopes aside
-          // managed within a map and keyed by the sub node's ID.
+          // This third part of the test covers the actual purpose of attribute binding:
+          // the ability to assign values or even to open a sub-scope to recurse into
+          // a nested object stored within a data field.
           auto mutator3 =
           TreeMutator::build()
-            .attach (collection(target)
-                       .constructFrom ([&](GenNode const& spec) -> Data
-                          {
-                            cout << "constructor invoked on "<<spec<<endl;
-                            return {spec.idi.getSym(), render(spec.data)};
-                          })
-                       .matchElement ([&](GenNode const& spec, Data const& elm) -> bool
-                          {
-                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
-                            return spec.idi.getSym() == elm.key;
-                          })
-                       .assignElement ([&](Data& target, GenNode const& spec) -> bool
-                          {
-                            cout << "assign "<<target<<" <- "<<spec<<endl;
-                            CHECK (target.key == spec.idi.getSym(), "assignment to target with wrong identity");
-                            target.val = render(spec.data);
-                            return true;
-                          })
-                       .buildChildMutator ([&](Data& target, GenNode::ID const& subID, TreeMutator::MutatorBuffer buff) -> bool
-                          {
-                            // use our "inside knowledge" to get at the nested scope implementation
-                            VecD& subScope = subScopes[subID];
-                            buff.create (
-                              TreeMutator::build()
-                                .attach (collection(subScope)
-                                           .constructFrom ([&](GenNode const& spec) -> Data
-                                              {
-                                                cout << "SubScope| constructor invoked on "<<spec<<endl;
-                                                return {spec.idi.getSym(), render(spec.data)};
-                                              })));
-                            
-                            // NOTE: mutation of sub scope has not happened yet
-                            //       we can only document the sub scope to be opened now
-                            cout << "openSub("<<subID.getSym()<<") ⟻ "<<target<<endl;
-                            target.val = "Rec(--"+subID.getSym()+"--)";
-                            return true;
-                          }));
+            .change("γ", [&](double val)
+              {
+                LOG_SETTER ("gamma")
+                gamma = val;
+              });
           
-          CHECK (isnil (target));
-          CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
-          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β                             // accept_until
-          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ                   // acceptSrc
-          CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
+          VERIFY_ERROR (LOGIC, mutator3.accept_until (ATTRIB2));  // rejected; no support for ordering             // accept_until
+          CHECK (mutator3.accept_until (Ref::ATTRIBS));           // only the generic end-of-scope marks
+          CHECK (mutator3.accept_until (Ref::END));               // are supported (and implemented as NOP)
           
-          CHECK (not contains(join(target), "≺γ∣3.1415927≻"));
+          // explanation: due to the nature of a 'data field',
+          // this binding has no notion of 'ordering' and thus no 'current position'.
+          // Rather, the decision if some diff verb is applicable can be done statically.
+          
+          CHECK (not mutator3.acceptSrc (ATTRIB1));
+          CHECK (not mutator3.acceptSrc (ATTRIB2));
+          CHECK (    mutator3.acceptSrc (ATTRIB3)); // in this round we just have a binding for ATTRIB3 (== "γ")  
+          CHECK (    mutator3.acceptSrc (SUB_NODE));// ...and of course a binding for SUB_NODE
+          
+          CHECK (3.45 == gamma);
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
-          CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
-          CHECK (not mutator3.completeScope());
-          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
-          CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
-          cout << "Content after assignment; "
-               << join(target) <<endl;
+          CHECK (3.14159265 == gamma);
+          CHECK ( 1 == alpha);                      // the other fields remain unaffected 
+          CHECK ( 2 == beta);
+          
+          cout << "successfully assigned a new value." <<endl;
           
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           // prepare for recursion into sub scope..
           // Since this is a demonstration, we do not actually recurse into anything,
           // rather we invoke the operations on a nested mutator right from here.
