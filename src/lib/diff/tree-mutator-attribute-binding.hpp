@@ -137,11 +137,29 @@
               return PAR::findSrc (refSpec);
           }
         
-        /** repeatedly accept, until after the designated location */
+        /** there is no real support for navigating to a 'position',
+         *  since attribute / data field binding has no notion of ordering.
+         *  An attempt to fast-forward to "the end" is tolerated though.
+         * @throw error::Logic when this binding becomes responsible and a
+         *        request to navigate to some specific attribute is detected
+         * @note  the diff spec `Ref::END` or `Ref::ATTRIBS` is tolerated
+         *        and implemented as NOP (since there is no 'position'
+         *        incorporated into the binding implementation.
+         */
         virtual bool
         accept_until (GenNode const& spec)  override
           {
-            UNIMPLEMENTED("only support UNTIL END");
+            if (Ref::END == spec or Ref::ATTRIBS == spec)
+              return true;
+            else
+              if (isApplicable(spec))
+                throw error::Logic (_Fmt{"attempt to navigate to a position behind attribute '%s', "
+                                         "but this binding for '%s' is linked to a data field and "
+                                         "thus does not support any notion of 'order' or 'position'."}
+                                        % spec.idi.getSym()
+                                        % this->attribID_);
+              else
+                return PAR::accept_until(spec);
           }
       };
     

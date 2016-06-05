@@ -835,7 +835,9 @@ namespace test{
                 gamma = val;
               });
           
-          VERIFY_ERROR (LOGIC, mutator3.accept_until (ATTRIB2));  // rejected; no support for ordering             // accept_until
+          VERIFY_ERROR (LOGIC, mutator3.accept_until (ATTRIB3));  // rejected; no support for ordering             // accept_until
+          CHECK (not mutator3.accept_until (ATTRIB2));            // unknown binding, no one is responsible
+          CHECK (not mutator3.accept_until (ATTRIB1));
           CHECK (mutator3.accept_until (Ref::ATTRIBS));           // only the generic end-of-scope marks
           CHECK (mutator3.accept_until (Ref::END));               // are supported (and implemented as NOP)
           
@@ -846,7 +848,7 @@ namespace test{
           CHECK (not mutator3.acceptSrc (ATTRIB1));
           CHECK (not mutator3.acceptSrc (ATTRIB2));
           CHECK (    mutator3.acceptSrc (ATTRIB3)); // in this round we just have a binding for ATTRIB3 (== "γ")  
-          CHECK (    mutator3.acceptSrc (SUB_NODE));// ...and of course a binding for SUB_NODE
+//        CHECK (    mutator3.acceptSrc (SUB_NODE));// ...and of course a binding for SUB_NODE
           
           CHECK (3.45 == gamma);
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
