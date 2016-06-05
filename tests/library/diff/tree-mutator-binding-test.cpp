@@ -835,6 +835,12 @@ namespace test{
                 gamma = val;
               });
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          // we have two lambdas now and thus can save on the size of one function pointer....
+          CHECK (sizeof(mutator1) - sizeof(mutator2) == sizeof(void*));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          
+          
           VERIFY_ERROR (LOGIC, mutator3.accept_until (ATTRIB3));  // rejected; no support for ordering             // accept_until
           CHECK (not mutator3.accept_until (ATTRIB2));            // unknown binding, no one is responsible
           CHECK (not mutator3.accept_until (ATTRIB1));
@@ -848,7 +854,8 @@ namespace test{
           CHECK (not mutator3.acceptSrc (ATTRIB1));
           CHECK (not mutator3.acceptSrc (ATTRIB2));
           CHECK (    mutator3.acceptSrc (ATTRIB3)); // in this round we just have a binding for ATTRIB3 (== "γ")  
-//        CHECK (    mutator3.acceptSrc (SUB_NODE));// ...and of course a binding for SUB_NODE
+          CHECK (    mutator3.acceptSrc (ATTRIB_NODE));
+                                                    // ...and of course a binding for a nested ATTRIB_NODE
           
           CHECK (3.45 == gamma);
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
@@ -859,86 +866,38 @@ namespace test{
           cout << "successfully assigned a new value." <<endl;
           
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-          // prepare for recursion into sub scope..
-          // Since this is a demonstration, we do not actually recurse into anything,
-          // rather we invoke the operations on a nested mutator right from here.
+          // prepare for recursion into sub scope...
+          // In this demonstration, the nested scope is declared to live within an attribute `ATTRIB_NODE` (== "δ").
+          // It is implemented as `TestMutationTarget delta`, which allows us to verify a fully operational nested mutator.
           
-          InPlaceBuffer<TreeMutator, sizeof(mutator1)> subMutatorBuffer;
+          const size_t BUFF_SIZ = sizeof(TreeMutator::build().attachDummy (delta));
+          
+          InPlaceBuffer<TreeMutator, BUFF_SIZ> subMutatorBuffer;
           TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
           
-          CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));                                                // mutateChild
+          CHECK (mutator3.mutateChild (ATTRIB_NODE, placementHandle));                                             // mutateChild
           
-          CHECK (isnil (subScopes[SUB_NODE.idi]));  // ...this is where the nested mutator is expected to work on
+          CHECK (isnil (delta));  // ...this is where the nested mutator is expected to work on
           CHECK (not subMutatorBuffer->hasSrc());
           
-          // now use the Mutator *interface* to talk to the nested mutator...
-          // This code might be confusing, because in fact we're playing two roles here!
-          // For one, above, in the definition of mutator3 and in the declaration of MapD subScopes,
-          // the test code represents what a private data structure and binding would do.
-          // But below we enact the TreeDiffAplicattor, which *would* use the Mutator interface
-          // to talk to an otherwise opaque nested mutator implementation. Actually, here this
-          // nested opaque mutator is created on-the-fly, embedded within the .buildChildMutator(..lambda...)
-          // Incidentally, we "just happen to know" how large the buffer needs to be to hold that mutator,
-          // since this is a topic beyond the scope of this test. In real usage, the DiffApplicator cares
-          // to provide a stack of suitably sized buffers for the nested mutators.
           
+          // now use the Mutator *interface* to talk to the nested mutator...
           subMutatorBuffer->injectNew (TYPE_X);                                                                    // >> // injectNew
           subMutatorBuffer->injectNew (ATTRIB2);                                                                   // >> // injectNew
           subMutatorBuffer->injectNew (CHILD_B);                                                                   // >> // injectNew
           subMutatorBuffer->injectNew (CHILD_A);                                                                   // >> // injectNew
           
-          CHECK (not isnil (subScopes[SUB_NODE.idi]));              // ...and "magically" these instructions happened to insert
-          cout << "Sub|" << join(subScopes[SUB_NODE.idi]) <<endl;  //  some new content into our implementation defined sub scope!
+          CHECK (not isnil (delta));                      // ...and "magically" these instructions happened to insert
+          cout << "Sub|" << delta.showContent() <<endl;  //  some new content into our implementation defined sub scope!
+          cout << delta <<endl;
           
           // verify contents of nested scope after mutation
-          contents = stringify(eachElm(subScopes[SUB_NODE.idi]));
-          CHECK ("≺type∣ξ≻" == *contents);
-          ++contents;
-          CHECK ("≺β∣2≻" == *contents);
-          ++contents;
-          CHECK (contains(*contents, "∣b≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣a≻"));
-          ++contents;
-          CHECK (isnil (contents));
+          CHECK (delta.showContent() == "type = ξ, β = 2, b, a");
           
-          
-          // now back to parent scope....
-          // ...add a new attribute and immediately recurse into it
-          mutator1.injectNew (ATTRIB_NODE);
-          CHECK (mutator3.mutateChild (ATTRIB_NODE, placementHandle));  // NOTE: we're just recycling the buffer. InPlaceHolder handles lifecycle properly
-          subMutatorBuffer->injectNew (TYPE_Z);
-          subMutatorBuffer->injectNew (CHILD_A);
-          subMutatorBuffer->injectNew (CHILD_A);
-          subMutatorBuffer->injectNew (CHILD_A);
-          CHECK (subMutatorBuffer->completeScope());  // no pending "open ends" left in sub-scope
-          CHECK (mutator3.completeScope());           // and likewise in the enclosing main scope
-          
-          // and thus we've gotten a second nested scope, populated with new values
-          cout << "Sub|" << join(subScopes[ATTRIB_NODE.idi]) <<endl;
-          
-          // verify contents of this second nested scope
-          contents = stringify(eachElm(subScopes[ATTRIB_NODE.idi]));
-          CHECK ("≺type∣ζ≻" == *contents);
-          ++contents;
-          CHECK (contains(*contents, "∣a≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣a≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣a≻"));
-          ++contents;
-          CHECK (isnil (contents));
-          
-          
-          // back to parent scope....
-          // verify the marker left by our "nested sub-scope lambda"
-          CHECK (contains (join(target), "Rec(--"+SUB_NODE.idi.getSym()+"--)"));
-          CHECK (contains (join(target), "Rec(--"+ATTRIB_NODE.idi.getSym()+"--)"));
-          
-          cout << "Content after nested mutation; "
-               << join(target) <<endl;
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          // verify unaffected parent scope (data fields)
+          CHECK (3.14159265 == gamma);
+          CHECK ( 1 == alpha);
+          CHECK ( 2 == beta);
         }
       
       
