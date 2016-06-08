@@ -285,7 +285,7 @@ namespace diff{
       void
       logScopeCompletion (iterator processingPos)
         {
-          log_.event ("completeScope", _Fmt{"⤴ scope%s completed / %d waste elm(s) dropped"}
+          log_.event ("completeScope", _Fmt{"⤴ scope%s completed / %d waste elm(s)"}
                                        % (processingPos? " NOT":"")
                                        % prev_content_.size());
         }
