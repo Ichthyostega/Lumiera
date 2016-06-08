@@ -70,7 +70,7 @@
  ** or reshape _all of the target's contents_. After that, you must not refer to the
  ** exhausted TreeMutator anymore, just let it fall out of scope. Incidentally, this
  ** also means that _any failure or exception encountered_ while applying a diff will
- ** **corrupt the target data structure**. The basic assumption is that
+ ** leave a **corrupted target data structure**. The basic assumption is that
  ** - the target data structure will actually be built through diff messages solely
  ** - and that all received diff messages are sane, as being drawn from a
  **   semantically and structurally equivalent source structure
@@ -82,6 +82,8 @@
  **       is defined in separate headers and included towards the bottom of this header.
  ** 
  ** @see tree-mutator-test.cpp
+ ** @see tree-mutator-binding-test.cpp
+ ** @see diff-language.hpp
  ** @see DiffDetector
  ** 
  */

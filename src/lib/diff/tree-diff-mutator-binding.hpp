@@ -23,7 +23,7 @@
 
 /** @file tree-diff-mutator-binding.hpp
  ** Concrete implementation to apply structural changes to unspecific
- ** private datea structures with hierarchical nature. This is a variation
+ ** private data structures with hierarchical nature. This is a variation
  ** of the generic [tree diff applicator](\ref tree-diff-application.hpp),
  ** using the same implementation concept, while relying on an abstract
  ** adapter type, the \ref TreeMutator. Similar to the generic case, when
@@ -47,9 +47,9 @@
  ** language in itself is necessarily a double dispatch (we have to abstract the
  ** verbs and we have to abstract the implementation side). And now we're decoupling
  ** the implementation side from a concrete data structure. Which means, that the
- ** use will have to provide a set of closures (which might even partially generated
+ ** use will have to provide a set of closures (which might even partially be generated
  ** functors) to translate the _implementation actions_ underlying the language into
- ** _concrete actions_ on local data.
+ ** _concrete actions_ working on local data.
  ** 
  ** @todo this is WIP as of 2/2016 -- in the end it might be merged back or even
  **       replace the tree-diff-application.hpp
@@ -87,7 +87,7 @@ namespace diff{
   
   
   /**
-   * Interpreter for the tree-diff-language to work on arbitrary, undiclosed
+   * Interpreter for the tree-diff-language to work on arbitrary, undisclosed
    * local data structures. The key point to note is that this local data is
    * not required to implement any specific interface. The only requirement is
    * the ability somehow to support the basic operations of applying a structural
@@ -329,13 +329,13 @@ namespace diff{
       void
       assignElm (GenNode const& n)
         {
-          UNIMPLEMENTED("locate allready accepted element and assign given new payload");
+          UNIMPLEMENTED("locate already accepted element and assign given new payload");
         }
       
       void
       open_subScope (GenNode const& n)
         {
-          UNIMPLEMENTED("locate allready accepted element and open recursive sub-scope for mutation");
+          UNIMPLEMENTED("locate already accepted element and open recursive sub-scope for mutation");
         }
       
       void
@@ -397,7 +397,7 @@ namespace diff{
             __fail_not_found (n);
         }
       
-      /** assignement of changed value in one step */
+      /** assignment of changed value in one step */
       virtual void
       set (GenNode const& n)  override
         {

@@ -32,9 +32,58 @@
  ** adaptation is done by implementing binding templates, in the way of building
  ** blocks, attached and customised through lambdas. It is possible to layer
  ** several bindings on top of a single TreeMutator -- and this header defines
- ** a building block for one such layer, especially for binding to object fields
- ** through getter / setter lambdas.
- **  
+ ** a building block for one specific kind of layer, used to bind object fields
+ ** through "setter" lambdas.
+ ** 
+ ** ## architecture considerations
+ ** Together with the (\ref tree-mutator-collection-binding.hpp), the attribute binding
+ ** is the most relevant building block -- yet it is special in several respects. There
+ ** is kind of a "impedance mismatch" between the concept of an "attribute", as used in
+ ** the context of diff messages and »External Tree Description«, and the nature of
+ ** data fields as used within the imperative or object oriented implementation: the
+ ** latter is rooted within a _class definition_ -- which is conceived as a _type_,
+ ** a conceptual entity used for construction of code, yet not really embodied into
+ ** the actual code at execution time. Thus, with respect to the _behaviour_ at execution,
+ ** the structure defined through typing and classes appears as static backdrop. This leads
+ ** to the consequence, that, on a generic (unspecific) level, we don't have any correlate
+ ** to the notion of _ordering_ and _sequence_, as found within the diff language.
+ ** 
+ ** On the other hand, this very notion of _ordering_ and _sequence_ is essential to the
+ ** meaning of "diff", as far as collections of "children" are involved. This leaves us
+ ** with the decision, either to increase complexity of the diff language's definition
+ ** and concept, absorb this discrepancy within the complexity of implementation.
+ ** Deliberately, the whole concept of a "diff language" builds onto the notion of
+ ** _layered semantics,_ where the precise meaning of some terms remains a private
+ ** extension within specific usage context. There is a lot of leeway within the
+ ** language, and the _correct usage protocol_ is linked to the actual scope of
+ ** usage. We need the diff language to be a connecting medium, to link some
+ ** remote partners based on a locally shared common understanding of structure.
+ ** 
+ ** And so we use the same approach when it comes to "attributes": We'll assume that
+ ** the partners connected through diff messages are _structurally compatible_ -- thus
+ ** any "change" message emitted at one side is assumed to basically make sense on the
+ ** receiving side. Consequently, the binding of an "attribute" to an object or data field
+ ** will either ignore or reject any specifics about field order. It will _reject_ an
+ ** explicit demand to re-order a field, and it will silently pass down other notions
+ ** related to ordering -- down to lower "onion layers" of the concrete binding. So
+ ** it depends on the concrete setup of the data binding (TreeMutator), if some
+ ** expression in diff language will be deemed incompatible -- which happens when
+ ** in the end no "onion layer" of the concrete binding was able to absorb and
+ ** comply to the diff message.
+ ** 
+ ** Another architectural consideration is relevant to the way attribute bindings are
+ ** constructed: we rather construct a separate binding for each individual attribute,
+ ** instead of building a collective binding for all attributes of a given object.
+ ** This gives us the benefit of a simple and flexible solution plus it avoids the
+ ** overhead of managing a _collection of attribute definitions_ (which would likely
+ ** cause a heap allocation for storage). The downside is that we loose any coherence
+ ** between attributes of "the same object", we loose possible consistency checks and
+ ** we get a linear search for access to any attribute binding. Moreover, we cannot
+ ** protect against creation of a nonsensical binding, e.g. a binding which ties
+ ** the same attribute several times in contradictory fashion. The client code
+ ** constructing the concrete TreeMutator needs to have adequate understanding
+ ** regarding mode of operation and "mechanics" of such a binding.
+ ** 
  ** @note the header tree-mutator-attribute-binding.hpp with specific builder templates
  **       is included way down, after the class definitions. This is done so for sake
  **       of readability.
@@ -96,7 +145,7 @@
         virtual bool
         hasSrc()  override
           {
-            return true;
+            return true;  // x or true == true
           }
         
         /** ensure the given spec is deemed appropriate at that point.
@@ -203,7 +252,7 @@
             return true;
           }
         
-        /** invoke the setter lambda, in case this binding layer is in charge */
+        /** invoke the setter lambda, when this binding layer is in charge */
         virtual bool
         assignElm (GenNode const& spec)  override
           {

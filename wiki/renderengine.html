@@ -8214,7 +8214,7 @@ On receiving the terms of this &quot;diff language&quot;, it is possible to gene
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201606051455" tags="Model Concepts GuiPattern design draft" changecount="87">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201606082305" tags="Model Concepts GuiPattern design draft" changecount="91">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 within the [[diff framework|TreeDiffModel]], this is a crucial joint, since here the abstract, generic, ~DOM-like ExternalTreeDescription meeds opaque, local and undisclosed data structures.
 
@@ -8311,7 +8311,7 @@ builder interface, several ways of binding can be //layered on top of each other
 each layer is responsible for a specific aspect of the binding. This is crucial to deal with &quot;objects&quot; comprised of a mixture of children, like e.g. the [[Pipe]]
 attached to a clip, or the mixture of clips, effects and labels found within a [[Fork]] (&quot;track&quot;).
 ;the selector
-:this is a lambda {{{isApplicableIf : bool(GenNode const&amp;)}}}, provided by each //onion layer//
+:this is a lambda {{{isApplicableIf : bool(GenNode const&amp;)}}}, provided separately by the concrete //onion layer//
 :* the selector is //optional// and only necessary when there is more than one binding layer
 :* this predicate decides if a given //spec,// as taken from a //diff verb// to be applied, is of relevance for the given //onion layer//
 :* if this onion layer is not concerned or affected by this message, it will be passed down to further layers, possibly ignoring it at the end
@@ -8338,8 +8338,9 @@ attached to a clip, or the mixture of clips, effects and labels found within a [
 :** the lambda is expected to //place// the generated mutator into the given buffer smart handle, which takes ownership of this object
 ;object field binding
 :this maps the concept of &quot;Attribute&quot; onto concrete, mutable data fields
-:any re-ordering, inserting and deleting of fields is ''prohibited'', while defaultable optional fields are tolerated
-:there is only one common »binding layer« for object fields (i.e. we don't offer a customisable selector)
+:any re-ordering  and deletion of fields is ''prohibited'', while defaultable optional fields may be tolerated
+:there is only one common combined binding for object fields (i.e. we don't offer a customisable selector),
+:where each individual binding is implemented on its own, as a self contained, isolated binding layer
 :binding is created ''alternatively'' through the following closures
 :* ''change'': &quot;key&quot;, setter lambda {{{void(T val)}}}
 :** binding for a regular setter to assign a new value

@@ -33,9 +33,8 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-//#include <utility>
+#include <vector>
 #include <string>
-//#include <vector>
 
 using util::join;
 using util::isnil;
@@ -44,9 +43,6 @@ using util::stringify;
 using lib::iter_stl::eachElm;
 using lib::time::Time;
 using std::string;
-
-//using std::vector;
-//using std::swap;
 
 using util::typeStr;
 
@@ -91,7 +87,7 @@ namespace test{
    *       - use a dummy diagnostic implementation to verify the interface
    *       - verify an adapter to apply structure modification to a generic collection
    *       - use closures to translate mutation into manipulation of private attributes
-   *       - integrate the standard case of tree diff application to `Rec<GenNode>`
+   * @todo - integrate the standard case of tree diff application to `Rec<GenNode>`
    * 
    * @remark even while this is a very long and detail oriented test, it barely
    *      scratches the surface of what is possible with _layering multiple bindings_
@@ -107,7 +103,7 @@ namespace test{
    *      diff application to an arbitrary hierarchical data structure. In this way, the
    *      following test cases demonstrate the intermediary steps executed when applying
    *      this test diff through the concrete binding exemplified in each case
-   * @remark the **test diff** referred here reads as follows
+   * @remark the **test diff** implied here reads as follows
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    * ins(ATTRIB1)
    * ins(ATTRIB3)
@@ -658,7 +654,14 @@ namespace test{
       
       
       
-      /** @test translate generic mutation into attribute manipulation */
+      /** @test translate generic mutation into attribute manipulation
+       *        - here we bind directly to data fields local to this scope
+       *        - we execute the same diff primitives used in the preceding tests
+       *        - yet binding to data fields has certain intrinsic limits; due to the
+       *          fixed non-dynamic nature of data fields, it is impossible to define an
+       *          "ordering" and consequently there is no _sequence of diff application._
+       *        - so the only form of actually _applying_ a change is to invoke the given
+       *          setter or use the given mechanism to construct a nested mutator.  */
       void
       mutateAttribute ()
         {
@@ -690,14 +693,10 @@ namespace test{
                 gamma = val;
               });
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-          CHECK (sizeof(mutator1) <= sizeof(VecD)                // the buffer for pending elements
-                                   + sizeof(VecD*)               // the reference to the original collection
-                                   + sizeof(void*)               // the reference from the ChildCollectionMutator to the CollectionBinding
-                                   + 2 * sizeof(VecD::iterator)  // one Lumiera RangeIter (comprised of pos and end iterators)
-                                   + 4 * sizeof(void*)           // the four unused default configured binding functions
-                                   + 1 * sizeof(void*));         // one back reference from the closure to this scope
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          CHECK (sizeof(mutator1) <= sizeof(void*)               // the TreeMutator VTable
+                                   + 2 * sizeof(void*)           // one closure reference for each lambda
+                                   + 2 * sizeof(GenNode::ID));   // one attribute-key for each binding
+          
           
           
           // --- first round: introduce new "attributes" ---
@@ -706,8 +705,8 @@ namespace test{
           CHECK (-1 == beta);
           CHECK (-1 == gamma);
           
-          CHECK (mutator1.hasSrc());                // NOTE: the attribute binding always has an implicit "source sequence"
-                                                    //       (which is in fact fixed, because it relies on a likewise fixed class definition)
+          CHECK (mutator1.hasSrc());                // NOTE: the attribute binding has no "reference source sequence" and thus no dynamic state.
+                                                    //       (in fact it is predetermined, because it relies on a likewise fixed class definition)
           CHECK (mutator1.completeScope());         // NOTE: this is always true and NOP, for the same reason: the structure of the binding is fixed
           
           mutator1.injectNew (ATTRIB1);
@@ -728,7 +727,7 @@ namespace test{
           CHECK (not mutator1.injectNew (ATTRIB2)); // ...because we didn't define a binding for ATTRIB2 (aka "beta")
           
           // any changes to something other than attributes are just delegated to the next "onion layer"
-          // since in this case here, there is only one layer (our attribute binding), these other changes will be silently ignored
+          // since in this case here, there is only one layer (our attribute binding), these other changes will be ignored silently
           mutator1.injectNew (CHILD_B);
           mutator1.injectNew (CHILD_B);
           mutator1.injectNew (CHILD_T);
@@ -738,6 +737,7 @@ namespace test{
           CHECK (-1 == beta);
           CHECK (3.45 == gamma);
           cout << "successfully 'injected' new attributes." <<endl;
+          
           
           
           // --- second round: reordering ---
@@ -765,18 +765,18 @@ namespace test{
                 gamma = val;
               });
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-          // we have two lambdas now and thus can save on the size of one function pointer....
-          CHECK (sizeof(mutator1) - sizeof(mutator2) == sizeof(void*));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          CHECK (sizeof(mutator1) <= sizeof(void*)               // the TreeMutator VTable
+                                   + 3 * sizeof(void*)           // one closure reference for each lambda
+                                   + 3 * sizeof(GenNode::ID));   // one attribute-key for each binding
+          
           
           
           CHECK ( 1 == alpha);
           CHECK (-1 == beta);
           CHECK (3.45 == gamma);                    // values not affected by attaching a new mutator
           
-          CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
-          CHECK ( 1 == alpha);                      // the match didn't change anything...
+          CHECK (mutator2.matchSrc (ATTRIB1));      // this "match" is positive, since our binding supports this attribute
+          CHECK ( 1 == alpha);                      // the (NOP) match didn't change anything...
           CHECK (-1 == beta);
           CHECK (3.45 == gamma);
           
@@ -785,8 +785,8 @@ namespace test{
                                                     // If we hadn't defined a binding for "γ", then the same operation
                                                     // would have been passed on silently to other binding layers.
           
-          CHECK (mutator2.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
-          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element (also a NOP)           // acceptSrc
+          CHECK (mutator2.matchSrc (ATTRIB1));      // behaviour of the binding remains unaffected
+          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and "accept" this src element (also a NOP)         // acceptSrc
           
           mutator2.skipSrc();                       // and 'skip' likewise is just not implemented for attributes  // skipSrc
           CHECK ( 1 == alpha);
@@ -817,7 +817,7 @@ namespace test{
           CHECK ( 2 == beta);
           CHECK (3.45 == gamma);                    // no further effect on our attribute fields
           
-          cout << "all 'reordering' operations ignored as expected..." <<endl;
+          cout << "ignored all 'reordering' operations (as expected)..." <<endl;
           
           
           
@@ -825,8 +825,8 @@ namespace test{
           
           
           // This third part of the test covers the actual purpose of attribute binding:
-          // the ability to assign values or even to open a sub-scope to recurse into
-          // a nested object stored within a data field.
+          // the ability to assign values or even to open a sub-scope enabling recursion
+          // into a nested object stored within a data field.
           auto mutator3 =
           TreeMutator::build()
             .change("γ", [&](double val)
@@ -848,10 +848,10 @@ namespace test{
                      << join(delta.getLog(), "\n") <<endl;
               });
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-          // we have two lambdas now and thus can save on the size of one function pointer....
-          CHECK (sizeof(mutator1) - sizeof(mutator2) == sizeof(void*));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          CHECK (sizeof(mutator1) <= sizeof(void*)               // the TreeMutator VTable
+                                   + 2 * sizeof(void*)           // one closure reference for each lambda
+                                   + 2 * sizeof(GenNode::ID));   // one attribute-key for each binding
+          
           
           
           VERIFY_ERROR (LOGIC, mutator3.accept_until (ATTRIB3));  // rejected; no support for ordering             // accept_until
@@ -884,7 +884,7 @@ namespace test{
           // It is implemented as `TestMutationTarget delta`, which allows us to verify a fully operational nested mutator.
           
           const size_t BUFF_SIZ = sizeof(TreeMutator::build().attachDummy (delta));
-          // just use some suitable size, not the point in focus for this test
+          // use some suitable size here, not the point in focus for this test
           
           InPlaceBuffer<TreeMutator, BUFF_SIZ> subMutatorBuffer;
           TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
