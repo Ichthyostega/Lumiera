@@ -271,7 +271,7 @@
       : public AttributeBindingBase<PAR>
       {
         
-        ASSERT_VALID_SIGNATURE (MUT, void(TreeMutator::MutatorBuffer));
+        ASSERT_VALID_SIGNATURE (MUT, void(TreeMutator::Handle));
 
         MUT mutatorBuilder_;
         
@@ -287,7 +287,7 @@
          *  which is assumed to construct a nested TreeMutator into the provided Buffer,
          *  able to deal with the nested attribute object referred by this binding */
         virtual bool
-        mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)  override
+        mutateChild (GenNode const& spec, TreeMutator::Handle targetBuff)  override
           {
             if (not this->isApplicable(spec))
               return PAR::mutateChild(spec, targetBuff);

@@ -96,7 +96,7 @@
         ASSERT_VALID_SIGNATURE (CTR, Elm (GenNode const&))
         ASSERT_VALID_SIGNATURE (SEL, bool(GenNode const&))
         ASSERT_VALID_SIGNATURE (ASS, bool(Elm&, GenNode const&))
-        ASSERT_VALID_SIGNATURE (MUT, bool(Elm&, GenNode::ID const&, TreeMutator::MutatorBuffer))
+        ASSERT_VALID_SIGNATURE (MUT, bool(Elm&, GenNode::ID const&, TreeMutator::Handle))
         
         
         Coll& collection;
@@ -302,7 +302,7 @@
         /** locate the designated target element and build a suitable
          *  sub-mutator for this element into the provided target buffer */
         virtual bool
-        mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
+        mutateChild (GenNode const& spec, TreeMutator::Handle targetBuff)
           {
             Iter target_found = binding_.locate (spec);
             return target_found? binding_.openSub (*target_found, spec.idi, targetBuff)
@@ -466,7 +466,7 @@
           }
         
         static bool
-        disable_childMutation (Elm&, GenNode::ID const&, TreeMutator::MutatorBuffer)
+        disable_childMutation (Elm&, GenNode::ID const&, TreeMutator::Handle)
           {
             return false;
           }

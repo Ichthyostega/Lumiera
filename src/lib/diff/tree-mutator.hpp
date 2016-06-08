@@ -271,7 +271,7 @@ namespace diff{
         }
       
       
-      using MutatorBuffer = PlantingHandle<TreeMutator>;
+      using Handle = PlantingHandle<TreeMutator>;
       
       /** locate the designated target element
        *  and build a suitable sub-mutator for this element
@@ -279,7 +279,7 @@ namespace diff{
        * @throw error::Fatal when buffer is insufficient
        * @return false when unable to locate the target */
       virtual bool
-      mutateChild (GenNode const&, MutatorBuffer)
+      mutateChild (GenNode const&, Handle)
         {
           // do nothing by default
           return false;

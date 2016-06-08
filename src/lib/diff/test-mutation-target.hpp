@@ -501,7 +501,7 @@ namespace diff{
         /** locate the designated target element and build a suitable
          *  sub-mutator for this element into the provided target buffer */
         virtual bool
-        mutateChild (GenNode const& spec, TreeMutator::MutatorBuffer targetBuff)
+        mutateChild (GenNode const& spec, TreeMutator::Handle targetBuff)
           {
             if (PAR::mutateChild (spec, targetBuff))
               return true;

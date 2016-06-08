@@ -304,7 +304,7 @@ namespace test{
           // implementation of TreeMutator without any further functionality.
           
           InPlaceBuffer<TreeMutator, sizeof(mutator3)> subMutatorBuffer;
-          TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
+          TreeMutator::Handle placementHandle(subMutatorBuffer);
           
           CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));                                                // mutateChild
           CHECK (not subMutatorBuffer->hasSrc());   // ...this is all we can do here
@@ -534,7 +534,7 @@ namespace test{
                             target.val = render(spec.data);
                             return true;
                           })
-                       .buildChildMutator ([&](Data& target, GenNode::ID const& subID, TreeMutator::MutatorBuffer buff) -> bool
+                       .buildChildMutator ([&](Data& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                           {
                             // use our "inside knowledge" to get at the nested scope implementation
                             VecD& subScope = subScopes[subID];
@@ -575,7 +575,7 @@ namespace test{
           // rather we invoke the operations on a nested mutator right from here.
           
           InPlaceBuffer<TreeMutator, sizeof(mutator1)> subMutatorBuffer;
-          TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
+          TreeMutator::Handle placementHandle(subMutatorBuffer);
           
           CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));                                                // mutateChild
           
@@ -834,7 +834,7 @@ namespace test{
                 LOG_SETTER ("gamma")
                 gamma = val;
               })
-            .mutateAttrib("δ", [&](TreeMutator::MutatorBuffer buff)
+            .mutateAttrib("δ", [&](TreeMutator::Handle buff)
               {
                 // NOTE: we use "implementation inside knowledge" regarding the nested scope,
                 //       which is here represented as TestMutationTarget
@@ -887,7 +887,7 @@ namespace test{
           // use some suitable size here, not the point in focus for this test
           
           InPlaceBuffer<TreeMutator, BUFF_SIZ> subMutatorBuffer;
-          TreeMutator::MutatorBuffer placementHandle(subMutatorBuffer);
+          TreeMutator::Handle placementHandle(subMutatorBuffer);
           
           CHECK (mutator3.mutateChild (ATTRIB_NODE, placementHandle));                                             // mutateChild
           
