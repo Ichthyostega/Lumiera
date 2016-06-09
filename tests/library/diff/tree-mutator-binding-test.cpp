@@ -69,7 +69,6 @@ namespace test{
                   CHILD_T(Time(12,34,56,78)),              // unnamed time value child
                   SUB_NODE = MakeRec().genNode(),          // empty anonymous node used to open a sub scope
                   ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ
-                  CHILD_NODE = SUB_NODE,                   // yet another child node, same ID as SUB_NODE (!)
                   GAMMA_PI("γ", 3.14159265);               // happens to have the same identity (ID) as ATTRIB3AS
     
   }//(End)Test fixture

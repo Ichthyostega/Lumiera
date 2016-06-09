@@ -26,6 +26,7 @@
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-cout.hpp"  //////////TODO necessary?
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
@@ -49,17 +50,17 @@ namespace test{
     // define some GenNode elements
     // to act as templates within the concrete diff
     // NOTE: everything in this diff language is by-value
-    const GenNode ATTRIB1("α", 1),                         // attribute α = 1 
+    const GenNode ATTRIB1("α", 1),                         // attribute α = 1
                   ATTRIB2("β", int64_t(2)),                // attribute α = 2L   (int64_t)
                   ATTRIB3("γ", 3.45),                      // attribute γ = 3.45 (double)
-                  TYPE_X("type", "X"),                     // a "magic" type attribute "X"
-                  TYPE_Y("type", "Y"),                     // 
+                  TYPE_X("type", "ξ"),                     // a "magic" type attribute "Xi"
+                  TYPE_Z("type", "ζ"),                     // 
                   CHILD_A("a"),                            // unnamed string child node
                   CHILD_B('b'),                            // unnamed char child node
                   CHILD_T(Time(12,34,56,78)),              // unnamed time value child
                   SUB_NODE = MakeRec().genNode(),          // empty anonymous node used to open a sub scope
                   ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ
-                  CHILD_NODE = SUB_NODE;                   // yet another child node, same ID as SUB_NODE (!)
+                  GAMMA_PI("γ", 3.14159265);               // happens to have the same identity (ID) as ATTRIB3AS
     
   }//(End)Test fixture
   
@@ -98,52 +99,57 @@ namespace test{
       using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
       
       DiffSeq
-      attributeDiff()          ///////////////////////////////TODO use the same diff as in TreeMutatorBinding_test
-        {
-          // prepare for direct attribute assignment
-          GenNode attrib1_mut(ATTRIB1.idi.getSym(), 11);
-          
-          return snapshot({ins(TYPE_X)
-                         , pick(ATTRIB1)
-                         , del(ATTRIB2)
-                         , ins(ATTRIB3)
-                         , set(attrib1_mut)
-                         });
-        }
-      
-      DiffSeq
       populationDiff()
         {
-          return snapshot({ins(ATTRIB2)
-                         , ins(CHILD_A)
-                         , ins(CHILD_A)
-                         , ins(CHILD_T)
+          return snapshot({ins(ATTRIB1)
+                         , ins(ATTRIB3)
+                         , ins(ATTRIB3)
+                         , ins(CHILD_B)
+                         , ins(CHILD_B)
                          , ins(CHILD_T)
                          });
-        }
-        
+        }                // ==> ATTRIB1, ATTRIB3, ATTRIB3, CHILD_B, CHILD_B, CHILD_T
+      
+      DiffSeq
+      reorderingDiff()
+        {
+          return snapshot({find(ATTRIB3)
+                         , pick(ATTRIB1)
+                         , skip(ATTRIB3)
+                         , ins(ATTRIB2)
+                         , pick(ATTRIB3)
+                         , del(CHILD_B)
+                         , ins(SUB_NODE)
+                         , pick(CHILD_B)
+                         , pick(CHILD_T)
+                         });
+        }                // ==> ATTRIB3, ATTRIB1, ATTRIB2, ATTRIB3, SUB_NODE, CHILD_B, CHILD_T
         
       DiffSeq
       mutationDiff()
         {
-          // prepare for direct assignment of new value
-          GenNode childT_later(CHILD_T.idi.getSym()
-                              ,Time(CHILD_T.data.get<Time>() +  Time(0,1)));
-          
-          return snapshot({after(Ref::ATTRIBS)      // fast forward to the first child
-                         , pick(CHILD_A)            // rearrange children of mixed types...
-                         , find(CHILD_T)
-                         , set(childT_later)        // immediately assign to the child just picked
-                         , find(CHILD_T)            // fetch the other Time child
-                         , del(CHILD_A)             // delete a child of type Y
-                         , skip(CHILD_T)
-                         , skip(CHILD_T)
-                         , mut(CHILD_A)             // mutate a child of type Y referred by ID
-                           , ins(ATTRIB3)
-                           , ins(CHILD_T)
-                         , emu(CHILD_A)
+          return snapshot({after(Ref::END)      ///////////TODO need to work this simplified version into the detail tests. after(..explicit attribute...) can not be implemented!
+                         , set(GAMMA_PI)
+                         , mut(SUB_NODE)
+                           , ins(TYPE_X)
+                           , ins(ATTRIB2)
+                           , ins(CHILD_B)
+                           , ins(CHILD_A)
+                         , emu(SUB_NODE)
+                         , ins(ATTRIB_NODE)
+                         , mut(ATTRIB_NODE)
+                           , ins(TYPE_Z)
+                           , ins(CHILD_A)
+                           , ins(CHILD_A)
+                           , ins(CHILD_A)
+                         , emu(ATTRIB_NODE)
                          });
-        }
+        }                // ==> ATTRIB3, ATTRIB1, ATTRIB2, ATTRIB3 := π,
+                         //     SUB_NODE{ type ξ, ATTRIB2, CHILD_B, CHILD_A },
+                         //     CHILD_B, CHILD_T,
+                         //     ATTRIB_NODE{ type ζ, CHILD_A, CHILD_A, CHILD_A }
+      
+      
       
       
       virtual void
@@ -153,15 +159,27 @@ namespace test{
           Rec::Mutator target;
           Rec& subject = target;
           DiffApplicator<Rec::Mutator> application(target);
+          //
+          // TODO verify results
+          cout << "before..."<<endl << subject<<endl;
           
           // Part I : apply attribute changes
           application.consume(populationDiff());
+          //
+          // TODO verify results
+          cout << "after...I"<<endl << subject<<endl;
           
           // Part II : apply child population
-          application.consume(mutationDiff());
+          application.consume(reorderingDiff());
+          //
+          // TODO verify results
+          cout << "after...II"<<endl << subject<<endl;
           
           // Part II : apply child mutations
           application.consume(mutationDiff());
+          //
+          // TODO verify results
+          cout << "after...III"<<endl << subject<<endl;
         }
     };
   
