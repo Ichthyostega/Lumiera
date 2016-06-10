@@ -121,10 +121,9 @@ namespace test{
    * pick(CHILD_B)
    * pick(CHILD_T)
    *                          // ==> ATTRIB3, ATTRIB1, ATTRIB2, ATTRIB3, SUB_NODE, CHILD_B, CHILD_T
-   * after(ATTRIB2)
-   * pick(ATTRIB3)
-   * set(GAMMA_PI)
+   * after(CHILD_B)
    * after(Ref::END)
+   * set(GAMMA_PI)
    * mut(SUB_NODE)
    *   ins(TYPE_X)
    *   ins(ATTRIB2)
@@ -279,17 +278,19 @@ namespace test{
           TreeMutator::build()
             .attachDummy (target);
           
+          // the first thing we try out is how to navigate through the sequence partially
           CHECK (isnil (target));
           CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
-          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β                             // accept_until
-          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ                   // acceptSrc
-          CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
+          CHECK (mutator3.accept_until (CHILD_B));  // fast forward behind attribute β                             // accept_until
+          CHECK (mutator3.matchSrc (CHILD_T));      // this /would/ be the next source element...
+          CHECK (not mutator3.completeScope());     // CHILD_T is still pending, not done yet...
+          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
+          CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           
+          // next thing will be an assignment to some element by ID
           CHECK (not contains(target.showContent(), "γ = 3.1415927"));
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
           CHECK (    contains(target.showContent(), "γ = 3.1415927"));
-          CHECK (not mutator3.completeScope());     // not done yet...
-          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
           CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           cout << "Content after assignment; "
                << target.showContent() <<endl;
@@ -314,20 +315,21 @@ namespace test{
           GenNode differentTime{CHILD_T.idi.getSym(), Time(11,22)};
           VERIFY_ERROR (LOGIC, mutator3.assignElm (differentTime));
           
-          CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.1415927, Rec(), b, 78:56:34.012");
+          CHECK (target.showContent() == "γ = 3.1415927, α = 1, β = 2, γ = 3.45, Rec(), b, 78:56:34.012");
           CHECK (target.verifyEvent("acceptSrc","78:56:34.012")
                        .before("attachMutator TestWireTap")
-                       .beforeEvent("accept_until β","γ = 3.45")
-                       .beforeEvent("accept_until β","α = 1")
-                       .beforeEvent("accept_until β","β = 2")
-                       .beforeEvent("acceptSrc","γ = 3.45")
-                       .beforeEvent("assignElm","γ: 3.45 ⤅ 3.1415927")
+                       .beforeEvent("accept_until _CHILD_char.","γ = 3.45")
+                       .beforeEvent("accept_until _CHILD_char.","α = 1")
+                       .beforeEvent("accept_until _CHILD_char.","β = 2")
+                       .beforeEvent("accept_until _CHILD_char.","γ = 3.45")
+                       .beforeEvent("accept_until _CHILD_char.","Rec()")
+                       .beforeEvent("accept_until _CHILD_char.","b")
                        .beforeEvent("completeScope","scope NOT completed")
-                       .beforeEvent("accept_until END","Rec()")
-                       .beforeEvent("accept_until END","b")
                        .beforeEvent("accept_until END","78:56:34.012")
                        .beforeEvent("completeScope","scope completed")
-                       .beforeEvent("mutateChild","_CHILD_Record.001: start mutation...Rec()")
+                       .beforeEvent("assignElm","γ: 3.45 ⤅ 3.1415927")
+                       .beforeEvent("completeScope","scope completed")
+                       .beforeEvent("mutateChild","start mutation...Rec()")
                        );
           
           cout << "____Mutation-Log______________\n"
@@ -555,15 +557,15 @@ namespace test{
           
           CHECK (isnil (target));
           CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
-          CHECK (mutator3.accept_until (ATTRIB2));  // fast forward behind attribute β                             // accept_until
-          CHECK (mutator3.acceptSrc (ATTRIB3));     // and accept the second copy of attribute γ                   // acceptSrc
-          CHECK (mutator3.matchSrc (SUB_NODE));     // this /would/ be the next source element, but...
+          CHECK (mutator3.accept_until (CHILD_B));  // fast forward behind attribute β                             // accept_until
+          CHECK (mutator3.matchSrc (CHILD_T));      // this /would/ be the next source element, but rather...
+          CHECK (not mutator3.completeScope());
+          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
+          CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           
           CHECK (not contains(join(target), "≺γ∣3.1415927≻"));
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
           CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
-          CHECK (not mutator3.completeScope());
-          CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
           CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           cout << "Content after assignment; "
                << join(target) <<endl;
@@ -862,6 +864,8 @@ namespace test{
           // explanation: due to the nature of a 'data field',
           // this binding has no notion of 'ordering' and thus no 'current position'.
           // Rather, the decision if some diff verb is applicable can be done statically.
+          CHECK (mutator3.completeScope());                       // always true (for the same reason)
+          
           
           CHECK (not mutator3.acceptSrc (ATTRIB1));
           CHECK (not mutator3.acceptSrc (ATTRIB2));

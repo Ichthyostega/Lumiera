@@ -83,10 +83,11 @@ namespace test{
    *       - we recurse into mutating such an _"unspecified"_ child element.
    * 
    * @todo this test defines a goal!! What has to be done, is to invent some test data structure and then run the exiting diffs against it. This requires the TreeMutator implementation to be finished!!!
-   * @todo 5/16 adjust the diff applied here to conform precisely to the diff used in TreeMutatorBinding_test !!!!! 
+   * @note this test uses the same verb sequence as is assumed for the
+   *       coverage of diff building blocks in TreeMutatorBinding_test
    * 
-   * @see TreeMutatorBinding_test coverage of the "building blocks"
    * @see DiffTreeApplication_test generic variant of tree diff application
+   * @see TreeMutatorBinding_test coverage of the "building blocks"
    * @see TreeMutator_test base operations of the adapter
    * @see tree-diff-mutator-binding.hpp
    * @see diff-tree-application.hpp
@@ -128,7 +129,8 @@ namespace test{
       DiffSeq
       mutationDiff()
         {
-          return snapshot({after(Ref::END)      ///////////TODO need to work this simplified version into the detail tests. after(..explicit attribute...) can not be implemented!
+          return snapshot({after(CHILD_B)
+                         , after(Ref::END)
                          , set(GAMMA_PI)
                          , mut(SUB_NODE)
                            , ins(TYPE_X)
