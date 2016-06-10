@@ -150,6 +150,33 @@ namespace test{
                          //     ATTRIB_NODE{ type ζ, CHILD_A, CHILD_A, CHILD_A }
       
       
+      /////// TODO : actually found the following content....
+      /*
+Rec(|
+ α = DataCap|«int»|1,
+ γ = DataCap|«double»|3.1415927,
+ γ = DataCap|«double»|3.45,
+ γ = DataCap|«double»|3.45,
+ α = DataCap|«int»|1,
+ β = DataCap|«long»|2,
+ γ = DataCap|«double»|3.45,
+ δ = DataCap|«Record<GenNode>»|
+       Rec(ζ|{GenNode-ID("_CHILD_string.002")-DataCap|«string»|a,
+              GenNode-ID("_CHILD_string.002")-DataCap|«string»|a,
+              GenNode-ID("_CHILD_string.002")-DataCap|«string»|a})
+    |
+{GenNode-ID("_CHILD_char.002")-DataCap|«char»|b,
+ GenNode-ID("_CHILD_char.002")-DataCap|«char»|b,
+ GenNode-ID("_CHILD_Time.002")-DataCap|«Time»|78:56:34.012,
+ GenNode-ID("_CHILD_Record.002")-DataCap|«Record<GenNode>»|
+       Rec(ξ| β = DataCap|«long»|2
+            |{GenNode-ID("_CHILD_char.002")-DataCap|«char»|b,
+              GenNode-ID("_CHILD_string.002")-DataCap|«string»|a}),
+ GenNode-ID("_CHILD_char.002")-DataCap|«char»|b,
+ GenNode-ID("_CHILD_Time.002")-DataCap|«Time»|78:56:34.012})
+ 
+       */
+      ////// TODO : obviously we missed the re-entrance case (which starts to show up at third re-use of the same diff applicator)
       
       
       virtual void
