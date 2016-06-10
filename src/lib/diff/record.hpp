@@ -212,7 +212,7 @@ namespace diff{
       empty()  const
         {
           return attribs_.empty()
-              && children_.empty();
+             and children_.empty();
         }
       
       

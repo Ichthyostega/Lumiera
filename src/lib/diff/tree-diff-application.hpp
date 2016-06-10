@@ -153,6 +153,11 @@ namespace diff{
             {
               target.swapContent (content);
               content.resetPos();
+              if (not target.empty())      // re-entrance:
+                {                         //  discard garbage from previous usage.
+                  Rec pristineSequence;  //   must start new sequence from scratch
+                  target.swap (pristineSequence);
+                }
             }
         };
       
@@ -377,7 +382,7 @@ namespace diff{
             }
         }
       
-      /** assignement of changed value in one step */
+      /** assignment of changed value in one step */
       virtual void
       set (GenNode const& n)  override
         {
