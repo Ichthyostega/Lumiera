@@ -27,15 +27,20 @@
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"  //////////TODO necessary?
-#include "lib/format-util.hpp"
+#include "lib/format-string.hpp"
+//#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 #include <vector>
+#include <memory>
 
 using lib::iter_stl::snapshot;
 using util::isnil;
 using util::join;
+using util::_Fmt;
+using util::join;
+using std::unique_ptr;
 using std::string;
 using std::vector;
 using lib::time::Time;
@@ -60,7 +65,42 @@ namespace test{
                   CHILD_T(Time(12,34,56,78)),              // unnamed time value child
                   SUB_NODE = MakeRec().genNode(),          // empty anonymous node used to open a sub scope
                   ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ
-                  GAMMA_PI("γ", 3.14159265);               // happens to have the same identity (ID) as ATTRIB3AS
+                  GAMMA_PI("γ", 3.14159265);               // happens to have the same identity (ID) as ATTRIB3
+    
+    
+    /**
+     * opaque private data structure to apply the diff.
+     * This class offers to build a binding for diff messages,
+     * which basically maps its internal structures onto the
+     * generic "object" scheme underlying the diff language.
+     */
+    class Opaque
+      {
+        int  alpha_   = -1;
+        string beta_  = "NIL";
+        double gamma_ = -1;
+        
+        unique_ptr<Opaque> delta_;
+        
+        vector<Opaque> nestedObj_;
+        vector<string> nestedData_;
+        
+      public:
+        Opaque() { }
+        
+        operator string()  const
+          {
+            return _Fmt{"%s (α:%d β:%s γ:%7.5f δ:%s\n......|nested:%s\n......|data:%s\n      )"}
+                       % idi::instanceTypeID (this)
+                       % alpha_
+                       % beta_
+                       % gamma_
+                       % delta_
+                       % join (nestedObj_, "\n......|")
+                       % join (nestedData_)
+                       ;
+          }
+      };
     
   }//(End)Test fixture
   
@@ -158,6 +198,9 @@ namespace test{
       run (Arg)
         {
           /////////////////////////////TODO we need a suitable test datastructure. What follows is just placeholder code. As of 4/2016, this test waits for the completion of the TreeMutator
+          Opaque opa;
+          cout << opa <<endl;
+          
           Rec::Mutator target;
           Rec& subject = target;
           DiffApplicator<Rec::Mutator> application(target);
