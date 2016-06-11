@@ -42,11 +42,11 @@
  **   assumed that the receiver knows what types to expect and how to deal with them.
  ** - there is a notion of changing or mutating the data content, while retaining
  **   the identity of the element. Of course this requires the data content to be
- **   assignalbe, which makes content mutation an optional feature.
+ **   assignable, which makes content mutation an optional feature.
  ** - beyond that, like in list diff, elements might be changed through a sequence of
  **   deletion and insertion of a changed element with the same identity.
  ** - since the tree like data structure is _recursive_, mutation of nested records
- **   os represented by "opening" the nested record, followed by a recursive diff.
+ **   is represented by "opening" the nested record, followed by a recursive diff.
  ** By implementing the #TreeDiffInterpreter interface (visitor), a concrete usage
  ** can receive a diff description and possibly apply it to suitable target data.
  ** 

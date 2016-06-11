@@ -410,15 +410,19 @@ namespace diff{
         {
           open_subScope (n);
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           Rec const& childRecord = child.data.get<Rec>();
           TRACE (diff, "tree-diff: ENTER scope %s", cStr(childRecord));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         }
       
       /** finish and leave child object scope, return to parent */
       virtual void
       emu (GenNode const& n)  override
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           TRACE (diff, "tree-diff: LEAVE scope %s", cStr(describeScope()));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           
           __expect_end_of_scope (n.idi);
           close_subScope();
@@ -427,21 +431,24 @@ namespace diff{
       
       
     public:
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
       explicit
-      DiffApplicationStrategy(Rec::Mutator& mutableTargetRecord)
-        : scopes_()
+      DiffApplicationStrategy(TreeMutator& targetBinding)
         {
+          TODO("attach to the given Target");
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           scopes_.emplace(mutableTargetRecord);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
         }
       
       void
       initDiffApplication()
         {
+          TODO("(re)initialise the diff application machinery");
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           REQUIRE (1 == scopes_.size());
           scopes_.top().init();
-        }
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+        }
     };
   
   

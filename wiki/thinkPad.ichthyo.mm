@@ -4323,7 +4323,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1465428839332" ID="ID_909803930" MODIFIED="1465428899833" TEXT="Diff-Anwendung">
+<node CREATED="1465428839332" ID="ID_909803930" MODIFIED="1465665730709" TEXT="Diff-Anwendung" VSHIFT="36">
 <icon BUILTIN="pencil"/>
 <node CREATED="1465428850946" ID="ID_1085608480" MODIFIED="1465428866278">
 <richcontent TYPE="NODE"><html>
@@ -4337,6 +4337,63 @@
   </body>
 </html>
 </richcontent>
+<node CREATED="1465664755169" ID="ID_132124444" MODIFIED="1465664761884" TEXT="Modus der Anwendung">
+<node CREATED="1465664762944" ID="ID_1254081914" MODIFIED="1465665479208" TEXT="DiffApplicator&lt;TreeMutator&gt;">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1465664777398" ID="ID_872861883" MODIFIED="1465664864246" TEXT="Automatismen sind denkbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....man k&#246;nnte sp&#228;ter geeignete Automatismen schaffen,
+    </p>
+    <p>
+      die sich diesen TreeMutator beschaffen
+    </p>
+    <ul>
+      <li>
+        indem erkannt wird, da&#223; das eigentliche Zielobjekt ein bestimmtes API bietet
+      </li>
+      <li>
+        indem andere relevante Eigenschaften des Zielobjekts erkannt werden
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1465665483456" ID="ID_1329468559" MODIFIED="1465665491378" TEXT="Problem: konkreter Mutator">
+<node CREATED="1465665492727" ID="ID_743684748" MODIFIED="1465665500210" TEXT="mu&#xdf; vom Target gebaut werden"/>
+<node CREATED="1465665500830" ID="ID_937213383" MODIFIED="1465665561681" TEXT="Typ nicht bekannt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1465665511580" ID="ID_611347489" MODIFIED="1465665556325" TEXT="soll auf Stack top-Level ">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465665579587" ID="ID_786565560" MODIFIED="1465665589851" TEXT="problematisch">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1465665594969" ID="ID_1072421347" MODIFIED="1465665614258" TEXT="unbekannte Gr&#xf6;&#xdf;e">
+<node CREATED="1465665884698" ID="ID_418230667" MODIFIED="1465665893757" TEXT="default-Bufferg&#xf6;&#xdf;e vorlegen"/>
+<node CREATED="1465665894273" ID="ID_970277186" MODIFIED="1465665901124" TEXT="Gr&#xf6;&#xdf;e proben und anpassen"/>
+<node CREATED="1465665901640" ID="ID_650164559" MODIFIED="1465665920298" TEXT="Gr&#xf6;&#xdf;e f&#xfc;r &quot;bekannte&quot; Targets statisch hinterlegen"/>
+</node>
+<node CREATED="1465665614990" ID="ID_1851089586" MODIFIED="1465665618569" TEXT="verwirrendes API">
+<node CREATED="1465665980686" ID="ID_1537039073" MODIFIED="1465665991232" TEXT="Anwendung sollte selbstevident sein"/>
+<node CREATED="1465666009690" ID="ID_1006664389" MODIFIED="1465666034048" TEXT="Typ-Signatur sollte den Weg weisen"/>
+<node CREATED="1465665993012" ID="ID_1531461875" MODIFIED="1465666003750" TEXT="keine komplexen &quot;Riten&quot;"/>
+<node CREATED="1465666524573" HGAP="30" ID="ID_462712191" MODIFIED="1465666537889" TEXT="Schlu&#xdf;folgerung" VSHIFT="18">
+<icon BUILTIN="yes"/>
+<node CREATED="1465666541419" ID="ID_1090547868" MODIFIED="1465666552293" TEXT="entweder ein festes Interface"/>
+<node CREATED="1465666552842" ID="ID_1518882587" MODIFIED="1465666574594" TEXT="oder &#xfc;ber Metaprogrammierung / Spezialisierung"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1465428871136" ID="ID_1015843161" MODIFIED="1465428881634" TEXT="integration mehrerer Bindungs-Layer"/>
 <node CREATED="1465428882150" ID="ID_1889489833" MODIFIED="1465428890897" TEXT="komplexer Integrationstest"/>

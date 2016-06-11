@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"
-#include "lib/diff/tree-diff-application.hpp"
+#include "lib/diff/tree-diff-mutator-binding.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"  //////////TODO necessary?
@@ -99,6 +99,12 @@ namespace test{
                        % join (nestedObj_, "\n......|")
                        % join (nestedData_)
                        ;
+          }
+        
+        TreeMutator
+        exposeMutator()
+          {
+            UNIMPLEMENTED("find a way, how to build and expose a custom TreeMutator, without revealing details...");
           }
       };
     
@@ -197,13 +203,9 @@ namespace test{
       virtual void
       run (Arg)
         {
-          /////////////////////////////TODO we need a suitable test datastructure. What follows is just placeholder code. As of 4/2016, this test waits for the completion of the TreeMutator
-          Opaque opa;
-          cout << opa <<endl;
-          
-          Rec::Mutator target;
-          Rec& subject = target;
-          DiffApplicator<Rec::Mutator> application(target);
+          Opaque subject;
+          auto target = subject.exposeMutator(); /////////////////////TODO damn it! what type can we expose here? And, we need move initialisation!
+          DiffApplicator<TreeMutator> application(target);
           //
           // TODO verify results
           cout << "before..."<<endl << subject<<endl;
