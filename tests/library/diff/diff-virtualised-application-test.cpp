@@ -101,10 +101,14 @@ namespace test{
                        ;
           }
         
-        TreeMutator
-        exposeMutator()
+        void
+        buildMutator (TreeMutator::Handle buff)
           {
-            UNIMPLEMENTED("find a way, how to build and expose a custom TreeMutator, without revealing details...");
+            UNIMPLEMENTED("construct the concrete Binding, using the TreeMutator::Builder DSL");
+            buff.create (
+              TreeMutator::build()
+                .attach (collection(nestedData_)
+                              ));
           }
       };
     
@@ -128,7 +132,7 @@ namespace test{
    *         what these elements actually are and how they are to be handled.
    *       - we recurse into mutating such an _"unspecified"_ child element.
    * 
-   * @todo this test defines a goal!! What has to be done, is to invent some test data structure and then run the exiting diffs against it. This requires the TreeMutator implementation to be finished!!!
+   * @todo this test is WIP as of 6/2016 !! What has to be done, is to work out a way how to create a TreeMutator binding. And of course, we need the Implementation of DiffApplicator<DiffMutable>
    * @note this test uses the same verb sequence as is assumed for the
    *       coverage of diff building blocks in TreeMutatorBinding_test
    * 
@@ -204,8 +208,8 @@ namespace test{
       run (Arg)
         {
           Opaque subject;
-          auto target = subject.exposeMutator(); /////////////////////TODO damn it! what type can we expose here? And, we need move initialisation!
-          DiffApplicator<TreeMutator> application(target);
+          DiffMutable& target = mutatorBinding (subject);
+          DiffApplicator<DiffMutable> application(target);
           //
           // TODO verify results
           cout << "before..."<<endl << subject<<endl;

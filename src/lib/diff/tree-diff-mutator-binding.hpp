@@ -69,6 +69,7 @@
 
 #include "lib/diff/tree-diff.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/diff/diff-mutable.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
@@ -78,6 +79,31 @@
 
 namespace lib {
 namespace diff{
+  
+  /* ======= derive a TreeMutator binding for a given opaque data structure ======= */
+  
+  template<class TAR, typename SEL =void>
+  struct MutatorBinding
+    {
+      ///////////////TODO
+      
+      operator DiffMutable& ()
+        {
+          UNIMPLEMENTED ("how to build and pass the closure safely");
+        }
+    };
+  
+  template<class TAR>
+  DiffMutable&
+  mutatorBinding (TAR& subject)
+  {
+    UNIMPLEMENTED ("how to detect, create and pass a suitable mutator building closure"); 
+  }
+  
+  
+  
+  
+  /* ======= Implementation of Tree Diff Application via TreeMutator ======= */
   
   using util::unConst;
   using util::cStr;
@@ -98,7 +124,7 @@ namespace diff{
    * @see DiffVirtualisedApplication_test demonstration of usage
    */
   template<>
-  class DiffApplicationStrategy<TreeMutator>
+  class DiffApplicationStrategy<DiffMutable>
     : public TreeDiffInterpreter
     {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
@@ -432,7 +458,7 @@ namespace diff{
       
     public:
       explicit
-      DiffApplicationStrategy(TreeMutator& targetBinding)
+      DiffApplicationStrategy(DiffMutable& targetBinding)
         {
           TODO("attach to the given Target");
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992

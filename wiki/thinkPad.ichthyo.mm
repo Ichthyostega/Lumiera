@@ -1802,10 +1802,10 @@
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
 </node>
-<node CREATED="1456506101544" HGAP="4" ID="ID_133511037" MODIFIED="1456533241759" TEXT="Implementierung" VSHIFT="16">
+<node CREATED="1456506101544" HGAP="4" ID="ID_133511037" MODIFIED="1465674319651" TEXT="Implementierung" VSHIFT="16">
 <icon BUILTIN="pencil"/>
 <node CREATED="1456506128581" HGAP="-2" ID="ID_322289358" MODIFIED="1465428684559" TEXT="Abw&#xe4;gungen" VSHIFT="549">
-<node CREATED="1456506135028" FOLDED="true" HGAP="29" ID="ID_470489868" MODIFIED="1465428690281" TEXT="Indirektionen" VSHIFT="-5">
+<node CREATED="1456506135028" FOLDED="true" HGAP="29" ID="ID_470489868" MODIFIED="1465674277614" TEXT="Indirektionen" VSHIFT="-5">
 <node CREATED="1456506145826" ID="ID_759825167" MODIFIED="1461888854079" TEXT="kosten">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -1941,7 +1941,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1457038737878" FOLDED="true" HGAP="44" ID="ID_643190842" MODIFIED="1465428691753" TEXT="Abstraktions-Grad">
+<node CREATED="1457038737878" FOLDED="true" HGAP="44" ID="ID_643190842" MODIFIED="1465674282709" TEXT="Abstraktions-Grad">
 <node CREATED="1457119812475" ID="ID_1862440484" MODIFIED="1457119817575" TEXT="Elemente bleiben opaque"/>
 <node CREATED="1457119818091" ID="ID_1097779694" MODIFIED="1457119984643">
 <richcontent TYPE="NODE"><html>
@@ -4341,7 +4341,7 @@
 <node CREATED="1465664762944" ID="ID_1254081914" MODIFIED="1465665479208" TEXT="DiffApplicator&lt;TreeMutator&gt;">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1465664777398" ID="ID_872861883" MODIFIED="1465664864246" TEXT="Automatismen sind denkbar">
+<node CREATED="1465664777398" ID="ID_872861883" MODIFIED="1465864148635" TEXT="Automatismen sind denkbar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4364,6 +4364,7 @@
   </body>
 </html>
 </richcontent>
+<arrowlink COLOR="#994062" DESTINATION="ID_1139754084" ENDARROW="Default" ENDINCLINATION="1028;0;" ID="Arrow_ID_10673972" STARTARROW="None" STARTINCLINATION="978;42;"/>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1465665483456" ID="ID_1329468559" MODIFIED="1465665491378" TEXT="Problem: konkreter Mutator">
@@ -4380,10 +4381,27 @@
 <node CREATED="1465665884698" ID="ID_418230667" MODIFIED="1465665893757" TEXT="default-Bufferg&#xf6;&#xdf;e vorlegen"/>
 <node CREATED="1465665894273" ID="ID_970277186" MODIFIED="1465665901124" TEXT="Gr&#xf6;&#xdf;e proben und anpassen"/>
 <node CREATED="1465665901640" ID="ID_650164559" MODIFIED="1465665920298" TEXT="Gr&#xf6;&#xdf;e f&#xfc;r &quot;bekannte&quot; Targets statisch hinterlegen"/>
+<node CREATED="1465852237233" HGAP="27" ID="ID_699424989" MODIFIED="1465852303982" TEXT="Beschlu&#xdf;" VSHIFT="12">
+<icon BUILTIN="yes"/>
+<node CREATED="1465852248487" ID="ID_1402619250" MODIFIED="1465852255154" TEXT="zun&#xe4;chst die einfachste L&#xf6;sung"/>
+<node CREATED="1465852255694" ID="ID_462293433" MODIFIED="1465852267784" TEXT="statisch festlegen"/>
+<node CREATED="1465852268252" ID="ID_329653886" MODIFIED="1465852274743" TEXT="ggfs. noch nach Zieltyp differenziert"/>
+<node CREATED="1465852275859" ID="ID_394082851" MODIFIED="1465852288510" TEXT="dynamisch / Lernen als M&#xf6;glichkeit vorsehen"/>
+</node>
 </node>
 <node CREATED="1465665614990" ID="ID_1851089586" MODIFIED="1465665618569" TEXT="verwirrendes API">
 <node CREATED="1465665980686" ID="ID_1537039073" MODIFIED="1465665991232" TEXT="Anwendung sollte selbstevident sein"/>
-<node CREATED="1465666009690" ID="ID_1006664389" MODIFIED="1465666034048" TEXT="Typ-Signatur sollte den Weg weisen"/>
+<node CREATED="1465666009690" ID="ID_1006664389" MODIFIED="1465666034048" TEXT="Typ-Signatur sollte den Weg weisen">
+<node CREATED="1465674483754" ID="ID_155190959" MODIFIED="1465674558135" TEXT="sehe nur eine L&#xf6;sung">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1465674488874" ID="ID_625451231" MODIFIED="1465674563848" TEXT="Mutator-Builder-Funktion">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1465674529460" ID="ID_845292312" MODIFIED="1465674571112" TEXT="pflanzt in ein gegebenes Buff-Handle">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
 <node CREATED="1465665993012" ID="ID_1531461875" MODIFIED="1465666003750" TEXT="keine komplexen &quot;Riten&quot;"/>
 <node CREATED="1465666524573" HGAP="30" ID="ID_462712191" MODIFIED="1465666537889" TEXT="Schlu&#xdf;folgerung" VSHIFT="18">
 <icon BUILTIN="yes"/>
@@ -4393,6 +4411,87 @@
 </node>
 </node>
 </node>
+</node>
+<node CREATED="1465855369239" ID="ID_1875145732" MODIFIED="1465860759641" TEXT="Architektur">
+<icon BUILTIN="pencil"/>
+<node CREATED="1465855402346" ID="ID_390477158" MODIFIED="1465855405925" TEXT="Grundgedanke">
+<node CREATED="1465855407129" ID="ID_1269101170" MODIFIED="1465855418148" TEXT="Trennung von DiffInterpreter und TreeMutator"/>
+<node CREATED="1465855418880" ID="ID_118862910" MODIFIED="1465855431490" TEXT="ersterer wird auf Basis von letzterem implementiert"/>
+<node CREATED="1465855507380" ID="ID_63018388" MODIFIED="1465855526320">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TreeMutator-<i>Binding</i>&#160;mu&#223; opaque bleiben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1465855561877" ID="ID_1466552960" MODIFIED="1465855592311">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Buffer-Gr&#246;&#223;en-Management <i>vorsehen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1465855596992" ID="ID_1925577989" MODIFIED="1465855605363" TEXT="passiert im Scope des Ctors"/>
+<node CREATED="1465855605879" ID="ID_961922886" MODIFIED="1465855611850" TEXT="bzw. im Scope des MUT-Verbs"/>
+<node CREATED="1465855641898" ID="ID_1420998207" MODIFIED="1465855731999" TEXT="Heuristik + Versuch&amp;Irrtum">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t
+    </p>
+    <ul>
+      <li>
+        ein sinnvoller Startwert wird heuristisch vorgegeben
+      </li>
+      <li>
+        wenn die Allokation scheitert, die Exception fangen und die tats&#228;chlich ben&#246;tigte Gr&#246;&#223;e merken
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1465855653265" ID="ID_1093267368" MODIFIED="1465855739025" TEXT="konfigurieren und lernen"/>
+</node>
+<node CREATED="1465855576187" ID="ID_1820859855" MODIFIED="1465855585389" TEXT="zun&#xe4;chst jedoch primitiv implementieren"/>
+</node>
+<node CREATED="1465856069657" ID="ID_1074974681" MODIFIED="1465856071677" TEXT="Struktur">
+<node CREATED="1465856074888" ID="ID_63334235" MODIFIED="1465856081531" TEXT="TreeMutator == PImpl"/>
+<node CREATED="1465856092638" ID="ID_587610953" MODIFIED="1465856106200" TEXT="BufferManager : opaque aber inline"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465864106739" ID="ID_1139754084" MODIFIED="1465864153301" TEXT="Zugang zum Mutator-Binding">
+<linktarget COLOR="#994062" DESTINATION="ID_1139754084" ENDARROW="Default" ENDINCLINATION="1028;0;" ID="Arrow_ID_10673972" SOURCE="ID_872861883" STARTARROW="None" STARTINCLINATION="978;42;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1465864167187" ID="ID_1126324374" MODIFIED="1465864171974" TEXT="Aufruf: freie Funktion"/>
+<node CREATED="1465864172514" ID="ID_523639016" MODIFIED="1465864180668" TEXT="delegiert auf Template"/>
+<node CREATED="1465864181193" ID="ID_214760095" MODIFIED="1465864192611" TEXT="explizite / regelbasierte Spezialisierung"/>
+<node CREATED="1465864193607" ID="ID_910823091" MODIFIED="1465864216053" TEXT="Problem: Storage f&#xfc;r die Closure">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1465864217628" ID="ID_234805162" MODIFIED="1465864228510" TEXT="typischerweise sind alles transiente Objekte"/>
+<node CREATED="1465864229170" ID="ID_1100042937" MODIFIED="1465864240501" TEXT="also mu&#xdf; die Closure als Wert-Objekt rausgegeben werden"/>
+<node CREATED="1465864247152" ID="ID_1684145985" MODIFIED="1465864259507" TEXT="gesucht: elegantes API">
+<icon BUILTIN="pencil"/>
+</node>
+</node>
+</node>
+<node CREATED="1465860736044" ID="ID_40337378" MODIFIED="1465860740383" TEXT="Implementierung"/>
+<node CREATED="1465860740971" ID="ID_1662787747" MODIFIED="1465860752949" TEXT="Unit-Test">
+<icon BUILTIN="pencil"/>
 </node>
 </node>
 <node CREATED="1465428871136" ID="ID_1015843161" MODIFIED="1465428881634" TEXT="integration mehrerer Bindungs-Layer"/>
@@ -4429,6 +4528,12 @@
 </node>
 </node>
 <node CREATED="1458850212503" ID="ID_321552356" MODIFIED="1458850218977" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465860661877" ID="ID_942624903" MODIFIED="1465860714295" TEXT="Builder-API f&#xfc;r Attribut-Binding dokumentieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465860672852" ID="ID_432641404" MODIFIED="1465860718271" TEXT="Variante zum Attribut-Binding, wobei die Attribut-ID als GenNode::ID gegeben ist">
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node CREATED="1460847222865" ID="ID_362820787" MODIFIED="1461888854414" TEXT="abstrakte operationale Semantik der Diff-Anwendung dokumentieren">
 <richcontent TYPE="NOTE"><html>
   <head>
