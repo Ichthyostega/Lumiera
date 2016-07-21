@@ -82,22 +82,77 @@ namespace diff{
   
   /* ======= derive a TreeMutator binding for a given opaque data structure ======= */
   
+  
+  using meta::enable_if;
+  using meta::Yes_t;
+  using meta::No_t;
+  using std::is_same;
+  using std::__not_;
+  using std::declval;
+  
+  /**
+   * helper to detect presence of a
+   * TreeMutator builder function
+   */
+  template<typename T>
+  class exposes_MutatorBuilder
+    {
+      
+      META_DETECT_FUNCTION (void, buildMutator, (TreeMutator::Handle));
+      
+    public:
+      enum{ value = HasFunSig_buildMutator<T>::value
+          };
+    };
+  
+  
+  
+  
+  
   template<class TAR, typename SEL =void>
   struct MutatorBinding
     {
-      ///////////////TODO
-      
-      operator DiffMutable& ()
-        {
-          UNIMPLEMENTED ("how to build and pass the closure safely");
-        }
+      static_assert (!sizeof(TAR), "MutatorBinding: Unable to access or build a TreeMutator for this target data.");
     };
   
   template<class TAR>
-  DiffMutable&
-  mutatorBinding (TAR& subject)
+  struct MutatorBinding<TAR, enable_if<is_same<TAR, DiffMutable>>>
+    {
+      using Ret = DiffMutable&;
+    };
+  
+  template<class TAR>
+  struct MutatorBinding<TAR, enable_if<exposes_MutatorBuilder<TAR>>>
+    {
+      class Wrapper
+        : public DiffMutable
+        {
+          TAR& subject_;
+          
+          /** implement the TreeMutator interface,
+           *  by forwarding to a known implementation function
+           *  on the wrapped target data type */
+          virtual void
+          buildMutator (TreeMutator::Handle handle)
+            {
+              subject_.buildMutator (handle);
+            }
+          
+        public:
+          Wrapper(TAR& subj)
+            : subject_(subj)
+            { }
+        };
+      
+      using Ret = Wrapper;
+    };
+  
+  template<class TAR>
+  auto
+  mutatorBinding (TAR& subject) -> typename MutatorBinding<TAR>::Ret
   {
-    UNIMPLEMENTED ("how to detect, create and pass a suitable mutator building closure"); 
+     using Wrapper = typename MutatorBinding<TAR>::Ret;
+     return Wrapper{subject};
   }
   
   

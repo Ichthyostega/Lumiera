@@ -208,7 +208,7 @@ namespace test{
       run (Arg)
         {
           Opaque subject;
-          DiffMutable& target = mutatorBinding (subject);
+          auto target = mutatorBinding (subject);
           DiffApplicator<DiffMutable> application(target);
           //
           // TODO verify results

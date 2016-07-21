@@ -215,7 +215,7 @@ namespace lib {
     
     
     
-    /** 
+    /**
      * helper to detect presence of a function
      * to support clone operations
      */
