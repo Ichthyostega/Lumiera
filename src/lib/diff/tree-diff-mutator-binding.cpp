@@ -1,5 +1,5 @@
 /*
-  TREE-DIFF-MUTATOR-BINDING.hpp  -  consume a tree diff, but target arbitrary private data
+  TreeDiffMutatorBinding  -  implementation of diff application to opaque data
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,157 +18,35 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-*/
+* *****************************************************/
 
 
-/** @file tree-diff-mutator-binding.hpp
- ** Concrete implementation to apply structural changes to unspecific
- ** private data structures with hierarchical nature. This is a variation
- ** of the generic [tree diff applicator](\ref tree-diff-application.hpp),
- ** using the same implementation concept, while relying on an abstract
- ** adapter type, the \ref TreeMutator. Similar to the generic case, when
- ** combined with the generic #DiffApplicator, this allows to receive
- ** linearised structural diff descriptions and apply them to a given
- ** target data structure, which in this case is even a decoupled
- ** private data structure.
+/** @file tree-diff-mutator-binding.cpp
+ ** Implementation of diff application to unspecific private data structures.
+ ** This binding is the link between a generic interpreter for our
+ ** »tree diff language« and a concrete TreeMutator implementation,
+ ** as provided by the target data structure. We do not require much
+ ** additional knowledge regarding the opaque target structure, beyond
+ ** the ability to construct such a customised TreeMutator. For this reason,
+ ** the implementation is mostly generic and thus can be emitted here within
+ ** the library module -- with the exception of the ctor, which indeed picks
+ ** up some specifics of the concrete usage situation and thus needs to be
+ ** generated in usage context.
  ** 
- ** ## Design considerations
- ** So this use case is implemented on the same conceptual framework used for
- ** the generic tree diff application, which in turn is -- conceptually -- an
- ** extension of applying a list diff. But, again, we follow the route _not_ to
- ** explicate those conceptual relations in the form of inheritance. This would
- ** be implementation re-use, as opposed to building a new viable abstraction.
- ** No one outside the implementation realm would benefit from such an abstraction,
- ** so we prefer to understand the tree diff language as the abstraction, which
- ** needs to embodied into two distinct contexts of implementation.
- ** 
- ** ### Yet another indirection
- ** Unfortunately this leads to yet another indirection layer: Implementing a
- ** language in itself is necessarily a double dispatch (we have to abstract the
- ** verbs and we have to abstract the implementation side). And now we're decoupling
- ** the implementation side from a concrete data structure. Which means, that the
- ** use will have to provide a set of closures (which might even partially be generated
- ** functors) to translate the _implementation actions_ underlying the language into
- ** _concrete actions_ working on local data.
- ** 
- ** ### Generic and variable parts
- ** So this is a link between generic [»tree diff language«](\ref tree-diff.hpp)
- ** interpretation and the concrete yet undisclosed private data structure, and
- ** most of this implementation is entirely generic, since the specifics are
- ** abstracted away behind the TreeMutator interface. For this reason, most of
- ** this explicit template specialisation code, especially. the virtual functions,
- ** can be emitted right here, within the library module. This helps to reduce
- ** "template bloat" and simplifies the dynamic linking. Thus, this header
- ** only contains the definition and the ctor code, which indeed needs to
- ** be adapted to each usage situation, while the main body of the
- ** functionality has been moved to the corresponding implementation
- ** file, where this template is explicitly instantiated, to force
- ** code generation into the library module.
- ** 
- ** @todo this is WIP as of 2/2016 -- in the end it might be merged back or even
- **       replace the tree-diff-application.hpp
- ** 
+ ** @see tree-diff.cpp
+ ** @see tree-diff-mutator-binding.cpp
  ** @see DiffVirtualisedApplication_test
- ** @see DiffTreeApplication_test
- ** @see DiffListApplication_test
- ** @see GenNodeBasic_test
- ** @see tree-diff.hpp
  ** 
  */
 
 
-#ifndef LIB_DIFF_TREE_DIFF_MUTATOR_BINDING_H
-#define LIB_DIFF_TREE_DIFF_MUTATOR_BINDING_H
+#include "lib/error.hpp"
+#include "lib/diff/tree-diff-mutator-binding.hpp"
 
 
-#include "lib/diff/tree-diff.hpp"
-#include "lib/diff/tree-mutator.hpp"
-#include "lib/diff/diff-mutable.hpp"
-#include "lib/diff/gen-node.hpp"
-#include "lib/format-string.hpp"
-#include "lib/util.hpp"
-
-#include <utility>
-#include <stack>
 
 namespace lib {
 namespace diff{
-  
-  /* ======= derive a TreeMutator binding for a given opaque data structure ======= */
-  
-  
-  using meta::enable_if;
-  using meta::Yes_t;
-  using meta::No_t;
-  using std::is_same;
-  
-  /**
-   * helper to detect presence of a
-   * TreeMutator builder function
-   */
-  template<typename T>
-  class exposes_MutatorBuilder
-    {
-      
-      META_DETECT_FUNCTION (void, buildMutator, (TreeMutator::Handle));
-      
-    public:
-      enum{ value = HasFunSig_buildMutator<T>::value
-          };
-    };
-  
-  
-  
-  
-  
-  template<class TAR, typename SEL =void>
-  struct MutatorBinding
-    {
-      static_assert (!sizeof(TAR), "MutatorBinding: Unable to access or build a TreeMutator for this target data.");
-    };
-  
-  template<class TAR>
-  struct MutatorBinding<TAR, enable_if<is_same<TAR, DiffMutable>>>
-    {
-      using Ret = DiffMutable&;
-    };
-  
-  template<class TAR>
-  struct MutatorBinding<TAR, enable_if<exposes_MutatorBuilder<TAR>>>
-    {
-      class Wrapper
-        : public DiffMutable
-        {
-          TAR& subject_;
-          
-          /** implement the TreeMutator interface,
-           *  by forwarding to a known implementation function
-           *  on the wrapped target data type */
-          virtual void
-          buildMutator (TreeMutator::Handle handle)
-            {
-              subject_.buildMutator (handle);
-            }
-          
-        public:
-          Wrapper(TAR& subj)
-            : subject_(subj)
-            { }
-        };
-      
-      using Ret = Wrapper;
-    };
-  
-  template<class TAR>
-  auto
-  mutatorBinding (TAR& subject) -> typename MutatorBinding<TAR>::Ret
-  {
-     using Wrapper = typename MutatorBinding<TAR>::Ret;
-     return Wrapper{subject};
-  }
-  
-  
-  
   
   /* ======= Implementation of Tree Diff Application via TreeMutator ======= */
   
@@ -179,22 +57,11 @@ namespace diff{
   using std::swap;
   
   
-  /**
-   * Interpreter for the tree-diff-language to work on arbitrary, undisclosed
-   * local data structures. The key point to note is that this local data is
-   * not required to implement any specific interface. The only requirement is
-   * the ability somehow to support the basic operations of applying a structural
-   * diff. This is ensured with the help of a _customisable adapter_ the TreeMutator.
-   * @throws  lumiera::error::State when diff application fails structurally.
-   * @throws  _unspecified errors_ when delegated operations fail.
-   * @see TreeDiffInterpreter explanation of the verbs
-   * @see DiffVirtualisedApplication_test demonstration of usage
-   */
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
   template<>
   class DiffApplicationStrategy<DiffMutable>
     : public TreeDiffInterpreter
     {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
       using Mutator = Rec::Mutator;
       using Content = Rec::ContentMutator;
       using Iter    = Content::Iter;
@@ -545,5 +412,5 @@ namespace diff{
     };
   
   
+  
 }} // namespace lib::diff
-#endif /*LIB_DIFF_TREE_DIFF_MUTATOR_BINDING_H*/
