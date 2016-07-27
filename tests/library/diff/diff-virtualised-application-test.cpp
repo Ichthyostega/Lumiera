@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"
-#include "lib/diff/tree-diff-mutator-binding.hpp"
+#include "lib/diff/tree-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"  //////////TODO necessary?

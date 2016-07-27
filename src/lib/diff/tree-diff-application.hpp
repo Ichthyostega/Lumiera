@@ -103,6 +103,8 @@
 
 
 #include "lib/diff/tree-diff.hpp"
+#include "lib/diff/tree-diff-traits.hpp"
+#include "lib/diff/tree-diff-mutator-binding.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
@@ -118,6 +120,29 @@ namespace diff{
   using util::_Fmt;
   using std::move;
   using std::swap;
+  
+  
+  
+  /**
+   * Interpreter for the tree-diff-language to work on arbitrary
+   * opaque target data structures. A concrete strategy to apply a structural diff
+   * to otherwise undisclosed, recursive, tree-like target data. The only requirement
+   * is for this target structure to expose a hook for building a customised
+   * TreeMutator able to work on and transform the private target data.
+   * @throws  lumiera::error::State when diff application fails due to the
+   *          target sequence being different than assumed by the given diff.
+   * @see #TreeDiffInterpreter explanation of the verbs
+   */
+  template<>
+  class DiffApplicationStrategy<DiffMutable>
+    : public TreeDiffMutatorBinding
+    {
+    public:
+      explicit
+      DiffApplicationStrategy<DiffMutable>(DiffMutable& targetBinding)
+        : TreeDiffMutatorBinding(targetBinding)
+        { }
+    };
   
   
   /**

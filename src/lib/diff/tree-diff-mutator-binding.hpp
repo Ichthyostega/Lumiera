@@ -94,80 +94,6 @@
 namespace lib {
 namespace diff{
   
-  /* ======= derive a TreeMutator binding for a given opaque data structure ======= */
-  
-  
-  using meta::enable_if;
-  using meta::Yes_t;
-  using meta::No_t;
-  using std::is_same;
-  
-  /**
-   * helper to detect presence of a
-   * TreeMutator builder function
-   */
-  template<typename T>
-  class exposes_MutatorBuilder
-    {
-      
-      META_DETECT_FUNCTION (void, buildMutator, (TreeMutator::Handle));
-      
-    public:
-      enum{ value = HasFunSig_buildMutator<T>::value
-          };
-    };
-  
-  
-  
-  
-  
-  template<class TAR, typename SEL =void>
-  struct MutatorBinding
-    {
-      static_assert (!sizeof(TAR), "MutatorBinding: Unable to access or build a TreeMutator for this target data.");
-    };
-  
-  template<class TAR>
-  struct MutatorBinding<TAR, enable_if<is_same<TAR, DiffMutable>>>
-    {
-      using Ret = DiffMutable&;
-    };
-  
-  template<class TAR>
-  struct MutatorBinding<TAR, enable_if<exposes_MutatorBuilder<TAR>>>
-    {
-      class Wrapper
-        : public DiffMutable
-        {
-          TAR& subject_;
-          
-          /** implement the TreeMutator interface,
-           *  by forwarding to a known implementation function
-           *  on the wrapped target data type */
-          virtual void
-          buildMutator (TreeMutator::Handle handle)
-            {
-              subject_.buildMutator (handle);
-            }
-          
-        public:
-          Wrapper(TAR& subj)
-            : subject_(subj)
-            { }
-        };
-      
-      using Ret = Wrapper;
-    };
-  
-  template<class TAR>
-  auto
-  mutatorBinding (TAR& subject) -> typename MutatorBinding<TAR>::Ret
-  {
-     using Wrapper = typename MutatorBinding<TAR>::Ret;
-     return Wrapper{subject};
-  }
-  
-  
   
   
   /* ======= Implementation of Tree Diff Application via TreeMutator ======= */
@@ -190,8 +116,7 @@ namespace diff{
    * @see TreeDiffInterpreter explanation of the verbs
    * @see DiffVirtualisedApplication_test demonstration of usage
    */
-  template<>
-  class DiffApplicationStrategy<DiffMutable>
+  class TreeDiffMutatorBinding
     : public TreeDiffInterpreter
     {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
@@ -286,7 +211,7 @@ namespace diff{
       
     public:
       explicit
-      DiffApplicationStrategy(DiffMutable& targetBinding)
+      TreeDiffMutatorBinding(DiffMutable& targetBinding)
         {
           TODO("attach to the given Target");
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
@@ -297,10 +222,6 @@ namespace diff{
       void initDiffApplication();
     };
   
-  
-  
-  /** use the explicit instantiation provided in library module */
-  extern template class DiffApplicationStrategy<DiffMutable>;
   
   
 }} // namespace lib::diff

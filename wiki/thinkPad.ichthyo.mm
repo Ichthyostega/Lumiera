@@ -4378,8 +4378,8 @@
 <node CREATED="1468761997202" ID="ID_1870085622" MODIFIED="1468762006291" TEXT="kombinierte L&#xf6;sung">
 <icon BUILTIN="idea"/>
 <node CREATED="1468762009304" ID="ID_1554371522" MODIFIED="1468762018314" TEXT="Interface DiffMutable"/>
-<node CREATED="1468762031701" ID="ID_48737788" MODIFIED="1468762250072" TEXT="Meta-Adapter">
-<icon BUILTIN="pencil"/>
+<node CREATED="1468762031701" ID="ID_48737788" MODIFIED="1469544261716" TEXT="Meta-Adapter">
+<linktarget COLOR="#503382" DESTINATION="ID_48737788" ENDARROW="Default" ENDINCLINATION="8;131;" ID="Arrow_ID_579805576" SOURCE="ID_887400042" STARTARROW="None" STARTINCLINATION="535;0;"/>
 <node CREATED="1468762052858" ID="ID_494010261" MODIFIED="1468762066764" TEXT="synthetisiert dieses Interface"/>
 <node CREATED="1468762067383" ID="ID_484867304" MODIFIED="1468762075059" TEXT="erkennt passende Methoden"/>
 <node CREATED="1468762075671" ID="ID_52899390" MODIFIED="1468762081293" TEXT="Problem: Storage">
@@ -4439,6 +4439,252 @@
 </node>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1469544027620" HGAP="38" ID="ID_1475348824" MODIFIED="1469544049582" TEXT="Storage-Probleme" VSHIFT="11">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1469544055624" ID="ID_390940604" MODIFIED="1469544066153" TEXT="Beobachtung: Template-bloat">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1469544072709" ID="ID_16055877" MODIFIED="1469544083016" TEXT="Ursache: wir generieren die Klasse jedesmal neu"/>
+<node CREATED="1469544084220" ID="ID_1247343007" MODIFIED="1469544104909" TEXT="...obwohl keinerlei Bezug zum Target-Typ vorliegt">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1469544123271" ID="ID_1703312587" MODIFIED="1469544133675" TEXT="Funktionalit&#xe4;t ist zu 90% generisch">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1469544171176" ID="ID_887400042" MODIFIED="1469544253263">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>nicht</i>&#160;generisch: <b><font color="#923977">mutatorBinding</font></b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#503382" DESTINATION="ID_48737788" ENDARROW="Default" ENDINCLINATION="8;131;" ID="Arrow_ID_579805576" STARTARROW="None" STARTINCLINATION="535;0;"/>
+</node>
+</node>
+<node CREATED="1469544264955" HGAP="35" ID="ID_366424331" MODIFIED="1469544292540" VSHIFT="16">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      L&#246;sungsversuch: <b>extern template</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1469544293574" ID="ID_947583528" MODIFIED="1469544318455" TEXT="Template bereits in Lumiera-Lib vor-generieren">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1469544337408" ID="ID_1646108569" MODIFIED="1469544349252" TEXT="nur ctor ist nochmals ge-Templated">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1469544323331" ID="ID_1924059831" MODIFIED="1469544362933" TEXT="flexibler Teil verbleibt in ctor">
+<icon BUILTIN="forward"/>
+<node CREATED="1469544368180" ID="ID_989521105" MODIFIED="1469544377687" TEXT="hier kann das mutatorBinding stattfinden"/>
+<node CREATED="1469544385882" ID="ID_82786122" MODIFIED="1469544397396" TEXT="...in Abh&#xe4;ngigkeit vom konkreten Zieltyp"/>
+<node CREATED="1469544400544" ID="ID_1789924824" MODIFIED="1469544413058" TEXT="Resultat ist ein TreeMutator im internen Puffer"/>
+</node>
+<node CREATED="1469544471294" ID="ID_1306807662" MODIFIED="1469544482058" TEXT="Problem-1: Puffer-Gr&#xf6;&#xdf;e">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1469544519439" ID="ID_1173588510" MODIFIED="1469544535057" TEXT="Plan: Heuristik + Traits"/>
+<node CREATED="1469544536309" ID="ID_579318822" MODIFIED="1469544546951" TEXT="h&#xe4;ngt von konkretem Zieltyp ab"/>
+<node CREATED="1469544547731" ID="ID_1296389584" MODIFIED="1469544596453" TEXT="kann nicht im generischen Teil stecken">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1469544575808" ID="ID_259226539" MODIFIED="1469544599880" TEXT="Problem: vom generischen Teil ansprechen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1469544601444" ID="ID_1593190605" MODIFIED="1469544616515" TEXT="L&#xf6;sung: weitere Indirektion">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1469544618738" ID="ID_324293110" MODIFIED="1469544754834" TEXT="vertretbar, da nur beim Scope-Wechsel....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...im Klartext: diesen Zugriff von der generischen Implementierung
+    </p>
+    <p>
+      auf den eingebauten Stack-Mechanismus ben&#246;tigen wir nur...
+    </p>
+    <ul>
+      <li>
+        einmal zu Beginn, bei der Konstruktion
+      </li>
+      <li>
+        wenn wir in einen geschachtelten Scope eintreten
+      </li>
+    </ul>
+    <p>
+      Zwar sind indirekte Calls aufwendiger, aber letzten Endes auch wieder nicht soooo aufwendig,
+    </p>
+    <p>
+      da&#223; sie uns im gegebenen Kontext umbringen
+    </p>
+    <ul>
+      <li>
+        wenn wir einen Solchen verlassen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1469544496907" ID="ID_447935464" MODIFIED="1469544506440" TEXT="Problem-2: re-Initialisierung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1469544831244" ID="ID_756911810" MODIFIED="1469544838662" TEXT="bestehendes Protokoll">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1469544839795" ID="ID_1308746305" MODIFIED="1469544858420" TEXT="Diff-Applikator kan beliebige Folge von Diffs akzeptieren"/>
+<node CREATED="1469544859392" ID="ID_325998286" MODIFIED="1469544964778">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>intern:</i>&#160;eingebaute <b>initDiffApplication()</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wird automatisch vor Konsumieren eines Diff aufgerufen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1469544965890" ID="ID_443152890" MODIFIED="1469545023179">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>Widerspruch:</i>&#160;TreeMutator ist <b>Wegwerf</b>-Objekt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#f61b01" CREATED="1469545033584" ID="ID_578930155" MODIFIED="1469545058652" TEXT="Abbruch">
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+<node CREATED="1469545080826" HGAP="41" ID="ID_268789302" MODIFIED="1469545140415" VSHIFT="17">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      L&#246;sungsversuch: <b>doppelte H&#252;lle</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="pencil"/>
+<node CREATED="1469545168798" ID="ID_511952630" MODIFIED="1469545171905" TEXT="Architektur">
+<node CREATED="1469545173893" ID="ID_1815808987" MODIFIED="1469545190599" TEXT="opaque: Kern == TreeMutator"/>
+<node CREATED="1469545191899" ID="ID_1298718461" MODIFIED="1469545206853" TEXT="generisch: TreeMutator-Bindung"/>
+<node CREATED="1469545208440" ID="ID_796164740" MODIFIED="1469545246870" TEXT="dediziert: Typ-Adapter"/>
+</node>
+<node CREATED="1469545401582" ID="ID_1145081121" MODIFIED="1469545407769" TEXT="konkrete Folgen...">
+<node CREATED="1469545417579" ID="ID_474776082" MODIFIED="1469545427486" TEXT="alle virtuellen Methoden im generischen Teil"/>
+<node CREATED="1469545428289" ID="ID_1077900797" MODIFIED="1469545450730" TEXT="generischer Teil verwendet nur Interfaces">
+<node CREATED="1469545452406" ID="ID_369878659" MODIFIED="1469545455778" TEXT="TreeMutator"/>
+<node CREATED="1469545456549" ID="ID_676404790" MODIFIED="1469545459401" TEXT="ScopeManager"/>
+</node>
+<node CREATED="1469545522445" ID="ID_1752356251" MODIFIED="1469545525384" TEXT="ScopeManager">
+<node CREATED="1469545526380" ID="ID_141570709" MODIFIED="1469545535550" TEXT="Imp. wird per Zieltyp generiert"/>
+<node CREATED="1469545536139" ID="ID_423387515" MODIFIED="1469545543750" TEXT="lebt in opaquem Buffer"/>
+<node CREATED="1469545546209" ID="ID_229490952" MODIFIED="1469545561067" TEXT="enth&#xe4;lt Stack,"/>
+<node CREATED="1469545562151" ID="ID_1390916085" MODIFIED="1469545568130" TEXT="mit passender Puffergr&#xf6;&#xdf;e"/>
+</node>
+<node CREATED="1469545592171" ID="ID_1826413238" MODIFIED="1469545710185" TEXT="dedizierter Applikator">
+<icon BUILTIN="idea"/>
+<node CREATED="1469545598922" ID="ID_815414440" MODIFIED="1469545609733" TEXT="h&#xe4;llt Referenz auf Zielobjekt"/>
+<node CREATED="1469545611177" ID="ID_410214862" MODIFIED="1469545670672">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann daher <b>TreeMutator</b>&#160;konstruieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1469545641644" ID="ID_1811640827" MODIFIED="1469545662506">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar per <b>mutatorBinding</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1469545691349" ID="ID_239269579" MODIFIED="1469545705980">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      implementiert somit <b>initDiffApplication()</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1469545778873" HGAP="37" ID="ID_263708712" MODIFIED="1469546023805" VSHIFT="53">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TODO: <font color="#010101">Namensgebung</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#7c4b8e" DESTINATION="ID_263708712" ENDARROW="Default" ENDINCLINATION="-438;877;" ID="Arrow_ID_774958535" SOURCE="ID_660087752" STARTARROW="Default" STARTINCLINATION="2134;135;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1469545959160" ID="ID_826999251" MODIFIED="1469545961076" TEXT="DiffApplicationStrategy&lt;DiffMutable&gt;"/>
+<node CREATED="1469545962192" ID="ID_1539721850" MODIFIED="1469545971051" TEXT="feste explizite Spezialisierung"/>
+<node CREATED="1469545972470" ID="ID_996523023" MODIFIED="1469545983800" TEXT="in non-Template-Basisklasse verwandeln"/>
+<node CREATED="1469545990956" ID="ID_543764775" MODIFIED="1469546010389" TEXT="oder zumindest in Trait-Template + enable_if"/>
 </node>
 </node>
 </node>
@@ -4603,6 +4849,10 @@
 <node CREATED="1465428216271" ID="ID_1296901581" MODIFIED="1465428234145" TEXT="die generische Variante &quot;after Ref::END&quot; ist sehr gut"/>
 <node CREATED="1465428236860" ID="ID_339833424" MODIFIED="1465428248614" TEXT="speziell Attribut-Binding unterst&#xfc;tzt zur generische Variante"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1469545751885" ID="ID_660087752" MODIFIED="1469545906061" TEXT="Namensgebung f&#xfc;r generisches Mutator-Binding">
+<arrowlink COLOR="#7c4b8e" DESTINATION="ID_263708712" ENDARROW="Default" ENDINCLINATION="-438;877;" ID="Arrow_ID_774958535" STARTARROW="Default" STARTINCLINATION="2134;135;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1458850387823" ID="ID_415691337" MODIFIED="1458850394506" TEXT="allgemein">
 <node CREATED="1458850397158" ID="ID_1336568549" MODIFIED="1458850405665" TEXT="GenNode">

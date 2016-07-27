@@ -64,7 +64,7 @@ namespace diff{
   using Iter    = Content::Iter;
   
   template<>
-  struct DiffApplicationStrategy<DiffMutable>::ScopeFrame
+  struct TreeDiffMutatorBinding::ScopeFrame
     {
       Mutator& target;
       Content content;
@@ -94,7 +94,7 @@ namespace diff{
       
       
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_in_target (GenNode const& elm, Literal oper)
+  TreeDiffMutatorBinding::__expect_in_target (GenNode const& elm, Literal oper)
   {
     if (endOfData())
       throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
@@ -112,7 +112,7 @@ namespace diff{
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_further_elements (GenNode const& elm)
+  TreeDiffMutatorBinding::__expect_further_elements (GenNode const& elm)
   {
     if (endOfData())
       throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
@@ -121,7 +121,7 @@ namespace diff{
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_found (GenNode const& elm, Iter const& targetPos)
+  TreeDiffMutatorBinding::__expect_found (GenNode const& elm, Iter const& targetPos)
   {
     if (targetPos == src().end())
       throw error::State(_Fmt("Premature end of sequence; unable to locate "
@@ -130,7 +130,7 @@ namespace diff{
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_successful_location (GenNode const& elm)
+  TreeDiffMutatorBinding::__expect_successful_location (GenNode const& elm)
   {
     if (endOfData()
         and not (    elm.matches(Ref::END)                                      // after(_END_)     -> its OK we hit the end
@@ -140,7 +140,7 @@ namespace diff{
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_valid_parent_scope (GenNode::ID const& idi)
+  TreeDiffMutatorBinding::__expect_valid_parent_scope (GenNode::ID const& idi)
   {
     if (scopes_.empty())
       throw error::State(_Fmt("Unbalanced child scope bracketing tokens in diff; "
@@ -154,7 +154,7 @@ namespace diff{
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_end_of_scope (GenNode::ID const& idi)
+  TreeDiffMutatorBinding::__expect_end_of_scope (GenNode::ID const& idi)
   {
     if (not endOfData())
       throw error::State(_Fmt("Incomplete diff: when about to leave scope %s, "
@@ -165,7 +165,7 @@ namespace diff{
   
   
   Iter
-  DiffApplicationStrategy<DiffMutable>::find_in_current_scope (GenNode const& elm)
+  TreeDiffMutatorBinding::find_in_current_scope (GenNode const& elm)
   {
     Iter end_of_scope = src().currIsAttrib()? src().attribs.end()
                                             : src().children.end();
@@ -178,7 +178,7 @@ namespace diff{
   }
   
   GenNode const&
-  DiffApplicationStrategy<DiffMutable>::find_child (GenNode::ID const& idi)
+  TreeDiffMutatorBinding::find_child (GenNode::ID const& idi)
   {
     if (alteredRec().empty())
       throw error::State(_Fmt("Attempt to mutate element %s, but current target data scope is empty. "
@@ -204,7 +204,7 @@ namespace diff{
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::move_into_new_sequence (Iter pos)
+  TreeDiffMutatorBinding::move_into_new_sequence (Iter pos)
   {
     if (src().currIsAttrib())
       out().appendAttrib (move(*pos));                    //////////////TICKET #969  was it a good idea to allow adding attributes "after the fact"?
@@ -216,31 +216,31 @@ namespace diff{
   /* == Forwarding: error handling == */
   
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_in_target  (GenNode const& elm, Literal oper)
+  TreeDiffMutatorBinding::__expect_in_target  (GenNode const& elm, Literal oper)
   {
     
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_further_elements (GenNode const& elm)
+  TreeDiffMutatorBinding::__expect_further_elements (GenNode const& elm)
   {
     
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::__fail_not_found (GenNode const& elm)
+  TreeDiffMutatorBinding::__fail_not_found (GenNode const& elm)
   {
     
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_end_of_scope (GenNode::ID const& idi)
+  TreeDiffMutatorBinding::__expect_end_of_scope (GenNode::ID const& idi)
   {
     
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::__expect_valid_parent_scope (GenNode::ID const& idi)
+  TreeDiffMutatorBinding::__expect_valid_parent_scope (GenNode::ID const& idi)
   {
     
   }
@@ -249,55 +249,55 @@ namespace diff{
   /* == Forwarding: mutation primitives == */
   
   void
-  DiffApplicationStrategy<DiffMutable>::skipSrc()
+  TreeDiffMutatorBinding::skipSrc()
   {
     UNIMPLEMENTED("skip next src element and advance abstract source position");
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::injectNew (GenNode const& n)
+  TreeDiffMutatorBinding::injectNew (GenNode const& n)
   {
     UNIMPLEMENTED("inject a new element at current abstract position");
   }
   
   bool
-  DiffApplicationStrategy<DiffMutable>::matchSrc (GenNode const& n)
+  TreeDiffMutatorBinding::matchSrc (GenNode const& n)
   {
     UNIMPLEMENTED("ensure the next source element matches with given spec");
   }
   
   bool
-  DiffApplicationStrategy<DiffMutable>::acceptSrc (GenNode const& n)
+  TreeDiffMutatorBinding::acceptSrc (GenNode const& n)
   {
     UNIMPLEMENTED("accept existing element, when matching the given spec");
   }
   
   bool
-  DiffApplicationStrategy<DiffMutable>::findSrc (GenNode const& n)
+  TreeDiffMutatorBinding::findSrc (GenNode const& n)
   {
     UNIMPLEMENTED("locate designated element and accept it at current position");
   }
   
   bool
-  DiffApplicationStrategy<DiffMutable>::accept_until (GenNode const& refMark)
+  TreeDiffMutatorBinding::accept_until (GenNode const& refMark)
   {
     UNIMPLEMENTED("repeatedly accept until encountering the mark");
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::assignElm (GenNode const& n)
+  TreeDiffMutatorBinding::assignElm (GenNode const& n)
   {
     UNIMPLEMENTED("locate already accepted element and assign given new payload");
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::open_subScope (GenNode const& n)
+  TreeDiffMutatorBinding::open_subScope (GenNode const& n)
   {
     UNIMPLEMENTED("locate already accepted element and open recursive sub-scope for mutation");
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::close_subScope()
+  TreeDiffMutatorBinding::close_subScope()
   {
     UNIMPLEMENTED("finish and leave sub scope and return to invoking parent scope");
   }
@@ -307,38 +307,38 @@ namespace diff{
   /* == Implementation of the list diff application primitives == */
   
   void
-  DiffApplicationStrategy<DiffMutable>::ins (GenNode const& n)
+  TreeDiffMutatorBinding::ins (GenNode const& n)
   {
     injectNew (n);
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::del (GenNode const& n)
+  TreeDiffMutatorBinding::del (GenNode const& n)
   {
     __expect_in_target(n, "remove");
     skipSrc();
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::pick (GenNode const& n)
+  TreeDiffMutatorBinding::pick (GenNode const& n)
   {
     __expect_in_target(n, "pick");
     acceptSrc (n);
   }
   
   void
-  DiffApplicationStrategy<DiffMutable>::skip (GenNode const& n)
+  TreeDiffMutatorBinding::skip (GenNode const& n)
   {
     __expect_further_elements (n);
     skipSrc();
   }      // assume the actual content has been moved away by a previous find()
   
   void
-  DiffApplicationStrategy<DiffMutable>::find (GenNode const& n)
+  TreeDiffMutatorBinding::find (GenNode const& n)
   {
     __expect_further_elements (n);
          // consume and leave waste, expected to be cleaned-up by skip() later
-    if (not findSrc(n));
+    if (not this->findSrc(n));
       __fail_not_found (n);
   }
   
@@ -349,7 +349,7 @@ namespace diff{
    *  thereby picking (accepting) all traversed elements
    *  into the reshaped new data structure as-is */
   void
-  DiffApplicationStrategy<DiffMutable>::after (GenNode const& n)
+  TreeDiffMutatorBinding::after (GenNode const& n)
   {
     if (not accept_until(n))
       __fail_not_found (n);
@@ -357,14 +357,14 @@ namespace diff{
   
   /** assignment of changed value in one step */
   void
-  DiffApplicationStrategy<DiffMutable>::set (GenNode const& n)
+  TreeDiffMutatorBinding::set (GenNode const& n)
   {
     assignElm (n);
   }
   
   /** open nested scope to apply diff to child object */
   void
-  DiffApplicationStrategy<DiffMutable>::mut (GenNode const& n)
+  TreeDiffMutatorBinding::mut (GenNode const& n)
   {
     open_subScope (n);
     
@@ -376,7 +376,7 @@ namespace diff{
   
   /** finish and leave child object scope, return to parent */
   void
-  DiffApplicationStrategy<DiffMutable>::emu (GenNode const& n)
+  TreeDiffMutatorBinding::emu (GenNode const& n)
   {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
     TRACE (diff, "tree-diff: LEAVE scope %s", cStr(describeScope()));
@@ -390,7 +390,7 @@ namespace diff{
   
   
   void
-  DiffApplicationStrategy<DiffMutable>::initDiffApplication()
+  TreeDiffMutatorBinding::initDiffApplication()
   {
     TODO("(re)initialise the diff application machinery");
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
@@ -400,14 +400,6 @@ namespace diff{
   }
   
   
-  
-  /* ==== trigger code generation of the generic part ==== */
-
-  /************************************************************************/
-  /* explicit template instantiation DiffApplicationStrategy<DiffMutable> */
-  /************************************************************************/
-  
-  template class DiffApplicationStrategy<DiffMutable>;
   
   
   
