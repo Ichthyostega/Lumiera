@@ -148,6 +148,13 @@ namespace diff{
     };
   
   
+  template<class TAR>
+  struct TreeMutatorSizeTraits
+    {
+      enum { siz = 200 };
+    };
+  
+  
   /**
    * Extended configuration for tree-diff-application to given opaque target data.
    * This setup uses the [metaprogramming adapter traits](\ref TreeDiffTraits) to
@@ -162,7 +169,12 @@ namespace diff{
   class DiffApplicationStrategy<TAR,  enable_if<TreeDiffTraits<TAR>>>
     : public TreeDiffMutatorBinding
     {
+      using Scopes = StackScopeManager<TreeMutatorSizeTraits<TAR>::siz>;
+      
+      
       TAR& subject_;
+      Scopes scopes_;
+      
       
       void
       buildMutator (DiffMutable& targetBinding)
@@ -177,6 +189,7 @@ namespace diff{
       DiffApplicationStrategy(TAR& subject)
         : TreeDiffMutatorBinding()
         , subject_(subject)
+        , scopes_()
         {
           auto target = mutatorBinding (subject);
           buildMutator (target);

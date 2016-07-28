@@ -48,6 +48,9 @@
 namespace lib {
 namespace diff{
   
+  ScopeManager::~ScopeManager() { };  ///< emit VTable here...
+
+  
   /* ======= Implementation of Tree Diff Application via TreeMutator ======= */
   
   using util::unConst;

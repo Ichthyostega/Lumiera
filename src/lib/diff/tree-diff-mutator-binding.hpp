@@ -94,6 +94,74 @@
 namespace lib {
 namespace diff{
   
+  /**
+   * Management interface to deal with storage for
+   * TreeMutators dedicated to nested scopes
+   */
+  class ScopeManager
+    : boost::noncopyable
+    {
+    public:
+      virtual ~ScopeManager();  ///< this is an interface
+      
+      virtual TreeMutator::Handle openScope()   =0;
+      virtual TreeMutator&        closeScope()  =0;
+      
+      virtual size_t depth()  const             =0;
+    };
+  
+  
+  
+  /**
+   * Typical standard implementation of the ScopeManager.
+   * Using Heap memory for the nested scopes, we create a stack
+   * of opaque InPlaceBuffers for each scope, which allows the
+   * PlantingHandle mechanism to let the target object corresponding
+   * to this scope build its own TreeMutator implementation into
+   * this buffer space for this scope.
+   */
+  template<size_t buffSiz>
+  class StackScopeManager
+    : public ScopeManager
+    {
+      using MutatorBuffer = InPlaceBuffer<TreeMutator, buffSiz>;
+      using MutatorStack = std::stack<MutatorBuffer>;
+      
+      /** Allocate Heap Storage for nested TreeMutator(s) */
+      MutatorStack scopes_;
+      
+      
+      /* ==== ScopeManager interface ==== */
+      
+      virtual TreeMutator::Handle
+      openScope()
+        {
+          UNIMPLEMENTED("push stack and open new scope");
+//          TreeMutator::Handle placementHandle(subMutatorBuffer);
+          
+          /////TODO static_assert on buffer size!!!!!!!
+        }
+      
+      virtual TreeMutator&
+      closeScope()
+        {
+          UNIMPLEMENTED("pop stack and return to parent scope");
+        }
+      
+      
+      virtual size_t
+      depth()  const
+        {
+          return scopes_.size();
+        }
+      
+      
+    public:
+      StackScopeManager()
+        : scopes_()
+        { }
+    };
+  
   
   
   /* ======= Implementation of Tree Diff Application via TreeMutator ======= */
