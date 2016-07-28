@@ -138,10 +138,49 @@ namespace diff{
     : public TreeDiffMutatorBinding
     {
     public:
+      void
+      buildMutator (DiffMutable& targetBinding)
+        {
+          UNIMPLEMENTED ("place the mutator into the manager buffer");
+//        TreeMutator::Handle buffHandle;
+//        targetBinding.buildMutator (buffHandle);
+        }
+    };
+  
+  
+  /**
+   * Extended configuration for tree-diff-application to given opaque target data.
+   * This setup uses the [metaprogramming adapter traits](\ref TreeDiffTraits) to
+   * pave a way for building the custom TreeMutator implementation internally wired
+   * to the given opaque target. Moreover, based on the concrete target type, a suitable
+   * ScopeManager implementation can be provided. Together, these two dynamically created
+   * adapters allow the generic TreeDiffMutatorBinding to perform all of the actual
+   * diff application and mutation task.
+   * @see DiffVirtualisedApplication_test usage example of this combined machinery
+   */
+  template<class TAR>
+  class DiffApplicationStrategy<TAR,  enable_if<TreeDiffTraits<TAR>>>
+    : public TreeDiffMutatorBinding
+    {
+      TAR& subject_;
+      
+      void
+      buildMutator (DiffMutable& targetBinding)
+        {
+          UNIMPLEMENTED ("place the mutator into the manager buffer");
+//        TreeMutator::Handle buffHandle;
+//        targetBinding.buildMutator (buffHandle);
+        }
+      
+    public:
       explicit
-      DiffApplicationStrategy<DiffMutable>(DiffMutable& targetBinding)
-        : TreeDiffMutatorBinding(targetBinding)
-        { }
+      DiffApplicationStrategy(TAR& subject)
+        : TreeDiffMutatorBinding()
+        , subject_(subject)
+        {
+          auto target = mutatorBinding (subject);
+          buildMutator (target);
+        }
     };
   
   

@@ -261,10 +261,13 @@ namespace diff{
    * @remarks the actual diff fed to the DiffApplicator
    *          assumes that this DiffApplicationStrategy is
    *          an Interpreter for the given diff language.
+   * @remarks the second template parameter allows for
+   *          `std::enable_if` based on the concrete
+   *          target type `TAR` (1st template arg)
    * @warning the actual language remains unspecified;
    *          it is picked from the visible context.
    */
-  template<class CON>
+  template<class TAR, typename SEL =void>
   class DiffApplicationStrategy;
   
   

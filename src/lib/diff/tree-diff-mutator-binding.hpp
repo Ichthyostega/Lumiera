@@ -210,8 +210,7 @@ namespace diff{
       
       
     public:
-      explicit
-      TreeDiffMutatorBinding(DiffMutable& targetBinding)
+      TreeDiffMutatorBinding()
         {
           TODO("attach to the given Target");
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992

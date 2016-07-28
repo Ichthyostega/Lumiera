@@ -208,8 +208,9 @@ namespace test{
       run (Arg)
         {
           Opaque subject;
-          auto target = mutatorBinding (subject);
-          DiffApplicator<DiffMutable> application(target);
+//        auto target = mutatorBinding (subject);
+//        DiffApplicator<DiffMutable> application(target);
+          DiffApplicator<Opaque> application(subject);
           //
           // TODO verify results
           cout << "before..."<<endl << subject<<endl;

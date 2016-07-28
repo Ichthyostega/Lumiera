@@ -4593,7 +4593,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1469545080826" HGAP="41" ID="ID_268789302" MODIFIED="1469545140415" VSHIFT="17">
+<node CREATED="1469545080826" HGAP="41" ID="ID_268789302" MODIFIED="1469738253120" VSHIFT="17">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -4605,7 +4605,7 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1469545168798" ID="ID_511952630" MODIFIED="1469545171905" TEXT="Architektur">
 <node CREATED="1469545173893" ID="ID_1815808987" MODIFIED="1469545190599" TEXT="opaque: Kern == TreeMutator"/>
 <node CREATED="1469545191899" ID="ID_1298718461" MODIFIED="1469545206853" TEXT="generisch: TreeMutator-Bindung"/>

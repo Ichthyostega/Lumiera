@@ -80,18 +80,21 @@ namespace diff{
   
   template<class TAR, typename SEL =void>
   struct TreeDiffTraits
+    : std::false_type
     {
       static_assert (!sizeof(TAR), "TreeDiffTraits: Unable to access or build a TreeMutator for this target data.");
     };
   
   template<class TAR>
   struct TreeDiffTraits<TAR, enable_if<is_same<TAR, DiffMutable>>>
+    : std::true_type
     {
       using Ret = DiffMutable&;
     };
   
   template<class TAR>
   struct TreeDiffTraits<TAR, enable_if<exposes_MutatorBuilder<TAR>>>
+    : std::true_type
     {
       class Wrapper
         : public DiffMutable
