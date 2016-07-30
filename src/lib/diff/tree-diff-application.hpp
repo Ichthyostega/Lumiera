@@ -123,42 +123,26 @@ namespace diff{
   
   
   
+  
   /**
    * Interpreter for the tree-diff-language to work on arbitrary
    * opaque target data structures. A concrete strategy to apply a structural diff
    * to otherwise undisclosed, recursive, tree-like target data. The only requirement
    * is for this target structure to expose a hook for building a customised
    * TreeMutator able to work on and transform the private target data.
-   * @throws  lumiera::error::State when diff application fails due to the
-   *          target sequence being different than assumed by the given diff.
-   * @see #TreeDiffInterpreter explanation of the verbs
-   */
-  template<>
-  class DiffApplicationStrategy<DiffMutable>
-    : public TreeDiffMutatorBinding
-    {
-    public:
-      void
-      buildMutator (DiffMutable& targetBinding)
-        {
-          UNIMPLEMENTED ("place the mutator into the manager buffer");
-//        TreeMutator::Handle buffHandle;
-//        targetBinding.buildMutator (buffHandle);
-        }
-    };
-  
-  
-  
-  
-  /**
-   * Extended configuration for tree-diff-application to given opaque target data.
-   * This setup uses the [metaprogramming adapter traits](\ref TreeDiffTraits) to
-   * pave a way for building the custom TreeMutator implementation internally wired
+   * 
+   * In the extended configuration for tree-diff-application to given opaque target
+   * data, the setup uses the [metaprogramming adapter traits](\ref TreeDiffTraits)
+   * to pave a way for building the custom TreeMutator implementation internally wired
    * to the given opaque target. Moreover, based on the concrete target type, a suitable
    * ScopeManager implementation can be provided. Together, these two dynamically created
    * adapters allow the generic TreeDiffMutatorBinding to perform all of the actual
    * diff application and mutation task.
+   * 
+   * @throws  lumiera::error::State when diff application fails due to the
+   *          target sequence being different than assumed by the given diff.
    * @see DiffVirtualisedApplication_test usage example of this combined machinery
+   * @see #TreeDiffInterpreter explanation of the verbs
    */
   template<class TAR>
   class DiffApplicationStrategy<TAR,  enable_if<TreeDiffTraits<TAR>>>

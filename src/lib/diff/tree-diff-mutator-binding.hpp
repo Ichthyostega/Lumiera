@@ -143,16 +143,20 @@ namespace diff{
       virtual TreeMutator::Handle
       openScope()
         {
-          UNIMPLEMENTED("push stack and open new scope");
-//          TreeMutator::Handle placementHandle(subMutatorBuffer);
+          scopes_.emplace();
+          TreeMutator::Handle placementHandle (scopes_.top());
           
-          /////TODO static_assert on buffer size!!!!!!!
+          static_assert (buffSiz >= sizeof(typename MutatorStack::value_type)
+                        ,"insufficient working buffer for TreeMutator");
+          return placementHandle;
         }
       
       virtual TreeMutator&
       closeScope()
         {
-          UNIMPLEMENTED("pop stack and return to parent scope");
+          scopes_.pop();
+          REQUIRE (0 < depth(), "attempt to return beyond root scope");
+          return *scopes_.top();
         }
       
       virtual void
@@ -161,7 +165,7 @@ namespace diff{
           while (0 < scopes_.size())
             scopes_.pop();
           
-          REQUIRE (scopes_.empty());
+          ENSURE (scopes_.empty());
         }
 
       
