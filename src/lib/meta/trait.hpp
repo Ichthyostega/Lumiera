@@ -319,6 +319,24 @@ namespace meta {
   
   
   
+  /** detect smart pointers */
+  template<typename X>
+  struct is_smart_ptr
+    : std::false_type
+    { };
+  
+  template<typename T>
+  struct is_smart_ptr<std::shared_ptr<T>>
+    : std::true_type
+    { };
+  
+  template <typename T, typename D>
+  struct is_smart_ptr<std::unique_ptr<T,D>>
+    : std::true_type
+    { };
+  
+  
+  
   
   
   

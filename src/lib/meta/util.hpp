@@ -52,6 +52,15 @@ namespace std { // forward declaration for std::string...
   class basic_string;
   
   using string = basic_string<char, char_traits<char>, allocator<char>>;
+  
+  
+  // forward declarations for common smart ptrs
+  template<typename T>
+  class shared_ptr;
+  
+  template <typename T, typename D>
+  class unique_ptr;
+  
 }
 
 
