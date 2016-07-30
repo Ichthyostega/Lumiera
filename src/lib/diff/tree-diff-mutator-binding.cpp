@@ -395,11 +395,8 @@ namespace diff{
   void
   TreeDiffMutatorBinding::initDiffApplication()
   {
-    TODO("(re)initialise the diff application machinery");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-    REQUIRE (1 == scopes_.size());
-    scopes_.top().init();
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+    REQUIRE (scopeManger_);
+    REQUIRE (treeMutator_);
   }
   
   

@@ -169,9 +169,14 @@ namespace diff{
         : TreeDiffMutatorBinding()
         , subject_(subject)
         , scopes_()
+        { }
+      
+      void
+      initDiffApplication()
         {
-          auto target = mutatorBinding (subject);
+          auto target = mutatorBinding (subject_);
           buildMutator (target);
+          TreeDiffMutatorBinding::initDiffApplication();
         }
     };
   

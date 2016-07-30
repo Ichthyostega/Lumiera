@@ -202,6 +202,11 @@ namespace diff{
   class TreeDiffMutatorBinding
     : public TreeDiffInterpreter
     {
+    protected:
+      TreeMutator*  treeMutator_;
+      ScopeManager* scopeManger_;
+      
+    private:
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
       using Mutator = Rec::Mutator;
       using Content = Rec::ContentMutator;
@@ -294,12 +299,9 @@ namespace diff{
       
     public:
       TreeDiffMutatorBinding()
-        {
-          TODO("attach to the given Target");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-          scopes_.emplace(mutableTargetRecord);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-        }
+        : treeMutator_(nullptr)
+        , scopeManger_(nullptr)
+        { }
       
       void initDiffApplication();
     };
