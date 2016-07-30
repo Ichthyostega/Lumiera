@@ -278,6 +278,33 @@ namespace util {
             };
       };
     
+    template<typename SP>
+    struct _is_smart_wrapper
+      : std::false_type
+      { };
+    template<typename T>
+    struct _is_smart_wrapper<std::shared_ptr<T>>
+      : std::true_type
+      { };
+    template <typename T, typename D>
+    struct _is_smart_wrapper<std::unique_ptr<T,D>>
+      : std::true_type
+      { };
+    
+    
+    
+    template<typename SP>
+    struct _shall_show_smartWrapper
+      {
+        enum{ value = not _shall_convert_toString<SP>::value
+                      and _is_smart_wrapper<typename std::remove_reference<
+                                            typename std::remove_cv<SP>::type>::type>::value
+            };
+      };
+    
+    
+    
+    
     
     inline void
     _clear_errorflag()
@@ -393,6 +420,24 @@ namespace util {
       dump (VAL const& val, Implementation& impl)
         try {
             format (string(val), impl); 
+          }
+        catch(std::exception const& ex)
+          {
+            format (_log_and_stringify(ex), impl);
+          }
+        catch(...)
+          {
+            format (_log_unknown_exception(), impl);
+          }
+    };
+  
+  template<typename SP>
+  struct _Fmt::Converter<SP,       lib::meta::enable_if<_shall_show_smartWrapper<SP>> >
+    {
+      static void
+      dump (SP const& smP, Implementation& impl)
+        try {
+            format (showSmartPtr (smP, lib::meta::typeSymbol(smP)), impl);
           }
         catch(std::exception const& ex)
           {

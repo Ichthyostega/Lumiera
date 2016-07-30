@@ -214,6 +214,9 @@ apologies for that."
     static regex mapAllocator {"(map<(" TYP_EXP "), (" TYP_EXP ")),.+allocator<pair<\\2 const, \\3>\\s*>\\s*"
                                 , regex::ECMAScript | regex::optimize};
     
+    static regex uniquePtr {"unique_ptr<(\\w+), default_delete<\\1>\\s*"
+                                , regex::ECMAScript | regex::optimize};
+    
     static regex lumieraP {"P<(\\w+), shared_ptr<\\1>\\s*"
                                 , regex::ECMAScript | regex::optimize};
     
@@ -224,6 +227,7 @@ apologies for that."
     end = regex_replace(pos, pos, end, commonPrefixes, "");
     end = regex_replace(pos, pos, end, stdAllocator, "$1");
     end = regex_replace(pos, pos, end, mapAllocator, "$1");
+    end = regex_replace(pos, pos, end, uniquePtr, "unique_ptr<$1");
     end = regex_replace(pos, pos, end, lumieraP, "P<$1");
 
     typeName.resize(end - typeName.begin());

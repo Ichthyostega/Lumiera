@@ -374,6 +374,16 @@ namespace util {
               : BOTTOM_INDICATOR + " «" + typeStr(ptr) + "»";
   }
   
+  template<typename SP>
+  inline std::string
+  showSmartPtr (SP const& smPtr, std::string label = "smP")
+  {
+    using TargetType = typename SP::element_type;
+    
+    return smPtr? label+"("+showAddr(smPtr.get()) + ") ↗" + StringConv<TargetType>::invoke(*smPtr)
+                : BOTTOM_INDICATOR + " «" + typeStr(smPtr) + "»";
+  }
+  
   /** human readable display of boolean values
    * @return "`true`" or "`false`"
    */

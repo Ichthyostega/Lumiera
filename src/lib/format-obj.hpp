@@ -95,6 +95,9 @@ namespace util {
     /** toggle to prefer specialisation with direct lexical conversion */
     template<typename X>
     using enable_LexicalConversion = lib::meta::enable_if< lib::meta::use_LexicalConversion<X>>;
+    
+    template<typename SP>
+    using show_SmartPointer = lib::meta::enable_if< lib::meta::is_smart_ptr<typename lib::meta::Strip<SP>::TypeReferred>>;
   }
   
   
@@ -108,6 +111,15 @@ namespace util {
       static std::string
       invoke (X const& val) noexcept
         try        { return boost::lexical_cast<std::string> (val); }
+        catch(...) { return FAILURE_INDICATOR; }
+    };
+  
+  template<typename SP>
+  struct StringConv<SP,    show_SmartPointer<SP>>
+    {
+      static std::string
+      invoke (SP const& smP) noexcept
+        try        { return showSmartPtr (smP, lib::meta::typeSymbol(smP)); }
         catch(...) { return FAILURE_INDICATOR; }
     };
   
