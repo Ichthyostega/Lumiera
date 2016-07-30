@@ -51,6 +51,47 @@
 namespace lib {
 namespace diff{
   
+  
+  /* ======= Hints / Heuristics for the required TreeMutator buffer size ======= */
+  
+  /**
+   * Heuristics to guide the allocation for nested TreeMutator.
+   * When applying a structural (tree) diff, the (otherwise undisclosed)
+   * target data structure needs to supply a TreeMutator implementation
+   * properly wired to the internal opaque data elements. Typically, this
+   * custom TreeMutator relies on several lambdas and closures, which
+   * require a variable and hard to guess amount of storage for back pointers
+   * and embedded parametrisation. More so, when the diff application opens
+   * nested scopes within the target data. The TreeDiffMutatorBinding relies
+   * on a (likewise opaque) ScopeManager implementation to maintain a stack
+   * of heap allocated buffers, where the mentioned nested TreeMutator
+   * implementations can be built and operated during the mutation process.
+   * 
+   * The default for buffer dimensions includes a safety margin and is thus
+   * quite expensive -- even though this is just a temporary working buffer.
+   * Thus we offer a hook for explicit or partial specialisations to control
+   * the very common cases known to work with smaller buffer sizes.
+   * 
+   * \par future extensions
+   * We might consider to make this system dynamic, in case buffer allocation
+   * for tree diff application becomes an issue in general. We might then guard
+   * the whole diff application location with try-catch blocks and allow thus
+   * for learning the right setting at runtime; obviously we'd then also have to
+   * memorise our findings somehow within the dynamic application configuration.
+   * 
+   * @see tree-diff-application.hpp
+   * @see DiffVirtualisedApplication_test
+   */
+  template<class TAR>
+  struct TreeMutatorSizeTraits
+    {
+      enum { siz = 200 };
+    };
+  
+  
+  
+  
+  
   /* ======= derive a TreeMutator binding for a given opaque data structure ======= */
   
   

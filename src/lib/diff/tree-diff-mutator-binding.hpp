@@ -106,6 +106,7 @@ namespace diff{
       
       virtual TreeMutator::Handle openScope()   =0;
       virtual TreeMutator&        closeScope()  =0;
+      virtual void                clear()       =0;
       
       virtual size_t depth()  const             =0;
     };
@@ -131,6 +132,12 @@ namespace diff{
       MutatorStack scopes_;
       
       
+    public:
+      StackScopeManager()
+        : scopes_()
+        { }
+      
+      
       /* ==== ScopeManager interface ==== */
       
       virtual TreeMutator::Handle
@@ -148,18 +155,22 @@ namespace diff{
           UNIMPLEMENTED("pop stack and return to parent scope");
         }
       
+      virtual void
+      clear()
+        {
+          while (0 < scopes_.size())
+            scopes_.pop();
+          
+          REQUIRE (scopes_.empty());
+        }
+
+      
       
       virtual size_t
       depth()  const
         {
           return scopes_.size();
         }
-      
-      
-    public:
-      StackScopeManager()
-        : scopes_()
-        { }
     };
   
   

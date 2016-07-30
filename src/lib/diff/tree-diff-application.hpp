@@ -148,11 +148,6 @@ namespace diff{
     };
   
   
-  template<class TAR>
-  struct TreeMutatorSizeTraits
-    {
-      enum { siz = 200 };
-    };
   
   
   /**
@@ -179,9 +174,9 @@ namespace diff{
       void
       buildMutator (DiffMutable& targetBinding)
         {
-          UNIMPLEMENTED ("place the mutator into the manager buffer");
-//        TreeMutator::Handle buffHandle;
-//        targetBinding.buildMutator (buffHandle);
+          scopes_.clear();
+          TreeMutator::Handle buffHandle = scopes_.openScope();
+          targetBinding.buildMutator (buffHandle);
         }
       
     public:
