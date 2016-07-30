@@ -39,6 +39,7 @@
  ** - an alternative or fallback value may be attached.
  ** 
  ** @todo WIP and rather brainstorming as of 2/10
+ ** @deprecated as of 2016 : the upcoming C++17 will provide an optional type!!
  ** 
  ** @see backend::ThreadJob usage example
  */
