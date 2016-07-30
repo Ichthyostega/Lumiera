@@ -43,6 +43,7 @@
 
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/diff/diff-mutable.hpp"
+#include "lib/null-value.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -82,13 +83,40 @@ namespace diff{
    * @see tree-diff-application.hpp
    * @see DiffVirtualisedApplication_test
    */
-  template<class TAR>
+  template<class TAR, typename SEL =void>
   struct TreeMutatorSizeTraits
     {
       enum { siz = 200 };
     };
   
   
+  constexpr size_t
+  treeMutatorSize (...)
+  {
+    return 0;
+  }
+  
+  
+  template<typename T>
+  constexpr T*
+  getSelector()
+    {
+      return static_cast<T*> (nullptr);
+    }
+  
+  template<typename T>
+  struct defines_custom_BufferSize
+    {
+      enum { value = 0 < treeMutatorSize (getSelector<T>()) };
+    };
+  
+  
+  template<class TAR>
+  struct TreeMutatorSizeTraits<TAR,  enable_if<defines_custom_BufferSize<TAR>> >
+    {
+      enum { siz = treeMutatorSize (getSelector<TAR>()) };
+    };
+
   
   
   

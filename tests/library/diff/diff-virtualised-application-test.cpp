@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"
 #include "lib/diff/tree-diff-application.hpp"
+#include "lib/diff/test-mutation-target.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"  //////////TODO necessary?
@@ -41,6 +42,7 @@ using util::join;
 using util::_Fmt;
 using util::join;
 using std::unique_ptr;
+using std::make_unique;
 using std::string;
 using std::vector;
 using lib::time::Time;
@@ -76,6 +78,9 @@ namespace test{
      */
     class Opaque
       {
+        idi::EntryID<Opaque> key_;
+        string type_ = Rec::TYPE_NIL;
+        
         int  alpha_   = -1;
         string beta_  = "NIL";
         double gamma_ = -1;
@@ -88,10 +93,46 @@ namespace test{
       public:
         Opaque() { }
         
+        explicit
+        Opaque (string keyID)
+          : key_(keyID)
+          { }
+        
+        explicit
+        Opaque (idi::BareEntryID id)
+          : key_(id)
+          { }
+        
+        Opaque (Opaque const& o)
+          : key_(o.key_)
+          , type_(o.type_)
+          , alpha_(o.alpha_)
+          , beta_(o.beta_)
+          , gamma_(o.gamma_)
+          , delta_()
+          , nestedObj_(o.nestedObj_)
+          , nestedData_(o.nestedData_)
+          {
+            if (o.delta_)
+              delta_.reset(new Opaque(*o.delta_));
+          }
+        
+        Opaque&
+        operator= (Opaque const& o)
+          {
+            if (&o != this)
+              {
+                Opaque tmp(o);
+                swap (*this, tmp);
+              }
+            return *this;
+          }
+        
+        
         operator string()  const
           {
             return _Fmt{"%s (α:%d β:%s γ:%7.5f δ:%s\n......|nested:%s\n......|data:%s\n      )"}
-                       % idi::instanceTypeID (this)
+                       % identity()
                        % alpha_
                        % beta_
                        % gamma_
@@ -101,20 +142,88 @@ namespace test{
                        ;
           }
         
+        string
+        identity()  const
+          {
+            string symbol = key_.getSym() + (isTyped()? "≺"+type_+"≻" : "");
+            return lib::idi::format::instance_hex_format(symbol, key_.getHash());
+          }
+        
+        bool
+        isTyped()  const
+          {
+            return Rec::TYPE_NIL != type_;
+          }
+        
+        
         void
         buildMutator (TreeMutator::Handle buff)
           {
-            UNIMPLEMENTED("construct the concrete Binding, using the TreeMutator::Builder DSL");
             buff.create (
               TreeMutator::build()
                 .attach (collection(nestedData_)
-                              ));
+                       .isApplicableIf ([&](GenNode const& spec) -> bool
+                          {
+                            return not spec.isNamed();                // »Selector« : accept anything unnamed value-like
+                          })
+                       .assignElement ([&](string& target, GenNode const& spec) -> bool
+                          {
+                            target = render(spec.data);
+                            return true;
+                          }))
+                .attach (collection(nestedObj_)
+                       .isApplicableIf ([&](GenNode const& spec) -> bool
+                          {
+                            return type_ == spec.data.recordType();    // »Selector« : require object-like sub scope with matching typeID
+                          })
+                       .constructFrom ([&](GenNode const& spec) -> Opaque
+                          {
+                            return Opaque{spec.idi};
+                          })
+                       .matchElement ([&](GenNode const& spec, Opaque const& elm) -> bool
+                          {
+                            return spec.idi == elm.key_;
+                          })
+                       .buildChildMutator ([&](Opaque& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                          {
+                            if (target.key_ != subID) return false; // require match on already existing child object
+                            target.buildMutator (buff);               //  delegate to child to build nested TreeMutator
+                            return true;
+                          }))
+                .change("type", [&](string typeID)
+                    {
+                      type_ = typeID;
+                    })
+                .change("α", [&](int val)
+                    {
+                      alpha_ = val;
+                    })
+                .change("β", [&](string val)
+                    {
+                      beta_ = val;
+                    })
+                .change("γ", [&](double val)
+                    {
+                      gamma_ = val;
+                    })
+                .mutateAttrib("δ", [&](TreeMutator::Handle buff)
+                    {
+                      if (not delta_)
+                        delta_.reset (new Opaque("δ"));
+                      REQUIRE (delta_);
+                      
+                      delta_->buildMutator(buff);
+                    }));
           }
+        
+        friend constexpr size_t
+        treeMutatorSize (const Opaque*)
+        {
+          return 350;
+        }
       };
     
   }//(End)Test fixture
-  
-  
   
   
   
