@@ -186,7 +186,7 @@ namespace test{
                           })
                        .buildChildMutator ([&](Opaque& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                           {
-                            if (target.key_ != subID) return false; // require match on already existing child object
+                            if (target.key_ != subID) return false;    // require match on already existing child object
                             target.buildMutator (buff);               //  delegate to child to build nested TreeMutator
                             return true;
                           }))
@@ -216,6 +216,10 @@ namespace test{
                     }));
           }
         
+        /** override default size traits
+         *  to allow for sufficient buffer,
+         *  able to hold the mutator defined above.
+         */
         friend constexpr size_t
         treeMutatorSize (const Opaque*)
         {

@@ -137,6 +137,16 @@ namespace diff{
         : scopes_()
         { }
       
+      TreeMutator&
+      currentScope()  const
+        {
+          if (0 == depth())
+            throw error::Logic("Attempt to access the current scope "
+                               "without establishing a root scope beforehand."
+                              , error::LUMIERA_ERROR_LIFECYCLE);
+          return *scopes_.top();
+        }
+      
       
       /* ==== ScopeManager interface ==== */
       
@@ -168,7 +178,6 @@ namespace diff{
           ENSURE (scopes_.empty());
         }
 
-      
       
       virtual size_t
       depth()  const
@@ -261,6 +270,7 @@ namespace diff{
       void __expect_in_target  (GenNode const& elm, Literal oper);
       void __expect_further_elements (GenNode const& elm);
       void __fail_not_found (GenNode const& elm);
+      void __failMismatch (GenNode const& spec, Literal oper);
       void __expect_end_of_scope (GenNode::ID const& idi);
       void __expect_valid_parent_scope (GenNode::ID const& idi);
       
@@ -269,7 +279,7 @@ namespace diff{
       /* == Forwarding: mutation primitives == */
       
       void skipSrc();
-      void injectNew (GenNode const& n);
+      bool injectNew (GenNode const& n);
       bool matchSrc (GenNode const& n);
       bool acceptSrc (GenNode const& n);
       bool findSrc (GenNode const& n);

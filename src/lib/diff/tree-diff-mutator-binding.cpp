@@ -237,6 +237,14 @@ namespace diff{
   }
   
   void
+  TreeDiffMutatorBinding::__failMismatch (GenNode const& spec, Literal oper)
+  {
+    throw error::State(_Fmt("Unable to %s element %s. Current target binding "
+                            "did not match as expected") % oper % spec
+                      , LUMIERA_ERROR_DIFF_CONFLICT);
+  }
+  
+  void
   TreeDiffMutatorBinding::__expect_end_of_scope (GenNode::ID const& idi)
   {
     
@@ -257,10 +265,10 @@ namespace diff{
     UNIMPLEMENTED("skip next src element and advance abstract source position");
   }
   
-  void
+  bool
   TreeDiffMutatorBinding::injectNew (GenNode const& n)
   {
-    UNIMPLEMENTED("inject a new element at current abstract position");
+    return treeMutator_->injectNew(n);
   }
   
   bool
@@ -312,7 +320,9 @@ namespace diff{
   void
   TreeDiffMutatorBinding::ins (GenNode const& n)
   {
-    injectNew (n);
+    bool success = injectNew (n);
+    if (not success)
+      __failMismatch (n, "insert");
   }
   
   void

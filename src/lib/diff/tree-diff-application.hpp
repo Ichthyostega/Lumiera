@@ -176,6 +176,8 @@ namespace diff{
         {
           auto target = mutatorBinding (subject_);
           buildMutator (target);
+          TreeDiffMutatorBinding::scopeManger_ = &scopes_;
+          TreeDiffMutatorBinding::treeMutator_ = &scopes_.currentScope();
           TreeDiffMutatorBinding::initDiffApplication();
         }
     };
