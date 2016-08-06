@@ -387,7 +387,7 @@ namespace diff{
          *      against this internal copy. This allows to verify what's going on
          */
         virtual void
-        skipSrc ()  override
+        skipSrc (GenNode const& n)  override
           {
             if (pos_)
               {
@@ -395,7 +395,7 @@ namespace diff{
                 ++pos_;
                 target_.logSkip (skippedElm);
               }
-            PAR::skipSrc();
+            PAR::skipSrc(n);
           }
         
         /** record in the test target
@@ -430,8 +430,8 @@ namespace diff{
         virtual bool
         acceptSrc (GenNode const& n)  override
           {
-            bool isSrcMatch = TestWireTap::matchSrc(n);          //////TODO this is wrong: we must invoke *only* our own match, but no chained match of lower layers
-            if (isSrcMatch)             // NOTE: important to call our own method here, not the virtual function
+            bool isSrcMatch = pos_ and n.matches(*pos_);
+            if (isSrcMatch)         // NOTE: important to invoke our own match here
               {
                 target_.inject (move(*pos_), "acceptSrc");
                 ++pos_;

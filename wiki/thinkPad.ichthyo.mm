@@ -900,7 +900,7 @@
 <node CREATED="1455927341473" ID="ID_573257215" MODIFIED="1455928707275" TEXT="del">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455927479054" ID="ID_93562485" MODIFIED="1455927482234" TEXT="verify"/>
-<node CREATED="1455927483301" ID="ID_1149563805" MODIFIED="1455982697209" TEXT="next_src"/>
+<node CREATED="1455927483301" ID="ID_1149563805" MODIFIED="1470522011715" TEXT="skipSrc"/>
 </node>
 <node CREATED="1455927346728" ID="ID_1236186762" MODIFIED="1455928705947" TEXT="find">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -909,8 +909,9 @@
 </node>
 <node CREATED="1455927354239" ID="ID_501366037" MODIFIED="1455928704596" TEXT="skip">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455927543126" ID="ID_740178322" MODIFIED="1455927547345" TEXT="if verify">
-<node CREATED="1455927548125" ID="ID_1645901473" MODIFIED="1455927549457" TEXT="skip"/>
+<node CREATED="1470522026709" ID="ID_967937679" MODIFIED="1470522029792" TEXT="skipSrc"/>
+<node CREATED="1470522030780" ID="ID_628304064" MODIFIED="1470522072842" TEXT="Problem: welcher Layer?">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1455927357415" ID="ID_1730455685" MODIFIED="1455928703412" TEXT="after">
@@ -975,10 +976,30 @@
 <node CREATED="1455927425726" ID="ID_1776437339" MODIFIED="1464117059267" TEXT="hasSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928216420" ID="ID_662720483" MODIFIED="1464117064570" TEXT="further src elements available"/>
+<node CREATED="1470527053136" ID="ID_1383280265" MODIFIED="1470527075712">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      of questionable use
+    </p>
+    <p>
+      with multiple layers
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
 </node>
 <node CREATED="1455927425726" ID="ID_1759686725" MODIFIED="1457120215833" TEXT="skipSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928216420" ID="ID_1581600385" MODIFIED="1455928325793" TEXT="advance source position"/>
+<node CREATED="1470527086660" ID="ID_13765501" MODIFIED="1470527097135" TEXT="guarded by selector">
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node CREATED="1455927396505" ID="ID_392033275" MODIFIED="1457120240382" TEXT="matchSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -2031,7 +2052,7 @@
 </node>
 </node>
 <node CREATED="1456528418823" HGAP="30" ID="ID_1372068793" MODIFIED="1457038621939" TEXT="Bestandteile" VSHIFT="-1">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1456528424246" FOLDED="true" ID="ID_472044094" MODIFIED="1461882018047" STYLE="fork" TEXT="Selektor">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1456528424246" FOLDED="true" ID="ID_472044094" MODIFIED="1469922003215" STYLE="fork" TEXT="Selektor">
 <linktarget COLOR="#7caed5" DESTINATION="ID_472044094" ENDARROW="Default" ENDINCLINATION="466;133;" ID="Arrow_ID_1253352795" SOURCE="ID_1406395599" STARTARROW="None" STARTINCLINATION="681;0;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1457741609884" ID="ID_1827838196" MODIFIED="1457741617108" TEXT="bin ich zust&#xe4;ndig?">
@@ -2346,7 +2367,7 @@
 </node>
 <node CREATED="1457742547067" HGAP="33" ID="ID_410938096" MODIFIED="1457742727257" TEXT="Selector explizit bauen" VSHIFT="7">
 <icon BUILTIN="yes"/>
-<node CREATED="1457742554722" ID="ID_1406395599" MODIFIED="1457742582535" TEXT="Selector-Interface">
+<node CREATED="1457742554722" ID="ID_1406395599" MODIFIED="1469918265250" TEXT="Selector-Interface">
 <arrowlink COLOR="#7caed5" DESTINATION="ID_472044094" ENDARROW="Default" ENDINCLINATION="466;133;" ID="Arrow_ID_1253352795" STARTARROW="None" STARTINCLINATION="681;0;"/>
 </node>
 <node CREATED="1457742626368" ID="ID_1910692241" MODIFIED="1457742639067" TEXT="2.Ausdrucks-Ebene">
@@ -2358,7 +2379,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1458175861176" FOLDED="true" HGAP="33" ID="ID_44294405" MODIFIED="1464113901987" TEXT="Design-Anforderungen">
+<node CREATED="1458175861176" FOLDED="true" HGAP="33" ID="ID_44294405" MODIFIED="1470521265401" TEXT="Design-Anforderungen">
 <node CREATED="1458175880034" ID="ID_995745627" MODIFIED="1458175889588" TEXT="gegeben ist eine STL-Collection">
 <node CREATED="1458175892400" ID="ID_1308086929" MODIFIED="1458175904674" TEXT="allgemeinstes STL-Container-Interface"/>
 <node CREATED="1458175905766" ID="ID_446727516" MODIFIED="1458175919817" TEXT="Wert-Typ per typedef abgreifen"/>
@@ -2533,7 +2554,7 @@
 <node CREATED="1458178223723" ID="ID_798018180" MODIFIED="1458178247755" TEXT="es gibt eine freie Funktion, die einen nested Builder f&#xfc;r das Binding liefert"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1458178288690" FOLDED="true" ID="ID_562189277" MODIFIED="1464113898035" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1458178288690" FOLDED="true" ID="ID_562189277" MODIFIED="1470521349868" TEXT="Implementierung">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1458178300324" TEXT="Builder">
 <node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1460753004725" TEXT="Typ-Definitionen schwierig anzuschreiben">
@@ -4213,8 +4234,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1461882151581" HGAP="29" ID="ID_710057839" MODIFIED="1468761946716" TEXT="Selector integrieren" VSHIFT="23">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1461882151581" HGAP="29" ID="ID_710057839" MODIFIED="1469918373136" TEXT="Selector integrieren" VSHIFT="23">
 <icon BUILTIN="flag-pink"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1461967533959" ID="ID_1476036864" MODIFIED="1468761946715" TEXT="korrekte logische Verkettung"/>
 <node CREATED="1461967541166" ID="ID_1033772766" MODIFIED="1468761946715" TEXT="mu&#xdf; von jeder Primitive unterst&#xfc;tzt werden">
 <icon BUILTIN="messagebox_warning"/>
@@ -4434,8 +4456,7 @@
       Client soll direkt <b>mutatorBinding</b>&#160;bieten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -4463,8 +4484,7 @@
       <i>nicht</i>&#160;generisch: <b><font color="#923977">mutatorBinding</font></b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#503382" DESTINATION="ID_48737788" ENDARROW="Default" ENDINCLINATION="8;131;" ID="Arrow_ID_579805576" STARTARROW="None" STARTINCLINATION="535;0;"/>
 </node>
 </node>
@@ -4478,8 +4498,7 @@
       L&#246;sungsversuch: <b>extern template</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1469544293574" ID="ID_947583528" MODIFIED="1469544318455" TEXT="Template bereits in Lumiera-Lib vor-generieren">
 <icon BUILTIN="info"/>
@@ -4538,8 +4557,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -4559,8 +4577,7 @@
       <i>intern:</i>&#160;eingebaute <b>initDiffApplication()</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4570,8 +4587,7 @@
       ...wird automatisch vor Konsumieren eines Diff aufgerufen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1469544965890" ID="ID_443152890" MODIFIED="1469545023179">
 <richcontent TYPE="NODE"><html>
@@ -4583,8 +4599,7 @@
       <i>Widerspruch:</i>&#160;TreeMutator ist <b>Wegwerf</b>-Objekt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node COLOR="#f61b01" CREATED="1469545033584" ID="ID_578930155" MODIFIED="1469545058652" TEXT="Abbruch">
@@ -4603,8 +4618,7 @@
       L&#246;sungsversuch: <b>doppelte H&#252;lle</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1469545168798" ID="ID_511952630" MODIFIED="1469545171905" TEXT="Architektur">
 <node CREATED="1469545173893" ID="ID_1815808987" MODIFIED="1469545190599" TEXT="opaque: Kern == TreeMutator"/>
@@ -4636,8 +4650,7 @@
       kann daher <b>TreeMutator</b>&#160;konstruieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1469545641644" ID="ID_1811640827" MODIFIED="1469545662506">
 <richcontent TYPE="NODE"><html>
@@ -4649,8 +4662,7 @@
       ...und zwar per <b>mutatorBinding</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1469545691349" ID="ID_239269579" MODIFIED="1469545705980">
 <richcontent TYPE="NODE"><html>
@@ -4662,8 +4674,7 @@
       implementiert somit <b>initDiffApplication()</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -4677,8 +4688,7 @@
       TODO: <font color="#010101">Namensgebung</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#7c4b8e" DESTINATION="ID_263708712" ENDARROW="Default" ENDINCLINATION="-438;877;" ID="Arrow_ID_774958535" SOURCE="ID_660087752" STARTARROW="Default" STARTINCLINATION="2134;135;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1469545959160" ID="ID_826999251" MODIFIED="1469545961076" TEXT="DiffApplicationStrategy&lt;DiffMutable&gt;"/>
@@ -4770,8 +4780,15 @@
 <icon BUILTIN="pencil"/>
 </node>
 </node>
-<node CREATED="1465428871136" ID="ID_1015843161" MODIFIED="1465428881634" TEXT="integration mehrerer Bindungs-Layer"/>
-<node CREATED="1465428882150" ID="ID_1889489833" MODIFIED="1465428890897" TEXT="komplexer Integrationstest"/>
+<node CREATED="1465428871136" ID="ID_1015843161" MODIFIED="1465428881634" TEXT="integration mehrerer Bindungs-Layer">
+<node CREATED="1469918339329" ID="ID_1427674245" MODIFIED="1469918349660" TEXT="DiffVirtualisedApplication_test"/>
+<node CREATED="1469918356432" ID="ID_55400098" MODIFIED="1469918363427" TEXT="Selector korrekt integrieren">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1465428882150" ID="ID_1889489833" MODIFIED="1465428890897" TEXT="komplexer Integrationstest">
+<node CREATED="1469918339329" ID="ID_1209021141" MODIFIED="1469918349660" TEXT="DiffVirtualisedApplication_test"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850101524" HGAP="-22" ID="ID_780586600" MODIFIED="1461882168896" TEXT="TODO" VSHIFT="29">
 <font NAME="SansSerif" SIZE="14"/>

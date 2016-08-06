@@ -226,7 +226,7 @@ namespace test{
           CHECK (target.showContent() == "γ = 3.45, α = 1");
           
           CHECK (mutator2.hasSrc());                // next we have to clean up waste 
-          mutator2.skipSrc();                       // left behind by the findSrc() operation                      // skipSrc
+          mutator2.skipSrc (ATTRIB3);               // left behind by the findSrc() operation                      // skipSrc
           CHECK (target.showContent() == "γ = 3.45, α = 1");
           
           mutator2.injectNew (ATTRIB2);                                                                            // injectNew
@@ -239,7 +239,7 @@ namespace test{
           // NOTE: the TestWireTap / TestMutationTarget does not enforce the attribute / children distinction!
           CHECK (mutator2.hasSrc());
           CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
-          mutator2.skipSrc();                       // ...which will be skipped (and thus discarded)               // skipSrc
+          mutator2.skipSrc (CHILD_B);               // ...which will be skipped (and thus discarded)               // skipSrc
           mutator2.injectNew (SUB_NODE);            // inject a new nested sub-structure here                      // injectNew
           CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
           CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
@@ -463,14 +463,14 @@ namespace test{
           CHECK (mutator2.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
           CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element                        // acceptSrc
           
-          mutator2.skipSrc();                       // next we have to clean up waste left over by findSrc()       // skipSrc
+          mutator2.skipSrc (ATTRIB3);               // next we have to clean up waste left over by findSrc()       // skipSrc
           
           mutator2.injectNew (ATTRIB2);                                                                            // injectNew
           CHECK (mutator2.matchSrc (ATTRIB3));
           CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
           
           CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
-          mutator2.skipSrc();                       // ...which will be skipped (and thus discarded)               // skipSrc
+          mutator2.skipSrc (CHILD_B);               // ...which will be skipped (and thus discarded)               // skipSrc
           mutator2.injectNew (SUB_NODE);            // inject a nested sub-structure (implementation defined)      // injectNew
           CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
           CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
@@ -789,7 +789,7 @@ namespace test{
           CHECK (mutator2.matchSrc (ATTRIB1));      // behaviour of the binding remains unaffected
           CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and "accept" this src element (also a NOP)         // acceptSrc
           
-          mutator2.skipSrc();                       // and 'skip' likewise is just not implemented for attributes  // skipSrc
+          mutator2.skipSrc (ATTRIB1);               // and 'skip' likewise is just not implemented for attributes  // skipSrc
           CHECK ( 1 == alpha);
           CHECK (-1 == beta);
           CHECK (3.45 == gamma);                    // all these non-operations actually didn't change anything...
@@ -807,7 +807,7 @@ namespace test{
           // but since all those operations are not relevant for our attribute binding, they will be passed on
           // to lower binding layers. And since, moreover, there /are no lower binding layers/ in our setup,
           // they will just do nothing and return false
-          mutator2.skipSrc();                                                                                      // skipSrc
+          mutator2.skipSrc (ATTRIB3);                                                                              // skipSrc
           CHECK (not mutator2.injectNew (SUB_NODE));// ...no setter binding, thus no effect                        // injectNew
           CHECK (not mutator2.matchSrc (CHILD_B));
           CHECK (not mutator2.acceptSrc (CHILD_B));                                                                // acceptSrc

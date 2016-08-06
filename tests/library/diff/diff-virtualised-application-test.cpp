@@ -137,7 +137,7 @@ namespace test{
                        % beta_
                        % gamma_
                        % delta_
-                       % join (nestedObj_, "\n......|")
+                       % join (nestedObj_, "\n........|")
                        % join (nestedData_)
                        ;
           }

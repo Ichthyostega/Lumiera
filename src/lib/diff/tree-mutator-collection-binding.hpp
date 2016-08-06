@@ -204,10 +204,15 @@
          *  causing this element to be discarded
          */
         virtual void
-        skipSrc ()  override
+        skipSrc (GenNode const& n)  override
           {
-            if (pos_)
-              ++pos_;
+            if (binding_.isApplicable(n))
+              {
+                if (pos_)
+                  ++pos_;
+              }
+            else
+              PAR::skipSrc (n);
           }
         
         /** fabricate a new element, based on
@@ -218,8 +223,13 @@
         virtual bool
         injectNew (GenNode const& n)  override
           {
-            binding_.inject (binding_.construct(n));
-            return true; /////////////////////////////////////////////////////////TODO with all these operations: need to invoke selector and possibly delegate to parent....
+            if (binding_.isApplicable(n))
+              {
+                binding_.inject (binding_.construct(n));
+                return true;
+              }
+            else
+              return PAR::injectNew (n);
           }
         
         virtual bool
@@ -233,60 +243,78 @@
         virtual bool
         matchSrc (GenNode const& spec)  override
           {
-            return pos_? binding_.matches (spec, *pos_)
-                       : false;
+            if (binding_.isApplicable(spec))
+              return pos_? binding_.matches (spec, *pos_)
+                         : false;
+            else
+              return PAR::matchSrc (spec);
           }
         
         /** accept existing element, when matching the given spec */
         virtual bool
         acceptSrc (GenNode const& n)  override
           {
-            bool isSrcMatch = ChildCollectionMutator::matchSrc(n);          //////TODO this is wrong: we must invoke *only* our own match, but no chained match of lower layers
-            if (isSrcMatch)                  // NOTE: crucial to call our own method here, not the virtual function
+            if (binding_.isApplicable(n))
               {
-                binding_.inject (move(*pos_));
-                ++pos_;
+                bool isSrcMatch = pos_ and binding_.matches (n, *pos_);
+                if (isSrcMatch)         // NOTE: crucial to perform only our own match check here 
+                  {
+                    binding_.inject (move(*pos_));
+                    ++pos_;
+                  }
+                return isSrcMatch;
               }
-            return isSrcMatch;
+            else
+              return PAR::acceptSrc (n);
           }
         
         /** locate designated element and accept it at current position */
         virtual bool
         findSrc (GenNode const& refSpec)  override
           {
-            Iter found = binding_.search (refSpec, pos_);
-            if (found)
+            if (binding_.isApplicable(refSpec))
               {
-                binding_.inject (move(*found));
+                Iter found = binding_.search (refSpec, pos_);
+                if (found)
+                  {
+                    binding_.inject (move(*found));
+                  }
+                return found;
               }
-            return found;
+            else
+              return PAR::findSrc (refSpec);
           }
         
         /** repeatedly accept, until after the designated location */
         virtual bool
         accept_until (GenNode const& spec)
           {
-            bool foundTarget = true;
-            
             if (spec.matches (Ref::END))
-              for ( ; pos_; ++pos_)
-                binding_.inject (move(*pos_));
-            else
               {
-                while (pos_ and not ChildCollectionMutator::matchSrc(spec))
-                  {
-                    binding_.inject (move(*pos_));
-                    ++pos_;
-                  }
-                if (ChildCollectionMutator::matchSrc(spec))
-                  {
-                    binding_.inject (move(*pos_));
-                    ++pos_;
-                  }
-                else
-                  foundTarget = false;
+                for ( ; pos_; ++pos_)
+                  binding_.inject (move(*pos_));
+                return true;
               }
-            return foundTarget;
+            else
+              if (binding_.isApplicable(spec))
+                {
+                  bool foundTarget = true;
+                  while (pos_ and not ChildCollectionMutator::matchSrc(spec))
+                    {
+                      binding_.inject (move(*pos_));
+                      ++pos_;
+                    }
+                  if (ChildCollectionMutator::matchSrc(spec))
+                    {
+                      binding_.inject (move(*pos_));
+                      ++pos_;
+                    }
+                  else
+                    foundTarget = false;
+                  return foundTarget;
+                }
+              else
+                return PAR::accept_until (spec);
           }
         
         /** locate element already accepted into the target sequence
@@ -294,9 +322,14 @@
         virtual bool
         assignElm (GenNode const& spec)
           {
-            Iter target_found = binding_.locate (spec);
-            return target_found? binding_.assign (*target_found, spec)
-                               : false;
+            if (binding_.isApplicable(spec))
+              {
+                Iter target_found = binding_.locate (spec);
+                return target_found? binding_.assign (*target_found, spec)
+                                   : false;
+              }
+            else
+              return PAR::assignElm (spec);
           }
         
         /** locate the designated target element and build a suitable
@@ -304,9 +337,14 @@
         virtual bool
         mutateChild (GenNode const& spec, TreeMutator::Handle targetBuff)
           {
-            Iter target_found = binding_.locate (spec);
-            return target_found? binding_.openSub (*target_found, spec.idi, targetBuff)
-                               : false;
+            if (binding_.isApplicable(spec))
+              {
+                Iter target_found = binding_.locate (spec);
+                return target_found? binding_.openSub (*target_found, spec.idi, targetBuff)
+                                   : false;
+              }
+            else
+              return PAR::mutateChild (spec, targetBuff);
           }
         
         /** verify all our pending (old) source elements where mentioned.

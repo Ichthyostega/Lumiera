@@ -204,15 +204,16 @@ namespace diff{
       /* ==== operation API ==== */
       
       virtual bool
-      hasSrc ()
+      hasSrc () ////////////////////////////////////TODO questionable if we need it. Can not be sensibly implemented on multiple onion-layers!
         {
           return false;
           // do nothing by default
         }
       
-      /** skip next src element and advance abstract source position */
+      /** skip next src element and advance abstract source position.
+       *  The argument shall be used to determine applicability */
       virtual void
-      skipSrc ()
+      skipSrc (GenNode const&)
         {
           // do nothing by default
         }
