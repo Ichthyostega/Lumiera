@@ -692,7 +692,7 @@ namespace diff{
   
   /**
    * @return either the contents of a nested record's type field
-   *         or the Rec::TYPE_NIL marker.
+   *         or the util::BOTTOM_INDICATOR, when not a record.
    * @remarks this function never raises an error, even if the element
    *         in fact doesn't constitute a nested scope. Effectively this
    *         allows to "peek" into the contents to some degree.
@@ -709,7 +709,7 @@ namespace diff{
         }
       
       return nested? nested->getType()
-                   : Rec::TYPE_NIL;
+                   : util::BOTTOM_INDICATOR;
     }
   
   

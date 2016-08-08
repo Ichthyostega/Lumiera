@@ -46,6 +46,7 @@ using std::make_unique;
 using std::string;
 using std::vector;
 using lib::time::Time;
+using util::BOTTOM_INDICATOR;
 
 
 namespace lib {
@@ -166,6 +167,10 @@ namespace test{
                           {
                             return not spec.isNamed();                // »Selector« : accept anything unnamed value-like
                           })
+                       .constructFrom ([&](GenNode const& spec) -> string
+                          {
+                            return string(spec);
+                          })
                        .assignElement ([&](string& target, GenNode const& spec) -> bool
                           {
                             target = render(spec.data);
@@ -174,7 +179,7 @@ namespace test{
                 .attach (collection(nestedObj_)
                        .isApplicableIf ([&](GenNode const& spec) -> bool
                           {
-                            return type_ == spec.data.recordType();    // »Selector« : require object-like sub scope with matching typeID
+                            return BOTTOM_INDICATOR != spec.data.recordType(); // »Selector« : require object-like sub scope
                           })
                        .constructFrom ([&](GenNode const& spec) -> Opaque
                           {

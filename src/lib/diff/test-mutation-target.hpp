@@ -133,18 +133,13 @@ namespace diff{
     inline string
     render (DataCap const& content)
     {
-      class StringRenderer
-        : public string
-        , public Variant<DataValues>::Visitor
+      struct StringRenderer
+        : public Variant<DataValues>::Visitor
         {
-          void
-          renderAs (string const& representation)
-            {
-              string::operator= (representation);
-            }
+          string representation{""};
           
 #define STRINGIFY_CONTENT(_TY_) \
-          virtual void handle  (_TY_& val) override { renderAs (util::toString (val)); }
+          virtual void handle  (_TY_& val) override { representation = util::toString (val); }
           
           STRINGIFY_CONTENT (int)
           STRINGIFY_CONTENT (int64_t)
@@ -164,22 +159,22 @@ namespace diff{
           virtual void
           handle  (Rec & rec) override
             {
-              renderAs (renderRecord (rec));
+              representation = renderRecord (rec);
             }
           
           virtual void
           handle  (RecRef & ref) override
             {
               if (ref)
-                renderAs (renderRecord (ref));
+                representation = renderRecord (ref);
               else
-                renderAs (util::BOTTOM_INDICATOR);
+                representation = util::BOTTOM_INDICATOR;
             }
         };
       
       StringRenderer visitor;
       unConst(content).accept (visitor);
-      return string(visitor);
+      return visitor.representation;
     }
     
   }//(End)diagnostic helpers
