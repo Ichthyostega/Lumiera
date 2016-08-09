@@ -766,7 +766,7 @@ namespace test{
                 gamma = val;
               });
           
-          CHECK (sizeof(mutator1) <= sizeof(void*)               // the TreeMutator VTable
+          CHECK (sizeof(mutator2) <= sizeof(void*)               // the TreeMutator VTable
                                    + 3 * sizeof(void*)           // one closure reference for each lambda
                                    + 3 * sizeof(GenNode::ID));   // one attribute-key for each binding
           
@@ -789,7 +789,8 @@ namespace test{
           CHECK (mutator2.matchSrc (ATTRIB1));      // behaviour of the binding remains unaffected
           CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and "accept" this src element (also a NOP)         // acceptSrc
           
-          mutator2.skipSrc (ATTRIB1);               // and 'skip' likewise is just not implemented for attributes  // skipSrc
+          VERIFY_ERROR (LOGIC, mutator2.skipSrc (ATTRIB3));
+                                                    // and 'skip' likewise is just not implemented for attributes  // skipSrc
           CHECK ( 1 == alpha);
           CHECK (-1 == beta);
           CHECK (3.45 == gamma);                    // all these non-operations actually didn't change anything...
@@ -807,7 +808,8 @@ namespace test{
           // but since all those operations are not relevant for our attribute binding, they will be passed on
           // to lower binding layers. And since, moreover, there /are no lower binding layers/ in our setup,
           // they will just do nothing and return false
-          mutator2.skipSrc (ATTRIB3);                                                                              // skipSrc
+          CHECK (not mutator2.matchSrc (CHILD_B));
+          mutator2.skipSrc (CHILD_B);               // ...no setter binding, thus no effect                        // skipSrc
           CHECK (not mutator2.injectNew (SUB_NODE));// ...no setter binding, thus no effect                        // injectNew
           CHECK (not mutator2.matchSrc (CHILD_B));
           CHECK (not mutator2.acceptSrc (CHILD_B));                                                                // acceptSrc

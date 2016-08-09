@@ -200,21 +200,6 @@
         
         /* ==== re-Implementation of the operation API ==== */
         
-        /** skip next pending src element,
-         *  causing this element to be discarded
-         */
-        virtual void
-        skipSrc (GenNode const& n)  override
-          {
-            if (binding_.isApplicable(n))
-              {
-                if (pos_)
-                  ++pos_;
-              }
-            else
-              PAR::skipSrc (n);
-          }
-        
         /** fabricate a new element, based on
          *  the given specification (GenNode),
          *  and insert it at current position
@@ -244,10 +229,25 @@
         matchSrc (GenNode const& spec)  override
           {
             if (binding_.isApplicable(spec))
-              return pos_? binding_.matches (spec, *pos_)
-                         : false;
+              return pos_ and binding_.matches (spec, *pos_);
             else
               return PAR::matchSrc (spec);
+          }
+        
+        /** skip next pending src element,
+         *  causing this element to be discarded
+         * @note can not perform a match on garbage data
+         */
+        virtual void
+        skipSrc (GenNode const& n)  override
+          {
+            if (binding_.isApplicable(n))
+              {
+                if (pos_)
+                    ++pos_;
+              }
+            else
+              PAR::skipSrc (n);
           }
         
         /** accept existing element, when matching the given spec */
@@ -257,7 +257,7 @@
             if (binding_.isApplicable(n))
               {
                 bool isSrcMatch = pos_ and binding_.matches (n, *pos_);
-                if (isSrcMatch)         // NOTE: crucial to perform only our own match check here 
+                if (isSrcMatch) //NOTE: crucial to perform only our own match check here 
                   {
                     binding_.inject (move(*pos_));
                     ++pos_;

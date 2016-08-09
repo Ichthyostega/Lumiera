@@ -376,26 +376,12 @@ namespace diff{
         
         /* ==== re-Implementation of the operation API ==== */
       
-        /** skip next recorded src element
-         * @remarks TestWireTap adapter together with TestMutationTarget
-         *      maintain a "shadow copy" of the data and apply the detected diff
-         *      against this internal copy. This allows to verify what's going on
-         */
-        virtual void
-        skipSrc (GenNode const& n)  override
-          {
-            if (pos_)
-              {
-                GenNode const& skippedElm = *pos_;
-                ++pos_;
-                target_.logSkip (skippedElm);
-              }
-            PAR::skipSrc(n);
-          }
-        
         /** record in the test target
          *  that a new child element is
          *  being inserted at current position
+         * @remarks TestWireTap adapter together with TestMutationTarget
+         *      maintain a "shadow copy" of the data and apply the detected diff
+         *      against this internal copy. This allows to verify what's going on
          */
         virtual bool
         injectNew (GenNode const& n)  override
@@ -417,8 +403,20 @@ namespace diff{
         matchSrc (GenNode const& n)  override
           {
             return PAR::matchSrc(n)
-                or pos_? n.matches(*pos_)
-                       : false;
+                or pos_ and n.matches(*pos_);
+          }
+        
+        /** skip next recorded src element without touching it */
+        virtual void
+        skipSrc (GenNode const& n)  override
+          {
+            if (pos_)
+              {
+                GenNode const& skippedElm = *pos_;
+                ++pos_;
+                target_.logSkip (skippedElm);
+              }
+            PAR::skipSrc(n);
           }
         
         /** accept existing element, when matching the given spec */
@@ -426,7 +424,7 @@ namespace diff{
         acceptSrc (GenNode const& n)  override
           {
             bool isSrcMatch = pos_ and n.matches(*pos_);
-            if (isSrcMatch)         // NOTE: important to invoke our own match here
+            if (isSrcMatch) //NOTE: important to invoke our own match here
               {
                 target_.inject (move(*pos_), "acceptSrc");
                 ++pos_;

@@ -973,6 +973,11 @@
 </html></richcontent>
 <cloud COLOR="#fce9c0"/>
 <font NAME="SansSerif" SIZE="16"/>
+<node CREATED="1455982947867" ID="ID_1339677569" MODIFIED="1470772472993" TEXT="injectNew">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455982969073" ID="ID_1885889112" MODIFIED="1455982974332" TEXT="inject new content"/>
+<node CREATED="1457047512175" ID="ID_1126383522" MODIFIED="1457047519426" TEXT="at implicit &quot;current&quot; position"/>
+</node>
 <node CREATED="1455927425726" ID="ID_1776437339" MODIFIED="1464117059267" TEXT="hasSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928216420" ID="ID_662720483" MODIFIED="1464117064570" TEXT="further src elements available"/>
@@ -994,38 +999,85 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1455927425726" ID="ID_1759686725" MODIFIED="1457120215833" TEXT="skipSrc">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928216420" ID="ID_1581600385" MODIFIED="1455928325793" TEXT="advance source position"/>
-<node CREATED="1470527086660" ID="ID_13765501" MODIFIED="1470527097135" TEXT="guarded by selector">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
 <node CREATED="1455927396505" ID="ID_392033275" MODIFIED="1457120240382" TEXT="matchSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1455928268589" ID="ID_97473072" MODIFIED="1455928318898" TEXT="ID comparison">
 <node CREATED="1455928524530" ID="ID_545057240" MODIFIED="1457120284424" TEXT="implicit next pos"/>
 <node CREATED="1455928530738" ID="ID_1035043901" MODIFIED="1455928533677" TEXT="ID"/>
 </node>
+<node CREATED="1470778603801" ID="ID_1808045935" MODIFIED="1470778650743" TEXT="needed to implement the `del` verb">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      since skipSrc performs both the `del` and the `skip` verb, it can not perform the match itself...
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1455982947867" ID="ID_1339677569" MODIFIED="1457047494973" TEXT="injectNew">
+</node>
+<node CREATED="1455927425726" ID="ID_1759686725" MODIFIED="1470772470034" TEXT="skipSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455982969073" ID="ID_1885889112" MODIFIED="1455982974332" TEXT="inject new content"/>
-<node CREATED="1457047512175" ID="ID_1126383522" MODIFIED="1457047519426" TEXT="at implicit &quot;current&quot; position"/>
+<node CREATED="1470527086660" ID="ID_13765501" MODIFIED="1470527097135" TEXT="guarded by selector">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1470772440180" ID="ID_1241607377" MODIFIED="1470778593859" TEXT="can not match by itself">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...because it is also used to discard garbage after a findSrc operation.
+    </p>
+    <p>
+      Thus we need to avoid touching the actual data in the src sequence, because this might lead to SEGFAULT.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      For this reason, the implementation of the `del` verb has to invoke matchSrc explicitly beforehand,
+    </p>
+    <p>
+      and this is the very reason `matchSrc` exists. Moreover, `matchSrc` must be written such
+    </p>
+    <p>
+      as to ensure to invoke the Selector before performing a local match. And skipSrc has to
+    </p>
+    <p>
+      proceed in precisely the same way. Thus, if the selector denies responsibility, we'll delegate
+    </p>
+    <p>
+      to the next lower layer in both cases, and the result and behaviour depends on this next lower layer solely
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1455928216420" ID="ID_1581600385" MODIFIED="1470778395226" TEXT="thus just advance source position"/>
 </node>
 <node CREATED="1455927413191" ID="ID_1624797970" MODIFIED="1457120269834" TEXT="acceptSrc">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928275316" ID="ID_702364156" MODIFIED="1455928304302">
+<node CREATED="1470527086660" ID="ID_410793564" MODIFIED="1470772489007" TEXT="guarded by selector">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1470772440180" ID="ID_836603881" MODIFIED="1470772503839" TEXT="verify match with next src position"/>
+<node CREATED="1455928275316" ID="ID_702364156" MODIFIED="1470772519749">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      <i>move</i>&#160;into target
+      then <i>move</i>&#160;into target
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1455928537273" ID="ID_1036724915" MODIFIED="1457120296935" TEXT="implicit next pos"/>
 </node>
 </node>

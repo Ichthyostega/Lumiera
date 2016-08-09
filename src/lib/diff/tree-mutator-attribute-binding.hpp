@@ -174,6 +174,18 @@
          *  in a way not to ask this binding to "reorder" a field from an
          *  existing class definition.
          */
+        virtual void
+        skipSrc (GenNode const& refSpec)  override
+          {
+            if (isApplicable(refSpec))
+              throw error::Logic (_Fmt{"attempt to skip or drop attribute '%s', "
+                                       "which is bound to an object field and "
+                                       "thus can not cease to exist."}
+                                      % refSpec.idi.getSym());
+            else
+              PAR::skipSrc (refSpec);
+          }
+        
         virtual bool
         findSrc (GenNode const& refSpec)  override
           {

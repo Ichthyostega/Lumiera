@@ -210,14 +210,6 @@ namespace diff{
           // do nothing by default
         }
       
-      /** skip next src element and advance abstract source position.
-       *  The argument shall be used to determine applicability */
-      virtual void
-      skipSrc (GenNode const&)
-        {
-          // do nothing by default
-        }
-      
       /** establish new element at current position
        * @return `true` when successfully inserted something */
       virtual bool
@@ -233,6 +225,22 @@ namespace diff{
         {
           // do nothing by default
           return false;
+        }
+      
+      /** skip next src element and advance abstract source position.
+       *  The argument shall be used to determine applicability
+       * @remarks this operation is used both to implement the `del` verb
+       *          and the `skip` verb. Since the latter discards garbage
+       *          left back by `find` we must not touch the contents,
+       *          to prevent a SEGFAULT. Thus `skipSrc` can not match
+       *          and thus can not return anything. Consequently the
+       *          `del` implementation has to use `matchSrc` explicitly,
+       *          and the latter must invoke the selector prior to
+       *          performing the local match. */
+      virtual void
+      skipSrc (GenNode const&)
+        {
+          // do nothing by default
         }
       
       /** accept existing element, when matching the given spec */

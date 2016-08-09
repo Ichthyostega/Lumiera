@@ -279,7 +279,6 @@ namespace diff{
       /* == Forwarding: mutation primitives == */
       
       void skipSrc();
-      bool injectNew (GenNode const& n);
       bool matchSrc (GenNode const& n);
       bool acceptSrc (GenNode const& n);
       bool findSrc (GenNode const& n);

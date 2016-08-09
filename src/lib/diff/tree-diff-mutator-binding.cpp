@@ -266,12 +266,6 @@ namespace diff{
   }
   
   bool
-  TreeDiffMutatorBinding::injectNew (GenNode const& n)
-  {
-    return treeMutator_->injectNew(n);
-  }
-  
-  bool
   TreeDiffMutatorBinding::matchSrc (GenNode const& n)
   {
     UNIMPLEMENTED("ensure the next source element matches with given spec");
@@ -320,7 +314,7 @@ namespace diff{
   void
   TreeDiffMutatorBinding::ins (GenNode const& n)
   {
-    bool success = injectNew (n);
+    bool success = treeMutator_->injectNew(n);
     if (not success)
       __failMismatch (n, "insert");
   }
