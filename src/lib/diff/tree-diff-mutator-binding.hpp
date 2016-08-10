@@ -264,6 +264,19 @@ namespace diff{
       
       void move_into_new_sequence (Iter pos);
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+
+      bool
+      endOfData()
+        {
+          return not treeMutator_->hasSrc();
+        }
+      
+      string
+      srcPos()
+        {
+          return "??"; ////////////////TODO  can this be served by the treeMutator_ ?? Is it still necessary?
+        }
+      
       
       /* == Forwarding: error handling == */
       
@@ -278,10 +291,7 @@ namespace diff{
       
       /* == Forwarding: mutation primitives == */
       
-      void skipSrc();
       bool matchSrc (GenNode const& n);
-      bool acceptSrc (GenNode const& n);
-      bool findSrc (GenNode const& n);
       bool accept_until (GenNode const& refMark);
       void assignElm (GenNode const& n);
       void open_subScope (GenNode const& n);

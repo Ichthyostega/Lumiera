@@ -218,22 +218,42 @@ namespace diff{
   
   /* == Forwarding: error handling == */
   
+  
   void
   TreeDiffMutatorBinding::__expect_in_target  (GenNode const& elm, Literal oper)
   {
     
+    if (endOfData())
+      throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
+                              "no (further) elements in target sequence") % oper % elm
+                        , LUMIERA_ERROR_DIFF_CONFLICT);
+    
+//  /////////////////////////////////////////////////////////////TODO: is there any chance to uphold this special syntactic construct?? otherwise drop it from the language!
+//  if (elm.matches(Ref::CHILD) and not srcPos()->isNamed())
+//    return; // allow for anonymous pick or delete of children
+    
+    if (not treeMutator_->matchSrc(elm))
+      throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
+                              "found element %s on current target position instead")
+                              % oper % elm % srcPos()                            /////////////////////TODO still relevant?
+                        , LUMIERA_ERROR_DIFF_CONFLICT);
   }
   
   void
   TreeDiffMutatorBinding::__expect_further_elements (GenNode const& elm)
   {
-    
+    if (endOfData())
+      throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
+                              "unable to apply diff further.") % elm
+                        , LUMIERA_ERROR_DIFF_CONFLICT);
   }
   
   void
   TreeDiffMutatorBinding::__fail_not_found (GenNode const& elm)
   {
-    
+    throw error::State(_Fmt("Premature end of sequence; unable to locate "
+                            "element %s in the remainder of the target.") % elm
+                      , LUMIERA_ERROR_DIFF_CONFLICT);
   }
   
   void
@@ -259,28 +279,10 @@ namespace diff{
   
   /* == Forwarding: mutation primitives == */
   
-  void
-  TreeDiffMutatorBinding::skipSrc()
-  {
-    UNIMPLEMENTED("skip next src element and advance abstract source position");
-  }
-  
   bool
   TreeDiffMutatorBinding::matchSrc (GenNode const& n)
   {
     UNIMPLEMENTED("ensure the next source element matches with given spec");
-  }
-  
-  bool
-  TreeDiffMutatorBinding::acceptSrc (GenNode const& n)
-  {
-    UNIMPLEMENTED("accept existing element, when matching the given spec");
-  }
-  
-  bool
-  TreeDiffMutatorBinding::findSrc (GenNode const& n)
-  {
-    UNIMPLEMENTED("locate designated element and accept it at current position");
   }
   
   bool
@@ -323,21 +325,23 @@ namespace diff{
   TreeDiffMutatorBinding::del (GenNode const& n)
   {
     __expect_in_target(n, "remove");
-    skipSrc();
+    treeMutator_->skipSrc(n);
   }
   
   void
   TreeDiffMutatorBinding::pick (GenNode const& n)
   {
-    __expect_in_target(n, "pick");
-    acceptSrc (n);
+//    __expect_in_target(n, "pick"); ////////////////////////TODO TOD-o ?
+    bool success = treeMutator_->acceptSrc (n);
+    if (not success)
+      __failMismatch (n, "pick");
   }
   
   void
   TreeDiffMutatorBinding::skip (GenNode const& n)
   {
     __expect_further_elements (n);
-    skipSrc();
+    treeMutator_->skipSrc(n);
   }      // assume the actual content has been moved away by a previous find()
   
   void
@@ -345,7 +349,7 @@ namespace diff{
   {
     __expect_further_elements (n);
          // consume and leave waste, expected to be cleaned-up by skip() later
-    if (not this->findSrc(n));
+    if (not treeMutator_->findSrc(n))
       __fail_not_found (n);
   }
   
