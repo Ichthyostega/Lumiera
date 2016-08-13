@@ -403,7 +403,7 @@ namespace diff{
         matchSrc (GenNode const& n)  override
           {
             return PAR::matchSrc(n)
-                or pos_ and n.matches(*pos_);
+                or(pos_ and n.matches(*pos_));
           }
         
         /** skip next recorded src element without touching it */
@@ -455,6 +455,10 @@ namespace diff{
             if (spec.matches (Ref::END))
               for ( ; pos_; ++pos_)
                 target_.inject (move(*pos_), "accept_until END");
+            else
+            if (spec.matches (Ref::ATTRIBS))
+              for ( ; pos_ and pos_->isNamed(); ++pos_)
+                target_.inject (move(*pos_), "accept_until after ATTRIBS");
             else
               {
                 string logMsg{"accept_until "+spec.idi.getSym()};
