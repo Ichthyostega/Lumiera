@@ -296,6 +296,9 @@
                 return true;
               }
             else
+            if (spec.matches (Ref::ATTRIBS))
+                return PAR::accept_until (spec);
+            else
               if (binding_.isApplicable(spec))
                 {
                   bool foundTarget = true;

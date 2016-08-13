@@ -454,18 +454,18 @@ namespace test{
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
           CHECK (isnil (target));                   // the match didn't change anything
           
-          CHECK (mutator2.findSrc (ATTRIB3));       // search for an element further down into src...              // findSrc
-          CHECK (!isnil (target));                  // ...pick and accept it into the "visible" part of target
-          CHECK (join(target) == "≺γ∣3.45≻");
+          CHECK (not mutator2.accept_until(Ref::ATTRIBS));
+                                                    // NOTE: collection values can be anything; thus this
+                                                    //       collection binding layer can not have any notion of
+                                                    //       "this is an attribute". It will just delegate to the
+                                                    //       next lower layer and thus finally return false
           
-          CHECK (mutator2.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
-          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element                        // acceptSrc
-          
-          mutator2.skipSrc (ATTRIB3);               // next we have to clean up waste left over by findSrc()       // skipSrc
-          
+          CHECK (mutator2.accept_until(ATTRIB3));   // ...but of course we can fast forward to dedicated values    // accept_until
+          CHECK (!isnil (target));                  // the fast forward did indeed accept some entries
+          CHECK (mutator2.acceptSrc(ATTRIB3));      // we have a duplicate in list, need to accept that as well    // accept
+          CHECK (mutator2.hasSrc());
+          CHECK (mutator2.matchSrc (CHILD_B));      // ...now we're located behind the attributes, at first child
           mutator2.injectNew (ATTRIB2);                                                                            // injectNew
-          CHECK (mutator2.matchSrc (ATTRIB3));
-          CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
           
           CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
           mutator2.skipSrc (CHILD_B);               // ...which will be skipped (and thus discarded)               // skipSrc
@@ -476,28 +476,32 @@ namespace test{
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still waiting, unaffected
           CHECK (not mutator2.acceptSrc (CHILD_T)); // refusing to accept/pick a non matching element
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still patiently waiting, unaffected
-          CHECK (mutator2.acceptSrc (CHILD_B));                                                                    // acceptSrc
-          CHECK (mutator2.matchSrc (CHILD_T));
-          CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
+          CHECK (mutator2.hasSrc());
+          CHECK (mutator2.findSrc (CHILD_T));       // search for an element further down into src...              // findSrc
+          CHECK (mutator2.matchSrc (CHILD_B));      // element at head of src is still CHILD_B (as before)
+          CHECK (mutator2.acceptSrc (CHILD_B));     // now pick and accept this src element as child               // acceptSrc
+          
+          CHECK (mutator2.hasSrc());                // next we have to clean up waste
+          mutator2.skipSrc (CHILD_T);               // left behind by the findSrc() operation                      // skipSrc
           CHECK (not mutator2.hasSrc());            // source contents exhausted
           CHECK (not mutator2.acceptSrc (CHILD_T)); // ...anything beyond is NOP
           CHECK (mutator2.completeScope());         // no pending elements left, everything resolved
           
           // verify reordered shape
           contents = stringify(eachElm(target));
+          CHECK ("≺α∣1≻" == *contents);
+          ++contents;
           CHECK ("≺γ∣3.45≻" == *contents);
           ++contents;
-          CHECK ("≺α∣1≻" == *contents);
+          CHECK ("≺γ∣3.45≻" == *contents);
           ++contents;
           CHECK ("≺β∣2≻" == *contents);
           ++contents;
-          CHECK ("≺γ∣3.45≻" == *contents);
-          ++contents;
           CHECK (contains(*contents, "∣Rec()≻"));
           ++contents;
-          CHECK (contains(*contents, "∣b≻"));
-          ++contents;
           CHECK (contains(*contents, "∣78:56:34.012≻"));
+          ++contents;
+          CHECK (contains(*contents, "∣b≻"));
           ++contents;
           CHECK (isnil (contents));
           
@@ -554,17 +558,17 @@ namespace test{
                           }));
           
           CHECK (isnil (target));
-          CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
-          CHECK (mutator3.accept_until (CHILD_B));  // fast forward behind attribute β                             // accept_until
-          CHECK (mutator3.matchSrc (CHILD_T));      // this /would/ be the next source element, but rather...
-          CHECK (not mutator3.completeScope());
+          CHECK (mutator3.matchSrc (ATTRIB1));      // new mutator starts out anew at the beginning
+          CHECK (mutator3.accept_until (CHILD_T));  // fast forward behind the second-last child (CHILD_T)         // accept_until
+          CHECK (mutator3.matchSrc (CHILD_B));      // this /would/ be the next source element, but rather...
+          CHECK (not mutator3.completeScope());     // CHILD_B is still pending, not done yet...
           CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
           CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           
           CHECK (not contains(join(target), "≺γ∣3.1415927≻"));
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
           CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
-          CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
+          CHECK (    mutator3.completeScope());
           cout << "Content after assignment; "
                << join(target) <<endl;
           
