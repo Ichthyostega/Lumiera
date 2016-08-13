@@ -111,16 +111,14 @@ namespace test{
    * ins(CHILD_B)
    * ins(CHILD_T)
    *                          // ==> ATTRIB1, ATTRIB3, ATTRIB3, CHILD_B, CHILD_B, CHILD_T
-   * find(ATTRIB3)
-   * pick(ATTRIB1)
-   * skip(ATTRIB3)
+   * after(Ref::ATTRIBS)
    * ins(ATTRIB2)
-   * pick(ATTRIB3)
    * del(CHILD_B)
    * ins(SUB_NODE)
+   * find(CHILD_T)
    * pick(CHILD_B)
-   * pick(CHILD_T)
-   *                          // ==> ATTRIB3, ATTRIB1, ATTRIB2, ATTRIB3, SUB_NODE, CHILD_B, CHILD_T
+   * skip(CHILD_T)
+   *                          // ==> ATTRIB1, ATTRIB3, (ATTRIB3), ATTRIB2, SUB_NODE, CHILD_T, CHILD_B
    * after(CHILD_B)
    * after(Ref::END)
    * set(GAMMA_PI)
@@ -137,10 +135,10 @@ namespace test{
    *   ins(CHILD_A)
    *   ins(CHILD_A)
    * emu(ATTRIB_NODE)
-   *                          // ==> ATTRIB3, ATTRIB1, ATTRIB2, ATTRIB3 := π,
-   *                          //     SUB_NODE{ type ξ, ATTRIB2, CHILD_B, CHILD_A },
-   *                          //     CHILD_B, CHILD_T,
+   *                          // ==> ATTRIB1, ATTRIB3 := π, (ATTRIB3), ATTRIB2,
    *                          //     ATTRIB_NODE{ type ζ, CHILD_A, CHILD_A, CHILD_A }
+   *                          //     SUB_NODE{ type ξ, ATTRIB2, CHILD_B, CHILD_A },
+   *                          //     CHILD_T, CHILD_B
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    * 
    * @see TreeMutator
@@ -217,27 +215,18 @@ namespace test{
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
           CHECK (isnil (target));                   // the match didn't change anything
           
-          CHECK (mutator2.findSrc (ATTRIB3));       // search for an element further down into src...              // findSrc
-          CHECK (!isnil (target));                  // ...pick and accept it into the "visible" part of target
-          CHECK (target.showContent() == "γ = 3.45");
-          
-          CHECK (mutator2.matchSrc (ATTRIB1));      // element at head of src is still ATTRIB1 (as before)
-          CHECK (mutator2.acceptSrc (ATTRIB1));     // now pick and accept this src element                        // acceptSrc
-          CHECK (target.showContent() == "γ = 3.45, α = 1");
-          
-          CHECK (mutator2.hasSrc());                // next we have to clean up waste 
-          mutator2.skipSrc (ATTRIB3);               // left behind by the findSrc() operation                      // skipSrc
-          CHECK (target.showContent() == "γ = 3.45, α = 1");
+          CHECK (mutator2.accept_until(Ref::ATTRIBS));                                                             // accept_until
+          CHECK (mutator2.hasSrc());
+          CHECK (!isnil (target));                  // the fast forward did accept some entries
+          CHECK (target.showContent() == "α = 1, γ = 3.45, γ = 3.45");
+          CHECK (mutator2.matchSrc (CHILD_B));      // ...and we're located behind the attributes, at first child
           
           mutator2.injectNew (ATTRIB2);                                                                            // injectNew
-          CHECK (mutator2.hasSrc());
-          CHECK (mutator2.matchSrc (ATTRIB3));
-          CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
-          CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.45");
+          CHECK (target.showContent() == "α = 1, γ = 3.45, γ = 3.45, β = 2");
           
           // now proceeding with the children.
           // NOTE: the TestWireTap / TestMutationTarget does not enforce the attribute / children distinction!
-          CHECK (mutator2.hasSrc());
+          CHECK (mutator2.hasSrc());                // still located behind the attributes...
           CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
           mutator2.skipSrc (CHILD_B);               // ...which will be skipped (and thus discarded)               // skipSrc
           mutator2.injectNew (SUB_NODE);            // inject a new nested sub-structure here                      // injectNew
@@ -247,27 +236,35 @@ namespace test{
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still waiting, unaffected
           CHECK (not mutator2.acceptSrc (CHILD_T)); // refusing to accept/pick a non matching element
           CHECK (mutator2.matchSrc (CHILD_B));      // child B still patiently waiting, unaffected
-          CHECK (mutator2.acceptSrc (CHILD_B));                                                                    // acceptSrc
-          CHECK (mutator2.matchSrc (CHILD_T));
-          CHECK (mutator2.acceptSrc (CHILD_T));                                                                    // acceptSrc
+          CHECK (mutator2.hasSrc());
+          CHECK (mutator2.findSrc (CHILD_T));       // search for an element further down into src...              // findSrc
+          CHECK (!isnil (target));                  // ...pick and accept it into the "visible" part of target
+          CHECK (target.showContent() == "α = 1, γ = 3.45, γ = 3.45, β = 2, Rec(), 78:56:34.012");
+          
+          CHECK (mutator2.matchSrc (CHILD_B));      // element at head of src is still CHILD_B (as before)
+          CHECK (mutator2.acceptSrc (CHILD_B));     // now pick and accept this src element as child               // acceptSrc
+          
+          CHECK (mutator2.hasSrc());                // next we have to clean up waste
+          mutator2.skipSrc (CHILD_T);               // left behind by the findSrc() operation                      // skipSrc
+          CHECK (target.showContent() == "α = 1, γ = 3.45, γ = 3.45, β = 2, Rec(), 78:56:34.012, b");
           CHECK (not mutator2.hasSrc());            // source contents exhausted
           CHECK (not mutator2.acceptSrc (CHILD_T));
           CHECK (mutator2.completeScope());         // no pending elements left, everything resolved
           CHECK (target.verify("attachMutator")
                        .beforeEvent("injectNew","78:56:34.012")
                        .before("attachMutator")
-                       .beforeEvent("findSrc","γ = 3.45")
-                       .beforeEvent("acceptSrc","α = 1")
-                       .beforeEvent("skipSrc","⟂")
+                       .beforeEvent("accept_until after ATTRIBS","α = 1")
+                       .beforeEvent("accept_until after ATTRIBS","γ = 3.45")
+                       .beforeEvent("accept_until after ATTRIBS","γ = 3.45")
                        .beforeEvent("injectNew","β = 2")
-                       .beforeEvent("acceptSrc","γ = 3.45")
                        .beforeEvent("skipSrc","b")
                        .beforeEvent("injectNew","Rec()")
+                       .beforeEvent("findSrc","78:56:34.012")
                        .beforeEvent("acceptSrc","b")
-                       .beforeEvent("acceptSrc","78:56:34.012")
-                       .beforeEvent("completeScope","scope completed")
+                       .beforeEvent("skipSrc","⟂")
+                       .beforeEvent("completeScope","scope completed / 6 waste elm(s)")
                        );
-          CHECK (target.showContent() == "γ = 3.45, α = 1, β = 2, γ = 3.45, Rec(), b, 78:56:34.012");
+          CHECK (target.showContent() == "α = 1, γ = 3.45, γ = 3.45, β = 2, Rec(), 78:56:34.012, b");
           cout << "Content after reordering; "
                << target.showContent() <<endl;
           
@@ -280,10 +277,10 @@ namespace test{
           
           // the first thing we try out is how to navigate through the sequence partially
           CHECK (isnil (target));
-          CHECK (mutator3.matchSrc (ATTRIB3));      // new mutator starts out anew at the beginning
-          CHECK (mutator3.accept_until (CHILD_B));  // fast forward behind attribute β                             // accept_until
-          CHECK (mutator3.matchSrc (CHILD_T));      // this /would/ be the next source element...
-          CHECK (not mutator3.completeScope());     // CHILD_T is still pending, not done yet...
+          CHECK (mutator3.matchSrc (ATTRIB1));      // new mutator starts out anew at the beginning
+          CHECK (mutator3.accept_until (CHILD_T));  // fast forward behind the second-last child (CHILD_T)         // accept_until
+          CHECK (mutator3.matchSrc (CHILD_B));      // this /would/ be the next source element...
+          CHECK (not mutator3.completeScope());     // CHILD_B is still pending, not done yet...
           CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
           CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           
@@ -315,20 +312,21 @@ namespace test{
           GenNode differentTime{CHILD_T.idi.getSym(), Time(11,22)};
           VERIFY_ERROR (LOGIC, mutator3.assignElm (differentTime));
           
-          CHECK (target.showContent() == "γ = 3.1415927, α = 1, β = 2, γ = 3.45, Rec(), b, 78:56:34.012");
-          CHECK (target.verifyEvent("acceptSrc","78:56:34.012")
+          CHECK (target.showContent() == "α = 1, γ = 3.1415927, γ = 3.45, β = 2, Rec(), 78:56:34.012, b");
+          CHECK (target.verifyEvent("findSrc","78:56:34.012")
+                       .beforeEvent("acceptSrc","b")
                        .before("attachMutator TestWireTap")
-                       .beforeEvent("accept_until _CHILD_char.","γ = 3.45")
-                       .beforeEvent("accept_until _CHILD_char.","α = 1")
-                       .beforeEvent("accept_until _CHILD_char.","β = 2")
-                       .beforeEvent("accept_until _CHILD_char.","γ = 3.45")
-                       .beforeEvent("accept_until _CHILD_char.","Rec()")
-                       .beforeEvent("accept_until _CHILD_char.","b")
+                       .beforeEvent("accept_until _CHILD_Time.","α = 1")
+                       .beforeEvent("accept_until _CHILD_Time.","γ = 3.45")
+                       .beforeEvent("accept_until _CHILD_Time.","γ = 3.45")
+                       .beforeEvent("accept_until _CHILD_Time.","β = 2")
+                       .beforeEvent("accept_until _CHILD_Time.","Rec()")
+                       .beforeEvent("accept_until _CHILD_Time.","78:56:34.012")
                        .beforeEvent("completeScope","scope NOT completed")
-                       .beforeEvent("accept_until END","78:56:34.012")
-                       .beforeEvent("completeScope","scope completed")
+                       .beforeEvent("accept_until END","b")
+                       .beforeEvent("completeScope","scope completed / 7 waste elm(s)")
                        .beforeEvent("assignElm","γ: 3.45 ⤅ 3.1415927")
-                       .beforeEvent("completeScope","scope completed")
+                       .beforeEvent("completeScope","scope completed / 7 waste elm(s)")
                        .beforeEvent("mutateChild","start mutation...Rec()")
                        );
           
