@@ -210,7 +210,10 @@
         virtual bool
         accept_until (GenNode const& spec)  override
           {
-            if (Ref::END == spec or Ref::ATTRIBS == spec)
+            if (Ref::END == spec)
+              return PAR::accept_until(Ref::END);
+            else
+            if (Ref::ATTRIBS == spec)
               return true;
             else
               if (isApplicable(spec))

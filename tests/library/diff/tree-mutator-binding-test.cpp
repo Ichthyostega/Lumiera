@@ -797,14 +797,22 @@ namespace test{
           CHECK (-1 == beta);
           CHECK (3.45 == gamma);                    // all these non-operations actually didn't change anything...
           
+          CHECK (mutator2.accept_until(Ref::ATTRIBS));                                                             // accept_until ATTRIBS
+                                                    // what /is/ allowed though, for reasons of logic,
+                                                    // is to "fast forward behind all attributes"
+                                                    // of course this is implemented as NOP
+          CHECK (not mutator2.accept_until(Ref::END));                                                             // accept_until END
+                                                    // likewise for Ref::END,
+                                                    // but in this case the call is actually forwarded down
+                                                    // and thus returns false in our setup here,
+                                                    // since there is no active layer below
+          
           mutator2.injectNew (ATTRIB2);                                                                            // injectNew
           
           CHECK ( 1 == alpha);
           CHECK ( 2 == beta);                       // the first operation actually causing a tangible effect
           CHECK (3.45 == gamma);
           
-          CHECK (mutator2.matchSrc (ATTRIB3));
-          CHECK (mutator2.acceptSrc (ATTRIB3));                                                                    // acceptSrc
           
           // for sake of completeness, we'll be applying the same sequence of operations as in the other tests
           // but since all those operations are not relevant for our attribute binding, they will be passed on
@@ -814,9 +822,9 @@ namespace test{
           mutator2.skipSrc (CHILD_B);               // ...no setter binding, thus no effect                        // skipSrc
           CHECK (not mutator2.injectNew (SUB_NODE));// ...no setter binding, thus no effect                        // injectNew
           CHECK (not mutator2.matchSrc (CHILD_B));
+          CHECK (not mutator2.findSrc (CHILD_T));   // find for non-attribute is just passed down                  // findSrc
           CHECK (not mutator2.acceptSrc (CHILD_B));                                                                // acceptSrc
-          CHECK (not mutator2.matchSrc (CHILD_T));
-          CHECK (not mutator2.acceptSrc (CHILD_T));                                                                // acceptSrc
+          mutator2.skipSrc (CHILD_T);                                                                              // skipSrc
           
           CHECK ( 1 == alpha);
           CHECK ( 2 == beta);
@@ -862,8 +870,8 @@ namespace test{
           VERIFY_ERROR (LOGIC, mutator3.accept_until (ATTRIB3));  // rejected; no support for ordering             // accept_until
           CHECK (not mutator3.accept_until (ATTRIB2));            // unknown binding, no one is responsible
           CHECK (not mutator3.accept_until (ATTRIB1));
-          CHECK (mutator3.accept_until (Ref::ATTRIBS));           // only the generic end-of-scope marks
-          CHECK (mutator3.accept_until (Ref::END));               // are supported (and implemented as NOP)
+          CHECK (mutator3.accept_until (Ref::ATTRIBS));           // only the generic end-of-scope marks supported
+          CHECK (not mutator3.accept_until (Ref::END));           // (and implemented either as NOP or passed down)
           
           // explanation: due to the nature of a 'data field',
           // this binding has no notion of 'ordering' and thus no 'current position'.
