@@ -277,22 +277,20 @@ namespace test{
                          , ins(CHILD_B)
                          , ins(CHILD_T)
                          });
-        }                // ==> ATTRIB1, ATTRIB3, ATTRIB3, CHILD_B, CHILD_B, CHILD_T
+        }                // ==> ATTRIB1, ATTRIB3, (ATTRIB3), CHILD_B, CHILD_B, CHILD_T
       
       DiffSeq
       reorderingDiff()
         {
-          return snapshot({find(ATTRIB3)
-                         , pick(ATTRIB1)
-                         , skip(ATTRIB3)
+          return snapshot({after(Ref::ATTRIBS)
                          , ins(ATTRIB2)
-                         , pick(ATTRIB3)
                          , del(CHILD_B)
                          , ins(SUB_NODE)
+                         , find(CHILD_T)
                          , pick(CHILD_B)
-                         , pick(CHILD_T)
+                         , skip(CHILD_T)
                          });
-        }                // ==> ATTRIB3, ATTRIB1, ATTRIB2, ATTRIB3, SUB_NODE, CHILD_B, CHILD_T
+        }                // ==> ATTRIB1, ATTRIB3, (ATTRIB3), ATTRIB2, SUB_NODE, CHILD_T, CHILD_B
         
       DiffSeq
       mutationDiff()
@@ -314,10 +312,10 @@ namespace test{
                            , ins(CHILD_A)
                          , emu(ATTRIB_NODE)
                          });
-        }                // ==> ATTRIB3 := π, ATTRIB1, ATTRIB2, ATTRIB3,
+        }                // ==> ATTRIB1, ATTRIB3 := π, (ATTRIB3), ATTRIB2,
                          //     ATTRIB_NODE{ type ζ, CHILD_A, CHILD_A, CHILD_A }
                          //     SUB_NODE{ type ξ, ATTRIB2, CHILD_B, CHILD_A },
-                         //     CHILD_B, CHILD_T,
+                         //     CHILD_T, CHILD_B
       
       
       
