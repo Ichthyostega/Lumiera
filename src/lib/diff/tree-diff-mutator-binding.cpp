@@ -259,8 +259,8 @@ namespace diff{
   void
   TreeDiffMutatorBinding::__failMismatch (GenNode const& spec, Literal oper)
   {
-    throw error::State(_Fmt("Unable to %s element %s. Current target binding "
-                            "did not match as expected") % oper % spec
+    throw error::State(_Fmt("Unable to %s element %s. Current shape of target "
+                            "data does not match expectations") % oper % spec
                       , LUMIERA_ERROR_DIFF_CONFLICT);
   }
   
@@ -273,35 +273,12 @@ namespace diff{
   void
   TreeDiffMutatorBinding::__expect_valid_parent_scope (GenNode::ID const& idi)
   {
-    
+    if (0 == scopeManger_->depth())
+      throw error::Fatal(_Fmt("Diff application floundered after leaving scope %s; "
+                              "unbalanced nested scopes, diff attempts to pop root.") % idi.getSym()
+                        , LUMIERA_ERROR_DIFF_CONFLICT);
   }
   
-  
-  /* == Forwarding: mutation primitives == */
-  
-  bool
-  TreeDiffMutatorBinding::matchSrc (GenNode const& n)
-  {
-    UNIMPLEMENTED("ensure the next source element matches with given spec");
-  }
-  
-  void
-  TreeDiffMutatorBinding::assignElm (GenNode const& n)
-  {
-    UNIMPLEMENTED("locate already accepted element and assign given new payload");
-  }
-  
-  void
-  TreeDiffMutatorBinding::open_subScope (GenNode const& n)
-  {
-    UNIMPLEMENTED("locate already accepted element and open recursive sub-scope for mutation");
-  }
-  
-  void
-  TreeDiffMutatorBinding::close_subScope()
-  {
-    UNIMPLEMENTED("finish and leave sub scope and return to invoking parent scope");
-  }
   
   
   
@@ -364,7 +341,8 @@ namespace diff{
   void
   TreeDiffMutatorBinding::set (GenNode const& n)
   {
-    assignElm (n);
+    if (not treeMutator_->assignElm(n))
+      __failMismatch (n, "assign");
   }
   
   /** open nested scope to apply diff to child object */

@@ -327,8 +327,7 @@
             if (binding_.isApplicable(spec))
               {
                 Iter target_found = binding_.locate (spec);
-                return target_found? binding_.assign (*target_found, spec)
-                                   : false;
+                return target_found and binding_.assign (*target_found, spec);
               }
             else
               return PAR::assignElm (spec);
@@ -342,8 +341,7 @@
             if (binding_.isApplicable(spec))
               {
                 Iter target_found = binding_.locate (spec);
-                return target_found? binding_.openSub (*target_found, spec.idi, targetBuff)
-                                   : false;
+                return target_found and binding_.openSub (*target_found, spec.idi, targetBuff);
               }
             else
               return PAR::mutateChild (spec, targetBuff);
