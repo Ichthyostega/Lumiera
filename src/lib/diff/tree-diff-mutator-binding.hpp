@@ -292,7 +292,6 @@ namespace diff{
       /* == Forwarding: mutation primitives == */
       
       bool matchSrc (GenNode const& n);
-      bool accept_until (GenNode const& refMark);
       void assignElm (GenNode const& n);
       void open_subScope (GenNode const& n);
       void close_subScope();

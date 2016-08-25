@@ -83,7 +83,7 @@ namespace test{
         string type_ = Rec::TYPE_NIL;
         
         int  alpha_   = -1;
-        string beta_  = "NIL";
+        int64_t beta_ = -1;
         double gamma_ = -1;
         
         unique_ptr<Opaque> delta_;
@@ -167,13 +167,17 @@ namespace test{
                           {
                             return not spec.isNamed();                // »Selector« : accept anything unnamed value-like
                           })
+                       .matchElement ([&](GenNode const& spec, string const& elm) -> bool
+                          {
+                            return elm == render(spec.data);
+                          })
                        .constructFrom ([&](GenNode const& spec) -> string
                           {
-                            return string(spec);
+                            return render (spec.data);
                           })
                        .assignElement ([&](string& target, GenNode const& spec) -> bool
                           {
-                            target = render(spec.data);
+                            target = render (spec.data);
                             return true;
                           }))
                 .attach (collection(nestedObj_)
@@ -181,13 +185,13 @@ namespace test{
                           {
                             return BOTTOM_INDICATOR != spec.data.recordType(); // »Selector« : require object-like sub scope
                           })
-                       .constructFrom ([&](GenNode const& spec) -> Opaque
-                          {
-                            return Opaque{spec.idi};
-                          })
                        .matchElement ([&](GenNode const& spec, Opaque const& elm) -> bool
                           {
                             return spec.idi == elm.key_;
+                          })
+                       .constructFrom ([&](GenNode const& spec) -> Opaque
+                          {
+                            return Opaque{spec.idi};
                           })
                        .buildChildMutator ([&](Opaque& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                           {
@@ -203,7 +207,7 @@ namespace test{
                     {
                       alpha_ = val;
                     })
-                .change("β", [&](string val)
+                .change("β", [&](int64_t val)
                     {
                       beta_ = val;
                     })

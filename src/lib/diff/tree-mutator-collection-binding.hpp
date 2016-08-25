@@ -301,19 +301,18 @@
             else
               if (binding_.isApplicable(spec))
                 {
-                  bool foundTarget = true;
-                  while (pos_ and not ChildCollectionMutator::matchSrc(spec))
+                  bool foundTarget = false;
+                  while (pos_ and not binding_.matches (spec, *pos_))
                     {
                       binding_.inject (move(*pos_));
                       ++pos_;
                     }
-                  if (ChildCollectionMutator::matchSrc(spec))
+                  if (binding_.matches (spec, *pos_))
                     {
                       binding_.inject (move(*pos_));
                       ++pos_;
+                      foundTarget = true;
                     }
-                  else
-                    foundTarget = false;
                   return foundTarget;
                 }
               else

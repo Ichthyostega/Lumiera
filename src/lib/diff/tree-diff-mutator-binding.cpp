@@ -285,12 +285,6 @@ namespace diff{
     UNIMPLEMENTED("ensure the next source element matches with given spec");
   }
   
-  bool
-  TreeDiffMutatorBinding::accept_until (GenNode const& refMark)
-  {
-    UNIMPLEMENTED("repeatedly accept until encountering the mark");
-  }
-  
   void
   TreeDiffMutatorBinding::assignElm (GenNode const& n)
   {
@@ -362,7 +356,7 @@ namespace diff{
   void
   TreeDiffMutatorBinding::after (GenNode const& n)
   {
-    if (not accept_until(n))
+    if (not treeMutator_->accept_until(n))
       __fail_not_found (n);
   }
   

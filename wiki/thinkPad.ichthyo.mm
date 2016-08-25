@@ -994,8 +994,7 @@
       with multiple layers
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -1015,8 +1014,7 @@
       since skipSrc performs both the `del` and the `skip` verb, it can not perform the match itself...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1455927425726" ID="ID_1759686725" MODIFIED="1470772470034" TEXT="skipSrc">
@@ -1055,8 +1053,7 @@
       to the next lower layer in both cases, and the result and behaviour depends on this next lower layer solely
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1455928216420" ID="ID_1581600385" MODIFIED="1470778395226" TEXT="thus just advance source position"/>
 </node>
@@ -1076,8 +1073,7 @@
       then <i>move</i>&#160;into target
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1455928537273" ID="ID_1036724915" MODIFIED="1457120296935" TEXT="implicit next pos"/>
 </node>
 </node>
@@ -4417,8 +4413,9 @@
 <node CREATED="1465665511580" ID="ID_611347489" MODIFIED="1465665556325" TEXT="soll auf Stack top-Level ">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465665579587" ID="ID_786565560" MODIFIED="1465665589851" TEXT="problematisch">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465665579587" ID="ID_786565560" MODIFIED="1472122123768" TEXT="problematisch">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1465665594969" ID="ID_1072421347" MODIFIED="1465665614258" TEXT="unbekannte Gr&#xf6;&#xdf;e">
 <node CREATED="1465665884698" ID="ID_418230667" MODIFIED="1465665893757" TEXT="default-Bufferg&#xf6;&#xdf;e vorlegen"/>
 <node CREATED="1465665894273" ID="ID_970277186" MODIFIED="1465665901124" TEXT="Gr&#xf6;&#xdf;e proben und anpassen"/>
@@ -4426,7 +4423,7 @@
 <node CREATED="1465852237233" HGAP="27" ID="ID_699424989" MODIFIED="1465852303982" TEXT="Beschlu&#xdf;" VSHIFT="12">
 <icon BUILTIN="yes"/>
 <node CREATED="1465852248487" ID="ID_1402619250" MODIFIED="1465852255154" TEXT="zun&#xe4;chst die einfachste L&#xf6;sung"/>
-<node CREATED="1465852255694" ID="ID_462293433" MODIFIED="1465852267784" TEXT="statisch festlegen"/>
+<node CREATED="1465852255694" ID="ID_462293433" MODIFIED="1472122166677" TEXT="statisch (fest) festlegen"/>
 <node CREATED="1465852268252" ID="ID_329653886" MODIFIED="1465852274743" TEXT="ggfs. noch nach Zieltyp differenziert"/>
 <node CREATED="1465852275859" ID="ID_394082851" MODIFIED="1465852288510" TEXT="dynamisch / Lernen als M&#xf6;glichkeit vorsehen"/>
 </node>
@@ -4577,7 +4574,7 @@
 <node CREATED="1469544601444" ID="ID_1593190605" MODIFIED="1469544616515" TEXT="L&#xf6;sung: weitere Indirektion">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1469544618738" ID="ID_324293110" MODIFIED="1469544754834" TEXT="vertretbar, da nur beim Scope-Wechsel....">
+<node CREATED="1469544618738" ID="ID_324293110" MODIFIED="1472122283229" TEXT="vertretbar, da nur beim Scope-Wechsel....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4596,20 +4593,19 @@
       <li>
         wenn wir in einen geschachtelten Scope eintreten
       </li>
+      <li>
+        wenn wir einen Solchen verlassen
+      </li>
     </ul>
     <p>
       Zwar sind indirekte Calls aufwendiger, aber letzten Endes auch wieder nicht soooo aufwendig,
     </p>
     <p>
-      da&#223; sie uns im gegebenen Kontext umbringen
+      da&#223; sie uns im gegebenen Kontext umbringen...
     </p>
-    <ul>
-      <li>
-        wenn wir einen Solchen verlassen
-      </li>
-    </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -4753,8 +4749,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1465855369239" ID="ID_1875145732" MODIFIED="1465860759641" TEXT="Architektur">
-<icon BUILTIN="pencil"/>
+<node CREATED="1465855369239" ID="ID_1875145732" MODIFIED="1472122083273" TEXT="Architektur">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1465855402346" ID="ID_390477158" MODIFIED="1465855405925" TEXT="Grundgedanke">
 <node CREATED="1465855407129" ID="ID_1269101170" MODIFIED="1465855418148" TEXT="Trennung von DiffInterpreter und TreeMutator"/>
 <node CREATED="1465855418880" ID="ID_118862910" MODIFIED="1465855431490" TEXT="ersterer wird auf Basis von letzterem implementiert"/>
@@ -4827,9 +4823,69 @@
 </node>
 </node>
 </node>
-<node CREATED="1465860736044" ID="ID_40337378" MODIFIED="1465860740383" TEXT="Implementierung"/>
+<node CREATED="1465860736044" ID="ID_40337378" MODIFIED="1472122049229" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
+<node CREATED="1472121965308" ID="ID_292673963" MODIFIED="1472121974646" TEXT="Verb delegiert an Mutator-Primitive"/>
+<node CREATED="1472121976018" ID="ID_421028989" MODIFIED="1472121995995" TEXT="Fehlerbehandlung anhand R&#xfc;ckgabewert dieser"/>
+<node CREATED="1472122015157" ID="ID_151735071" MODIFIED="1472122038334" TEXT="sinnvolle interne Fehler-Funktionen aufbauen"/>
+</node>
 <node CREATED="1465860740971" ID="ID_1662787747" MODIFIED="1465860752949" TEXT="Unit-Test">
 <icon BUILTIN="pencil"/>
+<node CREATED="1472122365079" ID="ID_1033283113" MODIFIED="1472122376193" TEXT="Aussagekr&#xe4;ftiges Beispiel-Diff">
+<node CREATED="1472122379548" ID="ID_270981817" MODIFIED="1472122384864" TEXT="sollte alle Features vorf&#xfc;hren"/>
+<node CREATED="1472122385380" ID="ID_773660909" MODIFIED="1472122391943" TEXT="sollte wichtige Grenzf&#xe4;lle aktivieren"/>
+<node CREATED="1472122394387" ID="ID_1262619176" MODIFIED="1472122409477" TEXT="sollte keine sinnlosen Operationen verlangen"/>
+</node>
+<node CREATED="1472122416040" ID="ID_644657664" MODIFIED="1472122576120" TEXT="Analog zu den Primitiven in TreeDiffBinding_test">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist ein Versuch, den Code f&#252;r den Leser verst&#228;ndlich zu halten.
+    </p>
+    <p>
+      Die Idee ist, da&#223; es einen high-level Unit-Test gibt, der die gesamte Diff-Anwendung durchspielt
+    </p>
+    <p>
+      und dazu passend einen low-level Unit-Test, der analog die gleichen Operationen macht,
+    </p>
+    <p>
+      allerdings direkt auf dem TreeDiff-Interface durch Aufruf der passenden Primitiv-Operaionen.
+    </p>
+    <p>
+      Letztere m&#252;ssen f&#252;r jede Art von &quot;onion-layer&quot; (konkretes Binding) erneut implementiert
+    </p>
+    <p>
+      und daher auch jeweils eigens per Unit-Test abgedeckt werden.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1472122581698" ID="ID_1932054966" MODIFIED="1472122688070" TEXT="sehr komplexes Binding auf privaten Datentyp">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist hier sinnvoll. Das Binding sollte komplexer sein,
+    </p>
+    <p>
+      als in der Praxis auftretende Bindings. Warum? Weil letztere immer etwas einseitg sind
+    </p>
+    <p>
+      und damit Abk&#252;rzungen im Code-Pfad ausn&#252;tzen. Die Gefahr schlummert aber im Zusammenspiel
+    </p>
+    <p>
+      der konkreten Bindings mit mehreren &quot;onion layers&quot;!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1465428871136" ID="ID_1015843161" MODIFIED="1465428881634" TEXT="integration mehrerer Bindungs-Layer">
