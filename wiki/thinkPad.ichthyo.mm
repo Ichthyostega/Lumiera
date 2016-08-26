@@ -4828,7 +4828,109 @@
 <node CREATED="1472121965308" ID="ID_292673963" MODIFIED="1472121974646" TEXT="Verb delegiert an Mutator-Primitive"/>
 <node CREATED="1472121976018" ID="ID_421028989" MODIFIED="1472121995995" TEXT="Fehlerbehandlung anhand R&#xfc;ckgabewert dieser"/>
 <node CREATED="1472122015157" ID="ID_151735071" MODIFIED="1472122038334" TEXT="sinnvolle interne Fehler-Funktionen aufbauen"/>
-<node CREATED="1472141026525" ID="ID_671819323" MODIFIED="1472141034511" TEXT="Scope-Wechsel"/>
+<node CREATED="1472141026525" ID="ID_671819323" MODIFIED="1472172843932" TEXT="Scope-Wechsel">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1472172154624" ID="ID_602990638" MODIFIED="1472172303809" TEXT="Zugang zum erzeugten Mutator....">
+<node CREATED="1472172310187" ID="ID_148408930" MODIFIED="1472172362034" TEXT="via buffer-Handle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erscheint mir die am wenigsten &#252;berraschende L&#246;sung.
+    </p>
+    <p>
+      und zwar per handle.get()
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1472172348526" ID="ID_1671229453" MODIFIED="1472172358593" TEXT="m&#xf6;gliche Alternativen">
+<node CREATED="1472172364204" ID="ID_261496162" MODIFIED="1472172467939" TEXT="Closure gibt TreeMutator&amp; zur&#xfc;ck">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erscheint mir fehleranf&#228;llig und irref&#252;hrend f&#252;r den Nutzer der Schnittstelle.
+    </p>
+    <p>
+      Denn er mu&#223; zwar das Objekt in das Handle platzieren, dann aber auch noch einen Pointer zur&#252;ckgeben,
+    </p>
+    <p>
+      der dann auch noch NULL sein kann, zum Signalisieren von Fehlern.
+    </p>
+    <p>
+      Ich empfinde das als schlechten Stil
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1472172467934" ID="ID_1258020411" MODIFIED="1472172562992" TEXT="ScopeManager-Interface erweitern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      naja, das w&#228;re billig, aber auch wieder beliebig.
+    </p>
+    <p>
+      Es macht keinen Sinn vom API-Design her, sondern man m&#252;&#223;te es halt machen,
+    </p>
+    <p>
+      weil die Implementierung den Zeiger auf den geschachtelen sub-Mutator umsetzen mu&#223;.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+<node CREATED="1472172586703" ID="ID_608960091" MODIFIED="1472172592722" TEXT="pr&#xfc;fen">
+<node CREATED="1472172593710" ID="ID_1915451499" MODIFIED="1472172608024" TEXT="geschachtelter Scope mu&#xdf; beim Verlassen komplett abgearbeitet sein"/>
+<node CREATED="1472172608636" ID="ID_1263541514" MODIFIED="1472172634020" TEXT="wir steigen niemals &#xfc;ber den root-Scope hinaus auf"/>
+</node>
+<node CREATED="1472172651974" ID="ID_807127372" MODIFIED="1472172657009" TEXT="ins-Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1472172658349" ID="ID_997769381" MODIFIED="1472172806077">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Diff-Sprache verlangt,
+    </p>
+    <p>
+      da&#223; vor dem &#214;ffnen des geschachtelten Scopes
+    </p>
+    <p>
+      dieser zumindest einmal per ins &quot;angelegt&quot; wurde.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1472172711846" ID="ID_146912736" MODIFIED="1472172809794" TEXT="wir haben es hier mit objektwertigen Attributen zu tun">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1472172723853" ID="ID_1560317945" MODIFIED="1472172732503" TEXT="das ist ein sonderbarer Grenzfall"/>
+<node CREATED="1472172733307" ID="ID_26853749" MODIFIED="1472172753564" TEXT="man wird die normalerweise auf Impl-Ebene erzeugen"/>
+<node CREATED="1472172754136" ID="ID_297078058" MODIFIED="1472172765458" TEXT="ein INS hat dann nichts sinnvolles zu tun"/>
+<node CREATED="1472172772494" ID="ID_337827865" MODIFIED="1472172795138" TEXT="default-Implementierung absorbiert das INS stillschweigend">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1465860740971" ID="ID_1662787747" MODIFIED="1465860752949" TEXT="Unit-Test">
 <icon BUILTIN="pencil"/>

@@ -310,6 +310,29 @@
             mutatorBuilder_(targetBuff);
             return true;
           }
+        
+        
+        /** default setup: silently absorb insert.
+         * @remark this whole binding flavour (MutateOperation) deals with an
+         *  odd corner case, namely an object valued attribute, which is deliberately
+         *  treated as nested scope; a sub-scope accessed by name. Since attributes
+         *  do not support any notion of "inserting" or "reordering" anyway, it is
+         *  typical in such a situation for the implementation data structure to manage
+         *  the underlying object automatically or default construct it anyway; moreover
+         *  it would be pointless to define a setter, since the whole point is not to
+         *  assign, but rather to enter and populate the nested target object. Yet,
+         *  the diff language requires us to send an empty initial value at least
+         *  once prior to mutation.
+         * @note if you really _need_ a dedicated custom setter, just define it
+         *  _after_ the `mutateAttribute` spec; it's implementation will then
+         *  be layered on top and shadow this default case.
+         */
+        virtual bool
+        injectNew (GenNode const& spec)  override
+          {
+            return this->isApplicable(spec)
+                or PAR::injectNew(spec);
+          }
       };
     
     

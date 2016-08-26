@@ -220,8 +220,8 @@ namespace test{
                     })
                 .mutateAttrib("δ", [&](TreeMutator::Handle buff)
                     {
-                      if (not delta_)
-                        delta_.reset (new Opaque("δ"));
+                      if (not delta_)                     // note: object managed automatically,
+                        delta_.reset (new Opaque("δ"));  //        no INS-implementation necessary
                       REQUIRE (delta_);
                       
                       delta_->buildMutator(buff);
