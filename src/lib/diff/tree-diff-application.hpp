@@ -179,7 +179,7 @@ namespace diff{
           buildMutator (target);
           TreeDiffMutatorBinding::scopeManger_ = &scopes_;
           TreeDiffMutatorBinding::treeMutator_ = &scopes_.currentScope();
-          TreeDiffMutatorBinding::initDiffApplication();
+          REQUIRE (this->treeMutator_);
         }
     };
   

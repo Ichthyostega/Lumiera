@@ -220,7 +220,7 @@
         virtual bool
         hasSrc ()  override
           {
-            return pos_;
+            return bool(pos_) or PAR::hasSrc();
           }
         
         /** ensure the next recorded source element

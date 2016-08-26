@@ -105,6 +105,15 @@
 //== anonymous namespace...
     
     
+    /**
+     * Generic behaviour of any binding to object fields (attributes).
+     * Since object fields as such are part of the class definition, a diff
+     * will never be able to add, insert, delted or re-order fields. Thus we
+     * do not need to keep track of an "old" and "new" order; rather there
+     * is always one single fixed element present to work on.
+     * @note consequently, several diff operations are either implemented NOP,
+     *       or passed to the parent (lower onion layers).
+     */
     template<class PAR>
     class AttributeBindingBase
       : public PAR
@@ -132,22 +141,20 @@
                and attribID_ == spec.idi;
           }
         
+        void
+        __ifApplicable_refuse_to(Literal oper, GenNode const& spec)
+          {
+            if (this->isApplicable(spec))
+              throw error::Logic (_Fmt{"attempt to %s attribute '%s', "
+                                       "but this binding for '%s' is linked to a data field and "
+                                       "thus does not support any notion of 'order' or 'position', "
+                                       "inserting or deletion."}
+                                      % oper % spec.idi % this->attribID_);
+          }
+        
         
         /* ==== re-Implementation of the operation API ==== */
       public:
-        /** this binding to an object field can not support any reordering,
-         *  inserting or deletion of "Elements", since the structure of an object
-         *  is fixed through the underlying class definition. For this reason,
-         *  we do not keep track of an "old" and "new" order; rather there
-         *  is always one single fixed element present to work on.
-         * @return `true` always
-         */
-        virtual bool
-        hasSrc()  override
-          {
-            return true;  // x or true == true
-          }
-        
         /** ensure the given spec is deemed appropriate at that point.
          *  Due to the hard wired nature of an object field binding, this can
          *  only be verified passively: a spec targeted at an unknown attribute
@@ -159,6 +166,10 @@
             return isApplicable (spec)
                 or PAR::matchSrc (spec);
           }
+        
+        
+        // note: hasSrc() not overridden here --> delegate to parent layer
+        
         
         /** accept status quo, after verifying the spec from the diff verb */
         virtual bool
@@ -177,25 +188,15 @@
         virtual void
         skipSrc (GenNode const& refSpec)  override
           {
-            if (isApplicable(refSpec))
-              throw error::Logic (_Fmt{"attempt to skip or drop attribute '%s', "
-                                       "which is bound to an object field and "
-                                       "thus can not cease to exist."}
-                                      % refSpec.idi.getSym());
-            else
-              PAR::skipSrc (refSpec);
+            __ifApplicable_refuse_to ("skip or drop", refSpec);
+            PAR::skipSrc (refSpec);
           }
         
         virtual bool
         findSrc (GenNode const& refSpec)  override
           {
-            if (isApplicable(refSpec))
-              throw error::Logic (_Fmt{"attempt to re-order attribute '%s', "
-                                       "which is bound to an object field and "
-                                       "thus does not respond to ordering."}
-                                      % refSpec.idi.getSym());
-            else
-              return PAR::findSrc (refSpec);
+            __ifApplicable_refuse_to ("re-order", refSpec);
+            return PAR::findSrc (refSpec);
           }
         
         /** there is no real support for navigating to a 'position',
@@ -216,14 +217,10 @@
             if (Ref::ATTRIBS == spec)
               return true;
             else
-              if (isApplicable(spec))
-                throw error::Logic (_Fmt{"attempt to navigate to a position behind attribute '%s', "
-                                         "but this binding for '%s' is linked to a data field and "
-                                         "thus does not support any notion of 'order' or 'position'."}
-                                        % spec.idi.getSym()
-                                        % this->attribID_);
-              else
+              {
+                __ifApplicable_refuse_to ("navigate to a position behind", spec);
                 return PAR::accept_until(spec);
+              }
           }
       };
     

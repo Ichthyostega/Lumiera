@@ -60,189 +60,22 @@ namespace diff{
   using std::swap;
   
   
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-
-  using Mutator = Rec::Mutator;
-  using Content = Rec::ContentMutator;
-  using Iter    = Content::Iter;
-  
-  template<>
-  struct TreeDiffMutatorBinding::ScopeFrame
-    {
-      Mutator& target;
-      Content content;
-      
-      ScopeFrame(Mutator& toModify)
-        : target(toModify)
-        , content()
-        { }
-      
-      void init()
-        {
-          target.swapContent (content);
-          content.resetPos();
-        }
-    };
-      
-      /** Storage: a stack of workspaces
-       * used to handle nested child objects */
-      std::stack<ScopeFrame> scopes_;
-      
-      
-      Mutator& out() { return scopes_.top().target; }
-      Content& src() { return scopes_.top().content; }
-      Iter& srcPos() { return scopes_.top().content.pos; }
-      bool endOfData() { return srcPos() == src().end(); }   /////TODO split into an actual scope end check and an non-null check
-      Rec& alteredRec() { return out(); }
-      
-      
-  void
-  TreeDiffMutatorBinding::__expect_in_target (GenNode const& elm, Literal oper)
-  {
-    if (endOfData())
-      throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
-                              "no (further) elements in target sequence") % oper % elm
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-    
-    if (elm.matches(Ref::CHILD) and not srcPos()->isNamed())
-      return; // allow for anonymous pick or delete of children
-    
-    if (not srcPos()->matches(elm))
-      throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
-                              "found element %s on current target position instead")
-                              % oper % elm % *srcPos()
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-  }
-  
-  void
-  TreeDiffMutatorBinding::__expect_further_elements (GenNode const& elm)
-  {
-    if (endOfData())
-      throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
-                              "unable to apply diff further.") % elm
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-  }
-  
-  void
-  TreeDiffMutatorBinding::__expect_found (GenNode const& elm, Iter const& targetPos)
-  {
-    if (targetPos == src().end())
-      throw error::State(_Fmt("Premature end of sequence; unable to locate "
-                              "element %s in the remainder of the target.") % elm
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-  }
-  
-  void
-  TreeDiffMutatorBinding::__expect_successful_location (GenNode const& elm)
-  {
-    if (endOfData()
-        and not (    elm.matches(Ref::END)                                      // after(_END_)     -> its OK we hit the end
-                 or (elm.matches(Ref::ATTRIBS) and src().children.empty())))    // after(_ATTRIBS_) -> if there are no children, it's OK to hit the end
-      throw error::State(_Fmt("Unable locate position 'after(%s)'") % elm.idi
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-  }
-  
-  void
-  TreeDiffMutatorBinding::__expect_valid_parent_scope (GenNode::ID const& idi)
-  {
-    if (scopes_.empty())
-      throw error::State(_Fmt("Unbalanced child scope bracketing tokens in diff; "
-                              "When leaving scope %s, we fell out of root scope.") % idi.getSym()
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-    
-    if (alteredRec().empty())
-      throw error::State(_Fmt("Corrupted state. When leaving scope %s, "
-                              "we found an empty parent scope.") % idi.getSym()
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-  }
-  
-  void
-  TreeDiffMutatorBinding::__expect_end_of_scope (GenNode::ID const& idi)
-  {
-    if (not endOfData())
-      throw error::State(_Fmt("Incomplete diff: when about to leave scope %s, "
-                              "not all previously existing elements have been confirmed by the diff. "
-                              "At least one spurious element %s was left over") % idi.getSym() % *srcPos()
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-  }
-  
-  
-  Iter
-  TreeDiffMutatorBinding::find_in_current_scope (GenNode const& elm)
-  {
-    Iter end_of_scope = src().currIsAttrib()? src().attribs.end()
-                                            : src().children.end();
-    return std::find_if (srcPos()
-                        ,end_of_scope
-                        ,[&](auto& entry)
-                             {
-                               return entry.matches(elm);
-                             });
-  }
-  
-  GenNode const&
-  TreeDiffMutatorBinding::find_child (GenNode::ID const& idi)
-  {
-    if (alteredRec().empty())
-      throw error::State(_Fmt("Attempt to mutate element %s, but current target data scope is empty. "
-                              "Sender and receiver out of sync?") % idi.getSym()
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-    
-    // Short-cut-mutation: look at the last element.
-    // this should be the one just added. BUT NOTE: this fails
-    // when adding an attribute after entering the child scope.
-    // Since attributes are typically values and not mutated,
-    // this inaccuracy was deemed acceptable
-    auto& current = out().accessLast();
-    if (Ref::THIS.matches(idi) or current.matches(idi))
-      return current;
-    
-    for (auto & child : alteredRec())
-      if (child.idi == idi)
-        return child;
-    
-    throw error::State(_Fmt("Attempt to mutate non existing child record; unable to locate child %s "
-                            "after applying the diff. Current scope: %s") % idi.getSym() % alteredRec()
-                      , LUMIERA_ERROR_DIFF_CONFLICT);
-  }
-  
-  void
-  TreeDiffMutatorBinding::move_into_new_sequence (Iter pos)
-  {
-    if (src().currIsAttrib())
-      out().appendAttrib (move(*pos));                    //////////////TICKET #969  was it a good idea to allow adding attributes "after the fact"?
-    else
-      out().appendChild (move(*pos));
-  }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
   
   /* == Forwarding: error handling == */
   
   
   void
-  TreeDiffMutatorBinding::__expect_in_target  (GenNode const& elm, Literal oper)
+  TreeDiffMutatorBinding::__failMismatch (Literal oper, GenNode const& spec)
   {
-    
-    if (endOfData())
-      throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
-                              "no (further) elements in target sequence") % oper % elm
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
-    
-//  /////////////////////////////////////////////////////////////TODO: is there any chance to uphold this special syntactic construct?? otherwise drop it from the language!
-//  if (elm.matches(Ref::CHILD) and not srcPos()->isNamed())
-//    return; // allow for anonymous pick or delete of children
-    
-    if (not treeMutator_->matchSrc(elm))
-      throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
-                              "found element %s on current target position instead")
-                              % oper % elm % srcPos()                            /////////////////////TODO still relevant?
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
+    throw error::State(_Fmt("Unable to %s element %s. Current shape of target "
+                            "data does not match expectations") % oper % spec
+                      , LUMIERA_ERROR_DIFF_CONFLICT);
   }
   
   void
   TreeDiffMutatorBinding::__expect_further_elements (GenNode const& elm)
   {
-    if (endOfData())
+    if (not treeMutator_->hasSrc())
       throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
                               "unable to apply diff further.") % elm
                         , LUMIERA_ERROR_DIFF_CONFLICT);
@@ -253,14 +86,6 @@ namespace diff{
   {
     throw error::State(_Fmt("Premature end of sequence; unable to locate "
                             "element %s in the remainder of the target.") % elm
-                      , LUMIERA_ERROR_DIFF_CONFLICT);
-  }
-  
-  void
-  TreeDiffMutatorBinding::__failMismatch (GenNode const& spec, Literal oper)
-  {
-    throw error::State(_Fmt("Unable to %s element %s. Current shape of target "
-                            "data does not match expectations") % oper % spec
                       , LUMIERA_ERROR_DIFF_CONFLICT);
   }
   
@@ -293,23 +118,25 @@ namespace diff{
   {
     bool success = treeMutator_->injectNew(n);
     if (not success)
-      __failMismatch (n, "insert");
+      __failMismatch ("insert", n);
   }
   
   void
   TreeDiffMutatorBinding::del (GenNode const& n)
   {
-    __expect_in_target(n, "remove");
+    __expect_further_elements(n);
+    if (not treeMutator_->matchSrc(n))
+      __failMismatch("remove", n);
+    
     treeMutator_->skipSrc(n);
   }
   
   void
   TreeDiffMutatorBinding::pick (GenNode const& n)
   {
-//    __expect_in_target(n, "pick"); ////////////////////////TODO TOD-o ?
     bool success = treeMutator_->acceptSrc (n);
     if (not success)
-      __failMismatch (n, "pick");
+      __failMismatch ("pick", n);
   }
   
   void
@@ -329,6 +156,8 @@ namespace diff{
   }
   
   
+  
+  
   /* == Implementation of the tree diff application primitives == */
   
   /** cue to a position behind the named node,
@@ -346,7 +175,7 @@ namespace diff{
   TreeDiffMutatorBinding::set (GenNode const& n)
   {
     if (not treeMutator_->assignElm(n))
-      __failMismatch (n, "assign");
+      __failMismatch("assign", n);
   }
   
   /** open nested scope to apply diff to child object */
@@ -355,7 +184,7 @@ namespace diff{
   {
     TreeMutator::Handle buffHandle = scopeManger_->openScope();
     if (not treeMutator_->mutateChild(n, buffHandle))
-      __failMismatch (n, "enter nested scope");
+      __failMismatch("enter nested scope", n);
     
     TRACE (diff, "tree-diff: ENTER scope %s", cStr(n.idi));
     treeMutator_ = buffHandle.get();
@@ -371,17 +200,6 @@ namespace diff{
     treeMutator_ = &scopeManger_->closeScope();
     __expect_valid_parent_scope (n.idi);
   }
-  
-  
-  
-  void
-  TreeDiffMutatorBinding::initDiffApplication()
-  {
-    REQUIRE (scopeManger_);
-    REQUIRE (treeMutator_);
-  }
-  
-  
   
   
   

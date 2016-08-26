@@ -216,74 +216,12 @@ namespace diff{
       ScopeManager* scopeManger_;
       
     private:
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-      using Mutator = Rec::Mutator;
-      using Content = Rec::ContentMutator;
-      using Iter    = Content::Iter;
-      
-      struct ScopeFrame
-        {
-          Mutator& target;
-          Content content;
-          
-          ScopeFrame(Mutator& toModify)
-            : target(toModify)
-            , content()
-            { }
-          
-          void init()
-            {
-              target.swapContent (content);
-              content.resetPos();
-            }
-        };
-      
-      /** Storage: a stack of workspaces
-       * used to handle nested child objects */
-      std::stack<ScopeFrame> scopes_;
-      
-      
-      Mutator& out() { return scopes_.top().target; }
-      Content& src() { return scopes_.top().content; }
-      Iter& srcPos() { return scopes_.top().content.pos; }
-      bool endOfData() { return srcPos() == src().end(); }   /////TODO split into an actual scope end check and an non-null check
-      Rec& alteredRec() { return out(); }
-      
-      
-      void __expect_in_target (GenNode const& elm, Literal oper);
-      void __expect_further_elements (GenNode const& elm);
-      void __expect_found (GenNode const& elm, Iter const& targetPos);
-      void __expect_successful_location (GenNode const& elm);
-      void __expect_valid_parent_scope (GenNode::ID const& idi);
-      void __expect_end_of_scope (GenNode::ID const& idi);
-      
-      
-      Iter find_in_current_scope (GenNode const& elm);
-      
-      GenNode const& find_child (GenNode::ID const& idi);
-      
-      void move_into_new_sequence (Iter pos);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-
-      bool
-      endOfData()
-        {
-          return not treeMutator_->hasSrc();
-        }
-      
-      string
-      srcPos()
-        {
-          return "??"; ////////////////TODO  can this be served by the treeMutator_ ?? Is it still necessary?
-        }
-      
       
       /* == Forwarding: error handling == */
       
-      void __expect_in_target  (GenNode const& elm, Literal oper);
+      void __failMismatch (Literal oper, GenNode const& spec);
       void __expect_further_elements (GenNode const& elm);
       void __fail_not_found (GenNode const& elm);
-      void __failMismatch (GenNode const& spec, Literal oper);
       void __expect_end_of_scope (GenNode::ID const& idi);
       void __expect_valid_parent_scope (GenNode::ID const& idi);
       
@@ -312,8 +250,6 @@ namespace diff{
         : treeMutator_(nullptr)
         , scopeManger_(nullptr)
         { }
-      
-      void initDiffApplication();
     };
   
   
