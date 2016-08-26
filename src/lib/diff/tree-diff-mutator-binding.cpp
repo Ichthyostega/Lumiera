@@ -267,7 +267,11 @@ namespace diff{
   void
   TreeDiffMutatorBinding::__expect_end_of_scope (GenNode::ID const& idi)
   {
-    
+    if (not treeMutator_->completeScope())
+      throw error::State(_Fmt("Diff application floundered in nested scope %s; "
+                              "unexpected extra elements found when diff "
+                              "should have settled everything.") % idi.getSym()
+                        , LUMIERA_ERROR_DIFF_CONFLICT);
   }
   
   void
@@ -349,24 +353,22 @@ namespace diff{
   void
   TreeDiffMutatorBinding::mut (GenNode const& n)
   {
-    open_subScope (n);
+    TreeMutator::Handle buffHandle = scopeManger_->openScope();
+    if (not treeMutator_->mutateChild(n, buffHandle))
+      __failMismatch (n, "enter nested scope");
     
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-    Rec const& childRecord = child.data.get<Rec>();
-    TRACE (diff, "tree-diff: ENTER scope %s", cStr(childRecord));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+    TRACE (diff, "tree-diff: ENTER scope %s", cStr(n.idi));
+    treeMutator_ = buffHandle.get();
   }
   
   /** finish and leave child object scope, return to parent */
   void
   TreeDiffMutatorBinding::emu (GenNode const& n)
   {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-    TRACE (diff, "tree-diff: LEAVE scope %s", cStr(describeScope()));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+    TRACE (diff, "tree-diff: LEAVE scope %s", cStr(n.idi));
     
     __expect_end_of_scope (n.idi);
-    close_subScope();
+    treeMutator_ = &scopeManger_->closeScope();
     __expect_valid_parent_scope (n.idi);
   }
   

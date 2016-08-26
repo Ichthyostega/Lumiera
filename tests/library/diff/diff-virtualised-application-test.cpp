@@ -79,7 +79,7 @@ namespace test{
      */
     class Opaque
       {
-        idi::EntryID<Opaque> key_;
+        idi::BareEntryID key_;
         string type_ = Rec::TYPE_NIL;
         
         int  alpha_   = -1;
@@ -92,11 +92,13 @@ namespace test{
         vector<string> nestedData_;
         
       public:
-        Opaque() { }
+        Opaque()
+          : key_(idi::EntryID<Opaque>())
+          { }
         
         explicit
         Opaque (string keyID)
-          : key_(keyID)
+          : key_(idi::EntryID<Opaque>(keyID))
           { }
         
         explicit
@@ -132,14 +134,15 @@ namespace test{
         
         operator string()  const
           {
-            return _Fmt{"%s (α:%d β:%s γ:%7.5f δ:%s\n......|nested:%s\n......|data:%s\n      )"}
+            return _Fmt{"%s__(α:%d β:%s γ:%7.5f δ:%s\n......|nested:%s\n......|data:%s\n      )__END_%s"}
                        % identity()
                        % alpha_
                        % beta_
                        % gamma_
                        % delta_
-                       % join (nestedObj_, "\n........|")
+                       % join (nestedObj_, "\n......|")
                        % join (nestedData_)
+                       % identity()
                        ;
           }
         
@@ -347,7 +350,7 @@ namespace test{
           // TODO verify results
           cout << "after...II"<<endl << subject<<endl;
           
-          // Part II : apply child mutations
+          // Part III : apply child mutations
           application.consume(mutationDiff());
           //
           // TODO verify results

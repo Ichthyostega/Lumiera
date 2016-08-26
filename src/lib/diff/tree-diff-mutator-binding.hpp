@@ -289,14 +289,6 @@ namespace diff{
       
       
       
-      /* == Forwarding: mutation primitives == */
-      
-      bool matchSrc (GenNode const& n);
-      void assignElm (GenNode const& n);
-      void open_subScope (GenNode const& n);
-      void close_subScope();
-      
-      
       
       /* == Implementation of the list diff application primitives == */
       

@@ -154,6 +154,14 @@ namespace lib {
         {
           return sizeof(SUB) <= maxSiz_;
         }
+      
+      BA*
+      get()  const
+        {
+          ENSURE (buffer_);
+          BA& bufferContent = **static_cast<InPlaceBuffer<BA>*> (buffer_);
+          return &bufferContent;
+        }
     };
   /////////////////////////////TODO move over into opaque-holder.hpp
 namespace diff{
@@ -286,7 +294,7 @@ namespace diff{
        *  and build a suitable sub-mutator for this element
        *  into the provided target buffer
        * @throw error::Fatal when buffer is insufficient
-       * @return false when unable to locate the target */
+       * @return `false` when unable to locate the target */
       virtual bool
       mutateChild (GenNode const&, Handle)
         {

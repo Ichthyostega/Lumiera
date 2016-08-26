@@ -155,12 +155,13 @@ namespace diff{
       Scopes scopes_;
       
       
-      void
+      TreeMutator*
       buildMutator (DiffMutable& targetBinding)
         {
           scopes_.clear();
           TreeMutator::Handle buffHandle = scopes_.openScope();
           targetBinding.buildMutator (buffHandle);
+          return buffHandle.get();
         }
       
     public:
