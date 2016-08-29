@@ -708,7 +708,7 @@ namespace test{
           CHECK (-1 == beta);
           CHECK (-1 == gamma);
           
-          CHECK (mutator1.hasSrc());                // NOTE: the attribute binding has no "reference source sequence" and thus no dynamic state.
+          CHECK (not mutator1.hasSrc());            // NOTE: the attribute binding has no "reference source sequence" and thus no dynamic state.
                                                     //       (in fact it is predetermined, because it relies on a likewise fixed class definition)
           CHECK (mutator1.completeScope());         // NOTE: this is always true and NOP, for the same reason: the structure of the binding is fixed
           

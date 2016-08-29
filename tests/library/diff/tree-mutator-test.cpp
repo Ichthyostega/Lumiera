@@ -26,35 +26,23 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
-//#include <utility>
 #include <string>
-//#include <vector>
+#include <vector>
 
 using util::isnil;
-using std::string;
-//using std::vector;
-//using std::swap;
-
+using util::join;
 using util::typeStr;
+
+using std::string;
+using std::vector;
 
 
 namespace lib {
 namespace diff{
 namespace test{
-  
-//  using lumiera::error::LUMIERA_ERROR_LOGIC;
-  
-  namespace {//Test fixture....
-    
-    
-    
-  }//(End)Test fixture
-  
-  
-  
-  
   
   
   
@@ -64,11 +52,14 @@ namespace test{
    * @test Demonstrate a customisable component for flexible bindings
    *       to enable generic tree changing and mutating operations to
    *       arbitrary hierarchical data structures.
+   *       - we use lambdas to link into our private implementation
+   *       - this test demonstrates the behaviour of an attribute setter
+   *       - plus some of the _primitive operations_ available on collections
    *       
    * @see TreeMutator
+   * @see DiffComplexApplication_test a way more complex usage scenario
    * @see GenNodeBasic_test
    * @see GenericRecordRepresentation_test
-   * @see GenericTreeRepresentation_test
    */
   class TreeMutator_test : public Test
     {
@@ -77,14 +68,14 @@ namespace test{
       run (Arg)
         {
           simpleAttributeBinding();
-          sequenceIteration();
-          copy_and_move();
+          simpleCollectionBinding();
         }
       
       
       void
       simpleAttributeBinding()
         {
+          MARK_TEST_FUN;
           string localData;
           auto mutator =
           TreeMutator::build()
@@ -110,14 +101,35 @@ namespace test{
       
       
       void
-      sequenceIteration()
+      simpleCollectionBinding()
         {
-        }
-      
-      
-      void
-      copy_and_move()
-        {
+          MARK_TEST_FUN;
+          vector<string> values;
+          values.push_back("a");
+          values.push_back("b");
+          
+          cout << join(values) <<endl;
+          CHECK (2 == values.size());
+          CHECK ("a, b" == join(values));
+          
+          auto mutator =
+          TreeMutator::build()
+            .attach (collection(values));
+          
+          cout << "concrete TreeMutator size=" << sizeof(mutator)
+               << " type="<< typeStr(mutator)
+               << endl;
+          
+          CHECK (isnil (values));
+          CHECK (mutator.matchSrc (GenNode("a")));
+                 mutator.skipSrc (GenNode("a"));
+          CHECK (mutator.matchSrc (GenNode("b")));
+          CHECK (mutator.injectNew (GenNode("c")));
+          CHECK (mutator.acceptSrc (GenNode("b")));
+          
+          cout << join(values) <<endl;
+          CHECK (2 == values.size());
+          CHECK ("c, b" == join(values));
         }
     };
   

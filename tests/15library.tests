@@ -169,14 +169,55 @@ END
 
 
 TEST "Diff: Generic recursive mutation with closure binding" TreeMutator_test <<END
+out-lit: |
+out-lit: |  »simpleAttributeBinding«
 out: concrete TreeMutator .+Builder<ChangeOperation<TreeMutator, test::TreeMutator_test::simpleAttributeBinding().+lambda\(string\).+> >
 out-lit: "data" closure received something that would be acceptable
 out-lit: localData changed to: that would be acceptable
+out-lit: |
+out-lit: |  »simpleCollectionBinding«
+out-lit: a, b
+out: concrete TreeMutator .+Builder<ChildCollectionMutator<TreeMutator,
+out-lit: c, b
 return: 0
 END
 
 
 TEST "Diff: mapping of changes onto opaque tree data" TreeMutatorBinding_test <<END
+return: 0
+END
+
+
+TEST "Diff: integration test with opaque target data" DiffComplexApplication_test <<END
+out-lit: before...
+out: Opaque.+__\(α:-1 β:-1 γ:-1.00000 δ:⟂ «unique_ptr<Opaque>»
+out: nested:$
+out: data:$
+out: \)__END_Opaque.+
+out-lit: after...I
+out: Opaque.+__\(α:1 β:-1 γ:3.45000 δ:⟂ «unique_ptr<Opaque>»
+out: nested:$
+out: data:b, b, 78:56:34\.012$
+out: \)__END_Opaque.+
+out-lit: after...II
+out: Opaque.+__\(α:1 β:2 γ:3.45000 δ:⟂ «unique_ptr<Opaque>»
+out: nested:_CHILD_Record.+__\(α:-1 β:-1 γ:-1.00000 δ:⟂ «unique_ptr<Opaque>»
+out: nested:$
+out: data:$
+out: \)__END__CHILD_Record.+
+out: data:78:56:34\.012, b$
+out: \)__END_Opaque.+
+out-lit: after...III
+out: Opaque.+__\(α:1 β:2 γ:3.14159 δ:unique_ptr.+ ↗≺ζ≻.+__\(α:-1 β:-1 γ:-1.00000 δ:⟂ «unique_ptr<Opaque>»
+out: nested:$
+out: data:a, a, a$
+out: \)__END_≺ζ≻\.+
+out: nested:_CHILD_Record.+≺ξ≻.+__\(α:-1 β:2 γ:-1.00000 δ:⟂ «unique_ptr<Opaque>»
+out: nested:$
+out: data:b, a$
+out: \)__END__CHILD_Record.+≺ξ≻.+
+out: data:78:56:34.012, b$
+out: \)__END_Opaque.+
 return: 0
 END
 
@@ -291,11 +332,6 @@ out: GenNode.+_CHILD_string.+«string».eggs
 out: GenNode.+_CHILD_string.+«string».spam
 out: GenNode.+_CHILD_TimeSpan.+«TimeSpan»|0:00:00.000≺920ms≻
 out: GenNode.+_CHILD_long.+«long.+42
-return: 0
-END
-
-
-PLANNED "GenericTreeRepresentation_test" GenericTreeRepresentation_test <<END
 return: 0
 END
 
