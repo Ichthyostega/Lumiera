@@ -26,7 +26,17 @@
  ** Decision how to access the target structure and how to construct
  ** a suitable TreeMutator as attached to this opaque target data.
  ** 
- ** @todo this is WIP as of 8/2016
+ ** In a nutshell, if some private data structure wants to receive
+ ** mutation diff messages...
+ ** - it must either implement the interface DiffMutable
+ ** - or provide the function point `void buildMutator(TreeMutator::Handle)`
+ ** Additionally, when the size of the custom TreeMutator object exceeds some
+ ** hard wired limit (200 bytes), then the target type also needs to define
+ ** the extension point `size_t treeMutatorSize(TargetType)`
+ ** 
+ ** All of this boils down to somewhere / somehow using the TreeMutator::Builder
+ ** (a DSL API) to construct a custom binding, which allows to talk to our
+ ** private data structure through the TreeMutator interface.
  ** 
  ** @see DiffComplexApplication_test
  ** @see DiffTreeApplication_test
@@ -91,7 +101,7 @@ namespace diff{
   
   
   constexpr size_t
-  treeMutatorSize (...)
+  treeMutatorSize (...) ///< fallback to detect absence of a custom definition
   {
     return 0;
   }
@@ -120,7 +130,7 @@ namespace diff{
   
   
   
-  /* ======= derive a TreeMutator binding for a given opaque data structure ======= */
+  /* ======= derive TreeMutator binding for a given opaque data structure ======= */
   
   
   using meta::enable_if;
@@ -139,8 +149,7 @@ namespace diff{
       META_DETECT_FUNCTION (void, buildMutator, (TreeMutator::Handle));
       
     public:
-      enum{ value = HasFunSig_buildMutator<T>::value
-          };
+      enum{ value = HasFunSig_buildMutator<T>::value };
     };
   
   
@@ -188,6 +197,16 @@ namespace diff{
       using Ret = Wrapper;
     };
   
+  
+  /**
+   * public access point to this configuration machinery
+   * @return depending on the circumstances, either a direct reference
+   *         to DiffMutable, or a transient functor object implementing
+   *         the DiffMutable interface
+   * @warning beware of dangling references! either use this call immediately
+   *         inline, or (preferably) use an `auto` typed variable to hold
+   *         the return value in local scope as long as necessary
+   */
   template<class TAR>
   auto
   mutatorBinding (TAR& subject) -> typename TreeDiffTraits<TAR>::Ret

@@ -2416,7 +2416,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1457232734636" FOLDED="true" ID="ID_1873945047" MODIFIED="1472219585812" TEXT="STL Collection">
+<node CREATED="1457232734636" ID="ID_1873945047" MODIFIED="1472498604863" TEXT="STL Collection">
 <icon BUILTIN="full-2"/>
 <node CREATED="1458175823858" ID="ID_438044714" MODIFIED="1458175828956" TEXT="Design-Grundlagen">
 <node CREATED="1457741673001" ID="ID_1873415490" MODIFIED="1457742700335" TEXT="konkrete Beispiele">
@@ -2628,7 +2628,7 @@
 <node CREATED="1458178223723" ID="ID_798018180" MODIFIED="1458178247755" TEXT="es gibt eine freie Funktion, die einen nested Builder f&#xfc;r das Binding liefert"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1458178288690" FOLDED="true" ID="ID_562189277" MODIFIED="1470521349868" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1458178288690" FOLDED="true" ID="ID_562189277" MODIFIED="1472498684254" TEXT="Implementierung">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1458178300324" TEXT="Builder">
 <node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1460753004725" TEXT="Typ-Definitionen schwierig anzuschreiben">
@@ -2637,7 +2637,7 @@
 <node CREATED="1458325973486" ID="ID_1711903796" MODIFIED="1458325992405" TEXT="Code ziemlich redundant und undurchsichtig">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1458326045724" ID="ID_338749301" MODIFIED="1461878392468" TEXT="Typ-Check erst sehr sp&#xe4;t">
+<node CREATED="1458326045724" ID="ID_338749301" MODIFIED="1472498604875" TEXT="Typ-Check erst sehr sp&#xe4;t">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2656,8 +2656,12 @@
       eine wom&#246;glich irref&#252;hrende Meldung generiert
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" STARTARROW="None" STARTINCLINATION="176;0;"/>
+</node>
+<node CREATED="1472498654730" ID="ID_1869339299" MODIFIED="1472498676884" TEXT="gel&#xf6;st durch static_assert">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1458178300984" ID="ID_1152672899" MODIFIED="1458178309971" TEXT="Binding-Layer">
@@ -4392,8 +4396,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1465428839332" ID="ID_909803930" MODIFIED="1465665730709" TEXT="Diff-Anwendung" VSHIFT="36">
-<icon BUILTIN="pencil"/>
+<node CREATED="1465428839332" ID="ID_909803930" MODIFIED="1472495575428" TEXT="Diff-Anwendung" VSHIFT="36">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1465428850946" ID="ID_1085608480" MODIFIED="1465428866278">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -4883,20 +4887,31 @@
 <node CREATED="1465864167187" ID="ID_1126324374" MODIFIED="1465864171974" TEXT="Aufruf: freie Funktion"/>
 <node CREATED="1465864172514" ID="ID_523639016" MODIFIED="1465864180668" TEXT="delegiert auf Template"/>
 <node CREATED="1465864181193" ID="ID_214760095" MODIFIED="1465864192611" TEXT="explizite / regelbasierte Spezialisierung"/>
-<node CREATED="1465864193607" ID="ID_910823091" MODIFIED="1465864216053" TEXT="Problem: Storage f&#xfc;r die Closure">
+<node CREATED="1465864193607" FOLDED="true" ID="ID_910823091" MODIFIED="1472495561111" TEXT="Problem: Storage f&#xfc;r die Closure">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1465864217628" ID="ID_234805162" MODIFIED="1465864228510" TEXT="typischerweise sind alles transiente Objekte"/>
 <node CREATED="1465864229170" ID="ID_1100042937" MODIFIED="1465864240501" TEXT="also mu&#xdf; die Closure als Wert-Objekt rausgegeben werden"/>
-<node CREATED="1465864247152" ID="ID_1684145985" MODIFIED="1465864259507" TEXT="gesucht: elegantes API">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472219502519" ID="ID_602618555" MODIFIED="1472219513437" TEXT="noch fertig zu integrieren....">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1472495487478" FOLDED="true" ID="ID_57266631" MODIFIED="1472495543911" TEXT="L&#xf6;sung...">
+<node CREATED="1472495496574" ID="ID_618531871" MODIFIED="1472495510056" TEXT="auto typed return value"/>
+<node CREATED="1472495510531" ID="ID_1366125392" MODIFIED="1472495513703" TEXT="keep in local scope"/>
+<node CREATED="1472495514203" ID="ID_1694911368" MODIFIED="1472495529197" TEXT="tightly integrate into ctor of DiffAplicator"/>
+</node>
+<node CREATED="1465864247152" ID="ID_1684145985" MODIFIED="1472494408902" TEXT="gesucht: elegantes API">
+<node CREATED="1472494557762" ID="ID_1916007342" MODIFIED="1472494575309" TEXT="DiffAplicator&lt;TargetTyp&gt;">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1472494413960" ID="ID_1460674703" MODIFIED="1472494571740" TEXT="Erweiterungspunkt f&#xfc;r ADL..."/>
+<node CREATED="1472494432219" ID="ID_1801329518" MODIFIED="1472494446981" TEXT="...wird vom ctor des Diff-Applikators verwendet"/>
+<node CREATED="1472494466926" ID="ID_1882750560" MODIFIED="1472494484296" TEXT="...und der wiederum greift nur"/>
+<node CREATED="1472494485388" ID="ID_1744987934" MODIFIED="1472494501141" TEXT="...wenn TreeDiffTraits definiert sind"/>
+<node CREATED="1472494501778" ID="ID_300920526" MODIFIED="1472494506323" TEXT="not too bad">
+<icon BUILTIN="ksmiletris"/>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1465860736044" ID="ID_40337378" MODIFIED="1472122049229" TEXT="Implementierung">
-<icon BUILTIN="pencil"/>
+<node CREATED="1465860736044" ID="ID_40337378" MODIFIED="1472494390376" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1472121965308" ID="ID_292673963" MODIFIED="1472121974646" TEXT="Verb delegiert an Mutator-Primitive"/>
 <node CREATED="1472121976018" ID="ID_421028989" MODIFIED="1472121995995" TEXT="Fehlerbehandlung anhand R&#xfc;ckgabewert dieser"/>
 <node CREATED="1472122015157" ID="ID_151735071" MODIFIED="1472122038334" TEXT="sinnvolle interne Fehler-Funktionen aufbauen"/>
@@ -5004,9 +5019,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1465860740971" ID="ID_1662787747" MODIFIED="1472219629782" TEXT="Unit-Test">
+<node CREATED="1465860740971" ID="ID_1662787747" MODIFIED="1472494384251" TEXT="Unit-Test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1662787747" ENDARROW="Default" ENDINCLINATION="114;0;" ID="Arrow_ID_1608349913" SOURCE="ID_1209021141" STARTARROW="None" STARTINCLINATION="114;0;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1472122365079" ID="ID_1033283113" MODIFIED="1472122376193" TEXT="Aussagekr&#xe4;ftiges Beispiel-Diff">
 <node CREATED="1472122379548" ID="ID_270981817" MODIFIED="1472122384864" TEXT="sollte alle Features vorf&#xfc;hren"/>
 <node CREATED="1472122385380" ID="ID_773660909" MODIFIED="1472122391943" TEXT="sollte wichtige Grenzf&#xe4;lle aktivieren"/>
@@ -5080,7 +5095,7 @@
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1458850122091" ID="ID_15024219" MODIFIED="1458850140244" TEXT="Collection-Binding: bessere Fehlermeldungen">
-<node CREATED="1458850141920" ID="ID_428365633" MODIFIED="1472219338977" TEXT="bei Signatur-Mismatch">
+<node CREATED="1458850141920" ID="ID_428365633" MODIFIED="1472498706370" TEXT="bei Signatur-Mismatch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5093,6 +5108,7 @@
 </html>
 </richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" SOURCE="ID_338749301" STARTARROW="None" STARTINCLINATION="176;0;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1458850154575" ID="ID_725958518" MODIFIED="1472219338982" TEXT="wenn der Default-Matcher greift">
 <richcontent TYPE="NOTE"><html>
@@ -5108,12 +5124,20 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1458850212503" ID="ID_321552356" MODIFIED="1458850218977" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465860661877" ID="ID_942624903" MODIFIED="1465860714295" TEXT="Builder-API f&#xfc;r Attribut-Binding dokumentieren">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1458850212503" ID="ID_321552356" MODIFIED="1472498583464" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1465860661877" ID="ID_942624903" MODIFIED="1472498127725" TEXT="Builder-API f&#xfc;r Attribut-Binding dokumentieren">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465860672852" ID="ID_432641404" MODIFIED="1465860718271" TEXT="Variante zum Attribut-Binding, wobei die Attribut-ID als GenNode::ID gegeben ist">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1472498724880" ID="ID_1122881728" MODIFIED="1472498733392" TEXT="f&#xfc;r sp&#xe4;ter">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1472498734359" ID="ID_888090802" MODIFIED="1472498742262" TEXT="brauchen wir das wirklich">
+<icon BUILTIN="help"/>
+</node>
 </node>
 <node CREATED="1460847222865" ID="ID_362820787" MODIFIED="1472219338993" TEXT="abstrakte operationale Semantik der Diff-Anwendung dokumentieren">
 <richcontent TYPE="NOTE"><html>
@@ -5163,8 +5187,7 @@
 </node>
 <node CREATED="1472216217388" HGAP="21" ID="ID_1810727202" MODIFIED="1472216290504" TEXT="Semantik der Diff-Sprache" VSHIFT="5">
 <node CREATED="1472216261102" ID="ID_1057680407" MODIFIED="1472216264937" TEXT="sinnvoll definiert"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472216265486" ID="ID_1774905589" MODIFIED="1472216278990" TEXT="sp&#xe4;ter re-evaluieren (Ticket)">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472216265486" ID="ID_1774905589" MODIFIED="1472495973662" TEXT="sp&#xe4;ter re-evaluieren (Ticket #996)">
 <node CREATED="1472216306208" ID="ID_310892577" MODIFIED="1472216342802" TEXT="AFTER">
 <arrowlink DESTINATION="ID_1957591180" ENDARROW="Default" ENDINCLINATION="-27;14;" ID="Arrow_ID_228215960" STARTARROW="None" STARTINCLINATION="139;3;"/>
 </node>

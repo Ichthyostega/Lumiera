@@ -441,7 +441,21 @@ namespace diff{
             return Change<CLO> (attributeID, setterClosure, move(*this));
           }
         
-        ///////////////////////////////////////TODO documentation
+        /** set up a binding for an object valued "attribute" or _named scope_.
+         *  This covers the rather special case, where some relevant sub object is
+         *  accessed as a (named) property of a managing parent object. On implementation
+         *  level, this corresponds to using a _getter_ to access a subcomponent or "PImpl".
+         *  On a formal level, for tree diff handling, such counts as _attribute_, yet with
+         *  the special twist that we can not just assign a new "value", but rather have to
+         *  enter a sub scope and handle a nested diff -- similar to how nested child objects
+         *  are dealt with in general. Thus, all we need here is a way how to build a nested
+         *  TreeMutator for this sub-scope.
+         * @param attributeID symbolic key to denote this "attribute"
+         * @param mutatorBuilderClosure functor or lambda to emplace a custom sub TreeMutator
+         *        into the given buffer (handle). Such a nested mutator shall be wired internally
+         *        to the object representation of the attribute in question.
+         * @see CollectionBindingBuilder::buildChildMutator
+         */
         template<typename CLO>
         Builder<MutateAttrib<CLO>>
         mutateAttrib (Symbol attributeID, CLO mutatorBuilderClosure)
@@ -450,7 +464,8 @@ namespace diff{
             return MutateAttrib<CLO> (key, mutatorBuilderClosure, move(*this));
           }
         
-        ///////////////////////////////////////TODO define variant taking a GenNode::ID
+        ///////////////////////////////////////TODO define variant taking a GenNode::ID ??
+        
         
         /** set up a binding to a structure of "child objects",
          *  implemented through a typical STL container
@@ -461,6 +476,25 @@ namespace diff{
          *   thus the type of the elements will be picked up, and the returned builder
          *   can be further outfitted with the builder methods, which take lambdas as
          *   callback into the implementation.
+         *   - the _matcher closure_ (CollectionBindingBuilder::matchElement) defines
+         *     how to determine, if an implementation data element "matches" a given diff spec
+         *   - the _constructor closure_ (CollectionBindingBuilder::constructFrom) defines how
+         *     to build a new implementation data element from the spec of an `INS` diff verb
+         *   - the optional _selector closure_ (CollectionBindingBuilder::isApplicableIf)
+         *     allows to limit applicability of this whole binding (layer) to only some
+         *     diff specs. E.g., we may set up a binding for elements with value semantics
+         *     and another binding layer on top to deal with object like children (sub scopes)
+         *   - the optional _setter closure_ (CollectionBindingBuilder::assignElement) accepts
+         *     a diff spec (GenNode) and should assign an equivalent value to the internal
+         *     data representation of the corresponding element (typically by constructing
+         *     an implementation data element and then invoking the corresponding setter)
+         *   - the optional _mutator closure_ (CollectionBindingBuilder::buildChildMutator)
+         *     allows for recursive descent into nested child scopes. On invocation, it has
+         *     to build a suitable custom TreeMutator implementation into the provided buffer
+         *     (handle), and this nested TreeMutator should be wired with the internal
+         *     representation of the nested scope to enter. The code invoking this closure
+         *     typically pushes the buffer on some internal stack and switches then to use
+         *     this nested mutator until encountering the corresponding `EMU` bracket verb.
          */
         template<typename BIN>
         Builder<Collection<BIN>>

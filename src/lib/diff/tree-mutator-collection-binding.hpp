@@ -371,7 +371,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL, FUN ,CTR,SEL,ASS,MUT>
-        matchElement (FUN matcher)
+        matchElement (FUN matcher)                               ///< expected lambda: `bool(GenNode const& spec, Elm const& elm)`
           {
             return { this->collection
                    , matcher
@@ -384,7 +384,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL,MAT, FUN ,SEL,ASS,MUT>
-        constructFrom (FUN constructor)
+        constructFrom (FUN constructor)                          ///< expected lambda: `Elm (GenNode const&)`
           {
             return { this->collection
                    , this->matches
@@ -397,7 +397,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL,MAT,CTR, FUN ,ASS,MUT>
-        isApplicableIf (FUN selector)
+        isApplicableIf (FUN selector)                            ///< expected lambda: `bool(GenNode const&)`
           {
             return { this->collection
                    , this->matches
@@ -410,7 +410,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL,MAT,CTR,SEL, FUN ,MUT>
-        assignElement (FUN setter)
+        assignElement (FUN setter)                               ///< expected lambda: `bool(Elm&, GenNode const&)`
           {
             return { this->collection
                    , this->matches
@@ -423,7 +423,7 @@
         
         template<class FUN>
         CollectionBindingBuilder<COLL,MAT,CTR,SEL,ASS, FUN >
-        buildChildMutator (FUN childMutationBuilder)
+        buildChildMutator (FUN childMutationBuilder)             ///< expected lambda: `bool(Elm&, GenNode::ID const&, TreeMutator::Handle)`
           {
             return { this->collection
                    , this->matches

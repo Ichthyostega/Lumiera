@@ -8049,7 +8049,7 @@ Used this way, diff representation helps to separate structure and raw data in e
 :Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201602190009" tags="Model GuiPattern design draft" changecount="54">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201608292011" tags="Model GuiPattern design draft" changecount="61">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -8068,7 +8068,7 @@ Provided as a loosely coupled collection of tools in the namespace {{{lib::diff}
 :*differences are spelled out in ''linearised form'': as a sequence of constant-size diff actions (called &amp;raquo;diff verbs&amp;laquo;)
 :*these are conceived as operations, which, when applied consuming the input sequence, will produce the target sequence of the diff.
 
-!{{red{WIP 12/2014}}}building a list diff detector
+!building a list diff detector
 transforming the algorithm sketch (&amp;rarr; see [[technical documentation|http://lumiera.org/documentation/technical/library/DiffFramework.html]]) into working code incurs some challenges at the level of technical details.
 
 !!!interface of the index component
@@ -8081,7 +8081,7 @@ A first attempt was made to come up with a rather clever swapping and rotating s
 !!!goal of a generic implementation
 The diff handling framework we intend to build here is meant to be //generic// -- the actual element data type, as well as the underlying data structure and the index access shall be supplied by strategy and specialisation. This has the downside (maybe this is even a benefit?) that most efficiency considerations are moot at this level; we need to look at actual use cases and investigate the composite performance in practice later.
 
-!{{red{WIP 1/2015}}}building the tree diff handling
+!building the tree diff handling
 Our tree diff handling framework is conceived as a direct specialisation of and extension to list diffing. We rely on a very specific element type for the tree nodes: the GenNode. This specific node element type is inherently generic, and the tree diff handling explicitly relies on some part of this generic nature to represent object features. Following the gist of the linearised list diff representation, also tree handling relies on an implicit ''tree representation protocol'':
 * every GenNode is a distinct element and considered unique within context.
 * nodes are inherently typed, but this typing is outside of the diff representation scope
@@ -8141,9 +8141,23 @@ Within the context of GuiModelUpdate, we discern two distinct situations necessi
 * a GenNode representing an object pulls diff information provided by Proc. This information contains mutations of attributes, and //some// of these attributes are relevant for the GUI and thus represented within the GuiModel
 * a widget was notified of pending changes in the GuiModel and calls back to pull a diff. While interpreting the attributes mentioned in the diff, it has to determine which widget state corresponds to the mentioned attributes, if applicable. Detected changes need to be interpreted and pushed into the corresponding widget and GTK elements.
 the second case is what poses the real challenge in terms of writing well organised code. Since in that case, the receiver side has to translate generic diff verbs into operations on hard wired language level data structures -- structures, we can not control, predict or limit beforhand. We deal with this situation by introducing a specific intermediary, the &amp;rarr; TreeMutator.
-</pre>
+
+!!!apply a diff onto implementation data
+Thus we need to carry the idea one step further. The goal is to allow a loose cooperation of components, without the need of a common data structure set in stone. Up to now, with our symbolic diff language and tree representation, we're able to render objects in some kind of DOM notation, and we're able to apply changes onto them. This is fine for maintaining an intermediary GuiModel, but to really achieve the desired loose coupling of cooperating components, we need //the ability to apply changes to implementation data structures.// To do so, we need a ''binding'' from the diff language to »''implemetation data''« -- without imposing restrictions onto the latter: We do not intend to invent yet another introspection framework, working on yet another meta object type. Thus, at some point, finally we need the help of the implementation context to //make sense of the diff verbs.//
+
+As said, this turns out to be a tricky challenge: implementing the application of diff messages is inevitably an involved and technical task; we should avoid imposing these technicalities onto client code. But, at minimum, we need to know some basic traits regarding the target data structures, in order to handle receiving change messages properly. We solve this problem through implicit conventions plus an indirection layer
+* we impose some very vague requirements onto the structure of target data: it is required to comply to our conceptual notion of an &quot;object&quot;; target data //needs to be congruent to [[ETD|ExternalTreeDescription]].//
+* we introduce an adapter interface, the TreeMutator. Diff application can then be implemented in terms of this new abstraction
+* we offer pre configured building blocks and a DSL, for client code to assemble a suitable {{{TreeMutator}}} implementation, privately tied into the opaque implementation data structure
+* client code has to fill in some necessary information in the form of ''closures'' (lambdas)
+** how to construct a new data element
+** how to match a //diff verb// against a given data element
+** how to determine applicability of a verb, allowing for multi layered binding
+** how to assign a new value, given the corresponding diff verb
+** how to open a nested scope for recursive mutation
+ </pre>
 </div>
-<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201602191532" tags="Model GuiPattern spec draft" changecount="63">
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201608291945" tags="Model GuiPattern spec draft" changecount="64">
 <pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
 This leads to what could be considered the very opposite of data-centric programming. Instead of embody »the truth« into a central data model with predefined layout, we base our achitecture on a set of actors and their collaboration. In the mentioned example this would be the high-level view in the Session, the Builder, the UI-Bus and the presentation elements within the timeline view. Underlying to each such collaboration is a shared conception of data. There is no need to //actually represent that data// -- it can be conceived to exist in a more descriptive, declarative [[external tree description (ETD)|ExternalTreeDescription]]. In fact, what we //do represent// is a ''diff'' against such an external rendering.
 
@@ -8210,7 +8224,7 @@ To complement this language construct, we define some special, magical (meta) el
 All these additional language constructs aren't strictly necessary, but widen the usability of the langauge, also to cover the description of incomplete or fuzzy diffs.
 
 !!!deriving conventional representations
-On receiving the terms of this &quot;diff language&quot;, it is possible to generate the well known and more conventional diff representations,
+On receiving a stream of tokens of this &quot;diff language&quot;, it is possible to generate the well known and more conventional diff representations,
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
