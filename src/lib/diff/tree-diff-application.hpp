@@ -133,7 +133,7 @@ namespace diff{
    * 
    * In the extended configuration for tree-diff-application to given opaque target
    * data, the setup uses the [metaprogramming adapter traits](\ref TreeDiffTraits)
-   * to pave a way for building the custom TreeMutator implementation internally wired
+   * to pave a way for building the custom TreeMutator implementation, wired internally
    * to the given opaque target. Moreover, based on the concrete target type, a suitable
    * ScopeManager implementation can be provided. Together, these two dynamically created
    * adapters allow the generic TreeDiffMutatorBinding to perform all of the actual

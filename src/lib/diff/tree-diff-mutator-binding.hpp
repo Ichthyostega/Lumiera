@@ -46,8 +46,8 @@
  ** Unfortunately this leads to yet another indirection layer: Implementing a
  ** language in itself is necessarily a double dispatch (we have to abstract the
  ** verbs and we have to abstract the implementation side). And now we're decoupling
- ** the implementation side from a concrete data structure. Which means, that the
- ** use will have to provide a set of closures (which might even partially be generated
+ ** the implementation side from a concrete data structure. Which means, that the user
+ ** will have to provide a set of closures (which might even partially be generated
  ** functors) to translate the _implementation actions_ underlying the language into
  ** _concrete actions_ working on local data.
  ** 
@@ -56,14 +56,27 @@
  ** interpretation and the concrete yet undisclosed private data structure, and
  ** most of this implementation is entirely generic, since the specifics are
  ** abstracted away behind the TreeMutator interface. For this reason, most of
- ** this explicit template specialisation code, especially. the virtual functions,
- ** can be emitted right here, within the library module. This helps to reduce
- ** "template bloat" and simplifies the dynamic linking. Thus, this header
- ** only contains the definition and the ctor code, which indeed needs to
- ** be adapted to each usage situation, while the main body of the
- ** functionality has been moved to the corresponding implementation
- ** file, where this template is explicitly instantiated, to force
- ** code generation into the library module.
+ ** this _delegating implementation_ can be emitted right here, within the
+ ** library module. With the sole exception of the ctor, which needs to
+ ** figure out a way how to "get" a suitable TreeMutator implementation
+ ** for the given concrete target data.
+ ** 
+ ** ### the TreeMutator DSL
+ ** In the end, this concrete TreeMutator needs to be built or provided within
+ ** the realm of the actual data implementation anyway, so the knowledge about the
+ ** actual data layout remains confined there. Unfortunately, implementing a TreeMutator
+ ** is quite an involved and technical task, requiring intimate knowledge of structure
+ ** and semantics of the diff language. On a second thought, it turns out that most
+ ** data implementation will rely on some very common representation techniques,
+ ** like using object fields as "attributes" and a STL collection to hold the
+ ** "children". Based on this insight, it is possible to provide standard adapters
+ ** and building blocks, in the form of an DSL, to generate the actual TreeMutator.
+ ** The usage site thus needs to supply only some lambda expressions to specify
+ ** how to deal with the representation data values
+ ** - how to construct a new entity
+ ** - when the binding actually becomes relevant
+ ** - how to determine a diff verb "matches" the actual data
+ ** - how to set a value or how to recurse into a sub scope
  ** 
  ** @todo this is WIP as of 2/2016 -- in the end it might be merged back or even
  **       replace the tree-diff-application.hpp
@@ -217,7 +230,7 @@ namespace diff{
       
     private:
       
-      /* == Forwarding: error handling == */
+      /* == error handling helpers == */
       
       void __failMismatch (Literal oper, GenNode const& spec);
       void __expect_further_elements (GenNode const& elm);

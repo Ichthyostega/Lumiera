@@ -27,26 +27,23 @@
 #include "lib/diff/test-mutation-target.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/format-cout.hpp"  //////////TODO necessary?
 #include "lib/format-string.hpp"
-//#include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 #include <vector>
 #include <memory>
 
-using lib::iter_stl::snapshot;
 using util::isnil;
 using util::join;
 using util::_Fmt;
-using util::join;
+using util::BOTTOM_INDICATOR;
+using lib::iter_stl::snapshot;
+using lib::time::Time;
 using std::unique_ptr;
-using std::make_unique;
 using std::string;
 using std::vector;
-using lib::time::Time;
-using util::BOTTOM_INDICATOR;
 
 
 namespace lib {
@@ -131,6 +128,14 @@ namespace test{
             return *this;
           }
         
+        bool verifyType(string x)    const { return x == type_; }
+        bool verifyAlpha(int x)      const { return x == alpha_;}
+        bool verifyBeta(int64_t x)   const { return x == beta_; }
+        bool verifyGamma(double x)   const { return x == gamma_;}
+        bool verifyData(string desc) const { return desc == join(nestedData_); }
+        const Opaque* nestedDelta()  const { return not delta_? NULL : delta_.get(); }
+        const Opaque* nestedObj_1()  const { return isnil(nestedObj_)? NULL : &nestedObj_[0]; }
+        
         
         operator string()  const
           {
@@ -160,6 +165,28 @@ namespace test{
           }
         
         
+        /** the _only way_ this opaque object exposes itself for mutation through diff messages.
+         *  This function builds a TreeMutator implementation into the given buffer space
+         * @note some crucial details for this binding to work properly...
+         *       - we define several "onion layers" of binding to deal with various scopes.
+         *       - the priority of these bindings is ordered from lowest to highest
+         *       - actually this is a quite complicated setup, including object fields
+         *         to represent attributes, where one special attribute which actually holds
+         *         a nested object, then both a collection of child objects and a collection
+         *         of data values
+         *       - the selector predicate (`isApplicableIf`) actually decides if a binding layer
+         *         becomes responsible for a given diff verb. Here, this decision is based on
+         *         the classification of the verb or spec to be handled, either being an
+         *         attribute (named, key-value pair), a nested sub-scope ("object") and
+         *         finally just any unnamed (non attribute) value
+         *       - the recursive mutation of nested scopes is simply initiated by invoking
+         *         the same Opaque::buildMutator on the respective children recursively.
+         *       - such an unusually complicated TreeMutator binding leads to increased
+         *         buffer space requirements for the actual TreeMutator to be generated;
+         *         Thus we need to implement the _extension point_ treeMutatorSize()
+         *         to supply a sufficient buffer size value. This function is
+         *         picked up through ADL, based on the target type `Opaque`
+         */
         void
         buildMutator (TreeMutator::Handle buff)
           {
@@ -330,30 +357,64 @@ namespace test{
       run (Arg)
         {
           Opaque subject;
-//        auto target = mutatorBinding (subject);
-//        DiffApplicator<DiffMutable> application(target);
           DiffApplicator<Opaque> application(subject);
           //
-          // TODO verify results
           cout << "before..."<<endl << subject<<endl;
+          CHECK (subject.verifyAlpha(-1));
+          CHECK (subject.verifyBeta(-1));
+          CHECK (subject.verifyGamma(-1));
+          CHECK (not subject.nestedDelta());
+          CHECK (not subject.nestedObj_1());
+          CHECK (subject.verifyData(""));
+          
           
           // Part I : apply attribute changes
           application.consume(populationDiff());
           //
-          // TODO verify results
           cout << "after...I"<<endl << subject<<endl;
+          // ==> ATTRIB1, ATTRIB3, (ATTRIB3), CHILD_B, CHILD_B, CHILD_T
+          CHECK (subject.verifyAlpha(1));
+          CHECK (subject.verifyGamma(ATTRIB3.data.get<double>()));
+          CHECK (subject.verifyData("b, b, 78:56:34.012"));
+          // unchanged...
+          CHECK (subject.verifyBeta(-1));
+          CHECK (not subject.nestedDelta());
+          CHECK (not subject.nestedObj_1());
+          
           
           // Part II : apply child population
           application.consume(reorderingDiff());
           //
-          // TODO verify results
           cout << "after...II"<<endl << subject<<endl;
+          // ==> ATTRIB1, ATTRIB3, (ATTRIB3), ATTRIB2, SUB_NODE, CHILD_T, CHILD_B
+          CHECK (subject.verifyAlpha(1));
+          CHECK (subject.verifyBeta (2));                     // attribute β has been set
+          CHECK (subject.verifyGamma(3.45));
+          CHECK (subject.verifyData("78:56:34.012, b"));      // one child deleted, the other ones re-ordered
+          CHECK (subject.nestedObj_1());                      // plus inserted a nested child object
+          CHECK (subject.nestedObj_1()->verifyType(Rec::TYPE_NIL));
+          CHECK (subject.nestedObj_1()->verifyBeta(-1));      // ...which is empty (default constructed)
+          CHECK (subject.nestedObj_1()->verifyData(""));
+          
           
           // Part III : apply child mutations
           application.consume(mutationDiff());
           //
-          // TODO verify results
           cout << "after...III"<<endl << subject<<endl;
+          // ==> ATTRIB1, ATTRIB3 := π, (ATTRIB3), ATTRIB2,
+          //     ATTRIB_NODE{ type ζ, CHILD_A, CHILD_A, CHILD_A }
+          //     SUB_NODE{ type ξ, ATTRIB2, CHILD_B, CHILD_A },
+          //     CHILD_T, CHILD_B
+          CHECK (subject.verifyAlpha(1));
+          CHECK (subject.verifyBeta (2));
+          CHECK (subject.verifyGamma(GAMMA_PI.data.get<double>())); // new value assigned to attribute γ
+          CHECK (subject.nestedDelta());                      // attribute δ (object valued) is now present
+          CHECK (subject.nestedDelta()->verifyType("ζ"));     // ...and has an explicitly defined type field
+          CHECK (subject.nestedDelta()->verifyData("a, a, a"));//...plus three similar child values
+          CHECK (subject.verifyData("78:56:34.012, b"));      // the child values weren't altered
+          CHECK (subject.nestedObj_1()->verifyType("ξ"));     // but the nested child object's type has been set
+          CHECK (subject.nestedObj_1()->verifyBeta(2));       // ...and the attribute β has been set on the nested object
+          CHECK (subject.nestedObj_1()->verifyData("b, a"));  // ...plus some child values where added here     
         }
     };
   
