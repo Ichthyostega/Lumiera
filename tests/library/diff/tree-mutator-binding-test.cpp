@@ -95,7 +95,7 @@ namespace test{
    *      data structures through appropriate special bindings given as lambda.
    * @remark _you should note_ that the scenario executed in each of these tests
    *      precisely corresponds to the application of the test diff used in
-   *      (\ref DiffVirtualisedApplication_test)
+   *      (\ref DiffComplexApplication_test)
    * @remark _to help with understanding this,_ please consider how diff application is
    *      actually implemented on top of a set of "primitives". The TreeMutator interface
    *      on the other hand offers precisely these building blocks necessary to implement

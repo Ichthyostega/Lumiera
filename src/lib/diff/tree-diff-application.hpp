@@ -141,7 +141,7 @@ namespace diff{
    * 
    * @throws  lumiera::error::State when diff application fails due to the
    *          target sequence being different than assumed by the given diff.
-   * @see DiffVirtualisedApplication_test usage example of this combined machinery
+   * @see DiffComplexApplication_test usage example of this combined machinery
    * @see #TreeDiffInterpreter explanation of the verbs
    */
   template<class TAR>

@@ -257,7 +257,6 @@ namespace test{
    *         what these elements actually are and how they are to be handled.
    *       - we recurse into mutating such an _"unspecified"_ child element.
    * 
-   * @todo this test is WIP as of 6/2016 !! What has to be done, is to work out a way how to create a TreeMutator binding. And of course, we need the Implementation of DiffApplicator<DiffMutable>
    * @note this test uses the same verb sequence as is assumed for the
    *       coverage of diff building blocks in TreeMutatorBinding_test
    * 
@@ -268,7 +267,7 @@ namespace test{
    * @see diff-tree-application.hpp
    * @see tree-diff.hpp
    */
-  class DiffVirtualisedApplication_test
+  class DiffComplexApplication_test
     : public Test
     , TreeDiffLanguage
     {
@@ -360,7 +359,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (DiffVirtualisedApplication_test, "unit common");
+  LAUNCHER (DiffComplexApplication_test, "unit common");
   
   
   

@@ -35,7 +35,7 @@
  ** 
  ** @see tree-diff.cpp
  ** @see tree-diff-mutator-binding.cpp
- ** @see DiffVirtualisedApplication_test
+ ** @see DiffComplexApplication_test
  ** 
  */
 

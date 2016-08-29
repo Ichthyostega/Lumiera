@@ -28,7 +28,7 @@
  ** 
  ** @todo this is WIP as of 8/2016
  ** 
- ** @see DiffVirtualisedApplication_test
+ ** @see DiffComplexApplication_test
  ** @see DiffTreeApplication_test
  ** @see DiffListApplication_test
  ** @see GenNodeBasic_test
@@ -81,7 +81,7 @@ namespace diff{
    * memorise our findings somehow within the dynamic application configuration.
    * 
    * @see tree-diff-application.hpp
-   * @see DiffVirtualisedApplication_test
+   * @see DiffComplexApplication_test
    */
   template<class TAR, typename SEL =void>
   struct TreeMutatorSizeTraits

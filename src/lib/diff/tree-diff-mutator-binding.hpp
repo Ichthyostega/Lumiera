@@ -68,7 +68,7 @@
  ** @todo this is WIP as of 2/2016 -- in the end it might be merged back or even
  **       replace the tree-diff-application.hpp
  ** 
- ** @see DiffVirtualisedApplication_test
+ ** @see DiffComplexApplication_test
  ** @see DiffTreeApplication_test
  ** @see DiffListApplication_test
  ** @see GenNodeBasic_test
@@ -206,7 +206,7 @@ namespace diff{
    * @throws  lumiera::error::State when diff application fails structurally.
    * @throws  _unspecified errors_ when delegated operations fail.
    * @see TreeDiffInterpreter explanation of the verbs
-   * @see DiffVirtualisedApplication_test demonstration of usage
+   * @see DiffComplexApplication_test demonstration of usage
    */
   class TreeDiffMutatorBinding
     : public TreeDiffInterpreter

@@ -90,7 +90,7 @@ namespace test{
    *      the \link diff::GenNode variant data node \endlink. The key point
    *      to note is the usage of Record elements as payload within GenNode,
    *      which allows to represent tree shaped object like data structures.
-   * @see DiffVirtualisedApplication_test handling arbitrary data structures
+   * @see DiffComplexApplication_test handling arbitrary data structures
    * @see GenericRecordRepresentation_test
    * @see GenNodeBasic_test
    * @see DiffListApplication_test
