@@ -45,8 +45,7 @@
       hei&#223;t: Element registriert sich am UI-Bus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078473068" ID="ID_510866826" MODIFIED="1472219338252" TEXT="zerst&#xf6;ren">
 <richcontent TYPE="NOTE"><html>
@@ -58,8 +57,7 @@
       hei&#223;t: Element deregistriert sich am UI-Bus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1448078308690" ID="ID_185716114" MODIFIED="1448078316540" TEXT="Aktionen">
@@ -73,8 +71,7 @@
       ...ist <i>immer</i>&#160;ein <b>tangible</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078516094" ID="ID_201691188" MODIFIED="1448078519937" TEXT="Commands"/>
 <node CREATED="1448078325679" ID="ID_946047770" MODIFIED="1448078510722" TEXT="tweaks"/>
@@ -134,8 +131,7 @@
       daf&#252;r gen&#252;gt der normale Reset
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1448078748448" ID="ID_1000763850" MODIFIED="1472219338266" TEXT="Nachrichten l&#xf6;schen">
@@ -148,8 +144,7 @@
       mark &quot;clearMsg&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078778916" ID="ID_1657108949" MODIFIED="1472219338289" TEXT="Fehler l&#xf6;schen">
 <richcontent TYPE="NOTE"><html>
@@ -161,8 +156,7 @@
       mark &quot;clearErr&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448078798369" ID="ID_819750758" MODIFIED="1472219338292" TEXT="komplett-Reset">
 <richcontent TYPE="NOTE"><html>
@@ -174,8 +168,7 @@
       mark &quot;reset&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -223,8 +216,7 @@
       was haben alle UI-Elemente wirklich gemeinsam?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1448658692023" FOLDED="true" ID="ID_888978058" MODIFIED="1472219338302" TEXT="generische Commands">
 <richcontent TYPE="NOTE"><html>
@@ -242,8 +234,7 @@
       oder handelt es sich nur um ein Implementierungsdetail der UI-Bus-Anbindung?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1448659456882" ID="ID_946761955" MODIFIED="1448659469420" TEXT="Notwendig: Command-Name + Varargs"/>
 <node CREATED="1451093919426" ID="ID_56876272" MODIFIED="1451093932614" TEXT="generisch impliziert auch zentrale Definition">
@@ -331,8 +322,7 @@
       Dann mu&#223;te das allerdigns jeweils f&#252;r alle Elemente sinnvoll sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1451177534345" ID="ID_524388510" MODIFIED="1451177541380" TEXT="impl">
 <node CREATED="1451177542256" ID="ID_980888532" MODIFIED="1472219338314" TEXT="ruft einen konkreten hook doExpand() auf">
@@ -345,8 +335,7 @@
       und der mu&#223; vom konkreten Widget implementiert werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1451177573108" ID="ID_1154342108" MODIFIED="1451177583935" TEXT="wenn dieser true zur&#xfc;ckgibt, ist der Zustand persistent"/>
 <node CREATED="1451177584435" ID="ID_1792154974" MODIFIED="1451177606906">
@@ -508,8 +497,7 @@
       Und ich mu&#223; das in einem Test zumindest emulieren k&#246;nnen!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1455668935142" ID="ID_1274632216" MODIFIED="1472219338332">
@@ -549,8 +537,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1455669272760" ID="ID_837691598" MODIFIED="1455899105816" TEXT="Call-Stack ist der Prozessor-Stack (Rekursion)">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1455899000582" ID="ID_1404453203" MODIFIED="1455899086452" TEXT="sorry, geht nicht">
@@ -603,8 +590,7 @@
       ist jedoch schon prototypisch implementiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1455899288247" ID="ID_635341866" MODIFIED="1455899347843" TEXT="Tree-Mutator hat echte (Assignment)-Mutation">
 <icon BUILTIN="info"/>
 <node CREATED="1455899303981" ID="ID_1584621992" MODIFIED="1455899333910" TEXT="pa&#xdf;t nicht auf die Semantik vom Diff">
@@ -849,8 +835,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1455913847683" ID="ID_1829117976" MODIFIED="1455913860029" TEXT="es gibt effektiv mehrere Kinder-Sammlungen"/>
 <node CREATED="1455913860594" ID="ID_631826706" MODIFIED="1455913869013" TEXT="wir verwalten intern f&#xfc;r jede eine Position"/>
@@ -877,8 +862,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1455913912323" ID="ID_1775410993" MODIFIED="1455913922605" TEXT="es gibt nominell nur eine Kinder-Folge"/>
 <node CREATED="1455913924857" ID="ID_505406246" MODIFIED="1455913935019" TEXT="wir m&#xfc;ssen die intern repr&#xe4;sentieren"/>
@@ -1030,8 +1014,7 @@
       since skipSrc performs both the `del` and the `skip` verb, it can not perform the match itself...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1455927425726" ID="ID_1759686725" MODIFIED="1470772470034" TEXT="skipSrc">
@@ -1070,8 +1053,7 @@
       to the next lower layer in both cases, and the result and behaviour depends on this next lower layer solely
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1455928216420" ID="ID_1581600385" MODIFIED="1470778395226" TEXT="thus just advance source position"/>
 </node>
@@ -1121,8 +1103,7 @@
       of this specific onion layer to accept forward until meeting this element.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1457231727259" ID="ID_1318527107" MODIFIED="1472219338462">
@@ -1151,8 +1132,7 @@
       will check the bool return value and throw an exception in that case
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -1233,8 +1213,7 @@
       Wichtigster solcher Fall ist die <b>Bindung auf Objekt-Felder</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#e5500c" CREATED="1461946693701" ID="ID_36720859" MODIFIED="1461946713634" STYLE="fork" TEXT="meta-Operationen">
@@ -1283,8 +1262,7 @@
       to construct the new target data efficiently in place.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1457190826145" ID="ID_1342883622" MODIFIED="1457190834604" TEXT="return to previous mutator"/>
@@ -1887,8 +1865,7 @@
       durch den das Problem mit der &quot;absrakten, opaquen&quot; Position entsch&#228;rft wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
@@ -2116,8 +2093,7 @@
       und protokolliert somit &quot;nebenbei&quot; was an Anforderungen an ihm vorbeigeht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1456523612849" ID="ID_729852941" MODIFIED="1456523625883" TEXT="Test zum Aufbau des Interfaces"/>
@@ -2367,8 +2343,7 @@
       f&#252;r spezifische Arten von Bindings
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1457232408368" FOLDED="true" HGAP="29" ID="ID_1068782263" MODIFIED="1472219584229" TEXT="TestWireTap / TestMutationTarget" VSHIFT="-6">
 <icon BUILTIN="full-1"/>
 <node CREATED="1457232426238" ID="ID_728198359" MODIFIED="1457232567024" TEXT="brauche ich, um das API zu entwickeln">
@@ -2410,8 +2385,7 @@
       denn sonst w&#252;rde er es f&#252;r darunter liegende Layer verschatten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="closed"/>
 </node>
 </node>
@@ -2656,8 +2630,7 @@
       eine wom&#246;glich irref&#252;hrende Meldung generiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" STARTARROW="None" STARTINCLINATION="176;0;"/>
 </node>
 <node CREATED="1472498654730" ID="ID_1869339299" MODIFIED="1472498676884" TEXT="gel&#xf6;st durch static_assert">
@@ -2869,8 +2842,7 @@
       dann <i>m&#252;ssen</i>&#160;Attribute irgendwie sinnvoll integriert sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1457741673001" ID="ID_1826667029" MODIFIED="1457742700335" TEXT="konkrete Beispiele">
@@ -4274,7 +4246,7 @@
 <icon BUILTIN="full-4"/>
 <node CREATED="1464305377785" ID="ID_396910166" MODIFIED="1464306126692" TEXT="Vor&#xfc;berlegungen">
 <icon BUILTIN="pencil"/>
-<node CREATED="1464305417066" FOLDED="true" ID="ID_1059660516" MODIFIED="1472141092653" TEXT="w&#xfc;nschenswert">
+<node CREATED="1464305417066" ID="ID_1059660516" MODIFIED="1472653389474" TEXT="w&#xfc;nschenswert">
 <icon BUILTIN="help"/>
 <node CREATED="1464305708891" ID="ID_1184917831" MODIFIED="1464305711647" TEXT="Vorteile">
 <node CREATED="1464305431944" ID="ID_426248387" MODIFIED="1464305641440" TEXT="den RecordContentMutator loswerden"/>
@@ -4305,6 +4277,24 @@
 </node>
 </node>
 </node>
+</node>
+<node CREATED="1472653531806" HGAP="76" ID="ID_1466924103" MODIFIED="1472653539641" TEXT="Ansatz" VSHIFT="-10">
+<node CREATED="1472653541019" ID="ID_1910363821" MODIFIED="1472653569512">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>zwei</i>&#160;Collection-Bindings
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1472653548905" ID="ID_56400821" MODIFIED="1472653553124" TEXT="speziell konfiguriert"/>
+<node CREATED="1472654905416" ID="ID_729856704" MODIFIED="1472654910067" TEXT="minimaler Code"/>
 </node>
 </node>
 <node CREATED="1464305382975" ID="ID_1038582300" MODIFIED="1464305386130" TEXT="Implementierung">
@@ -4360,8 +4350,7 @@
       In jedem Fall ger&#228;t dadurch die relative Verzahnung der Elemente untereinander aus dem Takt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1461967992042" ID="ID_9552950" MODIFIED="1468761946715" TEXT="nur ein Ausweg..."/>
 <node CREATED="1461968004720" ID="ID_1333404241" MODIFIED="1472219338765" TEXT="Ordnung der onion-layer verbindlich machen">
@@ -4389,14 +4378,13 @@
       und diese Elemente m&#252;ssen geschlossen hintereinander in der Reihenfolge liegen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1465428839332" ID="ID_909803930" MODIFIED="1472495575428" TEXT="Diff-Anwendung" VSHIFT="36">
+<node CREATED="1465428839332" FOLDED="true" ID="ID_909803930" MODIFIED="1472653380889" TEXT="Diff-Anwendung" VSHIFT="36">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1465428850946" ID="ID_1085608480" MODIFIED="1465428866278">
 <richcontent TYPE="NODE"><html>
@@ -4434,8 +4422,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#994062" DESTINATION="ID_1139754084" ENDARROW="Default" ENDINCLINATION="1028;0;" ID="Arrow_ID_10673972" STARTARROW="None" STARTINCLINATION="978;42;"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -4458,8 +4445,7 @@
       Letzten Endes lief&#160;&#160;das auch in diesem Fall auf inline-Storage hinaus...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1465665492727" ID="ID_743684748" MODIFIED="1465665500210" TEXT="mu&#xdf; vom Target gebaut werden"/>
 <node CREATED="1465665500830" ID="ID_937213383" MODIFIED="1465665561681" TEXT="Typ nicht bekannt">
 <icon BUILTIN="messagebox_warning"/>
@@ -4540,8 +4526,7 @@
       Standard == Interface DiffMutable implementieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -4659,8 +4644,7 @@
       da&#223; sie uns im gegebenen Kontext umbringen...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -4852,8 +4836,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1465855653265" ID="ID_1093267368" MODIFIED="1472219324298" TEXT="konfigurieren und lernen"/>
 </node>
@@ -4880,8 +4863,7 @@
       -- wie bzw. von wem bekommen wir dann ein Binding, das einen passenden TreeMutator konstruiert?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#994062" DESTINATION="ID_1139754084" ENDARROW="Default" ENDINCLINATION="1028;0;" ID="Arrow_ID_10673972" SOURCE="ID_872861883" STARTARROW="None" STARTINCLINATION="978;42;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1465864167187" ID="ID_1126324374" MODIFIED="1465864171974" TEXT="Aufruf: freie Funktion"/>
@@ -4931,8 +4913,7 @@
       und zwar per handle.get()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1472172348526" ID="ID_1671229453" MODIFIED="1472172358593" TEXT="m&#xf6;gliche Alternativen">
@@ -4955,8 +4936,7 @@
       Ich empfinde das als schlechten Stil
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1472172467934" ID="ID_1258020411" MODIFIED="1472172562992" TEXT="ScopeManager-Interface erweitern">
@@ -4975,8 +4955,7 @@
       weil die Implementierung den Zeiger auf den geschachtelen sub-Mutator umsetzen mu&#223;.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
@@ -5003,8 +4982,7 @@
       dieser zumindest einmal per ins &quot;angelegt&quot; wurde.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1472172711846" ID="ID_146912736" MODIFIED="1472172809794" TEXT="wir haben es hier mit objektwertigen Attributen zu tun">
@@ -5052,8 +5030,7 @@
       und daher auch jeweils eigens per Unit-Test abgedeckt werden.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1472122581698" ID="ID_1932054966" MODIFIED="1472122688070" TEXT="sehr komplexes Binding auf privaten Datentyp">
 <richcontent TYPE="NOTE"><html>
@@ -5074,8 +5051,7 @@
       der konkreten Bindings mit mehreren &quot;onion layers&quot;!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -5105,8 +5081,7 @@
       ...denn es ist sehr verwirrend, welche Signatur denn nun die Lambdas haben m&#252;ssen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" SOURCE="ID_338749301" STARTARROW="None" STARTINCLINATION="176;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -5120,8 +5095,7 @@
       ...denn es kann keinen Default-Matcher geben....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1458850212503" ID="ID_321552356" MODIFIED="1472498583464" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren">
@@ -5155,8 +5129,7 @@
       da&#223; der Client hier eigentlich ein Protokoll implementieren mu&#223;.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1458850263688" ID="ID_555018476" MODIFIED="1458850272315" TEXT="Zusammenf&#xfc;hren">
 <node CREATED="1458850294083" ID="ID_393704697" MODIFIED="1458850302901" TEXT="der normale GenNode-Applikator"/>
@@ -5202,8 +5175,7 @@
       <i>wenn &#252;berhaupt, </i>dann im Matcher im Binding-Layer implementieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -5664,8 +5636,7 @@
       Implementierung der real-world-Variante fehlt!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="13"/>
 <icon BUILTIN="prepare"/>
 <node CREATED="1453545875627" ID="ID_1411740156" MODIFIED="1453545951737" TEXT="Definition &#xbb;Zentral-Dienste&#xab;">

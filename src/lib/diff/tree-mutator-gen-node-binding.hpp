@@ -1,5 +1,5 @@
 /*
-  TREE-MUTATOR-COLLECTION-BINDING.hpp  -  diff::TreeMutator implementation building block
+  TREE-MUTATOR-GEN-NODE-BINDING.hpp  -  diff::TreeMutator implementation building block
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,19 +21,28 @@
 */
 
 
-/** @file tree-mutator-collection-binding.hpp
+/** @file tree-mutator-gen-node-binding.hpp
  ** Special binding implementation for TreeMutator, allowing to map
- ** tree diff operations onto a STL collection of native implementation objects.
+ ** tree diff operations onto an »External Tree Description«. Such is is a
+ ** DOM like representation of tree like structures, comprised of GenNode elements.
  ** TreeMutator is a customisable intermediary, which enables otherwise opaque
  ** implementation data structures to receive and respond to generic structural
  ** change messages ("tree diff").
  ** 
  ** Each concrete TreeMutator instance will be configured differently, and this
  ** adaptation is done by implementing binding templates, in the way of building
- ** blocks, attached and customised through lambdas. It is possible to layer
- ** several bindings on top of a single TreeMutator -- and this header defines
- ** a building block for one such layer, especially for binding to a representation
- ** of "child objects" managed within a typical STL container.
+ ** blocks, layered on top of each other. This header defines a special setup, based
+ ** on the two layered bindings for STL collections. The reason is that our »External
+ ** Tree Description«  of object-like structures is comprised of recursively nested
+ ** Record<GenNode> to represent "objects", and this representation is actually implemented
+ ** internally based on two collections -- one to hold the _attributes_ and one to hold the
+ ** _children._ So this special setup relies on implementation inside knowledge to apply
+ ** structural changes to such a representation. There is an implicit convention that
+ ** "objects" are to be spelled out by first giving the metadata, then enumerating the
+ ** attributes (key-value properties) and finally the child elements located within the
+ ** scope of this "object" node. This implicit convention is in accordance with the
+ ** structure of our _diff language_ -- thus it is sufficient just to layer two collection
+ ** bindings, together with suitable closures (lambdas) for layer selection, matching, etc.
  ** 
  ** @note the header tree-mutator-collection-binding.hpp with specific builder templates
  **       is included way down, after the class definitions. This is done so for sake
@@ -45,8 +54,8 @@
  */
 
 
-#ifndef LIB_DIFF_TREE_MUTATOR_COLLECTION_BINDING_H
-#define LIB_DIFF_TREE_MUTATOR_COLLECTION_BINDING_H
+#ifndef LIB_DIFF_TREE_MUTATOR_GEN_NODE_BINDING_H
+#define LIB_DIFF_TREE_MUTATOR_GEN_NODE_BINDING_H
 #ifndef LIB_DIFF_TREE_MUTATOR_H
   #error "this header shall not be used standalone (see tree-mutator.hpp)"
 #endif
@@ -198,7 +207,7 @@
         
         
         
-        /* ==== Implementation of TreeNode operation API ==== */
+        /* ==== re-Implementation of the operation API ==== */
         
         /** fabricate a new element, based on
          *  the given specification (GenNode),
@@ -551,4 +560,4 @@
     
     
     
-#endif /*LIB_DIFF_TREE_MUTATOR_COLLECTION_BINDING_H*/
+#endif /*LIB_DIFF_TREE_MUTATOR_GEN_NODE_BINDING_H*/

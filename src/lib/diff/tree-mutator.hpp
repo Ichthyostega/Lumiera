@@ -378,6 +378,7 @@ namespace diff{
     
 #include "lib/diff/tree-mutator-attribute-binding.hpp"
 #include "lib/diff/tree-mutator-collection-binding.hpp"
+#include "lib/diff/tree-mutator-gen-node-binding.hpp"
     
     
     
