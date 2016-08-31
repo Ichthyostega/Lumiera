@@ -504,6 +504,12 @@ namespace diff{
             return Collection<BIN> {forward<BIN>(collectionBindingSetup), move(*this)};
           }
         
+        auto
+        attach (Rec::Mutator& targetTree)
+          {
+            return twoLayeredGenNodeTreeSetup (targetTree, move(*this));
+          }
+        
         /** set up a diagnostic layer, binding to TestMutationTarget.
          *  This can be used to monitor the behaviour of the resulting TreeMutator for tests.
          */

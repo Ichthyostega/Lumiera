@@ -493,6 +493,12 @@ namespace diff{
       
       /* === low-level access (for diff application === */
       
+      auto
+      exposeToDiff()
+        {
+          return std::tie (record_.attribs_, record_.children_);
+        }
+      
       void
       swapContent (ContentMutator& alteredContent)
         {
