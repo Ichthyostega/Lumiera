@@ -66,7 +66,7 @@
     
     
     
-    using lib::diff::GenNode;
+    
     
     using Storage = RecordSetup<GenNode>::Storage;
     
@@ -96,7 +96,11 @@
     {
       return builderBase
                .attach (collection (accessChildren(targetTree)))
-               .attach (collection (accessAttribs(targetTree)));
+               .attach (collection (accessAttribs(targetTree)))
+                    .isApplicableIf ([&](GenNode const& spec)
+                       {
+                         return spec.isNamed();  // »Selector« : treat key-value elements here
+                       });
     }
     
     

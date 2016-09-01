@@ -190,9 +190,11 @@ namespace diff{
       template<typename X>
       X const& get()  const;
       
+      /** determine if payload constitutes a nested scope ("object") */
+      bool isNested()  const;
+      
       /** peek into the type field of a nested `Record<GenNode>` */
-      string
-      recordType()  const;
+      string recordType()  const;
       
       /** visit _children_ of a nested `Record<GenNode>` */
       Rec::scopeIter
@@ -710,6 +712,12 @@ namespace diff{
       
       return nested? nested->getType()
                    : util::BOTTOM_INDICATOR;
+    }
+  
+  inline bool
+  DataCap::isNested()  const
+    {
+      return util::BOTTOM_INDICATOR != recordType();
     }
   
   

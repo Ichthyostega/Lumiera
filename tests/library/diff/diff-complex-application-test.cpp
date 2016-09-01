@@ -213,7 +213,7 @@ namespace test{
                 .attach (collection(nestedObj_)
                        .isApplicableIf ([&](GenNode const& spec) -> bool
                           {
-                            return BOTTOM_INDICATOR != spec.data.recordType(); // »Selector« : require object-like sub scope
+                            return spec.data.isNested();              // »Selector« : require object-like sub scope
                           })
                        .matchElement ([&](GenNode const& spec, Opaque const& elm) -> bool
                           {

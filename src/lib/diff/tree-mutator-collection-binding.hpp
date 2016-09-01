@@ -76,11 +76,11 @@
      * an otherwise opaque implementation data structure.
      * 
      * @tparam COLL a STL compliant collection type holding "child elements"
-     * @tparam MAT a closure to determine if a child matches a diff spec (GenNode)
-     * @tparam CTR a closure to construct a new child element from a given diff spec
+     * @tparam MAT a functor to determine if a child matches a diff spec (GenNode)
+     * @tparam CTR a functor to construct a new child element from a given diff spec
      * @tparam SEL predicate to determine if this binding layer has to process a diff message
-     * @tparam ASS a closure to assign / set a new value from a given diff spec
-     * @tparam MUT a closure to construct a nested mutator for some child element
+     * @tparam ASS a functor to assign / set a new value from a given diff spec
+     * @tparam MUT a functor to construct a nested mutator for some child element
      */
     template<class COLL, class MAT, class CTR, class SEL, class ASS, class MUT>
     struct CollectionBinding
@@ -436,41 +436,69 @@
       };
     
     
-    using lib::meta::enable_if;
-    using lib::diff::can_wrap_in_GenNode;
+    /** builder function to synthesise builder type from given functors */
+    template<class COLL, class MAT, class CTR, class SEL, class ASS, class MUT>
+    inline auto
+    createCollectionBindingBuilder (COLL& coll, MAT m, CTR c, SEL s, ASS a, MUT u)
+    {
+      using Coll = typename Strip<COLL>::TypeReferred;
+
+      return CollectionBindingBuilder<Coll, MAT,CTR,SEL,ASS,MUT> {coll, m,c,s,a,u};
+    }
     
     
-    template<typename ELM, typename SEL =void>
-    struct _DefaultPayload
+    template<class ELM>
+    struct _EmptyBinding
       {
         static bool
-        match (GenNode const&, ELM const&)
+        __ERROR_missing_matcher (GenNode const&, ELM const&)
           {
             throw error::Logic ("unable to build a sensible default matching predicate");
           }
         
         static ELM
-        construct (GenNode const&)
+        __ERROR_missing_constructor (GenNode const&)
           {
             throw error::Logic ("unable to build a sensible default for creating new elements");
           }
-      };
-    
-    template<typename ELM>
-    struct _DefaultPayload<ELM, enable_if<can_wrap_in_GenNode<ELM>>>
-      {
+        
         static bool
-        match (GenNode const& spec, ELM const& elm)
+        ignore_selector (GenNode const&)
           {
-            return spec.matches(elm);
+            return true; // by default apply diff unconditionally
           }
         
-        static ELM
-        construct (GenNode const& spec)
+        static bool
+        disable_assignment (ELM&, GenNode const&)
           {
-            return spec.data.get<ELM>();
+            return false;
+          }
+        
+        static bool
+        disable_childMutation (ELM&, GenNode::ID const&, TreeMutator::Handle)
+          {
+            return false;
+          }
+        
+        
+        template<class COLL>
+        static auto
+        attachTo (COLL& coll)
+          {
+            return createCollectionBindingBuilder (coll
+                                                  ,__ERROR_missing_matcher
+                                                  ,__ERROR_missing_constructor
+                                                  ,ignore_selector
+                                                  ,disable_assignment
+                                                  ,disable_childMutation
+                                                  );
           }
       };
+    
+    
+    
+    using lib::meta::enable_if;
+    using lib::diff::can_wrap_in_GenNode;
     
     /**
      * starting point for configuration of a binding to STL container.
@@ -482,55 +510,73 @@
      * the created (\ref CollectionBindingBuilder) to replace
      * those defaults with lambdas tied into the actual
      * implementation of the target data structure.
+     * @note depending on the payload type within the collection,
+     *       we provide some preconfigured default specialisations
      */
-    template<class COLL>
+    template<class ELM, typename SEL =void>
     struct _DefaultBinding
+      : _EmptyBinding<ELM>
+      { };
+    
+    template<class ELM>
+    struct _DefaultBinding<ELM, enable_if<can_wrap_in_GenNode<ELM>>>
       {
-        using Coll = typename Strip<COLL>::TypeReferred;
-        using Elm  = typename Coll::value_type;
-        
-        using Payload = _DefaultPayload<Elm>;
-        
-        static bool
-        ignore_selector (GenNode const&)
+        template<class COLL>
+        static auto
+        attachTo (COLL& coll)
           {
-            return true; // by default apply diff unconditionally
-          }
-        
-        static bool
-        disable_assignment (Elm&, GenNode const&)
-          {
-            return false;
-          }
-        
-        static bool
-        disable_childMutation (Elm&, GenNode::ID const&, TreeMutator::Handle)
-          {
-            return false;
-          }
-        
-        
-        using FallbackBindingConfiguration
-            = CollectionBindingBuilder<Coll
-                                      ,decltype(&Payload::match)
-                                      ,decltype(&Payload::construct)
-                                      ,decltype(&ignore_selector)
-                                      ,decltype(&disable_assignment)
-                                      ,decltype(&disable_childMutation)
-                                      >;
-        
-        static FallbackBindingConfiguration
-        attachTo (Coll& coll)
-          {
-            return FallbackBindingConfiguration{ coll
-                                               , Payload::match
-                                               , Payload::construct
-                                               , ignore_selector
-                                               , disable_assignment
-                                               , disable_childMutation
-                                               };
+            return _EmptyBinding<ELM>::attachTo(coll)
+                      .matchElement([](GenNode const& spec, ELM const& elm)
+                         {
+                           return spec.matches(elm);
+                         })
+                      .constructFrom([](GenNode const& spec) -> ELM
+                         {
+                           return spec.data.get<ELM>();
+                         });
           }
       };
+    
+    template<>
+    struct _DefaultBinding<GenNode>
+      {
+        template<class COLL>
+        static auto
+        attachTo (COLL& coll)
+          {
+            return _EmptyBinding<GenNode>::attachTo(coll)
+                      .matchElement([](GenNode const& spec, GenNode const& elm)
+                         {
+                           return spec.matches(elm);
+                         })
+                      .constructFrom([](GenNode const& spec) -> GenNode
+                         {
+                           return GenNode{spec};
+                         })
+                      .assignElement ([](GenNode& target, GenNode const& spec) -> bool
+                         {
+                           target.data = spec.data;
+                           return true;
+                         })
+                      .buildChildMutator ([](GenNode& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                         {
+                           if (target.idi == subID     // require match on already existing child object
+                               and target.data.isNested())
+                             {
+                               Rec& nestedScope = target.data.get<Rec>();
+                               buff.create (
+                                 TreeMutator::build()
+                                   .attach (mutateInPlace (nestedScope)));
+                               return true;
+                             }
+                           else
+                             return false;
+                         });
+          }
+      };
+    
+    
+    
     
     
     /**
@@ -544,9 +590,11 @@
      */
     template<class COLL>
     auto
-    collection (COLL& coll) -> decltype(_DefaultBinding<COLL>::attachTo(coll))
+    collection (COLL& coll)
     {
-      return _DefaultBinding<COLL>::attachTo(coll);
+      using Elm  = typename COLL::value_type;
+      
+      return _DefaultBinding<Elm>::attachTo(coll);
     }
     
     
