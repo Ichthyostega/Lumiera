@@ -208,8 +208,8 @@ namespace diff{
    *         the return value in local scope as long as necessary
    */
   template<class TAR>
-  auto
-  mutatorBinding (TAR& subject) -> typename TreeDiffTraits<TAR>::Ret
+  typename TreeDiffTraits<TAR>::Ret
+  mutatorBinding (TAR& subject)
   {
      using Wrapper = typename TreeDiffTraits<TAR>::Ret;
      return Wrapper{subject};

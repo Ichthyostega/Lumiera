@@ -84,9 +84,8 @@
  ** constructing the concrete TreeMutator needs to have adequate understanding
  ** regarding mode of operation and "mechanics" of such a binding.
  ** 
- ** @note the header tree-mutator-attribute-binding.hpp with specific builder templates
- **       is included way down, after the class definitions. This is done so for sake
- **       of readability.
+ ** @note the header tree-mutator-attribute-binding.hpp was split off for sake of readability
+ **       and is included automatically from bottom of tree-mutator.hpp
  ** 
  ** @see tree-mutator-test.cpp
  ** @see TreeMutator::build()
@@ -96,13 +95,22 @@
 
 #ifndef LIB_DIFF_TREE_MUTATOR_ATTRIBUTE_BINDING_H
 #define LIB_DIFF_TREE_MUTATOR_ATTRIBUTE_BINDING_H
-#ifndef LIB_DIFF_TREE_MUTATOR_H
-  #error "this header shall not be used standalone (see tree-mutator.hpp)"
-#endif
 
 
-  
-//== anonymous namespace...
+#include "lib/error.hpp"
+#include "lib/symbol.hpp"
+#include "lib/diff/gen-node.hpp"
+#include "lib/diff/tree-mutator.hpp"
+#include "lib/format-string.hpp"
+#include "lib/idi/entry-id.hpp"
+
+#include <utility>
+
+
+namespace lib {
+namespace diff{
+
+  namespace { // Mutator-Builder decorator components...
     
     
     /**
@@ -333,4 +341,30 @@
       };
     
     
+    
+    /** Entry point for DSL builder */
+    template<class PAR>
+    template<typename CLO>
+    inline auto
+    Builder<PAR>::change (Symbol attributeID, CLO setterClosure)
+    {
+      return chainedBuilder<ChangeOperation<PAR,CLO>> (attributeID, setterClosure);
+    }
+    
+    
+    /** Entry point for DSL builder */
+    template<class PAR>
+    template<typename CLO>
+    inline auto
+    Builder<PAR>::mutateAttrib (Symbol attributeID, CLO mutatorBuilderClosure)
+    {
+      idi::EntryID<Rec> key{attributeID};
+      return chainedBuilder<MutationOperation<PAR,CLO>> (key, mutatorBuilderClosure);
+    }
+    
+    
+    
+  }//(END)Mutator-Builder decorator components...
+  
+}} // namespace lib::diff
 #endif /*LIB_DIFF_TREE_MUTATOR_ATTRIBUTE_BINDING_H*/

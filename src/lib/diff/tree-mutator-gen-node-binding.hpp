@@ -32,8 +32,8 @@
  ** Each concrete TreeMutator instance will be configured differently, and this
  ** adaptation is done by implementing binding templates, in the way of building
  ** blocks, layered on top of each other. This header defines a special setup, based
- ** on the two layered bindings for STL collections. The reason is that our »External
- ** Tree Description«  of object-like structures is comprised of recursively nested
+ ** on two layered bindings for STL collections. The reason is that our »External
+ ** Tree Description« of object-like structures is comprised of recursively nested
  ** Record<GenNode> to represent "objects", and this representation is actually implemented
  ** internally based on two collections -- one to hold the _attributes_ and one to hold the
  ** _children._ So this special setup relies on implementation inside knowledge to apply
@@ -44,9 +44,8 @@
  ** structure of our _diff language_ -- thus it is sufficient just to layer two collection
  ** bindings, together with suitable closures (lambdas) for layer selection, matching, etc.
  ** 
- ** @note the header tree-mutator-collection-binding.hpp with specific builder templates
- **       is included way down, after the class definitions. This is done so for sake
- **       of readability.
+ ** @note the header tree-mutator-collection-binding.hpp was split off for sake of readability
+ **       and is included automatically from bottom of tree-mutator.hpp
  ** 
  ** @see tree-mutator-test.cpp
  ** @see TreeMutator::build()
@@ -56,16 +55,19 @@
 
 #ifndef LIB_DIFF_TREE_MUTATOR_GEN_NODE_BINDING_H
 #define LIB_DIFF_TREE_MUTATOR_GEN_NODE_BINDING_H
-#ifndef LIB_DIFF_TREE_MUTATOR_H
-  #error "this header shall not be used standalone (see tree-mutator.hpp)"
-#endif
 
 
+#include "lib/diff/gen-node.hpp"
+#include "lib/diff/tree-mutator-collection-binding.hpp"
+#include "lib/diff/tree-mutator.hpp"
 
-//== anonymous namespace...
-    
-    
-    
+#include <tuple>
+
+
+namespace lib {
+namespace diff{
+
+  namespace { // Mutator-Builder decorator components...
     
     
     using Storage = RecordSetup<GenNode>::Storage;
@@ -83,26 +85,23 @@
       return std::get<1> (targetTree.exposeToDiff());
     }
     
-    /**
-     * Attach to GenNode tree: Special setup to build a concrete `TreeMutator`.
-     * This decorator is already outfitted with the necessary closures to work on
-     * a diff::Record<GenNode> -- which is typically used as "meta representation"
-     * of object-like structures. Thus this binding allows to apply a diff message
-     * onto such a given »External Tree Description«, mutating it into new shape.
-     */
+    
+    
+    /** Entry point for DSL builder */
     template<class PAR>
     inline auto
-    twoLayeredGenNodeTreeMutator (Rec::Mutator& targetTree, PAR&& builderBase)
+    Builder<PAR>::attach (Rec::Mutator& targetTree)
     {
-      return builderBase
-               .attach (collection (accessChildren(targetTree)))
-               .attach (collection (accessAttribs(targetTree)))
-                    .isApplicableIf ([&](GenNode const& spec)
-                       {
-                         return spec.isNamed();  // »Selector« : treat key-value elements here
-                       });
+      return this-> attach (collection (accessChildren(targetTree)))
+                   .attach (collection (accessAttribs(targetTree)))
+                        .isApplicableIf ([&](GenNode const& spec)
+                           {
+                             return spec.isNamed();  // »Selector« : treat key-value elements here
+                           });
     }
     
-    
-    
+  }//(END)Mutator-Builder decorator components...
+  
+  
+}} // namespace lib::diff
 #endif /*LIB_DIFF_TREE_MUTATOR_GEN_NODE_BINDING_H*/

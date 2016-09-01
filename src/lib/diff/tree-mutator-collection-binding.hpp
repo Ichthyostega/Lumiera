@@ -35,9 +35,8 @@
  ** a building block for one such layer, especially for binding to a representation
  ** of "child objects" managed within a typical STL container.
  ** 
- ** @note the header tree-mutator-collection-binding.hpp with specific builder templates
- **       is included way down, after the class definitions. This is done so for sake
- **       of readability.
+ ** @note the header tree-mutator-collection-binding.hpp was split off for sake of readability
+ **       and is included automatically from bottom of tree-mutator.hpp
  ** 
  ** @see tree-mutator-test.cpp
  ** @see TreeMutator::build()
@@ -47,13 +46,21 @@
 
 #ifndef LIB_DIFF_TREE_MUTATOR_COLLECTION_BINDING_H
 #define LIB_DIFF_TREE_MUTATOR_COLLECTION_BINDING_H
-#ifndef LIB_DIFF_TREE_MUTATOR_H
-  #error "this header shall not be used standalone (see tree-mutator.hpp)"
-#endif
 
 
+#include "lib/error.hpp"
+#include "lib/meta/trait.hpp"
+#include "lib/diff/gen-node.hpp"
+#include "lib/diff/tree-mutator.hpp"
+#include "lib/iter-adapter-stl.hpp"
 
-//== anonymous namespace...
+#include <utility>
+
+
+namespace lib {
+namespace diff{
+
+  namespace { // Mutator-Builder decorator components...
     
     
     
@@ -447,6 +454,7 @@
     }
     
     
+    
     template<class ELM>
     struct _EmptyBinding
       {
@@ -589,7 +597,7 @@
      * using lambdas as callback into the otherwise opaque implementation code.
      */
     template<class COLL>
-    auto
+    inline auto
     collection (COLL& coll)
     {
       using Elm  = typename COLL::value_type;
@@ -599,4 +607,17 @@
     
     
     
+    /** Entry point for DSL builder */
+    template<class PAR>
+    template<class BIN>
+    inline auto
+    Builder<PAR>::attach (BIN&& collectionBindingSetup)
+    {
+      return chainedBuilder<ChildCollectionMutator<PAR,BIN>> (forward<BIN>(collectionBindingSetup));
+    }
+    
+    
+  }//(END)Mutator-Builder decorator components...
+  
+}} // namespace lib::diff
 #endif /*LIB_DIFF_TREE_MUTATOR_COLLECTION_BINDING_H*/

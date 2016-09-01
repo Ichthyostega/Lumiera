@@ -528,10 +528,10 @@ namespace diff{
     
     
     template<class PAR>
-    Builder<TestWireTap<PAR>>
+    auto
     Builder<PAR>::attachDummy (TestMutationTarget& dummy)
     {
-      return WireTap (dummy, move(*this));
+      return chainedBuilder<TestWireTap<PAR>> (dummy);
     }
 
   }

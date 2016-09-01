@@ -324,6 +324,9 @@ namespace diff{
     };
   
   
+  
+  
+  
   namespace { // Mutator-Builder decorator components...
     
     using lib::meta::Strip;
@@ -374,16 +377,7 @@ namespace diff{
     
     
     
-    /* == implementation detail headers == */
     
-#include "lib/diff/tree-mutator-attribute-binding.hpp"
-#include "lib/diff/tree-mutator-collection-binding.hpp"
-#include "lib/diff/tree-mutator-gen-node-binding.hpp"
-    
-    
-    
-    template<class PAR>
-    struct TestWireTap;
     
     
     /**
@@ -402,16 +396,13 @@ namespace diff{
           : PAR{forward<PAR> (par)}
           { }
         
-        template<class CLO>
-        using Change = ChangeOperation<PAR,CLO>;
+        template<typename BIN, typename...ARGS>
+        Builder<BIN>
+        chainedBuilder (ARGS&&...args)
+          {
+            return Builder<BIN> (BIN{forward<ARGS>(args)..., move(*this)});
+          }
         
-        template<class CLO>
-        using MutateAttrib = MutationOperation<PAR,CLO>;
-        
-        template<class BIN>
-        using Collection = ChildCollectionMutator<PAR,BIN>;
-        
-        using WireTap = TestWireTap<PAR>;
         
         
         /* ==== binding API ==== */
@@ -434,13 +425,12 @@ namespace diff{
          *       "applicable" to this attribute and binding. Similar to
          *       GenNode, the provided attributeID is used as-is,
          *       without further sanitising.
+         * @return a _chained builder,_ which establishes this building and
+         *       can then be used to define additional binding layers on top
          */
         template<typename CLO>
-        Builder<Change<CLO>>
-        change (Symbol attributeID, CLO setterClosure)
-          {
-            return Change<CLO> (attributeID, setterClosure, move(*this));
-          }
+        auto change (Symbol attributeID, CLO setterClosure);
+        
         
         /** set up a binding for an object valued "attribute" or _named scope_.
          *  This covers the rather special case, where some relevant sub object is
@@ -458,12 +448,7 @@ namespace diff{
          * @see CollectionBindingBuilder::buildChildMutator
          */
         template<typename CLO>
-        Builder<MutateAttrib<CLO>>
-        mutateAttrib (Symbol attributeID, CLO mutatorBuilderClosure)
-          {
-            idi::EntryID<Rec> key{attributeID};
-            return MutateAttrib<CLO> (key, mutatorBuilderClosure, move(*this));
-          }
+        auto mutateAttrib (Symbol attributeID, CLO mutatorBuilderClosure);
         
         ///////////////////////////////////////TODO define variant taking a GenNode::ID ??
         
@@ -498,30 +483,33 @@ namespace diff{
          *     this nested mutator until encountering the corresponding `EMU` bracket verb.
          */
         template<typename BIN>
-        Builder<Collection<BIN>>
-        attach (BIN&& collectionBindingSetup)
-          {
-            return Collection<BIN> {forward<BIN>(collectionBindingSetup), move(*this)};
-          }
+        auto attach (BIN&& collectionBindingSetup);
         
-        auto
-        attach (Rec::Mutator& targetTree)
-          {
-            return twoLayeredGenNodeTreeSetup (targetTree, move(*this));
-          }
+        
+        /** set up binding to a GenNode tree: Special setup to build a concrete `TreeMutator`.
+         *  This decorator is already outfitted with the necessary closures to work on a
+         *  diff::Record<GenNode> -- which is typically used as "meta representation" of
+         *  object-like structures. Thus this binding allows to apply a diff message onto
+         *  such a given »External Tree Description«, mutating it into new shape.
+         * @remarks our meta representation of "objects" is based on Record<GenNode>, which
+         *          is implemented through two STL collections, one for the attributes and
+         *          one for the child elements. Thus we'll using two binding layers, based
+         *          on the ChildCollectionMutator, configured with the necessary lambdas.
+         */
+        auto attach (Rec::Mutator& targetTree);
+        
         
         /** set up a diagnostic layer, binding to TestMutationTarget.
          *  This can be used to monitor the behaviour of the resulting TreeMutator for tests.
          */
-        Builder<WireTap>
-        attachDummy (TestMutationTarget& dummy);
+        auto attachDummy (TestMutationTarget& dummy);
         
       };
     
   }//(END) Mutator-Builder...
   
   
-  Builder<TreeMutator>
+  inline Builder<TreeMutator>
   TreeMutator::build ()
   {
     return TreeMutator();
@@ -530,3 +518,11 @@ namespace diff{
   
 }} // namespace lib::diff
 #endif /*LIB_DIFF_TREE_MUTATOR_H*/
+
+
+         /* == implementation detail headers == */
+
+#include "lib/diff/tree-mutator-gen-node-binding.hpp"
+#include "lib/diff/tree-mutator-attribute-binding.hpp"
+#include "lib/diff/tree-mutator-collection-binding.hpp"
+
