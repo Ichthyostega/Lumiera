@@ -8228,7 +8228,7 @@ On receiving a stream of tokens of this &quot;diff language&quot;, it is possibl
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201606082305" tags="Model Concepts GuiPattern design draft" changecount="91">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201609021520" tags="Model Concepts GuiPattern design draft" changecount="94">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 within the [[diff framework|TreeDiffModel]], this is a crucial joint, since here the abstract, generic, ~DOM-like ExternalTreeDescription meeds opaque, local and undisclosed data structures.
 
@@ -8302,6 +8302,7 @@ the building blocks, from which such a diff application can be combined, are emb
 ;operation {{{accept_until}}}
 :repeatedly //accept// elements from the old state buffer, until hitting a condition. The condition is given within the //spec//
 :* when the spec is {{{Ref::END}}}, then accept all (remaining) elements, i.e. the remainder of the old sequence as-is.
+:* when the spec is {{{Ref::ATTRIBS}}}, and the implementation supports the notion of &quot;an attribute&quot;, then accept and stop behind attributes
 :* otherwise, accept //until after// finding an element that matches the //spec//. That is, the matching element will be the last one accepted
 ;operation {{{findSrc}}}
 :without changing the current position, delve further into the old state sequence, to find an element //matching the given spec.//
@@ -8364,12 +8365,16 @@ attached to a clip, or the mixture of clips, effects and labels found within a [
 :* ''mutateAttrib'': &quot;key&quot;, mutator-builder lambda {{{void(TreeMutator::MutatorBuffer)}}}
 :** fabricate a recursive sub-TreeMutator to handle an //object valued// attribute
 :** implicit typing -- the fabricated sub-TreeMutator just needs to be able to deal with the bound attribute
+;GenNode binding
+:in the end, it turnes out that the //implementation// underlying our ExternalTreeDescription itself fits nicely into the above mentioned standard bindings --
+:all we have to do is to layer two collection bindings on top of each other, with a suitable //selector// to separate //attributes// from //children.//
+:obviously, this unified implementation comes at the price of one additional indirection (namely through the ~TreeMutator VTable), while the requirements on temporary storage size are almost identical (two iterators and two back references instead of one). Moreover, all the explicitly coded complexities regarding the attribute / children distinction is gone, relying on the logic of layered decorators solely. So the effort to shape the TreeMutator API payed off in the end, to improve and rectify the whole design...
 
 
 You should note that this entire design is recursive: only after understanding the part, where, for handling a sub-structure, a nested mutator is fabricated and placed into a given buffer, it becomes clear to what effect we're creating a customised mutator: we always need some (relative) parent scope, which happens to know more about the actual data to be treated with a TreeMutator. This scope assists with creating a suitable binding. Obviously, from within that binding, it is known what the sub-structures and children of that local data are all about and what semantics to give to the fundamental operations.
 </pre>
 </div>
-<div title="TreeMutatorEvolution" creator="Ichthyostega" modifier="Ichthyostega" created="201603160255" modified="201607282049" tags="Model Concepts design draft" changecount="24">
+<div title="TreeMutatorEvolution" creator="Ichthyostega" modifier="Ichthyostega" created="201603160255" modified="201609021605" tags="Model Concepts design draft" changecount="25">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 
 !Motivation
@@ -8511,6 +8516,10 @@ To create a ''binding'' for any object field, we need
 * a ''name'' for matching keys
 * either a ''setter'' (lambda) or a ''mutator builder'' (lambda)
 We have a distinct typing for each individual attribute, but this typing remains implicit: the lambda has to know what value to extract from the GenNode payload within the accepted diff message and how to apply this value. Especially for ''time entities'', which are modelled as immutable values, the lambda might want to build a [[time mutator|TimeMutation]]. And especially in the UI, timing specifications are expected to be translated into a //presentation grid.//
+
+!!!types, attributes and layering
+During the analysis it turned out that support for a mixed set of //typed child elements// is an important goal. However, we may impose the restriction that these typed sub collections will be kept segregated and not be mixed up within the child scope. Effectively, this was already the fundamental trait for the //symbolic object representation// chosen here. Thus, &quot;attributes&quot; become just one further kind of typed children; even &quot;metadata&quot; might be treated along these lines in future (currently as of 2016 we have only a type field in {{{diff::Record}}}, which is treated explicitly).
+This observation leads directly to an implementation based on layered decorators. Each kind of target elements will be treated by another decorator exclusively, and control is passed through a chain of such decorators. This means, each decorator (or &quot;onion-layer&quot;) gets into charge based on a //selector predicate,// which works on the given diff verb solely (no introspection and no &quot;peeking&quot; into the implementation data). We should note though, that this implies some fine points of the diff language semantics are subject to this architectural decision -- especially the precise behaviour of the {{{AFTER}}}-verb depends on the //concrete layer structure// used at the target of the diff. Yet this seems acceptable, since it is the very nature of diff application to be dependent on internals of the target location -- just by definition we assume this inner structure of the target to be semantically congruent with the diff's source structure.
 
 
 !Implementation

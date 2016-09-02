@@ -219,11 +219,8 @@ namespace diff{
         virtual bool
         accept_until (GenNode const& spec)  override
           {
-            if (Ref::END == spec)
-              return PAR::accept_until(Ref::END);
-            else
-            if (Ref::ATTRIBS == spec)
-              return true;
+            if (Ref::END == spec or Ref::ATTRIBS == spec)
+              return PAR::accept_until(spec);
             else
               {
                 __ifApplicable_refuse_to ("navigate to a position behind", spec);

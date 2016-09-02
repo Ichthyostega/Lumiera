@@ -454,11 +454,12 @@ namespace test{
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
           CHECK (isnil (target));                   // the match didn't change anything
           
-          CHECK (not mutator2.accept_until(Ref::ATTRIBS));
-                                                    // NOTE: collection values can be anything; thus this
+          CHECK (mutator2.accept_until(Ref::ATTRIBS));
+          CHECK (mutator2.matchSrc (ATTRIB1));      // NOTE: collection values can be anything; thus this
                                                     //       collection binding layer can not have any notion of
-                                                    //       "this is an attribute". It will just delegate to the
-                                                    //       next lower layer and thus finally return false
+                                                    //       "this is an attribute". It will not accept anything
+                                                    //       and just delegate to the next lower layer, which here
+                                                    //       is the empty binding and thus finally returns true
           
           CHECK (mutator2.accept_until(ATTRIB3));   // ...but of course we can fast forward to dedicated values    // accept_until
           CHECK (!isnil (target));                  // the fast forward did indeed accept some entries
@@ -801,11 +802,7 @@ namespace test{
                                                     // what /is/ allowed though, for reasons of logic,
                                                     // is to "fast forward behind all attributes"
                                                     // of course this is implemented as NOP
-          CHECK (not mutator2.accept_until(Ref::END));                                                             // accept_until END
-                                                    // likewise for Ref::END,
-                                                    // but in this case the call is actually forwarded down
-                                                    // and thus returns false in our setup here,
-                                                    // since there is no active layer below
+          CHECK (mutator2.accept_until(Ref::END));  // likewise for Ref::END                                       // accept_until END
           
           mutator2.injectNew (ATTRIB2);                                                                            // injectNew
           
@@ -871,7 +868,7 @@ namespace test{
           CHECK (not mutator3.accept_until (ATTRIB2));            // unknown binding, no one is responsible
           CHECK (not mutator3.accept_until (ATTRIB1));
           CHECK (mutator3.accept_until (Ref::ATTRIBS));           // only the generic end-of-scope marks supported
-          CHECK (not mutator3.accept_until (Ref::END));           // (and implemented either as NOP or passed down)
+          CHECK (mutator3.accept_until (Ref::END));               // (and implemented as NOP plus forwarding down)
           
           // explanation: due to the nature of a 'data field',
           // this binding has no notion of 'ordering' and thus no 'current position'.

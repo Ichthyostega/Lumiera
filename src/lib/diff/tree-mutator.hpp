@@ -261,10 +261,11 @@ namespace diff{
       
       /** repeatedly accept, until after the designated location */
       virtual bool
-      accept_until (GenNode const&)
+      accept_until (GenNode const& spec)
         {
-          // do nothing by default
-          return false;
+          return (Ref::END == spec or Ref::ATTRIBS == spec);
+              // contents are exhausted by default,
+             //  yet we're unable to find something specific
         }
       
       /** locate designated element and accept it at current position */
@@ -469,7 +470,9 @@ namespace diff{
          *   - the optional _selector closure_ (CollectionBindingBuilder::isApplicableIf)
          *     allows to limit applicability of this whole binding (layer) to only some
          *     diff specs. E.g., we may set up a binding for elements with value semantics
-         *     and another binding layer on top to deal with object like children (sub scopes)
+         *     and another binding layer on top to deal with object like children (sub scopes).
+         *     Please note that this selector also gets to judge the Ref::ATTRIBS spec, which
+         *     means this layer's contents can be considered "attributes".
          *   - the optional _setter closure_ (CollectionBindingBuilder::assignElement) accepts
          *     a diff spec (GenNode) and should assign an equivalent value to the internal
          *     data representation of the corresponding element (typically by constructing
@@ -481,6 +484,15 @@ namespace diff{
          *     representation of the nested scope to enter. The code invoking this closure
          *     typically pushes the buffer on some internal stack and switches then to use
          *     this nested mutator until encountering the corresponding `EMU` bracket verb.
+         * @note the `after(Ref::ATTRIBS)` verb can only processed if the selector responds
+         *     correct to a Ref::ATTRIBS spec. The implicit default selector does so, i.e.
+         *     it rejects `Ref::ATTRIBS`. Please be sure to accept this token _only_ if
+         *     your layer indeed holds something meant to implement "attributes", because
+         *     in that case, the verb `after(Ref::ATTRIBS)` will fast forward and accept
+         *     all the current contents of this layer
+         * @warning please note the _nested DSL_. The builder functions used to define
+         *     the various closures are to be invoked on the _argument_ ("`collection(xyz)`"),
+         *     not on the top level builder...
          */
         template<typename BIN>
         auto attach (BIN&& collectionBindingSetup);

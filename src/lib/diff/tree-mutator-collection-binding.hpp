@@ -296,15 +296,15 @@ namespace diff{
         virtual bool
         accept_until (GenNode const& spec)
           {
-            if (spec.matches (Ref::END))
+            if (spec.matches (Ref::END)
+               or
+               (spec.matches (Ref::ATTRIBS)
+                and binding_.isApplicable (Ref::ATTRIBS)))
               {
                 for ( ; pos_; ++pos_)
                   binding_.inject (move(*pos_));
-                return true;
-              }
-            else
-            if (spec.matches (Ref::ATTRIBS))
                 return PAR::accept_until (spec);
+              }
             else
               if (binding_.isApplicable(spec))
                 {
@@ -471,9 +471,11 @@ namespace diff{
           }
         
         static bool
-        ignore_selector (GenNode const&)
+        ignore_selector (GenNode const& spec)
           {
-            return true; // by default apply diff unconditionally
+            return spec != Ref::ATTRIBS;
+            // by default apply diff unconditionally,
+            // but don't respond to after(ATTRIBS)
           }
         
         static bool
