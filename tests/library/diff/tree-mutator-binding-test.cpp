@@ -386,10 +386,10 @@ namespace test{
           
           CHECK (sizeof(mutator1) <= sizeof(VecD)                // the buffer for pending elements
                                    + sizeof(VecD*)               // the reference to the original collection
-                                   + sizeof(void*)               // the reference from the ChildCollectionMutator to the CollectionBinding
                                    + 2 * sizeof(VecD::iterator)  // one Lumiera RangeIter (comprised of pos and end iterators)
                                    + 4 * sizeof(void*)           // the four unused default configured binding functions
-                                   + 1 * sizeof(void*));         // one back reference from the closure to this scope
+                                   + 1 * sizeof(void*)           // one back reference from the closure to this scope
+                                   + sizeof(void*));             // the TreeMutator VTable
           
           
           // --- first round: populate the collection ---
@@ -951,14 +951,17 @@ namespace test{
           TreeMutator::build()
             .attach (target);
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
-          CHECK (sizeof(mutator1) <= sizeof(VecD)                // the buffer for pending elements
-                                   + sizeof(VecD*)               // the reference to the original collection
-                                   + sizeof(void*)               // the reference from the ChildCollectionMutator to the CollectionBinding
-                                   + 2 * sizeof(VecD::iterator)  // one Lumiera RangeIter (comprised of pos and end iterators)
-                                   + 4 * sizeof(void*)           // the four unused default configured binding functions
-                                   + 1 * sizeof(void*));         // one back reference from the closure to this scope
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          
+          using VecG = RecordSetup<GenNode>::Storage;
+          
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1007 : strange behaviour, getting additional storage
+          CHECK (sizeof(mutator1) <= 2 * (sizeof(VecG)           // we use two collection bindings...
+                                         +sizeof(VecG*)          // with a buffer for pending elements and a reference to the original collection
+                                         + 2* sizeof(VecG::iterator)  // and one Lumiera RangeIter (comprised of pos and end iterators)
+                                         +sizeof(void*)          // the VTable for each layer of TreeMutator impl
+                                         )
+                                   + 1 * sizeof(void*));         // plus one unused selector, implemented as pointer to the default impl
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1007
           
           
           // --- first round: populate the collection ---
