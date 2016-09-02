@@ -92,13 +92,22 @@ namespace diff{
     inline auto
     Builder<PAR>::attach (Rec::Mutator& targetTree)
     {
-      return this-> attach (collection (accessChildren(targetTree)))
-                   .attach (collection (accessAttribs(targetTree)))
-                        .isApplicableIf ([&](GenNode const& spec)
-                           {
-                             return spec.isNamed();  // »Selector« : treat key-value elements here
-                           });
+      return this->attach (collection (accessChildren(targetTree)))
+                  .attach (collection (accessAttribs(targetTree))
+                              .isApplicableIf ([](GenNode const& spec) -> bool
+                                   {
+                                     return spec.isNamed();  // »Selector« : treat key-value elements here
+                                   }));
     }
+    
+    inline void
+    buildNestedMutator(Rec& nestedScope, TreeMutator::Handle buff)
+    {
+       buff.create (
+         TreeMutator::build()
+           .attach (mutateInPlace (nestedScope)));
+    }
+    
     
   }//(END)Mutator-Builder decorator components...
   

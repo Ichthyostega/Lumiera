@@ -545,6 +545,10 @@ namespace diff{
           }
       };
     
+    
+    /** @internal forward declaration for recursive mutator builder call */
+    void buildNestedMutator(Rec& nestedScope, TreeMutator::Handle buff);
+    
     template<>
     struct _DefaultBinding<GenNode>
       {
@@ -571,10 +575,7 @@ namespace diff{
                            if (target.idi == subID     // require match on already existing child object
                                and target.data.isNested())
                              {
-                               Rec& nestedScope = target.data.get<Rec>();
-                               buff.create (
-                                 TreeMutator::build()
-                                   .attach (mutateInPlace (nestedScope)));
+                               buildNestedMutator(target.data.get<Rec>(), buff);
                                return true;
                              }
                            else
