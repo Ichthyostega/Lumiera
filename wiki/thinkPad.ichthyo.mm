@@ -4346,8 +4346,9 @@
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472930979111" ID="ID_1629990314" MODIFIED="1472931001117" TEXT="Problem: Typ-Feld">
+<node CREATED="1472930979111" ID="ID_1629990314" MODIFIED="1472934775211" TEXT="Problem: Typ-Feld">
 <icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1472931031568" ID="ID_1634653912" MODIFIED="1472931192300" TEXT="Kompromi&#xdf; in GenNode">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1472931061612" ID="ID_1482076461" MODIFIED="1472931066111" TEXT="halbherziges Design"/>
@@ -4400,6 +4401,47 @@
 <node CREATED="1472931309122" ID="ID_632255284" MODIFIED="1472931324740" TEXT="umgeht den Mutator"/>
 <node CREATED="1472931326512" ID="ID_150253618" MODIFIED="1472931332867" TEXT="arbeitet direkt auf den Collections"/>
 <node CREATED="1472931333975" ID="ID_330064662" MODIFIED="1472931342433" TEXT="reicht Werte unbetrachtet 1:1 durch"/>
+</node>
+<node CREATED="1472931711315" ID="ID_1747250133" MODIFIED="1472934762565" TEXT="L&#xf6;sung">
+<icon BUILTIN="idea"/>
+<node CREATED="1472931716482" ID="ID_1328626801" MODIFIED="1472931798657" TEXT="Lambdas nicht ausreichend">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...mit den Lambdas kann ich nur die Sicht auf die Werte steuern,
+    </p>
+    <p>
+      nicht aber das eigentliche Verhalten des Bindings.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Denn die Lambdas haben keinen Zugriff auf die Ziel-Datenstruktur!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1472931806958" ID="ID_321203237" MODIFIED="1472931822190" TEXT="m&#xfc;&#xdf;te Binding-Operationen anpassen">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node COLOR="#338800" CREATED="1472931829467" ID="ID_383672039" MODIFIED="1472934744607" STYLE="fork" TEXT="Dekorator">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1472934618917" ID="ID_1010335466" MODIFIED="1472934744607" TEXT="legt sich um den &#xe4;u&#xdf;eren Collection-Binding-Layer"/>
+<node CREATED="1472934635426" ID="ID_610715894" MODIFIED="1472934744607" TEXT="greift bei der injectNew und assignElm-Operation ein"/>
+<node CREATED="1472934671013" ID="ID_1605900118" MODIFIED="1472934744607" TEXT="braucht Zugang zum Rec::Mutator">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1472934695226" ID="ID_247894372" MODIFIED="1472934744607" TEXT="Code wird schwer lesbar"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472934710032" ID="ID_1233852840" MODIFIED="1472934744607" TEXT="umformulieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1472782025318" ID="ID_387350632" MODIFIED="1472782043725" TEXT="Standard-Lambdas f&#xfc;r GenNode">

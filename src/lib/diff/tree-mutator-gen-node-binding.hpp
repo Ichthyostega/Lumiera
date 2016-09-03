@@ -85,6 +85,49 @@ namespace diff{
       return std::get<1> (targetTree.exposeToDiff());
     }
     
+    template<class PAR>
+    class ObjectTypeHandler
+      : public PAR
+      {
+        Rec::Mutator& targetObj_;
+        
+      public:
+        ObjectTypeHandler(Rec::Mutator& targetObj, PAR&& chain)
+          : PAR(std::forward<PAR>(chain))
+          , targetObj_(targetObj)
+          { }
+        
+        virtual bool
+        injectNew (GenNode const& n)  override
+          {
+            if (n.isNamed() and n.isTypeID())
+              {
+                targetObj_.setType(n.data.get<string>());
+                return true;
+              }
+            else
+              return PAR::injectNew (n);
+          }
+        
+        virtual bool
+        assignElm (GenNode const& n)  override
+          {
+            if (n.isNamed() and n.isTypeID())
+              {
+                targetObj_.setType(n.data.get<string>());
+                return true;
+              }
+            else
+              return PAR::assignElm (n);
+          }
+      };
+    
+    template<class MUT>
+    inline Builder<ObjectTypeHandler<MUT>>
+    filterObjectType (Rec::Mutator& targetTree, Builder<MUT>&& baseBuilder)
+    {
+      return ObjectTypeHandler<MUT> {targetTree, move(baseBuilder)};
+    }
     
     
     /** Entry point for DSL builder */
@@ -92,12 +135,13 @@ namespace diff{
     inline auto
     Builder<PAR>::attach (Rec::Mutator& targetTree)
     {
-      return this->attach (collection (accessChildren(targetTree)))
+      return filterObjectType(targetTree,
+             this->attach (collection (accessChildren(targetTree)))
                   .attach (collection (accessAttribs(targetTree))
                               .isApplicableIf ([](GenNode const& spec) -> bool
                                    {
                                      return spec.isNamed();  // »Selector« : treat key-value elements here
-                                   }));
+                                   })));
     }
     
     inline void

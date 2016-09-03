@@ -294,7 +294,7 @@ namespace diff{
         
         /** repeatedly accept, until after the designated location */
         virtual bool
-        accept_until (GenNode const& spec)
+        accept_until (GenNode const& spec)  override
           {
             if (spec.matches (Ref::END)
                or
@@ -329,7 +329,7 @@ namespace diff{
         /** locate element already accepted into the target sequence
          *  and assign the designated payload value to it. */
         virtual bool
-        assignElm (GenNode const& spec)
+        assignElm (GenNode const& spec)  override
           {
             if (binding_.isApplicable(spec))
               {
@@ -343,7 +343,7 @@ namespace diff{
         /** locate the designated target element and build a suitable
          *  sub-mutator for this element into the provided target buffer */
         virtual bool
-        mutateChild (GenNode const& spec, TreeMutator::Handle targetBuff)
+        mutateChild (GenNode const& spec, TreeMutator::Handle targetBuff)  override
           {
             if (binding_.isApplicable(spec))
               {
@@ -357,7 +357,7 @@ namespace diff{
         /** verify all our pending (old) source elements where mentioned.
          * @note allows chained "onion-layers" to clean-up and verify.*/
         virtual bool
-        completeScope()
+        completeScope()  override
           {
             return PAR::completeScope()
                and isnil(this->pos_);

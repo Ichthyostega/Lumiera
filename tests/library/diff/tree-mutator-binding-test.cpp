@@ -1128,12 +1128,9 @@ namespace test{
           cout << "Sub-" << renderNode(subNode) <<endl;          // some new content into our implementation defined sub scope!
           
           // verify contents of nested scope after mutation
-          cout <<"Type=="<<nestedRec.getType()<<endl; ///////////TODO Problem: type attribute not recognised!!!!
-//        CHECK ("ξ" == nested.getType());                       // type of nested node has been set to Xi
+          CHECK ("ξ" == nestedRec.getType());                    // type of nested node has been set to Xi
           attrs = nestedRec.attribs();                           // look into the nested node's attributes...
-//        CHECK (  *attrs == ATTRIB2);
-//        CHECK (  *attrs == TYPE_X);              //////////////TODO Problem: type attribute not recognised!!!!
-          CHECK (*++attrs == ATTRIB2);
+          CHECK (  *attrs == ATTRIB2);
           CHECK (isnil (++attrs));
           scope = nestedRec.scope();                             // look into the nested nodes's scope contents...
           CHECK (  *scope == CHILD_B);
@@ -1145,10 +1142,11 @@ namespace test{
           // ...add a new attribute and immediately recurse into it
           mutator3.injectNew (ATTRIB_NODE);
           CHECK (mutator3.mutateChild (ATTRIB_NODE, placementHandle));  // NOTE: we're just recycling the buffer. InPlaceHolder handles lifecycle properly
-          subMutatorBuffer->injectNew (TYPE_Z);
+          subMutatorBuffer->injectNew (TYPE_X);
           subMutatorBuffer->injectNew (CHILD_A);
           subMutatorBuffer->injectNew (CHILD_A);
           subMutatorBuffer->injectNew (CHILD_A);
+          subMutatorBuffer->assignElm (TYPE_Z);       // NOTE use assignment to *change* the type field
           CHECK (subMutatorBuffer->completeScope());  // no pending "open ends" left in sub-scope
           CHECK (mutator3.completeScope());           // and likewise in the enclosing main scope
           
@@ -1158,9 +1156,8 @@ namespace test{
           
           // verify contents of this second nested scope
           CHECK (not isnil (attrRec));
-          cout <<"Type=="<<attrRec.getType()<<endl; /////////////TODO Problem: type attribute not recognised!!!!
-//        CHECK ("ζ" == attrNode.getType());
-//        CHECK (isnil (attrNode.attribs()));     ///////////////TODO Problem: type attribute not recognised!!!!
+          CHECK ("ζ" == attrRec.getType());
+          CHECK (isnil (attrRec.attribs()));
           scope = attrRec.scope();
           CHECK (not isnil (scope));
           CHECK (  *scope == CHILD_A);
