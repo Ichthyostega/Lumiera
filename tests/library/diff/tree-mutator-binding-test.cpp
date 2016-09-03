@@ -952,9 +952,9 @@ namespace test{
             .attach (target);
           
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1007 : strange behaviour, getting additional storage
           using VecG = RecordSetup<GenNode>::Storage;
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1007 : strange behaviour, getting additional storage
           CHECK (sizeof(mutator1) <= 2 * (sizeof(VecG)           // we use two collection bindings...
                                          +sizeof(VecG*)          // with a buffer for pending elements and a reference to the original collection
                                          + 2* sizeof(VecG::iterator)  // and one Lumiera RangeIter (comprised of pos and end iterators)
@@ -1000,46 +1000,31 @@ namespace test{
           
           // Mutators are one-time disposable objects,
           // thus we'll have to build a new one for the second round...
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           auto mutator2 =
           TreeMutator::build()
-            .attach (collection(target)
-                       .constructFrom ([&](GenNode const& spec) -> Data
-                          {
-                            cout << "constructor invoked on "<<spec<<endl;
-                            return {spec.idi.getSym(), render(spec.data)};
-                          })
-                       .matchElement ([&](GenNode const& spec, Data const& elm)
-                          {
-                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
-                            return spec.idi.getSym() == elm.key;
-                          }));
-          
-          // we have two lambdas now and thus can save on the size of one function pointer....
-          CHECK (sizeof(mutator1) - sizeof(mutator2) == sizeof(void*));
+            .attach (target);
           
           
-          CHECK (isnil (target));                   // the "visible" new content is still void
+          CHECK (isnil (target));                   // old content moved aside, visible new content still void
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
           CHECK (isnil (target));                   // the match didn't change anything
           
-          CHECK (not mutator2.accept_until(Ref::ATTRIBS));
-                                                    // NOTE: collection values can be anything; thus this
-                                                    //       collection binding layer can not have any notion of
-                                                    //       "this is an attribute". It will just delegate to the
-                                                    //       next lower layer and thus finally return false
-          
-          CHECK (mutator2.accept_until(ATTRIB3));   // ...but of course we can fast forward to dedicated values    // accept_until
+          CHECK (mutator2.accept_until(ATTRIB3));   // accept and fast forward behind a given value                // accept_until
           CHECK (!isnil (target));                  // the fast forward did indeed accept some entries
-          CHECK (mutator2.acceptSrc(ATTRIB3));      // we have a duplicate in list, need to accept that as well    // accept
-          CHECK (mutator2.hasSrc());
-          CHECK (mutator2.matchSrc (CHILD_B));      // ...now we're located behind the attributes, at first child
-          mutator2.injectNew (ATTRIB2);                                                                            // injectNew
           
-          CHECK (mutator2.matchSrc (CHILD_B));      // first child waiting in src is CHILD_B
+          CHECK (mutator2.matchSrc (ATTRIB3));      // we had a duplicate attribute entry (and Record<GenNode>
+                                                    // indeed represents duplicates), so this is waiting next
+
+          CHECK (mutator2.accept_until(Ref::ATTRIBS));                                                             // accept_until
+          
+          CHECK (mutator2.hasSrc());                // ...we did a "blind" fast forward, accepting all attributes
+          CHECK (mutator2.matchSrc (CHILD_B));      // thus we're now located behind the attributes, at first child
+          mutator2.injectNew (ATTRIB2);             // ..no one prevents us from injecting another attribute...    // injectNew
+          
+          CHECK (mutator2.matchSrc (CHILD_B));      // first child still waiting in src is CHILD_B
           mutator2.skipSrc (CHILD_B);               // ...which will be skipped (and thus discarded)               // skipSrc
-          mutator2.injectNew (SUB_NODE);            // inject a nested sub-structure (implementation defined)      // injectNew
+          mutator2.injectNew (SUB_NODE);            // inject a nested sub-structure (here a Record<GenNode>)      // injectNew
           CHECK (mutator2.matchSrc (CHILD_B));      // yet another B-child is waiting
           CHECK (not mutator2.findSrc (CHILD_A));   // unsuccessful find operation won't do anything
           CHECK (mutator2.hasSrc());
@@ -1058,25 +1043,25 @@ namespace test{
           CHECK (mutator2.completeScope());         // no pending elements left, everything resolved
           
           // verify reordered shape
-          contents = stringify(eachElm(target));
-          CHECK ("≺α∣1≻" == *contents);
-          ++contents;
-          CHECK ("≺γ∣3.45≻" == *contents);
-          ++contents;
-          CHECK ("≺γ∣3.45≻" == *contents);
-          ++contents;
-          CHECK ("≺β∣2≻" == *contents);
-          ++contents;
-          CHECK (contains(*contents, "∣Rec()≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣78:56:34.012≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣b≻"));
-          ++contents;
-          CHECK (isnil (contents));
+          CHECK (!isnil (root));                                 // nonempty -- content has been moved back
+          CHECK (Rec::TYPE_NIL == root.getType());               // type field was not touched
+          CHECK (1 == root.get("α").data.get<int>());            // all attributes accessible
+          CHECK (2 == root.get("β").data.get<int64_t>());
+          CHECK (3.45 == root.get("γ").data.get<double>());
+          auto attrs = root.attribs();                           // verify the sequence of attributes...
+          CHECK (  *attrs == ATTRIB1);                           // first attribute "α" was left as it was
+          CHECK (*++attrs == ATTRIB3);                           // same for the attribute "γ"
+          CHECK (*++attrs == ATTRIB3);                           // ...and its duplicate
+          CHECK (*++attrs == ATTRIB2);                           // and here is the newly inserted "β"
+          CHECK (isnil (++attrs));
+          scope = root.scope();                                  // look into the scope contents...
+          CHECK (  *scope == SUB_NODE);                          //   first the new empty nested child node
+          CHECK (*++scope == CHILD_T);                           //   but now followed immediately by CHILD_T
+          CHECK (*++scope == CHILD_B);                           //   while CHILD_B has be shuffled back
+          CHECK (isnil (++scope));                               // ...and that's all
           
           cout << "Content after reordering...."
-               << join(target) <<endl;
+               << renderRecord(target) <<endl;
           
           
           // --- third round: mutate data and sub-scopes ---
@@ -1087,6 +1072,7 @@ namespace test{
           // And beyond that, mutation entails to open a nested scope and delve into that recursively.
           // Here, as this is really just a test and demonstration, we implement those nested scopes aside
           // managed within a map and keyed by the sub node's ID.
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           auto mutator3 =
           TreeMutator::build()
             .attach (collection(target)
