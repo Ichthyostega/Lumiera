@@ -620,7 +620,7 @@ namespace test{
           
           // now back to parent scope....
           // ...add a new attribute and immediately recurse into it
-          mutator1.injectNew (ATTRIB_NODE);
+          mutator3.injectNew (ATTRIB_NODE);
           CHECK (mutator3.mutateChild (ATTRIB_NODE, placementHandle));  // NOTE: we're just recycling the buffer. InPlaceHolder handles lifecycle properly
           subMutatorBuffer->injectNew (TYPE_Z);
           subMutatorBuffer->injectNew (CHILD_A);
@@ -1101,54 +1101,49 @@ namespace test{
           CHECK (*++attrs == ATTRIB2);
           CHECK (isnil (++attrs));
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           // prepare for recursion into sub scope..
           // Since this is a demonstration, we do not actually recurse into anything,
-          // rather we invoke the operations on a nested mutator right from here.
+          // rather we just let the binding generate a nested mutator into some buffer
+          // and then we invoke the operations this nested mutator right from here.
           
           InPlaceBuffer<TreeMutator, sizeof(mutator1)> subMutatorBuffer;
           TreeMutator::Handle placementHandle(subMutatorBuffer);
           
           CHECK (mutator3.mutateChild (SUB_NODE, placementHandle));                                                // mutateChild
           
-          CHECK (isnil (subScopes[SUB_NODE.idi]));  // ...this is where the nested mutator is expected to work on
-          CHECK (not subMutatorBuffer->hasSrc());
+          GenNode const& subNode = *root.scope();
+          CHECK (subNode == SUB_NODE);                           // ...this is the sub node
+          CHECK (isnil (subNode.data.get<Rec>()));               // where the nested mutator is expected to work on
           
           // now use the Mutator *interface* to talk to the nested mutator...
-          // This code might be confusing, because in fact we're playing two roles here!
-          // For one, above, in the definition of mutator3 and in the declaration of MapD subScopes,
-          // the test code represents what a private data structure and binding would do.
-          // But below we enact the TreeDiffAplicator, which *would* use the Mutator interface
-          // to talk to an otherwise opaque nested mutator implementation. Actually, here this
-          // nested opaque mutator is created on-the-fly, embedded within the .buildChildMutator(..lambda...)
-          // Incidentally, we "just happen to know" how large the buffer needs to be to hold that mutator,
-          // since this is a topic beyond the scope of this test. In real usage, the DiffApplicator cares
-          // to provide a stack of suitably sized buffers for the nested mutators.
-          
+          // which was built and placed into the provided buffer
+          CHECK (not subMutatorBuffer->hasSrc());
           subMutatorBuffer->injectNew (TYPE_X);                                                                    // >> // injectNew
           subMutatorBuffer->injectNew (ATTRIB2);                                                                   // >> // injectNew
           subMutatorBuffer->injectNew (CHILD_B);                                                                   // >> // injectNew
           subMutatorBuffer->injectNew (CHILD_A);                                                                   // >> // injectNew
           
-          CHECK (not isnil (subScopes[SUB_NODE.idi]));              // ...and "magically" these instructions happened to insert
-          cout << "Sub|" << join(subScopes[SUB_NODE.idi]) <<endl;  //  some new content into our implementation defined sub scope!
+          Rec const& nestedRec = subNode.data.get<Rec>();
+          CHECK (not isnil (nestedRec));                         // ...and "magically" these instructions happened to insert
+          cout << "Sub-" << renderNode(subNode) <<endl;          // some new content into our implementation defined sub scope!
           
           // verify contents of nested scope after mutation
-          contents = stringify(eachElm(subScopes[SUB_NODE.idi]));
-          CHECK ("≺type∣ξ≻" == *contents);
-          ++contents;
-          CHECK ("≺β∣2≻" == *contents);
-          ++contents;
-          CHECK (contains(*contents, "∣b≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣a≻"));
-          ++contents;
-          CHECK (isnil (contents));
+          cout <<"Type=="<<nestedRec.getType()<<endl; ///////////TODO Problem: type attribute not recognised!!!!
+//        CHECK ("ξ" == nested.getType());                       // type of nested node has been set to Xi
+          attrs = nestedRec.attribs();                           // look into the nested node's attributes...
+//        CHECK (  *attrs == ATTRIB2);
+//        CHECK (  *attrs == TYPE_X);              //////////////TODO Problem: type attribute not recognised!!!!
+          CHECK (*++attrs == ATTRIB2);
+          CHECK (isnil (++attrs));
+          scope = nestedRec.scope();                             // look into the nested nodes's scope contents...
+          CHECK (  *scope == CHILD_B);
+          CHECK (*++scope == CHILD_A);
+          CHECK (isnil (++scope));                               // ...and that's all
           
           
           // now back to parent scope....
           // ...add a new attribute and immediately recurse into it
-          mutator1.injectNew (ATTRIB_NODE);
+          mutator3.injectNew (ATTRIB_NODE);
           CHECK (mutator3.mutateChild (ATTRIB_NODE, placementHandle));  // NOTE: we're just recycling the buffer. InPlaceHolder handles lifecycle properly
           subMutatorBuffer->injectNew (TYPE_Z);
           subMutatorBuffer->injectNew (CHILD_A);
@@ -1158,29 +1153,29 @@ namespace test{
           CHECK (mutator3.completeScope());           // and likewise in the enclosing main scope
           
           // and thus we've gotten a second nested scope, populated with new values
-          cout << "Sub|" << join(subScopes[ATTRIB_NODE.idi]) <<endl;
+          Rec const& attrRec = root.get("δ").data.get<Rec>();
+          cout << "Att-" << renderNode(attrRec) <<endl;
           
           // verify contents of this second nested scope
-          contents = stringify(eachElm(subScopes[ATTRIB_NODE.idi]));
-          CHECK ("≺type∣ζ≻" == *contents);
-          ++contents;
-          CHECK (contains(*contents, "∣a≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣a≻"));
-          ++contents;
-          CHECK (contains(*contents, "∣a≻"));
-          ++contents;
-          CHECK (isnil (contents));
+          CHECK (not isnil (attrRec));
+          cout <<"Type=="<<attrRec.getType()<<endl; /////////////TODO Problem: type attribute not recognised!!!!
+//        CHECK ("ζ" == attrNode.getType());
+//        CHECK (isnil (attrNode.attribs()));     ///////////////TODO Problem: type attribute not recognised!!!!
+          scope = attrRec.scope();
+          CHECK (not isnil (scope));
+          CHECK (  *scope == CHILD_A);
+          CHECK (*++scope == CHILD_A);
+          CHECK (*++scope == CHILD_A);
+          CHECK (isnil (++scope));
           
           
           // back to parent scope....
-          // verify the marker left by our "nested sub-scope lambda"
-          CHECK (contains (join(target), "Rec(--"+SUB_NODE.idi.getSym()+"--)"));
-          CHECK (contains (join(target), "Rec(--"+ATTRIB_NODE.idi.getSym()+"--)"));
+          // verify the parent scope indeed contains the nested elements in new shape
+          CHECK (contains (renderRecord(target), renderRecord(attrRec)));
+          CHECK (contains (renderRecord(target), renderRecord(nestedRec)));
           
           cout << "Content after nested mutation; "
-               << join(target) <<endl;
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+               << renderRecord(target) <<endl;
         }
     };
   

@@ -4333,6 +4333,9 @@
 <node CREATED="1464305382975" ID="ID_1038582300" MODIFIED="1464305386130" TEXT="Implementierung">
 <node CREATED="1457742036967" ID="ID_980619979" MODIFIED="1457742040187" TEXT="Attribute">
 <node CREATED="1472781560508" ID="ID_1534877939" MODIFIED="1472781584718" TEXT="Selector: isNamed"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1472930964666" ID="ID_1394229571" MODIFIED="1472930972842" TEXT="Behandlung f&#xfc;r Typ-Feld">
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 <node CREATED="1457742040782" ID="ID_613087606" MODIFIED="1457742042442" TEXT="Kinder"/>
 <node CREATED="1472781922380" ID="ID_506316487" MODIFIED="1472781969409" TEXT="Problem: rekursiver Mutator">
@@ -4341,6 +4344,62 @@
 <node CREATED="1472781957063" ID="ID_1617563820" MODIFIED="1472781964177" TEXT="durch forward-decl aufzul&#xf6;sen"/>
 <node CREATED="1472781977156" ID="ID_1731364667" MODIFIED="1472782008196" TEXT="erfordert Umbau der Code-Struktur">
 <icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472930979111" ID="ID_1629990314" MODIFIED="1472931001117" TEXT="Problem: Typ-Feld">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1472931031568" ID="ID_1634653912" MODIFIED="1472931192300" TEXT="Kompromi&#xdf; in GenNode">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1472931061612" ID="ID_1482076461" MODIFIED="1472931066111" TEXT="halbherziges Design"/>
+<node CREATED="1472931066635" ID="ID_1488685471" MODIFIED="1472931074166" TEXT="wollte nicht wirklich Metadaten einf&#xfc;hren"/>
+<node CREATED="1472931074754" ID="ID_1078549727" MODIFIED="1472931083789" TEXT="hab&apos;s daher dann fest verdrahtet"/>
+<node CREATED="1472931084281" ID="ID_358955160" MODIFIED="1472931095987" TEXT="erlaube &quot;Abk&#xfc;rzung&quot; &#xfc;ber das Typ-Attribut"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472931096647" ID="ID_1730961697" MODIFIED="1472931185935" TEXT="aber nicht wirklich konsequent...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...diese Abk&#252;rzung ist nur auf den Konstruktur aufgepflanzt,
+    </p>
+    <p>
+      nicht aber in der eigentlichen Implementierung verankert.
+    </p>
+    <p>
+      Das wollte ich nicht, weil ich l&#228;ngerfristig doch davon ausgehe,
+    </p>
+    <p>
+      da&#223; es einfach einen Metadaten-Scope gibt
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Die Inkonsequenz nun ist, da&#223; im Rec::Mutator keine Magie daf&#252;r vorgesehen ist
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1472931195618" ID="ID_1075996120" MODIFIED="1472931261669" TEXT="aber Meta-Attribut f&#xfc;r Diff">
+<node CREATED="1472931234165" ID="ID_160523779" MODIFIED="1472931239279" TEXT="geht nicht anders"/>
+<node CREATED="1472931241027" ID="ID_1519973794" MODIFIED="1472931247263" TEXT="direkte Folge des Objekt-Modells"/>
+<node CREATED="1472931391998" ID="ID_1361356376" MODIFIED="1472931394627" TEXT="betrifft">
+<node CREATED="1472931395526" ID="ID_1159599973" MODIFIED="1472931403393" TEXT="ins(type = X)"/>
+<node CREATED="1472931404525" ID="ID_1215961897" MODIFIED="1472931410552" TEXT="set(type = X)">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1472931416323" ID="ID_1856124935" MODIFIED="1472931434577" TEXT="AUA: bisher &#xfc;bersehen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1472931275575" ID="ID_158751268" MODIFIED="1472931286497" TEXT="Collection-Binding">
+<node CREATED="1472931287229" ID="ID_1702269467" MODIFIED="1472931308630" TEXT="klinkt sich unterhalb vom Mutator ein"/>
+<node CREATED="1472931309122" ID="ID_632255284" MODIFIED="1472931324740" TEXT="umgeht den Mutator"/>
+<node CREATED="1472931326512" ID="ID_150253618" MODIFIED="1472931332867" TEXT="arbeitet direkt auf den Collections"/>
+<node CREATED="1472931333975" ID="ID_330064662" MODIFIED="1472931342433" TEXT="reicht Werte unbetrachtet 1:1 durch"/>
 </node>
 </node>
 <node CREATED="1472782025318" ID="ID_387350632" MODIFIED="1472782043725" TEXT="Standard-Lambdas f&#xfc;r GenNode">
@@ -4374,6 +4433,7 @@
 <node CREATED="1472830286462" ID="ID_1170732286" MODIFIED="1472830298035" TEXT="Einsicht: END und ATTRIBS k&#xf6;nnen nicht scheitern">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1472830304844" ID="ID_354507274" MODIFIED="1472840380057" TEXT="...es geht nur um das Layer-Chaining"/>
 </node>
 </node>
 </node>
