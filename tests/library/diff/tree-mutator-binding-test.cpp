@@ -567,7 +567,7 @@ namespace test{
           CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           
           CHECK (not contains(join(target), "≺γ∣3.1415927≻"));
-          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
+          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the designated element        // assignElm
           CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
           CHECK (    mutator3.completeScope());
           cout << "Content after assignment; "
@@ -1067,51 +1067,12 @@ namespace test{
           // --- third round: mutate data and sub-scopes ---
           
           
-          // This time we build the Mutator bindings in a way to allow mutation
-          // For one, "mutation" means to assign a changed value to a simple node / attribute.
-          // And beyond that, mutation entails to open a nested scope and delve into that recursively.
-          // Here, as this is really just a test and demonstration, we implement those nested scopes aside
-          // managed within a map and keyed by the sub node's ID.
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
+          // since our target data here is comprised of GenNode elements,
+          // we're both able to assign data and to enter a nested Record<GenNode>
+          // The default configuration is outfitted for this use as-is right away.
           auto mutator3 =
           TreeMutator::build()
-            .attach (collection(target)
-                       .constructFrom ([&](GenNode const& spec) -> Data
-                          {
-                            cout << "constructor invoked on "<<spec<<endl;
-                            return {spec.idi.getSym(), render(spec.data)};
-                          })
-                       .matchElement ([&](GenNode const& spec, Data const& elm) -> bool
-                          {
-                            cout << "match? "<<spec.idi.getSym()<<"=?="<<elm.key<<endl;
-                            return spec.idi.getSym() == elm.key;
-                          })
-                       .assignElement ([&](Data& target, GenNode const& spec) -> bool
-                          {
-                            cout << "assign "<<target<<" <- "<<spec<<endl;
-                            CHECK (target.key == spec.idi.getSym(), "assignment to target with wrong identity");
-                            target.val = render(spec.data);
-                            return true;
-                          })
-                       .buildChildMutator ([&](Data& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                          {
-                            // use our "inside knowledge" to get at the nested scope implementation
-                            VecD& subScope = subScopes[subID];
-                            buff.create (
-                              TreeMutator::build()
-                                .attach (collection(subScope)
-                                           .constructFrom ([&](GenNode const& spec) -> Data
-                                              {
-                                                cout << "SubScope| constructor invoked on "<<spec<<endl;
-                                                return {spec.idi.getSym(), render(spec.data)};
-                                              })));
-                            
-                            // NOTE: mutation of sub scope has not happened yet
-                            //       we can only document the sub scope to be opened now
-                            cout << "openSub("<<subID.getSym()<<") ⟻ "<<target<<endl;
-                            target.val = "Rec(--"+subID.getSym()+"--)";
-                            return true;
-                          }));
+            .attach (target);
           
           CHECK (isnil (target));
           CHECK (mutator3.matchSrc (ATTRIB1));      // new mutator starts out anew at the beginning
@@ -1121,14 +1082,26 @@ namespace test{
           CHECK (mutator3.accept_until (Ref::END)); // fast forward, since we do not want to re-order anything     // accept_until
           CHECK (    mutator3.completeScope());     // now any pending elements where default-resolved
           
-          CHECK (not contains(join(target), "≺γ∣3.1415927≻"));
-          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
-          CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
+          CHECK (not contains(renderRecord(target), "γ = 3.1415927"));
+          CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the designated element        // assignElm
+          CHECK (    contains(renderRecord(target), "γ = 3.1415927"));
           CHECK (    mutator3.completeScope());
           cout << "Content after assignment; "
-               << join(target) <<endl;
+               << renderRecord(target) <<endl;
           
+          // Note: it is up to the implementation of the target data how to deal with duplicate attributes
+          //       Record<GenNode> represents attributes as a list of named sub GenNode elements, and the
+          //       access to attributes uses the first match found
+          attrs = root.attribs();                                // visit all attributes sequentially...
+          CHECK (  *attrs == ATTRIB1);                           // first attribute "α" was left as it was
+          CHECK (*++attrs == GAMMA_PI);                          // this is where the value assignment happened...
+          CHECK (   attrs->data.get<double>() == GAMMA_PI.data.get<double>());
+          CHECK (*++attrs == ATTRIB3);                           // ...while the duplicate "γ"...
+          CHECK (   attrs->data.get<double>() == 3.45);          //    ...still holds the original value
+          CHECK (*++attrs == ATTRIB2);
+          CHECK (isnil (++attrs));
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #992
           // prepare for recursion into sub scope..
           // Since this is a demonstration, we do not actually recurse into anything,
           // rather we invoke the operations on a nested mutator right from here.
