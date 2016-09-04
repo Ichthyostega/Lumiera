@@ -42,11 +42,14 @@
  ** attributes (key-value properties) and finally the child elements located within the
  ** scope of this "object" node. This implicit convention is in accordance with the
  ** structure of our _diff language_ -- thus it is sufficient just to layer two collection
- ** bindings, together with suitable closures (lambdas) for layer selection, matching, etc.
+ ** bindings, together with suitable closures (lambdas) for layer selection, matching, most
+ ** of which is already defined for collections of GenNode elements in general
  ** 
  ** @note the header tree-mutator-collection-binding.hpp was split off for sake of readability
  **       and is included automatically from bottom of tree-mutator.hpp
  ** 
+ ** @see _DefaultBinding<GenNode>
+ ** @see tree-mutator-collection-binding.hpp
  ** @see tree-mutator-test.cpp
  ** @see TreeMutator::build()
  ** 
@@ -69,22 +72,21 @@ namespace diff{
 
   namespace { // Mutator-Builder decorator components...
     
-    
-    using Storage = RecordSetup<GenNode>::Storage;
-    
-    
-    inline Storage&
-    accessAttribs (Rec::Mutator& targetTree)
-    {
-      return std::get<0> (targetTree.exposeToDiff());
-    }
-    
-    inline Storage&
-    accessChildren (Rec::Mutator& targetTree)
-    {
-      return std::get<1> (targetTree.exposeToDiff());
-    }
-    
+    /**
+     * Helper to deal with the magic "object type" attribute.
+     * Our _meta representation_ for "objects" as Record<GenNode>
+     * currently does not support metadata as a dedicated scope (as it should).
+     * Rather, the only relevant piece of metadata, an object type ID field, is
+     * treated with hard wired code and passed as a _magic attribute_ with key "type".
+     * Unfortunately this means for our task here that a plain flat standard binding
+     * for the collection of attributes does not suffice -- we need to intercept and
+     * grab assignments to this magic attribute to forward them to the dedicated
+     * type field found on diff::Record.
+     * 
+     * Since we build two layers of bindings, with the attributes necessarily on top,
+     * this special treatment can be layered as a decorator on top, just overriding
+     * the two operations which get to handle assignment to attribute values.
+     */
     template<class PAR>
     class ObjectTypeHandler
       : public PAR
@@ -98,35 +100,51 @@ namespace diff{
           { }
         
         virtual bool
-        injectNew (GenNode const& n)  override
+        injectNew (GenNode const& spec)  override
           {
-            if (n.isNamed() and n.isTypeID())
+            if (spec.isNamed() and spec.isTypeID())
               {
-                targetObj_.setType(n.data.get<string>());
+                targetObj_.setType(spec.data.get<string>());
                 return true;
               }
             else
-              return PAR::injectNew (n);
+              return PAR::injectNew (spec);
           }
         
         virtual bool
-        assignElm (GenNode const& n)  override
+        assignElm (GenNode const& spec)  override
           {
-            if (n.isNamed() and n.isTypeID())
+            if (spec.isNamed() and spec.isTypeID())
               {
-                targetObj_.setType(n.data.get<string>());
+                targetObj_.setType(spec.data.get<string>());
                 return true;
               }
             else
-              return PAR::assignElm (n);
+              return PAR::assignElm (spec);
           }
       };
     
     template<class MUT>
     inline Builder<ObjectTypeHandler<MUT>>
-    filterObjectType (Rec::Mutator& targetTree, Builder<MUT>&& baseBuilder)
+    filterObjectTypeAttribute (Rec::Mutator& targetTree, Builder<MUT>&& chain)
     {
-      return ObjectTypeHandler<MUT> {targetTree, move(baseBuilder)};
+      return ObjectTypeHandler<MUT> {targetTree, move(chain)};
+    }
+    
+    
+    
+    using Storage = RecordSetup<GenNode>::Storage;
+    
+    inline Storage&
+    accessAttribs (Rec::Mutator& targetTree)
+    {
+      return std::get<0> (targetTree.exposeToDiff());
+    }
+    
+    inline Storage&
+    accessChildren (Rec::Mutator& targetTree)
+    {
+      return std::get<1> (targetTree.exposeToDiff());
     }
     
     
@@ -135,15 +153,24 @@ namespace diff{
     inline auto
     Builder<PAR>::attach (Rec::Mutator& targetTree)
     {
-      return filterObjectType(targetTree,
-             this->attach (collection (accessChildren(targetTree)))
-                  .attach (collection (accessAttribs(targetTree))
-                              .isApplicableIf ([](GenNode const& spec) -> bool
-                                   {
-                                     return spec.isNamed();  // »Selector« : treat key-value elements here
-                                   })));
+      auto rawBinding = this->attach (collection (accessChildren(targetTree)))
+                             .attach (collection (accessAttribs(targetTree))
+                                     .isApplicableIf ([](GenNode const& spec) -> bool
+                                        {     // »Selector« : treat key-value elements here
+                                          return spec.isNamed();
+                                        }));
+      
+      return filterObjectTypeAttribute(targetTree, move(rawBinding));
     }
     
+    
+    /** @internal recursive invocation to build a binding
+     * to a nested scope (child node). This function is invoked
+     * for the `buildChildMutator` case from _DefaultBinding<GenNode>.
+     * But the _definition_ can only given here, after the preceding
+     * definition of Builder<PAR>::attach has worked out the resulting
+     * return type (which is just a nested DSL builder object)
+     */
     inline void
     buildNestedMutator(Rec& nestedScope, TreeMutator::Handle buff)
     {
@@ -151,7 +178,6 @@ namespace diff{
          TreeMutator::build()
            .attach (mutateInPlace (nestedScope)));
     }
-    
     
   }//(END)Mutator-Builder decorator components...
   

@@ -551,6 +551,8 @@ namespace diff{
     /** @internal forward declaration for recursive mutator builder call */
     void buildNestedMutator(Rec& nestedScope, TreeMutator::Handle buff);
     
+    /** standard configuration to deal with GenNode collections.
+     * @see tree-mutator-gen-node-binding.hpp */
     template<>
     struct _DefaultBinding<GenNode>
       {

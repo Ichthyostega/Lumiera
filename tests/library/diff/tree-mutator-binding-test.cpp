@@ -86,7 +86,7 @@ namespace test{
    *       - use a dummy diagnostic implementation to verify the interface
    *       - verify an adapter to apply structure modification to a generic collection
    *       - use closures to translate mutation into manipulation of private attributes
-   * @todo - integrate the standard case of tree diff application to `Rec<GenNode>`
+   *       - integrate the standard case of tree diff application to `Rec<GenNode>`
    * 
    * @remark even while this is a very long and detail oriented test, it barely
    *      scratches the surface of what is possible with _layering multiple bindings_
@@ -570,7 +570,7 @@ namespace test{
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the designated element        // assignElm
           CHECK (    contains(join(target), "≺γ∣3.1415927≻"));
           CHECK (    mutator3.completeScope());
-          cout << "Content after assignment; "
+          cout << "Content after assignment...."
                << join(target) <<endl;
           
           
@@ -650,7 +650,7 @@ namespace test{
           CHECK (contains (join(target), "Rec(--"+SUB_NODE.idi.getSym()+"--)"));
           CHECK (contains (join(target), "Rec(--"+ATTRIB_NODE.idi.getSym()+"--)"));
           
-          cout << "Content after nested mutation; "
+          cout << "Content after nested mutation...."
                << join(target) <<endl;
         }
       
@@ -991,7 +991,8 @@ namespace test{
           CHECK (*++scope == CHILD_B);                           //   followed by a second CHILD_B
           CHECK (*++scope == CHILD_T);                           //   and another one CHILD_T
           
-          cout << "injected......"<<renderRecord(target)<<endl;
+          cout << "injected...................."
+               << renderRecord(target)<<endl;
           
           
           
@@ -1086,7 +1087,7 @@ namespace test{
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the designated element        // assignElm
           CHECK (    contains(renderRecord(target), "γ = 3.1415927"));
           CHECK (    mutator3.completeScope());
-          cout << "Content after assignment; "
+          cout << "Content after assignment...."
                << renderRecord(target) <<endl;
           
           // Note: it is up to the implementation of the target data how to deal with duplicate attributes
@@ -1171,7 +1172,7 @@ namespace test{
           CHECK (contains (renderRecord(target), renderRecord(attrRec)));
           CHECK (contains (renderRecord(target), renderRecord(nestedRec)));
           
-          cout << "Content after nested mutation; "
+          cout << "Content after sub mutation.."
                << renderRecord(target) <<endl;
         }
     };

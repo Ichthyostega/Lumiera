@@ -474,7 +474,7 @@
 <icon BUILTIN="full-3"/>
 </node>
 </node>
-<node CREATED="1455668897947" HGAP="211" ID="ID_1897861223" MODIFIED="1460754924649" TEXT="Konsequenzen" VSHIFT="23">
+<node CREATED="1455668897947" FOLDED="true" HGAP="211" ID="ID_1897861223" MODIFIED="1473014971567" TEXT="Konsequenzen" VSHIFT="23">
 <node CREATED="1455668923175" ID="ID_1183550957" MODIFIED="1472219338326" TEXT="brauche passendes UI-Bus API">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -500,7 +500,7 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1455668935142" ID="ID_1274632216" MODIFIED="1472219338332">
+<node CREATED="1455668935142" FOLDED="true" ID="ID_1274632216" MODIFIED="1473014885369">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -568,7 +568,7 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node CREATED="1455669004941" ID="ID_853385575" MODIFIED="1472219338344">
+<node CREATED="1455669004941" FOLDED="true" ID="ID_853385575" MODIFIED="1473014886433">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -613,7 +613,7 @@
 <node CREATED="1455669331448" ID="ID_1852578403" MODIFIED="1455669333036" TEXT="f&#xfc;r find"/>
 </node>
 </node>
-<node COLOR="#ad014c" CREATED="1455669200945" HGAP="85" ID="ID_880765624" MODIFIED="1464117168136" TEXT="Design-Fragen" VSHIFT="-14">
+<node COLOR="#ad014c" CREATED="1455669200945" HGAP="85" ID="ID_880765624" MODIFIED="1473014902729" TEXT="Design-Fragen" VSHIFT="-14">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#4e1527" CREATED="1458408700205" ID="ID_685778920" MODIFIED="1458409890048" TEXT="Grundansatz">
@@ -887,7 +887,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#3a3785" CREATED="1455927009621" HGAP="148" ID="ID_153254427" MODIFIED="1456437838083" STYLE="fork" TEXT="&#xbb;generic tree diff&#xab;" VSHIFT="22">
+<node COLOR="#3a3785" CREATED="1455927009621" HGAP="148" ID="ID_153254427" MODIFIED="1473014898254" STYLE="fork" TEXT="&#xbb;generic tree diff&#xab;" VSHIFT="22">
 <cloud COLOR="#edd8ba"/>
 <font NAME="SansSerif" SIZE="15"/>
 <node CREATED="1455927154554" ID="ID_1055035778" MODIFIED="1455927158037" TEXT="Prinzip">
@@ -1883,9 +1883,9 @@
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
 </node>
-<node CREATED="1456506101544" HGAP="4" ID="ID_133511037" MODIFIED="1472829990104" TEXT="Implementierung" VSHIFT="16">
+<node CREATED="1456506101544" HGAP="4" ID="ID_133511037" MODIFIED="1473014933091" TEXT="Implementierung" VSHIFT="16">
 <icon BUILTIN="pencil"/>
-<node CREATED="1456506128581" HGAP="-2" ID="ID_322289358" MODIFIED="1465428684559" TEXT="Abw&#xe4;gungen" VSHIFT="549">
+<node CREATED="1456506128581" HGAP="-12" ID="ID_322289358" MODIFIED="1473014961683" TEXT="Abw&#xe4;gungen" VSHIFT="184">
 <node CREATED="1456506135028" FOLDED="true" HGAP="29" ID="ID_470489868" MODIFIED="1472830010078" TEXT="Indirektionen" VSHIFT="-5">
 <node CREATED="1456506145826" ID="ID_759825167" MODIFIED="1461888854079" TEXT="kosten">
 <richcontent TYPE="NOTE"><html>
@@ -2403,7 +2403,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1457232734636" ID="ID_1873945047" MODIFIED="1472498604863" TEXT="STL Collection">
+<node CREATED="1457232734636" FOLDED="true" ID="ID_1873945047" MODIFIED="1473014986468" TEXT="STL Collection">
 <icon BUILTIN="full-2"/>
 <node CREATED="1458175823858" ID="ID_438044714" MODIFIED="1458175828956" TEXT="Design-Grundlagen">
 <node CREATED="1457741673001" ID="ID_1873415490" MODIFIED="1457742700335" TEXT="konkrete Beispiele">
@@ -4255,7 +4255,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1457232746179" ID="ID_1793680066" MODIFIED="1464227326650" TEXT="Rec&lt;GenNode&gt;" VSHIFT="11">
+<node CREATED="1457232746179" FOLDED="true" ID="ID_1793680066" MODIFIED="1473015023264" TEXT="Rec&lt;GenNode&gt;" VSHIFT="11">
 <icon BUILTIN="full-4"/>
 <node CREATED="1464305377785" ID="ID_396910166" MODIFIED="1472781547337" TEXT="Vor&#xfc;berlegungen">
 <node CREATED="1464305417066" ID="ID_1059660516" MODIFIED="1472653389474" TEXT="w&#xfc;nschenswert">
@@ -4330,15 +4330,14 @@
 <node CREATED="1472654905416" ID="ID_729856704" MODIFIED="1472654910067" TEXT="minimaler Code"/>
 </node>
 </node>
-<node CREATED="1464305382975" ID="ID_1038582300" MODIFIED="1464305386130" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1464305382975" FOLDED="true" ID="ID_1038582300" MODIFIED="1473015004090" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1457742036967" ID="ID_980619979" MODIFIED="1457742040187" TEXT="Attribute">
 <node CREATED="1472781560508" ID="ID_1534877939" MODIFIED="1472781584718" TEXT="Selector: isNamed"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1472930964666" ID="ID_1394229571" MODIFIED="1472930972842" TEXT="Behandlung f&#xfc;r Typ-Feld">
-<icon BUILTIN="flag-pink"/>
-</node>
+<node CREATED="1472930964666" ID="ID_1394229571" MODIFIED="1473014470867" TEXT="Behandlung f&#xfc;r Typ-Feld"/>
 </node>
 <node CREATED="1457742040782" ID="ID_613087606" MODIFIED="1457742042442" TEXT="Kinder"/>
-<node CREATED="1472781922380" ID="ID_506316487" MODIFIED="1472781969409" TEXT="Problem: rekursiver Mutator">
+<node CREATED="1472781922380" FOLDED="true" ID="ID_506316487" MODIFIED="1473014767073" TEXT="Problem: rekursiver Mutator">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1472781942185" ID="ID_882829469" MODIFIED="1472781946644" TEXT="rein code-technisches Problem"/>
 <node CREATED="1472781957063" ID="ID_1617563820" MODIFIED="1472781964177" TEXT="durch forward-decl aufzul&#xf6;sen"/>
@@ -4346,9 +4345,8 @@
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
-<node CREATED="1472930979111" ID="ID_1629990314" MODIFIED="1472934775211" TEXT="Problem: Typ-Feld">
+<node CREATED="1472930979111" FOLDED="true" ID="ID_1629990314" MODIFIED="1473014765939" TEXT="Problem: Typ-Feld">
 <icon BUILTIN="messagebox_warning"/>
-<icon BUILTIN="pencil"/>
 <node CREATED="1472931031568" ID="ID_1634653912" MODIFIED="1472931192300" TEXT="Kompromi&#xdf; in GenNode">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1472931061612" ID="ID_1482076461" MODIFIED="1472931066111" TEXT="halbherziges Design"/>
@@ -4438,8 +4436,48 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1472934695226" ID="ID_247894372" MODIFIED="1472934744607" TEXT="Code wird schwer lesbar"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472934710032" ID="ID_1233852840" MODIFIED="1472934744607" TEXT="umformulieren">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1472934710032" ID="ID_1233852840" MODIFIED="1473014546281" TEXT="umformulieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1473014547678" ID="ID_1566443628" MODIFIED="1473014763323" TEXT="geht nur bedingt">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1473014552677" ID="ID_1444718355" MODIFIED="1473014759258" TEXT="Problem ist der Builder">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wir wollen mehrfach geschichtete TreeMutator-Subklassen,
+    </p>
+    <p>
+      aber tats&#228;chlich liefert jeder DSL-Aufruf einen Builder&lt;TreeMutator&lt;...&gt;&gt;.
+    </p>
+    <p>
+      Die normalen DSL-Aufrufe sind eben genau so gestrickt, da&#223; jeweils der oberste Builder entfernt wird,
+    </p>
+    <p>
+      ein neuer Layer dar&#252;bergebaut und das Ganze wieder in einen Builder eingewickelt wird.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dadurch ist es schwer bis unm&#246;glich (wg. den Lambdas), den resultierenden Typ anzuschreiben.
+    </p>
+    <p>
+      Daher bin ich zwingend auf Wrapper-Funktionen angewiesen, die diesen resultierenden Typ
+    </p>
+    <p>
+      vom konkreten Aufruf wieder &quot;abgreifen&quot;. Ich kann daher nicht die DSL-Notation verwenden,
+    </p>
+    <p>
+      um den Dekorator f&#252;r die Behandlung des Typ-Feldes einzubringen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -4563,7 +4601,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1465428839332" FOLDED="true" ID="ID_909803930" MODIFIED="1472653380889" TEXT="Diff-Anwendung" VSHIFT="36">
+<node CREATED="1465428839332" FOLDED="true" ID="ID_909803930" MODIFIED="1473015028567" TEXT="Diff-Anwendung" VSHIFT="36">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1465428850946" ID="ID_1085608480" MODIFIED="1465428866278">
 <richcontent TYPE="NODE"><html>
