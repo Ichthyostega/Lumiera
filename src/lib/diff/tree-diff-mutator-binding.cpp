@@ -48,7 +48,9 @@
 namespace lib {
 namespace diff{
   
-  ScopeManager::~ScopeManager() { };  ///< emit VTable here...
+  TreeMutator::~TreeMutator() { }  ///< emit VTables here...
+  
+  ScopeManager::~ScopeManager() { };
 
   
   

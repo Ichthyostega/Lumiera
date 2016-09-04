@@ -107,63 +107,6 @@
 
 
 namespace lib {
-  /////////////////////////////TODO move over into opaque-holder.hpp
-  /**
-   * handle to allow for safe _»remote implantation«_
-   * of an unknown subclass into a given opaque InPlaceBuffer,
-   * without having to disclose the concrete buffer type or size.
-   * @remarks this is especially geared towards use in APIs, allowing
-   *    a not yet known implementation to implant an agent or collaboration
-   *    partner into the likewise undisclosed innards of the exposed service.
-   * @warning the type BA must expose a virtual dtor, since the targeted
-   *    InPlaceBuffer has to take ownership of the implanted object.
-   */
-  template<class BA>
-  class PlantingHandle
-    {
-      void* buffer_;
-      size_t maxSiz_;
-      
-      ///////TODO static assert to virtual dtor??
-    public:
-      template<size_t maxSiz>
-      PlantingHandle (InPlaceBuffer<BA, maxSiz>& targetBuffer)
-        : buffer_(&targetBuffer)
-        , maxSiz_(maxSiz)
-        { }
-      
-      
-      template<class SUB>
-      BA&
-      create (SUB&& subMutator)
-        {
-          if (sizeof(SUB) > maxSiz_)
-            throw error::Fatal("Unable to implant implementation object of size "
-                               "exceeding the pre-established storage buffer capacity."
-                              ,error::LUMIERA_ERROR_CAPACITY);
-          
-          using Holder = InPlaceBuffer<BA, sizeof(SUB)>;
-          Holder& holder = *static_cast<Holder*> (buffer_);
-          
-          return holder.create<SUB> (std::forward<SUB> (subMutator));
-        }
-      
-      template<class SUB>
-      bool
-      canCreate()  const
-        {
-          return sizeof(SUB) <= maxSiz_;
-        }
-      
-      BA*
-      get()  const
-        {
-          ENSURE (buffer_);
-          BA& bufferContent = **static_cast<InPlaceBuffer<BA>*> (buffer_);
-          return &bufferContent;
-        }
-    };
-  /////////////////////////////TODO move over into opaque-holder.hpp
 namespace diff{
   
   namespace error = lumiera::error;
@@ -199,6 +142,8 @@ namespace diff{
     {
       
     public:
+      virtual ~TreeMutator(); ///< this is an interface
+      
       /** only allow default and move construction */
       TreeMutator ()                    =default;
       TreeMutator (TreeMutator&&)       =default;
