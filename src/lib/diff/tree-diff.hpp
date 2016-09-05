@@ -49,6 +49,12 @@
  **   is represented by "opening" the nested record, followed by a recursive diff.
  ** By implementing the #TreeDiffInterpreter interface (visitor), a concrete usage
  ** can receive a diff description and possibly apply it to suitable target data.
+ ** @remarks the standard usage is to create a DiffApplicator(target) and fed
+ **     a diff sequence to it. We provide a standard implementation of the
+ **     DiffApplicator + DiffApplicationStrategy, based on a _custimisable intermediary,_
+ **     the TreeMutator. This allows to apply a given tree to any suitably compatible
+ **     target data structure; especially there is a preconfigured setup for our
+ **     _"generic tree representation"_, diff::Record<GenNode>.
  ** 
  ** @see diff-language.cpp
  ** @see tree-diff-application.cpp
@@ -116,12 +122,7 @@ namespace diff{
    *          altered target structure. The `mut(ID)` verb then opens this nested
    *          record for diff handling, and all subsequent diff verbs are to be
    *          interpreted relative to this scope, until the corresponding
-   *          \c emu(ID) verb is encountered. As a special notation, right
-   *          after handling an element with the list diff verbs (i.e. \c ins
-   *          or \c pick or \c find), it is allowed immediately to open the
-   *          nested scope with \c mut(Ref::THIS) -- which circumvents the
-   *          problem that it is sometimes difficult to know the precise ID,
-   *          especially when hand-writing a diff to populate a data structure.                   ////////TICKET #996 : `Ref::THIS` is a questionable feature
+   *          \c emu(ID) verb is encountered.
    * - \c emu bracketing construct and counterpart to \c mut(ID). This verb
    *          must be given precisely at the end of the nested scope (it is
    *          not allowed to "return" from the middle of a scope, for sake
@@ -143,7 +144,7 @@ namespace diff{
       virtual void skip(GenNode const& n)   =0;
       
       virtual void after(GenNode const&n)   =0;
-      virtual void set (GenNode const&n)   =0;
+      virtual void set (GenNode const& n)   =0;
       virtual void mut (GenNode const& n)   =0;
       virtual void emu (GenNode const& n)   =0;
     };

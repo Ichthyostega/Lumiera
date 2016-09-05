@@ -1,5 +1,5 @@
 /*
-  TreeDiffMutatorBinding  -  implementation of diff application to opaque data
+  TreeDiff  -  implementation of diff application to opaque data
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file tree-diff-mutator-binding.cpp
+/** @file tree-diff.cpp
  ** Implementation of diff application to unspecific private data structures.
  ** This binding is the link between a generic interpreter for our
  ** »tree diff language« and a concrete TreeMutator implementation,
@@ -33,15 +33,15 @@
  ** up some specifics of the concrete usage situation and thus needs to be
  ** generated in usage context.
  ** 
- ** @see tree-diff.cpp
- ** @see tree-diff-mutator-binding.cpp
+ ** @see tree-diff.hpp
+ ** @see tree-diff-application.hpp
  ** @see DiffComplexApplication_test
  ** 
  */
 
 
 #include "lib/error.hpp"
-#include "lib/diff/tree-diff-mutator-binding.hpp"
+#include "lib/diff/tree-diff-application.hpp"
 
 
 
@@ -52,6 +52,8 @@ namespace diff{
   
   ScopeManager::~ScopeManager() { };
 
+  
+  
   
   
   /* ======= Implementation of Tree Diff Application via TreeMutator ======= */
@@ -76,6 +78,8 @@ namespace diff{
        TreeMutator::build()
                    .attach (*this));
   }
+  
+  
   
   
   
@@ -125,6 +129,7 @@ namespace diff{
                               "unbalanced nested scopes, diff attempts to pop root.") % idi.getSym()
                         , LUMIERA_ERROR_DIFF_CONFLICT);
   }
+  
   
   
   
