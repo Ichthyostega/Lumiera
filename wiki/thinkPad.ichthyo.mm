@@ -1883,7 +1883,7 @@
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
 </node>
-<node CREATED="1456506101544" HGAP="4" ID="ID_133511037" MODIFIED="1473014933091" TEXT="Implementierung" VSHIFT="16">
+<node CREATED="1456506101544" HGAP="4" ID="ID_133511037" MODIFIED="1473040740444" TEXT="Implementierung" VSHIFT="16">
 <icon BUILTIN="pencil"/>
 <node CREATED="1456506128581" HGAP="-12" ID="ID_322289358" MODIFIED="1473014961683" TEXT="Abw&#xe4;gungen" VSHIFT="184">
 <node CREATED="1456506135028" FOLDED="true" HGAP="29" ID="ID_470489868" MODIFIED="1472830010078" TEXT="Indirektionen" VSHIFT="-5">
@@ -5380,8 +5380,16 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472216265486" ID="ID_1774905589" MODIFIED="1472495973662" TEXT="sp&#xe4;ter re-evaluieren (Ticket #996)">
 <node CREATED="1472216306208" ID="ID_310892577" MODIFIED="1472216342802" TEXT="AFTER">
 <arrowlink DESTINATION="ID_1957591180" ENDARROW="Default" ENDINCLINATION="-27;14;" ID="Arrow_ID_228215960" STARTARROW="None" STARTINCLINATION="139;3;"/>
+<node CREATED="1473040688153" ID="ID_979711393" MODIFIED="1473040722530" TEXT="bleibt vorerst erhalten">
+<icon BUILTIN="yes"/>
 </node>
-<node CREATED="1472219973288" ID="ID_587190582" MODIFIED="1472219978578" TEXT="Ref::THIS">
+<node CREATED="1473040705207" ID="ID_14067702" MODIFIED="1473040710378" TEXT="kann sinnvoll implementiert werden"/>
+<node CREATED="1473040711582" ID="ID_1480176374" MODIFIED="1473040717859" TEXT="ist sehr n&#xfc;tzlich">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1472219973288" ID="ID_587190582" MODIFIED="1473040470789" TEXT="Ref::THIS">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1472220009699" ID="ID_1534445515" MODIFIED="1472220054293">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -5395,11 +5403,68 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
+<node CREATED="1473040485789" ID="ID_1621538037" MODIFIED="1473040633258" TEXT="nein: f&#xfc;hrt zu verworrener Implementierung bzw. ist unm&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir haben nun mehrere Layer,
+    </p>
+    <p>
+      und der Selector kann einfach anhand von Ref::THIS keine sinnvolle Entscheidung treffen.
+    </p>
+    <p>
+      Daher versuchen dann alle Layer dieses Element zu behandeln, oder gar keiner
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und da der Selector <i>nur die Spec anschauen darf, </i>l&#228;&#223;t sich das auch nachher nicht mehr korrigieren
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Daher habe ich mich <b>entschlossen, dieses Sprachkonstrukt zu entfernen</b>
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1472216312295" ID="ID_149667448" MODIFIED="1472216316395" TEXT="Ref::CHILD">
+<node CREATED="1473040662653" ID="ID_397737711" MODIFIED="1473040680738">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>entfernt</b>, da schlechtes Design
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1472216312295" ID="ID_149667448" MODIFIED="1473040473636" TEXT="Ref::CHILD">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1472219981838" ID="ID_117724515" MODIFIED="1472219987506" TEXT="was genau soll das sein??"/>
 <node CREATED="1472219987983" ID="ID_555190066" MODIFIED="1472219997032" TEXT="was ist der Unterschied zu Ref::THIS"/>
 <node CREATED="1472219998405" ID="ID_1294425222" MODIFIED="1472220005255" TEXT="funktioniert das &#xfc;berhaupt noch??"/>
+<node CREATED="1473040662653" ID="ID_1838404392" MODIFIED="1473040680738">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>entfernt</b>, da schlechtes Design
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>

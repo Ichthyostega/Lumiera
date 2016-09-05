@@ -8157,7 +8157,7 @@ As said, this turns out to be a tricky challenge: implementing the application o
 ** how to open a nested scope for recursive mutation
  </pre>
 </div>
-<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201608291945" tags="Model GuiPattern spec draft" changecount="64">
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201609050153" tags="Model GuiPattern spec draft" changecount="65">
 <pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
 This leads to what could be considered the very opposite of data-centric programming. Instead of embody »the truth« into a central data model with predefined layout, we base our achitecture on a set of actors and their collaboration. In the mentioned example this would be the high-level view in the Session, the Builder, the UI-Bus and the presentation elements within the timeline view. Underlying to each such collaboration is a shared conception of data. There is no need to //actually represent that data// -- it can be conceived to exist in a more descriptive, declarative [[external tree description (ETD)|ExternalTreeDescription]]. In fact, what we //do represent// is a ''diff'' against such an external rendering.
 
@@ -8217,8 +8217,7 @@ In addition, in a future extension, we might consider to introduce up/down foldi
 Since the bracketing construct for mutation of child structures bears the ID of the parent, a certain degree of leeway is introduced. In theory, we could always open such a bracketing construct right after the {{{pick}}} token accepting the parent -- yet, while minimal, such a strictly depth-first representation would be hard to read -- so we allow to group the recursive treatement of children //post-fix,// after the messages for the current node. In a similar vein, we introduce another token to describe a //short-cut://
 *{{{after}}}(node-ID) : fast-forward through the sequence of elements at current level until the position after the designated element.
 To complement this language construct, we define some special, magical (meta) element-~IDs
-*{{{_CHILD_}}} : marks an //unnamed// ID. Mostly, the implementation exploits this specific marker to distinguish between nodes which are (named) attributes of an object, and real children
-*{{{_THIS_}}} : can be used to refer to the immediately preceding element without knowing its name. Typically used to open a {{{mut(_THIS_)}}} ... {{{emu(_THIS_)}}} bracket to populate a newly inserted object
+*{{{_CHILD_}}} : marks an //unnamed// ID. The implementation exploits this specific marker to distinguish between nodes which are (named) attributes of an object, and real children.
 *{{{_ATTRIBS_}}} : can be used to jump {{{after(_ATTRIBS_)}}} when mutating the contents of an object. So the following diff verbs will immediately start working on the children
 *{{{_END_}}} : likewise can be used to jump {{{after(_END_)}}} to start appending new elements without caring for the existing current content.
 All these additional language constructs aren't strictly necessary, but widen the usability of the langauge, also to cover the description of incomplete or fuzzy diffs.

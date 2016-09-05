@@ -134,8 +134,8 @@ namespace test{
                          , pick(CHILD_A)
                          , skip(CHILD_T)
                          , del(CHILD_T)
-                         , pick(Ref::CHILD)         // pick a child anonymously
-                         , mut(Ref::THIS)           // mutate the current element (the one just picked)
+                         , after(Ref::END)          // accept anything beyond as-is
+                         , mut(SUB_NODE)
                            , ins(ATTRIB3)
                            , ins(ATTRIB_NODE)       // attributes can also be nested objects
                            , find(CHILD_A)
@@ -153,7 +153,7 @@ namespace test{
                              , ins(CHILD_A)
                              , ins(CHILD_A)
                            , emu(ATTRIB_NODE)
-                         , emu(Ref::THIS)
+                         , emu(SUB_NODE)
                          });
         }
       
