@@ -105,12 +105,19 @@
 
 
 namespace lib {
+  
+  template<class BA>
+  class PlantingHandle;
+  
+  
 namespace diff{
   
   namespace error = lumiera::error;
   
   using util::isnil;
   using std::string;
+  
+  class TreeMutator;
   
   template<typename VAL>
   struct RecordSetup;
@@ -491,7 +498,25 @@ namespace diff{
           return *this;
         }
       
-      /* === low-level access (for diff application === */
+      /* === low-level access (for diff application) === */
+      
+      using BufferHandle = PlantingHandle<TreeMutator>;
+      
+      /** attachment point to receive and apply tree-diff changes.
+       *  The actual implementation needs to be provided for concrete Record payload types;
+       *  in case of Record<GenNode>, a default implementation for this feature is provided by the
+       *  "diff framework", which offers a preconfigured binding to create a TreeMutator implementation,
+       *  which can then be used for a DiffApplicator. This way, a Rec::Mutator can receive diff messages
+       *  to reorder and reshape the contents.
+       * @param BufferHandle pointing to an (implementation provided) storage location, where this
+       *        function is expected to construct a suitable TreeMutator, linked to the internals
+       *        of this Record::Mutator.
+       * @see lib::diff::mutatorBinding()
+       * @see lib::diff::DiffApplicationStrategy
+       * @see tree-diff-application.hpp
+       * @see DiffTreeApplication_test usage example
+       */
+      void buildMutator (BufferHandle);
       
       auto
       exposeToDiff()

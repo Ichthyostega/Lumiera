@@ -782,6 +782,17 @@ namespace diff{
   }
   
   
+  /* === Extension point to apply a tree-diff === */
+  
+  /** implementation is provided by the "diff framework"
+   * @see tree-mutator-gen-node-binding.hpp
+   * @see tree-diff.cpp (implementation)
+   */
+  template<>
+  void MakeRec::buildMutator (BufferHandle buff);
+  
+  
+  
   /* === Specialisation for handling of attributes in Record<GenNode> === */
   
   template<>

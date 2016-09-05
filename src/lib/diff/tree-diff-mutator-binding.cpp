@@ -63,6 +63,21 @@ namespace diff{
   using std::swap;
   
   
+  /** @internal possibly recursive invocation to build a TreeMutator binding
+   * to an "object" / scope /child node. This function is invoked when creating
+   * a DiffApplicator<Rec::Mutator>, and it is then invoked recursively, when
+   * the top level TreeMutator enters a nested scope (child node).
+   */
+  template<>
+  void
+  Record<GenNode>::Mutator::buildMutator (BufferHandle buff)
+  {
+     buff.create (
+       TreeMutator::build()
+                   .attach (*this));
+  }
+  
+  
   
   /* == Forwarding: error handling == */
   

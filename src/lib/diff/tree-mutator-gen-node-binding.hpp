@@ -163,22 +163,6 @@ namespace diff{
       return filterObjectTypeAttribute(targetTree, move(rawBinding));
     }
     
-    
-    /** @internal recursive invocation to build a binding
-     * to a nested scope (child node). This function is invoked
-     * for the `buildChildMutator` case from _DefaultBinding<GenNode>.
-     * But the _definition_ can only given here, after the preceding
-     * definition of Builder<PAR>::attach has worked out the resulting
-     * return type (which is just a nested DSL builder object)
-     */
-    inline void
-    buildNestedMutator(Rec& nestedScope, TreeMutator::Handle buff)
-    {
-       buff.create (
-         TreeMutator::build()
-           .attach (mutateInPlace (nestedScope)));
-    }
-    
   }//(END)Mutator-Builder decorator components...
   
   
