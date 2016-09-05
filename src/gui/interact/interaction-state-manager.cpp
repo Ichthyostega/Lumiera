@@ -1,8 +1,8 @@
 /*
-  CommandImpl  -  Proc-Layer command implementation (top level)
+  InteractionStateManager  -  facility to watch and guide one aspect of UI interaction
 
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2015,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,39 +21,43 @@
 * *****************************************************/
 
 
-/** @file command-impl.cpp 
- ** //TODO 
+/** @file interaction-state-manager.cpp
+ ** Common base implementation for UI state tracking components.
  ** 
- ** @see command.hpp
- ** @see command-registry.hpp
- **
+ ** @see TODO___abstract-tangible-test.cpp
+ ** 
  */
 
 
-#include "proc/control/command-impl.hpp"
-#include "proc/control/command-argument-holder.hpp"
-//#include "proc/mobject/mobject-ref.hpp"
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement.hpp"
+//#include "lib/util.hpp"
+//#include "lib/symbol.hpp"
+//#include "include/logging.h"
+#include "gui/interact/interaction-state-manager.hpp"
 
-//#include <boost/format.hpp>
-//using boost::str;
+//#include <boost/noncopyable.hpp>
+//#include <string>
+//#include <map>
 
-namespace proc {
-namespace control {
-  
+//using std::map;
+//using std::string;
 
+//using util::contains;
+//using util::isnil;
 
-  /** */
-  CommandImpl::~CommandImpl() { }
+namespace gui {
+namespace interact {
   
+  namespace { // internal details
+    
+  } // internal details
+  
+  
+  
+//Tangible::~Tangible() { }  // Emit VTables here...
+  
+  
+  
+  
+  /** nonsense */
 
-  /////////////////////////////////////////TODO: is this impl file actually necessary??
-
-  
-  
-  
-  
-  
-  
-}} // namespace proc::control
+}} // namespace gui::interact

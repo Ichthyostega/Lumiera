@@ -85,6 +85,10 @@ namespace meta {
         typedef T Tail;
       };
     
+    typedef Node<NullType,NullType> NodeNull;
+    
+    
+    
     template
       < class T01=NullType
       , class T02=NullType
@@ -115,18 +119,17 @@ namespace meta {
                               , T13, T14, T15, T16
                               , T17, T18, T19, T20>::List ListTail;
       public:
-        typedef Node<T01, ListTail> List;
+        using List = Node<T01, ListTail>;
+        using Seq  = Types;
       };
     
     template<> 
     struct Types<>
       {
-        typedef NullType List;
-        typedef Types<>  Seq;
+        using List = NullType;
+        using Seq  = Types<>;
       };
     
-    
-    typedef Node<NullType,NullType> NodeNull;
     
     
 }} // namespace lib::meta

@@ -49,7 +49,7 @@
 #include "lib/error.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-util.hpp"
-#include "lib/format-util.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/typed-counter.hpp"
 #include "include/logging.h"
 
@@ -151,7 +151,7 @@ namespace lib {
       XX *
       allocateSlot ()
         {
-          TRACE (memory, "allocate %s", util::tyStr<XX>().c_str());
+          TRACE (memory, "allocate «%s»", util::typeStr<XX>().c_str());
           XX * newStorage = CustomAllocator<XX>::allocate (1);
           COUNTER::template incrementCount<XX>();
           return newStorage;
@@ -161,7 +161,7 @@ namespace lib {
       void
       releaseSlot (XX* entry)
         {
-          TRACE (memory, "release %s", util::tyStr<XX>().c_str());
+          TRACE (memory, "release «%s»", util::typeStr<XX>().c_str());
           CustomAllocator<XX>::deallocate (entry, 1);
           COUNTER::template decrementCount<XX>();
         }
@@ -278,8 +278,8 @@ namespace lib {
           catch(...)
             {
               lumiera_err errorID = lumiera_error();
-              WARN (common_dbg, "dtor of %s failed: %s", util::tyStr(entry).c_str()
-                                                       , errorID );
+              WARN (common_dbg, "dtor of «%s» failed: %s", util::typeStr(entry).c_str()
+                                                         , errorID );
             }
           releaseSlot<XX> (entry);
         }

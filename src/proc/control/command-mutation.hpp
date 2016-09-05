@@ -50,17 +50,10 @@
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 
-#include <iostream>
-#include <string>
-
 
 
 namespace proc {
 namespace control {
-  
-  using std::ostream;
-  using std::string;
-  
   
   
   

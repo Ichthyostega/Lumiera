@@ -30,14 +30,11 @@
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 
 using util::isSameObject;
-using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace proc    {
@@ -108,9 +105,9 @@ namespace test    {
           CHECK (isSameObject (p2, *ref2));
           CHECK (isSameObject (p2, *refX));
           
-          cout << string(*ref1) << endl;
-          cout << string(*ref2) << endl;
-          cout << string(*refX) << endl;
+          cout << *ref1 << endl;
+          cout << *ref2 << endl;
+          cout << *refX << endl;
           
           // PlacementRef mimics placement behaviour
           ref1->specialAPI();

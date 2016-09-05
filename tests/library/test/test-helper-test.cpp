@@ -25,10 +25,10 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/error.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <functional>
-#include <iostream>
 #include <string>
 
 using util::for_each;
@@ -40,8 +40,6 @@ using boost::algorithm::is_lower;
 using boost::algorithm::is_digit;
 using std::function;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib {
@@ -96,17 +94,27 @@ namespace test{
           CHECK (2 == sizeof (rmpf2));
           CHECK (3 == sizeof (rmpf3));
           
-          cout << showSizeof((size_t)42, "theUniverse") << endl;
-          cout << showSizeof<char>("just a char")       << endl;
-          cout << showSizeof(murpf)                     << endl;
-          cout << showSizeof(rmpf1)                     << endl;
-          cout << showSizeof(rmpf2)                     << endl;
-          cout << showSizeof<Wrmpf3>()                  << endl;
+          cout << showSizeof<char>("just a char") << endl;
+          cout << showSizeof(murpf)               << endl;
+          cout << showSizeof(rmpf1)               << endl;
+          cout << showSizeof(rmpf2)               << endl;
+          cout << showSizeof<Wrmpf3>()            << endl;
+          cout << showSizeof(size_t(42),
+                             string{"Universe"})  << endl;
           
+          // all the following ways to refer to an object are equivalent...
           Wrmpf1 *p1 = &rmpf1;
           Wrmpf1 *p2 = 0;
           cout << showSizeof(p1)  << endl;
           cout << showSizeof(p2)  << endl;
+          
+          Wrmpf1 & r = rmpf1;
+          Wrmpf1 const& cr = r;
+          Wrmpf1 const* cp = &r;
+          
+          cout << showSizeof(r)  << endl;
+          cout << showSizeof(cr)  << endl;
+          cout << showSizeof(cp)  << endl;
         }
       
       

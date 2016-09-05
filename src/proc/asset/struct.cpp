@@ -30,13 +30,11 @@
 #include "lib/util.hpp"
 #include "lib/symbol.hpp"
 #include "lib/query-util.hpp"
+#include "lib/format-string.hpp"
 #include "include/logging.h"
 #include "common/query.hpp"
 
-#include <boost/format.hpp>
-
-using boost::format;
-
+using util::_Fmt;
 using lib::Symbol;
 using lib::query::normaliseID;
 using lumiera::query::QueryHandler;
@@ -154,8 +152,8 @@ namespace asset {
   {
     normaliseID (pipeID);
     normaliseID (streamID);
-    static format descriptor("pipe(%s), stream(%s).");
-    Pipe* pP = impl_->fabricate (Query<Pipe> (str(descriptor % pipeID % streamID)));
+    _Fmt descriptor("pipe(%s), stream(%s).");
+    Pipe* pP = impl_->fabricate (Query<Pipe> (descriptor % pipeID % streamID));
     return AssetManager::instance().wrap (*pP);
   }
   

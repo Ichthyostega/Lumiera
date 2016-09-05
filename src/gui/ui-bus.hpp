@@ -22,9 +22,74 @@
 */
 
 /** @file ui-bus.hpp
- ** The top level UI controller.
+ ** Under construction: the top level UI controller.
+ ** The Lumiera GTK GUI is built around a generic backbone structure known as **UI-Bus**.
+ ** This is a messaging system and taps into any widget of more than local relevance.
+ ** To that end, any globally relevant (custom) widget, and all secondary controllers
+ ** inherit from the gui::model::Tangible base. The top-level gui::UiBus element is
+ ** a front-end and framework component managed by the [GTK-main](\ref GtkLumiera::main).
  ** 
- ** @todo as of 1/2015, this needs to be reshaped ////////////////////TICKET #959
+ ** @warning as of 12/2015, this is still totally a mess. This \em will remain
+ **          the one-and-only master controller of the UI, but I am determined
+ **          to change the architecture and implementation technique altogether.
+ **          For the time being, we keep the controller::Controller in place, as
+ **          written by Joel Holdsworth, while building the new UI-Bus frontend
+ **          to take on this central role eventually.
+ ** 
+ ** \par rationale
+ ** The UI-Bus acts as a **mediating backbone**, impersonating the role
+ ** of the _Model_ and the _Controler_ in the [MVC-Pattern]in common UI architecture.
+ ** 
+ ** The MVC-Pattern as such is fine, and probably the best we know for construction of
+ ** user interfaces. But it doesn't scale well towards the integration into a larger and
+ ** more structured system. There is a tension between the Controller in the UI and other
+ ** parts of an application, which as well need to be _in control._ And, even more important,
+ ** there is a tension between the demands of UI elements for support by a model, and the
+ ** demands to be placed on a core domain model of a large scale application. This tension is
+ ** resolved by enacting these roles while transforming the requests and demands into _Messages._
+ ** 
+ ** Through this architectural decision, we introduce the distinction between the _local, tangible
+ ** UI "mechanics"_ on one side, and the common, _generic interaction patterns_ on the other side.
+ ** The former, the mere "mechanics" of the UI shall be kept simple and reduced to immediate
+ ** feedback and reactions to operating some interface controls. Any actual operations and
+ ** actions relevant to the application as a whole, are to be sent as messages into the
+ ** UI-Bus. The interface code can assume some "core services" to be available _somewhere;_
+ ** these core services will receive the messages, act on them and _respond asynchronously_.
+ ** 
+ ** \par Bus interactions
+ ** The UI-Bus has a star shaped topology, with a central "bus master" hub, the ["Nexus"](\ref Nexus),
+ ** which maintains a routing table. Attachment and detachment of elements can be managed automatically,
+ ** since all of the UI-Bus operations _perform within the UI event thread._
+ ** 
+ ** We distinguish between _up-link messages,_ directed towards some central service
+ ** (presentation state management or command invocation) and _down-link messages,_
+ ** directed towards individual elements. The interactions at the bus are closely interrelated
+ ** with the [elementary UI-Element operations](tangible.hpp).
+ ** 
+ ** - **act**: send a [GenNode] representing the action
+ **   - in a first step, a command prototype is [outfitted](\ref InvocationTrail::bind()) with actual
+ **     parameter values. -> see [InvocationTrail]
+ **   - the actual command invocation is triggered by a ["bang" message](\ref InvocationTrail::bang())
+ ** - **note**: send a [GenNode] representing the _state mark;_
+ **   some (abstracted) presentation state manager is expected to listen to these messages,
+ **   possibly recording state to be restored later. The contents of the _state mark_ message
+ **   are implementation defined; knowledge about these is shared between individual widget
+ **   implementations and (partially, to some degree) the presentation state manager.
+ ** - **mark**: down-link communication to _feed back_ state updates or
+ **   to replay previously recorded _state marks_
+ **   
+ ** @warning deliberately the UI-Bus is **not threadsafe**.
+ **          Only [Tangible] elements performing in the UI-event thread are allowed to talk to the bus.
+ ** 
+ ** @see bus-controller.hpp
+ ** @see bus-term.hpp
+ ** @see ctrl/nexus.hpp
+ ** @see ctrl/core-service.hpp
+ ** 
+ ** [MVC-Pattern]: http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
+ ** 
+ ** @todo as of 1/2015, this header needs to be reshaped ////////////////////TICKET #959
+ ** 
  */
 
 
@@ -35,8 +100,11 @@
 #include "gui/gtk-lumiera.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
 #include "gui/ctrl/playback-controller.hpp"
 
+#include <boost/noncopyable.hpp>
+
 
 namespace gui {
+  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
   namespace model {
     class Project;
   } // namespace model
@@ -57,6 +125,29 @@ namespace gui {
         PlaybackController& get_playback_controller();
       };
   
-}}// namespace gui::controller
+}// namespace gui::controller
+  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
+  
+  
+  /**
+   * Backbone of the Lumiera GTK GUI.
+   * This is the Interface and Lifecycle front-end.
+   * When an instance of this class is created, the backbone becomes operative
+   * and is linked to the active gui::WindowManager. When it goes away, the
+   * backbone service switches into disabled mode, awaiting disconnection
+   * of all remaining clients. After that, it dissolves into nothingness.
+   */
+  class UiBus
+    : boost::noncopyable
+    {
+    public:
+      UiBus();
+     ~UiBus();
+     
+    };
+  
+  
+  
+}// namespace gui
 #endif /*GUI_UI_BUS_H*/
 

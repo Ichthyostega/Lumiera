@@ -24,16 +24,14 @@
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
 #include "lib/idi/genfunc.hpp"
+//#include "lib/format-cout.hpp"
 
 //#include <utility>
 //#include <string>
 //#include <vector>
-#include <iostream>
 
 //using std::string;
 //using std::vector;
-using std::cout;
-using std::endl;
 //using std::swap;
 
 
@@ -106,8 +104,7 @@ namespace test{
       void
       verify_fullTypeID()
         {
-          //////TODO this should be a identifier with only letters, numbers and underscores. Need to extend the util::sanitise
-          CHECK("lib::idi::test::(anonymous_namespace)::Somelib::idi::test::(anonymous_namespace)::Thing" == typeFullID<SomeThing>());
+          CHECK("Some_Thing" == typeFullID<SomeThing>());
         }
       
       

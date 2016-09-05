@@ -26,8 +26,6 @@
 
 #include "gui/gtk-base.hpp"
 
-#include <iostream>
-
 
 
 namespace gui {

@@ -27,8 +27,6 @@
 #include "proc/control/stypemanager.hpp"
 #include "teststreamtypes.hpp"
 
-#include <iostream>
-using std::cout;
 using ::test::Test;
 using util::isnil;
 

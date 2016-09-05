@@ -42,7 +42,7 @@
 #include "lib/util.hpp"
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "include/logging.h"
+#include "lib/format-string.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
 #include "proc/control/command-impl.hpp"
@@ -50,15 +50,13 @@
 #include "proc/control/command-impl-clone-builder.hpp"
 #include "proc/control/handling-pattern.hpp"
 
-#include <boost/format.hpp>
 #include <sstream>
 #include <string>
 
 using std::ostringstream;
 using std::string;
-using boost::format;
-using boost::str;
 using util::cStr;
+using util::_Fmt;
 
 
 namespace proc {
@@ -92,6 +90,15 @@ namespace control {
                            , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
     }
     
+    void
+    ___check_canUndo (const Command *handle)
+    {
+      REQUIRE (handle);
+      if (!handle->canUndo())
+        throw error::State ("Lifecycle error: command has not yet captured UNDO information"
+                           , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+    }
+    
   }
   
   
@@ -102,6 +109,8 @@ namespace control {
   
   
   Command::~Command() { }
+  CommandImpl::~CommandImpl() { }
+  
   
   
   
@@ -109,13 +118,13 @@ namespace control {
    *  @throw error::Invalid if command not 
    *         registered or incompletely defined.
    */
-  Command 
+  Command
   Command::get (Symbol cmdID)
   {
     Command cmd = CommandRegistry::instance().queryIndex (cmdID);
-    static format fmt("Command \"%s\" not found");
     if (!cmd)
-      throw error::Invalid(str(fmt % cmdID), LUMIERA_ERROR_INVALID_COMMAND);
+      throw error::Invalid(_Fmt("Command \"%s\" not found") % cmdID
+                          , LUMIERA_ERROR_INVALID_COMMAND);
     
     ENSURE (cmdID == CommandRegistry::instance().findDefinition(cmd));
     return cmd;
@@ -152,7 +161,6 @@ namespace control {
   Command::activate (shared_ptr<CommandImpl> const& implFrame, Symbol cmdID)
   {
     REQUIRE (implFrame);
-    static format fmt("Command \"%s\" already defined");
     
     if (this->isValid())
       duplicate_detected (cmdID);
@@ -200,7 +208,7 @@ namespace control {
   
   /** @note this bit of implementation from CommandRegistry rather
    *  heavily relies on implementation details from CommandImpl and
-   *  the help of CommandImplCloneBuilder and ArgumentHolder. It's
+   *  the help of CommandImplCloneBuilder and StorageHolder. It's
    *  implemented within command.cpp to keep the includes of
    *  the handling patterns clean. */
   shared_ptr<CommandImpl>
@@ -217,8 +225,11 @@ namespace control {
   void
   Command::duplicate_detected (Symbol newCmdID)  const
   {
-    static format fmt("Unable to store %s as new command. ID \"%s\" is already in use");
-    throw error::Logic (str (fmt % *this % newCmdID), LUMIERA_ERROR_DUPLICATE_COMMAND);
+    throw error::Logic (_Fmt("Unable to store %s as new command. "
+                             "ID \"%s\" is already in use")
+                            % *this
+                            % newCmdID
+                       , LUMIERA_ERROR_DUPLICATE_COMMAND);
   }
   
   
@@ -239,6 +250,18 @@ namespace control {
     _Handle::impl().setArguments(args);
   }
   
+  
+  /** @internal forward a `Record<GenNode>`, which was
+   *  typically received via UI-Bus, down to the CommandImpl.
+   *  @remarks this is how command arguments are actually
+   *           passed from UI to the Session core
+   */
+  void
+  Command::setArguments (lib::diff::Rec const& paramData)
+  {
+    ___check_notBottom (this, "Binding arguments of");
+    _Handle::impl().setArguments(paramData);
+  }
   
   
   /** @return the number of command \em definitions currently registered */
@@ -326,6 +349,17 @@ namespace control {
   }
   
   
+  Symbol
+  Command::getID()  const
+  {
+    Symbol id = CommandRegistry::instance().findDefinition (*this);
+    if (!id)
+      throw error::State("Encountered a NIL command handle while expecting a bound one."
+                        ,error::LUMIERA_ERROR_BOTTOM_VALUE);
+    return id;
+  }
+  
+  
   
   
   /** diagnostics: shows the commandID, if any,
@@ -358,25 +392,26 @@ namespace control {
   
   
   ExecResult
-  Command::undo ()
-  {
-    ___check_notBottom (this,"Un-doing");
-    
-    HandlingPattern const& defaultPattern
-      = HandlingPattern::get (getDefaultHandlingPattern());
-    
-    return exec (defaultPattern.howtoUNDO());
-  }
-  
-  
-  ExecResult
   Command::exec (HandlingPattern const& execPattern)
   {
     ___check_notBottom (this,"Invoking");
     ___check_isBound   (this);
     
+    string cmdName{*this};
     CommandImpl& thisCommand (_Handle::impl());
-    return execPattern.invoke (thisCommand, cStr(*this));
+    return execPattern.exec (thisCommand, cmdName);
+  }
+  
+  
+  ExecResult
+  Command::undo (HandlingPattern const& execPattern)
+  {
+    ___check_notBottom (this,"UNDOing");
+    ___check_canUndo   (this);
+    
+    string cmdName{*this};
+    CommandImpl& thisCommand (_Handle::impl());
+    return execPattern.undo (thisCommand, cmdName);
   }
   
   
@@ -384,6 +419,13 @@ namespace control {
   Command::exec (HandlingPattern::ID pattID)
   {
     return exec (HandlingPattern::get(pattID));
+  }
+  
+  
+  ExecResult
+  Command::undo (HandlingPattern::ID pattID)
+  {
+    return undo (HandlingPattern::get(pattID));
   }
   
   

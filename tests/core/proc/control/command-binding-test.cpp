@@ -23,18 +23,13 @@
 
 #include "lib/test/run.hpp"
 #include "proc/control/command-def.hpp"
-
 #include "proc/control/test-dummy-commands.hpp"
-
-#include <iostream>
+#include "lib/format-cout.hpp"
 
 
 namespace proc {
 namespace control {
 namespace test    {
-  
-  using std::cout;
-  using std::endl;
   
   
   
@@ -93,7 +88,7 @@ namespace test    {
               ;
           Command com ("test.command3.2");
           CHECK (com.canExec());
-          cout << string(com) << endl;
+          cout << com << endl;
           
           com();
           CHECK ( 2 == command3::check_);

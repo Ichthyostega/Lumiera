@@ -25,12 +25,10 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-invocation.hpp"
 #include "proc/control/command-def.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
-
-#include <iostream>
 
 
 namespace proc {
@@ -39,9 +37,6 @@ namespace test    {
   
   using util::isSameObject;
   using util::contains;
-  using util::str;
-  using std::cout;
-  using std::endl;
   
   
   
@@ -121,8 +116,8 @@ namespace test    {
           Command com ("test.command1.2");
           CHECK (com);
           CHECK (com == Command::get("test.command1.2"));
-          CHECK (contains (str(com), "test.command1.2"));
-          CHECK (contains (str(com), "{def}"));
+          CHECK (contains (string(com), "test.command1.2"));
+          CHECK (contains (string(com), "{def}"));
           CHECK (!com.canExec());
           VERIFY_ERROR (UNBOUND_ARGUMENTS, com() );
           CHECK ( 0 == command1::check_);
@@ -307,11 +302,11 @@ namespace test    {
       void
       stringRepresentation()
         {
-          cout << string (Command::get("test.command1.1")) << endl;
-          cout << string (Command::get("test.command1.2")) << endl;
-          cout << string (Command::get("test.command1.3")) << endl;
-          cout << string (Command::get("test.command1.4")) << endl;
-          cout << string (Command()                      ) << endl;
+          cout << Command::get("test.command1.1") << endl;
+          cout << Command::get("test.command1.2") << endl;
+          cout << Command::get("test.command1.3") << endl;
+          cout << Command::get("test.command1.4") << endl;
+          cout << Command()                       << endl;
           
           Command com
             = CommandDef ("test.command1.5")
@@ -319,13 +314,13 @@ namespace test    {
                   .captureUndo (command1::capture)
                   .undoOperation (command1::undoIt);
           
-          cout << string (com) << endl;
+          cout << com << endl;
           com.bind(123);
-          cout << string (com) << endl;
+          cout << com << endl;
           com();
-          cout << string (com) << endl;
+          cout << com << endl;
           com.undo();
-          cout << string (com) << endl;
+          cout << com << endl;
         }
       
       

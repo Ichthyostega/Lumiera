@@ -40,7 +40,7 @@
  ** through the CommandRegistry.
  ** 
  ** Later on, client code is assumed to re-access the command by ID. It may bind arguments, which are
- ** stored in the already allocated ArgumentHolder. (-->Ticket #269). As the Command frontend is a
+ ** stored in the already allocated StorageHolder. (-->Ticket #269). As the Command frontend is a
  ** smart-ptr, commands may be copied, stored away and passed on. When finally the ref-count of
  ** a given definition goes to zero, de-allocation happens automatically. This can't happen for
  ** a registered command definition though, as a Command instance is stored within the index
@@ -65,7 +65,7 @@
 
 #include "proc/control/command.hpp"
 #include "proc/control/command-signature.hpp"
-#include "proc/control/command-argument-holder.hpp"
+#include "proc/control/command-storage-holder.hpp"
 #include "lib/typed-allocation-manager.hpp"
 
 #include <boost/functional/hash.hpp>
@@ -238,7 +238,7 @@ namespace control {
           // derive the storage type necessary
           // to hold the command arguments and UNDO memento
           typedef typename UndoSignature<SIG_CAPT>::Memento Mem;
-          typedef ArgumentHolder<SIG_OPER,Mem> Arguments;
+          typedef StorageHolder<SIG_OPER,Mem> Arguments;
           
           shared_ptr<Arguments> pArg (allocator_.create<Arguments>());
           
@@ -250,10 +250,10 @@ namespace control {
       
       /** create an allocation for holding a clone of the given CommandImpl data.
        *  This is a tricky operation, as the CommandImpl after construction erases the
-       *  specific type information pertaining the ArgumentHolder. But this specific
+       *  specific type information pertaining the StorageHolder. But this specific
        *  type information is vital for determining the exact allocation size for
-       *  the clone ArgumentHolder. The only solution is to delegate the cloning
-       *  of the arguments down into the ArgumentHolder, passing a reference
+       *  the clone StorageHolder. The only solution is to delegate the cloning
+       *  of the arguments down into the StorageHolder, passing a reference
        *  to the memory manager for allocating the clone. Actually, we perform
        *  this operation through the help of a visitor, which re-gains the
        *  complete type context and prepares the necessary clone objects;

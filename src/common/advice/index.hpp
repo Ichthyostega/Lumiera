@@ -91,13 +91,13 @@
 #include "lib/symbol.hpp"
 #include "include/logging.h"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 #include "common/advice/binding.hpp"
 
 #include <boost/operators.hpp>
 #include <unordered_map>
-#include <iostream>
 #include <string>
 
 namespace lumiera{
@@ -109,6 +109,7 @@ namespace advice {
   using std::unordered_map;
   using lib::iter_stl::eachVal;
   using lib::iter_stl::eachElm;
+  using util::toString;
   using util::for_each;
   using util::contains;
   using util::unConst;
@@ -116,9 +117,6 @@ namespace advice {
   using std::string;
   using std::vector;
   using std::pair;
-  using std::ostream;
-  using std::cout;
-  using std::endl;
   
   
   
@@ -165,6 +163,12 @@ namespace advice {
           
           // using default-copy, thus assuming copy is NO_THROW
           
+          
+          operator string()  const  ///< diagnostics
+            {
+              return "E-" +hash_value(this->first) +"--> "+ this->second ;
+            }
+          
           friend bool
           operator== (Entry const& a, Entry const& b)
           {
@@ -175,12 +179,6 @@ namespace advice {
           operator== (Entry const& a, POA const& p)
           {
             return a.second == &p;
-          }
-          
-          friend ostream&
-          operator<< (ostream& os, Entry const& ent)
-          {
-            return os << "E-"<<hash_value(ent.first) << "--> " << ent.second ;
           }
         };
       
@@ -241,12 +239,12 @@ namespace advice {
                return false;
              }
            
-           void
-           dump() ///< debugging helper: Cluster contents --> STDOUT
+           operator string()  const  ///< debugging helper: show Cluster contents
              {
-               cout << "elmList("<< elms_.size()<<")" << endl;
-               for (EIter i=elms_.begin(); i!=elms_.end(); ++i)
-                 cout << "E...:"<< (*i) << endl;
+               string dump{"elmList("+toString(elms_.size())+")\n"};
+               for (auto const& entry : elms_)
+                 dump += "E...:"+entry+"\n";
+               return dump;
              }
            
            lib::RangeIter<EIter>

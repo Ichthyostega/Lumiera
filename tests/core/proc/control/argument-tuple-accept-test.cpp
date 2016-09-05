@@ -24,15 +24,12 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/function.hpp"
-#include "lib/meta/tuple.hpp"
-#include "lib/time/diagnostics.hpp"
+#include "lib/format-cout.hpp"
 
 #include <functional>
-#include <iostream>
-
-using std::cout;
-using std::endl;
+#include <tuple>
 
 
 namespace proc {
@@ -95,7 +92,7 @@ namespace test    {
    * @test Build a test object, which accepts a bind(...) call
    *       with specifically typed arguments.
    *       
-   * @see  control::CommandArgumentHolder
+   * @see  control::CommandStorageHolder
    */
   class ArgumentTupleAccept_test : public Test
     {
@@ -112,8 +109,8 @@ namespace test    {
           cout << showSizeof(testVoid) << endl;
           cout << showSizeof(testTime) << endl;
           
-          cout << testTime.getHead() << endl;
-          CHECK (23 == testTime.getTail().getHead());
+          cout << std::get<0> (testTime) << endl;
+          CHECK (23 == std::get<1> (testTime));
         }
       
     };

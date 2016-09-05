@@ -33,19 +33,6 @@ return: 0
 END
 
 
-TEST "plain entry-ID" EntryID_test <<END
-out-lit: ID<Dummy>-Dummy.001
-out-lit: ID<Dummy>-strange
-out-lit: ID<Dummy>-Dummy.002
-out-lit: ID<Fork>-Fork.001
-out-lit: ID<Fork>-Fork.002
-out-lit: ID<Fork>-special
-out: sizeof\( ..lib.idi.EntryID.+mobject.+session.+Fork.+ \) =
-out: sizeof\( ..lib.idi.+BareEntryID. \) =
-return: 0
-END
-
-
 PLANNED "ID to type association" TypedID_test <<END
 return: 0
 END

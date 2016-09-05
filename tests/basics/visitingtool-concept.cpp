@@ -54,15 +54,14 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/format-string.hpp"
 #include "lib/depend.hpp"
 
-#include <boost/format.hpp>
-#include <iostream>
 #include <vector>
 
-using boost::format;
+using util::_Fmt;
 using std::string;
-using std::cout;
 
 
 namespace lumiera {
@@ -373,7 +372,7 @@ namespace lumiera {
         protected:
           void talk_to (string guy)
             {
-              cout << format ("Hello %s, nice to meet you...\n") % guy;
+              cout << _Fmt{"Hello %s, nice to meet you...\n"} % guy;
             }
         };
       

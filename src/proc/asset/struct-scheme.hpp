@@ -39,12 +39,11 @@
 #include "lib/symbol.hpp"
 #include "proc/asset.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "lib/meta/util.hpp"
+#include "lib/format-string.hpp"
 
 #include <cstdlib>
 
-/////////////////////////////////////////////////////////TICKET #166 : needs to be pushed down into a *.cpp
-#include <boost/format.hpp>
-using boost::format;
 
 
 namespace proc {
@@ -139,7 +138,7 @@ namespace asset{
     
     /* catch-all defaults */
     template<class X>
-    Symbol StructTraits<X>::idSymbol() { return typeid(X).name(); } ////////////////////TICKET #583   this default works but is ugly
+    Symbol StructTraits<X>::idSymbol() { return lib::meta::typeSymbol<X>(); }
     template<class X>
     Symbol StructTraits<X>::catFolder(){ return idSymbol(); }
     template<class X>

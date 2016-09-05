@@ -104,7 +104,7 @@ namespace test{
           Impl obj;
           Interface const& ref = obj;
           
-          cout << "--no-arg--\n" << showVariadicTypes() <<"\n";
+          cout << "--no-arg--\n"    << showVariadicTypes() <<"\n";
           cout << "--value--\n"     << showVariadicTypes<double>(d) <<"\n";
           cout << "--reference--\n" << showVariadicTypes<double&>(d) <<"\n";
           cout << "--move--\n"      << showVariadicTypes<double&&>(d) <<"\n";

@@ -91,7 +91,7 @@ namespace lib {
           return (receiver.*handler_)(std::forward<ARGS>(args)...);
         }
       
-      operator string()
+      operator string()  const
         {
           return string(token_);
         }

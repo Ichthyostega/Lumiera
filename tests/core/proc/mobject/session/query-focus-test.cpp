@@ -26,9 +26,7 @@
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/query-focus.hpp"
 #include "proc/mobject/session/scope.hpp"
-
-#include <iostream>
-#include <string>
+#include "lib/format-cout.hpp"
 
 
 
@@ -49,10 +47,6 @@ namespace test    {
   }
   
   
-  
-  using std::string;
-  using std::cout;
-  using std::endl;
   
   
   /*******************************************************************************//**
@@ -138,7 +132,7 @@ namespace test    {
           CHECK (num_refs > 1);   // because the run() function also holds a ref
           
           QueryFocus subF = QueryFocus::push();
-          cout << string(subF) << endl;
+          cout << subF << endl;
           CHECK (subF == original);
           
           CHECK (       1 == refs(subF) );
@@ -148,25 +142,25 @@ namespace test    {
             QueryFocus subF2 = QueryFocus::push(Scope(subF).getParent());
             CHECK (subF2 != subF);
             CHECK (subF == original);
-            cout << string(subF2) << endl;
+            cout << subF2 << endl;
             
             ScopeQuery<TestSubMO21>::iterator ii = subF2.explore<TestSubMO21>();
             while (ii) // drill down depth first
               {
                 subF2.shift(*ii);
-                cout << string(subF2) << endl;
+                cout << subF2 << endl;
                 ii = subF2.explore<TestSubMO21>();
               }
-            cout << string(subF2) << "<<<--discovery exhausted" << endl;
+            cout << subF2 << "<<<--discovery exhausted" << endl;
             
             subF2.pop(); // releasing this focus and re-attaching to what's on stack top
-            cout << string(subF2) << "<<<--after pop()" << endl;
+            cout << subF2 << "<<<--after pop()" << endl;
             CHECK (subF2 == subF);
             CHECK (2 == refs(subF2));   // both are now attached to the same path
             CHECK (2 == refs(subF));
           }
           // subF2 went out of scope, but no auto-pop happens (because subF is still there)
-          cout << string(subF) << endl;
+          cout << subF << endl;
           
           CHECK (       1 == refs(subF));
           CHECK (num_refs == refs(original));

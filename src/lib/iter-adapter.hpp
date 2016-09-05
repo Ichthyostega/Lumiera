@@ -61,7 +61,7 @@
  ** can be used as a building block within this framework.
  ** 
  ** 
- ** \par Lumiera forward iterator concept
+ ** # Lumiera forward iterator concept
  ** 
  ** Similar to the STL, instead of using a common "Iterator" base class,
  ** we rather define a common set of functions and behaviour which can
@@ -262,10 +262,10 @@ namespace lib {
   
   /// Supporting equality comparisons...
   template<class P1, class P2, class CON>
-  bool operator== (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return il.pos_ == ir.pos_; }
+  inline bool operator== (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return il.pos_ == ir.pos_; }
   
   template<class P1, class P2, class CON>
-  bool operator!= (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return !(il == ir); }
+  inline bool operator!= (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return !(il == ir); }
   
   
   
@@ -286,7 +286,12 @@ namespace lib {
    *   -# \c checkPoint establishes if the given state element represents a valid state
    *   -# \c iterNext evolves this state by one step (sideeffect)
    *   -# \c yield realises the given state, yielding an element of result type T
-   * 
+   * @param T nominal result type (maybe const, but without reference).
+   *        The resulting iterator will yield a reference to this type T
+   * @param ST type of the "state core", defaults to T.
+   *        The resulting iterator will hold an instance of ST, which thus
+   *        needs to be copyable and default constructible to the extent
+   *        this is required for the iterator as such.
    * @see IterExplorer an iterator monad built on top of IterStateWrapper
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
@@ -302,9 +307,15 @@ namespace lib {
       typedef T& reference;
       typedef T  value_type;
       
+      IterStateWrapper (ST&& initialState)
+        : core_(std::forward<ST>(initialState))
+        {
+          checkPoint (core_);       // extension point: checkPoint
+        }
+      
       IterStateWrapper (ST const& initialState)
         : core_(initialState)
-        { 
+        {
           checkPoint (core_);       // extension point: checkPoint
         }
       
@@ -379,14 +390,16 @@ namespace lib {
   
   /// Supporting equality comparisons of equivalent iterators (same state type)...
   template<class T1, class T2, class ST>
-  bool operator== (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  inline bool
+  operator== (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
   {
     return (il.empty() && ir.empty())
         || (il.isValid() && ir.isValid() && il.core_ == ir.core_);
   }
   
   template<class T1, class T2, class ST>
-  bool operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  inline bool
+  operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
   { 
     return not (il == ir);
   }
@@ -499,10 +512,129 @@ namespace lib {
   
   /// Supporting equality comparisons...
   template<class I1, class I2>
-  bool operator== (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
+  inline bool operator== (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
     
   template<class I1, class I2>
-  bool operator!= (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return !(il == ir); }
+  inline bool operator!= (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return !(il == ir); }
+  
+  
+  
+  
+  
+  /**
+   * Enumerate all "numbers" within a range.
+   * This allows to build pipelines based on all
+   * numbers "for `i` from `1...N`". This range is _half open_,
+   * i.e. the start is inclusive and the end point is exclusive.
+   * @remarks basically this is `boost::irange` without any boost `#include`
+   * @tparam INT a number like type, which can be incremented and compared.
+   */
+  template<typename INT>
+  class NumIter
+    : public lib::BoolCheckable<NumIter<INT>>
+    {
+      INT i_;
+      INT e_;
+      
+    public:
+      typedef const INT* pointer;
+      typedef const INT& reference;
+      typedef       INT  value_type;
+      
+      NumIter (INT start, INT end)
+        : i_(start)
+        , e_(end)
+        { }
+      
+      template<typename X>
+      NumIter (X&& start, X&& end)
+        : i_(std::forward<X>(start))
+        , e_(std::forward<X>(end))
+        { }
+      
+      NumIter ()
+        : i_()
+        , e_()
+        { }
+      
+      // standard copy operations acceptable
+      
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      reference
+      operator*() const
+        {
+          _maybe_throw();
+          return i_;
+        }
+      
+      pointer
+      operator->() const
+        {
+          _maybe_throw();
+          return &i_;
+        }
+      
+      NumIter&
+      operator++()
+        {
+          _maybe_throw();
+          ++i_;
+          return *this;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return (i_!= INT()) && (i_ < e_);   // NOTE: use comparison to detect iteration end
+        }
+      
+      bool
+      empty ()    const
+        {
+          return not isValid();
+        }
+      
+      
+      /** access wrapped index elements */
+      const INT&  getPos()  const { return i_; }
+      const INT&  getEnd()  const { return e_; }
+      
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (NumIter);
+      
+      
+    private:
+      void
+      _maybe_throw()  const
+        {
+          if (!isValid())
+            _throwIterExhausted();
+        }
+    };
+  
+  
+  
+  /// Supporting equality comparisons...
+  template<class I1, class I2>
+  inline bool operator== (NumIter<I1> const& il, NumIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
+    
+  template<class I1, class I2>
+  inline bool operator!= (NumIter<I1> const& il, NumIter<I2> const& ir)  { return !(il == ir); }
+  
+  
+  
+  /** convenience function to iterate "each number" */
+  template<typename INT>
+  inline NumIter<INT>
+  eachNum (INT start, INT end)
+  {
+    return NumIter<INT> (start, end);
+  }
+  
+  
   
   
   
@@ -607,10 +739,10 @@ namespace lib {
   
   /// Supporting equality comparisons...
   template<class I1, class I2>
-  bool operator== (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
+  inline bool operator== (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
     
   template<class I1, class I2>
-  bool operator!= (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return not (il == ir); }
+  inline bool operator!= (ConstIter<I1> const& il, ConstIter<I2> const& ir)  { return not (il == ir); }
   
   
   

@@ -26,13 +26,11 @@
 #include "lib/meta/generator-combinations.hpp"
 #include "meta/typelist-diagnostics.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 
-#include <iostream>
 
 using ::test::Test;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib  {

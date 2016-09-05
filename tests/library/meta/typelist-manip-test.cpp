@@ -43,9 +43,11 @@
 #include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
 
+#include <type_traits>
 #include <iostream>
 
 using ::test::Test;
+using std::is_same;
 using std::cout;
 using std::endl;
 
@@ -139,9 +141,9 @@ namespace test {
               CHECK (6 == e1);
               CHECK (7 == e2);
               
-              CHECK ((is_sameType<NullType, E3>        ::value));
-              CHECK ((is_sameType<NullType, Nil>       ::value));
-              CHECK ((is_sameType<NullType, Irrelevant>::value));
+              CHECK ((is_same<NullType, E3>        ::value));
+              CHECK ((is_same<NullType, Nil>       ::value));
+              CHECK ((is_same<NullType, Irrelevant>::value));
             }
           
           

@@ -50,7 +50,6 @@
 
 #include <boost/functional/hash.hpp>
 #include <boost/operators.hpp>
-#include <iostream>
 #include <string>
 
 
@@ -174,6 +173,8 @@ namespace idi {
           return hash_;
         }
       
+      operator string()  const;
+      
       
       /** using BareEntryID derived objects as keys within tr1::unordered_map */
       struct UseEmbeddedHash
@@ -228,6 +229,19 @@ namespace idi {
       EntryID (string const& symbolID)
         : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
         { }
+      explicit
+      EntryID (const char* symbolID)
+        : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
+        { }
+      
+      /** case-2b: rely on an internal, already sanitised symbol.
+       *  The symbol string will be passed through as-is, while
+       *  the type information from TY will be hashed in.
+       */
+      explicit
+      EntryID (Symbol const& internalSymbol)
+        : BareEntryID (string(internalSymbol), getTypeHash<TY>())
+        { }
       
       
       /** @return true if the upcast would yield exactly the same
@@ -252,12 +266,8 @@ namespace idi {
         }
       
       
-      operator string ()  const
-        {
-          return "ID<"+typeSymbol<TY>()+">-"+EntryID::getSym();
-        }
+      operator string()  const;
       
-      friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }
       friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  < i2.getSym(); }
     };
     
@@ -287,6 +297,20 @@ namespace idi {
   BareEntryID::recast()  const
   {
     return EntryID<TAR>::recast(*this);
+  }
+  
+  
+  inline
+  BareEntryID::operator string()  const
+  {
+    return "bID-"+lib::idi::format::instance_hex_format(symbol_, hash_);
+  }
+  
+  template<class TY>
+  inline
+  EntryID<TY>::operator string()  const
+  {
+    return "ID<"+typeSymbol<TY>()+">-"+EntryID::getSym();
   }
   
   

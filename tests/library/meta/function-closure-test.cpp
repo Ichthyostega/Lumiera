@@ -336,8 +336,9 @@ namespace test {
           
           
           // finally combine all techniques....
-          typedef Tuple<List2>::Type NumberzArg;
-          typedef FunctionTypedef<int,NumberzArg>::Sig NumberzSig;
+          using NumberzArg = Types<List2>::Seq;
+          using NumberzSig = FunctionTypedef<int,NumberzArg>::Sig;
+          
           Tuple<NumberzArg> numberzTup (Num<5>(22), Num<6>(33), Num<7>(44));
           
           FunctionClosure<NumberzSig> numClo (getNumberz<5,6,7>, numberzTup );

@@ -37,7 +37,6 @@ namespace engine {
     using lib::meta::Flags;
     using lib::meta::CombineFlags;
     using lib::meta::DefineConfigByFlags;
-    using lib::meta::Instantiation;
     using lib::meta::Apply;
     using lib::meta::Filter;
     

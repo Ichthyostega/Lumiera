@@ -44,12 +44,10 @@
 #include "lib/format-string.hpp"
 #include "lib/meta/util.hpp"
 
-#include <boost/utility/enable_if.hpp>
 #include <string>
 
 
 using std::string;
-using boost::enable_if;
 
 
 namespace lib  {
@@ -97,8 +95,8 @@ namespace meta {
   
   
   
-  namespace test { //  unit tests covering typelist manipulating templates
-    namespace {   // hidden internals for diagnostics....
+  namespace test{ //  unit tests covering typelist manipulating templates
+    namespace  { // internals to support diagnostics in unit tests....
       
       
       using util::_Fmt;
@@ -111,8 +109,12 @@ namespace meta {
       /** debugging template, 
        *  printing the "number" used for instantiation on ctor call
        */
-      template<class NUM=NullType, class BASE=NullP>
-      struct Printer;
+      template<class T=NullType, class BASE=NullP>
+      struct Printer
+        : BASE
+        {
+          static string print () { return _Fmt("-<%s>%s") % typeStr<T>() % BASE::print(); }
+        };
       
       template<class BASE>
       struct Printer<NullType, BASE>
@@ -179,7 +181,6 @@ namespace meta {
             }
         };
       
-      
     } // (End) internal defs
     
     
@@ -187,8 +188,8 @@ namespace meta {
     /* ===== printing types and contents ===== */ 
     
     template<typename TYPES>
-    typename enable_if< is_Typelist<TYPES>,
-      string          >::type
+    inline                  enable_if< is_Typelist<TYPES>,
+    string                  >
     showType ()
     {
       typedef InstantiateChained<typename TYPES::List, Printer, NullP>  DumpPrinter;
@@ -198,11 +199,11 @@ namespace meta {
     //  Note: we define overloads of this function for other types, especially Tuples
     
     
-#define DISPLAY(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showType<NAME>() << endl;
+#define DISPLAY(_IT_)  \
+        cout << STRINGIFY(_IT_) << "\t:" << showType<_IT_>() << endl;
     
-#define DUMPVAL(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showDump (NAME) << endl;
+#define DUMPVAL(_IT_)  \
+        cout << STRINGIFY(_IT_) << "\t:" << util::toString(_IT_) << endl;
     
     
     

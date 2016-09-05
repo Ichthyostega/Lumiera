@@ -27,7 +27,7 @@
 #include "proc/control/command-registry.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/handling-pattern.hpp"
-#include "lib/symbol.hpp"
+#include "lib/test/event-log.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
 
@@ -39,19 +39,69 @@ namespace control {
 namespace test    {
   
   
-  using lib::Symbol;
   using std::function;
   using std::rand;
   
   
-  namespace { // test data and helpers...
+  namespace { // test fixture...
     
-    Symbol TEST_CMD  = "test.command1.handling";
+    string TEST_CMD  = "test.command1.handling";
     HandlingPattern::ID TEST_PATTERN = HandlingPattern::DUMMY;
-  }
+    
+    
+    class CustomHandler
+      : public HandlingPattern
+      {
+        mutable
+        lib::test::EventLog log_{"custom command handler"};
+        
+        
+        /* ==== HandlingPattern - Interface ==== */
+        
+        void
+        performExec (CommandImpl& command)  const override
+          {
+            log_.call (TEST_CMD, "exec");
+            command.invokeCapture();
+            command.invokeOperation();
+          }
+        
+        void
+        performUndo (CommandImpl& command)  const override
+          {
+            log_.call (TEST_CMD, "undo");
+            command.invokeUndo();
+          }
+        
+        bool
+        isValid()  const override
+          {
+            return true;
+          }
+        
+        
+      public:
+        bool
+        invokedExec()
+          {
+            return log_.verifyCall("exec").on(TEST_CMD);
+          }
+        
+        bool
+        invokedUndo()
+          {
+            return log_.verifyCall("undo").on(TEST_CMD)
+                       .afterCall("exec");
+          }
+      };
+    
+  }//(End) test fixture
   
   typedef shared_ptr<CommandImpl> PCommandImpl;
   typedef HandlingPattern const& HaPatt;
+  
+  
+  
   
   
   
@@ -83,6 +133,8 @@ namespace test    {
             PCommandImpl pCom = buildTestCommand(registry);
             checkExec (pCom);
             checkUndo (pCom);
+            
+            useCustomHandler (pCom);
           }
           
           CHECK (cnt_inst == registry.instance_count());
@@ -135,7 +187,7 @@ namespace test    {
           command1::check_ = 0;
           
           HaPatt patt = HandlingPattern::get(TEST_PATTERN);
-          ExecResult res = patt.invoke(*com, TEST_CMD);
+          ExecResult res = patt.exec (*com, TEST_CMD);
           
           CHECK (res);
           CHECK (ARGU == command1::check_);
@@ -153,13 +205,28 @@ namespace test    {
           CHECK (command1::check_ > 0);
           
           HaPatt ePatt = HandlingPattern::get(TEST_PATTERN);
-          HaPatt uPatt = ePatt.howtoUNDO();
-          ExecResult res = uPatt.invoke(*com, TEST_CMD);
+          ExecResult res = ePatt.undo (*com, TEST_CMD);
           
           CHECK (res);
           CHECK (command1::check_ == 0);
         }
       
+      
+      void
+      useCustomHandler (PCommandImpl com)
+        {
+          CustomHandler specialHandler;
+          
+          CHECK (com->canExec());
+          CHECK (not specialHandler.invokedExec());
+          
+          specialHandler.exec (*com, TEST_CMD);
+          CHECK (    specialHandler.invokedExec());
+          CHECK (not specialHandler.invokedUndo());
+          
+          specialHandler.undo (*com, TEST_CMD);
+          CHECK (    specialHandler.invokedExec());
+        }
     };
   
   

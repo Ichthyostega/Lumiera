@@ -92,7 +92,16 @@ namespace proc {
    * A good deal of the active engine code is outside the scope of the
    * Proc-Layer, e.g. code located in backend services and plugins.
    */
-  namespace engine { }
+  namespace engine {
+    
+    
+    /**
+     * Policies, definitions and tweaks to control the actual setup
+     * and behaviour of the render engine, and the way, render nodes
+     * are wired and instantiated
+     */
+    namespace config { }
+  }
   
   
   

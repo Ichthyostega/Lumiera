@@ -33,7 +33,7 @@
  ** than the (small) performance gain of directly invoking boost::format (which is
  ** known to be 10 times slower than printf anyway).
  ** 
- ** \par Implementation notes
+ ** ## Implementation notes
  ** To perform the formatting, usually a \c _Fmt object is created as an anonymous
  ** temporary, but it may as well be stored into a variable. Copying is not permitted.
  ** Individual parameters are then fed for formatting through the \c '%' operator.
@@ -53,20 +53,21 @@
  ** to be negligible, in comparison to using boost::format. When compiling a demo example
  ** on x86_64, the following executable sizes could be observed:
  ** 
- **                                          debug  stripped
- ** just string concatenation ...............  42k  8.8k
- ** including and using format-string.hpp ...  50k  9.4k
- ** including and using boost::format ....... 420k  140k
+ **                                          |debug | stripped
+ ** ----------------------------------------:|----: | ---:
+ ** just string concatenation ...            |  42k | 8.8k
+ ** including and using format-string.hpp ...|  50k | 9.4k
+ ** including and using boost::format ...    | 420k | 140k
  ** 
  ** In addition, we need to take the implementation translation unit (format-string.cpp)
  ** into account, which is required once per application and contains the specialisations
  ** for all primitive types. In the test showed above, the corresponding object file
  ** had a size of 1300k (with debug information) resp. 290k (stripped).
  ** 
- ** \par Usage
+ ** ## Usage
  ** The syntax of the format string is defined by boost::format and closely mimics
  ** the printf formatting directives. The notable difference is that boost::format
- ** uses the C++ stream output framework, and thus avoiding the perils of printf.
+ ** uses the C++ stream output framework, and thus avoids the perils of printf.
  ** The individual formatting placeholders just set the corresponding flags on
  ** an embedded string stream, thus the actual parameter types cause the
  ** selection of a suitable format, not the definitions within the
@@ -90,12 +91,13 @@
  ** \endcode
  ** 
  ** @remarks See the unit-test for extensive usage examples and corner cases.
- **          The header format-util.hpp provides an alternative string conversion,
- **          using a bit of boost type traits and lexical_cast, but no boost::format.
+ **          The header format-obj.hpp provides an alternative string conversion,
+ **          using a bit of type traits and boost lexical_cast, but no boost::format.
  ** @warning not suited for performance critical code. About 10 times slower than printf.
- **  
+ ** 
  ** @see FormatString_test
  ** @see format-util.hpp
+ ** @see format-obj.hpp
  ** 
  */
 
@@ -107,10 +109,8 @@
 #include "lib/meta/util.hpp"
 #include "lib/meta/size-trait.hpp"
 
-#include <string>
-#include <typeinfo>
 #include <boost/noncopyable.hpp>
-#include <boost/utility/enable_if.hpp>
+#include <string>
 
 
 
@@ -122,9 +122,9 @@ namespace std { // forward declaration to avoid including <iostream>
   template<typename C, class _TRAITS>
   class basic_ostream;
   
-  typedef basic_ostream<char, char_traits<char> > ostream;
-
+  using ostream = basic_ostream<char, char_traits<char>>;
 }
+
 
 namespace lib {
   class Literal; 
@@ -135,7 +135,6 @@ namespace lib {
 namespace util {
   
   using std::string;
-  using boost::enable_if;
   
   typedef unsigned char uchar;
 
@@ -165,6 +164,7 @@ namespace util {
       mutable Implementation formatter_;
       
       
+      /** call into the opaque implementation */
       template<typename VAL>
       static void format (const VAL, Implementation&);
       
@@ -273,10 +273,37 @@ namespace util {
     template<typename X>
     struct _shall_convert_toString
       {
-        enum{ value = ! _shall_format_directly<X>::value
-                   && lib::meta::can_convertToString<X>::value
+        enum{ value = not _shall_format_directly<X>::value
+                      and lib::meta::can_convertToString<X>::value
             };
       };
+    
+    template<typename SP>
+    struct _is_smart_wrapper
+      : std::false_type
+      { };
+    template<typename T>
+    struct _is_smart_wrapper<std::shared_ptr<T>>
+      : std::true_type
+      { };
+    template <typename T, typename D>
+    struct _is_smart_wrapper<std::unique_ptr<T,D>>
+      : std::true_type
+      { };
+    
+    
+    
+    template<typename SP>
+    struct _shall_show_smartWrapper
+      {
+        enum{ value = not _shall_convert_toString<SP>::value
+                      and _is_smart_wrapper<typename std::remove_reference<
+                                            typename std::remove_cv<SP>::type>::type>::value
+            };
+      };
+    
+    
+    
     
     
     inline void
@@ -323,7 +350,7 @@ namespace util {
       static void
       dump (VAL const&, Implementation& impl)
         {
-          format (string("«")+typeid(VAL).name()+"»", impl);
+          format ("«"+typeStr<VAL>()+"»", impl);
         }
     };
   
@@ -336,7 +363,7 @@ namespace util {
           if (pVal)
             Converter<VAL>::dump(*pVal, impl);
           else
-            format ("<null>", impl);
+            format (BOTTOM_INDICATOR, impl);
         }
     };
   
@@ -356,7 +383,17 @@ namespace util {
       static void
       dump (const char* cString, Implementation& impl)
         {
-          format (cString? cString : "↯", impl);
+          format (cString? cString : BOTTOM_INDICATOR, impl);
+        }
+    };
+  
+  template<>
+  struct _Fmt::Converter<bool>
+    {
+      static void
+      dump (bool yes, Implementation& impl)
+        {
+          format (yes? "true":"false", impl);
         }
     };
   
@@ -377,7 +414,7 @@ namespace util {
   
   /** some custom types explicitly provide a string representation */
   template<typename VAL>
-  struct _Fmt::Converter<VAL,      typename enable_if< _shall_convert_toString<VAL> >::type>
+  struct _Fmt::Converter<VAL,      lib::meta::enable_if<_shall_convert_toString<VAL>> >
     {
       static void
       dump (VAL const& val, Implementation& impl)
@@ -394,10 +431,28 @@ namespace util {
           }
     };
   
+  template<typename SP>
+  struct _Fmt::Converter<SP,       lib::meta::enable_if<_shall_show_smartWrapper<SP>> >
+    {
+      static void
+      dump (SP const& smP, Implementation& impl)
+        try {
+            format (showSmartPtr (smP, lib::meta::typeSymbol(smP)), impl);
+          }
+        catch(std::exception const& ex)
+          {
+            format (_log_and_stringify(ex), impl);
+          }
+        catch(...)
+          {
+            format (_log_unknown_exception(), impl);
+          }
+    };
+  
   /** some basic types are directly forwarded down to the implementation;
    * @note this requires explicit specialisations in format-string.cpp */
   template<typename VAL>
-  struct _Fmt::Converter<VAL,      typename enable_if< _shall_format_directly<VAL> >::type>
+  struct _Fmt::Converter<VAL,      lib::meta::enable_if<_shall_format_directly<VAL>> >
     {
       static void
       dump (const VAL val, Implementation& impl)

@@ -29,7 +29,6 @@
 #include "lib/time/digxel.hpp"
 #include "lib/symbol.hpp"
 
-//#include <iostream>
 #include <boost/operators.hpp>
 #include <boost/lexical_cast.hpp> ///////////////TODO
 #include <string>

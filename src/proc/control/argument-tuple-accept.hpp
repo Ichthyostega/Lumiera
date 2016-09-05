@@ -59,7 +59,9 @@
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/function.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/tuple-helper.hpp"
+
+#include <tuple>
 
 
 
@@ -70,6 +72,7 @@ namespace control {
   namespace bind_arg { // internals....
     
     using namespace lib::meta;
+    using std::make_tuple;
     
     
       //
@@ -91,7 +94,7 @@ namespace control {
         RET
         operator() ()
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::makeNullTuple() );
+            return static_cast<TAR*> (this) -> bindArg (std::tuple<>() );
           }
       };
     
@@ -105,7 +108,7 @@ namespace control {
         RET
         operator() (T1 a1)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1));
           }
       };
     
@@ -120,7 +123,7 @@ namespace control {
         RET
         operator() (T1 a1, T2 a2)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2));
           }
       };
     
@@ -136,7 +139,7 @@ namespace control {
         RET
         operator() (T1 a1, T2 a2, T3 a3)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3));
           }
       };
     
@@ -153,7 +156,7 @@ namespace control {
         RET
         operator() (T1 a1, T2 a2, T3 a3, T4 a4)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4));
           }
       };
     
@@ -171,7 +174,7 @@ namespace control {
         RET
         operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5));
           }
       };
     
@@ -190,7 +193,7 @@ namespace control {
         RET
         operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6));
           }
       };
     
@@ -210,7 +213,7 @@ namespace control {
         RET
         operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7));
           }
       };
     
@@ -231,7 +234,7 @@ namespace control {
         RET
         operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8));
           }
       };
     
@@ -253,7 +256,7 @@ namespace control {
         RET
         operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8,a9));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8,a9));
           }
       };
     
@@ -282,7 +285,7 @@ namespace control {
         RET
         bind ()
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::makeNullTuple() );
+            return static_cast<TAR*> (this) -> bindArg (std::tuple<>() );
           }
       };
     
@@ -296,7 +299,7 @@ namespace control {
         RET
         bind (T1 a1)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1));
           }
       };
     
@@ -311,7 +314,7 @@ namespace control {
         RET
         bind (T1 a1, T2 a2)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2));
           }
       };
     
@@ -327,7 +330,7 @@ namespace control {
         RET
         bind (T1 a1, T2 a2, T3 a3)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3));
           }
       };
     
@@ -344,7 +347,7 @@ namespace control {
         RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4));
           }
       };
     
@@ -362,7 +365,7 @@ namespace control {
         RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5));
           }
       };
     
@@ -381,7 +384,7 @@ namespace control {
         RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6));
           }
       };
     
@@ -401,7 +404,7 @@ namespace control {
         RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7));
           }
       };
     
@@ -422,7 +425,7 @@ namespace control {
         RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8));
           }
       };
     
@@ -444,7 +447,7 @@ namespace control {
         RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8,a9));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8,a9));
           }
       };
     
@@ -465,7 +468,7 @@ namespace control {
         RET                                                                          //________________________________
         bind ()                                                                     ///< Accept dummy binding (0 Arg)
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::makeNullTuple());
+            return static_cast<TAR*> (this) -> bindArg (std::tuple<>());
           }
         
         
@@ -473,7 +476,7 @@ namespace control {
         RET                                                                          //________________________________
         bind (T1 a1)                                                                ///< Accept binding with 1 Argument
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1));
           }
         
         
@@ -483,7 +486,7 @@ namespace control {
         RET                                                                          //________________________________
         bind (T1 a1, T2 a2)                                                         ///< Accept binding for 2 Arguments
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2));
           }
         
         
@@ -494,7 +497,7 @@ namespace control {
         RET                                                                          //________________________________
         bind (T1 a1, T2 a2, T3 a3)                                                  ///< Accept binding for 3 Arguments
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3));
           }
         
         
@@ -506,7 +509,7 @@ namespace control {
         RET                                                                          //________________________________
         bind (T1 a1, T2 a2, T3 a3, T4 a4)                                           ///< Accept binding for 4 Arguments
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4));
           }
         
         
@@ -519,7 +522,7 @@ namespace control {
         RET                                                                          //________________________________
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)                                    ///< Accept binding for 5 Arguments
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5));
           }
         
         
@@ -533,7 +536,7 @@ namespace control {
         RET                                                                          //________________________________
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)                             ///< Accept binding for 6 Arguments
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6));
           }
         
         
@@ -548,7 +551,7 @@ namespace control {
         RET                                                                          //________________________________
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7)                      ///< Accept binding for 7 Arguments
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7));
           }
         
         
@@ -564,7 +567,7 @@ namespace control {
         RET                                                                          //________________________________
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8)               ///< Accept binding for 8 Arguments
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8));
           }
         
         
@@ -581,29 +584,31 @@ namespace control {
         RET                                                                          //________________________________
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9)        ///< Accept binding for 9 Arguments
           {
-            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8,a9));
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8,a9));
           }
         
       };
     
     
+    using lib::meta::Tuple;
+    
     
     template<typename SIG>
     struct _Type
       {
-        typedef typename FunctionSignature< function<SIG> >::Args Args;
-        typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
-        typedef Tuple<Args> ArgTuple;
-        typedef SIG Sig;
+        using Args = typename FunctionSignature< function<SIG> >::Args;
+        using Ret  = typename FunctionSignature< function<SIG> >::Ret;
+        using Sig  = SIG;
+        using ArgTuple = Tuple<Args>;
       };
     
-    template<typename TYPES>
-    struct _Type<Tuple<TYPES> >
+    template<typename...TYPES>
+    struct _Type<std::tuple<TYPES...> >
       {
-        typedef TYPES Args;
-        typedef void  Ret;
-        typedef Tuple<TYPES> ArgTuple;
-        typedef typename FunctionTypedef<void, TYPES>::Sig Sig;
+        using Args = typename Types<TYPES...>::Seq;
+        using Ret  = void;
+        using Sig  = typename FunctionTypedef<void, Args>::Sig;
+        using ArgTuple = std::tuple<TYPES...>;
       };
   
     struct Dummy {}; 
@@ -624,8 +629,7 @@ namespace control {
   class AcceptArgumentTuple
     : public bind_arg::AcceptArgs<TAR,BASE, typename bind_arg::_Type<SIG>::Ret
                                           , typename bind_arg::_Type<SIG>::Args>
-    {
-    };
+    { };
   
   
   /** Helper Template for Proc-Layer control::Command : mix in a \c bind(...) function
@@ -637,8 +641,7 @@ namespace control {
   class AcceptArgumentBinding
     : public bind_arg::AcceptBind<TAR,BASE, typename bind_arg::_Type<SIG>::Ret
                                           , typename bind_arg::_Type<SIG>::Args>   
-    {
-    };
+    { };
   
     
   /** Variation of AcceptArgumentBinding, allowing to control the return type 
@@ -648,8 +651,7 @@ namespace control {
   class AcceptArgumentBindingRet
     : public bind_arg::AcceptBind<TAR,BASE, RET
                                           , typename bind_arg::_Type<SIG>::Args>
-    {
-    };
+    { };
   
   
   /** Helper Template for control::Command, mix-in complete set of \c bind(...) functions
@@ -663,8 +665,7 @@ namespace control {
           >
   class AcceptAnyBinding
     : public bind_arg::AcceptAnyBind<TAR,BASE,RET>
-    {
-    };
+    { };
   
   
   

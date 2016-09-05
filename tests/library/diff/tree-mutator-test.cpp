@@ -1,5 +1,5 @@
 /*
-  GenericTreeMutator(Test)  -  customisable intermediary to abstract tree changing operations
+  TreeMutator(Test)  -  customisable intermediary to abstract tree changing operations
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,39 +25,24 @@
 #include "lib/format-util.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
-//#include <utility>
 #include <string>
-//#include <vector>
-#include <iostream>
+#include <vector>
 
 using util::isnil;
-using std::string;
-//using std::vector;
-//using std::swap;
-using std::cout;
-using std::endl;
+using util::join;
+using util::typeStr;
 
-using lib::test::showType;
-using lib::test::demangleCxx;
+using std::string;
+using std::vector;
 
 
 namespace lib {
 namespace diff{
 namespace test{
-  
-//  using lumiera::error::LUMIERA_ERROR_LOGIC;
-  
-  namespace {//Test fixture....
-    
-    
-    
-  }//(End)Test fixture
-  
-  
-  
-  
   
   
   
@@ -67,27 +52,30 @@ namespace test{
    * @test Demonstrate a customisable component for flexible bindings
    *       to enable generic tree changing and mutating operations to
    *       arbitrary hierarchical data structures.
+   *       - we use lambdas to link into our private implementation
+   *       - this test demonstrates the behaviour of an attribute setter
+   *       - plus some of the _primitive operations_ available on collections
    *       
    * @see TreeMutator
+   * @see DiffComplexApplication_test a way more complex usage scenario
    * @see GenNodeBasic_test
-   * @see GenNodeBasic_test
-   * @see GenericTreeRepresentation_test
+   * @see GenericRecordRepresentation_test
    */
-  class GenericTreeMutator_test : public Test
+  class TreeMutator_test : public Test
     {
       
       virtual void
       run (Arg)
         {
           simpleAttributeBinding();
-          sequenceIteration();
-          copy_and_move();
+          simpleCollectionBinding();
         }
       
       
       void
       simpleAttributeBinding()
         {
+          MARK_TEST_FUN;
           string localData;
           auto mutator =
           TreeMutator::build()
@@ -98,14 +86,14 @@ namespace test{
               });
           
           cout << "concrete TreeMutator size=" << sizeof(mutator)
-               << " type="<< demangleCxx (showType (mutator))
+               << " type="<< typeStr(mutator)
                << endl;
           
           CHECK (isnil (localData));
-          Attribute testAttribute(string ("that would be acceptable"));
-          mutator.setAttribute ("lore", testAttribute);
+          string testValue{"that would be acceptable"};
+          mutator.assignElm ({"lore", testValue});
           CHECK ( isnil (localData)); // nothing happens, nothing changed
-          mutator.setAttribute ("data", testAttribute);
+          mutator.assignElm ({"data", testValue});
           CHECK (!isnil (localData));
           cout << "localData changed to: "<<localData<<endl;
           CHECK (localData == "that would be acceptable");
@@ -113,20 +101,41 @@ namespace test{
       
       
       void
-      sequenceIteration()
+      simpleCollectionBinding()
         {
-        }
-      
-      
-      void
-      copy_and_move()
-        {
+          MARK_TEST_FUN;
+          vector<string> values;
+          values.push_back("a");
+          values.push_back("b");
+          
+          cout << join(values) <<endl;
+          CHECK (2 == values.size());
+          CHECK ("a, b" == join(values));
+          
+          auto mutator =
+          TreeMutator::build()
+            .attach (collection(values));
+          
+          cout << "concrete TreeMutator size=" << sizeof(mutator)
+               << " type="<< typeStr(mutator)
+               << endl;
+          
+          CHECK (isnil (values));
+          CHECK (mutator.matchSrc (GenNode("a")));
+                 mutator.skipSrc (GenNode("a"));
+          CHECK (mutator.matchSrc (GenNode("b")));
+          CHECK (mutator.injectNew (GenNode("c")));
+          CHECK (mutator.acceptSrc (GenNode("b")));
+          
+          cout << join(values) <<endl;
+          CHECK (2 == values.size());
+          CHECK ("c, b" == join(values));
         }
     };
   
   
   /** Register this test class... */
-  LAUNCHER (GenericTreeMutator_test, "unit common");
+  LAUNCHER (TreeMutator_test, "unit common");
   
   
   

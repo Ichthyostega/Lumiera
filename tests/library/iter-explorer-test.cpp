@@ -25,12 +25,12 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-explorer.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <sstream>
 #include <vector>
 #include <string>
@@ -44,8 +44,6 @@ namespace test{
   using ::Test;
   using util::isnil;
   using util::isSameObject;
-  using std::cout;
-  using std::endl;
   using std::string;
   using lib::iter_stl::eachElm;
   using lib::iter_explorer::ChainedIters;
@@ -192,6 +190,13 @@ namespace test{
    * @test use a simple source iterator yielding numbers
    *       to build various functional evaluation structures,
    *       based on the IterExplorer template.
+   *       - the [state adapter](\ref verifyStateAdapter) iterator
+   *         construction pattern
+   *       - helper to [chain iterators](\ref verifyChainedIterators)
+   *       - building [tree exploring structures](\ref verifyDepthFirstExploration)
+   *       - the [monadic nature](\ref verifyMonadOperator) of IterExplorer
+   *       - a [recursively self-integrating](\ref verifyRecrusiveSelfIntegration)
+   *         evaluation pattern
    * 
    * \par Explanation
    * Both this test and the IterExplorer template might be bewildering
@@ -212,7 +217,7 @@ namespace test{
    * In such a situation, it is beneficial to develop and test both
    * in isolation. The IterExplorer template applies this pattern
    * to the task of processing a source sequence. Typically we use
-   * this in situations where we can't effort building elaborate
+   * this in situations where we can't afford building elaborate
    * data structures in (global) memory, but rather strive at
    * doing everything on-the-fly. A typical example is the
    * processing of a variably sized data set without
@@ -240,13 +245,17 @@ namespace test{
       
       
       
-      /** @test all of the following IterExplorer flavours are built on top
-       * of a special iterator adapter, centred at the notion of an iterable
+      /** @test demonstrate the underlying solution approach of IterExplorer.
+       * All of the following IterExplorer flavours are built on top of
+       * a special iterator adapter, centred at the notion of an iterable
        * state element type. The actual iterator just embodies one element
        * of this state representation, and typically this element alone holds
-       * all the relevant state and information, without any hidden back-link
-       * to some kind of container in charge of the elements yielded.
-       * Essentially this means the iterator is self contained.
+       * all the relevant state and information. Essentially this means the
+       * iterator is self contained. Contrast this to the more conventional
+       * approach of iterator implementation, where the iterator entity actually
+       * maintains a hidden back-link to some kind of container, which in turn
+       * is the one in charge of the elements yielded by the iterator.
+       * 
        */
       void
       verifyStateAdapter ()
@@ -275,7 +284,9 @@ namespace test{
       
       
       
-      /** @test a convenient helper built using IterExplorer building blocks.
+      /** @test verify a helper to chain a series of iterators  into a
+       * "flat" result sequence. This convenience helper is built using
+       * IterExplorer building blocks.
        * The resulting iterator \em combines and \em flattens a sequence
        * of source iterators, resulting in a simple sequence accessible
        * as iterator again. Here we verify the convenience / default
@@ -419,7 +430,7 @@ namespace test{
        * 
        * @note technical detail: the result type of the exploration function (here \c exploreChildren() ) determines
        *       the iterator type used within IterExplorer and to drive the evaluation. The source sequence used to
-       *       seed the evaluation process actually can be any iterator yielding assignment compatible values: The
+       *       seed the evaluation process can actually be any iterator yielding assignment compatible values: The
        *       second example uses a NumberSequence with unsigned int values 0..6, while the actual expansion and
        *       evaluation is based on NumberSeries using signed int values.
        */
@@ -454,8 +465,8 @@ namespace test{
       
       
       
-      /** @test a variation of recursive exploration, this time directly
-       * relying on the result set iterator type to provide the re-integration
+      /** @test verify a variation of recursive exploration, this time to rely
+       * directly on the result set iterator type to provide the re-integration
        * of intermediary results. Since our \c exploreChildren() function returns
        * a NumberSeries, which basically is a IterQueue, the re-integration of expanded
        * elements will happen at the end, resulting in breadth-first visitation order --
@@ -465,7 +476,9 @@ namespace test{
        * \link #verifyBreadthFirstExploration \endlink, appears here at the end of the
        * explorationResult sequence
        * @remarks this "combinator strategy" is really intended for use with custom sequences,
-       *          where the "Explorer" function works together with a specific implementation.
+       *          where the "Explorer" function works together with a specific implementation
+       *          and exploits knowledge about specifically tailored additional properties of
+       *          the input sequence elements to yield the desired overall effect.
        *          Actually this is what we use in the proc::engine::Dispatcher to generate a
        *          series of frame render jobs, including all prerequisite jobs
        */
@@ -534,6 +547,7 @@ namespace test{
                         // the ">>=" associates to the right, while the proper monad bind operator should associate to the left
         }
       
+      /** @internal exploration function used in ::verifyMonadOperator */
       static NumberSequence
       explode (uint top)
         {

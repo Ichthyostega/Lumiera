@@ -32,11 +32,11 @@
  ** The header control-impl.hpp defines the building blocks for time::Control
  ** and then includes this header here to get the concrete template specialisations
  ** for time::mutation::Policy. This policy class is templated by time entity types
- ** - for \c TI, the \em nominal value type used on the time::Control interface
- ** - for \c SRC, the actual type of values to impose as \em change
+ ** - for \c TI, the _nominal_ value type used on the time::Control interface
+ ** - for \c SRC, the actual type of values to impose _as change_
  ** - for \c TAR, the target time value's type, receiving those changes.
  ** 
- ** \par mutating a time value entity
+ ** ## mutating a time value entity
  ** 
  ** Actually imposing a change to the attached time value entity involves several
  ** steps. Each of these steps might be adapted specifically, in accordance to
@@ -55,26 +55,26 @@
  ** point of the time interval given by the TimeSpan.
  ** 
  ** Incoming changes might be of any of the aforementioned types, and in addition,
- ** we might receive \em nudging, which means to increment or decrement the target
+ ** we might receive *nudging*, which means to increment or decrement the target
  ** time value in discrete steps. After maybe adapting these incoming change values,
- ** they may be actually \em imposed to the target. In all cases, this is delegated
+ ** they may be actually _imposed_ on the target. In all cases, this is delegated
  ** to the time::Mutation base class, which is declared fried to TimeValue and thus
  ** has the exceptional ability to manipulate time values, which otherwise are defined
  ** to be immutable. Additionally, these protected functions in the time::Mutation
- ** baseclass also know how to handle \em nudge values, either by using the native
+ ** baseclass also know how to handle _nudge values_, either by using the native
  ** (embedded) time grid of a quantised time value, or by falling back to a standard
  ** nudging grid, defined in the session context (TODO as of 6/2011).                     //////////////////////TICKET #810
  ** 
- ** After (maybe) imposing a change to the target, the change \em notification value
+ ** After (maybe) imposing a change to the target, the _change notification_ value
  ** needs to be built. This is the time value entity to be forwarded to registered
- ** listeners. This notification value has to be given as the type \c TI, in accordance
- ** to the \c time::Control<TI> frontend definition used in the concrete usage situation.
- ** As this type \c TI might be different to the actual target type, and again different
+ ** listeners. This notification value has to be given as the type `TI`, in accordance
+ ** to the `time::Control<TI>` frontend definition used in the concrete usage situation.
+ ** As this type `TI` might be different to the actual target type, and again different
  ** to the type of the change handed in, in some cases this involves a second conversion
- ** step, to represent the current state of the target \c TAR in terms of the interface
- ** type \c TI.
+ ** step, to represent the current state of the target `TAR` in terms of the interface
+ ** type `TI`.
  ** 
- ** \par changing quantised (grid aligned) time entities
+ ** ## changing quantised (grid aligned) time entities
  ** 
  ** The time::Control element includes the capability to handle grid aligned time values,
  ** both as target and as change/notification value. This ability is compiled in conditionally,
@@ -101,11 +101,11 @@
 #ifndef LIB_TIME_CONTROL_POLICY_H
 #define LIB_TIME_CONTROL_POLICY_H
 
-#include "lib/meta/util.hpp"
 #include "lib/time/mutation.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <boost/utility/enable_if.hpp>
+#include <type_traits>
 #include <functional>
 
 
@@ -115,7 +115,8 @@ namespace time {
 namespace mutation {
   
   using boost::disable_if;
-  using lib::meta::is_sameType;
+  using std::__or_;
+  using std::is_same;
   using std::placeholders::_1;
   using std::function;
   using std::bind;
@@ -129,14 +130,14 @@ namespace mutation {
     inline bool
     isDuration()
     {
-      return is_sameType<T,Duration>::value;
+      return is_same<T, Duration>::value;
     }
     
     template<class T>
     inline bool
     isTimeSpan()
     {
-      return is_sameType<T,TimeSpan>::value;
+      return is_same<T, TimeSpan>::value;
     }
     
     template<class T>
@@ -306,18 +307,18 @@ namespace mutation {
   namespace {
     template<class T>
     struct canMutateDuration
-      {
-        static const bool value = is_sameType<T,Duration>::value
-                             ||   is_sameType<T,Offset>::value
-                             ||   is_sameType<T,int>::value;
-      };
+      : __or_< is_same<T,Duration>
+             , is_same<T,Offset>
+             , is_same<T,int>
+             >
+      { };
     
     template<class T>
     struct canReceiveDuration
-      {
-        static const bool value = is_sameType<T,Duration>::value
-                             ||   is_sameType<T,TimeSpan>::value;
-      };
+      : __or_< is_same<T,Duration>
+             , is_same<T,TimeSpan>
+             >
+      { };
   }
   
   

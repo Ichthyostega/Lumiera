@@ -8,6 +8,7 @@ out: apply \(tool, test1\);
 out: treat \(AbstractMO&\);
 out: apply \(tool, test2\);
 out: catch-all-function called...
+return: 0
 END
 
 

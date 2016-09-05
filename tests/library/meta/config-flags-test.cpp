@@ -38,28 +38,26 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/meta/util.hpp"
 #include "lib/format-string.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/configflags.hpp"
 #include "meta/typelist-diagnostics.hpp"
 #include "proc/engine/nodewiring-config.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 
 using ::test::Test;
 using util::_Fmt;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib  {
 namespace meta {
 namespace test {
   
+  using proc::engine::config::Instantiation;
   
   namespace { // internal definitions
   

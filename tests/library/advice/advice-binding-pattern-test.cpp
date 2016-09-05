@@ -23,15 +23,12 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 
 #include "lib/time/timevalue.hpp"
 #include "common/advice.hpp"
 
-#include <iostream>
-
 using lib::time::Time;
-using std::cout;
-using std::endl;
 
 
 

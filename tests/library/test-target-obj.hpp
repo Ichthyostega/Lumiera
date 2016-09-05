@@ -27,9 +27,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 
 
@@ -39,7 +39,6 @@ namespace test{
   using util::_Fmt;
   using boost::lexical_cast;
   using std::string;
-  using std::cout;
   
   /**
    * Target object to be created by Test-Factories or as Singleton.

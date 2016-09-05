@@ -29,14 +29,10 @@
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
 #include "lib/time/timevalue.hpp"
-#include "lib/util.hpp"
+//#include "lib/util.hpp"
 
-#include <iostream>
 
 using lib::time::Time;
-using util::contains;
-using std::string;
-using std::cout;
 
 
 namespace proc    {

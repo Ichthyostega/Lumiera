@@ -23,19 +23,16 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util-quant.hpp"
 
 #include <cmath>
-#include <iostream>
-#include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 
 using ::Test;
-using std::cout;
-using std::endl;
-using boost::format;
 using boost::lexical_cast;
-using lib::test::showType;
+using util::typeStr;
 using util::floorwrap;
 
 
@@ -77,7 +74,7 @@ namespace test {
       void
       checkWrap (I range, I scale)
         {
-          cout << "--------"<< showType<I>()
+          cout << "--------"<< typeStr<I>()
                << "--------"<< range<<"/"<<scale<<endl;
           for (I i=range; i >=-range; --i)
             showWrap (i, scale);
@@ -88,10 +85,10 @@ namespace test {
       showWrap (I val, I scale)
         {
           IDiv<I> wrap = floorwrap(val,scale);
-          cout << format ("% 3d /% 1d =% 1d  %% =% d     floor=% 4.1f  wrap = (%2d,%2d)\n")
-                           % val % scale % (val/scale) 
-                                         % (val%scale) % floor(double(val)/scale)
-                                                                     % wrap.quot % wrap.rem;
+          cout << _Fmt ("% 3d /% 1d =% 1d  %% =% d     floor=% 4.1f  wrap = (%2d,%2d)\n")
+                         % val % scale % (val/scale)
+                                       % (val%scale) % floor(double(val)/scale)
+                                                                   % wrap.quot % wrap.rem;
         }
     };
   

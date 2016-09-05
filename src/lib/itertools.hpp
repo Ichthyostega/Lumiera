@@ -29,8 +29,8 @@
  ** based on the Lumiera Forward Iterator concept. They build on generic
  ** programming techniques, thus are intended to be combined at compile time
  ** using definitive type information. Contrast this to an iterator model
- ** as in Java's Commons-Collections, where Iterator is an Interface based
- ** on virtual functions. Thus, the basic problem to overcome is the lack
+ ** as in Java's Collections, where Iterator is an Interface based on
+ ** virtual functions. Thus, the basic problem to overcome is the lack
  ** of a single common interface, which could serve as foundation for
  ** type inference. As a solution, we use a "onion" approach, where a
  ** generic base gets configured with an active core, implementing
@@ -55,10 +55,9 @@
  ** source iterator. The signature of the functor must match the
  ** desired value (output) type. 
  ** 
- ** @todo WIP WIP WIP
- ** @todo see Ticket #347
+ ** @todo some more building blocks are planned, see Ticket #347
  ** 
- ** @see IterAdapter
+ ** @see iter-adapter.hpp
  ** @see itertools-test.cpp
  ** @see contents-query.hpp
  */
@@ -142,15 +141,16 @@ namespace lib {
    * Standard functionality to build up any iterator tool.
    * IterTool exposes the frontend functions necessary to
    * comply to the Lumiera Forward Iterator concept.
-   * The protected part provides the building blocks
-   * to implement the actual processing/filter logic.
+   * The protected part provides the _iteration control_
+   * building blocks to drive the processing/filter logic,
+   * which is implemented in the specific core for each tool.
    */
   template<class CORE>
   class IterTool
     : public lib::BoolCheckable<IterTool<CORE> >
     {
       
-    protected: /* iteration control */
+    protected: /* == iteration control == */
       CORE core_;
       
       bool
@@ -158,7 +158,7 @@ namespace lib {
         {
           return core_.evaluate()
               || unConst(this)->iterate();
-        }        // skipping irrelevant results doesn't count as "mutation"
+        }     // to skip irrelevant results doesn't count as "mutation"
       
       bool
       iterate ()
@@ -320,10 +320,10 @@ namespace lib {
       typedef FilterCore<IT> _Filter;
       typedef IterTool<_Filter> _Impl;
       
+    public:
       static bool acceptAll(typename _Filter::Val) { return true; }
       
       
-    public:
       FilterIter ()
         : _Impl(FilterCore<IT>(IT(), acceptAll))
         { }
@@ -351,7 +351,154 @@ namespace lib {
   
   
   /** 
-   * Helper: predicate returning \c true
+   * Additional capabilities for FilterIter,
+   * allowing to extend the filter condition underway.
+   * This wrapper enables remoulding of the filer functor
+   * while in the middle of iteration. When the filter is
+   * modified, current head of iteration gets re-evaluated
+   * and possible fast-forwarded to the next element
+   * satisfying the now extended filter condition.
+   * @note changing the condition modifies a given iterator in place.
+   *       Superficially this might look as if the storage remains
+   *       the same, but in fact we're adding a lambda closure,
+   *       which the runtime usually allocates on the heap,
+   *       holding the previous functor and a second functor
+   *       for the added clause.
+   * @warning the addition of disjunctive and negated clauses might
+   *       actually weaken the filter condition. Yet still there is
+   *       \em no reset of the source iterator, i.e. we don't
+   *       re-evaluate from start, but just from current head.
+   *       Which means we might miss elements in the already consumed
+   *       part of the source sequence, which theoretically would
+   *       pass the now altered filter condition.
+   * @see IterTools_test::verify_filterExtension
+   */
+  template<class IT>
+  class ExtensibleFilterIter
+    : public FilterIter<IT>
+    {
+      typedef FilterCore<IT> _Filter;
+      typedef typename _Filter::Val Val;
+      
+      void
+      reEvaluate()
+        {
+          this->core_.cached_ = false;
+          this->hasData(); // re-evaluate head element
+        }
+      
+    public:
+      ExtensibleFilterIter() { }
+      
+      template<typename PRED>
+      ExtensibleFilterIter (IT const& src, PRED initialFilterPredicate)
+        : FilterIter<IT>(src, initialFilterPredicate)
+        { }
+      
+      ExtensibleFilterIter (IT const& src)
+        : ExtensibleFilterIter(src, FilterIter<IT>::acceptAll)
+        { }
+      
+      // standard copy operations acceptable
+      
+      
+      /** access the unfiltered source iterator
+       *  in current state */
+      IT&
+      underlying()
+        {
+          return this->core_.source_;
+        }
+      
+      
+      template<typename COND>
+      ExtensibleFilterIter&
+      andFilter (COND conjunctiveClause)
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return filter(val)
+                           and conjunctiveClause(val);
+                      };
+          reEvaluate();
+          return *this;
+        }
+      
+      template<typename COND>
+      ExtensibleFilterIter&
+      andNotFilter (COND conjunctiveClause)
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return filter(val)
+                           and not conjunctiveClause(val);
+                      };
+          reEvaluate();
+          return *this;
+        }
+      
+      template<typename COND>
+      ExtensibleFilterIter&
+      orFilter (COND disjunctiveClause)
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return filter(val)
+                            or disjunctiveClause(val);
+                      };
+          reEvaluate();
+          return *this;
+        }
+      
+      template<typename COND>
+      ExtensibleFilterIter&
+      orNotFilter (COND disjunctiveClause)
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return filter(val)
+                            or not disjunctiveClause(val);
+                      };
+          reEvaluate();
+          return *this;
+        }
+      
+      
+      template<typename COND>
+      ExtensibleFilterIter&
+      setNewFilter (COND entirelyDifferentPredicate)
+        {
+          this->core_.predicate_ = entirelyDifferentPredicate;
+          reEvaluate();
+          return *this;
+        }
+      
+      ExtensibleFilterIter&
+      flipFilter ()
+        {
+          function<bool(Val)>& filter = this->core_.predicate_;
+          
+          filter = [=](Val val)
+                      {
+                        return not filter(val);
+                      };
+          reEvaluate();
+          return *this;
+        }
+    };
+  
+  
+  
+  /**
+   * Helper: predicate returning `true`
    * whenever the argument value changes
    * during a sequence of invocations. 
    */ 

@@ -28,7 +28,6 @@
 
 #include <boost/functional/hash.hpp>
 #include <unordered_set>
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -36,8 +35,6 @@ using util::contains;
 using std::unordered_set;
 using std::vector;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib {

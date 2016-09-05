@@ -88,21 +88,17 @@ namespace control {
   
   
   /**
-   * Operation Skeleton how to invoke or undo a command.
-   * Concrete implementations may be retrieved by ID;
-   * they range from just invoking the command operations
-   * straight forward to dispatching with the ProcDispatcher
-   * or running the command asynchronously in a background thread.
-   * A HandlingPattern first of all describes how to invoke the
-   * command operation, but for each pattern it is possible to
-   * get a special "undo pattern", which, on activation, will
-   * reverse the effect of the basic pattern.  
+   * Interface: Operation Skeleton how to invoke or undo a command.
+   * Concrete implementations may be retrieved by ID; they range
+   * from just invoking the command operations straight forward
+   * to dispatching with the ProcDispatcher or running the command
+   * asynchronously in a background thread.
    */
   class HandlingPattern
     : public lib::BoolCheckable<HandlingPattern>
     {
-      
     public:
+      virtual ~HandlingPattern() {}   ///< this is an interface
       
       enum ID
         { SYNC
@@ -115,34 +111,47 @@ namespace control {
       
       static ID defaultID() { return DUMMY; }   ///////////TODO: should be ID::SYNC   Ticket #211
       
-      
+      /** retrieve the pre-configured pattern */
       static HandlingPattern const& get (ID id);
       
       
-      virtual ~HandlingPattern() {}
       
       /** main functionality: invoke a command, detect errors.
-       *  @return ExecResult object, which might later be used to 
-       *          detect errors on execution */
-      ExecResult invoke (CommandImpl& command, Symbol name)  const;
+       * @param string id of the command for error logging
+       * @return ExecResult object, which might later be used
+       *          to detect errors on execution */
+      ExecResult exec (CommandImpl& command, string)  const;
       
-      /** @return HandlingPattern describing how the UNDO operation is to be performed */
-      HandlingPattern const& howtoUNDO()  const { return getUndoPatt(); }
+      /** likewise invoke the configured UNDO operation */
+      ExecResult undo (CommandImpl& command, string)  const;
       
       
       virtual bool isValid()  const  =0;
       
     protected:
       
-      virtual HandlingPattern const& getUndoPatt() const =0;
-      virtual void perform (CommandImpl& command)  const =0;
+      virtual void performExec (CommandImpl& command)  const  =0;
+      virtual void performUndo (CommandImpl& command)  const  =0;
       
-      virtual void exec (CommandImpl& command)  const  =0;
-      virtual void undo (CommandImpl& command)  const  =0;
+    private:
+      typedef void (HandlingPattern::*Action) (CommandImpl&) const;
       
-      
-      
+      ExecResult invoke (CommandImpl&, string id, Action)  const;
     };
+  
+  
+  
+  inline ExecResult
+  HandlingPattern::exec (CommandImpl& command, string id)  const
+  {
+    return this->invoke (command, id, &HandlingPattern::performExec);
+  }
+  
+  inline ExecResult
+  HandlingPattern::undo (CommandImpl& command, string id)  const
+  {
+    return this->invoke (command, id, &HandlingPattern::performUndo);
+  }
   
   
   

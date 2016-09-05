@@ -27,6 +27,7 @@
 #include "proc/control/command-def.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
@@ -64,7 +65,7 @@ namespace test    {
   protocolled (TY val2check)
     {
       return contains ( command2::check_.str()
-                      , lexical_cast<string> (val2check)
+                      , util::toString (val2check)
                       );
     }
   
@@ -72,9 +73,9 @@ namespace test    {
   
   
   /***********************************************************************//**
-   * @test command usage aspects II: patterns of invoking commands.
+   * @test command usage aspects II: patterns of command invocation.
    * 
-   * @todo this test is still on hold, as the non-trivial patterns aren't implemented as of 10/09
+   * @todo this test is still on hold, as the non-trivial patterns aren't implemented as of 10/09  ////////////////TICKET #211
    * 
    * @see Command
    * @see command-basic-test.cpp (simple usage example)
@@ -89,7 +90,7 @@ namespace test    {
           _Fmt fmt ("invoked( %2d )");
           
           randVal_ = rand() % 100;
-          return str (fmt % randVal_);
+          return fmt % randVal_;
         }
       
       bool blowUp_;
@@ -109,15 +110,16 @@ namespace test    {
               .operation (command2::operate)
               .captureUndo (command2::capture)
               .undoOperation (command2::undoIt)
-              .bind (randFun, ref(blowUp_));
+              .bind (randFun, &blowUp_);
           
-           //note : blowUp_ is bound via reference_wrapper,
+           //note : blowUp_ is bound via pointer,
           //        thus we can provoke an exception at will.
           blowUp_ = false;
           
           
           check_defaultHandlingPattern();
-          check_ThrowOnError();
+//        check_ThrowOnError();              //////////////////////////////////////////////////////////////////////TICKET #211
+//        check_DispatcherInvocation()       // yet to be written as of 1/2016
           
           
           Command::remove ("test.command2");
@@ -135,29 +137,28 @@ namespace test    {
           
           CHECK (!protocolled("invoked"));
           
-          bool res = com();
+          bool success = com();
           
-          CHECK (res);
+          CHECK (success);
           CHECK (protocolled("invoked"));
           CHECK (protocolled(randVal_));
           
-          res = com.undo();
-          CHECK (res);        // UNDO invoked successfully
+          success = com.undo();
+          CHECK (success);           // UNDO invoked successfully
           CHECK (!protocolled(randVal_));
           CHECK (protocolled("UNDO"));
           
           blowUp_ = true;
           string current = command2::check_.str();
           
-          res = com();
-          CHECK (!res);       // not executed successfully (exception thrown)
+          success = com();
+          CHECK (not success);       // NOT executed successfully (exception thrown and caught)
           CHECK (command2::check_.str() == current);
-          CHECK (LUMIERA_ERROR_EXTERNAL == lumiera_error());
+          CHECK (!lumiera_error_peek());   // already absorbed
           
-          res = com.undo();
-          CHECK (!res);       // UNDO failed (exception thrown)
+          success = com.undo();
+          CHECK (not success);       // UNDO failed (exception thrown and caught)
           CHECK (command2::check_.str() == current);
-          CHECK (LUMIERA_ERROR_EXTERNAL == lumiera_error());
           
           blowUp_ = false;
         }

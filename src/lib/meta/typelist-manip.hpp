@@ -63,7 +63,7 @@ namespace meta {
     
     
     /** pick the n-th element from a typelist */
-    template<class TYPES, uint i>
+    template<class TYPES, size_t i>
     struct Pick
       {
         typedef NullType Type;  
@@ -73,7 +73,7 @@ namespace meta {
       {
         typedef TY Type;  
       };
-    template<class TY, class TYPES, uint i>
+    template<class TY, class TYPES, size_t i>
     struct Pick<Node<TY,TYPES>, i>
       {
         typedef typename Pick<TYPES, i-1>::Type Type;

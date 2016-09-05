@@ -24,21 +24,19 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-mutation.hpp"
-#include "proc/control/command-argument-holder.hpp"
+#include "proc/control/command-simple-closure.hpp"
 #include "proc/control/memento-tie.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/format-cout.hpp"
 
 #include <functional>
-#include <iostream>
 #include <cstdlib>
 #include <string>
 
 using std::function;
 using std::string;
 using std::rand;
-using std::cout;
-using std::endl;
 
 
 namespace proc {
@@ -92,7 +90,7 @@ namespace test    {
         }
       
       
-      /** @test check the Mutation functor which is bound to our \c testFunc(int) .
+      /** @test check the Mutation functor which is bound to our `testFunc(int)`.
        *        Then create a argument closure and use this to invoke the Mutation
        *        and verify actually \c testFunc(param) is executed.
        */
@@ -104,16 +102,16 @@ namespace test    {
           
           Mutation functor (funky);
           
-          MissingArguments<SIG_fun> nullClosure;
-          CHECK (!nullClosure);
+          SimpleClosure<SIG_fun> nullClosure;
+          CHECK (not nullClosure.isValid());
           cout << "empty placeholder closure: " << nullClosure << endl;
           VERIFY_ERROR (UNBOUND_ARGUMENTS, functor(nullClosure) );
           
           // now create a real closure....
-          Tuple<Types<int> > param = tuple::make(23);
-          Closure<void(int)> close_over (param);
+          Tuple<Types<int> > param = std::make_tuple (23);
+          SimpleClosure<void(int)> closed_over{param};
           
-          CmdClosure& closure (close_over);
+          CmdClosure& closure (closed_over);
           CHECK (closure);
           
           cout << "param values: " << closure << endl;
@@ -139,7 +137,7 @@ namespace test    {
        *  @note Mutation and UndoMutation are value objects, but they refer
        *        to a common command state, which for this test is modelled
        *        by local variables and which for the real commands is 
-       *        contained in a CommandArgumentHolder
+       *        contained in a Command-StorageHolder
        */
       void
       checkUndoMutation ()
@@ -153,12 +151,12 @@ namespace test    {
           UndoMutation undoFunctor (mementoHolder);
           CHECK (!mementoHolder);
           
-          MissingArguments<void(void)> nullClosure;
+          SimpleClosure<void(void)> nullClosure;
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor(nullClosure) );
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor.captureState(nullClosure) );
           
           Tuple<Types<> > param;
-          Closure<void()> clo (param);
+          SimpleClosure<void()> clo{param};
           
           CHECK (!mementoHolder);
           VERIFY_ERROR (MISSING_MEMENTO, undoFunctor (clo) );

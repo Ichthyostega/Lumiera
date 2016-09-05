@@ -25,12 +25,12 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/mobject/output-mapping.hpp"
 #include "proc/asset/pipe.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
 #include <string>
 
-using boost::format;
+using util::_Fmt;
 using util::isnil;
 using std::string;
 
@@ -76,8 +76,8 @@ namespace test {
           buildQuery (PID sourcePipeID, uint seqNr =0)
             {
               PPipe srcP = Pipe::lookup (sourcePipeID);
-              format queryPattern ("id(master_%1%), stream(%1%), ord(%2%)");
-              return Query<Pipe> (str(queryPattern % srcP->getStreamID().getSym() % seqNr));
+              _Fmt queryPattern{"id(master_%1%), stream(%1%), ord(%2%)"};
+              return Query<Pipe> (queryPattern % srcP->getStreamID().getSym() % seqNr);
             }
         };
       

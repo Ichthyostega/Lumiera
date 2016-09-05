@@ -38,8 +38,8 @@
 #include "backend/media-access-mock.hpp"
 #include "lib/test/depend-4test.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-cout.hpp"
 
-#include <iostream>
 
 
 
@@ -49,9 +49,6 @@ namespace mobject {
 namespace test    {
   
 //  using lib::test::showSizeof;
-  using std::string;
-  using std::cout;
-  using std::endl;
   
   using lib::Symbol;
   using lib::test::Depend4Test;

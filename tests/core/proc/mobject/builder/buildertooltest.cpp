@@ -31,9 +31,8 @@
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "backend/media-access-mock.hpp"
 #include "lib/test/depend-4test.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
-
-#include <iostream>
 
 using util::cStr;
 using std::string;
@@ -73,7 +72,7 @@ namespace test    {
           void treat (Clip& c)    
             { 
               Placement<Clip>& pC = getPlacement<Clip>();
-              cout << "Clip on media : "<< str(pC->getMedia()) <<"\n";
+              cout << "Clip on media : "<< pC->getMedia() <<"\n";
               CHECK (pC->operator==(c));
               log_ = string (pC);
             }

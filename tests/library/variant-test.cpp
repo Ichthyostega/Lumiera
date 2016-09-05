@@ -25,12 +25,11 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/variant.hpp"
 #include "lib/util.hpp"
 
 
-#include <iostream>
 #include <string>
 
 
@@ -45,8 +44,6 @@ namespace test{
   
   using util::contains;
   using std::string;
-  using std::cout;
-  using std::endl;
   
   using error::LUMIERA_ERROR_WRONG_TYPE;
   using error::LUMIERA_ERROR_LOGIC;
@@ -69,7 +66,7 @@ namespace test{
    * @see lib::Variant
    * @see util::AccessCasted
    * @see lib::OpaqueHolder
-   * @see GenericTreeMutator_test
+   * @see TreeMutator_test
    */
   class Variant_test : public Test
     {
@@ -96,14 +93,14 @@ namespace test{
           //// does not compile....
           // TestVariant evil(3.1415);
           
-          cout << string(v0) <<endl
-               << string(v1) <<endl
-               << string(v2) <<endl
-               << string(v3) <<endl;
+          cout << v0 <<endl
+               << v1 <<endl
+               << v2 <<endl
+               << v3 <<endl;
           
           CHECK (contains (string(v0), "Variant"));
           CHECK (contains (string(v0), "bool"));
-          CHECK (contains (string(v0), "0"));
+          CHECK (contains (string(v0), "false"));
           
           CHECK (contains (string(v1), "Variant"));
           CHECK (contains (string(v1), "int"));
@@ -114,7 +111,7 @@ namespace test{
           CHECK (contains (string(v2), "lololo"));
           
           CHECK (contains (string(v3), "Variant"));
-          CHECK (contains (string(v3), "lib::time::Time"));
+          CHECK (contains (string(v3), "Time"));
           CHECK (contains (string(v3), "0:00:00.000"));
         }
       

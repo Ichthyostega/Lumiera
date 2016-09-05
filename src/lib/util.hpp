@@ -155,6 +155,36 @@ namespace util {
     return 0 == str.rfind(prefix, 0);
   }
   
+  /** check if string ends with the given suffix */
+  inline bool
+  endsWith (string const& str, string const& suffix)
+  {
+    size_t l = suffix.length();
+    if (l > str.length()) return false;
+    size_t pos = str.length() - l;
+    return pos == str.find(suffix, pos);
+  }
+  
+  inline bool
+  endsWith (string const& str, const char* suffix)
+  {
+    return endsWith (str, string(suffix));
+  }
+  
+  inline void
+  removePrefix (string& str, string const& prefix)
+  {
+    if (not startsWith (str,prefix)) return;
+    str = str.substr (prefix.length());
+  }
+  
+  inline void
+  removeSuffix (string& str, string const& suffix)
+  {
+    if (not endsWith (str,suffix)) return;
+    str.resize(str.length() - suffix.length());
+  }
+  
   
   /** shortcut for containment test on a map */
   template <typename MAP>
@@ -317,6 +347,7 @@ namespace util {
    "Bääääh!!"                         --> 'Bh'
 \endverbatim
    * @see sanitised-identifier-test.cpp
+   * @see lib::meta::sanitisedSymbol()
    */
   string sanitise (string const& org);
   

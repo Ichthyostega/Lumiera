@@ -96,16 +96,13 @@
 #include "lib/error.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/format-util.hpp"        ///////////////////////////////TICKET #973 : investigate the impact of this inclusion on code size
 #include "lib/diff/record.hpp"
 #include "lib/variant.hpp"
 #include "lib/util.hpp"
 
-//#include <vector>
 #include <utility>
 #include <string>
 #include <deque>
-//#include <map>
 
 
 namespace lib {
@@ -192,6 +189,23 @@ namespace diff{
       X& get();
       template<typename X>
       X const& get()  const;
+      
+      /** determine if payload constitutes a nested scope ("object") */
+      bool isNested()  const;
+      
+      /** peek into the type field of a nested `Record<GenNode>` */
+      string recordType()  const;
+      
+      /** visit _children_ of a nested `Record<GenNode>` */
+      Rec::scopeIter
+      childIter()  const
+        {
+          const Rec* rec = unConst(this)->maybeGet<Rec>();
+          if (!rec)
+            return Rec::scopeIter();
+          else
+            return rec->scope();
+        }
     };
   
   
@@ -257,12 +271,48 @@ namespace diff{
       GenNode(Ref &  r);
       GenNode(Ref && r);
       
-      GenNode& operator= (GenNode const&)  =default;
-      GenNode& operator= (GenNode&&)       =default;
+      /** copy assignment
+       * @remarks we need to define our own version here for sake of sanity.
+       *    The reason is that we use inline storage (embedded within lib::Variant)
+       *    and that we deliberately _erase_ the actual type of data stored inline.
+       *    Because we still do want copy assignment, in case the payload data
+       *    supports this, we use a "virtual copy operator", where in the end
+       *    the storage buffer within lib::Variant has to decide if assignment
+       *    is possible. Only data with the same type may be assigned and we
+       *    prevent change of the (implicit) data type through assignment.
+       *    This check might throw, and for that reason we're better off
+       *    to perform the _data assignment_ first. The probability for
+       *    EntryID assignment to fail is low (but it may happen!).
+       * @note the use of inline storage turns swapping of data
+       *    into an expensive operation, involving a temporary.
+       *    This rules out the copy-and-swap idiom.
+       */
+      GenNode&
+      operator= (GenNode const& o)
+        {
+          if (&o != this)
+            {
+              data = o.data;
+              idi = o.idi;
+            }
+          return *this;
+        }
+      
+      GenNode&
+      operator= (GenNode&& o)
+        {
+          ASSERT (&o != this);
+          data = std::forward<DataCap>(o.data);
+          idi  = std::forward<ID>(o.idi);
+          return *this;
+        }
+      
+      //note: NOT defining a swap operation, because swapping inline storage is pointless!
       
       
       
-      /** @internal diagnostics helper. Include format-helper.cpp on use */
+      
+      /** @internal diagnostics helper */
       operator string()  const
         {
           return "GenNode-"+string(idi)+"-"+string(data);
@@ -284,8 +334,8 @@ namespace diff{
       bool contains (X const& elm)  const;
       
       
-      bool matches (GenNode const& o)  const { return this->matches(o.idi); }  ///< @note \em not comparing payload data. Use equality for that…
-      bool matches (ID const& id)      const { return idi == id; }
+      bool matches (GenNode const& o)  const { return this->matches(o.idi); }  ///< @note _not_ comparing payload data. Use equality for that…
+      bool matches (ID const& id)      const { return idi == id;            }
       bool matches (int     number)    const { return data.matchNum(number);}
       bool matches (int64_t number)    const { return data.matchNum(number);}
       bool matches (short   number)    const { return data.matchNum(number);}
@@ -310,6 +360,38 @@ namespace diff{
       iterator end()   const;
       
       
+      using ChildDataIter = TransformIter<Rec::scopeIter, DataCap const&>;
+      
+      /** visit the _data_ of nested child elements
+       * @return an iterator over the DataCap elements of all children,
+       *         in case this GenNode actually holds a Record.
+       *         Otherwise an empty iterator.
+       * @note this iterator visits _only_ the children, which are
+       *         by definition unnamed. It does _not_ visit attributes.
+       */
+      friend ChildDataIter
+      childData (GenNode const& n)
+      {
+        return ChildDataIter{ n.data.childIter()
+                            , [](GenNode const& child) ->DataCap const&
+                                {
+                                  return child.data;
+                                }
+                            };
+      }
+      
+      friend ChildDataIter
+      childData (Rec::scopeIter const& scopeIter)
+      {
+        return ChildDataIter{ scopeIter
+                            , [](GenNode const& child) ->DataCap const&
+                                {
+                                  return child.data;
+                                }
+                            };
+      }
+      
+      
       friend string
       name (GenNode const& node)
       {
@@ -328,6 +410,27 @@ namespace diff{
       {
         return not (n1 == n2);
       }
+      
+      /**
+       * allow for storage in ordered containers, ordering
+       * based on the human-readable ID within the GenNode.
+       * @warning this constitutes a _weaker equivalence_ than
+       *       given by the equality comparison (`operator==`),
+       *       since GenNode::ID is an EntryID, which also includes
+       *       the type parameter into the identity (hash). This means,
+       *       two GenNodes with different real payload type but same
+       *       ID symbol will not be equal, but be deemed equivalent
+       *       by this IDComparator. This can be dangerous when building
+       *       a set or map based on this comparator.
+       */
+      struct IDComparator
+        {
+          bool
+          operator() (GenNode const& left, GenNode const& right)  const
+            {
+              return left.idi.getSym() < right.idi.getSym();
+            }
+        };
       
     
     protected:
@@ -353,6 +456,31 @@ namespace diff{
           return "_CHILD_" + idi::generateSymbolicID<X>();
         }
     };
+  
+  
+  
+  /**
+   * metafunction to detect types able to be wrapped into a GenNode.
+   * Only a limited and fixed set of types may be placed within a GenNode,
+   * as defined through the typelist `lib::diff::DataValues`. This metafunction
+   * allows to enable or disable specialisations and definitions based on the
+   * fact if a type in question can live within a GenNode.
+   */
+  template<typename ELM>
+  struct can_wrap_in_GenNode
+    {
+      using Yes = lib::meta::Yes_t;
+      using No  = lib::meta::No_t;
+      
+      template<class X>
+      static Yes check(typename variant::CanBuildFrom<X, DataValues>::Type*);
+      template<class X>
+      static No  check(...);
+      
+    public:
+      static const bool value = (sizeof(Yes)==sizeof(check<ELM>(0)));
+    };
+  
   
   
   
@@ -563,7 +691,36 @@ namespace diff{
       
       return Variant<DataValues>::get<RecRef>();
     }
-
+  
+  /**
+   * @return either the contents of a nested record's type field
+   *         or the util::BOTTOM_INDICATOR, when not a record.
+   * @remarks this function never raises an error, even if the element
+   *         in fact doesn't constitute a nested scope. Effectively this
+   *         allows to "peek" into the contents to some degree.
+   */
+  inline string
+  DataCap::recordType()  const
+    {
+      Rec* nested = unConst(this)->maybeGet<Rec>();
+      if (!nested)
+        {
+          RecRef* ref = unConst(this)->maybeGet<RecRef>();
+          if (ref and not ref->empty())
+            nested = ref->get();
+        }
+      
+      return nested? nested->getType()
+                   : util::BOTTOM_INDICATOR;
+    }
+  
+  inline bool
+  DataCap::isNested()  const
+    {
+      return util::BOTTOM_INDICATOR != recordType();
+    }
+  
+  
   
   
   /**
@@ -592,6 +749,8 @@ namespace diff{
                  , DataCap(RecRef(oNode.data.get<Rec>())))
         { }
       
+      static const Ref I;       ///< symbolic ID ref "_I_"
+      static const Ref NO;      ///< symbolic ID ref "_NO_"
       static const Ref END;     ///< symbolic ID ref "_END_"
       static const Ref THIS;    ///< symbolic ID ref "_THIS_"
       static const Ref CHILD;   ///< symbolic ID ref "_CHILD_"
@@ -621,6 +780,17 @@ namespace diff{
   {
     return GenNode(symbolicID, std::move(record_));
   }
+  
+  
+  /* === Extension point to apply a tree-diff === */
+  
+  /** implementation is provided by the "diff framework"
+   * @see tree-mutator-gen-node-binding.hpp
+   * @see tree-diff.cpp (implementation)
+   */
+  template<>
+  void MakeRec::buildMutator (BufferHandle buff);
+  
   
   
   /* === Specialisation for handling of attributes in Record<GenNode> === */

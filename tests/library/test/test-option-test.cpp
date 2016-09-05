@@ -23,13 +23,12 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/testoption.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 
 using lib::Cmdline;
 using util::isnil;
-using std::endl;
 
 namespace test {
   
@@ -58,14 +57,14 @@ namespace test {
       /** @test performs the actual test for the option parser test::TestOption */
       void doIt (const string cmdline)
         {
-          std::cout << "Testing invocation with cmdline: " << cmdline << "..." << endl;
+          cout << "Testing invocation with cmdline: " << cmdline << "..." << endl;
           
           Cmdline args(cmdline);
           TestOption optparser (args);
           const string testID = optparser.getTestID();
-          std::cout << "--> Testgroup=" << optparser.getTestgroup() << endl;
-          std::cout << "--> Test-ID  =" << (isnil(testID)? "--missing--" : testID ) << endl;
-          std::cout << "--> remaining=" << args << endl;
+          cout << "--> Testgroup=" << optparser.getTestgroup() << endl;
+          cout << "--> Test-ID  =" << (isnil(testID)? "--missing--" : testID ) << endl;
+          cout << "--> remaining=" << args << endl;
         }
       
       void noOptions()      { doIt (""); }

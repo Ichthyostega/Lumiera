@@ -45,6 +45,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
 #include "lib/functor-util.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>
@@ -67,7 +68,7 @@ namespace control {
    *  Binding together state capturing and execution of the undo operation.
    *  MementoTie itself is a passive container object with a very specific type,
    *  depending on the type of the operation arguments and the type of the memento.
-   *  It is to be allocated within the ArgumentHolder of the command, thereby wrapping
+   *  It is to be allocated within the StorageHolder of the command, thereby wrapping
    *  the undo and capture function, setting up the necessary bindings and closures for
    *  allowing them to cooperate behind the scenes to carry out the UNDO functionality.
    *  On construction, the UndoMutation functor retrieves the wired up functions,
@@ -110,6 +111,9 @@ namespace control {
       
       
     public:
+      MementoTie()
+        : MementoTie (function<SIG_undo>(), function<SIG_cap>())
+        { }
       
       /** creates an execution context tying together the provided functions.
        *  Bound copies of these functors may be pulled from the MementoTie,
@@ -209,12 +213,8 @@ namespace control {
     if (!isCaptured_)
       return "<mem:missing>";
     
-    return "<"
-#ifdef LIB_FORMAT_UTIL_H
-         + util::str(memento_, "mem: ", "·memento·")
-#else
-         + std::string("memento")
-#endif
+    return "<mem: "
+         + util::toString (memento_)
          + ">";
   }
   

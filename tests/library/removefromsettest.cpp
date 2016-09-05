@@ -23,16 +23,17 @@
 
 #include "lib/test/run.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <functional>
-#include <iostream>
 #include <string>
 #include <set>
 
-using std::cout;
-using std::string;
+using util::join;
 using std::function;
+using std::string;
 
 
 
@@ -48,9 +49,9 @@ namespace test {
   void 
   show (IntSet const& coll)
   {
-    cout << "[ ";
-    for_each (coll, [](uint elm) { cout << elm << ", "; });
-    cout << "]\n";
+    cout << "[ "
+         << join (coll)
+         << " ]" <<endl;
   }
   
   function<bool(uint)>

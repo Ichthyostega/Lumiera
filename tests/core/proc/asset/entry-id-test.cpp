@@ -30,10 +30,10 @@
 #include "proc/mobject/session/fork.hpp"
 #include "lib/meta/trait-special.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
 
 #include <unordered_map>
-#include <iostream>
 #include <string>
 
 using lib::test::showSizeof;
@@ -43,8 +43,6 @@ using util::contains;
 using util::and_all;
 using lib::Literal;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 
@@ -139,9 +137,18 @@ namespace test{
           using proc::asset::idi::getAssetIdent;
           
           ForkID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
-          CHECK (getAssetIdent(tID) == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
+          
+          // Symbol-ID will be "sanitised"
+          CHECK ("test_track" == tID.getSym());
+          CHECK (tID == ForkID("☢ test ☢ track ☢"));
+          CHECK (tID == ForkID(string{"☢ test ☢ track ☢"}));
+          
+          // but: there is a pass-through for internal symbols
+          CHECK (tID != ForkID(Symbol{"☢ test ☢ track ☢"}));
           
           CHECK (tID.getHash() == ForkID("☢ test ☢ track ☢").getHash());
+          
+          CHECK (getAssetIdent(tID) == Asset::Ident("test_track", Category(STRUCT,"forks"), "lumi", 0));
           
           CHECK (tID.getSym() == getAssetIdent(tID).name);
           CHECK (getAssetIdent(ForkID()).category == Category (STRUCT,"forks"));

@@ -123,11 +123,11 @@ namespace meta {
           int     style_;
           int     cur_arg_;
           int     num_args_;
-          mutable bool   dumped_;
+          mutable bool  dumped_;
           std::string   prefix_;
           unsigned char exceptions;
           BasicAltstringbuf buf_;
-          Optional<Locale> loc_;
+          Optional<Locale>  loc_;
         };
       //-------------------------------------mimicked-definitions--
       

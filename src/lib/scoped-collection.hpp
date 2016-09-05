@@ -43,7 +43,7 @@
  **   number of objects is (heap) allocated right away, but no objects are
  **   created. Later on, individual objects are "pushed" into the collection
  **   by invoking #appendNewElement() to create a new element of the default
- **   type I) or #appendNew<Type>(args) to create some subtype. This way,
+ **   type `I`) or #appendNew<Type>(args) to create some subtype. This way,
  **   the container is being filled successively.
  ** - the "RAII style" usage strives to create all of the content objects
  **   right away, immediately after the memory allocation. This usage pattern
@@ -53,7 +53,7 @@
  ** @note intentionally there is no operation to discard individual objects,
  **       all you can do is to #clear() the whole container.
  ** @note the container can hold instances of a subclass of the type defined
- **       by the template parameter I. But you need to ensure in this case
+ **       by the template parameter `I`. But you need to ensure in this case
  **       that the defined buffer size for each element (2nt template parameter)
  **       is sufficient to hold any of these subclass instances. This condition
  **       is protected by a static assertion (compilation failure). 
@@ -93,10 +93,12 @@ namespace lib {
    * All child objects reside in a common chunk of storage
    * and are owned and managed by this collection holder.
    * Array style access and iteration is provided.
+   * @tparam I   the nominal Base/Interface class for a family of types
+   * @tparam siz maximum storage required for the targets to be held inline
    */
   template
-    < class I                    ///< the nominal Base/Interface class for a family of types
-    , size_t siz = sizeof(I)     ///< maximum storage required for the targets to be held inline
+    < class I
+    , size_t siz = sizeof(I)
     >
   class ScopedCollection
     : boost::noncopyable
@@ -360,6 +362,7 @@ namespace lib {
       
       
       
+                                                 ///////////////////////////////////////////////////////TICKET #967 : the following can be written better now. Also should be named 'emplace'
       /** push a new element of default type
        *  to the end of this container
        * @note EX_STRONG */
@@ -551,7 +554,7 @@ namespace lib {
   /** \par usage
    * Pass an instance of this builder functor as 2nd parameter
    * to ScopedCollections's ctor. (an anonymous instance is OK).
-   * Using this variant of the compiler switches the collection to RAII-style:
+   * Using this variant of the ctor switches the collection to RAII-style:
    * It will immediately try to create all the embedded objects, invoking this
    * builder functor for each "slot" to hold such an embedded object. Actually,
    * this "slot" is an ElementHolder instance, which provides functions for

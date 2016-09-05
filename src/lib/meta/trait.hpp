@@ -21,6 +21,39 @@
 */
 
 
+/** @file trait.hpp
+ ** Helpers for type detection, type rewriting and metaprogramming.
+ ** This header is a collection of frequently used templates for working with types.
+ ** It incurs only modest header inclusion overhead (be sure not to jeopardise that!).
+ ** 
+ ** \par unwrapping
+ ** Strip away all kinds of type adornments, like const, reference, pointer, smart-ptr.
+ ** The accompanying \ref unwrap() function can be used to accept "stuff packaged
+ ** in various forms". The \ref Strip template packages this ability in various
+ ** degrees for metaprogramming
+ ** @warning these helpers can be quite dangerous, as they silently break
+ **          any protective barriers (including lifecycle managing smart-ptrs)
+ ** 
+ ** \par string conversion
+ ** a set of trait templates to categorise arbitrary types with respect to
+ ** the ability for string conversions
+ ** 
+ ** \par ability to iterate
+ ** these traits [can be used](util-foreach.hpp) to build the notion of a
+ ** generic container -- basically anything that can be enumerated.
+ ** Within Lumiera, we frequently use our own concept of "iterability",
+ ** known as ["Lumiera Forward Iterator"](iter-adapter.hpp). These
+ ** helpers here allow to unify this concept with the "Range"
+ ** concept from the standard library (`begin()` and `end()`)
+ ** 
+ ** @see MetaUtils_test
+ ** @see \rem format-obj.hpp string representation for _anything_
+ ** @see \ref lib/meta/utils.hpp very basic metaprogramming helpers
+ ** @see typelist.hpp
+ ** 
+ */
+
+
 #ifndef LIB_META_TRAIT_H
 #define LIB_META_TRAIT_H
 
@@ -28,13 +61,8 @@
 #include "lib/meta/util.hpp"
 #include "lib/meta/duck-detector.hpp"
 
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_arithmetic.hpp>
-#include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/remove_pointer.hpp>
-#include <boost/type_traits/remove_cv.hpp>
+#include <type_traits>
 
-#include <string>
 
 //Forward declarations for the Unwrap helper....
 namespace boost{
@@ -46,22 +74,44 @@ namespace std {
 }
 namespace lib{
   template<class X, class B>  class P;
-}
+  
+  namespace hash {
+    class LuidH;
+  }
+  namespace time {
+    class TimeValue;
+    class Duration;
+}}
+namespace proc {
 namespace mobject{
   template<class X, class B>  class Placement;
-}
+}}
 
 
 namespace lib {
 namespace meta {
   
+  using std::remove_cv;
+  using std::remove_pointer;
+  using std::remove_reference;
+  using std::is_convertible;
+  using std::is_constructible;
+  using std::is_floating_point;
+  using std::is_arithmetic;
+  using std::is_unsigned;
+  using std::is_signed;
+  using std::is_same;
+  using std::__not_;
+  using std::__and_;
+  using std::__or_;
   
   
   /** 
-   * Helper for type analysis:
-   * tries to extract a base type from various wrappers.
+   * Helper for type analysis and convenience accessors:
+   * attempts to extract a base type from various wrappers.
    * Additionally allows to extract/deref the wrapped element.
    * @warning strips away any const
+   * @warning also strips away smart-ptrs and lifecycle managers!
    */
   template<typename X>
   struct Unwrap
@@ -75,10 +125,16 @@ namespace meta {
         }
     };
   
+  template<>
+  struct Unwrap<void>   ///< @note we can't unwrap void!
+    {
+      typedef void Type;
+    };
+  
   template<typename X>
   struct Unwrap<X*>
     {
-      typedef typename boost::remove_cv<X>::type Type;
+      typedef typename std::remove_cv<X>::type Type;
       
       static Type&
       extract (const X* ptr)
@@ -138,19 +194,6 @@ namespace meta {
         }
     };
   
-  template<typename X, class B>
-  struct Unwrap<mobject::Placement<X, B> >
-    {
-      typedef X  Type;
-      
-      static X&
-      extract (mobject::Placement<X,B> placement)
-        {
-          ASSERT (placement.isValid());
-          return *placement;
-        }
-    };
-  
   
   /** convenience shortcut: unwrapping free function.
    *  @return reference to the bare element.
@@ -173,10 +216,10 @@ namespace meta {
   template<typename X>
   struct Strip
     {
-      typedef typename boost::remove_cv<X>                 ::type TypeUnconst;
-      typedef typename boost::remove_reference<TypeUnconst>::type TypeReferred;
-      typedef typename boost::remove_pointer<TypeReferred> ::type TypePointee;
-      typedef typename boost::remove_cv<TypePointee>       ::type TypePlain;
+      typedef typename std::remove_cv<X>                 ::type TypeUnconst;
+      typedef typename std::remove_reference<TypeUnconst>::type TypeReferred;
+      typedef typename std::remove_pointer<TypeReferred> ::type TypePointee;
+      typedef typename std::remove_cv<TypePointee>       ::type TypePlain;
       
       typedef typename Unwrap<TypePlain>                   ::Type Type;
     };
@@ -218,40 +261,163 @@ namespace meta {
   
   
   
+  /* ==== Traits ==== */
   
+  /** compare unadorned types, disregarding const and references */
+  template<typename T, typename U>
+  struct is_basically
+    : is_same <typename Strip<T>::TypePlain
+              ,typename Strip<U>::TypePlain>
+    { };
   
-  /** Trait template for detecting if a type can be converted to string.
-   *  For example, this allows to write specialisations with the help of
-   *  boost::enable_if
-   */
-  template <typename TY>
-  struct can_ToString
-    {
-      enum { value = boost::is_convertible<TY, std::string>::value
-           };
-    };
+  /** detect various flavours of string / text data */
+  template<typename X>
+  struct is_StringLike
+    : __or_< is_basically<X, std::string>
+           , is_convertible<X, const char*>
+           >
+    { };
   
-  
-  /** Trait template for guarding \c lexical_cast<..> expressions.
-   *  Such an expression won't even compile for some types, because of
-   *  missing or ambiguous output operator(s).
-   *  Ideally, there would be some automatic detection (relying on the
-   *  existence of an operator<< for the given type. But I couldn't make
-   *  this work, so I fell back on just declaring types which are known
-   *  to work with lexical_cast to string
-   *  @note this compile-time trait can't predict if such an conversion
-   *        to string will be successful at runtime; indeed it may throw,
-   *        so you should additionally guard the invocation with try-catch!
+  /** types able to be lexically converted to string representation
+   * @note this compile-time trait can't predict if such an conversion
+   *    to string will be successful at runtime; indeed it may throw,
+   *    so you should additionally guard the invocation with try-catch!
+   * @remarks this template is relevant for guarding `lexical_cast<..>` expressions.
+   *    Such an expression won't even compile for some types, because of missing or
+   *    ambiguous output operator(s). Ideally, there would be some automatic detection
+   *    (relying on the existence of an `operator<<` for the given type. But at my
+   *    first attempt in 2009 (commit 1533e5bd0) I couldn't make this work, so I
+   *    fell back on just declaring all classes of types which are known to work
+   *    with lexical_cast to string.
+   * @remarks Meanwhile (2016) I think this is an adequate and robust solution
+   *    and here to stay. Based on this, I'll add a generic overload for the
+   *    output stream inserter `operator<<` to use custom string conversions;
+   *    this trait is essential to exclude types which can be printed as-is.
    */
   template<typename X>
   struct can_lexical2string
-    {
-      enum { value = boost::is_arithmetic<X>::value
-           };
-    };
+    : __or_< is_arithmetic<X>
+           , is_StringLike<X>
+           >
+    { };
+  
+  template<typename X>
+  struct use_LexicalConversion
+    : __and_<can_lexical2string<X>
+            ,__not_<can_convertToString<X>>
+            >
+    { };
+  
+  /** when to use custom string conversions for output streams */
+  template<typename X>
+  struct use_StringConversion4Stream
+    : __and_<std::is_class<typename Strip<X>::TypePlain>
+            ,__not_<std::is_pointer<X>>
+            ,__not_<can_lexical2string<X>>
+            >
+    { };
   
   
   
+  /** detect smart pointers */
+  template<typename X>
+  struct is_smart_ptr
+    : std::false_type
+    { };
+  
+  template<typename T>
+  struct is_smart_ptr<std::shared_ptr<T>>
+    : std::true_type
+    { };
+  
+  template <typename T, typename D>
+  struct is_smart_ptr<std::unique_ptr<T,D>>
+    : std::true_type
+    { };
+  
+  
+  
+  
+  
+  
+  template<typename NUM>
+  struct is_nonFloat
+    : __and_<is_arithmetic<NUM>
+            ,__not_<is_floating_point<NUM>>
+            >
+    { };
+  
+  /** temporary workaround for GCC [Bug-63723], necessary until CGG-5
+   * @remarks The problem is that GCC emits a warning on narrowing conversion,
+   *  instead of letting the SFINAE substitution fail. This can be considered
+   *  questionable behaviour, since the usual implementation of a `is_convertible`
+   *  trait uses initialisation from a brace enclosed list, where C++11 prohibits
+   *  narrowing conversions. Now the problem is, that we'll use such traits checks
+   *  to remove such  _impossble_ cases from generated trampoline tables or visitor
+   *  double dispatch implementations. Thus, for one we get lots of warnings at that
+   *  point when generating those trampoline tables (at initialisation), while it
+   *  is not clear we'll trigger those cases, and, when we do, we'll get narrowing
+   *  conversions in a context where we're unable to cope with them or protect
+   *  ourselves against spurious conversions.
+   *  What follows is a quick-n-dirty hack to remove such unwanted conversions. 
+   * 
+   * [Bug-63723]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63723
+   */
+  template<typename SRC, typename TAR>
+  struct is_narrowingInit
+    : __or_<__and_<is_unsigned<SRC>, is_signed<TAR>>
+           ,__and_<is_signed<SRC>, is_unsigned<TAR>>
+           ,__and_<is_nonFloat<SRC>, is_floating_point<TAR>>
+           ,__and_<is_floating_point<SRC>, is_nonFloat<TAR>>
+           ,__not_<is_constructible<TAR, SRC>>
+           >
+    { };
+  
+  template<typename TAR>
+  struct is_narrowingInit<lib::hash::LuidH, TAR>
+    : __or_<is_arithmetic<TAR>
+           ,is_floating_point<TAR>
+           >
+    { };
+  
+#define TRAIT_IS_NARROWING(_SRC_, _TAR_) \
+  template<>                              \
+  struct is_narrowingInit<_SRC_, _TAR_>    \
+    : std::true_type                        \
+    { };
+  
+  TRAIT_IS_NARROWING (int64_t, int32_t)
+  TRAIT_IS_NARROWING (int64_t, int16_t)
+  TRAIT_IS_NARROWING (int64_t, int8_t)
+  TRAIT_IS_NARROWING (int64_t, char)
+  TRAIT_IS_NARROWING (int32_t, int16_t)
+  TRAIT_IS_NARROWING (int32_t, int8_t)
+  TRAIT_IS_NARROWING (int32_t, char)
+  TRAIT_IS_NARROWING (int16_t, int8_t)
+  TRAIT_IS_NARROWING (int16_t, short)
+  TRAIT_IS_NARROWING (int16_t, char)
+  
+  TRAIT_IS_NARROWING (uint64_t, uint32_t)
+  TRAIT_IS_NARROWING (uint64_t, uint16_t)
+  TRAIT_IS_NARROWING (uint64_t, uint8_t)
+  TRAIT_IS_NARROWING (uint32_t, uint16_t)
+  TRAIT_IS_NARROWING (uint32_t, uint8_t)
+  TRAIT_IS_NARROWING (uint16_t, uint8_t)
+  TRAIT_IS_NARROWING (uint16_t, ushort)
+  
+  TRAIT_IS_NARROWING (double, float)
+  
+  TRAIT_IS_NARROWING (double, lib::time::TimeValue)
+  TRAIT_IS_NARROWING (double, lib::time::Duration)
+  
+#undef TRAIT_IS_NARROWING
+  
+  
+  
+  
+  
+  
+  /* ====== generic iteration support ====== */
   
   /** Trait template to detect a type usable immediately as
    *  "Lumiera Forward Iterator" in a specialised for-each loop
@@ -269,7 +435,7 @@ namespace meta {
       META_DETECT_OPERATOR_INC();
       
     public:
-      enum{ value = boost::is_convertible<Type, bool>::value
+      enum{ value = std::is_convertible<Type, bool>::value
                  && HasNested_value_type<Type>::value
                  && HasOperator_deref<Type>::value
                  && HasOperator_inc<Type>::value

@@ -23,8 +23,8 @@
 
 /** @file function-closure.hpp
  ** Partial function application and building a complete function closure.
- ** This is a small addendum to (and thin wrapper for) tr1/functional, supporting
- ** the case when a function should be closed over (partially or all) arguments,
+ ** This is a addendum to (and thin wrapper for) `<functional>`, supporting
+ ** the case when a function should be _closed_ over (partially or all) arguments,
  ** where especially the parameter values to close on are provided as a tuple.
  ** Additionally, we allow for composing (chaining) of two functions.
  ** 
@@ -39,7 +39,6 @@
  ** 
  ** @see control::CommandDef usage example
  ** @see function.hpp
- ** @see tuple.hpp
  ** 
  */
 
@@ -48,9 +47,10 @@
 #define LIB_META_FUNCTION_CLOSURE_H
 
 #include "lib/meta/function.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/tuple-helper.hpp"
 
 #include <functional>
+#include <tuple>
 
 
 
@@ -59,13 +59,14 @@ namespace meta{
 namespace func{
   
   using std::function;
+  using std::tuple;
   
   
   
   
   namespace { // helpers for binding and applying a function to an argument tuple
     
-    using tuple::element;
+    using std::get;
     
     /**
      * this Helper with repetitive specialisations for up to nine arguments
@@ -102,14 +103,14 @@ namespace func{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f (element<0>(arg));
+            return f (get<0>(arg));
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::bind (f, element<0>(arg));
+            return std::bind (f, get<0>(arg));
           }
       };
     
@@ -121,8 +122,8 @@ namespace func{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<0>(arg)
-                     , element<1>(arg)
+            return f ( get<0>(arg)
+                     , get<1>(arg)
                      );
           }
         
@@ -130,9 +131,9 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::bind (f, element<0>(arg)
-                                    , element<1>(arg)
-                                   );
+            return std::bind (f, get<0>(arg)
+                               , get<1>(arg)
+                              );
           }
       };
     
@@ -144,9 +145,9 @@ namespace func{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<0>(arg)
-                     , element<1>(arg)
-                     , element<2>(arg)
+            return f ( get<0>(arg)
+                     , get<1>(arg)
+                     , get<2>(arg)
                      );
           }
         
@@ -154,10 +155,10 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::bind (f, element<0>(arg)
-                                    , element<1>(arg)
-                                    , element<2>(arg)
-                                   );
+            return std::bind (f, get<0>(arg)
+                               , get<1>(arg)
+                               , get<2>(arg)
+                              );
           }
       };
     
@@ -169,10 +170,10 @@ namespace func{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<0>(arg)
-                     , element<1>(arg)
-                     , element<2>(arg)
-                     , element<3>(arg)
+            return f ( get<0>(arg)
+                     , get<1>(arg)
+                     , get<2>(arg)
+                     , get<3>(arg)
                      );
           }
         
@@ -180,11 +181,11 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::bind (f, element<0>(arg)
-                                    , element<1>(arg)
-                                    , element<2>(arg)
-                                    , element<3>(arg)
-                                   );
+            return std::bind (f, get<0>(arg)
+                               , get<1>(arg)
+                               , get<2>(arg)
+                               , get<3>(arg)
+                              );
           }
       };
     
@@ -196,11 +197,11 @@ namespace func{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<0>(arg)
-                     , element<1>(arg)
-                     , element<2>(arg)
-                     , element<3>(arg)
-                     , element<4>(arg)
+            return f ( get<0>(arg)
+                     , get<1>(arg)
+                     , get<2>(arg)
+                     , get<3>(arg)
+                     , get<4>(arg)
                      );
           }
         
@@ -208,12 +209,12 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::bind (f, element<0>(arg)
-                                    , element<1>(arg)
-                                    , element<2>(arg)
-                                    , element<3>(arg)
-                                    , element<4>(arg)
-                                   );
+            return std::bind (f, get<0>(arg)
+                               , get<1>(arg)
+                               , get<2>(arg)
+                               , get<3>(arg)
+                               , get<4>(arg)
+                              );
           }
       };
     
@@ -225,12 +226,12 @@ namespace func{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<0>(arg)
-                     , element<1>(arg)
-                     , element<2>(arg)
-                     , element<3>(arg)
-                     , element<4>(arg)
-                     , element<5>(arg)
+            return f ( get<0>(arg)
+                     , get<1>(arg)
+                     , get<2>(arg)
+                     , get<3>(arg)
+                     , get<4>(arg)
+                     , get<5>(arg)
                      );
           }
         
@@ -238,13 +239,13 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::bind (f, element<0>(arg)
-                                    , element<1>(arg)
-                                    , element<2>(arg)
-                                    , element<3>(arg)
-                                    , element<4>(arg)
-                                    , element<5>(arg)
-                                   );
+            return std::bind (f, get<0>(arg)
+                               , get<1>(arg)
+                               , get<2>(arg)
+                               , get<3>(arg)
+                               , get<4>(arg)
+                               , get<5>(arg)
+                              );
           }
       };
     
@@ -256,13 +257,13 @@ namespace func{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<0>(arg)
-                     , element<1>(arg)
-                     , element<2>(arg)
-                     , element<3>(arg)
-                     , element<4>(arg)
-                     , element<5>(arg)
-                     , element<6>(arg)
+            return f ( get<0>(arg)
+                     , get<1>(arg)
+                     , get<2>(arg)
+                     , get<3>(arg)
+                     , get<4>(arg)
+                     , get<5>(arg)
+                     , get<6>(arg)
                      );
           }
         
@@ -270,14 +271,14 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::bind (f, element<0>(arg)
-                                    , element<1>(arg)
-                                    , element<2>(arg)
-                                    , element<3>(arg)
-                                    , element<4>(arg)
-                                    , element<5>(arg)
-                                    , element<6>(arg)
-                                   );
+            return std::bind (f, get<0>(arg)
+                               , get<1>(arg)
+                               , get<2>(arg)
+                               , get<3>(arg)
+                               , get<4>(arg)
+                               , get<5>(arg)
+                               , get<6>(arg)
+                              );
           }
       };
     
@@ -289,14 +290,14 @@ namespace func{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<0>(arg)
-                     , element<1>(arg)
-                     , element<2>(arg)
-                     , element<3>(arg)
-                     , element<4>(arg)
-                     , element<5>(arg)
-                     , element<6>(arg)
-                     , element<7>(arg)
+            return f ( get<0>(arg)
+                     , get<1>(arg)
+                     , get<2>(arg)
+                     , get<3>(arg)
+                     , get<4>(arg)
+                     , get<5>(arg)
+                     , get<6>(arg)
+                     , get<7>(arg)
                      );
           }
         
@@ -304,15 +305,15 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::bind (f, element<0>(arg)
-                                    , element<1>(arg)
-                                    , element<2>(arg)
-                                    , element<3>(arg)
-                                    , element<4>(arg)
-                                    , element<5>(arg)
-                                    , element<6>(arg)
-                                    , element<7>(arg)
-                                   );
+            return std::bind (f, get<0>(arg)
+                               , get<1>(arg)
+                               , get<2>(arg)
+                               , get<3>(arg)
+                               , get<4>(arg)
+                               , get<5>(arg)
+                               , get<6>(arg)
+                               , get<7>(arg)
+                              );
           }
       };
     
@@ -324,15 +325,15 @@ namespace func{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<0>(arg)
-                     , element<1>(arg)
-                     , element<2>(arg)
-                     , element<3>(arg)
-                     , element<4>(arg)
-                     , element<5>(arg)
-                     , element<6>(arg)
-                     , element<7>(arg)
-                     , element<8>(arg)
+            return f ( get<0>(arg)
+                     , get<1>(arg)
+                     , get<2>(arg)
+                     , get<3>(arg)
+                     , get<4>(arg)
+                     , get<5>(arg)
+                     , get<6>(arg)
+                     , get<7>(arg)
+                     , get<8>(arg)
                      );
           }
         
@@ -340,16 +341,16 @@ namespace func{
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::bind (f, element<0>(arg)
-                                    , element<1>(arg)
-                                    , element<2>(arg)
-                                    , element<3>(arg)
-                                    , element<4>(arg)
-                                    , element<5>(arg)
-                                    , element<6>(arg)
-                                    , element<7>(arg)
-                                    , element<8>(arg)
-                                   );
+            return std::bind (f, get<0>(arg)
+                               , get<1>(arg)
+                               , get<2>(arg)
+                               , get<3>(arg)
+                               , get<4>(arg)
+                               , get<5>(arg)
+                               , get<6>(arg)
+                               , get<7>(arg)
+                               , get<8>(arg)
+                              );
           }
       };
     
@@ -360,40 +361,106 @@ namespace func{
     
     /* ===== Helpers for partial function application ===== */
     
-    using std::_Placeholder;     // what is the "official" way to import them?
+    /** @note relying on the implementation type
+     *        since we need to _build_ placeholders */
+    using std::_Placeholder;
     
     
     /**
-     *  Build a sequence of tr1 function argument placeholder types.
-     *  For each of the elements of the provided reference sequence,
+     *  Build a list of standard function argument placeholder types.
+     *  For each of the elements of the provided reference list,
      *  a Placeholder is added, numbers counting up starting with 1 (!)
      */
-    template<typename TYPES, uint i=0>
-    class PlaceholderTuple
+    template<typename TYPES, size_t i=1>
+    struct PlaceholderTuple
+      : PlaceholderTuple<typename TYPES::List>
+      { };
+    
+    template<typename X, typename TAIL, size_t i>
+    struct PlaceholderTuple<Node<X,TAIL>, i>
       {
-        typedef typename Tuple<TYPES>::Type     TypeSeq;
-        typedef typename Tuple<TYPES>::TailType TailSeq;
+        using TailPlaceholders = typename PlaceholderTuple<TAIL,i+1>::List;
         
-        typedef typename PlaceholderTuple<TailSeq, i+1>::PlaceholderSeq  TailPlaceholderSeq;
-        
-      public:
-        typedef typename Prepend<_Placeholder<i+1>, TailPlaceholderSeq>::Seq PlaceholderSeq;
-        typedef Tuple<PlaceholderSeq> Type;
-        
+        using List = Node<_Placeholder<i>, TailPlaceholders>;
       };
     
-    template<uint i>
-    struct PlaceholderTuple<Types<>, i> : PlaceholderTuple<NullType, i> {};
-    
-    template<uint i>
+    template<size_t i>
     struct PlaceholderTuple<NullType, i>
       {
-        typedef Types<> PlaceholderSeq;
-        typedef Tuple<Types<> > Type;
+        using List = NullType;
       };
     
     
+    
+    using std::tuple_element;
+    using std::tuple_size;
+    using std::get;
+    
+    
+    /**
+     * Builder for a tuple instance, where only some ctor parameters are supplied,
+     * while the remaining arguments will be default constructed. The use case is
+     * creating of a function binder, where some arguments shall be passed through
+     * (and thus be stored in the resulting closure), while other arguments are just
+     * marked as "Placeholder" with `std::_Placeholder<i>`.
+     * These placeholder marker terms just need to be default constructed, and will
+     * then be stored into the desired positions. Later on, when actually invoking
+     * such a partially closed function, only the arguments marked with placeholders
+     * need to be supplied, while the other arguments will use the values hereby
+     * "baked" into the closure.
+     * @tparam TAR full target tuple type. Some oft the elements within this tuple will
+     *             be default constructed, some will be initialised from the SRC tuple
+     * @tparam SRC argument tuple type, for the values _actually to be initialised_ here.
+     * @tparam start position within TYPES, at which the sequence of init-arguments starts;
+     *             all other positions will just be default initialised
+     * @see lib::meta::TupleConstructor
+     */
+    template<typename SRC, typename TAR, size_t start>
+    struct PartiallyInitTuple
+      {
+        template<size_t i>
+        using DestType = typename std::tuple_element<i, TAR>::type;
+        
+        
+        /**
+         * define those index positions in the target tuple,
+         * where init arguments shall be used on construction.
+         * All other arguments will just be default initialised.
+         */
+        static constexpr bool
+        useArg (size_t idx)
+          {
+            return (start <= idx)
+               and (idx < start + std::tuple_size<SRC>());
+          }
+        
+        
+        
+        template<size_t idx,   bool doPick = PartiallyInitTuple::useArg(idx)>
+        struct IndexMapper
+          {
+            SRC const& initArgs;
+            
+            operator DestType<idx>()
+              {
+                return std::get<idx-start> (initArgs);
+              }
+          };
+        
+        template<size_t idx>
+        struct IndexMapper<idx, false>
+          {
+            SRC const& initArgs;
+            
+            operator DestType<idx>()
+              {
+                return DestType<idx>();
+              }
+          };
+      };
+    
   } // (END) impl-namespace
+  
   
   
   
@@ -401,7 +468,10 @@ namespace func{
   
   /**
    * Closure-creating template.
-   * @note taking functor objects \em and parameters per reference
+   * The instance is linked (reference) to a given concrete argument tuple.
+   * A functor with a matching signature may then either be _closed_ over
+   * this argument values, or even be invoked right away with theses arguments.
+   * @warning we take functor objects _and parameters_ by reference
    */
   template<typename SIG>
   class TupleApplicator
@@ -436,7 +506,7 @@ namespace func{
    * This is a small usage example or spin-off,
    * having almost the same effect than invoking tr1::bind.
    * The notable difference is that the function arguments for
-   * creating the closure are passed in as one compound tuple.
+   * creating the closure are passed in as one tuple compound.
    */
   template<typename SIG>
   class FunctionClosure
@@ -470,6 +540,13 @@ namespace func{
    * either from the front (left) or aligned to the end
    * of the function argument list. Result is a "reduced" function,
    * expecting only the remaining "un-closed" arguments at invocation.
+   * @tparam SIG signature of the function to be closed, either as
+   *             function reference type or `std::function` object
+   * @tparam VAL type sequence describing the tuple of values
+   *             used for closing arguments
+   * @note the construction of this helper template does not verify or
+   *       match types to to the signature. In case of mismatch, you'll get
+   *       a compilation failure from `std::bind` (which can be confusing)
    */
   template<typename SIG, typename VAL>
   class PApply
@@ -478,6 +555,7 @@ namespace func{
       typedef typename _Fun<SIG>::Ret  Ret;
       typedef typename Args::List ArgsList;
       typedef typename VAL::List ValList;
+      typedef typename Types<ValList>::Seq ValTypes;
       
       enum { ARG_CNT = count<ArgsList>::value
            , VAL_CNT = count<ValList> ::value
@@ -489,32 +567,43 @@ namespace func{
       typedef typename Splice<ArgsList, ValList>::Back           LeftReduced;
       typedef typename Splice<ArgsList, ValList, ROFFSET>::Front RightReduced;
       
+      typedef typename Types<LeftReduced>::Seq  ArgsL;
+      typedef typename Types<RightReduced>::Seq ArgsR;
+      
+      
       // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
-      typedef typename func::PlaceholderTuple<LeftReduced>::PlaceholderSeq::List  LeftPlaceholders;
-      typedef typename func::PlaceholderTuple<RightReduced>::PlaceholderSeq::List RightPlaceholders;
+      typedef typename func::PlaceholderTuple<LeftReduced>::List  TrailingPlaceholders;
+      typedef typename func::PlaceholderTuple<RightReduced>::List LeadingPlaceholders;
       
       // ... and splice these placeholders on top of the original argument type list,
       // thus retaining the types to be closed, but setting a placeholder for each remaining argument
-      typedef typename Splice<ArgsList, LeftPlaceholders, VAL_CNT>::List LeftReplaced;
-      typedef typename Splice<ArgsList, RightPlaceholders, 0     >::List RightReplaced;
+      typedef typename Splice<ArgsList, TrailingPlaceholders, VAL_CNT>::List LeftReplaced;
+      typedef typename Splice<ArgsList, LeadingPlaceholders, 0     >::List RightReplaced;
       
-      typedef typename Tuple<LeftReduced>::Type  ArgsL;
-      typedef typename Tuple<RightReduced>::Type ArgsR;
+      typedef typename Types<LeftReplaced>::Seq  LeftReplacedTypes;
+      typedef typename Types<RightReplaced>::Seq RightReplacedTypes;
       
       // create a "builder" helper, which accepts exactly the value tuple elements
       // and puts them at the right location, while default-constructing the remaining
       // (=placeholder)-arguments. Using this builder helper, we can finally set up
-      // the argument tuples (Left/RightReplacedArgs) used for the tr1::bind call
-      typedef tuple::BuildTuple<LeftReplaced, ValList>           BuildL;
-      typedef tuple::BuildTuple<RightReplaced, ValList, ROFFSET> BuildR;
+      // the argument tuples (Left/RightReplacedArgs) used for the std::bind call
+      template<class SRC, class TAR, size_t i>
+      using IdxSelectorL = typename PartiallyInitTuple<SRC, TAR, 0>::template IndexMapper<i>;
       
-      /** Contains the argument values, starting from left.
-       *  Any remaining positions are occupied by binding placeholders */
-      typedef typename Tuple<LeftReplaced>::TupleType  LeftReplacedArgs;
+      template<class SRC, class TAR, size_t i>
+      using IdxSelectorR = typename PartiallyInitTuple<SRC, TAR, ROFFSET>::template IndexMapper<i>;
       
-      /** Contains the argument values, aligned to the end of the function argument list.
-       *  Any remaining positions before are occupied by binding placeholders */
-      typedef typename Tuple<RightReplaced>::TupleType RightReplacedArgs;
+      using BuildL = TupleConstructor<LeftReplacedTypes, IdxSelectorL>;
+      using BuildR = TupleConstructor<RightReplacedTypes, IdxSelectorR>;
+      
+      
+      /** Tuple to hold all argument values, starting from left.
+       *  Any remaining positions behind the substitute values are occupied by binding placeholders */
+      using LeftReplacedArgs  = Tuple<LeftReplacedTypes>;
+      
+      /** Tuple to hold all argument values, aligned to the end of the function argument list.
+       *  Any remaining positions before the substitute values are occupied by binding placeholders */
+      using RightReplacedArgs = Tuple<RightReplacedTypes>;
       
       
     public:
@@ -522,8 +611,8 @@ namespace func{
       typedef function<typename FunctionTypedef<Ret,ArgsR>::Sig> RightReducedFunc;
       
       
-      /** do a partial function application, closing the first arguments
-       *  f(a,b,c)->res  +  (a,b)  yields  f(c)->res
+      /** do a partial function application, closing the first arguments</br>
+       *  `f(a,b,c)->res  +  (a,b)`  yields  `f(c)->res`
        *  
        *  @param f   function, function pointer or functor
        *  @param arg value tuple, used to close function arguments starting from left
@@ -531,14 +620,14 @@ namespace func{
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
        */
       static LeftReducedFunc
-      bindFront (SIG& f, Tuple<VAL> const& arg)
+      bindFront (SIG& f, Tuple<ValTypes> const& arg)
         {
-          LeftReplacedArgs params (BuildL::create(arg));
+          LeftReplacedArgs params {BuildL(arg)};
           return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params);
         }
       
-      /** do a partial function application, closing the last arguments
-       *  f(a,b,c)->res  +  (b,c)  yields  f(a)->res
+      /** do a partial function application, closing the last arguments</br>
+       *  `f(a,b,c)->res  +  (b,c)`  yields  `f(a)->res`
        *  
        *  @param f   function, function pointer or functor
        *  @param arg value tuple, used to close function arguments starting from right
@@ -546,9 +635,9 @@ namespace func{
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
        */
       static RightReducedFunc
-      bindBack (SIG& f, Tuple<VAL> const& arg)
+      bindBack (SIG& f, Tuple<ValTypes> const& arg)
         {
-          RightReplacedArgs params (BuildR::create(arg));
+          RightReplacedArgs params {BuildR(arg)};
           return func::Apply<ARG_CNT>::template bind<RightReducedFunc> (f, params);
         }
     };
@@ -676,7 +765,7 @@ namespace func{
    * Bind a specific argument to an arbitrary value.
    * Especially, this "value" might be another binder.
    */
-  template<typename SIG, typename X, uint n>
+  template<typename SIG, typename X, uint pos>
   class BindToArgument
     {
       typedef typename _Fun<SIG>::Args Args;
@@ -686,28 +775,34 @@ namespace func{
       
       enum { ARG_CNT = count<ArgsList>::value };
 
-      typedef typename Splice<ArgsList, ValList, n>::Front RemainingFront;
-      typedef typename Splice<ArgsList, ValList, n>::Back  RemainingBack;
-      typedef typename func::PlaceholderTuple<RemainingFront>::PlaceholderSeq::List PlaceholdersBefore;
-      typedef typename func::PlaceholderTuple<RemainingBack,n>::PlaceholderSeq::List PlaceholdersBehind;
+      typedef typename Splice<ArgsList, ValList, pos>::Front RemainingFront;
+      typedef typename Splice<ArgsList, ValList, pos>::Back  RemainingBack;
+      typedef typename func::PlaceholderTuple<RemainingFront>::List PlaceholdersBefore;
+      typedef typename func::PlaceholderTuple<RemainingBack,pos+1>::List PlaceholdersBehind;
       typedef typename Append< typename Append< PlaceholdersBefore
                                               , ValList >::List
                              , PlaceholdersBehind >::List          PreparedArgs;
       typedef typename Append<RemainingFront, RemainingBack>::List ReducedArgs;
       
-      typedef tuple::BuildTuple<PreparedArgs, ValList, n> BuildPreparedArgs;
-      typedef typename Tuple<PreparedArgs>::TupleType  PreparedArgTuple;
-      typedef typename Types<ReducedArgs>::Seq RemainingArgs;
+      using PreparedArgTypes = typename Types<PreparedArgs>::Seq;
+      using RemainingArgs    = typename Types<ReducedArgs>::Seq;
       
-      typedef typename FunctionTypedef<Ret,RemainingArgs>::Sig ReducedSig;
+      using ReducedSig = typename FunctionTypedef<Ret,RemainingArgs>::Sig;
+      
+      template<class SRC, class TAR, size_t i>
+      using IdxSelector = typename PartiallyInitTuple<SRC, TAR, pos>::template IndexMapper<i>;
+      
+      using BuildPreparedArgs = TupleConstructor<PreparedArgTypes, IdxSelector>;
+      
+      
       
     public:
       typedef function<ReducedSig> ReducedFunc;
       
       static ReducedFunc
-      reduced (SIG& f, Tuple<ValList> const& val)
+      reduced (SIG& f, Tuple<Types<X>> const& val)
         {
-          PreparedArgTuple params (BuildPreparedArgs::create(val));
+          Tuple<PreparedArgTypes> params {BuildPreparedArgs(val)};
           return func::Apply<ARG_CNT>::template bind<ReducedFunc> (f, params);
         }
     };
@@ -773,25 +868,25 @@ namespace func{
    *  argument tuple and can be used to apply them
    *  to various functions repeatedly.
    */
-  template<typename ARG>
+  template<typename...ARG>
   inline
-  typename _Sig<void, ARG>::Applicator
-  tupleApplicator (Tuple<ARG>& args)
+  typename _Sig<void, Types<ARG...>>::Applicator
+  tupleApplicator (std::tuple<ARG...>& args)
   {
-    typedef typename _Sig<void,ARG>::Type Signature;
+    typedef typename _Sig<void,Types<ARG...>>::Type Signature;
     return TupleApplicator<Signature> (args);
   }
   
   
   /** apply the given function to the argument tuple */
-  template<typename SIG, typename ARG>
+  template<typename SIG, typename...ARG>
   inline
   typename _Fun<SIG>::Ret
-  apply (SIG& f, Tuple<ARG>& args)
+  apply (SIG& f, std::tuple<ARG...>& args)
   {
-    typedef typename _Fun<SIG>::Ret Ret;                //
-    typedef typename _Sig<Ret,ARG>::Type Signature;    // Note: deliberately re-building the Signature Type
-    return TupleApplicator<Signature> (args) (f);     //        in order to get better error messages here
+    typedef typename _Fun<SIG>::Ret Ret;                          //
+    typedef typename _Sig<Ret,Types<ARG...>>::Type Signature;    // Note: deliberately re-building the Signature Type
+    return TupleApplicator<Signature> (args) (f);               //        in order to get better error messages here
   }
   
   /** close the given function over all arguments,
@@ -799,12 +894,12 @@ namespace func{
    *  @return a closure object, which can be 
    *          invoked later to yield the
    *          function result. */
-  template<typename SIG, typename ARG>
+  template<typename SIG, typename...ARG>
   inline
-  typename _Clo<SIG,ARG>::Type
-  closure (SIG& f, Tuple<ARG>& args)
+  typename _Clo<SIG,Types<ARG...>>::Type
+  closure (SIG& f, std::tuple<ARG...>& args)
   {
-    typedef typename _Clo<SIG,ARG>::Type Closure;
+    typedef typename _Clo<SIG,Types<ARG...>>::Type Closure;
     return Closure (f,args);
   }
   

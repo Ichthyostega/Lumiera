@@ -117,10 +117,6 @@
 #include <type_traits>
 #include <utility>
 
-namespace lib {
-namespace time{
-  class Time;   // forward declaration for GCC 4.7 workaround
-}}
 
 namespace lib {
 namespace meta{
@@ -130,7 +126,8 @@ namespace meta{
   using std::is_move_constructible;
   using std::is_copy_constructible;
   using std::is_copy_assignable;
-  using std::enable_if;
+  using std::__and_;
+  using std::__not_;
   
   namespace error = lumiera::error;
   
@@ -239,44 +236,32 @@ namespace meta{
   
   
   
-  /** workaround for GCC 4.7: need to exclude some types,
-   *  since they raise private access violation during probing.
-   *  Actually, in C++11 such a case should trigger substitution
-   *  failure, not an compilation error */
-  template<class X>
-  struct can_use_assignment
-    : is_copy_assignable<X>
-    { };
-  
-  template<>
-  struct can_use_assignment<lib::time::Time>
-    { static constexpr bool value = false; };
-  
-  
-  
-  template<class X>
-  struct use_if_supports_only_move
-    : enable_if<    is_move_constructible<X>::value
-                && !is_copy_constructible<X>::value
-                && !can_use_assignment<X>::value
-               >
-    { };
-  
-  template<class X>
-  struct use_if_supports_cloning
-    : enable_if<    is_move_constructible<X>::value
-                &&  is_copy_constructible<X>::value
-                && !can_use_assignment<X>::value
-               >
-    { };
-  
-  template<class X>
-  struct use_if_supports_copy_and_assignment
-    : enable_if<    is_move_constructible<X>::value
-                &&  is_copy_constructible<X>::value
-                &&  can_use_assignment<X>::value
-               >
-    { };
+  namespace { // helpers to select suitable variant of copy support...
+    
+    template<class X>
+    struct supports_only_move
+      : __and_<is_move_constructible<X>
+              ,__not_<is_copy_constructible<X>>
+              ,__not_<is_copy_assignable<X>>
+              >
+      { };
+    
+    template<class X>
+    struct supports_cloning
+      : __and_<is_move_constructible<X>
+              ,is_copy_constructible<X>
+              ,__not_<is_copy_assignable<X>>
+              >
+      { };
+    
+    template<class X>
+    struct supports_copy_and_assignment
+      : __and_<is_move_constructible<X>
+              ,is_copy_constructible<X>
+              ,is_copy_assignable<X>
+              >
+      { };
+  }
   
   
   
@@ -292,21 +277,21 @@ namespace meta{
     };
   
   template<class X>
-  struct CopySupport<X,            typename use_if_supports_only_move<X>::type>
+  struct CopySupport<X,              enable_if<supports_only_move<X>> >
     {
       template<class I, class D, class B =I>
       using Policy = MoveSupport<I,D,B>;
     };
   
   template<class X>
-  struct CopySupport<X,            typename use_if_supports_cloning<X>::type>
+  struct CopySupport<X,              enable_if<supports_cloning<X>> >
     {
       template<class I, class D, class B =I>
       using Policy = CloneSupport<I,D,B>;
     };
   
   template<class X>
-  struct CopySupport<X,            typename use_if_supports_copy_and_assignment<X>::type>
+  struct CopySupport<X,              enable_if<supports_copy_and_assignment<X>> >
     {
       template<class I, class D, class B =I>
       using Policy = FullCopySupport<I,D,B>;

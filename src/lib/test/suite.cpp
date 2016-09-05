@@ -24,7 +24,7 @@
 
 #include "include/logging.h"
 #include "lib/hash-standard.hpp"
-#include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/test/suite.hpp"
 #include "lib/test/run.hpp"
 #include "lib/cmdline.hpp"
@@ -33,8 +33,8 @@
 
 #include <boost/algorithm/string.hpp>
 #include <memory>
-#include <iostream>
 #include <sstream>
+#include <string>
 #include <memory>
 #include <vector>
 #include <map>
@@ -43,9 +43,6 @@
 namespace test {
   
   using std::map;
-  using std::cout;
-  using std::cerr;
-  using std::endl;
   using std::vector;
   using std::shared_ptr;
   using boost::algorithm::trim;
@@ -53,8 +50,7 @@ namespace test {
   using util::cStr;
   using util::isnil;
   using util::contains;
-  using lib::test::showType;
-  using lib::test::demangleCxx;
+  using util::typeStr;
   
   typedef map<string, Launcher*> TestMap;
   typedef shared_ptr<TestMap>  PTestMap;
@@ -176,14 +172,14 @@ namespace test {
     {
       try 
         {
-          INFO (test, "++------------------- invoking TEST: %s", cStr(demangleCxx(showType(theTest))));
+          INFO (test, "++------------------- invoking TEST: %s", cStr(typeStr (theTest)));
           theTest.run (cmdline);
           return Suite::TEST_OK;
         }
       catch (lumiera::Error& failure)
         {
           lumiera_err errorID = lumiera_error(); // reset error flag
-          cerr << "*** Test Failure " << demangleCxx(showType(theTest)) << endl;
+          cerr << "*** Test Failure " << theTest << endl;
           cerr << "***            : " << failure.what() << endl;
           ERROR (test,     "Error state %s", errorID);
           WARN  (progress, "Caught exception %s", failure.what());
@@ -234,7 +230,7 @@ namespace test {
     // Instantiate all tests cases and execute them.
     for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
       {
-        std::cout << "\n  ----------"<< i->first<< "----------\n";
+        cout << "\n  ----------"<< i->first<< "----------\n";
         Launcher* test = (i->second);
         IS_VALID (test, i->first);
         exitCode_ |= invokeTestCase (*test->makeInstance(), cmdline); // actually no cmdline arguments

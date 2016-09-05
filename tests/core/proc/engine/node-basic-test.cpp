@@ -22,20 +22,17 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/util.hpp"
 #include "proc/engine/nodefactory.hpp"
 #include "proc/engine/nodewiring.hpp"
 #include "proc/engine/stateproxy.hpp"
 #include "proc/engine/channel-descriptor.hpp"
 #include "proc/mobject/session/effect.hpp"
 #include "lib/allocation-cluster.hpp"
+//#include "lib/format-cout.hpp"
+//#include "lib/util.hpp"
 
-//#include <boost/format.hpp>
-//#include <iostream>
 
-//using boost::format;
 //using std::string;
-//using std::cout;
 
 
 namespace proc {

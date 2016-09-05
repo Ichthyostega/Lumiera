@@ -24,9 +24,10 @@
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/depend.hpp"
+
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 
 
@@ -37,10 +38,7 @@ namespace test    {
   
   using lib::Depend;
   using boost::lexical_cast;
-  using std::ostream;
   using std::string;
-  using std::cout;
-  using std::endl;
   
   
   namespace { // what follows is a simulated (simplified) version
@@ -235,12 +233,6 @@ namespace test    {
     
     /* === Implementation of Session internals === */          //----------------corresponding-to-session-impl.cpp
       
-    inline ostream&
-    operator<< (ostream& os, TSessionImpl const& simpl)
-    {
-      return os << string(simpl);
-    }
-    
     TSessionImpl::operator string() const
     {
       return string("Session-Impl(")
@@ -257,14 +249,14 @@ namespace test    {
     void
     TSessionImpl::externalOperation()
     {
-      cout << *this << "::externalOperation()" << endl;
+      cout << this << "::externalOperation()" << endl;
     }
     
     /* ==== Implementation level API ==== */
     inline void
     TSessionImpl::implementationService()
     {
-      cout << *this << "::implementationService()" << endl;
+      cout << this << "::implementationService()" << endl;
     }
     
     

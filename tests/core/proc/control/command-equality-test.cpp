@@ -26,15 +26,17 @@
 #include "proc/control/command-def.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/argument-erasure.hpp"
-#include "proc/control/command-argument-holder.hpp"
+#include "proc/control/command-storage-holder.hpp"
+#include "proc/control/command-simple-closure.hpp"
 #include "proc/control/memento-tie.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/tuple-helper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
-#include <iostream>
 #include <string>
+#include <tuple>
 
 namespace proc {
 namespace control {
@@ -50,8 +52,7 @@ namespace test    {
   using std::function;
   using std::bind;
   using std::string;
-  using std::cout;
-  using std::endl;
+  using std::make_tuple;
   
   
   
@@ -83,19 +84,21 @@ namespace test    {
     typedef function<Sig_capt> Fun_c;
     typedef function<Sig_undo> Fun_u;
     
-    typedef Tuple<Types<char> > ArgTuple;
-    typedef Closure<Sig_oper> ArgHolder;
-    typedef MementoTie<Sig_oper, string> MemHolder;
+    using ArgTuple  = Tuple<Types<char>>;
+    using ArgHolder = OpClosure<Sig_oper>;
+    using MemHolder = MementoTie<Sig_oper, string>;
+    using Closure   = SimpleClosure<Sig_oper>;
   }
   
   
   
   /*************************************************************************************//**
-   * @test cover command equality detection. Two commands are deemed equivalent, if they
-   *       - build on the same Mutation functors
-   *       - are either both incomplete or
-   *       - are bound to equivalent arguments
-   *       - hold equivalent undo state (memento)
+   * @test cover command equality detection.
+   * Two commands are deemed equivalent, if they
+   *  - build on the same Mutation functors
+   *  - are either both incomplete or
+   *  - are bound to equivalent arguments
+   *  - hold equivalent undo state (memento)
    * To conduct this test, we set up two sets of functions, and then build both complete
    * command objects and command implementation facilities based on them.
    * 
@@ -170,21 +173,23 @@ namespace test    {
       void
       verifyClosureEquality()
         {
-          ArgHolder a1 (tuple::make ('a'));
-          ArgHolder a2 (tuple::make ('z'));
+          ArgHolder a1 (make_tuple ('a'));
+          ArgHolder a2 (make_tuple ('a'));
+          ArgHolder a3 (make_tuple ('z'));
           CHECK (a1 == a1);
-          CHECK (a1 != a2);
-          CHECK (a2 != a1);
-          
-          TypedArguments<ArgTuple> newArgs (tuple::make ('z'));
-          a1.bindArguments(newArgs);
           CHECK (a1 == a2);
           CHECK (a2 == a1);
+          CHECK (a1 != a3);
+          CHECK (a3 != a1);
+          CHECK (a2 != a3);
+          CHECK (a3 != a2);
           
-          typedef ArgumentHolder<Sig_oper,string> AHImpl;
-          AHImpl abuff1;
-          AHImpl abuff2;
+          typedef StorageHolder<Sig_oper,string> Storage;
+          Storage abuff1;
+          Storage abuff2;
           CHECK (abuff1 == abuff2);
+          
+          TypedArguments<ArgTuple> newArgs (make_tuple ('z'));
           abuff1.bindArguments(newArgs);
           CHECK (abuff1 != abuff2);
           abuff2.bindArguments(newArgs);
@@ -194,17 +199,18 @@ namespace test    {
           UndoMutation umu2 (abuff2.tie (undo_1, capt_1));
           CHECK (abuff1 == abuff2);                       // same capture function, no memento state!
           
-          umu1.captureState(a1);
+          Closure args {make_tuple ('u')};
+          umu1.captureState(args);
           CHECK (abuff1 != abuff2);
-          umu2.captureState(a1);
+          umu2.captureState(args);
           CHECK (abuff1 == abuff2); // same functions, same memento state
           
           check_ += "fake";          // manipulate the "state" to be captured
-          umu2.captureState(a1);     // capture again...
+          umu2.captureState(args);     // capture again...
           CHECK (abuff1 != abuff2); // captured memento differs!
           
           UndoMutation umu3 (abuff2.tie (undo_1, capt_2));
-          umu3.captureState(a1);
+          umu3.captureState(args);
           CHECK (abuff1 != abuff2); // differing functions detected
         }
       

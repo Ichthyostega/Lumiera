@@ -4,49 +4,57 @@ TESTING "Component Test Suite: Proc-Layer controller" ./test-suite --group=contr
 
 
 TEST "CommandBasic_test" CommandBasic_test <<END
+return: 0
 END
 
 
 TEST "Argument & Memento handling" CommandArgument_test <<END
 out: Command-State. arguments=unbound, ·noUNDO·.
 out: capture state...
-out: Command-State. arguments=Closure\(\), ·noUNDO·.
-out: Command-State. arguments=Closure\(.\), ·noUNDO·.
-out: Command-State. arguments=Closure\(.,.+s.*\), ·noUNDO·.
-out: Command-State. arguments=Closure\(.+s.*,glorious,..\), <mem: destruction>.
-out: would be serialised.....Command-State. arguments=Closure\(\), ·noUNDO·.
-out: would be serialised.....Command-State. arguments=Closure\(.\), ·noUNDO·.
-out: would be serialised.....Command-State. arguments=Closure\(.,.+s.*\), ·noUNDO·.
-out: would be serialised.....Command-State. arguments=Closure\(.+s.*,glorious,..\), <mem: destruction>.
-out: sizeof\( .+control1.ArgumentHolder.+ \) = .+
-out: Command-State. arguments=Closure\(.+s.*,Lumiera rocks,..\), ·noUNDO·.
+out: Command-State. arguments=OpClosure\(\), ·noUNDO·.
+out: Command-State. arguments=OpClosure\(.\), ·noUNDO·.
+out: Command-State. arguments=OpClosure\(.,.+s.*\), ·noUNDO·.
+out: Command-State. arguments=OpClosure\(.+s.*,glorious,..\), <mem: destruction>.
+out: would be serialised.....Command-State. arguments=OpClosure\(\), ·noUNDO·.
+out: would be serialised.....Command-State. arguments=OpClosure\(.\), ·noUNDO·.
+out: would be serialised.....Command-State. arguments=OpClosure\(.,.+s.*\), ·noUNDO·.
+out: would be serialised.....Command-State. arguments=OpClosure\(.+s.*,glorious,..\), <mem: destruction>.
+out: sizeof\( control::StorageHolder<void \(Tracker<TimeVar>, Tracker<string>, int\), Tracker<string> > \) = [0-9]{2,3}
+out: Command-State. arguments=OpClosure\(.+s.*,Lumiera rocks,..\), ·noUNDO·.
 out: capture state...
 out: captured state: START...Lumiera rocks
-out: Command-State. arguments=Closure\(.+s.*,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
+out: Command-State. arguments=OpClosure\(.+s.*,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
 out: invoke operation...
 out: START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)
 out: undo... memento=START...Lumiera rocks
-out: START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=0:..:....00\)----memento-:START...Lumiera rocks
+out: START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=.+s\)----memento-:START...Lumiera rocks
 out: capture state...
-out: modified: Command-State. arguments=Closure\(123ms,unbelievable,..\), <mem: START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=0:..:....00\)----memento-:START...Lumiera rocksLumiera rocks>.
-out: copied  : Command-State. arguments=Closure\(.+s.*,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
-out: undo... memento=START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=0:..:....00\)----memento-:START...Lumiera rocksLumiera rocks
-out: RESET...undoIt\(time=0:..:....00\)----memento-:START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=0:..:....00\)----memento-:START...Lumiera rocksLumiera rocks
+out: modified: Command-State. arguments=OpClosure\(123ms,unbelievable,..\), <mem: START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=.+s\)----memento-:START...Lumiera rocksLumiera rocks>.
+out: copied  : Command-State. arguments=OpClosure\(.+s.*,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
+out: undo... memento=START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=.+s\)----memento-:START...Lumiera rocksLumiera rocks
+out: RESET...undoIt\(time=.+s\)----memento-:START...doIt\( Time=.+s.* "Lumiera rocks" rand=.. \)undoIt\(time=.+s\)----memento-:START...Lumiera rocksLumiera rocks
+return: 0
 END
 
 
 TEST "build argument accepting function" ArgumentTupleAccept_test <<END
-out: sizeof\( .+control.+TestClass.+ \) =   1
-out: sizeof\( .+control.+TestClass.+lib.time.TimeVar.+ \) =  (12|16)
-out: 0:..:..\..00
+out: sizeof\( TestClass<void \(\)> \)            =   1
+out: sizeof\( TestClass<int \(TimeVar, int\)> \) =  (12|16)
+out: .+s
+return: 0
+END
+
+
+TEST "argument binding from GenNode message" CommandMessageBinding_test <<END
 return: 0
 END
 
 
 TEST "Command functor and UNDO functor" CommandMutation_test <<END
-out: empty placeholder closure: Closure\(0\)
-out: param values: Closure\(23\)
-out: saved state: 11
+out-lit: empty placeholder closure: Command-Closure{ arguments=unbound }
+out-lit: param values: Command-Closure{ arguments=OpClosure(23) }
+out-lit: saved state: 11
+return: 0
 END
 
 
@@ -99,7 +107,7 @@ return: 0
 END
 
 
-PLANNED "Command usage aspects II" CommandUse2_test <<END
+TEST "Command usage aspects II" CommandUse2_test <<END
 return: 0
 END
 

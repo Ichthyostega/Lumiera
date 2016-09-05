@@ -1,5 +1,5 @@
 /*
-  gui::model::Element  -  a generic element in the UI-Model
+  EventLog  -  test facility to verify the occurrence of expected events
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,36 +21,15 @@
 * *****************************************************/
 
 
-/** @file element.cpp
- ** Service for element.
- ** This header defines the basics of...
- ** 
- ** @note as of X/2015 this is complete bs
- ** @todo WIP  ///////////////////////TICKET #
- ** 
- ** @see ////TODO_test usage example
- ** @see element.cpp implementation
- ** 
- */
+#include "lib/test/event-log.hpp"
+//#include "lib/format-string.hpp"
 
+//#include <string>
 
-#include "lib/util.hpp"
-//#include "lib/symbol.hpp"
-//#include "include/logging.h"
-#include "gui/model/element.hpp"
+//using std::string;
 
-//#include <boost/noncopyable.hpp>
-#include <string>
-#include <map>
-
-using std::map;
-using std::string;
-
-using util::contains;
-using util::isnil;
-
-namespace gui {
-namespace model {
+namespace lib {
+namespace test{
   
   namespace { // internal details
     
@@ -58,20 +37,8 @@ namespace model {
   
   
   
-  //NA::~NA() { }
+//Tangible::~Tangible() { }  // Emit VTables here...
   
   
   
-  
-  /**
-   * 
-   * @param id
-   * @return
-   */
-  string
-  fun (string& id)
-  {
-    return "x"+id;
-  }
-
-}} // namespace gui::model
+}} // namespace lib::test

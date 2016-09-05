@@ -125,15 +125,17 @@ namespace test  {
           CHECK (!TestFrame::isDead  (this));
           CHECK (!TestFrame::isAlive (this));
           
-          TestFrame* onHeap = new TestFrame(23);
-          CHECK ( TestFrame::isAlive (onHeap));
-          CHECK (!onHeap->isDead());
-          CHECK (onHeap->isAlive());
-          CHECK (onHeap->isSane());
+          static char buffer[sizeof(TestFrame)];
+          TestFrame* frame = new(&buffer) TestFrame(23);
           
-          delete onHeap;
-          CHECK ( TestFrame::isDead  (onHeap));
-          CHECK (!TestFrame::isAlive (onHeap));
+          CHECK ( TestFrame::isAlive (frame));
+          CHECK (!frame->isDead());
+          CHECK (frame->isAlive());
+          CHECK (frame->isSane());
+          
+          frame->~TestFrame();
+          CHECK ( TestFrame::isDead  (frame));
+          CHECK (!TestFrame::isAlive (frame));
         }
       
       

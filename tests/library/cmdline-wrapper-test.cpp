@@ -24,15 +24,13 @@
 #include "lib/test/run.hpp"
 #include "lib/cmdline.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
 
-#include <iostream>
 #include <sstream>
 #include <string>
 
 using util::for_each;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 

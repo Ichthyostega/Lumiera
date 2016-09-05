@@ -29,8 +29,6 @@
 //#include "teststreamtypes.hpp"
 #include "include/lifecycle.h"
 
-#include <iostream>
-using std::cout;
 
 
 

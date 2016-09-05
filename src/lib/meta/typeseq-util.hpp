@@ -201,6 +201,18 @@ namespace meta {
   
   
   
+  /** 
+   * specialisation: pick n-th element from a type sequence
+   * @see typelist-manip.hpp
+   */
+  template<typename...TYPES, size_t i>
+  struct Pick<Types<TYPES...>, i>
+    {
+      using Type = typename lib::meta::Shifted<Types<TYPES...>, i>::Head;
+    };
+  
+  
+  
   
   
 }} // namespace lib::meta

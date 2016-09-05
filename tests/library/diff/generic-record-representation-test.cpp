@@ -23,11 +23,11 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/itertools.hpp"
 
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -37,8 +37,6 @@ using util::isnil;
 using util::join;
 using std::vector;
 using std::swap;
-using std::cout;
-using std::endl;
 
 
 namespace lib {
@@ -46,6 +44,7 @@ namespace diff{
 namespace test{
   
   using lumiera::error::LUMIERA_ERROR_INVALID;
+  using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   namespace {//Test fixture....
@@ -152,6 +151,8 @@ namespace test{
           
           CHECK (enterprise.getType() == "starship");
           CHECK (enterprise.get("Registry") == "NCC-1701-D");
+          CHECK (enterprise.child(0) == "Picard");
+          CHECK (enterprise.child(2) == "Data");
           
           CHECK (enterprise.hasAttribute("Owner"));
           CHECK (!enterprise.hasAttribute("owner"));
@@ -162,14 +163,15 @@ namespace test{
           CHECK (util::contains (enterprise, "Worf"));
           
           VERIFY_ERROR (INVALID, enterprise.get("warp10"));
+          VERIFY_ERROR (INDEX_BOUNDS, enterprise.child(12));
           
           cout << "enterprise = "
-               << string(enterprise)<<endl;
+               << enterprise <<endl;
           for (string elm : enterprise)
-            cout << elm<<endl;
+            cout << elm <<endl;
           cout << "--Attributes--"<<endl;
           for (string att : enterprise.attribs())
-            cout << att<<endl;
+            cout << att <<endl;
           cout << "--Keys--->" << join (enterprise.keys(), "<->")<<endl;
           cout << "--Vals--->" << join (enterprise.vals(), "<->")<<endl;
           cout << "--Crew--->" << join (enterprise.scope()," | ")<<endl;
@@ -328,7 +330,7 @@ namespace test{
           
           CHECK (mut != aa);
           
-          mut.replace(a);
+          mut.swap (a);
           CHECK (isnil (mut));
           CHECK (Seq({"a = α", "b = β", "⟂", "a"}) == contents(a));
           CHECK (Seq({"a = 1", "a"}) == contents(aa));

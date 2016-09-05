@@ -26,7 +26,6 @@
 #include "proc/assetmanager.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/time/display.hpp"
 #include "lib/format-string.hpp"
 #include "common/advice.hpp"
 #include "lib/util.hpp"

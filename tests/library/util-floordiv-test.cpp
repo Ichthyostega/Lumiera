@@ -25,17 +25,17 @@
 #include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
+#include "lib/format-cout.hpp"
+#include "lib/format-string.hpp"
+
 #include <cmath>
 #include <time.h>
 #include <vector>
-#include <iostream>
-#include <boost/format.hpp>
 
 using ::Test;
-using std::cout;
 using std::rand;
 using util::isnil;
-using boost::format;
+using util::_Fmt;
 
 
 namespace util {
@@ -215,7 +215,7 @@ namespace test {
           typedef VecI::const_iterator I;
           
           clock_t start(0), stop(0);
-          format resultDisplay("timings(%s)%|30T.|%5.3fsec\n");
+          _Fmt resultDisplay{"timings(%s)%|30T.|%5.3fsec\n"};
           
 #define   START_TIMINGS start=clock();          
 #define   DISPLAY_TIMINGS(ID) \

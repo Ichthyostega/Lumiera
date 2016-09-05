@@ -34,8 +34,8 @@
  */
 
 
-#ifndef SESSION_FACADE_H_
-#define SESSION_FACADE_H_
+#ifndef SESSION_FACADE_H
+#define SESSION_FACADE_H
 
 
 #include "lib/error.hpp"
@@ -88,4 +88,4 @@ namespace model {
   
   
 }} // namespace gui::model
-#endif /*SESSION_FACADE_H_*/
+#endif /*SESSION_FACADE_H*/

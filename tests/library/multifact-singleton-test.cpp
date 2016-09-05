@@ -24,10 +24,10 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/multifact.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 
 
@@ -41,8 +41,6 @@ namespace test{
   using util::isnil;
   using std::ostream;
   using std::string;
-  using std::cout;
-  using std::endl;
   
   using lumiera::error::LUMIERA_ERROR_INVALID;
   
@@ -52,10 +50,8 @@ namespace test{
     struct Interface
       {
         virtual ~Interface() {};
-        virtual operator string () =0;
+        virtual operator string () const  =0;
       };
-    
-    inline ostream& operator<< (ostream& os, Interface& ifa) { return os << string(ifa); }
     
     
     enum theID
@@ -72,7 +68,7 @@ namespace test{
     class Implementation
       : public Interface
       {
-        operator string()  override
+        operator string()  const override
           {
             return "Impl-"+lexical_cast<string> (ii);
           }

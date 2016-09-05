@@ -33,8 +33,8 @@
  */
 
 
-#ifndef GUI_MODEL_CONTROLLER_H_
-#define GUI_MODEL_CONTROLLER_H_
+#ifndef GUI_MODEL_CONTROLLER_H
+#define GUI_MODEL_CONTROLLER_H
 
 
 #include "lib/error.hpp"
@@ -59,15 +59,75 @@ namespace model {
     : public Tangible
     {
       
-    public:
-      Controller();
-     ~Controller();
+      /* ==== Tangible interface ==== */
       
-    protected:
-      string maybe ()  const;
+      virtual bool
+      doReset()  override
+        {
+          UNIMPLEMENTED ("Controller reset");
+        }
+      
+      virtual bool
+      doExpand (bool yes)  override
+        {
+          UNIMPLEMENTED ("Controller doExpand");
+        }
+      
+      virtual void
+      doReveal (ID child)  override
+        {
+          UNIMPLEMENTED ("Controller doReveal");
+        }
+      
+      virtual void
+      doRevealYourself()  override
+        {
+          UNIMPLEMENTED ("Controller doRevealYourself");
+        }
+      
+      virtual bool
+      doMsg (string text)  override
+        {
+          UNIMPLEMENTED ("Controller doMsg");
+        }
+      
+      virtual bool
+      doClearMsg ()  override
+        {
+          UNIMPLEMENTED ("Controller doClearMsg");
+        }
+      
+      virtual bool
+      doErr (string text)  override
+        {
+          UNIMPLEMENTED ("Controller doErr");
+        }
+      
+      virtual bool
+      doClearErr ()  override
+        {
+          UNIMPLEMENTED ("Controller doClearErr");
+        }
+      
+      virtual void
+      doFlash()  override
+        {
+          UNIMPLEMENTED ("Controller doFlash");
+        }
+      
+      virtual void
+      doMark (GenNode const& mark)  override
+        {
+          UNIMPLEMENTED ("Controller doMark");
+        }
+      
+      
+    public:
+      using Tangible::Tangible;
+      
     };
   
   
   
 }} // namespace gui::model
-#endif /*GUI_MODEL_CONTROLLER_H_*/
+#endif /*GUI_MODEL_CONTROLLER_H*/

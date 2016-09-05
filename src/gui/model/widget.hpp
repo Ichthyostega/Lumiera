@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_MODEL_WIDGET_H_
-#define GUI_MODEL_WIDGET_H_
+#ifndef GUI_MODEL_WIDGET_H
+#define GUI_MODEL_WIDGET_H
 
 
 #include "lib/error.hpp"
@@ -59,15 +59,75 @@ namespace model {
     : public Tangible
     {
       
-    public:
-      Widget();
-     ~Widget();
+      /* ==== Tangible interface ==== */
       
-    protected:
-      string maybe ()  const;
+      virtual bool
+      doReset()  override
+        {
+          UNIMPLEMENTED ("Widget reset");
+        }
+      
+      virtual bool
+      doExpand (bool yes)  override
+        {
+          UNIMPLEMENTED ("Widget doExpand");
+        }
+      
+      virtual void
+      doReveal (ID child)  override
+        {
+          UNIMPLEMENTED ("Widget doReveal");
+        }
+      
+      virtual void
+      doRevealYourself()  override
+        {
+          UNIMPLEMENTED ("Widget doRevealYourself");
+        }
+      
+      virtual bool
+      doMsg (string text)  override
+        {
+          UNIMPLEMENTED ("Widget doMsg");
+        }
+      
+      virtual bool
+      doClearMsg ()  override
+        {
+          UNIMPLEMENTED ("Widget doClearMsg");
+        }
+      
+      virtual bool
+      doErr (string text)  override
+        {
+          UNIMPLEMENTED ("Widget doErr");
+        }
+      
+      virtual bool
+      doClearErr ()  override
+        {
+          UNIMPLEMENTED ("Widget doClearErr");
+        }
+      
+      virtual void
+      doFlash()  override
+        {
+          UNIMPLEMENTED ("Widget doFlash");
+        }
+      
+      virtual void
+      doMark (GenNode const& mark)  override
+        {
+          UNIMPLEMENTED ("Widget doMark");
+        }
+      
+      
+    public:
+      using Tangible::Tangible;
+      
     };
   
   
   
 }} // namespace gui::model
-#endif /*GUI_MODEL_WIDGET_H_*/
+#endif /*GUI_MODEL_WIDGET_H*/

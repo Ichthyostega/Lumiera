@@ -27,63 +27,66 @@
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/error.hpp"
 
-#include <iostream>
 #include <vector>
 #include <string>
 
 
 using lib::transformIterator;
 using lib::iter_stl::eachElm;
+using lib::eachNum;
 using util::_Fmt;
 
 using std::vector;
 using std::string;
 using std::to_string;
-using std::cout;
-using std::endl;
 
 
 namespace util {
 namespace test {
   
-  class Reticent 
-    { };
-  
-  class UnReticent
-    : public Reticent 
-    {
-    public:
-      operator string()  const { return "hey Joe!"; }
-    };
-  
-  
-  
-  class AutoCounter
-    {
-      static uint cnt;
-      
-      uint id_;
-      double d_;
-      
-    public:
-      AutoCounter(double d)
-        : id_(++cnt)
-        , d_(d*2)
-        { }
-      
-      operator string()  const
-        {
-          return _Fmt("Nr.%02d(%3.1f)") % id_ % d_;
-        }
-    };
-  uint AutoCounter::cnt = 0;
+  namespace { // test fixture...
+    
+    class Reticent
+      { };
+    
+    class UnReticent
+      : public Reticent
+      {
+      public:
+        operator string()  const { return "hey Joe!"; }
+      };
+    
+    
+    
+    class AutoCounter
+      {
+        static uint cnt;
+        
+        uint id_;
+        double d_;
+        
+      public:
+        AutoCounter(double d)
+          : id_(++cnt)
+          , d_(d*2)
+          { }
+        
+        operator string()  const
+          {
+            return _Fmt("Nr.%02d(%3.1f)") % id_ % d_;
+          }
+      };
+    uint AutoCounter::cnt = 0;
+  }
   
   
   
   /***************************************************************************//**
    * @test verifies the proper working of some string-formatting helper functions.
-   *       - util::str() provides a failsafe to-String conversion, preferring
-   *         an built-in conversion, falling back to just a mangled type string.
+   *       - util::toString() provides a failsafe to-String conversion, preferring
+   *         an built-in conversion, falling back to just a type string.
+   *       - util::join() combines elements from arbitrary containers or iterators
+   *         into a string, relying on aforementioned generic string conversion
    * @see format-util.hpp
    */
   class FormatHelper_test
@@ -93,7 +96,9 @@ namespace test {
       run (Arg)
         {
           check2String();
+          checkStringify();
           checkStringJoin();
+          checkPrefixSuffix();
         }
       
       
@@ -101,20 +106,53 @@ namespace test {
       void
       check2String ()
         {
-          std::cout << "Displaying some types....\n";
-          
           Reticent closeLipped;
           UnReticent chatterer;
           
-          cout << str (closeLipped) << endl;
-          cout << str (closeLipped, "he says: ", "<no comment>") << endl;
+          CHECK (toString (closeLipped) == "«Reticent»"  );
+          CHECK (toString (chatterer)   == "hey Joe!"    );
           
-          cout << str (chatterer) << endl;
-          cout << str (chatterer, "he says: ", "<no comment>") << endl;
+          CHECK (toString (&chatterer)  == "«UnReticent»"); // string convertible => type display
+          CHECK (toString (nullptr)     == "↯"           ); // runtime exception, caught
           
-          cout << str (false, "the truth: ") << endl;
-          cout << str (12.34e55, "just a number: ") << endl;
-          cout << str (short(12)) << str (345L) << str ('X') << endl;
+          CHECK (toString (true)        == "true"        ); // special handling for bool
+          CHECK (toString (2+2 == 5)    == "false"       );
+          CHECK (toString (12.34e55)    == "1.234e+56"   );
+          
+          CHECK (toString (short(12))
+                +toString (345L)
+                +toString ("67")
+                +toString ('8')         == "12345678"    ); // these go through lexical_cast<string>
+        }
+      
+      
+      /** @test inline to-string converter function
+       *        - can be used as transforming iterator
+       *        - alternatively accept arbitrary arguments
+       */
+      void
+      checkStringify()
+        {
+          // use as transformer within an (iterator) pipeline
+          auto ss = stringify (eachNum (1.11, 10.2));
+          
+          CHECK (ss);
+          CHECK ("1.11" == *ss);
+          ++ss;
+          CHECK ("2.11" == *ss);
+          
+          string res{".."};
+          for (auto s : ss)
+            res += s;
+          
+          CHECK (res == "..2.113.114.115.116.117.118.119.1110.11");
+          
+          
+          using VecS = vector<string>;
+          
+          // another variant: collect arbitrary number of arguments
+          VecS vals = stringify<VecS> (short(12), 345L, "67", '8');
+          CHECK (vals == VecS({"12", "345", "67", "8"}));
         }
       
       
@@ -138,9 +176,74 @@ namespace test {
           std::function<AutoCounter(double)> justCount = [](double d){ return AutoCounter(d); };
           
           
-          cout << join(dubious, "--+--") << endl;
-          cout << join(transformIterator(eachElm(dubious)
-                                        ,justCount)) << endl;
+          CHECK (join (dubious, "--+--")
+                 == "0--+--"
+                    "1.1--+--"
+                    "2.2--+--"
+                    "3.3--+--"
+                    "4.4--+--"
+                    "5.5--+--"
+                    "6.6--+--"
+                    "7.7--+--"
+                    "8.8--+--"
+                    "9.9");
+          CHECK (join (transformIterator(eachElm(dubious), justCount))
+                 == "Nr.01(0.0), "
+                    "Nr.02(2.2), "
+                    "Nr.03(4.4), "
+                    "Nr.04(6.6), "
+                    "Nr.05(8.8), "
+                    "Nr.06(11.0), "
+                    "Nr.07(13.2), "
+                    "Nr.08(15.4), "
+                    "Nr.09(17.6), "
+                    "Nr.10(19.8)" );
+        }
+      
+      
+      /** @test convenience helpers to deal with prefixes and suffixes */
+      void
+      checkPrefixSuffix()
+        {
+          CHECK (startsWith ("abcdef", "abcdef"));
+          CHECK (startsWith ("abcdef", "abcde"));
+          CHECK (startsWith ("abcdef", "abcd"));
+          CHECK (startsWith ("abcdef", "abc"));
+          CHECK (startsWith ("abcdef", "ab"));
+          CHECK (startsWith ("abcdef", "a"));
+          CHECK (startsWith ("abcdef", ""));
+          CHECK (startsWith ("", ""));
+          
+          CHECK (not startsWith ("abc", "abcd"));
+          CHECK (not startsWith ("a", "ä"));
+          CHECK (not startsWith ("ä", "a"));
+          
+          CHECK (endsWith ("abcdef", "abcdef"));
+          CHECK (endsWith ("abcdef", "bcdef"));
+          CHECK (endsWith ("abcdef", "cdef"));
+          CHECK (endsWith ("abcdef", "def"));
+          CHECK (endsWith ("abcdef", "ef"));
+          CHECK (endsWith ("abcdef", "f"));
+          CHECK (endsWith ("abcdef", ""));
+          CHECK (endsWith ("", ""));
+          
+          CHECK (not endsWith ("abc", " abc"));
+          CHECK (not endsWith ("a", "ä"));
+          CHECK (not endsWith ("ä", "a"));
+          
+          string abc{"abcdef"};
+          removePrefix(abc, "ab");
+          CHECK ("cdef" == abc);
+          removeSuffix(abc, "ef");
+          CHECK ("cd" == abc);
+          
+          abc = "bcdef";
+          removePrefix(abc, "ab");
+          CHECK ("bcdef" == abc);
+          removeSuffix(abc, "abcdef");
+          CHECK ("bcdef" == abc);
+          removeSuffix(abc, "bcdef");
+          CHECK (isnil (abc));
         }
     };
   

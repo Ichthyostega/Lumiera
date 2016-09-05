@@ -31,12 +31,11 @@
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/streamtype.hpp"
+#include "lib/format-string.hpp"
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
 
-#include <boost/format.hpp>
-
-using boost::format;
+using util::_Fmt;
 using util::isnil;
 using std::string;
 
@@ -60,23 +59,25 @@ namespace test    {
   using proc::ConfigResolver;
   
   
-  
-  /** shortcut: query for given Pipe-ID */
-  bool
-  find (const string& pID)
-  {
-    return bool(Session::current->defaults.search (Query<Pipe> ("pipe("+pID+")")));
-  }
-  
-  
-  format pattern ("dummy_%s_%i");
-  
-  /** create a random new ID */
-  string
-  newID (Symbol prefix)
-  {
-    return str (pattern % prefix % std::rand());
-  }
+  namespace { // test fixture...
+    
+    /** shortcut: query for given Pipe-ID */
+    bool
+    find (const string& pID)
+    {
+      return bool(Session::current->defaults.search (Query<Pipe> ("pipe("+pID+")")));
+    }
+    
+    
+    _Fmt pattern ("dummy_%s_%i");
+    
+    /** create a random new ID */
+    string
+    newID (Symbol prefix)
+    {
+      return pattern % prefix % std::rand();
+    }
+  }//(end)test fixture
   
   
   

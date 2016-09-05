@@ -55,7 +55,7 @@ class ExamplePlugin
     static void
     myclose (LumieraInterface)
       {
-        std::cout << "dying" << endl;
+        cout << "dying" << endl;
       }
   };
 
@@ -67,13 +67,13 @@ class ExamplePlugin_de
     static void
     griazi ()
       {
-        std::cout << "Hallo Welt!" << endl;
+        cout << "Hallo Welt!" << endl;
       }
     
     static void
     servus (const char* m)
       {
-        std::cout << "Tschüss " << m << endl;
+        cout << "Tschüss " << m << endl;
       }
   };
 
@@ -85,13 +85,13 @@ class ExamplePlugin_en
     static void
     hello ()
       {
-        std::cout << "Hello World!" << endl;
+        cout << "Hello World!" << endl;
       }
     
     static void
     bye (const char* m)
       {
-        std::cout << "Bye " << m << endl;
+        cout << "Bye " << m << endl;
       }
   };
 

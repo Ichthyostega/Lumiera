@@ -24,12 +24,12 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/mobject.hpp"
+#include "lib/format-string.hpp"
 
-#include <boost/format.hpp>
 #include <typeinfo>
 
-using boost::format;
-using boost::str;
+using util::_Fmt;
+using lib::meta::typeStr;
 
 namespace proc {
 namespace mobject {
@@ -51,22 +51,20 @@ namespace mobject {
   
   Placement<MObject>::operator string ()  const 
   {
-    static format fmt("Placement<%s> %|50T.| use-cnt=%u ID(%x) adr=%p pointee=%p");
-    return str(fmt % typeid(*get()).name() % use_count()
-                                           % (size_t)getID() 
-                                           % this 
-                                           % get()
-                                           ); 
+    return _Fmt{"Placement<%s> %|50T.| use-cnt=%u ID(%016x) adr=%p pointee=%p"}
+              % typeStr(this->get()) % use_count()
+                                     % (size_t)getID()
+                                     % (void*)this
+                                     % (void*)get()
+                                     ;
   }
   
   
   string
   format_PlacementID (Placement<MObject> const& pla)
   {
-    static format fmt ("pID(%x)");
-    
     size_t hashVal = pla.getID();
-    return str(fmt % hashVal);
+    return _Fmt{"pID(%016x)"} % hashVal;
   }
   
   

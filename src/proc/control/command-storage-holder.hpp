@@ -1,5 +1,5 @@
 /*
-  COMMAND-ARGUMENT-HOLDER.hpp  -  specifically typed container for storage of command arguments
+  COMMAND-STORAGE-HOLDER.hpp  -  specifically typed container for storage of command arguments
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,10 @@
 */
 
 
-/** @file command-argument-holder.hpp
+/** @file command-storage-holder.hpp
  ** A passive container record holding the actual command arguments & UNDO state.
+ ** Effectively, this is the top level CmdClosure Implementation, which in turn
+ ** delegates to sub-closures for the operation arguments and for UNDO management.
  ** While all command objects themselves have a common type (type erasure),
  ** the actual argument tuple and the state memento for UNDO can't. Especially,
  ** the size of arguments and memento will depend on their respective types.
@@ -39,11 +41,11 @@
 
 
 
-#ifndef CONTROL_COMMAND_ARGUMENT_HOLDER_H
-#define CONTROL_COMMAND_ARGUMENT_HOLDER_H
+#ifndef CONTROL_COMMAND_STORAGE_HOLDER_H
+#define CONTROL_COMMAND_STORAGE_HOLDER_H
 
 #include "lib/typed-allocation-manager.hpp"
-#include "proc/control/command-closure.hpp"
+#include "proc/control/command-op-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 #include "proc/control/command-impl-clone-builder.hpp"
 #include "lib/opaque-holder.hpp"
@@ -59,65 +61,32 @@ namespace control {
   using std::string;
   
   
-  namespace { // empty state marker objects for ArgumentHolder
-    
-    template<typename SIG>
-    struct MissingArguments
-      : Closure<SIG>
-      {
-        typedef typename Closure<SIG>::ArgTuple ArgTuple;
-        
-        MissingArguments ()
-          : Closure<SIG> (ArgTuple ())
-          { }
-        
-      private:
-        virtual bool isValid ()  const { return false; }
-      };
-    
-    
-    template<typename SIG, typename MEM>
-    struct UntiedMemento
-      : MementoTie<SIG,MEM>
-      {
-        typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
-        typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
-        
-        UntiedMemento()
-          : MementoTie<SIG,MEM> (function<SIG_undo>(), function<SIG_cap>() )
-          { }
-      };
-  
-  } // (END) impl details / empty state marker objects
-  
   
   
   
   /**
-   * Specifically typed CmdClosure, which serves for
+   * This is "the" top level CmdClosure implementation.
+   * It is a specifically typed CmdClosure, which serves for
    * actually allocating storage to hold the command arguments
    * and the UNDO state (memento) for Proc-Layer commands.
-   * Both the contained components within ArgumentHolder
+   * Both the contained components within StorageHolder
    * can be in \em empty state; there are no distinct
-   * lifecycle limitations. ArgumentHolder is part
+   * lifecycle limitations. StorageHolder is part
    * of Proc-Layer command's implementation
    * and should not be used standalone.
    */
   template<typename SIG, typename MEM>
-  class ArgumentHolder
-    : public AbstractClosure
+  class StorageHolder
+    : public CmdClosure
     {
-      /** copy construction allowed(but no assignment)*/
-      ArgumentHolder& operator= (ArgumentHolder const&);
+      using ArgHolder = OpClosure<SIG>;
+      using MemHolder = MementoTie<SIG,MEM>;
       
+      using ArgumentBuff = InPlaceBuffer<ArgHolder>;
+      using  MementoBuff = InPlaceBuffer<MemHolder>;
       
-      typedef Closure<SIG>        ArgHolder;
-      typedef MementoTie<SIG,MEM> MemHolder;
-      
-      typedef InPlaceBuffer<ArgHolder, sizeof(ArgHolder), MissingArguments<SIG> > ArgumentBuff;
-      typedef InPlaceBuffer<MemHolder, sizeof(MemHolder), UntiedMemento<SIG,MEM> > MementoBuff;
-      
-      typedef typename ArgHolder::ArgTuple ArgTuple;
+      using ArgTuple = typename ArgHolder::ArgTuple;
+      using Args     = typename Types<ArgTuple>::Seq;
       
       
       /* ====== in-place storage buffers ====== */
@@ -130,12 +99,14 @@ namespace control {
       /* ==== proxied CmdClosure interface ==== */
       
     public:
-      virtual bool isValid ()  const
+      virtual bool
+      isValid ()  const override
         {
           return arguments_->isValid();
         }
       
-      virtual bool isCaptured() const
+      virtual bool
+      isCaptured() const override
         {
           return memento_->isValid();
         }
@@ -143,16 +114,26 @@ namespace control {
       
       
       /** assign a new parameter tuple to this */
-      virtual void bindArguments (Arguments& args)
-      {
-        if (!arguments_->isValid())
+      virtual void
+      bindArguments (Arguments& args)  override
+        {
           storeTuple (args.get<ArgTuple>());
-        else
-          arguments_->bindArguments(args);
-      }
+        }
+      
+      /** assign a new set of parameter values to this.
+       * @note the values are passed packaged into a sequence
+       *       of GenNode elements. This is the usual way
+       *       arguments are passed from the UI-Bus
+       */
+      virtual void
+      bindArguments (lib::diff::Rec const&  paramData)  override
+        {
+          storeTuple (buildTuple<Args> (paramData));
+        }
       
       
-      virtual void invoke (CmdFunctor const& func)
+      virtual void
+      invoke (CmdFunctor const& func)  override
         {
           if (!isValid())
             throw lumiera::error::State ("Lifecycle error: can't bind functor, "
@@ -163,28 +144,32 @@ namespace control {
         }
       
       
-      virtual operator string()  const
+      virtual
+      operator string()  const override
         {
           return "Command-State{ arguments="
-               + (*arguments_? string(*arguments_) : "unbound")
+               + (arguments_->isValid()? string(*arguments_) : "unbound")
                + ", "+string(*memento_)+"}"
                ;
         }
       
       
       
-      /** per default, all data within ArgumentHolder
+      /** per default, all data within StorageHolder
        *  is set up in \em empty state. Later on, the
        *  command arguments are to be provided by #bind ,
        *  whereas the undo functions will be wired by #tie
        */
-      ArgumentHolder ()
+      StorageHolder ()
         : arguments_()
         , memento_()
         { }
       
-      /** copy construction allowed(but no assignment) */
-      ArgumentHolder (ArgumentHolder const& oAh)
+      /** copy construction allowed(but no assignment).
+       * @remarks rationale is to support immutable argument values,
+       *          which means default/copy construction is OK
+       */
+      StorageHolder (StorageHolder const& oAh)
         : arguments_()
         , memento_()
         {
@@ -195,10 +180,16 @@ namespace control {
           memento_.template  create<MemHolder> (*oAh.memento_);
         }
       
+      
+      /** copy construction allowed(but no assignment)*/
+      StorageHolder& operator= (StorageHolder const&)  = delete;
+      
+      
+      
       /** assist with creating a clone copy;
        *  this results in invocation of the copy ctor */
       void
-      accept (CommandImplCloneBuilder& visitor)  const
+      accept (CommandImplCloneBuilder& visitor)  const override
         {
           visitor.buildCloneContext (*this);
         }
@@ -209,7 +200,7 @@ namespace control {
       bool empty ()   const { return !arguments_->isValid(); }
       
       
-      /** store a new argument tuple within this ArgumentHolder,
+      /** store a new argument tuple within this StorageHolder,
        *  discarding any previously stored arguments */
       void
       storeTuple (ArgTuple const& argTup)
@@ -254,14 +245,14 @@ namespace control {
       bool
       equals (CmdClosure const& other)  const
         {
-          const ArgumentHolder* toCompare = dynamic_cast<const ArgumentHolder*> (&other);
+          const StorageHolder* toCompare = dynamic_cast<const StorageHolder*> (&other);
           return (toCompare)
-              && (*this == *toCompare);
+             and (*this == *toCompare);
         }
       
       /// Supporting equality comparisons...
       friend bool
-      operator== (ArgumentHolder const& a1, ArgumentHolder const& a2)
+      operator== (StorageHolder const& a1, StorageHolder const& a2)
         {
           return (a1.arguments_->isValid() == a2.arguments_->isValid())
               && (*a1.arguments_ == *a2.arguments_)
@@ -271,7 +262,7 @@ namespace control {
         }
       
       friend bool
-      operator!= (ArgumentHolder const& a1, ArgumentHolder const& a2)
+      operator!= (StorageHolder const& a1, StorageHolder const& a2)
         {
           return not (a1 == a2);
         }
@@ -280,4 +271,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif
+#endif /*CONTROL_COMMAND_STORAGE_HOLDER_H*/

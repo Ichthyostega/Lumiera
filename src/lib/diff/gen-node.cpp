@@ -42,7 +42,6 @@
 
 
 #include "lib/error.hpp"
-#include "lib/format-util.hpp"
 #include "lib/diff/diff-language.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/util-quant.hpp"
@@ -62,17 +61,19 @@ namespace diff{
   
   /* symbolic marker ID references
    * used within the tree diff language
-   * to mark specific scopes
+   * to mark specific scopes and situations
    */
+  const Ref Ref::I      ("_I_");
+  const Ref Ref::NO     ("_NO_");
   const Ref Ref::END    ("_END_");
-  const Ref Ref::THIS   ("_THIS_");
+  const Ref Ref::THIS   ("_THIS_");     ////////TICKET #996 : Feature of questionable usefulness. Maybe dispensable?
   const Ref Ref::CHILD  ("_CHILD_");
   const Ref Ref::ATTRIBS("_ATTRIBS_");
   
   
   
   
-  /** Implementation of content equality test
+  /** Implementation of content equality test, delgating to content
    * @throws error::Logic when the given other DataCap
    *         does not hold a value of the same type than
    *         this DataCap.

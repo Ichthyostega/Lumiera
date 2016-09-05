@@ -26,7 +26,7 @@
 #include "proc/control/command-registry.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/handling-pattern.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 #include "lib/p.hpp"
@@ -58,7 +58,7 @@ namespace test    {
    *       This includes verifying sane allocation management.
    * @note this test covers a very specific low-level perspective, but on an
    *       integration level, involving TypedAllocationManager, CommandRegistry,
-   *       CommandImpl, CmdClosure, ArgumentHolder, UndoMutation, MementoTie.
+   *       CommandImpl, CmdClosure, StorageHolder, UndoMutation, MementoTie.
    *       Closes: Ticket #298
    * 
    * @see Command
@@ -116,7 +116,7 @@ namespace test    {
       bindRandArgument (CommandImpl& cmd)
         {
           typedef Types<int> ArgType;
-          TypedArguments<Tuple<ArgType> > arg (tuple::make (rand() % 10000));
+          TypedArguments<Tuple<ArgType>> arg (std::make_tuple (rand() % 10000));
           cmd.setArguments (arg);
           CHECK (cmd.canExec());
         }
@@ -138,30 +138,29 @@ namespace test    {
           
           // prepare for command invocation on implementation level....
           HandlingPattern const& testExec = HandlingPattern::get(TEST_HANDLING_PATTERN);
-          HandlingPattern const& testUndo = testExec.howtoUNDO();
           command1::check_ = 0;
           
           bindRandArgument (*orig);
           CHECK ( orig->canExec());
           CHECK (!orig->canUndo());
-          testExec.invoke (*orig, "Execute original");     // EXEC 1
+          testExec.exec (*orig, "Execute original");     // EXEC 1
           long state_after_exec1 = command1::check_;
           CHECK (command1::check_ > 0);
           CHECK (orig->canUndo());
           CHECK (orig != copy);
           
           CHECK (!copy->canUndo());
-          testExec.invoke (*copy, "Execute clone");        // EXEC 2
+          testExec.exec (*copy, "Execute clone");        // EXEC 2
           CHECK (command1::check_ != state_after_exec1);
           CHECK (copy->canUndo());
           CHECK (copy != orig);
           
           // invoke UNDO on the clone
-          testUndo.invoke (*copy, "Undo clone");           // UNDO 2
+          testExec.undo (*copy, "Undo clone");           // UNDO 2
           CHECK (command1::check_ == state_after_exec1);
           
           // invoke UNDO on original
-          testUndo.invoke (*orig, "Undo original");        // UNDO 1
+          testExec.undo (*orig, "Undo original");        // UNDO 1
           CHECK (command1::check_ ==0);
           
           CHECK (copy != orig);

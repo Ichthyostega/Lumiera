@@ -42,6 +42,7 @@
 #include "include/logging.h"
 #include "include/lifecycle.h"
 #include "lib/error.h"
+#include <exception>
 #include <string>
 
 namespace lumiera {

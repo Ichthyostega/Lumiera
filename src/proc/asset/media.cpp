@@ -29,20 +29,20 @@
 #include "proc/asset/unknown.hpp"
 #include "backend/media-access-facade.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"
 
 #include <boost/regex.hpp>
-#include <boost/format.hpp>
 
 
+using util::_Fmt;
 using util::isnil;
 using lib::time::FSecs;
 using lib::time::Duration;
 using backend_interface::MediaDesc;
 using backend_interface::MediaAccessFacade;
 
-using boost::format;
 using boost::regex;
 using boost::smatch;
 using boost::regex_search;
@@ -232,13 +232,12 @@ namespace asset {
   MediaFactory::operator() (Media& mediaref)
   {
     if (mediaref.checkCompound())
-      throw error::Invalid (str(format("Attempt to create a asset::Clip from the media %s, "
-                                       "which is not toplevel but rather part or a compound "
-                                       "(multichannel) media. Found parent Media %s.") 
-                                       % string(mediaref) 
-                                       % string(*mediaref.checkCompound()))
-                           ,LUMIERA_ERROR_PART_OF_COMPOUND
-                           );
+      throw error::Invalid (_Fmt("Attempt to create a asset::Clip from the media %s, "
+                                 "which is not toplevel but rather part of a compound "
+                                 "(multichannel) media. Found parent Media %s.") 
+                                 % mediaref
+                                 % *mediaref.checkCompound()
+                           ,LUMIERA_ERROR_PART_OF_COMPOUND);
     Clip* pC = new Clip (mediaref);
     return AssetManager::instance().wrap (*pC);
   }

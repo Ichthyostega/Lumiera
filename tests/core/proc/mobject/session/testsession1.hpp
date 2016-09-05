@@ -29,12 +29,9 @@
 #include "lib/error.hpp"
 //#include "lib/util.hpp"
 
-//#include <boost/format.hpp>
-#include <iostream>
+//#include <string>
 
-//using boost::format;
-using std::string;
-using std::cout;
+//using std::string;
 
 
 namespace proc {

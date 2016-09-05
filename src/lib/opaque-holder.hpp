@@ -72,6 +72,7 @@
 #include "lib/access-casted.hpp"
 #include "lib/util.hpp"
 
+#include <utility>
 #include <type_traits>
 #include <boost/noncopyable.hpp>
 
@@ -489,7 +490,7 @@ namespace lib {
    * The whole compound is copyable if and only if the contained
    * object is copyable.
    *
-   * \par using OpaqueHolder
+   * ## using OpaqueHolder
    * OpaqueHolder instances are copyable value objects. They are created
    * either empty, by copy from an existing OpaqueHolder, or by directly
    * specifying the concrete object to embed. This target object will be
@@ -499,16 +500,19 @@ namespace lib {
    * Later on, the embedded value might be accessed
    * - using the smart-ptr-like access through the common base interface BA
    * - when knowing the exact type to access, the templated #get might be an option
-   * - the empty state of the container and a \c isValid() on the target may be checked
-   * - a combination of both is available as a \c bool check on the OpaqueHolder instance.
+   * - the empty state of the container and a `isValid()` on the target may be checked
+   * - a combination of both is available as a `bool` check on the OpaqueHolder instance.
    *  
-   * For using OpaqueHolder, several \b assumptions need to be fulfilled
+   * For using OpaqueHolder, several *assumptions* need to be fulfilled
    * - any instance placed into OpaqueHolder is below the specified maximum size
    * - the caller cares for thread safety. No concurrent get calls while in mutation!
+   * 
+   * @tparam BA  the nominal Base/Interface class for a family of types
+   * @tparam siz maximum storage required for the targets to be held inline
    */
   template
-    < class BA                   ///< the nominal Base/Interface class for a family of types
-    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
+    < class BA
+    , size_t siz = sizeof(BA)
     >
   class OpaqueHolder
     : public InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA> >
@@ -567,11 +571,21 @@ namespace lib {
    * and especially it is mandatory for the base class to provide a 
    * virtual dtor. On the other hand, just the (alignment rounded)
    * storage for the object(s) placed into the buffer is required.
+   * @remarks as a complement, PlantingHandle may be used on APIs to offer
+   *         a lightweight way for clients to provide a callback.
+   * @warning InPlaceBuffer really takes ownership, and even creates a
+   *         default constructed instance of the base class right away.
+   *         Yet the requirement for a virtual dtor is deliberately not
+   *         enforced here, to allow use for types without VTable.
+   * 
+   * @tparam BA the nominal Base/Interface class for a family of types
+   * @tparam siz maximum storage required for the targets to be held inline
+   * @tparam DEFAULT the default instance to place initially
    */
   template
-    < class BA                   ///< the nominal Base/Interface class for a family of types
-    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
-    , class DEFAULT = BA         ///< the default instance to place initially
+    < class BA
+    , size_t siz = sizeof(BA)
+    , class DEFAULT = BA
     >
   class InPlaceBuffer
     : boost::noncopyable
@@ -614,85 +628,23 @@ namespace lib {
       
       
       /** Abbreviation for placement new */ 
-#define LIB_InPlaceBuffer_CTOR(_CTOR_CALL_) \
-          destroy();                         \
-          try                                 \
-            {                                  \
-              static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");\
-                                                 \
-              return *new(&buf_) _CTOR_CALL_;     \
-            }                                      \
-          catch (...)                               \
-            {                                        \
-              placeDefault();                         \
-              throw;                                   \
-            }
-      
-      
-      template<class TY>
+      template<class TY, typename...ARGS>
       TY&
-      create ()
+      create (ARGS&& ...args)
         {
-          LIB_InPlaceBuffer_CTOR ( TY() )
+          static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");
+          
+          destroy();
+          try {
+              return *new(&buf_) TY (std::forward<ARGS> (args)...);
+            }
+          catch (...)
+            {
+              placeDefault();
+              throw;
+            }
         }
       
-      
-      template<class TY, typename A1>
-      TY&                                               //___________________________________________
-      create (A1& a1)                                  ///< place object of type TY, using 1-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2)                          ///< place object of type TY, using 2-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2, A3& a3)                  ///< place object of type TY, using 3-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2, A3& a3, A4& a4)          ///< place object of type TY, using 4-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3,a4) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              , typename A5
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2, A3& a3, A4& a4, A5& a5)  ///< place object of type TY, using 5-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3,a4,a5) )
-        }
       
       
       
@@ -719,6 +671,67 @@ namespace lib {
           SUB* content = util::AccessCasted<SUB*>::access (asBase);
           return content;
         }     // NOTE: might be null.
+    };
+  
+  
+  
+  /**
+   * handle to allow for safe _»remote implantation«_
+   * of an unknown subclass into a given opaque InPlaceBuffer,
+   * without having to disclose the concrete buffer type or size.
+   * @remarks this is especially geared towards use in APIs, allowing
+   *    a not yet known implementation to implant an agent or collaboration
+   *    partner into the likewise undisclosed innards of the exposed service.
+   * @warning the type BA must expose a virtual dtor, since the targeted
+   *    InPlaceBuffer has to take ownership of the implanted object.
+   */
+  template<class BA>
+  class PlantingHandle
+    {
+      void* buffer_;
+      size_t maxSiz_;
+      
+      static_assert (std::has_virtual_destructor<BA>(),
+                     "target interface BA must provide virtual dtor, "
+                     "since InPlaceBuffer needs to take ownership.");
+      
+    public:
+      template<size_t maxSiz>
+      PlantingHandle (InPlaceBuffer<BA, maxSiz>& targetBuffer)
+        : buffer_(&targetBuffer)
+        , maxSiz_(maxSiz)
+        { }
+      
+      
+      template<class SUB>
+      BA&
+      create (SUB&& implementation)
+        {
+          if (sizeof(SUB) > maxSiz_)
+            throw error::Fatal("Unable to implant implementation object of size "
+                               "exceeding the pre-established storage buffer capacity."
+                              ,error::LUMIERA_ERROR_CAPACITY);
+          
+          using Holder = InPlaceBuffer<BA, sizeof(SUB)>;
+          Holder& holder = *static_cast<Holder*> (buffer_);
+          
+          return holder.create<SUB> (std::forward<SUB> (implementation));
+        }
+      
+      template<class SUB>
+      bool
+      canCreate()  const
+        {
+          return sizeof(SUB) <= maxSiz_;
+        }
+      
+      BA*
+      get()  const
+        {
+          ENSURE (buffer_);
+          BA& bufferContent = **static_cast<InPlaceBuffer<BA>*> (buffer_);
+          return &bufferContent;
+        }
     };
   
   

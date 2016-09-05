@@ -24,13 +24,13 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/util.hpp"
 
 #include "lib/itertools.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <cstdlib>
 #include <vector>
 
@@ -44,8 +44,6 @@ namespace test{
   using util::for_each;
   using util::isnil;
   using std::vector;
-  using std::cout;
-  using std::endl;
   using std::rand;
   
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
@@ -110,6 +108,7 @@ namespace test{
           Iter ii (source.begin());
           ++++++ii;
           buildFilterIterator (ii);
+          verify_filterExtension();
           verify_filterRepetitions();
           
           buildTransformingIterator (source.begin());
@@ -133,6 +132,7 @@ namespace test{
       static bool takeAll (int)   { return true; }
       static bool takeOdd (int i) { return 0 != i % 2; }
       static bool takeEve (int i) { return 0 == i % 2; }
+      static bool takeTrd (int i) { return 0 == i % 3; }
       
       void
       buildFilterIterator (Iter const& ii)
@@ -152,6 +152,81 @@ namespace test{
           while (++all) { }
           CHECK (isnil (odd));
           CHECK (all == odd);
+        }
+      
+      
+      /** @test verify the ability to extend a filter condition
+       *        while in the middle of an ongoing iteration.
+       * Typically this means sharpening the filter condition
+       * and thus making the filter more restrictive, filtering
+       * away more elements of the source stream. But through
+       * the ability to add disjunctive and negated clauses,
+       * it is also possible to weaken the filter condition
+       * @note in case of a weakened filter condition, there is
+       *       \em no reset of the source iterator, i.e. we don't
+       *       re-evaluate from start, but just from current head.
+       */
+      void
+      verify_filterExtension ()
+        {
+          typedef vector<uint64_t> Src;
+          typedef Src::iterator SrcIter;
+          typedef RangeIter<SrcIter> SeqIter;
+          typedef ExtensibleFilterIter<SeqIter> FilteredSeq;
+          
+          Src src;
+          for (uint i=0; i < 3*NUM_ELMS; ++i)
+            src.push_back(i);
+          
+          SeqIter completeSequence (src.begin(), src.end());
+          FilteredSeq filterIter (completeSequence, takeAll);
+          
+          CHECK (!isnil (filterIter));
+          CHECK (0 == *filterIter);
+          ++filterIter;
+          CHECK (1 == *filterIter);
+          
+          filterIter.andFilter(takeEve);
+          CHECK (!isnil (filterIter));
+          CHECK (2 == *filterIter);
+          ++filterIter;
+          CHECK (4 == *filterIter);
+          
+          // sharpen the condition...
+          filterIter.andFilter(takeTrd);
+          CHECK (!isnil (filterIter));
+          CHECK (6 == *filterIter);   // divisible by two and by three
+          ++filterIter;
+          CHECK (12 == *filterIter);
+          
+          verifyComparisons (filterIter);
+          pullOut (filterIter);
+          
+          // adding a disjunctive clause actually weakens the filter...
+          filterIter = {completeSequence, takeTrd};
+          CHECK (!isnil (filterIter));
+          CHECK (0 == *filterIter);
+          ++filterIter;
+          CHECK (3 == *filterIter);
+          
+          filterIter.orFilter(takeEve);
+          CHECK (3 == *filterIter);
+          ++filterIter;
+          CHECK (4 == *filterIter);
+          ++filterIter;
+          CHECK (6 == *filterIter);
+          verifyComparisons (filterIter);
+          
+          // flip filter logic
+          filterIter.flipFilter();
+          CHECK (7 == *filterIter);   // not even and not divisible by three
+          ++filterIter;
+          CHECK (11 == *filterIter);
+          ++filterIter;
+          CHECK (13 == *filterIter);
+          
+          verifyComparisons (filterIter);
+          pullOut (filterIter);
         }
       
       

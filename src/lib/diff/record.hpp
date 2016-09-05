@@ -90,6 +90,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/itertools.hpp"
+#include "lib/format-util.hpp"        ///////////////////////////////TICKET #973 : investigate the impact of this inclusion on code size
 #include "lib/util.hpp"
 
 #include "lib/diff/record-content-mutator.hpp"
@@ -104,12 +105,19 @@
 
 
 namespace lib {
+  
+  template<class BA>
+  class PlantingHandle;
+  
+  
 namespace diff{
   
   namespace error = lumiera::error;
   
   using util::isnil;
   using std::string;
+  
+  class TreeMutator;
   
   template<typename VAL>
   struct RecordSetup;
@@ -147,6 +155,7 @@ namespace diff{
       
     public:
       static const string TYPE_NIL;
+      static const Symbol TYPE_NIL_SYM;
       
       Record()
         : type_(TYPE_NIL)
@@ -190,16 +199,29 @@ namespace diff{
       // all default copy operations acceptable
       
       
-      /** for diagnostic purpose: include format-util.hpp */
+      /** for diagnostic purpose */
       operator std::string()  const;
       
+      
+      size_t
+      attribSize()  const
+        {
+          return attribs_.size();
+        }
+      
+      size_t
+      childSize()  const
+        {
+          return children_.size();
+        }
       
       bool
       empty()  const
         {
           return attribs_.empty()
-              && children_.empty();
+             and children_.empty();
         }
+      
       
       string
       getType()  const
@@ -228,6 +250,18 @@ namespace diff{
           else
             return extractVal (*found);
         }
+      
+      Access
+      child (size_t idx)  const
+        {
+          if (children_.size() <= idx)
+            throw error::Invalid ("Child index "       +util::toString(idx)
+                                 +" out of bounds [0.."+util::toString(children_.size())
+                                 +"["
+                                 ,error::LUMIERA_ERROR_INDEX_BOUNDS);
+          return children_[idx];
+        }
+      
       
       /**
        * While otherwise immutable,
@@ -351,7 +385,10 @@ namespace diff{
     };
   
   template<typename VAL>
-  const string Record<VAL>::TYPE_NIL = "NIL";
+  const Symbol Record<VAL>::TYPE_NIL_SYM = "NIL";
+  
+  template<typename VAL>
+  const string Record<VAL>::TYPE_NIL = string(TYPE_NIL_SYM);
   
   
   
@@ -384,7 +421,7 @@ namespace diff{
         }
       
       void
-      replace (Rec& existingInstance)  noexcept
+      swap (Rec& existingInstance)  noexcept
         {
           std::swap (existingInstance, record_);
         }
@@ -461,7 +498,31 @@ namespace diff{
           return *this;
         }
       
-      /* === low-level access (for diff application === */
+      /* === low-level access (for diff application) === */
+      
+      using BufferHandle = PlantingHandle<TreeMutator>;
+      
+      /** attachment point to receive and apply tree-diff changes.
+       *  The actual implementation needs to be provided for concrete Record payload types;
+       *  in case of Record<GenNode>, a default implementation for this feature is provided by the
+       *  "diff framework", which offers a preconfigured binding to create a TreeMutator implementation,
+       *  which can then be used for a DiffApplicator. This way, a Rec::Mutator can receive diff messages
+       *  to reorder and reshape the contents.
+       * @param BufferHandle pointing to an (implementation provided) storage location, where this
+       *        function is expected to construct a suitable TreeMutator, linked to the internals
+       *        of this Record::Mutator.
+       * @see lib::diff::mutatorBinding()
+       * @see lib::diff::DiffApplicationStrategy
+       * @see tree-diff-application.hpp
+       * @see DiffTreeApplication_test usage example
+       */
+      void buildMutator (BufferHandle);
+      
+      auto
+      exposeToDiff()
+        {
+          return std::tie (record_.attribs_, record_.children_);
+        }
       
       void
       swapContent (ContentMutator& alteredContent)
@@ -724,20 +785,15 @@ namespace diff{
   template<typename VAL>
   Record<VAL>::operator std::string()  const
   {
-#ifndef LIB_FORMAT_UTIL_H
-    return "Record(...)";
-#else
     using util::join;
     using lib::transformIterator;
     
     return "Rec("
-         + (TYPE_NIL==type_? "" : type_+"| ")
-         + join (transformIterator (this->attribs(), renderAttribute))
-         + " |{"
-         + join (this->scope())
-         + "})"
+         + (TYPE_NIL==type_? "" : type_)
+         + (isnil(this->attribs())? "" : "| "+join (transformIterator (this->attribs(), renderAttribute))+" ")
+         + (isnil(this->scope())?   "" : "|{"+join (this->scope())+"}")
+         + ")"
          ;
-#endif
   }
   
   

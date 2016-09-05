@@ -257,7 +257,7 @@ namespace lib {
   
   
   
-  namespace iter_explorer { ///< predefined policies and configurations
+  namespace iter_explorer { ///< predefined "exploration strategies", policies and configurations
     
     using util::unConst;
     using boost::enable_if;
@@ -267,7 +267,7 @@ namespace lib {
 
     
     /**
-     * Building block: evaluating source elements.
+     * Building block: just evaluate source elements.
      * This strategy will be tied into a "Combinator"
      * to hold the actual functor bound into the enclosing
      * IterExplorer monad to work on the contained elements.
@@ -386,9 +386,9 @@ namespace lib {
     /**
      * a generic "Combinator strategy" for IterExplorer.
      * This default / fallback solution doesn't assume anything beyond the
-     * source and the intermediary result(s) being Lumiera Forward Iterators.
+     * source and the intermediary result(s) to be Lumiera Forward Iterators.
      * @note the implementation stores the functor into a std::function object,
-     *       which might cause heap allocations, depending on given function.
+     *       which might cause heap allocations, depending on the function given.
      *       Besides, the implementation holds one instance of the (intermediary)
      *       result iterator (yielded by invoking the function) and a copy of the
      *       original IterExplorer source sequence, to get the further elements

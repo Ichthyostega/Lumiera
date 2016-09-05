@@ -79,6 +79,8 @@ namespace test{
    * @test Investigate various situations of using a Maybe value or option monad.
    * @note this is a testbed for experiments for the time being 11/2011
    * 
+   * @deprecated as of 2016 : the upcoming C++17 will provide an optional type!!!!!
+   * 
    * @see lib::Maybe 
    * @see null-value-test.cpp
    * @see util::AccessCasted

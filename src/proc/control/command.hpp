@@ -58,8 +58,9 @@
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/handling-pattern.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/bool-checkable.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/handle.hpp"
 
 #include <string>
@@ -75,6 +76,7 @@ namespace control {
   using lib::Symbol;
   using std::shared_ptr;
   using lib::meta::Tuple;
+  using lib::meta::Types;
   
   
   LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
@@ -130,11 +132,14 @@ namespace control {
       
       /* === command lifecycle === */
       
-      template<typename TYPES>
-      Command& bindArg (Tuple<TYPES> const&);
+      template<typename...TYPES>
+      Command& bindArg (std::tuple<TYPES...> const&);
+      
+      Command& bindArg (lib::diff::Rec const&);
       
       
       ExecResult operator() () ;
+      ExecResult exec () ;
       ExecResult undo () ;
       
       
@@ -144,6 +149,9 @@ namespace control {
        */
       ExecResult exec (HandlingPattern const& execPattern);
       ExecResult exec (HandlingPattern::ID);
+      
+      ExecResult undo (HandlingPattern const& execPattern);
+      ExecResult undo (HandlingPattern::ID);
       
       /** invoke using a default "synchronous" execution pattern */
       ExecResult execSync ();
@@ -171,6 +179,8 @@ namespace control {
       
       void duplicate_detected (Symbol)  const;
       
+      Symbol getID() const;
+      
       operator string() const;
       friend bool operator== (Command const&, Command const&);
       friend bool operator<  (Command const&, Command const&);
@@ -185,6 +195,7 @@ namespace control {
       
     private:
       void setArguments (Arguments&);
+      void setArguments (lib::diff::Rec const&);
       static bool equivalentImpl (Command const&, Command const&);
     };
   
@@ -198,15 +209,36 @@ namespace control {
     return exec (getDefaultHandlingPattern());
   }
   
+  inline ExecResult
+  Command::exec ()
+  {
+    return exec (getDefaultHandlingPattern());
+  }
   
-  template<typename TYPES>
+  inline ExecResult
+  Command::undo ()
+  {
+    return undo (getDefaultHandlingPattern());
+  }
+  
+  
+  template<typename...TYPES>
   inline Command&
-  Command::bindArg (Tuple<TYPES> const& tuple)
-    {
-      TypedArguments<Tuple<TYPES> > args(tuple);
-      this->setArguments (args);
-      return *this;
-    }
+  Command::bindArg (std::tuple<TYPES...> const& tuple)
+  {
+    TypedArguments<std::tuple<TYPES...>> args(tuple);
+    this->setArguments (args);
+    return *this;
+  }
+  
+  
+  inline Command&
+  Command::bindArg (lib::diff::Rec const& paramData)
+  {
+    this->setArguments (paramData);
+    return *this;
+  }
+
   
   
   
@@ -214,9 +246,9 @@ namespace control {
   
   inline bool
   Command::defined (Symbol cmdID)
-    {
-      return fetchDef(cmdID).isValid();
-    }
+  {
+    return fetchDef(cmdID).isValid();
+  }
   
   
 #define _FAILSAFE_COMMAND_QUERY(_ID_, _QUERY_) \
@@ -233,16 +265,16 @@ namespace control {
   
   inline bool
   Command::canExec (Symbol cmdID)
-    {
-      _FAILSAFE_COMMAND_QUERY (cmdID, canExec() );
-    }
+  {
+    _FAILSAFE_COMMAND_QUERY (cmdID, canExec() );
+  }
   
   
   inline bool
   Command::canUndo (Symbol cmdID)
-    {
-      _FAILSAFE_COMMAND_QUERY (cmdID, canUndo() );
-    }
+  {
+    _FAILSAFE_COMMAND_QUERY (cmdID, canUndo() );
+  }
 
 #undef _FAILSAFE_COMMAND_QUERY
   

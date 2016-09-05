@@ -54,8 +54,6 @@
 
 //#include <boost/operators.hpp>
 #include <memory>
-//#include <iostream>
-//#include <string>
 
 namespace lumiera{  ///////TODO: shouldn't that be namespace lib? or proc?
 namespace query  {

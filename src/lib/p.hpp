@@ -51,6 +51,8 @@
 
 
 #include "lib/error.hpp"
+#include "lib/meta/util.hpp"
+
 #include <memory>
 
 
@@ -98,6 +100,8 @@ namespace lib {
       
       void swap(P& b)         { BASE::swap (b);}
       
+      operator std::string()  const noexcept;
+      
       
     private: /* === friend operators injected into enclosing namespace for ADL === */
                                                                                           //////////////////TICKET #932 Clang is unable to fill in the default template argument. Resolved in newer versions of Clang. Temporary workaround: add second parameter B
@@ -126,6 +130,41 @@ namespace lib {
       operator>= (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *p >= *q;}
       
     };
+  
+  
+  
+  
+  /** Helper to create and manage by lib::P
+   * @tparam X the type of the new object to create on the heap
+   * @param ctorArgs arbitrary arguments to pass to ctor of `X`
+   * @return managing smart-ptr of type P<X>, holding onto the
+   *    object just created on the heap.
+   */
+  template<typename X, typename...ARGS>
+  inline P<X>
+  newP (ARGS&&... ctorArgs)
+  {
+    return P<X>{new X {std::forward<ARGS>(ctorArgs)...}};
+  }
+  
+  
+  
+  /**
+   * use custom string conversion on pointee, if applicable,
+   * otherwise fall back to a human readable type string.S
+   */
+  template<class TAR, class BASE>
+  inline
+  P<TAR,BASE>::operator std::string()  const noexcept
+  try {
+    if (BASE::get())
+      return util::StringConv<TAR>::invoke (this->operator*());
+    else
+      return "⟂ P<"+meta::typeStr<TAR>()+">";
+  }
+  catch(...)
+  { return meta::FAILURE_INDICATOR; }
+  
   
   
 } // namespace lib

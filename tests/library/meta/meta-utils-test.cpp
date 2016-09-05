@@ -26,6 +26,9 @@
 #include "lib/meta/typelist.hpp"
 
 #include <string>
+#include <iostream>
+using std::cout;
+using std::endl;/////////////////////////TODO
 
 
 namespace lib  {
@@ -50,20 +53,22 @@ namespace test {
       void
       run (Arg) 
         {
-          verify_basicAssumptions();
+          verify_basicTypeProbing();
+          verify_genericTypeDisplay();
           
           detect_stringConversion();
           detect_typeList();
         }
       
       
-      /** @test demonstrate / verify the
-       * basic type trait detection technique:
-       * By investigating the return type, we can
-       * figure out which overload the compiler picks..
+      /** @test demonstrate the basic type trait detection technique:
+       *  - we have two overloads with differing return type
+       *  - we form a function call expression
+       *  - by investigating the return type,
+       *    we can figure out which overload the compiler picks.
        */
       void
-      verify_basicAssumptions()
+      verify_basicTypeProbing()
         {
           CHECK (sizeof(Yes_t) != sizeof (No_t));
           
@@ -75,6 +80,26 @@ namespace test {
       
       static Yes_t probe (int);
       static No_t  probe (...);
+      
+      
+      
+      void
+      verify_genericTypeDisplay()
+        {
+          cout << typeStr<SubString>() <<endl;
+          
+          struct Lunatic
+            : Test
+            {
+              virtual void run (Arg) {}
+            }
+          lunatic;
+          cout << typeStr(lunatic)     << endl;
+          cout << typeStr(&lunatic)      << endl;
+          cout << typeStr((Test &)lunatic) << endl;
+          cout << typeStr((Test *) &lunatic) << endl;
+          cout << typeStr(&Lunatic::run)       << endl;
+        }
       
       
       

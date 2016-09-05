@@ -55,16 +55,22 @@
 
 
 namespace lib {
+namespace meta{
+  std::string demangleCxx (lib::Literal rawName);
+  std::string humanReadableTypeID (lib::Literal);
+  std::string primaryTypeComponent (lib::Literal);
+  std::string sanitisedFullTypeName(lib::Literal);
+}// implemented in format-obj.cpp
+
 namespace idi {
   
   using lib::HashVal;
   using std::string;
   
   namespace format { // integration helpers...
-    string demangled_innermost_component (const char* rawName);
-    string demangled_sanitised_name      (const char* rawName);
     
-    string instance_formatter (string const& prefix, long instanceNr);
+    string instance_format (string const& prefix, size_t instanceNr);
+    string instance_hex_format (string const& prefix, size_t instanceNr);
     
   } //(End)integration helpers...
   
@@ -73,12 +79,14 @@ namespace idi {
   /** Short readable type identifier, not necessarily unique or complete.
    * @return the innermost component of the demangled C++ type name.
    *         Usually, this is the bare name without any namespaces.
+   * @note this function is also defined in lib/meta/util.hpp,
+   *       both delegating to the same implementation
    */
   template<typename TY>
   inline string
   typeSymbol()
   {
-    return format::demangled_innermost_component (typeid(TY).name());
+    return lib::meta::primaryTypeComponent (typeid(TY).name());
   }
   
   /** Complete unique type identifier
@@ -90,7 +98,7 @@ namespace idi {
   inline string
   typeFullID()
   {
-    return format::demangled_sanitised_name (typeid(TY).name());
+    return lib::meta::sanitisedFullTypeName (typeid(TY).name());
   }
   
   template<typename TY>
@@ -105,6 +113,18 @@ namespace idi {
   namePrefix()
   {
     return typeSymbol<TY>();
+  }
+  
+  /** designation of an distinct object instance
+   * @par obj pointer to the memory location of the object
+   * @return a notation "typename.hash", where the hash is given
+   *         as 4 hex digits derived from the memory location
+   */
+  template<typename TY>
+  inline string
+  instanceTypeID(const TY *const obj)
+  {
+    return format::instance_hex_format (namePrefix<TY>(), (size_t(obj) / alignof(TY)) % (1<<16));
   }
   
   
@@ -122,18 +142,32 @@ namespace idi {
   generateSymbolicID()
   {
     static TypedCounter instanceCounter;
-    return format::instance_formatter (namePrefix<TY>(), instanceCounter.inc<TY>());
+    return format::instance_format (namePrefix<TY>(), instanceCounter.inc<TY>());
+  }
+  
+  /** build a long type based identifier, with running counter and custom prefix.
+   * @param prefix optional prefix to prepend to the generated ID
+   * @return a ID string based on the full type, followed by an instance number
+   * @warning for one, like \ref generateSymbolicID(), this operation is not really
+   *          cheap. And then, since the type ID is slightly abbreviated and then
+   *          mangled, there is still the possibility of occasional clashes.
+   */
+  template<class TY>
+  inline string
+  generateExtendedID(string prefix ="")
+  {
+    static TypedCounter instanceCounter;
+    return format::instance_format (prefix + typeFullID<TY>(), instanceCounter.inc<TY>());
   }
   
   /**
-   * @return a boost hash value, based on the full (mangled) C++ type name
+   * @return a standard hash value, based on the full (mangled) C++ type name
    */
   template<typename TY>
   inline HashVal
   getTypeHash()
   {
-    Literal rawTypeName (typeid(TY).name());
-    return hash_value (rawTypeName);
+    return typeid(TY).hash_code();
   }
   
   

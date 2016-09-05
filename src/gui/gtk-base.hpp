@@ -32,6 +32,8 @@
  ** Besides, this header defines the basic NLS. Most parts of the GUI rely either
  ** directly on this header, or through the inclusion of gtk-lumiera.hpp
  ** 
+ ** @warning include here only what is absolutely necessary,
+ **          for sake of compilation times and (debug) executable size.
  ** @see GtkLumiera
  */
 
@@ -63,46 +65,10 @@
 #endif
 
 
-
-
-/* ======= Namespace Definitions ======= */
-
-/** Lumiera GTK GUI implementation root. */
 namespace gui {
   
   typedef Glib::ustring uString;
   typedef const uString cuString;
-  
-
-  /** Dialog box classes. */
-  namespace dialog {}
-  
-  /** The Lumiera GTK-GUI uses a thin proxy layer data model
-   *  on top of the actual "high-level-model", which lives in the
-   *  Proc-Layer below. GUI operations interact with these proxy model
-   *  entities, which in turn forward the calls to the actual objects
-   *  in the Proc-Layer, through the Command system (which enables UNDO).
-   *  
-   *  @todo: as of 1/2011 this connection between the GUI proxy model and
-   *         the Proc-Layer model needs to be set up. Currently, the GUI model
-   *         entities are just created standalone and thus dysfunctional.
-   */
-  namespace model {}
-  
-  /** The namespace of all video output implementations. */
-  namespace output {}
-  
-  /** Docking panel classes. */
-  namespace panel {}
-  
-  /** Lumiera custom widgets. */
-  namespace widget {}
-  
-  /** The workspace window and it's helper classes. */
-  namespace workspace {}
-  
-  /** GUI helpers, utility functions and classes. */
-  namespace util {}
   
 }// namespace gui
 #endif

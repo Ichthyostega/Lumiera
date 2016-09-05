@@ -26,6 +26,7 @@
 
 
 #include "lib/symbol.hpp"
+#include "lib/meta/util.hpp"
 
 #include <typeinfo>
 #include <string>
@@ -70,7 +71,7 @@ namespace lib {
     const string
     buildTypeID()
     {
-      string typeID (typeid(TY).name());
+      string typeID {util::typeStr<TY>()};
       normaliseID (typeID);
       return typeID;
     }

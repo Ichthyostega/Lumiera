@@ -23,12 +23,9 @@
 
 #include "proc/mobject/session/query-focus.hpp"
 #include "proc/mobject/mobject.hpp"
+#include "lib/format-string.hpp"
 
-#include <boost/format.hpp>
-
-using boost::format;
-using boost::str;
-
+using util::_Fmt;
 
 namespace proc {
 namespace mobject {
@@ -164,9 +161,9 @@ namespace session {
   /** diagnostic self-display based on the ScopePath */
   QueryFocus::operator string()  const 
   {
-    static format display("Focus(%d)--->%s");
-    return str ( display % ScopeLocator::instance().stackSize() 
-                         % string (*focus_));
+    static _Fmt display("Focus(%d)--->%s");
+    return display % ScopeLocator::instance().stackSize()
+                   % *focus_;
   }
   
   

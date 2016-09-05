@@ -36,9 +36,9 @@
 #include "lib/test/depend-4test.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 
 using lib::test::Depend4Test;
 using lib::test::showSizeof;
@@ -47,8 +47,6 @@ using lib::time::FSecs;
 using lib::time::Time;
 using util::isnil;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace proc    {
@@ -188,18 +186,18 @@ namespace test    {
           MORef<Clip> rMO;
           CHECK (!rMO);                     // still empty (not bound)
           CHECK (0==rMO.use_count());
-          cout << string(rMO)     << endl;                 /////////////////////TICKET #527
+          cout << rMO << endl;                             /////////////////////TICKET #527
           cout << showSizeof(rMO) << endl;
           
           // activate by binding to provided ref
           rMO.activate(refObj);
           CHECK (rMO);                     // now bound
-          cout << string(rMO)     << endl;                 /////////////////////TICKET #527
+          cout << rMO << endl;                             /////////////////////TICKET #527
           
           // access MObject (Clip API)
 //        cout << rMO->operator string() << endl;          /////////////////////TICKET #428
           PMedia media = rMO->getMedia();
-          cout << str(media) << endl;                      /////////////////////TICKET #520
+          cout << media << endl;                           /////////////////////TICKET #520
           Duration mediaLength = media->getLength();
           CHECK (!isnil (mediaLength));
           CHECK (rMO->isValid());
@@ -218,7 +216,7 @@ namespace test    {
           CHECK (refP.use_count() == rMO.use_count());
           CHECK (checkUseCount(refP, 1));   // use count not changed
           CHECK (&refP == placementAdr);    // actually denotes the address of the original Placement in the "session"
-          cout << string(refP) << endl;
+          cout << refP << endl;
           
           ExplicitPlacement exPla = refP.resolve();
           CHECK (exPla.time == start);      // recovered Placement resolves to the same time as provided by the proxied API
@@ -371,8 +369,8 @@ namespace test    {
           CHECK (checkUseCount(rMObj, 2));
           CHECK (checkUseCount(rClip, 2));
           
-          cout << string(rClip) << endl;                         //////////TICKET #527
-          cout << string(rClip->getMedia()->ident) << endl;      //////////TICKET #520
+          cout << rClip << endl;                         //////////TICKET #527
+          cout << rClip->getMedia()->ident << endl;      //////////TICKET #520
         }
     };
   

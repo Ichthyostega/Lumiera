@@ -137,7 +137,7 @@ namespace engine {
   JobClosure::hash_value (JobParameter parameter)  const
     {
       HashVal hash = this->hashOfInstance (parameter.invoKey);
-      boost::hash_combine(hash, typeid(*this).name());
+      boost::hash_combine(hash, typeid(*this).hash_code());
       boost::hash_combine(hash, parameter.nominalTime);
       return hash;
     }

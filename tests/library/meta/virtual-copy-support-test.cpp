@@ -26,17 +26,16 @@
 #include "lib/format-string.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/meta/virtual-copy-support.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 #include <string>
 #include <type_traits>
 
 using util::_Fmt;
 using util::isnil;
 using std::string;
-using std::cout;
-using std::endl;
 
 using lumiera::error::LUMIERA_ERROR_LOGIC;
 using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
@@ -48,16 +47,9 @@ namespace test {
   
   namespace { // Test fixture...
     
-    class Interface;
-    
-    /** helper: shortened type display */
-    string
-    typeID(Interface const& obj)
-    {
-      return lib::test::tyAbbr(obj);
-    }
-    
     int _CheckSum_ = 0;
+    
+    class Interface;
     
     
     /** Interface for the Virtual copy operations.
@@ -117,7 +109,7 @@ namespace test {
         virtual operator string()  const override
           {
             return _Fmt("Sub|%s|%d|-%s")
-                      % typeID(*this)
+                      % util::typeStr(this)
                       % i
                       % access();
           }
@@ -241,17 +233,6 @@ namespace test {
   }//(End)Test fixture
   
   
-// GCC 4.7 workaround
-// SFINAE does not work properly on private functions
-// instead of dropping the template instance, it causes compilation failure
-
-}//now in namespace meta
-  
-  template<char c>
-  struct can_use_assignment<test::UnAssignable<c>>
-    { static constexpr bool value = false; };
-  
-namespace test {
   
   
   
@@ -303,9 +284,9 @@ namespace test {
           Regular<'A'> aa(a);
           Regular<'A'> a1;
           
-          cout << string(a) <<endl
-               << string(aa)<<endl
-               << string(a1)<<endl;
+          cout << a  <<endl
+               << aa <<endl
+               << a1 <<endl;
           
           a1 = a;
           
@@ -337,8 +318,8 @@ namespace test {
           prevID = cc;
           UnAssignable<'C'> ccc(std::move(cc));
           
-          cout << string(cc) <<endl
-               << string(ccc)<<endl;
+          cout << cc  <<endl
+               << ccc <<endl;
           
           CHECK (string(ccc) == prevID);
           CHECK (string(cc) != prevID);
@@ -352,8 +333,8 @@ namespace test {
           OnlyMovable<'D'> d;
           OnlyMovable<'D'> dd (std::move(d));
           
-          cout << string(d) <<endl
-               << string(dd)<<endl;
+          cout << d  <<endl
+               << dd <<endl;
           
           CHECK (string(dd) != string(d));
           CHECK (!isnil(dd));
@@ -415,10 +396,10 @@ namespace test {
           
           
           cout << "==fullVirtualCopySupport=="<<endl
-               << string(i)   <<endl
-               << string(ii)  <<endl
-               << string(iii) <<endl
-               << string(iiii)<<endl;
+               << i    <<endl
+               << ii   <<endl
+               << iii  <<endl
+               << iiii <<endl;
           
           //need to clean-up the placement-new instance explicitly
           iiii.~Interface();
@@ -461,10 +442,10 @@ namespace test {
           CHECK (!isnil(iii));
           
           cout << "==noAssignementSupport=="<<endl
-               << string(i)   <<endl
-               << string(ii)  <<endl
-               << string(iii) <<endl
-               << string(iiii)<<endl;
+               << i    <<endl
+               << ii   <<endl
+               << iii  <<endl
+               << iiii <<endl;
           
           //clean-up placement-new instance
           iiii.~Interface();
@@ -498,9 +479,9 @@ namespace test {
           CHECK ( isnil(i));
           
           cout << "==onlyMovableSupport=="<<endl
-               << string(i)   <<endl
-               << string(ii)  <<endl
-               << string(iiii)<<endl;
+               << i    <<endl
+               << ii   <<endl
+               << iiii <<endl;
           
           //clean-up placement-new instance
           iiii.~Interface();
@@ -527,8 +508,8 @@ namespace test {
           CHECK (!isnil (i));
           
           cout << "==disabledCopySupport=="<<endl
-               << string(i)   <<endl
-               << string(ii)  <<endl;
+               << i  <<endl
+               << ii <<endl;
           
           //no clean-up,
           //since we never created anything in the storage buffer

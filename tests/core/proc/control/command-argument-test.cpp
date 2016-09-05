@@ -23,19 +23,18 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/control/command-argument-holder.hpp"
+#include "proc/control/command-storage-holder.hpp"
 #include "lib/scoped-ptrvect.hpp"
-#include "lib/time/diagnostics.hpp"
-#include "lib/meta/tuple.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
-#include <iostream>
 #include <sstream>
 #include <cstdlib>
 #include <string>
+#include <tuple>
 
 using util::_Fmt;
 using util::isnil;
@@ -44,11 +43,9 @@ using lib::time::Time;
 using lib::time::TimeVar;
 using lib::time::TimeValue;
 using std::string;
-using std::ostream;
 using std::ostringstream;
+using std::make_tuple;
 using std::rand;
-using std::cout;
-using std::endl;
 
 
 namespace proc {
@@ -90,11 +87,6 @@ namespace test    {
         
         operator string()  const { return element_; }
         
-        friend ostream&
-        operator<< (ostream& out, const Tracker& tra)
-          {
-            return out << tra.element_;
-          }
         
         friend bool
         operator== (Tracker const& tra1, Tracker const& tra2)
@@ -189,7 +181,7 @@ namespace test    {
   /***********************************************************************//**
    * @test Check storage handling of the command parameters and state memento.
    *
-   * @see  control::CommandArgumentHolder
+   * @see  control::CommandStorageHolder
    * @see  command-basic-test.hpp
    */
   class CommandArgument_test : public Test
@@ -225,12 +217,12 @@ namespace test    {
       void
       createTuples (ArgTuples& tup)
         {
-          typedef ArgumentHolder<void(),            bool>  A1;
-          typedef ArgumentHolder<void(int),         void*> A2;
-          typedef ArgumentHolder<void(int,TimeVar), int>   A3;
-          typedef ArgumentHolder<void(int,TimeVar), Sint5> A4;
+          typedef StorageHolder<void(),            bool>  A1;
+          typedef StorageHolder<void(int),         void*> A2;
+          typedef StorageHolder<void(int,TimeVar), int>   A3;
+          typedef StorageHolder<void(int,TimeVar), Sint5> A4;
           
-          typedef ArgumentHolder<void(TTime,Tstr,int), Tstr>  A5;
+          typedef StorageHolder<void(TTime,Tstr,int), Tstr>  A5;
           
           
           A1* arg1 = new A1(); tup.manage (arg1);
@@ -247,12 +239,12 @@ namespace test    {
           
           for_each (tup, showIt);
           
-          arg1->storeTuple (tuple::makeNullTuple());
-          arg2->storeTuple (tuple::make (rand() % 10));
-          arg3->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
-          arg4->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
+          arg1->storeTuple (std::tuple<>());
+          arg2->storeTuple (make_tuple (rand() % 10));
+          arg3->storeTuple (make_tuple (rand() % 10, TimeVar(randTime())));
+          arg4->storeTuple (make_tuple (rand() % 10, TimeVar(randTime())));
           
-          arg5->storeTuple (tuple::make (TTime (randTime()), Tstr("glorious"), twoRandomDigits() ));
+          arg5->storeTuple (make_tuple (TTime (randTime()), Tstr("glorious"), twoRandomDigits() ));
           
           CHECK (!arg5->canUndo());
           
@@ -285,7 +277,7 @@ namespace test    {
       void
       checkArgumentComparison ()
         {
-          ArgumentHolder<void(int,int), int> one, two;
+          StorageHolder<void(int,int), int> one, two;
           CHECK (one == two);               // empty, identically typed argument holders -->equal
           
           one.tie(dummyU,dummyC)
@@ -297,23 +289,23 @@ namespace test    {
           two.memento() = one.memento();     // put the same UNDO state in both
           CHECK (one == two);               // ...makes them equal again
           
-          one.storeTuple (tuple::make (1,2));
+          one.storeTuple (make_tuple (1,2));
           CHECK (one != two);               // verify argument tuple comparison
           CHECK (two != one);
           CHECK (!isnil (one));
           CHECK ( isnil (two));
           
-          two.storeTuple (tuple::make (3,4));
+          two.storeTuple (make_tuple (3,4));
           CHECK (!isnil (two));
           CHECK (one != two);
           CHECK (two != one);
           
-          one.storeTuple (tuple::make (1,4));
+          one.storeTuple (make_tuple (1,4));
           CHECK (!isnil (one));
           CHECK (one != two);
           CHECK (two != one);
           
-          one.storeTuple (tuple::make (3,4));
+          one.storeTuple (make_tuple (3,4));
           CHECK (!isnil (one));
           CHECK (one == two);
           CHECK (two == one);
@@ -332,8 +324,8 @@ namespace test    {
       simulateCmdLifecycle()
         {
           typedef void SIG_do(Tracker<TimeVar>, Tracker<string>, int);
-          typedef ArgumentHolder<SIG_do, Tracker<string> >   Args;
-          typedef MementoTie<SIG_do, Tracker<string> >  MemHolder;
+          using Args      = StorageHolder<SIG_do, Tracker<string>>;
+          using MemHolder = MementoTie<SIG_do, Tracker<string>>;
           
           Args args;
           CHECK (isnil (args));
@@ -341,7 +333,7 @@ namespace test    {
           
           // store a set of parameter values, later to be used on invocation
           args.storeTuple (
-            tuple::make (TTime(randTime()), Tstr("Lumiera rocks"), twoRandomDigits() ));
+            make_tuple (TTime(randTime()), Tstr("Lumiera rocks"), twoRandomDigits() ));
           CHECK (!isnil (args));
           cout << args << endl;
           
@@ -385,7 +377,7 @@ namespace test    {
           protocol << "RESET...";
           
           args.storeTuple (
-            tuple::make (TTime(TimeValue(123456)), Tstr("unbelievable"), twoRandomDigits() ));
+            make_tuple (TTime(TimeValue(123456)), Tstr("unbelievable"), twoRandomDigits() ));
           cout << "modified: " << args     << endl;
           cout << "copied  : " << argsCopy << endl;    // holds still the old params & memento
           

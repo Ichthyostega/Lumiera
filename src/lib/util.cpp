@@ -41,12 +41,12 @@ namespace util {
   ChPredicate operator! (ChPredicate p) { return not bind(p,_1); }
 
   // character classes used for sanitising a string
-  ChPredicate isValid (is_alnum() or is_any_of("-_.:+$'()@"));           ///< characters to be retained
-  ChPredicate isPunct (is_space() or is_any_of(",;#*~´`?\\=/&%![]{}")); ///<  punctuation to be replaced by '_'
+  ChPredicate isValid (is_alnum() or is_any_of("-_.+$'()@"));               ///< characters to be retained
+  ChPredicate isPunct (is_space() or is_any_of(",;:#*~´`?\\=/&%![]{}<>")); ///<  punctuation to be replaced by '_'
 
   
   string
-  sanitise (const string& org)
+  sanitise (string const& org)
   {
     string res (trim_right_copy_if(org, !isValid ));
     string::iterator       j = res.begin();

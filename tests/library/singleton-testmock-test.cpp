@@ -26,15 +26,11 @@
 #include "lib/depend.hpp"
 #include "lib/util.hpp"
 
-#include <boost/lexical_cast.hpp>
-#include <boost/format.hpp>
-#include <iostream>
+#include "lib/format-cout.hpp"
+#include "lib/format-string.hpp"
 
-using boost::lexical_cast;
-using boost::format;
+using util::_Fmt;
 using util::isnil;
-using std::string;
-using std::cout;
 
 
 namespace lib {
@@ -49,7 +45,7 @@ namespace test{
     {
       int callCnt_;
       Symbol typid_;
-      format msg_;
+      _Fmt msg_;
       
     public:
       TestSingletonO(Symbol ty="TestSingletonO")

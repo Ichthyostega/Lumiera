@@ -21,12 +21,28 @@
 */
 
 
+/** @file test-helper.hpp
+ ** A collection of frequently used helper functions to support unit testing.
+ ** Some are test data generators, some are diagnostics helpers to produce readable
+ ** output. Some of these support meta programming to figure out the \em actual
+ ** reference kind (value, lvalue, rvalue) of a template parameter instantiation.
+ ** For GNU compatible compilers, we expose also the interface to the internal
+ ** ABI for [demangling type names](\ref demangleCxx).
+ ** 
+ ** @note this header is included into a large number of tests.
+ ** @see TestHelper_test
+ ** @see TestHelperDemangling_test
+ ** 
+ */
+
+
 #ifndef LIB_TEST_TEST_HELPER_H
 #define LIB_TEST_TEST_HELPER_H
 
 
 #include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-obj.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <typeinfo>
@@ -41,97 +57,41 @@ namespace test{
   using lib::Literal;
   using std::string;
   using std::rand;
+  using lib::meta::demangleCxx;
   
   
-  
-  /** get a sensible display for a type or object 
-   *  @param obj object of the type in question
-   *  @param name optional name to be used literally
-   *  @return either the literal name without any further magic,
-   *          or the result of compile-time or run time 
-   *          type identification as implemented by the compiler.
-   */
-  template<typename T>
-  inline Literal
-  showType (T const& obj, Literal name=0)
-  {
-    return name? name : Literal(typeid(obj).name());
-  }
-  
-  /** get a sensible display for a type 
-   *  @param name optional name to be used literally
-   *  @return either the literal name without any further magic,
-   *          or the result of compile-time or run time 
-   *          type identification as implemented by the compiler.
-   */
-  template<typename T>
-  inline Literal
-  showType (Literal name=0)
-  {
-    return name? name : Literal(typeid(T).name());
-  }
-  
-  
-  /** reverse the effect of C++ name mangling.
-   * @return string in language-level form of a C++ type or object name,
-   *         or a string with the original input if demangling fails.
-   * @warning implementation relies on the cross vendor C++ ABI in use
-   *         by GCC and compatible compilers, so portability is limited.
-   *         The implementation is accessed through libStdC++
-   *         Name representation in emitted object code and type IDs is
-   *         essentially an implementation detail and subject to change.
-   */
-  string
-  demangleCxx (Literal rawName);
-  
-  
-  /** short yet distinct name identifying the given type.
-   * @return demangled type-id without any scopes. */
-  template<typename TY>
-  string
-  tyAbbr()
-  {
-    string typeStr = demangleCxx (showType<TY>());
-    size_t pos = typeStr.rfind("::");
-    if (pos != string::npos)
-      typeStr = typeStr.substr(pos+2);
-    return typeStr;
-  }
-  
-  template<typename TY>
-  string
-  tyAbbr(TY&&)
-  {
-    return tyAbbr<TY>();
-  }
   
   
   /** for printing sizeof().
    *  prints the given size and name literally, without any further magic */
   string
-  showSizeof (size_t siz, const char* name);
+  showSizeof (size_t siz, string name);
   
-  /** for printing sizeof(), trying to figure out the type name automatically */
+  /** for printing sizeof(), possibly figuring out the type name automatically
+   * @param name when given, this name will be used for display,
+   *    instead of auto detecting the type
+   */
   template<typename T>
   inline string
-  showSizeof(const char* name=0)
+  showSizeof (T const* obj =0, const char* name =0)
   {
-    return showSizeof (sizeof (T), showType<T> (name));
+    return showSizeof (obj?  sizeof(*obj) : sizeof(T),
+                       name? name : util::typeStr(obj));
+  }
+  
+  template<typename T>
+  inline                                      meta::disable_if<std::is_pointer<T>,
+  string                                      >                                 // note:: force invocations with pointer to the first overload
+  showSizeof (T const& obj, const char* name=0)
+  {
+    return showSizeof (&obj, name);
   }
   
   template<typename T>
   inline string
-  showSizeof(T const& obj, const char* name=0)
+  showSizeof (const char* name)
   {
-    return showSizeof (sizeof (obj), showType (obj,name));
-  }
-  
-  template<typename T>
-  inline string
-  showSizeof(T *obj, const char* name=0)
-  {
-    return obj? showSizeof (*obj, name)
-              : showSizeof<T> (name);
+    return showSizeof<T> (nullptr, name);
   }
   
   
@@ -141,7 +101,7 @@ namespace test{
   string
   showRefKind()
   {
-    return std::is_lvalue_reference<R>::value? "REF"
+    return std::is_lvalue_reference<R>::value?       "REF"
                : std::is_rvalue_reference<R>::value? "MOV"
                                                    : "VAL";
   }
@@ -166,7 +126,7 @@ namespace test{
   {
     return " :---#"
          + boost::lexical_cast<string>(1 + sizeof...(xs))
-         + "  -- Type: " + showType<X>()
+         + "  -- Type: " + util::typeStr(x)
          + "  "          + showRefKind<X>()
          + "  Address* " + boost::lexical_cast<string>(&x)
          + "\n"
@@ -215,4 +175,12 @@ namespace test{
               CHECK (lumiera_error_expect (LUMIERA_ERROR_##ERROR_ID));\
             }
 
-#endif
+
+/**
+ * Macro to mark the current test function in STDOUT.
+ * This can be helpful to digest a long test output dump
+ */
+#define MARK_TEST_FUN \
+          cout << "|" << endl << "|  »"<<__FUNCTION__<<"«" <<endl;
+
+#endif /*LIB_TEST_TEST_HELPER_H*/

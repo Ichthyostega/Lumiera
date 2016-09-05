@@ -22,14 +22,23 @@
 
 
 /** @file bus-controller.hpp
+ ** The service actually operating the [UI-Bus](ui-bus.hpp).
+ ** This service includes state management for the bus operations
+ ** as a whole, it includes the setup of a [routing table](\ref ctrl::Nexus)
+ ** and it includes the management of connection to the [core service](core-service.hpp)
  ** Service for bus-controller.
  ** This header defines the basics of...
  ** 
- ** @note as of X/2015 this is complete bs
- ** @todo WIP  ///////////////////////TICKET #
+ ** @note as of 12/2015 this is merely placeholder code. The primary goal is to
+ **       write and cover model::Tangible and ctrl::BusTerm, so to define the operation
+ **       of the backbone components. Then the next step will be to replace the existing
+ **       (and obsolete) gui::controller::Controller by the gui::UiBus, which in turn
+ **       will have to instantiate a [BusController] instance.
+ ** @todo WIP  ///////////////////////TICKET #959
  ** 
  ** @see ////TODO_test usage example
- ** @see bus-controller.cpp implementation
+ ** @see [implementation](bus-controller.cpp)
+ ** @see [front-end and lifecycle](UiBus)
  ** 
  */
 

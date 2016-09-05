@@ -33,12 +33,9 @@
 #include "common/query.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 
 using util::isSameObject;
 using util::contains;
-using std::string;
-using std::cout;
 
 
 namespace proc    {

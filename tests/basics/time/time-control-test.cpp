@@ -30,19 +30,16 @@
 #include "lib/meta/generator-combinations.hpp"
 #include "proc/asset/meta/time-grid.hpp"
 #include "lib/scoped-holder.hpp"
-#include "lib/meta/util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 #include <limits>
 
-using lib::test::showType;
 using boost::lexical_cast;
+using util::typeStr;
 using util::isnil;
-using std::cout;
-using std::endl;
 using std::string;
 
 
@@ -195,20 +192,19 @@ namespace test{
   
   namespace { // Implementation: Matrix of individual test combinations
     
-    using lib::meta::is_sameType;
     
     template<class T>
     inline bool
     isDuration()
       {
-        return is_sameType<T,Duration>::value;
+        return std::is_same<T,Duration>::value;
       }
     
     template<class T>
     inline bool
     isQuTime()
       {
-        return is_sameType<T,QuTime>::value;
+        return std::is_same<T,QuTime>::value;
       }
     
     template<class T>
@@ -418,8 +414,8 @@ namespace test{
         void
         performTestSequence(TimeValue const& org, TimeValue const& c)
           {
-            cout << "Test-Case. Target=" << showType<TAR>() 
-                 << "\t <--feed--- "     << showType<SRC>() 
+            cout << "Test-Case. Target=" << typeStr<TAR>()
+                 << "\t <--feed--- "     << typeStr<SRC>()
                  << endl;
             
             // test subject

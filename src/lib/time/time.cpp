@@ -126,18 +126,20 @@ namespace time {
    * @warning internal Lumiera time values refer to an
    *         implementation dependent time origin/scale.
    * @return string rendering of the actual, underlying
-   *         implementation value, as \c h:m:s:ms
+   *         implementation value, as `h:m:s:ms`
    */
   Time::operator string()  const
   {
     return string (lumiera_tmpbuf_print_time (t_));
   }
   
-  /** @note recommendation to use TCode for external representation */
+  /** @note recommendation is to use TCode for external representation
+   *  @remarks this is the most prevalent internal diagnostics display
+   *        of any "time-like" value, it is meant to be compact. */
   TimeValue::operator string()  const
   {
     gavl_time_t time = t_;
-    int millis, seconds;
+    int64_t millis, seconds;
     bool negative = (time < 0);
     
     if (negative) time = -time;
@@ -151,15 +153,37 @@ namespace time {
          ;
   }
   
+  Offset::operator string()  const
+  {
+    return (t_< 0? "" : "∆")
+         + TimeValue::operator string();
+  }
+  
+  Duration::operator string()  const
+  {
+    return "≺"+TimeValue::operator string()+"≻";
+  }
+  
   TimeSpan::operator string()  const
   {
     return string (lumiera_tmpbuf_print_time (t_))
-                + "["+string(dur_)+"]";
+         + string (dur_);
+  }
+  
+  
+  /** visual framerate representation (for diagnostics) */
+  FrameRate::operator string() const
+  {
+    return 1==denominator() ? lexical_cast<string> (numerator())+"FPS"
+                            : lexical_cast<string> (numerator())
+                               + "/"
+                               + lexical_cast<string> (denominator())
+                               + "FPS";
   }
   
   
   /** @internal backdoor to sneak in a raw time value
-   *   bypassing any normalisation and limiting */
+   *      bypassing any normalisation and limiting */
   TimeValue
   TimeValue::buildRaw_ (gavl_time_t raw)
   {
@@ -185,17 +209,6 @@ namespace time {
                          , error::LUMIERA_ERROR_BOTTOM_VALUE);
     
     return Duration (1, *this);
-  }
-  
-  
-  /** visual framerate representation (for diagnostics) */
-  FrameRate::operator string() const
-  {
-    return 1==denominator() ? lexical_cast<string> (numerator())+"FPS"
-                            : lexical_cast<string> (numerator())
-                               + "/"
-                               + lexical_cast<string> (denominator())
-                               + "FPS";
   }
 
   

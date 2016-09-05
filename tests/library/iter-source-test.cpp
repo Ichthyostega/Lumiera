@@ -24,7 +24,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/time/diagnostics.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-source.hpp"
@@ -32,7 +32,6 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/noncopyable.hpp>
 #include <unordered_map>
-#include <iostream>
 #include <cstdlib>
 #include <string>
 #include <list>
@@ -55,8 +54,6 @@ namespace test{
   using std::string;
   using std::list;
   using std::rand;
-  using std::cout;
-  using std::endl;
   
   
   
@@ -157,10 +154,10 @@ namespace test{
       typedef IterSource<string>::iterator StringIter;
       typedef IterSource<TimeVar>::iterator TimeIter;
       
-      typedef std::map<string,TimeVar>                TreeMap;
+      typedef std::map<string,TimeVar>           TreeMap;
       typedef std::unordered_map<string,TimeVar> HashMap;
       
-      typedef std::multimap<int,int>               TreeMultimap;
+      typedef std::multimap<int,int>          TreeMultimap;
       typedef std::unordered_multimap<int,int>HashMultimap;
       
       

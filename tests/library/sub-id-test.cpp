@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
 
 #include "lib/sub-id.hpp"
 
@@ -45,8 +46,6 @@ namespace test{
   using boost::hash;
   using std::vector;
   using std::string;
-  using std::cout;
-  using std::endl;
   
   
   
@@ -56,7 +55,7 @@ namespace test{
     
     
     inline string
-    str (Colour c) ///< make the enum printable
+    toString (Colour c) ///< make the enum printable
     {
       static string sym("RGB");
       return sym.substr(c,1);

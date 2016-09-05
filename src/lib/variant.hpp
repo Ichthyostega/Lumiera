@@ -83,6 +83,7 @@
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/virtual-copy-support.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
 #include <type_traits>
@@ -101,7 +102,7 @@ namespace lib {
   namespace error = lumiera::error;
   
   
-  namespace { // implementation helpers
+  namespace variant { // implementation helpers
     
     using std::remove_reference;
     using meta::NullType;
@@ -117,27 +118,34 @@ namespace lib {
     
     template<typename X, typename TYPES>
     struct CanBuildFrom<X, Node<X, TYPES>>
+      : std::true_type
       {
         using Type = X;
       };
     
     template<typename X, typename TYPES>
     struct CanBuildFrom<const X, Node<X, TYPES>>
+      : std::true_type
       {
         using Type = X;
       };
     
+    template<typename TYPES, size_t len>
+    struct CanBuildFrom<const char [len], Node<string, TYPES>> ///< esp. allow to build string from char literal
+      : std::true_type
+      {
+        using Type = string;
+      };
+    
     template<typename X, typename T,typename TYPES>
     struct CanBuildFrom<X, Node<T, TYPES>>
-      {
-        using Type = typename CanBuildFrom<X,TYPES>::Type;
-      };
+      : CanBuildFrom<X,TYPES>
+      { };
     
     template<typename X>
     struct CanBuildFrom<X, NullType>
-      {
-        static_assert (0 > sizeof(X), "No type in Typelist can be built from the given argument");
-      };
+      : std::false_type
+      { };
     
     
     
@@ -189,9 +197,9 @@ namespace lib {
       enum { SIZ = meta::maxSize<typename TYPES::List>::value };
       
       template<typename RET>
-      using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
+      using VisitorFunc      = typename variant::VFunc<RET>::template VisitorInterface<TYPES>;
       template<typename RET>
-      using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
+      using VisitorConstFunc = typename variant::VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
       
       /**
        * to be implemented by the client for visitation
@@ -312,7 +320,7 @@ namespace lib {
           void
           dispatch (Visitor& visitor)
             {
-              using Dispatcher = VFunc<void>::template ValueAcceptInterface<TY>;
+              using Dispatcher = variant::VFunc<void>::template ValueAcceptInterface<TY>;
               
               Dispatcher& typeDispatcher = visitor;
               typeDispatcher.handle (this->access());
@@ -321,7 +329,7 @@ namespace lib {
           bool
           dispatch (Predicate& visitor)  const
             {
-              using Dispatcher = VFunc<bool>::template ValueAcceptInterface<const TY>;
+              using Dispatcher = variant::VFunc<bool>::template ValueAcceptInterface<const TY>;
               
               Dispatcher& typeDispatcher = visitor;
               return typeDispatcher.handle (this->access());
@@ -391,7 +399,9 @@ namespace lib {
       template<typename X>
       Variant(X&& x)
         {
-          using StorageType = typename CanBuildFrom<X, TYPES>::Type;
+          static_assert (variant::CanBuildFrom<X, TYPES>(), "No type in Typelist can be built from the given argument");
+          
+          using StorageType = typename variant::CanBuildFrom<X, TYPES>::Type;
           
           new(storage_) Buff<StorageType> (forward<X>(x));
         }
@@ -415,10 +425,10 @@ namespace lib {
       Variant&
       operator= (X x)
         {
-          using RawType = typename remove_reference<X>::type;
+          using RawType = typename std::remove_reference<X>::type;
           static_assert (meta::isInList<RawType, typename TYPES::List>(),
                          "Type error: the given variant could never hold the required type");
-          static_assert (meta::can_use_assignment<RawType>::value, "target type does not support assignment");
+          static_assert (std::is_copy_assignable<RawType>::value, "target type does not support assignment");
           
           buff<RawType>() = forward<X>(x);
           return *this;
@@ -444,6 +454,8 @@ namespace lib {
           rvar.buffer().moveInto (this->buffer());
           return *this;
         }
+      
+      //note: NOT defining a swap operation, because swapping inline storage is pointless!
       
       
       /** diagnostic helper */
@@ -497,13 +509,7 @@ namespace lib {
   template<typename TY>
   Variant<TYPES>::Buff<TY>::operator string()  const
   {
-#ifndef LIB_FORMAT_UTIL_H
-    return string("-?-")+typeid(TY).name()+"-?-";
-#else
-    return util::str (this->access(),
-                     (util::tyStr<TY>()+"|").c_str())
-#endif
-                     ;
+    return util::typedString (this->access());
   }
   
   

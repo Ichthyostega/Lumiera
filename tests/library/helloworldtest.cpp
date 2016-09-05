@@ -29,6 +29,8 @@
 
 using boost::lexical_cast;
 using util::isnil;
+using std::cout;
+using std::endl;
 
 
 namespace lumiera{
@@ -42,17 +44,18 @@ namespace test   {
     {
       virtual void
       run (Arg arg)
-      {
-        int num= isnil(arg)?  1 : lexical_cast<int> (arg[1]);
-        
-        for ( ; 0 < num-- ; )
-          greeting();
-      } 
+        {
+          int num= isnil(arg)?  1 : lexical_cast<int> (arg[1]);
+          
+          for ( ; 0 < num-- ; )
+            greeting();
+        }
       
-      void greeting() 
-      { 
-        std::cout << "This is how the world ends...\n";
-      }
+      void
+      greeting()
+        {
+          cout << "This is how the world ends..." <<endl;
+        }
     };
   
   

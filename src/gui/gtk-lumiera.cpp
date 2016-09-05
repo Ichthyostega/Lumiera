@@ -97,6 +97,9 @@ namespace gui {
     Project project;
     Controller controller(project);
     
+    //////////////////////TICKET #959 : establish the new backbone here / replaces Project and Controller
+    // UiBus uiBus;
+    
     windowManagerInstance_.init (Config::get (KEY_ICON_PATH), Config::get (KEY_UIRES_PATH));
     windowManagerInstance_.setTheme (Config::get (KEY_STYLESHEET));
     

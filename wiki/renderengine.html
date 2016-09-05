@@ -1478,25 +1478,25 @@ While generally there is //no limitation// on the number and type of parameters,
 Usually, parameters should be passed //by value// &amp;mdash; with the exception of target object(s), which are typically bound as MObjectRef, causing them to be resolved at commad execution time (late binding).
 </pre>
 </div>
-<div title="CommandHandling" modifier="Ichthyostega" created="200906072048" modified="200910090044" tags="SessionLogic spec draft decision design img">
-<pre>Organising any ''mutating'' operations executable by the user (via GUI) by means of the [[command pattern|http://en.wikipedia.org/wiki/Command_pattern]] can be considered //state of the art//&amp;nbsp; today. First of all, it allows to discern the specific implementation operations to be called on one or several objects within the HighLevelModel from the operation requested by the user, the latter being rather a concept. A command can be labeled clearly, executed under controlled circumstances, allowing transactional behaviour.
+<div title="CommandHandling" modifier="Ichthyostega" created="200906072048" modified="201601162032" tags="SessionLogic spec draft decision design img" changecount="12">
+<pre>To organise any ''mutating'' operation executable by the user (via GUI) by means of the [[command pattern|http://en.wikipedia.org/wiki/Command_pattern]] can be considered //state of the art//&amp;nbsp; today. First of all, it allows to discern the specific implementation operations to be called on one or several objects within the HighLevelModel from the operation requested by the user, the latter being rather a concept. A command can be labeled clearly, executed under controlled circumstances, allowing transactional behaviour.
 
 
 !Defining commands
-[&gt;img[Structure of Commands|uml/fig134021.png]] Basically, a command could contain arbitrary operations, but we'll assume that it causes a well defined mutation within the HighLevelModel, which can be ''undone''. Thus, when defining (&amp;rarr;[[syntax|CommandDefinition]]) a command, we need to specify not only a function doing the mutation, but also another function which might be called later to reverse the effect of the action. Besides, the action operates on a number of ''target'' objects and additionally may require a set of ''parameter'' values. These are to be stored explicitly within the command object, thus creating a ''closure'' &amp;mdash; the operation //must not//&amp;nbsp; rely on other hidden parameters (maybe with the exception of very generic singleton system services?).
+[&gt;img[Structure of Commands|uml/fig134021.png]] Basically, a command could contain arbitrary operations, but we'll assume that it causes a well defined mutation within the HighLevelModel, which can be ''undone''. Thus, when defining (&amp;rarr;[[syntax|CommandDefinition]]) a command, we need to specify not only a function to perform the mutation, but also another function which might be called later to reverse the effect of the action. Besides, the action operates on a number of ''target'' objects and additionally may require a set of ''parameter'' values. These are to be stored explicitly within the command object, thus creating a ''closure'' -- the operation //must not//&amp;nbsp; rely on other hidden parameters (with the exception of generic singleton system services).
 
-Theoretically, defining the &quot;undo&quot; operation might utilise two different approaches:
-* specifying an //inverse operation,// known to cancel out the effect of the command
-* capturing a //state memento,// which can later be played back to restore the state found prior to executing the command.
-While obviously the first solution is much simpler to implement on behalf of the command framework, the second solution has distinct advantages, especially in the context of an editing application: there might be rounding or calculation errors, the inverse might be difficult to define correctly, the effect of the operation might depend on circumstances, be random, or might even trigger a resolution operation to yield the final result. Thus the decision is within Lumiera Proc-Layer to //favour state capturing// &amp;mdash; but in a modified, semi-manual and not completely exclusive way.
+Theoretically, providing an &quot;undo&quot; functionality might draw on two different approaches:
+* to specify an //inverse operation,// known to cancel out the effect of the command
+* capturing of a //state memento,// which can later be played back in order to restore the state found prior to command execution.
+While obviously the first solution looks elegant and is much simpler to implement on behalf of the command framework, the second solution has distinct advantages, especially in the context of an editing application: there might be rounding or calculation errors, the inverse might be difficult to define correctly, the effect of the operation might depend on circumstances, be random, or might even trigger a query resolution operation to yield the final result. Thus for Lumiera the decision is to //favour state capturing// -- but in a modified, semi-manual and not completely exclusive way.
 
 !Undo state
-While the usual »Memento« implementation might automatically capture the whole model (resulting in a lot of data to be stored and some uncertainty about the scope of the model to be captured), in Lumiera we rely instead on the client code to provide a ''capture function''&amp;nbsp;and a ''playback function'' alongside with the actual operation. To help with this task, we provide a set of standard handlers for common situations. This way, operations might capture very specific information, might provide an &quot;intelligent undo&quot; to restore a given semantic instead of just a fixed value &amp;mdash; and moreover the client code is free actually to employ the &quot;inverse operation&quot; model in special cases where it just makes more sense than capturing state.
+While the usual »Memento« implementation might automatically capture the whole model (resulting in a lot of data to be stored and some uncertainty about the scope of the model to be captured), in Lumiera we rely instead on the client code to provide a ''capture function''&amp;nbsp;and a ''playback function'' alongside with the actual operation. To help with this task, we provide a set of standard handlers for common situations. This way, operations might capture very specific information, might provide an &quot;intelligent undo&quot; to restore a given semantic instead of just a fixed value -- and moreover the client code is free actually to employ the &quot;inverse operation&quot; model in special cases where it just makes more sense than capturing state.
 
 !Handling of commands
-A command may be [[defined|CommandDefinition]] completely from scratch, or it might just serve as a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted. {{red{10/09 WIP: not clear if we acutally implement this concept}}}
+A command may be [[defined|CommandDefinition]] completely from scratch, or it might just serve as a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted. {{red{10/09 WIP: not clear if we indeed implement this concept}}}
 
-By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation. While nothing prevents you from invoking the command operation functor several times, each invocation will overwrite the undo state captrued by the previous invocation. Thus, each command instance should bes seen as the promise (or later the trace) of a single operation execution. In a similar vein, the undo capturing should be defined as to be self sufficient, so that invoking just the undo functor of a single command performes any necessary steps to restore the situation found before invoking the corresponding mutation functor &amp;mdash; of course only //with respect to the topic covered by this command.// So, while commands provide a lot of flexibility and allow to do a multitude of things, certainly there is an intended CommandLifecycle.
+By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation. While nothing prevents you from invoking the command operation functor several times, each invocation will overwrite the undo state captured by the previous invocation. Thus, each command instance should be seen as the promise (or later the trace) of a single operation execution. In a similar vein, the undo capturing should be defined as to be self sufficient, so that invoking just the undo functor of a single command performs any necessary steps to restore the situation found before invoking the corresponding mutation functor -- of course only //with respect to the topic covered by this command.// So, while commands provide a lot of flexibility and allow to do a multitude of things, certainly there is an intended CommandLifecycle.
 &amp;rarr; command [[definition|CommandDefinition]] and [[-lifecycle|CommandLifecycle]]
 &amp;rarr; more on possible [[command usage scenarios|CommandUsage]]
 &amp;rarr; more details regarding [[command implementation|CommandImpl]]
@@ -1517,9 +1517,9 @@ To support this handling scheme, some infrastructure is in place:
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
 </pre>
 </div>
-<div title="CommandLifecycle" modifier="Ichthyostega" created="200907210135" modified="201112222244" tags="SessionLogic spec draft design img">
+<div title="CommandLifecycle" modifier="Ichthyostega" created="200907210135" modified="201601162035" tags="SessionLogic spec draft design img" changecount="1">
 <pre>[&lt;img[Structure of Commands|uml/fig135173.png]]
-While generally the command framework was designed to be flexible and allow a lot of different use cases, execution paths and to serve various goals, there is an ''intended lifecycle'' &amp;mdash; commands are expected to go through several distinct states.
+While generally the command framework was designed to be flexible and allow a lot of different use cases, employ different execution paths and to serve various goals, there is an ''intended lifecycle'' &amp;mdash; commands are expected to go through several distinct states.
 
 The handling of a command starts out with a ''command ID'' provided by the client code. Command ~IDs are unique (human readable) identifiers and should be organised in a hierarchical fashion. When provided with an ID, the CommandRegistry tries to fetch an existing command definition. In case this fails, we enter the [[command definition stage|CommandDefinition]], which includes specifying functions to implement the operation, state capturing and UNDO. When all of this information is available, the entity is called a ''command definition''. Conceptually, it is comparable to a //class// or //meta object.//
 
@@ -1970,9 +1970,9 @@ It would thus be desirable to have a fixed-sized allocation, able to hold the pl
 !!!Storage
 Explicit placements are value objects and stored at the respective usage site, most notably the [[Segmentation]]. They are //not// attached to the placement index in the session, nor do they bear any referential or indexing semantics. The only dynamic side effect of an explicit placement is to keep the reference count of the corresponding MObject up and thus keep it alive and  accessible.</pre>
 </div>
-<div title="ExternalTreeDescription" creator="Ichthyostega" modifier="Ichthyostega" created="201505081647" modified="201506121606" tags="Concepts Model design spec draft" changecount="27">
+<div title="ExternalTreeDescription" creator="Ichthyostega" modifier="Ichthyostega" created="201505081647" modified="201605211638" tags="Concepts Model design spec draft" changecount="30">
 <pre>//to symbolically represent hierarchically structured elements, without actually implementing them.//
-The purpose of this »external« description is to remove the need of a central data model to work against. We consider such a foundation data model as a good starting point, yet harmful for the evolution of any larger structure to be built. According to the subsidiarity principle, we prefer to turn the working data representation into a local concern. Which leaves us with the issue of collaboration. Any collaboration requires, as an underlying, some kind of common understanding. And any formalised, mechanical collaboration requires to represent that common point of attachment -- at least as symbolic representation. The ExternalTreeDescription is shaped to fulfil this need: //in theory,// the whole field could be represented, symbolically, as a network of hierarchically structured elements. Yet, //in practice,// all we need is to conceive the presence of such a representation, as a backdrop to work against. And we do so -- we work against that symbolic representation, by describing ''changes'' made to the structure and its elements. Thus, the description of changes, the ''diff language'', refers to and partially embodies such symbolically represented elements and relations.
+The purpose of this »external« description is to remove the need of a central data model to work against. We consider such a foundation data model as a good starting point, yet harmful for the evolution of any larger structure to be built. According to the subsidiarity principle, we prefer to turn the working data representation into a local concern. Which leaves us with the issue of collaboration. Any collaboration requires, as an underlying, some kind of common understanding. Yet any formalised, mechanical collaboration requires to represent that common point of attachment -- at least as a symbolic representation. The ExternalTreeDescription is shaped to fulfil this need: //in theory,// the whole field could be represented, symbolically, as a network of hierarchically structured elements. Yet, //in practice,// all we need is to conceive the presence of such a representation, as a backdrop to work against. And we do so -- we work against that symbolic representation, by describing ''changes'' made to the structure and its elements. Thus, the description of changes, the ''diff language'', refers to and partially embodies such symbolically represented elements and relations.
 &amp;rarr; TreeDiffFundamentals
 &amp;rarr; TreeDiffModel and [[-Implementation|TreeDiffImplementation]]
 
@@ -1983,11 +1983,11 @@ For practical purposes, we have to introduce some distinctions and limitations.
 * we have to differentiate the generic node to be either a mere data element, or an object-like ''Record''
 * the former, a mere data element, is considered to be &quot;just data&quot;, to be &quot;right here&quot; and without further meta information. You need to know what it is to deal with it.
 * to the contrary, a Record has an associated, symbolic type-ID, plus it can potentially be associated with and thus relate to further elements, with the relation originating at the Record.
-* and we distinguish two different kinds of relations possibly originating from a Record:
+* and we distinguish //two different kinds of relations possibly originating from a Record://
 ** ''attributes'' are known by-name; they can be addressed through this name-ID as a key, while the value is again a generic node, possibly even another record.
 ** ''children'' to the contrary can only be enumerated; they are considered to be within (and form) the ''scope'' of the given Record (object).
 
-And there is a further limitation: The domain of possible data is fixed, even hard wired. Implementation-wise, this turns the data within the generic node into a »Variant« (typesafe union). Basically, this opens two different ways to //access// the data within a given GenNode: either you know the type to expect beforehand (and the validity of this assumption is checked on each access; please recall, all of this is meant for symbolic representation, not for implementation of high performance computing). Or we offer the ability for //generic access// through a ''variant visitor'' (double dispatch). The latter includes the option not to handle all possible content types (making the variant visitor a //partial function// -- as in any non exhaustive pattern match).
+And there is a further limitation: The domain of possible data is fixed, even hard wired. Implementation-wise, this turns the data within the generic node into a »Variant« (typesafe union). Basically, this opens two different ways to //access// the data within a given GenNode: either you know the type to expect ''beforehand'' (and the validity of this assumption is checked on each access -- please recall, all of this is meant for symbolic representation, not for implementation of high performance computing). Or we offer the ability for //generic access// through a ''variant visitor'' (double dispatch). The latter includes the option not to handle all possible content types (making the variant visitor a //partial function// -- as in any non exhaustive pattern match).
 
 Basically, you can expect to encounter the following kinds of data
 *{{{int}}}, {{{int64_t}}}, {{{short}}}, {{{char}}}
@@ -2316,7 +2316,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="GenNode" creator="Ichthyostega" modifier="Ichthyostega" created="201501171413" modified="201507031718" tags="Model GuiIntegration GuiPattern def draft" changecount="13">
+<div title="GenNode" creator="Ichthyostega" modifier="Ichthyostega" created="201501171413" modified="201604152207" tags="Model GuiIntegration GuiPattern def draft" changecount="17">
 <pre>//Abstract generic node element to build a ~DOM-like rendering of Lumiera's [[session model|HighLevelModel]].//
 GenNode elements are values, yet behave polymorphic. They are rather light-weight, have an well established identity and can be compared. They are //generic// insofar they encompass several heterogeneous ordering systems, which in themselves can not be subsumed into a single ordering hierarchy. The //purpose// of these generic nodes is to build a symbolic representation, known as [[external tree description|ExternalTreeDescription]], existing somewhere &quot;outside&quot;, at a level where the fine points of ordering system relations do not really matter. Largely, this external description is not represented or layed down as a whole. Rather, it is used as a conceptual reference frame to describe //differences and changes.// Obviously, this means that parts of the altered structures have to appear in the description of the modifications. So, practically speaking, the prime purpose of GenNode elements is to appear as bits of information within a ''diff language'' to exchange such information of changes.
 
@@ -2324,12 +2324,27 @@ To be more specific, within the actual model there are [[Placements|Placement]].
 A generic node may //represent any of these kind// -- and it may have ~GenNode children, forming a tree. Effectively all of this together makes ~GenNode a ''Monad''.
 
 GenNode elements are conceived as values, and can thus be treated as mutable or immutable; it is up to the user to express this intent through const correctness.
-Especially the nested structures, i.e. a GenNode holding an embedded {{{diff::Record}}}, are by default immutable, but expose a object builder API for remoulding. This again places the actual decision about mutations into the usage context, since the remoulded Record has to be assigned explicitly.
+Especially the nested structures, i.e. a GenNode holding an embedded {{{diff::Record}}}, are by default immutable, but expose a object builder API for remoulding. This again places the actual decision about mutations into the usage context, since the remoulded Record has to be assigned explicitly. In fact, this is an underlying theme of the whole design laid out here: Data represented as GenNode graph is //structured, yet opaque.// It is always tied into an usage context, that &quot;happens to know&quot; what to expect. Moreover, the values to be integrated into such a structure are of limited type -- covering just the basic kinds of data plus a recursive structuring device:
+* integral values: {{{int}}}, {{{int64_t}}}, {{{short}}}, {{{char}}}
+* logic values: {{{bool}}}
+* measurement data: {{{double}}}
+* textual data: {{{std::string}}}
+* time representation: {{{time::Time}}}, {{{time::Duration}}}, {{{time::TimeSpan}}}
+* identity and reference: {{{hash::LuidH}}}
+* object-like structure:  {{{diff::Record&lt;GenNode&gt;}}}
+* for cross-links and performance considerations, we also provide a {{{Record}}}-//reference element.//
+
 
 
 !to reflect or not reflect
 When dealing with this external model representation, indeed there are some rather global concerns which lend themselves to a generic programming style. Simply because, otherwise, we'd end up explicating and thereby duplicating the structure of the model all over the code. Frequently, such a situation is quoted as the reason to demand introspection facilities on any data structure. We doubt this is a valid conclusion. Since introspection allows to accept just //any element// -- followed by an open-ended //reaction on the received type// -- we might arrive at the impression that our code reaches a maximum of flexibility and &quot;openness&quot;. Unfortunately, this turns out to be a self-deception, since code to do any meaningful operation needs pre-established knowledge about the meaning of the data to be processed. More so, when, as in any hierarchical data organisation, the relevant meaning is attached to the structure itself, so consequently this pre-established knowledge tends to be scattered over several, superficially &quot;open&quot; handler functions. What looks open and flexible at first sight is in fact littered with obscure and scattered, non obvious additional presumptions.
-This observation from coding practice gets us to the conclusion, that we do not really want to support the full notion of data and type introspection. We //do want// some kind of passive matching on structure, where the receiver explicitly has to supply structural presuppositions. In a fully functional language with a correspondingly rich type system, a partial function (pattern match) would be the solution of choice. Under the given circumstances, we're able to emulate this pattern based on our variant visitor -- which basically calls a different virtual function for each of the types possibly to be encountered &quot;within&quot; a ~GenNode.</pre>
+This observation from coding practice gets us to the conclusion, that we do not really want to support the full notion of data and type introspection. We //do want// some kind of passive matching on structure, where the receiver explicitly has to supply structural presuppositions. In a fully functional language with a correspondingly rich type system, a partial function (pattern match) would be the solution of choice. Under the given circumstances, we're able to emulate this pattern based on our variant visitor -- which basically calls a different virtual function for each of the types possibly to be encountered &quot;within&quot; a ~GenNode.
+
+This is a rather challenging attitude, and in practice we're bound to allow for a bit of leeway, leave some loopholes to at least &quot;peek&quot; into data about to be handled:
+* based on the form of a given node's ID element, we allow to distinguish //attributes and children.//
+* the {{{Record&lt;GenNode&gt;}}}, which is used to represent object-like entities, exposes a //semantic type filed// to be used at the local scope's discretion.
+* we explicitly enable receiving or handling code to &quot;peek&quot; into that type field, thereby silently absorbing the case when the GenNode in question in fact does not hold a Record.
+</pre>
 </div>
 <div title="GlobalPipe" modifier="Ichthyostega" created="201007110200" modified="201505310106" tags="Model spec draft" changecount="1">
 <pre>Each [[Timeline]] has an associated set of global [[pipes|Pipe]] (global busses), similar to the subgroups of a sound mixing desk.
@@ -2383,6 +2398,43 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201601021718" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="21">
+<pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
+
+!prerequisites for issuing a command
+Within the Lumiera architecture, with the very distinct separation between [[Session]] and interface view, several steps have to be met before we're able to operate on the model.
+* we need a pre-written script, which directly works on the entities reachable through the session interface &amp;rarr; [[Command handling in Proc-Layer|CommandHandling]]
+* we need to complement this script with a state capturing script and a script to undo the given action
+* we need to combine these fixed snippets into a //command prototype.//
+* we need to care for the supply of parameters
+** indirectly this defines and limits how this command can be issued
+** which in fact embeds the raw command into a context or a gesture of invocation
+** and this is the first instance where the command-as-seen-from-session translates into something tangible within the UI
+* next we have to consider conditions and circumstances. Not every command can be invoked any given time
+** the focus and current selection is relevant
+** the user interaction might supply context by pointing at something
+** the proximity of tangible interface elements might be sufficient to figure out missing parts
+** in fact it might be necessary to intersperse the invocation of a detail parameter dialogue prior to command execution
+* and finally, after considering all these concerns, it is possible to wire a connection into the actual invocation point in UI
+This observation might be surprising; even while a given command is well defined, we can not just invoke it right away. The prevalence of all these intermediary complexities is what opens the necessity and the room for InteractionControl, which is a concern specific to human-computer interfaces. Faced with such a necessity, there are two fundamentally different approaches.
+!!!Binding close to the widget
+This approach concentrates knowledge about the operation at that location, where it is conceived &quot;to happen&quot; -- that is, close to the concrete UI widget.
+So the actual widget type implies knowledge about the contents and the meaning of the command scripts. At the point when the widget is actually triggered, it starts to collect the necessary parameters and to this end needs to acquire connections to other facilities within the UI. In fact, even //before// anything can be triggered, the widget has to administer the activation state and show some controls as enabled or disabled, and it needs to observe ongoing state changes to be able to do so.
+
+The consequence of this approach is that the relations and whereabouts of entities involved into this decision tend to be explicated right into the widget code. Any overarching concerns end up being scattered over various implementation sites, need to be dealt with by convention, or rely on all invocation sites to use some helper facilities voluntarily.
+
+!!!Abstracted binding definitions
+This contrastive approach attempts to keep knowledge and definition clustered in a way according to the commands and actions to be performed -- even for the price of some abstractions and indirections. There is no natural and obvious place where to collect those information, and thus we need to create such a location deliberately. This new entity or location to be conceived serves to link user interface and session elements, and it tends to rely on definitions from both realms.
+* in addition to the script, here we build a parameter accessor, which is some kind of functor or closure.
+* we need to introduce a new abstraction, termed InteractionStateManager. This is deliberately not a single entity, rather some distinct facility in charge for one specific kind of interaction, like gestures being formed by mouse, touch or pen input.
+* from the command definition site, we need to send a combination of //rules// and parameter accessors, which together define an invocation path for one specific flavour of a command
+* the InteractionStateManager, driven by the state changes he observes, will evaluate those rules and determine the feasibility of specific command invocation paths
+* he sends the //enablement of a command invocation trail// as a preconfigured binding to the actual //trigger sites,// which in turn allows them to install actual reaction patterns &amp;rarr; InvocationTrail
+* if finally some button is hit, the local event binding can issue the command right away, as preconfigured in this //enablement binding,// by accessing just any UI-Bus terminal at reach within that context
+
+''Lumera decides to take the latter apptoch'' -- resulting in a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code embodies the low-level UI element reactions and as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.
+</pre>
+</div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201501052157" tags="GuiIntegration overview" changecount="1">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on the well known solution of using a __business facade__ and delegation proxies.
 Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to use it's functionality, and similarily the GUI provides a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
@@ -2403,11 +2455,11 @@ Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to u
 
 Probably the most important aspect regarding the GUI integration is how to get [[access to and operate on the Session|SessionInterface]]. More specifically, this includes [[referring to individual objects|MObjectRef]]. On top of these generic access mechanisms, we create a [[proxy GUI model|GuiModel]] for binding. The interface of this GUI model is tailored for display and translation into UI entities.</pre>
 </div>
-<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201501061108" tags="GuiIntegration design draft" changecount="9">
+<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201511202206" tags="GuiIntegration design draft" changecount="11">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
-Within the Lumiera GTK GUI, we use a proxying model as a mediating entity. It is based upon the ''generic aspect'' of the SessionInterface, but packaged and conditioned in a way to allow a direct mapping of GUI entities on top. The widgets in the GUI can be conceived as decorating this model. Callbacks can be wired back, allowing to transform UI events into a stream of commands for the Proc-Layer sitting below.
+Within the Lumiera GTK UI, we use a proxying model as a mediating entity. It is based upon the ''generic aspect'' of the SessionInterface, but packaged and conditioned in a way to allow a direct mapping of GUI entities on top. The widgets in the UI can be conceived as decorating this model. Callbacks can be wired back, so to transform user interface events into a stream of commands for the Proc-Layer sitting below.
 
 The GUI model is largely comprised of immutable ID elements, which can be treated as values. A mutated model configuration in Proc-Layer is pushed upwards as a new structure and translated into a ''diff'' against the previous structure -- ready to be consumed by the GUI widgets; this diff can be broken down into parts and consumed recursively -- leaving it to the leaf widgets to adapt themselves to reflect the new situation.
 &amp;rarr; [[Building blocks of the GUI model|GuiModelElements]]
@@ -2419,7 +2471,7 @@ We acknowledge that the gui model is typically used from within the GUI event di
 The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. This callback will be scheduled by the  widgets to perform in the GUI event  thread.
 </pre>
 </div>
-<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201505081459" tags="GuiIntegration design draft img" changecount="40">
+<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201511210301" tags="GuiIntegration design draft img" changecount="46">
 <pre>''Building Blocks for the User Interface Model and Control structure''
 The fundamental pattern for building graphical user interfaces is to segregate into the roles of __M__odel, __V__iew and __C__controler ([[MVC|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]). This approach is so succesful, that it turned into a de-facto standard in commen UI toolkit sets. But larger, more elaborate and specialised applications introduce several cross cutting concerns, which create a tension within this MVC solution pattern.
 [&lt;img[UI-Bus and GUI model elements|uml/fig158213.png]]
@@ -2438,17 +2490,17 @@ While GTK -- especially in the object oriented incantation given by Gtkmm -- hoo
 ;local state
 :recommendation is to have widget local state represented //within the UI toolkit (GTK).// On loosing bus connection, any element should disable itself or maybe even shut down.
 ;updates
-:tangible UI elements are //passive.// Any update and mutation, on notification from the bus, is [[pulled from the model|GuiModelUpdate]]. The individual element is thus required to update itself (and its children recursively) into compliance with the provided state.
+:tangible UI elements are //passive.// User interaction just results in messages sent to the bus. Any update and mutation, on notification from the bus, is [[pulled from the model|GuiModelUpdate]]. The individual element is thus required to update itself (and its children recursively) into compliance with the provided state.
 
 
 
 !building and updating the tree
-The workspace starts out with a single element, corresponding to the »model root« in the ~Proc-Layer HighLevelModel. Initially, or on notification, an element requests a //status update// -- which conceptually implies there is some kind of conversation state. The backbone, as represented by the UI-Bus, might be aware of the knowledge state of its clients and just send an incremental update. Yet the authority or the backbone is absolute. It might, at its own discretion, send a full state update, to which the client elements are expected to comply. The status and update information is exposed in the form of a diff iterator. The client element, which can be a widget or a controller within the workspace, is expected to pull and extract this diff information, adjusting itself and destroying or creating children as applicable. This implies a recursive tree visitation, passing down the diff iterator alongside.
+The workspace starts out with a single element, corresponding to the »model root« in the ~Proc-Layer HighLevelModel. Initially, or on notification, an [[interface element|UI-Element]] requests a //status update// -- which conceptually implies there is some kind of conversation state. The backbone, as represented by the UI-Bus, might be aware of the knowledge state of its clients and just send an incremental update. Yet the authority or the backbone is absolute. It might, at its own discretion, send a full state update, to which the client elements are expected to comply. The status and update information is exposed in the form of a diff iterator. The client element, which can be a widget or a controller within the workspace, is expected to pull and extract this diff information, adjusting itself and destroying or creating children as applicable. This implies a recursive tree visitation, passing down the diff iterator alongside.
 
 Speaking of implementation, this state and update mechanics relies on two crucial provisions: Lumiera's framework for [[tree diff representation|TreeDiffModel]] and the ExternalTreeDescription, which is an abstracted, ~DOM-like rendering of the relevant parts of the session; this model tree is comprised of [[generic node elements|GenNode]] acting as proxy for [[calls into|SessionInterface]] the [[session model|HighLevelModel]] proper.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201506040022" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="31">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201511261846" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="40">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2475,8 +2527,9 @@ Hereby we introduce a new in-layer abstraction: The UI-Bus.
 
 
 !initiating model updates
-Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispatcher. A model update can be requested by the GUI -- but the actual update will arrive asynchronously. The update information originate from within the [[build process|BuildFixture]]. {{red{TODO 10/2014 clarify the specifics}}}. When updates arrive, a ''diff is generated'' against the current GuiModel contents. The GuiModel is updated to reflect the differences and the Receivers or Listeners are signalled. It is their responsibility in turn to schedule an update operation into the GUI event thread. When performing this update, the Listener thus actively retrieves and pulls the diffed information from within the GUI event thread. The GuiModel's object monitor is sufficient to coordinate this handover.
+Model updates are always pushed up from Proc-Layer, coordinated by the ProcDispatcher. A model update can be requested by the GUI -- but the actual update will arrive asynchronously. The update information originate from within the [[build process|BuildFixture]]. {{red{TODO 10/2014 clarify the specifics}}}. When updates arrive, a ''diff is generated'' against the current GuiModel contents. The GuiModel is updated to reflect the differences and then notifications for any Receivers or Listeners are scheduled into the GUI event thread. On reception, it is their responsibility in turn to pull the targeted diff. When performing this update, the Listener thus actively retrieves and pulls the diffed information from within the GUI event thread. The GuiModel's object monitor is sufficient to coordinate this handover.
 &amp;rarr; representation of changes as a [[tree of diffs|TreeDiffModel]]
+&amp;rarr; properties and behaviour of [[generic interface elements|UI-Element]]
 
 !!!timing and layering intricacies
 A relevant question to be settled is as to where the core of each change is constituted. This is relevant due to the intricacies of multithreading: Since the change originates in the build process, but the effect of the change is //pulled// later from within the GUI event thread, it might well happen that at this point, meanwhile further changes entered the model. As such, this is not problematic, as long as taking the diff remains atomic. This leads to quite different solution approaches:
@@ -2484,7 +2537,7 @@ A relevant question to be settled is as to where the core of each change is cons
 * alternatively, we might incorporate a complete snapshot of all information relevant for the GUI into the GuiModel. Update messages from Proc must be complete and self contained in this case, since our goal is to avoid callbacks. Following this scheme, the first stage of any update would be a push from Proc to the GuiModel, followed by a callback pull from within the individual widgets receiving the notification later. This is the approach we choose for the Lumiera GUI.
 
 !!!information to represent and to derive
-The purpose of the GuiModel is to represent an anchor point for the structures //actually relevant for the UI.// To put that into context, the model in the session is not bound to represent matters exactly in the way to be rendered within the GUI. All we can expect is for the //build process// -- upon completion -- to generate a view of the actually altered parts, detailing the information relevant for presentation. Thus we do retain an ExternalTreeDescription of all the information received this way within the GuiModel. Whenever a completed build process sends an updated state, we use the diff framework to determine the actually relevant differences -- both for triggering the corresponding GUI widgets, and for forwarding this focussed diff information to these widgets when they call back from the UI event thread to pull the actual changes.
+The purpose of the GuiModel is to represent an anchor point for the structures //actually relevant for the UI.// To put that into context, the model in the session is not bound to represent matters exactly the way they are rendered within the GUI. All we can expect is for the //build process// -- upon completion -- to generate a view of the actually altered parts, detailing the information relevant for presentation. Thus we do retain an ExternalTreeDescription, holding all the information received this way within the GuiModel. Whenever a completed build process sends an updated state, we use the diff framework to determine the actually relevant differences -- both for triggering the corresponding UI widgets, and for forwarding focussed diff information to these widgets when they call back later from the UI event thread to pull actual changes.
 
 !!!switch of typed sub-context
 When dealing with structural (tree) diffing, there is a specific twist regarding child nodes of mixed type: In the general case, we can not assume that all children of a given node are of the same kind. The classical example is (X)HTML, where a node has //attributes,// various //nested tags// and //nested text content.// The //generic node// thus must be modelled as having several collections of children -- both ordered and un-ordered collections are possible -- and the content of each such sub-collection is itself polymorphic. This constitutes a challenge for the representation of data within the tree diff format. These difficulties can be overcome as follows
@@ -2494,7 +2547,7 @@ When dealing with structural (tree) diffing, there is a specific twist regarding
 #we introduce a //bracing construct// into the diff language, to enter a subnode within the diff representation
 #the diff is produced and consumed //demand-driven (by pull)//
 #whenever a node sees this bracing construct, in invokes the respective child //recursively//
-This approach ensures each nested diff is consumed within a properly typed context, without any need of switching types from the outside: the actual consumer of each part of the whole diff description just happens to know the actual meaning of those elements he processes itself, and passes control to others with adequate knowledge for the rest. Changes are broken down and transformed into //atomic changes.// For an internal data exchange, this is sufficient: in the end we're dealing with references to binary data anyway. But when it comes to an external, self-contained representation of diffs, we additionally need a way to attach raw chunks of data corresponding to the description of those atomic changes.
+This treatment ensures each nested diff is consumed within a properly typed context, and without any need of switching types from the outside: the actual consumer of each part of the whole diff description just happens to know the actual meaning of those elements he processes itself, and passes control to others with adequate knowledge for the rest. Changes are broken down and transformed into //atomic changes.// For an internal data exchange, this is sufficient: in the end we're dealing with references to binary data anyway. But when it comes to an external, self-contained representation of diffs, we additionally need a way to attach raw chunks of data corresponding to the description of those atomic changes.
 &amp;rarr; this is the purpose of the {{{DataCap}}} within our [[generic node element|GenNode]]
 </pre>
 </div>
@@ -2863,6 +2916,27 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201512160022" tags="design decision Concepts GuiPattern draft discuss" changecount="3">
+<pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
+The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Obviously, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. But, in any more than trivial UI application, there is an intermediate level, where things go on, which can not fully be just derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could strive at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
+
+;interface has a spatial quality
+:the elements within an user interface are arranged in a way that parallels our experience when working in real world space. With the addition of a //&quot;hyper component&quot;// -- allowing for cross connections and shortcuts beyond spatial logic
+;locality of work spaces
+:but the arrangement of the interface interactions is not amorphous, rather it is segregated into cohesive clusters of closely interrelated actions. We move between these clusters of activity the same way as we move between several well confined rooms within a building.
+;context and focus of activity
+:most of what we could do //in therory,// is not relevant most of the time. But when the inner logic of what we're about to do coincides with the things at hand, then we feel enabled.
+;shift of perspective
+:and while we work, the focus moves along. Some things are closer, other things are remote and require us to move and re-orient and reshape our perspective, should we choose to turn towards them.
+;the ability to arrange what is relevant
+:we do the same stuff again and again, and this makes us observe and gradually understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.</pre>
+</div>
+<div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" tags="def design GuiIntegration draft" changecount="1">
+<pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
+In a more elaborate UI, as can be expected for a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
+
+An InteractionStateManager is a global component, but rarely addressed directly. Rather this tracking component attaches and taps into various information sources to observe some aspects of global state. Moreover, it is outfitted with a set of rules, leading to enablement of some //command invocation trail.// These enablements or disablements are forwarded to the actual trigger points, which are those UI elements to witness the completion of a gesture.</pre>
+</div>
 <div title="InterfaceNamespaces" modifier="Ichthyostega" created="200708080338" modified="201003160209" tags="impl decision draft">
 <pre>Because we rely on strong decoupling and separation into self contained components, there is not much need for a common quasi-global namespace. Operations needing the cooperation of another subsystem will be delegated or even dispatched, consequently implementation code needs only the service acces points from &quot;direct cooperation partner&quot; subsystems. Hierarchical scopes besides classes are needed only when multiple subsystems share a set of common abstractions. Interface and Implementation use separate namespaces.
 
@@ -2894,6 +2968,10 @@ From experiences with other middle scale projects, I prefer having the test code
 
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
+</div>
+<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201601021714" tags="def GuiIntegration draft" changecount="2">
+<pre>//A command in preparation of being issued from the UI.//
+The actual persistent operations on the session model are defined through a DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].</pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="201208311625" tags="spec Rendering draft">
 <pre>The actual media data is rendered by [[individually scheduled render jobs|RenderJob]]. All these calculations together implement a [[stream of calculations|CalcStream]], as demanded and directed by the PlayProcess. During the preparation of playback, a ''node planning phase'' is performed, to arrange for [[dispatching|FrameDispatcher]] the individual calculations per frame.  The goal of these //preparations//&amp;nbsp; is to find out
@@ -4805,7 +4883,31 @@ There can be multiple viewer widgets, to be connected dynamically to multiple pl
 //Note, we have yet to specify how exactly the building and rendering will work together with the backend. There are several possibilities how to structure the Playlist//
 </pre>
 </div>
-<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201505081535" tags="design discuss" changecount="2">
+<div title="PresentationState" creator="Ichthyostega" modifier="Ichthyostega" created="201602121500" modified="201602121511" tags="GuiPattern Concepts def design draft" changecount="3">
+<pre>Within Lumiera, we distinguish between //model state// and //presentation state.// Any conceivable UI is stateful and reshapes itself through interaction -- but the common UI toolkits just give us this state as //transient state,// maybe with some means to restore state. For simple CRUD applications this might be sufficient, as long as the data is self contained and the meaning of data is self evident. But a work environment, like the NLE we're building here, layers additional requirements on top of mere data access. To be able to work, not only you need tools, you need //enablement.// Which, in a nutshell, means that things-at-hand need to be at hand. Sounds simple, yet is a challenge still not adequately fulfilled by contemporary computer based interfaces and  environments.
+
+A fundamental design decision in Lumiera is to distinguish between engine, model and working environment. The //model// is oriented towards the practicalities of film making, not towards the practicalities of implementing video processing. Also, the model needs to be self contained to the degree that //anything with a tangible influence on the final rendered result// needs to be represented within the model. So the task of editing a film is the task of building such a model. This is an ongoing effort over an extended period of time, which in fact turns this effort into a project. Yet, as such, any project also pertains to the way you are working within that project. These might be fundamental decisions about what material to use, about formats and technologies, but also some set of conventions emerging under way. Beyond that, any project develops habits of handling matters, which, over time, turn into rules. And even beyond that, over time, you expect to find common things at common places. The latter is what presentation state is all about.
+
+!dealing with presentation state
+The backbone of the Lumiera UI is arranged such as to produce a data feed with state transition notifications relevant for presentation state. This is not the raw data feed of UI signals, like a click on this or that button (such is kept confined within the realm of the UI toolkit, here GTK). Rather, it is a custom made, pre-filtered stream of messages on the UI-Bus, organised and structured and outfitted with meaning by the [[tangible interfeace elements|UI-Element]]. Technically speaking, these messages are known as ''state mark messages'', and they are handled through a specific set of API functions on the bus interface. It is a bidirectional data exchange protocol, encompassed by
+;state notifications
+:whenever an UI-Element deems a state transition ''relevant for persistent presentation state'', a state mark message will be emitted
+:* the originating element, as designated by its ID, is evident from the API call
+:* the message itself is a GenNode
+:** the ~ID-symbol of this message element was chosen by the emitting entity; it has distinctive meaning for this entity, e.g. »expand«, »reOrder«,...
+:** the payload of the message is a data element, sufficient for the originator to restore itself to precisely the state as represented through this state mark.
+;state marking
+:whenever the [[state manager|PresentationStateManager]] deems some state eligible to be restored, it casts the relevant state mark back at its originator
+:* so the originator needs to be discernibly by its ID, and this ID needs to be fabricated in a way such as to be reproducible within a later editing session
+:* the UI-Bus allows just to cast some state mark message at &quot;someone&quot; -- this is also used by the lower layers for notifications and error results
+:* the receiver is assumed to &quot;understand&quot; the actual meaning of that message and reshape itself to comply</pre>
+</div>
+<div title="PresentationStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201602121520" modified="201602121524" tags="GuiPattern spec draft" changecount="3">
+<pre>//The PresentationStateManager creates the ability to build persistent PresentationState//
+Run as part of the UiCoreServices, it is attached to the UI-Bus and listens to all ''state mark messages'' to distil the notion of relevant current state.
+On a basic level, the task is to group and store those messages in a way as to overwrite previous messages with new updates on the level of individual properties. Beyond that, there is the sensitivity to context, presentation perspective and work site, which means to impose an additional structure on this basic ''state snapshot'', to extract and replicate structured sets of state information.</pre>
+</div>
+<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201602162247" tags="design discuss" changecount="7">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
 !!Parameter Handling
@@ -4841,10 +4943,10 @@ We need to work out guidelines for dealing with operations going on simultaneous
 * all EditingOperations are not threadsafe intentionally, because they are [[scheduled|ProcLayerScheduler]]
 
 !!the perils of data representation
-In software development, there is a natural inclination to cast &quot;reality&quot; into data, the structure of which has to be nailed down first. Then, everyone might &quot;access reality&quot; and work on it. Such sounds natural, self-evident and sound, yet to the same extent this approach is fundamentally flawed. It is known to work well for small, &quot;handsome&quot; projects, where you clearly know up-front what you're up to: namely to get away, after being paid, before anyone realises the fact you've built something that looks nice but does not fit.
-So the challenge of any major undertaking in software construction is //not to build a model.// Rather, we want to arrive at something that can be made to fit. Over and over again.
+In software development, there is a natural inclination to cast &quot;reality&quot; into data, the structure of which has to be nailed down first. Then, everyone might &quot;access reality&quot; and work on it. Doing so might sounds rational, natural, even self-evident and sound, yet as compelling as it might be, this approach is fundamentally flawed. It is known to work well only for small, &quot;handsome&quot; projects, where you clearly know up-front what you're up to: namely to get away, after being paid, before anyone realises the fact you've built something that looks nice but does not fit.
+So the challenge of any major undertaking in software construction is //not to build an universal model.// Rather, we want to arrive at something that can be made to fit. Over and over again.
 
-More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something different. But we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, to support us with its firmness, but also to offer joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of subsidiarity. The links and joints between such autonomous centres can be shaped as exchange based on a common understanding of the specific matters to deal with, at that given joint.
+More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something entirely different. Yet still we know what we need and  we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, a skeleton to support us with its firmness, while also offering joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of subsidiarity. The links and joints between autonomous centres can be shaped to be in fact an exchange, a handover based on common understanding of the //specific matters to deal with,// at that given joint.
 </pre>
 </div>
 <div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" tags="def">
@@ -7947,7 +8049,7 @@ Used this way, diff representation helps to separate structure and raw data in e
 :Chunks of raw data are attached inline to the structural diff, assuming that each element implicitly knows the kind of data to expect
 </pre>
 </div>
-<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201510020048" tags="Model GuiPattern design draft" changecount="44">
+<div title="TreeDiffImplementation" creator="Ichthyostega" modifier="Ichthyostega" created="201412210015" modified="201608292011" tags="Model GuiPattern design draft" changecount="61">
 <pre>//This page details decisions taken for implementation of Lumiera's diff handling framework//
 This topic is rather abstract, since diff handling is multi purpose within Lumiera: Diff representation is seen as a meta language and abstraction mechanism; it enables tight collaboration without the need to tie and tangle the involved implementation data structures. Used this way, diff representation reduces coupling and helps to cut down overall complexity -- so to justify the considerable amount of complexity seen within the diff framework implementation.
 
@@ -7958,15 +8060,15 @@ Provided as a loosely coupled collection of tools in the namespace {{{lib::diff}
 :*lightweight copyable values
 :*equality comparable
 :*bearing distinct identity
-:*unique //as far as concerned//
+:*unique //as far as relevant//
 ;data sequence
-:any collection of data is delivered in the form of a sequence, which might or might not be //ordered,// but in any case will be traversed once only.
+:any collection of data is delivered in the form of a sequence, which is //stable// (retains a given sequence order), and allows for defined traversal in that order.
 ;diff language
 :a diff represents the changes necessary to transform an input sequence (&quot;old sequence&quot;) into a target sequence (&quot;new sequence&quot;)
-:differences are spelled out in ''linearised form'': as a sequence of constant-size diff actions (called &amp;raquo;diff verbs&amp;laquo;)
-:they are conceived as operations, which, when applied consuming the input sequence, will produce the target sequence of the diff.
+:*differences are spelled out in ''linearised form'': as a sequence of constant-size diff actions (called &amp;raquo;diff verbs&amp;laquo;)
+:*these are conceived as operations, which, when applied consuming the input sequence, will produce the target sequence of the diff.
 
-!{{red{WIP 12/2014}}}building a list diff detector
+!building a list diff detector
 transforming the algorithm sketch (&amp;rarr; see [[technical documentation|http://lumiera.org/documentation/technical/library/DiffFramework.html]]) into working code incurs some challenges at the level of technical details.
 
 !!!interface of the index component
@@ -7979,7 +8081,7 @@ A first attempt was made to come up with a rather clever swapping and rotating s
 !!!goal of a generic implementation
 The diff handling framework we intend to build here is meant to be //generic// -- the actual element data type, as well as the underlying data structure and the index access shall be supplied by strategy and specialisation. This has the downside (maybe this is even a benefit?) that most efficiency considerations are moot at this level; we need to look at actual use cases and investigate the composite performance in practice later.
 
-!{{red{WIP 1/2015}}}building the tree diff handling
+!building the tree diff handling
 Our tree diff handling framework is conceived as a direct specialisation of and extension to list diffing. We rely on a very specific element type for the tree nodes: the GenNode. This specific node element type is inherently generic, and the tree diff handling explicitly relies on some part of this generic nature to represent object features. Following the gist of the linearised list diff representation, also tree handling relies on an implicit ''tree representation protocol'':
 * every GenNode is a distinct element and considered unique within context.
 * nodes are inherently typed, but this typing is outside of the diff representation scope
@@ -8015,7 +8117,7 @@ __Questions for Design (6/15)__
 
 Within this framework, we represent //object-like// entities through a special flavour of the GenNode: Basically, an object is a flat collection of children, yet given in accordance to a distinct ''object protocol''. The relevant ''meta'' information is spelled out first, followed by the ''attributes'' and finally the ''children''. The distinction between these lies in the mode of handling. Meta information is something we need to know before we're able to deal with the actual stuff. Prominent example is the type of the object. Attributes are considered unordered, and will typically be addressed by-name. Children are an ordered collection of recursive instances of the same data structure. (Incidentally, we do not rule out the possibility that also an attribute holds a recursive subtree; only the mode of access is what makes the distinction).
 
-Here the question arises as to what extent the //language// needs to know about these object semantics. While a commitment for precision might lead us towards strict language definition, in fact, languages usable in practice need largely not be defined at all, since they are applied against a context. And since the use of the language itself might guide us from one context to another, the possibility of multiple levels of language arises. We use this observation as guideline and hint to keep our diff language open. Basically, it is just a sequence of verbs, which needs an actual interpreter implementation, which in turn naturally leads itself to attachment to some working context. At this point, we get a //binding// between sequences of language terms and the operational semantics, which in turn defines the limits of legal language constructs. As long as both sides agree upon the same structural conventions, the exchange works without strict codification. We should better strive at defining our object semantics precisely though. Any leeway can be allowed, as long as it conforms with the general layout and as long as it doesn't open the path to later confusion.
+Here the question arises as to what extent the //language// needs to know about these object semantics. While a commitment for precision might lead us towards strict language definition, in fact, languages usable in practice need largely not be defined at all, since they are applied against a context. And since the use of the language itself might guide us from one context to another, the possibility of multiple levels of language arises. We use this observation as guideline and hint to keep our diff language open. Basically, it is just a sequence of verbs, which needs an actual interpreter implementation, which in turn naturally leads itself to attachment to some working context. At this point, we get a //binding// between sequences of language terms and the operational semantics, which in turn defines the limits of legal language constructs. As long as both sides agree upon the same structural conventions, the exchange works without strict codification. We should better strive at defining our object semantics precisely though. Any leeway can be allowed, as long as it conforms with the general layout and as long as it doesn't open a path to confusion later.
 
 Based on these considerations we establish the &quot;two lists&quot; schematics:
 * we make our objects look like lists of attributes and children
@@ -8024,19 +8126,38 @@ Based on these considerations we establish the &quot;two lists&quot; schematics:
 ** metadata given by //magic attributes// (just a {{{&quot;type&quot;}}} attribute for now)
 ** occurrence of the first child switches from attribute zone to child scope
 ** children are recognisable by the form of their ID
-Relying on these rules, we're able to arrive at a sensible binding systematically, while most of the implementation is just a specialisation of list diffing.
+Relying on these rules, we're able to systematically build and derive a sensible binding, while most of the implementation is just a specialisation of list diffing.
 
 !!!handling of actual mutation
 This question is closely linked to the semantics of equality. In a simple list diff, this matter doesn't pose any problems; when an element is different, it is a different element, and this change can be encoded as a deletion and insertion of a new element. Not so in tree diff handling. We do not want to delete and re-build whole subtrees, because some tiny bit is altered somewhere down. Thus, a recursive sub-structure can be considered //the same entity,// yet still //mutated.// Our diff handling framework deals with the identity first, followed by an recourse into investigating //inner changes.// This recursive investigation is spelled out as a bracketed construct, which can be processed by recursive invocation. In the end, at the level of the tree leaves, handling those inner mutations boils down to invoking the //mutation closure,// as mentioned above. The knowledge of type context is thus confined to the receiving client, as long as every GenNode implementation offers support to detect an inner mutation and allows to install and invoke such a specifically typed closure to deal with the mutation. The twist to note is the point, //where// this closure is installed: it certainly doesn't make sense to install it on the generating side.
+
+!!!conceptual mismatch
+In the attempt to represent changes to a data structure in the form of //abstracted diff(erences),// we're facing a conceptual mismatch on two levels
+* even a generic, [[DOM-like structure|ExternalTreeDescription]] has more inherent rigidity than is compatible with the notion of describing differences. //We'll have to reject some diffs//
+* any real language-object implementation bears rich shades of semantics, which are impossible to represent symbolically. //We'll have to paraphrase and omit some aspects//
 
 !!!use cases of tree diff application
 Within the context of GuiModelUpdate, we discern two distinct situations necessitating an update driven by diff:
 * a GenNode representing an object pulls diff information provided by Proc. This information contains mutations of attributes, and //some// of these attributes are relevant for the GUI and thus represented within the GuiModel
 * a widget was notified of pending changes in the GuiModel and calls back to pull a diff. While interpreting the attributes mentioned in the diff, it has to determine which widget state corresponds to the mentioned attributes, if applicable. Detected changes need to be interpreted and pushed into the corresponding widget and GTK elements.
 the second case is what poses the real challenge in terms of writing well organised code. Since in that case, the receiver side has to translate generic diff verbs into operations on hard wired language level data structures -- structures, we can not control, predict or limit beforhand. We deal with this situation by introducing a specific intermediary, the &amp;rarr; TreeMutator.
-</pre>
+
+!!!apply a diff onto implementation data
+Thus we need to carry the idea one step further. The goal is to allow a loose cooperation of components, without the need of a common data structure set in stone. Up to now, with our symbolic diff language and tree representation, we're able to render objects in some kind of DOM notation, and we're able to apply changes onto them. This is fine for maintaining an intermediary GuiModel, but to really achieve the desired loose coupling of cooperating components, we need //the ability to apply changes to implementation data structures.// To do so, we need a ''binding'' from the diff language to »''implemetation data''« -- without imposing restrictions onto the latter: We do not intend to invent yet another introspection framework, working on yet another meta object type. Thus, at some point, finally we need the help of the implementation context to //make sense of the diff verbs.//
+
+As said, this turns out to be a tricky challenge: implementing the application of diff messages is inevitably an involved and technical task; we should avoid imposing these technicalities onto client code. But, at minimum, we need to know some basic traits regarding the target data structures, in order to handle receiving change messages properly. We solve this problem through implicit conventions plus an indirection layer
+* we impose some very vague requirements onto the structure of target data: it is required to comply to our conceptual notion of an &quot;object&quot;; target data //needs to be congruent to [[ETD|ExternalTreeDescription]].//
+* we introduce an adapter interface, the TreeMutator. Diff application can then be implemented in terms of this new abstraction
+* we offer pre configured building blocks and a DSL, for client code to assemble a suitable {{{TreeMutator}}} implementation, privately tied into the opaque implementation data structure
+* client code has to fill in some necessary information in the form of ''closures'' (lambdas)
+** how to construct a new data element
+** how to match a //diff verb// against a given data element
+** how to determine applicability of a verb, allowing for multi layered binding
+** how to assign a new value, given the corresponding diff verb
+** how to open a nested scope for recursive mutation
+ </pre>
 </div>
-<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201509300045" tags="Model GuiPattern spec draft" changecount="62">
+<div title="TreeDiffModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410270313" modified="201609050153" tags="Model GuiPattern spec draft" changecount="65">
 <pre>for the purpose of handling updates in the GUI timeline display efficiently, we need to determine and represent //structural differences//
 This leads to what could be considered the very opposite of data-centric programming. Instead of embody »the truth« into a central data model with predefined layout, we base our achitecture on a set of actors and their collaboration. In the mentioned example this would be the high-level view in the Session, the Builder, the UI-Bus and the presentation elements within the timeline view. Underlying to each such collaboration is a shared conception of data. There is no need to //actually represent that data// -- it can be conceived to exist in a more descriptive, declarative [[external tree description (ETD)|ExternalTreeDescription]]. In fact, what we //do represent// is a ''diff'' against such an external rendering.
 
@@ -8088,6 +8209,7 @@ Diff description and diff handling can be applied to tree-like data structures a
 Basically the transition from text diffing to changes on data structures is achieved by exchanging the //type of the tokens.// Instead of words, or lines of text, we now use //data elements.// To do so, we introduce a symbolic ExternalTreeDescription of tree-like core data structures. The elementary token element used in this tree diff, the GenNode, embodies either simple plain data elements (numbers, strings, booleans, id-hashes, time values) -- or it describes a //recursive data element,// given as {{{Record&lt;GenNode&gt;}}}. Such a recursive data element describes object-like entities as a sequence of metadata, named attributes and ordered child-nodes -- it is handled in two phases: the first step is to treat the presence and ordering of child data elements, insertions and deletes. The second phase opens for each structurally changed child data element a recursive bracketing construct, as indicated  by explicit (and slightly redundant) //bracketing tokens://
 *{{{mut}}}(node-ID)  : recurse into the designated node, which must be present already as result of the preceding changes. The following diff tokens describe //mutations// of the child
 *{{{emu}}}(node-ID)  : close the current node context and return one step up; the node-ID is given for verification, but can be used to restore the working position at parent level
+*{{{set}}}(node)  : shortcut notation for simple value elements; assign the new payload value to the designated element, retaining identity
 In addition, in a future extension, we might consider to introduce up/down folding primitives
 *{{{fold}}}(node-ID) : pick the following elements and fold them down into a new child with given node-ID. The downfolding continues until the next {{{emu}}} token
 *{{{lift}}}(node-ID) : remove the next child node, which must be node-ID, and insert its children at current position
@@ -8095,18 +8217,163 @@ In addition, in a future extension, we might consider to introduce up/down foldi
 Since the bracketing construct for mutation of child structures bears the ID of the parent, a certain degree of leeway is introduced. In theory, we could always open such a bracketing construct right after the {{{pick}}} token accepting the parent -- yet, while minimal, such a strictly depth-first representation would be hard to read -- so we allow to group the recursive treatement of children //post-fix,// after the messages for the current node. In a similar vein, we introduce another token to describe a //short-cut://
 *{{{after}}}(node-ID) : fast-forward through the sequence of elements at current level until the position after the designated element.
 To complement this language construct, we define some special, magical (meta) element-~IDs
-*{{{_CHILD_}}} : marks an //unnamed// ID. Mostly, the implementation exploits this specific marker to distinguish between nodes which are (named) attributes of an object, and real children
-*{{{_THIS_}}} : can be used to refer to the immediately preceding element without knowing its name. Typically used to open a {{{mut(_THIS_)}}} ... {{{emu(_THIS_)}}} bracket to populate a newly inserted object
+*{{{_CHILD_}}} : marks an //unnamed// ID. The implementation exploits this specific marker to distinguish between nodes which are (named) attributes of an object, and real children.
 *{{{_ATTRIBS_}}} : can be used to jump {{{after(_ATTRIBS_)}}} when mutating the contents of an object. So the following diff verbs will immediately start working on the children
 *{{{_END_}}} : likewise can be used to jump {{{after(_END_)}}} to start appending new elements without caring for the existing current content.
 All these additional language constructs aren't strictly necessary, but widen the usability of the langauge, also to cover the description of incomplete or fuzzy diffs.
 
 !!!deriving conventional representations
-On receiving the terms of this &quot;diff language&quot;, it is possible to generate the well known and more conventional diff representations,
+On receiving a stream of tokens of this &quot;diff language&quot;, it is possible to generate the well known and more conventional diff representations,
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201509300059" tags="Model Concepts GuiPattern design draft" changecount="53">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201609021520" tags="Model Concepts GuiPattern design draft" changecount="94">
+<pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
+within the [[diff framework|TreeDiffModel]], this is a crucial joint, since here the abstract, generic, ~DOM-like ExternalTreeDescription meeds opaque, local and undisclosed data structures.
+
+&amp;rarr; see TreeMutatorEvolution for an extensive discussion about the principles and architecture, which gradually leads to the final design of the ~TreeMutator, as realised now in code.
+
+!Motivation
+on a very large scale within the Lumiera application, disjoint subsystems are collaborating based on the notion of a //shared conceptual structure.//
+This means, we do not share a data model -- rather we exchange ''diff messages'' with respect to this assumed, common, conceptual structure. In practice, this kind of very loose coupling is realised with the help of a ~DOM-like notation based on a small selection of primitive base types, plus an ~object-like //record// made from such base elements. Based on these elements represented as [[generic nodes|GenNode]], we can build up a symbolic representation of shared structures, which we term the ExternalTreeDescription. In fact, this is not mean and not used as actual implementation data structure -- rather it is used to derive and validate the diff messages handled within our [[diff framework|TreeDiffModel]].
+
+//But --// if this symbolic representation is not meant for implementation -- how are we then able to relate it in any useful way to actual implementation data structures? The answer is two fold. For one, and most importantly, we do not collaborate on a shared data model, which means that the implementation data structures are always an implementation detail confined within some subsystem or even part of an subsystem. And this implementation layer can then -- secondly -- expose an adapter or intermediary, which offers a &quot;generic side&quot; for the diff framework to attach to. This adapter is the TreeMutator.
+
+!Definition
+;interface
+:the tree mutator is an interface providing a set of virtual functions, the ''mutation primitives''
+;adapter
+:the implementation of this interface acts as adapter, to translate ''verbs of the diff language'' into invocations on opaque, private data structures
+;binding
+:this adapter is //created// by binding those opaque, private data structures into some generic implementation patterns for the TreeMutator
+;builder interface
+:the TreeMutator offers a builder interface to build up those bindings, with the help of closures provided by the client, which is the private, opaque data structure
+
+So, from the usage side, some kind of implementation data structure will build a TreeMutator and tie itself into its binding Then, by exposing this {{{TreeMutator}}} implementation, this client data structure gets the ability to receive diff messages, which means this local and undisclosed data structure can be attached to and  collaborate with some other subsystem; it can be altered, extended and reshaped remotely, without the need to share implementation details.
+
+Incidentally, the ''diff language'' itself is meant to be readable and expressive. On the //sending side,// typically diff messages will be constructed directly in code. To this end, the GenNode offers a constructor and mutator syntax specifically crafted to allow writing clear and compact diff messages. Since the tree diff language embeds a simple list diff language as a subset, it is possible to generate structural changes by observing changes on data collections. Such //detected diffs// may be embedded within explicitly written diff message sequences.
+
+The canonical example are changes to the editing session. After maybe running some resolution steps, an actual effective change is determined within the session. At this point, a minimal diff message to describe this effective change will be created. This diff message can be logged, to make the change persistent. And then this message will be &quot;cast towards the UI&quot;. There is a communication structure, the UI-Bus, which allows to &quot;direct&quot; such a message towards an element only known and designated by its ID. In fact, this receiver element will be a widget within the UI, and this widget exposes a custom configured TreeMutator to consume this message and effect the corresponding changes within the widget structure of the UI.
+
+!Semantics
+The TreeMutator is an //adapter,// allowing the diff language to perform some abstracted generic operations, and at the same time enabling access to an (not further disclosed) implementation data structure in a standardised way. The underlying idea is to deal with //structured data//, i.e. anything which can be described in a DOM like tree. More specifically, our ExternalTreeDescription is the blueprint and exemplifies the generic notion of //structural data to receive a change by diff.// Anything, which can be brought into that form -- after sufficient abstraction -- can be handled through a TreeMutator with appropriate binding, and thus is able to receive diff messages. To be yet more specific
+* data is arranged in an order retaining collection
+* the type of data within that collection is possibly mixed
+* each element within that collection has an unique ID (identity)
+* but this uniqueness is only required locally, within a scope at hand
+* data can be classified in two ways
+** elements might be named (&quot;attributes&quot;) or unnamed (&quot;children&quot;)
+** elements might be primitive values or nested records (&quot;objects&quot;)
+* and  such an &quot;object&quot;
+** is recursively again &quot;data&quot; as defined here
+** can, optionally, carry a type field (metadata)
+** is expected to be spelled out as //attributes first, then children.//
+
+When it comes to applying a diff, we assume that this data abstractly behaves in a specific way, which is outlined by the ''mutation primitives'' -- these are the operations on the TreeMutator interface. Again, to be more specific...
+* data elements are //value-like,// but have an attached identity.
+* data elements can be moved.
+* when the diff application starts, all existing data elements will be moved into a temporary buffer
+* the sequence order of the data elements is retained in that move
+* after that, the data in the temporary buffer represents the //old state//, while the new state arrives in the form of diff instructions.
+* &quot;applying&quot; those diff instructions will transform the exiting data into new shape, possibly insert and delete some elements.
+* in the end, the data will be back into the original location, but reshaped and transformed.
+
+!!!mutation primitives
+the building blocks, from which such a diff application can be combined, are embodied into the TreeMutator interface
+;lifecycle
+:the TreeMutator is a one-way, &quot;throwaway&quot; object. It starts (with moving content into the old state buffer), is operated and then disposed.
+;ownership
+:the TreeMutator //only referres// to the data, but during the application process, it owns the data in the old state buffer
+;failure guarantee
+:''none'' given. If diff application fails, data is possibly partially transformed, partially in the old state buffer. Thus data is //corrupted.//
+;old sequence position
+:during diff application, the old state sequence is traversed once. There is an implicit position.
+;operation {{{hasSrc}}}
+:determine if there are further elements waiting from the old state sequence (to be either picked in the new sequence or discarded)
+;operation {{{skipSrc}}}
+:skip the next element in the old state sequence, effectively dropping it into obsolescence
+;operation {{{injectNew}}}
+:create and inject a new element into the transformed data, based on the given //spec// (from the verb in the diff message)
+;operation {{{matchSrc}}}
+:decide if the next element in the old state sequence //matches// the given //spec// from the diff verb. This spec is given as GenNode
+;operation {{{acceptSrc}}}
+:move the next element from the old state as-is into the new transfomed data, after verifying match with the provided //spec//.
+;operation {{{accept_until}}}
+:repeatedly //accept// elements from the old state buffer, until hitting a condition. The condition is given within the //spec//
+:* when the spec is {{{Ref::END}}}, then accept all (remaining) elements, i.e. the remainder of the old sequence as-is.
+:* when the spec is {{{Ref::ATTRIBS}}}, and the implementation supports the notion of &quot;an attribute&quot;, then accept and stop behind attributes
+:* otherwise, accept //until after// finding an element that matches the //spec//. That is, the matching element will be the last one accepted
+;operation {{{findSrc}}}
+:without changing the current position, delve further into the old state sequence, to find an element //matching the given spec.//
+:this element shall than be //accepted// (moved) into the new transformed data, leaving a //waste position// in the old state buffer.
+:later, when encountering this //waste position// during regular traversal, it //must be skipped//.
+:The regular diff language messages will ensure this to happen in proper order
+;operation {{{assignElm}}}
+:locate an element //already accepted into// the new transformed data. Then assign a new value corresponding to the given //spec//.
+:The search order is to look at the last added element first, then to start search from the beginning of the new transformed data sequence;
+:a match is identified by matching the ID part of the given //spec// against the //identity// of the data element in question. 
+;operation {{{mutateChild}}}
+:likewise locate an element //already accepted//. This element is assumed to be a //nested scope// (object)
+:for this element, a new TreeMutator shall be //fabricated recursively// and placed into a given buffer. This new TreeMutator is assumed
+:to be attached to the child element in question, and can be used to delve into mutation of sub scopes
+
+!!!ways of binding
+With ''binding'' we denote the way to attach a TreeMutator to concrete, implementation local data structures. It is accomplished using the ''builder interface''.
+Besides being a base class (with default {{{NOP}}} implementation of all mutation primitives), through this builder interface the TreeMutator offers several
+pre configured ways of binding to actual data, thereby easing the process to provide a suitably customised TreeMutator instance. Moreover, by using this
+builder interface, several ways of binding can be //layered on top of each other,// so the actual TreeMutator is structured into multiple //onion layers,// where
+each layer is responsible for a specific aspect of the binding. This is crucial to deal with &quot;objects&quot; comprised of a mixture of children, like e.g. the [[Pipe]]
+attached to a clip, or the mixture of clips, effects and labels found within a [[Fork]] (&quot;track&quot;).
+;the selector
+:this is a lambda {{{isApplicableIf : bool(GenNode const&amp;)}}}, provided separately by the concrete //onion layer//
+:* the selector is //optional// and only necessary when there is more than one binding layer
+:* this predicate decides if a given //spec,// as taken from a //diff verb// to be applied, is of relevance for the given //onion layer//
+:* if this onion layer is not concerned or affected by this message, it will be passed down to further layers, possibly ignoring it at the end
+:* thereby, the meaning of a diff message is //segregated// into various domains or type scopes, each of which corresponds to a //onion layer// at the implementation side
+;test mutation target
+:this is an &quot;onion layer&quot; for unit tests and diagnostic purposes. It is assumed to be layered on top of other, real bindings.
+:it acts like a //wire tap// and logs any encountered primitives into a {{{TestEventLog}}}.
+;STL collection binding
+:this is the most important case, allowing to bind to objects managed within a STL collection.
+:all non trivial and non default aspects of this binding need to be given by installing some ''closures'' (lambdas)
+:* lambda {{{matchElement : bool(GenNode const&amp; spec, Elm const&amp; elm)}}}
+:** implements the concrete meaning when a local data element can be considered to match the given spec
+:* lambda {{{constructFrom : Elm(GenNode const&amp; spec)}}}
+:** create a new element to conform to the given spec
+:** return this element by value
+:* lambda {{{isApplicableIf : bool(GenNode const&amp;)}}}
+:** decide applicability of the given //spec// to //this collection binding layer.//
+:* lambda {{{assignElement : bool(Elm&amp;, GenNode const&amp;)}}}
+:** implement assignment of a new value to the (implementation) data element passed in as reference
+:** might return false to indicate that assignment can not be handled
+:* lambda {{{buildChildMutator : bool(Elm&amp;, GenNode::ID const&amp;, TreeMutator::MutatorBuffer)}}}
+:** fabricate a recursive sub-TreeMutator to deal with the (implementation data) element passed as reference
+:** the ID, as taken from the (diff) spec, is also passed, for orientation
+:** the lambda is expected to //place// the generated mutator into the given buffer smart handle, which takes ownership of this object
+;object field binding
+:this maps the concept of &quot;Attribute&quot; onto concrete, mutable data fields
+:any re-ordering  and deletion of fields is ''prohibited'', while defaultable optional fields may be tolerated
+:there is only one common combined binding for object fields (i.e. we don't offer a customisable selector),
+:where each individual binding is implemented on its own, as a self contained, isolated binding layer
+:binding is created ''alternatively'' through the following closures
+:* ''change'': &quot;key&quot;, setter lambda {{{void(T val)}}}
+:** binding for a regular setter to assign a new value
+:** the value type is picked up from the provided lambda
+:** possible value types are restricted to the selection of GenNode payload types
+:** any further type conversions are to be handled by the closure and thus the client code
+:* ''mutateAttrib'': &quot;key&quot;, mutator-builder lambda {{{void(TreeMutator::MutatorBuffer)}}}
+:** fabricate a recursive sub-TreeMutator to handle an //object valued// attribute
+:** implicit typing -- the fabricated sub-TreeMutator just needs to be able to deal with the bound attribute
+;GenNode binding
+:in the end, it turnes out that the //implementation// underlying our ExternalTreeDescription itself fits nicely into the above mentioned standard bindings --
+:all we have to do is to layer two collection bindings on top of each other, with a suitable //selector// to separate //attributes// from //children.//
+:obviously, this unified implementation comes at the price of one additional indirection (namely through the ~TreeMutator VTable), while the requirements on temporary storage size are almost identical (two iterators and two back references instead of one). Moreover, all the explicitly coded complexities regarding the attribute / children distinction is gone, relying on the logic of layered decorators solely. So the effort to shape the TreeMutator API payed off in the end, to improve and rectify the whole design...
+
+
+You should note that this entire design is recursive: only after understanding the part, where, for handling a sub-structure, a nested mutator is fabricated and placed into a given buffer, it becomes clear to what effect we're creating a customised mutator: we always need some (relative) parent scope, which happens to know more about the actual data to be treated with a TreeMutator. This scope assists with creating a suitable binding. Obviously, from within that binding, it is known what the sub-structures and children of that local data are all about and what semantics to give to the fundamental operations.
+</pre>
+</div>
+<div title="TreeMutatorEvolution" creator="Ichthyostega" modifier="Ichthyostega" created="201603160255" modified="201609021605" tags="Model Concepts design draft" changecount="25">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 
 !Motivation
@@ -8151,30 +8418,43 @@ So this looks similar, but indeed now we create //operation bindings// up front,
 
 This construction pattern can be extended to offer several optional extension hooks for the clients to supply. Extended even by offering more generic hooks to deal with recursive changes to whole sub-trees or collections of children of a specific type. Facing towards the diff application, the generated TreeMutator will expose a standardised interface to support implementing all the diff verbs necessary to describe structural and data changes. Operations, attributes and properties not outfitted by the client with actual bindings will be supplemented as ~NOP-implementation, silently ignoring any changes targeted towards the corresponding structures. This is the remaining loophole: if a client &quot;forgets&quot; to install a binding for some part of the structure, any changes directed towards this part will pass by unnoticed.
 
-!!!practical problems {{red{to be solved 5/2015}}}
-* still not sure how to design the generic data elements representing &quot;Objects&quot; / &quot;records&quot; &amp;rarr; mostly settled by now
+!!!practical problems
+//posed as of 5/2015...//
+* still not sure how to design the generic data elements representing &quot;Objects&quot; / &quot;records&quot;
 * how to translate the {{{add}}} operation of tree diff into a native invocation
-* how to integate the recursive invocation properly
+* how to integrate the recursive invocation properly
 * how to deal with collections of children
 * how to integrate typed children
 
+&amp;rarr; largely, these problems are settled {{red{as of 3/2013}}}
+;objects
+:...are represented within the fixed structures of the [[ETD|ExternalTreeDescription]], that is as combination of [[generic node elements|GenNode]]
+;binding
+:...between generic diff operations and native invocations happens with the help of pattern like building blocks, which are layered on top of the {{{TreeMutator}}} interface
+;recursive tree mutation
+:...means to build a //sub-//mutator for some part of the opaque, private data structure -- which in turn means to build a {{{TreeMutator}}} subclass into a provided buffer, as polymorphic value
+;collections of children
+:...are just one (actually the most important) building pattern, and we provide a template to handle ~STL-collections of children
+;typed children
+:...are integrated into this onion like layering of building blocks with the help of a //selector// to decide which building block is responsible for some concrete sub structure
+
 !!!working with children
-Handling tree structured object data imposes some additional constraints, in comparision to generic changes done to a flat list. One notable difference is that there are pre-existing //attributes,// which can not be added and deleted, are known by-name, not by positional order. Another point worth noting is the fact that child objects may be segregated into several collections by type. Since our goal is to provide an intermediary with the ability to map to arbitrary structures, we need to define the primitive operations necessary for implementing the concrete structural operations represented in the form of a diff
+Handling tree structured object data imposes some additional constraints, in comparison to generic changes done to a flat list. One notable difference is that there are pre-existing //attributes,// which can not be added and deleted, are known by-name, not by positional order. Another point worth noting is the fact that child objects may be segregated into several collections by type. Since our goal is to provide an intermediary with the ability to map to arbitrary structures, we need to define the primitive operations necessary for implementing the concrete structural operations represented in the form of a diff
 * add a child
 * remove a child
 * step to the next child
 * find a specific child and place it at current position
 * enter recursive mutation of a child
-All these basic operations are implicitly stateful, i.e. they work against an assumed implicit state (&quot;the current child&quot;): we assume the childs to be organised into ordered collection(s), possibly multiple collections segregated by type, and we assume that there is a current position, possible a separate current position for each typed sub collection.. Moreover, we assume that the diff description comes in accordance with the order of actual children, so that the implementation can be oganised into a &quot;pass&quot; over the children. This also implies that children are recognisable (have an identity), and that there is a way to enter a recursive mutation for a given child.
+All these basic operations are implicitly stateful, i.e. they work against an assumed implicit state (&quot;the current child&quot;): we assume the children to be organised into ordered collection(s), possibly multiple collections segregated by type, and we assume that there is a current position, possible a separate current position for each typed sub collection.. Moreover, we assume that the diff description comes in accordance with the order of actual children, so that the implementation can be organised into a &quot;pass&quot; over the children. This also implies that children are recognisable (have an identity), and that there is a way to enter a recursive mutation for a given child.
 
 !!!how to provide the actual operations
 To ease the repetitive part of the wiring, which is necessary for each individual application case, we can allow for some degree of //duck typing,// as far as building the TreeMutator is concerned. If there is a type, which provides the above mentioned functions for child management, these can be hooked up automatically into a suitable adapter. Otherwise, the client may supply closures, using the same definition pattern as shown for the attributes above. Here, the ID argument is optional and denotes a //type filter,// whereas the closure itself must accept a name-ID argument. The purpose of this construction is the ability to manage collections of similar children. For example
 {{{
-       .addChild(&quot;Fork&quot;), [&amp;](string type, string id) {
+       .addChild(&quot;Fork&quot;, [&amp;](string type, string id) {
            ForkType kind = determineForkType(type);
            this.forks_.push_back(MyForkImpl(kind, id);
          })
-       .mutateChild(&quot;Fork&quot;), [&amp;](string id) {
+       .mutateChild(&quot;Fork&quot;, [&amp;](string id) {
            MyForkImpl&amp; fork = findFork(id);
            return fork.getMutator();
          })
@@ -8194,16 +8474,69 @@ Indeed, my first choice would have been a yet more evocative syntax
 Unfortunately, the {{{operator=}}} is right-associative in C++, with no option to change that parsing behaviour. Together with the likewise fixed high precedence of the dot (member call), which also can not be overloaded, we're out of options, even if willing to create a term builder construct. There is simply no way to prevent the parser from invoking the dot operator on the preceding closure. The workarounds would have been to use something other than '{{{=}}}' to create the bindings,  to use a comma instead of a dot, or to disallow chaining altogether. All these choices seem to be rather counter intuitive -- and the most important rule for defining a custom syntax is to stay within the realm of the predictable.
 
 
-!!!Architecture
-The distinguising trait or Lumiera's diff handling framework is to treat a //diff language// as a scope, where some verbs or predications gain a specific meaning. While a concrete {{{DiffApplicator}}} binds to a specific agent or target environment, the meaning of the binding remains implicit. This approach bears on the observation, that dealing with structural differences actually addresses //several layers of language.// An odered collection is one of them, some kind of object notion another one, and the exact meaning of structure yet another one.
+!Architecture
+The distinguising trait or Lumiera's diff handling framework is to treat a //diff language// as a scope, where some verbs or predications gain a specific meaning. While a concrete {{{DiffApplicator}}} binds to a specific agent or target environment, the meaning of the binding remains implicit. This approach draws upon the observation, that dealing with structural differences actually addresses //several layers of language.// An ordered collection is one of them, some kind of object notion another one, and the exact meaning of structure yet another one.
 
-In accordance with this understanding, the TreeMutator is shaped to form the attachment point of such a language construct onto a given structural context, which, through this very construct, remains opaque and thus decoupled. In the simple exemplary case of list diffing, the {{{DiffApplicator}}} requries the specialisation of some {{{DiffApplicationStrategy}}} to the concrete data container in use, most likely a STL {{{vector}}}. In a similar vein, a {{{DiffApplicator}}} for structural transformations requires the {{{DiffApplicationStrategy}}}'s specialisation to a TreeMutator. Which -- consequently -- needs to expose an API well suited to implement what a structural diff language might want to express. Yet, in addition, the TreeMutator also needs a binding API, allowing him to be linked into the actual structures subject to manipulation.
+In accordance with this understanding, the TreeMutator is shaped to form the attachment point of such a language construct onto a given structural context, which, through this very construct, remains opaque and thus decoupled. In the simple exemplary case of list diffing, the {{{DiffApplicator}}} requires the specialisation of some {{{DiffApplicationStrategy}}} to the concrete data container in use, most likely a STL {{{vector}}}. In a similar vein, a {{{DiffApplicator}}} for structural transformations requires the {{{DiffApplicationStrategy}}}'s specialisation to a TreeMutator. Which -- consequently -- needs to expose an API well suited to implement what a structural diff language might want to express. Yet, in addition, the TreeMutator also needs a binding API, allowing him to be linked into the actual structures subject to manipulation.
 
 At this point, practical performance considerations settle the remaining decisions: Language application is a ''double dispatch'' at least, so we won't be able to get below two indirections ever. We could strive at getting close to this theoretical minimum though. Unfortunately, one of the indirections is taken by the verbs of the language, while the other one is consumed by decoupling the language from the Applicator or Interpreter, i.e. abstracting the diff representation from the meaning of the described changes when considered within a specific target context -- which is the very core of using a diff representation.
 So we get to choose between
 * binding the Interpreter directly into a target context, which imposes an interface onto the constituents of this target -- or --
 * set up a flexible mapping through a third layer of indirection functors -- which, in a nutshell, is the design choice taken by the TreeMutator
 
+!!!the problem with object fields
+Since our goal is to represent changes to structured objects in the form of a diff message sequence, the ability to capture the essence of objects is crucial. We are not concerned with behaviour and state, yet we have to deal with the //object's visible properties.// This gets us into a design dilemma; the notion underlying our diff language is that of //structured data,// which indeed offers the concept of an //attribute// -- but visible properties are based on //object fields,// and thus have more limited capabilities, as being rooted in the class definition underlying each object. Consequently our diff language may express changes beyond the abilities of any ordinary object.
+* attributes may be reordered
+* attributes may be added and deleted
+-- none of which has any tangible meaning for a regular (language) object. Contrast this with ExternalTreeDescription, which we crafted specifically to support diff language and diff messages, resulting in the ability to represent those changes explicitly. So, in theory, a given diff, when applied both to a GenNode and via TreeMutator to a native data structure, might lead to states not semantically equivalent. We can not reliably protect ourselves against that possibility, but, on the other hand, it is not clear if such poses an actual threat.
+
+''A possible path to reconcile'' these inner contradictions is to support the mutation primitives ''as far as is sensible''.
+Through analysis of the semantics, we could distinguish several flavours of &quot;attributes&quot;, especially...
+;object fields
+:mandatory elements enforced by class definition, where values need to be supplied at construction time
+;defaultable object fields
+:regular object fields proper, where some construction logic is able to fill in defaults. After construction, they are indistinguishable from mandatory object fields
+;optional properties
+:elements rooted in the class definition, yet not necessarily given. The object is able to //detect their absence//, and may fill in a default or ignore missing properties
+;attribute map
+:an ordered collection of key-value associations, which can be enumerated, searched and extended
+Thus we //could define a sensible handling for each of those cases, and deal with combinations// -- but --
+it seems more adequate to limit ourselves just to object fields and to include the defaultable object fields through implementation leeway. Because, in the end we really do need object fields, and anything beyond is just a materialisation of special behaviour and can be kept out of the diff system altogether. Through diff messages, we want to express structured changes, not metadata, nor closures, nor strategies, nor prototypes. And the attribute map is really something different than an object, and should be implemented separately, when it comes to applying diff messages to GenNode elements; the latter are able to //emulate// or //represent// objects, but by their nature are rather key-value associations arranged in nested scopes.
+
+!!!mapping rules to handle object fields
+So we basically ''disallow'' anything related to ''order'', ''re-ordering'' and ''deletion'' of object fields.
+* when an object requires field values at construction time, this requirement has to be satisfied when inserting the object. The {{{ins}}} message must hold a complete value description in this case
+* beyond that, fields can //only// be either assigned, or opened for nested mutation.
+* for sake of consistency with the handling of a GenNode based [[ETD|ExternalTreeDescription]], we translate an {{{ins}}} message into an auto-accept followed by an assignment. In fact, any //defaultable object field,// when specified for the first time, //should// be given as {{{ins}}} message, because otherwise we would not be able to apply the same diff sequence to an equivalent GenNode representation of the same logical structure.
+Consequently, we're left with only a very limited subset of diff expression applicable to an »object field onion layer«
+* either a {{{pick}}} for every known field, possibly (optionally) followed by a {{{set}}} message with a new value
+* or an {{{after END}}}, followed (optionally) by an arbitrary sequence of {{{set}}} messages.
+To create a ''binding'' for any object field, we need
+* a ''name'' for matching keys
+* either a ''setter'' (lambda) or a ''mutator builder'' (lambda)
+We have a distinct typing for each individual attribute, but this typing remains implicit: the lambda has to know what value to extract from the GenNode payload within the accepted diff message and how to apply this value. Especially for ''time entities'', which are modelled as immutable values, the lambda might want to build a [[time mutator|TimeMutation]]. And especially in the UI, timing specifications are expected to be translated into a //presentation grid.//
+
+!!!types, attributes and layering
+During the analysis it turned out that support for a mixed set of //typed child elements// is an important goal. However, we may impose the restriction that these typed sub collections will be kept segregated and not be mixed up within the child scope. Effectively, this was already the fundamental trait for the //symbolic object representation// chosen here. Thus, &quot;attributes&quot; become just one further kind of typed children; even &quot;metadata&quot; might be treated along these lines in future (currently as of 2016 we have only a type field in {{{diff::Record}}}, which is treated explicitly).
+This observation leads directly to an implementation based on layered decorators. Each kind of target elements will be treated by another decorator exclusively, and control is passed through a chain of such decorators. This means, each decorator (or &quot;onion-layer&quot;) gets into charge based on a //selector predicate,// which works on the given diff verb solely (no introspection and no &quot;peeking&quot; into the implementation data). We should note though, that this implies some fine points of the diff language semantics are subject to this architectural decision -- especially the precise behaviour of the {{{AFTER}}}-verb depends on the //concrete layer structure// used at the target of the diff. Yet this seems acceptable, since it is the very nature of diff application to be dependent on internals of the target location -- just by definition we assume this inner structure of the target to be semantically congruent with the diff's source structure.
+
+
+!Implementation
+__June 2016__: after defining and implementing several concrete bindings successfully, the TreeMutator interface can be considered a given now. It seems conceivable even to try re-implementing the (already existing, hard wired) binding for GenNode in terms of a TreeMutator with specially outfitted binding. Anyway, matters are investigated and clarified enough in order to build the actual diff application based on this new TreeMutator interface. Some tricky structural and technical problems remain to be solved for that
+
+!!!size of the concrete TreeMutator
+Since our design avoids subclassing and does not demand the target data to comply to any interface, we get a //late binding// where the actual configuration and thus the behaviour of the concrete mutator is configured with lambdas at runtime, just before the diff is actually applied. This gets us into a situation somewhere between static and dynamic typing -- the functionality of the binding, as embodied into the lambdas, is of course known at compilation time, but we can't access this knowledge until right before invocation, when the actual instance is created at runtime. The problem with this is that we need to know the size of the mutator beforehand, since our diff language is defined in a way preventing recursive evaluation on the stack. We're bound to create the stack for dealing with nested scopes explicitly, as a data structure -- which means we need to know the maximum size of nested mutators to expect, or we're forced into implementing a flexible stack structure with explicitly pointer linked global allocations. There are several possibilities how to deal with that problem
+* the //simplest approach that could possibly work// is to define a global constant for a buffer size known to be sufficient for all relevant cases. An attempt to exceed this pre-set limit will terminate the program
+* a slight extension to this approach is to differentiate this constant based on the type of the top-level data structure to be exposed
+* we could catch exceptions caused by exceeding a heuristically chosen buffer limit and //learn// the actually required size for successive attempts. Depending on the actual implementation situation, this requires some way of aborting and re-starting a failed attempt of diff application, which is an complicated and expensive undertaking. This also prompts us to make those size information part of the application parametrisation, with the ability to adjust those values persistently as a result of this self-adapting mechanism.
+Right now it looks sensible to start with the simplistic approach, while keeping the more elaborate possibilities in mind. Which especially means to turn the size management into an opaque implementation detail not linked to the visible diff-interpreter interface.
+
+!!!implementation structure and invocation
+To receive and apply a diff, client code has to build a {{{DiffApplicator&lt;TreeMutator&gt;}}} and somehow attach this to the target data structure. Then, after feeding the diff sequence, the target data structure will be transformed. This leads to kind of a chicken-and-egg problem, since only the target data structure has the ability to know how to fabricate a suitable concrete TreeMutator. Assuming the //size problem// (as detailed above) is already solved one way or the other, we're bound to use an interface where the target structure is prompted to build a suitable mutator into a provided buffer or storage frame. Typically, we'd either use metaprogramming or some ADL extension point to derive a suitable //mutator building closure// from the given target structure. In fact, the same situation repeats itself recursively when it comes to mutating nested scopes, but in that case, the necessary //mutator building closure// is already part of the mutator binding created for the respective parent scope, and thus can just be invoked right away.
+
+The {{{DiffApplicator}}} itself can be made non-copyable; preferably it should be small and cheap to construct. At least we should strive at keeping the number of indirections and heap allocations low. Together with the requirement to separate from the actual TreeMutator implementation, which is built late, just before invocation, we arrive at a ~PImpl structure, with the TreeMutator as ~PImpl and a scope manager hidden within the implementation part; the latter will be responsible for creating a suitable stack, and to use the //mutator building closure// in order to incorporate the concrete TreeMutator into the stack frames.
+
+Pulling all those building blocks together, this architecture finally allows us to offer a (tree) diff-applicator for //»basically anything«:// The ctor respective the init method of {{{DiffAplicator&lt;Something&gt;}}} relies on the metaprogramming or ADL technique embedded within the {{{TreeDiffTraits&lt;Something&gt;}}} to //somehow// get at a {{{DiffMutable&amp;}}} -- the latter offering the crucial method to build a TreeMutator implementation internally wired in a proper way to {{{Something}}}'s internals. This in turn enables us to build a suitalbe {{{ScopeManager}}} implementation with a stack size sufficient to hold this TreeMutator implementation. After this type specific setup, the rest of the diff application works entirely generic and can thus be delegated to the non-templated baseclass TreeDiffMutatorBinding...
 </pre>
 </div>
 <div title="TypedID" modifier="Ichthyostega" created="201003200157" modified="201505310143" tags="Model Types Rules design draft" changecount="12">
@@ -8307,11 +8640,96 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201501061128" tags="GuiPattern Concepts def design draft" changecount="6">
+<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201602121429" tags="GuiPattern Concepts def design draft" changecount="15">
 <pre>Abstraction used in the Backbone of Lumiera's GTK User Interface
 The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the //Controler// in the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]] in common UI architecture.
 
-The ~MVC-Pattern as such is fine, and probably the best we know for construction of user interfaces. But it doesn't scale well towards the integration into a larger and more structured system. There is a tension between the Controller in the UI and other parts of an application, which as well need to be //in control.// And, even more important, there is a tension between the demands of UI elements for support by a model, and the demands to be placed on a core domain model of a large scale application. This tension is resolved by enacting these roles while transforming the requests and demands into //Messages.//</pre>
+The ~MVC-Pattern as such is fine, and probably the best we know for construction of user interfaces. But it doesn't scale well towards the integration into a larger and more structured system. There is a tension between the Controller in the UI and other parts of an application, which as well need to be //in control.// And, even more important, there is a tension between the demands of UI elements for support by a model, and the demands to be placed on a core domain model of a large scale application. This tension is resolved by enacting these roles while transforming the requests and demands into //Messages.//
+
+!!!rationale
+This way, we separate between immediate local control of UI state and the more global, generic [[interaction control|InteractionControl]] and [[command binding|GuiCommandBinding]].
+And we arrive at a backbone like structure, which can be wired, programmed and reasoned about while abstracting from the local concerns and the state management related to the UI toolkit set in use. Any element //of more than local relevance// -- be it a controller or be it a widget, representing some entity from the model -- will be attached to the UI-Bus by virtue of a ''bus terminal'', establishing a bi-directional connection. This enables any UI element so invoke commands and persist presentation state (by sending //&quot;state mark&quot; mesages//), and in turn this allows the session and engine core to &quot;cast&quot; state updates towards the UI, without precisely knowing where and how to reach the relevant presentation entities.
+
+!Bus interactions
+The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub, which maintains a routing table. Attachment and detachment of elements can be managed automatically, since all of the UI-Bus operations perform within the UI event thread. We distinguish between up-link messages, directed towards some central service (presentation state management or command invocation) and down-link messages, directed towards individual elements. The interactions at the bus are closely interrelated with the elementary UI-Element operations.
+;act
+:send a GenNode representing the action
+:* in a first step, a command prototype is outfitted with actual parameter values &amp;rarr; InvocationTrail
+:* the actual command invocation is triggered by a &quot;bang&quot; message
+;note
+:send a GenNode representing the //state mark//
+:some (abstracted) [[presentation state|PresentationState]] manager is expected to listen to these messages, possibly recording state to be restored later
+;mark
+:down-link communication to //feed back// state updates or to replay previously recorded  //state marks//
+</pre>
+</div>
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201602140400" tags="GuiPattern design draft decision" changecount="45">
+<pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
+As a starting point, we know
+* there is a backbone structure known as the UI-Bus
+* the latter is somehow related to the [[UI-model|GuiModel]] (one impersonates or represents the other)
+* each {{{gui::model::Tangible}}} has a ''bus-terminal'', which is linked to the former's identity
+* it is possible to wire ~SigC signals so to send messages via this terminal into the UI-Bus
+* these messages translate into command invocations towards the Proc-Layer
+* Proc-Layer responds asynchroneously with a diff message
+* the GuiModel translates this into notifications of the top level changed elements
+* these in turn request a diff and then update themselves into compliance.
+
+!Behaviours
+For some arbitrary reason, any element in the UI can appear and go away. This corresponds to attachment and deregistration at the UI-Bus
+
+In regular, operative state, an interface element may initiate //actions.// These correspond to invocation of [[Proc-Layer commands|CommandHandling]], after having supplied the necessary arguments. Commands are referred and called //by name// (~command-ID) and they are thus not bound to a specific UI-Element. Rather, it is the job of the UI to provide sensible command arguments, based on the context of the operation. There might be higher-level, cooperative [[gestures|Gesture]] within the interface, and actions might be formed like sentences, with the help of a FocusConcept -- however, in the end, there is a ''subject'' and a ''predicate''. And the interface element takes on the role of the underlying, the subject, the ''tangible''.
+
+Some actions are very common and can be represented by a shorthand. An example would be to tweak some property, which means to mutate the attribute of a model element known beforehand. Such tweaks are often caused by direct interaction, and thus have the tendency to appear in flushes, which might be batched to remove some load from the lower layers.
+
+And then there are manipulations that //alter presentation state:// Scrolling, canvas dragging, expanding and collapsing, moving by focus or manipulation of a similar presentation control.
+These manipulations in itself do not constitute an action. But there typically is some widget or controller, which is responsible for the touched presentation state. If this entity judges the state change to be relevant and persistent, it may send a ''state mark'' into the UI-Bus -- expecting this marked state to be remembered. In turn this means the bus terminal might feed a state mark back into the tangible element, expecting this state to be restored.
+
+A special case of state marking is the presentation of transient feedback. Such feedback is pushed from &quot;somewhere&quot; towards given elements, which react through an implementation dependent visual state change (flushing, colour change, marker icon). If such state marking is to be persistent, the interface element has in turn to send a specific state mark. An example would be a permanent error flag with a explanatory text showed in mouse over. Which in turn means there can also be sweeping state reset messages, which are to be broadcasted: A general &quot;reset&quot;, an indication to collapse everything, or to clear pending error flags.
+
+And finally, there are the //essential updates// -- any changes in the model //for real.//
+These are sent as notifications just to some top level element, expecting this element to request a diff and to mutate contents into shape recursively.
+
+
+!Interactions
+;lifecycle
+:connect to an existing term, supply the {{{EntryID}}} of the new element.
+:automatically detach at end of life.
+;act
+:send a GenNode representing the action
+;note
+:send a GenNode representing the //state mark//
+;mark
+:receive a GenNode representing the //feedback// or replayed //state mark//
+;signals
+:the individual element exposes some generic signal slots
+:* slotExpand prompts the element to transition into expanded / unfolded state. If this state is to be sticky, the element answers with a ''state mark''
+:* slotReveal prompts the element to bring the indicated child into sight. Typically, this request will &quot;bubble up&quot; recursively.
+:these slots are defined to be {{{sigc::trackable}}} for automated disconnection (&amp;rarr; see [[#940|http://issues.lumiera.org/ticket/940#comment:3]] for an explanation)
+;diff
+:ask to retrieve a diff, which
+:* either is an incremental status update
+:* or is a from-scratch reconfiguration
+
+We should note that these conventions of interchange lead to a recursive or ''self similar design'' of the UI-Bus: Each {{{BusTerm}}} is a personalised connection to yet another {{{BusTerm}}}. Even the ''bus master'' appears as just another {{{BusTerm}}} to all the communication partners. The overall topology of the bus might be reshaped without the participating elements being aware of such a change.
+
+!Persistent presentation state
+There is the distinction between //model state// and //presentation state,// the latter being confined to the //way you work with the model.// Every UI is stateful and reshapes itself through interaction -- but the common UI toolkits just give us this state as //transient state,// maybe with some means to restore state. The overall topic of PresentationState in an elaborate work environment like a NLE can be quite complex -- in Lumiera we try to separate the persistent part from the transient state, and we do so by exploiting the loose coupling achieved through the UI-Bus. For this to work we need the individual //tangible elements// to announce any presentation state transition deemed ''relevant persistent presentation state'' by them. To stress this last point: it is a decision //local// to the UI-Element, what to consider //relevant// and //what meaning// to give to this state.
+
+Anyway, whenever such a relevant change happens -- consider e.g. the presentation of a clip has been switched into //expanded display,// detailing all attached effects -- then the UI-Element responsible for that state shall emit a ''state mark'', which essentially appears as message on the UI-Bus. We expect a PresentationStateManager to listen somewhere on the bus, to note and to categorise these messages and to provide the actual mechanism for persistent state. Any such //state mark// message is implicitly associated with the ID of the originating entity (just through the way the UI-Bus works), and its payload is a GenNode. The symbolic ID of this state mark element can be chosen freely, as it lives within a distinct namespace. Obviously, some kind of protocol emerges here, where commonly used state transitions acquire a generic meaning. Terms like &quot;{{{expand}}}&quot;, &quot;{{{reset}}}&quot; or &quot;{{{revealYourself}}}&quot; are so common as to warrant a handler within the {{{model::Tangible}}} base class, delegating to virtual implementation functions, like {{{virtual void doExpand(bool)}}}. This is to say that the individual UI-Element is expected to be able to //receive// state mark messages, because those messages might be ''re-played'' by the state manager, in a consecutive session, attempting to restore previously recorded UI state. Consequently, each concrete element is expeted
+* to organise the relevant state transitions, so they can be represented with a (basically private) vocabulary
+* to provide and implement a data representation of the state, using the data types available as payload within GenNode
+* to create the ability to restore presentation state to the degree deemed adequate, on reception of such a message
+
+!Command activation
+While the above definitions might seem more or less obvious and reasonable, there is one tiny detail, which -- on second thought -- unfolds into a fundamental decision to be taken. The point in question is //how we refer to a command.// More specifically: is referring to a command something generic, or is it rather something left to the actual implementing widget? In the first case, a generic foundation element has to provide some framework to deal with command definitions, whereas in the second case just a protected slot to pass on invocations from derived classes would be sufficient. This is a question of fundamental importance; subsidiarity has its merits, so once we forgo the opportunity to build from a generic pattern, local patterns will take over, while similarities and symmetries have to grow and wait to be discovered sometimes, if at all. This might actually not be a problem -- yet if you know Lumiera, you know that we tend to look at existing practice and draw fundamental conclusions, prior to acting.
+&amp;rarr; InteractionControl
+&amp;rarr; GuiCommandBinding
+&amp;rarr; [[Command handling (Proc-Layer)|CommandHandling]]
+
+!!!actual implementation of command invocation
+A command's {{{InvocationTrail}}} is in fact just some tag object, wrapping the command definition ID. In a first step, when the command's arguments can be //closed,// a {{{Record}}} with suitable argument bindings is created and wrapped into a {{{GenNode}}} corresponding to the command. We should note that these bindings typically also entail to specify the //subject of the command.// This binding compound is sent over the UI-Bus, marking the command ready for execution. From this point on, just the {{{InvocationTrail}}} is passed to enable the trigger sites. When it is actually triggered, a simple &quot;bang!&quot; message with the command ID is sent over the bus. A given command instance may be re-used, as long as it is structurally the same as before, and as log as there is no possible collision with a similar, but differently parametrised instantiation process.
+</pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">
 <pre>For any kind of playback to happen, timeline elements (or similar model objects) need to be attached to a Viewer element through a special kind of [[binding|BindingMO]], called a ''view connection''. In the most general case, this creates an additional OutputMapping (and in the typical standard case, this boils down to a 1:1 association, sending the master bus of each media kind to the standard OutputDesignation for that kind).

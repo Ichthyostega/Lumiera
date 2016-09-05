@@ -33,6 +33,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
 #include <exception>
@@ -60,7 +61,7 @@ namespace lumiera {
     default_usermsg (Error* exception_obj)  throw() 
     {
       return string("Sorry, Lumiera encountered an internal error. (")
-           + typeid(*exception_obj).name() + ")";
+           + util::typeStr(*exception_obj) + ")";
     }
     
     inline CStr

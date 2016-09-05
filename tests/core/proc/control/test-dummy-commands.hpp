@@ -97,25 +97,25 @@ namespace test    {
     typedef function<string()> FunS;
     
     inline void
-    operate (FunS func, bool fail)
+    operate (FunS func, bool *fail)
     {
-      if (fail) throw External("simulated exception");
+      if (fail and *fail) throw External("simulated exception");
       
       check_ << func();
     }
     
     inline string
-    capture (FunS, bool)
+    capture (FunS, bool*)
     {
       return check_.str();
     }
     
     inline void
-    undoIt (FunS, bool fail, string previousProtocol)
+    undoIt (FunS, bool *fail, string previousProtocol)
     {
-      if (fail) throw External("simulated exception in UNDO");
+      if (fail and *fail) throw External("simulated exception in UNDO");
       
-      check_.seekp(0);
+      check_.str("");
       check_ << previousProtocol << "|UNDO|";
     }
   

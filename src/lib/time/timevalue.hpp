@@ -315,6 +315,9 @@ namespace time {
           return TimeValue(std::llabs (t_));
         }
       
+      /** @internal diagnostics, indicating ∆ */
+      operator std::string ()  const;
+      
       // Supporting sign flip
       Offset operator- ()  const;
     };
@@ -381,6 +384,10 @@ namespace time {
       Duration& operator= (Duration const&);
       
     public:
+      Duration()
+        : Duration(Time::ZERO)
+        { }
+      
       Duration (Offset const& distance)
         : TimeValue(distance.abs())
         { }
@@ -402,6 +409,10 @@ namespace time {
       
       void accept (Mutation const&);
       
+      
+      /** @internal diagnostics */
+      operator std::string ()  const;
+
       /// Supporting backwards use as offset
       Offset operator- ()  const;
       
@@ -478,6 +489,10 @@ namespace time {
       TimeSpan(TimeValue const& start, FSecs(duration_in_secs))
         : Time(start)
         , dur_(duration_in_secs)
+        { }
+      
+      TimeSpan()
+        : TimeSpan(Time::ZERO, Time::ZERO)
         { }
       
       

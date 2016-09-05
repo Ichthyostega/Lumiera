@@ -29,157 +29,107 @@
 // 11/14 - pointer to member functions and name mangling
 // 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
 // 8/15  - generalising the Variant::Visitor
+// 1/16  - generic to-string conversion for ostream
+// 1/16  - build tuple from runtime-typed variant container
 
 
 /** @file try.cpp
- ** Design: how to generalise the Variant::Visitor to arbitrary return values.
+ ** Metaprogramming: how to unload the contents of a runtime typed variant sequence
+ ** into ctor arguments of a (compile time typed) tuple. This involves two problems
+ ** - how to combine iteration, compile-time indexing and run-time access.
+ ** - how to overcome the runtime-to-compiletime barrier, using a pre-generated
+ **   double-dispatch (visitor).
  ** 
- ** Our Variant template allows either for access by known type, or through accepting
- ** a classic GoF visitor. Problem is that in many extended use cases we rather want
- ** to apply \em functions, e.g. for a monadic flatMap on a data structure built from
- ** Variant records. (see our \link diff::GenNode external object representation \endlink).
- ** Since our implementation technique relies on a template generated interface anyway,
- ** a mere extension to arbitrary return values seems feasible.
- **
+ ** The concrete problem prompting this research is the necessity to receive
+ ** a command invocation parameter tuple from a Record<GenNode>
+ ** 
  */
 
 typedef unsigned int uint;
 
-#include "lib/meta/typelist.hpp"
-#include "lib/meta/generator.hpp"
+#include "lib/symbol.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/meta/tuple-record-init.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
-#include "lib/util.hpp"
 
-#include <iostream>
-#include <cstdarg>
+#include <boost/noncopyable.hpp>
 #include <string>
 
-using util::unConst;
+using lib::Literal;
+using lib::Variant;
+using lib::idi::EntryID;
+using lib::diff::Rec;
+using lib::diff::MakeRec;
+using lib::diff::GenNode;
+using lib::meta::Types;
+using lib::meta::Tuple;
+using lib::meta::buildTuple;
+using lib::time::TimeVar;
+using lib::time::Time;
+
 using std::string;
-using std::cout;
-using std::endl;
+using std::tuple;
 
 
-template<typename RET>
-struct VFunc
+
+
+
+#define SHOW_TYPE(_TY_) \
+    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
+
+#define EVAL_PREDICATE(_PRED_) \
+    cout << STRINGIFY(_PRED_) << "\t : " << _PRED_ <<endl;
+
+void
+verifyConversions()
   {
-
-    template<class VAL>
-    struct ValueAcceptInterface
-      {
-        virtual RET handle(VAL&) { /* do nothing */ return RET(); };
-      };
+    using lib::meta::GenNodeAccessor;
+    using std::is_arithmetic;
+    using std::is_floating_point;
+    using lib::meta::is_nonFloat;
+    using lib::hash::LuidH;
     
-    template<typename TYPES>
-    using VisitorInterface
-        = lib::meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
     
-  };
-
-using lib::meta::NullType;
-using lib::meta::Node;
-
-template<typename TYPES>
-struct ConstAll;
-
-template<>
-struct ConstAll<NullType>
-  {
-    typedef NullType List;
-  };
-
-template<typename TY, typename TYPES>
-struct ConstAll<Node<TY,TYPES>>
-  {
-    typedef Node<const TY, typename ConstAll<TYPES>::List> List;
-  };
-
-
-
-template<class A, class B>
-struct Var
-  {
-    A a;
-    B b;
+    EVAL_PREDICATE(is_arithmetic<int>       ::value)
+    EVAL_PREDICATE(is_arithmetic<size_t>    ::value)
+    EVAL_PREDICATE(is_floating_point<size_t>::value)
+    EVAL_PREDICATE(is_nonFloat<size_t>      ::value)
     
-    using TYPES = lib::meta::Types<A,B>;
+    EVAL_PREDICATE(GenNodeAccessor<int>  ::allow_Conversion<size_t>    ::value)
+    EVAL_PREDICATE(GenNodeAccessor<int64_t>::allow_Conversion<long int>::value)
+    EVAL_PREDICATE(GenNodeAccessor<double>::allow_Conversion<int64_t>::value)
+    EVAL_PREDICATE(GenNodeAccessor<LuidH>::allow_Conversion<int64_t> ::value)
+    EVAL_PREDICATE(GenNodeAccessor<LuidH>::allow_Conversion<int16_t> ::value)
+    EVAL_PREDICATE(GenNodeAccessor<LuidH>::allow_Conversion<uint16_t>::value)
+    EVAL_PREDICATE(GenNodeAccessor<LuidH> ::allow_Conversion<LuidH>  ::value)
+    EVAL_PREDICATE(GenNodeAccessor<int64_t> ::allow_Conversion<LuidH>::value)
+    EVAL_PREDICATE(GenNodeAccessor<uint64_t>::allow_Conversion<LuidH>::value)
+    EVAL_PREDICATE(GenNodeAccessor<uint32_t>::allow_Conversion<LuidH>::value)
+    EVAL_PREDICATE(GenNodeAccessor<int32_t> ::allow_Conversion<LuidH>::value)
     
-    template<typename RET>
-    using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
-    template<typename RET>
-    using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<ConstAll<typename TYPES::List>>;
-    
-    using Visitor = VisitorFunc<void>;
-    using Predicate = VisitorConstFunc<bool>;
-    
-    template<typename RET>
-    RET
-    accept (VisitorFunc<RET>& visitor)
-      {
-        typename VFunc<RET>::template ValueAcceptInterface<A>& visA = visitor;
-        typename VFunc<RET>::template ValueAcceptInterface<B>& visB = visitor;
-        visA.handle (a);
-        return visB.handle (b);
-      }
-    
-    void
-    accept (Visitor& visitor)
-      {
-        accept<void> (visitor);
-      }
-    
-    bool
-    accept (Predicate& visitor)  const
-      {
-        typename VFunc<bool>::template ValueAcceptInterface<const A>& visA = visitor;
-        typename VFunc<bool>::template ValueAcceptInterface<const B>& visB = visitor;
-        return visA.handle (a)
-            && visB.handle (b);
-      }
+    cout <<endl<<endl;
+  }
 
-    
-    operator string()  const
-      {
-        return "Var("
-             + util::str(a)
-             + "|"
-             + util::str(b)
-             + ")";
-      }
-  };
-
-
-using V = Var<int, string>;
-
-class Visi
-  : public V::Visitor
-  {
-    virtual void handle(int& i)    { ++i; }
-    virtual void handle(string& s) { s += "."; }
-  };
-
-class Predi
-  : public V::Predicate
-  {
-    virtual bool handle(int const& i)    { return 0 == i % 2; }
-    virtual bool handle(string const& s) { return 0 == s.length() % 2; }
-  };
 
 
 int
 main (int, char**)
   {
+    verifyConversions();
     
-    V var{12, "huii"};
-    cout <<  string(var)<<endl;
+    using NiceTypes = Types<string, int>;
+    using UgglyTypes = Types<EntryID<long>, string, int, int64_t, double, TimeVar>;
     
-    Visi visi;
-    Predi predi;
+    Rec args = MakeRec().scope("lalü", 42);
+    Rec urgs = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
     
-    cout << var.accept(predi) <<endl;
-    var.accept(visi);
-    cout << var.accept(predi) <<endl;
-    cout <<  string(var)<<endl;
+    cout << args <<endl;
+    cout << urgs <<endl;
+    
+    cout << buildTuple<NiceTypes> (args) <<endl;
+    cout << buildTuple<UgglyTypes> (urgs) <<endl;
+    
     
     cout <<  "\n.gulp.\n";
     

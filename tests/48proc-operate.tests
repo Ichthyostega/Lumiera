@@ -3,14 +3,16 @@ TESTING "Proc Layer combined operations Test Suite" ./test-suite --group=operate
 
 
 TEST "Mock media access" MediaAccessMock_test <<END
-out-lit: accessing "test-1" (dur=0:00:25.000)...
+out-lit: accessing "test-1" (dur=≺25s≻)...
 out-lit:  Channel-0: nameID=video codecID=ID
-out-lit: accessing "test-2" (dur=0:00:25.000)...
+out-lit: accessing "test-2" (dur=≺25s≻)...
 out-lit:  Channel-0: nameID=video codecID=H264
 out-lit:  Channel-1: nameID=audio-L codecID=PCM
 out-lit:  Channel-2: nameID=audio-R codecID=PCM
+return: 0
 END
 
 
 PLANNED "RenderSegment_test" RenderSegment_test <<END
+return: 0
 END
