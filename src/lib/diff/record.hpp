@@ -93,7 +93,6 @@
 #include "lib/format-util.hpp"        ///////////////////////////////TICKET #973 : investigate the impact of this inclusion on code size
 #include "lib/util.hpp"
 
-#include "lib/diff/record-content-mutator.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -275,7 +274,6 @@ namespace diff{
        */
       class Mutator;
       
-      using ContentMutator = RecordContentMutator<Storage>;
       
       
       /**
@@ -524,16 +522,6 @@ namespace diff{
           return std::tie (record_.attribs_, record_.children_);
         }
       
-      void
-      swapContent (ContentMutator& alteredContent)
-        {
-          if (alteredContent.empty())
-            alteredContent.preAllocateStorage(record_.attribs_.size(),
-                                              record_.children_.size());
-          std::swap (record_.attribs_, alteredContent.attribs);
-          std::swap (record_.children_, alteredContent.children);
-          alteredContent.resetPos();
-        }
       
       /** get the tail element.
        * @return either the last child, or the last attribute, when children are empty.
