@@ -2398,7 +2398,7 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
-<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201601021718" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="21">
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201609081516" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="24">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 
 !prerequisites for issuing a command
@@ -2409,12 +2409,12 @@ Within the Lumiera architecture, with the very distinct separation between [[Ses
 * we need to care for the supply of parameters
 ** indirectly this defines and limits how this command can be issued
 ** which in fact embeds the raw command into a context or a gesture of invocation
-** and this is the first instance where the command-as-seen-from-session translates into something tangible within the UI
+** and only through this explication the command-as-seen-from-session translates into something tangible within the UI
 * next we have to consider conditions and circumstances. Not every command can be invoked any given time
 ** the focus and current selection is relevant
 ** the user interaction might supply context by pointing at something
 ** the proximity of tangible interface elements might be sufficient to figure out missing parts
-** in fact it might be necessary to intersperse the invocation of a detail parameter dialogue prior to command execution
+** at times it might also be necessary to intersperse the invocation of a detail parameter dialogue prior to command execution
 * and finally, after considering all these concerns, it is possible to wire a connection into the actual invocation point in UI
 This observation might be surprising; even while a given command is well defined, we can not just invoke it right away. The prevalence of all these intermediary complexities is what opens the necessity and the room for InteractionControl, which is a concern specific to human-computer interfaces. Faced with such a necessity, there are two fundamentally different approaches.
 !!!Binding close to the widget
@@ -2424,7 +2424,7 @@ So the actual widget type implies knowledge about the contents and the meaning o
 The consequence of this approach is that the relations and whereabouts of entities involved into this decision tend to be explicated right into the widget code. Any overarching concerns end up being scattered over various implementation sites, need to be dealt with by convention, or rely on all invocation sites to use some helper facilities voluntarily.
 
 !!!Abstracted binding definitions
-This contrastive approach attempts to keep knowledge and definition clustered in a way according to the commands and actions to be performed -- even for the price of some abstractions and indirections. There is no natural and obvious place where to collect those information, and thus we need to create such a location deliberately. This new entity or location to be conceived serves to link user interface and session elements, and it tends to rely on definitions from both realms.
+This contrastive approach attempts to keep knowledge and definition clustered in a way according to the commands and actions to be performed -- even at the price of some abstractions and indirections. There is no natural and obvious place where to collect those information, and thus we need to create such a location deliberately. This new entity or location to be conceived serves to link user interface and session elements, and it tends to rely on definitions from both realms.
 * in addition to the script, here we build a parameter accessor, which is some kind of functor or closure.
 * we need to introduce a new abstraction, termed InteractionStateManager. This is deliberately not a single entity, rather some distinct facility in charge for one specific kind of interaction, like gestures being formed by mouse, touch or pen input.
 * from the command definition site, we need to send a combination of //rules// and parameter accessors, which together define an invocation path for one specific flavour of a command
@@ -2500,7 +2500,7 @@ The workspace starts out with a single element, corresponding to the »model roo
 Speaking of implementation, this state and update mechanics relies on two crucial provisions: Lumiera's framework for [[tree diff representation|TreeDiffModel]] and the ExternalTreeDescription, which is an abstracted, ~DOM-like rendering of the relevant parts of the session; this model tree is comprised of [[generic node elements|GenNode]] acting as proxy for [[calls into|SessionInterface]] the [[session model|HighLevelModel]] proper.
 </pre>
 </div>
-<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201511261846" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="40">
+<div title="GuiModelUpdate" creator="Ichthyostega" modifier="Ichthyostega" created="201410250121" modified="201609081440" tags="GuiIntegration GuiPattern design decision discuss draft" changecount="41">
 <pre>Considerations regarding the [[structure of custom timeline widgets|GuiTimelineWidgetStructure]] highlight again the necessity of a clean separation of concerns and an &quot;open closed design&quot;. For the purpose of updating the timeline(s) to reflect the HighLevelModel in Proc-Layer, several requirements can be identified
 * we need incremental updates: we must not start redrawing each and everything on each tiny change
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
@@ -2544,9 +2544,9 @@ When dealing with structural (tree) diffing, there is a specific twist regarding
 #anything, even nested &quot;raw&quot; content is represented //as node//
 #all nodes can be addressed by an //generic identifier//
 #the diff is in //prefix order,// i.e. it first only mentions the ordering, additions and deletions of nodes designated by these ~IDs
-#we introduce a //bracing construct// into the diff language, to enter a subnode within the diff representation
+#we introduce a //bracketing construct// into the diff language, to enter a subnode within the diff representation
 #the diff is produced and consumed //demand-driven (by pull)//
-#whenever a node sees this bracing construct, in invokes the respective child //recursively//
+#whenever a node sees this bracketing construct, in invokes the respective child //recursively//
 This treatment ensures each nested diff is consumed within a properly typed context, and without any need of switching types from the outside: the actual consumer of each part of the whole diff description just happens to know the actual meaning of those elements he processes itself, and passes control to others with adequate knowledge for the rest. Changes are broken down and transformed into //atomic changes.// For an internal data exchange, this is sufficient: in the end we're dealing with references to binary data anyway. But when it comes to an external, self-contained representation of diffs, we additionally need a way to attach raw chunks of data corresponding to the description of those atomic changes.
 &amp;rarr; this is the purpose of the {{{DataCap}}} within our [[generic node element|GenNode]]
 </pre>
@@ -2916,12 +2916,12 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201512160022" tags="design decision Concepts GuiPattern draft discuss" changecount="3">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201609081505" tags="design decision Concepts GuiPattern draft discuss" changecount="7">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
-The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Obviously, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. But, in any more than trivial UI application, there is an intermediate level, where things go on, which can not fully be just derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could strive at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
+The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate level, where things go on, which can not fully be just derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could strive at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
 ;interface has a spatial quality
-:the elements within an user interface are arranged in a way that parallels our experience when working in real world space. With the addition of a //&quot;hyper component&quot;// -- allowing for cross connections and shortcuts beyond spatial logic
+:the elements within an user interface are arranged in a way that parallels our experience when working in real world space. With the addition some dose of //&quot;hyper&quot;// -- allowing for cross connections and shortcuts beyond spatial logic
 ;locality of work spaces
 :but the arrangement of the interface interactions is not amorphous, rather it is segregated into cohesive clusters of closely interrelated actions. We move between these clusters of activity the same way as we move between several well confined rooms within a building.
 ;context and focus of activity
@@ -2969,9 +2969,9 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201601021714" tags="def GuiIntegration draft" changecount="2">
+<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201609081519" tags="def GuiIntegration draft" changecount="3">
 <pre>//A command in preparation of being issued from the UI.//
-The actual persistent operations on the session model are defined through a DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].</pre>
+The actual persistent operations on the session model are defined through DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].</pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="201208311625" tags="spec Rendering draft">
 <pre>The actual media data is rendered by [[individually scheduled render jobs|RenderJob]]. All these calculations together implement a [[stream of calculations|CalcStream]], as demanded and directed by the PlayProcess. During the preparation of playback, a ''node planning phase'' is performed, to arrange for [[dispatching|FrameDispatcher]] the individual calculations per frame.  The goal of these //preparations//&amp;nbsp; is to find out
@@ -8640,7 +8640,7 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201602121429" tags="GuiPattern Concepts def design draft" changecount="15">
+<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201609081410" tags="GuiPattern Concepts def design draft" changecount="16">
 <pre>Abstraction used in the Backbone of Lumiera's GTK User Interface
 The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the //Controler// in the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]] in common UI architecture.
 
@@ -8648,7 +8648,7 @@ The ~MVC-Pattern as such is fine, and probably the best we know for construction
 
 !!!rationale
 This way, we separate between immediate local control of UI state and the more global, generic [[interaction control|InteractionControl]] and [[command binding|GuiCommandBinding]].
-And we arrive at a backbone like structure, which can be wired, programmed and reasoned about while abstracting from the local concerns and the state management related to the UI toolkit set in use. Any element //of more than local relevance// -- be it a controller or be it a widget, representing some entity from the model -- will be attached to the UI-Bus by virtue of a ''bus terminal'', establishing a bi-directional connection. This enables any UI element so invoke commands and persist presentation state (by sending //&quot;state mark&quot; mesages//), and in turn this allows the session and engine core to &quot;cast&quot; state updates towards the UI, without precisely knowing where and how to reach the relevant presentation entities.
+And we arrive at a backbone like structure, which can be wired, programmed and reasoned about while abstracting from the local concerns and the state management related to the UI toolkit set in use. Any element //of more than local relevance// -- be it a controller or be it a widget, representing some entity from the model -- will be attached to the UI-Bus by virtue of a ''bus terminal'', establishing a bi-directional connection. This enables any UI element to invoke commands and persist presentation state (by sending //&quot;state mark&quot; mesages//), and in turn this allows the session and engine core to &quot;cast&quot; state updates towards the UI, without precisely knowing where and how to reach the relevant presentation entities.
 
 !Bus interactions
 The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub, which maintains a routing table. Attachment and detachment of elements can be managed automatically, since all of the UI-Bus operations perform within the UI event thread. We distinguish between up-link messages, directed towards some central service (presentation state management or command invocation) and down-link messages, directed towards individual elements. The interactions at the bus are closely interrelated with the elementary UI-Element operations.
@@ -8663,7 +8663,7 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :down-link communication to //feed back// state updates or to replay previously recorded  //state marks//
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201602140400" tags="GuiPattern design draft decision" changecount="45">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201609081417" tags="GuiPattern design draft decision" changecount="47">
 <pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -8678,7 +8678,7 @@ As a starting point, we know
 !Behaviours
 For some arbitrary reason, any element in the UI can appear and go away. This corresponds to attachment and deregistration at the UI-Bus
 
-In regular, operative state, an interface element may initiate //actions.// These correspond to invocation of [[Proc-Layer commands|CommandHandling]], after having supplied the necessary arguments. Commands are referred and called //by name// (~command-ID) and they are thus not bound to a specific UI-Element. Rather, it is the job of the UI to provide sensible command arguments, based on the context of the operation. There might be higher-level, cooperative [[gestures|Gesture]] within the interface, and actions might be formed like sentences, with the help of a FocusConcept -- however, in the end, there is a ''subject'' and a ''predicate''. And the interface element takes on the role of the underlying, the subject, the ''tangible''.
+In regular, operative state, an interface element may initiate //actions.// These correspond to invocation of [[Proc-Layer commands|CommandHandling]], after having supplied the necessary arguments. Commands are referred and called //by name// (command-ID) and they are thus not bound to a specific UI-Element. Rather, it is the job of the UI to provide sensible command arguments, based on the context of the operation. There might be higher-level, cooperative [[gestures|Gesture]] within the interface, and actions might be formed like sentences, with the help of a FocusConcept -- however, at the the end of the day, there is a ''subject'' and a ''predicate''. And the interface element takes on the role of the underlying, the subject, the ''tangible''.
 
 Some actions are very common and can be represented by a shorthand. An example would be to tweak some property, which means to mutate the attribute of a model element known beforehand. Such tweaks are often caused by direct interaction, and thus have the tendency to appear in flushes, which might be batched to remove some load from the lower layers.
 

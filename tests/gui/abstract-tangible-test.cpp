@@ -207,8 +207,8 @@ namespace test {
        * retrieved or verified from the test code. Since lifecycle and robustness in
        * "post mortem" situations tend to be tricky for UI code, we provide a dedicated
        * ["zombification" feature](\ref gui::test::TestNexus::zombificate): a \ref MockElm can be
-       * turned into an _almost dead_ state, while still hanging around. It will be detached from the
-       * "living" Test-Nexus and re-wired to some special, hidden "Zombie Nexus", causing any
+       * turned into an _almost dead_ state, while still hanging around. It will be detached from
+       * the "living" Test-Nexus and re-wired to some special, hidden "Zombie Nexus", causing any
        * further messaging activity to be logged and ignored.
        */
       void
@@ -330,7 +330,7 @@ namespace test {
           // Usually it's the InvocationStateManager's job to
           // prepare an "InvocationTrail", which is a prospective
           // Command invocation about to happen soon.
-          InvocationTrail invTrail (Command::get (DUMMY_CMD_ID));
+          InvocationTrail invoTrail (Command::get (DUMMY_CMD_ID));
           
           // the UI element relevant for this command invocation
           MockElm mock("uiElm");
@@ -343,7 +343,7 @@ namespace test {
           
           
           // now the ongoing interaction picks up parameter data
-          mock.prepareCommand (invTrail, lib::diff::Rec({concreteParam}));
+          mock.prepareCommand (invoTrail, lib::diff::Rec({concreteParam}));
           CHECK (nexusLog.verifyCall("act").arg("«int»|" +toString(concreteParam))
                          .beforeEvent("binding for command \""+DUMMY_CMD_ID));
           
@@ -352,7 +352,7 @@ namespace test {
           
           
           // finally the command gets triggered
-          mock.issueCommand (invTrail);
+          mock.issueCommand (invoTrail);
           
           CHECK (dummyState == concreteParam);  // command was indeed invoked
           CHECK (nexusLog.verifyCall("act").arg("«int»|" +toString(concreteParam))

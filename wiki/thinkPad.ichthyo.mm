@@ -474,7 +474,7 @@
 <icon BUILTIN="full-3"/>
 </node>
 </node>
-<node CREATED="1455668897947" FOLDED="true" HGAP="211" ID="ID_1897861223" MODIFIED="1473014971567" TEXT="Konsequenzen" VSHIFT="23">
+<node CREATED="1455668897947" FOLDED="true" HGAP="211" ID="ID_1897861223" MODIFIED="1473352440905" TEXT="Konsequenzen" VSHIFT="23">
 <node CREATED="1455668923175" ID="ID_1183550957" MODIFIED="1472219338326" TEXT="brauche passendes UI-Bus API">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -1883,8 +1883,8 @@
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
 </node>
-<node CREATED="1456506101544" HGAP="4" ID="ID_133511037" MODIFIED="1473040740444" TEXT="Implementierung" VSHIFT="16">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1456506101544" FOLDED="true" HGAP="4" ID="ID_133511037" MODIFIED="1473352361466" TEXT="Implementierung" VSHIFT="16">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1456506128581" HGAP="-12" ID="ID_322289358" MODIFIED="1473014961683" TEXT="Abw&#xe4;gungen" VSHIFT="184">
 <node CREATED="1456506135028" FOLDED="true" HGAP="29" ID="ID_470489868" MODIFIED="1472830010078" TEXT="Indirektionen" VSHIFT="-5">
 <node CREATED="1456506145826" ID="ID_759825167" MODIFIED="1461888854079" TEXT="kosten">
@@ -4296,8 +4296,7 @@
       <i>zwei </i>Bindings
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1472781728046" ID="ID_1910688935" MODIFIED="1472781744825" TEXT="ref Quell-Vector"/>
 <node CREATED="1472781629036" ID="ID_1614778599" MODIFIED="1472781751975" TEXT="Puffer: Vector GenNode"/>
 <node CREATED="1472781648571" ID="ID_1190592868" MODIFIED="1472781677753" TEXT="ein zugeh&#xf6;riger Iterator"/>
@@ -4322,8 +4321,7 @@
       <i>zwei</i>&#160;Collection-Bindings
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1472653548905" ID="ID_56400821" MODIFIED="1472653553124" TEXT="speziell konfiguriert"/>
@@ -4378,8 +4376,7 @@
       Die Inkonsequenz nun ist, da&#223; im Rec::Mutator keine Magie daf&#252;r vorgesehen ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1472931195618" ID="ID_1075996120" MODIFIED="1472931261669" TEXT="aber Meta-Attribut f&#xfc;r Diff">
@@ -4421,8 +4418,7 @@
       Denn die Lambdas haben keinen Zugriff auf die Ziel-Datenstruktur!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1472931806958" ID="ID_321203237" MODIFIED="1472931822190" TEXT="m&#xfc;&#xdf;te Binding-Operationen anpassen">
@@ -4475,8 +4471,7 @@
       um den Dekorator f&#252;r die Behandlung des Typ-Feldes einzubringen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -4496,8 +4491,7 @@
       Mut -&gt; <font color="#e43e2a">Rekursion</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1472830089042" ID="ID_1759032781" MODIFIED="1472830104684" TEXT="until after Ref::ATTRIBS">
@@ -5431,8 +5425,7 @@
       Daher habe ich mich <b>entschlossen, dieses Sprachkonstrukt zu entfernen</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1473040662653" ID="ID_397737711" MODIFIED="1473040680738">
 <richcontent TYPE="NODE"><html>
@@ -5462,29 +5455,58 @@
       <b>entfernt</b>, da schlechtes Design
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
 </node>
 <node CREATED="1458850387823" HGAP="19" ID="ID_415691337" MODIFIED="1472216223370" TEXT="allgemein" VSHIFT="13">
 <node CREATED="1458850397158" ID="ID_1336568549" MODIFIED="1458850405665" TEXT="GenNode">
-<node CREATED="1458850406396" ID="ID_1837583550" MODIFIED="1458850420054" TEXT="string-Repr&#xe4;sentation der Payload"/>
+<node CREATED="1458850406396" ID="ID_1837583550" MODIFIED="1473352290120" TEXT="string-Repr&#xe4;sentation der Payload">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1473352291785" ID="ID_1639951853" MODIFIED="1473352300715" TEXT="vorerst nicht ben&#xf6;tigt"/>
+<node CREATED="1473352306190" ID="ID_1647542723" MODIFIED="1473352310810" TEXT="w&#xe4;re besser da&#xdf; nicht"/>
+<node CREATED="1473352312206" ID="ID_1150422227" MODIFIED="1473352316377" TEXT="Entscheidung vertagt"/>
+</node>
 <node COLOR="#338800" CREATED="1458850422587" ID="ID_1552868803" MODIFIED="1458851592866" TEXT="Metafunktion f&#xfc;r m&#xf6;gliche Payload">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1458850437017" ID="ID_592865755" MODIFIED="1458850455074" TEXT="Planting-Handle">
-<node CREATED="1458850456134" ID="ID_1020391699" MODIFIED="1458850463009" TEXT="Zwischenschicht einziehen im TreeMutator"/>
-<node CREATED="1458850463389" ID="ID_769403943" MODIFIED="1458850470192" TEXT="Generische Impl herausl&#xf6;sen"/>
-<node CREATED="1458850471228" ID="ID_167381938" MODIFIED="1458850476631" TEXT="Unit-Test hierf&#xfc;r"/>
+<node CREATED="1458850456134" ID="ID_1020391699" MODIFIED="1473352276059" TEXT="Zwischenschicht einziehen im TreeMutator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      anscheinend nicht notwendig
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1458850463389" ID="ID_769403943" MODIFIED="1473352257250" TEXT="Generische Impl herausl&#xf6;sen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850471228" ID="ID_167381938" MODIFIED="1473352333631" TEXT="Unit-Test hierf&#xfc;r">
+<icon BUILTIN="bell"/>
 </node>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1448658726090" FOLDED="true" ID="ID_37610818" MODIFIED="1455421704674" TEXT="Commands" VSHIFT="4">
+<node CREATED="1473352396906" HGAP="-48" ID="ID_392196966" MODIFIED="1473352414457" TEXT="Integration" VSHIFT="25">
+<icon BUILTIN="pencil"/>
+<node CREATED="1473352465473" ID="ID_158999012" MODIFIED="1473352469908" TEXT="in Tangible"/>
+<node CREATED="1473352470896" ID="ID_864450713" MODIFIED="1473352474499" TEXT="Unit-Tests">
+<node CREATED="1473352475375" ID="ID_731425414" MODIFIED="1473352482010" TEXT="AbstractTangible_test"/>
+<node CREATED="1473352482502" ID="ID_1891838260" MODIFIED="1473352485210" TEXT="UiBus_test"/>
+</node>
+</node>
+</node>
+<node CREATED="1448658726090" FOLDED="true" HGAP="18" ID="ID_37610818" MODIFIED="1473352410557" TEXT="Commands" VSHIFT="36">
 <node CREATED="1448658755071" ID="ID_1033500384" MODIFIED="1448658767933" TEXT="wie definieren">
 <icon BUILTIN="help"/>
 <node CREATED="1448658974985" ID="ID_974207484" MODIFIED="1448658989011" TEXT="Definition braucht Session-Modell"/>
@@ -6114,15 +6136,15 @@
 </node>
 </node>
 <node CREATED="1448063874479" HGAP="43" ID="ID_739054690" MODIFIED="1453546352792" TEXT="UI-Modell" VSHIFT="1"/>
-<node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1460934815823" TEXT="Diff-System" VSHIFT="1">
+<node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1473353270308" TEXT="Diff-System" VSHIFT="1">
 <font NAME="SansSerif" SIZE="14"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="go"/>
 <node CREATED="1434128278990" ID="ID_106354755" MODIFIED="1434128283641" TEXT="Diff-Darstellung"/>
 <node CREATED="1434128267381" ID="ID_823706141" MODIFIED="1434128551925" TEXT="List-diff">
 <icon BUILTIN="go"/>
 </node>
-<node CREATED="1434128078638" ID="ID_1704749549" MODIFIED="1434128568744" TEXT="Tree-Diff">
-<icon BUILTIN="prepare"/>
+<node CREATED="1434128078638" ID="ID_1704749549" MODIFIED="1473353206035" TEXT="Tree-Diff">
+<icon BUILTIN="go"/>
 <node CREATED="1434128095838" ID="ID_419405890" MODIFIED="1434128561967" TEXT="Detector">
 <icon BUILTIN="stop"/>
 </node>
@@ -7176,7 +7198,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1443733567706" HGAP="76" ID="ID_143203937" MODIFIED="1446356861829" TEXT="Diff-Language" VSHIFT="15">
+<node CREATED="1443733567706" HGAP="241" ID="ID_143203937" MODIFIED="1473353232804" TEXT="Diff-Language" VSHIFT="23">
 <cloud COLOR="#cfba9d"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="go"/>
@@ -7197,7 +7219,7 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#56397a" CREATED="1443733800322" ID="ID_1544242343" MODIFIED="1443741833374" TEXT="Nutz-Muster">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#56397a" CREATED="1443733800322" FOLDED="true" ID="ID_1544242343" MODIFIED="1473353181009" TEXT="Nutz-Muster">
 <font NAME="SansSerif" SIZE="13"/>
 <node CREATED="1443733822780" ID="ID_756812969" MODIFIED="1443733830672" TEXT="Basis-F&#xe4;lle">
 <node CREATED="1443733856089" ID="ID_1358940500" MODIFIED="1443735038199">
@@ -7380,8 +7402,15 @@
 <node CREATED="1443736354800" ID="ID_1024688383" MODIFIED="1443736761929" TEXT="locker">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1443735740907" ID="ID_1103250008" MODIFIED="1443735747902" TEXT="Meta-Attribute sind magisch"/>
-<node CREATED="1443735750626" ID="ID_1965990187" MODIFIED="1443736021880" TEXT="erstes Kind er&#xf6;ffnet Scope"/>
-<node CREATED="1443736449419" ID="ID_1376225902" MODIFIED="1443736603427" TEXT="danach Attribute wegsortieren"/>
+<node CREATED="1473353076877" ID="ID_1936057196" MODIFIED="1473353119669" TEXT="2-Layer binding">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1473353083492" ID="ID_1800912467" MODIFIED="1473353090031" TEXT="es gibt eine Schicht">
+<node CREATED="1473353090435" ID="ID_708279376" MODIFIED="1473353094535" TEXT="f&#xfc;r Attribute"/>
+<node CREATED="1473353095051" ID="ID_484062615" MODIFIED="1473353096974" TEXT="f&#xfc;r Kinder"/>
+</node>
+<node CREATED="1473353098274" ID="ID_1387467215" MODIFIED="1473353107805" TEXT="jede Schicht arbeitet in sich konsistent"/>
+<node CREATED="1473353109241" ID="ID_132411161" MODIFIED="1473353115884" TEXT="sichtbare Reihenfolge bleibt fest"/>
+</node>
 <node CREATED="1443736688027" ID="ID_1189409086" MODIFIED="1443737477829" TEXT="Attribut-Handhabung">
 <node CREATED="1443737483704" FOLDED="true" ID="ID_1359413673" MODIFIED="1455841883232" TEXT="Modell &quot;Liste&quot;">
 <icon BUILTIN="button_ok"/>
@@ -7601,7 +7630,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1443733831475" HGAP="1" ID="ID_1421473885" MODIFIED="1443736918147" TEXT="Fehler-F&#xe4;lle" VSHIFT="7">
+<node CREATED="1443733831475" FOLDED="true" HGAP="1" ID="ID_1421473885" MODIFIED="1473353174609" TEXT="Fehler-F&#xe4;lle" VSHIFT="7">
 <node CREATED="1443736788646" ID="ID_672669721" MODIFIED="1443736790761" TEXT="formal">
 <node CREATED="1443736804803" ID="ID_1706990948" MODIFIED="1443737150597" TEXT="Syntax">
 <node CREATED="1443737154028" ID="ID_143683919" MODIFIED="1443737159781" TEXT="durch Typsystem unterbunden">
@@ -7646,12 +7675,45 @@
 </node>
 </node>
 <node CREATED="1443737036108" ID="ID_641574289" MODIFIED="1443737046751" TEXT="INS Child in Attribut-Zone">
-<node CREATED="1443739551450" ID="ID_1330800958" MODIFIED="1443739579434" TEXT="f&#xfc;hrt zum Wechsel in den Scope"/>
+<node CREATED="1473352901693" ID="ID_1444450254" MODIFIED="1473352907657" TEXT="wird toleriert">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1473352908876" ID="ID_288202266" MODIFIED="1473352998161" TEXT="bricht aus der Reihenfolge aus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t:
+    </p>
+    <ul>
+      <li>
+        es wird einfach vom zust&#228;ndigen Layer (der f&#252;r die Attribute) aufgegriffen
+      </li>
+      <li>
+        es hat keinen Einflu&#223; auf die nach au&#223;en sichtbare Reihenfolge
+      </li>
+      <li>
+        diese Reihenfolge bleibt gruppiert nach Attributen / Kindern
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node CREATED="1443737051419" ID="ID_364647539" MODIFIED="1443737060541" TEXT="INS Attribut in Scope">
-<node CREATED="1443739774844" ID="ID_821712631" MODIFIED="1443739782423" TEXT="Spezialbehandlung: r&#xfc;berwerfen"/>
+<node CREATED="1473352922946" ID="ID_23438081" MODIFIED="1473352926387" TEXT="wird toleriert">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1443737064633" ID="ID_67819372" MODIFIED="1443737088689" TEXT="PERM-fetch Child in Attribut-Zone">
+<node CREATED="1473352927098" ID="ID_1791498124" MODIFIED="1473353001242" TEXT="bricht aus der reihenfolge aus">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1443737064633" ID="ID_67819372" MODIFIED="1473353034257" TEXT="PERM-fetch Child in Attribut-Zone">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1443739787850" ID="ID_31775669" MODIFIED="1443739831711" TEXT="f&#xfc;hrt zum Fehler wg. &quot;zwei Listen&quot;-Modell">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -7685,11 +7747,15 @@
   </body>
 </html></richcontent>
 </node>
+<node COLOR="#338800" CREATED="1473353036195" ID="ID_371361214" MODIFIED="1473353045794" TEXT="obsolet durch neue Implementierung">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1443735208090" HGAP="99" ID="ID_117472593" MODIFIED="1443740513543" TEXT="Entscheidungen" VSHIFT="8">
+</node>
+<node CREATED="1443735208090" FOLDED="true" HGAP="99" ID="ID_117472593" MODIFIED="1473353173218" TEXT="Entscheidungen" VSHIFT="8">
+<icon BUILTIN="info"/>
 <node CREATED="1443735230768" ID="ID_1544379221" MODIFIED="1443735318881">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -7718,9 +7784,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1443741905157" HGAP="364" ID="ID_1960988662" MODIFIED="1445644272260" TEXT="Diff-Implementierung" VSHIFT="17">
+<node CREATED="1443741905157" FOLDED="true" HGAP="364" ID="ID_1960988662" MODIFIED="1473353249926" TEXT="Diff-Implementierung" VSHIFT="17">
 <font NAME="SansSerif" SIZE="16"/>
-<icon BUILTIN="prepare"/>
+<icon BUILTIN="go"/>
 <node CREATED="1444522932841" HGAP="52" ID="ID_48288704" MODIFIED="1444522994078" TEXT="Architektur" VSHIFT="-5">
 <node CREATED="1444522939928" ID="ID_490994681" MODIFIED="1444522986895" TEXT="destruktiv?">
 <icon BUILTIN="help"/>
@@ -7740,7 +7806,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="help"/>
-<node CREATED="1444523008207" ID="ID_385890020" MODIFIED="1444523017076" TEXT="Sprache: geht nicht">
+<node CREATED="1444523008207" FOLDED="true" ID="ID_385890020" MODIFIED="1473352723959" TEXT="Sprache: geht nicht">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1444523018726" ID="ID_874967614" MODIFIED="1444523024345" TEXT="Problem DiffStep"/>
 <node CREATED="1444523025148" ID="ID_1403562226" MODIFIED="1444523033774" TEXT="ist eingebettet in die Sprache"/>
@@ -7763,7 +7829,8 @@
 <node CREATED="1444523091939" ID="ID_720826260" MODIFIED="1444523103670" TEXT="akzeptiert Interpreter -&gt; kontravariant"/>
 </node>
 </node>
-<node CREATED="1444523111792" ID="ID_1544468161" MODIFIED="1444523118219" TEXT="denkbar: Implementierung">
+<node CREATED="1444523111792" FOLDED="true" ID="ID_1544468161" MODIFIED="1473352725494" TEXT="Implementierungs-Ebene">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1444523131486" ID="ID_37078397" MODIFIED="1444523139993" TEXT="Anwendung setzt nur Vector voraus"/>
 <node CREATED="1444523140605" ID="ID_1673268008" MODIFIED="1444523237002">
 <richcontent TYPE="NODE"><html>
@@ -7819,8 +7886,8 @@
 <node CREATED="1443741923547" ID="ID_1978439060" MODIFIED="1443741930738" TEXT="Listen-Diff">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1443741931858" ID="ID_484829805" MODIFIED="1446356837301" TEXT="Baum-Diff">
-<icon BUILTIN="pencil"/>
+<node CREATED="1443741931858" ID="ID_484829805" MODIFIED="1473352665243" TEXT="Baum-Diff">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1445295424277" FOLDED="true" ID="ID_1084177503" MODIFIED="1446356540880">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -7970,7 +8037,8 @@
 </node>
 <node CREATED="1445392105075" ID="ID_1377567733" MODIFIED="1445392113677" TEXT="zwei neue, lokale Vektoren aufbauen"/>
 <node CREATED="1445392114217" ID="ID_71124283" MODIFIED="1445392120973" TEXT="daraus den neuen Record konstruieren"/>
-<node CREATED="1445556634395" FOLDED="true" ID="ID_1143865339" MODIFIED="1445644186279" TEXT="technische Komplikation: &quot;2 Listen&quot;-Modell">
+<node CREATED="1445556634395" FOLDED="true" ID="ID_1143865339" MODIFIED="1473352845686" TEXT="technische Komplikation: &quot;2 Listen&quot;-Modell">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1445620914088" ID="ID_1919426539" MODIFIED="1445621018036" TEXT="Verhalten &#xe4;ndert sich je nach Scope">
 <icon BUILTIN="info"/>
 </node>
@@ -7988,6 +8056,19 @@
 </node>
 <node CREATED="1445620991326" ID="ID_513677356" MODIFIED="1445620998003" TEXT="eigener Test">
 <icon BUILTIN="yes"/>
+</node>
+<node CREATED="1473352753713" HGAP="10" ID="ID_1353201178" MODIFIED="1473352765966" TEXT="besserer Ansatz" VSHIFT="22">
+<icon BUILTIN="idea"/>
+<node CREATED="1473352767432" ID="ID_1220456854" MODIFIED="1473352784089" TEXT="als interne Repr&#xe4;sentation klassifizieren"/>
+<node CREATED="1473352784533" ID="ID_1907760521" MODIFIED="1473352794511" TEXT="das normale Binding f&#xfc;r opaque Datenstrukturen verwenden"/>
+<node CREATED="1473352794988" ID="ID_652168710" MODIFIED="1473352818517" TEXT="vorkonfiguriert: 2-Layer Binding"/>
+<node CREATED="1473352820096" ID="ID_329351043" MODIFIED="1473352835764" TEXT="Spezialf&#xe4;lle aus der Sprache entfernen">
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1473352801547" ID="ID_1001891556" MODIFIED="1473352809203" TEXT="integriert in generischen Diff-Applikator">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node CREATED="1446159438278" FOLDED="true" HGAP="29" ID="ID_563496669" MODIFIED="1455841217005" VSHIFT="8">
@@ -8114,9 +8195,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1446356556349" ID="ID_1068649765" MODIFIED="1446356607845" TEXT="offen...">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1446356765393" ID="ID_293921295" MODIFIED="1446356827238" TEXT="IDs in Testdaten f&#xfc;r GenNodeBaisc_test">
+<node CREATED="1446356556349" ID="ID_1068649765" MODIFIED="1473352615333" TEXT="offen...">
+<node COLOR="#338800" CREATED="1446356765393" ID="ID_293921295" MODIFIED="1473352607814" TEXT="IDs in Testdaten f&#xfc;r GenNodeBasic_test">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -8130,10 +8210,14 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="flag"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1446356588505" ID="ID_895292312" MODIFIED="1446356602250" TEXT="gr&#xfc;ndlicher Test">
 <icon BUILTIN="yes"/>
+<node CREATED="1473352634730" ID="ID_955392554" MODIFIED="1473352641908" TEXT="bis jetzt nur &quot;positiv-Tests&quot;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1473352642473" ID="ID_839131437" MODIFIED="1473352654368" TEXT="Abdeckung der Grenzf&#xe4;lle">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -8147,7 +8231,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1460934597764" FOLDED="true" HGAP="163" ID="ID_1014666775" MODIFIED="1460934811386" TEXT="Review" VSHIFT="6">
+<node CREATED="1460934597764" FOLDED="true" HGAP="163" ID="ID_1014666775" MODIFIED="1473353246448" TEXT="Review" VSHIFT="6">
 <font NAME="SansSerif" SIZE="15"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1460934670043" ID="ID_1299827687" MODIFIED="1460934677134" TEXT="sp&#xe4;ter zu &#xfc;berpr&#xfc;fen">
@@ -8169,8 +8253,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1443740543812" HGAP="17" ID="ID_1766169268" MODIFIED="1460934606704" TEXT="Tests" VSHIFT="20">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1443740543812" FOLDED="true" HGAP="17" ID="ID_1766169268" MODIFIED="1473353256501" TEXT="Tests" VSHIFT="20">
 <font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="bell"/>
 <node CREATED="1443740549220" ID="ID_167459949" MODIFIED="1443740564198" TEXT="List-Diff">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1443740554315" ID="ID_1970336632" MODIFIED="1443740562083" TEXT="Anwenden">
@@ -8183,7 +8268,8 @@
 <node CREATED="1443740566042" ID="ID_632827470" MODIFIED="1443740575356" TEXT="Baum-Diff">
 <node CREATED="1443740576744" ID="ID_335386387" MODIFIED="1443741767350" TEXT="Anwenden">
 <icon BUILTIN="pencil"/>
-<node CREATED="1443741563019" HGAP="-20" ID="ID_1944319966" MODIFIED="1443741571881" TEXT="Demo-Beispiel" VSHIFT="8">
+<node CREATED="1443741563019" HGAP="-20" ID="ID_1944319966" MODIFIED="1473353154271" TEXT="Demo-Beispiel" VSHIFT="8">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1443741578993" ID="ID_318844233" MODIFIED="1443741582069" TEXT="INIT"/>
 <node CREATED="1443741591616" ID="ID_1102292452" MODIFIED="1443741607633" TEXT="INS + MUT _THIS_"/>
 <node CREATED="1443741620052" ID="ID_1065499540" MODIFIED="1443741633054" TEXT="MOD"/>
@@ -8311,8 +8397,7 @@
       <i>schmerzloses </i>C++ API
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448318701621" ID="ID_1339095142" MODIFIED="1448318719135" TEXT="unterst&#xfc;tzt Builder f&#xfc;r Integration in den Parse-Vorgang"/>
 <node CREATED="1448318726098" ID="ID_1386753436" MODIFIED="1448318736621" TEXT="unterst&#xfc;tzt Kommentarte (non-Standard)"/>
@@ -8327,8 +8412,7 @@
       Performance: guter Schnitt (etw. besser als boost spirit)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448320352804" ID="ID_1738484079" MODIFIED="1448320354088" TEXT="MIT"/>
 </node>
@@ -8345,8 +8429,7 @@
       hat ein DOM-API <i>und</i>&#160;ein SAX-artiges API
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1448320473828" ID="ID_681519615" MODIFIED="1448320508422" TEXT="header-only, self-contained, keine Abh&#xe4;ngigkeiten!">
@@ -8359,8 +8442,7 @@
       das hei&#223;t: <b>nicht einmal</b>&#160;abh&#228;ngig von der STL
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448320555049" ID="ID_1836540415" MODIFIED="1448321597617" TEXT="erweiterter Unicode-Support, incl. recoding beim Parsen"/>
 <node CREATED="1448321567452" ID="ID_933252727" MODIFIED="1448321582600" TEXT="kann auch in-situ parsen">
@@ -8373,8 +8455,7 @@
       wie gson
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448320545523" ID="ID_298176210" MODIFIED="1448320554597" TEXT="vollst&#xe4;ndig, incl Ersetzungen"/>
 <node CREATED="1448321598848" ID="ID_1151875949" MODIFIED="1448321606499" TEXT="eigener Block-Allokator, ersetzbar"/>
@@ -8392,8 +8473,7 @@
       nach dem Umzug auf Github hei&#223;t es gason
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1448319925356" ID="ID_1589130421" MODIFIED="1448320242925" TEXT="angeblich ziemlich schnell">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -8404,8 +8484,7 @@
       lt. eigenen Benchmakrs deutlich schneller als rapitjson, welches eigentlich immer als der &quot;schnelle&quot; JSON-Parser gilt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448319936915" ID="ID_1093677957" MODIFIED="1448319953316" TEXT="C++, aber ehr C-artiges API"/>
 <node CREATED="1448319955328" ID="ID_534293846" MODIFIED="1448319962555" TEXT="type-tag, switch-on-type"/>
@@ -8419,8 +8498,7 @@
       d.h. das Parsen schreibt den Eingabepuffer um, und Strings bleiben einfach liegen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448319973830" ID="ID_1495739376" MODIFIED="1448320003901" TEXT="Werte werden in IEEE double NaN geboxt"/>
 <node CREATED="1448320035173" ID="ID_226864203" MODIFIED="1448320053255" TEXT="eigener Block-Allokator"/>
@@ -8443,8 +8521,7 @@
       kein Repo auffindbar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1448315077731" ID="ID_439331220" MODIFIED="1448315088637" TEXT="boost property-tree">
@@ -8471,8 +8548,7 @@
       ich will nicht <i>noch ein</i>&#160;Objekt-System
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448321022444" ID="ID_658035448" MODIFIED="1448321032302" TEXT="das SAX-API ist genau, was ich brauche"/>
 <node CREATED="1448321063078" ID="ID_923664235" MODIFIED="1448321070185" TEXT="au&#xdf;erdem klein und schmerzlos"/>
