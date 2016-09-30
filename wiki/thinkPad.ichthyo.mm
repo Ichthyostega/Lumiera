@@ -5483,8 +5483,7 @@
       anscheinend nicht notwendig
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1458850463389" ID="ID_769403943" MODIFIED="1473352257250" TEXT="Generische Impl herausl&#xf6;sen">
@@ -5499,7 +5498,52 @@
 </node>
 <node CREATED="1473352396906" HGAP="-48" ID="ID_392196966" MODIFIED="1473352414457" TEXT="Integration" VSHIFT="25">
 <icon BUILTIN="pencil"/>
-<node CREATED="1473352465473" ID="ID_158999012" MODIFIED="1473352469908" TEXT="in Tangible"/>
+<node CREATED="1473352465473" ID="ID_158999012" MODIFIED="1473352469908" TEXT="in Tangible">
+<node CREATED="1475250911087" ID="ID_1042895809" MODIFIED="1475251607291" TEXT="zu kl&#xe4;ren">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1475250919286" ID="ID_211228413" MODIFIED="1475250977703" TEXT="wie sieht die initiale (diff)Nachricht aus">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1475251507800" ID="ID_1645310973" MODIFIED="1475251594901" TEXT="wo/wie wird Diff-Nachricht behandelt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...analog zur &quot;mark&quot;-Nachricht?
+    </p>
+    <ul>
+      <li>
+        diese wird im Nexus behandelt, in dem die Tangible::mark()-Methode aktiviert wird
+      </li>
+      <li>
+        in dieser wiederum steckt eine Default-Handler-Sequenz, plus ein Strategy-Pattern
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1475250930756" ID="ID_509435943" MODIFIED="1475250975686" TEXT="wo steckt der Diff selber">
+<icon BUILTIN="help"/>
+<node CREATED="1475251013513" ID="ID_1464747905" MODIFIED="1475251058167" TEXT="Diff == iterierbare &lt;DiffStep&gt;-Sequenz">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475251032255" ID="ID_824967618" MODIFIED="1475251053067" TEXT="pa&#xdf;t nicht in eine GenNode">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1475250947858" ID="ID_1438298132" MODIFIED="1475250973257" TEXT="wer ist der Kommunikationspartner">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1475250957097" ID="ID_1839306136" MODIFIED="1475250969909" TEXT="wie kennt das Tangible diesen Partner">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 <node CREATED="1473352470896" ID="ID_864450713" MODIFIED="1473352474499" TEXT="Unit-Tests">
 <node CREATED="1473352475375" ID="ID_731425414" MODIFIED="1473352482010" TEXT="AbstractTangible_test"/>
 <node CREATED="1473352482502" ID="ID_1891838260" MODIFIED="1473352485210" TEXT="UiBus_test"/>
@@ -5865,7 +5909,7 @@
 </node>
 </node>
 <node CREATED="1434128059966" ID="ID_823283341" MODIFIED="1434128067529" TEXT="Connect">
-<node CREATED="1434128071126" FOLDED="true" ID="ID_1618124128" MODIFIED="1455421996569" TEXT="UI-Bus">
+<node CREATED="1434128071126" FOLDED="true" ID="ID_1618124128" MODIFIED="1475251105159" TEXT="UI-Bus">
 <linktarget COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-25;-262;" ID="Arrow_ID_539627804" SOURCE="ID_257833497" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="prepare"/>
@@ -7699,8 +7743,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>

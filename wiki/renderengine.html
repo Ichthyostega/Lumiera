@@ -2398,7 +2398,7 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
-<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201609081516" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="24">
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201609091641" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="26">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 
 !prerequisites for issuing a command
@@ -2424,8 +2424,8 @@ So the actual widget type implies knowledge about the contents and the meaning o
 The consequence of this approach is that the relations and whereabouts of entities involved into this decision tend to be explicated right into the widget code. Any overarching concerns end up being scattered over various implementation sites, need to be dealt with by convention, or rely on all invocation sites to use some helper facilities voluntarily.
 
 !!!Abstracted binding definitions
-This contrastive approach attempts to keep knowledge and definition clustered in a way according to the commands and actions to be performed -- even at the price of some abstractions and indirections. There is no natural and obvious place where to collect those information, and thus we need to create such a location deliberately. This new entity or location to be conceived serves to link user interface and session elements, and it tends to rely on definitions from both realms.
-* in addition to the script, here we build a parameter accessor, which is some kind of functor or closure.
+This contrastive approach attempts to keep knowledge and definition clustered in a way according to the commands and actions to be performed -- even at the price of some abstractions and indirections. There is no natural and obvious place where to collect those information, and thus we need to create such a location deliberately. This new entity or location to be conceived will serve as a link between user interface and session elements, and it tends to rely on definitions from both realms.
+* in addition to the command script, here we build a parameter accessor, which is some kind of functor or closure.
 * we need to introduce a new abstraction, termed InteractionStateManager. This is deliberately not a single entity, rather some distinct facility in charge for one specific kind of interaction, like gestures being formed by mouse, touch or pen input.
 * from the command definition site, we need to send a combination of //rules// and parameter accessors, which together define an invocation path for one specific flavour of a command
 * the InteractionStateManager, driven by the state changes he observes, will evaluate those rules and determine the feasibility of specific command invocation paths
@@ -2931,9 +2931,9 @@ The interface programming allows us to react on events and trigger behaviour, an
 ;the ability to arrange what is relevant
 :we do the same stuff again and again, and this makes us observe and gradually understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.</pre>
 </div>
-<div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" tags="def design GuiIntegration draft" changecount="1">
+<div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201609091644" tags="def design GuiIntegration draft" changecount="2">
 <pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
-In a more elaborate UI, as can be expected for a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
+In a more elaborate UI, as can be expected for such a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
 
 An InteractionStateManager is a global component, but rarely addressed directly. Rather this tracking component attaches and taps into various information sources to observe some aspects of global state. Moreover, it is outfitted with a set of rules, leading to enablement of some //command invocation trail.// These enablements or disablements are forwarded to the actual trigger points, which are those UI elements to witness the completion of a gesture.</pre>
 </div>
@@ -8663,7 +8663,7 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :down-link communication to //feed back// state updates or to replay previously recorded  //state marks//
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201609081417" tags="GuiPattern design draft decision" changecount="47">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201609301612" tags="GuiPattern design draft decision" changecount="48">
 <pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -8729,6 +8729,13 @@ While the above definitions might seem more or less obvious and reasonable, ther
 
 !!!actual implementation of command invocation
 A command's {{{InvocationTrail}}} is in fact just some tag object, wrapping the command definition ID. In a first step, when the command's arguments can be //closed,// a {{{Record}}} with suitable argument bindings is created and wrapped into a {{{GenNode}}} corresponding to the command. We should note that these bindings typically also entail to specify the //subject of the command.// This binding compound is sent over the UI-Bus, marking the command ready for execution. From this point on, just the {{{InvocationTrail}}} is passed to enable the trigger sites. When it is actually triggered, a simple &quot;bang!&quot; message with the command ID is sent over the bus. A given command instance may be re-used, as long as it is structurally the same as before, and as log as there is no possible collision with a similar, but differently parametrised instantiation process.
+
+!Essential update {{red{WIP 9/2016}}}
+It is clear by now (9/2016) how shape and content changes are to be represented as diff message. Moreover, we have an implementation framework to build the concrete TreeMutator, which allows to target diff messages towards a (otherwise undisclosed) opaque implementation data structure.
+!!!questions
+* how to integrate &quot;diff calls&quot; in to UI-Bus and {{{Tangible}}}
+* how to ensure, diff processing happens within the event thread
+* what is the exact relation to the GuiModel -- this remained nebulous up to now
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">

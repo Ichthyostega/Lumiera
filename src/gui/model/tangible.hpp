@@ -69,7 +69,8 @@
  ** in the end, there is a _subject_ and a _predicate_. These need to be bound in order to
  ** form an _action_. And some interface element takes on or relates to the role of the
  ** underlying, the subject, the **tangible element**.
- ** Some actions are very common and can be represented by a shorthand.
+ ** 
+ ** @todo Some actions are very common and can be represented by a shorthand.
  ** An example would be to tweak some property, which means to mutate the attribute of a
  ** model element known beforehand. Such tweaks are often caused by direct interaction,
  ** and thus have the tendency to appear in flushes, which we want to batch in order to
