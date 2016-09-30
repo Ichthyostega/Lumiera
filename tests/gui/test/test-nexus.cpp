@@ -75,6 +75,7 @@ using lib::diff::DataValues;
 using lib::idi::instanceTypeID;
 using lib::test::EventLog;
 using gui::ctrl::BusTerm;
+using gui::ctrl::MutationMessage;
 using gui::interact::PresentationStateManager;
 using gui::interact::StateRecorder;
 using proc::control::Command;
@@ -211,6 +212,14 @@ namespace test{
             return cnt;
           }
         
+        virtual void
+        change (ID subject, MutationMessage& diff)  override
+          {
+            log_.call (this, "change", subject, diff);
+            BusHub::change (subject, diff);
+            log_.event ("TestNexus", _Fmt("applied diff to %s |%s") % subject % diff);
+          }
+        
         virtual BusTerm&
         routeAdd (ID identity, Tangible& newNode)  override
           {
@@ -343,6 +352,14 @@ namespace test{
             log().error ("request to broadcast to all Zombies");
             cerr << "broadcast message -> ZombieNexus" <<endl;
             return 0;
+          }
+        
+        virtual void
+        change (ID subject, MutationMessage& diff)  override
+          {
+            log().call(this, "change", subject, diff);
+            log().error ("request to apply a diff message via ZombieNexus");
+            cerr << "change diff -> ZombieNexus" <<endl;
           }
         
         virtual BusTerm&

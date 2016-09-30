@@ -73,6 +73,9 @@ namespace ctrl {
   }
   
   
+  MutationMessage::~MutationMessage() { }
+  
+  
   
   
   /** Builder function: establish and wire a new BusTerm.
@@ -168,6 +171,24 @@ namespace ctrl {
   BusTerm::markAll (GenNode const& mark)
   {
     return theBus_.markAll (mark);
+  }
+  
+  
+  /** alter and reshape the designated subject by applying the given diff message.
+   * @param diff encapsulated representation of a concrete diff sequence for the target.
+   * @return if the target was known and the diff was applied without accident
+   * @throws lumiera::error::State when diff application fails due to the target's shape
+   *         or state being different than implicitly assumed by the given diff.
+   * @remark each tangible offers to build a custom TreeMutator, which is appropriately
+   *         wired to receive diff messages targeted towards this specific element. The
+   *         standard implementation within the Nexus uses this ability to create a
+   *         DiffApplicator<DiffMutable>, finally to feed the given diff to the target,
+   *         which consequently will reshape and remould itself accordingly.
+   */
+  void
+  BusTerm::change (ID subject, MutationMessage& diff)
+  {
+    theBus_.change(subject, diff);
   }
   
   

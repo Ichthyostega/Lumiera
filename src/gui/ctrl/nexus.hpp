@@ -114,6 +114,15 @@ namespace ctrl{
           return routingTable_.size();
         }
       
+      
+      /** */
+      virtual void
+      change (ID subject, MutationMessage& diff)  override
+        {
+          UNIMPLEMENTED("actually apply a diff to the target Tangible");
+        }
+      
+      
       /** add a new down-link connection to the routing table
        * @param identity the [endpoint-ID](\ref BusTerm::endpointID_) used
        *         to address the new element to be connected to the bus.

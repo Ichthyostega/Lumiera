@@ -55,6 +55,7 @@
 //#include "lib/util.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "gui/ctrl/mutation-message.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <utility>
@@ -111,6 +112,7 @@ namespace ctrl{
       virtual bool mark (ID subject, GenNode const& mark);
       
       virtual size_t markAll (GenNode const& mark);
+      virtual void change (ID subject, MutationMessage& diff);
       
       virtual operator string()  const;
       
