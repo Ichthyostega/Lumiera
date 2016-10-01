@@ -5499,21 +5499,23 @@
 <node CREATED="1473352396906" HGAP="-48" ID="ID_392196966" MODIFIED="1473352414457" TEXT="Integration" VSHIFT="25">
 <icon BUILTIN="pencil"/>
 <node CREATED="1473352465473" ID="ID_158999012" MODIFIED="1473352469908" TEXT="in Tangible">
-<node CREATED="1475250911087" ID="ID_1042895809" MODIFIED="1475251607291" TEXT="zu kl&#xe4;ren">
+<node CREATED="1475250911087" ID="ID_1042895809" MODIFIED="1475356037858" TEXT="zu kl&#xe4;ren">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1475250919286" ID="ID_211228413" MODIFIED="1475250977703" TEXT="wie sieht die initiale (diff)Nachricht aus">
 <icon BUILTIN="help"/>
+<node CREATED="1475355977081" ID="ID_1302138609" MODIFIED="1475355984716" TEXT="dediziertes API"/>
+<node CREATED="1475356001462" ID="ID_1339165799" MODIFIED="1475356007240" TEXT="Nexus zerlegt das"/>
+<node CREATED="1475356007860" ID="ID_1405013613" MODIFIED="1475356015255" TEXT="l&#xf6;st direkt Anwendung aus"/>
 </node>
-<node CREATED="1475251507800" ID="ID_1645310973" MODIFIED="1475251594901" TEXT="wo/wie wird Diff-Nachricht behandelt">
+<node CREATED="1475251507800" ID="ID_1645310973" MODIFIED="1475355884967" TEXT="wo/wie wird Diff-Nachricht behandelt">
+<icon BUILTIN="help"/>
+<node CREATED="1475355925880" ID="ID_464242009" MODIFIED="1475355945481" TEXT="...analog zur &quot;mark&quot;-Nachricht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
-    <p>
-      ...analog zur &quot;mark&quot;-Nachricht?
-    </p>
     <ul>
       <li>
         diese wird im Nexus behandelt, in dem die Tangible::mark()-Methode aktiviert wird
@@ -5525,7 +5527,7 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="help"/>
+</node>
 </node>
 <node CREATED="1475250930756" ID="ID_509435943" MODIFIED="1475250975686" TEXT="wo steckt der Diff selber">
 <icon BUILTIN="help"/>
@@ -5535,9 +5537,23 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475251032255" ID="ID_824967618" MODIFIED="1475251053067" TEXT="pa&#xdf;t nicht in eine GenNode">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node CREATED="1475355960899" ID="ID_1468155641" MODIFIED="1475355974481">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Marker-Typ <b>MutationMessage</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1475250947858" ID="ID_1438298132" MODIFIED="1475250973257" TEXT="wer ist der Kommunikationspartner">
 <icon BUILTIN="help"/>
+<node CREATED="1475356021762" ID="ID_1261042951" MODIFIED="1475356028310" TEXT="irrelevant, da abstrahiert"/>
 </node>
 <node CREATED="1475250957097" ID="ID_1839306136" MODIFIED="1475250969909" TEXT="wie kennt das Tangible diesen Partner">
 <icon BUILTIN="help"/>
@@ -5567,6 +5583,15 @@
 </node>
 <node CREATED="1475342391631" ID="ID_1330153391" MODIFIED="1475342446252" TEXT="Platzhalter-Typ: DiffMessage"/>
 <node CREATED="1475342401278" ID="ID_1020722080" MODIFIED="1475342430750" TEXT="macht Diff zug&#xe4;nglich"/>
+</node>
+</node>
+<node CREATED="1475356047496" ID="ID_667427572" MODIFIED="1475356054163" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
+<node CREATED="1475356059342" ID="ID_1039482059" MODIFIED="1475356066062" TEXT="wie wird Diff eingebettet">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475356066853" ID="ID_821643910" MODIFIED="1475356076468" TEXT="Problem: Puffergr&#xf6;&#xdf;e">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

@@ -212,12 +212,20 @@ namespace test{
             return cnt;
           }
         
-        virtual void
+        virtual bool
         change (ID subject, MutationMessage& diff)  override
           {
             log_.call (this, "change", subject, diff);
-            BusHub::change (subject, diff);
-            log_.event ("TestNexus", _Fmt("applied diff to %s |%s") % subject % diff);
+            if (BusHub::change (subject, diff))
+              {
+                log_.event ("TestNexus", _Fmt("applied diff to %s |%s") % subject % diff);
+                return true;
+              }
+            else
+              {
+                log_.warn (_Fmt("disregarding change/diff to unknown %s |%s") % subject % diff);
+                return false;
+              }
           }
         
         virtual BusTerm&
@@ -354,12 +362,13 @@ namespace test{
             return 0;
           }
         
-        virtual void
+        virtual bool
         change (ID subject, MutationMessage& diff)  override
           {
             log().call(this, "change", subject, diff);
             log().error ("request to apply a diff message via ZombieNexus");
             cerr << "change diff -> ZombieNexus" <<endl;
+            return false;
           }
         
         virtual BusTerm&

@@ -54,7 +54,7 @@
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 //#include "lib/idi/entry-id.hpp"
-//#include "lib/diff/gen-node.hpp"
+#include "lib/diff/diff-mutable.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <utility>
@@ -85,6 +85,12 @@ namespace ctrl{
       
     public:
       virtual ~MutationMessage();  ///< this is an interface
+      
+      virtual void
+      applyTo (lib::diff::DiffMutable& target)
+        {
+          UNIMPLEMENTED("how to embed a diff sequence and apply this to the target");
+        }
       
       operator string()  const
         {

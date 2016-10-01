@@ -116,10 +116,18 @@ namespace ctrl{
       
       
       /** */
-      virtual void
+      virtual bool
       change (ID subject, MutationMessage& diff)  override
         {
-          UNIMPLEMENTED("actually apply a diff to the target Tangible");
+          auto entry = routingTable_.find (subject);
+          if (entry == routingTable_.end())
+            return false;
+          else
+            {
+              UNIMPLEMENTED("actually apply a diff to the target Tangible");
+              diff.applyTo (*entry->second);
+              return true;
+            }
         }
       
       

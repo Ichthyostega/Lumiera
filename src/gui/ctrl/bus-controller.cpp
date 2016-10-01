@@ -185,7 +185,7 @@ namespace ctrl {
    *         DiffApplicator<DiffMutable>, finally to feed the given diff to the target,
    *         which consequently will reshape and remould itself accordingly.
    */
-  void
+  bool
   BusTerm::change (ID subject, MutationMessage& diff)
   {
     theBus_.change(subject, diff);

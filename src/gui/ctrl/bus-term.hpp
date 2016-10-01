@@ -112,7 +112,7 @@ namespace ctrl{
       virtual bool mark (ID subject, GenNode const& mark);
       
       virtual size_t markAll (GenNode const& mark);
-      virtual void change (ID subject, MutationMessage& diff);
+      virtual bool change (ID subject, MutationMessage& diff);
       
       virtual operator string()  const;
       

@@ -130,6 +130,7 @@
 #include "lib/error.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/interact/invocation-trail.hpp"
+#include "lib/diff/diff-mutable.hpp"
 #include "lib/idi/entry-id.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -154,6 +155,7 @@ namespace model {
    */
   class Tangible
     : public sigc::trackable
+    , public lib::diff::DiffMutable
     , boost::noncopyable
     {
     protected:
@@ -205,6 +207,8 @@ namespace model {
       virtual bool doErr (string)          =0;
       virtual void doFlash()               =0;
       virtual void doMark(GenNode const&)  =0;
+      
+      virtual void buildMutator (lib::diff::TreeMutator::Handle)  =0;
     private:
     };
   

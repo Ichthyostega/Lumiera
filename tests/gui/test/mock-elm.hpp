@@ -223,6 +223,11 @@ namespace test{
           Tangible::doMark (mark);
         }
       
+      virtual void
+      buildMutator (lib::diff::TreeMutator::Handle buffer)  override
+        {
+          UNIMPLEMENTED ("create a TreeMutator to deal with our playground data");
+        }
       
     protected:
       string
