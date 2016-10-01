@@ -39,8 +39,8 @@
  ** 
  ** ### Use cases
  ** Initially, we'd have to distinguish two usage situations
- ** - apply a diff to a generic tree representation, based on Record<GenNode>
- ** - apply a diff to some tree shaped implementation data structure
+ **  - apply a diff to a generic tree representation, based on Record<GenNode>
+ **  - apply a diff to some tree shaped implementation data structure.
  ** _Conceptually_ we use the former as blueprint and base to define the semantics
  ** of our »tree-diff language«, while the latter is an extension and can be supported
  ** within the limits of precisely these tree-diff semantics. That is, we support diff
@@ -72,15 +72,15 @@
  ** a *diff conflict*, the target *will be corrupted*.
  ** 
  ** Our tree like data structures are conceived as a system of nested scopes. Within
- ** each scope, we have a list of elements, to which a list-diff is applied. On start
- ** of diff application, a one time adapter and intermediary is constructed: the TreeMutator.
+ ** each scope, we have a list of elements, to which a list-diff is applied. When commencing
+ ** diff application, a one time adapter and intermediary is constructed: the TreeMutator.
  ** This requires the help of the target data structure to set up the necessary bindings,
  ** since the diff applicator as such has no knowledge about the target data implementation.
  ** At this point, the existing (old) contents of the initial scope are moved away into an
  ** internal _source sequence buffer,_ from where they may be "picked" and moved back into
  ** place step by step through the diff. After possibly establishing a new order, inserting
  ** or omitting content within a given "object" (Record), the tree diff language allows in
- ** a second step to _open_ some of the child "objects" by entering nested scope, to effect
+ ** a second step to _open_ some of the child "objects" by entering nested scopes, to effect
  ** further changes within the selected child node. This is done within the `mut(ID)....emu(ID)`
  ** bracketing construct of the diff language. On the implementation side, this recursive
  ** descent and diff application is implemented with the help of a stack, where a new
@@ -117,7 +117,7 @@
  ** needs to supply only some functors or lambda expressions to specify how to deal
  ** with the actual representation data values:
  ** - how to construct a new entity
- ** - when the binding actually becomes active
+ ** - decide when the binding actually becomes active
  ** - how to determine a diff verb "matches" the actual data
  ** - how to set a value or how to recurse into a sub scope
  ** 
@@ -257,7 +257,7 @@ namespace diff{
    * Implementation of the tree-diff-language to work on arbitrary tree-like data.
    * This is the core part of the implementation, which maps the _diff verbs_
    * onto the corresponding _primitive operations_ of the TreeMutator interface.
-   * The concrete implementation of TreeMutator then is responsible of translating
+   * The concrete implementation of TreeMutator then is responsible to translate
    * those operations into the correct manipulation of target data.
    * @note implementation of these functions is emitted in tree-diff.cpp and thus
    *       within the library module. For an actual diff-applicator, we also need

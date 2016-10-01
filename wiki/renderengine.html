@@ -3431,6 +3431,10 @@ As an immediate consequence of not being able to reduce processing to elementary
 * the PlayProcess serves to join both views, providing a single PlayController front-end, while [[dispatching|FrameDispatcher]] to single channel processing.
 </pre>
 </div>
+<div title="MutationMessage" creator="Ichthyostega" modifier="Ichthyostega" created="201610011953" modified="201610012003" tags="def" changecount="4">
+<pre>//message on the UI-Bus to cause changes on the targeted UI-Element.//
+The UI-Bus offers a dedicated API to direct ~MutationMessages towards {{{Tangible}}} elements, as designated by the given ID. Actually, such messages serve as //capsule to transport a [[diff-sequence|TreeDiffModel]]// -- since a diff sequence as such is always concrete and tied to a specific context, we can not represent it directly as an abstract type on interface level. The receiver of a diff sequence must offer the ability to be reshaped through diff messages, which is expressed through the interface {{{DiffMutable}}}. In our case here, {{{Tangible}}} offers this interface and thus the ability to construct a concrete TreeMutator, which in turn is bound to the internals of the actual UI-Element in question. Together this allows for a generic implementation of MutationMessage handling, where the designated UI-Element is reshaped by applying an embedded concrete diff message with the help of a {{{DiffApplicator&lt;DiffMutable&gt;}}}, based on the TreeMutator exposed.</pre>
+</div>
 <div title="NodeConfiguration" modifier="Ichthyostega" created="200909041806" modified="200909041807" tags="spec Builder Rendering">
 <pre>Various aspects of the individual [[render node|ProcNode]] are subject to configuration and may influence the output quality or the behaviour of the render process.
 * the selection //what// actual implementation (plugin) to used for a formally defined &amp;raquo;[[Effect|EffectHandling]]&amp;laquo;
@@ -8640,7 +8644,7 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201609081410" tags="GuiPattern Concepts def design draft" changecount="16">
+<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201610011941" tags="GuiPattern Concepts def design draft" changecount="17">
 <pre>Abstraction used in the Backbone of Lumiera's GTK User Interface
 The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the //Controler// in the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]] in common UI architecture.
 
@@ -8661,9 +8665,11 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :some (abstracted) [[presentation state|PresentationState]] manager is expected to listen to these messages, possibly recording state to be restored later
 ;mark
 :down-link communication to //feed back// state updates or to replay previously recorded  //state marks//
+;change
+:direct a MutationMessage towards the designated UI-Element, causing the latter to build a TreeMutator to receive the embedded [[diff-sequence|TreeDiffModel]]
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201609301612" tags="GuiPattern design draft decision" changecount="48">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201610011935" tags="GuiPattern design draft decision" changecount="50">
 <pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -8733,9 +8739,12 @@ A command's {{{InvocationTrail}}} is in fact just some tag object, wrapping the 
 !Essential update {{red{WIP 9/2016}}}
 It is clear by now (9/2016) how shape and content changes are to be represented as diff message. Moreover, we have an implementation framework to build the concrete TreeMutator, which allows to target diff messages towards a (otherwise undisclosed) opaque implementation data structure.
 !!!questions
-* how to integrate &quot;diff calls&quot; in to UI-Bus and {{{Tangible}}}
+* how to integrate &quot;diff calls&quot; into UI-Bus and {{{Tangible}}}
 * how to ensure, diff processing happens within the event thread
 * what is the exact relation to the GuiModel -- this remained nebulous up to now
+
+!!!Diff messages
+The dispatch of //diff messages// is directly integrated into the UI-Bus -- which is not just some abstract messaging system, but deliberately made to act as backbone for the kind of operations and collaborations detailed here. This seamless integration helps to overcome several technical (detail) problems. For one, the diff framework itself is //generic,// which allows to apply diff sequences to a wide variety of different target data structures. And, secondly, choose the whole approach of diff messages delivered over a bus system for a very specific, architectural reason: we want to decouple from internal structures, while still allowing low-level collaboration over this abstracted interconnection channel. On both counts, we are thus bound to encapsulate the actual diff at interface level. So the MutationMessage marks the purpose to alter the designated {{{Tangible}}}, while offering an embedded, generic implementation to apply the (hidden) diff message, relying in turn on the interface {{{DiffMutatble}}}, which -- surprise -- is offered by {{{Tangible}}}. Basically this means that each tangible interface element offers the ability to be reshaped, by creating a TreeMutator on demand, internally wired to effect the changes inscribed within the diff.
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">
