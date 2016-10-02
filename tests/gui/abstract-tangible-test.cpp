@@ -52,6 +52,8 @@
 #include "test/test-nexus.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "proc/control/command-def.hpp"
+#include "lib/iter-adapter-stl.hpp"
+#include "lib/diff/tree-diff.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
@@ -496,7 +498,7 @@ namespace test {
         }
       
       
-      /** @test receive various kinds of notifications
+      /** @test receive various kinds of notifications.
        * Send message, error and flash messages via Bus to the element
        * and verify the doMsg, doErr or doFlash handlers were invoked.
        */
@@ -568,10 +570,66 @@ namespace test {
         }
       
       
+      /** @test mutate the mock element through diff messages */
       void
       mutate ()
         {
-          UNIMPLEMENTED ("mutate the element by diff message");
+          MARK_TEST_FUN
+          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          
+          MockElm rootMock("root");
+          ID rootID = rootMock.getID();
+          
+          rootMock["α"] = "Centauri";
+          CHECK ("Centauri" == rootMock["α"]);
+          CHECK (isnil (rootMock.scope));
+          
+          
+            struct : lib::diff::TreeDiffLanguage
+              {
+                const GenNode
+                  ATTRIB_AL  = GenNode("α", "quadrant"),
+                  ATTRIB_PI = GenNode("π", 3.14159265),
+                  CHILD_1   = GenNode("a"),
+                  CHILD_2   = GenNode('b');
+                
+                auto
+                generateDiff()
+                  {
+                    using lib::iter_stl::snapshot;
+                    using lib::diff::Ref;
+                    
+                    
+                    return snapshot({after(Ref::ATTRIBS)
+                                   , ins(CHILD_1)
+                                   , ins(CHILD_2)
+                                   , set(ATTRIB_AL)
+                                   , mut(CHILD_2)
+                                     , ins(ATTRIB_PI)
+                                   , emu(CHILD_2)
+                                   });
+                  }
+              }
+              diffSrc;
+          
+          MutationMessage mutabor{diffSrc.generateDiff()};
+          
+          auto& uiBus = gui::test::Nexus::testUI();
+          
+          uiBus.change(rootID, mutabor);
+          cout << "____Event-Log_________________\n"
+               << util::join(rootMock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(nexusLog, "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          CHECK (2 == rootMock.scope.size());                        // we've got two children now
+          CHECK (rootMock["α"] == "quadrant");                       // alpha attribute has been reassigned
+          CHECK (rootMock.scope[0].getID() == diffSrc.CHILD_1.idi);  // children have the expected IDs
+          CHECK (rootMock.scope[1].getID() == diffSrc.CHILD_2.idi);
+          CHECK (rootMock.scope[1]["π"]    == "3.1415927");          // and the second child got attribute Pi
         }
     };
   
