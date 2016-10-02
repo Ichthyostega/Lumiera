@@ -616,16 +616,30 @@ namespace lib {
       
       
     public:
-      InPlaceBuffer ()
-        {
-          placeDefault();
-        }
-      
      ~InPlaceBuffer ()
         {
           destroy();
         }
       
+      InPlaceBuffer ()
+        {
+          placeDefault();
+        }
+      
+      /** immediately emplace an embedded subclass type */
+      template<class TY, typename...ARGS>
+      InPlaceBuffer (TY*, ARGS&& ...args)
+        {
+          new(&buf_) TY (std::forward<ARGS> (args)...);
+        }
+      
+      /** helper to mark the subclass type to create.
+       * @remarks we can not specify explicit template arguments on ctor calls,
+       *  so the only way is to use a dummy marker argument to pass the type.
+       *  Use as `InPlaceBuffer(embedType<XYZ>, arg1, arg2, arg3)` */
+      template<typename SUB>
+      static auto embedType() { return (SUB*) nullptr; }
+
       
       /** Abbreviation for placement new */ 
       template<class TY, typename...ARGS>
