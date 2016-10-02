@@ -52,12 +52,14 @@
 
 #include "lib/error.hpp"
 //#include "lib/symbol.hpp"
+#include "lib/opaque-holder.hpp"
 //#include "lib/util.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "lib/diff/diff-mutable.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <utility>
+#include <utility>
 #include <string>
 
 
@@ -73,6 +75,42 @@ namespace ctrl{
 //  using lib::diff::GenNode;
   using std::string;
   
+  namespace diff_msg {
+    
+    class Holder
+      {
+      public:
+        virtual ~Holder();        ///< this is an interface
+        virtual void applyTo (lib::diff::DiffMutable&)   =0;
+        virtual string describe()  const                 =0;
+      };
+    
+    template<typename DIFF>
+    class Wrapped
+      : public Holder
+      {
+        DIFF diff_;
+        
+        virtual void
+        applyTo (lib::diff::DiffMutable& target)  override
+          {
+            UNIMPLEMENTED("how to embed a diff sequence and apply this to the target");
+          }
+        
+        virtual string
+        describe()  const override
+          {
+            UNIMPLEMENTED("string representation of diff/mutation messages");
+          }
+        
+      public:
+        Wrapped (DIFF&& diffSeq)
+          : diff_(std::move(diffSeq))
+          { }
+      };
+    
+    using Buffer = lib::InPlaceBuffer<Holder>;
+  }
   
   /**
    * Message on the UI-Bus holding an embedded diff sequence.
@@ -80,21 +118,25 @@ namespace ctrl{
    * to expose a TreeMutator, and then apply the embedded diff.
    */
   class MutationMessage
+    : public diff_msg::Buffer
     {
-    protected:
       
     public:
-      virtual ~MutationMessage();  ///< this is an interface
+      template<typename DIFF>
+      MutationMessage(DIFF&& diffSeq)
+        : diff_msg::Buffer{ embedType<diff_msg::Wrapped<DIFF>>()
+                          , std::move(diffSeq)}
+        { }
       
-      virtual void
+      void
       applyTo (lib::diff::DiffMutable& target)
         {
-          UNIMPLEMENTED("how to embed a diff sequence and apply this to the target");
+          access<diff_msg::Holder>()->applyTo(target);
         }
       
       operator string()  const
         {
-          UNIMPLEMENTED("string representation of diff/mutation messages");
+          return unConst(this)->access<diff_msg::Holder>()->describe();
         }
       
     protected:

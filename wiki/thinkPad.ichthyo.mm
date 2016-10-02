@@ -5590,6 +5590,61 @@
 <node CREATED="1475356059342" ID="ID_1039482059" MODIFIED="1475356066062" TEXT="wie wird Diff eingebettet">
 <icon BUILTIN="help"/>
 </node>
+<node CREATED="1475439403514" ID="ID_1619035258" MODIFIED="1475439643157" TEXT="Entscheidung">
+<icon BUILTIN="yes"/>
+<node CREATED="1475439416185" ID="ID_963854956" MODIFIED="1475439565484" TEXT="Builder-Funktion nicht sinnvoll">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....denn dann m&#252;&#223;te der Benutzer die Mechanik sehr genau verstehen, und stets eine auto-Variable definieren.
+    </p>
+    <p>
+      Sinnvoll w&#228;re dieser Ansatz nur, wenn das UI-Bus-API eine MutationMessage const&amp; nehmen w&#252;rde,
+    </p>
+    <p>
+      denn dann k&#246;nnte man den Builder-Aufruf inline schreiben.
+    </p>
+    <p>
+      Da wir aber stets den Diff moven und dann iterieren, scheidet const&amp; aus
+    </p>
+    <p>
+      Und f&#252;r eine reine Ref erzeugt C++ niemals eine anonyme Instanz!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1475439429055" ID="ID_1383518557" MODIFIED="1475439634154" TEXT="also: embeded Buffer">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und diesen mit VTable best&#252;cken.
+    </p>
+    <p>
+      Daf&#252;r wird die &#228;u&#223;ere H&#252;lle non-virtual
+    </p>
+    <p>
+      und kann noncopyable gemacht werden..
+    </p>
+    <p>
+      Das erlaubt dem Benutzer, einfach zu schreiben
+    </p>
+    <p>
+      MutationMessage(blaBlubb())
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1475439436134" ID="ID_583247605" MODIFIED="1475439442228" TEXT="verwende InPlaceBuffer"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475356066853" ID="ID_821643910" MODIFIED="1475356076468" TEXT="Problem: Puffergr&#xf6;&#xdf;e">
 <icon BUILTIN="flag-yellow"/>
 </node>

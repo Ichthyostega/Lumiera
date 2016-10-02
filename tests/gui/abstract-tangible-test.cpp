@@ -76,6 +76,7 @@ using lib::diff::DataCap;
 using proc::control::Command;
 using proc::control::CommandDef;
 using gui::interact::InvocationTrail;
+using gui::ctrl::MutationMessage;
 
 
 
@@ -580,8 +581,8 @@ namespace test {
           MockElm rootMock("root");
           ID rootID = rootMock.getID();
           
-          rootMock["α"] = "Centauri";
-          CHECK ("Centauri" == rootMock["α"]);
+          rootMock.attrib["α"] = "Centauri";
+          CHECK ("Centauri" == rootMock.attrib["α"]);
           CHECK (isnil (rootMock.scope));
           
           
@@ -626,10 +627,10 @@ namespace test {
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           
           CHECK (2 == rootMock.scope.size());                        // we've got two children now
-          CHECK (rootMock["α"] == "quadrant");                       // alpha attribute has been reassigned
+          CHECK (rootMock.attrib["α"] == "quadrant");                // alpha attribute has been reassigned
           CHECK (rootMock.scope[0].getID() == diffSrc.CHILD_1.idi);  // children have the expected IDs
           CHECK (rootMock.scope[1].getID() == diffSrc.CHILD_2.idi);
-          CHECK (rootMock.scope[1]["π"]    == "3.1415927");          // and the second child got attribute Pi
+          CHECK (rootMock.scope[1].attrib["π"]  == "3.1415927");     // and the second child got attribute Pi
         }
     };
   

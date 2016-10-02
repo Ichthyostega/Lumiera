@@ -71,6 +71,8 @@
 #include "lib/util.hpp"
 
 #include <string>
+#include <vector>
+#include <map>
 
 
 namespace gui {
@@ -110,6 +112,7 @@ namespace test{
       
       string message_;
       string error_;
+      
       
       
       /* ==== Tangible interface ==== */
@@ -293,6 +296,12 @@ namespace test{
         }
       
       
+      
+      
+      /* ==== Attributes and mock children ==== */
+      
+      std::map<string, string> attrib;
+      std::vector<MockElm> scope;
       
       
       /* ==== Query/Verification API ==== */

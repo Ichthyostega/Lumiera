@@ -73,7 +73,7 @@ namespace ctrl {
   }
   
   
-  MutationMessage::~MutationMessage() { }
+  diff_msg::Holder::~Holder() { }
   
   
   
