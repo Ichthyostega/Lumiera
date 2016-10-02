@@ -5559,7 +5559,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475342135193" HGAP="31" ID="ID_336806935" MODIFIED="1475342156412" TEXT="Problem: Diff-Nachricht" VSHIFT="7">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475342135193" FOLDED="true" HGAP="31" ID="ID_336806935" MODIFIED="1475449459631" TEXT="Problem: Diff-Nachricht" VSHIFT="7">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1475342157302" ID="ID_1383404259" MODIFIED="1475342166025" TEXT="&quot;Diff&quot; ist kein Typ"/>
 <node CREATED="1475342185707" ID="ID_787925049" MODIFIED="1475342190662" TEXT="Lumiera-Iteratoren sind generisch"/>
@@ -5658,8 +5658,155 @@
 </node>
 </node>
 </node>
+<node CREATED="1475449460694" HGAP="13" ID="ID_425831735" MODIFIED="1475449476287" TEXT="Prototyp: MockElm" VSHIFT="32">
+<icon BUILTIN="pencil"/>
+<node CREATED="1475449491378" ID="ID_1309107114" MODIFIED="1475449505548" TEXT="f&#xfc;hre Spiel-Attribute und Kinder ein"/>
+<node CREATED="1475449507224" ID="ID_1783640184" MODIFIED="1475449529881" TEXT="Kinder">
+<node CREATED="1475449530565" ID="ID_284330532" MODIFIED="1475449531825" TEXT="collection von MockElm"/>
+<node CREATED="1475449532556" ID="ID_1804332542" MODIFIED="1475449578332" TEXT="MockElm ist noncopyable">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...aus gutem Grund!
+    </p>
+    <p>
+      Der Nexus speichert n&#228;mlich eine direkte Referenz in der Routingtabelle
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1473352470896" ID="ID_864450713" MODIFIED="1473352474499" TEXT="Unit-Tests">
+<node CREATED="1475449544379" ID="ID_1132064603" MODIFIED="1475449583284" TEXT="also nur per shared_ptr">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1475449589725" ID="ID_460570633" MODIFIED="1475449593209" TEXT="Attribute">
+<node CREATED="1475449594060" HGAP="27" ID="ID_1311933287" MODIFIED="1475449971752" TEXT="Typ" VSHIFT="14">
+<icon BUILTIN="help"/>
+<node CREATED="1475449959916" ID="ID_573697431" MODIFIED="1475449966244" TEXT="map&lt;string,string&gt;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475449611754" HGAP="33" ID="ID_1285123321" MODIFIED="1475449984190" TEXT="Grundsatzfrage: Attribut-Map" VSHIFT="1">
+<icon BUILTIN="help"/>
+<node CREATED="1475449654357" ID="ID_1802368116" MODIFIED="1475449659480" TEXT="Ordnung / Unordnung"/>
+<node CREATED="1475449660020" ID="ID_286191859" MODIFIED="1475449740005" TEXT="Diff geht von Listen-Ordnung aus">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1475449777532" ID="ID_476663339" MODIFIED="1475449893670" TEXT="Symptom: Compile-Fehler">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Map hat kein emplace_back
+      </li>
+      <li>
+        Map hat kein back()
+      </li>
+    </ul>
+    <p>
+      Beides ist erst mal sinnvoll. Map hat zwar ein emplace, aber das f&#252;gt eben <i>irgendwo</i>&#160;ein
+    </p>
+    <p>
+      Und es gibt nicht sowas wie das &quot;zuletzt behandelte&quot; Element
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1475449719180" ID="ID_6178930" MODIFIED="1475449724993" TEXT="Sinnvoll das zu erweitern">
+<icon BUILTIN="help"/>
+<node CREATED="1475450034810" ID="ID_445949466" MODIFIED="1475450443961" TEXT="pro">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1475450042009" ID="ID_1941838908" MODIFIED="1475450049932" TEXT="man k&#xf6;nnte">
+<node CREATED="1475450050824" ID="ID_1660008285" MODIFIED="1475450053243" TEXT="ins"/>
+<node CREATED="1475450055775" ID="ID_1213643084" MODIFIED="1475450058698" TEXT="after::END"/>
+<node CREATED="1475450064470" ID="ID_754885592" MODIFIED="1475450069265" TEXT="assign / mutate"/>
+</node>
+<node CREATED="1475450148771" ID="ID_736367412" MODIFIED="1475450178254">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Reihenfolge
+    </p>
+    <p>
+      erhalten!
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1475450179591" ID="ID_793985703" MODIFIED="1475450197936" TEXT="dann sogar del"/>
+<node CREATED="1475450053927" ID="ID_1110207658" MODIFIED="1475450055018" TEXT="pick"/>
+</node>
+</node>
+<node CREATED="1475450038953" ID="ID_1285250844" MODIFIED="1475450446655" TEXT="con">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1475450285336" ID="ID_288261682" MODIFIED="1475450300712" TEXT="kein Schutz gegen sinnlose Operationen"/>
+<node CREATED="1475450229944" ID="ID_957217069" MODIFIED="1475450239042" TEXT="Reihenfolge ist Impl-Detail"/>
+<node CREATED="1475450240318" ID="ID_1993698586" MODIFIED="1475450376320" TEXT="Hashmap">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...hat eine &quot;zuf&#228;llige&quot; Reihenfolge, die von den Hash-Werten der gespeicherten Daten abh&#228;ngt.
+    </p>
+    <p>
+      Das bricht mit unserem grunds&#228;tzlichen Konzept der <b>kongruenten</b>&#160; Daten-Strukturen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1475450272442" ID="ID_567969130" MODIFIED="1475450429317" TEXT="inkompatibel mit GenNode">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ein Diff, das von einer ETD gezogen wurde,
+    </p>
+    <p>
+      l&#228;&#223;t sich nicht auf eine Map-Implementierung aufspielen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1475450448290" ID="ID_1738216720" MODIFIED="1475450466683">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Entscheidung: <i>abgelehnt</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1473352470896" HGAP="21" ID="ID_864450713" MODIFIED="1475449484393" TEXT="Unit-Tests" VSHIFT="18">
 <node CREATED="1473352475375" ID="ID_731425414" MODIFIED="1473352482010" TEXT="AbstractTangible_test"/>
 <node CREATED="1473352482502" ID="ID_1891838260" MODIFIED="1473352485210" TEXT="UiBus_test"/>
 </node>

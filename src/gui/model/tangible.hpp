@@ -152,6 +152,10 @@ namespace model {
    * which is the [UI-Bus](ui-bus.hpp). Any tangible element acquires a distinct identity
    * and has to be formed starting from an already existing bus nexus.
    * @see [explanation of the basic interactions](tangible.hpp)
+   * @warning Tangible is `noncopyable` for good reason: the UI-Bus Nexus adds a direct
+   *          reference into the routing table, tied to the given Tangible's ID (identity.
+   *          Consequently you must not store tangibles in STL containers, since these
+   *          might re-allocate and thus change the location in memory.
    */
   class Tangible
     : public sigc::trackable

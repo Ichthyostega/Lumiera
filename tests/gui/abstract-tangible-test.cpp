@@ -72,6 +72,7 @@ using gui::test::MockElm;
 using lib::test::EventLog;
 using lib::idi::EntryID;
 using lib::diff::Rec;
+using lib::diff::MakeRec;
 using lib::diff::GenNode;
 using lib::diff::DataCap;
 using proc::control::Command;
@@ -592,8 +593,8 @@ namespace test {
                 const GenNode
                   ATTRIB_AL  = GenNode("α", "quadrant"),
                   ATTRIB_PI = GenNode("π", 3.14159265),
-                  CHILD_1   = GenNode("a"),
-                  CHILD_2   = GenNode('b');
+                  CHILD_1   = MakeRec().genNode("a"),
+                  CHILD_2   = MakeRec().genNode("b");
                 
                 auto
                 generateDiff()
@@ -629,9 +630,9 @@ namespace test {
           
           CHECK (2 == rootMock.scope.size());                        // we've got two children now
           CHECK (rootMock.attrib["α"] == "quadrant");                // alpha attribute has been reassigned
-          CHECK (rootMock.scope[0].getID() == diffSrc.CHILD_1.idi);  // children have the expected IDs
-          CHECK (rootMock.scope[1].getID() == diffSrc.CHILD_2.idi);
-          CHECK (rootMock.scope[1].attrib["π"]  == "3.1415927");     // and the second child got attribute Pi
+          CHECK (rootMock.scope[0]->getID() == diffSrc.CHILD_1.idi);  // children have the expected IDs
+          CHECK (rootMock.scope[1]->getID() == diffSrc.CHILD_2.idi);
+          CHECK (rootMock.scope[1]->attrib["π"]  == "3.1415927");     // and the second child got attribute Pi
         }
     };
   

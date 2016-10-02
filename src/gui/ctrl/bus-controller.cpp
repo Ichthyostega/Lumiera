@@ -85,7 +85,7 @@ namespace ctrl {
    *        `mark` messages addressed to the new node's ID. It is expected
    *        that the Tangible in turn will use the returned BusTerm for
    *        any up-link communication. Thus, on destruction, the new
-   *        BusTerm will detach this UI-Bus connection alltogether.
+   *        BusTerm will detach this UI-Bus connection altogether.
    */
   BusTerm
   BusTerm::attach (ID identity, Tangible& newNode)

@@ -66,11 +66,13 @@
 #include "lib/diff/record.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "test/test-nexus.hpp"
+#include "lib/diff/test-mutation-target.hpp"   ///////////TICKET #1009 -- extract the render(DataCap) function?
 #include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <string>
+#include <memory>
 #include <vector>
 #include <map>
 
@@ -84,9 +86,13 @@ namespace gui {
 namespace test{
   
   
+  using lib::diff::TreeMutator;
   using util::isnil;
   using lib::Symbol;
   using std::string;
+  
+  class MockElm;
+  using PMockElm = std::shared_ptr<MockElm>;
   
   
   /**
@@ -227,9 +233,51 @@ namespace test{
         }
       
       virtual void
-      buildMutator (lib::diff::TreeMutator::Handle buffer)  override
+      buildMutator (TreeMutator::Handle buffer)  override
         {
-          UNIMPLEMENTED ("create a TreeMutator to deal with our playground data");
+          using Attrib = std::pair<const string,string>;
+          using lib::diff::collection;
+          using lib::diff::render;             ///////////TICKET #1009
+          
+          buffer.create (
+            TreeMutator::build()
+              .attach (collection(scope)
+                     .isApplicableIf ([&](GenNode const& spec) -> bool
+                        {
+                          return spec.data.isNested();                  // »Selector« : require object-like sub scope
+                        })
+                     .matchElement ([&](GenNode const& spec, PMockElm const& elm) -> bool
+                        {
+                          return spec.idi == elm->getID();
+                        })
+                     .constructFrom ([&](GenNode const& spec) -> PMockElm
+                        {
+                          return std::make_shared<MockElm>(spec.idi, this->uiBus_); // create a child element wired via this Element's BusTerm
+                        })
+                     .buildChildMutator ([&](PMockElm& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                        {
+                          if (target->getID() != subID) return false;   //require match on already existing child object
+                          target->buildMutator (buff);                  // delegate to child to build nested TreeMutator
+                          return true;
+                        }))
+              .attach (collection(attrib)
+                     .isApplicableIf ([&](GenNode const& spec) -> bool
+                        {
+                          return spec.isNamed();                        // »Selector« : accept anything attribute-like
+                        })
+                     .matchElement ([&](GenNode const& spec, Attrib const& elm) -> bool
+                        {
+                          return elm.first == spec.idi.getSym();
+                        })
+                     .constructFrom ([&](GenNode const& spec) -> Attrib
+                        {
+                          return {spec.idi.getSym(), render(spec.data)};
+                        })
+                     .assignElement ([&](Attrib& target, GenNode const& spec) -> bool
+                        {
+                          target.second = render (spec.data);
+                          return true;
+                        })));
         }
       
     protected:
@@ -301,7 +349,7 @@ namespace test{
       /* ==== Attributes and mock children ==== */
       
       std::map<string, string> attrib;
-      std::vector<MockElm> scope;
+      std::vector<PMockElm>    scope;
       
       
       /* ==== Query/Verification API ==== */
