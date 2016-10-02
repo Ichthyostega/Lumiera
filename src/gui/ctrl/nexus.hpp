@@ -42,6 +42,7 @@
 //#include "lib/idi/entry-id.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "gui/ctrl/mutation-message.hpp"
 #include "gui/model/tangible.hpp"
 //#include "lib/util.hpp"
 //#include "gui/model/tangible.hpp"

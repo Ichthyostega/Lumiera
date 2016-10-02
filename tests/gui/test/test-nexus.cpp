@@ -49,6 +49,7 @@
 #include "test/test-nexus.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/ctrl/nexus.hpp"
+#include "gui/ctrl/mutation-message.hpp"
 #include "gui/interact/state-recorder.hpp"
 #include "proc/control/command.hpp"
 #include "lib/diff/gen-node.hpp"

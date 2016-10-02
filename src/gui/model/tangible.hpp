@@ -208,6 +208,7 @@ namespace model {
       virtual void doFlash()               =0;
       virtual void doMark(GenNode const&)  =0;
       
+    public:
       virtual void buildMutator (lib::diff::TreeMutator::Handle)  =0;
     private:
     };

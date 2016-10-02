@@ -52,6 +52,7 @@
 #include "test/test-nexus.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "proc/control/command-def.hpp"
+#include "gui/ctrl/mutation-message.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/diff/tree-diff.hpp"
 #include "lib/time/timevalue.hpp"

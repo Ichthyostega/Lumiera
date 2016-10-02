@@ -55,7 +55,6 @@
 //#include "lib/util.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
-#include "gui/ctrl/mutation-message.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <utility>
@@ -67,6 +66,8 @@ namespace model {
   class Tangible;
 }
 namespace ctrl{
+  
+  class MutationMessage;
   
 //  using lib::HashVal;
 //  using util::isnil;

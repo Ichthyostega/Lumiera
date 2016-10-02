@@ -51,8 +51,8 @@
 
 #include "lib/error.hpp"
 #include "lib/opaque-holder.hpp"
-#include "lib/diff/diff-mutable.hpp"
 #include "lib/diff/tree-diff-application.hpp"
+#include "gui/model/tangible.hpp"
 #include "lib/format-util.hpp"
 
 #include <utility>
@@ -66,16 +66,16 @@ namespace ctrl{
   
   namespace diff_msg { // implementation details for embedding concrete diff messages
     
-    using lib::diff::DiffMutable;
     using lib::diff::DiffApplicator;
+    using model::Tangible;
     using std::move;
     
     class Holder
       {
       public:
         virtual ~Holder(); ///< this is an interface
-        virtual void applyTo (DiffMutable&)   =0;
-        virtual string describe()  const      =0;
+        virtual void applyTo (Tangible&)   =0;
+        virtual string describe()  const   =0;
       };
     
     template<typename DIFF>
@@ -85,9 +85,9 @@ namespace ctrl{
         DIFF diff_;
         
         virtual void
-        applyTo (DiffMutable& target)  override
+        applyTo (Tangible& target)  override
           {
-            DiffApplicator<DiffMutable> applicator(target);
+            DiffApplicator<Tangible> applicator(target);
             applicator.consume (move(diff_));
           }
         
@@ -143,7 +143,7 @@ namespace ctrl{
         { }
       
       void
-      applyTo (lib::diff::DiffMutable& target)
+      applyTo (model::Tangible& target)
         {
           access<diff_msg::Holder>()->applyTo(target);
         }
