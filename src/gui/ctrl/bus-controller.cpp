@@ -188,7 +188,7 @@ namespace ctrl {
   bool
   BusTerm::change (ID subject, MutationMessage& diff)
   {
-    theBus_.change(subject, diff);
+    return theBus_.change(subject, diff);
   }
   
   

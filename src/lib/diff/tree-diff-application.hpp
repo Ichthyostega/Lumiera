@@ -376,7 +376,9 @@ namespace diff{
       void
       initDiffApplication()
         {
-          auto target = mutatorBinding (subject_);
+          using Target = typename TreeDiffTraits<TAR>::Ret;
+          
+          Target target = mutatorBinding (subject_);
           buildMutator (target);
           TreeDiffMutatorBinding::scopeManger_ = &scopes_;
           TreeDiffMutatorBinding::treeMutator_ = &scopes_.currentScope();

@@ -630,6 +630,8 @@ namespace lib {
       template<class TY, typename...ARGS>
       InPlaceBuffer (TY*, ARGS&& ...args)
         {
+          static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");
+          
           new(&buf_) TY (std::forward<ARGS> (args)...);
         }
       

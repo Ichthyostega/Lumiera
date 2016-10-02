@@ -149,7 +149,8 @@ namespace diff{
       META_DETECT_FUNCTION (void, buildMutator, (TreeMutator::Handle));
       
     public:
-      enum{ value = HasFunSig_buildMutator<T>::value };
+      enum{ value = HasFunSig_buildMutator<T>::value
+                    and not is_same<T, DiffMutable>::value};
     };
   
   
@@ -212,7 +213,7 @@ namespace diff{
   mutatorBinding (TAR& subject)
   {
      using Wrapper = typename TreeDiffTraits<TAR>::Ret;
-     return Wrapper{subject};
+     return Wrapper(subject);
   }
   
   

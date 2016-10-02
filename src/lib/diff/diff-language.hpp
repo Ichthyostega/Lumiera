@@ -167,7 +167,8 @@ namespace diff{
           
           operator string()  const
             {
-              return string(verb()) + "("+string(elm())+")";
+              return string(unConst(this)->verb())
+               + "("+string(unConst(this)->elm())+")";
             }
           
           void

@@ -37,9 +37,8 @@
  ** ## Creating mutation messages
  ** The UI-Bus invocation actually takes a reference to MutationMessage, and thus on usage a
  ** concrete instance needs to be created. This concrete Message embeds an actual diff sequence,
- ** which is an iterable sequence of lib::diff::DiffStep records.
- ** 
- ** @todo as of 10/2016 this is WIP-WIP-WIP
+ ** which is some iterable sequence of lib::diff::DiffStep records.
+ ** @warning be sure to understand that the diff sequence is really moved away and then consumed.
  ** 
  ** @see [AbstractTangible_test]
  ** 
@@ -51,38 +50,32 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
 #include "lib/opaque-holder.hpp"
-//#include "lib/util.hpp"
-//#include "lib/idi/entry-id.hpp"
 #include "lib/diff/diff-mutable.hpp"
+#include "lib/diff/tree-diff-application.hpp"
+#include "lib/format-util.hpp"
 
-//#include <boost/noncopyable.hpp>
-//#include <utility>
 #include <utility>
 #include <string>
 
 
 namespace gui {
-namespace model {
-  class Tangible;
-}
 namespace ctrl{
   
-//  using lib::HashVal;
-//  using util::isnil;
-//  using lib::idi::EntryID;
-//  using lib::diff::GenNode;
   using std::string;
   
-  namespace diff_msg {
+  namespace diff_msg { // implementation details for embedding concrete diff messages
+    
+    using lib::diff::DiffMutable;
+    using lib::diff::DiffApplicator;
+    using std::move;
     
     class Holder
       {
       public:
-        virtual ~Holder();        ///< this is an interface
-        virtual void applyTo (lib::diff::DiffMutable&)   =0;
-        virtual string describe()  const                 =0;
+        virtual ~Holder(); ///< this is an interface
+        virtual void applyTo (DiffMutable&)   =0;
+        virtual string describe()  const      =0;
       };
     
     template<typename DIFF>
@@ -92,25 +85,43 @@ namespace ctrl{
         DIFF diff_;
         
         virtual void
-        applyTo (lib::diff::DiffMutable& target)  override
+        applyTo (DiffMutable& target)  override
           {
-            UNIMPLEMENTED("how to embed a diff sequence and apply this to the target");
+            DiffApplicator<DiffMutable> applicator(target);
+            applicator.consume (move(diff_));
           }
         
         virtual string
         describe()  const override
           {
-            UNIMPLEMENTED("string representation of diff/mutation messages");
+            DIFF copy(diff_); // NOTE: we copy, since each iteration consumes.
+            return util::join (move(copy));
           }
         
       public:
         Wrapped (DIFF&& diffSeq)
-          : diff_(std::move(diffSeq))
+          : diff_(move(diffSeq))
           { }
       };
     
-    using Buffer = lib::InPlaceBuffer<Holder>;
-  }
+    
+    /** standard size to reserve for the concrete diff representation
+     * @note this is a pragmatic guess, based on the actual usage pattern within Lumiera.
+     *       This determines the size of the inline buffer within MutationMessage.
+     *       You'll get an static assertion failure when creating a MutationMessage
+     *       from a concrete diff representation requiring more size...
+     */
+    enum { SIZE_OF_DIFF_REPRESENTATION = sizeof(std::vector<string>)
+                                       + sizeof(size_t)
+                                       + sizeof(void*)
+         };
+    
+    using Buffer = lib::InPlaceBuffer<Holder, SIZE_OF_DIFF_REPRESENTATION>;
+  }//(End) implementation details...
+  
+  
+  
+  
   
   /**
    * Message on the UI-Bus holding an embedded diff sequence.
@@ -120,8 +131,11 @@ namespace ctrl{
   class MutationMessage
     : public diff_msg::Buffer
     {
-      
     public:
+      /** build a MutationMessage by _consuming_ the given diff sequence
+       * @param diffSeq some iterable DiffStep sequence.
+       * @warning parameter will be moved into the embedded buffer and consumed
+       */
       template<typename DIFF>
       MutationMessage(DIFF&& diffSeq)
         : diff_msg::Buffer{ embedType<diff_msg::Wrapped<DIFF>>()
@@ -143,9 +157,6 @@ namespace ctrl{
     };
   
   
-    
-  
-  /**  */
   
   
 }} // namespace gui::ctrl
