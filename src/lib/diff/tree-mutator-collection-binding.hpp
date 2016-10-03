@@ -268,13 +268,20 @@ namespace diff{
         ChildCollectionMutator(BIN&& wiringClosures, PAR&& chain)
           : PAR(std::forward<PAR>(chain))
           , binding_(forward<BIN>(wiringClosures))
-          , pos_(binding_.initMutation())
+          , pos_()
           { }
         
         
         
         
         /* ==== Implementation of TreeNode operation API ==== */
+        
+        virtual void
+        init()  override
+          {
+            pos_ = binding_.initMutation();
+            PAR::init();
+          }
         
         /** fabricate a new element, based on
          *  the given specification (GenNode),

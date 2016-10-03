@@ -156,6 +156,15 @@ namespace diff{
       
       /* ==== operation API ==== */
       
+      /** initialisation immediately before start of diff application
+       * @remark allows for setup of state which is dependent on memory location,
+       *         like e.g. iterators. Due to the invokation via Builder DSL, the
+       *         implementation object may be moved after construction, but prior
+       *         to invoking this hook
+       */
+      virtual void
+      init() { }
+      
       virtual bool
       hasSrc () ////////////////////////////////////TODO questionable if we need it. Can not be sensibly implemented on multiple onion-layers!
         {

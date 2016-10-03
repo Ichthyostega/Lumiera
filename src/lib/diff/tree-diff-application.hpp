@@ -379,7 +379,7 @@ namespace diff{
           using Target = typename TreeDiffTraits<TAR>::Ret;
           
           Target target = mutatorBinding (subject_);
-          buildMutator (target);
+          buildMutator (target)->init();
           TreeDiffMutatorBinding::scopeManger_ = &scopes_;
           TreeDiffMutatorBinding::treeMutator_ = &scopes_.currentScope();
           REQUIRE (this->treeMutator_);

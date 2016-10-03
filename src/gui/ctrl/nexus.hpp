@@ -125,7 +125,6 @@ namespace ctrl{
             return false;
           else
             {
-              UNIMPLEMENTED("actually apply a diff to the target Tangible");
               diff.applyTo (*entry->second);
               return true;
             }

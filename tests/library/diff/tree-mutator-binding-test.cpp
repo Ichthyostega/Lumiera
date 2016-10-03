@@ -169,6 +169,7 @@ namespace test{
           auto mutator =
           TreeMutator::build()
             .attachDummy (target);
+          mutator.init();
           
           CHECK (isnil (target));
           CHECK (not mutator.hasSrc());
@@ -203,6 +204,7 @@ namespace test{
           auto mutator2 =
           TreeMutator::build()
             .attachDummy (target);
+          mutator2.init();
           
           CHECK (target.verify("attachMutator")
                        .beforeEvent("injectNew","78:56:34.012")
@@ -274,6 +276,7 @@ namespace test{
           auto mutator3 =
           TreeMutator::build()
             .attachDummy (target);
+          mutator3.init();
           
           // the first thing we try out is how to navigate through the sequence partially
           CHECK (isnil (target));
@@ -394,6 +397,8 @@ namespace test{
           
           // --- first round: populate the collection ---
           
+          mutator1.init();
+          
           CHECK (isnil (target));
           CHECK (not mutator1.hasSrc());
           
@@ -448,7 +453,7 @@ namespace test{
           // we have two lambdas now and thus can save on the size of one function pointer....
           CHECK (sizeof(mutator1) - sizeof(mutator2) == sizeof(void*));
           
-          
+          mutator2.init();
           CHECK (isnil (target));                   // the "visible" new content is still void
           
           CHECK (mutator2.matchSrc (ATTRIB1));      // current head element of src "matches" the given spec
@@ -557,6 +562,8 @@ namespace test{
                             target.val = "Rec(--"+subID.getSym()+"--)";
                             return true;
                           }));
+          
+          mutator3.init();
           
           CHECK (isnil (target));
           CHECK (mutator3.matchSrc (ATTRIB1));      // new mutator starts out anew at the beginning
@@ -696,6 +703,7 @@ namespace test{
                 LOG_SETTER ("gamma")
                 gamma = val;
               });
+          mutator1.init();
           
           CHECK (sizeof(mutator1) <= sizeof(void*)               // the TreeMutator VTable
                                    + 2 * sizeof(void*)           // one closure reference for each lambda
@@ -768,6 +776,8 @@ namespace test{
                 LOG_SETTER ("gamma")
                 gamma = val;
               });
+          mutator2.init();
+          
           
           CHECK (sizeof(mutator2) <= sizeof(void*)               // the TreeMutator VTable
                                    + 3 * sizeof(void*)           // one closure reference for each lambda
@@ -857,6 +867,7 @@ namespace test{
                 cout << "openSub()...\n"
                      << join(delta.getLog(), "\n") <<endl;
               });
+          mutator3.init();
           
           CHECK (sizeof(mutator1) <= sizeof(void*)               // the TreeMutator VTable
                                    + 2 * sizeof(void*)           // one closure reference for each lambda
@@ -950,6 +961,7 @@ namespace test{
           auto mutator1 =
           TreeMutator::build()
             .attach (target);
+          mutator1.init();
           
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1007 : strange behaviour, getting additional storage
@@ -1005,6 +1017,7 @@ namespace test{
           TreeMutator::build()
             .attach (target);
           
+          mutator2.init();
           
           CHECK (isnil (target));                   // old content moved aside, visible new content still void
           
@@ -1075,6 +1088,8 @@ namespace test{
           TreeMutator::build()
             .attach (target);
           
+          mutator3.init();
+
           CHECK (isnil (target));
           CHECK (mutator3.matchSrc (ATTRIB1));      // new mutator starts out anew at the beginning
           CHECK (mutator3.accept_until (CHILD_T));  // fast forward behind the second-last child (CHILD_T)         // accept_until

@@ -369,12 +369,19 @@ namespace diff{
         TestWireTap(Target& dummy, PAR&& chain)
           : PAR{forward<PAR> (chain)}
           , target_(dummy)
-          , pos_(target_.initMutation (identify(this)))
+          , pos_()
           { }
         
         
         
         /* ==== re-Implementation of the operation API ==== */
+        
+        virtual void
+        init()  override
+          {
+            pos_ = target_.initMutation (identify(this));
+            PAR::init();
+          }
       
         /** record in the test target
          *  that a new child element is
