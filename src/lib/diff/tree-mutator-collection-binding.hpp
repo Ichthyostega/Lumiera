@@ -128,6 +128,12 @@ namespace diff{
           , openSub(u)
           { }
         
+        // allow move construction only,
+        // to enable use of unique_ptr in collections
+        CollectionBinding(CollectionBinding&&) = default;
+        CollectionBinding(CollectionBinding&) = delete;
+        
+        
         
         /* === content manipulation API === */
         
@@ -259,9 +265,9 @@ namespace diff{
         
         
       public:
-        ChildCollectionMutator(BIN wiringClosures, PAR&& chain)
+        ChildCollectionMutator(BIN&& wiringClosures, PAR&& chain)
           : PAR(std::forward<PAR>(chain))
-          , binding_(wiringClosures)
+          , binding_(forward<BIN>(wiringClosures))
           , pos_(binding_.initMutation())
           { }
         
@@ -280,7 +286,7 @@ namespace diff{
           {
             if (binding_.isApplicable(n))
               {
-                binding_.inject (binding_.construct(n));
+                binding_.inject (std::move (binding_.construct(n)));
                 return true;
               }
             else

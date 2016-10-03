@@ -411,7 +411,8 @@ namespace diff{
          *   - the _matcher closure_ (CollectionBindingBuilder::matchElement) defines
          *     how to determine, if an implementation data element "matches" a given diff spec
          *   - the _constructor closure_ (CollectionBindingBuilder::constructFrom) defines how
-         *     to build a new implementation data element from the spec of an `INS` diff verb
+         *     to build a new implementation data element from the spec of an `INS` diff verb.
+         *     Note: the result will be moved (move-constructed) into the target container.
          *   - the optional _selector closure_ (CollectionBindingBuilder::isApplicableIf)
          *     allows to limit applicability of this whole binding (layer) to only some
          *     diff specs. E.g., we may set up a binding for elements with value semantics

@@ -92,7 +92,7 @@ namespace test{
   using std::string;
   
   class MockElm;
-  using PMockElm = std::shared_ptr<MockElm>;
+  using PMockElm = std::unique_ptr<MockElm>;
   
   
   /**
@@ -252,7 +252,7 @@ namespace test{
                         })
                      .constructFrom ([&](GenNode const& spec) -> PMockElm
                         {
-                          return std::make_shared<MockElm>(spec.idi, this->uiBus_); // create a child element wired via this Element's BusTerm
+                          return std::make_unique<MockElm>(spec.idi, this->uiBus_); // create a child element wired via this Element's BusTerm
                         })
                      .buildChildMutator ([&](PMockElm& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                         {
