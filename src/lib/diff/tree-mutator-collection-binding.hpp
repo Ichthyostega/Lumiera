@@ -154,8 +154,7 @@ namespace diff{
         locate (GenNode const& targetSpec)
           {
             if (not collection.empty()
-                and (Ref::THIS.matches(targetSpec.idi)
-                     or matches (targetSpec, collection.back())))
+                and matches (targetSpec, collection.back()))
               return lastElm();
             else
               return search (targetSpec, eachElm(collection));
