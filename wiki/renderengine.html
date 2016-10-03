@@ -8231,7 +8231,7 @@ On receiving a stream of tokens of this &quot;diff language&quot;, it is possibl
 i.e. a ''unified diff'' or the ''predicate notation'' used above to describe the list diffing algorithm, just by accumulating changes.
 </pre>
 </div>
-<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201609021520" tags="Model Concepts GuiPattern design draft" changecount="94">
+<div title="TreeMutator" creator="Ichthyostega" modifier="Ichthyostega" created="201503292115" modified="201610031515" tags="Model Concepts GuiPattern design draft" changecount="95">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 within the [[diff framework|TreeDiffModel]], this is a crucial joint, since here the abstract, generic, ~DOM-like ExternalTreeDescription meeds opaque, local and undisclosed data structures.
 
@@ -8354,6 +8354,10 @@ attached to a clip, or the mixture of clips, effects and labels found within a [
 :** fabricate a recursive sub-TreeMutator to deal with the (implementation data) element passed as reference
 :** the ID, as taken from the (diff) spec, is also passed, for orientation
 :** the lambda is expected to //place// the generated mutator into the given buffer smart handle, which takes ownership of this object
+;STL map binding
+:...can be supported, as an extension to the ''collection binding'' --
+:* elements are (key, value) pairs
+:* //use is discurraged,// since it contradicts and breaks diff semantics (due to the inherent ordering of maps)
 ;object field binding
 :this maps the concept of &quot;Attribute&quot; onto concrete, mutable data fields
 :any re-ordering  and deletion of fields is ''prohibited'', while defaultable optional fields may be tolerated
@@ -8377,7 +8381,7 @@ attached to a clip, or the mixture of clips, effects and labels found within a [
 You should note that this entire design is recursive: only after understanding the part, where, for handling a sub-structure, a nested mutator is fabricated and placed into a given buffer, it becomes clear to what effect we're creating a customised mutator: we always need some (relative) parent scope, which happens to know more about the actual data to be treated with a TreeMutator. This scope assists with creating a suitable binding. Obviously, from within that binding, it is known what the sub-structures and children of that local data are all about and what semantics to give to the fundamental operations.
 </pre>
 </div>
-<div title="TreeMutatorEvolution" creator="Ichthyostega" modifier="Ichthyostega" created="201603160255" modified="201609021605" tags="Model Concepts design draft" changecount="25">
+<div title="TreeMutatorEvolution" creator="Ichthyostega" modifier="Ichthyostega" created="201603160255" modified="201610031511" tags="Model Concepts design draft" changecount="26">
 <pre>The TreeMutator is an intermediary to translate a generic structure pattern into heterogeneous local invocation sequences.
 
 !Motivation
@@ -8492,7 +8496,7 @@ So we get to choose between
 Since our goal is to represent changes to structured objects in the form of a diff message sequence, the ability to capture the essence of objects is crucial. We are not concerned with behaviour and state, yet we have to deal with the //object's visible properties.// This gets us into a design dilemma; the notion underlying our diff language is that of //structured data,// which indeed offers the concept of an //attribute// -- but visible properties are based on //object fields,// and thus have more limited capabilities, as being rooted in the class definition underlying each object. Consequently our diff language may express changes beyond the abilities of any ordinary object.
 * attributes may be reordered
 * attributes may be added and deleted
--- none of which has any tangible meaning for a regular (language) object. Contrast this with ExternalTreeDescription, which we crafted specifically to support diff language and diff messages, resulting in the ability to represent those changes explicitly. So, in theory, a given diff, when applied both to a GenNode and via TreeMutator to a native data structure, might lead to states not semantically equivalent. We can not reliably protect ourselves against that possibility, but, on the other hand, it is not clear if such poses an actual threat.
+-- none of which has any tangible meaning for a regular (language) object. Contrast this with ExternalTreeDescription, which we crafted specifically to support diff language and diff messages, resulting in the ability to represent those changes explicitly. So, in theory, a given diff, when applied both to a GenNode and via TreeMutator to a native data structure, might lead to states not semantically equivalent. We can not reliably protect ourselves against that possibility, but, on the other hand, it is not clear if such poses an actual threat. Thus we'll tolerate extensions to the diff binding, to acknowledge usefulness in specific situations
 
 ''A possible path to reconcile'' these inner contradictions is to support the mutation primitives ''as far as is sensible''.
 Through analysis of the semantics, we could distinguish several flavours of &quot;attributes&quot;, especially...
@@ -8505,7 +8509,7 @@ Through analysis of the semantics, we could distinguish several flavours of &quo
 ;attribute map
 :an ordered collection of key-value associations, which can be enumerated, searched and extended
 Thus we //could define a sensible handling for each of those cases, and deal with combinations// -- but --
-it seems more adequate to limit ourselves just to object fields and to include the defaultable object fields through implementation leeway. Because, in the end we really do need object fields, and anything beyond is just a materialisation of special behaviour and can be kept out of the diff system altogether. Through diff messages, we want to express structured changes, not metadata, nor closures, nor strategies, nor prototypes. And the attribute map is really something different than an object, and should be implemented separately, when it comes to applying diff messages to GenNode elements; the latter are able to //emulate// or //represent// objects, but by their nature are rather key-value associations arranged in nested scopes.
+it seems more adequate to limit ourselves just to object fields and to include the defaultable object fields through implementation leeway. Because, in the end we really do need object fields, and anything beyond is just a materialisation of special behaviour and can be kept out of the diff system altogether. Through diff messages, we want to express structured changes, not metadata, nor closures, nor strategies, nor prototypes. And the attribute map is really something different than an object, and should be implemented separately, based on binding ot a //attribute collection,// when it comes to applying diff messages to GenNode elements; the latter are able to //emulate// or //represent// objects, but by their nature are rather key-value associations arranged in nested scopes.
 
 !!!mapping rules to handle object fields
 So we basically ''disallow'' anything related to ''order'', ''re-ordering'' and ''deletion'' of object fields.

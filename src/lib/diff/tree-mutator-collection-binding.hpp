@@ -35,6 +35,9 @@
  ** a building block for one such layer, especially for binding to a representation
  ** of "child objects" managed within a typical STL container.
  ** 
+ ** As a _special case_, binding to a STL map is supported, while this usage is rather
+ ** discurraged, since it contradicts the diff semantics due to intrinsic ordering.
+ ** 
  ** @note the header tree-mutator-collection-binding.hpp was split off for sake of readability
  **       and is included automatically from bottom of tree-mutator.hpp
  ** 
@@ -55,6 +58,8 @@
 #include "lib/iter-adapter-stl.hpp"
 
 #include <utility>
+#include <vector>
+#include <map>
 
 
 namespace lib {
@@ -63,7 +68,7 @@ namespace diff{
   namespace { // Mutator-Builder decorator components...
     
     
-    
+    using std::forward;
     using lib::meta::Strip;
     using lib::diff::GenNode;
     using lib::iter_stl::eachElm;
@@ -139,7 +144,7 @@ namespace diff{
         void
         inject (Elm&& elm)
           {
-            collection.emplace_back (forward<Elm>(elm));
+            emplace (collection, forward<Elm>(elm));
           }
         
         iterator
@@ -154,23 +159,82 @@ namespace diff{
         locate (GenNode const& targetSpec)
           {
             if (not collection.empty()
-                and matches (targetSpec, collection.back()))
-              return lastElm();
+                and matches (targetSpec, recentElm(collection)))
+              return recentElmIter();
             else
               return search (targetSpec, eachElm(collection));
           }
         
-      private:
+        
+      private: /* === technicallities of container access === */
+        
         /** @internal technicality
          * Our iterator is actually a Lumiera RangeIter, and thus we need
          * to construct a raw collection iterator pointing to the aftmost element
          * and then create a range from this iterator and the `end()` iterator.
          */
         iterator
-        lastElm()
+        recentElmIter()
           {
-            using raw_iter = typename CollectionBinding::Coll::iterator;
-            return iterator (raw_iter(&collection.back()), collection.end());
+            return iterator (recentElmRawIter(collection), collection.end());
+          }
+        
+        template<class C>
+        static auto
+        recentElmRawIter (C& coll) ///< fallback: use first element of container
+          {
+            return coll.begin();
+          }
+        
+        template<typename E>
+        using Map = std::map<typename E::key_type, typename E::second_type>;
+        
+        template<typename E>
+        static auto
+        recentElmRawIter (Map<E>& map) ///< workaround for `std::Map`: lookup via reverse iterator
+          {
+            return map.find (recentElm(map).first);
+          }
+        
+        static auto
+        recentElmRawIter (std::vector<Elm>& vec)
+          {
+            return typename std::vector<Elm>::iterator (&vec.back());
+          }
+        
+        
+        template<class C>
+        static Elm&
+        recentElm (C& coll)
+          {
+            return *coll.begin();
+          }
+        
+        template<typename E>
+        static E&
+        recentElm (Map<E>& map)
+          {
+            return *++map.rend();
+          }
+        
+        static Elm&
+        recentElm (std::vector<Elm>& vec)
+          {
+            return vec.back();
+          }
+        
+        
+        template<class C>
+        static void
+        emplace (C& coll, Elm&& elm)
+          {
+            coll.emplace (forward<Elm> (elm));
+          }
+        
+        static void
+        emplace (std::vector<Elm>& coll, Elm&& elm)
+          {
+            coll.emplace_back (forward<Elm> (elm));
           }
       };
     

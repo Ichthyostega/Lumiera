@@ -1883,7 +1883,7 @@
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1456506101544" FOLDED="true" HGAP="4" ID="ID_133511037" MODIFIED="1473352361466" TEXT="Implementierung" VSHIFT="16">
+<node COLOR="#338800" CREATED="1456506101544" FOLDED="true" HGAP="4" ID="ID_133511037" MODIFIED="1475507065141" TEXT="Implementierung" VSHIFT="16">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1456506128581" HGAP="-12" ID="ID_322289358" MODIFIED="1473014961683" TEXT="Abw&#xe4;gungen" VSHIFT="184">
 <node CREATED="1456506135028" FOLDED="true" HGAP="29" ID="ID_470489868" MODIFIED="1472830010078" TEXT="Indirektionen" VSHIFT="-5">
@@ -2833,7 +2833,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1457232752458" FOLDED="true" ID="ID_1490646673" MODIFIED="1472219587187" TEXT="Attribute">
+<node CREATED="1457232752458" FOLDED="true" ID="ID_1490646673" MODIFIED="1475507061988" TEXT="Attribute">
 <icon BUILTIN="full-3"/>
 <node CREATED="1458175823858" ID="ID_1785794072" MODIFIED="1458175828956" TEXT="Design-Grundlagen">
 <node CREATED="1461882686190" ID="ID_233456976" MODIFIED="1472219338718" TEXT="von praktischer Notwendigkeit getrieben">
@@ -2892,7 +2892,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1458175861176" FOLDED="true" HGAP="39" ID="ID_887227300" MODIFIED="1465428527547" TEXT="Design-Anforderungen" VSHIFT="7">
+<node CREATED="1458175861176" FOLDED="true" HGAP="39" ID="ID_887227300" MODIFIED="1475507055901" TEXT="Design-Anforderungen" VSHIFT="7">
 <node CREATED="1458175880034" ID="ID_163174135" MODIFIED="1461888634670" TEXT="...ein Objekt hat schon ein bestimmtes Feld">
 <node CREATED="1458175892400" ID="ID_640596624" MODIFIED="1461888660658" TEXT="Typ"/>
 <node CREATED="1461888661462" ID="ID_1138175982" MODIFIED="1461888668033" TEXT="default-Wert"/>
@@ -3007,7 +3007,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1461890009355" ID="ID_1808149320" MODIFIED="1461890064730" TEXT="aber ETD als Zwischenstufe ist m&#xf6;glich">
+<node CREATED="1461890009355" ID="ID_1808149320" MODIFIED="1475506883423" TEXT="aber ETD als Zwischenstufe ist m&#xf6;glich">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -3030,6 +3030,7 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#807bce" DESTINATION="ID_1808149320" ENDARROW="Default" ENDINCLINATION="671;0;" ID="Arrow_ID_1677374853" SOURCE="ID_1767038604" STARTARROW="Default" STARTINCLINATION="994;0;"/>
 </node>
 <node CREATED="1461890240148" ID="ID_1409253452" MODIFIED="1461890244887" TEXT="Schutzmechanismen">
 <node CREATED="1461890266377" ID="ID_513997188" MODIFIED="1461890283701">
@@ -3129,7 +3130,7 @@
 <node CREATED="1461967051095" ID="ID_328050724" MODIFIED="1461967056946" TEXT="wendet an, was anwendbar ist"/>
 <node CREATED="1461967057462" ID="ID_437076290" MODIFIED="1461967068248" TEXT="alles andere &quot;durchwinken&quot;"/>
 </node>
-<node COLOR="#990000" CREATED="1461967003141" HGAP="29" ID="ID_1805886948" MODIFIED="1461967337361" TEXT="Design-Entscheidung" VSHIFT="19">
+<node COLOR="#990000" CREATED="1461967003141" HGAP="29" ID="ID_1805886948" MODIFIED="1475506674214" TEXT="Design-Entscheidung" VSHIFT="19">
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1461967143851" ID="ID_1596604972" MODIFIED="1461967245047">
@@ -3203,6 +3204,17 @@
   </body>
 </html></richcontent>
 </node>
+</node>
+</node>
+<node CREATED="1475506680125" HGAP="58" ID="ID_1865970661" MODIFIED="1475506689657" TEXT="Variante" VSHIFT="13">
+<node CREATED="1475506691595" ID="ID_69735021" MODIFIED="1475506704861" TEXT="emptySrc -&gt; hasSrc"/>
+<node CREATED="1475506705641" ID="ID_409132685" MODIFIED="1475506735169" TEXT="und den nicht implementierbaren Fall tolerieren"/>
+<node CREATED="1475506735949" ID="ID_1814707193" MODIFIED="1475506746633" TEXT="im &#xdc;brigen: stets pr&#xfc;fen und scheitern">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1475506753523" HGAP="34" ID="ID_845946083" MODIFIED="1475506765947" TEXT="so umgesetzt" VSHIFT="10">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -3516,8 +3528,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1458178113697" FOLDED="true" HGAP="61" ID="ID_38103760" MODIFIED="1465428590343" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="48">
-<node CREATED="1463687362843" FOLDED="true" HGAP="116" ID="ID_775516687" MODIFIED="1465428540991" TEXT="Eingrenzung" VSHIFT="-28">
+<node CREATED="1458178113697" FOLDED="true" HGAP="61" ID="ID_38103760" MODIFIED="1475507059437" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="48">
+<node CREATED="1463687362843" HGAP="116" ID="ID_775516687" MODIFIED="1475506631325" TEXT="Eingrenzung" VSHIFT="-28">
 <node CREATED="1463687373889" ID="ID_155516876" MODIFIED="1463687400026" TEXT="Art von Attributen">
 <node CREATED="1463687402462" ID="ID_1119981147" MODIFIED="1464114029013" TEXT="Objekt-Feld">
 <icon BUILTIN="forward"/>
@@ -3591,7 +3603,9 @@
 <node CREATED="1463687461925" ID="ID_39763189" MODIFIED="1463687496231" TEXT="hier ausgeschlossen">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1463687466573" ID="ID_1853473792" MODIFIED="1463687482279" TEXT="implementierbar auf Basis des Collection-Binding"/>
+<node CREATED="1463687466573" ID="ID_1853473792" MODIFIED="1475507021278" TEXT="implementierbar auf Basis des Collection-Binding">
+<linktarget COLOR="#9f96d9" DESTINATION="ID_1853473792" ENDARROW="Default" ENDINCLINATION="41;-121;" ID="Arrow_ID_503281678" SOURCE="ID_1112268061" STARTARROW="Default" STARTINCLINATION="1873;0;"/>
+</node>
 <node CREATED="1463687484338" ID="ID_1009085517" MODIFIED="1463687491613" TEXT="k&#xf6;nnte f&#xfc;r GenNode relevant sein"/>
 </node>
 </node>
@@ -5525,8 +5539,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1475250930756" ID="ID_509435943" MODIFIED="1475250975686" TEXT="wo steckt der Diff selber">
@@ -5547,8 +5560,7 @@
       Marker-Typ <b>MutationMessage</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1475250947858" ID="ID_1438298132" MODIFIED="1475250973257" TEXT="wer ist der Kommunikationspartner">
@@ -5618,8 +5630,7 @@
       Und f&#252;r eine reine Ref erzeugt C++ niemals eine anonyme Instanz!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1475439429055" ID="ID_1383518557" MODIFIED="1475444176904" TEXT="also: embeded Buffer">
 <richcontent TYPE="NOTE"><html>
@@ -5643,8 +5654,7 @@
       MutationMessage(blaBlubb())
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1475439436134" ID="ID_583247605" MODIFIED="1475444176904" TEXT="verwende InPlaceBuffer"/>
@@ -5676,8 +5686,7 @@
       Der Nexus speichert n&#228;mlich eine direkte Referenz in der Routingtabelle
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1475449544379" ID="ID_1132064603" MODIFIED="1475449583284" TEXT="also nur per shared_ptr">
@@ -5715,9 +5724,12 @@
       Und es gibt nicht sowas wie das &quot;zuletzt behandelte&quot; Element
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1475506967550" HGAP="42" ID="ID_1112268061" MODIFIED="1475507021278" TEXT="ist aber implementierbar" VSHIFT="8">
+<arrowlink COLOR="#9f96d9" DESTINATION="ID_1853473792" ENDARROW="Default" ENDINCLINATION="41;-121;" ID="Arrow_ID_503281678" STARTARROW="Default" STARTINCLINATION="1873;0;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 <node CREATED="1475449719180" ID="ID_6178930" MODIFIED="1475449724993" TEXT="Sinnvoll das zu erweitern">
 <icon BUILTIN="help"/>
@@ -5741,8 +5753,7 @@
       erhalten!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1475450179591" ID="ID_793985703" MODIFIED="1475450197936" TEXT="dann sogar del"/>
 <node CREATED="1475450053927" ID="ID_1110207658" MODIFIED="1475450055018" TEXT="pick"/>
 </node>
@@ -5764,8 +5775,7 @@
       Das bricht mit unserem grunds&#228;tzlichen Konzept der <b>kongruenten</b>&#160; Daten-Strukturen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1475450272442" ID="ID_567969130" MODIFIED="1475450429317" TEXT="inkompatibel mit GenNode">
@@ -5781,25 +5791,63 @@
       l&#228;&#223;t sich nicht auf eine Map-Implementierung aufspielen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
-<node CREATED="1475450448290" ID="ID_1738216720" MODIFIED="1475450466683">
+<node CREATED="1475506346525" ID="ID_574367406" MODIFIED="1475506428740" VSHIFT="6">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      Entscheidung: <i>abgelehnt</i>
+      Entscheidung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1475506358863" ID="ID_120379432" MODIFIED="1475506391795" TEXT="wird nicht empfohlen">
+<font ITALIC="true" NAME="SansSerif" SIZE="13"/>
+</node>
+<node CREATED="1475506368078" ID="ID_1568414977" MODIFIED="1475506381941" TEXT="vollst&#xe4;ndigkeitshalber unterst&#xfc;tzt">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1475506411768" ID="ID_583086851" MODIFIED="1475506507414" TEXT="kann sinnvoll sein...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...zum Beispiel wie grade hier, beim MockElm
+    </p>
+    <p>
+      das wird vermutlich niemals wirklich in einem vollen Diff-Zusammenhang gebraucht.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und dann ist unbestreitbar eine Map eine sehr einfache Implementierung
+    </p>
+    <p>
+      und auch im Diff-Applikator nicht wirklich schwierig zu unterst&#252;tzen
     </p>
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="yes"/>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#338800" CREATED="1475506514203" HGAP="45" ID="ID_1183193114" MODIFIED="1475506577093" TEXT="Begr&#xfc;ndung" VSHIFT="23">
+<node CREATED="1475506528937" ID="ID_1971084550" MODIFIED="1475506538324" TEXT="es verletzt die Prinzipien"/>
+<node CREATED="1475506538983" ID="ID_1555995664" MODIFIED="1475506547491" TEXT="insofern aber wie Feld-Attribute auch"/>
+<node CREATED="1475506549886" ID="ID_275560362" MODIFIED="1475506558609" TEXT="eingeschr&#xe4;nkt unterst&#xfc;tzbar"/>
+<node CREATED="1475506559309" ID="ID_1767038604" MODIFIED="1475506896798" TEXT="Objekt -&gt; ETD -&gt; Objekt">
+<arrowlink COLOR="#807bce" DESTINATION="ID_1808149320" ENDARROW="Default" ENDINCLINATION="671;0;" ID="Arrow_ID_1677374853" STARTARROW="Default" STARTINCLINATION="994;0;"/>
+</node>
+</node>
 </node>
 </node>
 </node>
