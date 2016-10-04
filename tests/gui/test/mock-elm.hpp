@@ -239,6 +239,9 @@ namespace test{
           using lib::diff::collection;
           using lib::diff::render;             ///////////TICKET #1009
           
+          log_.call (this->identify(), "buildMutator");
+          cout << this->identify() << " <-- DIFF" <<endl;
+          
           buffer.create (
             TreeMutator::build()
               .attach (collection(scope)
@@ -252,18 +255,23 @@ namespace test{
                         })
                      .constructFrom ([&](GenNode const& spec) -> PMockElm
                         {
-                          return std::make_unique<MockElm>(spec.idi, this->uiBus_); // create a child element wired via this Element's BusTerm
+                          log_.event("diff", "create child \""+spec.idi.getSym()+"\"");
+                          PMockElm child = std::make_unique<MockElm>(spec.idi, this->uiBus_);
+                          child->joinLog(*this);                        // create a child element wired via this Element's BusTerm
+                          return child;
                         })
                      .buildChildMutator ([&](PMockElm& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                         {
                           if (target->getID() != subID) return false;   //require match on already existing child object
                           target->buildMutator (buff);                  // delegate to child to build nested TreeMutator
+                          log_.event("diff", ">>Scope>> "+subID.getSym());
                           return true;
                         }))
               .attach (collection(attrib)
                      .isApplicableIf ([&](GenNode const& spec) -> bool
                         {
-                          return spec.isNamed();                        // »Selector« : accept anything attribute-like
+                          return spec.isNamed()                         // »Selector« : accept attribute-like values
+                             and not spec.data.isNested();              //              but no nested objects
                         })
                      .matchElement ([&](GenNode const& spec, Attrib const& elm) -> bool
                         {
@@ -271,14 +279,23 @@ namespace test{
                         })
                      .constructFrom ([&](GenNode const& spec) -> Attrib
                         {
-                          return {spec.idi.getSym(), render(spec.data)};
+                          string key{spec.idi.getSym()},
+                                 val{render(spec.data)};
+                          log_.event("diff", "++Attib++ "+key+" = "+val);
+                          return {key, val};
                         })
                      .assignElement ([&](Attrib& target, GenNode const& spec) -> bool
                         {
-                          target.second = render (spec.data);
+                          string key{spec.idi.getSym()},
+                                 newVal{render (spec.data)};
+                          log_.event("diff", "set Attib "+key+" <-"+newVal);
+                          target.second = newVal;
                           return true;
                         })));
+          
+          log_.event ("diff", getID().getSym() +" accepts mutation...");
         }
+      
       
     protected:
       string

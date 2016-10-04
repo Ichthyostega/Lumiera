@@ -211,7 +211,8 @@ namespace ctrl {
   void
   BusTerm::routeDetach(ID node)  noexcept
   {
-    theBus_.routeDetach (node);
+    if (isConnected())
+      theBus_.routeDetach (node);
   }
   
   

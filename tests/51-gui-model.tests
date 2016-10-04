@@ -7,7 +7,7 @@ return: 0
 END
 
 
-PLANNED "the abstracted tangible UI element" AbstractTangible_test <<END
+TEST "the abstracted tangible UI element" AbstractTangible_test <<END
 return: 0
 END
 

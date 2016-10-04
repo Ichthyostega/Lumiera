@@ -32,12 +32,12 @@
  ** 
  ** What is covered here is actually a **test mock**. Which in turn enables us
  ** to cover interface interactions and behaviour in a generic fashion, without
- ** actually having to operate the interface.
+ ** actually having to operate the interface. But at the same time, this test
+ ** documents our generic UI element protocol and the corrsponding interactions.
  ** 
  ** @note as of 11/2015 this is a draft into the blue...
- ** @todo WIP  ///////////////////////TICKET #959
- ** @todo WIP  ///////////////////////TICKET #956
- ** @todo WIP  ///////////////////////TICKET #975
+ ** @todo WIP  ///////////////////////TICKET #959 : GUI Model / Bus
+ ** @todo WIP  ///////////////////////TICKET #956 : model diff representation
  ** @todo WIP  ///////////////////////TICKET #961 : tests to pass...
  ** 
  ** @see gui::UiBus
@@ -50,6 +50,7 @@
 #include "lib/test/event-log.hpp"
 #include "test/mock-elm.hpp"
 #include "test/test-nexus.hpp"
+#include "lib/idi/genfunc.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "proc/control/command-def.hpp"
 #include "gui/ctrl/mutation-message.hpp"
@@ -174,9 +175,22 @@ namespace test {
    *       - state mark replay
    *       - message casting
    *       - error state indication
-   *       
+   *       - structural changes by diff message
+   * 
+   * This test documents a generic interaction protocoll supported by all
+   * "tangible" elements of the Lumiera GTK UI. This works by connecting any
+   * such element to a messaging backbone, the *UI-Bus*. By sending messages
+   * according to this protocol, typical state changes can be detected and
+   * later be replayed on elements addressed by ID. Moreover, the preconfigured
+   * commands offered by the session can be invoked via bus message, and it is
+   * possible to populate and change UI elements by sending a _tree diff message_
+   * @note the actions in this test are verified with the help of an EventLog
+   *       built into the mock UI element and the mock UI-Bus counterpart.
+   *       Additionally, each test case dumps those log contents to STDOUT,
+   *       which hopefully helps to undrstand the interactions in detail.
+   * 
    * @see BusTerm_test
-   * @see SessionElementQuery_test
+   * @see DiffTreeApplication_test
    * @see tangible.hpp
    * @see ui-bus.hpp
    */
@@ -573,7 +587,34 @@ namespace test {
         }
       
       
-      /** @test mutate the mock element through diff messages */
+      
+      /** @test mutate the mock element through diff messages
+       * This test performs the basic mechanism used to populate the UI
+       * or to change structure or settings within individual elements.
+       * This is done by sending a »Diff Message« via UI-Bus, which is
+       * handled and applied to the receiver by Lumiera's diff framework.
+       * 
+       * This test uses the MockElem to simulate real UI elements;
+       * to be able to verify the diff application, MockElm is already
+       * preconfigured with a _diff binding_, and it exposes a set of
+       * attributes and a collection of child mock elements. Basically,
+       * the diff mechanism allows to effect structural changes within
+       * an otherwise opaque implementation data structure. For this
+       * to work, the receiver needs to create a custom _diff binding_.
+       * Thus, each subclass of Tangible has to implement the virtual
+       * function Tangible::buildMutator() and hook up those internal
+       * structures, which are exposed to changes via diff message.
+       * Note especially how child UI elements are added this way,
+       * to populate the contents of the UI.
+       * 
+       * The diff itself is an iterable sequence of _diff verbs_.
+       * Typically, such a diff is generated as the result of some operation
+       * in the Session core, or it is created by comparing two versions of
+       * an abstracted object description (e.g. session snapshot).
+       * 
+       * Here in this test case, we use a hard wired diff sequence,
+       * so we can check the expected structural changes actually took place.
+       */
       void
       mutate ()
         {
@@ -588,10 +629,11 @@ namespace test {
           CHECK (isnil (rootMock.scope));
           
           
+            // simulated source for structural diff
             struct : lib::diff::TreeDiffLanguage
               {
                 const GenNode
-                  ATTRIB_AL  = GenNode("α", "quadrant"),
+                  ATTRIB_AL = GenNode("α", "quadrant"),
                   ATTRIB_PI = GenNode("π", 3.14159265),
                   CHILD_1   = MakeRec().genNode("a"),
                   CHILD_2   = MakeRec().genNode("b");
@@ -599,27 +641,63 @@ namespace test {
                 auto
                 generateDiff()
                   {
-                    using lib::iter_stl::snapshot;
                     using lib::diff::Ref;
+                    using lib::iter_stl::snapshot;
                     
-                    
-                    return snapshot({after(Ref::ATTRIBS)
-                                   , ins(CHILD_1)
-                                   , ins(CHILD_2)
-                                   , set(ATTRIB_AL)
-                                   , mut(CHILD_2)
-                                     , ins(ATTRIB_PI)
-                                   , emu(CHILD_2)
+                    return snapshot({after(Ref::ATTRIBS)   // start after the existing attributes (of root)
+                                   , ins(CHILD_1)          // insert first child (with name "a")
+                                   , ins(CHILD_2)          // insert second child (with name "b")
+                                   , set(ATTRIB_AL)        // assign a new value to attribute "α" <- "quadrant"
+                                   , mut(CHILD_2)          // open nested scope of child "b" for recursive mutation
+                                     , ins(ATTRIB_PI)      // ..within nested scope, add a new attribute "π" := 3.14159265
+                                   , emu(CHILD_2)          // leave nested scope
                                    });
                   }
               }
               diffSrc;
           
-          MutationMessage mutabor{diffSrc.generateDiff()};
           
           auto& uiBus = gui::test::Nexus::testUI();
           
+          
+          // send a Diff message via UI-Bus to the rootMock
+          MutationMessage mutabor{diffSrc.generateDiff()};
           uiBus.change(rootID, mutabor);
+          
+          
+          // Verify the rootMock has been properly altered....
+          MockElm& childA = *rootMock.scope[0];
+          MockElm& childB = *rootMock.scope[1];
+          
+          CHECK (2 == rootMock.scope.size());             // we've got two children now
+          CHECK (rootMock.attrib["α"] == "quadrant");     // alpha attribute has been reassigned
+          CHECK (childA.getID() == diffSrc.CHILD_1.idi);  // children have the expected IDs
+          CHECK (childB.getID() == diffSrc.CHILD_2.idi);
+          CHECK (childB.attrib["π"]  == "3.1415927");     // and the second child got attribute Pi
+          
+          
+          CHECK (rootMock.verifyEvent("create","root")
+                         .beforeCall("buildMutator").on(&rootMock)
+                         .beforeEvent("diff","root accepts mutation...")        // start of diff mutation
+                         .beforeEvent("diff","create child \"a\"")              // insert first child
+                         .beforeEvent("create", "a")
+                         .beforeEvent("diff","create child \"b\"")              // insert second child
+                         .beforeEvent("create", "b")
+                         .beforeEvent("diff","set Attib α <-quadrant")          // assign value to existing attribute α
+                         .beforeCall("buildMutator").on(&childB)                // establish nested mutator for second child
+                         .beforeEvent("diff","b accepts mutation...")
+                         .beforeEvent("diff",">>Scope>> b")                     // recursively mutate second child
+                         .beforeEvent("diff","++Attib++ π = 3.1415927"));       // insert new attribute π within nested scope
+          
+          
+          CHECK (nexusLog.verifyCall("routeAdd").arg(rootMock.getID(), memLocation(rootMock))      // rootMock was attached to Nexus
+                         .beforeCall("change")  .argMatch(rootMock.getID(),
+                                                          "after.+ins.+ins.+set.+mut.+ins.+emu")   // diff message sent via UI-Bus
+                         .beforeCall("routeAdd").arg(childA.getID(), memLocation(childA))          // first new child was attached to Nexus
+                         .beforeCall("routeAdd").arg(childB.getID(), memLocation(childB))          // second new child was attached to Nexus
+                         .beforeEvent("applied diff to "+string(rootMock.getID()))
+                         );
+          
           cout << "____Event-Log_________________\n"
                << util::join(rootMock.getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
@@ -627,12 +705,14 @@ namespace test {
           cout << "____Nexus-Log_________________\n"
                << util::join(nexusLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          
-          CHECK (2 == rootMock.scope.size());                        // we've got two children now
-          CHECK (rootMock.attrib["α"] == "quadrant");                // alpha attribute has been reassigned
-          CHECK (rootMock.scope[0]->getID() == diffSrc.CHILD_1.idi);  // children have the expected IDs
-          CHECK (rootMock.scope[1]->getID() == diffSrc.CHILD_2.idi);
-          CHECK (rootMock.scope[1]->attrib["π"]  == "3.1415927");     // and the second child got attribute Pi
+        }
+      
+      
+      
+      static string
+      memLocation (Tangible& uiElm)
+        {
+          return lib::idi::instanceTypeID (&uiElm);
         }
     };
   

@@ -214,7 +214,17 @@ namespace model {
       
     public:
       virtual void buildMutator (lib::diff::TreeMutator::Handle)  =0;
-    private:
+      
+      
+      /** override default size traits for diff application.
+       * @remarks this value here is hard coded, base on what
+       *  can be expected for diff application to UI elements.
+       */
+      friend constexpr size_t
+      treeMutatorSize (const Tangible*)
+      {
+        return 256;
+      }
     };
   
   

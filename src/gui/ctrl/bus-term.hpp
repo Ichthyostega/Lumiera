@@ -136,6 +136,8 @@ namespace ctrl{
       
       virtual BusTerm& routeAdd(ID,Tangible&);
       virtual void routeDetach(ID)  noexcept;
+      
+      bool isConnected()  const noexcept;
     };
   
   
@@ -147,6 +149,14 @@ namespace ctrl{
   {
     theBus_.note (this->endpointID_, mark);
   }
+  
+  /** @internal tie break */
+  inline bool
+  BusTerm::isConnected()  const noexcept
+  {
+    return &theBus_ != this;
+  }
+  
   
   
 }} // namespace gui::ctrl
