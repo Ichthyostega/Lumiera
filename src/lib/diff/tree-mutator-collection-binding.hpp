@@ -654,6 +654,7 @@ namespace diff{
                              {
                                mutateInPlace (target.data.get<Rec>())
                                    .buildMutator(buff);
+                               buff.get()->init();
                                return true;
                              }
                            else

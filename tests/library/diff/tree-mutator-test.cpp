@@ -89,6 +89,8 @@ namespace test{
                << " type="<< typeStr(mutator)
                << endl;
           
+          mutator.init();
+          
           CHECK (isnil (localData));
           string testValue{"that would be acceptable"};
           mutator.assignElm ({"lore", testValue});
@@ -119,6 +121,8 @@ namespace test{
           cout << "concrete TreeMutator size=" << sizeof(mutator)
                << " type="<< typeStr(mutator)
                << endl;
+          
+          mutator.init();
           
           CHECK (isnil (values));
           CHECK (mutator.matchSrc (GenNode("a")));
