@@ -2616,7 +2616,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201503221519" tags="GuiPattern discuss decision impl" changecount="25">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610131647" tags="GuiPattern discuss decision impl" changecount="29">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2644,10 +2644,18 @@ There are some issues though, which more or less force us into custom drawing
 * the sheer amount of individual elements we need to get to screen is way beyond anything in a conventional GUI -- the UI toolkit set can not be expected to handle such load smoothly
 
 !Remedy: A Canvas Control
-All of the above is a serious concern. There is no easy way out, since, for the beginning, we need to get hands on with the display -- to get any tangible elements to work against. Yet we might come up with a plan of attack and we might align even the preliminary steps in a way to switch to a more durable solution once we get a chance to do so. The desired solution is to build our own ''Canvas Control'' to be as much in line with existing widgets and GTK conventions as possible. This is, instead of just jumping into our own drawing code heads first.
-* to the outside, make this control as much a well behaved ~GTK-3 widget or container as possible
-* learn about theming and styling engines and integrate with them to retrieve the platform look-and-feel
-* consider the ability to ''integrate regular GTK widgets'' onto our Custom Canvas. Try to figure out the regular event handling and try to forward to the embedded widgets. On success, this would allow to pass back into existing implementation and use standard code for standard stuff, even if we need to do the frame decoration and some event handling ourselves.
+All of the above is a serious concern. There is no easy way out, since, for the beginning, we need to get hands on with the display -- to get any tangible elements to work against. Yet there exists a solution to combine the strengths of both approaches: a ''Canvas Widget'' is for one a regular widget, and can thus be integrated into the UI, while it allows to //place child widgets freely onto a managed area,// termed as &quot;the canvas&quot;. These child widgets are wired and managed pretty much like any other widget, they participate in theming, styling and accessibility technologies. Moreover, the canvas area can be clipped and scrolled, so to allow for arrangements way beyond the limits of the actual screen.
+* in the past, this functionality was pioneered by several extension libraries, for example by the [[GooCanvas|https://developer.gnome.org/goocanvas/stable/GooCanvas.html]] library for ~GTK-2
+* meanwhile, ~GTK-3 features several special layout managers, one of which is the [[GtkLayout|https://developer.gnome.org/gtk3/stable/GtkLayout.html]] widget, which incorporates this concept of //widgets placed on a canvas.//
+
+!!!to be investigated
+In order to build a sensible plan for our timeline structure, we need to investigate and clarify some fundamental properties of the GtkLayoutWidget
+* how are overlapping widgets handled?
+* how is resizing of widgets handled, esp. when they need to grow due to content changes?
+* how does the event dispatching deal with partially covered widgets?
+* how can embedded widgets be integrated into a tabbing / focus order?
+* how is custom drawing and widget drawing interwoven?
+
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">
