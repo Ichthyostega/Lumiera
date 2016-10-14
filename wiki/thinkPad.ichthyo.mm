@@ -8984,6 +8984,48 @@
 <node CREATED="1476375715644" ID="ID_1233704735" MODIFIED="1476375723495" TEXT="scrollable"/>
 <node CREATED="1476375723915" ID="ID_72518723" MODIFIED="1476375732734" TEXT="can place sub-widgets"/>
 <node CREATED="1476375733298" ID="ID_1024321268" MODIFIED="1476375738517" TEXT="allows custom drawing"/>
+<node CREATED="1476468254712" HGAP="64" ID="ID_1424353399" MODIFIED="1476468264189" TEXT="Eigenschaften" VSHIFT="45">
+<icon BUILTIN="pencil"/>
+<node CREATED="1476468265399" ID="ID_257790579" MODIFIED="1476468269738" TEXT="Test-Setup schaffen">
+<node CREATED="1476468390830" ID="ID_1922633406" MODIFIED="1476468418695" TEXT="soll">
+<icon BUILTIN="yes"/>
+<node CREATED="1476468393174" ID="ID_412857359" MODIFIED="1476468395498" TEXT="schnell gehen"/>
+<node CREATED="1476468395941" ID="ID_1419405883" MODIFIED="1476468401560" TEXT="nicht das UI kaputtmachen"/>
+<node CREATED="1476468402085" ID="ID_1171941848" MODIFIED="1476468410471" TEXT="realistisch sein"/>
+</node>
+</node>
+<node CREATED="1476468272510" ID="ID_150722005" MODIFIED="1476468274785" TEXT="Untersuchung">
+<node CREATED="1476468292804" ID="ID_283291482" MODIFIED="1476468314044" TEXT="overlapping widgets"/>
+<node CREATED="1476468292805" ID="ID_140846763" MODIFIED="1476468325987" TEXT="resizing of widgets"/>
+<node CREATED="1476468292805" ID="ID_1075320324" MODIFIED="1476468352572" TEXT="partially covered widgets">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....how does the event dispatching deal with partially covered widgets
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1476468292805" ID="ID_1670607748" MODIFIED="1476468372969" TEXT="tabbing / focus order">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...for embedded widgets
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1476468292805" ID="ID_472068538" MODIFIED="1476468383131" TEXT="custom drawing and widget drawing"/>
+</node>
+</node>
 </node>
 </node>
 </node>

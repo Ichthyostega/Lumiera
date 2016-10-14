@@ -2398,6 +2398,25 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
+<div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="201610141820" tags="GuiPattern impl" changecount="3">
+<pre>//This is the canvas widget of ~GTK-3//
+It allows not only custom drawing, but also to embed other widgets at defined coordinates.
+
+!to be investigated
+In order to build a sensible plan for our timeline structure, we need to investigate and clarify some fundamental properties of the GtkLayoutWidget
+* how are overlapping widgets handled?
+* how is resizing of widgets handled, esp. when they need to grow due to content changes?
+* how does the event dispatching deal with partially covered widgets?
+* how can embedded widgets be integrated into a tabbing / focus order?
+* how is custom drawing and widget drawing interwoven?
+
+!test setup
+we need a test setup for this investigation.
+ * easy to launch
+ * don't waste much time, it is disposable
+ * realistic: shall reflect the situation in our actual UI
+</pre>
+</div>
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201609091641" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="26">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 
@@ -2616,7 +2635,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610131647" tags="GuiPattern discuss decision impl" changecount="29">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610141820" tags="GuiPattern discuss decision impl" changecount="30">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2648,7 +2667,7 @@ All of the above is a serious concern. There is no easy way out, since, for the 
 * in the past, this functionality was pioneered by several extension libraries, for example by the [[GooCanvas|https://developer.gnome.org/goocanvas/stable/GooCanvas.html]] library for ~GTK-2
 * meanwhile, ~GTK-3 features several special layout managers, one of which is the [[GtkLayout|https://developer.gnome.org/gtk3/stable/GtkLayout.html]] widget, which incorporates this concept of //widgets placed on a canvas.//
 
-!!!to be investigated
+!!!to be investigated {{red{WIP 10/2016}}}
 In order to build a sensible plan for our timeline structure, we need to investigate and clarify some fundamental properties of the GtkLayoutWidget
 * how are overlapping widgets handled?
 * how is resizing of widgets handled, esp. when they need to grow due to content changes?
