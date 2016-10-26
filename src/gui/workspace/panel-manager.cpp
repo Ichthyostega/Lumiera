@@ -71,6 +71,7 @@ namespace workspace {
       ///////////////////////////////////////////////////////TICKET #172 : observed as a reason for crashes when closing the GUI. It was invoked after end of main, when the GUI as already gone.
     
 #if false ///////////////////////////////////////////////////TICKET #937 : disabled for GTK-3 transition. TODO investigate why this logic existed...    
+      ///////////////////////////////////////////////////////TICKET #1027
     for(int i = 0; i < 4; i++)
       if(dockPlaceholders_[i])
         g_object_unref(dockPlaceholders_[i]);
@@ -84,6 +85,8 @@ namespace workspace {
   void
   PanelManager::setupDock()
   {
+      ///////////////////////////////////////////////////////TICKET #1027 : investigate what would be the proper way to do this with gdlmm (C++ binding). No direct usage of GDL !
+
     REQUIRE(dockPlaceholders_[0] == NULL && dockPlaceholders_[1] == NULL &&
       dockPlaceholders_[2] == NULL && dockPlaceholders_[3] == NULL);
     dockPlaceholders_[0] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
@@ -223,6 +226,7 @@ namespace workspace {
   void
   PanelManager::createPanels()
   {
+                                                            ///////////////////////////////TICKET #1026 : code smell, use types directly instead          
     panel::Panel* assetsPanel =   createPanel_by_name("AssetsPanel");
     panel::Panel* viewerPanel =   createPanel_by_name("ViewerPanel");
     panel::Panel* timelinePanel = createPanel_by_name("TimelinePanel");

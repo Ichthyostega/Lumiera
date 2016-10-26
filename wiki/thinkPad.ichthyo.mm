@@ -26,6 +26,155 @@
 </node>
 <node CREATED="1476376943985" ID="ID_1422206856" MODIFIED="1476376946021" TEXT="Viewer"/>
 <node CREATED="1476376927660" ID="ID_688318446" MODIFIED="1476376932070" TEXT="Docks"/>
+<node CREATED="1477342616175" HGAP="37" ID="ID_954058801" MODIFIED="1477342623660" TEXT="Workspace" VSHIFT="33">
+<node CREATED="1477342624942" ID="ID_56920104" MODIFIED="1477342628449" TEXT="ist-Zustand">
+<node CREATED="1477342634181" ID="ID_930340610" MODIFIED="1477342640272" TEXT="ein globaler WindowManager">
+<node CREATED="1477342640932" ID="ID_950379507" MODIFIED="1477342666356" TEXT="hat Liste von WorkspaceWindow-s"/>
+<node CREATED="1477342694237" ID="ID_1913986184" MODIFIED="1477342711039" TEXT="diese deregistrieren sich beim Schlie&#xdf;en"/>
+<node CREATED="1477342711442" ID="ID_500847959" MODIFIED="1477342721373" TEXT="wenn letztes Fenster zu, dann Main-&gt;quit"/>
+<node CREATED="1477342816853" ID="ID_205499879" MODIFIED="1477342865641" TEXT="steuert Zusand von Menu&gt;Window&gt;CloseWindow">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nur <i>enabled</i>&#160;wenn
+    </p>
+    <p>
+      mehr als ein top-level Fenster offen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1477342868574" ID="ID_679226593" MODIFIED="1477342875681" TEXT="WorkspaceWindow">
+<node CREATED="1477342962345" ID="ID_1801410798" MODIFIED="1477342970428" TEXT="verbunden mit">
+<node CREATED="1477342985710" ID="ID_1944710826" MODIFIED="1477342988103" TEXT="Project"/>
+<node CREATED="1477342971448" ID="ID_1574175266" MODIFIED="1477342982842" TEXT="Controller"/>
+</node>
+<node CREATED="1477343022529" ID="ID_1585028268" MODIFIED="1477343028308" TEXT="owns">
+<node CREATED="1477343030104" ID="ID_350881879" MODIFIED="1477343237313" TEXT="gtk::UiManager">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      A Gtk::UIManager constructs a user interface (menus and toolbars) from one or more UI definitions,
+    </p>
+    <p>
+      which reference actions from one or more action groups.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1477343041295" ID="ID_1874325062" MODIFIED="1477343048450" TEXT="PanelManager">
+<node CREATED="1477343244428" ID="ID_513688853" MODIFIED="1477343252255" TEXT="managed die Docks"/>
+<node CREATED="1477345531413" ID="ID_1082348568" MODIFIED="1477345540367" TEXT="Liste m&#xf6;glicher Panel-Typen"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1477345852274" HGAP="30" ID="ID_1401392249" MODIFIED="1477345881876" TEXT="Kritik" VSHIFT="15">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1477345882862" ID="ID_1342647727" MODIFIED="1477345901848" TEXT="arbeitet zu viel mit Pointern ohe RAII"/>
+<node CREATED="1477345906723" ID="ID_906895860" MODIFIED="1477345934939" TEXT="&quot;poor man&apos;s reflection&quot;"/>
+<node CREATED="1477345939063" ID="ID_984848221" MODIFIED="1477346048791">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      realisiert Vererbung <i>zu fu&#223;</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...anstatt eine auf den konkreten Typ getemplatete Subklasse zu verwenden,
+    </p>
+    <p>
+      wird eine &quot;CreatePanelProc&quot; in einen PanelDescriptor eingewickelt.
+    </p>
+    <p>
+      Letzten Endes wird dieser dann per Match auf die Typ-ID ausgew&#228;hlt.
+    </p>
+    <p>
+      AUA!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1477347390430" HGAP="46" ID="ID_138529757" MODIFIED="1477347400283" TEXT="Panel" VSHIFT="31">
+<node CREATED="1477347401045" ID="ID_919458304" MODIFIED="1477347404816" TEXT="Timeline">
+<node CREATED="1477347410884" ID="ID_507837490" MODIFIED="1477347414199" TEXT="im Umbau"/>
+</node>
+<node CREATED="1477347405332" ID="ID_1735199230" MODIFIED="1477347406904" TEXT="Asset"/>
+<node CREATED="1477347407324" ID="ID_1325322495" MODIFIED="1477347409463" TEXT="Viewer">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1477347416659" ID="ID_1220196828" MODIFIED="1477347423723" TEXT="kaputt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1477347424858" ID="ID_439722309" MODIFIED="1477347445263" TEXT="wird nicht mehr erzeugt">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1477347448199" ID="ID_432416001" MODIFIED="1477347459131" TEXT="Grund: kein Displayer">
+<icon BUILTIN="info"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1477343061900" ID="ID_589166101" MODIFIED="1477343063991" TEXT="Statusbar"/>
+<node CREATED="1477343071827" ID="ID_369966079" MODIFIED="1477343100245" TEXT="Actions">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Helper to build the menu and for&#160;registering and handling of user action events
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1477344354329" ID="ID_1683945104" MODIFIED="1477344359708" TEXT="createUi()">
+<node CREATED="1477344605448" ID="ID_960836253" MODIFIED="1477344608195" TEXT="panelManager_.setupDock();"/>
+<node CREATED="1477344610087" ID="ID_844257690" MODIFIED="1477344615706" TEXT="baut auf">
+<node CREATED="1477344616486" ID="ID_466606949" MODIFIED="1477344619001" TEXT="Men&#xfc;bar"/>
+<node CREATED="1477344619541" ID="ID_1111690482" MODIFIED="1477344658636" TEXT="dockContainer"/>
+<node CREATED="1477344659440" ID="ID_1310811438" MODIFIED="1477344662236" TEXT="statusBar"/>
+</node>
+</node>
+</node>
+<node CREATED="1477343115357" ID="ID_213954404" MODIFIED="1477343118368" TEXT="Kritik">
+<node CREATED="1477343120660" ID="ID_1940152250" MODIFIED="1477343150595" TEXT="Multiplizit&#xe4;t unklar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es sieht so aus, als w&#228;re es &quot;das&quot; WorkspaceWindow
+    </p>
+    <p>
+      aber es kann davon mehrere geben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1477343152288" ID="ID_1267678981" MODIFIED="1477343164378" TEXT="Vermengung von Fenster und Workspace"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1448070434915" HGAP="64" ID="ID_257833497" MODIFIED="1450390417230" VSHIFT="7">
 <richcontent TYPE="NODE"><html>

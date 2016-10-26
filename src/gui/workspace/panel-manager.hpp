@@ -44,6 +44,7 @@ namespace workspace {
   
   /**
    * A class to manage DockItem objects for WorkspaceWindow.
+   * @todo this code is smelly and needs some clean-up        ///////////////////////////////TICKET #1026
    */
   class PanelManager
     {
@@ -91,7 +92,7 @@ namespace workspace {
       
       /**
        * Gets a pointer to the dock object.
-       * @remarks Note that this must not be called before setup_dock.
+       * @remarks Note that this must not be called before setup_dock.   ///////////////////////////////TICKET #1026 : code smell
        */
       Gdl::Dock& getDock();
       
@@ -104,7 +105,7 @@ namespace workspace {
       /**
        * Returns a reference to the owner workspace window.
        */
-      WorkspaceWindow& getWorkspaceWindow();
+      WorkspaceWindow& getWorkspaceWindow();                             ///////////////////////////////TICKET #1026 : code smell, unclear dependency relation
       
       /**
        * Shows a panel given a description index.
@@ -218,7 +219,7 @@ namespace workspace {
         {
         protected:
           typedef panel::Panel* (*const CreatePanelProc)(PanelManager&, Gdl::DockItem&);
-          
+                                                            ///////////////////////////////TICKET #1026 : code smell, why not just using inheritance?          
         private:
           /** reference to the typeID of this class */
           const std::type_info& classInfo_;

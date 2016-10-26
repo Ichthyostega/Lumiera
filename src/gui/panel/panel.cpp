@@ -48,6 +48,7 @@ namespace panel{
       g_object_set_property (G_OBJECT (dockItem.gobj()), "long-name", val.gobj());
       
       /* Set the grip handle */
+      ///////////////////////////////////////////////////////TICKET #1027 : find out how to do this with gdlmm (C++ binding). No direct usage of GDL !
       GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
         gdl_dock_item_get_grip(dockItem.gobj()));
       gdl_dock_item_grip_show_handle(grip);
@@ -73,6 +74,7 @@ namespace panel{
     
   #if false /////////////////////////////////////////////////TICKET #937 : disabled for GTK-3 transition. TODO investigate why this logic existed...    
     /* Detach the panel bar */
+      ///////////////////////////////////////////////////////TICKET #1027 !!
     GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
       gdl_dock_item_get_grip(dockItem_.gobj()));
     gtk_container_remove (GTK_CONTAINER(grip),
