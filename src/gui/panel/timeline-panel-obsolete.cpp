@@ -2,7 +2,7 @@
   TimelinePanel  -  Dockable panel to hold the main timeline view
 
   Copyright (C)         Lumiera.org
-    2016,               Hermann Vosseler <Ichthyostega@web.de>
+    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,16 +21,8 @@
 * *****************************************************/
 
 
-/** @file timeline-panel.cpp
- ** Implementation of dockable timeline container.
- ** 
- ** @see timeline-widget.hpp
- ** 
- */
-
-
 #include "gui/gtk-lumiera.hpp"
-#include "gui/panel/timeline-panel.hpp"
+#include "gui/panel/timeline-panel-obsolete.hpp"
 #include "gui/widget/timeline/timeline-zoom-scale.hpp"
 
 #include "gui/workspace/workspace-window.hpp"

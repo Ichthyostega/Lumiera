@@ -2,7 +2,7 @@
   TIMELINE-PANEL.hpp  -  Dockable panel to hold the main timeline view            
 
   Copyright (C)         Lumiera.org
-    2016,               Hermann Vosseler <Ichthyostega@web.de>
+    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,14 +20,14 @@
 
 */
 
-
-/** @file timeline-panel.hpp
+/** @file timeline-panel-obsolete.hpp
  ** This file contains the definition of the timeline panel
+ ** @deprecated rework of timeline widget iminent
  */
 
 
-#ifndef GUI_PANEL_TIMELINE_PANEL_H
-#define GUI_PANEL_TIMELINE_PANEL_H
+#ifndef GUI_PANEL_TIMELINE_PANEL_OBSOLETE_H
+#define GUI_PANEL_TIMELINE_PANEL_OBSOLETE_H
 
 #include "gui/panel/panel.hpp"
 #include "gui/widget/timecode-widget.hpp"
@@ -198,4 +198,4 @@ namespace model{
   
   
 }}// namespace gui::panel
-#endif /*GUI_PANEL_TIMELINE_PANEL_H*/
+#endif /*GUI_PANEL_TIMELINE_PANEL_OBSOLETE_H*/
