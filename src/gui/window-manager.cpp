@@ -201,8 +201,9 @@ namespace gui {
     Glib::RefPtr<IconFactory> factory = IconFactory::create();
     
     addStockIconSet(factory, "panel-assets",   "panel_assets",  _("_Assets"));
-    addStockIconSet(factory, "panel-timeline", "panel_timeline",_("_Timeline"));
     addStockIconSet(factory, "panel-viewer",   "panel_viewer",  _("_Viewer"));
+    addStockIconSet(factory, "panel-timeline", "panel_timeline",_("_Timeline"));
+    addStockIconSet(factory, "panel-timeline", "panel_timeline_obsolete",_("_ZombieTimeline"));
     
     addStockIconSet(factory, "window-new",     "new_window",    _("New _Window"));
     
@@ -250,7 +251,7 @@ namespace gui {
     // Add the icon set to the icon factory
     const Gtk::StockID stock_id(id);
     factory->add(stock_id, icon_set);
-    Gtk::Stock::add(Gtk::StockItem(stock_id, label));
+    Gtk::Stock::add(Gtk::StockItem(stock_id, label));              //////////////////////TICKET #1030 : use "icon names" instead of Gtk::StockItem
     return true;
   }
   
@@ -295,7 +296,7 @@ namespace gui {
     Glib::RefPtr<Gtk::IconTheme> theme = Gtk::IconTheme::get_default();
     REQUIRE(theme);
     
-    TODO ("find out how IconInfo could be made const. For example, GTKmm 2.10.10 is missing the const on operator bool() in iconinfo.h");
+    ///////////////////////////////////////////TODO find out how IconInfo could be made const. For example, GTKmm 2.10.10 is missing the const on operator bool() in iconinfo.h
     IconInfo info = theme->lookup_icon(icon_name, width, (IconLookupFlags)0);
     
     if (!info) return false; // unable to resolve Icon

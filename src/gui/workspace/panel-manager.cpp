@@ -26,6 +26,7 @@
 #include "gui/panel/assets-panel.hpp"
 #include "gui/panel/viewer-panel.hpp"
 #include "gui/panel/timeline-panel.hpp"
+#include "gui/panel/timeline-panel-obsolete.hpp"
 
 #include "include/logging.h"
 
@@ -39,6 +40,7 @@ namespace workspace {
   const PanelManager::PanelDescription
     PanelManager::panelDescriptionList[] = {
       PanelManager::Panel<TimelinePanel>(),
+      PanelManager::Panel<TimelinePanelObsolete>(),
       PanelManager::Panel<ViewerPanel>(),
       PanelManager::Panel<AssetsPanel>()
     };

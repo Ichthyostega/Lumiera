@@ -47,11 +47,11 @@ using util::contains;
 namespace gui {
 namespace panel {
     
-  const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
+  const int TimelinePanelObsolete::ZoomToolSteps = 2; // 2 seems comfortable
   
   
-  TimelinePanel::TimelinePanel (workspace::PanelManager& panelManager,
-                                Gdl::DockItem& dockItem)
+  TimelinePanelObsolete::TimelinePanelObsolete (workspace::PanelManager& panelManager,
+                                                Gdl::DockItem& dockItem)
     : Panel(panelManager, dockItem, getTitle(), getStockID())
     , timeCode("sequence_clock", "timecode_widget", true)
     , previousButton(Stock::MEDIA_PREVIOUS)
@@ -70,7 +70,7 @@ namespace panel {
     {
       // Hook up notifications
       getProject().get_sequences().signal_changed().connect(mem_fun(this,
-          &TimelinePanel::on_sequence_list_changed));
+          &TimelinePanelObsolete::on_sequence_list_changed));
       
       // Setup the sequence chooser
       sequenceChooserModel = Gtk::ListStore::create(sequenceChooserColumns);
@@ -81,7 +81,7 @@ namespace panel {
       sequenceChooser.show_all();
       
       sequenceChooserChangedConnection = sequenceChooser.signal_changed().
-        connect( sigc::mem_fun(*this, &TimelinePanel::on_sequence_chosen) );
+        connect( sigc::mem_fun(*this, &TimelinePanelObsolete::on_sequence_chosen) );
       
       panelBar_.pack_start(sequenceChooser, PACK_SHRINK);
       
@@ -91,24 +91,24 @@ namespace panel {
       toolbar.append(previousButton);
       toolbar.append(rewindButton);
       toolbar.append(playPauseButton,
-        mem_fun(this, &TimelinePanel::on_play_pause));
+        mem_fun(this, &TimelinePanelObsolete::on_play_pause));
       toolbar.append(stopButton,
-        mem_fun(this, &TimelinePanel::on_stop));
+        mem_fun(this, &TimelinePanelObsolete::on_stop));
       toolbar.append(forwardButton);
       toolbar.append(nextButton);
       
       toolbar.append(separator1);
       
       toolbar.append(arrowTool,
-        mem_fun(this, &TimelinePanel::on_arrow_tool));
+        mem_fun(this, &TimelinePanelObsolete::on_arrow_tool));
       toolbar.append(iBeamTool,
-        mem_fun(this, &TimelinePanel::on_ibeam_tool));
+        mem_fun(this, &TimelinePanelObsolete::on_ibeam_tool));
         
       toolbar.append(separator2);
       
       toolbar.append(zoomScale);
       zoomScale.signal_zoom().
-        connect(mem_fun(this,&TimelinePanel::on_zoom));
+        connect(mem_fun(this,&TimelinePanelObsolete::on_zoom));
       
       toolbar.show_all();
       panelBar_.pack_start(toolbar, PACK_SHRINK);
@@ -148,19 +148,19 @@ namespace panel {
     }
   
   const char*
-  TimelinePanel::getTitle()
+  TimelinePanelObsolete::getTitle()
   {
-    return _("Timeline");
+    return _("ZombieTimeline");
   }
   
   const gchar*
-  TimelinePanel::getStockID()
+  TimelinePanelObsolete::getStockID()
   {
-    return "panel_timeline";
+    return "panel_timeline_obsolete";
   }
   
   void
-  TimelinePanel::on_play_pause()
+  TimelinePanelObsolete::on_play_pause()
   {
     if (!is_playing())
       play();
@@ -171,33 +171,33 @@ namespace panel {
   }
   
   void
-  TimelinePanel::on_stop()
+  TimelinePanelObsolete::on_stop()
   {
     getController().get_playback_controller().stop();
     updatePlaybackButtons();
   }
   
   void
-  TimelinePanel::on_arrow_tool()
+  TimelinePanelObsolete::on_arrow_tool()
   {
     setTool(timeline::Arrow);
   }
   
   void
-  TimelinePanel::on_ibeam_tool()
+  TimelinePanelObsolete::on_ibeam_tool()
   {  
     setTool(timeline::IBeam);
   }
   
   void
-  TimelinePanel::on_zoom (double time_scale_ratio)
+  TimelinePanelObsolete::on_zoom (double time_scale_ratio)
   {
     REQUIRE(timelineWidget);
     timelineWidget->zoom_view(time_scale_ratio);
   }
   
   void
-  TimelinePanel::on_zoom_in()
+  TimelinePanelObsolete::on_zoom_in()
   {
     REQUIRE(timelineWidget);
     timelineWidget->zoom_view(ZoomToolSteps);
@@ -205,7 +205,7 @@ namespace panel {
   }
   
   void
-  TimelinePanel::on_zoom_out()
+  TimelinePanelObsolete::on_zoom_out()
   {
     REQUIRE(timelineWidget);
     timelineWidget->zoom_view(-ZoomToolSteps);
@@ -213,13 +213,13 @@ namespace panel {
   }
   
   void
-  TimelinePanel::on_mouse_hover(Time)
+  TimelinePanelObsolete::on_mouse_hover(Time)
   {
     /* do nothing */
   }
   
   void
-  TimelinePanel::on_playback_period_drag_released()
+  TimelinePanelObsolete::on_playback_period_drag_released()
   {
     //----- TEST CODE - this needs to set the playback point via the
     // real backend
@@ -234,7 +234,7 @@ namespace panel {
   }
   
   void
-  TimelinePanel::on_sequence_list_changed()
+  TimelinePanelObsolete::on_sequence_list_changed()
   {
     updateSequenceChooser();
   }
@@ -242,7 +242,7 @@ namespace panel {
   
   /** @deprecated for #955 : move this callback \em into the model! */
   void
-  TimelinePanel::on_sequence_chosen()
+  TimelinePanelObsolete::on_sequence_chosen()
   {
     REQUIRE(timelineWidget);
     
@@ -269,7 +269,7 @@ namespace panel {
   
   
   void
-  TimelinePanel::updateSequenceChooser()
+  TimelinePanelObsolete::updateSequenceChooser()
   {
     REQUIRE(sequenceChooserModel);
     
@@ -304,7 +304,7 @@ namespace panel {
   
   
   void
-  TimelinePanel::updatePlaybackButtons()
+  TimelinePanelObsolete::updatePlaybackButtons()
   {
     if (is_playing())
       {
@@ -321,7 +321,7 @@ namespace panel {
   
   
   void
-  TimelinePanel::updateToolButtons()
+  TimelinePanelObsolete::updateToolButtons()
   {    
     if (!updatingToolbar)
       {
@@ -334,7 +334,7 @@ namespace panel {
   
   
   void
-  TimelinePanel::updateZoomButtons()
+  TimelinePanelObsolete::updateZoomButtons()
   {
   /* This function is no longer needed
    * TODO: Let the ZoomScaleWidget perform
@@ -343,25 +343,25 @@ namespace panel {
   
   
   void
-  TimelinePanel::play()
+  TimelinePanelObsolete::play()
   {   
     getController().get_playback_controller().play();
   }
   
   void
-  TimelinePanel::pause()
+  TimelinePanelObsolete::pause()
   {
     getController().get_playback_controller().pause();
   }
   
   bool
-  TimelinePanel::is_playing()
+  TimelinePanelObsolete::is_playing()
   {
     return getController().get_playback_controller().is_playing();
   }
   
   void
-  TimelinePanel::setTool (timeline::ToolType tool)
+  TimelinePanelObsolete::setTool (timeline::ToolType tool)
   {
     REQUIRE(timelineWidget);
     
@@ -373,7 +373,7 @@ namespace panel {
   }
   
   void
-  TimelinePanel::showTime (Time time)
+  TimelinePanelObsolete::showTime (Time time)
   {
     ////////////TODO integrate the Timecode Widget
     
@@ -381,14 +381,14 @@ namespace panel {
   }
   
   bool
-  TimelinePanel::on_frame()
+  TimelinePanelObsolete::on_frame()
   {
     /////////TODO what happens here??
     return true;
   }
   
   shared_ptr<timeline::TimelineState>
-  TimelinePanel::loadState (weak_ptr<Sequence> sequence)
+  TimelinePanelObsolete::loadState (weak_ptr<Sequence> sequence)
   {
     /* state exists */
     if (contains(timelineStates, sequence))

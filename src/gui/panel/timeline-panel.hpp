@@ -22,7 +22,10 @@
 
 
 /** @file timeline-panel.hpp
- ** This file contains the definition of the timeline panel
+ ** A dockable container to hold a notebook of timeline displays.
+ ** 
+ ** @todo as of 10/2016 this is WIP-WIP-WIP : canvas widgets experiment
+ ** @todo build a new timeline widget, connected to the UI-Bus
  */
 
 
@@ -30,17 +33,10 @@
 #define GUI_PANEL_TIMELINE_PANEL_H
 
 #include "gui/panel/panel.hpp"
-#include "gui/widget/timecode-widget.hpp"
-#include "gui/widget/timeline-widget.hpp"
-#include "gui/widget/timeline/timeline-zoom-scale.hpp"
 
-#include "lib/time/timevalue.hpp"
-#include "lib/util-coll.hpp"
+//#include <memory>
 
-#include <memory>
-#include <map>
 
-using namespace gui::widget; ////////////TODO only explicit using clauses please!
 
 namespace gui  {
 namespace model{
@@ -48,14 +44,12 @@ namespace model{
   }
   namespace panel {
   
-  using std::shared_ptr;
-  using std::weak_ptr;
-  using lib::time::Time;
+//using std::shared_ptr;
   
   
   
   /**
-   * Dockable panel to hold timeline widget.
+   * Dockable panel to hold timeline widget(s).
    */
   class TimelinePanel
     : public Panel
@@ -72,128 +66,7 @@ namespace model{
       static const gchar* getStockID();
       
       
-    private:
-      //----- Event Handlers -----//
-      
-      void on_play_pause();
-      void on_stop();
-      
-      void on_arrow_tool();
-      void on_ibeam_tool();
-      
-      void on_zoom (double time_scale_ratio);
-      void on_zoom_in();
-      void on_zoom_out();
-      
-      void on_time_pressed();
-        
-      void on_mouse_hover (Time);
-      void on_playback_period_drag_released();
-      
-      /** event handler for change of sequences list */
-      void on_sequence_list_changed();
-      
-      /** event handler when choosing a new sequence for display */
-      void on_sequence_chosen();
-      
-    private:
-      
-      void updateSequenceChooser();
-      
-      void updatePlaybackButtons();
-      void updateToolButtons();
-      void updateZoomButtons();
-      
-      void play();
-      
-      void pause();
-      
-      bool is_playing();
-      
-      void setTool (gui::widget::timeline::ToolType tool);
-      
-      void showTime (Time);
-        
-      shared_ptr<widget::timeline::TimelineState>
-      loadState (weak_ptr<model::Sequence> sequence);
-      
-    private:
-      /**
-       * sequence chooser combo box columns
-       */
-      class SequenceChooserColumns
-        : public Gtk::TreeModel::ColumnRecord
-        {
-        public:
-          SequenceChooserColumns()
-            {
-              add(nameColumn);
-              add(sequenceColumn);
-            }
-          
-          /** invisible column which will be used
-           *  to identify the sequence of a row. */
-          Gtk::TreeModelColumn<weak_ptr<model::Sequence>> sequenceColumn;
-          
-          /** column to use as the label for the combo box widget items */
-          Gtk::TreeModelColumn<uString> nameColumn;
-        };
-      
-      
-    private:
-      
-      //----- Data -----//
-      
-      // Grip Widgets
-      ButtonBar toolbar;
-      
-      // Sequence Chooser
-      SequenceChooserColumns sequenceChooserColumns;
-      Glib::RefPtr<Gtk::ListStore> sequenceChooserModel;
-      Gtk::ComboBox sequenceChooser;
-      sigc::connection sequenceChooserChangedConnection;
-      
-      // Body Widgets
-      boost::scoped_ptr<TimelineWidget> timelineWidget;
-      
-      std::map< weak_ptr<model::Sequence>
-              , shared_ptr<widget::timeline::TimelineState>
-              , ::util::WeakPtrComparator
-              > 
-        timelineStates;
-      
-      // Toolbar Widgets
-      TimeCode timeCode;
-      
-      MiniButton previousButton;
-      MiniButton rewindButton;
-      MiniButton playPauseButton;
-      MiniButton stopButton;
-      MiniButton forwardButton;
-      MiniButton nextButton;
-      
-      MiniToggleButton arrowTool;
-      MiniToggleButton iBeamTool;
-      
-      Gtk::SeparatorToolItem separator1;
-      
-      MiniButton zoomIn;
-      MiniButton zoomOut;
-      gui::widget::timeline::TimelineZoomScale zoomScale;
-      
-      Gtk::SeparatorToolItem separator2;
-      
-      // Internals
-      bool updatingToolbar;
-      gui::widget::timeline::ToolType currentTool;
-      
-    private:
-      // TEST CODE
-      bool on_frame();
-      
-      //----- Constants -----//
-    private:
-      static const int ZoomToolSteps;
+    protected:
     };
   
   

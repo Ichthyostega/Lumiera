@@ -57,7 +57,7 @@ namespace model{
   /**
    * Dockable panel to hold timeline widget.
    */
-  class TimelinePanel
+  class TimelinePanelObsolete
     : public Panel
     {
     public:
@@ -65,7 +65,7 @@ namespace model{
        * @param panel_manager The owner panel manager widget.
        * @param dock_item The GdlDockItem that will host this panel.
        */
-      TimelinePanel(workspace::PanelManager&, Gdl::DockItem&);
+      TimelinePanelObsolete(workspace::PanelManager&, Gdl::DockItem&);
       
       
       static const char* getTitle();
