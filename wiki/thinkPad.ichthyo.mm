@@ -174,6 +174,23 @@
 <node CREATED="1477343152288" ID="ID_1267678981" MODIFIED="1477343164378" TEXT="Vermengung von Fenster und Workspace"/>
 </node>
 </node>
+<node CREATED="1477522265208" HGAP="53" ID="ID_41510242" MODIFIED="1477522301608" TEXT="Neuerungen" VSHIFT="28">
+<node CREATED="1477522271822" ID="ID_622217667" MODIFIED="1477522304296" TEXT="PanelExperiment">
+<icon BUILTIN="pencil"/>
+<node CREATED="1477522330886" ID="ID_1920846276" MODIFIED="1477522338065" TEXT="ScrolledWindow"/>
+<node CREATED="1477522340573" ID="ID_168076322" MODIFIED="1477522342848" TEXT="Grid">
+<node CREATED="1477523590806" ID="ID_908611386" MODIFIED="1477523592705" TEXT="attach()"/>
+<node CREATED="1477523593462" ID="ID_1461366621" MODIFIED="1477523597777" TEXT="attach_next_to()"/>
+<node CREATED="1477523578208" ID="ID_738525852" MODIFIED="1477523599621" TEXT="add()"/>
+</node>
+<node CREATED="1477523550484" ID="ID_1492266905" MODIFIED="1477523553047" TEXT="Box">
+<node CREATED="1477523556667" ID="ID_852178687" MODIFIED="1477523561430" TEXT="horizontal / vertikal"/>
+<node CREATED="1477523561930" ID="ID_868197404" MODIFIED="1477523572380" TEXT="pack_start() "/>
+<node CREATED="1477523573184" ID="ID_1063091132" MODIFIED="1477523576100" TEXT="pack_end()"/>
+</node>
+</node>
+<node CREATED="1477522287316" ID="ID_1942021610" MODIFIED="1477522290919" TEXT="TimelinePanel"/>
+</node>
 </node>
 </node>
 <node CREATED="1448070434915" HGAP="64" ID="ID_257833497" MODIFIED="1450390417230" VSHIFT="7">
@@ -9119,6 +9136,52 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1477523681978" HGAP="23" ID="ID_400257229" MODIFIED="1477523760062" TEXT="Richtlinien" VSHIFT="-21">
+<node CREATED="1477523701544" ID="ID_1802991794" MODIFIED="1477523708299" TEXT="empfohlen">
+<node CREATED="1477523709342" ID="ID_781118281" MODIFIED="1477523710386" TEXT="Box">
+<node CREATED="1477524273619" ID="ID_216152004" MODIFIED="1477524281302" TEXT="pack_start() / pack_end()"/>
+<node COLOR="#ca1b00" CREATED="1477524282122" ID="ID_1542686719" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-multi-item-containers.html.en#per-child-packing-options" MODIFIED="1477524315404" TEXT="packing options">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1477523710854" ID="ID_1520577996" MODIFIED="1477523711882" TEXT="Grid"/>
+</node>
+<node CREATED="1477523714526" ID="ID_654535915" MODIFIED="1477523737952" TEXT="Application verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nicht mehr das <i>klassische</i>&#160;gtk::Main
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1477526858307" ID="ID_676269117" MODIFIED="1477526862502" TEXT="custom widget">
+<node COLOR="#ca1b00" CREATED="1477526864162" ID="ID_1385929770" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1477526888486" TEXT="Beispiel">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1477527104426" ID="ID_334736261" MODIFIED="1477527138549" TEXT="custom style properties">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...k&#246;nnen vom CSS-Stylesheet aus gesetzt werden.
+    </p>
+    <p>
+      Siehe Beschreibung im Beispiel/Tutorial
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
 </node>
 </node>
 <node CREATED="1446515847047" ID="ID_290915762" MODIFIED="1446515861953" TEXT="GtkCssProvider">

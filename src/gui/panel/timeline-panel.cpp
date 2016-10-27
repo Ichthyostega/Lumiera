@@ -44,6 +44,7 @@
 //using std::shared_ptr;
 //using std::weak_ptr;
 //using util::contains;
+using sigc::mem_fun;
 
 
 namespace gui {
@@ -54,7 +55,35 @@ namespace panel {
   TimelinePanel::TimelinePanel (workspace::PanelManager& panelManager,
                                 Gdl::DockItem& dockItem)
     : Panel(panelManager, dockItem, getTitle(), getStockID())
+    , twoParts_(Gtk::ORIENTATION_VERTICAL)
+    , buttons_()
+    , button_1_()
+    , button_2_()
+    , frame_("Gtk::Layout Experiments")
+    , scroller_()
     {
+      twoParts_.pack_start(buttons_, Gtk::PACK_SHRINK);
+      twoParts_.pack_start(frame_);
+      
+      buttons_.add(button_1_);
+      buttons_.add(button_2_);
+      buttons_.set_layout(Gtk::BUTTONBOX_START);
+      
+      button_1_.set_label("Experiment _1");
+      button_1_.signal_clicked().connect(
+                  mem_fun(*this, &TimelinePanel::experiment_1));
+      
+      button_2_.set_label("Experiment _2");
+      button_2_.signal_clicked().connect(
+                  mem_fun(*this, &TimelinePanel::experiment_2));
+      
+      frame_.add(scroller_);
+      frame_.set_border_width(5);
+      
+      scroller_.set_shadow_type(Gtk::SHADOW_NONE);
+      
+      this->add(twoParts_);
+      this->show_all();
     }
   
   const char*
@@ -67,6 +96,20 @@ namespace panel {
   TimelinePanel::getStockID()
   {
     return "panel_timeline";
+  }
+  
+  
+  void
+  TimelinePanel::experiment_1()
+  {
+    frame_.set_label("Experiment 1...");
+  }
+  
+  
+  void
+  TimelinePanel::experiment_2()
+  {
+    frame_.set_label("Experiment 2...");
   }
   
   

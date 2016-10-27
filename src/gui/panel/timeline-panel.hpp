@@ -50,6 +50,7 @@ namespace model{
   
   /**
    * Dockable panel to hold timeline widget(s).
+   * @todo as of 10/2016 this is used for exploring GTK behaviour
    */
   class TimelinePanel
     : public Panel
@@ -66,7 +67,16 @@ namespace model{
       static const gchar* getStockID();
       
       
-    protected:
+    private:
+      Gtk::Box twoParts_;
+      Gtk::ButtonBox buttons_;
+      Gtk::Button button_1_;
+      Gtk::Button button_2_;
+      Gtk::Frame frame_;
+      Gtk::ScrolledWindow scroller_;
+      
+      void experiment_1();
+      void experiment_2();
     };
   
   
