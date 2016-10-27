@@ -127,6 +127,8 @@ namespace panel {
   
   namespace {
     _Fmt childID("Chld-%02d");
+    
+    int instanceCnt = 0;
   }
   
   
@@ -138,7 +140,35 @@ namespace panel {
     {
       signal_clicked().connect(
         mem_fun(*this, &ChildEx::onClicked));
+      
+      ++instanceCnt;
     }
+  
+  
+  ////////////////////////////////////////////////////////////////////TICKET #1020 : verification code for instance management
+  ChildEx::~ChildEx()
+    {
+      --instanceCnt;
+      if (instanceCnt > 0)
+        cout << "  💀  still "<<instanceCnt<<" children to kill...";
+      else
+      if (instanceCnt == 0)
+        cout << "+++ Success: all children are dead..."<<endl;
+      else
+        cout << "### ALARM ###"<<endl
+             << "instanceCnt == "<<instanceCnt <<endl;
+    }
+  
+  void
+  __verifyDeadChildren()
+    {
+      if (instanceCnt == 0)
+        cout << "+++ Success: all children are dead..."<<endl;
+      else
+        cout << "### ALARM ###"<<endl
+             << "instanceCnt == "<<instanceCnt <<endl;
+    }
+  ////////////////////////////////////////////////////////////////////TICKET #1020 : verification code for instance management
   
   
   void

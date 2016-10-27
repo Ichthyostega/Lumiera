@@ -56,10 +56,14 @@ namespace model{
       
     public:
       ChildEx();
+     ~ChildEx();
       
     private:
       void onClicked();
     };
+  
+  void __verifyDeadChildren();
+  
   
   
   /**
