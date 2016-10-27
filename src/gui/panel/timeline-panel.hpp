@@ -46,11 +46,41 @@ namespace model{
   
 //using std::shared_ptr;
   
+  /**
+   * "experimental" child widget for investigation of gtk::Layout
+   */
+  class ChildEx
+    : public Gtk::Button
+    {
+      static uint childNo;
+      
+    public:
+      ChildEx();
+      
+    private:
+      void onClicked();
+    };
   
   
   /**
    * Dockable panel to hold timeline widget(s).
-   * @todo as of 10/2016 this is used for exploring GTK behaviour
+   * @todo build the actual implementation, after finishing the investigation
+   * 
+   * ## Investigation of gtk::GtkLayout
+   * As of 10/2016, we start this task with an exploration of GTK behaviour
+   * 
+   * \par Plan of investigation
+   *  1. place some simple widgets (Buttons)
+   *  2. learn how to draw
+   *  3. place a huge number of widgets, to scrutinise scrolling and performance
+   *  4. place widgets overlapping
+   *  5. bind signals to those widgets, to verify event dispatching
+   *  6. bind some further signal(s) to the ~GtkLayout container
+   *  7. hide and re-show a partially and a totally overlapped widget
+   *  8. find a way to move a widget
+   *  9. expand an existing widget (text change)
+   *  10. build a custom "clip" widget
+   *  11. retrofit all preceding tests to use this "clip" widget
    */
   class TimelinePanel
     : public Panel
@@ -74,6 +104,8 @@ namespace model{
       Gtk::Button button_2_;
       Gtk::Frame frame_;
       Gtk::ScrolledWindow scroller_;
+      
+      ChildEx* chldEx_;
       
       void experiment_1();
       void experiment_2();

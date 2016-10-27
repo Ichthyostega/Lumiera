@@ -36,15 +36,20 @@
 
 //#include "gui/workspace/workspace-window.hpp"
 #include "gui/ui-bus.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
 
 
 
+using util::_Fmt;
 //using std::shared_ptr;
 //using std::weak_ptr;
 //using util::contains;
 using sigc::mem_fun;
+using std::cout;
+using std::endl;
 
 
 namespace gui {
@@ -81,6 +86,10 @@ namespace panel {
       frame_.set_border_width(5);
       
       scroller_.set_shadow_type(Gtk::SHADOW_NONE);
+      scroller_.set_border_width(10);
+      
+      chldEx_ = Gtk::manage(new ChildEx);
+      scroller_.add(*chldEx_);
       
       this->add(twoParts_);
       this->show_all();
@@ -110,6 +119,32 @@ namespace panel {
   TimelinePanel::experiment_2()
   {
     frame_.set_label("Experiment 2...");
+  }
+  
+  
+  
+  /* === Support for Investigation === */
+  
+  namespace {
+    _Fmt childID("Chld-%02d");
+  }
+  
+  
+  uint ChildEx::childNo = 0;
+  
+  
+  ChildEx::ChildEx()
+    : Gtk::Button(string (childID % childNo++))
+    {
+      signal_clicked().connect(
+        mem_fun(*this, &ChildEx::onClicked));
+    }
+  
+  
+  void
+  ChildEx::onClicked()
+  {
+    cout << "|=="<<get_label()<<endl;
   }
   
   

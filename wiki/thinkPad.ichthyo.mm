@@ -10,6 +10,7 @@
 </node>
 <node CREATED="1476376882857" HGAP="193" ID="ID_1420903777" MODIFIED="1476376900764" TEXT="Kern-Elemente" VSHIFT="-34">
 <node CREATED="1476376913589" ID="ID_1887326939" MODIFIED="1476376917001" TEXT="Timeline">
+<node CREATED="1477599995452" ID="ID_97568136" MODIFIED="1477599999383" TEXT="Bestandteile">
 <node CREATED="1476377043180" ID="ID_1179709828" MODIFIED="1476377047495" TEXT="Head">
 <node CREATED="1476377067729" ID="ID_896843893" MODIFIED="1476377070268" TEXT="Patchbay"/>
 <node CREATED="1476377071072" ID="ID_745594295" MODIFIED="1476377074604" TEXT="in-sync with body"/>
@@ -22,6 +23,67 @@
 </node>
 <node CREATED="1476377059386" ID="ID_363001687" MODIFIED="1476377064293" TEXT="Control">
 <node CREATED="1476377117290" ID="ID_179386424" MODIFIED="1476377119406" TEXT="scolling"/>
+</node>
+</node>
+<node CREATED="1477600006370" ID="ID_1328755612" MODIFIED="1477600008246" TEXT="Ansatz">
+<node CREATED="1477600020776" ID="ID_955842824" MODIFIED="1477600023460" TEXT="Einteilung"/>
+<node CREATED="1477600027128" ID="ID_1592196047" MODIFIED="1477600035730" TEXT="Handhabung">
+<node CREATED="1477600041886" ID="ID_1241593972" MODIFIED="1477600043265" TEXT="User"/>
+<node CREATED="1477600044069" ID="ID_217967290" MODIFIED="1477600047600" TEXT="technisch">
+<node CREATED="1477600126514" ID="ID_1433799303" MODIFIED="1477600133242" TEXT="grunds&#xe4;tzlich....">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1477600134217" ID="ID_1352260964" MODIFIED="1477600194445" TEXT="wie viel selber machen?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Frage ist, wie viel des Verhaltens programmieren wir selber explizit aus,
+    </p>
+    <p>
+      und welchen Teil des Verhaltens &#252;berlassen wir GTK
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1477600216950" ID="ID_1935952349" MODIFIED="1477600219202" TEXT="focus">
+<node CREATED="1477600231756" ID="ID_1744616929" MODIFIED="1477600233608" TEXT="Tabbing">
+<node CREATED="1477600258865" ID="ID_112614309" MODIFIED="1477600274354" TEXT="GTK &#xfc;berlassen">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1477600275118" ID="ID_1701392398" MODIFIED="1477600284385" TEXT="Ordnung explizit setzen">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1477600285685" ID="ID_195435447" MODIFIED="1477600299976" TEXT="effektiv unterbinden">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1477600234036" ID="ID_957445675" MODIFIED="1477600237135" TEXT="Navigation">
+<node CREATED="1477600335934" ID="ID_1021991791" MODIFIED="1477600342473" TEXT="r&#xe4;umliche Metapher"/>
+<node CREATED="1477600353036" ID="ID_529949426" MODIFIED="1477600361398" TEXT="brauche Orts-Repr&#xe4;sentation">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1477600385264" ID="ID_734925174" MODIFIED="1477600387915" TEXT="Darstellung">
+<node CREATED="1477600397934" ID="ID_224014088" MODIFIED="1477600417763" TEXT="GTK alles geben">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1477600402110" ID="ID_375405149" MODIFIED="1477600415503" TEXT="nur eine aktuelle Auswahl">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1477600431489" ID="ID_741336406" MODIFIED="1477600435733" TEXT="gtk::Layout">
+<node CREATED="1477600442792" ID="ID_143840935" MODIFIED="1477600450067" TEXT="ist das offizielle Canvas-Control"/>
+<node CREATED="1477600450463" ID="ID_293636936" MODIFIED="1477600453523" TEXT="scheint sehr m&#xe4;chtig"/>
+<node CREATED="1477600454470" ID="ID_1255426760" MODIFIED="1477600459258" TEXT="ist ein gtk::Container"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1476376943985" ID="ID_1422206856" MODIFIED="1476376946021" TEXT="Viewer"/>
@@ -9198,7 +9260,7 @@
 <node CREATED="1476375733298" ID="ID_1024321268" MODIFIED="1476375738517" TEXT="allows custom drawing"/>
 <node CREATED="1476468254712" HGAP="64" ID="ID_1424353399" MODIFIED="1476468264189" TEXT="Eigenschaften" VSHIFT="45">
 <icon BUILTIN="pencil"/>
-<node CREATED="1476468265399" ID="ID_257790579" MODIFIED="1476468269738" TEXT="Test-Setup schaffen">
+<node CREATED="1476468265399" HGAP="2" ID="ID_257790579" MODIFIED="1477595454134" TEXT="Test-Setup schaffen" VSHIFT="-15">
 <node CREATED="1476468390830" ID="ID_1922633406" MODIFIED="1476468418695" TEXT="soll">
 <icon BUILTIN="yes"/>
 <node CREATED="1476468393174" ID="ID_412857359" MODIFIED="1476468395498" TEXT="schnell gehen"/>
@@ -9207,6 +9269,8 @@
 </node>
 </node>
 <node CREATED="1476468272510" ID="ID_150722005" MODIFIED="1476468274785" TEXT="Untersuchung">
+<node CREATED="1477595404814" HGAP="37" ID="ID_1078486680" MODIFIED="1477595470851" TEXT="Goals" VSHIFT="-12">
+<icon BUILTIN="yes"/>
 <node CREATED="1476468292804" ID="ID_283291482" MODIFIED="1476468314044" TEXT="overlapping widgets"/>
 <node CREATED="1476468292805" ID="ID_140846763" MODIFIED="1476468325987" TEXT="resizing of widgets"/>
 <node CREATED="1476468292805" ID="ID_1075320324" MODIFIED="1476468352572" TEXT="partially covered widgets">
@@ -9219,8 +9283,7 @@
       ....how does the event dispatching deal with partially covered widgets
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1476468292805" ID="ID_1670607748" MODIFIED="1476468372969" TEXT="tabbing / focus order">
 <richcontent TYPE="NOTE"><html>
@@ -9232,10 +9295,60 @@
       ...for embedded widgets
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1476468292805" ID="ID_472068538" MODIFIED="1476468383131" TEXT="custom drawing and widget drawing"/>
+</node>
+<node CREATED="1477595408918" ID="ID_387371672" MODIFIED="1477595438110" TEXT="Tasks">
+<node CREATED="1477595418669" ID="ID_1316314985" MODIFIED="1477596119220" TEXT="# place some simple widgets (Buttons)">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-1"/>
+<node CREATED="1477601706168" ID="ID_130395672" MODIFIED="1477601711906" TEXT="Kind-Klasse anlegen"/>
+<node CREATED="1477601712063" ID="ID_1720776876" MODIFIED="1477601717354" TEXT="Kinder managen"/>
+</node>
+<node CREATED="1477595418669" ID="ID_517122292" MODIFIED="1477596119220" TEXT="# learn how to draw">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1477595418670" ID="ID_770195423" MODIFIED="1477596119220" TEXT="# place a huge number of widgets, to scrutinise scrolling and performance">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-3"/>
+</node>
+<node CREATED="1477595418670" ID="ID_423514526" MODIFIED="1477596119220" TEXT="# place widgets overlapping">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-4"/>
+</node>
+<node CREATED="1477595418670" ID="ID_1370967982" MODIFIED="1477596119220" TEXT="# bind signals to those widgets, to verify event dispatching">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-5"/>
+</node>
+<node CREATED="1477595418670" ID="ID_1603374862" MODIFIED="1477596119219" TEXT="# bind some further signal(s) to the GtkLayout container">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-6"/>
+</node>
+<node CREATED="1477595418670" ID="ID_496085779" MODIFIED="1477596119219" TEXT="# hide and re-show a partially and a totally overlapped widget">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-7"/>
+</node>
+<node CREATED="1477595418670" ID="ID_1516591439" MODIFIED="1477596119219" TEXT="# find a way to move a widget">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-8"/>
+</node>
+<node CREATED="1477595418670" ID="ID_1275908576" MODIFIED="1477596119218" TEXT="# expand an existing widget (text change)">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-9"/>
+</node>
+<node CREATED="1477595418670" ID="ID_700977265" MODIFIED="1477596119218" TEXT="# build a custom &quot;&apos;&apos;clip&apos;&apos;&quot; widget">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-1"/>
+<icon BUILTIN="full-0"/>
+</node>
+<node CREATED="1477595418670" ID="ID_1708640864" MODIFIED="1477596119217" TEXT="# retrofit all preceding tests to use this &quot;&apos;&apos;clip&apos;&apos;&quot; widget">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-1"/>
+<icon BUILTIN="full-1"/>
+</node>
+</node>
 </node>
 </node>
 </node>
