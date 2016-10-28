@@ -9360,13 +9360,19 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-3"/>
 </node>
-<node CREATED="1477595418670" ID="ID_423514526" MODIFIED="1477668704361" TEXT="# place widgets overlapping / irregularily">
+<node CREATED="1477595418670" ID="ID_423514526" MODIFIED="1477694999159" TEXT="# place widgets overlapping / irregularily">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-4"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1477668663507" ID="ID_1576657272" MODIFIED="1477668671481" TEXT="order: later on top">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1477668674577" ID="ID_431152757" MODIFIED="1477668679556" TEXT="place widgets out of sight"/>
+<node CREATED="1477668674577" ID="ID_431152757" MODIFIED="1477694925233" TEXT="place widgets out of sight">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1477694911349" ID="ID_93004070" MODIFIED="1477694932280" TEXT="widgets beyond the scrollable area">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1477595418670" ID="ID_1370967982" MODIFIED="1477596119220" TEXT="# bind signals to those widgets, to verify event dispatching">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -9380,7 +9386,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-7"/>
 </node>
-<node CREATED="1477595418670" ID="ID_1516591439" MODIFIED="1477596119219" TEXT="# find a way to move a widget">
+<node CREATED="1477595418670" ID="ID_1516591439" MODIFIED="1477694985862" TEXT="# move and delete widgets">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-8"/>
 </node>

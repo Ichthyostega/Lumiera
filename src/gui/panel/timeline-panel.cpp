@@ -119,8 +119,8 @@ namespace panel {
     
     ChildEx* chld = makeChld();
     childz_.push_back(chld);
-    uint x = rand() % 1000;
-    uint y = rand() % 500;
+    uint x = rand() % 2000;
+    uint y = rand() % 1000;
     canvas_.put(*chld, x, y);
     chld->show();
   }
