@@ -40,6 +40,7 @@
 #include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
+#include <cstdlib>
 
 
 
@@ -50,6 +51,7 @@ using util::_Fmt;
 using sigc::mem_fun;
 using std::cout;
 using std::endl;
+using std::rand;
 
 
 namespace gui {
@@ -66,6 +68,7 @@ namespace panel {
     , button_2_()
     , frame_("Gtk::Layout Experiments")
     , scroller_()
+    , canvas_()
     {
       twoParts_.pack_start(buttons_, Gtk::PACK_SHRINK);
       twoParts_.pack_start(frame_);
@@ -87,10 +90,11 @@ namespace panel {
       
       scroller_.set_shadow_type(Gtk::SHADOW_NONE);
       scroller_.set_border_width(10);
+      scroller_.add(canvas_);
       
-      chldEx_ = Gtk::manage(new ChildEx);
-      scroller_.add(*chldEx_);
+      canvas_.set_size(1000,500);
       
+      // show everything....
       this->add(twoParts_);
       this->show_all();
     }
@@ -112,6 +116,13 @@ namespace panel {
   TimelinePanel::experiment_1()
   {
     frame_.set_label("Experiment 1...");
+    
+    ChildEx* chld = makeChld();
+    childz_.push_back(chld);
+    uint x = rand() % 1000;
+    uint y = rand() % 500;
+    canvas_.put(*chld, x, y);
+    chld->show();
   }
   
   
@@ -145,12 +156,19 @@ namespace panel {
     }
   
   
+  ChildEx*
+  TimelinePanel::makeChld()
+  {
+    return Gtk::manage(new ChildEx);
+  }
+
+  
   ////////////////////////////////////////////////////////////////////TICKET #1020 : verification code for instance management
   ChildEx::~ChildEx()
     {
       --instanceCnt;
       if (instanceCnt > 0)
-        cout << "  💀  still "<<instanceCnt<<" children to kill...";
+        cout << "  ↯↯  still "<<instanceCnt<<" children to kill..."<<endl;
       else
       if (instanceCnt == 0)
         cout << "+++ Success: all children are dead..."<<endl;

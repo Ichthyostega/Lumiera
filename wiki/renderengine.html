@@ -2635,7 +2635,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610271909" tags="GuiPattern discuss decision impl" changecount="36">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610281529" tags="GuiPattern discuss decision impl" changecount="37">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2689,6 +2689,13 @@ In order to build a sensible plan for our timeline structure, we need to investi
 # retrofit all preceding tests to use this &quot;''clip''&quot; widget
 
 !!!Observations
+* the size of the scrollable area needs to be setup beforehand, otherwise children won't show up
+* children need to be made visible, otherwise they are added, but remain hidden
+* the coordinate of children (upper left corner) is within the scrollable area, but the extension might well be beyond
+* children may be so close to the boundary, that it is not possible to click on them
+* after receiving an onClic event, the scrollable area jumps back to (left, top).
+* when overall window is enlarged, the visible area seems to be expanded. Then even children close to boundary come into sight and are clickable.
+
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">

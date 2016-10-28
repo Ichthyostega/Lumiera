@@ -35,6 +35,7 @@
 #include "gui/panel/panel.hpp"
 
 //#include <memory>
+#include <vector>
 
 
 
@@ -42,7 +43,7 @@ namespace gui  {
 namespace model{
     class Sequence;
   }
-  namespace panel {
+namespace panel {
   
 //using std::shared_ptr;
   
@@ -74,7 +75,7 @@ namespace model{
    * As of 10/2016, we start this task with an exploration of GTK behaviour
    * 
    * \par Plan of investigation
-   *  1. place some simple widgets (Buttons)
+   *  1. place some simple widgets (Buttons) ✔
    *  2. learn how to draw
    *  3. place a huge number of widgets, to scrutinise scrolling and performance
    *  4. place widgets overlapping
@@ -108,8 +109,12 @@ namespace model{
       Gtk::Button button_2_;
       Gtk::Frame frame_;
       Gtk::ScrolledWindow scroller_;
+      Gtk::Layout canvas_;
       
-      ChildEx* chldEx_;
+      ChildEx* makeChld();
+      
+      using ChildV = std::vector<ChildEx*>;
+      ChildV childz_;
       
       void experiment_1();
       void experiment_2();

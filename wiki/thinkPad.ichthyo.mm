@@ -9345,9 +9345,10 @@
 <node CREATED="1476468292805" ID="ID_472068538" MODIFIED="1476468383131" TEXT="custom drawing and widget drawing"/>
 </node>
 <node CREATED="1477595408918" ID="ID_387371672" MODIFIED="1477595438110" TEXT="Tasks">
-<node CREATED="1477595418669" ID="ID_1316314985" MODIFIED="1477596119220" TEXT="# place some simple widgets (Buttons)">
+<node CREATED="1477595418669" FOLDED="true" ID="ID_1316314985" MODIFIED="1477668302459" TEXT="# place some simple widgets (Buttons)">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1477601706168" ID="ID_130395672" MODIFIED="1477601711906" TEXT="Kind-Klasse anlegen"/>
 <node CREATED="1477601712063" ID="ID_1720776876" MODIFIED="1477601717354" TEXT="Kinder managen"/>
 </node>
@@ -9359,9 +9360,13 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-3"/>
 </node>
-<node CREATED="1477595418670" ID="ID_423514526" MODIFIED="1477596119220" TEXT="# place widgets overlapping">
+<node CREATED="1477595418670" ID="ID_423514526" MODIFIED="1477668704361" TEXT="# place widgets overlapping / irregularily">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-4"/>
+<node CREATED="1477668663507" ID="ID_1576657272" MODIFIED="1477668671481" TEXT="order: later on top">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1477668674577" ID="ID_431152757" MODIFIED="1477668679556" TEXT="place widgets out of sight"/>
 </node>
 <node CREATED="1477595418670" ID="ID_1370967982" MODIFIED="1477596119220" TEXT="# bind signals to those widgets, to verify event dispatching">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
