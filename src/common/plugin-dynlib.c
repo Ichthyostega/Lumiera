@@ -63,4 +63,5 @@ lumiera_plugin_unload_DYNLIB (LumieraPlugin self)
   void* handle = lumiera_plugin_handle (self);
   if (handle)
     dlclose (handle);
+    ///////////////////////////////////////////////////////////////////TICKET #1034 : on Debian the process dies when unloading gtk_gui.lum (_dl_close: Assertion `map->l_init_called' failed!)
 }

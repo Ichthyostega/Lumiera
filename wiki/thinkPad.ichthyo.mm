@@ -191,6 +191,51 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1477616970387" HGAP="56" ID="ID_786267715" MODIFIED="1477617005828" TEXT="Problem: Panel clean-up" VSHIFT="40">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1477617009766" ID="ID_205353538" MODIFIED="1477617184499" TEXT="Verdacht: dtor wird nicht aufgerufen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wie komme ich da drauf?
+    </p>
+    <p>
+      Ich wollte untersuchen, ob Gtk::manage( ptr ) korrekt die &#252;bergebenen Objekte aufr&#228;umt.
+    </p>
+    <p>
+      Wie sich nun zeigt, passiert das Aufr&#228;umen im dtor desjenigen Widget, dem das zu managende Objekt als Kind gegeben wurde.
+    </p>
+    <p>
+      Im vorliegenden Fall w&#228;re das der dtor des umschlie&#223;enden ScrolledWindow. Der aber wird <i>offensichtlich nicht aufgerufen,</i>
+    </p>
+    <p>
+      auch nicht im Application-Shutdown!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1477617185582" ID="ID_634277803" MODIFIED="1477617217049" TEXT="PanelManager::createPanels()">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....erzeugt wird das hier:
+    </p>
+    <p>
+      dock_.add_item(timelinePanel-&gt;getDockItem(),Gdl::DOCK_BOTTOM);
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
 </node>
 <node CREATED="1477343061900" ID="ID_589166101" MODIFIED="1477343063991" TEXT="Statusbar"/>
 <node CREATED="1477343071827" ID="ID_369966079" MODIFIED="1477343100245" TEXT="Actions">
@@ -10393,6 +10438,18 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1477665256799" FOLDED="true" ID="ID_685276209" MODIFIED="1477665344605" TEXT="&#xc4;rger">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1477665276421" ID="ID_714740974" MODIFIED="1477665294382" TEXT="dlclose #1034">
+<node CREATED="1477665304137" ID="ID_65862146" MODIFIED="1477665319167" TEXT="Assertion, da Library nicht entladen werden kann">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1477665320934" ID="ID_1841226938" MODIFIED="1477665322506" TEXT="LD_DEBUG=all NOBUG_LOG=pluginloader_dbg:TRACE  2&gt;&amp;1 target/lumiera | c++filt &gt;weia"/>
+<node CREATED="1477665330317" ID="ID_1760958407" MODIFIED="1477665341818" TEXT="weitere Untersuchung notwendig....">
+<icon BUILTIN="bell"/>
+</node>
 </node>
 </node>
 </node>
