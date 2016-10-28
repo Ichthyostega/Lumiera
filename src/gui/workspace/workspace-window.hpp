@@ -35,10 +35,6 @@
 #include "gui/workspace/actions.hpp"
 #include "gui/workspace/panel-manager.hpp"
 
-#include "gui/panel/assets-panel.hpp"
-#include "gui/panel/viewer-panel.hpp"
-#include "gui/panel/timeline-panel.hpp"
-
 #include <gtkmm.h>
 
 using namespace gui::panel;
