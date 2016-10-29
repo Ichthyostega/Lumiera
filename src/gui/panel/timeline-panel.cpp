@@ -81,29 +81,40 @@ namespace panel {
       buttons_.set_layout(Gtk::BUTTONBOX_START);
       
       // buttons to trigger experiments
-      button_1_.set_label("Experiment _1");
-      button_1_.set_tooltip_text("place new child widget\nat random position on the canvas");
+      button_1_.set_label("_place");
+      button_1_.set_use_underline();
+      button_1_.set_tooltip_markup("<b>Experiment 1</b>:\nplace new child widget\nat random position on the canvas");
       button_1_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_1));
       buttons_.add(button_1_);
       
-      button_2_.set_label("Experiment _2");
-      button_2_.set_tooltip_text("move all child widgets randomly");
+      button_2_.set_label("_move");
+      button_2_.set_use_underline();
+      button_2_.set_tooltip_markup("<b>Experiment 2</b>:\nmove all child widgets randomly");
       button_2_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_2));
       buttons_.add(button_2_);
       
-      button_3_.set_label("Experiment _3");
-      button_3_.set_tooltip_text("align all child widgets in a row\nwith silight random vertical offset");
+      button_3_.set_label("a_lign");
+      button_3_.set_use_underline();
+      button_3_.set_tooltip_markup("<b>Experiment 3</b>:\nalign all child widgets in a row\nwith silight random vertical offset");
       button_3_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_3));
       buttons_.add(button_3_);
       
-      button_4_.set_label("Experiment _4");
-      button_4_.set_tooltip_text("kill arbitrary child widget");
+      button_4_.set_label("kill");
+      button_4_.set_use_underline();
+      button_4_.set_tooltip_markup("<b>Experiment 4</b>:\nkill arbitrary child widget");
       button_4_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_4));
       buttons_.add(button_4_);
+      
+      button_5_.set_label("_kill");
+      button_5_.set_use_underline();
+      button_5_.set_tooltip_markup("<b>Experiment 5</b>:\nkill arbitrary child widget");
+      button_5_.signal_clicked().connect(
+                  mem_fun(*this, &TimelinePanel::experiment_5));
+      buttons_.add(button_5_);
       //(End)buttons...
       
       frame_.add(scroller_);
@@ -158,7 +169,7 @@ namespace panel {
   void
   TimelinePanel::experiment_1()
   {
-    frame_.set_label("Experiment 1...");
+    frame_.set_label("Experiment 1... PLACE");
     
     ChildEx* chld = makeChld();
     childz_.push_back(chld);
@@ -173,7 +184,7 @@ namespace panel {
   void
   TimelinePanel::experiment_2()
   {
-    frame_.set_label("Experiment 2...");
+    frame_.set_label("Experiment 2... MOVE");
     for (Widget* chld : childz_)
       {
         uint x = canvas_.child_property_x(*chld);
@@ -192,7 +203,7 @@ namespace panel {
   void
   TimelinePanel::experiment_3()
   {
-    frame_.set_label("Experiment 3...");
+    frame_.set_label("Experiment 3... ALIGN");
     uint pos=0;
     for (Widget* chld : childz_)
       {
@@ -210,6 +221,13 @@ namespace panel {
   TimelinePanel::experiment_4()
   {
     frame_.set_label("Experiment 4...");
+  }
+  
+  
+  void
+  TimelinePanel::experiment_5()
+  {
+    frame_.set_label("Experiment 5... KILL");
     uint killPos = rand() % childz_.size();
     ChildV::iterator killThat(&childz_[killPos]);
     ChildEx* victim = *killThat;
