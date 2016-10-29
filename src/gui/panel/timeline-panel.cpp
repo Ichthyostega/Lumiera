@@ -113,7 +113,7 @@ namespace panel {
       scroller_.set_border_width(10);
       scroller_.add(canvas_);
       
-      canvas_.set_size(1000,500);
+      adjustToNecessaryCanvasSize();
       
       // show everything....
       this->add(twoParts_);
@@ -134,6 +134,28 @@ namespace panel {
   
   
   void
+  TimelinePanel::adjustToNecessaryCanvasSize()
+  {
+    uint sizeX = 10;
+    uint sizeY = 10;
+    for (Widget* chld : childz_)
+      {
+        uint x = canvas_.child_property_x(*chld);
+        uint y = canvas_.child_property_y(*chld);
+        x += chld->get_allocated_width();
+        y += chld->get_allocated_height();
+        sizeX = max (sizeX, x);
+        sizeY = max (sizeY, y);
+      }
+    // additional leeway for the scrollbars
+    sizeX += 10;
+    sizeY += 10;
+    
+    canvas_.set_size (sizeX, sizeY);
+  }
+  
+  
+  void
   TimelinePanel::experiment_1()
   {
     frame_.set_label("Experiment 1...");
@@ -144,6 +166,7 @@ namespace panel {
     uint y = rand() % 500;
     canvas_.put(*chld, x, y);
     chld->show();
+    adjustToNecessaryCanvasSize();
   }
   
   
@@ -162,6 +185,7 @@ namespace panel {
         
         canvas_.move (*chld, x,y);
       }
+    adjustToNecessaryCanvasSize();
   }
   
   
@@ -178,6 +202,7 @@ namespace panel {
         int width = chld->get_allocated_width();
         pos += 0.6 * width;
       }
+    adjustToNecessaryCanvasSize();
   }
   
   

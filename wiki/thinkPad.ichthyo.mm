@@ -9386,9 +9386,10 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-7"/>
 </node>
-<node CREATED="1477595418670" ID="ID_1516591439" MODIFIED="1477694985862" TEXT="# move and delete widgets">
+<node CREATED="1477595418670" ID="ID_1516591439" MODIFIED="1477754020121" TEXT="# move and delete widgets">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-8"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1477703725690" ID="ID_554135449" MODIFIED="1477703778772" TEXT="move">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1477703730073" ID="ID_1070867956" MODIFIED="1477703771801" TEXT="foreach doesn&apos;t work">

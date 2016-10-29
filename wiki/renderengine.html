@@ -2635,7 +2635,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610291403" tags="GuiPattern discuss decision impl" changecount="45">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610291551" tags="GuiPattern discuss decision impl" changecount="48">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2690,16 +2690,20 @@ In order to build a sensible plan for our timeline structure, we need to investi
 
 !!!Observations
 * children need to be made visible, otherwise they are added, but remain hidden
-* the size of the scrollable area is independent of the actual size extension of the canvas
-* the scrollable area determines when scrollbars are visible and what area can be reached through them
-* but children can well be placed beyond; they are fully functional then, just covered and out of sight
-* enlarging the enclosing window and thus enlarging the layout canvas will uncover such stray children.
 * when in sight, children receive events and are fully functional, even when placed out of the scrollable area.
 * the coordinate of children is their upper left corner, but they may extend beyond that and even beyond the scrollable area
-* children may be so close to the boundary, that it is not possible to click on them
-* when children close to the boundary receive an onClick event, the scrollable area might jumps back slightly..
 ;layering
 :children added later are always on top.
+;scrolling and size
+:the {{{Gtk::Layout}}} widget has a canvas size, which is defined implicitly, by placing child elements
+:* the size of the scrollable area is independent of the actual size extension of the canvas
+:* the scrollable area determines when scrollbars are visible and what area can be reached through them
+:* but children can well be placed beyond; they are fully functional then, just covered and out of sight
+:* enlarging the enclosing window and thus enlarging the layout canvas will uncover such stray children.
+:* //problematic//
+:** children may be so close to the boundary, that it is not possible to click on them
+:** when children close to the boundary receive an onClick event, the scrollable area might jump back slightly..
+:** the management of visible viewport within {{{Gtk::ScrolledWindow}}} is not correct (see [[ticket #1037|http://issues.lumiera.org/ticket/1037]])&lt;br/&gt;it does not account properly for the area covered by the scrollbars themselves
 ;moving child widgets
 :works as expected
 ;delete child widgets
@@ -2707,7 +2711,7 @@ In order to build a sensible plan for our timeline structure, we need to investi
 :removed child widgets will also removed from display (hidden)
 :but the widget object needs to be deleted manually, because detached widgets are no longer managed by GTK
 ;iteration over child widgets
-:problematic
+://problematic//
 :* the signal based {{{foreach}}} does not work -- there seems to be a problem with the slot's signature causing a wrong address to be passed in
 :* the interface {{{Gtk::Container}}} exposes a {{{get_children}}} function, but this returns a //copy// of the vector with pointers to all child widgets
 </pre>

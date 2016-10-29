@@ -118,6 +118,8 @@ namespace panel {
       using ChildV = std::vector<ChildEx*>;
       ChildV childz_;
       
+      void adjustToNecessaryCanvasSize();
+      
       void experiment_1();
       void experiment_2();
       void experiment_3();
