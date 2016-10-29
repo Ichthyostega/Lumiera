@@ -70,6 +70,7 @@ namespace panel {
     , buttons_()
     , button_1_()
     , button_2_()
+    , button_3_()
     , frame_("Gtk::Layout Experiments")
     , scroller_()
     , canvas_()
@@ -79,6 +80,7 @@ namespace panel {
       
       buttons_.add(button_1_);
       buttons_.add(button_2_);
+      buttons_.add(button_3_);
       buttons_.set_layout(Gtk::BUTTONBOX_START);
       
       button_1_.set_label("Experiment _1");
@@ -88,6 +90,10 @@ namespace panel {
       button_2_.set_label("Experiment _2");
       button_2_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_2));
+      
+      button_3_.set_label("Experiment _3");
+      button_3_.signal_clicked().connect(
+                  mem_fun(*this, &TimelinePanel::experiment_3));
       
       frame_.add(scroller_);
       frame_.set_border_width(5);
@@ -147,6 +153,21 @@ namespace panel {
       }
   }
   
+  
+  void
+  TimelinePanel::experiment_3()
+  {
+    frame_.set_label("Experiment 3...");
+    uint pos=0;
+    for (Widget* chld : childz_)
+      {
+        uint y = rand() % 30;
+        canvas_.move (*chld, pos, y);
+        
+        int width = chld->get_allocated_width();
+        pos += 0.6 * width;
+      }
+  }
   
   
   /* === Support for Investigation === */

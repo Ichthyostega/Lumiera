@@ -107,6 +107,7 @@ namespace panel {
       Gtk::ButtonBox buttons_;
       Gtk::Button button_1_;
       Gtk::Button button_2_;
+      Gtk::Button button_3_;
       Gtk::Frame frame_;
       Gtk::ScrolledWindow scroller_;
       Gtk::Layout canvas_;
@@ -118,6 +119,7 @@ namespace panel {
       
       void experiment_1();
       void experiment_2();
+      void experiment_3();
     };
   
   
