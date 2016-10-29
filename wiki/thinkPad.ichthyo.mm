@@ -9389,6 +9389,15 @@
 <node CREATED="1477595418670" ID="ID_1516591439" MODIFIED="1477694985862" TEXT="# move and delete widgets">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-8"/>
+<node CREATED="1477703725690" ID="ID_554135449" MODIFIED="1477703778772" TEXT="move">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1477703730073" ID="ID_1070867956" MODIFIED="1477703771801" TEXT="foreach doesn&apos;t work">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1477703741232" ID="ID_942790225" MODIFIED="1477703768906" TEXT="get_children returns copy">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
 </node>
 <node CREATED="1477595418670" ID="ID_1275908576" MODIFIED="1477596119218" TEXT="# expand an existing widget (text change)">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>

@@ -40,6 +40,7 @@
 #include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
+#include <algorithm>
 #include <cstdlib>
 
 
@@ -48,10 +49,13 @@ using util::_Fmt;
 //using std::shared_ptr;
 //using std::weak_ptr;
 //using util::contains;
+using Gtk::Widget;
 using sigc::mem_fun;
+using sigc::ptr_fun;
 using std::cout;
 using std::endl;
 using std::rand;
+using std::max;
 
 
 namespace gui {
@@ -119,8 +123,8 @@ namespace panel {
     
     ChildEx* chld = makeChld();
     childz_.push_back(chld);
-    uint x = rand() % 2000;
-    uint y = rand() % 1000;
+    uint x = rand() % 1000;
+    uint y = rand() % 500;
     canvas_.put(*chld, x, y);
     chld->show();
   }
@@ -130,6 +134,17 @@ namespace panel {
   TimelinePanel::experiment_2()
   {
     frame_.set_label("Experiment 2...");
+    for (Widget* chld : childz_)
+      {
+        uint x = canvas_.child_property_x(*chld);
+        uint y = canvas_.child_property_y(*chld);
+        int deltaX = -20 + rand() % 41;
+        int deltaY = -15 + rand() % 31;
+        x = uint(max (0, int(x) + deltaX));
+        y = uint(max (0, int(y) + deltaY));
+        
+        canvas_.move (*chld, x,y);
+      }
   }
   
   
@@ -149,11 +164,15 @@ namespace panel {
   ChildEx::ChildEx()
     : Gtk::Button(string (childID % childNo++))
     {
-      signal_clicked().connect(
-        mem_fun(*this, &ChildEx::onClicked));
-      
       ++instanceCnt;
     }
+  
+  
+  void
+  ChildEx::on_clicked()
+  {
+    cout << "|=="<<get_label()<<endl;
+  }
   
   
   ChildEx*
@@ -187,13 +206,6 @@ namespace panel {
              << "instanceCnt == "<<instanceCnt <<endl;
     }
   ////////////////////////////////////////////////////////////////////TICKET #1020 : verification code for instance management
-  
-  
-  void
-  ChildEx::onClicked()
-  {
-    cout << "|=="<<get_label()<<endl;
-  }
   
   
   
