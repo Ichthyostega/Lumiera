@@ -2635,7 +2635,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610291551" tags="GuiPattern discuss decision impl" changecount="48">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610291617" tags="GuiPattern discuss decision impl" changecount="49">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2706,6 +2706,8 @@ In order to build a sensible plan for our timeline structure, we need to investi
 :** the management of visible viewport within {{{Gtk::ScrolledWindow}}} is not correct (see [[ticket #1037|http://issues.lumiera.org/ticket/1037]])&lt;br/&gt;it does not account properly for the area covered by the scrollbars themselves
 ;moving child widgets
 :works as expected
+;expanding widgets
+:works ex expected
 ;delete child widgets
 :is possible by the {{{Container::remove(Widget*)}}} function
 :removed child widgets will also removed from display (hidden)

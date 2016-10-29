@@ -9406,9 +9406,10 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1477595418670" ID="ID_1275908576" MODIFIED="1477596119218" TEXT="# expand an existing widget (text change)">
+<node CREATED="1477595418670" ID="ID_1275908576" MODIFIED="1477757749992" TEXT="# expand an existing widget (text change)">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-9"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1477595418670" ID="ID_700977265" MODIFIED="1477596119218" TEXT="# build a custom &quot;&apos;&apos;clip&apos;&apos;&quot; widget">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>

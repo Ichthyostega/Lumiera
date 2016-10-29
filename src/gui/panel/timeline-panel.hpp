@@ -83,7 +83,7 @@ namespace panel {
    *  6. bind some further signal(s) to the ~GtkLayout container
    *  7. hide and re-show a partially and a totally overlapped widget
    *  8. find a way to move a widget ✔ and delete arbitrary widgets ✔
-   *  9. expand an existing widget (text change)
+   *  9. expand an existing widget (text change) ✔
    *  10. build a custom "clip" widget
    *  11. retrofit all preceding tests to use this "clip" widget
    */

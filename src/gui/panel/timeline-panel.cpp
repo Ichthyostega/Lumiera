@@ -102,9 +102,9 @@ namespace panel {
                   mem_fun(*this, &TimelinePanel::experiment_3));
       buttons_.add(button_3_);
       
-      button_4_.set_label("kill");
+      button_4_.set_label("_grow");
       button_4_.set_use_underline();
-      button_4_.set_tooltip_markup("<b>Experiment 4</b>:\nkill arbitrary child widget");
+      button_4_.set_tooltip_markup("<b>Experiment 4</b>:\nextend arbitrary child widget's text");
       button_4_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_4));
       buttons_.add(button_4_);
@@ -220,7 +220,10 @@ namespace panel {
   void
   TimelinePanel::experiment_4()
   {
-    frame_.set_label("Experiment 4...");
+    frame_.set_label("Experiment 4... GROW");
+    uint selector = rand() % childz_.size();
+    ChildEx& toGrow = *childz_[selector];
+    toGrow.set_label ("***"+toGrow.get_label()+"***");
   }
   
   
