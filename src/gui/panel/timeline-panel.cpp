@@ -82,21 +82,25 @@ namespace panel {
       
       // buttons to trigger experiments
       button_1_.set_label("Experiment _1");
+      button_1_.set_tooltip_text("place new child widget\nat random position on the canvas");
       button_1_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_1));
       buttons_.add(button_1_);
       
       button_2_.set_label("Experiment _2");
+      button_2_.set_tooltip_text("move all child widgets randomly");
       button_2_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_2));
       buttons_.add(button_2_);
       
       button_3_.set_label("Experiment _3");
+      button_3_.set_tooltip_text("align all child widgets in a row\nwith silight random vertical offset");
       button_3_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_3));
       buttons_.add(button_3_);
       
       button_4_.set_label("Experiment _4");
+      button_4_.set_tooltip_text("kill arbitrary child widget");
       button_4_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_4));
       buttons_.add(button_4_);
