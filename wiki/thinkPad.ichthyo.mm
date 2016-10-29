@@ -9401,6 +9401,9 @@
 <node CREATED="1477748350140" ID="ID_1672717051" MODIFIED="1477748361823" TEXT="align all in a row">
 <icon BUILTIN="button_ok"/>
 </node>
+<node CREATED="1477749635577" ID="ID_592134506" MODIFIED="1477749644284" TEXT="delete arbitrary children">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1477595418670" ID="ID_1275908576" MODIFIED="1477596119218" TEXT="# expand an existing widget (text change)">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>

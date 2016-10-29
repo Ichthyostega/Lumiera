@@ -82,7 +82,7 @@ namespace panel {
    *  5. bind signals to those widgets, to verify event dispatching
    *  6. bind some further signal(s) to the ~GtkLayout container
    *  7. hide and re-show a partially and a totally overlapped widget
-   *  8. find a way to move a widget ✔
+   *  8. find a way to move a widget ✔ and delete arbitrary widgets ✔
    *  9. expand an existing widget (text change)
    *  10. build a custom "clip" widget
    *  11. retrofit all preceding tests to use this "clip" widget
@@ -108,6 +108,7 @@ namespace panel {
       Gtk::Button button_1_;
       Gtk::Button button_2_;
       Gtk::Button button_3_;
+      Gtk::Button button_4_;
       Gtk::Frame frame_;
       Gtk::ScrolledWindow scroller_;
       Gtk::Layout canvas_;
@@ -120,6 +121,7 @@ namespace panel {
       void experiment_1();
       void experiment_2();
       void experiment_3();
+      void experiment_4();
     };
   
   

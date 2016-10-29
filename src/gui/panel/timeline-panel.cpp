@@ -78,22 +78,29 @@ namespace panel {
       twoParts_.pack_start(buttons_, Gtk::PACK_SHRINK);
       twoParts_.pack_start(frame_);
       
-      buttons_.add(button_1_);
-      buttons_.add(button_2_);
-      buttons_.add(button_3_);
       buttons_.set_layout(Gtk::BUTTONBOX_START);
       
+      // buttons to trigger experiments
       button_1_.set_label("Experiment _1");
       button_1_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_1));
+      buttons_.add(button_1_);
       
       button_2_.set_label("Experiment _2");
       button_2_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_2));
+      buttons_.add(button_2_);
       
       button_3_.set_label("Experiment _3");
       button_3_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_3));
+      buttons_.add(button_3_);
+      
+      button_4_.set_label("Experiment _4");
+      button_4_.signal_clicked().connect(
+                  mem_fun(*this, &TimelinePanel::experiment_4));
+      buttons_.add(button_4_);
+      //(End)buttons...
       
       frame_.add(scroller_);
       frame_.set_border_width(5);
@@ -167,6 +174,19 @@ namespace panel {
         int width = chld->get_allocated_width();
         pos += 0.6 * width;
       }
+  }
+  
+  
+  void
+  TimelinePanel::experiment_4()
+  {
+    frame_.set_label("Experiment 4...");
+    uint killPos = rand() % childz_.size();
+    ChildV::iterator killThat(&childz_[killPos]);
+    ChildEx* victim = *killThat;
+    childz_.erase (killThat);
+    canvas_.remove (*victim);
+    delete victim;
   }
   
   
