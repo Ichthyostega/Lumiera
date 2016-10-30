@@ -9438,7 +9438,8 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1477791881630" ID="ID_1823256674" MODIFIED="1477791884001" TEXT="coordinates">
+<node CREATED="1477791881630" ID="ID_1823256674" MODIFIED="1477843569686" TEXT="coordinates">
+<icon BUILTIN="pencil"/>
 <node CREATED="1477791885614" ID="ID_380369648" MODIFIED="1477791916343">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -9454,6 +9455,67 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1477791921953" ID="ID_555455740" MODIFIED="1477791952896" TEXT="...not the extension of the canvas!"/>
+<node CREATED="1477841655353" ID="ID_1533125137" MODIFIED="1477841674650" TEXT="adjust to compensate">
+<icon BUILTIN="idea"/>
+<node CREATED="1477841600713" ID="ID_1319450558" LINK="http://stackoverflow.com/questions/40325668/scrollable-drawing-in-gtklayout" MODIFIED="1477841645668" TEXT="Question: can the framework adjust for us">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      asked on stackoverflow...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1477841687997" ID="ID_1267996486" MODIFIED="1477841698287" TEXT="explicitly by code">
+<node CREATED="1477841706107" ID="ID_1685967940" MODIFIED="1477841722860" TEXT="use get_value() from adjustment"/>
+<node CREATED="1477841728496" ID="ID_935017463" MODIFIED="1477841747713" TEXT="because this represents coord. of visible viewport"/>
+<node CREATED="1477841753180" ID="ID_501431504" MODIFIED="1477841795159" TEXT="max(value) + viewport-size == canvas size">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...as can be observed
+    </p>
+    <p>
+      by printing values from the on_draw() callback
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1477841809741" ID="ID_1400891730" MODIFIED="1477841816024" TEXT="context-&gt;translate">
+<node CREATED="1477841816516" ID="ID_642580279" MODIFIED="1477841841348" TEXT="by -value"/>
+<node CREATED="1477841842512" ID="ID_1549119493" MODIFIED="1477841854051" TEXT="allows us to use absolute coords."/>
+<node CREATED="1477841854807" ID="ID_1202368941" MODIFIED="1477841859362" TEXT="clipping happens automatically"/>
+<node CREATED="1477841860278" ID="ID_208350074" MODIFIED="1477841903458" TEXT="need to ctx-&gt;save() and ctx-&gt;restore()">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...otherwise adjustment values will cummulate,
+    </p>
+    <p>
+      causing us to adjust too much
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1477843534095" ID="ID_1261380784" MODIFIED="1477843541259" TEXT="Problem: widget extension">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1477843543126" ID="ID_1096450231" MODIFIED="1477843556632" TEXT="seems to be defined only after drawing it"/>
+</node>
 </node>
 <node CREATED="1477784943797" ID="ID_298493039" MODIFIED="1477791972306" TEXT="layering">
 <icon BUILTIN="button_ok"/>

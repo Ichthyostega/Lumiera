@@ -162,9 +162,6 @@ namespace panel {
         sizeX = max (sizeX, x);
         sizeY = max (sizeY, y);
       }
-    // additional leeway for the scrollbars
-    sizeX += 10;
-    sizeY += 10;
     
     canvas_.set_size (sizeX, sizeY);
   }
@@ -261,23 +258,58 @@ namespace panel {
   }
   
   
+  namespace {
+    _Fmt debugAdj(" | Adj-%s(%3d<%5.2f<%3d)");
+  }
+  
   bool
   Canvas::on_draw(Cairo::RefPtr<Cairo::Context> const& cox)
   {
     if (shallDraw_)
       {
-        int w = get_allocation().get_width();
-        int h = get_allocation().get_height();
+        int h = get_allocation().get_width();
+        int v = get_allocation().get_height();
         
-        cox->set_line_width (10.0);
+        uint extH, extV;
+        get_size (extH, extV);
+        
+        auto adjH = get_hadjustment();
+        auto adjV = get_vadjustment();
+        
+        cout << "draw h:"<<h<<" v:"<<v
+             << " ext-h:"<<extH<<" ext-v:"<<extV
+             << string(debugAdj % "H" % adjH->get_lower() % adjH->get_value() % adjH->get_upper())
+             << string(debugAdj % "V" % adjV->get_lower() % adjV->get_value() % adjV->get_upper())
+             << endl;
+        
+        double offH = adjH->get_value();
+        double offV = adjV->get_value();
+        cox->save();
+        cox->translate(-offH, -offV);
         
         // draw red diagonal line
         cox->set_source_rgb(0.8, 0.0, 0.0);
+        cox->set_line_width (10.0);
         cox->move_to(0, 0);
-        cox->line_to(w, h);
+        cox->line_to(extH, extV);
         cox->stroke();
+        cox->restore();
+        
+        Gtk::Layout::on_draw(cox);
+        
+        cox->save();
+        cox->translate(-offH, -offV);
+        
+        cox->set_source_rgb(0.2, 0.4, 0.9);
+        cox->set_line_width (2.0);
+        cox->rectangle(0,0, extH, extV);
+        cox->stroke();
+        cox->restore();
+        
+        return false;
       }
-    return Gtk::Layout::on_draw(cox);
+    else
+      return Gtk::Layout::on_draw(cox);
   }
 
   
