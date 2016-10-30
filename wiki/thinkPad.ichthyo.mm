@@ -9414,7 +9414,8 @@
 </node>
 <node CREATED="1477789514451" ID="ID_84890591" LINK="https://www.cairographics.org/documentation/cairomm/reference/" MODIFIED="1477789523593" TEXT="Cairomm API-doc"/>
 </node>
-<node CREATED="1477784938038" ID="ID_93104177" MODIFIED="1477784941482" TEXT="how-to...">
+<node CREATED="1477784938038" ID="ID_93104177" MODIFIED="1477791977201" TEXT="how-to...">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1477788718965" ID="ID_1354942176" MODIFIED="1477788722040" TEXT="derived class"/>
 <node CREATED="1477788722228" ID="ID_720985572" MODIFIED="1477788730239" TEXT="override on_draw()"/>
 <node CREATED="1477788731163" ID="ID_421749777" MODIFIED="1477788740646" TEXT="invoke inherited on_draw()">
@@ -9437,7 +9438,30 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1477784943797" ID="ID_298493039" MODIFIED="1477784946617" TEXT="layering"/>
+<node CREATED="1477791881630" ID="ID_1823256674" MODIFIED="1477791884001" TEXT="coordinates">
+<node CREATED="1477791885614" ID="ID_380369648" MODIFIED="1477791916343">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#bd0053">Warning</font>: allocation is the <i>visible</i>&#160;area
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1477791921953" ID="ID_555455740" MODIFIED="1477791952896" TEXT="...not the extension of the canvas!"/>
+</node>
+<node CREATED="1477784943797" ID="ID_298493039" MODIFIED="1477791972306" TEXT="layering">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1477791842091" ID="ID_671463871" MODIFIED="1477791848942" TEXT="depends on order of parent call"/>
+<node CREATED="1477791849578" ID="ID_96793101" MODIFIED="1477791858929" TEXT="and on order of cairo draw operations">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
 <node CREATED="1477784949533" ID="ID_1496795315" MODIFIED="1477784952776" TEXT="custom styling"/>
 </node>
 <node CREATED="1477595418670" ID="ID_770195423" MODIFIED="1477596119220" TEXT="# place a huge number of widgets, to scrutinise scrolling and performance">

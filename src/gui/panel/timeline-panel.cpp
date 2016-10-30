@@ -248,10 +248,15 @@ namespace panel {
   Canvas::enableDraw (bool yes)
   {
     shallDraw_ = yes;
-    if (shallDraw_)
+    
+    // force redrawing of the visible area...
+    auto win = get_window();
+    if (win)
       {
-        ///TODO invalidate
-        cout << "DRRRRAW!"<<endl;
+        int w = get_allocation().get_width();
+        int h = get_allocation().get_height();
+        Gdk::Rectangle rect{0, 0, w, h};
+        win->invalidate_rect(rect, false);
       }
   }
   
@@ -261,7 +266,16 @@ namespace panel {
   {
     if (shallDraw_)
       {
-        cout << "Canvas::on_draw("<<cox<<");"<<endl;
+        int w = get_allocation().get_width();
+        int h = get_allocation().get_height();
+        
+        cox->set_line_width (10.0);
+        
+        // draw red diagonal line
+        cox->set_source_rgb(0.8, 0.0, 0.0);
+        cox->move_to(0, 0);
+        cox->line_to(w, h);
+        cox->stroke();
       }
     return Gtk::Layout::on_draw(cox);
   }
