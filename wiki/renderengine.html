@@ -2398,6 +2398,15 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
+<div title="GtkCustomDrawing" creator="Ichthyostega" modifier="Ichthyostega" created="201610300111" modified="201610300113" tags="spec GuiPattern" changecount="6">
+<pre>//some information how to achieve custom drawing with ~GTKmm...//
+valuable reference documentation comes bundled with lib ~GTKmm, in the guide [[&quot;Programming with GTKmm|https://developer.gnome.org/gtkmm-tutorial/stable/index.html.en]]
+* the chapter detailing [[use of the Gtk::DrawingArea|https://developer.gnome.org/gtkmm-tutorial/stable/chapter-drawingarea.html.en]], including an introduction to [[Cairomm|https://www.cairographics.org/documentation/cairomm/reference/]]
+* the chapter about [[constructing a custom widget|https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en]]
+
+Basically we have to handle the {{{signal_draw}}} events. Since we need to control the event processing, it is recommended to do this event handling by //overriding the {{{on_draw()}}} function,// not by connecting a slot directly to the signal. Two details are to be considered here: the //return value// controls if the event can be considered as fully handled. If we return {{{false}}}, enclosing (parent) widgets get also to handle this event. And, secondly, if we derive from any widget, it is a good idea to invoke the //parent implementation of {{{on_draw()}}} at the appropriate point.// This is especially relevant when our custom drawing involves the ''canvas widget'' ({{{Gtk::Layout}}}), which has the ability to place several further widgets embedded onto the canvas area. Without invoking this parent event handler, those embedded widgets won't be shown.
+</pre>
+</div>
 <div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="201610141820" tags="GuiPattern impl" changecount="3">
 <pre>//This is the canvas widget of ~GTK-3//
 It allows not only custom drawing, but also to embed other widgets at defined coordinates.
@@ -2635,7 +2644,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610291617" tags="GuiPattern discuss decision impl" changecount="49">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610300058" tags="GuiPattern discuss decision impl" changecount="50">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2716,6 +2725,8 @@ In order to build a sensible plan for our timeline structure, we need to investi
 ://problematic//
 :* the signal based {{{foreach}}} does not work -- there seems to be a problem with the slot's signature causing a wrong address to be passed in
 :* the interface {{{Gtk::Container}}} exposes a {{{get_children}}} function, but this returns a //copy// of the vector with pointers to all child widgets
+;about GtkCustomDrawing
+:need to derive from {{{Gtk::Layout}}} and override the {{{on_draw(cairocontext)}}} function
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">

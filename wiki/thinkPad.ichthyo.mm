@@ -8,7 +8,19 @@
 <node CREATED="1455289597596" ID="ID_970065036" MODIFIED="1455289601196" TEXT="work site"/>
 <node CREATED="1455289466261" ID="ID_273679080" MODIFIED="1455289469961" TEXT="PresentationState"/>
 </node>
-<node CREATED="1476376882857" HGAP="193" ID="ID_1420903777" MODIFIED="1476376900764" TEXT="Kern-Elemente" VSHIFT="-34">
+<node CREATED="1477784761581" HGAP="72" ID="ID_854334914" MODIFIED="1477784783508" TEXT="Rahmen" VSHIFT="-21">
+<node CREATED="1477784793993" ID="ID_1868522177" MODIFIED="1477784810257" TEXT="Umbau">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1477784813895" ID="ID_1343270939" MODIFIED="1477784821050" TEXT="Model durch UI-Bus ersetzen"/>
+<node CREATED="1477784829157" ID="ID_1998357180" MODIFIED="1477784838700" TEXT="Icon-Laden modernisieren"/>
+<node CREATED="1477784821925" FOLDED="true" ID="ID_1871474250" MODIFIED="1477784892461" TEXT="Styling aufr&#xe4;umen">
+<node CREATED="1477784846162" ID="ID_1164942946" MODIFIED="1477784889994" TEXT="siehe Info zum CssProvider">
+<arrowlink DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1846;-61;" ID="Arrow_ID_1610122569" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1476376882857" HGAP="193" ID="ID_1420903777" MODIFIED="1477784783964" TEXT="Kern-Elemente" VSHIFT="-34">
 <node CREATED="1476376913589" ID="ID_1887326939" MODIFIED="1476376917001" TEXT="Timeline">
 <node CREATED="1477599995452" ID="ID_97568136" MODIFIED="1477599999383" TEXT="Bestandteile">
 <node CREATED="1476377043180" ID="ID_1179709828" MODIFIED="1476377047495" TEXT="Head">
@@ -9269,8 +9281,24 @@
 </richcontent>
 </node>
 </node>
+<node CREATED="1477785704584" ID="ID_528329491" MODIFIED="1477785711408" TEXT="event handling">
+<node CREATED="1477785727469" ID="ID_129787833" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/chapter-signals.html.en" MODIFIED="1477785743493" TEXT="Guide: Kapitel &quot;Signals&quot;"/>
+<node CREATED="1477785747138" ID="ID_4618201" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-xeventsignals.html.en" MODIFIED="1477785785076" TEXT="speziell Details zu event Handlern: X event signals">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1477785807338" ID="ID_80062368" MODIFIED="1477788924929" TEXT="wie">
+<icon BUILTIN="info"/>
+<node CREATED="1477785809930" ID="ID_596393977" MODIFIED="1477785817884" TEXT="signal connect()"/>
+<node COLOR="#ca1b00" CREATED="1477785830295" ID="ID_94782325" MODIFIED="1477785836644" TEXT="-- oder --"/>
+<node CREATED="1477785818920" ID="ID_1600280983" MODIFIED="1477788924929" TEXT="on_xxx() &#xfc;berschreiben">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1600280983" ENDARROW="Default" ENDINCLINATION="893;0;" ID="Arrow_ID_1707544457" SOURCE="ID_111966354" STARTARROW="None" STARTINCLINATION="893;0;"/>
+</node>
+</node>
+<node CREATED="1477785856731" ID="ID_63204089" MODIFIED="1477785865998" TEXT="R&#xfc;ckgabewert: true == fertig behandelt"/>
+</node>
 <node CREATED="1477526858307" ID="ID_676269117" MODIFIED="1477526862502" TEXT="custom widget">
-<node COLOR="#ca1b00" CREATED="1477526864162" ID="ID_1385929770" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1477526888486" TEXT="Beispiel">
+<node COLOR="#ca1b00" CREATED="1477526864162" ID="ID_1385929770" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1477788908756" TEXT="Beispiel">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1385929770" ENDARROW="Default" ENDINCLINATION="1055;0;" ID="Arrow_ID_1314305180" SOURCE="ID_426069181" STARTARROW="None" STARTINCLINATION="1055;0;"/>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1477527104426" ID="ID_334736261" MODIFIED="1477527138549" TEXT="custom style properties">
@@ -9291,8 +9319,29 @@
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node CREATED="1446515847047" ID="ID_290915762" MODIFIED="1446515861953" TEXT="GtkCssProvider">
+<node CREATED="1446515847047" FOLDED="true" ID="ID_290915762" MODIFIED="1477784898996" TEXT="GtkCssProvider">
 <node CREATED="1446515865029" ID="ID_1503616150" MODIFIED="1446515869624" TEXT="parsing errors"/>
+<node CREATED="1477784584821" ID="ID_1810760662" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1477784889994" TEXT="Beispiel im GTKmm-Guide (custom widget)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in der Implementierung, mywidget.cc
+    </p>
+    <p>
+      ist eine komplette Sequenz, wie man einen CSS-StyleProvider setzt
+    </p>
+    <p>
+      und auch ein Signal f&#252;r Parse-Fehler anschlie&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1846;-61;" ID="Arrow_ID_1610122569" SOURCE="ID_1164942946" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
+<icon BUILTIN="info"/>
+</node>
 </node>
 <node CREATED="1476375676818" ID="ID_1029920942" MODIFIED="1476375683685" TEXT="Canvas">
 <node CREATED="1476375696215" ID="ID_1397403295" MODIFIED="1476375700698" TEXT="GtkDrawingArea">
@@ -9355,6 +9404,41 @@
 <node CREATED="1477595418669" ID="ID_517122292" MODIFIED="1477596119220" TEXT="# learn how to draw">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-2"/>
+<node CREATED="1477788816168" ID="ID_904860978" MODIFIED="1477788929338" TEXT="documentation">
+<icon BUILTIN="info"/>
+<node CREATED="1477788823751" ID="ID_111966354" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/chapter-drawingarea.html.en" MODIFIED="1477788918987" TEXT="read the custom drawing chapter">
+<arrowlink DESTINATION="ID_1600280983" ENDARROW="Default" ENDINCLINATION="893;0;" ID="Arrow_ID_1707544457" STARTARROW="None" STARTINCLINATION="893;0;"/>
+</node>
+<node CREATED="1477788855234" ID="ID_426069181" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1477788908756" TEXT="read the example code of a custom widget">
+<arrowlink DESTINATION="ID_1385929770" ENDARROW="Default" ENDINCLINATION="1055;0;" ID="Arrow_ID_1314305180" STARTARROW="None" STARTINCLINATION="1055;0;"/>
+</node>
+<node CREATED="1477789514451" ID="ID_84890591" LINK="https://www.cairographics.org/documentation/cairomm/reference/" MODIFIED="1477789523593" TEXT="Cairomm API-doc"/>
+</node>
+<node CREATED="1477784938038" ID="ID_93104177" MODIFIED="1477784941482" TEXT="how-to...">
+<node CREATED="1477788718965" ID="ID_1354942176" MODIFIED="1477788722040" TEXT="derived class"/>
+<node CREATED="1477788722228" ID="ID_720985572" MODIFIED="1477788730239" TEXT="override on_draw()"/>
+<node CREATED="1477788731163" ID="ID_421749777" MODIFIED="1477788740646" TEXT="invoke inherited on_draw()">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1477788749289" ID="ID_1466181075" MODIFIED="1477788790117" TEXT="returns false">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...meaning, &quot;this event is not yet fully processed&quot;,
+    </p>
+    <p>
+      i.e. the enclosing parent widget also gets a chance to redraw itself
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1477784943797" ID="ID_298493039" MODIFIED="1477784946617" TEXT="layering"/>
+<node CREATED="1477784949533" ID="ID_1496795315" MODIFIED="1477784952776" TEXT="custom styling"/>
 </node>
 <node CREATED="1477595418670" ID="ID_770195423" MODIFIED="1477596119220" TEXT="# place a huge number of widgets, to scrutinise scrolling and performance">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>

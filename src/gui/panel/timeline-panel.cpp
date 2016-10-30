@@ -68,9 +68,6 @@ namespace panel {
     : Panel(panelManager, dockItem, getTitle(), getStockID())
     , twoParts_(Gtk::ORIENTATION_VERTICAL)
     , buttons_()
-    , button_1_()
-    , button_2_()
-    , button_3_()
     , frame_("Gtk::Layout Experiments")
     , scroller_()
     , canvas_()
@@ -115,6 +112,13 @@ namespace panel {
       button_5_.signal_clicked().connect(
                   mem_fun(*this, &TimelinePanel::experiment_5));
       buttons_.add(button_5_);
+      
+      toggleDraw_.set_label("draw");
+      toggleDraw_.signal_clicked().connect(
+                  [this]() {
+                             canvas_.enableDraw (this->toggleDraw_.get_active());
+                           });
+      buttons_.add(toggleDraw_);
       //(End)buttons...
       
       frame_.add(scroller_);
@@ -239,6 +243,29 @@ namespace panel {
     delete victim;
   }
   
+  
+  void
+  Canvas::enableDraw (bool yes)
+  {
+    shallDraw_ = yes;
+    if (shallDraw_)
+      {
+        ///TODO invalidate
+        cout << "DRRRRAW!"<<endl;
+      }
+  }
+  
+  
+  bool
+  Canvas::on_draw(Cairo::RefPtr<Cairo::Context> const& cox)
+  {
+    if (shallDraw_)
+      {
+        cout << "Canvas::on_draw("<<cox<<");"<<endl;
+      }
+    return Gtk::Layout::on_draw(cox);
+  }
+
   
   /* === Support for Investigation === */
   

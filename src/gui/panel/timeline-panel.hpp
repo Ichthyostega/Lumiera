@@ -48,7 +48,7 @@ namespace panel {
 //using std::shared_ptr;
   
   /**
-   * "experimental" child widget for investigation of gtk::Layout
+   * "experimental" child widget for investigation of Gtk::Layout
    */
   class ChildEx
     : public Gtk::Button
@@ -64,6 +64,24 @@ namespace panel {
     };
   
   void __verifyDeadChildren();
+  
+  
+  
+  /**
+   * "experimental" custom canvas, based on Gtk::Layout.
+   * In addition this customised widget supports direct drawing
+   */
+  class Canvas
+    : public Gtk::Layout
+    {
+      bool shallDraw_;
+      
+    public:
+      void enableDraw (bool);
+      
+    private:
+      virtual bool on_draw (Cairo::RefPtr<Cairo::Context> const&)  override;
+    };
   
   
   
@@ -110,9 +128,10 @@ namespace panel {
       Gtk::Button button_3_;
       Gtk::Button button_4_;
       Gtk::Button button_5_;
+      Gtk::CheckButton toggleDraw_;
       Gtk::Frame frame_;
       Gtk::ScrolledWindow scroller_;
-      Gtk::Layout canvas_;
+      Canvas canvas_;
       
       ChildEx* makeChld();
       
