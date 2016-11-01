@@ -256,23 +256,17 @@ namespace panel {
       Gtk::Container::ForeachSlot callback
         = [&](Gtk::Widget& chld)
                 {
-                  cout << "hoya "<<chld;
-                  auto allo = chld.get_allocation();
-                  uint x = allo.get_x();
-                  uint y = allo.get_y();
-                  x += allo.get_width();
-                  y += allo.get_height();
+                  auto alloc = chld.get_allocation();
+                  uint x = alloc.get_x();
+                  uint y = alloc.get_y();
+                  x += alloc.get_width();
+                  y += alloc.get_height();
                   extH = max (extH, x);
                   extV = max (extV, y);
-                  cout << "x="<<x<<" y="<<y<<endl;
                 };
       foreach(callback);
       recalcExtension_ = false;
       set_size (extH, extV);
-  }
-  
-  namespace {
-    _Fmt debugAdj(" | Adj-%s(%3d<%5.2f<%3d)");
   }
   
   
@@ -281,23 +275,15 @@ namespace panel {
   {
     if (shallDraw_)
       {
-        int h = get_allocation().get_width();
-        int v = get_allocation().get_height();
-        uint extH=20, extV=20;
+        uint extH, extV;
         determineExtension();
         get_size (extH, extV);
         
         auto adjH = get_hadjustment();
         auto adjV = get_vadjustment();
-        
-        cout << "draw h:"<<h<<" v:"<<v
-             << " ext-h:"<<extH<<" ext-v:"<<extV
-             << string(debugAdj % "H" % adjH->get_lower() % adjH->get_value() % adjH->get_upper())
-             << string(debugAdj % "V" % adjV->get_lower() % adjV->get_value() % adjV->get_upper())
-             << endl;
-        
         double offH = adjH->get_value();
         double offV = adjV->get_value();
+        
         cox->save();
         cox->translate(-offH, -offV);
         
@@ -310,7 +296,7 @@ namespace panel {
         cox->restore();
         
         // cause child widgets to be redrawn
-        Gtk::Layout::on_draw(cox);
+        bool event_is_handled = Gtk::Layout::on_draw(cox);
         
         // any drawing which follows happens on top of child widgets...
         cox->save();
@@ -322,7 +308,7 @@ namespace panel {
         cox->stroke();
         cox->restore();
         
-        return false;
+        return event_is_handled;
       }
     else
       return Gtk::Layout::on_draw(cox);

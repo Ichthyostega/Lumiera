@@ -2648,7 +2648,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611012218" tags="GuiPattern discuss decision impl" changecount="58">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611012221" tags="GuiPattern discuss decision impl" changecount="59">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2746,12 +2746,11 @@ In order to build a sensible plan for our timeline structure, we need to investi
       Gtk::Container::ForeachSlot callback
         = [&amp;](Gtk::Widget&amp; chld)
                 {
-                  cout &lt;&lt; &quot;hoya &quot;&lt;&lt;chld;
-                  auto allo = chld.get_allocation();
-                  uint x = allo.get_x();
-                  uint y = allo.get_y();
-                  x += allo.get_width();
-                  y += allo.get_height();
+                  auto alloc = chld.get_allocation();
+                  uint x = alloc.get_x();
+                  uint y = alloc.get_y();
+                  x += alloc.get_width();
+                  y += alloc.get_height();
                   extH = max (extH, x);
                   extV = max (extV, y);
                 };

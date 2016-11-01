@@ -9389,9 +9389,10 @@
 <node CREATED="1477601706168" ID="ID_130395672" MODIFIED="1477601711906" TEXT="Kind-Klasse anlegen"/>
 <node CREATED="1477601712063" ID="ID_1720776876" MODIFIED="1477601717354" TEXT="Kinder managen"/>
 </node>
-<node CREATED="1477595418669" ID="ID_517122292" MODIFIED="1477596119220" TEXT="# learn how to draw">
+<node CREATED="1477595418669" ID="ID_517122292" MODIFIED="1478039048340" TEXT="# learn how to draw">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-2"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1477788816168" ID="ID_904860978" MODIFIED="1477788929338" TEXT="documentation">
 <icon BUILTIN="info"/>
 <node CREATED="1477788823751" ID="ID_111966354" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/chapter-drawingarea.html.en" MODIFIED="1477788918987" TEXT="read the custom drawing chapter">
@@ -9425,7 +9426,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1477791881630" ID="ID_1823256674" MODIFIED="1478038049036" TEXT="coordinates">
+<node CREATED="1477791881630" FOLDED="true" HGAP="37" ID="ID_1823256674" MODIFIED="1478039071618" TEXT="coordinates" VSHIFT="11">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1477791885614" ID="ID_380369648" MODIFIED="1477791916343">
 <richcontent TYPE="NODE"><html>
@@ -9590,17 +9591,19 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1477595418670" ID="ID_1370967982" MODIFIED="1477596119220" TEXT="# bind signals to those widgets, to verify event dispatching">
+<node CREATED="1477595418670" ID="ID_1370967982" MODIFIED="1478039086087" TEXT="# bind signals to those widgets, to verify event dispatching">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-5"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1477595418670" ID="ID_1603374862" MODIFIED="1477596119219" TEXT="# bind some further signal(s) to the GtkLayout container">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-6"/>
 </node>
-<node CREATED="1477595418670" ID="ID_496085779" MODIFIED="1477596119219" TEXT="# hide and re-show a partially and a totally overlapped widget">
+<node CREATED="1477595418670" ID="ID_496085779" MODIFIED="1478039095462" TEXT="# hide and re-show a partially and a totally overlapped widget">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-7"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1477595418670" ID="ID_1516591439" MODIFIED="1477754020121" TEXT="# move and delete widgets">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>

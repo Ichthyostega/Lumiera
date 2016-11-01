@@ -98,10 +98,10 @@ namespace panel {
    * 
    * \par Plan of investigation
    *  1. place some simple widgets (Buttons) ✔
-   *  2. learn how to draw
+   *  2. learn how to draw ✔
    *  3. place a huge number of widgets, to scrutinise scrolling and performance
    *  4. place widgets overlapping and irregularily, beyond the scrollable area ✔
-   *  5. bind signals to those widgets, to verify event dispatching
+   *  5. bind signals to those widgets, to verify event dispatching ✔
    *  6. bind some further signal(s) to the ~GtkLayout container
    *  7. hide and re-show a partially and a totally overlapped widget
    *  8. find a way to move a widget ✔ and delete arbitrary widgets ✔
