@@ -57,8 +57,7 @@
       und welchen Teil des Verhaltens &#252;berlassen wir GTK
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1477600216950" ID="ID_1935952349" MODIFIED="1477600219202" TEXT="focus">
@@ -119,8 +118,7 @@
       mehr als ein top-level Fenster offen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1477342868574" ID="ID_679226593" MODIFIED="1477342875681" TEXT="WorkspaceWindow">
@@ -142,8 +140,7 @@
       which reference actions from one or more action groups.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1477343041295" ID="ID_1874325062" MODIFIED="1477343048450" TEXT="PanelManager">
 <node CREATED="1477343244428" ID="ID_513688853" MODIFIED="1477343252255" TEXT="managed die Docks"/>
@@ -162,8 +159,7 @@
       realisiert Vererbung <i>zu fu&#223;</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -182,8 +178,7 @@
       AUA!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1477347390430" HGAP="46" ID="ID_138529757" MODIFIED="1477347400283" TEXT="Panel" VSHIFT="31">
@@ -227,8 +222,7 @@
       auch nicht im Application-Shutdown!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1477617185582" ID="ID_634277803" MODIFIED="1477617217049" TEXT="PanelManager::createPanels()">
 <richcontent TYPE="NOTE"><html>
@@ -243,8 +237,7 @@
       dock_.add_item(timelinePanel-&gt;getDockItem(),Gdl::DOCK_BOTTOM);
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -260,8 +253,7 @@
       Helper to build the menu and for&#160;registering and handling of user action events
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1477344354329" ID="ID_1683945104" MODIFIED="1477344359708" TEXT="createUi()">
@@ -287,8 +279,7 @@
       aber es kann davon mehrere geben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1477343152288" ID="ID_1267678981" MODIFIED="1477343164378" TEXT="Vermengung von Fenster und Workspace"/>
 </node>
@@ -9277,8 +9268,7 @@
       ...nicht mehr das <i>klassische</i>&#160;gtk::Main
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1477785704584" ID="ID_528329491" MODIFIED="1477785711408" TEXT="event handling">
@@ -9314,8 +9304,7 @@
       Siehe Beschreibung im Beispiel/Tutorial
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -9337,8 +9326,7 @@
       und auch ein Signal f&#252;r Parse-Fehler anschlie&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1846;-61;" ID="Arrow_ID_1610122569" SOURCE="ID_1164942946" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
 <icon BUILTIN="info"/>
 </node>
@@ -9434,12 +9422,11 @@
       i.e. the enclosing parent widget also gets a chance to redraw itself
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node CREATED="1477791881630" ID="ID_1823256674" MODIFIED="1477843569686" TEXT="coordinates">
-<icon BUILTIN="pencil"/>
+<node CREATED="1477791881630" ID="ID_1823256674" MODIFIED="1478038049036" TEXT="coordinates">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1477791885614" ID="ID_380369648" MODIFIED="1477791916343">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -9450,8 +9437,7 @@
       <font color="#bd0053">Warning</font>: allocation is the <i>visible</i>&#160;area
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1477791921953" ID="ID_555455740" MODIFIED="1477791952896" TEXT="...not the extension of the canvas!"/>
@@ -9486,8 +9472,7 @@
       by printing values from the on_draw() callback
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1477841809741" ID="ID_1400891730" MODIFIED="1477841816024" TEXT="context-&gt;translate">
 <node CREATED="1477841816516" ID="ID_642580279" MODIFIED="1477841841348" TEXT="by -value"/>
@@ -9506,8 +9491,7 @@
       causing us to adjust too much
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -9515,6 +9499,68 @@
 <node CREATED="1477843534095" ID="ID_1261380784" MODIFIED="1477843541259" TEXT="Problem: widget extension">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1477843543126" ID="ID_1096450231" MODIFIED="1477843556632" TEXT="seems to be defined only after drawing it"/>
+<node CREATED="1478032584364" ID="ID_1961636905" MODIFIED="1478032597162" TEXT="need to find the right signal">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1478032598165" ID="ID_275509060" MODIFIED="1478032625203" TEXT="need to get foreach working">
+<icon BUILTIN="yes"/>
+<node CREATED="1478032633704" ID="ID_1067159761" MODIFIED="1478032641714" TEXT="Hint: show_all_children"/>
+<node CREATED="1478032642310" ID="ID_246127915" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-containers.html.en" MODIFIED="1478032658384" TEXT="Tutorial: custom container"/>
+<node CREATED="1478037794935" HGAP="41" ID="ID_614099643" MODIFIED="1478037886314" TEXT="geht doch" VSHIFT="38">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1478037802776" ID="ID_1706111079" MODIFIED="1478037817305" TEXT="keine Ahnung warums neulich einen SEGFAULT gab"/>
+<node CREATED="1478037818037" ID="ID_1257597772" MODIFIED="1478037846037" TEXT="wichtig: Funktor inline bestehen lassen"/>
+<node CREATED="1478037849449" ID="ID_171841689" MODIFIED="1478037859121" TEXT="habe diesmal sogar ein Lambda verwendet">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1478037888539" ID="ID_1261247197" MODIFIED="1478037996248" TEXT="wie">
+<icon BUILTIN="idea"/>
+<node CREATED="1478037893658" ID="ID_1711061664" MODIFIED="1478037896669" TEXT="trigger-Variable"/>
+<node CREATED="1478037899458" ID="ID_132096735" MODIFIED="1478037907973" TEXT="im on_draw()-Callback">
+<node CREATED="1478037908465" ID="ID_1414994452" MODIFIED="1478037915835" TEXT="erst hier sind die Allokationen gesetzt"/>
+<node CREATED="1478037916303" ID="ID_1781865207" MODIFIED="1478037977495" TEXT="konnte keine anderen sinnvollen callbacks finden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...die anderen, die noch in Frage kommen w&#252;rden,
+    </p>
+    <p>
+      sind nur f&#252;r den Fall, da&#223; ein Widget neu instantiiert wird
+    </p>
+    <p>
+      oder neu in das Window-System gemappt wird.
+    </p>
+    <p>
+      
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1478037986046" ID="ID_1293899679" MODIFIED="1478037990857">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      on_check_resize() wird nicht aufgerufen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1478038003892" ID="ID_477362495" MODIFIED="1478038010982" TEXT="rufe foreach mit inline-Lambda auf"/>
+<node CREATED="1478038011427" ID="ID_399044896" MODIFIED="1478038019797" TEXT="melde per max in die lokalen Variablen zur&#xfc;ck"/>
+<node CREATED="1478038020338" ID="ID_541293489" MODIFIED="1478038026524" TEXT="Layout-&gt;set_size()"/>
+</node>
 </node>
 </node>
 <node CREATED="1477784943797" ID="ID_298493039" MODIFIED="1477791972306" TEXT="layering">

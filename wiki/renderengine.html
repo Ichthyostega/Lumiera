@@ -2411,7 +2411,7 @@ Typically, when starting the draw operation, we retrieve our //allocation.// Thi
 Thus, if we want to use absolute canvas coordinates for our drawing, we need to adjust the cairo context prior to any drawing operations: we translate it in the opposite direction of the values retrieved from the scrollbar {{{Gtk::Adjustment}}}s. This causes the //user coordinates// to coincede with the absolute canvas coordinates.
 </pre>
 </div>
-<div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="201610141820" tags="GuiPattern impl" changecount="3">
+<div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="201611012211" tags="GuiPattern impl" changecount="4">
 <pre>//This is the canvas widget of ~GTK-3//
 It allows not only custom drawing, but also to embed other widgets at defined coordinates.
 
@@ -2425,9 +2425,9 @@ In order to build a sensible plan for our timeline structure, we need to investi
 
 !test setup
 we need a test setup for this investigation.
- * easy to launch
- * don't waste much time, it is disposable
- * realistic: shall reflect the situation in our actual UI
+* easy to launch
+* don't waste much time, it is disposable
+* realistic: shall reflect the situation in our actual UI
 </pre>
 </div>
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201609091641" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="26">
@@ -2648,7 +2648,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201610301605" tags="GuiPattern discuss decision impl" changecount="52">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611012218" tags="GuiPattern discuss decision impl" changecount="58">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2736,6 +2736,28 @@ In order to build a sensible plan for our timeline structure, we need to investi
 :** when invoked //after// our custom drawing, the embedded widgets stay on top
 :* the {{{Gtk::Allocation}}} is precisely the visible screen area reserved for the widget.&lt;br/&gt;It is //not// the extension of the virtual canvas.
 :* ...consequently, if our drawing shall be stitched to the canvas, we need to care for translation and for clipping ourselves. &amp;rarr; see [[here|GtkCustomDrawing]]
+;determine canvas extension
+:when the extension of the (virtual) canvas area depends on position and size of child widgets, //we need to calculate this extension manually.//
+:* beware: the allocation for child widgets is not setup immediately, when adding or moving children
+:* rather, we need to wait until in the {{{on_draw()}}} callback for the {{{Gtk::Layout}}}
+:* at this point, we may use the //foreach// mechanism of the container
+{{{
+      uint extH=20, extV=20;
+      Gtk::Container::ForeachSlot callback
+        = [&amp;](Gtk::Widget&amp; chld)
+                {
+                  cout &lt;&lt; &quot;hoya &quot;&lt;&lt;chld;
+                  auto allo = chld.get_allocation();
+                  uint x = allo.get_x();
+                  uint y = allo.get_y();
+                  x += allo.get_width();
+                  y += allo.get_height();
+                  extH = max (extH, x);
+                  extV = max (extV, y);
+                };
+      foreach(callback);
+      set_size (extH, extV);
+}}}
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">

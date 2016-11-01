@@ -75,12 +75,16 @@ namespace panel {
     : public Gtk::Layout
     {
       bool shallDraw_;
+      bool recalcExtension_ = false;
       
     public:
       void enableDraw (bool);
+      void adjustSize();
       
     private:
       virtual bool on_draw (Cairo::RefPtr<Cairo::Context> const&)  override;
+      
+      void determineExtension();
     };
   
   
@@ -137,8 +141,6 @@ namespace panel {
       
       using ChildV = std::vector<ChildEx*>;
       ChildV childz_;
-      
-      void adjustToNecessaryCanvasSize();
       
       void experiment_1();
       void experiment_2();

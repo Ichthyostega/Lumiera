@@ -128,7 +128,7 @@ namespace panel {
       scroller_.set_border_width(10);
       scroller_.add(canvas_);
       
-      adjustToNecessaryCanvasSize();
+      canvas_.adjustSize();
       
       // show everything....
       this->add(twoParts_);
@@ -148,24 +148,6 @@ namespace panel {
   }
   
   
-  void
-  TimelinePanel::adjustToNecessaryCanvasSize()
-  {
-    uint sizeX = 10;
-    uint sizeY = 10;
-    for (Widget* chld : childz_)
-      {
-        uint x = canvas_.child_property_x(*chld);
-        uint y = canvas_.child_property_y(*chld);
-        x += chld->get_allocated_width();
-        y += chld->get_allocated_height();
-        sizeX = max (sizeX, x);
-        sizeY = max (sizeY, y);
-      }
-    
-    canvas_.set_size (sizeX, sizeY);
-  }
-  
   
   void
   TimelinePanel::experiment_1()
@@ -178,7 +160,7 @@ namespace panel {
     uint y = rand() % 500;
     canvas_.put(*chld, x, y);
     chld->show();
-    adjustToNecessaryCanvasSize();
+    canvas_.adjustSize();
   }
   
   
@@ -197,7 +179,7 @@ namespace panel {
         
         canvas_.move (*chld, x,y);
       }
-    adjustToNecessaryCanvasSize();
+    canvas_.adjustSize();
   }
   
   
@@ -214,7 +196,7 @@ namespace panel {
         int width = chld->get_allocated_width();
         pos += 0.6 * width;
       }
-    adjustToNecessaryCanvasSize();
+    canvas_.adjustSize();
   }
   
   
@@ -258,9 +240,41 @@ namespace panel {
   }
   
   
+  
+  void
+  Canvas::adjustSize()
+  {
+    recalcExtension_ = true;
+  }
+  
+  void
+  Canvas::determineExtension()
+  {
+      if (not recalcExtension_) return;
+      
+      uint extH=20, extV=20;
+      Gtk::Container::ForeachSlot callback
+        = [&](Gtk::Widget& chld)
+                {
+                  cout << "hoya "<<chld;
+                  auto allo = chld.get_allocation();
+                  uint x = allo.get_x();
+                  uint y = allo.get_y();
+                  x += allo.get_width();
+                  y += allo.get_height();
+                  extH = max (extH, x);
+                  extV = max (extV, y);
+                  cout << "x="<<x<<" y="<<y<<endl;
+                };
+      foreach(callback);
+      recalcExtension_ = false;
+      set_size (extH, extV);
+  }
+  
   namespace {
     _Fmt debugAdj(" | Adj-%s(%3d<%5.2f<%3d)");
   }
+  
   
   bool
   Canvas::on_draw(Cairo::RefPtr<Cairo::Context> const& cox)
@@ -269,8 +283,8 @@ namespace panel {
       {
         int h = get_allocation().get_width();
         int v = get_allocation().get_height();
-        
-        uint extH, extV;
+        uint extH=20, extV=20;
+        determineExtension();
         get_size (extH, extV);
         
         auto adjH = get_hadjustment();
@@ -295,8 +309,10 @@ namespace panel {
         cox->stroke();
         cox->restore();
         
+        // cause child widgets to be redrawn
         Gtk::Layout::on_draw(cox);
         
+        // any drawing which follows happens on top of child widgets...
         cox->save();
         cox->translate(-offH, -offV);
         
