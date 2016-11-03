@@ -22,7 +22,8 @@
 
 
 /** @file filedescriptorregistry.c
- ** TODO filedescriptorregistry.c
+ ** Implementation of a registry to manage used filedescriptors
+ ** @todo development in this area is stalled since 2010
  */
 
 

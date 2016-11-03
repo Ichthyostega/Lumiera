@@ -22,7 +22,11 @@
 
 
 /** @file scriptrunnerfacade.cpp
- ** TODO scriptrunnerfacade.cpp
+ ** Subsystem descriptor and configuration for a controlling and operating
+ ** Lumiera through bindings to a script language.
+ ** 
+ ** @todo this just documents a vague plan. We won't be able to implement
+ **       anything of that kind for the foreseeable future as of 1/2017
  */
 
 

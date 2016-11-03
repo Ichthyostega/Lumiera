@@ -22,7 +22,10 @@
 
 
 /** @file media-access-facade.cpp
- ** TODO media-access-facade.cpp
+ ** Implementation binding to query for a media file's properties.
+ ** 
+ ** @todo this was added as a draft and mock implementation in 2008
+ **       and is only used sporadic for unit tests.
  */
 
 

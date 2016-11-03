@@ -22,7 +22,8 @@
 
 
 /** @file resourcecollector.c
- ** TODO resourcecollector.c
+ ** Implementation of a global service to manage scarce system resources
+ ** @todo this was a plan from 2008 and never got beyond an initial concept stage
  */
 
 

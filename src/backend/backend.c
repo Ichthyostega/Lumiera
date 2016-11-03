@@ -22,7 +22,7 @@
 
 
 /** @file backend.c
- ** TODO backend.c
+ ** Lumiera Backend: implementation of global initialisation and services.
  */
 
 

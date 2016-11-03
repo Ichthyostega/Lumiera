@@ -22,7 +22,8 @@
 
 
 /** @file filehandlecache.c
- ** TODO filehandlecache.c
+ ** Implementation of caching for filehandle representation data
+ ** @todo development in this area is stalled since 2010
  */
 
 

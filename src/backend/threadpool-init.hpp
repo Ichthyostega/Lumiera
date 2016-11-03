@@ -22,7 +22,7 @@
 */
 
 /** @file threadpool-init.hpp
- ** Automatically bring up the Threading management and Threadpool in the backend.
+ ** Automatically bring up the threading management and threadpool in the backend.
  ** This works by registering a lifecycle callback, which is activated at the start
  ** of main or when running the testsuite. Similarly, a shutdown hook is registered.
  ** 

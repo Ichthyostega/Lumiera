@@ -22,7 +22,7 @@
 
 
 /** @file engine-config.h
- ** TODO engine-config.h
+ ** access point to configuration of engine parameters
  */
 
 

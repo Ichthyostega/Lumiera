@@ -22,7 +22,8 @@
 
 
 /** @file resourcecollector.h
- ** TODO resourcecollector.h
+ ** A global manager for scarce system resources
+ ** @todo this was a plan from 2008 and never got beyond an initial concept stage
  */
 
 

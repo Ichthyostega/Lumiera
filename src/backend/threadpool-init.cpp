@@ -22,7 +22,7 @@
 
 
 /** @file threadpool-init.cpp
- ** TODO threadpool-init.cpp
+ ** Implementation of automatic initialisation of the low-level thread handling framework.
  */
 
 

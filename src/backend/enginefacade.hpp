@@ -22,7 +22,10 @@
 
 
 /** @file enginefacade.hpp
- ** TODO enginefacade.hpp
+ ** Global control interface for the render engine subsystem.
+ ** The render engine, as implemented in an combined effort by the
+ ** Lumiera backend and some parts of Proc-Layer, can be started and
+ ** stopped as a [Subsystem](\ref subsys.hpp) of the whole application.
  */
 
 

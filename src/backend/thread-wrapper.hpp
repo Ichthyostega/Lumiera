@@ -23,7 +23,16 @@
 
 
 /** @file thread-wrapper.hpp
- ** TODO thread-wrapper.hpp
+ ** Convenience front-end for basic thread handling needs.
+ ** The Lumiera backend contains a dedicated low-level thread handling framework,
+ ** which is relevant for scheduling render activities to make best use of parallelisation
+ ** abilities of the given system. Typically, the upper layers should not have to deal much
+ ** with thread handling, yet at some point there is the need to implement a self contained
+ ** action running within a dedicated thread. The backend::Thread class is a wrapper to
+ ** represent such an parallel action conveniently and safely; together with the object
+ ** monitor, this allows to abstract away intricacies into self contained objects.
+ ** 
+ ** @note the thread wrapper is not intended for high performance computations.
  */
 
 

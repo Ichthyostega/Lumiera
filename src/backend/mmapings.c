@@ -22,7 +22,8 @@
 
 
 /** @file mmapings.c
- ** TODO mmapings.c
+ ** Implementation of organisational data of memory mapped file regions
+ ** @todo development in this area is stalled since 2010
  */
 
 

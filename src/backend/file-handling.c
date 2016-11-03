@@ -22,7 +22,7 @@
 
 
 /** @file file-handling.c
- ** TODO file-handling.c
+ ** Implementation of file management functions
  */
 
 

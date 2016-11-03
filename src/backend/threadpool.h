@@ -22,7 +22,7 @@
 
 
 /** @file threadpool.h
- ** TODO threadpool.h
+ ** @todo development in this area is stalled since 2010
  */
 
 

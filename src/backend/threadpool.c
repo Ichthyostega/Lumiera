@@ -22,7 +22,9 @@
 
 
 /** @file threadpool.c
- ** TODO threadpool.c
+ ** Implementation of a threadpool.
+ ** The plan is to manage the massively parallel activities by a scheduler.
+ ** @todo development in this area is stalled since 2010
  */
 
 

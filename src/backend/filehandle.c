@@ -22,7 +22,8 @@
 
 
 /** @file filehandle.c
- ** TODO filehandle.c
+ ** Implementation of filehandle representation.
+ ** @todo development in this area is stalled since 2010
  */
 
 

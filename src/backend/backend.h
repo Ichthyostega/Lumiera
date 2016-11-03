@@ -22,7 +22,7 @@
 
 
 /** @file backend.h
- ** TODO backend.h
+ ** Lumiera Backend: global initialisation and definitions.
  */
 
 

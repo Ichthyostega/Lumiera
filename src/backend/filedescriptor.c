@@ -22,7 +22,8 @@
 
 
 /** @file filedescriptor.c
- ** TODO filedescriptor.c
+ ** Implementation of a file descriptor management framework
+ ** @todo development in this area is stalled since 2010
  */
 
 
@@ -83,7 +84,7 @@ lumiera_filedescriptor_acquire (const char* name, int flags, LList filenode)
                 }
               int fd;
               INFO (filedescriptor_dbg, "try creating file: %s", name);
-              TODO ("creat mode from config");
+              TODO ("create mode from config");
               fd = creat (name, 0666);
               if (fd == -1)
                 {

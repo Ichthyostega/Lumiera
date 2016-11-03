@@ -22,7 +22,8 @@
 
 
 /** @file scheduler-frontend.hpp
- ** TODO scheduler-frontend.hpp
+ ** Scheduler service access point for higher layers.
+ ** @todo WIP unfinished since 9/2013
  */
 
 

@@ -22,7 +22,7 @@
 
 
 /** @file engine-config.cpp
- ** TODO engine-config.cpp
+ ** implementation of engine configuration and parametrisation
  */
 
 

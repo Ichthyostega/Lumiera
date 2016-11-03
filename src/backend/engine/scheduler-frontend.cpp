@@ -22,7 +22,7 @@
 
 
 /** @file scheduler-frontend.cpp
- ** TODO scheduler-frontend.cpp
+ ** Scheduler service implementation
  */
 
 
