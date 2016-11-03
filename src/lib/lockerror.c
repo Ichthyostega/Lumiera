@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file lockerror.c
+ ** TODO lockerror.c
+ */
+
+
 #include "lib/lockerror.h"
 
 #include <errno.h>

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file config-wordlist.c
+ ** TODO config-wordlist.c
+ */
+
+
 #include "include/logging.h"
 #include "lib/error.h"
 #include "lib/tmpbuf.h"

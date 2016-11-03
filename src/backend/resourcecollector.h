@@ -21,6 +21,11 @@
 */
 
 
+/** @file resourcecollector.h
+ ** TODO resourcecollector.h
+ */
+
+
 #ifndef BACKEND_RESOURCECOLLECTOR_H
 #define BACKEND_RESOURCECOLLECTOR_H
 

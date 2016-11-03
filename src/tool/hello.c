@@ -3,6 +3,11 @@
  *           integrated into the SCons based build system of Lumiera
  */
 
+
+/** @file hello.c
+ ** TODO hello.c
+ */
+
 #include <stdio.h>
 
 int

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file main.c
+ ** TODO main.c
+ */
+
+
 #include "alsa.h"
 
 #include <unistd.h>

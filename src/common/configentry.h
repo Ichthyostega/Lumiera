@@ -21,6 +21,11 @@
 */
 
 
+/** @file configentry.h
+ ** TODO configentry.h
+ */
+
+
 #ifndef COMMON_CONFIGENTRY_H
 #define COMMON_CONFIGENTRY_H
 

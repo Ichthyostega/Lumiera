@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file configentry.c
+ ** TODO configentry.c
+ */
+
+
 #include "lib/safeclib.h"
 #include "common/configentry.h"
 
