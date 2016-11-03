@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_EFFECT_H
 #define PROC_MOBJECT_SESSION_EFFECT_H
 

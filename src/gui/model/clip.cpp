@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/model/clip.hpp"
 #include "lib/time/mutation.hpp"
 

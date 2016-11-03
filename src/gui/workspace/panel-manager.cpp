@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/workspace/panel-manager.hpp"
 
 #include "gui/panel/assets-panel.hpp"

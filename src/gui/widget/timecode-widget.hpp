@@ -24,6 +24,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef GUI_WIDGET_TIMECODE_WIDGET_H
 #define GUI_WIDGET_TIMECODE_WIDGET_H
 

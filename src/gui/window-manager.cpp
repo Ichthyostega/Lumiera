@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/window-manager.hpp"
 #include "gui/gtk-lumiera.hpp"
 #include "gui/workspace/workspace-window.hpp"

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 
 #ifndef GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
 #define GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP

@@ -22,6 +22,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "proc/engine/worker/dummy-image-generator.hpp"
 
 

@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef PROC_CONTROL_STYPEMANAGER_H
 #define PROC_CONTROL_STYPEMANAGER_H
 

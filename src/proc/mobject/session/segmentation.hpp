@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef MOBJECT_SESSION_SEGMENTATION_H
 #define MOBJECT_SESSION_SEGMENTATION_H
 

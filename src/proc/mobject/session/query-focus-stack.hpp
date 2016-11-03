@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef MOBJECT_SESSION_QUERY_FOCUS_STACK_H
 #define MOBJECT_SESSION_QUERY_FOCUS_STACK_H
 

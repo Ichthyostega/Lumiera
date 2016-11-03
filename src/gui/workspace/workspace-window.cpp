@@ -20,6 +20,11 @@
 
 * *****************************************************/
 
+
+/** @file §§§
+ ** TODO §§§
+ */
+
 #include "gui/gtk-lumiera.hpp"
 #include "workspace-window.hpp"
 #include "include/logging.h"

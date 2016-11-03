@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef GUI_WIDGET_HEADER_WIDGET_H
 #define GUI_WIDGET_HEADER_WIDGET_H
 

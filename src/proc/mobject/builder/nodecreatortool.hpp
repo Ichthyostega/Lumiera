@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef MOBJECT_BUILDER_NODECREATORTOOL_H
 #define MOBJECT_BUILDER_NODECREATORTOOL_H
 

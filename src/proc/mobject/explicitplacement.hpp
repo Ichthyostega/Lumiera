@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef MOBJECT_EXPLICITPLACEMENT_H
 #define MOBJECT_EXPLICITPLACEMENT_H
 

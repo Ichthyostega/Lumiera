@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 
 #ifndef LIB_BOOL_CHECKABLE_H
 #define LIB_BOOL_CHECKABLE_H

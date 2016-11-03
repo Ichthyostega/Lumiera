@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/widget/button-bar.hpp"
 #include "include/logging.h"
 

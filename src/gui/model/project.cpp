@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/model/project.hpp"
 #include "gui/model/sequence.hpp"
 

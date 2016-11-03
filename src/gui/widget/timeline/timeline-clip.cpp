@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/widget/timeline/timeline-clip.hpp"
 
 namespace gui {

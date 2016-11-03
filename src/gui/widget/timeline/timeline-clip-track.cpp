@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/widget/timeline/timeline-clip.hpp"
 #include "gui/widget/timeline/timeline-clip-track.hpp"
 #include "gui/widget/timeline/timeline-view-window.hpp"

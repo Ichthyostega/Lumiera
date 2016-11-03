@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef ENGINE_PLUGINADAPTER_H
 #define ENGINE_PLUGINADAPTER_H
 

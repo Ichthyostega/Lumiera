@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef MOBJECT_SESSION_SPECIFIC_CONTENTS_QUERY_H
 #define MOBJECT_SESSION_SPECIFIC_CONTENTS_QUERY_H
 

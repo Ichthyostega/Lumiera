@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef MOBJECT_SESSION_SESS_MANAGER_IMPL_H
 #define MOBJECT_SESSION_SESS_MANAGER_IMPL_H
 

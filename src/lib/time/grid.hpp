@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef LIB_TIME_GRID_H
 #define LIB_TIME_GRID_H
 

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/widget/timeline/basic-draw-strategy.hpp"
 
 namespace gui {

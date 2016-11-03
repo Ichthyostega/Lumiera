@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/widget/timeline/timeline-view-window.hpp"
 #include "gui/widget/timeline-widget.hpp"
 

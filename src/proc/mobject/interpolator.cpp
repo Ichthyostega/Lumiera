@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "proc/mobject/interpolator.hpp"
 
 namespace proc {

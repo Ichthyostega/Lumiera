@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef GUI_DIALOG_NAME_CHOOSER_H
 #define GUI_DIALOG_NAME_CHOOSER_H
 

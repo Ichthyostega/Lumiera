@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef MOBJECT_INTERPOLATOR_H
 #define MOBJECT_INTERPOLATOR_H
 

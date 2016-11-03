@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 
 #include <boost/noncopyable.hpp>
 #include <algorithm>

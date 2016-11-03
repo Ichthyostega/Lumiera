@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 
 #ifndef GUI_WIDGET_TIMELINE_ZOOM_SCALE_H
 #define GUI_WIDGET_TIMELINE_ZOOM_SCALE_H

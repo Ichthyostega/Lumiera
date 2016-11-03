@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/workspace/actions.hpp"
 #include "gui/workspace/workspace-window.hpp"
 

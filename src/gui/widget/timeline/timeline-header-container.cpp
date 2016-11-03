@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/widget/timeline/timeline-header-container.hpp"
 #include "gui/widget/timeline/timeline-track.hpp"
 #include "gui/widget/timeline-widget.hpp"

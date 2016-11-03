@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef LIB_QUERY_DIAGNOSTICS_H
 #define LIB_QUERY_DIAGNOSTICS_H
 

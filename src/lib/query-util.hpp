@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef LIB_QUERY_UTIL_H
 #define LIB_QUERY_UTIL_H
 

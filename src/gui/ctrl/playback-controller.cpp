@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/ctrl/playback-controller.hpp"
 #include "gui/display-service.hpp"
 #include "lib/error.hpp"

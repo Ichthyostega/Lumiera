@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef GUI_DIALOG_PREFERENCES_DIALOG_H
 #define GUI_DIALOG_PREFERENCES_DIALOG_H
 

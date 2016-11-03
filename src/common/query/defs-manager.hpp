@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef LUMIERA_QUERY_DEFS_MANAGER_H
 #define LUMIERA_QUERY_DEFS_MANAGER_H
 

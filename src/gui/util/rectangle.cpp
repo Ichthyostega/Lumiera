@@ -20,6 +20,11 @@
 
 * *****************************************************/
 
+
+/** @file §§§
+ ** TODO §§§
+ */
+
 #include "gui/util/rectangle.hpp"
 #include <algorithm>
 

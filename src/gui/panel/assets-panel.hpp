@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 
 #ifndef GUI_PANEL_ASSETS_PANEL_H
 #define GUI_PANEL_ASSETS_PANEL_H

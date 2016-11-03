@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef GUI_UTIL_RECTANGLE_H
 #define GUI_UTIL_RECTANGLE_H
 

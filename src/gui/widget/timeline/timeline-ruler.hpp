@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef GUI_WIDGET_TIMELINE_RULER_H
 #define GUI_WIDGET_TIMELINE_RULER_H
 

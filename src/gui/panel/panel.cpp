@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/panel/panel.hpp"
 #include "gui/workspace/panel-manager.hpp"

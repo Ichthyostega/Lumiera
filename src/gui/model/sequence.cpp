@@ -20,6 +20,11 @@
 
 * *****************************************************/
 
+
+/** @file §§§
+ ** TODO §§§
+ */
+
 #include "gui/model/sequence.hpp"
 #include "include/logging.h"
 

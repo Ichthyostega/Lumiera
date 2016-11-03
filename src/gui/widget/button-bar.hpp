@@ -21,6 +21,11 @@
 */
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #ifndef GUI_WIDGET_BUTTON_BAR_H
 #define GUI_WIDGET_BUTTON_BAR_H
 

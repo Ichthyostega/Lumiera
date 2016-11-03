@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "gui/widget/timeline/timeline-ruler.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/window-manager.hpp"

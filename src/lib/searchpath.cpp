@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "lib/error.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/symbol.hpp"

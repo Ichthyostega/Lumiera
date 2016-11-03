@@ -20,6 +20,11 @@
 
 * *****************************************************/
 
+
+/** @file §§§
+ ** TODO §§§
+ */
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/panel/assets-panel.hpp"
 

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file §§§
+ ** TODO §§§
+ */
+
+
 #include "proc/asset/meta/time-grid.hpp"
 #include "proc/asset/struct-scheme.hpp"
 #include "proc/assetmanager.hpp"
