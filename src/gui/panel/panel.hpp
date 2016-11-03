@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file panel.hpp
+ ** TODO panel.hpp
  */
 
 

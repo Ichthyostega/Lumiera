@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file output-designation.hpp
+ ** TODO output-designation.hpp
  */
 
 

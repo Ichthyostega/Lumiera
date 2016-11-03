@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file preferences-dialog.hpp
+ ** TODO preferences-dialog.hpp
  */
 
 

@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file query-diagnostics.hpp
+ ** TODO query-diagnostics.hpp
  */
 
 

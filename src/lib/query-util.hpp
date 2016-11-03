@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file query-util.hpp
+ ** TODO query-util.hpp
  */
 
 

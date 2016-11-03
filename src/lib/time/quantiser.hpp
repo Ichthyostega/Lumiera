@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file quantiser.hpp
+ ** TODO quantiser.hpp
  */
 
 

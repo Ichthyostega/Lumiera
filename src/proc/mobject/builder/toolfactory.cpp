@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file toolfactory.cpp
+ ** TODO toolfactory.cpp
  */
 
 

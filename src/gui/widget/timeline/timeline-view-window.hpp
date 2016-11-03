@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-view-window.hpp
+ ** TODO timeline-view-window.hpp
  */
 
 

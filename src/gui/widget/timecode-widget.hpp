@@ -24,8 +24,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timecode-widget.hpp
+ ** TODO timecode-widget.hpp
  */
 
 

@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file libgavl.hpp
+ ** TODO libgavl.hpp
  */
 
 

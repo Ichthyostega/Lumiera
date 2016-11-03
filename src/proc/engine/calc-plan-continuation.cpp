@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file calc-plan-continuation.cpp
+ ** TODO calc-plan-continuation.cpp
  */
 
 

@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file threadpool-init.cpp
+ ** TODO threadpool-init.cpp
  */
 
 

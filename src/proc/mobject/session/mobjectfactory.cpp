@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file mobjectfactory.cpp
+ ** TODO mobjectfactory.cpp
  */
 
 

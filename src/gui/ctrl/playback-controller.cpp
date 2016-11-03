@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file playback-controller.cpp
+ ** TODO playback-controller.cpp
  */
 
 

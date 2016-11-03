@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file generator-mo.cpp
+ ** TODO generator-mo.cpp
  */
 
 

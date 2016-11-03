@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file trait-special.hpp
+ ** TODO trait-special.hpp
  */
 
 

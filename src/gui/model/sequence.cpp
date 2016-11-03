@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file sequence.cpp
+ ** TODO sequence.cpp
  */
 
 #include "gui/model/sequence.hpp"

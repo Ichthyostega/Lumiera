@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file scope-locator.hpp
+ ** TODO scope-locator.hpp
  */
 
 

@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-header-widget.cpp
+ ** TODO timeline-header-widget.cpp
  */
 
 

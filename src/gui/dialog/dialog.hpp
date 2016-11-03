@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file dialog.hpp
+ ** TODO dialog.hpp
  */
 
 

@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file size-trait.hpp
+ ** TODO size-trait.hpp
  */
 
 

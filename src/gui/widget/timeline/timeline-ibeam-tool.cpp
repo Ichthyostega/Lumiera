@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-ibeam-tool.cpp
+ ** TODO timeline-ibeam-tool.cpp
  */
 
 

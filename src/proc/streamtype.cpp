@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file streamtype.cpp
+ ** TODO streamtype.cpp
  */
 
 

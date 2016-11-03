@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file dummy-play-connection.cpp
+ ** TODO dummy-play-connection.cpp
  */
 
 

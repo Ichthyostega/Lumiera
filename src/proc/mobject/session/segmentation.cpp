@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file segmentation.cpp
+ ** TODO segmentation.cpp
  */
 
 #include "proc/mobject/session/segmentation.hpp"

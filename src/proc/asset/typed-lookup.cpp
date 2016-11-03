@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file typed-lookup.cpp
+ ** TODO typed-lookup.cpp
  */
 
 

@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file basic-draw-strategy.hpp
+ ** TODO basic-draw-strategy.hpp
  */
 
 

@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file window-manager.cpp
+ ** TODO window-manager.cpp
  */
 
 

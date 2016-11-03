@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file compoundmedia.hpp
+ ** TODO compoundmedia.hpp
  */
 
 

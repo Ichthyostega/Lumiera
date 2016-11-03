@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file workspace-window.cpp
+ ** TODO workspace-window.cpp
  */
 
 #include "gui/gtk-lumiera.hpp"

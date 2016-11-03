@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file netnodefacade.cpp
+ ** TODO netnodefacade.cpp
  */
 
 

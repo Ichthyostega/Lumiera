@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file placement-index-query-resolver.cpp
+ ** TODO placement-index-query-resolver.cpp
  */
 
 

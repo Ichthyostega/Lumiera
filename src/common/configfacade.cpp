@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file configfacade.cpp
+ ** TODO configfacade.cpp
  */
 
 

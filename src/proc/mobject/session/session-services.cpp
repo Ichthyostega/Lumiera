@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file session-services.cpp
+ ** TODO session-services.cpp
  */
 
 

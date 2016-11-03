@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file panel-manager.cpp
+ ** TODO panel-manager.cpp
  */
 
 

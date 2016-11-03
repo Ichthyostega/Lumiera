@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file render-configurator.cpp
+ ** TODO render-configurator.cpp
  */
 
 

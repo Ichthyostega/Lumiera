@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-body.cpp
+ ** TODO timeline-body.cpp
  */
 
 

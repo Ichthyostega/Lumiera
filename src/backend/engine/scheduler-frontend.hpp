@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file scheduler-frontend.hpp
+ ** TODO scheduler-frontend.hpp
  */
 
 

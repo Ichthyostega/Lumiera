@@ -22,8 +22,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file thread-wrapper.hpp
+ ** TODO thread-wrapper.hpp
  */
 
 

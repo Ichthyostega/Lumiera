@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file name-chooser.hpp
+ ** TODO name-chooser.hpp
  */
 
 

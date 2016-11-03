@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-zoom-scale.hpp
+ ** TODO timeline-zoom-scale.hpp
  */
 
 

@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file scope.hpp
+ ** TODO scope.hpp
  */
 
 

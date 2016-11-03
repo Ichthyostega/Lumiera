@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-group-track.cpp
+ ** TODO timeline-group-track.cpp
  */
 
 

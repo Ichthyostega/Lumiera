@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-header-container.cpp
+ ** TODO timeline-header-container.cpp
  */
 
 

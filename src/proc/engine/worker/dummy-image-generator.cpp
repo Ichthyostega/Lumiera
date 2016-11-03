@@ -22,8 +22,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file dummy-image-generator.cpp
+ ** TODO dummy-image-generator.cpp
  */
 
 

@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-view-window.cpp
+ ** TODO timeline-view-window.cpp
  */
 
 

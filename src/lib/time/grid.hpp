@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file grid.hpp
+ ** TODO grid.hpp
  */
 
 

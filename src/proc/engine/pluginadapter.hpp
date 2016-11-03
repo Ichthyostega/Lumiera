@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file pluginadapter.hpp
+ ** TODO pluginadapter.hpp
  */
 
 

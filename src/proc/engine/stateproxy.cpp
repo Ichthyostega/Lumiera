@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file stateproxy.cpp
+ ** TODO stateproxy.cpp
  */
 
 

@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file effect.hpp
+ ** TODO effect.hpp
  */
 
 

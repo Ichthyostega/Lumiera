@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file searchpath.cpp
+ ** TODO searchpath.cpp
  */
 
 

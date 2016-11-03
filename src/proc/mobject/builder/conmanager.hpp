@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file conmanager.hpp
+ ** TODO conmanager.hpp
  */
 
 

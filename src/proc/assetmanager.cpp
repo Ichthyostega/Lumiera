@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file assetmanager.cpp
+ ** TODO assetmanager.cpp
  */
 
 

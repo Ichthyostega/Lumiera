@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file nodecreatortool.cpp
+ ** TODO nodecreatortool.cpp
  */
 
 

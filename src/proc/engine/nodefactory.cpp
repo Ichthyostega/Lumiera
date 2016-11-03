@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file nodefactory.cpp
+ ** TODO nodefactory.cpp
  */
 
 

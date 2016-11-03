@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file name-chooser.cpp
+ ** TODO name-chooser.cpp
  */
 
 

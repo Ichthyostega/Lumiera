@@ -22,8 +22,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file config-resolver.cpp
+ ** TODO config-resolver.cpp
  */
 
 

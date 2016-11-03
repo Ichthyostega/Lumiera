@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-header-container.hpp
+ ** TODO timeline-header-container.hpp
  */
 
 

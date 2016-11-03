@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file query-focus-stack.hpp
+ ** TODO query-focus-stack.hpp
  */
 
 

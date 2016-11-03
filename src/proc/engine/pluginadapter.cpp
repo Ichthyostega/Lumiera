@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file pluginadapter.cpp
+ ** TODO pluginadapter.cpp
  */
 
 

@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file handling-pattern.cpp
+ ** TODO handling-pattern.cpp
  */
 
 

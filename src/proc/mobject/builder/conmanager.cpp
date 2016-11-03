@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file conmanager.cpp
+ ** TODO conmanager.cpp
  */
 
 

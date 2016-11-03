@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file interfaceproxy.cpp
+ ** TODO interfaceproxy.cpp
  */
 
 

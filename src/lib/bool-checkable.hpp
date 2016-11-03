@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file bool-checkable.hpp
+ ** TODO bool-checkable.hpp
  */
 
 

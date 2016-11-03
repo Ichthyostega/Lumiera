@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file notification-service.cpp
+ ** TODO notification-service.cpp
  */
 
 

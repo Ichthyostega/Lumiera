@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file clip-track.cpp
+ ** TODO clip-track.cpp
  */
 
 #include "clip-track.hpp"

@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file button-bar.hpp
+ ** TODO button-bar.hpp
  */
 
 

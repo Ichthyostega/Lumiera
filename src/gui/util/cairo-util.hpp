@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file cairo-util.hpp
+ ** TODO cairo-util.hpp
  */
 
 #include <cairomm/cairomm.h>

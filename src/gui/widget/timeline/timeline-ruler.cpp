@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-ruler.cpp
+ ** TODO timeline-ruler.cpp
  */
 
 

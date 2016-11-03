@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file buffer-provider.cpp
+ ** TODO buffer-provider.cpp
  */
 
 

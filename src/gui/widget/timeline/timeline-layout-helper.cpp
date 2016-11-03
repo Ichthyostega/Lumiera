@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-layout-helper.cpp
+ ** TODO timeline-layout-helper.cpp
  */
 
 

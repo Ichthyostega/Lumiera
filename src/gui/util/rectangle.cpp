@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file rectangle.cpp
+ ** TODO rectangle.cpp
  */
 
 #include "gui/util/rectangle.hpp"

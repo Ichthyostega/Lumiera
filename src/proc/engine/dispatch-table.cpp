@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file dispatch-table.cpp
+ ** TODO dispatch-table.cpp
  */
 
 

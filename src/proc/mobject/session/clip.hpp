@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file clip.hpp
+ ** TODO clip.hpp
  */
 
 

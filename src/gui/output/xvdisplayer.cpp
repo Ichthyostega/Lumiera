@@ -23,8 +23,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file xvdisplayer.cpp
+ ** TODO xvdisplayer.cpp
  */
 
 

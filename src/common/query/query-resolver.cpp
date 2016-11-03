@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file query-resolver.cpp
+ ** TODO query-resolver.cpp
  */
 
 

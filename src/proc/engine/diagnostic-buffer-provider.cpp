@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file diagnostic-buffer-provider.cpp
+ ** TODO diagnostic-buffer-provider.cpp
  */
 
 

@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file session-impl.cpp
+ ** TODO session-impl.cpp
  */
 
 

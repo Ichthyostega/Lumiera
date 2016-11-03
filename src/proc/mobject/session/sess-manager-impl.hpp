@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file sess-manager-impl.hpp
+ ** TODO sess-manager-impl.hpp
  */
 
 

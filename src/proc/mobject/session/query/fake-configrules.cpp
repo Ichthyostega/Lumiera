@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file fake-configrules.cpp
+ ** TODO fake-configrules.cpp
  */
 
 

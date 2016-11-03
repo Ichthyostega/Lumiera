@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-entity.cpp
+ ** TODO timeline-entity.cpp
  */
 
 

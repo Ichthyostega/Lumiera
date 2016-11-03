@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file compoundmedia.cpp
+ ** TODO compoundmedia.cpp
  */
 
 

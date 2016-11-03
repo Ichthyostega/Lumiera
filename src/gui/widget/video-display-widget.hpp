@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file video-display-widget.hpp
+ ** TODO video-display-widget.hpp
  */
 
 

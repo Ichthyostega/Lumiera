@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file inventory.hpp
+ ** TODO inventory.hpp
  */
 
 

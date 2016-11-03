@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file viewer-panel.cpp
+ ** TODO viewer-panel.cpp
  */
 
 #include "gui/gtk-lumiera.hpp"

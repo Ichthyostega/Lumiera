@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file video-display-widget.cpp
+ ** TODO video-display-widget.cpp
  */
 
 

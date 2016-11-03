@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timeline-panel.cpp
+ ** TODO timeline-panel.cpp
  */
 
 

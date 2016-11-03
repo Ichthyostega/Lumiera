@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file calc-plan-continuation.hpp
+ ** TODO calc-plan-continuation.hpp
  */
 
 

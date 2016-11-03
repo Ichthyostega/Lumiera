@@ -22,8 +22,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file config-rules.cpp
+ ** TODO config-rules.cpp
  */
 
 

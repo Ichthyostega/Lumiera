@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file draw-strategy.cpp
+ ** TODO draw-strategy.cpp
  */
 
 

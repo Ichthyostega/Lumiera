@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file locatingpin.cpp
+ ** TODO locatingpin.cpp
  */
 
 

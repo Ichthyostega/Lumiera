@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file query-resolver.hpp
+ ** TODO query-resolver.hpp
  */
 
 

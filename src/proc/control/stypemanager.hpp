@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file stypemanager.hpp
+ ** TODO stypemanager.hpp
  */
 
 

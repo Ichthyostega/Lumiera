@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file bufftable-obsolete.hpp
+ ** TODO bufftable-obsolete.hpp
  */
 
 

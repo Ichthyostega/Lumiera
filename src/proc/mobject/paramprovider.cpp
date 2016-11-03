@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file paramprovider.cpp
+ ** TODO paramprovider.cpp
  */
 
 

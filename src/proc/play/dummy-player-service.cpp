@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file dummy-player-service.cpp
+ ** TODO dummy-player-service.cpp
  */
 
 

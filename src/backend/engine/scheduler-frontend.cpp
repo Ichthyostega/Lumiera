@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file scheduler-frontend.cpp
+ ** TODO scheduler-frontend.cpp
  */
 
 

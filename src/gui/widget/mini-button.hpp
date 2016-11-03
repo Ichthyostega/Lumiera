@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file mini-button.hpp
+ ** TODO mini-button.hpp
  */
 
 

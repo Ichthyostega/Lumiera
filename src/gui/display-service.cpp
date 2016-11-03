@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file display-service.cpp
+ ** TODO display-service.cpp
  */
 
 

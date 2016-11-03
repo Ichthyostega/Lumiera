@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file timequant.hpp
+ ** TODO timequant.hpp
  */
 
 

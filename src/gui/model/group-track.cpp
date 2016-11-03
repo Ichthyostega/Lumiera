@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file group-track.cpp
+ ** TODO group-track.cpp
  */
 
 #include "group-track.hpp"

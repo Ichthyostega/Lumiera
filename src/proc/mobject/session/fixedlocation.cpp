@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file fixedlocation.cpp
+ ** TODO fixedlocation.cpp
  */
 
 

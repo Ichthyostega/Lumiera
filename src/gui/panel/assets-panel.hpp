@@ -21,8 +21,8 @@
 */
 
 
-/** @file §§§
- ** TODO §§§
+/** @file assets-panel.hpp
+ ** TODO assets-panel.hpp
  */
 
 

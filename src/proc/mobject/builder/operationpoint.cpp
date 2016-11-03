@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file operationpoint.cpp
+ ** TODO operationpoint.cpp
  */
 
 

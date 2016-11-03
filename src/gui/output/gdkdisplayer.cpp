@@ -23,8 +23,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file gdkdisplayer.cpp
+ ** TODO gdkdisplayer.cpp
  */
 
 

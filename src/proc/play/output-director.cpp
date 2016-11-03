@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file §§§
- ** TODO §§§
+/** @file output-director.cpp
+ ** TODO output-director.cpp
  */
 
 
