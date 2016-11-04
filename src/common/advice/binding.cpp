@@ -22,7 +22,11 @@
 
 
 /** @file binding.cpp
- ** TODO binding.cpp
+ ** Implementation of a binding record to represent a match between two patterns.
+ ** This is used for the Advice System, to record existing connections between
+ ** advice providers and consumers. But as such, Binding is a generic mechanism
+ ** and looks like it could be of wider use within the Lumiera application.
+ ** This is the reason why Binding got a separate implementation `cpp` file.
  */
 
 
@@ -62,7 +66,7 @@ namespace advice {
     const string matchArg = "\\(\\s*"+matchSym+"?\\s*\\)"; 
     regex findPredicate ("\\s*"+matchSym+"("+matchArg+")?\\s*,?");    ///< \c sym(arg), groups: [symbol, parenthesis, argument symbol]
     
-    /** detect the \em arity of an predicate, as matched by #findPredicate.
+    /** detect the _arity_ of an predicate, as matched by #findPredicate.
      *  Currently, we don't really parse predicate logic notation and thus we
      *  just distinguish nullary predicates (no argument) and predicates with
      *  one single constant argument. */

@@ -31,7 +31,7 @@
  ** Basically, this piece of code defines a specialised index / storage table to hold
  ** Queries-for-default objects. This allows to remember what actually was used as
  ** "default" solution for some query and to oder possible default solutions.
- ** @remarks as of 2012, we're still using a fake implementation of the resolution,
+ ** @remarks as of 2017, we're still using a fake implementation of the resolution,
  **          no real resolution engine. While the basic idea of this "defaults registry"
  **          is likely to stay, the actual order relation and maybe even the components
  **          to be stored in this registry might be subject to change. 

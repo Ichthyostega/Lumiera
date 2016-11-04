@@ -22,7 +22,9 @@
 
 
 /** @file configentry.h
- ** TODO configentry.h
+ ** Draft for a configuration system (2008).
+ ** @todo as of 2016 this code is unused and
+ **       likely to be replaced by a different approach.
  */
 
 

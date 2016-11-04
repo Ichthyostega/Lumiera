@@ -22,7 +22,13 @@
 
 
 /** @file query-resolver.hpp
- ** TODO query-resolver.hpp
+ ** framework and to resolve logical queries.
+ ** This header defines a family of interfaces and classes
+ ** to integrate resolution of logical, rules based queries into generic
+ ** implementation code. The concrete facility actually to resolve such queries
+ ** is abstracted away as QueryResolver. A prominent usage example is the session,
+ ** which allows to query for elements "somewhere within the model"
+ ** 
  */
 
 

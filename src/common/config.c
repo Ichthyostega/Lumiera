@@ -22,7 +22,9 @@
 
 
 /** @file config.c
- ** TODO config.c
+ ** Implementation of a draft for application configuration from 2008.
+ ** @warning since 2012 it is unclear if we retain this approach
+ ** @todo as of 2016 this code is not used and never was
  */
 
 

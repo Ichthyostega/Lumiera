@@ -22,7 +22,10 @@
 
 
 /** @file configitem.c
- ** Implementation: create a configitem from a single line of the config file.
+ ** Implementation draft for a configuration system (2008).
+ ** Create a configitem from a single line of the config file.
+ ** @todo as of 2016 this code is unused and
+ **       likely to be replaced by a different approach.
  */
 
 

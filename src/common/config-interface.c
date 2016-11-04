@@ -22,7 +22,10 @@
 
 
 /** @file config-interface.c
- ** TODO config-interface.c
+ ** A public interface to a (planned) global configuration system.
+ ** This is part of a drafted configuration system (2008).
+ ** @todo as of 2016 this code is unused and
+ **       likely to be replaced by a different approach.
  */
 
 

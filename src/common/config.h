@@ -33,6 +33,8 @@
  ** to revisit the topic when we've gained a better understanding of
  ** session storage and management of default values and user preferences.
  ** 
+ ** @todo as of 2016, this code is not in any meaningful use
+ ** 
  ** @see lumiera::BasicSetup simple start-up configuration
  ** @see http://lumiera.org/documentation/technical/backend/ConfigLoader.html ConfigLoader draft from 2008
  */

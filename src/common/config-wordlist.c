@@ -22,7 +22,11 @@
 
 
 /** @file config-wordlist.c
- ** TODO config-wordlist.c
+ ** Draft for a configuration system (2008).
+ ** Part of this is the implementation of a word list with
+ ** search and access functions
+ ** @todo as of 2016 this code is unused and
+ **       likely to be replaced by a different approach.
  */
 
 

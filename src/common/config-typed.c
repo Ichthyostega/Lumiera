@@ -22,8 +22,11 @@
 
 
 /** @file config-type.d
- ** Implementation: high level typed configuration interfaces.
+ ** Implementation draft for a configuration system (2008).
+ ** This file implements high level typed configuration interfaces.
  ** @note unfinished draft from 2008
+ ** @todo as of 2016 this code is unused and
+ **       likely to be replaced by a different approach.
  */
 
 #include "include/logging.h"

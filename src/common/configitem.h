@@ -22,7 +22,11 @@
 
 
 /** @file configitem.h
- ** Hierarchy of configuration items.
+ ** Draft for a configuration system (2008).
+ ** @todo as of 2016 this code is unused and
+ **       likely to be replaced by a different approach.
+ ** 
+ ** # Hierarchy of configuration items.
  ** configitems form a 3 level hierarchy:
  ** 
  ** \verbatim

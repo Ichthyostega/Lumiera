@@ -22,7 +22,14 @@
 
 
 /** @file query-resolver.cpp
- ** TODO query-resolver.cpp
+ ** implementation of a framework to query and discover elements
+ ** based on logical rules. This framework builds on the notion of
+ ** possibly having several QueryResolver facilities to handle various
+ ** kinds of queries in an uniform way. To reflect that design, the
+ ** implementation is built round a DispatcherTable to forward requests
+ ** to concrete entities implementing the QueryResolver interface. The
+ ** actual query resolution mechanism is thus not part of the framework.
+ ** 
  */
 
 
@@ -102,7 +109,7 @@ namespace lumiera {
     REQUIRE (!dispatcher_->empty(), "attempt to issue a query without having installed any resolver (yet)");  
     
     if (!canHandle (query))
-      throw lumiera::error::Invalid ("unable to resolve this kind of query"); ////TICKET #197
+      throw lumiera::error::Invalid ("unable to resolve this kind of query"); //////////////////////////////////TICKET #197
     
     return dispatcher_->handle(query);
   }

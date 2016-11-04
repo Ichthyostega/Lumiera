@@ -23,7 +23,8 @@
 
 
 /** @file config-rules.cpp
- ** TODO config-rules.cpp
+ ** Implementation backend part for a configuration rules / query system.
+ ** @todo placeholder and mostly not implemented as of 11/2016
  */
 
 
