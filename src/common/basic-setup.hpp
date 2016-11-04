@@ -22,7 +22,31 @@
 
 
 /** @file basic-setup.hpp
- ** TODO basic-setup.hpp
+ ** Bootstrap and self-configuration of the application at startup.
+ ** The class BasicSetup represents the very basic self-configuration
+ ** of the application at start-up. This bootstrap is based on some
+ ** conventions for the application to "find its parts".
+ ** 
+ ** # Motivation: why a bootstrap convention?
+ ** We want Lumiera to be usable _without the need of a set-up._
+ ** Since the application is meant to be used in media production, users
+ ** often have to work in temporary and varying environments. In such a
+ ** situation, it is desirable just to "unzip and start" an application
+ ** bundle. On the other hand, obviously we want to create a nice and
+ ** proper, FSH compliant application, which can be packaged and installed
+ ** in a modern Linux distribution as first class citizen. We can fulfil
+ ** both demands by establishing a convention how the application can
+ ** discover the very basic parts necessary to start up into the `main()`
+ ** function and read a setup configuration. This setup configuration
+ ** in turn supports the definition of _search paths_ -- which then
+ ** allows us to deliver the application in a bundle structure which
+ ** both can be run from a single root folder and likewise easily
+ ** be mapped into FSH compliant installation folders by the
+ ** packager.
+ ** 
+ ** @see lumiera::AppState::AppState()
+ ** @see main.cpp
+ ** 
  */
 
 

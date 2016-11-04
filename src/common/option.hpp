@@ -22,7 +22,24 @@
 
 
 /** @file option.hpp
- ** TODO option.hpp
+ ** front-end for handling the commandline arguments.
+ ** Lumiera uses the [Boost program options library] for commandline parsing
+ ** and handling of a `setup.ini` file. After checking the commandline arguments
+ ** syntactically, the internal options representation is passed to the various
+ ** [Subsystems](\ref subsys.hpp) of the application. This mechanism allows
+ ** individual subsystems to decide if they want and need to start up at all.
+ ** Obviously, starting a subsystem also pulls up its prerequisites.
+ ** 
+ ** The idea behind this structure is to allow operating the application in
+ ** various _alternative modes,_ like starting "headless" (without UI), script
+ ** driven or as node in a renderfarm network.
+ ** 
+ ** [Boost program options library] : http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
+ ** 
+ ** @see basic-setup.hpp
+ ** @see lumiera::AppState
+ ** @see lumiera::Config
+ ** 
  */
 
 

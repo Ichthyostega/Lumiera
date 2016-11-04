@@ -39,6 +39,7 @@
 /* ==================== GuiNotification =================================== */
     
 #include "include/guinotification-facade.h"
+#include "include/interfaceproxy.hpp"
 
 namespace gui {
   

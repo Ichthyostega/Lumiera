@@ -54,6 +54,7 @@
     
 //#include "proc/play/dummy-player-service.hpp"
 #include "include/dummy-player-facade.h"
+#include "include/interfaceproxy.hpp"
 
 namespace lumiera {
   

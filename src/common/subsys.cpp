@@ -22,7 +22,15 @@
 
 
 /** @file subsys.cpp
- ** TODO subsys.cpp
+ ** Implementation details of a »subsystem descriptor«.
+ ** The application is split into various such subsystems,
+ ** which are prompted by main() to start/stop.
+ ** 
+ ** @see subsystem-runner.hpp
+ ** @see lumiera::AppState
+ ** @see facade.cpp
+ ** @see main.cpp
+ ** 
  */
 
 

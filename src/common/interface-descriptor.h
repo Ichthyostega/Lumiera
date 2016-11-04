@@ -22,7 +22,11 @@
 
 
 /** @file interface-descriptor.h
- ** TODO interface-descriptor.h
+ ** A data record to describe interface, interface instances and plug-in
+ ** instances. It is used by the _interface system_ to register, open
+ ** and manage global extension points and separation interfaces between
+ ** the components of the application.
+ ** 
  */
 
 

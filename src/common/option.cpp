@@ -22,7 +22,8 @@
 
 
 /** @file option.cpp
- ** TODO option.cpp
+ ** Implementation of commandline argument handling,
+ ** based on lib Boost »program options«
  */
 
 

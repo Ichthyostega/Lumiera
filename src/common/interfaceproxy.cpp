@@ -22,7 +22,21 @@
 
 
 /** @file interfaceproxy.cpp
- ** TODO interfaceproxy.cpp
+ ** Implementation of C++ binding proxies on top of the (plain-C based)
+ ** interface system. This is an implementation facility within the application core,
+ ** which allows to embody just an ["interface instance handle"](\ref instancehandle.hpp),
+ ** in order to get RAII-style registration of interfaces and loading of plug-ins.
+ ** 
+ ** A *crucial requirement* for this approach to work is, that any relevant interface
+ ** to be bound and exposed as C++ object needs to set up a concrete specialisation of
+ ** lumiera::facade::Proxy to drive instantiation of the actual binding proxy.
+ ** The relevant specialisations _need to be included explicitly_ into this
+ ** compilation unit!
+ ** 
+ ** The result of this setup is that clients can just invoke `SomeInterface::facade()`
+ ** and thus call through proper C++ bindings with type safety and automatic
+ ** lifecycle management.
+ ** 
  */
 
 
