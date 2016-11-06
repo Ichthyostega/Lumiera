@@ -22,7 +22,8 @@
 
 
 /** @file timeline-view-window.cpp
- ** TODO timeline-view-window.cpp
+ ** Implementation of the timeline window, which holds the main timeline display.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

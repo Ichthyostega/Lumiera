@@ -22,7 +22,7 @@
 
 
 /** @file timeline-panel.cpp
- ** TODO timeline-panel.cpp
+ ** Implementation of the dockable panel to hold the main timeline display.
  */
 
 

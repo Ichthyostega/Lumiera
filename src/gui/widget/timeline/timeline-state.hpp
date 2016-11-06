@@ -22,7 +22,9 @@
 
 
 /** @file timeline-state.hpp
- ** TODO timeline-state.hpp
+ ** Presentation state for the first draft of the timeline display. Very likely
+ ** to be replaced by a complete rewrite.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

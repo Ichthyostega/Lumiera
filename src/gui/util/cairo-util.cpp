@@ -22,7 +22,7 @@
 
 
 /** @file cairo-util.cpp
- ** TODO cairo-util.cpp
+ ** Implementation of helper functions to support working with lib Cairo
  */
 
 

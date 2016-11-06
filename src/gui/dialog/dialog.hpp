@@ -22,7 +22,7 @@
 
 
 /** @file dialog.hpp
- ** TODO dialog.hpp
+ ** Global constants and definitions for dialogs.
  */
 
 

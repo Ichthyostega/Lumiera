@@ -22,7 +22,8 @@
 
 
 /** @file timeline-state.cpp
- ** TODO timeline-state.cpp
+ ** Implementation of presentation state for the first draft of the timeline display.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

@@ -22,7 +22,7 @@
 
 
 /** @file timeline-header-widget.cpp
- ** TODO timeline-header-widget.cpp
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

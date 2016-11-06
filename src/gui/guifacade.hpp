@@ -25,7 +25,7 @@
  ** lower layers of Lumiera. While part of the public interface of the Lumiera GUI,
  ** the implementation of this facility is part of the core application (and not
  ** contained within the GUI dynamic module), because it's job is to load and
- ** activate this module and to startup the GUI.
+ ** activate this module as plug-in and to startup the GUI.
  **
  ** @see lumiera::AppState
  ** @see lumiera::Option

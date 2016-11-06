@@ -22,7 +22,7 @@
 
 
 /** @file basic-draw-strategy.hpp
- ** TODO basic-draw-strategy.hpp
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

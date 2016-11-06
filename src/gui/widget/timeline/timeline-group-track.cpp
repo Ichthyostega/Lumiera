@@ -22,7 +22,8 @@
 
 
 /** @file timeline-group-track.cpp
- ** TODO timeline-group-track.cpp
+ ** @deprecated to be replaced by a different implementation approach
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

@@ -22,7 +22,8 @@
 
 
 /** @file cairo-util.hpp
- ** TODO cairo-util.hpp
+ ** Utility functions for working with elements from the Cairo
+ ** vector drawing library.
  */
 
 #include <cairomm/cairomm.h>

@@ -22,7 +22,7 @@
 
 
 /** @file panel.cpp
- ** TODO panel.cpp
+ ** Implementation base for all dockable panels
  */
 
 

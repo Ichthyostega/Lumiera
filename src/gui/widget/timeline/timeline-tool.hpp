@@ -22,7 +22,9 @@
 
 
 /** @file timeline-tool.hpp
- ** TODO timeline-tool.hpp
+ ** Tools and working modes for selections in the timeline. Most notably
+ ** the Arrow tool for object selection and the I-Beam tool for range selection. 
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

@@ -22,7 +22,8 @@
 
 
 /** @file draw-strategy.cpp
- ** TODO draw-strategy.cpp
+ ** @deprecated very likely to be completely rewritten.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

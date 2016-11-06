@@ -22,7 +22,13 @@
 
 
 /** @file assets-panel.hpp
- ** TODO assets-panel.hpp
+ ** A (dockable) panel to organise the assets of a project.
+ ** Assets are descriptor objects maintained within the Session model.
+ ** They are used to represent
+ ** - media and clips
+ ** - processors, effects etc.
+ ** - structural elements like timeline, tracks, sequences etc.
+ ** - metadata descriptors
  */
 
 

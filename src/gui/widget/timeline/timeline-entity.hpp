@@ -22,7 +22,8 @@
 
 
 /** @file timeline-entity.hpp
- ** any UI element that can be placed on the timeline.
+ ** Any UI element that can be placed on the timeline.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 #ifndef GUI_WIDGET_TIMELINE_ENTITY_H

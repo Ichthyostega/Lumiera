@@ -22,7 +22,8 @@
 
 
 /** @file timeline-zoom-scale.cpp
- ** TODO timeline-zoom-scale.cpp
+ ** Widget to control timeline zoom scale
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

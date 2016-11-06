@@ -22,7 +22,8 @@
 
 
 /** @file timeline-ruler.cpp
- ** TODO timeline-ruler.cpp
+ ** The ruler at the top of the timeline display to represent the time axis.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

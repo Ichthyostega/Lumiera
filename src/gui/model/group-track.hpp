@@ -21,7 +21,10 @@
 */
 
 /** @file widget/timeline/group-track.hpp
- ** This file contains the definition of group track timeline objects
+ ** Preliminary UI-model: Definition of group track timeline objects.
+ ** @warning as of 2016 this UI model is known to be a temporary workaround
+ **          and will be replaced in entirety by UI-Bus and diff framework.
+ ** @deprecated the existing timeline implementation will be completely rewritten
  */
 
 
@@ -36,6 +39,7 @@ namespace model {
 
 /**
  * A class representation of a grouping of tracks.
+ * @deprecated the existing timeline implementation will be rewritten
  */
 class GroupTrack : public ParentTrack
 {

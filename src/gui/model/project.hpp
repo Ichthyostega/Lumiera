@@ -21,8 +21,10 @@
 */
 
 /** @file project.hpp
- ** This file contains the definition of Project, a class which
+ ** Preliminary UI-model: Definition of Project, a class which
  ** stores project data, and wraps proc layer data.
+ ** @warning as of 2016 this UI model is known to be a temporary workaround
+ **          and will be replaced in entirety by UI-Bus and diff framework.
  ** 
  ** @todo this solution was used to build the first outline of the UI.
  **       It needs to be reshaped into a connector to Proc-Layer  ///////////////TICKET #959

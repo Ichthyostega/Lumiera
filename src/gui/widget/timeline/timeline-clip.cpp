@@ -22,7 +22,7 @@
 
 
 /** @file timeline-clip.cpp
- ** TODO timeline-clip.cpp
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

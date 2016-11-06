@@ -22,7 +22,8 @@
 
 
 /** @file timeline-entity.cpp
- ** TODO timeline-entity.cpp
+ ** Implementation of a generic element to be placed onto the timeline
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

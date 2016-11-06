@@ -22,7 +22,7 @@
 
 
 /** @file panel.hpp
- ** TODO panel.hpp
+ ** Base class and interface for all dockable panels
  */
 
 

@@ -22,7 +22,7 @@
 
 
 /** @file name-chooser.hpp
- ** TODO name-chooser.hpp
+ ** Dialog to enter a string name.
  */
 
 

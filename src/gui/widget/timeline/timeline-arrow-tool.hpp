@@ -22,6 +22,7 @@
 
 /** @file timeline-arrow-tool.hpp
  ** This file contains the definition of the arrow tool class
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 #ifndef GUI_WIDGET_TIMELINE_ARROW_TOOL_H

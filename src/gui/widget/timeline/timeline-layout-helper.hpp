@@ -20,8 +20,9 @@
 
 */
 /** @file timeline-layout-helper.cpp
- ** This file contains the definition of the layout helper class
+ ** Preliminary implementation of Timeline presentation, layout helper.
  ** @todo this class should be thoroughly reworked; it seems to be kind of a "god class" ////////TODO 5/2015
+ ** @deprecated as of 2016 this class will become obsolete and replaced by a different implementation approach
  */
 
 

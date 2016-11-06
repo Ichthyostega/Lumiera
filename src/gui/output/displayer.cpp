@@ -24,7 +24,14 @@
 
 
 /** @file displayer.cpp
- ** TODO displayer.cpp
+ ** Implementation of a displayer object, intended for creating
+ ** a video display in the UI. This class was created as part of
+ ** an initial draft of the user interface.
+ ** @warning as of 2016 it is not clear, if this code will be
+ **          evolved into the actual display facility, or be
+ **          replaced and rewritten, when we're about to 
+ **          create a functional video display connected
+ **          to the render engine. 
  */
 
 

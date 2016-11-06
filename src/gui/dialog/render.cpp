@@ -22,7 +22,8 @@
 
 
 /** @file render.cpp
- ** TODO render.cpp
+ ** Implementation of gui:dialog::Render, which is a Dialog
+ ** to set up a renter process and define output name and format.
  */
 
 

@@ -22,7 +22,7 @@
 
 
 /** @file rectangle.hpp
- ** TODO rectangle.hpp
+ ** Helper functions to work with rectangular screen ranges
  */
 
 

@@ -22,7 +22,8 @@
 
 
 /** @file timeline-tool.cpp
- ** TODO timeline-tool.cpp
+ ** Tools and working modes for selections in the timeline. 
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

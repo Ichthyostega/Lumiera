@@ -22,7 +22,9 @@
 
 
 /** @file timeline-group-track.hpp
- ** TODO timeline-group-track.hpp
+ ** Preliminary implementation of a group track within the timeline display
+ ** @deprecated to be replaced by a different implementation approach
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 

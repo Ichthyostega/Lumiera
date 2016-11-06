@@ -22,7 +22,10 @@
 
 
 /** @file playback-controller.cpp
- ** TODO playback-controller.cpp
+ ** Implementation parts of PlaybackController.
+ ** @warning this is preliminary code and will be reworked, once
+ **          we're able to connect to actual playback processes
+ **          performed by the render engine.
  */
 
 

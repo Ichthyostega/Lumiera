@@ -22,7 +22,7 @@
 
 
 /** @file viewer-panel.cpp
- ** TODO viewer-panel.cpp
+ ** Implementation of a dockable panel to hold the video viewers
  */
 
 #include "gui/gtk-lumiera.hpp"

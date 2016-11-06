@@ -22,7 +22,7 @@
 
 
 /** @file rectangle.cpp
- ** TODO rectangle.cpp
+ ** Implementation of functions to work with rectangular screen ranges
  */
 
 #include "gui/util/rectangle.hpp"

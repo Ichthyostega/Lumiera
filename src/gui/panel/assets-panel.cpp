@@ -22,7 +22,7 @@
 
 
 /** @file assets-panel.cpp
- ** TODO assets-panel.cpp
+ ** Implementation of a (dockable) panel to organise the assets of a project.
  */
 
 #include "gui/gtk-lumiera.hpp"

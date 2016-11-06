@@ -22,7 +22,8 @@
 
 
 /** @file timeline-layout-helper.cpp
- ** TODO timeline-layout-helper.cpp
+ ** Preliminary implementation of Timeline presentation, layout helper.
+ ** @deprecated as of 2016 this class will become obsolete and replaced by a different implementation approach
  */
 
 

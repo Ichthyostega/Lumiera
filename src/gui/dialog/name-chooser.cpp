@@ -22,7 +22,8 @@
 
 
 /** @file name-chooser.cpp
- ** TODO name-chooser.cpp
+ ** Implementation details of NameChooser,
+ ** a dialog to enter a name string.
  */
 
 
