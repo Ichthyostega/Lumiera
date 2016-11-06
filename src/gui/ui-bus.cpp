@@ -23,7 +23,6 @@
 
 
 /** @file ui-bus.cpp
- ** TODO ui-bus.cpp
  */
 
 

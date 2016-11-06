@@ -22,7 +22,7 @@
 
 
 /** @file video-display-widget.cpp
- ** TODO video-display-widget.cpp
+ ** Implementation of video display, embedded into the UI.
  */
 
 

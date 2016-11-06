@@ -22,7 +22,7 @@
 
 
 /** @file menu-button.cpp
- ** TODO menu-button.cpp
+ ** Implementation of the MenuButton widget, to display a menu when clicked.
  */
 
 

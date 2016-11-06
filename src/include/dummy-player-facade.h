@@ -22,7 +22,6 @@
 
 
 /** @file dummy-player-facade.h
- ** TODO dummy-player-facade.h
  */
 
 

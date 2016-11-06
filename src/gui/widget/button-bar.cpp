@@ -22,7 +22,7 @@
 
 
 /** @file button-bar.cpp
- ** TODO button-bar.cpp
+ ** Implementation of a toolbar with buttons for use in dialogs.
  */
 
 

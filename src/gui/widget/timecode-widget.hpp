@@ -25,7 +25,10 @@
 
 
 /** @file timecode-widget.hpp
- ** TODO timecode-widget.hpp
+ ** Widget for timecode display and input.
+ ** Ported and adapted from the Ardour DAW.
+ ** @todo needs extensive rework to get smooth integration
+ **       with Lumiera's timecode handling functions 
  */
 
 
@@ -55,7 +58,7 @@ namespace widget {
   
   
   /**
-   * Widget for timecode imput and display.
+   * Widget for timecode input and display.
    * Adapted implementation from the Ardour DAW
    */
   class TimeCode

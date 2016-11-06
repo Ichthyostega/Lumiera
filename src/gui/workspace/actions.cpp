@@ -22,7 +22,8 @@
 
 
 /** @file actions.cpp
- ** TODO actions.cpp
+ ** Implementation of support functionality to register and manage
+ ** user actions and command bindings
  */
 
 

@@ -25,7 +25,8 @@
 
 
 /** @file timecode-widget.cpp
- ** TODO timecode-widget.cpp
+ ** Widget for timecode display and input.
+ ** Ported and adapted from the Ardour DAW
  */
 
 

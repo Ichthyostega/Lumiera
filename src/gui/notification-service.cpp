@@ -22,7 +22,7 @@
 
 
 /** @file notification-service.cpp
- ** TODO notification-service.cpp
+ ** @todo write documentation for the notification service
  */
 
 

@@ -22,7 +22,7 @@
 
 
 /** @file button-bar.hpp
- ** TODO button-bar.hpp
+ ** A toolbar widget for use in dialogs.
  */
 
 

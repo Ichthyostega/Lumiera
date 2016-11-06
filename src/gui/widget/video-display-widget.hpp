@@ -22,7 +22,7 @@
 
 
 /** @file video-display-widget.hpp
- ** TODO video-display-widget.hpp
+ ** Widget to create a video display embedded into the UI
  */
 
 

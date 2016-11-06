@@ -22,7 +22,7 @@
 
 
 /** @file mini-button.hpp
- ** TODO mini-button.hpp
+ ** Adapter to wrap button widgets intended to serve as tool buttons
  */
 
 

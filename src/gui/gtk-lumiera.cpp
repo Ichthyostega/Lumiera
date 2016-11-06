@@ -22,7 +22,6 @@
 
 
 /** @file gtk-lumiera.cpp
- ** TODO gtk-lumiera.cpp
  */
 
 

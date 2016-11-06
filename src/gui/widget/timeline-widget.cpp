@@ -22,7 +22,7 @@
 
 
 /** @file timeline-widget.cpp
- ** TODO timeline-widget.cpp
+ ** @deprecated timecode display is about to be rewritten as of 11/2016
  */
 
 

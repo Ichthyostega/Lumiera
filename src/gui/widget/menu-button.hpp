@@ -22,7 +22,7 @@
 
 
 /** @file menu-button.hpp
- ** TODO menu-button.hpp
+ ** A button widget that displays a menu when clicked.
  */
 
 

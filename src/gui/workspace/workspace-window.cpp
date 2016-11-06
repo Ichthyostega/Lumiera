@@ -22,7 +22,7 @@
 
 
 /** @file workspace-window.cpp
- ** TODO workspace-window.cpp
+ ** Implementation of base functionality for workspace windows.
  */
 
 #include "gui/gtk-lumiera.hpp"

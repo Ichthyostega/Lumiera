@@ -22,7 +22,7 @@
 
 
 /** @file play-facade.h
- ** TODO play-facade.h
+ ** Public access point to the _playback service_ provided by the »play-out subsystem«
  */
 
 
