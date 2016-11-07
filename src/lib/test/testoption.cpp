@@ -22,7 +22,7 @@
 
 
 /** @file testoption.cpp
- ** TODO testoption.cpp
+ ** Implementation of commandline parsing for the unittest test-suite.
  */
 
 

@@ -23,7 +23,7 @@
 
 
 /** @file depend-4test.hpp
- ** TODO depend-4test.hpp
+ ** test support code to inject mock variants of depencencies
  */
 
 

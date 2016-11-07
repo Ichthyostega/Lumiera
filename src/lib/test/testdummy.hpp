@@ -22,7 +22,10 @@
 
 
 /** @file testdummy.hpp
- ** TODO testdummy.hpp
+ ** unittest helper code: test dummy object.
+ ** This dummy includes some distinct random identity marker
+ ** plus a checksum facility to verify instance management, i.e.
+ ** to verify each created instance was properly destroyed after use.
  */
 
 

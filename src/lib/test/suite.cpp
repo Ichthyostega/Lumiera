@@ -22,7 +22,7 @@
 
 
 /** @file suite.cpp
- ** TODO suite.cpp
+ ** Implementation of a simple test runner / test suite framework for unit testing.
  */
 
 

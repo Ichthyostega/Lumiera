@@ -22,7 +22,7 @@
 
 
 /** @file testoption.hpp
- ** TODO testoption.hpp
+ ** Commandline options for our unittest test-suite executable.
  */
 
 
