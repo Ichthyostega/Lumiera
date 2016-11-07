@@ -22,7 +22,7 @@
 
 
 /** @file maybe-compare.hpp
- ** TODO maybe-compare.hpp
+ ** helpers for fail-safe invocation of comparison operations from generic code.
  */
 
 

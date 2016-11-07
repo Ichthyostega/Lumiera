@@ -22,7 +22,26 @@
 
 
 /** @file size-trait.hpp
- ** TODO size-trait.hpp
+ ** Metaprogramming definitions to deal with dependency on implementation size and layout.
+ ** Sometimes we need to build our code based on very specific assumptions regarding the
+ ** implementation data layout of library classes we rely on. Typically such happens when
+ ** we're forced to work around limitations the library provider never intended to be relevant
+ ** for any client. Which places us into the very unfortunate situation either to abandon some
+ ** design concept we prefer to use for some other relevant reason, or to do something very
+ ** evil and nasty (namely to rely on magic numbers, which may break silently when the
+ ** library provider changes implementation).
+ ** 
+ ** While this situation can not be solved in principle, at least we may concentrate all
+ ** these nasty dependencies in a single location. Moreover, we can deal with this situation
+ ** by constructing our _magic numbers_ at least in a systematic way, which allows us to
+ ** intersperse static assertions to trigger an alarm when adjustments need to be made.
+ ** 
+ ** \par typical example
+ ** A prominent example is boost::format, which causes a lot of code size bloat when used
+ ** liberally. For that reason, we built a front-end to encapsulate the boost implementation,
+ ** so any typed flavour of any call needs to be instantiated only once per application.
+ ** This allows us to use type safe formatting in error messages, but unfortunately forces
+ ** us to rely on the precise size of the boost::format implementation.
  */
 
 

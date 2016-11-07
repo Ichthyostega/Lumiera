@@ -22,7 +22,7 @@
 
 
 /** @file genfunc.cpp
- ** TODO genfunc.cpp
+ ** Implementation of generic functions to build identification schemes.
  */
 
 
