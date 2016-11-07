@@ -22,7 +22,12 @@
 
 
 /** @file formats.hpp
- ** TODO formats.hpp
+ ** Definition of time code formats
+ ** This header is part of the Lumiera time and timecode handling library
+ ** and defines the interfaces and types to deal with the common set of
+ ** time code formats encountered in video editing. The generic handling
+ ** of _quantised time_ can be parametrised to support and comply to these
+ ** specific time code formats.
  */
 
 

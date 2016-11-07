@@ -22,7 +22,9 @@
 
 
 /** @file grid.hpp
- ** TODO grid.hpp
+ ** definition of a time grid abstraction for time and timecode handling.
+ ** This interface is the foundation to deal with _quantised_ (grid aligned)
+ ** time values, as is essential for handling of timecode data.
  */
 
 

@@ -22,7 +22,17 @@
 
 
 /** @file quantiser.hpp
- ** TODO quantiser.hpp
+ ** Library functions to support the formation of grid-aligned time values.
+ ** This is a crucial part of Lumiera's time and time handling framework; it
+ ** serves as link between the precise internal time representation and various
+ ** grid-aligned external standard time representations. The underlying theme is,
+ ** by forcing all conversions to go through this central set of library functions,
+ ** the notorious act of frame-aligning / grid-aligning time values, which can not
+ ** be avoided, will at least be performed in a reproducible and predictable way.
+ ** Moreover, the time handling library was built in a way such as to encourage
+ ** use of the internal, abstracted yet precise time entities, so that the
+ ** inevitable conversion to the imprecise but well-established external
+ ** entities (frame numbers, SMPTE, drop frame, HMS) happens as late as possible.
  */
 
 
@@ -35,7 +45,6 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/iter-adapter.hpp"
 
-//#include <boost/operators.hpp>
 #include <vector>
 #include <string>
 #include <cmath>

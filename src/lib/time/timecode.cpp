@@ -22,7 +22,9 @@
 
 
 /** @file timecode.cpp
- ** TODO timecode.cpp
+ ** Implementation parts of the timecode handling library.
+ ** @todo a started implementation exists since 2010,
+ **       yet crucial parts still need to be filled in as of 2016
  */
 
 

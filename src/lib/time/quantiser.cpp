@@ -22,7 +22,7 @@
 
 
 /** @file quantiser.cpp
- ** TODO quantiser.cpp
+ ** Implementation of support functions to create grid-aligned time and timecode values
  */
 
 

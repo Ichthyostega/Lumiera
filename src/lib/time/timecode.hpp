@@ -22,7 +22,14 @@
 
 
 /** @file timecode.hpp
- ** TODO timecode.hpp
+ ** Timecode handling library
+ ** This header defines the foundation interface TCode to represent a grid aligned
+ ** time specification, given in some well-established time code format. It is complemented
+ ** by implementations of the most relevant practical time code formats
+ ** - frame numbers / frame counting
+ ** - SMPTE (hours, minutes, seconds and frames) -- including drop-frame
+ ** - HMS (hours, minutes, seconds and fractional seconds)
+ ** - fractional seconds as rational number
  */
 
 
@@ -50,7 +57,10 @@ namespace time {
   /**
    * Interface: fixed format timecode specification.
    * @see time::format
-   * @todo WIP-WIP-WIP
+   * @todo as of 2016 this is basically finished since years,
+   *       but still not in any widespread practical use (not by bad intention,
+   *       simply by lack of opportunities). So this core interface still needs
+   *       some feedback from practice in order to be finalised. 
    */
   class TCode
     {
