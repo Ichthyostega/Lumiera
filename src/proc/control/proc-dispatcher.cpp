@@ -22,7 +22,7 @@
 
 
 /** @file proc-dispatcher.cpp
- ** TODO proc-dispatcher.cpp
+ ** @todo merge from gui branch
  */
 
 

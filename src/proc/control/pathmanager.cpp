@@ -22,7 +22,9 @@
 
 
 /** @file pathmanager.cpp
- ** TODO pathmanager.cpp
+ ** Implementation functionality regarding decision about the proper
+ ** wiring and calculation strategy for rendering.
+ ** @todo placeholder as of 2014, development in this area is stalled
  */
 
 

@@ -22,7 +22,9 @@
 
 
 /** @file stypemanager.hpp
- ** TODO stypemanager.hpp
+ ** Interface to the stream type system
+ ** @todo very crucial part of the design,
+ **       unfortunately development in this area is stalled since 2012
  */
 
 

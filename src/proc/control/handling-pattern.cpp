@@ -22,7 +22,8 @@
 
 
 /** @file handling-pattern.cpp
- ** TODO handling-pattern.cpp
+ ** Implementation of pre-defined command handling patterns
+ ** @internal detail of the Proc-Layer command handling framework.
  */
 
 

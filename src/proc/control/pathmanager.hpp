@@ -22,7 +22,11 @@
 
 
 /** @file pathmanager.hpp
- ** TODO pathmanager.hpp
+ ** Facility to decide upon the actual render strategy.
+ ** When wiring the various processing facilities to form a render nodes network,
+ ** at times there are multiple possibilities to reach a given goal. This opens
+ ** the opportunity for optimisation and to configure specific variants or flavours.
+ ** @todo this is a design draft and just defines a placeholder to indicate our plans.
  */
 
 

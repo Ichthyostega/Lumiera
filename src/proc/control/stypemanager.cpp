@@ -22,7 +22,7 @@
 
 
 /** @file stypemanager.cpp
- ** TODO stypemanager.cpp
+ ** Implementation functions of the stream type system
  */
 
 
