@@ -22,7 +22,7 @@
 
 
 /** @file media.hpp
- ** Media data is a specific kind of Asset.
+ ** Media data represented a specific kind of Asset.
  ** For the different <i>kinds</i> of Assets, we use sub-interfaces inheriting
  ** from the general Asset interface. To be able to get asset::Media instances
  ** directly from the AssetManager, we define a specialisation of the Asset ID.

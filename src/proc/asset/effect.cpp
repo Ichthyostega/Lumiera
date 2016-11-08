@@ -22,7 +22,8 @@
 
 
 /** @file effect.cpp
- ** TODO effect.cpp
+ ** Implementation level functionality regarding the Asset representation of effects
+ ** @todo still unimplemented and stalled work as of 2016
  */
 
 

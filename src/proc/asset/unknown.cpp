@@ -22,7 +22,7 @@
 
 
 /** @file unknown.cpp
- ** TODO unknown.cpp
+ ** Implementation functions regarding a marker asset for unknown media.
  */
 
 

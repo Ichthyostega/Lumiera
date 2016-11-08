@@ -22,7 +22,8 @@
 
 
 /** @file viewer.cpp
- ** TODO viewer.cpp
+ ** Implementation functions to represent a viewer or viewer attachment point.
+ ** @todo half finished draft, topic was postponed as of 2014, but will become relevant again
  */
 
 

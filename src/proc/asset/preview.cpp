@@ -22,7 +22,7 @@
 
 
 /** @file preview.cpp
- ** TODO preview.cpp
+ ** Implementation details regarding a placeholder / "Proxy" / preview media asset
  */
 
 

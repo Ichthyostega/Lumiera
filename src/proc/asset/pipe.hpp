@@ -22,7 +22,11 @@
 
 
 /** @file pipe.hpp
- ** TODO pipe.hpp
+ ** A "processing pipe" represented as Asset.
+ ** The Pipe Asset, especially the ID<Pipe> plays a crucial role within the
+ ** Session model to represent both attachment points for further media processors
+ ** and connection designations, which will be resolved to some input/output port
+ ** during the Builder run.
  */
 
 

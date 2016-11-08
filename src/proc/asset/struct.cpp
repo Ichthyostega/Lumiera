@@ -22,7 +22,18 @@
 
 
 /** @file struct.cpp
- ** TODO struct.cpp
+ ** Implementation functions to support the "structural asset" abstraction.
+ ** This translation unit defines some functions of high importance for querying
+ ** and self-discovery of model parts. Moreover, it drives explicit template specialisations
+ ** for the core functions of the StructFacotry.
+ ** 
+ ** # Vision
+ ** The vision is to express knowledge, configuration and some flexible parts of the model construction
+ ** through predicate rules. To support this vision, at various places within the translation from
+ ** Session model to render node network, a _query_ is used instead of hard wired functionality.
+ ** @todo while most code here is a very preliminary draft (let's call it a hack), as of 2016
+ **       we acknowledge that this design is here to stay and represents one of the most
+ **       distinctive features of Lumiera
  */
 
 

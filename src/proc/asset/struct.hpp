@@ -22,9 +22,10 @@
 
 
 /** @file struct.hpp
+ ** Asset representation of structural elements within the model.
  ** Structural parts of the Session (e.g. "tracks", i.e. Fork objects) can be
  ** reflected into the "bookkeeping view" as a specific Kind of Asset.
- ** For the different \em kinds of Assets, we use sub-interfaces inheriting
+ ** For the different _kinds of Assets_, we use sub-interfaces inheriting
  ** from the general Asset interface, each of which expose a distinguishing feature.
  ** In the case of structural assets, the key point is the ability to retrieve an
  ** instance based on a capabilities query; structural assets are typically created
@@ -36,7 +37,8 @@
  ** - "tracks" are implemented as Fork represented as \c entryID within the asset view.
  ** - ProcPatt is used as a blueprint in the build process, a standard connection pattern
  ** 
- ** \par access and creation
+ ** ## access and creation
+ ** 
  ** asset::Struct instances are created on demand; the interface is to invoke the
  ** StructFactory with a (typed) Query describing properties or capabilities.
  ** In case this query succeeds, an existing asset will be returned, otherwise

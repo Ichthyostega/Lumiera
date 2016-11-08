@@ -22,7 +22,7 @@
 
 
 /** @file meta.cpp
- ** TODO meta.cpp
+ ** Implementation details regarding the Meta Asset category
  */
 
 

@@ -42,6 +42,10 @@
  ** on the name-ID of the sequence: \c Struct::retrieve(Query<Sequence> ("id(theName)."))
  ** Additionally, a specific fork root may be requested: \c "id(theName),rootFork(trackID)." 
  ** 
+ ** @todo this is a very crucial part of the emerging design of the session model. Unfortunately,
+ **       development on that frontier has stalled since 2010, since we focused efforts towards
+ **       the player, the engine and the GUI lately (as of 2016)
+ ** 
  ** @see Session
  ** @see StructFactory
  **

@@ -22,7 +22,7 @@
 
 
 /** @file media.cpp
- ** TODO media.cpp
+ ** Implementation regarding the Media Asset abstraction
  */
 
 

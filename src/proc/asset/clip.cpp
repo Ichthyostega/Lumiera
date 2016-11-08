@@ -22,7 +22,7 @@
 
 
 /** @file clip.cpp
- ** TODO clip.cpp
+ ** Clip Asset implementation
  */
 
 

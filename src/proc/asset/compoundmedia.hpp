@@ -22,7 +22,9 @@
 
 
 /** @file compoundmedia.hpp
- ** TODO compoundmedia.hpp
+ ** Definition of an Asset to represent a clustering or compound of several media
+ ** @warning early draft, never put into use as of 2016 (but there wasn't a reason to
+ **          do so either, since we didn't get up to dealing with this topic)
  */
 
 

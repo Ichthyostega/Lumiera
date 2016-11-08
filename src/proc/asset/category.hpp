@@ -22,7 +22,7 @@
 
 
 /** @file category.hpp
- ** TODO category.hpp
+ ** Definition of Asset categorisation
  */
 
 

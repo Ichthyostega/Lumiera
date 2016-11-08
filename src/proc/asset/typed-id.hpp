@@ -33,6 +33,8 @@
  **       the interfaces. Ichthyo expects this registration service to play a crucial role
  **       when it comes to integrating a real resolution engine (prolog). For now, the
  **       only interesting point is how to handle the automatic registration.
+ ** @todo and as of 2016, we acknowledge the importance of this approach,
+ **       just the topic is deferred for now and will be picked up later...
  ** 
  ** @see configrules.hpp
  ** @see typed-lookup.cpp corresponding implementation

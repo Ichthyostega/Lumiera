@@ -22,7 +22,7 @@
 
 
 /** @file proc.cpp
- ** TODO proc.cpp
+ ** Implementation details regarding the Asset representation of a media processing facility
  */
 
 

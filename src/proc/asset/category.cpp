@@ -22,7 +22,7 @@
 
 
 /** @file category.cpp
- ** TODO category.cpp
+ ** Implementation parts regarding Asset categorisation
  */
 
 

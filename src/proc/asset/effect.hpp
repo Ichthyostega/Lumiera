@@ -22,7 +22,7 @@
 
 
 /** @file effect.hpp
- ** TODO effect.hpp
+ ** Definition of an Asset representation for any kind of _effect_ or media processor.
  */
 
 

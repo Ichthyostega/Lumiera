@@ -22,7 +22,7 @@
 
 
 /** @file procpatt.cpp
- ** TODO procpatt.cpp
+ ** Implementation details related to "processing pattern" assets.
  */
 
 

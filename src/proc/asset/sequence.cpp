@@ -22,7 +22,7 @@
 
 
 /** @file sequence.cpp
- ** TODO sequence.cpp
+ ** Implementation parts of the Sequence entity within the Session model
  */
 
 

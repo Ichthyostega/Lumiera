@@ -22,7 +22,9 @@
 
 
 /** @file dataset.hpp
- ** TODO dataset.hpp
+ ** Definition of an Asset to represent a set of control data
+ ** An example would be captured animation data from some kind of external controller.
+ ** @warning as of 2016, this is a design placeholder. The concept seems reasonable though.
  */
 
 

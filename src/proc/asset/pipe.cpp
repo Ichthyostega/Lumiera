@@ -22,7 +22,7 @@
 
 
 /** @file pipe.cpp
- ** TODO pipe.cpp
+ ** Implementation details regarding the Asset representation of a processing Pipe
  */
 
 

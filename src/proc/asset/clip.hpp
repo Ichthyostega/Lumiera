@@ -22,7 +22,7 @@
 
 
 /** @file clip.hpp
- ** TODO clip.hpp
+ ** Definition of Asset representation for a media clip
  */
 
 

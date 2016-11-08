@@ -22,7 +22,7 @@
 
 
 /** @file preview.hpp
- ** TODO preview.hpp
+ ** Placeholder "proxy" Asset
  */
 
 
