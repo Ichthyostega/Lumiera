@@ -22,7 +22,7 @@
 
 
 /** @file cmdline.cpp
- ** TODO cmdline.cpp
+ ** Implementation of a wrapper / marker to handle "commandline arguments".
  */
 
 

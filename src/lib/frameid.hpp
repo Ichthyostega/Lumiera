@@ -22,7 +22,14 @@
 
 
 /** @file frameid.hpp
- ** TODO frameid.hpp
+ ** Marker tuple to identify a specific frame.
+ ** @todo 2016 the intention was to use this as cache key, and to include
+ **       some information regarding the processing chain which led up to
+ **       the calculation of this frame, to allow for intelligent caching
+ **       and to avoid throwing away most of the frames on each and every
+ **       tweak of the edit. This marker was added as a preview in 2010
+ **       but we didn't get to the point of actually putting that idea
+ **       into practical use. Yet the basic idea remains desirable...
  */
 
 

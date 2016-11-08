@@ -22,7 +22,7 @@
 
 
 /** @file util-quant.hpp
- ** TODO util-quant.hpp
+ ** Utilities for quantisation (grid alignment) and comparisons.
  */
 
 

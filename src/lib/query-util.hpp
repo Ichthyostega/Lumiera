@@ -22,7 +22,7 @@
 
 
 /** @file query-util.hpp
- ** TODO query-util.hpp
+ ** Utilities to support working with predicate queries
  */
 
 

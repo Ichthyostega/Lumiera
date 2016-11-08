@@ -22,7 +22,8 @@
 
 
 /** @file visitor-dispatcher.hpp
- ** TODO visitor-dispatcher.hpp
+ ** Helper for a trampoline table based implementation of the visitor pattern.
+ ** @internal implementation part, clients should include visitor.hpp
  */
 
 

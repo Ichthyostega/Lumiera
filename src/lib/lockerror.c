@@ -22,7 +22,7 @@
 
 
 /** @file lockerror.c
- ** TODO lockerror.c
+ ** implementation and definitions for error-handling on low-level locking
  */
 
 

@@ -22,7 +22,10 @@
 
 
 /** @file nocopy.hpp
- ** TODO nocopy.hpp
+ ** Mix-Ins to allow or prohibit various degrees of copying and cloning.
+ ** @todo 2016 this could be organised way better. Also C++11 offers a way more
+ **       elegant way of expressing the intention. We could get rid of `boost::noncopyable`
+ **       The basic idea of using a marker mixin seems very reasonable though.     ////////////////////////////TICKET #1084
  */
 
 

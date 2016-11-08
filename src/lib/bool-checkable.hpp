@@ -22,7 +22,20 @@
 
 
 /** @file bool-checkable.hpp
- ** TODO bool-checkable.hpp
+ ** Mix-in for implicit conversion to bool.
+ ** When inheriting from BoolCheckable, a class becomes convertible
+ ** to `bool` -- which is implemented by invoking an operation `isValid()`
+ ** on this class.
+ ** 
+ ** @deprecated 2016 it is not clear if we'll retain that feature on the long run.
+ **       Essentially this was needed to work around the dangers of implicit `bool`
+ **       conversion in C++98, which is largely obsolete since C++11, because the
+ **       rectified semantics of implicit conversion now prevent most unexpected
+ **       usages of this conversion function, like e.g. in comparison operators
+ **       on a derived class. Moreover, fun fact is, the implementation in this
+ **       header is not even correct, see Ticket #477
+ **       On the other hand, the basic idea of exposing a `isValid()` function
+ **       does not sound too bad...
  */
 
 

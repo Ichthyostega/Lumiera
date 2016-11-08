@@ -22,7 +22,7 @@
 
 
 /** @file searchpath.cpp
- ** TODO searchpath.cpp
+ ** Implementation of helpers to handle directory search paths.
  */
 
 

@@ -1,5 +1,5 @@
 /*
-  tmpbuf.c      -  Round Robin Temporary buffers
+  TMPBUF.h  -  Round Robin Temporary buffers
 
   Copyright (C)                         Lumiera.org
     2008, 2010                          Christian Thaeter <ct@pipapo.org>
@@ -17,29 +17,37 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
+
+
+/** @file tmpbuf.h
+ ** Round robin temporary buffers.
+ ** This helper provides some buffers per thread which are round-robin recycled with each use.
+ ** The idea is to have fast buffers for temporal data without need for explicit heap management.
+ ** There is a fixed number of buffers per thread, which will be re-used with a round-robin pattern,
+ ** without any safety checks. The caller just needs to ensure not to use too much of these buffers.
+ ** Typical usage is for "just printing a damn number", hand it over to a library, which will copy
+ ** the data anyway.
+ ** 
+ ** @warning this is the restored old version from  bc989dab7a97fc69c (July 2010)
+ **         (the improved version is still buggy as of 5/2011)
+ */
+
 
 #ifndef LUMIERA_TMPBUF_H
 #define LUMIERA_TMPBUF_H
 
 #include <stdlib.h>
 
-/**
- * @file
- * Round robin temporary buffers.
- * This provides some buffers per thread which are round-robin recycled with each use.
- * The idea is to have fast buffers for temporal data without need for explicit heap management.
- * 
- * @warning this is the restored old version from  bc989dab7a97fc69c (July 2010)
- *         (the improved version is still buggy as of 5/2011)
- */
 
 
-/* following value must be exponent of 2 */
 /**
  * Number of buffers in the ring
  * This also defines how many concurent buffers can be in use in one thread (including nested calls)
  * tmpbufs are only suitable for nested calls where one knows in advance how much tmpbufs might be used
+ * 
+ * @warning the value defined here must be a power of 2
  */
 #define LUMIERA_TMPBUF_NUM 16
 

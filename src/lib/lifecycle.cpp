@@ -22,7 +22,7 @@
 
 
 /** @file lifecycle.cpp
- ** TODO lifecycle.cpp
+ ** Implementation of installable callbacks for lifecycle events.
  */
 
 

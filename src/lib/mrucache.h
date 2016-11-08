@@ -19,20 +19,22 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_CACHE_H
-#define LUMIERA_CACHE_H
+
+/** @file mrucache.h
+ ** Most recent used cache.
+ ** Elements (addressed by a LList node) are either checked in the cache and thereby subject of aging
+ ** or checked out under control of the user. Most operations require that the cache is locked.
+ ** @warning not threadsafe. Locking must be done from usage site.
+ */
+
+
+#ifndef LIB_MRUCACHE_H
+#define LIB_MRUCACHE_H
 
 #include "lib/llist.h"
 
 #include <nobug.h>
 
-/**
- * @file
- * Most recent used cache
- * Elements (addressed by a LList node) are either checked in the cache and thereby subject of aging
- * or checked out under control of the user. Most operations require that the cache is locked. This locking
- * must be done from elsewhere.
- */
 
 /**
  * Callback function used to destroy/cleanup aged elements.
@@ -176,4 +178,4 @@ int
 lumiera_mrucache_age (LumieraMruCache self, int nelem);
 
 
-#endif
+#endif /*LIB_MRUCACHE_H*/

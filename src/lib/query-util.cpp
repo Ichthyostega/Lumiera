@@ -22,7 +22,7 @@
 
 
 /** @file query-util.cpp
- ** TODO query-util.cpp
+ ** Implementation of helpers for working with predicate queries.
  */
 
 

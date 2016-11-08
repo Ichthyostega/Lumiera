@@ -22,7 +22,9 @@
 
 
 /** @file dependency-factory.hpp
- ** TODO dependency-factory.hpp
+ ** Implementation of a singleton factory used to bring up services as dependency.
+ ** @internal this implementation header belongs to our framework to deal with
+ **           [service dependencies](\ref depend.hpp) and should not be used directly.
  */
 
 
@@ -45,7 +47,7 @@ namespace lib {
   /**
    * @internal Factory to generate and manage service objects classified by type.
    * An instance of this factory is placed <i>once for each type</i> for use by
-   * the \c lib::Depend<TY> front-end for dependency management. While the latter
+   * the lib::Depend<TY> front-end for dependency management. While the latter
    * provides the singleton-style initialisation patter, the DependencyFacotry
    * maintains a customisable factory function for instance creation. Moreover,
    * the embedded helper template DependencyFactory::InstanceHolder actually

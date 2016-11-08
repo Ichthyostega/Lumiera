@@ -21,7 +21,7 @@
 
 
 /** @file lockerror.h
- ** TODO lockerror.h
+ ** definitions and declarations for error-handling on low-level locking
  */
 
 #ifndef LUMIERA_LOCKERRORS_H

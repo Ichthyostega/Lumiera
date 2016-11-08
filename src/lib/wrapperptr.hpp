@@ -22,7 +22,8 @@
 
 
 /** @file wrapperptr.hpp
- ** TODO wrapperptr.hpp
+ ** Wrapper to treat several flavours of smart-pointers uniformly
+ ** @deprecated as of 2016 we should re-think how to organise visitor use in the Builder
  */
 
 

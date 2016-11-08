@@ -36,8 +36,8 @@ Credits for many further implementation ideas go to
 
 
 /** @file visitor.hpp
- ** A library implementation of the <b>Visitor Pattern</b> tailored specifically
- ** to Lumiera's needs within the Proc Layer. Visitor enables <b>double dispatch</b>
+ ** A library implementation of the *Visitor Pattern* tailored specifically
+ ** to Lumiera's needs within the Proc Layer. Visitor enables *double dispatch*
  ** calls, based both on the concrete type of some target object and the concrete type of
  ** a tool object being applied to this target. The code carrying out this tool application
  ** (and thus triggering the double dispatch) need not know any of these concrete types and is
@@ -47,22 +47,27 @@ Credits for many further implementation ideas go to
  ** concrete target visitable type.
  **
  ** Implementation notes
- ** <ul><li>driven by dispatch tables with trampoline functions.</li>
- **     <li>uses Typelists and Template metaprogramming to generate 
- **         Dispatcher tables for the concrete types.</li>
- **     <li>individual Visiting Tool implementation classes need to derive
- **         from some Applicable<TOOLImpl, Types<Type1,Type2,...> > instantiation
- **         and thus define which calls they get dispatched. This is \b crucial.
- **         A concrete type not declared in this way will never be dispatched to this
- **         concrete visiting tool implementation class. Of course, the latter is free
- **         to implement corresponding "treat(ConcreteVisitable&) functions or fall back
- **         on some treat(VisitableInterface&) function.</li>
- **     <li>any concrete Visitable subclass wanting to be treated by some concrete tool
- **         needs to use the DECLARE_PROCESSABLE_BY(TOOLBASE) macro. By this, it gets an
- **         virtual `apply(TOOLBASE&)` function. Otherwise, it will be treated by the
- **         interface of the next base class using this macro.</li>
- ** </ul>
- ** For design questions and more detailed implementation notes, see the Proc Layer Tiddly Wiki.  
+ ** - driven by dispatch tables with trampoline functions.
+ ** - uses Typelists and Template metaprogramming to generate
+ **   Dispatcher tables for the concrete types.
+ ** - individual Visiting Tool implementation classes need to derive
+ **   from some Applicable<TOOLImpl, Types<Type1,Type2,...> > instantiation
+ **   and thus define which calls they get dispatched. _This is crucial_.
+ **   A concrete type not declared in this way will never be dispatched to this
+ **   concrete visiting tool implementation class. Of course, the latter is free
+ **   to implement corresponding "treat(ConcreteVisitable&) functions or fall back
+ **   on some treat(VisitableInterface&) function.
+ ** - any concrete Visitable subclass wanting to be treated by some concrete tool
+ **   needs to use the `DECLARE_PROCESSABLE_BY(TOOLBASE)` macro. By this, it gets an
+ **   virtual `apply(TOOLBASE&)` function. Otherwise, it will be treated by the
+ **   interface of the next base class using this macro.
+ ** 
+ ** @remarks as of 2016, it is not clear if we'll really use this facility; it was meant to play a
+ **   crucial role in the Builder (which is not implemented yet....). The fundamental idea of relying
+ **   on a visitor seems still adequate though. For design questions and more detailed implementation
+ **   notes, see the [TiddlyWiki].
+ **
+ ** [TiddlyWiki]: http://lumiera.org/wiki/renderengine.html#VisitorUse%20VisitingToolImpl%20BuilderStructures%20BuilderMechanics "Lumiera Tiddly Wiki"
  **
  ** @see visitingtooltest.cpp test cases using our lib implementation
  ** @see BuilderTool one especially important instantiation

@@ -22,7 +22,7 @@
 
 
 /** @file query-diagnostics.hpp
- ** TODO query-diagnostics.hpp
+ ** diagnostic helpers to support test related to predicate queries
  */
 
 

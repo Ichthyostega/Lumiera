@@ -22,7 +22,9 @@
 
 
 /** @file scoped-holder-transfer.hpp
- ** TODO scoped-holder-transfer.hpp
+ ** A mechanism to take ownership without allowing copy.
+ ** @deprecated obsolete concept, superseded by C++11 rvalue references
+ ** @todo expunge this!
  */
 
 

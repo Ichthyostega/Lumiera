@@ -1,5 +1,5 @@
 /*
-  safe_clib.h  -  Portable and safe wrappers around some clib functions and some tools
+  SAFECLIB.h  -  Portable and safe wrappers around some clib functions and some tools
 
   Copyright (C)         CinelerraCV
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -19,14 +19,16 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+
+/** @file safeclib.h
+ ** Portable and safe wrappers around some C-Lib functions
+ */
+
+
 #include "error.h"
 
 #include <stdlib.h>
 
-/**
- * @file
- * Portable and safe wrappers around some clib functions and some tools
- */
 LUMIERA_ERROR_DECLARE(NO_MEMORY);
 
 /**

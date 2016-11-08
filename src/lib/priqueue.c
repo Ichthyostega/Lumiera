@@ -22,7 +22,7 @@
 
 
 /** @file priqueue.c
- ** TODO priqueue.c
+ ** a simple "text book" implementation of a priority queue, based on a binary heap
  */
 
 

@@ -21,7 +21,7 @@
 
 
 /** @file mrucache.c
- ** TODO mrucache.c
+ ** Implementation of a caching by most recent use.
  */
 
 #include "lib/safeclib.h"

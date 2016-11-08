@@ -21,7 +21,7 @@
 
 
 /** @file mpool.c
- ** TODO mpool.c
+ ** Implementation of pooling memory allocation functions for constant sized objects.
  */
 
 #include <stdlib.h>

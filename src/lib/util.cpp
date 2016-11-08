@@ -22,7 +22,10 @@
 
 
 /** @file util.cpp
- ** TODO util.cpp
+ ** Implementation of widely used helper functions.
+ ** The helpers implemented here are typically accessed by including util.hpp,
+ ** so the reason of pushing down the implementation into a separate translation unit
+ ** (this one here) is to avoid more heavyweight includes (e.g. boost).
  */
 
 

@@ -22,7 +22,7 @@
 
 
 /** @file luid.c
- ** TODO luid.c
+ ** Implementation functions for Lumiera's unique object identifier (LUID).
  */
 
 

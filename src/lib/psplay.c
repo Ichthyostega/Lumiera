@@ -23,7 +23,7 @@
 
 
 /** @file psplay.c
- ** TODO psplay.c
+ ** Probabilistic splay tree implementation
  */
 
 #include "include/logging.h"

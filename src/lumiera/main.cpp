@@ -23,7 +23,7 @@
 
 
 /** @file main.cpp
- ** TODO main.cpp
+ ** Lumiera application main function
  */
 
 

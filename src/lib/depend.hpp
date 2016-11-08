@@ -42,7 +42,7 @@ This code is heavily inspired by
  ** functions allows for subclass creation and various other kinds of service management.
  ** 
  ** 
- ** \par Why Singletons? Inversion-of-Control and Dependency Injection
+ ** # Why Singletons? Inversion-of-Control and Dependency Injection
  ** 
  ** Singletons are frequently over-used, and often they serve as disguised
  ** global variables to support a procedural programming style. As a remedy, typically
@@ -53,19 +53,19 @@ This code is heavily inspired by
  ** Thus, for Lumiera, the choice to use Singletons was deliberate: we understand the
  ** Inversion-of-Control principle, yet we want to stay just below the level of building
  ** a central application manager core. At the usage site, we access a factory for some
- ** service <i>by name</i>, where the »name« is actually the type name of an interface
- ** or facade. Singleton is used as an implementation of this factory, when the service
+ ** service *by name*, where the »name« is actually the type name of an interface or
+ ** facade. Singleton is used as an _implementation_ of this factory, when the service
  ** is self-contained and can be brought up lazily.
  ** 
- ** \par Conventions, Lifecycle and Unit Testing
+ ** ## Conventions, Lifecycle and Unit Testing
  ** 
  ** Usually we place an instance of the singleton factory (or some other kind of factory)
  ** as a static variable within the interface class describing the service or facade.
  ** As a rule, everything accessible as Singleton is sufficiently self-contained to come
- ** up any time -- even prior to \c main(). But at shutdown, any deregistration must be
- ** done explicitly using a lifecycle hook. Destructors aren't allowed to do any significant
- ** work besides releasing references, and we acknowledge that singletons can be released
- ** in \em arbitrary order.
+ ** up any time -- even prior to `main()`. But at shutdown, any deregistration must be done
+ ** explicitly using a lifecycle hook. Destructors aren't allowed to do _any significant work_
+ ** beyond releasing references, and we acknowledge that singletons can be released
+ ** in _arbitrary order_.
  ** 
  ** @see lib::Depend
  ** @see lib::DependencyFactory
@@ -89,6 +89,7 @@ namespace lib {
    * Access point to singletons and other kinds of dependencies.
    * Actually this is a Factory object, which is typically placed into a
    * static field of the Singleton (target) class or some otherwise suitable interface.
+   * @param SI the class of the Singleton instance
    * @note uses static fields internally, so all factory configuration is shared per type
    * @remark there is an ongoing discussion regarding the viability of the
    *   Double Checked Locking pattern, which requires either the context of a clearly defined
@@ -98,7 +99,12 @@ namespace lib {
    *   the singleton ctor to be flushed and visible to other threads when releasing the lock?
    *   To my understanding, the answer is yes. See
    *   [POSIX](http://www.opengroup.org/onlinepubs/000095399/basedefs/xbd_chap04.html#tag_04_10)
-   * @param SI the class of the Singleton instance
+   * @remark we could consider to rely on a _Meyers Singleton_, where the compiler automatically
+   *   generates the necessary code and guard variable to ensure single-threaded initialisation
+   *   of the instance variable. But the downside of this approach is that we'd loose access
+   *   to the singleton instance variable, which then resides within the scope of a single
+   *   access function. Such would counterfeit the ability to exchange the instance to
+   *   inject a mock for unit testing.
    */
   template<class SI>
   class Depend

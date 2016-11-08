@@ -22,7 +22,9 @@
 
 
 /** @file optional-ref.hpp
- ** TODO optional-ref.hpp
+ ** a checked, switchable reference.
+ ** Offers semantics similar to a pointer, but throws (not segfaults)
+ ** on invalid dereferentiation
  */
 
 

@@ -21,7 +21,7 @@
 
 
 /** @file sectionlock.h
- ** TODO sectionlock.h
+ ** Mutex state handle for locked code sections
  */
 
 #ifndef LUMIERA_SECTIONLOCK_H

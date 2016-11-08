@@ -22,7 +22,11 @@
 
 
 /** @file cmdline.hpp
- ** TODO cmdline.hpp
+ ** Class to encapsulate the typical C-style commandline definition.
+ ** A Cmdline object takes the typical `int argc, int** argv` and _copies_
+ ** the referred data into a vector of strings. Thus `Cmdline` is a way to
+ ** express explicitly on APIs that we are consuming commandline contents,
+ ** and, moreover, it offers a way more sane interface to deal with those.
  */
 
 
@@ -44,7 +48,7 @@ namespace lib {
 
 
   /**
-   * Abstraction of the usual "int argc, int** argv"-Commandline,
+   * Abstraction of the usual `int argc, int** argv`-Commandline,
    * to be able to treat it as a vector of strings. Inherits from
    * vector<std::string>, but provides convenient conversions to
    * string (joining delimited by space)... 

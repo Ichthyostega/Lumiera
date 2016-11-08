@@ -23,7 +23,8 @@
 
 
 /** @file hash-fnv.c
- ** TODO hash-fnv.c
+ ** Implementation of FNV ("Fowler-Noll-Vo") hashing functions.
+ ** @remarks code for this implementation is public domain
  */
 
 
