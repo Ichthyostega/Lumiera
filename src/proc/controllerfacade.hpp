@@ -22,7 +22,8 @@
 
 
 /** @file controllerfacade.hpp
- ** TODO controllerfacade.hpp
+ ** unfinished draft for a "Proc-Layer Controller"
+ ** @todo as of 2016 it very much looks like there wont'be any such thing...
  */
 
 

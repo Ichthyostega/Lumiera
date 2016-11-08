@@ -22,7 +22,7 @@
 
 
 /** @file asset.cpp
- ** TODO asset.cpp
+ ** Default implementation of the [Asset abstraction](\ref asset.hpp)
  */
 
 

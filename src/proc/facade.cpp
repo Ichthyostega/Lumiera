@@ -22,7 +22,7 @@
 
 
 /** @file facade.cpp
- ** TODO facade.cpp
+ ** merge description from "gui" branch
  */
 
 

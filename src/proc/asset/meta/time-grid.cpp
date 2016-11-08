@@ -22,7 +22,7 @@
 
 
 /** @file time-grid.cpp
- ** TODO time-grid.cpp
+ ** Implementation of access to time-quantised reference scales
  */
 
 
@@ -78,7 +78,7 @@ namespace meta {
      * smart-ptr-to-Quantiser to that, which then can be
      * published via the \link advice.hpp "advice system"\endlink
      * @note this allows to use a time grid just "by name",
-     *       without explicit dependance to the Session / Assets
+     *       without explicit dependence to the Session / Assets
      */
     inline PGrid
     publishWrapped (TimeGrid& newGrid)

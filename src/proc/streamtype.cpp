@@ -22,7 +22,7 @@
 
 
 /** @file streamtype.cpp
- ** TODO streamtype.cpp
+ ** Implementation of a _stream type_ framework
  */
 
 

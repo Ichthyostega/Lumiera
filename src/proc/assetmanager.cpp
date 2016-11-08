@@ -22,7 +22,7 @@
 
 
 /** @file assetmanager.cpp
- ** TODO assetmanager.cpp
+ ** Implementation of Asset lookup and organisation functions
  */
 
 
