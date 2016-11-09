@@ -22,7 +22,7 @@
 
 
 /** @file dummy-play-connection.cpp
- ** TODO dummy-play-connection.cpp
+ ** Implementation of a service for mock render playback to support testing.
  */
 
 

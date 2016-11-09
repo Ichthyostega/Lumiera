@@ -22,7 +22,7 @@
 
 
 /** @file dummy-player-service.cpp
- ** TODO dummy-player-service.cpp
+ ** Implementation of a service for mock render output to support testing.
  */
 
 

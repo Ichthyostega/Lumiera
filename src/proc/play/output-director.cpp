@@ -22,7 +22,7 @@
 
 
 /** @file output-director.cpp
- ** TODO output-director.cpp
+ ** Implementation of global output connection management
  */
 
 

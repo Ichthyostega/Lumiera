@@ -22,7 +22,11 @@
 
 
 /** @file timings.cpp
- ** TODO timings.cpp
+ ** Implementation of a data tuple for timing specification.
+ ** A Timings record represents a constraint on playback, and will be
+ ** used to organise and the calculations necessary to generate the data.
+ ** Especially, a Timings record serves to establish a relation to an externally
+ ** fixed time grid or time source.
  */
 
 

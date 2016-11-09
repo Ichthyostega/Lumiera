@@ -32,7 +32,7 @@
  ** external output, or a group of such outputs (e.g. left and right sound card output channels),
  ** or an output file or similar capability accepting media content. Initially, an output slot
  ** needs to be provided, configured and registered, using an implementation suitable for the
- ** kind of media data to be output (sound, video) and also suitable for the special circumstances
+ ** kind of media data to be sent (sound, video) and also suitable for the special circumstances
  ** of the output capability (render a file, display video in a GUI widget, send video to some
  ** full screen display, establish a Jack port, just use some kind of "sound out"). An output
  ** slot is always limited to a single kind of media, and to a single connection unit, but
@@ -43,16 +43,16 @@
  ** there may be only a single client using a given output slot this way. To stress this point:
  ** output slots don't provide any kind of inherent mixing capability; any adaptation, mixing,
  ** overlaying and sharing needs to be done within the nodes network producing the output data
- ** to be fed into the slot. (in special cases, some external output capabilities — e.g. the
- ** Jack audio connection system — may still provide additional mixing capabilities,
+ ** to be fed into the slot. (in special cases, some external output capabilities -- e.g. the
+ ** Jack audio connection system -- may still provide additional mixing capabilities,
  ** but that's beyond the scope of the Lumiera application)
  ** 
  ** Once allocated, the output slot returns a set of concrete sink handles (one for each
  ** physical channel expecting data). The calculating process feeds its results into those handles.
  ** Size and other characteristics of the data frames are assumed to be suitable, which typically
  ** won't be verified at that level anymore. Besides that, the allocation of an output slot reveals
- ** detailed timing expectations. The client is required to comply to these timings when \em emitting
- ** data — he's even required to provide a current time specification, alongside with the data.
+ ** detailed timing expectations. The client is required to comply to these timings when _emitting_
+ ** data -- he's even required to provide a current time specification, alongside with the data.
  ** Based on this information, the output slot has the ability to handle timing failures gracefully;
  ** the concrete output slot implementation is expected to provide some kind of de-click or
  ** de-flicker facility, which kicks in automatically when a timing failure is detected.

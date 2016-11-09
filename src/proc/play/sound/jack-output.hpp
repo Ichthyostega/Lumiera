@@ -21,7 +21,9 @@
 */
 
 /** @file jack-output.hpp
- **
+ ** 
+ ** @todo empty placeholder to underpin the claim: yes we will support Jack Audio!
+ ** 
  ** @see lumiera::Display
  ** @see lumiera::DummyPlayer
  ** @see gui::PlaybackController usage example 

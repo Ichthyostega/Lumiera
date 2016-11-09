@@ -22,7 +22,7 @@
 
 
 /** @file output-slot.cpp
- ** TODO output-slot.cpp
+ ** Generic implementation functionality common to all output connections.
  */
 
 

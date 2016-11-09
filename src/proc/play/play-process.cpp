@@ -22,7 +22,7 @@
 
 
 /** @file play-process.cpp
- ** TODO play-process.cpp
+ ** Implementation to organise an ongoing playback/rendering process
  */
 
 

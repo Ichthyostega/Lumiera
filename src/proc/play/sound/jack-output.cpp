@@ -22,7 +22,9 @@
 
 
 /** @file jack-output.cpp
- ** TODO jack-output.cpp
+ ** 
+ ** @todo empty placeholder: yes we will support Jack Audio!
+ ** 
  */
 
 

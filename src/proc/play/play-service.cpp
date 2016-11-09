@@ -22,7 +22,7 @@
 
 
 /** @file play-service.cpp
- ** TODO play-service.cpp
+ ** Implementation of core parts of the Player subsystem
  */
 
 
