@@ -22,7 +22,13 @@
 
 
 /** @file dispatcher.hpp
- ** TODO dispatcher.hpp
+ ** Service abstraction within the render engine for generating render jobs.
+ ** On interface level, the render engine uses the notion of a [calculation stream](CalcStream)
+ ** to represent an ongoing rendering process. Within the _implementation_ of such a process,
+ ** the Dispatcher is responsible for transforming the generic setup of such a calculation stream
+ ** into a sequence of concrete jobs, anchored at some distinct point in time.
+ ** 
+ ** @todo valid draft, unfortunately stalled in 2013
  */
 
 
@@ -62,7 +68,7 @@ namespace engine {
    * evaluation and planning of new jobs, which can then be handed over to the Scheduler
    * for time-bound activation.
    * 
-   * \par usage considerations
+   * ## usage considerations
    * the asynchronous and ongoing nature of the render process mandates to avoid a central
    * instance for operating this planning process. Instead, together with each chunk of
    * planned jobs we generate a continuation job, which -- on activation -- will pick up

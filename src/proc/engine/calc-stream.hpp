@@ -22,7 +22,21 @@
 
 
 /** @file calc-stream.hpp
- ** TODO calc-stream.hpp
+ ** A core abstraction within the render engine to represent an ongoing calculation.
+ ** Within the Lumiera render engine, the rendering process is modelled in a functional way,
+ ** as a _stream of calculations_ -- which eventually result in a stream of data frames.
+ ** Typically, streams in this context are conceived as unlimited and open-ended, and
+ ** can be represented by a generator or continuation function. Moreover, the invocation
+ ** of this "continue-the-stream"-function is embedded into the other rendering calculations
+ ** as a series of planning jobs. Whose purpose is, to create further future calculation jobs,
+ ** including future planning jobs.
+ ** 
+ ** All of this structure thus exists only dynamically, always in ongoing evaluation.
+ ** For the interface level we thus create a symbolic placeholder, the CalcStream object
+ ** 
+ ** @see engine-service.hpp
+ ** @todo this draft was created in 2013 just to the point of defining the skeleton of the engine.
+ ** @todo as of 2016, this is considered the way to go and will be completed _eventually_
  */
 
 
@@ -144,6 +158,5 @@ namespace engine{
   
   
   
-} // namespace engine
-} // namespace proc
-#endif
+}}// namespace proc::engine
+#endif /*PROC_ENGINE_CALC_STREAM_H*/

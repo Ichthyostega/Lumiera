@@ -22,7 +22,8 @@
 
 
 /** @file calc-plan-continuation.cpp
- ** TODO calc-plan-continuation.cpp
+ ** Implementation elements of render process planning.
+ ** @todo a draft created in 2013 and then stalled. This is not obsolete.
  */
 
 

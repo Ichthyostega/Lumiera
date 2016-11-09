@@ -22,18 +22,26 @@
 
 
 /** @file mask.cpp
- ** TODO mask.cpp
+ ** Mask generator node implementation
+ ** @deprecated not clear if needed as of 2016
  */
 
 
+#include "lib/error.hpp"
 #include "proc/engine/mask.hpp"
 
 namespace proc {
 namespace engine {
-
+  
+  
+  Mask::Mask (WiringDescriptor const& wd)
+    : ProcNode(wd)
+    {
+      UNIMPLEMENTED("do we need a dedicated ProcNode subclass as mask generator?");
+    }
+  
   /** */
-
-
-
-
-}} // namespace engine
+  
+  
+  
+}}// namespace engine

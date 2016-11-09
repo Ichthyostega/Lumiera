@@ -22,7 +22,8 @@
 
 
 /** @file dispatcher.cpp
- ** TODO dispatcher.cpp
+ ** Implementation parts of job generation within an ongoing render process
+ ** @todo valid draft, unfortunately stalled in 2013
  */
 
 
@@ -39,7 +40,7 @@ namespace engine {
   FrameSequencer::~FrameSequencer() { }
   
   
-  /** */
+  /** @todo WIP */
   Dispatcher::JobBuilder
   Dispatcher::onCalcStream (ModelPort modelPort, uint channel)
   {
@@ -48,7 +49,7 @@ namespace engine {
   }
   
   
-  /** */
+  /** @todo WIP */
   FrameCoord
   Dispatcher::JobBuilder::relativeFrameLocation (TimeAnchor& refPoint, FrameCnt frameOffset)
   {

@@ -35,13 +35,15 @@
  ** Invocation object (a sub-interface of StateAdapter) to access the various aspects of the
  ** invocation state.
  ** 
- ** \par composition of the Invocation State
+ ** ## composition of the Invocation State
+ ** 
  ** For each individual ProcNode#pull() call, the WiringAdapter#callDown() builds an StateAdapter
  ** instance directly on the stack, managing the actual buffer pointers and state references. Using this
  ** StateAdapter, the predecessor nodes are pulled. The way these operations are carried out is encoded
  ** in the actual StateAdapter type known to the NodeWiring (WiringAdapter) instance. All of these actual
  ** StateAdapter types are built as implementing the engine::State interface.
- **
+ ** 
+ ** @todo relies still on an [obsoleted implementation draft](\ref bufftable-obsolete.hpp)
  ** @see engine::ProcNode
  ** @see engine::StateProxy
  ** @see engine::BuffTable

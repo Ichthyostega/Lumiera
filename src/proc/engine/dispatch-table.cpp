@@ -22,7 +22,8 @@
 
 
 /** @file dispatch-table.cpp
- ** TODO dispatch-table.cpp
+ ** Implementation details of render job generation.
+ ** @todo draft from 2011, stalled, relevance not yet clear
  */
 
 

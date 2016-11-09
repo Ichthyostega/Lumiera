@@ -27,12 +27,12 @@
  ** for time bound invocation. This header defines the data structures used to describe
  ** a job, and the basic data structures used by the scheduler to keep track of individual
  ** jobs. Moreover, within the C++ part of this header, some classes are layered on top
- ** of these data structures; especially the JobClosure ABC describes the \em generic part
+ ** of these data structures; especially the JobClosure ABC describes the _generic part_
  ** of each job, while the "moving parts" are embedded within the lumiera_jobParameter.
  ** 
  ** A render job is a parameterless function, ready to be invoked by the scheduler..
  ** Since every non trivial job actually needs some parameters (at least a frame number)
- ** and relies on additional definitions and data structures, a \em closure is created
+ ** and relies on additional definitions and data structures, a _closure_ is created
  ** to make these dependencies explicit and opaque for the scheduler. The actual
  ** job invocation is forwarded to a virtual function JobClosure#invokeJobOperation(JobParameter),
  ** which is defined "somewhere" in a subclass and remains opaque for the scheduler;

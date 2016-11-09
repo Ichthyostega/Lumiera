@@ -22,7 +22,7 @@
 
 
 /** @file frame-coord.hpp
- ** TODO frame-coord.hpp
+ ** Tuple data type to address distinct frames within the render engine calculations.
  */
 
 
@@ -101,8 +101,8 @@ namespace engine {
    * This interface describes the essence of generating
    * a series of frame locations, which is necessary for
    * planning render jobs. To implement it, actually some
-   * kind of \link lib::time::Quantiser frame grid \endlink
-   * is necessary -- in practice we use a Dispatcher, which is
+   * kind of [frame grid](\ref lib::time::Quantiser) is
+   * necessary -- in practice we use a Dispatcher, which is
    * backed by the Segmentation (i.e. the render nodes network).
    */
   class FrameSequencer

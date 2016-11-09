@@ -34,11 +34,12 @@
  ** these jobs are to be executed through the scheduler in the backend layer.
  ** 
  ** While the individual CalcStram is simple, linear and unmodifiable, any CalcStream may be
- ** \em superseded by a new definition. In this case, the engine will care for a seamless
+ ** _superseded_ by a new definition. In this case, the engine will care for a seamless
  ** switch and continuation; under the hood, there is a mechanism to discard resources
  ** tied to the original CalcStream, once the switch to the new definition is complete.
  ** 
  ** @ingroup engine
+ ** @todo draft from 2013, stalled, but still relevant and to be continued eventually
  ** @see EngineInterface_test
  ** @see CalcStream_test
  ** @see proc::play::PlayerService
@@ -175,6 +176,5 @@ namespace engine{
   
   
   
-} // namespace engine
-} // namespace proc
-#endif
+}} // namespace proc::engine
+#endif /*PROC_ENGINE_ENGINE_SERVICE_H*/

@@ -22,7 +22,7 @@
 
 
 /** @file buffer-provider.cpp
- ** TODO buffer-provider.cpp
+ ** Implementation details related to buffer lifecycle management in the render engine.
  */
 
 

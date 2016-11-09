@@ -22,7 +22,8 @@
 
 
 /** @file engine-service-mock.cpp
- ** TODO engine-service-mock.cpp
+ ** Implementation translation unit for a mock render engine for unit testing.
+ ** @todo draft from 2012, and, while stalled, still relevant as of 2016
  */
 
 

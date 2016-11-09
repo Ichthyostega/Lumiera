@@ -22,7 +22,11 @@
 
 
 /** @file bufftable.hpp
- ** TODO bufftable.hpp
+ ** helper for organisation of render data buffers
+ ** Used during the process of _"pulling"_ a render node, which recursively might
+ ** pull further nodes. Any node has a _render calculation function,_ which in turn
+ ** needs input and output buffers
+ ** @see buffer-provider.hpp
  */
 
 

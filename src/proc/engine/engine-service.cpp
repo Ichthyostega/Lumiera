@@ -22,7 +22,7 @@
 
 
 /** @file engine-service.cpp
- ** TODO engine-service.cpp
+ ** Implementation parts related to the engine service abstraction
  */
 
 

@@ -22,7 +22,7 @@
 
 
 /** @file buffer-local-key.hpp
- ** TODO buffer-local-key.hpp
+ ** A marker data type used in metadata / buffer management of the render engine.
  */
 
 

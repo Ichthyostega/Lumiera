@@ -22,7 +22,10 @@
 
 
 /** @file job-ticket.hpp
- ** TODO job-ticket.hpp
+ ** Execution plan to generate render jobs within a specific render process.
+ ** A JobTicket is a preconfigured generator for render jobs, which in turn
+ ** are functors to perform the calculations for a specific data frame.
+ ** @see job.hpp
  */
 
 
@@ -74,7 +77,7 @@ using util::isnil;
    * To turn a JobTicket into an actual job, we need the additional information
    * regarding the precise frame number (=nominal time) and the channel number
    * to calculate (in case the actual feed is multichannel, which is the default).
-   * This way, the JobTicket acts as <i>higher order function:</i> a function
+   * This way, the JobTicket acts as _higher order function:_ a function
    * generating on invocation another, specific function (= the job).
    * 
    * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
@@ -236,8 +239,8 @@ using util::isnil;
   JobTicket::startExploration()  const
   {
     UNIMPLEMENTED ("somehow build a self-referential pseudo-prerequisite, and seed an ExplorationState with that");
-    /////////////////////TODO problem is: we need an JobTicket::Prerequisite instance, where the descriptor points to "self" (this JobTicket)
-    /////////////////////TODO           : but this instance needs to reside somewhere at a safe location, since we want to embed an LinkedElements-iterator
+    /////////////////////TODO problem is: we need a JobTicket::Prerequisite instance, where the descriptor points to "self" (this JobTicket)
+    /////////////////////TODO           : but this instance needs to reside somewhere at a safe location, since we want to embed a LinkedElements-iterator
     /////////////////////TODO           : into the ExplorationState. And obviously we do not want that instance in each JobTicket, only in the top level ones
     
     /////////////////////TODO : on second thought -- better have a top-level entry point to the evaluation of a frame
