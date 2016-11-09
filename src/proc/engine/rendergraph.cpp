@@ -22,7 +22,7 @@
 
 
 /** @file rendergraph.cpp
- ** TODO rendergraph.cpp
+ ** @deprecated a pile of crap, leftovers and started drafts, stalled since 2011 -- but maybe here to stay...
  */
 
 

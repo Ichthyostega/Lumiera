@@ -22,12 +22,12 @@
 
 
 /** @file rendergraph.hpp
- ** TODO rendergraph.hpp
+ ** @deprecated a pile of crap, leftovers and started drafts, stalled since 2011 -- but maybe here to stay...
  */
 
 
-#ifndef ENGINE_RENDERGRAPH_H
-#define ENGINE_RENDERGRAPH_H
+#ifndef PROC_ENGINE_RENDERGRAPH_H
+#define PROC_ENGINE_RENDERGRAPH_H
 
 #include "proc/common.hpp"
 #include "proc/state.hpp"
@@ -71,4 +71,4 @@ namespace engine {
   
   
 }} // namespace proc::engine
-#endif
+#endif /*PROC_ENGINE_RENDERGRAPH_H*/

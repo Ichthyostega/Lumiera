@@ -22,7 +22,7 @@
 
 
 /** @file tracking-heap-block-provider.cpp
- ** TODO tracking-heap-block-provider.cpp
+ ** Implementation details of a mock engine::BufferProvider for unit testing
  */
 
 

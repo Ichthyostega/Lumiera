@@ -22,7 +22,14 @@
 
 
 /** @file stateproxy.hpp
- ** TODO stateproxy.hpp
+ ** Access point to the state of a frame rendering evaluation.
+ ** The rendering of frames is triggered from a render job, and recursively
+ ** retrieves the data from predecessor nodes. Some statefull aspects are involved
+ ** into this recursive evaluation, beyond the data in the local call stack. Such
+ ** additional statefull dependencies are problematic (regarding concurrency and
+ ** throughput) and are thus abstracted from the actual processing operations
+ ** with the help of the proc::engine::State interface
+ ** @todo unfinished draft from 2009 regarding the render process
  */
 
 

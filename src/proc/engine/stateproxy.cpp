@@ -22,7 +22,8 @@
 
 
 /** @file stateproxy.cpp
- ** TODO stateproxy.cpp
+ ** Implementation details of some stateful operations needed from within the render calculation.
+ ** @todo unfinished draft from 2009 regarding the render process
  */
 
 

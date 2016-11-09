@@ -22,14 +22,22 @@
 
 
 /** @file renderengine.cpp
- ** TODO renderengine.cpp
+ ** @deprecated a pile of crap, leftovers and started drafts, stalled since 2011 -- but maybe here to stay...
  */
 
 
+#include "lib/error.hpp"
 #include "proc/engine/renderengine.hpp"
 
 namespace proc {
 namespace engine {
+  
+  
+  RenderEngine::RenderEngine()
+    : RenderGraph()
+    {
+      UNIMPLEMENTED("wtf... a video editor without implemented render engine??");
+    }
   
   
   /** */
