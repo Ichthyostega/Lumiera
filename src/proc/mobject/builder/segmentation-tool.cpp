@@ -22,7 +22,8 @@
 
 
 /** @file segmentation-tool.cpp
- ** TODO segmentation-tool.cpp
+ ** Implementation of builder primitives to create a timeline segmentation.
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
  */
 
 

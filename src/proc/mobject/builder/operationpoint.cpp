@@ -22,7 +22,8 @@
 
 
 /** @file operationpoint.cpp
- ** TODO operationpoint.cpp
+ ** Implementation of primitive builder operations on at the _current point of operation_.
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
  */
 
 

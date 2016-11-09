@@ -22,7 +22,7 @@
 
 
 /** @file conmanager.hpp
- ** TODO conmanager.hpp
+ ** @todo initially generated code of unclear relevance
  */
 
 
@@ -43,7 +43,7 @@ namespace builder {
    * with the corresponding ParamProviders (automation) in the Session.
    * Questions regarding the possibility of a media stream connection are 
    * delegated internally to the STypeManager.
-   * \par
+   * 
    * The primary service of the connection manager is to accept a wiring request
    * and handle the details of establishing the necessary connections.
    */
@@ -51,9 +51,9 @@ namespace builder {
     {
     public:
       /**
-       * TODO just a design sketch, work out signatures etc...
+       * @todo just a design sketch from 2008, work out signatures etc...
        */
-      int getConnection () ;
+      int getConnection ();
     };
 
 

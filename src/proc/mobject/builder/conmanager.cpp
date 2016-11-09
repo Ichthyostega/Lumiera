@@ -22,10 +22,11 @@
 
 
 /** @file conmanager.cpp
- ** TODO conmanager.cpp
+ ** @todo initially generated code of unclear relevance
  */
 
 
+#include "lib/error.hpp"
 #include "proc/mobject/builder/conmanager.hpp"
 #include "proc/control/stypemanager.hpp"
 
@@ -36,13 +37,13 @@ namespace builder {
   
   
   /**
-   * TODO !!!!!!!!!!!!!!!!!!
+   * @todo TODO IT!!!!!!!!!!!!!!!!!!
    */
   int
   ConManager::getConnection ()
   {
+    UNIMPLEMENTED ("wiring in the builder...");
   }
-
-
-
+  
+  
 }}} // namespace proc::mobject::builder

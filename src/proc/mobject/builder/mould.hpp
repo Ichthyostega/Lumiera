@@ -22,7 +22,13 @@
 
 
 /** @file mould.hpp
- ** TODO mould.hpp
+ ** Builder tool kit.
+ ** On the basic level, the builder works by wiring up new processing nodes,
+ ** guided by a small number of preconfigured building patterns. For each such
+ ** basic wiring situation, there is a builder::Mould, which acts as a fixed
+ ** counterpart for the node network in construction to hinge on.
+ ** 
+ ** @todo plan and draft from 2008 -- still considered relevant as of 2016
  */
 
 
@@ -45,21 +51,21 @@ namespace builder {
   
   
   /**
-   * Interface: a workbench-like tool used by the builder 
+   * Interface: a workbench-like tool used by the builder
    * for wiring up a specific building situation, followed by
-   * the application/execution of a single building step. Mould is 
+   * the application/execution of a single building step. Mould is
    * conceived as the passive part, while usually the ProcPatt plays
    * the role of the active counterpart. By means of the Mould interface,
    * the specifics of a build situation are abstracted away, thus allowing
    * the processing pattern to be defined as working on symbolic locations.
    * Most commonly this is "current", denoting the render node just being built.
-   * <ul><li>PipeMould supports attaching an effect to a pipe</li>
-   *     <li>combining pipes via a transition is done by a CombiningMould</li> 
-   *     <li>a SourceChainMould allows to start out from a source reader and build a clip</li> 
-   *     <li>wiring general connections is supported by the WiringMould</li>
-   * </ul>
+   * - PipeMould supports attaching an effect to a pipe
+   * - combining pipes via a transition is done by a CombiningMould
+   * - a SourceChainMould allows to start out from a source reader and build a clip
+   * - wiring general connections is supported by the WiringMould
+   * 
    * @see ToolFactory
-   * @see NodeCreatorTool 
+   * @see NodeCreatorTool
    */
   class Mould
     {

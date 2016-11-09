@@ -22,7 +22,7 @@
 
 
 /** @file assembler.hpp
- ** TODO assembler.hpp
+ ** @todo initially generated code of unclear relevance
  */
 
 
@@ -45,7 +45,8 @@ namespace builder {
   class Assembler
     {
     public:
-      engine::RenderEngine & build () ;
+      engine::RenderEngine&
+      build ();
       // TODO: allocation, GC???
     };
   

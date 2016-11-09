@@ -22,7 +22,11 @@
 
 
 /** @file toolfactory.hpp
- ** TODO toolfactory.hpp
+ ** Factory to create the tools for the build process.
+ ** Obviously the logic to control and direct the build process will be attached
+ ** behind this interface.
+ ** 
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
  */
 
 

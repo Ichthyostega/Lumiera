@@ -22,7 +22,8 @@
 
 
 /** @file common.hpp
- ** TODO common.hpp
+ ** @todo initially generated code of unclear relevance
+ ** @deprecated 2016 is a common inclusion file really such a good idea?
  */
 
 

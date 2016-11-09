@@ -22,7 +22,12 @@
 
 
 /** @file segmentation-tool.hpp
- ** TODO segmentation-tool.hpp
+ ** Visiting tool to create a viable _segmentation_ of the timeline for rendering.
+ ** Within each such segment, the _configuration and wiring_ of the render node network
+ ** is considered stable. Any further variation within a segment is created solely by varying
+ ** parameters (automation). The created Segmentation is considered the "backbone" of the
+ ** low-level render node network
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
  */
 
 
@@ -81,4 +86,4 @@ namespace builder {
   
   
 }}} // namespace proc::mobject::builder
-#endif
+#endif /*MOBJECT_BUILDER_SEGMENTATION_TOOL_H*/

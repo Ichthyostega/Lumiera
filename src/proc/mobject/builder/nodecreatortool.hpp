@@ -22,7 +22,8 @@
 
 
 /** @file nodecreatortool.hpp
- ** TODO nodecreatortool.hpp
+ ** Visitor tool to work on the concrete model objects when building the render node network.
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
  */
 
 
@@ -78,4 +79,4 @@ namespace builder {
   
   
 }}} // namespace proc:mobject::builder
-#endif
+#endif /*MOBJECT_BUILDER_NODECREATORTOOL_H*/
