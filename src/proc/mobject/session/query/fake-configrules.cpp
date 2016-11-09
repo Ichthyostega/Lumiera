@@ -22,7 +22,17 @@
 
 
 /** @file fake-configrules.cpp
- ** TODO fake-configrules.cpp
+ ** Implementation of a fake query resolution service based on preconfigured answers.
+ ** Since we're not able to build or even integrate a real resolution engine for the time being,
+ ** we use a table of preconfigured answers, which allows us to handle the standard cases and
+ ** some additional unit test cases.
+ ** 
+ ** Obviously this is a dirty hack, and the implementation is a pile of spaghetti code,
+ ** hastily bashed together to keep things going. Typically this fake code collaborates with
+ ** backdoor functions placed into otherwise not yet implemented facilities, to get past the
+ ** roadblock. For example, StructFactory::made4fake()
+ ** 
+ ** @deprecated integrate a real resolution engine! /////////////////////////////////////////////////////////TICKET #710
  */
 
 
@@ -42,7 +52,7 @@
 using lib::Literal;
 using util::isnil;
 
-//////////////////////////////////////////////////////////////////TICKET #710 : to be removed entirely in Alpha
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #710 : to be removed entirely in Alpha
 
 namespace proc {
 namespace mobject {

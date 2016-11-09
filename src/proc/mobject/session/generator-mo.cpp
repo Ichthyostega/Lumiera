@@ -22,7 +22,8 @@
 
 
 /** @file generator-mo.cpp
- ** TODO generator-mo.cpp
+ ** @todo WIP implementation of player subsystem from 2011
+ ** @todo as of 2016, this effort is considered stalled but basically valid
  */
 
 

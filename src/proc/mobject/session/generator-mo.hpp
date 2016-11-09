@@ -22,7 +22,10 @@
 
 
 /** @file generator-mo.hpp
- ** TODO generator-mo.hpp
+ ** A data generator media object.
+ ** Can be used as placeholder, or as testing device
+ ** @todo WIP implementation of player subsystem from 2011
+ ** @todo as of 2016, this effort is considered stalled but basically valid
  */
 
 

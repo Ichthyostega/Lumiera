@@ -22,7 +22,9 @@
 
 
 /** @file session-impl.cpp
- ** TODO session-impl.cpp
+ ** Implementation of the global session datastructure
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
  */
 
 

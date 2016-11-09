@@ -22,7 +22,13 @@
 
 
 /** @file fixedlocation.hpp
- ** TODO fixedlocation.hpp
+ ** Specialised LocatingPin for use in Placement, especially for globally fixed positions
+ ** The FixedLocation is assumed to play a central role within the Build process, which
+ ** ultimately aims ad resolving any part of the session into either a wiring directive
+ ** or a piece of media or processing to happen at a location fixed in time.
+ ** 
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
  */
 
 

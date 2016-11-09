@@ -22,7 +22,9 @@
 
 
 /** @file binding.cpp
- ** TODO binding.cpp
+ ** Implementation details of the Binding MObject to tie a sequence into a timeline or virtual clip
+ ** @todo stalled effort towards a session implementation from 2010
+ ** @todo 2016 likely to stay, but expect some extensive rework
  */
 
 

@@ -22,7 +22,9 @@
 
 
 /** @file meta.hpp
- ** TODO meta.hpp
+ ** Intermediate Asset interface: metadata and processing instructions
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
  */
 
 

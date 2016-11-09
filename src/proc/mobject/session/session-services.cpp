@@ -22,7 +22,22 @@
 
 
 /** @file session-services.cpp
- ** TODO session-services.cpp
+ ** Implementation of some top-level internal services of the session.
+ ** The Session is _the_ central interface to access the model and thus the
+ ** edit being worked on. Behind the scenes, it needs to operate several technically
+ ** quite involved services, which we prefer to hide away as implementation details.
+ ** Typically, each of these services defines a dedicated interface, and is implemented
+ ** by delegating to a set of more specialised facilities.
+ ** 
+ ** The following services are integrated here
+ ** - service to access a Placement by (hash) ID
+ ** - service to attach or remove session content, while maintaining all indices
+ ** - service to query and explore session contents
+ ** - service to inject mock content for unit testing
+ ** - service to manage and discover default settings by resolution query
+ ** 
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
  */
 
 

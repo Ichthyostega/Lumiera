@@ -22,7 +22,7 @@
 
 
 /** @file effect.cpp
- ** TODO effect.cpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet... 
  */
 
 
@@ -38,7 +38,7 @@ namespace session {
   asset::Proc const& 
   Effect::getProcAsset() const
   {
-    UNIMPLEMENTED ("how to access the processing asset assotiated to a given Effect-MObject");
+    UNIMPLEMENTED ("how to access the processing asset associated to a given Effect-MObject");
   }
   
   

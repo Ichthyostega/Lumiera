@@ -22,7 +22,21 @@
 
 
 /** @file fixture.hpp
- ** TODO fixture.hpp
+ ** Backbone data structure of the low-level render node model
+ ** The fixture defines the boundary between the Session (high-level) realm
+ ** and the internals of the render engine. The goal of a Builder run is to
+ ** build a new Fixture. All relative or indirect referrals are resolved at that point
+ ** and all time positions or output designations are made explicit. The Fixture defines
+ ** a Segmentation of every (top-level) timeline, and thus defines those segments which
+ ** can be rendered with a single wiring configuration. This Segmentation, as defined as
+ ** part of the Fixture, is also the foundation for memory management within the engine
+ ** model, since the allocation of render nodes for a given segment happens at once, and
+ ** segments are obliterated as a whole, when being replaced by a new version as result
+ ** of a more recent builder run. Ongoing render processes are also tracked per segment,
+ ** which allows the individual calculation steps just to assume the data is "there".
+ ** 
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
  */
 
 

@@ -22,7 +22,8 @@
 
 
 /** @file segment.cpp
- ** TODO segment.cpp
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
  */
 
 #include "proc/mobject/session/segment.hpp"

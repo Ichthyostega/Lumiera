@@ -29,7 +29,7 @@
  ** access via his overloaded operator->() . Because there is no operator*(),
  ** no one can get at the address of the current session object. (correct?)
  **
- ** TODO: this is an implementation draft, awaiting integration with several other facilities //////////////////TICKET #704
+ ** @todo as of 2016 this is an implementation draft, awaiting integration with several other facilities //////////////////TICKET #704
  **
  ** @see session-impl.hpp
  ** @see mobject::Session#current

@@ -22,7 +22,10 @@
 
 
 /** @file meta.cpp
- ** TODO meta.cpp
+ ** implementation details regarding the Meta asset abstraction
+ ** 
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 not sure if we really need a separate translation unit for this?
  */
 
 

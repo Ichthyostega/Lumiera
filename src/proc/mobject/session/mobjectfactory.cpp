@@ -22,7 +22,8 @@
 
 
 /** @file mobjectfactory.cpp
- ** TODO mobjectfactory.cpp
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
  */
 
 

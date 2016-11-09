@@ -22,7 +22,8 @@
 
 
 /** @file root.cpp
- ** TODO root.cpp
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
  */
 
 

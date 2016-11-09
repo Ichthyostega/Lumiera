@@ -22,7 +22,8 @@
 
 
 /** @file wish.hpp
- ** TODO wish.hpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet...
+ ** @deprecated WTF?
  */
 
 

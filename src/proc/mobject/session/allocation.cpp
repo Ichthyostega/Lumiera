@@ -22,7 +22,7 @@
 
 
 /** @file allocation.cpp
- ** TODO allocation.cpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet... 
  */
 
 
