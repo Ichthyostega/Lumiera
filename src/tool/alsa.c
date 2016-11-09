@@ -22,7 +22,7 @@
 
 
 /** @file alsa.c
- ** TODO alsa.c
+ ** Example implementation how to access the ALSA sound backend
  */
 
 

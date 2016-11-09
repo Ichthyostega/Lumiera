@@ -22,7 +22,11 @@
 
 
 /** @file libgavl.hpp
- ** TODO libgavl.hpp
+ ** Concrete implementation of the MediaImplLib facade to work with `libGAVL`
+ ** @todo a draft and placeholder code from 2008, at which time the intention was
+ **       to rely on libGAVL for processing of raw media data. This seemed like a
+ **       good idea at that time, but we should re-evaluate if libGAVL is maintained
+ **       and in actual use, before we start really relying on it
  */
 
 
@@ -30,7 +34,7 @@
 #define PROC_EXTERNAL_LIBGAVL_H
 
 
-#include "proc/control/mediaimpllib.hpp"
+#include "proc/control/media-impl-lib.hpp"
 
 
 
@@ -52,6 +56,7 @@ namespace external {
    * in an implementation agnostic way.
    * @note GAVL types are automagically registered into the
    * control::STypeManager on reset and thus are always available.
+   * @todo 2016 evaluate if libGAVL is still active and maintained
    */
   class ImplFacadeGAVL
     : public ImplFacade

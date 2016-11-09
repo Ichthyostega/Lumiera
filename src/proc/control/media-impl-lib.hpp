@@ -1,5 +1,5 @@
 /*
-  MEDIAIMPLLIB.hpp  -  interface providing a facade to an media handling library
+  MEDIA-IMPL-LIB.hpp  -  facade interface to access an external media handling library
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file mediaimpllib.hpp
+/** @file media-impl-lib.hpp
  ** Abstraction to represent (metadata) of an external library to handle media data
  ** Lumiera delegates most actual media data processing to well established external
  ** libraries. While configuring the render process, a [stream type](streamtype.hpp)
@@ -33,8 +33,8 @@
  */
 
 
-#ifndef CONTROL_MEDIAIMPLLIB_H
-#define CONTROL_MEDIAIMPLLIB_H
+#ifndef PROC_CONTROL_MEDIA_IMPL_LIB_H
+#define PROC_CONTROL_MEDIA_IMPL_LIB_H
 
 
 #include "proc/streamtype.hpp"
@@ -64,4 +64,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif
+#endif /*PROC_CONTROL_MEDIA_IMPL_LIB_H*/

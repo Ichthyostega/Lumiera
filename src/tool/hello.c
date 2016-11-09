@@ -5,7 +5,7 @@
 
 
 /** @file hello.c
- ** TODO hello.c
+ ** Example file to demonstrate integration of stand-alone tools into the build process
  */
 
 #include <stdio.h>
