@@ -22,12 +22,14 @@
 
 
 /** @file interpolator.hpp
- ** TODO interpolator.hpp
+ ** Core abstraction: automation parameter interpolator
+ ** Each interpolator implementation has the ability to resolve intermediary
+ ** values and to provide a parameter value for _every arbitrary point in time._
  */
 
 
-#ifndef MOBJECT_INTERPOLATOR_H
-#define MOBJECT_INTERPOLATOR_H
+#ifndef PROC_MOBJECT_INTERPOLATOR_H
+#define PROC_MOBJECT_INTERPOLATOR_H
 
 
 
@@ -36,7 +38,7 @@ namespace mobject {
   
   
   /**
-   * Provides the implementation for getting the acutal value 
+   * Provides the implementation for getting the actual value
    * of a time varying or automated effect/plugin parameter
    */
   template<class VAL>
@@ -48,4 +50,4 @@ namespace mobject {
   
   
 }} // namespace proc::mobject
-#endif
+#endif /*PROC_MOBJECT_INTERPOLATOR_H*/

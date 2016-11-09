@@ -22,12 +22,22 @@
 
 
 /** @file explicitplacement.hpp
- ** TODO explicitplacement.hpp
+ ** Core abstraction: completely resolved placement of an MObject
+ ** Within the session model, all media objects are attached with the help
+ ** of mobject::Placement elements. These are the "glue" to stitch the model
+ ** together. However, placements are typically only defined in parts, and what
+ ** is left out in the definition is assumed to be _"obvious from the context"._
+ ** 
+ ** The core operation within Proc-Layer is the Builder run, which walks the Session model
+ ** to resolve and fill in all the contextual information. The result is a completely resolved
+ ** Placement for each actually visible and relevant entity. Such is represented as ExplicitPlacement.
+ ** These are arranged into the backbone structure, the Fixture, and the actual render node network
+ ** necessary to _render_ those contents is attached below.
  */
 
 
-#ifndef MOBJECT_EXPLICITPLACEMENT_H
-#define MOBJECT_EXPLICITPLACEMENT_H
+#ifndef PROC_MOBJECT_EXPLICITPLACEMENT_H
+#define PROC_MOBJECT_EXPLICITPLACEMENT_H
 
 #include "proc/mobject/placement.hpp"
 
@@ -90,4 +100,4 @@ namespace mobject {
   
   
 }} // namespace proc::mobject
-#endif
+#endif /*PROC_MOBJECT_EXPLICITPLACEMENT_H*/

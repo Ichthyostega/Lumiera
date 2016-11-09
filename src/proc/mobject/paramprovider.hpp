@@ -22,12 +22,14 @@
 
 
 /** @file paramprovider.hpp
- ** TODO paramprovider.hpp
+ ** Core abstraction: an entity to expose a single parameter
+ ** 
+ ** @todo as of 2016, we still need to work out our parameter/automation concept.
  */
 
 
-#ifndef MOBJECT_PARAMPROVIDER_H
-#define MOBJECT_PARAMPROVIDER_H
+#ifndef PROC_MOBJECT_PARAMPROVIDER_H
+#define PROC_MOBJECT_PARAMPROVIDER_H
 
 
 
@@ -57,4 +59,4 @@ namespace mobject {
 
 
 }} // namespace proc::mobject
-#endif
+#endif /*PROC_MOBJECT_PARAMPROVIDER_H*/

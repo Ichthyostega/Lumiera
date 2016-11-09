@@ -22,7 +22,9 @@
 
 
 /** @file paramprovider.cpp
- ** TODO paramprovider.cpp
+ ** Implementation functions of the Parameter abstraction.
+ ** 
+ ** @todo as of 2016, we still need to work out our parameter/automation concept.
  */
 
 

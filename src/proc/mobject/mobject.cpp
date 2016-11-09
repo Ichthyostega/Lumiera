@@ -22,7 +22,7 @@
 
 
 /** @file mobject.cpp
- ** TODO mobject.cpp
+ ** Top level implementation functions globally relevant to the session model
  */
 
 

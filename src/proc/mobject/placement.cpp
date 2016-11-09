@@ -22,7 +22,7 @@
 
 
 /** @file placement.cpp
- ** TODO placement.cpp
+ ** Implementation functions belonging to the Placement entity
  */
 
 

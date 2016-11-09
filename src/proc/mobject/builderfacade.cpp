@@ -22,29 +22,32 @@
 
 
 /** @file builderfacade.cpp
- ** TODO builderfacade.cpp
+ ** Implementation of top-level access to builder functionality
  */
 
 
 #include "proc/mobject/builder/common.hpp"
 #include "proc/mobject/builderfacade.hpp"
+#include "proc/mobject/session/fixture.hpp"
 
 namespace proc {
 namespace mobject {
   
-  
-  /**
-   * Main Operation of the Builder: 
-   * create a render engine for a given part of the timeline
-   */
-  engine::RenderEngine &
-  BuilderFacade::buildEngine ()
-  {
-    //////////////////////TODO
-  }
+  using session::Fixture;
   
   LUMIERA_ERROR_DEFINE (BUILDER_LIFECYCLE, "Builder activated while in non operational state");
   
+  
+  
+  /**
+   * Main Operation of the Builder:
+   * rebuild the low-level model based on the current contents of the Session.
+   */
+  Fixture&
+  BuilderFacade:: rebuildFixture ()
+  {
+    UNIMPLEMENTED ("build the builder...");
+  }
   
   
   
