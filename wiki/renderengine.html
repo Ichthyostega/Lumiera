@@ -2510,6 +2510,116 @@ Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to u
 
 </pre>
 </div>
+<div title="GuiCustomWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611180430" tags="GuiPattern discuss decision draft" changecount="62">
+<pre>Inevitably, the UI of an advanced application like Lumiera needs some parts beyond the scope of what can be achieved by combining standard widgets. Typically, an UI toolkit (GTK is no exception here) offers some extension mechanism to integrate such more elaborate, application specific behaviour. Within Lumiera, the Timeline is probably the most prominent place where we need to come up with our own handling solution -- which also means to rely on such extension mechanisms and to integrate well with the more conventional parts of the UI. Since the core concept of typical UI toolkit sets is that of a //widget,// we end up with writing some kind of customised or completely custom defined widget. 
+
+!two fundamental models
+It is clear that we need to write a customised widget to embody the specific behaviour we need. Two distinct approaches are conceivable
+;custom arrangement
+:define or derive our own widget class to arrange existing widgets in a customised way
+;custom drawing
+:get the allocated screen area for our widget and perform all drawing and event updating explicitly in our own code
+
+!!!perils of custom drawing
+While the second approach intuitively seems to be adequate (and in fact, Cinelerra, Ardour and our own GUI choose this approach), we should note several problematic aspects
+* once we &quot;take over&quot;, we are entirely responsible for &quot;our area&quot; and GTK steps out of our way
+* we have to replicate and code up any behaviour we want and know from the standard GUI
+* chances are that we are handling some aspects different than the default, without even noticing there is a default
+* chances are that we are lacking the manpower to cope with all interdependencies of concrete presentation situation, custom styling and event state
+Our custom made UI elements impend to turn into a tremendous time sink (For reference, Paul Davis reported for Ardour 2.x that he spent 80% of the developer time not with audio processing, but rather with bashing the UI into shape), while non the less delivering just a crappy, home-brew and misaligned user experience which stands out as an alien element not playing well with the rest of the desktop.
+{{red{Well}}} //at least we are aware of the danger.//
+
+!!!is custom drawing necessary?
+There are some issues though, which more or less force us into custom drawing
+* for our task, we're suffering a horrible lack of screen real estate. This forces us into conceiving elaborate controls way beyond the capabilities of existing standard widgets
+* and for the feedback, we also need to tap into very precise event handling, which is hard to achieve with the huge amount of variability found with standard widgets
+* our timeline display has to comply to a temporal metric grid, which is incompatible with the leeway present in standard widgets for the purpose of styling and skinning the UI
+* the sheer amount of individual elements we need to get to screen is way beyond anything in a conventional GUI -- the UI toolkit set can not be expected to handle such load smoothly
+
+!Remedy: A Canvas Control
+All of the above is a serious concern. There is no easy way out, since, for the beginning, we need to get hands on with the display -- to get any tangible elements to work against. Yet there exists a solution to combine the strengths of both approaches: a ''Canvas Widget'' is for one a regular widget, and can thus be integrated into the UI, while it allows to //place child widgets freely onto a managed area,// termed as &quot;the canvas&quot;. These child widgets are wired and managed pretty much like any other widget, they participate in theming, styling and accessibility technologies. Moreover, the canvas area can be clipped and scrolled, so to allow for arrangements way beyond the limits of the actual screen.
+* in the past, this functionality was pioneered by several extension libraries, for example by the [[GooCanvas|https://developer.gnome.org/goocanvas/stable/GooCanvas.html]] library for ~GTK-2
+* meanwhile, ~GTK-3 features several special layout managers, one of which is the [[GtkLayout|https://developer.gnome.org/gtk3/stable/GtkLayout.html]] widget, which incorporates this concept of //widgets placed on a canvas.//
+
+!Investigation: ~GtkLayout {{red{WIP 10/2016}}}
+In order to build a sensible plan for our timeline structure, we need to investigate and clarify some fundamental properties of the GtkLayoutWidget
+* how are overlapping widgets handled?
+* how is resizing of widgets handled, esp. when they need to grow due to content changes?
+* how does the event dispatching deal with partially covered widgets?
+* how can embedded widgets be integrated into a tabbing / focus order?
+* how is custom drawing and widget drawing interwoven?
+
+!!!Plan of investigation
+# place some simple widgets (Buttons)
+# learn how to draw
+# place a huge number of widgets, to scrutinise scrolling and performance
+# place widgets overlapping
+# bind signals to those widgets, to verify event dispatching
+# bind some further signal(s) to the ~GtkLayout container
+# hide and re-show a partially and a totally overlapped widget
+# find a way to move a widget
+# expand an existing widget (text change)
+# build a custom &quot;''clip''&quot; widget
+# retrofit all preceding tests to use this &quot;''clip''&quot; widget
+
+!!!Observations
+* children need to be made visible, otherwise they are added, but remain hidden
+* when in sight, children receive events and are fully functional, even when placed out of the scrollable area.
+* the coordinate of children is their upper left corner, but they may extend beyond that and even beyond the scrollable area
+;layering
+:children added later are always on top.
+;scrolling and size
+:the {{{Gtk::Layout}}} widget has a canvas size, which is defined implicitly, by placing child elements
+:* the size of the scrollable area is independent of the actual size extension of the canvas
+:* the scrollable area determines when scrollbars are visible and what area can be reached through them
+:* but children can well be placed beyond; they are fully functional then, just covered and out of sight
+:* enlarging the enclosing window and thus enlarging the layout canvas will uncover such stray children.
+:* //problematic//
+:** children may be so close to the boundary, that it is not possible to click on them
+:** when children close to the boundary receive an onClick event, the scrollable area might jump back slightly..
+:** the management of visible viewport within {{{Gtk::ScrolledWindow}}} is not correct (see [[ticket #1037|http://issues.lumiera.org/ticket/1037]])&lt;br/&gt;it does not account properly for the area covered by the scrollbars themselves
+;moving child widgets
+:works as expected
+;expanding widgets
+:works as expected
+;delete child widgets
+:is possible by the {{{Container::remove(Widget*)}}} function
+:removed child widgets will also removed from display (hidden)
+:but the widget object needs to be deleted manually, because detached widgets are no longer managed by GTK
+;iteration over child widgets
+://problematic//
+:* the signal based {{{foreach}}} does not work -- there seems to be a problem with the slot's signature causing a wrong address to be passed in
+:* the interface {{{Gtk::Container}}} exposes a {{{get_children}}} function, but this returns a //copy// of the vector with pointers to all child widgets
+;about GtkCustomDrawing
+:need to derive from {{{Gtk::Layout}}} and override the {{{on_draw(cairocontext)}}} function
+:* layering is controlled by the order of the cairo calls, plus the point when the inherited {{{Gtk::Layout::on_draw()}}} is invoked
+:** when invoked //before// our custom drawing, we draw on top of the embedded widgets
+:** when invoked //after// our custom drawing, the embedded widgets stay on top
+:* the {{{Gtk::Allocation}}} is precisely the visible screen area reserved for the widget.&lt;br/&gt;It is //not// the extension of the virtual canvas.
+:* ...consequently, if our drawing shall be stitched to the canvas, we need to care for translation and for clipping ourselves. &amp;rarr; see [[here|GtkCustomDrawing]]
+;determine canvas extension
+:when the extension of the (virtual) canvas area depends on position and size of child widgets, //we need to calculate this extension manually.//
+:* beware: the allocation for child widgets is not setup immediately, when adding or moving children
+:* rather, we need to wait until in the {{{on_draw()}}} callback for the {{{Gtk::Layout}}}
+:* at this point, we may use the //foreach// mechanism of the container
+{{{
+      uint extH=20, extV=20;
+      Gtk::Container::ForeachSlot callback
+        = [&amp;](Gtk::Widget&amp; chld)
+                {
+                  auto alloc = chld.get_allocation();
+                  uint x = alloc.get_x();
+                  uint y = alloc.get_y();
+                  x += alloc.get_width();
+                  y += alloc.get_height();
+                  extH = max (extH, x);
+                  extV = max (extV, y);
+                };
+      foreach(callback);
+      set_size (extH, extV);
+}}}
+</pre>
+</div>
 <div title="GuiFacade" modifier="Ichthyostega" created="200902080719" tags="def spec">
 <pre>special LayerSeparationInterface which serves the main purpose to load the GuiStarterPlugin, thus bringing up the Lumiera GTK UI at application start.
 </pre>
@@ -2680,115 +2790,14 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611172322" tags="GuiPattern discuss decision impl" changecount="60">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611180443" tags="GuiPattern discuss decision impl" changecount="61">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
-!two fundamental models
-It is clear that we need to write a customised widget (just because there are way to much specifics as to spell them out flat on top level). Two distinct approaches are conceivable
-;custom arrangement
-:define or derive our own widget class to arrange existing widgets in a customised way
-;custom drawing
-:get the allocated screen area for our widget and perform all drawing and event updating explicitly in our own code
+Right away, this topic touches a tricky design and architectural challenge: the → question [[how to organise custom widgets|GuiCustomWidget]].
 
-!!!perils of custom drawing
-While the second approach intuitively seems to be adequate (and in fact, Cinelerra, Ardour and our own GUI choose this approach), we should note several problematic aspects
-* once we &quot;take over&quot;, we are entirely responsible for &quot;our area&quot; and GTK steps out of our way
-* we have to replicate and code up any behaviour we want and know from the standard GUI
-* chances are that we are handling some aspects different than the default, without even noticing there is a default
-* chances are that we are lacking the manpower to cope with all interdependencies of concrete presentation situation, custom styling and event state
-Our custom made UI elements impend to turn into a tremendous time sink (For reference, Paul Davis reported for Ardour 2.x that he spent 80% of the developer time not with audio processing, but rather with bashing the UI into shape), while non the less delivering just a crappy, home-brew and misaligned user experience which stands out as an alien element not playing well with the rest of the desktop.
-{{red{Well}}} //at least we are aware of the danger.//
+In a nutshell, ~GTKmm offers several degrees of customisation, namely to build a custom widget class, to build a custom container widget, and to use the {{{Gtk::Layout}}} &quot;canvas widget&quot;, possibly combined with //custom drawing.// In addition to assembling a timeline widget class by combining several nested panes, the timeline display needs to rely on the latter approach to allow for the necessary flexible arrangement of [[clip widgets|GuiClipWidget]] within the [[track fork|Fork]].
 
-!!!is custom drawing necessary?
-There are some issues though, which more or less force us into custom drawing
-* for our task, we're suffering a horrible lack of screen real estate. This forces us into conceiving elaborate controls way beyond the capabilities of existing standard widgets
-* and for the feedback, we also need to tap into very precise event handling, which is hard to achieve with the huge amount of variability found with standard widgets
-* our timeline display has to comply to a temporal metric grid, which is incompatible with the leeway present in standard widgets for the purpose of styling and skinning the UI
-* the sheer amount of individual elements we need to get to screen is way beyond anything in a conventional GUI -- the UI toolkit set can not be expected to handle such load smoothly
-
-!Remedy: A Canvas Control
-All of the above is a serious concern. There is no easy way out, since, for the beginning, we need to get hands on with the display -- to get any tangible elements to work against. Yet there exists a solution to combine the strengths of both approaches: a ''Canvas Widget'' is for one a regular widget, and can thus be integrated into the UI, while it allows to //place child widgets freely onto a managed area,// termed as &quot;the canvas&quot;. These child widgets are wired and managed pretty much like any other widget, they participate in theming, styling and accessibility technologies. Moreover, the canvas area can be clipped and scrolled, so to allow for arrangements way beyond the limits of the actual screen.
-* in the past, this functionality was pioneered by several extension libraries, for example by the [[GooCanvas|https://developer.gnome.org/goocanvas/stable/GooCanvas.html]] library for ~GTK-2
-* meanwhile, ~GTK-3 features several special layout managers, one of which is the [[GtkLayout|https://developer.gnome.org/gtk3/stable/GtkLayout.html]] widget, which incorporates this concept of //widgets placed on a canvas.//
-
-!Investigation: ~GtkLayout {{red{WIP 10/2016}}}
-In order to build a sensible plan for our timeline structure, we need to investigate and clarify some fundamental properties of the GtkLayoutWidget
-* how are overlapping widgets handled?
-* how is resizing of widgets handled, esp. when they need to grow due to content changes?
-* how does the event dispatching deal with partially covered widgets?
-* how can embedded widgets be integrated into a tabbing / focus order?
-* how is custom drawing and widget drawing interwoven?
-
-!!!Plan of investigation
-# place some simple widgets (Buttons)
-# learn how to draw
-# place a huge number of widgets, to scrutinise scrolling and performance
-# place widgets overlapping
-# bind signals to those widgets, to verify event dispatching
-# bind some further signal(s) to the ~GtkLayout container
-# hide and re-show a partially and a totally overlapped widget
-# find a way to move a widget
-# expand an existing widget (text change)
-# build a custom &quot;''clip''&quot; widget
-# retrofit all preceding tests to use this &quot;''clip''&quot; widget
-
-!!!Observations
-* children need to be made visible, otherwise they are added, but remain hidden
-* when in sight, children receive events and are fully functional, even when placed out of the scrollable area.
-* the coordinate of children is their upper left corner, but they may extend beyond that and even beyond the scrollable area
-;layering
-:children added later are always on top.
-;scrolling and size
-:the {{{Gtk::Layout}}} widget has a canvas size, which is defined implicitly, by placing child elements
-:* the size of the scrollable area is independent of the actual size extension of the canvas
-:* the scrollable area determines when scrollbars are visible and what area can be reached through them
-:* but children can well be placed beyond; they are fully functional then, just covered and out of sight
-:* enlarging the enclosing window and thus enlarging the layout canvas will uncover such stray children.
-:* //problematic//
-:** children may be so close to the boundary, that it is not possible to click on them
-:** when children close to the boundary receive an onClick event, the scrollable area might jump back slightly..
-:** the management of visible viewport within {{{Gtk::ScrolledWindow}}} is not correct (see [[ticket #1037|http://issues.lumiera.org/ticket/1037]])&lt;br/&gt;it does not account properly for the area covered by the scrollbars themselves
-;moving child widgets
-:works as expected
-;expanding widgets
-:works as expected
-;delete child widgets
-:is possible by the {{{Container::remove(Widget*)}}} function
-:removed child widgets will also removed from display (hidden)
-:but the widget object needs to be deleted manually, because detached widgets are no longer managed by GTK
-;iteration over child widgets
-://problematic//
-:* the signal based {{{foreach}}} does not work -- there seems to be a problem with the slot's signature causing a wrong address to be passed in
-:* the interface {{{Gtk::Container}}} exposes a {{{get_children}}} function, but this returns a //copy// of the vector with pointers to all child widgets
-;about GtkCustomDrawing
-:need to derive from {{{Gtk::Layout}}} and override the {{{on_draw(cairocontext)}}} function
-:* layering is controlled by the order of the cairo calls, plus the point when the inherited {{{Gtk::Layout::on_draw()}}} is invoked
-:** when invoked //before// our custom drawing, we draw on top of the embedded widgets
-:** when invoked //after// our custom drawing, the embedded widgets stay on top
-:* the {{{Gtk::Allocation}}} is precisely the visible screen area reserved for the widget.&lt;br/&gt;It is //not// the extension of the virtual canvas.
-:* ...consequently, if our drawing shall be stitched to the canvas, we need to care for translation and for clipping ourselves. &amp;rarr; see [[here|GtkCustomDrawing]]
-;determine canvas extension
-:when the extension of the (virtual) canvas area depends on position and size of child widgets, //we need to calculate this extension manually.//
-:* beware: the allocation for child widgets is not setup immediately, when adding or moving children
-:* rather, we need to wait until in the {{{on_draw()}}} callback for the {{{Gtk::Layout}}}
-:* at this point, we may use the //foreach// mechanism of the container
-{{{
-      uint extH=20, extV=20;
-      Gtk::Container::ForeachSlot callback
-        = [&amp;](Gtk::Widget&amp; chld)
-                {
-                  auto alloc = chld.get_allocation();
-                  uint x = alloc.get_x();
-                  uint y = alloc.get_y();
-                  x += alloc.get_width();
-                  y += alloc.get_height();
-                  extH = max (extH, x);
-                  extV = max (extV, y);
-                };
-      foreach(callback);
-      set_size (extH, extV);
-}}}
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">
