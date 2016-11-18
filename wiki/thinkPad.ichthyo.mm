@@ -21,7 +21,7 @@
 </node>
 </node>
 <node CREATED="1476376882857" HGAP="193" ID="ID_1420903777" MODIFIED="1477784783964" TEXT="Kern-Elemente" VSHIFT="-34">
-<node CREATED="1476376913589" ID="ID_1887326939" MODIFIED="1476376917001" TEXT="Timeline">
+<node CREATED="1476376913589" HGAP="18" ID="ID_1887326939" MODIFIED="1479434878937" TEXT="Timeline" VSHIFT="-5">
 <node CREATED="1477599995452" ID="ID_97568136" MODIFIED="1477599999383" TEXT="Bestandteile">
 <node CREATED="1476377043180" ID="ID_1179709828" MODIFIED="1476377047495" TEXT="Head">
 <node CREATED="1476377067729" ID="ID_896843893" MODIFIED="1476377070268" TEXT="Patchbay"/>
@@ -97,8 +97,49 @@
 </node>
 </node>
 </node>
-<node CREATED="1476376943985" ID="ID_1422206856" MODIFIED="1476376946021" TEXT="Viewer"/>
-<node CREATED="1476376927660" ID="ID_688318446" MODIFIED="1476376932070" TEXT="Docks"/>
+<node CREATED="1476376943985" HGAP="22" ID="ID_1422206856" MODIFIED="1479434895083" TEXT="Viewer" VSHIFT="10"/>
+<node CREATED="1479434763643" HGAP="25" ID="ID_1572413636" MODIFIED="1479434887744" TEXT="Clip" VSHIFT="31">
+<node CREATED="1479434774138" ID="ID_912862507" MODIFIED="1479442348920" TEXT="Grundlagen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1479434780105" ID="ID_239720378" MODIFIED="1479434829990" TEXT="apperances">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ein Clip hat verschiedene Erscheinungsformen im UI
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Verwende das als Leitgedanke, um das Layout zu entwickeln
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1479434831825" ID="ID_975727645" MODIFIED="1479434836781" TEXT="abridged form">
+<node CREATED="1479434845992" ID="ID_609815513" MODIFIED="1479434860330" TEXT="media bin, collapsed fork"/>
+<node CREATED="1479441548335" ID="ID_150470698" MODIFIED="1479441564712" TEXT="icon + ID label"/>
+</node>
+<node CREATED="1479441503085" ID="ID_386209482" MODIFIED="1479441506119" TEXT="compact form">
+<node CREATED="1479441530689" ID="ID_1057853337" MODIFIED="1479441539364" TEXT="timeline default"/>
+<node CREATED="1479441567268" ID="ID_1413366977" MODIFIED="1479441582078" TEXT="rendered content strip + decorations"/>
+</node>
+<node CREATED="1479441519834" ID="ID_1669486876" MODIFIED="1479441522374" TEXT="expanded form">
+<node CREATED="1479441586057" ID="ID_64386373" MODIFIED="1479441597593" TEXT="window with embedded sub-clips"/>
+</node>
+</node>
+<node CREATED="1479442296443" ID="ID_911884433" MODIFIED="1479442304498" TEXT="graceful display degradation">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1479442310537" ID="ID_1849995398" MODIFIED="1479442342361" TEXT="Fall1: wenigstens 1 pixel"/>
+<node CREATED="1479442322359" ID="ID_492785140" MODIFIED="1479442337761" TEXT="Fall2: in diesem Pixel ist content"/>
+</node>
+</node>
+</node>
+<node CREATED="1476376927660" HGAP="35" ID="ID_688318446" MODIFIED="1479434903774" TEXT="Docks" VSHIFT="12"/>
 <node CREATED="1477342616175" HGAP="37" ID="ID_954058801" MODIFIED="1477342623660" TEXT="Workspace" VSHIFT="33">
 <node CREATED="1477342624942" ID="ID_56920104" MODIFIED="1477342628449" TEXT="ist-Zustand">
 <node CREATED="1477342634181" ID="ID_930340610" MODIFIED="1477342640272" TEXT="ein globaler WindowManager">
@@ -9540,8 +9581,7 @@
       
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1478037986046" ID="ID_1293899679" MODIFIED="1478037990857">
 <richcontent TYPE="NODE"><html>
@@ -9553,8 +9593,7 @@
       on_check_resize() wird nicht aufgerufen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
@@ -9613,6 +9652,38 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1477703730073" ID="ID_1070867956" MODIFIED="1477703771801" TEXT="foreach doesn&apos;t work">
 <icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1479424603959" ID="ID_194428894" MODIFIED="1479424858118" TEXT="works on second attempt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...keine Ahnung, was ich beim ersten Mal falsch gemacht habe.
+    </p>
+    <p>
+      jedenfalls hab ich da sofort beim ersten Aufruf der Closure einen SEGFAULT bekommen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Auch im zweiten Anlauf habe ich ein Lambda verwendet.
+    </p>
+    <p>
+      M&#246;glicherweise ist der einzige Unterschied, da&#223; ich es nun aus dem draw-callback
+    </p>
+    <p>
+      aufrufe, und da&#223; demgegen&#252;ber bei der ersten Verwendung die Allocation des jeweiligen
+    </p>
+    <p>
+      Kind-Widgets noch gar nicht festgelegt war (denn das passiert erst beim draw).
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1477703741232" ID="ID_942790225" MODIFIED="1477703768906" TEXT="get_children returns copy">
 <icon BUILTIN="smiley-oh"/>
@@ -10634,6 +10705,11 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1478387336953" FOLDED="true" ID="ID_1320541285" MODIFIED="1478387379268" TEXT="debian/copyright">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1478387345624" ID="ID_666713431" MODIFIED="1478387376477" TEXT="sollte alle Copyright-statements korrekt zusammenfassen"/>
+<node CREATED="1478387362709" ID="ID_1001009846" MODIFIED="1478387376477" TEXT="siehe Debian-Policy"/>
 </node>
 </node>
 </node>

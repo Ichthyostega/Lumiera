@@ -1421,6 +1421,17 @@ Additionally, each calculation stream knows how to access a //render environment
 &amp;rarr; NodeOperationProtocol
 </pre>
 </div>
+<div title="Clip" creator="Ichthyostega" modifier="Ichthyostega" created="201611180032" modified="201611180042" tags="def Model" changecount="2">
+<pre>//A clip represents some segment of media, which is arranged to appear at some time point within the edit.//
+Lumiera agrees to this common understanding (of most film editing and sound handling applications), to the degree that a clip within Lumiera is largely an abstract entity, avoiding implicit or explicit further assumptions. A clip has a //temporal extension,// (start point and a duration) and we assume it features some media content. Yet the underlying media need not be uniform, it might be structured, a compound of several sources (e.g.  sound and image) -- it might even be //virtual,// part of another sequence, in which case we'll get a VirtualClip.
+
+//For the user,// clips are the most relevant entities encountered when working with and building the edit. As such, it is represented in the UI as [[clip widget|GuiClipWidget]], which can appear as arranged within the [[fork (&quot;tracks&quot;)|Fork]] or as item within a //media bin.// But for the internal processing, clips are not conceived as primary entities; rather, they are translated by the [[Builder]] into an arrangement of interconnected [[pipes|Pipe]], which in turn are wired into a data processing network. In the end, this translates into a [[stream of processing jobs|CalcStream]], which are [[scheduled|Scheduler]] for calculation &quot;just in time&quot;.
+
+&amp;rarr; SessionInterface
+&amp;rarr; TrackHandling
+&amp;rarr; PipeHandling
+</pre>
+</div>
 <div title="ColorPalette" modifier="Ichthyostega" created="200706190033" modified="200807131329" tags="excludeMissing">
 <pre>Background: #fefefd
 Foreground: #000
@@ -2204,7 +2215,7 @@ The building blocks for such a chain of triggers and reactions are provided by a
 
 __3/2014__: The crucial point seems to be the impedance mismatch between segments and calculation streams. We have a really high number of segments, which change only occasionally. But we have a rather small number of calculation streams, which mutate rapidly. And, over time, any calculation stream might -- occasionally -- touch a large number of segments. Thus, care should be taken not to implement the dependency structure naively. We only need to care about the tainted calculation streams when it comes to discarding a segment.</pre>
 </div>
-<div title="Fork" modifier="Ichthyostega" created="200801062320" modified="201505310126" tags="def design decision" changecount="1">
+<div title="Fork" modifier="Ichthyostega" created="200801062320" modified="201611180016" tags="def design decision Model" changecount="2">
 <pre>Within Lumiera, tracks are just a structure used to organize the Media Objects within the Sequence. Tracks are associated allways to a specific Sequence and the Tracks of an Sequence form a //tree of tracks.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
 
 To underpin this design decision, Lumiera introduces the more generic concept of a ''Fork'' -- to subsume the &quot;tracks&quot; within the timeline, as well as the &quot;media bins&quot; in the asset management section
@@ -2398,13 +2409,13 @@ On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of a
 :sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
-<div title="GtkCustomDrawing" creator="Ichthyostega" modifier="Ichthyostega" created="201610300111" modified="201610301604" tags="spec GuiPattern" changecount="10">
+<div title="GtkCustomDrawing" creator="Ichthyostega" modifier="Ichthyostega" created="201610300111" modified="201611172341" tags="spec GuiPattern" changecount="11">
 <pre>//some information how to achieve custom drawing with ~GTKmm...//
 valuable reference documentation comes bundled with lib ~GTKmm, in the guide [[&quot;Programming with GTKmm&quot;|https://developer.gnome.org/gtkmm-tutorial/stable/index.html.en]]
 * the chapter detailing [[use of the Gtk::DrawingArea|https://developer.gnome.org/gtkmm-tutorial/stable/chapter-drawingarea.html.en]], including an introduction to [[Cairomm|https://www.cairographics.org/documentation/cairomm/reference/]]
 * the chapter about [[constructing a custom widget|https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en]]
 
-Basically we have to handle the {{{signal_draw}}} events. Since we need to control the event processing, it is recommended to do this event handling by //overriding the {{{on_draw()}}} function,// not by connecting a slot directly to the signal. Two details are to be considered here: the //return value// controls if the event can be considered as fully handled. If we return {{{false}}}, enclosing (parent) widgets get also to handle this event. And, secondly, if we derive from any widget, it is a good idea to invoke the //parent implementation of {{{on_draw()}}} at the appropriate point.// This is especially relevant when our custom drawing involves the ''canvas widget'' ({{{Gtk::Layout}}}), which has the ability to place several further widgets embedded onto the canvas area. Without invoking this parent event handler, those embedded widgets won't be shown.
+Basically we have to handle the {{{signal_draw}}} events. Since we need to control the event processing, it is recommended to do this event handling by //overriding the {{{on_draw()}}} function,// not by connecting a slot directly to the signal. Two details are to be considered here: the //return value// controls if the event can be considered as fully handled. If we return {{{false}}}, enclosing (parent) widgets get also to handle this event. This is typically what we want in case of custom drawing. And, secondly, if we derive from any widget, it is a good idea to invoke the //parent implementation of {{{on_draw()}}} at the appropriate point.// This is especially relevant when our custom drawing involves the ''canvas widget'' ({{{Gtk::Layout}}}), which has the ability to place several further widgets embedded onto the canvas area. Without invoking this parent event handler, those embedded widgets won't be shown.
 
 Typically, when starting the draw operation, we retrieve our //allocation.// This is precisely the rectangle reserved for the current widget, //insofar it is visible.// Especially this means, when a larger canvas is partially shown with the help of scrollbars, the allocation is the actually visible rectangle, not the virtual extension of the canvas. Each scrollbar is associated with a {{{Gtk::Adjustment}}}, which is basically a bracketed value with preconfigured step increments. The //value// of the adjustment corresponds to the //coordinates of the viewport// within the larger area of the canvas. Since coordinates in Gtk and Cairo are oriented towards the right and downwards, the value properties of both adjustments (horizontal and vertical) together give us the coordinates of the upper left corner of the viewport. The maximum value possible within such an adjustment is such as to fulfil {{{max(value) + viewport-size == canvas-size}}}. By printing values from the {{{on_draw()}}} callback, it can be verified that Gtk indeed handles it precisely that way.
 
@@ -2428,6 +2439,27 @@ we need a test setup for this investigation.
 * easy to launch
 * don't waste much time, it is disposable
 * realistic: shall reflect the situation in our actual UI
+</pre>
+</div>
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201611180411" tags="GuiPattern design draft" changecount="6">
+<pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
+Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
+* we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels)
+* like anything within a timeline, a clip has a temporal extension (but not necessarily finite; it can be zero, or it can be infinite)
+* by virtue of [[Placement]], a clip acquires a time position.
+Due to this unspecific nature, a clip might take on various //appearances// within the UI.
+
+!clip appearances
+To start with, a clip can be rendered in ''abridged form'', which means that the content is stylised and the temporal extension does not matter. In this form, the clip is reduced to an icon, an expand widget and a ID label. This is the standard representation encountered within the //media bins.// The intent of this representation is to save on screen area, especially to minimise vertical extension. As a derivative of this layout style, a clip may be shown in abridged form, but with proper representation of the temporal extension; to this end, the enclosing box is extended horizontally as needed, while the compound of icon, control and label is aligned such as to remain in sight.
+
+The next step in a series of progressively more detailed clip representations is the ''compact form'', which still focusses on handling the clip as an unit, while at least indicating some of the inherent structuring. Essentially, the clip here is represented as a //strip of rendered preview content,// decorated with some overlays. One of these overlays is the //ID pane,// which resembles the arrangement known from the abridged form: The icon here is always the [[Placement]] icon, followed by the expand widget and the ID label. Again, this pane is aligned such as to remain in sight. Then, there is a pair of overlays, termed the //boundary panes,// which indicate the begin and the end of the clip respectively. Graphically, these overlays should be rendered in a more subtle way, just enough to be recognisable. The boundary panes are the attachment areas for //trimming gestures,// as opposed to moving and dragging the whole clip or shuffle editing of the content. Moreover, these boundary panes compensate for the alignment of the ID pane, which mostly keeps the latter in sight. As this might counterfeit the visual perception of scrolling, the boundary panes serve to give a clear visual clue when reaching the boundary of an extended clip. Optionally, another overlay is rendered at the upper side of the clip's area, to indicate attached effect(s). It is quite possible for these effect decorations not to cover the whole temporal span of the clip.
+
+A yet more detailed display of the clip's internals is exposed in the ''expanded form.'' Here, the clip is displayed as an window pane holding nested clip displays, which in turn might again be abridged, compact or ({{red{maybe 11/16}}}) even expanded. This enclosing clip window pane should be rendered semi transparent, just to indicate the enclosing whole. The individual clip displays embedded therein serve to represent individual media parts or channels, or individual attached effects. Due to the recursive nature of Lumiera's HighLevelModel, each of these parts exposes essentially the same controls, allowing to control the respective aspects of the part in question. We may even consider {{red{unclear as of 11/16}}} to allow accessing the parts of a VirtualClip, this way turning the enclosing clip into a lightweight container ({{red{11/2016 give proper credit for this concept! Who proposed this initially in 2008? was this Thosten Wilms?}}}
+
+Finally, there can be a situation where it is just not possible to render any of the aforementioned display styles properly, due to size constraints. Especially, this happens when zooming out such as to show a whole sequence or even timeline in overview. We need to come up with a scheme of ''graceful display degradation'' to deal with this situation -- just naively attempting to render any form might easily send our UI thread into a minute long blocking rendering state, for no good reason. Instead, display should fall back to
+* showing just a placeholder rectangle, when the clip (or any other media element) will cover a temporal span relating to at least 1 pixel width (configurable trigger condition)
+* even further collapsing several entities into a strike of elements, to indicate at least that something is there.
+Together this shows we have to decide on a ''display strategy'' //before we even consider to add// a specific widget to the enclosing GTK container....
 </pre>
 </div>
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201609091641" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="26">
@@ -2618,14 +2650,14 @@ Now, when invoking an operation on some public interface, the code in the lower 
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201505310135" tags="GuiPattern design decision draft" changecount="8">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201611180106" tags="GuiPattern design decision draft" changecount="11">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
 * this binding in turn ties a [[Sequence]]
 * and the sequence provides a [[Fork (&quot;tree of tracks&quot;)|Fork]]
-* within the scope of these tracks, there is content
-* and this content implies output designations
+* within the scope of these tracks, there is content  ([[clips|Clip]])
+* and this content implies [[output designations|OutputDesignation]]
 * which are resolved to the [[global Pipes|GlobalPipe]] belonging to //this specific Timeline.//
 * after establishing a ViewerPlayConnection, a running PlayProcess exposes a PlayController
 Session, Binding and Sequence are the mandatory ingredients.
@@ -2636,8 +2668,8 @@ In the temporal dimension, there is the usual scrolling and zooming of content, 
 The workspace dimension (vertical layout) is more like a ''Fork'', which can be expanded recursively. More specifically, each strip or layer or &quot;track&quot; can be featured in //collapsed// or //expanded state.//
 * the collapsed state features a condensed representation (&quot;the tip of the iceberg&quot;). It exposes just the topmost entity, and might show a rendered (pre)view. Elements might be stacked on top, but any element visible here //is accessible.//
 * when expanding, the content unfolds into...
-** a ''scope ruler'' to represent the whole sub-scope. This is rendered as a small pane, holding any locally attached labels and track-wide or temporally scoped effects
-** the content stack, comprised of media, attached effects and transitions
+** a ''scope ruler'' to represent the whole sub-scope. This is rendered as a small pane, extending horizontally, holding any locally attached labels and track-wide or temporally scoped effects
+** the content stack, comprised of [[clip widgets|GuiClipWidget]], attached effects and transitions
 ** a stack of nested sub-scopes (recursive).
 This collapsed, expanded and possibly nested workspace structure is always exactly paralleled in the header pane.
 
@@ -2648,7 +2680,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611012221" tags="GuiPattern discuss decision impl" changecount="59">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611172322" tags="GuiPattern discuss decision impl" changecount="60">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2720,7 +2752,7 @@ In order to build a sensible plan for our timeline structure, we need to investi
 ;moving child widgets
 :works as expected
 ;expanding widgets
-:works ex expected
+:works as expected
 ;delete child widgets
 :is possible by the {{{Container::remove(Widget*)}}} function
 :removed child widgets will also removed from display (hidden)
@@ -4612,7 +4644,7 @@ DAMAGE.
 <div title="PathManager" modifier="Ichthyostega" created="200909041748" tags="def Builder">
 <pre>Facility guiding decisions regarding the strategy to employ for rendering or wiring up connections. The PathManager is querried through the OperationPoint, when executing the connection steps within the Build process.</pre>
 </div>
-<div title="Pipe" modifier="Ichthyostega" created="200801062110" modified="201202032309" tags="def decision">
+<div title="Pipe" modifier="Ichthyostega" created="200801062110" modified="201611180016" tags="def decision Model" changecount="1">
 <pre>Pipes play an central role within the Proc Layer, because for everything placed and handled within the session, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
 We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
 Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source ports|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
@@ -4628,7 +4660,7 @@ Similar structures and mechanisms are extended beyond the core model: The GUI ca
 
 </pre>
 </div>
-<div title="PipeHandling" modifier="Ichthyostega" created="200801101352" modified="201011220320" tags="spec">
+<div title="PipeHandling" modifier="Ichthyostega" created="200801101352" modified="201611180018" tags="spec Model Builder" changecount="1">
 <pre>!Identification
 Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
 
@@ -5977,17 +6009,17 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201505310142" tags="SessionLogic GuiIntegration design draft discuss" changecount="5">
+<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201611180019" tags="SessionLogic GuiIntegration design draft discuss" changecount="6">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
 * LayerSeparationInterfaces allowing to access these interfaces from outside the Proc-Layer
 * the primary public ~APIs exposed on the objects to be [[queried and retrieved|SessionStructureQuery]] via the session class API
-** Timeline
-** Sequence
-** Placement
-** Clip
-** Fork
+** [[Timeline]]
+** [[Sequence]]
+** [[Placement]]
+** [[Clip]]
+** [[Fork]]
 ** Effect
 ** Automation
 * the [[command|CommandHandling]] interface, including the [[UNDO|UndoManager]] facility
