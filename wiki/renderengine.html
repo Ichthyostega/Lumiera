@@ -2441,7 +2441,7 @@ we need a test setup for this investigation.
 * realistic: shall reflect the situation in our actual UI
 </pre>
 </div>
-<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201611180411" tags="GuiPattern design draft" changecount="6">
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201611190243" tags="GuiPattern design draft" changecount="12">
 <pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
 Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
 * we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels)
@@ -2456,10 +2456,20 @@ The next step in a series of progressively more detailed clip representations is
 
 A yet more detailed display of the clip's internals is exposed in the ''expanded form.'' Here, the clip is displayed as an window pane holding nested clip displays, which in turn might again be abridged, compact or ({{red{maybe 11/16}}}) even expanded. This enclosing clip window pane should be rendered semi transparent, just to indicate the enclosing whole. The individual clip displays embedded therein serve to represent individual media parts or channels, or individual attached effects. Due to the recursive nature of Lumiera's HighLevelModel, each of these parts exposes essentially the same controls, allowing to control the respective aspects of the part in question. We may even consider {{red{unclear as of 11/16}}} to allow accessing the parts of a VirtualClip, this way turning the enclosing clip into a lightweight container ({{red{11/2016 give proper credit for this concept! Who proposed this initially in 2008? was this Thosten Wilms?}}}
 
-Finally, there can be a situation where it is just not possible to render any of the aforementioned display styles properly, due to size constraints. Especially, this happens when zooming out such as to show a whole sequence or even timeline in overview. We need to come up with a scheme of ''graceful display degradation'' to deal with this situation -- just naively attempting to render any form might easily send our UI thread into a minute long blocking rendering state, for no good reason. Instead, display should fall back to
+Finally, there can be a situation where it is just not possible to render any of the aforementioned display styles properly, due to size constraints. Especially, this happens when zooming out such as to show a whole sequence or even timeline in overview. We need to come up with a scheme of ''graceful display degradation'' to deal with this situation -- just naively attempting to render any form might easily send our UI thread into a minute long blocking render state, for no good reason. Instead, in such cases display should fall back to
 * showing just a placeholder rectangle, when the clip (or any other media element) will cover a temporal span relating to at least 1 pixel width (configurable trigger condition)
 * even further collapsing several entities into a strike of elements, to indicate at least that something is there.
 Together this shows we have to decide on a ''display strategy'' //before we even consider to add// a specific widget to the enclosing GTK container....
+
+!!!strategy decision how to show a clip
+Depending on specific circumstances within the presentation, we get a fundamentally different code path, well beyond just a variation of display parametrisation. Even more, this decision happens above the level of individual widgets, and this decision might be changed dynamically, independently of adding or removing individual widgets. We may
+* need to build a custom drawing container for a single widget, to produce the compact and expanded display; theoretically this display can be //reduced// to the abridged form.
+* alternatively we may omit the overhead of a custom drawing container, if we know that we'll most likely stick to the abridged form, or reduce display to a placeholder block
+* but in the extreme case, we do not even display anything for a given widget -- rather we need to create a placeholder to stand-in for //N clips.//
+This is unfortunate, since it defeats a self-contained control structure, where each widget holds its own model and manages its own state. Rather, we have to distinguish between child elements as belonging to the model and child widgets as far as the view is concerned. A given scope in the fork could have more clip child elements than child widgets for display. Which means, we have to separate between the view aspect and the modelling aspect. And this split happens already on a level global to the timeline.
+
+This creates a tension related to the kind of architecture we want to build with the help of the UI-Bus. The intention is to split and separate between the application global concerns, like issuing an editing command or retrieving changed model contents, and the //local UI mechanics.// This separation can only work, if -- with respect to the global concerns -- the UI-Bus represents model //and// controler, while the UI widgets take on the role of a &quot;mere view&quot;. While, for the local concerns, the same widgets are to act self-contained. But now, already the existence of aforementioned widgets becomes dependent from another, obviously local concern, which unfortunately cross-cuts the 1:1 relation between model entities and view counterpart.
+
 </pre>
 </div>
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201609091641" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="26">
@@ -2510,11 +2520,11 @@ Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to u
 
 </pre>
 </div>
-<div title="GuiCustomWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611180430" tags="GuiPattern discuss decision draft" changecount="62">
+<div title="GuiCustomWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611182349" tags="GuiPattern discuss decision draft" changecount="64">
 <pre>Inevitably, the UI of an advanced application like Lumiera needs some parts beyond the scope of what can be achieved by combining standard widgets. Typically, an UI toolkit (GTK is no exception here) offers some extension mechanism to integrate such more elaborate, application specific behaviour. Within Lumiera, the Timeline is probably the most prominent place where we need to come up with our own handling solution -- which also means to rely on such extension mechanisms and to integrate well with the more conventional parts of the UI. Since the core concept of typical UI toolkit sets is that of a //widget,// we end up with writing some kind of customised or completely custom defined widget. 
 
 !two fundamental models
-It is clear that we need to write a customised widget to embody the specific behaviour we need. Two distinct approaches are conceivable
+So it is clear that we need to write a customised widget to embody the specific behaviour we need. Two distinct approaches are conceivable
 ;custom arrangement
 :define or derive our own widget class to arrange existing widgets in a customised way
 ;custom drawing
@@ -2531,7 +2541,7 @@ Our custom made UI elements impend to turn into a tremendous time sink (For refe
 
 !!!is custom drawing necessary?
 There are some issues though, which more or less force us into custom drawing
-* for our task, we're suffering a horrible lack of screen real estate. This forces us into conceiving elaborate controls way beyond the capabilities of existing standard widgets
+* for our task, we're always suffering from lack of screen real estate. This forces us into conceiving elaborate controls way beyond the capabilities of existing standard widgets
 * and for the feedback, we also need to tap into very precise event handling, which is hard to achieve with the huge amount of variability found with standard widgets
 * our timeline display has to comply to a temporal metric grid, which is incompatible with the leeway present in standard widgets for the purpose of styling and skinning the UI
 * the sheer amount of individual elements we need to get to screen is way beyond anything in a conventional GUI -- the UI toolkit set can not be expected to handle such load smoothly
