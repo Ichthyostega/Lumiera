@@ -96,6 +96,34 @@
 </node>
 </node>
 </node>
+<node CREATED="1479678484210" ID="ID_1561971595" MODIFIED="1479678488573" TEXT="Struktur">
+<node CREATED="1479678496272" ID="ID_807567871" LINK="file:///home/hiv/devel/lumi/wiki/renderengine.html#GuiTimelineWidgetStructure" MODIFIED="1479678687574" TEXT="Analyse">
+<node CREATED="1479678503071" ID="ID_806149006" MODIFIED="1479678681170" TEXT="Grid bringt nix">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das war zwar schon meine Bauchgef&#252;hl,
+    </p>
+    <p>
+      habe aber sicherheitshalber diese Analyse nochmal gemacht.
+    </p>
+    <p>
+      Details im&#160;&#160;TiddlyWiki....
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1479678634213" ID="ID_432405176" MODIFIED="1479678650821" TEXT="rekursive Struktur schaffen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1479678509822" ID="ID_915690336" MODIFIED="1479678663117" TEXT="Scrolling ist notwendig speziell"/>
+</node>
+</node>
 </node>
 <node CREATED="1476376943985" HGAP="22" ID="ID_1422206856" MODIFIED="1479434895083" TEXT="Viewer" VSHIFT="10"/>
 <node CREATED="1479434763643" HGAP="25" ID="ID_1572413636" MODIFIED="1479434887744" TEXT="Clip" VSHIFT="31">
