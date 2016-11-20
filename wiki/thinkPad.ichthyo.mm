@@ -99,8 +99,7 @@
 </node>
 <node CREATED="1476376943985" HGAP="22" ID="ID_1422206856" MODIFIED="1479434895083" TEXT="Viewer" VSHIFT="10"/>
 <node CREATED="1479434763643" HGAP="25" ID="ID_1572413636" MODIFIED="1479434887744" TEXT="Clip" VSHIFT="31">
-<node CREATED="1479434774138" ID="ID_912862507" MODIFIED="1479442348920" TEXT="Grundlagen">
-<icon BUILTIN="pencil"/>
+<node CREATED="1479434774138" ID="ID_912862507" MODIFIED="1479601717907" TEXT="Grundlagen">
 <node CREATED="1479434780105" ID="ID_239720378" MODIFIED="1479434829990" TEXT="apperances">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -117,25 +116,116 @@
       Verwende das als Leitgedanke, um das Layout zu entwickeln
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1479434831825" ID="ID_975727645" MODIFIED="1479434836781" TEXT="abridged form">
 <node CREATED="1479434845992" ID="ID_609815513" MODIFIED="1479434860330" TEXT="media bin, collapsed fork"/>
 <node CREATED="1479441548335" ID="ID_150470698" MODIFIED="1479441564712" TEXT="icon + ID label"/>
+<node CREATED="1479601640961" ID="ID_191706335" MODIFIED="1479601645229" TEXT="Gtk::Frame"/>
 </node>
 <node CREATED="1479441503085" ID="ID_386209482" MODIFIED="1479441506119" TEXT="compact form">
 <node CREATED="1479441530689" ID="ID_1057853337" MODIFIED="1479441539364" TEXT="timeline default"/>
 <node CREATED="1479441567268" ID="ID_1413366977" MODIFIED="1479441582078" TEXT="rendered content strip + decorations"/>
+<node CREATED="1479601649615" ID="ID_417588278" MODIFIED="1479601662578" TEXT="Gtk::Frame + Gtk::Layout"/>
 </node>
 <node CREATED="1479441519834" ID="ID_1669486876" MODIFIED="1479441522374" TEXT="expanded form">
 <node CREATED="1479441586057" ID="ID_64386373" MODIFIED="1479441597593" TEXT="window with embedded sub-clips"/>
+<node CREATED="1479601667734" ID="ID_1877644742" MODIFIED="1479601683095" TEXT="dto, with recursive embedded sub-clips"/>
 </node>
 </node>
 <node CREATED="1479442296443" ID="ID_911884433" MODIFIED="1479442304498" TEXT="graceful display degradation">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1479442310537" ID="ID_1849995398" MODIFIED="1479442342361" TEXT="Fall1: wenigstens 1 pixel"/>
 <node CREATED="1479442322359" ID="ID_492785140" MODIFIED="1479442337761" TEXT="Fall2: in diesem Pixel ist content"/>
+</node>
+</node>
+<node CREATED="1479601690675" ID="ID_542607961" MODIFIED="1479601720226" TEXT="Struktur">
+<icon BUILTIN="pencil"/>
+<node CREATED="1479601699057" ID="ID_1130364446" MODIFIED="1479601707854" TEXT="Konflikt mit der UI-Bus-Architektur">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1479601736116" ID="ID_891600328" MODIFIED="1479601748486" TEXT="Bus == Rolle des Controler/Model"/>
+<node CREATED="1479601749946" ID="ID_887287956" MODIFIED="1479601757981" TEXT="Widget == View-Rolle"/>
+</node>
+<node CREATED="1479601765896" ID="ID_1632476975" MODIFIED="1479601784408">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      UI-Bus gilt nur f&#252;r <b>globale Belange</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1479601788237" ID="ID_1871715779" MODIFIED="1479601795259" TEXT="wichtige neue Unterscheidung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1479601796075" ID="ID_1177606400" MODIFIED="1479601807006" TEXT="Global == in der Session aufgezeichnet"/>
+<node CREATED="1479601807666" ID="ID_1374495669" MODIFIED="1479601812781" TEXT="vs. lokale UI-Mechanik"/>
+<node CREATED="1479601828799" ID="ID_1797519191" MODIFIED="1479601837377" TEXT="Ziel: Subsidiarit&#xe4;t f&#xfc;r lokale Belange"/>
+</node>
+<node CREATED="1479601884288" HGAP="34" ID="ID_1371609613" MODIFIED="1479602442561" TEXT="L&#xf6;sungs-Idee" VSHIFT="18">
+<icon BUILTIN="idea"/>
+<node CREATED="1479601889567" ID="ID_1123973572" MODIFIED="1479601899475">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es geht nur um <i>Rollen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1479601907221" ID="ID_286625648" MODIFIED="1479601914101" TEXT="es ist ein Design-Pattern">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1479601925938" ID="ID_22286545" MODIFIED="1479601944896">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das lokale Element mu&#223; nur als View <i>fungieren</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1479601945839" ID="ID_254470029" MODIFIED="1479601954903" TEXT="Model-View-Presenter">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1479602306718" ID="ID_359464754" MODIFIED="1479602311385" TEXT="ClipPresenter">
+<node CREATED="1479602311740" ID="ID_963961994" MODIFIED="1479602314256" TEXT="Mittelsmann"/>
+<node CREATED="1479602314676" ID="ID_944757170" MODIFIED="1479602318896" TEXT="steht f&#xfc;r den Clip"/>
+<node CREATED="1479602319555" ID="ID_1557047586" MODIFIED="1479602327854" TEXT="steuert ein ClipWidget"/>
+<node CREATED="1479602338609" ID="ID_444253818" MODIFIED="1479602340884" TEXT="ClipWidget">
+<node CREATED="1479602341777" ID="ID_1610807382" MODIFIED="1479602381582" TEXT="empf&#xe4;ngt DisplayStrategy"/>
+<node CREATED="1479602382195" ID="ID_1504834509" MODIFIED="1479602405257">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann sich selbst
+    </p>
+    <p>
+      transformieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1479602412095" ID="ID_832808487" MODIFIED="1479602415154" TEXT="Frame"/>
+<node CREATED="1479602415654" ID="ID_1358720" MODIFIED="1479602418642" TEXT="Frame + Layout"/>
+<node CREATED="1479602419134" ID="ID_1788706818" MODIFIED="1479602425033" TEXT="sub-Clips im Layout"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -9681,8 +9771,7 @@
       Kind-Widgets noch gar nicht festgelegt war (denn das passiert erst beim draw).
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1477703741232" ID="ID_942790225" MODIFIED="1477703768906" TEXT="get_children returns copy">
