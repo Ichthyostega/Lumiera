@@ -2827,7 +2827,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611202144" tags="GuiPattern discuss decision impl" changecount="70">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611210035" tags="GuiPattern discuss decision impl" changecount="74">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -2858,6 +2858,13 @@ So we get a timeline custom widget, which at top level establishes this two-part
 
 !dealing with nested structures
 The handling of objects structured into nested scopes is a hallmark of the very specific approach taken by Lumiera when it comes to attaching, arranging and relating media objects. But here in the UI display of the timeline, this approach creates a special architectural challenge: the only sane way to deal with nested structures without exploding complexity is to find some way to exploit the ''recursive self similarity'' inherent in any tree structure. But the problematic consequence of this assessment is the tension, even contradiction it creates to the necessities of GUI programming, which forces us to come up with one single, definitive widget representation of what is going on eventually. The conclusion is that we need to come up with an interface such as to allow building and remoulding of the UI display through incremental steps -- where each of this incremental steps relies solely on relative, context based information. Because this is the only way we can deal with building a tree structure by recursive programming. We must not demand the individual step to know its arrangement within the tree, other than indicating a &quot;current&quot; or a &quot;parent&quot; reference point.
+
+The structure of the display is extended or altered under two circumstances:
+#. some component receives a [[diff mutation message|MutationMessage]], prompting to add or remove a //child component.//
+#. the display (style) of some component is expanded or collapsed.
+Here, the &quot;component&quot; relevant for such structural changes is always the UI representation of a track. But beyond that, the layout can be changed //without changing the display structure,// when some embedded component, be it placement (in the track heads / the patchbay) or a clip, effect or transition, is expanded or collapsed. In such a case, a resizing challenge needs to be directed towards the next enclosing track container.
+
+From these observations we can draw the conclusion, that we'll build a ''local structural model'', to reflect the logical relations between the parts comprising the timeline display. And each of these local representation components holds onto a display context, which in fact links it into two different display widget stacks in the two parts of the actual timeline display. Thus, if a component, especially a track, adds a child, it has to pass this child to its own display context, which in turn has to consult its parts, attach new child widgets to those parts and form a new child display context, which then has to be returned to the newly formed child and stored there for future referral.
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">

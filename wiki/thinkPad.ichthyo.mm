@@ -123,6 +123,17 @@
 </node>
 <node CREATED="1479678509822" ID="ID_915690336" MODIFIED="1479678663117" TEXT="Scrolling ist notwendig speziell"/>
 </node>
+<node CREATED="1479678717961" ID="ID_946163885" MODIFIED="1479678722108" TEXT="globales Widget">
+<node CREATED="1479678723576" ID="ID_666987913" MODIFIED="1479678758128" TEXT="Layout Grundmuster: zweigeteilt"/>
+<node CREATED="1479678736655" ID="ID_1313901406" MODIFIED="1479678745545" TEXT="globaler Layout-Manager"/>
+</node>
+<node CREATED="1479688613990" ID="ID_1537299376" MODIFIED="1479688617705" TEXT="Struktur&#xe4;nderung">
+<node CREATED="1479688621637" ID="ID_71591229" MODIFIED="1479688631881" TEXT="notwendig: strukturelles Modell">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1479688633483" ID="ID_1301490505" MODIFIED="1479688646781" TEXT="Elemente in diesem halten einen display-context"/>
+<node CREATED="1479688653913" ID="ID_1435784278" MODIFIED="1479688666394" TEXT="dieser wiederum mu&#xdf; f&#xfc;r jede Erweiterung konsultiert werden"/>
+</node>
 </node>
 </node>
 <node CREATED="1476376943985" HGAP="22" ID="ID_1422206856" MODIFIED="1479434895083" TEXT="Viewer" VSHIFT="10"/>
