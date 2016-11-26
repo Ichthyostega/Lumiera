@@ -114,8 +114,7 @@
       Details im&#160;&#160;TiddlyWiki....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1479678634213" ID="ID_432405176" MODIFIED="1479678650821" TEXT="rekursive Struktur schaffen">
@@ -133,6 +132,188 @@
 </node>
 <node CREATED="1479688633483" ID="ID_1301490505" MODIFIED="1479688646781" TEXT="Elemente in diesem halten einen display-context"/>
 <node CREATED="1479688653913" ID="ID_1435784278" MODIFIED="1479688666394" TEXT="dieser wiederum mu&#xdf; f&#xfc;r jede Erweiterung konsultiert werden"/>
+</node>
+</node>
+<node CREATED="1479774700668" ID="ID_1407821684" MODIFIED="1479774704971" TEXT="Mutation">
+<node CREATED="1479774705839" ID="ID_301222108" MODIFIED="1479774729887" TEXT="Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#d30f0f" CREATED="1479774731141" ID="ID_1523088286" MODIFIED="1479774739456" TEXT="Element != Widget"/>
+<node CREATED="1479774747753" ID="ID_279553704" MODIFIED="1479774761996" TEXT="Umordnen der Elemente hat keinen Effekt auf die Anzeige"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1479774764575" ID="ID_1338013643" MODIFIED="1480120324802" TEXT="DiffApplikator geht einfach von STL-Collection aus"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1480120294912" HGAP="31" ID="ID_1734639851" MODIFIED="1480120514431" VSHIFT="23">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      grunds&#228;tzliches
+    </p>
+    <p>
+      Problem
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1480120349873" ID="ID_795629510" MODIFIED="1480120398685" TEXT="Diff repr&#xe4;sentiert &#xc4;nderungen indirekt"/>
+<node CREATED="1480120487509" ID="ID_1693545323" MODIFIED="1480120500957">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      speziell die Umordnungen <i>ergeben sich</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1480120359191" ID="ID_1039094699" MODIFIED="1480120390087" TEXT="Widget-Container hat keine &#xc4;nderungs-Schnittstelle"/>
+</node>
+</node>
+<node CREATED="1480120516442" ID="ID_880374813" MODIFIED="1480120518812" TEXT="Ans&#xe4;tze">
+<node CREATED="1480120531935" FOLDED="true" ID="ID_1894474191" MODIFIED="1480123859812" TEXT="Dekorator auf TreeMutator">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1480121069464" ID="ID_1707876611" MODIFIED="1480121073803" TEXT="Operationen mitlesen"/>
+<node CREATED="1480121074703" ID="ID_1346494338" MODIFIED="1480123649491" TEXT="Notifikations-Schnittstelle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und der Dekorator w&#252;rde die beobachteten Operationen
+    </p>
+    <p>
+      an diese Notifikations-Schnittstelle senden.
+    </p>
+    <p>
+      Implementiert w&#252;rde sie vom jeweiligen Widget
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480123478013" ID="ID_1281325973" MODIFIED="1480123610437" TEXT="eine Ebene zu tief, aber geht noch">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      korrekt w&#228;re, die Diff-Verben mitzulesen.
+    </p>
+    <p>
+      <i>Das </i>geht aber nicht, weil wir intern (aktiv) iterieren.
+    </p>
+    <p>
+      Wollten wir das doch, m&#252;&#223;ten wir das gesamte Diff-Applikator-Design wegwerfen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Da aber eigentlich eine 1:1-Zuordnung zwischen Diff-Verben und Operations-Primitiven besteht,
+    </p>
+    <p>
+      k&#246;nnte man trotzdem (mit etwas H&#228;ngen und W&#252;rgen) noch hinkommen.
+    </p>
+    <p>
+      Der Dekorator w&#252;rde also auf dem TreeMutator sitzen...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480121092492" ID="ID_1543810707" MODIFIED="1480123739970" TEXT="L&#xf6;schungen nur heuristisch zu erkennen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Weil wir die &quot;skip&quot;-Operation f&#252;r zwei Zwecke verwenden,
+    </p>
+    <p>
+      und man im Skip nicht wei&#223;, ob man das Element &#252;berhaupt noch anfassen darf,
+    </p>
+    <p>
+      denn es k&#246;nnte ja auch ein von &quot;find&quot; zur&#252;ckgelassener M&#252;ll sein.
+    </p>
+    <p>
+      Daher gibt es die matchSrc-Operation. Effektiv wird die aber nur bei einem Delete aufgerufen...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480123741362" ID="ID_586646895" MODIFIED="1480123856739" TEXT="unsauber, h&#xe4;sslich, ungl&#xfc;cklich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        man sitzt mit dem Detektor unter dem API
+      </li>
+      <li>
+        dadurch entstehen &quot;ungeschriebene Regeln&quot;, wie das API auzurufen ist
+      </li>
+      <li>
+        alternativ k&#246;nnten wir die Operationen komplett 1:1 definieren, also eine explizite delete-Operation einf&#252;hren
+      </li>
+      <li>
+        daf&#252;r w&#252;rde dann die matchSrc wegfallen, was praktisch alle sinnvollen Unit-Tests stark beschr&#228;nkt.
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480123380843" ID="ID_1717666432" MODIFIED="1480123757244" TEXT="w&#xe4;re prinzipiell machbar">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1480121177145" ID="ID_1964453367" MODIFIED="1480123456994" TEXT="Widget is delegate/slave">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1480121209277" ID="ID_834494092" MODIFIED="1480123869816" TEXT="Hinzuf&#xfc;gungen erzeugen neue Widgets">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1480121219579" ID="ID_1906821886" MODIFIED="1480123871892" TEXT="L&#xf6;schungen entfernen das zugeh&#xf6;rige Widget">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1480121271493" ID="ID_1169797519" MODIFIED="1480123874577" TEXT="Reihenfolge ist nebens&#xe4;chlich">
+<icon BUILTIN="idea"/>
+<node CREATED="1480123311260" ID="ID_1288896772" MODIFIED="1480123320575" TEXT="Reihenfolge der Widgets == Z-Ordnung"/>
+<node CREATED="1480123321707" ID="ID_1842225087" MODIFIED="1480123329269" TEXT="das ist ein reiner UI-Belang"/>
+<node CREATED="1480123330521" ID="ID_255024472" MODIFIED="1480123352490" TEXT="Reihenfolge der Tracks wird im UI realisiert"/>
+<node CREATED="1480123353030" ID="ID_871730723" MODIFIED="1480123366705" TEXT="Reihenfolge der Clips wird redundant (durch Position) gegeben"/>
+</node>
+</node>
+</node>
+<node CREATED="1480123881912" HGAP="6" ID="ID_1550301342" MODIFIED="1480123892997" TEXT="Schlu&#xdf;folgerung" VSHIFT="3">
+<icon BUILTIN="yes"/>
+<node CREATED="1480123900845" ID="ID_1099759004" MODIFIED="1480123908024" TEXT="wir mutieren ein Modell-Objekt"/>
+<node CREATED="1480123908524" ID="ID_599072568" MODIFIED="1480123917999" TEXT="das Widget h&#xe4;ngt an diesem als kompletter Slave"/>
+<node CREATED="1480123920371" ID="ID_413127533" MODIFIED="1480123932333" TEXT="Registrierung / Deregistrierung mu&#xdf; vollautomatisch sein"/>
+<node CREATED="1480124094867" ID="ID_1956638484" MODIFIED="1480124123833">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>nach </i>der Mutation erfolgt <b>Display-Neubewertung</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1480124145476" ID="ID_1268974326" MODIFIED="1480124152519" TEXT="f&#xfc;r einen ganzen Scope"/>
+<node CREATED="1480124153979" ID="ID_887707794" MODIFIED="1480124172604" TEXT="stellt fest, was gezeigt werden mu&#xdf;"/>
+<node CREATED="1480124174144" ID="ID_1145067443" MODIFIED="1480124210543" TEXT="synthetisiert Anzeige-Parameter (z.B: Koordinaten, Z-Ordnung)"/>
+<node CREATED="1480124235128" ID="ID_162610711" MODIFIED="1480124250602" TEXT="mu&#xdf; inkrementell arbeiten und bestehende Widgets anpassen"/>
+</node>
 </node>
 </node>
 </node>
@@ -195,8 +376,7 @@
       UI-Bus gilt nur f&#252;r <b>globale Belange</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1479601788237" ID="ID_1871715779" MODIFIED="1479601795259" TEXT="wichtige neue Unterscheidung">
 <icon BUILTIN="idea"/>
 </node>
@@ -216,8 +396,7 @@
       es geht nur um <i>Rollen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1479601907221" ID="ID_286625648" MODIFIED="1479601914101" TEXT="es ist ein Design-Pattern">
 <icon BUILTIN="yes"/>
@@ -232,8 +411,7 @@
       das lokale Element mu&#223; nur als View <i>fungieren</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1479601945839" ID="ID_254470029" MODIFIED="1479601954903" TEXT="Model-View-Presenter">
 <icon BUILTIN="forward"/>
@@ -257,8 +435,7 @@
       transformieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1479602412095" ID="ID_832808487" MODIFIED="1479602415154" TEXT="Frame"/>
 <node CREATED="1479602415654" ID="ID_1358720" MODIFIED="1479602418642" TEXT="Frame + Layout"/>
 <node CREATED="1479602419134" ID="ID_1788706818" MODIFIED="1479602425033" TEXT="sub-Clips im Layout"/>
