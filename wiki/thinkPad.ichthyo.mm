@@ -316,6 +316,56 @@
 </node>
 </node>
 </node>
+<node CREATED="1480300573857" ID="ID_434577605" MODIFIED="1480300855667" TEXT="Anzeige-Steuerung" VSHIFT="20">
+<icon BUILTIN="pencil"/>
+<node CREATED="1480300584454" ID="ID_202830560" MODIFIED="1480300592344" TEXT="globaler Layout-Manager">
+<node CREATED="1480300595820" ID="ID_1004344887" MODIFIED="1480300606631" TEXT="fungiert als Service"/>
+<node CREATED="1480300614873" ID="ID_895306481" MODIFIED="1480300625444" TEXT="Ermitteln konkreter Koordinaten"/>
+</node>
+<node CREATED="1480300627712" ID="ID_1748490788" MODIFIED="1480300640058" TEXT="Display-Manager">
+<node CREATED="1480300640790" ID="ID_1461181527" MODIFIED="1480300644825" TEXT="Abstraktion">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1480300645837" ID="ID_337010957" MODIFIED="1480300648544" TEXT="Interface"/>
+<node CREATED="1480300649437" ID="ID_704277125" MODIFIED="1480300673402">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      interagiert mit den <b>Presentern</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1480300682256" ID="ID_1828380850" MODIFIED="1480300684700" TEXT="Presenter">
+<node CREATED="1480300690191" ID="ID_1405428387" MODIFIED="1480300779304" TEXT="sind lokales Struktur-Modell">
+<node CREATED="1480300733506" ID="ID_186466790" MODIFIED="1480300739877" TEXT="werden per Diff manipuliert"/>
+<node CREATED="1480300740537" ID="ID_1322437138" MODIFIED="1480300765878" TEXT="enthalten die Modell-Binding-Daten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. eine LUID
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1480300699694" ID="ID_1686150984" MODIFIED="1480300712392" TEXT="aktiver Part der View-Steuerung"/>
+<node CREATED="1480300717747" ID="ID_1736166807" MODIFIED="1480300724214" TEXT="Master-Slave f&#xfc;r die Widgets"/>
+<node CREATED="1480300804840" ID="ID_1330942810" MODIFIED="1480300820674" TEXT="Verbindung zum Anzeigekontext">
+<node CREATED="1480300822302" ID="ID_1819260908" MODIFIED="1480300833984" TEXT="zwei Kontexte f&#xfc;r die Tracks"/>
+<node CREATED="1480300836092" ID="ID_1069009472" MODIFIED="1480300847326" TEXT="Anzeigekontext = Konkretes Vater-Widget"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1476376943985" HGAP="22" ID="ID_1422206856" MODIFIED="1479434895083" TEXT="Viewer" VSHIFT="10"/>
 <node CREATED="1479434763643" HGAP="25" ID="ID_1572413636" MODIFIED="1479434887744" TEXT="Clip" VSHIFT="31">
