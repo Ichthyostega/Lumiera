@@ -2,7 +2,7 @@
   TimelineWidget  -  custom widget for timeline display of the project
 
   Copyright (C)         Lumiera.org
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -22,30 +22,40 @@
 
 
 /** @file timeline-widget.cpp
+ ** Implementation details of Lumiera's timeline display widget.
  ** 
- ** @deprecated as of 11/2016, a complete rework of the timeline display is underway
- ** @see gui::timeline::TimelineWidget new timeline display
+ ** @todo as of 12/2016 a complete rework of the timeline display is underway
  ** 
  */
 
 
-#include "gui/widget/timeline-widget.hpp"
+#include "gui/gtk-lumiera.hpp"
+#include "gui/timeline/timeline-widget.hpp"
 
-#include <boost/foreach.hpp>
-#include <typeinfo>
-#include <memory>
+//#include "gui/workspace/workspace-window.hpp"
+//#include "gui/ui-bus.hpp"
+//#include "lib/format-string.hpp"
+//#include "lib/format-cout.hpp"
 
-using lib::time::Time;
-using lib::time::TimeValue;
-using std::dynamic_pointer_cast;
+//#include "lib/util.hpp"
+//#include <algorithm>
+//#include <cstdlib>
 
-using namespace Gtk;
 
-using namespace util;
-using namespace gui::widget::timeline;
+
+//using util::_Fmt;
+//using std::shared_ptr;
+//using std::weak_ptr;
+//using util::contains;
+//using Gtk::Widget;
+//using sigc::mem_fun;
+//using sigc::ptr_fun;
+//using std::cout;
+//using std::endl;
+
 
 namespace gui {
-namespace widget {
+namespace timeline {
   
   const int TimelineWidget::TrackPadding = 1;
   const int TimelineWidget::HeaderWidth = 150;
@@ -556,4 +566,4 @@ namespace widget {
   }
   
   
-}}// gui::widget
+}}// namespace gui::timeline

@@ -2452,11 +2452,11 @@ we need a test setup for this investigation.
 * realistic: shall reflect the situation in our actual UI
 </pre>
 </div>
-<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201611272357" tags="GuiPattern design draft" changecount="18">
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201612011708" tags="GuiPattern design draft" changecount="20">
 <pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
 Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
 * we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels)
-* like anything within a timeline, a clip has a temporal extension (but not necessarily finite; it can be zero, or it can be infinite)
+* like anything within a timeline, a clip has a temporal extension (but not necessarily finite; it can //not be zero,// but it can be infinite)
 * by virtue of [[Placement]], a clip acquires a time position.
 Due to this unspecific nature, a clip might take on various //appearances// within the UI.
 
@@ -8132,10 +8132,13 @@ Actually, Timeline is both an interface and acts as façade. Its an interface, b
 Besides building on the asset management, implementing Timeline (and Sequence) as StructAsset yields another benefit: ~StructAssets can be retrieved by query, allowing to specify more details of the configuration immediately on creation. //But on the short term, this approach causes problems:// there is no real inference engine integrated into Lumiera yet (as of 2/2010 the plan is to get an early alpha working end to end first). For now we're bound to use the {{{fake-configrules}}} and to rely on a hard wired simulation of the intended behaviour of a real query resolution. Just some special magic queries will work for now, but that's enough to get ahead.
 </pre>
 </div>
-<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" tags="spec GuiPattern" changecount="1">
+<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="201612011740" tags="spec GuiPattern img" changecount="4">
 <pre>//guide and control the concrete display properties of the various sub components (tracks, clips) comprising a timeline display.//
 
 The TimelineDisplayManager actually is an abstraction, a control interface, revolving around the guidance individual components need in order to settle on a proper display. Those components are represented as mediating entities, the TrackPresenter and the ClipPresenter, each of which controls and manages a mostly passive GTK widget. To this end, the presenters need to know at which virtual coordinates their corresponding widgets would show up, and they need to know if these widgets need to be actually present at the moment. Also, especially the ClipPresenter needs to know which ''clip appearance style'' to choose for the corresponding slave widget.
+
+!display evaluation pass
+[&gt;img[Clip presentation control|uml/Timeline-display-evaluation.png]]Since the timeline display is formed by several nested collections of elements, a proper display layout must incorporate information from all those parts. A naive approach likely would just iterate over them and reach in to extract data -- or even worse, build a separate display data store, which then needs to be kept in sync with the component hierarchy. Any of this would lead to high coupling and turns any necessary adjustment and changes due to evolution of requirements into a liability. Such a dangerous situation can be avoided altogether by admitting the collaborative nature of the task at hand. To get there, we need to distil the abstraction shared between the global and the local concerns, and we need to shape it such as to build onto some kind of invariant, allowing that abstraction to re-emerge at several levels of locality.
 </pre>
 </div>
 <div title="TimelineSequences" modifier="Ichthyostega" created="200811011836" modified="201505310138" tags="design decision img" changecount="4">

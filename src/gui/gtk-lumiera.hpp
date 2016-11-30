@@ -99,7 +99,7 @@ namespace gui {
    */
   namespace model {}
   
-  /** The namespace of all video output implementations. */
+  /** Video output implementation. */
   namespace output {}
 
   /** Dialog box classes. */
@@ -113,6 +113,9 @@ namespace gui {
   
   /** The workspace window and it's helper classes. */
   namespace workspace {}
+  
+  /** The timeline display and editing operations. */
+  namespace timeline {}
   
   /** GUI helpers, utility functions and classes. */
   namespace util {}

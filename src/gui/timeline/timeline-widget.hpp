@@ -2,7 +2,7 @@
   TIMELINE-WIDGET.hpp  -  custom widget for timeline display of the project
 
   Copyright (C)         Lumiera.org
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,52 +20,29 @@
 
 */
 
+
 /** @file timeline-widget.hpp
  ** This file defines the core component of the Lumiera GUI
  ** 
- ** @deprecated broken since transition to GTK-3
- ** @todo needs to be reworked from ground as if 5/2015
- **       GTK-3 uses different event handling callbacks,
- **       so the existing implementation is defunct.
- **       Moreover, this class is designed way to monolithic.
- **       It will never be able to scale to the full planned
- **       timeline and editing functionality of Lumiera
- ** @see gui::timeline::TimelineWidget new timeline display
+ ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** 
  */
 
 
-#ifndef GUI_WIDGET_TIMELINE_WIDGET_H
-#define GUI_WIDGET_TIMELINE_WIDGET_H
+#ifndef GUI_TIMELINE_TIMELINE_WIDGET_H
+#define GUI_TIMELINE_TIMELINE_WIDGET_H
 
-#include "gui/widget/timeline/timeline-state.hpp"
-#include "gui/widget/timeline/timeline-header-container.hpp"
-#include "gui/widget/timeline/timeline-body.hpp"
-#include "gui/widget/timeline/timeline-ruler.hpp"
-#include "gui/widget/timeline/timeline-tool.hpp"
-#include "gui/widget/timeline/timeline-arrow-tool.hpp"
-#include "gui/widget/timeline/timeline-ibeam-tool.hpp"
-#include "gui/widget/timeline/timeline-group-track.hpp"
-#include "gui/widget/timeline/timeline-clip-track.hpp"
-#include "gui/widget/timeline/timeline-layout-helper.hpp"
-
-#include "gui/model/sequence.hpp"
+#include "gui/gtk-base.hpp"
 
 #include "lib/time/timevalue.hpp"
 
-#include <memory>
+//#include <memory>
+//#include <vector>
 
 
-namespace gui {
-namespace widget {
-  
-  using lib::time::Time;
-  using std::shared_ptr;
-  
-  /** namespace of timeline widget helper classes.
-   * @deprecated as of 11/2016, a complete rework of the timeline display is underway
-   * @see (\ref gui::timeline) namespace of the new timeline display
-   */
-  namespace timeline {}
+
+namespace gui  {
+namespace timeline {
   
   
   /**
@@ -310,5 +287,5 @@ namespace widget {
     };
   
   
-}}// gui::widget
-#endif /*GUI_WIDGET_TIMELINE_WIDGET_H*/
+}}// namespace gui::timeline
+#endif /*GUI_TIMELINE_TIMELINE_WIDGET_H*/
