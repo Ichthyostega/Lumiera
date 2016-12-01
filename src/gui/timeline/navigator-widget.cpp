@@ -1,5 +1,5 @@
 /*
-  TimelineWidget  -  custom widget for timeline display of the project
+  NavigatorWidget  -  display of navigation controls in the timeline UI
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,31 +21,30 @@
 * *****************************************************/
 
 
-/** @file timeline-widget.cpp
- ** Implementation details of Lumiera's timeline display widget.
+/** @file navigator-widget.cpp
+ ** Implementation detail of the navigation control elements presented
+ ** at top of the timeline UI's header pane.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo WIP-WIP-WIP as of 12/2016
  ** 
  */
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/timeline/timeline-widget.hpp"
+#include "gui/timeline/navigator-widget.hpp"
 
-//#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
+
 //#include <algorithm>
-//#include <cstdlib>
+//#include <vector>
 
 
 
 //using util::_Fmt;
-//using std::shared_ptr;
-//using std::weak_ptr;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -57,23 +56,18 @@
 namespace gui {
 namespace timeline {
   
-//const int TimelineWidget::TrackPadding = 1;
-//const int TimelineWidget::HeaderWidth = 150;
-//const int TimelineWidget::HeaderIndentWidth = 10;
   
   
   
   
-  TimelineWidget::TimelineWidget ()
-    : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
+  NavigatorWidget::NavigatorWidget ()
     {
     }
   
   
-  TimelineWidget::~TimelineWidget()
+  NavigatorWidget::~NavigatorWidget()
   {
   }
-  
   
   
   

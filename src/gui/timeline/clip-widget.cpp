@@ -1,5 +1,5 @@
 /*
-  TimelineWidget  -  custom widget for timeline display of the project
+  ClipWidget  -  display of a clip in timeline or media bin view
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,31 +21,34 @@
 * *****************************************************/
 
 
-/** @file timeline-widget.cpp
- ** Implementation details of Lumiera's timeline display widget.
+/** @file v.cpp
+ ** Implementation details of _clip display_ within the Lumiera UI.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @note a "clip" can be a media clip proper, or just some part
+ **       of the former, a channel, or even an effect attached to
+ **       a clip. Moreover, this clip display can be used both
+ **       within the context of the timeline or as element in a
+ **       media bin in the asset management section.
+ ** @todo WIP-WIP-WIP as of 12/2016
  ** 
  */
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/timeline/timeline-widget.hpp"
+#include "gui/timeline/clip-widget.hpp"
 
-//#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
+
 //#include <algorithm>
-//#include <cstdlib>
+//#include <vector>
 
 
 
 //using util::_Fmt;
-//using std::shared_ptr;
-//using std::weak_ptr;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -57,23 +60,18 @@
 namespace gui {
 namespace timeline {
   
-//const int TimelineWidget::TrackPadding = 1;
-//const int TimelineWidget::HeaderWidth = 150;
-//const int TimelineWidget::HeaderIndentWidth = 10;
   
   
   
   
-  TimelineWidget::TimelineWidget ()
-    : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
+  ClipWidget::ClipWidget ()
     {
     }
   
   
-  TimelineWidget::~TimelineWidget()
+  ClipWidget::~ClipWidget()
   {
   }
-  
   
   
   

@@ -1,5 +1,5 @@
 /*
-  TimelineWidget  -  custom widget for timeline display of the project
+  LabelWidget  -  display an ID label, possibly with icon
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,31 +21,29 @@
 * *****************************************************/
 
 
-/** @file timeline-widget.cpp
- ** Implementation details of Lumiera's timeline display widget.
+/** @file label-widget.cpp
+ ** Implementation details of the UI building block to display an ID label.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo WIP-WIP-WIP as of 12/2016
  ** 
  */
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/timeline/timeline-widget.hpp"
+#include "gui/widget/label-widget.hpp"
 
-//#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
+
 //#include <algorithm>
-//#include <cstdlib>
+//#include <vector>
 
 
 
 //using util::_Fmt;
-//using std::shared_ptr;
-//using std::weak_ptr;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -55,27 +53,22 @@
 
 
 namespace gui {
-namespace timeline {
-  
-//const int TimelineWidget::TrackPadding = 1;
-//const int TimelineWidget::HeaderWidth = 150;
-//const int TimelineWidget::HeaderIndentWidth = 10;
+namespace widget {
   
   
   
   
-  TimelineWidget::TimelineWidget ()
-    : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
+  
+  LabelWidget::LabelWidget ()
     {
     }
   
   
-  TimelineWidget::~TimelineWidget()
+  LabelWidget::~LabelWidget()
   {
   }
   
   
   
   
-  
-}}// namespace gui::timeline
+}}// namespace gui::widget

@@ -1,0 +1,110 @@
+/*
+  LAYOUT-MANAGER.hpp  -  global timeline layout management and display control
+
+  Copyright (C)         Lumiera.org
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
+
+/** @file layout-manager.hpp
+ ** A core service of the timeline UI to ensure consistent display and layout
+ ** of all components within the timeline. The content of the timeline is organised
+ ** into several nested collections, possibly holding several thousand individual elements.
+ ** Together with the requirement to show media elements within a precisely defined, regular
+ ** time grid, this forces us to control various aspects of the layout and display style
+ ** manually, instead of letting the UI toolkit work out the details automatically. Note
+ ** especially that the typical UI toolkit is not prepared to handle such a high number of
+ ** individual elements smoothly. Even more so, when most of those elements are not even
+ ** visible most of the time. Unfortunately, doing a manual display forces us to perform
+ ** the task usually serviced by a table grid widget, that is, to keep flexible elements
+ ** aligned in columns or (as is the case here) in rows. Basically we split our display
+ ** horizontally, where the right part is just a custom drawing canvas. Consequently we
+ ** have to ensure all tracks are perfectly aligned between the track header pane and
+ ** the scrollable working space in the timeline body display.
+ ** 
+ ** # Architecture
+ ** 
+ ** A naive approach would have a global layout manager drill down into some model storage
+ ** and reach into the components to manipulate and adjust the layout to fit. Doing so can
+ ** be considered, since this links together details scattered all over the model into a
+ ** huge global process carried out at a single code location. Any further extension or
+ ** evolution of details of the UI presentation are bound to be worked into this core
+ ** global piece of code, which soon becomes brittle, hard to understand and generally
+ ** a liability and maintenance burden. We have seen this happen in numerous existing
+ ** code bases (and in fact even our own initial approach started to go down that route).
+ ** Thus we strive to break up the whole process of controlling the layout into several
+ ** local concerns, each of which can be made self contained. The backbone is formed by
+ ** a recursive collaboration between two abstractions (interfaces)
+ ** - the building blocks of the timeline expose the interface timeline::Element
+ ** - the global timeline widget implements a timeline::LayoutManager interface
+ ** 
+ ** ## Display evaluation pass
+ ** 
+ ** Whenever the layout of timeline contents has to be (re)established, we trigger a recursive
+ ** evaluation pass, which in fact is a tree walk. The layout manager creates a DisplayEvaluation
+ ** record, which is passed to the [Element's allocate function](Element::allocate). The element
+ ** in turn has the liability to walks its children and recursively initiate a nested evaluation
+ ** by invoking DisplayEvaluation::evaluateChild(Element), which in turn calls back to
+ ** LayoutManager::evaluate() to initiate a recursive evaluation pass. Within the recursively
+ ** created DisplayEvaluation elements, we are able to transport and aggregate information
+ ** necessary to give each element it' screen allocation. And this in turn allows us to
+ ** decide upon a suitable display strategy for each individual element.
+ ** 
+ ** For this to work, the _element_ can not be the actual widget, since the result of this whole
+ ** process might be to create or retract an actual GTK widget. For this reason, the timeline
+ ** layout management relies on a _Presenter_ entity, which in turn controls a mostly passive
+ ** view -- our solution in fact relies on some flavour of the
+ ** [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) here.
+ ** 
+ ** @todo WIP-WIP-WIP as of 12/2016
+ ** 
+ */
+
+
+#ifndef GUI_TIMELINE_LAYOUT_MANAGER_H
+#define GUI_TIMELINE_LAYOUT_MANAGER_H
+
+#include "gui/gtk-base.hpp"
+
+//#include "lib/util.hpp"
+
+//#include <memory>
+//#include <vector>
+
+
+
+namespace gui  {
+namespace timeline {
+  
+  
+  /**
+   * @todo WIP-WIP as of 12/2016
+   */
+  class LayoutManager
+    {
+    public:
+      LayoutManager ();
+     ~LayoutManager();
+     
+    private:/* ===== Internals ===== */
+     
+    };
+  
+  
+}}// namespace gui::timeline
+#endif /*GUI_TIMELINE_LAYOUT_MANAGER_H*/

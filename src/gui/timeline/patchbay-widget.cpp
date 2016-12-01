@@ -1,5 +1,5 @@
 /*
-  TimelineWidget  -  custom widget for timeline display of the project
+  PatchbayWidget  -  display of the patchbay to control track placement parameters
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,31 +21,30 @@
 * *****************************************************/
 
 
-/** @file timeline-widget.cpp
- ** Implementation details of Lumiera's timeline display widget.
+/** @file patchbay-widget.cpp
+ ** Implementation details of the _patchbay_, allowing to tweak
+ ** parameters of a fork's placement.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo WIP-WIP-WIP as of 12/2016
  ** 
  */
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/timeline/timeline-widget.hpp"
+#include "gui/timeline/patchbay-widget.hpp"
 
-//#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
+
 //#include <algorithm>
-//#include <cstdlib>
+//#include <vector>
 
 
 
 //using util::_Fmt;
-//using std::shared_ptr;
-//using std::weak_ptr;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -57,23 +56,18 @@
 namespace gui {
 namespace timeline {
   
-//const int TimelineWidget::TrackPadding = 1;
-//const int TimelineWidget::HeaderWidth = 150;
-//const int TimelineWidget::HeaderIndentWidth = 10;
   
   
   
   
-  TimelineWidget::TimelineWidget ()
-    : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
+  PatchbayWidget::PatchbayWidget ()
     {
     }
   
   
-  TimelineWidget::~TimelineWidget()
+  PatchbayWidget::~PatchbayWidget()
   {
   }
-  
   
   
   
