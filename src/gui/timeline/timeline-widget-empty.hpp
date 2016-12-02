@@ -1,5 +1,5 @@
 /*
-  TIMELINE-WIDGET.hpp  -  custom widget for timeline display of the project
+  TIMELINE-WIDGET-EMPTY.hpp  -  placeholder widget for a missing timeline
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,20 +21,20 @@
 */
 
 
-/** @file timeline-widget.hpp
- ** This file defines the core component of the Lumiera GUI.
- ** Timelines are the top level elements within Lumiera's high-level-model ("the session").
- ** In the UI workspace, there is a timeline pane with several tabs, each of which holds an
- ** instance of the TimelineWidget. Each of these tabs either represents one of the top-level
- ** timelines in the model, or it represents a (focussed / slave) view into some timeline.
+/** @file timeline-widget-empty.hpp
+ ** Empty placeholder to be rendered when the UI starts without session.
+ ** The TimelinePannel represents the [model root](\ref mobject::session::Root) and thus
+ ** has the responsibility to manage the individual TimelineWidget instances. In case the
+ ** UI is started with no usable session loaded in Proc-Layer, this empty placeholder widget
+ ** can be inserted.
  ** 
  ** @todo as of 12/2016 a complete rework of the timeline display is underway
  ** 
  */
 
 
-#ifndef GUI_TIMELINE_TIMELINE_WIDGET_H
-#define GUI_TIMELINE_TIMELINE_WIDGET_H
+#ifndef GUI_TIMELINE_TIMELINE_WIDGET_EMPTY_H
+#define GUI_TIMELINE_TIMELINE_WIDGET_EMPTY_H
 
 #include "gui/gtk-base.hpp"
 
@@ -55,15 +55,15 @@ namespace timeline {
    * @remarks At top level, this widget is split into a header pane (left)
    *     and a scrollable timeline body (right). The layout of both parts is aligned.
    */
-  class TimelineController
+  class TimelineWidgetEmpty
     {
     public:
       /**
        * @param source_state state to be used used as the
        *    data source (model) for this timeline widget.
        */
-      TimelineController ();
-     ~TimelineController();  
+      TimelineWidgetEmpty();
+     ~TimelineWidgetEmpty();  
       
       
       
@@ -79,4 +79,4 @@ namespace timeline {
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_TIMELINE_WIDGET_H*/
+#endif /*GUI_TIMELINE_TIMELINE_WIDGET_EMPTY_H*/

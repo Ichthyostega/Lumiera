@@ -21,16 +21,17 @@
 * *****************************************************/
 
 
-/** @file timeline-widget.cpp
- ** Implementation details of Lumiera's timeline display widget.
+/** @file timeline-controller.cpp
+ ** Implementation details of timeline operation management and control.
  ** 
  ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @see TimelineWidget
  ** 
  */
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/timeline/timeline-widget.hpp"
+#include "gui/timeline/timeline-controller.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"

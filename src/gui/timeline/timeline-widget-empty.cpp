@@ -1,5 +1,5 @@
 /*
-  TimelineWidgetEmpty  -  coordinate operation of timeline display
+  TimelineWidgetEmpty  -  placeholder widget for a missing timeline
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file timeline-widget.cpp
- ** Implementation details of Lumiera's timeline display widget.
+/** @file timeline-widget-empty.cpp
+ ** Implementation of an empty timeline placeholder.
  ** 
  ** @todo as of 12/2016 a complete rework of the timeline display is underway
  ** 
@@ -30,7 +30,7 @@
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/timeline/timeline-widget.hpp"
+#include "gui/timeline/timeline-widget-empty.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
@@ -64,12 +64,12 @@ namespace timeline {
   
   
   
-  TimelineController::TimelineController ()
+  TimelineWidgetEmpty::TimelineWidgetEmpty ()
     {
     }
   
   
-  TimelineController::~TimelineController()
+  TimelineWidgetEmpty::~TimelineWidgetEmpty()
   {
   }
   

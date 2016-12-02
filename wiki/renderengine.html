@@ -2536,15 +2536,20 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 ''Lumera decides to take the latter apptoch'' -- resulting in a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code embodies the low-level UI element reactions and as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.
 </pre>
 </div>
-<div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201501052157" tags="GuiIntegration overview" changecount="1">
-<pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on the well known solution of using a __business facade__ and delegation proxies.
-Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to use it's functionality, and similarily the GUI provides a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
+<div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201612021714" tags="GuiIntegration overview" changecount="4">
+<pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
 
 !anatomy of the Proc/GUI interface
 * the GuiFacade is used as a general lifecycle facade to start up the GUI and to set up the LayerSeparationInterfaces.
 * GuiFacade is implemented by a class //in core// and exposes a notification proxy implementing GuiNotificationFacade, which actually is wired through the InterfaceSystem to forward to the corresponding implementation facade object within the GUI
-* similarly, starting the fundamental subsystems within proc installs Interfaces into the InterfaceSystem and exposes them through proxy objects
+* similarly, starting the fundamental subsystems within proc installs Interfaces into the InterfaceSystem and exposes them through proxy objects.&lt;br/&gt;{{red{TODO 12/2016}}} there shall be an interface to [[invoke commands|CommandHandling]]...
 
+!principles of UI / Proc interaction
+By all means, we want to avoid a common shared data structure as foundation for any interaction. For a prominent example, have a look at [[Blender|https://developer.blender.org]] to see where this leads; //such is not bad,// but it limits to a very specific kind of evolution. //We are aiming for less and for more.// Fuelled by our command and UNDO system, and our rules based [[Builder]] with its asynchronous responses, we came to rely on a messaging system, known as the [[UI-Bus]].
+
+The consequence is that both sides, &quot;the core&quot; and &quot;the UI&quot; remain autonomous within their realm. For some concerns, namely //the core concerns,// that is editing, arranging, processing, the core is in charge and has absolute authority. On the other hand, when it comes to user interaction, especially the //mechanics and materiality of interaction,// the UI is the authority; it is free to decide about what is exposed and in which way. The collaboration between both sides is based on a ''common structural understanding'', which is never fully, totally formed in concrete data structures.
+
+Rather, the core sends ''diff messages'' up to the UI, indicating how it sees this virtual structure to be changing. The UI reflects these changes into //its own understanding and representation,// that is here a structure of display widgets. When the user interacts with these structures of the presentation layer, ''command messages'' are generated, using the element ~IDs to designate the arguments of the intended operation. This again causes reaction and change in the core, which is reflected back in the form of further diff messages.
 </pre>
 </div>
 <div title="GuiCustomWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611182349" tags="GuiPattern discuss decision draft" changecount="64">
@@ -2661,10 +2666,13 @@ In order to build a sensible plan for our timeline structure, we need to investi
 <pre>special LayerSeparationInterface which serves the main purpose to load the GuiStarterPlugin, thus bringing up the Lumiera GTK UI at application start.
 </pre>
 </div>
-<div title="GuiIntegration" modifier="Ichthyostega" created="200812050532" modified="201410170111" tags="overview" changecount="2">
-<pre>Considering how to interface to and integrate with the GUI Layer. Running the GUI is //optional,// but it requires to be [[started up|GuiStart]], installing the necessary LayerSeparationInterfaces. As an example how to integrate the GUI with the lower layers, in 1/2009 we created an PlayerDummy, which &quot;pulls&quot; dummy frames from the (not yet existing) engine and displays them within an XV viewer widget.
+<div title="GuiIntegration" modifier="Ichthyostega" created="200812050532" modified="201612021642" tags="overview" changecount="5">
+<pre>Considering how to interface to and integrate with the GUI Layer. Running the GUI is //optional,// but it requires to be [[started up|GuiStart]], installing the necessary LayerSeparationInterfaces. Probably the most important aspect regarding the GUI integration is how to get [[access to and operate|GuiConnection]] on the [[Session|SessionInterface]].
 
-Probably the most important aspect regarding the GUI integration is how to get [[access to and operate on the Session|SessionInterface]]. More specifically, this includes [[referring to individual objects|MObjectRef]]. On top of these generic access mechanisms, we create a [[proxy GUI model|GuiModel]] for binding. The interface of this GUI model is tailored for display and translation into UI entities.</pre>
+More specifically, the integration is based on ''messaging''. To start with, the UI needs to be [[populated with updates|GuiModelUpdate]], and while in operation, it will send command messages over the [[UI-Bus]]. Effectively, the UI maintains its own [[model|GuiModel]], specifically tailored for display and translation into tangible UI entities.
+
+----
+In a preliminary attempt to establish an integration between the GUI and the lower layers, in 1/2009 we created an PlayerDummy, which &quot;pulls&quot; dummy frames from the (not yet existing) engine and displays them within an XV viewer widget. This highlighted the problems we're about to encounter and made us think about the more radically decoupled approach we followed thereafter...</pre>
 </div>
 <div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201511202206" tags="GuiIntegration design draft" changecount="11">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
@@ -2767,10 +2775,15 @@ This treatment ensures each nested diff is consumed within a properly typed cont
 Access point for the lower layers to push information and state changes (aynchronously) to the GUI. Actually, most operations within Lumiera are initiated by the user through the GUI. In the course of such actions, the GUI uses the services of the lower layer and typically recieves an synchronous response. In some exceptional cases, these operations may cause additional changes to happen asynchronously from the GUI's perspective. For example, an edit operation might trigger a re-build of the low-level model, which then detects an error.
 </pre>
 </div>
-<div title="GuiPattern" creator="Ichthyostega" modifier="Ichthyostega" created="201410160054" modified="201410250026" tags="overview" changecount="2">
+<div title="GuiPattern" creator="Ichthyostega" modifier="Ichthyostega" created="201410160054" modified="201612021723" tags="overview" changecount="4">
 <pre>While the HighLevelModel is self-contained and forms an autonomous »Universe«, the Lumiera GUI uses a well defined set of Metaphors, structural patterns and conventions to represent the user's view upon the model within the session. 
 
-Based on these foundations, we have to take some design decisions regarding the [[organisation of our custom GUI|GuiTimelineWidgetStructure]]</pre>
+The most fundamental principle is that of ''subsidiarity'': we understand both &quot;the core&quot; and &quot;the UI&quot; to be autonomous and responsible for their own concerns. The core has to deal with editing, arranging and processing, while the UI forms the materiality and mechanics of interaction. The [[link between both sides|GuiConnection]] is established through a communication system, the UI-Bus.
+&amp;rarr; the UI view [[is updated|GuiModelUpdate]] by ''diff messages''
+&amp;rarr; and in turn, commands are [[prepared and issued|GuiCommandBinding]] in the UI and sent as ''command messages''
+
+Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
+</pre>
 </div>
 <div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="200902080720" tags="GuiIntegration">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
