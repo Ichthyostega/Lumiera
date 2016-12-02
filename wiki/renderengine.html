@@ -2797,7 +2797,7 @@ Now, when invoking an operation on some public interface, the code in the lower 
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201612020306" tags="GuiPattern design decision draft" changecount="18">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201612021809" tags="GuiPattern design decision draft" changecount="42">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -2819,7 +2819,17 @@ The workspace dimension (vertical layout) is more like a ''Fork'', which can be 
 ** a ''scope ruler'' to represent the whole sub-scope. This is rendered as a small pane, extending horizontally, holding any locally attached labels and track-wide or temporally scoped effects
 ** the content stack, comprised of [[clip widgets|GuiClipWidget]], attached effects and transitions
 ** a stack of nested sub-scopes (recursive).
+
+@@float: right;background-color: #E9EDF8;width: 82ex;padding: 2ex;margin: 0px 4em 1em 2em;__Note in this example__
+* on top level, there are two tracks, the second track has nested sub tracks
+* Clip-2 has an effect attached, Clip-3 is expanded and also has an effect attached
+* the second track has a global effect attached; it shows up in the scope ruler
+@@
 This collapsed, expanded and possibly nested workspace structure is always exactly paralleled in the header pane.
+
+
+
+
 
 !!!nesting
 By principle, this workspace structure is //not a list of &quot;Tracks&quot;// -- it is a system of ''nested scopes''. The nesting emerges on demand.
