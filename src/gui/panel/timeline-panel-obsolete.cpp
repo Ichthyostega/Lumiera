@@ -66,7 +66,7 @@ namespace panel {
     , zoomOut(Stock::ZOOM_OUT)
     , zoomScale()
     , updatingToolbar(false)
-    , currentTool(timeline::Arrow)
+    , currentTool(gui::widget::timeline::Arrow)
     {
       // Hook up notifications
       getProject().get_sequences().signal_changed().connect(mem_fun(this,
@@ -180,13 +180,13 @@ namespace panel {
   void
   TimelinePanelObsolete::on_arrow_tool()
   {
-    setTool(timeline::Arrow);
+    setTool(gui::widget::timeline::Arrow);
   }
   
   void
   TimelinePanelObsolete::on_ibeam_tool()
   {  
-    setTool(timeline::IBeam);
+    setTool(gui::widget::timeline::IBeam);
   }
   
   void
@@ -256,8 +256,7 @@ namespace panel {
         
         if(sequence)
           {
-            shared_ptr<timeline::TimelineState> old_state(
-              timelineWidget->get_state());
+            shared_ptr<TimelineState> old_state{timelineWidget->get_state()};
             REQUIRE(old_state);
             if(sequence != old_state->getSequence())
               timelineWidget->set_state(loadState(sequence));
@@ -279,8 +278,7 @@ namespace panel {
     // Repopulate the sequence chooser
     sequenceChooserModel->clear();
     
-    shared_ptr<timeline::TimelineState> state =
-      timelineWidget->get_state();
+    shared_ptr<TimelineState> state = timelineWidget->get_state();
     
     BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
       getProject().get_sequences() )
@@ -326,8 +324,8 @@ namespace panel {
     if (!updatingToolbar)
       {
         updatingToolbar = true;
-        arrowTool.set_active(currentTool == timeline::Arrow);
-        iBeamTool.set_active(currentTool == timeline::IBeam);
+        arrowTool.set_active (currentTool == gui::widget::timeline::Arrow);
+        iBeamTool.set_active (currentTool == gui::widget::timeline::IBeam);
         updatingToolbar = false;
       }
   }
@@ -361,7 +359,7 @@ namespace panel {
   }
   
   void
-  TimelinePanelObsolete::setTool (timeline::ToolType tool)
+  TimelinePanelObsolete::setTool (ToolType tool)
   {
     REQUIRE(timelineWidget);
     
@@ -387,7 +385,7 @@ namespace panel {
     return true;
   }
   
-  shared_ptr<timeline::TimelineState>
+  shared_ptr<TimelineState>
   TimelinePanelObsolete::loadState (weak_ptr<Sequence> sequence)
   {
     /* state exists */
@@ -397,12 +395,12 @@ namespace panel {
     shared_ptr<Sequence> shared_sequence = sequence.lock();
     if (shared_sequence)
       {
-        shared_ptr<timeline::TimelineState> new_state(new timeline::TimelineState(shared_sequence));
+        shared_ptr<TimelineState> new_state(new TimelineState(shared_sequence));
         timelineStates[sequence] = new_state;
         return new_state;
       }
     
-    return shared_ptr< timeline::TimelineState >();
+    return shared_ptr<TimelineState>();
   }
   
 }}   // namespace gui::panel

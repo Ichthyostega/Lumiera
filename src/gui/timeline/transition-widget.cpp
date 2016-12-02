@@ -59,12 +59,12 @@ namespace timeline {
   
   
   
-  TransitionWidget::TransitionWidget ()
+  TransitionWidget::TransitionWidget()
     {
     }
   
   
-  TransitionWidget::TransitionWidget()
+  TransitionWidget::~TransitionWidget()
   {
   }
   

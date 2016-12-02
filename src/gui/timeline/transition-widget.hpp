@@ -51,7 +51,7 @@ namespace timeline {
   class TransitionWidget
     {
     public:
-      TransitionWidget ();
+      TransitionWidget();
      ~TransitionWidget();
      
     private:/* ===== Internals ===== */
