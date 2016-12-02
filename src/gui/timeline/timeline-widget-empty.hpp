@@ -26,12 +26,7 @@
  ** Timelines are the top level elements within Lumiera's high-level-model ("the session").
  ** In the UI workspace, there is a timeline pane with several tabs, each of which holds an
  ** instance of the TimelineWidget. Each of these tabs either represents one of the top-level
- ** timelines in the model, or it represents a (focused / slave) view into some timeline.
- ** 
- ** The TimelineWidget is the top level entry point to a significant part of the UI, anything
- ** related to timeline display and editing operations: each instance of this widget is dedicated
- ** to a single session::Timeline, known by its ID. The widget creates a TimelineController
- ** right away, which takes initiative to populate the display with that Timeline's contents.
+ ** timelines in the model, or it represents a (focussed / slave) view into some timeline.
  ** 
  ** @todo as of 12/2016 a complete rework of the timeline display is underway
  ** 
@@ -42,7 +37,6 @@
 #define GUI_TIMELINE_TIMELINE_WIDGET_H
 
 #include "gui/gtk-base.hpp"
-#include "gui/timeline/timeline-controller.hpp"
 
 #include "lib/time/timevalue.hpp"
 
@@ -57,21 +51,19 @@ namespace timeline {
   
   /**
    * Core timeline display (custom widget).
-   * Top level entry point to the timeline display component.
    * @todo WIP-WIP-rewrite as of 12/2016
    * @remarks At top level, this widget is split into a header pane (left)
    *     and a scrollable timeline body (right). The layout of both parts is aligned.
    */
-  class TimelineWidget
-    : public Gtk::Paned
+  class TimelineController
     {
     public:
       /**
        * @param source_state state to be used used as the
        *    data source (model) for this timeline widget.
        */
-      TimelineWidget ();
-     ~TimelineWidget();  
+      TimelineController ();
+     ~TimelineController();  
       
       
       

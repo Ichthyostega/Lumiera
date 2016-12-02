@@ -1,5 +1,5 @@
 /*
-  TimelineWidget  -  custom widget for timeline display of the project
+  TimelineWidgetEmpty  -  coordinate operation of timeline display
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,7 +25,6 @@
  ** Implementation details of Lumiera's timeline display widget.
  ** 
  ** @todo as of 12/2016 a complete rework of the timeline display is underway
- ** @see timeline-controller.cpp
  ** 
  */
 
@@ -65,13 +64,12 @@ namespace timeline {
   
   
   
-  TimelineWidget::TimelineWidget ()
-    : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
+  TimelineController::TimelineController ()
     {
     }
   
   
-  TimelineWidget::~TimelineWidget()
+  TimelineController::~TimelineController()
   {
   }
   

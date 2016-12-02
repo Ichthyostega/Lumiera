@@ -2797,7 +2797,7 @@ Now, when invoking an operation on some public interface, the code in the lower 
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201612021809" tags="GuiPattern design decision draft" changecount="42">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201612021831" tags="GuiPattern design decision draft" changecount="43">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -2829,6 +2829,14 @@ This collapsed, expanded and possibly nested workspace structure is always exact
 
 
 
+
+
+!!!lifecycle and instances
+A given instance of the {{{TimelineWidget}}} is always dedicated to render the contents of //one specific timeline.// We never switch the data model while retaining the UI entities. This also means, a given instance is tied to one conversation with the core; it is created when the core tells us about this timeline with an initial population diff, and it lives until either this timeline is discarded in the core model, or the whole session is shut down.
+
+The dockable ''timeline pannel'' manages the existing {{{TimelineWidget}}} instances, and this effectively put the former into the role of representing the [[model root|ModelRootMO]]. We might consider to transfer this role to the workspace manager eventually, but {{red{right now 12/2016}}} this doesn't feel like a problem, since the workspace manager has to care for global concerns of the UI, not the session. We can assume there also is an ''asset pannel'', allowing the timeline pannel to delegate anything related asset modelling.
+
+In case the UI starts with no session present in the core, an //empty timeline placeholder// will be displayed, which provides UI for creating a new session...
 
 
 !!!nesting
