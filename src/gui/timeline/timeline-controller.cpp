@@ -93,6 +93,42 @@ namespace timeline {
   }
   
   
+  /**
+   * @internal this method is invoked by the UI-Bus when dispatching a MutationMessage...
+   * @remarks this is likely the first occasion a casual reader sees such a binding function,
+   * thus some explanations might be helpful. This is part of the »diff framework«: we use
+   * messages to _communicate changes on structured data._ We might as well just use a common
+   * object model, but we refrain from doing so, to avoid tight coupling, here between the
+   * core logic and the structures in the UI. Rather we assume that both sides share a
+   * roughly compatible understanding regarding the structure of the session model.
+   * Exchanging just diff messages allows us to use private implementation data structures
+   * in the UI as we see fit, without the danger of breaking anything in the core. And vice
+   * versa. You may see this as yet another way of data binding between model and view.
+   * The TreeMutator helps to accomplish this binding between a generic structure description,
+   * in our case based on GenNode elements, and the private data structure, here the private
+   * object fields and the collection of child objects within TimelineController. To ease this
+   * essentially "mechanic" and repetitive task, the TreeMutator offers some standard building
+   * blocks, plus a builder DSL, allowing just to fill in the flexible parts with some lambdas.
+   * Yet still, the technical details of getting this right can be tricky, especially since
+   * it is very important to set up those bindings in the right order. Basically we build
+   * a stack of decorators, so what is mentioned last will be checked first. Effectively
+   * this creates a structure of "onion layers", where each layer handles just one aspect
+   * of the binding. This works together with the convention that the diff message must
+   * mention all changes regarding one group (or kind) of elements together and completely.
+   * This is kind of an _object description protocol_, meaning that the diff has to mention
+   * the metadata (the object type) first, followed by the "attributes" (fields) and finally
+   * nested child objects. And nested elements can be handled with a nested diff, which
+   * recurses into some nested scope. In the example here, we are prepared to deal with
+   * two kinds of nested scope:
+   * - the _fork_ (that is the tree of tracks) is a nested structure
+   * - we hold a collection of marker child objects, each of which can be entered
+   *   as a nested scope.
+   * For both cases we prepare a way to build a _nested mutator_, and in both cases this
+   * is simply achieved by relying on the common interface of all those "elements", which
+   * is gui::model::Tangible and just happens to require each such "tangible" to offer
+   * a mutation building method, just like this one here. Just recursive programming.
+   * @see DiffComplexApplication_test
+   */
   void
   TimelineController::buildMutator (TreeMutator::Handle buffer)
   {
@@ -102,31 +138,31 @@ namespace timeline {
       TreeMutator::build()
         .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
-                  {
-                    return spec.data.isNested();                  // »Selector« : require object-like sub scope
+                  {                                            // »Selector« : require object-like sub scope
+                    return spec.data.isNested();
                   })
                .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
-                  {
+                  {                                            // »Matcher« : how to know we're dealing with the right object
                     return spec.idi == ID(elm);
                   })
                .constructFrom ([&](GenNode const& spec) -> PMarker
-                  {
+                  {                                            // »Constructor« : what to do when the diff mentions a new entity
                     return make_unique<MarkerWidget>(spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {
-                    if (ID(target) != subID) return false;         //require match on already existing child object
-                    target->buildMutator (buff);                  // delegate to child to build nested TreeMutator
+                  {                                            // »Mutator« : how to apply the diff recursively to a nested scope
+                    if (ID(target) != subID) return false;     //  - require match on already existing child object
+                    target->buildMutator (buff);               //  - delegate to child to build nested TreeMutator
                     return true;
                   }))
-        .change("name", [&](string val)
-            {
-              name_ = val;
-            })
         .mutateAttrib("fork", [&](TreeMutator::Handle buff)
-            {
+            {                                                  // »Attribute Mutator« : how enter an object field as nested scope
               REQUIRE (fork_);
               fork_->buildMutator(buff);
+            })
+        .change("name", [&](string val)
+            {                                                  // »Attribute Setter« : how assign a new value to some object field
+              name_ = val;
             }));
   }
   
