@@ -83,6 +83,13 @@ namespace timeline {
   
   
   
+  /**
+   * @note we distinguish between the contents of our three nested child collections
+   *       based on the symbolic type field send in the Record type within the diff representation
+   *       - "Marker" designates a Marker object
+   *       - "Clip" designates a Clip placed on this track
+   *       - "Fork" designates a nested sub-track
+   */
   void
   TrackPresenter::buildMutator (TreeMutator::Handle buffer)
   {

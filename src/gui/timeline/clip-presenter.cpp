@@ -46,6 +46,8 @@
 
 //using util::_Fmt;
 using lib::diff::TreeMutator;
+using lib::diff::collection;
+using std::make_unique;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -82,57 +84,69 @@ namespace timeline {
   void
   ClipPresenter::buildMutator (TreeMutator::Handle buffer)
   {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1039
-    using Attrib = std::pair<const string,string>;
-    using lib::diff::collection;
+    using PChannel = unique_ptr<ClipPresenter>;
+    using PEffect  = unique_ptr<ClipPresenter>;
+    using PMarker  = unique_ptr<MarkerWidget>;
     
     buffer.create (
       TreeMutator::build()
-        .attach (collection(scope)
+        .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
-                  {
-                    return spec.data.isNested();                  // »Selector« : require object-like sub scope
+                  {                                            // »Selector« : require object-like sub scope with type-field "Marker"
+                    return "Marker" == spec.data.recordType();
                   })
-               .matchElement ([&](GenNode const& spec, PMockElm const& elm) -> bool
+               .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {
-                    return spec.idi == elm->getID();
+                    return spec.idi == ID(elm);
                   })
-               .constructFrom ([&](GenNode const& spec) -> PMockElm
+               .constructFrom ([&](GenNode const& spec) -> PMarker
                   {
-                    PMockElm child = std::make_unique<MockElm>(spec.idi, this->uiBus_);
-                    return child;
+                    return make_unique<MarkerWidget>(spec.idi, this->uiBus_);
                   })
-               .buildChildMutator ([&](PMockElm& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+               .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (target->getID() != subID) return false;   //require match on already existing child object
-                    target->buildMutator (buff);                  // delegate to child to build nested TreeMutator
+                    if (ID(target) != subID) return false;
+                    target->buildMutator (buff);
                     return true;
                   }))
-        .attach (collection(attrib)
+        .attach (collection(effects_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
-                  {
-                    return spec.isNamed()                         // »Selector« : accept attribute-like values
-                       and not spec.data.isNested();              //              but no nested objects
+                  {                                            // »Selector« : require object-like sub scope with type-field "Effect"
+                    return "Effect" == spec.data.recordType();
                   })
-               .matchElement ([&](GenNode const& spec, Attrib const& elm) -> bool
+               .matchElement ([&](GenNode const& spec, PEffect const& elm) -> bool
                   {
-                    return elm.first == spec.idi.getSym();
+                    return spec.idi == ID(elm);
                   })
-               .constructFrom ([&](GenNode const& spec) -> Attrib
+               .constructFrom ([&](GenNode const& spec) -> PEffect
                   {
-                    string key{spec.idi.getSym()},
-                           val{render(spec.data)};
-                    return {key, val};
+                    return make_unique<ClipPresenter>(spec.idi, this->uiBus_);
                   })
-               .assignElement ([&](Attrib& target, GenNode const& spec) -> bool
+               .buildChildMutator ([&](PEffect& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    string key{spec.idi.getSym()},
-                           newVal{render (spec.data)};
-                    target.second = newVal;
+                    if (ID(target) != subID) return false;
+                    target->buildMutator (buff);
+                    return true;
+                  }))
+        .attach (collection(channels_)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {                                            // »Selector« : require object-like sub scope with type-field "Channel"
+                    return "Channel" == spec.data.recordType();
+                  })
+               .matchElement ([&](GenNode const& spec, PChannel const& elm) -> bool
+                  {
+                    return spec.idi == ID(elm);
+                  })
+               .constructFrom ([&](GenNode const& spec) -> PChannel
+                  {
+                    return make_unique<ClipPresenter>(spec.idi, this->uiBus_);
+                  })
+               .buildChildMutator ([&](PChannel& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {
+                    if (ID(target) != subID) return false;
+                    target->buildMutator (buff);
                     return true;
                   })));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1039
-    UNIMPLEMENTED ("diff mutation binding for the ClipPresenter");
   }
   
   
