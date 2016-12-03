@@ -267,15 +267,7 @@ verb `mut(ID)`::
          target structure. The `mut(ID)` verb then opens the designated nested
          record for diff handling, and all subsequent diff verbs are to be
          interpreted relative to this scope, until the corresponding
-         `emu(ID)` verb is encountered. As a special notation, right
-         after handling an element with the list diff verbs (i.e. `ins`
-         or `pick` or `find`), it is allowed immediately to open the
-         nested scope with `mut(Ref::THIS)`footnote:[this shortcut circumvents
-         the problem that it is sometimes difficult to know the precise ID for
-         unnamed children just created at the given scope.
-         We acknowledge that diff messages will sometimes be hand-writtten,
-         especially to populate a target data structure without knowing its
-         implementation. The whole diff language is designed to be human readable.]
+         `emu(ID)` verb is encountered.
 verb `emu(ID)`::
          closing bracketing construct and counterpart to `mut(ID)`. This verb
          must be given precisely at the end of the nested scope.footnote:[it is
