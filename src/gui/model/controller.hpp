@@ -38,6 +38,7 @@
 
 
 #include "lib/error.hpp"
+#include "gui/model/tangible.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 

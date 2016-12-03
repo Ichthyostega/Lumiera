@@ -29,14 +29,14 @@
  ** inherit from the gui::model::Tangible base. The top-level gui::UiBus element is
  ** a front-end and framework component managed by the [GTK-main](\ref GtkLumiera::main).
  ** 
- ** @warning as of 12/2015, this is still totally a mess. This \em will remain
+ ** @warning as of 12/2016, this is still totally a mess. This \em will remain
  **          the one-and-only master controller of the UI, but I am determined
  **          to change the architecture and implementation technique altogether.
  **          For the time being, we keep the controller::Controller in place, as
  **          written by Joel Holdsworth, while building the new UI-Bus frontend
  **          to take on this central role eventually.
  ** 
- ** \par rationale
+ ** # Rationale
  ** The UI-Bus acts as a **mediating backbone**, impersonating the role
  ** of the _Model_ and the _Controler_ in the [MVC-Pattern]in common UI architecture.
  ** 
@@ -54,9 +54,9 @@
  ** feedback and reactions to operating some interface controls. Any actual operations and
  ** actions relevant to the application as a whole, are to be sent as messages into the
  ** UI-Bus. The interface code can assume some "core services" to be available _somewhere;_
- ** these core services will receive the messages, act on them and _respond asynchronously_.
+ ** these core services will receive the messages, act on them and _respond asynchronously._
  ** 
- ** \par Bus interactions
+ ** # Bus interactions
  ** The UI-Bus has a star shaped topology, with a central "bus master" hub, the ["Nexus"](\ref Nexus),
  ** which maintains a routing table. Attachment and detachment of elements can be managed automatically,
  ** since all of the UI-Bus operations _perform within the UI event thread._

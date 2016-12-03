@@ -54,6 +54,7 @@
 #define GUI_TIMELINE_TIMELINE_CONTROLLER_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/model/controller.hpp"
 
 #include "lib/time/timevalue.hpp"
 
@@ -67,19 +68,23 @@ namespace timeline {
   
   
   /**
-   * Core timeline display (custom widget).
+   * Controller to supervise the timeline display.
+   * As a [tangible element](model::Tangible), it is attached to the UI-Bus.
    * @todo WIP-WIP-rewrite as of 12/2016
-   * @remarks At top level, this widget is split into a header pane (left)
-   *     and a scrollable timeline body (right). The layout of both parts is aligned.
+   * @remarks a Timeline always has an attached Sequence, which in turn has
+   *     a single mandatory root track. This in turn might hold further child tracks,
+   *     thus forming a fork of nested scopes.
    */
   class TimelineController
+    : public model::Controller
     {
     public:
       /**
-       * @param source_state state to be used used as the
-       *    data source (model) for this timeline widget.
+       * @param identity used to refer to a corresponding timeline element in the Session
+       * @param nexus some established connection to the UI-Bus, used for registration.
        */
-      TimelineController();
+      TimelineController (ID identity, ctrl::BusTerm& nexus);
+      
      ~TimelineController();  
       
       
@@ -91,7 +96,10 @@ namespace timeline {
     private:/* ===== Events ===== */
       
     private:/* ===== Internals ===== */
-     
+      
+      /** set up a binding to respond to mutation messages via UiBus */
+      virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
+   
     };
   
   

@@ -176,6 +176,141 @@
 <node CREATED="1479678723576" ID="ID_666987913" MODIFIED="1479678758128" TEXT="Layout Grundmuster: zweigeteilt"/>
 <node CREATED="1479678736655" ID="ID_1313901406" MODIFIED="1479678745545" TEXT="globaler Layout-Manager"/>
 </node>
+<node CREATED="1480723110777" HGAP="24" ID="ID_1197860604" MODIFIED="1480725393020" TEXT="Kontrollstruktur" VSHIFT="7">
+<icon BUILTIN="pencil"/>
+<node CREATED="1480723136861" ID="ID_839909208" MODIFIED="1480723143433" TEXT="Einstiegspunkt">
+<node CREATED="1480723144188" ID="ID_420419439" MODIFIED="1480723148072" TEXT="TimelineWidget"/>
+<node CREATED="1480723148572" ID="ID_1331974915" MODIFIED="1480723151671" TEXT="wirklich">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1480723200765" ID="ID_1498754065" MODIFIED="1480723203209" TEXT="aktiv">
+<node CREATED="1480723223938" ID="ID_1057816659" MODIFIED="1480723229172" TEXT="UI-Mechanik">
+<node CREATED="1480723246207" ID="ID_988556037" MODIFIED="1480723268808" TEXT="Scrollen"/>
+<node CREATED="1480723270492" ID="ID_1057899601" MODIFIED="1480723272959" TEXT="Zoomen"/>
+<node CREATED="1480723288521" ID="ID_238022948" MODIFIED="1480723290941" TEXT="Navigieren">
+<node CREATED="1480723291697" ID="ID_486282572" MODIFIED="1480723294564" TEXT="delegiert"/>
+<node CREATED="1480723296128" ID="ID_681787776" MODIFIED="1480723317025" TEXT="timeline::NavigatorWidget"/>
+</node>
+<node CREATED="1480723797453" ID="ID_451406554" MODIFIED="1480723801984" TEXT="Benachrichtigungen"/>
+</node>
+<node CREATED="1480723989315" ID="ID_1314277524" MODIFIED="1480723991902" TEXT="zentral">
+<node CREATED="1480724166868" ID="ID_1338884424" MODIFIED="1480724170734" TEXT="Struktur&#xe4;nderung">
+<node CREATED="1480724385214" ID="ID_1913904871" MODIFIED="1480724400259" TEXT="DiffMutable bieten">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1480724171371" ID="ID_410013238" MODIFIED="1480724177718" TEXT="Struktur&#xe4;nderung vorbereiten">
+<node CREATED="1480724215437" ID="ID_1953691654" MODIFIED="1480724219873" TEXT="Kontextmen&#xfc;"/>
+<node CREATED="1480724317120" ID="ID_1898649980" MODIFIED="1480724328098" TEXT="Fokus + Befehl / Taste"/>
+<node CREATED="1480724346548" ID="ID_200646693" MODIFIED="1480724360777" TEXT="markieren + Kommando schicken">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1480724417722" HGAP="55" ID="ID_940232384" MODIFIED="1480724427486" TEXT="drei M&#xf6;glichkeiten" VSHIFT="5">
+<node CREATED="1480724450958" ID="ID_493402962" MODIFIED="1480725131286" TEXT="Widget is Tangible">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1480724706739" ID="ID_1043502336" MODIFIED="1480724721717" TEXT="kann dann direkt Notifications implementieren"/>
+<node CREATED="1480724724585" ID="ID_576219568" MODIFIED="1480724737691" TEXT="mu&#xdf; f&#xfc;r alle Struktur&#xe4;nderungen delegieren"/>
+<node CREATED="1480724738583" ID="ID_403933116" MODIFIED="1480724756546" TEXT="Achtung: Tangible is noncopyable">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1480724761876" ID="ID_335451126" MODIFIED="1480724779581" TEXT="wegen BusTerm">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      braucht feste Speicher-Addresse
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480724781801" ID="ID_198046255" MODIFIED="1480724795442" TEXT="folglich: nicht in STL-Container">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+<node CREATED="1480724461860" ID="ID_865875607" MODIFIED="1480725128760" TEXT="Controller is Tangible">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1480724851312" ID="ID_1653680733" MODIFIED="1480724896364" TEXT="erzeugt R&#xfc;ckbezug f&#xfc;r Notifications">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ..d.h. der Controller mu&#223; wieder auf das Widget zugreifen
+    </p>
+    <p>
+      und sei es auch blo&#223; &#252;ber ein Interface!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480724910096" ID="ID_874781354" MODIFIED="1480724920595" TEXT="kann direkt das View-Modell manipulieren"/>
+<node CREATED="1480724927814" ID="ID_1912287440" MODIFIED="1480724956251" TEXT="ist nicht direkt erreichbar">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1480724935397" ID="ID_1279073903" MODIFIED="1480725166588" TEXT="Modell-Vater mu&#xdf; DiffMutable sehen">
+<arrowlink COLOR="#2817aa" DESTINATION="ID_550796340" ENDARROW="Default" ENDINCLINATION="129;0;" ID="Arrow_ID_1199115828" STARTARROW="None" STARTINCLINATION="129;0;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1480724468283" ID="ID_1683703083" MODIFIED="1480725137591" TEXT="expose DiffMutable">
+<icon BUILTIN="idea"/>
+<node CREATED="1480724983774" ID="ID_845297603" MODIFIED="1480724994016" TEXT="hei&#xdf;t: Manipulation au&#xdf;erhalb des Diff-Systems"/>
+<node CREATED="1480725000029" ID="ID_1586514211" MODIFIED="1480725010294" TEXT="wir steigen stets auf Ebene einer Timeline ein"/>
+<node CREATED="1480725012731" ID="ID_9332776" MODIFIED="1480725101873">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>aber:</i>&#160;Binding im Diff-System durchaus m&#246;glich
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn:
+    </p>
+    <p>
+      das Diff-System verlangt nicht, da&#223; Kinder in der Collection auch Tangible sind.
+    </p>
+    <p>
+      Es verlangt nur
+    </p>
+    <ul>
+      <li>
+        da&#223; wir wissen, wie wir Kinder machen
+      </li>
+      <li>
+        da&#223; wir f&#252;r ein gegebenes Kind ein DiffMutable beschaffen k&#246;nnen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1480725106478" ID="ID_550796340" MODIFIED="1480725166588" TEXT="effektiv auch die L&#xf6;sung f&#xfc;r Alternative-2">
+<linktarget COLOR="#2817aa" DESTINATION="ID_550796340" ENDARROW="Default" ENDINCLINATION="129;0;" ID="Arrow_ID_1199115828" SOURCE="ID_1279073903" STARTARROW="None" STARTINCLINATION="129;0;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1479688613990" ID="ID_1537299376" MODIFIED="1479688617705" TEXT="Struktur&#xe4;nderung">
 <node CREATED="1479688621637" ID="ID_71591229" MODIFIED="1479688631881" TEXT="notwendig: strukturelles Modell">
 <icon BUILTIN="messagebox_warning"/>
@@ -184,7 +319,7 @@
 <node CREATED="1479688653913" ID="ID_1435784278" MODIFIED="1479688666394" TEXT="dieser wiederum mu&#xdf; f&#xfc;r jede Erweiterung konsultiert werden"/>
 </node>
 </node>
-<node CREATED="1479774700668" HGAP="36" ID="ID_1407821684" MODIFIED="1480606879554" TEXT="Mutation" VSHIFT="7">
+<node CREATED="1479774700668" HGAP="47" ID="ID_1407821684" MODIFIED="1480725485721" TEXT="Mutation" VSHIFT="13">
 <node CREATED="1479774705839" ID="ID_301222108" MODIFIED="1479774729887" TEXT="Problem">
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#d30f0f" CREATED="1479774731141" ID="ID_1523088286" MODIFIED="1479774739456" TEXT="Element != Widget"/>
@@ -219,6 +354,10 @@
 </html></richcontent>
 </node>
 <node CREATED="1480120359191" ID="ID_1039094699" MODIFIED="1480120390087" TEXT="Widget-Container hat keine &#xc4;nderungs-Schnittstelle"/>
+<node COLOR="#338800" CREATED="1480725417748" HGAP="28" ID="ID_1996114890" MODIFIED="1480725470323" TEXT="...war dann doch kein so schlimmes Problem" VSHIFT="7">
+<arrowlink COLOR="#69ee12" DESTINATION="ID_1964453367" ENDARROW="Default" ENDINCLINATION="-55;-87;" ID="Arrow_ID_636465261" STARTARROW="None" STARTINCLINATION="-116;69;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node CREATED="1480120516442" ID="ID_880374813" MODIFIED="1480120518812" TEXT="Ans&#xe4;tze">
@@ -325,7 +464,8 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node CREATED="1480121177145" ID="ID_1964453367" MODIFIED="1480123456994" TEXT="Widget is delegate/slave">
+<node CREATED="1480121177145" ID="ID_1964453367" MODIFIED="1480725470323" TEXT="Widget is delegate/slave">
+<linktarget COLOR="#69ee12" DESTINATION="ID_1964453367" ENDARROW="Default" ENDINCLINATION="-55;-87;" ID="Arrow_ID_636465261" SOURCE="ID_1996114890" STARTARROW="None" STARTINCLINATION="-116;69;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1480121209277" ID="ID_834494092" MODIFIED="1480123869816" TEXT="Hinzuf&#xfc;gungen erzeugen neue Widgets">
 <icon BUILTIN="idea"/>
@@ -431,10 +571,81 @@
 <node CREATED="1480639429307" ID="ID_1922498247" MODIFIED="1480639431270" TEXT="Canvas"/>
 </node>
 </node>
-<node CREATED="1480606954115" ID="ID_1178000371" MODIFIED="1480606960326" TEXT="Struktur-Modell"/>
+<node CREATED="1480606954115" ID="ID_1178000371" MODIFIED="1480606960326" TEXT="Struktur-Modell">
+<node CREATED="1480725215087" ID="ID_212845679" MODIFIED="1480725217771" TEXT="erzeugen">
+<node CREATED="1480725218783" ID="ID_192239117" MODIFIED="1480725230986" TEXT="Controller ist Tangible">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1480725247115" ID="ID_1533101483" MODIFIED="1480725266740" TEXT="Konstruktion erfordert...">
+<node CREATED="1480725267632" ID="ID_335184137" MODIFIED="1480725357016" TEXT="EntryID&lt;Timeline&gt;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eigentlich...
+    </p>
+    <p>
+      w&#252;rde eine BareEntryID gen&#252;gen.
+    </p>
+    <p>
+      Aber die strengere Typisierung erscheint mir ein
+    </p>
+    <p>
+      hilfreicher Wink f&#252;r den User
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480725273775" ID="ID_1495656573" MODIFIED="1480725279987" TEXT="Bus-Term-Referenz"/>
+</node>
+</node>
+<node CREATED="1480725377994" ID="ID_172881069" MODIFIED="1480725379629" TEXT="verwalten"/>
+</node>
 <node CREATED="1480694550601" ID="ID_391329400" MODIFIED="1480694554372" TEXT="TimelineController">
 <node CREATED="1480694557112" ID="ID_786517324" MODIFIED="1480694570434" TEXT="Widget ist Startpunkt"/>
 <node CREATED="1480694571310" ID="ID_1188786444" MODIFIED="1480694576714" TEXT="aber Controller wird Chef"/>
+<node CREATED="1480725633399" ID="ID_1475661668" MODIFIED="1480725663683" TEXT="mu&#xdf; erst mal Controller implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...abstraktes Interface
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1480725680713" ID="ID_448125852" MODIFIED="1480725692188" TEXT="Delegate for Notification">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1480725704142" ID="ID_992732373" MODIFIED="1480725707913" TEXT="was bleibt abstrakt">
+<node CREATED="1480725715916" ID="ID_890987188" MODIFIED="1480725754663" TEXT="buildMutator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      lat&#252;rnich
+    </p>
+    <p>
+      ...den <i>mu&#223;</i>&#160;jeder individuell implementieren,
+    </p>
+    <p>
+      um die Bindung herzustellen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1480606985087" ID="ID_885244508" MODIFIED="1480639465600" TEXT="Layout-Manager">
 <node CREATED="1480639469981" ID="ID_983391388" MODIFIED="1480639472833" TEXT="Abstraktionen"/>
@@ -6347,7 +6558,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475342135193" FOLDED="true" HGAP="31" ID="ID_336806935" MODIFIED="1475449459631" TEXT="Problem: Diff-Nachricht" VSHIFT="7">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475342135193" FOLDED="true" HGAP="31" ID="ID_336806935" MODIFIED="1480725582488" TEXT="Problem: Diff-Nachricht" VSHIFT="7">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1475342157302" ID="ID_1383404259" MODIFIED="1475342166025" TEXT="&quot;Diff&quot; ist kein Typ"/>
 <node CREATED="1475342185707" ID="ID_787925049" MODIFIED="1475342190662" TEXT="Lumiera-Iteratoren sind generisch"/>

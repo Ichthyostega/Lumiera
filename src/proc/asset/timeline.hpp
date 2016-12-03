@@ -38,10 +38,15 @@
  ** Like every structural asset, the creation of timelines happens automatically
  ** on referral; Timelines can be queried from the StructFactory, providing additional
  ** requested capabilities. Commonly clients will retrieve a given timeline by query
- ** on the name-ID of the timeline: \c Struct::retrieve(Query<Timeline>("id(theName)."))
+ ** on the name-ID of the timeline: `Struct::retrieve (Query<Timeline>("id(theName)."))`
  ** Additionally, the binding to a specific sequence may be established alongside:
- ** \c "timeline(theTimelineName),bindSequence(theTimelineName,sequenceID)." 
+ ** `"timeline(theTimelineName), bindSequence(theTimelineName,sequenceID)."`
  ** 
+ ** @todo around 2010, the concept of Timeline and Session binding was defined,
+ **       together with a rough preliminary implementation. Up to 2017, there
+ **       was no opportunity to set this system really into motion; this is
+ **       not necessarily a bad thing, since meanwhile we understand way
+ **       better in which way the Session will actually be accessed...
  ** @see Session
  ** @see Sequence
  ** @see StructFactory
@@ -84,7 +89,10 @@ namespace asset {
   
   
   /**
-   * TODO type comment
+   * @todo this new Timeline API was invented about 2010
+   *       and remained in half finished state ever since.
+   * @todo 2016 can confirm that we still want to go that route
+   * @todo we need some actual interface, beyond just creating timelines!
    */
   class Timeline
     : public Struct

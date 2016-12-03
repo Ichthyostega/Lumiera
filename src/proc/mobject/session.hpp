@@ -24,7 +24,7 @@
 /** @file session.hpp
  ** @ingroup session
  ** Primary Interface to the current Session.
- ** The session interface can be used to discover session's contents.
+ ** The session interface can be used to discover session contents.
  ** Mostly, these objects within the session are MObject subclasses, but they
  ** are attached into the session by a Placement. Usually, you'd want to use
  ** the discovered objects to invoke operations on them; in most cases,

@@ -65,9 +65,12 @@ namespace timeline {
   
   
   
-  TimelineWidget::TimelineWidget ()
+  TimelineWidget::TimelineWidget (TimelineID identity, ctrl::BusTerm& nexus)
     : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
+    , control_{new TimelineController{identity, nexus}}
+    , layout_{new LayoutManager}
     {
+      UNIMPLEMENTED ("build the timeline UI");
     }
   
   

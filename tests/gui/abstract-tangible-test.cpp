@@ -177,7 +177,7 @@ namespace test {
    *       - error state indication
    *       - structural changes by diff message
    * 
-   * This test documents a generic interaction protocoll supported by all
+   * This test documents a generic interaction protocol supported by all
    * "tangible" elements of the Lumiera GTK UI. This works by connecting any
    * such element to a messaging backbone, the *UI-Bus*. By sending messages
    * according to this protocol, typical state changes can be detected and
@@ -187,7 +187,7 @@ namespace test {
    * @note the actions in this test are verified with the help of an EventLog
    *       built into the mock UI element and the mock UI-Bus counterpart.
    *       Additionally, each test case dumps those log contents to STDOUT,
-   *       which hopefully helps to undrstand the interactions in detail.
+   *       which hopefully helps to understand the interactions in detail.
    * 
    * @see BusTerm_test
    * @see DiffTreeApplication_test
@@ -211,7 +211,7 @@ namespace test {
       /** @test verify the UI widget unit test support framework.
        * The generic backbone of the Lumiera UI offers a mock UI element,
        * with the ability to stand-in for actual elements present in the real GUI.
-       * This allows us to rig a emulated test user interface to cover interactions
+       * This allows us to rig an emulated test user interface to cover interactions
        * involving some communication from or to interface elements. After setting up
        * a [mock UI-element](\ref MockElm) with a suitable name / ID, we're able to
        * operate this element programmatically and to send messages and responses
@@ -338,7 +338,7 @@ namespace test {
           MARK_TEST_FUN
           EventLog nexusLog = gui::test::Nexus::startNewLog();
           
-          // Setup test stage: define an command/action "in Proc"
+          // Setup test stage: define a command/action "in Proc"
           CommandDef (DUMMY_CMD_ID)
               .operation (operate)
               .captureUndo (capture)

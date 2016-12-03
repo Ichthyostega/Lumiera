@@ -45,6 +45,7 @@
 
 
 //using util::_Fmt;
+using lib::diff::TreeMutator;
 //using std::shared_ptr;
 //using std::weak_ptr;
 //using util::contains;
@@ -65,7 +66,8 @@ namespace timeline {
   
   
   
-  TimelineController::TimelineController ()
+  TimelineController::TimelineController (ID identity, ctrl::BusTerm& nexus)
+    : Controller{identity, nexus}
     {
     }
   

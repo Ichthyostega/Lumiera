@@ -33,6 +33,20 @@
  ** to a single session::Timeline, known by its ID. The widget creates a TimelineController
  ** right away, which takes initiative to populate the display with that Timeline's contents.
  ** 
+ ** #Lifecycle
+ ** The assumption is that any element creation and deletion is triggered through messages over
+ ** the [UI-Bus](\ref ui-bus.hpp). So there will be a _parent element,_ corresponding to the
+ ** ["model root"](\ref session::Root), and this parent, in response to some mutation message,
+ ** will create a TimelineWidget, add it into the appropriate GTK display setup and manage it
+ ** as child element; the [construction parameters](TimelineWidget::TimelineWidget] ensure
+ ** it gets connected to the bus as well. Incidentally, this assumption also implies that
+ ** this parent element has set up a _binding for diff mutation,_ typically by implementing
+ ** model::Tangible::buildMutator. And further on this means that the parent will also
+ ** destroy the TimelineWidget, prompted by a message to that end. All deregistration
+ ** and unwinding happens automatically. Widgets, and also our model::Controller
+ ** is `sigc::trackable`, which means after destruction any further signals
+ ** will be silently ignored.
+ ** 
  ** @todo as of 12/2016 a complete rework of the timeline display is underway
  ** 
  */
@@ -42,18 +56,28 @@
 #define GUI_TIMELINE_TIMELINE_WIDGET_H
 
 #include "gui/gtk-base.hpp"
-#include "gui/timeline/timeline-controller.hpp"
+#include "gui/timeline/timeline-controller.hpp"   /////TODO possible to push that into the implementation?
+#include "gui/timeline/layout-manager.hpp"
+#include "gui/ctrl/bus-term.hpp"
 
 #include "lib/time/timevalue.hpp"
+#include "lib/diff/diff-mutable.hpp"
+#include "lib/idi/entry-id.hpp"
 
 //#include <memory>
 //#include <vector>
 
 
 
+namespace proc {
+namespace asset{
+  class Timeline;
+}}
+
 namespace gui  {
 namespace timeline {
   
+  using TimelineID = lib::idi::EntryID<proc::asset::Timeline>;
   
   /**
    * Core timeline display (custom widget).
@@ -65,12 +89,30 @@ namespace timeline {
   class TimelineWidget
     : public Gtk::Paned
     {
+      std::unique_ptr<TimelineController> control_;
+      std::unique_ptr<LayoutManager>      layout_;
+      
     public:
-      /**
-       * @param source_state state to be used used as the
-       *    data source (model) for this timeline widget.
+      /** build a new timeline display and attach it to the UI-Bus.
+       * @param identity used to refer to a corresponding element in the Session
+       * @param nexus some established connection to the UI-Bus, will be used
+       *          to register the embedded TimelineController as communication
+       *          partner to respond under the given ID.
+       * @remarks after creation, the widget can just be hooked up and wired like
+       *          any ordinary GTK element; it becomes passive and just responds to
+       *          signals. The active role is played by the controller, which also
+       *          responds to mutation messages; this is the only way to populate
+       *          the timeline display. Likewise, a timeline shall be deleted by
+       *          sending an respective mutation message to its _parent element,_
+       *          the one that created it, typically also in response to a message.
+       *          Non the less it is possible just to delete a TimelineWidget, since
+       *          it is a Gtk::Widget, and the controller is also `sigc::trackable`
+       *          and additionally, as a gui::model::Tangible, it will deregister
+       *          automatically from the UI-Bus. After that, any further messages
+       *          towards this element will be dropped silently.
        */
-      TimelineWidget ();
+      TimelineWidget (TimelineID identity, ctrl::BusTerm& nexus);
+      
      ~TimelineWidget();  
       
       

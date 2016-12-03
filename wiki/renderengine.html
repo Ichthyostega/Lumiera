@@ -3517,8 +3517,8 @@ For each meta asset instance, initially a //builder// is created for setting up 
 <div title="Model" modifier="Ichthyostega" created="201003210020" modified="201003210021" tags="overview">
 <pre>Lumiera's Proc-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" created="201003020150" modified="201505310112" tags="SessionLogic Model operational spec draft img" changecount="1">
-<pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assesment is the fact that the session implementation is beeing kept mostly single-threaded. Thus, lacking one central place to handle this issue, care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
+<div title="ModelDependencies" modifier="Ichthyostega" created="201003020150" modified="201612030206" tags="SessionLogic Model operational spec draft img" changecount="4">
+<pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assessment is the fact that the session implementation is deliberately kept single-threaded. While this simplifies reasoning, we also lack one central place to handle this issue, ans so care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
 
 !known interdependencies
 [&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
@@ -3527,7 +3527,7 @@ For each meta asset instance, initially a //builder// is created for setting up 
 * currently as of 2/2010 the exact dependency of the automation calculation during the render process onto the automation definitions within the HighLevelModel remains to be specified.
 
 !!Timelines and Sequences
-While implemented as StructAsset, additionally we need to assure every instance gets linked to the relevant parts of the model and registered with the session. Contrast this with other kinds of assets, which may just remain enlisted, but never actually used.
+While implemented as StructAsset, additionally we need to ensure every instance gets linked to the relevant parts of the model and registered with the session. Contrast this with other kinds of assets, which may just remain enlisted, but never actually used.
 
 ;the Session
 :...is linked 1:1 with timelines and sequences. Registration and deregistration is directly tied to creation and destruction.
@@ -3539,7 +3539,7 @@ While implemented as StructAsset, additionally we need to assure every instance 
 : __created__ &amp;rArr; create a dedicated new binding, either useing an existing sequence, or a newly created empty sequence
 : __destroy__ &amp;rArr; remove binding, while the previously bound sequence remains in model.
 ;root-placed Binding
-:while generally a Binding can exist in the model, when attached to root, a Timeline will be created
+:while generally a Binding can just exist somewhere in the model, when attached to root, a Timeline will be created
 : __created__ &amp;rArr; an existing sequence might be given on creation, otherwhise a default configured sequence is created
 : __destroy__ &amp;rArr; implemented by detaching from root (see below) prior to purging from the model.
 : __attached__ to root &amp;rArr; invoke Timeline creation
@@ -8144,14 +8144,14 @@ Currently (1/11), the strategy is implemented according to (1) and (4) above, le
 Implementation of this strategy is still broken: it doesn't work properly when actually the change passing over the zero point happens by propagation from lower digits. Because then -- given the way the mutators are implemented -- the //new value of the wrapping digit hasn't been stored.// It seems the only sensible solution is to change the definition of the functors, so that any value will be changed by side-effect {{red{Question 4/11 -- isn't this done and fixed by now??}}}
 </pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" created="200706250721" modified="201505310138" tags="def" changecount="3">
+<div title="Timeline" modifier="Ichthyostega" created="200706250721" modified="201612030116" tags="def" changecount="4">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a [[timeline view in the GUI|GuiTimelineView]] and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a list of [[global Pipes|GlobalPipe]] representing the possible outputs (master busses)
 * //exactly one// top-level [[Sequence]], which in turn may contain further nested Sequences.
 * when used for Playback, a ViewConnection is necessary, allowing to get or connect to a PlayController
 
-Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Fork]] and are part of the individual sequences, together with the media objects placed to these tracks. Thus sequences are independent entities which may exist stand-alone within the model, while a timeline is //always bound to hold a sequence.// &amp;rarr; see ModelDependencies
+Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Fork]] and are part of the individual sequences, together with the media objects placed to this //track fork.// Thus sequences are independent entities which may exist stand-alone within the model, while a timeline is //always bound to hold a sequence.// &amp;rarr; see ModelDependencies
 [&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
 
 Within the Project, there may be ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, multiple timelines may not be combined further. You can always just render (or view) one specific timeline. A given sequence may be referred directly or indirectly from multiple timelines though. A given timeline is represented within the GUI according to [[distinct principles and conventions|GuiTimelineView]]

@@ -27,6 +27,8 @@
  ** through some [bus terminal](bus-term.hpp). Actually, there is one special BustTerm
  ** implementation, which acts as router and messaging hub.
  ** 
+ ** @note messages to unknown target elements are silently dropped.
+ ** 
  ** @todo initial draft and WIP-WIP-WIP as of 11/2015
  ** 
  ** @see TODO_abstract-tangible-test.cpp

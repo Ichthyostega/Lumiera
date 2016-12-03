@@ -35,6 +35,7 @@ namespace lib {
    * Typically the return type is an interface, 
    * and the Implementation wraps some datastructure
    * holding subclasses.
+   * @todo ouch -- a collection that isn't iterable...  ///////////////////////TICKET #1040
    */
   template<class T>
   struct RefArray : boost::noncopyable
