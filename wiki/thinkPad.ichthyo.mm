@@ -571,7 +571,8 @@
 <node CREATED="1480639429307" ID="ID_1922498247" MODIFIED="1480639431270" TEXT="Canvas"/>
 </node>
 </node>
-<node CREATED="1480606954115" ID="ID_1178000371" MODIFIED="1480606960326" TEXT="Struktur-Modell">
+<node CREATED="1480606954115" ID="ID_1178000371" MODIFIED="1480807618481" TEXT="Struktur-Modell">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1480725215087" ID="ID_212845679" MODIFIED="1480725217771" TEXT="erzeugen">
 <node CREATED="1480725218783" ID="ID_192239117" MODIFIED="1480725230986" TEXT="Controller ist Tangible">
 <icon BUILTIN="yes"/>
@@ -597,8 +598,8 @@
 </node>
 </node>
 <node CREATED="1480725377994" ID="ID_172881069" MODIFIED="1480725379629" TEXT="verwalten">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480741524775" ID="ID_661893589" MODIFIED="1480741531814" TEXT="Bindings einrichten">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1480741524775" ID="ID_661893589" MODIFIED="1480807588342" TEXT="Bindings einrichten">
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1480800574418" ID="ID_791426893" MODIFIED="1480800602219" TEXT="Marker">
 <icon BUILTIN="messagebox_warning"/>
@@ -607,6 +608,7 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1480800605150" ID="ID_1156238228" MODIFIED="1480800608682" TEXT="sind stets optional"/>
+<node CREATED="1480807594822" ID="ID_333819085" MODIFIED="1480807600418" TEXT="f&#xfc;hre mal einen Marker-Typ ein"/>
 </node>
 </node>
 </node>
@@ -655,7 +657,7 @@
 <node CREATED="1480741498930" ID="ID_1605140473" MODIFIED="1480741509309" TEXT="hat nur einen einziten RootTrack">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1480742405505" ID="ID_1590367176" MODIFIED="1480781192026" TEXT="ACHTUNG: leere Sequenz?">
+<node CREATED="1480742405505" FOLDED="true" ID="ID_1590367176" MODIFIED="1480807627421" TEXT="ACHTUNG: leere Sequenz?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1087,11 +1089,21 @@
 <node CREATED="1480741389777" ID="ID_1548768233" MODIFIED="1480741396471" TEXT="welche kommen in Frage">
 <icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480741397880" ID="ID_299590632" MODIFIED="1480741452337" TEXT="Effekte als ClipPresenter implementieren??">
-<icon BUILTIN="help"/>
+<node CREATED="1480741397880" ID="ID_299590632" MODIFIED="1480807650331" TEXT="Effekte werden als ClipPresenter implementiert">
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480741425668" ID="ID_826648354" MODIFIED="1480741461359" TEXT="wie Labels implementieren. Tangible Widget??">
-<icon BUILTIN="help"/>
+<node CREATED="1480741425668" ID="ID_826648354" MODIFIED="1480807688769" TEXT="Labels werden als eigenes Tangible MarkerWidget implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sie verwenden dann ein LabelWidget zur Darstellung
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 <node CREATED="1480741466519" ID="ID_29080454" MODIFIED="1480741471654" TEXT="das werden zwei Collections">
 <icon BUILTIN="messagebox_warning"/>

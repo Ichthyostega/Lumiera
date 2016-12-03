@@ -39,6 +39,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/model/widget.hpp"
+#include "gui/widget/label-widget.hpp"
 
 //#include "lib/util.hpp"
 
@@ -50,14 +51,21 @@
 namespace gui  {
 namespace timeline {
   
+  enum MarkerKind {
+    MARK,
+    LOOP
+  };
+  
   
   /**
    * @todo WIP-WIP as of 12/2016
    */
   class MarkerWidget
     : public model::Widget
+    , public widget::LabelWidget
     {
-      
+      MarkerKind kind_;
+      string     name_;
       
     public:
       /**
