@@ -41,6 +41,7 @@
 #include "gui/gtk-lumiera.hpp"
 #include "gui/timeline/timeline-controller.hpp"
 #include "gui/timeline/track-presenter.hpp"
+#include "gui/timeline/marker-widget.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
@@ -77,6 +78,7 @@ namespace timeline {
   
   TimelineController::TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus)
     : Controller{identity, nexus}
+    , markers_{}
     , fork_{new TrackPresenter{trackID, nexus}}
     {
       UNIMPLEMENTED ("how to make the controller operative...");

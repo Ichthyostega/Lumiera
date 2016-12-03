@@ -31,6 +31,7 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/timeline/clip-presenter.hpp"
+#include "gui/timeline/marker-widget.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"

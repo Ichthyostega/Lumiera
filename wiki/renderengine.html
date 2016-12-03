@@ -2810,7 +2810,7 @@ Now, when invoking an operation on some public interface, the code in the lower 
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201612021831" tags="GuiPattern design decision draft" changecount="43">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201612032136" tags="GuiPattern design decision draft" changecount="47">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -2838,10 +2838,7 @@ The workspace dimension (vertical layout) is more like a ''Fork'', which can be 
 * Clip-2 has an effect attached, Clip-3 is expanded and also has an effect attached
 * the second track has a global effect attached; it shows up in the scope ruler
 @@
-This collapsed, expanded and possibly nested workspace structure is always exactly paralleled in the header pane.
-
-
-
+This collapsed, expanded and possibly nested workspace structure is always exactly paralleled in the header pane. In addition, it allows to configure specific placement properties for each nested scope, which especially means to display faders and some toggles, depending on what kind of placement was added. Of course, this placement configuration needs to be collapsible too. Effects and markers can appear at various different scopes, sometimes requiring an abridged display
 
 
 !!!lifecycle and instances

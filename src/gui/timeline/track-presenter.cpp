@@ -32,6 +32,7 @@
 #include "gui/gtk-lumiera.hpp"
 #include "gui/timeline/track-presenter.hpp"
 #include "gui/timeline/clip-presenter.hpp"
+#include "gui/timeline/marker-widget.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -64,6 +65,7 @@ namespace timeline {
   TrackPresenter::TrackPresenter (ID identity, ctrl::BusTerm& nexus)
     : Controller{identity, nexus}
     , subFork_{}
+    , markers_{}
     , clips_{}
     , head_{}
     , body_{}

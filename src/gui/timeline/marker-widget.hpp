@@ -1,5 +1,5 @@
 /*
-  MARKER-WIDGET.hpp  -  presentation control element for a track within the timeline
+  MARKER-WIDGET.hpp  -  display of a marker in timeline or within clips
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,21 +22,12 @@
 
 
 /** @file marker-widget.hpp
- ** Presentation control element to model and manage a track within the timeline UI.
- ** In the Lumiera timeline UI, we are mixing two different scope of concerns: For one,
- ** we have the globally tangible scope of actual session elements an operations performed
- ** on those. And then there are more local considerations regarding the "mechanics" of the
- ** UI elements, their state and immediate feedback to user interactions. The _Presenter_ --
- ** as known from the [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) --
- ** serves as link between both levels. For the global angle of view, it is a model::Tangible and thus
- ** plays the role of the _View_, while the _Model_ and _Controler_ roles are mediated through the
- ** gui::UiBus, exchanging command, state and mutation messages. On the other hand, for the local
- ** angle of view, the _Presenter_ is a structural model element, kind of a _view model_, and corresponds
- ** to the respective element within the session. In addition, it manages actively the collaborative
- ** part of layout building, delegating to a mostly passive GTK widget for the actual display.
- ** This way it becomes possible to manage the actual UI resources on a global level, avoiding to
- ** represent potentially several thousand individual elements as GTK entities, while at any time
- ** only several can be visible and active as far as user interaction is concerned.
+ ** Widget to show a marker at various places.
+ ** Markers are attached by placement and serve as a reference point, for navigation,
+ ** for special functions, but also to be referenced by other placements. The display
+ ** of a marker is just a label, typically abridged. But the MarkerWidget itself
+ ** participates in the structural model of the UI and thus is a model::Tangible and
+ ** may receive messages over the UI-Bus.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** 
@@ -47,36 +38,30 @@
 #define GUI_TIMELINE_MARKER_WIDGET_H
 
 #include "gui/gtk-base.hpp"
-#include "gui/model/controller.hpp"
-#include "gui/timeline/track-head-widget.hpp"
-#include "gui/timeline/track-body.hpp"
+#include "gui/model/widget.hpp"
 
 //#include "lib/util.hpp"
 
 //#include <memory>
-#include <vector>
+//#include <vector>
 
 
 
 namespace gui  {
 namespace timeline {
   
-  using std::vector;
-  using std::unique_ptr;
-  
-  class ClipPresenter;
   
   /**
    * @todo WIP-WIP as of 12/2016
    */
   class MarkerWidget
-    : public model::Controller
+    : public model::Widget
     {
       
       
     public:
       /**
-       * @param identity used to refer to a corresponding session::Fork in the Session
+       * @param identity used to refer to a corresponding marker entity in the Session
        * @param nexus a way to connect this Controller to the UI-Bus.
        */
       MarkerWidget (ID identity, ctrl::BusTerm& nexus);

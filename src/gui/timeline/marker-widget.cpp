@@ -1,5 +1,5 @@
 /*
-  MarkerWidget  -  presentation control element for a track within the timeline
+  MarkerWidget  -  display of a marker in timeline or within clips
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file marker-widget.cpp
- ** Implementation details of track presentation management.
+ ** Implementation of marker display.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** 
@@ -31,7 +31,6 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/timeline/marker-widget.hpp"
-#include "gui/timeline/clip-presenter.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -62,9 +61,9 @@ namespace timeline {
   
   
   MarkerWidget::MarkerWidget (ID identity, ctrl::BusTerm& nexus)
-    : Controller{identity, nexus}
+    : Widget{identity, nexus}
     {
-      UNIMPLEMENTED ("how to attach the TrackPresenter into the two relevant GTK display contexts");
+      UNIMPLEMENTED ("how to attach the Marker, depending on the actual context");
     }
   
   

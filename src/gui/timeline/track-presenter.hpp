@@ -65,6 +65,7 @@ namespace timeline {
   using std::unique_ptr;
   
   class ClipPresenter;
+  class MarkerWidget;
   
   /**
    * @todo WIP-WIP as of 12/2016
@@ -73,6 +74,7 @@ namespace timeline {
     : public model::Controller
     {
       vector<unique_ptr<TrackPresenter>> subFork_;
+      vector<unique_ptr<MarkerWidget>>   markers_;
       vector<unique_ptr<ClipPresenter>>  clips_;
       
       TrackHeadWidget head_;

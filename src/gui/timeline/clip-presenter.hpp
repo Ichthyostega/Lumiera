@@ -67,7 +67,6 @@ namespace timeline {
   
   using std::vector;
   using std::unique_ptr;
-  using widget::LabelWidget;
   
   class MarkerWidget;
   

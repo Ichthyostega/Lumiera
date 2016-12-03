@@ -59,14 +59,18 @@
 #include "lib/time/timevalue.hpp"
 
 #include <memory>
-//#include <vector>
+#include <vector>
 
 
 
 namespace gui  {
 namespace timeline {
   
+  using std::vector;
+  using std::unique_ptr;
+  
   class TrackPresenter;
+  class MarkerWidget;
   
   
   /**
@@ -80,7 +84,8 @@ namespace timeline {
   class TimelineController
     : public model::Controller
     {
-      std::unique_ptr<TrackPresenter> fork_;
+      vector<unique_ptr<MarkerWidget>> markers_;
+      std::unique_ptr<TrackPresenter>  fork_;
       
     public:
       /**
