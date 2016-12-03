@@ -75,7 +75,7 @@ diff detection schemes, especially those geared at text diff detection, engage i
 of producing an ``optimal'' diff, which effectively means to build specifically tuned pattern
 or decision tables, from which the final diff can then be pulled or interpreted.
 We acknowledge that in our case building a lookup table index with additional annotations can be
-as bad as O(n^2^) and worse; we might well be able to do better, but likely for the price of
+as bad as O(n^2^) and worse; we _might_ be able to do better, but likely for the price of
 turning the algorithm into some kind of mental challenge.]
 In case this turns out as a performance problem, we might consider integrating the index
 maintenance into the data structure to be diffed, which shifts the additional impact of
@@ -199,14 +199,14 @@ link:{ldoc}/design/architecture/ExternalTreeDescription.html[»External Tree Des
 _symbolic representation_ of hierarchically structured elements, without actually implementing them.
 The purpose of this ``external'' description is to largely remove the need for a central data model
 to work against. A _symbolic diff message_ allows to propagate data and structure changes,
-without even using the same data representation at both ends.
+without even using the same data representation at both sides of the collaboration.
 
 Generic Node Record
 ~~~~~~~~~~~~~~~~~~~
 For this to work, we need some very generic meta representation. This can be a textual representation
 (e.g. JSON) -- but within the application it seems more appropriate to use an abstracted and unspecific
 typed data representation, akin to ``JSON with typed language data''. It can be considered _symbolic,_
-insofar it isn't the data, it refers to it. For this approach to work, we need the following parts:
+insofar it isn't the data, it refers to it. To make such an approach work, we need the following parts:
 
 - a _generic node_, which has an _identity_ and some payload data. This `GenNode` is treated as elementary value.
 - a _record_ made from a collection of generic nodes, to take on the abstracted role of an object. Such a
@@ -285,4 +285,44 @@ verb `emu(ID)`::
          made at the generation side.] At this point, this child scope is left
          and the parent scope with all existing diff state is _popped from an
          internal stack._
+
+
+representation of objects
+~~~~~~~~~~~~~~~~~~~~~~~~~
+While we are talking about _structured data,_ in fact what are about to handle are *objects*, understood in the standard
+flavour of object orientation, where an object is the instance of a type and offers a contract. Incidentally, this is
+not the original, ``pure'' meaning of object orientation, but the one that became prolific in brining our daily practice
+closer to the inherent structuring of modern human organisation. And in dealing with this kind of object, we sometimes
+get into conflict with the essentially open and permissive nature of structured data. So we need to establish a
+mapping rule, which translates into additional conventions about how to spell out matters in the diff language.
+
+We choose to leave this largely on the level of stylistic rules, thus stressing the language nature of the diff.
+Even when this bears the danger to produce an exception very late, when it comes to applying the diff to a target
+data structure. The intention behind this whole diff approach is to transform tight coupling with strict rules
+into a loose collaboration based on a common understanding. So generally we'll assume the diff is just right,
+and if not, we'll get what we deserve.footnote:[This gives rise to a tricky discussion about loss of strictness
+and the costs incurred by that happening. We should not treat this topic in isolation, but rather consider that
+loose coupling was chosen to avoid far more serious problems caused by tight coupling, and especially the poisoning
+and dire consequences of a global fixed common data model, when used in a large, not homogeneous system.
+But when a system indeed is not homogeneous, we better try to make each part open-closed, open for change
+but closed against extension. This is especially true in the case of the UI.]
+
+
+object representation protocol
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A diff is created to tell some partner about our data, and the »protocol to describe an object« is as follows
+
+- the ID is the object's identity and is once given, right at start, and never changed
+- we spell out any metadata (esp. a type information) first, followed by all attributes,
+  and then followed by contents of the object's scope (children).
+- attributes are to be given in a way not in contradiction to the more stringent semantics
+  of an object field or property
+
+  * never attempt to re-order or delete such attributes, since their presence is fixed in the class definition
+  * when a field is mandatory _by its nature,_ it shall be required in construction, and the corresponding data
+    is to be given with the `ins` verb causing the constructor call
+  * on the other hand, the data for an optional field, when present, shall be spelled out by `ins` verb
+    after construction, with the first _population diff._
+  * we do not support attribute map semantics (or extended ``object properties'' of any kind). +
+    If necessary, treat them as nested entity with map semantics
 

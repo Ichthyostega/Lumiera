@@ -99,13 +99,14 @@ namespace ctrl{
     {
     protected:
       using EntryID = lib::idi::BareEntryID;
-      using ID = EntryID const&;
       using Tangible = gui::model::Tangible;
       
       EntryID endpointID_;
       BusTerm& theBus_;
       
     public:
+      using ID = EntryID const&;
+      
       virtual ~BusTerm();  ///< this is an interface
       
       virtual void act  (GenNode const& command);

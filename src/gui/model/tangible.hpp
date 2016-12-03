@@ -162,11 +162,12 @@ namespace model {
     , public lib::diff::DiffMutable
     , boost::noncopyable
     {
+    public:
+      using ID = ctrl::BusTerm::ID;
     protected:
       using GenNode = lib::diff::GenNode;
       using Cmd = interact::InvocationTrail;
       using Rec = lib::diff::Rec;
-      using ID = lib::idi::BareEntryID const&;
       
       ctrl::BusTerm uiBus_;
       

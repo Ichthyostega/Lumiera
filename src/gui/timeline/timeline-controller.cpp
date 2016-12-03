@@ -75,9 +75,9 @@ namespace timeline {
   
   
   
-  TimelineController::TimelineController (ID identity, ctrl::BusTerm& nexus)
+  TimelineController::TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus)
     : Controller{identity, nexus}
-    , fork_{} /////////////////////////////////////////////////////////////////////////////////////TODO note that the TrackPresenter will be built later, when the diff assigns the property!!!
+    , fork_{new TrackPresenter{trackID, nexus}}
     {
       UNIMPLEMENTED ("how to make the controller operative...");
     }

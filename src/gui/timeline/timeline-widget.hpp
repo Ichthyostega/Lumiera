@@ -62,7 +62,6 @@
 
 #include "lib/time/timevalue.hpp"
 #include "lib/diff/diff-mutable.hpp"
-#include "lib/idi/entry-id.hpp"
 
 //#include <memory>
 //#include <vector>
@@ -77,7 +76,7 @@ namespace asset{
 namespace gui  {
 namespace timeline {
   
-  using TimelineID = lib::idi::EntryID<proc::asset::Timeline>;
+  using ctrl::BusTerm;
   
   /**
    * Core timeline display (custom widget).
@@ -95,6 +94,7 @@ namespace timeline {
     public:
       /** build a new timeline display and attach it to the UI-Bus.
        * @param identity used to refer to a corresponding element in the Session
+       * @param trackID the mandatory root track used in the associated Sequence
        * @param nexus some established connection to the UI-Bus, will be used
        *          to register the embedded TimelineController as communication
        *          partner to respond under the given ID.
@@ -111,7 +111,7 @@ namespace timeline {
        *          automatically from the UI-Bus. After that, any further messages
        *          towards this element will be dropped silently.
        */
-      TimelineWidget (TimelineID identity, ctrl::BusTerm& nexus);
+      TimelineWidget (BusTerm::ID identity, BusTerm::ID trackID, BusTerm& nexus);
       
      ~TimelineWidget();  
       

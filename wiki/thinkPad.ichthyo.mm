@@ -655,10 +655,190 @@
 </node>
 <node CREATED="1480742405505" ID="ID_1590367176" MODIFIED="1480742416770" TEXT="ACHTUNG: kann leer sein">
 <icon BUILTIN="messagebox_warning"/>
+<node CREATED="1480776052551" ID="ID_431920594" MODIFIED="1480776054547" TEXT="warum">
 <node CREATED="1480742420383" ID="ID_19092812" MODIFIED="1480742430313" TEXT="kann ihn nicht gleich im ctor erzeugen"/>
 <node CREATED="1480742432749" ID="ID_1840237751" MODIFIED="1480742437344" TEXT="denn wir brauchen die ID"/>
 <node CREATED="1480742437892" ID="ID_1335490062" MODIFIED="1480742444383" TEXT="und die kann nur &#xfc;ber den Bus kommen"/>
 <node CREATED="1480742445563" ID="ID_1224591813" MODIFIED="1480742457934" TEXT="also m&#xfc;ssen wir warten, bis das Attribut zugewiesen wird"/>
+</node>
+<node CREATED="1480776067549" ID="ID_1500222365" MODIFIED="1480776070273" TEXT="Alternativen">
+<node CREATED="1480776081388" ID="ID_783764544" MODIFIED="1480776085367" TEXT="via ctor">
+<node CREATED="1480776096665" ID="ID_1492275941" MODIFIED="1480776289639" TEXT="das hei&#xdf;t....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Thema &quot;Darstellung von Objekt-Feldern im Diff&quot;
+    </p>
+    <p>
+      <i>da hab ich mir ausgiebig Gedanken dar&#252;ber gemacht (in dieser Mindmap)</i>
+    </p>
+    <ul>
+      <li>
+        entweder ein Feld ist wirklich optional belegbar, dann kann es mit dem Diff kommen
+      </li>
+      <li>
+        wenn dagegen ein Feld zwingend bef&#252;llt sein soll, mu&#223; man das &#252;ber den Konstruktor erzwingen<br />in diesem Fall m&#252;ssen alle Daten bereits mit dem vorangehenden INS kommen,<br />welches den Konstruktor-Aufruf ausl&#246;st<br /><br />
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1480776313813" ID="ID_1507386991" MODIFIED="1480776333149" TEXT="Vorteil: einfache Verh&#xe4;ltnisse in der Widget-Impl"/>
+<node CREATED="1480776341393" ID="ID_1985821448" MODIFIED="1480776352107" TEXT="Nachteil: mu&#xdf; Diff genau so schicken"/>
+<node CREATED="1480777922397" ID="ID_514769772" MODIFIED="1480777930035" TEXT="...sonst">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1480777941187" ID="ID_1804935890" MODIFIED="1480777949933" TEXT="irgendjemand triggert Laden"/>
+<node CREATED="1480777950449" ID="ID_487608965" MODIFIED="1480777963507" TEXT="Core schickt Populations-diff"/>
+<node CREATED="1480777972862" ID="ID_1185499319" MODIFIED="1480777978601" TEXT="Exception beim Aufspielen"/>
+<node CREATED="1480777979069" ID="ID_1379570617" MODIFIED="1480777982889" TEXT="kann nur geloggt werden"/>
+<node CREATED="1480777983381" ID="ID_1125654729" MODIFIED="1480778000894" TEXT="Folglich fehlt im UI die betreffende Timeline"/>
+<node CREATED="1480778002098" ID="ID_535894255" MODIFIED="1480778010557" TEXT="sp&#xe4;tere Updates scheitern gleicherma&#xdf;en"/>
+<node CREATED="1480778011745" ID="ID_1623403394" MODIFIED="1480778017194" TEXT="dysfunktionales UI">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node CREATED="1480776087027" ID="ID_132590373" MODIFIED="1480776091198" TEXT="leer zulassen">
+<node CREATED="1480778115091" ID="ID_1948130012" MODIFIED="1480778317340" TEXT="das hei&#xdf;t...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die betreffenden Felder sind echt optional.
+    </p>
+    <p>
+      Der Ctor belegt sie mit einem sinnvollen Leerwert
+    </p>
+    <p>
+      Das Objekt mu&#223; so geschrieben werden, da&#223; es mit den Leerwerten umgehen kann,
+    </p>
+    <p>
+      was typischerweise heit&#223;, da&#223; es verschiedene Betriebsmodi bekommt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Das Diff kann dann sp&#228;ter die konkreten Werte f&#252;r die Attribute nachliefern;
+    </p>
+    <p>
+      typischerweise wird es das in einem Populationsdiff sofort als N&#228;chstes machen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1480778348652" ID="ID_1249761108" MODIFIED="1480778386899" TEXT="Vorteil: Diff-Erzeugung und Aufspielen l&#xe4;uft nach Schema-F"/>
+<node CREATED="1480778407052" ID="ID_181642617" MODIFIED="1480778601225">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zwei m&#246;gliche
+    </p>
+    <p>
+      Konsequenzen
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1480778420418" ID="ID_1430286640" MODIFIED="1480778450962" TEXT="Problem ignorieren">
+<node CREATED="1480778490545" ID="ID_1228109442" MODIFIED="1480778498347" TEXT="darauf hoffen, da&#xdf; das Diff immer sauber kommt"/>
+<node CREATED="1480778499928" ID="ID_1466170472" MODIFIED="1480778510146" TEXT="Felder im Ctor einfach uninitialisiert lassen"/>
+<node CREATED="1480778511086" ID="ID_1612105579" MODIFIED="1480778515905" TEXT="keine Checks im Code"/>
+<node CREATED="1480778532907" ID="ID_1167492250" MODIFIED="1480778587358">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      funktioniert <i>fast immer</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>&quot;was kann denn schon passieren??&quot;</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1480778451502" ID="ID_1135553012" MODIFIED="1480778472519" TEXT="echt optionale Felder">
+<node CREATED="1480778622039" ID="ID_1007915114" MODIFIED="1480778650859">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Betriebsart <i>&quot;partiell initialisiert&quot;</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480778652819" ID="ID_1335924975" MODIFIED="1480778665661" TEXT="Checks und Verzweigungen im Code"/>
+<node CREATED="1480778689191" ID="ID_45333997" MODIFIED="1480778753615" TEXT="Pflanzt sich auf die Nutzer fort">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ..hier das Widget, das ebenfalls
+    </p>
+    <ul>
+      <li>
+        nur partiell aufgebaut existieren k&#246;nnen mu&#223;
+      </li>
+      <li>
+        sp&#228;ter sich dynamisch erweitern k&#246;nnen mu&#223;
+      </li>
+      <li>
+        in der Behandlung der UI-Signale ebenfalls checks einbauen mu&#223;
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480778768988" ID="ID_1385067618" MODIFIED="1480778827398" TEXT="und das alles nur f&#xfc;r....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      einen Fall, der <i>praktisch nie</i>&#160;auftritt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1480606985087" ID="ID_885244508" MODIFIED="1480639465600" TEXT="Layout-Manager">

@@ -87,7 +87,7 @@ namespace timeline {
        * @param identity used to refer to a corresponding timeline element in the Session
        * @param nexus some established connection to the UI-Bus, used for registration.
        */
-      TimelineController (ID identity, ctrl::BusTerm& nexus);
+      TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus);
       
      ~TimelineController();  
       
