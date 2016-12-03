@@ -516,7 +516,7 @@ namespace diff{
                    , childMutationBuilder
                    };
           }
-      };
+      };                                                                           /////////////////////////////////TICKET #1041  provide a shortcut for just invoking a nested DiffMutable
     
     
     /** builder function to synthesise builder type from given functors */
