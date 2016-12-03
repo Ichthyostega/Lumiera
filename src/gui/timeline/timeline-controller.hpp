@@ -87,6 +87,8 @@ namespace timeline {
       vector<unique_ptr<MarkerWidget>> markers_;
       std::unique_ptr<TrackPresenter>  fork_;
       
+      string name_;
+      
     public:
       /**
        * @param identity used to refer to a corresponding timeline element in the Session
@@ -98,6 +100,9 @@ namespace timeline {
      ~TimelineController();  
       
       
+      /** set up a binding to respond to mutation messages via UiBus */
+      virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
+      
       
     public: /* ===== Control interface ===== */
       
@@ -106,10 +111,6 @@ namespace timeline {
     private:/* ===== Events ===== */
       
     private:/* ===== Internals ===== */
-      
-      /** set up a binding to respond to mutation messages via UiBus */
-      virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
-   
     };
   
   

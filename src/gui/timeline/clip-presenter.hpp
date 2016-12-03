@@ -93,11 +93,11 @@ namespace timeline {
      ~ClipPresenter();
       
       
-    private:/* ===== Internals ===== */
-      
       /** set up a binding to respond to mutation messages via UiBus */
       virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
-   
+      
+      
+    private:/* ===== Internals ===== */
     };
   
   

@@ -56,6 +56,8 @@
 
 //using util::_Fmt;
 using lib::diff::TreeMutator;
+using lib::diff::collection;
+using std::make_unique;
 //using std::shared_ptr;
 //using std::weak_ptr;
 //using util::contains;
@@ -80,6 +82,7 @@ namespace timeline {
     : Controller{identity, nexus}
     , markers_{}
     , fork_{new TrackPresenter{trackID, nexus}}
+    , name_{identity.getSym()}              // fallback initialise name from human-readable ID symbol 
     {
       UNIMPLEMENTED ("how to make the controller operative...");
     }
@@ -93,57 +96,38 @@ namespace timeline {
   void
   TimelineController::buildMutator (TreeMutator::Handle buffer)
   {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1039
-    using Attrib = std::pair<const string,string>;
-    using lib::diff::collection;
+    using PMarker = unique_ptr<MarkerWidget>;
     
     buffer.create (
       TreeMutator::build()
-        .attach (collection(scope)
+        .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {
                     return spec.data.isNested();                  // »Selector« : require object-like sub scope
                   })
-               .matchElement ([&](GenNode const& spec, PMockElm const& elm) -> bool
+               .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {
-                    return spec.idi == elm->getID();
+                    return spec.idi == ID(elm);
                   })
-               .constructFrom ([&](GenNode const& spec) -> PMockElm
+               .constructFrom ([&](GenNode const& spec) -> PMarker
                   {
-                    PMockElm child = std::make_unique<MockElm>(spec.idi, this->uiBus_);
-                    return child;
+                    return make_unique<MarkerWidget>(spec.idi, this->uiBus_);
                   })
-               .buildChildMutator ([&](PMockElm& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+               .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (target->getID() != subID) return false;   //require match on already existing child object
+                    if (ID(target) != subID) return false;         //require match on already existing child object
                     target->buildMutator (buff);                  // delegate to child to build nested TreeMutator
                     return true;
                   }))
-        .attach (collection(attrib)
-               .isApplicableIf ([&](GenNode const& spec) -> bool
-                  {
-                    return spec.isNamed()                         // »Selector« : accept attribute-like values
-                       and not spec.data.isNested();              //              but no nested objects
-                  })
-               .matchElement ([&](GenNode const& spec, Attrib const& elm) -> bool
-                  {
-                    return elm.first == spec.idi.getSym();
-                  })
-               .constructFrom ([&](GenNode const& spec) -> Attrib
-                  {
-                    string key{spec.idi.getSym()},
-                           val{render(spec.data)};
-                    return {key, val};
-                  })
-               .assignElement ([&](Attrib& target, GenNode const& spec) -> bool
-                  {
-                    string key{spec.idi.getSym()},
-                           newVal{render (spec.data)};
-                    target.second = newVal;
-                    return true;
-                  })));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1039
-    UNIMPLEMENTED ("diff mutation binding for the TimelineController");
+        .change("name", [&](string val)
+            {
+              name_ = val;
+            })
+        .mutateAttrib("fork", [&](TreeMutator::Handle buff)
+            {
+              REQUIRE (fork_);
+              fork_->buildMutator(buff);
+            }));
   }
   
   
