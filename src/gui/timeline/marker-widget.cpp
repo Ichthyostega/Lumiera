@@ -1,5 +1,5 @@
 /*
-  TrackPresenter  -  presentation control element for a track within the timeline
+  MarkerWidget  -  presentation control element for a track within the timeline
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file track-presenter.cpp
+/** @file marker-widget.cpp
  ** Implementation details of track presentation management.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
@@ -30,7 +30,7 @@
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/timeline/track-presenter.hpp"
+#include "gui/timeline/marker-widget.hpp"
 #include "gui/timeline/clip-presenter.hpp"
 
 //#include "gui/ui-bus.hpp"
@@ -61,18 +61,14 @@ namespace timeline {
   
   
   
-  TrackPresenter::TrackPresenter (ID identity, ctrl::BusTerm& nexus)
+  MarkerWidget::MarkerWidget (ID identity, ctrl::BusTerm& nexus)
     : Controller{identity, nexus}
-    , subFork_{}
-    , clips_{}
-    , head_{}
-    , body_{}
     {
       UNIMPLEMENTED ("how to attach the TrackPresenter into the two relevant GTK display contexts");
     }
   
   
-  TrackPresenter::~TrackPresenter()
+  MarkerWidget::~MarkerWidget()
   {
   }
   
@@ -80,7 +76,7 @@ namespace timeline {
   
   
   void
-  TrackPresenter::buildMutator (TreeMutator::Handle buffer)
+  MarkerWidget::buildMutator (TreeMutator::Handle buffer)
   {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1039
     using Attrib = std::pair<const string,string>;

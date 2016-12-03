@@ -1,5 +1,5 @@
 /*
-  CLIP-PRESENTER.hpp  -  presentation control element for a clip within the timeline
+  MARKER-WIDGET.hpp  -  presentation control element for a track within the timeline
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-/** @file clip-presenter.hpp
- ** Presentation control element to model and manage a clip within the timeline UI.
+/** @file marker-widget.hpp
+ ** Presentation control element to model and manage a track within the timeline UI.
  ** In the Lumiera timeline UI, we are mixing two different scope of concerns: For one,
  ** we have the globally tangible scope of actual session elements an operations performed
  ** on those. And then there are more local considerations regarding the "mechanics" of the
@@ -38,22 +38,18 @@
  ** represent potentially several thousand individual elements as GTK entities, while at any time
  ** only several can be visible and active as far as user interaction is concerned.
  ** 
- ** Especially the ClipPresenter plays a crucial role when it comes to deciding which *clip appearance style*
- ** to use for the actual display. Depending on the zoom level, the ClipPresenter may even decide to hide
- ** the individual clip and join it into a combined placeholder for degraded display of a hole strike of
- ** clips, just to indicate some content is actually present in this part of the timeline.
- ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** 
  */
 
 
-#ifndef GUI_TIMELINE_CLIP_PRESENTER_H
-#define GUI_TIMELINE_CLIP_PRESENTER_H
+#ifndef GUI_TIMELINE_MARKER_WIDGET_H
+#define GUI_TIMELINE_MARKER_WIDGET_H
 
 #include "gui/gtk-base.hpp"
 #include "gui/model/controller.hpp"
-#include "gui/timeline/clip-widget.hpp"
+#include "gui/timeline/track-head-widget.hpp"
+#include "gui/timeline/track-body.hpp"
 
 //#include "lib/util.hpp"
 
@@ -67,31 +63,25 @@ namespace timeline {
   
   using std::vector;
   using std::unique_ptr;
-  using widget::LabelWidget;
   
-  class MarkerWidget;
-  
+  class ClipPresenter;
   
   /**
    * @todo WIP-WIP as of 12/2016
    */
-  class ClipPresenter
+  class MarkerWidget
     : public model::Controller
     {
-      vector<unique_ptr<ClipPresenter>> channels_;
-      vector<unique_ptr<ClipPresenter>> effects_;
-      vector<unique_ptr<MarkerWidget>>  markers_;
       
-      ClipWidget widget_;
       
     public:
       /**
        * @param identity used to refer to a corresponding session::Fork in the Session
        * @param nexus a way to connect this Controller to the UI-Bus.
        */
-      ClipPresenter (ID identity, ctrl::BusTerm& nexus);
+      MarkerWidget (ID identity, ctrl::BusTerm& nexus);
       
-     ~ClipPresenter();
+     ~MarkerWidget();
       
       
     private:/* ===== Internals ===== */
@@ -103,4 +93,4 @@ namespace timeline {
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_CLIP_PRESENTER_H*/
+#endif /*GUI_TIMELINE_MARKER_WIDGET_H*/

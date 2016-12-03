@@ -48,6 +48,8 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/model/controller.hpp"
+#include "gui/timeline/track-head-widget.hpp"
+#include "gui/timeline/track-body.hpp"
 
 //#include "lib/util.hpp"
 
@@ -59,6 +61,9 @@
 namespace gui  {
 namespace timeline {
   
+  using std::vector;
+  using std::unique_ptr;
+  
   class ClipPresenter;
   
   /**
@@ -67,8 +72,11 @@ namespace timeline {
   class TrackPresenter
     : public model::Controller
     {
-      std::vector<std::unique_ptr<TrackPresenter>> subFork_;
-      std::vector<std::unique_ptr<ClipPresenter>>  clips_;
+      vector<unique_ptr<TrackPresenter>> subFork_;
+      vector<unique_ptr<ClipPresenter>>  clips_;
+      
+      TrackHeadWidget head_;
+      TrackBody       body_;
       
       
     public:

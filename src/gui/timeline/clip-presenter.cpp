@@ -62,6 +62,9 @@ namespace timeline {
   
   ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus)
     : Controller{identity, nexus}
+    , channels_{}
+    , effects_{}
+    , markers_{}
     , widget_{}
     {
       UNIMPLEMENTED ("how inject the ClipWidget into the appropriate GTK display context");

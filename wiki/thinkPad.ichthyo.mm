@@ -577,23 +577,17 @@
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1480725247115" ID="ID_1533101483" MODIFIED="1480725266740" TEXT="Konstruktion erfordert...">
-<node CREATED="1480725267632" ID="ID_335184137" MODIFIED="1480725357016" TEXT="EntryID&lt;Timeline&gt;">
+<node CREATED="1480796814716" ID="ID_1742743432" MODIFIED="1480796848191" TEXT="ID einer Timeline">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      eigentlich...
+      wir lassen es offen, welche Art von ID das ist.
     </p>
     <p>
-      w&#252;rde eine BareEntryID gen&#252;gen.
-    </p>
-    <p>
-      Aber die strengere Typisierung erscheint mir ein
-    </p>
-    <p>
-      hilfreicher Wink f&#252;r den User
+      Irgend eine BareEntryID gen&#252;gt
     </p>
   </body>
 </html>
@@ -653,7 +647,21 @@
 <node CREATED="1480741498930" ID="ID_1605140473" MODIFIED="1480741509309" TEXT="hat nur einen einziten RootTrack">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1480742405505" ID="ID_1590367176" MODIFIED="1480742416770" TEXT="ACHTUNG: kann leer sein">
+<node CREATED="1480742405505" ID="ID_1590367176" MODIFIED="1480781192026" TEXT="ACHTUNG: leere Sequenz?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>theoretisch</i>&#160;k&#246;nnte man eine Timeline ohne Sequenz
+    </p>
+    <p>
+      oder eine Sequenz ohne root-Fork zulassen
+    </p>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1480776052551" ID="ID_431920594" MODIFIED="1480776054547" TEXT="warum">
 <node CREATED="1480742420383" ID="ID_19092812" MODIFIED="1480742430313" TEXT="kann ihn nicht gleich im ctor erzeugen"/>
@@ -839,6 +847,197 @@
 </node>
 </node>
 </node>
+<node CREATED="1480780047561" HGAP="88" ID="ID_1993420764" MODIFIED="1480780928544" TEXT="Entscheidung" VSHIFT="16">
+<node CREATED="1480780057079" ID="ID_481017202" MODIFIED="1480780058979" TEXT="Analyse">
+<node CREATED="1480780061327" ID="ID_628488180" MODIFIED="1480780243989" TEXT="zwei F&#xe4;lle sind sehr &#xe4;hnlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar interessanterweise &#252;ber Kreuz gegliedert
+    </p>
+    <ul>
+      <li>
+        die Ctor-L&#246;sung (hat aber etwas mehr Umsetzungsaufwand)
+      </li>
+      <li>
+        die &quot;wird schon klappen&quot;-L&#246;sung
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1480780163369" ID="ID_851065784" MODIFIED="1480780174083" TEXT="wenig Zusatzaufwand"/>
+<node CREATED="1480780174552" ID="ID_640476327" MODIFIED="1480780182891" TEXT="funktioniert fast immer"/>
+<node CREATED="1480780183319" ID="ID_431465582" MODIFIED="1480780192913" TEXT="&#xfc;ble Konsequenzen wenn nicht"/>
+</node>
+<node CREATED="1480780140741" ID="ID_1754958261" MODIFIED="1480780420705" TEXT="und ein dritter ist wirklich wasserdicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn alle Objekte <i>wirklich</i>&#160;auf partiell initialisierten Zustand vorbereitet sind,
+    </p>
+    <p>
+      und auch &#252;ber ihre APIs dem Nutzer diese Unterscheidnung mit aufzwingen
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1480780253397" ID="ID_1966427410" MODIFIED="1480780259944" TEXT="zum Preis von deutlich Mehraufwand"/>
+<node CREATED="1480780260508" ID="ID_1565963038" MODIFIED="1480780464068" TEXT="plus einer korrodierenden Wirkung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...welche darin besteht,
+    </p>
+    <p>
+      da&#223; man &#252;berall, in der Fl&#228;che, sich um Zustandsabh&#246;ngigkeit k&#252;mmern mu&#223;,
+    </p>
+    <p>
+      und deshalb dazu neigt, das Problem jeweils wegzutricksen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Es besteht also die gro&#223;e Gefahr, zu &quot;s&#252;ndigen&quot; und
+    </p>
+    <p>
+      heimlich in den &quot;wird schon nix passieren&quot; Fall zu geraten.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480780269867" ID="ID_1571900658" MODIFIED="1480780281357" TEXT="daf&#xfc;r kann nie was passieren"/>
+</node>
+</node>
+<node CREATED="1480780494717" ID="ID_432076484" MODIFIED="1480780497296" TEXT="Bewertung">
+<node CREATED="1480780498437" ID="ID_1806301944" MODIFIED="1480780667751" TEXT="nur die Ctor-L&#xf6;sung ist geradlinig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, nur diese L&#246;sung gr&#252;ndet in der Natur der behandelten Sachverhalte.
+    </p>
+    <p>
+      Wenn etwas seinem Wesen nach nicht optional ist, dann wird es auch nicht optional behandelt.
+    </p>
+    <p>
+      Es ist keine weitere Argumentation notwendig.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480780538975" ID="ID_1139883143" MODIFIED="1480780593840" TEXT="nur die &quot;pa&#xdf;t schon&quot;-L&#xf6;sung ist vern&#xfc;nftig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nach allen g&#228;ngigen Prinzipien der instrumentellen Vernunft.
+    </p>
+    <p>
+      KISS
+    </p>
+    <p>
+      YAGNI
+    </p>
+    <p>
+      &quot;fokussiere Dich&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1480780704849" ID="ID_483861197" MODIFIED="1480780707332" TEXT="Abw&#xe4;gung">
+<node CREATED="1480780715911" ID="ID_1289637688" MODIFIED="1480780729633" TEXT="in der Berufspraxis mu&#xdf; man st&#xe4;ndig ein Auge zudr&#xfc;cken"/>
+<node CREATED="1480780731213" ID="ID_773522234" MODIFIED="1480780809290">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier hab ich <b>endlich mal</b>&#160;die Gelegenheit, sauber zu arbeiten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1480780746851" ID="ID_1128552915" MODIFIED="1480780759173" TEXT="und etwas zu schaffen, f&#xfc;r das ich mich nicht entschuldigen mu&#xdf;"/>
+<node CREATED="1480780768272" ID="ID_1174359339" MODIFIED="1480780788674" TEXT="leider f&#xfc;hrt genau diese Haltung dazu, da&#xdf; mir die Helfer davonlaufen"/>
+<node CREATED="1480780835319" ID="ID_1263364267" MODIFIED="1480781084576">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hey, es ist <b>mein Leben</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...hab ich mich je anders entschieden?
+    </p>
+    <p>
+      <i>wenn</i>&#160;ich mich &#252;berhaupt entscheiden konnte...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1480780930115" HGAP="5" ID="ID_1156407347" MODIFIED="1480781078592" TEXT="L&#xf6;sung: per Konstruktor festlegen" VSHIFT="6">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nochmal zusammengefa&#223;t
+    </p>
+    <ul>
+      <li>
+        immer wenn ein Feld <i>seinem Wesen nach</i>&#160;zwingend gesetzt sein mu&#223; (und aus keinem anderen Grund)
+      </li>
+      <li>
+        dann wird dies per Konstruktor so erzwungen
+      </li>
+      <li>
+        daher mu&#223; dann im Diff bereits im INS-Verb die notwendige Information transportiert werden
+      </li>
+      <li>
+        das hei&#223;t, bei der Diff-Erzeugung mu&#223; man aufpassen und an dieser Stelle bereits einen Record mit den Daten liefern
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node CREATED="1480606985087" ID="ID_885244508" MODIFIED="1480639465600" TEXT="Layout-Manager">
@@ -933,6 +1132,18 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1479442310537" ID="ID_1849995398" MODIFIED="1479442342361" TEXT="Fall1: wenigstens 1 pixel"/>
 <node CREATED="1479442322359" ID="ID_492785140" MODIFIED="1479442337761" TEXT="Fall2: in diesem Pixel ist content"/>
+</node>
+</node>
+<node CREATED="1480797025150" ID="ID_852148145" MODIFIED="1480797028377" TEXT="verwendet f&#xfc;r">
+<node CREATED="1480797029581" ID="ID_1257172627" MODIFIED="1480797032121" TEXT="Clips">
+<node CREATED="1480797161164" ID="ID_1187665675" MODIFIED="1480797165743" TEXT="abridged"/>
+<node CREATED="1480797166355" ID="ID_1788361951" MODIFIED="1480797169462" TEXT="compact"/>
+<node CREATED="1480797170331" ID="ID_174323572" MODIFIED="1480797173534" TEXT="expanded"/>
+</node>
+<node CREATED="1480797032709" ID="ID_597046922" MODIFIED="1480797036144" TEXT="Spuren im Clip"/>
+<node CREATED="1480797036804" ID="ID_418077851" MODIFIED="1480797038416" TEXT="Effekte">
+<node CREATED="1480797067392" ID="ID_1213128633" MODIFIED="1480797184388" TEXT="compact"/>
+<node CREATED="1480797155052" ID="ID_640502487" MODIFIED="1480797188132" TEXT="abridged"/>
 </node>
 </node>
 <node CREATED="1479601690675" ID="ID_542607961" MODIFIED="1479601720226" TEXT="Struktur">
