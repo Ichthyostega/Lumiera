@@ -52,6 +52,8 @@
 #define GUI_TIMELINE_CLIP_PRESENTER_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/model/controller.hpp"
+#include "gui/timeline/clip-widget.hpp"
 
 //#include "lib/util.hpp"
 
@@ -68,13 +70,27 @@ namespace timeline {
    * @todo WIP-WIP as of 12/2016
    */
   class ClipPresenter
+    : public model::Controller
     {
+      ClipWidget widget_;
+      //////////////////////////TODO collection for the Effects
+      //////////////////////////TODO collection for the Labels
+      
     public:
-      ClipPresenter();
+      /**
+       * @param identity used to refer to a corresponding session::Fork in the Session
+       * @param nexus a way to connect this Controller to the UI-Bus.
+       */
+      ClipPresenter (ID identity, ctrl::BusTerm& nexus);
+      
      ~ClipPresenter();
-     
+      
+      
     private:/* ===== Internals ===== */
-     
+      
+      /** set up a binding to respond to mutation messages via UiBus */
+      virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
+   
     };
   
   

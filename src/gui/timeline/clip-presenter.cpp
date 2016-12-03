@@ -44,6 +44,7 @@
 
 
 //using util::_Fmt;
+using lib::diff::TreeMutator;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -59,13 +60,75 @@ namespace timeline {
   
   
   
-  ClipPresenter::ClipPresenter ()
+  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus)
+    : Controller{identity, nexus}
+    , widget_{}
     {
+      UNIMPLEMENTED ("how inject the ClipWidget into the appropriate GTK display context");
     }
   
   
   ClipPresenter::~ClipPresenter()
   {
+  }
+  
+  
+  
+  
+  void
+  ClipPresenter::buildMutator (TreeMutator::Handle buffer)
+  {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1039
+    using Attrib = std::pair<const string,string>;
+    using lib::diff::collection;
+    
+    buffer.create (
+      TreeMutator::build()
+        .attach (collection(scope)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {
+                    return spec.data.isNested();                  // »Selector« : require object-like sub scope
+                  })
+               .matchElement ([&](GenNode const& spec, PMockElm const& elm) -> bool
+                  {
+                    return spec.idi == elm->getID();
+                  })
+               .constructFrom ([&](GenNode const& spec) -> PMockElm
+                  {
+                    PMockElm child = std::make_unique<MockElm>(spec.idi, this->uiBus_);
+                    return child;
+                  })
+               .buildChildMutator ([&](PMockElm& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {
+                    if (target->getID() != subID) return false;   //require match on already existing child object
+                    target->buildMutator (buff);                  // delegate to child to build nested TreeMutator
+                    return true;
+                  }))
+        .attach (collection(attrib)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {
+                    return spec.isNamed()                         // »Selector« : accept attribute-like values
+                       and not spec.data.isNested();              //              but no nested objects
+                  })
+               .matchElement ([&](GenNode const& spec, Attrib const& elm) -> bool
+                  {
+                    return elm.first == spec.idi.getSym();
+                  })
+               .constructFrom ([&](GenNode const& spec) -> Attrib
+                  {
+                    string key{spec.idi.getSym()},
+                           val{render(spec.data)};
+                    return {key, val};
+                  })
+               .assignElement ([&](Attrib& target, GenNode const& spec) -> bool
+                  {
+                    string key{spec.idi.getSym()},
+                           newVal{render (spec.data)};
+                    target.second = newVal;
+                    return true;
+                  })));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1039
+    UNIMPLEMENTED ("diff mutation binding for the ClipPresenter");
   }
   
   

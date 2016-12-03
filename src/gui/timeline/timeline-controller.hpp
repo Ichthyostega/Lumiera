@@ -58,13 +58,15 @@
 
 #include "lib/time/timevalue.hpp"
 
-//#include <memory>
+#include <memory>
 //#include <vector>
 
 
 
 namespace gui  {
 namespace timeline {
+  
+  class TrackPresenter;
   
   
   /**
@@ -78,6 +80,8 @@ namespace timeline {
   class TimelineController
     : public model::Controller
     {
+      std::unique_ptr<TrackPresenter> fork_;
+      
     public:
       /**
        * @param identity used to refer to a corresponding timeline element in the Session

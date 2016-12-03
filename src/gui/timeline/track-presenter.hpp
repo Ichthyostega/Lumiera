@@ -47,29 +47,45 @@
 #define GUI_TIMELINE_TRACK_PRESENTER_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/model/controller.hpp"
 
 //#include "lib/util.hpp"
 
 //#include <memory>
-//#include <vector>
+#include <vector>
 
 
 
 namespace gui  {
 namespace timeline {
   
+  class ClipPresenter;
   
   /**
    * @todo WIP-WIP as of 12/2016
    */
   class TrackPresenter
+    : public model::Controller
     {
+      std::vector<std::unique_ptr<TrackPresenter>> subFork_;
+      std::vector<std::unique_ptr<ClipPresenter>>  clips_;
+      
+      
     public:
-      TrackPresenter ();
+      /**
+       * @param identity used to refer to a corresponding session::Fork in the Session
+       * @param nexus a way to connect this Controller to the UI-Bus.
+       */
+      TrackPresenter (ID identity, ctrl::BusTerm& nexus);
+      
      ~TrackPresenter();
-     
+      
+      
     private:/* ===== Internals ===== */
-     
+      
+      /** set up a binding to respond to mutation messages via UiBus */
+      virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
+   
     };
   
   

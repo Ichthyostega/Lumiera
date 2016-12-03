@@ -23,6 +23,14 @@
 
 /** @file timeline-controller.cpp
  ** Implementation details of timeline operation management and control.
+ ** - we build a binding to allow TimelineController to handle mutation messages
+ **   on behalf of "the timeline". While the setup of a Timeline is quite flexible
+ **   at the session level, here, when it comes to UI presentation, it can be
+ **   boiled down to
+ **   + a name
+ **   + a single mandatory root track (which in turn could hold nested tracks)
+ ** - thus we get a rather simple mapping, with some fixed attributes and no
+ **   flexible child collection. The root track is implemented as TrackPresenter.
  ** 
  ** @todo as of 12/2016 a complete rework of the timeline display is underway
  ** @see TimelineWidget
@@ -32,6 +40,7 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/timeline/timeline-controller.hpp"
+#include "gui/timeline/track-presenter.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
@@ -68,7 +77,9 @@ namespace timeline {
   
   TimelineController::TimelineController (ID identity, ctrl::BusTerm& nexus)
     : Controller{identity, nexus}
+    , fork_{} /////////////////////////////////////////////////////////////////////////////////////TODO note that the TrackPresenter will be built later, when the diff assigns the property!!!
     {
+      UNIMPLEMENTED ("how to make the controller operative...");
     }
   
   
@@ -77,6 +88,61 @@ namespace timeline {
   }
   
   
+  void
+  TimelineController::buildMutator (TreeMutator::Handle buffer)
+  {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1039
+    using Attrib = std::pair<const string,string>;
+    using lib::diff::collection;
+    
+    buffer.create (
+      TreeMutator::build()
+        .attach (collection(scope)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {
+                    return spec.data.isNested();                  // »Selector« : require object-like sub scope
+                  })
+               .matchElement ([&](GenNode const& spec, PMockElm const& elm) -> bool
+                  {
+                    return spec.idi == elm->getID();
+                  })
+               .constructFrom ([&](GenNode const& spec) -> PMockElm
+                  {
+                    PMockElm child = std::make_unique<MockElm>(spec.idi, this->uiBus_);
+                    return child;
+                  })
+               .buildChildMutator ([&](PMockElm& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {
+                    if (target->getID() != subID) return false;   //require match on already existing child object
+                    target->buildMutator (buff);                  // delegate to child to build nested TreeMutator
+                    return true;
+                  }))
+        .attach (collection(attrib)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {
+                    return spec.isNamed()                         // »Selector« : accept attribute-like values
+                       and not spec.data.isNested();              //              but no nested objects
+                  })
+               .matchElement ([&](GenNode const& spec, Attrib const& elm) -> bool
+                  {
+                    return elm.first == spec.idi.getSym();
+                  })
+               .constructFrom ([&](GenNode const& spec) -> Attrib
+                  {
+                    string key{spec.idi.getSym()},
+                           val{render(spec.data)};
+                    return {key, val};
+                  })
+               .assignElement ([&](Attrib& target, GenNode const& spec) -> bool
+                  {
+                    string key{spec.idi.getSym()},
+                           newVal{render (spec.data)};
+                    target.second = newVal;
+                    return true;
+                  })));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1039
+    UNIMPLEMENTED ("diff mutation binding for the TimelineController");
+  }
   
   
   
