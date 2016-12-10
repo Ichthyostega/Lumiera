@@ -76,6 +76,10 @@ namespace ctrl{
    * defining special handling overrides for _all other kinds of messages_.
    * The purpose of the Nexus is to route all these _other kinds of messages._
    * 
+   * Thus, the "uplink", which is in fact the CoreService, is left to handle
+   * - the *`act`* messages (command invocation)
+   * - the *`mark`* messages (upstream state change notification)
+   * 
    * @todo write type comment
    */
   class Nexus

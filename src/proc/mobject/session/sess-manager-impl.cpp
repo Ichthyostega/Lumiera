@@ -103,7 +103,7 @@ namespace session {
         
         
         
-        /** @note Any session services get up into default configured state.
+        /** @note Any session services come up into default configured state.
          *        After the swap, \c tmpS holds onto the old session, which
          *        consequently should unwind on leaving this scope. */
         void

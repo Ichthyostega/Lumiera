@@ -63,7 +63,11 @@
  ** 
  ** The <b>test support interface</b> provides a test driver for performing a controlled 
  ** playback or rendering for some time. Thus, a test routine may lock into a blocking wait,
- ** to investigate results after the planned test sequence was performed. 
+ ** to investigate results after the planned test sequence was performed.
+ ** 
+ ** @todo this was invented in 2012 -- but development of the player subsystem stalled thereafter.
+ **       As of 2016, I still consider this design valid and intend to pick up development when
+ **       able to address this topic again. At the moment, the UI-Session connection is more urgent.
  ** 
  ** @see lumiera::DummyPlayer
  ** @see gui::PlaybackController usage example 
@@ -216,7 +220,9 @@ namespace play {
    * allowing to start a data producing process while leaving out
    * various parts of the real engine implementation. The specific
    * mode of operation, suitable for various test scenarios, may be
-   * fine tuned by the strategy object defined as template parameter. 
+   * fine tuned by the strategy object defined as template parameter.
+   * 
+   * @todo not-yet-implemented as of 2016 -- but the design can be considered valid.
    */
   template<class DEF>
   class DummyPlayConnection
