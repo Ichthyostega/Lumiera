@@ -31,6 +31,14 @@
  ** The Nexus is configured such as to forward these special messages
  ** to the [CoreService] terminal, which invokes the dedicated services.
  ** 
+ ** # Lifecycle
+ ** CoreService is a PImpl to manage all the technical parts of actual
+ ** service provision. When it goes down, all services are decommissioned.
+ ** A part of these lifecycle technicalities is to manage the setup of the
+ ** [UI-Bus main hub](\ref ctrl::Nexus), which requires some trickery, since
+ ** both CoreService and Nexus are mutually interdependent from an operational
+ ** perspective, since they exchange messages in both directions.
+ ** 
  ** @todo initial draft and WIP-WIP-WIP as of 12/2015
  ** 
  ** @see TODO_abstract-tangible-test.cpp
@@ -43,8 +51,10 @@
 
 
 #include "lib/error.hpp"
+#include "include/logging.h"
 //#include "lib/idi/entry-id.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "gui/ctrl/nexus.hpp"
 //#include "lib/util.hpp"
 //#include "gui/model/tangible.hpp"
 //#include "lib/diff/record.hpp"
@@ -78,6 +88,7 @@ namespace ctrl{
     , boost::noncopyable
     {
       
+      Nexus uiBusBackbone_;
       
       virtual void
       act (GenNode const& command)
@@ -95,9 +106,19 @@ namespace ctrl{
       
     public:
       explicit
-      CoreService (BusTerm& backlink_to_Nexus, ID identity =lib::idi::EntryID<CoreService>())
-        : BusTerm(identity, backlink_to_Nexus)
-      { }
+      CoreService (ID identity =lib::idi::EntryID<CoreService>())
+        : BusTerm(identity, uiBusBackbone_)
+        , uiBusBackbone_{*this}
+        {
+          INFO (gui, "UI-Backbone operative.");
+        }
+      
+     ~CoreService()
+        {
+          if (0 < uiBusBackbone_.size())
+            ERROR (gui, "Some UI components are still connected to the backbone.");
+        }
+      
     };
   
   

@@ -171,13 +171,13 @@ namespace ctrl{
         }
       
       
+    public:
       size_t
       size()  const
         {
           return routingTable_.size();
         }
       
-    public:
       explicit
       Nexus (BusTerm& uplink_to_CoreService, ID identity =lib::idi::EntryID<Nexus>())
         : BusTerm(identity, uplink_to_CoreService)

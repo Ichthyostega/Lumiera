@@ -130,6 +130,14 @@ namespace ctrl{
       BusTerm(BusTerm&&) = default;
       
     protected:
+      /**
+       * @param identity used for routing towards this BusTerm
+       * @param attached_to the "upstream" connection to the Bus
+       * @warning it is essential that this ctor just initialises
+       *        the references, but never invokes any operation
+       *        on the _upstream_ connection. Because this allows
+       *        to build mutually interdependent connections.
+       */
       BusTerm(ID identity, BusTerm& attached_to)
         : endpointID_(identity)
         , theBus_(attached_to)

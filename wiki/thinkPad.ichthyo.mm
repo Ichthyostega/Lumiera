@@ -30,9 +30,9 @@
 <node CREATED="1481333616753" ID="ID_709873899" MODIFIED="1481333628171" TEXT="Nexus ist Teil von CoreService"/>
 <node CREATED="1481335769192" ID="ID_1335469664" MODIFIED="1481335780355" TEXT="Interface-Manager gleicherma&#xdf;en"/>
 </node>
-<node CREATED="1481320693912" ID="ID_918908848" MODIFIED="1481320717736" TEXT="Lebenszyklus kl&#xe4;ren">
-<icon BUILTIN="help"/>
-<node CREATED="1481332855167" ID="ID_362694314" MODIFIED="1481335695437">
+<node COLOR="#338800" CREATED="1481320693912" ID="ID_918908848" MODIFIED="1481338438364" TEXT="Lebenszyklus kl&#xe4;ren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1481332855167" ID="ID_362694314" MODIFIED="1481338438363">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -45,7 +45,7 @@
 </html>
 </richcontent>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1481332888362" ID="ID_85978592" MODIFIED="1481332995503" TEXT="Nexus braucht CoreService braucht Nexus...">
+<node CREATED="1481332888362" ID="ID_85978592" MODIFIED="1481338438364" TEXT="Nexus braucht CoreService braucht Nexus...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -67,20 +67,77 @@
 </richcontent>
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1481332999091" ID="ID_1793743943" MODIFIED="1481333021348" TEXT="Problem ist: ich wollte Nexus nicht speziell konstruieren"/>
+<node CREATED="1481332999091" ID="ID_1793743943" MODIFIED="1481338438364" TEXT="Problem ist: ich wollte Nexus nicht speziell konstruieren"/>
+<node CREATED="1481338218216" ID="ID_128336616" MODIFIED="1481338438364" TEXT="L&#xf6;sung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1481338222672" ID="ID_318056010" MODIFIED="1481338438364" TEXT="Bus-Term greift tats&#xe4;chlich nicht auf Uplink zu">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gemeint ist: im ctor
+    </p>
+    <p>
+      Es speichert nur die Referenz
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Ganz anders Model::Tangible: dieses registriert sich bei der Konstruktion
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1481335696027" ID="ID_785830602" MODIFIED="1481335708541" TEXT="Lebenszyklus generell unsauber">
-<node CREATED="1481335709297" ID="ID_1340554881" MODIFIED="1481335722187" TEXT="Ticket #1048"/>
-<node CREATED="1481335723887" ID="ID_689818706" MODIFIED="1481335731291" TEXT="GtkLumiera ist ein Singleton">
+<node CREATED="1481338237550" ID="ID_781727426" MODIFIED="1481338438364" TEXT="kann also eine Referenz auf lokalen Speicher reinreichen"/>
+<node CREATED="1481338295614" ID="ID_1811061645" MODIFIED="1481338438364" TEXT="Folglich mu&#xdf; Nexus lokal in CoreServices angesiedelt werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      oder anders herum,
+    </p>
+    <p>
+      aber so herum macht es mehr Sinn
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+<node CREATED="1481335696027" ID="ID_785830602" MODIFIED="1481338438364" TEXT="Lebenszyklus generell unsauber">
+<node CREATED="1481335709297" ID="ID_1340554881" MODIFIED="1481338438364" TEXT="Ticket #1048"/>
+<node CREATED="1481335723887" ID="ID_689818706" MODIFIED="1481338438364" TEXT="GtkLumiera ist ein Singleton">
 <icon BUILTIN="stop-sign"/>
 </node>
-<node CREATED="1481335735901" ID="ID_185489405" MODIFIED="1481335743205" TEXT="das lebt so viel zu lange">
+<node CREATED="1481335735901" ID="ID_185489405" MODIFIED="1481338438364" TEXT="das lebt so viel zu lange">
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
+<node CREATED="1481338348143" ID="ID_713195335" MODIFIED="1481338438364" TEXT="Entscheidung">
+<icon BUILTIN="yes"/>
+<node CREATED="1481338354702" ID="ID_1755264056" MODIFIED="1481338438364" TEXT="CoreServices ist das Lebenszyklus-PImpl"/>
+<node CREATED="1481338363965" ID="ID_1656280824" MODIFIED="1481338438364" TEXT="wenn geschlossen, mu&#xdf; das ganze &#xfc;brige GUI schon tot sein"/>
+<node CREATED="1481338393113" ID="ID_1854005469" MODIFIED="1481338438364" TEXT="Warn-Log hierf&#xfc;r eingebaut">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1481320699056" ID="ID_728332859" MODIFIED="1481320714906" TEXT="wo kommen die CoreServices hin">
+<node CREATED="1481338408983" ID="ID_516483369" MODIFIED="1481338438364" TEXT="k&#xf6;nnte sp&#xe4;ter sogar eine Exception sein">
 <icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1481320699056" ID="ID_728332859" MODIFIED="1481338454729" TEXT="wo kommen die CoreServices hin">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1481338456152" ID="ID_266095129" MODIFIED="1481338464995" TEXT="sie leben im Objekt Ui-Bus"/>
+<node CREATED="1481338465823" ID="ID_78520725" MODIFIED="1481338471698" TEXT="und zwar als PImpl"/>
+<node CREATED="1481338478069" ID="ID_406101846" MODIFIED="1481338495839" TEXT="und UI-Bus lebt im lokalen scope von GtkLumiera::main()"/>
 </node>
 <node CREATED="1481320759472" ID="ID_687951877" MODIFIED="1481320764307" TEXT="Interfaces &#xf6;ffnen">
 <node CREATED="1481320765135" ID="ID_379585622" MODIFIED="1481320835124">

@@ -101,6 +101,11 @@
 #include "gui/ctrl/playback-controller.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <memory>
+
+
+using std::unique_ptr;
+
 
 
 namespace gui {
@@ -127,19 +132,26 @@ namespace gui {
   
 }// namespace gui::controller
   ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
+  namespace ctrl {
+    class CoreService;
+  }
   
   
   /**
    * Backbone of the Lumiera GTK GUI.
    * This is the Interface and Lifecycle front-end.
    * When an instance of this class is created, the backbone becomes operative
-   * and is linked to the active gui::WindowManager. When it goes away, the
-   * backbone service switches into disabled mode, awaiting disconnection
-   * of all remaining clients. After that, it dissolves into nothingness.
+   * and can then be used to attach the active gui::WindowManager. When it goes away,
+   * all backbone services are forced to shut down and disconnect, which means, that
+   * at this point, the entire UI must be decommissioned. Effectively this also means
+   * that the UiBus object must be run within the GTK event thread and must not be
+   * accessed from anywhere else.
    */
   class UiBus
     : boost::noncopyable
     {
+      unique_ptr<ctrl::CoreService> coreService_;
+      
     public:
       UiBus();
      ~UiBus();
