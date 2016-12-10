@@ -23,6 +23,9 @@
 
 
 #include "gui/ui-bus.hpp"
+#include "gui/ctrl/nexus.hpp"
+#include "gui/ctrl/core-service.hpp"
+#include "lib/depend.hpp"
 
 namespace gui {
   ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....

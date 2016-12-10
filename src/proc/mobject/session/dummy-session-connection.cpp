@@ -68,6 +68,10 @@ namespace session {
     }
   
   
+  /** storage for the Singleton accessor */
+  lib::Depend<DummySessionConnection> DummySessionConnection::instance;
+  
+  
   /**
    * 
    * @param id

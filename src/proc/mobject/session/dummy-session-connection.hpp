@@ -44,7 +44,7 @@
 #define PROC_MOBJECT_SESSION_DUMMY_SESSION_CONNECTION_H
 
 #include "lib/error.hpp"
-#include "lib/hash-value.h"
+#include "lib/depend.hpp"
 //#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
@@ -55,10 +55,7 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-  class LifecycleAdvisor;
-  
-  using lib::HashVal;
-  using util::isnil;
+//using util::isnil;
   using std::string;
   
   /**
@@ -68,15 +65,21 @@ namespace session {
    * @see DummySessionConnection_test
    */
   class DummySessionConnection
+    : boost::noncopyable
     {
       string nothing_;
 
-    public:
       DummySessionConnection();
+     ~DummySessionConnection();
 
-     ~DummySessionConnection ( );
+      friend class lib::DependencyFactory;
 
-      // using default copy/assignment
+    public:
+      /** access point to set up the scaffolding.
+       * @internal this is a development helper and will be remoulded all the time.
+       */
+      static lib::Depend<DummySessionConnection> instance;
+      
       
       /* == X interface for == */
 

@@ -95,7 +95,7 @@ namespace ctrl{
         describe()  const override
           {
             DIFF copy(diff_); // NOTE: we copy, since each iteration consumes.
-            return util::join (move(copy));
+            return ::util::join (move(copy));
           }
         
       public:
