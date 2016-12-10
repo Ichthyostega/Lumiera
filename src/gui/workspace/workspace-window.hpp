@@ -64,8 +64,8 @@ namespace gui {
      ~WorkspaceWindow();
       
       
-      gui::model::Project& getProject();
-      gui::controller::Controller& getController();
+      gui::model::Project& getProject();                   ////////////////////////////TICKET #1048 : these getters need to disappear, they are no good!!!!
+      gui::controller::Controller& getController();        ////////////////////////////TICKET #1048 : no one has to muck around with WorkspaceWindow's internals
       PanelManager& getPanelManager();
       
       void set_close_window_sensitive (bool enable);

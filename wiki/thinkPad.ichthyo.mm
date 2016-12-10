@@ -25,15 +25,59 @@
 <linktarget COLOR="#f9b709" DESTINATION="ID_1343270939" ENDARROW="Default" ENDINCLINATION="-30;-35;" ID="Arrow_ID_1867016690" SOURCE="ID_635303062" STARTARROW="None" STARTINCLINATION="-34;-43;"/>
 <node COLOR="#338800" CREATED="1481320683706" ID="ID_1226263415" MODIFIED="1481331062143" TEXT="kl&#xe4;ren, wo der Bus aufgeh&#xe4;ngt wird">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1481331063782" ID="ID_1606852933" MODIFIED="1481331125690" TEXT="Lifecycle-Frontend"/>
-<node CREATED="1481331126846" ID="ID_1504578861" MODIFIED="1481331128530" TEXT="RAII"/>
-<node CREATED="1481331150275" ID="ID_814186655" MODIFIED="1481331157741" TEXT="als PImpl">
-<node CREATED="1481331159233" ID="ID_491966235" MODIFIED="1481331160685" TEXT="Nexus"/>
-<node CREATED="1481331161225" ID="ID_638534758" MODIFIED="1481331164044" TEXT="CoreService"/>
-</node>
+<node CREATED="1481331063782" ID="ID_1606852933" MODIFIED="1481333728957" TEXT="Lifecycle-Frontend UI-Bus"/>
+<node CREATED="1481331150275" ID="ID_814186655" MODIFIED="1481333614213" TEXT="CoreService als PImpl"/>
+<node CREATED="1481333616753" ID="ID_709873899" MODIFIED="1481333628171" TEXT="Nexus ist Teil von CoreService"/>
+<node CREATED="1481335769192" ID="ID_1335469664" MODIFIED="1481335780355" TEXT="Interface-Manager gleicherma&#xdf;en"/>
 </node>
 <node CREATED="1481320693912" ID="ID_918908848" MODIFIED="1481320717736" TEXT="Lebenszyklus kl&#xe4;ren">
 <icon BUILTIN="help"/>
+<node CREATED="1481332855167" ID="ID_362694314" MODIFIED="1481335695437">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#cf1445">AUA</font>: Henne oder Ei?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1481332888362" ID="ID_85978592" MODIFIED="1481332995503" TEXT="Nexus braucht CoreService braucht Nexus...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn:
+    </p>
+    <ul>
+      <li>
+        Nexus verwendet CoreService als &quot;upstream&quot;, um <i>alle sonstigen Nachriten</i>&#160;dorthin zuzustellen
+      </li>
+      <li>
+        CoreService hat Nexus als Upstream, um mit dem restlichen System kommunizieren zu k&#246;nnen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1481332999091" ID="ID_1793743943" MODIFIED="1481333021348" TEXT="Problem ist: ich wollte Nexus nicht speziell konstruieren"/>
+</node>
+<node CREATED="1481335696027" ID="ID_785830602" MODIFIED="1481335708541" TEXT="Lebenszyklus generell unsauber">
+<node CREATED="1481335709297" ID="ID_1340554881" MODIFIED="1481335722187" TEXT="Ticket #1048"/>
+<node CREATED="1481335723887" ID="ID_689818706" MODIFIED="1481335731291" TEXT="GtkLumiera ist ein Singleton">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1481335735901" ID="ID_185489405" MODIFIED="1481335743205" TEXT="das lebt so viel zu lange">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
 </node>
 <node CREATED="1481320699056" ID="ID_728332859" MODIFIED="1481320714906" TEXT="wo kommen die CoreServices hin">
 <icon BUILTIN="help"/>

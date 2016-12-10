@@ -130,6 +130,9 @@ namespace gui {
   
   /**
    *  Top level entry point: The Lumiera GTK UI.
+   *  @todo as of 12/2016 this is a singleton, which is sketchy.
+   *        It should be instantiated in local scope of GuiLifecycle
+   *        within guistart.cpp and discarded right after shutdown   ///////////////TICKET #1048 : rectify lifecycle
    */
   class GtkLumiera
     : boost::noncopyable
@@ -140,14 +143,14 @@ namespace gui {
       
     public:
       /** access the the global application object */
-      static GtkLumiera& application();
+      static GtkLumiera& application();                 ////////////////////////////TICKET #1048 : this loophole needs to be closed
       
       
       
       /** start up the GUI and run the event thread */
       void main(int argc, char *argv[]);
       
-      WindowManager& windowManager();
+      WindowManager& windowManager();                   ////////////////////////////TICKET #1048 : this loophole needs to be closed
       
       
       /** the name of the application */
