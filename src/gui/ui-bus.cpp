@@ -216,7 +216,7 @@ namespace ctrl {
     void
     BusTerm::routeDetach(ID node)  noexcept
     {
-      if (isConnected())
+      if (not isShortCircuit(node))
         theBus_.routeDetach (node);
     }
     

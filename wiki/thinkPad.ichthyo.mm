@@ -139,7 +139,8 @@
 <node CREATED="1481338465823" ID="ID_78520725" MODIFIED="1481338471698" TEXT="und zwar als PImpl"/>
 <node CREATED="1481338478069" ID="ID_406101846" MODIFIED="1481338495839" TEXT="und UI-Bus lebt im lokalen scope von GtkLumiera::main()"/>
 </node>
-<node CREATED="1481320759472" ID="ID_687951877" MODIFIED="1481320764307" TEXT="Interfaces &#xf6;ffnen">
+<node CREATED="1481320759472" ID="ID_687951877" MODIFIED="1481416165597" TEXT="Interfaces &#xf6;ffnen">
+<icon BUILTIN="pencil"/>
 <node CREATED="1481320765135" ID="ID_379585622" MODIFIED="1481320835124">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -7835,7 +7836,7 @@
 </node>
 </node>
 <node CREATED="1434128059966" ID="ID_823283341" MODIFIED="1434128067529" TEXT="Connect">
-<node CREATED="1434128071126" FOLDED="true" ID="ID_1618124128" MODIFIED="1475251105159" TEXT="UI-Bus">
+<node CREATED="1434128071126" ID="ID_1618124128" MODIFIED="1481413111360" TEXT="UI-Bus">
 <linktarget COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-25;-262;" ID="Arrow_ID_539627804" SOURCE="ID_257833497" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="prepare"/>
@@ -7864,6 +7865,116 @@
 <node CREATED="1450390559805" ID="ID_1657985065" MODIFIED="1450390565215" TEXT="Downlink:">
 <node CREATED="1450390566252" ID="ID_591456555" MODIFIED="1450390584621" TEXT="registriert eine Route zu einem Tangible"/>
 <node CREATED="1450390585329" ID="ID_1371255341" MODIFIED="1450390595419" TEXT="der dtor entfernt diese Route wieder"/>
+</node>
+<node CREATED="1481413366826" FOLDED="true" HGAP="34" ID="ID_1180928280" MODIFIED="1481416141258" TEXT="problematisch im Shutdown" VSHIFT="5">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1481413410588" ID="ID_1106063275" MODIFIED="1481413416392" TEXT="Shutdown von Zombie-Nodes">
+<node CREATED="1481413418027" ID="ID_998027739" MODIFIED="1481413421327" TEXT="reines Test-Problem"/>
+<node CREATED="1481413421795" ID="ID_1335417806" MODIFIED="1481413432909" TEXT="gel&#xf6;st durch self-link + tie break"/>
+</node>
+<node CREATED="1481413436529" ID="ID_195971284" MODIFIED="1481413459210" TEXT="Shutdown des CoreService">
+<node CREATED="1481413462638" ID="ID_485427993" MODIFIED="1481413469848" TEXT="Problem: Backlink zum Nexus"/>
+<node CREATED="1481413470268" ID="ID_688303898" MODIFIED="1481413610394" TEXT="Nexus ist zu dem Zeitpunkt schon destruiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die L&#246;sung f&#252;r diese wecheslseitige Abh&#228;ngigkeit
+    </p>
+    <p>
+      ist, den Nexus als Member im CoreService zu haben,
+    </p>
+    <p>
+      weil man dann seine Addresse schon wei&#223;, bevor er erzeugt ist.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dummerweise rettet mich dieser Trick nicht im Shutdown,
+    </p>
+    <p>
+      denn hier nun l&#228;uft tats&#228;chlicher Code aus dem Destruktor heraus!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1481413489290" ID="ID_24882673" MODIFIED="1481413519026" TEXT="folglich l&#xe4;uft nur noch die Impl vom BusTerm"/>
+<node CREATED="1481413520326" ID="ID_471345968" MODIFIED="1481414008423" TEXT="Endlosschleife (ping-pong)">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1481414009877" ID="ID_269084554" MODIFIED="1481416128424" TEXT="...innerer Widerspruch">
+<linktarget COLOR="#426895" DESTINATION="ID_269084554" ENDARROW="Default" ENDINCLINATION="36;87;" ID="Arrow_ID_708633830" SOURCE="ID_354799236" STARTARROW="None" STARTINCLINATION="369;0;"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1481414032482" ID="ID_1121261163" MODIFIED="1481414037813" TEXT="upstream und nicht upstream"/>
+<node CREATED="1481414149018" ID="ID_1708781872" MODIFIED="1481414263785" TEXT="kann Reihenfolge nicht etablieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bei einem <i>echten Downstream</i>&#160;k&#246;nnte man daf&#252;r sorgen,
+    </p>
+    <p>
+      da&#223; er grunds&#228;tzlich vor dem Nexus weggeht. Aber nun kommt, auf dem Umweg
+    </p>
+    <p>
+      &#252;ber den Core-Service, der Nexus nach dem Nexus....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1481414420406" ID="ID_559357688" MODIFIED="1481414430548" TEXT="erschwerend...">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1481414434148" ID="ID_333480677" MODIFIED="1481414440176" TEXT="BusTerm ist stateless"/>
+<node CREATED="1481414477766" ID="ID_695637715" MODIFIED="1481414504287" TEXT="soll auch so bleiben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich will nicht damit anfangen, da&#223; man einen Zeiger umsetzen kann....
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1481415983533" HGAP="37" ID="ID_1500277801" MODIFIED="1481416115106" TEXT="Trick l&#xf6;st beide" VSHIFT="6">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1481415996732" ID="ID_98181285" MODIFIED="1481416003799" TEXT="ein &quot;circuit breaker&quot;"/>
+<node CREATED="1481416013842" ID="ID_1905276259" MODIFIED="1481416044386">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      beendet Deregistrierung,
+    </p>
+    <p>
+      wenn ein&#160;BusTerm sich selbst deregistriert
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1481416047509" ID="ID_1445652228" MODIFIED="1481416060327" TEXT="etwas halbseiden"/>
+<node CREATED="1481416060843" ID="ID_354799236" MODIFIED="1481416128424" TEXT="aber... ein innerer Widerspruch liegt zugrunde">
+<arrowlink COLOR="#426895" DESTINATION="ID_269084554" ENDARROW="Default" ENDINCLINATION="36;87;" ID="Arrow_ID_708633830" STARTARROW="None" STARTINCLINATION="369;0;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1434128310005" ID="ID_644247390" MODIFIED="1434128318561" TEXT="Knoten-ID">
@@ -7897,7 +8008,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1453545812389" FOLDED="true" HGAP="43" ID="ID_202253849" MODIFIED="1472219339048" TEXT="Core-Services" VSHIFT="2">
+<node CREATED="1453545812389" FOLDED="true" HGAP="43" ID="ID_202253849" MODIFIED="1481413359437" TEXT="Core-Services" VSHIFT="2">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -8105,7 +8216,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1448063874479" HGAP="43" ID="ID_739054690" MODIFIED="1453546352792" TEXT="UI-Modell" VSHIFT="1"/>
+<node CREATED="1448063874479" HGAP="43" ID="ID_739054690" MODIFIED="1481413149364" TEXT="UI-Modell" VSHIFT="1">
+<icon BUILTIN="help"/>
+</node>
 <node CREATED="1434128074725" FOLDED="true" HGAP="28" ID="ID_933994138" MODIFIED="1473353270308" TEXT="Diff-System" VSHIFT="1">
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="go"/>

@@ -146,7 +146,7 @@ namespace ctrl{
       virtual BusTerm& routeAdd(ID,Tangible&);
       virtual void routeDetach(ID)  noexcept;
       
-      bool isConnected()  const noexcept;
+      bool isShortCircuit(ID)  const noexcept;
     };
   
   
@@ -159,11 +159,12 @@ namespace ctrl{
     theBus_.note (this->endpointID_, mark);
   }
   
-  /** @internal tie break */
+  /** @internal circuit breaker, relevant for Nexus shutdown */
   inline bool
-  BusTerm::isConnected()  const noexcept
+  BusTerm::isShortCircuit(ID otherID)  const noexcept
   {
-    return &theBus_ != this;
+    return &theBus_ == this
+        or otherID == endpointID_;
   }
   
   
