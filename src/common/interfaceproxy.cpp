@@ -121,6 +121,11 @@ namespace facade {
 
 
 
+    /* ==================== SessionCommand ================================= */
+    
+#include "proc/control/session-command-interface-proxy.hpp"
+
+
     /* ==================== GuiNotification ================================ */
     
 #include "gui/notification-interface-proxy.hpp"

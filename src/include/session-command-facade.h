@@ -1,8 +1,8 @@
 /*
-  SESSION-COMMAND-FACADE.h  -  access point for pushing information into the GUI
+  SESSION-COMMAND-FACADE.h  -  access point for invoking commands on the session
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,11 +20,13 @@
 
 */
 
-/** @file gui-notification-facade.h
- ** Major public Interface of the Lumiera GUI. While generally speaking, the GUI
- ** controls the application and thus acts on its own, it exposes some services
- ** usable by scripts or the two lower layers. The main purpose of these services
- ** is to push status updates and similar information up into the GUI.
+/** @file session-command-facade.h
+ ** Major public Interface to the Session subsystem of Lumiera GUI.
+ ** This interface describes the ability of the Session to trigger the execution
+ ** of pre-defined commands, outfitted with suitably arguments and parameters.
+ ** Triggering of these commands typically happens in response of some messages
+ ** being sent over the UI-Bus. Likewise, external entities (e.g. plug-ins) may
+ ** invoke commands over this interface to alter the session.
  **
  ** @see notification-service.hpp implementation
  ** @see gui::GuiFacade
@@ -44,7 +46,8 @@
 #include <string>
 
 
-namespace gui {
+namespace proc {
+namespace control {
   
   using std::string;
   
@@ -59,10 +62,10 @@ namespace gui {
    * calls through the lumieraorg_GuiNotification interface
    * @throws lumiera::error::State when interface is not opened
    */
-  class GuiNotification
+  class SessionCommand
     {
     public:
-      static lumiera::facade::Accessor<GuiNotification> facade;
+      static lumiera::facade::Accessor<SessionCommand> facade;
       
       /** push a user visible notification text */
       virtual void displayInfo (string const& text)          =0;
@@ -74,12 +77,12 @@ namespace gui {
       
       
     protected:
-      virtual ~GuiNotification() {}
+      virtual ~SessionCommand() {}
     };
     
   
   
-} // namespace gui
+}} // namespace proc::control
 
 
 extern "C" {
@@ -88,7 +91,7 @@ extern "C" {
   
 #include "common/interface.h"
 
-LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
+LUMIERA_INTERFACE_DECLARE (lumieraorg_SessionCommand, 0,
                            LUMIERA_INTERFACE_SLOT (void, displayInfo,        (const char*)),
                            LUMIERA_INTERFACE_SLOT (void, triggerGuiShutdown, (const char*)),
 );

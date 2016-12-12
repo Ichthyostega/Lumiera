@@ -92,7 +92,7 @@ namespace lumiera {
          *  since it complicated the definition of the facade proxy
          *  and created quite involved library dependency problems.
          */
-        Process start(LumieraDisplaySlot viewerHandle)
+        Process start(LumieraDisplaySlot viewerHandle)  override
           {
             ProcessImplementationLink* pP = static_cast<ProcessImplementationLink*> (_i_.startPlay (viewerHandle));
             

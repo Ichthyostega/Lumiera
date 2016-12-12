@@ -1,8 +1,8 @@
 /*
-  SessionCommand(Proxy)  -  public service to push information into the GUI
+  SessionCommand(Proxy)  -  public service to invoke commands on the session
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -25,44 +25,45 @@
 /** @file session-command-interface-proxy.hpp
  ** This is an implementation fragment, intended to be included into common/interfaceproxy.cpp
  ** 
- ** The purpose is to define a proxy implementation of gui::GuiNotification, in order to
- ** redirect any calls through the associated C Language Interface "lumieraorg_GuiNotification"
+ ** The purpose is to define a proxy implementation of proc::control::SessionCommand, in order to
+ ** redirect any calls through the associated C Language Interface "lumieraorg_SessionCommand"
  ** 
- ** @see gui-notification-facade.hpp
- ** @see notification-service.hpp actual implementation within the GUI
+ ** @see session-command-facade.hpp
+ ** @see session-command-service.hpp actual implementation within the GUI
  */
 
 
 
 
 
-/* ==================== GuiNotification =================================== */
+/* ==================== SessionCommand =================================== */
 
-#include "include/gui-notification-facade.h"
+#include "include/session-command-facade.h"
 
-namespace gui {
+namespace proc {
+namespace control {
   
   /** storage for the facade proxy factory
    *  used by client code to invoke through the interface */
-  lumiera::facade::Accessor<GuiNotification> GuiNotification::facade;
+  lumiera::facade::Accessor<SessionCommand> SessionCommand::facade;
 
-} // namespace gui
+}} // namespace proc::control
 
 
 
 namespace lumiera {
 namespace facade {
   
-  typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
-                        , gui::GuiNotification
-                        > IHandle_GuiNotification;
+  typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
+                        , proc::control::SessionCommand
+                        > IHandle_SessionCommand;
   
   
   template<>
-  class Proxy<IHandle_GuiNotification>
-    : public Holder<IHandle_GuiNotification>
+  class Proxy<IHandle_SessionCommand>
+    : public Holder<IHandle_SessionCommand>
     {
-      //----Proxy-Implementation-of-GuiNotification--------
+      //----Proxy-Implementation-of-SessionCommand--------
       
       void displayInfo (string const& text)         override  { _i_.displayInfo (cStr(text)); }
       void triggerGuiShutdown (string const& cause) override  { _i_.triggerGuiShutdown (cStr(cause)); }
@@ -73,8 +74,8 @@ namespace facade {
     };
   
   
-  template  void openProxy<IHandle_GuiNotification>  (IHandle_GuiNotification const&);
-  template  void closeProxy<IHandle_GuiNotification> (void);
+  template  void openProxy<IHandle_SessionCommand>  (IHandle_SessionCommand const&);
+  template  void closeProxy<IHandle_SessionCommand> (void);
   
   
 }} // namespace lumiera::facade

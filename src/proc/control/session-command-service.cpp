@@ -1,8 +1,8 @@
 /*
-  SessionCommandService  -  public service allowing to push information into the GUI
+  SessionCommandService  -  public service to invoke commands on the session
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,9 +20,9 @@
 
 * *****************************************************/
 
-/** @file notification-service.cpp
- ** Implementation of notifications and updates within the GUI.
- ** This is the actual service implementation and runs within the GUI plugin.
+/** @file session-command-service.cpp
+ ** Implementation of command invocation on the Session interface.
+ ** This is the actual service implementation and runs within Session subsystem.
  ** 
  */
 
@@ -40,25 +40,26 @@ extern "C" {
 
 
 
-namespace gui {
+namespace proc {
+namespace control {
   
   using std::string;
   using util::cStr;
 
   
   void 
-  NotificationService::displayInfo (string const& text)
+  SessionCommandService::displayInfo (string const& text)
   {
-    INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));
-    ////////////////////////TODO actually push the information to the GUI
+    INFO (gui, "@Session: display '%s' as notification message.", cStr(text));
+    UNIMPLEMENTED ("do bla");  ////////////////////////TODO actually do something
   }
   
   
   void
-  NotificationService::triggerGuiShutdown (string const& cause)
+  SessionCommandService::triggerGuiShutdown (string const& cause)
   {
-    NOTICE (gui, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
-    TODO ("actually request a shutdown from the GUI");
+    NOTICE (gui, "@Session: shutdown triggered with explanation '%s'....", cStr(cause));
+    UNIMPLEMENTED ("do blubb");  ////////////////////////TODO actually do something
   }
   
   
@@ -68,15 +69,15 @@ namespace gui {
     /* ================== define an lumieraorg_GuiNotification instance ======================= */
     
     LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0
-                               ,lumieraorg_GuiNotificationFacade_descriptor
+                               ,lumieraorg_SessionCommandFacade_descriptor
                                , NULL, NULL, NULL
                                , LUMIERA_INTERFACE_INLINE (name,
                                                            const char*, (LumieraInterface ifa),
-                                                             { (void)ifa;  return "GuiNotification"; }
+                                                             { (void)ifa;  return "SessionCommand"; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (brief,
                                                            const char*, (LumieraInterface ifa),
-                                                             { (void)ifa;  return "GUI Interface: push state update and notification of events into the GUI"; }
+                                                             { (void)ifa;  return "Session Interface: invoke pre-defined commands to operate on the session"; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (homepage,
                                                            const char*, (LumieraInterface ifa),
@@ -84,7 +85,7 @@ namespace gui {
                                                           )
                                , LUMIERA_INTERFACE_INLINE (version,
                                                            const char*, (LumieraInterface ifa),
-                                                             { (void)ifa;  return "0.1~pre"; }
+                                                             { (void)ifa;  return "0.3~pre"; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (author,
                                                            const char*, (LumieraInterface ifa),
@@ -100,7 +101,7 @@ namespace gui {
                                                                (void)ifa;
                                                                return
                                                                  "Copyright (C)        Lumiera.org\n"
-                                                                 "  2008               Hermann Vosseler <Ichthyostega@web.de>";
+                                                                 "  2016               Hermann Vosseler <Ichthyostega@web.de>";
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (license,
@@ -138,15 +139,15 @@ namespace gui {
     
     
     using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
-    typedef lib::SingletonRef<GuiNotification>::Accessor InstanceRef;
-
-    InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual GuiNotification implementation...
+    typedef lib::SingletonRef<SessionCommand>::Accessor InstanceRef;
+    
+    InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
     
     
     
-    LUMIERA_INTERFACE_INSTANCE (lumieraorg_GuiNotification, 0
-                               ,lumieraorg_GuiNotificationService
-                               , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_GuiNotificationFacade_descriptor)
+    LUMIERA_INTERFACE_INSTANCE (lumieraorg_SessionCommand, 0
+                               ,lumieraorg_SessionCommandService
+                               , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_SessionCommandFacade_descriptor)
                                , NULL /* on  open  */
                                , NULL /* on  close */
                                , LUMIERA_INTERFACE_INLINE (displayInfo,
@@ -154,7 +155,7 @@ namespace gui {
                                                              { 
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
                                                                else
-                                                                 _instance->displayInfo(text); 
+                                                                 _instance->displayInfo(text);
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown,
@@ -162,26 +163,26 @@ namespace gui {
                                                              { 
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cause);
                                                                else
-                                                                 _instance->triggerGuiShutdown(cause); 
+                                                                 _instance->triggerGuiShutdown(cause);
                                                              }
                                                           )
                                );
-
-
-
+    
+    
+    
   } // (END) facade implementation details
   
   
   
   
-  NotificationService::NotificationService () 
+  SessionCommandService::SessionCommandService ()
     : implInstance_(this,_instance),
-      serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))
+      serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_SessionCommand, 0, lumieraorg_SessionCommandService))
   {
-    INFO (gui, "GuiNotification Facade opened.");
+    INFO (gui, "SessionCommand Facade opened.");
   }
   
   
-
-
-} // namespace gui
+  
+  
+}} // namespace proc::control

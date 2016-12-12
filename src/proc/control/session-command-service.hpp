@@ -1,8 +1,8 @@
 /*
-  SESSION-COMMAND-SERVICE.hpp  -  public service allowing to push information into the GUI
+  SESSION-COMMAND-SERVICE.hpp  -  public service to invoke commands on the session
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,17 +20,19 @@
 
 */
 
-/** @file notification-service.hpp
- ** A public service provided by the GUI, implementing the gui::GuiNotification facade interface.
- ** The purpose of this service is to push state update and notification of events from the lower
- ** layers into the Lumiera GUI. Typically, this happens asynchronously and triggered either by
- ** events within the lower layers, or as result of invoking commands on the session.
+/** @file session-command-service.hpp
+ ** A public service offered by the Session, implementing the SessionCommand facade interface.
+ ** This is the primary way to invoke commands and cause edit operations within the Session.
+ ** Through this service, the user interface or other external entities may invoke pre defined
+ ** commands and pass the appropriate arguments. Commands are small functions operating directly
+ ** on the Session interface; each command is complemented with a state capturing function and
+ ** an UNDO function.
  ** 
  ** This service is the implementation of a layer separation facade interface. Clients should use
- ** gui::GuiNotification#facade to access this service. This header defines the interface used
- ** to \em provide this service, not to access it.
+ ** proc::control::GuiNotification#facade to access this service. This header defines the interface
+ ** used to _provide_ this service, not to access it.
  **
- ** @see gui::GuiFacade
+ ** @see facade.hpp subsystems for the Proc-Layer
  ** @see guifacade.cpp starting this service 
  */
 
@@ -39,30 +41,30 @@
 #define PROC_CONTROL_SESSION_COMMAND_SERVICE_H
 
 
-#include "include/gui-notification-facade.h"
+#include "include/session-command-facade.h"
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
 
 
-namespace gui {
+namespace proc {
+namespace control {
   
   
   
-  /**************************************************//**
-   * Actual implementation of the GuiNotification service
-   * within the Lumiera GTK GUI. Creating an instance of
-   * this class automatically registers the interface
-   * with the Lumiera Interface/Plugin system and creates
-   * a forwarding proxy within the application core to
-   * route calls through this interface.
+  /***********************************************************//**
+   * Actual implementation of the SessionCommand service
+   * within the Lumiera Session subsystem. Creating an instance
+   * of this class automatically registers corresponding interface
+   * with the Lumiera Interface/Plugin system and creates a forwarding
+   * proxy within the application core to route calls through this interface.
    * 
    * @todo the ctor of this class should take references
    *       to any internal service providers within the
-   *       GUI which are needed to implement the service. 
+   *       Session which are needed to implement the service.
    */
-  class NotificationService
-    : public GuiNotification
+  class SessionCommandService
+    : public SessionCommand
     {
       
       /* === Implementation of the Facade Interface === */
@@ -73,19 +75,19 @@ namespace gui {
       
       /* === Interface Lifecycle === */
       
-      typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
-                                     , GuiNotification
+      typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
+                                     , SessionCommand
                                      > ServiceInstanceHandle;
       
-      lib::SingletonRef<GuiNotification> implInstance_;
+      lib::SingletonRef<SessionCommand> implInstance_;
       ServiceInstanceHandle serviceInstance_;
       
     public:
-      NotificationService();
+      SessionCommandService();
       
     };
     
   
   
-} // namespace gui
+}} // namespace proc::control
 #endif /*PROC_CONTROL_SESSION_COMMAND_SERVICE_H*/

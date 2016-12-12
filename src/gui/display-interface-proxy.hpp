@@ -69,7 +69,7 @@ namespace facade {
       //----Proxy-Implementation-of-lumiera::Display--------
       
       Display::Sink
-      getHandle (LumieraDisplaySlot display)
+      getHandle (LumieraDisplaySlot display)  override
         {
           _i_.allocate (display);
           Sink sinkHandle;

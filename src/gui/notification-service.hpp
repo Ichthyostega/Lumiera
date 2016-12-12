@@ -31,7 +31,7 @@
  ** to \em provide this service, not to access it.
  **
  ** @see gui::GuiFacade
- ** @see guifacade.cpp starting this service 
+ ** @see core-sevice.hpp starting this service
  */
 
 
@@ -67,8 +67,8 @@ namespace gui {
       
       /* === Implementation of the Facade Interface === */
       
-      void displayInfo (string const& text);
-      void triggerGuiShutdown (string const& cause);
+      void displayInfo (string const& text)         override;
+      void triggerGuiShutdown (string const& cause) override;
       
       
       /* === Interface Lifecycle === */

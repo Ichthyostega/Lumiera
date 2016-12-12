@@ -174,7 +174,7 @@ namespace gui {
   
   
   
-  NotificationService::NotificationService () 
+  NotificationService::NotificationService ()
     : implInstance_(this,_instance),
       serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))
   {

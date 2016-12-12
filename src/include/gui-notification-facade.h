@@ -21,10 +21,14 @@
 */
 
 /** @file gui-notification-facade.h
- ** Major public Interface of the Lumiera GUI. While generally speaking, the GUI
- ** controls the application and thus acts on its own, it exposes some services
- ** usable by scripts or the two lower layers. The main purpose of these services
- ** is to push status updates and similar information up into the GUI.
+ ** Major public Interface of the Lumiera GUI. While from a user's point of view,
+ ** the GUI controls the application and thus acts on its own, in fact the UI sends
+ ** command messages to the Session subsystem in Proc-Layer. These commands cause
+ ** changes in the session, which result in notification and structure change messages
+ ** being pushed up asynchronously back into the UI. The GuiNotification interface
+ ** abstracts this ability of the UI to receive such update messages. It is implemented
+ ** by the NotificationService within the GUI Layer, which causes actual tangible changes
+ ** to happen in the UI in response to the reception of these messages.
  **
  ** @see notification-service.hpp implementation
  ** @see gui::GuiFacade

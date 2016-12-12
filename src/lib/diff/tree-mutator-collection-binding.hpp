@@ -36,7 +36,7 @@
  ** of "child objects" managed within a typical STL container.
  ** 
  ** As a _special case_, binding to a STL map is supported, while this usage is rather
- ** discurraged, since it contradicts the diff semantics due to intrinsic ordering.
+ ** discouraged, since it contradicts the diff semantics due to intrinsic ordering.
  ** 
  ** @note the header tree-mutator-collection-binding.hpp was split off for sake of readability
  **       and is included automatically from bottom of tree-mutator.hpp
