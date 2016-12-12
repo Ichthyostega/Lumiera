@@ -62,7 +62,7 @@ namespace backend {
    * The new thread starts immediately within the ctor; after returning, the new
    * thread has already copied the arguments and indeed actively started to run.
    * 
-   * \par Joining, cancellation and memory management
+   * # Joining, cancellation and memory management
    * In the basic version (class Thread), the created thread is completely detached
    * and not further controllable. There is no way to find out its execution state,
    * wait on termination or even cancel it. Client code needs to implement such
@@ -77,7 +77,7 @@ namespace backend {
    * must join to prevent pulling away member variables the thread function will
    * continue to use.
    * 
-   * \par failures in the thread function
+   * # failures in the thread function
    * The operation started in the new thread is protected by a top-level catch block.
    * Error states or caught exceptions can be propagated through the lumiera_error
    * state flag, when using the \c join() facility. By invoking \join().maybeThrow()
@@ -86,7 +86,7 @@ namespace backend {
    * async Thread is considered a violation of policy and will result in emergency
    * shutdown of the whole application.
    * 
-   * \par synchronisation barriers
+   * # synchronisation barriers
    * Lumiera threads provide a low-level synchronisation mechanism, which is used
    * to secure the hand-over of additional arguments to the thread function. It
    * can be used by client code, but care has to be taken to avoid getting out

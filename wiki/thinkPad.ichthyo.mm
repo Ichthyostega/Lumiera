@@ -153,6 +153,57 @@
   </body>
 </html>
 </richcontent>
+<node CREATED="1481502320065" ID="ID_1298358905" MODIFIED="1481502325705" TEXT="macht bisher der GuiRunner">
+<node CREATED="1481502327528" ID="ID_75293128" MODIFIED="1481502442640" TEXT="das ist ohnehin schlecht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil es dadurch passieren k&#246;nnte,
+    </p>
+    <p>
+      da&#223; die Konstruktion des GuiRunners schon scheitert, bevor der Rumpf des ctors aufgerufen wird.
+    </p>
+    <p>
+      In einem solchen Fall wird leider auch der Rumpf des dtors nicht aufgerufen, wodurch das
+    </p>
+    <p>
+      Term-Signal nicht ausgesendet w&#252;rde.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1481502335583" ID="ID_1245191241" MODIFIED="1481502372882" TEXT="Felder im GuiRunner sollten noexcept sein">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1481502305995" ID="ID_1943234904" MODIFIED="1481502317084" TEXT="in CoreService verschieben"/>
+<node CREATED="1481502251450" ID="ID_1125529151" MODIFIED="1481502303814" TEXT="m&#xf6;glicher Race">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1481502257825" ID="ID_232782099" MODIFIED="1481502300621" TEXT="Gefahr gering">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil unser Thread-Framework
+    </p>
+    <p>
+      tats&#228;chlich <i>erzwingt,</i>&#160;da&#223; der neue Thrad zu laufen beginnt, bevor die
+    </p>
+    <p>
+      startende Funktion zur&#252;ckkehrt.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1481320772830" ID="ID_1607125695" MODIFIED="1481320786893">
 <richcontent TYPE="NODE"><html>

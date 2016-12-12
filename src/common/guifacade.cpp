@@ -115,6 +115,14 @@ namespace gui {
             return true;
           }
         
+        /**
+         * @warning there is a possible race here,
+         *  when shutdown is triggered before the GUI was able to open the GuiNotification interface.
+         *  However, the Lumiera thread handling wrapper/framework ensures that a new thread actually
+         *  starts to execute (and picks up the arguments), prior to returning from the thread starting
+         *  function. For this reason, it is rather unlikely this race actually happens in practice,
+         *  since opening the GuiNotification interface is done early, while starting the UI-Bus. 
+         */
         void
         triggerShutdown ()  noexcept override
           {

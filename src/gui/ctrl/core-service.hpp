@@ -53,6 +53,7 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 //#include "lib/idi/entry-id.hpp"
+#include "gui/notification-service.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/nexus.hpp"
 //#include "lib/util.hpp"
@@ -89,6 +90,7 @@ namespace ctrl{
     {
       
       Nexus uiBusBackbone_;
+      NotificationService activateNotificationService_;
       
       virtual void
       act (GenNode const& command)
@@ -109,6 +111,7 @@ namespace ctrl{
       CoreService (ID identity =lib::idi::EntryID<CoreService>())
         : BusTerm(identity, uiBusBackbone_)
         , uiBusBackbone_{*this}
+        , activateNotificationService_()             // opens the GuiNotification facade interface
         {
           INFO (gui, "UI-Backbone operative.");
         }
