@@ -69,8 +69,8 @@ namespace control {
       
       /* === Implementation of the Facade Interface === */
       
-      void displayInfo (string const& text);
-      void triggerGuiShutdown (string const& cause);
+      void bla_TODO (string const& text)    override;
+      void blubb_TODO (string const& cause) override;
       
       
       /* === Interface Lifecycle === */

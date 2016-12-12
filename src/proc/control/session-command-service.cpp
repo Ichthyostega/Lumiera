@@ -48,7 +48,7 @@ namespace control {
 
   
   void 
-  SessionCommandService::displayInfo (string const& text)
+  SessionCommandService::bla_TODO (string const& text)
   {
     INFO (gui, "@Session: display '%s' as notification message.", cStr(text));
     UNIMPLEMENTED ("do bla");  ////////////////////////TODO actually do something
@@ -56,7 +56,7 @@ namespace control {
   
   
   void
-  SessionCommandService::triggerGuiShutdown (string const& cause)
+  SessionCommandService::blubb_TODO (string const& cause)
   {
     NOTICE (gui, "@Session: shutdown triggered with explanation '%s'....", cStr(cause));
     UNIMPLEMENTED ("do blubb");  ////////////////////////TODO actually do something
@@ -150,20 +150,20 @@ namespace control {
                                , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_SessionCommandFacade_descriptor)
                                , NULL /* on  open  */
                                , NULL /* on  close */
-                               , LUMIERA_INTERFACE_INLINE (displayInfo,
+                               , LUMIERA_INTERFACE_INLINE (bla_TODO,
                                                            void, (const char* text),
                                                              { 
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
                                                                else
-                                                                 _instance->displayInfo(text);
+                                                                 _instance->bla_TODO(text);
                                                              }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown,
+                               , LUMIERA_INTERFACE_INLINE (blubb_TODO,
                                                            void, (const char* cause),
                                                              { 
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cause);
                                                                else
-                                                                 _instance->triggerGuiShutdown(cause);
+                                                                 _instance->blubb_TODO(cause);
                                                              }
                                                           )
                                );

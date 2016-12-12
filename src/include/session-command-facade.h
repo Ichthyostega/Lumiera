@@ -67,13 +67,11 @@ namespace control {
     public:
       static lumiera::facade::Accessor<SessionCommand> facade;
       
-      /** push a user visible notification text */
-      virtual void displayInfo (string const& text)          =0;
+      /** @todo dummy placeholder, actual operation to be defined soon (12/16) */
+      virtual void bla_TODO (string const& text)      =0;
       
-      /** causes the GUI to shut down unconditionally
-       *  @param cause user visible explanation of the
-       *         reason causing this shutdown      */
-      virtual void triggerGuiShutdown (string const& cause)  =0;
+      /** @todo dummy placeholder, actual operation to be defined soon (12/16) */
+      virtual void blubb_TODO (string const& cause)   =0;
       
       
     protected:
@@ -92,8 +90,8 @@ extern "C" {
 #include "common/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_SessionCommand, 0,
-                           LUMIERA_INTERFACE_SLOT (void, displayInfo,        (const char*)),
-                           LUMIERA_INTERFACE_SLOT (void, triggerGuiShutdown, (const char*)),
+                           LUMIERA_INTERFACE_SLOT (void, bla_TODO,    (const char*)),
+                           LUMIERA_INTERFACE_SLOT (void, blubb_TODO,  (const char*)),
 );
 
 

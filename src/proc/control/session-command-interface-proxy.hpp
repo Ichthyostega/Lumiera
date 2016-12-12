@@ -65,8 +65,8 @@ namespace facade {
     {
       //----Proxy-Implementation-of-SessionCommand--------
       
-      void displayInfo (string const& text)         override  { _i_.displayInfo (cStr(text)); }
-      void triggerGuiShutdown (string const& cause) override  { _i_.triggerGuiShutdown (cStr(cause)); }
+      void bla_TODO (string const& text)    override  { _i_.bla_TODO (cStr(text)); }
+      void blubb_TODO (string const& cause) override  { _i_.blubb_TODO (cStr(cause)); }
       
       
     public:
