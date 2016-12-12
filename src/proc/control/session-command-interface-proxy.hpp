@@ -1,5 +1,5 @@
 /*
-  Notification(Proxy)  -  public service to push information into the GUI
+  SessionCommand(Proxy)  -  public service to push information into the GUI
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 
-/** @file notification-interface-proxy.hpp
+/** @file session-command-interface-proxy.hpp
  ** This is an implementation fragment, intended to be included into common/interfaceproxy.cpp
  ** 
  ** The purpose is to define a proxy implementation of gui::GuiNotification, in order to

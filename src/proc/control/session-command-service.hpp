@@ -1,5 +1,5 @@
 /*
-  NOTIFICATION-SERVICE.hpp  -  public service allowing to push information into the GUI
+  SESSION-COMMAND-SERVICE.hpp  -  public service allowing to push information into the GUI
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -35,8 +35,8 @@
  */
 
 
-#ifndef GUI_NOTIFICATION_SERVICE_H
-#define GUI_NOTIFICATION_SERVICE_H
+#ifndef PROC_CONTROL_SESSION_COMMAND_SERVICE_H
+#define PROC_CONTROL_SESSION_COMMAND_SERVICE_H
 
 
 #include "include/gui-notification-facade.h"
@@ -88,4 +88,4 @@ namespace gui {
   
   
 } // namespace gui
-#endif
+#endif /*PROC_CONTROL_SESSION_COMMAND_SERVICE_H*/

@@ -1,5 +1,5 @@
 /*
-  GUI-NOTIFICATION-FACADE.h  -  access point for pushing information into the GUI
+  SESSION-COMMAND-FACADE.h  -  access point for pushing information into the GUI
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_GUI_NOTIFICATION_H
-#define GUI_GUI_NOTIFICATION_H
+#ifndef PROC_CONTROL_SESSION_COMMAND_H
+#define PROC_CONTROL_SESSION_COMMAND_H
 
 
 
@@ -97,4 +97,4 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
 #ifdef __cplusplus
 }
 #endif
-#endif /*GUI_GUI_NOTIFICATION_H*/
+#endif /*PROC_CONTROL_SESSION_COMMAND_H*/

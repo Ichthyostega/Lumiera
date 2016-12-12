@@ -1,5 +1,5 @@
 /*
-  NotificationService  -  public service allowing to push information into the GUI
+  SessionCommandService  -  public service allowing to push information into the GUI
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -26,7 +26,7 @@
  ** 
  */
 
-#include "gui/notification-service.hpp"
+#include "proc/control/session-command-service.hpp"
 #include "include/logging.h"
 #include "lib/depend.hpp"
 #include "lib/util.hpp"
