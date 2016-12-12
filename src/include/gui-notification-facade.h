@@ -1,5 +1,5 @@
 /*
-  GUINOTIFICATION-FACADE.h  -  access point for pushing information into the GUI
+  GUI-NOTIFICATION-FACADE.h  -  access point for pushing information into the GUI
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
 
 */
 
-/** @file guinotification-facade.h
+/** @file gui-notification-facade.h
  ** Major public Interface of the Lumiera GUI. While generally speaking, the GUI
  ** controls the application and thus acts on its own, it exposes some services
  ** usable by scripts or the two lower layers. The main purpose of these services
@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_GUINOTIFICATION_H
-#define GUI_GUINOTIFICATION_H
+#ifndef GUI_GUI_NOTIFICATION_H
+#define GUI_GUI_NOTIFICATION_H
 
 
 

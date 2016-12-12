@@ -22,7 +22,7 @@
 
 
 #include "gui/guifacade.hpp"
-#include "include/guinotification-facade.h"
+#include "include/gui-notification-facade.h"
 #include "lib/sync.hpp"
 #include "lib/error.hpp"
 #include "lib/depend.hpp"

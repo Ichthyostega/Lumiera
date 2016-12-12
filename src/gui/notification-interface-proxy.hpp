@@ -28,7 +28,7 @@
  ** The purpose is to define a proxy implementation of gui::GuiNotification, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_GuiNotification"
  ** 
- ** @see guinotification-facade.hpp
+ ** @see gui-notification-facade.hpp
  ** @see notification-service.hpp actual implementation within the GUI
  */
 
@@ -38,7 +38,7 @@
 
 /* ==================== GuiNotification =================================== */
     
-#include "include/guinotification-facade.h"
+#include "include/gui-notification-facade.h"
 
 namespace gui {
   

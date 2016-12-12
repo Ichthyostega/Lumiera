@@ -39,7 +39,7 @@
 #define GUI_NOTIFICATION_SERVICE_H
 
 
-#include "include/guinotification-facade.h"
+#include "include/gui-notification-facade.h"
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
