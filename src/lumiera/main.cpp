@@ -68,7 +68,7 @@ main (int argc, const char* argv[])
       netNode.depends (engine);
 //    playOut.depends (engine);
 //    playOut.depends (session);
-//    lumigui.depends (session);   //////TODO commented out in order to be able to start up a dummy GuiStarterPlugin
+//    lumigui.depends (session);    ////////////////////////////////////////////TICKET #318 : need to activate this again, after implementing minimal Session subsystem
 //    lumigui.depends (engine);
       player.depends (playOut);    //////TODO dummy player, until we're able to render
       lumigui.depends (player);

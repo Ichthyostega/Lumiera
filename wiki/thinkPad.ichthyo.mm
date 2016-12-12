@@ -217,9 +217,26 @@
   </body>
 </html>
 </richcontent>
-<node CREATED="1481320843596" ID="ID_7225903" MODIFIED="1481320847199" TEXT="definieren"/>
-<node CREATED="1481320847724" ID="ID_545146501" MODIFIED="1481320850327" TEXT="wo ansiedeln"/>
-<node CREATED="1481320850779" ID="ID_1632600003" MODIFIED="1481320854143" TEXT="hochfahren"/>
+<node COLOR="#338800" CREATED="1481320843596" ID="ID_7225903" MODIFIED="1481509899511" TEXT="definieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1481320847724" ID="ID_545146501" MODIFIED="1481320850327" TEXT="wo ansiedeln">
+<node CREATED="1481509901926" ID="ID_1612540786" MODIFIED="1481509907305" TEXT="in proc::control"/>
+<node CREATED="1481509908527" ID="ID_1079488123" MODIFIED="1481509915351" TEXT="wo implementieren">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1481320850779" ID="ID_1632600003" MODIFIED="1481320854143" TEXT="hochfahren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481509921211" ID="ID_1515469097" MODIFIED="1481510272928" TEXT="TODO: Session-Subsystem implementieren (#318)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481510231986" ID="ID_45803267" MODIFIED="1481510243425" TEXT="TODO: dort SessionCommandService instantiieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1481510244184" ID="ID_1521406724" MODIFIED="1481510260635" TEXT="kann dann in CoreService einfach &#xfc;ber die .facade() zugreifen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1481320870369" ID="ID_454465129" MODIFIED="1481320875916" TEXT="Rolle des &quot;Model&quot; kl&#xe4;ren"/>

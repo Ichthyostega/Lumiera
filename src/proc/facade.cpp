@@ -88,6 +88,7 @@ namespace proc {
         {
           UNIMPLEMENTED ("load an existing session as denoted by the options and register shutdown hook");
           return false;
+                                                  //////////////////////////////////////////////////////////TICKET #318 : start Thread and instantiate SessionCommandService
         }
       
       void

@@ -24,6 +24,8 @@
  ** Implementation of command invocation on the Session interface.
  ** This is the actual service implementation and runs within Session subsystem.
  ** 
+ ** @todo implement a minimal version of a "Session subsystem" and instantiate SessionCommandService there ///////////TICKET #318
+ ** 
  */
 
 #include "proc/control/session-command-service.hpp"

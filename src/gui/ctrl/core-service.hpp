@@ -40,6 +40,7 @@
  ** perspective, since they exchange messages in both directions.
  ** 
  ** @todo initial draft and WIP-WIP-WIP as of 12/2015
+ ** @todo implement a minimal version of a "Session subsystem" and instantiate SessionCommandService there ///////////TICKET #318
  ** 
  ** @see TODO_abstract-tangible-test.cpp
  ** 
@@ -53,6 +54,7 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 //#include "lib/idi/entry-id.hpp"
+#include "include/session-command-facade.h"
 #include "gui/notification-service.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/nexus.hpp"
@@ -96,6 +98,7 @@ namespace ctrl{
       act (GenNode const& command)
         {
           UNIMPLEMENTED("receive and handle command invocation");
+                                                                  ///////////////////////////TICKET #318 : start SessionCommandService. Can then just invoke SessionCommand.facade()...
         }
       
       
@@ -111,7 +114,7 @@ namespace ctrl{
       CoreService (ID identity =lib::idi::EntryID<CoreService>())
         : BusTerm(identity, uiBusBackbone_)
         , uiBusBackbone_{*this}
-        , activateNotificationService_()             // opens the GuiNotification facade interface
+        , activateNotificationService_()             // opens the GuiNotificationService instance
         {
           INFO (gui, "UI-Backbone operative.");
         }
