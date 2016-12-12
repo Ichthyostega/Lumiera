@@ -91,7 +91,7 @@ namespace gui {
         operator string ()  const { return "Lumiera GTK GUI"; }
         
         bool 
-        shouldStart (lumiera::Option& opts)
+        shouldStart (lumiera::Option& opts)  override
           {
             if (opts.isHeadless() || 0 < opts.getPort())
               {
@@ -103,7 +103,7 @@ namespace gui {
           }
         
         bool
-        start (lumiera::Option&, Subsys::SigTerm termination)
+        start (lumiera::Option&, Subsys::SigTerm termination)  override
           {
             Lock guard (this);
             if (facade) return false; // already started
@@ -116,15 +116,15 @@ namespace gui {
           }
         
         void
-        triggerShutdown ()  throw()
+        triggerShutdown ()  noexcept override
           {
             try { GuiNotification::facade().triggerGuiShutdown ("Application shutdown"); }
             
-            catch (...){}
+            ERROR_LOG_AND_IGNORE (guifacade, "trigger shutdown of the GUI");
           }
         
         bool 
-        checkRunningState ()  throw()
+        checkRunningState ()  noexcept override
           {
             return bool(facade);
           }
@@ -158,8 +158,8 @@ namespace gui {
                 WARN (guifacade, "GUI subsystem terminates, but GuiFacade isn't properly closed. "
                                  "Closing it forcedly; this indicates broken startup logic and should be fixed.");
                 try { facade.reset (0); }
-                catch(...) { WARN_IF (lumiera_error_peek(), guifacade, "Ignoring error: %s", lumiera_error()); }
-                lumiera_error(); // clear any remaining error state...
+                ERROR_LOG_AND_IGNORE (guifacade, "forcibly closing the GUI");
+                ENSURE (not lumiera_error_peek());
               }
           }
       };

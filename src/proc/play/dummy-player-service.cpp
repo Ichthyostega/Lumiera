@@ -59,13 +59,13 @@ namespace proc  {
           
           
           bool 
-          shouldStart (lumiera::Option&)
+          shouldStart (lumiera::Option&)  override
             {
               return false; // for now the DummyPlayerService only comes "up" as dependency,
             }              //  but doesn't start as a subsystem on it's own.
           
           bool
-          start (lumiera::Option&, Subsys::SigTerm terminationHandle)
+          start (lumiera::Option&, Subsys::SigTerm terminationHandle)  override
             {
               ASSERT (!thePlayer_);
               
@@ -78,7 +78,7 @@ namespace proc  {
           
           
           void
-          triggerShutdown ()  throw()
+          triggerShutdown ()  noexcept override
             {
               thePlayer_.reset(0);
               // note: shutdown of the DummyPlayerService instance may block
@@ -86,7 +86,7 @@ namespace proc  {
             }
           
           bool 
-          checkRunningState ()  throw()
+          checkRunningState ()  noexcept override
             {
               return bool(thePlayer_);
             }

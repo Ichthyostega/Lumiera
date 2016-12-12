@@ -41,27 +41,27 @@ namespace proc {
       operator string ()  const { return "Builder"; }
       
       bool 
-      shouldStart (Option&)
+      shouldStart (Option&)  override
         {
           TODO ("determine, if we need a Builder Thread");
           return false;
         }
       
       bool
-      start (Option&, Subsys::SigTerm termination)
+      start (Option&, Subsys::SigTerm termination)  override
         {
           UNIMPLEMENTED ("fire up a Builder in a separate Thread, and register shutdown hook");
           return false;
         }
       
       void
-      triggerShutdown ()  throw()
+      triggerShutdown ()  noexcept override
         {
           UNIMPLEMENTED ("halt the Builder and cancel any build process");  /////TODO really cancel??
         }
       
       bool 
-      checkRunningState ()  throw()
+      checkRunningState ()  noexcept override
         {
           //Lock guard (*this);
           TODO ("implement detecting running state");
@@ -77,27 +77,27 @@ namespace proc {
       operator string ()  const { return "Session"; }
       
       bool 
-      shouldStart (Option&)
+      shouldStart (Option&)  override
         {
           TODO ("determine, if an existing Session should be loaded");
           return false;
         }
       
       bool
-      start (Option&, Subsys::SigTerm termination)
+      start (Option&, Subsys::SigTerm termination)  override
         {
           UNIMPLEMENTED ("load an existing session as denoted by the options and register shutdown hook");
           return false;
         }
       
       void
-      triggerShutdown ()  throw()
+      triggerShutdown ()  noexcept override
         {
           UNIMPLEMENTED ("initiate closing this Session");
         }
       
       bool 
-      checkRunningState ()  throw()
+      checkRunningState ()  noexcept override
         {
           //Lock guard (*this);
           TODO ("implement detecting running state");
@@ -120,14 +120,14 @@ namespace proc {
        * @todo   actually define cmdline options and parse/decide here! 
        */
       bool 
-      shouldStart (Option&)
+      shouldStart (Option&)  override
         {
           TODO ("extract options about specific output systems to be brought up");
           return false;
         }
       
       bool
-      start (Option&, Subsys::SigTerm termination)
+      start (Option&, Subsys::SigTerm termination)  override
         {
           this->completedSignal_ = termination;
           return play::OutputDirector::instance().connectUp();
@@ -137,14 +137,14 @@ namespace proc {
       
       
       void
-      triggerShutdown ()  throw()
+      triggerShutdown ()  noexcept override
         {
           play::OutputDirector::instance().triggerDisconnect (completedSignal_);
         }
       
       
       bool 
-      checkRunningState ()  throw()
+      checkRunningState ()  noexcept override
         {
           return play::OutputDirector::instance().isOperational();
         }

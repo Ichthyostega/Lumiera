@@ -43,7 +43,7 @@ namespace lumiera {
   
   
   bool
-  Subsys::isRunning()
+  Subsys::isRunning()  noexcept
   {
     return checkRunningState();
   }

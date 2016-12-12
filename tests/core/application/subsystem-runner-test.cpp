@@ -102,7 +102,7 @@ namespace test  {
           
           
           bool
-          shouldStart (lumiera::Option&)
+          shouldStart (lumiera::Option&)  override
             {
               string startSpec (extractID ("start",spec_));
               return "true" ==startSpec 
@@ -112,7 +112,7 @@ namespace test  {
           
           
           bool
-          start (lumiera::Option&, Subsys::SigTerm termination)
+          start (lumiera::Option&, Subsys::SigTerm termination)  override
             {
               CHECK (!(isUp_|started_|didRun_), "attempt to start %s twice!", cStr(*this));
               
@@ -139,7 +139,7 @@ namespace test  {
             }
           
           void
-          triggerShutdown ()  throw()
+          triggerShutdown ()  noexcept override
             {
               // note: *not* locking here...
               termRequest_ = true;
@@ -148,7 +148,7 @@ namespace test  {
             }
           
           bool 
-          checkRunningState ()  throw()
+          checkRunningState ()  noexcept override
             {
               // note: *not* locking here...
               return isUp_;

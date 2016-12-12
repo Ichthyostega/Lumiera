@@ -38,27 +38,27 @@ namespace backend {
       operator string ()  const { return "Script runner"; }
       
       bool 
-      shouldStart (lumiera::Option&)
+      shouldStart (lumiera::Option&)  override
         {
           TODO ("determine, if a script should be executed");
           return false;
         }
       
       bool
-      start (lumiera::Option&, SigTerm termination)
+      start (lumiera::Option&, SigTerm termination)  override
         {
           UNIMPLEMENTED ("start the script as defined by the options and register script abort/exit hook");
           return false;
         }
       
       void
-      triggerShutdown ()  throw()
+      triggerShutdown ()  noexcept override
         {
           UNIMPLEMENTED ("halt any running script");
         }
       
       bool 
-      checkRunningState ()  throw()
+      checkRunningState ()  noexcept override
         {
           //Lock guard (*this);
           TODO ("implement detecting running state");

@@ -85,7 +85,7 @@ namespace lumiera {
       
       /** @return true if Up
        *  @warning must not block nor throw. */
-      bool isRunning();
+      bool isRunning()  noexcept;
       
       
       /** query application option state to determine 
@@ -109,7 +109,7 @@ namespace lumiera {
        *  the SigTerm passed to #start must be invoked.
        * @note called within a locked context (barrier) 
        * @warning must not block nor throw. */
-      virtual void triggerShutdown ()  throw()  =0;
+      virtual void triggerShutdown ()  noexcept  =0;
       
       
       const std::vector<Subsys*>
@@ -122,7 +122,7 @@ namespace lumiera {
        *  terminate at any point without further notice
        *  Note further, that a subsystem must not be in
        *  running state when signalling termination. */
-      virtual bool checkRunningState()  throw() =0;
+      virtual bool checkRunningState()  noexcept =0;
       
       std::vector<Subsys*> prereq_;
     };

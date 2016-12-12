@@ -38,27 +38,27 @@ namespace backend {
       operator string ()  const { return "Engine"; }
       
       bool 
-      shouldStart (lumiera::Option&)
+      shouldStart (lumiera::Option&)  override
         {
           TODO ("determine, if renderengine should be started");
           return false;
         }
       
       bool
-      start (lumiera::Option&, Subsys::SigTerm termination)
+      start (lumiera::Option&, Subsys::SigTerm termination)  override
         {
           UNIMPLEMENTED ("pull up renderengine and register shutdown hook");
           return false;
         }
       
       void
-      triggerShutdown ()  throw()
+      triggerShutdown ()  noexcept override
         {
           UNIMPLEMENTED ("initiate halting the engine");
         }
       
       bool 
-      checkRunningState ()  throw()
+      checkRunningState ()  noexcept override
         {
           //Lock guard (*this);
           TODO ("implement detecting running state");

@@ -37,27 +37,27 @@ namespace backend {
       operator string ()  const { return "Renderfarm node"; }
       
       bool 
-      shouldStart (lumiera::Option&)
+      shouldStart (lumiera::Option&)  override
         {
           TODO ("determine, if render node service should be provided");
           return false;
         }
       
       bool
-      start (lumiera::Option&, SigTerm termination)
+      start (lumiera::Option&, SigTerm termination)  override
         {
           UNIMPLEMENTED ("open a render node server port and register shutdown hook");
           return false;
         }
       
       void
-      triggerShutdown ()  throw()
+      triggerShutdown ()  noexcept override
         {
           UNIMPLEMENTED ("initiate shutting down the render node");
         }
       
       bool 
-      checkRunningState ()  throw()
+      checkRunningState ()  noexcept override
         {
           //Lock guard (*this);
           TODO ("implement detecting running state");
