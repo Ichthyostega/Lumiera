@@ -144,7 +144,7 @@ namespace gui {
   
   
   bool
-  kickOff (Subsys::SigTerm& terminationHandle)
+  launchUI (Subsys::SigTerm& terminationHandle)
   {
     try
       {
@@ -245,10 +245,10 @@ extern "C" { /* ================== define a lumieraorg_Gui instance ============
                                           , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_GuiStarterPlugin_descriptor)
                                           , NULL  /* on open  */
                                           , NULL  /* on close */
-                                          , LUMIERA_INTERFACE_INLINE (kickOff,
+                                          , LUMIERA_INTERFACE_INLINE (launchUI,
                                                                       bool, (void* termSig),
                                                                         { 
-                                                                          return gui::kickOff (*reinterpret_cast<Subsys::SigTerm *> (termSig));
+                                                                          return gui::launchUI (*reinterpret_cast<Subsys::SigTerm *> (termSig));
                                                                         }
                                                                      )
                                           )

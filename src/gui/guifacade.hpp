@@ -68,7 +68,7 @@ namespace gui {
    * This is an facade interface to the GUI subsystem, but it is setup
    * somewhat special, as its sole purpose is to expose the subsystem
    * descriptor, which, when started, loads the GUI as a plugin and
-   * invokes \c kickOff(term) there. For the implementation see
+   * invokes `launchUI(term)` there. For the implementation see
    * gui::GuiRunner (guifacade.cpp) and guistart.cpp (the plugin).
    * 
    * @note this facade is intended to be used by Lumiera main solely.
@@ -99,7 +99,7 @@ namespace gui {
        *  @internal this function is invoked automatically during the GUI
        *            loading and startup process. Don't call it manually.
        */
-      virtual bool kickOff (lumiera::Subsys::SigTerm&)  =0;
+      virtual bool launchUI (lumiera::Subsys::SigTerm&)  =0;
       
       
     protected:
@@ -108,7 +108,7 @@ namespace gui {
     
   /** interface of the GuiStarterPlugin */
   LUMIERA_INTERFACE_DECLARE (lumieraorg_Gui, 1,
-                             LUMIERA_INTERFACE_SLOT (bool, kickOff, (void*))
+                             LUMIERA_INTERFACE_SLOT (bool, launchUI, (void*))
   );
   
   

@@ -61,7 +61,7 @@ namespace gui {
         : theGUI_("lumieraorg_Gui", 1, 1, "lumieraorg_GuiStarterPlugin") // load GuiStarterPlugin
         {
           ASSERT (theGUI_);
-          bool res = this->kickOff (terminationHandle);
+          bool res = this->launchUI (terminationHandle);
           
           if (!res || lumiera_error_peek())
             throw lumiera::error::Fatal("failed to bring up GUI",lumiera_error());
@@ -70,9 +70,9 @@ namespace gui {
       ~GuiRunner () {  }
       
       
-      bool kickOff (Subsys::SigTerm& terminationHandle) 
+      bool launchUI (Subsys::SigTerm& terminationHandle)  override
         { 
-          return theGUI_->kickOff (reinterpret_cast<void*> (&terminationHandle));
+          return theGUI_->launchUI (reinterpret_cast<void*> (&terminationHandle));
         }
     };
   
