@@ -36,7 +36,6 @@
 #define CONTROL_PROC_DISPATCHER_H
 
 //#include "lib/symbol.hpp"
-#include "proc/control/command.hpp"
 #include "common/subsys.hpp"
 #include "lib/depend.hpp"
 

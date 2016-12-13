@@ -22,9 +22,10 @@
 
 
 
+#include "lib/error.hpp"
+#include "include/logging.h"
 #include "proc/control/proc-dispatcher.hpp"
 #include "proc/mobject/session.hpp"
-#include "include/logging.h"
 #include "backend/thread-wrapper.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/mobject.hpp"
@@ -59,7 +60,22 @@ namespace control {
       void
       run (Subsys::SigTerm sigTerm)
         {
-          
+          string errorMsg;
+          try
+            {
+              TODO ("actually do something in the loop");
+              sleep(2);
+            }
+          catch (lumiera::Error& problem)
+            {
+              errorMsg = problem.what();
+              lumiera_error();        // clear error flag
+            }
+          catch (...)
+            {
+              errorMsg = string{lumiera_error()};
+            }
+          sigTerm (&errorMsg);
         }
       
     };
