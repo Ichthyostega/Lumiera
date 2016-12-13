@@ -37,9 +37,11 @@
 
 //#include "lib/symbol.hpp"
 #include "proc/control/command.hpp"
+#include "common/subsys.hpp"
 #include "lib/depend.hpp"
 
-//#include <memory>
+#include <memory>
+//#include <functional>
 
 
 
@@ -47,7 +49,12 @@ namespace proc {
 namespace control {
   
 //  using lib::Symbol;
-//  using std::shared_ptr;
+  using std::unique_ptr;
+//  using std::bind;
+  using lumiera::Subsys;
+  
+  
+  class DispatcherLoop;
   
   
   /**
@@ -55,9 +62,15 @@ namespace control {
    */
   class ProcDispatcher
     {
+      unique_ptr<DispatcherLoop> runningLoop_;
+      
       
     public:
       static lib::Depend<ProcDispatcher> instance;
+      
+      bool start (Subsys::SigTerm);
+      bool isRunning();
+      void requestStop();
       
       void activate();
       void deactivate();

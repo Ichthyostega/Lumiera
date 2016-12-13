@@ -25,16 +25,44 @@
 #include "proc/control/proc-dispatcher.hpp"
 #include "proc/mobject/session.hpp"
 #include "include/logging.h"
+#include "backend/thread-wrapper.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
 
 //#include <boost/format.hpp>
 //using boost::str;
+  
+using backend::ThreadJoinable;
 
 namespace proc {
 namespace control {
   
+  class DispatcherLoop
+    : ThreadJoinable
+    {
+    public:
+      DispatcherLoop (Subsys::SigTerm notification)
+        : ThreadJoinable("Lumiera Session"
+                        , bind (&DispatcherLoop::run, this, notification))
+        {
+          INFO (session, "Proc-Dispatcher running...");
+        }
+      
+     ~DispatcherLoop()
+        {
+          this->join();
+          INFO (session, "Proc-Dispatcher stopped.");
+        }
+    
+    private:
+      void
+      run (Subsys::SigTerm sigTerm)
+        {
+          
+        }
+      
+    };
   
   namespace {
   
@@ -47,14 +75,57 @@ namespace control {
       ProcDispatcher::instance().activate();
     }
     
+    void
+    deactivateCommandProcessing()
+    {
+      ProcDispatcher::instance().deactivate();
+    }
     
-    lumiera::LifecycleHook _schedule (mobject::ON_SESSION_INIT, &activateCommandProcessing);
+    
+    lumiera::LifecycleHook _schedule_opening (mobject::ON_SESSION_INIT, &activateCommandProcessing);
+    lumiera::LifecycleHook _schedule_closing (mobject::ON_SESSION_END,  &deactivateCommandProcessing);
   
   }
   
   /** storage for Singleton access */
   lib::Depend<ProcDispatcher> ProcDispatcher::instance;
   
+  
+  
+  
+  
+  /** */
+  bool
+  ProcDispatcher::start (Subsys::SigTerm termNotification)
+  {
+    if (runningLoop_) return false;
+    
+    runningLoop_.reset (
+      new DispatcherLoop (
+            [=] (string* problemMessage)
+                {
+                  runningLoop_.reset();
+                  termNotification(problemMessage);
+                }));
+
+    return true;
+  }
+  
+  
+  /** */
+  bool
+  ProcDispatcher::isRunning()
+  {
+    return bool(runningLoop_);
+  }
+  
+  
+  /** */
+  void
+  ProcDispatcher::requestStop()
+  {
+    UNIMPLEMENTED ("trigger shutdown into the dispacher loop thread");
+  }
   
   
   /** */

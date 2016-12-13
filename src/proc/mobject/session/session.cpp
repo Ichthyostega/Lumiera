@@ -50,6 +50,10 @@ namespace mobject {
   using session::SessionImplAPI;
 
 
+  namespace { // the global session manager instance...
+    lib::Depend<SessManagerImpl> theSessionManager;
+  }
+  
   
   /** temporary fix for init problems
    *  @todo really solve the basic init of session manager TICKET #518
@@ -66,7 +70,7 @@ namespace mobject {
    *  you use dot-notation, while you access the <i>session object</i>
    *  via arrow notation (e.g. `Session::current->getFixture()` )
    */
-  SessManager& Session::current = lib::Depend<SessManagerImpl>()();
+  SessManager& Session::current = theSessionManager();
   
   
   /** special access point allowing Proc-Layer internals

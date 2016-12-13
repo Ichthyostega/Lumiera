@@ -42,8 +42,7 @@
       <font color="#cf1445">AUA</font>: Henne oder Ei?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1481332888362" ID="ID_85978592" MODIFIED="1481338438364" TEXT="Nexus braucht CoreService braucht Nexus...">
 <richcontent TYPE="NOTE"><html>
@@ -63,8 +62,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1481332999091" ID="ID_1793743943" MODIFIED="1481338438364" TEXT="Problem ist: ich wollte Nexus nicht speziell konstruieren"/>
@@ -89,8 +87,7 @@
       Ganz anders Model::Tangible: dieses registriert sich bei der Konstruktion
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1481338237550" ID="ID_781727426" MODIFIED="1481338438364" TEXT="kann also eine Referenz auf lokalen Speicher reinreichen"/>
 <node CREATED="1481338295614" ID="ID_1811061645" MODIFIED="1481338438364" TEXT="Folglich mu&#xdf; Nexus lokal in CoreServices angesiedelt werden">
@@ -106,8 +103,7 @@
       aber so herum macht es mehr Sinn
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="forward"/>
 </node>
 </node>
@@ -151,8 +147,7 @@
       UI: <b>GuiNotification</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1481502320065" ID="ID_1298358905" MODIFIED="1481502325705" TEXT="macht bisher der GuiRunner">
 <node CREATED="1481502327528" ID="ID_75293128" MODIFIED="1481502442640" TEXT="das ist ohnehin schlecht">
 <richcontent TYPE="NOTE"><html>
@@ -173,8 +168,7 @@
       Term-Signal nicht ausgesendet w&#252;rde.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1481502335583" ID="ID_1245191241" MODIFIED="1481502372882" TEXT="Felder im GuiRunner sollten noexcept sein">
@@ -201,8 +195,7 @@
       startende Funktion zur&#252;ckkehrt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1481320772830" ID="ID_1607125695" MODIFIED="1481320786893">
@@ -215,8 +208,7 @@
       Proc: <b>SessionCommand</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node COLOR="#338800" CREATED="1481320843596" ID="ID_7225903" MODIFIED="1481509899511" TEXT="definieren">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -227,8 +219,29 @@
 </node>
 </node>
 <node CREATED="1481320850779" ID="ID_1632600003" MODIFIED="1481320854143" TEXT="hochfahren">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481509921211" ID="ID_1515469097" MODIFIED="1481510272928" TEXT="TODO: Session-Subsystem implementieren (#318)">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481509921211" ID="ID_1515469097" MODIFIED="1481599502388" TEXT="TODO: Session-Subsystem implementieren (#318)">
+<icon BUILTIN="pencil"/>
+<node CREATED="1481599413419" ID="ID_673133356" MODIFIED="1481599420290" TEXT="Ticket #318"/>
+<node CREATED="1481599421021" ID="ID_461768132" MODIFIED="1481599492544" TEXT="Locking kl&#xe4;ren">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481599447034" ID="ID_27053080" MODIFIED="1481599486152" TEXT="mu&#xdf; unique_ptr locken">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481599454593" ID="ID_1547594303" MODIFIED="1481599484757" TEXT="mu&#xdf; Operationen auf dem Thread locken">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1481599468712" ID="ID_1273965744" MODIFIED="1481599482440" TEXT="Vorsicht beim Anhalten (Deadlock-Gefahr)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1481599430804" ID="ID_1105415989" MODIFIED="1481599438887" TEXT="Forwarding-Operationen implementieren"/>
+<node CREATED="1481599594399" ID="ID_1017459823" MODIFIED="1481599602601" TEXT="entscheiden, wer die Session &#xf6;ffnet">
+<node CREATED="1481599603757" ID="ID_812618450" MODIFIED="1481599612320" TEXT="Operation auf dem SessionManager"/>
+<node CREATED="1481599612812" ID="ID_1970476027" MODIFIED="1481599618598" TEXT="der ist Singleton"/>
+<node CREATED="1481599626194" ID="ID_1815350592" MODIFIED="1481599638105" TEXT="wenn Session &#xf6;ffnet, wird der Dispatcher aktiviert">
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481510231986" ID="ID_45803267" MODIFIED="1481510243425" TEXT="TODO: dort SessionCommandService instantiieren">
 <icon BUILTIN="flag-yellow"/>
@@ -285,8 +298,7 @@
       sets f&#252;r <b>eine feste</b>&#160;session::Timeline
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -305,8 +317,7 @@
       es gibt eine <i>EmptyTimeline</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1480694930990" ID="ID_1289595423" MODIFIED="1480694936274" TEXT="interface == Widget"/>
 </node>
 </node>
@@ -455,8 +466,7 @@
       braucht feste Speicher-Addresse
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480724781801" ID="ID_198046255" MODIFIED="1480724795442" TEXT="folglich: nicht in STL-Container">
 <icon BUILTIN="stop-sign"/>
@@ -478,8 +488,7 @@
       und sei es auch blo&#223; &#252;ber ein Interface!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480724910096" ID="ID_874781354" MODIFIED="1480724920595" TEXT="kann direkt das View-Modell manipulieren"/>
 <node CREATED="1480724927814" ID="ID_1912287440" MODIFIED="1480724956251" TEXT="ist nicht direkt erreichbar">
@@ -504,8 +513,7 @@
       <i>aber:</i>&#160;Binding im Diff-System durchaus m&#246;glich
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -529,8 +537,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1480725106478" ID="ID_550796340" MODIFIED="1480725166588" TEXT="effektiv auch die L&#xf6;sung f&#xfc;r Alternative-2">
@@ -609,8 +616,7 @@
       Implementiert w&#252;rde sie vom jeweiligen Widget
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480123478013" ID="ID_1281325973" MODIFIED="1480123610437" TEXT="eine Ebene zu tief, aber geht noch">
 <richcontent TYPE="NOTE"><html>
@@ -640,8 +646,7 @@
       Der Dekorator w&#252;rde also auf dem TreeMutator sitzen...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480121092492" ID="ID_1543810707" MODIFIED="1480123739970" TEXT="L&#xf6;schungen nur heuristisch zu erkennen">
 <richcontent TYPE="NOTE"><html>
@@ -662,8 +667,7 @@
       Daher gibt es die matchSrc-Operation. Effektiv wird die aber nur bei einem Delete aufgerufen...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480123741362" ID="ID_586646895" MODIFIED="1480123856739" TEXT="unsauber, h&#xe4;sslich, ungl&#xfc;cklich">
 <richcontent TYPE="NOTE"><html>
@@ -686,8 +690,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480123380843" ID="ID_1717666432" MODIFIED="1480123757244" TEXT="w&#xe4;re prinzipiell machbar">
 <icon BUILTIN="forward"/>
@@ -726,8 +729,7 @@
       <i>nach </i>der Mutation erfolgt <b>Display-Neubewertung</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1480124145476" ID="ID_1268974326" MODIFIED="1480124152519" TEXT="f&#xfc;r einen ganzen Scope"/>
 <node CREATED="1480124153979" ID="ID_887707794" MODIFIED="1480124172604" TEXT="stellt fest, was gezeigt werden mu&#xdf;"/>
 <node CREATED="1480124174144" ID="ID_1145067443" MODIFIED="1480124210543" TEXT="synthetisiert Anzeige-Parameter (z.B: Koordinaten, Z-Ordnung)"/>
@@ -756,8 +758,7 @@
       interagiert mit den <b>Presentern</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1480300682256" ID="ID_1828380850" MODIFIED="1480300684700" TEXT="Presenter">
@@ -773,8 +774,7 @@
       d.h. eine LUID
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1480300699694" ID="ID_1686150984" MODIFIED="1480300712392" TEXT="aktiver Part der View-Steuerung"/>
@@ -820,8 +820,7 @@
       Irgend eine BareEntryID gen&#252;gt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480725273775" ID="ID_1495656573" MODIFIED="1480725279987" TEXT="Bus-Term-Referenz"/>
 </node>
@@ -854,8 +853,7 @@
       ...abstraktes Interface
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1480725680713" ID="ID_448125852" MODIFIED="1480725692188" TEXT="Delegate for Notification">
 <icon BUILTIN="help"/>
@@ -877,8 +875,7 @@
       um die Bindung herzustellen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -899,8 +896,7 @@
       oder eine Sequenz ohne root-Fork zulassen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1480776052551" ID="ID_431920594" MODIFIED="1480776054547" TEXT="warum">
 <node CREATED="1480742420383" ID="ID_19092812" MODIFIED="1480742430313" TEXT="kann ihn nicht gleich im ctor erzeugen"/>
@@ -931,8 +927,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1480776313813" ID="ID_1507386991" MODIFIED="1480776333149" TEXT="Vorteil: einfache Verh&#xe4;ltnisse in der Widget-Impl"/>
@@ -979,8 +974,7 @@
       typischerweise wird es das in einem Populationsdiff sofort als N&#228;chstes machen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1480778348652" ID="ID_1249761108" MODIFIED="1480778386899" TEXT="Vorteil: Diff-Erzeugung und Aufspielen l&#xe4;uft nach Schema-F"/>
@@ -997,8 +991,7 @@
       Konsequenzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1480778420418" ID="ID_1430286640" MODIFIED="1480778450962" TEXT="Problem ignorieren">
 <node CREATED="1480778490545" ID="ID_1228109442" MODIFIED="1480778498347" TEXT="darauf hoffen, da&#xdf; das Diff immer sauber kommt"/>
 <node CREATED="1480778499928" ID="ID_1466170472" MODIFIED="1480778510146" TEXT="Felder im Ctor einfach uninitialisiert lassen"/>
@@ -1013,8 +1006,7 @@
       funktioniert <i>fast immer</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1024,8 +1016,7 @@
       <i>&quot;was kann denn schon passieren??&quot;</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
@@ -1040,8 +1031,7 @@
       Betriebsart <i>&quot;partiell initialisiert&quot;</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480778652819" ID="ID_1335924975" MODIFIED="1480778665661" TEXT="Checks und Verzweigungen im Code"/>
 <node CREATED="1480778689191" ID="ID_45333997" MODIFIED="1480778753615" TEXT="Pflanzt sich auf die Nutzer fort">
@@ -1065,8 +1055,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480778768988" ID="ID_1385067618" MODIFIED="1480778827398" TEXT="und das alles nur f&#xfc;r....">
 <richcontent TYPE="NOTE"><html>
@@ -1078,8 +1067,7 @@
       einen Fall, der <i>praktisch nie</i>&#160;auftritt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
@@ -1106,8 +1094,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1480780163369" ID="ID_851065784" MODIFIED="1480780174083" TEXT="wenig Zusatzaufwand"/>
 <node CREATED="1480780174552" ID="ID_640476327" MODIFIED="1480780182891" TEXT="funktioniert fast immer"/>
 <node CREATED="1480780183319" ID="ID_431465582" MODIFIED="1480780192913" TEXT="&#xfc;ble Konsequenzen wenn nicht"/>
@@ -1125,8 +1112,7 @@
       und auch &#252;ber ihre APIs dem Nutzer diese Unterscheidnung mit aufzwingen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1480780253397" ID="ID_1966427410" MODIFIED="1480780259944" TEXT="zum Preis von deutlich Mehraufwand"/>
 <node CREATED="1480780260508" ID="ID_1565963038" MODIFIED="1480780464068" TEXT="plus einer korrodierenden Wirkung">
 <richcontent TYPE="NOTE"><html>
@@ -1153,8 +1139,7 @@
       heimlich in den &quot;wird schon nix passieren&quot; Fall zu geraten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480780269867" ID="ID_1571900658" MODIFIED="1480780281357" TEXT="daf&#xfc;r kann nie was passieren"/>
 </node>
@@ -1176,8 +1161,7 @@
       Es ist keine weitere Argumentation notwendig.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480780538975" ID="ID_1139883143" MODIFIED="1480780593840" TEXT="nur die &quot;pa&#xdf;t schon&quot;-L&#xf6;sung ist vern&#xfc;nftig">
 <richcontent TYPE="NOTE"><html>
@@ -1198,8 +1182,7 @@
       &quot;fokussiere Dich&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1480780704849" ID="ID_483861197" MODIFIED="1480780707332" TEXT="Abw&#xe4;gung">
@@ -1214,8 +1197,7 @@
       hier hab ich <b>endlich mal</b>&#160;die Gelegenheit, sauber zu arbeiten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480780746851" ID="ID_1128552915" MODIFIED="1480780759173" TEXT="und etwas zu schaffen, f&#xfc;r das ich mich nicht entschuldigen mu&#xdf;"/>
 <node CREATED="1480780768272" ID="ID_1174359339" MODIFIED="1480780788674" TEXT="leider f&#xfc;hrt genau diese Haltung dazu, da&#xdf; mir die Helfer davonlaufen"/>
@@ -1229,8 +1211,7 @@
       hey, es ist <b>mein Leben</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1243,8 +1224,7 @@
       <i>wenn</i>&#160;ich mich &#252;berhaupt entscheiden konnte...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -1273,8 +1253,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -1297,8 +1276,7 @@
       wie in Kopf <i>und</i>&#160;Rumpf injizieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -1331,8 +1309,7 @@
       ...sie verwenden dann ein LabelWidget zur Darstellung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1480741466519" ID="ID_29080454" MODIFIED="1480741471654" TEXT="das werden zwei Collections">
 <icon BUILTIN="messagebox_warning"/>
@@ -7994,8 +7971,7 @@
       &#252;ber den Core-Service, der Nexus nach dem Nexus....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1481414420406" ID="ID_559357688" MODIFIED="1481414430548" TEXT="erschwerend...">
 <icon BUILTIN="smily_bad"/>
@@ -8010,8 +7986,7 @@
       ich will nicht damit anfangen, da&#223; man einen Zeiger umsetzen kann....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -8033,8 +8008,7 @@
       wenn ein&#160;BusTerm sich selbst deregistriert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1481416047509" ID="ID_1445652228" MODIFIED="1481416060327" TEXT="etwas halbseiden"/>
