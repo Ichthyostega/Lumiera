@@ -23,16 +23,23 @@
 
 #include "proc/facade.hpp"
 #include "lib/depend.hpp"
+//#include "lib/sync.hpp"
+#include "proc/control/proc-dispatcher.hpp"
 #include "proc/play/output-director.hpp"
 
 #include <string>
+//#include <memory>
 
 
 namespace proc {
   
   using std::string;
+  using std::unique_ptr;
   using lumiera::Subsys;
   using lumiera::Option;
+  using lib::Sync;
+//  using lib::RecursiveLock_NoWait;
+  using proc::control::ProcDispatcher;
   
   
   class BuilderSubsysDescriptor
@@ -71,38 +78,35 @@ namespace proc {
   
   
   
-  class SessionSubsysDescriptor
+  class SessionSubsystem
     : public Subsys
     {
       operator string ()  const { return "Session"; }
       
+      /** @remarks there is no need explicitly to start the session core, 
+       *   since it will usually be pulled up as prerequisite */
       bool 
       shouldStart (Option&)  override
         {
-          TODO ("determine, if an existing Session should be loaded");
           return false;
         }
       
       bool
-      start (Option&, Subsys::SigTerm termination)  override
+      start (Option&, Subsys::SigTerm termNotification)  override
         {
-          UNIMPLEMENTED ("load an existing session as denoted by the options and register shutdown hook");
-          return false;
-                                                  //////////////////////////////////////////////////////////TICKET #318 : start Thread and instantiate SessionCommandService
+          return ProcDispatcher::instance().start (termNotification);
         }
       
       void
       triggerShutdown ()  noexcept override
         {
-          UNIMPLEMENTED ("initiate closing this Session");
+          ProcDispatcher::instance().requestStop();
         }
       
       bool 
       checkRunningState ()  noexcept override
         {
-          //Lock guard (*this);
-          TODO ("implement detecting running state");
-          return false;
+          return ProcDispatcher::instance().isRunning();
         }
     };
   
@@ -153,7 +157,7 @@ namespace proc {
   
   namespace {
     lib::Depend<BuilderSubsysDescriptor> theBuilderDescriptor;
-    lib::Depend<SessionSubsysDescriptor> theSessionDescriptor;
+    lib::Depend<SessionSubsystem> theSessionSubsystemLifecycle;
     lib::Depend<PlayOutSubsysDescriptor> thePlayOutDescriptor;
   }
   
@@ -172,7 +176,7 @@ namespace proc {
   Subsys&
   Facade::getSessionDescriptor()
   {
-    return theSessionDescriptor();
+    return theSessionSubsystemLifecycle();
   }
   
   

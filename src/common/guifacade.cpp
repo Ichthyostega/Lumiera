@@ -93,7 +93,7 @@ namespace gui {
         bool 
         shouldStart (lumiera::Option& opts)  override
           {
-            if (opts.isHeadless() || 0 < opts.getPort())
+            if (opts.isHeadless() or 0 < opts.getPort())
               {
                 INFO (guifacade, "*not* starting the GUI...");
                 return false;

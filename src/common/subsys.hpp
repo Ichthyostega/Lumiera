@@ -89,7 +89,9 @@ namespace lumiera {
       
       
       /** query application option state to determine 
-       *  if this subsystem should be activated. */
+       *  if this subsystem should be activated.
+       * @note even if not started explicitly, it could still
+       *       be started as prerequisite of another one */
       virtual bool shouldStart (lumiera::Option&)  =0;
       
       
