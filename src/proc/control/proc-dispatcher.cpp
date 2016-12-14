@@ -80,28 +80,7 @@ namespace control {
       
     };
   
-  namespace {
   
-    /** when session gets ready,
-     *  open the command processing interface.
-     */
-    void
-    activateCommandProcessing()
-    {
-      ProcDispatcher::instance().activate();
-    }
-    
-    void
-    deactivateCommandProcessing()
-    {
-      ProcDispatcher::instance().deactivate();
-    }
-    
-    
-    lumiera::LifecycleHook _schedule_opening (mobject::ON_SESSION_INIT, &activateCommandProcessing);
-    lumiera::LifecycleHook _schedule_closing (mobject::ON_SESSION_END,  &deactivateCommandProcessing);
-  
-  }
   
   /** storage for Singleton access */
   lib::Depend<ProcDispatcher> ProcDispatcher::instance;
@@ -148,7 +127,7 @@ namespace control {
   void
   ProcDispatcher::activate()
   {
-    INFO (command, "Session command processing activated.");
+    INFO (command, "Session command processing activated.");   ///////////////TODO only emit these log messages when processing is *really* started/stopped
     TODO ("implement command processing queue");
   }
   

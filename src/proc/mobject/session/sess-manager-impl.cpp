@@ -42,6 +42,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/sess-manager-impl.hpp"
 #include "proc/mobject/session/lifecycle-advisor.hpp"
+#include "proc/control/proc-dispatcher.hpp"
 #include "proc/config-resolver.hpp"
 #include "proc/asset/timeline.hpp"
 #include "common/query/defs-manager.hpp"
@@ -146,15 +147,14 @@ namespace session {
         void
         openSessionInterface()  override
           {
-            TODO ("enable command processing");     /////////////////////// TICKET #699
+            control::ProcDispatcher::instance().activate();
           }
         
         
         void
         closeSessionInterface()  override
-          {                                             /////////////////////// TICKET #699
-            INFO (session, "closing session interfaces.");
-            TODO ("actually disable command processing :) and don't babble in the log when NOT closing anything...");
+          {
+            control::ProcDispatcher::instance().deactivate();
           }
         
         
