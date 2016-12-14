@@ -84,14 +84,14 @@ namespace session {
       
       
       /* ==== Session API ==== */
-      virtual bool isValid ();
-      virtual MObjectRef attach (PMO const& placement);
-      virtual bool       detach (PMO const& placement);
+      virtual bool isValid()  override;
+      virtual MObjectRef attach (PMO const& placement)  override;
+      virtual bool       detach (PMO const& placement)  override;
       
-      virtual MObjectRef getRoot();
+      virtual MObjectRef getRoot()  override;
 
-      virtual PFix& getFixture ();
-      virtual void rebuildFixture ();
+      virtual PFix& getFixture()    override;
+      virtual void rebuildFixture() override;
       
     protected: /* == management API === */
       SessionImpl ();

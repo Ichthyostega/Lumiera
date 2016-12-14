@@ -32,6 +32,9 @@ namespace proc {
 namespace mobject {
 namespace session {
   
+  using lib::Sync;
+  using lib::RecursiveLock_NoWait;
+  
   class LifecycleAdvisor;
   
   
@@ -41,7 +44,7 @@ namespace session {
    */
   class SessManagerImpl
     : public SessManager
-    , public lib::Sync<>
+    , public Sync<RecursiveLock_NoWait>
     {
       scoped_ptr<SessionImplAPI>   pSess_;
       scoped_ptr<LifecycleAdvisor> lifecycle_;
@@ -52,19 +55,19 @@ namespace session {
      ~SessManagerImpl() ;
       
       /* ==== SessManager API ==== */
-      virtual void clear () ;
-      virtual void close () ;
-      virtual void reset () ;
-      virtual void load ()  ;
-      virtual void save ()  ;
+      virtual void clear()  override;
+      virtual void close()  override;
+      virtual void reset()  override;
+      virtual void load ()  override;
+      virtual void save ()  override;
       
-      virtual bool isUp ()  ;
+      virtual bool isUp ()  override;
       
       
     public:
       /* ==== proc layer internal API ==== */
       
-      virtual SessionImplAPI* operator-> ()  throw() ;
+      virtual SessionImplAPI* operator-> ()  noexcept override;
       
     };
   

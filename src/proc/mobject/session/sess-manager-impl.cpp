@@ -67,7 +67,7 @@ namespace session {
    *        session object(s) will halt the system.
    */
   SessionImplAPI*
-  SessManagerImpl::operator-> ()  throw()
+  SessManagerImpl::operator-> ()  noexcept
   {
     if (!pSess_)
       try
@@ -107,7 +107,7 @@ namespace session {
          *        After the swap, \c tmpS holds onto the old session, which
          *        consequently should unwind on leaving this scope. */
         void
-        createSessionFacilities()
+        createSessionFacilities()  override
           {
             INFO (session, "Initialising new Session....");
             SessionPImpl tmpS (new SessionImplAPI);
@@ -116,7 +116,7 @@ namespace session {
         
         
         void
-        injectSessionContent()
+        injectSessionContent()  override
           {
             if (shall_load_)
               {
@@ -137,29 +137,29 @@ namespace session {
         
         
         void
-        getSessionReady()
+        getSessionReady()  override
           {
             INFO (session, "Session ready for use.");
           }
         
         
         void
-        openSessionInterface()
+        openSessionInterface()  override
           {
-            TODO ("open public session interface");     /////////////////////// TICKET #699
+            TODO ("enable command processing");     /////////////////////// TICKET #699
           }
         
         
         void
-        closeSessionInterface()
+        closeSessionInterface()  override
           {                                             /////////////////////// TICKET #699
             INFO (session, "closing session interfaces.");
-            TODO ("actually close session interfaces :) and don't babble in the log when NOT closing anything...");
+            TODO ("actually disable command processing :) and don't babble in the log when NOT closing anything...");
           }
         
         
         void
-        disconnectRenderProcesses()
+        disconnectRenderProcesses()  override
           {
             TODO ("halt rendering");   //////////////////////////////////////// TICKET #703
             TODO ("possibly terminate builder"); ////////////////////////////// TICKET #201
@@ -167,14 +167,14 @@ namespace session {
         
         
         void
-        commandLogCheckpoint()
+        commandLogCheckpoint()  override
           {                            //////////////////////////////////////// TICKET #697
             INFO (command, " Session shutdown. Command processing stopped.");
           }
         
         
         void
-        deconfigure()
+        deconfigure()  override
           {
             session_->defaults.clear();
             ConfigResolver::instance().reset();    // forget any configuration rules
@@ -221,8 +221,9 @@ namespace session {
   
   
   bool
-  SessManagerImpl::isUp ()
+  SessManagerImpl::isUp()
   {
+    Lock sync(this);
     return bool(pSess_);                          ///////////////////// TICKET #702 possible race, because this gets true way before the interface is up
   }
   
@@ -230,7 +231,7 @@ namespace session {
    *  @todo clarify relation to command processing/undo     /////////// TICKET #697
    */
   void
-  SessManagerImpl::clear ()
+  SessManagerImpl::clear()
   {
     Lock sync(this);
     pSess_->clear();
@@ -242,7 +243,7 @@ namespace session {
    *  @todo well defined transactional behaviour  ///////////////////// TICKET #698
    */
   void
-  SessManagerImpl::close ()
+  SessManagerImpl::close()
   {
     Lock sync(this);
     if (isUp())
@@ -256,7 +257,7 @@ namespace session {
    *        AssetManager so support this kind of transactional switch!
    */
   void
-  SessManagerImpl::reset ()
+  SessManagerImpl::reset()
   {
     Lock sync(this);
     if (isUp())
@@ -266,7 +267,7 @@ namespace session {
   
   
   void
-  SessManagerImpl::load ()
+  SessManagerImpl::load()
   {
     UNIMPLEMENTED ("load serialised session");
     Lock sync(this);
@@ -285,7 +286,7 @@ namespace session {
    *  to several files (master file and edl files)
    */
   void
-  SessManagerImpl::save ()
+  SessManagerImpl::save()
   {
     UNIMPLEMENTED ("save session (serialised)");
     /////////////////////////////////////////////////TODO: need lock?
