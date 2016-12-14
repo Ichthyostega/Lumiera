@@ -64,6 +64,7 @@ namespace control {
     : public lib::Sync<>
     {
       unique_ptr<DispatcherLoop> runningLoop_;
+      bool active_{false};
       
       
     public:

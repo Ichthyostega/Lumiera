@@ -222,8 +222,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481509921211" ID="ID_1515469097" MODIFIED="1481599502388" TEXT="TODO: Session-Subsystem implementieren (#318)">
 <icon BUILTIN="pencil"/>
 <node CREATED="1481599413419" ID="ID_673133356" MODIFIED="1481599420290" TEXT="Ticket #318"/>
-<node CREATED="1481599421021" ID="ID_461768132" MODIFIED="1481599492544" TEXT="Locking kl&#xe4;ren">
-<icon BUILTIN="pencil"/>
+<node CREATED="1481599421021" ID="ID_461768132" MODIFIED="1481686898425" TEXT="Locking kl&#xe4;ren">
 <node CREATED="1481684383530" ID="ID_236117" MODIFIED="1481684451657" TEXT="zwei unabh&#xe4;ngige Locks">
 <icon BUILTIN="yes"/>
 <node CREATED="1481684391921" ID="ID_138369898" MODIFIED="1481684442846" TEXT="Front-End">
@@ -257,12 +256,55 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1481599430804" ID="ID_1105415989" MODIFIED="1481599438887" TEXT="Forwarding-Operationen implementieren"/>
-<node CREATED="1481599594399" ID="ID_1017459823" MODIFIED="1481599602601" TEXT="entscheiden, wer die Session &#xf6;ffnet">
+<node CREATED="1481599430804" ID="ID_1105415989" MODIFIED="1481599438887" TEXT="Forwarding-Operationen implementieren">
+<node CREATED="1481686902156" ID="ID_1526215617" MODIFIED="1481686910633" TEXT="aktivieren /deaktivieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481686911938" ID="ID_17287395" MODIFIED="1481686919619" TEXT="stoppen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1481599594399" ID="ID_1017459823" MODIFIED="1481687087609" TEXT="entscheiden, wer die Session &#xf6;ffnet">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1481686982097" ID="ID_1925999031" MODIFIED="1481687002238" TEXT="passiert on demand">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wenn jemand zugreift
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node CREATED="1481599603757" ID="ID_812618450" MODIFIED="1481599612320" TEXT="Operation auf dem SessionManager"/>
 <node CREATED="1481599612812" ID="ID_1970476027" MODIFIED="1481599618598" TEXT="der ist Singleton"/>
 <node CREATED="1481599626194" ID="ID_1815350592" MODIFIED="1481599638105" TEXT="wenn Session &#xf6;ffnet, wird der Dispatcher aktiviert">
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1481687005813" ID="ID_1108477992" MODIFIED="1481687081246" TEXT="Entscheidung: Sesion-lifecycle und Dispatcher sind unabh&#xe4;ngig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      grundlegende Design-Enscheidung
+    </p>
+    <ul>
+      <li>
+        wir haben Komponenten mit Dependency-Injection
+      </li>
+      <li>
+        da beide Komponenten nur nach ihren eigenen Hinsichten funktionieren,<br />wird das System insgesamt einfacher
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>

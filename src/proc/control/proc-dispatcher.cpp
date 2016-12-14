@@ -45,6 +45,9 @@ namespace control {
     : ThreadJoinable
     , public Sync<RecursiveLock_Waitable>
     {
+      bool canDispatch_{false};
+      bool blocked_    {false};
+      
     public:
       DispatcherLoop (Subsys::SigTerm notification)
         : ThreadJoinable("Lumiera Session"
@@ -58,7 +61,25 @@ namespace control {
           this->join();
           INFO (session, "Proc-Dispatcher stopped.");
         }
-    
+      
+      void
+      activateCommandProecssing()
+        {
+          Lock sync(this);
+          canDispatch_ = true;
+          INFO (command, "Session command processing activated.");
+          TODO ("implement command processing queue");
+        }
+      
+      void
+      deactivateCommandProecssing()
+        {
+          Lock sync(this);
+          canDispatch_ = false;
+          INFO (command, "Session command interface closed.");
+          TODO ("implement command processing queue");
+        }
+      
     private:
       void
       run (Subsys::SigTerm sigTerm)
@@ -106,7 +127,9 @@ namespace control {
                   runningLoop_.reset();
                   termNotification(problemMessage);
                 }));
-
+    
+    if (active_)
+      runningLoop_->activateCommandProecssing();
     return true;
   }
   
@@ -129,13 +152,21 @@ namespace control {
   }
   
   
-  /** */
+  /** activate processing of enqueued session commands.
+   * @remarks command processing serves as public external interface
+   *  to the session. This call is used by the session lifecycle (SessManagerImpl)
+   *  when the session is brought up; any other invocation runs danger to mess up
+   *  the session lifecycle state and process commands on a deconfigured session.
+   *  In case the dispatcher loop is not actually running, the activation state
+   *  is stored and applied accordingly later, when the loop is fired up.
+   */
   void
   ProcDispatcher::activate()
   {
     Lock sync(this);
-    INFO (command, "Session command processing activated.");   ///////////////TODO only emit these log messages when processing is *really* started/stopped
-    TODO ("implement command processing queue");
+    active_ = true;
+    if (runningLoop_)
+      runningLoop_->activateCommandProecssing();
   }
   
   
@@ -143,8 +174,9 @@ namespace control {
   ProcDispatcher::deactivate()
   {
     Lock sync(this);
-    INFO (command, "Session command interface closed.");
-    TODO ("implement command processing queue");
+    active_ = false;
+    if (runningLoop_)
+      runningLoop_->deactivateCommandProecssing();
   }
 
   
@@ -152,7 +184,7 @@ namespace control {
   ProcDispatcher::clear()
   {
     Lock sync(this);
-    if (!empty())
+    if (not empty())
       WARN (command, "DISCARDING pending Session commands.");
     TODO ("implement command processing queue");
   }
