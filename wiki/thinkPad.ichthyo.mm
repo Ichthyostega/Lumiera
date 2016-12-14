@@ -224,11 +224,34 @@
 <node CREATED="1481599413419" ID="ID_673133356" MODIFIED="1481599420290" TEXT="Ticket #318"/>
 <node CREATED="1481599421021" ID="ID_461768132" MODIFIED="1481599492544" TEXT="Locking kl&#xe4;ren">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481599447034" ID="ID_27053080" MODIFIED="1481599486152" TEXT="mu&#xdf; unique_ptr locken">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1481684383530" ID="ID_236117" MODIFIED="1481684451657" TEXT="zwei unabh&#xe4;ngige Locks">
+<icon BUILTIN="yes"/>
+<node CREATED="1481684391921" ID="ID_138369898" MODIFIED="1481684442846" TEXT="Front-End">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Lock sorgt hier f&#252;r konsistenten Zustand und Sichtbarkeit (memory barrier)
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481599454593" ID="ID_1547594303" MODIFIED="1481599484757" TEXT="mu&#xdf; Operationen auf dem Thread locken">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1481684394544" ID="ID_1314197501" MODIFIED="1481684422640" TEXT="Back-End">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Lock ist hier das Dispatcher-Lock
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1481599468712" ID="ID_1273965744" MODIFIED="1481599482440" TEXT="Vorsicht beim Anhalten (Deadlock-Gefahr)">
 <icon BUILTIN="messagebox_warning"/>

@@ -38,6 +38,7 @@
 //#include "lib/symbol.hpp"
 #include "common/subsys.hpp"
 #include "lib/depend.hpp"
+#include "lib/sync.hpp"
 
 #include <memory>
 //#include <functional>
@@ -60,6 +61,7 @@ namespace control {
    * @todo Type-comment
    */
   class ProcDispatcher
+    : public lib::Sync<>
     {
       unique_ptr<DispatcherLoop> runningLoop_;
       

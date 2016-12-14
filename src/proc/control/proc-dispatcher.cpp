@@ -35,12 +35,15 @@
 //using boost::str;
   
 using backend::ThreadJoinable;
+using lib::Sync;
+using lib::RecursiveLock_Waitable;
 
 namespace proc {
 namespace control {
   
   class DispatcherLoop
     : ThreadJoinable
+    , public Sync<RecursiveLock_Waitable>
     {
     public:
       DispatcherLoop (Subsys::SigTerm notification)
@@ -93,6 +96,7 @@ namespace control {
   bool
   ProcDispatcher::start (Subsys::SigTerm termNotification)
   {
+    Lock sync(this);
     if (runningLoop_) return false;
     
     runningLoop_.reset (
@@ -111,6 +115,7 @@ namespace control {
   bool
   ProcDispatcher::isRunning()
   {
+    Lock sync(this);
     return bool(runningLoop_);
   }
   
@@ -119,6 +124,7 @@ namespace control {
   void
   ProcDispatcher::requestStop()
   {
+    Lock sync(this);
     UNIMPLEMENTED ("trigger shutdown into the dispacher loop thread");
   }
   
@@ -127,6 +133,7 @@ namespace control {
   void
   ProcDispatcher::activate()
   {
+    Lock sync(this);
     INFO (command, "Session command processing activated.");   ///////////////TODO only emit these log messages when processing is *really* started/stopped
     TODO ("implement command processing queue");
   }
@@ -135,6 +142,7 @@ namespace control {
   void
   ProcDispatcher::deactivate()
   {
+    Lock sync(this);
     INFO (command, "Session command interface closed.");
     TODO ("implement command processing queue");
   }
@@ -143,6 +151,7 @@ namespace control {
   void
   ProcDispatcher::clear()
   {
+    Lock sync(this);
     if (!empty())
       WARN (command, "DISCARDING pending Session commands.");
     TODO ("implement command processing queue");
@@ -152,6 +161,7 @@ namespace control {
   bool
   ProcDispatcher::empty()  const
   {
+    Lock sync(this);
     TODO ("implement command processing queue");
     return true;
   }
