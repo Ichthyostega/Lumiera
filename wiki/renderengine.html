@@ -5222,6 +5222,13 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 [img[Asset Classess|uml/fig131077.png]]
 {{red{Note 3/2010}}} it is very unlikely we'll organise the processing nodes as a class hierarchy. Rather it looks like we'll get several submodules/special capabilities configured in within the Builder</pre>
 </div>
+<div title="ProcDispatcher" creator="Ichthyostega" modifier="Ichthyostega" created="201612140406" tags="def SessionLogic draft" changecount="1">
+<pre>//The guard and coordinator of any operation within the session subsystem.//
+The session and related components work effectively single threaded. Any tangible operation on the session data structure has to be enqueued as [[command|CommandHandling]] into the dispatcher. Moreover, the [[Builder]] is triggered from the ProcDispatcher; and while the Builder is running, any command processing is halted. The Builder in turn creates or reshapes the processing nodes network, and the changed network is brought into operation with a //transactional switch// -- while render processes on this processing network operate unaffected and essentially multi-threaded.
+
+Enqueueing commands through the {{{SessionCommandFacade}}} into the ProcDispatcher is the official way to cause changes to the session. And the running state of the ProcDispatcher is equivalent with the running state of the //session subsystem as a whole.//
+</pre>
+</div>
 <div title="ProcLayer" modifier="Ichthyostega" created="200708100333" modified="200708100338" tags="def">
 <pre>The middle Layer of our current Architecture plan, i.e. the layer managing all processing and manipulation, while the actual data handling is done in the backend and the user interaction belongs to the GUI Layer.
 
@@ -6064,7 +6071,7 @@ The concurrent nature of the problem is what makes this simple task somewhat mor
 * referrals to already known sequence points might be added later, and also from different threads ({{red{WIP 3/14}}} not sure if we need to expand on this observation -- see CalcStream &amp;hArr; Segment)
 This structure looks like requiring a message passing approach: we can arrange for determining the actual dependencies and fulfillment state late, within a single consumer, which is responsible for invoking the triggers. The other clients (threads) just pass messages into a possibly lock-free messageing channel.</pre>
 </div>
-<div title="Session" modifier="Ichthyostega" created="200712100525" modified="201501171410" tags="def SessionLogic" changecount="1">
+<div title="Session" modifier="Ichthyostega" created="200712100525" modified="201612140358" tags="def SessionLogic" changecount="3">
 <pre>The Session contains all information, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[Sequence]].
 &amp;rarr; [[Session design overview|SessionOverview]]
 &amp;rarr; Structure of the SessionInterface
@@ -6079,6 +6086,10 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * the [[Asset subsystem|AssetManager]] is tightly integrated; besides, there are some SessionServices for internal use
 
 &amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
+
+
+!Session lifecycle
+The session lifecycle need to be distinguished from the state of the //session subsystem.// The latter is one of the major components of Lumiera, and when it is brought up, the {{{SessionCommandFacade}}} is opened and the ProcDispatcher started. On the other hand, the session as such is a data structure and pulled up on demand, by the {{{SessionManager}}}. Whenever the session is fully populated and configured, the ProcDispatcher is instructed to //actually allow dispatching of commands towards the session.// This command dispatching mechanism is the actual access point to the session for clients outside Proc-Layer; when dispatching is halted, commands can be enqueued non the less, which allows for a reactive UI.
 </pre>
 </div>
 <div title="SessionConfigurationAttachment" modifier="Ichthyostega" created="201112222242" tags="SessionLogic draft">
@@ -6122,11 +6133,10 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201611180019" tags="SessionLogic GuiIntegration design draft discuss" changecount="6">
+<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201612140351" tags="SessionLogic GuiIntegration design draft discuss" changecount="7">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
-* LayerSeparationInterfaces allowing to access these interfaces from outside the Proc-Layer
 * the primary public ~APIs exposed on the objects to be [[queried and retrieved|SessionStructureQuery]] via the session class API
 ** [[Timeline]]
 ** [[Sequence]]
@@ -6136,6 +6146,9 @@ The session and the models rely on dependent objects beeing kept updated and con
 ** Effect
 ** Automation
 * the [[command|CommandHandling]] interface, including the [[UNDO|UndoManager]] facility
+
+__Note__: the SessionInterface as such is //not a [[external public interface|LayerSeparationInterfaces]].// Clients from outside Proc-Layer can talk to the session by issuing commands through the {{{SessionCommandFacade}}}. Processing of commands is coordinated by the ProcDispatcher, which also is responsible for starting the [[Builder]].
+
 
 !generic and explicit API
 The HighLevelModel exposes two kinds of interfaces (which are interconnected and rely on each other): A generic, but somewhat low-level API, which is good for processing &amp;mdash; like e.g. for the builder or de-serialiser &amp;mdash; and a more explicit API providing access to some meaningful entities within the model. Indeed, the latter (explicit top level entities) can be seen as a ''façade interface'' to the generic structures:
