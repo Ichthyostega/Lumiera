@@ -22,8 +22,8 @@
 */
 
 
-#ifndef LIB_THREADWRAPPER_H
-#define LIB_THREADWRAPPER_H
+#ifndef LIB_THREAD_WRAPPER_H
+#define LIB_THREAD_WRAPPER_H
 
 
 #include "lib/error.hpp"
@@ -96,131 +96,130 @@ namespace backend {
    */
   class Thread
     : boost::noncopyable
-  {
-    
-  protected:
-    typedef function<void(void)> Operation;
-    
-    
-    struct ThreadStartContext
-      : boost::noncopyable
-      {
-        
-        Operation const& operation_;
-        
-        static void
-        run (void* arg)
-          {
-            REQUIRE (arg);
-            ThreadStartContext* ctx = reinterpret_cast<ThreadStartContext*>(arg);
-            Operation _doIt_(ctx->operation_);
-            
-            lumiera_thread_sync (); // sync point: arguments handed over
-            
-            try
-              { 
-                _doIt_(); // execute the actual operation in the new thread
-              }
-            
-            catch (std::exception& failure)
-              {
-                if (!lumiera_error_peek())
-                  LUMIERA_ERROR_SET (sync, STATE
-                                    ,failure.what());
-              }
-            catch (...)
-              {
-                LUMIERA_ERROR_SET_ALERT (sync, EXTERNAL
-                                        , "Thread terminated abnormally");
-              }
-          }
-        
-        
-      public:
-        ThreadStartContext (LumieraThread& handle
-                           ,Operation const& operation_to_execute
-                           ,Literal& purpose
-                           ,NoBugFlag logging_flag
-                           ,uint additionalFlags   =0  
-                           )
-          : operation_(operation_to_execute)
-          {
-            REQUIRE (!lumiera_error(), "Error pending at thread start") ;
-            handle =
-              lumiera_thread_run ( LUMIERA_THREADCLASS_INTERACTIVE | additionalFlags
-                                 , &run         // invoking the run helper and..
-                                 , this         // passing this start context as parameter
-                                 , purpose.c()
-                                 , logging_flag
-                                 );
-            if (!handle)
-              throw error::State ("Failed to start a new Thread for \"+purpose+\""
-                                 , lumiera_error());
-            
-            // make sure the new thread had the opportunity to take the Operation
-            // prior to leaving and thereby possibly destroying this local context
-            lumiera_thread_sync_other (handle);
-          }
-      };
-    
-    
-    
-    LumieraThread thread_;
-    
-    Thread() : thread_(0) { }
-    
-    
-  public:
-    /** Create a new thread to execute the given operation.
-     *  The new thread starts up synchronously, it can't
-     *  be cancelled and it can't be joined.
-     *  @param purpose fixed char string used to denote the thread for diagnostics
-     *  @param logging_flag NoBug flag to receive diagnostics regarding the new thread
-     *  @param operation defining what to execute within the new thread. Any functor
-     *         which can be bound to function<void(void)>. Note this functor will be
-     *         copied onto the stack of the new thread, thus it can be transient.
-     */
-    Thread (Literal purpose, Operation const& operation, NoBugFlag logging_flag = &NOBUG_FLAG(thread))
-      : thread_(0)
-      {
-        ThreadStartContext (thread_, operation, purpose, logging_flag);
-      }
-    
-    
-    /** @note by design there is no possibility to find out
-     *  just based on the thread handle if some thread is alive.
-     *  We define our own accounting here based on the internals
-     *  of the thread wrapper. This will break down, if you mix
-     *  uses of the C++ wrapper with the raw C functions. */
-    bool
-    isValid()  const
-      {
-        return thread_;
-      }
-    
-    
-    /** Synchronisation barrier. In the function executing in this thread
-     *  needs to be a corresponding Thread::syncPoint() call. Blocking until
-     *  both the caller and the thread have reached the barrier.
-     */
-    void
-    sync ()
-      {
-        REQUIRE (isValid(), "Thread terminated");
-        if (!lumiera_thread_sync_other (thread_))
-          lumiera::throwOnError();
-      }
-    
-    /** counterpart of the synchronisation barrier, to be called from
-     *  within the thread to be synchronised. Will block until both
-     *  this thread and the outward partner reached the barrier. 
-     */
-    static void
-    syncPoint ()
-      {
-        lumiera_thread_sync ();
-      }
-  };
+    {
+      
+    protected:
+      typedef function<void(void)> Operation;
+      
+      
+      struct ThreadStartContext
+        : boost::noncopyable
+        {
+          
+          Operation const& operation_;
+          
+          static void
+          run (void* arg)
+            {
+              REQUIRE (arg);
+              ThreadStartContext* ctx = reinterpret_cast<ThreadStartContext*>(arg);
+              Operation _doIt_(ctx->operation_);
+              
+              lumiera_thread_sync (); // sync point: arguments handed over
+              
+              try {
+                  _doIt_(); // execute the actual operation in the new thread
+                }
+              
+              catch (std::exception& failure)
+                {
+                  if (!lumiera_error_peek())
+                    LUMIERA_ERROR_SET (sync, STATE
+                                      ,failure.what());
+                }
+              catch (...)
+                {
+                  LUMIERA_ERROR_SET_ALERT (sync, EXTERNAL
+                                          , "Thread terminated abnormally");
+                }
+            }
+          
+          
+        public:
+          ThreadStartContext (LumieraThread& handle
+                             ,Operation const& operation_to_execute
+                             ,Literal& purpose
+                             ,NoBugFlag logging_flag
+                             ,uint additionalFlags   =0
+                             )
+            : operation_(operation_to_execute)
+            {
+              REQUIRE (!lumiera_error(), "Error pending at thread start");
+              handle =
+                lumiera_thread_run ( LUMIERA_THREADCLASS_INTERACTIVE | additionalFlags
+                                   , &run         // invoking the run helper and..
+                                   , this         // passing this start context as parameter
+                                   , purpose.c()
+                                   , logging_flag
+                                   );
+              if (!handle)
+                throw error::State ("Failed to start a new Thread for \"+purpose+\""
+                                   , lumiera_error());
+              
+              // make sure the new thread had the opportunity to take the Operation
+              // prior to leaving and thereby possibly destroying this local context
+              lumiera_thread_sync_other (handle);
+            }
+        };
+      
+      
+      
+      LumieraThread thread_;
+      
+      Thread() : thread_(0) { }
+      
+      
+    public:
+      /** Create a new thread to execute the given operation.
+       *  The new thread starts up synchronously, it can't
+       *  be cancelled and it can't be joined.
+       *  @param purpose fixed char string used to denote the thread for diagnostics
+       *  @param logging_flag NoBug flag to receive diagnostics regarding the new thread
+       *  @param operation defining what to execute within the new thread. Any functor
+       *         which can be bound to function<void(void)>. Note this functor will be
+       *         copied onto the stack of the new thread, thus it can be transient.
+       */
+      Thread (Literal purpose, Operation const& operation, NoBugFlag logging_flag = &NOBUG_FLAG(thread))
+        : thread_(0)
+        {
+          ThreadStartContext (thread_, operation, purpose, logging_flag);
+        }
+      
+      
+      /** @note by design there is no possibility to find out
+       *  just based on the thread handle if some thread is alive.
+       *  We define our own accounting here based on the internals
+       *  of the thread wrapper. This will break down, if you mix
+       *  uses of the C++ wrapper with the raw C functions. */
+      bool
+      isValid()  const
+        {
+          return thread_;
+        }
+      
+      
+      /** Synchronisation barrier. In the function executing in this thread
+       *  needs to be a corresponding Thread::syncPoint() call. Blocking until
+       *  both the caller and the thread have reached the barrier.
+       */
+      void
+      sync()
+        {
+          REQUIRE (isValid(), "Thread terminated");
+          if (!lumiera_thread_sync_other (thread_))
+            lumiera::throwOnError();
+        }
+      
+      /** counterpart of the synchronisation barrier, to be called from
+       *  within the thread to be synchronised. Will block until both
+       *  this thread and the outward partner reached the barrier.
+       */
+      static void
+      syncPoint ()
+        {
+          lumiera_thread_sync ();
+        }
+    };
   
   
   
@@ -233,41 +232,40 @@ namespace backend {
    */
   class ThreadJoinable
     : public lib::BoolCheckable<ThreadJoinable
-                               ,Thread>     // baseclass
-  {
-  public:
-    ThreadJoinable (Literal purpose, Operation const& operation,
-                    NoBugFlag logging_flag = &NOBUG_FLAG(thread))
-      {
-        ThreadStartContext (thread_, operation, purpose, logging_flag,
-                            LUMIERA_THREAD_JOINABLE);
-      }
-    
-    
-    /** put the caller into a blocking wait until this thread has terminated.
-     *  @return token signalling either success or failure.
-     *          The caller can find out by invoking \c isValid()
-     *          or \c maybeThrow() on this result token
-     */
-    lib::Result<void>
-    join ()
-      {
-        if (!isValid())
-          throw error::Logic ("joining on an already terminated thread");
-        
-        lumiera_err errorInOtherThread =
-            lumiera_thread_join (thread_);
-        thread_ = 0;
-        
-        if (errorInOtherThread)
-          return error::State ("Thread terminated with error", errorInOtherThread);
-        else
-          return true;
-      }
-  };
+    ,Thread>                  // baseclass
+    {
+    public:
+      ThreadJoinable (Literal purpose, Operation const& operation,
+                      NoBugFlag logging_flag = &NOBUG_FLAG(thread))
+        {
+          ThreadStartContext (thread_, operation, purpose, logging_flag,
+                              LUMIERA_THREAD_JOINABLE);
+        }
+      
+      
+      /** put the caller into a blocking wait until this thread has terminated.
+       *  @return token signalling either success or failure.
+       *          The caller can find out by invoking `isValid()`
+       *          or `maybeThrow()` on this result token
+       */
+      lib::Result<void>
+      join ()
+        {
+          if (!isValid())
+            throw error::Logic ("joining on an already terminated thread");
+          
+          lumiera_err errorInOtherThread =
+              lumiera_thread_join (thread_);
+          thread_ = 0;
+          
+          if (errorInOtherThread)
+            return error::State ("Thread terminated with error", errorInOtherThread);
+          else
+            return true;
+        }
+    };
   
   
   
 } // namespace backend
-#endif
-
+#endif /*LIB_THREAD_WRAPPER_H*/
