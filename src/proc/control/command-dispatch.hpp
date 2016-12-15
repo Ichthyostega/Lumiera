@@ -1,5 +1,5 @@
 /*
-  PROC-DISPATCHER.hpp  -  Proc-Layer command dispatch and execution
+  COMMAND-DISPATCH.hpp  -  Interface to enqueue and dispatch command messages
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,19 +21,20 @@
 */
 
 
-/** @file proc-dispatcher.hpp
- ** Dispatch and execute mutation operations on the High-level model.
+/** @file command-dispatch.hpp
+ ** Interface to abstract the DispatcherLoop's ability to handle command messages.
  ** //TODO 
  **
- ** @see Command
- ** @see Session
+ ** @see proc-dispatcher.hpp
+ ** @see session-command-service.hpp
+ ** @see DispatcherLoop
  **
  */
 
 
 
-#ifndef PROC_CONTROL_PROC_DISPATCHER_H
-#define PROC_CONTROL_PROC_DISPATCHER_H
+#ifndef PROC_CONTROL_COMMAND_DISPATCH_H
+#define PROC_CONTROL_COMMAND_DISPATCH_H
 
 //#include "lib/symbol.hpp"
 #include "common/subsys.hpp"
@@ -91,4 +92,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif /*PROC_CONTROL_PROC_DISPATCHER_H*/
+#endif /*PROC_CONTROL_COMMAND_DISPATCH_H*/

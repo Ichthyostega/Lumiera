@@ -212,10 +212,201 @@
 <node COLOR="#338800" CREATED="1481320843596" ID="ID_7225903" MODIFIED="1481509899511" TEXT="definieren">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1481320847724" ID="ID_545146501" MODIFIED="1481320850327" TEXT="wo ansiedeln">
-<node CREATED="1481509901926" ID="ID_1612540786" MODIFIED="1481509907305" TEXT="in proc::control"/>
-<node CREATED="1481509908527" ID="ID_1079488123" MODIFIED="1481509915351" TEXT="wo implementieren">
+<node CREATED="1481767553542" ID="ID_1936508244" MODIFIED="1481768787560" TEXT="Eigenschaften">
+<icon BUILTIN="info"/>
+<node CREATED="1481768183970" ID="ID_1887870402" MODIFIED="1481768197029" TEXT="ist offizielle Session-Schnittstelle"/>
+<node CREATED="1481768211951" ID="ID_287828489" MODIFIED="1481768529260">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      setzt <i>aktivierten</i>&#160;Dispatcher <font color="#6e080d">zwingend</font>&#160;voraus
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es gen&#252;gt definitiv nicht, nur die Dispatcher-Komponente(Schnittstelle) erreichen zu k&#246;nnen.
+    </p>
+    <p>
+      Jede Operation, die &#252;ber dieses externe Interface bereitsteht, ben&#246;tigt zur Implementierung
+    </p>
+    <p>
+      eine aktiv laufende Dispatcher-Queue.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Daher macht es Sinn, den Interface-Lebenszyklus ganz starr an den Disspatcher zu binden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1481768341149" ID="ID_1200042703" MODIFIED="1481768435704" TEXT="implizite Bindung an eine Session-Instanz">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar wirklich sehr implizit,
+    </p>
+    <p>
+      n&#228;mlich &#252;ber die Identit&#228;t (IDs) der Command-Parameter.
+    </p>
+    <p>
+      Das hei&#223;t, ein eingehendes Command pa&#223;t nur zu einer bestimmten Session-Instanz,
+    </p>
+    <p>
+      was zwar jederzeit (via statisches/internes Session-API) verifizierbar ist, jedoch nicht offensichtlich
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1481768566167" ID="ID_702026185" MODIFIED="1481768669948" TEXT="kann jederzeit asynchron geschlossen werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das folgt einfach aus den logischen Eigenschaften der beteiligten Komponenten,
+    </p>
+    <p>
+      welche eben autonom sind.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Das hei&#223;t im Klartext, alle Clients m&#252;ssen darauf vorbereitet sein, da&#223; diese Schnittstelle
+    </p>
+    <p>
+      <i>jederzeit</i>&#160;wegbrechen kann, was dann hei&#223;t, da&#223; irgend ein Aufruf eine Exception wirft
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1481320847724" HGAP="42" ID="ID_545146501" MODIFIED="1481768822574" TEXT="wo ansiedeln" VSHIFT="-5">
 <icon BUILTIN="help"/>
+<node CREATED="1481509901926" ID="ID_1612540786" MODIFIED="1481509907305" TEXT="in proc::control"/>
+<node CREATED="1481767522123" ID="ID_789146708" MODIFIED="1481768757494">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wer besitzt die
+    </p>
+    <p>
+      Implementierung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1481767563781" ID="ID_1894117297" MODIFIED="1481768160140" TEXT="Subsystem">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1481767649426" ID="ID_1806364059" MODIFIED="1481767651421" TEXT="pro">
+<node CREATED="1481767653785" ID="ID_65381960" MODIFIED="1481767658028" TEXT="offensichtlich"/>
+<node CREATED="1481767700299" ID="ID_1163247183" MODIFIED="1481767705134" TEXT="logisch"/>
+</node>
+<node CREATED="1481767665231" ID="ID_141423591" MODIFIED="1481767666891" TEXT="con">
+<node CREATED="1481767681797" ID="ID_1133339398" MODIFIED="1481768995389" TEXT="fragiler Lebenszyklus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      meint: zwei gekoppelte Statusvariable
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1481767706906" ID="ID_815807707" MODIFIED="1481767710581" TEXT="bekomme dort Zustand"/>
+<node CREATED="1481767720576" ID="ID_714877064" MODIFIED="1481767729611" TEXT="mu&#xdf; dort Locking verwenden"/>
+<node CREATED="1481767711033" ID="ID_232055384" MODIFIED="1481767716628" TEXT="bekomme dort Fehlerbehandlung"/>
+</node>
+</node>
+<node CREATED="1481767579130" ID="ID_191292506" MODIFIED="1481769033192" TEXT="Dispatcher">
+<icon BUILTIN="help"/>
+<node CREATED="1481767748180" ID="ID_549036367" MODIFIED="1481767757831" TEXT="pro">
+<node CREATED="1481767761027" ID="ID_949448369" MODIFIED="1481767771781" TEXT="ist die offizielle Schnittstelle"/>
+<node CREATED="1481767864069" ID="ID_47595319" MODIFIED="1481767874567" TEXT="kann Service-Impl direkt verdrahten"/>
+</node>
+<node CREATED="1481767758347" ID="ID_1773256683" MODIFIED="1481767759439" TEXT="con">
+<node CREATED="1481767797062" ID="ID_1542908203" MODIFIED="1481768960633">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mu&#223; alle Operationen durchschleifen
+    </p>
+    <p>
+      oder mu&#223; PImpl als Interface exponieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1481767831105" ID="ID_1351930491" MODIFIED="1481768989667" TEXT="fragiler Lebenszyklus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      meint: zwei gekoppelte Statusvariable
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1481767581619" ID="ID_1364443356" MODIFIED="1481769116830" TEXT="DispatcherLoop">
+<linktarget COLOR="#4aff51" DESTINATION="ID_1364443356" ENDARROW="Default" ENDINCLINATION="10;30;" ID="Arrow_ID_870320696" SOURCE="ID_1152351588" STARTARROW="Default" STARTINCLINATION="-221;-88;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1481767877379" ID="ID_1139131626" MODIFIED="1481767879351" TEXT="pro">
+<node CREATED="1481767893969" ID="ID_1688865092" MODIFIED="1481767911170" TEXT="kann dort dediziertes Interface nutzen"/>
+<node CREATED="1481767924909" ID="ID_438801896" MODIFIED="1481767931359" TEXT="alle Operationen passieren dort"/>
+<node CREATED="1481767961616" ID="ID_1097715033" MODIFIED="1481769012774" TEXT="Lebenszyklus == RAII">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1481769041800" ID="ID_1026761428" MODIFIED="1481769059178" TEXT="ausschlaggebend">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1481769052246" ID="ID_628010771" MODIFIED="1481769055002" TEXT="gutes Design"/>
+</node>
+<node CREATED="1481768131609" ID="ID_600248646" MODIFIED="1481768139171" TEXT="Locking schon da"/>
+</node>
+<node CREATED="1481768014089" ID="ID_1260583976" MODIFIED="1481768019020" TEXT="con">
+<node CREATED="1481768019848" ID="ID_1155187340" MODIFIED="1481768032040">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Shutdown <i>tricky</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1481768075481" ID="ID_795971368" MODIFIED="1481768083275" TEXT="in der Implementierung versteckt"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1481320850779" ID="ID_1632600003" MODIFIED="1481320854143" TEXT="hochfahren">
@@ -310,6 +501,12 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481510231986" ID="ID_45803267" MODIFIED="1481510243425" TEXT="TODO: dort SessionCommandService instantiieren">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1481769089234" ID="ID_1152351588" MODIFIED="1481769124140" TEXT="lebt in der DispatcherLoop">
+<arrowlink COLOR="#4aff51" DESTINATION="ID_1364443356" ENDARROW="Default" ENDINCLINATION="10;30;" ID="Arrow_ID_870320696" STARTARROW="Default" STARTINCLINATION="-221;-88;"/>
+</node>
+<node CREATED="1481769144226" ID="ID_1609251574" MODIFIED="1481769153389" TEXT="mu&#xdf; Service-API extrahieren">
+<icon BUILTIN="pencil"/>
+</node>
 </node>
 <node CREATED="1481510244184" ID="ID_1521406724" MODIFIED="1481510260635" TEXT="kann dann in CoreService einfach &#xfc;ber die .facade() zugreifen">
 <icon BUILTIN="idea"/>

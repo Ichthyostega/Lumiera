@@ -6071,7 +6071,7 @@ The concurrent nature of the problem is what makes this simple task somewhat mor
 * referrals to already known sequence points might be added later, and also from different threads ({{red{WIP 3/14}}} not sure if we need to expand on this observation -- see CalcStream &amp;hArr; Segment)
 This structure looks like requiring a message passing approach: we can arrange for determining the actual dependencies and fulfillment state late, within a single consumer, which is responsible for invoking the triggers. The other clients (threads) just pass messages into a possibly lock-free messageing channel.</pre>
 </div>
-<div title="Session" modifier="Ichthyostega" created="200712100525" modified="201612140358" tags="def SessionLogic" changecount="3">
+<div title="Session" modifier="Ichthyostega" created="200712100525" modified="201612150345" tags="def SessionLogic" changecount="4">
 <pre>The Session contains all information, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[Sequence]].
 &amp;rarr; [[Session design overview|SessionOverview]]
 &amp;rarr; Structure of the SessionInterface
@@ -6089,7 +6089,7 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 
 
 !Session lifecycle
-The session lifecycle need to be distinguished from the state of the //session subsystem.// The latter is one of the major components of Lumiera, and when it is brought up, the {{{SessionCommandFacade}}} is opened and the ProcDispatcher started. On the other hand, the session as such is a data structure and pulled up on demand, by the {{{SessionManager}}}. Whenever the session is fully populated and configured, the ProcDispatcher is instructed to //actually allow dispatching of commands towards the session.// This command dispatching mechanism is the actual access point to the session for clients outside Proc-Layer; when dispatching is halted, commands can be enqueued non the less, which allows for a reactive UI.
+The session lifecycle need to be distinguished from the state of the [[session subsystem|SessionSubsystem]]. The latter is one of the major components of Lumiera, and when it is brought up, the {{{SessionCommandFacade}}} is opened and the ProcDispatcher started. On the other hand, the session as such is a data structure and pulled up on demand, by the {{{SessionManager}}}. Whenever the session is fully populated and configured, the ProcDispatcher is instructed to //actually allow dispatching of commands towards the session.// This command dispatching mechanism is the actual access point to the session for clients outside Proc-Layer; when dispatching is halted, commands can be enqueued non the less, which allows for a reactive UI.
 </pre>
 </div>
 <div title="SessionConfigurationAttachment" modifier="Ichthyostega" created="201112222242" tags="SessionLogic draft">
@@ -6370,6 +6370,13 @@ To make this work, QueryFocus exposes an static API (and especially the focus st
 And last but not least: the difficult part of this whole concept is encapsulated and ''can be left out for now''. Because, according to Lumiera's [[roadmap|http://issues.lumiera.org/roadmap]], meta-clips are to be postponed until well into beta! Thus, we can start with a trivial (no-op) implementation, but immediately gain the benefit of making the relevant parts of the session implementation aware of the problem.
 
 {{red{WIP ... draft}}}</pre>
+</div>
+<div title="SessionSubsystem" creator="Ichthyostega" modifier="Ichthyostega" created="201612150347" modified="201612150359" tags="def impl SessionLogic img" changecount="8">
+<pre>//A subsystem within Proc-Layer, responsible for lifecycle and access to the editing [[Session]].//
+[img[Structure of the Session Subsystem|uml/Session-subsystem.png]]
+
+!Structure
+The ProcDispatcher is at the heart of the //Session Subsystem.// Because the official interface for working on the session, the {{{SessionCommand}}} façade, is expressed in terms of sending command messages to invoke predefined [[commands|CommandHandling]] to operate on the SessionInterface, the actual implementation of such a {{{SessionCommandService}}} needs a component actually to enqueue and dispatch those commands -- which is the {{{DispatcherLoop}}} within the ProcDispatcher. As usual, the ''lifecycle'' is controlled by a subsystem descriptor, which starts and stopps the whole subsystem; and this starting and stopping in turn translates into starting/stopping of the dispatcher loop. On the other hand, //activation of the dispatcher,// which means actively to dispatch commands, is controlled by the lifecycle of the session proper. The latter is just a data structure, and can be loaded / saved and rebuilt through the ''session manager''.</pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
