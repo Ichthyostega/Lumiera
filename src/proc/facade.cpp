@@ -81,7 +81,7 @@ namespace proc {
   class SessionSubsystem
     : public Subsys
     {
-      operator string ()  const { return "Session"; }
+      operator string()  const { return "Session"; }
       
       /** @remarks there is no need explicitly to start the session core, 
        *   since it will usually be pulled up as prerequisite */
@@ -98,13 +98,13 @@ namespace proc {
         }
       
       void
-      triggerShutdown ()  noexcept override
+      triggerShutdown()  noexcept override
         {
           ProcDispatcher::instance().requestStop();
         }
       
       bool 
-      checkRunningState ()  noexcept override
+      checkRunningState()  noexcept override
         {
           return ProcDispatcher::instance().isRunning();
         }
@@ -115,7 +115,7 @@ namespace proc {
   class PlayOutSubsysDescriptor
     : public Subsys
     {
-      operator string ()  const { return "PlayOut"; }
+      operator string()  const { return "PlayOut"; }
       
       /** determine, if any output system is required to start up explicitly.
        *  Moreover, extract configuration variations for specific kinds of output
@@ -142,14 +142,14 @@ namespace proc {
       
       
       void
-      triggerShutdown ()  noexcept override
+      triggerShutdown()  noexcept override
         {
           play::OutputDirector::instance().triggerDisconnect (completedSignal_);
         }
       
       
       bool 
-      checkRunningState ()  noexcept override
+      checkRunningState()  noexcept override
         {
           return play::OutputDirector::instance().isOperational();
         }

@@ -51,6 +51,7 @@ namespace control {
     {
       bool canDispatch_{false};
       bool blocked_    {false};
+      bool mustHalt_   {false};
       
       unique_ptr<SessionCommandService> commandService_;
       
@@ -68,8 +69,8 @@ namespace control {
         {
           try {
               Lock sync(this);
-              commandService_.reset();
-              this->join();
+              commandService_.reset();   // redundant call, ensure the session interface is reliably closed
+              this->join();              // block until the loop thread terminates and is reaped
               INFO (session, "Proc-Dispatcher stopped.");
             }
           ERROR_LOG_AND_IGNORE(session, "Stopping the Proc-Dispatcher");
@@ -110,6 +111,15 @@ namespace control {
           return 0;
         }
       
+      void
+      requestStop()  noexcept
+        {
+          Lock sync(this);
+          commandService_.reset(); // closes Session interface
+          mustHalt_ = true;
+          UNIMPLEMENTED("*must* notify loop thread");  /////////////////TODO really?
+        }
+      
     private:
       void
       run (Subsys::SigTerm sigTerm)
@@ -117,7 +127,7 @@ namespace control {
           string errorMsg;
           try
             {
-              TODO ("actually do something in the loop");
+              TODO ("actually do something in the loop"); /////////////////////////////////////////TODO  *** THIS NEXT TO IMPLEMENT !!!! ***
               sleep(2);
             }
           catch (lumiera::Error& problem)
@@ -173,12 +183,17 @@ namespace control {
   }
   
   
-  /** */
+  /** signal to the loop thread that it needs to terminate.
+   * @warning dangerous operation; must not block nor throw
+   * 
+   * @todo need to re-check the logic, once the loop is fully implemented; ensure there is nothing on this call path that can block or throw!!! 
+   */
   void
-  ProcDispatcher::requestStop()
+  ProcDispatcher::requestStop()  noexcept
   {
     Lock sync(this);
-    UNIMPLEMENTED ("trigger shutdown into the dispacher loop thread");
+    if (runningLoop_)
+      runningLoop_->requestStop();
   }
   
   

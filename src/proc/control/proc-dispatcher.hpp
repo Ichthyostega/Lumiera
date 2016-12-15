@@ -72,7 +72,7 @@ namespace control {
       
       bool start (Subsys::SigTerm);
       bool isRunning();
-      void requestStop();
+      void requestStop()  noexcept;
       
       void activate();
       void deactivate();

@@ -76,7 +76,7 @@ namespace lumiera {
       virtual ~Subsys();
       
       /** a human readable name */
-      virtual operator string ()  const =0;
+      virtual operator string()  const =0;
 
       
       /** define a dependency to another Subsys
@@ -111,11 +111,11 @@ namespace lumiera {
        *  the SigTerm passed to #start must be invoked.
        * @note called within a locked context (barrier) 
        * @warning must not block nor throw. */
-      virtual void triggerShutdown ()  noexcept  =0;
+      virtual void triggerShutdown()  noexcept  =0;
       
       
       const std::vector<Subsys*>
-      getPrerequisites () { return prereq_; }
+      getPrerequisites() { return prereq_; }
       
       
     private:
