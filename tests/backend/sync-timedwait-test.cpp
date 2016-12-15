@@ -54,8 +54,14 @@ namespace test{
    * @test timeout feature on condition wait as provided by pthread and accessible
    *       via the object monitor based locking/waiting mechanism. Without creating
    *       multiple threads, we engage into a blocking wait, which aborts due to
-   *       setting a timeout. (Note it is discouraged to use the timed wait feature;
-   *       when possible, you should prefer relying on the Lumiera scheduler)
+   *       setting a timeout. Our waiting facility is written such as to invoke
+   *       the condition prior to entering wait state (and consecutively whenever
+   *       awakened). This test switches into wait-with-timeout mode right from
+   *       within this condition check and thus works even while there is no
+   *       other thread and thus an unconditional wait would stall forever.
+   *       
+   * @note it is discouraged to use the timed wait feature for "timing";
+   *       when possible you should prefer relying on the Lumiera scheduler
    * 
    * @see SyncWaiting_test
    * @see sync::Timeout
@@ -85,7 +91,7 @@ namespace test{
       neverHappens()                              ///< the "condition test" used for waiting....
         {
           Lock currentLock(this);                 // get the Lock recursively
-          if (!currentLock.isTimedWait())         // right from within the condition test:
+          if (!currentLock.isTimedWait())         // right from within the condition check:
             currentLock.setTimeout(WAIT_mSec);    // switch waiting mode to timed wait and set timeout
           
           return false;

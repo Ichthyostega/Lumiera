@@ -26,6 +26,8 @@
 #include "include/logging.h"
 #include "proc/control/proc-dispatcher.hpp"
 #include "proc/control/command-dispatch.hpp"
+#include "proc/control/command-queue.hpp"
+#include "proc/control/looper.hpp"
 #include "proc/control/session-command-service.hpp"
 #include "proc/mobject/session.hpp"
 #include "backend/thread-wrapper.hpp"
@@ -55,12 +57,17 @@ namespace control {
       
       unique_ptr<SessionCommandService> commandService_;
       
+      CommandQueue queue_;
+      Looper      looper_;
+      
       
     public:
       DispatcherLoop (Subsys::SigTerm notification)
         : ThreadJoinable("Lumiera Session"
                         , bind (&DispatcherLoop::run, this, notification))
         , commandService_(new SessionCommandService(*this))
+        , queue_()
+        , looper_()
         {
           INFO (session, "Proc-Dispatcher running...");
         }

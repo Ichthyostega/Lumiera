@@ -5222,11 +5222,35 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 [img[Asset Classess|uml/fig131077.png]]
 {{red{Note 3/2010}}} it is very unlikely we'll organise the processing nodes as a class hierarchy. Rather it looks like we'll get several submodules/special capabilities configured in within the Builder</pre>
 </div>
-<div title="ProcDispatcher" creator="Ichthyostega" modifier="Ichthyostega" created="201612140406" tags="def SessionLogic draft" changecount="1">
+<div title="ProcDispatcher" creator="Ichthyostega" modifier="Ichthyostega" created="201612140406" modified="201612151859" tags="def spec SessionLogic draft" changecount="3">
 <pre>//The guard and coordinator of any operation within the session subsystem.//
 The session and related components work effectively single threaded. Any tangible operation on the session data structure has to be enqueued as [[command|CommandHandling]] into the dispatcher. Moreover, the [[Builder]] is triggered from the ProcDispatcher; and while the Builder is running, any command processing is halted. The Builder in turn creates or reshapes the processing nodes network, and the changed network is brought into operation with a //transactional switch// -- while render processes on this processing network operate unaffected and essentially multi-threaded.
 
 Enqueueing commands through the {{{SessionCommandFacade}}} into the ProcDispatcher is the official way to cause changes to the session. And the running state of the ProcDispatcher is equivalent with the running state of the //session subsystem as a whole.//
+
+!Requirements
+To function properly as action coordinator of the session subsystem, the dispatcher has to fulfil multiple demands
+;enqueue
+:accept and enqueue command messages concurrently, any time, without blocking the caller
+:*FIFO for //regular commands//
+:*LIFO for //priority requests//
+;process
+:dequeue and process entries sequentially
+;sleep
+:work continuously until queue is empty, then enter wait state
+;check point
+:invoke a well defined check point reliably non blocking (&quot;ensure to make progress&quot;)
+:* when?
+:** after each command
+:** regularily whle idle
+:* why?
+:** ensure the Builder runs regularly
+:** respond reliably to shutdown request
+;manage
+:care for rectifying entries in the queue
+:* ensure they //match// current session, discard obsoleted requests
+:* //aggregate// similar requests
+:* //supersede// by newer commands of a certain kind
 </pre>
 </div>
 <div title="ProcLayer" modifier="Ichthyostega" created="200708100333" modified="200708100338" tags="def">

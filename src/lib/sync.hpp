@@ -29,7 +29,7 @@
  ** describes a way of dealing with synchronisation known to play well with
  ** scoping, encapsulation and responsibility for a single purpose.
  ** 
- ** A class becomes \em lockable by inheriting from lib::Sync with the appropriate
+ ** A class becomes _lockable_ by inheriting from lib::Sync with the appropriate
  ** parametrisation. This causes any instance to inherit a monitor member (object),
  ** managing a mutex and (optionally) a condition variable for waiting. The actual
  ** synchronisation is achieved by placing a guard object as local (stack) variable
@@ -38,7 +38,7 @@
  ** manages the locking and unlocking; optionally it may also be used for waiting
  ** on a condition.
  ** 
- ** Please note:
+ ** @note
  ** - It is important to select a suitable parametrisation of the monitor.
  **   This is done by specifying one of the defined policy classes.
  ** - Be sure to pick the recursive mutex implementation when recursive calls
@@ -176,7 +176,7 @@ namespace lib {
             } while(err == EINTR);
             
             if (err) lumiera_lockerror_set (err, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-            return !err; 
+            return not err;
           }
         
         bool
@@ -187,7 +187,7 @@ namespace lib {
             } while(err == EINTR);
               
             if (err) lumiera_lockerror_set (err, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-            return !err;
+            return not err;
           }
         
         
@@ -405,7 +405,20 @@ namespace lib {
    * The interface for clients to access the functionality is the embedded
    * Lock template, which should be instantiated as an automatic variable
    * within the scope to be protected.
-   *
+   * 
+   * ## Usage
+   * - for *locking*, just place an instant of the embedded Lock into the local
+   *   scope to be protected. All lock instances within the same object share
+   *   the monitor; thus any time, only one of them gets the mutex all other
+   *   instances block on construction.
+   * - for *waiting* likewise place an instance of the Lock class (which gets
+   *   you a mutex). Then invoke the wait method on that instance; this suspends
+   *   the current thread and releases the mutex. To awake and check the condition,
+   *   some other thread must invoke the Lock::notify() within the same object.
+   *   The Lock::wait() call returns `true` when the condition was met, and
+   *   `false` if awakened due to timeout. The call might throw in case of
+   *   technical errors. In any case, when returning from the `wait()` call,
+   *   the mutex has been re-acquired.
    */
   template<class CONF = NonrecursiveLock_NoWait>
   class Sync
