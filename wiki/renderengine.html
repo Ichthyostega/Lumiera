@@ -6371,12 +6371,18 @@ And last but not least: the difficult part of this whole concept is encapsulated
 
 {{red{WIP ... draft}}}</pre>
 </div>
-<div title="SessionSubsystem" creator="Ichthyostega" modifier="Ichthyostega" created="201612150347" modified="201612150359" tags="def impl SessionLogic img" changecount="8">
+<div title="SessionSubsystem" creator="Ichthyostega" modifier="Ichthyostega" created="201612150347" modified="201612150453" tags="def impl SessionLogic img" changecount="9">
 <pre>//A subsystem within Proc-Layer, responsible for lifecycle and access to the editing [[Session]].//
 [img[Structure of the Session Subsystem|uml/Session-subsystem.png]]
 
 !Structure
-The ProcDispatcher is at the heart of the //Session Subsystem.// Because the official interface for working on the session, the {{{SessionCommand}}} façade, is expressed in terms of sending command messages to invoke predefined [[commands|CommandHandling]] to operate on the SessionInterface, the actual implementation of such a {{{SessionCommandService}}} needs a component actually to enqueue and dispatch those commands -- which is the {{{DispatcherLoop}}} within the ProcDispatcher. As usual, the ''lifecycle'' is controlled by a subsystem descriptor, which starts and stopps the whole subsystem; and this starting and stopping in turn translates into starting/stopping of the dispatcher loop. On the other hand, //activation of the dispatcher,// which means actively to dispatch commands, is controlled by the lifecycle of the session proper. The latter is just a data structure, and can be loaded / saved and rebuilt through the ''session manager''.</pre>
+The ProcDispatcher is at the heart of the //Session Subsystem.// Because the official interface for working on the session, the {{{SessionCommand}}} façade, is expressed in terms of sending command messages to invoke predefined [[commands|CommandHandling]] to operate on the SessionInterface, the actual implementation of such a {{{SessionCommandService}}} needs a component actually to enqueue and dispatch those commands -- which is the {{{DispatcherLoop}}} within the ProcDispatcher. As usual, the ''lifecycle'' is controlled by a subsystem descriptor, which starts and stopps the whole subsystem; and this starting and stopping in turn translates into starting/stopping of the dispatcher loop. On the other hand, //activation of the dispatcher,// which means actively to dispatch commands, is controlled by the lifecycle of the session proper. The latter is just a data structure, and can be loaded / saved and rebuilt through the ''session manager''.
+
+!Lifecycle
+
+!!!shutdown
+Shutdown is initiated by sending a message to the dispatcher loop. {{red{TODO 12/2016}}} need to ensure the loop terminates reliably then! When loop terminates, the {{{sigTerm}}} of the SessionSubsystem is invoked, which then in turn causes the DispatcherLoop thread to be reaped.
+</pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>

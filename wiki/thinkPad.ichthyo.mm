@@ -507,6 +507,30 @@
 <node CREATED="1481769144226" ID="ID_1609251574" MODIFIED="1481769153389" TEXT="mu&#xdf; Service-API extrahieren">
 <icon BUILTIN="pencil"/>
 </node>
+<node CREATED="1481777039358" ID="ID_395609084" MODIFIED="1481777050096" TEXT="Shutdown sauber regeln">
+<node CREATED="1481777054755" ID="ID_1551225439" MODIFIED="1481777106485">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mu&#223; SessionCommandService schlie&#223;en
+    </p>
+    <p>
+      <i>bevor</i>&#160;die Dispatcher-loop angehalten wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1481777114203" ID="ID_1156396729" MODIFIED="1481777121886" TEXT="Lock, um Deadlock zu vermeitden"/>
+<node CREATED="1481777122306" ID="ID_1506554988" MODIFIED="1481777133445" TEXT="alles im dtor  -&gt; noexcept"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481777210447" ID="ID_1392452935" MODIFIED="1481777289370" TEXT="TODO: sicherstellen da&#xdf; join nicht blockt">
+<arrowlink COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="8475;0;" ID="Arrow_ID_1930701586" STARTARROW="None" STARTINCLINATION="8475;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node CREATED="1481510244184" ID="ID_1521406724" MODIFIED="1481510260635" TEXT="kann dann in CoreService einfach &#xfc;ber die .facade() zugreifen">
 <icon BUILTIN="idea"/>
@@ -10965,6 +10989,26 @@
 <node CREATED="1481688529539" ID="ID_1972961763" MODIFIED="1481688540109" TEXT="SessionManager ist zust&#xe4;ndig"/>
 <node CREATED="1481688544921" ID="ID_1934560784" MODIFIED="1481688561386" TEXT="wenn Session geladen, ist ProcDispatcher freigegeben"/>
 <node CREATED="1481688562830" ID="ID_708961458" MODIFIED="1481688582024" TEXT="SessionSubsystem startet processing loop im ProcDispatcher"/>
+<node CREATED="1481777252497" ID="ID_1789585729" MODIFIED="1481777279294" TEXT="Shutdown">
+<linktarget COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="8475;0;" ID="Arrow_ID_1930701586" SOURCE="ID_1392452935" STARTARROW="None" STARTINCLINATION="8475;0;"/>
+<node CREATED="1481777297635" ID="ID_483368010" MODIFIED="1481777305432" TEXT="Deadlock-Gefahr">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1481777308978" ID="ID_1380229085" MODIFIED="1481777327818" TEXT="Lebensdauer der Session-Datenstruktur">
+<node CREATED="1481777328479" ID="ID_1668359018" MODIFIED="1481777336447" TEXT="unabh&#xe4;ngig vom Session-Subsystem">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1481777343548" ID="ID_354877994" MODIFIED="1481777350704" TEXT="irgendwann post main()"/>
+</node>
+<node CREATED="1481777355747" ID="ID_1804595708" MODIFIED="1481777364326" TEXT="Subsystem-&gt;end">
+<node CREATED="1481777368330" ID="ID_1933237483" MODIFIED="1481777374277" TEXT="Halte-Nachricht"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481777374801" ID="ID_1844558240" MODIFIED="1481777385577" TEXT="sicherstellen, da&#xdf; Loop anh&#xe4;lt">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1481777397542" ID="ID_1147135932" MODIFIED="1481777409960" TEXT="DispatcherLoop tot"/>
+<node CREATED="1481777410972" ID="ID_457965735" MODIFIED="1481777418982" TEXT="sigTerm"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1448314932726" ID="ID_669869188" MODIFIED="1448314941137" POSITION="right" TEXT="Render"/>

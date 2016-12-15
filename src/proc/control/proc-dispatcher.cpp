@@ -33,12 +33,13 @@
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
 
-//#include <boost/format.hpp>
+#include <memory>
 //using boost::str;
   
 using backend::ThreadJoinable;
 using lib::Sync;
 using lib::RecursiveLock_Waitable;
+using std::unique_ptr;
 
 namespace proc {
 namespace control {
@@ -51,22 +52,27 @@ namespace control {
       bool canDispatch_{false};
       bool blocked_    {false};
       
-      SessionCommandService commandService_;
+      unique_ptr<SessionCommandService> commandService_;
       
       
     public:
       DispatcherLoop (Subsys::SigTerm notification)
         : ThreadJoinable("Lumiera Session"
                         , bind (&DispatcherLoop::run, this, notification))
-        , commandService_(*this)
+        , commandService_(new SessionCommandService(*this))
         {
           INFO (session, "Proc-Dispatcher running...");
         }
       
      ~DispatcherLoop()
         {
-          this->join();
-          INFO (session, "Proc-Dispatcher stopped.");
+          try {
+              Lock sync(this);
+              commandService_.reset();
+              this->join();
+              INFO (session, "Proc-Dispatcher stopped.");
+            }
+          ERROR_LOG_AND_IGNORE(session, "Stopping the Proc-Dispatcher");
         }
       
       void
