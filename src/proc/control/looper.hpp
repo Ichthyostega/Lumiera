@@ -58,10 +58,22 @@ namespace control {
 //  using lib::Symbol;
 //  using std::bind;
   
+  namespace {
+    /**
+     * @todo this value should be retrieved from configuration                  ////////////////////////////////TICKET #1052 : access application configuration
+     * @see Looper::establishWakeTimeout()
+     */
+    const uint PROC_DISPATCHER_BUILDER_DELAY_ms = 50;
+  }
   
   
   /**
-   * @todo Type-comment
+   * @todo write Type-comment (WIP 12/2016)
+   * 
+   * @warning the Looper _is not threadsafe,_
+   *        since it is intended to be run exclusively from
+   *        the Session working thread.
+   * @see DispatcherLoop::run()
    */
   class Looper
     {
@@ -70,6 +82,37 @@ namespace control {
       Looper()
       { }
       
+      /* == working state == */
+      
+      bool isWorking()  const  { return false; }
+      bool isIdle()     const  { return false; }
+      bool needBuild()  const  { return false; }
+      bool isDisabled() const  { return false; }
+      bool isDying()    const  { return false; }
+      
+      
+      /** state fusion to control (timed) wait */
+      bool
+      requireAction()
+        {
+          return isWorking()
+              or needBuild()
+              or isDying();
+        }
+      
+      /** state fusion to control looping */
+      bool
+      shallLoop()  const
+        {
+          return not isDying();
+        }
+      
+      ulong
+      getTimeout()  const
+        {
+          static uint wakeTimeout_ms = establishWakeTimeout();
+          return wakeTimeout_ms;
+        }
       
       
       /* == diagnostics == */
@@ -77,10 +120,28 @@ namespace control {
 //    size_t size() const ;
 //    bool empty()  const ;
       
+    private:
+      static uint establishWakeTimeout();
     };
   ////////////////TODO 12/16 currently just fleshing  out the API....
   
   
+  /** @internal establish the typical timeout for idle sleep.
+   * When the ProcDispatcher has no work to do, it needs to wake up regularly
+   * for a checkpoint, to determine if the Builder needs to be triggered or
+   * the shutdown-flag be checked. So the period established here defines
+   * some kind of minimal reaction especially for the builder, so to ensure
+   * that further commands trickling in get a chance to be enqueued before
+   * the builder run effectively blocks command processing. Add to this
+   * the typical average running time of the builder, to get the reaction
+   * period visible to the user as update response delay within the UI.
+   * @todo find a way how to retrieve this value from application config!    ////////////////////TICKET #1052 : access application configuration
+   */
+  uint
+  Looper::establishWakeTimeout()
+  {
+    return PROC_DISPATCHER_BUILDER_DELAY_ms;
+  }
   
   
 }} // namespace proc::control

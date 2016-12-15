@@ -53,7 +53,7 @@ namespace control {
     {
       bool canDispatch_{false};
       bool blocked_    {false};
-      bool mustHalt_   {false};
+      bool mustHalt_   {false};  /////////////////TODO this flag shall be relocated into the Looper!
       
       unique_ptr<SessionCommandService> commandService_;
       
@@ -134,8 +134,16 @@ namespace control {
           string errorMsg;
           try
             {
-              TODO ("actually do something in the loop"); /////////////////////////////////////////TODO  *** THIS NEXT TO IMPLEMENT !!!! ***
-              sleep(2);
+              while (looper_.shallLoop())
+                {
+                  awaitAction();
+                  if (looper_.isDying()) break;
+                  if (looper_.needBuild())
+                    startBuilder();
+                  else
+                  if (looper_.isWorking())
+                    processCommands();
+                }
             }
           catch (lumiera::Error& problem)
             {
@@ -146,16 +154,38 @@ namespace control {
             {
               errorMsg = string{lumiera_error()};
             }
+          // now leave the Session thread...
+          // send notification of subsystem shutdown
           sigTerm (&errorMsg);
         }
       
+      void
+      awaitAction()
+        {
+          Lock(this).wait(looper_,
+                          &Looper::requireAction,
+                          looper_.getTimeout());
+        }
+      
+      void
+      processCommands()
+        {
+          UNIMPLEMENTED ("pull commands from the queue and dispatch them");
+        }
+      
+      void
+      startBuilder()
+        {
+          UNIMPLEMENTED ("start the Proc-Builder to recalculate render nodes network");
+        }
     };
+  
+  
   
   
   
   /** storage for Singleton access */
   lib::Depend<ProcDispatcher> ProcDispatcher::instance;
-  
   
   
   
