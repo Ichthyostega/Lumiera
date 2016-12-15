@@ -26,6 +26,7 @@
 #include "include/logging.h"
 #include "proc/control/proc-dispatcher.hpp"
 #include "proc/control/command-dispatch.hpp"
+#include "proc/control/session-command-service.hpp"
 #include "proc/mobject/session.hpp"
 #include "backend/thread-wrapper.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
@@ -50,10 +51,14 @@ namespace control {
       bool canDispatch_{false};
       bool blocked_    {false};
       
+      SessionCommandService commandService_;
+      
+      
     public:
       DispatcherLoop (Subsys::SigTerm notification)
         : ThreadJoinable("Lumiera Session"
                         , bind (&DispatcherLoop::run, this, notification))
+        , commandService_(*this)
         {
           INFO (session, "Proc-Dispatcher running...");
         }

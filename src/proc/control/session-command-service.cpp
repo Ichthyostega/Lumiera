@@ -177,9 +177,10 @@ namespace control {
   
   
   
-  SessionCommandService::SessionCommandService ()
-    : implInstance_(this,_instance),
-      serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_SessionCommand, 0, lumieraorg_SessionCommandService))
+  SessionCommandService::SessionCommandService  (CommandDispatch& dispatcherLoopInterface)
+    : dispatcher_{dispatcherLoopInterface}
+    , implInstance_{this,_instance}
+    , serviceInstance_{ LUMIERA_INTERFACE_REF (lumieraorg_SessionCommand, 0, lumieraorg_SessionCommandService)}
   {
     INFO (gui, "SessionCommand Facade opened.");
   }

@@ -46,6 +46,8 @@
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
+#include <boost/noncopyable.hpp>
+
 
 
 namespace proc {
@@ -66,7 +68,10 @@ namespace control {
    */
   class SessionCommandService
     : public SessionCommand
+    , boost::noncopyable
     {
+      CommandDispatch& dispatcher_;
+      
       
       /* === Implementation of the Facade Interface === */
       
@@ -84,7 +89,7 @@ namespace control {
       ServiceInstanceHandle serviceInstance_;
       
     public:
-      SessionCommandService();
+      SessionCommandService (CommandDispatch& dispatcherLoopInterface);
       
     };
     
