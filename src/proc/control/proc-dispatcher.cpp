@@ -25,6 +25,7 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "proc/control/proc-dispatcher.hpp"
+#include "proc/control/command-dispatch.hpp"
 #include "proc/mobject/session.hpp"
 #include "backend/thread-wrapper.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
@@ -43,6 +44,7 @@ namespace control {
   
   class DispatcherLoop
     : ThreadJoinable
+    , public CommandDispatch
     , public Sync<RecursiveLock_Waitable>
     {
       bool canDispatch_{false};
@@ -78,6 +80,23 @@ namespace control {
           canDispatch_ = false;
           INFO (command, "Session command interface closed.");
           TODO ("implement command processing queue");
+        }
+      
+      
+      /* === CommandDispatch interface === */
+      
+      void
+      clear()  override
+        {
+          Lock sync(this);
+          UNIMPLEMENTED ("clear the queue");
+        }
+      
+      size_t
+      size()  const
+        {
+          TODO ("implement command processing queue");
+          return 0;
         }
       
     private:
@@ -185,8 +204,11 @@ namespace control {
   {
     Lock sync(this);
     if (not empty())
-      WARN (command, "DISCARDING pending Session commands.");
-    TODO ("implement command processing queue");
+      {
+        WARN (command, "DISCARDING pending Session commands.");
+        REQUIRE (runningLoop_);
+        runningLoop_->clear();
+      }
   }
   
   
@@ -194,8 +216,8 @@ namespace control {
   ProcDispatcher::empty()  const
   {
     Lock sync(this);
-    TODO ("implement command processing queue");
-    return true;
+    return not runningLoop_
+        or 0 == runningLoop_->size();
   }
 
   

@@ -2,7 +2,7 @@
   COMMAND-DISPATCH.hpp  -  Interface to enqueue and dispatch command messages
 
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2016,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -23,7 +23,9 @@
 
 /** @file command-dispatch.hpp
  ** Interface to abstract the DispatcherLoop's ability to handle command messages.
- ** //TODO 
+ ** //TODO
+ ** 
+ ** @todo WIP-WIP as of 12/2016 
  **
  ** @see proc-dispatcher.hpp
  ** @see session-command-service.hpp
@@ -36,12 +38,11 @@
 #ifndef PROC_CONTROL_COMMAND_DISPATCH_H
 #define PROC_CONTROL_COMMAND_DISPATCH_H
 
-//#include "lib/symbol.hpp"
-#include "common/subsys.hpp"
-#include "lib/depend.hpp"
-#include "lib/sync.hpp"
+#include "lib/error.hpp"   ////////TODO needed?
+//#include "common/subsys.hpp"
+//#include "lib/depend.hpp"
 
-#include <memory>
+//#include <memory>
 //#include <functional>
 
 
@@ -50,40 +51,26 @@ namespace proc {
 namespace control {
   
 //  using lib::Symbol;
-  using std::unique_ptr;
 //  using std::bind;
-  using lumiera::Subsys;
   
-  
-  class DispatcherLoop;
   
   
   /**
    * @todo Type-comment
    */
-  class ProcDispatcher
-    : public lib::Sync<>
+  class CommandDispatch
     {
-      unique_ptr<DispatcherLoop> runningLoop_;
-      bool active_{false};
-      
       
     public:
-      static lib::Depend<ProcDispatcher> instance;
+      virtual ~CommandDispatch() { }  ///< this is an interface
       
-      bool start (Subsys::SigTerm);
-      bool isRunning();
-      void requestStop();
-      
-      void activate();
-      void deactivate();
-      void clear();
+      virtual void clear()     =0;  /////TODO placeholder code
       
       
       /* == diagnostics == */
       
 //    size_t size() const ;
-      bool empty()  const ;
+//    bool empty()  const ;
       
     };
   ////////////////TODO currently just fleshing  out the API....

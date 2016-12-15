@@ -42,6 +42,7 @@
 
 
 #include "include/session-command-facade.h"
+#include "proc/control/command-dispatch.hpp"
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
