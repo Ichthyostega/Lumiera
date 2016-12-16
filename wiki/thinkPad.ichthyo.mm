@@ -11016,7 +11016,8 @@
 </node>
 </node>
 <node CREATED="1481778538165" HGAP="37" ID="ID_522398894" MODIFIED="1481778549049" TEXT="ProcDispatcher" VSHIFT="12">
-<node CREATED="1481826274018" ID="ID_1916296972" MODIFIED="1481826277691" TEXT="Requirements">
+<node CREATED="1481826274018" HGAP="18" ID="ID_1916296972" MODIFIED="1481917919910" TEXT="Requirements" VSHIFT="-7">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1481826329819" ID="ID_1238318698" MODIFIED="1481826431105" TEXT="enqueue commands concurrently">
 <node CREATED="1481827297122" ID="ID_860095678" MODIFIED="1481827311268" TEXT="FIFO for regular commands"/>
 <node CREATED="1481827312024" ID="ID_850193431" MODIFIED="1481827318187" TEXT="LIFO for priority requests"/>
@@ -11039,6 +11040,88 @@
 <node CREATED="1481827558336" ID="ID_1026688096" MODIFIED="1481827646856" TEXT="match current session"/>
 <node CREATED="1481827647491" ID="ID_1849886325" MODIFIED="1481827652111" TEXT="aggregate similar"/>
 <node CREATED="1481827652539" ID="ID_313823253" MODIFIED="1481827657846" TEXT="supersede"/>
+</node>
+</node>
+<node CREATED="1481917572639" HGAP="74" ID="ID_190109346" MODIFIED="1481917906139" TEXT="operational" VSHIFT="-27">
+<icon BUILTIN="pencil"/>
+<node CREATED="1481917612602" ID="ID_567971228" MODIFIED="1481917622388" TEXT="Loop l&#xe4;uft stets, aber blockt ggfs"/>
+<node CREATED="1481917641910" ID="ID_1157396234" MODIFIED="1481917663639" TEXT="anf&#xe4;nglich idle --&gt; schlafen"/>
+<node CREATED="1481918441020" ID="ID_584625018" MODIFIED="1481918463933" TEXT="Command-Queue wird ohne Verz&#xf6;gerung abgearbeitet"/>
+<node CREATED="1481918465680" ID="ID_973127249" MODIFIED="1481918474355" TEXT="Builder startet">
+<node CREATED="1481918475295" ID="ID_1997533333" MODIFIED="1481918480586" TEXT="nach kurzer Idle-Periode"/>
+<node CREATED="1481918481102" ID="ID_335740959" MODIFIED="1481918491976" TEXT="nach l&#xe4;ngerer Command-Abarbeitung"/>
+</node>
+<node CREATED="1481917691047" ID="ID_714937554" MODIFIED="1481917700266" TEXT="&#xc4;nderung der Umst&#xe4;nde">
+<node CREATED="1481917700998" ID="ID_470084004" MODIFIED="1481917705641" TEXT="kommt stets &#xfc;ber Interface"/>
+<node CREATED="1481917726683" ID="ID_962119246" MODIFIED="1481917738197" TEXT="weckt den Loop-Thread auf"/>
+<node CREATED="1481917766837" ID="ID_1794908304" MODIFIED="1481918114857" TEXT="ist atomar (locking)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Guard beim Zugang &#252;ber das Interface
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1481918074269" ID="ID_1984339005" MODIFIED="1481918091136">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>nur sie</i>&#160;ist atomar
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1481918117831" ID="ID_924462902" MODIFIED="1481918121154" TEXT="asynchron">
+<node CREATED="1481918130245" ID="ID_1624017067" MODIFIED="1481918382409">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>nur ein Thread</b>&#160;f&#252;r Commands und Builder
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#171ccb" DESTINATION="ID_1214851922" ENDARROW="Default" ENDINCLINATION="53;-5;" ID="Arrow_ID_1745317422" STARTARROW="None" STARTINCLINATION="42;2;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1481918174199" ID="ID_364234189" MODIFIED="1481918180762" TEXT="essentiell f&#xfc;r Konsitenz der Session"/>
+<node CREATED="1481918181254" ID="ID_1313994065" MODIFIED="1481918191233" TEXT="stellt bereits sicher, da&#xdf; der Builder blockt"/>
+</node>
+<node CREATED="1481918194356" ID="ID_1233041580" MODIFIED="1481918206823" TEXT="einf&#xfc;gen neuer Commands"/>
+<node CREATED="1481918273490" ID="ID_1214851922" MODIFIED="1481918368739" TEXT="n&#xe4;chstes Command starten">
+<arrowlink COLOR="#010de6" DESTINATION="ID_1857790160" ENDARROW="Default" ENDINCLINATION="86;0;" ID="Arrow_ID_1735750125" STARTARROW="Default" STARTINCLINATION="127;3;"/>
+<linktarget COLOR="#171ccb" DESTINATION="ID_1214851922" ENDARROW="Default" ENDINCLINATION="53;-5;" ID="Arrow_ID_1745317422" SOURCE="ID_1624017067" STARTARROW="None" STARTINCLINATION="42;2;"/>
+</node>
+<node CREATED="1481918291351" ID="ID_1857790160" MODIFIED="1481918331776" TEXT="Builder-Lauf initiieren">
+<linktarget COLOR="#010de6" DESTINATION="ID_1857790160" ENDARROW="Default" ENDINCLINATION="86;0;" ID="Arrow_ID_1735750125" SOURCE="ID_1214851922" STARTARROW="Default" STARTINCLINATION="127;3;"/>
+</node>
+<node CREATED="1481918212722" ID="ID_1376599707" MODIFIED="1481918221844" TEXT="Shutdown-Triggger"/>
+<node CREATED="1481918222577" ID="ID_1588368762" MODIFIED="1481918245517" TEXT="Sperre setzen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1481918517018" HGAP="11" ID="ID_916331172" MODIFIED="1481918522478" TEXT="Sperre" VSHIFT="8">
+<node CREATED="1481918524673" ID="ID_1705856370" MODIFIED="1481918546498" TEXT="verhindert Command- und Builder-start"/>
+<node CREATED="1481918547182" ID="ID_920627724" MODIFIED="1481920718126" TEXT="bestehende Commands / Builder-L&#xe4;ufe werden noch abgeschlossen"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481920722100" ID="ID_1378897740" MODIFIED="1481920732028" TEXT="SessionManager mu&#xdf; auf Sperre warten">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481926040310" ID="ID_667460598" MODIFIED="1481926061115" TEXT="Deadlock wenn der Session-Thread selber auf diese Sperre wartet">
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 </node>
 <node CREATED="1481778549940" HGAP="35" ID="ID_676848252" MODIFIED="1481828600299" TEXT="DispatcherLoop">
@@ -11091,7 +11174,15 @@
 </node>
 <node CREATED="1481778590790" ID="ID_1748096848" MODIFIED="1481826297245" TEXT="Anhalten">
 <linktarget COLOR="#f70841" DESTINATION="ID_1748096848" ENDARROW="Default" ENDINCLINATION="-353;-77;" ID="Arrow_ID_506637666" SOURCE="ID_1844558240" STARTARROW="None" STARTINCLINATION="-200;38;"/>
-<node CREATED="1481778666820" ID="ID_1860590145" MODIFIED="1481778688685" TEXT="trigger-Variable mustHalt_"/>
+<node CREATED="1481778666820" ID="ID_1860590145" MODIFIED="1481917471448" TEXT="Trigger-Variable im Looper">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1481917462421" ID="ID_200909201" MODIFIED="1481917474864" TEXT="shutdown-Trigger ebenda">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1481917478412" ID="ID_594556769" MODIFIED="1481917505131" TEXT="kombiniert enabled und shutdown">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481778708207" HGAP="48" ID="ID_1311208726" MODIFIED="1481831819823" TEXT="Builder-Steuerung" VSHIFT="-5">

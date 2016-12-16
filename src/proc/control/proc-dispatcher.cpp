@@ -46,6 +46,8 @@ using std::unique_ptr;
 namespace proc {
 namespace control {
   
+  namespace error = lumiera::error;
+  
   class DispatcherLoop
     : ThreadJoinable
     , public CommandDispatch
@@ -130,6 +132,12 @@ namespace control {
           UNIMPLEMENTED("*must* notify loop thread");  /////////////////TODO really?
         }
       
+      void
+      awaitCheckpoint()
+        {
+          Lock blockWaiting(this, &DispatcherLoop::stateIsSynched);
+        }
+      
     private:
       void
       run (Subsys::SigTerm sigTerm)
@@ -169,6 +177,18 @@ namespace control {
                           looper_.getTimeout());
         }
       
+      bool
+      stateIsSynched()
+        {
+          bool duelyResolved = false;
+          UNIMPLEMENTED("find out if all pending state changes are carried out.");
+          if (not duelyResolved and calledFromWithinSessionThread())
+            throw error::Fatal("Possible Deadlock. "
+                               "Attempt to synchronise to a command processing check point "
+                               "from within the (single) session thread."
+                              , error::LUMIERA_ERROR_LIFECYCLE);
+        }
+      
       void
       processCommands()
         {
@@ -179,6 +199,15 @@ namespace control {
       startBuilder()
         {
           UNIMPLEMENTED ("start the Proc-Builder to recalculate render nodes network");
+        }
+      
+      bool
+      calledFromWithinSessionThread()
+        {
+          UNIMPLEMENTED ("how to find out when the session thread attempts to catch its own tail...???");
+          ////////////////////////////////////////////////////////////////TODO any idea how to achieve that? The lock does not help us, since it is recursive and
+          //////////////////////////////////////////////////////////////// ... since command/builder execution itself is not performed in a locked section.
+          //////////////////////////////////////////////////////////////// ... Possibly we'll just have to plant a ThreadLocal to mark this dangerous situation.
         }
     };
   
@@ -261,6 +290,21 @@ namespace control {
     active_ = false;
     if (runningLoop_)
       runningLoop_->deactivateCommandProecssing();
+  }
+  
+  
+  /** block until the dispatcher has actually reached disabled state.
+   * @warning beware of invoking this function from within the session thread,
+   *        since the waiting relies on the very lock also used to coordinate
+   *        command processing and builder runs within that thread.
+   * @throw error::Fatal when a deadlock due to such a recursive call can be detected
+   */
+  void
+  ProcDispatcher::awaitDeactivation()
+  {
+    Lock sync(this);
+    if (runningLoop_)
+      runningLoop_->awaitCheckpoint();
   }
 
   

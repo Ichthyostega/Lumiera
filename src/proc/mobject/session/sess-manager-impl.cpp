@@ -166,9 +166,13 @@ namespace session {
           }
         
         
+        /**
+         * @warning throws error::Fatal or even deadlocks when called from session thread
+         */
         void
         commandLogCheckpoint()  override
           {                            //////////////////////////////////////// TICKET #697
+            control::ProcDispatcher::instance().awaitDeactivation();
             INFO (command, " Session shutdown. Command processing stopped.");
           }
         
@@ -241,6 +245,7 @@ namespace session {
   /** Shut down the current session together with all associated services.
    *  @todo avoid blocking when aborting render processes ///////////// TICKET #201
    *  @todo well defined transactional behaviour  ///////////////////// TICKET #698
+   * @warning throws error::Fatal or even deadlocks when called from session thread
    */
   void
   SessManagerImpl::close()
@@ -255,6 +260,7 @@ namespace session {
   /** @todo error handling, how to deal with a partially configured session?
    *  @todo for \c reset() to work, we need to change the implementation of
    *        AssetManager so support this kind of transactional switch!
+   * @warning throws error::Fatal or even deadlocks when called from session thread
    */
   void
   SessManagerImpl::reset()
@@ -265,7 +271,9 @@ namespace session {
     lifecycle_->pullUp();
   }
   
-  
+  /**
+   * @warning throws error::Fatal or even deadlocks when called from session thread
+   */
   void
   SessManagerImpl::load()
   {

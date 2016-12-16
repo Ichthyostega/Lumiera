@@ -76,6 +76,7 @@ namespace control {
       
       void activate();
       void deactivate();
+      void awaitDeactivation();
       void clear();
       
       
