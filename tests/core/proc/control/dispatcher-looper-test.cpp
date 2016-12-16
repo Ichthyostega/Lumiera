@@ -91,6 +91,8 @@ namespace test    {
           verifyBasics();
           verifyShutdown();
           verifyWakeupActivity();
+          verifyShutdown_stops_processing();
+          verifyDisabling_stops_processing();
         }
       
       
@@ -151,6 +153,131 @@ namespace test    {
           CHECK (not looper.isWorking());
           CHECK (    looper.isIdle());
           CHECK (looper.shallLoop());
+        }
+      
+      
+      void
+      verifyShutdown_stops_processing()
+        {
+          Setup setup;
+          Looper looper = setup.install();
+          
+          CHECK (not looper.isDying());
+          CHECK (looper.shallLoop());
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isWorking());
+          CHECK (    looper.isIdle());
+          
+          setup.has_commands_in_queue = true;
+          
+          CHECK (    looper.requireAction());
+          CHECK (    looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (    looper.shallLoop());
+          CHECK (not looper.isDying());
+          
+          looper.triggerShutdown();
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (not looper.shallLoop());
+          CHECK (    looper.isDying());
+          
+          setup.has_commands_in_queue = false;
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (not looper.shallLoop());
+          CHECK (    looper.isDying());
+          
+          setup.has_commands_in_queue = true;
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (not looper.shallLoop());
+          CHECK (    looper.isDying());
+        }
+      
+      
+      void
+      verifyDisabling_stops_processing()
+        {
+          Setup setup;
+          Looper looper = setup.install();
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (    looper.isIdle());
+          CHECK (    looper.shallLoop());
+          CHECK (not looper.isDying());
+          
+          setup.has_commands_in_queue = true;      // normal operation: pending commands will be processed
+          
+          CHECK (    looper.requireAction());      // ..causes wake-up
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (    looper.shallLoop());
+          CHECK (not looper.isDying());
+          
+          looper.enableProcessing(false);          // disable processing
+          
+          CHECK (not looper.requireAction());
+          CHECK (    looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (    looper.shallLoop());
+          CHECK (not looper.isDying());
+          
+          setup.has_commands_in_queue = false;     // while disabled, state of the command queue has no effect
+          
+          CHECK (not looper.requireAction());
+          CHECK (    looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (    looper.shallLoop());
+          CHECK (not looper.isDying());
+          
+          setup.has_commands_in_queue = true;
+          
+          CHECK (not looper.requireAction());
+          CHECK (    looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (    looper.shallLoop());
+          CHECK (not looper.isDying());
+          
+          looper.enableProcessing();               // resume normal operation
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (    looper.shallLoop());
+          CHECK (not looper.isDying());
+          
+          looper.enableProcessing(false);          // disable again
+          
+          CHECK (not looper.requireAction());
+          CHECK (    looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (    looper.shallLoop());
+          CHECK (not looper.isDying());
+          
+          looper.triggerShutdown();                // wake-up for shutdown even from disabled state
+          
+          CHECK (    looper.requireAction());
+          CHECK (    looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.isIdle());
+          CHECK (not looper.shallLoop());
+          CHECK (    looper.isDying());
         }
     };
   

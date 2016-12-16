@@ -110,6 +110,12 @@ namespace control {
           shutdown_ = true;
         }
       
+      void
+      enableProcessing(bool yes =true)
+        {
+          disabled_ = not yes;
+        }
+      
       /** state fusion to control (timed) wait */
       bool
       requireAction()
