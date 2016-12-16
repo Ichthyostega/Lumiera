@@ -52,6 +52,7 @@ namespace test    {
      */
     struct Setup
       {
+        bool has_commands_in_queue = false;
         
         Looper
         install()
@@ -89,6 +90,7 @@ namespace test    {
         {
           verifyBasics();
           verifyShutdown();
+          verifyWakeupActivity();
         }
       
       
@@ -120,6 +122,33 @@ namespace test    {
           looper.triggerShutdown();
           CHECK (looper.isDying());
           CHECK (not looper.shallLoop());
+        }
+      
+      
+      void
+      verifyWakeupActivity()
+        {
+          Setup setup;
+          Looper looper = setup.install();
+          
+          CHECK (not looper.isDying());
+          CHECK (looper.shallLoop());
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isWorking());
+          CHECK (    looper.isIdle());
+          
+          setup.has_commands_in_queue = true;
+          
+          CHECK (    looper.requireAction());
+          CHECK (    looper.isWorking());
+          CHECK (not looper.isIdle());
+          
+          setup.has_commands_in_queue = false;
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isWorking());
+          CHECK (    looper.isIdle());
         }
     };
   
