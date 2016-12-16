@@ -93,6 +93,8 @@ namespace test    {
           verifyWakeupActivity();
           verifyShutdown_stops_processing();
           verifyDisabling_stops_processing();
+          verifyBuidlerStart();
+          verifyCheckpoint();
         }
       
       
@@ -278,6 +280,20 @@ namespace test    {
           CHECK (not looper.isIdle());
           CHECK (not looper.shallLoop());
           CHECK (    looper.isDying());
+        }
+      
+      
+      void
+      verifyBuidlerStart()
+        {
+          UNIMPLEMENTED("verify the logic when builder gets triggered");
+        }
+      
+      
+      void
+      verifyCheckpoint()
+        {
+          UNIMPLEMENTED("verify the semantics of reaching a checkpoint");
         }
     };
   

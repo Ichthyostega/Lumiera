@@ -21,6 +21,22 @@
 * *****************************************************/
 
 
+/** @file proc-dispatcher.cpp
+ ** Implementation details of running commands and the builder.
+ ** The ProcDispatcher is at the heart of the session subsystem and implements
+ ** a (single) session thread to perform commands and trigger builder runs.
+ ** New commands can be enqueued with a dedicated CommandQueue, while the details
+ ** of operation control logic are encapsulated in a [logic component](\ref Looper).
+ ** 
+ ** @todo as of 12/2016, implementation has been drafted and is very much WIP
+ ** @todo                         //////////////////////////////////////////////////////TODO ensure really every state change triggers a wakeup!!!!!!!
+ ** 
+ ** @see ProcDispatcher
+ ** @see DispatcherLooper_test
+ ** @see CommandQueue_test
+ **
+ */
+
 
 #include "lib/error.hpp"
 #include "include/logging.h"
@@ -108,12 +124,14 @@ namespace control {
       
       
       /* === CommandDispatch interface === */
+          //////////////////////////////////////////TODO notify!!!! on!! every!! state!! changing!! operation!!
       
       void
       clear()  override
         {
           Lock sync(this);
           UNIMPLEMENTED ("clear the queue");
+          //////////////////////////////////////////TODO notify!!!!
         }
       
       size_t
@@ -129,7 +147,8 @@ namespace control {
           Lock sync(this);
           commandService_.reset(); // closes Session interface
           mustHalt_ = true;
-          UNIMPLEMENTED("*must* notify loop thread");  /////////////////TODO really?
+          UNIMPLEMENTED("*must* notify loop thread");  /////////////////TODO really?  YES!!!
+          //////////////////////////////////////////TODO notify!!!!
         }
       
       void
