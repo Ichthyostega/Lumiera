@@ -25,6 +25,7 @@
 #include "proc/control/looper.hpp"
 //#include "proc/control/command.hpp"
 //#include "proc/control/command-registry.hpp"
+#include "lib/format-cout.hpp"
 //#include "lib/test/event-log.hpp"
 
 //#include "proc/control/test-dummy-commands.hpp"
@@ -88,6 +89,7 @@ namespace test    {
       run (Arg)
         {
           verifyBasics();
+          verifyShutdown();
         }
       
       
@@ -98,6 +100,27 @@ namespace test    {
           Looper looper = setup.install();
           
           CHECK (not looper.isDying());
+          CHECK (looper.shallLoop());
+          CHECK (not looper.needBuild());
+          
+          uint timeout = looper.getTimeout();
+          CHECK (10 < timeout,  "configured idle timeout %2u to short", timeout);
+          CHECK (timeout < 500, "configured idle timeout %3u to long",  timeout);
+        }
+      
+      
+      void
+      verifyShutdown()
+        {
+          Setup setup;
+          Looper looper = setup.install();
+          
+          CHECK (not looper.isDying());
+          CHECK (looper.shallLoop());
+          
+          setup.shutdown = true;
+          CHECK (looper.isDying());
+          CHECK (not looper.shallLoop());
         }
     };
   
