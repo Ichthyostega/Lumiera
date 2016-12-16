@@ -52,7 +52,6 @@ namespace test    {
      */
     struct Setup
       {
-        bool shutdown = false;
         
         Looper
         install()
@@ -118,7 +117,7 @@ namespace test    {
           CHECK (not looper.isDying());
           CHECK (looper.shallLoop());
           
-          setup.shutdown = true;
+          looper.triggerShutdown();
           CHECK (looper.isDying());
           CHECK (not looper.shallLoop());
         }

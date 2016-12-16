@@ -77,7 +77,8 @@ namespace control {
    */
   class Looper
     {
-      
+      bool shutdown = false;
+        
     public:
       Looper()
       { }
@@ -88,7 +89,7 @@ namespace control {
       bool isIdle()     const  { return false; }
       bool needBuild()  const  { return false; }
       bool isDisabled() const  { return false; }
-      bool isDying()    const  { return false; }
+      bool isDying()    const  { return shutdown; }
       
       
       /** state fusion to control (timed) wait */
@@ -115,6 +116,11 @@ namespace control {
         }
       
       
+      void
+      triggerShutdown()
+        {
+          shutdown = true;
+        }
       /* == diagnostics == */
       
 //    size_t size() const ;
