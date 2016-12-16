@@ -287,6 +287,148 @@ namespace test    {
       verifyBuidlerStart()
         {
           UNIMPLEMENTED("verify the logic when builder gets triggered");
+          Setup setup;
+          Looper looper = setup.install();
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.needBuild());
+          CHECK (    looper.isIdle());
+          
+          setup.has_commands_in_queue = true;      // regular command processing
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (    looper.needBuild());
+          CHECK (not looper.isIdle());
+          
+          setup.has_commands_in_queue = false;     // done with the commands thus far
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (    looper.needBuild());          // ...note: still needs build
+          CHECK (    looper.isIdle());
+          ///////////////////////////////TODO verify the timeout is the short timeout
+          
+          ///////////////////////////////TODO how to communicate build dirty state??  // set NOT DIRTY
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.needBuild());          // ...note: now done with building
+          CHECK (    looper.isIdle());
+          ///////////////////////////////TODO verify the timeout is now the *extended* timeout
+          
+          setup.has_commands_in_queue = true;      // next command pending
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (    looper.needBuild());
+          CHECK (not looper.isIdle());
+          ///////////////////////////////TODO verify the timeout is back to the short period
+          
+          looper.enableProcessing(false);          // disable processing
+          
+          CHECK (not looper.requireAction());
+          CHECK (    looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.needBuild());          // ...note: dirty state hidden by disabled state
+          CHECK (not looper.isIdle());
+          ///////////////////////////////TODO verify the timeout is *completely disabled*
+          
+          looper.enableProcessing(true);           // enable back
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (    looper.needBuild());          // ...note: dirty state revealed again
+          CHECK (not looper.isIdle());
+          ///////////////////////////////TODO verify the timeout is back to the short period
+          
+          setup.has_commands_in_queue = false;     // done with the commands
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (    looper.needBuild());          // ...note: still needs build
+          CHECK (    looper.isIdle());
+          
+          looper.enableProcessing(false);          // disable processing
+          
+          CHECK (not looper.requireAction());
+          CHECK (    looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.needBuild());          // ...note: dirty state hidden
+          CHECK (not looper.isIdle());
+          ///////////////////////////////TODO verify the timeout is *completely disabled*
+          
+          looper.enableProcessing(true);           // enable back
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (    looper.needBuild());          // ...note: dirty state revealed
+          CHECK (    looper.isIdle());
+          ///////////////////////////////TODO verify the timeout is back to the short period
+          
+          looper.enableProcessing(false);          // disable processing
+          ///////////////////////////////TODO how to communicate build dirty state??  // set NOT DIRTY
+                                                   // let's assume builder was running and is now finished
+          
+          CHECK (not looper.requireAction());
+          CHECK (    looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.needBuild());          // ...note: dirty state not obvious
+          CHECK (not looper.isIdle());
+          ///////////////////////////////TODO verify the timeout is *completely disabled*
+          
+          looper.enableProcessing(true);           // enable back
+          
+          CHECK (not looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.needBuild());          // ...note: but now it becomes clear builder is not dirty
+          CHECK (    looper.isIdle());
+          ///////////////////////////////TODO verify the timeout is now the *extended* timeout
+          
+          setup.has_commands_in_queue = true;      // more commands again
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (    looper.needBuild());
+          CHECK (not looper.isIdle());
+          
+          looper.triggerShutdown();                // request shutdown...
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.needBuild());          // ...note: no need to care for builder anymore
+          CHECK (not looper.isIdle());
+          ///////////////////////////////TODO verify the timeout *remains* at the short period (due to shutdown)
+          
+          setup.has_commands_in_queue = false;     // and even when done all commands
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.needBuild());          // ...note: still no need for builder run, since in shutdown
+          CHECK (not looper.isIdle());
+          ///////////////////////////////TODO verify the timeout *remains* at the short period (due to shutdown)
+          
+          ///////////////////////////////TODO how to communicate build dirty state??  // set NOT DIRTY
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.needBuild());
+          CHECK (not looper.isIdle());
+          ///////////////////////////////TODO verify the timeout *remains* at the short period (due to shutdown)
         }
       
       
@@ -294,6 +436,10 @@ namespace test    {
       verifyCheckpoint()
         {
           UNIMPLEMENTED("verify the semantics of reaching a checkpoint");
+                                                        //////////////////////////TODO a checkpoint is reached when no state change is pending
+                                                        //////////////////////////TODO It is not clear how this relates to triggering the Builder,
+                                                        //////////////////////////TODO since the initial idea was to trigger the Builder at checkpoints,
+                                                        /// but now it looks like we don't need this distinction anymore
         }
     };
   
