@@ -48,7 +48,7 @@
 //#include "lib/depend.hpp"
 
 //#include <memory>
-//#include <functional>
+#include <functional>
 
 
 
@@ -57,6 +57,7 @@ namespace control {
   
 //  using lib::Symbol;
 //  using std::bind;
+//  using std::function;
   
   namespace {
     /**
@@ -77,20 +78,37 @@ namespace control {
    */
   class Looper
     {
-      bool shutdown = false;
+      using Predicate = std::function<bool(void)>;
+      
+      bool shutdown_ = false;
+      bool disabled_ = false;
+      Predicate hasCommandsPending_;
         
     public:
-      Looper()
+      template<class FUN>
+      Looper(FUN determine_commands_are_waiting)
+        : hasCommandsPending_(determine_commands_are_waiting)
       { }
       
-      /* == working state == */
+      // standard copy acceptable
       
-      bool isWorking()  const  { return false; }
-      bool isIdle()     const  { return false; }
+      
+      /* == working state logic == */
+      
+      bool isDying()    const  { return shutdown_; }
+      bool isDisabled() const  { return disabled_ or isDying(); }
+      bool isWorking()  const  { return hasCommandsPending_() and not isDisabled(); }
       bool needBuild()  const  { return false; }
-      bool isDisabled() const  { return false; }
-      bool isDying()    const  { return shutdown; }
+      bool isIdle()     const  { return not (isWorking() or needBuild() or isDisabled()); }
       
+      
+      /* == operation control == */
+      
+      void
+      triggerShutdown()
+        {
+          shutdown_ = true;
+        }
       
       /** state fusion to control (timed) wait */
       bool
@@ -115,12 +133,6 @@ namespace control {
           return wakeTimeout_ms;
         }
       
-      
-      void
-      triggerShutdown()
-        {
-          shutdown = true;
-        }
       /* == diagnostics == */
       
 //    size_t size() const ;

@@ -57,7 +57,7 @@ namespace test    {
         Looper
         install()
           {
-            return Looper{};
+            return Looper([&](){ return has_commands_in_queue; });
           }
       };
     
@@ -143,12 +143,14 @@ namespace test    {
           CHECK (    looper.requireAction());
           CHECK (    looper.isWorking());
           CHECK (not looper.isIdle());
+          CHECK (looper.shallLoop());
           
           setup.has_commands_in_queue = false;
           
           CHECK (not looper.requireAction());
           CHECK (not looper.isWorking());
           CHECK (    looper.isIdle());
+          CHECK (looper.shallLoop());
         }
     };
   

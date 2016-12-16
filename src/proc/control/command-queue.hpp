@@ -72,8 +72,18 @@ namespace control {
       
       /* == diagnostics == */
       
-//    size_t size() const ;
-//    bool empty()  const ;
+      size_t
+      size() const
+        {
+          TODO ("implement queue");
+          return 0;
+        }
+      
+      bool
+      empty()  const
+        {
+          return 0 == size();
+        }
       
     };
   ////////////////TODO 12/16 currently just fleshing  out the API....

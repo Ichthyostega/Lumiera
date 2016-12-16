@@ -67,7 +67,10 @@ namespace control {
                         , bind (&DispatcherLoop::run, this, notification))
         , commandService_(new SessionCommandService(*this))
         , queue_()
-        , looper_()
+        , looper_([&]() -> bool
+                    {
+                      return not queue_.empty();
+                    })
         {
           INFO (session, "Proc-Dispatcher running...");
         }
@@ -162,8 +165,7 @@ namespace control {
       void
       awaitAction()
         {
-          Lock(this).wait(looper_,
-                          &Looper::requireAction,
+          Lock(this).wait(looper_, &Looper::requireAction,
                           looper_.getTimeout());
         }
       
