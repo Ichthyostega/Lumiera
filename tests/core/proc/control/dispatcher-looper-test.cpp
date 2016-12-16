@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/control/command-queue.hpp"
+#include "proc/control/looper.hpp"
 //#include "proc/control/command.hpp"
 //#include "proc/control/command-registry.hpp"
 //#include "lib/test/event-log.hpp"
@@ -43,6 +43,22 @@ namespace test    {
   
   namespace { // test fixture...
     
+    /**
+     * Setup for testing the Looper.
+     * In operation, the Looper receives its input by invoking closures.
+     * With the help of this adapter, unit tests may just set values
+     * on the Setup record and verify the result on the wired Looper
+     */
+    struct Setup
+      {
+        bool shutdown = false;
+        
+        Looper
+        install()
+          {
+            return Looper{};
+          }
+      };
     
   }//(End) test fixture
   
@@ -78,6 +94,10 @@ namespace test    {
       void
       verifyBasics()
         {
+          Setup setup;
+          Looper looper = setup.install();
+          
+          CHECK (not looper.isDying());
         }
     };
   
