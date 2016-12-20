@@ -11113,7 +11113,8 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1481918517018" HGAP="11" ID="ID_916331172" MODIFIED="1481918522478" TEXT="Sperre" VSHIFT="8">
+<node CREATED="1481918517018" HGAP="11" ID="ID_916331172" MODIFIED="1482197469326" TEXT="Sperre" VSHIFT="8">
+<icon BUILTIN="bell"/>
 <node CREATED="1481918524673" ID="ID_1705856370" MODIFIED="1481918546498" TEXT="verhindert Command- und Builder-start"/>
 <node CREATED="1481918547182" ID="ID_920627724" MODIFIED="1481920718126" TEXT="bestehende Commands / Builder-L&#xe4;ufe werden noch abgeschlossen"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481920722100" ID="ID_1378897740" MODIFIED="1481920732028" TEXT="SessionManager mu&#xdf; auf Sperre warten">
@@ -11121,6 +11122,69 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481926040310" ID="ID_667460598" MODIFIED="1481926061115" TEXT="Deadlock wenn der Session-Thread selber auf diese Sperre wartet">
 <icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1482197251133" ID="ID_1245878337" MODIFIED="1482197465351">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ticket <font color="#e90426">#1054</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="bell"/>
+<node CREATED="1482197270202" ID="ID_221875120" MODIFIED="1482197288634" TEXT="neues API auf unserem Thread-Wrapper schaffen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1482197280297" ID="ID_1142010083" MODIFIED="1482197291127" TEXT="rein technisch bereits heute m&#xf6;glich">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1482197292263" ID="ID_669497196" MODIFIED="1482197456041" TEXT="jeder Lumiera-Thread speichert &quot;self&quot; in thread local storage">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und &quot;self&quot; == LumieraThrea* == &quot;handle&quot; (im Wrapper).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      D.h. solange der Wrapper lebt (!), kann er selber leicht feststellen, ob die aktuelle Ausf&#252;hrung
+    </p>
+    <p>
+      auch in einem Thread stattfindet, der
+    </p>
+    <ul>
+      <li>
+        von unserem Threadpool gestartet wurde
+      </li>
+      <li>
+        ein Thread-Handle hat, das mit dem Handle dieses Wrappers identisch ist.
+      </li>
+    </ul>
+    <p>
+      
+    </p>
+    <p>
+      Das Sch&#246;ne bei diesem Ansatz ist, da&#223; man daf&#252;r weder das Handle exponieren mu&#223;,
+    </p>
+    <p>
+      noch irgendwelche komischen Policies aufmachen. Solange es das Objekt gibt, klappt das.
+    </p>
+    <p>
+      OO rocks!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
 </node>
 </node>
 </node>
@@ -11207,7 +11271,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481928958233" ID="ID_350657817" MODIFIED="1481929002980" TEXT="Builder-Lauf erzwingen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1481928966167" ID="ID_1511723472" MODIFIED="1481928974435" TEXT="wenn lange Timeout-Spanne &#xfc;berschritten"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481928978223" ID="ID_106761868" MODIFIED="1481928996349" TEXT="implementierung erforder Zeitmessung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481928978223" ID="ID_106761868" MODIFIED="1482194043443" TEXT="implementierung erfordert Zeitmessung">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>

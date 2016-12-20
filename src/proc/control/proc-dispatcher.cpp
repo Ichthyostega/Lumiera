@@ -227,6 +227,8 @@ namespace control {
           ////////////////////////////////////////////////////////////////TODO any idea how to achieve that? The lock does not help us, since it is recursive and
           //////////////////////////////////////////////////////////////// ... since command/builder execution itself is not performed in a locked section.
           //////////////////////////////////////////////////////////////// ... Possibly we'll just have to plant a ThreadLocal to mark this dangerous situation.
+          
+          ///////////////////////////////////////////////////////////////////////////////TICKET #1054 : can be done by relying on some internals of our thread handling framework
         }
     };
   

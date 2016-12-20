@@ -197,6 +197,7 @@ namespace backend {
           return thread_;
         }
       
+      ////////////////////////////////////////////////////////////////////////////TICKET #1054 : API to find out if current execution is *in* this thread!
       
       /** Synchronisation barrier. In the function executing in this thread
        *  needs to be a corresponding Thread::syncPoint() call. Blocking until
