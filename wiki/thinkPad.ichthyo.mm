@@ -11275,6 +11275,43 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+<node CREATED="1482202066204" HGAP="23" ID="ID_41541843" MODIFIED="1482202078184" TEXT="L&#xf6;sungnsansatz" VSHIFT="16">
+<icon BUILTIN="help"/>
+<node CREATED="1482202080675" ID="ID_12774028" MODIFIED="1482202126233" TEXT="CommandQueue mu&#xdf; helfen und dirty-state verwalten">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1482202099752" ID="ID_434677221" MODIFIED="1482202114130" TEXT="geht, weil sie wei&#xdf;, wann ein Command wirklich l&#xe4;uft"/>
+<node CREATED="1482202114630" ID="ID_1833945556" MODIFIED="1482202123872" TEXT="unsch&#xf6;n, weil wir nun massive Kopplung haben"/>
+</node>
+<node CREATED="1482202127252" ID="ID_1720469294" MODIFIED="1482202135479" TEXT="Looper in State-machine verwandeln">
+<node CREATED="1482202136235" ID="ID_239151488" MODIFIED="1482202175455" TEXT="schwierig">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1482202142818" ID="ID_1412852448" MODIFIED="1482202181794" TEXT="ben&#xf6;tigt Hilfe von der DispatcherLoop">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1482202156416" ID="ID_1161547825" MODIFIED="1482202183920" TEXT="geht aber: nach jedem WHILE-Durchlauf">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1482202165423" ID="ID_1845799711" MODIFIED="1482202186673" TEXT="schaut sauberer aus">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1482202187620" ID="ID_259250017" MODIFIED="1482202197691" TEXT="Frage: geht es &#xfc;berhaupt zu implementieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node CREATED="1482202207242" ID="ID_1287224856" MODIFIED="1482202269318" TEXT="Test">
+<icon BUILTIN="pencil"/>
+<node CREATED="1482202211049" ID="ID_1159832087" MODIFIED="1482202222520" TEXT="komplexen Ablauf als Szenario durchspielen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1482202223536" ID="ID_374030732" MODIFIED="1482202266018" TEXT="Logik im Looper auf Basis generischer &#xdc;berlegungen implementieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1482202243253" ID="ID_1342399342" MODIFIED="1482202264229" TEXT="verh&#xe4;lt er sich dann richtig">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 <node CREATED="1481828583551" ID="ID_436508747" MODIFIED="1481828608672" TEXT="Aufbau">
 <node CREATED="1481828611347" ID="ID_160907866" MODIFIED="1481828614071" TEXT="Front-End"/>

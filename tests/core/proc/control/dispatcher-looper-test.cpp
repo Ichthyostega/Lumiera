@@ -79,7 +79,6 @@ namespace test    {
     struct Setup
       {
         bool has_commands_in_queue = false;
-        bool builder_is_dirty      = false;
         
         Looper
         install()
@@ -324,7 +323,6 @@ namespace test    {
           CHECK (    looper.isIdle());
           
           setup.has_commands_in_queue = true;      // regular command processing
-          setup.builder_is_dirty = true;           // need to re-build after issuing a command
           
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
@@ -332,19 +330,52 @@ namespace test    {
           CHECK (    looper.needBuild());
           CHECK (not looper.isIdle());
           
-          setup.has_commands_in_queue = false;     // done with the commands thus far
+          looper.markStateProcessed();             // at least one command has been handled
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (    looper.needBuild());          // ...note: still needs build
+          CHECK (not looper.isIdle());
+          
+          CHECK (isFast (looper.getTimeout()));
+          
+          
+          looper.markStateProcessed();             // next processing round: further command(s) processed,
+                                                   // yet still more commands pending...
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (    looper.needBuild());          // ...note: still needs build
+          CHECK (not looper.isIdle());
+          
+          CHECK (isFast (looper.getTimeout()));
+          
+          
+          looper.markStateProcessed();             // let's assume we've hit the long timeout
+                                                   // and thus triggered one the builder run now,
+                                                   // but still more commands are pending...
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (    looper.needBuild());          // ...note: again needs build
+          CHECK (not looper.isIdle());
+          
+          CHECK (isFast (looper.getTimeout()));
+          
+          
+          setup.has_commands_in_queue = false;     // now emptied our queue
+          looper.markStateProcessed();             // at least one command has been handled
           
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
           CHECK (    looper.needBuild());          // ...note: still needs build
-          CHECK (    looper.isIdle());
-          
-          CHECK (isFast (looper.getTimeout()));
+          CHECK (not looper.isIdle());
           
           
-          setup.builder_is_dirty = false;
-          
+          looper.markStateProcessed();             // next processing round: invoked builder,
+                                                   // and no more commands commands pending...
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
@@ -360,12 +391,12 @@ namespace test    {
           CHECK (not looper.isDisabled());
           CHECK (    looper.isWorking());
           CHECK (not looper.needBuild());          // ...note: command not yet processed: no need to re-build
-          CHECK (    looper.isIdle());
+          CHECK (not looper.isIdle());
           
           CHECK (isSlow (looper.getTimeout()));
           
           
-          setup.builder_is_dirty = true;           // now let's assume one command has been processed
+          looper.markStateProcessed();             // now let's assume one command has been processed
           
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
@@ -399,6 +430,7 @@ namespace test    {
           
           
           setup.has_commands_in_queue = false;     // done with the commands
+          looper.markStateProcessed();
           
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
@@ -429,7 +461,7 @@ namespace test    {
           
           
           looper.enableProcessing(false);          // disable processing
-          setup.builder_is_dirty = false;          // let's assume builder was running and is now finished
+          looper.markStateProcessed();             // let's assume builder was running and is now finished
           
           CHECK (not looper.requireAction());
           CHECK (    looper.isDisabled());
@@ -452,7 +484,7 @@ namespace test    {
           
           
           setup.has_commands_in_queue = true;      // more commands again
-          setup.builder_is_dirty      = true;      // ...and let's assume one command has already been processed
+          looper.markStateProcessed();             // ...and let's assume one command has already been processed
           
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
@@ -471,7 +503,8 @@ namespace test    {
           CHECK (isFast (looper.getTimeout()));
           
           
-          setup.has_commands_in_queue = false;     // and even when done all commands
+          setup.has_commands_in_queue = false;     // and even when done with all commands...
+          looper.markStateProcessed();
           
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
@@ -482,7 +515,7 @@ namespace test    {
           CHECK (isFast (looper.getTimeout()));
           
           
-          setup.builder_is_dirty = false;
+          looper.markStateProcessed();
           
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());

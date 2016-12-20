@@ -173,6 +173,7 @@ namespace control {
                   else
                   if (looper_.isWorking())
                     processCommands();
+                  looper_.markStateProcessed();
                 }
             }
           catch (lumiera::Error& problem)
@@ -199,13 +200,12 @@ namespace control {
       bool
       stateIsSynched()
         {
-          bool duelyResolved = false;
-          UNIMPLEMENTED("find out if all pending state changes are carried out.");
-          if (not duelyResolved and calledFromWithinSessionThread())
+          if (looper_.hasPendingChanges() and calledFromWithinSessionThread())
             throw error::Fatal("Possible Deadlock. "
                                "Attempt to synchronise to a command processing check point "
                                "from within the (single) session thread."
                               , error::LUMIERA_ERROR_LIFECYCLE);
+          return looper_.hasPendingChanges();
         }
       
       void

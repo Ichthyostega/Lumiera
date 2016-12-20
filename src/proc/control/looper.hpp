@@ -116,6 +116,22 @@ namespace control {
           disabled_ = not yes;
         }
       
+      /** invoking this function signals
+       *  that all consequences of past state changes
+       *  have been processed and duly resolved.
+       */
+      void
+      markStateProcessed()
+        {
+          UNIMPLEMENTED("state transition logic");
+        }
+      
+      bool
+      hasPendingChanges()  const
+        {
+          UNIMPLEMENTED("state transition logic");
+        }
+      
       /** state fusion to control (timed) wait */
       bool
       requireAction()
