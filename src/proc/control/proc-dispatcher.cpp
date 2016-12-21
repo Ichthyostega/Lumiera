@@ -47,12 +47,8 @@
 #include "proc/control/session-command-service.hpp"
 #include "proc/mobject/session.hpp"
 #include "backend/thread-wrapper.hpp"
-//#include "proc/mobject/mobject-ref.hpp"
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement.hpp"
 
 #include <memory>
-//using boost::str;
   
 using backend::ThreadJoinable;
 using lib::Sync;
@@ -71,7 +67,6 @@ namespace control {
     {
       bool canDispatch_{false};
       bool blocked_    {false};
-      bool mustHalt_   {false};  /////////////////TODO this flag shall be relocated into the Looper!
       
       unique_ptr<SessionCommandService> commandService_;
       
@@ -146,7 +141,7 @@ namespace control {
         {
           Lock sync(this);
           commandService_.reset(); // closes Session interface
-          mustHalt_ = true;
+          looper_.triggerShutdown();
           UNIMPLEMENTED("*must* notify loop thread");  /////////////////TODO really?  YES!!!
           //////////////////////////////////////////TODO notify!!!!
         }

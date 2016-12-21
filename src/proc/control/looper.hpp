@@ -82,6 +82,7 @@ namespace control {
       
       bool shutdown_ = false;
       bool disabled_ = false;
+      uint dirty_    = false;
       Predicate hasCommandsPending_;
         
     public:
@@ -98,7 +99,7 @@ namespace control {
       bool isDying()    const  { return shutdown_; }
       bool isDisabled() const  { return disabled_ or isDying(); }
       bool isWorking()  const  { return hasCommandsPending_() and not isDisabled(); }
-      bool runBuild()   const  { return false; }
+      bool runBuild()   const  { return (dirty_ and not hasCommandsPending_()) or forceBuild(); }
       bool isIdle()     const  { return not (isWorking() or runBuild() or isDisabled()); }
       
       
@@ -118,12 +119,14 @@ namespace control {
       
       /** invoking this function signals
        *  that all consequences of past state changes
-       *  have been processed and duly resolved.
+       *  have been processed and are duly resolved.
        */
       void
       markStateProcessed()
         {
-          UNIMPLEMENTED("state transition logic");
+          if (runBuild())
+            --dirty_;
+          ENSURE (dirty_ <= 2);
         }
       
       bool
@@ -136,8 +139,11 @@ namespace control {
       bool
       requireAction()
         {
+          if (isWorking())
+            dirty_ = 2;
+          
           return isWorking()
-              or runBuild()
+              or forceBuild()
               or isDying();
         }
       
@@ -162,6 +168,11 @@ namespace control {
       
     private:
       static uint establishWakeTimeout();
+      
+      bool forceBuild()  const
+        {
+          return false;
+        }
     };
   ////////////////TODO 12/16 currently just fleshing  out the API....
   
@@ -177,7 +188,7 @@ namespace control {
    * period visible to the user as update response delay within the UI.
    * @todo find a way how to retrieve this value from application config!    ////////////////////TICKET #1052 : access application configuration
    */
-  uint
+  uint inline
   Looper::establishWakeTimeout()
   {
     return PROC_DISPATCHER_BUILDER_DELAY_ms;
