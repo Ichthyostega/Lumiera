@@ -23,23 +23,18 @@
 
 #include "lib/test/run.hpp"
 #include "proc/control/looper.hpp"
-//#include "proc/control/command.hpp"
-//#include "proc/control/command-registry.hpp"
 #include "lib/format-cout.hpp"
-//#include "lib/test/event-log.hpp"
 
-//#include "proc/control/test-dummy-commands.hpp"
-
-//#include <cstdlib>
+#include <chrono>
+#include <thread>
 
 
 namespace proc {
 namespace control {
 namespace test    {
   
-  
-//  using std::function;
-//  using std::rand;
+  using std::this_thread::sleep_for;
+  using namespace std::chrono_literals;
   
   
   namespace { // test fixture...
@@ -89,8 +84,6 @@ namespace test    {
     
   }//(End) test fixture
   
-//  typedef shared_ptr<CommandImpl> PCommandImpl;
-//  typedef HandlingPattern const& HaPatt;
   
   
   
@@ -119,8 +112,7 @@ namespace test    {
           verifyWakeupActivity();
           verifyShutdown_stops_processing();
           verifyDisabling_stops_processing();
-          verifyBuidlerStart();
-          verifyCheckpoint();
+          verifyBuilderStart();
         }
       
       
@@ -132,7 +124,7 @@ namespace test    {
           
           CHECK (not looper.isDying());
           CHECK (looper.shallLoop());
-          CHECK (not looper.needBuild());
+          CHECK (not looper.runBuild());
           
           uint timeout = looper.getTimeout();
           CHECK (10 < timeout,  "configured idle timeout %2u to short", timeout);
@@ -310,16 +302,15 @@ namespace test    {
       
       
       void
-      verifyBuidlerStart()
+      verifyBuilderStart()
         {
-          UNIMPLEMENTED("verify the logic when builder gets triggered");
           Setup setup;
           Looper looper = setup.install();
           
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.needBuild());
+          CHECK (not looper.runBuild());
           CHECK (    looper.isIdle());
           
           setup.has_commands_in_queue = true;      // regular command processing
@@ -327,7 +318,7 @@ namespace test    {
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (    looper.isWorking());
-          CHECK (    looper.needBuild());
+          CHECK (not looper.runBuild());
           CHECK (not looper.isIdle());
           
           looper.markStateProcessed();             // at least one command has been handled
@@ -335,7 +326,7 @@ namespace test    {
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (    looper.isWorking());
-          CHECK (    looper.needBuild());          // ...note: still needs build
+          CHECK (not looper.runBuild());           // ...note: build not yet triggered
           CHECK (not looper.isIdle());
           
           CHECK (isFast (looper.getTimeout()));
@@ -346,32 +337,37 @@ namespace test    {
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (    looper.isWorking());
-          CHECK (    looper.needBuild());          // ...note: still needs build
+          CHECK (not looper.runBuild());           // ...build still postponed
           CHECK (not looper.isIdle());
           
-          CHECK (isFast (looper.getTimeout()));
+          sleep_for (1200ms);
           
-          
-          looper.markStateProcessed();             // let's assume we've hit the long timeout
-                                                   // and thus triggered one the builder run now,
-                                                   // but still more commands are pending...
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (    looper.isWorking());
-          CHECK (    looper.needBuild());          // ...note: again needs build
+          CHECK (    looper.runBuild());           // ...after some time of command processing, a build run is forced
           CHECK (not looper.isIdle());
           
-          CHECK (isFast (looper.getTimeout()));
+          looper.markStateProcessed();             // and when the builder run is confirmed...
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isDisabled());
+          CHECK (    looper.isWorking());
+          CHECK (not looper.runBuild());           // ...we are back to normal working state (build postponed)
+          CHECK (not looper.isIdle());
           
           
           setup.has_commands_in_queue = false;     // now emptied our queue
-          looper.markStateProcessed();             // at least one command has been handled
+          looper.markStateProcessed();             // at least one further command has been handled
           
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (    looper.needBuild());          // ...note: still needs build
+          CHECK (    looper.runBuild());           // ...note: now build will be triggered
           CHECK (not looper.isIdle());
+          
+          CHECK (isFast (looper.getTimeout()));    // ...but only after a short wait period,
+                                                   //    since not looper.requireAction()
           
           
           looper.markStateProcessed();             // next processing round: invoked builder,
@@ -379,32 +375,30 @@ namespace test    {
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.needBuild());          // ...note: now done with building
+          CHECK (not looper.runBuild());           // ...note: now done with building
           CHECK (    looper.isIdle());
           
-          CHECK (isSlow (looper.getTimeout()));
+          CHECK (isSlow (looper.getTimeout()));    // ...now Dispatcher is idle and goes to sleep
           
           
           setup.has_commands_in_queue = true;      // next command pending
           
-          CHECK (    looper.requireAction());
+          CHECK (    looper.requireAction());      // return to work mode
           CHECK (not looper.isDisabled());
           CHECK (    looper.isWorking());
-          CHECK (not looper.needBuild());          // ...note: command not yet processed: no need to re-build
+          CHECK (not looper.runBuild());
           CHECK (not looper.isIdle());
           
-          CHECK (isSlow (looper.getTimeout()));
+          setup.has_commands_in_queue = false;     // now let's assume command has been processed
+          looper.markStateProcessed();             // and queue is empty again
           
-          
-          looper.markStateProcessed();             // now let's assume one command has been processed
-          
-          CHECK (    looper.requireAction());
+          CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
-          CHECK (    looper.isWorking());
-          CHECK (    looper.needBuild());
+          CHECK (not looper.isWorking());
+          CHECK (    looper.runBuild());
           CHECK (not looper.isIdle());
           
-          CHECK (isFast (looper.getTimeout()));
+          CHECK (isFast (looper.getTimeout()));    // now build *would* be triggered after short timeout, but..
           
           
           looper.enableProcessing(false);          // disable processing
@@ -412,38 +406,7 @@ namespace test    {
           CHECK (not looper.requireAction());
           CHECK (    looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.needBuild());          // ...note: dirty state hidden by disabled state
-          CHECK (not looper.isIdle());
-          
-          CHECK (isDisabled (looper.getTimeout()));
-          
-          
-          looper.enableProcessing(true);           // enable back
-          
-          CHECK (    looper.requireAction());
-          CHECK (not looper.isDisabled());
-          CHECK (    looper.isWorking());
-          CHECK (    looper.needBuild());          // ...note: dirty state revealed again
-          CHECK (not looper.isIdle());
-          
-          CHECK (isFast (looper.getTimeout()));
-          
-          
-          setup.has_commands_in_queue = false;     // done with the commands
-          looper.markStateProcessed();
-          
-          CHECK (not looper.requireAction());
-          CHECK (not looper.isDisabled());
-          CHECK (not looper.isWorking());
-          CHECK (    looper.needBuild());          // ...note: still needs build
-          CHECK (    looper.isIdle());
-          
-          looper.enableProcessing(false);          // disable processing
-          
-          CHECK (not looper.requireAction());
-          CHECK (    looper.isDisabled());
-          CHECK (not looper.isWorking());
-          CHECK (not looper.needBuild());          // ...note: dirty state hidden
+          CHECK (not looper.runBuild());          // ...note: dirty state hidden by disabled state
           CHECK (not looper.isIdle());
           
           CHECK (isDisabled (looper.getTimeout()));
@@ -454,11 +417,10 @@ namespace test    {
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (    looper.needBuild());          // ...note: dirty state revealed
-          CHECK (    looper.isIdle());
+          CHECK (    looper.runBuild());          // ...note: dirty state revealed again
+          CHECK (not looper.isIdle());
           
           CHECK (isFast (looper.getTimeout()));
-          
           
           looper.enableProcessing(false);          // disable processing
           looper.markStateProcessed();             // let's assume builder was running and is now finished
@@ -466,7 +428,7 @@ namespace test    {
           CHECK (not looper.requireAction());
           CHECK (    looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.needBuild());          // ...note: dirty state not obvious
+          CHECK (not looper.runBuild());          // ...note: dirty state not obvious
           CHECK (not looper.isIdle());
           
           CHECK (isDisabled (looper.getTimeout()));
@@ -477,7 +439,7 @@ namespace test    {
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.needBuild());          // ...note: but now it becomes clear builder is not dirty
+          CHECK (not looper.runBuild());          // ...note: but now it becomes clear builder is not dirty
           CHECK (    looper.isIdle());
           
           CHECK (isSlow (looper.getTimeout()));
@@ -489,7 +451,7 @@ namespace test    {
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (    looper.isWorking());
-          CHECK (    looper.needBuild());
+          CHECK (not looper.runBuild());
           CHECK (not looper.isIdle());
           
           looper.triggerShutdown();                // request shutdown...
@@ -497,7 +459,7 @@ namespace test    {
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.needBuild());          // ...note: no need to care for builder anymore
+          CHECK (not looper.runBuild());
           CHECK (not looper.isIdle());
           
           CHECK (isFast (looper.getTimeout()));
@@ -509,33 +471,10 @@ namespace test    {
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.needBuild());          // ...note: still no need for builder run, since in shutdown
+          CHECK (not looper.runBuild());          // ...note: still no need for builder run, since in shutdown
           CHECK (not looper.isIdle());
           
           CHECK (isFast (looper.getTimeout()));
-          
-          
-          looper.markStateProcessed();
-          
-          CHECK (    looper.requireAction());
-          CHECK (not looper.isDisabled());
-          CHECK (not looper.isWorking());
-          CHECK (not looper.needBuild());
-          CHECK (not looper.isIdle());
-          
-          CHECK (isFast (looper.getTimeout()));
-          
-        }
-      
-      
-      void
-      verifyCheckpoint()
-        {
-          UNIMPLEMENTED("verify the semantics of reaching a checkpoint");
-                                                        //////////////////////////TODO a checkpoint is reached when no state change is pending
-                                                        //////////////////////////TODO It is not clear how this relates to triggering the Builder,
-                                                        //////////////////////////TODO since the initial idea was to trigger the Builder at checkpoints,
-                                                        /// but now it looks like we don't need this distinction anymore
         }
     };
   

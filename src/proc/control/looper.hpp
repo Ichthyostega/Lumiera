@@ -98,8 +98,8 @@ namespace control {
       bool isDying()    const  { return shutdown_; }
       bool isDisabled() const  { return disabled_ or isDying(); }
       bool isWorking()  const  { return hasCommandsPending_() and not isDisabled(); }
-      bool needBuild()  const  { return false; }
-      bool isIdle()     const  { return not (isWorking() or needBuild() or isDisabled()); }
+      bool runBuild()   const  { return false; }
+      bool isIdle()     const  { return not (isWorking() or runBuild() or isDisabled()); }
       
       
       /* == operation control == */
@@ -137,7 +137,7 @@ namespace control {
       requireAction()
         {
           return isWorking()
-              or needBuild()
+              or runBuild()
               or isDying();
         }
       

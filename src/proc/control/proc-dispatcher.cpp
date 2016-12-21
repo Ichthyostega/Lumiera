@@ -155,9 +155,11 @@ namespace control {
       awaitCheckpoint()
         {
           Lock blockWaiting(this, &DispatcherLoop::stateIsSynched);
+                                            //////////////////////////////////////////TODO find out who will notify us!!!!
         }
       
     private:
+      /** the actual loop running in the Session thread */
       void
       run (Subsys::SigTerm sigTerm)
         {
@@ -168,7 +170,7 @@ namespace control {
                 {
                   awaitAction();
                   if (looper_.isDying()) break;
-                  if (looper_.needBuild())
+                  if (looper_.runBuild())
                     startBuilder();
                   else
                   if (looper_.isWorking())
@@ -205,7 +207,7 @@ namespace control {
                                "Attempt to synchronise to a command processing check point "
                                "from within the (single) session thread."
                               , error::LUMIERA_ERROR_LIFECYCLE);
-          return looper_.hasPendingChanges();
+          return not looper_.hasPendingChanges();
         }
       
       void
