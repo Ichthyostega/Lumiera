@@ -48,6 +48,7 @@ namespace test    {
     bool
     isFast (uint timeoutDelay_ms)
       {
+        cout << "isFast? " << timeoutDelay_ms <<endl;
         return timeoutDelay_ms < 1.2 * EXPECTED_BUILDER_DELAY_ms
            and 0 < timeoutDelay_ms;
       }
@@ -55,12 +56,14 @@ namespace test    {
     bool
     isSlow (uint timeoutDelay_ms)
       {
+        cout << "isSlow? " << timeoutDelay_ms <<endl;
         return timeoutDelay_ms >= 1.2 * EXPECTED_BUILDER_DELAY_ms;
       }
     
     bool
     isDisabled (uint timeoutDelay_ms)
       {
+        cout << "isDisabled? " << timeoutDelay_ms <<endl;
         return 0 == timeoutDelay_ms;
       }
     
@@ -128,7 +131,7 @@ namespace test    {
           
           uint timeout = looper.getTimeout();
           CHECK (10 < timeout,  "configured idle timeout %2u to short", timeout);
-          CHECK (timeout < 500, "configured idle timeout %3u to long",  timeout);
+          CHECK (timeout < 800, "configured idle timeout %3u to long",  timeout);
         }
       
       
@@ -331,7 +334,7 @@ namespace test    {
           CHECK (not looper.runBuild());           // ...note: build not yet triggered
           CHECK (not looper.isIdle());
           
-          CHECK (isFast (looper.getTimeout()));
+          CHECK (isSlow (looper.getTimeout()));
           
           
           looper.markStateProcessed();             // next processing round: further command(s) processed,

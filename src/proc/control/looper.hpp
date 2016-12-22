@@ -43,7 +43,8 @@
 #ifndef PROC_CONTROL_LOOPER_H
 #define PROC_CONTROL_LOOPER_H
 
-#include "lib/error.hpp"   ////////TODO needed?
+#include "lib/time/timevalue.hpp"
+#include "backend/real-clock.hpp"
 //#include "common/subsys.hpp"
 //#include "lib/depend.hpp"
 
@@ -58,13 +59,32 @@ namespace control {
 //  using lib::Symbol;
 //  using std::bind;
 //  using std::function;
+  using lib::time::Time;
+  using lib::time::TimeVar;
+  using lib::time::Offset;
+  using lib::time::Duration;
+  using backend::RealClock;
   
   namespace {
     /**
+     * Latency to trigger the Builder after processing command(s).
+     * This allows to collect and aggregate commands trickling in from the UI,
+     * especially from dragging and mouse wheel. Once the builder has started,
+     * further commands will be blocked and enqueued.
      * @todo this value should be retrieved from configuration                  ////////////////////////////////TICKET #1052 : access application configuration
      * @see Looper::establishWakeTimeout()
      */
     const uint PROC_DISPATCHER_BUILDER_DELAY_ms = 50;
+    
+    /**
+     * Factor to slow down the latency when the command queue is not empty.
+     * The builder attempts first to dispatch all commands in the queue, before
+     * triggering the Builder again. However, if the extended latency period
+     * has been passed, a builder run will be forced, even if further commands
+     * are still waiting in the queue.
+     * @todo this value should be retrieved from configuration                  ////////////////////////////////TICKET #1052 : access application configuration
+     */
+    const uint PROC_DISPATCHER_BUSY_SLOWDOWN_FACTOR = 15;
   }
   
   
@@ -82,8 +102,11 @@ namespace control {
       
       bool shutdown_ = false;
       bool disabled_ = false;
-      uint dirty_    = false;
       Predicate hasCommandsPending_;
+      
+      uint dirty_ = 0;
+      TimeVar gotDirty_ = Time::NEVER;
+      
         
     public:
       template<class FUN>
@@ -99,7 +122,8 @@ namespace control {
       bool isDying()    const  { return shutdown_; }
       bool isDisabled() const  { return disabled_ or isDying(); }
       bool isWorking()  const  { return hasCommandsPending_() and not isDisabled(); }
-      bool runBuild()   const  { return (dirty_ and not hasCommandsPending_()) or forceBuild(); }
+      bool idleBuild()  const  { return dirty_ and not hasCommandsPending_(); }
+      bool runBuild()   const  { return (idleBuild() or forceBuild()) and not isDisabled(); }
       bool isIdle()     const  { return not (isWorking() or runBuild() or isDisabled()); }
       
       
@@ -139,8 +163,11 @@ namespace control {
       bool
       requireAction()
         {
-          if (isWorking())
-            dirty_ = 2;
+          if (isWorking() and not dirty_)
+            {
+              dirty_ = 2;
+              startBuilderTimeout();
+            }
           
           return isWorking()
               or forceBuild()
@@ -154,11 +181,14 @@ namespace control {
           return not isDying();
         }
       
-      ulong
+      ulong                                        /////////////////////////////////////////////TICKET #1056 : better return a std::chrono value here 
       getTimeout()  const
         {
-          static uint wakeTimeout_ms = establishWakeTimeout();
-          return wakeTimeout_ms;
+          if (isDisabled())
+            return 0;
+          else
+            return wakeTimeout_ms()
+                 * (dirty_ and not isWorking()? 1 : slowdownFactor());
         }
       
       /* == diagnostics == */
@@ -167,12 +197,11 @@ namespace control {
 //    bool empty()  const ;
       
     private:
-      static uint establishWakeTimeout();
-      
-      bool forceBuild()  const
-        {
-          return false;
-        }
+      static uint wakeTimeout_ms();
+      static uint slowdownFactor();
+
+      void startBuilderTimeout();
+      bool forceBuild()  const;
     };
   ////////////////TODO 12/16 currently just fleshing  out the API....
   
@@ -188,11 +217,36 @@ namespace control {
    * period visible to the user as update response delay within the UI.
    * @todo find a way how to retrieve this value from application config!    ////////////////////TICKET #1052 : access application configuration
    */
-  uint inline
-  Looper::establishWakeTimeout()
+  inline uint
+  Looper::wakeTimeout_ms()
   {
     return PROC_DISPATCHER_BUILDER_DELAY_ms;
   }
+  
+  inline uint
+  Looper::slowdownFactor()
+  {
+    return PROC_DISPATCHER_BUSY_SLOWDOWN_FACTOR;
+  }
+  
+  inline void
+  Looper::startBuilderTimeout()
+  {
+    gotDirty_ = RealClock::now();
+  }
+  
+  /** @internal logic to enforce a builder run,
+   * once some extended time period has been passed.
+   */
+  inline bool
+  Looper::forceBuild()  const
+  {
+    static Duration maxBuildTimeout{Time(getTimeout(), 0)};
+    
+    return dirty_
+       and maxBuildTimeout < Offset(gotDirty_, RealClock::now());
+  }                                                                          ///////////////////TICKET #1055 : likely to become more readable when Lumiera Time has std::chrono integration 
+
   
   
 }} // namespace proc::control

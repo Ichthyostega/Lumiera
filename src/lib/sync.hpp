@@ -233,6 +233,7 @@ namespace lib {
      * helper for specifying an optional timeout for an timed wait.
      * Wrapping a timespec-struct, it allows for easy initialisation
      * by a given relative offset.
+     * @todo integrate with std::chrono                                //////////////////////////TICKET #1055
      */
     struct Timeout
       : timespec
@@ -245,7 +246,7 @@ namespace lib {
           {
             if (offs)
               {
-                clock_gettime(CLOCK_REALTIME, this);
+                clock_gettime(CLOCK_REALTIME, this);                   //////////////////////////TICKET #886
                 tv_sec   += offs / 1000;
                 tv_nsec  += 1000000 * (offs % 1000);
                 if (tv_nsec >= 1000000000)
@@ -455,7 +456,7 @@ namespace lib {
           
           template<typename C>
           bool
-          wait (C& cond, ulong timeout=0)
+          wait (C& cond, ulong timeout=0)                     //////////////////////////////////////TICKET #1055 : accept std::chrono values here
             {
               return mon_.wait(cond,timeout);
             }

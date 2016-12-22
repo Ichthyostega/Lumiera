@@ -11212,7 +11212,44 @@
 <node CREATED="1481831638089" ID="ID_209292609" MODIFIED="1481831840636" TEXT="Builder steuern">
 <arrowlink COLOR="#5242a4" DESTINATION="ID_1311208726" ENDARROW="Default" ENDINCLINATION="2;-45;" ID="Arrow_ID_313252247" STARTARROW="None" STARTINCLINATION="-186;-13;"/>
 </node>
-<node CREATED="1481831642376" ID="ID_1301681872" MODIFIED="1481831650435" TEXT="Checkpoint bieten"/>
+<node CREATED="1481831642376" ID="ID_1301681872" MODIFIED="1481831650435" TEXT="Checkpoint bieten">
+<node CREATED="1482365008444" ID="ID_1520027430" MODIFIED="1482365011517" TEXT="wirklich">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1482365012947" ID="ID_10844185" MODIFIED="1482365019558" TEXT="Konzept nicht klar"/>
+<node CREATED="1482365020242" ID="ID_981800101" MODIFIED="1482365065006" TEXT="urspr&#xfc;nglich...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...meinte ich, so etwas wie den Sequence-Point von C++
+    </p>
+    <p>
+      also die Stelle, an der &quot;die Zahnr&#228;der ineinander greifen&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1482365070571" ID="ID_1387994688" MODIFIED="1482365108042" TEXT="Notwendigkeit zweifelhaft">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es scheint, als w&#252;rde ich eine Implementierung hinbekommen,
+    </p>
+    <p>
+      die (fast) nur auf logischen Zusammenh&#228;ngen beruht
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 <node CREATED="1481831747042" ID="ID_134003952" MODIFIED="1481831788672" TEXT="sperrbar sein">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -11273,6 +11310,22 @@
 <node CREATED="1481928966167" ID="ID_1511723472" MODIFIED="1481928974435" TEXT="wenn lange Timeout-Spanne &#xfc;berschritten"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481928978223" ID="ID_106761868" MODIFIED="1482194043443" TEXT="implementierung erfordert Zeitmessung">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1482365133332" ID="ID_99275973" MODIFIED="1482365147008" TEXT="moderne / zeitgem&#xe4;&#xdf;e Implementierung">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1482365613228" ID="ID_1195899391" MODIFIED="1482365638775">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>billig:</i>&#160;unsere Zeit-Lib nutzen
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1482202066204" HGAP="23" ID="ID_41541843" MODIFIED="1482202078184" TEXT="L&#xf6;sungnsansatz" VSHIFT="16">
@@ -11773,6 +11826,26 @@
 </node>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1482365415326" HGAP="87" ID="ID_886002365" MODIFIED="1482365429434" TEXT="Standard C++" VSHIFT="-21">
+<node CREATED="1482365430484" ID="ID_1414724077" MODIFIED="1482365432879" TEXT="chrono">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1482365434203" ID="ID_1026694670" MODIFIED="1482365437852" TEXT="lernen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1482365448257" ID="ID_1648116305" MODIFIED="1482365468841">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ticket <font color="#ba0c3f">#886</font>
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
