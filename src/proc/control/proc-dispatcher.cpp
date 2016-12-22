@@ -42,7 +42,36 @@
  ** this also entails opening the public SessionCommandService interface.
  ** 
  ** ## Loop operation control
+ ** The loop starts with a blocking wait state, bound to the condition Looper::requireAction. Here, Looper
+ ** is a helper to encapsulate the control logic, separated from the actual control flow. In the loop body,
+ ** depending on the Looper's decision, either the next command is fetched from the CommandQueue and dispatched,
+ ** or a builder run is triggered, to re-build the »Low-Level-Model« to reflect the executed command's effects.
+ ** After these working actions, a _"check point"_ is reached in Looper::markStateProcessed, which updates
+ ** the logic and manages the _dirty state_ to control builder runs. After that, looping enters the possibly
+ ** blocking wait.
+ ** - after a command has been dispatched, the builder is _dirty_ and needs to run
+ ** - yet we continue to dispatch further commands, until the queue is emptied
+ ** - and only after a further small latency wait, the builder run is triggered
+ ** - but we _enforce a builder run_ after some extended timeout period, even
+ **   when the command queue is not yet emptied
+ ** - from the outside, it is possible to deactivate processing and place the
+ **   loop into dormant state. This is used while closing or loading the Session
+ ** - and of course we can request the Session Loop Thread to stop, for shutting
+ **   down the »Session Subsystem« as a whole
+ ** - in both cases the currently performed action (command or builder) is
+ **   finished, without interrupt
  ** 
+ ** ## Locking
+ ** The ProcDispatcher uses an "inner and outer capsule" design, and both layers are locked independently.
+ ** On the outer layer, locking ensures sanity of the control data structures, while locking on the inner
+ ** layer guards the communication with the Session Loop Thread, and coordinates sleep wait and notification.
+ ** As usual with Lumiera's Thread wrapper, the management of the thread's lifecycle itself, hand-over of
+ ** parameters, and starting / joining of the thread operation is protected by other locking embedded into
+ ** the thread and threadpool handling code.
+ ** @note most of the time, the Session Loop Thread does not hold any lock, most notably while performing a
+ **       command or running the builder. Likewise, evaluation of the control logic in the Looper helper
+ **       is a private detail of the performing thread. The lock is acquired solely for checking or leaving
+ **       the wait state and when fetching next command from queue.
  ** 
  ** @todo as of 12/2016, implementation has been drafted and is very much WIP
  ** @todo                         //////////////////////////////////////////////////////TODO ensure really every state change triggers a wakeup!!!!!!!
@@ -164,7 +193,7 @@ namespace control {
         }
       
       void
-      awaitCheckpoint()
+      awaitStateProcessed()
         {
           Lock blockWaiting(this, &DispatcherLoop::stateIsSynched);
                                             //////////////////////////////////////////TODO find out who will notify us!!!!
@@ -186,13 +215,14 @@ namespace control {
               while (looper_.shallLoop())
                 {
                   awaitAction();
-                  if (looper_.isDying()) break;
+                  if (looper_.isDying())
+                    break;
                   if (looper_.runBuild())
                     startBuilder();
                   else
                   if (looper_.isWorking())
                     processCommands();
-                  looper_.markStateProcessed();
+                  updateState();
                 }
             }
           catch (lumiera::Error& problem)
@@ -210,10 +240,18 @@ namespace control {
         }
       
       void
-      awaitAction()
+      awaitAction()   ///< at begin of loop body...
         {
           Lock(this).wait(looper_, &Looper::requireAction,
                           looper_.getTimeout());
+        }
+      
+      void
+      updateState()   ///< at end of loop body...
+        {
+          looper_.markStateProcessed();
+          if (looper_.isDisabled())
+            Lock(this).notifyAll();
         }
       
       bool
@@ -344,7 +382,7 @@ namespace control {
   {
     Lock sync(this);
     if (runningLoop_)
-      runningLoop_->awaitCheckpoint();
+      runningLoop_->awaitStateProcessed();
   }
 
   

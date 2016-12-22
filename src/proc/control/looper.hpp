@@ -109,6 +109,8 @@ namespace control {
       
       bool shutdown_ = false;
       bool disabled_ = false;
+      bool inChange_ = false;
+      
       Predicate hasCommandsPending_;
       
       uint dirty_ = 0;
@@ -163,6 +165,7 @@ namespace control {
       void
       markStateProcessed()
         {
+          inChange_ = false;
           if (idleBuild() or forceBuild())
             --dirty_;
           ENSURE (dirty_ <= 2);
@@ -171,13 +174,14 @@ namespace control {
       bool
       hasPendingChanges()  const
         {
-          UNIMPLEMENTED("state transition logic");
+          return inChange_;
         }
       
       /** state fusion to control (timed) wait */
       bool
       requireAction()
         {
+          inChange_ = true;
           if (isWorking() and not dirty_)
             {
               dirty_ = 2;
