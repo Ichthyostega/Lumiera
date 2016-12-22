@@ -23,10 +23,26 @@
 
 /** @file proc-dispatcher.cpp
  ** Implementation details of running commands and the builder.
- ** The ProcDispatcher is at the heart of the session subsystem and implements
- ** a (single) session thread to perform commands and trigger builder runs.
- ** New commands can be enqueued with a dedicated CommandQueue, while the details
- ** of operation control logic are encapsulated in a [logic component](\ref Looper).
+ ** The ProcDispatcher is at the heart of the session subsystem and implements a
+ ** (single) session thread to perform commands and trigger builder runs. New commands
+ ** can be enqueued with a dedicated CommandQueue, while the details of operation control
+ ** logic are encapsulated in a [logic component](\ref Looper).
+ ** 
+ ** # Operational Semantics
+ ** We need to distinguish between the ProcDispatcher itself, which is a static (singleton) service,
+ ** and the »Session Subsystem« plus the _Session proper._ The subsystem has an application-global lifecycle,
+ ** while the Session itself is a data structure and can be closed, opened or re-loaded. There is a singular
+ ** transactional access point to the Session datastructure, which can be switched to new session contents.
+ ** But external manipulation of the session contents is performed by commands, which are _dispatched_ --
+ ** to manage this process is the concern of the »Session Subsystem«.
+ ** 
+ ** Closing a session blocks further command processing, while the lifecycle of the _Session Subsystem_ is
+ ** actually linked to _running the \ref DispatcherLoop_ -- implementation logic defined in this translation
+ ** unit here. This loop implementation is performed in a dedicated thread, _the Session Loop Thread._ And
+ ** this also entails opening the public SessionCommandService interface.
+ ** 
+ ** ## Loop operation control
+ ** 
  ** 
  ** @todo as of 12/2016, implementation has been drafted and is very much WIP
  ** @todo                         //////////////////////////////////////////////////////TODO ensure really every state change triggers a wakeup!!!!!!!
@@ -66,8 +82,8 @@ namespace control {
     , public Sync<RecursiveLock_Waitable>
     {
       bool canDispatch_{false};
-      bool blocked_    {false};
-      
+
+      /** manage the primary public Session interface */
       unique_ptr<SessionCommandService> commandService_;
       
       CommandQueue queue_;
@@ -78,7 +94,7 @@ namespace control {
       DispatcherLoop (Subsys::SigTerm notification)
         : ThreadJoinable("Lumiera Session"
                         , bind (&DispatcherLoop::runSessionThread, this, notification))
-        , commandService_(new SessionCommandService(*this))
+        , commandService_{new SessionCommandService(*this)}
         , queue_()
         , looper_([&]() -> bool
                     {
@@ -93,7 +109,7 @@ namespace control {
         {
           try {
               Lock sync(this);
-              commandService_.reset();   // redundant call, ensure the session interface is reliably closed
+              commandService_.reset();   // redundant call, to ensure session interface is closed reliably 
               this->join();              // block until the loop thread terminates and is reaped
               INFO (session, "Proc-Dispatcher stopped.");
             }

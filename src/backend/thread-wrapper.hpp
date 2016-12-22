@@ -218,6 +218,7 @@ namespace backend {
       static void
       syncPoint ()
         {
+                          ////////////////////////////////////////////////////////TICKET #1054 : consider to call safeguard here, to ensure this is called from within the thread
           lumiera_thread_sync ();
         }
     };

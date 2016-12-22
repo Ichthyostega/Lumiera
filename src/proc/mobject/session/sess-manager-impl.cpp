@@ -140,6 +140,7 @@ namespace session {
         void
         getSessionReady()  override
           {
+            /////////////////////////////////////////////TODO anything to do here?
             INFO (session, "Session ready for use.");
           }
         

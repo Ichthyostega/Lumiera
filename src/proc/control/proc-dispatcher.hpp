@@ -35,22 +35,18 @@
 #ifndef PROC_CONTROL_PROC_DISPATCHER_H
 #define PROC_CONTROL_PROC_DISPATCHER_H
 
-//#include "lib/symbol.hpp"
 #include "common/subsys.hpp"
 #include "lib/depend.hpp"
 #include "lib/sync.hpp"
 
 #include <memory>
-//#include <functional>
 
 
 
 namespace proc {
 namespace control {
   
-//  using lib::Symbol;
   using std::unique_ptr;
-//  using std::bind;
   using lumiera::Subsys;
   
   
@@ -79,14 +75,9 @@ namespace control {
       void awaitDeactivation();
       void clear();
       
-      
-      /* == diagnostics == */
-      
-//    size_t size() const ;
       bool empty()  const ;
       
     };
-  ////////////////TODO currently just fleshing  out the API....
   
   
   
