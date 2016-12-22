@@ -85,6 +85,7 @@ namespace control {
                       return not queue_.empty();
                     })
         {
+          Thread::sync(); // done with init; loop may run now....
           INFO (session, "Proc-Dispatcher running...");
         }
       
@@ -163,6 +164,7 @@ namespace control {
       runSessionThread (Subsys::SigTerm sigTerm)
         {
           string errorMsg;
+          syncPoint();
           try
             {
               while (looper_.shallLoop())
