@@ -148,7 +148,7 @@ namespace control {
       void
       markStateProcessed()
         {
-          if (runBuild())
+          if (idleBuild() or forceBuild())
             --dirty_;
           ENSURE (dirty_ <= 2);
         }
@@ -241,7 +241,7 @@ namespace control {
   inline bool
   Looper::forceBuild()  const
   {
-    static Duration maxBuildTimeout{Time(getTimeout(), 0)};
+    static Duration maxBuildTimeout{Time(wakeTimeout_ms() * slowdownFactor(), 0)};
     
     return dirty_
        and maxBuildTimeout < Offset(gotDirty_, RealClock::now());

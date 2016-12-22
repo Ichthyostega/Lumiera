@@ -48,7 +48,6 @@ namespace test    {
     bool
     isFast (uint timeoutDelay_ms)
       {
-        cout << "isFast? " << timeoutDelay_ms <<endl;
         return timeoutDelay_ms < 1.2 * EXPECTED_BUILDER_DELAY_ms
            and 0 < timeoutDelay_ms;
       }
@@ -56,14 +55,12 @@ namespace test    {
     bool
     isSlow (uint timeoutDelay_ms)
       {
-        cout << "isSlow? " << timeoutDelay_ms <<endl;
         return timeoutDelay_ms >= 1.2 * EXPECTED_BUILDER_DELAY_ms;
       }
     
     bool
     isDisabled (uint timeoutDelay_ms)
       {
-        cout << "isDisabled? " << timeoutDelay_ms <<endl;
         return 0 == timeoutDelay_ms;
       }
     
@@ -345,7 +342,8 @@ namespace test    {
           CHECK (not looper.runBuild());           // ...build still postponed
           CHECK (not looper.isIdle());
           
-          sleep_for (1200ms);
+          sleep_for (800ms);
+          looper.markStateProcessed();             // let's assume we did command processing for a long time...
           
           CHECK (    looper.requireAction());
           CHECK (not looper.isDisabled());
@@ -462,24 +460,24 @@ namespace test    {
           looper.triggerShutdown();                // request shutdown...
           
           CHECK (    looper.requireAction());
-          CHECK (not looper.isDisabled());
+          CHECK (    looper.isDisabled());
           CHECK (not looper.isWorking());
           CHECK (not looper.runBuild());
           CHECK (not looper.isIdle());
           
-          CHECK (isFast (looper.getTimeout()));
+          CHECK (isDisabled (looper.getTimeout()));
           
           
           setup.has_commands_in_queue = false;     // and even when done with all commands...
           looper.markStateProcessed();
           
           CHECK (    looper.requireAction());
-          CHECK (not looper.isDisabled());
+          CHECK (    looper.isDisabled());
           CHECK (not looper.isWorking());
           CHECK (not looper.runBuild());          // ...note: still no need for builder run, since in shutdown
           CHECK (not looper.isIdle());
           
-          CHECK (isFast (looper.getTimeout()));
+          CHECK (isDisabled (looper.getTimeout()));
         }
     };
   
