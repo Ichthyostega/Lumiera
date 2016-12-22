@@ -33,9 +33,8 @@
  ** What is covered here is actually a **test mock**. Which in turn enables us
  ** to cover interface interactions and behaviour in a generic fashion, without
  ** actually having to operate the interface. But at the same time, this test
- ** documents our generic UI element protocol and the corrsponding interactions.
+ ** documents our generic UI element protocol and the corresponding interactions.
  ** 
- ** @note as of 11/2015 this is a draft into the blue...
  ** @todo WIP  ///////////////////////TICKET #959 : GUI Model / Bus
  ** @todo WIP  ///////////////////////TICKET #956 : model diff representation
  ** @todo WIP  ///////////////////////TICKET #961 : tests to pass...

@@ -11209,8 +11209,9 @@
 <node CREATED="1481831950160" ID="ID_602481733" MODIFIED="1481831962578" TEXT="gesperrt"/>
 <node CREATED="1481831965253" ID="ID_1644273707" MODIFIED="1481832013139" TEXT="sterbend"/>
 </node>
-<node CREATED="1481831638089" ID="ID_209292609" MODIFIED="1481831840636" TEXT="Builder steuern">
+<node CREATED="1481831638089" ID="ID_209292609" MODIFIED="1482375840758" TEXT="Builder steuern">
 <arrowlink COLOR="#5242a4" DESTINATION="ID_1311208726" ENDARROW="Default" ENDINCLINATION="2;-45;" ID="Arrow_ID_313252247" STARTARROW="None" STARTINCLINATION="-186;-13;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1481831642376" ID="ID_1301681872" MODIFIED="1481831650435" TEXT="Checkpoint bieten">
 <node CREATED="1482365008444" ID="ID_1520027430" MODIFIED="1482365011517" TEXT="wirklich">
@@ -11286,9 +11287,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481778708207" HGAP="48" ID="ID_1311208726" MODIFIED="1481831819823" TEXT="Builder-Steuerung" VSHIFT="-5">
+<node COLOR="#338800" CREATED="1481778708207" HGAP="48" ID="ID_1311208726" MODIFIED="1482375858816" TEXT="Builder-Steuerung" VSHIFT="-5">
 <linktarget COLOR="#5242a4" DESTINATION="ID_1311208726" ENDARROW="Default" ENDINCLINATION="2;-45;" ID="Arrow_ID_313252247" SOURCE="ID_209292609" STARTARROW="None" STARTINCLINATION="-186;-13;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1481828478741" ID="ID_1706868067" MODIFIED="1481828497838" TEXT="Hysterese"/>
 <node CREATED="1481828498618" ID="ID_321199314" MODIFIED="1481828519539" TEXT="nach neuem Command, mit kleiner Verz&#xf6;gerung"/>
 <node CREATED="1481828520176" ID="ID_239973202" MODIFIED="1481828532570" TEXT="bei voller Schlange mit Toleranzschwelle"/>
@@ -11298,18 +11299,24 @@
 <node CREATED="1481928867893" ID="ID_1200076817" MODIFIED="1481928871448" TEXT="wenn in Shutdown"/>
 </node>
 <node CREATED="1481928874500" ID="ID_73724471" MODIFIED="1481928881567" TEXT="idle-timeout">
-<node CREATED="1481928882723" ID="ID_770033134" MODIFIED="1481928885951" TEXT="dynamisch steuern"/>
-<node CREATED="1481928888035" ID="ID_927205346" MODIFIED="1481928912699" TEXT="kurz, wenn der Builder laufen mu&#xdf;"/>
-<node CREATED="1481928913687" ID="ID_696704157" MODIFIED="1481928937432" TEXT="lang sonst"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481928939300" ID="ID_1625916543" MODIFIED="1481928952211" TEXT="kein Timeout wenn gesperrt">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1481928882723" ID="ID_770033134" MODIFIED="1482375680096" TEXT="dynamisch steuern">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1481928888035" ID="ID_927205346" MODIFIED="1482375682035" TEXT="kurz, wenn der Builder laufen mu&#xdf;">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1481928913687" ID="ID_696704157" MODIFIED="1482375684299" TEXT="lang sonst">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1481928939300" ID="ID_1625916543" MODIFIED="1482375686245" TEXT="kein Timeout wenn gesperrt">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481928958233" ID="ID_350657817" MODIFIED="1481929002980" TEXT="Builder-Lauf erzwingen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1481928958233" ID="ID_350657817" MODIFIED="1482375661113" TEXT="Builder-Lauf erzwingen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1481928966167" ID="ID_1511723472" MODIFIED="1481928974435" TEXT="wenn lange Timeout-Spanne &#xfc;berschritten"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481928978223" ID="ID_106761868" MODIFIED="1482194043443" TEXT="implementierung erfordert Zeitmessung">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1481928978223" ID="ID_106761868" MODIFIED="1482375654382" TEXT="Implementierung erfordert Zeitmessung">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1482365133332" ID="ID_99275973" MODIFIED="1482365147008" TEXT="moderne / zeitgem&#xe4;&#xdf;e Implementierung">
 <icon BUILTIN="help"/>
@@ -11335,7 +11342,8 @@
 <node CREATED="1482202099752" ID="ID_434677221" MODIFIED="1482202114130" TEXT="geht, weil sie wei&#xdf;, wann ein Command wirklich l&#xe4;uft"/>
 <node CREATED="1482202114630" ID="ID_1833945556" MODIFIED="1482202123872" TEXT="unsch&#xf6;n, weil wir nun massive Kopplung haben"/>
 </node>
-<node CREATED="1482202127252" ID="ID_1720469294" MODIFIED="1482202135479" TEXT="Looper in State-machine verwandeln">
+<node CREATED="1482202127252" ID="ID_1720469294" MODIFIED="1482375697342" TEXT="Looper in State-machine verwandeln">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1482202136235" ID="ID_239151488" MODIFIED="1482202175455" TEXT="schwierig">
 <icon BUILTIN="stop-sign"/>
 </node>
@@ -11348,18 +11356,44 @@
 <node CREATED="1482202165423" ID="ID_1845799711" MODIFIED="1482202186673" TEXT="schaut sauberer aus">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1482202187620" ID="ID_259250017" MODIFIED="1482202197691" TEXT="Frage: geht es &#xfc;berhaupt zu implementieren">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1482202187620" ID="ID_259250017" MODIFIED="1482375714962" TEXT="geht das &#xfc;berhaupt">
+<icon BUILTIN="help"/>
+<node CREATED="1482375716922" ID="ID_1702615812" MODIFIED="1482375756924" TEXT="ja">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1482375724321" ID="ID_218202011" MODIFIED="1482375736264" TEXT="einfacher trap-door-Mechanismus">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1482375737327" ID="ID_1980564250" MODIFIED="1482375746202" TEXT="tendentiell bereits schwer zu verstehen">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
-<node CREATED="1482202207242" ID="ID_1287224856" MODIFIED="1482202269318" TEXT="Test">
-<icon BUILTIN="pencil"/>
+</node>
+<node COLOR="#338800" CREATED="1482202207242" ID="ID_1287224856" MODIFIED="1482375808494" TEXT="Test">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1482202211049" ID="ID_1159832087" MODIFIED="1482202222520" TEXT="komplexen Ablauf als Szenario durchspielen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1482202223536" ID="ID_374030732" MODIFIED="1482202266018" TEXT="Logik im Looper auf Basis generischer &#xdc;berlegungen implementieren">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1482375826635" ID="ID_1275445978" MODIFIED="1482375832687" TEXT="beinhaltet auch einen Timeout">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1482202223536" ID="ID_374030732" MODIFIED="1482375796750">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Logik im Looper auf Basis
+    </p>
+    <p>
+      generischer &#220;berlegungen implementiert
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1482202243253" ID="ID_1342399342" MODIFIED="1482202264229" TEXT="verh&#xe4;lt er sich dann richtig">
 <icon BUILTIN="help"/>

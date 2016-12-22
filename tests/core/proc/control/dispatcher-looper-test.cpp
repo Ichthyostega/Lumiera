@@ -23,7 +23,6 @@
 
 #include "lib/test/run.hpp"
 #include "proc/control/looper.hpp"
-#include "lib/format-cout.hpp"
 
 #include <chrono>
 #include <thread>
@@ -303,6 +302,15 @@ namespace test    {
         }
       
       
+      /** @test logic to trigger the builder over a complete simulated lifecycle.
+       *        - when Looper::requireAction is true, the thread does not go into wait state
+       *        - in the loop body
+       *          * either when `runBuild()` is true, the builder run is triggered
+       *          * or when `isWorking()` is true, the next command is processed
+       *        - after that, Looper::markStateProcessed proceeds the state machine
+       *  @note this test actually has to sleep in order to verify triggering a timeout
+       * 
+       */
       void
       verifyBuilderStart()
         {

@@ -77,7 +77,7 @@ namespace control {
     public:
       DispatcherLoop (Subsys::SigTerm notification)
         : ThreadJoinable("Lumiera Session"
-                        , bind (&DispatcherLoop::run, this, notification))
+                        , bind (&DispatcherLoop::runSessionThread, this, notification))
         , commandService_(new SessionCommandService(*this))
         , queue_()
         , looper_([&]() -> bool
@@ -154,9 +154,13 @@ namespace control {
         }
       
     private:
-      /** the actual loop running in the Session thread */
+      /**
+       * any operation running in the Session thread
+       * is started from here. When this loop terminates,
+       * the "Session subsystem" shuts down.
+       */
       void
-      run (Subsys::SigTerm sigTerm)
+      runSessionThread (Subsys::SigTerm sigTerm)
         {
           string errorMsg;
           try

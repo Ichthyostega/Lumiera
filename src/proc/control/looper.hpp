@@ -45,10 +45,7 @@
 
 #include "lib/time/timevalue.hpp"
 #include "backend/real-clock.hpp"
-//#include "common/subsys.hpp"
-//#include "lib/depend.hpp"
 
-//#include <memory>
 #include <functional>
 
 
@@ -56,9 +53,6 @@
 namespace proc {
 namespace control {
   
-//  using lib::Symbol;
-//  using std::bind;
-//  using std::function;
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::Offset;
@@ -88,8 +82,21 @@ namespace control {
   }
   
   
+  
   /**
-   * @todo write Type-comment (WIP 12/2016)
+   * Encapsulated control logic for the session thread loop.
+   * This helper component was factored out from the loop body
+   * for sake of clarity and to allow unit testing of the logic
+   * in isolation. It is based on logical relations together
+   * with the following assumptions
+   * - Looper::shallLoop controls the loop's `while` condition
+   * - at the begin of the loop the thread possibly enters a blocking
+   *   wait state; the wake-up condition is provided by Looper::requireAction.
+   * - then, in the actual loop body, depending on the predicates calculated here,
+   *   either the builder run is triggered, or a single command is dispatched
+   *   from the queue to work on the session.
+   * - after returning from these active operations, at the end of the loop,
+   *   the state evaluation is updated by Looper::markStateProcessed
    * 
    * @warning the Looper _is not threadsafe,_
    *        since it is intended to be run exclusively from
@@ -144,6 +151,14 @@ namespace control {
       /** invoking this function signals
        *  that all consequences of past state changes
        *  have been processed and are duly resolved.
+       * @remark the implementation actually does not need to watch out
+       *         for command processing state directly, only the managing
+       *         of builder runs requires active state transitions here.
+       *         When the conditions for triggering the Builder are met,
+       *         control flow typically just has emptied the command queue.
+       *         Thus we need to let one invocation pass by; the next loop iteration
+       *         will begin after waking up from a short sleep and trigger the build,
+       *         so the next (second) invocation can clear the builder dirty state.
        */
       void
       markStateProcessed()
@@ -191,10 +206,6 @@ namespace control {
                  * (dirty_ and not isWorking()? 1 : slowdownFactor());
         }
       
-      /* == diagnostics == */
-      
-//    size_t size() const ;
-//    bool empty()  const ;
       
     private:
       static uint wakeTimeout_ms();
@@ -203,7 +214,6 @@ namespace control {
       void startBuilderTimeout();
       bool forceBuild()  const;
     };
-  ////////////////TODO 12/16 currently just fleshing  out the API....
   
   
   /** @internal establish the typical timeout for idle sleep.
