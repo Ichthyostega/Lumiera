@@ -32,7 +32,6 @@
 #include <string>
 
 //using lib::P;
-//using lib::newP;
 //using lib::diff::GenNode;
 
 using std::string;

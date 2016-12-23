@@ -33,7 +33,7 @@
 #include <string>
 
 using lib::P;
-using lib::newP;
+using lib::makeP;
 using lib::diff::GenNode;
 
 using std::string;
@@ -130,8 +130,8 @@ namespace test {
         {
           showTraits();
           
-          auto silent = newP<Reticent>();
-          auto chatty = newP<GenNode>("Hui", "Buh");
+          auto silent = makeP<Reticent>();
+          auto chatty = makeP<GenNode>("Hui", "Buh");
           
           cout << "smart-ptr, no string conv..." << silent <<endl;
           cout << "smart-ptr, custom conv......" << chatty <<endl;

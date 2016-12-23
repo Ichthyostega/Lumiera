@@ -36,7 +36,7 @@ namespace control {
 namespace test    {
   
   using lib::P;
-  using lib::newP;
+  using lib::makeP;
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::TimeValue;
@@ -94,7 +94,7 @@ namespace test    {
           int randVal ((rand() % 10) - 5);
           Time five(TimeValue(5));
           TimeValue randomTime(randVal);
-          auto obj = newP<TimeVar>(five);
+          auto obj = makeP<TimeVar>(five);
           
           CommandDef ("test.command1")
               .operation (operate)

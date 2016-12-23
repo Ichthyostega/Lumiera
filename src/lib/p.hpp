@@ -142,7 +142,7 @@ namespace lib {
    */
   template<typename X, typename...ARGS>
   inline P<X>
-  newP (ARGS&&... ctorArgs)
+  makeP (ARGS&&... ctorArgs)
   {
     return P<X>{new X {std::forward<ARGS>(ctorArgs)...}};
   }
