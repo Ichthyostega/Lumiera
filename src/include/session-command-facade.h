@@ -36,7 +36,8 @@
  ** facade indeed retrieves the corresponding proc::control::Command
  ** handles to perform the binding operation and hands them over
  ** to the ProcDispatcher for invocation.
- **
+ ** 
+ ** @see command.hpp
  ** @see session-command-service.hpp implementation
  ** @see proc::control::ProcDispatcher
  ** @see gui::ctrl::CoreService
@@ -62,15 +63,19 @@ namespace control {
   using std::string;
   
   
-  /*****************************************************************//**
-   * Global access point to push state update and notification of events
-   * from the lower layers into the Lumiera GUI. Typically, this happens
-   * asynchronously and triggered by events within the lower layers.
+  /**********************************************************************//**
+   * Global access point to invoke commands and cause edit operations within
+   * the Session. Any changes to the session are effected by prepared functors
+   * bound into a proc::control::Command registration. A command instance will
+   * first be outfitted with suitable parameters to define the target and to
+   * qualify and elaborate the action, before it can be actually triggered.
+   * Commands then go through a queue to be invoked one by one.
    * 
    * This is a layer separation facade interface. Clients should use
    * the embedded #facade factory, which yields a proxy to route any
    * calls through the lumieraorg_SessionCommand interface
    * @throws lumiera::error::State when interface is not opened
+   * @see [Command system](command.hpp)
    */
   class SessionCommand
     {

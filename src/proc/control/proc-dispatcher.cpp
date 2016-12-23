@@ -92,10 +92,12 @@
 #include "proc/control/session-command-service.hpp"
 #include "proc/mobject/session.hpp"
 #include "backend/thread-wrapper.hpp"
+#include "lib/format-string.hpp"
 
 #include <memory>
   
 using backend::ThreadJoinable;
+using util::_Fmt;
 using lib::Sync;
 using lib::RecursiveLock_Waitable;
 using std::unique_ptr;
@@ -180,6 +182,17 @@ namespace control {
         {
           Lock sync(this);
           UNIMPLEMENTED ("clear the queue");
+          //////////////////////////////////////////TODO notify!!!!
+        }
+      
+      void
+      enqueue (Command cmd)  override
+        {
+          if (not cmd.canExec())
+            throw error::Logic(_Fmt("Reject '%s'. Not suitably prepared for invocation: %s")
+                                   % cmd.getID() % cmd
+                              , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+          UNIMPLEMENTED ("enqueue command");
           //////////////////////////////////////////TODO notify!!!!
         }
       

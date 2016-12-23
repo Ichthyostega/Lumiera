@@ -23,10 +23,7 @@
 
 /** @file command-dispatch.hpp
  ** Interface to abstract the DispatcherLoop's ability to handle command messages.
- ** //TODO
  ** 
- ** @todo WIP-WIP as of 12/2016 
- **
  ** @see proc-dispatcher.hpp
  ** @see session-command-service.hpp
  ** @see DispatcherLoop
@@ -38,25 +35,21 @@
 #ifndef PROC_CONTROL_COMMAND_DISPATCH_H
 #define PROC_CONTROL_COMMAND_DISPATCH_H
 
-#include "lib/error.hpp"   ////////TODO needed?
-//#include "common/subsys.hpp"
-//#include "lib/depend.hpp"
-
-//#include <memory>
-//#include <functional>
+#include "proc/control/command.hpp"
 
 
 
 namespace proc {
 namespace control {
   
-//  using lib::Symbol;
-//  using std::bind;
   
   
   
   /**
-   * @todo Type-comment
+   * Interface of a service to perform Commands on the session.
+   * Commands committed here need to be ready for actual performance
+   * on the _current session._ They will be sent through a queue
+   * to be performed one by one.
    */
   class CommandDispatch
     {
@@ -64,16 +57,9 @@ namespace control {
     public:
       virtual ~CommandDispatch() { }  ///< this is an interface
       
-      virtual void clear()     =0;  /////TODO placeholder code
-      
-      
-      /* == diagnostics == */
-      
-//    size_t size() const ;
-//    bool empty()  const ;
-      
+      virtual void clear()            =0;  /////TODO do we actually need that operation?
+      virtual void enqueue (Command)  =0;
     };
-  ////////////////TODO currently just fleshing  out the API....
   
   
   

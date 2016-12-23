@@ -23,14 +23,19 @@
 /** @file session-command-service.cpp
  ** Implementation of command invocation on the Session interface.
  ** This is the actual service implementation and runs within Session subsystem.
- ** 
- ** @todo implement a minimal version of a "Session subsystem" and instantiate SessionCommandService there ///////////TICKET #318
+ ** It is managed by the DispatcherLoop, which also starts the Session Loop Thread.
+ ** Moreover, for actually perform any command, the command operation needs to be
+ ** defined somewhere statically, as a function operating on the _current session,_
+ ** plus an _state capturing_ and _UNDO_ function. And the concrete arguments of
+ ** the command functor must be suitably bound.
  ** 
  */
 
 #include "proc/control/session-command-service.hpp"
+#include "proc/control/command.hpp"
 #include "include/logging.h"
 #include "lib/depend.hpp"
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 extern "C" {
@@ -45,21 +50,36 @@ extern "C" {
 namespace proc {
 namespace control {
   
+  using lib::Symbol;
   using std::string;
   using util::cStr;
-
+  
+  namespace {
+    
+    /** @todo workaround until we're able to retrieve a Symbol by string    ////////////////////////TICKET #158 : symbol table to get a Symbol from string representation
+     * @throw error::Invalid when no suitable command definition exists
+     */
+    Command
+    retrieveCommand (string const& cmdID)
+    {
+      Symbol cmdSym {cmdID.c_str()};
+      return Command::get (cmdSym);
+    }
+  }
+  
+  
   
   void 
-  SessionCommandService::bindArg (string const& cmdID, Rec const& args)
+  SessionCommandService::bindArg (string const& cmdID, Rec const& argSeq)
   {
-    UNIMPLEMENTED ("bind command with arguments from Record<GenNode>");  ////////////////////////TODO actually do something
+    retrieveCommand(cmdID).bindArg(argSeq);
   }
   
   
   void
   SessionCommandService::invoke (string const& cmdID)
   {
-    UNIMPLEMENTED ("enqueue command with ProcDispatcher");               ////////////////////////TODO actually do something
+    dispatcher_.enqueue (retrieveCommand(cmdID));
   }
   
   

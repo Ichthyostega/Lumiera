@@ -23,9 +23,9 @@
 
 /** @file command.hpp
  ** Proc-Layer command frontend.
- ** A \b command is a functor, which can be invoked according to a pre-defined HandlingPattern.
+ ** A *command* is a functor, which can be invoked according to a pre-defined HandlingPattern.
  ** Most notably, command invocation can be scheduled and logged with the serialiser, and the effect
- ** of any command invocation can be \em undone later on by invoking the "undo operation" defined
+ ** of any command invocation can be _undone_ later on by invoking the "undo operation" defined
  ** alongside with the command's operation. The command operation is defined through a C/C++ function
  ** and may receive an arbitrary number and type of arguments. After setting up such a CommandDef ,
  ** it can be referred for use through a symbolic ID. Before being able to invoke the command, concrete
