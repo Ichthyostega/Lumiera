@@ -88,9 +88,9 @@ namespace meta {
   
   
   /** helper for generating test lists */      
-  template<class X> struct CountDown          { typedef NullType List; };
-  template<>        struct CountDown<Num<0> > { typedef Node<Num<0>, NullType> List; };
-  template<int I>   struct CountDown<Num<I> > { typedef Node<Num<I>, typename CountDown<Num<I-1> >::List> List; };
+  template<class X> struct CountDown         { typedef NullType List; };
+  template<>        struct CountDown<Num<0>> { typedef Node<Num<0>, NullType> List; };
+  template<int I>   struct CountDown<Num<I>> { typedef Node<Num<I>, typename CountDown<Num<I-1>>::List> List; };
   
   
   

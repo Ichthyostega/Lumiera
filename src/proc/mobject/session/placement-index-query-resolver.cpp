@@ -275,7 +275,7 @@ namespace session {
     QueryID
     whenQueryingFor()
       {
-        QueryID qID(Goal::DISCOVERY, getResultTypeID<Placement<MO> >());
+        QueryID qID(Goal::DISCOVERY, getResultTypeID<Placement<MO>>());
         return qID;
       }
     
@@ -326,15 +326,15 @@ namespace session {
   PlacementIndexQueryResolver::canHandleQuery(QID qID)  const
   {
     return qID.kind == Goal::DISCOVERY
-       &&( qID.type == getResultTypeID<Placement<MObject> >()
-         ||qID.type == getResultTypeID<Placement<Clip> >()
-         ||qID.type == getResultTypeID<Placement<Effect> >()
+       &&( qID.type == getResultTypeID<Placement<MObject>>()
+         ||qID.type == getResultTypeID<Placement<Clip>>()
+         ||qID.type == getResultTypeID<Placement<Effect>>()
                        /////////////////////////////////////////////////////////////////TICKET #414
          
-         ||qID.type == getResultTypeID<Placement<mobject::test::DummyMO    > >()
-         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO1 > >()
-         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO2 > >()
-         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO21> >()
+         ||qID.type == getResultTypeID<Placement<mobject::test::DummyMO    >>()
+         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO1 >>()
+         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO2 >>()
+         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO21>>()
                        /////////////////////////////////////////////////////////////////TICKET #532
          );
   }

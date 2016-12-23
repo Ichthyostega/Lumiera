@@ -179,7 +179,7 @@ namespace test    {
           typedef Types<int> ArgType;
           const int ARGU (1 + rand() % 1000);
           Tuple<ArgType> tuple(ARGU);
-          TypedArguments<Tuple<ArgType> > arg(tuple);
+          TypedArguments<Tuple<ArgType>> arg(tuple);
           com->setArguments(arg);
           
           CHECK (com->canExec());

@@ -153,7 +153,7 @@ namespace config {
           void
           visit (IxID code)
             {
-              PFunc pFactory (new FactoryHolder<Factory<CONF> > (ctor_param_));
+              PFunc pFactory (new FactoryHolder<Factory<CONF>> (ctor_param_));
               factories_[code] = pFactory;
             }
           

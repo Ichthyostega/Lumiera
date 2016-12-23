@@ -55,7 +55,7 @@ namespace iter_stl {
    */
   template<typename IT>
   class DistinctIter
-    : public lib::BoolCheckable<DistinctIter<IT> >
+    : public lib::BoolCheckable<DistinctIter<IT>>
     {
     public:
       typedef typename IT::value_type value_type;
@@ -205,16 +205,16 @@ namespace iter_stl {
     template<class IT, typename SEL>
     struct _MapSubSelector
       {
-        typedef WrappedStlIter< Wrapped_PickKey<IT> > PickKey;
-        typedef WrappedStlIter< Wrapped_PickVal<IT> > PickVal;
+        typedef WrappedStlIter< Wrapped_PickKey<IT>> PickKey;
+        typedef WrappedStlIter< Wrapped_PickVal<IT>> PickVal;
       };
     
     /** especially for const iterators we need to use \c const& and \c const* */
     template<class IT, typename SEL>
     struct _MapSubSelector<IT, SEL const&>
       {
-        typedef WrappedStlIter< Wrapped_PickKey<IT> >      PickKey; // Key is always const for maps
-        typedef WrappedStlIter< Wrapped_PickConstVal<IT> > PickVal;
+        typedef WrappedStlIter< Wrapped_PickKey<IT>>      PickKey; // Key is always const for maps
+        typedef WrappedStlIter< Wrapped_PickConstVal<IT>> PickVal;
       };
     
     
@@ -415,7 +415,7 @@ namespace iter_stl {
    */
   template<typename VAL>
   class IterSnapshot
-    : public lib::BoolCheckable<IterSnapshot<VAL> >
+    : public lib::BoolCheckable<IterSnapshot<VAL>>
     {
       typedef std::vector<VAL> Sequence;
       

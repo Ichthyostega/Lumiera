@@ -54,7 +54,7 @@ namespace test{
     
   }
   
-  typedef std::unordered_map< Symbol, string, hash<Symbol> > HTable;
+  typedef std::unordered_map< Symbol, string, hash<Symbol>> HTable;
   
   
   /*********************************************************//**

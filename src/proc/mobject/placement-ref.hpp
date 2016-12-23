@@ -98,7 +98,7 @@ namespace proc {
    */
   template<class MX =MObject>
   class PlacementRef
-    : public lib::BoolCheckable<PlacementRef<MX> >
+    : public lib::BoolCheckable<PlacementRef<MX>>
     {
       typedef Placement<MX>      PlacementMX;
       typedef Placement<MObject>::ID     _ID;

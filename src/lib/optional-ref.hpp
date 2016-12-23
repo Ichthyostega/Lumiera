@@ -53,7 +53,7 @@ namespace lib {
    */
   template<typename T>
   class OptionalRef
-    : public lib::BoolCheckable<OptionalRef<T> >
+    : public lib::BoolCheckable<OptionalRef<T>>
     {
       T* ref_;
       

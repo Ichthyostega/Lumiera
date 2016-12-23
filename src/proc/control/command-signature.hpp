@@ -78,7 +78,7 @@ namespace control {
   template<typename SIG, typename MEM>
   class CommandSignature
     {
-      typedef typename FunctionSignature< function<SIG> >::Args Args;
+      typedef typename FunctionSignature< function<SIG>>::Args Args;
       
       typedef typename Args::List ArgList;
       typedef typename Append<ArgList, MEM>::List ExtendedArglist;
@@ -113,8 +113,8 @@ namespace control {
   class UndoSignature
     {
       // preparation:  dissect the function signature into arguments and result
-      typedef typename FunctionSignature< function<SIG> >::Args Args;
-      typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
+      typedef typename FunctionSignature< function<SIG>>::Args Args;
+      typedef typename FunctionSignature< function<SIG>>::Ret  Ret;
       
       /** Case1: defining the Undo-Capture function */
       template<typename RET, typename ARG>

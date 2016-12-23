@@ -60,13 +60,13 @@ namespace test{
       virtual void
       run (Arg) 
         {
-          verifyConfiguration<Digxel<int>    > (123);
-          verifyConfiguration<Digxel<double> > (123.4567);
-          verifyConfiguration<SexaDigit      > (42);
-          verifyConfiguration<SexaDigit      > (-5);
-          verifyConfiguration<HexaDigit      > (0xc);
-          verifyConfiguration<HexaDigit      > (0x6f);
-          verifyConfiguration<CountVal       > (-1234567890);
+          verifyConfiguration<Digxel<int>   > (123);
+          verifyConfiguration<Digxel<double>> (123.4567);
+          verifyConfiguration<SexaDigit     > (42);
+          verifyConfiguration<SexaDigit     > (-5);
+          verifyConfiguration<HexaDigit     > (0xc);
+          verifyConfiguration<HexaDigit     > (0x6f);
+          verifyConfiguration<CountVal      > (-1234567890);
           
           verifySignum();
         }

@@ -189,7 +189,7 @@ namespace widget {
     return playbackPeriodDragReleasedSignal;
   }
   
-  sigc::signal<void, shared_ptr<timeline::Track> >
+  sigc::signal<void, shared_ptr<timeline::Track>>
   TimelineWidget::hovering_track_changed_signal() const
   {
     return hoveringTrackChangedSignal;
@@ -368,7 +368,7 @@ namespace widget {
   TimelineWidget::remove_orphaned_tracks()
   {
     std::map<shared_ptr<model::Track>,
-      shared_ptr<timeline::Track> >
+      shared_ptr<timeline::Track>>
       orphan_track_map(trackMap);
     
     // Remove all tracks which are still present in the sequence
@@ -378,7 +378,7 @@ namespace widget {
     
     // orphan_track_map now contains all the orphaned tracks
     // Remove them
-    std::pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> >
+    std::pair<shared_ptr<model::Track>, shared_ptr<timeline::Track>>
       pair; 
     BOOST_FOREACH( pair, orphan_track_map )
       {
@@ -393,7 +393,7 @@ namespace widget {
   TimelineWidget::search_orphaned_tracks_in_branch(
       shared_ptr<model::Track> modelTrack,
       std::map<shared_ptr<model::Track>,
-      shared_ptr<timeline::Track> > &orphan_track_map)
+      shared_ptr<timeline::Track>>& orphan_track_map)
   {
     REQUIRE(modelTrack);
     
@@ -417,7 +417,7 @@ namespace widget {
     REQUIRE(modelTrack != sequence()); // The sequence isn't
                                         // really a track
     
-    std::map<shared_ptr<model::Track>, shared_ptr<timeline::Track> >::
+    std::map<shared_ptr<model::Track>, shared_ptr<timeline::Track>>::
       const_iterator iterator = trackMap.find(modelTrack);
     if (iterator == trackMap.end())
       {

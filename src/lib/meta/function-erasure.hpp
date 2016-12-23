@@ -139,7 +139,7 @@ namespace meta{
       function<SIG>&
       getFun ()  const
         {
-          return get<function<SIG> >();
+          return get<function<SIG>>();
         }
       
       

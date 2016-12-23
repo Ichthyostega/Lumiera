@@ -192,7 +192,7 @@ namespace lib {
                            ///< how to access the contents via a common interface?
     >
   class InPlaceAnyHolder
-    : public BoolCheckable<InPlaceAnyHolder<siz, AccessPolicy> >
+    : public BoolCheckable<InPlaceAnyHolder<siz, AccessPolicy>>
     {
       typedef typename AccessPolicy::Base * BaseP;
       
@@ -515,9 +515,9 @@ namespace lib {
     , size_t siz = sizeof(BA)
     >
   class OpaqueHolder
-    : public InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA> >
+    : public InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA>>
     {
-      typedef InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA> > InPlaceHolder;
+      typedef InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA>> InPlaceHolder;
       
     public:
       OpaqueHolder() : InPlaceHolder() {}

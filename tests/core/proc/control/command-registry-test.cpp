@@ -211,7 +211,7 @@ namespace test    {
           
           CHECK (!pImpl->canExec());
           typedef Types<int> ArgType;
-          TypedArguments<Tuple<ArgType> > arg (Tuple<ArgType>(98765));
+          TypedArguments<Tuple<ArgType>> arg{Tuple<ArgType>(98765)};
           pImpl->setArguments(arg);
           CHECK (pImpl->canExec());
           

@@ -32,13 +32,13 @@ ParentTrack::ParentTrack()
 {
 }
 
-const std::list<shared_ptr<Track> >&
+const std::list<shared_ptr<Track>>&
 ParentTrack::get_child_tracks() const
 {
   return tracks.get_list();
 }
 
-lumiera::observable_list<shared_ptr<Track> >&
+lumiera::observable_list<shared_ptr<Track>>&
 ParentTrack::get_child_track_list()
 {
   return tracks;

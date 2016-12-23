@@ -98,7 +98,7 @@ namespace test {
     void
     place_object (AllocationCluster& clu, uint id)
       {
-        clu.create<Dummy<i> > (id);
+        clu.create<Dummy<i>> (id);
       }
     
     typedef void (Invoker)(AllocationCluster&, uint);
@@ -170,10 +170,10 @@ namespace test {
           AllocationCluster clu;
           
           char c1(123), c2(56), c3(3), c4(4), c5(5);
-          Dummy<44>& ref1 = clu.create<Dummy<44> > ();
-          Dummy<37>& ref2 = clu.create<Dummy<37> > (c1);
-          Dummy<37>& ref3 = clu.create<Dummy<37> > (c2);
-          Dummy<1234>& rX = clu.create<Dummy<1234> > (c3,c4,c5);
+          Dummy<44>& ref1 = clu.create<Dummy<44>> ();
+          Dummy<37>& ref2 = clu.create<Dummy<37>> (c1);
+          Dummy<37>& ref3 = clu.create<Dummy<37>> (c2);
+          Dummy<1234>& rX = clu.create<Dummy<1234>> (c3,c4,c5);
           
           CHECK (&ref1);
           CHECK (&ref2);
@@ -189,9 +189,9 @@ namespace test {
           // all created object's dtors will be invoked.
           
           CHECK (4 == clu.size());
-          CHECK (1 == clu.count<Dummy<44> >());
-          CHECK (2 == clu.count<Dummy<37> >());
-          CHECK (1 == clu.count<Dummy<1234> >());
+          CHECK (1 == clu.count<Dummy<44>>());
+          CHECK (2 == clu.count<Dummy<37>>());
+          CHECK (1 == clu.count<Dummy<1234>>());
         }
       
       
@@ -221,7 +221,7 @@ namespace test {
                 {
                   char i1 = truncChar(i);
                   char i2 = truncChar(rand() % 5);
-                  clu.create<Dummy<1> > (i1,i2);
+                  clu.create<Dummy<1>> (i1,i2);
                 }
               catch (char id)
                 {

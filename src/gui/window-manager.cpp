@@ -103,7 +103,7 @@ namespace gui {
     REQUIRE(event);
     REQUIRE(event->window);
     
-    list< shared_ptr<WorkspaceWindow> >::iterator iterator = windowList.begin();
+    list<shared_ptr<WorkspaceWindow>>::iterator iterator{windowList.begin()};
     
     while (iterator != windowList.end())
       {
@@ -141,8 +141,7 @@ namespace gui {
   {
     bool enable = windowList.size() > 1;
     
-    list< shared_ptr<WorkspaceWindow> >::iterator iterator = 
-      windowList.begin();
+    list<shared_ptr<WorkspaceWindow>>::iterator iterator{windowList.begin()};
     
     while (iterator != windowList.end())
       {

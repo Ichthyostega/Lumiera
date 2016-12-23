@@ -78,10 +78,10 @@ namespace test{
     TestFactory theFact;
     
     // Configure the products to be fabricated....
-    TestFactory::Singleton<Implementation<ONE> > holder1 (theFact,ONE);
-    TestFactory::Singleton<Implementation<TWO> > holder2 (theFact,TWO);
-    TestFactory::Singleton<Implementation<THR> > holder3 (theFact,THR);
-    TestFactory::Singleton<Implementation<FOU> > holder4 (theFact,FOU);
+    TestFactory::Singleton<Implementation<ONE>> holder1{theFact,ONE};
+    TestFactory::Singleton<Implementation<TWO>> holder2{theFact,TWO};
+    TestFactory::Singleton<Implementation<THR>> holder3{theFact,THR};
+    TestFactory::Singleton<Implementation<FOU>> holder4{theFact,FOU};
   }
   
   
@@ -124,7 +124,7 @@ namespace test{
           CHECK (isnil (anotherFact));
           VERIFY_ERROR (INVALID, anotherFact(ONE) );
           
-          TestFactory::Singleton<Implementation<ONE> > anotherSingletonHolder (anotherFact,ONE);
+          TestFactory::Singleton<Implementation<ONE>> anotherSingletonHolder (anotherFact,ONE);
           Interface & o3 = anotherFact(ONE);
           CHECK (isSameObject(o2,o3));
         } 

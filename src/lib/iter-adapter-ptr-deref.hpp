@@ -85,7 +85,7 @@ namespace lib {
    */
   template<class IT>
   class PtrDerefIter
-    : public lib::BoolCheckable<PtrDerefIter<IT> >
+    : public lib::BoolCheckable<PtrDerefIter<IT>>
     {
       IT i_;  ///< nested source iterator
       
@@ -230,7 +230,7 @@ namespace lib {
    */
   template<class IT>
   class AddressExposingIter
-    : public lib::BoolCheckable<AddressExposingIter<IT> >
+    : public lib::BoolCheckable<AddressExposingIter<IT>>
     {
       typedef typename IT::pointer _Ptr;
       

@@ -157,7 +157,7 @@ namespace lib {
    */
   template<class POS, class CON>
   class IterAdapter
-    : public lib::BoolCheckable<IterAdapter<POS,CON> >
+    : public lib::BoolCheckable<IterAdapter<POS,CON>>
     {
       CON source_;
       mutable POS pos_;
@@ -298,7 +298,7 @@ namespace lib {
    */
   template<typename T, class ST =T>
   class IterStateWrapper
-    : public lib::BoolCheckable<IterStateWrapper<T,ST> >
+    : public lib::BoolCheckable<IterStateWrapper<T,ST>>
     {
       ST core_;
       
@@ -422,7 +422,7 @@ namespace lib {
    */
   template<class IT>
   class RangeIter
-    : public lib::BoolCheckable<RangeIter<IT> >
+    : public lib::BoolCheckable<RangeIter<IT>>
     {
       IT p_;
       IT e_;
@@ -648,7 +648,7 @@ namespace lib {
   struct IterType;
   
   template<template<class,class> class Iter, class TY, class CON>
-  struct IterType<Iter<TY,CON> >
+  struct IterType<Iter<TY,CON>>
     {
       typedef CON Container;
       typedef TY  ElemType;
@@ -661,7 +661,7 @@ namespace lib {
     };
   
   template<class IT>
-  struct IterType<RangeIter<IT> >
+  struct IterType<RangeIter<IT>>
     : IterType<IT>
     {
       template<class T2>
@@ -677,7 +677,7 @@ namespace lib {
   /** wrapper to declare exposed values const */
   template<class IT>
   class ConstIter
-    : public lib::BoolCheckable<ConstIter<IT> >
+    : public lib::BoolCheckable<ConstIter<IT>>
     {
       IT i_;  ///< nested source iterator
       

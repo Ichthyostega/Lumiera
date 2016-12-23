@@ -79,7 +79,7 @@ namespace time {
    */
   class TimeValue
     : boost::totally_ordered<TimeValue,
-      boost::totally_ordered<TimeValue, gavl_time_t> >
+      boost::totally_ordered<TimeValue, gavl_time_t>>
     {
     protected:
       /** the raw (internal) time value

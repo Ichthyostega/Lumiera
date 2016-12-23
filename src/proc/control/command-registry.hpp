@@ -120,7 +120,7 @@ namespace control {
     , noncopyable
     {
       // using a hashtable to implement the index
-      typedef unordered_map<Symbol, Command, hash<Symbol> > CmdIndex;
+      typedef unordered_map<Symbol, Command, hash<Symbol>> CmdIndex;
       typedef map< const Command*, Symbol, order_by_impl> ReverseIndex;
       
       TypedAllocationManager allocator_;

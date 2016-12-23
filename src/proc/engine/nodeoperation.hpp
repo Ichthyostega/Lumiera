@@ -283,7 +283,7 @@ namespace config {
   template<class CONF>
   struct SelectBuffProvider                                          { typedef AllocBufferFromParent Type; };
   template<uint PROC_ign, uint INPLA_ign>
-  struct SelectBuffProvider< Config<CACHING, PROC_ign, INPLA_ign> >  { typedef AllocBufferFromCache  Type; };
+  struct SelectBuffProvider< Config<CACHING, PROC_ign, INPLA_ign>>   { typedef AllocBufferFromCache  Type; };
   
   
   template<class Config>
@@ -291,7 +291,7 @@ namespace config {
   
   
   template<uint INPLACE_ign>
-  struct Strategy< Config<CACHING,PROCESS,INPLACE_ign> >
+  struct Strategy< Config<CACHING,PROCESS,INPLACE_ign>>
     : QueryCache<
        AllocBufferTable<
         PullInput<
@@ -303,7 +303,7 @@ namespace config {
     { };
   
   template<uint INPLACE_ign>
-  struct Strategy< Config<PROCESS,INPLACE_ign> >
+  struct Strategy< Config<PROCESS,INPLACE_ign>>
     : AllocBufferTable<
        PullInput<
         AllocOutput<

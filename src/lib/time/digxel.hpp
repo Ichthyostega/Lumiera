@@ -224,7 +224,7 @@ namespace time {
             , class FMT  = digxel::Formatter<NUM>
             >
   class Digxel
-    : public boost::totally_ordered<Digxel<NUM,FMT> >
+    : public boost::totally_ordered<Digxel<NUM,FMT>>
     {
       mutable
       FMT buffer_;

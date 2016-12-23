@@ -226,33 +226,33 @@ namespace meta{
   template<typename SIG>
   struct _Fun
     {
-      typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-      typedef typename FunctionSignature<function<SIG> >::Args Args;
-      typedef                                             SIG  Sig;
+      typedef typename FunctionSignature<function<SIG>>::Ret  Ret;
+      typedef typename FunctionSignature<function<SIG>>::Args Args;
+      typedef                                            SIG  Sig;
     };
   /** Specialisation for using a function pointer */
   template<typename SIG>
   struct _Fun<SIG*>
     {
-      typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-      typedef typename FunctionSignature<function<SIG> >::Args Args;
-      typedef                                             SIG  Sig;
+      typedef typename FunctionSignature<function<SIG>>::Ret  Ret;
+      typedef typename FunctionSignature<function<SIG>>::Args Args;
+      typedef                                            SIG  Sig;
     };
   /** Specialisation when using a function reference */
   template<typename SIG>
   struct _Fun<SIG&>
     {
-      typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-      typedef typename FunctionSignature<function<SIG> >::Args Args;
-      typedef                                             SIG  Sig;
+      typedef typename FunctionSignature<function<SIG>>::Ret  Ret;
+      typedef typename FunctionSignature<function<SIG>>::Args Args;
+      typedef                                            SIG  Sig;
     };
   /** Specialisation for passing a functor */
   template<typename SIG>
-  struct _Fun<function<SIG> >
+  struct _Fun<function<SIG>>
     {
-      typedef typename FunctionSignature<function<SIG> >::Ret Ret;
-      typedef typename FunctionSignature<function<SIG> >::Args Args;
-      typedef                                             SIG  Sig;
+      typedef typename FunctionSignature<function<SIG>>::Ret  Ret;
+      typedef typename FunctionSignature<function<SIG>>::Args Args;
+      typedef                                            SIG  Sig;
     };
   
   /** Specialisations for member function pointers */
@@ -407,7 +407,7 @@ namespace meta{
   template< typename RET
           , typename A1
           >
-  struct FunctionTypedef<RET, Types<A1> >
+  struct FunctionTypedef<RET, Types<A1>>
   {
     typedef function<RET(A1)> Func;
     typedef          RET Sig(A1);
@@ -418,7 +418,7 @@ namespace meta{
           , typename A1
           , typename A2
           >
-  struct FunctionTypedef<RET, Types<A1,A2> >
+  struct FunctionTypedef<RET, Types<A1,A2>>
   {
     typedef function<RET(A1,A2)> Func;
     typedef          RET Sig(A1,A2);
@@ -430,7 +430,7 @@ namespace meta{
           , typename A2
           , typename A3
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3> >
+  struct FunctionTypedef<RET, Types<A1,A2,A3>>
   {
     typedef function<RET(A1,A2,A3)> Func;
     typedef          RET Sig(A1,A2,A3);
@@ -443,7 +443,7 @@ namespace meta{
           , typename A3
           , typename A4
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4> >
+  struct FunctionTypedef<RET, Types<A1,A2,A3,A4>>
   {
     typedef function<RET(A1,A2,A3,A4)> Func;
     typedef          RET Sig(A1,A2,A3,A4);
@@ -457,7 +457,7 @@ namespace meta{
           , typename A4
           , typename A5
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5> >
+  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5>>
   {
     typedef function<RET(A1,A2,A3,A4,A5)> Func;
     typedef          RET Sig(A1,A2,A3,A4,A5);
@@ -472,7 +472,7 @@ namespace meta{
           , typename A5
           , typename A6
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6> >
+  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6>>
   {
     typedef function<RET(A1,A2,A3,A4,A5,A6)> Func;
     typedef          RET Sig(A1,A2,A3,A4,A5,A6);
@@ -488,7 +488,7 @@ namespace meta{
           , typename A6
           , typename A7
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6,A7> >
+  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6,A7>>
   {
     typedef function<RET(A1,A2,A3,A4,A5,A6,A7)> Func;
     typedef          RET Sig(A1,A2,A3,A4,A5,A6,A7);
@@ -505,7 +505,7 @@ namespace meta{
           , typename A7
           , typename A8
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8> >
+  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8>>
   {
     typedef function<RET(A1,A2,A3,A4,A5,A6,A7,A8)> Func;
     typedef          RET Sig(A1,A2,A3,A4,A5,A6,A7,A8);
@@ -523,7 +523,7 @@ namespace meta{
           , typename A8
           , typename A9
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8,A9> >
+  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8,A9>>
   {
     typedef function<RET(A1,A2,A3,A4,A5,A6,A7,A8,A9)> Func;
     typedef          RET Sig(A1,A2,A3,A4,A5,A6,A7,A8,A9);

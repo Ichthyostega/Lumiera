@@ -106,10 +106,10 @@ namespace test{
           typedef DummyObj<23> * PD23;
           CHECK (sizeof(DummyObj<1>) != sizeof(DummyObj<23>));
           
-          PD1  pD11 = allocator.create<DummyObj<1> >();
-          PD1  pD12 = allocator.create<DummyObj<1> >();
-          PD23 pD21 = allocator.create<DummyObj<23> >();
-          PD23 pD22 = allocator.create<DummyObj<23> >();
+          PD1  pD11 = allocator.create<DummyObj<1>>();
+          PD1  pD12 = allocator.create<DummyObj<1>>();
+          PD23 pD21 = allocator.create<DummyObj<23>>();
+          PD23 pD22 = allocator.create<DummyObj<23>>();
           PS   pS11 = allocator.create<string> ("Lumiera");
           PS   pS12 = allocator.create<string> ("the paradox");
           
@@ -138,8 +138,8 @@ namespace test{
           CHECK (*pS11 == "Lumiera");
           CHECK (*pS12 == "the paradox");
           
-          PD23 pDxx = allocator.create<DummyObj<23> > (*pD21);
-          PS   pSxx = allocator.create<string>        (*pS12);
+          PD23 pDxx = allocator.create<DummyObj<23>> (*pD21);
+          PS   pSxx = allocator.create<string>       (*pS12);
           
           CHECK (*pS12 == *pSxx);
           CHECK (!isSameObject (*pS12, *pSxx));
@@ -153,8 +153,8 @@ namespace test{
           allocator.destroy (pDxx);
           allocator.destroy (pSxx);
           
-          CHECK (0 == allocator.numSlots<DummyObj<1> >());
-          CHECK (0 == allocator.numSlots<DummyObj<23> >());
+          CHECK (0 == allocator.numSlots<DummyObj<1>>());
+          CHECK (0 == allocator.numSlots<DummyObj<23>>());
           CHECK (0 == allocator.numSlots<string>());
           CHECK (0 == checksum_);
         }

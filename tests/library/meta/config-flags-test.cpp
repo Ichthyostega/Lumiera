@@ -102,7 +102,7 @@ namespace test {
     template<> struct Maybe<Conf3> : Indeed { enum{ CODE = 30 }; };
     
     template<uint Fl> 
-    struct Maybe<Config<TWO,Fl> >
+    struct Maybe<Config<TWO,Fl>>
     { 
       typedef Yes_t is_defined;
       
@@ -170,7 +170,7 @@ cout << "__________________________\n" \
           CHECK (1==sizeof(flags1));   // pure marker-type without content
           CHECK (1==sizeof(flags2));
           
-          typedef DefineConfigByFlags<Node<Flag<ONE>,NullType> >::Config SimpleConfig_defined_by_Typelist;
+          typedef DefineConfigByFlags<Node<Flag<ONE>,NullType>>::Config SimpleConfig_defined_by_Typelist;
           DISPLAY (SimpleConfig_defined_by_Typelist);
           
           typedef DefineConfigByFlags<AllFlags>::Config AnotherConfig_defined_by_Typelist;

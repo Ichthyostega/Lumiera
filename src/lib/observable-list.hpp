@@ -36,7 +36,7 @@ namespace lumiera
  * An observable_list is an STL list with an inbuilt sigc++ signal that
  * allows observers to be notified when changes are made to the list.
  */
-template<class T, class Allocator = std::allocator<T> >
+template<class T, class Allocator = std::allocator<T>>
 class observable_list
 {
 public:

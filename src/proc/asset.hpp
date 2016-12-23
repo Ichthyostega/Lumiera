@@ -339,7 +339,7 @@ namespace asset {
   struct is_pAsset : boost::false_type {};
   
   template <class A>
-  struct is_pAsset<shared_ptr<A> >
+  struct is_pAsset<shared_ptr<A>>
     : boost::is_base_of<Asset, A>      {};
   
   

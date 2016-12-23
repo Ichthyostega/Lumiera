@@ -53,13 +53,13 @@ public:
   /**
    * Gets a read-only reference to the the list of child tracks.
    */
-  const std::list<shared_ptr<Track> >&
+  const std::list<shared_ptr<Track>>&
     get_child_tracks() const;
 
   /**
    * Gets read-write access to the list of child tracks.
    */
-  lumiera::observable_list<shared_ptr<Track> >&
+  lumiera::observable_list<shared_ptr<Track>>&
     get_child_track_list();
 
   /**
@@ -91,7 +91,7 @@ protected:
   /**
    * The internal list of child tracks of this parent.
    */
-  lumiera::observable_list<shared_ptr<Track> > tracks;
+  lumiera::observable_list<shared_ptr<Track>> tracks;
 };
 
 }   // namespace model

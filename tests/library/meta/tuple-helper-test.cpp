@@ -55,11 +55,11 @@ namespace test {
     typedef Types< Num<1>
                  , Num<3>
                  , Num<5>
-                 >          Types1;
+                 >         Types1;
     typedef Types< Num<2>
                  , Num<4>
-                 >          Types2;
-    typedef Types< Num<7> > Types3;
+                 >         Types2;
+    typedef Types< Num<7>> Types3;
     
     
     

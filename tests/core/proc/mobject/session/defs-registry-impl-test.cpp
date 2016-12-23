@@ -79,10 +79,10 @@ namespace test    {
     string Dummy<I>::name = _Fmt("Dummy<%2i>") % I;
     
     template<int I>
-    inline P<Dummy<I> >
+    inline P<Dummy<I>>
     fabricate()
     {
-      return P<Dummy<I> >(new Dummy<I>);
+      return P<Dummy<I>>(new Dummy<I>);
     }
     
   }//(End)Test helpers
@@ -104,14 +104,14 @@ namespace test    {
     {
       scoped_ptr<DefsRegistry> reg_;
       
-      typedef P<Dummy<13> > Obj;
-      typedef P<Dummy<23> > Pra;
+      typedef P<Dummy<13>> Obj;
+      typedef P<Dummy<23>> Pra;
       
-      typedef Query<Dummy<13> > Q13;
-      typedef Query<Dummy<23> > Q23;
+      typedef Query<Dummy<13>> Q13;
+      typedef Query<Dummy<23>> Q23;
       
-      typedef DefsRegistry::Iter<Dummy<13> > Iter13;
-      typedef DefsRegistry::Iter<Dummy<23> > Iter23;
+      typedef DefsRegistry::Iter<Dummy<13>> Iter13;
+      typedef DefsRegistry::Iter<Dummy<23>> Iter23;
       
       
       // some test objects...

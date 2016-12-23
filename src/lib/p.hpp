@@ -73,7 +73,7 @@ namespace lib {
    *       pointee causes an dynamic cast. Thus the pointee types
    *       need to support RTTI.
    */
-  template<class TAR, class BASE =shared_ptr<TAR> >
+  template<class TAR, class BASE =shared_ptr<TAR>>
   class P
     : public BASE
     {

@@ -65,7 +65,7 @@ namespace lib {
    *   when the pointer isn'T \c NULL
    * 
    */
-  template<class TY, class PAR = std::allocator<TY> >
+  template<class TY, class PAR = std::allocator<TY>>
   class Allocator_TransferNoncopyable
     {
       typedef Allocator_TransferNoncopyable<TY,PAR> _ThisType;

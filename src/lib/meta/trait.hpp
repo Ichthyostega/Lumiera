@@ -145,7 +145,7 @@ namespace meta {
     };
   
   template<typename X>
-  struct Unwrap<boost::reference_wrapper<X> >
+  struct Unwrap<boost::reference_wrapper<X>>
     {
       typedef X  Type;
       
@@ -157,7 +157,7 @@ namespace meta {
     };
   
   template<typename X>
-  struct Unwrap<std::reference_wrapper<X> >
+  struct Unwrap<std::reference_wrapper<X>>
     {
       typedef X  Type;
       
@@ -169,7 +169,7 @@ namespace meta {
     };
   
   template<typename X>
-  struct Unwrap<std::shared_ptr<X> >
+  struct Unwrap<std::shared_ptr<X>>
     {
       typedef X  Type;
       
@@ -182,7 +182,7 @@ namespace meta {
     };
   
   template<typename X, class B>
-  struct Unwrap<P<X, B> >
+  struct Unwrap<P<X, B>>
     {
       typedef X  Type;
       

@@ -98,8 +98,8 @@ namespace control {
   
   namespace stage { ///< helpers for building up a command definition
     
-    typedef shared_ptr<CommandImpl> ImplInstance;
-    typedef function<Command&(ImplInstance const&)> Activation;
+    using ImplInstance = shared_ptr<CommandImpl>;
+    using Activation   = function<Command&(ImplInstance const&)>;
     
     
     
@@ -112,7 +112,7 @@ namespace control {
       {
         Command& prototype_;
         
-        typedef typename FunctionSignature< function<SIG> >::Args CmdArgs;
+        typedef typename FunctionSignature< function<SIG>>::Args CmdArgs;
         
         CompletedDefinition (Command& definedCommand)
           : prototype_(definedCommand)
@@ -244,11 +244,11 @@ namespace control {
         
         
         template<typename SIG2>
-        typename BuildUndoDefType<UndoSignature<SIG2> >::Type
+        typename BuildUndoDefType<UndoSignature<SIG2>>::Type
         captureUndo (SIG2& how_to_capture_UndoState)
           {
             typedef typename UndoSignature<SIG2>::CaptureSig UndoCapSig;
-            typedef typename BuildUndoDefType<UndoSignature<SIG2> >::Type SpecificUndoDefinition;
+            typedef typename BuildUndoDefType<UndoSignature<SIG2>>::Type SpecificUndoDefinition;
             
             function<UndoCapSig> captureOperation (how_to_capture_UndoState);
             return SpecificUndoDefinition (callback_, operation_, captureOperation);

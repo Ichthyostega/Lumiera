@@ -105,7 +105,7 @@ namespace meta{
           , uint f4
           , uint IGN
           >
-  struct ConfigSetFlag<Fl, Config<f1,f2,f3,f4,IGN> >
+  struct ConfigSetFlag<Fl, Config<f1,f2,f3,f4,IGN>>
     {
       typedef lib::meta::Config<Fl,f1,f2,f3,f4> Config;
     };
@@ -158,7 +158,7 @@ namespace meta{
   struct FlagInfo;
   
   template<uint ff, class FLAGS>
-  struct FlagInfo<Node<Flag<ff>, FLAGS> >
+  struct FlagInfo<Node<Flag<ff>, FLAGS>>
     {
       enum{ BITS = maxC< ff,  FlagInfo<FLAGS>::BITS> ::VAL
           , CODE =  (1<<ff) | FlagInfo<FLAGS>::CODE
@@ -181,7 +181,7 @@ namespace meta{
     };
   
   template<class CONF, class TAIL>
-  struct FlagInfo<Node<CONF, TAIL> >
+  struct FlagInfo<Node<CONF, TAIL>>
     {
       typedef typename CONF::Flags ThisFlags;
       enum{ 

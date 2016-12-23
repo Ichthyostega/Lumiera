@@ -154,7 +154,8 @@ namespace advice {
       struct Entry
         : pair<Binding::Matcher, POA*>
         , boost::equality_comparable<Entry, POA,
-          boost::equality_comparable<Entry> >
+          boost::equality_comparable<Entry>
+        >
         {
           explicit
           Entry (POA& elm)

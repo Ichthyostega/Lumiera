@@ -53,7 +53,7 @@ namespace test {
       static void deleter (TestAsset<A>* aa) { delete aa; }
       
     public:
-      typedef lib::P<TestAsset<A> > PA;
+      using PA = lib::P<TestAsset<A>>;
       
       static PA create ()             { return (new TestAsset<A>       )->ptrFromThis(); }
       static PA create (PAsset& pRef) { return (new TestAsset<A> (pRef))->ptrFromThis(); }

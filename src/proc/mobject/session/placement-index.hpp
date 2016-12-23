@@ -157,7 +157,7 @@ namespace session {
   
   /// @note just ignoring the second (parent) type encoded into Placement
   template<typename MO, typename BMO>
-  struct BuildID<Placement<MO,BMO> >
+  struct BuildID<Placement<MO,BMO>>
     {
       typedef PlacementMO::Id<MO> Type;
       typedef MO                  Target;

@@ -68,7 +68,7 @@ namespace lib {
    */
   template<class IMP>
   class Handle 
-    : public lib::BoolCheckable<Handle<IMP> >
+    : public lib::BoolCheckable<Handle<IMP>>
     {
     protected:
       typedef std::shared_ptr<IMP> SmPtr;

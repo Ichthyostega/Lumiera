@@ -476,10 +476,10 @@ namespace func{
   template<typename SIG>
   class TupleApplicator
     {
-      typedef typename FunctionSignature< function<SIG> >::Args Args;
-      typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
+      using Args = typename FunctionSignature< function<SIG>>::Args;
+      using Ret  = typename FunctionSignature< function<SIG>>::Ret;
       
-      typedef function<Ret()> BoundFunc;
+      using BoundFunc = function<Ret()>;
       
       enum { ARG_CNT = count<typename Args::List>::value };
       

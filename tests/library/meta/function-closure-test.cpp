@@ -142,8 +142,8 @@ namespace test {
       check_signatureTypeManip ()
         {
           typedef int someFunc(Num<5>,Num<9>);
-          typedef FunctionSignature<function<someFunc> >::Ret RetType;  // should be int
-          typedef FunctionSignature<function<someFunc> >::Args Args;
+          typedef FunctionSignature<function<someFunc>>::Ret RetType;  // should be int
+          typedef FunctionSignature<function<someFunc>>::Args Args;
           DISPLAY (Args);
           
           typedef Prepend<Num<1>, Args>::Seq NewArgs;               // manipulate the argument type(s)
@@ -162,10 +162,10 @@ namespace test {
         {
           cout << "\t:\n\t: ---Apply---\n";
           
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
+          Tuple<Types<>>            tup0 ;
+          Tuple<Types<int>>         tup1 (11);
+          Tuple<Types<int,int>>     tup2 (11,12);
+          Tuple<Types<int,int,int>> tup3 (11,12,13);
           DUMPVAL (tup0);
           DUMPVAL (tup1);
           DUMPVAL (tup2);
@@ -192,10 +192,10 @@ namespace test {
       void
       check_applyFunc ()
         {
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
+          Tuple<Types<>>             tup0 ;
+          Tuple<Types<int>>          tup1 (11);
+          Tuple<Types<int,int>>      tup2 (11,12);
+          Tuple<Types<int,int,int>>  tup3 (11,12,13);
           function<int()>            functor0 (fun0);
           function<int(int)>         functor1 (fun1);
           function<int(int,int)>     functor2 (fun2);
@@ -224,10 +224,10 @@ namespace test {
         {
           cout << "\t:\n\t: ---Bind----\n";
           
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
+          Tuple<Types<>>            tup0 ;
+          Tuple<Types<int>>         tup1 (11);
+          Tuple<Types<int,int>>     tup2 (11,12);
+          Tuple<Types<int,int,int>> tup3 (11,12,13);
           
           typedef function<int()> BoundFun;
           
@@ -257,10 +257,10 @@ namespace test {
       void
       check_bindFunc ()
         {
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
+          Tuple<Types<>>             tup0 ;
+          Tuple<Types<int>>          tup1 (11);
+          Tuple<Types<int,int>>      tup2 (11,12);
+          Tuple<Types<int,int,int>>  tup3 (11,12,13);
           function<int()>            unbound_functor0 (fun0);
           function<int(int)>         unbound_functor1 (fun1);
           function<int(int,int)>     unbound_functor2 (fun2);
@@ -294,10 +294,10 @@ namespace test {
       void
       build_closure ()
         {
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
+          Tuple<Types<>>            tup0 ;
+          Tuple<Types<int>>         tup1 (11);
+          Tuple<Types<int,int>>     tup2 (11,12);
+          Tuple<Types<int,int,int>> tup3 (11,12,13);
           
           FunctionClosure<int()>            clo0 (fun0,tup0);
           FunctionClosure<int(int)>         clo1 (fun1,tup1);

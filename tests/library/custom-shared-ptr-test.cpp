@@ -141,7 +141,7 @@ namespace test{
           CHECK (0 == pX.use_count());
           CHECK (4 == pX2.use_count());
           
-          P<X, P<X> > pXX (pX2);  // a different type, but compatible pointers
+          P<X, P<X>> pXX (pX2);  // a different type, but compatible pointers
           pX2 = pX;
           CHECK (!pX2);
           CHECK (0 == pX2.use_count());
@@ -194,13 +194,13 @@ namespace test{
       void
       check_type_relations ()
         {
-          P<X> pX;                    // Base: shared_ptr<X>
-          P<XX> pX1;                  // Base: shared_ptr<XX>
-          P<XX,P<X> > pX2;            // Base: P<X>
-          P<XX,shared_ptr<X> > pX3;   // Base: shared_ptr<X>
-          P<XX,shared_ptr<long> > pLo;// Base: shared_ptr<long>       (rather nonsense, but well...)
-          P<X,string> pLoL;           // Base: std::string
-          P<string> pLoLoL;           // Base: shared_ptr<string>
+          P<X> pX;                   // Base: shared_ptr<X>
+          P<XX> pX1;                 // Base: shared_ptr<XX>
+          P<XX,P<X>> pX2;            // Base: P<X>
+          P<XX,shared_ptr<X>> pX3;   // Base: shared_ptr<X>
+          P<XX,shared_ptr<long>> pLo;// Base: shared_ptr<long>       (rather nonsense, but well...)
+          P<X,string> pLoL;          // Base: std::string
+          P<string> pLoLoL;          // Base: shared_ptr<string>
           
           CHECK (INSTANCEOF (shared_ptr<X>, &pX));
           

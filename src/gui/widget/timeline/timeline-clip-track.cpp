@@ -68,7 +68,7 @@ namespace timeline {
     cairo->stroke();
     
     // Draw all clips
-    std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip> > pair; 
+    std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip>> pair; 
     BOOST_FOREACH (pair, clipMap)
       {
         pair.second->draw(cairo, window);
@@ -78,7 +78,7 @@ namespace timeline {
   shared_ptr<timeline::Clip>
   ClipTrack::getClipAt(Time position) const
   {
-    std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip> >
+    std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip>>
       pair; 
     BOOST_FOREACH (pair, clipMap)
       {
@@ -127,7 +127,8 @@ namespace timeline {
   ClipTrack::removeOrphanedClips ()
   {
     std::map< shared_ptr<model::Clip>,
-              shared_ptr<timeline::Clip> >
+              shared_ptr<timeline::Clip>
+            >
       orphanClipMap (clipMap);
     
     // Remove all clips which are still present in the sequence
@@ -137,7 +138,7 @@ namespace timeline {
     
     // orphanClipMap now contains all the orphaned clips
     // Remove them
-    std::pair< shared_ptr<model::Clip>, shared_ptr<timeline::Clip> >
+    std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip>>
       pair; 
     BOOST_FOREACH (pair, orphanClipMap)
       {

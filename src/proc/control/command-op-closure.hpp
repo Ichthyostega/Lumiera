@@ -153,7 +153,7 @@ namespace control {
   template<typename SIG>
   class OpClosure
     {
-      using Args = typename FunctionSignature< function<SIG> >::Args;
+      using Args = typename FunctionSignature< function<SIG>>::Args;
       using Builder = BuildTupleAccessor<ParamAccessor, Args>;
       
       using ParamStorageTuple =typename Builder::Product;

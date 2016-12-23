@@ -450,7 +450,7 @@ namespace lib {
     class ChainedIters;
     
     template<class ITI>
-    class ChainedIters<ITI,     typename enable_if< _is_iterator_of_iterators<ITI> >::type
+    class ChainedIters<ITI,     typename enable_if< _is_iterator_of_iterators<ITI>>::type
                       >
       : public IterStateWrapper<typename ITI::value_type::value_type 
                                ,ChainedIteratorImpl<ITI, typename ITI::value_type>
@@ -471,7 +471,7 @@ namespace lib {
      *       of the given iterator is itself an iterator
      */ 
     template<class SEQ>
-    class ChainedIters<SEQ,     typename disable_if< _is_iterator_of_iterators<SEQ> >::type
+    class ChainedIters<SEQ,     typename disable_if< _is_iterator_of_iterators<SEQ>>::type
                       > 
       : public IterStateWrapper<typename SEQ::value_type
                                ,ChainedIteratorImpl<IterStack<SEQ>, SEQ>
@@ -940,10 +940,10 @@ namespace lib {
   /* ==== convenient builder free functions ==== */
   
   template<class IT>
-  inline IterExplorer<iter_explorer::WrappedSequence<IT> >
+  inline IterExplorer<iter_explorer::WrappedSequence<IT>>
   exploreIter (IT const& srcSeq)
   {
-    return IterExplorer<iter_explorer::WrappedSequence<IT> > (srcSeq);
+    return IterExplorer<iter_explorer::WrappedSequence<IT>> (srcSeq);
   }
   
   

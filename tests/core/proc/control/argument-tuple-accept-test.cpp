@@ -54,8 +54,8 @@ namespace test    {
     template<typename SIG>
     struct _Tup
       {
-        typedef typename FunctionSignature< function<SIG> >::Args Args;
-        typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
+        typedef typename FunctionSignature< function<SIG>>::Args Args;
+        typedef typename FunctionSignature< function<SIG>>::Ret  Ret;
         typedef Tuple<Args> Ty;
       };
     

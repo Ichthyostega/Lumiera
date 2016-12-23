@@ -137,7 +137,7 @@ namespace test{
           _checksum = 0;
           _create_count = 0;
           {
-            typedef InPlaceBuffer<Base, sizeof(DD<42>), DD<0> > Buffer;
+            typedef InPlaceBuffer<Base, sizeof(DD<42>), DD<0>> Buffer;
             
             Buffer buff;
             CHECK (sizeof(buff) <= sizeof(DD<42>) + _ALIGN_);
@@ -145,10 +145,10 @@ namespace test{
             CHECK (0 == _checksum);
             buff->confess();          // one default object of type DD<0> has been created
             
-            buff.create<DD<5> > ();
+            buff.create<DD<5>>();
             buff->confess();
             
-            buff.create<DD<9> > ("I'm fine");
+            buff.create<DD<9>> ("I'm fine");
             buff->confess();
             
             VERIFY_ERROR( FATAL, buff.create<Killer> () );

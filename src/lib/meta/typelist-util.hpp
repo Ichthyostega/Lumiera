@@ -65,7 +65,7 @@ namespace meta {
         enum{ value = 0 };
       };
     template<class TY, class TYPES>
-    struct count<Node<TY,TYPES> >
+    struct count<Node<TY,TYPES>>
       {
         enum{ value = 1 + count<TYPES>::value };
       };
@@ -82,7 +82,7 @@ namespace meta {
         static constexpr int value = 0;
       };
     template<class TY, class TYPES>
-    struct maxSize<Node<TY,TYPES> >
+    struct maxSize<Node<TY,TYPES>>
       {
         static constexpr size_t thisval = sizeof(TY);
         static constexpr size_t nextval = maxSize<TYPES>::value;
@@ -101,13 +101,13 @@ namespace meta {
       };
     
     template<typename TY, typename TYPES>
-    struct IsInList<TY, Node<TY,TYPES> >
+    struct IsInList<TY, Node<TY,TYPES>>
       {
         enum{ value = true };
       };
     
     template<typename TY, typename XX, typename TYPES>
-    struct IsInList<TY, Node<XX,TYPES> >
+    struct IsInList<TY, Node<XX,TYPES>>
       {
         enum{ value = IsInList<TY,TYPES>::value };
       };

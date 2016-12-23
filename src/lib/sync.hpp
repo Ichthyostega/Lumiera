@@ -264,7 +264,7 @@ namespace lib {
     
     template<class MTX>
     class Condition
-      : public Mutex<Wrapped_Condition<MTX> >
+      : public Mutex<Wrapped_Condition<MTX>>
       {
         typedef Wrapped_Condition<MTX> Cond;
         

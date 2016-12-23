@@ -34,7 +34,7 @@ namespace lib {
 namespace meta {
   
   
-  /** the tr1 hashtable(s) are notoriously difficult to handle
+  /** the std hashtable(s) are notoriously difficult to handle
    *  when it comes to detecting capabilities by metaprogramming,
    *  because the're built up from a generic baseclass and especially
    *  inherit their iterator-types as template specialisations.
@@ -42,7 +42,7 @@ namespace meta {
    *  Thus we provide fixed diagnostics to bypass the traits check.
    */
   template<typename KEY, typename VAL, typename HASH>
-  struct can_STL_ForEach<std::unordered_map<KEY,VAL,HASH> >
+  struct can_STL_ForEach<std::unordered_map<KEY,VAL,HASH>>
     {
       enum { value = true };
     };

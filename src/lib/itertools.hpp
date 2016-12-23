@@ -147,7 +147,7 @@ namespace lib {
    */
   template<class CORE>
   class IterTool
-    : public lib::BoolCheckable<IterTool<CORE> >
+    : public lib::BoolCheckable<IterTool<CORE>>
     {
       
     protected: /* == iteration control == */
@@ -315,7 +315,7 @@ namespace lib {
    */
   template<class IT>
   class FilterIter
-    : public IterTool<FilterCore<IT> >
+    : public IterTool<FilterCore<IT>>
     {
       typedef FilterCore<IT> _Filter;
       typedef IterTool<_Filter> _Impl;
@@ -609,7 +609,7 @@ namespace lib {
    */
   template<class IT, class VAL>
   class TransformIter
-    : public IterTool<TransformingCore<IT,VAL> >
+    : public IterTool<TransformingCore<IT,VAL>>
     {
       typedef TransformingCore<IT,VAL> _Trafo;
       typedef IterTool<_Trafo> _IteratorImpl;
@@ -636,19 +636,19 @@ namespace lib {
     template<typename SIG>
     struct _ProducedOutput
       {
-        typedef typename FunctionSignature<function<SIG> >::Ret Type;
+        typedef typename FunctionSignature<function<SIG>>::Ret Type;
       };
     
     template<typename SIG>
-    struct _ProducedOutput<function<SIG> >
+    struct _ProducedOutput<function<SIG>>
       {
-        typedef typename FunctionSignature<function<SIG> >::Ret Type;
+        typedef typename FunctionSignature<function<SIG>>::Ret Type;
       };
     
     template<typename FUN>
     struct _ProducedOutput<FUN*>
       {
-        typedef typename FunctionSignature<function<FUN> >::Ret Type;
+        typedef typename FunctionSignature<function<FUN>>::Ret Type;
       };
   }
   

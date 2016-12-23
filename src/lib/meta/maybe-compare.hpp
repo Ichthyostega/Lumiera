@@ -53,7 +53,7 @@ namespace meta{
    *  we'll use our private hack, which at least detects equivalence 
    *  in \em some cases... */
   template<typename SIG>
-  struct Comparator<function<SIG> >
+  struct Comparator<function<SIG>>
     {
       static bool
       equals (function<SIG> const& f1, function<SIG> const& f2)

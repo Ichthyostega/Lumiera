@@ -180,7 +180,7 @@ namespace visitor {
       
       
     public:
-      static Depend<Dispatcher<TAR,TOOL> > instance;
+      static Depend<Dispatcher<TAR,TOOL>> instance;
       
       inline ReturnType 
       forwardCall (TAR& target, TOOL& tool)
@@ -208,7 +208,7 @@ namespace visitor {
   
   /** storage for the dispatcher table(s) */
   template<class TAR, class TOOL>
-  Depend<Dispatcher<TAR,TOOL> > Dispatcher<TAR,TOOL>::instance;
+  Depend<Dispatcher<TAR,TOOL>> Dispatcher<TAR,TOOL>::instance;
   
   
   

@@ -90,9 +90,9 @@ namespace test   {
      */
     template<uint CHA, uint FRA>
     struct TestFrameTable
-      : vector<vector<TestFrame> >
+      : vector<vector<TestFrame>>
       {
-        typedef vector<vector<TestFrame> > VECT;
+        typedef vector<vector<TestFrame>> VECT;
         
         TestFrameTable()
           : VECT(CHA)

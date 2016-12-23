@@ -194,11 +194,11 @@ namespace test{
       createOpaqueValues ()
         {
           TestList list;
-          list.push_back (PolyVal::build<Imp<1> >  () );
-          list.push_back (PolyVal::build<Imp<11> > () );
-          list.push_back (PolyVal::build<Imp<111> >() );
-          list.push_back (PolyVal::build<Imp<23> > () );
-          list.push_back (PolyVal::build<Imp<5> >  () );
+          list.push_back (PolyVal::build<Imp<1>>  () );
+          list.push_back (PolyVal::build<Imp<11>> () );
+          list.push_back (PolyVal::build<Imp<111>>() );
+          list.push_back (PolyVal::build<Imp<23>> () );
+          list.push_back (PolyVal::build<Imp<5>>  () );
           return list;
         } //note: copy
       

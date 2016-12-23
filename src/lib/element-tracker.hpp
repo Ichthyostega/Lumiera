@@ -90,11 +90,11 @@ namespace lib {
    */
   template<typename ELM>
   class ElementTracker
-    : public lib::RefArrayVector<P<ELM> >
+    : public lib::RefArrayVector<P<ELM>>
     {
-      typedef std::vector<P<ELM> > _Vec;
-      typedef typename _Vec::iterator Iter;
-      typedef typename _Vec::const_iterator CIter;
+      using  _Vec = std::vector<P<ELM>>;
+      using  Iter = typename _Vec::iterator;
+      using CIter = typename _Vec::const_iterator;
       
     public:
      ~ElementTracker()

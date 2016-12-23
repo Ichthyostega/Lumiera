@@ -153,13 +153,13 @@ namespace test {
               typedef Append<NullType, NullType> Append1;
               DISPLAY (Append1);
               
-              typedef Append<Num<11>,Num<22> >   Append2;
+              typedef Append<Num<11>,Num<22>>    Append2;
               DISPLAY (Append2);
               
               typedef Append<Num<111>,NullType>  Append3;
               DISPLAY (Append3);
               
-              typedef Append<NullType,Num<222> > Append4;
+              typedef Append<NullType,Num<222>>  Append4;
               DISPLAY (Append4);
               
               typedef Append<List1,NullType>     Append5;
@@ -171,7 +171,7 @@ namespace test {
               typedef Append<Num<111>,List2>     Append7;
               DISPLAY (Append7);
               
-              typedef Append<List1,Num<222> >    Append8;
+              typedef Append<List1,Num<222>>     Append8;
               DISPLAY (Append8);
               
               typedef Append<List1,List2>        Append9;
@@ -182,7 +182,7 @@ namespace test {
           void
           check_splice ()
             {
-              typedef Types<Num<9>,Num<8> >::List OLi;
+              typedef Types<Num<9>,Num<8>>::List OLi;
               // will "paste" the list OLi "on top" of another Typelist...
               
               typedef Splice<NullType, NullType> Overl01;
@@ -225,7 +225,7 @@ namespace test {
               DISPLAY (Overl13);
               
               
-              typedef Types<Num<99> >::List OLi2;
+              typedef Types<Num<99>>::List OLi2;
               typedef Splice<List1, OLi2, 0>::Front Front1;
               typedef Splice<List1, OLi2, 1>::Front Front2;
               typedef Splice<List1, OLi2, 5>::Front Front3;
@@ -293,8 +293,8 @@ namespace test {
           
           
           
-          template<class X> struct AddConst2          { typedef X        Type; };
-          template<int I>   struct AddConst2<Num<I> > { typedef Num<I+2> Type; };
+          template<class X> struct AddConst2         { typedef X        Type; };
+          template<int I>   struct AddConst2<Num<I>> { typedef Num<I+2> Type; };
           
           void
           check_apply ()
@@ -304,8 +304,8 @@ namespace test {
             }
           
           
-          template<class X> struct IsEven          { enum {value = false };        };
-          template<int I>   struct IsEven<Num<I> > { enum {value = (0 == I % 2) }; };
+          template<class X> struct IsEven         { enum {value = false };        };
+          template<int I>   struct IsEven<Num<I>> { enum {value = (0 == I % 2) }; };
           
           void
           check_filter ()
@@ -318,13 +318,13 @@ namespace test {
           void
           check_prefix ()
             {
-              typedef PrefixAll<Num<11>,Num<22> > Prefix1;
+              typedef PrefixAll<Num<11>,Num<22>> Prefix1;
               DISPLAY (Prefix1);
               
-              typedef PrefixAll<Num<101>,List1>   Prefix2;
+              typedef PrefixAll<Num<101>,List1>  Prefix2;
               DISPLAY (Prefix2);
               
-              typedef PrefixAll<NullType,List1>   Prefix3;
+              typedef PrefixAll<NullType,List1>  Prefix3;
               DISPLAY (Prefix3);
               
               typedef Types<List1::List,Num<0>,List2::List>::List  List_of_Lists;
@@ -345,8 +345,8 @@ namespace test {
               typedef Distribute<Num<11>, List1> Dist1;
               DISPLAY (Dist1);
               
-              typedef Types<Num<11>,Num<22>,Num<33> >::List Prefixes;
-              typedef Distribute<Prefixes, Num<0> > Dist2;
+              typedef Types<Num<11>,Num<22>,Num<33>>::List Prefixes;
+              typedef Distribute<Prefixes, Num<0>> Dist2;
               DISPLAY (Dist2);
               
               typedef Distribute<Prefixes, List1> Dist3;
@@ -360,7 +360,7 @@ namespace test {
           void
           check_combine()
             {
-              typedef CountDown<Num<11> > Down;
+              typedef CountDown<Num<11>> Down;
               DISPLAY (Down);
               
               typedef Combine<List1::List, CountDown> Combi;

@@ -131,7 +131,7 @@ namespace test {
           me_can_has_more_numberz.eat (b2);
           me_can_has_more_numberz.eat (b5);
           
-          TakeIt<Block<13> >& subInterface = me_can_has_more_numberz;
+          TakeIt<Block<13>>& subInterface = me_can_has_more_numberz;
           
           subInterface.eat (b13);
           me_can_has_more_numberz.eat();

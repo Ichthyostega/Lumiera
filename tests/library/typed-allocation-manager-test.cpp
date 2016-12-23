@@ -90,15 +90,15 @@ namespace test{
           
           TypedAllocationManager allocator;
           
-          typedef shared_ptr<DummyObj<1> >  PD1;
-          typedef shared_ptr<DummyObj<22> > PD22;
+          typedef shared_ptr<DummyObj<1>>  PD1;
+          typedef shared_ptr<DummyObj<22>> PD22;
           CHECK (sizeof(DummyObj<1>) != sizeof(DummyObj<22>));
           
             {
               PD1  pD11 = allocator.create<DummyObj<1> >();
               PD1  pD12 = allocator.create<DummyObj<1> >();
-              PD22 pD21 = allocator.create<DummyObj<22> >();
-              PD22 pD22 = allocator.create<DummyObj<22> >();
+              PD22 pD21 = allocator.create<DummyObj<22>>();
+              PD22 pD22 = allocator.create<DummyObj<22>>();
               CHECK (pD11);
               CHECK (pD12);
               CHECK (pD21);
@@ -121,13 +121,13 @@ namespace test{
               CHECK (isSameObject (*pD21, *pD2x));
               
               CHECK (2 == allocator.numSlots<DummyObj<1> >());
-              CHECK (2 == allocator.numSlots<DummyObj<22> >());
+              CHECK (2 == allocator.numSlots<DummyObj<22>>());
               
               CHECK (0 == allocator.numSlots<long>()); // query just some unrelated type...
             }
           
           CHECK (0 == allocator.numSlots<DummyObj<1> >());
-          CHECK (0 == allocator.numSlots<DummyObj<22> >());
+          CHECK (0 == allocator.numSlots<DummyObj<22>>());
           CHECK (0 == checksum_);
         }
     };

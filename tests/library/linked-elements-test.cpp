@@ -416,15 +416,15 @@ namespace test{
             
             ListCustomAllocated elements(allocator);
             
-            elements.pushNew<Num<1> > (2);
-            elements.pushNew<Num<3> > (4,5);
-            elements.pushNew<Num<6> > (7,8,9);
+            elements.pushNew<Num<1>> (2);
+            elements.pushNew<Num<3>> (4,5);
+            elements.pushNew<Num<6>> (7,8,9);
             
             CHECK (sum(9) == Dummy::checksum());
             CHECK (3 == allocator.size());
-            CHECK (1 == allocator.count<Num<1> >());
-            CHECK (1 == allocator.count<Num<3> >());
-            CHECK (1 == allocator.count<Num<6> >());
+            CHECK (1 == allocator.count<Num<1>>());
+            CHECK (1 == allocator.count<Num<3>>());
+            CHECK (1 == allocator.count<Num<6>>());
             
             CHECK (3 == elements.size());
             CHECK (1+2 == elements[2].getVal());

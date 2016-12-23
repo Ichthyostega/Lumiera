@@ -141,7 +141,7 @@ namespace query  {
     struct Slot
       : public TableEntry
       {
-        typedef std::set<Record<TAR> > Registry;
+        typedef std::set<Record<TAR>> Registry;
         
         Registry registry;
         static size_t index; ///< where to find this Slot in every Table

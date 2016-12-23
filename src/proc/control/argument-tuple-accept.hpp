@@ -596,8 +596,8 @@ namespace control {
     template<typename SIG>
     struct _Type
       {
-        using Args = typename FunctionSignature< function<SIG> >::Args;
-        using Ret  = typename FunctionSignature< function<SIG> >::Ret;
+        using Args = typename FunctionSignature< function<SIG>>::Args;
+        using Ret  = typename FunctionSignature< function<SIG>>::Ret;
         using Sig  = SIG;
         using ArgTuple = Tuple<Args>;
       };

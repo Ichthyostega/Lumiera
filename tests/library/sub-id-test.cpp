@@ -142,7 +142,7 @@ namespace test{
       
       template<class KEY>
       struct HashTable
-        : std::unordered_map<KEY, string, hash<KEY> >
+        : std::unordered_map<KEY, string, hash<KEY>>
         {
           void
           add (KEY key)

@@ -55,7 +55,7 @@ namespace facade {
   class Holder;
   
   template<class FA, class I>
-  class Holder<InstanceHandle<I,FA> >
+  class Holder<InstanceHandle<I,FA>>
     : Accessor<FA>
     , protected FA
     {

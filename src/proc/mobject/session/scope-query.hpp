@@ -72,9 +72,9 @@ namespace session {
    */
   template<class MO>
   class DiscoveryQuery
-    : public Query<Placement<MO> >
+    : public Query<Placement<MO>>
     {
-      typedef Query<Placement<MO> > _Query;
+      typedef Query<Placement<MO>> _Query;
       
       
     public:      
@@ -145,7 +145,7 @@ namespace session {
     : public DiscoveryQuery<MO>
     {
       typedef DiscoveryQuery<MO>   _Parent;
-      typedef Query<Placement<MO> > _Query;
+      typedef Query<Placement<MO>> _Query;
       
       
       PlacementMO::ID    startPoint_;

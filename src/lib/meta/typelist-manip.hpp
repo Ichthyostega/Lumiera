@@ -130,7 +130,7 @@ namespace meta {
     struct Append<Node<TY,TYPES>, TAIL>    { typedef Node<TY,  typename Append<TYPES,  TAIL>::List>  List; };
     
     template<class TY, class TYPES>
-    struct Append<NullType, Node<TY,TYPES> >   { typedef Node<TY,TYPES>   List; };
+    struct Append<NullType, Node<TY,TYPES>>    { typedef Node<TY,TYPES>   List; };
     
     template<class TY, class TYPES>
     struct Append<Node<TY,TYPES>, NullType>    { typedef Node<TY,TYPES>   List; };
@@ -155,11 +155,11 @@ namespace meta {
     struct SplitLast<NullType>             { typedef NullType Type;
                                              typedef NullType List; };
     template<class TY>
-    struct SplitLast<Node<TY,NullType> >   { typedef TY       Type;
+    struct SplitLast<Node<TY,NullType>>    { typedef TY       Type;
                                              typedef NullType List; };
     
     template<class TY, class TYPES>
-    struct SplitLast<Node<TY,TYPES> >      { typedef typename SplitLast<TYPES>::Type Type;
+    struct SplitLast<Node<TY,TYPES>>       { typedef typename SplitLast<TYPES>::Type Type;
                                              typedef typename Append< TY,
                                                                       typename SplitLast<TYPES>::List
                                                                     >::List 
@@ -211,7 +211,7 @@ namespace meta {
     struct Dissect;
     
     template<class T, class TYPES>
-    struct Dissect<Node<T,TYPES> >
+    struct Dissect<Node<T,TYPES>>
       {
         typedef Node<T,TYPES>                  List;  ///< the complete list
         typedef T                              Head;  ///< first element
@@ -253,7 +253,7 @@ namespace meta {
     template< class T
             , class TY, class TYPES
             >
-    struct PrefixAll<T, Node<TY,TYPES> >   { typedef Node< typename Append<T,TY>::List
+    struct PrefixAll<T, Node<TY,TYPES>>    { typedef Node< typename Append<T,TY>::List
                                                          , typename PrefixAll<T,TYPES>::List
                                                          >     List; };
     
@@ -313,7 +313,7 @@ namespace meta {
     template<class F>
     struct FlagOnOff
       { 
-        typedef Node<F, Node<NullType,NullType> >  List;
+        typedef Node<F, Node<NullType,NullType>>  List;
       };
     
     

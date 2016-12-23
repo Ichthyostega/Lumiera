@@ -49,7 +49,7 @@ namespace model {
     return os.str();
   }
 
-  lumiera::observable_list< shared_ptr<Clip> >&
+  lumiera::observable_list<shared_ptr<Clip>>&
   ClipTrack::getClipList()
   {
     return clips;

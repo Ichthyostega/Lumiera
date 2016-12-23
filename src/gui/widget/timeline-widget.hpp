@@ -127,8 +127,8 @@ namespace widget {
       
     public:
       /* ===== Signals ===== */
-      typedef sigc::signal<void, shared_ptr<timeline::TimelineState> > TimelineStateChangeSignal;
-      typedef sigc::signal<void, shared_ptr<timeline::Track> > HoveringTrackChangedSignal;
+      using TimelineStateChangeSignal  = sigc::signal<void, shared_ptr<timeline::TimelineState>>;
+      using HoveringTrackChangedSignal = sigc::signal<void, shared_ptr<timeline::Track>>;
       
       sigc::signal<void, lib::time::Time> mouse_hover_signal() const;
       
@@ -202,7 +202,7 @@ namespace widget {
       void
       search_orphaned_tracks_in_branch (shared_ptr<model::Track> modelTrack,
                                         std::map<shared_ptr<model::Track>,
-                                        shared_ptr<timeline::Track> > &orphan_track_map);
+                                        shared_ptr<timeline::Track>>& orphan_track_map);
       
       /**
        * Looks up a timeline UI track in trackMap that corresponds to a
@@ -270,7 +270,7 @@ namespace widget {
        * @deprecated for #955
        */
       std::map<shared_ptr<model::Track>
-              ,shared_ptr<timeline::Track> >
+              ,shared_ptr<timeline::Track>>
         trackMap;
         
       shared_ptr<timeline::Track> hoveringTrack;

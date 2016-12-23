@@ -140,7 +140,7 @@ namespace wrapper {
    */
   template<typename TY>
   class ItemWrapper
-    : public BoolCheckable<ItemWrapper<TY> >
+    : public BoolCheckable<ItemWrapper<TY>>
     {
       
       typedef typename remove_const<TY>::type TY_unconst;
@@ -347,8 +347,8 @@ namespace wrapper {
     : public function<SIG>
     , boost::noncopyable
     {
-      typedef typename FunctionSignature<function<SIG> >::Ret Res;
-      typedef ItemWrapper<Res> ResWrapper;
+      using Res = typename FunctionSignature<function<SIG>>::Ret;
+      using ResWrapper = ItemWrapper<Res>;
       
       ResWrapper lastResult_;
       

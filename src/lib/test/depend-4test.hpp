@@ -74,7 +74,7 @@ namespace test{
     
     
     template<class MOCK>
-    struct ServiceInterface<MOCK, typename enable_if< defines_ServiceInterface<MOCK> >::type>
+    struct ServiceInterface<MOCK, typename enable_if< defines_ServiceInterface<MOCK>>::type>
       {
         typedef typename MOCK::ServiceInterface Type;
       };
