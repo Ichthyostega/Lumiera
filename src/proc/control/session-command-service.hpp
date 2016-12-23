@@ -29,7 +29,7 @@
  ** an UNDO function.
  ** 
  ** This service is the implementation of a layer separation facade interface. Clients should use
- ** proc::control::GuiNotification#facade to access this service. This header defines the interface
+ ** proc::control::SessionCommand::facade to access this service. This header defines the interface
  ** used to _provide_ this service, not to access it.
  **
  ** @see facade.hpp subsystems for the Proc-Layer
@@ -45,6 +45,7 @@
 #include "proc/control/command-dispatch.hpp"
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
+#include "lib/diff/gen-node.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -52,6 +53,8 @@
 
 namespace proc {
 namespace control {
+  
+  using lib::diff::Rec;
   
   
   
@@ -62,9 +65,9 @@ namespace control {
    * with the Lumiera Interface/Plugin system and creates a forwarding
    * proxy within the application core to route calls through this interface.
    * 
-   * @todo the ctor of this class should take references
-   *       to any internal service providers within the
-   *       Session which are needed to implement the service.
+   * This service is backed by implementation facilities embedded within
+   * the ProcDispatcher, exposed through the CommandDispatch interface.
+   * @see DispatcherLoop
    */
   class SessionCommandService
     : public SessionCommand
@@ -75,8 +78,8 @@ namespace control {
       
       /* === Implementation of the Facade Interface === */
       
-      void bla_TODO (string const& text)    override;
-      void blubb_TODO (string const& cause) override;
+      void bindArg (string const& cmdID, Rec const& args) override;
+      void invoke (string const& cmdID)                   override;
       
       
       /* === Interface Lifecycle === */

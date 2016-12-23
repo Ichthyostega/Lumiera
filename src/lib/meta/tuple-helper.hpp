@@ -317,6 +317,7 @@ namespace meta {
    * @note we provide such a specialisation for `Record<GenNode>`, which
    *       allows us to fill an (argument) tuple from a sequence of generic
    *       data values, with run-time type compatibility check.
+   * @see tuple-record-init.hpp
    */
   template<typename TYPES, class SRC>
   Tuple<TYPES>

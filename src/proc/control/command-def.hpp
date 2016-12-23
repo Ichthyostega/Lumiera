@@ -23,15 +23,15 @@
 
 /** @file command-def.hpp
  ** Actually defining a command and binding it to execution parameters.
- ** While the header command.hpp contains everything needed for executing and
- ** commands and referring to them, this more heavy-weight header is needed when
- ** \em defining the concrete operations to be encapsulated into a command. To
- ** create a command, you need to provide three functions (for the actual operation,
+ ** While the header command.hpp contains everything needed for executing
+ ** commands and referring to them, this more heavy-weight header is needed
+ ** when _defining_ the concrete operations to be encapsulated into a command.
+ ** To create a command, you need to provide three functions (the actual operation,
  ** the undo operation and for capturing undo state prior to invoking the operation).
  ** 
  ** For actually providing these operations, the client is expected to call the
  ** definition functions in a chained manner ("fluent interface"). When  finally all the
- ** required information is available, a \em prototype object is built and registered
+ ** required information is available, a _command prototype object_ is built and registered
  ** with the CommandRegistry. From this point on, the corresponding Command (frontend object)
  ** can be accessed directly by ID (and only relying on the header command.hpp).
  ** 

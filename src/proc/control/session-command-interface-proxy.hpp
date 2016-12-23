@@ -65,8 +65,8 @@ namespace facade {
     {
       //----Proxy-Implementation-of-SessionCommand--------
       
-      void bla_TODO (string const& text)    override  { _i_.bla_TODO (cStr(text)); }
-      void blubb_TODO (string const& cause) override  { _i_.blubb_TODO (cStr(cause)); }
+      void bindArg (string const& cmdID, lib::diff::Rec const& args)  override { _i_.bindArg (cStr(cmdID), &args); }
+      void invoke (string const& cmdID)                               override { _i_.invoke  (cStr(cmdID));        }
       
       
     public:

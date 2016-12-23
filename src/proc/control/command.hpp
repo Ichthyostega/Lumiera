@@ -65,7 +65,6 @@
 
 #include <string>
 
-///////////////////////////////////////////TODO: define an C-API representation here, make the header multilingual!
 
 
 
@@ -105,6 +104,8 @@ namespace control {
    *  - maybe binds to concrete arguments (e.g. a target object)
    *  - triggers command execution through operator()
    *  - maybe checks the return value for errors
+   *  
+   * @remark lightweight implementation as smart-ptr
    */
   class Command
     : public AcceptAnyBinding<Command       // accepts arbitrary bind(..) calls (with runtime check)

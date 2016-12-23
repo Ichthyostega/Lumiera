@@ -413,6 +413,29 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481509921211" ID="ID_1515469097" MODIFIED="1481599502388" TEXT="TODO: Session-Subsystem implementieren (#318)">
 <icon BUILTIN="pencil"/>
 <node CREATED="1481599413419" ID="ID_673133356" MODIFIED="1481599420290" TEXT="Ticket #318"/>
+<node CREATED="1482464327133" ID="ID_996095134" MODIFIED="1482464370699" TEXT="was es ist">
+<icon BUILTIN="help"/>
+<node CREATED="1482464377831" ID="ID_1028012453" MODIFIED="1482464390602">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>ist nicht</i>&#160;&quot;die Session
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1482464332981" ID="ID_1523357281" MODIFIED="1482464350688" TEXT="Session Subsystem == Session Dispatcher Loop Thread">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1482464414721" ID="ID_490065319" MODIFIED="1482464436563" TEXT="verwaltet Command-Queue"/>
+<node CREATED="1482464436919" ID="ID_64274402" MODIFIED="1482464442042" TEXT="f&#xfc;hrt Commands aus"/>
+<node CREATED="1482464442438" ID="ID_1339868449" MODIFIED="1482464449049" TEXT="startet den Builder"/>
+</node>
 <node CREATED="1481599421021" ID="ID_461768132" MODIFIED="1481686898425" TEXT="Locking kl&#xe4;ren">
 <node CREATED="1481684383530" ID="ID_236117" MODIFIED="1481684451657" TEXT="zwei unabh&#xe4;ngige Locks">
 <icon BUILTIN="yes"/>
@@ -444,6 +467,10 @@
 </node>
 </node>
 <node CREATED="1481599468712" ID="ID_1273965744" MODIFIED="1481599482440" TEXT="Vorsicht beim Anhalten (Deadlock-Gefahr)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1482464502542" ID="ID_284397306" MODIFIED="1482464609118" TEXT="Vorsicht beim Schlie&#xdf;en der Session">
+<arrowlink COLOR="#5a97df" DESTINATION="ID_1378897740" ENDARROW="Default" ENDINCLINATION="9540;0;" ID="Arrow_ID_1446486242" STARTARROW="None" STARTINCLINATION="9540;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -537,6 +564,98 @@
 </node>
 <node CREATED="1481510244184" ID="ID_1521406724" MODIFIED="1481510260635" TEXT="kann dann in CoreService einfach &#xfc;ber die .facade() zugreifen">
 <icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1482464658193" HGAP="-19" ID="ID_726798260" MODIFIED="1482464708932" TEXT="Ausgestaltung" VSHIFT="24">
+<icon BUILTIN="pencil"/>
+<node CREATED="1482465840843" ID="ID_818984499" MODIFIED="1482465853543" TEXT="Entwurf">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1482464676366" FOLDED="true" ID="ID_1064506750" MODIFIED="1482464760237" TEXT="bekommt Nachrichten vom UI-Bus">
+<node CREATED="1482464755404" ID="ID_213932356" MODIFIED="1482464757487" TEXT="Argument"/>
+<node CREATED="1482464758148" ID="ID_545671857" MODIFIED="1482464759104" TEXT="Bang"/>
+</node>
+<node CREATED="1482464696668" ID="ID_1191503480" MODIFIED="1482464706174" TEXT="m&#xfc;ssen in Command-Objekte &#xfc;bersetzt werden"/>
+<node CREATED="1482464712474" ID="ID_1386285986" MODIFIED="1482464718917" TEXT="Interface sollte noch GenNodes nehmen"/>
+<node CREATED="1482464719513" ID="ID_1003624750" MODIFIED="1482464729939" TEXT="aber synchron die Commands beziehen"/>
+<node CREATED="1482464730783" ID="ID_1225624791" MODIFIED="1482464740714" TEXT="damit Exceptions sofort fliegen"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1482465854513" HGAP="26" ID="ID_1477532018" MODIFIED="1482465942379" TEXT="Widerspruch zu Tangible " VSHIFT="12">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1482465965660" ID="ID_1945056449" MODIFIED="1482465965660" TEXT="Tangible::prepareCommand"/>
+<node CREATED="1482466012484" ID="ID_283758092" MODIFIED="1482466020782" TEXT="verwendet InvocationTrail"/>
+<node CREATED="1482466021562" ID="ID_620393388" MODIFIED="1482466103867" TEXT="dieser wird direkt mit Command erzeugt"/>
+<node CREATED="1482466509953" ID="ID_565604124" MODIFIED="1482466586294" TEXT="...dient der Sicherheit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn es erzwingt,
+    </p>
+    <p>
+      da&#223; die betreffenden Commands schon erzeugt und registriert sein m&#252;ssen,
+    </p>
+    <p>
+      wenn in der UI ein InvocationTrail angelegt wird.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1482466104359" ID="ID_235553653" MODIFIED="1482466115902" TEXT="speichert aber eigentlich nur die Cmd-ID">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1482466197707" ID="ID_832611965" MODIFIED="1482466242650">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Architektur-Entscheidung
+    </p>
+    <p>
+      <i>kann offen bleiben</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1482466246933" ID="ID_870716233" MODIFIED="1482466256655" TEXT="h&#xe4;ngt von der Verwendung ab"/>
+<node CREATED="1482466257027" ID="ID_1491453181" MODIFIED="1482466260134" TEXT="von InvocationTrail"/>
+<node CREATED="1482466260627" ID="ID_1708185529" MODIFIED="1482466265989" TEXT="wie Commands im UI gebunden werden"/>
+<node CREATED="1482466271713" ID="ID_1519273419" MODIFIED="1482466437871" TEXT="Nur IDs gehen &#xfc;ber die Leitung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1482466587807" ID="ID_135147405" MODIFIED="1482466599044">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      reine ID-Wirtschaft <i>w&#228;re m&#246;glich</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1482466285359" ID="ID_1077952925" MODIFIED="1482466316309" TEXT="Zugriff auf proc::control::Command is OK">
+<icon BUILTIN="yes"/>
+<node COLOR="#c0425f" CREATED="1482466320947" ID="ID_431246960" MODIFIED="1482466419650" TEXT="Grundsatz-Entscheidung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1482466328482" ID="ID_1223809722" MODIFIED="1482466411192" TEXT="GUI darf von unteren Layern abh&#xe4;ngen">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1482466347767" ID="ID_755953852" MODIFIED="1482466385464" TEXT="C++ ist das ma&#xdf;gebliche Ausdrucksmedium">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1482466368068" ID="ID_149410251" MODIFIED="1482466388017" TEXT="und nicht irgend ein abstraktes CLI-Binding">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -10985,7 +11104,9 @@
 <node CREATED="1481688478057" ID="ID_1082882066" MODIFIED="1481688486685" TEXT="&#xe4;quivalent zum ProcDispatcher"/>
 <node CREATED="1481688490000" ID="ID_579694361" MODIFIED="1481688499051" TEXT="koordiniert die Abl&#xe4;ufe in Proc"/>
 </node>
-<node CREATED="1481688500943" ID="ID_1821833408" MODIFIED="1481688508265" TEXT="Session ist eine interne Datenstruktur"/>
+<node CREATED="1481688500943" ID="ID_1821833408" MODIFIED="1482464848610" TEXT="Session ist eine interne Datenstruktur">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1481688517437" ID="ID_241232196" MODIFIED="1481688520592" TEXT="Lifecycle">
 <node CREATED="1481688521532" ID="ID_1825349679" MODIFIED="1481688527391" TEXT="Session started on demand"/>
@@ -11117,7 +11238,8 @@
 <icon BUILTIN="bell"/>
 <node CREATED="1481918524673" ID="ID_1705856370" MODIFIED="1481918546498" TEXT="verhindert Command- und Builder-start"/>
 <node CREATED="1481918547182" ID="ID_920627724" MODIFIED="1481920718126" TEXT="bestehende Commands / Builder-L&#xe4;ufe werden noch abgeschlossen"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481920722100" ID="ID_1378897740" MODIFIED="1481920732028" TEXT="SessionManager mu&#xdf; auf Sperre warten">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481920722100" ID="ID_1378897740" MODIFIED="1482464539361" TEXT="SessionManager mu&#xdf; auf Sperre warten">
+<linktarget COLOR="#5a97df" DESTINATION="ID_1378897740" ENDARROW="Default" ENDINCLINATION="9540;0;" ID="Arrow_ID_1446486242" SOURCE="ID_284397306" STARTARROW="None" STARTINCLINATION="9540;0;"/>
 <icon BUILTIN="flag-pink"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481926040310" ID="ID_667460598" MODIFIED="1481926061115" TEXT="Deadlock wenn der Session-Thread selber auf diese Sperre wartet">
@@ -11195,7 +11317,7 @@
 <node CREATED="1481828624042" ID="ID_1970372601" MODIFIED="1481828635748" TEXT="Looper f&#xfc;r Schleifen-Logik"/>
 <node CREATED="1481828639584" ID="ID_1344182776" MODIFIED="1481828648402" TEXT="CommandQueue"/>
 </node>
-<node CREATED="1481778549940" HGAP="35" ID="ID_676848252" MODIFIED="1482430860737" TEXT="DispatcherLoop">
+<node CREATED="1481778549940" HGAP="50" ID="ID_676848252" MODIFIED="1482464798892" TEXT="DispatcherLoop" VSHIFT="1">
 <icon BUILTIN="pencil"/>
 <node CREATED="1481778741546" ID="ID_684867533" MODIFIED="1481778755694" TEXT="&#xf6;ffnet Session-Interface">
 <icon BUILTIN="button_ok"/>
@@ -11294,7 +11416,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1481778708207" FOLDED="true" HGAP="48" ID="ID_1311208726" MODIFIED="1482430859075" TEXT="Builder-Steuerung" VSHIFT="-5">
+<node COLOR="#338800" CREATED="1481778708207" FOLDED="true" HGAP="50" ID="ID_1311208726" MODIFIED="1482464807571" TEXT="Builder-Steuerung">
 <linktarget COLOR="#5242a4" DESTINATION="ID_1311208726" ENDARROW="Default" ENDINCLINATION="2;-45;" ID="Arrow_ID_313252247" SOURCE="ID_209292609" STARTARROW="None" STARTINCLINATION="-186;-13;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1481828478741" ID="ID_1706868067" MODIFIED="1481828497838" TEXT="Hysterese"/>

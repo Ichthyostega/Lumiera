@@ -50,18 +50,16 @@ namespace control {
 
   
   void 
-  SessionCommandService::bla_TODO (string const& text)
+  SessionCommandService::bindArg (string const& cmdID, Rec const& args)
   {
-    INFO (gui, "@Session: display '%s' as notification message.", cStr(text));
-    UNIMPLEMENTED ("do bla");  ////////////////////////TODO actually do something
+    UNIMPLEMENTED ("bind command with arguments from Record<GenNode>");  ////////////////////////TODO actually do something
   }
   
   
   void
-  SessionCommandService::blubb_TODO (string const& cause)
+  SessionCommandService::invoke (string const& cmdID)
   {
-    NOTICE (gui, "@Session: shutdown triggered with explanation '%s'....", cStr(cause));
-    UNIMPLEMENTED ("do blubb");  ////////////////////////TODO actually do something
+    UNIMPLEMENTED ("enqueue command with ProcDispatcher");               ////////////////////////TODO actually do something
   }
   
   
@@ -152,20 +150,20 @@ namespace control {
                                , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_SessionCommandFacade_descriptor)
                                , NULL /* on  open  */
                                , NULL /* on  close */
-                               , LUMIERA_INTERFACE_INLINE (bla_TODO,
-                                                           void, (const char* text),
+                               , LUMIERA_INTERFACE_INLINE (bindArg,
+                                                           void, (const char* cmdID, const void* args),
                                                              { 
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
                                                                else
-                                                                 _instance->bla_TODO(text);
+                                                                 _instance->bindArg(cmdID, *static_cast<Rec const *> (args));
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (blubb_TODO,
-                                                           void, (const char* cause),
+                                                           void, (const char* cmdID),
                                                              { 
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cause);
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
                                                                else
-                                                                 _instance->blubb_TODO(cause);
+                                                                 _instance->invoke(cmdID);
                                                              }
                                                           )
                                );

@@ -23,14 +23,23 @@
 /** @file session-command-facade.h
  ** Major public Interface to the Session subsystem of Lumiera GUI.
  ** This interface describes the ability of the Session to trigger the execution
- ** of pre-defined commands, outfitted with suitably arguments and parameters.
- ** Triggering of these commands typically happens in response of some messages
+ ** of pre-defined commands, outfitted with suitable arguments and parameters.
+ ** Triggering of these commands typically happens in response to some messages
  ** being sent over the UI-Bus. Likewise, external entities (e.g. plug-ins) may
  ** invoke commands over this interface to alter the session.
+ ** 
+ ** For this reason, the operations exposed here are defined in terms matching
+ ** the structure of binding and invocation messages. This goes so far as to
+ ** accept the command arguments for binding packaged as `Record<GenNode>`.
+ ** For each command, there needs to be a registration record within the
+ ** Proc-Layer implementation. The service implementation backing this
+ ** facade indeed retrieves the corresponding proc::control::Command
+ ** handles to perform the binding operation and hands them over
+ ** to the ProcDispatcher for invocation.
  **
- ** @see notification-service.hpp implementation
- ** @see gui::GuiFacade
- ** @see main.cpp
+ ** @see session-command-service.hpp implementation
+ ** @see proc::control::ProcDispatcher
+ ** @see gui::ctrl::CoreService
  */
 
 
@@ -42,6 +51,7 @@
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "include/interfaceproxy.hpp"
+#include "lib/diff/gen-node.hpp"
 
 #include <string>
 
@@ -58,8 +68,8 @@ namespace control {
    * asynchronously and triggered by events within the lower layers.
    * 
    * This is a layer separation facade interface. Clients should use
-   * the embedded #facade factory, which yields a proxy routing any 
-   * calls through the lumieraorg_GuiNotification interface
+   * the embedded #facade factory, which yields a proxy to route any
+   * calls through the lumieraorg_SessionCommand interface
    * @throws lumiera::error::State when interface is not opened
    */
   class SessionCommand
@@ -67,11 +77,11 @@ namespace control {
     public:
       static lumiera::facade::Accessor<SessionCommand> facade;
       
-      /** @todo dummy placeholder, actual operation to be defined soon (12/16) */
-      virtual void bla_TODO (string const& text)      =0;
+      /** prepare command invocation: bind the command's arguments */
+      virtual void bindArg (string const& cmdID, lib::diff::Rec const& args) =0;
       
-      /** @todo dummy placeholder, actual operation to be defined soon (12/16) */
-      virtual void blubb_TODO (string const& cause)   =0;
+      /** trigger invocation of a prepared command */
+      virtual void invoke (string const& cmdID)                              =0;
       
       
     protected:
@@ -90,8 +100,8 @@ extern "C" {
 #include "common/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_SessionCommand, 0,
-                           LUMIERA_INTERFACE_SLOT (void, bla_TODO,    (const char*)),
-                           LUMIERA_INTERFACE_SLOT (void, blubb_TODO,  (const char*)),
+                           LUMIERA_INTERFACE_SLOT (void, bindArg, (const char*, const void*)),
+                           LUMIERA_INTERFACE_SLOT (void, invoke,  (const char*)),
 );
 
 

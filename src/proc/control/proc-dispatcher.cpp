@@ -45,10 +45,10 @@
  ** The loop starts with a blocking wait state, bound to the condition Looper::requireAction. Here, Looper
  ** is a helper to encapsulate the control logic, separated from the actual control flow. In the loop body,
  ** depending on the Looper's decision, either the next command is fetched from the CommandQueue and dispatched,
- ** or a builder run is triggered, to re-build the »Low-Level-Model« to reflect the executed command's effects.
+ ** or a builder run is triggered, rebuilding the »Low-Level-Model« to reflect the executed command's effects.
  ** After these working actions, a _"check point"_ is reached in Looper::markStateProcessed, which updates
- ** the logic and manages the _dirty state_ to control builder runs. After that, looping enters the possibly
- ** blocking wait.
+ ** the logic and manages a _dirty state_ to control builder runs. After that, the looping control flow
+ ** again enters the possibly blocking condition wait.
  ** - after a command has been dispatched, the builder is _dirty_ and needs to run
  ** - yet we continue to dispatch further commands, until the queue is emptied
  ** - and only after a further small latency wait, the builder run is triggered
@@ -66,10 +66,10 @@
  ** On the outer layer, locking ensures sanity of the control data structures, while locking on the inner
  ** layer guards the communication with the Session Loop Thread, and coordinates sleep wait and notification.
  ** As usual with Lumiera's Thread wrapper, the management of the thread's lifecycle itself, hand-over of
- ** parameters, and starting / joining of the thread operation is protected by other locking embedded into
- ** the thread and threadpool handling code.
- ** @note most of the time, the Session Loop Thread does not hold any lock, most notably while performing a
- **       command or running the builder. Likewise, evaluation of the control logic in the Looper helper
+ ** parameters, and starting / joining of the thread operation is protected by separate locking embedded
+ ** into the thread and threadpool handling code.
+ ** @note most of the time, the Session Loop Thread does not hold any lock, most notably while performing
+ **       a command or running the builder. Likewise, evaluation of the control logic in the Looper helper
  **       is a private detail of the performing thread. The lock is acquired solely for checking or leaving
  **       the wait state and when fetching next command from queue.
  ** 
@@ -105,6 +105,14 @@ namespace control {
   
   namespace error = lumiera::error;
   
+  /**
+   * PImpl within ProcDispatcher
+   * to implement the _Session Loop Thread._
+   * During the lifetime of this object
+   * - the SessionCommandService is offered to enqueue commands
+   * - the Session Loop thread dispatches commands and triggers the Builder
+   * @see DispatcherLooper_test
+   */
   class DispatcherLoop
     : ThreadJoinable
     , public CommandDispatch

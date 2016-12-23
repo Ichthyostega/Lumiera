@@ -90,7 +90,7 @@ namespace meta {
      * and fixed selection of types), we prepare a converter function
      * for each sensible conversion path to the given `TAR` target type.
      * This converter will placement-construct a target value in a buffer
-     * reserved within this within this Accessor object.
+     * reserved within this Accessor object.
      * @warning template bloat: we get a converter for each possible conversion
      *      for each instantiation of this template, irrespective if we actually
      *      need it or not. The price is payed per distinct type used within some

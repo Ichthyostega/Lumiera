@@ -127,15 +127,15 @@ namespace test {
     void
     processCommandInvocation (GenNode const& commandMsg)
     {
-      REQUIRE (string(DUMMY_CMD_ID) == commandMsg.idi.getSym());
+      REQUIRE (string{DUMMY_CMD_ID} == commandMsg.idi.getSym());
       
       class CommandBindingDetector
         : public DataCap::Predicate
         {
           bool
-          handle (Rec const& binding) override
+          handle (Rec const& binding) override             ///< the argument binding message
             {
-              auto cmd = Command::get(DUMMY_CMD_ID);
+              auto cmd = Command::get (DUMMY_CMD_ID);
               auto arg = binding.scope()->data.get<int>();
               
               cmd.bind (arg);
@@ -143,9 +143,9 @@ namespace test {
             }
           
           bool
-          handle (int const&) override
+          handle (int const&) override                     ///< the "bang!" message (command invocation)
             {
-              auto cmd = Command::get(DUMMY_CMD_ID);
+              auto cmd = Command::get (DUMMY_CMD_ID);
               
               cmd();
               return true;
