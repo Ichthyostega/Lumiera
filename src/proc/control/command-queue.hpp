@@ -42,8 +42,10 @@
 #define PROC_CONTROL_COMMAND_QUEUE_H
 
 #include "proc/control/command.hpp"
+#include "lib/iter-stack.hpp"
 //#include "common/subsys.hpp"
 //#include "lib/depend.hpp"
+#include "lib/util.hpp"
 
 //#include <memory>
 //#include <functional>
@@ -55,6 +57,7 @@ namespace control {
   
 //  using lib::Symbol;
 //  using std::bind;
+  using lib::unConst;
   
   
   
@@ -62,6 +65,7 @@ namespace control {
    * @todo Type-comment
    */
   class CommandQueue
+    : public lib::IterQueue<Command>
     {
       
     public:
@@ -69,14 +73,18 @@ namespace control {
       { }
       
       
+      void
+      clear()
+        {
+          this->stateCore().clear();
+        }
       
       /* == diagnostics == */
       
       size_t
       size() const
         {
-          TODO ("implement queue");
-          return 0;
+          return unConst(this)->stateCore().size();
         }
       
       bool

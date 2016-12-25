@@ -122,7 +122,7 @@ namespace test    {
           
           Command x = queue.pop();
           CHECK (1 == queue.size());
-          CHECK (COMMAND_1 == x.getID());
+          CHECK (x == com11);
           
           queue.clear();
           CHECK (0 == queue.size());

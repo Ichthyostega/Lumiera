@@ -134,7 +134,8 @@ namespace control {
       
      ~CommandRegistry()
         {
-          INFO (command, "Shutting down Command system...");
+          if (0 < index_size())
+            INFO (command, "Shutting down Command system...");
                                                                 //////////////////////TICKET #295 : possibly remotely trigger Command mass suicide here....
           ridx_.clear();
           index_.clear();
