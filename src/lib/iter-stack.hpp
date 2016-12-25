@@ -66,7 +66,7 @@
 
 namespace lib {
   
-  namespace { 
+  namespace iter {
     using util::unConst;
     
     /**
@@ -100,7 +100,7 @@ namespace lib {
           elements.pop_back();
         }
       };
-  }//(End) Wrapper/Helper
+  } // namespace lib::iter
   
   
   
@@ -118,7 +118,7 @@ namespace lib {
    */
   template<class TY>
   struct IterStack
-    : IterStateWrapper<TY, IterDequeStorage<TY>>
+    : IterStateWrapper<TY, iter::IterDequeStorage<TY>>
     {
       
       // using default create and copy operations
@@ -165,7 +165,7 @@ namespace lib {
    */
   template<class TY>
   struct IterQueue
-    : IterStateWrapper<TY, IterDequeStorage<TY>>
+    : IterStateWrapper<TY, iter::IterDequeStorage<TY>>
     {
       
       // using default create and copy operations
