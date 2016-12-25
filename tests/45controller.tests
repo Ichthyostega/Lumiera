@@ -117,11 +117,11 @@ return: 0
 END
 
 
-PLANNED "Dispatcher loop control logic" DispatcherLooper_test <<END
+TEST "Dispatcher loop control logic" DispatcherLooper_test <<END
 return: 0
 END
 
 
-PLANNED "Dispatcher command queue" CommandQueue_test <<END
+TEST "Dispatcher command queue" CommandQueue_test <<END
 return: 0
 END

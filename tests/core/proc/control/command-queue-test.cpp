@@ -100,6 +100,7 @@ namespace test    {
       run (Arg)
         {
           verifyBasics();
+          verifyExecutabilityCheck();
         }
       
       
@@ -127,6 +128,27 @@ namespace test    {
           queue.clear();
           CHECK (0 == queue.size());
           CHECK (queue.empty());
+        }
+      
+      
+      void
+      verifyExecutabilityCheck()
+        {
+          Command com11 = Command(COMMAND_1).newInstance();
+          Command com12 = Command(COMMAND_1).newInstance();
+          
+          com11.bind(42);
+          // NOT binding the second command...
+          
+          CommandQueue queue;
+          queue.feed (com11);
+          CHECK (1 == queue.size());
+          
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, queue.feed (com12));
+          CHECK (1 == queue.size());
+          
+          queue.pop().execSync();
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, com12.execSync());
         }
     };
   

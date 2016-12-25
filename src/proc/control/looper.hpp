@@ -26,10 +26,16 @@
  ** This helper encapsulates the loop control logic to separate it from actual
  ** implementation of timing and waiting (per pthread condition variables).
  ** It exposes a combined condition (to be used for waiting) plus any further
- ** controls to manage the operation of the actual queue. The actual tasks to
- ** be controlled are installed as functors.
- ** 
- ** @todo WIP-WIP as of 12/2016 
+ ** state predicates necessary to manage the state transitions regarding the
+ ** ProcDispatcher implementation:
+ ** - detect working state, based on a closure to detect an non empty CommandQueue
+ ** - handle the disabling and shutdown of the dispatching task
+ ** - detect an idle state to allow the DispatcherLoop to go to sleep
+ ** - detect the need to run the builder after handling a command
+ ** - manage timeout to run the builder with a slight latency
+ ** - manage an extended timeout to enforce builder run eventually.
+ ** - offer a "check point" where all state is balanced, which can be
+ **   used as a synchronisation point to halt the loop.
  ** 
  ** @see DispatcherLooper_test
  ** @see proc-dispatcher.hpp

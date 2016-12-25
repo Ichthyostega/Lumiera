@@ -23,10 +23,11 @@
 
 /** @file command-queue.hpp
  ** Implementation building block of ProcDispatcher to organise commands.
- ** This is the actual implementation of the command queue and additionally
- ** supports some management tasks pertaining to the queue as a whole.
+ ** This is the actual implementation of the command queue to allow for
+ ** strictly sequential dispatch of commands to work on the session.
  ** 
- ** @todo WIP-WIP as of 12/2016 
+ ** @todo as of 12/2016 this is fully functional, but we may want to add
+ **       some further management functions like purging of expired commands
  ** 
  ** @see CommandQueue_test
  ** @see proc-dispatcher.hpp
@@ -43,26 +44,23 @@
 
 #include "proc/control/command.hpp"
 #include "lib/iter-stack.hpp"
-//#include "common/subsys.hpp"
-//#include "lib/depend.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
-
-//#include <memory>
-//#include <functional>
-
 
 
 namespace proc {
 namespace control {
   
-//  using lib::Symbol;
-//  using std::bind;
+  namespace error = lumiera::error;
+  
+  using util::_Fmt;
   using lib::unConst;
   
   
   
   /**
-   * @todo Type-comment
+   * Implementation of the Session's command queue.
+   * @see DispatcherLoop
    */
   class CommandQueue
     : public lib::IterQueue<Command>
@@ -73,11 +71,24 @@ namespace control {
       { }
       
       
+      CommandQueue&
+      feed (Command const& cmd)
+        {
+          if (not cmd.canExec())
+            throw error::Logic(_Fmt("Reject '%s'. Not suitably prepared for invocation: %s")
+                                   % cmd.getID() % cmd
+                              , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+          
+          lib::IterQueue<Command>::feed(cmd);
+          return *this;
+        }
+      
       void
       clear()
         {
           this->stateCore().clear();
         }
+      
       
       /* == diagnostics == */
       
@@ -94,8 +105,6 @@ namespace control {
         }
       
     };
-  ////////////////TODO 12/16 currently just fleshing  out the API....
-  
   
   
   

@@ -92,12 +92,10 @@
 #include "proc/control/session-command-service.hpp"
 #include "proc/mobject/session.hpp"
 #include "backend/thread-wrapper.hpp"
-#include "lib/format-string.hpp"
 
 #include <memory>
   
 using backend::ThreadJoinable;
-using util::_Fmt;
 using lib::Sync;
 using lib::RecursiveLock_Waitable;
 using std::unique_ptr;
@@ -181,26 +179,23 @@ namespace control {
       clear()  override
         {
           Lock sync(this);
-          UNIMPLEMENTED ("clear the queue");
+          queue_.clear();
           //////////////////////////////////////////TODO notify!!!!
         }
       
       void
       enqueue (Command cmd)  override
         {
-          if (not cmd.canExec())
-            throw error::Logic(_Fmt("Reject '%s'. Not suitably prepared for invocation: %s")
-                                   % cmd.getID() % cmd
-                              , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
-          UNIMPLEMENTED ("enqueue command");
+          Lock sync(this);
+          queue_.feed (cmd);
           //////////////////////////////////////////TODO notify!!!!
         }
       
       size_t
       size()  const
         {
-          TODO ("implement command processing queue");
-          return 0;
+          Lock sync(this);
+          return queue_.size();
         }
       
       void
@@ -217,7 +212,7 @@ namespace control {
       awaitStateProcessed()
         {
           Lock blockWaiting(this, &DispatcherLoop::stateIsSynched);
-                                            //////////////////////////////////////////TODO find out who will notify us!!!!
+                                            //////////////////////////////////////////TODO eternal sleep.... find out who will wake us!!!!
         }
       
     private:
