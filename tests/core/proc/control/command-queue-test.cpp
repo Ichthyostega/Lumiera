@@ -27,6 +27,7 @@
 //#include "proc/control/command-registry.hpp"
 //#include "lib/test/event-log.hpp"
 #include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
 
@@ -41,6 +42,7 @@ namespace test    {
 //  using std::function;
 //  using std::rand;
   using lib::Symbol;
+  using util::isnil;
   
   
   namespace { // test fixture...
@@ -104,6 +106,27 @@ namespace test    {
       void
       verifyBasics()
         {
+          Command com11 = Command(COMMAND_1).newInstance();
+          Command com12 = Command(COMMAND_1).newInstance();
+          
+          com11.bind(42);
+          com12.bind(47);
+          
+          CommandQueue queue;
+          CHECK (isnil(queue));
+          
+          queue.feed (com11);
+          queue.feed (com12);
+          
+          CHECK (2 == queue.size());
+          
+          Command x = queue.pop();
+          CHECK (1 == queue.size());
+          CHECK (COMMAND_1 == x.getID());
+          
+          queue.clear();
+          CHECK (0 == queue.size());
+          CHECK (queue.empty());
         }
     };
   
