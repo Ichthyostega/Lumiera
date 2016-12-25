@@ -25,7 +25,7 @@
  ** Some dummy command functions used for building unit test cases. 
  ** Any of these functions comes in triples of operation function, undo state
  ** capturing function and UNDO function. They are placed into a nested test
- ** namespace, together with some global variables used as a backdoor to
+ ** namespace, together with some global variables, usable as backdoor to
  ** verify the effect of calling these functions.
  ** 
  ** @see command-use1-test.cpp
@@ -86,7 +86,7 @@ namespace test    {
   
   
   
-  namespace command2 { ///< test command writing to protocol and possibly throwing
+  namespace command2 { ///< test command writing capturing log and possibly throwing
     
     using lumiera::error::External;
     
@@ -125,7 +125,7 @@ namespace test    {
   
   
   
-  namespace command3 { ///< test command taking zero arguments
+  namespace command3 { ///< test command with zero arguments
     
     extern ulong check_;
     

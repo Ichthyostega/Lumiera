@@ -41,7 +41,7 @@
 #ifndef PROC_CONTROL_COMMAND_QUEUE_H
 #define PROC_CONTROL_COMMAND_QUEUE_H
 
-#include "lib/error.hpp"   ////////TODO needed?
+#include "proc/control/command.hpp"
 //#include "common/subsys.hpp"
 //#include "lib/depend.hpp"
 

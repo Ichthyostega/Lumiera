@@ -119,7 +119,7 @@ namespace test    {
           
           check_defaultHandlingPattern();
 //        check_ThrowOnError();              //////////////////////////////////////////////////////////////////////TICKET #211
-//        check_DispatcherInvocation()       // yet to be written as of 1/2016
+          check_DispatcherInvocation();
           
           
           Command::remove ("test.command2");
@@ -197,6 +197,14 @@ namespace test    {
           
           com2.undo();
           CHECK (!protocolled(randVal_));
+        }
+      
+      
+      
+      void
+      check_DispatcherInvocation()
+        {
+          UNIMPLEMENTED("start the dispatcher and enqueue a rigged special command");  /////////////////////////////TICKET #209
         }
     };
   

@@ -23,11 +23,12 @@
 
 #include "lib/test/run.hpp"
 #include "proc/control/command-queue.hpp"
-//#include "proc/control/command.hpp"
+#include "proc/control/command-def.hpp"
 //#include "proc/control/command-registry.hpp"
 //#include "lib/test/event-log.hpp"
+#include "lib/symbol.hpp"
 
-//#include "proc/control/test-dummy-commands.hpp"
+#include "proc/control/test-dummy-commands.hpp"
 
 //#include <cstdlib>
 
@@ -39,10 +40,13 @@ namespace test    {
   
 //  using std::function;
 //  using std::rand;
+  using lib::Symbol;
   
   
   namespace { // test fixture...
     
+    const Symbol COMMAND_1{"test.queue.command1"};
+    const Symbol COMMAND_3{"test.queue.command3"};
     
   }//(End) test fixture
   
@@ -67,7 +71,29 @@ namespace test    {
   class CommandQueue_test : public Test
     {
       
+      //------------------FIXTURE
+    public:
+      CommandQueue_test()
+        {
+          CommandDef (COMMAND_1)
+               .operation (command1::operate)
+               .captureUndo (command1::capture)
+               .undoOperation (command1::undoIt)
+               ;
+          CommandDef (COMMAND_3)
+               .operation (command3::operate)
+               .captureUndo (command3::capture)
+               .undoOperation (command3::undoIt)
+               ;
+        }
+     ~CommandQueue_test()
+        {
+          Command::remove (COMMAND_1);
+          Command::remove (COMMAND_3);
+        }
+      //-------------(End)FIXTURE
       
+     
       virtual void
       run (Arg)
         {

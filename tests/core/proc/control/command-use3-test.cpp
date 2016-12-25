@@ -60,6 +60,8 @@ namespace test    {
    *       asynchronous or repeated invocation and command sequence bundles.
    *
    * @todo planned but not implemented as of 7/09
+   * @todo as of 12/2016 I doubt we'll get asynchronous invocation
+   *       but command sequence bundles still seem a reasonable future idea
    *        
    * @see HandlingPattern
    */

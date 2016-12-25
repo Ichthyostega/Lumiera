@@ -170,6 +170,7 @@ namespace test    {
         }
       
       
+      /** @test verify the Handling pattern API: execute a command */
       void
       checkExec (PCommandImpl com)
         {
@@ -177,8 +178,8 @@ namespace test    {
           CHECK (!com->canExec());
           
           typedef Types<int> ArgType;
-          const int ARGU (1 + rand() % 1000);
-          Tuple<ArgType> tuple(ARGU);
+          const int ARGR (1 + rand() % 1000);
+          Tuple<ArgType> tuple(ARGR);
           TypedArguments<Tuple<ArgType>> arg(tuple);
           com->setArguments(arg);
           
@@ -190,11 +191,12 @@ namespace test    {
           ExecResult res = patt.exec (*com, TEST_CMD);
           
           CHECK (res);
-          CHECK (ARGU == command1::check_);
+          CHECK (ARGR == command1::check_);
           CHECK (com->canUndo());
         }
       
       
+      /** @test verify the Handling pattern API: undo a command */
       void
       checkUndo (PCommandImpl com)
         {
@@ -212,6 +214,9 @@ namespace test    {
         }
       
       
+      /** @test use custom implementation of the HandlingPattern interface,
+       *        rigged to verify the functions are actually invoked.
+       */
       void
       useCustomHandler (PCommandImpl com)
         {
