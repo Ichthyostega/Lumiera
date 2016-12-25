@@ -181,6 +181,7 @@ namespace control {
       void duplicate_detected (Symbol)  const;
       
       Symbol getID() const;
+      bool isAnonymous() const;
       
       operator string() const;
       friend bool operator== (Command const&, Command const&);

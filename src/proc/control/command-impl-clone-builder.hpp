@@ -29,10 +29,10 @@
  ** command implementation need to be cloned and re-wired with the cloned partners,
  ** which requires re-creating the specifically typed context used at initial setup.
  ** 
- ** Ticket #301 : it may well be that the need for such a facility is a symptom of
- ** misaligned design, but I rather doubt so -- because both the memento holder and
+ ** @todo Ticket #301 : it may well be that the need for such a facility is a symptom
+ ** of misaligned design, but I rather doubt so -- because both the memento holder and
  ** the command closure need a specifically typed context, and there is no reason
- ** for combining them into a single facility. 
+ ** for combining them into a single facility.
  ** 
  ** @see CommandRegistry#createCloneImpl
  ** @see CommandImpl
@@ -46,26 +46,17 @@
 #ifndef CONTROL_COMMAND_IMPL_CLONE_BUILDER_H
 #define CONTROL_COMMAND_IMPL_CLONE_BUILDER_H
 
-//#include "proc/control/command.hpp"
-//#include "proc/control/command-closure.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "lib/typed-allocation-manager.hpp"
 #include "lib/opaque-holder.hpp"
-//#include "lib/bool-checkable.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <boost/operators.hpp>
-
-//#include <memory>
-//#include <functional>
 
 
 namespace proc {
 namespace control {
   
   using lib::TypedAllocationManager;
-//  using std::function;
-//  using std::shared_ptr;
   using lib::InPlaceBuffer;
   
   
@@ -159,7 +150,7 @@ namespace control {
         {
           REQUIRE (!newContext_->isValid(), "Lifecycle-Error");
           
-          newContext_.create<impl::ClonedContext> (origArgHolder, allocator_); 
+          newContext_.create<impl::ClonedContext> (origArgHolder, allocator_);
         }
       
       

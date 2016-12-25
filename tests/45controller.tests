@@ -99,7 +99,7 @@ out: Command\("test.command1.1"\) \{undo\}
 out: Command\("test.command1.2"\) \{undo\}
 out: Command\("test.command1.3"\) \{undo\}
 out: Command\("test.command1.4"\) \{undo\}
-out: Command\(_xxx_\) NIL
+out: Command\("_anonymous_"\) NIL
 out: Command\("test.command1.5"\) \{def\}
 out: Command\("test.command1.5"\) \{exec\}
 out: Command\("test.command1.5"\) \{undo\}

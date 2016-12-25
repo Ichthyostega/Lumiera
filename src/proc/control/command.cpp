@@ -349,14 +349,29 @@ namespace control {
   }
   
   
+  namespace {
+    const Symbol ANONYMOUS_CMD_SYMBOL("_anonymous_");
+  }
+  
   Symbol
   Command::getID()  const
   {
+    ////////////////////////////////////////////////////////////////////TODO do we need no-throw guarantee here?
     Symbol id = CommandRegistry::instance().findDefinition (*this);
-    if (!id)
-      throw error::State("Encountered a NIL command handle while expecting a bound one."
-                        ,error::LUMIERA_ERROR_BOTTOM_VALUE);
-    return id;
+    return id? id
+             : ANONYMOUS_CMD_SYMBOL;
+  }
+  
+  
+  /** @return `true` when this command (front-end) was never registered
+   * with the CommandRegistry; typically this is the case with instances
+   * created from a prototype, when calling Command::newInstance instead
+   * of invoking Command::storeDef(Symbol).
+   */
+  bool
+  Command::isAnonymous()  const
+  {
+    return not CommandRegistry::instance().findDefinition (*this);
   }
   
   
@@ -367,13 +382,8 @@ namespace control {
   Command::operator string() const
   {
     ostringstream repr;
-    repr << "Command";
     ////////////////////////////////////////////////////////////////////TODO do we need no-throw guarantee here?
-    Symbol id = CommandRegistry::instance().findDefinition (*this);
-    if (id)
-      repr << "(\""<<id<<"\") ";
-    else 
-      repr << "(_xxx_) ";
+    repr << "Command(\""<<getID()<<"\") ";
     if (!isValid())
       repr << "NIL";
     else
