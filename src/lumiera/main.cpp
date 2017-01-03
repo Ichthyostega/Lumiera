@@ -43,7 +43,6 @@ namespace {
   Subsys& netNode = backend::NetNodeFacade::getDescriptor();
   Subsys& script  = backend::ScriptRunnerFacade::getDescriptor();
   Subsys& player  = lumiera::DummyPlayer::getDescriptor();        ///////TODO: just a dummy, until we're able to render
-  Subsys& builder = proc::Facade::getBuilderDescriptor();
   Subsys& session = proc::Facade::getSessionDescriptor();
   Subsys& playOut = proc::Facade::getPlayOutDescriptor();
   Subsys& lumigui = gui::GuiFacade::getDescriptor();
@@ -63,7 +62,6 @@ main (int argc, const char* argv[])
       lumiera::Option options (args);
       application.init (options);
       
-//    session.depends (builder);
       netNode.depends (session);
       netNode.depends (engine);
 //    playOut.depends (engine);

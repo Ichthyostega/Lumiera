@@ -420,10 +420,37 @@
       Session-Subsystem implementieren <font color="#c60814">(#318)</font>
     </p>
   </body>
+</html></richcontent>
+<icon BUILTIN="pencil"/>
+<node CREATED="1481599413419" HGAP="34" ID="ID_673133356" MODIFIED="1483473316679" TEXT="Ticket #318" VSHIFT="-7">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....das ist schon mehr ein Meta-Ticket,
+    </p>
+    <p>
+      und es h&#228;ngt wohl zu viel darunter, um es gleich ganz abschlie&#223;en zu k&#246;nnen.
+    </p>
+    <p>
+      Aber ich <i>akzeptiere</i>&#160;es und verwende es jetzt als Treiber
+    </p>
+  </body>
 </html>
 </richcontent>
 <icon BUILTIN="pencil"/>
-<node CREATED="1481599413419" ID="ID_673133356" MODIFIED="1481599420290" TEXT="Ticket #318"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483473104426" ID="ID_1606817357" MODIFIED="1483473167947" TEXT="#701 Session interface Support facility">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483473212107" ID="ID_600424316" MODIFIED="1483473247077" TEXT="#699 entrance to session subsystem">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483473153851" ID="ID_868700871" MODIFIED="1483473169722" TEXT="#1049 draft SessionLoop component">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 <node CREATED="1482464327133" ID="ID_996095134" MODIFIED="1482464370699" TEXT="was es ist">
 <icon BUILTIN="help"/>
 <node CREATED="1482464377831" ID="ID_1028012453" MODIFIED="1482464390602">

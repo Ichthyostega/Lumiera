@@ -42,42 +42,6 @@ namespace proc {
   using proc::control::ProcDispatcher;
   
   
-  class BuilderSubsysDescriptor
-    : public Subsys
-    {
-      operator string ()  const { return "Builder"; }
-      
-      bool 
-      shouldStart (Option&)  override
-        {
-          TODO ("determine, if we need a Builder Thread");
-          return false;
-        }
-      
-      bool
-      start (Option&, Subsys::SigTerm termination)  override
-        {
-          UNIMPLEMENTED ("fire up a Builder in a separate Thread, and register shutdown hook");
-          return false;
-        }
-      
-      void
-      triggerShutdown ()  noexcept override
-        {
-          UNIMPLEMENTED ("halt the Builder and cancel any build process");  /////TODO really cancel??
-        }
-      
-      bool 
-      checkRunningState ()  noexcept override
-        {
-          //Lock guard (*this);
-          TODO ("implement detecting running state");
-          return false;
-        }
-    };
-  
-  
-  
   class SessionSubsystem
     : public Subsys
     {
@@ -156,20 +120,11 @@ namespace proc {
     };
   
   namespace {
-    lib::Depend<BuilderSubsysDescriptor> theBuilderDescriptor;
     lib::Depend<SessionSubsystem> theSessionSubsystemLifecycle;
     lib::Depend<PlayOutSubsysDescriptor> thePlayOutDescriptor;
   }
   
   
-  
-  
-  /** @internal intended for use by main(). */
-  Subsys&
-  Facade::getBuilderDescriptor()
-  {
-    return theBuilderDescriptor();
-  }
   
   
   /** @internal intended for use by main(). */

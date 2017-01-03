@@ -56,12 +56,6 @@ namespace proc {
   struct Facade
     {
       /** provide a descriptor for lumiera::AppState,
-       *  wired accordingly to allow main to fire off
-       *  or halt the Builder thread within Proc.  */
-      static lumiera::Subsys& getBuilderDescriptor();
-      
-      
-      /** provide a descriptor for lumiera::AppState,
        *  wired accordingly to allow main to bring up
        *  a editing session, possibly by loading an
        *  existing session from storage. */
