@@ -167,8 +167,8 @@ namespace test    {
           CHECK (looper.shallLoop());
           
           setup.has_commands_in_queue = false;
-          looper.markStateProcessed();
-          looper.markStateProcessed();
+          looper.markStateProcessed();         // after command processing
+          looper.markStateProcessed();         // after builder run
           
           CHECK (not looper.requireAction());
           CHECK (not looper.isWorking());

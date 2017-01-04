@@ -128,6 +128,14 @@ namespace control {
       
       
     public:
+      /** start the session loop thread
+       * @param notification callback to invoke on thread termination
+       * @remark _in theory_ this ctor could block, since it waits for the thread
+       *         actually to get operational and it waits for the SessionCommand interface
+       *         to be opened. The latter _should not_ run into any obstacles, because
+       *         in case it does, the main application thread is deadlocked on startup.
+       *         Such might happen indirectly, when something depends on "the Session"
+       */
       DispatcherLoop (Subsys::SigTerm notification)
         : ThreadJoinable("Lumiera Session"
                         , bind (&DispatcherLoop::runSessionThread, this, notification))
@@ -315,7 +323,14 @@ namespace control {
   
   
   
-  /** */
+  /** starting the ProcDispatcher means to start the session subsystem.
+   * @return `false` when _starting_ failed since it is already running...
+   * @remark this function implements the start operation for the »session subsystem«.
+   *         More specifically, this operation starts a new thread to perform the
+   *         _session loop,_ which means to perform commands and trigger the builder.
+   *         It might block temporarily for synchronisation with this new thread and
+   *         while opening the SessionCommand facade.
+   */
   bool
   ProcDispatcher::start (Subsys::SigTerm termNotification)
   {
@@ -326,7 +341,7 @@ namespace control {
       new DispatcherLoop (
             [=] (string* problemMessage)
                 {
-                  runningLoop_.reset();
+                  runningLoop_.reset();   //////////////////////TODO: (1) Race in ProcDispatcher  (2) Deadlock because the Thread attempts to reap itself
                   termNotification(problemMessage);
                 }));
     
@@ -336,7 +351,10 @@ namespace control {
   }
   
   
-  /** */
+  /** whether the »session subsystem« is operational.
+   * @return `true` if the session loop thread has been fully
+   *         started and is not (yet) completely terminated.
+   */
   bool
   ProcDispatcher::isRunning()
   {

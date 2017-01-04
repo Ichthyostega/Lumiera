@@ -56,14 +56,14 @@ namespace proc {
   struct Facade
     {
       /** provide a descriptor for lumiera::AppState,
-       *  wired accordingly to allow main to bring up
-       *  a editing session, possibly by loading an
-       *  existing session from storage. */
+       *  wired accordingly to allow `main()` to boot
+       *  the support infrastructure for loading of
+       *  and working on the editing session. */
       static lumiera::Subsys& getSessionDescriptor();
       
       
       /** provide a descriptor for lumiera::AppState,
-       *  wired accordingly to allow main to bring up
+       *  wired accordingly to allow `main()` to bring up
        *  the render / playback coordination and 
        *  output management subsystem. */
       static lumiera::Subsys& getPlayOutDescriptor();

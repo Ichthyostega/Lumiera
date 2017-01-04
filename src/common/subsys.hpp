@@ -95,9 +95,11 @@ namespace lumiera {
       virtual bool shouldStart (lumiera::Option&)  =0;
       
       
-      /** how to start up this subsystem. Failure to start up
-       *  usually terminates the whole application. When this subsystem
-       *  ceases to work, it must assure to activate the given signal.
+      /** attempt to bring up this subsystem up. On return, the
+       *  subsystem must be operational, according to checkRunningState().
+       *  Failure to start up usually terminates the whole application.
+       *  When this subsystem ceases to work, it must ensure to activate
+       *  the given callback signal.
        *  @param options may be influencing the operation mode 
        *  @param termination to be signalled by the subsystem.
        *  @warning termination must be signalled reliably.  

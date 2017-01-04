@@ -330,8 +330,7 @@
       meint: zwei gekoppelte Statusvariable
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1481767706906" ID="ID_815807707" MODIFIED="1481767710581" TEXT="bekomme dort Zustand"/>
 <node CREATED="1481767720576" ID="ID_714877064" MODIFIED="1481767729611" TEXT="mu&#xdf; dort Locking verwenden"/>
@@ -358,8 +357,7 @@
       oder mu&#223; PImpl als Interface exponieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1481767831105" ID="ID_1351930491" MODIFIED="1481768989667" TEXT="fragiler Lebenszyklus">
 <richcontent TYPE="NOTE"><html>
@@ -371,8 +369,7 @@
       meint: zwei gekoppelte Statusvariable
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -463,8 +460,7 @@
       <i>ist nicht</i>&#160;&quot;die Session
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1482464332981" ID="ID_1523357281" MODIFIED="1482464350688" TEXT="Session Subsystem == Session Dispatcher Loop Thread">
@@ -487,8 +483,7 @@
       das Lock sorgt hier f&#252;r konsistenten Zustand und Sichtbarkeit (memory barrier)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1481684394544" ID="ID_1314197501" MODIFIED="1481684422640" TEXT="Back-End">
 <richcontent TYPE="NOTE"><html>
@@ -500,12 +495,23 @@
       Lock ist hier das Dispatcher-Lock
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1481599468712" ID="ID_1273965744" MODIFIED="1481599482440" TEXT="Vorsicht beim Anhalten (Deadlock-Gefahr)">
 <icon BUILTIN="messagebox_warning"/>
+<node CREATED="1483477519974" ID="ID_1731425552" MODIFIED="1483477535864" TEXT="Term-Signal k&#xf6;nnte blocken">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483484052785" ID="ID_667055412" MODIFIED="1483484091053" TEXT="Race beim runningLoop_.reset()">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1483490316758" ID="ID_1734989824" MODIFIED="1483490376306" TEXT="nur das Term-Signal kann DispatcherLoop deleten">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1483490459499" ID="ID_1006586365" MODIFIED="1483490478840" TEXT="Thread will sich selbst reapen ==&gt; Deadlock">
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 <node CREATED="1482464502542" ID="ID_284397306" MODIFIED="1482464609118" TEXT="Vorsicht beim Schlie&#xdf;en der Session">
 <arrowlink COLOR="#5a97df" DESTINATION="ID_1378897740" ENDARROW="Default" ENDINCLINATION="9540;0;" ID="Arrow_ID_1446486242" STARTARROW="None" STARTINCLINATION="9540;0;"/>
@@ -532,8 +538,7 @@
       ...wenn jemand zugreift
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1481599603757" ID="ID_812618450" MODIFIED="1481599612320" TEXT="Operation auf dem SessionManager"/>
 <node CREATED="1481599612812" ID="ID_1970476027" MODIFIED="1481599618598" TEXT="der ist Singleton"/>
@@ -558,8 +563,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -586,8 +590,7 @@
       <i>bevor</i>&#160;die Dispatcher-loop angehalten wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1481778397600" ID="ID_1997192349" MODIFIED="1481778409498" TEXT="bereits wenn Anhalten signalisiert wird"/>
 <node CREATED="1481778409942" ID="ID_100284739" MODIFIED="1481778419113" TEXT="zur Sicherheit nochmal im dtor"/>
@@ -604,8 +607,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1482464658193" HGAP="-19" ID="ID_726798260" MODIFIED="1482464708932" TEXT="Ausgestaltung" VSHIFT="24">
-<icon BUILTIN="pencil"/>
+<node CREATED="1482464658193" HGAP="-14" ID="ID_726798260" MODIFIED="1482711954690" TEXT="Ausgestaltung" VSHIFT="29">
 <node CREATED="1482465840843" ID="ID_818984499" MODIFIED="1482465853543" TEXT="Entwurf">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1482464676366" FOLDED="true" ID="ID_1064506750" MODIFIED="1482464760237" TEXT="bekommt Nachrichten vom UI-Bus">
@@ -638,8 +640,7 @@
       wenn in der UI ein InvocationTrail angelegt wird.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1482466104359" ID="ID_235553653" MODIFIED="1482466115902" TEXT="speichert aber eigentlich nur die Cmd-ID">
 <icon BUILTIN="idea"/>
@@ -658,8 +659,7 @@
       <i>kann offen bleiben</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1482466246933" ID="ID_870716233" MODIFIED="1482466256655" TEXT="h&#xe4;ngt von der Verwendung ab"/>
 <node CREATED="1482466257027" ID="ID_1491453181" MODIFIED="1482466260134" TEXT="von InvocationTrail"/>
 <node CREATED="1482466260627" ID="ID_1708185529" MODIFIED="1482466265989" TEXT="wie Commands im UI gebunden werden"/>
@@ -676,8 +676,7 @@
       reine ID-Wirtschaft <i>w&#228;re m&#246;glich</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1482466285359" ID="ID_1077952925" MODIFIED="1482466316309" TEXT="Zugriff auf proc::control::Command is OK">
@@ -11177,7 +11176,11 @@
 </node>
 <node CREATED="1481777397542" ID="ID_1147135932" MODIFIED="1481778447806" TEXT="DispatcherLoop stirbt"/>
 <node CREATED="1481777410972" ID="ID_457965735" MODIFIED="1481777418982" TEXT="sigTerm"/>
-<node CREATED="1481778453137" ID="ID_1895977623" MODIFIED="1481778465907" TEXT="bewirkt reapen des LoopThread"/>
+<node CREATED="1481778453137" ID="ID_1895977623" MODIFIED="1481778465907" TEXT="bewirkt reapen des LoopThread">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1482712050992" ID="ID_336551514" MODIFIED="1482712065548" TEXT="wie genau">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -11186,7 +11189,11 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1481826329819" ID="ID_1238318698" MODIFIED="1481826431105" TEXT="enqueue commands concurrently">
 <node CREATED="1481827297122" ID="ID_860095678" MODIFIED="1481827311268" TEXT="FIFO for regular commands"/>
-<node CREATED="1481827312024" ID="ID_850193431" MODIFIED="1481827318187" TEXT="LIFO for priority requests"/>
+<node CREATED="1481827312024" ID="ID_850193431" MODIFIED="1481827318187" TEXT="LIFO for priority requests">
+<node CREATED="1482712100745" ID="ID_1387300775" MODIFIED="1482712106824" TEXT="vorerst nicht implementiert">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 <node CREATED="1481826431861" ID="ID_328583048" MODIFIED="1481826440935" TEXT="process sequentially"/>
 <node CREATED="1481826441884" ID="ID_952327020" MODIFIED="1481826446791" TEXT="until queue is empty"/>
@@ -11230,8 +11237,7 @@
       Guard beim Zugang &#252;ber das Interface
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1481918074269" ID="ID_1984339005" MODIFIED="1481918091136">
 <richcontent TYPE="NODE"><html>
@@ -11243,8 +11249,7 @@
       <i>nur sie</i>&#160;ist atomar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -11259,8 +11264,7 @@
       <b>nur ein Thread</b>&#160;f&#252;r Commands und Builder
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#171ccb" DESTINATION="ID_1214851922" ENDARROW="Default" ENDINCLINATION="53;-5;" ID="Arrow_ID_1745317422" STARTARROW="None" STARTINCLINATION="42;2;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1481918174199" ID="ID_364234189" MODIFIED="1481918180762" TEXT="essentiell f&#xfc;r Konsitenz der Session"/>
@@ -11300,8 +11304,7 @@
       Ticket <font color="#e90426">#1054</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="bell"/>
 <node CREATED="1482197270202" ID="ID_221875120" MODIFIED="1482197288634" TEXT="neues API auf unserem Thread-Wrapper schaffen">
 <icon BUILTIN="yes"/>
@@ -11348,8 +11351,7 @@
       OO rocks!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -11362,8 +11364,8 @@
 <node CREATED="1481828624042" ID="ID_1970372601" MODIFIED="1481828635748" TEXT="Looper f&#xfc;r Schleifen-Logik"/>
 <node CREATED="1481828639584" ID="ID_1344182776" MODIFIED="1481828648402" TEXT="CommandQueue"/>
 </node>
-<node CREATED="1481778549940" HGAP="50" ID="ID_676848252" MODIFIED="1482464798892" TEXT="DispatcherLoop" VSHIFT="1">
-<icon BUILTIN="pencil"/>
+<node CREATED="1481778549940" HGAP="50" ID="ID_676848252" MODIFIED="1482712315146" TEXT="DispatcherLoop" VSHIFT="1">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1481778741546" ID="ID_684867533" MODIFIED="1481778755694" TEXT="&#xf6;ffnet Session-Interface">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -11387,42 +11389,33 @@
 <arrowlink COLOR="#5242a4" DESTINATION="ID_1311208726" ENDARROW="Default" ENDINCLINATION="2;-45;" ID="Arrow_ID_313252247" STARTARROW="None" STARTINCLINATION="-186;-13;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1481831642376" ID="ID_1301681872" MODIFIED="1481831650435" TEXT="Checkpoint bieten">
-<node CREATED="1482365008444" ID="ID_1520027430" MODIFIED="1482365011517" TEXT="wirklich">
+<node CREATED="1481831642376" ID="ID_1301681872" MODIFIED="1482712297004" TEXT="Checkpoint bieten">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1482365008444" ID="ID_1520027430" MODIFIED="1482712182562" TEXT="warum">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1482365012947" ID="ID_10844185" MODIFIED="1482365019558" TEXT="Konzept nicht klar"/>
-<node CREATED="1482365020242" ID="ID_981800101" MODIFIED="1482365065006" TEXT="urspr&#xfc;nglich...">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...meinte ich, so etwas wie den Sequence-Point von C++
-    </p>
-    <p>
-      also die Stelle, an der &quot;die Zahnr&#228;der ineinander greifen&quot;
-    </p>
-  </body>
-</html>
-</richcontent>
+<node CREATED="1482365012947" ID="ID_10844185" MODIFIED="1482712196344" TEXT="um zuverl&#xe4;ssig anhalten zu k&#xf6;nnen"/>
+<node CREATED="1482712199900" ID="ID_1990071363" MODIFIED="1482712291119" TEXT="Checkpoint == Zustand ausgeglichen">
+<icon BUILTIN="idea"/>
 </node>
-<node CREATED="1482365070571" ID="ID_1387994688" MODIFIED="1482365108042" TEXT="Notwendigkeit zweifelhaft">
-<richcontent TYPE="NOTE"><html>
+<node CREATED="1482712212930" ID="ID_1065088226" MODIFIED="1482712286050" TEXT="das hei&#xdf;t">
+<icon BUILTIN="info"/>
+<node CREATED="1482712227048" ID="ID_172281578" MODIFIED="1482712234491" TEXT="keine schwebenden Zustands&#xe4;nderungen"/>
+<node CREATED="1482712235016" ID="ID_943771142" MODIFIED="1482712249961" TEXT="Alle zustands-Relevanten &#xc4;nderungen sind ausgewertet"/>
+<node CREATED="1482712250461" ID="ID_610930154" MODIFIED="1482712260744" TEXT="alle Pr&#xe4;dikate spiegeln den wirklichen Zustand wider"/>
+<node CREATED="1482712261876" ID="ID_47966817" MODIFIED="1482712282765">
+<richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      es scheint, als w&#252;rde ich eine Implementierung hinbekommen,
-    </p>
-    <p>
-      die (fast) nur auf logischen Zusammenh&#228;ngen beruht
+      Kontrollflu&#223; ist <i>nicht</i>&#160;in einer Arbeitsfunktion
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 <node CREATED="1481831747042" ID="ID_134003952" MODIFIED="1481831788672" TEXT="sperrbar sein">
@@ -11443,8 +11436,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -11505,8 +11497,7 @@
       <i>billig:</i>&#160;unsere Zeit-Lib nutzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1482430715396" ID="ID_1005651794" MODIFIED="1482430722896" TEXT="nicht besonders sch&#xf6;n">
 <icon BUILTIN="smily_bad"/>
@@ -11572,8 +11563,7 @@
       generischer &#220;berlegungen implementiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1482202243253" ID="ID_1342399342" MODIFIED="1482202264229" TEXT="verh&#xe4;lt er sich dann richtig">
@@ -12053,8 +12043,7 @@
       Ticket <font color="#ba0c3f">#886</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>

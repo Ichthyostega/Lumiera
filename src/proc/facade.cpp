@@ -47,8 +47,9 @@ namespace proc {
     {
       operator string()  const { return "Session"; }
       
-      /** @remarks there is no need explicitly to start the session core, 
-       *   since it will usually be pulled up as prerequisite */
+      /** @remarks there is no need explicitly to start the session,
+       *   since it is passive, waiting for invocations and will be
+       *   pulled up as prerequisite of other subsystems. */
       bool 
       shouldStart (Option&)  override
         {
