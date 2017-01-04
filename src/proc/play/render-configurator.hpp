@@ -48,10 +48,9 @@
 //#include "lib/util.hpp"
 //
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
-//#include <string>
 #include <functional>
 #include <vector>
+//#include <string>
 
 
 namespace proc {

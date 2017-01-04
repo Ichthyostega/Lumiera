@@ -29,7 +29,7 @@
 #include "lib/functor-util.hpp"
 #include "common/instancehandle.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <functional>
 #include <string>
 
@@ -37,7 +37,7 @@
 namespace gui {
   
   using std::string;
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   using std::bind;
   using std::placeholders::_1;
   using lumiera::Subsys;
@@ -81,7 +81,7 @@ namespace gui {
   
   namespace { // implementation of GUI-"Subsystem" : start GUI through GuiStarterPlugin
     
-    scoped_ptr<GuiRunner> facade (0);
+    unique_ptr<GuiRunner> facade;
     
     
     class GuiSubsysDescriptor

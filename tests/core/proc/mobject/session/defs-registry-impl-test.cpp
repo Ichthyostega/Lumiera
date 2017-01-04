@@ -31,14 +31,14 @@
 
 #include "lib/query-diagnostics.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <map>
 
 using util::isnil;
 using util::_Fmt;
 using lib::P;
 
-using boost::scoped_ptr;
+using std::unique_ptr;
 using std::string;
 using std::rand;
 using std::map;
@@ -102,7 +102,7 @@ namespace test    {
    */
   class DefsRegistryImpl_test : public Test
     {
-      scoped_ptr<DefsRegistry> reg_;
+      unique_ptr<DefsRegistry> reg_;
       
       typedef P<Dummy<13>> Obj;
       typedef P<Dummy<23>> Pra;

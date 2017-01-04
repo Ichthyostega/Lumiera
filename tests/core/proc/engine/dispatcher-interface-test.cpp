@@ -37,7 +37,6 @@
 #include "lib/util-coll.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/scoped_ptr.hpp>
 #include <functional>
 #include <vector>
 

@@ -34,7 +34,6 @@
 //#include <memory>
 ////#include <functional>
 #include <memory>
-//#include <boost/scoped_ptr.hpp>
 
 
 

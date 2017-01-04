@@ -30,9 +30,9 @@
 #include "lib/depend.hpp"
 #include "lib/meta/duck-detector.hpp"
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <memory>
 
 
 namespace lib {
@@ -100,12 +100,12 @@ namespace test{
     {
       typedef typename ServiceInterface<TYPE>::Type Interface;
       
-      boost::scoped_ptr<TYPE> mock_;
+      std::unique_ptr<TYPE> mock_;
       Interface* shadowedOriginal_;
       
       Depend4Test()
-        : mock_(new TYPE)
-        , shadowedOriginal_(Depend<Interface>::injectReplacement (mock_.get()))
+        : mock_{new TYPE}
+        , shadowedOriginal_{Depend<Interface>::injectReplacement (mock_.get())}
         { }
       
      ~Depend4Test()

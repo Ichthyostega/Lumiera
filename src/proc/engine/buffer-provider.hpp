@@ -50,14 +50,14 @@
 #include "proc/engine/buffer-local-key.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace proc {
 namespace engine {
   
-  using boost::scoped_ptr;
   using lib::Literal;
+  using std::unique_ptr;
   
   
   class BufferMetadata;
@@ -81,7 +81,7 @@ namespace engine {
   class BufferProvider
     : boost::noncopyable
     {
-      scoped_ptr<BufferMetadata> meta_;
+      unique_ptr<BufferMetadata> meta_;
       
       
     protected: /* === for Implementation by concrete providers === */

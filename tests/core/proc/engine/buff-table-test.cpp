@@ -29,7 +29,7 @@
 #include "lib/ref-array.hpp"
 #include "lib/format-cout.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using test::Test;
 
@@ -129,7 +129,7 @@ namespace test  {
    */
   class BuffTable_test : public Test
     {
-      typedef boost::scoped_ptr<BuffTableStorage> PSto;
+      using PSto = std::unique_ptr<BuffTableStorage>;
       
       PSto pStorage;
       ulong counter;

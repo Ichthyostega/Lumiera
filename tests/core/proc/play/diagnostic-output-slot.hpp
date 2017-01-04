@@ -52,7 +52,6 @@
 //#include <vector>
 #include <unordered_set>
 #include <memory>
-//#include <boost/scoped_ptr.hpp>
 
 
 namespace proc {

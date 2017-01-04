@@ -33,7 +33,7 @@ namespace builder {
   
   using util::isnil;
   using std::auto_ptr;
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   
   
   struct BuildProcessState
@@ -42,8 +42,8 @@ namespace builder {
       session::Fixture & fixedTimeline_;
       auto_ptr<engine::RenderGraph> procSegment_;
       
-      scoped_ptr<SegmentationTool> segmentation_;
-      scoped_ptr<NodeCreatorTool> fabrication_;
+      unique_ptr<SegmentationTool> segmentation_;
+      unique_ptr<NodeCreatorTool> fabrication_;
       
       
       BuildProcessState (session::Fixture& theTimeline)

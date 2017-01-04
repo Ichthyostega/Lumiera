@@ -62,7 +62,6 @@
 #include "lib/util.hpp"
 //
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
 #include <functional>
 //#include <string>
 #include <vector>

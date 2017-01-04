@@ -28,8 +28,8 @@
 #include "lib/p.hpp"
 #include "common/query.hpp"
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <memory>
 
 
 
@@ -38,7 +38,7 @@ namespace query  {
   
   
   using lumiera::Query;
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   
   namespace impl { class DefsRegistry; }
   
@@ -59,7 +59,7 @@ namespace query  {
    */
   class DefsManager : private boost::noncopyable
     {
-      scoped_ptr<impl::DefsRegistry> defsRegistry_;
+      unique_ptr<impl::DefsRegistry> defsRegistry_;
       
     public:
       

@@ -40,7 +40,7 @@ extern "C" {
 
 using util::cStr;
 using lib::Literal;
-
+using std::unique_ptr;
 
 
 
@@ -77,10 +77,10 @@ namespace lumiera {
    * @note all further application startup is conducted by \c main.cpp
    */
   AppState::AppState()
-    : setup_(LUMIERA_LOCATION_OF_BOOTSTRAP_INI)
-    , subsystems_(0)
-    , emergency_(false)
-    , core_up_ (false)
+    : setup_{LUMIERA_LOCATION_OF_BOOTSTRAP_INI}
+    , subsystems_{}
+    , emergency_{false}
+    , core_up_{false}
   { }
   
   
@@ -89,7 +89,7 @@ namespace lumiera {
   AppState& 
   AppState::instance()  // Meyer's singleton
   {
-    static scoped_ptr<AppState> theApp_ (0);
+    static unique_ptr<AppState> theApp_;
     if (!theApp_) theApp_.reset (new AppState ());
     return *theApp_;
   }

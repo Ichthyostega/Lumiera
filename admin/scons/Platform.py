@@ -86,8 +86,6 @@ def configure(env):
             problems.append('We need boost::noncopyable')
         if not conf.CheckCXXHeader('boost/lexical_cast.hpp'):
             problems.append('We need boost::lexical_cast')
-        if not conf.CheckCXXHeader('boost/scoped_ptr.hpp'):
-            problems.append('We need boost::scoped_ptr (scoped_ptr.hpp).')
         if not conf.CheckCXXHeader('boost/format.hpp'):
             problems.append('We need boost::format (header).')
         if not conf.CheckLibWithHeader('boost_program_options','boost/program_options.hpp','C++'):

@@ -42,7 +42,6 @@
 //#include <string>
 //#include <memory>
 //#include <functional>
-//#include <boost/scoped_ptr.hpp>
 
 namespace lumiera {
   

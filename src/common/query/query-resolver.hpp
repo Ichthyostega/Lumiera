@@ -28,7 +28,6 @@
 #include "common/query.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <functional>
 #include <memory>
 #include <string>
@@ -38,7 +37,7 @@ using std::function;
 namespace lumiera {
   
   using boost::noncopyable;
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   using std::string;
   
   
@@ -98,7 +97,7 @@ namespace lumiera {
   class QueryResolver
     : noncopyable
     {
-      scoped_ptr<QueryDispatcher> dispatcher_;
+      unique_ptr<QueryDispatcher> dispatcher_;
       
       
     public:

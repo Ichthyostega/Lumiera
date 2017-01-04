@@ -26,12 +26,10 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/engine/buffer-metadata.hpp"
 
-#include <boost/scoped_ptr.hpp>
 #include <cstdlib>
 #include <cstring>
 #include <limits>
 
-using boost::scoped_ptr;
 using util::isnil;
 using util::isSameObject;
 

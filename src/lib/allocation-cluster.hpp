@@ -52,7 +52,6 @@
 #include "lib/scoped-holder.hpp"
 #include "lib/scoped-holder-transfer.hpp"
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <vector>
 
@@ -60,7 +59,6 @@
 
 namespace lib {
   
-  using boost::scoped_ptr;
   
   /**
    * A pile of objects sharing common allocation and lifecycle.

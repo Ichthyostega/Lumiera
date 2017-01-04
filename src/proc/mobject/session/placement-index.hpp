@@ -113,9 +113,9 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 
-#include <unordered_map>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <unordered_map>
+#include <memory>
 #include <vector>
 
 namespace std {
@@ -145,7 +145,7 @@ namespace session {
   LUMIERA_ERROR_DECLARE (NONEMPTY_SCOPE);   ///< Placement scope (still) contains other elements
   
   
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   
   
   /**
@@ -182,7 +182,7 @@ namespace session {
       class Table;
       class Validator;
       
-      scoped_ptr<Table> pTab_;
+      unique_ptr<Table> pTab_;
       
       
       typedef PlacementMO::ID _PID;

@@ -30,10 +30,9 @@ extern "C" {
 #include "common/interface-descriptor.h"
 }
 
-#include <string>
-#include <memory>
 #include <functional>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
+#include <string>
 
 
 
@@ -43,7 +42,6 @@ namespace proc  {
     using std::string;
     using lumiera::Subsys;
     using std::auto_ptr;
-    using boost::scoped_ptr;
     using std::bind;
     
     
@@ -74,7 +72,7 @@ namespace proc  {
             }
           
           /** manages the actual (single) instance of the player service impl */
-          scoped_ptr<DummyPlayerService> thePlayer_;
+          std::unique_ptr<DummyPlayerService> thePlayer_;
           
           
           void
@@ -277,11 +275,11 @@ namespace proc  {
     
     
     ProcessImpl::ProcessImpl(LumieraDisplaySlot viewerHandle)
-      : fps_(0)
-      , play_(false)
-      , display_(Display::facade().getHandle (viewerHandle))
-      , imageGen_(0)
-      , tick_(new TickService (bind (&ProcessImpl::doFrame, this)))
+      : fps_{0}
+      , play_{false}
+      , display_{Display::facade().getHandle (viewerHandle)}
+      , imageGen_{}
+      , tick_{new TickService (bind (&ProcessImpl::doFrame, this))}
       { }
     
     

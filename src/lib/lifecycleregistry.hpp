@@ -38,22 +38,23 @@
 #ifndef LUMIERA_LIFECYCLEREGISTRY_H
 #define LUMIERA_LIFECYCLEREGISTRY_H
 
-#include <map>
-#include <set>
-#include <string>
-#include <functional>
-#include <boost/scoped_ptr.hpp>
-#include <boost/noncopyable.hpp>
 
 #include "lib/util.hpp"
+
+#include <boost/noncopyable.hpp>
+#include <functional>
+#include <memory>
+#include <string>
+#include <set>
+#include <map>
 
 
 namespace lumiera {
   
-  using boost::scoped_ptr;
   using boost::noncopyable;
-  using std::function;
   using util::contains;
+  using std::unique_ptr;
+  using std::function;
   using std::string;
 
 
@@ -95,7 +96,7 @@ namespace lumiera {
        *  @warning don't use it after the end of main()! */
       static LifecycleRegistry& instance()   // Meyer's singleton
         {
-          static scoped_ptr<LifecycleRegistry> theRegistry_;
+          static unique_ptr<LifecycleRegistry> theRegistry_;
           if (!theRegistry_) theRegistry_.reset (new LifecycleRegistry ());
           return *theRegistry_;
         }
@@ -108,8 +109,8 @@ namespace lumiera {
         execute (ON_BASIC_INIT);   // just to be sure, typically a NOP, because nothing is registered yet 
       }
       
-      ~LifecycleRegistry () {}
-      friend void boost::checked_delete<LifecycleRegistry>(LifecycleRegistry*);
+     ~LifecycleRegistry () { }
+      friend class std::default_delete<LifecycleRegistry>;
       
     };
 

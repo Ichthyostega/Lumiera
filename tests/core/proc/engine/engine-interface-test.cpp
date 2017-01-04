@@ -33,7 +33,6 @@
 #include "proc/asset/pipe.hpp"
 #include "lib/time/timevalue.hpp"
 
-//#include <boost/scoped_ptr.hpp>
 //#include <ctime>
 
 using test::Test;

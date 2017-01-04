@@ -52,8 +52,7 @@
 
 #include <utility>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
-using boost::scoped_ptr;
+
 
 
 
@@ -107,7 +106,7 @@ namespace mobject {
         struct LocatingSolution;
       
         /** next additional Pin, if any */
-        scoped_ptr<LocatingPin> next_;
+        std::unique_ptr<LocatingPin> next_;
         
         /** order to consider when resolving. 0=highest */
         virtual int getPrioLevel ()  const { return 0; }

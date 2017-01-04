@@ -28,12 +28,12 @@
 #include "proc/engine/buffer-metadata.hpp"
 #include "proc/engine/testframe.hpp"
 
-#include <boost/scoped_ptr.hpp>
 #include <cstdlib>
 #include <cstring>
+#include <memory>
 
 using std::strncpy;
-using boost::scoped_ptr;
+using std::unique_ptr;
 using lib::test::randStr;
 using util::isSameObject;
 using util::isnil;
@@ -82,7 +82,7 @@ namespace test  {
   class BufferMetadata_test : public Test
     {
       /** common Metadata table to be tested */
-      scoped_ptr<BufferMetadata> meta_;
+      unique_ptr<BufferMetadata> meta_;
       
       virtual void
       run (Arg) 

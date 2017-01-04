@@ -29,13 +29,14 @@
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/session/auto.hpp"
 
-#include <list>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
+#include <list>
 
 
 using std::list;
 using std::shared_ptr;
+using std::unique_ptr;
 
 
 
@@ -55,7 +56,7 @@ namespace session {
     protected:
       /////////////////////////////////////////////////TODO: placeholder code
       list<ExplicitPlacement> content_;
-      boost::scoped_ptr<Segmentation> partitioning_;
+      unique_ptr<Segmentation> partitioning_;
       
       /////////////////////////////////////////////////TICKET #573  who creates the fixture?
       

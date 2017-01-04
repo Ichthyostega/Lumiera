@@ -30,7 +30,7 @@
 #include "proc/engine/nodewiring-def.hpp"
 
 //#include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 //#include <cstddef>
 
 
@@ -85,7 +85,7 @@ namespace engine {
   class WiringFactory
     {
       lib::AllocationCluster& alloc_;
-      boost::scoped_ptr<config::WiringFactoryImpl> pImpl_;
+      std::unique_ptr<config::WiringFactoryImpl> pImpl_;
       
     public:
       WiringFactory (lib::AllocationCluster& a);

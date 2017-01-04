@@ -51,7 +51,6 @@
 //#include "lib/sync.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 //#include <string>
 #include <functional>
 #include <vector>
@@ -72,7 +71,6 @@ namespace play {
 //using std::bind;
   using std::vector;
 //using std::shared_ptr;
-  using boost::scoped_ptr;
   
   
   

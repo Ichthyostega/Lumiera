@@ -30,7 +30,6 @@
 #include "proc/mobject/builder/mould.hpp"
 #include "proc/engine/rendergraph.hpp"
 
-#include <boost/scoped_ptr.hpp>
 #include <memory>
 
 
@@ -50,7 +49,7 @@ namespace builder {
    */
   class ToolFactory
     {
-      boost::scoped_ptr<BuildProcessState> state_;
+      std::unique_ptr<BuildProcessState> state_;
       
     public:
       /** prepare a builder tool kit for dealing with the given Fixture,

@@ -28,7 +28,7 @@
 //#include "common/query.hpp"
 #include "lib/hash-standard.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <vector>
 #include <string>
 
@@ -56,7 +56,7 @@ namespace builder {
    */
   class OperationPoint
     {
-      boost::scoped_ptr<RefPoint> refPoint_;
+      std::unique_ptr<RefPoint> refPoint_;
       
     public:
       OperationPoint (engine::NodeFactory&, asset::Media const& srcMedia);

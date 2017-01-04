@@ -65,7 +65,7 @@ namespace play {
   OutputDirector::connectUp()
   {
     Lock sync(this);
-    REQUIRE (!shutdown_initiated_);
+    REQUIRE (not shutdown_initiated_);
     
     player_.reset (new PlayService);
     return this->isOperational();
@@ -90,9 +90,9 @@ namespace play {
    *       immediate unconditional termination of the application.
    */
   void
-  OutputDirector::triggerDisconnect (SigTerm completedSignal)  throw()
+  OutputDirector::triggerDisconnect (SigTerm completedSignal)  noexcept
   {
-    if (!shutdown_initiated_)
+    if (not shutdown_initiated_)
       {
         shutdown_initiated_ = true;
         Thread ("Output shutdown supervisor", bind (&OutputDirector::bringDown, this, completedSignal));
@@ -114,7 +114,7 @@ namespace play {
   {
     Lock sync(this);
     string problemLog;
-    if (!isOperational())
+    if (not isOperational())
       {
         WARN (play, "Attempt to OutputDirector::bringDown() -- "
                     "which it is not in running state. Invocation ignored. "

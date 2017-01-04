@@ -60,7 +60,7 @@
 #include "common/interface-facade-link.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 //#include <string>
 
 
@@ -72,7 +72,6 @@ namespace play {
 //using lumiera::Subsys;
 //using lumiera::Display;
 //using lumiera::DummyPlayer;
-  using boost::scoped_ptr;
   
   
 //  class DummyImageGenerator;
@@ -103,7 +102,7 @@ namespace play {
     , boost::noncopyable
     {
       InterfaceFacadeLink<lumiera::Play> facadeAccess_;
-      scoped_ptr<ProcessTable>           pTable_;
+      std::unique_ptr<ProcessTable>      pTable_;
       
       
       /** Implementation: build a PlayProcess */

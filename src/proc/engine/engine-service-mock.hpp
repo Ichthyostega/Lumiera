@@ -54,8 +54,6 @@
 #include "lib/scoped-ptrvect.hpp"
 //
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
-//#include <string>
 
 
 namespace proc {

@@ -96,7 +96,6 @@
 #include "lib/iter-source.hpp"
 //
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
 //#include <string>
 #include <vector>
 

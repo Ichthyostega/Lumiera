@@ -44,8 +44,7 @@
 #include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
-//#include <memory>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace proc {
@@ -54,7 +53,7 @@ namespace play {
 //using std::string;
 //using std::vector;
 //using std::shared_ptr;
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   
   
   class PlayService;
@@ -75,7 +74,7 @@ namespace play {
     {
       typedef lumiera::Subsys::SigTerm SigTerm;
       
-      scoped_ptr<PlayService> player_;
+      unique_ptr<PlayService> player_;
       ///////TODO more components and connections to manage here...
       
       bool shutdown_initiated_ = false;   /////TODO probably need a way more elaborate lifecylce management
@@ -84,7 +83,7 @@ namespace play {
       static lib::Depend<OutputDirector> instance;
       
       bool connectUp() ;
-      void triggerDisconnect(SigTerm)  throw();
+      void triggerDisconnect(SigTerm)  noexcept;
       
       bool isOperational()  const;
       

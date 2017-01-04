@@ -36,8 +36,8 @@
 #include "proc/engine/type-handler.hpp"
 #include "proc/engine/buffer-provider.hpp"
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <memory>
 
 
 namespace proc {
@@ -62,7 +62,7 @@ namespace engine {
     : boost::noncopyable
     {
       
-      boost::scoped_ptr<TrackingHeapBlockProvider>    pImpl_;
+      std::unique_ptr<TrackingHeapBlockProvider>   pImpl_;
       static lib::Depend<DiagnosticBufferProvider> diagnostics;
       
       

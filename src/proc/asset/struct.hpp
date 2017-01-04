@@ -64,7 +64,7 @@
 #include "common/query.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <string>
 
 
@@ -73,7 +73,7 @@ namespace proc {
 namespace asset {
   
   using std::string;
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   using lumiera::Query;
   using lib::Symbol;
   
@@ -142,7 +142,7 @@ namespace asset {
   class StructFactory
     : boost::noncopyable
     {
-      scoped_ptr<StructFactoryImpl> impl_;
+      unique_ptr<StructFactoryImpl> impl_;
       
     protected:
       StructFactory ();

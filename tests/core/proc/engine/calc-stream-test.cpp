@@ -26,7 +26,6 @@
 
 #include "proc/engine/engine-service.hpp"
 
-//#include <boost/scoped_ptr.hpp>
 //#include <ctime>
 
 using test::Test;

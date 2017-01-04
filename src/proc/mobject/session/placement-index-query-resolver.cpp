@@ -29,7 +29,7 @@
 
 #include "proc/mobject/test-dummy-mobject.hpp"  /////////////////////////////////////TICKET #532
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <stack>
 
 
@@ -37,7 +37,7 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   
   using lumiera::Goal;
   using lumiera::Query;
@@ -198,7 +198,7 @@ namespace session {
     {
       ContentFilter acceptable_;
       ExplorerBuilder buildExploartion_;
-      scoped_ptr<Explorer> explore_;
+      unique_ptr<Explorer> explore_;
       
       
       virtual Result

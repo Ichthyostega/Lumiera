@@ -46,8 +46,8 @@ namespace session {
     : public SessManager
     , public Sync<RecursiveLock_NoWait>
     {
-      scoped_ptr<SessionImplAPI>   pSess_;
-      scoped_ptr<LifecycleAdvisor> lifecycle_;
+      unique_ptr<SessionImplAPI>   pSess_;
+      unique_ptr<LifecycleAdvisor> lifecycle_;
       
       SessManagerImpl()  throw();
       friend class lib::DependencyFactory;

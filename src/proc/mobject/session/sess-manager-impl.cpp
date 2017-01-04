@@ -48,7 +48,7 @@
 #include "common/query/defs-manager.hpp"
 #include "common/query.hpp"
 
-using boost::scoped_ptr;
+#include <memory>
 
 
 
@@ -94,7 +94,7 @@ namespace session {
   
   namespace { // defining details of the Session Lifecycle
     
-    typedef scoped_ptr<SessionImplAPI> SessionPImpl;
+    using SessionPImpl = std::unique_ptr<SessionImplAPI>;
     
     class SessionLifecycleDetails
       : public LifecycleAdvisor
@@ -210,8 +210,8 @@ namespace session {
    *  \link #operator-> access \endlink to the session object.
    */
   SessManagerImpl::SessManagerImpl ()  throw()
-    : pSess_ (0)
-    , lifecycle_(new SessionLifecycleDetails(pSess_))
+    : pSess_{}
+    , lifecycle_{new SessionLifecycleDetails(pSess_)}
   {
     Session::initFlag = true;  //////////////////////////////////////// TICKET #518   instead of this hack, implement basic-init of the session manager for real
   }

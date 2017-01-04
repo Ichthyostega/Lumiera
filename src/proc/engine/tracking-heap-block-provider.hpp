@@ -49,8 +49,7 @@
 #include "lib/scoped-ptrvect.hpp"
 
 #include <unordered_map>
-#include <boost/scoped_ptr.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 
 namespace proc {
@@ -63,8 +62,7 @@ namespace engine {
   
   namespace diagn {
     
-    using boost::scoped_ptr;
-    using boost::scoped_array;
+    using std::unique_ptr;
 
     
     /**
@@ -75,7 +73,7 @@ namespace engine {
     class Block
       : boost::noncopyable
       {
-        scoped_array<char> storage_;
+        unique_ptr<char[]> storage_;
         
         bool was_released_;
         
@@ -130,7 +128,7 @@ namespace engine {
   class TrackingHeapBlockProvider
     : public BufferProvider
     {
-      scoped_ptr<diagn::PoolTable> pool_;
+      unique_ptr<diagn::PoolTable> pool_;
       ScopedPtrVect<diagn::Block> outSeq_; 
       
     public:

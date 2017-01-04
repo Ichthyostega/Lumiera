@@ -36,7 +36,7 @@
 #include "gui/widget/timeline/timeline-header-widget.hpp"
 #include "lib/time/timevalue.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace gui {
@@ -235,7 +235,7 @@ namespace timeline {
       /**
        * An internal timer used for the expand/collapse animation.
        */
-      boost::scoped_ptr<Glib::Timer> expand_timer;
+      std::unique_ptr<Glib::Timer> expand_timer;
       
       //----- Header Widgets ------//
       

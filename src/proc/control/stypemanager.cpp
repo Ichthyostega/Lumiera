@@ -36,7 +36,7 @@ namespace control {
   
   
   STypeManager::STypeManager()
-    : reg_(0)
+    : reg_{}
   {
     reset();
   }

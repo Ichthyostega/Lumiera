@@ -31,7 +31,7 @@
 #include "gui/widget/timeline/timeline-tool.hpp"
 #include "lib/time/timevalue.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace gui {
 
@@ -188,7 +188,7 @@ private:
     Shift
   };
   
-  boost::scoped_ptr<timeline::Tool> tool;
+  std::unique_ptr<timeline::Tool> tool;
   double mouseDownX, mouseDownY;
   
   // Scroll State

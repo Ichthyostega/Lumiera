@@ -55,7 +55,6 @@
 //#include <vector>
 #include <boost/rational.hpp>
 #include <memory>
-//#include <boost/scoped_ptr.hpp>
 
 namespace lib {
 namespace time{

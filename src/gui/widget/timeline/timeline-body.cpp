@@ -46,7 +46,7 @@ namespace timeline {
 
 TimelineBody::TimelineBody (TimelineWidget &timelineWidget)
   : Glib::ObjectBase("TimelineBody")
-  , tool(NULL)
+  , tool()
   , mouseDownX(0)
   , mouseDownY(0)
   , dragType(None)

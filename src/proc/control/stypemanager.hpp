@@ -28,7 +28,7 @@
 #include "proc/streamtype.hpp"
 #include "lib/depend.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace proc {
@@ -41,7 +41,7 @@ namespace control {
     {
       
       class Registry;
-      boost::scoped_ptr<Registry> reg_;
+      std::unique_ptr<Registry> reg_;
       
     public:
       static lib::Depend<STypeManager> instance;

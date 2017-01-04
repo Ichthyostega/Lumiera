@@ -53,7 +53,6 @@
 //#include <string>
 //#include <vector>
 //#include <memory>
-//#include <boost/scoped_ptr.hpp>
 
 //namespace lib {
 //namespace time{

@@ -26,13 +26,12 @@
 #include "lib/util.hpp"
 
 #include <cstdlib>
-#include <limits.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using test::Test;
 using std::rand;
 using util::isSameObject;
-using boost::scoped_ptr;
+using std::unique_ptr;
 
 
 namespace proc {
@@ -146,8 +145,8 @@ namespace test  {
       void
       verifyFrameSeries()
         {
-          scoped_ptr<TestFrame> thisFrames[CHAN_COUNT];
-          scoped_ptr<TestFrame> prevFrames[CHAN_COUNT];
+          unique_ptr<TestFrame> thisFrames[CHAN_COUNT];
+          unique_ptr<TestFrame> prevFrames[CHAN_COUNT];
           
           for (uint i=0; i<CHAN_COUNT; ++i)
             thisFrames[i].reset (new TestFrame(0, i));

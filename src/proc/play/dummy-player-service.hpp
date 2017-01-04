@@ -47,7 +47,7 @@
 #include "lib/singleton-ref.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <string>
 
 
@@ -84,9 +84,9 @@ namespace proc {
         uint fps_;
         bool play_;
         
-        Display::Sink                          display_;
-        boost::scoped_ptr<DummyImageGenerator> imageGen_;
-        boost::scoped_ptr<TickService>         tick_;
+        Display::Sink                        display_;
+        std::unique_ptr<DummyImageGenerator> imageGen_;
+        std::unique_ptr<TickService>         tick_;
         
         
       public:

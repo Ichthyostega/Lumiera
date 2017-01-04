@@ -46,7 +46,7 @@
 #include "common/basic-setup.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <string>
 #include <map>
 
@@ -55,7 +55,6 @@
 namespace lumiera {
   
   using std::string;
-  using boost::scoped_ptr;
   using boost::noncopyable;
   
   class SubsystemRunner;
@@ -74,8 +73,8 @@ namespace lumiera {
     private:
       AppState ();
       
-      ~AppState ();
-      friend void boost::checked_delete<AppState>(AppState*);
+     ~AppState ();
+      friend class std::default_delete<AppState>;
       
       
     public:
@@ -131,7 +130,7 @@ namespace lumiera {
       
     
     private:
-      typedef scoped_ptr<SubsystemRunner>   PSub;
+      using PSub = std::unique_ptr<SubsystemRunner>;
       
       BasicSetup setup_;
       

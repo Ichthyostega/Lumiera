@@ -74,7 +74,7 @@
 #include "lib/iter-source.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace proc {
@@ -86,7 +86,7 @@ namespace play {
   using lib::time::TimeValue;
   using lib::time::Time;
   
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   
   
   
@@ -116,7 +116,7 @@ namespace play {
       /** active connections through this OutputSlot */
       class ConnectionState;
       
-      scoped_ptr<ConnectionState> state_;
+      unique_ptr<ConnectionState> state_;
       
       /** build the \em connected state,
        *  based on the existing configuration

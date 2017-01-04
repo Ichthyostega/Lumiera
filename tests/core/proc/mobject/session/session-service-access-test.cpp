@@ -28,6 +28,7 @@
 #include "lib/depend.hpp"
 
 #include <boost/lexical_cast.hpp>
+#include <memory>
 #include <string>
 
 
@@ -38,6 +39,7 @@ namespace test    {
   
   using lib::Depend;
   using boost::lexical_cast;
+  using std::unique_ptr;
   using std::string;
   
   
@@ -173,10 +175,10 @@ namespace test    {
     
     struct TSessManagerImpl : TSessManager
       {
-        scoped_ptr<SessionImplAPI> pImpl_;
+        unique_ptr<SessionImplAPI> pImpl_;
         
         TSessManagerImpl()
-          : pImpl_(0)
+          : pImpl_{}
           { }
         
         SessionImplAPI*
@@ -192,7 +194,7 @@ namespace test    {
         void
         reset ()
           {
-            scoped_ptr<SessionImplAPI> tmpS (new SessionImplAPI);
+            unique_ptr<SessionImplAPI> tmpS {new SessionImplAPI};
             pImpl_.swap (tmpS);
           }
       };

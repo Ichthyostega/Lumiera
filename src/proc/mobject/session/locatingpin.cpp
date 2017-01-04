@@ -27,13 +27,14 @@
 #include "proc/mobject/session/fixedlocation.hpp"
 #include "proc/mobject/session/relativelocation.hpp"
 
+using std::unique_ptr;
 
 namespace proc {
 namespace mobject {
 namespace session {
   
   inline LocatingPin*
-  cloneChain (const scoped_ptr<LocatingPin>& chain)
+  cloneChain (const unique_ptr<LocatingPin>& chain)
   {
     if (!chain) 
       return 0;
@@ -77,7 +78,7 @@ namespace session {
       return next_->addChain (newLp);
     else
       {
-        scoped_ptr<LocatingPin> tmp_next (newLp);
+        unique_ptr<LocatingPin> tmp_next (newLp);
         tmp_next->next_.swap(next_);
         next_.swap(tmp_next);
         return *newLp;

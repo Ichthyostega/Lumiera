@@ -58,10 +58,9 @@
 #ifndef LIB_SCOPED_HOLDER_H
 #define LIB_SCOPED_HOLDER_H
 
-#include <boost/scoped_ptr.hpp>
-
 #include "lib/error.hpp"
 
+#include <memory>
 
 
 namespace lib {
@@ -76,9 +75,9 @@ namespace lib {
    */
   template<class B>
   class ScopedPtrHolder
-    : public boost::scoped_ptr<B>
+    : public std::unique_ptr<B>
     {
-      typedef boost::scoped_ptr<B> _Parent;
+      typedef std::unique_ptr<B> _Parent;
       
       static B* must_be_null (_Parent const& ptr)
       {
@@ -89,8 +88,8 @@ namespace lib {
       }
       
     public:
-      ScopedPtrHolder ()
-        : _Parent(0)
+      ScopedPtrHolder()
+        : _Parent{}
         { }
       
       template<class SU>

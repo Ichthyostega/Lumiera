@@ -25,10 +25,9 @@
 #include "lib/error.hpp"
 
 #include <boost/random/linear_congruential.hpp>
-#include <boost/scoped_ptr.hpp>
 
-#include <limits.h>
 #include <cstring>
+#include <memory>
 #include <vector>
 
 
@@ -132,7 +131,7 @@ namespace test   {
     
     typedef TestFrameTable<INITIAL_CHAN,INITIAL_FRAMES> TestFrames;
     
-    boost::scoped_ptr<TestFrames> testFrames;
+    std::unique_ptr<TestFrames> testFrames;
     
     
     TestFrame&

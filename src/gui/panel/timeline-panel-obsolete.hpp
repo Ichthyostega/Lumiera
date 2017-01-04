@@ -154,7 +154,7 @@ namespace model{
       sigc::connection sequenceChooserChangedConnection;
       
       // Body Widgets
-      boost::scoped_ptr<TimelineWidget> timelineWidget;
+      std::unique_ptr<TimelineWidget> timelineWidget;
       
       std::map< weak_ptr<model::Sequence>
               , shared_ptr<widget::timeline::TimelineState>

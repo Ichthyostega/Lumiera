@@ -30,14 +30,12 @@
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : the bare interface would be sufficient here
 #include "lib/depend.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace proc {
 namespace mobject {
 namespace session {
-  
-  using boost::scoped_ptr;
   
   class QueryFocusStack;
   class ScopePath;
@@ -60,7 +58,7 @@ namespace session {
    */
   class ScopeLocator
     {
-      scoped_ptr<QueryFocusStack> focusStack_;
+      std::unique_ptr<QueryFocusStack> focusStack_;
       
     public:
       static lib::Depend<ScopeLocator> instance;

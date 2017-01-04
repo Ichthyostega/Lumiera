@@ -64,7 +64,6 @@
 #include "lib/depend.hpp"
 //
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
 #include <functional>
 //#include <string>
 
