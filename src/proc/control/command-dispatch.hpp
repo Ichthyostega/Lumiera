@@ -22,7 +22,7 @@
 
 
 /** @file command-dispatch.hpp
- ** Interface to abstract the DispatcherLoop's ability to handle command messages.
+ ** Interface to abstract the ProcDispatcher's ability to handle command messages.
  ** 
  ** @see proc-dispatcher.hpp
  ** @see session-command-service.hpp
@@ -47,7 +47,7 @@ namespace control {
   
   /**
    * Interface of a service to perform Commands on the session.
-   * Commands committed here need to be ready for actual performance
+   * Commands committed here need to be ready for actual invocation
    * on the _current session._ They will be sent through a queue
    * to be performed one by one.
    */

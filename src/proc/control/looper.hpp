@@ -156,17 +156,15 @@ namespace control {
           disabled_ = not yes;
         }
       
-      /** invoking this function signals
-       *  that all consequences of past state changes
+      /** invoking this function signals that
+       *  all consequences of past state changes
        *  have been processed and are duly resolved.
-       * @remark the implementation actually does not need to watch out
-       *         for command processing state directly, only the managing
-       *         of builder runs requires active state transitions here.
-       *         When the conditions for triggering the Builder are met,
-       *         control flow typically just has emptied the command queue.
-       *         Thus we need to let one invocation pass by; the next loop iteration
-       *         will begin after waking up from a short sleep and trigger the build,
-       *         so the next (second) invocation can clear the builder dirty state.
+       * @remark the implementation actually does not need to watch out for command processing state
+       *         directly, only the managing of builder runs requires active state transitions here.
+       *         When the conditions for triggering the Builder are met, control flow typically just
+       *         has emptied the command queue. Thus we need to let one invocation pass by; the next
+       *         loop iteration will begin after waking up from a short sleep and trigger the build,
+       *         so the following (second) invocation can clear the builder dirty state.
        */
       void
       markStateProcessed()
@@ -224,6 +222,7 @@ namespace control {
       void startBuilderTimeout();
       bool forceBuild()  const;
     };
+  
   
   
   /** @internal establish the typical timeout for idle sleep.

@@ -129,6 +129,8 @@ namespace control {
       Command() { }          ///< undefined command
      ~Command();
       
+      // default copy acceptable
+      
       
       
       /* === command lifecycle === */

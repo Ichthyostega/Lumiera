@@ -176,33 +176,6 @@ namespace control {
           TODO ("implement command processing queue");
         }
       
-      
-      /* === CommandDispatch interface === */
-          //////////////////////////////////////////TODO notify!!!! on!! every!! state!! changing!! operation!!
-      
-      void
-      clear()  override
-        {
-          Lock sync(this);
-          queue_.clear();
-          //////////////////////////////////////////TODO notify!!!!
-        }
-      
-      void
-      enqueue (Command cmd)  override
-        {
-          Lock sync(this);
-          queue_.feed (cmd);
-          //////////////////////////////////////////TODO notify!!!!
-        }
-      
-      size_t
-      size()  const
-        {
-          Lock sync(this);
-          return queue_.size();
-        }
-      
       void
       requestStop()  noexcept
         {
@@ -220,14 +193,41 @@ namespace control {
                                             //////////////////////////////////////////TODO eternal sleep.... find out who will wake us!!!!
         }
       
+      size_t
+      size()  const
+        {
+          Lock sync(this);
+          return queue_.size();
+        }
+      
+      
+      /* === CommandDispatch interface === */
+          //////////////////////////////////////////TODO notify!!!! on!! every!! state!! changing!! operation!!
+      
+      void
+      enqueue (Command cmd)  override
+        {
+          Lock sync(this);
+          queue_.feed (cmd);
+          //////////////////////////////////////////TODO notify!!!!
+        }
+      
+      void
+      clear()  override
+        {
+          Lock sync(this);
+          queue_.clear();
+          //////////////////////////////////////////TODO notify!!!!
+        }
+      
     private:
       /**
-       * any operation running in the Session thread
-       * is started from here. When this loop terminates,
-       * the "Session subsystem" shuts down.
+       * any operation running in the Session thread is
+       * started from here. When this loop terminates,
+       * the »session subsystem« shuts down.
        */
       void
-      runSessionThread (Subsys::SigTerm sigTerm)
+      runSessionThread (Subsys::SigTerm notifyEnd)
         {
           string errorMsg;
           syncPoint();
@@ -255,9 +255,9 @@ namespace control {
             {
               errorMsg = string{lumiera_error()};
             }
-          // now leave the Session thread...
-          // send notification of subsystem shutdown
-          sigTerm (&errorMsg);
+           // leave the Session thread...
+          //  send notification of subsystem shutdown
+          notifyEnd (&errorMsg);
         }
       
       void
@@ -289,13 +289,22 @@ namespace control {
       void
       processCommands()
         {
-          UNIMPLEMENTED ("pull commands from the queue and dispatch them");
+          Command cmd;
+            {
+              Lock sync(this);
+              if (not queue_.empty())
+                cmd = queue_.pop();
+            }
+          if (cmd)
+            {
+              TODO ("+++ dispatch %s", util::cStr(cmd));
+            }
         }
       
       void
       startBuilder()
         {
-          UNIMPLEMENTED ("start the Proc-Builder to recalculate render nodes network");
+          TODO ("+++ start the Proc-Builder...");
         }
       
       bool
