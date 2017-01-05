@@ -71,8 +71,8 @@ namespace query  {
   
   
   
-  /** @internal causes boost::checked_delete from \c scoped_ptr<DefsRegistry>
-   *  to be placed here, where the declaration of DefsRegistry is available.*/
+  /** @internal causes std::default_delete from `unique_ptr<DefsRegistry>`
+   *  to be emitted here, where the declaration of DefsRegistry is available. */
   DefsManager::~DefsManager() {}
   
   

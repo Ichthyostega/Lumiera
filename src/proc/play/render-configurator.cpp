@@ -40,7 +40,6 @@ namespace play {
   namespace error = lumiera::error;
 //    using std::string;
 //    using lumiera::Subsys;
-//    using boost::scoped_ptr;
   using std::shared_ptr;
   using std::bind;
   using std::placeholders::_1;

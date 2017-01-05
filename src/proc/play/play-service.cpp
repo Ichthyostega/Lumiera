@@ -60,8 +60,6 @@ namespace play {
 
 //using std::string;
 //using lumiera::Subsys;
-//using std::auto_ptr;
-//using boost::scoped_ptr;
 //using std::bind;
   using lib::Sync;
   using lib::RecursiveLock_NoWait;

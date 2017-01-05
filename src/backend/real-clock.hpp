@@ -68,7 +68,6 @@ namespace backend {
 
 //using std::vector;
 //using std::shared_ptr;
-//using boost::scoped_ptr;
   
   
   /**

@@ -60,7 +60,7 @@ namespace lib {
    * - besides, the \em noncopyable type needs to provide an
    *   <tt>operator bool()</tt> yielding true iff currently
    *   containing an managed object. This is similar to
-   *   boost::scoped_ptr or even the behaviour of a plain
+   *   std::unique_ptr or even the behaviour of a plain
    *   old raw pointer, which is equivalent to \c true
    *   when the pointer isn'T \c NULL
    * 

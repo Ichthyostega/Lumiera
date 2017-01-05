@@ -71,7 +71,6 @@ namespace play {
 
 //using std::vector;
   using std::shared_ptr;
-//using boost::scoped_ptr;
   
   namespace { // diagnostics & internals....
     

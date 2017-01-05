@@ -37,7 +37,6 @@ namespace play {
   
 //    using std::string;
 //    using lumiera::Subsys;
-//    using boost::scoped_ptr;
 //    using std::bind;
   using lib::transform;
   using lib::append_all;

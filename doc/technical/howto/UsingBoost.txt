@@ -164,16 +164,26 @@ libraries (those people know very well what they're doing...)
 
 some practical guidelines
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-- `boost::format`, `boost::variant`, `boost::any`, `boost::lambda` and the more elaborate metaprogramming
-  stuff adds considerable weight. A good advice is to confine those features to the implementation level:
-  use them within individual translation units (`*.cpp`) where this makes sense, but don't cast
-  general interfaces in terms of those library constructs.
+Facilities like `boost::format`, `boost::variant`, `boost::any`, `boost::lambda` and the more elaborate
+metaprogramming stuff add considerable weight. A good advice is to confine those features to the implementation
+level: use them within individual translation units (`*.cpp`) where this makes sense, but don't express
+general interfaces in terms of those library constructs.
+
+Actually, for the most relevant of these, namely `boost::format` and `boost::variant`, we have either
+created a lightweight front-end or our own simplified implementation in the support library, leading
+to a significant reduction in overall code size.
+
+Beyond those somewhat problematic entities, there used to be several incredibly useful tools from the
+Boost library, which create only moderate overhead -- nothing to be really concerned about. Fortunately,
+mostly these have meanwhile been adapted into the official standard library, and can thus be used without
+creating a dependency on Boost.
+
 - the _functional_ tools (`function`, `bind` and friends), the _hash functions_, _lexical_cast_ and the
   _regular expressions_ create a moderate overhead. Probably fine in general purpose code, but you should
-  be aware that there is a price tag. About the same as with many STL features.
-- the `shared_ptr` `weak_ptr`, `intrusive_ptr` and `scoped_ptr` are really indispensable and can be used
-  liberally everywhere. Same for `enable_if` and the `boost::type_traits`. The impact of those features
-  on compilation times and  code size is negligible and the runtime overhead is zero, compared to _performing
+  be aware that there is a price tag. About the same as with many STL other features.
+- the `shared_ptr` `weak_ptr`, `intrusive_ptr` and `unique_ptr` are really indispensable and can be used
+  liberally everywhere. Same for `enable_if` and the `type_traits`. The impact of those features on
+  compilation times and  code size is negligible and the runtime overhead is zero, compared to _performing
   the same stuff manually_ (obviously a ref-counting pointer like `smart_ptr` has the size of two raw pointers
   and incurs an overhead on each creation, copy and disposal of a variable -- but that's besides the point I'm
   trying to make here, and generally unavoidable)

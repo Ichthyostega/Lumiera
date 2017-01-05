@@ -26,7 +26,7 @@
  ** For example, a service provider may need to maintain a number of individual
  ** process handles. The solution here is deliberately kept simple, it is
  ** similar to using a STL container with shared_ptr(s), but behaves rather
- ** like boost::scoped_ptr. It provides the same basic functionality as
+ ** like std::unique_ptr. It provides the same basic functionality as
  ** boost::ptr_vector, but doesn't require us to depend on boost-serialisation.
  ** 
  ** Some details to note:

@@ -29,9 +29,9 @@
  ** use of shared_ptr  or even a garbage collector. Sometimes circumstances
  ** rather call for a very simple or lightweight solution though.
  ** 
- ** ScopedPtrHolder is a simple extension to boost::scoped_ptr, enabling
+ ** ScopedPtrHolder is a simple extension to std::unique_ptr, enabling
  ** to use it within STL containers if we stick to a specific protocol.
- ** The idea is to permit copying as long as the scoped_ptr is empty.
+ ** The idea is to permit copying as long as the unique_ptr is empty.
  ** This can be used to allow for extension of the STL container on
  ** demand, i.e. to handle the typical situation of a registry which
  ** is initialised lazily, but only released in a controlled fashion.
@@ -69,7 +69,7 @@ namespace lib {
   
   
   /**
-   * Extension to boost::scoped_ptr, allowing copy operations
+   * Extension to std::unique_ptr, allowing copy operations
    * on empty pointers (i.e. contained pointer is null).
    * @throw error::Logic on attempt to copy otherwise
    */
@@ -128,7 +128,7 @@ namespace lib {
   
   
   /**
-   * Inline buffer holding and owning an object similar to scoped_ptr.
+   * Inline buffer holding and owning an object similar to unique_ptr.
    * Access to the contained object is similar to a smart-pointer,
    * but the object isn't heap allocated, rather placed into an
    * buffer within ScopedHolder. Initially, ScopedHolder is empty
