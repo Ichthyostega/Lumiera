@@ -131,21 +131,25 @@ namespace control {
        * @param notification callback to invoke on thread termination
        * @remark _in theory_ this ctor could block, since it waits for the thread
        *         actually to get operational and it waits for the SessionCommand interface
-       *         to be opened. The latter _should not_ run into any obstacles, because
-       *         in case it does, the main application thread is deadlocked on startup.
+       *         to be opened. The latter _better should not_ run into any obstacles, because
+       *         in case it does, the main application thread will be deadlocked on startup.
        *         Such might happen indirectly, when something depends on "the Session"
        */
       DispatcherLoop (Subsys::SigTerm notification)
         : Thread{"Lumiera Session", bind (&DispatcherLoop::runSessionThread, this, notification)}
-        , commandService_{new SessionCommandService(*this)}
+        , commandService_()
         , queue_()
         , looper_([&]() -> bool
                     {
                       return not queue_.empty();
                     })
         {
-          Thread::sync(); // done with init; loop may run now....
+          Thread::sync(); // done with setup; loop may run now....
           INFO (session, "Proc-Dispatcher running...");
+            {
+              Lock(this);          // open public session interface:
+              commandService_.reset(new SessionCommandService(*this));
+            }
         }
       
      ~DispatcherLoop()
