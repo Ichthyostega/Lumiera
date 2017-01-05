@@ -174,6 +174,14 @@ namespace test    {
           CHECK (not looper.isWorking());
           CHECK (    looper.isIdle());
           CHECK (looper.shallLoop());
+          
+          looper.triggerShutdown();
+          
+          CHECK (not looper.shallLoop());
+          
+          CHECK (    looper.requireAction());
+          CHECK (not looper.isWorking());
+          CHECK (not looper.isIdle());
         }
       
       

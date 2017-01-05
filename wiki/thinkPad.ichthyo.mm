@@ -452,7 +452,9 @@
 <node CREATED="1483642220941" ID="ID_775655275" MODIFIED="1483645257684" TEXT="integrate actual command queue">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1483642220941" ID="ID_704571897" MODIFIED="1483642220941" TEXT="care for waking (notification) from sleep state"/>
+<node CREATED="1483642220941" ID="ID_704571897" MODIFIED="1483648766529" TEXT="care for waking (notification) from sleep state">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1483642220940" ID="ID_1519554797" MODIFIED="1483642272822" TEXT="care for syncing the disabled state"/>
 <node CREATED="1483642220941" ID="ID_377776032" MODIFIED="1483642220941" TEXT="deadlock safeguard"/>
 </node>

@@ -71,10 +71,9 @@
  ** @note most of the time, the Session Loop Thread does not hold any lock, most notably while performing
  **       a command or running the builder. Likewise, evaluation of the control logic in the Looper helper
  **       is a private detail of the performing thread. The lock is acquired solely for checking or leaving
- **       the wait state and when fetching next command from queue.
+ **       the wait state and when fetching the next command from queue.
  ** 
  ** @todo as of 12/2016, implementation has been drafted and is very much WIP
- ** @todo                         //////////////////////////////////////////////////////TODO ensure really every state change triggers a wakeup!!!!!!!
  ** 
  ** @see ProcDispatcher
  ** @see DispatcherLooper_test
@@ -182,12 +181,11 @@ namespace control {
           Lock sync(this);
           commandService_.reset(); // closes Session interface
           looper_.triggerShutdown();
-          UNIMPLEMENTED("*must* notify loop thread");  /////////////////TODO really?  YES!!!
-          //////////////////////////////////////////TODO notify!!!!
+          sync.notifyAll();
         }
       
       void
-      awaitStateProcessed()
+      awaitStateProcessed()  const
         {
           Lock blockWaiting(this, &DispatcherLoop::stateIsSynched);
                                             //////////////////////////////////////////TODO eternal sleep.... find out who will wake us!!!!
@@ -202,14 +200,13 @@ namespace control {
       
       
       /* === CommandDispatch interface === */
-          //////////////////////////////////////////TODO notify!!!! on!! every!! state!! changing!! operation!!
       
       void
       enqueue (Command cmd)  override
         {
           Lock sync(this);
           queue_.feed (cmd);
-          //////////////////////////////////////////TODO notify!!!!
+          sync.notifyAll();
         }
       
       void
@@ -217,7 +214,7 @@ namespace control {
         {
           Lock sync(this);
           queue_.clear();
-          //////////////////////////////////////////TODO notify!!!!
+          sync.notifyAll();
         }
       
     private:
