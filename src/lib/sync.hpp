@@ -361,9 +361,9 @@ namespace lib {
         
         template<class X>
         bool
-        wait (X& instance, bool (X::*method)(void), ulong timedwait=0)
+        wait (X& instance, bool (X::*method)(void), ulong timedwait=0)    ///////////////////////TICKET #1051 : add support for lambdas
           {
-            BoolMethodPredicate<X> invokeMethod(instance, method);
+            BoolMethodPredicate<X> invokeMethod(instance, method);        ///////////////////////TICKET #1057 : const correctness, allow use of const member functions
             return IMPL::wait(invokeMethod, timeout_.setOffset(timedwait));
           }
         
@@ -463,7 +463,7 @@ namespace lib {
           
           template<typename X>
           bool
-          wait  (X& instance, bool (X::*predicate)(void), ulong timeout=0)
+          wait  (X& instance, bool (X::*predicate)(void), ulong timeout=0)    //////////////////////TICKET #1051 : enable use of lambdas 
             {
               return mon_.wait(instance,predicate,timeout);
             }

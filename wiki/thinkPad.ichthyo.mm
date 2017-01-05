@@ -419,7 +419,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1481599413419" HGAP="34" ID="ID_673133356" MODIFIED="1483473316679" TEXT="Ticket #318" VSHIFT="-7">
+<node COLOR="#338800" CREATED="1481599413419" HGAP="34" ID="ID_673133356" MODIFIED="1483654943383" TEXT="Ticket #318" VSHIFT="-7">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -437,15 +437,15 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483473104426" ID="ID_1606817357" MODIFIED="1483473167947" TEXT="#701 Session interface Support facility">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483473212107" ID="ID_600424316" MODIFIED="1483473247077" TEXT="#699 entrance to session subsystem">
 <icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483473153851" ID="ID_868700871" MODIFIED="1483473169722" TEXT="#1049 draft SessionLoop component">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1483473153851" ID="ID_868700871" MODIFIED="1483654523247" TEXT="#1049 draft SessionLoop component">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1483642220941" ID="ID_517844262" MODIFIED="1483645251383" TEXT="integrate API functions for enqueuing commands">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -455,8 +455,12 @@
 <node CREATED="1483642220941" ID="ID_704571897" MODIFIED="1483648766529" TEXT="care for waking (notification) from sleep state">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1483642220940" ID="ID_1519554797" MODIFIED="1483642272822" TEXT="care for syncing the disabled state"/>
-<node CREATED="1483642220941" ID="ID_377776032" MODIFIED="1483642220941" TEXT="deadlock safeguard"/>
+<node CREATED="1483642220940" ID="ID_1519554797" MODIFIED="1483654058917" TEXT="care for syncing the disabled state">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483642220941" ID="ID_377776032" MODIFIED="1483654517016" TEXT="deadlock safeguard">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node CREATED="1482464327133" HGAP="51" ID="ID_996095134" MODIFIED="1483584055342" TEXT="was es ist" VSHIFT="-2">
@@ -630,9 +634,9 @@
 <node CREATED="1481778397600" ID="ID_1997192349" MODIFIED="1481778409498" TEXT="bereits wenn Anhalten signalisiert wird"/>
 <node CREATED="1481778409942" ID="ID_100284739" MODIFIED="1481778419113" TEXT="zur Sicherheit nochmal im dtor"/>
 </node>
-<node CREATED="1481777114203" ID="ID_1156396729" MODIFIED="1481777121886" TEXT="Lock, um Deadlock zu vermeitden"/>
+<node CREATED="1481777114203" ID="ID_1156396729" MODIFIED="1483654726680" TEXT="Lock, um Deadlock zu vermeiden"/>
 <node CREATED="1481777122306" ID="ID_1506554988" MODIFIED="1481777133445" TEXT="alles im dtor  -&gt; noexcept"/>
-<node CREATED="1481777210447" ID="ID_1392452935" MODIFIED="1483582206339" TEXT="sicherstellen da&#xdf; shutdown nicht blockt">
+<node CREATED="1481777210447" ID="ID_1392452935" MODIFIED="1483654905825" TEXT="sicherstellen da&#xdf; shutdown nicht blockt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -662,7 +666,7 @@
   </body>
 </html>
 </richcontent>
-<arrowlink COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="6300;584;" ID="Arrow_ID_1930701586" STARTARROW="None" STARTINCLINATION="8475;0;"/>
+<arrowlink COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="3216;0;" ID="Arrow_ID_1930701586" STARTARROW="None" STARTINCLINATION="8475;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -11221,8 +11225,8 @@
 <node CREATED="1481688529539" ID="ID_1972961763" MODIFIED="1481688540109" TEXT="SessionManager ist zust&#xe4;ndig"/>
 <node CREATED="1481688544921" ID="ID_1934560784" MODIFIED="1481688561386" TEXT="wenn Session geladen, ist ProcDispatcher freigegeben"/>
 <node CREATED="1481688562830" ID="ID_708961458" MODIFIED="1481688582024" TEXT="SessionSubsystem startet processing loop im ProcDispatcher"/>
-<node CREATED="1481777252497" ID="ID_1789585729" MODIFIED="1481778497944" TEXT="Shutdown">
-<linktarget COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="6300;584;" ID="Arrow_ID_1930701586" SOURCE="ID_1392452935" STARTARROW="None" STARTINCLINATION="8475;0;"/>
+<node CREATED="1481777252497" ID="ID_1789585729" MODIFIED="1483654905825" TEXT="Shutdown">
+<linktarget COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="3216;0;" ID="Arrow_ID_1930701586" SOURCE="ID_1392452935" STARTARROW="None" STARTINCLINATION="8475;0;"/>
 <node CREATED="1481777297635" ID="ID_483368010" MODIFIED="1481777305432" TEXT="Deadlock-Gefahr">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -11234,9 +11238,13 @@
 </node>
 <node CREATED="1481777355747" ID="ID_1804595708" MODIFIED="1481777364326" TEXT="Subsystem-&gt;end">
 <node CREATED="1481777368330" ID="ID_1933237483" MODIFIED="1481777374277" TEXT="Halte-Nachricht"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481777374801" ID="ID_1844558240" MODIFIED="1481826297245" TEXT="sicherstellen, da&#xdf; Loop anh&#xe4;lt">
+<node COLOR="#338800" CREATED="1481777374801" ID="ID_1844558240" MODIFIED="1483654878632" TEXT="sicherstellen, da&#xdf; Loop anh&#xe4;lt">
 <arrowlink COLOR="#f70841" DESTINATION="ID_1748096848" ENDARROW="Default" ENDINCLINATION="-353;-77;" ID="Arrow_ID_506637666" STARTARROW="None" STARTINCLINATION="-200;38;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1483654823454" ID="ID_397283548" MODIFIED="1483654831113" TEXT="shutdown -&gt; requireAction"/>
+<node CREATED="1483654831773" ID="ID_911489519" MODIFIED="1483654845495" TEXT="shutdown-Trigger macht Notify"/>
+<node CREATED="1483654846083" ID="ID_1926442698" MODIFIED="1483654852935" TEXT="Loop-Thread wacht auf"/>
+<node CREATED="1483654853850" ID="ID_934617670" MODIFIED="1483654862885" TEXT="...und f&#xe4;llt aus der Loop heraus"/>
 </node>
 <node CREATED="1481777397542" ID="ID_1147135932" MODIFIED="1481778447806" TEXT="DispatcherLoop stirbt"/>
 <node CREATED="1481777410972" ID="ID_457965735" MODIFIED="1481777418982" TEXT="sigTerm"/>
@@ -11347,13 +11355,17 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1481918517018" HGAP="11" ID="ID_916331172" MODIFIED="1482197469326" TEXT="Sperre" VSHIFT="8">
-<icon BUILTIN="bell"/>
-<node CREATED="1481918524673" ID="ID_1705856370" MODIFIED="1481918546498" TEXT="verhindert Command- und Builder-start"/>
-<node CREATED="1481918547182" ID="ID_920627724" MODIFIED="1481920718126" TEXT="bestehende Commands / Builder-L&#xe4;ufe werden noch abgeschlossen"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481920722100" ID="ID_1378897740" MODIFIED="1482464539361" TEXT="SessionManager mu&#xdf; auf Sperre warten">
+<node CREATED="1481918517018" HGAP="11" ID="ID_916331172" MODIFIED="1483654611468" TEXT="Sperre" VSHIFT="8">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1481918524673" ID="ID_1705856370" MODIFIED="1483654636642" TEXT="verhindert Command- und Builder-start">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1481918547182" ID="ID_920627724" MODIFIED="1483654595721" TEXT="bestehende Commands / Builder-L&#xe4;ufe werden noch abgeschlossen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1481920722100" ID="ID_1378897740" MODIFIED="1483654575032" TEXT="SessionManager mu&#xdf; auf Sperre warten">
 <linktarget COLOR="#5a97df" DESTINATION="ID_1378897740" ENDARROW="Default" ENDINCLINATION="9540;0;" ID="Arrow_ID_1446486242" SOURCE="ID_284397306" STARTARROW="None" STARTINCLINATION="9540;0;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481926040310" ID="ID_667460598" MODIFIED="1481926061115" TEXT="Deadlock wenn der Session-Thread selber auf diese Sperre wartet">
 <icon BUILTIN="flag-pink"/>

@@ -5222,7 +5222,7 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 [img[Asset Classess|uml/fig131077.png]]
 {{red{Note 3/2010}}} it is very unlikely we'll organise the processing nodes as a class hierarchy. Rather it looks like we'll get several submodules/special capabilities configured in within the Builder</pre>
 </div>
-<div title="ProcDispatcher" creator="Ichthyostega" modifier="Ichthyostega" created="201612140406" modified="201612162302" tags="def spec SessionLogic draft" changecount="5">
+<div title="ProcDispatcher" creator="Ichthyostega" modifier="Ichthyostega" created="201612140406" modified="201701052235" tags="def spec SessionLogic draft" changecount="11">
 <pre>//The guard and coordinator of any operation within the session subsystem.//
 The session and related components work effectively single threaded. Any tangible operation on the session data structure has to be enqueued as [[command|CommandHandling]] into the dispatcher. Moreover, the [[Builder]] is triggered from the ProcDispatcher; and while the Builder is running, any command processing is halted. The Builder in turn creates or reshapes the processing nodes network, and the changed network is brought into operation with a //transactional switch// -- while render processes on this processing network operate unaffected and essentially multi-threaded.
 
@@ -5233,19 +5233,18 @@ To function properly as action coordinator of the session subsystem, the dispatc
 ;enqueue
 :accept and enqueue command messages concurrently, any time, without blocking the caller
 :*FIFO for //regular commands//
-:*LIFO for //priority requests//
+:*LIFO for //priority requests//  {{red{unimplemented 1/17}}}
 ;process
 :dequeue and process entries sequentially
 ;sleep
 :work continuously until queue is empty, then enter wait state
 ;check point
-:invoke a well defined check point reliably non blocking (&quot;ensure to make progress&quot;)
+:arrive at a well defined check point reliably non blocking (&quot;ensure to make progress&quot;)
+:* necessary to know when internal state is consistent
 :* when?
 :** after each command
-:** regularily whle idle
-:* why?
-:** ensure the Builder runs regularly
-:** respond reliably to shutdown request
+:** after builder run
+:** after wake-up
 ;manage
 :care for rectifying entries in the queue
 :* ensure they //match// current session, discard obsoleted requests
@@ -5263,9 +5262,9 @@ Initially the command queue is empty and the ProcDispatcher can be considered id
 
 So the logic to trigger builder runs has to take some leeway into account. Due to the typical interactive working style of an editing application, session commands might be trickling in in strikes of similar commands, intermingled with tiny pauses. For this reason, the ProcDispatcher implements some //hysteresis,// as far as triggering the builder runs is concerned. The builder is fired in idle state, but only after passing some //latency period.// On the other hand, massive UI activities (especially during a builder run) may have flooded the queue, thus sending the session into an extended period of command processing. From the user's view angle, the application looks non responsive in such a case, albeit not frozen, since the UI can still enqueue further commands and thus retains the ability to react locally on user interaction. To mitigate this problem, the builder should be started anyway after some extended period of command processing, even if the queue is not yet emptied. Each builder run produces a structural diff message sent towards the UI and thus causes user visible changes within the session's UI representation. This somewhat stuttering response conveys to the user a tangible sensation of ongoing activity, while communicating at the same time, at least subconsciously some degree of operational overload. {{red{note 12/2016 builder is not implemented, so consider this planning}}}
 
-Any change to the circumstances determining the ProcDispatcher's behaviour need to be imparted actively through the public interface -- the dispatcher is not designed to be a state listener or observer. Any such state change notifications are synchronised and cause a wakeup notification to the session thread. For this purpose, enqueuing of further commands counts as state change and is lock protected. Beyond that, any other activities, like //processing// of commands or builder runs, are performed within the session thread without blocking other threads; the locking on the ProcDispatcher is only ever short term to ensure consistent internal state. Clients need to be prepared for the effect of actions to appear asynchronously and with some delay. Especially this means that session switch or shutdown has to await completion of any session command or builder run currently in progress.
+Any change to the circumstances determining the ProcDispatcher's behaviour needs to be imparted actively through the public interface -- the dispatcher is not designed to be a state listener or observer. Any such state change notifications are synchronised and cause a wakeup notification to the session thread. For this purpose, enqueuing of further commands counts as state change and is lock protected. Beyond that, any other activities, like //processing// of commands or builder runs, are performed within the session thread without blocking other threads; the locking on the ProcDispatcher is only ever short term to ensure consistent internal state. Clients need to be prepared for the effect of actions to appear asynchronously and with some delay. Especially this means that session switch or shutdown has to await completion of any session command or builder run currently in progress.
 
-When the session is closed or dismantled, further processing in the ProcDispatcher will be disabled, after completing the current command or builder run. This disabled state can be reversed when a new session instance becomes operative. And while the dispatcher will then continue to empty the command queue, most commands in queue will probably be obsoleted and dropped, because of referring to a deceased session instance. Moreover, the lifecycle of the session instances has to be distinguished from the lifecycle of the &quot;session subsystem&quot; as such. When the latter is terminated, be it by a fatal error in some builder run, or be it due to general shutdown of the application, the ProcDispatcher will be asked to terminate the session thread after completing the current activity in progress. Such an event will also discard any further commands waiting in the dispatcher's queue.
+When the session is closed or dismantled, further processing in the ProcDispatcher will be disabled, after completing the current command or builder run. This disabled state can be reversed when a new session instance becomes operative. And while the dispatcher will then continue to empty the command queue, most commands in queue will probably be obsoleted and dropped, because of referring to a deceased session instance. Moreover, the lifecycle of the session instances has to be distinguished from the lifecycle of the SessionSubsystem as such. When the latter is terminated, be it by a fatal error in some builder run, or be it due to general shutdown of the application, the ProcDispatcher will be asked to terminate the session thread after completing the current activity in progress. Such an event will also discard any further commands waiting in the dispatcher's queue.
 </pre>
 </div>
 <div title="ProcLayer" modifier="Ichthyostega" created="200708100333" modified="200708100338" tags="def">

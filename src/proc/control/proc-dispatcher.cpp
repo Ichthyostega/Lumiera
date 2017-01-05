@@ -73,8 +73,6 @@
  **       is a private detail of the performing thread. The lock is acquired solely for checking or leaving
  **       the wait state and when fetching the next command from queue.
  ** 
- ** @todo as of 12/2016, implementation has been drafted and is very much WIP
- ** 
  ** @see ProcDispatcher
  ** @see DispatcherLooper_test
  ** @see CommandQueue_test
@@ -94,9 +92,9 @@
 
 #include <memory>
   
-using backend::Thread;
 using lib::Sync;
 using lib::RecursiveLock_Waitable;
+using backend::Thread;
 using std::unique_ptr;
 
 namespace proc {
@@ -104,10 +102,10 @@ namespace control {
   
   namespace error = lumiera::error;
   
-  /**
-   * PImpl within ProcDispatcher
-   * to implement the _Session Loop Thread._
-   * During the lifetime of this object
+  
+  /********************************************************************//**
+   * PImpl within ProcDispatcher to implement the _Session Loop Thread._
+   * During the lifetime of this object...
    * - the SessionCommandService is offered to enqueue commands
    * - the Session Loop thread dispatches commands and triggers the Builder
    * @see DispatcherLooper_test
@@ -117,8 +115,7 @@ namespace control {
     , public CommandDispatch
     , public Sync<RecursiveLock_Waitable>
     {
-      bool canDispatch_{false};
-
+      
       /** manage the primary public Session interface */
       unique_ptr<SessionCommandService> commandService_;
       
@@ -165,18 +162,18 @@ namespace control {
       activateCommandProecssing()
         {
           Lock sync(this);
-          canDispatch_ = true;
+          looper_.enableProcessing(true);
           INFO (command, "Session command processing activated.");
-          TODO ("implement command processing queue");
+          sync.notifyAll();
         }
       
       void
       deactivateCommandProecssing()
         {
           Lock sync(this);
-          canDispatch_ = false;
+          looper_.enableProcessing(false);
           INFO (command, "Session command interface closed.");
-          TODO ("implement command processing queue");
+          sync.notifyAll();
         }
       
       void
@@ -191,8 +188,8 @@ namespace control {
       void
       awaitStateProcessed()  const
         {
-          Lock blockWaiting(this, &DispatcherLoop::stateIsSynched);
-                                            //////////////////////////////////////////TODO eternal sleep.... find out who will wake us!!!!
+          Lock blockWaiting(unConst(this), &DispatcherLoop::stateIsSynched);       ///////////////////////TICKET #1057 : const correctness on wait predicate
+            // wake-up typically by updateState()
         }
       
       size_t
@@ -272,14 +269,14 @@ namespace control {
       updateState()   ///< at end of loop body...
         {
           looper_.markStateProcessed();
-          if (looper_.isDisabled())
+          if (looper_.isDisabled())     // otherwise wake-up would not be safe
             Lock(this).notifyAll();
         }
       
       bool
       stateIsSynched()
         {
-          if (looper_.hasPendingChanges() and calledFromWithinSessionThread())
+          if (calledFromWithinSessionThread())
             throw error::Fatal("Possible Deadlock. "
                                "Attempt to synchronise to a command processing check point "
                                "from within the (single) session thread."
@@ -324,11 +321,12 @@ namespace control {
   
   
   
+  
   /** storage for Singleton access */
   lib::Depend<ProcDispatcher> ProcDispatcher::instance;
   
   
-  
+  /* ======== ProcDispatcher implementation ======== */
   
   /** starting the ProcDispatcher means to start the session subsystem.
    * @return `false` when _starting_ failed since it is already running...
@@ -426,6 +424,12 @@ namespace control {
   }
   
   
+  /** halt further processing of session commands
+   * @note the processing itself runs in a separate thread, thus any currently
+   *  ongoing command or builder execution will be completed prior to this setting
+   *  to take effect. If the intention is to halt processing because the session is
+   *  about to dismantled, it is mandatory to awaitDeactivation()
+   */
   void
   ProcDispatcher::deactivate()
   {
@@ -472,8 +476,6 @@ namespace control {
     return not runningLoop_
         or 0 == runningLoop_->size();
   }
-
-  
   
   
   
