@@ -21,14 +21,35 @@
 * *****************************************************/
 
 
+/** @file facade.cpp
+ ** Implementation of subsystem lifecycle behaviour for the core parts of Proc-Layer.
+ ** - The »session subsystem« is responsible for accepting operations to work on the
+ **   session datastructure, and it will trigger the Builder to reflect those changes
+ **   into a suitable render nodes network
+ ** - The »play out subsystem« is able to _perform_ such a render nodes network
+ **   for video playback and rendering.
+ ** 
+ ** lumiera::Subsys and lumiera::SubsystemRunner together define a protocol for some
+ ** large scale building blocks of the whole application to be started and terminated.
+ ** Typically this entails to create a dedicated thread to manage the top level concerns
+ ** for the given subsystem, and to create registration and services for public access:
+ ** - to operate on the session, use the proc::control::SessionCommand facade
+ ** - playback and render operations can be operated by the lumiera::Play facade
+ ** 
+ ** @see ProcDispatcher
+ ** @see OutputDirector
+ ** @see subsys.hpp
+ ** @see main.cpp
+ **
+ */
+
+
 #include "proc/facade.hpp"
 #include "lib/depend.hpp"
-//#include "lib/sync.hpp"
 #include "proc/control/proc-dispatcher.hpp"
 #include "proc/play/output-director.hpp"
 
 #include <string>
-//#include <memory>
 
 
 namespace proc {
@@ -37,8 +58,6 @@ namespace proc {
   using std::unique_ptr;
   using lumiera::Subsys;
   using lumiera::Option;
-  using lib::Sync;
-//  using lib::RecursiveLock_NoWait;
   using proc::control::ProcDispatcher;
   
   

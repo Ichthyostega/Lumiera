@@ -22,11 +22,12 @@
 
 /** @file facade.hpp
  ** Top level entrance point and facade for the Proc-Layer.
- ** The middle layer of the application holds a session with the
- ** high-level model, to be translated by the Builder into a node network,
- ** which can be \em performed by the Engine to render output.
+ ** The middle layer of the application holds a session with the high-level model,
+ ** to be translated by the Builder into a node network, which can be _performed_
+ ** by the Engine to render output.
  ** 
  ** @see common.hpp
+ ** @see main.cpp
  ** 
  */
 
@@ -49,8 +50,12 @@ namespace proc {
    * @todo this is a dummy placeholder as of 1/2009. Currently, there
    *       is only implementation-level code within the Proc-Layer and
    *       the interfaces need to be worked out.
-   * @note at least the Play/Output subsystem slowly turns into
+   * @todo at least the Play/Output subsystem slowly turns into
    *       something real, as of 6/2011
+   * @todo and as of 1/2017, the Session subsystem is basically
+   *       implemented and it became clear that there won't be
+   *       a "Builder subsystem". So this interface might now
+   *       be considered roughly complete...
    * 
    */
   struct Facade

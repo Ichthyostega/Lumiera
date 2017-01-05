@@ -338,7 +338,7 @@ namespace control {
       new DispatcherLoop (
             [=] (string* problemMessage)
                 {
-                  runningLoop_.reset();   //////////////////////TODO: Race in ProcDispatcher
+                  ProcDispatcher::endRunningLoopState();
                   termNotification(problemMessage);
                 }));
     
@@ -361,16 +361,40 @@ namespace control {
   
   
   /** signal to the loop thread that it needs to terminate.
-   * @warning dangerous operation; must not block nor throw
-   * 
-   * @todo need to re-check the logic, once the loop is fully implemented; ensure there is nothing on this call path that can block or throw!!! 
+   * @note the immediate consequence is to close SessionCommandService
    */
   void
   ProcDispatcher::requestStop()  noexcept
   {
+    try {
+      Lock sync(this);
+      if (runningLoop_)
+        runningLoop_->requestStop();
+    }
+    ERROR_LOG_AND_IGNORE (command, "Request for Session Loop Thread to terminate");
+  }
+  
+  
+  /** @internal clean-up when leaving the session loop thread.
+   *  This function is hooked up in to the termination callback,
+   *  and is in fact the only one to delete the loop PImpl. We
+   *  take the (outer) lock on ProcDispatcher to ensure no one
+   *  commits anything to the DispatcherLoop object while being
+   *  deleted. The call itself, while technically originating
+   *  from within DispatcherLoop::runSessionThread(), relies
+   *  solely on stack based context data and is a tail call.
+   */
+  void
+  ProcDispatcher::endRunningLoopState()
+  {
     Lock sync(this);
     if (runningLoop_)
-      runningLoop_->requestStop();
+      runningLoop_.reset();  // delete DispatcherLoop object
+    else
+      WARN (command, "clean-up of DispatcherLoop invoked, "
+                     "while ProcDispatcher is not marked as 'running'. "
+                     "Likely an error in lifecycle logic, as the only one "
+                     "intended to delete this object is the loop thread itself.");
   }
   
   
@@ -415,8 +439,9 @@ namespace control {
     if (runningLoop_)
       runningLoop_->awaitStateProcessed();
   }
-
   
+  
+  /** discard any commands waiting in the dispatcher queue */
   void
   ProcDispatcher::clear()
   {

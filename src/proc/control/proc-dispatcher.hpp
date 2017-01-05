@@ -102,6 +102,8 @@ namespace control {
       
       bool empty()  const ;
       
+    private:
+      void endRunningLoopState();
     };
   
   

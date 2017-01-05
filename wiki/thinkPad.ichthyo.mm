@@ -503,14 +503,26 @@
 <node CREATED="1483477519974" ID="ID_1731425552" MODIFIED="1483477535864" TEXT="Term-Signal k&#xf6;nnte blocken">
 <icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483484052785" ID="ID_667055412" MODIFIED="1483484091053" TEXT="Race beim runningLoop_.reset()">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1483484052785" ID="ID_667055412" MODIFIED="1483581561638" TEXT="Race beim runningLoop_.reset()">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1483490316758" ID="ID_1734989824" MODIFIED="1483490376306" TEXT="nur das Term-Signal kann DispatcherLoop deleten">
+<node COLOR="#338800" CREATED="1483490459499" ID="ID_1006586365" MODIFIED="1483581568462" TEXT="Thread will sich selbst reapen ==&gt; Deadlock">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1483581573147" FOLDED="true" ID="ID_989149672" MODIFIED="1483581738496" TEXT="durch Umbau gel&#xf6;st">
+<icon BUILTIN="info"/>
+<node CREATED="1483490316758" ID="ID_1734989824" MODIFIED="1483581603244" TEXT="nur das Term-Signal kann DispatcherLoop deleten">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1483490459499" ID="ID_1006586365" MODIFIED="1483490478840" TEXT="Thread will sich selbst reapen ==&gt; Deadlock">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1483581605968" ID="ID_227347532" MODIFIED="1483581655738" TEXT="mu&#xdf; das &#xe4;u&#xdf;ere Lock auf ProcDispatcher verwenden"/>
+<node CREATED="1483581657849" ID="ID_1078225675" MODIFIED="1483581670643" TEXT="damit sind konkurrierende Zugriffe auf die Loop geblockt"/>
+<node CREATED="1483581671183" ID="ID_186079754" MODIFIED="1483581680474" TEXT="und danach ist der PImpl bereits auf NULL gesetzt"/>
+<node CREATED="1483581583411" ID="ID_650761020" MODIFIED="1483581594997" TEXT="thread join ist &#xfc;berfl&#xfc;ssig"/>
+<node CREATED="1483581640739" ID="ID_560356092" MODIFIED="1483581652445" TEXT="das Objekt wird in einem tail-call gel&#xf6;scht"/>
+<node CREATED="1483581682701" ID="ID_747399934" MODIFIED="1483581695879" TEXT="dieser callback selber vewrwendet nur Werte vom Stack"/>
+<node CREATED="1483581696443" ID="ID_373783285" MODIFIED="1483581733454" TEXT="daher kann das Objekt gefahrlos &quot;sich selber l&#xf6;schen&quot;">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node CREATED="1482464502542" ID="ID_284397306" MODIFIED="1482464609118" TEXT="Vorsicht beim Schlie&#xdf;en der Session">
@@ -518,12 +530,13 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1481599430804" ID="ID_1105415989" MODIFIED="1481599438887" TEXT="Forwarding-Operationen implementieren">
+<node CREATED="1481599430804" HGAP="19" ID="ID_1105415989" MODIFIED="1483581921613" TEXT="Forwarding-Operationen implementieren" VSHIFT="10">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1481686902156" ID="ID_1526215617" MODIFIED="1481686910633" TEXT="aktivieren /deaktivieren">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481686911938" ID="ID_17287395" MODIFIED="1481686919619" TEXT="stoppen">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1481686911938" ID="ID_17287395" MODIFIED="1483581788279" TEXT="stoppen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1481599594399" ID="ID_1017459823" MODIFIED="1481687087609" TEXT="entscheiden, wer die Session &#xf6;ffnet">
@@ -567,16 +580,27 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-</node>
-<node COLOR="#338800" CREATED="1481510231986" ID="ID_45803267" MODIFIED="1482530111326" TEXT="dort SessionCommandService instantiieren">
+<node COLOR="#338800" CREATED="1483581821347" HGAP="13" ID="ID_1893571865" MODIFIED="1483581962712" TEXT="Review Lebenszyklus" VSHIFT="8">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1481769089234" ID="ID_1152351588" MODIFIED="1481769124140" TEXT="lebt in der DispatcherLoop">
+<node CREATED="1483581829682" ID="ID_1563520696" MODIFIED="1483581904481" TEXT="alle Subsys-Operationen auf Semantik durchgepr&#xfc;ft">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1483581852071" ID="ID_1139549600" MODIFIED="1483581902223" TEXT="1/2017: Locking und Concurrency erscheint sauber behandelt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1481510231986" HGAP="23" ID="ID_45803267" MODIFIED="1483581960654" TEXT="dort SessionCommandService instantiieren" VSHIFT="4">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1481769089234" ID="ID_1152351588" MODIFIED="1483582218575" TEXT="lebt in der DispatcherLoop">
 <arrowlink COLOR="#4aff51" DESTINATION="ID_1364443356" ENDARROW="Default" ENDINCLINATION="10;30;" ID="Arrow_ID_870320696" STARTARROW="Default" STARTINCLINATION="-221;-88;"/>
+<icon BUILTIN="info"/>
 </node>
 <node CREATED="1481769144226" ID="ID_1609251574" MODIFIED="1482532883149" TEXT="mu&#xdf; Service-API extrahieren">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1481777039358" ID="ID_395609084" MODIFIED="1481777050096" TEXT="Shutdown sauber regeln">
+<node CREATED="1481777039358" ID="ID_395609084" MODIFIED="1483582212694" TEXT="Shutdown sauber regeln">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1481777054755" ID="ID_1551225439" MODIFIED="1481778421924">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -597,9 +621,38 @@
 </node>
 <node CREATED="1481777114203" ID="ID_1156396729" MODIFIED="1481777121886" TEXT="Lock, um Deadlock zu vermeitden"/>
 <node CREATED="1481777122306" ID="ID_1506554988" MODIFIED="1481777133445" TEXT="alles im dtor  -&gt; noexcept"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481777210447" ID="ID_1392452935" MODIFIED="1481778497944" TEXT="TODO: sicherstellen da&#xdf; join nicht blockt">
+<node CREATED="1481777210447" ID="ID_1392452935" MODIFIED="1483582206339" TEXT="sicherstellen da&#xdf; shutdown nicht blockt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      1/2017 Review durchgef&#252;hrt und Logik &#252;berarbeitet.
+    </p>
+    <p>
+      Einziger Risikofaktor ist nun, wenn beim Schlie&#223;en des SessionCommand-Intertfaces
+    </p>
+    <p>
+      oder beim Signalisieren an den Thread eine Exception fliegt; denn dann loggen wir zwar,
+    </p>
+    <p>
+      aber die Shutdown-R&#252;ckmeldung kommt u.U niemals an, und damit bleiben wir
+    </p>
+    <p>
+      am Ende von main() einfach h&#228;ngen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <i>Ich halte diese F&#228;lle aber f&#252;r in der Praxis nicht relevant,</i>&#160; und verzichte daher auf eine Spezialbehandlung
+    </p>
+  </body>
+</html>
+</richcontent>
 <arrowlink COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="6300;584;" ID="Arrow_ID_1930701586" STARTARROW="None" STARTINCLINATION="8475;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
