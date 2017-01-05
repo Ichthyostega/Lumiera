@@ -95,7 +95,7 @@
 
 #include <memory>
   
-using backend::ThreadJoinable;
+using backend::Thread;
 using lib::Sync;
 using lib::RecursiveLock_Waitable;
 using std::unique_ptr;
@@ -114,7 +114,7 @@ namespace control {
    * @see DispatcherLooper_test
    */
   class DispatcherLoop
-    : ThreadJoinable
+    : Thread
     , public CommandDispatch
     , public Sync<RecursiveLock_Waitable>
     {
@@ -137,8 +137,7 @@ namespace control {
        *         Such might happen indirectly, when something depends on "the Session"
        */
       DispatcherLoop (Subsys::SigTerm notification)
-        : ThreadJoinable("Lumiera Session"
-                        , bind (&DispatcherLoop::runSessionThread, this, notification))
+        : Thread{"Lumiera Session", bind (&DispatcherLoop::runSessionThread, this, notification)}
         , commandService_{new SessionCommandService(*this)}
         , queue_()
         , looper_([&]() -> bool
@@ -153,9 +152,7 @@ namespace control {
      ~DispatcherLoop()
         {
           try {
-              Lock sync(this);
-              commandService_.reset();   // redundant call, to ensure session interface is closed reliably 
-              this->join();              // block until the loop thread terminates and is reaped
+              commandService_.reset();  // redundant call, to ensure session interface is closed reliably 
               INFO (session, "Proc-Dispatcher stopped.");
             }
           ERROR_LOG_AND_IGNORE(session, "Stopping the Proc-Dispatcher");
@@ -341,7 +338,7 @@ namespace control {
       new DispatcherLoop (
             [=] (string* problemMessage)
                 {
-                  runningLoop_.reset();   //////////////////////TODO: (1) Race in ProcDispatcher  (2) Deadlock because the Thread attempts to reap itself
+                  runningLoop_.reset();   //////////////////////TODO: Race in ProcDispatcher
                   termNotification(problemMessage);
                 }));
     
