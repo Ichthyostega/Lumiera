@@ -24,10 +24,8 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include "lib/symbol.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/error.hpp"
-#include "lib/sync.hpp"
 
 #include <functional>
 
@@ -126,7 +124,7 @@ namespace test {
                                 , bind (&ThreadWrapperJoin_test::theAction, this, DESTRUCTION_CODE)
                                 );
           
-          CHECK (!thread2.join().isValid() ); // can check success without throwing
+          CHECK (not thread2.join().isValid()); // can check success without throwing
         }
     };
   

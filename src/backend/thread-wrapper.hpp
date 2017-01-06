@@ -80,7 +80,7 @@ namespace backend {
    * # failures in the thread function
    * The operation started in the new thread is protected by a top-level catch block.
    * Error states or caught exceptions can be propagated through the lumiera_error
-   * state flag, when using the \c join() facility. By invoking \join().maybeThrow()
+   * state flag, when using ThreadJoinable::join(). By invoking `join().maybeThrow()`
    * on a join-able thread, exceptions can be propagated.
    * @note any errorstate or caught exception detected on termination of a standard
    * async Thread is considered a violation of policy and will result in emergency
@@ -220,6 +220,13 @@ namespace backend {
         {
                           ////////////////////////////////////////////////////////TICKET #1054 : consider to call safeguard here, to ensure this is called from within the thread
           lumiera_thread_sync ();
+        }
+      
+    protected:
+      bool
+      invokedWithinThread()
+        {
+          UNIMPLEMENTED ("thread self recognition");
         }
     };
   
