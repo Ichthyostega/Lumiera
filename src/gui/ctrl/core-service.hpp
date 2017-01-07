@@ -40,7 +40,6 @@
  ** perspective, since they exchange messages in both directions.
  ** 
  ** @todo initial draft and WIP-WIP-WIP as of 12/2015
- ** @todo implement a minimal version of a "Session subsystem" and instantiate SessionCommandService there ///////////TICKET #318
  ** 
  ** @see TODO_abstract-tangible-test.cpp
  ** 
@@ -97,8 +96,7 @@ namespace ctrl{
       virtual void
       act (GenNode const& command)
         {
-          UNIMPLEMENTED("receive and handle command invocation");
-                                                                  ///////////////////////////TICKET #318 : start SessionCommandService. Can then just invoke SessionCommand.facade()...
+          UNIMPLEMENTED("receive and handle command invocation"); ///////////////////////////TICKET #1049 : working draft how to handle and dispatch commands
         }
       
       

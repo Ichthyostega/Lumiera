@@ -681,7 +681,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1483748175610" HGAP="31" ID="ID_73597248" MODIFIED="1483748197700" VSHIFT="16">
+<node CREATED="1483748175610" HGAP="31" ID="ID_73597248" MODIFIED="1483754359443" VSHIFT="16">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -696,13 +696,40 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483748214772" ID="ID_1642552563" MODIFIED="1483748289540" TEXT="#1046 Preliminary Definition of SessionCommand facade">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1483748231330" ID="ID_1962213649" MODIFIED="1483748356929" TEXT="soll hierzu sehen, da&#xdf; ein einfacher Aufruf wirklich klappt">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1483748323014" ID="ID_1031176077" MODIFIED="1483748339768" TEXT="Nachrichten vom UI-Bus entnehmen"/>
+<node CREATED="1483748323014" ID="ID_1031176077" MODIFIED="1483748339768" TEXT="Nachrichten vom UI-Bus entnehmen">
+<node CREATED="1483755303243" ID="ID_1425274731" MODIFIED="1483755469145" TEXT="Brauche Command-Handler">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1483755317105" ID="ID_775818551" MODIFIED="1483755319685" TEXT="ist ein Visitor"/>
+<node CREATED="1483755320136" ID="ID_1343109260" MODIFIED="1483755327580" TEXT="Knackpunkt: Command-ID">
+<node CREATED="1483755331671" ID="ID_1913103415" MODIFIED="1483755339874" TEXT="wird im Visitor gebraucht"/>
+<node CREATED="1483755341814" ID="ID_254491480" MODIFIED="1483755347073" TEXT="Instanz-Management fraglich"/>
+<node CREATED="1483755347949" ID="ID_4176562" MODIFIED="1483755359704" TEXT="Performance-&#xdc;berlegungen"/>
+<node CREATED="1483755360196" ID="ID_514688462" MODIFIED="1483755368542" TEXT="Nachrichten kommen ohne bestimmte Ordnung an"/>
+</node>
+</node>
+<node CREATED="1483755390640" ID="ID_1882657994" MODIFIED="1483755397495" TEXT="Vorlage">
+<icon BUILTIN="info"/>
+<node CREATED="1483755399334" ID="ID_582834462" MODIFIED="1483755404434" TEXT="AbstractTangible_test">
+<node CREATED="1483755406254" ID="ID_1800773105" MODIFIED="1483755410665" TEXT="hat inline-Visitor"/>
+<node CREATED="1483755445984" ID="ID_468077802" MODIFIED="1483755455255" TEXT="aber Command-ID fest gedrahtet">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1483755412605" ID="ID_220502028" MODIFIED="1483755416440" TEXT="BusTerm_test">
+<node CREATED="1483755417932" ID="ID_1696122428" MODIFIED="1483755426679" TEXT="verwendet Hanlder vom Test-Nexus"/>
+<node CREATED="1483755428354" ID="ID_1619772942" MODIFIED="1483755442790" TEXT="der verwendet bereits komplettes Argument-Binding">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1483748340524" ID="ID_841368846" MODIFIED="1483748346879" TEXT="API-Funktionen aufrufen"/>
 </node>
 <node CREATED="1482464658193" HGAP="-14" ID="ID_726798260" MODIFIED="1482711954690" TEXT="Ausgestaltung" VSHIFT="29">
