@@ -207,7 +207,7 @@ namespace control {
       ulong                                        /////////////////////////////////////////////TICKET #1056 : better return a std::chrono value here 
       getTimeout()  const
         {
-          if (isDisabled())
+          if (isDisabled() or not dirty_)
             return 0;
           else
             return wakeTimeout_ms()

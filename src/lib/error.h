@@ -128,7 +128,7 @@ lumiera_err LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
 /**
  * Helper macro to raise an error for the current thread.
  * Same as LUMIERA_ERROR_SET(), but logs at 'LOG_WARNING' level.
- * Use this when a not unexected error happens which can be handled.
+ * Use this when a not unexpected error happens which can be handled.
  * @param flag NoBug flag describing the subsystem where the error was raised
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
  * @param extra optional string (or NULL) which adds some more context to the error, can be a temporary

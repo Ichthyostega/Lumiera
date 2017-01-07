@@ -124,6 +124,10 @@ namespace test    {
           CHECK (not looper.isDying());
           CHECK (looper.shallLoop());
           CHECK (not looper.runBuild());
+          CHECK (isDisabled (looper.getTimeout()));
+          
+          setup.has_commands_in_queue = true;
+          CHECK (looper.requireAction());
           
           uint timeout = looper.getTimeout();
           CHECK (10 < timeout,  "configured idle timeout %2u to short", timeout);
@@ -397,7 +401,7 @@ namespace test    {
           CHECK (not looper.runBuild());           // ...note: now done with building
           CHECK (    looper.isIdle());
           
-          CHECK (isSlow (looper.getTimeout()));    // ...now Dispatcher is idle and goes to sleep
+          CHECK (isDisabled(looper.getTimeout())); // ...now Dispatcher is idle and goes to sleep
           
           
           setup.has_commands_in_queue = true;      // next command pending
@@ -425,7 +429,7 @@ namespace test    {
           CHECK (not looper.requireAction());
           CHECK (    looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.runBuild());          // ...note: dirty state hidden by disabled state
+          CHECK (not looper.runBuild());           // ...note: dirty state hidden by disabled state
           CHECK (not looper.isIdle());
           
           CHECK (isDisabled (looper.getTimeout()));
@@ -436,7 +440,7 @@ namespace test    {
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (    looper.runBuild());          // ...note: dirty state revealed again
+          CHECK (    looper.runBuild());           // ...note: dirty state revealed again
           CHECK (not looper.isIdle());
           
           CHECK (isFast (looper.getTimeout()));
@@ -447,7 +451,7 @@ namespace test    {
           CHECK (not looper.requireAction());
           CHECK (    looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.runBuild());          // ...note: dirty state not obvious
+          CHECK (not looper.runBuild());           // ...note: dirty state not obvious
           CHECK (not looper.isIdle());
           
           CHECK (isDisabled (looper.getTimeout()));
@@ -458,10 +462,10 @@ namespace test    {
           CHECK (not looper.requireAction());
           CHECK (not looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.runBuild());          // ...note: but now it becomes clear builder is not dirty
+          CHECK (not looper.runBuild());           // ...note: but now it becomes clear builder is not dirty
           CHECK (    looper.isIdle());
           
-          CHECK (isSlow (looper.getTimeout()));
+          CHECK (isDisabled (looper.getTimeout()));
           
           
           setup.has_commands_in_queue = true;      // more commands again
@@ -490,7 +494,7 @@ namespace test    {
           CHECK (    looper.requireAction());
           CHECK (    looper.isDisabled());
           CHECK (not looper.isWorking());
-          CHECK (not looper.runBuild());          // ...note: still no need for builder run, since in shutdown
+          CHECK (not looper.runBuild());           // ...note: still no need for builder run, since in shutdown
           CHECK (not looper.isIdle());
           
           CHECK (isDisabled (looper.getTimeout()));
