@@ -65,15 +65,14 @@ main (int argc, const char* argv[])
       netNode.depends (session);
       netNode.depends (engine);
 //    playOut.depends (engine);
-//    playOut.depends (session);
-//    lumigui.depends (session);    ////////////////////////////////////////////TICKET #318 : need to activate this again, after implementing minimal Session subsystem
+      playOut.depends (session);
+      lumigui.depends (session);
 //    lumigui.depends (engine);
       player.depends (playOut);    //////TODO dummy player, until we're able to render
       lumigui.depends (player);
       script.depends (session);
       script.depends (engine);
       
-      application.maybeStart (session);
       application.maybeStart (playOut);
       application.maybeStart (netNode);
       application.maybeStart (lumigui);

@@ -438,11 +438,17 @@
 </html>
 </richcontent>
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483473104426" ID="ID_1606817357" MODIFIED="1483473167947" TEXT="#701 Session interface Support facility">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1483473104426" ID="ID_1606817357" MODIFIED="1483747983243" TEXT="#701 Session interface Support facility">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483473212107" ID="ID_600424316" MODIFIED="1483473247077" TEXT="#699 entrance to session subsystem">
-<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1483473212107" ID="ID_600424316" MODIFIED="1483753094315" TEXT="#699 entrance to session subsystem">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1483748003185" ID="ID_1342405777" MODIFIED="1483748021355" TEXT="sollte das auch tats&#xe4;chlich mal in Betrieb setzen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1483748023934" ID="ID_535793074" MODIFIED="1483753100683" TEXT="Session ab jetzt in main() hochfahren...">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1483473153851" ID="ID_868700871" MODIFIED="1483654523247" TEXT="#1049 draft SessionLoop component">
 <icon BUILTIN="button_ok"/>
@@ -674,6 +680,30 @@
 <node CREATED="1481510244184" ID="ID_1521406724" MODIFIED="1481510260635" TEXT="kann dann in CoreService einfach &#xfc;ber die .facade() zugreifen">
 <icon BUILTIN="idea"/>
 </node>
+</node>
+<node CREATED="1483748175610" HGAP="31" ID="ID_73597248" MODIFIED="1483748197700" VSHIFT="16">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Einfachen Aufruf
+    </p>
+    <p>
+      implementieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483748214772" ID="ID_1642552563" MODIFIED="1483748289540" TEXT="#1046 Preliminary Definition of SessionCommand facade">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1483748231330" ID="ID_1962213649" MODIFIED="1483748356929" TEXT="soll hierzu sehen, da&#xdf; ein einfacher Aufruf wirklich klappt">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1483748323014" ID="ID_1031176077" MODIFIED="1483748339768" TEXT="Nachrichten vom UI-Bus entnehmen"/>
+<node CREATED="1483748340524" ID="ID_841368846" MODIFIED="1483748346879" TEXT="API-Funktionen aufrufen"/>
 </node>
 <node CREATED="1482464658193" HGAP="-14" ID="ID_726798260" MODIFIED="1482711954690" TEXT="Ausgestaltung" VSHIFT="29">
 <node CREATED="1482465840843" ID="ID_818984499" MODIFIED="1482465853543" TEXT="Entwurf">

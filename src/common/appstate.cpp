@@ -153,7 +153,7 @@ namespace lumiera {
   typedef AppState::ExitCode ExitCode;
   
   
-  /** @par
+  /** @remark
    *  This function is executed at the end of main(), after the necessary subsystems
    *  have been started, typically in separate threads. Thus, the main thread will
    *  enter a blocking wait, until all activated subsystems have signalled shutdown.
@@ -239,7 +239,7 @@ namespace lumiera {
   /** anything which should be closed as late as possible and after
    *  the normal shutdown sequence can be placed into the AppState dtor.
    *  But note though, when the application is halted unconditionally,
-   *  not dtors will be executed.
+   *  no dtors will be executed.
    */
   AppState::~AppState()
     {
