@@ -458,8 +458,8 @@
 <node CREATED="1483642220940" ID="ID_1519554797" MODIFIED="1483654058917" TEXT="care for syncing the disabled state">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483642220941" ID="ID_377776032" MODIFIED="1483654517016" TEXT="deadlock safeguard">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1483642220941" ID="ID_377776032" MODIFIED="1483746849507" TEXT="deadlock safeguard">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -11220,7 +11220,8 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1481688517437" ID="ID_241232196" MODIFIED="1481688520592" TEXT="Lifecycle">
+<node CREATED="1481688517437" ID="ID_241232196" MODIFIED="1483747248364" TEXT="Lifecycle">
+<icon BUILTIN="info"/>
 <node CREATED="1481688521532" ID="ID_1825349679" MODIFIED="1481688527391" TEXT="Session started on demand"/>
 <node CREATED="1481688529539" ID="ID_1972961763" MODIFIED="1481688540109" TEXT="SessionManager ist zust&#xe4;ndig"/>
 <node CREATED="1481688544921" ID="ID_1934560784" MODIFIED="1481688561386" TEXT="wenn Session geladen, ist ProcDispatcher freigegeben"/>
@@ -11256,7 +11257,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1481778538165" HGAP="37" ID="ID_522398894" MODIFIED="1481778549049" TEXT="ProcDispatcher" VSHIFT="12">
+<node CREATED="1481778538165" HGAP="37" ID="ID_522398894" MODIFIED="1483747241417" TEXT="ProcDispatcher" VSHIFT="12">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1481826274018" HGAP="18" ID="ID_1916296972" MODIFIED="1482430840977" TEXT="Requirements" VSHIFT="-7">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1481826329819" ID="ID_1238318698" MODIFIED="1481826431105" TEXT="enqueue commands concurrently">
@@ -11269,26 +11271,53 @@
 </node>
 <node CREATED="1481826431861" ID="ID_328583048" MODIFIED="1481826440935" TEXT="process sequentially"/>
 <node CREATED="1481826441884" ID="ID_952327020" MODIFIED="1481826446791" TEXT="until queue is empty"/>
-<node CREATED="1481826997930" ID="ID_576341056" MODIFIED="1481827018171" TEXT="invoke check point">
+<node CREATED="1481826997930" FOLDED="true" ID="ID_576341056" MODIFIED="1483747181184" TEXT="provide a check point">
 <node CREATED="1481827040748" ID="ID_406205627" MODIFIED="1481827045172" TEXT="when">
 <icon BUILTIN="help"/>
 <node CREATED="1481827019615" ID="ID_1169845292" MODIFIED="1481827024402" TEXT="after each command"/>
-<node CREATED="1481827024942" ID="ID_137101226" MODIFIED="1481827033713" TEXT="regularily whle idle"/>
+<node CREATED="1481827024942" ID="ID_137101226" MODIFIED="1483747035198" TEXT="after each builder run"/>
 </node>
 <node CREATED="1481827051787" ID="ID_1911969568" MODIFIED="1481827055340" TEXT="why">
 <icon BUILTIN="help"/>
-<node CREATED="1481827057618" ID="ID_80559422" MODIFIED="1481827068540" TEXT="ensure Builder runs"/>
-<node CREATED="1481827109643" ID="ID_76492776" MODIFIED="1481827126189" TEXT="respond to shutdown request"/>
+<node CREATED="1483747048432" ID="ID_1165337571" MODIFIED="1483747060594" TEXT="to ensure sane state logic"/>
+<node CREATED="1483747065326" ID="ID_896973402" MODIFIED="1483747120443" TEXT="allow to wait for disabled state">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...necessary when closing the session;
+    </p>
+    <p>
+      we need to wait for the current command or builder run to be completed
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
-<node CREATED="1481827548073" ID="ID_690689259" MODIFIED="1481827556820" TEXT="manage entries">
+</node>
+<node CREATED="1481827548073" FOLDED="true" ID="ID_690689259" MODIFIED="1483747220632" TEXT="manage entries">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...noch nicht implementiert 1/17
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="bell"/>
 <node CREATED="1481827558336" ID="ID_1026688096" MODIFIED="1481827646856" TEXT="match current session"/>
 <node CREATED="1481827647491" ID="ID_1849886325" MODIFIED="1481827652111" TEXT="aggregate similar"/>
 <node CREATED="1481827652539" ID="ID_313823253" MODIFIED="1481827657846" TEXT="supersede"/>
 </node>
 </node>
-<node CREATED="1481917572639" HGAP="74" ID="ID_190109346" MODIFIED="1482430844888" TEXT="operational" VSHIFT="-27">
-<icon BUILTIN="pencil"/>
+<node CREATED="1481917572639" FOLDED="true" HGAP="74" ID="ID_190109346" MODIFIED="1483747230010" TEXT="operational..." VSHIFT="-27">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1481917612602" ID="ID_567971228" MODIFIED="1481917622388" TEXT="Loop l&#xe4;uft stets, aber blockt ggfs"/>
 <node CREATED="1481917641910" ID="ID_1157396234" MODIFIED="1481917663639" TEXT="anf&#xe4;nglich idle --&gt; schlafen"/>
 <node CREATED="1481918441020" ID="ID_584625018" MODIFIED="1481918463933" TEXT="Command-Queue wird ohne Verz&#xf6;gerung abgearbeitet"/>
@@ -11325,7 +11354,8 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1481918117831" ID="ID_924462902" MODIFIED="1481918121154" TEXT="asynchron">
+<node CREATED="1481918117831" ID="ID_924462902" MODIFIED="1483746949675" TEXT="asynchron">
+<icon BUILTIN="info"/>
 <node CREATED="1481918130245" ID="ID_1624017067" MODIFIED="1481918382409">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -11367,10 +11397,10 @@
 <linktarget COLOR="#5a97df" DESTINATION="ID_1378897740" ENDARROW="Default" ENDINCLINATION="9540;0;" ID="Arrow_ID_1446486242" SOURCE="ID_284397306" STARTARROW="None" STARTINCLINATION="9540;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1481926040310" ID="ID_667460598" MODIFIED="1481926061115" TEXT="Deadlock wenn der Session-Thread selber auf diese Sperre wartet">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1481926040310" ID="ID_667460598" MODIFIED="1483746929724" TEXT="Deadlock wenn der Session-Thread selber auf diese Sperre wartet">
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1482197251133" ID="ID_1245878337" MODIFIED="1482197465351">
+<node CREATED="1482197251133" ID="ID_1245878337" MODIFIED="1483746892436">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -11381,7 +11411,7 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="bell"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1482197270202" ID="ID_221875120" MODIFIED="1482197288634" TEXT="neues API auf unserem Thread-Wrapper schaffen">
 <icon BUILTIN="yes"/>
 </node>
@@ -11440,7 +11470,7 @@
 <node CREATED="1481828624042" ID="ID_1970372601" MODIFIED="1481828635748" TEXT="Looper f&#xfc;r Schleifen-Logik"/>
 <node CREATED="1481828639584" ID="ID_1344182776" MODIFIED="1481828648402" TEXT="CommandQueue"/>
 </node>
-<node CREATED="1481778549940" HGAP="50" ID="ID_676848252" MODIFIED="1482712315146" TEXT="DispatcherLoop" VSHIFT="1">
+<node CREATED="1481778549940" FOLDED="true" HGAP="50" ID="ID_676848252" MODIFIED="1483747148797" TEXT="DispatcherLoop" VSHIFT="1">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1481778741546" ID="ID_684867533" MODIFIED="1481778755694" TEXT="&#xf6;ffnet Session-Interface">
 <icon BUILTIN="button_ok"/>

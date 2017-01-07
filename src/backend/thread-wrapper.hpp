@@ -197,7 +197,6 @@ namespace backend {
           return thread_;
         }
       
-      ////////////////////////////////////////////////////////////////////////////TICKET #1054 : API to find out if current execution is *in* this thread!
       
       /** Synchronisation barrier. In the function executing in this thread
        *  needs to be a corresponding Thread::syncPoint() call. Blocking until
@@ -206,7 +205,7 @@ namespace backend {
       void
       sync()
         {
-          REQUIRE (isValid(), "Thread terminated");
+          REQUIRE (isValid(), "Thread not running");
           if (!lumiera_thread_sync_other (thread_))
             lumiera::throwOnError();
         }
@@ -214,19 +213,23 @@ namespace backend {
       /** counterpart of the synchronisation barrier, to be called from
        *  within the thread to be synchronised. Will block until both
        *  this thread and the outward partner reached the barrier.
+       * @warning blocks on the _current_ thread's condition var
        */
       static void
       syncPoint ()
         {
-                          ////////////////////////////////////////////////////////TICKET #1054 : consider to call safeguard here, to ensure this is called from within the thread
           lumiera_thread_sync ();
         }
       
     protected:
+      /** determine if the currently executing code runs within this thread */
       bool
-      invokedWithinThread()
+      invokedWithinThread()  const
         {
-          UNIMPLEMENTED ("thread self recognition");
+          REQUIRE (isValid(), "Thread not running");
+          LumieraThread current = lumiera_thread_self ();
+          return current
+             and current == this->thread_;
         }
     };
   

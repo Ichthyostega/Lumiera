@@ -276,7 +276,7 @@ namespace control {
       bool
       stateIsSynched()
         {
-          if (calledFromWithinSessionThread())
+          if (this->invokedWithinThread())
             throw error::Fatal("Possible Deadlock. "
                                "Attempt to synchronise to a command processing check point "
                                "from within the (single) session thread."
@@ -303,17 +303,6 @@ namespace control {
       startBuilder()
         {
           TODO ("+++ start the Proc-Builder...");
-        }
-      
-      bool
-      calledFromWithinSessionThread()
-        {
-          UNIMPLEMENTED ("how to find out when the session thread attempts to catch its own tail...???");
-          ////////////////////////////////////////////////////////////////TODO any idea how to achieve that? The lock does not help us, since it is recursive and
-          //////////////////////////////////////////////////////////////// ... since command/builder execution itself is not performed in a locked section.
-          //////////////////////////////////////////////////////////////// ... Possibly we'll just have to plant a ThreadLocal to mark this dangerous situation.
-          
-          ///////////////////////////////////////////////////////////////////////////////TICKET #1054 : can be done by relying on some internals of our thread handling framework
         }
     };
   

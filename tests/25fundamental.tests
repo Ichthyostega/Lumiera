@@ -91,6 +91,11 @@ return: 0
 END
 
 
+TEST "Detect code runing in a given Thread" ThreadWrapperSelfRecognitionTest_test  <<END
+return: 0
+END
+
+
 TEST "Starting and stopping subsystems" SubsystemRunner_test  <<END
 out: -----singleSubsys_complete_cycle-----
 out: -----singleSubsys_start_failure-----

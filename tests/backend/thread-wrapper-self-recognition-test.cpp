@@ -77,6 +77,8 @@ namespace test {
           TestThread testThread;
           
           CHECK (not testThread.invocation_happens_within_this_thread());
+          
+          usleep(10); // give the thread a chance to run before shutdown
         }
     };
   
