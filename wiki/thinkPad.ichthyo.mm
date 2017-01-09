@@ -21,8 +21,9 @@
 </node>
 <node CREATED="1477784793993" ID="ID_1868522177" MODIFIED="1477784810257" TEXT="Umbau">
 <icon BUILTIN="hourglass"/>
-<node CREATED="1477784813895" ID="ID_1343270939" MODIFIED="1481320738244" TEXT="Model durch UI-Bus ersetzen">
+<node CREATED="1477784813895" ID="ID_1343270939" MODIFIED="1483920891840" TEXT="Model durch UI-Bus ersetzen">
 <linktarget COLOR="#f9b709" DESTINATION="ID_1343270939" ENDARROW="Default" ENDINCLINATION="-30;-35;" ID="Arrow_ID_1867016690" SOURCE="ID_635303062" STARTARROW="None" STARTINCLINATION="-34;-43;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1343270939" ENDARROW="Default" ENDINCLINATION="-197;638;" ID="Arrow_ID_1686519160" SOURCE="ID_202253849" STARTARROW="Default" STARTINCLINATION="-83;-1020;"/>
 <node COLOR="#338800" CREATED="1481320683706" ID="ID_1226263415" MODIFIED="1481331062143" TEXT="kl&#xe4;ren, wo der Bus aufgeh&#xe4;ngt wird">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1481331063782" ID="ID_1606852933" MODIFIED="1481333728957" TEXT="Lifecycle-Frontend UI-Bus"/>
@@ -704,14 +705,161 @@
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1483748323014" ID="ID_1031176077" MODIFIED="1483748339768" TEXT="Nachrichten vom UI-Bus entnehmen">
-<node CREATED="1483755303243" ID="ID_1425274731" MODIFIED="1483755469145" TEXT="Brauche Command-Handler">
+<node COLOR="#520262" CREATED="1483908814960" HGAP="34" ID="ID_430949603" MODIFIED="1483910973175" TEXT="Design sinnvoll?" VSHIFT="6">
+<linktarget COLOR="#b694bf" DESTINATION="ID_430949603" ENDARROW="Default" ENDINCLINATION="178;425;" ID="Arrow_ID_1062305149" SOURCE="ID_329609486" STARTARROW="Default" STARTINCLINATION="-629;-2354;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1483908894494" ID="ID_1854211202" MODIFIED="1483908918166" TEXT="Proc-Commands...">
+<node CREATED="1483908919274" ID="ID_184360294" MODIFIED="1483908924253" TEXT="k&#xf6;nnte man direkt aufrufen"/>
+<node CREATED="1483908982889" ID="ID_758147179" MODIFIED="1483908992252" TEXT="sind bereits ein Handle"/>
+</node>
+<node CREATED="1483909157290" ID="ID_1197073738" MODIFIED="1483909160254" TEXT="via UI-Bus">
+<node CREATED="1483909161170" ID="ID_159742986" MODIFIED="1483909170373" TEXT="bleibt ein synchroner Aufruf"/>
+<node CREATED="1483909179088" ID="ID_926171934" MODIFIED="1483909221854" TEXT="Command(Handle) auf beiden Seiten"/>
+<node CREATED="1483909223058" ID="ID_582886428" MODIFIED="1483909252225" TEXT="Argument-Marshalling">
+<node CREATED="1483909253550" ID="ID_824110666" MODIFIED="1483909262056" TEXT="umst&#xe4;ndlich, mehrstufig"/>
+<node CREATED="1483909263620" ID="ID_1628441605" MODIFIED="1483909277414" TEXT="erzwingt mehrfache Indirektion"/>
+<node CREATED="1483909333227" ID="ID_473681935" MODIFIED="1483909347045" TEXT="Umpacken -&gt; Record -&gt; Tuple -&gt; function"/>
+</node>
+<node CREATED="1483909386820" ID="ID_311424247" MODIFIED="1483909398950" TEXT="mehrfache Indirektion">
+<node CREATED="1483909440437" ID="ID_1792180060" MODIFIED="1483909458398" TEXT="Variant-Record VTable"/>
+<node CREATED="1483909459226" ID="ID_1352346417" MODIFIED="1483909465933" TEXT="Bus-Term VTable"/>
+<node CREATED="1483909468913" ID="ID_1209442982" MODIFIED="1483909487842" TEXT="Command-Handler double dispatch"/>
+<node CREATED="1483909488622" ID="ID_856721427" MODIFIED="1483909495025" TEXT="Argument-Auswertung double dispatch"/>
+<node CREATED="1483909496110" ID="ID_1500666281" MODIFIED="1483909508008" TEXT="Command-Functor invocation VTable"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483909585362" HGAP="1" ID="ID_1047452263" MODIFIED="1483909604941" TEXT="mu&#xdf; sich noch rechtfertigen" VSHIFT="11">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1483909605879" ID="ID_1463483386" MODIFIED="1483909742954" TEXT="war eine Design-Wahl auf Verdacht">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1483909613670" ID="ID_223762457" MODIFIED="1483909705485" TEXT="erzwingt Trennung im Planen und Denken"/>
+<node CREATED="1483909679605" ID="ID_1627582396" MODIFIED="1483909688616" TEXT="k&#xf6;nnte Verallgemeinerungen im UI generieren"/>
+<node CREATED="1483909714201" ID="ID_1677179961" MODIFIED="1483909722659" TEXT="k&#xf6;nnte UI-Abl&#xe4;ufe abstrakt testbar machen"/>
+</node>
+</node>
+<node CREATED="1483755303243" HGAP="86" ID="ID_1425274731" MODIFIED="1483910253374" TEXT="Brauche Command-Handler" VSHIFT="11">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1483755317105" ID="ID_775818551" MODIFIED="1483755319685" TEXT="ist ein Visitor"/>
 <node CREATED="1483755320136" ID="ID_1343109260" MODIFIED="1483755327580" TEXT="Knackpunkt: Command-ID">
-<node CREATED="1483755331671" ID="ID_1913103415" MODIFIED="1483755339874" TEXT="wird im Visitor gebraucht"/>
-<node CREATED="1483755341814" ID="ID_254491480" MODIFIED="1483755347073" TEXT="Instanz-Management fraglich"/>
-<node CREATED="1483755347949" ID="ID_4176562" MODIFIED="1483755359704" TEXT="Performance-&#xdc;berlegungen"/>
+<node CREATED="1483755331671" FOLDED="true" ID="ID_1913103415" MODIFIED="1483910224790" TEXT="wird im Visitor gebraucht">
+<node CREATED="1483909964935" ID="ID_991182613" MODIFIED="1483910009457">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      will sagen: <i>in </i>den Visitor-Methoden-Implementierungen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1483909984005" ID="ID_590392737" MODIFIED="1483910003178">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>aber</i>&#160;ist nicht auf dem Visitor-Interface darstellbar
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1483910035326" ID="ID_366990653" MODIFIED="1483910045213" TEXT="latentes Design-Problem">
+<icon BUILTIN="idea"/>
+<node CREATED="1483910047148" ID="ID_1870862761" MODIFIED="1483910055271" TEXT="Design Rec&lt;GenNode&gt;"/>
+<node CREATED="1483910056243" ID="ID_967619584" MODIFIED="1483910089274" TEXT="da Record eine Payload ist"/>
+<node CREATED="1483910117819" ID="ID_117939525" MODIFIED="1483910215292" TEXT="man k&#xf6;nnte....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....&#252;ber einen GenNode-Visitor nachdenken
+    </p>
+    <p>
+      <b>aber</b>
+    </p>
+    <ul>
+      <li>
+        nicht jetzt
+      </li>
+      <li>
+        das Problem m&#252;&#223;te mehrfach auftreten
+      </li>
+      <li>
+        k&#246;nnte zu Switch-On-Type-programming f&#252;hren
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node CREATED="1483755341814" FOLDED="true" ID="ID_254491480" MODIFIED="1483909953441" TEXT="Instanz-Management fraglich">
+<node CREATED="1483909934891" ID="ID_1608078388" MODIFIED="1483909940038" TEXT="nicht wirklich relevant"/>
+<node CREATED="1483909940506" ID="ID_262925518" MODIFIED="1483909951669" TEXT="effektiv nur Stack-Storage"/>
+</node>
+<node CREATED="1483755347949" FOLDED="true" ID="ID_4176562" MODIFIED="1483909906648" TEXT="Performance-&#xdc;berlegungen">
+<node CREATED="1483909826690" ID="ID_1903951356" MODIFIED="1483909898026" TEXT="nicht wirklich schlimm">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1483909832385" ID="ID_136936347" MODIFIED="1483909836244" TEXT="Storage ist lokal"/>
+<node CREATED="1483909836992" ID="ID_238373170" MODIFIED="1483909866352" TEXT="VTable ist vorbereitet"/>
+<node CREATED="1483909866844" ID="ID_83144371" MODIFIED="1483909873843" TEXT="aber: double-dispatch">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 <node CREATED="1483755360196" ID="ID_514688462" MODIFIED="1483755368542" TEXT="Nachrichten kommen ohne bestimmte Ordnung an"/>
+</node>
+</node>
+<node CREATED="1483910254385" HGAP="88" ID="ID_267402281" MODIFIED="1483910443222" TEXT="Command-Instanz-Management" VSHIFT="-8">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1483910266799" ID="ID_86909318" MODIFIED="1483910282066" TEXT="wie funktioniert&apos;s?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1483910289396" ID="ID_1014786685" MODIFIED="1483910293311" TEXT="Prototyp-Pattern"/>
+<node CREATED="1483910293827" ID="ID_1957585594" MODIFIED="1483910331763" TEXT="irgendjemand...">
+<node CREATED="1483910333137" ID="ID_1304876612" MODIFIED="1483910340745" TEXT="mu&#xdf; Command-Definitionen Klonen"/>
+<node CREATED="1483910306458" ID="ID_601011326" MODIFIED="1483910315557" TEXT="und dabei IDs generieren / dekorieren"/>
+</node>
+<node CREATED="1483911060894" ID="ID_1204552049" MODIFIED="1483911063564" TEXT="wer">
+<icon BUILTIN="help"/>
+<node CREATED="1483911069277" ID="ID_277421164" MODIFIED="1483911081743" TEXT="InteractionStateManager">
+<node CREATED="1483911145898" ID="ID_897832170" MODIFIED="1483911160684" TEXT="eigentlich nur opaque Command-IDs"/>
+<node CREATED="1483911161248" ID="ID_283380145" MODIFIED="1483911176626" TEXT="aber: wei&#xdf; wann neue Interaktion beginnt"/>
+</node>
+<node CREATED="1483911091314" ID="ID_842914123" MODIFIED="1483911097021" TEXT="SessionCommandService">
+<node CREATED="1483911181669" ID="ID_1397857321" MODIFIED="1483911193568" TEXT="sitzt schon in Proc"/>
+<node CREATED="1483911194940" ID="ID_485403998" MODIFIED="1483911207598" TEXT="&quot;nat&#xfc;rlich&quot; nah am Command-Framework"/>
+<node CREATED="1483911208546" ID="ID_380202969" MODIFIED="1483911221076" TEXT="wei&#xdf; aber nichts von Interaktionen"/>
+</node>
+</node>
+<node CREATED="1483921000340" HGAP="-60" ID="ID_1814046433" MODIFIED="1483921038381" VSHIFT="31">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>Idee:</i>&#160;Zusammenarbeit
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1483921070115" ID="ID_398046799" MODIFIED="1483921131646" TEXT="Prototyp-Service"/>
+<node CREATED="1483921132114" ID="ID_1652398711" MODIFIED="1483921138070" TEXT="liefert dekorierte Command-ID"/>
+<node CREATED="1483921149368" ID="ID_1028150245" MODIFIED="1483921160762" TEXT="im GUI nur noch Command-IDs"/>
 </node>
 </node>
 <node CREATED="1483755390640" ID="ID_1882657994" MODIFIED="1483755397495" TEXT="Vorlage">
@@ -8101,7 +8249,7 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1448659021803" ID="ID_1800666256" MODIFIED="1448659025502" TEXT="nah an der Session"/>
 <node CREATED="1448659026042" ID="ID_831434285" MODIFIED="1448659032566" TEXT="ein Schnittstellen-Paket"/>
-<node CREATED="1448669306480" ID="ID_1009169288" MODIFIED="1451094122356">
+<node CREATED="1448669306480" ID="ID_1009169288" MODIFIED="1483910782488">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -8346,10 +8494,11 @@
 </node>
 </node>
 </node>
-<node CREATED="1448669332204" FOLDED="true" HGAP="76" ID="ID_329609486" MODIFIED="1455421724973" TEXT="InteractionControl">
+<node CREATED="1448669332204" HGAP="76" ID="ID_329609486" MODIFIED="1483910973175" TEXT="InteractionControl">
+<arrowlink COLOR="#b694bf" DESTINATION="ID_430949603" ENDARROW="Default" ENDINCLINATION="178;425;" ID="Arrow_ID_1062305149" STARTARROW="Default" STARTINCLINATION="-629;-2354;"/>
 <linktarget COLOR="#5f0ac8" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="219;-148;" ID="Arrow_ID_1101633958" SOURCE="ID_1009169288" STARTARROW="None" STARTINCLINATION="-315;0;"/>
 <font NAME="SansSerif" SIZE="15"/>
-<node CREATED="1448669439582" FOLDED="true" HGAP="41" ID="ID_307071507" MODIFIED="1455421718766" TEXT="ad-hoc oder systematisch" VSHIFT="-2">
+<node CREATED="1448669439582" FOLDED="true" HGAP="41" ID="ID_307071507" MODIFIED="1483910919618" TEXT="ad-hoc oder systematisch" VSHIFT="-2">
 <icon BUILTIN="help"/>
 <node CREATED="1448669512988" ID="ID_1184892495" MODIFIED="1448669517328" TEXT="fundamentale Frage"/>
 <node CREATED="1448669517796" ID="ID_1165902172" MODIFIED="1448669526326" TEXT="f&#xfc;r mich eigentlich sofort klar"/>
@@ -8364,7 +8513,7 @@
 <node CREATED="1448669567765" ID="ID_1254931544" MODIFIED="1448669587150" TEXT="b&#xfc;rstet die UI-Toolkits &#xbb;gegen den Strich&#xab;"/>
 </node>
 </node>
-<node CREATED="1448669636900" ID="ID_1111001545" MODIFIED="1448669645343" TEXT="Einf&#xfc;hren einer Zwischenebene">
+<node CREATED="1448669636900" ID="ID_1111001545" MODIFIED="1483910851668" TEXT="Einf&#xfc;hren einer Zwischenebene">
 <node CREATED="1448669646474" ID="ID_1590745326" MODIFIED="1448669657189" TEXT="hyper-r&#xe4;umliche Anordnung"/>
 <node CREATED="1448669657633" ID="ID_1054403772" MODIFIED="1448669661661" TEXT="Focus-Bewegung"/>
 <node CREATED="1448669662417" ID="ID_828883183" MODIFIED="1448669674907" TEXT="Einteilung in Arbeits-R&#xe4;ume"/>
@@ -8621,7 +8770,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1453545812389" FOLDED="true" HGAP="43" ID="ID_202253849" MODIFIED="1481413359437" TEXT="Core-Services" VSHIFT="2">
+<node CREATED="1453545812389" HGAP="43" ID="ID_202253849" MODIFIED="1483920891840" TEXT="Core-Services" VSHIFT="2">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -8635,6 +8784,7 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink DESTINATION="ID_1343270939" ENDARROW="Default" ENDINCLINATION="-197;638;" ID="Arrow_ID_1686519160" STARTARROW="Default" STARTINCLINATION="-83;-1020;"/>
 <font NAME="SansSerif" SIZE="13"/>
 <icon BUILTIN="prepare"/>
 <node CREATED="1453545875627" ID="ID_1411740156" MODIFIED="1453545951737" TEXT="Definition &#xbb;Zentral-Dienste&#xab;">
@@ -8757,8 +8907,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1453546138215" ID="ID_621186206" MODIFIED="1453546582649" TEXT="Verbindung zum ProcDispatcher">
-<icon BUILTIN="hourglass"/>
+<node CREATED="1453546138215" ID="ID_621186206" MODIFIED="1483910591582" TEXT="Verbindung zum ProcDispatcher">
+<icon BUILTIN="pencil"/>
 </node>
 <node CREATED="1453546183561" ID="ID_1080090125" MODIFIED="1453546187900" TEXT="Mock-Variante">
 <node CREATED="1453546195240" ID="ID_1905175534" MODIFIED="1454711242234" TEXT="loggen">

@@ -197,7 +197,7 @@ namespace model {
   void
   Tangible::prepareCommand (Cmd const& prototype, Rec&& arguments)
   {
-    uiBus_.act (prototype.bind (std::forward<Rec>(arguments)));
+    uiBus_.act (prototype.bindMsg (std::forward<Rec>(arguments)));
   }
   
   
@@ -209,7 +209,7 @@ namespace model {
   void
   Tangible::issueCommand (Cmd const& preparedAction)
   {
-    uiBus_.act (preparedAction.bang());
+    uiBus_.act (preparedAction.bangMsg());
   }
   
   

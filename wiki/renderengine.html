@@ -1560,7 +1560,7 @@ When a command has been executed (and maybe undone), it's best to leave it alone
 State predicates are accessible through the Command (frontend); additionally there are static query functions in class {{{Command}}}
 </pre>
 </div>
-<div title="CommandUsage" modifier="Ichthyostega" created="200907212338" modified="200908091509" tags="SessionLogic draft operational">
+<div title="CommandUsage" modifier="Ichthyostega" created="200907212338" modified="201701090011" tags="SessionLogic draft operational" changecount="8">
 <pre>//for now (7/09) I'll use this page to collect ideas how commands might be used...//
 
 * use a command for getting a log entry and an undo possibility automatically
@@ -1595,6 +1595,10 @@ State predicates are accessible through the Command (frontend); additionally the
 * is configured into the command instance, to implement the command's invocation
 * returns a duck-typed //result// object
 
+
+!command &amp;harr; interaction
+The User Interface does not just trigger commands -- rather it performs //user interactions.//
+An interaction is formed like a sentence of spoken language, which means, there is a process of forming such a sentence, giving rise to [[interaction state|InteractionStateManager]]. In many cases, the actual arguments of a command invocation are to be drawn from the current context. Thus, GuiCommandBinding is a way more elaborate topic, while it builds upon the fundamentals defined here...
 </pre>
 </div>
 <div title="ConManager" modifier="Ichthyostega" created="200806050208" modified="200810060300" tags="def Builder">
@@ -3170,12 +3174,12 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201609081505" tags="design decision Concepts GuiPattern draft discuss" changecount="7">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201701082320" tags="design decision Concepts GuiPattern draft discuss" changecount="11">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
-The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate level, where things go on, which can not fully be just derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could strive at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
+The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate and implicit level of understanding, where things just happen, which can not fully be derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? How do we how we are to get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could aim at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
 ;interface has a spatial quality
-:the elements within an user interface are arranged in a way that parallels our experience when working in real world space. With the addition some dose of //&quot;hyper&quot;// -- allowing for cross connections and shortcuts beyond spatial logic
+:the elements within an user interface are arranged in a way that parallels our experience when working in real world space. With the addition of some dose of //&quot;hyper&quot;// -- allowing for cross connections and shortcuts beyond spatial logic
 ;locality of work spaces
 :but the arrangement of the interface interactions is not amorphous, rather it is segregated into cohesive clusters of closely interrelated actions. We move between these clusters of activity the same way as we move between several well confined rooms within a building.
 ;context and focus of activity
@@ -3185,11 +3189,15 @@ The interface programming allows us to react on events and trigger behaviour, an
 ;the ability to arrange what is relevant
 :we do the same stuff again and again, and this makes us observe and gradually understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.</pre>
 </div>
-<div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201609091644" tags="def design GuiIntegration draft" changecount="2">
+<div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201701082324" tags="def design GuiIntegration draft" changecount="4">
 <pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
 In a more elaborate UI, as can be expected for such a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
 
-An InteractionStateManager is a global component, but rarely addressed directly. Rather this tracking component attaches and taps into various information sources to observe some aspects of global state. Moreover, it is outfitted with a set of rules, leading to enablement of some //command invocation trail.// These enablements or disablements are forwarded to the actual trigger points, which are those UI elements to witness the completion of a gesture.</pre>
+An InteractionStateManager is a global component, but rarely addressed directly. Rather this tracking component attaches and taps into various information sources to observe some aspects of global state. Moreover, it is outfitted with a set of rules, leading to enablement of some //command invocation trail.// These enablements or disablements are forwarded to the actual trigger points, which are those UI elements to witness the completion of a gesture.
+
+&amp;rarr; InteractionControl
+&amp;rarr; GuiCommandBinding
+&amp;rarr; CommandUsage</pre>
 </div>
 <div title="InterfaceNamespaces" modifier="Ichthyostega" created="200708080338" modified="201003160209" tags="impl decision draft">
 <pre>Because we rely on strong decoupling and separation into self contained components, there is not much need for a common quasi-global namespace. Operations needing the cooperation of another subsystem will be delegated or even dispatched, consequently implementation code needs only the service acces points from &quot;direct cooperation partner&quot; subsystems. Hierarchical scopes besides classes are needed only when multiple subsystems share a set of common abstractions. Interface and Implementation use separate namespaces.

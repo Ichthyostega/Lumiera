@@ -1,8 +1,8 @@
 /*
-  CORE-SERVICE.hpp  -  service to address the application core from the UI
+  COMMAND-HANDLER.hpp  -  helper to turn command messages into invocations in Proc
 
   Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+    2017,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,9 +21,9 @@
 */
 
 
-/** @file core-service.hpp
- ** Dedicated service node within the UI-Bus to handle command invocation
- ** and presentation state. Mostly, the UI-Bus is just a star shaped network
+/** @file command-handler.hpp
+ ** Visitor to process command messages and turn them into command invocations
+ ** in Proc-Layer. Mostly, the UI-Bus is just a star shaped network
  ** with one central [routing hub][ctrl::Nexus], and serves to distribute
  ** generic state and update messages. But there are some special messages
  ** which need central processing: The command preparation and invocation
@@ -46,8 +46,8 @@
  */
 
 
-#ifndef GUI_CTRL_CORE_SERVICE_H
-#define GUI_CTRL_CORE_SERVICE_H
+#ifndef GUI_CTRL_COMMAND_HANDLER_H
+#define GUI_CTRL_COMMAND_HANDLER_H
 
 
 #include "lib/error.hpp"
@@ -85,7 +85,7 @@ namespace ctrl{
    * 
    * @todo write type comment
    */
-  class CoreService
+  class CommandHandler
     : public BusTerm
     , boost::noncopyable
     {
@@ -128,4 +128,4 @@ namespace ctrl{
   
   
 }} // namespace gui::ctrl
-#endif /*GUI_CTRL_CORE_SERVICE_H*/
+#endif /*GUI_CTRL_COMMAND_HANDLER_H*/

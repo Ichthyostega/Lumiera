@@ -91,12 +91,12 @@ namespace interact {
         : cmdID_(prototype.getID())
         { }
       
-      GenNode bind (Rec&& cmdArgs)  const
+      GenNode bindMsg (Rec&& cmdArgs)  const
         {
           return GenNode(cmdID_, std::forward<Rec>(cmdArgs));
         }
       
-      GenNode bang()  const
+      GenNode bangMsg()  const
         {
           return GenNode(cmdID_, int(DO_IT));
         }
