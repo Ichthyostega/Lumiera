@@ -23,25 +23,24 @@
 
 /** @file command-handler.hpp
  ** Visitor to process command messages and turn them into command invocations
- ** in Proc-Layer. Mostly, the UI-Bus is just a star shaped network
- ** with one central [routing hub][ctrl::Nexus], and serves to distribute
- ** generic state and update messages. But there are some special messages
- ** which need central processing: The command preparation and invocation
- ** messages and the presentation state tracking messages (state marks).
- ** The Nexus is configured such as to forward these special messages
- ** to the [CoreService] terminal, which invokes the dedicated services.
+ ** in Proc-Layer. While the actual operation corresponding to a command is fixed
+ ** as a script working on the internal Session interface, the invocation of a
+ ** command is often the result of an ongoing user interaction. The invocation
+ ** itself is formed like a sentence of spoken language, including some context.
+ ** For this reason, several messages can be sent over the [UI-Bus](\ref ui-bus.hpp)
+ ** to prepare command invocation and explicate the actual command arguments. The
+ ** concept and topology of the UI-Bus allows to send those messages from arbitrary
+ ** locations within the UI, just assuming there is a CoreService somewhere to
+ ** receive and treat those messages. In fact, parameters need to be extracted
+ ** and for the actual invocation, a command handle needs to be passed to the
+ ** ProcDispatcher for processing in the session thread. CommandHandler is
+ ** a delegate to implement those translation tasks on receipt of a
+ ** command related UI-bus message.
  ** 
- ** # Lifecycle
- ** CoreService is a PImpl to manage all the technical parts of actual
- ** service provision. When it goes down, all services are decommissioned.
- ** A part of these lifecycle technicalities is to manage the setup of the
- ** [UI-Bus main hub](\ref ctrl::Nexus), which requires some trickery, since
- ** both CoreService and Nexus are mutually interdependent from an operational
- ** perspective, since they exchange messages in both directions.
+ ** @todo initial draft and WIP-WIP-WIP as of 1/2017
  ** 
- ** @todo initial draft and WIP-WIP-WIP as of 12/2015
- ** 
- ** @see TODO_abstract-tangible-test.cpp
+ ** @see AbstractTangible_test::invokeCommand()
+ ** @see gui::test::Nexus::prepareDiagnosticCommandHandler()
  ** 
  */
 
@@ -51,16 +50,17 @@
 
 
 #include "lib/error.hpp"
-#include "include/logging.h"
+//#include "include/logging.h"
 //#include "lib/idi/entry-id.hpp"
 #include "include/session-command-facade.h"
-#include "gui/notification-service.hpp"
-#include "gui/ctrl/bus-term.hpp"
-#include "gui/ctrl/nexus.hpp"
+#include "proc/control/command-def.hpp"
+//#include "gui/notification-service.hpp"
+//#include "gui/ctrl/bus-term.hpp"
+//#include "gui/ctrl/nexus.hpp"
 //#include "lib/util.hpp"
 //#include "gui/model/tangible.hpp"
-//#include "lib/diff/record.hpp"
-#include "lib/idi/entry-id.hpp"
+#include "lib/diff/gen-node.hpp"
+//#include "lib/idi/entry-id.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <string>
@@ -72,57 +72,44 @@ namespace ctrl{
 //  using lib::HashVal;
 //  using util::isnil;
 //  using lib::idi::EntryID;
-//  using lib::diff::Record;
+  using lib::diff::Rec;
+  using lib::diff::GenNode;
+  using lib::diff::DataCap;
+  using proc::control::SessionCommand;
 //  using std::string;
   
   
   /**
-   * Attachment point to "central services" within the UI-Bus.
-   * This special implementation of the [BusTerm] interface receives and
-   * handles those messages to be processed by centralised services:
-   * - commands need to be sent down to Proc-Layer
-   * - presentation state messages need to be recorded and acted upon.
-   * 
-   * @todo write type comment
+   * Visitor to help with processing command related messages on the UI-Bus.
+   * Used by CoreService to translate such messages into Command invocation
+   * by the ProcDispatcher.
+   * @remark we need a Visitor here to deal with the different flavours
+   *         of command messages, some of which provide arguments as payload
    */
   class CommandHandler
-    : public BusTerm
+    : public DataCap::Predicate
     , boost::noncopyable
     {
+      GenNode::ID const& commandID_;
       
-      Nexus uiBusBackbone_;
-      NotificationService activateNotificationService_;
-      
-      virtual void
-      act (GenNode const& command)  override
+      bool
+      handle (Rec const& bindingArgs) override    ///< the argument binding message
         {
-          UNIMPLEMENTED("receive and handle command invocation"); ///////////////////////////TICKET #1049 : working draft how to handle and dispatch commands
+          SessionCommand::facade().bindArg (commandID_, bindingArgs);
+          return true;
         }
       
-      
-      virtual void
-      note (ID subject, GenNode const& mark)  override
+      bool
+      handle (int const&) override                ///< the "bang!" message (command invocation)
         {
-          UNIMPLEMENTED ("receive and handle presentation state note messages.");
+          SessionCommand::facade().invoke (commandID_);
+          return true;
         }
-      
       
     public:
-      explicit
-      CoreService (ID identity =lib::idi::EntryID<CoreService>())
-        : BusTerm(identity, uiBusBackbone_)
-        , uiBusBackbone_{*this}
-        , activateNotificationService_()             // opens the GuiNotificationService instance
-        {
-          INFO (gui, "UI-Backbone operative.");
-        }
-      
-     ~CoreService()
-        {
-          if (0 < uiBusBackbone_.size())
-            ERROR (gui, "Some UI components are still connected to the backbone.");
-        }
-      
+      CommandHandler (GenNode const& commandMsg)
+        : commandID_{commandMsg.idi}
+        { }
     };
   
   

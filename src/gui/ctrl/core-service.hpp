@@ -55,6 +55,7 @@
 //#include "lib/idi/entry-id.hpp"
 #include "include/session-command-facade.h"
 #include "gui/notification-service.hpp"
+#include "gui/ctrl/command-handler.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/nexus.hpp"
 //#include "lib/util.hpp"
@@ -96,7 +97,8 @@ namespace ctrl{
       virtual void
       act (GenNode const& command)  override
         {
-          UNIMPLEMENTED("receive and handle command invocation"); ///////////////////////////TICKET #1049 : working draft how to handle and dispatch commands
+          CommandHandler handler{command};
+          command.data.accept (handler);
         }
       
       

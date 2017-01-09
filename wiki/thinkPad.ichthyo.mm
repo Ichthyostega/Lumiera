@@ -860,6 +860,21 @@
 <node CREATED="1483921070115" ID="ID_398046799" MODIFIED="1483921131646" TEXT="Prototyp-Service"/>
 <node CREATED="1483921132114" ID="ID_1652398711" MODIFIED="1483921138070" TEXT="liefert dekorierte Command-ID"/>
 <node CREATED="1483921149368" ID="ID_1028150245" MODIFIED="1483921160762" TEXT="im GUI nur noch Command-IDs"/>
+<node CREATED="1483924872930" ID="ID_242219866" MODIFIED="1483925475104">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das w&#228;re eine <b>Protokoll-Erweiterung</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#e0ac6d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-2132;93;" ID="Arrow_ID_1940592535" SOURCE="ID_876058329" STARTARROW="Default" STARTINCLINATION="2588;-604;"/>
+<linktarget COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-784;1692;" ID="Arrow_ID_1617518648" SOURCE="ID_1479669922" STARTARROW="None" STARTINCLINATION="3436;-1136;"/>
+</node>
 </node>
 </node>
 <node CREATED="1483755390640" ID="ID_1882657994" MODIFIED="1483755397495" TEXT="Vorlage">
@@ -875,6 +890,29 @@
 <node CREATED="1483755428354" ID="ID_1619772942" MODIFIED="1483755442790" TEXT="der verwendet bereits komplettes Argument-Binding">
 <icon BUILTIN="idea"/>
 </node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1483924890656" HGAP="-56" ID="ID_815841886" MODIFIED="1483924953296" TEXT="Implementierung" VSHIFT="19">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1483924900583" ID="ID_12753464" MODIFIED="1483924949597" TEXT="banal">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1483924903190" ID="ID_1436586014" MODIFIED="1483924947483" TEXT="wenn man das Design akzeptiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t,
+    </p>
+    <p>
+      die mehrfachen Indirektionen und das Ein-/Auspacken der Argumente
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
@@ -8241,7 +8279,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1448658726090" FOLDED="true" HGAP="18" ID="ID_37610818" MODIFIED="1473352410557" TEXT="Commands" VSHIFT="36">
+<node CREATED="1448658726090" HGAP="18" ID="ID_37610818" MODIFIED="1483925094852" TEXT="Commands" VSHIFT="36">
 <node CREATED="1448658755071" ID="ID_1033500384" MODIFIED="1448658767933" TEXT="wie definieren">
 <icon BUILTIN="help"/>
 <node CREATED="1448658974985" ID="ID_974207484" MODIFIED="1448658989011" TEXT="Definition braucht Session-Modell"/>
@@ -8488,6 +8526,12 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1483925128784" HGAP="28" ID="ID_876058329" MODIFIED="1483925475104" TEXT="UI-Bus Protokoll-Erweiterung" VSHIFT="23">
+<arrowlink COLOR="#e0ac6d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-2132;93;" ID="Arrow_ID_1940592535" STARTARROW="Default" STARTINCLINATION="2588;-604;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1483925141934" ID="ID_981015562" MODIFIED="1483925151561" TEXT="Nachricht um zu forken"/>
+<node CREATED="1483925152477" ID="ID_467666678" MODIFIED="1483925163288" TEXT="erweiterte Command-ID als Antwort"/>
 </node>
 </node>
 </node>
@@ -8905,6 +8949,14 @@
 <node CREATED="1453590741428" ID="ID_1733557933" MODIFIED="1453590749327" TEXT="1.6MiB -&gt; 100k"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483925280108" HGAP="30" ID="ID_1479669922" MODIFIED="1483925448124" TEXT="Protokoll-Erweiterung" VSHIFT="8">
+<arrowlink COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-784;1692;" ID="Arrow_ID_1617518648" STARTARROW="None" STARTINCLINATION="3436;-1136;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1483925298713" ID="ID_347702585" MODIFIED="1483925306749" TEXT="Command-Prototyp forken"/>
+<node CREATED="1483925307385" ID="ID_509982277" MODIFIED="1483925311132" TEXT="neue ID generieren lassen"/>
+<node CREATED="1483925311624" ID="ID_1592410347" MODIFIED="1483925338280" TEXT="Anforderung vom InvocationStateManager"/>
+<node CREATED="1483925338796" ID="ID_348930186" MODIFIED="1483925348375" TEXT="implementiert in SessionCommandService"/>
 </node>
 </node>
 <node CREATED="1453546138215" ID="ID_621186206" MODIFIED="1483910591582" TEXT="Verbindung zum ProcDispatcher">
