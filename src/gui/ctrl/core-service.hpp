@@ -39,9 +39,8 @@
  ** both CoreService and Nexus are mutually interdependent from an operational
  ** perspective, since they exchange messages in both directions.
  ** 
- ** @todo initial draft and WIP-WIP-WIP as of 12/2015
- ** 
- ** @see TODO_abstract-tangible-test.cpp
+ ** @see AbstractTangible_test
+ ** @see BusTerm_test
  ** 
  */
 
@@ -52,39 +51,26 @@
 
 #include "lib/error.hpp"
 #include "include/logging.h"
-//#include "lib/idi/entry-id.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "include/session-command-facade.h"
 #include "gui/notification-service.hpp"
 #include "gui/ctrl/command-handler.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/nexus.hpp"
-//#include "lib/util.hpp"
-//#include "gui/model/tangible.hpp"
-//#include "lib/diff/record.hpp"
-#include "lib/idi/entry-id.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <string>
 
 
 namespace gui {
 namespace ctrl{
   
-//  using lib::HashVal;
-//  using util::isnil;
-//  using lib::idi::EntryID;
-//  using lib::diff::Record;
-//  using std::string;
-  
   
   /**
-   * Attachment point to "central services" within the UI-Bus.
+   * Attachment point to »central services« within the UI-Bus.
    * This special implementation of the [BusTerm] interface receives and
    * handles those messages to be processed by centralised services:
    * - commands need to be sent down to Proc-Layer
    * - presentation state messages need to be recorded and acted upon.
-   * 
-   * @todo write type comment
    */
   class CoreService
     : public BusTerm

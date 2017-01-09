@@ -37,8 +37,6 @@
  ** a delegate to implement those translation tasks on receipt of a
  ** command related UI-bus message.
  ** 
- ** @todo initial draft and WIP-WIP-WIP as of 1/2017
- ** 
  ** @see AbstractTangible_test::invokeCommand()
  ** @see gui::test::Nexus::prepareDiagnosticCommandHandler()
  ** 
@@ -50,33 +48,20 @@
 
 
 #include "lib/error.hpp"
-//#include "include/logging.h"
-//#include "lib/idi/entry-id.hpp"
-#include "include/session-command-facade.h"
-#include "proc/control/command-def.hpp"
-//#include "gui/notification-service.hpp"
-//#include "gui/ctrl/bus-term.hpp"
-//#include "gui/ctrl/nexus.hpp"
-//#include "lib/util.hpp"
-//#include "gui/model/tangible.hpp"
 #include "lib/diff/gen-node.hpp"
-//#include "lib/idi/entry-id.hpp"
+#include "include/session-command-facade.h"
 
 #include <boost/noncopyable.hpp>
-//#include <string>
 
 
 namespace gui {
 namespace ctrl{
+  namespace error = lumiera::error;
   
-//  using lib::HashVal;
-//  using util::isnil;
-//  using lib::idi::EntryID;
   using lib::diff::Rec;
   using lib::diff::GenNode;
   using lib::diff::DataCap;
   using proc::control::SessionCommand;
-//  using std::string;
   
   
   /**
@@ -90,21 +75,42 @@ namespace ctrl{
     : public DataCap::Predicate
     , boost::noncopyable
     {
+      
       GenNode::ID const& commandID_;
       
+      /** @todo unimplemented extension of command protocol
+       *        to clone a given command definition prototype
+       * @param subID additional identifier to extend command-ID
+       * @return extended command ID, comprised of the basic ID, as given by
+       *        the GenNode::ID of the commandMsg (see CommandHandler(GenNode)),
+       *        extended by the subID and some random digits.
+       * @throw error::Logic always, not yet implemented        ///////////////////////////////////////////////////TICKET #1058 consider extension of UI-Bus protocol
+       */
       bool
-      handle (Rec const& bindingArgs) override    ///< the argument binding message
+      handle (string const& subID) override                ///< the "bang!" message (command invocation)
+        {
+          throw error::Logic ("Extended Protocol for cloning command prototypes (Ticket #1058)"
+                             , error::LUMIERA_ERROR_UNIMPLEMENTED);
+        }
+      
+      
+      /** handle command argument binding message */
+      bool
+      handle (Rec const& bindingArgs) override
         {
           SessionCommand::facade().bindArg (commandID_, bindingArgs);
           return true;
         }
       
+      
+      /** handle the "bang!" message (trigger invocation) */
       bool
       handle (int const&) override                ///< the "bang!" message (command invocation)
         {
           SessionCommand::facade().invoke (commandID_);
           return true;
         }
+      
       
     public:
       CommandHandler (GenNode const& commandMsg)

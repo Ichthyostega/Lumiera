@@ -103,7 +103,8 @@ namespace ctrl {
     /* ==== standard implementation of the BusTerm interface ==== */
     
     /** prepare or trigger invocation of a command.
-     * @param command a GenNode holding parameters invocation trigger
+     * @param command a GenNode either holding command parameters
+     *        or an int to signal actual command invocation
      * @remarks some commands can simply be invoked right away, but
      *          in the general case, command preparation and invocation
      *          is a multi-step process. The gui::interact::InvocationTrail
