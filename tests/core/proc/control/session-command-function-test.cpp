@@ -34,6 +34,7 @@ extern "C" {
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/format-obj.hpp"
+#include "lib/format-cout.hpp" //////////TODO
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
@@ -50,10 +51,12 @@ namespace test    {
 //  using std::rand;
   using lib::test::randTime;
   using gui::ctrl::CommandHandler;
+  using lib::diff::Rec;
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::Duration;
   using lib::time::Offset;
+  using lib::time::FSecs;
   using lib::Symbol;
   using util::isnil;
   using util::toString;
@@ -66,18 +69,18 @@ namespace test    {
     
     const Symbol COMMAND_ID{"test.dispatch.function.command"};
     
-    TimeVar dummyState = randTime();
+    TimeVar testCommandState = randTime();
     
     void
     operate (Duration dur, Offset offset, int factor)
     {
-      dummyState += dur + offset*factor;
+      testCommandState += dur + offset*factor;
     }
     
     string
     capture (Duration, Offset, int)
     {
-      return dummyState;
+      return testCommandState;
     }
     
     void
@@ -91,7 +94,7 @@ namespace test    {
   
 //  typedef shared_ptr<CommandImpl> PCommandImpl;
 //  typedef HandlingPattern const& HaPatt;
-  
+#define __DELAY__ usleep(10000);
   
   
   
@@ -139,7 +142,7 @@ namespace test    {
           lumiera::throwOnError();
           
           startDispatcher();
-//        perform_simpleInvocation();
+          perform_simpleInvocation();
 //        perform_messageInvocation();
 //        perform_massivelyParallel();
           stopDispatcher();
@@ -176,7 +179,7 @@ namespace test    {
           CHECK (ProcDispatcher::instance().isRunning());
           ProcDispatcher::instance().requestStop();
           
-          usleep(10000);
+          __DELAY__
           CHECK (not ProcDispatcher::instance().isRunning());
           CHECK (thread_has_ended);
         }
@@ -185,7 +188,21 @@ namespace test    {
       void
       perform_simpleInvocation()
         {
-          UNIMPLEMENTED ("invoke the facade directly");
+          string cmdID {COMMAND_ID};
+          Rec arguments {Duration(15,10), Time(500,0), -1};
+          
+          CHECK (not Command(COMMAND_ID).canExec());
+          SessionCommand::facade().bindArg (cmdID, arguments);
+          CHECK (Command(COMMAND_ID).canExec());
+          
+          cout << "prevState="<<testCommandState<<endl;
+          
+          Time prevState = testCommandState;
+          SessionCommand::facade().invoke(cmdID);
+          
+          __DELAY__
+          cout << "postState="<<testCommandState<<endl;
+          CHECK (testCommandState - prevState == Time(0, 1));
         }
       
       
