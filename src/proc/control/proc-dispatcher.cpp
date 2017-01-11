@@ -89,6 +89,7 @@
 #include "proc/control/session-command-service.hpp"
 #include "proc/mobject/session.hpp"
 #include "backend/thread-wrapper.hpp"
+#include "lib/util.hpp"                ///////////////TODO for test command invocation
 
 #include <memory>
   
@@ -296,6 +297,14 @@ namespace control {
           if (cmd)
             {
               TODO ("+++ dispatch %s", util::cStr(cmd));
+              
+              //////////////////////////////////////////////////////TODO : magic to invoke commands from unit tests
+              if (util::startsWith (string(cmd.getID()), "test."))
+                {
+                  INFO (command, "+++ -------->>> bang!");
+                  cmd();
+                }
+              //////////////////////////////////////////////////////TODO : magic to invoke commands from unit tests
             }
         }
       

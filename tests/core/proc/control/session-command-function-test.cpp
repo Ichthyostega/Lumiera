@@ -74,7 +74,7 @@ namespace test    {
     void
     operate (Duration dur, Offset offset, int factor)
     {
-      testCommandState += dur + offset*factor;
+      testCommandState += Offset(dur) + offset*factor;
     }
     
     string
@@ -195,13 +195,11 @@ namespace test    {
           SessionCommand::facade().bindArg (cmdID, arguments);
           CHECK (Command(COMMAND_ID).canExec());
           
-          cout << "prevState="<<testCommandState<<endl;
           
           Time prevState = testCommandState;
           SessionCommand::facade().invoke(cmdID);
           
           __DELAY__
-          cout << "postState="<<testCommandState<<endl;
           CHECK (testCommandState - prevState == Time(0, 1));
         }
       
