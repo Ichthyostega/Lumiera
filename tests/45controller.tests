@@ -125,3 +125,8 @@ END
 TEST "Dispatcher command queue" CommandQueue_test <<END
 return: 0
 END
+
+
+TEST "Dispatcher function test" SessionCommandFunction_test <<END
+return: 0
+END

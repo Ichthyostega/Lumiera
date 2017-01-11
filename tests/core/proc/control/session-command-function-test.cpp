@@ -23,6 +23,10 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+extern "C" {
+#include "common/interfaceregistry.h"
+}
+
 #include "proc/control/proc-dispatcher.hpp"
 #include "proc/control/command-def.hpp"
 #include "gui/ctrl/command-handler.hpp"
@@ -31,9 +35,10 @@
 #include "lib/time/timecode.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/symbol.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <cstdlib>
+#include <string>
 
 
 namespace proc {
@@ -50,8 +55,9 @@ namespace test    {
   using lib::time::Duration;
   using lib::time::Offset;
   using lib::Symbol;
-//  using util::isnil;
+  using util::isnil;
   using util::toString;
+  using std::string;
   
   
   namespace { // test fixture...
@@ -129,25 +135,50 @@ namespace test    {
       virtual void
       run (Arg)
         {
+          lumiera_interfaceregistry_init();
+          lumiera::throwOnError();
+          
           startDispatcher();
-          perform_simpleInvocation();
-          perform_messageInvocation();
-          perform_massivelyParallel();
+//        perform_simpleInvocation();
+//        perform_messageInvocation();
+//        perform_massivelyParallel();
           stopDispatcher();
+          
+          lumiera_interfaceregistry_destroy();
         }
       
       
+      /** @test start the session loop thread, similar
+       *        to what the »session subsystem« does
+       *  @note we are _not_ actually starting the subsystem
+       *  @see facade.cpp
+       */
       void
       startDispatcher()
         {
-          UNIMPLEMENTED ("start the session loop thread");
+          CHECK (not ProcDispatcher::instance().isRunning());
+          
+          ProcDispatcher::instance().start ([&] (string* problemMessage)
+                                                {
+                                                  CHECK (isnil (*problemMessage));
+                                                  thread_has_ended = true;
+                                                });
+          
+          CHECK (ProcDispatcher::instance().isRunning());
+          CHECK (not thread_has_ended);
         }
+      bool thread_has_ended{false};
       
       
       void
       stopDispatcher()
         {
-          UNIMPLEMENTED ("stop the session loop thread");
+          CHECK (ProcDispatcher::instance().isRunning());
+          ProcDispatcher::instance().requestStop();
+          
+          usleep(10000);
+          CHECK (not ProcDispatcher::instance().isRunning());
+          CHECK (thread_has_ended);
         }
       
       
