@@ -296,7 +296,7 @@ namespace time {
 
     public:
       explicit 
-      Offset (TimeValue const& distance)
+      Offset (TimeValue const& distance =Time::ZERO)
         : TimeValue(distance)
         { }
       
