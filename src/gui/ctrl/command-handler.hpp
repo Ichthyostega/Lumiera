@@ -52,12 +52,14 @@
 #include "include/session-command-facade.h"
 
 #include <boost/noncopyable.hpp>
+#include <string>
 
 
 namespace gui {
 namespace ctrl{
   namespace error = lumiera::error;
   
+  using std::string;
   using lib::diff::Rec;
   using lib::diff::GenNode;
   using lib::diff::DataCap;

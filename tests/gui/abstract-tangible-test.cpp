@@ -91,7 +91,8 @@ namespace test {
   
   namespace { // test fixture...
     
-    // dummy operation to be invoked through the command system
+    /* === dummy operation to be invoked through the command system === */
+    
     int dummyState = 0;
     
     void

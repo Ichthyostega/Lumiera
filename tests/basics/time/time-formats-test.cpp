@@ -30,7 +30,6 @@
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <boost/lexical_cast.hpp>
 #include <string>
 #include <cstdlib>
 
@@ -45,6 +44,7 @@ namespace time{
 namespace test{
   
   using proc::asset::meta::TimeGrid;
+  using util::toString;
   using format::Frames;
   using format::Smpte;
   
@@ -58,7 +58,7 @@ namespace test{
       while (!frameNr)
         frameNr = rand() % (2*MAX_FRAME) - MAX_FRAME;
       
-      return lexical_cast<string>(frameNr)+"#";
+      return toString(frameNr)+"#";
     }
   }
   
@@ -128,7 +128,7 @@ namespace test{
           CHECK (5 == frames2 - frames1);
           
           q2.accept (Mutation::changeTime(v1));
-          CHECK (30 == q2.formatAs<Frames>() - frames1);
+          CHECK (30 == q2.formatAs<Frames>() - frames1);     // q2 == v1 == t1 + (6*5)/(5*5)sec
           
           CHECK (quellCode == string(frames1));
           CHECK (quellCode != string(frames2));

@@ -1,0 +1,194 @@
+/*
+  SessionCommandFunction(Test)  -  function test of command dispatch via SessionCommand facade
+
+  Copyright (C)         Lumiera.org
+    2017,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+* *****************************************************/
+
+
+#include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
+#include "proc/control/proc-dispatcher.hpp"
+#include "proc/control/command-def.hpp"
+#include "gui/ctrl/command-handler.hpp"
+#include "proc/asset/meta/time-grid.hpp"
+#include "lib/time/timequant.hpp"
+#include "lib/time/timecode.hpp"
+#include "lib/format-obj.hpp"
+#include "lib/symbol.hpp"
+//#include "lib/util.hpp"
+
+//#include <cstdlib>
+
+
+namespace proc {
+namespace control {
+namespace test    {
+  
+  
+//  using std::function;
+//  using std::rand;
+  using lib::test::randTime;
+  using gui::ctrl::CommandHandler;
+  using lib::time::Time;
+  using lib::time::TimeVar;
+  using lib::time::Duration;
+  using lib::time::Offset;
+  using lib::Symbol;
+//  using util::isnil;
+  using util::toString;
+  
+  
+  namespace { // test fixture...
+    
+    /* === mock operation to be dispatched as command === */
+    
+    const Symbol COMMAND_ID{"test.dispatch.function.command"};
+    
+    TimeVar dummyState = randTime();
+    
+    void
+    operate (Duration dur, Offset offset, int factor)
+    {
+      dummyState += dur + offset*factor;
+    }
+    
+    string
+    capture (Duration, Offset, int)
+    {
+      return dummyState;
+    }
+    
+    void
+    undoIt (Duration, Offset, int, string oldState)
+    {
+//    dummyState = oldState;
+    }
+    
+    
+  }//(End) test fixture
+  
+//  typedef shared_ptr<CommandImpl> PCommandImpl;
+//  typedef HandlingPattern const& HaPatt;
+  
+  
+  
+  
+  
+  
+  /******************************************************************************************//**
+   * @test verify integrated functionality of command dispatch through the SessionCommand facade.
+   *       - operate lifecycle of the supporting components,
+   *         similar to activating the »session subsystem«
+   *       - generate command messages similar to what is received from the UI-Bus
+   *       - us the handler mechanism from gui::ctrl::CoreService to talk to the facade
+   *       - have a specially rigged command function to observe invocation
+   *       - wait for the session loop thread to dispatch this command
+   *       - verify that commands are really executed single-threaded
+   * 
+   * @see proc::SessionSubsystem
+   * @see ProcDispatcher
+   * @see CommandQueue_test
+   * @see AbstractTangible_test::invokeCommand()
+   */
+  class SessionCommandFunction_test : public Test
+    {
+      
+      //------------------FIXTURE
+    public:
+      SessionCommandFunction_test()
+        {
+          CommandDef (COMMAND_ID)
+               .operation (operate)
+               .captureUndo (capture)
+               .undoOperation (undoIt)
+               ;
+        }
+     ~SessionCommandFunction_test()
+        {
+          Command::remove (COMMAND_ID);
+        }
+      //-------------(End)FIXTURE
+      
+     
+      virtual void
+      run (Arg)
+        {
+          startDispatcher();
+          perform_simpleInvocation();
+          perform_messageInvocation();
+          perform_massivelyParallel();
+          stopDispatcher();
+        }
+      
+      
+      void
+      startDispatcher()
+        {
+          UNIMPLEMENTED ("start the session loop thread");
+        }
+      
+      
+      void
+      stopDispatcher()
+        {
+          UNIMPLEMENTED ("stop the session loop thread");
+        }
+      
+      
+      void
+      perform_simpleInvocation()
+        {
+          UNIMPLEMENTED ("invoke the facade directly");
+        }
+      
+      
+      /** @test invoke a command in the same way as CoreService does
+       *        when handling command messages from the UI-Bus
+       *        - use the help of an InvocationTrail, similar to what the
+       *          [generic UI element](\ref gui::model::Tangible) does 
+       *        - generate a argument binding message
+       *        - generate a "bang!" message
+       */
+      void
+      perform_messageInvocation()
+        {
+          UNIMPLEMENTED ("invoke via message");
+        }
+      
+      
+      /** @test verify that commands are properly enqueued
+       *        and executed one by one
+       *        - create several threads to send random command messages
+       *        - verify that, after executing all commands, the internal
+       *          state variable reflects the result of a proper
+       *          sequential calculation and summation
+       */
+      void
+      perform_massivelyParallel()
+        {
+          UNIMPLEMENTED ("verify sequentialisation by queue");
+        }
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (SessionCommandFunction_test, "function controller");
+  
+  
+}}} // namespace proc::control::test
