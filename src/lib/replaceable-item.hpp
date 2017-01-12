@@ -29,6 +29,27 @@
  ** the same storage space. For all really assignable types we fall back to a trivial
  ** implementation.
  ** 
+ ** \par motivation
+ ** The typical usage is in library or framework code, where we do not know what types to expect.
+ ** For example, the Lumiera command framework automatically captures an _UNDO memento_ based
+ ** on the return type of a state capturing function. It would be highly surprising for the
+ ** user if it wasn't possible to capture e.g. time values or durations as _old state_,
+ ** because these entities can not be re-assigned with new values, only created.
+ ** But obviously a command handling framework needs the ability to capture
+ ** state consecutively several times, and this adapter was created
+ ** to bridge this conceptual discrepancy
+ ** 
+ ** \par extensions
+ **  - the type can be solely move constructible, in which case the payload needs to be
+ **    moved explicitly when embedding into this adapter   ///////////////////////////////////////////////TICKET 1059 : does not work yet on GCC-4.9
+ **  - when the payload is equality comparable, the container is as well, by delegation
+ **  - container instances can be default created, which emplaces an _empty value_.
+ **    The actual value to embed is retrieved from the lib::NullValue template,
+ **    which is a static per-type singleton.
+ **  - thus types which are not even default constructible can still be used,
+ **    by providing an explicit specialisation of lib::NullValue for this type.
+ ** 
+ ** @see ReplaceableIterm_test
  ** @see proc::control::MementoTie
  ** 
  */
@@ -42,24 +63,25 @@
 #include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
-#include <utility>
 #include <type_traits>
+#include <utility>
 
 
 
 namespace lib {
 namespace wrapper {
   
-  using util::unConst;
   using util::isSameObject;
+  using util::unConst;
   using std::forward;
-//  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   
   
   
   /**
-   * 
+   * Adapter container to take snapshots from non-assignable values.
+   * Implemented by placing the subject into an inline buffer.
+   * @note uses lib::NullValue to retrieve an _empty payload_.
    */
   template<typename X, typename COND =void>
   class ReplaceableItem
@@ -105,6 +127,12 @@ namespace wrapper {
           return reinterpret_cast<X&>(content_);
         }
       
+      void
+      destroy()
+        {
+          access().~X();
+        }
+      
       template<typename Z>
       void
       emplace (Z&& otherValue)
@@ -113,12 +141,6 @@ namespace wrapper {
         } 
         catch(...) {
           NullValue<X>::build (&content_);
-        }
-      
-      void
-      destroy()
-        {
-          access().~X();
         }
       
       template<typename Z>
@@ -131,12 +153,16 @@ namespace wrapper {
     };
   
   
+  
   template<typename X>
   struct is_assignable_value
     : std::__and_<std::is_copy_assignable<X>, std::__not_<std::is_reference<X>>>
     { };
   
-  
+  /**
+   * simple delegating implementation
+   * to use for regular cases
+   */
   template<typename X>
   class ReplaceableItem<X,    meta::enable_if<is_assignable_value<X>>>
     {
@@ -159,6 +185,7 @@ namespace wrapper {
     };
   
   
+  /** disallow embedding references */
   template<typename X>
   class ReplaceableItem<X,    meta::enable_if<std::is_reference<X>>>
     {
