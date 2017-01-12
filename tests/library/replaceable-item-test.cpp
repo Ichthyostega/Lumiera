@@ -67,7 +67,7 @@ namespace test{
         
         Tracker()                  : i_(rand() % 500) { ++cntTracker; }
         Tracker(Tracker const& ot) : i_(ot.i_)        { ++cntTracker; }
-        Tracker(uint i)            : i_()             { ++cntTracker; }
+        Tracker(uint i)            : i_(i)            { ++cntTracker; }
        ~Tracker()                                     { --cntTracker; }
       };
     
@@ -114,20 +114,20 @@ namespace test{
           Duration d1{randTime()}, d2{randTime()};
           
           verifyWrapper<ulong> (l1, l2);
-          verifyWrapper<Time>  (t1, d1);
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
-          verifyWrapper<ulong&> (l1, l2);
           verifyWrapper<ulong*> (&l1, &l2);
-          verifyWrapper<ulong*> ((0), &l2);
-          verifyWrapper<ulong*> (&l1, (0));
-          verifyWrapper<ulong const&> (l1, l2);
           
           verifyWrapper<string> (s1, s2);
-          verifyWrapper<string&> (s1, s2);
           verifyWrapper<string*> (&s1, &s2);
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          verifyWrapper<string> (cp, "Lumiera");
           verifyWrapper<const char*> (cp, "Lumiera");
+          verifyWrapper<const char*> (cp, s2);
           
+          verifyWrapper<Time>  (t1, t2);
+          verifyWrapper<Time>  (t1, d1);
+          verifyWrapper<Duration> (d1, t2);
+          verifyWrapper<Duration> (d1, d2);
           
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           verifySaneInstanceHandling();

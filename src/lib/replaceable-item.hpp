@@ -50,7 +50,7 @@
 namespace lib {
 namespace wrapper {
   
-//  using util::unConst;
+  using util::unConst;
   using util::isSameObject;
   using std::forward;
 //  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
@@ -91,16 +91,11 @@ namespace wrapper {
           return *this;
         }
       
-      operator X&()
-        {
-          return access();
-        }
-      operator X const&()  const
-        {
-          return unConst(this)->access();
-        }
+      operator X&()             { return access();                }
+      operator X const&() const { return unConst(this)->access(); }
       
-      X& get() { return access(); }
+      X&       get()            { return access();                }
+      X const& get()      const { return unConst(this)->access(); }
       
       
     private:
@@ -159,7 +154,8 @@ namespace wrapper {
       operator X&()             { return val_; }
       operator X const&() const { return val_; }
       
-      X& get() { return val_; }
+      X&       get()       { return val_; }
+      X const& get() const { return val_; }
     };
   
   
@@ -170,6 +166,46 @@ namespace wrapper {
     };
   
   
+  /* ===== Equality comparison delegated to contained element ===== */
+  
+  template<typename X>
+  inline bool
+  operator== (ReplaceableItem<X> const& li, ReplaceableItem<X> const& ri)
+  {
+    return li.get() == ri.get();
+  }
+  template<typename X>
+  inline bool
+  operator!= (ReplaceableItem<X> const& li, ReplaceableItem<X> const& ri)
+  {
+    return li.get() != ri.get();
+  }
+  
+  template<typename X, typename Z>
+  inline bool
+  operator== (ReplaceableItem<X> const& item, Z const& something)
+  {
+    return item.get() == something;
+  }
+  template<typename X, typename Z>
+  inline bool
+  operator!= (ReplaceableItem<X> const& item, Z const& something)
+  {
+    return item.get() != something;
+  }
+  
+  template<typename Z, typename X>
+  inline bool
+  operator== (Z const& something, ReplaceableItem<X> const& item)
+  {
+    return item.get() == something;
+  }
+  template<typename Z, typename X>
+  inline bool
+  operator!= (Z const& something, ReplaceableItem<X> const& item)
+  {
+    return item.get() != something;
+  }
   
   
   
