@@ -27,14 +27,13 @@
  ** It is implemented as a cluster of Meyer's Singletons, thus the creation happens
  ** on demand, and the destruction happens "sometime" during application shutdown.
  ** Contrary to the generic lumiera Singleton holder, this implementation is
- ** lightweight and without any further prerequisites, contains no logging,
- ** no assertions and no locking.
+ ** lightweight and without any further prerequisites and validity checks.
  ** @warning we can't make any assumptions regarding the exact time when the dtor
  **          is called, and it is even impossible to detect if this happened already.
  **          Any access after that point will use a defunct object, thus the user
- **          needs to assure this facility is <b>never used during application shutdown</b>
+ **          needs to assure this facility is *never used during application shutdown*
  ** 
- ** \par purpose of NIL objects
+ ** # purpose of NIL objects
  ** Employing the NIL object pattern instead of NULL pointers typically leads to
  ** greatly simplified and more robust code. Usually the only problem is these NIL
  ** marker objects need to exist somewhere. In case no factory is used for object
@@ -44,6 +43,7 @@
  ** may introduce a race, which is considered acceptable here, as these objects
  ** are assumed to be simple, constant and value-like.
  ** 
+ ** @note deliberately this template is an extension point for explicit specialisation
  ** @todo initialisation could be extended to use a free function to fabricate
  **       the NIL value object, so to support the special case of an NIL object
  **       not being default constructible
@@ -65,7 +65,8 @@ namespace lib {
   /** 
    * Singleton holder for NIL or default value objects.
    * Implemented as a cluster of Meyer's singletons, maintaining
-   * a single value per type.
+   * a single value per type. As an extension point for specialisation,
+   * a function to emplace a "default" object is also provided.
    */
   template<class TY>
   struct NullValue
@@ -75,6 +76,12 @@ namespace lib {
         {
           static TY nilValue;
           return nilValue;
+        }
+      
+      static TY&
+      build (void* storage)
+        {
+          new(storage) TY{};
         }
     };
   

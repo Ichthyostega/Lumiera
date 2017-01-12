@@ -1,0 +1,222 @@
+/*
+  ReplaceableItem(Test)  -  adapter to take snapshot from non-assignable values
+
+  Copyright (C)         Lumiera.org
+    2017,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+* *****************************************************/
+
+
+
+#include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
+#include "lib/util.hpp"
+
+#include "lib/replaceable-item.hpp"
+
+//#include <functional>
+//#include <iostream>
+//#include <cstdlib>
+//#include <string>
+//#include <vector>
+
+
+
+namespace lib {
+namespace wrapper {
+namespace test{
+  
+  using ::Test;
+  using lib::test::randStr;
+  using lib::test::showSizeof;
+  using util::isSameObject;
+  
+  using std::ref;
+  using std::vector;
+  using std::string;
+  using std::rand;
+  using std::cout;
+  using std::endl;
+  
+  
+  
+  namespace { // Test helper: yet another ctor/dtor counting class
+    
+    long cntTracker = 0;
+    
+    struct Tracker
+      {
+        uint i_;
+        
+        Tracker()                  : i_(rand() % 500) { ++cntTracker; }
+        Tracker(Tracker const& ot) : i_(ot.i_)        { ++cntTracker; }
+       ~Tracker()                                     { --cntTracker; }
+      };
+    
+    struct NonAssign
+      : Tracker
+      {
+        using Tracker::Tracker;
+        NonAssign& operator= (NonAssign const&)  =delete;
+      };
+      
+  } // (END) Test helpers
+  
+  
+  
+  
+  
+  
+  
+  /***************************************************************************//**
+   * @test use the ItemWrapper to define inline-storage holding values,
+   *       pointers and references. Verify correct behaviour in each case,
+   *       including (self)assignment, empty check, invalid dereferentiation.
+   * 
+   * @see  wrapper.hpp
+   */
+  class ReplaceableItem_test : public Test
+    {
+    
+    
+      virtual void
+      run (Arg)
+        {
+          ulong l1 (rand() % 1000);
+          ulong l2 (rand() % 1000);
+          string s1 (randStr(50));
+          string s2 (randStr(50));
+          const char* cp (s1.c_str());
+          
+          verifyWrapper<ulong> (l1, l2);
+          verifyWrapper<ulong&> (l1, l2);
+          verifyWrapper<ulong*> (&l1, &l2);
+          verifyWrapper<ulong*> ((0), &l2);
+          verifyWrapper<ulong*> (&l1, (0));
+          verifyWrapper<ulong const&> (l1, l2);
+          
+          verifyWrapper<string> (s1, s2);
+          verifyWrapper<string&> (s1, s2);
+          verifyWrapper<string*> (&s1, &s2);
+          
+          verifyWrapper<const char*> (cp, "Lumiera");
+          
+          
+          verifySaneInstanceHandling();
+          verifyWrappedRef ();
+        }
+      
+      
+      template<typename X, typename Y>
+      void
+      verifyWrapper (X she, Y he)
+        {
+          using It = ReplaceableItem<X>;
+          
+          It one{she}, two{he};
+          CHECK (two == he);
+          CHECK (one == she);
+          CHECK (sizeof(one) == sizeof(X));
+          CHECK (sizeof(two) == sizeof(X));
+          
+          It copy1{she};
+          It copy2;
+          
+          CHECK (one == copy1);
+          CHECK (one != copy2);
+          CHECK (two != copy1);
+          CHECK (two != copy2);
+          
+          CHECK (copy2 == NullValue<X>::get());
+          
+          copy2 = two;
+          CHECK (one == copy1);
+          CHECK (one != copy2);
+          CHECK (two != copy1);
+          CHECK (two == copy2);
+          
+          std::swap (copy1, copy2);
+          CHECK (one != copy1);
+          CHECK (one == copy2);
+          CHECK (two == copy1);
+          CHECK (two != copy2);
+          
+          copy1 = copy1;
+          copy2 = one;
+          
+          CHECK (copy1 == he);
+          CHECK (copy2 == she);
+          
+          CHECK (not isSameObject(he, static_cast<X&>(copy1)));
+          
+          copy1 = It;
+          copy1 = copy1;
+          CHECK (copy1 == NullValue<X>::get());
+          CHECK (copy1 != he);
+        };
+      
+      
+      /** @test verify that ctor and dtor calls are balanced,
+       *        even when assigning and self-assigning.
+       */
+      void
+      verifySaneInstanceHandling()
+        {
+          cntTracker = 0;
+          {
+            Tracker t1;
+            Tracker t2;
+            
+            verifyWrapper<Tracker> (t1, t2);
+            verifyWrapper<Tracker&> (t1, t2);
+            verifyWrapper<Tracker*> (&t1, &t2);
+            
+          }
+          CHECK (0 == cntTracker);
+        }
+      
+      
+      /** @test verify especially that we can handle
+       *        and re-"assign" an embedded reference
+       */
+      void
+      verifyWrappedRef ()
+        {
+          int x = 5;
+          ReplaceableItem<int&> refWrap;
+          CHECK (refWrap == 0);
+          
+          refWrap = x;
+          CHECK (5 == refWrap);
+          CHECK (x == refWrap);
+          
+          refWrap += 5;
+          CHECK (x == 10);
+          
+          ItemWrapper<int*> ptrWrap (& static_cast<int&>(refWrap));
+          CHECK ( isSameObject (*static_cast<int*>(ptrWrap),  x));
+          CHECK (!isSameObject ( static_cast<int*>(ptrWrap), &x));
+          *static_cast<int*>(ptrWrap) += 13;
+          CHECK (x == 23);
+        }
+    };
+  
+  LAUNCHER (ReplaceableItem_test, "unit common");
+  
+  
+}}} // namespace lib::wrapper::test
+

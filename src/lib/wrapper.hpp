@@ -44,9 +44,9 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
-#include <boost/type_traits/remove_const.hpp>
 #include <boost/noncopyable.hpp>
 #include <functional>
 
@@ -59,7 +59,6 @@ namespace wrapper {
   using lib::meta::FunctionSignature;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
-  using boost::remove_const;
   using std::function;
   
   
@@ -143,7 +142,7 @@ namespace wrapper {
     : public BoolCheckable<ItemWrapper<TY>>
     {
       
-      typedef typename remove_const<TY>::type TY_unconst;
+      using TY_unconst = typename meta::UnConst<TY>::Type ;
       
       
       mutable 
@@ -220,7 +219,7 @@ namespace wrapper {
           if (!isSameObject (something, access() ))
             {
               if (created_)
-                access_unconst() = something;
+                access() = something;
               else
                 build (something);
             }
