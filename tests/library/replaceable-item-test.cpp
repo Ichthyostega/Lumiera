@@ -53,6 +53,7 @@ namespace test{
 //  using std::vector;
   using std::string;
   using std::rand;
+  using std::swap;
   
   
   
@@ -66,6 +67,7 @@ namespace test{
         
         Tracker()                  : i_(rand() % 500) { ++cntTracker; }
         Tracker(Tracker const& ot) : i_(ot.i_)        { ++cntTracker; }
+        Tracker(uint i)            : i_()             { ++cntTracker; }
        ~Tracker()                                     { --cntTracker; }
       };
     
@@ -186,6 +188,8 @@ namespace test{
       
       /** @test verify that ctor and dtor calls are balanced,
        *        even when assigning and self-assigning.
+       *  @note Tracker uses the simple implementation for assignable values,
+       *        while NonAssign uses the embedded-buffer implementation
        */
       void
       verifySaneInstanceHandling()
@@ -197,11 +201,19 @@ namespace test{
             
             verifyWrapper<Tracker> (t1, t2);
             verifyWrapper<Tracker*> (&t1, &t2);
+            verifyWrapper<Tracker> (t1, t2.i_);
             verifyWrapper<Tracker, Tracker&> (t1, t2);
             
+            NonAssign u1;
+            NonAssign u2;
+            verifyWrapper<NonAssign> (u1, u2);
+            verifyWrapper<NonAssign*> (&u1, &u2);
+            verifyWrapper<NonAssign> (u1, u2.i_);
+            verifyWrapper<NonAssign, NonAssign&> (u1, u2);
+            verifyWrapper<Tracker> (u1, u2);
           }
-          CHECK (1 == cntTracker);      // one singleton instance in NullValue<Tracker> survives 
-        }
+          CHECK (2 == cntTracker);      // surviving singleton instances
+        }                              //  NullValue<Tracker> and NullValue<NonAssign>
       
       
       /** @test verify especially that we can handle and re-"assign" an embedded pointer */
