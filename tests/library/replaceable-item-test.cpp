@@ -75,7 +75,11 @@ namespace test{
         using Tracker::Tracker;
         NonAssign& operator= (NonAssign const&)  =delete;
       };
-      
+    
+    
+    bool operator== (Tracker const& t1, Tracker const& t2) { return t1.i_ == t2.i_; }
+    bool operator!= (Tracker const& t1, Tracker const& t2) { return t1.i_ != t2.i_; }
+    
   } // (END) Test helpers
   
   
@@ -123,8 +127,8 @@ namespace test{
           verifyWrapper<const char*> (cp, "Lumiera");
           
           
-          verifySaneInstanceHandling();
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          verifySaneInstanceHandling();
           verifyWrappedPtr ();
         }
       
@@ -178,7 +182,6 @@ namespace test{
           CHECK (copy1 == NullValue<X>::get());
           CHECK (copy1 != he);
         };
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
       
       
       /** @test verify that ctor and dtor calls are balanced,
@@ -193,13 +196,12 @@ namespace test{
             Tracker t2;
             
             verifyWrapper<Tracker> (t1, t2);
-            verifyWrapper<Tracker&> (t1, t2);
             verifyWrapper<Tracker*> (&t1, &t2);
+            verifyWrapper<Tracker, Tracker&> (t1, t2);
             
           }
-          CHECK (0 == cntTracker);
+          CHECK (1 == cntTracker);      // one singleton instance in NullValue<Tracker> survives 
         }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
       
       
       /** @test verify especially that we can handle and re-"assign" an embedded pointer */

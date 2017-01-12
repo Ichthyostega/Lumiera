@@ -148,7 +148,7 @@ namespace wrapper {
       X val_;
       
     public:
-      ReplaceableItem() : val_() { }
+      ReplaceableItem() : val_(NullValue<X>::get())         { }
       
       ReplaceableItem(X const& val) : val_(val)             { }
       ReplaceableItem(X &&     val) : val_(forward<X>(val)) { }
