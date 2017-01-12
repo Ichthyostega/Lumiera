@@ -25,6 +25,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"////////////TODO
 
 #include "lib/replaceable-item.hpp"
@@ -43,11 +44,13 @@ namespace test{
   
   using ::Test;
   using lib::test::randStr;
-  using lib::test::showSizeof;
+  using lib::test::randTime;
   using util::isSameObject;
   
-  using std::ref;
-  using std::vector;
+  using time::Time;
+  using time::Duration;
+//  using std::ref;
+//  using std::vector;
   using std::string;
   using std::rand;
   
@@ -101,14 +104,12 @@ namespace test{
           string s2 (randStr(50));
           const char* cp (s1.c_str());
           
-          cout << std::boolalpha << is_assignable_value<int>::value <<endl; 
-          cout << std::boolalpha << is_assignable_value<int&>::value <<endl; 
-          cout << std::boolalpha << is_assignable_value<int&&>::value <<endl; 
-          cout << std::boolalpha << is_assignable_value<int const&>::value <<endl; 
-          cout << std::boolalpha << is_assignable_value<int*>::value <<endl; 
+          Time     t1{randTime()}, t2{randTime()};
+          Duration d1{randTime()}, d2{randTime()};
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           verifyWrapper<ulong> (l1, l2);
+          verifyWrapper<Time>  (t1, d1);
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           verifyWrapper<ulong&> (l1, l2);
           verifyWrapper<ulong*> (&l1, &l2);
           verifyWrapper<ulong*> ((0), &l2);
@@ -127,7 +128,6 @@ namespace test{
           verifyWrappedPtr ();
         }
       
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
       
       template<typename X, typename Y>
       void
@@ -151,31 +151,34 @@ namespace test{
           
           CHECK (copy2 == NullValue<X>::get());
           
-          copy2 = two;
+          copy2 = he;               // assign from value
           CHECK (one == copy1);
           CHECK (one != copy2);
           CHECK (two != copy1);
           CHECK (two == copy2);
           
-          std::swap (copy1, copy2);
+          std::swap (copy1, copy2); // possibly move construction / move assignment
           CHECK (one != copy1);
           CHECK (one == copy2);
           CHECK (two == copy1);
           CHECK (two != copy2);
           
-          copy1 = copy1;
-          copy2 = one;
+          copy1 = copy1;            // self assignment (is skipped)
+          copy2 = one;              // assignment of an identical value
           
           CHECK (copy1 == he);
           CHECK (copy2 == she);
+          CHECK (one   == she);
+          CHECK (two   == he);
           
           CHECK (not isSameObject(he, static_cast<X&>(copy1)));
           
-          copy1 = It;
+          copy1 = It{};             // copy assignment from anonymous holder
           copy1 = copy1;
           CHECK (copy1 == NullValue<X>::get());
           CHECK (copy1 != he);
         };
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
       
       
       /** @test verify that ctor and dtor calls are balanced,

@@ -81,7 +81,7 @@ namespace lib {
       static TY&
       build (void* storage)
         {
-          new(storage) TY{};
+          return *new(storage) TY{};
         }
     };
   

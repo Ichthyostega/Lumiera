@@ -97,7 +97,7 @@ namespace wrapper {
         }
       operator X const&()  const
         {
-          return access();
+          return unConst(this)->access();
         }
       
       X& get() { return access(); }
@@ -105,7 +105,7 @@ namespace wrapper {
       
     private:
       X&
-      access()  const
+      access()
         {
           return reinterpret_cast<X&>(content_);
         }
