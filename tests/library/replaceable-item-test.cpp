@@ -25,6 +25,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
+#include "lib/format-cout.hpp"////////////TODO
 
 #include "lib/replaceable-item.hpp"
 
@@ -49,8 +50,6 @@ namespace test{
   using std::vector;
   using std::string;
   using std::rand;
-  using std::cout;
-  using std::endl;
   
   
   
@@ -102,6 +101,13 @@ namespace test{
           string s2 (randStr(50));
           const char* cp (s1.c_str());
           
+          cout << std::boolalpha << is_assignable_value<int>::value <<endl; 
+          cout << std::boolalpha << is_assignable_value<int&>::value <<endl; 
+          cout << std::boolalpha << is_assignable_value<int&&>::value <<endl; 
+          cout << std::boolalpha << is_assignable_value<int const&>::value <<endl; 
+          cout << std::boolalpha << is_assignable_value<int*>::value <<endl; 
+          
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           verifyWrapper<ulong> (l1, l2);
           verifyWrapper<ulong&> (l1, l2);
           verifyWrapper<ulong*> (&l1, &l2);
@@ -117,9 +123,11 @@ namespace test{
           
           
           verifySaneInstanceHandling();
-          verifyWrappedRef ();
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          verifyWrappedPtr ();
         }
       
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
       
       template<typename X, typename Y>
       void
@@ -188,30 +196,26 @@ namespace test{
           }
           CHECK (0 == cntTracker);
         }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
       
       
-      /** @test verify especially that we can handle
-       *        and re-"assign" an embedded reference
-       */
+      /** @test verify especially that we can handle and re-"assign" an embedded pointer */
       void
-      verifyWrappedRef ()
+      verifyWrappedPtr ()
         {
           int x = 5;
-          ReplaceableItem<int&> refWrap;
-          CHECK (refWrap == 0);
+          ReplaceableItem<int*> ptrWrap;
+          CHECK (ptrWrap.get() == NULL);
           
-          refWrap = x;
-          CHECK (5 == refWrap);
-          CHECK (x == refWrap);
+          ptrWrap = &x;
+          CHECK (5 == *ptrWrap.get());
+          CHECK (&x == ptrWrap.get());
           
-          refWrap += 5;
+          *ptrWrap.get() += 5;
           CHECK (x == 10);
           
-          ItemWrapper<int*> ptrWrap (& static_cast<int&>(refWrap));
-          CHECK ( isSameObject (*static_cast<int*>(ptrWrap),  x));
-          CHECK (!isSameObject ( static_cast<int*>(ptrWrap), &x));
-          *static_cast<int*>(ptrWrap) += 13;
-          CHECK (x == 23);
+          CHECK ( isSameObject (*ptrWrap.get(), x));
+          CHECK (!isSameObject ( ptrWrap.get(), x));
         }
     };
   

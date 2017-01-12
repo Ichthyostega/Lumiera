@@ -52,6 +52,7 @@ namespace wrapper {
   
 //  using util::unConst;
   using util::isSameObject;
+  using std::forward;
 //  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   
@@ -99,6 +100,9 @@ namespace wrapper {
           return access();
         }
       
+      X& get() { return access(); }
+      
+      
     private:
       X&
       access()  const
@@ -131,11 +135,38 @@ namespace wrapper {
         }
     };
   
+  
   template<typename X>
-  class ReplaceableItem<X,   meta::enable_if<std::is_copy_assignable<X>>>
-    : public X
-    { 
-      using X::X;
+  struct is_assignable_value
+    : std::__and_<std::is_copy_assignable<X>, std::__not_<std::is_reference<X>>>
+    { };
+  
+  
+  template<typename X>
+  class ReplaceableItem<X,    meta::enable_if<is_assignable_value<X>>>
+    {
+      X val_;
+      
+    public:
+      ReplaceableItem() : val_() { }
+      
+      ReplaceableItem(X const& val) : val_(val)             { }
+      ReplaceableItem(X &&     val) : val_(forward<X>(val)) { }
+      
+      ReplaceableItem& operator= (X const& val) { val_=val;             return *this; }
+      ReplaceableItem& operator= (X &&     val) { val_=forward<X>(val); return *this; }
+      
+      operator X&()             { return val_; }
+      operator X const&() const { return val_; }
+      
+      X& get() { return val_; }
+    };
+  
+  
+  template<typename X>
+  class ReplaceableItem<X,    meta::enable_if<std::is_reference<X>>>
+    {
+      static_assert( not sizeof(X), "ReplaceableItem for references is pointless");
     };
   
   
