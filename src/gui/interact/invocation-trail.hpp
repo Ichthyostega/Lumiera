@@ -33,7 +33,7 @@
  ** actual values is tracked by an [InvocationTrail] handle. When
  ** ready, finally this handle can be issued on any [BusTerm].
  ** 
- ** @todo as of 11/2015 this is complete WIP-WIP-WIP
+ ** @todo as of 11/2015 this is more of a concept draft
  ** 
  ** @see ////TODO_test usage example
  ** 
@@ -86,6 +86,7 @@ namespace interact {
        *    exist somewhere in the system and IDs to be sent over the bus, without the certainty
        *    of a real invocation site and a matching command operation to exist somewhere else
        *    within the system.
+       * @todo do we need an alternative ctor based on plain command-ID?                 ///////////////////////////TICKET #1060 : create a dedicated command-ID type?
        */
       InvocationTrail(proc::control::Command prototype)
         : cmdID_(prototype.getID())

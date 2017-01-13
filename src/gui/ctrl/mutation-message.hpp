@@ -109,7 +109,7 @@ namespace ctrl{
      * @note this is a pragmatic guess, based on the actual usage pattern within Lumiera.
      *       This determines the size of the inline buffer within MutationMessage.
      *       You'll get an static assertion failure when creating a MutationMessage
-     *       from a concrete diff representation requiring more size...
+     *       from a concrete diff representation requires more storage space...
      */
     enum { SIZE_OF_DIFF_REPRESENTATION = sizeof(std::vector<string>)
                                        + sizeof(size_t)

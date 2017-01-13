@@ -30,9 +30,7 @@ extern "C" {
 #include "proc/control/proc-dispatcher.hpp"
 #include "proc/control/command-def.hpp"
 #include "gui/ctrl/command-handler.hpp"
-#include "proc/asset/meta/time-grid.hpp"
-#include "lib/time/timequant.hpp"
-#include "lib/time/timecode.hpp"
+#include "gui/interact/invocation-trail.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/format-cout.hpp" //////////TODO
 #include "lib/symbol.hpp"
@@ -50,7 +48,9 @@ namespace test    {
 //  using std::function;
 //  using std::rand;
   using lib::test::randTime;
+  using gui::interact::InvocationTrail;
   using gui::ctrl::CommandHandler;
+  using lib::diff::GenNode;
   using lib::diff::Rec;
   using lib::time::Time;
   using lib::time::TimeVar;
@@ -86,7 +86,7 @@ namespace test    {
     void
     undoIt (Duration, Offset, int, Time oldState)
     {
-//    dummyState = oldState;
+      testCommandState = oldState;
     }
     
     
@@ -200,7 +200,7 @@ namespace test    {
           SessionCommand::facade().invoke(cmdID);
           
           __DELAY__
-          CHECK (testCommandState - prevState == Time(0, 1));
+          CHECK (testCommandState - prevState == Time(0, 1));           // execution added 1500ms -1*500ms == 1sec
         }
       
       
@@ -214,7 +214,29 @@ namespace test    {
       void
       perform_messageInvocation()
         {
-          UNIMPLEMENTED ("invoke via message");
+          // this happens "somewhere" in the UI interaction control framework
+          InvocationTrail invoTrail{Command(COMMAND_ID)};
+          
+          // this happens within some tangible UI element (widget / controller)
+          GenNode argumentBindingMessage = invoTrail.bindMsg (Rec{Duration(25,10), Time(500,0), -2});
+          GenNode commandTriggerMessage  = invoTrail.bangMsg ();
+          CHECK (argumentBindingMessage.idi == commandTriggerMessage.idi);
+          
+          // this happens, when CoreService receives command messages from UI-Bus
+          CommandHandler handler1{argumentBindingMessage};
+          argumentBindingMessage.data.accept(handler1);                 // handler is a visitor for the message payload
+          
+          CHECK (Command::canExec(COMMAND_ID));
+          CHECK (not Command::canUndo(COMMAND_ID));
+          Time prevState = testCommandState;
+          
+          // now handling the message to trigger execution
+          CommandHandler handler2{commandTriggerMessage};
+          commandTriggerMessage.data.accept(handler2);
+          
+          __DELAY__
+          CHECK (Command::canUndo(COMMAND_ID));
+          CHECK (testCommandState - prevState == Time(500, 1));         // execution added 2500ms -2*500ms == 1.5sec
         }
       
       
