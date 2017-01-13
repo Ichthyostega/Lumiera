@@ -44,6 +44,7 @@
 #include "lib/meta/maybe-compare.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
+#include "lib/replaceable-item.hpp"
 #include "lib/functor-util.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
@@ -60,6 +61,7 @@ namespace control {
   using lib::meta::func::bindLast;
   using lib::meta::func::chained;
   using lib::meta::equals_safeInvoke;
+  using lib::wrapper::ReplaceableItem;
     
   LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);  ///<  Undo functor not yet usable, because no undo state has been captured
   
@@ -80,7 +82,7 @@ namespace control {
    *  to be provided with a reference to this stored memento value through an additional
    *  parameter (which by convention is always the last argument of the undo function).
    *  @warning take care of the MementoTie storage location, as the bound functions
-   *           returned by #tieCaptureFunc and #tieUndoFunc refer to \c this internally.
+   *           returned by #tieCaptureFunc and #tieUndoFunc refer to `this` implicitly.
    *  
    *  @param SIG signature of the command operation
    *  @param MEM type of the memento state to capture. Needs to be default constructible and copyable
@@ -94,7 +96,7 @@ namespace control {
       typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
       typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
       
-      MEM memento_; ///< storage holding the captured state for undo
+      ReplaceableItem<MEM> memento_; ///< storage holding the captured state for undo
       
       bool isCaptured_;
       
@@ -214,7 +216,7 @@ namespace control {
       return "<mem:missing>";
     
     return "<mem: "
-         + util::toString (memento_)
+         + util::toString (memento_.get())
          + ">";
   }
   

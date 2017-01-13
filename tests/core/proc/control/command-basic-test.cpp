@@ -40,6 +40,7 @@ namespace test    {
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::TimeValue;
+  using lib::time::Offset;
   
   
   
@@ -53,14 +54,14 @@ namespace test    {
       *dummyObj += TimeValue(randVal);
     }
     
-    TimeVar
+    Offset
     capture (P<TimeVar> dummyObj, int)
     {
-      return *dummyObj;
+      return Offset{*dummyObj};
     }
     
     void
-    undoIt (P<TimeVar> dummyObj, int, TimeVar oldVal)
+    undoIt (P<TimeVar> dummyObj, int, Offset oldVal)
     {
       *dummyObj = oldVal;
     }

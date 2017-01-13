@@ -55,8 +55,8 @@
  */
 
 
-#ifndef LIB_REPLACABLE_ITEM_H
-#define LIB_REPLACABLE_ITEM_H
+#ifndef LIB_REPLACEABLE_ITEM_H
+#define LIB_REPLACEABLE_ITEM_H
 
 #include "lib/error.hpp"
 #include "lib/null-value.hpp"
@@ -237,4 +237,4 @@ namespace wrapper {
   
   
 }} // namespace lib::wrap
-#endif /*LIB_REPLACABLE_ITEM_H*/
+#endif /*LIB_REPLACEABLE_ITEM_H*/

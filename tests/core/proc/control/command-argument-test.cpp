@@ -98,6 +98,19 @@ namespace test    {
     template<typename TY>
     int Tracker<TY>::instanceCnt (0);
     
+    /** prepare a (singleton) _empty value_ for the memento.
+     * @remarks This is done prior to observing the Tracker instanceCnt,
+     *  because this empty value obviously remains allocated forever.
+     *  The memento is stored within a [special holder](\ref lib::ReplaceableItem)
+     *  to allow capturing memento state even from immutable values, which only can
+     *  be copy constructed. This mechanism uses lib::NullValue to retrieve an
+     *  empty placeholder value when the memento has not yet been captured.
+     */
+    void
+    prepareEmptyMemento()
+    {
+      lib::NullValue<Tracker<string>>::get();
+    }
     
     /** Dummy custom memento datatype
      *  @note memento needs to be equality comparable
@@ -191,6 +204,7 @@ namespace test    {
       run (Arg)
         {
           ArgTuples testTuples;
+          prepareEmptyMemento();
           Tracker<TimeVar>::instanceCnt = 0;
           Tracker<string>::instanceCnt = 0;
           

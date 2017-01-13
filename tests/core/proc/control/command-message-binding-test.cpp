@@ -54,14 +54,14 @@ namespace test    {
       implicitTestState += dur;
     }
     
-    TimeVar
+    Time
     capture (Duration)
     {
       return implicitTestState;
     }
     
     void
-    undoIt (Duration, TimeVar oldVal)
+    undoIt (Duration, Time oldVal)
     {
       implicitTestState = oldVal;
     }
@@ -81,6 +81,8 @@ namespace test    {
    * - we support immutable argument types, which means the command binding
    *   machinery works without (re)assignment, only copy construction of
    *   argument holders into an inline buffer.
+   * - likewise we support to use an immutable type as captured state
+   *   memento, which is demonstrated by capturing a Time value
    * 
    * @see BusTerm_test
    * @see TupleRecordInit_test

@@ -77,14 +77,14 @@ namespace test    {
       testCommandState += Offset(dur) + offset*factor;
     }
     
-    string
+    Time
     capture (Duration, Offset, int)
     {
       return testCommandState;
     }
     
     void
-    undoIt (Duration, Offset, int, string oldState)
+    undoIt (Duration, Offset, int, Time oldState)
     {
 //    dummyState = oldState;
     }
