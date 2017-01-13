@@ -931,8 +931,17 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1483927552823" HGAP="-105" ID="ID_458362835" MODIFIED="1483927563707" TEXT="Unit-Test" VSHIFT="12">
+<node CREATED="1483927552823" HGAP="-105" ID="ID_458362835" MODIFIED="1484294433837" TEXT="Unit-Test" VSHIFT="12">
+<icon BUILTIN="pencil"/>
+<node CREATED="1484294389310" ID="ID_100306048" MODIFIED="1484294425156" TEXT="direkter Aufruf der Facade">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1484294397597" ID="ID_1461153044" MODIFIED="1484294422192" TEXT="Aufruf &#xfc;ber Nachrichten + Visitor">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484294409827" ID="ID_1014781174" MODIFIED="1484294428426" TEXT="massiv-paralleler Aufruf">
 <icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node CREATED="1483748340524" ID="ID_841368846" MODIFIED="1483748346879" TEXT="API-Funktionen aufrufen"/>

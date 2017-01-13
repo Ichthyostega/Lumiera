@@ -31,12 +31,10 @@ extern "C" {
 #include "proc/control/command-def.hpp"
 #include "gui/ctrl/command-handler.hpp"
 #include "gui/interact/invocation-trail.hpp"
-#include "lib/format-obj.hpp"
-#include "lib/format-cout.hpp" //////////TODO
+//#include "lib/format-cout.hpp" //////////TODO
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-//#include <cstdlib>
 #include <string>
 
 
@@ -56,10 +54,8 @@ namespace test    {
   using lib::time::TimeVar;
   using lib::time::Duration;
   using lib::time::Offset;
-  using lib::time::FSecs;
   using lib::Symbol;
   using util::isnil;
-  using util::toString;
   using std::string;
   
   
@@ -68,6 +64,8 @@ namespace test    {
     /* === mock operation to be dispatched as command === */
     
     const Symbol COMMAND_ID{"test.dispatch.function.command"};
+    const Symbol COMMAND_I1{"test.dispatch.function.command.instance-1"};
+    const Symbol COMMAND_I2{"test.dispatch.function.command.instance-2"};
     
     TimeVar testCommandState = randTime();
     
@@ -127,10 +125,14 @@ namespace test    {
                .captureUndo (capture)
                .undoOperation (undoIt)
                ;
+          Command(COMMAND_ID).storeDef(COMMAND_I1);
+          Command(COMMAND_ID).storeDef(COMMAND_I2);
         }
      ~SessionCommandFunction_test()
         {
           Command::remove (COMMAND_ID);
+          Command::remove (COMMAND_I1);
+          Command::remove (COMMAND_I2);
         }
       //-------------(End)FIXTURE
       
@@ -143,7 +145,7 @@ namespace test    {
           
           startDispatcher();
           perform_simpleInvocation();
-//        perform_messageInvocation();
+          perform_messageInvocation();
 //        perform_massivelyParallel();
           stopDispatcher();
           
@@ -188,12 +190,12 @@ namespace test    {
       void
       perform_simpleInvocation()
         {
-          string cmdID {COMMAND_ID};
+          string cmdID {COMMAND_I1};
           Rec arguments {Duration(15,10), Time(500,0), -1};
           
-          CHECK (not Command(COMMAND_ID).canExec());
+          CHECK (not Command(COMMAND_I1).canExec());
           SessionCommand::facade().bindArg (cmdID, arguments);
-          CHECK (Command(COMMAND_ID).canExec());
+          CHECK (Command(COMMAND_I1).canExec());
           
           
           Time prevState = testCommandState;
@@ -215,19 +217,21 @@ namespace test    {
       perform_messageInvocation()
         {
           // this happens "somewhere" in the UI interaction control framework
-          InvocationTrail invoTrail{Command(COMMAND_ID)};
+          InvocationTrail invoTrail{Command(COMMAND_I2)};
           
           // this happens within some tangible UI element (widget / controller)
-          GenNode argumentBindingMessage = invoTrail.bindMsg (Rec{Duration(25,10), Time(500,0), -2});
+          GenNode argumentBindingMessage = invoTrail.bindMsg (Rec {Duration(25,10), Time(500,0), -2});
           GenNode commandTriggerMessage  = invoTrail.bangMsg ();
-          CHECK (argumentBindingMessage.idi == commandTriggerMessage.idi);
+          CHECK (argumentBindingMessage.idi.getSym() == string{COMMAND_I2});
+          CHECK (commandTriggerMessage.idi.getSym() == string{COMMAND_I2});
+          CHECK (not Command::canExec(COMMAND_I2));
           
           // this happens, when CoreService receives command messages from UI-Bus
           CommandHandler handler1{argumentBindingMessage};
           argumentBindingMessage.data.accept(handler1);                 // handler is a visitor for the message payload
           
-          CHECK (Command::canExec(COMMAND_ID));
-          CHECK (not Command::canUndo(COMMAND_ID));
+          CHECK (Command::canExec(COMMAND_I2));
+          CHECK (not Command::canUndo(COMMAND_I2));
           Time prevState = testCommandState;
           
           // now handling the message to trigger execution
@@ -235,7 +239,7 @@ namespace test    {
           commandTriggerMessage.data.accept(handler2);
           
           __DELAY__
-          CHECK (Command::canUndo(COMMAND_ID));
+          CHECK (Command::canUndo(COMMAND_I2));
           CHECK (testCommandState - prevState == Time(500, 1));         // execution added 2500ms -2*500ms == 1.5sec
         }
       

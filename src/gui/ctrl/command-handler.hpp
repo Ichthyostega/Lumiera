@@ -100,7 +100,7 @@ namespace ctrl{
       bool
       handle (Rec const& bindingArgs) override
         {
-          SessionCommand::facade().bindArg (commandID_, bindingArgs);
+          SessionCommand::facade().bindArg (commandID_.getSym(), bindingArgs);
           return true;
         }
       
@@ -109,7 +109,7 @@ namespace ctrl{
       bool
       handle (int const&) override                ///< the "bang!" message (command invocation)
         {
-          SessionCommand::facade().invoke (commandID_);
+          SessionCommand::facade().invoke (commandID_.getSym());
           return true;
         }
       
