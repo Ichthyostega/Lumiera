@@ -32,6 +32,12 @@
 
 #include "proc/control/test-dummy-commands.hpp"
 
+extern "C" {
+#include "common/interfaceregistry.h"
+}
+#include "proc/control/proc-dispatcher.hpp"
+#include "include/session-command-facade.h"
+
 #include <functional>
 #include <boost/ref.hpp>
 #include <boost/lexical_cast.hpp>
@@ -201,10 +207,55 @@ namespace test    {
       
       
       
+      /** @test simplified integration test of command dispatch
+       *        - performs the minimal actions necessary to start the session loop thread
+       *        - then issues a test command, which will be queued and dispatched
+       *          by the ProcDispatcher. Like in the real application, the command
+       *          executions happens in the dedicated session loop thread, and thus
+       *          we have to wait a moment, after which execution can be verified.
+       *        - finally the ProcDispatcher is signalled to shut down.
+       *  @see SessionCommandFunction_test for much more in-depth coverage of this aspect
+       */
       void
       check_DispatcherInvocation()
         {
-          UNIMPLEMENTED("start the dispatcher and enqueue a rigged special command");  /////////////////////////////TICKET #209
+          CHECK (not ProcDispatcher::instance().isRunning());
+          lumiera_interfaceregistry_init();
+          lumiera::throwOnError();
+#define __DELAY__ usleep(10000);
+          
+          bool thread_has_ended{false};
+          ProcDispatcher::instance().start ([&] (string*) { thread_has_ended = true; });
+          
+          CHECK (ProcDispatcher::instance().isRunning());
+          CHECK (not thread_has_ended);
+          
+          //----Session-Loop-Thread-is-running------------------------
+          
+          string cmdID {"test.command2"};
+          string prevExecLog = command2::check_.str();
+          
+          // previous test cases prepared the arguments
+          // so that we can just trigger command execution.
+          // In the real application, this call is issued
+          // from CoreService when receiving a command
+          // invocation message over the UI-Bus
+          SessionCommand::facade().invoke(cmdID);
+          
+          __DELAY__  // wait a moment for the other thread to dispatch the command...
+          CHECK (prevExecLog != command2::check_.str());
+          
+          //----Session-Loop-Thread-is-running------------------------
+          
+          // shut down the ProcDispatcher...
+          CHECK (ProcDispatcher::instance().isRunning());
+          ProcDispatcher::instance().requestStop();
+          
+          __DELAY__  // wait a moment for the other thread to terminate...
+          CHECK (not ProcDispatcher::instance().isRunning());
+          CHECK (thread_has_ended);
+          
+          lumiera_interfaceregistry_destroy();
         }
     };
   
