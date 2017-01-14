@@ -28,7 +28,7 @@
  ** this facility is to provide a context, in which type-IDs can be allocated. In the
  ** case of the TypedCounter, these type-IDs are used to index into a vector of counters,
  ** this way allowing to access a counter for a given type.
- ** <P>
+ ** 
  ** This test builds several "families", each sharing a TypedCounter. Each of these
  ** families runs a set of member threads, which concurrently access the TypedCounter of
  ** this family. After waiting for all threads to finish, we compare the checksum built
@@ -85,7 +85,7 @@ namespace test{
                                           */
       
       
-      /** 
+      /**
        * Interface to a family of dummy types
        */
       class DummyType
@@ -180,7 +180,7 @@ namespace test{
       
       
       
-      /** 
+      /**
        * Collection of target functions,
        * to be invoked during the test run
        */
@@ -224,14 +224,14 @@ namespace test{
           iterator end()   { return targets_.end();   }
         };
       
-      DummyTarget targetCollection; 
+      DummyTarget targetCollection;
       
       
       
       /**
        * Each single check runs in a separate thread
        * and performs a random sequence of increments
-       * and decrements on random targets. 
+       * and decrements on random targets.
        */
       class SingleCheck
         : ThreadJoinable
@@ -259,7 +259,7 @@ namespace test{
         };
       
       
-      /** 
+      /**
        * Family of individual checks, sharing
        * a common TypedCounter instance.
        */
@@ -311,7 +311,7 @@ namespace test{
     {
       
       void
-      run (Arg) 
+      run (Arg)
         {
           simpleUsageTest();
           tortureTest();
@@ -366,7 +366,7 @@ namespace test{
       
       
       void 
-      tortureTest () 
+      tortureTest ()
         {
           std::srand (::time (NULL));
           sum_TypedCounter_ = 0;

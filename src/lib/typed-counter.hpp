@@ -126,7 +126,7 @@ namespace lib {
   
   
   /** 
-   * Helper providing a set of counters, each tied to a specific type.
+   * Utility providing a set of counters, each tied to a specific type.
    */
   class TypedCounter
     : public Sync<>
@@ -183,6 +183,44 @@ namespace lib {
       size_t size() const { return counters_.size(); }
       bool empty()  const { return counters_.empty();}
     };
+  
+  
+  
+  /**
+   * Utility to produce member IDs
+   * for objects belonging to a "Family",
+   * as defined by a distinguishing type.
+   */
+  template<typename TY>
+  class FamilyMember
+    {
+      const size_t id_;
+      
+      /** member counter shared per template instance */
+      static size_t memberCounter;
+      
+      /** threadsafe allocation of member ID */
+      static size_t
+      allocateNextMember()
+        {
+          ClassLock<FamilyMember> synchronised;
+          return memberCounter++;
+        }
+      
+    public:
+      FamilyMember()
+        : id_{allocateNextMember()}
+        { }
+      
+      operator size_t()  const
+        {
+          return id_;
+        }
+    };
+  
+  /** allocate storage for the counter per type family */
+  template<typename TY>
+  size_t FamilyMember<TY>::memberCounter{0};
   
   
   

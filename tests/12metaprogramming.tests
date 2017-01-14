@@ -602,6 +602,11 @@ return: 0
 END
 
 
+TEST "Type-based family member IDs" TypedFamilyMemberID_test <<END
+return: 0
+END
+
+
 TEST "for-each operations" UtilForeach_test 10 <<END
 out: ---:check_foreach_plain
 out: :10:9:8:7:6:5:4:3:2:1
