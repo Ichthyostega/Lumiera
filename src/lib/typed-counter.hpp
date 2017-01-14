@@ -60,14 +60,19 @@
 #include "lib/sync-classlock.hpp"
 
 #include <vector>
+#include <string>
 
 
+namespace util {
+  std::string showSize (size_t)   noexcept;
+}
 
 namespace lib {
   
   typedef size_t IxID;              //////////////////////TICKET #863
   
   using std::vector;
+  using std::string;
   
   
   /** 
@@ -216,6 +221,23 @@ namespace lib {
         {
           return id_;
         }
+      
+      operator string()  const
+        {
+          return util::showSize (this->id_);
+        }
+      
+      friend string
+      operator+ (string const& prefix, FamilyMember id)
+      {
+        return prefix+id;
+      }
+      
+      friend string
+      operator+ (const char* prefix, FamilyMember id)
+      {
+        return string(prefix)+id;
+      }
     };
   
   /** allocate storage for the counter per type family */

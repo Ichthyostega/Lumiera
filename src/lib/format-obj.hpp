@@ -85,6 +85,7 @@ namespace util {
   
   std::string showDouble (double) noexcept;
   std::string showFloat (float)   noexcept;
+  std::string showSize (size_t)   noexcept;
   std::string showAddr (void const* addr) noexcept;
   
   /** preconfigured format for pretty-printing of addresses */

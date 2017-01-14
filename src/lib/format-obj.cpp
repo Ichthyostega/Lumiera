@@ -359,6 +359,17 @@ namespace util {
     { return FAILURE_INDICATOR; }
   
   
+  string
+  showSize (size_t val)   noexcept
+    try {
+      ostringstream buffer;
+      buffer << val;
+      return buffer.str();
+    }
+    catch(...)
+    { return FAILURE_INDICATOR; }
+  
+  
   /** @note show only the trailing X bytes of any address */
   ostream&
   showAddr (ostream& stream, void const* addr)

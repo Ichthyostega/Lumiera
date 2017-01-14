@@ -31,10 +31,14 @@ extern "C" {
 #include "proc/control/command-def.hpp"
 #include "gui/ctrl/command-handler.hpp"
 #include "gui/interact/invocation-trail.hpp"
+#include "backend/thread-wrapper.hpp"
+#include "lib/typed-counter.hpp"
 //#include "lib/format-cout.hpp" //////////TODO
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
+#include <boost/lexical_cast.hpp>
+#include <vector>
 #include <string>
 
 
@@ -45,6 +49,7 @@ namespace test    {
   
 //  using std::function;
 //  using std::rand;
+  using boost::lexical_cast;
   using lib::test::randTime;
   using gui::interact::InvocationTrail;
   using gui::ctrl::CommandHandler;
@@ -54,12 +59,29 @@ namespace test    {
   using lib::time::TimeVar;
   using lib::time::Duration;
   using lib::time::Offset;
+  using lib::time::FSecs;
+  using lib::FamilyMember;
   using lib::Symbol;
   using util::isnil;
   using std::string;
+  using std::vector;
   
   
   namespace { // test fixture...
+    
+    /* === parameters for multi-threaded stress test === */
+    
+    uint NUM_THREADS_DEFAULT = 20;   ///< @note _not_ const, can be overridden by command line argument
+    uint NUM_INVOC_PER_THRED = 10;
+    uint MAX_RAND_DELAY_ms   = 10;
+    
+    void
+    maybeOverride (uint& configSetting, Arg cmdline, uint paramNr)
+    {
+      if (paramNr < cmdline.size())
+        configSetting = lexical_cast<uint>(cmdline[paramNr]);
+    }
+    
     
     /* === mock operation to be dispatched as command === */
     
@@ -90,8 +112,7 @@ namespace test    {
     
   }//(End) test fixture
   
-//  typedef shared_ptr<CommandImpl> PCommandImpl;
-//  typedef HandlingPattern const& HaPatt;
+  
 #define __DELAY__ usleep(10000);
   
   
@@ -138,7 +159,7 @@ namespace test    {
       
      
       virtual void
-      run (Arg)
+      run (Arg args_for_stresstest)
         {
           lumiera_interfaceregistry_init();
           lumiera::throwOnError();
@@ -146,15 +167,15 @@ namespace test    {
           startDispatcher();
           perform_simpleInvocation();
           perform_messageInvocation();
-//        perform_massivelyParallel();
+          perform_massivelyParallel(args_for_stresstest);
           stopDispatcher();
           
           lumiera_interfaceregistry_destroy();
         }
       
       
-      /** @test start the session loop thread, similar
-       *        to what the »session subsystem« does
+      /** @test start the session loop thread,
+       *        similar to what the »session subsystem« does
        *  @note we are _not_ actually starting the subsystem
        *  @see facade.cpp
        */
@@ -252,10 +273,79 @@ namespace test    {
        *          sequential calculation and summation
        */
       void
-      perform_massivelyParallel()
+      perform_massivelyParallel(Arg args_for_stresstest)
         {
-          UNIMPLEMENTED ("verify sequentialisation by queue");
-        }
+          maybeOverride(NUM_THREADS_DEFAULT, args_for_stresstest, 1);
+          maybeOverride(NUM_INVOC_PER_THRED, args_for_stresstest, 2);
+          maybeOverride(MAX_RAND_DELAY_ms,   args_for_stresstest, 3);
+          
+          class InvocationProducer
+            : backend::ThreadJoinable
+            {
+              FamilyMember<InvocationProducer> id_;
+              string id_buffer_{COMMAND_ID + ".thread-"+id_};
+              Symbol cmdID_{cStr(id_buffer_)};
+              
+              void
+              fabricateCommands()
+                {
+                  syncPoint();
+                  InvocationTrail invoTrail{Command(cmdID_)};
+                  
+                  for (uint i=0; i<NUM_INVOC_PER_THRED; ++i)
+                    {
+                      __randomDelay();
+                      sendCommandMessage (invoTrail.bindMsg (Rec {Duration(7*id_, 2), Time(500,0), int(-i)}));
+                      
+                      __randomDelay();
+                      sendCommandMessage (invoTrail.bangMsg());
+                    }
+                }
+              
+              static void
+              sendCommandMessage(GenNode msg)
+                {
+                  CommandHandler handler{msg};
+                  msg.data.accept(handler);
+                }
+              
+              static void
+              __randomDelay()
+                {
+                  usleep (1000L * (1 + rand() % MAX_RAND_DELAY_ms));
+                }
+              
+            public:
+              InvocationProducer()
+                : ThreadJoinable("test command producer", [&](){ fabricateCommands(); })
+                {
+                  Command(COMMAND_ID).storeDef(cmdID_);
+                  this->sync();
+                }
+              
+             ~InvocationProducer()
+                {
+                  this->join().maybeThrow();
+                  Command::remove (cmdID_);
+                }
+            };
+            
+          Time prevState = testCommandState;
+          
+          // fire up several threads to issue commands in parallel...
+          vector<InvocationProducer> producerThreads{NUM_THREADS_DEFAULT};
+          
+          
+          FSecs expectedOffset{0};
+          for (uint i=0; i<NUM_THREADS_DEFAULT; ++i)
+            for (uint j=0; j<NUM_INVOC_PER_THRED; ++j)
+              expectedOffset += FSecs(i*7,2) - FSecs(j,2);
+          
+          while (not ProcDispatcher::instance().empty());
+          
+          CHECK (testCommandState - prevState == Time(expectedOffset));
+          
+        }// Note: leaving this scope blocks for joining all producer threads
     };
   
   
