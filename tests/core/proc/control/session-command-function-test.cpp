@@ -21,6 +21,58 @@
 * *****************************************************/
 
 
+/** @file session-command-function-test.cpp
+ ** Function(integration) test of command dispatch into session thread.
+ ** This is a test combining several components to operate similar as in the real application,
+ ** while still relying upon an unit-test like setup. The goal is to cover how _session commands_
+ ** are issued from an access point (CoreService) in the UI backbone, passed on through an
+ ** abstraction interface (the SessionCommand facade), handed over to the ProcDispatcher,
+ ** which, running within a dedicated thread (the »session loop thread«), enqueues all
+ ** these commands and dispatches them one by one.
+ ** 
+ ** # the test operation
+ ** This test setup defines a specifically rigged _test command,_ which does not actually
+ ** operate on the session. Instead, it performs some time calculations and adds the resulting
+ ** time offset to a global variable, which can be observed from the test methods. The generated
+ ** values are controlled by the command arguments and thus predictable, which allows to verify
+ ** the expected number of invocations happened, using the right arguments.
+ ** 
+ ** # massively multithreaded stress test
+ ** The last test case performs a massively multithreaded _torture test_ to scrutinise the sanity
+ ** of locking and state management. It creates several threads, each of which produces several
+ ** instances of the common _test command_ used in this test, and binds each instance with different
+ ** execution arguments. All these operations are sent as command messages, interspersed with short
+ ** random pauses, which causes them to arrive in arbitrary order within the dispatcher queue.
+ ** Moreover, while the "command producer threads" are running, the main thread temporarily
+ ** disables command dispatch, which causes the command queue to build up. After re-enabling
+ ** dispatch, the main thread spins to wait for the queue to become empty. The important
+ ** point to note is that the test command function itself _contains no locking._ But since
+ ** all command operations are triggered in a single dedicated thread, albeit in arbitrary
+ ** order, at the end the checksum must add up to the expected value.
+ ** 
+ ** ## parametrisation
+ ** It is possible to change the actual setup with the following positional commandline arguments
+ ** - the number of threads to start
+ ** - the number of consecutive command instances produced in each thread
+ ** - the maximum delay (in µs) between each step in each thread
+ ** Astute readers might have noticed, that the test fixture is sloppy with respect to proper
+ ** locking and synchronisation. Rather, some explicit sleep commands are interspersed in a way
+ ** tuned to work satisfactory in practice. This whole approach can only work, because each
+ ** Posix locking call actually requires the runtime system to issue a read/write barrier,
+ ** which are known to have global effects on the relevant platforms (x86 and x86_64).
+ ** And because the production relevant code in ProcDispatcher uses sufficient (in fact
+ ** even excessive) locking, the state variables of the test fixture are properly synced
+ ** by sideeffect.
+ ** 
+ ** This test case can fail when, by bad coincidence, the command queue is temporarily emptied,
+ ** while some producer threads are still alive -- because in this case the main thread might
+ ** verify the checksum before all command instances have been triggered. To avoid this
+ ** situation, make sure the delay between actions in the threads is not too long and
+ ** start a sufficiently high nubmer of producer threads.
+ ** 
+ */
+
+
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 extern "C" {
@@ -33,7 +85,7 @@ extern "C" {
 #include "gui/interact/invocation-trail.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/typed-counter.hpp"
-//#include "lib/format-cout.hpp" //////////TODO
+#include "lib/format-string.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
@@ -47,8 +99,6 @@ namespace control {
 namespace test    {
   
   
-//  using std::function;
-//  using std::rand;
   using boost::lexical_cast;
   using lib::test::randTime;
   using gui::interact::InvocationTrail;
@@ -62,18 +112,20 @@ namespace test    {
   using lib::time::FSecs;
   using lib::FamilyMember;
   using lib::Symbol;
+  using util::_Fmt;
   using util::isnil;
   using std::string;
   using std::vector;
+  using std::rand;
   
   
   namespace { // test fixture...
     
     /* === parameters for multi-threaded stress test === */
     
-    uint NUM_THREADS_DEFAULT = 20;   ///< @note _not_ const, can be overridden by command line argument
+    uint NUM_THREADS_DEFAULT = 50;   ///< @note _not_ const, can be overridden by command line argument
     uint NUM_INVOC_PER_THRED = 10;
-    uint MAX_RAND_DELAY_ms   = 10;
+    uint MAX_RAND_DELAY_us   = 50;   ///< @warning be sure to keep this way shorter than the delay in the main thread
     
     void
     maybeOverride (uint& configSetting, Arg cmdline, uint paramNr)
@@ -113,7 +165,7 @@ namespace test    {
   }//(End) test fixture
   
   
-#define __DELAY__ usleep(10000);
+#define __DELAY__ usleep(20000);
   
   
   
@@ -196,6 +248,7 @@ namespace test    {
       bool thread_has_ended{false};
       
       
+      /** @test verify the »session loop thread« has finished properly */
       void
       stopDispatcher()
         {
@@ -208,6 +261,7 @@ namespace test    {
         }
       
       
+      /** @test demonstrate a simple direct invocation */
       void
       perform_simpleInvocation()
         {
@@ -227,10 +281,11 @@ namespace test    {
         }
       
       
+      
       /** @test invoke a command in the same way as CoreService does
        *        when handling command messages from the UI-Bus
        *        - use the help of an InvocationTrail, similar to what the
-       *          [generic UI element](\ref gui::model::Tangible) does 
+       *          [generic UI element](\ref gui::model::Tangible) does
        *        - generate a argument binding message
        *        - generate a "bang!" message
        */
@@ -261,12 +316,13 @@ namespace test    {
           
           __DELAY__
           CHECK (Command::canUndo(COMMAND_I2));
-          CHECK (testCommandState - prevState == Time(500, 1));         // execution added 2500ms -2*500ms == 1.5sec
+          CHECK (testCommandState - prevState == Time(FSecs(3,2)));     // execution added 2500ms -2*500ms == 1.5sec
         }
       
       
-      /** @test verify that commands are properly enqueued
-       *        and executed one by one
+      
+      /** @test massively multithreaded _torture test_ to verify
+       *        that commands are properly enqueued and executed one by one
        *        - create several threads to send random command messages
        *        - verify that, after executing all commands, the internal
        *          state variable reflects the result of a proper
@@ -277,25 +333,51 @@ namespace test    {
         {
           maybeOverride(NUM_THREADS_DEFAULT, args_for_stresstest, 1);
           maybeOverride(NUM_INVOC_PER_THRED, args_for_stresstest, 2);
-          maybeOverride(MAX_RAND_DELAY_ms,   args_for_stresstest, 3);
+          maybeOverride(MAX_RAND_DELAY_us,   args_for_stresstest, 3);
           
+          
+          // we'll run several instances of the following thread....
           class InvocationProducer
             : backend::ThreadJoinable
             {
               FamilyMember<InvocationProducer> id_;
-              string id_buffer_{COMMAND_ID + ".thread-"+id_};
-              Symbol cmdID_{cStr(id_buffer_)};
+              vector<string> cmdIDs_;
               
+              Symbol
+              cmdID(uint j)
+                {
+                  cmdIDs_.push_back (_Fmt("%s.thread-%02d.%d") % COMMAND_ID % id_ % j);
+                  return cStr(cmdIDs_.back());
+                }
+              
+              
+            public:
+              InvocationProducer()
+                : ThreadJoinable("test command producer", [&](){ fabricateCommands(); })
+                {
+                  this->sync();
+                }
+              
+             ~InvocationProducer()
+                {
+                  this->join().maybeThrow();
+                  for (auto& id : cmdIDs_)
+                    Command::remove (cStr(id));
+                }
+             
+            private:
               void
               fabricateCommands()
                 {
-                  syncPoint();
-                  InvocationTrail invoTrail{Command(cmdID_)};
+                  syncPoint(); // barrier to ensure initialisation of the object
                   
-                  for (uint i=0; i<NUM_INVOC_PER_THRED; ++i)
+                  for (uint j=0; j<NUM_INVOC_PER_THRED; ++j)
                     {
+                      auto cmd = Command(COMMAND_ID).storeDef(cmdID(j));
+                      InvocationTrail invoTrail{cmd};
+                      
                       __randomDelay();
-                      sendCommandMessage (invoTrail.bindMsg (Rec {Duration(7*id_, 2), Time(500,0), int(-i)}));
+                      sendCommandMessage (invoTrail.bindMsg (Rec {Duration(7*id_, 2), Time(500,0), -int(j)}));
                       
                       __randomDelay();
                       sendCommandMessage (invoTrail.bangMsg());
@@ -312,37 +394,37 @@ namespace test    {
               static void
               __randomDelay()
                 {
-                  usleep (1000L * (1 + rand() % MAX_RAND_DELAY_ms));
-                }
-              
-            public:
-              InvocationProducer()
-                : ThreadJoinable("test command producer", [&](){ fabricateCommands(); })
-                {
-                  Command(COMMAND_ID).storeDef(cmdID_);
-                  this->sync();
-                }
-              
-             ~InvocationProducer()
-                {
-                  this->join().maybeThrow();
-                  Command::remove (cmdID_);
+                  if (not MAX_RAND_DELAY_us) return;
+                  usleep (1 + rand() % MAX_RAND_DELAY_us);   // random delay varying in steps of 1µs
                 }
             };
+          
+          /* == controlling code in main thread == */
             
           Time prevState = testCommandState;
           
           // fire up several threads to issue commands in parallel...
           vector<InvocationProducer> producerThreads{NUM_THREADS_DEFAULT};
           
-          
           FSecs expectedOffset{0};
           for (uint i=0; i<NUM_THREADS_DEFAULT; ++i)
             for (uint j=0; j<NUM_INVOC_PER_THRED; ++j)
               expectedOffset += FSecs(i*7,2) - FSecs(j,2);
           
+          // give the producer threads some head start...
+          usleep(MAX_RAND_DELAY_us * NUM_INVOC_PER_THRED / 2);
+          
+          // stop the dispatching to cause the queue to build up...
+          ProcDispatcher::instance().deactivate();
+          ProcDispatcher::instance().awaitDeactivation();
+          
+          __DELAY__
+          ProcDispatcher::instance().activate();
+          
+          __DELAY__
           while (not ProcDispatcher::instance().empty());
           
+          __DELAY__
           CHECK (testCommandState - prevState == Time(expectedOffset));
           
         }// Note: leaving this scope blocks for joining all producer threads

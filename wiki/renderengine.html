@@ -2540,13 +2540,13 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 ''Lumera decides to take the latter apptoch'' -- resulting in a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code embodies the low-level UI element reactions and as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.
 </pre>
 </div>
-<div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201612021714" tags="GuiIntegration overview" changecount="4">
+<div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201701140732" tags="GuiIntegration overview" changecount="8">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
 
 !anatomy of the Proc/GUI interface
-* the GuiFacade is used as a general lifecycle facade to start up the GUI and to set up the LayerSeparationInterfaces.
-* GuiFacade is implemented by a class //in core// and exposes a notification proxy implementing GuiNotificationFacade, which actually is wired through the InterfaceSystem to forward to the corresponding implementation facade object within the GUI
-* similarly, starting the fundamental subsystems within proc installs Interfaces into the InterfaceSystem and exposes them through proxy objects.&lt;br/&gt;{{red{TODO 12/2016}}} there shall be an interface to [[invoke commands|CommandHandling]]...
+* the GuiFacade is used as a general lifecycle facade to start up the GUI and to set up the LayerSeparationInterfaces.&lt;br/&gt;It is implemented by a class //in core// and loads the Lumiera ~GTK-UI as a plug-in.
+* once the UI is running, it exposes the GuiNotificationFacade, to allow pushing state and structure updates up into the user interface.
+* in the opposite direction, for initiating actions from the UI, the SessionSubsystem opens the SessionCommandFacade, which can be considered //&quot;the&quot; public session interface.//
 
 !principles of UI / Proc interaction
 By all means, we want to avoid a common shared data structure as foundation for any interaction. For a prominent example, have a look at [[Blender|https://developer.blender.org]] to see where this leads; //such is not bad,// but it limits to a very specific kind of evolution. //We are aiming for less and for more.// Fuelled by our command and UNDO system, and our rules based [[Builder]] with its asynchronous responses, we came to rely on a messaging system, known as the [[UI-Bus]].
@@ -5230,11 +5230,11 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 [img[Asset Classess|uml/fig131077.png]]
 {{red{Note 3/2010}}} it is very unlikely we'll organise the processing nodes as a class hierarchy. Rather it looks like we'll get several submodules/special capabilities configured in within the Builder</pre>
 </div>
-<div title="ProcDispatcher" creator="Ichthyostega" modifier="Ichthyostega" created="201612140406" modified="201701052235" tags="def spec SessionLogic draft" changecount="11">
+<div title="ProcDispatcher" creator="Ichthyostega" modifier="Ichthyostega" created="201612140406" modified="201701140727" tags="def spec SessionLogic draft" changecount="12">
 <pre>//The guard and coordinator of any operation within the session subsystem.//
 The session and related components work effectively single threaded. Any tangible operation on the session data structure has to be enqueued as [[command|CommandHandling]] into the dispatcher. Moreover, the [[Builder]] is triggered from the ProcDispatcher; and while the Builder is running, any command processing is halted. The Builder in turn creates or reshapes the processing nodes network, and the changed network is brought into operation with a //transactional switch// -- while render processes on this processing network operate unaffected and essentially multi-threaded.
 
-Enqueueing commands through the {{{SessionCommandFacade}}} into the ProcDispatcher is the official way to cause changes to the session. And the running state of the ProcDispatcher is equivalent with the running state of the //session subsystem as a whole.//
+Enqueueing commands through the SessionCommandFacade into the ProcDispatcher is the official way to cause changes to the session. And the running state of the ProcDispatcher is equivalent with the running state of the //session subsystem as a whole.//
 
 !Requirements
 To function properly as action coordinator of the session subsystem, the dispatcher has to fulfil multiple demands
@@ -6138,6 +6138,11 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 The session lifecycle need to be distinguished from the state of the [[session subsystem|SessionSubsystem]]. The latter is one of the major components of Lumiera, and when it is brought up, the {{{SessionCommandFacade}}} is opened and the ProcDispatcher started. On the other hand, the session as such is a data structure and pulled up on demand, by the {{{SessionManager}}}. Whenever the session is fully populated and configured, the ProcDispatcher is instructed to //actually allow dispatching of commands towards the session.// This command dispatching mechanism is the actual access point to the session for clients outside Proc-Layer; when dispatching is halted, commands can be enqueued non the less, which allows for a reactive UI.
 </pre>
 </div>
+<div title="SessionCommandFacade" creator="Ichthyostega" modifier="Ichthyostega" created="201701140732" modified="201701140736" tags="spec" changecount="4">
+<pre>LayerSeparationInterface, provided by the Proc-Layer.
+The {{{SessionCommand}}} façade and the corresponding {{{proc::control::SessionCommandService}}} can be considered //the public interface to the session://
+They allow to send [[commands|CommandHandling]] to work on the session data structure. All these commands, as well as the [[Builder]], are performed in a dedicated thread, the »session loop thread«, which is operated by the ProcDispatcher. As a direct consequence, all mutations of the session data, as well as all logical consequences determined by the builder, are performed single-threaded, without the need to care for synchronisation issues. Another consequence of this design is the fact that running the builder disables session command processing, causing further commands to be queued up in the ProcDispatcher. Any structural changes resulting from builder runs will finally be pushed back up into the UI, asynchronously.</pre>
+</div>
 <div title="SessionConfigurationAttachment" modifier="Ichthyostega" created="201112222242" tags="SessionLogic draft">
 <pre>While the core of the persistent session state corresponds just to the HighLevelModel, there is additionaly attached state, annotations and specific bindings, which allow to connect the session model to the local application configuration on each system. A typical example would be the actual output channels, connections and drivers to use on a specific system. In a Studio setup, these setup and wiring might be quite complex, it may be specific to just a single project, and the user might want to work on the same project on different systems. This explains why we can't just embody these configuration information right into the actual model.</pre>
 </div>
@@ -6179,19 +6184,24 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201612140351" tags="SessionLogic GuiIntegration design draft discuss" changecount="7">
-<pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
-* the API of the session class
-* the accompanying management interface (SessionManager API)
-* the primary public ~APIs exposed on the objects to be [[queried and retrieved|SessionStructureQuery]] via the session class API
-** [[Timeline]]
-** [[Sequence]]
-** [[Placement]]
-** [[Clip]]
-** [[Fork]]
-** Effect
-** Automation
-* the [[command|CommandHandling]] interface, including the [[UNDO|UndoManager]] facility
+<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201701140715" tags="SessionLogic GuiIntegration design draft discuss" changecount="9">
+<pre>&quot;Session Interface&quot; has several meanings, depending on the context.
+;application global
+:the session is a data structure, which can be saved and loaded, and manipulated by [[sending commands|CommandHandling]]
+;within ~Proc-Layer
+:here »the session« can be seen as a compound of several interfaces and facilities,
+:together forming the primary access point to the user visible contents and state of the editing project.
+:* the API of the session class
+:* the accompanying management interface (SessionManager API)
+:* the primary public ~APIs exposed on the objects to be [[queried and retrieved|SessionStructureQuery]] via the session class API
+:** [[Timeline]]
+:** [[Sequence]]
+:** [[Placement]]
+:** [[Clip]]
+:** [[Fork]]
+:** Effect
+:** Automation
+:* the [[command handling framework|CommandHandling]], including the [[UNDO|UndoManager]] facility
 
 __Note__: the SessionInterface as such is //not a [[external public interface|LayerSeparationInterfaces]].// Clients from outside Proc-Layer can talk to the session by issuing commands through the {{{SessionCommandFacade}}}. Processing of commands is coordinated by the ProcDispatcher, which also is responsible for starting the [[Builder]].
 
@@ -6417,12 +6427,12 @@ And last but not least: the difficult part of this whole concept is encapsulated
 
 {{red{WIP ... draft}}}</pre>
 </div>
-<div title="SessionSubsystem" creator="Ichthyostega" modifier="Ichthyostega" created="201612150347" modified="201701050238" tags="def impl SessionLogic img" changecount="10">
+<div title="SessionSubsystem" creator="Ichthyostega" modifier="Ichthyostega" created="201612150347" modified="201701140727" tags="def impl SessionLogic img" changecount="11">
 <pre>//A subsystem within Proc-Layer, responsible for lifecycle and access to the editing [[Session]].//
 [img[Structure of the Session Subsystem|uml/Session-subsystem.png]]
 
 !Structure
-The ProcDispatcher is at the heart of the //Session Subsystem.// Because the official interface for working on the session, the {{{SessionCommand}}} façade, is expressed in terms of sending command messages to invoke predefined [[commands|CommandHandling]] to operate on the SessionInterface, the actual implementation of such a {{{SessionCommandService}}} needs a component actually to enqueue and dispatch those commands -- which is the {{{DispatcherLoop}}} within the ProcDispatcher. As usual, the ''lifecycle'' is controlled by a subsystem descriptor, which starts and stops the whole subsystem; and this starting and stopping in turn translates into starting/stopping of the dispatcher loop. On the other hand, //activation of the dispatcher,// which means actively to dispatch commands, is controlled by the lifecycle of the session proper. The latter is just a data structure, and can be loaded / saved and rebuilt through the ''session manager''.
+The ProcDispatcher is at the heart of the //Session Subsystem.// Because the official interface for working on the session, the [[SessionCommand façade|SessionCommandFacade]], is expressed in terms of sending command messages to invoke predefined [[commands|CommandHandling]] to operate on the SessionInterface, the actual implementation of such a {{{SessionCommandService}}} needs a component actually to enqueue and dispatch those commands -- which is the {{{DispatcherLoop}}} within the ProcDispatcher. As usual, the ''lifecycle'' is controlled by a subsystem descriptor, which starts and stops the whole subsystem; and this starting and stopping in turn translates into starting/stopping of the dispatcher loop. On the other hand, //activation of the dispatcher,// which means actively to dispatch commands, is controlled by the lifecycle of the session proper. The latter is just a data structure, and can be loaded / saved and rebuilt through the ''session manager''.
 
 !Lifecycle
 As far as lifecycle is concerned, the »session subsystem« has to be distinguished from the //session proper,// which is just a data structure with its own, separate lifecycle considerations. Accessing the session data only makes sense when this data structure is fully loaded, while the //session subsystem,// deals with performing commands on the session and with triggering the builder runs.

@@ -230,7 +230,7 @@ namespace lib {
       friend string
       operator+ (string const& prefix, FamilyMember id)
       {
-        return prefix+id;
+        return prefix+string(id);
       }
       
       friend string
