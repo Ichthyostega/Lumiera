@@ -351,6 +351,62 @@
 </richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node COLOR="#c80e33" CREATED="1484862058589" ID="ID_1640490030" MODIFIED="1484862079387" TEXT="Locking">
+<icon BUILTIN="help"/>
+<node CREATED="1484865203945" ID="ID_1990023724" MODIFIED="1484865221554" TEXT="Locking in der GuiFacade ist korrekt"/>
+<node CREATED="1484865231878" ID="ID_1054093321" MODIFIED="1484865240952" TEXT="im Gui-Thread kein Locking notwendig"/>
+<node CREATED="1484865243724" ID="ID_617730067" MODIFIED="1484865273473" TEXT="HA! das Lambda vom Threadstart">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1484865278999" ID="ID_1656236909" MODIFIED="1484865283979" TEXT="aufgekl&#xe4;rt">
+<node CREATED="1484865298093" ID="ID_1797078596" MODIFIED="1484865314802">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die <i>Closure</i>&#160;eines Lambdas h&#228;ngt am Kontext
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1484865316147" ID="ID_687373412" MODIFIED="1484865348826" TEXT="wenn ich den Thread mit Lambda starte..."/>
+<node CREATED="1484865349366" ID="ID_652410738" MODIFIED="1484865350930" TEXT="betrifft das den term-Functor"/>
+<node CREATED="1484865513568" ID="ID_696204655" MODIFIED="1484865622731" TEXT="selbst wenn der Funktor selber per Value &#xfc;bergeben wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      konkret:
+    </p>
+    <p>
+      der Kontext ist hier n&#228;mlich ein anderes Lambda, das dem Aufruf des GUI-Plugins mitgegeben wurde.
+    </p>
+    <p>
+      Dagegen die alte L&#246;sung erzeugte an dieser Stelle einen Bind-Ausdruck, und das war offenbar genug,
+    </p>
+    <p>
+      um nicht mehr von dem direkten Kontext abh&#228;ngig zu sein, in dem der Thread gestartet wurde.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Denn dieser Kontext (auf dem Stack) ist nat&#252;rlich lange schon weg, wenn der Thread
+    </p>
+    <p>
+      terminiert und dann tats&#228;chlich den Fuktor aufrufen m&#246;chte
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1484800741349" ID="ID_1156360682" MODIFIED="1484800797521">

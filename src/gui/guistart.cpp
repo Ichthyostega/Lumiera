@@ -147,7 +147,7 @@ namespace gui {
   {
     try
       {
-        Thread {"GUI-Main", [&]() { runGUI(terminationHandle); }};
+        Thread {"GUI-Main", bind (&runGUI, terminationHandle)};
         return true; // if we reach this line...
       }
     catch(...)
