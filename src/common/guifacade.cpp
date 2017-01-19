@@ -63,8 +63,6 @@ namespace gui {
             throw lumiera::error::Fatal("failed to bring up GUI",lumiera_error());
         }
       
-      ~GuiRunner () {  }
-      
       
       bool launchUI (Subsys::SigTerm& terminationHandle)  override
         { 

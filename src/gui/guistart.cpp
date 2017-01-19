@@ -89,24 +89,17 @@ namespace gui {
      */
     struct GuiLifecycle
       {
-        string error_;
-        Subsys::SigTerm reportOnTermination_;
         DisplayService activateDisplayService_;        ///////////////////////////TICKET #82 will go away once we have a real OutputSlot offered by the UI
         
-        GuiLifecycle (Subsys::SigTerm terminationHandler)
-          : reportOnTermination_(terminationHandler)
-          , activateDisplayService_()                  // opens the gui::Display facade interface
+        GuiLifecycle ()
+          : activateDisplayService_()                  // opens the gui::Display facade interface
           { }
-        
-       ~GuiLifecycle ()
-          {
-            reportOnTermination_(&error_);             // inform main thread that the GUI has been shut down. 
-          }
         
         
         void
-        run ()
+        run (Subsys::SigTerm reportOnTermination)
           {
+            string errorMsgBuff;
             try
               {
                 int argc =0;
@@ -114,27 +107,29 @@ namespace gui {
                 
                 // execute the GTK Event Loop____________
                 GtkLumiera::application().main(argc, argv);          /////////////TICKET #1048 : do not access GtkLumiera as singleton, rather just place it as local variable on the stack here 
-                
-                if (!lumiera_error_peek())
-                    return;                            // all went well, normal shutdown
-              }
+              }                                        // all went well, regular shutdown
+            
             catch (lumiera::Error& problem)
               {
-                error_ = problem.what();
+                errorMsgBuff = problem.what();
                 lumiera_error();                       // clear error flag
-                return;
               }
-            catch (...){ }
-            error_ = "unexpected error terminated the GUI.";
-            return;
+            catch (...)
+              {
+                errorMsgBuff = "unexpected error terminated the GUI.";
+              }
+            if (lumiera_error_peek())
+              errorMsgBuff = string{lumiera_error()};
+            
+            reportOnTermination(&errorMsgBuff);        // inform main thread that the GUI has been shut down. 
           }
       };
     
     
     void
-    runGUI (Subsys::SigTerm reportTermination)
+    runGUI (Subsys::SigTerm& reportOnTermination)
     {
-      GuiLifecycle(reportTermination).run();
+      GuiLifecycle{}.run (reportOnTermination);
     }
     
   } // (End) impl details
