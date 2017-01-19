@@ -65,14 +65,12 @@ extern "C" {
 #include "common/interface-descriptor.h"
 }
 
-#include <functional>
 #include <string>
 
 
 
 using std::string;
 using backend::Thread;
-using std::bind;
 using lumiera::Subsys;
 using lumiera::error::LUMIERA_ERROR_STATE;
 using gui::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
@@ -149,7 +147,7 @@ namespace gui {
   {
     try
       {
-        Thread ("GUI-Main", bind (&runGUI, terminationHandle));
+        Thread {"GUI-Main", [&]() { runGUI(terminationHandle); }};
         return true; // if we reach this line...
       }
     catch(...)

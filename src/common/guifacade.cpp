@@ -30,7 +30,6 @@
 #include "common/instancehandle.hpp"
 
 #include <memory>
-#include <functional>
 #include <string>
 
 
@@ -38,11 +37,8 @@ namespace gui {
   
   using std::string;
   using std::unique_ptr;
-  using std::bind;
-  using std::placeholders::_1;
   using lumiera::Subsys;
   using lumiera::InstanceHandle;
-  using util::dispatchSequenced;
   using lib::Sync;
   using lib::RecursiveLock_NoWait;
   
@@ -103,15 +99,20 @@ namespace gui {
           }
         
         bool
-        start (lumiera::Option&, Subsys::SigTerm termination)  override
+        start (lumiera::Option&, Subsys::SigTerm termNotification)  override
           {
             Lock guard (this);
-            if (facade) return false; // already started
+            if (facade)
+              return false;    // already started
             
-            facade.reset (
-              new GuiRunner (                            // trigger loading load the GuiStarterPlugin...
-                dispatchSequenced( closeOnTermination_  //  on termination call this->closeGuiModule(*) first
-                                 , termination)));     //...followed by invoking the given termSignal
+            facade.reset (   // trigger loading of the GuiStarterPlugin...
+              new GuiRunner (
+                    [=] (string* problemMessage)
+                        { //    will be invoked when the UI thread exits
+                          closeGuiModule();
+                          termNotification(problemMessage);
+                        }));
+            
             return true;
           }
         
@@ -140,7 +141,7 @@ namespace gui {
         
         
         void
-        closeGuiModule (std::string *)
+        closeGuiModule ()
           {
             Lock guard (this);
             if (!facade)
@@ -153,14 +154,11 @@ namespace gui {
           }
         
         
-        Subsys::SigTerm closeOnTermination_;
         
       public:
-        GuiSubsysDescriptor()
-          : closeOnTermination_ (bind (&GuiSubsysDescriptor::closeGuiModule, this, _1))
-          { }
+        GuiSubsysDescriptor() { }
         
-        ~GuiSubsysDescriptor()
+       ~GuiSubsysDescriptor()
           {
             if (facade)
               {
