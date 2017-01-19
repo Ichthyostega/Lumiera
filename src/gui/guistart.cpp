@@ -90,10 +90,10 @@ namespace gui {
     struct GuiLifecycle
       {
         string error_;
-        Subsys::SigTerm& reportOnTermination_;
+        Subsys::SigTerm reportOnTermination_;
         DisplayService activateDisplayService_;        ///////////////////////////TICKET #82 will go away once we have a real OutputSlot offered by the UI
         
-        GuiLifecycle (Subsys::SigTerm& terminationHandler)
+        GuiLifecycle (Subsys::SigTerm terminationHandler)
           : reportOnTermination_(terminationHandler)
           , activateDisplayService_()                  // opens the gui::Display facade interface
           { }
@@ -132,7 +132,7 @@ namespace gui {
     
     
     void
-    runGUI (Subsys::SigTerm& reportTermination)
+    runGUI (Subsys::SigTerm reportTermination)
     {
       GuiLifecycle(reportTermination).run();
     }

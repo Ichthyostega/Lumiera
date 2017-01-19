@@ -299,6 +299,78 @@
 </richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484800531361" ID="ID_1483426067" MODIFIED="1484800543445" TEXT="Segfault bleibt aufzukl&#xe4;ren">
+<icon BUILTIN="pencil"/>
+<node CREATED="1484801095326" ID="ID_1423080714" MODIFIED="1484801173709" TEXT="beobachte re-entranten dtor-Aufruf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das scheint einen virtuellen dtor aufzurufen, der den dtor von NotificationService aktiviert
+    </p>
+    <p>
+      ?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1484801174579" ID="ID_1403729721" MODIFIED="1484801189578" TEXT="wirklich? oder ist das der Member-dtor">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1484801103716" ID="ID_111329243" MODIFIED="1484801112319" TEXT="Instancehandle -&gt; Interfaceproxy"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484802736906" ID="ID_635595401" MODIFIED="1484802744322" TEXT="AUA">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1484802745625" ID="ID_375871642" MODIFIED="1484802749686" TEXT="Heisenbug">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1484802752728" ID="ID_634426848" MODIFIED="1484802766354" TEXT="passiert beim Aufruf des TerminationHandle"/>
+<node CREATED="1484802766966" ID="ID_370736554" MODIFIED="1484802805848">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn ich per Value capture, dann gibts schon
+    </p>
+    <p>
+      beim Start des GUI einen SEGFAULT
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und noch schlimmer: im Debugger gibts keinen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1484800741349" ID="ID_1156360682" MODIFIED="1484800797521">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Debug: nur <b>ein</b>&#160;Element connected
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="bell"/>
+<node CREATED="1484800781408" ID="ID_183164357" MODIFIED="1484800786931" TEXT="n&#xe4;mlich der NotificationService"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484800787590" ID="ID_1262993877" MODIFIED="1484800791287" TEXT="AUA!">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1484799604429" ID="ID_1141687282" MODIFIED="1484799616681" TEXT="Design-Problem: sinnvolles Diff">
