@@ -149,6 +149,7 @@
     </p>
   </body>
 </html></richcontent>
+<node COLOR="#af2b37" CREATED="1484792679322" ID="ID_426218722" MODIFIED="1484792696857" TEXT="#1047"/>
 <node CREATED="1481502320065" ID="ID_1298358905" MODIFIED="1481502325705" TEXT="macht bisher der GuiRunner">
 <node CREATED="1481502327528" ID="ID_75293128" MODIFIED="1481502442640" TEXT="das ist ohnehin schlecht">
 <richcontent TYPE="NOTE"><html>
@@ -175,12 +176,61 @@
 <node CREATED="1481502335583" ID="ID_1245191241" MODIFIED="1481502372882" TEXT="Felder im GuiRunner sollten noexcept sein">
 <icon BUILTIN="yes"/>
 </node>
+<node CREATED="1484793048273" ID="ID_66499328" MODIFIED="1484793095620" TEXT="verschoben">
+<arrowlink COLOR="#4072ad" DESTINATION="ID_1019455888" ENDARROW="Default" ENDINCLINATION="-334;0;" ID="Arrow_ID_693735378" STARTARROW="None" STARTINCLINATION="-45;-19;"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1481502305995" ID="ID_1943234904" MODIFIED="1481502317084" TEXT="in CoreService verschieben"/>
-<node CREATED="1481502251450" ID="ID_1125529151" MODIFIED="1481502303814" TEXT="m&#xf6;glicher Race">
+</node>
+<node CREATED="1481502305995" ID="ID_1943234904" MODIFIED="1481502317084" TEXT="in CoreService verschieben">
+<node CREATED="1484793022924" ID="ID_1019455888" MODIFIED="1484793099044" TEXT="GuiNotificattion ist jetzt Feld in CoreService">
+<linktarget COLOR="#4072ad" DESTINATION="ID_1019455888" ENDARROW="Default" ENDINCLINATION="-334;0;" ID="Arrow_ID_693735378" SOURCE="ID_66499328" STARTARROW="None" STARTINCLINATION="-45;-19;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1484793113472" ID="ID_221612387" MODIFIED="1484793120867" TEXT="Lebenszyklus nochmal pr&#xfc;fen">
+<node CREATED="1484797307376" ID="ID_842106541" MODIFIED="1484797309705" TEXT="Abfolge">
+<node CREATED="1484797311008" ID="ID_424744338" MODIFIED="1484797318947" TEXT="GuiFacade::start"/>
+<node CREATED="1484797337516" ID="ID_750979034" MODIFIED="1484797361213" TEXT="erzeugt unique_ptr&lt;GuiRunner&gt;"/>
+<node CREATED="1484797370352" ID="ID_622906815" MODIFIED="1484797377059" TEXT="dieser hat GuiHandle als member">
+<node CREATED="1484797379239" ID="ID_1948690926" MODIFIED="1484797386210" TEXT="l&#xe4;d Plugin"/>
+<node CREATED="1484797399756" ID="ID_1084903350" MODIFIED="1484797408855" TEXT="ruft im ctor launchUi()"/>
+</node>
+<node CREATED="1484797429160" ID="ID_959278184" MODIFIED="1484797432292" TEXT="guistart.cpp">
+<node CREATED="1484797432999" ID="ID_1571358017" MODIFIED="1484797439067" TEXT="implementiert GUI-Plugin"/>
+<node CREATED="1484797442686" ID="ID_83446606" MODIFIED="1484797481709" TEXT="launchUI -&gt; erzeugt GUI-Thread"/>
+</node>
+<node CREATED="1484797483865" ID="ID_159090609" MODIFIED="1484797501994" TEXT="GuiThread (==runGUI())">
+<node CREATED="1484797502462" ID="ID_21819368" MODIFIED="1484797511801" TEXT="erzeugt GuiLifecycle"/>
+<node CREATED="1484797512341" ID="ID_57994807" MODIFIED="1484797515712" TEXT="ruft darauf run()"/>
+<node CREATED="1484797517052" ID="ID_840628023" MODIFIED="1484797527271" TEXT="l&#xf6;st das sigTerm aus"/>
+</node>
+<node CREATED="1484797531482" ID="ID_1734603717" MODIFIED="1484797541533" TEXT="GuiLifecycle::run() -&gt; GtkLumiera::main">
+<node CREATED="1484797543593" ID="ID_143907787" MODIFIED="1484797547740" TEXT="erzeugt UiBus"/>
+<node CREATED="1484797548208" ID="ID_984623574" MODIFIED="1484797555083" TEXT="erzeugt WindowManager"/>
+<node CREATED="1484797557383" ID="ID_637078214" MODIFIED="1484797568569" TEXT="Gtk-Kit::run()"/>
+</node>
+<node CREATED="1484797573701" ID="ID_162958920" MODIFIED="1484797576384" TEXT="UiBus">
+<node CREATED="1484797576972" ID="ID_1159570219" MODIFIED="1484797584063" TEXT="erzeugt CoreService"/>
+<node CREATED="1484797584483" ID="ID_290592673" MODIFIED="1484797619642" TEXT="dieser hat Member ">
+<node CREATED="1484797623574" ID="ID_277189073" MODIFIED="1484797625783" TEXT="Nexus"/>
+<node CREATED="1484797620495" ID="ID_1793464076" MODIFIED="1484797620495" TEXT="GuiNotificationService"/>
+</node>
+</node>
+</node>
+<node CREATED="1484797253856" ID="ID_226245696" MODIFIED="1484797260091" TEXT="GUI start sauber"/>
+</node>
+</node>
+<node CREATED="1481502251450" HGAP="96" ID="ID_1125529151" MODIFIED="1484797644569" TEXT="m&#xf6;glicher Race" VSHIFT="16">
 <icon BUILTIN="messagebox_warning"/>
+<node CREATED="1484797174890" ID="ID_986391148" MODIFIED="1484797217827" TEXT="Exception killt GUI bevor GuiNotification offen ist">
+<icon BUILTIN="info"/>
 </node>
-<node CREATED="1481502257825" ID="ID_232782099" MODIFIED="1481502300621" TEXT="Gefahr gering">
+<node CREATED="1484797210597" ID="ID_1555304752" MODIFIED="1484797221086" TEXT="ist das &#xfc;berhaupt ein Problem">
+<icon BUILTIN="help"/>
+<node CREATED="1484797230051" ID="ID_590420902" MODIFIED="1484797240465" TEXT="sigTerm stammt vom UI-Thread">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1481502257825" HGAP="24" ID="ID_232782099" MODIFIED="1484797276714" TEXT="Gefahr gering" VSHIFT="11">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -199,7 +249,59 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1481320772830" FOLDED="true" ID="ID_1607125695" MODIFIED="1484377590302">
+<node CREATED="1484797646771" HGAP="44" ID="ID_1605520996" MODIFIED="1484797673982" TEXT="Ausgestaltung" VSHIFT="10">
+<icon BUILTIN="pencil"/>
+<node CREATED="1484797663121" ID="ID_134980216" MODIFIED="1484797669469" TEXT="braucht Bus-Connection">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1484797863862" ID="ID_464230340" MODIFIED="1484797870255" TEXT="zum Controller machen">
+<icon BUILTIN="help"/>
+<node CREATED="1484797872109" ID="ID_1877007933" MODIFIED="1484797877960" TEXT="Controller ist Tangible"/>
+<node CREATED="1484797878364" ID="ID_93289471" MODIFIED="1484797887414" TEXT="hat damit automatisch BusTerm"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797900185" ID="ID_1895372084" MODIFIED="1484797910297" TEXT="Protokoll zum Schlie&#xdf;en">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484797911392" ID="ID_286857196" MODIFIED="1484797917672" TEXT="mu&#xdf; ich definieren">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1484797920846" ID="ID_472054508" MODIFIED="1484797941875" TEXT="sollte Nachricht auf dem Bus sein">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1484797928661" ID="ID_256413655" MODIFIED="1484797937983" TEXT="sollte in das bestehende Protokoll passen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1484797684438" ID="ID_932852399" MODIFIED="1484797739131" TEXT="GUI-Shutdown implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bisher k&#246;nnen wir das GUI nur <i>aktiv intern</i>&#160;schlie&#223;en,
+    </p>
+    <p>
+      indem wir ein GTK-Signal erzeugen, das das Hauptfenster schlie&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1484797749237" ID="ID_1654016697" MODIFIED="1484797763392" TEXT="wie kann man GTK-UI explizit schlie&#xdf;en">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797766035" ID="ID_1740926324" MODIFIED="1484797792293" TEXT="wie signalisieren wir das">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" ID="ID_389264738" MODIFIED="1484797832804" TEXT="weitere Funktionen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1484797813373" ID="ID_536855363" MODIFIED="1484797818072" TEXT="generische Nachricht"/>
+<node CREATED="1484797818780" ID="ID_354397333" MODIFIED="1484797821767" TEXT="state mark"/>
+<node CREATED="1484797822403" ID="ID_364545191" MODIFIED="1484797825559" TEXT="Diff"/>
+</node>
+</node>
+</node>
+<node CREATED="1481320772830" FOLDED="true" HGAP="21" ID="ID_1607125695" MODIFIED="1484797661159" VSHIFT="11">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -438,8 +540,7 @@
       Aber ich <i>akzeptiere</i>&#160;es und verwende es jetzt als Treiber
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1483473104426" ID="ID_1606817357" MODIFIED="1483747983243" TEXT="#701 Session interface Support facility">
 <icon BUILTIN="button_ok"/>
@@ -674,8 +775,7 @@
       <i>Ich halte diese F&#228;lle aber f&#252;r in der Praxis nicht relevant,</i>&#160; und verzichte daher auf eine Spezialbehandlung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="3216;0;" ID="Arrow_ID_1930701586" STARTARROW="None" STARTINCLINATION="8475;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -698,8 +798,7 @@
       implementieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1483748214772" ID="ID_1642552563" MODIFIED="1484377266424" TEXT="#1046 Preliminary Definition of SessionCommand facade">
 <icon BUILTIN="button_ok"/>
@@ -759,8 +858,7 @@
       will sagen: <i>in </i>den Visitor-Methoden-Implementierungen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1483909984005" ID="ID_590392737" MODIFIED="1483910003178">
 <richcontent TYPE="NODE"><html>
@@ -772,8 +870,7 @@
       <i>aber</i>&#160;ist nicht auf dem Visitor-Interface darstellbar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1483910035326" ID="ID_366990653" MODIFIED="1483910045213" TEXT="latentes Design-Problem">
 <icon BUILTIN="idea"/>
@@ -803,8 +900,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -858,8 +954,7 @@
       <i>Idee:</i>&#160;Zusammenarbeit
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1483921070115" ID="ID_398046799" MODIFIED="1483921131646" TEXT="Prototyp-Service"/>
 <node CREATED="1483921132114" ID="ID_1652398711" MODIFIED="1483921138070" TEXT="liefert dekorierte Command-ID"/>
@@ -874,8 +969,7 @@
       ...das w&#228;re eine <b>Protokoll-Erweiterung</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#e0ac6d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-2132;93;" ID="Arrow_ID_1940592535" SOURCE="ID_876058329" STARTARROW="Default" STARTINCLINATION="2588;-604;"/>
 <linktarget COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-784;1692;" ID="Arrow_ID_1617518648" SOURCE="ID_1479669922" STARTARROW="None" STARTINCLINATION="3436;-1136;"/>
 </node>
@@ -889,8 +983,7 @@
       vertagt; Ticket <font color="#c52a05">#1058</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="bell"/>
 </node>
 </node>
@@ -928,8 +1021,7 @@
       die mehrfachen Indirektionen und das Ein-/Auspacken der Argumente
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -11632,8 +11724,7 @@
       we need to wait for the current command or builder run to be completed
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -11647,8 +11738,7 @@
       ...noch nicht implementiert 1/17
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="bell"/>
 <node CREATED="1481827558336" ID="ID_1026688096" MODIFIED="1481827646856" TEXT="match current session"/>
 <node CREATED="1481827647491" ID="ID_1849886325" MODIFIED="1481827652111" TEXT="aggregate similar"/>

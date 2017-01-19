@@ -42,6 +42,8 @@ extern "C" {
 
 namespace gui {
   
+  using lib::diff::TreeMutator;
+  using model::Controller;
   using std::string;
   using util::cStr;
 
@@ -60,6 +62,14 @@ namespace gui {
     NOTICE (gui, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
     TODO ("actually request a shutdown from the GUI");
   }
+  
+  
+  void
+  NotificationService::buildMutator (TreeMutator::Handle buffer)
+  {
+    UNIMPLEMENTED ("in which way to bind the Notification service for diff messages??");
+  }
+
   
   
   namespace { // facade implementation details
@@ -174,9 +184,10 @@ namespace gui {
   
   
   
-  NotificationService::NotificationService ()
-    : implInstance_(this,_instance),
-      serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))
+  NotificationService::NotificationService (ctrl::BusTerm& nexus)
+    : Controller{lib::idi::EntryID<NotificationService>{}, nexus}
+    , implInstance_(this,_instance)
+    , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))
   {
     INFO (gui, "GuiNotification Facade opened.");
   }

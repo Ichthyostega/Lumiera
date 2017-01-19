@@ -84,7 +84,7 @@ namespace gui {
      * Implement the necessary steps for actually making the Lumiera Gui available.
      * Open the business interface(s) and start up the GTK GUI main event loop.
      * @todo to ensure invocation of the termination signal, any members
-     *       should be failsafe on initialisation (that means, we must no
+     *       should be failsafe on initialisation (that means, we must not
      *       open other interfaces here...)            ///////////////////////////TICKET #82
      */
     struct GuiLifecycle
@@ -113,7 +113,7 @@ namespace gui {
                 char *argv[] = {};                     // dummy command line for GTK
                 
                 // execute the GTK Event Loop____________
-                GtkLumiera::application().main(argc, argv);
+                GtkLumiera::application().main(argc, argv);          /////////////TICKET #1048 : do not access GtkLumiera as singleton, rather just place it as local variable on the stack here 
                 
                 if (!lumiera_error_peek())
                     return;                            // all went well, normal shutdown

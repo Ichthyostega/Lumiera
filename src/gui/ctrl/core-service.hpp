@@ -100,7 +100,7 @@ namespace ctrl{
       CoreService (ID identity =lib::idi::EntryID<CoreService>())
         : BusTerm(identity, uiBusBackbone_)
         , uiBusBackbone_{*this}
-        , activateNotificationService_()             // opens the GuiNotificationService instance
+        , activateNotificationService_(uiBusBackbone_)       // opens the GuiNotificationService instance
         {
           INFO (gui, "UI-Backbone operative.");
         }

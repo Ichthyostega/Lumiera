@@ -41,6 +41,7 @@
 
 #include "include/gui-notification-facade.h"
 #include "common/instancehandle.hpp"
+#include "gui/model/controller.hpp"
 #include "lib/singleton-ref.hpp"
 
 
@@ -63,6 +64,7 @@ namespace gui {
    */
   class NotificationService
     : public GuiNotification
+    , public model::Controller
     {
       
       /* === Implementation of the Facade Interface === */
@@ -80,8 +82,14 @@ namespace gui {
       lib::SingletonRef<GuiNotification> implInstance_;
       ServiceInstanceHandle serviceInstance_;
       
+      
+      /* === Control Interface === */
+      
+      /** set up a binding to respond to mutation messages via UiBus */
+      virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
+      
     public:
-      NotificationService(); /////////////////////////////////////////////////////////TICKET #1047 : define GuiNotification
+      NotificationService(ctrl::BusTerm& nexus);
       
     };
     
