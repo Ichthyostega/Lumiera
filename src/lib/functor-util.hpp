@@ -50,56 +50,6 @@ namespace util { ////////////TODO: refactor namespace. But probably not directly
   using std::bind;
   using std::placeholders::_1;
   
-  
-  /** "Combiner" which calls two functions one after another
-   *  returning the result of the second invocation.  */
-  template<typename SIG>
-  struct CombineSequenced;
-  
-  template<typename ARG, typename RET>
-  struct CombineSequenced<RET(ARG)>
-    {
-      typedef function<RET(ARG)> Func;
-      
-      static RET 
-      dispatch (Func first, Func second, ARG arg)
-        {
-          first (arg);
-          return second (arg);
-        }
-    };
-  
-  
-  template< typename SIG 
-          , class COM = CombineSequenced<SIG> 
-          >
-  class Dispatch
-    : public function<SIG>
-    {
-      typedef typename COM::Func Func;
-      
-    public:
-      Dispatch (Func const& f1,
-                Func const& f2)
-        : Func (bind (&COM::dispatch, f1, f2, _1))
-        { }
-    };
-  
-  
-  /** convenience shortcut to call two functors in sequence. 
-   *  @return a Dispatch functor object which incorporates the
-   *          functors as copy and on invocation calls the first
-   *          function and then returns the result of the second */
-  template<typename SIG>
-  Dispatch<SIG>
-  dispatchSequenced (function<SIG> const& f1,
-                     function<SIG> const& f2)
-  {
-    return Dispatch<SIG> (f1, f2);
-  }
-  
-  
-  
   namespace { // hiding some nasty details...
     
     using lib::HashVal;
