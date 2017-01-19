@@ -257,6 +257,62 @@
 <icon BUILTIN="help"/>
 <node CREATED="1484797872109" ID="ID_1877007933" MODIFIED="1484797877960" TEXT="Controller ist Tangible"/>
 <node CREATED="1484797878364" ID="ID_93289471" MODIFIED="1484797887414" TEXT="hat damit automatisch BusTerm"/>
+<node CREATED="1484799525344" ID="ID_640788614" MODIFIED="1484799536484" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484799538686" ID="ID_1136883698" MODIFIED="1484799594552" TEXT="tut es nicht">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1484799551220" ID="ID_496503271" MODIFIED="1484799585260" TEXT="Fehlermeldung + Segfault">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      0000000937: ERR: core-service.hpp:111: worker_3: ~CoreService: Some UI components are still connected to the backbone.
+    </p>
+    <p>
+      Speicherzugriffsfehler
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1484800480472" ID="ID_1441013524" MODIFIED="1484800529641" TEXT="Sanity-Check in CoreService anpassen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...mu&#223; diejenigen Bus-Verbindungen abziehen, die von Members dieser Klasse stammen
+    </p>
+    <ul>
+      <li>
+        CoreService selber
+      </li>
+      <li>
+        der NotificationService
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1484799604429" ID="ID_1141687282" MODIFIED="1484799616681" TEXT="Design-Problem: sinnvolles Diff">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1484799625306" ID="ID_443020211" MODIFIED="1484799632496" TEXT="aus den Fingern saugen">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1484799634233" ID="ID_1600517820" MODIFIED="1484799642178" TEXT="nur implementation-reuse">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1484799675388" HGAP="29" ID="ID_228932182" MODIFIED="1484799693431" TEXT="Idee: Attribute?" VSHIFT="18">
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797900185" ID="ID_1895372084" MODIFIED="1484797910297" TEXT="Protokoll zum Schlie&#xdf;en">
 <icon BUILTIN="flag-yellow"/>
@@ -297,7 +353,9 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1484797813373" ID="ID_536855363" MODIFIED="1484797818072" TEXT="generische Nachricht"/>
 <node CREATED="1484797818780" ID="ID_354397333" MODIFIED="1484797821767" TEXT="state mark"/>
-<node CREATED="1484797822403" ID="ID_364545191" MODIFIED="1484797825559" TEXT="Diff"/>
+<node CREATED="1484797822403" ID="ID_364545191" MODIFIED="1484797825559" TEXT="Diff">
+<node CREATED="1484799660822" ID="ID_1288003894" MODIFIED="1484799667505" TEXT="TreeMutator binden"/>
+</node>
 </node>
 </node>
 </node>

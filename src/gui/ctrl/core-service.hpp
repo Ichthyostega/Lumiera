@@ -80,6 +80,16 @@ namespace ctrl{
       Nexus uiBusBackbone_;
       NotificationService activateNotificationService_;
       
+      /**
+       * This service establishes some hard wired connections to the UI-Bus.
+       * Because baseclass BusTerm automatically disconnects at destruction,
+       * the member NotificationService and this object (CoreService) are
+       * still connected to the nexus, when the sanity check in our dtor runs.
+       * But all other UI elements outside of the scope of this should already
+       * be disconnected at that point...
+       */
+      enum { NUMBER_OF_CONNECTED_DIRECT_MEMBERS = 2 };//!< NUMBER_OF_CONNECTED_DIRECT_MEMBERS
+      
       virtual void
       act (GenNode const& command)  override
         {
@@ -107,7 +117,7 @@ namespace ctrl{
       
      ~CoreService()
         {
-          if (0 < uiBusBackbone_.size())
+          if (uiBusBackbone_.size() > NUMBER_OF_CONNECTED_DIRECT_MEMBERS)
             ERROR (gui, "Some UI components are still connected to the backbone.");
         }
       
