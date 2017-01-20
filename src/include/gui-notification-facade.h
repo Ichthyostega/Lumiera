@@ -114,9 +114,14 @@ extern "C" {
 
   
 #include "common/interface.h"
+#include "lib/hash-value.h"
+
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
                            LUMIERA_INTERFACE_SLOT (void, displayInfo,        (const char*)),
+                           LUMIERA_INTERFACE_SLOT (void, markError,          (LumieraUid, const char*)),
+                           LUMIERA_INTERFACE_SLOT (void, markNote,           (LumieraUid, const char*)),
+                           LUMIERA_INTERFACE_SLOT (void, mutate,             (LumieraUid, void*)),
                            LUMIERA_INTERFACE_SLOT (void, triggerGuiShutdown, (const char*)),
 );
 

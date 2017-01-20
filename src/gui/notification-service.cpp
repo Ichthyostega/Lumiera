@@ -24,6 +24,9 @@
  ** Implementation of notifications and updates within the GUI.
  ** This is the actual service implementation and runs within the GUI plugin.
  ** 
+ ** @todo 1/2017 actually forward invocations on the UI-Bus
+ ** @todo 1/2017 find a solution for passing diff messages    /////////////////////////////////////////////////TICKET #1066
+ ** 
  */
 
 #include "gui/notification-service.hpp"
@@ -46,12 +49,36 @@ namespace gui {
   using gui::ctrl::BusTerm;
   using std::string;
   using util::cStr;
-
+  
   
   void 
   NotificationService::displayInfo (string const& text)
   {
     INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));
+    ////////////////////////TODO actually push the information to the GUI
+  }
+  
+  
+  void
+  NotificationService::markError (ID uiElement, string const& text)
+  {
+    UNIMPLEMENTED ("send a error mark message via UI-Bus");
+    ////////////////////////TODO actually push the information to the GUI
+  }
+  
+  
+  void
+  NotificationService::markNote  (ID uiElement, string const& text)
+  {
+    UNIMPLEMENTED ("send a info/warning message via UI-Bus");
+    ////////////////////////TODO actually push the information to the GUI
+  }
+  
+  
+  void
+  NotificationService::mutate (ID uiElement, DiffMessage&)    /////////////////////////////////////////////////TICKET #1066 : how to pass a diff message
+  {
+    UNIMPLEMENTED ("actually produce a MutationMessage on the UI-Bus");     ///////////////////////////////////TICKET #1066 : how to build and pass a MutationMessage
     ////////////////////////TODO actually push the information to the GUI
   }
   
@@ -142,7 +169,7 @@ namespace gui {
     
     using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
     typedef lib::SingletonRef<GuiNotification>::Accessor InstanceRef;
-
+    
     InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual GuiNotification implementation...
     
     
@@ -154,24 +181,48 @@ namespace gui {
                                , NULL /* on  close */
                                , LUMIERA_INTERFACE_INLINE (displayInfo,
                                                            void, (const char* text),
-                                                             { 
+                                                             {
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
                                                                else
-                                                                 _instance->displayInfo(text); 
+                                                                 _instance->displayInfo (text);
+                                                             }
+                                                          )
+                               , LUMIERA_INTERFACE_INLINE (markError,
+                                                           void, (LumieraUid element, const char* text),
+                                                             {
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
+                                                               else
+                                                                 _instance->markError (reinterpret_cast<ID> (*element), text);
+                                                             }
+                                                          )
+                               , LUMIERA_INTERFACE_INLINE (markNote,
+                                                           void, (LumieraUid element, const char* text),
+                                                             {
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
+                                                               else
+                                                                 _instance->markNote (reinterpret_cast<ID> (*element), text);
+                                                             }
+                                                          )
+                               , LUMIERA_INTERFACE_INLINE (mutate,
+                                                           void, (LumieraUid element, void* diff),
+                                                             {
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, "passing diff message");
+                                                               else
+                                                                 _instance->mutate (reinterpret_cast<ID> (*element), *reinterpret_cast<DiffMessage*> (diff));
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown,
                                                            void, (const char* cause),
-                                                             { 
+                                                             {
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cause);
                                                                else
-                                                                 _instance->triggerGuiShutdown(cause); 
+                                                                 _instance->triggerGuiShutdown (cause);
                                                              }
                                                           )
                                );
-
-
-
+    
+    
+    
   } // (END) facade implementation details
   
   
