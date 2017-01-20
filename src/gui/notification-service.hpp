@@ -48,6 +48,7 @@
 
 namespace gui {
   
+  using ID = BusTerm::ID;
   
   
   /**************************************************//**
@@ -70,8 +71,11 @@ namespace gui {
       
       /* === Implementation of the Facade Interface === */
       
-      void displayInfo (string const& text)         override;
-      void triggerGuiShutdown (string const& cause) override;
+      void displayInfo (string const& text)             override;
+      void triggerGuiShutdown (string const& cause)     override;
+      void markError (ID uiElement, string const& text) override;
+      void markNote  (ID uiElement, string const& text) override;
+      void mutate (ID uiElement, MutationMessage&)      override;
       
       
       /* === Interface Lifecycle === */

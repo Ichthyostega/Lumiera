@@ -573,9 +573,77 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" ID="ID_389264738" MODIFIED="1484797832804" TEXT="weitere Funktionen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1484797813373" ID="ID_536855363" MODIFIED="1484797818072" TEXT="generische Nachricht"/>
-<node CREATED="1484797818780" ID="ID_354397333" MODIFIED="1484797821767" TEXT="state mark"/>
+<node CREATED="1484797818780" ID="ID_354397333" MODIFIED="1484797821767" TEXT="state mark">
+<node CREATED="1484877574046" ID="ID_251939815" MODIFIED="1484877577130" TEXT="Error"/>
+<node CREATED="1484877577550" ID="ID_258243919" MODIFIED="1484877578530" TEXT="Note"/>
+</node>
 <node CREATED="1484797822403" ID="ID_364545191" MODIFIED="1484797825559" TEXT="Diff">
 <node CREATED="1484799660822" ID="ID_1288003894" MODIFIED="1484799667505" TEXT="TreeMutator binden"/>
+<node CREATED="1484877585605" ID="ID_101718446" MODIFIED="1484877768706" TEXT="verwende MutationMessage">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1484877590492" ID="ID_1552177670" MODIFIED="1484877658022" TEXT="k&#xf6;nnte sich sp&#xe4;ter noch &#xc4;ndern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....aber im Moment sieht das ad&#228;quat aus,
+    </p>
+    <p>
+      da ja der Konstruktor von MutationMessage generisch (Template) ist,
+    </p>
+    <p>
+      und man damit jedes diff-iterable einbetten kann.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1484877658891" ID="ID_1855662071" MODIFIED="1484877679187" TEXT="Vorsicht: Storage / GUI-Thread">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1484877696486" ID="ID_476867583" MODIFIED="1484877708576" TEXT="wir m&#xfc;ssen jede Aktion in den Event-Thread &#xfc;bergeben"/>
+<node CREATED="1484877711388" ID="ID_407918505" MODIFIED="1484877730584">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, die Diff-<b>Implementierung</b>&#160;mu&#223; l&#228;nger leben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1484877731337" ID="ID_1859059266" MODIFIED="1484877761556">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      faktisch erfolgt somit ein <b>Callback</b>&#160;aus einem anderen Thread
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1484877743992" ID="ID_680582075" MODIFIED="1484877751765">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      um das Diff zu <i>pullen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>

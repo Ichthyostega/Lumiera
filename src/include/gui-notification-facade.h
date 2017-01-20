@@ -44,6 +44,8 @@
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "include/interfaceproxy.hpp"
+#include "gui/ctrl/mutation-message.hpp"
+#include "lib/idi/entry-id.hpp"
 
 #include <string>
 
@@ -51,6 +53,7 @@
 namespace gui {
   
   using std::string;
+  using ctrl::MutationMessage;
   
   
   /*****************************************************************//**
@@ -66,15 +69,35 @@ namespace gui {
   class GuiNotification
     {
     public:
+      using ID = lib::idi::BareEntryID const&;
+
       static lumiera::facade::Accessor<GuiNotification> facade;
       
+      
       /** push a user visible notification text */
-      virtual void displayInfo (string const& text)          =0;
+      virtual void displayInfo (string const& text)              =0;
+      
+      /** highlight an element in the UI as problem location */
+      virtual void markError (ID uiElement, string const& text)  =0;
+      
+      /** attach an warning or state information element */
+      virtual void markNote  (ID uiElement, string const& text)  =0;
+      
+      /** push a diff message up into the user interface.
+       * @remark this is the intended way how to populate or
+       *  manipulate the contents of the user interface from
+       *  lower layers. By sending a _diff message,_ any
+       *  structural or content changes can be described
+       *  without actually knowing the implementation of
+       *  the UI model elements subject to this change.
+       * @see diff-language.hpp
+       */
+      virtual void mutate (ID uiElement, MutationMessage&)       =0;
       
       /** causes the GUI to shut down unconditionally
        *  @param cause user visible explanation of the
        *         reason causing this shutdown      */
-      virtual void triggerGuiShutdown (string const& cause)  =0;
+      virtual void triggerGuiShutdown (string const& cause)      =0;
       
       
     protected:

@@ -122,7 +122,14 @@ namespace ctrl{
         }
       
       
-      /** */
+      /** direct a mutation message towards the indicated Tangible.
+       * @remark this is the intended way how to populate or manipulate
+       *         the contents of the user interface from lower layers.
+       *         By sending a _diff message,_ any structural or content
+       *         changes can be described without actually knowing the
+       *         concrete implementation of the UI model elements
+       *         subject to this change
+       */
       virtual bool
       change (ID subject, MutationMessage& diff)  override
         {

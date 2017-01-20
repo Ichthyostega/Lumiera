@@ -1,8 +1,8 @@
 /*
-  MUTATION-MESSAGE.hpp  -  message on UI-Bus to cause changes to tangible UI elements
+  DIFF-MESSAGE.hpp  -  message to cause changes to generic model elements
 
   Copyright (C)         Lumiera.org
-    2016,               Hermann Vosseler <Ichthyostega@web.de>
+    2017,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,8 +21,8 @@
 */
 
 
-/** @file mutation-message.hpp
- ** Message on the UI-Bus to cause changes on the targeted [UI-Element](\ref Tangible).
+/** @file diff-message.hpp
+ ** Generic Message with an embedded diff, to describe changes to model elements.
  ** The UI-Bus offers a dedicated API to direct MutationMessages towards Tangible elements,
  ** as designated by the given ID. Actually, such messages serve as capsule to transport a
  ** diff-sequence -- since a diff sequence as such is always concrete and tied to a specific context,
@@ -40,17 +40,13 @@
  ** which is some iterable sequence of lib::diff::DiffStep records.
  ** @warning be sure to understand that the diff sequence is really moved away and then consumed.
  ** 
- ** @todo as of 1/2017 there is an unsolved problem how such messages can be passed from lower layers.
- **       A direct symptom is the dependency of this header on model::Tangible, which in turn requires
- **       sigc::Trackable. This is a challenging topic, since we need to hand over to the UI-Event Thread  /////////////////////////////////#1066 : Concept for passing Diff Messages
- ** 
  ** @see [AbstractTangible_test]
  ** 
  */
 
 
-#ifndef GUI_CTRL_MUTATION_MESSAGE_H
-#define GUI_CTRL_MUTATION_MESSAGE_H
+#ifndef LIB_DIFF_DIFF_MESSAGE_H
+#define LIB_DIFF_DIFF_MESSAGE_H
 
 
 #include "lib/error.hpp"
@@ -164,4 +160,4 @@ namespace ctrl{
   
   
 }} // namespace gui::ctrl
-#endif /*GUI_CTRL_MUTATION_MESSAGE_H*/
+#endif /*LIB_DIFF_DIFF_MESSAGE_H*/
