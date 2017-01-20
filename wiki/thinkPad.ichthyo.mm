@@ -128,6 +128,40 @@
 <node CREATED="1481338408983" ID="ID_516483369" MODIFIED="1481338438364" TEXT="k&#xf6;nnte sp&#xe4;ter sogar eine Exception sein">
 <icon BUILTIN="help"/>
 </node>
+<node CREATED="1484871442777" ID="ID_492545805" MODIFIED="1484871538161">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      CoreService hat <i>keine volle</i>&#160;Bus-Connection
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hab ich mir jetzt explizit so &#252;berlegt und es ist sinnvoll.
+    </p>
+    <p>
+      Nur ein Tangible kann eine volle Bus-Connection haben, und das hei&#223;t,
+    </p>
+    <p>
+      es kann downlink-Nachrichten bekommen. Dagegen hat CoreService lediglich ein &quot;freistehendes&quot;
+    </p>
+    <p>
+      BusTerm, das damit Nachrichten an den Nexus schicken kann.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1481320699056" ID="ID_728332859" MODIFIED="1481338454729" TEXT="wo kommen die CoreServices hin">
@@ -187,7 +221,8 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1484793113472" ID="ID_221612387" MODIFIED="1484793120867" TEXT="Lebenszyklus nochmal pr&#xfc;fen">
-<node CREATED="1484797307376" ID="ID_842106541" MODIFIED="1484797309705" TEXT="Abfolge">
+<node CREATED="1484797307376" ID="ID_842106541" MODIFIED="1484871289966" TEXT="Abfolge">
+<icon BUILTIN="info"/>
 <node CREATED="1484797311008" ID="ID_424744338" MODIFIED="1484797318947" TEXT="GuiFacade::start"/>
 <node CREATED="1484797337516" ID="ID_750979034" MODIFIED="1484797361213" TEXT="erzeugt unique_ptr&lt;GuiRunner&gt;"/>
 <node CREATED="1484797370352" ID="ID_622906815" MODIFIED="1484797377059" TEXT="dieser hat GuiHandle als member">
@@ -209,14 +244,63 @@
 <node CREATED="1484797557383" ID="ID_637078214" MODIFIED="1484797568569" TEXT="Gtk-Kit::run()"/>
 </node>
 <node CREATED="1484797573701" ID="ID_162958920" MODIFIED="1484797576384" TEXT="UiBus">
-<node CREATED="1484797576972" ID="ID_1159570219" MODIFIED="1484797584063" TEXT="erzeugt CoreService"/>
+<node CREATED="1484797576972" ID="ID_1159570219" MODIFIED="1484797584063" TEXT="erzeugt CoreService">
+<node CREATED="1484871312594" ID="ID_1351400025" MODIFIED="1484871320837" TEXT="erbt zwar von BusTerm"/>
+<node CREATED="1484871321473" ID="ID_112216780" MODIFIED="1484871392585" TEXT="hat aber keine connection">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gemeint ist: keine volle bidirektionale Connection,
+    </p>
+    <p>
+      denn CoreService ist kein Tangible. Das macht Sinn so, habe dar&#252;ber nachgedacht.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Anmerkung: ein &quot;frestehendes&quot; BusTerm ist valide und zugelassen, es hat halt nur eine uplink-Connection.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1484871556194" ID="ID_1978811406" MODIFIED="1484871610834" TEXT="macht Sinn so">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nur ein Tangible kann downlink-Nachrichten sinnvoll empfangen;
+    </p>
+    <p>
+      es mu&#223; dazu auch jede Menge Methoden implementieren.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 <node CREATED="1484797584483" ID="ID_290592673" MODIFIED="1484797619642" TEXT="dieser hat Member ">
 <node CREATED="1484797623574" ID="ID_277189073" MODIFIED="1484797625783" TEXT="Nexus"/>
 <node CREATED="1484797620495" ID="ID_1793464076" MODIFIED="1484797620495" TEXT="GuiNotificationService"/>
 </node>
 </node>
 </node>
-<node CREATED="1484797253856" ID="ID_226245696" MODIFIED="1484797260091" TEXT="GUI start sauber"/>
+<node COLOR="#338800" CREATED="1484797253856" ID="ID_226245696" MODIFIED="1484871281624" TEXT="GUI start sauber">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1484871163902" ID="ID_274722396" MODIFIED="1484871283455" TEXT="closeGuiModule (PImpl) hat Lock">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1484871188635" ID="ID_1922412139" MODIFIED="1484871285111" TEXT="Storage/Lebenzyklus des Term-Funktors (jetzt) OK">
+<arrowlink COLOR="#a9b4c1" DESTINATION="ID_375871642" ENDARROW="Default" ENDINCLINATION="-164;-16;" ID="Arrow_ID_896120556" STARTARROW="None" STARTINCLINATION="345;-16;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node CREATED="1481502251450" HGAP="96" ID="ID_1125529151" MODIFIED="1484797644569" TEXT="m&#xf6;glicher Race" VSHIFT="16">
@@ -257,10 +341,23 @@
 <icon BUILTIN="help"/>
 <node CREATED="1484797872109" ID="ID_1877007933" MODIFIED="1484797877960" TEXT="Controller ist Tangible"/>
 <node CREATED="1484797878364" ID="ID_93289471" MODIFIED="1484797887414" TEXT="hat damit automatisch BusTerm"/>
-<node CREATED="1484799525344" ID="ID_640788614" MODIFIED="1484799536484" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
+<node CREATED="1484799604429" ID="ID_1141687282" MODIFIED="1484799616681" TEXT="Design-Problem: sinnvolles Diff">
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484799538686" ID="ID_1136883698" MODIFIED="1484799594552" TEXT="tut es nicht">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1484799625306" ID="ID_443020211" MODIFIED="1484799632496" TEXT="aus den Fingern saugen">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1484799634233" ID="ID_1600517820" MODIFIED="1484799642178" TEXT="nur implementation-reuse">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1484799675388" HGAP="29" ID="ID_228932182" MODIFIED="1484799693431" TEXT="Idee: Attribute?" VSHIFT="18">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1484799525344" ID="ID_640788614" MODIFIED="1484871642690" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484799538686" ID="ID_1136883698" MODIFIED="1484866524904" TEXT="tut es nicht">
+<icon BUILTIN="pencil"/>
 </node>
 <node CREATED="1484799551220" ID="ID_496503271" MODIFIED="1484799585260" TEXT="Fehlermeldung + Segfault">
 <richcontent TYPE="NOTE"><html>
@@ -275,8 +372,8 @@
       Speicherzugriffsfehler
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+</node>
 <node CREATED="1484800480472" ID="ID_1441013524" MODIFIED="1484800529641" TEXT="Sanity-Check in CoreService anpassen">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -295,38 +392,12 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484800531361" ID="ID_1483426067" MODIFIED="1484800543445" TEXT="Segfault bleibt aufzukl&#xe4;ren">
-<icon BUILTIN="pencil"/>
-<node CREATED="1484801095326" ID="ID_1423080714" MODIFIED="1484801173709" TEXT="beobachte re-entranten dtor-Aufruf">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das scheint einen virtuellen dtor aufzurufen, der den dtor von NotificationService aktiviert
-    </p>
-    <p>
-      ?
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
-<node CREATED="1484801174579" ID="ID_1403729721" MODIFIED="1484801189578" TEXT="wirklich? oder ist das der Member-dtor">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1484801103716" ID="ID_111329243" MODIFIED="1484801112319" TEXT="Instancehandle -&gt; Interfaceproxy"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484802736906" ID="ID_635595401" MODIFIED="1484802744322" TEXT="AUA">
-<icon BUILTIN="flag-pink"/>
-<node CREATED="1484802745625" ID="ID_375871642" MODIFIED="1484802749686" TEXT="Heisenbug">
+<node CREATED="1484802745625" FOLDED="true" ID="ID_375871642" MODIFIED="1484871220212" TEXT="Heisenbug">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_375871642" ENDARROW="Default" ENDINCLINATION="-164;-16;" ID="Arrow_ID_896120556" SOURCE="ID_1922412139" STARTARROW="None" STARTINCLINATION="345;-16;"/>
 <icon BUILTIN="smily_bad"/>
-</node>
 <node CREATED="1484802752728" ID="ID_634426848" MODIFIED="1484802766354" TEXT="passiert beim Aufruf des TerminationHandle"/>
 <node CREATED="1484802766966" ID="ID_370736554" MODIFIED="1484802805848">
 <richcontent TYPE="NODE"><html>
@@ -347,19 +418,21 @@
       Und noch schlimmer: im Debugger gibts keinen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#c80e33" CREATED="1484862058589" ID="ID_1640490030" MODIFIED="1484862079387" TEXT="Locking">
 <icon BUILTIN="help"/>
-<node CREATED="1484865203945" ID="ID_1990023724" MODIFIED="1484865221554" TEXT="Locking in der GuiFacade ist korrekt"/>
+<node COLOR="#338800" CREATED="1484865203945" ID="ID_1990023724" MODIFIED="1484866438758" TEXT="Locking in der GuiFacade ist korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1484865231878" ID="ID_1054093321" MODIFIED="1484865240952" TEXT="im Gui-Thread kein Locking notwendig"/>
 <node CREATED="1484865243724" ID="ID_617730067" MODIFIED="1484865273473" TEXT="HA! das Lambda vom Threadstart">
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1484865278999" ID="ID_1656236909" MODIFIED="1484865283979" TEXT="aufgekl&#xe4;rt">
+<node COLOR="#338800" CREATED="1484865278999" ID="ID_1656236909" MODIFIED="1484865631538" TEXT="aufgekl&#xe4;rt">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1484865298093" ID="ID_1797078596" MODIFIED="1484865314802">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -370,8 +443,7 @@
       die <i>Closure</i>&#160;eines Lambdas h&#228;ngt am Kontext
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1484865316147" ID="ID_687373412" MODIFIED="1484865348826" TEXT="wenn ich den Thread mit Lambda starte..."/>
 <node CREATED="1484865349366" ID="ID_652410738" MODIFIED="1484865350930" TEXT="betrifft das den term-Functor"/>
@@ -403,9 +475,7 @@
       terminiert und dann tats&#228;chlich den Fuktor aufrufen m&#246;chte
     </p>
   </body>
-</html>
-</richcontent>
-</node>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -419,26 +489,31 @@
       Debug: nur <b>ein</b>&#160;Element connected
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="bell"/>
 <node CREATED="1484800781408" ID="ID_183164357" MODIFIED="1484800786931" TEXT="n&#xe4;mlich der NotificationService"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484800787590" ID="ID_1262993877" MODIFIED="1484800791287" TEXT="AUA!">
 <icon BUILTIN="flag-pink"/>
+<node CREATED="1484801095326" ID="ID_1423080714" MODIFIED="1484801173709" TEXT="beobachte re-entranten dtor-Aufruf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das scheint einen virtuellen dtor aufzurufen, der den dtor von NotificationService aktiviert
+    </p>
+    <p>
+      ?
+    </p>
+  </body>
+</html></richcontent>
 </node>
-</node>
-</node>
-</node>
-<node CREATED="1484799604429" ID="ID_1141687282" MODIFIED="1484799616681" TEXT="Design-Problem: sinnvolles Diff">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1484799625306" ID="ID_443020211" MODIFIED="1484799632496" TEXT="aus den Fingern saugen">
+<node CREATED="1484801174579" ID="ID_1403729721" MODIFIED="1484801189578" TEXT="wirklich? oder ist das der Member-dtor">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1484799634233" ID="ID_1600517820" MODIFIED="1484799642178" TEXT="nur implementation-reuse">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1484799675388" HGAP="29" ID="ID_228932182" MODIFIED="1484799693431" TEXT="Idee: Attribute?" VSHIFT="18">
-<icon BUILTIN="idea"/>
+<node CREATED="1484801103716" ID="ID_111329243" MODIFIED="1484801112319" TEXT="Instancehandle -&gt; Interfaceproxy"/>
 </node>
 </node>
 </node>

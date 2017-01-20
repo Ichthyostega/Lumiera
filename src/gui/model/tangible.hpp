@@ -173,7 +173,7 @@ namespace model {
       
       
       Tangible(ID identity, ctrl::BusTerm& nexus)
-        : uiBus_(nexus.attach(identity, *this))
+        : uiBus_{nexus.attach(identity, *this)}
         { }
       
     public:

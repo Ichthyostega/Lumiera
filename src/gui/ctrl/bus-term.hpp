@@ -34,14 +34,23 @@
  ** which it will be wired. Moreover, each BusTerm bears a distinct
  ** [identity](\ref ::endpointID_), which is used as _implicit subject_
  ** for emanating messages, or as explicit destination for routing.
- ** The whole [UI-Bus](\ref BusController) is built to perform within the
+ ** The whole [UI-Bus](\ref ui-bus.hpp) is built to perform within the
  ** UI event thread and thus is _not threadsafe_. For that reason,
  ** the automatic detachment built into each BusTerm's dtor is
  ** sufficient to ensure sane connectivity.
  ** 
- ** @todo as of 11/2015 this is complete WIP-WIP-WIP
+ ** @note BusTerm *disconnects itself automatically* on destruction.
+ **       However, it is *not attached automatically*. It _does require_
+ **       a reference to the bus on construction, which by default places
+ **       the BusTerm instance into a _semi connected_ state: the BusTerm
+ **       is able to send messages to the bus, but the Nexus (hub) does
+ **       not know the BusTerm by ID and thus is not able to direct
+ **       messages towards this BusTerm. Contrast this to a Tangible,
+ **       which is constructed in a way to ensure it is always has a
+ **       bidirectional communication link to the Nexus.
  ** 
  ** @see [BusTerm_test]
+ ** @see Tangible
  ** 
  */
 
@@ -51,8 +60,6 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 
@@ -69,8 +76,6 @@ namespace ctrl{
   
   class MutationMessage;
   
-//  using lib::HashVal;
-//  using util::isnil;
   using lib::idi::EntryID;
   using lib::diff::GenNode;
   using std::string;
@@ -127,7 +132,10 @@ namespace ctrl{
       
       /** may be moved, but not copied,
        *  due to the embedded identity */
-      BusTerm(BusTerm&&) = default;
+      BusTerm(BusTerm&&)      = default;
+      BusTerm(BusTerm const&) = delete;
+      
+      BusTerm& operator= (BusTerm const&) = delete;
       
     protected:
       /**
@@ -150,7 +158,7 @@ namespace ctrl{
     };
   
   
-    
+  
   
   /** record state mark from this subject */
   inline void

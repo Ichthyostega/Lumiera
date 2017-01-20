@@ -182,6 +182,12 @@ namespace ctrl{
       Nexus (BusTerm& uplink_to_CoreService, ID identity =lib::idi::EntryID<Nexus>())
         : BusTerm(identity, uplink_to_CoreService)
       { }
+      
+     ~Nexus()
+        {
+          if (0 < size())
+            ERROR (gui, "Some UI components are still connected to the backbone.");
+        }
     };
   
   

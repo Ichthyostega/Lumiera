@@ -39,6 +39,37 @@
  ** both CoreService and Nexus are mutually interdependent from an operational
  ** perspective, since they exchange messages in both directions.
  ** 
+ ** ## Bus connection and topology
+ ** The CoreService plays a central role within the UI, since it represents
+ ** _»the application core«_ from the UI layer's viewpoint. But it is not
+ ** the bus manager or central router, a role fulfilled by ctrl::Nexus,
+ ** the central UI-Bus hub. Every node which has been added into the
+ ** routing table in Nexus, can be addressed as a _first class citizen,_
+ ** that is, we're able to direct messages towards such an element, knowing
+ ** only it's ID. But there is a twist: all connections to the Bus are made
+ ** from [bus terminals](ctrl::BusTerm), and each _node_, i.e. each
+ ** [tangible model element](model::Tangible) has a BusTerm member and
+ ** thus inherits the ability to talk to the bus. But only when _actively_
+ ** connected to the bus, a full link and entry in the routing table is
+ ** established. The constructor of model::Tangible indeed makes such
+ ** a connection right away, while any "free standing" BusTerm just
+ ** knows how to talk to the Bus _upstream,_ without establishing
+ ** a full link to receive also _downstream_ messages.
+ ** 
+ ** And _the fine point to note is_ that CoreService just incorporates
+ ** a free standing BusTerm, without registering it with the Nexus.
+ ** Doing so would be pointless, since CoreService in fact is not a
+ ** regular Tangible, rather it fulfils a very special purpose within
+ ** the UI. Most of the UI-Bus messages would not make much sense when
+ ** directed towards the CoreService. Rather, CoreService _acts as upstream_
+ ** for the Nexus, and thus gains the ability to respond to those few special
+ ** messages, which can not be handled in a generic way on the Nexus:
+ ** - *act* handles command invocation within the Session core, and
+ **   is treated by [forwarding](command-handler.hpp) it over the
+ **   SessionCommand facade to the [Proc-Dispatcher](proc-dispatcher.hpp)
+ ** - *note* observes and captures presentation state note messages, which
+ **   are to be handled by a central presentation state manager (TODO 1/17).
+ ** 
  ** @see AbstractTangible_test
  ** @see BusTerm_test
  ** 
@@ -80,15 +111,6 @@ namespace ctrl{
       Nexus uiBusBackbone_;
       NotificationService activateNotificationService_;
       
-      /**
-       * This service establishes some hard wired connections to the UI-Bus.
-       * Because baseclass BusTerm automatically disconnects at destruction,
-       * the member NotificationService and this object (CoreService) are
-       * still connected to the nexus, when the sanity check in our dtor runs.
-       * But all other UI elements outside of the scope of this should already
-       * be disconnected at that point...
-       */
-      enum { NUMBER_OF_CONNECTED_DIRECT_MEMBERS = 2 };//!< NUMBER_OF_CONNECTED_DIRECT_MEMBERS
       
       virtual void
       act (GenNode const& command)  override
@@ -114,13 +136,6 @@ namespace ctrl{
         {
           INFO (gui, "UI-Backbone operative.");
         }
-      
-     ~CoreService()
-        {
-          if (uiBusBackbone_.size() > NUMBER_OF_CONNECTED_DIRECT_MEMBERS)
-            ERROR (gui, "Some UI components are still connected to the backbone.");
-        }
-      
     };
   
   
