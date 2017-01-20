@@ -23,24 +23,19 @@
 
 /** @file diff-message.hpp
  ** Generic Message with an embedded diff, to describe changes to model elements.
- ** The UI-Bus offers a dedicated API to direct MutationMessages towards Tangible elements,
- ** as designated by the given ID. Actually, such messages serve as capsule to transport a
- ** diff-sequence -- since a diff sequence as such is always concrete and tied to a specific context,
- ** we can not represent it directly as an abstract type on interface level. The receiver of a diff
- ** sequence must offer the ability to be reshaped through diff messages, which is expressed through
- ** the interface DiffMutable. In the case at question here, gui::model::Tangible offers this interface
- ** and thus the ability to construct a concrete lib::diff::TreeMutator, which in turn is bound to the
- ** internals of the actual UI-Element. Together this allows for a generic implementation of MutationMessage
- ** handling, where the designated UI-Element is reshaped by applying an embedded concrete diff message
- ** with the help of a `DiffApplicator<DiffMutable>`, based on the TreeMutator exposed.
+ ** The ability to create and apply such messages to describe and effect changes,
+ ** without actually knowing much about the target to receive the diff, relies on the
+ ** [diff framework](\ref diff-language.hpp).
  ** 
- ** ## Creating mutation messages
- ** The UI-Bus invocation actually takes a reference to MutationMessage, and thus on usage a
- ** concrete instance needs to be created. This concrete Message embeds an actual diff sequence,
- ** which is some iterable sequence of lib::diff::DiffStep records.
- ** @warning be sure to understand that the diff sequence is really moved away and then consumed.
+ ** The challenging part with this task is the fact that we need to pass such messages
+ ** over abstraction barriers and even schedule them into another thread (the UI event thread),
+ ** but diff application actually is a _pull operation_ and thus indicates that there must
+ ** be a callback actually to retrieve the diff content.
+ ** 
+ ** @todo as of 1/2017 this is placeholder code and we need a concept //////////////////////////////////////////TICKET #1066 : how to pass diff messages
  ** 
  ** @see [AbstractTangible_test]
+ ** @see mutation-message.hpp
  ** 
  */
 
@@ -50,114 +45,37 @@
 
 
 #include "lib/error.hpp"
-#include "lib/opaque-holder.hpp"
-#include "lib/diff/tree-diff-application.hpp"
-#include "gui/model/tangible.hpp"
-#include "lib/format-util.hpp"
 
-#include <utility>
+#include <boost/noncopyable.hpp>
 #include <string>
 
 
-namespace gui {
-namespace ctrl{
+namespace lib {
+namespace diff{
   
   using std::string;
   
-  namespace diff_msg { // implementation details for embedding concrete diff messages
-    
-    using lib::diff::DiffApplicator;
-    using model::Tangible;
-    using std::move;
-    
-    class Holder
-      {
-      public:
-        virtual ~Holder(); ///< this is an interface
-        virtual void applyTo (Tangible&)   =0;
-        virtual string describe()  const   =0;
-      };
-    
-    template<typename DIFF>
-    class Wrapped
-      : public Holder
-      {
-        DIFF diff_;
-        
-        virtual void
-        applyTo (Tangible& target)  override
-          {
-            DiffApplicator<Tangible> applicator(target);
-            applicator.consume (move(diff_));
-          }
-        
-        virtual string
-        describe()  const override
-          {
-            DIFF copy(diff_); // NOTE: we copy, since each iteration consumes.
-            return ::util::join (move(copy));
-          }
-        
-      public:
-        Wrapped (DIFF&& diffSeq)
-          : diff_(move(diffSeq))
-          { }
-      };
-    
-    
-    /** standard size to reserve for the concrete diff representation
-     * @note this is a pragmatic guess, based on the actual usage pattern within Lumiera.
-     *       This determines the size of the inline buffer within MutationMessage.
-     *       You'll get an static assertion failure when creating a MutationMessage
-     *       from a concrete diff representation requires more storage space...
-     */
-    enum { SIZE_OF_DIFF_REPRESENTATION = sizeof(std::vector<string>)
-                                       + sizeof(size_t)
-                                       + sizeof(void*)
-         };
-    
-    using Buffer = lib::InPlaceBuffer<Holder, SIZE_OF_DIFF_REPRESENTATION>;
-  }//(End) implementation details...
-  
-  
+ 
   
   
   
   /**
-   * Message on the UI-Bus holding an embedded diff sequence.
-   * The Nexus (hub of the UI-Bus) will prompt the designated Tangible
-   * to expose a TreeMutator, and then apply the embedded diff.
+   * @todo placeholder
    */
-  class MutationMessage
-    : public diff_msg::Buffer
+  class DiffMessage
+    : boost::noncopyable
     {
     public:
-      /** build a MutationMessage by _consuming_ the given diff sequence
-       * @param diffSeq some iterable DiffStep sequence.
-       * @warning parameter will be moved into the embedded buffer and consumed
-       */
-      template<typename DIFF>
-      MutationMessage(DIFF&& diffSeq)
-        : diff_msg::Buffer{ embedType<diff_msg::Wrapped<DIFF>>()
-                          , std::move(diffSeq)}
-        { }
       
       void
-      applyTo (model::Tangible& target)
+      magically_extract_MutationMessage()
         {
-          access<diff_msg::Holder>()->applyTo(target);
+          UNIMPLEMENTED ("miracle No #1066");                         //////////////////////////////////////////TICKET #1066 : how to pass diff messages
         }
-      
-      operator string()  const
-        {
-          return unConst(this)->access<diff_msg::Holder>()->describe();
-        }
-      
-    protected:
     };
   
   
   
   
-}} // namespace gui::ctrl
+}} // namespace lib::diff
 #endif /*LIB_DIFF_DIFF_MESSAGE_H*/

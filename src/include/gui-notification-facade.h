@@ -44,7 +44,7 @@
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "include/interfaceproxy.hpp"
-#include "gui/ctrl/mutation-message.hpp"
+#include "lib/diff/diff-message.hpp"                ///////////////////////////////////////////////////////////STICKET #1066 : placeholder
 #include "lib/idi/entry-id.hpp"
 
 #include <string>
@@ -53,7 +53,9 @@
 namespace gui {
   
   using std::string;
-  using ctrl::MutationMessage;
+  using lib::diff::DiffMessage;
+  
+  using ID = lib::idi::BareEntryID const&;
   
   
   /*****************************************************************//**
@@ -69,8 +71,6 @@ namespace gui {
   class GuiNotification
     {
     public:
-      using ID = lib::idi::BareEntryID const&;
-
       static lumiera::facade::Accessor<GuiNotification> facade;
       
       
@@ -92,7 +92,7 @@ namespace gui {
        *  the UI model elements subject to this change.
        * @see diff-language.hpp
        */
-      virtual void mutate (ID uiElement, MutationMessage&)       =0;
+      virtual void mutate (ID uiElement, DiffMessage&)           =0;      /////////////////////////////////////TICKET #1066 : how to pass a diff message
       
       /** causes the GUI to shut down unconditionally
        *  @param cause user visible explanation of the
