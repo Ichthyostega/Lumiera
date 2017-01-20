@@ -41,7 +41,7 @@
 
 #include "include/gui-notification-facade.h"
 #include "common/instancehandle.hpp"
-#include "gui/model/controller.hpp"
+#include "gui/ctrl/bus-term.hpp"
 #include "lib/singleton-ref.hpp"
 
 
@@ -58,13 +58,14 @@ namespace gui {
    * a forwarding proxy within the application core to
    * route calls through this interface.
    * 
-   * @todo the ctor of this class should take references
-   *       to any internal service providers within the
-   *       GUI which are needed to implement the service. 
+   * @note the ctor of this class establishes an "up-link"
+   *       connection to the [UI-Bus](ui-bus.hpp), which
+   *       enables the service implementation to talk to
+   *       other facilities within the UI.
    */
   class NotificationService
     : public GuiNotification
-    , public model::Controller
+    , public ctrl::BusTerm
     {
       
       /* === Implementation of the Facade Interface === */
@@ -83,13 +84,9 @@ namespace gui {
       ServiceInstanceHandle serviceInstance_;
       
       
-      /* === Control Interface === */
-      
-      /** set up a binding to respond to mutation messages via UiBus */
-      virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
       
     public:
-      NotificationService(ctrl::BusTerm& nexus);
+      NotificationService (ctrl::BusTerm& upLink);
       
     };
     

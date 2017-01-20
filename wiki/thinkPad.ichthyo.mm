@@ -337,7 +337,7 @@
 <icon BUILTIN="pencil"/>
 <node CREATED="1484797663121" ID="ID_134980216" MODIFIED="1484797669469" TEXT="braucht Bus-Connection">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1484797863862" ID="ID_464230340" MODIFIED="1484797870255" TEXT="zum Controller machen">
+<node CREATED="1484797863862" FOLDED="true" ID="ID_464230340" MODIFIED="1484876070975" TEXT="zum Controller machen">
 <icon BUILTIN="help"/>
 <node CREATED="1484797872109" ID="ID_1877007933" MODIFIED="1484797877960" TEXT="Controller ist Tangible"/>
 <node CREATED="1484797878364" ID="ID_93289471" MODIFIED="1484797887414" TEXT="hat damit automatisch BusTerm"/>
@@ -352,6 +352,32 @@
 <node CREATED="1484799675388" HGAP="29" ID="ID_228932182" MODIFIED="1484799693431" TEXT="Idee: Attribute?" VSHIFT="18">
 <icon BUILTIN="idea"/>
 </node>
+</node>
+<node CREATED="1484876010871" ID="ID_175784507" MODIFIED="1484876038858" TEXT="Design-Problem: restliches Tangible-Protokoll">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wirkt alles mehr oder weniger beliebig...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1484875935505" ID="ID_1341415727" MODIFIED="1484875940799" TEXT="nein">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1484875946312" FOLDED="true" ID="ID_271363232" MODIFIED="1484875993627" TEXT="ist ein BusTerm">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1484875959342" ID="ID_1202046492" MODIFIED="1484875967689" TEXT="nur unidirektional zum Bus verbunden"/>
+<node CREATED="1484875968557" ID="ID_1406569407" MODIFIED="1484875989502" TEXT="ist hier genau angemessen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1484875972588" ID="ID_1887863793" MODIFIED="1484875984841" TEXT="damit kann der Service mit dem UI reden">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1484799525344" FOLDED="true" ID="ID_640788614" MODIFIED="1484875268468" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
@@ -501,6 +527,13 @@
 <icon BUILTIN="info"/>
 </node>
 </node>
+</node>
+<node CREATED="1484876114521" ID="ID_1082250595" MODIFIED="1484876121540" TEXT="Protokoll zur Kommunikation">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484876122960" ID="ID_31825421" MODIFIED="1484876140752" TEXT="UI-Bus nur im GUI-Thread">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1484876143949" ID="ID_558559630" MODIFIED="1484876153688" TEXT="mu&#xdf; Nachrichten explizit &#xfc;bergeben"/>
+<node CREATED="1484876154492" ID="ID_669377427" MODIFIED="1484876157575" TEXT="an Locking denken"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797900185" ID="ID_1895372084" MODIFIED="1484797910297" TEXT="Protokoll zum Schlie&#xdf;en">
 <icon BUILTIN="flag-yellow"/>

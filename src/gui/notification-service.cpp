@@ -43,7 +43,7 @@ extern "C" {
 namespace gui {
   
   using lib::diff::TreeMutator;
-  using model::Controller;
+  using gui::ctrl::BusTerm;
   using std::string;
   using util::cStr;
 
@@ -63,13 +63,6 @@ namespace gui {
     TODO ("actually request a shutdown from the GUI");
   }
   
-  
-  void
-  NotificationService::buildMutator (TreeMutator::Handle buffer)
-  {
-    UNIMPLEMENTED ("in which way to bind the Notification service for diff messages??");
-  }
-
   
   
   namespace { // facade implementation details
@@ -184,8 +177,15 @@ namespace gui {
   
   
   
-  NotificationService::NotificationService (ctrl::BusTerm& nexus)
-    : Controller{lib::idi::EntryID<NotificationService>{}, nexus}
+  /**
+   * When started, NotificationService connects to the [UI-Bus](ui-bus.hpp) via
+   * the provided connection. This is a simple, unidirectional up-link connection,
+   * without actively adding NotificationService into the routing tables in [Nexus].
+   * Yet this simple connection is sufficient to implement this service by talking
+   * to other facilities within the UI layer.
+   */
+  NotificationService::NotificationService (ctrl::BusTerm& upLink)
+    : BusTerm{lib::idi::EntryID<NotificationService>{}, upLink}
     , implInstance_(this,_instance)
     , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))
   {
@@ -193,6 +193,4 @@ namespace gui {
   }
   
   
-
-
 } // namespace gui
