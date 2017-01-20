@@ -65,11 +65,13 @@ namespace controller {
     { }
   
   
-  // emit VTables here...
+  // emit administrative code here...
   UiBus::~UiBus() { }
   
-  
 namespace ctrl {
+    
+    CoreService::~CoreService() { }
+    
     
     /** @note detaches the corresponding node automatically */
     BusTerm::~BusTerm()

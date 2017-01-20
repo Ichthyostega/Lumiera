@@ -136,6 +136,8 @@ namespace ctrl{
         {
           INFO (gui, "UI-Backbone operative.");
         }
+      
+     ~CoreService();
     };
   
   

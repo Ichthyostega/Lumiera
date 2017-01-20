@@ -354,10 +354,10 @@
 </node>
 </node>
 </node>
-<node CREATED="1484799525344" ID="ID_640788614" MODIFIED="1484871642690" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
-<icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484799538686" ID="ID_1136883698" MODIFIED="1484866524904" TEXT="tut es nicht">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1484799525344" FOLDED="true" ID="ID_640788614" MODIFIED="1484875268468" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#ff0000" CREATED="1484799538686" ID="ID_1136883698" MODIFIED="1484873804862" TEXT="tut es nicht">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 <node CREATED="1484799551220" ID="ID_496503271" MODIFIED="1484799585260" TEXT="Fehlermeldung + Segfault">
 <richcontent TYPE="NOTE"><html>
@@ -479,7 +479,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1484800741349" ID="ID_1156360682" MODIFIED="1484800797521">
+<node CREATED="1484800741349" ID="ID_1156360682" MODIFIED="1484875247050">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -490,30 +490,15 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="bell"/>
-<node CREATED="1484800781408" ID="ID_183164357" MODIFIED="1484800786931" TEXT="n&#xe4;mlich der NotificationService"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484800787590" ID="ID_1262993877" MODIFIED="1484800791287" TEXT="AUA!">
-<icon BUILTIN="flag-pink"/>
-<node CREATED="1484801095326" ID="ID_1423080714" MODIFIED="1484801173709" TEXT="beobachte re-entranten dtor-Aufruf">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das scheint einen virtuellen dtor aufzurufen, der den dtor von NotificationService aktiviert
-    </p>
-    <p>
-      ?
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1484801174579" ID="ID_1403729721" MODIFIED="1484801189578" TEXT="wirklich? oder ist das der Member-dtor">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1484800781408" ID="ID_183164357" MODIFIED="1484875241862" TEXT="n&#xe4;mlich der NotificationService">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1484801103716" ID="ID_111329243" MODIFIED="1484801112319" TEXT="Instancehandle -&gt; Interfaceproxy"/>
+<node COLOR="#338800" CREATED="1484875214137" ID="ID_977859942" MODIFIED="1484875237383" TEXT="nein: das ist genau OK">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1484875222128" ID="ID_1133941591" MODIFIED="1484875235519" TEXT="CoreService ist nicht bidirektional angebunden">
+<icon BUILTIN="info"/>
 </node>
 </node>
 </node>
