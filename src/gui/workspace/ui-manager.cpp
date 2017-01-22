@@ -1,8 +1,9 @@
 /*
-  WindowManager  -  Global UI Manager
+  UiManager  -  Global UI Manager
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2017,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,9 +22,13 @@
 * *****************************************************/
 
 
-#include "gui/window-manager.hpp"
+/** @file ui-manager.cpp
+ ** Implementation of global UI resource and instance management.
+ */
+
+
 #include "gui/gtk-lumiera.hpp"
-#include "gui/workspace/workspace-window.hpp"
+#include "gui/workspace/ui-manager.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 
@@ -43,13 +48,14 @@ using namespace gui::workspace;
 namespace fsys = boost::filesystem;
 
 namespace gui {
+namespace workspace {
   
-  IconSize WindowManager::GiantIconSize = ICON_SIZE_INVALID;
-  IconSize WindowManager::MenuIconSize = ICON_SIZE_INVALID;
+  IconSize UiManager::GiantIconSize = ICON_SIZE_INVALID;
+  IconSize UiManager::MenuIconSize = ICON_SIZE_INVALID;
   
   
   void
-  WindowManager::init (string const& iconPath, string const& resourcePath)
+  UiManager::init (string const& iconPath, string const& resourcePath)
   {
     this->iconSearchPath_ = iconPath;
     this->resourceSerachPath_ = resourcePath;
@@ -60,7 +66,7 @@ namespace gui {
   
   
   void
-  WindowManager::setTheme (string const& stylesheetName)
+  UiManager::setTheme (string const& stylesheetName)
   {
     auto screen = Gdk::Screen::get_default();
     auto css_provider = CssProvider::create();
@@ -81,13 +87,13 @@ namespace gui {
   
   
   void
-  WindowManager::newWindow (gui::model::Project& source_project, gui::controller::Controller& source_controller)
+  UiManager::newWindow (gui::model::Project& source_project, gui::controller::Controller& source_controller)
   { 
     shared_ptr<WorkspaceWindow> window(new WorkspaceWindow(source_project, source_controller));
     REQUIRE(window);
     
     window->signal_delete_event().connect(sigc::mem_fun(
-      this, &WindowManager::on_window_closed));
+      this, &UiManager::on_window_closed));
     
     windowList.push_back(window);
     
@@ -98,7 +104,7 @@ namespace gui {
   
   
   bool
-  WindowManager::on_window_closed (GdkEventAny* event)
+  UiManager::on_window_closed (GdkEventAny* event)
   {
     REQUIRE(event);
     REQUIRE(event->window);
@@ -137,7 +143,7 @@ namespace gui {
   
   
   void
-  WindowManager::updateCloseWindowInMenus()
+  UiManager::updateCloseWindowInMenus()
   {
     bool enable = windowList.size() > 1;
     
@@ -155,7 +161,7 @@ namespace gui {
   
   
   Cairo::RefPtr<Cairo::SolidPattern>
-  WindowManager::readStyleColourProperty (Gtk::Widget& widget
+  UiManager::readStyleColourProperty (Gtk::Widget& widget
                                          ,const gchar * property_name
                                          ,guint16 red, guint16 green, guint16 blue)
   {
@@ -185,7 +191,7 @@ namespace gui {
   
   
   void
-  WindowManager::registerAppIconSizes()
+  UiManager::registerAppIconSizes()
   {
     if(GiantIconSize == ICON_SIZE_INVALID)
       GiantIconSize = IconSize::register_new ("giant", 48, 48);
@@ -195,7 +201,7 @@ namespace gui {
   
   
   void
-  WindowManager::registerStockItems()
+  UiManager::registerStockItems()
   {
     Glib::RefPtr<IconFactory> factory = IconFactory::create();
     
@@ -219,7 +225,7 @@ namespace gui {
   
   
   bool
-  WindowManager::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
+  UiManager::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
                                  ,cuString& icon_name
                                  ,cuString& id
                                  ,cuString& label)
@@ -256,7 +262,7 @@ namespace gui {
   
   
   bool
-  WindowManager::addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
+  UiManager::addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
                               ,cuString& icon_name
                               ,Gtk::IconSize size
                               ,bool wildcard)
@@ -280,7 +286,7 @@ namespace gui {
   
   
   bool
-  WindowManager::addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
+  UiManager::addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
                                     ,cuString& icon_name
                                     ,Gtk::IconSize size
                                     ,bool wildcard)
@@ -306,7 +312,7 @@ namespace gui {
   
   
   bool
-  WindowManager::addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
+  UiManager::addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
                                        ,cuString& base_dir
                                        ,cuString& icon_name
                                        ,Gtk::IconSize size
@@ -326,7 +332,7 @@ namespace gui {
   
   
   bool
-  WindowManager::addStockIconFromPath (string path
+  UiManager::addStockIconFromPath (string path
                                       ,Glib::RefPtr<Gtk::IconSet> const& icon_set
                                       ,Gtk::IconSize size
                                       ,bool wildcard)
@@ -352,4 +358,4 @@ namespace gui {
   }
   
   
-}// namespace gui
+}}// namespace gui::workspace

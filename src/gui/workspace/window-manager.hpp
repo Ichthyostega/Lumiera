@@ -46,10 +46,12 @@
 
 namespace gui {
   
-  namespace model      { class Project; }
-  namespace controller { class Controller; }
-  namespace workspace  { class WorkspaceWindow; }
+  namespace model      { class Project; }           ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
+  namespace controller { class Controller; }        ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   
+namespace workspace {
+  
+  class WorkspaceWindow;
   
   using std::shared_ptr;
   using std::string;
@@ -228,5 +230,5 @@ namespace gui {
   
   
   
-}// namespace gui
+}}// namespace gui::workspace
 #endif /*GUI_WINDOW_MANAGER_H*/

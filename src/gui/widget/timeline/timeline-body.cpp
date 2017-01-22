@@ -23,7 +23,7 @@
 
 #include "gui/widget/timeline/timeline-body.hpp"
 #include "gui/widget/timeline-widget.hpp"
-#include "gui/window-manager.hpp"
+#include "gui/workspace/ui-manager.hpp"
 #include "gui/util/cairo-util.hpp"
 
 #include "timeline-arrow-tool.hpp"

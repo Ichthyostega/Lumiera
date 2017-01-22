@@ -52,7 +52,8 @@
 
 
 #include "gui/gtk-base.hpp"
-#include "gui/window-manager.hpp"
+#include "gui/workspace/ui-manager.hpp"
+#include "gui/workspace/window-manager.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <memory>
@@ -138,7 +139,7 @@ namespace gui {
     : boost::noncopyable
     {
       /** Central application window manager instance */
-      WindowManager windowManagerInstance_;
+      workspace::WindowManager windowManagerInstance_;
       
       
     public:
@@ -150,7 +151,7 @@ namespace gui {
       /** start up the GUI and run the event thread */
       void main(int argc, char *argv[]);
       
-      WindowManager& windowManager();                   ////////////////////////////TICKET #1048 : this loophole needs to be closed
+      workspace::WindowManager& windowManager();        ////////////////////////////TICKET #1048 : this loophole needs to be closed
       
       
       /** the name of the application */

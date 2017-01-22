@@ -24,7 +24,7 @@
 #include "gui/workspace/actions.hpp"
 #include "gui/workspace/workspace-window.hpp"
 
-#include "gui/window-manager.hpp"
+#include "gui/workspace/ui-manager.hpp"
 
 #include "gui/dialog/render.hpp"
 #include "gui/dialog/preferences-dialog.hpp"

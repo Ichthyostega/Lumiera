@@ -22,7 +22,7 @@
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/window-manager.hpp"
+#include "gui/workspace/ui-manager.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/model/project.hpp"

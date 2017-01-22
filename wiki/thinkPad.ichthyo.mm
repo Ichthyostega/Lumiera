@@ -138,8 +138,7 @@
       CoreService hat <i>keine volle</i>&#160;Bus-Connection
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -158,8 +157,7 @@
       BusTerm, das damit Nachrichten an den Nexus schicken kann.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -265,8 +263,7 @@
       Anmerkung: ein &quot;frestehendes&quot; BusTerm ist valide und zugelassen, es hat halt nur eine uplink-Connection.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1484871556194" ID="ID_1978811406" MODIFIED="1484871610834" TEXT="macht Sinn so">
 <richcontent TYPE="NOTE"><html>
@@ -281,8 +278,7 @@
       es mu&#223; dazu auch jede Menge Methoden implementieren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1484797584483" ID="ID_290592673" MODIFIED="1484797619642" TEXT="dieser hat Member ">
@@ -363,8 +359,7 @@
       wirkt alles mehr oder weniger beliebig...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1484875935505" ID="ID_1341415727" MODIFIED="1484875940799" TEXT="nein">
 <icon BUILTIN="button_cancel"/>
@@ -538,7 +533,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797900185" ID="ID_1895372084" MODIFIED="1484797910297" TEXT="Protokoll zum Schlie&#xdf;en">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484797911392" ID="ID_286857196" MODIFIED="1484797917672" TEXT="mu&#xdf; ich definieren">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484797911392" ID="ID_286857196" MODIFIED="1485126732565" TEXT="mu&#xdf; ich definieren">
+<linktarget COLOR="#872666" DESTINATION="ID_286857196" ENDARROW="Default" ENDINCLINATION="272;63;" ID="Arrow_ID_1606936924" SOURCE="ID_405470138" STARTARROW="Default" STARTINCLINATION="1461;0;"/>
 <icon BUILTIN="flag-pink"/>
 </node>
 <node CREATED="1484797920846" ID="ID_472054508" MODIFIED="1484797941875" TEXT="sollte Nachricht auf dem Bus sein">
@@ -562,13 +558,108 @@
       indem wir ein GTK-Signal erzeugen, das das Hauptfenster schlie&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1484797749237" ID="ID_1654016697" MODIFIED="1484797763392" TEXT="wie kann man GTK-UI explizit schlie&#xdf;en">
 <icon BUILTIN="help"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797766035" ID="ID_1740926324" MODIFIED="1484797792293" TEXT="wie signalisieren wir das">
 <icon BUILTIN="help"/>
+</node>
+<node CREATED="1485116867963" ID="ID_1146024699" MODIFIED="1485116876162" TEXT="bisher kann man nur das Fenster schlie&#xdf;en">
+<node CREATED="1485116884925" ID="ID_296160451" MODIFIED="1485116898396" TEXT="wie funktioniert das?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1485116901507" ID="ID_1272809751" MODIFIED="1485116904846" TEXT="WindowManager">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485126609878" ID="ID_649614174" MODIFIED="1485126614405" TEXT="#1064 investigate WindowManager lifecycle">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1485116921072" ID="ID_1191743111" MODIFIED="1485116925722" TEXT="close Action"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485118623744" ID="ID_392996871" MODIFIED="1485126655278" TEXT="#1032 use gtk::Application instead of gtk::Main">
+<arrowlink COLOR="#ae1856" DESTINATION="ID_206480879" ENDARROW="Default" ENDINCLINATION="715;0;" ID="Arrow_ID_926482654" STARTARROW="Default" STARTINCLINATION="134;383;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1485118668802" ID="ID_575152579" MODIFIED="1485118676149" TEXT="WindowManager verwendet gtk::Main"/>
+<node CREATED="1485118677425" ID="ID_1952311126" MODIFIED="1485118685915" TEXT="genau, um die Applikation runterzufahren"/>
+<node CREATED="1485124031945" ID="ID_329247026" MODIFIED="1485124037892" TEXT="Gtk::Application">
+<node CREATED="1485124038768" ID="ID_764043255" MODIFIED="1485124045970" TEXT="ist kein Singleton"/>
+<node CREATED="1485124046775" ID="ID_505212945" MODIFIED="1485124051706" TEXT="hat keinen public ctor"/>
+<node CREATED="1485124052149" ID="ID_799710500" MODIFIED="1485124060680" TEXT="mit create erstellt -&gt; smart ptr"/>
+<node CREATED="1485124063732" ID="ID_1584553859" MODIFIED="1485124069376" TEXT="erbt von Gio::Application">
+<node CREATED="1485124070131" ID="ID_1720443251" MODIFIED="1485124077430" TEXT="wrappt g_application"/>
+</node>
+</node>
+<node CREATED="1485124084465" ID="ID_660066920" MODIFIED="1485124092140" TEXT="how-to">
+<icon BUILTIN="help"/>
+<node CREATED="1485124094936" ID="ID_1446212765" MODIFIED="1485124097196" TEXT="offiziell">
+<node CREATED="1485124098920" ID="ID_1783958965" MODIFIED="1485124109274" TEXT="auto app = Application::create"/>
+<node CREATED="1485124111806" ID="ID_231977368" MODIFIED="1485124114842" TEXT="app-&gt;run"/>
+</node>
+<node CREATED="1485124120220" ID="ID_1639025787" MODIFIED="1485124125059" TEXT="von Application erben">
+<icon BUILTIN="help"/>
+<node CREATED="1485124129436" ID="ID_1540860407" MODIFIED="1485124141373" TEXT="laut Quellcode spricht nichts dagegen"/>
+<node CREATED="1485124142178" ID="ID_1048261084" MODIFIED="1485124208286" TEXT="man sollte aber keine Methoden &#xfc;berschreiben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nur eine <i>heuristische </i>Vermutung von mir
+    </p>
+    <p>
+      st&#252;tzt sich auf folgenden Quellcode
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Application::Application(const Glib::ustring&amp; application_id, Gio::ApplicationFlags flags)
+    </p>
+    <p>
+      :
+    </p>
+    <p>
+      &#160;&#160;// Mark this class as non-derived to allow C++ vfuncs to be skipped.
+    </p>
+    <p>
+      &#160;&#160;//Note that GApplication complains about &quot;&quot; but allows NULL (0), so we avoid passing &quot;&quot;.
+    </p>
+    <p>
+      &#160;&#160;Glib::ObjectBase(0),
+    </p>
+    <p>
+      &#160;&#160;Gio::Application(Glib::ConstructParams(custom_class_init(), &quot;application_id&quot;, (application_id.empty() ? 0 : application_id.c_str()), &quot;flags&quot;, GApplicationFlags(flags), static_cast&lt;char*&gt;(0))),
+    </p>
+    <p>
+      &#160;&#160;m_argc(0),
+    </p>
+    <p>
+      &#160;&#160;m_argv(0)
+    </p>
+    <p>
+      {
+    </p>
+    <p>
+      &#160;&#160;gtk_init(0, 0);
+    </p>
+    <p>
+      }
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1485124284856" ID="ID_473768869" MODIFIED="1485124294410" TEXT="Windows selber managen">
+<icon BUILTIN="help"/>
+<node CREATED="1485124296582" ID="ID_628648705" MODIFIED="1485124304593" TEXT="gtk::Application verwaltet Fensterliste"/>
+<node CREATED="1485124305157" ID="ID_1632068669" MODIFIED="1485124313311" TEXT="schlie&#xdf;t sich automatisch, wenn das letzte Fenster zu ist"/>
+<node CREATED="1485124315795" ID="ID_178656069" MODIFIED="1485124323478" TEXT="unser WindowManager macht das Gleiche"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" ID="ID_389264738" MODIFIED="1484797832804" TEXT="weitere Funktionen">
@@ -599,8 +690,7 @@
       und man damit jedes diff-iterable einbetten kann.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1484877658891" ID="ID_1855662071" MODIFIED="1484877679187" TEXT="Vorsicht: Storage / GUI-Thread">
 <icon BUILTIN="messagebox_warning"/>
@@ -615,8 +705,7 @@
       das hei&#223;t, die Diff-<b>Implementierung</b>&#160;mu&#223; l&#228;nger leben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1484877731337" ID="ID_1859059266" MODIFIED="1484877761556">
 <richcontent TYPE="NODE"><html>
@@ -628,8 +717,7 @@
       faktisch erfolgt somit ein <b>Callback</b>&#160;aus einem anderen Thread
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1484877743992" ID="ID_680582075" MODIFIED="1484877751765">
 <richcontent TYPE="NODE"><html>
@@ -641,8 +729,7 @@
       um das Diff zu <i>pullen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -1528,6 +1615,37 @@
 <node CREATED="1477784846162" ID="ID_1164942946" MODIFIED="1477784889994" TEXT="siehe Info zum CssProvider">
 <arrowlink DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1846;-61;" ID="Arrow_ID_1610122569" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
 </node>
+</node>
+</node>
+<node CREATED="1485126385235" HGAP="38" ID="ID_548720270" MODIFIED="1485126396764" TEXT="top-Level" VSHIFT="11">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485126400233" ID="ID_885004423" MODIFIED="1485126409402" TEXT="unsauberes Design">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1485126410424" ID="ID_1158773288" MODIFIED="1485126414947" TEXT="wir haben mehrere Fenster"/>
+<node CREATED="1485126418431" ID="ID_1145950660" MODIFIED="1485126426673" TEXT="GtkLumiera sollte kein Singleton sein"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1485126429445" ID="ID_832156304" MODIFIED="1485126432879" TEXT="aufr&#xe4;umen">
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485126506699" ID="ID_1776936645" MODIFIED="1485126569343" TEXT="#1067 rearrange GUI Application top-level">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485126573818" ID="ID_206480879" MODIFIED="1485126655278" TEXT="#1032 use gtk::Application instead of gtk::Main">
+<linktarget COLOR="#ae1856" DESTINATION="ID_206480879" ENDARROW="Default" ENDINCLINATION="715;0;" ID="Arrow_ID_926482654" SOURCE="ID_392996871" STARTARROW="Default" STARTINCLINATION="134;383;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485126609878" ID="ID_815018040" MODIFIED="1485126614405" TEXT="#1064 investigate WindowManager lifecycle">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#ae1856" CREATED="1485126686643" ID="ID_405470138" MODIFIED="1485126732565" TEXT="sauberer Shutdown">
+<arrowlink COLOR="#872666" DESTINATION="ID_286857196" ENDARROW="Default" ENDINCLINATION="272;63;" ID="Arrow_ID_1606936924" STARTARROW="Default" STARTINCLINATION="1461;0;"/>
+</node>
+</node>
+<node CREATED="1485126441508" ID="ID_1227132808" MODIFIED="1485126456054" TEXT="GtkLumiera == Applikation == Lebenszyklus"/>
+<node CREATED="1485126457025" ID="ID_1698853761" MODIFIED="1485126465460" TEXT="WorkspaceManger == Hub f&#xfc;r Framework"/>
+<node CREATED="1485126466520" ID="ID_717310004" MODIFIED="1485126475339" TEXT="WindowManager : nur f&#xfc;r die Hauptfenster zust&#xe4;ndig"/>
+<node CREATED="1485126481023" ID="ID_943652445" MODIFIED="1485126488201" TEXT="pro Fenster">
+<node CREATED="1485126488981" ID="ID_1346100835" MODIFIED="1485126494129" TEXT="WorkspaceWindow"/>
+<node CREATED="1485126494621" ID="ID_923407468" MODIFIED="1485126498416" TEXT="PanelManager"/>
 </node>
 </node>
 </node>
