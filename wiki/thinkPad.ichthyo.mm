@@ -660,6 +660,13 @@
 <node CREATED="1485124315795" ID="ID_178656069" MODIFIED="1485124323478" TEXT="unser WindowManager macht das Gleiche"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485130302095" HGAP="28" ID="ID_506541774" MODIFIED="1485130320914" TEXT="neuer WorkspaceManger wird daf&#xfc;r zust&#xe4;ndig" VSHIFT="14">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1485130321924" ID="ID_46787934" MODIFIED="1485130327728" TEXT="Funktion umziehen"/>
+<node CREATED="1485130328324" ID="ID_874057448" MODIFIED="1485130334983" TEXT="umschreiben auf gtk::Application"/>
+<node CREATED="1485130336235" ID="ID_125642886" MODIFIED="1485130353981" TEXT="Application-Objekt durchgeben"/>
+<node CREATED="1485130355377" ID="ID_175334188" MODIFIED="1485130395487" TEXT="Zugriff f&#xfc;r NotificationFacade erm&#xf6;glichen"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" ID="ID_389264738" MODIFIED="1484797832804" TEXT="weitere Funktionen">

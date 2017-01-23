@@ -37,21 +37,21 @@
 #include <memory>
 #include <list>
 
+using Gtk::IconSize;
+using Gtk::IconFactory;
+
 using util::cStr;
 using std::list;
 using std::shared_ptr;
 
-using namespace Gtk;  ///////////////////////////TODO explicit using directives please!
-using namespace Glib;
-using namespace gui::workspace;
-
-namespace fsys = boost::filesystem;
 
 namespace gui {
 namespace workspace {
   
-  IconSize UiManager::GiantIconSize = ICON_SIZE_INVALID;
-  IconSize UiManager::MenuIconSize = ICON_SIZE_INVALID;
+  namespace fsys = boost::filesystem;
+  
+  IconSize UiManager::GiantIconSize = Gtk::ICON_SIZE_INVALID;
+  IconSize UiManager::MenuIconSize = Gtk::ICON_SIZE_INVALID;
   
   
   void
@@ -69,7 +69,7 @@ namespace workspace {
   UiManager::setTheme (string const& stylesheetName)
   {
     auto screen = Gdk::Screen::get_default();
-    auto css_provider = CssProvider::create();
+    auto css_provider = Gtk::CssProvider::create();
     try
       {
         css_provider->load_from_path (lib::resolveModulePath (stylesheetName, resourceSerachPath_));
@@ -81,83 +81,10 @@ namespace workspace {
         WARN(gui, "Failure while loading stylesheet '%s': %s", cStr(stylesheetName), cStr(failure.what()));
       }
     
-    StyleContext::add_provider_for_screen (screen, css_provider,
-                                           GTK_STYLE_PROVIDER_PRIORITY_USER);
+    Gtk::StyleContext::add_provider_for_screen (screen, css_provider,
+                                                GTK_STYLE_PROVIDER_PRIORITY_USER);
   }
   
-  
-  void
-  UiManager::newWindow (gui::model::Project& source_project, gui::controller::Controller& source_controller)
-  { 
-    shared_ptr<WorkspaceWindow> window(new WorkspaceWindow(source_project, source_controller));
-    REQUIRE(window);
-    
-    window->signal_delete_event().connect(sigc::mem_fun(
-      this, &UiManager::on_window_closed));
-    
-    windowList.push_back(window);
-    
-    window->show();
-  
-    updateCloseWindowInMenus();
-  }
-  
-  
-  bool
-  UiManager::on_window_closed (GdkEventAny* event)
-  {
-    REQUIRE(event);
-    REQUIRE(event->window);
-    
-    list<shared_ptr<WorkspaceWindow>>::iterator iterator{windowList.begin()};
-    
-    while (iterator != windowList.end())
-      {
-        shared_ptr<WorkspaceWindow> workspace_window(*iterator);
-        REQUIRE(workspace_window);
-        
-        Glib::RefPtr<Gdk::Window> window = workspace_window->get_window();
-        REQUIRE(window);
-        if (window->gobj() == event->window)
-          {
-            // This window has been closed
-            iterator = windowList.erase(iterator);
-          }
-        else
-          iterator++;
-      }
-    
-    if (windowList.empty())
-      {
-        // All windows have been closed - we should exit
-        Main *main = Main::instance();
-        REQUIRE(main);
-        main->quit();
-      }
-    
-    updateCloseWindowInMenus();
-    
-    // Unless this is false, the window won't close
-    return false;
-  }
-  
-  
-  void
-  UiManager::updateCloseWindowInMenus()
-  {
-    bool enable = windowList.size() > 1;
-    
-    list<shared_ptr<WorkspaceWindow>>::iterator iterator{windowList.begin()};
-    
-    while (iterator != windowList.end())
-      {
-        shared_ptr<WorkspaceWindow> workspace_window(*iterator);
-        REQUIRE(workspace_window);
-        
-        workspace_window->set_close_window_sensitive(enable);
-        iterator++;
-      }
-  }
   
   
   Cairo::RefPtr<Cairo::SolidPattern>
@@ -193,9 +120,9 @@ namespace workspace {
   void
   UiManager::registerAppIconSizes()
   {
-    if(GiantIconSize == ICON_SIZE_INVALID)
+    if(GiantIconSize == Gtk::ICON_SIZE_INVALID)
       GiantIconSize = IconSize::register_new ("giant", 48, 48);
-    if(MenuIconSize == ICON_SIZE_INVALID)
+    if(MenuIconSize == Gtk::ICON_SIZE_INVALID)
       MenuIconSize = IconSize::register_new ("menu", 16, 16);
   }
   
@@ -203,7 +130,7 @@ namespace workspace {
   void
   UiManager::registerStockItems()
   {
-    Glib::RefPtr<IconFactory> factory = IconFactory::create();
+    Glib::RefPtr<IconFactory> factory = Gtk::IconFactory::create();
     
     addStockIconSet(factory, "panel-assets",   "panel_assets",  _("_Assets"));
     addStockIconSet(factory, "panel-viewer",   "panel_viewer",  _("_Viewer"));
@@ -238,11 +165,11 @@ namespace workspace {
     no_icons &= !addStockIcon(
       icon_set, icon_name, GiantIconSize, no_icons);
     no_icons &= !addStockIcon(
-      icon_set, icon_name, ICON_SIZE_BUTTON, no_icons);
+      icon_set, icon_name, Gtk::ICON_SIZE_BUTTON, no_icons);
     no_icons &= !addStockIcon(
-      icon_set, icon_name, ICON_SIZE_MENU, no_icons);
+      icon_set, icon_name, Gtk::ICON_SIZE_MENU, no_icons);
     no_icons &= !addStockIcon(
-      icon_set, icon_name, ICON_SIZE_LARGE_TOOLBAR, no_icons);
+      icon_set, icon_name, Gtk::ICON_SIZE_LARGE_TOOLBAR, no_icons);
     no_icons &= !addStockIcon(
       icon_set, icon_name, MenuIconSize, no_icons);
     
@@ -302,7 +229,7 @@ namespace workspace {
     REQUIRE(theme);
     
     ///////////////////////////////////////////TODO find out how IconInfo could be made const. For example, GTKmm 2.10.10 is missing the const on operator bool() in iconinfo.h
-    IconInfo info = theme->lookup_icon(icon_name, width, (IconLookupFlags)0);
+    Gtk::IconInfo info = theme->lookup_icon(icon_name, width, (Gtk::IconLookupFlags)0);
     
     if (!info) return false; // unable to resolve Icon
     
@@ -325,7 +252,7 @@ namespace workspace {
     REQUIRE(width > 0);
     
     // Try to load the icon
-    cuString path(ustring::compose("%1/%2x%3/%4.png",
+    cuString path(Glib::ustring::compose("%1/%2x%3/%4.png",
       base_dir, width, height, icon_name)); 
     return addStockIconFromPath(path, icon_set, size, wildcard);
   }

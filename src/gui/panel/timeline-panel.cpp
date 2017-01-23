@@ -42,6 +42,7 @@
 //#include "lib/util.hpp"
 #include <algorithm>
 #include <cstdlib>
+#include <string>
 
 
 
@@ -52,6 +53,7 @@ using util::_Fmt;
 using Gtk::Widget;
 using sigc::mem_fun;
 using sigc::ptr_fun;
+using std::string;
 using std::cout;
 using std::endl;
 using std::rand;

@@ -62,7 +62,7 @@ namespace gui {
     /** storage for the Main Application object */
     lib::Depend<GtkLumiera> theApplicationInstance;
     
-    Literal KEY_TITLE      = "Lumiera.title";
+    Literal KEY_TITLE      = "Lumiera.title";        //////////////////////////////////////////////////////////TICKET #1067 : turn these into global constants
     Literal KEY_VERSION    = "Lumiera.version";
     Literal KEY_WEBSITE    = "Lumiera.website";
     Literal KEY_AUTHORS    = "Lumiera.authors";
@@ -100,8 +100,9 @@ namespace gui {
     //////////////////////TICKET #959 : establish the new backbone here / replaces Project and Controller
     UiBus uiBus;
     
-    windowManagerInstance_.init (Config::get (KEY_ICON_PATH), Config::get (KEY_UIRES_PATH));
-    windowManagerInstance_.setTheme (Config::get (KEY_STYLESHEET));
+    workspace::UiManager uiManager;
+    uiManager.init (Config::get (KEY_ICON_PATH), Config::get (KEY_UIRES_PATH));
+    uiManager.setTheme (Config::get (KEY_STYLESHEET));
     
     
     windowManagerInstance_.newWindow (project, controller);

@@ -52,7 +52,6 @@ namespace gui {
   
 namespace workspace {
   
-  class WorkspaceWindow;
   
   using std::shared_ptr;
   using std::string;
@@ -71,6 +70,21 @@ namespace workspace {
       
       
     public:
+      
+      /** The registered icon size for giant 48x48 px icons.
+       * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
+       *          until register_giant_icon_size is called.
+       */
+      static Gtk::IconSize GiantIconSize;
+      
+      /** The registered icon size for giant 16x16 px icons.
+       * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
+       *          until register_app_icon_sizes is called.
+       */
+      static Gtk::IconSize MenuIconSize;
+      
+      
+    public:
       /**
        * Initialise the window manager on application start.
        * Register the icon configuration and sizes and lookup
@@ -80,12 +94,6 @@ namespace workspace {
        */
       void init (string const& iconPath, string const& resourcePath);
       
-      /**
-       * Creates a new window connected to a specified project and controller
-       * @param source_project The project to connect the window to.
-       * @param source_controller The controller to connect the window to.
-       */
-      void newWindow (gui::model::Project&, gui::controller::Controller&);
       
       /**
        * Sets the theme to use for the Lumiera GUI.
@@ -111,19 +119,6 @@ namespace workspace {
       
       
     private:
-      
-      /** Event handler for when a window has been closed */
-      bool on_window_closed(GdkEventAny* event);
-      
-      
-      /**
-       * On creating and closing of any window, handle enabling or disabling of the
-       * Window/Close Window menu option.
-       * 
-       * It should be enabled when there is more than one window and disabled
-       * otherwise.
-       */
-      void updateCloseWindowInMenus();
       
       
       /** Registers the custom icon sizes. */
@@ -212,21 +207,6 @@ namespace workspace {
       
     private:
       
-      std::list<shared_ptr<workspace::WorkspaceWindow>> windowList;
-      
-    public:
-      
-      /** The registered icon size for giant 48x48 px icons.
-       * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
-       *          until register_giant_icon_size is called.
-       */
-      static Gtk::IconSize GiantIconSize;
-      
-      /** The registered icon size for giant 16x16 px icons.
-       * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
-       *          until register_app_icon_sizes is called.
-       */
-      static Gtk::IconSize MenuIconSize;
     };
   
   

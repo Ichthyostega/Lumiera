@@ -685,13 +685,13 @@ namespace timeline {
     get_style_property("mouse_chevron_size", mouseChevronSize);
     get_style_property("selection_chevron_size", selectionChevronSize);
     
-    playbackPointColour = WindowManager::readStyleColourProperty(
+    playbackPointColour = workspace::UiManager::readStyleColourProperty(
       *this, "playback_point_colour", 0, 0, 0);
     get_style_property("playback_point_alpha", playbackPointAlpha);
     get_style_property("playback_point_size", playbackPointSize);
     
     playbackPeriodArrowColour =
-      WindowManager::readStyleColourProperty(
+      workspace::UiManager::readStyleColourProperty(
       *this, "playback_period_arrow_colour", 0, 0, 0);
     get_style_property("playback_period_arrow_alpha",
       playbackPeriodArrowAlpha);

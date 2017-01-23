@@ -47,8 +47,8 @@ namespace timeline {
     , expanded(true)
     , expandDirection(None)
     , headerWidget(*this)
-    , enableButton(Gtk::StockID("track_enabled"), WindowManager::MenuIconSize)
-    , lockButton(Gtk::StockID("track_unlocked"), WindowManager::MenuIconSize)
+    , enableButton(Gtk::StockID("track_enabled"), workspace::UiManager::MenuIconSize)
+    , lockButton(Gtk::StockID("track_unlocked"), workspace::UiManager::MenuIconSize)
     {
       REQUIRE(modelTrack);
       
@@ -320,12 +320,12 @@ namespace timeline {
     
     if (modelTrack->getEnabled())
       {
-        enableButton.setStockID (Gtk::StockID("track_enabled"), WindowManager::MenuIconSize);
+        enableButton.setStockID (Gtk::StockID("track_enabled"), workspace::UiManager::MenuIconSize);
         enableButton.set_tooltip_text(_("Disable track"));
       }
     else
       {
-        enableButton.setStockID (Gtk::StockID("track_disabled"), WindowManager::MenuIconSize);
+        enableButton.setStockID (Gtk::StockID("track_disabled"), workspace::UiManager::MenuIconSize);
         enableButton.set_tooltip_text(_("Enable track"));
       }
   }
@@ -338,12 +338,12 @@ namespace timeline {
     
     if (modelTrack->getLocked())
       {
-        lockButton.setStockID (Gtk::StockID("track_locked"), WindowManager::MenuIconSize);
+        lockButton.setStockID (Gtk::StockID("track_locked"), workspace::UiManager::MenuIconSize);
         lockButton.set_tooltip_text(_("Unlock track"));
       }
     else
       {
-        lockButton.setStockID (Gtk::StockID("track_unlocked"), WindowManager::MenuIconSize);
+        lockButton.setStockID (Gtk::StockID("track_unlocked"), workspace::UiManager::MenuIconSize);
         lockButton.set_tooltip_text(_("Lock track"));
       }
   }

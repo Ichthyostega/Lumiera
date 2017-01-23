@@ -60,14 +60,16 @@
 
 #include <memory>
 #include <vector>
+#include <string>
 
 
 
 namespace gui  {
 namespace timeline {
   
-  using std::vector;
   using std::unique_ptr;
+  using std::vector;
+  using std::string;
   
   class TrackPresenter;
   class MarkerWidget;

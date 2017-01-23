@@ -44,12 +44,14 @@
 //#include "lib/util.hpp"
 
 //#include <memory>
-//#include <vector>
+#include <string>
 
 
 
 namespace gui  {
 namespace timeline {
+  
+  using std::string;
   
   enum MarkerKind {
     MARK,

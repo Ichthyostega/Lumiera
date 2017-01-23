@@ -70,14 +70,6 @@ namespace workspace {
       
       
     public:
-      /**
-       * Initialise the window manager on application start.
-       * Register the icon configuration and sizes and lookup
-       * all the icons -- either from the default theme of via
-       * the given Lumiera icon search paths (see \c setup.ini ).
-       * @see lumiera::Config
-       */
-      void init (string const& iconPath, string const& resourcePath);
       
       /**
        * Creates a new window connected to a specified project and controller
@@ -86,27 +78,6 @@ namespace workspace {
        */
       void newWindow (gui::model::Project&, gui::controller::Controller&);
       
-      /**
-       * Sets the theme to use for the Lumiera GUI.
-       * @param stylesheetName GTK CSS stylesheet to load from the resourceSearchPath_
-       * @throw error::Config if this stylesheet can't be resolved on the searchpath
-       * @see #init
-       * @see lumiera::Config
-       */
-      void setTheme (string const& stylesheetName);
-      
-      /**
-       * A utility function which reads a colour style from the GTK Style.
-       * @param widget The widget to load the style out of.
-       * @param property_name The name of the style property to load.
-       * @param red The fallback red intensity.
-       * @param green The fallback green intensity.
-       * @param blue The fallback blue intensity.
-       * @return The loaded colour.
-       */
-      static Cairo::RefPtr<Cairo::SolidPattern>
-      readStyleColourProperty (Gtk::Widget &widget, const gchar *property_name,
-                               guint16 red, guint16 green, guint16 blue);
       
       
     private:
@@ -125,107 +96,11 @@ namespace workspace {
       void updateCloseWindowInMenus();
       
       
-      /** Registers the custom icon sizes. */
-      void registerAppIconSizes();
-      
-      /**
-       * Registers application stock items:
-       * icons and labels associated with IDs
-       */
-      void registerStockItems();
-      
-      /**
-       * Adds an icon (in different sizes) to the icon factory.
-       * @param factory The factory to add the icon to.
-       * @param icon_name The file name of the icon to add.
-       * @param id The id name of the icon.
-       * @param label The user readable icon name for this icon.
-       * @return \c true if the icon was successfully loaded,
-       *         returns \c false otherwise.
-       */
-      bool
-      addStockIconSet (Glib::RefPtr<Gtk::IconFactory> const& factory
-                      ,cuString& icon_name
-                      ,cuString& id
-                      ,cuString& label);
-      
-      /**
-       * Loads an icon, searching standard icon locations,
-       * and adds it to an icon set.
-       * @param icon_set The icon set to add the icon to.
-       * @param icon_name The file name of the icon to load.
-       * @param size The size of the icon to load.
-       * @param wildcard \c true if this icon is to be wildcarded.
-       * @return \c true if the icon was loaded successfully.
-       */
-      bool
-      addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                   ,cuString& icon_name
-                   ,Gtk::IconSize size
-                   ,bool wildcard);
-      
-      /**
-       * Loads an icon from a the icon theme
-       * @param icon_set The icon set to add the icon to.
-       * @param icon_name The name of the icon to load.
-       * @param size The size of the icon to load.
-       * @param wildcard \c true if this icon is to be wildcarded.
-       * @return \c true if the icon was loaded successfully.
-       */
-      bool
-      addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                         ,cuString& icon_name
-                         ,Gtk::IconSize size
-                         ,bool wildcard);
-      
-      /**
-       * Loads an icon from a non theme set.
-       * @param icon_set The icon set to add the icon to.
-       * @param base_dir The root icons directory to load from.
-       * @param icon_name The file name of the icon to load.
-       * @param size The size of the icon to load.
-       * @param wildcard \c true if this icon is to be wildcarded.
-       * @return \c true if the icon was loaded successfully.
-       */
-      bool
-      addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                            ,cuString& base_dir
-                            ,cuString& icon_name
-                            ,Gtk::IconSize size
-                            ,bool wildcard);
-      
-      /**
-       * Loads an icon from a specific path and adds it to an icon set.
-       * @param path The path to load from.
-       * @param icon_set The icon set to add the icon to.
-       * @param size The size of the icon to load.
-       * @param wildcard \c true if this icon is to be wildcarded.
-       * @return \c true if the icon was loaded successfully.
-       */
-      bool
-      addStockIconFromPath (string path
-                           ,Glib::RefPtr<Gtk::IconSet> const& icon_set
-                           ,Gtk::IconSize size
-                           ,bool wildcard);
-      
       
     private:
       
       std::list<shared_ptr<workspace::WorkspaceWindow>> windowList;
       
-    public:
-      
-      /** The registered icon size for giant 48x48 px icons.
-       * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
-       *          until register_giant_icon_size is called.
-       */
-      static Gtk::IconSize GiantIconSize;
-      
-      /** The registered icon size for giant 16x16 px icons.
-       * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
-       *          until register_app_icon_sizes is called.
-       */
-      static Gtk::IconSize MenuIconSize;
     };
   
   

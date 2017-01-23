@@ -526,14 +526,14 @@ TimelineBody::register_styles() const
 void
 TimelineBody::read_styles()
 {
-  backgroundColour = WindowManager::readStyleColourProperty(
+  backgroundColour = workspace::UiManager::readStyleColourProperty(
     *this, "background", 0, 0, 0);
     
-  selectionColour = WindowManager::readStyleColourProperty(
+  selectionColour = workspace::UiManager::readStyleColourProperty(
     *this, "selection", 0, 0, 0);
   get_style_property("selection_alpha", selectionAlpha);
   
-  playbackPointColour = WindowManager::readStyleColourProperty(
+  playbackPointColour = workspace::UiManager::readStyleColourProperty(
     *this, "playback_point", 0, 0, 0);
 }
   
