@@ -49,7 +49,9 @@ namespace gui {
   
   namespace model      { class Project; }           ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   namespace controller { class Controller; }        ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
-  
+
+  class UiBus;
+
 namespace workspace {
   
   
@@ -63,7 +65,7 @@ namespace workspace {
    * icons and resources within Lumiera's GUI.
    */
   class UiManager
-    : Gtk::UIManager
+    : public Gtk::UIManager
     , boost::noncopyable
     {
       string iconSearchPath_;
@@ -129,6 +131,7 @@ namespace workspace {
       readStyleColourProperty (Gtk::Widget &widget, const gchar *property_name,
                                guint16 red, guint16 green, guint16 blue);
       
+      void allowCloseWindow (bool yes);
       
     private:
       

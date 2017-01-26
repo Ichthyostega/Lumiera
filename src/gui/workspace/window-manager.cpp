@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+#include "gui/workspace/ui-manager.hpp"
 #include "gui/workspace/window-manager.hpp"
 #include "gui/workspace/workspace-window.hpp"
 
@@ -37,10 +38,15 @@ namespace workspace {
   
   
   
+  WindowManager::WindowManager (UiManager& uiManager)
+    : uiManager_(uiManager)
+    { }
+  
+  
   void
   WindowManager::newWindow (gui::model::Project& source_project, gui::controller::Controller& source_controller)
   { 
-    shared_ptr<WorkspaceWindow> window(new WorkspaceWindow(source_project, source_controller));
+    shared_ptr<WorkspaceWindow> window (new WorkspaceWindow{uiManager_, source_project, source_controller});
     REQUIRE(window);
     
     window->signal_delete_event().connect(sigc::mem_fun(
@@ -96,18 +102,7 @@ namespace workspace {
   void
   WindowManager::updateCloseWindowInMenus()
   {
-    bool enable = windowList.size() > 1;
-    
-    list<shared_ptr<WorkspaceWindow>>::iterator iterator{windowList.begin()};
-    
-    while (iterator != windowList.end())
-      {
-        shared_ptr<WorkspaceWindow> workspace_window(*iterator);
-        REQUIRE(workspace_window);
-        
-        workspace_window->set_close_window_sensitive(enable);
-        iterator++;
-      }
+    uiManager_.allowCloseWindow ( 1 < windowList.size());
   }
   
   

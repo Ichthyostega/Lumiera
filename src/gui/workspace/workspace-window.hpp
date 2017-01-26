@@ -58,7 +58,8 @@ namespace gui {
     : public Gtk::Window
     {
     public:
-      WorkspaceWindow(gui::model::Project& source_project
+      WorkspaceWindow(gui::workspace::UiManager&
+                     ,gui::model::Project& source_project
                      ,gui::controller::Controller& source_controller);
       
      ~WorkspaceWindow();
@@ -68,11 +69,9 @@ namespace gui {
       gui::controller::Controller& getController();        ////////////////////////////TICKET #1048 : no one has to muck around with WorkspaceWindow's internals
       PanelManager& getPanelManager();
       
-      void set_close_window_sensitive (bool enable);
-      
       
     private:
-      void createUI();
+      void createUI (UiManager& uiManager);
       
       
       
@@ -85,7 +84,6 @@ namespace gui {
       
       
       /* ===== UI ===== */
-      Glib::RefPtr<Gtk::UIManager> uiManager_;
       Gtk::VBox baseContainer_;
       Gtk::HBox dockContainer_;
       

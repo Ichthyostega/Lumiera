@@ -45,6 +45,8 @@ namespace gui {
   using namespace gui::workspace;
   using namespace gui::controller;
   
+  namespace error = lumiera::error;
+  
   using boost::algorithm::is_any_of;
   using boost::algorithm::split;
   
@@ -104,8 +106,8 @@ namespace gui {
     uiManager.init (Config::get (KEY_ICON_PATH), Config::get (KEY_UIRES_PATH));
     uiManager.setTheme (Config::get (KEY_STYLESHEET));
     
-    
-    windowManagerInstance_.newWindow (project, controller);
+    windowManagerInstance_.reset (new workspace::WindowManager (uiManager));
+    windowManagerInstance_->newWindow (project, controller);
     kit.run(); // GTK event loop
   }
   
@@ -113,7 +115,11 @@ namespace gui {
   WindowManager&
   GtkLumiera::windowManager()
   {
-    return windowManagerInstance_;
+    if (not windowManagerInstance_)
+      throw error::Logic ("GTK UI is not in running state"
+                         , error::LUMIERA_ERROR_LIFECYCLE);
+    
+    return *windowManagerInstance_;
   }
   
   

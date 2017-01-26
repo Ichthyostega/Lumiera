@@ -51,10 +51,8 @@ namespace workspace {
   
   
   void
-  Actions::populateMainActions (Glib::RefPtr<Gtk::UIManager> uiManager)
+  Actions::populateMainActions (Gtk::UIManager& uiManager)
   {
-    REQUIRE(uiManager);
-    
     //----- Create the Action Group -----//
     actionGroup = ActionGroup::create();
     
@@ -135,7 +133,7 @@ namespace workspace {
     actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),
       mem_fun(*this, &Actions::onMenu_help_about) );
     
-    uiManager->insert_action_group(actionGroup);
+    uiManager.insert_action_group(actionGroup);
     
     //----- Create the UI layout -----//
     uString ui_info = 
@@ -197,27 +195,27 @@ namespace workspace {
     
     try
       {
-        uiManager->add_ui_from_string(ui_info);
+        uiManager.add_ui_from_string (ui_info);
       }
     catch(const Glib::Error& ex)
       {
-        ERROR(gui, "Building menus failed: %s", ex.what().data());
+        ERROR (gui, "Building menus failed: %s", ex.what().data());
         return;
       }
       
     //----- Add Extra Actions -----//
-    populateShowPanelActions(uiManager);
+    populateShowPanelActions (uiManager);
   }
   
   
   
   void
-  Actions::populateShowPanelActions(Glib::RefPtr<Gtk::UIManager> uiManager)
+  Actions::populateShowPanelActions (Gtk::UIManager& uiManager)
   {  
-    const int count = PanelManager::getPanelDescriptionCount();
+    const uint count = PanelManager::getPanelDescriptionCount();
     
     Glib::RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();
-    for(int i = 0; i < count; i++)
+    for (uint i = 0; i < count; i++)
       {
         const gchar *stock_id = PanelManager::getPanelStockID(i);
         cuString name = ustring::compose("Panel%1", i);
@@ -225,13 +223,14 @@ namespace workspace {
           bind(mem_fun(*this, &Actions::onMenu_show_panel), i));
       }
       
-    uiManager->insert_action_group(actionGroup);
+    uiManager.insert_action_group (actionGroup);
     
-    for(int i = 0; i < count; i++)
+    for (uint i = 0; i < count; i++)
       {
         cuString name = ustring::compose("Panel%1", i);
-        uiManager->add_ui(uiManager->new_merge_id(),
-          "/MenuBar/WindowMenu/WindowShowPanel", name, name);
+        uiManager.add_ui (uiManager.new_merge_id(),
+                          "/MenuBar/WindowMenu/WindowShowPanel",
+                          name, name);
       }
   }
   

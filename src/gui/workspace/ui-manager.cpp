@@ -291,4 +291,12 @@ namespace workspace {
   }
   
   
+  void
+  UiManager::allowCloseWindow (bool yes)
+  {
+    this->get_action("/MenuBar/WindowMenu/WindowCloseWindow")
+             ->set_sensitive (yes);
+  }
+  
+  
 }}// namespace gui::workspace

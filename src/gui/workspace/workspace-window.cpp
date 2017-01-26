@@ -40,14 +40,15 @@ using namespace gui::controller;
 namespace gui {
 namespace workspace {
   
-  WorkspaceWindow::WorkspaceWindow (Project& source_project
+  WorkspaceWindow::WorkspaceWindow (UiManager& uiManager
+                                   ,Project& source_project
                                    ,gui::controller::Controller& source_controller)
     : project_(source_project)
     , controller_(source_controller)
     , panelManager_(*this)
     , actions_(*this)
     {    
-      createUI();
+      createUI (uiManager);
     }
   
   
@@ -80,48 +81,39 @@ namespace workspace {
   
   
   void
-  WorkspaceWindow::createUI()
+  WorkspaceWindow::createUI (UiManager& uiManager)
   {
     // RTL Test Code
     //set_default_direction (TEXT_DIR_RTL);
     
     //----- Configure the Window -----//
-    set_title(GtkLumiera::getAppTitle());
-    set_default_size(1024, 768);
+    set_title (GtkLumiera::getAppTitle());
+    set_default_size (1024, 768);
     
     //----- Set up the UI Manager -----//
     // The UI will be nested within a VBox
-    add(baseContainer_);
+    add (baseContainer_);
     
-    uiManager_ = Gtk::UIManager::create();
-    actions_.populateMainActions(uiManager_);
-    add_accel_group(uiManager_->get_accel_group());
+    actions_.populateMainActions (uiManager);
+    add_accel_group (uiManager.get_accel_group());
     
     //----- Set up the Menu Bar -----//
-    Gtk::Widget* menu_bar = uiManager_->get_widget("/MenuBar");
-    REQUIRE(menu_bar != NULL);
+    Gtk::Widget* menu_bar = uiManager.get_widget ("/MenuBar");
+    REQUIRE (menu_bar != NULL);
     baseContainer_.pack_start(*menu_bar, Gtk::PACK_SHRINK);
     
     //----- Create the Docks -----//
     panelManager_.setupDock();
-    dockContainer_.pack_start(panelManager_.getDockBar(),false,false,0);
-    dockContainer_.pack_start(panelManager_.getDock(),true,true,0);
-    baseContainer_.pack_start(dockContainer_, PACK_EXPAND_WIDGET);
+    dockContainer_.pack_start (panelManager_.getDockBar(), false,false,0);
+    dockContainer_.pack_start (panelManager_.getDock(), true,true,0);
+    baseContainer_.pack_start (dockContainer_, PACK_EXPAND_WIDGET);
     
     //----- Create the status bar -----//
     //statusBar.set_has_resize_grip();
-    statusBar_.set_resize_mode(Gtk::RESIZE_PARENT);
-    baseContainer_.pack_start(statusBar_, PACK_SHRINK);
+    statusBar_.set_resize_mode (Gtk::RESIZE_PARENT);
+    baseContainer_.pack_start (statusBar_, PACK_SHRINK);
     
     show_all_children();
-  }
-  
-  
-  void
-  WorkspaceWindow::set_close_window_sensitive (bool enable)
-  {
-    uiManager_->get_action("/MenuBar/WindowMenu/WindowCloseWindow")
-             ->set_sensitive(enable);
   }
   
   

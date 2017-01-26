@@ -139,7 +139,7 @@ namespace gui {
     : boost::noncopyable
     {
       /** Central application window manager instance */
-      workspace::WindowManager windowManagerInstance_;
+      shared_ptr<workspace::WindowManager> windowManagerInstance_;
       
       
     public:

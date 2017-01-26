@@ -55,7 +55,7 @@ namespace workspace {
        * Populates a uiManager with the main set of actions.
        * @param uiManager A pointer to the uiManager to populate.
        */
-      void populateMainActions (Glib::RefPtr<Gtk::UIManager> uiManager);
+      void populateMainActions (Gtk::UIManager& uiManager);
       
       
       
@@ -64,7 +64,7 @@ namespace workspace {
       /**
        * Populates a uiManager with actions for the Show Panel menu.
        */
-      void populateShowPanelActions(Glib::RefPtr<Gtk::UIManager> uiManager);
+      void populateShowPanelActions(Gtk::UIManager& uiManager);
       
       /**
        * Updates the state of the menu/toolbar actions

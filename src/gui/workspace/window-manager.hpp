@@ -51,6 +51,7 @@ namespace gui {
   
 namespace workspace {
   
+  class UiManager;
   class WorkspaceWindow;
   
   using std::shared_ptr;
@@ -65,11 +66,11 @@ namespace workspace {
   class WindowManager
     : boost::noncopyable
     {
-      string iconSearchPath_;
-      string resourceSerachPath_;
+      UiManager& uiManager_;
       
       
     public:
+      WindowManager (UiManager&);
       
       /**
        * Creates a new window connected to a specified project and controller
