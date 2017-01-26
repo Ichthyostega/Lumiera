@@ -100,7 +100,7 @@ namespace gui {
     //////////////////////TICKET #959 : establish the new backbone here / replaces Project and Controller
     UiBus uiBus;
     
-    workspace::UiManager uiManager;
+    workspace::UiManager uiManager(uiBus);
     uiManager.init (Config::get (KEY_ICON_PATH), Config::get (KEY_UIRES_PATH));
     uiManager.setTheme (Config::get (KEY_STYLESHEET));
     

@@ -647,8 +647,7 @@
       }
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -660,12 +659,21 @@
 <node CREATED="1485124315795" ID="ID_178656069" MODIFIED="1485124323478" TEXT="unser WindowManager macht das Gleiche"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485130302095" HGAP="28" ID="ID_506541774" MODIFIED="1485130320914" TEXT="neuer WorkspaceManger wird daf&#xfc;r zust&#xe4;ndig" VSHIFT="14">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485130302095" HGAP="28" ID="ID_506541774" MODIFIED="1485452531308" TEXT="neuer WorkspaceManger" VSHIFT="14">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1485452508180" ID="ID_549617075" MODIFIED="1485452515819" TEXT="wird daf&#xfc;r zust&#xe4;ndig">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1485130321924" ID="ID_46787934" MODIFIED="1485130327728" TEXT="Funktion umziehen"/>
 <node CREATED="1485130328324" ID="ID_874057448" MODIFIED="1485130334983" TEXT="umschreiben auf gtk::Application"/>
 <node CREATED="1485130336235" ID="ID_125642886" MODIFIED="1485130353981" TEXT="Application-Objekt durchgeben"/>
 <node CREATED="1485130355377" ID="ID_175334188" MODIFIED="1485130395487" TEXT="Zugriff f&#xfc;r NotificationFacade erm&#xf6;glichen"/>
+</node>
+<node CREATED="1485452536138" ID="ID_599315721" MODIFIED="1485452566707" TEXT="vermittelt das">
+<icon BUILTIN="pencil"/>
+<node CREATED="1485452541583" ID="ID_790081376" MODIFIED="1485452548314" TEXT="Funktor speichern"/>
+<node CREATED="1485452548693" ID="ID_375213971" MODIFIED="1485452552248" TEXT="Sicherheit des Funktors"/>
+<node CREATED="1485130355377" ID="ID_483167177" MODIFIED="1485130395487" TEXT="Zugriff f&#xfc;r NotificationFacade erm&#xf6;glichen"/>
+</node>
 </node>
 </node>
 </node>
@@ -1628,7 +1636,6 @@
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485126400233" ID="ID_885004423" MODIFIED="1485126409402" TEXT="unsauberes Design">
 <icon BUILTIN="flag-yellow"/>
-</node>
 <node CREATED="1485126410424" ID="ID_1158773288" MODIFIED="1485126414947" TEXT="wir haben mehrere Fenster"/>
 <node CREATED="1485126418431" ID="ID_1145950660" MODIFIED="1485126426673" TEXT="GtkLumiera sollte kein Singleton sein"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1485126429445" ID="ID_832156304" MODIFIED="1485126432879" TEXT="aufr&#xe4;umen">
@@ -1647,9 +1654,57 @@
 <arrowlink COLOR="#872666" DESTINATION="ID_286857196" ENDARROW="Default" ENDINCLINATION="272;63;" ID="Arrow_ID_1606936924" STARTARROW="Default" STARTINCLINATION="1461;0;"/>
 </node>
 </node>
-<node CREATED="1485126441508" ID="ID_1227132808" MODIFIED="1485126456054" TEXT="GtkLumiera == Applikation == Lebenszyklus"/>
-<node CREATED="1485126457025" ID="ID_1698853761" MODIFIED="1485126465460" TEXT="WorkspaceManger == Hub f&#xfc;r Framework"/>
-<node CREATED="1485126466520" ID="ID_717310004" MODIFIED="1485126475339" TEXT="WindowManager : nur f&#xfc;r die Hauptfenster zust&#xe4;ndig"/>
+</node>
+<node CREATED="1485126441508" ID="ID_1227132808" MODIFIED="1485454325864" TEXT="GtkLumiera">
+<node CREATED="1485454326827" ID="ID_1493501410" MODIFIED="1485454331748" TEXT="Applikation == Lebenszyklus">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1485126457025" ID="ID_1698853761" MODIFIED="1485454369762" TEXT="workspace::UiManger">
+<node CREATED="1485454242368" ID="ID_482639947" MODIFIED="1485454312303" TEXT="Hub f&#xfc;r Framework">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1485454284961" ID="ID_940728768" MODIFIED="1485454304731" TEXT="es gibt nur einen">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1485454375917" ID="ID_1935695209" MODIFIED="1485457020772" TEXT="erbt von Gtk::UiManager">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485457021805" ID="ID_1476863246" MODIFIED="1485457036813" TEXT="Gtk::UiManager ist deprecated">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1485457105010" ID="ID_202831328" MODIFIED="1485457107477" TEXT="neuer Weg">
+<node CREATED="1485457108425" ID="ID_152284167" MODIFIED="1485457124586" TEXT="man erzeugt Gio::SimpleActionGroup"/>
+<node CREATED="1485457141853" ID="ID_1841602685" MODIFIED="1485457147592" TEXT="man f&#xfc;gt diese dem Fenster hinzu"/>
+</node>
+<node CREATED="1485454243767" ID="ID_3699127" MODIFIED="1485454247467" TEXT="konsistentes UI">
+<node CREATED="1485454248335" ID="ID_623536019" MODIFIED="1485454252273" TEXT="globales Men&#xfc;"/>
+<node CREATED="1485454259637" ID="ID_432211008" MODIFIED="1485454262840" TEXT="globale Toolbar"/>
+<node CREATED="1485454252789" ID="ID_310049457" MODIFIED="1485454258553" TEXT="globale Aktionen"/>
+<node CREATED="1485454263876" ID="ID_543704434" MODIFIED="1485454270615" TEXT="globale Keybindings"/>
+</node>
+</node>
+<node CREATED="1485126466520" ID="ID_717310004" MODIFIED="1485457324752" TEXT="WindowManager">
+<node CREATED="1485457325724" ID="ID_1954589768" MODIFIED="1485457325724" TEXT="nur f&#xfc;r die Hauptfenster zust&#xe4;ndig"/>
+<node CREATED="1485457328043" ID="ID_1787642462" MODIFIED="1485457367904" TEXT="wir haben kein ApplicationWindow">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn das ist das vereinfachte Setup f&#252;r &quot;einfache&quot; Applikationen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1485457370310" ID="ID_1931452525" MODIFIED="1485457379864" TEXT="GtkWindow sind v&#xf6;llig ausreichend"/>
+</node>
 <node CREATED="1485126481023" ID="ID_943652445" MODIFIED="1485126488201" TEXT="pro Fenster">
 <node CREATED="1485126488981" ID="ID_1346100835" MODIFIED="1485126494129" TEXT="WorkspaceWindow"/>
 <node CREATED="1485126494621" ID="ID_923407468" MODIFIED="1485126498416" TEXT="PanelManager"/>

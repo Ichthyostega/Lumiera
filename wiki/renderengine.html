@@ -2795,7 +2795,7 @@ The most fundamental principle is that of ''subsidiarity'': we understand both &
 Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
 </pre>
 </div>
-<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="200902080720" tags="GuiIntegration">
+<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201701261938" tags="GuiIntegration GuiPattern" changecount="1">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
 * main and AppState activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
 * loading a GuiStarterPlugin actually
@@ -2814,6 +2814,9 @@ Note that we retain strict isolation in the other direction: no part of the lowe
 * these service objects in turn hold an ~InstanceHandle, which cares to register and open the corresponding C Language Interface
 * additionally this InstanceHandle is configured such as to create an &quot;facade proxy&quot; object, which is implemented within liblumieracommon.so
 Now, when invoking an operation on some public interface, the code in the lower layers actually executes an implementation of this operation //on the facade proxy,// which in turn forwards the call through the CL interface into the GUI, where it is actually implemented by the corresponding service object instance.
+
+!!!UI top level
+Regarding the internal organisation of Lumiera's ~UI-Layer, there is a [[top level structure|GuiTopLevel]] to manage application lifecycle
 </pre>
 </div>
 <div title="GuiStarterPlugin" modifier="Ichthyostega" created="200902080716" tags="def GuiIntegration">
@@ -2912,6 +2915,25 @@ Applying a diff changes the structure, that is, the structure of the local model
 * such might be triggered indirectly, by clean-up of leftovers, since the {{{DiffApplicator}}} re-orders and deletes by leaving some data behind
 * the diff also re-orders model elements, which does not have an immediate effect on the display, but needs to be interpreted separately.
 Together this means we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
+</pre>
+</div>
+<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201701261950" tags="GuiPattern spec draft" changecount="4">
+<pre>To a large extent, the Lumiera user interface is built around a //backbone structure,// known as the UI-Bus.
+But there are some dedicated top-level entities, collaborating to maintain a consistent application lifecycle
+;Application
+:the application object, {{{GtkLumiera}}} is what executes within the GuiStarterPlugin and thus within the Gtk event thread
+:it is of no further relevance for any of the other UI entities, insofar it just creates and wires the top level constituents and encompasses their lifetime
+;~UI-Bus
+:the backbone of the user interface
+:as central communication system, the UI-Bus has a star shaped topology with a central router and attached CoreService
+;UI Manager
+:maintain a coherent global interface
+:responsible for all global framework concerns, resources and global application state
+;Window Manager
+:manage the top level workspace windows
+;Notification Façade
+:attachment point for lower layers and anyone in need to &quot;talk to the UI&quot;
+:the GuiNotificationFacade is a LayerSeparationInterface and integrated with Lumiera's interface system
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">

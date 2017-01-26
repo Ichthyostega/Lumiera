@@ -63,10 +63,13 @@ namespace workspace {
    * icons and resources within Lumiera's GUI.
    */
   class UiManager
-    : boost::noncopyable
+    : Gtk::UIManager
+    , boost::noncopyable
     {
       string iconSearchPath_;
       string resourceSerachPath_;
+      
+      UiBus& uiBus_;
       
       
     public:
@@ -85,6 +88,15 @@ namespace workspace {
       
       
     public:
+      /**
+       * There is one global UiManager instance,
+       * which is created by [the Application](\ref GtkLumiera)
+       * and allows access to the UI-Bus backbone. The UiManager itself
+       * is _not a ctrl::Controller,_ and thus not directly connected to the Bus.
+       * Rather, supports the top-level windows for creating a consistent interface.
+       */
+      UiManager (UiBus& bus);
+      
       /**
        * Initialise the window manager on application start.
        * Register the icon configuration and sizes and lookup

@@ -28,6 +28,7 @@
 
 
 #include "gui/gtk-lumiera.hpp"
+#include "gui/ui-bus.hpp"
 #include "gui/workspace/ui-manager.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
@@ -53,6 +54,11 @@ namespace workspace {
   IconSize UiManager::GiantIconSize = Gtk::ICON_SIZE_INVALID;
   IconSize UiManager::MenuIconSize = Gtk::ICON_SIZE_INVALID;
   
+  
+  UiManager::UiManager (UiBus& bus)
+    : Gtk::UIManager()
+    , uiBus_(bus)
+    { }
   
   void
   UiManager::init (string const& iconPath, string const& resourcePath)
