@@ -28,6 +28,7 @@
 #include "lib/depend.hpp"
 #include "lib/functor-util.hpp"
 #include "common/instancehandle.hpp"
+#include "common/option.hpp"
 
 #include <memory>
 #include <string>

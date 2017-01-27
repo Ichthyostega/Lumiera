@@ -44,7 +44,6 @@
 #define LUMIERA_SUBSYS_H
 
 #include "lib/error.hpp"
-#include "common/option.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <functional>
@@ -58,6 +57,8 @@ namespace lumiera {
   using std::string;
   using boost::noncopyable;
   using std::function;
+  
+  class Option;
   
   
   
