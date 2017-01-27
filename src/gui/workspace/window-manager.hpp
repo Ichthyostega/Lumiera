@@ -22,14 +22,13 @@
 
 
 /** @file window-manager.hpp
- ** Manager for all application windows and resources.
- ** This file defines the global UI Manager class. The central WindowManager
- ** instance is owned by the GtkLumiera object and initialised in GTK-main.
- ** The WindowManager has the ability to create new windows integrated with
- ** the application framework, to provide Icons and other resources and
- ** to set and access a general UI theme.
+ ** Manager for all top level application windows.
+ ** The central WindowManager instance is owned by the GtkLumiera object and
+ ** initialised in GTK-main. The WindowManager allows to create new windows
+ ** integrated with the application framework.
  ** 
  ** @see gtk-lumiera.hpp
+ ** @see ui-manager.hpp
  */
 
 
@@ -39,9 +38,8 @@
 #include "gui/gtk-base.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <cairomm/cairomm.h>
-#include <string>
 #include <memory>
+#include <list>
 
 
 namespace gui {
@@ -54,28 +52,30 @@ namespace workspace {
   class UiManager;
   class WorkspaceWindow;
   
-  using std::shared_ptr;
-  using std::string;
+  using std::list;
   
   
   
   /**
-   * The centralised manager of all the windows,
-   * icons and resources within Lumiera's GUI.
+   * A centralised manager of all top level application windows.
    */
   class WindowManager
     : boost::noncopyable
     {
-      UiManager& uiManager_;
+      using PWindow = shared_ptr<WorkspaceWindow>;
+      
+      UiManager&    uiManager_;
+      list<PWindow> windowList_;
       
       
     public:
       WindowManager (UiManager&);
       
       /**
-       * Creates a new window connected to a specified project and controller
+       * Create a new window connected to a specified project and controller
        * @param source_project The project to connect the window to.
        * @param source_controller The controller to connect the window to.
+       * @todo better way to connect to the model   ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
        */
       void newWindow (gui::model::Project&, gui::controller::Controller&);
       
@@ -84,7 +84,7 @@ namespace workspace {
     private:
       
       /** Event handler for when a window has been closed */
-      bool on_window_closed(GdkEventAny* event);
+      bool on_window_closed (GdkEventAny* event);
       
       
       /**
@@ -99,8 +99,6 @@ namespace workspace {
       
       
     private:
-      
-      std::list<shared_ptr<workspace::WorkspaceWindow>> windowList;
       
     };
   

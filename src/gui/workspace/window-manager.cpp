@@ -30,7 +30,6 @@
 
 using util::cStr;
 using std::list;
-using std::shared_ptr;
 
 
 namespace gui {
@@ -39,20 +38,21 @@ namespace workspace {
   
   
   WindowManager::WindowManager (UiManager& uiManager)
-    : uiManager_(uiManager)
+    : uiManager_{uiManager}
+    , windowList_{}
     { }
   
   
   void
   WindowManager::newWindow (gui::model::Project& source_project, gui::controller::Controller& source_controller)
   { 
-    shared_ptr<WorkspaceWindow> window (new WorkspaceWindow{uiManager_, source_project, source_controller});
+    PWindow window (new WorkspaceWindow{uiManager_, source_project, source_controller});
     REQUIRE(window);
     
     window->signal_delete_event().connect(sigc::mem_fun(
       this, &WindowManager::on_window_closed));
     
-    windowList.push_back(window);
+    windowList_.push_back(window);
     
     window->show();
   
@@ -66,11 +66,11 @@ namespace workspace {
     REQUIRE(event);
     REQUIRE(event->window);
     
-    list<shared_ptr<WorkspaceWindow>>::iterator iterator{windowList.begin()};
+    list<PWindow>::iterator iterator{windowList_.begin()};
     
-    while (iterator != windowList.end())
+    while (iterator != windowList_.end())
       {
-        shared_ptr<WorkspaceWindow> workspace_window(*iterator);
+        PWindow workspace_window(*iterator);
         REQUIRE(workspace_window);
         
         Glib::RefPtr<Gdk::Window> window = workspace_window->get_window();
@@ -78,13 +78,13 @@ namespace workspace {
         if (window->gobj() == event->window)
           {
             // This window has been closed
-            iterator = windowList.erase(iterator);
+            iterator = windowList_.erase(iterator);
           }
         else
           iterator++;
       }
     
-    if (windowList.empty())
+    if (windowList_.empty())
       {
         // All windows have been closed - we should exit
         Gtk::Main *main = Gtk::Main::instance();               ////////////////////////////////////////////////TICKET #1032 : use gtk::Application instead of gtk::Main
@@ -102,7 +102,7 @@ namespace workspace {
   void
   WindowManager::updateCloseWindowInMenus()
   {
-    uiManager_.allowCloseWindow ( 1 < windowList.size());
+    uiManager_.allowCloseWindow ( 1 < windowList_.size());
   }
   
   

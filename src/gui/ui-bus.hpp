@@ -66,17 +66,21 @@
  ** directed towards individual elements. The interactions at the bus are closely interrelated
  ** with the [elementary UI-Element operations](tangible.hpp).
  ** 
- ** - **act**: send a [GenNode] representing the action
+ ** - *act*: send a [GenNode] representing the action
  **   - in a first step, a command prototype is [outfitted](\ref InvocationTrail::bind()) with actual
  **     parameter values. -> see [InvocationTrail]
  **   - the actual command invocation is triggered by a ["bang" message](\ref InvocationTrail::bang())
- ** - **note**: send a [GenNode] representing the _state mark;_
+ ** - *note*: send a [GenNode] representing the _state mark;_
  **   some (abstracted) presentation state manager is expected to listen to these messages,
  **   possibly recording state to be restored later. The contents of the _state mark_ message
  **   are implementation defined; knowledge about these is shared between individual widget
  **   implementations and (partially, to some degree) the presentation state manager.
- ** - **mark**: down-link communication to _feed back_ state updates or
- **   to replay previously recorded _state marks_
+ ** - *mark*: down-link communication to _feed back_ state updates or
+ **   to replay previously recorded _state marks._
+ **   
+ ** @note The *mark* verb can also be used as an (future) extension point to send _generic messages_ --
+ **   possibly even to broadcast them to interested subjects, which have been registered with the
+ **   \ref Nexus as targeted receivers...
  **   
  ** @warning deliberately the UI-Bus is **not threadsafe**.
  **          Only [Tangible] elements performing in the UI-event thread are allowed to talk to the bus.

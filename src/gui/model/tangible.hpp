@@ -101,7 +101,7 @@
  **   This interaction also implies, that the element automatically detaches itself at end of life.
  ** - **act**: send a \ref GenNode representing the action
  ** - **note**: _send_ a GenNode representing the _state mark_
- ** - **mark**: _receive_ a GenNode representing the _feedback_ or a replayed _state mark_
+ ** - **mark**: _receive_ a GenNode representing the _feedback,_ a replayed _state mark_ or _generic message._
  ** - **diff**: ask to retrieve a diff, which
  **   - either is an incremental status update
  **   - or is a from-scratch reconfiguration
