@@ -24,8 +24,8 @@
 #include "gui/widget/timeline/timeline-group-track.hpp"
 #include "gui/widget/timeline-widget.hpp"
 
-using namespace Gtk;
-using namespace sigc;
+using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace sigc;        ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace widget {

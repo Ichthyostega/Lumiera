@@ -25,9 +25,9 @@
 #include "gui/widget/timeline-widget.hpp"
 
 
-using namespace Gtk;
-using namespace gui::widget;
-using namespace lumiera;
+using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui::widget; ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace lumiera;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace widget {

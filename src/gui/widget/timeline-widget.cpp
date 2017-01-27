@@ -39,10 +39,10 @@ using lib::time::Time;
 using lib::time::TimeValue;
 using std::dynamic_pointer_cast;
 
-using namespace Gtk;
+using namespace Gtk;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-using namespace util;
-using namespace gui::widget::timeline;
+using namespace util;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui::widget::timeline;       ////////////TODO OK this one looks more sensible, but why do we need to refer to such a nested space so much?
 
 namespace gui {
 namespace widget {

@@ -28,7 +28,7 @@
 #include "include/logging.h"
 
 
-using namespace Gtk;
+using namespace Gtk;         //////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace dialog {

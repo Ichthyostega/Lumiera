@@ -30,9 +30,9 @@
 
 #include "include/logging.h"
 
-using namespace boost;
-using namespace std;
-using namespace Gtk;
+using namespace boost;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace std;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace Gtk;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace workspace {

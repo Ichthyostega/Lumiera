@@ -33,7 +33,7 @@
 
 #include <boost/foreach.hpp>
 
-using namespace Gtk;
+using namespace Gtk;         //////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace sigc;
 using namespace gui::widget;
 using namespace gui::widget::timeline;

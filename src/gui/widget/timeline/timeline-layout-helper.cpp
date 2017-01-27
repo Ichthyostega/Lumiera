@@ -36,10 +36,10 @@ using std::shared_ptr;
 using std::weak_ptr;
 using std::dynamic_pointer_cast;
 
-using namespace Gtk;
-using namespace lumiera;
-using namespace util;
-using namespace gui::util;
+using namespace Gtk;           ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace lumiera;       ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace util;          ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui::util;     /////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace widget {

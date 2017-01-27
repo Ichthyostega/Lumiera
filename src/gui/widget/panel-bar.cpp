@@ -31,11 +31,11 @@
 #include <boost/foreach.hpp>
 #include <algorithm>
 
-using namespace Gtk;
-using namespace Glib;
-using namespace sigc;
-using namespace std;
-using namespace gui::workspace;
+using namespace Gtk;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace Glib;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace sigc;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace std;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui::workspace;       //////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace widget {

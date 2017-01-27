@@ -25,8 +25,8 @@
 #include "gui/dialog/name-chooser.hpp"
 #include "gui/dialog/dialog.hpp"
 
-using namespace Gtk;
-using namespace Glib;
+using namespace Gtk;         //////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace Glib;        //////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace dialog {

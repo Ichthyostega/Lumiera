@@ -39,7 +39,7 @@
 
 namespace gui {
   
-  using namespace Gtk;   ////////////////////TODO explicit usings please!
+  using namespace Gtk;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
   using namespace Glib;
   using namespace gui::model;
   using namespace gui::workspace;

@@ -30,11 +30,11 @@
 
 #include <cairomm/cairomm.h>
 
-using namespace Gtk;
-using namespace Cairo;
-using namespace gui;
-using namespace gui::widget;
-using namespace gui::widget::timeline;
+using namespace Gtk;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace Cairo;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui::widget;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui::widget::timeline;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 using std::shared_ptr;
 using gui::util::CairoUtil;

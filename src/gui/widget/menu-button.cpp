@@ -24,9 +24,9 @@
 #include "gui/widget/menu-button.hpp"
 
 
-using namespace Gtk;
-using namespace Glib;
-using namespace sigc;
+using namespace Gtk;      ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace Glib;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace sigc;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 
 #define POPUP_SLUG "TheMenu"

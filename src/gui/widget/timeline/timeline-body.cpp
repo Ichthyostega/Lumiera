@@ -33,9 +33,9 @@
 #include <cairomm/cairomm.h>
 #include <boost/foreach.hpp>
 
-using namespace Gtk;
-using namespace std;
-using namespace lumiera;
+using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace std;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace lumiera;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 using gui::util::CairoUtil;
 using std::shared_ptr;

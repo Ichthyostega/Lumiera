@@ -32,8 +32,8 @@
 using std::pair;
 using std::shared_ptr;
 
-using namespace Gtk;
-using namespace util;
+using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace util;        ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace widget {

@@ -29,9 +29,9 @@
 #include "gui/display-service.hpp"
 
 
-using namespace Gtk;
-using namespace gui::widget;
-using namespace gui::controller;
+using namespace Gtk;                   ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui::widget;           ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui::controller;       ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace panel {

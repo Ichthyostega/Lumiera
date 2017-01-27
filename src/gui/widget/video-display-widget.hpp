@@ -30,7 +30,7 @@
 #include "gui/output/displayer.hpp"
 
 
-using namespace gui::output;
+using namespace gui::output;  ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace widget {

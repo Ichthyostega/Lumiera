@@ -31,7 +31,7 @@
 namespace gui {
 namespace widget {
   
-  using namespace Gtk;
+  using namespace Gtk;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
   
   /**
    * A button that displays a menu when clicked on.

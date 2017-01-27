@@ -25,7 +25,7 @@
 #include "gui/widget/timeline-widget.hpp"
 #include "lib/time/mutation.hpp"
 
-using namespace gui::widget;
+using namespace gui::widget;     ///////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 using lib::time::Mutation;
 using std::shared_ptr;

@@ -27,7 +27,7 @@
 
 #include <boost/foreach.hpp>
 
-using namespace Gtk;
+using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 using std::shared_ptr;
 using util::contains;

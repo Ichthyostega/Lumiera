@@ -37,7 +37,7 @@
 
 #include <gtkmm.h>
 
-using namespace gui::panel;
+using namespace gui::panel;       ///////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
   namespace model {

@@ -27,8 +27,8 @@
 #include "gui/dialog/name-chooser.hpp"
 #include "include/logging.h"
 
-using namespace Gtk;
-using namespace sigc;
+using namespace Gtk;          ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace sigc;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 using std::shared_ptr;
 

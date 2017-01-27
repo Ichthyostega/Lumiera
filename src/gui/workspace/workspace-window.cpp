@@ -32,8 +32,8 @@
 
 
 
-using namespace Gtk;
-using namespace Glib;
+using namespace Gtk;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace Glib;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace gui::model;
 using namespace gui::controller;
 

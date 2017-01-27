@@ -42,7 +42,7 @@
 #include <memory>
 #include <map>
 
-using namespace gui::widget; ////////////TODO only explicit using clauses please!
+using namespace gui::widget;      /////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui  {
 namespace model{

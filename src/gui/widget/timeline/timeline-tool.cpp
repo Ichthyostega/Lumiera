@@ -24,7 +24,7 @@
 #include "gui/widget/timeline/timeline-tool.hpp"
 #include "gui/widget/timeline-widget.hpp"
 
-using namespace Gdk;
+using namespace Gdk;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using std::shared_ptr;
 
 namespace gui {

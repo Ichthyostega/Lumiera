@@ -44,7 +44,7 @@ namespace dialog {
       PreferencesDialog (Gtk::Window &parent)
         : Dialog(_("Preferences"), parent, true)
         {
-          using namespace Gtk;
+          using namespace Gtk;   /////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
           
           Box *v_box = get_vbox();
           REQUIRE (v_box != NULL);

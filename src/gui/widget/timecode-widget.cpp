@@ -49,7 +49,7 @@ using std::string;
 namespace gui {
 namespace widget {
   
-  using namespace Gtk;
+  using namespace Gtk;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
   
   // TODO: frame rate should not be a constant, but instead be per sequence
   const float framerate = 25;

@@ -70,10 +70,10 @@ ParentTrack::remove_descendant_track(
 shared_ptr<ParentTrack>
 ParentTrack::find_descendant_track_parent(shared_ptr<Track> child)
 { 
-  using namespace boost;
+  using namespace boost;        ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
   REQUIRE(child != NULL);
-  BOOST_FOREACH(std::shared_ptr<Track> track, tracks)
+  BOOST_FOREACH(std::shared_ptr<Track> track, tracks)  ///////TODO use a standard foreach loop
     {
       if(track == child)
         return shared_from_this();
