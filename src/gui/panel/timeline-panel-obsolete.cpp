@@ -24,8 +24,8 @@
 #include "gui/gtk-lumiera.hpp"
 #include "gui/panel/timeline-panel-obsolete.hpp"
 #include "gui/widget/timeline/timeline-zoom-scale.hpp"
-
 #include "gui/workspace/workspace-window.hpp"
+#include "gui/ctrl/playback-controller.hpp"
 #include "gui/model/project.hpp"
 #include "gui/ui-bus.hpp"
 
@@ -39,6 +39,8 @@ using namespace gui::widget;
 using namespace gui::widget::timeline;
 using namespace gui::model;
 
+using gui::controller::Controller;
+using gui::ctrl::PlaybackController;
 using std::shared_ptr;
 using std::weak_ptr;
 using util::contains;
@@ -175,7 +177,7 @@ namespace panel {
   void
   TimelinePanelObsolete::on_stop()
   {
-    getController().get_playback_controller().stop();
+    PlaybackController::get().stop();
     updatePlaybackButtons();
   }
   
@@ -346,19 +348,19 @@ namespace panel {
   void
   TimelinePanelObsolete::play()
   {   
-    getController().get_playback_controller().play();
+    PlaybackController::get().play();
   }
   
   void
   TimelinePanelObsolete::pause()
   {
-    getController().get_playback_controller().pause();
+    PlaybackController::get().pause();
   }
   
   bool
   TimelinePanelObsolete::is_playing()
   {
-    return getController().get_playback_controller().is_playing();
+    return PlaybackController::get().is_playing();
   }
   
   void

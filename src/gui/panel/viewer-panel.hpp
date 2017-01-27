@@ -31,6 +31,7 @@
 
 #include "gui/panel/panel.hpp"
 #include "gui/widget/video-display-widget.hpp"
+#include "gui/ctrl/playback-controller.hpp"
 
 namespace gui  {
 namespace panel{
@@ -41,6 +42,8 @@ namespace panel{
   class ViewerPanel
     : public Panel
     {
+      ctrl::PlaybackController playbackController_;
+      
     public:
       ViewerPanel (workspace::PanelManager&, Gdl::DockItem&);
       

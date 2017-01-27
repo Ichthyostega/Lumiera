@@ -28,15 +28,36 @@
 
 
 namespace gui {
-namespace controller { 
+namespace ctrl {
+  
+  namespace error = lumiera::error;
   
   
   
   PlaybackController::PlaybackController()
     : playing_(false)
     , viewerHandle_(0)
-    { }
+    { 
+      instance = this;                               ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
+    }
   
+  PlaybackController::~PlaybackController()
+    { 
+      instance = nullptr;                            ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
+    }
+  
+  
+  PlaybackController* PlaybackController::instance;  ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
+  
+  PlaybackController&
+  PlaybackController::get()                          ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
+  {
+    if (not instance)
+      throw error::Logic ("GTK UI is not in running state"
+                         , error::LUMIERA_ERROR_LIFECYCLE);
+    
+    return *instance;
+  }
   
   void
   PlaybackController::play()

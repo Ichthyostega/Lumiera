@@ -126,12 +126,12 @@ namespace gui {
     class Controller
       {
         model::Project&    project_;
-        PlaybackController playback_;
+        ctrl::PlaybackController playback_;
         
       public:
         Controller (model::Project&);
       
-        PlaybackController& get_playback_controller();
+        ctrl::PlaybackController& get_playback_controller();
       };
   
 }// namespace gui::controller

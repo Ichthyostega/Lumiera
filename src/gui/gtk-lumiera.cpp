@@ -109,7 +109,7 @@ namespace gui {
   
   
   WindowList&
-  GtkLumiera::windowManager()
+  GtkLumiera::windowManager() /////////////////////////////////////////TICKET #1048 : last Blocker is Actions::onMenu_window_new_window()
   {
     if (not windowManagerInstance_)
       throw error::Logic ("GTK UI is not in running state"

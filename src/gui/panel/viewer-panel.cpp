@@ -25,7 +25,6 @@
 
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/ui-bus.hpp"  ///////////////////////////////////TODO why are we forced to include this after workspace-window.hpp ??  Ambiguity between std::ref and boost::reference_wrapper
-#include "gui/ctrl/playback-controller.hpp"
 #include "gui/display-service.hpp"
 
 
@@ -39,14 +38,13 @@ namespace panel {
   ViewerPanel::ViewerPanel (workspace::PanelManager& panelManager
                            ,Gdl::DockItem& dockItem)
     : Panel(panelManager, dockItem, getTitle(), getStockID())
+    , playbackController_{}
     {
       //----- Pack in the Widgets -----//
       pack_start(display_, PACK_EXPAND_WIDGET);
       
-      PlaybackController& playback(getController().get_playback_controller());
-      
       FrameDestination outputDestination (sigc::mem_fun(this, &ViewerPanel::on_frame));
-      playback.useDisplay (DisplayService::setUp (outputDestination));
+      playbackController_.useDisplay (DisplayService::setUp (outputDestination));
     }
   
   const char*
