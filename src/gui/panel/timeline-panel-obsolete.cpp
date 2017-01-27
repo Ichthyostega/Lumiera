@@ -71,7 +71,7 @@ namespace panel {
     , currentTool(gui::widget::timeline::Arrow)
     {
       // Hook up notifications
-      getProject().get_sequences().signal_changed().connect(mem_fun(this,
+      obsoleteProject_.get_sequences().signal_changed().connect(mem_fun(this,
           &TimelinePanelObsolete::on_sequence_list_changed));
       
       // Setup the sequence chooser
@@ -133,7 +133,7 @@ namespace panel {
       zoomScale       .set_tooltip_text(_("Adjust timeline zoom scale"));
       
       // Setup the timeline widget
-      shared_ptr<Sequence> sequence = *(getProject().get_sequences().begin());
+      shared_ptr<Sequence> sequence = *(obsoleteProject_.get_sequences().begin());
       timelineWidget.reset(new TimelineWidget(loadState(sequence)));
       pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
       
@@ -282,8 +282,9 @@ namespace panel {
     
     shared_ptr<TimelineState> state = timelineWidget->get_state();
     
+                                           /////////////////////////////////////////////////TODO should be a std foreach loop -- but acutally all of this code is being rewritten anyway, so why care?
     BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
-      getProject().get_sequences() )
+      obsoleteProject_.get_sequences() )
       {
         Gtk::TreeIter iter = sequenceChooserModel->append();
         Gtk::TreeModel::Row row = *iter;

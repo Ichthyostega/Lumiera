@@ -117,7 +117,7 @@ namespace panel{
   {
     /** Gdlmm as of v1.30.0 does not have
      * a facility for checking the whether
-     * a dock item is iconified or not
+     * a dock item is iconified or not   ////////////////////TODO explicit usings please!
      */
     GdlDockItem *item = dockItem_.gobj();
     REQUIRE(item != NULL);
@@ -148,18 +148,6 @@ namespace panel{
   Panel::getWorkspaceWindow()
   {
     return panelManager_.getWorkspaceWindow();
-  }
-  
-  model::Project&
-  Panel::getProject()
-  {
-    return panelManager_.getWorkspaceWindow().getProject();
-  }
-  
-  controller::Controller&
-  Panel::getController()
-  {
-    return panelManager_.getWorkspaceWindow().getController();
   }
   
   sigc::signal<void>&

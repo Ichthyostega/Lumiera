@@ -71,13 +71,7 @@ namespace workspace {
     public:
       WindowList (UiManager&);
       
-      /**
-       * Create a new window connected to a specified project and controller
-       * @param source_project The project to connect the window to.
-       * @param source_controller The controller to connect the window to.
-       * @todo better way to connect to the model   ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
-       */
-      void newWindow (gui::model::Project&, gui::controller::Controller&);
+      void newWindow ();
       
       
       

@@ -58,29 +58,14 @@ namespace gui {
     : public Gtk::Window
     {
     public:
-      WorkspaceWindow(gui::workspace::UiManager&
-                     ,gui::model::Project& source_project
-                     ,gui::controller::Controller& source_controller);
-      
+      WorkspaceWindow(gui::workspace::UiManager&);
      ~WorkspaceWindow();
       
-      
-      gui::model::Project& getProject();                   ////////////////////////////TICKET #1048 : these getters need to disappear, they are no good!!!!
-      gui::controller::Controller& getController();        ////////////////////////////TICKET #1048 : no one has to muck around with WorkspaceWindow's internals
       PanelManager& getPanelManager();
       
       
     private:
       void createUI (UiManager& uiManager);
-      
-      
-      
-      /* ===== Model ===== */
-      gui::model::Project& project_;
-      
-      
-      /* ===== Controller ===== */
-      gui::controller::Controller& controller_;
       
       
       /* ===== UI ===== */

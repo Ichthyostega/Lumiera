@@ -1674,9 +1674,11 @@
 <node CREATED="1485551030086" ID="ID_1052165402" MODIFIED="1485551034969" TEXT="in GtkLumiera definiert"/>
 <node CREATED="1485551035413" ID="ID_1861899005" MODIFIED="1485551056342" TEXT="tats&#xe4;chlich im Panel (Basisklasse) gespeichert"/>
 <node CREATED="1485551056834" ID="ID_538186909" MODIFIED="1485551066884" TEXT="tats&#xe4;chlich nur im alten TimelinePannel gebraucht"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485551067353" ID="ID_1684200224" MODIFIED="1485551114389" TEXT="&#xdc;bergangsl&#xf6;sung">
-<icon BUILTIN="pencil"/>
-<node CREATED="1485551080687" ID="ID_405147511" MODIFIED="1485551083866" TEXT="als Felder dort"/>
+<node COLOR="#338800" CREATED="1485551067353" ID="ID_1684200224" MODIFIED="1485551899239" TEXT="&#xdc;bergangsl&#xf6;sung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1485551080687" ID="ID_405147511" MODIFIED="1485551905501" TEXT="als Felder dort">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1485551085454" ID="ID_472031977" MODIFIED="1485551095662" TEXT="ist ohnehin defunkt">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
@@ -1746,6 +1748,9 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485555902731" ID="ID_55451880" MODIFIED="1485555951678" TEXT="#1070 how to bind session commands into UI actions">
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485549081728" ID="ID_1122969153" MODIFIED="1485549214471" TEXT="globale Aktionen">
 <arrowlink COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-678;-1180;" ID="Arrow_ID_1373278707" STARTARROW="Default" STARTINCLINATION="670;252;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -1811,6 +1816,21 @@
 </node>
 <node CREATED="1485548727401" ID="ID_1344937285" MODIFIED="1485548731869" TEXT="was ist die Closure">
 <icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485555987832" ID="ID_313705636" MODIFIED="1485555992480" TEXT="Wiring">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1485555999110" ID="ID_376092703" MODIFIED="1485556008921" TEXT="top-level macht GtkLumiera im ctor"/>
+<node CREATED="1485556011260" ID="ID_1618308499" MODIFIED="1485556026758" TEXT="backlink zum Manager"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485556027322" ID="ID_196345177" MODIFIED="1485556069949" TEXT="Problem: Docking panels">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1485556037465" ID="ID_1657490812" MODIFIED="1485556046020" TEXT="brauchen typischerweise eine Querverbindung"/>
+<node CREATED="1485556046703" ID="ID_50463095" MODIFIED="1485556055302" TEXT="geht das &#xfc;ber den Bus alleine?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1485556056206" ID="ID_509456873" MODIFIED="1485556067214" TEXT="...sonst mu&#xdf; der PanelManager helfen">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -9645,6 +9665,9 @@
 </richcontent>
 <linktarget COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-678;-1180;" ID="Arrow_ID_1373278707" SOURCE="ID_1122969153" STARTARROW="Default" STARTINCLINATION="670;252;"/>
 <icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485555902731" ID="ID_1913236669" MODIFIED="1485555922185" TEXT="#1070 how to bind session commands into UI actions">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node CREATED="1485548866990" ID="ID_664933854" MODIFIED="1485548877800" TEXT="Commands"/>

@@ -333,8 +333,9 @@ namespace workspace {
   {
     dialog::NameChooser dialog(workspaceWindow_,     ////////////////////////////////////TICKET #1069 how to refer to the _current window_
       _("Add Sequence"), _("New Sequence"));
-    if(dialog.run() == RESPONSE_OK)
-      workspaceWindow_.getProject().add_new_sequence(dialog.getName());
+/////////////////////////////////////////////////////////////////////////////////////////TICKET #1070 need a way how to issue session commands    
+//  if(dialog.run() == RESPONSE_OK)
+//    workspaceWindow_.getProject().add_new_sequence(dialog.getName());
   }
   
   
@@ -352,9 +353,7 @@ namespace workspace {
   void
   Actions::onMenu_window_new_window()
   {
-    GtkLumiera::application().windowManager().newWindow (
-      workspaceWindow_.getProject(),
-      workspaceWindow_.getController()); 
+    GtkLumiera::application().windowManager().newWindow(); 
   }
   
   

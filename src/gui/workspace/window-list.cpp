@@ -50,9 +50,9 @@ namespace workspace {
   
   
   void
-  WindowList::newWindow (gui::model::Project& source_project, gui::controller::Controller& source_controller)
+  WindowList::newWindow ()
   { 
-    PWindow window (new WorkspaceWindow{uiManager_, source_project, source_controller});
+    PWindow window (new WorkspaceWindow{uiManager_});
     REQUIRE(window);
     
     window->signal_delete_event().connect(sigc::mem_fun(

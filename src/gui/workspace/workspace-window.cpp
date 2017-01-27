@@ -40,12 +40,8 @@ using namespace gui::controller;
 namespace gui {
 namespace workspace {
   
-  WorkspaceWindow::WorkspaceWindow (UiManager& uiManager
-                                   ,Project& source_project
-                                   ,gui::controller::Controller& source_controller)
-    : project_(source_project)
-    , controller_(source_controller)
-    , panelManager_(*this)
+  WorkspaceWindow::WorkspaceWindow (UiManager& uiManager)
+    : panelManager_(*this)
     , actions_(*this)
     {    
       createUI (uiManager);
@@ -57,20 +53,6 @@ namespace workspace {
     INFO (gui_dbg, "Closing workspace window...");
   }
   
-  
-  
-  Project&
-  WorkspaceWindow::getProject()
-  {
-    return project_;
-  }
-  
-  
-  Controller&
-  WorkspaceWindow::getController()
-  {
-    return controller_;
-  }
   
   
   PanelManager&

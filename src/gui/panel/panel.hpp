@@ -85,8 +85,6 @@ namespace gui {
     protected:
       
       workspace::WorkspaceWindow& getWorkspaceWindow();
-      model::Project& getProject();
-      controller::Controller& getController();
       
     private:
       

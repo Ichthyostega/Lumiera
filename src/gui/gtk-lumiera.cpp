@@ -25,7 +25,6 @@
 #include "gui/workspace/ui-manager.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/ui-bus.hpp"
-#include "gui/model/project.hpp"
 #include "lib/format-string.hpp"
 #include "lib/depend.hpp"
 #include "lib/symbol.hpp"
@@ -96,9 +95,6 @@ namespace gui {
     
     Glib::set_application_name (getAppTitle());
     
-    Project project;
-    Controller controller(project);
-    
     //////////////////////TICKET #959 : establish the new backbone here / replaces Project and Controller
     UiBus uiBus;
     
@@ -107,7 +103,7 @@ namespace gui {
     uiManager.setTheme (Config::get (KEY_STYLESHEET));
     
     windowManagerInstance_.reset (new workspace::WindowList (uiManager));
-    windowManagerInstance_->newWindow (project, controller);
+    windowManagerInstance_->newWindow();
     kit.run(); // GTK event loop
   }
   
