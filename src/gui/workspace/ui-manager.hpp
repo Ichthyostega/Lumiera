@@ -23,14 +23,12 @@
 
 
 /** @file ui-manager.hpp
- ** Manager for all application windows and resources.
- ** This file defines the global UI Manager class. The central WindowManager
- ** instance is owned by the GtkLumiera object and initialised in GTK-main.
- ** The WindowManager has the ability to create new windows integrated with
- ** the application framework, to provide Icons and other resources and
- ** to set and access a general UI theme.
+ ** Manager for application resources and similar global state.
+ ** The central UiManager instance is owned by the GtkLumiera object and initialised in GTK-main.
+ ** It offers services to provide Icons and other resources and to set and access a general UI theme.
  ** 
  ** @see gtk-lumiera.hpp
+ ** @see ui-bus.hpp
  */
 
 
@@ -61,8 +59,7 @@ namespace workspace {
   
   
   /**
-   * The centralised manager of all the windows,
-   * icons and resources within Lumiera's GUI.
+   * The centralised manager of all icons and resources within Lumiera's GUI.
    */
   class UiManager
     : public Gtk::UIManager

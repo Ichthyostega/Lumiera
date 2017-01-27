@@ -1,5 +1,5 @@
 /*
-  WINDOW-MANAGER.hpp  -  Global UI Manager
+  WINDOW-LIST.hpp  -  manage all top level windows
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,10 +21,10 @@
 */
 
 
-/** @file window-manager.hpp
+/** @file window-list.hpp
  ** Manager for all top level application windows.
- ** The central WindowManager instance is owned by the GtkLumiera object and
- ** initialised in GTK-main. The WindowManager allows to create new windows
+ ** The central WindowList instance is owned by the GtkLumiera object and
+ ** initialised in GTK-main. The WindowList allows to create new windows
  ** integrated with the application framework.
  ** 
  ** @see gtk-lumiera.hpp
@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_WINDOW_MANAGER_H
-#define GUI_WINDOW_MANAGER_H
+#ifndef GUI_WINDOW_LIST_H
+#define GUI_WINDOW_LIST_H
 
 #include "gui/gtk-base.hpp"
 
@@ -59,7 +59,7 @@ namespace workspace {
   /**
    * A centralised manager of all top level application windows.
    */
-  class WindowManager
+  class WindowList
     : boost::noncopyable
     {
       using PWindow = shared_ptr<WorkspaceWindow>;
@@ -69,7 +69,7 @@ namespace workspace {
       
       
     public:
-      WindowManager (UiManager&);
+      WindowList (UiManager&);
       
       /**
        * Create a new window connected to a specified project and controller
@@ -105,4 +105,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WINDOW_MANAGER_H*/
+#endif /*GUI_WINDOW_LIST_H*/

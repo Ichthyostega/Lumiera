@@ -56,7 +56,7 @@
  ** The _generic interface element_ based on [Tangible](\ref model::Tangible) covers a set of behaviour
  ** common to  all elements of the interface. This behaviour is targeted towards the _integration_
  ** with the core application. Beyond that, there are still several concerns regarding presentation,
- ** like a common styling. These are addressed the conventional way, through a common \ref WindowManager.
+ ** like a common styling. These are addressed the conventional way, through a common \ref UiManager.
  ** The following discussion focuses on the aspects of integration with the core.
  ** 
  ** For one reason or another, any element in the UI can appear and go away.

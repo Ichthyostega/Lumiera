@@ -145,11 +145,11 @@ namespace gui {
    * Backbone of the Lumiera GTK GUI.
    * This is the Interface and Lifecycle front-end.
    * When an instance of this class is created, the backbone becomes operative
-   * and can then be used to attach the active gui::WindowManager. When it goes away,
-   * all backbone services are forced to shut down and disconnect, which means, that
-   * at this point, the entire UI must be decommissioned. Effectively this also means
-   * that the UiBus object must be run within the GTK event thread and must not be
-   * accessed from anywhere else.
+   * and can then be used to attach the active workspace::UiManager and similar entities.
+   * When it goes away, all backbone services are forced to shut down and disconnect,
+   * which means, that at this point, the entire UI must be decommissioned. Effectively
+   * this also means that the UiBus object must be run within the GTK event thread
+   * and must not be accessed from anywhere else.
    */
   class UiBus
     : boost::noncopyable

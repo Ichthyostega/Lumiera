@@ -26,7 +26,7 @@
  ** Invoking the GtkLumiera::main() function brings up the GUI; this
  ** function will block in the GTK event thread until the Application gets
  ** closed by user interaction or by triggering a shutdown via the GuiNotificationFacade.
- ** GtkLumiera is a singleton and owns the central WindowManager instance used for
+ ** GtkLumiera is a singleton and owns the central WindowList instance used for
  ** opening all windows and registering and loading icons and resources.
  ** 
  ** \par configuration and resource search
@@ -53,7 +53,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/workspace/ui-manager.hpp"
-#include "gui/workspace/window-manager.hpp"
+#include "gui/workspace/window-list.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <memory>
@@ -139,7 +139,7 @@ namespace gui {
     : boost::noncopyable
     {
       /** Central application window manager instance */
-      shared_ptr<workspace::WindowManager> windowManagerInstance_;
+      shared_ptr<workspace::WindowList> windowManagerInstance_;
       
       
     public:
@@ -151,7 +151,7 @@ namespace gui {
       /** start up the GUI and run the event thread */
       void main(int argc, char *argv[]);
       
-      workspace::WindowManager& windowManager();        ////////////////////////////TICKET #1048 : this loophole needs to be closed
+      workspace::WindowList& windowManager();        ////////////////////////////TICKET #1048 : this loophole needs to be closed
       
       
       /** the name of the application */

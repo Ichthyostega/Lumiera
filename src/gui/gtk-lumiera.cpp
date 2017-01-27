@@ -106,13 +106,13 @@ namespace gui {
     uiManager.init (Config::get (KEY_ICON_PATH), Config::get (KEY_UIRES_PATH));
     uiManager.setTheme (Config::get (KEY_STYLESHEET));
     
-    windowManagerInstance_.reset (new workspace::WindowManager (uiManager));
+    windowManagerInstance_.reset (new workspace::WindowList (uiManager));
     windowManagerInstance_->newWindow (project, controller);
     kit.run(); // GTK event loop
   }
   
   
-  WindowManager&
+  WindowList&
   GtkLumiera::windowManager()
   {
     if (not windowManagerInstance_)

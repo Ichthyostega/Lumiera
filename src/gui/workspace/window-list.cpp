@@ -1,5 +1,5 @@
 /*
-  WindowManager  -  Global UI Manager
+  WindowList  -  manage all top level windows
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,8 +21,14 @@
 * *****************************************************/
 
 
+/** @file window-list.cpp
+ ** Implementation parts of the list to manage all top level windows.
+ ** @see ui-manager.hpp
+ */
+
+
 #include "gui/workspace/ui-manager.hpp"
-#include "gui/workspace/window-manager.hpp"
+#include "gui/workspace/window-list.hpp"
 #include "gui/workspace/workspace-window.hpp"
 
 #include <memory>
@@ -37,20 +43,20 @@ namespace workspace {
   
   
   
-  WindowManager::WindowManager (UiManager& uiManager)
+  WindowList::WindowList (UiManager& uiManager)
     : uiManager_{uiManager}
     , windowList_{}
     { }
   
   
   void
-  WindowManager::newWindow (gui::model::Project& source_project, gui::controller::Controller& source_controller)
+  WindowList::newWindow (gui::model::Project& source_project, gui::controller::Controller& source_controller)
   { 
     PWindow window (new WorkspaceWindow{uiManager_, source_project, source_controller});
     REQUIRE(window);
     
     window->signal_delete_event().connect(sigc::mem_fun(
-      this, &WindowManager::on_window_closed));
+      this, &WindowList::on_window_closed));
     
     windowList_.push_back(window);
     
@@ -61,7 +67,7 @@ namespace workspace {
   
   
   bool
-  WindowManager::on_window_closed (GdkEventAny* event)
+  WindowList::on_window_closed (GdkEventAny* event)
   {
     REQUIRE(event);
     REQUIRE(event->window);
@@ -100,7 +106,7 @@ namespace workspace {
   
   
   void
-  WindowManager::updateCloseWindowInMenus()
+  WindowList::updateCloseWindowInMenus()
   {
     uiManager_.allowCloseWindow ( 1 < windowList_.size());
   }

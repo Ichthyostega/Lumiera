@@ -1695,7 +1695,8 @@
 <node CREATED="1485454263876" ID="ID_543704434" MODIFIED="1485454270615" TEXT="globale Keybindings"/>
 </node>
 </node>
-<node CREATED="1485126466520" ID="ID_717310004" MODIFIED="1485457324752" TEXT="WindowManager">
+<node CREATED="1485126466520" ID="ID_717310004" MODIFIED="1485546455540" TEXT="WindowManager">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1485457325724" ID="ID_1954589768" MODIFIED="1485457325724" TEXT="nur f&#xfc;r die Hauptfenster zust&#xe4;ndig"/>
 <node CREATED="1485457328043" ID="ID_1787642462" MODIFIED="1485457367904" TEXT="wir haben kein ApplicationWindow">
 <richcontent TYPE="NOTE"><html>
@@ -1712,6 +1713,33 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1485457370310" ID="ID_1931452525" MODIFIED="1485457379864" TEXT="GtkWindow sind v&#xf6;llig ausreichend"/>
+<node CREATED="1485546285407" ID="ID_1129769291" MODIFIED="1485546307908">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mu&#223; kein <b>Manager</b>&#160;sein
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1485546319434" ID="ID_1592361314" MODIFIED="1485546343174" TEXT="macht nur eine Sache">
+<icon BUILTIN="idea"/>
+<node CREATED="1485546325993" ID="ID_1335197005" MODIFIED="1485546333460" TEXT="n&#xe4;mlich eine Liste der Fenster verwalten"/>
+</node>
+<node CREATED="1485546344471" ID="ID_582242471" MODIFIED="1485546422834" TEXT="WindowList">
+<arrowlink DESTINATION="ID_298060478" ENDARROW="Default" ENDINCLINATION="-3;-38;" ID="Arrow_ID_683571287" STARTARROW="None" STARTINCLINATION="-62;0;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1485546396952" ID="ID_298060478" MODIFIED="1485546422834" TEXT="WindowList">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_298060478" ENDARROW="Default" ENDINCLINATION="-3;-38;" ID="Arrow_ID_683571287" SOURCE="ID_582242471" STARTARROW="None" STARTINCLINATION="-62;0;"/>
+<node CREATED="1485546400807" ID="ID_1118405222" MODIFIED="1485546415097" TEXT="macht, was vom gro&#xdf;en Manager &#xfc;brig blieb"/>
+<node CREATED="1485546425452" ID="ID_1088557274" MODIFIED="1485546450588" TEXT="wird von GtkLumiera gehalten und verdrahtet"/>
 </node>
 <node CREATED="1485126481023" ID="ID_943652445" MODIFIED="1485126488201" TEXT="pro Fenster">
 <node CREATED="1485126488981" ID="ID_1346100835" MODIFIED="1485126494129" TEXT="WorkspaceWindow"/>

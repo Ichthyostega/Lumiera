@@ -95,8 +95,8 @@ namespace workspace {
   
   Cairo::RefPtr<Cairo::SolidPattern>
   UiManager::readStyleColourProperty (Gtk::Widget& widget
-                                         ,const gchar * property_name
-                                         ,guint16 red, guint16 green, guint16 blue)
+                                     ,const gchar * property_name
+                                     ,guint16 red, guint16 green, guint16 blue)
   {
     REQUIRE (property_name);
     
@@ -159,14 +159,13 @@ namespace workspace {
   
   bool
   UiManager::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
-                                 ,cuString& icon_name
-                                 ,cuString& id
-                                 ,cuString& label)
+                             ,cuString& icon_name
+                             ,cuString& id
+                             ,cuString& label)
   {
     Glib::RefPtr<Gtk::IconSet> icon_set = Gtk::IconSet::create();
     
-    // Load all the sizes, wildcarding the first, largest icon to be
-    // loaded
+    // Load all the sizes, wildcarding the first, largest icon to be loaded
     bool no_icons = true;
     no_icons &= !addStockIcon(
       icon_set, icon_name, GiantIconSize, no_icons);
@@ -201,7 +200,7 @@ namespace workspace {
                               ,bool wildcard)
   {
     // Try the icon theme  
-    if(addThemeIconSource(icon_set, icon_name, size, wildcard))
+    if (addThemeIconSource(icon_set, icon_name, size, wildcard))
       return true;
     
     // Try to resolve the icon via the configured search path
@@ -220,9 +219,9 @@ namespace workspace {
   
   bool
   UiManager::addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                                    ,cuString& icon_name
-                                    ,Gtk::IconSize size
-                                    ,bool wildcard)
+                                ,cuString& icon_name
+                                ,Gtk::IconSize size
+                                ,bool wildcard)
   {
     // Get the size
     int width = 0, height = 0;
@@ -246,10 +245,10 @@ namespace workspace {
   
   bool
   UiManager::addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                                       ,cuString& base_dir
-                                       ,cuString& icon_name
-                                       ,Gtk::IconSize size
-                                       ,bool wildcard)
+                                   ,cuString& base_dir
+                                   ,cuString& icon_name
+                                   ,Gtk::IconSize size
+                                   ,bool wildcard)
   {
     // Get the size
     int width = 0, height = 0;
@@ -266,9 +265,9 @@ namespace workspace {
   
   bool
   UiManager::addStockIconFromPath (string path
-                                      ,Glib::RefPtr<Gtk::IconSet> const& icon_set
-                                      ,Gtk::IconSize size
-                                      ,bool wildcard)
+                                  ,Glib::RefPtr<Gtk::IconSet> const& icon_set
+                                  ,Gtk::IconSize size
+                                  ,bool wildcard)
   {
     if (!fsys::exists (path)) return false;
     
