@@ -33,6 +33,8 @@
 #include "gui/widget/timecode-widget.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/widget/timeline/timeline-zoom-scale.hpp"
+#include "gui/model/project.hpp"
+#include "gui/ui-bus.hpp"   ////////////TODO for the obsolete Controller
 
 #include "lib/time/timevalue.hpp"
 #include "lib/util-coll.hpp"
@@ -51,6 +53,8 @@ namespace model{
   using std::shared_ptr;
   using std::weak_ptr;
   using lib::time::Time;
+  using model::Project;
+  using controller::Controller;
   
   
   
@@ -143,6 +147,11 @@ namespace model{
     private:
       
       //----- Data -----//
+      
+      // the obsolete and defunct UI model
+      Project    obsoleteProject_;
+      Controller obsoleteController_;                                 /////////////////////////////////////////TICKET #1048 GtkLumiera must not be a singleton
+
       
       // Grip Widgets
       ButtonBar toolbar;

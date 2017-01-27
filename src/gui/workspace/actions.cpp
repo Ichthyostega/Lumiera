@@ -272,7 +272,7 @@ namespace workspace {
   void
   Actions::onMenu_file_render()
   {
-    dialog::Render dialog(workspaceWindow_);
+    dialog::Render dialog(workspaceWindow_);         ////////////////////////////////////TICKET #1069 how to refer to the _current window_
     dialog.run();
   }
   
@@ -291,7 +291,7 @@ namespace workspace {
   void
   Actions::onMenu_edit_preferences()
   {
-    dialog::PreferencesDialog dialog(workspaceWindow_);
+    dialog::PreferencesDialog dialog(workspaceWindow_);  ////////////////////////////////TICKET #1069 how to refer to the _current window_
     dialog.run();
   }
   
@@ -331,7 +331,7 @@ namespace workspace {
   void
   Actions::onMenu_sequence_add()
   {
-    dialog::NameChooser dialog(workspaceWindow_,
+    dialog::NameChooser dialog(workspaceWindow_,     ////////////////////////////////////TICKET #1069 how to refer to the _current window_
       _("Add Sequence"), _("New Sequence"));
     if(dialog.run() == RESPONSE_OK)
       workspaceWindow_.getProject().add_new_sequence(dialog.getName());
@@ -369,7 +369,7 @@ namespace workspace {
   void
   Actions::onMenu_show_panel(int panel_index)
   {
-    workspaceWindow_.getPanelManager().showPanel(panel_index);
+    workspaceWindow_.getPanelManager().showPanel(panel_index);  /////////////////////////TICKET #1069 how to refer to the _current window_
   }
   
   

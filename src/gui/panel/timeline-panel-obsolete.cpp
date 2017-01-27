@@ -53,6 +53,8 @@ namespace panel {
   TimelinePanelObsolete::TimelinePanelObsolete (workspace::PanelManager& panelManager,
                                                 Gdl::DockItem& dockItem)
     : Panel(panelManager, dockItem, getTitle(), getStockID())
+    , obsoleteProject_{}
+    , obsoleteController_{obsoleteProject_}
     , timeCode("sequence_clock", "timecode_widget", true)
     , previousButton(Stock::MEDIA_PREVIOUS)
     , rewindButton(Stock::MEDIA_REWIND)
