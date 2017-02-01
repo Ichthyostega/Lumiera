@@ -62,7 +62,7 @@ namespace workspace {
   class WindowList
     : boost::noncopyable
     {
-      using PWindow = shared_ptr<WorkspaceWindow>;
+      using PWindow = std::shared_ptr<WorkspaceWindow>;
       
       UiManager&    uiManager_;
       list<PWindow> windowList_;

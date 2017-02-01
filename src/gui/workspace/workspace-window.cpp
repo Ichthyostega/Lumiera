@@ -21,6 +21,8 @@
 * *****************************************************/
 
 #include "gui/gtk-lumiera.hpp"
+#include "gui/config-keys.hpp"
+#include "gui/workspace/ui-manager.hpp"
 #include "workspace-window.hpp"
 #include "include/logging.h"
 
@@ -69,7 +71,7 @@ namespace workspace {
     //set_default_direction (TEXT_DIR_RTL);
     
     //----- Configure the Window -----//
-    set_title (GtkLumiera::getAppTitle());
+    set_title (Config::get (KEY_TITLE));
     set_default_size (1024, 768);
     
     //----- Set up the UI Manager -----//

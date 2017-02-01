@@ -25,36 +25,18 @@
 #include "gui/workspace/ui-manager.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/ui-bus.hpp"
-#include "lib/format-string.hpp"
 #include "lib/depend.hpp"
-#include "lib/symbol.hpp"
 
 #include "include/config-facade.h"
 
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/algorithm/string/split.hpp>
-#include <string>
-#include <vector>
 
 namespace gui {
   
-  using namespace Gtk;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-  using namespace Glib;
-  using namespace gui::model;
-  using namespace gui::workspace;
-  using namespace gui::controller;
-  
   namespace error = lumiera::error;
   
-  using boost::algorithm::is_any_of;
-  using boost::algorithm::split;
   
-  using lumiera::Config;
-  using lib::Literal;
-  using ::util::_Fmt;
   using std::string;
   
-  typedef std::vector<uString> UVector;
   
   
   
@@ -63,15 +45,6 @@ namespace gui {
     /** storage for the Main Application object */
     lib::Depend<GtkLumiera> theApplicationInstance;
     
-    Literal KEY_TITLE      = "Lumiera.title";        //////////////////////////////////////////////////////////TICKET #1067 : turn these into global constants
-    Literal KEY_VERSION    = "Lumiera.version";
-    Literal KEY_WEBSITE    = "Lumiera.website";
-    Literal KEY_AUTHORS    = "Lumiera.authors";
-    Literal KEY_COPYRIGHT  = "Lumiera.copyright";
-    
-    Literal KEY_STYLESHEET = "Gui.stylesheet";
-    Literal KEY_UIRES_PATH = "Gui.resourcepath";
-    Literal KEY_ICON_PATH  = "Gui.iconpath";
   }
   
   
@@ -89,26 +62,20 @@ namespace gui {
   void
   GtkLumiera::main (int argc, char *argv[])
   {
+    Gtk::Main kit(argc, argv);
     Glib::thread_init();
     Gdl::init();
-    Main kit(argc, argv);
-    
-    Glib::set_application_name (getAppTitle());
     
     //////////////////////TICKET #959 : establish the new backbone here / replaces Project and Controller
     UiBus uiBus;
     
     workspace::UiManager uiManager(uiBus);
-    uiManager.init (Config::get (KEY_ICON_PATH), Config::get (KEY_UIRES_PATH));
-    uiManager.setTheme (Config::get (KEY_STYLESHEET));
-    
-    windowManagerInstance_.reset (new workspace::WindowList (uiManager));
-    windowManagerInstance_->newWindow();
+    uiManager.createApplicationWindow();
     kit.run(); // GTK event loop
   }
   
   
-  WindowList&
+  workspace::WindowList&
   GtkLumiera::windowManager() /////////////////////////////////////////TICKET #1048 : last Blocker is Actions::onMenu_window_new_window()
   {
     if (not windowManagerInstance_)
@@ -116,49 +83,6 @@ namespace gui {
                          , error::LUMIERA_ERROR_LIFECYCLE);
     
     return *windowManagerInstance_;
-  }
-  
-  
-  cuString
-  GtkLumiera::getAppTitle()
-  {
-    return Config::get (KEY_TITLE);
-  }
-  
-  
-  cuString
-  GtkLumiera::getAppVersion()
-  {
-    return Config::get (KEY_VERSION);
-  }
-  
-  
-  cuString
-  GtkLumiera::getCopyright()
-  {
-    return string (
-      _Fmt(_("© %s the original Authors\n"
-             "-- Lumiera Team --\n"
-             "Lumiera is Free Software (GPL)"))
-            % Config::get (KEY_COPYRIGHT));
-  }
-  
-  
-  cuString
-  GtkLumiera::getLumieraWebsite()
-  {
-    return Config::get (KEY_WEBSITE);
-  }
-  
-  
-  const UVector
-  GtkLumiera::getLumieraAuthors()
-  {
-    string authors = Config::get (KEY_AUTHORS);
-    UVector authorsList;
-    
-    split (authorsList, authors, is_any_of (",|"));
-    return authorsList;
   }
   
   

@@ -52,12 +52,8 @@
 
 
 #include "gui/gtk-base.hpp"
-#include "gui/workspace/ui-manager.hpp"
-#include "gui/workspace/window-list.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <memory>
-#include <vector>
 
 
 
@@ -138,9 +134,6 @@ namespace gui {
   class GtkLumiera
     : boost::noncopyable
     {
-      /** Central application window manager instance */
-      shared_ptr<workspace::WindowList> windowManagerInstance_;
-      
       
     public:
       /** access the the global application object */
@@ -150,21 +143,6 @@ namespace gui {
       
       /** start up the GUI and run the event thread */
       void main(int argc, char *argv[]);
-      
-      workspace::WindowList& windowManager();        ////////////////////////////TICKET #1048 : this loophole needs to be closed
-      
-      
-      /** the name of the application */
-      static cuString getAppTitle();
-      
-      static cuString getAppVersion();
-      
-      static cuString getCopyright();
-      
-      static cuString getLumieraWebsite();
-      
-      /** alphabetical list of the application's authors */
-      static const std::vector<uString> getLumieraAuthors();
       
     };
   

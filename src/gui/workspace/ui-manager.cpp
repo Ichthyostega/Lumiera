@@ -28,6 +28,7 @@
 
 
 #include "gui/gtk-lumiera.hpp"
+#include "gui/config-keys.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/workspace/ui-manager.hpp"
 #include "lib/searchpath.hpp"
@@ -58,16 +59,19 @@ namespace workspace {
   UiManager::UiManager (UiBus& bus)
     : Gtk::UIManager()
     , uiBus_(bus)
+    , iconSearchPath_{Config::get (KEY_ICON_PATH)}
+    , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
     { }
   
   void
-  UiManager::init (string const& iconPath, string const& resourcePath)
+  UiManager::init ()
   {
-    this->iconSearchPath_ = iconPath;
-    this->resourceSerachPath_ = resourcePath;
+    Glib::set_application_name (Config::get (KEY_TITLE));
     
     registerAppIconSizes();
     registerStockItems();
+    
+    setTheme (Config::get (KEY_STYLESHEET));
   }
   
   

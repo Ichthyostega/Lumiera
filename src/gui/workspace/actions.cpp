@@ -22,6 +22,7 @@
 
 
 #include "gui/workspace/actions.hpp"
+#include "gui/config-keys.hpp"
 #include "gui/workspace/workspace-window.hpp"
 
 #include "gui/workspace/ui-manager.hpp"
@@ -32,12 +33,24 @@
 
 #include "gui/model/project.hpp"
 
+#include "lib/format-string.hpp"
+
 #include "include/logging.h"
+
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <vector>
+
 
 using namespace Gtk;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace Glib;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace sigc;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace gui;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+
+using boost::algorithm::is_any_of;
+using boost::algorithm::split;
+using ::util::_Fmt;
+using std::vector;
 
 namespace gui {
 namespace workspace {
@@ -380,11 +393,21 @@ namespace workspace {
     // Configure the about dialog
     AboutDialog dialog;
     
-    dialog.set_program_name(GtkLumiera::getAppTitle());
-    dialog.set_version(GtkLumiera::getAppVersion());
-    dialog.set_copyright(GtkLumiera::getCopyright());
-    dialog.set_website(GtkLumiera::getLumieraWebsite());
-    dialog.set_authors(GtkLumiera::getLumieraAuthors());
+    cuString copyrightNotice {_Fmt(_("© %s the original Authors\n"
+                                     "-- Lumiera Team --\n"
+                                     "Lumiera is Free Software (GPL)"))
+                                     % Config::get (KEY_COPYRIGHT)};
+    
+    string authors = Config::get (KEY_AUTHORS);
+    vector<uString> authorsList;
+    split (authorsList, authors, is_any_of (",|"));
+    
+    
+    dialog.set_program_name(Config::get (KEY_TITLE));
+    dialog.set_version(Config::get (KEY_VERSION));
+    dialog.set_copyright(copyrightNotice);
+    dialog.set_website(Config::get (KEY_WEBSITE));
+    dialog.set_authors(authorsList);
     
     dialog.set_transient_for(workspaceWindow_);
     
@@ -396,7 +419,7 @@ namespace workspace {
   
   //----- Temporary junk
   void
-  Actions::onMenu_others()
+  Actions::onMenu_others()                                      /////////////////////////TICKET #1070 need a concept how to bind global actions
   {
     g_message("A menu item was selected.");
   }

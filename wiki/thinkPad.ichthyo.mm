@@ -1712,9 +1712,11 @@
 <node CREATED="1485463525736" ID="ID_1608786246" MODIFIED="1485463536587" TEXT="h&#xe4;lt alle zentralen Komponenten"/>
 <node CREATED="1485463537111" ID="ID_929585985" MODIFIED="1485463543226" TEXT="wird nie selber direkt angesprochen"/>
 </node>
-<node CREATED="1485126457025" ID="ID_1698853761" MODIFIED="1485549731115" TEXT="workspace::UiManger">
+<node CREATED="1485126457025" ID="ID_1698853761" MODIFIED="1485902874186" TEXT="workspace::UiManger">
 <linktarget COLOR="#667b93" DESTINATION="ID_1698853761" ENDARROW="Default" ENDINCLINATION="19;-86;" ID="Arrow_ID_1952755524" SOURCE="ID_40172420" STARTARROW="None" STARTINCLINATION="-290;0;"/>
+<linktarget COLOR="#75d3f9" DESTINATION="ID_1698853761" ENDARROW="Default" ENDINCLINATION="52;178;" ID="Arrow_ID_1969801735" SOURCE="ID_1440190469" STARTARROW="None" STARTINCLINATION="-140;-47;"/>
 <icon BUILTIN="pencil"/>
+<icon BUILTIN="idea"/>
 <node CREATED="1485454242368" ID="ID_482639947" MODIFIED="1485454312303" TEXT="Hub f&#xfc;r Framework">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="info"/>
@@ -1752,10 +1754,95 @@
       eigentlich wollen wir <i>&quot;das aktuelle&quot;</i>
     </p>
   </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1485902627783" HGAP="42" ID="ID_88029282" MODIFIED="1485903024781" VSHIFT="-13">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      L&#246;sung: <i><font color="#27754d">schwebende Bindung</font></i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1485902684454" ID="ID_1435239012" MODIFIED="1485902691584" TEXT="Eventgetriebene Oberfl&#xe4;che"/>
+<node CREATED="1485902692556" ID="ID_1729615218" MODIFIED="1485902698503" TEXT="wird einmal Verdrahtet"/>
+<node CREATED="1485902722360" ID="ID_1003456982" MODIFIED="1485902735679">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      arbeitet dann <i>freischwebend</i>
+    </p>
+  </body>
 </html>
 </richcontent>
 </node>
+<node CREATED="1485902750053" ID="ID_34756513" MODIFIED="1485902754440" TEXT="zentrales Bindeglied">
+<node CREATED="1485902762284" ID="ID_1542199290" MODIFIED="1485902773701" TEXT="kennt die Applikation"/>
+<node CREATED="1485902774201" ID="ID_354078562" MODIFIED="1485902778964" TEXT="kennt den Windowmanager"/>
+<node CREATED="1485902783201" ID="ID_609776597" MODIFIED="1485902793986" TEXT="kennt einen Operations-Controller"/>
+<node CREATED="1485902809813" ID="ID_648457506" MODIFIED="1485902817775" TEXT="kennt den UI-Bus"/>
+<node CREATED="1485902794479" ID="ID_1389010579" MODIFIED="1485902806377" TEXT="und ggffs weitere"/>
 </node>
+<node CREATED="1485902832698" HGAP="48" ID="ID_1440190469" MODIFIED="1485902944593" TEXT="genau dies ist der UiManager" VSHIFT="14">
+<arrowlink COLOR="#75d3f9" DESTINATION="ID_1698853761" ENDARROW="Default" ENDINCLINATION="52;178;" ID="Arrow_ID_1969801735" STARTARROW="None" STARTINCLINATION="-140;-47;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1485902945474" HGAP="-2" ID="ID_269152626" MODIFIED="1485903010811" TEXT="L&#xf6;sungs-Detail: dynamisch koppeln" VSHIFT="19">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...meint:
+    </p>
+    <p>
+      wir m&#252;ssen zur Aufrufzeit einer Aktion
+    </p>
+    <p>
+      an den aktuellen Kontext ankoppeln k&#246;nnen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Das hei&#223;t, der UiManager mu&#223; im Stande sein,
+    </p>
+    <p>
+      diesen &quot;aktuellen Kontext&quot; irgendwo <i>aufzufischen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1485903041262" ID="ID_997327941" MODIFIED="1485903044082" TEXT="Fokus"/>
+<node CREATED="1485903046613" ID="ID_1041890737" MODIFIED="1485903050080" TEXT="aktuelles Fenster">
+<node CREATED="1485903652236" ID="ID_1692258488" MODIFIED="1485903657033" TEXT="WindowList">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1485903658300" ID="ID_1048329186" MODIFIED="1485903665054" TEXT="durchsuchen..."/>
+<node CREATED="1485904084947" ID="ID_64462533" MODIFIED="1485904087814" TEXT="Gtk::Window"/>
+<node CREATED="1485904064949" ID="ID_313273027" MODIFIED="1485904081249" TEXT="property_has_focus">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1485904072812" ID="ID_829657223" MODIFIED="1485904083263" TEXT="property_is_active">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485898796393" ID="ID_1217726538" MODIFIED="1485898814419" TEXT="#1069 how to refer to the current window">
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485555902731" ID="ID_55451880" MODIFIED="1485555951678" TEXT="#1070 how to bind session commands into UI actions">
 <icon BUILTIN="flag-yellow"/>
@@ -1764,6 +1851,11 @@
 <arrowlink COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-678;-1180;" ID="Arrow_ID_1373278707" STARTARROW="Default" STARTINCLINATION="670;252;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
+</node>
+<node CREATED="1485909456513" ID="ID_576215675" MODIFIED="1485909490512" TEXT="top-level-Verdrahtung">
+<node CREATED="1485909491412" ID="ID_1205077540" MODIFIED="1485909496247" TEXT="h&#xe4;lt WindowList"/>
+<node CREATED="1485909496860" ID="ID_1365340983" MODIFIED="1485909504422" TEXT="h&#xe4;lt Actions"/>
+<node CREATED="1485909560027" ID="ID_1949656657" MODIFIED="1485909569270" TEXT="baut den UI-Rahen auf"/>
 </node>
 <node CREATED="1485454243767" ID="ID_3699127" MODIFIED="1485454247467" TEXT="konsistentes UI">
 <node CREATED="1485454248335" ID="ID_623536019" MODIFIED="1485454252273" TEXT="globales Men&#xfc;"/>
@@ -1785,8 +1877,7 @@
       ...denn das ist das vereinfachte Setup f&#252;r &quot;einfache&quot; Applikationen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1485457370310" ID="ID_1931452525" MODIFIED="1485457379864" TEXT="GtkWindow sind v&#xf6;llig ausreichend"/>
@@ -1800,8 +1891,7 @@
       mu&#223; kein <b>Manager</b>&#160;sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1485546319434" ID="ID_1592361314" MODIFIED="1485546343174" TEXT="macht nur eine Sache">
@@ -9670,8 +9760,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-678;-1180;" ID="Arrow_ID_1373278707" SOURCE="ID_1122969153" STARTARROW="Default" STARTINCLINATION="670;252;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485555902731" ID="ID_1913236669" MODIFIED="1485555922185" TEXT="#1070 how to bind session commands into UI actions">

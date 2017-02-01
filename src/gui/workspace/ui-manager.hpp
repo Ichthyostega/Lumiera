@@ -103,7 +103,7 @@ namespace workspace {
        * the given Lumiera icon search paths (see \c setup.ini ).
        * @see lumiera::Config
        */
-      void init (string const& iconPath, string const& resourcePath);
+      void init ();
       
       
       /**
